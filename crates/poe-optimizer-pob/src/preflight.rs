@@ -99,6 +99,8 @@ pub fn validate(xml: &str) -> Result<(), PreflightError> {
     let mut seen = HashSet::new();
     let mut build = None;
     let mut tree = None;
+    let mut skills = None;
+    let mut config = None;
     let mut legacy_tree = false;
     for node in root.children().filter(Node::is_element) {
         let name = node.tag_name().name();
@@ -114,6 +116,8 @@ pub fn validate(xml: &str) -> Result<(), PreflightError> {
         match name {
             "Build" => build = Some(node),
             "Tree" => tree = Some(node),
+            "Skills" => skills = Some(node),
+            "Config" => config = Some(node),
             "Spec" => legacy_tree = true,
             _ => {}
         }
@@ -148,6 +152,91 @@ pub fn validate(xml: &str) -> Result<(), PreflightError> {
                 "an existing spec index",
             ));
         }
+    }
+    if let Some(skills) = skills {
+        validate_skills(skills)?;
+    }
+    if let Some(config) = config {
+        validate_config(config)?;
+    }
+    Ok(())
+}
+
+// SkillsTab.Load accepts direct legacy Skill children or SkillSet/Skill children.
+// Restrict traversal to those paths so unrelated extension nodes remain untouched.
+fn validate_skills(skills: Node<'_, '_>) -> Result<(), PreflightError> {
+    for node in skills.children().filter(Node::is_element) {
+        if node.tag_name().namespace().is_some() {
+            continue;
+        }
+        match node.tag_name().name() {
+            "Skill" => validate_skill_selection(node)?,
+            "SkillSet" => {
+                for skill in node.children().filter(Node::is_element) {
+                    if skill.tag_name().namespace().is_none() && skill.tag_name().name() == "Skill"
+                    {
+                        validate_skill_selection(skill)?;
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+    Ok(())
+}
+
+fn validate_skill_selection(skill: Node<'_, '_>) -> Result<(), PreflightError> {
+    // SkillsTab.Save:480-481 unconditionally applies tostring, so an unset field
+    // is exported as literal "nil". Load:315-316 restores that to the same default
+    // as an absent attribute. Preserve this documented sentinel, not arbitrary
+    // malformed values that happen to make tonumber return nil as well.
+    for attribute in ["mainActiveSkill", "mainActiveSkillCalcs"] {
+        if let Some(value) = skill.attribute(attribute)
+            && value != "nil"
+            && decimal(value).is_none_or(|index| index == 0)
+        {
+            return Err(invalid(
+                "Skill",
+                attribute,
+                value,
+                "a positive active-skill index",
+            ));
+        }
+    }
+    Ok(())
+}
+
+// ConfigTab.Load consumes Input/Placeholder directly or one level inside ConfigSet.
+// Lua tonumber accepts overflow as infinity and malformed text as nil; neither is
+// an acceptable replacement for an explicitly supplied numeric scenario input.
+fn validate_config(config: Node<'_, '_>) -> Result<(), PreflightError> {
+    for node in config.children().filter(Node::is_element) {
+        if node.tag_name().namespace().is_some() {
+            continue;
+        }
+        if node.tag_name().name() == "ConfigSet" {
+            for input in node.children().filter(Node::is_element) {
+                if input.tag_name().namespace().is_none() {
+                    validate_config_number(input)?;
+                }
+            }
+        } else {
+            validate_config_number(node)?;
+        }
+    }
+    Ok(())
+}
+
+fn validate_config_number(node: Node<'_, '_>) -> Result<(), PreflightError> {
+    let element = match node.tag_name().name() {
+        "Input" => "Input",
+        "Placeholder" => "Placeholder",
+        _ => return Ok(()),
+    };
+    if let Some(value) = node.attribute("number")
+        && !value.trim().parse::<f64>().is_ok_and(f64::is_finite)
+    {
+        return Err(invalid(element, "number", value, "a finite number"));
     }
     Ok(())
 }
@@ -491,6 +580,167 @@ mod tests {
         ));
     }
 
+    #[test]
+    fn rejects_explicit_invalid_active_skill_indexes_in_both_layouts() {
+        for attribute in ["mainActiveSkill", "mainActiveSkillCalcs"] {
+            for value in [
+                "",
+                "0",
+                "-1",
+                "0.5",
+                "1.5",
+                "NaN",
+                "inf",
+                "1e999",
+                "4294967296",
+            ] {
+                let skill = format!("<Skill {attribute}='{value}'/>");
+                for skills in [
+                    format!("<Skills>{skill}</Skills>"),
+                    format!("<Skills><SkillSet id='1'>{skill}</SkillSet></Skills>"),
+                ] {
+                    let error = validate(&document(BUILD, TREE, &skills)).unwrap_err();
+                    assert!(
+                        matches!(error, PreflightError::InvalidAttribute {
+                            element: "Skill", attribute: actual, ..
+                        } if actual == attribute),
+                        "{attribute}={value:?}: {error}"
+                    );
+                }
+            }
+        }
+        let error = validate(&document(
+            BUILD,
+            TREE,
+            "<Skills><Skill mainActiveSkill='0'/></Skills>",
+        ))
+        .unwrap_err();
+        assert_eq!(
+            error.to_string(),
+            "invalid Skill.mainActiveSkill value \"0\": expected a positive active-skill index"
+        );
+        for skills in [
+            "<Skills><Skill/><Skill mainActiveSkill='1' mainActiveSkillCalcs='2'/></Skills>",
+            "<Skills><SkillSet id='1'><Skill mainActiveSkill='2' mainActiveSkillCalcs='1'/></SkillSet></Skills>",
+        ] {
+            validate(&document(BUILD, TREE, skills)).unwrap();
+        }
+    }
+
+    #[test]
+    fn accepts_upstream_nil_skill_sentinel_without_accepting_zero() {
+        let xml = include_str!(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../tests/fixtures/builds/pobarchives-Dfz36mCq.xml"
+        ));
+        assert!(xml.contains("mainActiveSkill=\"nil\""));
+        assert!(xml.contains("mainActiveSkillCalcs=\"nil\""));
+        validate(xml).unwrap();
+        for skills in [
+            "<Skills><Skill mainActiveSkill='nil' mainActiveSkillCalcs='nil'/></Skills>",
+            "<Skills><SkillSet id='1'><Skill mainActiveSkill='nil' mainActiveSkillCalcs='1'/></SkillSet></Skills>",
+            "<Skills><Skill mainActiveSkill='2' mainActiveSkillCalcs='nil'/></Skills>",
+        ] {
+            validate(&document(BUILD, TREE, skills)).unwrap();
+        }
+        for skill in [
+            "<Skill mainActiveSkill='0' mainActiveSkillCalcs='nil'/>",
+            "<Skill mainActiveSkill='nil' mainActiveSkillCalcs='0'/>",
+            "<Skill mainActiveSkill='null'/>",
+            "<Skill mainActiveSkillCalcs='NIL'/>",
+        ] {
+            assert!(matches!(
+                validate(&document(BUILD, TREE, &format!("<Skills>{skill}</Skills>"))),
+                Err(PreflightError::InvalidAttribute {
+                    element: "Skill",
+                    ..
+                })
+            ));
+        }
+    }
+    #[test]
+    fn rejects_malformed_or_nonfinite_config_numbers_in_both_layouts() {
+        for element in ["Input", "Placeholder"] {
+            for value in [
+                "", "NaN", "nan", "inf", "-inf", "Infinity", "1e999", "-1e999", "broken", "1.2.3",
+            ] {
+                let input = format!("<{element} name='enemyLevel' number='{value}'/>");
+                for config in [
+                    format!("<Config>{input}</Config>"),
+                    format!("<Config><ConfigSet id='1'>{input}</ConfigSet></Config>"),
+                ] {
+                    let error = validate(&document(BUILD, TREE, &config)).unwrap_err();
+                    assert!(
+                        matches!(error, PreflightError::InvalidAttribute {
+                            element: actual, attribute: "number", ..
+                        } if actual == element),
+                        "{element}.number={value:?}: {error}"
+                    );
+                }
+            }
+        }
+        let error = validate(&document(
+            BUILD,
+            TREE,
+            "<Config><Input name='enemyLevel' number='1e999'/></Config>",
+        ))
+        .unwrap_err();
+        assert_eq!(
+            error.to_string(),
+            "invalid Input.number value \"1e999\": expected a finite number"
+        );
+    }
+
+    #[test]
+    fn accepts_finite_config_numbers_and_preserves_literal_strings() {
+        for element in ["Input", "Placeholder"] {
+            for value in ["0", "-1.5", "+2", "1e2", "1e-999", " 1.5 "] {
+                let input = format!("<{element} name='test' number='{value}'/>");
+                validate(&document(BUILD, TREE, &format!("<Config>{input}</Config>"))).unwrap();
+                validate(&document(
+                    BUILD,
+                    TREE,
+                    &format!("<Config><ConfigSet id='1'>{input}</ConfigSet></Config>"),
+                ))
+                .unwrap();
+            }
+            let input = format!("<{element} name='literal' string='inf'/>");
+            validate(&document(BUILD, TREE, &format!("<Config>{input}</Config>"))).unwrap();
+            validate(&document(
+                BUILD,
+                TREE,
+                &format!("<Config><ConfigSet id='1'>{input}</ConfigSet></Config>"),
+            ))
+            .unwrap();
+        }
+        validate(&document(
+            BUILD,
+            TREE,
+            "<Config><Input name='flag' boolean='true'/></Config>",
+        ))
+        .unwrap();
+    }
+
+    #[test]
+    fn numeric_checks_do_not_walk_unrelated_extensions() {
+        let extensions = r#"
+            <Future><Skills><Skill mainActiveSkill='0'/></Skills>
+                <Config><Input name='test' number='inf'/></Config></Future>
+            <Skills>
+                <Future><Skill mainActiveSkill='0'/></Future>
+                <SkillSet id='1'><Future><Skill mainActiveSkillCalcs='0'/></Future></SkillSet>
+                <x:Skill xmlns:x='urn:extension' mainActiveSkill='0'/>
+                <x:SkillSet xmlns:x='urn:extension'><Skill mainActiveSkill='0'/></x:SkillSet>
+            </Skills>
+            <Config>
+                <Future><Input name='test' number='inf'/></Future>
+                <ConfigSet id='1'><Future><Placeholder name='test' number='NaN'/></Future></ConfigSet>
+                <x:Input xmlns:x='urn:extension' name='test' number='inf'/>
+                <x:ConfigSet xmlns:x='urn:extension'><Input name='test' number='inf'/></x:ConfigSet>
+            </Config>
+        "#;
+        validate(&document(BUILD, TREE, extensions)).unwrap();
+    }
     #[test]
     fn rejects_malformed_and_wrong_root_documents() {
         assert!(matches!(

@@ -16,6 +16,7 @@ fn evaluate(path: &Path) -> Value {
         .arg(path)
         .arg("--timeout-seconds")
         .arg("60")
+        .arg("--raw")
         .output()
         .unwrap();
     assert!(
@@ -23,7 +24,14 @@ fn evaluate(path: &Path) -> Value {
         "{}",
         String::from_utf8_lossy(&output.stderr)
     );
-    serde_json::from_slice(&output.stdout).expect("CLI emits one JSON document")
+    let mut report: Value =
+        serde_json::from_slice(&output.stdout).expect("CLI emits one JSON document");
+    let raw = report["evaluation"]["attachments"][0]["content"]
+        .as_str()
+        .unwrap();
+    let snapshot: Value = serde_json::from_str(raw).unwrap();
+    report["evaluation"] = snapshot;
+    report
 }
 
 fn assert_actor_parity(left: &Value, right: &Value) {

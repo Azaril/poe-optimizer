@@ -1,0 +1,13 @@
+[package]
+name = "poe-optimizer-engine"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.93"
+description = "Incremental native Rust translation of pinned PoB calculation kernels"
+publish = false
+
+[dependencies]
+
+[target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
+mlua = { version = "=0.12.1", features = ["luajit", "vendored"] }
+sha2 = "0.10"

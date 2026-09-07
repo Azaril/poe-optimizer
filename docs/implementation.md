@@ -2,13 +2,16 @@
 
 Last updated: 2026-09-07
 
-Current phase: M1 evaluator implementation is in progress. Import and fresh-process PoB
-evaluation pass local Windows checks and hosted Windows/Linux CI. Independent calculation
-parity remains outstanding. No optimizer is implemented.
+Current phase: M1 remains in progress. Backend-neutral evaluation contracts, typed metrics,
+explicit options and coverage are implemented. Two independent Spark reference cases pass
+local CLI parity; broader mechanic and mutation coverage remains open. Native Rust calculation
+translation is active in parallel. All 78 local Windows tests, formatting, Clippy and portable
+core/native WASM compilation pass. Hosted CI for this checkpoint is pending. No optimizer
+or worker pool is implemented.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
 work, and the next session's starting point. [Design](design.md) defines the intended system
-and acceptance criteria; [execution and interfaces](execution-and-interfaces.md) defines
+and acceptance criteria; [execution and interfaces](execution-and-interfaces.md) and the [calculation boundary decision](calculation-boundary.md) define
 runtime and application contracts. The [PoB investigation](pob-integration.md) and
 [prior-art review](prior-art-and-product-review.md) retain dated evidence and rationale.
 Update this document at progress checkpoints, rather than adding implementation status to
@@ -16,62 +19,98 @@ the design documents.
 
 ## Resume here
 
-1. Inspect `git status --short --branch` before editing. Evaluator checkpoint `71c0af7`
-   is published; local Windows formatting, Clippy and all 47 tests pass, as do hosted
-   Windows/Linux checks. Continue with the coverage/calibration work below.
-2. Keep the PoB submodule at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified.
-   The pinned source boots; neither `+=` nor leading `#@` lines require an overlay with
-   the selected LuaJIT. Do not repeat the original compatibility spike.
-3. Next establish **typed metric and skill coverage plus independent calibration parity**.
-   Resolve the three ambiguous fixture entries, selected minion action, Full DPS membership
-   and granted/manual provenance. Add a small attack/self-cast calibration fixture and
-   explicit bossing/mapping assumptions; obtain independently reproduced PoB outputs.
-4. Exercise legal mutations and coupled interactions across all six dimensions before
-   calling M1 complete or enabling persistent workers/search recommendations. The passing
-   level-change A/B/A and same-adapter export/reimport checks are a starting point, not
-   independent reference or complete mutation-parity evidence.
-5. Replace this resume point and record evidence at the next checkpoint.
+1. Inspect `git status --short --branch` before editing. The current working checkpoint adds
+   shared evaluation contracts, typed CLI output, options/coverage, independent calibration,
+   and the first native kernels. Preserve these changes. The last recorded published baseline
+   is `71c0af7`; its 47-test/Windows/Linux CI evidence belongs to that historical checkpoint.
+2. Check the publication/hosted CI entry below before starting more changes. Local validation
+   is complete: 78 tests pass, including the selected-minion interpretation and options
+   regressions; formatting, Clippy and portable core/native WASM checks also pass.
+3. Keep the PoB submodule at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified.
+   No Lua syntax overlay is required. Preserve original user fixtures and the independently
+   generated calibration goldens; never refresh expected values using the Rust evaluator.
+4. Expand M1 with a small attack/item/support interaction fixture, then controlled legal
+   mutations across passive, item, support, supporting-skill, class and ascendancy choices.
+   Include simultaneous skill/item locks and coupled changes. The three unresolved supplied
+   entries are classified with related candidates; they are not automatically repaired.
+   Investigate the pinned tree's dangling class-start connections before cross-class search.
+5. Continue the native track with a bounded modifier aggregation/data-model slice and actual
+   upstream differential evidence. The six numeric helpers are not a build evaluator and
+   are not yet wired as a full `CalculationBackend`. Keep production dependencies free of
+   Lua and OS services; the portable compilation pass is not a browser execution result.
+6. Add candidate/lock/scoring models and tiny exhaustive joint-search fixtures through the
+   shared engine boundary as M2 starts. Pooling, cancellation, caching and persistent workers
+   remain later implementation work gated by correctness and shared resource accounting.
+7. Replace this resume point and record evidence at the next checkpoint.
 
 No product-scope answer blocks these tasks. Exact objectives, thresholds, required skill/item
-subsets, and encounter assumptions remain explicit per-run inputs. A successful calculation
-or agreement with cached source values does not establish independent evaluator parity.
+subsets, and encounter assumptions remain explicit per-run inputs. The two Spark cases establish
+independent host/extractor parity for shared PoB calculations, not independent certification of
+PoE mechanics or complete evaluator coverage.
 
 ## Current repository and capabilities
 
 - Branch: `main`; remote `origin` is `https://github.com/Azaril/poe-optimizer.git`
-  ([repository](https://github.com/Azaril/poe-optimizer)). The user explicitly authorized
-  publishing the project and supplied build files. Evaluator checkpoint `71c0af7` is
-  published and passed [hosted CI](https://github.com/Azaril/poe-optimizer/actions/runs/34147041293).
-- [Workspace](../Cargo.toml): Rust 2024 / minimum 1.93; core protocol/snapshot types,
-  PoB importer/runtime/supervisor, a static native UTF-8 library, and the root CLI.
-- [CLI](../src/main.rs): `import <input>` validates raw XML or a PoB share code;
-  `evaluate <input>` runs a fresh worker and emits experimental JSON with optional XML
-  export. Output files are created without overwriting existing files. Planner JSON
-  conversion is not implemented.
+  ([repository](https://github.com/Azaril/poe-optimizer)). The user authorized publishing the
+  project and supplied builds. Evaluator baseline `71c0af7` passed
+  [hosted CI](https://github.com/Azaril/poe-optimizer/actions/runs/34147041293); current changes
+  have the complete local evidence below and await their hosted checkpoint.
+- [Workspace](../Cargo.toml): Rust 2024 / minimum 1.93; shared application contracts, PoB
+  import/runtime/supervision, a static native UTF-8 library, native calculation kernels,
+  and the root CLI. The [core](../crates/poe-optimizer-core/src/evaluation.rs) now separates
+  `CalculationBackend` from `EvaluationEngine`. Requests/results carry build documents,
+  options, capabilities, typed measurements, coverage and versioned identity without exposing
+  Lua or process APIs. The current `Engine` is synchronous. Contract validation rejects
+  missing/duplicate/undeclared measurements, bad units, invalid finite metadata, and changed
+  backend/request identity. Backends enforce their own deadline and return typed failures.
+- [CLI](../src/main.rs): `import`, `evaluate`, and `metrics`. Evaluation uses report schema 2
+  with a shared typed `evaluation` object; the private JSONL worker protocol is version 2.
+  `--options <json>` selects one-based groups/actions and applies a named encounter's enemy
+  level, boss kind and explicit five-component incoming hit. Repeatable `--metric` filters
+  typed actor queries; `--raw` includes the backend diagnostic snapshot attachment. JSON/XML
+  destinations must be new paths. Planner JSON conversion is not implemented.
+- [Metric catalog](../crates/poe-optimizer-pob/src/metrics.rs): 15 definitions, 17 actor queries.
+  Player metrics cover life/mana/energy shield, four capped resistances, PoB EHP and five
+  maximum-hit values; selected hit DPS and average hit also support the selected minion.
+  Units and `Finite` / `NonFinite` / `Unavailable` are explicit. `CombinedDPS` and `FullDPS`
+  remain raw diagnostics, not catalog objectives. Broader action semantics, including the
+  selected minion's cooldown-adjusted rate, remain diagnostic rather than rotation guarantees.
+- [Options/context](../crates/poe-optimizer-core/src/options.rs) record requested selection,
+  encounter overrides and effective MAIN inputs/conditions. [Coverage](skill-coverage.md)
+  records resolved/unresolved entries, ownership and provenance, Full DPS membership/counts,
+  selected action context, and dangling tree connections without silently repairing imports.
 - [Importer](../crates/poe-optimizer-pob/src/import.rs): exact UTF-8 XML and hash preservation;
   1 MiB share-code and 8 MiB XML limits, complete zlib-stream validation, 100,000-node
   parser cap, and no DTD/custom entity expansion. Predefined/numeric XML escapes work.
-- [Runtime](../crates/poe-optimizer-pob/src/runtime.rs): `mlua 0.12.1` hosts vendored
-  `luajit-src 210.7.3+1ee778a` (reported LuaJIT `2.1.1787165859`) and statically linked
-  `luautf8 0.1.6`. The [native-module notes](../crates/poe-optimizer-lua-utf8/README.md)
-  record source/header provenance and the shared runtime linkage; bundled Windows DLLs
-  are not loaded. The unmodified pinned wrapper calculates and exports the supplied build.
-- [Supervisor](../crates/poe-optimizer-pob/src/supervisor.rs): versioned JSONL with request
-  identity, one fresh process per evaluation, startup-inclusive deadline, bounded pipe I/O,
-  structured failures, and retained stderr even on success. Parent-owned scratch storage
-  is removed after kill/reap and I/O cleanup; timeout and cleanup tests pass.
-- [Evaluator preflight](../crates/poe-optimizer-pob/src/preflight.rs) rejects missing or
-  ambiguous Build/Tree identity and unsupported format versions; it does not change the
-  container-only importer contract or certify build legality. Post-load guards reject
-  incomplete/stale calculations. Pure-Rust source verification and native/adapter
-  fingerprints pass their checks without spawning Git from workers.
-- Snapshots expose raw actor outputs, explicit non-finite keys and coverage warnings.
-  Certified metric mappings, objective parsing, search, Rayon pools, cancellation, reports,
+- [PoB backend](../crates/poe-optimizer-pob/src/backend.rs) implements the shared contract using
+  a supervised fresh process. [Runtime](../crates/poe-optimizer-pob/src/runtime.rs) embeds
+  `mlua 0.12.1`, `luajit-src 210.7.3+1ee778a` (LuaJIT `2.1.1787165859`) and static
+  `luautf8 0.1.6`. Production does not load upstream Windows DLLs. The
+  [native-module notes](../crates/poe-optimizer-lua-utf8/README.md) preserve exact source/header
+  provenance. The supervisor enforces startup-inclusive deadlines, bounded I/O, request
+  identity, retained stderr and parent-owned scratch cleanup after kill/reap.
+- [Evaluator preflight](../crates/poe-optimizer-pob/src/preflight.rs) rejects missing/ambiguous
+  Build/Tree identity and unsupported versions; container-only import remains separate.
+  Post-load guards reject stale/incomplete calculations. Pure-Rust source verification and
+  adapter/native fingerprints avoid Git subprocesses inside workers.
+- [Independent calibration](calibration-reference.md): two small level-1 Spark cases, normal
+  mapping and Pinnacle bossing, each have 19 recorded numeric outputs. A separate Windows
+  C/Lua host runs the same pinned PoB through its bundled LuaJIT `2.1.1784580905`; it shares
+  neither production host nor extractor code. [CLI parity](../tests/calibration.rs) passes
+  locally against those committed goldens. This validates the limited host/extractor path,
+  not independently modeled mechanics or realistic endgame quality.
+- [Native engine](native-engine.md): `poe-optimizer-engine` contains six resolved-input
+  numerical functions for player/monster hit chance, deflection, fractional/rounded armour
+  reduction, and rounding. Production has no external dependencies, Lua, I/O or scheduling.
+  Five differential/property tests against actual pinned Lua functions and a
+  `wasm32-unknown-unknown` library compile pass. It is not a full build backend, browser app,
+  measured speedup or replacement for the current PoB evaluator.
+- Objective parsing, candidate mutation/legality, search, Rayon pools, cancellation, reports,
   recovery and GUI are **not implemented**. [objective.toml](../examples/objective.toml)
   remains design notation, not accepted CLI input.
-- [CI](../.github/workflows/rust.yml) now checks out submodules and runs workspace formatting,
-  Clippy and tests on Windows/Linux, building the embedded native dependencies. Both jobs
-  passed for `71c0af7`; see the validation evidence below.
+- [CI](../.github/workflows/rust.yml) initializes pinned submodules and checks workspace
+  formatting, Clippy and tests on Windows/Linux, plus portable core/native WASM compilation.
+  Current checkpoint hosted results are pending; the complete local checks pass.
 
 ## Delivery plan and gates
 
@@ -82,13 +121,14 @@ is concrete; real-build recommendations depend on both.
 | Milestone | Status | Deliverable and acceptance gate |
 | --- | --- | --- |
 | M0: bootstrap and alignment | Complete | Rust scaffold, pinned submodule, end-state design, source/prior-art review, preserved source fixture, and this implementation record. Scaffold validation passes; this does not establish evaluator correctness. |
-| M1: evaluator and fixtures | In progress; runtime/import/fresh-worker path validated on Windows/Linux; independent parity and broader coverage outstanding | Reproducible mlua/LuaJIT startup in a Rust worker, bounded import, supervised fresh-process evaluation, typed metric mappings, controlled mutations across all six dimensions, export/re-import parity, and isolation evidence. Complete the checklist below. |
-| M2: reusable core and synthetic joint search | Not started | Candidate/domain/lock models, metric policies, coupled mutations and repair, Rayon/job APIs, shared budgets and events. Match exhaustive tiny domains, escape coordinated-change traps, preserve multiple locks, and verify deterministic one/many-worker results plus cancellation/dedup/accounting. |
+| M1: evaluator and fixtures | In progress; shared boundary/typed options and limited independent Spark parity implemented; broader mechanic and legal mutation coverage outstanding | Reproducible mlua/LuaJIT startup in a Rust worker, bounded import, supervised fresh-process evaluation, typed metric mappings, controlled mutations across all six dimensions, export/re-import parity, and isolation evidence. Complete the checklist below. |
+| M2: reusable core and synthetic joint search | Shared evaluation interfaces available; candidate/scoring/search work not started | Candidate/domain/lock models, metric policies, coupled mutations and repair, Rayon/job APIs, shared budgets and events. Match exhaustive tiny domains, escape coordinated-change traps, preserve multiple locks, and verify deterministic one/many-worker results plus cancellation/dedup/accounting. |
 | M3: first usable joint optimizer | Not started | Integrate all six dimensions with multicore PoB evaluation; ship preflight, evaluation/comparison, search, saved-result reranking, recovery, verified exports, and offline reports. Meet the end-to-end gates below. |
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
 | M5: richer objective policies | Not started | Unit-checked expressions, composite and ordered priorities, soft preferences, Pareto selection, and explicit robust aggregation. Test policy-specific selection and preserve hard constraints. |
 | Desktop GUI | Deferred until CLI/report contracts stabilize | Choose frontend; Tauri is a candidate. Reuse core jobs, results and comparison models. Verify CLI/GUI parity, responsive cancellation and native-worker packaging. Does not depend on finishing every M4/M5 feature. |
-| Rust calculation migration / PoE1 | Deferred | Profile before porting calculations; require differential parity. Add PoE1 as a separate versioned rules/evaluator adapter after PoE2 interfaces are proven. |
+| Native Rust calculation replacement | Active in parallel | Six numerical kernels and portable library compilation pass focused checks. Expand through modifier/data and complete pipeline slices with differential parity before exposing a native build backend. Performance and browser execution remain unmeasured. |
+| PoE1 adapter | Later, separate track | Add a distinct versioned rules/data/evaluator adapter after PoE2 interfaces are proven; do not mix game identities or reuse PoE2 parity claims. |
 
 Narrow passive/item/skill experiments are internal validation steps. The first usable release
 must search classes, ascendancies, passives, equipment, support gems, and supporting active
@@ -107,22 +147,27 @@ skills together within explicit finite catalogs. It must support 1..N required s
       No pin change or syntax overlay was needed. Source-manifest reproducibility,
       mismatch rejection and native provenance checks pass, along with hosted Windows/Linux
       startup, native and fixture tests. Exact dependency/source identities are recorded.
-- [ ] **M1.2 Boundary — partly complete.** Fresh-process JSONL handshake/request/response,
-      deadline/exit supervision, bounded I/O, retained diagnostics, parent scratch cleanup
-      and CLI/XML export pass local checks. Explicit skill/scenario request selection
-      remains to implement. Outputs are typed transport structures containing raw PoB
-      fields, not certified game metric contracts.
-- [ ] **M1.3 Import and metrics — container/preflight complete; metric semantics partial.**
-      Bounded XML/share imports preserve unknown fields and source bytes; evaluator-only
-      preflight prevents incomplete containers from silently calculating default builds.
-      Resolve actors/groups/parts, Full DPS membership, granted/manual provenance and the
-      three unresolved entries. Add a small attack/self-cast calibration case and typed
-      metric availability/units; do not turn unresolved or non-finite values into zero.
-- [ ] **M1.4 Baseline parity — partial.** Ordinary-frame calculation/export, completed-load
-      guards and export/reimport actor comparisons pass locally. Obtain independent
-      same-pin PoB reference outputs, record their production method and tolerances, and
-      compare semantic state plus supported metrics. Cached export values and same-adapter
-      round trips are not independent reference evidence.
+- [ ] **M1.2 Boundary — implemented and locally validated; scenario coverage remains limited.** Shared
+      `CalculationBackend` / `EvaluationEngine` separate application contracts from hosting.
+      CLI schema 2 and protocol 2 carry explicit skill/scenario options, versioned identity,
+      typed measurements, coverage and optional diagnostic attachments. Eleven core contract
+      tests pass; full options/coverage and workspace verification remain to finalize.
+      The synchronous engine has no worker pool or preemptive native execution boundary.
+- [ ] **M1.3 Import and metrics — container/preflight complete; semantics partial.**
+      Typed units/availability now cover 15 definitions and 17 actor queries. Coverage
+      classifies the three unresolved supplied entries and exposes selected ownership,
+      Full DPS membership, manual/generated provenance and missing tree connections.
+      No automatic repair is performed. Extend selected minion command/usage-model coverage
+      and expand action/mechanic coverage before treating measurements as search objectives.
+- [ ] **M1.4 Baseline parity — partial, with independent calibration evidence.**
+      Two self-cast Spark scenarios have independently hosted/extracted, same-pin PoB
+      reference outputs and explicit bossing/mapping assumptions. Both pass the production
+      CLI comparison of all 19 recorded values plus typed units/context/coverage. Reference
+      generation uses different host, extractor and LuaJIT builds; the calculation engine
+      is shared, so this is not independent game-mechanics certification. Expand to attack,
+      support/equipment, minion and survival cases. Same-adapter A/B/A/export comparisons
+      remain useful separate evidence; cached export values are not a reference oracle.
+
 - [ ] **M1.5 Mutation parity — not started across the required dimensions.** Exercise legal
       passive, item, support, supporting-skill, class and ascendancy changes separately
       and jointly. Preserve locks and verify export, point/resource accounting and effect
@@ -196,11 +241,11 @@ independent evidence of the game patch.
 | --- | --- | --- |
 | Runtime portability | The selected embedded LuaJIT accepts `count += 1` and the leading `#@` lines; the pinned wrapper boots on Windows without vendor changes. | Hosted Windows/Linux checks pass; retain version/source pins on future updates. |
 | Native ABI and source identity | Static `luautf8 0.1.6` links to mlua's vendored LuaJIT. Native/Unicode tests, eight vendored-file provenance checks, source-manifest reproducibility and mismatch rejection pass locally. | Hosted portability checks pass. Repeat provenance checks deliberately when updating pinned inputs. |
-| Selected minion metric semantics | Main group is Kelari (`SummonSandDjinnPlayer`), selector 2. Fresh output names the minion action Kelari's Deception and reports raw `TotalDPS` about 60,384.684. This agrees with the cache but is not an independent reference. | Establish metric units/actor/part and scenario semantics with independent calibration. Non-finite chaos-immunity outputs are explicitly listed; define typed handling before scoring. |
-| Full DPS membership | The supplied build still has no included Full DPS groups and raw player `FullDPS` is zero. | Make inclusion/count/uptime explicit; do not sum per-skill outputs or treat the zero roll-up as total build damage. |
-| Unresolved and granted skills | Exactly three imported entries remain unresolved: Spectre: Powered Zealot, Navira's Well and Kelari's Deception. A live minion action with the last name does not resolve its separate imported entry. | Resolve through the adapter and reconcile manual/tree/item-granted provenance; do not omit, double-count or score unresolved entries as zero. |
-| Host behavior and diagnostics | Rust handles decoding/time; host callbacks prevent prompts and redirect diagnostics. Successful startup can still log missing-node messages, which are retained in snapshots. | Review messages for coverage impact; scratch-cleanup and timeout checks already pass. |
-| Legality, freshness and parity | The fresh-process ordinary-frame path, completed-load/version guards, evaluator preflight and A/B/A/round-trip checks pass locally. Full legality and independent parity remain unproven. | Calibration/reference comparison, then legal/coupled mutation and isolation coverage before reuse or fast paths. |
+| Selected minion metric semantics | Main player action is `SummonSandDjinnPlayer`; selected minion action is `ExplosiveTeleportSandDjinn`, owned by group 1/gem 1. Typed non-finite chaos immunity is represented explicitly. Upstream initially declares average mode, then clears it after applying the self-cast cooldown: final `show_average=false`. The typed value is PoB's selected-action rate, not a rotation guarantee. | Add command/clone/usage-model coverage; do not present raw ~60,384.684 as independently validated sustained minion DPS. Add independent minion/action references. |
+| Full DPS membership | Structured coverage shows no included supplied-build groups and raw player `FullDPS` zero. Spark calibration includes one group and compares its raw roll-up. | Keep membership/counts/contributions explicit; Combined DPS and Full DPS are not catalog objectives. Independent Spark agreement does not validate multi-skill uptime or aggregation. |
+| Unresolved and granted skills | Three entries remain unresolved. Powered Zealot matches two Spectre monsters; Navira's Well and Kelari's Deception match minion command actions. Coverage distinguishes 15 manual, three tree-granted and one item-granted groups. | Preserve ambiguity and original input; exact relationships are hints, not repair or legality. Exercise supported action changes and coupled support/granted-skill effects without omission or double-counting. |
+| Host behavior and diagnostics | Fourteen startup messages correspond to dangling connections in tree `0_5`; coverage exposes actual missing targets and allocated endpoints. The Sorceress start and supplied allocated nodes are unaffected by those specific edges. | Their impact on other classes remains unverified. Compare topology against corrected upstream/game data before enabling cross-class tree search. Preserve stderr and coverage together. |
+| Legality, freshness and parity | Fresh-load guards and A/B/A/round trips pass at the previous checkpoint; two new Spark scenarios pass independent-host CLI parity. Neither provides full build legality or six-dimension mutation evidence. | Complete legal/coupled mutation and failure/isolation coverage before reuse, fast paths or real-build recommendations. |
 
 These are technical unknowns, not requests for the user to guess internal PoB IDs.
 Ask for user input when a reproduced issue forces a product trade-off or the supplied
@@ -208,7 +253,39 @@ material cannot establish an intended build choice; present the concrete alterna
 
 ## Validation evidence
 
-### Current M1 evaluator checkpoint — published and validated
+### Current contracts, calibration and native checkpoint — local checks passed
+
+Recorded on 2026-09-07 on Windows/x64. These changes are in the working tree at this
+checkpoint. Preserve the historical results below; their CI commit is not the current
+code. Local validation is complete. Publication and hosted results will be recorded below.
+The final Lua edit before the standalone smoke was a comment documenting cooldown behavior;
+formatting/Clippy and the smoke were rerun after it.
+
+| Check | Result / limit |
+| --- | --- |
+| Core shared contract suite, `cargo test -p poe-optimizer-core --test engine_contract --locked` | **11 passed.** Fake alternate/boxed backends exercise custom catalogs, complete actor queries, explicit unavailable/non-finite values, unit/schema checks, capability rejection, identity/options echo, JSON-safe metadata and typed timeout/failure propagation. |
+| Independent CLI calibration, `cargo test --test calibration --locked` | **1 passed, covering both Spark scenarios.** Each fresh CLI process matches all 19 independent raw values, source/fixture identity, typed finite units, absent-minion availability, effective encounter and selected Spark coverage. Absolute tolerance `1e-8`, relative tolerance `1e-9`; applied as `max(absolute, abs(reference) * relative)`. |
+| Standalone reference generation, `pwsh -File scripts/reference-calibrate.ps1` | Separate MSVC C driver plus bundled DLLs produced the two committed reference JSONs. Two independent fresh runs per fixture reproduced all 19 metrics exactly. Runtime/compiler/source/fixture/generator hashes and assumptions are recorded in [the reference notes](calibration-reference.md). No Rust evaluator generated expected values. |
+| Native numerical parity, `cargo test -p poe-optimizer-engine --locked` | **5 passed.** Six functions compare against actual pinned upstream Lua using source hashes, boundary grids, interpreted/warmed execution, exceptional-value classification and positive-domain properties. The crate remains a resolved-input numerical slice, not a full evaluator. |
+| Portable core and native libraries, `cargo check -p poe-optimizer-core -p poe-optimizer-engine --lib --target wasm32-unknown-unknown --locked` | Passed. Production library has no Lua/C/OS dependency. No browser runtime, bindings, scheduler or browser numerical/performance test has run. |
+| Options/coverage integration suite | **7 passed.** Exact group/player/minion selection, mapping overrides, capped resistance units, invalid selectors/metrics/fields, nonfinite Config numbers, DamageOverTime/incoming-hit mismatch, unresolved/provenance/tree coverage and classified infinity. MAIN action ownership is checked against the authoritative actor list, not PoB's mutable UI display list. The minion's final average flag is correctly false after cooldown adjustment. |
+| `cargo fmt --all -- --check` | Passed after all code edits. |
+| `cargo clippy --workspace --all-targets --locked -- -D warnings` | Passed with warnings denied. |
+| `cargo test --workspace --all-targets --locked` | **78 passed**, zero failures; one ignored subprocess helper is explicitly invoked by the deadline test. Includes the original fixture A/B/A and export/reimport regressions, 11 core contract tests, 5 native parity tests, and 5 new preflight tests. |
+| Sources, artifacts and documentation | Read-only audit matched all 1,082 source entries and all 16 available reference artifact hashes. Both independent runs match each golden's 19 values exactly. Original user fixtures retain exact hashes/lengths, submodule remains clean; README/docs relative file links and `git diff --check` pass. |
+| Publish and hosted Windows/Linux CI | **Pending:** checkpoint commit and hosted run URL/results. Historical run `34147041293` validates only `71c0af7`. |
+| Standalone CLI smoke | `runs/m1-contracts-20260907-dd6640a0.json` and `.xml` (ignored) contain schema 2, 17 typed measurements, exact selected SandDjinn action and raw diagnostic attachment. Adapter fingerprint `bf6a6c2f134812e9f738a1f0c4581472a5130d239a85d48e1a169e16c261e292`. This debug run took 2,582.5707 ms inside evaluation, including source verification/startup; one observation is not a benchmark. `metrics` emits 15 definitions without launching Lua. |
+| Optimization, native speedup/scaling and browser execution | Not implemented or measured. No throughput, quality, scaling or browser-runtime claim follows from parity and compilation. |
+
+The PoB source remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`, source-manifest hash
+`8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675`.
+Current production hosting is mlua `0.12.1` / LuaJIT `2.1.1787165859` / static UTF-8
+`0.1.6`; the independent reference uses bundled LuaJIT `2.1.1784580905` on x64. The
+Spark comparisons establish host/extractor parity for those shared PoB calculations.
+Native kernel differential checks translate the pinned implementation; neither kind
+of evidence independently certifies game mechanics.
+
+### Historical M1 evaluator checkpoint — published and validated
 
 Recorded on 2026-09-07 on Windows/x64 with Rust 1.93. Evaluator commit
 [`71c0af7`](https://github.com/Azaril/poe-optimizer/commit/71c0af7a8813776036b4e9750f4ac713bb52a832)
@@ -299,6 +376,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `46473e3` | Recorded explicit user authorization to push the project and supplied fixtures to GitHub; cleared the pending publishing question. |
 | 2026-09-07 | `1be92d7` | Preferred mlua hosting inside isolated Rust evaluator workers. |
 | 2026-09-07 | `71c0af7` | Added bounded import, evaluator preflight, embedded/native hosting, source verification, fresh-worker supervision and CLI evaluation/export. Formatting, Clippy, 47 local tests and hosted Windows/Linux CI pass; independent parity and optimization remain outstanding. |
+| 2026-09-07 | Current working checkpoint; publication pending | Added backend-neutral contracts, CLI schema/protocol 2, typed catalog/options/coverage, two independent Spark scenarios and the first six native numerical functions. All 78 local tests, formatting, Clippy and core/native WASM compilation pass; hosted results and broader M1 coverage remain pending. |
 
 ### Hosting decision checkpoint
 

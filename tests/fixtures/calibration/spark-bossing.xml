@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathOfBuilding2>
+  <Build level="60" className="Sorceress" ascendClassName="None" targetVersion="0_1" characterLevelAutoMode="false" mainSocketGroup="1" viewMode="CALCS"/>
+  <Tree activeSpec="1">
+    <Spec title="Unallocated Sorceress" classId="7" classInternalId="7" ascendClassId="0" treeVersion="0_5" nodes="" masteryEffects=""/>
+  </Tree>
+  <Skills activeSkillSet="1" defaultGemLevel="normalMaximum" defaultGemQuality="0">
+    <SkillSet id="1" title="Spark">
+      <Skill enabled="true" includeInFullDPS="true" groupCount="1" label="Single Spark hit" mainActiveSkill="1" mainActiveSkillCalcs="1">
+        <Gem nameSpec="Spark" skillId="SparkPlayer" gemId="Metadata/Items/Gems/SkillGemSpark" variantId="Spark" level="1" quality="0" enabled="true" enableGlobal1="true" enableGlobal2="true" count="1"/>
+      </Skill>
+    </SkillSet>
+  </Skills>
+  <Items activeItemSet="1"><ItemSet id="1" title="No equipment"/></Items>
+  <Config activeConfigSet="1">
+    <ConfigSet id="1" title="Bossing: Pinnacle enemy">
+      <Input name="enemyIsBoss" string="Pinnacle"/>
+      <Input name="enemyLevel" number="82"/>
+      <Input name="enemyFireResist" number="50"/>
+      <Input name="enemyColdResist" number="50"/>
+      <Input name="enemyLightningResist" number="50"/>
+      <Input name="enemyChaosResist" number="0"/>
+      <Input name="enemyDamageType" string="Melee"/>
+      <Input name="enemyPhysicalDamage" number="3000"/>
+      <Input name="enemyFireDamage" number="0"/>
+      <Input name="enemyColdDamage" number="0"/>
+      <Input name="enemyLightningDamage" number="0"/>
+      <Input name="enemyChaosDamage" number="0"/>
+      <Input name="enemyPhysicalOverwhelm" number="0"/>
+      <Input name="enemyFirePen" number="0"/>
+      <Input name="enemyColdPen" number="0"/>
+      <Input name="enemyLightningPen" number="0"/>
+      <Input name="enemyCritChance" number="0"/>
+      <Input name="enemySpeed" number="1000"/>
+      <Input name="conditionEnemyShocked" boolean="false"/>
+      <Input name="conditionEnemyChilled" boolean="false"/>
+      <Input name="conditionEnemyIgnited" boolean="false"/>
+      <Input name="conditionCritRecently" boolean="false"/>
+      <Input name="conditionBeenHitRecently" boolean="false"/>
+      <Input name="multiplierNearbyEnemies" number="1"/>
+      <Input name="multiplierNearbyRareOrUniqueEnemies" number="1"/>
+    </ConfigSet>
+  </Config>
+  <Notes>Minimal Bossing: Pinnacle enemy host-calibration fixture. Level 1 Spark, no supports, no equipment, no allocated passives. Normal-monster numbers are mapping proxies, not measured clear speed.</Notes>
+</PathOfBuilding2>

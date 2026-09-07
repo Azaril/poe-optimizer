@@ -13,10 +13,18 @@ application layers, with the following package boundaries:
 | Package | Owns | Dependency direction |
 | --- | --- | --- |
 | `poe-optimizer-core` | Problem/candidate types, metric and evaluator interfaces, scoring, search, execution limits, run events/results | Independent of CLI, Tauri, webviews, and a particular Lua host |
+| `poe-optimizer-engine` | Portable native game calculations and versioned data; no Lua, OS scheduling or application I/O | Implements calculation semantics; independent of the PoB runtime |
 | `poe-optimizer-pob` | PoB game adapter, mlua/LuaJIT hosting in Rust workers, process supervision, metric mappings, XML import/export | Implements core interfaces; depends on core |
 | `poe-optimizer-report` | Versioned artifact encoding and presentation models, JSON/CSV export, HTML report generation | Depends on core result types; never owns calculation or search rules |
 | `poe-optimizer-cli` | Flags/config loading, composition of adapters, terminal progress, exit codes, report commands | Calls core, PoB adapter, and reporting APIs; binary remains `poe-optimizer` |
 | Future Tauri application | Goal editor, run control, charts, build comparison and export | Calls the same libraries through a small Rust application layer |
+
+The [calculation boundary decision](calculation-boundary.md) separates `CalculationBackend`
+from the application-facing `EvaluationEngine`. Callers exchange typed build documents,
+options, measurements, coverage and errors. Raw Lua outputs are opaque diagnostic
+attachments; native backends do not inherit PoB's process requirement. `full_build_evaluation`
+means complete-document input support, not a legality or mechanic-coverage certificate.
+Portable native stages follow the [native engine design](native-engine.md).
 
 Search and evaluation behavior belong in libraries; application layers compose them.
 Keep pure data/model modules separate from scheduling within core; split further if
@@ -64,7 +72,7 @@ Rust/Lua interaction stays inside that worker; the coordinator uses the versione
 protocol. Adding threads around one locked VM would not parallelize the oracle. Keep Lua
 handles out of Rayon work and preserve process isolation for hard timeouts, native failures,
 and fresh verification. The [hosting contract](design.md#evaluator-boundary) covers native
-module compatibility and the diagnostic external-runtime fallback.
+module compatibility and the independent upstream-runtime reference harness.
 
 ### CPU, memory, and admission control
 

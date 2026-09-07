@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/poe-optimizer-core", "crates/poe-optimizer-pob", "crates/poe-optimizer-lua-utf8"]
+members = ["crates/poe-optimizer-core", "crates/poe-optimizer-pob", "crates/poe-optimizer-lua-utf8", "crates/poe-optimizer-engine"]
 resolver = "3"
 
 [package]

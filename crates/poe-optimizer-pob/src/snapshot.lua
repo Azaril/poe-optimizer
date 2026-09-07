@@ -1,23 +1,27 @@
 local function actor_output(actor)
     if not actor then return nil end
-    local metrics, non_finite = {}, {}
+    local metrics, non_finite, non_finite_values = {}, {}, {}
     for key, value in pairs(actor.output or {}) do
         if type(key) == "string" and type(value) == "number" then
             if value == value and value ~= math.huge and value ~= -math.huge then
                 metrics[key] = value
             else
                 table.insert(non_finite, key)
+                non_finite_values[key] = value ~= value and "not_a_number" or (value > 0 and "positive_infinity" or "negative_infinity")
             end
         end
     end
     table.sort(non_finite)
     local effect = actor.mainSkill and actor.mainSkill.activeEffect
     local granted = effect and effect.grantedEffect
+    local flags = effect and effect.statSet and effect.statSet.skillFlags
     return {
         skill_name = granted and granted.name or nil,
         skill_id = granted and granted.id or nil,
+        has_hit_damage = flags and flags.hit == true and not flags.disable or false,
         metrics = metrics,
         non_finite_metrics = non_finite,
+        non_finite_values = non_finite_values,
     }
 end
 

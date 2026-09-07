@@ -448,6 +448,15 @@ name = "poe-optimizer-core"
 version = "0.1.0"
 dependencies = [
  "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "poe-optimizer-engine"
+version = "0.1.0"
+dependencies = [
+ "mlua",
+ "sha2",
 ]
 
 [[package]]

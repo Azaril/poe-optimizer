@@ -20,3 +20,7 @@ jobs:
         run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - name: Test
         run: cargo test --workspace --all-targets --locked
+      - name: Install portable target
+        run: rustup target add wasm32-unknown-unknown
+      - name: Check portable core and native calculations
+        run: cargo check -p poe-optimizer-core -p poe-optimizer-engine --lib --target wasm32-unknown-unknown --locked

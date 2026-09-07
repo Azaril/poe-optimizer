@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
-pub const PROTOCOL_VERSION: u32 = 1;
+pub const PROTOCOL_VERSION: u32 = 2;
 pub const MAX_WIRE_BYTES: usize = 64 * 1024 * 1024;
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -17,6 +17,7 @@ pub struct WorkerRequest {
     pub protocol_version: u32,
     pub request_id: u64,
     pub xml: String,
+    pub options: options::EvaluationOptions,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -37,6 +38,8 @@ pub struct WorkerFailure {
 pub struct EvaluationSnapshot {
     pub runtime: RuntimeIdentity,
     pub build: BuildSummary,
+    pub coverage: coverage::BuildCoverage,
+    pub context: options::EvaluationContext,
     pub player: ActorOutput,
     pub minion: Option<ActorOutput>,
     pub warnings: Vec<String>,
@@ -74,6 +77,13 @@ pub struct BuildSummary {
 pub struct ActorOutput {
     pub skill_name: Option<String>,
     pub skill_id: Option<String>,
+    pub has_hit_damage: bool,
     pub metrics: BTreeMap<String, f64>,
     pub non_finite_metrics: Vec<String>,
+    pub non_finite_values: BTreeMap<String, metrics::NonFiniteKind>,
 }
+
+pub mod coverage;
+pub mod evaluation;
+pub mod metrics;
+pub mod options;

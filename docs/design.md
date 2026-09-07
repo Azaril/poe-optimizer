@@ -39,8 +39,8 @@ and unbounded discovery outside the user's allowed catalogs.
 Keep PoB source unmodified in a pinned submodule. Own the compatibility shim and
 worker protocol in this repository. Prefer Rust workers embedding LuaJIT through `mlua`
 for Lua hosting and interaction. Preserve process isolation and fresh-process verification.
-Direct LuaJIT execution is a diagnostic/reference fallback if an embedding incompatibility
-is reproduced, rather than the required initial host.
+A separate upstream LuaJIT harness supplies independent host/extraction reference evidence
+and can diagnose embedding incompatibilities.
 
 ## Problem and boundaries
 
@@ -208,9 +208,10 @@ callbacks, ordinary-frame calculations, and export parity before declaring this 
 If dynamic C-module loading is used, isolate the required unsafe initialization in the
 adapter and load only controlled runtime modules; the [default Lua constructor](https://docs.rs/mlua/0.12.1/mlua/struct.Lua.html#method.new)
 disallows C modules. Imported build data and objective configuration are never executable Lua.
-A fresh Rust/`mlua` process remains the correctness baseline. Use an external LuaJIT harness
-only to diagnose or temporarily work around a documented incompatibility, with the same
-version/provenance and parity requirements.
+A fresh Rust/`mlua` process remains the production correctness baseline. Use a separate
+upstream-runtime harness for independent host/extraction calibration and to diagnose
+embedding incompatibilities. Record source, runtime and harness identities with tolerances;
+shared PoB source remains a shared dependency, not independent validation of game mechanics.
 
 ### Parallel execution policy
 
@@ -619,9 +620,13 @@ adapter must demonstrate differential parity and declare its own versioned capab
 | PoE2 mechanics and data change | Pin source/data and record schema/runtime; upgrade with fixture parity checks |
 | Packaging upstream/native dependencies | Keep notices; inventory dependencies actually shipped; select our distribution license before release |
 
-Rust migration should start with orchestration, hashing, graph operations, and independent
-validation. Port a calculation subsystem only when profiling shows value and fixture coverage
-can compare it against Lua over representative and adversarial cases. Keep a Lua fallback.
+A native Rust calculation engine develops in parallel with the PoB adapter and optimizer.
+Translate cohesive calculation/data stages with differential parity against actual pinned
+Lua functions and representative/adversarial candidate states. Profile before claiming or
+tuning speed improvements. Keep the Lua reference adapter for comparison and explicit
+unsupported scope. The [calculation boundary decision](calculation-boundary.md) separates
+portable calculations, evaluation orchestration and host execution; the
+[native engine design](native-engine.md) defines translation and WebAssembly gates.
 A shared Rust trait does not imply PoE1 and PoE2 share rules or field semantics.
 
 ## Confirmed design decisions
@@ -636,6 +641,8 @@ first, visual output, and a later GUI. The user has also confirmed:
 4. Include both bossing and mapping benchmark contexts from the start.
 5. Joint equipment optimization is part of the first product, not a deferred alternative
    to support/gem search.
+6. Calculation and evaluation APIs must support replacing Lua with a fully native Rust
+   backend. Develop parity-tested native stages in parallel; retain a browser/WASM path.
 
 The [decision register](prior-art-and-product-review.md#decision-register-and-remaining-input)
 preserves the answers and rationale. Exact skill/item requirements, goals, and scenario

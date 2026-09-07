@@ -2,7 +2,7 @@
 //! Upstream source is trusted, revision-pinned code; the worker is not a security sandbox.
 
 use mlua::{Function, Lua, LuaSerdeExt, MultiValue, Table, Value};
-use poe_optimizer_core::{EvaluationSnapshot, RuntimeIdentity};
+use poe_optimizer_core::{EvaluationSnapshot, RuntimeIdentity, options::EvaluationOptions};
 use serde::Deserialize;
 use sha2::{Digest, Sha256};
 use std::{
@@ -56,7 +56,17 @@ pub fn evaluate(
     scratch: &Path,
     xml: &str,
 ) -> Result<EvaluationSnapshot, RuntimeError> {
+    evaluate_with_options(pob_root, scratch, xml, &EvaluationOptions::default())
+}
+
+pub fn evaluate_with_options(
+    pob_root: &Path,
+    scratch: &Path,
+    xml: &str,
+    options: &EvaluationOptions,
+) -> Result<EvaluationSnapshot, RuntimeError> {
     let start = Instant::now();
+    options.validate().map_err(RuntimeError::Setup)?;
     crate::import::decode_build(xml.as_bytes())?;
     crate::preflight::validate(xml)?;
     let root = pob_root.canonicalize()?;
@@ -77,6 +87,13 @@ pub fn evaluate(
     poe_optimizer_lua_utf8::register(&lua)?;
     let globals = lua.globals();
     globals.set("arg", lua.create_table()?)?;
+    globals.set(
+        "_optimizer_options",
+        lua.to_value_with(
+            options,
+            mlua::serde::SerializeOptions::new().serialize_none_to_null(false),
+        )?,
+    )?;
     globals.set("_optimizer_source_path", lua_path(&source))?;
     globals.set("_optimizer_runtime_path", lua_path(&root.join("runtime")))?;
     globals.set("_optimizer_user_path", lua_path(&user_path))?;
@@ -170,6 +187,12 @@ pub fn evaluate(
         assert(#main.popups == 0, "PoB requires an interactive import decision")
         assert(build.calcsTab and build.spec and build.skillsTab, "Incomplete imported build")
         assert(build.spec.curClass.classes[build.spec.curAscendClassId], "Invalid imported ascendancy")
+    "#).exec()?;
+    lua.load(include_str!("options.lua"))
+        .set_name("@optimizer-options.lua")
+        .exec()?;
+    check_prompt(&lua)?;
+    lua.load(r#"
         local previous = build.calcsTab.mainEnv
         local revision = assert(build.outputRevision, "Missing calculation revision")
         build.buildFlag = true
@@ -178,18 +201,44 @@ pub fn evaluate(
         assert(build.calcsTab.mainEnv ~= previous, "PoB retained an old calculation environment")
     "#).exec()?;
     check_prompt(&lua)?;
+    globals
+        .get::<Function>("_optimizer_validate_options")?
+        .call::<()>(())?;
     let value: Value = lua
         .load(SNAPSHOT)
         .set_name("@optimizer-snapshot.lua")
         .eval()?;
-    let snapshot: LuaSnapshot = lua.from_value(value)?;
+    let mut snapshot: LuaSnapshot = lua.from_value(value)?;
     check_prompt(&lua)?;
     crate::import::decode_build(snapshot.export_xml.as_bytes())?;
+    let coverage: poe_optimizer_core::coverage::BuildCoverage = lua.from_value(
+        lua.load(include_str!("coverage.lua"))
+            .set_name("@optimizer-coverage.lua")
+            .eval()?,
+    )?;
+    let context = lua.from_value(
+        lua.load(include_str!("context.lua"))
+            .set_name("@optimizer-context.lua")
+            .eval()?,
+    )?;
+    if !coverage.tree_connections.is_empty() {
+        snapshot.warnings.push(format!("{} dangling upstream passive-tree connections; cross-class topology coverage is unverified", coverage.tree_connections.len()));
+    }
     let jit: Table = globals.get("jit")?;
     let mut hash = Sha256::new();
     hash.update(include_str!("runtime.rs"));
     hash.update(HOST);
     hash.update(SNAPSHOT);
+    hash.update(include_str!("options.lua"));
+    hash.update(include_str!("context.lua"));
+    hash.update(include_str!("coverage.lua"));
+    hash.update(include_str!("metrics.rs"));
+    hash.update(include_str!("backend.rs"));
+    hash.update(include_str!("supervisor.rs"));
+    hash.update(include_str!("../../poe-optimizer-core/src/evaluation.rs"));
+    hash.update(include_str!("../../poe-optimizer-core/src/options.rs"));
+    hash.update(include_str!("../../poe-optimizer-core/src/metrics.rs"));
+    hash.update(include_str!("../../poe-optimizer-core/src/coverage.rs"));
     hash.update(include_str!("../../../Cargo.lock"));
     hash.update(include_str!("../../../Cargo.toml"));
     hash.update(include_str!("../Cargo.toml"));
@@ -224,6 +273,8 @@ pub fn evaluate(
             adapter_hash: format!("{:x}", hash.finalize()),
         },
         build: snapshot.build,
+        coverage,
+        context,
         player: snapshot.player,
         minion: snapshot.minion,
         warnings: snapshot.warnings,

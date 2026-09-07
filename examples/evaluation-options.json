@@ -1,0 +1,18 @@
+{
+  "selection": {
+    "socket_group": 1,
+    "active_skill": 1
+  },
+  "encounter": {
+    "name": "mapping-calibration",
+    "enemy_level": 60,
+    "boss": "normal",
+    "incoming_hit": {
+      "physical": 1000.0,
+      "fire": 0.0,
+      "cold": 0.0,
+      "lightning": 0.0,
+      "chaos": 0.0
+    }
+  }
+}

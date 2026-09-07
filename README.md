@@ -23,12 +23,15 @@ shared CPU/memory limits. The CLI comes first, with
 structured run data and offline HTML reports; a later GUI can use the same APIs,
 with Tauri as a candidate.
 
-**Status:** experimental import and evaluation CLI. It decodes PoB share codes/XML,
-loads the pinned PoB engine through `mlua`, and returns fresh raw player/minion outputs
-plus an optional PoB XML export. Each request uses an isolated process with a deadline.
-Optimization, certified metric mappings, persistent worker pools, and reports are not
-implemented yet. The [living implementation document](docs/implementation.md) is the
-progress and resume record; update it at feature/experiment checkpoints and handoffs.
+**Status:** experimental import and evaluation CLI with backend-neutral calculation and
+evaluation APIs. It accepts PoB share codes/XML, explicit skill/action and encounter options,
+and returns typed metrics with units, availability and structured coverage. Each PoB request
+uses a fresh `mlua` worker process with a deadline. Independent Spark mapping/bossing
+references validate the host and metric extraction. A parallel native Rust crate has initial
+parity-tested numerical helpers and compiles for WebAssembly; it is not a full build evaluator.
+Optimization, worker pools, reports and browser bindings are not implemented yet.
+The [living implementation document](docs/implementation.md) is the progress and resume record;
+update it at feature/experiment checkpoints and handoffs.
 Start with [the end-state design](docs/design.md), especially its
 [confirmed decisions](docs/design.md#confirmed-design-decisions), then the
 [implementation resume point](docs/implementation.md#resume-here). See
@@ -76,18 +79,50 @@ Output files must be new paths; existing files are never overwritten. Without `-
 evaluation JSON goes to stdout. `--pob` selects a source directory matching the committed
 source manifest. The evaluator validates its source directly and does not run Git at runtime.
 
-Snapshots identify the runtime, source/adapter fingerprints, selected actors and raw PoB
-field names. Non-finite measurements are listed separately; unknown skill entries and
-upstream diagnostics remain visible. Export is PoB's normalized serialization, while the
-import command preserves the original XML bytes. Evaluation requires a supported explicit
-Build section and tree specification; incomplete/ambiguous imports fail instead of using
-PoB defaults. No claim of independent numerical parity,
-full mechanic support, build legality or optimized results is made by this diagnostic command.
+List the metric catalog or select an explicit calibration context:
 
+```powershell
+cargo run --locked -- metrics
+cargo run --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml --options examples/evaluation-options.json --metric player.selected_hit_dps --metric player.life
+```
+
+`--metric` is repeatable; use `player.<id>` or `minion.<id>`. With no filter, all declared
+actor/metric combinations are returned, including unavailable measurements. Percent values
+use percentage points (`75` means 75%). Finite, positive/negative infinity, NaN and unavailable
+are distinct. Combined DPS and Full DPS rollups are not registered objective metrics.
+
+The options file accepts one-based socket-group/action indexes and an optional selected
+minion action. Encounter overrides set a name, enemy level, boss kind and/or all five incoming
+hit components. Omitted fields retain imported assumptions; naming a scenario does not reset
+buffs, conditions or enemy settings. The result records requested options and observed
+configuration/conditions, which are not yet a complete resolved scenario model. See
+[skill coverage](docs/skill-coverage.md) for action provenance and unresolved entries.
+
+Experimental CLI JSON and worker protocol are version 2. Results identify backend,
+rules/source/adapter fingerprints, observed selection, metric schema/units and coverage.
+`--raw` adds the complete PoB diagnostic snapshot as an opaque JSON attachment. Objective code
+must use typed measurements rather than inspect raw PoB fields. Unknown fields in options,
+unsupported metrics and replaced explicit selections fail instead of silently falling back.
+
+Export is PoB's normalized serialization, while `import` preserves original XML bytes.
+Evaluation requires explicit supported build/tree metadata. Current outputs remain diagnostic:
+the [independent calibration](docs/calibration-reference.md) covers two controlled Spark cases,
+not general mechanic support, build legality or search recommendations. Non-damaging actions
+and average-damage modes do not yield an invented sustainable DPS objective.
+
+The [calculation boundary decision](docs/calculation-boundary.md) explains replacing the PoB
+backend without changing callers. See the [native engine design](docs/native-engine.md) for
+translation/parity gates and browser requirements. To check portable libraries:
+
+```powershell
+rustup target add wasm32-unknown-unknown
+cargo check -p poe-optimizer-core -p poe-optimizer-engine --lib --target wasm32-unknown-unknown --locked
+```
 ## Repository
 
 - `src/`: thin CLI and hidden worker protocol entry point.
-- `crates/poe-optimizer-core/`: reusable evaluation/process contracts.
+- `crates/poe-optimizer-core/`: backend-neutral evaluation contracts, options, metrics and coverage.
+- `crates/poe-optimizer-engine/`: portable native calculation kernels and differential tests.
 - `crates/poe-optimizer-pob/`: bounded import, source verification, mlua host and supervision.
 - `crates/poe-optimizer-lua-utf8/`: static Unicode module, native sources and provenance.
 - `docs/design.md`: end-state scope, architecture, objectives, search, and acceptance criteria.
@@ -95,6 +130,7 @@ full mechanic support, build legality or optimized results is made by this diagn
 - `docs/pob-integration.md`: findings from the pinned upstream source.
 - `docs/execution-and-interfaces.md`: parallel runtime, core APIs, artifacts, and frontend plan.
 - `docs/prior-art-and-product-review.md`: cited references, prioritized gaps, and decision status.
+- `examples/evaluation-options.json`: runnable diagnostic selection and encounter overrides.
 - `examples/objective.toml`: illustrative future configuration, not a supported CLI input.
 - `vendor/path-of-building-poe2/`: unmodified Git submodule.
 - `local/`, `runs/`: ignored locations for private build inputs and generated results.
@@ -116,7 +152,7 @@ The initial clone is shallow to keep setup small. Fetch more upstream history wh
 needed with `git -C vendor/path-of-building-poe2 fetch --unshallow`.
 Ordinary setup must use the recorded revision, not `git submodule update --remote`.
 An upstream upgrade should explicitly select a revision, run evaluator parity
-checks once they exist, and commit the changed submodule pointer.
+checks and review translated native stages, then commit the changed submodule pointer.
 
 Upstream licensing and third-party notices remain in
 [its LICENSE.md](vendor/path-of-building-poe2/LICENSE.md). This scaffold does not

@@ -137,6 +137,22 @@ pub fn evaluate(
     xml: &str,
     timeout: Duration,
 ) -> Result<EvaluationSnapshot, SupervisorError> {
+    evaluate_with_options(
+        executable,
+        pob_root,
+        xml,
+        &poe_optimizer_core::options::EvaluationOptions::default(),
+        timeout,
+    )
+}
+
+pub fn evaluate_with_options(
+    executable: &Path,
+    pob_root: &Path,
+    xml: &str,
+    options: &poe_optimizer_core::options::EvaluationOptions,
+    timeout: Duration,
+) -> Result<EvaluationSnapshot, SupervisorError> {
     let deadline = deadline(timeout)?;
     if xml.len() > MAX_XML_BYTES {
         return Err(SupervisorErrorKind::InputTooLarge.into());
@@ -145,6 +161,7 @@ pub fn evaluate(
         protocol_version: PROTOCOL_VERSION,
         request_id: REQUEST_ID,
         xml: xml.to_owned(),
+        options: options.clone(),
     })
     .map_err(SupervisorErrorKind::Serialize)?;
     if request.len() >= MAX_WIRE_BYTES {
@@ -630,7 +647,7 @@ mod tests {
 
     #[test]
     fn validates_protocol_version_request_identity_and_worker_failure() {
-        assert!(validate_hello(br#"{"protocol_version":1,"backend":"mlua"}"#).is_ok());
+        assert!(validate_hello(br#"{"protocol_version":2,"backend":"mlua"}"#).is_ok());
         assert!(matches!(
             validate_hello(br#"{"protocol_version":999,"backend":"mlua"}"#),
             Err(SupervisorErrorKind::ProtocolVersion {
@@ -646,18 +663,20 @@ mod tests {
             })
         ));
         assert!(matches!(
-            validate_response(&failure_response(1, 2)),
+            validate_response(&failure_response(PROTOCOL_VERSION, 2)),
             Err(SupervisorErrorKind::RequestId { actual: 2 })
         ));
-        assert!(matches!(validate_response(&failure_response(1, 1)),
-            Err(SupervisorErrorKind::Worker { code, message }) if code == "fixture_error" && message == "specific failure"));
+        assert!(
+            matches!(validate_response(&failure_response(PROTOCOL_VERSION, 1)),
+            Err(SupervisorErrorKind::Worker { code, message }) if code == "fixture_error" && message == "specific failure")
+        );
     }
 
     #[test]
     fn rejects_malformed_or_duplicate_protocol_fields() {
         for bytes in [
             b"not JSON".as_slice(),
-            br#"{"protocol_version":1,"protocol_version":1,"backend":"mlua"}"#,
+            br#"{"protocol_version":2,"protocol_version":2,"backend":"mlua"}"#,
         ] {
             assert!(matches!(
                 validate_hello(bytes),
@@ -665,7 +684,7 @@ mod tests {
             ));
         }
         assert!(matches!(
-            validate_response(br#"{"protocol_version":1,"request_id":1}"#),
+            validate_response(br#"{"protocol_version":2,"request_id":1}"#),
             Err(SupervisorErrorKind::InvalidJson {
                 stage: "response",
                 ..
@@ -805,7 +824,7 @@ mod tests {
             // of the Rust test harness's own stdout preamble.
             sender
                 .send(Event::Hello(
-                    br#"{"protocol_version":1,"backend":"fixture"}"#.to_vec(),
+                    br#"{"protocol_version":2,"backend":"fixture"}"#.to_vec(),
                 ))
                 .unwrap();
             let timeout = Duration::from_millis(250);

@@ -1,0 +1,66 @@
+{
+  "build": {
+    "ascendancy_name": "None",
+    "class_name": "Sorceress",
+    "level": 60,
+    "tree_version": "0_5"
+  },
+  "config": {
+    "enemyDamageType": "Melee",
+    "enemyIsBoss": "Pinnacle",
+    "enemyLevel": 82,
+    "enemyLightningResist": 50,
+    "enemyPhysicalDamage": 3000
+  },
+  "method": "bundled-dll-independent-host-direct-main",
+  "metrics": {
+    "AverageHit": 2.9975,
+    "ChaosResist": 0,
+    "ColdResist": -50,
+    "CombinedDPS": 4.2821428571429,
+    "CritChance": 9,
+    "CritMultiplier": 2,
+    "Dex": 7,
+    "EnergyShield": 0,
+    "FireResist": -50,
+    "FullDPS": 4.2821428571429,
+    "Int": 15,
+    "Life": 809,
+    "LightningResist": -50,
+    "Mana": 315,
+    "PhysicalMaximumHitTaken": 809,
+    "Speed": 1.4285714285714,
+    "Str": 7,
+    "TotalDPS": 4.2821428571429,
+    "TotalEHP": 809
+  },
+  "runtime": {
+    "architecture": "x64",
+    "jit_version": "LuaJIT 2.1.1784580905",
+    "lua_version": "Lua 5.1"
+  },
+  "schema_version": 1,
+  "skill": {
+    "id": "SparkPlayer",
+    "name": "Spark"
+  },
+  "provenance": {
+    "generated_utc": "2026-09-07T17:41:26Z",
+    "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "source_manifest_sha256_lf": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+    "fixture_sha256": "c7a3fe88ce61bd6093bd94b9d55906ff2b67ca258b9dcda5b25894cda86862f4",
+    "lua51_dll_sha256": "2e4e58e4cc6f6cb01d119ff3715253108041f6c59f9a6a464a62b2f70623bca6",
+    "lua_utf8_dll_sha256": "8f49400e2c84716c3caf27c5b1d60133b7f598748fa9cdd31f0732a0642af96d",
+    "driver_source_sha256_lf": "63d61ea837a70f84c2a57457d03114672746ae515228dd3906d344608322263c",
+    "driver_executable_sha256": "02ae3ae728927e467d8bce442e07e4216e0418f717856ced4b2b51ec7829cc43",
+    "harness_sha256_lf": "c7489f35bb291f8fdc5f1c12ed9254934b087c68883382f21044753794c5d070",
+    "generator_sha256_lf": "db308b1d7bd524123029ca1a9c253b89a97136cfeb3897145909228405208858",
+    "compiler": "MSVC 19.50.35723.0 /O2 x64",
+    "operating_system": "Microsoft Windows NT 10.0.26200.0"
+  },
+  "comparison": {
+    "absolute_tolerance": 1E-08,
+    "relative_tolerance": 1E-09,
+    "scope": "Independent host and extractor parity for shared PoB calculations; not independent game-mechanics certification."
+  }
+}
