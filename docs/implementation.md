@@ -3,8 +3,8 @@
 Last updated: 2026-09-07
 
 Current phase: M1 evaluator implementation is in progress. Import and fresh-process PoB
-evaluation pass local Windows checks. Hosted CI and independent calculation parity remain
-outstanding. No optimizer is implemented.
+evaluation pass local Windows checks and hosted Windows/Linux CI. Independent calculation
+parity remains outstanding. No optimizer is implemented.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
 work, and the next session's starting point. [Design](design.md) defines the intended system
@@ -16,9 +16,9 @@ the design documents.
 
 ## Resume here
 
-1. Inspect `git status --short --branch` before editing. Local Windows formatting, Clippy
-   and all 47 tests pass for this evaluator checkpoint. Commit/push the reviewed changes,
-   then inspect and record hosted Windows/Linux CI results; no hosted result is recorded yet.
+1. Inspect `git status --short --branch` before editing. Evaluator checkpoint `71c0af7`
+   is published; local Windows formatting, Clippy and all 47 tests pass, as do hosted
+   Windows/Linux checks. Continue with the coverage/calibration work below.
 2. Keep the PoB submodule at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified.
    The pinned source boots; neither `+=` nor leading `#@` lines require an overlay with
    the selected LuaJIT. Do not repeat the original compatibility spike.
@@ -40,8 +40,8 @@ or agreement with cached source values does not establish independent evaluator 
 
 - Branch: `main`; remote `origin` is `https://github.com/Azaril/poe-optimizer.git`
   ([repository](https://github.com/Azaril/poe-optimizer)). The user explicitly authorized
-  publishing the project and supplied build files. Last published baseline: `1be92d7`;
-  this locally validated evaluator checkpoint is ready for commit/push and hosted CI.
+  publishing the project and supplied build files. Evaluator checkpoint `71c0af7` is
+  published and passed [hosted CI](https://github.com/Azaril/poe-optimizer/actions/runs/34147041293).
 - [Workspace](../Cargo.toml): Rust 2024 / minimum 1.93; core protocol/snapshot types,
   PoB importer/runtime/supervisor, a static native UTF-8 library, and the root CLI.
 - [CLI](../src/main.rs): `import <input>` validates raw XML or a PoB share code;
@@ -70,8 +70,8 @@ or agreement with cached source values does not establish independent evaluator 
   recovery and GUI are **not implemented**. [objective.toml](../examples/objective.toml)
   remains design notation, not accepted CLI input.
 - [CI](../.github/workflows/rust.yml) now checks out submodules and runs workspace formatting,
-  Clippy and tests on Windows/Linux, building the embedded native dependencies. Hosted
-  results for this checkpoint have not been recorded.
+  Clippy and tests on Windows/Linux, building the embedded native dependencies. Both jobs
+  passed for `71c0af7`; see the validation evidence below.
 
 ## Delivery plan and gates
 
@@ -82,7 +82,7 @@ is concrete; real-build recommendations depend on both.
 | Milestone | Status | Deliverable and acceptance gate |
 | --- | --- | --- |
 | M0: bootstrap and alignment | Complete | Rust scaffold, pinned submodule, end-state design, source/prior-art review, preserved source fixture, and this implementation record. Scaffold validation passes; this does not establish evaluator correctness. |
-| M1: evaluator and fixtures | In progress; runtime/import/fresh-worker path validated locally; independent parity and broader coverage outstanding | Reproducible mlua/LuaJIT startup in a Rust worker, bounded import, supervised fresh-process evaluation, typed metric mappings, controlled mutations across all six dimensions, export/re-import parity, and isolation evidence. Complete the checklist below. |
+| M1: evaluator and fixtures | In progress; runtime/import/fresh-worker path validated on Windows/Linux; independent parity and broader coverage outstanding | Reproducible mlua/LuaJIT startup in a Rust worker, bounded import, supervised fresh-process evaluation, typed metric mappings, controlled mutations across all six dimensions, export/re-import parity, and isolation evidence. Complete the checklist below. |
 | M2: reusable core and synthetic joint search | Not started | Candidate/domain/lock models, metric policies, coupled mutations and repair, Rayon/job APIs, shared budgets and events. Match exhaustive tiny domains, escape coordinated-change traps, preserve multiple locks, and verify deterministic one/many-worker results plus cancellation/dedup/accounting. |
 | M3: first usable joint optimizer | Not started | Integrate all six dimensions with multicore PoB evaluation; ship preflight, evaluation/comparison, search, saved-result reranking, recovery, verified exports, and offline reports. Meet the end-to-end gates below. |
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
@@ -100,13 +100,13 @@ skills together within explicit finite catalogs. It must support 1..N required s
 - [x] Pin and inspect upstream loading, calculation, mutation, and export seams.
 - [x] Decode the supplied PoB export without altering source bytes; record provenance,
       game/tree identity, and structural checks.
-- [ ] **M1.1 Runtime — implemented and validated on Windows; hosted checks pending.**
+- [x] **M1.1 Runtime — implemented and validated on Windows/Linux.**
       Embedded LuaJIT and static UTF-8 boot the pinned wrapper and load the supplied build.
       Host callbacks supply paths, time, logging, noninteractive failures and controlled
       scratch writes. Dynamic native loading is disabled; each VM stays in its worker.
       No pin change or syntax overlay was needed. Source-manifest reproducibility,
-      mismatch rejection and native provenance checks pass; record hosted Windows/Linux
-      results while retaining exact dependency and native source identities.
+      mismatch rejection and native provenance checks pass, along with hosted Windows/Linux
+      startup, native and fixture tests. Exact dependency/source identities are recorded.
 - [ ] **M1.2 Boundary — partly complete.** Fresh-process JSONL handshake/request/response,
       deadline/exit supervision, bounded I/O, retained diagnostics, parent scratch cleanup
       and CLI/XML export pass local checks. Explicit skill/scenario request selection
@@ -194,8 +194,8 @@ independent evidence of the game patch.
 
 | Unknown / limitation | Evidence so far | Next check |
 | --- | --- | --- |
-| Runtime portability | The selected embedded LuaJIT accepts `count += 1` and the leading `#@` lines; the pinned wrapper boots on Windows without vendor changes. | Record hosted Windows/Linux results; retain version/source pins. |
-| Native ABI and source identity | Static `luautf8 0.1.6` links to mlua's vendored LuaJIT. Native/Unicode tests, eight vendored-file provenance checks, source-manifest reproducibility and mismatch rejection pass locally. | Verify hosted portability and repeat provenance checks deliberately when updating pinned inputs. |
+| Runtime portability | The selected embedded LuaJIT accepts `count += 1` and the leading `#@` lines; the pinned wrapper boots on Windows without vendor changes. | Hosted Windows/Linux checks pass; retain version/source pins on future updates. |
+| Native ABI and source identity | Static `luautf8 0.1.6` links to mlua's vendored LuaJIT. Native/Unicode tests, eight vendored-file provenance checks, source-manifest reproducibility and mismatch rejection pass locally. | Hosted portability checks pass. Repeat provenance checks deliberately when updating pinned inputs. |
 | Selected minion metric semantics | Main group is Kelari (`SummonSandDjinnPlayer`), selector 2. Fresh output names the minion action Kelari's Deception and reports raw `TotalDPS` about 60,384.684. This agrees with the cache but is not an independent reference. | Establish metric units/actor/part and scenario semantics with independent calibration. Non-finite chaos-immunity outputs are explicitly listed; define typed handling before scoring. |
 | Full DPS membership | The supplied build still has no included Full DPS groups and raw player `FullDPS` is zero. | Make inclusion/count/uptime explicit; do not sum per-skill outputs or treat the zero roll-up as total build damage. |
 | Unresolved and granted skills | Exactly three imported entries remain unresolved: Spectre: Powered Zealot, Navira's Well and Kelari's Deception. A live minion action with the last name does not resolve its separate imported entry. | Resolve through the adapter and reconcile manual/tree/item-granted provenance; do not omit, double-count or score unresolved entries as zero. |
@@ -208,10 +208,11 @@ material cannot establish an intended build choice; present the concrete alterna
 
 ## Validation evidence
 
-### Current M1 evaluator checkpoint — local validation complete
+### Current M1 evaluator checkpoint — published and validated
 
-Recorded on 2026-09-07 on Windows/x64 with Rust 1.93. The implementation is ready for
-commit/push; hosted CI results are still outstanding.
+Recorded on 2026-09-07 on Windows/x64 with Rust 1.93. Evaluator commit
+[`71c0af7`](https://github.com/Azaril/poe-optimizer/commit/71c0af7a8813776036b4e9750f4ac713bb52a832)
+is published; both hosted Windows/Linux jobs passed.
 
 | Check | Result / limit |
 | --- | --- |
@@ -222,7 +223,8 @@ commit/push; hosted CI results are still outstanding.
 | Container/evaluator separation | Empty `PathOfBuilding2` imports as a valid container but evaluation rejects it. Unsupported target versions reject before returning default/startup metrics. |
 | Output safety and supervision | Output aliases reject before evaluation; bounded I/O, blocked-stdin deadline/kill/reap and scratch cleanup tests pass. |
 | Sources and native provenance | Original source/decoded fixture hashes unchanged; pinned submodule clean. All eight vendored native/header file identities match provenance. Source manifest reproduces and wrong-pin rejection passes. |
-| Hosted CI / independent PoB reference / joint mutation parity | Not established. Hosted checks await publication; independent calibration and all-dimension mutation coverage remain M1 work. |
+| Hosted CI | [Run 34147041293](https://github.com/Azaril/poe-optimizer/actions/runs/34147041293) passed on both `windows-latest` and `ubuntu-latest`: checkout, Rust setup, formatting, Clippy and workspace tests. |
+| Independent PoB reference / joint mutation parity | Not established; independent calibration and all-dimension mutation coverage remain M1 work. |
 
 The standalone debug observation used `mlua 0.12.1`, LuaJIT `2.1.1787165859`
 (`luajit-src 210.7.3+1ee778a`), and static `luautf8 0.1.6`, on an AMD Ryzen 9 9950X3D
@@ -296,7 +298,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `8eb2e23` | Separated end-state design from delivery tracking; recorded M1 resume point and evidence; connected the user-created GitHub repository. |
 | 2026-09-07 | `46473e3` | Recorded explicit user authorization to push the project and supplied fixtures to GitHub; cleared the pending publishing question. |
 | 2026-09-07 | `1be92d7` | Preferred mlua hosting inside isolated Rust evaluator workers. |
-| 2026-09-07 | M1 evaluator checkpoint (locally validated; commit/push next) | Added bounded import, evaluator preflight, embedded/native hosting, source verification, fresh-worker supervision and CLI evaluation/export. Formatting, Clippy and 47 local tests pass; hosted CI, independent parity and optimization remain outstanding. |
+| 2026-09-07 | `71c0af7` | Added bounded import, evaluator preflight, embedded/native hosting, source verification, fresh-worker supervision and CLI evaluation/export. Formatting, Clippy, 47 local tests and hosted Windows/Linux CI pass; independent parity and optimization remain outstanding. |
 
 ### Hosting decision checkpoint
 
