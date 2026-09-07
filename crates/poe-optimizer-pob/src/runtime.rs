@@ -234,6 +234,7 @@ pub fn evaluate_with_options(
     let jit: Table = globals.get("jit")?;
     let mut hash = Sha256::new();
     hash.update(include_str!("runtime.rs"));
+    hash.update(poe_optimizer_data::implementation_fingerprint());
     hash.update(HOST);
     hash.update(SNAPSHOT);
     hash.update(include_str!("options.lua"));

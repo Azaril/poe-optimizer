@@ -1,16 +1,13 @@
 [package]
-name = "poe-optimizer-native"
+name = "poe-optimizer-data"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.93"
 publish = false
 
 [dependencies]
-poe-optimizer-data = { path = "../poe-optimizer-data" }
 poe-optimizer-core = { path = "../poe-optimizer-core" }
-poe-optimizer-engine = { path = "../poe-optimizer-engine" }
-poe-optimizer-import = { path = "../poe-optimizer-import" }
-roxmltree = "0.21"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
+thiserror = "2"

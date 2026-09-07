@@ -12,8 +12,18 @@ use either implementation without exposing Lua values or process APIs.
 
 | Profile | Character and skills | Equipment and encounter scope |
 | --- | --- | --- |
-| Spark | Unallocated Sorceress, no ascendancy, one level-1 quality-0 Spark | No equipment/supports; supported explicit normal, boss or Pinnacle encounter configuration |
-| Mace Strike | Unallocated Warrior, no ascendancy, one level-1 quality-0 Mace Strike; optional level-1 quality-0 Brutality I | One normal Wooden Club or Smithing Hammer, quality 0–20, item level 1–100, no modifiers/implicits; normal enemies only |
+| Spark | One level-1 quality-0 Spark; supported class/tree selection described below | No equipment/supports; supported explicit normal, boss or Pinnacle encounter configuration |
+| Mace Strike | One level-1 quality-0 Mace Strike; optional level-1 quality-0 Brutality I; supported class/tree selection described below | One normal Wooden Club or Smithing Hammer, quality 0–20, item level 1–100, no modifiers/implicits; normal enemies only |
+
+Both profiles accept all eight pinned classes and 23 ascendancy identities, with implicit
+roots and zero or one ordinary entrance passive connected to the selected class. Class
+attributes affect resources and attack accuracy. Admitted entrance effects include skill
+speed, skill-type damage increases and flat armour, evasion or energy shield. Shared physical
+roots and class-specific node substitutions retain their distinct source identities.
+Allocated ascendancy passives, other ordinary nodes, attribute choices, jewels, grants and
+weapon-set allocations remain unsupported. Selecting an ascendancy identity does not claim
+coverage for its allocated effects. The evaluator does not infer an available point budget
+or certify equipment/gem requirements; search must separately apply explicit finite rules.
 
 Both profiles accept character levels 1–100, enemy levels 1–85, explicit supported encounter
 inputs and supported quest/resistance settings. A native Mace request with a boss scenario
@@ -26,6 +36,21 @@ selected average hit and selected hit DPS. Mace returns eight finite metrics and
 per-hand attack averages. The resolved main-hand average remains diagnostic evidence. EHP,
 maximum hits, Full DPS, minions and broader builds are outside native coverage. Unsupported
 mechanics or unknown metric queries reject; there is no automatic Lua fallback.
+
+`poe-optimizer-data` owns the portable tree model, finite projections and an authenticated
+bundled subset of class/root/entrance source records. Native builds load this data without
+a PoB checkout. The bundle identifies retained and excluded records explicitly; it is not
+a complete game database. Optional PoB extraction produces fresh artifacts for updates and
+parity. See [tree projection](tree-projection.md).
+
+Native results include a `native-tree` diagnostic attachment with the selected class and
+ascendancy, physical allocations, effective entrance stat lines and the bundled-data digest.
+Use CLI `--raw` to retain these diagnostic attachments. The tree evidence kind is
+`native_source_resolution`; `point_budget_verified` is false. The
+PoB-specific live passive observation field remains absent on native results, because native
+source resolution cannot establish Lua object-reference observations. Armour and evasion
+are computed and included in the native profile diagnostic; the public metric catalog is
+unchanged.
 
 `poe-optimizer-engine` owns numerical calculations and modifier semantics.
 `poe-optimizer-native` projects source XML into immutable inputs, calls the selected pipeline
@@ -43,6 +68,7 @@ Select native explicitly when using that build:
 ```powershell
 cargo run --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml --backend native
 cargo run --locked -- evaluate tests/fixtures/calibration/mace-wooden.xml --backend native
+cargo run --locked -- evaluate examples/native-witch-entrance.xml --backend native --raw
 cargo run --locked -- metrics --backend native
 cargo run --locked -- search-experimental --backend native --problem examples/mace-search.json --jobs 4 --max-evaluations 10
 ```
@@ -127,6 +153,8 @@ not establish optimizer quality, browser speed or a speedup over PoB.
 
 ## Verification and expansion gates
 
+The controlled Mace search remains limited to Warrior without paid passives or ascendancy;
+new evaluator coverage is not automatically added to its finite search catalog.
 Native controlled search checks the exact materialized source export, class/root/skill
 projection, resolved weapon and support evidence, fixed external configuration and backend
 identity. The top feasible candidate must pass a fresh evaluation with matching assessment

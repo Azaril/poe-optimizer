@@ -397,7 +397,7 @@ fn unsupported_build_changes_fail_without_falling_back_to_the_oracle() {
     request.build.content = request
         .build
         .content
-        .replace("nodes=\"\"", "nodes=\"4739\"");
+        .replace("nodes=\"\"", "nodes=\"4294967295\"");
     let error = Engine::new(NativeBackend::new())
         .evaluate(&request, budget())
         .unwrap_err();

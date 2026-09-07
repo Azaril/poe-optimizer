@@ -1,14 +1,15 @@
-//! Closed native pipeline: Sorceress, level-one quality-zero Spark, no equipment,
-//! support gems, allocated passives or other modifiers. The host must validate
+//! Closed native pipeline: level-one quality-zero Spark, explicit class attributes
+//! and supported entrance effects, no equipment or supports. The host must validate
 //! that complete build scope before constructing these explicit inputs.
 //!
 //! Constants are transcribed from versioned upstream data, not calibration output.
 //! See SOURCE_FILES and the source-executing tests; this is not a general build engine.
 
+use crate::character::{BASE_EVASION, CharacterAttributes, CharacterInput, CharacterModifiers};
 use crate::defence::round_to_integer;
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-spark-level1-unmodified-v1";
+pub const PROFILE_ID: &str = "poe2-spark-level1-class-entrance-v2";
 pub const TREE_VERSION: &str = "0_5";
 pub const CLASS_ID: u32 = 7;
 pub const SKILL_ID: &str = "SparkPlayer";
@@ -113,6 +114,8 @@ pub struct SparkOutput {
     pub life: f64,
     pub mana: f64,
     pub energy_shield: f64,
+    pub armour: f64,
+    pub evasion: f64,
     pub fire_resistance: f64,
     pub cold_resistance: f64,
     pub lightning_resistance: f64,
@@ -134,9 +137,30 @@ impl fmt::Display for SparkError {
 }
 impl Error for SparkError {}
 
-/// Evaluate one validated closed-profile input. No parsing, allocations, Lua,
-/// timing, I/O or shared mutable state occur in this native production path.
+/// Legacy profile attributes with no passive modifiers.
+pub const DEFAULT_CHARACTER: CharacterInput = CharacterInput {
+    attributes: CharacterAttributes {
+        strength: DATA.strength,
+        dexterity: DATA.dexterity,
+        intelligence: DATA.intelligence,
+    },
+    modifiers: CharacterModifiers::NONE,
+};
+
+/// Evaluate the original Sorceress/no-passive profile without parsing, Lua or I/O.
 pub fn evaluate(input: &SparkInput) -> Result<SparkOutput, SparkError> {
+    evaluate_with_character(input, &DEFAULT_CHARACTER)
+}
+
+/// Evaluate explicit resolved class attributes and admitted entrance modifiers.
+/// The caller must validate the full document and source allocation independently.
+pub fn evaluate_with_character(
+    input: &SparkInput,
+    character: &CharacterInput,
+) -> Result<SparkOutput, SparkError> {
+    character.validate().map_err(|error| SparkError(error.0))?;
+    let attributes = character.attributes;
+    let modifiers = character.modifiers;
     if !(1..=100).contains(&input.character_level) {
         return Err(SparkError("Spark profile character level must be 1..100"));
     }
@@ -162,7 +186,7 @@ pub fn evaluate(input: &SparkInput) -> Result<SparkOutput, SparkError> {
         } else {
             0.0
         }
-        + DATA.strength * DATA.life_per_strength;
+        + attributes.strength * DATA.life_per_strength;
     let life_increased = if input.quests.molten_shrine {
         DATA.quest_life_increased
     } else {
@@ -170,7 +194,7 @@ pub fn evaluate(input: &SparkInput) -> Result<SparkOutput, SparkError> {
     };
     let mana_base = DATA.mana_per_level * level
         + DATA.initial_mana
-        + DATA.intelligence * DATA.mana_per_intelligence;
+        + attributes.intelligence * DATA.mana_per_intelligence;
     let mana_increased = if input.quests.silent_hall {
         DATA.quest_mana_increased
     } else {
@@ -199,22 +223,29 @@ pub fn evaluate(input: &SparkInput) -> Result<SparkOutput, SparkError> {
     let crit_multiplier = 1.0 + DATA.critical_damage_bonus / 100.0;
     // CalcOffence executes separate ordinary/critical damage passes, averages
     // their damage endpoints, applies resistance, then weights by crit chance.
-    let hit_average =
-        (DATA.lightning_minimum / 2.0 + DATA.lightning_maximum / 2.0) * effective_multiplier;
-    let crit_average = (DATA.lightning_minimum * crit_multiplier / 2.0
-        + DATA.lightning_maximum * crit_multiplier / 2.0)
+    let damage_increased = modifiers.spell_damage_increased + modifiers.projectile_damage_increased;
+    let damage_multiplier = 1.0 + damage_increased / 100.0;
+    let lightning_minimum = round_to_integer(DATA.lightning_minimum * damage_multiplier);
+    let lightning_maximum = round_to_integer(DATA.lightning_maximum * damage_multiplier);
+    let hit_average = (lightning_minimum / 2.0 + lightning_maximum / 2.0) * effective_multiplier;
+    let crit_average = (lightning_minimum * crit_multiplier / 2.0
+        + lightning_maximum * crit_multiplier / 2.0)
         * effective_multiplier;
     let average_hit =
         hit_average * (1.0 - crit_chance / 100.0) + crit_average * crit_chance / 100.0;
     let average_damage = average_hit * 100.0 / 100.0;
-    let cast_rate = 1.0 / DATA.cast_time;
+    let speed_multiplier =
+        round_to_integer((1.0 + modifiers.skill_speed_increased / 100.0) * 100.0) / 100.0;
+    let cast_rate = 1.0 / (DATA.cast_time / speed_multiplier);
     Ok(SparkOutput {
-        strength: DATA.strength,
-        dexterity: DATA.dexterity,
-        intelligence: DATA.intelligence,
+        strength: attributes.strength,
+        dexterity: attributes.dexterity,
+        intelligence: attributes.intelligence,
         life,
         mana,
-        energy_shield: 0.0,
+        energy_shield: round_to_integer(modifiers.energy_shield_flat).max(0.0),
+        armour: round_to_integer(modifiers.armour_flat).max(0.0),
+        evasion: round_to_integer(BASE_EVASION + modifiers.evasion_flat).max(0.0),
         fire_resistance: resistance(input.quests.blackjaw),
         cold_resistance: resistance(input.quests.beira),
         lightning_resistance: resistance(input.quests.garukhan),
@@ -230,6 +261,10 @@ pub fn evaluate(input: &SparkInput) -> Result<SparkOutput, SparkError> {
 
 /// SHA-256 over full upstream source files, normalized from CRLF to LF.
 pub const SOURCE_FILES: &[SourceFile] = &[
+    SourceFile {
+        path: "src/Modules/ModParser.lua",
+        sha256: "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+    },
     SourceFile {
         path: "src/Data/Misc.lua",
         sha256: "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9",

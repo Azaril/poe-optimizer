@@ -461,6 +461,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "poe-optimizer-core",
+ "poe-optimizer-data",
  "poe-optimizer-import",
  "poe-optimizer-native",
  "poe-optimizer-pob",
@@ -478,6 +479,17 @@ version = "0.1.0"
 dependencies = [
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "poe-optimizer-data"
+version = "0.1.0"
+dependencies = [
+ "poe-optimizer-core",
+ "serde",
+ "serde_json",
+ "sha2",
+ "thiserror",
 ]
 
 [[package]]
@@ -517,6 +529,7 @@ name = "poe-optimizer-native"
 version = "0.1.0"
 dependencies = [
  "poe-optimizer-core",
+ "poe-optimizer-data",
  "poe-optimizer-engine",
  "poe-optimizer-import",
  "roxmltree",
@@ -531,6 +544,7 @@ version = "0.1.0"
 dependencies = [
  "mlua",
  "poe-optimizer-core",
+ "poe-optimizer-data",
  "poe-optimizer-import",
  "poe-optimizer-lua-utf8",
  "roxmltree",

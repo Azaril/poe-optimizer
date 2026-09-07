@@ -22,6 +22,7 @@ pub(crate) enum NativeInput {
 }
 pub(crate) struct Profile {
     pub input: NativeInput,
+    pub tree: crate::tree::NativeTree,
     pub enemy_level: u32,
     pub config: BTreeMap<String, Scalar>,
     pub export_xml: String,
@@ -191,12 +192,17 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
         &["Build", "Tree", "Skills", "Items", "Config", "Notes"],
     )?;
     let build = child(root, "Build")?;
-    let is_mace = match build.attribute("className") {
-        Some("Sorceress") => false,
-        Some("Warrior") => true,
+    let main_group = child(child(child(root, "Skills")?, "SkillSet")?, "Skill")?;
+    let main_gem = main_group
+        .children()
+        .find(|node| node.has_tag_name("Gem"))
+        .ok_or_else(|| unsupported("Native profile requires a main active gem"))?;
+    let is_mace = match main_gem.attribute("skillId") {
+        Some("SparkPlayer") => false,
+        Some("Melee1HMacePlayer") => true,
         _ => {
             return Err(unsupported(
-                "Native profiles currently require Sorceress/Spark or Warrior/Mace Strike",
+                "Native profiles currently support Spark or Mace Strike",
             ));
         }
     };
@@ -216,7 +222,6 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
     fixed(
         build,
         &[
-            ("ascendClassName", "None"),
             ("targetVersion", "0_1"),
             ("characterLevelAutoMode", "false"),
             ("mainSocketGroup", "1"),
@@ -248,32 +253,8 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
         ],
         &[],
     )?;
-    fixed(
-        spec,
-        &[
-            ("classInternalId", if is_mace { "6" } else { "7" }),
-            ("ascendClassId", "0"),
-            ("treeVersion", "0_5"),
-            ("masteryEffects", ""),
-        ],
-    )?;
-    if (is_mace && !matches!(spec.attribute("classId"), Some("3" | "6")))
-        || (!is_mace && spec.attribute("classId") != Some("7"))
-    {
-        return Err(unsupported("Class index disagrees with the native profile"));
-    }
-    let implicit_root = if is_mace { "47175" } else { "54447" };
-    if !spec
-        .attribute("nodes")
-        .is_some_and(|nodes| nodes.is_empty() || nodes == implicit_root)
-        || spec
-            .attribute("ascendancyInternalId")
-            .is_some_and(|v| !v.is_empty())
-    {
-        return Err(unsupported(
-            "Native build profiles do not support paid passives or ascendancies",
-        ));
-    }
+    fixed(spec, &[("treeVersion", "0_5"), ("masteryEffects", "")])?;
+    let resolved_tree = crate::tree::NativeTree::resolve(build, spec)?;
     let skills = child(root, "Skills")?;
     only(
         skills,
@@ -568,6 +549,7 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
     };
     Ok(Profile {
         input,
+        tree: resolved_tree,
         enemy_level,
         config,
         export_xml,

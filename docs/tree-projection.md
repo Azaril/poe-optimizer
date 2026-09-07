@@ -1,6 +1,6 @@
 # Controlled passive-tree projection
 
-`poe_optimizer_pob::tree_projection` converts an authenticated
+`poe_optimizer_data::tree_projection` converts an authenticated
 [tree snapshot](tree-data.md) into a finite core `CandidateCatalog`. The projection
 keeps all **8 classes and 23 ascendancies**, their **28 shared physical implicit
 roots**, and a caller-supplied set of allowed normal paid nodes. A candidate then
@@ -19,14 +19,20 @@ it does not require dropping classes from the intended optimizer scope.
 implementation. It can be created through:
 
 ```rust
-AuthenticatedTreeSnapshot::extract(executable, pob_source_root, timeout)
-AuthenticatedTreeSnapshot::from_trusted_digest(snapshot, expected_sha256)
+// Optional PoB adapter convenience wrapper:
+poe_optimizer_pob::tree_projection::AuthenticatedTreeSnapshot::extract(
+    executable, pob_source_root, timeout)
+// Portable consumer with an independently trusted complete-content digest:
+poe_optimizer_data::tree_projection::AuthenticatedTreeSnapshot::from_trusted_digest(
+    snapshot, expected_sha256)
 ```
 
 The first method calls the existing supervised extraction worker, including its
 source verification, hard deadline and artifact bounds. The executable must be
-the trusted application CLI. The second method checks the supported source
-identity and the **complete snapshot's canonical content digest** against an
+the trusted application CLI. The adapter wrapper dereferences to the portable type,
+preserving old `TreeProjection::new(&authenticated, ...)` call sites. The second
+method checks the supported source identity and the **complete snapshot's
+canonical content digest** against an
 independently trusted expected digest. An expected digest copied from the same
 untrusted input is not authentication. It must originate from a trusted local
 extraction or separate trusted manifest. Pretty-printed file bytes have a
@@ -39,7 +45,10 @@ digest constructor rejects such a changed snapshot.
 
 Authenticated snapshots are immutable and internally shared using `Arc`; creating
 several projections does not repeatedly copy the full source dataset. No Lua
-handle or mutable VM state escapes extraction.
+handle or mutable VM state escapes extraction. Portable trusted producers can
+use `from_trusted_extraction(snapshot, expected_sha256)` to record that route;
+the producer must obtain the expected digest from its actual trusted extraction,
+not labels or a digest supplied with untrusted input.
 
 ## Construct a finite catalog
 
@@ -104,12 +113,14 @@ but must **rebind the combined catalog identity** to every component and payload
 Reusing the tree-only identity after inserting items or skills would misidentify
 the candidate domain. Keep source/projection evidence alongside that composition.
 
-Extraction and projection currently live in the optional PoB adapter, where
-trusted Lua inputs and source verification belong. Their output is plain core
-Rust/serde data. A native production backend can consume a separately generated,
-versioned and authenticated artifact without linking the PoB adapter or invoking
-Lua. This preparation layer does not require PoB in the eventual native runtime.
-It also does not provide native stat calculations by itself.
+The projection and its owned Rust/serde model live in the Lua-free
+`poe-optimizer-data` crate, with native and WASM support. Trusted local source
+verification, Lua extraction and worker supervision remain in the optional PoB
+adapter, which preserves its existing public paths through re-exports and a
+convenience authentication wrapper. The production native backend borrows the
+separately authenticated [bundled class/entrance subset](tree-data.md#bundled-subset-for-native-evaluation)
+without linking PoB. That subset is a distinct type, never a trimmed object
+presented as a complete snapshot. Projection itself does not calculate stats.
 
 ## Coverage and acceptance limits
 
@@ -124,8 +135,9 @@ Global source uncertainty is separate from selected-mechanic blockers. Copying a
 snapshot categories directly into `CandidateCatalog.unsupported_mechanics` would
 make every finite candidate unsearchable, including a no-paid-node identity
 fixture. The snapshot's missing native stat translation can be covered by the
-chosen PoB calculation backend; live-game completeness still remains diagnostic.
-The projected catalog's passing finite rules therefore coexist with explicit
+chosen backend for its explicitly supported profile; live-game completeness
+still remains diagnostic. The projected catalog's passing finite rules therefore
+coexist with explicit
 coverage limitations. They must not be presented as unrestricted build legality.
 
 Fresh backend checks must still compare actual class/ascendancy identities,

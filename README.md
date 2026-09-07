@@ -32,8 +32,9 @@ Each PoB request
 uses a fresh `mlua` worker process with a deadline. Independent Spark mapping/bossing
 references plus a four-case attack/weapon/support matrix validate host and metric extraction.
 A parallel native Rust crate has parity-tested numerical helpers and numeric/conditional
-modifier aggregation and numeric scaling programs. A native build backend now parses a
-restricted Spark and Mace Strike profiles and computes their supported resource,
+modifier aggregation and numeric scaling programs. A native build backend now parses
+restricted Spark and Mace Strike profiles across all pinned class/ascendancy identities,
+with zero or one ordinary entrance passive, and computes their supported resource,
 resistance and hit metrics entirely in Rust. `evaluate --backend native` uses the same result/objective APIs, and a
 native-only CLI build excludes Lua and PoB. General native build coverage remains in progress;
 see [native backend and optional reference mode](docs/native-backend.md).
@@ -43,7 +44,8 @@ checks. `search-experimental --backend native` searches supplied normal-Mace wea
 choices directly on Rayon with exact locks and source-preserving mutations; `--backend pob`
 selects the optional reference backend; `search-calibration` retains the four original
 fixtures. `extract-tree` exports pinned topology and source/override metadata for broader
-mutation work, with live passive coverage and authenticated bounded graph projections.
+mutation work, with live passive coverage and authenticated bounded graph projections. A portable data
+crate supplies native class/root/entrance records without loading PoB.
 `benchmark-native` measures prepared or full-document typed evaluation throughput.
 General joint mutation, full native mechanic coverage, HTML reports and browser
 bindings remain unimplemented. See [the runnable experimental workflow](docs/experimental-search.md)
@@ -155,13 +157,14 @@ translation/parity gates and browser requirements. To check portable libraries:
 
 ```powershell
 rustup target add wasm32-unknown-unknown
-cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-import -p poe-optimizer-native --lib --target wasm32-unknown-unknown --locked
+cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data -p poe-optimizer-import -p poe-optimizer-native --lib --target wasm32-unknown-unknown --locked
 ```
 ## Repository
 
 - `src/`: thin CLI and hidden worker protocol entry point.
 - `crates/poe-optimizer-core/`: backend-neutral evaluation contracts, options, metrics and coverage.
 - `crates/poe-optimizer-engine/`: portable native calculation kernels and differential tests.
+- `crates/poe-optimizer-data/`: authenticated portable tree models, projections and native class/entrance data.
 - `crates/poe-optimizer-native/`: strict native document profiles, preparation and typed backend.
 - `crates/poe-optimizer-import/`: portable bounded decoding, preflight and controlled materialization.
 - `crates/poe-optimizer-pob/`: optional reference host, source extraction, verification and supervision.

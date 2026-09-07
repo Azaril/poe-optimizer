@@ -36,4 +36,4 @@ jobs:
       - name: Install portable target
         run: rustup target add wasm32-unknown-unknown
       - name: Check portable core and native calculations
-        run: cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-import -p poe-optimizer-native --lib --target wasm32-unknown-unknown --locked
+        run: cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data -p poe-optimizer-import -p poe-optimizer-native --lib --target wasm32-unknown-unknown --locked

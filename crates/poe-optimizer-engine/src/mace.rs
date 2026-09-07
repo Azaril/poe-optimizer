@@ -1,15 +1,17 @@
-//! Closed native Warrior/Mace Strike profile with one normal mace and optional
+//! Closed native Mace Strike profile with one normal mace and optional
 //! level-one quality-zero Brutality I. Hosts validate the complete document:
-//! no other equipment, passives, ascendancy, supports or external modifiers.
+//! explicit class attributes and admitted entrance effects, no other equipment,
+//! allocated ascendancy effects, supports or external modifiers.
 //! Enemy values are resolved by the host; this kernel does not select encounters.
 
+use crate::character::{BASE_EVASION, CharacterAttributes, CharacterInput, CharacterModifiers};
 use crate::{
     defence::{PINNED_CONSTANTS, armour_reduction_percent, hit_chance, round_to_integer},
     spark::{self, SourceFile, SparkQuestRewards},
 };
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-mace-strike-controlled-v1";
+pub const PROFILE_ID: &str = "poe2-mace-strike-class-entrance-v2";
 pub const TREE_VERSION: &str = "0_5";
 /// Index in the pinned tree classes table; XML classInternalId is a separate id.
 pub const CLASS_ID: u32 = 3;
@@ -109,6 +111,8 @@ pub struct MaceOutput {
     pub life: f64,
     pub mana: f64,
     pub energy_shield: f64,
+    pub armour: f64,
+    pub evasion: f64,
     pub fire_resistance: f64,
     pub cold_resistance: f64,
     pub lightning_resistance: f64,
@@ -142,9 +146,30 @@ impl fmt::Display for MaceError {
 }
 impl Error for MaceError {}
 
-/// Evaluate a previously scope-validated build without allocation, parsing, Lua,
-/// clocks, I/O or mutable global state. No golden values participate in evaluation.
+/// Legacy profile attributes with no passive modifiers.
+pub const DEFAULT_CHARACTER: CharacterInput = CharacterInput {
+    attributes: CharacterAttributes {
+        strength: DATA.strength,
+        dexterity: DATA.dexterity,
+        intelligence: DATA.intelligence,
+    },
+    modifiers: CharacterModifiers::NONE,
+};
+
+/// Evaluate the original Warrior/no-passive profile without parsing, Lua or I/O.
 pub fn evaluate(input: &MaceInput) -> Result<MaceOutput, MaceError> {
+    evaluate_with_character(input, &DEFAULT_CHARACTER)
+}
+
+/// Evaluate explicit resolved class attributes and admitted entrance modifiers.
+/// The caller must validate the full document and source allocation independently.
+pub fn evaluate_with_character(
+    input: &MaceInput,
+    character: &CharacterInput,
+) -> Result<MaceOutput, MaceError> {
+    character.validate().map_err(|error| MaceError(error.0))?;
+    let attributes = character.attributes;
+    let modifiers = character.modifiers;
     if !(1..=100).contains(&input.character_level) {
         return Err(MaceError("Mace profile character level must be 1..100"));
     }
@@ -184,10 +209,10 @@ pub fn evaluate(input: &MaceInput) -> Result<MaceOutput, MaceError> {
         } else {
             0.0
         }
-        + DATA.strength * shared.life_per_strength;
+        + attributes.strength * shared.life_per_strength;
     let mana_base = shared.mana_per_level * level
         + shared.initial_mana
-        + DATA.intelligence * shared.mana_per_intelligence;
+        + attributes.intelligence * shared.mana_per_intelligence;
     let life_increased = if input.quests.molten_shrine {
         shared.quest_life_increased
     } else {
@@ -222,17 +247,22 @@ pub fn evaluate(input: &MaceInput) -> Result<MaceOutput, MaceError> {
     } else {
         1.0
     };
-    let physical_minimum = round_to_integer(weapon_physical_minimum * more);
-    let physical_maximum = round_to_integer(weapon_physical_maximum * more);
+    let increased =
+        1.0 + (modifiers.attack_damage_increased + modifiers.melee_damage_increased) / 100.0;
+    let physical_minimum = round_to_integer(weapon_physical_minimum * increased * more);
+    let physical_maximum = round_to_integer(weapon_physical_maximum * increased * more);
     let (fire_minimum, fire_maximum) = if input.brutality {
         (0.0, 0.0)
     } else {
-        (weapon.fire_minimum, weapon.fire_maximum)
+        (
+            round_to_integer(weapon.fire_minimum * increased),
+            round_to_integer(weapon.fire_maximum * increased),
+        )
     };
     // CalcSetup's level multiplier carries a negative one-level base adjustment;
     // CalcPerform adds the dexterity bonus before CalcOffence floors accuracy.
     let accuracy = (DATA.accuracy_per_level * level - DATA.accuracy_per_level
-        + DATA.dexterity * DATA.accuracy_per_dexterity)
+        + attributes.dexterity * DATA.accuracy_per_dexterity)
         .floor()
         .max(0.0);
     let enemy_evasion = round_to_integer(input.enemy_evasion).max(0.0);
@@ -266,15 +296,19 @@ pub fn evaluate(input: &MaceInput) -> Result<MaceOutput, MaceError> {
         total_hit_average * (1.0 - crit_chance / 100.0) + total_crit_average * crit_chance / 100.0;
     let average_damage = main_hand_average_hit * hit / 100.0;
     let base_time = 1.0 / weapon.attack_rate;
-    let attack_rate = 1.0 / base_time;
+    let speed_multiplier =
+        round_to_integer((1.0 + modifiers.skill_speed_increased / 100.0) * 100.0) / 100.0;
+    let attack_rate = 1.0 / (base_time / speed_multiplier);
     let hit_dps = average_damage * attack_rate;
     Ok(MaceOutput {
-        strength: DATA.strength,
-        dexterity: DATA.dexterity,
-        intelligence: DATA.intelligence,
+        strength: attributes.strength,
+        dexterity: attributes.dexterity,
+        intelligence: attributes.intelligence,
         life,
         mana,
-        energy_shield: 0.0,
+        energy_shield: round_to_integer(modifiers.energy_shield_flat).max(0.0),
+        armour: round_to_integer(modifiers.armour_flat).max(0.0),
+        evasion: round_to_integer(BASE_EVASION + modifiers.evasion_flat).max(0.0),
         fire_resistance: resistance(input.quests.blackjaw),
         cold_resistance: resistance(input.quests.beira),
         lightning_resistance: resistance(input.quests.garukhan),
@@ -342,6 +376,10 @@ const MONSTER_ARMOUR: [f64; 100] = [
 
 /// Normalized full source hashes for this versioned profile's data and translated branches.
 pub const SOURCE_FILES: &[SourceFile] = &[
+    SourceFile {
+        path: "src/Modules/ModParser.lua",
+        sha256: "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+    },
     SourceFile {
         path: "src/Data/Misc.lua",
         sha256: "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9",

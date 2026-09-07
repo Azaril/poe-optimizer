@@ -15,6 +15,7 @@ const ITEM: &str = include_str!("../../../../vendor/path-of-building-poe2/src/Cl
 fn source_checks() {
     for record in mace::SOURCE_FILES {
         let source = match record.path {
+            "src/Modules/ModParser.lua" => character_parity::PARSER,
             "src/Data/Misc.lua" => SPARK_MISC,
             "src/Data/QuestRewards.lua" => SPARK_QUESTS,
             "src/Data/Bases/mace.lua" => BASES,
@@ -128,7 +129,7 @@ impl MaceOracle {
             "---Calculates the area percentage",
         )
         .to_owned();
-        body.push_str("\nreturn function(input) local m_modf=math.modf; local modDB=new('ModDB'):ModDB(); local output={Str=maceClass.base_str,Dex=maceClass.base_dex,Int=maceClass.base_int}; modDB.actor={output=output}; modDB.multipliers.Level=input.level; local env={mode_effective=true,modDB=modDB,partyMembers={modDB=modDB},configInput={resistancePenalty=input.penalty,enemyFireResist=input.resistance}}; ");
+        body.push_str("\nreturn function(input) local m_modf=math.modf; local modDB=new('ModDB'):ModDB(); local output={Str=input.character.strength,Dex=input.character.dexterity,Int=input.character.intelligence}; modDB.actor={output=output}; modDB.multipliers.Level=input.level; for _, mod in ipairs(input.character.mods) do modDB:AddMod(copyTable(mod)) end; local env={mode_effective=true,modDB=modDB,partyMembers={modDB=modDB},configInput={resistancePenalty=input.penalty,enemyFireResist=input.resistance}}; ");
         body.push_str(section(
             &setup,
             "\t\tmodDB:NewMod(\"Life\", \"BASE\", data.characterConstants",
@@ -156,13 +157,13 @@ impl MaceOracle {
             "\t-- Add attribute bonuses\n",
             "\t-- Calculate Presence / Surrounded",
         ));
-        body.push_str("sparkCalcs.doActorLifeManaSpirit({modDB=modDB,output=output},true); local resistTypeList={'Fire','Cold','Lightning','Chaos'}; ");
+        body.push_str("sparkCalcs.doActorLifeManaSpirit({modDB=modDB,output=output},true); characterDefences(modDB,output,input.level); local resistTypeList={'Fire','Cold','Lightning','Chaos'}; ");
         body.push_str(section(
             &defence,
             "\tfor _, elem in ipairs(resistTypeList) do\n\t\tlocal min, max, total, dotTotal",
             "\n\t\toutput[elem..\"ResistOverCap\"]",
         ));
-        body.push_str("\nend; local source=maceWeapon(input); output.Weapon=source; local enemyDB=new('ModDB'):ModDB(); enemyDB:NewMod('Armour','BASE',input.armour,'Config'); enemyDB:NewMod('Evasion','BASE',input.evasion,'Config'); enemyDB:NewMod('FireResist','BASE',input.resistance,'Config'); local skillModList=modDB; local cfg={}; local skillCfg=cfg; local skillData={}; local activeSkill={skillModList=skillModList,activeEffect={grantedEffect=skills.Melee1HMacePlayer,grantedEffectLevel=skills.Melee1HMacePlayer.levels[1]},conversionTable={},gainTable={}}; local globalOutput={ActionSpeedMod=1}; local skillFlags={hit=true}; local isAttack=true; ");
+        body.push_str("\nend; local source=maceWeapon(input); output.Weapon=source; local enemyDB=new('ModDB'):ModDB(); enemyDB:NewMod('Armour','BASE',input.armour,'Config'); enemyDB:NewMod('Evasion','BASE',input.evasion,'Config'); enemyDB:NewMod('FireResist','BASE',input.resistance,'Config'); local skillModList=modDB; local cfg={flags=OR64(ModFlag.Attack,ModFlag.Melee,ModFlag.Hit)}; local skillCfg=cfg; local skillData={}; local activeSkill={skillModList=skillModList,activeEffect={grantedEffect=skills.Melee1HMacePlayer,grantedEffectLevel=skills.Melee1HMacePlayer.levels[1]},conversionTable={},gainTable={}}; local globalOutput={ActionSpeedMod=1}; local skillFlags={hit=true}; local isAttack=true; ");
         body.push_str("if input.brutality then local support=skills.SupportBrutalityPlayer.statSets[1]; for _, stat in ipairs(support.constantStats) do for _, mod in ipairs(support.statMap[stat[1]]) do local resolved=copyTable(mod); resolved.value=stat[2]; modDB:AddMod(resolved) end end; for _, name in ipairs(support.stats) do for _, flag in ipairs(maceSupportFlags[name]) do modDB:AddMod(copyTable(flag)) end end end; ");
         body.push_str(section(
             &offence,
@@ -186,6 +187,11 @@ impl MaceOracle {
         ));
         body.push_str("\nlocal baseTime; ");
         body.push_str(source_line(&offence, "baseTime = (1 / ( source.AttackRate"));
+        body.push('\n');
+        body.push_str(source_line(
+            section(&offence, "\t\t\tif skillModList:Sum(\"BASE\", skillCfg, \"Multiplier:TraumaStacks\") == 0 then", "\n\t\t\tif skillFlags.warcry then"),
+            "local inc = skillModList:Sum(\"INC\", cfg, \"Speed\")",
+        ));
         body.push('\n');
         body.push_str(source_line(
             &offence,
@@ -297,9 +303,20 @@ impl MaceOracle {
         Self { oracle, calculate }
     }
     fn calculate(&self, input: &MaceInput) -> Table {
+        self.calculate_with_character(input, &mace::DEFAULT_CHARACTER)
+    }
+
+    fn calculate_with_character(
+        &self,
+        input: &MaceInput,
+        character: &poe_optimizer_engine::character::CharacterInput,
+    ) -> Table {
         let lua = &self.oracle.lua;
         let table = lua.create_table().unwrap();
         table.set("level", input.character_level).unwrap();
+        table
+            .set("character", character_parity::input_table(lua, character))
+            .unwrap();
         table.set("weapon", input.weapon.data().name).unwrap();
         table.set("quality", input.quality).unwrap();
         table.set("brutality", input.brutality).unwrap();
@@ -349,6 +366,9 @@ fn compare(output: MaceOutput, expected: Table) {
         ("Int", output.intelligence),
         ("Life", output.life),
         ("Mana", output.mana),
+        ("EnergyShield", output.energy_shield),
+        ("Armour", output.armour),
+        ("Evasion", output.evasion),
         ("FireResist", output.fire_resistance),
         ("ColdResist", output.cold_resistance),
         ("LightningResist", output.lightning_resistance),
@@ -566,4 +586,76 @@ fn mace_versioned_data_bounds_and_stateless_evaluation_are_explicit() {
         capped.physical_hit_average,
         expected.physical_hit_average * 0.25
     );
+}
+
+#[test]
+fn all_class_entrances_match_actual_mace_source_with_armour_and_brutality() {
+    for warm in [false, true] {
+        let oracle = MaceOracle::new(warm);
+        for entrance in character_parity::entrances(&oracle.oracle.lua) {
+            for level in [1, 60, 100] {
+                for weapon in [MaceWeapon::WoodenClub, MaceWeapon::SmithingHammer] {
+                    for brutality in [false, true] {
+                        let case = MaceInput {
+                            character_level: level,
+                            weapon,
+                            quality: 20,
+                            brutality,
+                            enemy_armour: 100.0,
+                            enemy_fire_resistance: 50.0,
+                            ..input()
+                        };
+                        compare(
+                            mace::evaluate_with_character(&case, &entrance.character).unwrap(),
+                            oracle.calculate_with_character(&case, &entrance.character),
+                        );
+                    }
+                }
+            }
+        }
+        // Fractional boundaries cover the source's two-decimal speed multiplier
+        // rounding and endpoint damage rounding before critical damage/armour.
+        for value in [
+            0.0,
+            0.49,
+            0.5,
+            0.51,
+            4.49,
+            4.5,
+            9.99,
+            10.0,
+            10.01,
+            1_000_000.0,
+        ] {
+            let character = poe_optimizer_engine::character::CharacterInput {
+                modifiers: poe_optimizer_engine::character::CharacterModifiers {
+                    skill_speed_increased: value,
+                    attack_damage_increased: value,
+                    melee_damage_increased: value,
+                    energy_shield_flat: value,
+                    armour_flat: value,
+                    evasion_flat: value,
+                    ..Default::default()
+                },
+                ..mace::DEFAULT_CHARACTER
+            };
+            for weapon in [MaceWeapon::WoodenClub, MaceWeapon::SmithingHammer] {
+                let case = MaceInput {
+                    weapon,
+                    brutality: true,
+                    enemy_armour: 100.0,
+                    ..input()
+                };
+                compare(
+                    mace::evaluate_with_character(&case, &character).unwrap(),
+                    oracle.calculate_with_character(&case, &character),
+                );
+            }
+        }
+        let before = mace::evaluate(&input()).unwrap();
+        let mut invalid = mace::DEFAULT_CHARACTER;
+        invalid.modifiers.armour_flat = f64::NAN;
+        assert!(mace::evaluate_with_character(&input(), &invalid).is_err());
+        assert_eq!(mace::evaluate(&input()).unwrap(), before);
+    }
 }

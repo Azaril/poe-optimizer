@@ -1,12 +1,13 @@
 # Pinned passive-tree data snapshot
 
-`poe_optimizer_pob::tree_data` extracts the pinned PoB `0_5` tree into owned,
+`poe_optimizer_data::tree_data` owns the portable snapshot model. The optional
+`poe_optimizer_pob::tree_data` adapter extracts the pinned PoB `0_5` tree into owned,
 serializable Rust data. The snapshot contains **4,914 physical nodes, 8 catalog
 classes, 23 catalog ascendancies, 5,187 undirected usable edges and 14 dangling
 connections**. These are properties of the committed PoB dataset, not a claim
 about the latest live game. No website is scraped or consulted during extraction.
 
-This is the data foundation for broader passive/class mutations and eventual
+This is the data foundation for broader passive/class mutations and
 native calculation. It does not yet turn every extracted node into a certified
 search choice. Existing [candidate validation](candidate-model.md) and
 [tree-topology findings](tree-topology-investigation.md) remain separate concerns.
@@ -28,9 +29,11 @@ It performs no file writes, full PoB startup, calculation, downloads or asset lo
 
 `TreeDataSnapshot` owns its maps, sets, strings and primitive values. Consumers
 need no Lua state, handles, process IDs, filesystem paths or environment settings.
-The types currently live in the PoB adapter crate; extracting a dedicated portable
-data crate remains possible when native/WASM consumers need Rust linking. The
-serialized schema can already be consumed independently of the Lua host.
+The models, source-identity checks, canonical hashing and finite projection live
+in the Lua-free `poe-optimizer-data` crate, which compiles for native and WASM
+targets. The PoB adapter re-exports the old public model paths for compatibility.
+Only local source verification, Lua extraction and worker supervision remain in
+the optional reference adapter.
 
 Useful methods are:
 
@@ -51,8 +54,8 @@ Useful methods are:
 The identity records source revision
 `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`, tree version, snapshot schema version,
 source-manifest SHA-256, individual hashes of `tree.lua`, `PassiveTree.lua` and
-`PassiveSpec.lua`, and the extractor's own source hash. Source text normalizes
-CRLF to LF, matching the existing source verifier. Ordered maps and sets remove
+`PassiveSpec.lua`, and a combined hash of the extractor and portable model source.
+Source text normalizes CRLF to LF, matching the existing source verifier. Ordered maps and sets remove
 Lua table iteration order from serialized output. Two fresh extraction processes
 produce identical JSON; ordinary JSON round trips preserve the same digest.
 
@@ -84,15 +87,20 @@ This preserves source fields that do not yet have native semantic implementation
 ## Physical identities and effective source data
 
 Class selection uses the exported `classes` catalog's `integerId`, rather than
-legacy names in start labels or array positions. Witch/Sorceress share root
-**54447**; Ranger/Huntress share **50459**. All eight classes retain two ordinary
+legacy names in start labels or array positions. Snapshot schema **2** also
+preserves the one-based source array position as `TreeClass.source_index`;
+Warrior has source index **3** and canonical integer ID **6**. These values are
+not interchangeable. Schema-1 snapshots are rejected; regenerate them from the
+pinned source rather than filling the new field from an assumed index. The
+bundled subset has its own schema version **1** and is a different data type.
+Witch/Sorceress share root **54447**; Ranger/Huntress share **50459**. All eight classes retain two ordinary
 entrances. Shadow, Marauder, Duelist and Templar start labels do not create
 selectable classes at this source revision. Class records retain base attributes,
 ascendancy membership and complete source metadata.
 
-Ascendancies use their internal IDs and retain the owning class, one-based class
-index, catalog name, replacement metadata and physical start. Lich (`Witch3`) and
-Abyssal Lich (`Witch3b`) share root **23710**. Their switched paid nodes share
+Ascendancies use their internal IDs and retain the owning class, their one-based
+selection index within that class, catalog name, replacement metadata and physical
+start. Lich (`Witch3`) and Abyssal Lich (`Witch3b`) share root **23710**. Their switched paid nodes share
 physical IDs too: **58751** belongs to both source alternatives. Ownership sets
 preserve these relationships without inventing additional graph nodes.
 
@@ -151,6 +159,95 @@ Full source records retain metadata for later implementations. The 14 absent
 targets remain evidence of unknown coverage; extraction neither synthesizes
 replacement nodes nor declares that they are irrelevant.
 
+## Bundled subset for native evaluation
+
+`poe_optimizer_data::bundled::class_tree()` borrows an immutable, once-parsed
+`BundledClassTree`; it needs no checkout, Lua runtime, process or filesystem
+access. The separately typed subset contains all **8 class identities and 23
+ascendancies**, **28 implicit physical roots** and **12 ordinary physical nodes**
+with **16 class-specific entrance views**. It retains the full source identity,
+full snapshot digest, exact raw records, class/ascendancy switches, effective
+stat strings and override provenance. See the crate's
+[NOTICE](../crates/poe-optimizer-data/NOTICE.md) for source and game-data attribution.
+
+The checked-in `class-tree.json` is authenticated against a separately compiled
+`class-tree.sha256` before use. `authenticate_bundle(bytes)` accepts only those
+exact reviewed bytes; a caller cannot supply its own expected digest. The
+artifact digest and the portable model/projection implementation fingerprint
+are bound into native backend identity. A matching provenance label alone never
+admits replacement data.
+
+The subset explicitly records **4,874 excluded nodes**, all **14 source dangling
+connections**, retained-to-excluded boundary edges and coverage limitations.
+Raw retained adjacency still references excluded endpoints; it must not be used
+as a complete allocation graph. Only the `class_entrances` map is an admitted
+native entrance choice set. Borrowed `class`, `ascendancy`, `entrances` and
+`entrance` accessors resolve canonical IDs and reject incompatible owners.
+
+Generation checks every class-only and class/ascendancy selection: all **31**
+choices have stat-free implicit roots without unhandled root mechanics, and each
+entrance's effective source view is unchanged by every owning ascendancy. Unknown
+root fields, root stat effects, changed entrance overlays or point semantics fail
+subset validation. Shared and inherited root display names remain source evidence;
+they do not add modifiers. Allocated ascendancy effects are outside this subset.
+
+This artifact supplies exact data, not a generic stat translator. The current
+[native backend](native-backend.md) maps the reviewed entrance stat strings and
+admits zero or one ordinary entrance connected to the selected class root. Point
+allowances remain explicit caller constraints. `validate_scope()` checks subset
+semantics but does not authenticate arbitrary deserialized data.
+
+The adapter's `tree_bundle` integration test creates a fresh full snapshot in a
+supervised child, derives this subset, and compares its canonical bytes with the
+compiled artifact. It proves all retained data and provenance reproduce from the
+pinned source. Six Lua-free data tests separately check authentication, identity
+mapping, shared roots and class-specific effects, owner rejection, and rejection
+of unmodeled root mechanics. Data tests and WASM compilation require no PoB source.
+
+## Reproduce or deliberately refresh the bundle
+
+Run from the repository root with the pinned reference submodule available:
+
+```powershell
+cargo test --locked -p poe-optimizer-pob --test tree_bundle compiled_bundle_matches_fresh_full_source_extraction
+cargo test --locked -p poe-optimizer-data
+cargo check --locked -p poe-optimizer-data --lib --target wasm32-unknown-unknown
+```
+
+The first command supervises a private child with a 60-second deadline and bounds
+its artifact before reading it. It does not rewrite the committed bundle.
+
+For an intentional refresh, first review the source/model changes and update
+`crates/poe-optimizer-data/data/tree-source-identity.json`. Keep its pin, full
+manifest hash and three source-file hashes aligned with the adapter's reviewed
+source manifest. Its `extractor_sha256` is SHA-256 of the concatenation, in order,
+of the UTF-8 bytes of `poe-tree-extractor-and-model-v2`, the entire
+`crates/poe-optimizer-pob/src/tree_data.rs`, and the entire
+`crates/poe-optimizer-data/src/tree_data.rs`; normalize CRLF to LF in both files.
+There are no separators or length fields. Format the Rust files before hashing.
+A source/model change with an unchanged expected hash fails extraction before
+Lua execution. Other portable implementation changes still change the data and
+backend implementation fingerprints.
+
+After reviewing the identity, the explicit offline generation helper writes a
+fresh candidate artifact to a unique local path:
+
+```powershell
+$taskOutput = Join-Path (Get-Location) ("runs/tree-bundle-" + [guid]::NewGuid() + ".json")
+$env:POE_TREE_BUNDLE_OUTPUT = $taskOutput
+cargo test --locked -p poe-optimizer-pob --test tree_bundle -- --ignored --exact bundle_extraction_child
+if ($LASTEXITCODE -ne 0) { throw "Bundle generation failed" }
+Get-FileHash -LiteralPath $taskOutput -Algorithm SHA256
+```
+
+This helper is for trusted development generation; production extraction uses the
+supervised worker. Inspect the generated records, coverage and provenance diff,
+then deliberately replace `data/class-tree.json` with those exact bytes and
+`data/class-tree.sha256` with their lowercase SHA-256 followed by a newline. Do
+not derive a new trusted digest from an arbitrary supplied bundle. Repeat the
+supervised reproduction and portable checks above, plus live parity for affected
+native profiles. Changes to scope, mechanics or source contracts require an
+explicit schema/policy review; updating a checksum cannot authorize new effects.
 ## Validation evidence
 
 Seven integration tests consume child-process extractions of the actual pin.
@@ -165,7 +262,7 @@ test is invoked only as the isolated extraction child. Targeted Clippy passes
 with warnings denied.
 
 These tests validate extraction and the reviewed loader behavior, not independent
-numeric parity for every passive's effects or full gameplay legality. The next
-useful checks are minimal evaluated builds for every class/ascendancy and both
-ordinary entrances, followed by requested-versus-realized passive identity and
-override comparisons before unrestricted tree mutation enters search.
+numeric parity for every passive's effects or full gameplay legality. Native
+contract and optional live-reference parity tests cover the admitted class and
+entrance profiles separately. Unrestricted tree mutation still needs broader
+allocation and modifier evidence.

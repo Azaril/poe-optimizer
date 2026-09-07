@@ -100,7 +100,7 @@ fn unknown_mechanics_in_any_section_are_rejected_instead_of_approximated() {
             "ascendClassName=\"None\"",
             "ascendClassName=\"Stormweaver\"",
         ),
-        MAPPING.replace("nodes=\"\"", "nodes=\"4739\""),
+        MAPPING.replace("nodes=\"\"", "nodes=\"4294967295\""),
         MAPPING.replace("masteryEffects=\"\"", "masteryEffects=\"1,2\""),
         MAPPING.replace("level=\"1\" quality=\"0\"", "level=\"2\" quality=\"0\""),
         MAPPING.replace(

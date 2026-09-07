@@ -258,13 +258,15 @@ so consumers can exercise the whole build/evaluation boundary before the general
 is ready. Unsupported builds or mechanics must fail explicitly, with the optional reference
 backend selected deliberately by the caller rather than hidden inside a native calculation.
 
-The initial `spark` profile accepts a Sorceress using level-one, quality-zero Spark, no
-equipment/supports/allocated passives, and no additional modifiers. The host validates
-that complete scope before constructing `SparkInput`; the numeric engine does not parse
-XML. The input exposes character level, resistance penalty, resolved enemy lightning
-resistance and six quest reward switches. It returns attributes, life/mana/energy shield,
-four player resistances, selected average hit and hit DPS, plus intermediate cast rate,
-critical chance/multiplier and effective enemy resistance. EHP, maximum hits, ailments,
+The `spark` profile accepts level-one, quality-zero Spark with no equipment or supports.
+`evaluate_with_character` receives resolved class attributes and the explicitly admitted
+ordinary entrance effects described below. The host validates the complete scope before
+constructing `SparkInput` and `CharacterInput`; the numeric engine does not parse XML.
+The legacy `evaluate(input)` wrapper preserves Sorceress attributes and no passive effects.
+The input exposes character level, resistance penalty, resolved enemy lightning resistance
+and six quest reward switches. It returns attributes, life/mana/energy shield, armour,
+evasion, four player resistances, selected average hit and hit DPS, plus intermediate cast
+rate, critical chance/multiplier and effective enemy resistance. EHP, maximum hits, ailments,
 projectile collision/repeat-hit simulation and resource sustainability are not supplied.
 
 The profile preserves PoB's configuration defaults: the six fixed quest rewards affecting
@@ -279,7 +281,8 @@ remain outside this profile. Enemy resistance uses the pinned configurable ceili
 
 `SparkData` is a compact Rust transcription of skill level data, class attributes, character
 constants, quest effects and explicit calculation constants. `SOURCE_FILES` identifies
-11 complete normalized source files, and `PROFILE_ID` identifies the supported semantics.
+12 complete normalized source files, including the modifier parser semantic oracle.
+`PROFILE_ID` is `poe2-spark-level1-class-entrance-v2`.
 The production function uses no parsing, allocation, I/O, timing, Lua or shared state. The
 application adapter owns XML admission, source identity, evaluation clock, metric coverage
 and prepared-input reuse. A native-only build and WASM consumer can therefore call the
@@ -308,13 +311,15 @@ Sources: [Spark skill data](https://github.com/PathOfBuildingCommunity/PathOfBui
 
 ### Closed Mace Strike profile
 
-The `mace` profile extends the native build path to a Warrior with level-one Mace Strike,
-one normal Wooden Club or Smithing Hammer, integer quality 0..20 and item level 1..100.
-Brutality I at level one and quality zero is the only admitted support. There are no other
-items, supports, allocated passives, ascendancy or external modifiers. Warrior is entry 3
-in the pinned tree's classes table, whose `integerId` is 6; these identifiers are distinct.
-The host validates the complete document, identities and scenario before constructing
-`MaceInput`. Unmodified weapon base stats do not scale with item level.
+The `mace` profile accepts level-one Mace Strike, one normal Wooden Club or Smithing
+Hammer, integer quality 0..20 and item level 1..100. Brutality I at level one and quality
+zero is the only admitted support. `evaluate_with_character` adds resolved class attributes
+and the ordinary entrance effects below. There are no other items, supports, allocated
+ascendancy effects or external modifiers. The legacy `evaluate(input)` wrapper preserves
+Warrior attributes and no passive effects. Warrior is entry 3 in the raw tree classes array;
+its `integerId` and PoB's rekeyed live class index are 6. The host validates the complete
+document, identities and scenario before constructing `MaceInput` and `CharacterInput`.
+Unmodified weapon base stats do not scale with item level.
 
 The production kernel translates local weapon quality and endpoint rounding, the skill's
 base damage and Brutality's modifier/elemental damage exclusion, inherent accuracy,
@@ -323,7 +328,7 @@ speed, separate critical/ordinary armour mitigation and final hit DPS. The enemy
 mitigation cap is 75%, separately sourced from the player cap. Applying one armour
 reduction to the combined average would be incorrect because a critical strike's larger
 hit has a different reduction. Character resources and resistances use the same quest and
-character-data source pipeline as Spark, with Warrior attributes.
+character-data source pipeline as Spark, with the explicitly resolved attributes.
 
 `MaceInput` receives resolved finite, nonnegative enemy armour/evasion and finite fire
 resistance in -200..200. The kernel applies the ordinary configurable resistance cap and
@@ -336,7 +341,8 @@ coverage. Per-hand average hit is exposed as `main_hand_average_hit`; PoB does n
 a top-level AverageHit for this attack, and the typed metric remains unavailable under
 that existing contract. This profile claims hit DPS, not combined or ailment DPS.
 
-Sixteen normalized source hashes accompany the Rust data. The differential test executes
+Seventeen normalized source hashes accompany the Rust data; the profile identity is
+`poe2-mace-strike-class-entrance-v2`. The differential test executes
 actual pinned Item/ModDB/resource/offence source with resolved closed-profile scaffolding,
 including the real Brutality stat map and damage-disable flags. Interpreted and warmed
 runs cover every admitted quality, both weapons and support choices, character levels,
@@ -345,6 +351,61 @@ rejection and repeated requests. Four separately captured, unchanged full-build 
 goldens provide an additional check. Full document/mutation comparisons remain necessary
 before an adapter expands its accepted scope. These tests establish parity for this
 closed profile and do not establish a general native build engine or game certification.
+
+### Resolved class attributes and ordinary entrance effects
+
+`character::CharacterInput` is shared by both complete kernels. Its `attributes` field
+contains resolved strength, dexterity and intelligence. These are whole nonnegative values;
+class catalog lookup, class-specific node replacements and build admission live in the
+portable data/native adapter. The calculation remains independent of XML, the data loader,
+Lua, operating-system services and mutable caches. Every class in the pinned catalog can
+supply these values. An ascendancy identity with no allocated ascendancy effects does not
+add numeric modifiers to these profiles.
+
+`CharacterModifiers` admits exactly the numeric forms present on the two ordinary entrance
+nodes for each of the eight catalog classes. It is not a general modifier parser:
+
+| Explicit fields | Closed-profile effect |
+| --- | --- |
+| `armour_flat`, `evasion_flat`, `energy_shield_flat` | Global defence bases with upstream final integer rounding. Base evasion is 7; armour and energy shield otherwise begin at zero. |
+| `skill_speed_increased` | Applies to each profile's attack/cast speed; the total multiplier rounds to two decimals before dividing base time. The source also creates warcry/totem-placement speed modifiers, which have no action target in these profiles. |
+| `spell_damage_increased`, `projectile_damage_increased` | Both match Spark and add before each lightning damage endpoint is rounded. They do not match Mace Strike. |
+| `attack_damage_increased`, `melee_damage_increased` | Both match Mace Strike and add before damage scaling by Brutality and endpoint rounding. The physical weapon endpoints have already passed local quality rounding. They do not match Spark. |
+| `minion_damage_increased` | Preserves the Witch entrance's explicitly scoped minion bonus. Neither zero-minion profile has an actor to receive it; it does not increase player damage. |
+
+The Witch replacement at physical node 4739 has spell and minion damage; the Huntress
+replacement at physical node 56651 has attack damage. Their shared-start counterparts
+have spell and projectile damage respectively. Druid node 50084 has both spell and attack
+damage; only the matching flag contributes to either selected skill. Resolve these source
+replacements before constructing numeric inputs. Do not sum the original and replacement
+node effects or use the effective replacement ID as a physical graph allocation.
+
+Attributes affect life, mana and accuracy through the actual inherent bonuses. These
+entrances introduce no flat/increased life, mana, accuracy or attribute modifiers, so the
+input does not imply support for those wider modifier forms. Nonfinite, negative or
+fractional attributes reject. Modifier values must be finite and nonnegative. The numeric
+boundary caps every field at 1,000,000 to keep admitted calculations finite; this is an
+implementation scope bound, not a game stat maximum. The adapter restricts actual admitted
+values to versioned source effects and zero or one ordinary entrance allocation. Diagnostic
+evaluation does not certify available passive points or skill/item attribute requirements;
+search must enforce its explicit progression and legality constraints separately.
+
+The source oracle loads the full pinned `ModParser.lua`, checking its complete normalized
+hash, and proves the exact numeric names, flags and nested minion scope for all sixteen
+effective entrances. No general text parser is implemented in Rust. Both kernel oracles
+execute the original `calcDamage`, resource/attribute and global defence branches, in
+interpreted and warmed LuaJIT. Class attributes and effective stat strings are read from
+the actual pinned tree. Cases cover every entrance across character levels and mitigation,
+plus damage, speed and defence rounding boundaries, rejected exceptional inputs and request
+reuse. The six immutable independent Spark/Mace calibration builds remain unchanged.
+Complete document comparisons are a separate integration gate; these calculations do not
+establish general tree, ascendancy-mechanic or game legality coverage.
+
+Sources: [ordinary stat parser](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/ModParser.lua),
+[pinned class and passive data](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/TreeData/0_5/tree.lua),
+[global defence calculation](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/CalcDefence.lua#L1344-L1458),
+[damage endpoint calculation](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/CalcOffence.lua#L178-L225),
+[speed multiplier rounding](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/CalcOffence.lua#L2975-L2980).
 
 ## Numeric behavior and parity
 

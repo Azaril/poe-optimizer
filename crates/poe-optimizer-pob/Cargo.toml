@@ -6,6 +6,7 @@ rust-version = "1.93"
 publish = false
 
 [dependencies]
+poe-optimizer-data = { path = "../poe-optimizer-data" }
 poe-optimizer-import = { path = "../poe-optimizer-import" }
 mlua = { version = "=0.12.1", features = ["luajit", "vendored", "serde"] }
 poe-optimizer-core = { path = "../poe-optimizer-core" }

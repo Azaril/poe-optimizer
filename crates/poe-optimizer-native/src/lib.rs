@@ -2,6 +2,7 @@
 //! No PoB checkout, Lua state, subprocess, filesystem or network access is required.
 #![forbid(unsafe_code)]
 mod profile;
+mod tree;
 
 use poe_optimizer_core::{BuildSummary, coverage::*, evaluation::*, metrics::*, options::*};
 use poe_optimizer_engine::{mace, spark};
@@ -52,13 +53,15 @@ impl PreparedEvaluation {
     /// Pure calculation entry point for native/browser hosts. No time or OS calls.
     pub fn calculate(&self) -> Result<NativeCalculation, EvaluationError> {
         match &self.profile.input {
-            NativeInput::Spark(input) => spark::evaluate(input)
-                .map(NativeCalculation::Spark)
-                .map_err(|e| {
-                    EvaluationError::new(EvaluationErrorKind::CalculationFailed, e.to_string())
-                }),
+            NativeInput::Spark(input) => {
+                spark::evaluate_with_character(input, &self.profile.tree.character)
+                    .map(NativeCalculation::Spark)
+                    .map_err(|e| {
+                        EvaluationError::new(EvaluationErrorKind::CalculationFailed, e.to_string())
+                    })
+            }
             NativeInput::Mace(input) => {
-                mace::evaluate(input)
+                mace::evaluate_with_character(input, &self.profile.tree.character)
                     .map(NativeCalculation::Mace)
                     .map_err(|e| {
                         EvaluationError::new(EvaluationErrorKind::CalculationFailed, e.to_string())
@@ -110,10 +113,10 @@ impl NativeCalculation {
     fn diagnostic(&self, input: &NativeInput) -> serde_json::Value {
         let mut value = match self {
             Self::Spark(o) => {
-                serde_json::json!({"strength":o.strength,"dexterity":o.dexterity,"intelligence":o.intelligence,"cast_rate":o.cast_rate,"crit_chance":o.crit_chance,"crit_multiplier":o.crit_multiplier,"effective_enemy_lightning_resistance":o.effective_enemy_lightning_resistance})
+                serde_json::json!({"strength":o.strength,"dexterity":o.dexterity,"intelligence":o.intelligence,"armour":o.armour,"evasion":o.evasion,"cast_rate":o.cast_rate,"crit_chance":o.crit_chance,"crit_multiplier":o.crit_multiplier,"effective_enemy_lightning_resistance":o.effective_enemy_lightning_resistance})
             }
             Self::Mace(o) => {
-                serde_json::json!({"strength":o.strength,"dexterity":o.dexterity,"intelligence":o.intelligence,"attack_rate":o.attack_rate,"accuracy":o.accuracy,"hit_chance":o.hit_chance,"crit_chance":o.crit_chance,"crit_multiplier":o.crit_multiplier,"main_hand_average_hit":o.main_hand_average_hit,"average_damage":o.average_damage,"effective_enemy_fire_resistance":o.effective_enemy_fire_resistance,"effective_enemy_evasion":o.effective_enemy_evasion})
+                serde_json::json!({"strength":o.strength,"dexterity":o.dexterity,"intelligence":o.intelligence,"armour":o.armour,"evasion":o.evasion,"attack_rate":o.attack_rate,"accuracy":o.accuracy,"hit_chance":o.hit_chance,"crit_chance":o.crit_chance,"crit_multiplier":o.crit_multiplier,"main_hand_average_hit":o.main_hand_average_hit,"average_damage":o.average_damage,"effective_enemy_fire_resistance":o.effective_enemy_fire_resistance,"effective_enemy_evasion":o.effective_enemy_evasion})
             }
         };
         if let NativeInput::Mace(i) = input {
@@ -132,8 +135,6 @@ impl NativeCalculation {
 }
 struct BuildInfo {
     level: u32,
-    class_name: &'static str,
-    root: u32,
     skill_id: &'static str,
     skill_name: &'static str,
     game_id: &'static str,
@@ -145,8 +146,6 @@ impl BuildInfo {
         match input {
             NativeInput::Spark(i) => Self {
                 level: i.character_level,
-                class_name: "Sorceress",
-                root: 54447,
                 skill_id: "SparkPlayer",
                 skill_name: "Spark",
                 game_id: "Metadata/Items/Gems/SkillGemSpark",
@@ -155,8 +154,6 @@ impl BuildInfo {
             },
             NativeInput::Mace(i) => Self {
                 level: i.character_level,
-                class_name: "Warrior",
-                root: 47175,
                 skill_id: "Melee1HMacePlayer",
                 skill_name: "Mace Strike",
                 game_id: "Metadata/Items/Gem/SkillGemPlayerDefault1HMace",
@@ -203,6 +200,8 @@ pub fn backend_identity() -> BackendIdentity {
             for text in [
                 include_str!("lib.rs"),
                 include_str!("profile.rs"),
+                include_str!("tree.rs"),
+                include_str!("../../poe-optimizer-engine/src/character.rs"),
                 include_str!("../Cargo.toml"),
                 include_str!("../../poe-optimizer-engine/src/spark.rs"),
                 include_str!("../../poe-optimizer-engine/src/mace.rs"),
@@ -221,6 +220,8 @@ pub fn backend_identity() -> BackendIdentity {
             ] {
                 adapter.update(text.replace("\r\n", "\n"));
             }
+            adapter.update(poe_optimizer_data::implementation_fingerprint());
+            adapter.update(poe_optimizer_data::bundled::content_sha256());
             BackendIdentity {
                 id: "native-poe2".into(),
                 implementation_version: env!("CARGO_PKG_VERSION").into(),
@@ -337,13 +338,13 @@ impl<C: EvaluationClock> NativeBackend<C> {
         }
         let mut result=EvaluationResult {
             backend:backend_identity(),
-            build:BuildSummary{level:info.level,class_name:info.class_name.into(),ascendancy_name:"None".into(),tree_version:"0_5".into(),main_socket_group:1,allocated_nodes:vec![info.root],skill_groups:1},
+            build:BuildSummary{level:info.level,class_name:prepared.profile.tree.class.name.clone(),ascendancy_name:prepared.profile.tree.ascendancy_name().into(),tree_version:"0_5".into(),main_socket_group:1,allocated_nodes:prepared.profile.tree.allocated_nodes.clone(),skill_groups:1},
             context:EvaluationContext{requested:prepared.request.options.clone(),calculation_mode:"MAIN".into(),enemy_level:prepared.profile.enemy_level,config_inputs:prepared.profile.config.clone(),config_placeholders:defaults,player_conditions:BTreeMap::new(),enemy_conditions:BTreeMap::new()},
             coverage:coverage(prepared.profile.group_label.clone(), &info),measurements,
             exports:vec![BuildDocument{format:BuildFormat::PathOfBuilding2Xml,content:prepared.profile.export_xml.clone()}],
             warnings:vec![format!("Native supported profile: {}. Other build mechanics are rejected.",output.profile_id()),"Full DPS rollups, EHP and maximum-hit calculations are not implemented by this backend.".into()],
             elapsed_ms:0.0,diagnostic_only:true,
-            attachments:vec![DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-profile+json;version=1".into(),content:output.diagnostic(&prepared.profile.input).to_string()}],
+            attachments:vec![DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-profile+json;version=1".into(),content:output.diagnostic(&prepared.profile.input).to_string()}, DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-tree+json;version=1".into(),content:prepared.profile.tree.diagnostic().to_string()}],
         };
         result.elapsed_ms = self.elapsed(start, budget)?;
         result.validate_recorded()?;

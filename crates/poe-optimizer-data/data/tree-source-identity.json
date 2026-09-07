@@ -1,0 +1,12 @@
+{
+  "schema_version": 2,
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "tree_version": "0_5",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files_sha256": {
+    "src/Classes/PassiveSpec.lua": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c",
+    "src/Classes/PassiveTree.lua": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d",
+    "src/TreeData/0_5/tree.lua": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+  },
+  "extractor_sha256": "375eebb6297214638354f9c4c464d6f265e05cc0dbdea5686831d93a59f63e3e"
+}

@@ -16,18 +16,17 @@ use std::{
 };
 
 use mlua::{HookTriggers, Lua, LuaOptions, StdLib, Table, Value, VmState};
-use serde::{Deserialize, Serialize};
+pub use poe_optimizer_data::tree_data::{
+    DanglingConnection, EffectiveTreeNode, LOADER_PATH, OverrideProvenance, SPEC_PATH,
+    SUPPORTED_TREE_VERSION, SourceTable, SourceValue, TREE_PATH, TREE_SNAPSHOT_SCHEMA,
+    TreeAscendancy, TreeClass, TreeDataSnapshot, TreeNode, TreeNodeKind, TreePointCategory,
+    TreeSourceIdentity,
+};
 use sha2::{Digest, Sha256};
 use thiserror::Error;
 
 use crate::source;
 
-pub const TREE_SNAPSHOT_SCHEMA: u32 = 1;
-pub const SUPPORTED_TREE_VERSION: &str = "0_5";
-const TREE_PATH: &str = "src/TreeData/0_5/tree.lua";
-const LOADER_PATH: &str = "src/Classes/PassiveTree.lua";
-const SPEC_PATH: &str = "src/Classes/PassiveSpec.lua";
-const MANIFEST: &str = include_str!("../data/pob-source-manifest.json");
 const MAX_TREE_BYTES: usize = 8 * 1024 * 1024;
 const MAX_NODES: usize = 20_000;
 const MAX_CONNECTIONS: usize = 200_000;
@@ -36,6 +35,8 @@ const MAX_TEXT_BYTES: usize = 16 * 1024 * 1024;
 
 #[derive(Debug, Error)]
 pub enum TreeDataError {
+    #[error(transparent)]
+    Data(#[from] poe_optimizer_data::tree_data::TreeDataError),
     #[error(transparent)]
     Source(#[from] source::SourceError),
     #[error("passive tree extraction failed: {0}")]
@@ -48,269 +49,6 @@ pub enum TreeDataError {
 
 fn invalid(message: impl Into<String>) -> TreeDataError {
     TreeDataError::Invalid(message.into())
-}
-
-/// Lua table key types remain distinct, including numeric attribute choices.
-/// Empty tables remain tables; they are never guessed to be JSON arrays.
-#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct SourceTable {
-    pub named: BTreeMap<String, SourceValue>,
-    pub indexed: BTreeMap<i64, SourceValue>,
-}
-
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(tag = "type", content = "value", rename_all = "snake_case")]
-pub enum SourceValue {
-    Boolean(bool),
-    Integer(i64),
-    Number(f64),
-    String(String),
-    Table(SourceTable),
-}
-
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct TreeSourceIdentity {
-    pub schema_version: u32,
-    pub upstream_revision: String,
-    pub tree_version: String,
-    pub source_manifest_sha256: String,
-    pub source_files_sha256: BTreeMap<String, String>,
-    pub extractor_sha256: String,
-}
-
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct TreeClass {
-    pub integer_id: u32,
-    pub name: String,
-    pub start_node_id: u32,
-    pub ascendancy_ids: BTreeSet<String>,
-    pub base_strength: u32,
-    pub base_dexterity: u32,
-    pub base_intelligence: u32,
-    pub source: SourceTable,
-}
-
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct TreeAscendancy {
-    pub internal_id: String,
-    pub catalog_id: String,
-    pub name: String,
-    pub class_id: u32,
-    pub class_index: u32,
-    pub start_node_id: u32,
-    pub replaces: Option<String>,
-    pub replaced_by: Option<String>,
-    pub source: SourceTable,
-}
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum TreeNodeKind {
-    ClassStart,
-    AscendancyStart,
-    ImageOnly,
-    Socket,
-    Keystone,
-    Notable,
-    Normal,
-}
-
-/// Source-default accounting only. Runtime-granted/free allocations and weapon
-/// sets can change costs and need their own validation before search uses them.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum TreePointCategory {
-    ImplicitRoot,
-    Ordinary,
-    Ascendancy,
-    NonAllocatable,
-    UnsupportedChoice,
-}
-
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct TreeNode {
-    pub id: u32,
-    pub string_id: Option<String>,
-    pub name: String,
-    pub kind: TreeNodeKind,
-    pub point_category: TreePointCategory,
-    pub source_default_point_cost: Option<u32>,
-    pub class_start_labels: BTreeSet<String>,
-    pub class_ids: BTreeSet<u32>,
-    pub ascendancy_ids: BTreeSet<String>,
-    pub stats: Vec<String>,
-    pub raw_connections: BTreeSet<u32>,
-    pub adjacent: BTreeSet<u32>,
-    pub automatic_overrides: BTreeMap<String, SourceTable>,
-    pub unsupported_mechanics: BTreeSet<String>,
-    pub source: SourceTable,
-}
-
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct DanglingConnection {
-    pub from: u32,
-    pub missing: u32,
-}
-
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct TreeDataSnapshot {
-    pub identity: TreeSourceIdentity,
-    pub classes: BTreeMap<u32, TreeClass>,
-    pub ascendancies: BTreeMap<String, TreeAscendancy>,
-    pub nodes: BTreeMap<u32, TreeNode>,
-    pub dangling_connections: BTreeSet<DanglingConnection>,
-    pub ignored_image_connections: BTreeSet<(u32, u32)>,
-    pub ignored_self_connections: BTreeSet<u32>,
-    pub unsupported_mechanics: BTreeSet<String>,
-}
-
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(tag = "kind", rename_all = "snake_case")]
-pub enum OverrideProvenance {
-    Base,
-    Class {
-        class_id: u32,
-        selector: String,
-    },
-    Ascendancy {
-        internal_id: String,
-        selector: String,
-    },
-}
-
-/// The chosen source record with PoB's shallow fallback to the base record.
-/// `physical_node_id` remains the allocation/graph key. This is a source-data
-/// view, not a claim that every field is replaced on PoB's live spec node.
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct EffectiveTreeNode {
-    pub physical_node_id: u32,
-    pub effective_source_id: u32,
-    pub name: String,
-    pub stats: Vec<String>,
-    pub provenance: OverrideProvenance,
-    pub override_fields: BTreeSet<String>,
-    pub source: SourceTable,
-}
-
-impl TreeDataSnapshot {
-    /// Reject a stale schema, pin, loader or extractor identity. This checks
-    /// provenance claims only; arbitrary deserialized snapshot contents are not
-    /// authenticated merely because these fields match.
-    pub fn validate_source_identity(&self) -> Result<(), TreeDataError> {
-        if self.identity != expected_identity()? {
-            return Err(invalid("snapshot source or extractor identity is stale"));
-        }
-        Ok(())
-    }
-
-    /// A stable digest of the complete serialized snapshot, including evidence.
-    pub fn sha256(&self) -> Result<String, TreeDataError> {
-        let bytes = serde_json::to_vec(self).map_err(|error| invalid(error.to_string()))?;
-        Ok(hash(&bytes))
-    }
-
-    pub fn ordinary_entrances(&self, class_id: u32) -> Result<BTreeSet<u32>, TreeDataError> {
-        let class = self
-            .classes
-            .get(&class_id)
-            .ok_or_else(|| invalid("unknown class ID"))?;
-        let root = self
-            .nodes
-            .get(&class.start_node_id)
-            .ok_or_else(|| invalid("missing class root"))?;
-        Ok(root
-            .adjacent
-            .iter()
-            .copied()
-            .filter(|id| {
-                self.nodes
-                    .get(id)
-                    .is_some_and(|node| node.point_category == TreePointCategory::Ordinary)
-            })
-            .collect())
-    }
-
-    /// Resolve automatic class/ascendancy switches, preserving base graph IDs.
-    /// Class selectors take precedence, exactly as BuildAllDependsAndPaths.
-    /// Attribute choices, jewels and explicit hash overrides remain unsupported.
-    pub fn effective_node(
-        &self,
-        class_id: u32,
-        ascendancy_internal_id: Option<&str>,
-        physical_node_id: u32,
-    ) -> Result<EffectiveTreeNode, TreeDataError> {
-        let class = self
-            .classes
-            .get(&class_id)
-            .ok_or_else(|| invalid("unknown class ID"))?;
-        let ascendancy = ascendancy_internal_id
-            .map(|id| {
-                let asc = self
-                    .ascendancies
-                    .get(id)
-                    .ok_or_else(|| invalid("unknown ascendancy internal ID"))?;
-                if asc.class_id != class_id {
-                    return Err(invalid("ascendancy does not belong to the selected class"));
-                }
-                Ok(asc)
-            })
-            .transpose()?;
-        let node = self
-            .nodes
-            .get(&physical_node_id)
-            .ok_or_else(|| invalid("unknown physical node ID"))?;
-        let selected = if let Some(option) = node.automatic_overrides.get(&class.name) {
-            Some((
-                option,
-                OverrideProvenance::Class {
-                    class_id,
-                    selector: class.name.clone(),
-                },
-            ))
-        } else {
-            ascendancy.and_then(|asc| {
-                node.automatic_overrides.get(&asc.name).map(|option| {
-                    (
-                        option,
-                        OverrideProvenance::Ascendancy {
-                            internal_id: asc.internal_id.clone(),
-                            selector: asc.name.clone(),
-                        },
-                    )
-                })
-            })
-        };
-        let mut effective = node.source.clone();
-        let mut override_fields = BTreeSet::new();
-        let provenance = match selected {
-            Some((option, provenance)) => {
-                for (key, value) in &option.named {
-                    override_fields.insert(key.clone());
-                    effective.named.insert(key.clone(), value.clone());
-                }
-                effective.indexed.extend(option.indexed.clone());
-                provenance
-            }
-            None => OverrideProvenance::Base,
-        };
-        Ok(EffectiveTreeNode {
-            physical_node_id,
-            effective_source_id: source_u32(&effective, "id")?.unwrap_or(physical_node_id),
-            name: source_string(&effective, "name")?.unwrap_or_else(|| node.name.clone()),
-            stats: source_strings(&effective, "stats")?.unwrap_or_default(),
-            provenance,
-            override_fields,
-            source: effective,
-        })
-    }
 }
 
 /// Extract only the committed 0_5 tree. This synchronous worker-side function
@@ -382,7 +120,11 @@ fn extract_table(
     let mut ascendancies = BTreeMap::new();
     let mut class_names = BTreeMap::new();
     let mut asc_names = BTreeMap::new();
-    for entry in tree.get::<Table>("classes")?.sequence_values::<Table>() {
+    for (source_index, entry) in tree
+        .get::<Table>("classes")?
+        .sequence_values::<Table>()
+        .enumerate()
+    {
         let entry = entry?;
         let id: u32 = entry.get("integerId")?;
         let name: String = entry.get("name")?;
@@ -419,6 +161,7 @@ fn extract_table(
             }
         }
         let definition = TreeClass {
+            source_index: source_index as u32 + 1,
             integer_id: id,
             name: name.clone(),
             start_node_id: 0,
@@ -620,43 +363,19 @@ fn extract_table(
 }
 
 fn expected_identity() -> Result<TreeSourceIdentity, TreeDataError> {
-    let manifest: serde_json::Value =
-        serde_json::from_str(MANIFEST).map_err(|error| invalid(error.to_string()))?;
-    let mut files = BTreeMap::new();
-    for entry in manifest["files"]
-        .as_array()
-        .ok_or_else(|| invalid("invalid source manifest"))?
-    {
-        let path = entry["path"]
-            .as_str()
-            .ok_or_else(|| invalid("invalid manifest path"))?;
-        if [TREE_PATH, LOADER_PATH, SPEC_PATH].contains(&path) {
-            files.insert(
-                path.to_owned(),
-                entry["sha256"]
-                    .as_str()
-                    .ok_or_else(|| invalid("invalid manifest hash"))?
-                    .to_owned(),
-            );
-        }
+    let identity = poe_optimizer_data::tree_data::expected_identity()?;
+    let mut fingerprint = Sha256::new();
+    fingerprint.update(b"poe-tree-extractor-and-model-v2");
+    fingerprint.update(include_str!("tree_data.rs").replace("\r\n", "\n"));
+    fingerprint
+        .update(include_str!("../../poe-optimizer-data/src/tree_data.rs").replace("\r\n", "\n"));
+    if identity.extractor_sha256 != format!("{:x}", fingerprint.finalize()) {
+        return Err(invalid(
+            "compiled tree extractor/model differ from the supported identity manifest",
+        ));
     }
-    if files.len() != 3 {
-        return Err(invalid("tree or loader absent from embedded manifest"));
-    }
-    Ok(TreeSourceIdentity {
-        schema_version: TREE_SNAPSHOT_SCHEMA,
-        upstream_revision: source::UPSTREAM_REVISION.into(),
-        tree_version: SUPPORTED_TREE_VERSION.into(),
-        source_manifest_sha256: hash(MANIFEST.replace("\r\n", "\n").as_bytes()),
-        source_files_sha256: files,
-        extractor_sha256: hash(
-            include_str!("tree_data.rs")
-                .replace("\r\n", "\n")
-                .as_bytes(),
-        ),
-    })
+    Ok(identity)
 }
-
 fn hash(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
@@ -744,55 +463,4 @@ fn copy_text(text: mlua::LuaString, budget: &mut ValueBudget) -> Result<String, 
         return Err(invalid("source text byte limit"));
     }
     Ok(text.to_str()?.to_owned())
-}
-fn source_u32(table: &SourceTable, field: &str) -> Result<Option<u32>, TreeDataError> {
-    match table.named.get(field) {
-        None => Ok(None),
-        Some(SourceValue::Integer(value)) => u32::try_from(*value)
-            .map(Some)
-            .map_err(|_| invalid("source integer out of range")),
-        Some(SourceValue::Number(value))
-            if value.fract() == 0.0 && *value >= 0.0 && *value <= u32::MAX as f64 =>
-        {
-            Ok(Some(*value as u32))
-        }
-        _ => Err(invalid(format!(
-            "source field {field} must be an unsigned integer"
-        ))),
-    }
-}
-fn source_string(table: &SourceTable, field: &str) -> Result<Option<String>, TreeDataError> {
-    match table.named.get(field) {
-        None => Ok(None),
-        Some(SourceValue::String(value)) => Ok(Some(value.clone())),
-        _ => Err(invalid(format!("source field {field} must be a string"))),
-    }
-}
-fn source_strings(table: &SourceTable, field: &str) -> Result<Option<Vec<String>>, TreeDataError> {
-    let Some(value) = table.named.get(field) else {
-        return Ok(None);
-    };
-    let SourceValue::Table(table) = value else {
-        return Err(invalid("source string list is not a table"));
-    };
-    if !table.named.is_empty()
-        || !table
-            .indexed
-            .keys()
-            .copied()
-            .eq(1..=table.indexed.len() as i64)
-    {
-        return Err(invalid(
-            "source string list is not a contiguous one-based sequence",
-        ));
-    }
-    table
-        .indexed
-        .values()
-        .map(|value| match value {
-            SourceValue::String(value) => Ok(value.clone()),
-            _ => Err(invalid("source string list contains non-string")),
-        })
-        .collect::<Result<Vec<_>, _>>()
-        .map(Some)
 }

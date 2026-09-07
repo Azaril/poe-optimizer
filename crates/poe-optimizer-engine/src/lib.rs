@@ -8,6 +8,7 @@
 
 #![forbid(unsafe_code)]
 
+pub mod character;
 pub mod conditions;
 pub mod defence;
 pub mod mace;

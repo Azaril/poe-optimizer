@@ -2271,6 +2271,7 @@ fn source_line<'a>(source: &'a str, exact_prefix: &str) -> &'a str {
 fn spark_source_checks() {
     for record in spark::SOURCE_FILES {
         let source = match record.path {
+            "src/Modules/ModParser.lua" => character_parity::PARSER,
             "src/Data/Misc.lua" => SPARK_MISC,
             "src/Data/QuestRewards.lua" => SPARK_QUESTS,
             "src/Data/Skills/act_int.lua" => SPARK_SKILLS,
@@ -2415,15 +2416,20 @@ impl SparkOracle {
             }
         }
         lua.globals().set("sparkQuests", selected_quests).unwrap();
+        character_parity::install_defence_oracle(lua);
         // Insert unchanged upstream functions/expressions for the exact branches
         // admitted by this profile. Scaffolding supplies resolved skill/context data;
         // no expected values or rewritten Lua arithmetic are used.
         let setup = SPARK_SETUP.replace("\r\n", "\n");
         let perform = SPARK_PERFORM.replace("\r\n", "\n");
         let offence = SPARK_OFFENCE.replace("\r\n", "\n");
-        let mut body = String::from(
-            "return function(input) local m_min, m_max = math.min, math.max; local modDB=new('ModDB'):ModDB(); local output={Str=sparkClass.base_str,Dex=sparkClass.base_dex,Int=sparkClass.base_int}; modDB.actor={output=output}; modDB.multipliers.Level=input.level; ",
-        );
+        let mut body = section(
+            &offence,
+            "-- Path of Building",
+            "---Calculates the area percentage",
+        )
+        .to_owned();
+        body.push_str("return function(input) local m_min, m_max = math.min, math.max; local modDB=new('ModDB'):ModDB(); local output={Str=input.character.strength,Dex=input.character.dexterity,Int=input.character.intelligence}; modDB.actor={output=output}; modDB.multipliers.Level=input.level; for _, mod in ipairs(input.character.mods) do modDB:AddMod(copyTable(mod)) end; ");
         body.push_str(section(
             &setup,
             "\t\tmodDB:NewMod(\"Life\", \"BASE\", data.characterConstants",
@@ -2435,13 +2441,13 @@ impl SparkOracle {
             "\t-- Add attribute bonuses\n",
             "\t-- Calculate Presence / Surrounded",
         ));
-        body.push_str("sparkCalcs.doActorLifeManaSpirit({modDB=modDB,output=output},true); local enemyDB=new('ModDB'):ModDB(); enemyDB:NewMod('LightningResist','BASE',input.resistance,'Config'); local env={configInput={enemyLightningResist=input.resistance},modDB=modDB,partyMembers={modDB=modDB},mode_effective=true}; local isElemental={Lightning=true}; ");
+        body.push_str("sparkCalcs.doActorLifeManaSpirit({modDB=modDB,output=output},true); characterDefences(modDB,output,input.level); local enemyDB=new('ModDB'):ModDB(); enemyDB:NewMod('LightningResist','BASE',input.resistance,'Config'); local env={configInput={enemyLightningResist=input.resistance},modDB=modDB,partyMembers={modDB=modDB},mode_effective=true}; local isElemental={Lightning=true}; ");
         body.push_str(section(
             &offence,
             "\tlocal function calcResistForType(",
             "\n\tlocal function runSkillFunc(",
         ));
-        body.push_str("local cfg={}; local skillCfg=cfg; local skillModList=modDB; local skillData={}; local activeSkill={activeEffect={grantedEffect=sparkSkill}}; local globalOutput={ActionSpeedMod=1}; local baseCrit=sparkSkill.levels[1].critChance; local base,inc,more=0,0,1;\n");
+        body.push_str("local cfg={flags=OR64(ModFlag.Spell,ModFlag.Cast,ModFlag.Projectile,ModFlag.Hit)}; local skillCfg=cfg; local skillModList=modDB; local skillData={}; local activeSkill={skillModList=modDB,conversionTable={},activeEffect={grantedEffect=sparkSkill}}; local globalOutput={ActionSpeedMod=1}; local baseCrit=sparkSkill.levels[1].critChance; local base,inc,more=0,0,1;\n");
         body.push_str(source_line(
             &offence,
             "output.CritChance = round((baseCrit + base)",
@@ -2461,10 +2467,15 @@ impl SparkOracle {
         body.push_str(source_line(&offence, "baseTime = (skillData.castTimeOverride or activeSkill.activeEffect.grantedEffect.castTime"));
         body.push('\n');
         body.push_str(source_line(
+            section(&offence, "\t\t\tif skillModList:Sum(\"BASE\", skillCfg, \"Multiplier:TraumaStacks\") == 0 then", "\n\t\t\tif skillFlags.warcry then"),
+            "local inc = skillModList:Sum(\"INC\", cfg, \"Speed\")",
+        ));
+        body.push('\n');
+        body.push_str(source_line(
             &offence,
             "output.Speed = 1 / (baseTime / round(",
         ));
-        body.push_str("\nglobalOutput.Speed=output.Speed; local effectiveResist=calcResistForType('Lightning',cfg); local totalHitAvg,totalCritAvg; for pass=1,2 do local damageTypeHitMin=sparkSkill.statSets[1].levels[1][1]; local damageTypeHitMax=sparkSkill.statSets[1].levels[1][2]; local allMult=1; ");
+        body.push_str("\nglobalOutput.Speed=output.Speed; local effectiveResist=calcResistForType('Lightning',cfg); local totalHitAvg,totalCritAvg; for pass=1,2 do output.LightningSummedMinBase=sparkSkill.statSets[1].levels[1][1]; output.LightningSummedMaxBase=sparkSkill.statSets[1].levels[1][2]; local damageTypeHitMin,damageTypeHitMax=calcDamage(activeSkill,output,cfg,nil,'Lightning',0); local allMult=1; ");
         body.push_str(section(
             &offence,
             "\t\t\t\t\tif pass == 1 then\n\t\t\t\t\t\t-- Apply crit multiplier",
@@ -2517,9 +2528,20 @@ impl SparkOracle {
     }
 
     fn calculate(&self, input: &SparkInput) -> Table {
+        self.calculate_with_character(input, &spark::DEFAULT_CHARACTER)
+    }
+
+    fn calculate_with_character(
+        &self,
+        input: &SparkInput,
+        character: &poe_optimizer_engine::character::CharacterInput,
+    ) -> Table {
         let lua = &self.oracle.lua;
         let table = lua.create_table().unwrap();
         table.set("level", input.character_level).unwrap();
+        table
+            .set("character", character_parity::input_table(lua, character))
+            .unwrap();
         table
             .set("resistance", input.enemy_lightning_resistance)
             .unwrap();
@@ -2662,3 +2684,6 @@ fn closed_spark_data_is_transcribed_from_source_and_rejects_invalid_profile_inpu
 
 #[path = "support/mace_parity.rs"]
 mod mace_parity;
+
+#[path = "support/character_parity.rs"]
+mod character_parity;

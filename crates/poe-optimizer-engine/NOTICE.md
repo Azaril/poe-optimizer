@@ -15,6 +15,7 @@ Community PoE2 at revision `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`:
 - `src/Classes/ModStore.lua:425-468,605-652,704-722`: ordinary stat lookup and numeric PerStat/StatThreshold tags.
 - `src/spark.rs::SOURCE_FILES` lists the complete versioned skill, class, character, quest, configuration and calculation sources for the closed Spark profile.
 - `src/mace.rs::SOURCE_FILES` additionally records mace bases, Mace Strike/Brutality skill data, skill-stat flags and local weapon quality calculations.
+- `src/character.rs` and the class/entrance profile branches derive ordinary class attribute bonuses, global defence bases, flagged damage and speed rounding from the existing profile source lists. Exact entrance stat semantics are checked against `src/Modules/ModParser.lua` and class-specific `src/TreeData/0_5/tree.lua` options; both full source hashes are retained.
 - `src/Data/Global.lua:122-332`: supported flag and keyword matching semantics.
 - `src/Modules/Data.lua:597-603`: MORE precision entries.
 

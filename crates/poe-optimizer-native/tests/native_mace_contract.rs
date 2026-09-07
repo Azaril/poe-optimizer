@@ -355,8 +355,8 @@ fn unsupported_mace_mechanics_are_rejected_at_preparation() {
             WOODEN.replace("ascendClassName=\"None\"", "ascendClassName=\"Titan\""),
         ),
         (
-            "paid passive",
-            WOODEN.replace("nodes=\"\"", "nodes=\"41119\""),
+            "unknown passive",
+            WOODEN.replace("nodes=\"\"", "nodes=\"4294967295\""),
         ),
         (
             "foreign implicit root",
