@@ -6,8 +6,9 @@ Current phase: M2 now includes parameterized normal-Mace weapon/support mutation
 an experimental supplied-problem CLI, a reusable coordinated discrete proposer, and
 isolated pinned-tree extraction. Native numeric multiplier programs extend the Rust port.
 All 188 local workspace tests, Clippy, formatting and portable core/native WASM compilation
-pass. The documented eight-state search and tree export also pass. Publication and hosted
-CI for this checkpoint are the remaining bookkeeping step; evidence is recorded below.
+pass. The documented eight-state search and tree export also pass. Code is published as
+`55df9d5`; both Windows/Linux hosted jobs passed, including tests and WASM compilation.
+The following documentation-only update records the completed checkpoint.
 The first usable release still requires all six dimensions together.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
@@ -23,7 +24,8 @@ the design documents.
 
 1. Inspect `git status --short --branch` and this checkpoint's publication row. All 188
    local tests, formatting, Clippy, portable WASM checks and documented CLI examples pass.
-   Publish the current checkpoint and record Windows/Linux hosted CI, then resume at item 4.
+   Code is published as `55df9d5`; both hosted jobs pass in run `34159259405`.
+   This documentation-only update records the evidence; resume implementation at item 4.
    Preserve unrelated user work.
 2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve original
    supplied exports and all independently generated Spark/Mace calibration goldens.
@@ -126,7 +128,7 @@ joint integration. It does not change the agreed release scope or calculation bo
 | Documented supplied search | Ignored `runs/m2-mutations-64290528.json` and `.xml`: jobs 2, eight combinations, ten total attempts, no failures, consistent fresh verification and source export. Winner `smithing-q20/none`, selected hit DPS `20.1596255`, debug total `15513.8403 ms`. This is a single observation, not a scaling benchmark or new independent numerical golden. Adapter fingerprint `3fbb6e59049912f9e0bd914fd84fd3d46ab5a44a555231f3c203b36ade1353b8`. |
 | Tree extraction | Seven source-data tests and two supervisor tests pass. Ignored standalone `runs/tree-0_5-64290528.json` has canonical snapshot SHA-256 `390e699115ac358b0da57b312e7449db919da124822365b888b5ade1dc97c433`; extractor fingerprint `a1c740c1ba3f8af90b9f423e1a973de8e14cd2cd938e1df9f4faebc004dd177c`. Identity-claim checks alone do not authenticate edited snapshots. |
 | Integrity and review | Submodule, original supplied exports and independent goldens are unchanged. Independent scoped code reviews, README/docs local file-target checks and `git diff --check` pass. |
-| Publication and hosted CI | Local checkpoint ready; commit/push and Windows/Linux hosted CI are pending. Replace this row with concrete code/run identities after completion. |
+| Publication and hosted CI | Published as `55df9d5` to `origin/main`. [Windows/Linux CI run 34159259405](https://github.com/Azaril/poe-optimizer/actions/runs/34159259405) passed both jobs, including formatting, Clippy, full workspace tests and portable core/native WASM compilation. The following resume-document update changes documentation only. |
 
 ## M2 candidate/search and calibration CLI checkpoint — 2026-09-07
 
@@ -185,7 +187,9 @@ scope to weapon/support selection.
   ([repository](https://github.com/Azaril/poe-optimizer)). The user authorized publishing the
   project and supplied builds. Evaluator baseline `71c0af7` passed
   [hosted CI](https://github.com/Azaril/poe-optimizer/actions/runs/34147041293); the previous
-  shared-contract checkpoint `7dd2a09` is published with complete evidence below. The prior candidate/search checkpoint is published as `8e902c2`. Current controlled-mutation/tree/multiplier validation and publication status are recorded above.
+  shared-contract checkpoint `7dd2a09` is published with complete evidence below. The prior
+  candidate/search checkpoint is published as `8e902c2`. Current controlled-mutation/tree/
+  multiplier validation and publication status are recorded above.
 - [Workspace](../Cargo.toml): Rust 2024 / minimum 1.93; shared application contracts, PoB
   import/runtime/supervision, a static native UTF-8 library, native calculation kernels,
   a host search library, and the root CLI. The [core](../crates/poe-optimizer-core/src/evaluation.rs) now separates
@@ -345,7 +349,8 @@ skills together within explicit finite catalogs. It must support 1..N required s
       passive, item, support, supporting-skill, class and ascendancy changes separately
       and jointly. Preserve locks and verify export, point/resource accounting and effect
       removal against fresh materialization/reload. Include at least two required skills
-      and two exact equipped-item locks; the level-only integration change is insufficient.
+      and two exact equipped-item locks; neither level-only changes nor the restricted Mace
+      profile establish this gate.
 - [ ] **M1.6 Isolation and failures — partial.** Parser/protocol failures, blocked-stdin
       timeout/reaping, scratch cleanup, fresh-worker A/B/A and export/reimport checks pass.
       Complete broader order, worker-count and failure coverage. Persistent reset/reload
@@ -586,6 +591,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `7dd2a09` | Added backend-neutral contracts, CLI schema/protocol 2, typed catalog/options/coverage, two independent Spark scenarios and the first six native numerical functions. All 78 local tests, formatting, Clippy and core/native WASM compilation pass. Both hosted Windows/Linux jobs pass in run `34150698841`; broader M1 coverage remains open. |
 | 2026-09-07 | `bb08697` + `86526ae` | Added configurable scalar assessment and saved-report validation, four independent Mace interaction goldens, native untagged numeric modifier aggregation and a source-level tree topology investigation. All 107 local tests, formatting, Clippy, core/native WASM compilation and standalone objective/reassessment smoke pass; source/golden audit passes. Document checks and independent code review pass; published through `86526ae`, with both hosted Windows/Linux jobs passing in run `34152960922`. Canonical all-dimension candidates, locks and joint search remain next. |
 | 2026-09-07 | `8e902c2` | Added canonical all-dimension candidates/locks with shared physical-node ownership, bounded host search and fresh verification, a four-build PoB calibration-search CLI and parity-tested native conditions. All 154 local tests, Clippy, formatting, WASM compilation, standalone search/export and review checks pass; hosted CI evidence is in the checkpoint table above. |
+| 2026-09-07 | `55df9d5` | Added structural weapon/support mutation, supplied-problem CLI search, coordinated discrete proposals, isolated pinned-tree snapshots and native multiplier programs. All 188 local tests, Clippy, formatting, portable WASM and documented example checks pass; hosted CI evidence is in the checkpoint table above. |
 
 ### Hosting decision checkpoint
 
