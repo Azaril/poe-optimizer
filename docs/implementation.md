@@ -7,7 +7,9 @@ scalar objective assessment, saved-result validation, a four-case attack/weapon/
 reference matrix, and native numeric modifier aggregation are implemented at this checkpoint.
 All 107 local tests, formatting, Clippy with warnings denied, portable core/native WASM
 compilation and the standalone objective/reassessment smoke pass. Document links, whitespace
-and independent code review pass. Publication and hosted CI remain pending; the prior `7dd2a09` hosted evidence is preserved below. No optimizer or worker pool is implemented.
+and independent code review pass. Code is published through `86526ae`; both Windows/Linux
+hosted jobs pass, including WASM compilation. Historical evidence remains below. No optimizer
+or worker pool is implemented.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
 work, and the next session's starting point. [Design](design.md) defines the intended system
@@ -20,14 +22,13 @@ the design documents.
 
 ## Resume here
 
-1. Inspect `git status --short --branch` before editing. This checkpoint adds objective
-   assessment, recorded-result validation, attack interaction calibration, native modifier
-   aggregation and topology findings. Local tests/Clippy/WASM validation is complete;
-   publication and hosted CI remain pending below. `7dd2a09` is the prior published baseline.
-2. All 107 Windows tests pass with zero failures; Clippy denies warnings and portable
-   core/native WASM compilation passes. Source/reference audits, formatting and the
-   standalone objective/saved-assessment smoke also pass. Document checks pass;
-   publish and record hosted Windows/Linux CI before closing the checkpoint.
+1. Inspect `git status --short --branch` before editing. Code is published through `86526ae`
+   (core/calibration/native changes in `bb08697`, CLI integration in `86526ae`). This checkpoint
+   adds objective assessment, recorded-result validation, attack interaction calibration,
+   native modifier aggregation and topology findings. Read its validation table below.
+2. All 107 local Windows tests, formatting, Clippy, core/native WASM compilation, source/
+   reference audits and standalone objective/saved-assessment checks pass. Both hosted
+   Windows/Linux jobs pass for `86526ae`; next implementation work starts at item 4.
 3. Keep the PoB submodule at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified.
    Preserve original user fixtures and all six independently generated calibration goldens.
    The attack reference uses separate scripts; original Spark scripts/goldens remain unchanged.
@@ -70,7 +71,7 @@ compare independent hosts/extractors using shared PoB calculations, not independ
   project and supplied builds. Evaluator baseline `71c0af7` passed
   [hosted CI](https://github.com/Azaril/poe-optimizer/actions/runs/34147041293); the previous
   shared-contract checkpoint `7dd2a09` is published with complete evidence below. Current
-  objective/calibration/modifier changes pass local tests/Clippy/WASM and await publication.
+  objective/calibration/modifier changes are published through `86526ae` with local tests/Clippy/WASM passing.
 - [Workspace](../Cargo.toml): Rust 2024 / minimum 1.93; shared application contracts, PoB
   import/runtime/supervision, a static native UTF-8 library, native calculation kernels,
   and the root CLI. The [core](../crates/poe-optimizer-core/src/evaluation.rs) now separates
@@ -160,7 +161,7 @@ compare independent hosts/extractors using shared PoB calculations, not independ
 - [CI](../.github/workflows/rust.yml) initializes pinned submodules and checks workspace
   formatting, Clippy and tests on Windows/Linux, plus portable core/native WASM compilation.
   Both hosted jobs pass for historical checkpoint `7dd2a09`. Hosted results for this
-  objective/calibration/modifier checkpoint are pending.
+  objective/calibration/modifier checkpoint pass for `86526ae` in run `34152960922`.
 
 ## Delivery plan and gates
 
@@ -311,10 +312,10 @@ material cannot establish an intended build choice; present the concrete alterna
 
 ### Current objective, attack interaction and native modifier checkpoint — local checks passed
 
-Implemented on 2026-09-07 after `7dd2a09`. The combined run passed 107 tests, Clippy with
+Implemented on 2026-09-07, published through `86526ae` after `7dd2a09`. The combined run passed 107 tests, Clippy with
 warnings denied, and portable core/native WASM compilation. Reference/source audits also
 pass. The standalone objective/saved-assessment smoke and final formatting/Clippy rerun
-also pass. Document checks and independent code review pass; publication and hosted CI remain pending. Historical results
+also pass. Document checks and independent code review pass; both hosted jobs pass for `86526ae`. Historical results
 below retain their original code identities.
 
 | Check | Current evidence / remaining gate |
@@ -330,7 +331,7 @@ below retain their original code identities.
 | Topology investigation | Read-only source/exporter/graph inspection records actual class catalogs, both ordinary entrances per start, reverse-listed adjacency, absent references and normalization risks. No submodule modification or game-data completeness claim. Proposed fixture plan remains unimplemented. |
 | Source and reference audit | Passed for all four new attack cases and both retained independent runs per case. Original fixtures and Spark artifacts remain unchanged. Source/golden identity checks pass. |
 | Standalone objective and saved assessment | Passed: ignored `runs/m2-assessment-20260907-1d4afb62.json` and `runs/m2-assessment-20260907-1d4afb62-assessed.json` contain identical `ObjectiveAssessment` values from fresh calculation and saved reassessment. PoB EHP is `22562.9609905472`; fire/cold meet 75%, while lightning at 71% misses by 4 percentage points with normalized violation 0.4. Adapter fingerprint `8be35ce741554f294114ccdebd34602172f6125ff05faaf23fdc4d54e4493695`; evaluator elapsed `2591.3717` ms in this debug run. One observation is not a performance benchmark. Source pin/hash unchanged. |
-| Document checks and publication | README/docs relative file links and `git diff --check` pass. Independent review found no outstanding issues in the scalar scope after recorded-result/schema-evidence fixes. Commit/push and Windows/Linux CI remain pending. |
+| Document checks and publication | README/docs relative file links and `git diff --check` pass. Independent review found no outstanding issues in the scalar scope after recorded-result/schema-evidence fixes. Published through `86526ae`; [Windows/Linux CI run 34152960922](https://github.com/Azaril/poe-optimizer/actions/runs/34152960922) passed both jobs, including formatting, Clippy, full tests and portable core/native compilation. The following resume-document update changes documentation only. |
 | Joint optimization / scaling / native whole-build backend | Not implemented or measured. New assessment and coupled reference cases do not establish search quality, throughput, full native parity or browser viability. |
 
 The [objective notes](objective-assessment.md), [attack reference notes](calibration-reference.md),
@@ -463,7 +464,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `1be92d7` | Preferred mlua hosting inside isolated Rust evaluator workers. |
 | 2026-09-07 | `71c0af7` | Added bounded import, evaluator preflight, embedded/native hosting, source verification, fresh-worker supervision and CLI evaluation/export. Formatting, Clippy, 47 local tests and hosted Windows/Linux CI pass; independent parity and optimization remain outstanding. |
 | 2026-09-07 | `7dd2a09` | Added backend-neutral contracts, CLI schema/protocol 2, typed catalog/options/coverage, two independent Spark scenarios and the first six native numerical functions. All 78 local tests, formatting, Clippy and core/native WASM compilation pass. Both hosted Windows/Linux jobs pass in run `34150698841`; broader M1 coverage remains open. |
-| 2026-09-07 | Objective / attack / modifier checkpoint, publication pending | Added configurable scalar assessment and saved-report validation, four independent Mace interaction goldens, native untagged numeric modifier aggregation and a source-level tree topology investigation. All 107 local tests, formatting, Clippy, core/native WASM compilation and standalone objective/reassessment smoke pass; source/golden audit passes. Document checks and independent code review pass; publication and hosted CI remain pending. Canonical all-dimension candidates, locks and joint search remain next. |
+| 2026-09-07 | `bb08697` + `86526ae` | Added configurable scalar assessment and saved-report validation, four independent Mace interaction goldens, native untagged numeric modifier aggregation and a source-level tree topology investigation. All 107 local tests, formatting, Clippy, core/native WASM compilation and standalone objective/reassessment smoke pass; source/golden audit passes. Document checks and independent code review pass; published through `86526ae`, with both hosted Windows/Linux jobs passing in run `34152960922`. Canonical all-dimension candidates, locks and joint search remain next. |
 
 ### Hosting decision checkpoint
 
