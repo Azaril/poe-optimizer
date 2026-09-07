@@ -1,4 +1,9 @@
 # DESIGN EXAMPLE ONLY. No configuration parser or optimizer is implemented.
+# This is one possible user's goal, not an exhaustive catalog or mandatory preset.
+# Replace the objective metric/direction and add, remove, or change constraints
+# using capabilities supported by the future adapter. No DPS/resistance/EHP
+# requirement is implicit. This example shows the first single-metric policy;
+# composite, priority, and Pareto policies are later design stages.
 # Metric names are proposed adapter identifiers, not arbitrary PoB output keys.
 # Paths are relative to this file. The seed file is supplied locally by the user.
 

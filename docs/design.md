@@ -11,6 +11,11 @@ First prove that a known build and small changes reproduce PoB's results. Then o
 passive allocations on an existing build, keeping skill setup, items, class/ascendancy,
 level, weapon configuration, and combat assumptions fixed.
 
+User-configurable goals are a core requirement. Skill selection, damage, resistance,
+and effective hit pool are illustrative use cases, not an exhaustive objective catalog
+or mandatory requirements. Each run chooses what to optimize, what must hold, and which
+build choices may change. The limited first search domain does not fix the user's goals.
+
 Use a budgeted heuristic search that returns verified improvements and explains their
 trade-offs. Do not promise the global optimum. Introduce finite item inventories next;
 defer unconstrained item generation, live trade ingestion, and broad skill discovery.
@@ -32,14 +37,16 @@ The first useful workflow:
 
 1. Import a complete local PoB XML build.
 2. Resolve and lock the selected skill, build configuration, and allowed search domain.
-3. Specify one objective and explicit hard constraints.
+3. Configure the objective policy and any hard constraints from the supported capabilities.
 4. Evaluate the seed and show the exact interpreted metrics.
 5. Search within a time and evaluation budget.
 6. Return the best feasible alternatives, before/after metrics, changes, and PoB XML exports.
 
-“Use skill X” is a structural lock on the imported skill group, gem, skill part,
-supports, and applicable weapon set, rather than a string-based score bonus. If the
-selection is ambiguous, validation fails with the choices to resolve.
+When requested, “use skill X” is a structural lock on the imported skill group, gem,
+skill part, supports, and applicable weapon set, rather than a string-based score bonus.
+If the selection is ambiguous, validation fails with the choices to resolve. The passive
+MVP fixes the seed's skill setup as a search-domain restriction; broader domains can
+expose those choices independently of the configured scoring policy.
 
 Initial non-goals: building from an empty character; discovering every viable archetype;
 perfect rare items; crafting or purchase automation; an online service or GUI; frame-level
@@ -85,9 +92,10 @@ Start with one Rust package. Introduce modules as functionality arrives:
 
 | Component | Responsibility |
 | --- | --- |
-| Problem/model | Seed identity, locks, objective, constraints, scenario, immutable candidate state |
+| Problem/model | Seed identity, locks, configurable objective policy, constraints, scenario, immutable candidate state |
 | Game adapter | Versioned tree and item identifiers, legal mutations, capability declarations |
-| Evaluator | Worker lifecycle and protocol; conversion from PoB outputs to supported metrics |
+| Evaluator | Worker lifecycle and protocol; conversion from PoB outputs to registered metrics |
+| Metric registry / scoring | Discoverable metric definitions and providers; validated user goals; generic feasibility and ranking |
 | Search | Candidate proposals, budgets, diversity, restarts, feasible/infeasible archives |
 | Storage/report | Evaluation cache, run provenance, comparisons, exports |
 
@@ -154,7 +162,8 @@ SQLite for persistent evaluations only when repeated workloads justify it.
 
 ## Objective and constraint contract
 
-For candidate `x`, fixed scenario `s`, and evaluator `E`, search legal states `L`:
+For the initial scalar policy, with candidate `x`, fixed scenario `s`, and evaluator `E`,
+search legal states `L` using the configured score `f` (negated for minimization):
 
 ```text
 maximize f(E(x, s))
@@ -162,7 +171,7 @@ subject to x in L and every user constraint being satisfied
 ```
 
 `L` includes game rules, point limits, and user locks. A legal state need not satisfy the
-user's defensive requirements. Keep these outcomes separate:
+user's requirements. Keep these outcomes separate:
 
 | Outcome | Meaning | Treatment |
 | --- | --- | --- |
@@ -170,19 +179,61 @@ user's defensive requirements. Keep these outcomes separate:
 | Infeasible | Legal and evaluated, but at least one user constraint fails | May support exploration; label clearly |
 | Feasible | Legal, supported, and all hard constraints pass | Eligible for recommended results |
 
-Initially allow one named metric to maximize/minimize plus conjunctions of typed constraints.
-Support explicit operators such as `>=`, `>`, `<=`, and `<`; reject unknown names,
-contradictory bounds, invalid units, and non-finite thresholds. Defer arbitrary scripts and
-user-authored formulas until a typed expression language is warranted.
+Every run supplies an objective policy and zero or more hard constraints. No damage,
+resistance, EHP, or skill requirement is inserted implicitly. Presets are editable starting
+points; the resolved specification must show all active requirements before search begins.
+
+The intended configuration supports these independently:
+
+- **Goals:** maximize or minimize any applicable registered metric, including measured
+  build properties and supplied cost or change-count metrics as their providers become available.
+- **Hard constraints:** user-selected lower/upper bounds, ranges, or required structural
+  choices. A metric may be an objective, a constraint, both, or neither.
+- **Preferences:** explicit soft targets and trade-offs, kept separate from hard feasibility.
+- **Objective policy:** a single score, a composite score with explicit normalization and
+  weights, ordered priorities (lexicographic ranking), or a Pareto set of alternatives.
+- **Domain and scenario:** locks, allowed choices, inventories, and fixed encounter assumptions
+  are configured separately from scoring, subject to the implemented search capabilities.
+
+For example, a user might prioritize movement speed, reduce resource cost, minimize gear
+cost while meeting performance thresholds, maximize a defensive measure, or compare several
+trade-offs. These are non-exhaustive requirements examples, conditional on having reliable
+metric providers; they are not claims that the initial adapter exposes all such measurements.
+
+Stage implementation: M2 starts with one user-selected registered metric to maximize/minimize
+and any conjunction of typed constraints. Support explicit operators such as `>=`, `>`,
+`<=`, and `<`; reject unknown names, contradictory bounds, invalid units, and non-finite
+thresholds. Subsequent stages add unit-checked derived expressions, composite/priority policies,
+soft targets, and Pareto selection. Declare supported policy modes through capabilities;
+reject unavailable modes rather than silently falling back to DPS or a scalar approximation.
+
+Keep the search engine independent of metric names. It consumes a validated problem and
+a scoring/selection policy; that policy owns objective direction, priority, preference
+scoring, and tie-break rules. Pareto selection requires an archive and diversity policy,
+not a hidden weighted sum. Derived expressions should use a typed declarative language
+with explicit units, normalization, and undefined-value handling; arbitrary Lua execution
+is not needed to make user objectives configurable.
 
 See [the illustrative TOML](../examples/objective.toml). It is a proposed format, not an
-implemented parser or a runnable optimization request. Its numeric values are examples.
+implemented parser or a runnable optimization request. Its chosen metrics, constraints,
+thresholds, and locks are examples and can be replaced or omitted where capabilities permit.
 
 ### Metric semantics
 
-Each supported metric has a name, unit, scope, scenario dependencies, upstream mapping,
-and applicability checks. Missing values, unsupported mappings, NaN, and infinity must
-be surfaced explicitly; a non-finite value cannot win the search by accident.
+Use an extensible, discoverable metric registry. Each definition has a stable name,
+description, unit, scope, scenario dependencies, provider/version, and applicability checks.
+Providers may map verified PoB outputs, derive validated measurements, inspect build choices,
+or use explicit external inputs such as an inventory cost snapshot. Each declares the inputs
+it depends on for evaluation and cache identity. Adding a metric must not require changes
+to search operators or embedding game-specific field names in the scoring algorithm.
+
+Expose available metrics and policy modes during problem configuration. Validate the requested
+combination against the game, evaluator version, selected build, and supplied data before
+search. Missing values, unsupported mappings, NaN, and infinity must be surfaced explicitly;
+a non-finite value cannot win the search by accident.
+
+The following table illustrates a few potential mappings; it is not the registry's full
+scope or a set of required user goals.
 
 | Proposed metric | Contract |
 | --- | --- |
@@ -241,7 +292,9 @@ Operators should propose a valid final allocation:
 Account for shared path segments and node costs. Target-build legality is the initial
 contract; a playable sequence of intermediate respec steps and refund costs are later features.
 
-Use upstream marginal scores and cheap heuristics to order proposals, while reserving
+Use marginal scores compatible with the configured objective and cheap heuristics to
+order proposals. Upstream damage-specific hints must not dominate a defense, cost, or
+other objective; disable incompatible hints. Preserve exploration by reserving
 random/diverse proposals. A locally harmful node or item can participate in a strong
 combination, so marginal scores are neither an additive objective nor a safe pruning bound.
 
@@ -257,19 +310,23 @@ Use multi-start local search with a small beam, variable-size mutations, and exp
 6. Select diverse states; increase mutation size or restart after stagnation.
 7. Stop at the evaluation/time budget, cancellation, or domain exhaustion.
 
-For reported results, every feasible candidate outranks every infeasible one. Among feasible
-states, compare objective, then prefer fewer changes and a stable canonical tie-break.
-Among infeasible states, compare normalized constraint shortfall, then objective.
+For reported results, every feasible candidate outranks every infeasible one. In the initial
+scalar policy, compare feasible states using the configured objective direction, followed by
+the configured tie-break policy and a stable canonical tie-break. Preferring fewer changes is
+an optional user preference. Among infeasible states, compare normalized constraint shortfall,
+then the configured objective. Later policies supply their own priority or Pareto selection
+while retaining the same hard-feasibility boundary.
 
 For a lower-bound constraint, an example violation is
 `max(0, threshold - measured) / violation_scale`; reverse it for an upper bound.
 Scales must be positive and in the metric's units. Track exact satisfaction separately:
 strict inequality can fail at equality even with zero numeric shortfall. Rank violating
 constraint count as an additional discriminator. Hard constraints are never traded away
-for a sufficiently large damage improvement.
+for a sufficiently large objective improvement.
 
 Reserve beam capacity for legal but infeasible exploration even when a feasible incumbent
-exists. Otherwise, a temporary resistance deficit could prevent a coordinated improvement.
+exists. Otherwise, a temporary constraint deficit (such as resistance) could prevent a
+coordinated improvement.
 Keep the best feasible archive independently, so exploration cannot lose it.
 
 Population size, restart schedule, and evaluation budget are parameters to benchmark,
@@ -317,6 +374,7 @@ step and supervise workers against the run deadline. If cancellation or timeout 
 verification, return a previously verified incumbent when available; otherwise return
 clearly labeled evaluated-only diagnostics, with no verified recommendation. Record any
 reserved capacity that could not be used.
+
 Re-evaluate finalists in a fresh worker, export them, re-import the exported XML, and compare
 locked state and relevant metrics. Cache-only scores are insufficient for final verification.
 
@@ -345,10 +403,10 @@ is separate from future Lua parity tests; it currently does not check the submod
 | --- | --- | --- |
 | M0: bootstrap (this change) | Rust CLI scaffold, pinned submodule, design, example objective, CI configuration | Rust builds/lints, clean submodule, source findings documented |
 | M1: evaluator spike | Headless startup; seed load; selected skill and scenario; metrics; one legal mutation; export | Runtime blockers resolved and recorded; baseline/mutation/export parity; reset isolation; timing and dependencies measured |
-| M2: problem/search harness | Typed objective and constraints, candidate identity, budgets, search against a synthetic evaluator | Tiny exhaustive references; infeasible/error cases; deterministic selection; budget/cancellation behavior |
+| M2: problem/search harness | Metric registry, configurable single-metric policy and constraints, candidate identity, budgets, synthetic evaluator | Swap goals/constraints without search-code changes; maximize/minimize and unsupported-capability cases; tiny exhaustive references; determinism and budgets |
 | M3: passive optimizer | Supported tree reallocations through PoB with fixed equipment/skills | Legal exported candidates; no incumbent regression; quality measured against greedy/random baselines |
 | M4: finite inventory | Concrete item pools and coordinated item/tree moves | Slot/availability rules; reproducible item provenance; improvements on item-interaction fixtures |
-| M5: broader objectives | Scenario robustness, Pareto alternatives, targeted performance work | Benchmarks justify added complexity; all finalists still independently revalidated |
+| M5: richer goal policies | Typed derived expressions, composite/priority objectives, soft targets, Pareto alternatives, scenario robustness | Unit/normalization validation; hard constraints preserved; policy-specific selection checked; all finalists independently revalidated |
 | Later | Selective Rust calculations and PoE1 adapter | Differential parity and explicit versioned game capabilities |
 
 Do not begin a large optimizer implementation before M1 confirms the calculation boundary.
@@ -378,8 +436,11 @@ Proposed defaults, to confirm or revise before implementation:
 
 1. **First product:** improve an existing build's passive tree, with gear, exact skill setup,
    weapon configurations, class/ascendancy, and combat settings fixed.
-2. **Initial metric pair:** one verified selected-skill DPS mode plus explicit capped elemental
-   resistance and a fully specified PoB EHP requirement. Choose a representative seed build for M1.
+2. **Configurable goals (required):** user-selected objectives, constraints, and preferences
+   through extensible metric and policy definitions. DPS, resistance, and EHP can serve as M1
+   parity fixtures; they are neither mandatory goals nor an exhaustive catalog. The proposed
+   first implementation supports one selected metric plus optional hard constraints, with
+   richer policies staged behind the same configuration boundary.
 3. **Search behavior:** hard constraints, best-found alternatives, and a fixed budget; allow
    infeasible internal exploration while preserving verified feasible results.
 4. **Items:** supplied finite inventory first, with trade and hypothetical crafting deferred.

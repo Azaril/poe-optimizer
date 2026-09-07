@@ -2,8 +2,13 @@
 
 An experimental Rust project for constraint-driven Path of Exile 2 build optimization,
 with potential Path of Exile 1 support later. The intended workflow is to import a
-build, fix its skill and combat assumptions, express an objective and constraints,
+build, choose which build decisions may change, fix combat assumptions, and configure goals,
 then search for good legal alternatives using Path of Building's calculations.
+
+Goals are user-configurable. Damage, resistance, EHP, and skill-selection examples are
+illustrative; users choose objectives, constraints, and preferences from an extensible
+metric catalog. The first search domain keeps skills and gear fixed while reallocating
+passives; richer scoring policies and search domains are separate design stages.
 
 **Status:** repository scaffold and design proposal. The CLI prints project information;
 it does not evaluate or optimize builds yet.
