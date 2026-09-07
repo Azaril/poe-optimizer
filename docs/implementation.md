@@ -9,7 +9,9 @@ evaluation, separate status beams, deduplication and fresh verification. The cal
 bridge covers four immutable Mace fixtures, not arbitrary imported builds. Native conditions
 extend the numeric database. All 154 local workspace tests, formatting, Clippy and portable
 core/native WASM compilation pass. Standalone search/export and document checks pass.
-Publication and Windows/Linux hosted validation are the remaining checkpoint steps.
+Code is published as `8e902c2`; both Windows/Linux hosted jobs pass, including WASM
+compilation. The following documentation-only update records the completed checkpoint.
+
 This is the living record of delivery order, implemented behavior, validation, unresolved
 work, and the next session's starting point. [Design](design.md) defines the intended system
 and acceptance criteria; [execution and interfaces](execution-and-interfaces.md) and the
@@ -21,10 +23,11 @@ the design documents.
 
 ## Resume here
 
-1. Inspect `git status --short --branch` and the checkpoint evidence below. Candidate/core,
-   host search, the calibrated PoB bridge/CLI and native conditions pass all 154 local
-   workspace tests. Complete publication/hosted verification if still pending, then resume
-   implementation at item 4. Preserve unrelated user work.
+1. Inspect `git status --short --branch`. Code is published as `8e902c2`; all 154 local
+   workspace tests, Clippy, formatting, standalone search/export and core/native WASM
+   checks pass. Both Windows/Linux hosted jobs pass in run `34156176185`. This
+   documentation-only update records the evidence; resume implementation at item 4.
+   Preserve unrelated user work.
 2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve original
    supplied exports and all independently generated Spark/Mace calibration goldens.
 3. Read [candidate contracts](candidate-model.md), [search contracts](search-kernel.md)
@@ -115,7 +118,8 @@ scope to weapon/support selection.
 | Portable boundary | `cargo check -p poe-optimizer-core -p poe-optimizer-engine --lib --target wasm32-unknown-unknown --locked` passes with the shared-root model and condition implementation. Search's host scheduler is deliberately outside this gate. |
 | Standalone calibration search | Ignored `runs/m2-search-9b151354.json` and `.xml`: jobs 2, five attempts including one fresh verification, `mace-smithing`, selected hit DPS `18.208694`, verification consistent. Debug search elapsed `7151.7147 ms`; this single observation is not a scaling benchmark. Adapter fingerprint `b2c24db59723ee873659e5cd044ae43bb3d39e0b25605ec8e5f70969833adafb`. |
 | Integrity and review | Original fixtures/goldens and submodule unchanged. README/docs local file links and `git diff --check` pass. Independent review findings are addressed and covered by regression tests. |
-| Publication and hosted CI | Pending this checkpoint's code push and Windows/Linux run. Update this row with the exact commit/run result. |
+| Publication and hosted CI | Published as `8e902c2` to `origin/main`. [Windows/Linux CI run 34156176185](https://github.com/Azaril/poe-optimizer/actions/runs/34156176185) passed both jobs, including formatting, Clippy, full tests and portable core/native WASM compilation. The following resume-document update changes documentation only. |
+
 ## Current repository and capabilities
 
 - Branch: `main`; remote `origin` is `https://github.com/Azaril/poe-optimizer.git`
@@ -123,7 +127,7 @@ scope to weapon/support selection.
   project and supplied builds. Evaluator baseline `71c0af7` passed
   [hosted CI](https://github.com/Azaril/poe-optimizer/actions/runs/34147041293); the previous
   shared-contract checkpoint `7dd2a09` is published with complete evidence below. Current
-  objective/calibration/modifier changes are published through `86526ae` with local tests/Clippy/WASM passing.
+  candidate/search/conditional-modifier checkpoint is published as `8e902c2` with all 154 local tests, Clippy and portable core/native WASM passing; hosted evidence is above.
 - [Workspace](../Cargo.toml): Rust 2024 / minimum 1.93; shared application contracts, PoB
   import/runtime/supervision, a static native UTF-8 library, native calculation kernels,
   a host search library, and the root CLI. The [core](../crates/poe-optimizer-core/src/evaluation.rs) now separates
@@ -212,8 +216,9 @@ scope to weapon/support selection.
   policy input is JSON as documented in [objective-assessment.md](objective-assessment.md).
 - [CI](../.github/workflows/rust.yml) initializes pinned submodules and checks workspace
   formatting, Clippy and tests on Windows/Linux, plus portable core/native WASM compilation.
-  Both hosted jobs pass for historical checkpoint `7dd2a09`. Hosted results for this
-  objective/calibration/modifier checkpoint pass for `86526ae` in run `34152960922`.
+  Both hosted jobs pass for historical checkpoint `7dd2a09`. Hosted results for the
+  previous objective/calibration/modifier checkpoint pass for `86526ae` in run `34152960922`.
+  Current `8e902c2` hosted evidence is recorded in the M2 checkpoint table above.
 
 ## Delivery plan and gates
 
@@ -518,6 +523,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `71c0af7` | Added bounded import, evaluator preflight, embedded/native hosting, source verification, fresh-worker supervision and CLI evaluation/export. Formatting, Clippy, 47 local tests and hosted Windows/Linux CI pass; independent parity and optimization remain outstanding. |
 | 2026-09-07 | `7dd2a09` | Added backend-neutral contracts, CLI schema/protocol 2, typed catalog/options/coverage, two independent Spark scenarios and the first six native numerical functions. All 78 local tests, formatting, Clippy and core/native WASM compilation pass. Both hosted Windows/Linux jobs pass in run `34150698841`; broader M1 coverage remains open. |
 | 2026-09-07 | `bb08697` + `86526ae` | Added configurable scalar assessment and saved-report validation, four independent Mace interaction goldens, native untagged numeric modifier aggregation and a source-level tree topology investigation. All 107 local tests, formatting, Clippy, core/native WASM compilation and standalone objective/reassessment smoke pass; source/golden audit passes. Document checks and independent code review pass; published through `86526ae`, with both hosted Windows/Linux jobs passing in run `34152960922`. Canonical all-dimension candidates, locks and joint search remain next. |
+| 2026-09-07 | `8e902c2` | Added canonical all-dimension candidates/locks with shared physical-node ownership, bounded host search and fresh verification, a four-build PoB calibration-search CLI and parity-tested native conditions. All 154 local tests, Clippy, formatting, WASM compilation, standalone search/export and review checks pass; hosted CI evidence is in the checkpoint table above. |
 
 ### Hosting decision checkpoint
 
