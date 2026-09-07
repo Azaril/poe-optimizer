@@ -2,7 +2,7 @@
 
 Source investigation recorded on 2026-09-07. No Lua runtime or calculation was executed during this investigation. All upstream references below are pinned to submodule commit `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. These dated observations inform the [target design](design.md); runtime findings, current validation status, and follow-up work belong in the [living implementation document](implementation.md).
 
-The source already provides a useful headless entry point and a comparison calculator. Start with a small Lua adapter running in a separate process, preserve upstream calculations, and establish an independently reloaded build as the correctness baseline before enabling incremental evaluation.
+The source already provides a useful headless entry point and a comparison calculator. Preserve upstream calculations and establish an independently reloaded build as the correctness baseline before enabling incremental evaluation. The subsequent user-confirmed [hosting decision](design.md#evaluator-boundary) prefers a Rust worker embedding LuaJIT through `mlua`, with a small Lua compatibility shim; direct LuaJIT execution is a diagnostic fallback.
 
 ## Verified source facts
 
@@ -12,6 +12,28 @@ The source already provides a useful headless entry point and a comparison calcu
 - Upstream [`.busted`](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/.busted#L1-L13) runs with `src` as the working directory and includes `../runtime/lua/?.lua;../runtime/lua/?/init.lua` in the Lua module path. Relative file loading is part of the current integration contract.
 - [Launch.lua:19](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Launch.lua#L19) unconditionally invokes `jit.opt.start`. [Common.lua:19-30](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/Common.lua#L19-L30) expects global `bit`, bundled `xml`, `base64`, and `sha1`, and the native `lua-utf8` module. Do not interpret the wrapper's old “standard lua interpreter” comment as a tested compatibility guarantee.
 - [Dockerfile](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/Dockerfile#L1-L40) builds Lua 5.1.5, a pinned LuaJIT revision, and `luautf8`; [test.yml:30](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/.github/workflows/test.yml#L30) uses `busted --lua=luajit`. The inspected checkout includes Windows `runtime/lua51.dll` and `runtime/lua-utf8.dll`, but an executable Lua interpreter was not found on the investigation shell's PATH. This investigation did not establish ABI and architecture compatibility with an embedded Rust runtime.
+
+### Embedding bootstrap checks
+
+Follow-up source/binary inspection on 2026-09-07 for the mlua hosting decision found:
+
+- The bundled [lua-utf8.dll](../vendor/path-of-building-poe2/runtime/lua-utf8.dll) and
+  [lua51.dll](../vendor/path-of-building-poe2/runtime/lua51.dll) have x64 PE headers, and
+  the former imports the latter. This establishes a linkage dependency, not compatibility
+  with a vendored/static embedded runtime. Prove a single compatible runtime or rebuild/
+  register the native module against the selected host before loading real builds.
+- [Main.lua:63](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/Main.lua#L63)
+  reads `arg[1]`; provide the interpreter-style `arg` table during embedded bootstrap.
+- `HeadlessWrapper.lua` and `Launch.lua` begin with `#@` lines. Verify their treatment when
+  loading through mlua, or preserve file-loader behavior deliberately. The existing
+  `count += 1` concern remains separate; changing the Rust binding does not change the
+  selected LuaJIT language syntax.
+- The wrapper loads `_SimpleGraphic.def.lua` before `Launch.lua`, overwriting matching
+  host functions. Install real callbacks after those definitions and before application
+  initialization; test diagnostics, paths, clock and prompt handling in that sequence.
+
+These are inspection findings only. Runtime/module loading and calculation checks remain
+in the [implementation checklist](implementation.md#m1-checklist-establish-the-calculation-oracle).
 
 ### Load, mutate, calculate, and export
 
@@ -68,7 +90,7 @@ Freeze external encounter and usage assumptions when comparing candidates: incom
 
 ## Untested runtime hypotheses
 
-A persistent LuaJIT worker should amortize data loading; several independent worker processes should permit parallel evaluations without sharing Lua globals. A Rust embedding through a LuaJIT-capable library may later reduce IPC cost, but does not remove native-module ABI, Lua lifetime, or global-state concerns. Neither option has been benchmarked here.
+A persistent worker should amortize data loading; several independent worker processes should permit parallel evaluations without sharing Lua globals. Hosting LuaJIT through `mlua` inside a Rust worker does not remove coordinator/worker IPC, native-module ABI, Lua lifetime, or global-state concerns. This investigation did not benchmark either hosting option.
 
 Reloading baseline XML before every candidate should be safer than rolling back arbitrary tables, but it still requires isolation tests. Compare repeated A, A/B/A sequences, different evaluation orders, and separate fresh processes. Hash semantic candidate data rather than raw exported XML: `SaveDB` enumerates saver tables with `pairs`, so raw serialization order should not be assumed canonical.
 

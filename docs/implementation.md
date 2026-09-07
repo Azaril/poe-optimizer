@@ -19,10 +19,11 @@ the design documents.
 2. Confirm the PoB submodule is at
    `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` using `git submodule status`.
    Initialize the recorded revision if needed; do not update to upstream HEAD as routine setup.
-3. Start **M1.1: provision and parse/boot the external LuaJIT runtime**. Verify the
-   `Main.lua` syntax concern before building the full protocol or tuning worker reuse.
-   Keep runtime setup, generated settings, and any explicit compatibility overlay outside
-   the source submodule. Record exact setup commands and runtime/module identities here.
+3. Start **M1.1: build a minimal Rust worker embedding LuaJIT through `mlua`**. This is the
+   user's preferred host. Validate native `lua-utf8` integration and parse/boot the pinned
+   wrapper, including the `Main.lua` syntax concern, before expanding the protocol or
+   tuning worker reuse. Keep runtime setup, generated settings, and any explicit overlay
+   outside the source submodule; record setup commands and runtime/module identities here.
 4. Once startup works, establish fresh-process evaluation of a small calibration build and
    the supplied minion fixture. Determine actual metric/skill coverage before making
    optimization recommendations.
@@ -42,6 +43,8 @@ skill/item subsets, and encounter assumptions remain explicit per-run inputs.
 - Publication permission: on 2026-09-07, the user explicitly authorized pushing this project,
   including the supplied source exports and decoded fixture, to this public repository.
   The repository was created specifically for this project; no publishing question is pending.
+- Publication status: `main` was pushed successfully at `46473e3` and its remote SHA was
+  verified. Subsequent checkpoints continue on the same tracking branch.
 - Last implementation baseline: `72bf6a7` (design review and decoded fixture).
   Documentation checkpoint `8eb2e23` introduced the living implementation record.
 - [Rust package](../Cargo.toml): edition 2024, declared minimum Rust 1.93, stable toolchain,
@@ -64,7 +67,7 @@ is concrete; real-build recommendations depend on both.
 | Milestone | Status | Deliverable and acceptance gate |
 | --- | --- | --- |
 | M0: bootstrap and alignment | Complete | Rust scaffold, pinned submodule, end-state design, source/prior-art review, preserved source fixture, and this implementation record. Scaffold validation passes; this does not establish evaluator correctness. |
-| M1: evaluator and fixtures | Next; source inspection and fixture decoding only are complete | Reproducible LuaJIT startup, bounded import, supervised fresh-process evaluation, typed metric mappings, controlled mutations across all six dimensions, export/re-import parity, and isolation evidence. Complete the checklist below. |
+| M1: evaluator and fixtures | Next; source inspection and fixture decoding only are complete | Reproducible mlua/LuaJIT startup in a Rust worker, bounded import, supervised fresh-process evaluation, typed metric mappings, controlled mutations across all six dimensions, export/re-import parity, and isolation evidence. Complete the checklist below. |
 | M2: reusable core and synthetic joint search | Not started | Candidate/domain/lock models, metric policies, coupled mutations and repair, Rayon/job APIs, shared budgets and events. Match exhaustive tiny domains, escape coordinated-change traps, preserve multiple locks, and verify deterministic one/many-worker results plus cancellation/dedup/accounting. |
 | M3: first usable joint optimizer | Not started | Integrate all six dimensions with multicore PoB evaluation; ship preflight, evaluation/comparison, search, saved-result reranking, recovery, verified exports, and offline reports. Meet the end-to-end gates below. |
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
@@ -82,14 +85,23 @@ skills together within explicit finite catalogs. It must support 1..N required s
 - [x] Pin and inspect upstream loading, calculation, mutation, and export seams.
 - [x] Decode the supplied PoB export without altering source bytes; record provenance,
       game/tree identity, and structural checks.
-- [ ] **M1.1 Runtime:** provision a pinned LuaJIT executable and compatible `lua-utf8`;
-      record versions, hashes, architecture/ABI, module paths and setup commands. Parse
-      `Main.lua` and boot `HeadlessWrapper.lua`. Reproduce or dismiss the syntax concern.
-      If needed, compare a known passing pin or an explicit minimal compatibility overlay;
-      record the reason, diff/hash and parity evidence. Never conceal a vendor edit.
+- [ ] **M1.1 Runtime:** build a minimal Rust worker with `mlua` and its `luajit` backend;
+      trial `vendored` runtime building, then validate compatible `lua-utf8` integration.
+      Record crate/runtime/native-module versions, hashes, architecture, ABI/linkage,
+      module paths and commands. Supply `arg`, package paths and deliberate file-loader
+      handling for the leading `#@` lines; install host callbacks in the correct order.
+      Check `jit`, `bit`, host callbacks and Unicode behavior;
+      parse `Main.lua` and boot `HeadlessWrapper.lua`. Reproduce or dismiss the syntax
+      concern. Keep a VM on its owning worker thread; no shared VM or `send` feature is
+      needed. Use controlled native-module registration/loading, documenting any unsafe
+      initialization boundary. If needed, test matching shared-runtime linkage or a module
+      build against the embedded runtime. Use an external LuaJIT harness only for a
+      reproduced compatibility issue or independent reference comparison. An upstream pin
+      change or minimal overlay must record its reason, diff/hash and parity evidence.
 - [ ] **M1.2 Boundary:** create the first functional core/PoB/CLI workspace packages as
-      needed; keep the report package until it has functionality. Implement versioned
-      JSON Lines handshake/request IDs, raw XML input, selected skill/scenario, typed
+      needed; keep the report package until it has functionality. Use `mlua` calls and
+      typed conversions inside the worker, with the compatibility shim as needed. Implement
+      Rust-owned JSON Lines handshake/request IDs, raw XML input, selected skill/scenario, typed
       outputs, structured errors, deadline/exit supervision, bounded output and XML export.
       Use one request per fresh process first. Keep diagnostics off protocol stdout,
       prevent interactive prompts, and control writable paths/environment.
@@ -174,7 +186,7 @@ independent evidence of the game patch.
 | Unknown / limitation | Evidence so far | Next check |
 | --- | --- | --- |
 | Pinned runtime compatibility | Source `Main.lua:339` contains `count += 1`; headless loading uses `loadfile`. No interpreter reproduction yet. | M1.1 parse/boot; record exact failure or successful compatibility mechanism. |
-| Runtime availability and native ABI | Windows DLLs are in upstream; no Lua/LuaJIT executable was found on PATH during source investigation. Docker executable was found, but engine availability was not tested. | Select and record reproducible runtime/module setup; verify architecture and actual startup. |
+| Embedded runtime and native ABI | mlua documents a LuaJIT backend and vendored builds; these have not been compiled here. PE inspection confirms the bundled `lua-utf8.dll` and `lua51.dll` are x64, and `lua-utf8.dll` imports `lua51.dll`. Compatibility with our embedded runtime is unverified. | M1.1 build/load test: runtime symbols, native-module linkage, architecture, callbacks and actual startup. An installed LuaJIT executable is not a prerequisite for the preferred host. |
 | Selected minion metric semantics | Main group is Kelari (`SummonSandDjinnPlayer`), selected minion skill 2; all Full DPS flags are literal `nil`, cached player FullDPS is zero. | Resolve actor/part and inclusion rules in PoB. Do not substitute cached minion damage or sum skill outputs blindly. |
 | Unresolved and granted skills | Spectre: Powered Zealot, Navira's Well and Kelari's Deception lack stable IDs; manual/tree/item-granted groups need reconciliation. | Resolve through adapter and record diagnostics; do not silently omit, double-count or score unresolved entries as zero. |
 | Placeholder host functions and prompts | Headless compression/time functions are stubs; startup/frame errors can prompt for input. | Use Rust decoding/timing, raw XML, controlled callbacks and supervised failure handling. |
@@ -234,7 +246,22 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `c278da5` | Designed multicore execution and reusable CLI/GUI boundaries. |
 | 2026-09-07 | `72bf6a7` | Reviewed WoW prior art; confirmed joint scope and cross-class search; preserved/decoded supplied minion fixture. |
 | 2026-09-07 | `8eb2e23` | Separated end-state design from delivery tracking; recorded M1 resume point and evidence; connected the user-created GitHub repository. |
-| 2026-09-07 | Publication authorization (this change) | Recorded explicit user authorization to push the project and supplied fixtures to GitHub; cleared the pending publishing question. |
+| 2026-09-07 | `46473e3` | Recorded explicit user authorization to push the project and supplied fixtures to GitHub; cleared the pending publishing question. |
+
+### Hosting decision checkpoint
+
+On 2026-09-07 the user preferred `mlua` for Lua hosting/interaction where feasible. The
+design and M1 resume point now prioritize a Rust worker embedding LuaJIT. Direct LuaJIT
+execution is a diagnostic/reference fallback. Process isolation, shared budgets, fresh
+verification and all joint-search requirements remain in force.
+
+Official [mlua 0.12.1 feature metadata](https://raw.githubusercontent.com/mlua-rs/mlua/v0.12.1/Cargo.toml)
+confirms `luajit` and `vendored` support and Rust 1.88 as its declared minimum, below this
+project's Rust 1.93 minimum. This is source-level feasibility evidence, not a successful
+local build, ABI validation or PoB calculation. Read-only inspection also identified the
+Windows native-module dependency and bootstrap requirements recorded in the
+[integration notes](pob-integration.md#embedding-bootstrap-checks). Pin the dependency/runtime selection
+when implementing M1. No Cargo dependencies or runtime code changed at this checkpoint.
 
 ## Decisions still deferred
 

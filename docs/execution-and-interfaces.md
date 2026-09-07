@@ -13,7 +13,7 @@ application layers, with the following package boundaries:
 | Package | Owns | Dependency direction |
 | --- | --- | --- |
 | `poe-optimizer-core` | Problem/candidate types, metric and evaluator interfaces, scoring, search, execution limits, run events/results | Independent of CLI, Tauri, webviews, and a particular Lua host |
-| `poe-optimizer-pob` | PoB game adapter, Lua worker supervision, metric mappings, XML import/export | Implements core interfaces; depends on core |
+| `poe-optimizer-pob` | PoB game adapter, mlua/LuaJIT hosting in Rust workers, process supervision, metric mappings, XML import/export | Implements core interfaces; depends on core |
 | `poe-optimizer-report` | Versioned artifact encoding and presentation models, JSON/CSV export, HTML report generation | Depends on core result types; never owns calculation or search rules |
 | `poe-optimizer-cli` | Flags/config loading, composition of adapters, terminal progress, exit codes, report commands | Calls core, PoB adapter, and reporting APIs; binary remains `poe-optimizer` |
 | Future Tauri application | Goal editor, run control, charts, build comparison and export | Calls the same libraries through a small Rust application layer |
@@ -58,10 +58,13 @@ a reusable library should not configure the host's global pool. Pool lifetime be
 to the engine runtime, shared across its runs. Keep worker IPC, file writes, and blocking
 process waits on the supervisor/I/O path rather than occupying Rayon compute threads.
 
-PoB's mutable Lua globals remain isolated: one live VM per evaluator process and one active
-calculation per process. Adding threads around one locked Lua VM would not parallelize
-the oracle. An embedded Rust/LuaJIT evaluator must preserve these ownership rules and
-process isolation until measured evidence justifies changing them.
+PoB's mutable Lua globals remain isolated: each Rust evaluator process owns an `mlua`
+instance using the LuaJIT backend, with one active calculation on its owning thread.
+Rust/Lua interaction stays inside that worker; the coordinator uses the versioned process
+protocol. Adding threads around one locked VM would not parallelize the oracle. Keep Lua
+handles out of Rayon work and preserve process isolation for hard timeouts, native failures,
+and fresh verification. The [hosting contract](design.md#evaluator-boundary) covers native
+module compatibility and the diagnostic external-runtime fallback.
 
 ### CPU, memory, and admission control
 

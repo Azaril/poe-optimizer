@@ -37,9 +37,10 @@ of the initial joint search. Defer unconstrained rare-item generation, live trad
 and unbounded discovery outside the user's allowed catalogs.
 
 Keep PoB source unmodified in a pinned submodule. Own the compatibility shim and
-worker protocol in this repository. Prefer an external LuaJIT worker for the first
-integration spike; benchmark a Rust worker embedding LuaJIT through `mlua` only after
-startup and calculation correctness are established.
+worker protocol in this repository. Prefer Rust workers embedding LuaJIT through `mlua`
+for Lua hosting and interaction. Preserve process isolation and fresh-process verification.
+Direct LuaJIT execution is a diagnostic/reference fallback if an embedding incompatibility
+is reproduced, rather than the required initial host.
 
 ## Problem and boundaries
 
@@ -137,7 +138,7 @@ flowchart LR
     Core --> Search[Search coordinator + shared resource budget]
     Search --> Rayon[Rayon candidate generation / validation / scoring]
     Rayon --> Cache[Cache + in-flight deduplication]
-    Cache --> Pool[Parallel isolated Lua workers]
+    Cache --> Pool[Parallel Rust workers with mlua and LuaJIT]
     Pool --> PoB[Pinned PoB calculations and data]
     PoB --> Search
     Search --> Results[Versioned run events + results + XML]
@@ -189,12 +190,27 @@ globals, working directories, and recoverable timeouts. They are a reliability b
 not a security sandbox. Kill and replace a worker after a timeout, startup hang, or corrupt
 response; return a typed error and count the attempt against the budget. Cap retries.
 
-Use an external LuaJIT worker with the upstream headless approach as the reference runtime.
-It is closest to the upstream test environment and makes module dependencies explicit.
-An embedded Rust/LuaJIT worker may simplify packaging and reduce IPC overhead later, but
-native-module ABI, bitness, package loading, and Windows compilation still need validation.
-The [mlua API](https://docs.rs/mlua/0.12.1/mlua/) exposes Lua state and Rust/Lua value
-conversion; using it does not by itself provide PoB's host functions or runtime modules.
+Use `mlua` as the Rust/Lua boundary inside each evaluator worker, with its LuaJIT backend
+to retain PoB's runtime assumptions. Rust owns process startup, protocol serialization,
+callbacks and typed value conversion; a small Lua shim adapts PoB's private object model.
+The [mlua build documentation](https://github.com/mlua-rs/mlua#compiling) supports LuaJIT
+and vendored runtime builds. Vendoring the interpreter does not supply PoB's native modules.
+
+Keep one VM owned by one execution thread in each worker process. The coordinator sends
+complete candidates through the versioned protocol; `mlua` values stay inside the worker.
+The [mlua threading model](https://docs.rs/mlua/0.12.1/mlua/#send-and-sync-support) does not
+make simultaneous calculations in one state independent. Parallelism comes from workers;
+Rayon handles Rust compute work under the shared resource budget. Embedding preserves IPC
+between the coordinator and workers and does not by itself establish a speed improvement.
+
+Validate Windows/native-module ABI and symbol linkage, `lua-utf8` loading, required host
+callbacks, ordinary-frame calculations, and export parity before declaring this host usable.
+If dynamic C-module loading is used, isolate the required unsafe initialization in the
+adapter and load only controlled runtime modules; the [default Lua constructor](https://docs.rs/mlua/0.12.1/mlua/struct.Lua.html#method.new)
+disallows C modules. Imported build data and objective configuration are never executable Lua.
+A fresh Rust/`mlua` process remains the correctness baseline. Use an external LuaJIT harness
+only to diagnose or temporarily work around a documented incompatibility, with the same
+version/provenance and parity requirements.
 
 ### Parallel execution policy
 
@@ -596,7 +612,7 @@ adapter must demonstrate differential parity and declare its own versioned capab
 | Upstream dev snapshot does not run with the intended interpreter | Smoke-test first; choose a known passing pin or an explicit minimal compatibility patch, with parity evidence |
 | Incomplete or incorrect modeled mechanics | Scope supported fixtures/mechanics; propagate diagnostics; do not market unsupported results as verified |
 | Runtime globals/caches contaminate candidates | Fresh-process baseline, isolation tests, supervised workers; optimize resets only after parity |
-| Oracle evaluations dominate cost | Measure first; cache and batch; improve proposals; consider embedding or hot-path migration later |
+| Oracle evaluations dominate cost | Measure first; cache and batch; improve proposals; consider host/IPC tuning or hot-path migration later |
 | Multicore overhead, memory duplication, or UI backpressure limits throughput | Shared CPU/memory limits; bounded queues and events; measure scaling before tuning |
 | Search stays in one local optimum | Larger graph moves, diverse starts, infeasible exploration; benchmark interactions |
 | User goals hide assumptions | Typed metrics, immutable scenario, unrounded feasibility, clear violation reports |

@@ -18,7 +18,8 @@ and mapping contexts. Search must handle coordinated changes that escape local o
 it returns verified best-found alternatives without promising a global optimum.
 
 The planned engine uses reusable Rust core libraries, Rayon for parallel Rust work,
-and isolated PoB workers under shared CPU/memory limits. The CLI comes first, with
+and isolated Rust workers hosting PoB through `mlua` with the LuaJIT backend, under
+shared CPU/memory limits. The CLI comes first, with
 structured run data and offline HTML reports; a later GUI can use the same APIs,
 with Tauri as a candidate.
 
