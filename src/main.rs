@@ -4,7 +4,9 @@ use poe_optimizer_core::{
 };
 use poe_optimizer_core::{
     evaluation::*,
+    metrics::MetricDefinition,
     metrics::{ActorScope, MetricQuery},
+    objective::{ObjectiveSpec, ScoringPolicy},
     options::EvaluationOptions,
 };
 use poe_optimizer_pob::import::{MAX_XML_BYTES, decode_build};
@@ -38,7 +40,15 @@ enum Action {
         #[arg(long)]
         output: Option<PathBuf>,
     },
-    /// Evaluate a build in a fresh supervised process; raw metrics are experimental.
+    /// Assess a saved evaluation against an objective without starting a calculation.
+    Assess {
+        input: PathBuf,
+        #[arg(long)]
+        objective: PathBuf,
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
+    /// Evaluate a build in a fresh process and optionally assess a configured objective.
     Evaluate {
         input: PathBuf,
         #[arg(long, default_value = "vendor/path-of-building-poe2")]
@@ -58,6 +68,9 @@ enum Action {
         /// Request a typed metric, e.g. player.life or minion.selected_hit_dps; repeatable.
         #[arg(long = "metric", value_parser = parse_metric)]
         metrics: Vec<MetricQuery>,
+        /// Assess a scalar objective and typed constraints from a JSON specification.
+        #[arg(long)]
+        objective: Option<PathBuf>,
         /// Include backend-specific raw diagnostic attachments in the JSON result.
         #[arg(long)]
         raw: bool,
@@ -116,7 +129,8 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             output,
             export,
             options,
-            metrics,
+            mut metrics,
+            objective,
             raw,
         }) => {
             // Reject conflicting/existing destinations before spending the evaluation budget.
@@ -132,21 +146,28 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             }
             let imported = decode_build(&read_input(&input)?)?;
             let options = match options {
-                Some(path) => {
-                    let mut bytes = Vec::new();
-                    File::open(path)?
-                        .take(64 * 1024 + 1)
-                        .read_to_end(&mut bytes)?;
-                    if bytes.len() > 64 * 1024 {
-                        return Err("Evaluation options exceed 64 KiB".into());
-                    }
-                    serde_json::from_slice::<EvaluationOptions>(&bytes)?
-                }
+                Some(path) => read_json::<EvaluationOptions>(&path, 64 * 1024)?,
                 None => EvaluationOptions::default(),
             };
             let backend =
                 poe_optimizer_pob::backend::PobBackend::new(std::env::current_exe()?, pob);
             let engine = Engine::new(backend);
+            let policy = objective
+                .map(|path| {
+                    read_json::<ObjectiveSpec>(&path, 64 * 1024)?
+                        .compile(&engine.capabilities().metrics)
+                        .map_err(Box::<dyn std::error::Error>::from)
+                })
+                .transpose()?;
+            if !metrics.is_empty()
+                && let Some(policy) = &policy
+            {
+                for query in policy.required_metrics() {
+                    if !metrics.contains(&query) {
+                        metrics.push(query);
+                    }
+                }
+            }
             let mut result = engine.evaluate(
                 &EvaluationRequest {
                     build: BuildDocument {
@@ -165,12 +186,19 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             if !raw {
                 result.attachments.clear();
             }
-            let report = serde_json::json!({
+            let assessment = policy
+                .as_ref()
+                .map(|policy| policy.assess(&result.measurements))
+                .transpose()?;
+            let mut report = serde_json::json!({
                 "schema_version": 2,
                 "status": "experimental_evaluation",
                 "source": { "format": imported.format, "xml_sha256": imported.sha256 },
                 "evaluation": result,
             });
+            if let Some(assessment) = assessment {
+                report["objective_assessment"] = serde_json::to_value(assessment)?;
+            }
             let mut json = serde_json::to_vec_pretty(&report)?;
             json.push(b'\n');
             if let Some(path) = output {
@@ -186,9 +214,79 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 write_new(&path, document.content.as_bytes())?;
             }
         }
+        Some(Action::Assess {
+            input,
+            objective,
+            output,
+        }) => {
+            if output.as_ref().is_some_and(|path| path.exists()) {
+                return Err("Output already exists".into());
+            }
+            let saved: SavedEvaluation = read_json(&input, MAX_WIRE_BYTES)?;
+            if saved.schema_version != 2 || saved.status != "experimental_evaluation" {
+                return Err("Assess requires an evaluation report with schema version 2".into());
+            }
+            saved.evaluation.validate_recorded()?;
+            // Use the recorded metric versions, never today's PoB catalog or a Lua process.
+            // A filtered report can only assess metrics it actually recorded.
+            let catalog: Vec<_> = saved
+                .evaluation
+                .measurements
+                .iter()
+                .map(|measurement| MetricDefinition {
+                    id: measurement.query.id.clone(),
+                    unit: measurement.unit,
+                    actors: vec![measurement.query.actor],
+                    schema_version: measurement.schema_version,
+                    description: "Recorded evaluation measurement".into(),
+                })
+                .collect();
+            let policy = read_json::<ObjectiveSpec>(&objective, 64 * 1024)?.compile(&catalog)?;
+            let assessment = policy.assess(&saved.evaluation.measurements)?;
+            let report = serde_json::json!({
+                "schema_version": 1, "status": "diagnostic_objective_assessment",
+                "source": saved.source,
+                "backend": saved.evaluation.backend,
+                "build": saved.evaluation.build,
+                "context": saved.evaluation.context,
+                "coverage": saved.evaluation.coverage,
+                "evaluation_diagnostic_only": saved.evaluation.diagnostic_only,
+                "warnings": saved.evaluation.warnings,
+                "objective_assessment": assessment,
+            });
+            let mut bytes = serde_json::to_vec_pretty(&report)?;
+            bytes.push(b'\n');
+            if let Some(path) = output {
+                write_new(&path, &bytes)?;
+            } else {
+                io::stdout().write_all(&bytes)?;
+            }
+        }
         Some(Action::Worker { pob, scratch }) => worker(&pob, &scratch)?,
     }
     Ok(())
+}
+
+#[derive(serde::Deserialize)]
+struct SavedEvaluation {
+    schema_version: u32,
+    status: String,
+    source: serde_json::Value,
+    evaluation: EvaluationResult,
+}
+
+fn read_json<T: serde::de::DeserializeOwned>(
+    path: &Path,
+    limit: usize,
+) -> Result<T, Box<dyn std::error::Error>> {
+    let mut bytes = Vec::new();
+    File::open(path)?
+        .take(limit as u64 + 1)
+        .read_to_end(&mut bytes)?;
+    if bytes.len() > limit {
+        return Err(format!("JSON input exceeds {limit} bytes").into());
+    }
+    Ok(serde_json::from_slice(&bytes)?)
 }
 
 fn read_input(path: &Path) -> io::Result<Vec<u8>> {
