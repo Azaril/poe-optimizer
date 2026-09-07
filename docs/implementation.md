@@ -6,12 +6,13 @@ Current phase: M1 remains in progress. Backend-neutral evaluation contracts, typ
 explicit options and coverage are implemented. Two independent Spark reference cases pass
 local CLI parity; broader mechanic and mutation coverage remains open. Native Rust calculation
 translation is active in parallel. All 78 local Windows tests, formatting, Clippy and portable
-core/native WASM compilation pass. Hosted CI for this checkpoint is pending. No optimizer
+core/native WASM compilation pass. Windows/Linux CI also passes for `7dd2a09`. No optimizer
 or worker pool is implemented.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
 work, and the next session's starting point. [Design](design.md) defines the intended system
-and acceptance criteria; [execution and interfaces](execution-and-interfaces.md) and the [calculation boundary decision](calculation-boundary.md) define
+and acceptance criteria; [execution and interfaces](execution-and-interfaces.md) and the
+[calculation boundary decision](calculation-boundary.md) define
 runtime and application contracts. The [PoB investigation](pob-integration.md) and
 [prior-art review](prior-art-and-product-review.md) retain dated evidence and rationale.
 Update this document at progress checkpoints, rather than adding implementation status to
@@ -19,13 +20,12 @@ the design documents.
 
 ## Resume here
 
-1. Inspect `git status --short --branch` before editing. The current working checkpoint adds
-   shared evaluation contracts, typed CLI output, options/coverage, independent calibration,
-   and the first native kernels. Preserve these changes. The last recorded published baseline
-   is `71c0af7`; its 47-test/Windows/Linux CI evidence belongs to that historical checkpoint.
-2. Check the publication/hosted CI entry below before starting more changes. Local validation
-   is complete: 78 tests pass, including the selected-minion interpretation and options
-   regressions; formatting, Clippy and portable core/native WASM checks also pass.
+1. Inspect `git status --short --branch` before editing. Code checkpoint `7dd2a09` is
+   published with shared evaluation contracts, typed CLI output, options/coverage,
+   independent calibration and the first native kernels. Read the validation table below.
+2. Local validation is complete: 78 Windows tests pass, including exact minion selection
+   and observed cooldown behavior. Formatting, Clippy and portable core/native WASM checks
+   also pass. Windows/Linux CI, including both portable library checks, passes for this code.
 3. Keep the PoB submodule at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified.
    No Lua syntax overlay is required. Preserve original user fixtures and the independently
    generated calibration goldens; never refresh expected values using the Rust evaluator.
@@ -54,7 +54,7 @@ PoE mechanics or complete evaluator coverage.
   ([repository](https://github.com/Azaril/poe-optimizer)). The user authorized publishing the
   project and supplied builds. Evaluator baseline `71c0af7` passed
   [hosted CI](https://github.com/Azaril/poe-optimizer/actions/runs/34147041293); current changes
-  have the complete local evidence below and await their hosted checkpoint.
+  are published as `7dd2a09` with complete local evidence below.
 - [Workspace](../Cargo.toml): Rust 2024 / minimum 1.93; shared application contracts, PoB
   import/runtime/supervision, a static native UTF-8 library, native calculation kernels,
   and the root CLI. The [core](../crates/poe-optimizer-core/src/evaluation.rs) now separates
@@ -110,7 +110,7 @@ PoE mechanics or complete evaluator coverage.
   remains design notation, not accepted CLI input.
 - [CI](../.github/workflows/rust.yml) initializes pinned submodules and checks workspace
   formatting, Clippy and tests on Windows/Linux, plus portable core/native WASM compilation.
-  Current checkpoint hosted results are pending; the complete local checks pass.
+  Both hosted jobs pass for `7dd2a09`, including tests and portable core/native compilation.
 
 ## Delivery plan and gates
 
@@ -151,7 +151,8 @@ skills together within explicit finite catalogs. It must support 1..N required s
       `CalculationBackend` / `EvaluationEngine` separate application contracts from hosting.
       CLI schema 2 and protocol 2 carry explicit skill/scenario options, versioned identity,
       typed measurements, coverage and optional diagnostic attachments. Eleven core contract
-      tests pass; full options/coverage and workspace verification remain to finalize.
+      tests, seven options/coverage integration tests and full workspace checks pass.
+      Part/stat-set overrides and a complete resolved scenario model remain unimplemented.
       The synchronous engine has no worker pool or preemptive native execution boundary.
 - [ ] **M1.3 Import and metrics — container/preflight complete; semantics partial.**
       Typed units/availability now cover 15 definitions and 17 actor queries. Coverage
@@ -255,9 +256,9 @@ material cannot establish an intended build choice; present the concrete alterna
 
 ### Current contracts, calibration and native checkpoint — local checks passed
 
-Recorded on 2026-09-07 on Windows/x64. These changes are in the working tree at this
-checkpoint. Preserve the historical results below; their CI commit is not the current
-code. Local validation is complete. Publication and hosted results will be recorded below.
+Recorded on 2026-09-07 on Windows/x64 for published code checkpoint `7dd2a09`.
+Preserve the historical results below as evidence for their own commits. Local validation
+is complete; hosted results are recorded below.
 The final Lua edit before the standalone smoke was a comment documenting cooldown behavior;
 formatting/Clippy and the smoke were rerun after it.
 
@@ -273,7 +274,7 @@ formatting/Clippy and the smoke were rerun after it.
 | `cargo clippy --workspace --all-targets --locked -- -D warnings` | Passed with warnings denied. |
 | `cargo test --workspace --all-targets --locked` | **78 passed**, zero failures; one ignored subprocess helper is explicitly invoked by the deadline test. Includes the original fixture A/B/A and export/reimport regressions, 11 core contract tests, 5 native parity tests, and 5 new preflight tests. |
 | Sources, artifacts and documentation | Read-only audit matched all 1,082 source entries and all 16 available reference artifact hashes. Both independent runs match each golden's 19 values exactly. Original user fixtures retain exact hashes/lengths, submodule remains clean; README/docs relative file links and `git diff --check` pass. |
-| Publish and hosted Windows/Linux CI | **Pending:** checkpoint commit and hosted run URL/results. Historical run `34147041293` validates only `71c0af7`. |
+| Publish and hosted Windows/Linux CI | **Passed for `7dd2a09` on both Windows and Linux:** formatting, Clippy, full tests, and core/native WASM compilation. [Hosted run 34150698841](https://github.com/Azaril/poe-optimizer/actions/runs/34150698841). The subsequent living-document update changes documentation only. |
 | Standalone CLI smoke | `runs/m1-contracts-20260907-dd6640a0.json` and `.xml` (ignored) contain schema 2, 17 typed measurements, exact selected SandDjinn action and raw diagnostic attachment. Adapter fingerprint `bf6a6c2f134812e9f738a1f0c4581472a5130d239a85d48e1a169e16c261e292`. This debug run took 2,582.5707 ms inside evaluation, including source verification/startup; one observation is not a benchmark. `metrics` emits 15 definitions without launching Lua. |
 | Optimization, native speedup/scaling and browser execution | Not implemented or measured. No throughput, quality, scaling or browser-runtime claim follows from parity and compilation. |
 
@@ -376,7 +377,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `46473e3` | Recorded explicit user authorization to push the project and supplied fixtures to GitHub; cleared the pending publishing question. |
 | 2026-09-07 | `1be92d7` | Preferred mlua hosting inside isolated Rust evaluator workers. |
 | 2026-09-07 | `71c0af7` | Added bounded import, evaluator preflight, embedded/native hosting, source verification, fresh-worker supervision and CLI evaluation/export. Formatting, Clippy, 47 local tests and hosted Windows/Linux CI pass; independent parity and optimization remain outstanding. |
-| 2026-09-07 | Current working checkpoint; publication pending | Added backend-neutral contracts, CLI schema/protocol 2, typed catalog/options/coverage, two independent Spark scenarios and the first six native numerical functions. All 78 local tests, formatting, Clippy and core/native WASM compilation pass; hosted results and broader M1 coverage remain pending. |
+| 2026-09-07 | `7dd2a09` | Added backend-neutral contracts, CLI schema/protocol 2, typed catalog/options/coverage, two independent Spark scenarios and the first six native numerical functions. All 78 local tests, formatting, Clippy and core/native WASM compilation pass. Both hosted Windows/Linux jobs pass in run `34150698841`; broader M1 coverage remains open. |
 
 ### Hosting decision checkpoint
 
