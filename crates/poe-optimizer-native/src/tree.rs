@@ -3,7 +3,7 @@
 use poe_optimizer_core::evaluation::{EvaluationError, EvaluationErrorKind};
 use poe_optimizer_data::{
     bundled,
-    tree_data::{EffectiveTreeNode, TreeAscendancy, TreeClass},
+    tree_data::{EffectiveTreeNode, TREE_PATH, TreeAscendancy, TreeClass, TreeSourceIdentity},
 };
 use poe_optimizer_engine::character::{CharacterAttributes, CharacterInput, CharacterModifiers};
 use roxmltree::Node;
@@ -18,6 +18,30 @@ pub(crate) struct NativeTree {
 }
 fn unsupported(message: impl Into<String>) -> EvaluationError {
     EvaluationError::new(EvaluationErrorKind::UnsupportedCapability, message)
+}
+// Data artifacts and numerical source pins evolve independently. Refuse mixed
+// revisions or tree data before any document can reach the calculation kernel.
+fn validate_calculation_source(source: &TreeSourceIdentity) -> Result<(), EvaluationError> {
+    use poe_optimizer_engine::{UPSTREAM_REVISION, mace, spark};
+    let tree_hash = source.source_files_sha256.get(TREE_PATH);
+    let matching_tree = [spark::SOURCE_FILES, mace::SOURCE_FILES]
+        .into_iter()
+        .all(|files| {
+            files.iter().any(|file| {
+                file.path == TREE_PATH && tree_hash.map(String::as_str) == Some(file.sha256)
+            })
+        });
+    if source.upstream_revision != UPSTREAM_REVISION
+        || source.tree_version != spark::TREE_VERSION
+        || source.tree_version != mace::TREE_VERSION
+        || !matching_tree
+    {
+        return Err(EvaluationError::new(
+            EvaluationErrorKind::BackendContract,
+            "Native data and calculation source revisions, tree versions and tree hashes must agree",
+        ));
+    }
+    Ok(())
 }
 fn integer(node: Node<'_, '_>, field: &str) -> Result<u32, EvaluationError> {
     let text = node
@@ -36,6 +60,7 @@ impl NativeTree {
         let data = bundled::class_tree().map_err(|error| {
             EvaluationError::new(EvaluationErrorKind::BackendContract, error.to_string())
         })?;
+        validate_calculation_source(&data.source)?;
         let internal_id = integer(spec, "classInternalId")?;
         let class = data
             .class(internal_id)
@@ -181,4 +206,31 @@ fn apply_stat(modifiers: &mut CharacterModifiers, stat: &str) -> Result<(), Eval
         }
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn bundled_data_cannot_mix_with_another_calculation_pin_or_tree() {
+        let source = &bundled::class_tree().unwrap().source;
+        validate_calculation_source(source).unwrap();
+        let mut wrong_revision = source.clone();
+        wrong_revision.upstream_revision = "0".repeat(40);
+        let mut wrong_version = source.clone();
+        wrong_version.tree_version = "0_4".into();
+        let mut wrong_hash = source.clone();
+        wrong_hash
+            .source_files_sha256
+            .insert(TREE_PATH.into(), "0".repeat(64));
+        let mut absent_hash = source.clone();
+        absent_hash.source_files_sha256.remove(TREE_PATH);
+        for altered in [wrong_revision, wrong_version, wrong_hash, absent_hash] {
+            assert_eq!(
+                validate_calculation_source(&altered).unwrap_err().kind,
+                EvaluationErrorKind::BackendContract
+            );
+        }
+    }
 }

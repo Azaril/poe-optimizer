@@ -56,6 +56,9 @@ unchanged.
 `poe-optimizer-native` projects source XML into immutable inputs, calls the selected pipeline
 and builds the shared typed result. The formulas and constants come from pinned source;
 unchanged independently generated full-build outputs are tests, not implementation data.
+Before resolving a native document, the bundle's rules revision, tree version and source
+tree digest must agree with both numerical pipelines. A mismatch returns a backend contract
+error, so data refreshes cannot silently pair a new tree with older calculations.
 Default quest rewards and the resistance penalty are explicit in result context. Cached
 source numerical outputs are ignored and removed from native exports. Encounter overrides
 are written into exported configuration so re-import preserves the selected scenario.

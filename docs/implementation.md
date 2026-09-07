@@ -11,7 +11,8 @@ difference; all targeted data, native contract, numerical, lint and WASM checks 
 Full integrated validation passes: 276 workspace tests, 16 native-only CLI tests, formatting,
 lint, dependency audit and five portable WASM library targets. The native-only release
 example preserves source bytes and produces the expected class/entrance metrics. Publication
-and hosted CI are pending for this code checkpoint; prior main is `5dd77eb`.
+is complete through `fa5136b` on `main`; hosted Windows/Linux CI is running. The new
+fixed-input class/entrance benchmark completed 4.5 million evaluations without errors.
 The next implementation gate is source-preserving class/passive materialization and finite
 search admission with explicit point budgets. Full native game coverage and the first
 usable all-six-dimension optimizer remain unfinished, including the supplied minion build.
@@ -131,10 +132,11 @@ was removed. The supplied minion build and unrestricted native evaluation remain
 | Native admission/exports | Four new contracts pass across 62 class/ascendancy documents, 32 entrance documents, coupled shared-root cases, legacy/canonical class IDs, byte-preserving exports and unsupported input cases. |
 | Fresh full-build parity | **100 fresh PoB evaluations pass** in a targeted 128.11-second run with two workers: 98 primary class/entrance/coupled-selection cases plus two native-export reimports. Maximum observed absolute and scaled numeric delta: **0** across public metrics and extra raw-stat comparisons. Mace cases have positive enemy evasion and uncapped hit chance. Native-only builds compile the oracle target with zero tests. |
 | Full integrated validation | **276 workspace tests pass, zero failures**, eight ignored child helpers exercised by parent tests; **16 native-only CLI tests pass**. Workspace/native-only Clippy with warnings denied, formatting, native dependency audit and five portable library WASM targets pass. Logs: `runs/native-class-workspace-tests.log`, `runs/native-class-native-only-tests.log`, `runs/native-class-clippy.log`, `runs/native-class-native-only-clippy.log`, `runs/native-class-wasm.log`, `runs/native-class-dependencies.txt`. |
+| Data/calculation compatibility | Native preparation now explicitly requires the bundle and both numerical pipelines to agree on rules revision, tree version and tree source hash. Twenty native tests pass, including mismatched/missing source identity cases; native Clippy and WASM checks pass. The guard changes admission only, with no formula/result-shape changes. Logs: `runs/native-class-source-guard-tests.log`, `runs/native-class-source-guard-clippy.log`, `runs/native-class-source-guard-wasm.log`. Full final validation follows this guard. |
 | Initial integrated correction | The first full run caught one obsolete rejection assertion for newly supported node 4739; it now uses an unsupported node. No calculator change was required. The complete rerun passes. Initial failure log: `runs/native-class-workspace-tests-initial.log`. |
 | Native-only release example | `evaluate examples/native-witch-entrance.xml --backend native --raw --timeout-seconds 30`: Witch/Abyssal Lich, allocated physical IDs `[4739,23710,54447]`, effective entrance source 17306. Life **809**, mana **315**, selected average hit **6.54**, selected hit DPS **9.342857142857143**. XML export is byte-identical; source/export SHA-256 `fcb6ad36f0991733fe9ed9ec9fada97ee4cebab4d68247c1a53a50aab54c63ed`. Artifacts: `runs/native-class-example.json` and `.xml`; release build log: `runs/native-class-release.log`. This example is source-derived demonstration data, not an independent numerical golden. |
 | Documentation and source preservation | 185 local documentation file links and Git whitespace checks pass. Supplied original exports, independent fixtures and the pinned submodule are unchanged. |
-| Publication and hosted CI | Local validation is complete. Code publication and hosted Windows/Linux CI are pending; prior main commit: `5dd77eb`. |
+| Publication and hosted CI | Published to `origin/main` as `fa5136b`. [Windows/Linux run 34169436926](https://github.com/Azaril/poe-optimizer/actions/runs/34169436926) is in progress; both runners have passed formatting/lint and reached tests. |
 
 Bundle SHA-256: `272c40b13109c999e4e28693a5c64dfe9625ed24c106c83e2a132794ac955411`.
 Full schema-2 source snapshot SHA-256:
@@ -146,6 +148,43 @@ Next executable work is the class/passive materialization and search gate in the
 steps above. Native point-budget/gear legality, broader modifier coverage and all-six-dimension
 optimization remain unfinished. Previous throughput measurements below apply to their
 explicitly named prior code and fixed Spark profile, not automatically to this expanded result path.
+
+### Release throughput for the class/entrance example
+
+Measured code: `fa5136b`; input: `examples/native-witch-entrance.xml` (2,831 bytes;
+source hash above). AMD Ryzen 9 9950X3D, 16 physical cores / 32 logical processors,
+Windows 11 Pro 10.0.26200 x64, Rust 1.93.0. Native-only default release build/target
+settings; no concurrent local Cargo or parity workload. OS/background load was not controlled.
+
+Three independent 250,000-evaluation runs per mode/thread count, cycling repetitions,
+thread counts and modes, with a 60-second deadline per run. All **4,500,000** evaluations
+completed, with zero failures/late discards, stable backend identity and identical finite
+metric checksums. No calculation warmups or result cache. Preparation is timed separately.
+
+| Threads | Prepared typed results/sec, median (min–max) | Document typed results/sec, median (min–max) |
+| --- | --- | --- |
+| 1 | 89,798 (88,465–90,069) | 27,116 (26,942–27,463) |
+| 4 | 259,882 (252,937–260,103) | 83,496 (82,347–85,391) |
+| 32 | 466,612 (422,521–488,600) | 189,033 (179,382–193,643) |
+
+Both modes recompute the native calculation and construct/validate complete typed results,
+including the new tree/source diagnostics, XML export, Rayon scheduling, accounting and
+metric checksums. Prepared mode reuses validated source inputs; document mode reparses and
+resolves them each time. These are tiny fixed-profile API observations, not pure-kernel
+speed, arbitrary-build throughput, search quality, browser performance or a PoB speedup.
+Some prepared runs remain below one second and show substantial variation. The prior
+checkpoint used another profile/result shape; the two tables are not a controlled regression
+comparison. The preparation/result cost reinforces the separate compiled-input/minimal-output
+search work in the resume plan.
+
+Reproduce with `benchmark-native examples/native-witch-entrance.xml --mode prepared|document
+--jobs 1|4|32 --evaluations 250000 --timeout-seconds 60 --output <new-path>`, three runs each.
+Ignored artifacts: `runs/native-class-throughput/{prepared,document}-jobs*-r*.json`,
+`machine.json`, `summary.json`; driver: `runs/benchmark-native-class-checkpoint.ps1`.
+Per-result finite-metric SHA-256:
+`3dbf33c2ddbdc3595304372a141f9cfc98df9368736a196b7087ff99982c14d1`.
+Native-only release executable SHA-256:
+`48b12d9a52994ef41c12df31f5bfd3841d061ad8be7be26d958fea2f188a3587`.
 
 ## Native build pipelines, worker-free search and passive parity — 2026-09-07
 
