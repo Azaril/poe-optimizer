@@ -10,11 +10,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Install Rust
         run: rustup show
       - name: Check formatting
         run: cargo fmt --all -- --check
       - name: Lint
-        run: cargo clippy --all-targets --locked -- -D warnings
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - name: Test
-        run: cargo test --all-targets --locked
+        run: cargo test --workspace --all-targets --locked

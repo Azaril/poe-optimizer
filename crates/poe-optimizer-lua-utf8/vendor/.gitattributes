@@ -1,0 +1,2 @@
+# Keep vendored upstream source hashes unchanged across platforms.
+* -text -whitespace

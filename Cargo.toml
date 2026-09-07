@@ -1,9 +1,23 @@
+[workspace]
+members = ["crates/poe-optimizer-core", "crates/poe-optimizer-pob", "crates/poe-optimizer-lua-utf8"]
+resolver = "3"
+
 [package]
-name = "poe-optimizer"
+name = "poe-optimizer-cli"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.93"
 description = "Experimental constraint-driven build optimization for Path of Exile 2"
 publish = false
 
+[[bin]]
+name = "poe-optimizer"
+path = "src/main.rs"
+
 [dependencies]
+clap = { version = "4", features = ["derive"] }
+poe-optimizer-core = { path = "crates/poe-optimizer-core" }
+poe-optimizer-pob = { path = "crates/poe-optimizer-pob" }
+serde_json = "1"
+serde = "1"
+tempfile = "3"

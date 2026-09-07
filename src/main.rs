@@ -1,27 +1,223 @@
-use std::{env, process::ExitCode};
+use clap::{Parser, Subcommand};
+use poe_optimizer_core::{
+    MAX_WIRE_BYTES, PROTOCOL_VERSION, WorkerFailure, WorkerHello, WorkerRequest, WorkerResponse,
+};
+use poe_optimizer_pob::import::{MAX_XML_BYTES, decode_build};
+use std::{
+    fs::File,
+    io::{self, BufRead, Read, Write},
+    path::{Path, PathBuf},
+    process::ExitCode,
+    time::Duration,
+};
 
-const HELP: &str = "poe-optimizer — experimental Path of Exile 2 build optimizer
+#[derive(Parser)]
+#[command(
+    name = "poe-optimizer",
+    version,
+    about = "Experimental Path of Exile 2 build evaluator",
+    long_about = "Import PoB XML/share codes and obtain fresh diagnostic PoB outputs through isolated mlua workers. Optimization and certified metric mappings are not implemented."
+)]
+struct Cli {
+    #[command(subcommand)]
+    command: Option<Action>,
+}
 
-Usage: poe-optimizer [--help | --version]
-
-This repository currently contains the Rust scaffold and proposed design.
-Build evaluation and optimization are not implemented yet.
-
-Design: docs/design.md
-Upstream integration notes: docs/pob-integration.md";
+#[derive(Subcommand)]
+enum Action {
+    /// Decode and validate a PoB XML file or share code, preserving exact XML bytes.
+    Import {
+        input: PathBuf,
+        /// Write decoded XML to a new file; existing files are never overwritten.
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
+    /// Evaluate a build in a fresh supervised process; raw metrics are experimental.
+    Evaluate {
+        input: PathBuf,
+        #[arg(long, default_value = "vendor/path-of-building-poe2")]
+        pob: PathBuf,
+        /// Includes worker startup, calculation, export and process exit.
+        #[arg(long, default_value_t = 30)]
+        timeout_seconds: u64,
+        /// Save the JSON snapshot instead of writing it to stdout.
+        #[arg(long)]
+        output: Option<PathBuf>,
+        /// Also save PoB's normalized XML export to a new file.
+        #[arg(long)]
+        export: Option<PathBuf>,
+    },
+    #[command(name = "__worker", hide = true)]
+    Worker {
+        #[arg(long)]
+        pob: PathBuf,
+        #[arg(long)]
+        scratch: PathBuf,
+    },
+}
 
 fn main() -> ExitCode {
-    let args: Vec<_> = env::args_os().skip(1).collect();
-    match args.as_slice() {
-        [] => println!("{HELP}"),
-        [arg] if arg == "--help" || arg == "-h" => println!("{HELP}"),
-        [arg] if arg == "--version" || arg == "-V" => {
-            println!("poe-optimizer {}", env!("CARGO_PKG_VERSION"));
-        }
-        _ => {
-            eprintln!("Unsupported arguments. Run poe-optimizer --help for current capabilities.");
-            return ExitCode::from(2);
+    match run(Cli::parse()) {
+        Ok(()) => ExitCode::SUCCESS,
+        Err(error) => {
+            eprintln!("Error: {error}");
+            ExitCode::FAILURE
         }
     }
-    ExitCode::SUCCESS
+}
+
+fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
+    match cli.command {
+        None => {
+            use clap::CommandFactory;
+            Cli::command().print_help()?;
+            println!();
+        }
+        Some(Action::Import { input, output }) => {
+            let imported = decode_build(&read_input(&input)?)?;
+            if let Some(path) = output {
+                write_new(&path, imported.xml.as_bytes())?;
+            }
+            println!(
+                "{}",
+                serde_json::to_string_pretty(&serde_json::json!({
+                    "format": imported.format,
+                    "xml_sha256": imported.sha256,
+                    "xml_bytes": imported.xml.len(),
+                    "validation": "container_only"
+                }))?
+            );
+        }
+        Some(Action::Evaluate {
+            input,
+            pob,
+            timeout_seconds,
+            output,
+            export,
+        }) => {
+            // Reject conflicting/existing destinations before spending the evaluation budget.
+            for path in [&output, &export].into_iter().flatten() {
+                if path.exists() {
+                    return Err(format!("Output already exists: {}", path.display()).into());
+                }
+            }
+            let output_identity = output.as_deref().map(destination_identity).transpose()?;
+            let export_identity = export.as_deref().map(destination_identity).transpose()?;
+            if output_identity.is_some() && output_identity == export_identity {
+                return Err("JSON and XML outputs need different paths".into());
+            }
+            let imported = decode_build(&read_input(&input)?)?;
+            let snapshot = poe_optimizer_pob::supervisor::evaluate(
+                &std::env::current_exe()?,
+                &pob,
+                &imported.xml,
+                Duration::from_secs(timeout_seconds),
+            )?;
+            let report = serde_json::json!({
+                "schema_version": 1,
+                "status": "experimental_evaluation",
+                "source": { "format": imported.format, "xml_sha256": imported.sha256 },
+                "evaluation": snapshot,
+            });
+            let mut json = serde_json::to_vec_pretty(&report)?;
+            json.push(b'\n');
+            if let Some(path) = output {
+                write_new(&path, &json)?;
+            } else {
+                io::stdout().write_all(&json)?;
+            }
+            if let Some(path) = export {
+                write_new(&path, snapshot.export_xml.as_bytes())?;
+            }
+        }
+        Some(Action::Worker { pob, scratch }) => worker(&pob, &scratch)?,
+    }
+    Ok(())
+}
+
+fn read_input(path: &Path) -> io::Result<Vec<u8>> {
+    let mut bytes = Vec::new();
+    File::open(path)?
+        .take(MAX_XML_BYTES as u64 + 1)
+        .read_to_end(&mut bytes)?;
+    if bytes.len() > MAX_XML_BYTES {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidData,
+            "Build source exceeds the XML input limit",
+        ));
+    }
+    Ok(bytes)
+}
+
+fn destination(path: &Path) -> io::Result<PathBuf> {
+    let name = path
+        .file_name()
+        .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "Output needs a file name"))?;
+    let parent = path
+        .parent()
+        .filter(|p| !p.as_os_str().is_empty())
+        .unwrap_or(Path::new("."));
+    Ok(parent.canonicalize()?.join(name))
+}
+
+fn destination_identity(path: &Path) -> io::Result<PathBuf> {
+    let path = destination(path)?;
+    #[cfg(windows)]
+    let path = PathBuf::from(path.to_string_lossy().to_lowercase());
+    Ok(path)
+}
+
+fn write_new(path: &Path, bytes: &[u8]) -> io::Result<()> {
+    let path = destination(path)?;
+    let mut file = tempfile::NamedTempFile::new_in(path.parent().expect("absolute output parent"))?;
+    file.write_all(bytes)?;
+    file.as_file().sync_all()?;
+    file.persist_noclobber(path).map_err(|error| error.error)?;
+    Ok(())
+}
+fn worker(pob: &Path, scratch: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    send_json(&WorkerHello {
+        protocol_version: PROTOCOL_VERSION,
+        backend: "mlua-luajit".into(),
+    })?;
+    let mut line = Vec::new();
+    io::stdin()
+        .lock()
+        .take(MAX_WIRE_BYTES as u64 + 1)
+        .read_until(b'\n', &mut line)?;
+    if line.len() > MAX_WIRE_BYTES || !line.ends_with(b"\n") {
+        return Err("Missing, oversized or unterminated worker request".into());
+    }
+    let request: WorkerRequest = serde_json::from_slice(&line)?;
+    let result = if request.protocol_version != PROTOCOL_VERSION {
+        Err(WorkerFailure {
+            code: "protocol_version".into(),
+            message: "Unsupported protocol version".into(),
+        })
+    } else {
+        poe_optimizer_pob::runtime::evaluate(pob, scratch, &request.xml).map_err(|error| {
+            WorkerFailure {
+                code: "evaluation_failed".into(),
+                message: error.to_string(),
+            }
+        })
+    };
+    send_json(&WorkerResponse {
+        protocol_version: PROTOCOL_VERSION,
+        request_id: request.request_id,
+        result,
+    })?;
+    Ok(())
+}
+
+fn send_json(value: &impl serde::Serialize) -> Result<(), Box<dyn std::error::Error>> {
+    let mut bytes = serde_json::to_vec(value)?;
+    bytes.push(b'\n');
+    if bytes.len() > MAX_WIRE_BYTES {
+        return Err("Worker response exceeds protocol limit".into());
+    }
+    let mut stdout = io::stdout().lock();
+    stdout.write_all(&bytes)?;
+    stdout.flush()?;
+    Ok(())
 }

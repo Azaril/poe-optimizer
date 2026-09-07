@@ -1,0 +1,49 @@
+{
+  "luautf8_version": "0.1.6",
+  "luautf8_commit": "1bb70d45208d4033dcc75efee968be70534dd3ab",
+  "luajit_src_version": "210.7.3+1ee778a",
+  "luajit_src_archive_sha256": "869665372263eb337b14f480cfb864b89f12eade4eb42cb415f71517b4a67572",
+  "luajit_commit": "1ee778a4e37122d8ca7d5733c590a47dafd6b15c",
+  "files": [
+    {
+      "path": "vendor/luajit-headers/COPYRIGHT",
+      "bytes": 2935,
+      "sha256": "6cda3076a8c09b31bb1f90da614ea89e7ee194589626eeac613e522849604e47"
+    },
+    {
+      "path": "vendor/luajit-headers/lauxlib.h",
+      "bytes": 6028,
+      "sha256": "7093ea70fb38341d10475814b90961cec22f9643c11e3ea4c2ddc2cd4b03164e"
+    },
+    {
+      "path": "vendor/luajit-headers/lua.h",
+      "bytes": 12324,
+      "sha256": "ecab8480aaedb648b75258453ab82e71c4d0db234175f455af72962c8578f787"
+    },
+    {
+      "path": "vendor/luajit-headers/luaconf.h",
+      "bytes": 4791,
+      "sha256": "0368985c56235d9bf8082dee845289500ee91b281e3ae6d8c434ca5348d9a976"
+    },
+    {
+      "path": "vendor/luajit-headers/lualib.h",
+      "bytes": 1165,
+      "sha256": "10fd6bccc4ae40cc9094b10d8d8de5a8d3febb90668cde599c253bec04bf4546"
+    },
+    {
+      "path": "vendor/luautf8/LICENSE",
+      "bytes": 1068,
+      "sha256": "74506285923bcc3e58aaca1b774db26461021783d02b2dc26bafcaa02ef7a00b"
+    },
+    {
+      "path": "vendor/luautf8/lutf8lib.c",
+      "bytes": 72448,
+      "sha256": "b38286f5bd879d586d9e6c9d45e86b421745a644b3f51d25fdfa89df761166ec"
+    },
+    {
+      "path": "vendor/luautf8/unidata.h",
+      "bytes": 290383,
+      "sha256": "f9baaf58a3330cc360189390fc8dca9eefcd2fd657b76fec6c0e3f200ae4ce37"
+    }
+  ]
+}

@@ -4,6 +4,29 @@ Source investigation recorded on 2026-09-07. No Lua runtime or calculation was e
 
 The source already provides a useful headless entry point and a comparison calculator. Preserve upstream calculations and establish an independently reloaded build as the correctness baseline before enabling incremental evaluation. The subsequent user-confirmed [hosting decision](design.md#evaluator-boundary) prefers a Rust worker embedding LuaJIT through `mlua`, with a small Lua compatibility shim; direct LuaJIT execution is a diagnostic fallback.
 
+## Runtime checkpoint: embedded host
+
+The subsequent mlua spike successfully built and ran the pinned entry points on Windows
+with Rust 1.93.0, mlua 0.12.1 and luajit-src 210.7.3+1ee778a (reported runtime
+`LuaJIT 2.1.1787165859`). The leading hash lines and the `count += 1` statement parse
+without source overlays in this runtime. The earlier syntax concern is therefore not a
+reproduced blocker for the selected host; no PoB source patch was applied.
+
+The native bridge compiles luautf8 0.1.6 against matching public LuaJIT headers and
+preloads its C entry point into the same VM. It loads neither bundled Windows DLL.
+See its [provenance](../crates/poe-optimizer-lua-utf8/README.md) and native tests.
+
+The supplied minion build produces fresh MAIN player/minion snapshots and XML export.
+Three source entries remain unresolved, and no groups participate in Full DPS. The raw
+selected-minion TotalDPS matches the source cache, but that consistency is not independent
+parity evidence. The adapter reports unvalidated coverage and explicit non-finite fields.
+Source hashing, import-completion guards, fresh calculation revisions and supervisor-owned
+scratch storage address the startup and lifetime issues found during implementation review.
+PoB can also load a fresh default character when Build/Tree data is absent, so evaluator
+preflight requires explicit supported identity and rejects duplicate core sections.
+Container-only import remains lossless and separate from these evaluator restrictions.
+Current tests and remaining acceptance work are in the [implementation record](implementation.md).
+
 ## Verified source facts
 
 ### Bootstrap and runtime dependencies

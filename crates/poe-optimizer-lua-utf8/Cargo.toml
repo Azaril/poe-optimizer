@@ -1,0 +1,16 @@
+[package]
+name = "poe-optimizer-lua-utf8"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.93"
+description = "Statically linked luautf8 module for the PoB LuaJIT host"
+publish = false
+
+[dependencies]
+mlua = { version = "=0.12.1", features = ["luajit", "vendored"] }
+
+[build-dependencies]
+cc = "1.2"
+# Constrain mlua-sys's vendored runtime to the source of our public headers.
+# No Build::build call is made here: mlua-sys compiles the only Lua runtime.
+luajit-src = "=210.7.3"
