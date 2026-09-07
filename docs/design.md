@@ -1,8 +1,10 @@
 # Build optimizer design
 
-Status: proposal for alignment; no evaluator or search engine is implemented.
+Status: agreed direction; this document describes the target system and its contracts.
 Initial target: Path of Exile 2, multicore core libraries with a CLI, Windows development.
-Source baseline: PoB commit `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`.
+See the [living implementation record](implementation.md) for delivery sequence, current
+capabilities, validation evidence, unresolved work, and the next session's resume point.
+The [source investigation](pob-integration.md) records the inspected PoB baseline.
 
 ## Recommendation
 
@@ -94,8 +96,8 @@ Plan distinct workflows over the same libraries:
 - **Upgrade ranking (inventory stage):** distinguish a one-item marginal comparison from
   joint re-optimization or an eventual multi-item plan.
 
-Persist portable problem/project data and recovery checkpoints for long runs. M3 should
-support a compatible warm start from saved candidates with explicit verification status;
+Persist portable problem/project data and recovery checkpoints for long runs. Support
+a compatible warm start from saved candidates with explicit verification status;
 evaluated-only recovery seeds must be freshly revalidated before trusted reuse. Exact search-state resume
 is a separate capability whose priority depends on expected run length. Include practical
 near-equal alternatives, readable grouped changes, and per-constraint failure explanations.
@@ -111,10 +113,11 @@ mechanics, unvalidated coverage, and numerical/fresh verification are distinct r
 The pinned source contains a headless wrapper, XML build loading, tests that use that
 wrapper, calculation outputs, and helpers for evaluating local changes. It is not a
 documented stable library API. Our source review also found runtime compatibility and
-state-management questions; this revision has not been booted or validated here.
+state-management questions. Runtime validation status belongs in the
+[implementation record](implementation.md#fixture-ledger-and-technical-unknowns).
 
 See [the integration notes](pob-integration.md) for exact source links, dependencies,
-metric mappings, and the first smoke-test checklist. In particular:
+metric mappings, and dated observations. In particular:
 
 - The headless wrapper initializes application objects, not just a pure formula function.
 - Global state and calculation caches require explicit lifecycle control.
@@ -153,8 +156,7 @@ Use a Cargo workspace with library/application boundaries from the first engine 
 | `poe-optimizer-cli` | Configuration/flags, adapter composition, progress display and exit codes; binary named `poe-optimizer` |
 | Later desktop application | GUI using the same libraries; Tauri remains a candidate |
 
-The current scaffold is still one binary; introduce these packages as their functionality
-arrives. Core libraries must not depend on CLI parsing, terminal output, Tauri, or a webview.
+Core libraries must not depend on CLI parsing, terminal output, Tauri, or a webview.
 Expose typed validation/run/cancellation/result APIs and progress events, allowing the
 CLI and later GUI to share all calculation, feasibility, and search behavior.
 
@@ -187,8 +189,8 @@ globals, working directories, and recoverable timeouts. They are a reliability b
 not a security sandbox. Kill and replace a worker after a timeout, startup hang, or corrupt
 response; return a typed error and count the attempt against the budget. Cap retries.
 
-The first spike should use an external LuaJIT runtime with the upstream headless approach.
-It is closest to the upstream test environment and exposes missing modules early.
+Use an external LuaJIT worker with the upstream headless approach as the reference runtime.
+It is closest to the upstream test environment and makes module dependencies explicit.
 An embedded Rust/LuaJIT worker may simplify packaging and reduce IPC overhead later, but
 native-module ABI, bitness, package loading, and Windows compilation still need validation.
 The [mlua API](https://docs.rs/mlua/0.12.1/mlua/) exposes Lua state and Rust/Lua value
@@ -286,12 +288,12 @@ cost while meeting performance thresholds, maximize a defensive measure, or comp
 trade-offs. These are non-exhaustive requirements examples, conditional on having reliable
 metric providers; they are not claims that the initial adapter exposes all such measurements.
 
-Stage implementation: M2 starts with one user-selected registered metric to maximize/minimize
-and any conjunction of typed constraints. Support explicit operators such as `>=`, `>`,
-`<=`, and `<`; reject unknown names, contradictory bounds, invalid units, and non-finite
-thresholds. Subsequent stages add unit-checked derived expressions, composite/priority policies,
-soft targets, and Pareto selection. Declare supported policy modes through capabilities;
+Support explicit operators such as `>=`, `>`, `<=`, and `<`; reject unknown names,
+contradictory bounds, invalid units, and non-finite thresholds. The policy model supports
+unit-checked derived expressions, composite/priority policies, soft targets, and Pareto
+selection alongside a single selected metric. Declare supported modes through capabilities;
 reject unavailable modes rather than silently falling back to DPS or a scalar approximation.
+The [implementation plan](implementation.md#delivery-plan-and-gates) sequences these modes.
 
 Keep the search engine independent of metric names. It consumes a validated problem and
 a scoring/selection policy; that policy owns objective direction, priority, preference
@@ -330,7 +332,7 @@ scope or a set of required user goals.
 | `physical_max_hit` (later, likewise other types) | Incoming hit size survived for the documented damage type and scenario; distinct from aggregate EHP |
 
 Do not blindly map `CombinedDPS` to damage per second: the inspected calculations have an
-average-damage mode. For M1 select a fixture and skill mode with a verified DPS interpretation;
+average-damage mode. Require a verified DPS interpretation for each supported skill mode;
 publish the exact mapping and reject unsupported modes. Full-build DPS, per-skill DPS,
 minion damage, and average-hit damage must not be silently interchanged. Multiple required
 skills do not justify summing their standalone DPS: a supported inclusion/usage model must
@@ -347,7 +349,7 @@ avoidance/recovery assumptions, conditional defenses, and other contributing con
 The first release must evaluate named bossing and mapping benchmark scenarios with verified
 metric meanings. Individual runs can select one or several named scenarios; constraints
 declare which scenarios must pass. A scalar objective identifies its scenario or an explicit
-supported reducer. Richer aggregation remains a later scoring-policy feature. Mapping
+supported reducer. Richer aggregation is an explicit scoring-policy capability. Mapping
 benchmarks use documented proxies such as applicable area damage, mobility, and resource
 metrics; do not invent an end-to-end map-clear-time simulation.
 
@@ -536,8 +538,9 @@ Use three kinds of evidence:
   search, and the proposed method under equal oracle-evaluation budgets and several seeds.
 
 A no-change baseline establishes that the optimizer does not regress a feasible incumbent.
-A/B/A, permuted-order, and cold/warm evaluations detect state leaks. Ordinary scaffold CI
-is separate from future Lua parity tests; it currently does not check the submodule runtime.
+A/B/A, permuted-order, and cold/warm evaluations detect state leaks. Rust-only checks and
+Lua parity tests provide distinct evidence; a compiling orchestrator does not establish
+evaluator correctness.
 
 ## Visualization and application interfaces
 
@@ -552,42 +555,39 @@ progress delivery. The UI should configure goals/resources, start/cancel runs, a
 results without parsing terminal output or duplicating scoring. Artifact formats and
 presentation models should support both saved-run reports and GUI views.
 
-See [run visualization and frontend design](execution-and-interfaces.md#run-data-and-visual-output-before-a-gui).
-These outputs and interfaces are proposed; the current scaffold does not generate them.
+See [run visualization and frontend design](execution-and-interfaces.md#run-data-and-visual-output).
+The [implementation record](implementation.md) tracks delivery of these interfaces.
 
-## Milestones and acceptance gates
+## Acceptance criteria
 
-| Milestone | Deliverable | Acceptance gate |
-| --- | --- | --- |
-| M0: bootstrap (complete) | Rust scaffold, pinned PoB submodule, design and prior-art review | Scaffold checks pass; evaluator remains unimplemented |
-| M1: evaluator and fixture spike | Import/decode a verified fixture; headless startup; class/tree/item/support/supporting-skill mutations; per-skill/build metrics; export | Runtime blockers recorded/resolved; source game/version checked; effect provenance and lock preservation; baseline/mutation/export parity and isolation |
-| M2: core libraries and joint synthetic search | Complete candidate/lock model, finite catalogs, coupled mutations/repair, metric policy, Rayon/job APIs, budgets and events | Tiny exhaustive joint domains; traps requiring coordinated changes; multi-skill/item locks; deterministic one/many-worker checks; cancellation/dedup/budget correctness |
-| M3: first usable joint optimizer | Class/ascendancy, tree, gear, supports and supporting skills searchable in one run; multicore PoB workers; preflight, comparisons, checkpoints and visual reports | All requested dimensions work end to end; verified legal exports; interaction gains versus greedy/random/alternating baselines; 5/15/30-minute quality/scaling measurements; bossing and mapping fixtures |
-| M4: broader catalogs and upgrade planning | Deeper equipment/skill coverage, finite acquisition snapshots, conditional upgrade/bundle ranking, refinement of joint search | Explicit availability/cost/baseline semantics; continued lock/coverage checks; improvements on diverse interaction cases |
-| M5: richer scoring policies | Typed expressions, composite/priority objectives, soft targets, Pareto alternatives and richer robust aggregation | Units/normalization validated; hard constraints preserved; policy-specific selection checked |
-| GUI (after CLI/report stabilization) | Goal/lock editor, resources, progress, class/tree/item/skill comparisons and export over shared libraries; evaluate Tauri | CLI/GUI result parity; responsive start/cancel; reusable saved runs; native-worker packaging verified |
-| Later | Selective Rust calculations and PoE1 adapter | Differential parity and explicit versioned capabilities |
+The delivery sequence and milestone status are maintained in the
+[implementation record](implementation.md#delivery-plan-and-gates). The following gates
+define what the system must demonstrate, independently of implementation order.
 
-Implementation spikes may work on one axis at a time, but no isolated passive, gear, or gem
-optimizer satisfies M3. M2 can proceed with a synthetic evaluator alongside M1, while real
-PoB integration must establish capability and parity before recommending builds.
-
-M3 acceptance includes fixtures with at least two required skills and two exact equipped-item
-locks, plus allowed class/ascendancy changes. Include an exhaustively checked synthetic case
-where improvement requires a coordinated move across the candidate dimensions and every
-single-change improvement path stalls. Verify supporting effects disappear when their
-sources are removed and that repair preserves every lock.
+The first usable optimizer must search all six dimensions end to end and produce verified
+legal exports. Its acceptance suite includes at least two required skills and two exact
+equipped-item locks, plus allowed class/ascendancy changes. Include an exhaustively checked
+synthetic case where improvement requires a coordinated move across candidate dimensions
+and every single-change improvement path stalls. Verify supporting effects disappear when
+their sources are removed and that repair preserves every lock.
 
 Measure both fixed-candidate evaluator scaling and end-to-end best-found quality at 5, 15,
-and 30 minutes on recorded reference hardware. Include explicit bossing and mapping cases
-with documented proxy metrics and assumptions. This is not a claim of optimality or actual
-map-clear-time prediction. Report individual case results, variance, and failures.
+and 30 minutes on recorded reference hardware. Compare against random, greedy and
+alternating-domain baselines under equal evaluation budgets and several seeds. Include
+explicit bossing and mapping cases with documented proxy metrics and assumptions. Report
+individual case results, variability and failures; these measurements do not establish a
+global optimum or actual map-clear-time prediction.
 
 Recovery checkpoints may include evaluated-only candidates with explicit status, so a crash
 before finalist verification does not lose all progress. Freshly validate these seeds before
 trusted reuse in a new run; final recommendations always pass independent verification.
-Exact resume is distinct from warm start and can follow after the minutes-long workflow is
-reliable. The GUI need not wait for every M4/M5 feature.
+Exact resume must be distinguished from a warm start and declare its compatibility and
+budget semantics.
+
+Rich objective policies must validate units/normalization and preserve hard constraints.
+A GUI must produce the same results as the CLI through shared libraries, remain responsive
+during runs, and package the evaluator reproducibly. Any migrated Rust calculation or PoE1
+adapter must demonstrate differential parity and declare its own versioned capabilities.
 
 ## Risks and decisions to revisit
 
@@ -608,7 +608,7 @@ validation. Port a calculation subsystem only when profiling shows value and fix
 can compare it against Lua over representative and adversarial cases. Keep a Lua fallback.
 A shared Rust trait does not imply PoE1 and PoE2 share rules or field semantics.
 
-## Decisions to align on
+## Confirmed design decisions
 
 Confirmed direction: Rust core libraries, configurable goals, multicore execution, a CLI
 first, visual output, and a later GUI. The user has also confirmed:
@@ -621,24 +621,12 @@ first, visual output, and a later GUI. The user has also confirmed:
 5. Joint equipment optimization is part of the first product, not a deferred alternative
    to support/gem search.
 
-The supplied example is now preserved as a [decoded PoB XML fixture](../tests/fixtures/builds/pobarchives-Dfz36mCq.xml)
-with [provenance and structural checks](../tests/fixtures/builds/pobarchives-Dfz36mCq.metadata.json).
-The local export is URL-safe base64 containing zlib-compressed UTF-8 XML with root
-`PathOfBuilding2`: level 96 Sorceress / Disciple of Varashta, tree version `0_5`.
-Its selected main group is Kelari, the Tainted Sands (a minion skill). The planner title
-claims patch 0.5.5; the XML target version is not independent patch evidence.
-
-Keep the original files and decoded byte stream unchanged. All 130 allocated node IDs
-exist in the pinned tree data, but this is structural compatibility, not calculation parity.
-The source has 19 skill groups and 16 referenced items. All Full DPS membership flags are
-literal `nil`, cached player FullDPS is zero, and three named skill entries lack stable IDs.
-Resolve inclusion, actor selection, granted/manual group provenance, and these entries through
-the adapter before using any damage output as a benchmark. Use separate minimal calibration
-fixtures to isolate behavior; retain this complex minion build as an integration fixture.
-
 The [decision register](prior-art-and-product-review.md#decision-register-and-remaining-input)
-records the confirmed answers and fixture status. No product-scope question is currently
-unanswered. Exact skill/item requirements, goals, and scenario settings will be explicit
-inputs to actual optimization runs. Runtime integration and search work can proceed within
-this scope. Distribution licensing, trade-data sources, and desktop packaging can wait
-until their respective milestones.
+preserves the answers and rationale. Exact skill/item requirements, goals, and scenario
+settings are explicit inputs to optimization runs rather than universal project defaults.
+Finite candidate catalogs bound each run without changing the required search dimensions.
+
+The [implementation record](implementation.md) owns current fixture validation, technical
+unknowns, deferred decisions and the next action. Preserve original build exports as
+immutable evidence; keep small calibration fixtures separate from complex integration
+fixtures and verify their supported mechanics before using them as optimization benchmarks.

@@ -22,11 +22,14 @@ and isolated PoB workers under shared CPU/memory limits. The CLI comes first, wi
 structured run data and offline HTML reports; a later GUI can use the same APIs,
 with Tauri as a candidate.
 
-**Status:** repository scaffold and design proposal. The CLI prints project information;
-it does not evaluate or optimize builds yet.
+**Status:** scaffold and aligned design; the evaluator spike is next. The CLI prints project
+information and does not evaluate or optimize builds yet. The
+[living implementation document](docs/implementation.md) is the authoritative progress and
+resume record. Update it at feature/experiment checkpoints and before session handoff.
 
-Start with [the design proposal](docs/design.md), especially its
-[alignment decisions](docs/design.md#decisions-to-align-on). See
+Start with [the end-state design](docs/design.md), especially its
+[confirmed decisions](docs/design.md#confirmed-design-decisions), then the
+[implementation resume point](docs/implementation.md#resume-here). See
 [PoB integration notes](docs/pob-integration.md) for source-verified seams and open runtime questions.
 The [execution and interface design](docs/execution-and-interfaces.md) covers multicore
 scheduling, library boundaries, structured results, visualization, and the GUI path.
@@ -62,8 +65,9 @@ and Linux when the project is hosted on GitHub.
 
 ## Repository
 
-- `src/`: minimal CLI scaffold; implementation will follow design alignment.
-- `docs/design.md`: proposed scope, architecture, objectives, search, and milestones.
+- `src/`: minimal CLI scaffold.
+- `docs/design.md`: end-state scope, architecture, objectives, search, and acceptance criteria.
+- `docs/implementation.md`: living delivery plan, current status, checks, and session resume point.
 - `docs/pob-integration.md`: findings from the pinned upstream source.
 - `docs/execution-and-interfaces.md`: parallel runtime, core APIs, artifacts, and frontend plan.
 - `docs/prior-art-and-product-review.md`: cited references, prioritized gaps, and decision status.
@@ -91,4 +95,4 @@ checks once they exist, and commit the changed submodule pointer.
 
 Upstream licensing and third-party notices remain in
 [its LICENSE.md](vendor/path-of-building-poe2/LICENSE.md). This scaffold does not
-choose a distribution license for the new project; select one before publishing.
+choose a distribution license for the new project; select one before a public release.

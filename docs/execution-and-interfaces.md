@@ -1,15 +1,16 @@
 # Parallel execution, interfaces, and visualization
 
-Status: proposed implementation architecture. The current executable remains a minimal
-CLI scaffold; Rayon integration, core crates, run artifacts, reports, and a GUI are not
-implemented. These requirements extend [the main design](design.md).
+This document describes the target execution architecture and application contracts,
+extending [the main design](design.md). Current capabilities, delivery sequence,
+validation results, and the next resume point belong in the
+[living implementation document](implementation.md).
 
 ## Reusable libraries with a CLI first
 
-Implement the optimizer as a Cargo workspace with reusable Rust libraries and thin
-application layers. Move functionality into these boundaries as it is implemented:
+The optimizer is designed as a Cargo workspace with reusable Rust libraries and thin
+application layers, with the following package boundaries:
 
-| Planned package | Owns | Dependency direction |
+| Package | Owns | Dependency direction |
 | --- | --- | --- |
 | `poe-optimizer-core` | Problem/candidate types, metric and evaluator interfaces, scoring, search, execution limits, run events/results | Independent of CLI, Tauri, webviews, and a particular Lua host |
 | `poe-optimizer-pob` | PoB game adapter, Lua worker supervision, metric mappings, XML import/export | Implements core interfaces; depends on core |
@@ -17,10 +18,10 @@ application layers. Move functionality into these boundaries as it is implemente
 | `poe-optimizer-cli` | Flags/config loading, composition of adapters, terminal progress, exit codes, report commands | Calls core, PoB adapter, and reporting APIs; binary remains `poe-optimizer` |
 | Future Tauri application | Goal editor, run control, charts, build comparison and export | Calls the same libraries through a small Rust application layer |
 
-The names are proposed; do not populate empty packages before their implementation starts.
-Create the core/CLI boundary with the first working engine functionality, rather than
-implementing search inside the CLI and extracting it later. Keep pure data/model modules
-separate from scheduling within core; split further if concrete dependency needs justify it.
+Search and evaluation behavior belong in libraries; application layers compose them.
+Keep pure data/model modules separate from scheduling within core; split further if
+concrete dependency needs justify it. Package names can change without changing these
+ownership and dependency rules.
 
 The library accepts typed inputs and returns typed errors/results. It must not print to
 a terminal, exit the host process, parse application arguments, or require a webview.
@@ -85,10 +86,10 @@ If an isolated fresh process cannot fit, fail clearly instead of repeatedly laun
 Record requested and resolved limits, the estimate used, peak usage, and any throttling.
 A process lifetime limit may be needed if long runs expose memory growth.
 
-The M1 spike measures cold/fresh evaluation and verifies persistent-worker reset behavior.
-The first search release uses a bounded multicore evaluator pool; fresh-process evaluation
-remains the correctness reference. Parallelism must not wait for a rewrite of calculations
-in Rust.
+A bounded multicore evaluator pool is part of the engine contract. Fresh-process
+evaluation remains the correctness reference; persistent workers require demonstrated
+reset equivalence. Worker sizing uses measured cold/fresh evaluation costs and memory
+usage. Parallelism does not depend on rewriting calculations in Rust.
 
 ### Work distribution and shared state
 
@@ -157,7 +158,7 @@ cores. Run several seeds and show variance. Cold startup, memory duplication, se
 selection, and IPC may limit scaling, so set performance targets from measurements.
 Include a multicore smoke test in engine CI and run larger scaling benchmarks separately.
 
-## Run data and visual output before a GUI
+## Run data and visual output
 
 Use versioned structured output as the shared source for CLI reporting, offline visualization,
 and the eventual frontend. Proposed artifacts in each run directory:
@@ -185,7 +186,7 @@ Coalesce/drop redundant progress under load; persist important events or retain 
 the authoritative run state so a slow/disconnected UI cannot block the optimizer or lose
 completion. Consumers can request a fresh snapshot after a gap.
 
-Start visualization with an optional offline HTML report created by the CLI:
+The CLI can create an optional offline HTML report containing:
 
 - Before/after tables for the user's chosen metrics, constraints, and slack.
 - Best feasible objective and constraint violation over evaluations and elapsed time.
@@ -208,14 +209,15 @@ evaluation failure, and a completed search with no feasible result.
 
 Include baseline-aware candidate comparison and saved-result reranking in the CLI workflow.
 Reranking must validate stored metric compatibility and identify the retained candidate set;
-it does not imply a new search. Recovery initially warm-starts a new run from saved
+it does not imply a new search. Recovery supports warm-starting a new run from saved
 candidates. Also retain evaluated-only recovery seeds with explicit status, since a crash
 may happen before final verification; freshly validate them before trusted reuse in a new
 run and independently verify all recommendations. Exact resume requires a compatible checkpoint of search/random state, budget
 ledger, and pending work as described in the [product review](prior-art-and-product-review.md).
 
-No new commands or output flags are implemented by this design update. The example
-configuration describes future execution/output options alongside the existing user goals.
+The [example configuration](../examples/objective.toml) illustrates the proposed goal,
+execution, and output contracts. The [implementation document](implementation.md)
+tracks which commands and configuration fields are available.
 
 For the later desktop application, Tauri is a candidate because it combines a Rust backend
 with a webview frontend ([architecture](https://v2.tauri.app/concept/architecture/)).
@@ -227,7 +229,7 @@ The frontend never has to parse terminal output or reimplement feasibility and s
 The first GUI should import a build, discover supported metrics, edit objectives/constraints,
 choose resource limits, start/cancel runs, inspect progress and candidate changes, compare
 trade-offs, and export a chosen verified build. Reuse report presentation models where useful.
-Choose the web frontend framework when this milestone begins.
+The web frontend framework remains an application-layer choice.
 
 Confirm Tauri's packaging, native Lua worker/ABI distribution, platform prerequisites,
 and UI responsiveness in a small prototype before committing to the framework. Keep

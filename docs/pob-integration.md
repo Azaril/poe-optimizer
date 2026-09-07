@@ -1,6 +1,6 @@
 # Path of Building PoE2 integration notes
 
-Status: source inspection for the initial design, 2026-09-07. No Lua runtime or calculation was executed during this investigation. All upstream references below are pinned to submodule commit `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. Runtime compatibility, throughput, and repeated-evaluation isolation remain milestone M1 work.
+Source investigation recorded on 2026-09-07. No Lua runtime or calculation was executed during this investigation. All upstream references below are pinned to submodule commit `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. These dated observations inform the [target design](design.md); runtime findings, current validation status, and follow-up work belong in the [living implementation document](implementation.md).
 
 The source already provides a useful headless entry point and a comparison calculator. Start with a small Lua adapter running in a separate process, preserve upstream calculations, and establish an independently reloaded build as the correctness baseline before enabling incremental evaluation.
 
@@ -11,7 +11,7 @@ The source already provides a useful headless entry point and a comparison calcu
 - [HeadlessWrapper.lua:1-78](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/HeadlessWrapper.lua#L1-L78) loads `_SimpleGraphic.def.lua`, provides callback dispatch, suppresses `require("lcurl.safe")`, loads `Launch.lua`, then executes initialization and one frame. It exposes global `build`, `newBuild()`, `loadBuildFromXML(xmlText, name)`, and `loadBuildFromJSON(characterJSON)`.
 - Upstream [`.busted`](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/.busted#L1-L13) runs with `src` as the working directory and includes `../runtime/lua/?.lua;../runtime/lua/?/init.lua` in the Lua module path. Relative file loading is part of the current integration contract.
 - [Launch.lua:19](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Launch.lua#L19) unconditionally invokes `jit.opt.start`. [Common.lua:19-30](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/Common.lua#L19-L30) expects global `bit`, bundled `xml`, `base64`, and `sha1`, and the native `lua-utf8` module. Do not interpret the wrapper's old “standard lua interpreter” comment as a tested compatibility guarantee.
-- [Dockerfile](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/Dockerfile#L1-L40) builds Lua 5.1.5, a pinned LuaJIT revision, and `luautf8`; [test.yml:30](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/.github/workflows/test.yml#L30) uses `busted --lua=luajit`. The checkout includes Windows `runtime/lua51.dll` and `runtime/lua-utf8.dll`, but an executable Lua interpreter was not found on the shell PATH. ABI and architecture compatibility with an embedded Rust runtime have not been established.
+- [Dockerfile](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/Dockerfile#L1-L40) builds Lua 5.1.5, a pinned LuaJIT revision, and `luautf8`; [test.yml:30](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/.github/workflows/test.yml#L30) uses `busted --lua=luajit`. The inspected checkout includes Windows `runtime/lua51.dll` and `runtime/lua-utf8.dll`, but an executable Lua interpreter was not found on the investigation shell's PATH. This investigation did not establish ABI and architecture compatibility with an embedded Rust runtime.
 
 ### Load, mutate, calculate, and export
 
@@ -56,12 +56,12 @@ These names are raw PoB output keys, not a proposed general API. Expose stable d
 
 For “resistances > 75%,” preserve the user's chosen comparison. `>= 75` means at least 75 effective resistance; `> 75` requires an effective value above 75 and therefore sufficient maximum resistance as well. “Capped” means no `Missing{Type}Resist`, which can differ from either condition. Name chaos separately rather than silently treating “elemental” as all four types.
 
-Freeze encounter configuration when comparing candidates: incoming damage mix, enemy level/type and speed, temporary buffs, resource/charge assumptions, avoidance settings, and skill targeting. The defence calculation reads [`enemyDamageType` and `EHPUnluckyWorstOf`](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/CalcDefence.lua#L2206-L2224), as well as [`enemySpeed`](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/CalcDefence.lua#L3410-L3415). These are part of the objective's meaning and cache key.
+Freeze external encounter and usage assumptions when comparing candidates: incoming damage mix, enemy level/type and speed, declared uptime assumptions, and skill targeting. Recompute candidate-derived buffs, resource/charge availability, reservation, and supporting-skill effects; a removed source must not leave its benefit enabled. The defence calculation reads [`enemyDamageType` and `EHPUnluckyWorstOf`](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/CalcDefence.lua#L2206-L2224), as well as [`enemySpeed`](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/CalcDefence.lua#L3410-L3415). These are part of the objective's meaning and cache key.
 
 ## Potential integration issues identified in source
 
 1. **Pinned-source syntax concern:** [Main.lua:339](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/Main.lua#L339) contains `count += 1`. The headless [`LoadModule` stub](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/_SimpleGraphic.def.lua#L437-L446) directly invokes `loadfile`; no source transformation was found in this bootstrap. This is an apparent incompatibility with standard LuaJIT syntax, even if `SaveModCache` is not called, because the module must parse. Reproduce before treating this pin as runnable. If needed, choose a verified passing revision or maintain an explicit, minimal adapter patch with its hash; do not hide a local vendor edit.
-2. **Compression and timing are placeholders:** [`Deflate`, `Inflate`, and `GetTime`](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/_SimpleGraphic.def.lua#L362-L399) return empty strings or zero in headless mode. Raw XML avoids compressed-share-code dependence in M1. Measure time in Rust; later provide real compression and a monotonic clock deliberately.
+2. **Compression and timing are placeholders:** [`Deflate`, `Inflate`, and `GetTime`](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/_SimpleGraphic.def.lua#L362-L399) return empty strings or zero in headless mode. Raw XML avoids dependence on these compressed-share-code stubs. The adapter needs deliberate compression support and a monotonic clock; the Rust supervisor can measure elapsed evaluation time independently.
 3. **Headless does not imply side-effect-free:** paths are stubbed, normal startup reads settings, and shutdown calls [`SaveSettings`](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/Main.lua#L371). `REGENERATE_MOD_CACHE=1` enables [cache regeneration](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/Main.lua#L123-L132). Workers need controlled paths/environment and no update/import network flow. Keep the submodule unchanged during evaluation.
 4. **Stdout is not a clean protocol:** [`ConPrintf`](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/_SimpleGraphic.def.lua#L484-L486) uses `print`. Route diagnostic output away from the response stream before introducing JSON messages.
 5. **Calculable does not necessarily mean legal:** comparison overrides can inspect isolated nodes, whereas allocation methods construct paths and dependencies. Keep connectivity, point budgets, weapon-set rules, skill validity, item compatibility, and resource constraints explicit. Verify them on the materialized candidate before reporting feasibility.
@@ -72,23 +72,21 @@ A persistent LuaJIT worker should amortize data loading; several independent wor
 
 Reloading baseline XML before every candidate should be safer than rolling back arbitrary tables, but it still requires isolation tests. Compare repeated A, A/B/A sequences, different evaluation orders, and separate fresh processes. Hash semantic candidate data rather than raw exported XML: `SaveDB` enumerates saver tables with `pairs`, so raw serialization order should not be assumed canonical.
 
-## Recommended milestone M1 spike
+## Follow-up validation
 
-1. Provision a pinned LuaJIT runtime and matching `lua-utf8` dependency. Record runtime identity, architecture, upstream SHA, and any adapter patch hash. Parse and boot the upstream wrapper; resolve the syntax concern openly. Keep runtime setup outside the submodule and make any paths explicit.
-2. Implement the smallest external Lua adapter and Rust process supervisor: versioned request/response, XML input, controlled scenario and main skill, typed metrics, structured errors, timeout, and XML output. Start with one request per fresh process to establish a baseline. Do not expose arbitrary Lua in objective files.
-3. Use a small fixture for a supported self-cast or attack skill. Import it, calculate through the ordinary frame path, and compare raw metrics with the same pinned PoB version. Fail on missing required metrics, non-finite results, startup prompts, or invalid selected skills. Save and reload the XML and compare again.
-4. Apply one legal passive-path change and one fixed candidate-item replacement separately. Confirm changed metrics and exported build state, then compare miscellaneous-calculator overrides with a freshly materialized and reloaded candidate. Keep EHP calculation enabled.
-5. Run A/A and A/B/A isolation checks and an intentionally malformed request. Only after parity, introduce persistent workers with baseline reload. Validate identical candidate/scenario outputs across worker counts within declared numeric tolerances.
-6. Record cold startup, warm full evaluation, warm override evaluation, export/reload cost, peak memory, and error rate. Use these measurements to choose worker count and search evaluation budget. Acceptance is a reproducible evaluator with verified mutations and reviewable XML; optimization quality is the next milestone.
+The [implementation document](implementation.md) owns the evaluator work sequence and
+acceptance checklist: runtime boot, fresh-process calculation and export parity, mutation
+and worker-isolation checks, and measured throughput and memory. Keep subsequent results
+there so these source-inspection notes retain their original evidence boundary.
 
 ## User-supplied minion fixture
 
 The [decoded reference fixture](../tests/fixtures/builds/pobarchives-Dfz36mCq.xml) is a
 level 96 Sorceress / Disciple of Varashta export with `PathOfBuilding2` root and `0_5`
 tree data. Its [metadata](../tests/fixtures/builds/pobarchives-Dfz36mCq.metadata.json)
-records exact source/output hashes and bounded decoding checks. The two original local
-exports remain unchanged. Source structure and tree-ID presence have been checked;
-no Lua evaluation or UI parity has been performed.
+records exact source/output hashes and bounded decoding checks. The investigation preserved
+the two original exports and checked source structure and tree-ID presence. It did not
+perform Lua evaluation or UI parity checks; see the implementation document for later results.
 
 The selected group is Kelari, the Tainted Sands, with a minion-skill selector. All Full DPS
 membership flags are literal `nil`; cached player FullDPS is zero. Three named skill
@@ -98,7 +96,8 @@ are unsupported. Preserve raw input; resolve names, inclusion, actors, and dupli
 through the pinned adapter before scoring. Never accept cached source values as fresh
 calculation evidence or silently interpret unresolved entries as zero contribution.
 
-M1 should include this complex integration case plus separate small calibration cases.
-The first usable optimizer's scope includes required lists of multiple skills/items and
-joint class/ascendancy, tree, gear, support-gem, and supporting-skill changes. Controlled
-per-dimension spikes remain useful, but do not substitute for coupled parity and search checks.
+This complex integration case complements small calibration cases. The target scope
+includes required lists of multiple skills/items and joint class/ascendancy, tree, gear,
+support-gem, and supporting-skill changes. Controlled per-dimension checks do not establish
+coupled parity or search quality. Fixture coverage and acceptance tasks are tracked in the
+[implementation document](implementation.md).

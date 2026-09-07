@@ -1,8 +1,11 @@
 # Product review and WoW optimizer prior art
 
 Reviewed: 2026-09-07. This is a design review, not an implementation report or an audit
-of the referenced optimizers' internals. The existing [design](design.md) and
-[execution/interface plan](execution-and-interfaces.md) remain the implementation proposal.
+of the referenced optimizers' internals. The [design](design.md) and
+[execution/interface design](execution-and-interfaces.md) define the target system.
+The [living implementation record](implementation.md) owns current status, delivery order,
+acceptance evidence and the resume point. Milestone references below describe the review's
+proposed placement; consult that record for the maintained plan.
 
 ## Review conclusion
 
@@ -247,7 +250,7 @@ configuration. They are not global decisions the project needs to fix for every 
 Windows development, Rust core libraries, configurable objectives, multicore execution,
 a CLI first, and a later GUI are already established direction.
 
-Decisions that can wait: distribution license before publishing; desktop frontend framework
+Decisions that can wait: distribution license before a public release; desktop frontend framework
 and Tauri packaging before GUI implementation; trade data sources before acquisition workflows;
 PoE1 support after the PoE2 interfaces are proven. No additional user approval is needed
 to research or implement routine details within the agreed scope.
