@@ -5,3 +5,8 @@
 *.yml text eol=lf
 *.lua text eol=lf
 Cargo.lock text eol=lf
+# Preserve source-export and decoded-fixture byte hashes across platforms.
+/example.build -text
+/example.import.txt -text
+# The raw upstream export intentionally retains its original whitespace.
+/tests/fixtures/builds/pobarchives-Dfz36mCq.xml -text -whitespace

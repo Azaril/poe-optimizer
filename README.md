@@ -2,13 +2,20 @@
 
 An experimental Rust project for constraint-driven Path of Exile 2 build optimization,
 with potential Path of Exile 1 support later. The intended workflow is to import a
-build, choose which build decisions may change, fix combat assumptions, and configure goals,
+build, choose which build decisions may change, set encounter assumptions, and configure goals,
 then search for good legal alternatives using Path of Building's calculations.
 
 Goals are user-configurable. Damage, resistance, EHP, and skill-selection examples are
 illustrative; users choose objectives, constraints, and preferences from an extensible
-metric catalog. The first search domain keeps skills and gear fixed while reallocating
-passives; richer scoring policies and search domains are separate design stages.
+metric catalog. The first usable optimizer must jointly search classes, ascendancies,
+passives, equipment, support gems, and supporting active skills. Users can require 1..N
+skills and retain 1..N exact equipped item instances, with independent locks on other
+choices. Finite candidate pools bound each run without removing these search dimensions.
+Candidate-derived skill effects are recalculated while external encounter assumptions stay fixed.
+
+The initial quality target is configurable 5–30 minute runs, benchmarked in both bossing
+and mapping contexts. Search must handle coordinated changes that escape local optima;
+it returns verified best-found alternatives without promising a global optimum.
 
 The planned engine uses reusable Rust core libraries, Rayon for parallel Rust work,
 and isolated PoB workers under shared CPU/memory limits. The CLI comes first, with
@@ -23,6 +30,12 @@ Start with [the design proposal](docs/design.md), especially its
 [PoB integration notes](docs/pob-integration.md) for source-verified seams and open runtime questions.
 The [execution and interface design](docs/execution-and-interfaces.md) covers multicore
 scheduling, library boundaries, structured results, visualization, and the GUI path.
+The [WoW prior-art and product review](docs/prior-art-and-product-review.md) records useful
+reference workflows, confirmed product decisions, and fixture-validation status.
+The supplied exports are preserved as a [decoded PoE2 minion fixture](tests/fixtures/builds/README.md)
+with provenance hashes and structural checks. Its level-96 Sorceress / Disciple of Varashta
+build has not yet been evaluated by our PoB adapter; cached metrics and unresolved skill
+entries are explicitly recorded as validation work.
 
 ## Getting started
 
@@ -53,6 +66,7 @@ and Linux when the project is hosted on GitHub.
 - `docs/design.md`: proposed scope, architecture, objectives, search, and milestones.
 - `docs/pob-integration.md`: findings from the pinned upstream source.
 - `docs/execution-and-interfaces.md`: parallel runtime, core APIs, artifacts, and frontend plan.
+- `docs/prior-art-and-product-review.md`: cited references, prioritized gaps, and decision status.
 - `examples/objective.toml`: illustrative future configuration, not a supported CLI input.
 - `vendor/path-of-building-poe2/`: unmodified Git submodule.
 - `local/`, `runs/`: ignored locations for private build inputs and generated results.

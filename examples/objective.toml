@@ -1,85 +1,120 @@
-# DESIGN EXAMPLE ONLY. No configuration parser or optimizer is implemented.
-# This is one possible user's goal, not an exhaustive catalog or mandatory preset.
-# Replace the objective metric/direction and add, remove, or change constraints
-# using capabilities supported by the future adapter. No DPS/resistance/EHP
-# requirement is implicit. This example shows the first single-metric policy;
-# composite, priority, and Pareto policies are later design stages.
-# Metric names are proposed adapter identifiers, not arbitrary PoB output keys.
-# Paths are relative to this file. The seed file is supplied locally by the user.
+# DESIGN EXAMPLE ONLY. No parser, evaluator, or optimizer is implemented.
+# Metrics and constraints are illustrative, not mandatory goals or an exhaustive catalog.
+# Imported keys below are placeholders to resolve through the future adapter.
+# Files are user-supplied inputs, relative to this example; they are not included fixtures.
 
 schema_version = 1
 game = "poe2"
 seed_build = "../local/seed.xml"
 
-[locks]
-class = true
-ascendancy = true
-level = true
-equipment = true
-skill_groups = true
-weapon_sets = true
+[domain]
+# All these dimensions participate in the same search; individual locks remain optional.
+classes = "all_supported_for_game_version"
+ascendancies = "all_legal_for_candidate_class"
+passives = "all_supported_for_game_version"
+equipment_pool = "../local/items.json"
+support_gem_pool = "../local/support-gems.json"
+supporting_skill_pool = "../local/supporting-skills.json"
+# Pools declare exact availability and permitted gem properties, not imaginary best rolls.
+level_budget = "seed_level"
+point_budget = "legal_for_level_and_progression"
+progression_source = "seed_progression"
 
-[main_skill]
-# Resolve against the imported build and lock the exact group, gem, and skill part.
-source = "seed_selection"
+# Required skills retain their identities in legal, enabled, usable configurations.
+# Their supports/properties/placement are separate optional locks.
+# A metric references a requirement's id; requiring a skill need not make it a damage goal.
+[[required_skills]]
+id = "main"
+imported_key = "imported-skill:primary"
+role = "damage"
+lock_properties = ["identity"]
 
-[scenario]
-source = "seed_configuration"
-freeze = true
-# Resolve all defaults and serialize the complete scenario in the run manifest.
+[[required_skills]]
+id = "utility"
+imported_key = "imported-skill:supporting"
+role = "supporting"
+lock_properties = ["identity"]
+
+# Fixed items must remain equipped with their exact instance data/rolls.
+# A slot lock is optional; mere presence in the inventory does not satisfy the requirement.
+[[required_items]]
+instance_id = "imported-item:1"
+placement = "any_compatible_equipped_slot"
+
+[[required_items]]
+instance_id = "imported-item:2"
+placement = "any_compatible_equipped_slot"
+
+[[scenarios]]
+id = "bossing"
+configuration = "../local/scenarios/bossing.toml"
+freeze_external_assumptions = true
+
+[[scenarios]]
+id = "mapping"
+configuration = "../local/scenarios/mapping.toml"
+freeze_external_assumptions = true
+# Recompute candidate-derived buffs/reservations/conditions from their actual skill/item
+# sources. Frozen external settings must not preserve bonuses from removed supporting skills.
+# Mapping uses documented proxy metrics, not a claimed map-clear-time simulator.
 
 [search]
-space = "passive_reallocations"
-point_budget = "seed_allocated"
-max_evaluations = 10000
-max_seconds = 300
+space = "joint_build"
+dimensions = ["class", "ascendancy", "passives", "equipment", "support_gems", "supporting_skills"]
+max_evaluations = 100000
+max_seconds = 900
 random_seed = 42
-# Budgets are illustrative, not performance promises.
-# Evaluation budget counts each uncached candidate/scenario calculation attempt;
-# Includes final verification; reserve attempts/time before exploration exhausts them.
+# Illustrative 15-minute budget within the 5–30 minute benchmark target, not a promise.
+# Count every dispatched PoB calculation attempt, including extra skill/scenario passes,
+# failed attempts, retries, and final verification; reserve verification capacity first.
 # Cache hits and cheaply rejected invalid proposals are counted separately.
 
 [execution]
-# Future options; one shared CPU-work budget across Rust tasks and Lua processes.
 jobs = "auto"
 evaluator_workers = "auto"
 mode = "throughput" # Or "deterministic" for stable logical batch selection.
-memory_budget_mib = 8192 # Illustrative user-selected limit, not a measured requirement.
-# Resolved concurrency also depends on worker memory and is recorded in the manifest.
+memory_budget_mib = 8192 # Illustrative user limit, not a measured requirement.
 
 [output]
-# Relative to this configuration file; artifacts can later be opened by the GUI.
 directory = "../runs/example"
 formats = ["json", "html"]
 progress = "sampled"
+checkpoint = "warm_start"
 export_verified_builds = true
 
+# One illustrative goal. A run need not optimize both scenarios or all required skills.
 [objective]
-metric = "selected_skill_dps"
+metric = "skill_dps"
+skill_id = "main"
+scenario = "bossing"
 direction = "maximize"
+# No unsupported sum of standalone DPS from multiple skills is implied.
 
 [[constraints]]
 metric = "fire_resistance_capped_pct"
+scenarios = ["bossing", "mapping"]
 operator = ">="
 value = 75.0
 violation_scale = 10.0
 
 [[constraints]]
 metric = "cold_resistance_capped_pct"
+scenarios = ["bossing", "mapping"]
 operator = ">="
 value = 75.0
 violation_scale = 10.0
 
 [[constraints]]
 metric = "lightning_resistance_capped_pct"
+scenarios = ["bossing", "mapping"]
 operator = ">="
 value = 75.0
 violation_scale = 10.0
 
 [[constraints]]
 metric = "pob_total_ehp"
+scenarios = ["bossing", "mapping"]
 operator = ">="
 value = 20000.0
 violation_scale = 20000.0
-# This is PoB's scenario-dependent aggregate, not a universal survivability claim.
-# Enable only once the adapter validates its mapping and the intended scenario.
+# PoB's scenario-dependent aggregate; enable only after validating mapping and context.

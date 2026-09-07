@@ -7,14 +7,22 @@ Source baseline: PoB commit `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`.
 ## Recommendation
 
 Build a Rust search engine around a versioned Path of Building (PoB) Lua evaluator.
-First prove that a known build and small changes reproduce PoB's results. Then optimize
-passive allocations on an existing build, keeping skill setup, items, class/ascendancy,
-level, weapon configuration, and combat assumptions fixed.
+First prove that imported builds and controlled changes reproduce PoB's results. The first
+usable optimizer must then search class, ascendancy, passive allocations, equipment, support
+gems, and supporting skills jointly. It must preserve any user-required set of 1..N skills
+and 1..N equipped item instances. A passive-only or gear-only search is an internal test
+baseline, not the agreed first product.
+
+Use explicit, versioned candidate catalogs and inventory bounds to make the domain finite.
+Within that domain, class/ascendancy changes and all requested build dimensions must remain
+searchable unless the user locks them. Reject unsupported requested capabilities explicitly.
+Target useful best-found results over configurable 5–30 minute runs, with both bossing and
+mapping benchmark cases; this is a validation target, not a performance or optimality promise.
 
 User-configurable goals are a core requirement. Skill selection, damage, resistance,
 and effective hit pool are illustrative use cases, not an exhaustive objective catalog
 or mandatory requirements. Each run chooses what to optimize, what must hold, and which
-build choices may change. The limited first search domain does not fix the user's goals.
+build choices may change. Finite candidate catalogs do not fix the user's goals.
 
 Treat multicore execution and reusable core libraries as initial engine requirements.
 Build the CLI over those libraries, with structured results and offline visualization
@@ -22,8 +30,9 @@ before a later desktop GUI. Rayon is the proposed Rust CPU executor; isolated Lu
 parallelize PoB calculations. Tauri is a candidate for the later GUI.
 
 Use a budgeted heuristic search that returns verified improvements and explains their
-trade-offs. Do not promise the global optimum. Introduce finite item inventories next;
-defer unconstrained item generation, live trade ingestion, and broad skill discovery.
+trade-offs. Do not promise the global optimum. Finite item and skill/gem catalogs are part
+of the initial joint search. Defer unconstrained rare-item generation, live trade ingestion,
+and unbounded discovery outside the user's allowed catalogs.
 
 Keep PoB source unmodified in a pinned submodule. Own the compatibility shim and
 worker protocol in this repository. Prefer an external LuaJIT worker for the first
@@ -41,23 +50,61 @@ before invoking it.
 The first useful workflow:
 
 1. Import a complete local PoB XML build.
-2. Resolve and lock the selected skill, build configuration, and allowed search domain.
+2. Resolve required skills/items, independent locks, allowed catalogs, and scenario assumptions.
 3. Configure the objective policy and any hard constraints from the supported capabilities.
 4. Evaluate the seed and show the exact interpreted metrics.
 5. Search within a time and evaluation budget.
 6. Return the best feasible alternatives, before/after metrics, changes, and PoB XML exports.
 
-When requested, “use skill X” is a structural lock on the imported skill group, gem,
-skill part, supports, and applicable weapon set, rather than a string-based score bonus.
-If the selection is ambiguous, validation fails with the choices to resolve. The passive
-MVP fixes the seed's skill setup as a search-domain restriction; broader domains can
-expose those choices independently of the configured scoring policy.
+Support lists of required skills and equipped items from the first problem schema. A required
+skill must exist in a legal, enabled, usable configuration; merely leaving a disabled gem in
+an unused group is insufficient. Its identity and role are separate from optional locks on
+supports, level/quality, group placement, or weapon assignment. A fixed item means the exact
+concrete item instance/rolls must be equipped, not merely present in an inventory. An exact
+slot lock is optional and distinct from allowing any legal compatible slot.
+
+Requirements can identify active damage skills, supporting active skills, or support gems
+through unambiguous adapter IDs and explicit placement/role constraints. Keep the metric's
+actor/skill/group/part selector separate from presence and lock requirements. Required skills
+need not all be damage objectives. Class/ascendancy changes must preserve these requirements;
+if a required mechanic is unavailable for a candidate class, that candidate is invalid.
 
 Initial non-goals: building from an empty character; discovering every viable archetype;
 perfect rare items; crafting or purchase automation; an online service; a GUI in the first
 milestone (desktop interaction is planned later); frame-level
 combat simulation; rewriting the whole calculation engine in Rust. PoB's modeled numbers
 are the initial target, with its supported-mechanic limitations carried into our reports.
+
+## Product workflows and gaps identified in review
+
+The [WoW prior-art and product review](prior-art-and-product-review.md) compares Raidbots,
+Ask Mr. Robot, SimulationCraft, and WoWSims using official documentation and source schemas.
+Its transferable lessons are workflow and trust requirements, not assumptions that the
+same algorithms or stochastic simulation methods apply to PoB.
+
+Plan distinct workflows over the same libraries:
+
+- **Preflight/evaluate:** show supported metrics/mechanics, imported assumptions, active
+  selections, and frozen dimensions before committing to a search.
+- **Compare:** evaluate supplied alternatives against an explicit common baseline and scenario.
+- **Optimize:** jointly search allowed classes/ascendancies, passives, equipment, supports,
+  and supporting skills while preserving explicit requirements.
+- **Inspect/rerank:** change goals over compatible retained measurements, clearly labeling
+  that the saved candidate set was reranked rather than newly searched.
+- **Upgrade ranking (inventory stage):** distinguish a one-item marginal comparison from
+  joint re-optimization or an eventual multi-item plan.
+
+Persist portable problem/project data and recovery checkpoints for long runs. M3 should
+support a compatible warm start from saved candidates with explicit verification status;
+evaluated-only recovery seeds must be freshly revalidated before trusted reuse. Exact search-state resume
+is a separate capability whose priority depends on expected run length. Include practical
+near-equal alternatives, readable grouped changes, and per-constraint failure explanations.
+
+Include both bossing and mapping contexts in the initial benchmark suite. A run chooses
+its own named scenarios, applicable constraints, and objective scope; testing both contexts
+does not silently require every user to optimize a combined goal. Explicit sensitivity
+checks consume a reserved budget and do not automatically imply robustness. Known unsupported
+mechanics, unvalidated coverage, and numerical/fresh verification are distinct report statuses.
 
 ## What the upstream source establishes
 
@@ -167,14 +214,23 @@ oversubscription avoidance, and scaling acceptance, are in the
 
 ### Candidate identity and provenance
 
-Keep original XML immutable. A candidate describes all unlocked choices against that seed:
-allocated nodes and relevant tree state initially, then explicit slot-to-item assignments.
-Preserve locked build content, including configuration, skill groups, jewel/socket
-configuration, alternate sets, and metadata required for faithful export.
+Keep original XML immutable. A candidate is a complete materialized choice of class,
+ascendancy, passive state, equipped item assignments, support-gem assignments, supporting
+skill selections and enabled states, and any other permitted skill/weapon configuration.
+Use the seed as a starting point, not a mandatory class or skill-setup boundary.
+
+Preserve exactly the user's locks and requirements, including locked jewel/socket and
+alternate-set state where specified. Candidate state must capture all derived effects
+needed for faithful evaluation/export. Every requested dimension participates in import,
+mutation/repair, legality, cache identity, reporting, and export from the first usable release.
 
 Node and item identities are namespaced by game and data revision. A sorted list of node
 IDs alone is not a complete build identity: class, ascendancy, selection state, weapon sets,
 and other choices affecting those nodes also matter.
+
+Every reported delta identifies its baseline build, candidate, scenario, evaluator, and
+metric-schema versions. Comparing against the seed and comparing against a best-known
+owned-inventory build are separate views; never silently mix their denominators.
 
 An evaluation cache key includes:
 
@@ -267,7 +323,7 @@ scope or a set of required user goals.
 
 | Proposed metric | Contract |
 | --- | --- |
-| `selected_skill_dps` | Supported selected-skill damage per second, with exact skill part and inclusion policy pinned; reject average-hit or otherwise incompatible output |
+| `skill_dps` with an explicit skill/actor/group/part selector | Supported skill damage per second; multiple selectors can coexist. Pin inclusion/usage policy and reject incompatible average-hit outputs. |
 | `fire_resistance_capped_pct` (and cold/lightning) | PoB's capped elemental resistance in percent units: 75 means 75%, not 0.75 |
 | `fire_resistance_uncapped_pct` (and cold/lightning) | Uncapped resistance total, for explicit overcap requirements |
 | `pob_total_ehp` | PoB's aggregate effective hit pool for the fully resolved defensive scenario |
@@ -275,8 +331,11 @@ scope or a set of required user goals.
 
 Do not blindly map `CombinedDPS` to damage per second: the inspected calculations have an
 average-damage mode. For M1 select a fixture and skill mode with a verified DPS interpretation;
-publish the exact mapping and reject unsupported modes. Full-build DPS, selected-skill DPS,
-minion damage, and average-hit damage must not be silently interchanged.
+publish the exact mapping and reject unsupported modes. Full-build DPS, per-skill DPS,
+minion damage, and average-hit damage must not be silently interchanged. Multiple required
+skills do not justify summing their standalone DPS: a supported inclusion/usage model must
+account for their actual contribution and shared action/resource assumptions. Additional
+PoB calculations needed to collect separate selectors consume the evaluation budget.
 
 The original “resistances > 75%” could mean capped resistance, exceeding a cap, or uncapped
 overcap. Preserve the chosen operator. If a capped metric's maximum is 75, `> 75` cannot
@@ -285,14 +344,20 @@ to explain such conflicts; a failed heuristic search alone cannot prove impossib
 
 Likewise, EHP is not a universal defensive scalar. Record damage mix, enemy settings,
 avoidance/recovery assumptions, conditional defenses, and other contributing configuration.
-The first release supports one fixed scenario and PoB's documented metric semantics.
-Later, allow named scenarios with constraints required in every scenario and an explicit
-objective aggregation such as minimum DPS.
+The first release must evaluate named bossing and mapping benchmark scenarios with verified
+metric meanings. Individual runs can select one or several named scenarios; constraints
+declare which scenarios must pass. A scalar objective identifies its scenario or an explicit
+supported reducer. Richer aggregation remains a later scoring-policy feature. Mapping
+benchmarks use documented proxies such as applicable area damage, mobility, and resource
+metrics; do not invent an end-to-end map-clear-time simulation.
 
-Freeze all resolved combat settings, charges, buffs, uptime assumptions, enemy values,
-and custom configuration before searching. Optimization must not improve a score by
-switching on a favorable assumption. Derived build effects may change; declared scenario
-assumptions may not.
+Freeze external encounter assumptions, enemy settings, external buffs, and declared usage/
+uptime policies. Recompute build-derived effects from each candidate: changing supporting
+skills may change aura/buff availability, debuffs, triggers, reservation, charges, and resource
+use. Tag effect provenance so removing its source cannot leave a stale imported configuration
+bonus, and adding an unrelated flag cannot create free performance. A fixed uptime assumption
+only applies when its declared mechanism exists in the candidate. Report unresolved manual
+flags before searching; do not silently treat them as available candidate-derived effects.
 
 Constraint evaluation uses unrounded finite values, with exact declared operators.
 Parity-test floating-point tolerances are separate from feasibility semantics; presentation
@@ -300,12 +365,31 @@ rounding must not turn a near miss into a pass.
 
 ## Search strategy
 
-### First domain: bounded passive reallocations
+### Joint domain and required locks
 
-Start from the imported allocation with a fixed point budget (default: its allocated
-ordinary points). Lock ascendancy, jewel/socket contents, weapon-set-specific allocations,
-and unusual tree mechanics until their legality and point accounting are verified.
-Reject unsupported tree configurations explicitly instead of approximating their rules.
+The candidate domain includes classes/ascendancies, tree allocations, finite equipment,
+support gems, and supporting skills simultaneously. Level, point budgets, inventory,
+available game/data versions, and any prohibited choices are explicit problem inputs.
+An imported class is a seed, not an implicit lock. Validate each requested catalog and
+report unsupported content rather than freezing an entire requested dimension silently.
+
+Required-skill/item lists may contain 1..N entries; the schema can also represent an empty
+list when the user intentionally imposes no such requirement. Item locks preserve exact
+instances and availability multiplicity. Skill locks preserve the requested usable identity
+and explicitly frozen properties. Validate every lock after class changes, repair, evaluation,
+export, and re-import. Conflicting requirements fail preflight.
+
+### Passive, class, and ascendancy operators
+
+Start from the imported allocation as one seed and generate diverse valid seeds for allowed
+class/ascendancy choices. Respect separate point categories and level/progression budgets.
+A class/ascendancy macro move must rebuild valid root connectivity, remove incompatible
+class-specific allocations/effects, and select a compatible tree/skill/item configuration.
+Do not transplant node IDs and assume the resulting build is legal.
+
+Implement special passive, jewel/socket, and weapon-set accounting from verified game data.
+An unsupported mechanic must be exposed as a capability gap, with any reduced search domain
+explicitly chosen by the user rather than advertised as complete joint optimization.
 
 Use game-specific legality, not generic connectivity alone. Validate allocation paths,
 point categories, class starts, relevant special-node choices, prerequisites, and preserved
@@ -345,7 +429,9 @@ scalar policy, compare feasible states using the configured objective direction,
 the configured tie-break policy and a stable canonical tie-break. Preferring fewer changes is
 an optional user preference. Among infeasible states, compare normalized constraint shortfall,
 then the configured objective. Later policies supply their own priority or Pareto selection
-while retaining the same hard-feasibility boundary.
+while retaining the same hard-feasibility boundary. User-defined near-equality tolerances
+may group practical alternatives or inform preferences, but never change exact hard-constraint
+checks. Preserve raw scores and state any cost/change-count preference explicitly.
 
 For a lower-bound constraint, an example violation is
 `max(0, threshold - measured) / violation_scale`; reverse it for an upper bound.
@@ -366,17 +452,25 @@ completion-driven scheduling; deterministic mode uses stable logical batches and
 streams independent of thread IDs. A random seed alone does not guarantee reproducibility
 when timing affects selection or a wall-clock deadline truncates work.
 
-### Extending to items and joint optimization
+### Equipment and coordinated mutations
 
-Next accept a finite inventory of concrete item instances, with slot compatibility,
+Accept a finite inventory of concrete item instances from the first usable release, with slot compatibility,
 requirements, uniqueness restrictions, and availability multiplicity. Start with owned or
 user-supplied items and preserve full modifier text and rolls. A PoB-representable item is
 not evidence that it is obtainable.
 
-Use single-slot replacements, paired replacements, and joint tree/item moves. Alternating
-tree search and gear search is a useful baseline, but coordinated moves are needed to
-escape local optima. Avoid deleting “dominated” items using simple stat comparisons when
-special modifiers or requirements can interact.
+Use single-slot replacements, paired replacements, and coordinated proposals spanning
+class/ascendancy, passives, gear, support assignments, and supporting skills. Include
+moves capable of changing all dimensions together. Alternating isolated optimizers is a
+benchmark baseline, not the full search strategy: every one-change path can stall despite
+a better combined state.
+
+Materialize and evaluate the complete proposed combination. Intermediate edits need not
+improve the objective or satisfy user performance thresholds. Dependency-aware repair may
+restore valid paths, attributes, resources, or gem compatibility using the allowed pools,
+but must never discard a required skill/item or invent an unavailable item. Keep legal
+infeasible exploration states and larger/diverse restarts alongside the feasible archive.
+Avoid deleting “dominated” items using scalar stat comparisons when modifiers can interact.
 
 When trade data is introduced, snapshot league, item identifiers, collection time,
 currency conversion assumptions, prices, and availability. Treat price/budget as explicit
@@ -388,12 +482,28 @@ proposal policies until simpler baselines reveal a concrete limitation. Exact me
 useful for tiny subproblems and benchmark ground truth, not a presumed model of all mechanics.
 Any future surrogate proposes or prioritizes; final recommendations still pass PoB evaluation.
 
+### Finite support and gem configurations
+
+Support-gem assignments and supporting active skills are distinct mutable dimensions in
+the first usable release. Search explicit finite pools using game-version-specific
+compatibility, counts, prerequisites, weapon restrictions, and resource rules. Supporting
+skills can provide buffs, debuffs, triggered effects, or resource interactions; include their
+enabled state and effect provenance in candidate identity.
+
+Coordinate their additions/removals/replacements with equipment, paths, and class/ascendancy
+changes. Preserve all required skills, including multiple primary or supporting skills, while
+allowing their non-locked supporting configuration to change. A locally worse support choice
+can be part of a better jointly repaired configuration; marginal gains are not pruning bounds.
+
 ## Results and validation
 
 Each run reports the seed, best verified feasible alternatives, precise mutations, objective
 and constraints with slack, assumptions, unsupported-mechanic warnings, and PoB XML exports.
 Also record source/data/runtime versions, resolved problem, inventory snapshot, random seed,
-operator settings, budgets, termination reason, and actual evaluation counts.
+operator settings, budgets, termination reason, and actual evaluation counts. Include an
+explicit comparison baseline, coverage status, readable node/item/skill names, point totals,
+and grouped dependencies so the user can apply and assess the change. Conditional ablation
+comparisons, if added, must not present interaction effects as additive causal contributions.
 
 If no feasible result is found, say “No feasible build found within this search budget.”
 Show the closest legal candidates as infeasible, with failed requirements. Never silently
@@ -449,19 +559,35 @@ These outputs and interfaces are proposed; the current scaffold does not generat
 
 | Milestone | Deliverable | Acceptance gate |
 | --- | --- | --- |
-| M0: bootstrap (this change) | Rust CLI scaffold, pinned submodule, design, example objective, CI configuration | Rust builds/lints, clean submodule, source findings documented |
-| M1: evaluator spike | Headless startup; seed load; selected skill and scenario; metrics; one legal mutation; export | Runtime blockers resolved and recorded; baseline/mutation/export parity; reset isolation; timing and dependencies measured |
-| M2: libraries and parallel search harness | Core/adapter/CLI boundaries, metric registry, configurable scalar policy, Rayon execution, events/results, synthetic evaluator | Goal changes without search edits; one/many-worker agreement in deterministic cases; global budgets, cancellation and bounded queues; exhaustive tiny domains |
-| M3: passive optimizer and reports | Multicore PoB worker pool, supported tree reallocations, run artifacts, optional offline HTML comparisons | Legal verified exports; no incumbent regression; quality versus greedy/random; measured CPU/memory scaling; reports reproduce stored values |
-| M4: finite inventory | Concrete item pools and coordinated item/tree moves | Slot/availability rules; reproducible item provenance; improvements on item-interaction fixtures |
-| M5: richer goal policies | Typed derived expressions, composite/priority objectives, soft targets, Pareto alternatives, scenario robustness | Unit/normalization validation; hard constraints preserved; policy-specific selection checked; all finalists independently revalidated |
-| GUI (after CLI/report stabilization) | Goal editor, resource controls, progress, visual comparisons and export over the same libraries; evaluate Tauri | CLI/GUI domain-result parity; responsive start/cancel; reusable saved runs; native worker packaging verified |
-| Later | Selective Rust calculations and PoE1 adapter | Differential parity and explicit versioned game capabilities |
+| M0: bootstrap (complete) | Rust scaffold, pinned PoB submodule, design and prior-art review | Scaffold checks pass; evaluator remains unimplemented |
+| M1: evaluator and fixture spike | Import/decode a verified fixture; headless startup; class/tree/item/support/supporting-skill mutations; per-skill/build metrics; export | Runtime blockers recorded/resolved; source game/version checked; effect provenance and lock preservation; baseline/mutation/export parity and isolation |
+| M2: core libraries and joint synthetic search | Complete candidate/lock model, finite catalogs, coupled mutations/repair, metric policy, Rayon/job APIs, budgets and events | Tiny exhaustive joint domains; traps requiring coordinated changes; multi-skill/item locks; deterministic one/many-worker checks; cancellation/dedup/budget correctness |
+| M3: first usable joint optimizer | Class/ascendancy, tree, gear, supports and supporting skills searchable in one run; multicore PoB workers; preflight, comparisons, checkpoints and visual reports | All requested dimensions work end to end; verified legal exports; interaction gains versus greedy/random/alternating baselines; 5/15/30-minute quality/scaling measurements; bossing and mapping fixtures |
+| M4: broader catalogs and upgrade planning | Deeper equipment/skill coverage, finite acquisition snapshots, conditional upgrade/bundle ranking, refinement of joint search | Explicit availability/cost/baseline semantics; continued lock/coverage checks; improvements on diverse interaction cases |
+| M5: richer scoring policies | Typed expressions, composite/priority objectives, soft targets, Pareto alternatives and richer robust aggregation | Units/normalization validated; hard constraints preserved; policy-specific selection checked |
+| GUI (after CLI/report stabilization) | Goal/lock editor, resources, progress, class/tree/item/skill comparisons and export over shared libraries; evaluate Tauri | CLI/GUI result parity; responsive start/cancel; reusable saved runs; native-worker packaging verified |
+| Later | Selective Rust calculations and PoE1 adapter | Differential parity and explicit versioned capabilities |
 
-Do not begin a large optimizer implementation before M1 confirms the calculation boundary.
-M2's independent synthetic harness can proceed alongside M1 once the metric contract is agreed.
-The GUI can proceed after the M3 interfaces stabilize; it need not wait for every item-search
-or advanced-objective feature in M4/M5.
+Implementation spikes may work on one axis at a time, but no isolated passive, gear, or gem
+optimizer satisfies M3. M2 can proceed with a synthetic evaluator alongside M1, while real
+PoB integration must establish capability and parity before recommending builds.
+
+M3 acceptance includes fixtures with at least two required skills and two exact equipped-item
+locks, plus allowed class/ascendancy changes. Include an exhaustively checked synthetic case
+where improvement requires a coordinated move across the candidate dimensions and every
+single-change improvement path stalls. Verify supporting effects disappear when their
+sources are removed and that repair preserves every lock.
+
+Measure both fixed-candidate evaluator scaling and end-to-end best-found quality at 5, 15,
+and 30 minutes on recorded reference hardware. Include explicit bossing and mapping cases
+with documented proxy metrics and assumptions. This is not a claim of optimality or actual
+map-clear-time prediction. Report individual case results, variance, and failures.
+
+Recovery checkpoints may include evaluated-only candidates with explicit status, so a crash
+before finalist verification does not lose all progress. Freshly validate these seeds before
+trusted reuse in a new run; final recommendations always pass independent verification.
+Exact resume is distinct from warm start and can follow after the minutes-long workflow is
+reliable. The GUI need not wait for every M4/M5 feature.
 
 ## Risks and decisions to revisit
 
@@ -484,23 +610,35 @@ A shared Rust trait does not imply PoE1 and PoE2 share rules or field semantics.
 
 ## Decisions to align on
 
-Proposed defaults, to confirm or revise before implementation:
+Confirmed direction: Rust core libraries, configurable goals, multicore execution, a CLI
+first, visual output, and a later GUI. The user has also confirmed:
 
-1. **First product:** improve an existing build's passive tree, with gear, exact skill setup,
-   weapon configurations, class/ascendancy, and combat settings fixed.
-2. **Configurable goals (required):** user-selected objectives, constraints, and preferences
-   through extensible metric and policy definitions. DPS, resistance, and EHP can serve as M1
-   parity fixtures; they are neither mandatory goals nor an exhaustive catalog. The proposed
-   first implementation supports one selected metric plus optional hard constraints, with
-   richer policies staged behind the same configuration boundary.
-3. **Search behavior:** hard constraints, best-found alternatives, and a fixed budget; allow
-   infeasible internal exploration while preserving verified feasible results.
-4. **Items:** supplied finite inventory first, with trade and hypothetical crafting deferred.
-5. **Runtime:** external LuaJIT spike first; retain a process boundary and benchmark embedding later.
-6. **Generalization:** design narrow adapter boundaries now; add PoE1 only after the PoE2 evaluator
-   and passive MVP establish which abstractions are actually shared.
-7. **Parallel execution (required):** use available cores for independent Rust work and PoB
-   evaluations under one configurable CPU/memory budget; Rayon is the proposed CPU executor.
-8. **Application structure (required):** CLI over reusable core libraries, structured results,
-   and an initial visual report; later GUI reuses the same APIs, with Tauri to evaluate.
-9. **Distribution:** local development first; select a license and packaging approach before release.
+1. The first usable optimizer searches class/ascendancy, passives, equipment, support gems,
+   and supporting skills jointly; required lists must preserve 1..N skills and 1..N items.
+2. Class and ascendancy changes belong in that first release.
+3. Benchmark useful results over configurable 5–30 minute runs.
+4. Include both bossing and mapping benchmark contexts from the start.
+5. Joint equipment optimization is part of the first product, not a deferred alternative
+   to support/gem search.
+
+The supplied example is now preserved as a [decoded PoB XML fixture](../tests/fixtures/builds/pobarchives-Dfz36mCq.xml)
+with [provenance and structural checks](../tests/fixtures/builds/pobarchives-Dfz36mCq.metadata.json).
+The local export is URL-safe base64 containing zlib-compressed UTF-8 XML with root
+`PathOfBuilding2`: level 96 Sorceress / Disciple of Varashta, tree version `0_5`.
+Its selected main group is Kelari, the Tainted Sands (a minion skill). The planner title
+claims patch 0.5.5; the XML target version is not independent patch evidence.
+
+Keep the original files and decoded byte stream unchanged. All 130 allocated node IDs
+exist in the pinned tree data, but this is structural compatibility, not calculation parity.
+The source has 19 skill groups and 16 referenced items. All Full DPS membership flags are
+literal `nil`, cached player FullDPS is zero, and three named skill entries lack stable IDs.
+Resolve inclusion, actor selection, granted/manual group provenance, and these entries through
+the adapter before using any damage output as a benchmark. Use separate minimal calibration
+fixtures to isolate behavior; retain this complex minion build as an integration fixture.
+
+The [decision register](prior-art-and-product-review.md#decision-register-and-remaining-input)
+records the confirmed answers and fixture status. No product-scope question is currently
+unanswered. Exact skill/item requirements, goals, and scenario settings will be explicit
+inputs to actual optimization runs. Runtime integration and search work can proceed within
+this scope. Distribution licensing, trade-data sources, and desktop packaging can wait
+until their respective milestones.

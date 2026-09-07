@@ -1,0 +1,701 @@
+{
+  "name": "BEST MINION ARMY DISCIPLE OF VARASHTA BUILD IN POE 2 0.5.5",
+  "author": "RNGenius",
+  "link": "https://pobarchives.com/build/Dfz36mCq",
+  "description": "Exported from pobarchives.com",
+  "ascendancy": "Sorceress3",
+  "passives": [
+    {
+      "id": "minion_offence21_"
+    },
+    {
+      "id": "energy_shield9"
+    },
+    {
+      "id": "witch595"
+    },
+    {
+      "id": "minion_offence49"
+    },
+    {
+      "id": "archon19"
+    },
+    {
+      "id": "jewel_slot1979"
+    },
+    {
+      "id": "Puppetmaster1"
+    },
+    {
+      "id": "energy_shield39"
+    },
+    {
+      "id": "minion_offence29"
+    },
+    {
+      "id": "intelligence69"
+    },
+    {
+      "id": "energy_shield24"
+    },
+    {
+      "id": "AscendancySorceress3Notable8"
+    },
+    {
+      "id": "intelligence53_"
+    },
+    {
+      "id": "minion_reservation4"
+    },
+    {
+      "id": "minion_offence47_"
+    },
+    {
+      "id": "minion_offence40"
+    },
+    {
+      "id": "minion_offence43"
+    },
+    {
+      "id": "energy_shield11"
+    },
+    {
+      "id": "corpses9_"
+    },
+    {
+      "id": "jewel_slot1972"
+    },
+    {
+      "id": "archon21"
+    },
+    {
+      "id": "minion_offence22"
+    },
+    {
+      "id": "minion_offence15"
+    },
+    {
+      "id": "minion_reservation14"
+    },
+    {
+      "id": "minion_reservation1"
+    },
+    {
+      "id": "power_charges20"
+    },
+    {
+      "id": "witch_sorceress_notable2"
+    },
+    {
+      "id": "energy_shield29"
+    },
+    {
+      "id": "intelligence52"
+    },
+    {
+      "id": "archon9"
+    },
+    {
+      "id": "minion_offence30_"
+    },
+    {
+      "id": "minion_offence34"
+    },
+    {
+      "id": "intelligence45"
+    },
+    {
+      "id": "archon20_"
+    },
+    {
+      "id": "minion_offence36"
+    },
+    {
+      "id": "AscendancySorceress3Small6_"
+    },
+    {
+      "id": "attributes14"
+    },
+    {
+      "id": "Puppetmaster5"
+    },
+    {
+      "id": "energy_shield22"
+    },
+    {
+      "id": "AscendancySorceress3Notable9"
+    },
+    {
+      "id": "energy_shield15"
+    },
+    {
+      "id": "minion_offence44_"
+    },
+    {
+      "id": "AscendancySorceress3Notable11"
+    },
+    {
+      "id": "intelligence16"
+    },
+    {
+      "id": "AscendancySorceress3Notable6"
+    },
+    {
+      "id": "minion_offence28"
+    },
+    {
+      "id": "attributes1"
+    },
+    {
+      "id": "attributes53"
+    },
+    {
+      "id": "passive_keystone_chaos_inoculation"
+    },
+    {
+      "id": "minion_defence6"
+    },
+    {
+      "id": "archon22__"
+    },
+    {
+      "id": "AscendancySorceress3Small1"
+    },
+    {
+      "id": "archon11"
+    },
+    {
+      "id": "energy_shield12"
+    },
+    {
+      "id": "intelligence84"
+    },
+    {
+      "id": "minion_offence45"
+    },
+    {
+      "id": "energy_shield13"
+    },
+    {
+      "id": "minion_offence16"
+    },
+    {
+      "id": "Puppetmaster9"
+    },
+    {
+      "id": "archon10"
+    },
+    {
+      "id": "archon2_"
+    },
+    {
+      "id": "energy_shield21"
+    },
+    {
+      "id": "intelligence58"
+    },
+    {
+      "id": "area_spells28"
+    },
+    {
+      "id": "minion_offence41"
+    },
+    {
+      "id": "energy_shield46_"
+    },
+    {
+      "id": "intelligence47"
+    },
+    {
+      "id": "archon24"
+    },
+    {
+      "id": "jewel_slot1969"
+    },
+    {
+      "id": "archon1"
+    },
+    {
+      "id": "intelligence46"
+    },
+    {
+      "id": "minion_offence7"
+    },
+    {
+      "id": "minion_offence37_"
+    },
+    {
+      "id": "infusion25"
+    },
+    {
+      "id": "attributes21"
+    },
+    {
+      "id": "stun_threshold_from_energy_shield7"
+    },
+    {
+      "id": "archon8"
+    },
+    {
+      "id": "minion_offence27_"
+    },
+    {
+      "id": "minion_offence50"
+    },
+    {
+      "id": "Puppetmaster6"
+    },
+    {
+      "id": "archon23"
+    },
+    {
+      "id": "AscendancySorceress3Notable7"
+    },
+    {
+      "id": "infusion23"
+    },
+    {
+      "id": "intelligence6"
+    },
+    {
+      "id": "Puppetmaster11"
+    },
+    {
+      "id": "intelligence17"
+    },
+    {
+      "id": "energy_shield27"
+    },
+    {
+      "id": "intelligence102"
+    },
+    {
+      "id": "energy_shield7"
+    },
+    {
+      "id": "AscendancySorceress3Notable13"
+    },
+    {
+      "id": "energy_shield37"
+    },
+    {
+      "id": "minion_offence12_"
+    },
+    {
+      "id": "volatility1"
+    },
+    {
+      "id": "minion_offence33_"
+    },
+    {
+      "id": "energy_shield16"
+    },
+    {
+      "id": "intelligence57"
+    },
+    {
+      "id": "infusion19_"
+    },
+    {
+      "id": "minion_offence31"
+    },
+    {
+      "id": "energy_shield33_"
+    },
+    {
+      "id": "intelligence59"
+    },
+    {
+      "id": "Puppetmaster10"
+    },
+    {
+      "id": "minion_defence7"
+    },
+    {
+      "id": "intelligence56"
+    },
+    {
+      "id": "AscendancySorceress3Start"
+    },
+    {
+      "id": "minion_offence9"
+    },
+    {
+      "id": "triggers19"
+    },
+    {
+      "id": "minion_offence11"
+    },
+    {
+      "id": "intelligence60"
+    },
+    {
+      "id": "intelligence49"
+    },
+    {
+      "id": "stun_threshold_from_energy_shield12"
+    },
+    {
+      "id": "intelligence54"
+    },
+    {
+      "id": "energy_shield23"
+    },
+    {
+      "id": "infusion24"
+    },
+    {
+      "id": "energy_shield44"
+    },
+    {
+      "id": "intelligence76"
+    },
+    {
+      "id": "energy_shield36"
+    },
+    {
+      "id": "minion_offence8"
+    },
+    {
+      "id": "energy_shield35"
+    },
+    {
+      "id": "energy_shield10_"
+    },
+    {
+      "id": "energy_shield34_"
+    },
+    {
+      "id": "minion_offence10_"
+    },
+    {
+      "id": "minion_offence14"
+    },
+    {
+      "id": "attributes13"
+    },
+    {
+      "id": "intelligence51"
+    },
+    {
+      "id": "energy_shield41"
+    },
+    {
+      "id": "Puppetmaster2_"
+    },
+    {
+      "id": "minion_offence35"
+    },
+    {
+      "id": "minion_offence42"
+    },
+    {
+      "id": "energy_shield14"
+    },
+    {
+      "id": "attributes78"
+    }
+  ],
+  "skills": [
+    {
+      "id": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+      "additional_text": "<grey>{Level 20}",
+      "support_skills": [
+        {
+          "id": "Metadata/Items/Gem/SupportGemBiddingThree",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemMuster",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemKurgalsLeash",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemEnormity",
+          "additional_text": "<grey>{Level 1}"
+        }
+      ]
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "additional_text": "<grey>{Level 17}",
+      "support_skills": [
+        {
+          "id": "Metadata/Items/Gem/SupportGemLastGasp",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemSplinterThree",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemDemolisherTwo",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemMuster",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemInspirationTwo",
+          "additional_text": "<grey>{Level 1}"
+        }
+      ]
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalWarriorWeaponSkill",
+      "additional_text": "<grey>{Level 18}",
+      "support_skills": [
+        {
+          "id": "Metadata/Items/Gems/SupportGemSplinterThree",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemDemolisherTwo",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemLastGasp",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemMuster",
+          "additional_text": "<grey>{Level 1}"
+        }
+      ]
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "additional_text": "<grey>{Level 19 / 20% quality}",
+      "support_skills": [
+        {
+          "id": "Metadata/Items/Gems/SupportGemSplinterThree",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemLastGasp",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemDemolisherTwo",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemMuster",
+          "additional_text": "<grey>{Level 1}"
+        }
+      ]
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalCleric",
+      "additional_text": "<grey>{Level 19 / 20% quality}",
+      "support_skills": [
+        {
+          "id": "Metadata/Items/Gem/SupportGemLastGasp",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemArcaneTempoTwo",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemMeatShieldTwo",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemElementalArmy",
+          "additional_text": "<grey>{Level 1}"
+        }
+      ]
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalBrute",
+      "additional_text": "<grey>{Level 19}",
+      "support_skills": [
+        {
+          "id": "Metadata/Items/Gem/SupportGemLastGasp",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemSplinterThree",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemUruksSmelting",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemMuster",
+          "additional_text": "<grey>{Level 1}"
+        }
+      ]
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "additional_text": "<grey>{Level 19}",
+      "support_skills": [
+        {
+          "id": "Metadata/Items/Gem/SupportGemLastGasp",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemSplinter",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemDemolisherTwo",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemMuster",
+          "additional_text": "<grey>{Level 1}"
+        }
+      ]
+    },
+    {
+      "id": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+      "additional_text": "<grey>{Level 20}",
+      "support_skills": [
+        {
+          "id": "Metadata/Items/Gems/SupportGemPersistenceTwo",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemArcaneTempoTwo",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemBiddingThree",
+          "additional_text": "<grey>{Level 1}"
+        }
+      ]
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalStormMage",
+      "additional_text": "<grey>{Level 19}",
+      "support_skills": [
+        {
+          "id": "Metadata/Items/Gem/SupportGemLastGasp",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemConduction",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gem/SupportGemMuster",
+          "additional_text": "<grey>{Level 1}"
+        }
+      ]
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemRefutation",
+      "additional_text": "<grey>{Level 20}",
+      "support_skills": [
+        {
+          "id": "Metadata/Items/Gems/SupportGemIngenuityTwo",
+          "additional_text": "<grey>{Level 1}"
+        },
+        {
+          "id": "Metadata/Items/Gems/SupportGemPersistenceTwo",
+          "additional_text": "<grey>{Level 1}"
+        }
+      ]
+    },
+    {
+      "id": "Metadata/Items/Gem/SkillGemAscendancySummonFireDjinn",
+      "additional_text": "<grey>{Level 20}",
+      "support_skills": [
+        {
+          "id": "Metadata/Items/Gems/SupportGemInspirationTwo",
+          "additional_text": "<grey>{Level 1}"
+        }
+      ]
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "additional_text": "<grey>{Level 12}"
+    },
+    {
+      "id": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+      "additional_text": "<grey>{Level 1}"
+    },
+    {
+      "id": "Metadata/Items/Gem/SkillGemAscendancySummonFireDjinn",
+      "additional_text": "<grey>{Level 1}"
+    },
+    {
+      "id": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+      "additional_text": "<grey>{Level 1}"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalWarriorWeaponSkill",
+      "additional_text": "<grey>{Level 18}"
+    }
+  ],
+  "inventory_slots": [
+    {
+      "inventory_id": "Gloves1",
+      "additional_text": "<yellow>{Woe Hand}\n<grey>{Baroque Gloves}\n<blue>{Bonded: +20 to maximum Life}\n<blue>{Bonded: +20 to maximum Mana}\n<blue>{+18% to Fire Resistance}\n+31 to maximum Energy Shield\nAdds 1 to 13 Lightning damage to Attacks\n+27 to Intelligence\n+40% to Cold Resistance\n+22% to Lightning Resistance\n<blue>{79% increased Energy Shield}\n<bronze>{Greater Desert Rune}"
+    },
+    {
+      "inventory_id": "Weapon1",
+      "additional_text": "<yellow>{Morbid Roar}\n<grey>{Rattling Sceptre}\n<blue>{Allies in your Presence deal 40% increased Damage}\n<blue>{Bonded: 40% increased Damage while Shapeshifted}\n<grey>{Grants Skill: Level 18 Skeletal Warrior Minion}\n47% increased Spirit\n+95 to maximum Mana\nAllies in your Presence have 27% increased Critical Hit Chance\nAllies in your Presence Regenerate 20.7 Life per second\n+4 to Level of all Minion Skills\n<blue>{Allies in your Presence deal 79% increased Damage}\n<bronze>{Primate Idol}"
+    },
+    {
+      "inventory_id": "Charm1",
+      "additional_text": "<blue>{Bright Dousing Charm of the Surgeon}\n<grey>{Dousing Charm}\n<grey>{Used when you become Ignited}\nAlso grants 176 Guard\n35% Chance to gain a Charge when you kill an enemy"
+    },
+    {
+      "inventory_id": "Belt1",
+      "additional_text": "<yellow>{Beast Snare}\n<grey>{Mail Belt}\n<grey>{10% reduced Flask Charges used}\n<grey>{Has 1 Charm Slot}\n+217 to Armour\n+28% to Cold Resistance\n+22% to Lightning Resistance\nMinions deal 52% increased Damage with Command Skills"
+    },
+    {
+      "inventory_id": "Helm1",
+      "additional_text": "<yellow>{Golem Guardian}\n<grey>{Kamasan Tiara}\n<blue>{Bonded: +20 to maximum Life}\n<blue>{Bonded: +20 to maximum Mana}\n<blue>{+18% to Cold Resistance}\n73% increased Energy Shield\n+61 to maximum Life\n17% increased Rarity of Items found\n20% reduced Attribute Requirements\n+2 to Level of all Minion Skills\n<blue>{42% increased Archon Buff duration}\n<bronze>{Greater Glacial Rune}"
+    },
+    {
+      "inventory_id": "Charm1",
+      "slot_x": 1,
+      "additional_text": "<blue>{Vibrant Grounding Charm of the Brewer}\n<grey>{Grounding Charm}\n<grey>{Used when you become Shocked}\nAlso grants 205 Guard\n29% reduced Charges per use"
+    },
+    {
+      "inventory_id": "Flask1",
+      "slot_x": 1,
+      "additional_text": "<blue>{Concentrated Ultimate Mana Flask of the Distiller}\n<grey>{Ultimate Mana Flask}\n70% increased Amount Recovered\n24% reduced Charges per use"
+    },
+    {
+      "inventory_id": "Amulet1",
+      "additional_text": "<yellow>{Havoc Torc}\n<grey>{Lapis Amulet}\n<blue>{Allocates Dominion}\n<grey>{+11 to Intelligence}\n56% increased maximum Energy Shield\n+54 to maximum Energy Shield\n14% increased Rarity of Items found\n+3 to Level of all Minion Skills\n+22 to Intelligence\n<blue>{+32% to Lightning Resistance}"
+    },
+    {
+      "inventory_id": "Weapon1",
+      "slot_x": 1,
+      "additional_text": "<yellow>{Plague Chant}\n<grey>{Sacred Focus}\n<blue>{18% increased Armour, Evasion and Energy Shield}\n<blue>{Bonded: +20 to maximum Life}\n<blue>{Bonded: +20 to maximum Mana}\n+2 to Level of all Minion Skills\n+68 to maximum Energy Shield\n72% increased Energy Shield\n+7 to maximum Mana\n+32% to Fire Resistance\n+34% to Cold Resistance\n<bronze>{Greater Iron Rune}"
+    },
+    {
+      "inventory_id": "Boots1",
+      "additional_text": "<yellow>{Invasion Trail}\n<grey>{Runeforged Sandsworn Sandals}\n<blue>{Bonded: 30% increased Armour if you haven't Dodge Rolled Recently}\n<blue>{+0.3 metres to Dodge Roll distance}\n14% increased Rarity of Items found\n30% increased Movement Speed\n+44 to maximum Energy Shield\n62% increased Energy Shield\n+39% to Fire Resistance\n+168 to Stun Threshold\n<bronze>{Rune of Acrobatics}"
+    },
+    {
+      "inventory_id": "Ring2",
+      "additional_text": "<yellow>{Honour Circle}\n<grey>{Prismatic Ring}\n<grey>{+9% to all Elemental Resistances}\n+66 to maximum Mana\nAdds 6 to 15 Physical Damage to Attacks\n12% increased Rarity of Items found\n+31% to Lightning Resistance\nMinions have 36% increased Critical Hit Chance\nMinions have 19% increased Critical Damage Bonus"
+    },
+    {
+      "inventory_id": "Ring1",
+      "unique_name": "Evergrasping Ring",
+      "additional_text": "<unique>{Evergrasping Ring}\n<grey>{Pearl Ring}\n<grey>{9% increased Cast Speed}\n+79 to maximum Mana\nAllies in your Presence Gain 24% of Damage as Extra Chaos Damage\nEnemies in your Presence Gain 9% of Damage as Extra Chaos Damage"
+    },
+    {
+      "inventory_id": "BodyArmour1",
+      "additional_text": "<yellow>{Empyrean Suit}\n<grey>{Runeforged Adherent's Raiment}\n<blue>{36% increased Armour, Evasion and Energy Shield}\n<blue>{Bonded: +40 to maximum Life}\n<blue>{Bonded: +40 to maximum Mana}\n+76 to maximum Energy Shield\n88% increased Energy Shield\n+34 to Spirit\n+29 to Intelligence\n+30% to Fire Resistance\n51% reduced Poison Duration on you\n<bronze>{Greater Iron Rune}\n<bronze>{Greater Iron Rune}"
+    }
+  ]
+}

@@ -1,0 +1,1249 @@
+{
+  "schema_version": 1,
+  "fixture_id": "pobarchives-Dfz36mCq",
+  "inspected_at_utc": "2026-09-07T15:39:01.350873+00:00",
+  "associated_source_url": "https://pobarchives.com/build/Dfz36mCq",
+  "acquisition": "User supplied local files; archive page was not retrieved successfully.",
+  "inputs": [
+    {
+      "repository_path": "example.build",
+      "bytes": 18294,
+      "sha256": "59c86e16eab6c27bbfe51ca13d2e7730224c7e6cf7b6034117b90a9f64304dae",
+      "format": "JSON in-game planner export (user identified)"
+    },
+    {
+      "repository_path": "example.import.txt",
+      "bytes": 10940,
+      "sha256": "348c890f8cfb4287788b569c7e6f29bef04999ad7d0dbcd01224b0ae98846a98",
+      "format": "URL-safe base64 of zlib-compressed UTF-8 PoB XML"
+    }
+  ],
+  "output": {
+    "repository_path": "tests/fixtures/builds/pobarchives-Dfz36mCq.xml",
+    "bytes": 49642,
+    "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+    "preservation": "Exact decompressed byte stream; XML not reserialized or normalized."
+  },
+  "source_claims": {
+    "title": "BEST MINION ARMY DISCIPLE OF VARASHTA BUILD IN POE 2 0.5.5",
+    "author": "RNGenius",
+    "game_patch_from_title": "0.5.5",
+    "patch_claim_independently_verified": false
+  },
+  "verified_structure": {
+    "xml_root": "PathOfBuilding2",
+    "game": "Path of Exile 2",
+    "build_attributes": {
+      "level": "96",
+      "className": "Sorceress",
+      "ascendClassName": "Disciple of Varashta",
+      "targetVersion": "0_1",
+      "characterLevelAutoMode": "false",
+      "mainSocketGroup": "1",
+      "viewMode": "TREE"
+    },
+    "tree_version": "0_5",
+    "target_version": "0_1",
+    "target_version_is_not_game_patch": true,
+    "tree_spec_count": 1,
+    "allocated_node_id_count": 130,
+    "unique_allocated_node_id_count": 130,
+    "skill_set_count": 1,
+    "skill_group_count": 19,
+    "groups_without_source_attribute": 15,
+    "tree_granted_group_count": 3,
+    "item_granted_group_count": 1,
+    "selected_main_group_index": 1,
+    "selected_main_group_first_gem": {
+      "nameSpec": "Kelari, the Tainted Sands",
+      "skillId": "SummonSandDjinnPlayer",
+      "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+      "variantId": "AscendancySummonSandDjinn",
+      "level": "20",
+      "quality": "0",
+      "enabled": "true",
+      "count": "1",
+      "skillMinion": "SandDjinn",
+      "skillMinionSkill": "2",
+      "skillMinionSkillCalcs": "2"
+    },
+    "full_dps_membership_values": [
+      "nil"
+    ],
+    "explicit_full_dps_group_count": 0,
+    "item_record_count": 16,
+    "item_set_count": 1,
+    "nonzero_inventory_slot_reference_count": 13,
+    "nonzero_tree_socket_reference_count": 3,
+    "unique_referenced_item_count": 16,
+    "config_set_count": 1,
+    "config_input_count": 17
+  },
+  "planner_structure": {
+    "ascendancy_internal_id": "Sorceress3",
+    "passive_entry_count": 130,
+    "skill_entry_count": 16,
+    "inventory_slot_entry_count": 13,
+    "not_asserted_equivalent_to_pob_export": true
+  },
+  "skill_groups": [
+    {
+      "index": 1,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Kelari, the Tainted Sands",
+          "skillId": "SummonSandDjinnPlayer",
+          "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+          "variantId": "AscendancySummonSandDjinn",
+          "level": "20",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1",
+          "skillMinion": "SandDjinn",
+          "skillMinionSkill": "2",
+          "skillMinionSkillCalcs": "2"
+        },
+        {
+          "nameSpec": "Bidding III",
+          "skillId": "SupportBiddingPlayerThree",
+          "gemId": "Metadata/Items/Gem/SupportGemBiddingThree",
+          "variantId": "BiddingSupportThree",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Muster",
+          "skillId": "SupportMusterPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemMuster",
+          "variantId": "MusterSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Kurgal's Leash",
+          "skillId": "SupportKurgalsLeashPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemKurgalsLeash",
+          "variantId": "KurgalsLeashSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Magnified Area II",
+          "skillId": "SupportMagnifiedAreaPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+          "variantId": "MagnifiedAreaSupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Hulking Minions",
+          "skillId": "SupportHulkingMinionsPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemEnormity",
+          "variantId": "HulkingMinionsSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Skeletal Arsonist",
+          "skillId": "SummonSkeletalArsonistsPlayer",
+          "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+          "variantId": "SkeletalArsonist",
+          "level": "17",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1",
+          "skillMinion": "RaisedSkeletonArsonist",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        },
+        {
+          "nameSpec": "Last Gasp",
+          "skillId": "SupportLastGaspPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemLastGasp",
+          "variantId": "LastGaspSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Armour Break III",
+          "skillId": "SupportArmourBreakPlayerThree",
+          "gemId": "Metadata/Items/Gems/SupportGemSplinterThree",
+          "variantId": "ArmourBreakSupportThree",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Armour Demolisher II",
+          "skillId": "SupportArmourDemolisherPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemDemolisherTwo",
+          "variantId": "ArmourDemolisherSupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Muster",
+          "skillId": "SupportMusterPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemMuster",
+          "variantId": "MusterSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Efficiency II",
+          "skillId": "SupportEfficiencyPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemInspirationTwo",
+          "variantId": "EfficiencySupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Skeletal Warrior",
+          "skillId": "SummonSkeletalWarriorsPlayer",
+          "gemId": "Metadata/Items/Gems/SkillGemSkeletalWarriorWeaponSkill",
+          "variantId": "SkeletalWarrior",
+          "level": "18",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1",
+          "skillMinion": "RaisedSkeletonWarriors",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        },
+        {
+          "nameSpec": "Armour Break III",
+          "skillId": "SupportArmourBreakPlayerThree",
+          "gemId": "Metadata/Items/Gems/SupportGemSplinterThree",
+          "variantId": "ArmourBreakSupportThree",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Armour Demolisher II",
+          "skillId": "SupportArmourDemolisherPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemDemolisherTwo",
+          "variantId": "ArmourDemolisherSupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Last Gasp",
+          "skillId": "SupportLastGaspPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemLastGasp",
+          "variantId": "LastGaspSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Muster",
+          "skillId": "SupportMusterPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemMuster",
+          "variantId": "MusterSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Skeletal Sniper",
+          "skillId": "SummonSkeletalSnipersPlayer",
+          "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+          "variantId": "SkeletalSniper",
+          "level": "19",
+          "quality": "20",
+          "enabled": "true",
+          "count": "1",
+          "skillMinion": "RaisedSkeletonSniper",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        },
+        {
+          "nameSpec": "Armour Break III",
+          "skillId": "SupportArmourBreakPlayerThree",
+          "gemId": "Metadata/Items/Gems/SupportGemSplinterThree",
+          "variantId": "ArmourBreakSupportThree",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Last Gasp",
+          "skillId": "SupportLastGaspPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemLastGasp",
+          "variantId": "LastGaspSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Armour Demolisher II",
+          "skillId": "SupportArmourDemolisherPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemDemolisherTwo",
+          "variantId": "ArmourDemolisherSupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Muster",
+          "skillId": "SupportMusterPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemMuster",
+          "variantId": "MusterSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Skeletal Cleric",
+          "skillId": "SummonSkeletalClericsPlayer",
+          "gemId": "Metadata/Items/Gems/SkillGemSkeletalCleric",
+          "variantId": "SkeletalCleric",
+          "level": "19",
+          "quality": "20",
+          "enabled": "true",
+          "count": "1",
+          "skillMinion": "RaisedSkeletonCleric",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        },
+        {
+          "nameSpec": "Last Gasp",
+          "skillId": "SupportLastGaspPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemLastGasp",
+          "variantId": "LastGaspSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Rapid Casting II",
+          "skillId": "SupportRapidCastingPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemArcaneTempoTwo",
+          "variantId": "RapidCastingSupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Meat Shield II",
+          "skillId": "SupportMeatShieldPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemMeatShieldTwo",
+          "variantId": "MeatShieldSupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Elemental Army",
+          "skillId": "SupportElementalArmyPlayer",
+          "gemId": "Metadata/Items/Gems/SupportGemElementalArmy",
+          "variantId": "ElementalArmySupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Spectre: Powered Zealot",
+          "level": "19",
+          "quality": "20",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Muster",
+          "skillId": "SupportMusterPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemMuster",
+          "variantId": "MusterSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Overcharge",
+          "skillId": "SupportOverchargePlayer",
+          "gemId": "Metadata/Items/Gems/SupportGemOvercharge",
+          "variantId": "OverchargeSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Pierce III",
+          "skillId": "SupportPiercePlayerThree",
+          "gemId": "Metadata/Items/Gems/SupportGemPierceThree",
+          "variantId": "PierceSupportThree",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Last Gasp",
+          "skillId": "SupportLastGaspPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemLastGasp",
+          "variantId": "LastGaspSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Skeletal Brute",
+          "skillId": "SummonSkeletalBrutesPlayer",
+          "gemId": "Metadata/Items/Gems/SkillGemSkeletalBrute",
+          "variantId": "SkeletalBrute",
+          "level": "19",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1",
+          "skillMinion": "RaisedSkeletonBrute",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        },
+        {
+          "nameSpec": "Last Gasp",
+          "skillId": "SupportLastGaspPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemLastGasp",
+          "variantId": "LastGaspSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Armour Break III",
+          "skillId": "SupportArmourBreakPlayerThree",
+          "gemId": "Metadata/Items/Gems/SupportGemSplinterThree",
+          "variantId": "ArmourBreakSupportThree",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Uruk's Smelting",
+          "skillId": "SupportUruksSmeltingPlayer",
+          "gemId": "Metadata/Items/Gems/SupportGemUruksSmelting",
+          "variantId": "UruksSmeltingSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Muster",
+          "skillId": "SupportMusterPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemMuster",
+          "variantId": "MusterSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Skeletal Reaver",
+          "skillId": "SummonSkeletalReaversPlayer",
+          "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+          "variantId": "SkeletalReaver",
+          "level": "19",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1",
+          "skillMinion": "RaisedSkeletonReaver",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        },
+        {
+          "nameSpec": "Last Gasp",
+          "skillId": "SupportLastGaspPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemLastGasp",
+          "variantId": "LastGaspSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Armour Break I",
+          "skillId": "SupportArmourBreakPlayer",
+          "gemId": "Metadata/Items/Gems/SupportGemSplinter",
+          "variantId": "ArmourBreakSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Armour Demolisher II",
+          "skillId": "SupportArmourDemolisherPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemDemolisherTwo",
+          "variantId": "ArmourDemolisherSupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Muster",
+          "skillId": "SupportMusterPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemMuster",
+          "variantId": "MusterSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Navira, the Last Mirage",
+          "skillId": "SummonWaterDjinnPlayer",
+          "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+          "variantId": "AscendancySummonWaterDjinn",
+          "level": "20",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1",
+          "skillMinion": "WaterDjinn",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        },
+        {
+          "nameSpec": "Prolonged Duration II",
+          "skillId": "ProlongedDurationSupportPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemPersistenceTwo",
+          "variantId": "ProlongedDurationSupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Rapid Casting II",
+          "skillId": "SupportRapidCastingPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemArcaneTempoTwo",
+          "variantId": "RapidCastingSupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Bidding III",
+          "skillId": "SupportBiddingPlayerThree",
+          "gemId": "Metadata/Items/Gem/SupportGemBiddingThree",
+          "variantId": "BiddingSupportThree",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Skeletal Storm Mage",
+          "skillId": "SummonSkeletalStormMagesPlayer",
+          "gemId": "Metadata/Items/Gems/SkillGemSkeletalStormMage",
+          "variantId": "SkeletalStormMage",
+          "level": "19",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1",
+          "skillMinion": "RaisedSkeletonStormMage",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        },
+        {
+          "nameSpec": "Last Gasp",
+          "skillId": "SupportLastGaspPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemLastGasp",
+          "variantId": "LastGaspSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Shock",
+          "skillId": "SupportShockPlayer",
+          "gemId": "Metadata/Items/Gems/SupportGemConduction",
+          "variantId": "ShockSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Muster",
+          "skillId": "SupportMusterPlayer",
+          "gemId": "Metadata/Items/Gem/SupportGemMuster",
+          "variantId": "MusterSupport",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Refutation",
+          "skillId": "RefutationPlayer",
+          "gemId": "Metadata/Items/Gems/SkillGemRefutation",
+          "variantId": "Refutation",
+          "level": "20",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Cooldown Recovery II",
+          "skillId": "SupportCooldownRecoveryPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemIngenuityTwo",
+          "variantId": "CooldownRecoverySupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        },
+        {
+          "nameSpec": "Prolonged Duration II",
+          "skillId": "ProlongedDurationSupportPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemPersistenceTwo",
+          "variantId": "ProlongedDurationSupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Ruzhan, the Blazing Sword",
+          "skillId": "SummonFireDjinnPlayer",
+          "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonFireDjinn",
+          "variantId": "AscendancySummonFireDjinn",
+          "level": "20",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1",
+          "skillMinion": "FireDjinn",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        },
+        {
+          "nameSpec": "Efficiency II",
+          "skillId": "SupportEfficiencyPlayerTwo",
+          "gemId": "Metadata/Items/Gems/SupportGemInspirationTwo",
+          "variantId": "EfficiencySupportTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Navira's Well",
+          "level": "20",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Kelari's Deception",
+          "level": "20",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "attributes": {
+        "mainActiveSkillCalcs": "1",
+        "includeInFullDPS": "nil",
+        "enabled": "true",
+        "mainActiveSkill": "1"
+      },
+      "gems": [
+        {
+          "nameSpec": "Skeletal Frost Mage",
+          "skillId": "SummonSkeletalFrostMagesPlayer",
+          "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+          "variantId": "SkeletalFrostMage",
+          "level": "12",
+          "quality": "0",
+          "enabled": "true",
+          "count": "1",
+          "skillMinion": "RaisedSkeletonFrostMage",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        }
+      ]
+    },
+    {
+      "index": 16,
+      "attributes": {
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "source": "Tree:13289",
+        "enabled": "true",
+        "mainActiveSkill": "nil"
+      },
+      "gems": [
+        {
+          "nameSpec": "Kelari, the Tainted Sands",
+          "skillId": "SummonSandDjinnPlayer",
+          "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+          "variantId": "AscendancySummonSandDjinn",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "nil",
+          "skillMinion": "SandDjinn",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "attributes": {
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "source": "Tree:34207",
+        "enabled": "true",
+        "mainActiveSkill": "nil"
+      },
+      "gems": [
+        {
+          "nameSpec": "Ruzhan, the Blazing Sword",
+          "skillId": "SummonFireDjinnPlayer",
+          "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonFireDjinn",
+          "variantId": "AscendancySummonFireDjinn",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "nil",
+          "skillMinion": "FireDjinn",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "attributes": {
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "source": "Tree:32705",
+        "enabled": "true",
+        "mainActiveSkill": "nil"
+      },
+      "gems": [
+        {
+          "nameSpec": "Navira, the Last Mirage",
+          "skillId": "SummonWaterDjinnPlayer",
+          "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+          "variantId": "AscendancySummonWaterDjinn",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true",
+          "count": "nil",
+          "skillMinion": "WaterDjinn",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "attributes": {
+        "mainActiveSkillCalcs": "nil",
+        "includeInFullDPS": "nil",
+        "label": "",
+        "source": "Item:9:Morbid Roar, Rattling Sceptre",
+        "enabled": "true",
+        "slot": "Weapon 1",
+        "mainActiveSkill": "nil"
+      },
+      "gems": [
+        {
+          "nameSpec": "Skeletal Warrior",
+          "skillId": "SummonSkeletalWarriorsPlayer",
+          "gemId": "Metadata/Items/Gems/SkillGemSkeletalWarriorWeaponSkill",
+          "variantId": "SkeletalWarrior",
+          "level": "18",
+          "quality": "0",
+          "enabled": "true",
+          "count": "nil",
+          "skillMinion": "RaisedSkeletonWarriors",
+          "skillMinionSkill": "1",
+          "skillMinionSkillCalcs": "1"
+        }
+      ]
+    }
+  ],
+  "unresolved_named_gem_entries": [
+    {
+      "group_index": 6,
+      "gem_index": 1,
+      "name": "Spectre: Powered Zealot",
+      "missing_fields": [
+        "skillId",
+        "gemId",
+        "variantId"
+      ]
+    },
+    {
+      "group_index": 13,
+      "gem_index": 1,
+      "name": "Navira's Well",
+      "missing_fields": [
+        "skillId",
+        "gemId",
+        "variantId"
+      ]
+    },
+    {
+      "group_index": 14,
+      "gem_index": 1,
+      "name": "Kelari's Deception",
+      "missing_fields": [
+        "skillId",
+        "gemId",
+        "variantId"
+      ]
+    }
+  ],
+  "nonzero_inventory_slot_references": [
+    {
+      "itemPbURL": "",
+      "name": "Gloves",
+      "itemId": "4"
+    },
+    {
+      "itemPbURL": "",
+      "name": "Weapon 1",
+      "itemId": "9"
+    },
+    {
+      "itemPbURL": "",
+      "active": "true",
+      "name": "Charm 1",
+      "itemId": "13"
+    },
+    {
+      "itemPbURL": "",
+      "name": "Belt",
+      "itemId": "7"
+    },
+    {
+      "itemPbURL": "",
+      "name": "Helmet",
+      "itemId": "8"
+    },
+    {
+      "itemPbURL": "",
+      "active": "true",
+      "name": "Charm 2",
+      "itemId": "12"
+    },
+    {
+      "itemPbURL": "",
+      "active": "true",
+      "name": "Flask 2",
+      "itemId": "11"
+    },
+    {
+      "itemPbURL": "",
+      "name": "Amulet",
+      "itemId": "6"
+    },
+    {
+      "itemPbURL": "",
+      "name": "Weapon 2",
+      "itemId": "1"
+    },
+    {
+      "itemPbURL": "",
+      "name": "Boots",
+      "itemId": "5"
+    },
+    {
+      "itemPbURL": "",
+      "name": "Ring 2",
+      "itemId": "10"
+    },
+    {
+      "itemPbURL": "",
+      "name": "Ring 1",
+      "itemId": "2"
+    },
+    {
+      "itemPbURL": "",
+      "name": "Body Armour",
+      "itemId": "3"
+    }
+  ],
+  "nonzero_tree_socket_references": [
+    {
+      "nodeId": "7960",
+      "itemId": "16"
+    },
+    {
+      "nodeId": "21984",
+      "itemId": "15"
+    },
+    {
+      "nodeId": "61419",
+      "itemId": "14"
+    }
+  ],
+  "configuration_inputs": [
+    {
+      "name": "questAct 2Valley of the TitansMedallion",
+      "string": "30% increased Charm Effect Duration  +1 Charm Slot"
+    },
+    {
+      "name": "conditionEnemyChilled",
+      "boolean": "true"
+    },
+    {
+      "name": "questAct 4Abandoned PrisonGoddess of Justice",
+      "string": "30% increased Life Recovery from Flasks"
+    },
+    {
+      "name": "multiplierNearbyRareOrUniqueEnemies",
+      "number": "1"
+    },
+    {
+      "name": "conditionEnemyBleeding",
+      "boolean": "true"
+    },
+    {
+      "name": "questAct 3Venom CryptsVenom Draught",
+      "string": "25% increased Stun Threshold"
+    },
+    {
+      "name": "conditionCritRecently",
+      "boolean": "true"
+    },
+    {
+      "name": "conditionBeenHitRecently",
+      "boolean": "true"
+    },
+    {
+      "name": "multiplierNearbyEnemies",
+      "number": "1"
+    },
+    {
+      "name": "DisableEHPGainOnBlock",
+      "boolean": "true"
+    },
+    {
+      "name": "questInterlude 2QimahSeven Pillars",
+      "string": "15% increased Global Armour, Evasion and Energy Shield"
+    },
+    {
+      "name": "questAct 4Halls Of The DeadNgamahu's Test",
+      "string": "+5% to Fire Resistance"
+    },
+    {
+      "name": "questAct 4Eye of HinekoraSilent Hall",
+      "boolean": "false"
+    },
+    {
+      "name": "questAct 4Halls Of The DeadTasalio's Test",
+      "string": "+5% to Cold Resistance"
+    },
+    {
+      "name": "questAct 4Eye of HinekoraTribal Medicine",
+      "string": "30% increased Global Armour, Evasion and Energy Shield"
+    },
+    {
+      "name": "questAct 4Halls Of The DeadTawhoa's Test",
+      "string": "+5% to Lightning Resistance"
+    },
+    {
+      "name": "conditionEnemyIgnited",
+      "boolean": "true"
+    }
+  ],
+  "cached_source_metrics": {
+    "status": "Imported cached values only; not a test oracle and not recalculated. Player and minion scopes are kept distinct.",
+    "values": [
+      {
+        "element": "PlayerStat",
+        "stat": "TotalDPS",
+        "value": "0"
+      },
+      {
+        "element": "PlayerStat",
+        "stat": "CombinedDPS",
+        "value": "0"
+      },
+      {
+        "element": "PlayerStat",
+        "stat": "TotalEHP",
+        "value": "23012.861136999"
+      },
+      {
+        "element": "PlayerStat",
+        "stat": "Life",
+        "value": "1"
+      },
+      {
+        "element": "PlayerStat",
+        "stat": "Spirit",
+        "value": "281"
+      },
+      {
+        "element": "PlayerStat",
+        "stat": "EnergyShield",
+        "value": "9409"
+      },
+      {
+        "element": "PlayerStat",
+        "stat": "FullDPS",
+        "value": "0"
+      },
+      {
+        "element": "MinionStat",
+        "stat": "TotalDPS",
+        "value": "60384.684193077"
+      },
+      {
+        "element": "MinionStat",
+        "stat": "CombinedDPS",
+        "value": "60384.684193077"
+      },
+      {
+        "element": "MinionStat",
+        "stat": "Life",
+        "value": "9887"
+      },
+      {
+        "element": "MinionStat",
+        "stat": "EnergyShield",
+        "value": "0"
+      }
+    ]
+  },
+  "source_compatibility_checks": {
+    "pinned_pob_commit": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "kind": "Read-only source/data presence checks; no Lua code executed.",
+    "root_name_present_in_build_reader": true,
+    "tree_0_5_present": true,
+    "disciple_name_and_sorceress3_present": true,
+    "kelari_skill_id_present_in_gem_data": true,
+    "allocated_node_ids_absent_from_tree_0_5": []
+  },
+  "status": {
+    "structural_decode": "passed",
+    "runtime_evaluation": "not_run",
+    "evaluator_support": "unverified",
+    "baseline_metric_parity": "not_verified",
+    "optimizer_implementation": "not_implemented"
+  },
+  "caveats": [
+    "The title claims game patch 0.5.5; XML independently records treeVersion 0_5 and targetVersion 0_1, not exact patch 0.5.5.",
+    "All includeInFullDPS attributes are the literal string nil; cached player FullDPS is zero. This does not define a useful aggregate damage objective.",
+    "Spectre: Powered Zealot, Navira's Well, and Kelari's Deception have names but no skillId, gemId, or variantId. Preserve them and surface unresolved capability until tested; do not silently count them as zero.",
+    "Manual and tree/item-granted skill groups overlap. Evaluation must resolve their provenance and intended grouping before damage aggregation.",
+    "Counts and selected skill indices are imported metadata; actual active minion population and usage semantics have not been verified.",
+    "The native planner JSON and PoB XML are separate source formats with different structures and counts; lossless equivalence has not been established.",
+    "Configuration values are preserved source assumptions, not independently validated combat conditions.",
+    "This complex minion fixture is retained as representative scope; smaller calibration fixtures are still needed for evaluator parity.",
+    "The fixture was not evaluated, mutated, re-exported by PoB, or checked for runtime legality."
+  ],
+  "decode_safety": {
+    "input_limit_bytes": 1000000,
+    "compressed_limit_bytes": 1000000,
+    "uncompressed_limit_bytes": 8000000,
+    "strict_base64_validation": true,
+    "required_complete_zlib_stream_without_trailing_data": true,
+    "xml_encoding": "UTF-8",
+    "dtd_and_entity_declarations": "rejected before parsing",
+    "external_entities": "not resolved; declarations rejected",
+    "downloaded_or_imported_code_executed": false
+  }
+}

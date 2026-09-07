@@ -80,3 +80,25 @@ Reloading baseline XML before every candidate should be safer than rolling back 
 4. Apply one legal passive-path change and one fixed candidate-item replacement separately. Confirm changed metrics and exported build state, then compare miscellaneous-calculator overrides with a freshly materialized and reloaded candidate. Keep EHP calculation enabled.
 5. Run A/A and A/B/A isolation checks and an intentionally malformed request. Only after parity, introduce persistent workers with baseline reload. Validate identical candidate/scenario outputs across worker counts within declared numeric tolerances.
 6. Record cold startup, warm full evaluation, warm override evaluation, export/reload cost, peak memory, and error rate. Use these measurements to choose worker count and search evaluation budget. Acceptance is a reproducible evaluator with verified mutations and reviewable XML; optimization quality is the next milestone.
+
+## User-supplied minion fixture
+
+The [decoded reference fixture](../tests/fixtures/builds/pobarchives-Dfz36mCq.xml) is a
+level 96 Sorceress / Disciple of Varashta export with `PathOfBuilding2` root and `0_5`
+tree data. Its [metadata](../tests/fixtures/builds/pobarchives-Dfz36mCq.metadata.json)
+records exact source/output hashes and bounded decoding checks. The two original local
+exports remain unchanged. Source structure and tree-ID presence have been checked;
+no Lua evaluation or UI parity has been performed.
+
+The selected group is Kelari, the Tainted Sands, with a minion-skill selector. All Full DPS
+membership flags are literal `nil`; cached player FullDPS is zero. Three named skill
+entries have no stable IDs, and manual/granted group provenance needs reconciliation.
+These are import/metric-contract questions, not proof that the corresponding mechanics
+are unsupported. Preserve raw input; resolve names, inclusion, actors, and duplication
+through the pinned adapter before scoring. Never accept cached source values as fresh
+calculation evidence or silently interpret unresolved entries as zero contribution.
+
+M1 should include this complex integration case plus separate small calibration cases.
+The first usable optimizer's scope includes required lists of multiple skills/items and
+joint class/ascendancy, tree, gear, support-gem, and supporting-skill changes. Controlled
+per-dimension spikes remain useful, but do not substitute for coupled parity and search checks.

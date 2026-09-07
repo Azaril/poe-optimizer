@@ -28,6 +28,11 @@ The composition layer owns runtime/resource lifetimes and supplies the evaluator
 artifact destination. Multiple runs in one host share a resource manager rather than
 each silently claiming all cores.
 
+Problem data must express multiple required skills and exact equipped items, independent
+locks, and the joint class/ascendancy/tree/gear/support/supporting-skill domain. Class/ascendancy
+alternatives are target-build plans; do not imply an executable transition from the imported
+character without separately validating that transition.
+
 Proposed library operations are validate/resolve problem, list capabilities, start run,
 observe progress, cancel, retrieve result, and export a verified candidate. A run handle
 provides cancellation, a progress receiver, and completion. These are logical contracts,
@@ -38,11 +43,13 @@ and of Tauri command macros.
 
 Parallelize independent work throughout the pipeline:
 
-- Candidate generation and graph legality across proposals, with task-local scratch state.
+- Candidate generation and legality across class/ascendancy, passive, equipment, support-gem,
+  and supporting-skill proposals, with task-local scratch state.
 - Canonicalization, hashing, and independent score calculations.
 - PoB evaluations across isolated worker processes.
 - Independent search starts/islands, sharing the same evaluation service and resource budget.
-- Later, required scenarios and final-candidate verification when their dependencies allow it.
+- Required scenario/skill-selector calculations and final-candidate verification when their
+  dependencies allow it; initial benchmarks cover bossing and mapping.
 
 Use [Rayon](https://docs.rs/rayon/1.12.0/rayon/) for Rust CPU work. Construct an explicitly
 sized local pool with [ThreadPoolBuilder](https://docs.rs/rayon/1.12.0/rayon/struct.ThreadPoolBuilder.html);
@@ -103,7 +110,8 @@ an explicit verification path that bypasses completed-cache reuse and in-flight 
 starts an independent fresh worker, and consumes its reserved evaluation attempts. Prefer short critical sections
 and local batches; profile contention before introducing more elaborate sharding.
 
-Assign evaluation-budget tokens centrally before dispatch, including retries and final
+Assign evaluation-budget tokens centrally before dispatch for every actual PoB calculation,
+including extra skill-selector/scenario passes, retries, and final
 verification. An attached duplicate/cache hit does not consume a second token. Once a
 calculation is dispatched, its attempt counts even if cancelled or failed. Queue entries
 must not conceal unaccounted running attempts. All islands use the same deadline and
@@ -156,12 +164,14 @@ and the eventual frontend. Proposed artifacts in each run directory:
 
 | Artifact | Contents |
 | --- | --- |
+| `project.json` | Portable resolved seed references, allowed domain, goals, named scenarios and dependency identities |
 | `manifest.json` | Resolved problem, source/runtime/schema versions, seed, requested/resolved resource limits and scheduling policy |
-| `result.json` | Completion state, verified alternatives, metrics/units, constraints/slack, mutation summaries and diagnostics |
+| `result.json` | Completion state, explicit comparison baseline IDs, verified alternatives, metrics/units, constraints/slack, coverage status, mutation summaries and diagnostics |
 | `progress.jsonl` | Sequenced progress snapshots and incumbent changes with elapsed time and evaluation counts |
 | `candidates.csv` | Optional flattened comparison data with metric IDs, units, scenario IDs and verification status |
 | `builds/*.xml` | Verified candidate exports with stable IDs linked from results |
 | `report.html` | Optional offline visual report generated from saved artifacts |
+| `checkpoint.json` | Versioned, atomically written recovery state; explicitly declares warm-start versus exact-resume capability |
 
 Persist bounded/sampled progress and retained alternatives by default, not every candidate
 or full build on every event. Make detailed traces an explicit option with storage limits.
@@ -180,7 +190,8 @@ Start visualization with an optional offline HTML report created by the CLI:
 - Before/after tables for the user's chosen metrics, constraints, and slack.
 - Best feasible objective and constraint violation over evaluations and elapsed time.
 - Candidate comparisons and, when supported, Pareto scatter plots with user-selected axes.
-- Passive additions/removals and item changes; add a tree overlay once tree-layout export exists.
+- Class/ascendancy choices, passive additions/removals, item changes, support assignments,
+  and supporting-skill/effect changes; add a tree overlay once tree-layout export exists.
 - Assumptions, source provenance, and clear verified/infeasible/error states.
 
 Labels and chart axes come from the metric registry, not fixed DPS/EHP field names. Plot
@@ -194,6 +205,14 @@ listing, problem validation, evaluation, optimization, and rendering saved-run r
 Human-readable progress goes to stderr; machine-output modes reserve stdout for structured
 data. Ctrl+C maps to core cancellation, and errors/exit codes distinguish invalid input,
 evaluation failure, and a completed search with no feasible result.
+
+Include baseline-aware candidate comparison and saved-result reranking in the CLI workflow.
+Reranking must validate stored metric compatibility and identify the retained candidate set;
+it does not imply a new search. Recovery initially warm-starts a new run from saved
+candidates. Also retain evaluated-only recovery seeds with explicit status, since a crash
+may happen before final verification; freshly validate them before trusted reuse in a new
+run and independently verify all recommendations. Exact resume requires a compatible checkpoint of search/random state, budget
+ledger, and pending work as described in the [product review](prior-art-and-product-review.md).
 
 No new commands or output flags are implemented by this design update. The example
 configuration describes future execution/output options alongside the existing user goals.
