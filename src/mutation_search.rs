@@ -3,17 +3,21 @@ use poe_optimizer_core::{
     candidate::{
         Candidate, CandidateBudgets, CandidateConstraints, CandidateDomain, SkillGroupLocks,
     },
-    evaluation::{BackendIdentity, Engine, EvaluationBudget, EvaluationEngine, EvaluationRequest},
+    evaluation::{
+        BackendIdentity, CalculationBackend, Engine, EvaluationBudget, EvaluationEngine,
+        EvaluationRequest,
+    },
     metrics::MetricQuery,
     objective::{ObjectiveSpec, ScoringPolicy},
     options::EvaluationOptions,
 };
-use poe_optimizer_pob::{
-    backend::PobBackend,
-    import::decode_build,
-    mutation::{
-        ControlledMaceCatalog, MaceSupportChoice, NormalMaceAlternative, VerifiedMaceScenario,
+#[cfg(feature = "pob")]
+use poe_optimizer_import::controlled_mace::VerifiedMaceScenario;
+use poe_optimizer_import::{
+    controlled_mace::{
+        ControlledMaceCatalog, MaceSupportChoice, NormalMaceAlternative, VerifiedNativeMaceScenario,
     },
+    decode_build,
 };
 use poe_optimizer_search::{discrete::*, *};
 use serde::{Deserialize, Serialize};
@@ -38,6 +42,9 @@ pub(crate) struct Args {
     /// JSON problem containing a supported template, finite weapon/support choices and objective.
     #[arg(long)]
     problem: PathBuf,
+    /// Native Rust calculation or optional PoB reference adapter.
+    #[arg(long, value_enum, default_value_t = super::default_backend())]
+    backend: super::BackendChoice,
     #[arg(long, default_value = "vendor/path-of-building-poe2")]
     pob: PathBuf,
     #[arg(long, default_value_t = 1)]
@@ -128,17 +135,24 @@ impl SearchDomain<DiscretePoint> for Domain<'_> {
             .propose(parents, round, seed, limit, &self.neighborhood, control)
     }
 }
+type SearchEngine = Engine<Box<dyn CalculationBackend + Send + Sync>>;
+enum Scenario {
+    Native(VerifiedNativeMaceScenario),
+    #[cfg(feature = "pob")]
+    Pob(VerifiedMaceScenario),
+}
 struct Evaluator<'a> {
     domain: &'a Domain<'a>,
-    engine: &'a Engine<PobBackend>,
-    scenario: &'a VerifiedMaceScenario,
+    engine: &'a SearchEngine,
+    scenario: &'a Scenario,
+    execution: ExecutionKind,
     identity: &'a BackendIdentity,
     metrics: Vec<MetricQuery>,
     warnings: Mutex<BTreeSet<String>>,
 }
 impl CandidateEvaluator<DiscretePoint> for Evaluator<'_> {
     fn execution_kind(&self) -> ExecutionKind {
-        ExecutionKind::ExternalProcess
+        self.execution
     }
     fn evaluate(
         &self,
@@ -166,10 +180,18 @@ impl CandidateEvaluator<DiscretePoint> for Evaluator<'_> {
                 },
             )
             .map_err(|e| e.to_string())?;
-        self.domain
-            .registry
-            .validate_realization(candidate, &result, self.scenario)
-            .map_err(|e| e.to_string())?;
+        match self.scenario {
+            Scenario::Native(scenario) => self
+                .domain
+                .registry
+                .validate_native_realization(candidate, &result, scenario),
+            #[cfg(feature = "pob")]
+            Scenario::Pob(scenario) => self
+                .domain
+                .registry
+                .validate_realization(candidate, &result, scenario),
+        }
+        .map_err(|error| error.to_string())?;
         if serde_json::to_value(&result.backend).map_err(|e| e.to_string())?
             != serde_json::to_value(self.identity).map_err(|e| e.to_string())?
         {
@@ -233,7 +255,12 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         problem.weapons.clone(),
         problem.supports.clone(),
     )?;
-    let engine = Engine::new(PobBackend::new(std::env::current_exe()?, args.pob.clone()));
+    let engine = Engine::new(super::make_backend(args.backend, args.pob.clone())?);
+    let execution = match args.backend {
+        super::BackendChoice::Native => ExecutionKind::RustCpu,
+        #[cfg(feature = "pob")]
+        super::BackendChoice::Pob => ExecutionKind::ExternalProcess,
+    };
     let policy = problem.objective.compile(&engine.capabilities().metrics)?;
     let weapons: Vec<_> = registry
         .alternatives()
@@ -326,6 +353,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     };
     let mut report = serde_json::json!({
         "schema_version":1,"status":"experimental_mutation_search","diagnostic_only":true,
+        "requested_backend":engine.capabilities().id,"execution_kind":if execution == ExecutionKind::RustCpu {"rust_cpu"} else {"external_process"},
         "scope":"normal_mace_weapon_support_profile_v1","problem":problem,"template_xml_sha256":imported.sha256,
         "template":registry.template_build(),"catalog":registry.catalog(),"alternatives":registry.alternatives(),
         "candidate_constraints":constraints,"space":domain.space,"strategy":args.strategy,"neighborhood":domain.neighborhood,
@@ -361,8 +389,14 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             return emit(&args, report);
         }
     };
+    let scenario = match args.backend {
+        super::BackendChoice::Native => registry
+            .bind_native_baseline(&baseline, &poe_optimizer_native::backend_identity())
+            .map(Scenario::Native),
+        #[cfg(feature = "pob")]
+        super::BackendChoice::Pob => registry.bind_baseline(&baseline).map(Scenario::Pob),
+    };
     baseline.attachments.clear();
-    let scenario = registry.bind_baseline(&baseline);
     report["preparation"]["evaluation"] = serde_json::to_value(&baseline)?;
     let scenario = match scenario {
         Ok(value) => value,
@@ -383,6 +417,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         domain: &domain,
         engine: &engine,
         scenario: &scenario,
+        execution,
         identity: &baseline.backend,
         metrics: policy.required_metrics(),
         warnings: Mutex::new(BTreeSet::new()),

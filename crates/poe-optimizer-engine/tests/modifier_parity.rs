@@ -20,6 +20,8 @@ const STORE: &str = include_str!("../../../vendor/path-of-building-poe2/src/Clas
 const GLOBAL: &str = include_str!("../../../vendor/path-of-building-poe2/src/Data/Global.lua");
 const COMMON: &str = include_str!("../../../vendor/path-of-building-poe2/src/Modules/Common.lua");
 const DATA: &str = include_str!("../../../vendor/path-of-building-poe2/src/Modules/Data.lua");
+const MODTOOLS: &str =
+    include_str!("../../../vendor/path-of-building-poe2/src/Modules/ModTools.lua");
 
 struct Oracle {
     lua: Lua,
@@ -68,6 +70,10 @@ impl Oracle {
                 "Review native modifier translation after changing {name}"
             );
         }
+        assert_eq!(
+            format!("{:x}", Sha256::digest(MODTOOLS.replace("\r\n", "\n"))),
+            "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+        );
         let lua = Lua::new();
         let common = COMMON.replace("\r\n", "\n");
         // The actual class library and round definition are extracted, with only
@@ -94,6 +100,15 @@ impl Oracle {
         .unwrap();
         lua.load(GLOBAL).set_name("pinned-Global").exec().unwrap();
         lua.load("modLib = {}; data = {};").exec().unwrap();
+        let modtools = MODTOOLS.replace("\r\n", "\n");
+        lua.load(section(
+            &modtools,
+            "function modLib.createMod(",
+            "\nmodLib.parseMod,",
+        ))
+        .set_name("pinned-ModTools-createMod")
+        .exec()
+        .unwrap();
         let data = DATA.replace("\r\n", "\n");
         lua.load(section(
             &data,
@@ -1257,6 +1272,20 @@ impl Oracle {
         }
     }
 
+    fn stat_variables(&self, table: &Table, stats: &StatVariables) {
+        match stats {
+            StatVariables::One(name) => table.set("stat", name.as_str()).unwrap(),
+            StatVariables::Sum(names) => table
+                .set(
+                    "statList",
+                    self.lua
+                        .create_sequence_from(names.iter().map(String::as_str))
+                        .unwrap(),
+                )
+                .unwrap(),
+        }
+    }
+
     fn scaling_modifier(&self, value: f64, program: &ScalingProgram) -> Table {
         let modifier = self.lua.create_table().unwrap();
         modifier.set("value", value).unwrap();
@@ -1297,6 +1326,38 @@ impl Oracle {
                     table
                         .set("thresholdActor", tag.threshold_actor.as_deref())
                         .unwrap();
+                }
+                ScalingTag::PerStat(tag) => {
+                    table.set("type", "PerStat").unwrap();
+                    self.stat_variables(&table, &tag.stats);
+                    self.scalar_fields(&table, &tag.divisor, "div", "divVar");
+                    table.set("base", tag.base).unwrap();
+                    table.set("actor", tag.actor.as_deref()).unwrap();
+                    if let Some(limit) = &tag.limit {
+                        self.scalar_fields(&table, &limit.value, "limit", "limitVar");
+                        table.set("limitTotal", limit.total).unwrap();
+                    }
+                }
+                ScalingTag::StatThreshold(tag) => {
+                    table.set("type", "StatThreshold").unwrap();
+                    self.stat_variables(&table, &tag.stats);
+                    match &tag.threshold {
+                        StatThresholdValue::Constant(value) => {
+                            table.set("threshold", *value).unwrap()
+                        }
+                        StatThresholdValue::Stat(name) => {
+                            table.set("thresholdStat", name.as_str()).unwrap()
+                        }
+                    }
+                    if let Some(percent) = &tag.percent {
+                        self.scalar_fields(
+                            &table,
+                            percent,
+                            "thresholdPercent",
+                            "thresholdPercentVar",
+                        );
+                    }
+                    table.set("upper", tag.upper).unwrap();
                 }
                 ScalingTag::Limit { value, negative } => {
                     table.set("type", "Limit").unwrap();
@@ -1801,3 +1862,803 @@ fn scaling_program_reuse_reads_dynamic_divisors_without_request_order_state() {
         }
     }
 }
+
+use poe_optimizer_engine::multipliers::{
+    StatLimit, StatScale, StatThreshold, StatThresholdValue, StatVariables,
+};
+use poe_optimizer_engine::stats::{ResolvedStatEnvironment, StatError, StatValues};
+
+impl Oracle {
+    fn populate_stats(&self, db: &Table, cfg: &Table, stats: &ResolvedStatEnvironment) {
+        let table = |values: &StatValues| {
+            let table = self.lua.create_table().unwrap();
+            for (name, value) in values {
+                table.set(name.as_str(), *value).unwrap();
+            }
+            table
+        };
+        let actor: Table = db.get("actor").unwrap();
+        actor.set("output", stats.output().map(table)).unwrap();
+        cfg.set("skillStats", table(stats.skill_stats())).unwrap();
+    }
+
+    fn stat_query(&self, db: &Table, cfg: &Table, name: &str) -> f64 {
+        self.lua.load("return function(db, cfg, name, warm) local result; for i=1,(warm and 200 or 1) do result=db:GetStat(name,cfg) end; return result end").eval::<Function>().unwrap().call((db, cfg, name, self.warm)).unwrap()
+    }
+}
+
+fn per_stat(name: &str) -> StatScale {
+    StatScale {
+        stats: StatVariables::One(name.to_owned()),
+        divisor: ScalarSource::Constant(1.0),
+        base: 0.0,
+        limit: None,
+        actor: None,
+    }
+}
+
+#[test]
+fn ordinary_stat_lookup_preserves_output_precedence_missing_tables_and_nonfinite_values() {
+    let output = BTreeMap::from([
+        ("Str".to_owned(), 0.0),
+        ("Int".to_owned(), -0.0),
+        ("Dex".to_owned(), f64::NAN),
+        ("Life".to_owned(), f64::INFINITY),
+    ]);
+    let skill = BTreeMap::from([
+        ("Str".to_owned(), 100.0),
+        ("Int".to_owned(), 200.0),
+        ("Dex".to_owned(), 300.0),
+        ("Life".to_owned(), 400.0),
+        ("Mana".to_owned(), -7.0),
+    ]);
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        let db = oracle.database(&[vec![]]);
+        let cfg = oracle.condition_config(&db, &QueryContext::default(), &condition_input(1));
+        for output in [None, Some(StatValues::new()), Some(output.clone())] {
+            let stats = ResolvedStatEnvironment::try_new(output, skill.clone(), vec![]).unwrap();
+            oracle.populate_stats(&db, &cfg, &stats);
+            for name in ["Str", "Int", "Dex", "Life", "Mana", "Absent"] {
+                assert_number(
+                    Some(stats.get_stat(name).unwrap()),
+                    Some(oracle.stat_query(&db, &cfg, name)),
+                );
+            }
+        }
+    }
+}
+
+#[test]
+fn per_stat_scaling_preserves_divisor_epsilon_base_and_factor_or_total_caps() {
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        for value in [
+            -3.0001,
+            -3.0,
+            -0.0002,
+            -0.0,
+            0.9999,
+            0.9999_f64.next_down(),
+            0.9999_f64.next_up(),
+            3.5,
+            f64::INFINITY,
+            f64::NEG_INFINITY,
+            f64::NAN,
+        ] {
+            let input = condition_input(1);
+            let values = vec![BTreeMap::from([
+                ("Div".to_owned(), 2.0),
+                ("Limit".to_owned(), 2.5),
+            ])];
+            let db = oracle.tagged_database(&[vec![]]);
+            let query = QueryContext::default();
+            let cfg = oracle.condition_config(&db, &query, &input);
+            oracle.populate_multipliers(&db, &values);
+            let environment = MultiplierEnvironment::try_new(
+                ModifierDatabase::try_new(vec![vec![]]).unwrap(),
+                values,
+                ConditionEnvironment::try_new(input).unwrap(),
+                vec![],
+            )
+            .unwrap();
+            let stats = ResolvedStatEnvironment::try_new(
+                Some(BTreeMap::from([("Str".to_owned(), value)])),
+                StatValues::new(),
+                vec![],
+            )
+            .unwrap();
+            oracle.populate_stats(&db, &cfg, &stats);
+            for divisor in [
+                ScalarSource::Constant(1.0),
+                ScalarSource::Constant(0.0),
+                ScalarSource::Constant(-1.0),
+                ScalarSource::Constant(f64::NAN),
+                ScalarSource::Multiplier("Div".to_owned()),
+            ] {
+                for total in [None, Some(false), Some(true)] {
+                    let mut tag = per_stat("Str");
+                    tag.divisor = divisor.clone();
+                    tag.base = -0.125;
+                    tag.limit = total.map(|total| StatLimit {
+                        value: ScalarSource::Multiplier("Limit".to_owned()),
+                        total,
+                    });
+                    let program = ScalingProgram::try_new(vec![ScalingTag::PerStat(tag)]).unwrap();
+                    for initial in [-2.0, -0.0, 1.25, f64::NAN] {
+                        assert_number(
+                            program
+                                .evaluate_with_stats(initial, &environment, &query, &stats)
+                                .unwrap(),
+                            oracle.scaling_query(&db, &cfg, initial, &program).unwrap(),
+                        );
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn stat_threshold_preserves_ordered_lists_percent_sources_and_exact_boundaries() {
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        for value in [
+            -0.0,
+            0.0,
+            2.0_f64.next_down(),
+            2.0,
+            2.0_f64.next_up(),
+            f64::INFINITY,
+            f64::NEG_INFINITY,
+            f64::NAN,
+        ] {
+            let input = condition_input(1);
+            let values = vec![BTreeMap::from([("Percent".to_owned(), 50.0)])];
+            let db = oracle.tagged_database(&[vec![]]);
+            let query = QueryContext::default();
+            let cfg = oracle.condition_config(&db, &query, &input);
+            oracle.populate_multipliers(&db, &values);
+            let environment = MultiplierEnvironment::try_new(
+                ModifierDatabase::try_new(vec![vec![]]).unwrap(),
+                values,
+                ConditionEnvironment::try_new(input).unwrap(),
+                vec![],
+            )
+            .unwrap();
+            let stats = ResolvedStatEnvironment::try_new(
+                Some(BTreeMap::from([
+                    ("Str".to_owned(), value),
+                    ("Threshold".to_owned(), 2.0),
+                    ("Large".to_owned(), 1e16),
+                    ("Negative".to_owned(), -1e16),
+                    ("One".to_owned(), 1.0),
+                ])),
+                StatValues::new(),
+                vec![],
+            )
+            .unwrap();
+            oracle.populate_stats(&db, &cfg, &stats);
+            for names in [
+                StatVariables::One("Str".to_owned()),
+                StatVariables::Sum(vec![]),
+                StatVariables::Sum(vec!["Str".to_owned(), "Str".to_owned()]),
+                StatVariables::Sum(vec![
+                    "Large".to_owned(),
+                    "Negative".to_owned(),
+                    "One".to_owned(),
+                ]),
+                StatVariables::Sum(vec![
+                    "One".to_owned(),
+                    "Large".to_owned(),
+                    "Negative".to_owned(),
+                ]),
+            ] {
+                for threshold in [
+                    StatThresholdValue::Constant(0.0),
+                    StatThresholdValue::Constant(f64::NAN),
+                    StatThresholdValue::Stat("Threshold".to_owned()),
+                    StatThresholdValue::Stat("Missing".to_owned()),
+                ] {
+                    for percent in [
+                        None,
+                        Some(ScalarSource::Constant(0.0)),
+                        Some(ScalarSource::Constant(100.0)),
+                        Some(ScalarSource::Constant(f64::NAN)),
+                        Some(ScalarSource::Multiplier("Percent".to_owned())),
+                    ] {
+                        for upper in [false, true] {
+                            let program = ScalingProgram::try_new(vec![ScalingTag::StatThreshold(
+                                StatThreshold {
+                                    stats: names.clone(),
+                                    threshold: threshold.clone(),
+                                    percent: percent.clone(),
+                                    upper,
+                                },
+                            )])
+                            .unwrap();
+                            assert_number(
+                                program
+                                    .evaluate_with_stats(7.0, &environment, &query, &stats)
+                                    .unwrap(),
+                                oracle.scaling_query(&db, &cfg, 7.0, &program).unwrap(),
+                            );
+                        }
+                    }
+                }
+                let mut tag = per_stat("Str");
+                tag.stats = names;
+                let program = ScalingProgram::try_new(vec![ScalingTag::PerStat(tag)]).unwrap();
+                assert_number(
+                    program
+                        .evaluate_with_stats(-0.0, &environment, &query, &stats)
+                        .unwrap(),
+                    oracle.scaling_query(&db, &cfg, -0.0, &program).unwrap(),
+                );
+            }
+        }
+    }
+}
+
+#[test]
+fn stat_programs_preserve_mixed_tag_order_and_shared_program_request_independence() {
+    let mut tag = per_stat("Str");
+    tag.divisor = ScalarSource::Multiplier("Div".to_owned());
+    tag.base = 0.75;
+    let tags = vec![
+        ScalingTag::Condition(condition("Active", false)),
+        ScalingTag::PerStat(tag),
+        ScalingTag::Multiplier(multiplier_scale("Count")),
+        ScalingTag::Limit {
+            value: ScalarSource::Constant(10.0),
+            negative: false,
+        },
+    ];
+    for tags in [tags.clone(), tags.into_iter().rev().collect()] {
+        let program = ScalingProgram::try_new(tags).unwrap();
+        for warm in [false, true] {
+            let oracle = Oracle::new(warm);
+            let shared_modifier = oracle.scaling_modifier(2.5, &program);
+            let evaluate: Function = oracle.lua.load("return function(db, cfg, mod, warm) local result; for i=1,(warm and 200 or 1) do result=db:EvalMod(mod,cfg) end; return result end").eval().unwrap();
+            for (str_value, divisor, active) in [
+                (8.0, 2.0, true),
+                (13.0, 4.0, true),
+                (f64::NAN, 0.0, true),
+                (2.0, 3.0, false),
+                (8.0, 2.0, true),
+            ] {
+                let mut input = condition_input(1);
+                input.store_conditions[0].insert("Active".to_owned(), active);
+                let values = vec![BTreeMap::from([
+                    ("Count".to_owned(), 2.0),
+                    ("Div".to_owned(), divisor),
+                ])];
+                let db = oracle.tagged_database(&[vec![]]);
+                let query = QueryContext::default();
+                let cfg = oracle.condition_config(&db, &query, &input);
+                oracle.populate_multipliers(&db, &values);
+                let environment = MultiplierEnvironment::try_new(
+                    ModifierDatabase::try_new(vec![vec![]]).unwrap(),
+                    values,
+                    ConditionEnvironment::try_new(input).unwrap(),
+                    vec![],
+                )
+                .unwrap();
+                let stats = ResolvedStatEnvironment::try_new(
+                    Some(BTreeMap::from([("Str".to_owned(), str_value)])),
+                    StatValues::new(),
+                    vec![],
+                )
+                .unwrap();
+                oracle.populate_stats(&db, &cfg, &stats);
+                assert_number(
+                    program
+                        .evaluate_with_stats(2.5, &environment, &query, &stats)
+                        .unwrap(),
+                    evaluate
+                        .call((db, cfg, shared_modifier.clone(), warm))
+                        .unwrap(),
+                );
+            }
+        }
+    }
+}
+
+#[test]
+fn stat_programs_reject_special_stat_branches_unknown_context_and_missing_context() {
+    let stats = ResolvedStatEnvironment::try_new(
+        Some(BTreeMap::from([("ManaUnreserved".to_owned(), 5.0)])),
+        StatValues::new(),
+        vec![],
+    )
+    .unwrap();
+    for name in [
+        "ManaReservedPercent",
+        "LifeReservedPercent",
+        "ManaUnreserved",
+    ] {
+        assert!(matches!(
+            stats.get_stat(name),
+            Err(StatError::UnsupportedStat(_))
+        ));
+        assert!(
+            ScalingProgram::try_new(vec![
+                ScalingTag::Condition(condition("Missing", false)),
+                ScalingTag::PerStat(per_stat(name))
+            ])
+            .is_err()
+        );
+        assert!(
+            ScalingProgram::try_new(vec![ScalingTag::StatThreshold(StatThreshold {
+                stats: StatVariables::One("Str".to_owned()),
+                threshold: StatThresholdValue::Stat(name.to_owned()),
+                percent: None,
+                upper: false
+            })])
+            .is_err()
+        );
+    }
+    assert!(matches!(
+        ResolvedStatEnvironment::try_new(
+            None,
+            StatValues::new(),
+            vec!["Function-valued output".to_owned()]
+        ),
+        Err(StatError::UnsupportedContext(_))
+    ));
+    let mut tag = per_stat("Str");
+    tag.actor = Some("parent".to_owned());
+    assert!(ScalingProgram::try_new(vec![ScalingTag::PerStat(tag)]).is_err());
+    let environment = MultiplierEnvironment::try_new(
+        ModifierDatabase::try_new(vec![vec![]]).unwrap(),
+        vec![MultiplierValues::new()],
+        ConditionEnvironment::try_new(condition_input(1)).unwrap(),
+        vec![],
+    )
+    .unwrap();
+    let program = ScalingProgram::try_new(vec![
+        ScalingTag::Condition(condition("Missing", false)),
+        ScalingTag::PerStat(per_stat("Str")),
+    ])
+    .unwrap();
+    assert_eq!(
+        program.evaluate(1.0, &environment, &QueryContext::default()),
+        Err(MultiplierError::MissingStatContext)
+    );
+    assert!(
+        program
+            .evaluate_with_stats(1.0, &environment, &QueryContext::default(), &stats)
+            .unwrap()
+            .is_none()
+    );
+}
+
+use poe_optimizer_engine::spark::{self, SparkInput, SparkQuestRewards};
+const SPARK_SKILLS: &str =
+    include_str!("../../../vendor/path-of-building-poe2/src/Data/Skills/act_int.lua");
+const SPARK_MISC: &str = include_str!("../../../vendor/path-of-building-poe2/src/Data/Misc.lua");
+const SPARK_QUESTS: &str =
+    include_str!("../../../vendor/path-of-building-poe2/src/Data/QuestRewards.lua");
+const SPARK_TREE: &str =
+    include_str!("../../../vendor/path-of-building-poe2/src/TreeData/0_5/tree.lua");
+const SPARK_SETUP: &str =
+    include_str!("../../../vendor/path-of-building-poe2/src/Modules/CalcSetup.lua");
+const SPARK_PERFORM: &str =
+    include_str!("../../../vendor/path-of-building-poe2/src/Modules/CalcPerform.lua");
+const SPARK_OFFENCE: &str =
+    include_str!("../../../vendor/path-of-building-poe2/src/Modules/CalcOffence.lua");
+const SPARK_DEFENCE: &str =
+    include_str!("../../../vendor/path-of-building-poe2/src/Modules/CalcDefence.lua");
+const SPARK_CONFIG: &str =
+    include_str!("../../../vendor/path-of-building-poe2/src/Modules/ConfigOptions.lua");
+const SPARK_TOOLS: &str =
+    include_str!("../../../vendor/path-of-building-poe2/src/Modules/CalcTools.lua");
+
+fn source_line<'a>(source: &'a str, exact_prefix: &str) -> &'a str {
+    let mut matching = source
+        .lines()
+        .filter(|line| line.trim_start().starts_with(exact_prefix));
+    let result = matching
+        .next()
+        .unwrap_or_else(|| panic!("Missing upstream source line: {exact_prefix}"));
+    assert!(
+        matching.next().is_none(),
+        "Ambiguous upstream source line: {exact_prefix}"
+    );
+    result
+}
+
+fn spark_source_checks() {
+    for record in spark::SOURCE_FILES {
+        let source = match record.path {
+            "src/Data/Misc.lua" => SPARK_MISC,
+            "src/Data/QuestRewards.lua" => SPARK_QUESTS,
+            "src/Data/Skills/act_int.lua" => SPARK_SKILLS,
+            "src/TreeData/0_5/tree.lua" => SPARK_TREE,
+            "src/Modules/CalcSetup.lua" => SPARK_SETUP,
+            "src/Modules/CalcPerform.lua" => SPARK_PERFORM,
+            "src/Modules/CalcOffence.lua" => SPARK_OFFENCE,
+            "src/Modules/CalcDefence.lua" => SPARK_DEFENCE,
+            "src/Modules/ConfigOptions.lua" => SPARK_CONFIG,
+            "src/Modules/Data.lua" => DATA,
+            "src/Modules/Common.lua" => COMMON,
+            path => panic!("Unverified native Spark source: {path}"),
+        };
+        assert_eq!(
+            format!("{:x}", Sha256::digest(source.replace("\r\n", "\n"))),
+            record.sha256,
+            "{} changed",
+            record.path
+        );
+    }
+    assert_eq!(
+        format!("{:x}", Sha256::digest(SPARK_TOOLS.replace("\r\n", "\n"))),
+        "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    );
+}
+
+struct SparkOracle {
+    oracle: Oracle,
+    calculate: Function,
+}
+impl SparkOracle {
+    fn new(warm: bool) -> Self {
+        spark_source_checks();
+        let oracle = Oracle::new(warm);
+        let lua = &oracle.lua;
+        let data: Table = lua
+            .load(SPARK_MISC)
+            .set_name("pinned-Spark-Misc-data")
+            .eval()
+            .unwrap();
+        lua.globals().set("data", data.clone()).unwrap();
+        let data_source = DATA.replace("\r\n", "\n");
+        lua.load(section(
+            &data_source,
+            "data.misc = {",
+            "\ndata.skillColorMap = ",
+        ))
+        .exec()
+        .unwrap();
+        lua.load(section(
+            &data_source,
+            "data.highPrecisionMods = {",
+            "data.weaponTypeInfo = {",
+        ))
+        .exec()
+        .unwrap();
+        lua.load(section(
+            SPARK_TOOLS,
+            "calcLib = { }",
+            "-- Validate the level of the given gem",
+        ))
+        .exec()
+        .unwrap();
+        let tree: Table = lua
+            .load(SPARK_TREE)
+            .set_name("pinned-Spark-tree-data")
+            .eval()
+            .unwrap();
+        let classes: Table = tree.get("classes").unwrap();
+        let class: Table = classes.get(spark::CLASS_ID).unwrap();
+        lua.globals().set("sparkClass", class).unwrap();
+        lua.load(
+            "skills = {}; SkillType = setmetatable({}, {__index=function(_, key) return key end})",
+        )
+        .exec()
+        .unwrap();
+        let skill_source = SPARK_SKILLS.replace("\r\n", "\n");
+        lua.load(section(
+            &skill_source,
+            "skills[\"SparkPlayer\"] = {",
+            "\nskills[\"SummonSpectrePlayer\"]",
+        ))
+        .set_name("pinned-Spark-skill-data")
+        .exec()
+        .unwrap();
+        let skills: Table = lua.globals().get("skills").unwrap();
+        lua.globals()
+            .set("sparkSkill", skills.get::<Table>(spark::SKILL_ID).unwrap())
+            .unwrap();
+        lua.load("package.loaded['Modules.CalcBase'] = {};")
+            .exec()
+            .unwrap();
+        let calcs: Table = lua
+            .load(SPARK_DEFENCE)
+            .set_name("pinned-Spark-resource-function")
+            .eval()
+            .unwrap();
+        lua.globals().set("sparkCalcs", calcs).unwrap();
+        let quests: Table = lua
+            .load(SPARK_QUESTS)
+            .set_name("pinned-Spark-quest-data")
+            .eval()
+            .unwrap();
+        let selected_quests = lua.create_table().unwrap();
+        // Source-text classification is fixture setup, not a numeric formula oracle.
+        for item in quests.sequence_values::<Table>() {
+            let quest = item.unwrap();
+            let info: String = quest.get("Info").unwrap();
+            let field = match info.as_str() {
+                "Candlemass" => Some("candlemass"),
+                "Molten Shrine" => Some("molten_shrine"),
+                "Silent Hall" => Some("silent_hall"),
+                "Beira" => Some("beira"),
+                "Sisters of Garukhan Shrine" => Some("garukhan"),
+                "Blackjaw" => Some("blackjaw"),
+                _ => None,
+            };
+            if let Some(field) = field {
+                let text: String = quest.get("Stat").unwrap();
+                let number: f64 = text
+                    .split_whitespace()
+                    .next()
+                    .unwrap()
+                    .trim_start_matches('+')
+                    .trim_end_matches('%')
+                    .parse()
+                    .unwrap();
+                let (name, kind) = match field {
+                    "candlemass" => ("Life", "BASE"),
+                    "molten_shrine" => ("Life", "INC"),
+                    "silent_hall" => ("Mana", "INC"),
+                    "beira" => ("ColdResist", "BASE"),
+                    "garukhan" => ("LightningResist", "BASE"),
+                    "blackjaw" => ("FireResist", "BASE"),
+                    _ => unreachable!(),
+                };
+                let record = lua.create_table().unwrap();
+                record.set("name", name).unwrap();
+                record.set("kind", kind).unwrap();
+                record.set("value", number).unwrap();
+                selected_quests.set(field, record).unwrap();
+            }
+        }
+        lua.globals().set("sparkQuests", selected_quests).unwrap();
+        // Insert unchanged upstream functions/expressions for the exact branches
+        // admitted by this profile. Scaffolding supplies resolved skill/context data;
+        // no expected values or rewritten Lua arithmetic are used.
+        let setup = SPARK_SETUP.replace("\r\n", "\n");
+        let perform = SPARK_PERFORM.replace("\r\n", "\n");
+        let offence = SPARK_OFFENCE.replace("\r\n", "\n");
+        let mut body = String::from(
+            "return function(input) local m_min, m_max = math.min, math.max; local modDB=new('ModDB'):ModDB(); local output={Str=sparkClass.base_str,Dex=sparkClass.base_dex,Int=sparkClass.base_int}; modDB.actor={output=output}; modDB.multipliers.Level=input.level; ",
+        );
+        body.push_str(section(
+            &setup,
+            "\t\tmodDB:NewMod(\"Life\", \"BASE\", data.characterConstants",
+            "\t\tmodDB:NewMod(\"ManaRegen\"",
+        ));
+        body.push_str("for field, quest in pairs(sparkQuests) do if input.quests[field] then modDB:NewMod(quest.name,quest.kind,quest.value,'Quest') end end\n");
+        body.push_str(section(
+            &perform,
+            "\t-- Add attribute bonuses\n",
+            "\t-- Calculate Presence / Surrounded",
+        ));
+        body.push_str("sparkCalcs.doActorLifeManaSpirit({modDB=modDB,output=output},true); local enemyDB=new('ModDB'):ModDB(); enemyDB:NewMod('LightningResist','BASE',input.resistance,'Config'); local env={configInput={enemyLightningResist=input.resistance},modDB=modDB,partyMembers={modDB=modDB},mode_effective=true}; local isElemental={Lightning=true}; ");
+        body.push_str(section(
+            &offence,
+            "\tlocal function calcResistForType(",
+            "\n\tlocal function runSkillFunc(",
+        ));
+        body.push_str("local cfg={}; local skillCfg=cfg; local skillModList=modDB; local skillData={}; local activeSkill={activeEffect={grantedEffect=sparkSkill}}; local globalOutput={ActionSpeedMod=1}; local baseCrit=sparkSkill.levels[1].critChance; local base,inc,more=0,0,1;\n");
+        body.push_str(source_line(
+            &offence,
+            "output.CritChance = round((baseCrit + base)",
+        ));
+        body.push_str("\nmodDB:NewMod('CritMultiplier','BASE',data.characterConstants.base_critical_hit_damage_bonus,'Base');\n");
+        let crit = section(
+            &offence,
+            "\t\t\t\tlocal extraDamage = skillModList:Sum(\"BASE\", cfg, \"CritMultiplier\")",
+            "\n\t\t\t\toutput.CritMultiplier = 1 + m_max(0, extraDamage)",
+        );
+        body.push_str(crit);
+        body.push_str(source_line(
+            &offence,
+            "output.CritMultiplier = 1 + m_max(0, extraDamage)",
+        ));
+        body.push_str("\nlocal baseTime; ");
+        body.push_str(source_line(&offence, "baseTime = (skillData.castTimeOverride or activeSkill.activeEffect.grantedEffect.castTime"));
+        body.push('\n');
+        body.push_str(source_line(
+            &offence,
+            "output.Speed = 1 / (baseTime / round(",
+        ));
+        body.push_str("\nglobalOutput.Speed=output.Speed; local effectiveResist=calcResistForType('Lightning',cfg); local totalHitAvg,totalCritAvg; for pass=1,2 do local damageTypeHitMin=sparkSkill.statSets[1].levels[1][1]; local damageTypeHitMax=sparkSkill.statSets[1].levels[1][2]; local allMult=1; ");
+        body.push_str(section(
+            &offence,
+            "\t\t\t\t\tif pass == 1 then\n\t\t\t\t\t\t-- Apply crit multiplier",
+            "\n\t\t\t\t\tif skillModList:Flag(skillCfg, \"LuckyHits\")",
+        ));
+        body.push_str("\nlocal damageTypeHitAvgNotLucky,damageTypeHitAvgLucky,damageTypeHitAvg; local damageTypeLuckyChance=0; ");
+        body.push_str(source_line(
+            &offence,
+            "damageTypeHitAvgNotLucky = (damageTypeHitMin / 2",
+        ));
+        body.push('\n');
+        body.push_str(source_line(
+            &offence,
+            "damageTypeHitAvgLucky = (damageTypeHitMin / 3",
+        ));
+        body.push('\n');
+        body.push_str(source_line(
+            &offence,
+            "damageTypeHitAvg = damageTypeHitAvgNotLucky *",
+        ));
+        body.push_str("\nlocal effMult=1; ");
+        body.push_str(source_line(
+            &offence,
+            "effMult = effMult * (1 - effectiveResist / 100)",
+        ));
+        body.push('\n');
+        body.push_str(source_line(
+            &offence,
+            "damageTypeHitAvg = damageTypeHitAvg * effMult",
+        ));
+        body.push_str("\nif pass==1 then totalCritAvg=damageTypeHitAvg else totalHitAvg=damageTypeHitAvg end; end; output.HitChance=100; output.DpsMultiplier=1; local quantityMultiplier=1; ");
+        body.push_str(source_line(&offence, "output.AverageHit = totalHitAvg *"));
+        body.push('\n');
+        body.push_str(source_line(
+            &offence,
+            "output.AverageDamage = output.AverageHit * output.HitChance / 100",
+        ));
+        body.push('\n');
+        body.push_str(source_line(
+            &offence,
+            "output.TotalDPS = output.AverageDamage *",
+        ));
+        body.push_str("\noutput.EffectiveResist=effectiveResist; return output end");
+        let calculate = lua
+            .load(body)
+            .set_name("pinned-Spark-closed-pipeline-sections")
+            .eval()
+            .unwrap();
+        Self { oracle, calculate }
+    }
+
+    fn calculate(&self, input: &SparkInput) -> Table {
+        let lua = &self.oracle.lua;
+        let table = lua.create_table().unwrap();
+        table.set("level", input.character_level).unwrap();
+        table
+            .set("resistance", input.enemy_lightning_resistance)
+            .unwrap();
+        let quests = lua.create_table().unwrap();
+        for (name, enabled) in [
+            ("candlemass", input.quests.candlemass),
+            ("molten_shrine", input.quests.molten_shrine),
+            ("silent_hall", input.quests.silent_hall),
+            ("beira", input.quests.beira),
+            ("garukhan", input.quests.garukhan),
+            ("blackjaw", input.quests.blackjaw),
+        ] {
+            quests.set(name, enabled).unwrap();
+        }
+        table.set("quests", quests).unwrap();
+        let wrapper:Function=lua.load("return function(f,input,warm) local result; for i=1,(warm and 200 or 1) do result=f(input) end; return result end").eval().unwrap();
+        wrapper
+            .call((self.calculate.clone(), table, self.oracle.warm))
+            .unwrap()
+    }
+}
+
+#[test]
+fn closed_spark_pipeline_matches_pinned_resource_and_offense_source_sections() {
+    for warm in [false, true] {
+        let oracle = SparkOracle::new(warm);
+        for level in [1, 2, 20, 60, 61, 100] {
+            for mask in [0u8, 1, 2, 4, 8, 16, 32, 63] {
+                let quests = SparkQuestRewards {
+                    candlemass: mask & 1 != 0,
+                    molten_shrine: mask & 2 != 0,
+                    silent_hall: mask & 4 != 0,
+                    beira: mask & 8 != 0,
+                    garukhan: mask & 16 != 0,
+                    blackjaw: mask & 32 != 0,
+                };
+                for resistance in [-200.0, -25.5, 0.0, 50.0, 80.0, 90.0, 200.0] {
+                    let input = SparkInput {
+                        character_level: level,
+                        resistance_penalty: -60.0,
+                        enemy_lightning_resistance: resistance,
+                        quests,
+                    };
+                    let actual = spark::evaluate(&input).unwrap();
+                    let expected = oracle.calculate(&input);
+                    for (name, actual) in [
+                        ("Life", actual.life),
+                        ("Mana", actual.mana),
+                        ("Str", actual.strength),
+                        ("Dex", actual.dexterity),
+                        ("Int", actual.intelligence),
+                        ("AverageHit", actual.average_hit),
+                        ("TotalDPS", actual.hit_dps),
+                        ("Speed", actual.cast_rate),
+                        ("CritChance", actual.crit_chance),
+                        ("CritMultiplier", actual.crit_multiplier),
+                        (
+                            "EffectiveResist",
+                            actual.effective_enemy_lightning_resistance,
+                        ),
+                    ] {
+                        assert_number(Some(actual), Some(expected.get(name).unwrap()));
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn closed_spark_data_is_transcribed_from_source_and_rejects_invalid_profile_inputs() {
+    let oracle = SparkOracle::new(false);
+    let class: Table = oracle.oracle.lua.globals().get("sparkClass").unwrap();
+    assert_eq!(class.get::<f64>("base_str").unwrap(), spark::DATA.strength);
+    assert_eq!(class.get::<f64>("base_dex").unwrap(), spark::DATA.dexterity);
+    assert_eq!(
+        class.get::<f64>("base_int").unwrap(),
+        spark::DATA.intelligence
+    );
+    let skill: Table = oracle.oracle.lua.globals().get("sparkSkill").unwrap();
+    assert_eq!(skill.get::<f64>("castTime").unwrap(), spark::DATA.cast_time);
+    let data: Table = oracle.oracle.lua.globals().get("data").unwrap();
+    let constants: Table = data.get("characterConstants").unwrap();
+    for (name, value) in [
+        ("life_per_level", spark::DATA.life_per_level),
+        ("mana_per_level", spark::DATA.mana_per_level),
+        (
+            "base_critical_hit_damage_bonus",
+            spark::DATA.critical_damage_bonus,
+        ),
+        (
+            "base_maximum_all_resistances_%",
+            spark::DATA.player_resistance_cap,
+        ),
+    ] {
+        assert_eq!(constants.get::<f64>(name).unwrap(), value);
+    }
+    let input = SparkInput {
+        character_level: 60,
+        resistance_penalty: -60.0,
+        enemy_lightning_resistance: 0.0,
+        quests: SparkQuestRewards::default(),
+    };
+    for level in [0, 101, u32::MAX] {
+        assert!(
+            spark::evaluate(&SparkInput {
+                character_level: level,
+                ..input
+            })
+            .is_err()
+        );
+    }
+    for resistance in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY, -200.1, 200.1] {
+        assert!(
+            spark::evaluate(&SparkInput {
+                enemy_lightning_resistance: resistance,
+                ..input
+            })
+            .is_err()
+        );
+    }
+    for penalty in [f64::NAN, f64::INFINITY, -60.1, 0.1] {
+        assert!(
+            spark::evaluate(&SparkInput {
+                resistance_penalty: penalty,
+                ..input
+            })
+            .is_err()
+        );
+    }
+    let before = spark::evaluate(&input).unwrap();
+    spark::evaluate(&SparkInput {
+        character_level: 1,
+        enemy_lightning_resistance: 200.0,
+        ..input
+    })
+    .unwrap();
+    assert_eq!(spark::evaluate(&input).unwrap(), before);
+}
+
+#[path = "support/mace_parity.rs"]
+mod mace_parity;

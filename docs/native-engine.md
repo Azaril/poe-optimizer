@@ -10,7 +10,8 @@ and usable evaluation path while the native engine grows through verified slices
 `poe-optimizer-engine` owns game calculations that can run without Lua or an operating
 system. It accepts resolved numeric inputs, validated numeric modifier layers, and explicit condition contexts now,
 and will eventually accept typed build, modifier and game-data models. The optimizer core owns objectives, constraints and search;
-the PoB adapter owns Lua runtime hosting, XML import/export and reference execution.
+portable import owns interchange and materialization, the native adapter owns document
+preparation and typed native results, and the PoB adapter owns optional Lua reference hosting.
 Neither the native engine nor future browser bindings should depend on the native PoB
 worker package.
 
@@ -93,7 +94,7 @@ INC, MORE and OVERRIDE.
 The independent differential harness executes the actual pinned `ModStore` public query
 wrappers and `ModDB` implementation. It loads the actual `Data/Global.lua` bit/keyword
 helpers and extracts the actual `Common.lua` class library/rounding and `Data.lua` precision
-table. All five full normalized source hashes are checked. There is no translated Lua
+table. The five calculation/helper source hashes and the actual ModTools constructor source hash are checked. There is no translated Lua
 formula oracle. Cases cover interpreted and warmed LuaJIT, interacting flag/keyword masks,
 53-bit boundaries, parent layers, duplicate and reordered stat names, source variations,
 zero overrides, precision carry, negative and near-rounding-boundary factors, grouped
@@ -189,15 +190,16 @@ can contain BASE/OVERRIDE producers tagged with supported conditions; any nested
 multiplier/scaling producer must retain its unsupported tag and fail DB construction.
 Actor-specific multiplier/limit/threshold targets also reject, even if the current actor
 context could resolve them. ActorCondition remains available solely as a condition gate.
-PerStat/PercentStat, reservation-specific GetStat behavior, global/shared limits, mixed-key
-`varList` tables, table/function-valued modifiers and unknown fields remain unsupported.
+The separate stat slice below adds current-store PerStat and StatThreshold. PercentStat,
+reservation-specific GetStat behavior, global/shared limits, mixed-key `varList` tables,
+table/function-valued modifiers and unknown fields remain unsupported.
 An importer must retain unknown fields as unsupported metadata. For overlapping upstream
 fields, it must preserve upstream precedence: `divVar` over `div`, a literal cap over
 `limitVar`, and `limitTotal` over `limitNegTotal`. The typed cap mode records the selected
 meaning; it does not infer omitted input semantics.
 
 The differential harness calls the actual pinned `ModStore:GetMultiplier` and
-`ModStore:EvalMod` against real ModDB layers. It uses the same five normalized full-source
+`ModStore:EvalMod` against real ModDB layers. It uses the same calculation/helper normalized full-source
 hash checks as the earlier modifier tests. Cases cover both interpreted and warmed LuaJIT,
 conditional and source-filtered producers, zero overrides, parent grouping, absent
 variables, ordered and repeated variable lists, threshold equality, rounding-boundary
@@ -208,6 +210,141 @@ immutable, with no Lua objects, I/O or host scheduling.
 Sources: [GetMultiplier](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua#L417-L423),
 [Multiplier and MultiplierThreshold](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua#L489-L604),
 [Limit](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua#L739-L741).
+
+## Fifth translation boundary: explicit ordinary stat lookups
+
+`stats::ResolvedStatEnvironment` stores an optional actor output table and the query's
+skill-local stat table. Ordinary `GetStat` queries prefer a present output value, including
+zero or NaN, then the skill-local value, then zero. An absent output table is preserved.
+This context receives resolved numeric values; it does not derive those values from a
+build. Unsupported context/value metadata rejects construction.
+
+`ScalingProgram` additionally accepts `PerStat` and `StatThreshold` tags. These programs
+require `evaluate_with_stats`; calling the previous `evaluate` method returns
+`MissingStatContext`, even when a preceding condition would disable the modifier.
+Construction checks every referenced stat and rejects unsupported branches before use.
+
+| Surface | Supported semantics |
+| --- | --- |
+| `PerStat` | One stat or a dense ordered list, repeated names, literal/current-store multiplier divisor, `floor(stat / divisor + 0.0001)`, additive base, and a literal/current-store multiplier maximum on the factor or final value. |
+| `StatThreshold` | One stat or ordered list, literal or named-stat threshold, optional literal/current-store multiplier percentage, and exact upper/lower comparisons. An absent percentage skips that arithmetic; zero remains a present percentage. |
+| Ordered composition | Stat tags execute among existing multiplier, limit and condition tags, preserving early exits and numeric operation ordering. |
+| Dynamic inputs | Stats and divisor references are re-read from the supplied immutable contexts on each call. Programs retain no request-dependent values. |
+
+`ManaReservedPercent`, `LifeReservedPercent` and `ManaUnreserved` are explicitly rejected
+as queries. Upstream treats these names specially using reservation/skill data or a NaN
+fallback; a plain numeric table lookup is not equivalent. These keys may remain in an
+output table, but neither direct queries nor program references silently approximate
+them. Actor-targeted PerStat, PercentStat, recursive scaling producers, function/table
+values, mixed-key stat lists and unknown fields remain outside this slice. The importer
+must retain unrepresented fields as unsupported metadata.
+
+The actual-source tests call `ModStore:GetStat` and `EvalMod` in interpreted and warmed
+LuaJIT. They exercise output-versus-skill precedence, absent tables and fields, dense list
+ordering/cancellation, repeated names, threshold percentage/equality boundaries,
+zero/negative divisors, cap order, mixed tag sequences, changed contexts with reused
+programs, signed zero, infinities and NaN. No translated Lua formula serves as an oracle.
+
+Sources: [GetStat](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua#L425-L468),
+[PerStat](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua#L605-L652),
+[StatThreshold](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua#L704-L722).
+
+## Closed native build profiles before general evaluator coverage
+
+The production destination is a fully native build evaluator. PoB supplies optional parity
+checks and update evidence; supported native calculations must not launch Lua processes.
+Grow complete, explicitly bounded build profiles alongside the common modifier machinery,
+so consumers can exercise the whole build/evaluation boundary before the general engine
+is ready. Unsupported builds or mechanics must fail explicitly, with the optional reference
+backend selected deliberately by the caller rather than hidden inside a native calculation.
+
+The initial `spark` profile accepts a Sorceress using level-one, quality-zero Spark, no
+equipment/supports/allocated passives, and no additional modifiers. The host validates
+that complete scope before constructing `SparkInput`; the numeric engine does not parse
+XML. The input exposes character level, resistance penalty, resolved enemy lightning
+resistance and six quest reward switches. It returns attributes, life/mana/energy shield,
+four player resistances, selected average hit and hit DPS, plus intermediate cast rate,
+critical chance/multiplier and effective enemy resistance. EHP, maximum hits, ailments,
+projectile collision/repeat-hit simulation and resource sustainability are not supplied.
+
+The profile preserves PoB's configuration defaults: the six fixed quest rewards affecting
+these outputs are enabled unless explicitly disabled, independently of character level.
+They add flat life, increased life/mana and elemental resistance. Quest choice lists default
+to Nothing. Consequently, a minimal XML with no equipment or allocated nodes still has
+quest modifiers; omitting those defaults would produce incorrect resource/resistance values.
+Normal, standard and pinnacle enemy resistance defaults are resolved by the host. Uber
+boss damage reduction, an explicit `enemyMaxResist` flag and other damage-taken modifiers
+remain outside this profile. Enemy resistance uses the pinned configurable ceiling (up to
+90%) and floor (-200%); player resistances retain upstream truncation before clamping.
+
+`SparkData` is a compact Rust transcription of skill level data, class attributes, character
+constants, quest effects and explicit calculation constants. `SOURCE_FILES` identifies
+11 complete normalized source files, and `PROFILE_ID` identifies the supported semantics.
+The production function uses no parsing, allocation, I/O, timing, Lua or shared state. The
+application adapter owns XML admission, source identity, evaluation clock, metric coverage
+and prepared-input reuse. A native-only build and WASM consumer can therefore call the
+same function without the PoB package.
+
+Validation combines two complementary forms of evidence. The source harness executes the
+actual ModDB/ModStore machinery, complete resource function and unchanged relevant offence
+expressions for the admitted profile across levels, quest combinations and resistance
+boundaries, in interpreted and warmed LuaJIT. Full-build checks compare the native outputs
+against the immutable independent mapping/pinnacle Spark goldens; new host integration
+fixtures must also compare complete admitted inputs with the optional PoB backend. The
+production calculation never reads golden measurements. Native-only test dependencies load
+reference JSON and Lua; they are excluded from the production/WASM dependency graph.
+
+A closed-profile comparison proves only its declared scope. Expand admission and tests
+together when adding gem levels, supports, equipment, passive paths, classes or conditions.
+Preserve exact candidate realization checks and metric availability at each expansion;
+never let a broad parser make unsupported mechanics disappear before profile admission.
+
+Sources: [Spark skill data](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Data/Skills/act_int.lua#L19901-L20124),
+[base initialization](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/CalcSetup.lua#L826-L849),
+[attribute bonuses](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/CalcPerform.lua#L489-L520),
+[quest defaults](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/ConfigOptions.lua#L57-L105),
+[resource calculation](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/CalcDefence.lua#L71-L128),
+[hit/DPS aggregation](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/CalcOffence.lua#L4563-L4576).
+
+### Closed Mace Strike profile
+
+The `mace` profile extends the native build path to a Warrior with level-one Mace Strike,
+one normal Wooden Club or Smithing Hammer, integer quality 0..20 and item level 1..100.
+Brutality I at level one and quality zero is the only admitted support. There are no other
+items, supports, allocated passives, ascendancy or external modifiers. Warrior is entry 3
+in the pinned tree's classes table, whose `integerId` is 6; these identifiers are distinct.
+The host validates the complete document, identities and scenario before constructing
+`MaceInput`. Unmodified weapon base stats do not scale with item level.
+
+The production kernel translates local weapon quality and endpoint rounding, the skill's
+base damage and Brutality's modifier/elemental damage exclusion, inherent accuracy,
+rounded enemy evasion, hit chance, a second accuracy check for critical strikes, attack
+speed, separate critical/ordinary armour mitigation and final hit DPS. The enemy physical
+mitigation cap is 75%, separately sourced from the player cap. Applying one armour
+reduction to the combined average would be incorrect because a critical strike's larger
+hit has a different reduction. Character resources and resistances use the same quest and
+character-data source pipeline as Spark, with Warrior attributes.
+
+`MaceInput` receives resolved finite, nonnegative enemy armour/evasion and finite fire
+resistance in -200..200. The kernel applies the ordinary configurable resistance cap and
+provides checked source-table lookups for normal-monster levels 1..100. The adapter must
+apply actual encounter level bounds and defaults; the initial document profile admits
+normal enemies and explicit armour. Other encounters, enemy block, nondefault distance,
+armour break, physical reduction modifiers, damage conversion, lucky damage, ailments,
+additional support mechanics and other unrepresented flags require new parity-backed
+coverage. Per-hand average hit is exposed as `main_hand_average_hit`; PoB does not provide
+a top-level AverageHit for this attack, and the typed metric remains unavailable under
+that existing contract. This profile claims hit DPS, not combined or ailment DPS.
+
+Sixteen normalized source hashes accompany the Rust data. The differential test executes
+actual pinned Item/ModDB/resource/offence source with resolved closed-profile scaffolding,
+including the real Brutality stat map and damage-disable flags. Interpreted and warmed
+runs cover every admitted quality, both weapons and support choices, character levels,
+armour caps, evasion rounding and resistance boundaries, quest toggles, nonfinite input
+rejection and repeated requests. Four separately captured, unchanged full-build attack
+goldens provide an additional check. Full document/mutation comparisons remain necessary
+before an adapter expands its accepted scope. These tests establish parity for this
+closed profile and do not establish a general native build engine or game certification.
 
 ## Numeric behavior and parity
 

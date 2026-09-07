@@ -10,6 +10,7 @@ use std::{collections::BTreeMap, error::Error, fmt};
 use crate::{
     conditions::{ConditionEnvironment, ModifierTag},
     modifiers::{ModifierDatabase, ModifierError, QueryContext, SumKind},
+    stats::{ResolvedStatEnvironment, StatError, validate_stat},
 };
 
 pub type MultiplierValues = BTreeMap<String, f64>;
@@ -26,6 +27,8 @@ pub struct MultiplierEnvironment {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum MultiplierError {
     Modifier(ModifierError),
+    Stat(StatError),
+    MissingStatContext,
     LayerCount {
         modifiers: usize,
         values: usize,
@@ -49,6 +52,12 @@ impl Error for MultiplierError {}
 impl From<ModifierError> for MultiplierError {
     fn from(error: ModifierError) -> Self {
         Self::Modifier(error)
+    }
+}
+
+impl From<StatError> for MultiplierError {
+    fn from(error: StatError) -> Self {
+        Self::Stat(error)
     }
 }
 
@@ -186,10 +195,71 @@ pub struct MultiplierThreshold {
     pub threshold_actor: Option<String>,
 }
 
+/// A single stat or a dense ordered statList, preserving repeated names.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum StatVariables {
+    One(String),
+    Sum(Vec<String>),
+}
+impl StatVariables {
+    fn names(&self) -> &[String] {
+        match self {
+            Self::One(name) => std::slice::from_ref(name),
+            Self::Sum(names) => names,
+        }
+    }
+    fn value(&self, stats: &ResolvedStatEnvironment) -> Result<f64, StatError> {
+        match self {
+            Self::One(name) => stats.get_stat(name),
+            Self::Sum(names) => {
+                let mut sum = 0.0;
+                for name in names {
+                    sum += stats.get_stat(name)?;
+                }
+                Ok(sum)
+            }
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct StatLimit {
+    pub value: ScalarSource,
+    /// False caps the factor; true caps the scaled value after additive base.
+    pub total: bool,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct StatScale {
+    pub stats: StatVariables,
+    pub divisor: ScalarSource,
+    pub base: f64,
+    pub limit: Option<StatLimit>,
+    /// Actor-targeted PerStat is retained but rejected by this current-store slice.
+    pub actor: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum StatThresholdValue {
+    Constant(f64),
+    Stat(String),
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct StatThreshold {
+    pub stats: StatVariables,
+    pub threshold: StatThresholdValue,
+    /// None skips percentage arithmetic entirely, preserving exceptional values.
+    pub percent: Option<ScalarSource>,
+    pub upper: bool,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum ScalingTag {
     Multiplier(MultiplierScale),
     Threshold(MultiplierThreshold),
+    PerStat(StatScale),
+    StatThreshold(StatThreshold),
     Limit {
         value: ScalarSource,
         negative: bool,
@@ -204,6 +274,7 @@ pub enum ScalingTag {
 #[derive(Debug, Clone, PartialEq)]
 pub struct ScalingProgram {
     tags: Vec<ScalingTag>,
+    requires_stats: bool,
 }
 
 impl ScalingProgram {
@@ -218,6 +289,7 @@ impl ScalingProgram {
                 {
                     Some("Actor-targeted MultiplierThreshold")
                 }
+                ScalingTag::PerStat(tag) if tag.actor.is_some() => Some("Actor-targeted PerStat"),
                 ScalingTag::Unsupported(feature)
                 | ScalingTag::Condition(ModifierTag::Unsupported(feature)) => {
                     Some(feature.as_str())
@@ -231,7 +303,32 @@ impl ScalingProgram {
                 });
             }
         }
-        Ok(Self { tags })
+        // Inspect every referenced stat before accepting the complete program,
+        // even if an earlier condition would disable the modifier at runtime.
+        let mut requires_stats = false;
+        for tag in &tags {
+            let names = match tag {
+                ScalingTag::PerStat(tag) => {
+                    requires_stats = true;
+                    tag.stats.names()
+                }
+                ScalingTag::StatThreshold(tag) => {
+                    requires_stats = true;
+                    if let StatThresholdValue::Stat(name) = &tag.threshold {
+                        validate_stat(name)?;
+                    }
+                    tag.stats.names()
+                }
+                _ => continue,
+            };
+            for name in names {
+                validate_stat(name)?;
+            }
+        }
+        Ok(Self {
+            tags,
+            requires_stats,
+        })
     }
 
     pub fn tags(&self) -> &[ScalingTag] {
@@ -243,10 +340,33 @@ impl ScalingProgram {
     /// or an extractor: query selection/source checks occur in the caller.
     pub fn evaluate(
         &self,
-        mut value: f64,
+        value: f64,
         environment: &MultiplierEnvironment,
         query: &QueryContext,
     ) -> Result<Option<f64>, MultiplierError> {
+        self.evaluate_internal(value, environment, query, None)
+    }
+
+    pub fn evaluate_with_stats(
+        &self,
+        value: f64,
+        environment: &MultiplierEnvironment,
+        query: &QueryContext,
+        stats: &ResolvedStatEnvironment,
+    ) -> Result<Option<f64>, MultiplierError> {
+        self.evaluate_internal(value, environment, query, Some(stats))
+    }
+
+    fn evaluate_internal(
+        &self,
+        mut value: f64,
+        environment: &MultiplierEnvironment,
+        query: &QueryContext,
+        stats: Option<&ResolvedStatEnvironment>,
+    ) -> Result<Option<f64>, MultiplierError> {
+        if self.requires_stats && stats.is_none() {
+            return Err(MultiplierError::MissingStatContext);
+        }
         for tag in &self.tags {
             match tag {
                 ScalingTag::Multiplier(tag) => {
@@ -282,6 +402,42 @@ impl ScalingProgram {
                         || (tag.equals && multiplier != threshold)
                         || (!tag.upper && multiplier < threshold)
                     {
+                        return Ok(None);
+                    }
+                }
+                ScalingTag::PerStat(tag) => {
+                    let stats = stats.ok_or(MultiplierError::MissingStatContext)?;
+                    let base = tag.stats.value(stats)?;
+                    let divisor = environment.scalar(&tag.divisor, query)?;
+                    let mut multiplier = (base / divisor + 0.0001).floor();
+                    let limit = tag
+                        .limit
+                        .as_ref()
+                        .map(|limit| environment.scalar(&limit.value, query))
+                        .transpose()?;
+                    if let (Some(limit), Some(spec)) = (limit, &tag.limit)
+                        && !spec.total
+                    {
+                        multiplier = lua_min(multiplier, limit);
+                    }
+                    value = value * multiplier + tag.base;
+                    if let (Some(limit), Some(spec)) = (limit, &tag.limit)
+                        && spec.total
+                    {
+                        value = lua_min(value, limit);
+                    }
+                }
+                ScalingTag::StatThreshold(tag) => {
+                    let stats = stats.ok_or(MultiplierError::MissingStatContext)?;
+                    let value = tag.stats.value(stats)?;
+                    let mut threshold = match &tag.threshold {
+                        StatThresholdValue::Constant(value) => *value,
+                        StatThresholdValue::Stat(name) => stats.get_stat(name)?,
+                    };
+                    if let Some(percent) = &tag.percent {
+                        threshold *= environment.scalar(percent, query)? / 100.0;
+                    }
+                    if (tag.upper && value > threshold) || (!tag.upper && value < threshold) {
                         return Ok(None);
                     }
                 }

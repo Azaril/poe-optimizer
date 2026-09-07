@@ -23,8 +23,9 @@ Use two interfaces in `poe-optimizer-core`:
   backend responses. Execution services will add scheduling, caching, cancellation and
   shared budgets around this boundary without exposing backend internals to callers.
 
-The CLI composes `Engine<PobBackend>`. Generic and boxed backend implementations share
-these contracts; a future native backend implements the same calculation interface.
+The CLI composes `Engine` with a selected native or PoB backend. Generic and boxed backend
+implementations share these contracts. The production target is native-only packaging and
+direct Rust parallel evaluation; the PoB backend remains optional for parity and updates.
 Neither interface requires Lua handles, filesystem paths, process IDs, a webview or a
 particular thread/async runtime. The PoB adapter privately owns those host dependencies.
 
@@ -45,13 +46,18 @@ A catalog declaration identifies semantics, not universal mechanic validation.
 `full_build_evaluation` means the backend accepts a complete build document, distinguishing
 it from numerical helpers. It does not certify legality or complete mechanic coverage.
 Per-result coverage and diagnostic/verification status remain separate. Do not register a
-partially translated kernel collection as a complete native build evaluator.
+partially translated kernel collection as a complete native build evaluator. A complete
+document pipeline with explicitly bounded mechanic coverage may expose this capability
+while rejecting every build outside that coverage. This is not full game support, and
+must never silently fall back to PoB or substitute zero for missing calculations.
 
 Keep `poe-optimizer-engine` focused on portable calculations and versioned game data.
 It must not depend on `poe-optimizer-pob`, Lua, the CLI or an OS scheduler. Translation
 proceeds in cohesive slices against the pinned Lua oracle, as described in
 [native-engine.md](native-engine.md). Export, data extraction and packaging are separate
-adapter responsibilities. A build-time Lua data extractor does not imply a Lua runtime
+adapter responsibilities. `poe-optimizer-import` owns shared portable interchange; native
+build preparation and typed backend adaptation belong in `poe-optimizer-native`.
+A build-time Lua data extractor does not imply a Lua runtime
 dependency for the native/browser evaluator.
 
 The initial engine interface is synchronous. Backend implementations enforce their own
@@ -91,5 +97,5 @@ alone establishes neither browser functionality nor a speed improvement.
 Observed configuration tables are evidence, not a fully resolved scenario model. Skill
 indexes are scoped to the evaluated active skill set and pinned catalog, not stable user
 requirement IDs. Those limitations must remain visible until canonical candidate, scenario
-and coverage models are implemented. See [execution-and-interfaces.md](execution-and-interfaces.md)
+and coverage models have complete supported semantic integration. See [execution-and-interfaces.md](execution-and-interfaces.md)
 for the target job API and [design.md](design.md) for complete optimizer acceptance criteria.

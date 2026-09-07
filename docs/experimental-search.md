@@ -1,98 +1,154 @@
 # Experimental controlled search
 
-`search-experimental` searches a supplied finite weapon/support problem using reusable
-candidate, scoring and search interfaces. Unlike `search-calibration`, it constructs
-parameterized candidates from a structurally validated XML template. It is still a
-restricted diagnostic development profile, not the first general joint optimizer release.
-The first usable release continues to require all six dimensions, multiple required skills
-and exact items, and broad mechanic coverage.
+`search-experimental` searches supplied normal-Mace weapon/support choices with the native
+Rust backend or the optional PoB reference backend. Both use the same canonical candidates,
+objective policy, budgets, locks and fresh finalist verification. This remains a restricted
+diagnostic development profile. The intended general release still requires joint search
+across all six build dimensions, multiple required skills/items and broad mechanic coverage.
 
 ## Run a supplied problem
 
 ```powershell
 New-Item -ItemType Directory -Force runs | Out-Null
-cargo run --locked -- search-experimental --problem examples/mace-search.json --jobs 2 --max-evaluations 10 --timeout-seconds 300 --output runs/mace-search.json --export runs/mace-best.xml
+cargo run --locked -- search-experimental --backend native --problem examples/mace-search.json --jobs 4 --max-evaluations 10 --timeout-seconds 300 --output runs/mace-native-search.json --export runs/mace-native-best.xml
 ```
 
-The [example problem](../examples/mace-search.json) has four exact weapons and two support
-choices: quality-zero and quality-20 Wooden Clubs and Smithing Hammers, with no support or
-Brutality I. Its objective maximizes selected hit DPS. The user can supply another typed
-objective and constraints through the same policy schema used by evaluation and assessment.
-Ten attempts allow one template calculation, all eight combinations and one fresh finalist.
+The [example problem](../examples/mace-search.json) contains four exact weapons and two
+support choices: quality-zero and quality-20 Wooden Clubs and Smithing Hammers, each with
+no support or Brutality I. Its objective maximizes selected hit DPS. Ten attempts allow one
+template calculation, all eight combinations and one fresh finalist. Other supported typed
+objectives and constraints use the same schema as evaluation and assessment.
 
-`template` is relative to the problem file, or an absolute path. PoB XML/share imports pass
-through the existing bounded importer. Exact item text, support choices, optional locks
-and neighborhood settings are in the JSON. Unknown fields and unsupported profile mechanics
-are rejected before calculation. Read [controlled mutation support](controlled-mutations.md)
-for the structural profile and accepted ranges. The supplied Sorceress/minion build remains
-an evaluator fixture; this command does not yet mutate it.
+The native-only build also provides controlled search and defaults to the native backend:
+
+```powershell
+cargo run --no-default-features --locked -- search-experimental --problem examples/mace-search.json --jobs 4 --max-evaluations 10
+```
+
+Developer builds with the default `pob` feature retain the PoB default for compatibility.
+Choose the reference backend explicitly when comparing behavior:
+
+```powershell
+cargo run --locked -- search-experimental --backend pob --problem examples/mace-search.json --jobs 2 --max-evaluations 10
+```
+
+Native execution uses a local Rayon pool with `ExecutionKind::RustCpu`. PoB execution uses
+`ExecutionKind::ExternalProcess` and supervised calculation workers. A native run needs no
+PoB checkout and never starts a Lua worker or falls back to PoB. Native-only builds omit
+PoB worker, extraction and calibration-harness commands.
+
+## Supported input and locks
+
+`template` is relative to the problem file or an absolute path. XML/share codes pass through
+the bounded importer. The template fixes an unallocated Warrior without ascendancy, one
+level-1 quality-0 Mace Strike, one normal Wooden Club or Smithing Hammer, and zero or one
+level-1 quality-0 Brutality I. Supplied item alternatives can change their base, quality
+0–20 and item level 1–100 while retaining the exact supported five-line item format.
+Character level, configuration and all other source fields remain fixed throughout a run.
+
+Native Mace currently admits normal enemies only. The PoB controlled profile also supports
+its documented boss/Pinnacle scenarios. Unknown JSON fields, unsupported structural
+mechanics and invalid locks reject before search; backend-specific admission can also reject
+the initial template attempt. Read [controlled mutation support](controlled-mutations.md)
+for structural ranges and [native backend coverage](native-backend.md) for the native gate.
+The supplied Sorceress/minion build remains an evaluator fixture and is not mutated here.
+
+Native Mace returns eight finite metrics: life, mana, energy shield, four capped resistances
+and selected hit DPS. `selected_average_hit` is explicitly unavailable because its shared
+contract does not aggregate per-hand attack averages. Objectives requiring unavailable
+values cannot produce a feasible recommendation. The standalone native evaluator also
+supports its restricted Spark profile, but this mutation command currently operates on the
+Mace profile only.
 
 Optional `locks.weapon_id` fixes an exact supplied weapon. `locks.support` fixes `none` or
-`brutality_i`. Both are represented in the discrete axes and canonical candidate constraints;
-replaying candidate validation does not depend on CLI-only lock rules. Other character/tree/
-main-skill fields are fixed by this profile, not silently dropped from the general design.
+`brutality_i`. Both are represented in discrete axes and canonical candidate constraints;
+replaying validation therefore preserves the locks. Main skill, class, ascendancy and tree
+are fixed by this profile; they remain required dimensions of the overall design.
+
+The shared `poe_optimizer_import::controlled_mace` module owns immutable catalogs,
+source-preserving materialization and realization checks. `preflight` owns shared structural
+evaluation checks. Both are pure Rust, with compatibility re-exports at the old
+`poe_optimizer_pob::mutation` and `poe_optimizer_pob::preflight` paths.
 
 ## Strategies and accounting
 
 The default `--strategy exhaustive` enumerates the bounded supplied product, subject to
-`--max-proposals`. It never enumerates the game's whole space. `--strategy guided` starts
-from a deterministic complete point and uses the reusable discrete proposer:
+`--max-proposals`. `--strategy guided` starts from a deterministic complete point and uses
+the reusable discrete proposer:
 
 ```powershell
-cargo run --locked -- search-experimental --problem examples/mace-search.json --strategy guided --jobs 2 --seed 42 --max-evaluations 10 --max-rounds 64 --max-proposals 4096
+cargo run --no-default-features --locked -- search-experimental --problem examples/mace-search.json --strategy guided --jobs 4 --seed 42 --max-evaluations 10 --max-rounds 64 --max-proposals 4096
 ```
 
-The proposer cycles its mutation radius, changes several unlocked axes together, and samples
-full random restarts at a configured interval. It does not allocate the Cartesian product
-for sampling, and supports up to 128 axes with u32 cardinalities. Frozen/singleton axes never
-change. Empty samples can retry until round/proposal/time limits; they must not stop the run
-before later coupled moves or restarts. No sampled stall is an optimality certificate.
-Actual game-state repair and more advanced island/diversity policies remain future work.
+The proposer cycles its mutation radius, changes several unlocked axes together and samples
+full random restarts at a configured interval. Sampling avoids allocating a Cartesian
+product and supports up to 128 axes with u32 cardinalities. Frozen/singleton axes never
+change. Empty samples can retry until round/proposal/time limits so later coupled moves or
+restarts remain possible. A sampled stall does not establish optimality. Game-state repair
+and broader island/diversity policies remain future work.
 
-`--max-evaluations` includes the initial template calculation and one attempt reserved for
-fresh finalist verification; its minimum is three. Preparation establishes an immutable
-scenario, not an independent mechanics golden or a scored seed. Search receives the remaining
-attempt capacity and remaining duration. Failed calculations count. Reports distinguish
-preparation, search and verification, and `total_evaluations` includes them all.
+`--max-evaluations` includes one initial template calculation and one reserved fresh
+finalist attempt; its minimum is three. Preparation binds the immutable scenario and is
+not a scored seed or independent mechanics golden. Search receives only the remaining
+attempt capacity and duration. Failures count. Reports separate preparation, search and
+verification, and `total_evaluations` includes all three.
 
-The deadline begins before problem import/catalog construction. These host operations are
-bounded but do not have hard CPU preemption; a deadline check prevents late admission to the
-first calculation. Each PoB worker also has a 30-second maximum. Final artifact persistence
-is outside the calculation/search duration. Library cancellation remains cooperative; CLI
-signal handling and hard process-memory admission are not implemented.
+The deadline starts before problem import/catalog construction. These bounded host
+operations have cooperative checks, with no hard CPU preemption. Each engine call receives
+at most 30 seconds or the remaining run time, whichever is smaller. PoB enforces that limit
+through its process supervisor; native calculation uses its cooperative clock boundary.
+Late search results are discarded. Final artifact persistence is outside search duration.
+CLI signal cancellation and hard process-memory admission are not implemented.
 
-## Evidence and export
+## Realization evidence and export
 
-JSON retains the template and hash, problem, exact catalogs/payloads, discrete layout and
-canonical constraints, backend identity, baseline evaluation, search budgets/statistics,
-ranked assessments and fresh verification. Preparation failure emits an explicit partial
-report with no search or XML export. `best_verified` appears only after the highest feasible
-candidate passes a fresh process calculation with matching assessment and realized state.
-It retains `diagnostic_only`; consistency is not a full game-legality certificate.
+JSON retains the template/hash, problem, exact catalogs and payloads, discrete layout,
+canonical constraints, requested backend/execution kind, baseline identity/evaluation,
+budgets/statistics, ranked assessments and fresh verification. Preparation failure emits
+an explicit report with no search or XML export. `best_verified` appears only when the top
+feasible candidate passes a fresh calculation with matching assessment and realized state.
+The diagnostic marker remains set; consistency does not certify complete game legality.
 
-When requested, XML export contains the materialized source with only the supported item/
-support source ranges changed. Other source bytes are retained. Existing output files are
-never overwritten. No export is written for an unverified or infeasible best candidate.
-The original independent C-host Mace goldens validate generated quality-zero combinations.
-Quality-20, changed-level and Pinnacle cases validate structural realization and interactions;
-they do not constitute new independently generated numerical goldens.
+Native realization requires the backend's XML export to equal the exact materialized
+candidate bytes. It checks Warrior/class root, the selected Mace action and exact support
+gem projection. It separately checks resolved weapon base/quality/item level and support
+choice from the immutable native calculation inputs recorded in diagnostic evidence. The
+backend identity and external configuration/placeholders must match the fresh template;
+candidate-derived condition tables are not frozen. Native validation never calls the
+PoB-normalized baseline binder. PoB realization retains its existing normalized-export and
+live coverage checks.
+
+Requested XML export contains the materialized source with only item/support ranges changed;
+other source bytes are retained. A fresh verification attempt must pass before writing it,
+and existing output files are never overwritten. No export is written for an unverified
+or infeasible best candidate. Re-import and native re-evaluation of the exported winner are
+covered by tests.
+
+The four unchanged independent C-host quality-zero Mace references anchor numerical parity
+for generated candidates. Serial and four-worker native runs match those values. The
+supplied eight-state example agrees across exhaustive and guided native search, including
+its quality-20 alternatives. Changed level/quality and reference-backend Pinnacle checks
+supply additional realization evidence; they are not new independent numerical goldens.
+See the [native benchmark guide](native-backend.md#fixed-input-throughput-benchmark) for
+fixed-input typed API throughput measurements. Those benchmarks include result construction,
+validation and accounting; they do not measure raw arithmetic or optimizer quality.
 
 ## Tree extraction foundation
 
-The new offline command runs a separate bounded worker:
+Tree extraction remains a separate offline reference command requiring the `pob` feature:
 
 ```powershell
 cargo run --locked -- extract-tree --tree-version 0_5 --timeout-seconds 30 --output runs/tree-0_5.json
 ```
 
-It verifies the pinned source manifest and exact executable data literal, then exports
-4,914 nodes, eight classes, 23 ascendancies, shared physical roots and override provenance.
-All 14 dangling connections remain explicit. The snapshot preserves typed Lua keys/values
-as owned serialized data; consumers need no live Lua state. Read [tree-data.md](tree-data.md)
-for source hashes, bounds, graph semantics and unsupported mechanics. The Rust extractor/
-snapshot implementation currently lives in the PoB adapter; a portable consumer module is
-a separate integration step. No site scraping or bulk remote extraction is involved.
+Its bounded worker verifies the pinned source manifest and exact executable data literal,
+then exports 4,914 nodes, eight classes, 23 ascendancies, shared physical roots and override
+provenance. All 14 dangling connections stay explicit. The owned serialized snapshot can
+be consumed without a live Lua state. Read [tree data](tree-data.md) and
+[controlled tree projection](tree-projection.md) for authenticity, graph semantics and
+unsupported mechanics. No site scraping or bulk remote extraction is involved.
 
-The next expansion is to connect this source data to validated class/ascendancy/passive
-mutations, then broader equipment and skill/supporting-skill catalogs. Automatic overrides,
-point/resource legality and exact realized-state comparisons must survive those extensions.
+Future expansion must connect authenticated tree data to native class/ascendancy/passive
+calculations, then broader equipment and skill/supporting-skill catalogs. Automatic
+overrides, point/resource legality and exact realized-state comparisons must survive each
+extension. Progress checkpoints and remaining work live in [implementation.md](implementation.md).

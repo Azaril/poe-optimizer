@@ -1,0 +1,16 @@
+[package]
+name = "poe-optimizer-import"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.93"
+publish = false
+
+[dependencies]
+poe-optimizer-core = { path = "../poe-optimizer-core" }
+serde_json = "1"
+base64 = "0.22"
+flate2 = { version = "1", default-features = false, features = ["rust_backend"] }
+roxmltree = "0.21"
+serde = { version = "1", features = ["derive"] }
+sha2 = "0.10"
+thiserror = "2"

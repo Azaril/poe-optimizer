@@ -20,7 +20,20 @@ jobs:
         run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - name: Test
         run: cargo test --workspace --all-targets --locked
+      - name: Test native-only CLI
+        run: cargo test -p poe-optimizer-cli --no-default-features --all-targets --locked
+      - name: Lint native-only CLI
+        run: cargo clippy -p poe-optimizer-cli --no-default-features --all-targets --locked -- -D warnings
+      - name: Verify native-only runtime dependencies
+        shell: pwsh
+        run: |
+          $dependencies = cargo tree -p poe-optimizer-cli --no-default-features --edges normal --prefix none --locked
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $dependencies
+          if ($dependencies -match '^(poe-optimizer-pob|poe-optimizer-lua-utf8|mlua|mlua-sys|lua-src|luajit-src) ') {
+            throw 'Native-only deployment includes a PoB or Lua runtime dependency'
+          }
       - name: Install portable target
         run: rustup target add wasm32-unknown-unknown
       - name: Check portable core and native calculations
-        run: cargo check -p poe-optimizer-core -p poe-optimizer-engine --lib --target wasm32-unknown-unknown --locked
+        run: cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-import -p poe-optimizer-native --lib --target wasm32-unknown-unknown --locked

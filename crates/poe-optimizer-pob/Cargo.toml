@@ -6,8 +6,7 @@ rust-version = "1.93"
 publish = false
 
 [dependencies]
-base64 = "0.22"
-flate2 = "1"
+poe-optimizer-import = { path = "../poe-optimizer-import" }
 mlua = { version = "=0.12.1", features = ["luajit", "vendored", "serde"] }
 poe-optimizer-core = { path = "../poe-optimizer-core" }
 poe-optimizer-lua-utf8 = { path = "../poe-optimizer-lua-utf8" }

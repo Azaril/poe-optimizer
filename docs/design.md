@@ -8,7 +8,9 @@ The [source investigation](pob-integration.md) records the inspected PoB baselin
 
 ## Recommendation
 
-Build a Rust search engine around a versioned Path of Building (PoB) Lua evaluator.
+Build a Rust search engine with a fully native, parallel build evaluator. Keep versioned
+Path of Building (PoB) as an optional calculation reference for differential testing and
+validating game updates.
 First prove that imported builds and controlled changes reproduce PoB's results. The first
 usable optimizer must then search class, ascendancy, passive allocations, equipment, support
 gems, and supporting skills jointly. It must preserve any user-required set of 1..N skills
@@ -28,15 +30,17 @@ build choices may change. Finite candidate catalogs do not fix the user's goals.
 
 Treat multicore execution and reusable core libraries as initial engine requirements.
 Build the CLI over those libraries, with structured results and offline visualization
-before a later desktop GUI. Rayon is the proposed Rust CPU executor; isolated Lua workers
-parallelize PoB calculations. Tauri is a candidate for the later GUI.
+before a later desktop GUI. Rayon executes native calculations directly over shared immutable
+data and independent candidate state. Isolated Lua workers serve the optional PoB reference
+backend. Tauri is a candidate for the later GUI.
 
 Use a budgeted heuristic search that returns verified improvements and explains their
 trade-offs. Do not promise the global optimum. Finite item and skill/gem catalogs are part
 of the initial joint search. Defer unconstrained rare-item generation, live trade ingestion,
 and unbounded discovery outside the user's allowed catalogs.
 
-Keep PoB source unmodified in a pinned submodule. Own the compatibility shim and
+The production native distribution must not require a PoB checkout, Lua runtime or evaluator
+subprocesses. For reference builds, keep PoB source unmodified in a pinned submodule. Own the compatibility shim and
 worker protocol in this repository. Prefer Rust workers embedding LuaJIT through `mlua`
 for Lua hosting and interaction. Preserve process isolation and fresh-process verification.
 A separate upstream LuaJIT harness supplies independent host/extraction reference evidence
@@ -75,8 +79,10 @@ if a required mechanic is unavailable for a candidate class, that candidate is i
 Initial non-goals: building from an empty character; discovering every viable archetype;
 perfect rare items; crafting or purchase automation; an online service; a GUI in the first
 milestone (desktop interaction is planned later); frame-level
-combat simulation; rewriting the whole calculation engine in Rust. PoB's modeled numbers
-are the initial target, with its supported-mechanic limitations carried into our reports.
+combat simulation. Replacing the complete calculation core in Rust is an explicit target.
+PoB's modeled numbers are the initial parity target, with its supported-mechanic limitations
+carried into our reports. Narrow native profiles are incremental validation steps, not
+completion of that replacement.
 
 ## Product workflows and gaps identified in review
 
@@ -138,8 +144,11 @@ flowchart LR
     Core --> Search[Search coordinator + shared resource budget]
     Search --> Rayon[Rayon candidate generation / validation / scoring]
     Rayon --> Cache[Cache + in-flight deduplication]
-    Cache --> Pool[Parallel Rust workers with mlua and LuaJIT]
+    Cache --> Backend[Calculation backend contract]
+    Backend --> Native[Native Rust calculations on Rayon]
+    Backend --> Pool[Optional reference workers / mlua and LuaJIT]
     Pool --> PoB[Pinned PoB calculations and data]
+    Native --> Search
     PoB --> Search
     Search --> Results[Versioned run events + results + XML]
     Results --> Reports[Report library / offline HTML]
@@ -152,7 +161,10 @@ Use a Cargo workspace with library/application boundaries from the first engine 
 | Planned package | Responsibility |
 | --- | --- |
 | `poe-optimizer-core` | Problem/candidate models, metric/evaluator interfaces, generic scoring/search, execution policy, events/results |
-| `poe-optimizer-pob` | Game rules/data integration, Lua process supervision, output mappings, XML import/export |
+| `poe-optimizer-engine` | Portable Rust calculation semantics and versioned game data; no Lua or OS scheduler |
+| `poe-optimizer-native` | Native build preparation, calculation backend, typed results and export |
+| `poe-optimizer-import` | Bounded build/share-code decoding and portable interchange/materialization |
+| `poe-optimizer-pob` | Optional reference backend, Lua supervision, source extraction and parity evidence |
 | `poe-optimizer-report` | Structured artifacts, comparison models, CSV/JSON exports and offline HTML reports |
 | `poe-optimizer-cli` | Configuration/flags, adapter composition, progress display and exit codes; binary named `poe-optimizer` |
 | Later desktop application | GUI using the same libraries; Tauri remains a candidate |
@@ -167,7 +179,13 @@ PoE1 can share these libraries while supplying its own rules, topology, and metr
 
 ### Evaluator boundary
 
-The proposed protocol is versioned JSON Lines with request IDs and a startup handshake.
+The shared calculation and evaluation interfaces are in-process Rust traits with typed
+requests/results; see the [boundary decision](calculation-boundary.md). Native preparation
+produces immutable versioned build inputs and independent mutable calculation state. It
+must not invoke PoB, require IPC or silently fall back to Lua for unsupported mechanics.
+Backend selection is explicit and participates in provenance and cache compatibility.
+
+The optional PoB backend privately uses versioned JSON Lines with request IDs and a startup handshake.
 Only protocol messages go to stdout; PoB logging is captured on stderr. A worker declares
 game, upstream revision, runtime/ABI, adapter revision, supported metrics, and capabilities.
 
@@ -181,11 +199,12 @@ Logical operations:
 
 Do not require the coordinator to understand arbitrary Lua object graphs. Each evaluation
 must reconstruct a candidate from the same baseline, not rely on whatever mutation the
-previous request left behind. Initially use fresh processes or an independently verified
-full reset per evaluation. Reuse initialized workers only after A/B/A and request-order
+previous request left behind. For PoB reference evaluation, initially use fresh processes or an independently verified
+full reset. Reuse initialized reference workers only after A/B/A and request-order
 tests demonstrate isolation.
 
-Use a bounded pool of processes, one active calculation per worker. Processes give independent
+For the PoB backend, use a bounded process pool with one active calculation per worker.
+These processes give independent
 globals, working directories, and recoverable timeouts. They are a reliability boundary,
 not a security sandbox. Kill and replace a worker after a timeout, startup hang, or corrupt
 response; return a typed error and count the attempt against the budget. Cap retries.
@@ -208,7 +227,7 @@ callbacks, ordinary-frame calculations, and export parity before declaring this 
 If dynamic C-module loading is used, isolate the required unsafe initialization in the
 adapter and load only controlled runtime modules; the [default Lua constructor](https://docs.rs/mlua/0.12.1/mlua/struct.Lua.html#method.new)
 disallows C modules. Imported build data and objective configuration are never executable Lua.
-A fresh Rust/`mlua` process remains the production correctness baseline. Use a separate
+A fresh Rust/`mlua` process remains the PoB reference-backend correctness baseline. Use a separate
 upstream-runtime harness for independent host/extraction calibration and to diagnose
 embedding incompatibilities. Record source, runtime and harness identities with tolerances;
 shared PoB source remains a shared dependency, not independent validation of game mechanics.
@@ -217,7 +236,8 @@ shared PoB source remains a shared dependency, not independent validation of gam
 
 Multicore execution is part of the first working search engine. Use an engine-owned,
 explicitly sized Rayon pool for independent Rust CPU tasks and a supervised pool of
-single-calculation Lua workers. Independent starts/islands share those pools. Keep process
+single-calculation Lua workers when the reference backend is selected. Native calculations
+run directly on the CPU pool without per-candidate processes. Independent starts/islands share those pools. Keep process
 I/O and waits off the Rayon compute path, and never share one mutable Lua VM across workers.
 
 Resolve a total CPU concurrency budget (`jobs = "auto"` or a user limit) plus evaluator
@@ -501,7 +521,8 @@ into each candidate evaluation. Acquiring items remains outside the optimizer.
 Defer genetic crossover, surrogate models, mixed-integer formulations, and learned
 proposal policies until simpler baselines reveal a concrete limitation. Exact methods remain
 useful for tiny subproblems and benchmark ground truth, not a presumed model of all mechanics.
-Any future surrogate proposes or prioritizes; final recommendations still pass PoB evaluation.
+Any future surrogate proposes or prioritizes; final recommendations still pass the selected
+exact calculation backend. Production uses native evaluation; PoB remains an explicit reference.
 
 ### Finite support and gem configurations
 
@@ -533,12 +554,13 @@ relax a threshold or claim the task is mathematically impossible from this resul
 Reserve evaluation attempts and wall-clock time for fresh finalist verification before
 spending the search budget. Both limits cover the whole run, including failed attempts,
 export/re-import calculations, and final verification. Check remaining time before each
-step and supervise workers against the run deadline. If cancellation or timeout prevents
+step; check native work cooperatively and supervise reference workers against the run deadline. If cancellation or timeout prevents
 verification, return a previously verified incumbent when available; otherwise return
 clearly labeled evaluated-only diagnostics, with no verified recommendation. Record any
 reserved capacity that could not be used.
 
-Re-evaluate finalists in a fresh worker, export them, re-import the exported XML, and compare
+Re-evaluate finalists with fresh native calculation state or a fresh PoB reference worker,
+according to the selected backend. Export them, re-import the exported XML, and compare
 locked state and relevant metrics. Cache-only scores are insufficient for final verification.
 
 Measure cold startup, warm evaluation p50/p95, worker memory, failures/timeouts, cache hits,
@@ -614,15 +636,16 @@ adapter must demonstrate differential parity and declare its own versioned capab
 | --- | --- |
 | Upstream dev snapshot does not run with the intended interpreter | Smoke-test first; choose a known passing pin or an explicit minimal compatibility patch, with parity evidence |
 | Incomplete or incorrect modeled mechanics | Scope supported fixtures/mechanics; propagate diagnostics; do not market unsupported results as verified |
-| Runtime globals/caches contaminate candidates | Fresh-process baseline, isolation tests, supervised workers; optimize resets only after parity |
-| Oracle evaluations dominate cost | Measure first; cache and batch; improve proposals; consider host/IPC tuning or hot-path migration later |
+| Runtime globals/caches contaminate candidates | Fresh native calculation state and order-independence checks; PoB uses a fresh-process baseline and supervised workers, with reset reuse only after parity |
+| Calculation cost dominates search | Build complete native pipelines, measure preparation/calculation/result costs, share immutable data and batch work; use the optional oracle for parity |
 | Multicore overhead, memory duplication, or UI backpressure limits throughput | Shared CPU/memory limits; bounded queues and events; measure scaling before tuning |
 | Search stays in one local optimum | Larger graph moves, diverse starts, infeasible exploration; benchmark interactions |
 | User goals hide assumptions | Typed metrics, immutable scenario, unrounded feasibility, clear violation reports |
 | PoE2 mechanics and data change | Pin source/data and record schema/runtime; upgrade with fixture parity checks |
 | Packaging upstream/native dependencies | Keep notices; inventory dependencies actually shipped; select our distribution license before release |
 
-A native Rust calculation engine develops in parallel with the PoB adapter and optimizer.
+The fully native Rust calculation engine is the production target. It develops in parallel
+with the optional PoB reference adapter and optimizer.
 Translate cohesive calculation/data stages with differential parity against actual pinned
 Lua functions and representative/adversarial candidate states. Profile before claiming or
 tuning speed improvements. Keep the Lua reference adapter for comparison and explicit
@@ -644,7 +667,9 @@ first, visual output, and a later GUI. The user has also confirmed:
 5. Joint equipment optimization is part of the first product, not a deferred alternative
    to support/gem search.
 6. Calculation and evaluation APIs must support replacing Lua with a fully native Rust
-   backend. Develop parity-tested native stages in parallel; retain a browser/WASM path.
+   backend that is independent of PoB and executes directly in parallel. Keep PoB loadable
+   as an optional parity/update reference. Develop complete parity-tested native pipelines
+   and retain a browser/WASM path.
 
 The [decision register](prior-art-and-product-review.md#decision-register-and-remaining-input)
 preserves the answers and rationale. Exact skill/item requirements, goals, and scenario

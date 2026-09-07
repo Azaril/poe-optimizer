@@ -113,6 +113,7 @@ fn result(id: &str, options: EvaluationOptions) -> EvaluationResult {
             enemy_conditions: BTreeMap::new(),
         },
         coverage: BuildCoverage {
+            passives: None,
             schema_version: 1,
             active_skill_set_id: None,
             groups: vec![],

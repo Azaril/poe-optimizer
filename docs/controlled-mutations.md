@@ -1,6 +1,6 @@
-# Controlled PoB mutations
+# Controlled build mutations
 
-Status: experimental finite-domain adapter, `pob::mutation`, alongside the unchanged four-fixture `pob::candidate` calibration registry. This phase supplies parameterized weapon/support search inputs. The end state remains joint class, ascendancy, passive, item, active-skill, and support search with configurable requirements and independent locks.
+Status: experimental finite-domain adapter, `poe_optimizer_import::controlled_mace` (also re-exported by `pob::mutation`), alongside the unchanged four-fixture `pob::candidate` calibration registry. This phase supplies parameterized weapon/support search inputs. The end state remains joint class, ascendancy, passive, item, active-skill, and support search with configurable requirements and independent locks.
 
 ## Supported structural profile
 
@@ -20,7 +20,7 @@ The base may be Wooden Club or Smithing Hammer; item level is 1–100 and qualit
 
 Support choices are `none` and/or `brutality_i`. Their Cartesian product with weapons produces at most 128 candidates. The compatibility claim is tied to the pinned source: `src/Data/Skills/sup_str.lua` defines Brutality I as supporting damaging attacks, and Mace Strike is the known one-hand Mace attack. Quality and level variants of support gems, support families, multiple supports, and arbitrary skill compatibility require further data translation and tests.
 
-Every encounter input used by the original Mace template remains explicit. Permitted parameter changes include enemy level 1–100, boss setting `None`/`Boss`/`Pinnacle`, enemy armour, resistances, incoming damage components, penetration/overwhelm, and attack interval within conservative numeric bounds. Damage type stays Melee, enemy crit chance stays zero, the five optional condition toggles stay false, and nearby-enemy counts stay 1/0. Incoming damage must contain a positive component. Unknown configuration keys, custom modifiers, alternate scalar types, nonfinite values, omitted required inputs, and duplicates are rejected. These are fixed scenario inputs for the entire search, not optimizable choices.
+Every encounter input used by the original Mace template remains explicit. Permitted parameter changes include enemy level 1–85, boss setting `None`/`Boss`/`Pinnacle`, enemy armour, resistances, incoming damage components, penetration/overwhelm, and attack interval within conservative numeric bounds. Damage type stays Melee, enemy crit chance stays zero, the five optional condition toggles stay false, and nearby-enemy counts stay 1/0. Incoming damage must contain a positive component. Unknown configuration keys, custom modifiers, alternate scalar types, nonfinite values, omitted required inputs, and duplicates are rejected. These are fixed scenario inputs for the entire search, not optimizable choices.
 
 ## Identity and source preservation
 
@@ -40,8 +40,23 @@ PoB uses Lua `pairs()` when exporting several tables, so equivalent fresh export
 
 This baseline is **runtime-derived drift evidence**, not an independent numerical reference or a full legality certificate. The CLI must label all results diagnostic and require a fresh finalist verification before export. Canonical domain validation and realization checks complement each other; neither proves acquisition, full combat execution, mapping clear speed, progression assumptions, or completeness of PoB mechanics.
 
+### Native realization
+
+The native path uses `bind_native_baseline(result, expected_backend)` and
+`validate_native_realization(candidate, result, scenario)`. It validates the selected native
+backend/rules, exact materialized XML export, class/root, active/support identities and
+settings, source configuration, stable external placeholders and parsed weapon base,
+quality, item level and support evidence. It expects native source preservation, not PoB's
+normalization. Candidate-derived condition tables remain free to change. Both paths retain
+the same candidate locks, budgets, objective contracts and diagnostic status.
+
+Native controlled search currently supports the normal-enemy subset; unsupported boss
+scenarios fail preparation explicitly. Each native calculation runs directly on Rayon and
+fresh finalist verification recomputes in fresh native state without PoB. There is no hidden
+reference evaluation or fallback. See [native backend](native-backend.md) for complete scope.
+
 ## Validation and remaining work
 
 `tests/controlled_mutations.rs` covers structural acceptance, exact payload identity, source-byte preservation, support addition/removal, coordinated choices, foreign-catalog rejection, unknown mechanics, ambiguous sets, and malformed encounter inputs. The generated quality-zero product matches all four unchanged independent C-host Mace DPS goldens. Fresh parameterized round trips cover quality 20, changed character/enemy levels, incoming damage, and item level, plus a Pinnacle scenario with explicit armour/resistance settings. Mutation probes reject source-frame and realized item/gem/configuration drift.
 
-The four original goldens remain the independent numerical reference. Parameterized round trips establish requested state and interaction behavior; they are not newly independent absolute-number goldens. Future phases should expand independently calibrated item/support families, integrate translated tree and class data, preserve full candidate legality across combinations, and add native calculation parity. No general source-document mutation or complete six-dimension release claim is made by this adapter.
+The four original goldens remain the independent numerical reference. Parameterized round trips establish requested state and interaction behavior; they are not newly independent absolute-number goldens. Future phases should expand independently calibrated item/support families, integrate translated tree and class data, preserve full candidate legality across combinations, and extend native calculation parity beyond the admitted profiles. No general source-document mutation or complete six-dimension release claim is made by this adapter.

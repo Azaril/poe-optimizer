@@ -1,9 +1,13 @@
+#[cfg(feature = "pob")]
 mod catalog_search;
 mod mutation_search;
+mod native_benchmark;
 
 use clap::{Parser, Subcommand};
+use poe_optimizer_core::MAX_WIRE_BYTES;
+#[cfg(feature = "pob")]
 use poe_optimizer_core::{
-    MAX_WIRE_BYTES, PROTOCOL_VERSION, WorkerFailure, WorkerHello, WorkerRequest, WorkerResponse,
+    PROTOCOL_VERSION, WorkerFailure, WorkerHello, WorkerRequest, WorkerResponse,
 };
 use poe_optimizer_core::{
     evaluation::*,
@@ -12,20 +16,23 @@ use poe_optimizer_core::{
     objective::{ObjectiveSpec, ScoringPolicy},
     options::EvaluationOptions,
 };
-use poe_optimizer_pob::import::{MAX_XML_BYTES, decode_build};
+use poe_optimizer_import::{MAX_XML_BYTES, decode_build};
 use std::{
     fs::File,
-    io::{self, BufRead, Read, Write},
+    io::{self, Read, Write},
     path::{Path, PathBuf},
     process::ExitCode,
 };
+
+#[cfg(feature = "pob")]
+use std::io::BufRead;
 
 #[derive(Parser)]
 #[command(
     name = "poe-optimizer",
     version,
     about = "Experimental Path of Exile 2 build evaluator",
-    long_about = "Import PoB XML/share codes and obtain fresh diagnostic PoB outputs through isolated mlua workers. Includes experimental controlled weapon/support search and pinned tree-data extraction. General build optimization is not implemented; calculation and search coverage remain diagnostic."
+    long_about = "Import build XML/share codes and select a native Rust or optional PoB reference backend. Native coverage is currently restricted and rejects unsupported builds. Controlled search supports both backends; tree extraction requires the PoB reference feature. Results remain diagnostic."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -34,9 +41,12 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Action {
+    /// Measure native fixed-input API throughput with a bounded local Rayon pool.
+    BenchmarkNative(native_benchmark::Args),
     /// Search supplied normal-Mace weapon/support choices (experimental supported profile).
     SearchExperimental(mutation_search::Args),
     /// Export the pinned passive-tree data from an isolated, bounded extraction worker.
+    #[cfg(feature = "pob")]
     ExtractTree {
         #[arg(long, default_value = "vendor/path-of-building-poe2")]
         pob: PathBuf,
@@ -48,6 +58,7 @@ enum Action {
         output: PathBuf,
     },
     #[command(name = "__tree-worker", hide = true)]
+    #[cfg(feature = "pob")]
     TreeWorker {
         #[arg(long)]
         pob: PathBuf,
@@ -59,9 +70,13 @@ enum Action {
         error_file: PathBuf,
     },
     /// Search the four calibrated weapon/support alternatives (developer harness).
+    #[cfg(feature = "pob")]
     SearchCalibration(catalog_search::Args),
     /// List the typed measurement catalog without starting a calculation.
-    Metrics,
+    Metrics {
+        #[arg(long, value_enum, default_value_t = default_backend())]
+        backend: BackendChoice,
+    },
     /// Decode and validate a PoB XML file or share code, preserving exact XML bytes.
     Import {
         input: PathBuf,
@@ -77,12 +92,14 @@ enum Action {
         #[arg(long)]
         output: Option<PathBuf>,
     },
-    /// Evaluate a build in a fresh process and optionally assess a configured objective.
+    /// Evaluate with the selected calculation backend and optionally assess an objective.
     Evaluate {
         input: PathBuf,
+        #[arg(long, value_enum, default_value_t = default_backend())]
+        backend: BackendChoice,
         #[arg(long, default_value = "vendor/path-of-building-poe2")]
         pob: PathBuf,
-        /// Includes worker startup, calculation, export and process exit.
+        /// Shared calculation deadline; includes process startup when using the PoB backend.
         #[arg(long, default_value_t = 30)]
         timeout_seconds: u64,
         /// Save the JSON snapshot instead of writing it to stdout.
@@ -105,12 +122,43 @@ enum Action {
         raw: bool,
     },
     #[command(name = "__worker", hide = true)]
+    #[cfg(feature = "pob")]
     Worker {
         #[arg(long)]
         pob: PathBuf,
         #[arg(long)]
         scratch: PathBuf,
     },
+}
+
+#[derive(Clone, Copy, Debug, clap::ValueEnum)]
+enum BackendChoice {
+    Native,
+    #[cfg(feature = "pob")]
+    Pob,
+}
+fn default_backend() -> BackendChoice {
+    #[cfg(feature = "pob")]
+    {
+        BackendChoice::Pob
+    }
+    #[cfg(not(feature = "pob"))]
+    {
+        BackendChoice::Native
+    }
+}
+fn make_backend(
+    selection: BackendChoice,
+    _pob: PathBuf,
+) -> Result<Box<dyn CalculationBackend + Send + Sync>, Box<dyn std::error::Error>> {
+    Ok(match selection {
+        BackendChoice::Native => Box::new(poe_optimizer_native::NativeBackend::new()),
+        #[cfg(feature = "pob")]
+        BackendChoice::Pob => Box::new(poe_optimizer_pob::backend::PobBackend::new(
+            std::env::current_exe()?,
+            _pob,
+        )),
+    })
 }
 
 fn main() -> ExitCode {
@@ -125,7 +173,9 @@ fn main() -> ExitCode {
 
 fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
+        Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,
         Some(Action::SearchExperimental(args)) => mutation_search::run(args)?,
+        #[cfg(feature = "pob")]
         Some(Action::ExtractTree {
             pob,
             tree_version,
@@ -154,6 +204,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 }))?
             );
         }
+        #[cfg(feature = "pob")]
         Some(Action::TreeWorker {
             pob,
             tree_version,
@@ -162,16 +213,21 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         }) => {
             poe_optimizer_pob::tree_worker::worker(&pob, &tree_version, &artifact, &error_file)?;
         }
+        #[cfg(feature = "pob")]
         Some(Action::SearchCalibration(args)) => catalog_search::run(args)?,
         None => {
             use clap::CommandFactory;
             Cli::command().print_help()?;
             println!();
         }
-        Some(Action::Metrics) => {
+        Some(Action::Metrics { backend }) => {
             println!(
                 "{}",
-                serde_json::to_string_pretty(&poe_optimizer_pob::metrics::catalog())?
+                serde_json::to_string_pretty(
+                    &make_backend(backend, PathBuf::new())?
+                        .capabilities()
+                        .metrics
+                )?
             );
         }
         Some(Action::Import { input, output }) => {
@@ -191,6 +247,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         }
         Some(Action::Evaluate {
             input,
+            backend,
             pob,
             timeout_seconds,
             output,
@@ -216,8 +273,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 Some(path) => read_json::<EvaluationOptions>(&path, 64 * 1024)?,
                 None => EvaluationOptions::default(),
             };
-            let backend =
-                poe_optimizer_pob::backend::PobBackend::new(std::env::current_exe()?, pob);
+            let backend = make_backend(backend, pob)?;
             let engine = Engine::new(backend);
             let policy = objective
                 .map(|path| {
@@ -329,6 +385,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 io::stdout().write_all(&bytes)?;
             }
         }
+        #[cfg(feature = "pob")]
         Some(Action::Worker { pob, scratch }) => worker(&pob, &scratch)?,
     }
     Ok(())
@@ -396,6 +453,7 @@ fn write_new(path: &Path, bytes: &[u8]) -> io::Result<()> {
     file.persist_noclobber(path).map_err(|error| error.error)?;
     Ok(())
 }
+#[cfg(feature = "pob")]
 fn worker(pob: &Path, scratch: &Path) -> Result<(), Box<dyn std::error::Error>> {
     send_json(&WorkerHello {
         protocol_version: PROTOCOL_VERSION,
@@ -435,6 +493,7 @@ fn worker(pob: &Path, scratch: &Path) -> Result<(), Box<dyn std::error::Error>> 
     Ok(())
 }
 
+#[cfg(feature = "pob")]
 fn send_json(value: &impl serde::Serialize) -> Result<(), Box<dyn std::error::Error>> {
     let mut bytes = serde_json::to_vec(value)?;
     bytes.push(b'\n');

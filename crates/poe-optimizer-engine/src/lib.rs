@@ -1,6 +1,7 @@
 //! Native calculation kernels translated from pinned Path of Building PoE2 source.
 //!
-//! This partial port is not a build evaluator. Production code has no Lua, I/O,
+//! This partial port includes closed Spark/Mace profiles, not a general build evaluator.
+//! Production code has no Lua, I/O,
 //! threading, or external-crate dependencies. Inputs are already resolved numeric
 //! values, validated numeric modifiers and explicit condition contexts; build legality lives outside
 //! this slice. See `docs/native-engine.md` for scope and parity requirements.
@@ -9,8 +10,11 @@
 
 pub mod conditions;
 pub mod defence;
+pub mod mace;
 pub mod modifiers;
 pub mod multipliers;
+pub mod spark;
+pub mod stats;
 
 /// PoB revision from which the currently implemented kernels were translated.
 pub const UPSTREAM_REVISION: &str = "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4";

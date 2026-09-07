@@ -134,6 +134,30 @@ impl EvaluationResult {
                 "Unsupported recorded coverage schema version".into(),
             ));
         }
+        if let Some(passives) = &self.coverage.passives {
+            passives.validate().map_err(invalid)?;
+            let observed: std::collections::BTreeSet<_> = passives
+                .allocated_nodes
+                .iter()
+                .map(|node| node.physical_node_id)
+                .collect();
+            let recorded: std::collections::BTreeSet<_> =
+                self.build.allocated_nodes.iter().copied().collect();
+            if passives.tree_version != self.build.tree_version
+                || passives.class.name != self.build.class_name
+                || passives
+                    .ascendancy
+                    .as_ref()
+                    .map_or("None", |value| value.name.as_str())
+                    != self.build.ascendancy_name
+                || observed != recorded
+                || recorded.len() != self.build.allocated_nodes.len()
+            {
+                return Err(invalid(
+                    "Recorded passive evidence disagrees with build identity or allocations".into(),
+                ));
+            }
+        }
         fn finite_optional(value: Option<f64>, field: &str) -> Result<(), EvaluationError> {
             if value.is_some_and(|number| !number.is_finite()) {
                 return Err(EvaluationError::new(

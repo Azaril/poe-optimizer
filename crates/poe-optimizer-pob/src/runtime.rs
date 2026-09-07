@@ -211,11 +211,18 @@ pub fn evaluate_with_options(
     let mut snapshot: LuaSnapshot = lua.from_value(value)?;
     check_prompt(&lua)?;
     crate::import::decode_build(snapshot.export_xml.as_bytes())?;
-    let coverage: poe_optimizer_core::coverage::BuildCoverage = lua.from_value(
+    let mut coverage: poe_optimizer_core::coverage::BuildCoverage = lua.from_value(
         lua.load(include_str!("coverage.lua"))
             .set_name("@optimizer-coverage.lua")
             .eval()?,
     )?;
+    let passives: poe_optimizer_core::coverage::PassiveCoverage = lua.from_value(
+        lua.load(include_str!("passive_coverage.lua"))
+            .set_name("@optimizer-passive-coverage.lua")
+            .eval()?,
+    )?;
+    passives.validate().map_err(RuntimeError::Setup)?;
+    coverage.passives = Some(passives);
     let context = lua.from_value(
         lua.load(include_str!("context.lua"))
             .set_name("@optimizer-context.lua")
@@ -232,6 +239,7 @@ pub fn evaluate_with_options(
     hash.update(include_str!("options.lua"));
     hash.update(include_str!("context.lua"));
     hash.update(include_str!("coverage.lua"));
+    hash.update(include_str!("passive_coverage.lua"));
     hash.update(include_str!("metrics.rs"));
     hash.update(include_str!("backend.rs"));
     hash.update(include_str!("supervisor.rs"));
@@ -243,7 +251,11 @@ pub fn evaluate_with_options(
     hash.update(include_str!("../../../Cargo.toml"));
     hash.update(include_str!("../Cargo.toml"));
     hash.update(include_str!("import.rs"));
+    hash.update(include_str!("../../poe-optimizer-import/src/lib.rs"));
+    hash.update(include_str!("../../poe-optimizer-import/Cargo.toml"));
     hash.update(include_str!("preflight.rs"));
+    hash.update(include_str!("../../poe-optimizer-import/src/preflight.rs"));
+    hash.update(include_str!("../../poe-optimizer-import/src/xml_compat.rs"));
     hash.update(include_str!("../../poe-optimizer-core/src/lib.rs"));
     hash.update(include_str!("../../poe-optimizer-core/Cargo.toml"));
     hash.update(include_str!("source.rs"));

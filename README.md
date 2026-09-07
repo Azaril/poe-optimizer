@@ -3,7 +3,8 @@
 An experimental Rust project for constraint-driven Path of Exile 2 build optimization,
 with potential Path of Exile 1 support later. The intended workflow is to import a
 build, choose which build decisions may change, set encounter assumptions, and configure goals,
-then search for good legal alternatives using Path of Building's calculations.
+then search for good legal alternatives using a native Rust evaluator, with Path of Building
+available as an optional parity reference.
 
 Goals are user-configurable. Damage, resistance, EHP, and skill-selection examples are
 illustrative; users choose objectives, constraints, and preferences from an extensible
@@ -17,9 +18,9 @@ The initial quality target is configurable 5–30 minute runs, benchmarked in bo
 and mapping contexts. Search must handle coordinated changes that escape local optima;
 it returns verified best-found alternatives without promising a global optimum.
 
-The planned engine uses reusable Rust core libraries, Rayon for parallel Rust work,
-and isolated Rust workers hosting PoB through `mlua` with the LuaJIT backend, under
-shared CPU/memory limits. The CLI comes first, with
+The planned engine uses reusable Rust core libraries and direct Rayon evaluation under
+shared CPU/memory limits. Optional isolated Rust workers host the PoB reference through
+`mlua` with the LuaJIT backend. The CLI comes first, with
 structured run data and offline HTML reports; a later GUI can use the same APIs,
 with Tauri as a candidate.
 
@@ -31,13 +32,20 @@ Each PoB request
 uses a fresh `mlua` worker process with a deadline. Independent Spark mapping/bossing
 references plus a four-case attack/weapon/support matrix validate host and metric extraction.
 A parallel native Rust crate has parity-tested numerical helpers and numeric/conditional
-modifier aggregation plus numeric multiplier programs, and compiles for WebAssembly; it is not a full build evaluator.
+modifier aggregation and numeric scaling programs. A native build backend now parses a
+restricted Spark and Mace Strike profiles and computes their supported resource,
+resistance and hit metrics entirely in Rust. `evaluate --backend native` uses the same result/objective APIs, and a
+native-only CLI build excludes Lua and PoB. General native build coverage remains in progress;
+see [native backend and optional reference mode](docs/native-backend.md).
 Canonical candidates and locks represent all six dimensions. A generic search kernel has
 bounded parallel evaluation, feasible/infeasible beams, deduplication and fresh finalist
-checks. `search-experimental` searches supplied normal-Mace weapon/support choices with
-exact locks and source-preserving mutations; `search-calibration` retains the four original
+checks. `search-experimental --backend native` searches supplied normal-Mace weapon/support
+choices directly on Rayon with exact locks and source-preserving mutations; `--backend pob`
+selects the optional reference backend; `search-calibration` retains the four original
 fixtures. `extract-tree` exports pinned topology and source/override metadata for broader
-mutation work. General joint PoB mutation, persistent workers, HTML reports and browser
+mutation work, with live passive coverage and authenticated bounded graph projections.
+`benchmark-native` measures prepared or full-document typed evaluation throughput.
+General joint mutation, full native mechanic coverage, HTML reports and browser
 bindings remain unimplemented. See [the runnable experimental workflow](docs/experimental-search.md)
 and [search contracts](docs/search-kernel.md).
 The [living implementation document](docs/implementation.md) is the progress and resume record;
@@ -61,7 +69,15 @@ The output is not a certified build recommendation; cached values are never the 
 Install Git and Rust through rustup, with a working native linker
 (on Windows, Visual Studio Build Tools with the C++ toolchain).
 
-From this repository:
+For the native-only executable (supported profiles are listed in [native backend](docs/native-backend.md)):
+
+```powershell
+cargo build -p poe-optimizer-cli --release --no-default-features --locked
+cargo run -p poe-optimizer-cli --no-default-features --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml
+cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-search.json --jobs 4 --max-evaluations 10
+```
+
+For the full development workspace, including optional PoB references and parity tests:
 
 ```powershell
 git submodule update --init --recursive
@@ -73,7 +89,7 @@ cargo test --workspace --all-targets --locked
 ```
 
 The project selects stable Rust and declares Rust 1.93 as its minimum version. Cargo
-builds a pinned LuaJIT runtime and the native UTF-8 module from vendored source; no Lua
+builds a pinned LuaJIT runtime and the native UTF-8 module when the PoB feature is enabled; no Lua
 executable or upstream Windows DLL is required. The native C compiler is needed in
 addition to the Rust linker. CI checks the full workspace on Windows and Linux.
 
@@ -108,13 +124,14 @@ buffs, conditions or enemy settings. The result records requested options and ob
 configuration/conditions, which are not yet a complete resolved scenario model. See
 [skill coverage](docs/skill-coverage.md) for action provenance and unresolved entries.
 
-Experimental CLI JSON and worker protocol are version 2. Results identify backend,
+Evaluation-report JSON and the PoB worker protocol are version 2; controlled-search and native benchmark reports use schema 1. Results identify backend,
 rules/source/adapter fingerprints, observed selection, metric schema/units and coverage.
 `--raw` adds the complete PoB diagnostic snapshot as an opaque JSON attachment. Objective code
 must use typed measurements rather than inspect raw PoB fields. Unknown fields in options,
 unsupported metrics and replaced explicit selections fail instead of silently falling back.
 
-Export is PoB's normalized serialization, while `import` preserves original XML bytes.
+PoB evaluation exports normalized serialization. Native evaluation exports validated source
+with supported options applied and stale cached outputs removed. `import` preserves original XML bytes.
 Evaluation requires explicit supported build/tree metadata. Current outputs remain diagnostic:
 the [independent calibration](docs/calibration-reference.md) covers controlled Spark and attack cases,
 not general mechanic support, build legality or search recommendations. Non-damaging actions
@@ -138,14 +155,16 @@ translation/parity gates and browser requirements. To check portable libraries:
 
 ```powershell
 rustup target add wasm32-unknown-unknown
-cargo check -p poe-optimizer-core -p poe-optimizer-engine --lib --target wasm32-unknown-unknown --locked
+cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-import -p poe-optimizer-native --lib --target wasm32-unknown-unknown --locked
 ```
 ## Repository
 
 - `src/`: thin CLI and hidden worker protocol entry point.
 - `crates/poe-optimizer-core/`: backend-neutral evaluation contracts, options, metrics and coverage.
 - `crates/poe-optimizer-engine/`: portable native calculation kernels and differential tests.
-- `crates/poe-optimizer-pob/`: bounded import, source verification, mlua host and supervision.
+- `crates/poe-optimizer-native/`: strict native document profiles, preparation and typed backend.
+- `crates/poe-optimizer-import/`: portable bounded decoding, preflight and controlled materialization.
+- `crates/poe-optimizer-pob/`: optional reference host, source extraction, verification and supervision.
 - `crates/poe-optimizer-lua-utf8/`: static Unicode module, native sources and provenance.
 - `docs/design.md`: end-state scope, architecture, objectives, search, and acceptance criteria.
 - `docs/implementation.md`: living delivery plan, current status, checks, and session resume point.

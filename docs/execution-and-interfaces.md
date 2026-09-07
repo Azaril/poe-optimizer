@@ -15,9 +15,11 @@ application layers, with the following package boundaries:
 | `poe-optimizer-core` | Portable problem/candidate types, metric and evaluator interfaces, scoring and evidence contracts | Independent of CLI, Tauri, webviews, OS scheduling and a particular Lua host |
 | `poe-optimizer-search` | Search orchestration, bounded host scheduling, evaluation budgets, archives and verification | Depends on core; adapters provide candidates/calculations; native and browser schedulers stay replaceable |
 | `poe-optimizer-engine` | Portable native game calculations and versioned data; no Lua, OS scheduling or application I/O | Implements calculation semantics; independent of the PoB runtime |
-| `poe-optimizer-pob` | PoB game adapter, mlua/LuaJIT hosting in Rust workers, process supervision, metric mappings, XML import/export | Implements core interfaces; depends on core |
+| `poe-optimizer-native` | Native build preparation, backend adaptation and export | Depends on portable core, engine and import; no PoB runtime |
+| `poe-optimizer-import` | Bounded interchange decoding and source-preserving materialization | Portable Rust; no reference host dependency |
+| `poe-optimizer-pob` | Optional PoB reference backend, mlua/LuaJIT workers, source extraction and parity | Implements core interfaces; depends on core and shared import |
 | `poe-optimizer-report` | Versioned artifact encoding and presentation models, JSON/CSV export, HTML report generation | Depends on core result types; never owns calculation or search rules |
-| `poe-optimizer-cli` | Flags/config loading, composition of adapters, terminal progress, exit codes, report commands | Calls core, PoB adapter, and reporting APIs; binary remains `poe-optimizer` |
+| `poe-optimizer-cli` | Flags/config loading, composition of adapters, terminal progress, exit codes, report commands | Calls core, selected native/optional PoB backend, and reporting APIs; binary remains `poe-optimizer` |
 | Future Tauri application | Goal editor, run control, charts, build comparison and export | Calls the same libraries through a small Rust application layer |
 
 The [calculation boundary decision](calculation-boundary.md) separates `CalculationBackend`
@@ -56,7 +58,8 @@ Parallelize independent work throughout the pipeline:
 - Candidate generation and legality across class/ascendancy, passive, equipment, support-gem,
   and supporting-skill proposals, with task-local scratch state.
 - Canonicalization, hashing, and independent score calculations.
-- PoB evaluations across isolated worker processes.
+- Native evaluations directly on Rayon, with shared immutable data and task-local calculation state.
+- Optional PoB reference evaluations across isolated worker processes.
 - Independent search starts/islands, sharing the same evaluation service and resource budget.
 - Required scenario/skill-selector calculations and final-candidate verification when their
   dependencies allow it; initial benchmarks cover bossing and mapping.
@@ -98,10 +101,10 @@ If an isolated fresh process cannot fit, fail clearly instead of repeatedly laun
 Record requested and resolved limits, the estimate used, peak usage, and any throttling.
 A process lifetime limit may be needed if long runs expose memory growth.
 
-A bounded multicore evaluator pool is part of the engine contract. Fresh-process
+Bounded multicore evaluation is part of the engine contract. The native production path
+shares data in-process and does not inherit reference worker overhead. For PoB, fresh-process
 evaluation remains the correctness reference; persistent workers require demonstrated
-reset equivalence. Worker sizing uses measured cold/fresh evaluation costs and memory
-usage. Parallelism does not depend on rewriting calculations in Rust.
+reset equivalence. Reference-worker sizing uses measured cold/fresh costs and memory usage.
 
 ### Work distribution and shared state
 
@@ -120,10 +123,11 @@ requests join the same calculation instead of spending the budget repeatedly. Pu
 complete typed result atomically, release reservations on failure, and never hold a global
 cache/archive lock while evaluating or waiting for IPC. Fresh finalist verification uses
 an explicit verification path that bypasses completed-cache reuse and in-flight deduplication,
-starts an independent fresh worker, and consumes its reserved evaluation attempts. Prefer short critical sections
+uses fresh native calculation state or an independent PoB worker according to the selected
+backend, and consumes its reserved evaluation attempts. Prefer short critical sections
 and local batches; profile contention before introducing more elaborate sharding.
 
-Assign evaluation-budget tokens centrally before dispatch for every actual PoB calculation,
+Assign evaluation-budget tokens centrally before dispatch for every actual calculation,
 including extra skill-selector/scenario passes, retries, and final
 verification. An attached duplicate/cache hit does not consume a second token. Once a
 calculation is dispatched, its attempt counts even if cancelled or failed. Queue entries
@@ -243,7 +247,8 @@ choose resource limits, start/cancel runs, inspect progress and candidate change
 trade-offs, and export a chosen verified build. Reuse report presentation models where useful.
 The web frontend framework remains an application-layer choice.
 
-Confirm Tauri's packaging, native Lua worker/ABI distribution, platform prerequisites,
-and UI responsiveness in a small prototype before committing to the framework. Keep
+Confirm Tauri's native evaluator packaging, platform prerequisites and UI responsiveness
+in a small prototype before committing to the framework. If the GUI also ships the optional
+PoB reference backend, validate its Lua worker/ABI distribution separately. Keep
 Tauri dependencies in the application package so CLI/library builds remain independent
 of the desktop toolchain.

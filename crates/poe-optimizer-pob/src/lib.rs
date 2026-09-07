@@ -2,6 +2,7 @@
 pub mod candidate;
 pub mod mutation;
 pub mod tree_data;
+pub mod tree_projection;
 pub mod tree_worker;
 
 pub mod backend;

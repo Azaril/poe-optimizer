@@ -1,3 +1,5 @@
+#![cfg(feature = "pob")]
+
 use serde_json::Value;
 use std::{
     fs,

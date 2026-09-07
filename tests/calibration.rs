@@ -1,3 +1,5 @@
+#![cfg(feature = "pob")]
+
 //! Independent host/extractor parity for shared PoB calculations, not independent
 //! certification of game mechanics. Expected values come from the standalone
 //! bundled-DLL harness documented in docs/calibration-reference.md, never this CLI.
