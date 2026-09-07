@@ -1,0 +1,102 @@
+{
+  "attack": {
+    "applied_support_ids": [],
+    "attack_rate": 1.45,
+    "fire_max": 0,
+    "fire_min": 0,
+    "main_hand": {
+      "Accuracy": 396,
+      "AverageDamage": 7.17584,
+      "AverageHit": 8.344,
+      "ChaosHitAverage": 0,
+      "ColdHitAverage": 0,
+      "FireHitAverage": 0,
+      "HitChance": 86,
+      "LightningHitAverage": 0,
+      "PhysicalHitAverage": 8
+    },
+    "physical_max": 10,
+    "physical_min": 6,
+    "skill_level": 1,
+    "weapon_name": "Wooden Club",
+    "weapon_quality": 0,
+    "weapon_requirements": {
+      "dexterity": 0,
+      "intelligence": 0,
+      "level": 0,
+      "strength": 0
+    },
+    "weapon_type": "One Hand Mace"
+  },
+  "build": {
+    "ascendancy_name": "None",
+    "class_name": "Warrior",
+    "level": 60,
+    "tree_version": "0_5"
+  },
+  "config": {
+    "enemyArmour": 0,
+    "enemyDamageType": "Melee",
+    "enemyIsBoss": "None",
+    "enemyLevel": 60,
+    "enemyLightningResist": 0,
+    "enemyPhysicalDamage": 1000
+  },
+  "method": "bundled-dll-independent-host-direct-main-attack-v1",
+  "metrics": {
+    "AverageDamage": 7.17584,
+    "ChaosResist": 0,
+    "ChaosStoredCombinedAvg": 0,
+    "ColdResist": -50,
+    "ColdStoredCombinedAvg": 0,
+    "CombinedDPS": 10.404968,
+    "CritChance": 4.3,
+    "CritMultiplier": 2,
+    "Dex": 7,
+    "EnergyShield": 0,
+    "FireResist": -50,
+    "FireStoredCombinedAvg": 0,
+    "FullDPS": 10.404968,
+    "HitChance": 86,
+    "Int": 7,
+    "Life": 825,
+    "LightningResist": -50,
+    "LightningStoredCombinedAvg": 0,
+    "Mana": 298,
+    "PhysicalMaximumHitTaken": 825,
+    "PhysicalStoredCombinedAvg": 8.344,
+    "Speed": 1.45,
+    "Str": 15,
+    "TotalDPS": 10.404968,
+    "TotalEHP": 825
+  },
+  "runtime": {
+    "architecture": "x64",
+    "jit_version": "LuaJIT 2.1.1784580905",
+    "lua_version": "Lua 5.1"
+  },
+  "schema_version": 1,
+  "skill": {
+    "id": "Melee1HMacePlayer",
+    "name": "Mace Strike"
+  },
+  "provenance": {
+    "generated_utc": "2026-09-07T18:31:02Z",
+    "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "source_manifest_sha256_lf": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+    "fixture_sha256": "67899c77f30c672fbe171784cdbe1c0c2de8095bc59717fdc68bd11d1ab744f6",
+    "lua51_dll_sha256": "2e4e58e4cc6f6cb01d119ff3715253108041f6c59f9a6a464a62b2f70623bca6",
+    "lua_utf8_dll_sha256": "8f49400e2c84716c3caf27c5b1d60133b7f598748fa9cdd31f0732a0642af96d",
+    "driver_source_sha256_lf": "63d61ea837a70f84c2a57457d03114672746ae515228dd3906d344608322263c",
+    "driver_executable_sha256": "16c029bcc92e7341e2f7e226bdc4d966921136d52037b7483b97a9278cc8d1da",
+    "harness_sha256_lf": "4f5e09f794c4ba16c200b689bbc6c14859f8207dce98aad67d20d763cd758a8c",
+    "generator_sha256_lf": "27b2ca844e935ec847163461dc412ddc3aebc8ce0cbd8060261450bf829cef83",
+    "compiler": "MSVC 19.50.35723.0 /O2 x64",
+    "operating_system": "Microsoft Windows NT 10.0.26200.0"
+  },
+  "comparison": {
+    "absolute_tolerance": 1E-08,
+    "relative_tolerance": 1E-09,
+    "scope": "Independent host and extractor parity for shared PoB calculations; not independent game-mechanics certification."
+  }
+}

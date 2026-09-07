@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "objective": {
+    "kind": "scalar",
+    "metric": { "actor": "player", "id": "pob_total_ehp" },
+    "unit": "damage",
+    "direction": "maximize"
+  },
+  "constraints": [
+    {
+      "id": "fire-cap",
+      "metric": { "actor": "player", "id": "fire_resistance_capped_pct" },
+      "unit": "percent",
+      "operator": ">=",
+      "threshold": 75.0,
+      "violation_scale": 10.0
+    },
+    {
+      "id": "cold-cap",
+      "metric": { "actor": "player", "id": "cold_resistance_capped_pct" },
+      "unit": "percent",
+      "operator": ">=",
+      "threshold": 75.0,
+      "violation_scale": 10.0
+    },
+    {
+      "id": "lightning-cap",
+      "metric": { "actor": "player", "id": "lightning_resistance_capped_pct" },
+      "unit": "percent",
+      "operator": ">=",
+      "threshold": 75.0,
+      "violation_scale": 10.0
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathOfBuilding2>
+  <Build level="60" className="Warrior" ascendClassName="None" targetVersion="0_1" characterLevelAutoMode="false" mainSocketGroup="1" viewMode="CALCS"/>
+  <Tree activeSpec="1">
+    <Spec title="Unallocated Warrior" classId="3" classInternalId="6" ascendClassId="0" treeVersion="0_5" nodes="" masteryEffects=""/>
+  </Tree>
+  <Skills activeSkillSet="1" defaultGemLevel="normalMaximum" defaultGemQuality="0">
+    <SkillSet id="1" title="Mace Strike">
+      <Skill enabled="true" includeInFullDPS="true" groupCount="1" label="Single Mace Strike" mainActiveSkill="1" mainActiveSkillCalcs="1">
+        <Gem nameSpec="Mace Strike" skillId="Melee1HMacePlayer" gemId="Metadata/Items/Gem/SkillGemPlayerDefault1HMace" variantId="PlayerDefault1HMace" level="1" quality="0" enabled="true" enableGlobal1="true" enableGlobal2="true" count="1"/>
+      </Skill>
+    </SkillSet>
+  </Skills>
+  <Items activeItemSet="1">
+    <Item id="1">Rarity: NORMAL
+Wooden Club
+Item Level: 1
+Quality: 0
+Implicits: 0
+</Item>
+    <ItemSet id="1" title="Wooden Club" useSecondWeaponSet="false">
+      <Slot name="Weapon 1" itemId="1"/>
+    </ItemSet>
+  </Items>
+  <Config activeConfigSet="1">
+    <ConfigSet id="1" title="Mapping: normal enemy">
+      <Input name="enemyIsBoss" string="None"/>
+      <Input name="enemyLevel" number="60"/>
+      <Input name="enemyArmour" number="0"/>
+      <Input name="enemyFireResist" number="0"/>
+      <Input name="enemyColdResist" number="0"/>
+      <Input name="enemyLightningResist" number="0"/>
+      <Input name="enemyChaosResist" number="0"/>
+      <Input name="enemyDamageType" string="Melee"/>
+      <Input name="enemyPhysicalDamage" number="1000"/>
+      <Input name="enemyFireDamage" number="0"/>
+      <Input name="enemyColdDamage" number="0"/>
+      <Input name="enemyLightningDamage" number="0"/>
+      <Input name="enemyChaosDamage" number="0"/>
+      <Input name="enemyPhysicalOverwhelm" number="0"/>
+      <Input name="enemyFirePen" number="0"/>
+      <Input name="enemyColdPen" number="0"/>
+      <Input name="enemyLightningPen" number="0"/>
+      <Input name="enemyCritChance" number="0"/>
+      <Input name="enemySpeed" number="1000"/>
+      <Input name="conditionEnemyShocked" boolean="false"/>
+      <Input name="conditionEnemyChilled" boolean="false"/>
+      <Input name="conditionEnemyIgnited" boolean="false"/>
+      <Input name="conditionCritRecently" boolean="false"/>
+      <Input name="conditionBeenHitRecently" boolean="false"/>
+      <Input name="multiplierNearbyEnemies" number="1"/>
+      <Input name="multiplierNearbyRareOrUniqueEnemies" number="0"/>
+    </ConfigSet>
+  </Config>
+  <Notes>Controlled attack/weapon/support host-calibration fixture: mace-wooden. Level 60 Warrior, normal quality-zero weapon, explicit Mace Strike level 1, zero or one Brutality I. No allocated passives. Normal-monster proxy, not measured clear speed.</Notes>
+</PathOfBuilding2>

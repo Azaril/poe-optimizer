@@ -77,6 +77,97 @@ pub struct EvaluationResult {
     pub attachments: Vec<DiagnosticAttachment>,
 }
 
+impl EvaluationResult {
+    /// Validate the shared recorded-result structure without consulting a live backend.
+    ///
+    /// This checks every measurement and numeric evidence field, including measurements
+    /// that an assessment does not use. It does not authenticate the source, interpret
+    /// metric units against a current catalog, or establish game legality/data semantics.
+    /// Both replay consumers and live engines should validate before using a result.
+    pub fn validate_recorded(&self) -> Result<(), EvaluationError> {
+        let invalid = |message| EvaluationError::new(EvaluationErrorKind::BackendContract, message);
+        self.context.requested.validate().map_err(|message| {
+            invalid(format!(
+                "Recorded evaluation options are invalid: {message}"
+            ))
+        })?;
+        if !self.elapsed_ms.is_finite() || self.elapsed_ms < 0.0 {
+            return Err(invalid(
+                "Recorded elapsed time must be finite and nonnegative".into(),
+            ));
+        }
+        for (name, values) in [
+            ("config_inputs", &self.context.config_inputs),
+            ("config_placeholders", &self.context.config_placeholders),
+        ] {
+            if values
+                .values()
+                .any(|value| matches!(value, Scalar::Number(number) if !number.is_finite()))
+            {
+                return Err(invalid(format!(
+                    "Recorded context {name} contains a nonfinite number"
+                )));
+            }
+        }
+        let mut queries = BTreeSet::new();
+        for measurement in &self.measurements {
+            if measurement.query.id.trim().is_empty() {
+                return Err(invalid("Recorded metric IDs must be nonblank".into()));
+            }
+            if !queries.insert(&measurement.query) {
+                return Err(invalid("Duplicate recorded measurement query".into()));
+            }
+            if measurement.schema_version == 0 {
+                return Err(invalid(
+                    "Recorded metric schema versions must be positive".into(),
+                ));
+            }
+            if matches!(measurement.value, MeasurementValue::Finite { value } if !value.is_finite())
+            {
+                return Err(invalid(
+                    "A recorded finite measurement contains a nonfinite value".into(),
+                ));
+            }
+        }
+        if self.coverage.schema_version != 1 {
+            return Err(invalid(
+                "Unsupported recorded coverage schema version".into(),
+            ));
+        }
+        fn finite_optional(value: Option<f64>, field: &str) -> Result<(), EvaluationError> {
+            if value.is_some_and(|number| !number.is_finite()) {
+                return Err(EvaluationError::new(
+                    EvaluationErrorKind::BackendContract,
+                    format!("Recorded {field} must be finite when present"),
+                ));
+            }
+            Ok(())
+        }
+        for group in &self.coverage.groups {
+            finite_optional(group.group_count, "coverage.groups.group_count")?;
+            for gem in &group.gems {
+                finite_optional(gem.count, "coverage.groups.gems.count")?;
+                finite_optional(gem.level, "coverage.groups.gems.level")?;
+                finite_optional(gem.quality, "coverage.groups.gems.quality")?;
+            }
+        }
+        for skill in &self.coverage.full_dps.active_skills {
+            finite_optional(skill.count, "coverage.full_dps.active_skills.count")?;
+        }
+        for contribution in &self.coverage.full_dps.reported_contributions {
+            finite_optional(
+                contribution.dps,
+                "coverage.full_dps.reported_contributions.dps",
+            )?;
+            finite_optional(
+                contribution.count,
+                "coverage.full_dps.reported_contributions.count",
+            )?;
+        }
+        Ok(())
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum EvaluationErrorKind {
@@ -219,36 +310,21 @@ impl<B: CalculationBackend> EvaluationEngine for Engine<B> {
                 "Backend returned a different identity or requested evaluation options",
             ));
         }
-        if !result.elapsed_ms.is_finite()
-            || result.elapsed_ms < 0.0
-            || result
-                .context
-                .config_inputs
-                .values()
-                .chain(result.context.config_placeholders.values())
-                .any(|value| matches!(value, Scalar::Number(number) if !number.is_finite()))
-        {
-            return Err(EvaluationError::new(
-                EvaluationErrorKind::BackendContract,
-                "Backend returned invalid elapsed time or nonfinite context metadata",
-            ));
-        }
+        result.validate_recorded()?;
         let mut measured = BTreeSet::new();
         for measurement in &result.measurements {
             let definition = capabilities.metrics.iter().find(|metric| {
                 metric.id == measurement.query.id
                     && metric.actors.contains(&measurement.query.actor)
             });
-            if !measured.insert(measurement.query.clone())
-                || definition.is_none_or(|metric| {
-                    metric.unit != measurement.unit
-                        || metric.schema_version != measurement.schema_version
-                })
-                || matches!(measurement.value, MeasurementValue::Finite { value } if !value.is_finite())
-            {
+            measured.insert(measurement.query.clone());
+            if definition.is_none_or(|metric| {
+                metric.unit != measurement.unit
+                    || metric.schema_version != measurement.schema_version
+            }) {
                 return Err(EvaluationError::new(
                     EvaluationErrorKind::BackendContract,
-                    "Backend returned duplicate, undeclared, mistyped or invalid finite measurements",
+                    "Backend returned undeclared or mistyped measurements",
                 ));
             }
         }

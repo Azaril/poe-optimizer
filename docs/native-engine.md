@@ -8,8 +8,8 @@ and usable evaluation path while the native engine grows through verified slices
 ## Boundaries and intended outcome
 
 `poe-optimizer-engine` owns game calculations that can run without Lua or an operating
-system. It accepts resolved numeric inputs now and will eventually accept typed build,
-modifier and game-data models. The optimizer core owns objectives, constraints and search;
+system. It accepts resolved numeric inputs and validated untagged modifier layers now,
+and will eventually accept typed build, modifier and game-data models. The optimizer core owns objectives, constraints and search;
 the PoB adapter owns Lua runtime hosting, XML import/export and reference execution.
 Neither the native engine nor future browser bindings should depend on the native PoB
 worker package.
@@ -52,6 +52,60 @@ The upstream MIT attribution is retained in the crate's
 These helpers do not collect modifiers, apply item/passive rules, compute complete EHP,
 or evaluate a build. Their constants are passed explicitly rather than being a second
 independent game-data database.
+
+## Second translation boundary: untagged numeric ModDB queries
+
+`modifiers::ModifierDatabase` is an immutable numeric aggregation slice with explicit
+`QueryContext` and `MorePrecision` inputs. It models the pinned `ModDB` methods, not the
+entire modifier store and not `ModList` interchangeability. A `ModifierInput` preserves
+its source, modifier/value kinds and tag names until validation. Construction rejects the
+entire input if any layer contains an unsupported entry, even if a particular query
+would not select that entry. This keeps partial extraction from silently changing a build.
+No automatic Lua extraction or full-build adapter is attached to this slice yet.
+
+| Surface | Supported semantics |
+| --- | --- |
+| `sum(Base / Increased)` | BASE/INC addition by query-name then insertion order; each local result adds its recursively grouped parent result. |
+| `more` | MORE percentages become multiplicative factors. Default rounding occurs per local stat bucket at two decimal places; explicit high precision truncates the accumulated result. Precision carries across query names within a layer and resets for each parent. |
+| `override_value` | First matching local value in name/insertion order, then parent layers. Zero is a present override; absence returns `None`. |
+| Modifier flags | All required bits must occur in the query. Exactly representable nonnegative 53-bit masks are supported except bit 31, whose upstream signed-low-word behavior requires a separate extension. Every currently declared pinned `ModFlag` fits the supported domain. |
+| Keyword flags | Any matching keyword by default, all keywords when the modifier carries `MatchAll`. Empty requirements match. The `MatchAll` control bit is removed from both masks before matching; masks are bounded to bits 0-30. |
+| Source provenance | Strings remain attached to modifiers. BASE/INC accept the exact source or its first nonempty colon-delimited component. MORE/OVERRIDE match only that component. A selected modifier with absent source and a source-filtered MORE/OVERRIDE query produces an explicit error, matching the upstream error boundary. |
+| Parent layers | Layer zero is the queried DB and following layers are its successive parents. Layer and insertion order are semantic inputs, retained for rounding, floating-point cancellation and override priority. |
+| Query names | Zero through eight names, preserving order and repeated names. More than eight is rejected. |
+
+`MorePrecision::pinned()` contains the two MORE entries from pinned `Modules/Data.lua`:
+`SupportManaMultiplier` and `ReservationMultiplier`, both at four decimal places.
+`try_new` accepts an explicit alternate precision table with decimal places 0-15. The
+empty/default table means ordinary two-decimal rounding everywhere; it must not be
+mistaken for the pinned game data. Precision inputs concern MORE aggregation only;
+modifier scaling has separate rules outside this slice.
+
+All conditional, actor, item, skill, multiplier, threshold, global-limit and other tags
+remain unsupported. FLAG/LIST/MAX and unknown modifier kinds, nonnumeric values including
+functions/tables/booleans/nil, unsupported flag masks and out-of-range precision fail
+explicitly. A future importer must carry unsupported metadata to validation rather than
+constructing an untagged approximation. Actor scope and condition evaluation must be
+ported through `EvalMod` and validated separately before this supports real modifier
+contexts. This module does not derive a final stat by assuming a universal combination
+of BASE, INC, MORE and OVERRIDE.
+
+The independent differential harness executes the actual pinned `ModStore` public query
+wrappers and `ModDB` implementation. It loads the actual `Data/Global.lua` bit/keyword
+helpers and extracts the actual `Common.lua` class library/rounding and `Data.lua` precision
+table. All five full normalized source hashes are checked. There is no translated Lua
+formula oracle. Cases cover interpreted and warmed LuaJIT, interacting flag/keyword masks,
+53-bit boundaries, parent layers, duplicate and reordered stat names, source variations,
+zero overrides, precision carry, negative and near-rounding-boundary factors, grouped
+cancellation, nonfinite values and fail-closed unsupported input. Finite comparisons use
+`1e-12 * max(1, abs(reference))`; signed zero/infinity and NaN classification are checked
+separately. Captured real modifier contexts and whole-build mutation parity remain gates
+before native evaluator integration.
+
+Sources: [ModDB.lua](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModDB.lua),
+[ModStore.lua](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua),
+[Global.lua](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Data/Global.lua#L122-L332),
+[MORE precision data](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/Data.lua#L597-L603).
 
 ## Numeric behavior and parity
 

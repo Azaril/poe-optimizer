@@ -1,12 +1,17 @@
 # Upstream attribution
 
-The defence kernels in `src/defence.rs` are translated from Path of Building
+The defence kernels in `src/defence.rs` and numeric modifier queries in
+`src/modifiers.rs` are translated from Path of Building
 Community PoE2 at revision `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`:
 
 - `src/Modules/CalcDefence.lua:33-69`: hitChance, monsterHitChance,
   deflectChance, armourReductionF and armourReduction.
-- `src/Modules/Common.lua:722-728`: round, without its optional decimal argument.
+- `src/Modules/Common.lua:722-728`: round, with and without its decimal argument.
 - `src/Modules/Data.lua:251,261`: deflection cap and armour ratio.
+- `src/Classes/ModDB.lua:135-294,344-390`: untagged numeric query aggregation.
+- `src/Classes/ModStore.lua:201-218,261-278,302-319`: query defaults and dispatch.
+- `src/Data/Global.lua:122-332`: supported flag and keyword matching semantics.
+- `src/Modules/Data.lua:597-603`: MORE precision entries.
 
 Source: https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2
 

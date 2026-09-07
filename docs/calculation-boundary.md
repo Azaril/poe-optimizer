@@ -78,6 +78,10 @@ The adapter fingerprint covers calculation shims, metric mapping, backend conver
 core contracts and process supervision. Backend swaps require equivalent supported
 semantics, not just matching trait signatures. An intentional rules change must be visible.
 
+Objective assessment uses a separate `ScoringPolicy` contract over typed measurements;
+see [objective assessment](objective-assessment.md). Saved assessment must validate recorded
+structures and retain metric versions without requiring the current calculation backend.
+
 Use fake backends to test engine invariants independently of Lua. Test PoB against separately
 produced reference outputs, then differential-test translated Rust slices against actual
 upstream functions and full candidate states before integrating them. Compile portable

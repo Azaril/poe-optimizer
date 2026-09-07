@@ -311,6 +311,8 @@ unit-checked derived expressions, composite/priority policies, soft targets, and
 selection alongside a single selected metric. Declare supported modes through capabilities;
 reject unavailable modes rather than silently falling back to DPS or a scalar approximation.
 The [implementation plan](implementation.md#delivery-plan-and-gates) sequences these modes.
+The [objective assessment contract](objective-assessment.md) defines the initial scalar
+assessment interface and its distinction from candidate legality and search.
 
 Keep the search engine independent of metric names. It consumes a validated problem and
 a scoring/selection policy; that policy owns objective direction, priority, preference

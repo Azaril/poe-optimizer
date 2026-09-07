@@ -25,11 +25,14 @@ with Tauri as a candidate.
 
 **Status:** experimental import and evaluation CLI with backend-neutral calculation and
 evaluation APIs. It accepts PoB share codes/XML, explicit skill/action and encounter options,
-and returns typed metrics with units, availability and structured coverage. Each PoB request
+and returns typed metrics with units, availability and structured coverage. Configurable scalar
+objectives can be assessed during evaluation or against saved results without recalculation.
+Each PoB request
 uses a fresh `mlua` worker process with a deadline. Independent Spark mapping/bossing
-references validate the host and metric extraction. A parallel native Rust crate has initial
-parity-tested numerical helpers and compiles for WebAssembly; it is not a full build evaluator.
-Optimization, worker pools, reports and browser bindings are not implemented yet.
+references plus a four-case attack/weapon/support matrix validate host and metric extraction.
+A parallel native Rust crate has parity-tested numerical helpers and untagged modifier
+aggregation, and compiles for WebAssembly; it is not a full build evaluator.
+Optimization, worker pools, HTML reports and browser bindings are not implemented yet.
 The [living implementation document](docs/implementation.md) is the progress and resume record;
 update it at feature/experiment checkpoints and handoffs.
 Start with [the end-state design](docs/design.md), especially its
@@ -106,9 +109,21 @@ unsupported metrics and replaced explicit selections fail instead of silently fa
 
 Export is PoB's normalized serialization, while `import` preserves original XML bytes.
 Evaluation requires explicit supported build/tree metadata. Current outputs remain diagnostic:
-the [independent calibration](docs/calibration-reference.md) covers two controlled Spark cases,
+the [independent calibration](docs/calibration-reference.md) covers controlled Spark and attack cases,
 not general mechanic support, build legality or search recommendations. Non-damaging actions
 and average-damage modes do not yield an invented sustainable DPS objective.
+
+Configure an objective or reassess a saved evaluation:
+
+```powershell
+cargo run --locked -- evaluate example.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
+cargo run --locked -- assess runs/assessed.json --objective examples/evaluation-objective.json
+```
+
+The example maximizes EHP with three resistance constraints; the supplied build misses the
+lightning threshold by four percentage points. Every objective and threshold is configurable.
+See [objective assessment](docs/objective-assessment.md) for strict comparisons, units,
+unavailability and saved-result behavior. Passing these constraints is not a legality verdict.
 
 The [calculation boundary decision](docs/calculation-boundary.md) explains replacing the PoB
 backend without changing callers. See the [native engine design](docs/native-engine.md) for
@@ -130,6 +145,7 @@ cargo check -p poe-optimizer-core -p poe-optimizer-engine --lib --target wasm32-
 - `docs/pob-integration.md`: findings from the pinned upstream source.
 - `docs/execution-and-interfaces.md`: parallel runtime, core APIs, artifacts, and frontend plan.
 - `docs/prior-art-and-product-review.md`: cited references, prioritized gaps, and decision status.
+- `examples/evaluation-objective.json`: runnable scalar objective and hard constraints.
 - `examples/evaluation-options.json`: runnable diagnostic selection and encounter overrides.
 - `examples/objective.toml`: illustrative future configuration, not a supported CLI input.
 - `vendor/path-of-building-poe2/`: unmodified Git submodule.

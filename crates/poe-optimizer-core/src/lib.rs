@@ -87,3 +87,5 @@ pub mod coverage;
 pub mod evaluation;
 pub mod metrics;
 pub mod options;
+
+pub mod objective;

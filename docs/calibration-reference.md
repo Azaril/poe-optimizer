@@ -17,7 +17,8 @@ The [independent Lua harness](../scripts/reference-pob.lua) loads upstream
 `Launch.lua` directly. It imports fixture XML through `main:SetMode`, checks
 initialization, clears PoB's global cache, and calls
 `character.calcsTab.calcs.buildOutput(character, "MAIN")` directly. It selects
-19 finite numeric values from the returned player environment. Imported cached
+19 finite numeric values for the original Spark references. The separate attack
+extractor below additionally records weapon and per-hand details. Imported cached
 `PlayerStat` values and the production adapter's saved output tables are unused.
 
 Reference runtime measured on 2026-09-07:
@@ -39,7 +40,7 @@ existing upstream submodule. No new native modules are loaded by production.
 
 ## Small fixtures and assumptions
 
-Both fixtures contain a level 60 Sorceress with no ascendancy, equipment, support
+Both Spark fixtures contain a level 60 Sorceress with no ascendancy, equipment, support
 gems, supporting skills, or explicitly allocated passives. They select level 1,
 quality 0 Spark, one skill group, one count, and include that group in Full DPS.
 These intentionally weak characters isolate import and evaluation behavior;
@@ -121,5 +122,94 @@ Compare fixture hashes against the reference provenance before using a golden.
 Changing an upstream pin, fixture, driver, or extractor requires an explicit
 reference refresh and an [implementation checkpoint](implementation.md).
 
-Additional attack, item/support interaction, minion, and survival-mechanic cases
-remain necessary before broad evaluator confidence or optimizer claims.
+Additional minion, dual-wield, support-family conflict, passive-tree, and survival-
+mechanic cases remain necessary before broad evaluator confidence or optimizer
+claims.
+## Attack, weapon, and support interaction
+
+Four additional fixtures form a controlled two-by-two comparison. A level 60
+Warrior with no ascendancy or explicitly allocated passives uses level 1,
+quality 0 **Mace Strike** (`Melee1HMacePlayer`). The only equipped item is a
+normal, quality 0 one-handed mace in Weapon 1; the off hand is empty. Each case
+uses either no support or level 1, quality 0 **Brutality I**. There is one active
+skill group, explicitly included in Full DPS with count one. This intentionally
+small calculation state holds the skill level fixed; it is not a certified
+in-game progression or legal endgame build.
+
+The attack cases use the Spark mapping fixture's normal level 60 enemy and
+incoming physical hit of 1,000, with **enemy armour explicitly set to zero** and
+all elemental/chaos resistances zero. This isolates damage types from enemy
+armour's nonlinear response. Accuracy is left to PoB: the recorded accuracy is
+396, hit chance 86%, effective critical chance 4.3%, and action rate 1.45 per
+second. The same assumptions apply to all four cases. They do not measure clear
+speed, boss uptime, additional strike targets, or real combat execution.
+
+| Fixture | Weapon base damage | Brutality I | Raw selected TotalDPS | Reference main-hand AverageHit |
+| --- | --- | --- | ---: | ---: |
+| `mace-wooden` | Wooden Club: 6–10 physical | No | 10.404968 | 8.344 |
+| `mace-smithing` | Smithing Hammer: 5–9 physical, 5–9 fire | No | 18.208694 | 14.602 |
+| `mace-wooden-brutality` | Wooden Club: 6–10 physical | Yes | 13.6565205 | 10.9515 |
+| `mace-smithing-brutality` | Smithing Hammer: 5–9 physical, 5–9 fire | Yes | 11.0552785 | 8.8655 |
+
+The Smithing Hammer wins without Brutality; the Wooden Club wins with it.
+Brutality improves the Wooden Club's DPS by 3.2515525 but reduces the Smithing
+Hammer's DPS by 7.1534155. This is a concrete interaction that cannot be modeled
+by summing independent item and support scores. The cross difference between
+both changes is -10.404968 DPS. These values include PoB's rounding of physical
+damage endpoints: multiplying the Wooden Club's 6–10 range by 1.25 yields 8–13
+after rounding, while the Smithing Hammer's 5–9 becomes 6–11. A blanket 25%
+multiplier applied to the final DPS would give the wrong answer.
+
+The reference asserts the active skill's exact ID and reads **applied** support
+effects from the main skill's `effectList`, where upstream has already checked
+support compatibility. It records weapon base/type/quality, base requirements,
+skill level, damage endpoints, and the main-hand numeric output. The Warrior's
+15 strength satisfies the Smithing Hammer's base requirement of 11; the Wooden
+Club has no base attribute requirement. These focused checks do not establish
+full equipment, resource, socket, support-count, or passive legality.
+
+The Warrior's implicit start node is 47175. The pinned tree has three missing
+edges originating at that allocated start; the fixtures take no explicit tree
+paths. The cases retain those diagnostics and **do not validate Warrior tree
+connectivity**. See [skill coverage](skill-coverage.md) for the wider upstream
+graph issue.
+
+### Separate, reproducible attack reference path
+
+The new [attack generator](../scripts/reference-attack-calibrate.ps1) compiles
+the existing independent C driver and uses a separate
+[attack Lua extractor](../scripts/reference-attack-pob.lua). It has method ID
+`bundled-dll-independent-host-direct-main-attack-v1`, records 25 top-level
+numeric metrics plus nine main-hand values, and checks the same PoB pin/runtime
+as the Spark reference. It never invokes the Rust evaluator. Keeping separate
+scripts preserves the **original Spark generator, extractor, XML, and goldens
+byte-for-byte**, including their original provenance hashes.
+
+```powershell
+pwsh -File scripts/reference-attack-calibrate.ps1
+```
+
+Each fresh run creates `local/reference-calibration/attack-*`, with a separate
+scratch directory/process for every fixture. The output JSON records fixture,
+DLL, C driver, extractor, generator, and source manifest hashes. Two fresh
+processes per fixture matched all 25 numeric metrics and the complete attack
+detail block exactly before the references were copied into the repository.
+The committed outputs were produced on 2026-09-07 with the Windows x64 bundled
+LuaJIT and MSVC versions listed above. Regeneration follows the same review and
+tolerance policy as Spark; expected values must never come from production.
+
+The [attack regression test](../tests/attack_calibration.rs) checks all 25
+recorded top-level outputs against production, exact fixture/source identity,
+resolved skill/support entries, physical weapon endpoints, the explicit enemy
+configuration, and both directions of the weapon/support ranking change. It
+also checks the typed selected hit DPS and its unit. The independent main-hand
+values remain reference evidence; production does not yet expose a typed
+per-hand output contract.
+
+This exposed a useful mapping gap: PoB stores attack `AverageHit` in
+`output.MainHand`/`output.OffHand`, whereas the current selected-average-hit
+binding reads a top-level scalar. Therefore **`player.selected_average_hit`
+remains explicitly unavailable for these attacks**, even though hit DPS is
+available. The test preserves this honest availability contract. A future
+mapping must define the single-hand, alternating-hand, and simultaneous-hand
+semantics before exposing a combined value; it must not choose a hand silently.
