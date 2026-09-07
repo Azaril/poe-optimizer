@@ -39,11 +39,11 @@ skill/item subsets, and encounter assumptions remain explicit per-run inputs.
 - Branch: `main`. GitHub repository:
   [Azaril/poe-optimizer](https://github.com/Azaril/poe-optimizer).
   Remote `origin`: `https://github.com/Azaril/poe-optimizer.git`.
-- Publication: `origin` is configured and GitHub reports the repository is public. No push
-  has occurred. Automatic approval review requires explicit consent to publish the supplied
-  source exports and decoded fixture; that user question is pending. This does not block M1.
+- Publication permission: on 2026-09-07, the user explicitly authorized pushing this project,
+  including the supplied source exports and decoded fixture, to this public repository.
+  The repository was created specifically for this project; no publishing question is pending.
 - Last implementation baseline: `72bf6a7` (design review and decoded fixture).
-  This documentation checkpoint introduces the living implementation record.
+  Documentation checkpoint `8eb2e23` introduced the living implementation record.
 - [Rust package](../Cargo.toml): edition 2024, declared minimum Rust 1.93, stable toolchain,
   no library dependencies. [CLI scaffold](../src/main.rs) supports help/version only.
 - The PoB submodule is pinned and unmodified. It is source-inspected, not runtime-validated.
@@ -233,7 +233,8 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `7926b60` | Clarified configurable objectives and extensible scoring. |
 | 2026-09-07 | `c278da5` | Designed multicore execution and reusable CLI/GUI boundaries. |
 | 2026-09-07 | `72bf6a7` | Reviewed WoW prior art; confirmed joint scope and cross-class search; preserved/decoded supplied minion fixture. |
-| 2026-09-07 | Living-document checkpoint (this change) | Separated end-state design from delivery tracking; recorded M1 resume point and evidence; connected the user-created GitHub repository. |
+| 2026-09-07 | `8eb2e23` | Separated end-state design from delivery tracking; recorded M1 resume point and evidence; connected the user-created GitHub repository. |
+| 2026-09-07 | Publication authorization (this change) | Recorded explicit user authorization to push the project and supplied fixtures to GitHub; cleared the pending publishing question. |
 
 ## Decisions still deferred
 
