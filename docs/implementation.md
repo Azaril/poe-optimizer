@@ -8,11 +8,11 @@ implicit roots and zero or one connected ordinary entrance. A portable authentic
 crate supplies the class/tree subset without loading PoB. Fresh differential validation
 passes all 100 class/entrance/combined-selection evaluations with zero observed numeric
 difference; all targeted data, native contract, numerical, lint and WASM checks pass.
-Full integrated validation passes: 276 workspace tests, 16 native-only CLI tests, formatting,
+Full integrated validation passes: 277 workspace tests, 16 native-only CLI tests, formatting,
 lint, dependency audit and five portable WASM library targets. The native-only release
 example preserves source bytes and produces the expected class/entrance metrics. Publication
-is complete through `fa5136b` on `main`; hosted Windows/Linux CI is running. The new
-fixed-input class/entrance benchmark completed 4.5 million evaluations without errors.
+is complete through `36fc552` on `main`; final Windows/Linux CI passes in run `34170105192`.
+The new fixed-input class/entrance benchmark completed 4.5 million evaluations without errors.
 The next implementation gate is source-preserving class/passive materialization and finite
 search admission with explicit point budgets. Full native game coverage and the first
 usable all-six-dimension optimizer remain unfinished, including the supplied minion build.
@@ -29,9 +29,9 @@ the design documents.
 ## Resume here
 
 1. Inspect `git status --short --branch` and the current validation/publication table below.
-   The class/ordinary-entrance evaluator and portable data implementation are complete;
-   finish integrated checks/publication if still pending, then continue at finite
-   class/passive search admission below. Read [native backend](native-backend.md),
+   The class/ordinary-entrance evaluator and portable data implementation are implemented,
+   validated and published. Continue at finite class/passive search admission below.
+   Read [native backend](native-backend.md),
    [native calculations](native-engine.md), [live passive coverage](passive-coverage.md)
    and [tree projection](tree-projection.md). The production target is a fully native
    parallel evaluator; PoB is an optional explicit reference, never a hidden fallback.
@@ -131,12 +131,12 @@ was removed. The supplied minion build and unrestricted native evaluation remain
 | Numerical source parity | **31 modifier/source tests pass**, including interpreted/warmed full ModParser semantics for all 16 effective entrances and both pipelines across levels/mitigation/rounding boundaries. Both independent golden tests covering six untouched fixtures pass; engine Clippy and WASM compilation pass. |
 | Native admission/exports | Four new contracts pass across 62 class/ascendancy documents, 32 entrance documents, coupled shared-root cases, legacy/canonical class IDs, byte-preserving exports and unsupported input cases. |
 | Fresh full-build parity | **100 fresh PoB evaluations pass** in a targeted 128.11-second run with two workers: 98 primary class/entrance/coupled-selection cases plus two native-export reimports. Maximum observed absolute and scaled numeric delta: **0** across public metrics and extra raw-stat comparisons. Mace cases have positive enemy evasion and uncapped hit chance. Native-only builds compile the oracle target with zero tests. |
-| Full integrated validation | **276 workspace tests pass, zero failures**, eight ignored child helpers exercised by parent tests; **16 native-only CLI tests pass**. Workspace/native-only Clippy with warnings denied, formatting, native dependency audit and five portable library WASM targets pass. Logs: `runs/native-class-workspace-tests.log`, `runs/native-class-native-only-tests.log`, `runs/native-class-clippy.log`, `runs/native-class-native-only-clippy.log`, `runs/native-class-wasm.log`, `runs/native-class-dependencies.txt`. |
-| Data/calculation compatibility | Native preparation now explicitly requires the bundle and both numerical pipelines to agree on rules revision, tree version and tree source hash. Twenty native tests pass, including mismatched/missing source identity cases; native Clippy and WASM checks pass. The guard changes admission only, with no formula/result-shape changes. Logs: `runs/native-class-source-guard-tests.log`, `runs/native-class-source-guard-clippy.log`, `runs/native-class-source-guard-wasm.log`. Full final validation follows this guard. |
+| Full integrated validation | **277 workspace tests pass, zero failures**, eight ignored child helpers exercised by parent tests; **16 native-only CLI tests pass**. Workspace/native-only Clippy with warnings denied, formatting, native dependency audit and five portable library WASM targets pass. Logs: `runs/native-class-final-workspace-tests.log`, `runs/native-class-final-native-only-tests.log`, `runs/native-class-final-clippy.log`, `runs/native-class-final-native-only-clippy.log`, `runs/native-class-final-wasm.log`, `runs/native-class-final-dependencies.txt`. |
+| Data/calculation compatibility | Native preparation now explicitly requires the bundle and both numerical pipelines to agree on rules revision, tree version and tree source hash. Twenty native tests pass, including mismatched/missing source identity cases; native Clippy and WASM checks pass. The guard changes admission only, with no formula/result-shape changes. Logs: `runs/native-class-source-guard-tests.log`, `runs/native-class-source-guard-clippy.log`, `runs/native-class-source-guard-wasm.log`. The complete integrated validation above includes this guard. |
 | Initial integrated correction | The first full run caught one obsolete rejection assertion for newly supported node 4739; it now uses an unsupported node. No calculator change was required. The complete rerun passes. Initial failure log: `runs/native-class-workspace-tests-initial.log`. |
-| Native-only release example | `evaluate examples/native-witch-entrance.xml --backend native --raw --timeout-seconds 30`: Witch/Abyssal Lich, allocated physical IDs `[4739,23710,54447]`, effective entrance source 17306. Life **809**, mana **315**, selected average hit **6.54**, selected hit DPS **9.342857142857143**. XML export is byte-identical; source/export SHA-256 `fcb6ad36f0991733fe9ed9ec9fada97ee4cebab4d68247c1a53a50aab54c63ed`. Artifacts: `runs/native-class-example.json` and `.xml`; release build log: `runs/native-class-release.log`. This example is source-derived demonstration data, not an independent numerical golden. |
-| Documentation and source preservation | 185 local documentation file links and Git whitespace checks pass. Supplied original exports, independent fixtures and the pinned submodule are unchanged. |
-| Publication and hosted CI | Published to `origin/main` as `fa5136b`. [Windows/Linux run 34169436926](https://github.com/Azaril/poe-optimizer/actions/runs/34169436926) is in progress; both runners have passed formatting/lint and reached tests. |
+| Native-only release example | `evaluate examples/native-witch-entrance.xml --backend native --raw --timeout-seconds 30`: Witch/Abyssal Lich, allocated physical IDs `[4739,23710,54447]`, effective entrance source 17306. Life **809**, mana **315**, selected average hit **6.54**, selected hit DPS **9.342857142857143**. XML export is byte-identical; source/export SHA-256 `fcb6ad36f0991733fe9ed9ec9fada97ee4cebab4d68247c1a53a50aab54c63ed`. The final `36fc552` native-only release reproduces these metrics and bytes. Artifacts: `runs/native-class-final-example.json` and `.xml`; release build log: `runs/native-class-final-release.log`. This example is source-derived demonstration data, not an independent numerical golden. |
+| Documentation and source preservation | 195 local file links across tracked Markdown documents and Git whitespace checks pass. Supplied original exports, independent fixtures and the pinned submodule are unchanged. |
+| Publication and hosted CI | Published to `origin/main` through `36fc552`. Initial code `fa5136b` passes both [Windows/Linux jobs in run 34169436926](https://github.com/Azaril/poe-optimizer/actions/runs/34169436926). Final source-guard code `36fc552` also passes both Windows/Linux jobs in [run 34170105192](https://github.com/Azaril/poe-optimizer/actions/runs/34170105192). |
 
 Bundle SHA-256: `272c40b13109c999e4e28693a5c64dfe9625ed24c106c83e2a132794ac955411`.
 Full schema-2 source snapshot SHA-256:
@@ -183,7 +183,7 @@ Ignored artifacts: `runs/native-class-throughput/{prepared,document}-jobs*-r*.js
 `machine.json`, `summary.json`; driver: `runs/benchmark-native-class-checkpoint.ps1`.
 Per-result finite-metric SHA-256:
 `3dbf33c2ddbdc3595304372a141f9cfc98df9368736a196b7087ff99982c14d1`.
-Native-only release executable SHA-256:
+Measured `fa5136b` native-only release executable SHA-256:
 `48b12d9a52994ef41c12df31f5bfd3841d061ad8be7be26d958fea2f188a3587`.
 
 ## Native build pipelines, worker-free search and passive parity — 2026-09-07
@@ -814,6 +814,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `8e902c2` | Added canonical all-dimension candidates/locks with shared physical-node ownership, bounded host search and fresh verification, a four-build PoB calibration-search CLI and parity-tested native conditions. All 154 local tests, Clippy, formatting, WASM compilation, standalone search/export and review checks pass; hosted CI evidence is in the checkpoint table above. |
 | 2026-09-07 | `55df9d5` | Added structural weapon/support mutation, supplied-problem CLI search, coordinated discrete proposals, isolated pinned-tree snapshots and native multiplier programs. All 188 local tests, Clippy, formatting, portable WASM and documented example checks pass; hosted CI evidence is in the checkpoint table above. |
 | 2026-09-07 | `a09c406` + `115a902` | Added native Spark/Mace build pipelines, switchable backends, native-only packaging, Rayon controlled search, fixed-input throughput measurements and live passive/tree parity groundwork. All 260 workspace tests, 16 native-only CLI tests, formatting, lint, dependency checks and four portable WASM library builds pass locally; both hosted Windows/Linux jobs pass in run `34166302194` on main. Full native game coverage remains incomplete; class/passive calculations are next. |
+| 2026-09-07 | `fa5136b` + `36fc552` | Added portable authenticated game data, native class/ascendancy identity and ordinary-entrance evaluation, source-alignment guards and fixed-input multicore measurements. All 277 workspace tests, 16 native-only CLI tests, formatting, lint, dependency checks and five portable WASM libraries pass. One hundred fresh PoB evaluations show zero observed numeric difference; both hosted Windows/Linux jobs pass in run `34170105192` on main. Next: source-preserving class/passive materialization, explicit search budgets and equipment requirements; full native game coverage remains incomplete. |
 
 ### Hosting decision checkpoint
 

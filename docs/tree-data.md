@@ -227,7 +227,10 @@ of the UTF-8 bytes of `poe-tree-extractor-and-model-v2`, the entire
 There are no separators or length fields. Format the Rust files before hashing.
 A source/model change with an unchanged expected hash fails extraction before
 Lua execution. Other portable implementation changes still change the data and
-backend implementation fingerprints.
+backend implementation fingerprints. Native preparation also requires the bundle's
+rules revision, tree version and tree hash to match both numerical pipelines. Update
+those numerical source declarations only with the corresponding source/parity review;
+the compatibility guard rejects mixed data/formula pins before calculation.
 
 After reviewing the identity, the explicit offline generation helper writes a
 fresh candidate artifact to a unique local path:
@@ -248,6 +251,7 @@ not derive a new trusted digest from an arbitrary supplied bundle. Repeat the
 supervised reproduction and portable checks above, plus live parity for affected
 native profiles. Changes to scope, mechanics or source contracts require an
 explicit schema/policy review; updating a checksum cannot authorize new effects.
+
 ## Validation evidence
 
 Seven integration tests consume child-process extractions of the actual pin.
