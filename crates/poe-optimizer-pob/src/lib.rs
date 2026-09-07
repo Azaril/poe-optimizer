@@ -1,5 +1,8 @@
 //! Path of Building import, runtime and evaluator process adapter.
 pub mod candidate;
+pub mod mutation;
+pub mod tree_data;
+pub mod tree_worker;
 
 pub mod backend;
 pub mod import;

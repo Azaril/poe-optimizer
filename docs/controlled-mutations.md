@@ -1,0 +1,47 @@
+# Controlled PoB mutations
+
+Status: experimental finite-domain adapter, `pob::mutation`, alongside the unchanged four-fixture `pob::candidate` calibration registry. This phase supplies parameterized weapon/support search inputs. The end state remains joint class, ascendancy, passive, item, active-skill, and support search with configurable requirements and independent locks.
+
+## Supported structural profile
+
+`ControlledMaceCatalog::new(template_xml, weapons, supports)` checks structure and values, rather than requiring one of four XML hashes. The template is an unallocated Warrior with no ascendancy, tree `0_5`, one active item/skill/configuration set, exactly one manually specified Mace Strike at level 1/quality 0, and zero or one Brutality I at level 1/quality 0. The only equipped item is slot `Weapon 1`, XML item ID `1`. Character level is explicit, 1–100, with automatic leveling disabled. No extra allocated passives, equipment, runes, modifiers, active skills, item-granted skills, minions, alternate sets, or unknown mechanics are accepted.
+
+The weapon list contains 1–64 distinct exact item payloads with distinct user labels. Payloads have exactly these five lines:
+
+```text
+Rarity: NORMAL
+Wooden Club
+Item Level: 70
+Quality: 20
+Implicits: 0
+```
+
+The base may be Wooden Club or Smithing Hammer; item level is 1–100 and quality is 0–20, as canonical integers. Whitespace around the complete payload and CRLF line endings normalize before hashing. Extra modifier lines, nonnormal rarity, range settings, corrupted items, and unknown bases fail closed. These two pinned bases have no level requirement; Smithing Hammer requires 11 strength, below the Warrior's pinned base strength. This is a bounded known compatibility case, not a general equipment-requirement solver.
+
+Support choices are `none` and/or `brutality_i`. Their Cartesian product with weapons produces at most 128 candidates. The compatibility claim is tied to the pinned source: `src/Data/Skills/sup_str.lua` defines Brutality I as supporting damaging attacks, and Mace Strike is the known one-hand Mace attack. Quality and level variants of support gems, support families, multiple supports, and arbitrary skill compatibility require further data translation and tests.
+
+Every encounter input used by the original Mace template remains explicit. Permitted parameter changes include enemy level 1–100, boss setting `None`/`Boss`/`Pinnacle`, enemy armour, resistances, incoming damage components, penetration/overwhelm, and attack interval within conservative numeric bounds. Damage type stays Melee, enemy crit chance stays zero, the five optional condition toggles stay false, and nearby-enemy counts stay 1/0. Incoming damage must contain a positive component. Unknown configuration keys, custom modifiers, alternate scalar types, nonfinite values, omitted required inputs, and duplicates are rejected. These are fixed scenario inputs for the entire search, not optimizable choices.
+
+## Identity and source preservation
+
+The catalog identity includes the exact template SHA-256, sorted named weapon payloads, support choice set, projection version, and pinned PoB source identity. Item and gem instances use hashes of exact normalized payloads; repeated PoB XML item ID `1` never merges different weapon settings. Catalog and candidate ordering are deterministic, and each materialization includes all canonical dimensions. `resolve_candidate(weapon_id, support)` exposes the stable two-axis mapping.
+
+Materialization patches only the source ranges for the item element and optional support gem. It preserves every other template byte, including configuration, labels, Notes, comments, unknown prose, and formatting. Structural fields with unknown mechanics are rejected before mutation, so preservation does not silently imply support. The user's source file is not modified. A candidate from another catalog or any combination outside this finite registry cannot be materialized.
+
+## Baseline and realization evidence
+
+The caller first evaluates `template_build()` in a fresh supervised PoB process and passes its result to `bind_baseline`. This preparation attempt consumes the overall deadline and evaluation budget even if it fails. It is not a candidate cache hit or final verification.
+
+Before creating `VerifiedMaceScenario`, the adapter checks the pinned backend identity, diagnostic marker, selected action ownership, exact active/support identities and settings, class/ascendancy/level/allocation, active sets, explicit source configuration, freshly exported weapon payload, and source metadata. The pinned host normalizes the legacy class ID `3` to canonical ID `6` through `classInternalId=6`, adds implicit Warrior start node `47175`, and inserts the derived `LevelReq: 0` item line. Those specific normalizations are checked explicitly. Other item-text rewrites fail.
+
+`validate_realization(candidate, result, scenario)` repeats requested-versus-realized checks for each candidate, then compares all effective configuration inputs/placeholders and normalized noncandidate XML against the verified template. Player and enemy condition tables remain evidence and are not globally frozen: candidate mechanics can legitimately alter them. The source's explicit external condition inputs are still checked.
+
+PoB uses Lua `pairs()` when exporting several tables, so equivalent fresh exports can reorder sections and entries. The drift signature sorts canonical child representations. Gem order is separately checked, including the selected active gem at index 1, so canonicalization does not permit support/active reordering. Numeric `PlayerStat`, `MinionStat`, and `FullDPSSkill` output nodes are excluded from the immutable signature. Noncandidate persisted state, including labels, notes, empty Buffs/TimelessData defaults, runes, configuration blocks, and other exported sections, remains guarded.
+
+This baseline is **runtime-derived drift evidence**, not an independent numerical reference or a full legality certificate. The CLI must label all results diagnostic and require a fresh finalist verification before export. Canonical domain validation and realization checks complement each other; neither proves acquisition, full combat execution, mapping clear speed, progression assumptions, or completeness of PoB mechanics.
+
+## Validation and remaining work
+
+`tests/controlled_mutations.rs` covers structural acceptance, exact payload identity, source-byte preservation, support addition/removal, coordinated choices, foreign-catalog rejection, unknown mechanics, ambiguous sets, and malformed encounter inputs. The generated quality-zero product matches all four unchanged independent C-host Mace DPS goldens. Fresh parameterized round trips cover quality 20, changed character/enemy levels, incoming damage, and item level, plus a Pinnacle scenario with explicit armour/resistance settings. Mutation probes reject source-frame and realized item/gem/configuration drift.
+
+The four original goldens remain the independent numerical reference. Parameterized round trips establish requested state and interaction behavior; they are not newly independent absolute-number goldens. Future phases should expand independently calibrated item/support families, integrate translated tree and class data, preserve full candidate legality across combinations, and add native calculation parity. No general source-document mutation or complete six-dimension release claim is made by this adapter.

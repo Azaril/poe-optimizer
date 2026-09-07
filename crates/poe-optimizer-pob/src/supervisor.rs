@@ -341,19 +341,25 @@ fn supervise(
     }
 }
 
-struct ReapedChild {
+pub(crate) struct ReapedChild {
     child: Child,
     reaped: bool,
 }
 
 impl ReapedChild {
-    fn try_wait(&mut self) -> io::Result<Option<ExitStatus>> {
+    pub(crate) fn new(child: Child) -> Self {
+        Self {
+            child,
+            reaped: false,
+        }
+    }
+    pub(crate) fn try_wait(&mut self) -> io::Result<Option<ExitStatus>> {
         let status = self.child.try_wait()?;
         self.reaped |= status.is_some();
         Ok(status)
     }
 
-    fn stop(&mut self) -> io::Result<()> {
+    pub(crate) fn stop(&mut self) -> io::Result<()> {
         if self.reaped || self.try_wait()?.is_some() {
             return Ok(());
         }

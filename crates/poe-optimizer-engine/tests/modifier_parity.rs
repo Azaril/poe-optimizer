@@ -1207,3 +1207,597 @@ fn tagged_input_and_condition_context_fail_closed_without_changing_untagged_api(
         2.0
     );
 }
+
+// Multiplier oracle plumbing only serializes inputs; all arithmetic is executed
+// by actual source-hashed ModStore:GetMultiplier / ModStore:EvalMod methods above.
+use poe_optimizer_engine::multipliers::{
+    MultiplierEnvironment, MultiplierError, MultiplierLimit, MultiplierLimitMode, MultiplierScale,
+    MultiplierThreshold, MultiplierValues, MultiplierVariables, ScalarSource, ScalingProgram,
+    ScalingTag,
+};
+
+impl Oracle {
+    fn populate_multipliers(&self, root: &Table, layers: &[MultiplierValues]) {
+        let mut db = root.clone();
+        for (i, layer) in layers.iter().enumerate() {
+            let values = self.lua.create_table().unwrap();
+            for (name, value) in layer {
+                values.set(name.as_str(), *value).unwrap();
+            }
+            db.set("multipliers", values).unwrap();
+            if i + 1 < layers.len() {
+                db = db.get("parent").unwrap();
+            }
+        }
+    }
+
+    fn multiplier_query(&self, db: &Table, cfg: &Table, variable: &str) -> mlua::Result<f64> {
+        self.lua.load("return function(db, cfg, var, warm) local result; for i = 1, (warm and 200 or 1) do result = db:GetMultiplier(var, cfg) end; return result end")
+            .eval::<Function>()?.call((db, cfg, variable, self.warm))
+    }
+
+    fn scaling_variables(&self, table: &Table, variables: &MultiplierVariables) {
+        match variables {
+            MultiplierVariables::One(name) => table.set("var", name.as_str()).unwrap(),
+            MultiplierVariables::Sum(names) => table
+                .set(
+                    "varList",
+                    self.lua
+                        .create_sequence_from(names.iter().map(String::as_str))
+                        .unwrap(),
+                )
+                .unwrap(),
+        }
+    }
+
+    fn scalar_fields(&self, table: &Table, source: &ScalarSource, literal: &str, variable: &str) {
+        match source {
+            ScalarSource::Constant(value) => table.set(literal, *value).unwrap(),
+            ScalarSource::Multiplier(name) => table.set(variable, name.as_str()).unwrap(),
+        }
+    }
+
+    fn scaling_modifier(&self, value: f64, program: &ScalingProgram) -> Table {
+        let modifier = self.lua.create_table().unwrap();
+        modifier.set("value", value).unwrap();
+        for (i, tag) in program.tags().iter().enumerate() {
+            let table = self.lua.create_table().unwrap();
+            match tag {
+                ScalingTag::Multiplier(tag) => {
+                    table.set("type", "Multiplier").unwrap();
+                    self.scaling_variables(&table, &tag.variables);
+                    self.scalar_fields(&table, &tag.divisor, "div", "divVar");
+                    table.set("base", tag.base).unwrap();
+                    table.set("invert", tag.invert).unwrap();
+                    table.set("actor", tag.actor.as_deref()).unwrap();
+                    table.set("limitActor", tag.limit_actor.as_deref()).unwrap();
+                    if let Some(limit) = &tag.limit {
+                        self.scalar_fields(&table, &limit.value, "limit", "limitVar");
+                        table
+                            .set(
+                                "limitTotal",
+                                limit.mode == MultiplierLimitMode::TotalMaximum,
+                            )
+                            .unwrap();
+                        table
+                            .set(
+                                "limitNegTotal",
+                                limit.mode == MultiplierLimitMode::TotalMinimum,
+                            )
+                            .unwrap();
+                    }
+                }
+                ScalingTag::Threshold(tag) => {
+                    table.set("type", "MultiplierThreshold").unwrap();
+                    self.scaling_variables(&table, &tag.variables);
+                    self.scalar_fields(&table, &tag.threshold, "threshold", "thresholdVar");
+                    table.set("upper", tag.upper).unwrap();
+                    table.set("equals", tag.equals).unwrap();
+                    table.set("actor", tag.actor.as_deref()).unwrap();
+                    table
+                        .set("thresholdActor", tag.threshold_actor.as_deref())
+                        .unwrap();
+                }
+                ScalingTag::Limit { value, negative } => {
+                    table.set("type", "Limit").unwrap();
+                    self.scalar_fields(&table, value, "limit", "limitVar");
+                    table.set("neg", *negative).unwrap();
+                }
+                ScalingTag::Condition(ModifierTag::Condition { variables, negated }) => {
+                    table.set("type", "Condition").unwrap();
+                    self.variables(&table, variables);
+                    table.set("neg", *negated).unwrap();
+                }
+                ScalingTag::Condition(ModifierTag::ActorCondition {
+                    actor,
+                    variables,
+                    negated,
+                }) => {
+                    table.set("type", "ActorCondition").unwrap();
+                    table.set("actor", actor.as_deref()).unwrap();
+                    if let Some(variables) = variables {
+                        self.variables(&table, variables);
+                    }
+                    table.set("neg", *negated).unwrap();
+                }
+                ScalingTag::Unsupported(_) | ScalingTag::Condition(ModifierTag::Unsupported(_)) => {
+                    panic!("Unsupported oracle input")
+                }
+            }
+            modifier.set(i + 1, table).unwrap();
+        }
+        modifier
+    }
+
+    fn scaling_query(
+        &self,
+        db: &Table,
+        cfg: &Table,
+        value: f64,
+        program: &ScalingProgram,
+    ) -> mlua::Result<Option<f64>> {
+        let modifier = self.scaling_modifier(value, program);
+        self.lua.load("return function(db, cfg, mod, warm) local result; for i = 1, (warm and 200 or 1) do result = db:EvalMod(mod, cfg) end; return result end")
+            .eval::<Function>()?.call((db, cfg, modifier, self.warm))
+    }
+}
+
+fn multiplier_scale(variable: &str) -> MultiplierScale {
+    MultiplierScale {
+        variables: MultiplierVariables::One(variable.to_owned()),
+        divisor: ScalarSource::Constant(1.0),
+        base: 0.0,
+        invert: false,
+        limit: None,
+        actor: None,
+        limit_actor: None,
+    }
+}
+
+#[test]
+fn multipliers_preserve_override_base_conditions_and_parent_explicit_values() {
+    let mut base = modifier("Multiplier:A", NumericKind::Base, 7.5);
+    base.flags = 1;
+    let mut overridden = modifier("Multiplier:A", NumericKind::Override, 0.0);
+    overridden.keyword_flags = 2;
+    let layers = vec![
+        vec![TaggedModifierInput {
+            modifier: base,
+            tags: vec![condition("Active", false)],
+        }],
+        vec![
+            TaggedModifierInput {
+                modifier: overridden,
+                tags: vec![condition("Override", false)],
+            },
+            modifier("Multiplier:B", NumericKind::Base, 11.0).into(),
+        ],
+        vec![
+            modifier("Multiplier:A", NumericKind::Base, 13.0).into(),
+            modifier("Multiplier:B", NumericKind::Override, -0.0).into(),
+        ],
+    ];
+    let values = vec![
+        BTreeMap::from([("A".to_owned(), 2.5), ("B".to_owned(), 1e16)]),
+        BTreeMap::from([("A".to_owned(), 3.0), ("B".to_owned(), -1e16)]),
+        BTreeMap::from([("A".to_owned(), 4.0), ("B".to_owned(), 1.0)]),
+    ];
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        for active in [false, true] {
+            for override_active in [false, true] {
+                let mut input = condition_input(layers.len());
+                input.store_conditions[2].insert("Active".to_owned(), active);
+                input
+                    .skill_conditions
+                    .insert("Override".to_owned(), override_active);
+                let db = oracle.tagged_database(&layers);
+                oracle.populate_multipliers(&db, &values);
+                let native = MultiplierEnvironment::try_new(
+                    ModifierDatabase::try_new_tagged(layers.clone()).unwrap(),
+                    values.clone(),
+                    ConditionEnvironment::try_new(input.clone()).unwrap(),
+                    vec![],
+                )
+                .unwrap();
+                for flags in [0, 1] {
+                    for keyword_flags in [0, 2] {
+                        for source in [None, Some("Item"), Some("Item:42"), Some("Tree")] {
+                            let query = QueryContext {
+                                flags,
+                                keyword_flags,
+                                source: source.map(str::to_owned),
+                            };
+                            let cfg = oracle.condition_config(&db, &query, &input);
+                            for variable in ["A", "B", "Absent"] {
+                                assert_number(
+                                    Some(native.get_multiplier(variable, &query).unwrap()),
+                                    Some(oracle.multiplier_query(&db, &cfg, variable).unwrap()),
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn multiplier_layer_arithmetic_preserves_grouping_nonfinite_and_zero_overrides() {
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        for explicit in [
+            vec![1e16, -1e16, 1.0],
+            vec![1.0, 1e16, -1e16],
+            vec![-0.0],
+            vec![f64::NAN],
+            vec![f64::INFINITY, f64::NEG_INFINITY],
+            vec![f64::NEG_INFINITY],
+        ] {
+            let values: Vec<_> = explicit
+                .iter()
+                .map(|value| BTreeMap::from([("A".to_owned(), *value)]))
+                .collect();
+            for override_value in [
+                None,
+                Some(0.0),
+                Some(-0.0),
+                Some(f64::NAN),
+                Some(f64::INFINITY),
+            ] {
+                let mut layers = vec![vec![]; values.len()];
+                if let Some(value) = override_value {
+                    layers[0].push(modifier("Multiplier:A", NumericKind::Override, value).into());
+                }
+                let input = condition_input(layers.len());
+                let db = oracle.tagged_database(&layers);
+                oracle.populate_multipliers(&db, &values);
+                let query = QueryContext::default();
+                let cfg = oracle.condition_config(&db, &query, &input);
+                let native = MultiplierEnvironment::try_new(
+                    ModifierDatabase::try_new_tagged(layers).unwrap(),
+                    values.clone(),
+                    ConditionEnvironment::try_new(input).unwrap(),
+                    vec![],
+                )
+                .unwrap();
+                assert_number(
+                    Some(native.get_multiplier("A", &query).unwrap()),
+                    Some(oracle.multiplier_query(&db, &cfg, "A").unwrap()),
+                );
+            }
+        }
+    }
+}
+
+#[test]
+fn multiplier_scaling_matches_floor_inversion_base_and_all_limit_modes() {
+    let cases = [
+        -3.0001,
+        -3.0,
+        -0.0002,
+        0.0,
+        0.9998,
+        0.9999,
+        0.9999_f64.next_down(),
+        0.9999_f64.next_up(),
+        3.5,
+        f64::INFINITY,
+        f64::NEG_INFINITY,
+        f64::NAN,
+    ];
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        for count in cases {
+            let values = vec![BTreeMap::from([
+                ("Count".to_owned(), count),
+                ("Div".to_owned(), 2.0),
+                ("Cap".to_owned(), 2.5),
+            ])];
+            let layers = vec![vec![]];
+            let input = condition_input(1);
+            let db = oracle.tagged_database(&layers);
+            oracle.populate_multipliers(&db, &values);
+            let query = QueryContext::default();
+            let cfg = oracle.condition_config(&db, &query, &input);
+            let native = MultiplierEnvironment::try_new(
+                ModifierDatabase::try_new_tagged(layers).unwrap(),
+                values,
+                ConditionEnvironment::try_new(input).unwrap(),
+                vec![],
+            )
+            .unwrap();
+            for divisor in [
+                ScalarSource::Constant(1.0),
+                ScalarSource::Constant(0.0),
+                ScalarSource::Constant(-1.0),
+                ScalarSource::Constant(f64::NAN),
+                ScalarSource::Multiplier("Div".to_owned()),
+            ] {
+                for limit_mode in [
+                    None,
+                    Some(MultiplierLimitMode::FactorMaximum),
+                    Some(MultiplierLimitMode::TotalMaximum),
+                    Some(MultiplierLimitMode::TotalMinimum),
+                ] {
+                    for invert in [false, true] {
+                        let mut scale = multiplier_scale("Count");
+                        scale.divisor = divisor.clone();
+                        scale.invert = invert;
+                        scale.base = -0.125;
+                        scale.limit = limit_mode.map(|mode| MultiplierLimit {
+                            value: ScalarSource::Multiplier("Cap".to_owned()),
+                            mode,
+                        });
+                        let program =
+                            ScalingProgram::try_new(vec![ScalingTag::Multiplier(scale)]).unwrap();
+                        for value in [-2.0, 0.0, 1.25, f64::NAN] {
+                            assert_number(
+                                program.evaluate(value, &native, &query).unwrap(),
+                                oracle.scaling_query(&db, &cfg, value, &program).unwrap(),
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn multiplier_thresholds_lists_and_limits_preserve_exact_comparisons_and_tag_order() {
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        for count in [
+            -2.0,
+            -0.0,
+            0.0,
+            2.0,
+            2.0_f64.next_up(),
+            f64::INFINITY,
+            f64::NEG_INFINITY,
+            f64::NAN,
+        ] {
+            let values = vec![BTreeMap::from([
+                ("Count".to_owned(), count),
+                ("Threshold".to_owned(), 2.0),
+                ("Large".to_owned(), 1e16),
+                ("Negative".to_owned(), -1e16),
+                ("One".to_owned(), 1.0),
+            ])];
+            let layers = vec![vec![]];
+            let input = condition_input(1);
+            let db = oracle.tagged_database(&layers);
+            oracle.populate_multipliers(&db, &values);
+            let query = QueryContext::default();
+            let cfg = oracle.condition_config(&db, &query, &input);
+            let native = MultiplierEnvironment::try_new(
+                ModifierDatabase::try_new_tagged(layers).unwrap(),
+                values,
+                ConditionEnvironment::try_new(input).unwrap(),
+                vec![],
+            )
+            .unwrap();
+            for variables in [
+                MultiplierVariables::One("Count".to_owned()),
+                MultiplierVariables::Sum(vec![]),
+                MultiplierVariables::Sum(vec!["Count".to_owned(), "Count".to_owned()]),
+                MultiplierVariables::Sum(vec![
+                    "Large".to_owned(),
+                    "Negative".to_owned(),
+                    "One".to_owned(),
+                ]),
+                MultiplierVariables::Sum(vec![
+                    "One".to_owned(),
+                    "Large".to_owned(),
+                    "Negative".to_owned(),
+                ]),
+            ] {
+                for threshold in [
+                    ScalarSource::Constant(0.0),
+                    ScalarSource::Constant(f64::NAN),
+                    ScalarSource::Multiplier("Threshold".to_owned()),
+                ] {
+                    for upper in [false, true] {
+                        for equals in [false, true] {
+                            let tag = MultiplierThreshold {
+                                variables: variables.clone(),
+                                threshold: threshold.clone(),
+                                upper,
+                                equals,
+                                actor: None,
+                                threshold_actor: None,
+                            };
+                            let program =
+                                ScalingProgram::try_new(vec![ScalingTag::Threshold(tag)]).unwrap();
+                            assert_number(
+                                program.evaluate(17.0, &native, &query).unwrap(),
+                                oracle.scaling_query(&db, &cfg, 17.0, &program).unwrap(),
+                            );
+                        }
+                    }
+                }
+                let mut scale = multiplier_scale("Count");
+                scale.variables = variables;
+                let tags = vec![
+                    ScalingTag::Multiplier(scale),
+                    ScalingTag::Limit {
+                        value: ScalarSource::Constant(-0.0),
+                        negative: false,
+                    },
+                    ScalingTag::Limit {
+                        value: ScalarSource::Constant(f64::NAN),
+                        negative: true,
+                    },
+                ];
+                for tags in [tags.clone(), tags.into_iter().rev().collect()] {
+                    let program = ScalingProgram::try_new(tags).unwrap();
+                    assert_number(
+                        program.evaluate(-0.0, &native, &query).unwrap(),
+                        oracle.scaling_query(&db, &cfg, -0.0, &program).unwrap(),
+                    );
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn scaling_condition_order_preserves_early_exit_before_multiplier_source_errors() {
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        let mut no_source = modifier("Multiplier:A", NumericKind::Override, 2.0);
+        no_source.source = None;
+        let layers = vec![vec![no_source.into()]];
+        let values = vec![MultiplierValues::new()];
+        let input = condition_input(1);
+        let db = oracle.tagged_database(&layers);
+        oracle.populate_multipliers(&db, &values);
+        let query = QueryContext {
+            source: Some("Item".to_owned()),
+            ..Default::default()
+        };
+        let cfg = oracle.condition_config(&db, &query, &input);
+        let native = MultiplierEnvironment::try_new(
+            ModifierDatabase::try_new_tagged(layers).unwrap(),
+            values,
+            ConditionEnvironment::try_new(input).unwrap(),
+            vec![],
+        )
+        .unwrap();
+        let inactive = ScalingTag::Condition(condition("Missing", false));
+        let scale = ScalingTag::Multiplier(multiplier_scale("A"));
+        let program = ScalingProgram::try_new(vec![inactive.clone(), scale.clone()]).unwrap();
+        assert_number(
+            program.evaluate(10.0, &native, &query).unwrap(),
+            oracle.scaling_query(&db, &cfg, 10.0, &program).unwrap(),
+        );
+        let program = ScalingProgram::try_new(vec![scale, inactive]).unwrap();
+        assert!(matches!(
+            program.evaluate(10.0, &native, &query),
+            Err(MultiplierError::Modifier(
+                ModifierError::MissingSource { .. }
+            ))
+        ));
+        assert!(oracle.scaling_query(&db, &cfg, 10.0, &program).is_err());
+    }
+}
+
+#[test]
+fn multiplier_context_and_scaling_program_reject_unrepresented_input() {
+    let db = ModifierDatabase::try_new(vec![vec![]]).unwrap();
+    let conditions = ConditionEnvironment::try_new(condition_input(1)).unwrap();
+    assert!(matches!(
+        MultiplierEnvironment::try_new(db.clone(), vec![], conditions.clone(), vec![]),
+        Err(MultiplierError::LayerCount { .. })
+    ));
+    assert!(matches!(
+        MultiplierEnvironment::try_new(
+            db.clone(),
+            vec![MultiplierValues::new()],
+            conditions.clone(),
+            vec!["Recursive multiplier-producing tag".to_owned()]
+        ),
+        Err(MultiplierError::UnsupportedContext(_))
+    ));
+    assert!(matches!(
+        MultiplierEnvironment::try_new(
+            db,
+            vec![MultiplierValues::new()],
+            ConditionEnvironment::try_new(condition_input(2)).unwrap(),
+            vec![]
+        ),
+        Err(MultiplierError::LayerCount { .. })
+    ));
+    let mut actor_scale = multiplier_scale("A");
+    actor_scale.actor = Some("enemy".to_owned());
+    let mut actor_limit = multiplier_scale("A");
+    actor_limit.limit_actor = Some("parent".to_owned());
+    let mut threshold = MultiplierThreshold {
+        variables: MultiplierVariables::One("A".to_owned()),
+        threshold: ScalarSource::Constant(1.0),
+        upper: false,
+        equals: false,
+        actor: None,
+        threshold_actor: Some("parent".to_owned()),
+    };
+    for unsupported in [
+        ScalingTag::Multiplier(actor_scale),
+        ScalingTag::Multiplier(actor_limit),
+        ScalingTag::Threshold(threshold.clone()),
+        ScalingTag::Unsupported("PerStat".to_owned()),
+        ScalingTag::Unsupported("Multiplier extra field".to_owned()),
+        ScalingTag::Condition(ModifierTag::Unsupported("FLAG inference".to_owned())),
+    ] {
+        assert!(matches!(
+            ScalingProgram::try_new(vec![
+                ScalingTag::Condition(condition("Missing", false)),
+                unsupported
+            ]),
+            Err(MultiplierError::UnsupportedTag { index: 1, .. })
+        ));
+    }
+    threshold.threshold_actor = None;
+    threshold.actor = Some("player".to_owned());
+    assert!(ScalingProgram::try_new(vec![ScalingTag::Threshold(threshold)]).is_err());
+}
+
+#[test]
+fn scaling_program_reuse_reads_dynamic_divisors_without_request_order_state() {
+    let mut scale = multiplier_scale("Count");
+    scale.divisor = ScalarSource::Multiplier("Div".to_owned());
+    scale.limit = Some(MultiplierLimit {
+        value: ScalarSource::Multiplier("Cap".to_owned()),
+        mode: MultiplierLimitMode::TotalMaximum,
+    });
+    let program = ScalingProgram::try_new(vec![
+        ScalingTag::Condition(ModifierTag::ActorCondition {
+            actor: None,
+            variables: Some(ConditionVariables::One("Active".to_owned())),
+            negated: false,
+        }),
+        ScalingTag::Multiplier(scale),
+    ])
+    .unwrap();
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        let shared_modifier = oracle.scaling_modifier(2.5, &program);
+        let evaluate: Function = oracle.lua.load("return function(db, cfg, mod, warm) local result; for i = 1, (warm and 200 or 1) do result = db:EvalMod(mod, cfg) end; return result end").eval().unwrap();
+        // Lua mutates tag.div; native input stays immutable. Returning to each
+        // original context must recover the same result after unrelated queries.
+        for (count, divisor, cap, active) in [
+            (8.0, 2.0, 100.0, true),
+            (8.0, 4.0, 100.0, true),
+            (8.0, 0.0, 3.0, true),
+            (3.0, 1.0, 100.0, false),
+            (8.0, 2.0, 100.0, true),
+        ] {
+            let values = vec![BTreeMap::from([
+                ("Count".to_owned(), count),
+                ("Div".to_owned(), divisor),
+                ("Cap".to_owned(), cap),
+            ])];
+            let layers = vec![vec![]];
+            let mut input = condition_input(1);
+            input.store_conditions[0].insert("Active".to_owned(), active);
+            let db = oracle.tagged_database(&layers);
+            oracle.populate_multipliers(&db, &values);
+            let query = QueryContext::default();
+            let cfg = oracle.condition_config(&db, &query, &input);
+            let native = MultiplierEnvironment::try_new(
+                ModifierDatabase::try_new_tagged(layers).unwrap(),
+                values,
+                ConditionEnvironment::try_new(input).unwrap(),
+                vec![],
+            )
+            .unwrap();
+            assert_number(
+                program.evaluate(2.5, &native, &query).unwrap(),
+                evaluate
+                    .call((db, cfg, shared_modifier.clone(), warm))
+                    .unwrap(),
+            );
+        }
+    }
+}

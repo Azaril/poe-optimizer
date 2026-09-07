@@ -20,5 +20,6 @@ poe-optimizer-core = { path = "crates/poe-optimizer-core" }
 poe-optimizer-pob = { path = "crates/poe-optimizer-pob" }
 poe-optimizer-search = { path = "crates/poe-optimizer-search" }
 serde_json = "1"
+sha2 = "0.10"
 serde = "1"
 tempfile = "3"

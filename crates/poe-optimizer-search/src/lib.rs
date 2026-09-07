@@ -1,5 +1,8 @@
 //! Bounded host-side search. Candidate legality, proposals and calculation are replaceable.
 //! CPU evaluations use a local Rayon pool; process-supervision waits use scoped OS threads.
+
+pub mod discrete;
+
 use poe_optimizer_core::{metrics::MetricMeasurement, objective::*};
 use rayon::prelude::*;
 use serde::Serialize;
@@ -47,6 +50,11 @@ pub enum SearchPlan<C> {
 }
 
 pub trait SearchDomain<C>: Sync {
+    /// Stochastic proposers may have empty samples before later radii/restarts.
+    /// Round and duration limits still bound these retries.
+    fn can_propose_after_empty(&self) -> bool {
+        false
+    }
     /// Reject illegal, locked-out or unsupported states before spending a calculation.
     fn validate(&self, candidate: &C, control: &EvaluationControl<'_>) -> Result<(), String>;
     /// Generate complete states, including coupled mutations/restarts when useful.
@@ -460,7 +468,7 @@ where
         if proposals.len() > remaining {
             return Err("Proposal generator exceeded its limit".into());
         }
-        if proposals.is_empty() {
+        if proposals.is_empty() && !domain.can_propose_after_empty() {
             report.termination = Termination::SearchStalled;
             break;
         }

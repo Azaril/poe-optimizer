@@ -57,4 +57,8 @@ For the supplied hit-DPS objective, Smithing Hammer without Brutality wins globa
 
 `tests/cli_search.rs` checks serial/parallel ranking against all four independent numerical references, fresh verification and source export, partial budgets, infeasible/no-export behavior, invalid objectives/limits and output collision handling. These are correctness checks, not throughput or scaling measurements.
 
-Broader integration should replace the four-hash allowlist with a source-preserving, versioned projection that accounts for all active/inactive sets, gem parts/stat sets, generated-skill ownership, item identity/rolls, passive overrides and weapon-set allocation. Each supported mutation must compare intended state with fresh realized state before it enters search. The finite-only CLI and diagnostic labels should remain until those broader mappings and all-dimension parity gates are established.
+The separate [controlled mutation adapter](controlled-mutations.md) and
+[experimental CLI](experimental-search.md) now provide parameterized normal-Mace choices;
+this four-hash registry remains the immutable calibration path.
+
+Broader integration should extend the source-preserving, versioned projection that accounts for all active/inactive sets, gem parts/stat sets, generated-skill ownership, item identity/rolls, passive overrides and weapon-set allocation. Each supported mutation must compare intended state with fresh realized state before it enters search. The finite-only CLI and diagnostic labels should remain until those broader mappings and all-dimension parity gates are established.

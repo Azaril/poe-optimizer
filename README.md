@@ -31,12 +31,15 @@ Each PoB request
 uses a fresh `mlua` worker process with a deadline. Independent Spark mapping/bossing
 references plus a four-case attack/weapon/support matrix validate host and metric extraction.
 A parallel native Rust crate has parity-tested numerical helpers and numeric/conditional
-modifier aggregation, and compiles for WebAssembly; it is not a full build evaluator.
+modifier aggregation plus numeric multiplier programs, and compiles for WebAssembly; it is not a full build evaluator.
 Canonical candidates and locks represent all six dimensions. A generic search kernel has
 bounded parallel evaluation, feasible/infeasible beams, deduplication and fresh finalist
-checks. The `search-calibration` CLI searches four exact weapon/support fixtures; general
-PoB mutation, persistent workers, HTML reports and browser bindings remain unimplemented.
-See [search contracts and the runnable example](docs/search-kernel.md).
+checks. `search-experimental` searches supplied normal-Mace weapon/support choices with
+exact locks and source-preserving mutations; `search-calibration` retains the four original
+fixtures. `extract-tree` exports pinned topology and source/override metadata for broader
+mutation work. General joint PoB mutation, persistent workers, HTML reports and browser
+bindings remain unimplemented. See [the runnable experimental workflow](docs/experimental-search.md)
+and [search contracts](docs/search-kernel.md).
 The [living implementation document](docs/implementation.md) is the progress and resume record;
 update it at feature/experiment checkpoints and handoffs.
 Start with [the end-state design](docs/design.md), especially its

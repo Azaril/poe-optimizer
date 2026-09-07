@@ -321,6 +321,10 @@ impl ModifierDatabase {
         Ok(())
     }
 
+    pub fn layer_count(&self) -> usize {
+        self.layers.len()
+    }
+
     pub fn layer(&self, index: usize) -> Option<&[NumericModifier]> {
         self.layers.get(index).map(Vec::as_slice)
     }

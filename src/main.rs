@@ -1,4 +1,5 @@
 mod catalog_search;
+mod mutation_search;
 
 use clap::{Parser, Subcommand};
 use poe_optimizer_core::{
@@ -24,7 +25,7 @@ use std::{
     name = "poe-optimizer",
     version,
     about = "Experimental Path of Exile 2 build evaluator",
-    long_about = "Import PoB XML/share codes and obtain fresh diagnostic PoB outputs through isolated mlua workers. Typed metric mappings and coverage are diagnostic; Includes a developer calibration search; general build optimization is not implemented."
+    long_about = "Import PoB XML/share codes and obtain fresh diagnostic PoB outputs through isolated mlua workers. Includes experimental controlled weapon/support search and pinned tree-data extraction. General build optimization is not implemented; calculation and search coverage remain diagnostic."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -33,6 +34,30 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Action {
+    /// Search supplied normal-Mace weapon/support choices (experimental supported profile).
+    SearchExperimental(mutation_search::Args),
+    /// Export the pinned passive-tree data from an isolated, bounded extraction worker.
+    ExtractTree {
+        #[arg(long, default_value = "vendor/path-of-building-poe2")]
+        pob: PathBuf,
+        #[arg(long, default_value = "0_5")]
+        tree_version: String,
+        #[arg(long, default_value_t = 30)]
+        timeout_seconds: u64,
+        #[arg(long)]
+        output: PathBuf,
+    },
+    #[command(name = "__tree-worker", hide = true)]
+    TreeWorker {
+        #[arg(long)]
+        pob: PathBuf,
+        #[arg(long)]
+        tree_version: String,
+        #[arg(long)]
+        artifact: PathBuf,
+        #[arg(long)]
+        error_file: PathBuf,
+    },
     /// Search the four calibrated weapon/support alternatives (developer harness).
     SearchCalibration(catalog_search::Args),
     /// List the typed measurement catalog without starting a calculation.
@@ -100,6 +125,43 @@ fn main() -> ExitCode {
 
 fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
+        Some(Action::SearchExperimental(args)) => mutation_search::run(args)?,
+        Some(Action::ExtractTree {
+            pob,
+            tree_version,
+            timeout_seconds,
+            output,
+        }) => {
+            if output.exists() {
+                return Err("Output already exists".into());
+            }
+            destination_identity(&output)?;
+            let snapshot = poe_optimizer_pob::tree_worker::extract_tree(
+                &std::env::current_exe()?,
+                &pob,
+                &tree_version,
+                std::time::Duration::from_secs(timeout_seconds),
+            )?;
+            let fingerprint = snapshot.sha256()?;
+            write_new(&output, &serde_json::to_vec_pretty(&snapshot)?)?;
+            println!(
+                "{}",
+                serde_json::to_string_pretty(&serde_json::json!({
+                    "schema_version":1, "status":"extracted_source_data", "snapshot_sha256":fingerprint,
+                    "classes":snapshot.classes.len(), "ascendancies":snapshot.ascendancies.len(), "nodes":snapshot.nodes.len(),
+                    "dangling_connections":snapshot.dangling_connections.len(), "unsupported_mechanics":snapshot.unsupported_mechanics,
+                    "source":snapshot.identity, "output":output
+                }))?
+            );
+        }
+        Some(Action::TreeWorker {
+            pob,
+            tree_version,
+            artifact,
+            error_file,
+        }) => {
+            poe_optimizer_pob::tree_worker::worker(&pob, &tree_version, &artifact, &error_file)?;
+        }
         Some(Action::SearchCalibration(args)) => catalog_search::run(args)?,
         None => {
             use clap::CommandFactory;

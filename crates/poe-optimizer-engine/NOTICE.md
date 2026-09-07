@@ -1,7 +1,7 @@
 # Upstream attribution
 
 The defence kernels in `src/defence.rs` and numeric modifier queries in
-`src/modifiers.rs`, with conditional evaluation in `src/conditions.rs`, are translated from Path of Building
+`src/modifiers.rs`, conditional evaluation in `src/conditions.rs`, and explicit multiplier/scaling evaluation in `src/multipliers.rs`, are translated from Path of Building
 Community PoE2 at revision `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`:
 
 - `src/Modules/CalcDefence.lua:33-69`: hitChance, monsterHitChance,
@@ -11,6 +11,7 @@ Community PoE2 at revision `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`:
 - `src/Classes/ModDB.lua:135-294,344-390`: numeric query aggregation and conditional dispatch.
 - src/Classes/ModStore.lua:201-218,261-278,302-319: query defaults and dispatch.
 - src/Classes/ModStore.lua:74-81,409-415,742-799: actor lookup, explicit condition-table lookup, Condition and ActorCondition tags.
+- `src/Classes/ModStore.lua:417-423,489-604,739-741`: explicit multiplier queries and numeric Multiplier/MultiplierThreshold/Limit tags.
 - `src/Data/Global.lua:122-332`: supported flag and keyword matching semantics.
 - `src/Modules/Data.lua:597-603`: MORE precision entries.
 

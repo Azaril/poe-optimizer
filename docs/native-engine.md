@@ -79,7 +79,7 @@ No automatic Lua extraction or full-build adapter is attached to this slice yet.
 `try_new` accepts an explicit alternate precision table with decimal places 0-15. The
 empty/default table means ordinary two-decimal rounding everywhere; it must not be
 mistaken for the pinned game data. Precision inputs concern MORE aggregation only;
-modifier scaling has separate rules outside this slice.
+modifier scaling has separate rules implemented by the bounded program below.
 
 The legacy `try_new` constructor still rejects every raw tag name. The explicit typed
 condition path below handles a declared subset of `EvalMod`; item, skill, multiplier,
@@ -143,11 +143,10 @@ retained as unsupported features. They must not be pre-resolved into apparently 
 booleans unless a separate extraction contract proves equivalence across the exact query
 flags, source and overrides. No real-build modifier extractor is provided yet.
 
-Multiplier and scaling tags remain a separate stage: `GetMultiplier` combines explicit
-values, parent values, BASE modifiers and OVERRIDE queries, introducing dependencies and
-possible recursion. Adding a scalar multiplier field would not implement those semantics.
-Global limits, item/skill predicates, modifier functions and condition-producing FLAG
-queries need their own typed input and parity scope before activation.
+The multiplier slice below handles explicit values and conditional numeric producers.
+Recursive multiplier-producing tags, global limits, item/skill predicates, modifier
+functions and condition-producing FLAG queries still need their own typed input and
+parity scope before activation.
 
 The differential suite uses the same source-hashed, actual upstream `ModStore`/`ModDB`
 harness as numeric aggregation; it does not replace `EvalMod` or `GetCondition` with a
@@ -157,6 +156,58 @@ weapon exceptions, source and flag filtering, inactive MORE precision, zero over
 nonfinite values and explicit rejection. Captured real modifier contexts and complete
 candidate mutation parity remain required before integrating this slice into a native
 build evaluator. No throughput improvement is claimed.
+
+## Fourth translation boundary: explicit multipliers and numeric scaling
+
+`multipliers::MultiplierEnvironment` combines the complete current store's explicit
+multiplier tables with the validated numeric/conditional `ModifierDatabase` and
+`ConditionEnvironment`. All three retain the same nonempty local/parent layer structure.
+Unsupported context metadata rejects construction. `get_multiplier` executes pinned
+`GetMultiplier`: a present OVERRIDE wins (including zero or NaN); otherwise the local
+explicit value adds the recursively grouped parent explicit values, then the complete
+BASE modifier query. Parent BASE/OVERRIDE queries are not repeated while traversing
+explicit values. Flags, source filters, conditions and override errors use the existing
+actual-source-tested query semantics.
+
+`ScalingProgram` validates and evaluates a complete ordered sequence of numeric tags.
+It returns `None` for a disabled modifier and `Some(0)` for an active numeric zero. It is
+an `EvalMod` slice, not a replacement for ModDB query selection or aggregation. Callers
+remain responsible for the surrounding query's modifier-kind, flags and source checks.
+No full-build extraction, native evaluator integration or throughput claim follows.
+
+| Surface | Supported semantics |
+| --- | --- |
+| `Multiplier` | One variable or a dense ordered array sum, literal divisor or current-store `divVar`, `floor(base / divisor + 0.0001)`, optional inversion of a nonzero factor, and additive `tag.base` after multiplication. |
+| Multiplier caps | Literal/current-store multiplier cap applied either to the factor, the resulting total maximum, or the resulting total minimum. Factor caps apply before inversion; total caps apply after multiplication and additive base. |
+| `MultiplierThreshold` | Literal/current-store multiplier threshold; exact upper/lower/equality comparisons and the upstream interaction when both `upper` and `equals` are true. NaN comparisons retain upstream behavior. |
+| `Limit` | Literal/current-store multiplier ceiling, or a floor at the negated limit. Equal and unordered min/max operands preserve the selected x64 LuaJIT behavior. |
+| Ordered condition tags | The already supported `Condition` and `ActorCondition` predicates can appear among scaling tags. An early disabled condition prevents later multiplier queries and their errors. |
+| Mutable divisor field upstream | `divVar` is read on every evaluation. The native program stores the source reference, so it has no mutable `tag.div` field or request-dependent cache. |
+
+This boundary deliberately excludes multiplier recursion. The environment's numeric DB
+can contain BASE/OVERRIDE producers tagged with supported conditions; any nested
+multiplier/scaling producer must retain its unsupported tag and fail DB construction.
+Actor-specific multiplier/limit/threshold targets also reject, even if the current actor
+context could resolve them. ActorCondition remains available solely as a condition gate.
+PerStat/PercentStat, reservation-specific GetStat behavior, global/shared limits, mixed-key
+`varList` tables, table/function-valued modifiers and unknown fields remain unsupported.
+An importer must retain unknown fields as unsupported metadata. For overlapping upstream
+fields, it must preserve upstream precedence: `divVar` over `div`, a literal cap over
+`limitVar`, and `limitTotal` over `limitNegTotal`. The typed cap mode records the selected
+meaning; it does not infer omitted input semantics.
+
+The differential harness calls the actual pinned `ModStore:GetMultiplier` and
+`ModStore:EvalMod` against real ModDB layers. It uses the same five normalized full-source
+hash checks as the earlier modifier tests. Cases cover both interpreted and warmed LuaJIT,
+conditional and source-filtered producers, zero overrides, parent grouping, absent
+variables, ordered and repeated variable lists, threshold equality, rounding-boundary
+neighbors, zero/negative divisors, inversion and cap order, condition short-circuit errors,
+nonfinite arithmetic and signed zero. Production code remains dependency-free and
+immutable, with no Lua objects, I/O or host scheduling.
+
+Sources: [GetMultiplier](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua#L417-L423),
+[Multiplier and MultiplierThreshold](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua#L489-L604),
+[Limit](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua#L739-L741).
 
 ## Numeric behavior and parity
 

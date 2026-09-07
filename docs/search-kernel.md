@@ -17,8 +17,11 @@ of a complete optimum. This never means the game's domain was exhausted.
 states and generates a bounded next set from separate feasible and infeasible beams,
 a round index, and a deterministic seed. The proposer owns coordinated mutation,
 repair and restart semantics; the kernel never changes locks or invents missing mechanics.
-An empty proposal set means `search_stalled`, not exhaustive completion. Proposal and
-round limits bound duplicate-only or invalid-only searches. One test domain searches
+By default an empty proposal set means `search_stalled`, not exhaustive completion.
+A stochastic domain can declare `can_propose_after_empty()` so empty samples retry under
+the same round/time limits before later mutation radii or restarts. Proposal and
+round limits bound duplicate-only or invalid-only searches. The reusable [discrete proposer](experimental-search.md#strategies-and-accounting) now
+provides coupled moves and restarts without materializing its Cartesian product. One test domain searches
 six binary dimensions and needs a two-choice move to cross an interaction trap; its
 best result is compared with all 64 states. These are invented mechanics, separate from
 real PoB calibration.
