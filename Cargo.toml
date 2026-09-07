@@ -1,0 +1,9 @@
+[package]
+name = "poe-optimizer"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.93"
+description = "Experimental constraint-driven build optimization for Path of Exile 2"
+publish = false
+
+[dependencies]

@@ -1,0 +1,65 @@
+# DESIGN EXAMPLE ONLY. No configuration parser or optimizer is implemented.
+# Metric names are proposed adapter identifiers, not arbitrary PoB output keys.
+# Paths are relative to this file. The seed file is supplied locally by the user.
+
+schema_version = 1
+game = "poe2"
+seed_build = "../local/seed.xml"
+
+[locks]
+class = true
+ascendancy = true
+level = true
+equipment = true
+skill_groups = true
+weapon_sets = true
+
+[main_skill]
+# Resolve against the imported build and lock the exact group, gem, and skill part.
+source = "seed_selection"
+
+[scenario]
+source = "seed_configuration"
+freeze = true
+# Resolve all defaults and serialize the complete scenario in the run manifest.
+
+[search]
+space = "passive_reallocations"
+point_budget = "seed_allocated"
+max_evaluations = 10000
+max_seconds = 300
+random_seed = 42
+# Budgets are illustrative, not performance promises.
+# Evaluation budget counts each uncached candidate/scenario calculation attempt;
+# Includes final verification; reserve attempts/time before exploration exhausts them.
+# Cache hits and cheaply rejected invalid proposals are counted separately.
+
+[objective]
+metric = "selected_skill_dps"
+direction = "maximize"
+
+[[constraints]]
+metric = "fire_resistance_capped_pct"
+operator = ">="
+value = 75.0
+violation_scale = 10.0
+
+[[constraints]]
+metric = "cold_resistance_capped_pct"
+operator = ">="
+value = 75.0
+violation_scale = 10.0
+
+[[constraints]]
+metric = "lightning_resistance_capped_pct"
+operator = ">="
+value = 75.0
+violation_scale = 10.0
+
+[[constraints]]
+metric = "pob_total_ehp"
+operator = ">="
+value = 20000.0
+violation_scale = 20000.0
+# This is PoB's scenario-dependent aggregate, not a universal survivability claim.
+# Enable only once the adapter validates its mapping and the intended scenario.
