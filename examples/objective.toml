@@ -39,6 +39,21 @@ random_seed = 42
 # Includes final verification; reserve attempts/time before exploration exhausts them.
 # Cache hits and cheaply rejected invalid proposals are counted separately.
 
+[execution]
+# Future options; one shared CPU-work budget across Rust tasks and Lua processes.
+jobs = "auto"
+evaluator_workers = "auto"
+mode = "throughput" # Or "deterministic" for stable logical batch selection.
+memory_budget_mib = 8192 # Illustrative user-selected limit, not a measured requirement.
+# Resolved concurrency also depends on worker memory and is recorded in the manifest.
+
+[output]
+# Relative to this configuration file; artifacts can later be opened by the GUI.
+directory = "../runs/example"
+formats = ["json", "html"]
+progress = "sampled"
+export_verified_builds = true
+
 [objective]
 metric = "selected_skill_dps"
 direction = "maximize"

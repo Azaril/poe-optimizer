@@ -10,12 +10,19 @@ illustrative; users choose objectives, constraints, and preferences from an exte
 metric catalog. The first search domain keeps skills and gear fixed while reallocating
 passives; richer scoring policies and search domains are separate design stages.
 
+The planned engine uses reusable Rust core libraries, Rayon for parallel Rust work,
+and isolated PoB workers under shared CPU/memory limits. The CLI comes first, with
+structured run data and offline HTML reports; a later GUI can use the same APIs,
+with Tauri as a candidate.
+
 **Status:** repository scaffold and design proposal. The CLI prints project information;
 it does not evaluate or optimize builds yet.
 
 Start with [the design proposal](docs/design.md), especially its
 [alignment decisions](docs/design.md#decisions-to-align-on). See
 [PoB integration notes](docs/pob-integration.md) for source-verified seams and open runtime questions.
+The [execution and interface design](docs/execution-and-interfaces.md) covers multicore
+scheduling, library boundaries, structured results, visualization, and the GUI path.
 
 ## Getting started
 
@@ -45,6 +52,7 @@ and Linux when the project is hosted on GitHub.
 - `src/`: minimal CLI scaffold; implementation will follow design alignment.
 - `docs/design.md`: proposed scope, architecture, objectives, search, and milestones.
 - `docs/pob-integration.md`: findings from the pinned upstream source.
+- `docs/execution-and-interfaces.md`: parallel runtime, core APIs, artifacts, and frontend plan.
 - `examples/objective.toml`: illustrative future configuration, not a supported CLI input.
 - `vendor/path-of-building-poe2/`: unmodified Git submodule.
 - `local/`, `runs/`: ignored locations for private build inputs and generated results.

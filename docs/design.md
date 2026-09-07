@@ -1,7 +1,7 @@
 # Build optimizer design
 
 Status: proposal for alignment; no evaluator or search engine is implemented.
-Initial target: Path of Exile 2, local CLI, Windows development.
+Initial target: Path of Exile 2, multicore core libraries with a CLI, Windows development.
 Source baseline: PoB commit `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`.
 
 ## Recommendation
@@ -15,6 +15,11 @@ User-configurable goals are a core requirement. Skill selection, damage, resista
 and effective hit pool are illustrative use cases, not an exhaustive objective catalog
 or mandatory requirements. Each run chooses what to optimize, what must hold, and which
 build choices may change. The limited first search domain does not fix the user's goals.
+
+Treat multicore execution and reusable core libraries as initial engine requirements.
+Build the CLI over those libraries, with structured results and offline visualization
+before a later desktop GUI. Rayon is the proposed Rust CPU executor; isolated Lua workers
+parallelize PoB calculations. Tauri is a candidate for the later GUI.
 
 Use a budgeted heuristic search that returns verified improvements and explains their
 trade-offs. Do not promise the global optimum. Introduce finite item inventories next;
@@ -49,7 +54,8 @@ MVP fixes the seed's skill setup as a search-domain restriction; broader domains
 expose those choices independently of the configured scoring policy.
 
 Initial non-goals: building from an empty character; discovering every viable archetype;
-perfect rare items; crafting or purchase automation; an online service or GUI; frame-level
+perfect rare items; crafting or purchase automation; an online service; a GUI in the first
+milestone (desktop interaction is planned later); frame-level
 combat simulation; rewriting the whole calculation engine in Rust. PoB's modeled numbers
 are the initial target, with its supported-mechanic limitations carried into our reports.
 
@@ -76,32 +82,38 @@ A working Rust build in this repository is not evidence that the PoB evaluator w
 
 ```mermaid
 flowchart LR
-    Input[Seed XML + objective + locks] --> Validate[Resolve and validate problem]
-    Validate --> Search[Rust search coordinator]
-    Search --> Rules[Game-specific legal mutations]
-    Rules --> Cache[Canonical evaluation cache]
-    Cache --> Pool[Supervised evaluator workers]
-    Pool --> Shim[Owned Lua adapter]
-    Shim --> PoB[Pinned PoB Lua and data]
-    PoB --> Metrics[Metrics + validity + diagnostics]
-    Metrics --> Search
-    Search --> Results[Verified alternatives + XML + run manifest]
+    CLI[CLI application] --> Core[Reusable core library APIs]
+    GUI[Later GUI / Tauri candidate] --> Core
+    Core --> Search[Search coordinator + shared resource budget]
+    Search --> Rayon[Rayon candidate generation / validation / scoring]
+    Rayon --> Cache[Cache + in-flight deduplication]
+    Cache --> Pool[Parallel isolated Lua workers]
+    Pool --> PoB[Pinned PoB calculations and data]
+    PoB --> Search
+    Search --> Results[Versioned run events + results + XML]
+    Results --> Reports[Report library / offline HTML]
+    Results --> CLI
+    Results --> GUI
 ```
 
-Start with one Rust package. Introduce modules as functionality arrives:
+Use a Cargo workspace with library/application boundaries from the first engine implementation:
 
-| Component | Responsibility |
+| Planned package | Responsibility |
 | --- | --- |
-| Problem/model | Seed identity, locks, configurable objective policy, constraints, scenario, immutable candidate state |
-| Game adapter | Versioned tree and item identifiers, legal mutations, capability declarations |
-| Evaluator | Worker lifecycle and protocol; conversion from PoB outputs to registered metrics |
-| Metric registry / scoring | Discoverable metric definitions and providers; validated user goals; generic feasibility and ranking |
-| Search | Candidate proposals, budgets, diversity, restarts, feasible/infeasible archives |
-| Storage/report | Evaluation cache, run provenance, comparisons, exports |
+| `poe-optimizer-core` | Problem/candidate models, metric/evaluator interfaces, generic scoring/search, execution policy, events/results |
+| `poe-optimizer-pob` | Game rules/data integration, Lua process supervision, output mappings, XML import/export |
+| `poe-optimizer-report` | Structured artifacts, comparison models, CSV/JSON exports and offline HTML reports |
+| `poe-optimizer-cli` | Configuration/flags, adapter composition, progress display and exit codes; binary named `poe-optimizer` |
+| Later desktop application | GUI using the same libraries; Tauri remains a candidate |
 
-Split into crates only when stable boundaries or independent testing justify it. Avoid a
-universal modifier model now. PoE1 can share search orchestration and reporting while
-providing its own evaluator, legality rules, topology, and metric capabilities.
+The current scaffold is still one binary; introduce these packages as their functionality
+arrives. Core libraries must not depend on CLI parsing, terminal output, Tauri, or a webview.
+Expose typed validation/run/cancellation/result APIs and progress events, allowing the
+CLI and later GUI to share all calculation, feasibility, and search behavior.
+
+See [parallel execution, interfaces, and visualization](execution-and-interfaces.md) for
+the proposed package dependencies, resource policy, event/artifact contracts, and GUI path.
+PoE1 can share these libraries while supplying its own rules, topology, and metric capabilities.
 
 ### Evaluator boundary
 
@@ -134,6 +146,24 @@ An embedded Rust/LuaJIT worker may simplify packaging and reduce IPC overhead la
 native-module ABI, bitness, package loading, and Windows compilation still need validation.
 The [mlua API](https://docs.rs/mlua/0.12.1/mlua/) exposes Lua state and Rust/Lua value
 conversion; using it does not by itself provide PoB's host functions or runtime modules.
+
+### Parallel execution policy
+
+Multicore execution is part of the first working search engine. Use an engine-owned,
+explicitly sized Rayon pool for independent Rust CPU tasks and a supervised pool of
+single-calculation Lua workers. Independent starts/islands share those pools. Keep process
+I/O and waits off the Rayon compute path, and never share one mutable Lua VM across workers.
+
+Resolve a total CPU concurrency budget (`jobs = "auto"` or a user limit) plus evaluator
+and memory limits. Coordinate admission across Rust tasks and Lua processes so multiple
+pools/runs do not each claim the whole machine. Bound queues, deduplicate in-flight
+evaluations, and reserve budget tokens before dispatch. The single-core path remains a
+reference, not the default target architecture.
+
+Offer throughput scheduling for ordinary runs and deterministic batches for regression
+tests. Record resolved limits and scheduling parameters. Full details, including cancellation,
+oversubscription avoidance, and scaling acceptance, are in the
+[execution design](execution-and-interfaces.md#multicore-execution-is-an-initial-engine-requirement).
 
 ### Candidate identity and provenance
 
@@ -330,9 +360,11 @@ coordinated improvement.
 Keep the best feasible archive independently, so exploration cannot lose it.
 
 Population size, restart schedule, and evaluation budget are parameters to benchmark,
-not performance claims. Begin with a single worker for deterministic experiments; for
-parallel runs assign request sequence IDs and stable batch selection, and record scheduling
-policy. A random seed alone does not guarantee reproducibility when timing affects selection.
+not performance claims. Evaluate independent candidates and starts concurrently through
+the shared runtime. Keep a single-worker reference for debugging. Throughput mode uses
+completion-driven scheduling; deterministic mode uses stable logical batches and random
+streams independent of thread IDs. A random seed alone does not guarantee reproducibility
+when timing affects selection or a wall-clock deadline truncates work.
 
 ### Extending to items and joint optimization
 
@@ -397,20 +429,39 @@ A no-change baseline establishes that the optimizer does not regress a feasible 
 A/B/A, permuted-order, and cold/warm evaluations detect state leaks. Ordinary scaffold CI
 is separate from future Lua parity tests; it currently does not check the submodule runtime.
 
+## Visualization and application interfaces
+
+Deliver a CLI over core libraries first. Persist versioned manifests/results, sampled
+progress events, comparison data, and verified PoB exports. An optional offline HTML report
+shows selected metrics, constraint slack, progress, and build changes; supported multi-objective
+runs can add Pareto plots. Metric names and axes come from the user's problem and registry.
+
+Plan the desktop GUI after the CLI workflow and report data stabilize. Tauri is a candidate
+for a small Rust application layer over the same libraries, with background runs and bounded
+progress delivery. The UI should configure goals/resources, start/cancel runs, and compare
+results without parsing terminal output or duplicating scoring. Artifact formats and
+presentation models should support both saved-run reports and GUI views.
+
+See [run visualization and frontend design](execution-and-interfaces.md#run-data-and-visual-output-before-a-gui).
+These outputs and interfaces are proposed; the current scaffold does not generate them.
+
 ## Milestones and acceptance gates
 
 | Milestone | Deliverable | Acceptance gate |
 | --- | --- | --- |
 | M0: bootstrap (this change) | Rust CLI scaffold, pinned submodule, design, example objective, CI configuration | Rust builds/lints, clean submodule, source findings documented |
 | M1: evaluator spike | Headless startup; seed load; selected skill and scenario; metrics; one legal mutation; export | Runtime blockers resolved and recorded; baseline/mutation/export parity; reset isolation; timing and dependencies measured |
-| M2: problem/search harness | Metric registry, configurable single-metric policy and constraints, candidate identity, budgets, synthetic evaluator | Swap goals/constraints without search-code changes; maximize/minimize and unsupported-capability cases; tiny exhaustive references; determinism and budgets |
-| M3: passive optimizer | Supported tree reallocations through PoB with fixed equipment/skills | Legal exported candidates; no incumbent regression; quality measured against greedy/random baselines |
+| M2: libraries and parallel search harness | Core/adapter/CLI boundaries, metric registry, configurable scalar policy, Rayon execution, events/results, synthetic evaluator | Goal changes without search edits; one/many-worker agreement in deterministic cases; global budgets, cancellation and bounded queues; exhaustive tiny domains |
+| M3: passive optimizer and reports | Multicore PoB worker pool, supported tree reallocations, run artifacts, optional offline HTML comparisons | Legal verified exports; no incumbent regression; quality versus greedy/random; measured CPU/memory scaling; reports reproduce stored values |
 | M4: finite inventory | Concrete item pools and coordinated item/tree moves | Slot/availability rules; reproducible item provenance; improvements on item-interaction fixtures |
 | M5: richer goal policies | Typed derived expressions, composite/priority objectives, soft targets, Pareto alternatives, scenario robustness | Unit/normalization validation; hard constraints preserved; policy-specific selection checked; all finalists independently revalidated |
+| GUI (after CLI/report stabilization) | Goal editor, resource controls, progress, visual comparisons and export over the same libraries; evaluate Tauri | CLI/GUI domain-result parity; responsive start/cancel; reusable saved runs; native worker packaging verified |
 | Later | Selective Rust calculations and PoE1 adapter | Differential parity and explicit versioned game capabilities |
 
 Do not begin a large optimizer implementation before M1 confirms the calculation boundary.
 M2's independent synthetic harness can proceed alongside M1 once the metric contract is agreed.
+The GUI can proceed after the M3 interfaces stabilize; it need not wait for every item-search
+or advanced-objective feature in M4/M5.
 
 ## Risks and decisions to revisit
 
@@ -420,6 +471,7 @@ M2's independent synthetic harness can proceed alongside M1 once the metric cont
 | Incomplete or incorrect modeled mechanics | Scope supported fixtures/mechanics; propagate diagnostics; do not market unsupported results as verified |
 | Runtime globals/caches contaminate candidates | Fresh-process baseline, isolation tests, supervised workers; optimize resets only after parity |
 | Oracle evaluations dominate cost | Measure first; cache and batch; improve proposals; consider embedding or hot-path migration later |
+| Multicore overhead, memory duplication, or UI backpressure limits throughput | Shared CPU/memory limits; bounded queues and events; measure scaling before tuning |
 | Search stays in one local optimum | Larger graph moves, diverse starts, infeasible exploration; benchmark interactions |
 | User goals hide assumptions | Typed metrics, immutable scenario, unrounded feasibility, clear violation reports |
 | PoE2 mechanics and data change | Pin source/data and record schema/runtime; upgrade with fixture parity checks |
@@ -447,4 +499,8 @@ Proposed defaults, to confirm or revise before implementation:
 5. **Runtime:** external LuaJIT spike first; retain a process boundary and benchmark embedding later.
 6. **Generalization:** design narrow adapter boundaries now; add PoE1 only after the PoE2 evaluator
    and passive MVP establish which abstractions are actually shared.
-7. **Distribution:** local development first; select a license and packaging approach before release.
+7. **Parallel execution (required):** use available cores for independent Rust work and PoB
+   evaluations under one configurable CPU/memory budget; Rayon is the proposed CPU executor.
+8. **Application structure (required):** CLI over reusable core libraries, structured results,
+   and an initial visual report; later GUI reuses the same APIs, with Tauri to evaluate.
+9. **Distribution:** local development first; select a license and packaging approach before release.
