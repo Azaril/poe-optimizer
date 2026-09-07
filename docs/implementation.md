@@ -9,9 +9,10 @@ excludes PoB, LuaJIT and the UTF-8 module. Live passive observations and authent
 projections provide evidence for the next native class/passive expansion. Integrated
 validation passes: 260 workspace tests, 16 native-only CLI tests, lint, dependency audit
 and portable WASM compilation. Release fixed-input throughput and controlled search are
-recorded below. The initial code checkpoint is `a09c406`; the user explicitly reaffirmed publication to
-`main`. A Rust 1.98 Clippy compatibility fix is ready, and final hosted Windows/Linux CI
-on the main-branch checkpoint is pending.
+recorded below. The native code and Rust 1.98 Clippy compatibility fix are published to
+`main` through `115a902`. Both hosted Windows/Linux jobs pass in
+[run 34166302194](https://github.com/Azaril/poe-optimizer/actions/runs/34166302194), including
+workspace/native-only tests, lint, dependency checks and portable WASM compilation.
 Full native game coverage and the first usable all-six-dimension optimizer remain unfinished.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
@@ -25,10 +26,10 @@ the design documents.
 
 ## Resume here
 
-1. Inspect `git status --short --branch` and the validation/publication table below. Local
-   native integration checks and throughput measurements are complete; finish publication
-   and hosted CI if still pending, then continue at the class/passive step below.
-   Read [native backend](native-backend.md),
+1. Inspect `git status --short --branch` and the validation/publication table below. Native
+   integration, throughput measurements, main-branch publication and hosted CI are complete
+   through `115a902`. Continue at the class/passive step below after reading
+   [native backend](native-backend.md),
    [native calculations](native-engine.md), [live passive coverage](passive-coverage.md)
    and [tree projection](tree-projection.md). The production target is a fully native
    parallel evaluator; PoB is an optional explicit reference, never a hidden fallback.
@@ -144,7 +145,7 @@ These native profiles do not yet support the supplied complex minion build.
 | Runtime dependencies | Native-only normal dependency graph contains no PoB adapter, mlua, LuaJIT or UTF-8 native module. CI now enforces this graph check. Log: `runs/native-checkpoint-dependencies.txt`. |
 | Reference parity | Two unchanged Spark and four unchanged Mace goldens, actual-source numerical grids, 16 fresh Spark/Mace PoB evaluations including native-export reimports, plus the 49-build passive matrix all pass. |
 | Release search | Native-only release CLI, `search-experimental --backend native --problem examples/mace-search.json --jobs 4 --max-evaluations 10`: template + eight candidates + fresh finalist, winner `smithing-q20/none`, selected hit DPS **20.1596255**, XML export written. Observed search/calculation duration **2.0101 ms**, excluding final persistence; a tiny diagnostic domain, not an optimizer-quality benchmark. Artifacts: `runs/native-checkpoint-search.json`, `runs/native-checkpoint-best.xml`. |
-| Publication | Initial native code: `a09c406`, first published to `native-evaluation`. The user then explicitly confirmed pushing to `main`. Initial hosted run `34165834314` found Rust 1.98's `chunks_exact_to_as_chunks` lint in benchmark accounting; fixed with `as_chunks::<8>()`, with both six-test benchmark suites and Rust 1.93 workspace Clippy passing. Final main-branch CI pending. |
+| Publication and hosted CI | Published to `origin/main` through `115a902` with explicit user authorization. [Windows/Linux run 34166302194](https://github.com/Azaril/poe-optimizer/actions/runs/34166302194) passes both jobs: formatting, workspace/native-only lint and tests, native-only dependency checks and portable WASM compilation. Initial native code `a09c406` first ran in `34165834314`, where Rust 1.98 found `chunks_exact_to_as_chunks` in benchmark accounting; `115a902` uses `as_chunks::<8>()`, retaining the arithmetic and passing both six-test benchmark suites and workspace Clippy on Rust 1.93. The following resume update changes documentation only; 179 local file links and Git whitespace checks pass. |
 
 ### Release fixed-input native throughput
 
@@ -702,6 +703,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `bb08697` + `86526ae` | Added configurable scalar assessment and saved-report validation, four independent Mace interaction goldens, native untagged numeric modifier aggregation and a source-level tree topology investigation. All 107 local tests, formatting, Clippy, core/native WASM compilation and standalone objective/reassessment smoke pass; source/golden audit passes. Document checks and independent code review pass; published through `86526ae`, with both hosted Windows/Linux jobs passing in run `34152960922`. Canonical all-dimension candidates, locks and joint search remain next. |
 | 2026-09-07 | `8e902c2` | Added canonical all-dimension candidates/locks with shared physical-node ownership, bounded host search and fresh verification, a four-build PoB calibration-search CLI and parity-tested native conditions. All 154 local tests, Clippy, formatting, WASM compilation, standalone search/export and review checks pass; hosted CI evidence is in the checkpoint table above. |
 | 2026-09-07 | `55df9d5` | Added structural weapon/support mutation, supplied-problem CLI search, coordinated discrete proposals, isolated pinned-tree snapshots and native multiplier programs. All 188 local tests, Clippy, formatting, portable WASM and documented example checks pass; hosted CI evidence is in the checkpoint table above. |
+| 2026-09-07 | `a09c406` + `115a902` | Added native Spark/Mace build pipelines, switchable backends, native-only packaging, Rayon controlled search, fixed-input throughput measurements and live passive/tree parity groundwork. All 260 workspace tests, 16 native-only CLI tests, formatting, lint, dependency checks and four portable WASM library builds pass locally; both hosted Windows/Linux jobs pass in run `34166302194` on main. Full native game coverage remains incomplete; class/passive calculations are next. |
 
 ### Hosting decision checkpoint
 
