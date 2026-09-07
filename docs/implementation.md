@@ -2,20 +2,20 @@
 
 Last updated: 2026-09-07
 
-Current phase: native class and ordinary-passive evaluation is implemented for the restricted
-Spark/Mace pipelines. Both now accept all eight classes and 23 ascendancy identities, with
-implicit roots and zero or one connected ordinary entrance. A portable authenticated data
-crate supplies the class/tree subset without loading PoB. Fresh differential validation
-passes all 100 class/entrance/combined-selection evaluations with zero observed numeric
-difference; all targeted data, native contract, numerical, lint and WASM checks pass.
-Full integrated validation passes: 277 workspace tests, 16 native-only CLI tests, formatting,
-lint, dependency audit and five portable WASM library targets. The native-only release
-example preserves source bytes and produces the expected class/entrance metrics. Publication
-is complete through `36fc552` on `main`; final Windows/Linux CI passes in run `34170105192`.
-The new fixed-input class/entrance benchmark completed 4.5 million evaluations without errors.
-The next implementation gate is source-preserving class/passive materialization and finite
-search admission with explicit point budgets. Full native game coverage and the first
-usable all-six-dimension optimizer remain unfinished, including the supplied minion build.
+Current phase: injectable game-data architecture is recorded; runtime injection is the
+next implementation gate, before further class/passive search expansion. The
+[data-boundary decision](game-data-boundary.md) separates versioned configuration packages,
+immutable data models and compiled calculation data from Rust mechanic semantics. This
+checkpoint changes documentation only; no injection API or external-data CLI option exists yet.
+
+The validated code baseline remains `36fc552`, documented through `2675ffb` on `main`:
+restricted native Spark/Mace evaluation across eight classes, 23 ascendancy identities and
+zero or one ordinary entrance; a portable authenticated tree subset; 277 workspace tests,
+16 native-only CLI tests, five portable WASM libraries and hosted Windows/Linux CI passing.
+One hundred fresh PoB evaluations show zero observed numeric difference. The prior 4.5-million
+evaluation benchmark remains specific to `fa5136b`. Numerical constants and global data access
+still need migration. Full native game coverage, the supplied minion build and the first
+usable all-six-dimension optimizer remain unfinished.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
 work, and the next session's starting point. [Design](design.md) defines the intended system
@@ -29,16 +29,22 @@ the design documents.
 ## Resume here
 
 1. Inspect `git status --short --branch` and the current validation/publication table below.
-   The class/ordinary-entrance evaluator and portable data implementation are implemented,
-   validated and published. Continue at finite class/passive search admission below.
-   Read [native backend](native-backend.md),
+   Read the [data-boundary decision](game-data-boundary.md) and complete D1–D5 below before
+   broadening class/passive search. The previous native class/entrance implementation is
+   validated and published, but still obtains data through globals and Rust constants.
+   Also read [native backend](native-backend.md),
    [native calculations](native-engine.md), [live passive coverage](passive-coverage.md)
    and [tree projection](tree-projection.md). The production target is a fully native
    parallel evaluator; PoB is an optional explicit reference, never a hidden fallback.
 2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve supplied
    original exports and independent Spark/Mace goldens. Maintain actual-source interpreted
    and warmed parity, full-build differential cases and strict unsupported-mechanic errors.
-3. Connect source-preserving class/ascendancy/passive materialization to a finite search
+3. Implement the injectable-data migration in the checkpoint below. Start with typed package
+   schema/validation and the instance-owned data seam, then move existing Spark/Mace values,
+   tables and effects into configuration. Keep prepared-data ownership, instance identity,
+   search/catalog/cache consumers and compatibility guards coherent at each step. Preserve
+   current unsupported-mechanic admission and reference parity while replacing globals.
+4. Connect source-preserving class/ascendancy/passive materialization to a finite search
    catalog using the authenticated portable data. Rebind composed catalog identities to
    tree, skill and item payloads; validate requested versus realized physical allocations,
    effective entrance stats and source exports. Start with the numerically validated
@@ -48,7 +54,7 @@ the design documents.
    Equipment/gem requirements also need explicit finite rules before cross-class item
    recommendations: diagnostic calculation alone does not prove they can be equipped.
    The current controlled Mace search remains Warrior/no-paid-passives/none-ascendancy.
-4. Broaden source-derived passive/modifier extraction beyond the twelve exact admitted
+5. Broaden source-derived passive/modifier extraction beyond the twelve exact admitted
    stat strings and nine numeric modifier fields, with actual-source and full-build parity
    before relaxing admission. Preserve the data bundle's distinction between retained and
    excluded records; schema-1 snapshots must be regenerated for schema 2. Connect broader
@@ -56,29 +62,29 @@ the design documents.
    skills/items, cross-class search, exact locks and ownership/resource/point accounting.
    No selected special node, grant, socket or unknown mechanic may disappear during projection.
    Global extraction uncertainty remains separate from unsupported selected mechanics.
-5. Replace closed profiles with reusable complete native pipelines as coverage permits:
+6. Replace closed profiles with reusable complete native pipelines as coverage permits:
    item/gem/passive modifiers, resolved actors/conditions and resources, offence/defence,
    conversions, ailments, triggers and minions. PerStat/StatThreshold programs now support
    ordered numeric dependencies; actor-target multipliers, recursive producers and special
    GetStat names remain explicit gaps. No profile count or shared trait establishes full
    game replacement. Source/data upgrades require source identity and parity review.
-6. Specialize coordinated proposals with game-aware repair and diverse archives. Preserve
+7. Specialize coordinated proposals with game-aware repair and diverse archives. Preserve
    exhaustive tiny references, deterministic one/many-worker comparisons, locks and empty
    sample retry bounds. Benchmark random, greedy and alternating baselines at 5, 15 and 30
    minutes in mapping/bossing before making optimizer-quality claims. Current eight-state
    Mace search is a diagnostic integration test, not that benchmark or the first product.
-7. Profile preparation/calculation/result costs on realistic supported native builds before
+8. Profile preparation/calculation/result costs on realistic supported native builds before
    tuning. Reuse immutable prepared inputs, compiled modifiers and task-local scratch state;
    avoid per-candidate XML/diagnostic/export construction in a future native search hot path.
    Keep versioned result/provenance contracts and fresh native finalist recalculation.
-8. Add shared memory/CPU admission, CLI signal cancellation, progress events, checkpoints,
+9. Add shared memory/CPU admission, CLI signal cancellation, progress events, checkpoints,
    persisted cache and throughput scheduling. Optional PoB workers retain separate supervision;
    their fresh-process/reset requirements do not apply to native execution. Every dispatched
    calculation, preparation evaluation and finalist check remains in the shared budget ledger.
-9. Add offline comparison/HTML reports, then GUI and browser bindings. Portable compilation
+10. Add offline comparison/HTML reports, then GUI and browser bindings. Portable compilation
    does not prove browser execution, browser parallelism or performance. The browser host
    supplies clocks/scheduling and uses the same calculation contracts.
-10. Update this resume point and checkpoint evidence before the next handoff.
+11. Update this resume point and checkpoint evidence before the next handoff.
 
 For targeted data questions, the user supplied PoE2DB/PoEDB; see the
 [lookup constraint](design.md#external-lookup-references). Do not scrape or bulk-extract either site.
@@ -88,6 +94,84 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Injectable game-data design — 2026-09-07
+
+The user clarified that most game data must load from configuration through its own model
+and injection seam. [The accepted direction](game-data-boundary.md) extends the existing
+portable data crate, makes backend/prepared identity instance-specific, and shares immutable
+compiled data across workers. Game values and content become data; Rust retains arithmetic,
+rounding and operation semantics. Embedded defaults use the same loader as external packages.
+Data-only changes using supported semantics must not require rebuilding the evaluator.
+
+This is a design/documentation checkpoint on the clean `2675ffb` baseline. No production
+code, fixtures, game-data artifacts or submodule pin change here. The runtime APIs and
+migration tasks below are **not implemented**. The previous code validation remains evidence
+for that baseline only; Rust tests are not repeated for these document-only edits.
+
+### Audit of the current data coupling
+
+| Area | Current implementation / migration work |
+| --- | --- |
+| Backend and prepared ownership | [Native backend](../crates/poe-optimizer-native/src/lib.rs) stores only a clock; prepared profiles have no dataset owner/identity. Introduce shared data ownership and reject incompatible prepared reuse. |
+| Tree access and provenance | [Native tree](../crates/poe-optimizer-native/src/tree.rs) obtains global bundled data and keeps static record borrows. Replace with instance-resolved IDs/indices and retained immutable ownership; diagnostics use the selected data identity. |
+| Package loading | [Bundle loader](../crates/poe-optimizer-data/src/bundled.rs) uses a compiled expected digest and global `OnceLock`; [source model](../crates/poe-optimizer-data/src/tree_data.rs) fixes source/tree selection. Add portable byte loading with explicit trust/compatibility inputs while preserving source evidence. |
+| Numerical content | [Spark](../crates/poe-optimizer-engine/src/spark.rs) embeds skill/resource/quest/resistance values. [Mace](../crates/poe-optimizer-engine/src/mace.rs) embeds weapon definitions, accuracy/support values and monster tables. Move records and patch-dependent parameters into the package; retain pure calculation semantics. |
+| Further parameters and effects | Audit base evasion and other balance coefficients in [character](../crates/poe-optimizer-engine/src/character.rs) and [defence](../crates/poe-optimizer-engine/src/defence.rs). Replace native tree's twelve English-line effect mappings with typed effect records and versioned operation validation. |
+| Admission and defaults | [Native profile](../crates/poe-optimizer-native/src/profile.rs) and native reporting embed skill/item identities and quest/encounter defaults. Resolve them from data; keep operation support and structural restrictions in code. Configured content must not expand unsupported mechanics by declaration. |
+| Identity consumers | Global `backend_identity()` feeds results, [benchmarking](../src/native_benchmark.rs), [native search binding](../src/mutation_search.rs) and [catalog checks](../src/catalog_search.rs). Migrate these together. Core's current result/backend ID check alone cannot distinguish two datasets under `native-poe2`. |
+
+### Migration sequence and acceptance gates
+
+- [ ] **D1 — data model and loading.** Define manifest, lightweight core `DataIdentity`, typed
+  records and bounded byte loader in `poe-optimizer-data`. Separate owned validated snapshot
+  from serialized DTOs. Cover the existing tree, character, skill/support, item, quest,
+  encounter and level-table data first. Preserve raw-source provenance, partial coverage,
+  physical/effective IDs and order-sensitive modifier semantics. Validate duplicate IDs/keys,
+  ranges/units, references, missing tables and schema/game identity. Supply trust through the
+  host; package claims do not authenticate themselves. Keep dependencies one-way.
+- [ ] **D2 — instance injection and identity.** Add compiled data ownership to native backend
+  construction and prepared evaluation, replacing global tree reads and static record
+  lifetimes. Kernels consume borrowed resolved data; compilation checks executable mechanic
+  capabilities. Migrate backend identities, result construction, diagnostics, benchmark/search
+  factories and catalog checks together. Version affected persisted contracts/cache identities.
+  Prove A/B/A isolation, same-data cross-instance reuse and different-data prepared rejection.
+  Keep the existing exact source guard until an explicit equally strict compatibility contract
+  is ready; do not weaken admission simply to make edited packages load.
+- [ ] **D3 — externalize the current native data.** Move the audited Spark/Mace constants,
+  weapons, monster tables, rewards/defaults and patch-dependent formula parameters out of Rust
+  and into the reviewed package. Replace English stat matching and numerical magnitudes with
+  typed effect records whose operations are implemented in Rust. Separate generic operations
+  from supported-profile admission. Default kernels and native documents must use the injected
+  values; compatibility wrappers may not become a second hard-coded source of truth. A
+  controlled synthetic package must change a supported result without Rust changes and must
+  not inherit the reviewed dataset's identity or PoB parity status.
+- [ ] **D4 — host loading and source updates.** Compose CLI default/external byte loading through
+  one path, with explicit selection failures and no fallback. Carry effective data identity into
+  run/checkpoint manifests, exports and search configuration. Build deterministic optional PoB
+  extraction for the expanded package and retain exact source/parity provenance. Embedded and
+  external copies of identical data must yield identical semantic identity/results. New source
+  releases using supported operations update data/compatibility evidence without recompiling
+  a Rust allowlist. Keep arbitrary custom packages clearly distinct from reviewed parity data.
+- [ ] **D5 — parity, portability and performance checkpoint.** Preserve the six independent
+  goldens and 100-case fresh PoB matrix for the reviewed default data. Exercise invalid-package
+  and cross-data cache/catalog cases, one/many-worker isolation, native-only dependencies and
+  five portable WASM libraries. Measure initialization separately and confirm repeated prepared
+  calculation neither reloads nor hashes configuration. Record memory ownership and supported
+  fixture/machine identities before judging throughput. Update this resume point, then continue
+  class/passive materialization with explicit point and equipment/gem legality rules.
+
+After D1 establishes concrete interfaces, numeric record extraction and independent
+contract/parity fixtures can proceed in parallel in separate files. Keep backend identity
+integration under one owner. A tree-only injection checkpoint does not complete D3 or the
+requirement to externalize most game data.
+
+Design verification: reviewed against the current code and independently audited for
+ownership, provenance, compatibility and concurrency gaps. All 221 local file links and
+20 heading links across 28 Markdown documents pass, as does Git whitespace validation.
+One pre-existing stale M1 heading link was repaired. This checkpoint changes documentation
+only; code checks were not rerun. No product-scope answer blocks D1; use versioned JSON and
+complete package replacement initially, and preserve the native/optional-reference architecture.
 
 ## Native class and ordinary-passive evaluation — 2026-09-07
 
@@ -144,8 +228,8 @@ Full schema-2 source snapshot SHA-256:
 Regeneration/authentication procedures are in [tree data](tree-data.md); the byte digest
 comes from the checked-in trusted artifact manifest, not the input's self-asserted labels.
 
-Next executable work is the class/passive materialization and search gate in the resume
-steps above. Native point-budget/gear legality, broader modifier coverage and all-six-dimension
+At this code checkpoint the next work was class/passive materialization. The new data
+injection migration now precedes that search gate in the resume steps above. Native point-budget/gear legality, broader modifier coverage and all-six-dimension
 optimization remain unfinished. Previous throughput measurements below apply to their
 explicitly named prior code and fixed Spark profile, not automatically to this expanded result path.
 
@@ -511,7 +595,7 @@ is concrete; real-build recommendations depend on both.
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
 | M5: richer objective policies | Not started | Unit-checked expressions, composite and ordered priorities, soft preferences, Pareto selection, and explicit robust aggregation. Test policy-specific selection and preserve hard constraints. |
 | Desktop GUI | Deferred until CLI/report contracts stabilize | Choose frontend; Tauri is a candidate. Reuse core jobs, results and comparison models. Verify CLI/GUI parity, responsive cancellation and native evaluator packaging; package optional reference workers separately. Does not depend on finishing every M4/M5 feature. |
-| Native Rust calculation replacement | Active; all class/ascendancy identities and ordinary entrances supported by restricted Spark/Mace pipelines; portable data and native weapon/support search implemented | Integrate class/passive materialization and explicit finite search rules, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
+| Native Rust calculation replacement | Active; all class/ascendancy identities and ordinary entrances supported by restricted Spark/Mace pipelines; portable data and native weapon/support search implemented | Complete injectable configuration/model work D1–D5 before class/passive materialization and explicit finite search rules, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
 | PoE1 adapter | Later, separate track | Add a distinct versioned rules/data/evaluator adapter after PoE2 interfaces are proven; do not mix game identities or reuse PoE2 parity claims. |
 
 Narrow passive/item/skill experiments are internal validation steps. The first usable release
@@ -585,9 +669,15 @@ skills together within explicit finite catalogs. It must support 1..N required s
       historical standalone reference timings with a native scaling benchmark. Browser and
       realistic optimizer-quality measurements remain outstanding.
 
+- [ ] **M1.8 Configurable native data — design recorded; implementation pending.** Complete
+      D1–D5 above: owned versioned package/model, instance injection, externalized numeric data,
+      host loading, identity isolation and unchanged default parity. The current portable tree
+      crate is groundwork; global loader access and compiled numerical tables remain gaps.
+
 The planner JSON export is preserved as auxiliary input/provenance. Raw PoB XML and PoB
 share codes are runnable import paths; planner conversion follows only when its format
 and missing semantics can be mapped faithfully.
+
 
 ### M2 and M3 acceptance details
 
@@ -815,6 +905,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `55df9d5` | Added structural weapon/support mutation, supplied-problem CLI search, coordinated discrete proposals, isolated pinned-tree snapshots and native multiplier programs. All 188 local tests, Clippy, formatting, portable WASM and documented example checks pass; hosted CI evidence is in the checkpoint table above. |
 | 2026-09-07 | `a09c406` + `115a902` | Added native Spark/Mace build pipelines, switchable backends, native-only packaging, Rayon controlled search, fixed-input throughput measurements and live passive/tree parity groundwork. All 260 workspace tests, 16 native-only CLI tests, formatting, lint, dependency checks and four portable WASM library builds pass locally; both hosted Windows/Linux jobs pass in run `34166302194` on main. Full native game coverage remains incomplete; class/passive calculations are next. |
 | 2026-09-07 | `fa5136b` + `36fc552` | Added portable authenticated game data, native class/ascendancy identity and ordinary-entrance evaluation, source-alignment guards and fixed-input multicore measurements. All 277 workspace tests, 16 native-only CLI tests, formatting, lint, dependency checks and five portable WASM libraries pass. One hundred fresh PoB evaluations show zero observed numeric difference; both hosted Windows/Linux jobs pass in run `34170105192` on main. Next: source-preserving class/passive materialization, explicit search budgets and equipment requirements; full native game coverage remains incomplete. |
+| 2026-09-07 | Injectable game-data design (after `2675ffb`) | Recorded the user-directed configuration/model seam, immutable compiled-data injection, instance/prepared identity, strict compatibility and D1–D5 migration gates. Reprioritized this work before broader class/passive search. Documentation only; runtime injection and external package selection remain unimplemented. |
 
 ### Hosting decision checkpoint
 

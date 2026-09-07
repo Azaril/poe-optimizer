@@ -204,6 +204,15 @@ pinned source. Six Lua-free data tests separately check authentication, identity
 mapping, shared roots and class-specific effects, owner rejection, and rejection
 of unmodeled root mechanics. Data tests and WASM compilation require no PoB source.
 
+## Planned general data boundary
+
+This compiled tree subset and its global loader are the current implementation. The
+[game-data decision](game-data-boundary.md) extends the portable model to injectable
+versioned packages for all supported game content. The default bundle will use the same
+validated loading path as external bytes. Existing exact source checks remain in force
+until an explicit data/semantic compatibility contract replaces them; this design does not
+make arbitrary edited bundles valid for the current loader.
+
 ## Reproduce or deliberately refresh the bundle
 
 Run from the repository root with the pinned reference submodule available:

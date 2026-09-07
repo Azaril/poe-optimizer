@@ -164,7 +164,7 @@ cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data 
 - `src/`: thin CLI and hidden worker protocol entry point.
 - `crates/poe-optimizer-core/`: backend-neutral evaluation contracts, options, metrics and coverage.
 - `crates/poe-optimizer-engine/`: portable native calculation kernels and differential tests.
-- `crates/poe-optimizer-data/`: authenticated portable tree models, projections and native class/entrance data.
+- `crates/poe-optimizer-data/`: authenticated portable tree models, projections and native class/entrance data. The [data-boundary design](docs/game-data-boundary.md) defines its expansion to injectable configuration packages; runtime package selection is planned.
 - `crates/poe-optimizer-native/`: strict native document profiles, preparation and typed backend.
 - `crates/poe-optimizer-import/`: portable bounded decoding, preflight and controlled materialization.
 - `crates/poe-optimizer-pob/`: optional reference host, source extraction, verification and supervision.

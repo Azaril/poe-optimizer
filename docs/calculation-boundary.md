@@ -51,8 +51,13 @@ document pipeline with explicitly bounded mechanic coverage may expose this capa
 while rejecting every build outside that coverage. This is not full game support, and
 must never silently fall back to PoB or substitute zero for missing calculations.
 
-Keep `poe-optimizer-engine` focused on portable calculations and versioned game data.
-It must not depend on `poe-optimizer-pob`, Lua, the CLI or an OS scheduler. Translation
+Keep `poe-optimizer-engine` focused on portable calculation semantics over injected game data.
+`poe-optimizer-data` owns the versioned model, portable byte loader and validated immutable
+snapshots; the engine compiles supported records into shared calculation tables. The host
+selects the package and injects compiled data into each native backend. Data content and
+balance values remain configuration, with typed Rust operations defining their behavior.
+See the [game-data boundary](game-data-boundary.md) for ownership and compatibility contracts.
+The engine must not depend on `poe-optimizer-pob`, Lua, the CLI or an OS scheduler. Translation
 proceeds in cohesive slices against the pinned Lua oracle, as described in
 [native-engine.md](native-engine.md). Export, data extraction and packaging are separate
 adapter responsibilities. `poe-optimizer-import` owns shared portable interchange; native
@@ -79,7 +84,11 @@ by its host. Do not make every backend use IPC merely because PoB needs process 
 
 ## Consequences and validation
 
-Maintain source, rules, adapter and metric identities with every result and cache key.
+Maintain source, effective data-content, rules/semantic, adapter and metric identities with
+every result and cache key. Identity is backend-instance-specific. Prepared inputs retain
+their data and semantic identity; a backend must reject reuse with a different dataset even
+when both instances expose the same backend ID. Core validation and persisted schemas must
+preserve that distinction as injection is implemented.
 The adapter fingerprint covers calculation shims, metric mapping, backend conversion,
 core contracts and process supervision. Backend swaps require equivalent supported
 semantics, not just matching trait signatures. An intentional rules change must be visible.

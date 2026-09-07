@@ -9,7 +9,14 @@ and usable evaluation path while the native engine grows through verified slices
 
 `poe-optimizer-engine` owns game calculations that can run without Lua or an operating
 system. It accepts resolved numeric inputs, validated numeric modifier layers, and explicit condition contexts now,
-and will eventually accept typed build, modifier and game-data models. The optimizer core owns objectives, constraints and search;
+and will accept typed build/modifier inputs against injected, immutable compiled game data.
+The independent `poe-optimizer-data` model owns content and balance parameters. The engine
+owns operation semantics and compiles supported records into borrowed calculation views;
+see the [data-boundary decision](game-data-boundary.md). Most game values must be loaded
+from configuration, including patch-dependent formula coefficients. Compatible value/table
+changes must not require Rust edits; new operations still require code and parity review.
+
+The optimizer core owns objectives, constraints and search;
 portable import owns interchange and materialization, the native adapter owns document
 preparation and typed native results, and the PoB adapter owns optional Lua reference hosting.
 Neither the native engine nor future browser bindings should depend on the native PoB

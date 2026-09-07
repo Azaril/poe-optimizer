@@ -56,7 +56,7 @@ Follow-up source/binary inspection on 2026-09-07 for the mlua hosting decision f
   initialization; test diagnostics, paths, clock and prompt handling in that sequence.
 
 These are inspection findings only. Runtime/module loading and calculation checks remain
-in the [implementation checklist](implementation.md#m1-checklist-establish-the-calculation-oracle).
+in the [implementation checklist](implementation.md#m1-checklist-native-calculation-and-optional-reference-parity).
 
 ### Load, mutate, calculate, and export
 

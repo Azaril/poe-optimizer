@@ -63,6 +63,19 @@ Default quest rewards and the resistance penalty are explicit in result context.
 source numerical outputs are ignored and removed from native exports. Encounter overrides
 are written into exported configuration so re-import preserves the selected scenario.
 
+## Planned data injection boundary
+
+The current native backend still uses a global bundled-tree loader and compiled numerical
+constants. A portable data crate alone does not establish runtime injection. The
+[accepted data design](game-data-boundary.md) moves package selection to the host and gives
+each backend shared immutable compiled data. Prepared evaluations retain the originating
+data identity; cross-dataset reuse rejects. Skills, item bases, monster tables, rewards,
+balance parameters and typed passive effects migrate to configuration while Rust retains
+operation semantics and coverage checks. Embedded defaults use the same loader as external
+packages. These APIs are planned; this document's commands do not yet expose external data
+selection. The [implementation plan](implementation.md#injectable-game-data-design--2026-09-07)
+tracks this migration before further class/passive search expansion.
+
 ## CLI and dependency separation
 
 The default developer build includes the PoB reference feature and defaults to that backend.

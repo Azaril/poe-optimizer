@@ -14,8 +14,9 @@ application layers, with the following package boundaries:
 | --- | --- | --- |
 | `poe-optimizer-core` | Portable problem/candidate types, metric and evaluator interfaces, scoring and evidence contracts | Independent of CLI, Tauri, webviews, OS scheduling and a particular Lua host |
 | `poe-optimizer-search` | Search orchestration, bounded host scheduling, evaluation budgets, archives and verification | Depends on core; adapters provide candidates/calculations; native and browser schedulers stay replaceable |
-| `poe-optimizer-engine` | Portable native game calculations and versioned data; no Lua, OS scheduling or application I/O | Implements calculation semantics; independent of the PoB runtime |
-| `poe-optimizer-native` | Native build preparation, backend adaptation and export | Depends on portable core, engine and import; no PoB runtime |
+| `poe-optimizer-data` | Versioned game-data schemas, byte loading/validation, immutable snapshots and data identity | Depends only on portable types; never on engine, native, PoB or acquisition I/O |
+| `poe-optimizer-engine` | Portable native calculations and compilation of supported game-data records | Depends on portable data models; no Lua, OS scheduling or application I/O |
+| `poe-optimizer-native` | Injected compiled-data ownership, native build preparation, backend adaptation and export | Depends on portable core, data, engine and import; no PoB runtime |
 | `poe-optimizer-import` | Bounded interchange decoding and source-preserving materialization | Portable Rust; no reference host dependency |
 | `poe-optimizer-pob` | Optional PoB reference backend, mlua/LuaJIT workers, source extraction and parity | Implements core interfaces; depends on core and shared import |
 | `poe-optimizer-report` | Versioned artifact encoding and presentation models, JSON/CSV export, HTML report generation | Depends on core result types; never owns calculation or search rules |
@@ -30,9 +31,9 @@ means complete-document input support, not a legality or mechanic-coverage certi
 Portable native stages follow the [native engine design](native-engine.md).
 
 Search and evaluation behavior belong in libraries; application layers compose them.
-Keep pure data/model modules in portable core and OS/Rayon scheduling in the host search
-crate. Package names can change without changing these
-ownership and dependency rules.
+Keep generic contracts in portable core, game-data models in the portable data crate, and
+OS/Rayon scheduling in the host search crate. Package names can change without changing
+these ownership and dependency rules.
 
 The library accepts typed inputs and returns typed errors/results. It must not print to
 a terminal, exit the host process, parse application arguments, or require a webview.
@@ -113,7 +114,15 @@ unbounded memory. Keep sufficiently many independent candidates or search starts
 to fill workers. Schedule work dynamically in throughput mode, so one expensive build does
 not make every other worker idle. Batch cheap Rust operations to amortize scheduling overhead.
 
-Share immutable problem/tree data. Keep mutable search state local to each island, with
+Load, validate and compile the selected game-data package once at setup. Inject shared
+immutable data into backend instances and bind each run, prepared build, candidate catalog
+and cache entry to its content/semantic identity. Different snapshots may coexist in one
+host; updates create new instances rather than change active jobs. Acquisition belongs to
+the host, while portable loading accepts bytes. No per-evaluation configuration parsing or
+data-provider I/O enters Rayon tasks. Account for shared data and retained versions in the
+resource budget; see the [data boundary](game-data-boundary.md).
+
+Share immutable problem/game data. Keep mutable search state local to each island, with
 a coordinator merging feasible archives and optionally exchanging a few diverse candidates.
 Independent starts are logical tasks, not dedicated threads. Island count is a search
 parameter and can exceed worker count; it must not multiply the CPU or evaluation budget.

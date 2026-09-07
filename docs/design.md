@@ -146,6 +146,9 @@ flowchart LR
     Rayon --> Cache[Cache + in-flight deduplication]
     Cache --> Backend[Calculation backend contract]
     Backend --> Native[Native Rust calculations on Rayon]
+    Packages[Versioned game-data packages] --> Loader[Portable validation and compilation]
+    Loader --> Data[Injected immutable game data]
+    Data --> Native
     Backend --> Pool[Optional reference workers / mlua and LuaJIT]
     Pool --> PoB[Pinned PoB calculations and data]
     Native --> Search
@@ -161,7 +164,8 @@ Use a Cargo workspace with library/application boundaries from the first engine 
 | Planned package | Responsibility |
 | --- | --- |
 | `poe-optimizer-core` | Problem/candidate models, metric/evaluator interfaces, generic scoring/search, execution policy, events/results |
-| `poe-optimizer-engine` | Portable Rust calculation semantics and versioned game data; no Lua or OS scheduler |
+| `poe-optimizer-data` | Versioned game-data model, portable package loading/validation and immutable snapshots; no evaluator or acquisition I/O |
+| `poe-optimizer-engine` | Portable Rust calculation semantics and compilation of injected data into resolved calculation tables; no Lua or OS scheduler |
 | `poe-optimizer-native` | Native build preparation, calculation backend, typed results and export |
 | `poe-optimizer-import` | Bounded build/share-code decoding and portable interchange/materialization |
 | `poe-optimizer-pob` | Optional reference backend, Lua supervision, source extraction and parity evidence |
@@ -176,6 +180,22 @@ CLI and later GUI to share all calculation, feasibility, and search behavior.
 See [parallel execution, interfaces, and visualization](execution-and-interfaces.md) for
 the proposed package dependencies, resource policy, event/artifact contracts, and GUI path.
 PoE1 can share these libraries while supplying its own rules, topology, and metric capabilities.
+
+### Game-data boundary
+
+Most game content and balance parameters load from versioned configuration packages owned
+by `poe-optimizer-data`. Hosts select and load bytes, then inject a validated immutable
+snapshot compiled for the chosen native engine. Skills, item bases, passive effects,
+monster tables, rewards and numeric rules must not require edits to Rust source when their
+values change within supported semantics. Rust owns calculation operations and coverage
+checks; data cannot enable an unimplemented mechanic.
+
+The same loader accepts embedded default and external data. Each backend and prepared build
+retains its dataset identity; parallel jobs can use different snapshots without global
+state. Search catalogs, results and caches bind to that identity. Run objectives, inventory,
+selected quest rewards and encounter choices remain separate problem inputs. The
+[data-boundary decision](game-data-boundary.md) defines the model, ownership, validation,
+compatibility and data-update contracts.
 
 ### Evaluator boundary
 
@@ -273,7 +293,7 @@ owned-inventory build are separate views; never silently mix their denominators.
 
 An evaluation cache key includes:
 
-- Game and PoB commit; adapter and metric-schema versions; runtime identity.
+- Game and verified effective data digest; calculation semantic, adapter and metric-schema versions; runtime identity and optional reference-source revision. Data identity is separate from a PoB commit or human patch label.
 - Seed content hash and canonical complete candidate state.
 - Resolved scenario, all implicit defaults, and requested metric set.
 - Candidate inventory snapshot when relevant to validity or reported cost.
@@ -460,7 +480,7 @@ Use multi-start local search with a small beam, variable-size mutations, and exp
 1. Evaluate and retain the seed, including an infeasible seed.
 2. Generate and cheaply validate a bounded set of mutations.
 3. Canonicalize and deduplicate candidates, using cached measurements when available.
-4. Evaluate uncached candidates through PoB.
+4. Evaluate uncached candidates through the selected backend with the run's immutable data snapshot; native Rust is the production target and PoB is an optional reference.
 5. Update a best-feasible archive and a separate near-feasible exploration archive.
 6. Select diverse states; increase mutation size or restart after stagnation.
 7. Stop at the evaluation/time budget, cancellation, or domain exhaustion.
@@ -670,6 +690,9 @@ first, visual output, and a later GUI. The user has also confirmed:
    backend that is independent of PoB and executes directly in parallel. Keep PoB loadable
    as an optional parity/update reference. Develop complete parity-tested native pipelines
    and retain a browser/WASM path.
+7. Most game data belongs in versioned configuration and an independent data model, injected
+   into native evaluation. Share immutable data across workers; keep calculation semantics
+   in Rust and support compatible data-only updates without rebuilding the evaluator.
 
 The [decision register](prior-art-and-product-review.md#decision-register-and-remaining-input)
 preserves the answers and rationale. Exact skill/item requirements, goals, and scenario
