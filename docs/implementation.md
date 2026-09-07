@@ -2,15 +2,14 @@
 
 Last updated: 2026-09-07
 
-Current phase: M1 evaluator coverage and M2 reusable core are advancing together. Configurable
-scalar objective assessment, saved-result validation, a four-case attack/weapon/support
-reference matrix, and native numeric modifier aggregation are implemented at this checkpoint.
-All 107 local tests, formatting, Clippy with warnings denied, portable core/native WASM
-compilation and the standalone objective/reassessment smoke pass. Document links, whitespace
-and independent code review pass. Code is published through `86526ae`; both Windows/Linux
-hosted jobs pass, including WASM compilation. Historical evidence remains below. No optimizer
-or worker pool is implemented.
-
+Current phase: M2 candidate/search contracts and a developer PoB calibration-search CLI
+are implemented alongside the native calculation port. Canonical models cover all six
+dimensions and shared physical roots; the generic kernel supplies bounded parallel
+evaluation, separate status beams, deduplication and fresh verification. The calibration
+bridge covers four immutable Mace fixtures, not arbitrary imported builds. Native conditions
+extend the numeric database. All 154 local workspace tests, formatting, Clippy and portable
+core/native WASM compilation pass. Standalone search/export and document checks pass.
+Publication and Windows/Linux hosted validation are the remaining checkpoint steps.
 This is the living record of delivery order, implemented behavior, validation, unresolved
 work, and the next session's starting point. [Design](design.md) defines the intended system
 and acceptance criteria; [execution and interfaces](execution-and-interfaces.md) and the
@@ -22,41 +21,44 @@ the design documents.
 
 ## Resume here
 
-1. Inspect `git status --short --branch` before editing. Code is published through `86526ae`
-   (core/calibration/native changes in `bb08697`, CLI integration in `86526ae`). This checkpoint
-   adds objective assessment, recorded-result validation, attack interaction calibration,
-   native modifier aggregation and topology findings. Read its validation table below.
-2. All 107 local Windows tests, formatting, Clippy, core/native WASM compilation, source/
-   reference audits and standalone objective/saved-assessment checks pass. Both hosted
-   Windows/Linux jobs pass for `86526ae`; next implementation work starts at item 4.
-3. Keep the PoB submodule at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified.
-   Preserve original user fixtures and all six independently generated calibration goldens.
-   The attack reference uses separate scripts; original Spark scripts/goldens remain unchanged.
-   Never refresh expected values using the Rust evaluator.
-4. Implement canonical candidate/domain/lock models across all six dimensions: class,
-   ascendancy, passives, equipment, support gems and supporting active skills. Preserve 1..N
-   required skills and 1..N exact equipped item instances, including at least two of each
-   in fixtures. Use the shared evaluation and scoring boundaries; a scalar assessment is
-   available now, while candidate mutation and search remain unimplemented.
-5. Add tiny exhaustive joint-search fixtures and a coordinated-change trap, then controlled
-   PoB mutations with requested-versus-realized state checks, legal point/resource accounting,
-   lock preservation, fresh re-evaluation and export/re-import parity. The attack matrix
-   demonstrates a real weapon/support ranking reversal; it does not replace six-dimension
-   mutation or full legality tests. Resolve class/ascendancy ownership explicitly.
-6. Use [the topology investigation](tree-topology-investigation.md) when extracting the
-   candidate graph. Every actual catalog class has two surviving ordinary entrances; several
-   edges are listed only in reverse. Build bidirectional adjacency, retain dangling-edge
-   diagnostics and separate pinned-graph consistency from unverified game completeness.
-   The missing references do not remove cross-class search from scope.
-7. Continue native translation through bounded conditional/tag/scoped modifier evaluation
-   and a versioned, validated data extraction boundary. Untagged BASE/INC/MORE/OVERRIDE now
-   has a native implementation; unsupported metadata must remain explicit rather than be
-   stripped. Capture real modifier contexts for differential validation before integration.
-   Neither numerical kernels nor aggregation is a native full-build backend.
-8. Add worker pools, Rayon scheduling, cancellation, caching and persistent reuse only with
-   shared CPU/memory/attempt accounting and fresh-process parity. Portable WASM compilation
-   remains separate from browser execution, bindings and measured performance.
-9. Replace this resume point and record evidence at the next checkpoint.
+1. Inspect `git status --short --branch` and the checkpoint evidence below. Candidate/core,
+   host search, the calibrated PoB bridge/CLI and native conditions pass all 154 local
+   workspace tests. Complete publication/hosted verification if still pending, then resume
+   implementation at item 4. Preserve unrelated user work.
+2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve original
+   supplied exports and all independently generated Spark/Mace calibration goldens.
+3. Read [candidate contracts](candidate-model.md), [search contracts](search-kernel.md)
+   and [the calibrated bridge](pob-candidates.md). These establish reusable boundaries;
+   the CLI searches only four exact Mace fixtures. It is a development gate, not the first
+   usable joint optimizer. Core contracts and tests retain cross-class/ascendancy scope
+   and multiple required skills/exact item instances.
+4. Expand controlled candidate materialization beyond exact fixture membership using a
+   versioned PoB data extraction boundary. Start with parameterized weapon/support
+   variants and independent differential fixtures, then supporting skills and complete
+   class/ascendancy/passive changes together. Preserve source scenario/identity and check
+   requested-versus-realized state, locks, legal point/resources, export/re-import parity
+   and fresh finalists. Do not infer a whole-game legality certificate from catalog checks.
+5. Use [the topology investigation](tree-topology-investigation.md) for real graph extraction:
+   symmetric edges, two surviving ordinary entrances per actual catalog class, separate
+   point categories and explicit dangling/special-mechanic diagnostics. Missing targets
+   do not remove cross-class search from product scope.
+6. Implement domain-specific coordinated mutations, restarts and diverse search archives
+   with exhaustive tiny references and independent real-build fixtures. The generic kernel
+   now accepts a bounded proposer, but does not yet generate general PoB mutations.
+   Extend benchmarks across mapping/bossing and 5–30 minute budgets before tuning quality.
+7. Add shared memory/CPU admission, signal-aware cancellation, progress events, persisted
+   checkpoints/cache and throughput scheduling. Current per-run deduplication and scoped
+   fresh workers are bounded by explicit jobs/attempt/proposal limits; they are not a
+   persistent worker pool or hard memory governor. Worker reuse requires fresh-process parity.
+8. Continue native translation from explicit Condition/ActorCondition tables through real
+   modifier-context extraction and bounded multiplier/scaling semantics. FLAG-derived
+   conditions and a full native build evaluator remain unsupported. Keep interpreted and
+   warmed actual-upstream parity tests and portable core/native WASM checks.
+9. Structured search JSON is available; an offline comparison/HTML report and later Tauri
+   GUI should consume the same result/candidate contracts. Browser bindings and execution
+   remain separate work from portable compilation.
+10. Update this resume point and validation evidence at the next progress checkpoint.
+For targeted data questions, the user supplied PoE2DB/PoEDB; see the [lookup constraint](design.md#external-lookup-references). Do not scrape or bulk-extract either site.
 
 No product-scope answer blocks these tasks. Exact objective metrics, thresholds, scales,
 required skill/item subsets and encounter assumptions remain explicit per-run inputs.
@@ -64,6 +66,56 @@ Assessment reports constraint evidence and primary availability; it does not cer
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
 
+## M2 candidate/search and calibration CLI checkpoint — 2026-09-07
+
+This checkpoint connects canonical finite candidates to a replaceable search/evaluation
+boundary and a real PoB integration harness. It does not narrow the first usable optimizer
+scope to weapon/support selection.
+
+- Core candidate/lock contracts retain classes, ascendancies, passives, equipment,
+  support gems and supporting skills. Fourteen tests include simultaneous changes in all
+  six dimensions while preserving two required skill definitions and two exact items;
+  reverse-edge connectivity, owner/point accounting, multiplicity, independent locks,
+  resources and explicit unsupported mechanics are covered. Shared physical class and
+  ascendancy roots/paid nodes use validated owner sets, including pinned Witch/Sorceress
+  and Lich/Abyssal Lich relationships; effective override extraction remains explicit work.
+- The host search crate uses Rayon for Rust CPU evaluations and scoped supervisor threads
+  for external processes. Twenty tests compare a coupled six-bit search with all 64
+  states, compare one/multiple jobs and both schedulers, preserve infeasible exploration,
+  and exercise deduplication, failures, exact budget boundaries, cooperative cancellation,
+  late results and fresh-verification drift. No Lua/process type enters candidate/scoring
+  contracts. Search proposals remain domain-provided complete states.
+- The PoB registry resolves only four independently calibrated source hashes, preserves
+  original XML bytes and hashes exact item/gem payloads. Candidate membership includes
+  immutable source/catalog identity. Fresh realization checks cover class roots, passive
+  allocations, equipment payloads, gem identities/configuration and encounter settings;
+  only verified upstream normalizations are accepted. See [bridge scope](pob-candidates.md).
+- `search-calibration` exposes configurable scalar goals/constraints, jobs, shared duration
+  and attempt limits. Four exploration attempts plus one fresh finalist attempt exercise
+  the complete catalog. JSON includes catalog, source labels/hashes, effective budgets,
+  backend identity, assessments and verification; an exact source export requires a fresh
+  verified feasible incumbent. All results retain diagnostic status. The four-case DPS
+  winner is Smithing Hammer without Brutality; the support-equipped pair ranks Wooden Club
+  higher, preserving the independently demonstrated interaction.
+- Native `Condition`/`ActorCondition` evaluation preserves parent/skill/actor fallback,
+  override and weapon exceptions plus inactive MORE precision and source error ordering.
+  Five additional actual-upstream tests bring the native crate to 16 tests. Explicit
+  resolved condition tables are supported; FLAG-derived conditions, multiplier/scaling
+  tags, real-build extraction and full native evaluation remain unsupported.
+- Review fixes include last-round proposal admission, cancellation precedence and controls,
+  late/failure accounting, full fresh assessment/metadata comparison, malformed finite
+  evidence rejection, scenario drift, hidden item XML children and shared physical-node
+  ownership. No user design input
+  was needed; package separation implements the existing portable-core boundary.
+
+| Validation | Evidence |
+| --- | --- |
+| Full Windows workspace | `cargo test --workspace --all-targets --locked`: **154 passed, zero failures**. Both ignored helpers are explicitly invoked by their parent deadline/fresh-process tests. Log: ignored `runs/m2-search-workspace-tests.log`. |
+| Formatting and lint | `cargo fmt --all -- --check` and `cargo clippy --workspace --all-targets --locked -- -D warnings` pass. |
+| Portable boundary | `cargo check -p poe-optimizer-core -p poe-optimizer-engine --lib --target wasm32-unknown-unknown --locked` passes with the shared-root model and condition implementation. Search's host scheduler is deliberately outside this gate. |
+| Standalone calibration search | Ignored `runs/m2-search-9b151354.json` and `.xml`: jobs 2, five attempts including one fresh verification, `mace-smithing`, selected hit DPS `18.208694`, verification consistent. Debug search elapsed `7151.7147 ms`; this single observation is not a scaling benchmark. Adapter fingerprint `b2c24db59723ee873659e5cd044ae43bb3d39e0b25605ec8e5f70969833adafb`. |
+| Integrity and review | Original fixtures/goldens and submodule unchanged. README/docs local file links and `git diff --check` pass. Independent review findings are addressed and covered by regression tests. |
+| Publication and hosted CI | Pending this checkpoint's code push and Windows/Linux run. Update this row with the exact commit/run result. |
 ## Current repository and capabilities
 
 - Branch: `main`; remote `origin` is `https://github.com/Azaril/poe-optimizer.git`
@@ -74,7 +126,7 @@ compare independent hosts/extractors using shared PoB calculations, not independ
   objective/calibration/modifier changes are published through `86526ae` with local tests/Clippy/WASM passing.
 - [Workspace](../Cargo.toml): Rust 2024 / minimum 1.93; shared application contracts, PoB
   import/runtime/supervision, a static native UTF-8 library, native calculation kernels,
-  and the root CLI. The [core](../crates/poe-optimizer-core/src/evaluation.rs) now separates
+  a host search library, and the root CLI. The [core](../crates/poe-optimizer-core/src/evaluation.rs) now separates
   `CalculationBackend` from `EvaluationEngine`. Requests/results carry build documents,
   options, capabilities, typed measurements, coverage and versioned identity without exposing
   Lua or process APIs. The current `Engine` is synchronous. Contract validation rejects
@@ -85,7 +137,7 @@ compare independent hosts/extractors using shared PoB calculations, not independ
   numbers and optional coverage numbers are checked, including unused measurements.
   Coverage schema 1 is supported. This does not authenticate source identity, reinterpret
   units using today's catalog, or certify data semantics and game legality.
-- [CLI](../src/main.rs): `import`, `evaluate`, `metrics`, and `assess`. Evaluation uses report schema 2
+- [CLI](../src/main.rs): `import`, `evaluate`, `metrics`, `assess`, and the developer `search-calibration` harness. Evaluation uses report schema 2
   with a shared typed `evaluation` object; the private JSONL worker protocol is version 2.
   `--options <json>` selects one-based groups/actions and applies a named encounter's enemy
   level, boss kind and explicit five-component incoming hit. Repeatable `--metric` filters
@@ -141,23 +193,23 @@ compare independent hosts/extractors using shared PoB calculations, not independ
   agree exactly; [production attack parity](../tests/attack_calibration.rs) also passes
   in the 107-test combined run. This is shared-PoB host/extractor calibration,
   not independently modeled mechanics or full build legality.
-- [Native engine](native-engine.md): `poe-optimizer-engine` contains the prior six numerical
-  functions plus a validated untagged numeric modifier database for BASE/INC/MORE/OVERRIDE.
-  Aggregation preserves flags/keyword matching, source filtering, insertion/query/parent
-  ordering, rounding/truncation and override presence. Unsupported tags, value kinds,
-  masks and query shapes fail explicitly. Six new differential tests execute the actual
-  pinned ModStore/ModDB wrappers; conditional/scoped evaluation and data import remain
-  unimplemented. Production has no external dependencies, Lua, I/O or scheduling. This
-  is not a full build backend, browser app, measured speedup or replacement for PoB.
+- [Native engine](native-engine.md): six numerical functions and a validated numeric
+  BASE/INC/MORE/OVERRIDE database now include typed Condition/ActorCondition queries.
+  Sixteen actual-upstream parity tests cover numeric and conditional behavior. Unsupported
+  tags, FLAG-derived conditions, multipliers, real-build extraction and full native
+  evaluation remain explicit. Production has no external dependencies, Lua, I/O or
+  scheduling; portable compilation is not a browser execution or speedup claim.
 - [Tree topology](tree-topology-investigation.md): all eight actual catalog classes have
   usable ordinary entrances at six shared start locations. The 14 absent references
   remain data-coverage evidence, not proof that affected classes cannot be searched.
   Extraction must reconstruct reverse-listed edges and class-specific overrides; candidate
   validation must detect PoB normalization/pruning and mismatched ascendancy ownership.
-- Candidate mutation/legality, search, Rayon pools, cancellation, search reports, recovery
-  and GUI are **not implemented**. [objective.toml](../examples/objective.toml) remains
-  end-state design notation; the implemented assessment input is the narrower JSON schema
-  documented in [objective-assessment.md](objective-assessment.md).
+- [Candidates](candidate-model.md) and [search](search-kernel.md): finite supplied rules,
+  all-dimension locks, bounded parallel evaluation, heuristic proposal contracts and fresh
+  verification are implemented. `search-calibration` integrates four immutable PoB sources.
+  General PoB mutation/legality, memory admission, recovery and GUI remain unimplemented.
+  [objective.toml](../examples/objective.toml) remains end-state design notation; implemented
+  policy input is JSON as documented in [objective-assessment.md](objective-assessment.md).
 - [CI](../.github/workflows/rust.yml) initializes pinned submodules and checks workspace
   formatting, Clippy and tests on Windows/Linux, plus portable core/native WASM compilation.
   Both hosted jobs pass for historical checkpoint `7dd2a09`. Hosted results for this
@@ -173,12 +225,12 @@ is concrete; real-build recommendations depend on both.
 | --- | --- | --- |
 | M0: bootstrap and alignment | Complete | Rust scaffold, pinned submodule, end-state design, source/prior-art review, preserved source fixture, and this implementation record. Scaffold validation passes; this does not establish evaluator correctness. |
 | M1: evaluator and fixtures | In progress; shared boundary, typed options and six independent reference scenarios validated locally; broader legal mutation coverage outstanding | Reproducible mlua/LuaJIT startup in a Rust worker, bounded import, supervised fresh-process evaluation, typed metric mappings, controlled mutations across all six dimensions, export/re-import parity, and isolation evidence. Complete the checklist below. |
-| M2: reusable core and synthetic joint search | Evaluation and scalar scoring interfaces implemented; canonical candidate/lock models and synthetic joint search next | Candidate/domain/lock models, metric policies, coupled mutations and repair, Rayon/job APIs, shared budgets and events. Match exhaustive tiny domains, escape coordinated-change traps, preserve multiple locks, and verify deterministic one/many-worker results plus cancellation/dedup/accounting. |
+| M2: reusable core and synthetic joint search | Candidate/lock contracts, synthetic joint search, deterministic parallel evaluation and bounded verification implemented; events, richer operators and shared resource management outstanding | Candidate/domain/lock models, metric policies, coupled mutations and repair, Rayon/job APIs, shared budgets and events. Match exhaustive tiny domains, escape coordinated-change traps, preserve multiple locks, and verify deterministic one/many-worker results plus cancellation/dedup/accounting. |
 | M3: first usable joint optimizer | Not started | Integrate all six dimensions with multicore PoB evaluation; ship preflight, evaluation/comparison, search, saved-result reranking, recovery, verified exports, and offline reports. Meet the end-to-end gates below. |
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
 | M5: richer objective policies | Not started | Unit-checked expressions, composite and ordered priorities, soft preferences, Pareto selection, and explicit robust aggregation. Test policy-specific selection and preserve hard constraints. |
 | Desktop GUI | Deferred until CLI/report contracts stabilize | Choose frontend; Tauri is a candidate. Reuse core jobs, results and comparison models. Verify CLI/GUI parity, responsive cancellation and native-worker packaging. Does not depend on finishing every M4/M5 feature. |
-| Native Rust calculation replacement | Active in parallel | Six numerical kernels and untagged numeric modifier aggregation implemented. Conditional tags, scoped evaluation, data extraction and complete pipeline slices need differential parity before exposing a native build backend. Performance and browser execution remain unmeasured. |
+| Native Rust calculation replacement | Active in parallel | Six numerical kernels plus numeric and explicit conditional modifier evaluation implemented. FLAG-derived conditions, multiplier/scaling tags, data extraction and complete pipeline slices need differential parity before exposing a native build backend. Performance and browser execution remain unmeasured. |
 | PoE1 adapter | Later, separate track | Add a distinct versioned rules/data/evaluator adapter after PoE2 interfaces are proven; do not mix game identities or reuse PoE2 parity claims. |
 
 Narrow passive/item/skill experiments are internal validation steps. The first usable release
@@ -230,7 +282,8 @@ skills together within explicit finite catalogs. It must support 1..N required s
 - [ ] **M1.6 Isolation and failures — partial.** Parser/protocol failures, blocked-stdin
       timeout/reaping, scratch cleanup, fresh-worker A/B/A and export/reimport checks pass.
       Complete broader order, worker-count and failure coverage. Persistent reset/reload
-      workers, pools and cancellation are not implemented; enable reuse only after matching
+      workers and memory-governed pools remain unimplemented; bounded fresh scheduling and
+      cooperative library cancellation now exist. Enable reuse only after matching
       the fresh-process reference.
 - [ ] **M1.7 Measurements — partial observation only.** The recorded standalone debug CLI
       request took 2,603.4796 ms inside the evaluator and 2,996.6718 ms wall time, including

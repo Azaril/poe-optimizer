@@ -1,4 +1,6 @@
 //! Path of Building import, runtime and evaluator process adapter.
+pub mod candidate;
+
 pub mod backend;
 pub mod import;
 pub mod metrics;

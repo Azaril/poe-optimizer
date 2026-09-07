@@ -1,3 +1,5 @@
+mod catalog_search;
+
 use clap::{Parser, Subcommand};
 use poe_optimizer_core::{
     MAX_WIRE_BYTES, PROTOCOL_VERSION, WorkerFailure, WorkerHello, WorkerRequest, WorkerResponse,
@@ -22,7 +24,7 @@ use std::{
     name = "poe-optimizer",
     version,
     about = "Experimental Path of Exile 2 build evaluator",
-    long_about = "Import PoB XML/share codes and obtain fresh diagnostic PoB outputs through isolated mlua workers. Typed metric mappings and coverage are diagnostic; optimization is not implemented."
+    long_about = "Import PoB XML/share codes and obtain fresh diagnostic PoB outputs through isolated mlua workers. Typed metric mappings and coverage are diagnostic; Includes a developer calibration search; general build optimization is not implemented."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -31,6 +33,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Action {
+    /// Search the four calibrated weapon/support alternatives (developer harness).
+    SearchCalibration(catalog_search::Args),
     /// List the typed measurement catalog without starting a calculation.
     Metrics,
     /// Decode and validate a PoB XML file or share code, preserving exact XML bytes.
@@ -96,6 +100,7 @@ fn main() -> ExitCode {
 
 fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
+        Some(Action::SearchCalibration(args)) => catalog_search::run(args)?,
         None => {
             use clap::CommandFactory;
             Cli::command().print_help()?;

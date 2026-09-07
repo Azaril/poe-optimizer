@@ -1,11 +1,13 @@
-//! Validated, untagged numeric subset of the pinned PoB `ModDB` query semantics.
+//! Validated numeric subset of the pinned PoB `ModDB` query semantics.
 //!
-//! This is not a `ModStore::EvalMod` implementation or an importer. Callers must
+//! The typed condition path implements a declared `EvalMod` subset, not an importer. Callers must
 //! supply every modifier and preserve its tags/value kind so unsupported input
 //! fails validation. Layer zero is the queried database; later layers are its
 //! successive parents. Ordering affects floating-point sums and overrides.
 
 use std::{collections::BTreeMap, error::Error, fmt};
+
+use crate::conditions::{ConditionEnvironment, ModifierTag};
 
 /// Bit 31 is excluded because upstream AND64 recombines a signed low word.
 /// All other nonnegative, exactly representable 53-bit masks are supported.
@@ -56,8 +58,26 @@ pub struct ModifierInput {
     pub flags: u64,
     pub keyword_flags: u64,
     pub source: Option<String>,
-    /// Every tag is currently unsupported, including conditions and scopes.
+    /// The legacy constructor rejects every raw tag name. Use TaggedModifierInput
+    /// for explicitly represented tags and retain unsupported names here.
     pub tag_kinds: Vec<String>,
+}
+
+/// Typed tags augment the old input without changing existing untagged callers.
+/// Any raw `modifier.tag_kinds` still reject the whole database.
+#[derive(Debug, Clone, PartialEq)]
+pub struct TaggedModifierInput {
+    pub modifier: ModifierInput,
+    pub tags: Vec<ModifierTag>,
+}
+
+impl From<ModifierInput> for TaggedModifierInput {
+    fn from(modifier: ModifierInput) -> Self {
+        Self {
+            modifier,
+            tags: vec![],
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -68,6 +88,7 @@ pub struct NumericModifier {
     flags: u64,
     keyword_flags: u64,
     source: Option<String>,
+    tags: Vec<ModifierTag>,
 }
 
 impl NumericModifier {
@@ -86,6 +107,18 @@ impl NumericModifier {
     pub const fn value(&self) -> f64 {
         self.value
     }
+
+    pub fn tags(&self) -> &[ModifierTag] {
+        &self.tags
+    }
+
+    fn evaluated_value(&self, conditions: Option<&ConditionEnvironment>) -> Option<f64> {
+        if self.tags.is_empty() || conditions.is_some_and(|context| context.matches(&self.tags)) {
+            Some(self.value)
+        } else {
+            None
+        }
+    }
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
@@ -99,6 +132,10 @@ pub struct QueryContext {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ModifierError {
+    MissingConditionContext,
+    InvalidConditionContext {
+        reason: String,
+    },
     UnsupportedKind {
         layer: usize,
         modifier: usize,
@@ -170,11 +207,12 @@ impl MorePrecision {
     }
 }
 
-/// Immutable validated layers. No actor conditions, mutation, caches or Lua
-/// objects live here. Unsupported entries anywhere in the input reject it all.
+/// Immutable validated layers. Explicit condition contexts, mutation, caches or Lua
+/// objects are never retained here. Unsupported entries anywhere reject the input.
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct ModifierDatabase {
     layers: Vec<Vec<NumericModifier>>,
+    has_tags: bool,
 }
 
 impl ModifierDatabase {
@@ -218,11 +256,69 @@ impl ModifierDatabase {
                     flags: input.flags,
                     keyword_flags: input.keyword_flags,
                     source: input.source,
+                    tags: vec![],
                 });
             }
             resolved.push(modifiers);
         }
-        Ok(Self { layers: resolved })
+        Ok(Self {
+            layers: resolved,
+            has_tags: false,
+        })
+    }
+
+    /// Validate typed tags and every numeric modifier before accepting any layer.
+    pub fn try_new_tagged(layers: Vec<Vec<TaggedModifierInput>>) -> Result<Self, ModifierError> {
+        let mut tags = Vec::with_capacity(layers.len());
+        let mut untagged = Vec::with_capacity(layers.len());
+        for (layer, entries) in layers.into_iter().enumerate() {
+            let mut layer_tags = Vec::with_capacity(entries.len());
+            let mut layer_inputs = Vec::with_capacity(entries.len());
+            for (modifier, entry) in entries.into_iter().enumerate() {
+                for tag in &entry.tags {
+                    if let ModifierTag::Unsupported(tag) = tag {
+                        return Err(ModifierError::UnsupportedTag {
+                            layer,
+                            modifier,
+                            tag: tag.clone(),
+                        });
+                    }
+                }
+                layer_tags.push(entry.tags);
+                layer_inputs.push(entry.modifier);
+            }
+            tags.push(layer_tags);
+            untagged.push(layer_inputs);
+        }
+        let mut result = Self::try_new(untagged)?;
+        for (layer, layer_tags) in result.layers.iter_mut().zip(tags) {
+            for (modifier, tags) in layer.iter_mut().zip(layer_tags) {
+                result.has_tags |= !tags.is_empty();
+                modifier.tags = tags;
+            }
+        }
+        Ok(result)
+    }
+
+    fn validate_conditions(
+        &self,
+        conditions: Option<&ConditionEnvironment>,
+    ) -> Result<(), ModifierError> {
+        if self.has_tags && conditions.is_none() {
+            return Err(ModifierError::MissingConditionContext);
+        }
+        if let Some(conditions) = conditions
+            && conditions.input().store_conditions.len() != self.layers.len()
+        {
+            return Err(ModifierError::InvalidConditionContext {
+                reason: format!(
+                    "Expected {} store condition layers, received {}",
+                    self.layers.len(),
+                    conditions.input().store_conditions.len()
+                ),
+            });
+        }
+        Ok(())
     }
 
     pub fn layer(&self, index: usize) -> Option<&[NumericModifier]> {
@@ -236,7 +332,28 @@ impl ModifierDatabase {
         context: &QueryContext,
         names: &[&str],
     ) -> Result<f64, ModifierError> {
+        self.sum_internal(kind, context, names, None)
+    }
+
+    pub fn sum_with_conditions(
+        &self,
+        kind: SumKind,
+        context: &QueryContext,
+        names: &[&str],
+        conditions: &ConditionEnvironment,
+    ) -> Result<f64, ModifierError> {
+        self.sum_internal(kind, context, names, Some(conditions))
+    }
+
+    fn sum_internal(
+        &self,
+        kind: SumKind,
+        context: &QueryContext,
+        names: &[&str],
+        conditions: Option<&ConditionEnvironment>,
+    ) -> Result<f64, ModifierError> {
         validate_query(context, names)?;
+        self.validate_conditions(conditions)?;
         let kind = match kind {
             SumKind::Base => NumericKind::Base,
             SumKind::Increased => NumericKind::Increased,
@@ -254,7 +371,7 @@ impl ModifierDatabase {
                                     || source_prefix(source) == context.source.as_deref()
                             }))
                     {
-                        result += modifier.value;
+                        result += modifier.evaluated_value(conditions).unwrap_or(0.0);
                     }
                 }
             }
@@ -274,7 +391,28 @@ impl ModifierDatabase {
         names: &[&str],
         precision: &MorePrecision,
     ) -> Result<f64, ModifierError> {
+        self.more_internal(context, names, precision, None)
+    }
+
+    pub fn more_with_conditions(
+        &self,
+        context: &QueryContext,
+        names: &[&str],
+        precision: &MorePrecision,
+        conditions: &ConditionEnvironment,
+    ) -> Result<f64, ModifierError> {
+        self.more_internal(context, names, precision, Some(conditions))
+    }
+
+    fn more_internal(
+        &self,
+        context: &QueryContext,
+        names: &[&str],
+        precision: &MorePrecision,
+        conditions: Option<&ConditionEnvironment>,
+    ) -> Result<f64, ModifierError> {
         validate_query(context, names)?;
+        self.validate_conditions(conditions)?;
         let mut local_results = Vec::with_capacity(self.layers.len());
         for (layer_index, layer) in self.layers.iter().enumerate() {
             let mut result = 1.0;
@@ -286,7 +424,10 @@ impl ModifierDatabase {
                     if matches(modifier, NumericKind::More, context, name)
                         && matches_prefix(modifier, context, layer_index, index)?
                     {
-                        mod_result *= 1.0 + modifier.value / 100.0;
+                        // A failed conditional MORE still participates in the
+                        // precision selection, with an effective numeric zero.
+                        mod_result *=
+                            1.0 + modifier.evaluated_value(conditions).unwrap_or(0.0) / 100.0;
                         if let Some(places) = precision.decimal_places.get(*name) {
                             decimal_places = Some(decimal_places.unwrap_or(*places).max(*places));
                         }
@@ -318,14 +459,34 @@ impl ModifierDatabase {
         context: &QueryContext,
         names: &[&str],
     ) -> Result<Option<f64>, ModifierError> {
+        self.override_internal(context, names, None)
+    }
+
+    pub fn override_with_conditions(
+        &self,
+        context: &QueryContext,
+        names: &[&str],
+        conditions: &ConditionEnvironment,
+    ) -> Result<Option<f64>, ModifierError> {
+        self.override_internal(context, names, Some(conditions))
+    }
+
+    fn override_internal(
+        &self,
+        context: &QueryContext,
+        names: &[&str],
+        conditions: Option<&ConditionEnvironment>,
+    ) -> Result<Option<f64>, ModifierError> {
         validate_query(context, names)?;
+        self.validate_conditions(conditions)?;
         for (layer_index, layer) in self.layers.iter().enumerate() {
             for name in names {
                 for (index, modifier) in layer.iter().enumerate() {
                     if matches(modifier, NumericKind::Override, context, name)
                         && matches_prefix(modifier, context, layer_index, index)?
+                        && let Some(value) = modifier.evaluated_value(conditions)
                     {
-                        return Ok(Some(modifier.value));
+                        return Ok(Some(value));
                     }
                 }
             }

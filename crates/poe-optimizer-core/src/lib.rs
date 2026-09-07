@@ -83,6 +83,8 @@ pub struct ActorOutput {
     pub non_finite_values: BTreeMap<String, metrics::NonFiniteKind>,
 }
 
+pub mod candidate;
+
 pub mod coverage;
 pub mod evaluation;
 pub mod metrics;

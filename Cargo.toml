@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/poe-optimizer-core", "crates/poe-optimizer-pob", "crates/poe-optimizer-lua-utf8", "crates/poe-optimizer-engine"]
+members = ["crates/poe-optimizer-core", "crates/poe-optimizer-pob", "crates/poe-optimizer-lua-utf8", "crates/poe-optimizer-engine", "crates/poe-optimizer-search"]
 resolver = "3"
 
 [package]
@@ -18,6 +18,7 @@ path = "src/main.rs"
 clap = { version = "4", features = ["derive"] }
 poe-optimizer-core = { path = "crates/poe-optimizer-core" }
 poe-optimizer-pob = { path = "crates/poe-optimizer-pob" }
+poe-optimizer-search = { path = "crates/poe-optimizer-search" }
 serde_json = "1"
 serde = "1"
 tempfile = "3"

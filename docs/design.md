@@ -655,3 +655,12 @@ The [implementation record](implementation.md) owns current fixture validation, 
 unknowns, deferred decisions and the next action. Preserve original build exports as
 immutable evidence; keep small calibration fixtures separate from complex integration
 fixtures and verify their supported mechanics before using them as optimization benchmarks.
+
+## External lookup references
+
+The user supplied [PoE2DB](https://poe2db.tw/us/) and [PoEDB](https://poedb.tw/us/)
+as references for targeted mechanic and item lookups. Do not scrape either site or
+perform bulk/mass extraction. Record individual page/version context when using one to
+investigate a specific discrepancy. A lookup does not replace the pinned calculation/data
+identity or independent parity evidence; any eventual data ingestion source needs its own
+versioned provenance and supported acquisition method.

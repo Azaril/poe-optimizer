@@ -2,11 +2,12 @@
 //!
 //! This partial port is not a build evaluator. Production code has no Lua, I/O,
 //! threading, or external-crate dependencies. Inputs are already resolved numeric
-//! values and validated untagged modifiers; build legality and scenario resolution live outside
+//! values, validated numeric modifiers and explicit condition contexts; build legality lives outside
 //! this slice. See `docs/native-engine.md` for scope and parity requirements.
 
 #![forbid(unsafe_code)]
 
+pub mod conditions;
 pub mod defence;
 pub mod modifiers;
 

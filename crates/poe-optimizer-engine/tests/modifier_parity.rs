@@ -4,9 +4,14 @@
 use std::collections::BTreeMap;
 
 use mlua::{Function, Lua, Table};
+use poe_optimizer_engine::conditions::{
+    ConditionActor, ConditionEnvironment, ConditionEnvironmentInput, ConditionVariables,
+    Conditions, ModifierTag, WeaponConditions,
+};
 use poe_optimizer_engine::modifiers::{
     KEYWORD_MATCH_ALL, ModifierDatabase, ModifierError, ModifierInput, ModifierKind, ModifierValue,
     MorePrecision, NumericKind, QueryContext, SUPPORTED_MOD_FLAG_BITS, SumKind,
+    TaggedModifierInput,
 };
 use sha2::{Digest, Sha256};
 
@@ -617,5 +622,588 @@ fn absent_sources_preserve_sum_behavior_and_report_upstream_errors() {
             .more(&context, &["Missing"], &MorePrecision::pinned())
             .unwrap(),
         1.0
+    );
+}
+
+impl Oracle {
+    fn tagged_database(&self, layers: &[Vec<TaggedModifierInput>]) -> Table {
+        let plain: Vec<Vec<_>> = layers
+            .iter()
+            .map(|layer| layer.iter().map(|entry| entry.modifier.clone()).collect())
+            .collect();
+        let root = self.database(&plain);
+        let mut db = root.clone();
+        for (layer_index, layer) in layers.iter().enumerate() {
+            let mods: Table = db.get("mods").unwrap();
+            let mut indexes = BTreeMap::new();
+            for input in layer {
+                let index = indexes.entry(input.modifier.name.as_str()).or_insert(0);
+                *index += 1;
+                let bucket: Table = mods.get(input.modifier.name.as_str()).unwrap();
+                let entry: Table = bucket.get(*index).unwrap();
+                for (i, tag) in input.tags.iter().enumerate() {
+                    let table = self.lua.create_table().unwrap();
+                    match tag {
+                        ModifierTag::Condition { variables, negated } => {
+                            table.set("type", "Condition").unwrap();
+                            self.variables(&table, variables);
+                            table.set("neg", *negated).unwrap();
+                        }
+                        ModifierTag::ActorCondition {
+                            actor,
+                            variables,
+                            negated,
+                        } => {
+                            table.set("type", "ActorCondition").unwrap();
+                            table.set("actor", actor.as_deref()).unwrap();
+                            if let Some(variables) = variables {
+                                self.variables(&table, variables);
+                            }
+                            table.set("neg", *negated).unwrap();
+                        }
+                        ModifierTag::Unsupported(_) => {
+                            panic!("Cannot construct supported oracle input from unknown tag")
+                        }
+                    }
+                    entry.set(i + 1, table).unwrap();
+                }
+            }
+            if layer_index + 1 < layers.len() {
+                db = db.get("parent").unwrap();
+            }
+        }
+        root
+    }
+
+    fn variables(&self, table: &Table, variables: &ConditionVariables) {
+        match variables {
+            ConditionVariables::One(name) => table.set("var", name.as_str()).unwrap(),
+            ConditionVariables::Any(names) => table
+                .set(
+                    "varList",
+                    self.lua
+                        .create_sequence_from(names.iter().map(String::as_str))
+                        .unwrap(),
+                )
+                .unwrap(),
+        }
+    }
+
+    fn condition_table(&self, values: &Conditions) -> Table {
+        let result = self.lua.create_table().unwrap();
+        for (name, value) in values {
+            result.set(name.as_str(), *value).unwrap();
+        }
+        result
+    }
+
+    fn populate_conditions(&self, root: &Table, layers: &[Conditions]) {
+        let mut db = root.clone();
+        for (i, layer) in layers.iter().enumerate() {
+            db.set("conditions", self.condition_table(layer)).unwrap();
+            if i + 1 < layers.len() {
+                db = db.get("parent").unwrap();
+            }
+        }
+    }
+
+    fn condition_config(
+        &self,
+        db: &Table,
+        query: &QueryContext,
+        input: &ConditionEnvironmentInput,
+    ) -> Table {
+        self.populate_conditions(db, &input.store_conditions);
+        let mut actors = vec![];
+        for input in &input.actors {
+            let actor = self.lua.create_table().unwrap();
+            let layers = vec![vec![]; input.conditions.len()];
+            let actor_db = self.database(&layers);
+            self.populate_conditions(&actor_db, &input.conditions);
+            actor_db.set("actor", actor.clone()).unwrap();
+            actor.set("modDB", actor_db).unwrap();
+            for (field, weapon) in [
+                ("weaponData1", &input.weapon_one),
+                ("weaponData2", &input.weapon_two),
+            ] {
+                let table = self.lua.create_table().unwrap();
+                table
+                    .set("countsAsAll1H", weapon.counts_as_all_one_handed)
+                    .unwrap();
+                for (name, value) in &weapon.added {
+                    table.set(format!("Added{name}"), *value).unwrap();
+                }
+                actor.set(field, table).unwrap();
+            }
+            actors.push(actor);
+        }
+        for (i, actor) in input.actors.iter().enumerate() {
+            for (role, index) in &actor.links {
+                actors[i]
+                    .set(role.as_str(), actors[*index].clone())
+                    .unwrap();
+            }
+        }
+        db.set("actor", actors[input.current_actor].clone())
+            .unwrap();
+        let config = self.lua.create_table().unwrap();
+        config.set("flags", query.flags as f64).unwrap();
+        config
+            .set("keywordFlags", query.keyword_flags as f64)
+            .unwrap();
+        config.set("source", query.source.as_deref()).unwrap();
+        config
+            .set("overrideCond", self.condition_table(&input.overrides))
+            .unwrap();
+        config
+            .set("skillCond", self.condition_table(&input.skill_conditions))
+            .unwrap();
+        config.set("actor", input.query_actor.as_deref()).unwrap();
+        config
+    }
+}
+
+fn condition(name: &str, negated: bool) -> ModifierTag {
+    ModifierTag::Condition {
+        variables: ConditionVariables::One(name.to_owned()),
+        negated,
+    }
+}
+
+fn condition_input(layer_count: usize) -> ConditionEnvironmentInput {
+    ConditionEnvironmentInput {
+        store_conditions: vec![Conditions::new(); layer_count],
+        actors: vec![ConditionActor::default()],
+        ..Default::default()
+    }
+}
+
+fn tagged_modifiers(tags: &[Vec<ModifierTag>]) -> Vec<Vec<TaggedModifierInput>> {
+    let mut layers = vec![vec![], vec![], vec![]];
+    for (i, tags) in tags.iter().enumerate() {
+        for kind in [
+            NumericKind::Base,
+            NumericKind::Increased,
+            NumericKind::More,
+            NumericKind::Override,
+        ] {
+            for name in ["A", "SupportManaMultiplier"] {
+                let mut modifier = modifier(name, kind, i as f64 + 0.37);
+                modifier.flags = (i % 3) as u64;
+                modifier.keyword_flags = if i % 2 == 0 { 1 } else { KEYWORD_MATCH_ALL | 3 };
+                modifier.source = Some(if i % 2 == 0 { "Item:42" } else { "Tree:17" }.to_owned());
+                layers[i % 3].push(TaggedModifierInput {
+                    modifier,
+                    tags: tags.clone(),
+                });
+            }
+        }
+    }
+    layers
+}
+
+fn compare_conditions(
+    oracle: &Oracle,
+    layers: &[Vec<TaggedModifierInput>],
+    input: &ConditionEnvironmentInput,
+) {
+    let native = ModifierDatabase::try_new_tagged(layers.to_vec()).unwrap();
+    let environment = ConditionEnvironment::try_new(input.clone()).unwrap();
+    let db = oracle.tagged_database(layers);
+    for query in [
+        QueryContext::default(),
+        QueryContext {
+            flags: 3,
+            keyword_flags: 3,
+            source: None,
+        },
+        QueryContext {
+            flags: 3,
+            keyword_flags: 3,
+            source: Some("Item".to_owned()),
+        },
+        QueryContext {
+            flags: 3,
+            keyword_flags: 3,
+            source: Some("Item:42".to_owned()),
+        },
+    ] {
+        let config = oracle.condition_config(&db, &query, input);
+        for names in [
+            vec!["A"],
+            vec!["SupportManaMultiplier", "A", "A"],
+            vec!["A", "Missing", "SupportManaMultiplier"],
+        ] {
+            for kind in [
+                NumericKind::Base,
+                NumericKind::Increased,
+                NumericKind::More,
+                NumericKind::Override,
+            ] {
+                let expected = oracle
+                    .query
+                    .call((
+                        db.clone(),
+                        config.clone(),
+                        oracle
+                            .lua
+                            .create_sequence_from(names.iter().copied())
+                            .unwrap(),
+                        kind.upstream_name(),
+                        oracle.warm,
+                    ))
+                    .unwrap();
+                let actual = match kind {
+                    NumericKind::Base => Some(
+                        native
+                            .sum_with_conditions(SumKind::Base, &query, &names, &environment)
+                            .unwrap(),
+                    ),
+                    NumericKind::Increased => Some(
+                        native
+                            .sum_with_conditions(SumKind::Increased, &query, &names, &environment)
+                            .unwrap(),
+                    ),
+                    NumericKind::More => Some(
+                        native
+                            .more_with_conditions(
+                                &query,
+                                &names,
+                                &MorePrecision::pinned(),
+                                &environment,
+                            )
+                            .unwrap(),
+                    ),
+                    NumericKind::Override => native
+                        .override_with_conditions(&query, &names, &environment)
+                        .unwrap(),
+                };
+                assert_number(actual, expected);
+            }
+        }
+    }
+}
+
+#[test]
+fn conditions_inherit_truthy_parents_and_distinguish_overrides_from_skill_conditions() {
+    let tags = vec![
+        vec![condition("A", false)],
+        vec![condition("A", true)],
+        vec![condition("B", false)],
+        vec![condition("A", false), condition("B", true)],
+        vec![ModifierTag::Condition {
+            variables: ConditionVariables::Any(vec!["A".to_owned(), "B".to_owned()]),
+            negated: false,
+        }],
+        vec![ModifierTag::Condition {
+            variables: ConditionVariables::Any(vec!["B".to_owned(), "A".to_owned()]),
+            negated: true,
+        }],
+        vec![ModifierTag::Condition {
+            variables: ConditionVariables::Any(vec![]),
+            negated: true,
+        }],
+        vec![],
+    ];
+    let layers = tagged_modifiers(&tags);
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        for local in [None, Some(false), Some(true)] {
+            for parent in [None, Some(false), Some(true)] {
+                for override_value in [None, Some(false), Some(true)] {
+                    for skill in [false, true] {
+                        let mut input = condition_input(layers.len());
+                        if let Some(value) = local {
+                            input.store_conditions[0].insert("A".to_owned(), value);
+                        }
+                        if let Some(value) = parent {
+                            input.store_conditions[1].insert("A".to_owned(), value);
+                        }
+                        input.store_conditions[2].insert("B".to_owned(), true);
+                        if let Some(value) = override_value {
+                            input.overrides.insert("A".to_owned(), value);
+                        }
+                        input.skill_conditions.insert("A".to_owned(), skill);
+                        compare_conditions(&oracle, &layers, &input);
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn actor_conditions_preserve_player_fallback_and_missing_actor_semantics() {
+    let mut tags = vec![];
+    for actor in [
+        None,
+        Some("enemy"),
+        Some("player"),
+        Some("parent"),
+        Some("minion"),
+        Some("absent"),
+    ] {
+        for variables in [
+            None,
+            Some(ConditionVariables::One("A".to_owned())),
+            Some(ConditionVariables::Any(vec![
+                "B".to_owned(),
+                "A".to_owned(),
+            ])),
+            Some(ConditionVariables::Any(vec![])),
+        ] {
+            for negated in [false, true] {
+                tags.push(vec![ModifierTag::ActorCondition {
+                    actor: actor.map(str::to_owned),
+                    variables: variables.clone(),
+                    negated,
+                }]);
+            }
+        }
+    }
+    let layers = tagged_modifiers(&tags);
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        for direct in [false, true] {
+            for parent in [false, true] {
+                for enemy in [false, true] {
+                    for override_value in [None, Some(false), Some(true)] {
+                        let mut input = condition_input(layers.len());
+                        input.actors.resize(5, ConditionActor::default());
+                        input.store_conditions[0].insert("A".to_owned(), true);
+                        input.skill_conditions.insert("B".to_owned(), true); // ActorCondition must ignore this.
+                        input.query_actor = Some("absent".to_owned());
+                        if let Some(value) = override_value {
+                            input.overrides.insert("A".to_owned(), value);
+                        }
+                        if direct {
+                            input.actors[0].links.insert("player".to_owned(), 1);
+                        }
+                        if parent {
+                            input.actors[0].links.insert("parent".to_owned(), 2);
+                            input.actors[2].links.insert("player".to_owned(), 3);
+                        }
+                        if enemy {
+                            input.actors[0].links.insert("enemy".to_owned(), 4);
+                            input.actors[4].links.insert("player".to_owned(), 4);
+                        }
+                        input.actors[1].conditions =
+                            vec![BTreeMap::from([("A".to_owned(), false)])];
+                        input.actors[2].conditions = vec![BTreeMap::from([("B".to_owned(), true)])];
+                        input.actors[3].conditions = vec![BTreeMap::from([("A".to_owned(), true)])];
+                        input.actors[4].conditions = vec![
+                            BTreeMap::from([("A".to_owned(), false)]),
+                            BTreeMap::from([("A".to_owned(), true)]),
+                        ];
+                        compare_conditions(&oracle, &layers, &input);
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn all_one_handed_weapon_exceptions_match_condition_tag_ordering() {
+    let tags = vec![
+        vec![condition("A", true)],
+        vec![condition("B", true)],
+        vec![condition("A", false)],
+        vec![ModifierTag::Condition {
+            variables: ConditionVariables::Any(vec!["A".to_owned(), "B".to_owned()]),
+            negated: true,
+        }],
+        vec![ModifierTag::Condition {
+            variables: ConditionVariables::Any(vec!["B".to_owned(), "A".to_owned()]),
+            negated: true,
+        }],
+    ];
+    let layers = tagged_modifiers(&tags);
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        for first in [false, true] {
+            for second in [false, true] {
+                for added_a in [None, Some(false), Some(true)] {
+                    for added_b in [None, Some(false), Some(true)] {
+                        let mut input = condition_input(layers.len());
+                        input.store_conditions[0] =
+                            BTreeMap::from([("A".to_owned(), true), ("B".to_owned(), true)]);
+                        let mut added = Conditions::new();
+                        if let Some(value) = added_a {
+                            added.insert("A".to_owned(), value);
+                        }
+                        if let Some(value) = added_b {
+                            added.insert("B".to_owned(), value);
+                        }
+                        input.actors[0].weapon_one = WeaponConditions {
+                            counts_as_all_one_handed: first,
+                            added,
+                        };
+                        input.actors[0].weapon_two = WeaponConditions {
+                            counts_as_all_one_handed: second,
+                            added: BTreeMap::from([
+                                ("A".to_owned(), false),
+                                ("B".to_owned(), true),
+                            ]),
+                        };
+                        compare_conditions(&oracle, &layers, &input);
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn conditional_queries_preserve_inactive_more_precision_zero_overrides_and_error_boundaries() {
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        for value in [0.0, -0.0, f64::NAN, f64::INFINITY, f64::NEG_INFINITY, 1.37] {
+            let mut layers = vec![vec![], vec![], vec![]];
+            for kind in [
+                NumericKind::Base,
+                NumericKind::Increased,
+                NumericKind::More,
+                NumericKind::Override,
+            ] {
+                layers[0].push(TaggedModifierInput {
+                    modifier: modifier("SupportManaMultiplier", kind, value),
+                    tags: vec![condition("Active", false)],
+                });
+                layers[0].push(TaggedModifierInput {
+                    modifier: modifier("A", kind, 3.37),
+                    tags: vec![],
+                });
+                layers[1].push(TaggedModifierInput {
+                    modifier: modifier("A", kind, -1.63),
+                    tags: vec![],
+                });
+                layers[2].push(TaggedModifierInput {
+                    modifier: modifier("SupportManaMultiplier", kind, -0.0),
+                    tags: vec![],
+                });
+            }
+            for active in [false, true] {
+                let mut input = condition_input(layers.len());
+                input.store_conditions[0].insert("Active".to_owned(), active);
+                compare_conditions(&oracle, &layers, &input);
+            }
+        }
+        let mut entry = modifier("A", NumericKind::Override, 1.0);
+        entry.source = None;
+        let layers = vec![vec![TaggedModifierInput {
+            modifier: entry,
+            tags: vec![condition("Missing", false)],
+        }]];
+        let native = ModifierDatabase::try_new_tagged(layers.clone()).unwrap();
+        let input = condition_input(1);
+        let environment = ConditionEnvironment::try_new(input.clone()).unwrap();
+        let db = oracle.tagged_database(&layers);
+        let query = QueryContext {
+            source: Some("Item".to_owned()),
+            ..Default::default()
+        };
+        let config = oracle.condition_config(&db, &query, &input);
+        assert!(matches!(
+            native.override_with_conditions(&query, &["A"], &environment),
+            Err(ModifierError::MissingSource { .. })
+        ));
+        assert!(
+            oracle
+                .query
+                .call::<Option<f64>>((
+                    db,
+                    config,
+                    oracle.lua.create_sequence_from(["A"]).unwrap(),
+                    "OVERRIDE",
+                    warm
+                ))
+                .is_err()
+        );
+    }
+}
+
+#[test]
+fn tagged_input_and_condition_context_fail_closed_without_changing_untagged_api() {
+    let entry = TaggedModifierInput {
+        modifier: modifier("A", NumericKind::Base, 1.0),
+        tags: vec![condition("A", false)],
+    };
+    let native = ModifierDatabase::try_new_tagged(vec![vec![entry.clone()]]).unwrap();
+    assert!(matches!(
+        native.sum(SumKind::Base, &QueryContext::default(), &["Missing"]),
+        Err(ModifierError::MissingConditionContext)
+    ));
+    assert!(matches!(
+        native.more(&QueryContext::default(), &["A"], &MorePrecision::pinned()),
+        Err(ModifierError::MissingConditionContext)
+    ));
+    assert!(matches!(
+        native.override_value(&QueryContext::default(), &["A"]),
+        Err(ModifierError::MissingConditionContext)
+    ));
+    for tag in [
+        "EnemyCondition",
+        "Multiplier",
+        "PerStat",
+        "Condition:unknownField",
+        "FutureTag",
+    ] {
+        let mut unknown = entry.clone();
+        unknown.tags.push(ModifierTag::Unsupported(tag.to_owned()));
+        assert!(matches!(
+            ModifierDatabase::try_new_tagged(vec![vec![], vec![unknown]]),
+            Err(ModifierError::UnsupportedTag {
+                layer: 1,
+                modifier: 0,
+                ..
+            })
+        ));
+    }
+    let mut legacy_tag = entry.clone();
+    legacy_tag.modifier.tag_kinds.push("SkillName".to_owned());
+    assert!(matches!(
+        ModifierDatabase::try_new_tagged(vec![vec![legacy_tag]]),
+        Err(ModifierError::UnsupportedTag { .. })
+    ));
+    let mut flag = entry;
+    flag.modifier.kind = ModifierKind::Unsupported("FLAG".to_owned());
+    assert!(matches!(
+        ModifierDatabase::try_new_tagged(vec![vec![flag]]),
+        Err(ModifierError::UnsupportedKind { .. })
+    ));
+    assert!(ConditionEnvironment::try_new(ConditionEnvironmentInput::default()).is_err());
+    let mut invalid = condition_input(1);
+    invalid.actors[0].links.insert("enemy".to_owned(), 99);
+    assert!(ConditionEnvironment::try_new(invalid).is_err());
+    let mut invalid = condition_input(1);
+    invalid
+        .unsupported_features
+        .push("Condition:FLAG".to_owned());
+    assert!(ConditionEnvironment::try_new(invalid).is_err());
+    let mut invalid = condition_input(1);
+    invalid.actors.push(ConditionActor {
+        unsupported_features: vec!["Condition:FLAG".to_owned()],
+        ..Default::default()
+    });
+    assert!(ConditionEnvironment::try_new(invalid).is_err());
+    let wrong_layers = ConditionEnvironment::try_new(condition_input(2)).unwrap();
+    assert!(
+        native
+            .sum_with_conditions(
+                SumKind::Base,
+                &QueryContext::default(),
+                &["A"],
+                &wrong_layers
+            )
+            .is_err()
+    );
+    let untagged =
+        ModifierDatabase::try_new(vec![vec![modifier("A", NumericKind::Base, 2.0)]]).unwrap();
+    assert_eq!(
+        untagged
+            .sum(SumKind::Base, &QueryContext::default(), &["A"])
+            .unwrap(),
+        2.0
     );
 }

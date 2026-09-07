@@ -30,9 +30,13 @@ objectives can be assessed during evaluation or against saved results without re
 Each PoB request
 uses a fresh `mlua` worker process with a deadline. Independent Spark mapping/bossing
 references plus a four-case attack/weapon/support matrix validate host and metric extraction.
-A parallel native Rust crate has parity-tested numerical helpers and untagged modifier
-aggregation, and compiles for WebAssembly; it is not a full build evaluator.
-Optimization, worker pools, HTML reports and browser bindings are not implemented yet.
+A parallel native Rust crate has parity-tested numerical helpers and numeric/conditional
+modifier aggregation, and compiles for WebAssembly; it is not a full build evaluator.
+Canonical candidates and locks represent all six dimensions. A generic search kernel has
+bounded parallel evaluation, feasible/infeasible beams, deduplication and fresh finalist
+checks. The `search-calibration` CLI searches four exact weapon/support fixtures; general
+PoB mutation, persistent workers, HTML reports and browser bindings remain unimplemented.
+See [search contracts and the runnable example](docs/search-kernel.md).
 The [living implementation document](docs/implementation.md) is the progress and resume record;
 update it at feature/experiment checkpoints and handoffs.
 Start with [the end-state design](docs/design.md), especially its

@@ -12,7 +12,8 @@ application layers, with the following package boundaries:
 
 | Package | Owns | Dependency direction |
 | --- | --- | --- |
-| `poe-optimizer-core` | Problem/candidate types, metric and evaluator interfaces, scoring, search, execution limits, run events/results | Independent of CLI, Tauri, webviews, and a particular Lua host |
+| `poe-optimizer-core` | Portable problem/candidate types, metric and evaluator interfaces, scoring and evidence contracts | Independent of CLI, Tauri, webviews, OS scheduling and a particular Lua host |
+| `poe-optimizer-search` | Search orchestration, bounded host scheduling, evaluation budgets, archives and verification | Depends on core; adapters provide candidates/calculations; native and browser schedulers stay replaceable |
 | `poe-optimizer-engine` | Portable native game calculations and versioned data; no Lua, OS scheduling or application I/O | Implements calculation semantics; independent of the PoB runtime |
 | `poe-optimizer-pob` | PoB game adapter, mlua/LuaJIT hosting in Rust workers, process supervision, metric mappings, XML import/export | Implements core interfaces; depends on core |
 | `poe-optimizer-report` | Versioned artifact encoding and presentation models, JSON/CSV export, HTML report generation | Depends on core result types; never owns calculation or search rules |
@@ -27,8 +28,8 @@ means complete-document input support, not a legality or mechanic-coverage certi
 Portable native stages follow the [native engine design](native-engine.md).
 
 Search and evaluation behavior belong in libraries; application layers compose them.
-Keep pure data/model modules separate from scheduling within core; split further if
-concrete dependency needs justify it. Package names can change without changing these
+Keep pure data/model modules in portable core and OS/Rayon scheduling in the host search
+crate. Package names can change without changing these
 ownership and dependency rules.
 
 The library accepts typed inputs and returns typed errors/results. It must not print to

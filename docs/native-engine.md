@@ -8,7 +8,7 @@ and usable evaluation path while the native engine grows through verified slices
 ## Boundaries and intended outcome
 
 `poe-optimizer-engine` owns game calculations that can run without Lua or an operating
-system. It accepts resolved numeric inputs and validated untagged modifier layers now,
+system. It accepts resolved numeric inputs, validated numeric modifier layers, and explicit condition contexts now,
 and will eventually accept typed build, modifier and game-data models. The optimizer core owns objectives, constraints and search;
 the PoB adapter owns Lua runtime hosting, XML import/export and reference execution.
 Neither the native engine nor future browser bindings should depend on the native PoB
@@ -53,7 +53,7 @@ These helpers do not collect modifiers, apply item/passive rules, compute comple
 or evaluate a build. Their constants are passed explicitly rather than being a second
 independent game-data database.
 
-## Second translation boundary: untagged numeric ModDB queries
+## Second translation boundary: numeric ModDB queries
 
 `modifiers::ModifierDatabase` is an immutable numeric aggregation slice with explicit
 `QueryContext` and `MorePrecision` inputs. It models the pinned `ModDB` methods, not the
@@ -81,14 +81,14 @@ empty/default table means ordinary two-decimal rounding everywhere; it must not 
 mistaken for the pinned game data. Precision inputs concern MORE aggregation only;
 modifier scaling has separate rules outside this slice.
 
-All conditional, actor, item, skill, multiplier, threshold, global-limit and other tags
-remain unsupported. FLAG/LIST/MAX and unknown modifier kinds, nonnumeric values including
-functions/tables/booleans/nil, unsupported flag masks and out-of-range precision fail
-explicitly. A future importer must carry unsupported metadata to validation rather than
-constructing an untagged approximation. Actor scope and condition evaluation must be
-ported through `EvalMod` and validated separately before this supports real modifier
-contexts. This module does not derive a final stat by assuming a universal combination
-of BASE, INC, MORE and OVERRIDE.
+The legacy `try_new` constructor still rejects every raw tag name. The explicit typed
+condition path below handles a declared subset of `EvalMod`; item, skill, multiplier,
+threshold, global-limit and other tags remain unsupported. FLAG/LIST/MAX and unknown
+modifier kinds, nonnumeric values including functions/tables/booleans/nil, unsupported
+flag masks and out-of-range precision fail explicitly. A future importer must carry
+unsupported metadata to validation rather than constructing an untagged approximation.
+This module does not derive a final stat by assuming a universal combination of BASE,
+INC, MORE and OVERRIDE.
 
 The independent differential harness executes the actual pinned `ModStore` public query
 wrappers and `ModDB` implementation. It loads the actual `Data/Global.lua` bit/keyword
@@ -106,6 +106,57 @@ Sources: [ModDB.lua](https://github.com/PathOfBuildingCommunity/PathOfBuilding-P
 [ModStore.lua](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua),
 [Global.lua](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Data/Global.lua#L122-L332),
 [MORE precision data](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Modules/Data.lua#L597-L603).
+
+## Third translation boundary: explicit conditional modifier contexts
+
+`ModifierDatabase::try_new_tagged` accepts `TaggedModifierInput` without changing the
+legacy untagged constructor or query signatures. Each input keeps its complete numeric
+modifier, source, flags and an ordered vector of typed `ModifierTag` values. Unknown tags
+or unrepresented fields must become `Unsupported` metadata and reject the complete input,
+including entries no current query would select. Tagged databases require the explicit
+`sum_with_conditions`, `more_with_conditions` or `override_with_conditions` query path;
+calling an old query on them returns `MissingConditionContext`.
+
+`ConditionEnvironment::try_new` validates an immutable environment. It contains the
+queried store's local/parent condition tables, an actor index graph, per-actor condition
+tables and weapon metadata, and the query's override/skill conditions and actor name.
+References must resolve; every store condition layer corresponds to a modifier layer.
+An absent actor link is distinct from an invalid link. Contexts retain unsupported-feature
+markers so extraction cannot discard condition-producing modifiers or unknown behavior.
+They do not own Lua objects, mutable caches, a thread pool or operating-system services.
+
+| Supported behavior | Pinned semantics |
+| --- | --- |
+| `Condition` with one variable or a list | A list is OR, ordered tags are AND; negation applies to the complete tag. An empty list is false before negation. |
+| `GetCondition` table lookup | A present `overrideCond` value wins, including false. Otherwise local or any parent true is sufficient; local false does not mask a true parent. |
+| Skill-local conditions | `Condition` checks `skillCond` after `GetCondition`, so a true skill condition can satisfy even a false override. `ActorCondition` ignores `skillCond`. |
+| `ActorCondition` | Supports an explicit actor or the current queried store, optional one/list variables, negation, and the upstream `cfg.actor` fallback when no condition target is present. Enemy conditions use this tag with `actor = "enemy"`; the pin has no `EnemyCondition` tag. |
+| Player actor lookup | Direct player reference first, then the parent actor's player, then the enemy actor's player. Other roles use direct links. Parent actor references and parent modifier layers are separate inputs. |
+| Parent modifier evaluation | A modifier inherited from a parent DB still evaluates against the original queried store and actor context, preserving the `context` argument threaded through `ModDB`. |
+| All-one-handed weapon exception | Negated `Condition` tags retain `countsAsAll1H` and `Added<condition>` behavior, including first qualifying weapon precedence and list order. |
+| Disabled conditional values | BASE/INC contribute zero; MORE uses zero but still influences precision selection; OVERRIDE is absent. Active numeric zero remains a present override. Source errors occur before tag evaluation. |
+
+This is an **explicit condition-table subset**. `GetCondition` also consults
+`Condition:<name>` FLAG modifiers upstream. FLAG inputs still reject at numeric DB
+construction, and condition-producing FLAG entries in actor/context extraction must be
+retained as unsupported features. They must not be pre-resolved into apparently complete
+booleans unless a separate extraction contract proves equivalence across the exact query
+flags, source and overrides. No real-build modifier extractor is provided yet.
+
+Multiplier and scaling tags remain a separate stage: `GetMultiplier` combines explicit
+values, parent values, BASE modifiers and OVERRIDE queries, introducing dependencies and
+possible recursion. Adding a scalar multiplier field would not implement those semantics.
+Global limits, item/skill predicates, modifier functions and condition-producing FLAG
+queries need their own typed input and parity scope before activation.
+
+The differential suite uses the same source-hashed, actual upstream `ModStore`/`ModDB`
+harness as numeric aggregation; it does not replace `EvalMod` or `GetCondition` with a
+copied oracle. It exercises interpreted and warmed LuaJIT across truthy inheritance,
+false overrides, skill-local conditions, missing actors, player fallback precedence,
+weapon exceptions, source and flag filtering, inactive MORE precision, zero overrides,
+nonfinite values and explicit rejection. Captured real modifier contexts and complete
+candidate mutation parity remain required before integrating this slice into a native
+build evaluator. No throughput improvement is claimed.
 
 ## Numeric behavior and parity
 
