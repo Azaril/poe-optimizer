@@ -9,9 +9,9 @@ excludes PoB, LuaJIT and the UTF-8 module. Live passive observations and authent
 projections provide evidence for the next native class/passive expansion. Integrated
 validation passes: 260 workspace tests, 16 native-only CLI tests, lint, dependency audit
 and portable WASM compilation. Release fixed-input throughput and controlled search are
-recorded below. Publication on `native-evaluation` and hosted Windows/Linux CI are pending. Automatic
-approval review rejected the broad direct-to-main publication, so this checkpoint uses a
-separate review branch; `main` remains unchanged.
+recorded below. The initial code checkpoint is `a09c406`; the user explicitly reaffirmed publication to
+`main`. A Rust 1.98 Clippy compatibility fix is ready, and final hosted Windows/Linux CI
+on the main-branch checkpoint is pending.
 Full native game coverage and the first usable all-six-dimension optimizer remain unfinished.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
@@ -144,10 +144,11 @@ These native profiles do not yet support the supplied complex minion build.
 | Runtime dependencies | Native-only normal dependency graph contains no PoB adapter, mlua, LuaJIT or UTF-8 native module. CI now enforces this graph check. Log: `runs/native-checkpoint-dependencies.txt`. |
 | Reference parity | Two unchanged Spark and four unchanged Mace goldens, actual-source numerical grids, 16 fresh Spark/Mace PoB evaluations including native-export reimports, plus the 49-build passive matrix all pass. |
 | Release search | Native-only release CLI, `search-experimental --backend native --problem examples/mace-search.json --jobs 4 --max-evaluations 10`: template + eight candidates + fresh finalist, winner `smithing-q20/none`, selected hit DPS **20.1596255**, XML export written. Observed search/calculation duration **2.0101 ms**, excluding final persistence; a tiny diagnostic domain, not an optimizer-quality benchmark. Artifacts: `runs/native-checkpoint-search.json`, `runs/native-checkpoint-best.xml`. |
-| Publication | Publishing on `native-evaluation`; code commit and hosted Windows/Linux CI pending. Automatic approval review rejected the broad direct-to-main push; the feature branch provides a reviewable result. |
+| Publication | Initial native code: `a09c406`, first published to `native-evaluation`. The user then explicitly confirmed pushing to `main`. Initial hosted run `34165834314` found Rust 1.98's `chunks_exact_to_as_chunks` lint in benchmark accounting; fixed with `as_chunks::<8>()`, with both six-test benchmark suites and Rust 1.93 workspace Clippy passing. Final main-branch CI pending. |
 
 ### Release fixed-input native throughput
 
+Measured code: `a09c406` (the subsequent checksum-iteration lint fix retains its arithmetic).
 Machine: AMD Ryzen 9 9950X3D, 16 physical cores / 32 logical processors, Windows 11 Pro
 10.0.26200 x64, Rust 1.93.0. Built with `cargo build -p poe-optimizer-cli --release
 --no-default-features --locked`, default release profile and target settings. No concurrent

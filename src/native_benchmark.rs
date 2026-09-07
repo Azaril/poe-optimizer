@@ -75,10 +75,12 @@ impl Observation {
         } else {
             self.first_digest = Some(digest);
         }
-        for (word, bytes) in self.checksum_words.iter_mut().zip(digest.chunks_exact(8)) {
-            *word = word.wrapping_add(u64::from_le_bytes(
-                bytes.try_into().expect("eight-byte digest chunk"),
-            ));
+        for (word, bytes) in self
+            .checksum_words
+            .iter_mut()
+            .zip(digest.as_chunks::<8>().0)
+        {
+            *word = word.wrapping_add(u64::from_le_bytes(*bytes));
         }
     }
     fn merge(&mut self, other: Self) {
