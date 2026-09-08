@@ -313,8 +313,8 @@ impl ActorQueries for ProgramQueries<'_, '_> {
         }
         Ok(None)
     }
-    fn flag(&self, name: &str) -> bool {
-        (0..self.layer_count()).any(|layer| {
+    fn flag(&self, name: &str) -> Result<bool, ActorError> {
+        Ok((0..self.layer_count()).any(|layer| {
             self.programs(layer).iter().any(|program| {
                 program.bucket(name, Kind::Flag).is_some_and(|bucket| {
                     program.rows(bucket).iter().any(|row| {
@@ -322,7 +322,7 @@ impl ActorQueries for ProgramQueries<'_, '_> {
                     })
                 })
             })
-        })
+        }))
     }
     fn update_conditions(&mut self, conditions: [bool; 12]) -> Result<(), ActorError> {
         self.scratch.conditions = conditions

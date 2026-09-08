@@ -7,7 +7,7 @@
 
 use std::{collections::BTreeMap, error::Error, fmt};
 
-use crate::conditions::{ConditionEnvironment, ModifierTag};
+use crate::conditions::{ConditionResolver, ModifierTag};
 
 /// Bit 31 is excluded because upstream AND64 recombines a signed low word.
 /// All other nonnegative, exactly representable 53-bit masks are supported.
@@ -114,12 +114,18 @@ impl NumericModifier {
         &self.tags
     }
 
-    fn evaluated_value(&self, conditions: Option<&ConditionEnvironment>) -> Option<f64> {
-        if self.tags.is_empty() || conditions.is_some_and(|context| context.matches(&self.tags)) {
-            Some(self.value)
+    fn evaluated_value(
+        &self,
+        conditions: Option<&dyn ConditionResolver>,
+    ) -> Result<Option<f64>, ModifierError> {
+        let matches = if self.tags.is_empty() {
+            true
+        } else if let Some(context) = conditions {
+            context.matches(&self.tags)?
         } else {
-            None
-        }
+            false
+        };
+        Ok(matches.then_some(self.value))
     }
 }
 
@@ -320,21 +326,25 @@ impl ModifierDatabase {
 
     fn validate_conditions(
         &self,
-        conditions: Option<&ConditionEnvironment>,
+        conditions: Option<&dyn ConditionResolver>,
+        query: &QueryContext,
     ) -> Result<(), ModifierError> {
         if self.has_tags && conditions.is_none() {
             return Err(ModifierError::MissingConditionContext);
         }
         if let Some(conditions) = conditions
-            && conditions.input().store_conditions.len() != self.layers.len()
+            && conditions.store_layer_count() != self.layers.len()
         {
             return Err(ModifierError::InvalidConditionContext {
                 reason: format!(
                     "Expected {} store condition layers, received {}",
                     self.layers.len(),
-                    conditions.input().store_conditions.len()
+                    conditions.store_layer_count()
                 ),
             });
+        }
+        if let Some(conditions) = conditions {
+            conditions.validate_query(query)?;
         }
         Ok(())
     }
@@ -362,7 +372,7 @@ impl ModifierDatabase {
         kind: SumKind,
         context: &QueryContext,
         names: &[&str],
-        conditions: &ConditionEnvironment,
+        conditions: &dyn ConditionResolver,
     ) -> Result<f64, ModifierError> {
         self.sum_internal(kind, context, names, Some(conditions))
     }
@@ -372,10 +382,10 @@ impl ModifierDatabase {
         kind: SumKind,
         context: &QueryContext,
         names: &[&str],
-        conditions: Option<&ConditionEnvironment>,
+        conditions: Option<&dyn ConditionResolver>,
     ) -> Result<f64, ModifierError> {
         validate_query(context, names)?;
-        self.validate_conditions(conditions)?;
+        self.validate_conditions(conditions, context)?;
         let kind = match kind {
             SumKind::Base => NumericKind::Base,
             SumKind::Increased => NumericKind::Increased,
@@ -393,7 +403,7 @@ impl ModifierDatabase {
                                     || source_prefix(source) == context.source.as_deref()
                             }))
                     {
-                        result += modifier.evaluated_value(conditions).unwrap_or(0.0);
+                        result += modifier.evaluated_value(conditions)?.unwrap_or(0.0);
                     }
                 }
             }
@@ -421,7 +431,7 @@ impl ModifierDatabase {
         kind: SumKind,
         context: &QueryContext,
         name: &str,
-        conditions: &ConditionEnvironment,
+        conditions: &dyn ConditionResolver,
     ) -> Result<f64, ModifierError> {
         self.sum_positive_internal(kind, context, name, Some(conditions))
     }
@@ -430,10 +440,10 @@ impl ModifierDatabase {
         kind: SumKind,
         context: &QueryContext,
         name: &str,
-        conditions: Option<&ConditionEnvironment>,
+        conditions: Option<&dyn ConditionResolver>,
     ) -> Result<f64, ModifierError> {
         validate_query(context, &[name])?;
-        self.validate_conditions(conditions)?;
+        self.validate_conditions(conditions, context)?;
         let kind = match kind {
             SumKind::Base => NumericKind::Base,
             SumKind::Increased => NumericKind::Increased,
@@ -443,7 +453,7 @@ impl ModifierDatabase {
             for (index, modifier) in layer.iter().enumerate() {
                 if matches(modifier, kind, context, name)
                     && matches_prefix(modifier, context, layer_index, index)?
-                    && let Some(value) = modifier.evaluated_value(conditions)
+                    && let Some(value) = modifier.evaluated_value(conditions)?
                     && value > 0.0
                 {
                     result += value;
@@ -466,7 +476,7 @@ impl ModifierDatabase {
         &self,
         context: &QueryContext,
         names: &[&str],
-        conditions: &ConditionEnvironment,
+        conditions: &dyn ConditionResolver,
     ) -> Result<Option<f64>, ModifierError> {
         self.max_internal(context, names, Some(conditions))
     }
@@ -474,10 +484,10 @@ impl ModifierDatabase {
         &self,
         context: &QueryContext,
         names: &[&str],
-        conditions: Option<&ConditionEnvironment>,
+        conditions: Option<&dyn ConditionResolver>,
     ) -> Result<Option<f64>, ModifierError> {
         validate_query(context, names)?;
-        self.validate_conditions(conditions)?;
+        self.validate_conditions(conditions, context)?;
         let mut result = None;
         for (layer_index, layer) in self.layers.iter().enumerate() {
             for name in names {
@@ -485,9 +495,9 @@ impl ModifierDatabase {
                     if matches(modifier, NumericKind::Max, context, name)
                         && matches_prefix(modifier, context, layer_index, index)?
                         && modifier
-                            .evaluated_value(conditions)
+                            .evaluated_value(conditions)?
                             .is_some_and(|value| value != 0.0)
-                        && let Some(value) = modifier.evaluated_value(conditions)
+                        && let Some(value) = modifier.evaluated_value(conditions)?
                         && value > result.unwrap_or(0.0)
                     {
                         result = Some(value);
@@ -514,7 +524,7 @@ impl ModifierDatabase {
         context: &QueryContext,
         names: &[&str],
         precision: &MorePrecision,
-        conditions: &ConditionEnvironment,
+        conditions: &dyn ConditionResolver,
     ) -> Result<f64, ModifierError> {
         self.more_internal(context, names, precision, Some(conditions))
     }
@@ -524,10 +534,10 @@ impl ModifierDatabase {
         context: &QueryContext,
         names: &[&str],
         precision: &MorePrecision,
-        conditions: Option<&ConditionEnvironment>,
+        conditions: Option<&dyn ConditionResolver>,
     ) -> Result<f64, ModifierError> {
         validate_query(context, names)?;
-        self.validate_conditions(conditions)?;
+        self.validate_conditions(conditions, context)?;
         let mut local_results = Vec::with_capacity(self.layers.len());
         for (layer_index, layer) in self.layers.iter().enumerate() {
             let mut result = 1.0;
@@ -542,7 +552,7 @@ impl ModifierDatabase {
                         // A failed conditional MORE still participates in the
                         // precision selection, with an effective numeric zero.
                         mod_result *=
-                            1.0 + modifier.evaluated_value(conditions).unwrap_or(0.0) / 100.0;
+                            1.0 + modifier.evaluated_value(conditions)?.unwrap_or(0.0) / 100.0;
                         if let Some(places) = precision.decimal_places.get(*name) {
                             decimal_places = Some(decimal_places.unwrap_or(*places).max(*places));
                         }
@@ -576,7 +586,7 @@ impl ModifierDatabase {
         &self,
         context: &QueryContext,
         names: &[&str],
-        conditions: &ConditionEnvironment,
+        conditions: &dyn ConditionResolver,
     ) -> Result<Option<f64>, ModifierError> {
         self.override_internal(context, names, Some(conditions))
     }
@@ -585,16 +595,16 @@ impl ModifierDatabase {
         &self,
         context: &QueryContext,
         names: &[&str],
-        conditions: Option<&ConditionEnvironment>,
+        conditions: Option<&dyn ConditionResolver>,
     ) -> Result<Option<f64>, ModifierError> {
         validate_query(context, names)?;
-        self.validate_conditions(conditions)?;
+        self.validate_conditions(conditions, context)?;
         for (layer_index, layer) in self.layers.iter().enumerate() {
             for name in names {
                 for (index, modifier) in layer.iter().enumerate() {
                     if matches(modifier, NumericKind::Override, context, name)
                         && matches_prefix(modifier, context, layer_index, index)?
-                        && let Some(value) = modifier.evaluated_value(conditions)
+                        && let Some(value) = modifier.evaluated_value(conditions)?
                     {
                         return Ok(Some(value));
                     }
@@ -611,7 +621,7 @@ pub enum SumKind {
     Increased,
 }
 
-fn validate_flags(flags: u64, keyword_flags: u64) -> Result<(), ModifierError> {
+pub(crate) fn validate_flags(flags: u64, keyword_flags: u64) -> Result<(), ModifierError> {
     if flags & !SUPPORTED_MOD_FLAG_BITS != 0 || keyword_flags & !SUPPORTED_KEYWORD_FLAG_BITS != 0 {
         return Err(ModifierError::UnsupportedFlags {
             flags,
@@ -635,17 +645,20 @@ fn matches(
     context: &QueryContext,
     name: &str,
 ) -> bool {
-    let keywords = modifier.keyword_flags & !KEYWORD_MATCH_ALL;
+    modifier.name == name
+        && modifier.kind == kind
+        && matches_masks(modifier.flags, modifier.keyword_flags, context)
+}
+
+pub(crate) fn matches_masks(flags: u64, keyword_flags: u64, context: &QueryContext) -> bool {
+    let keywords = keyword_flags & !KEYWORD_MATCH_ALL;
     let available = context.keyword_flags & !KEYWORD_MATCH_ALL;
-    let keyword_match = if modifier.keyword_flags & KEYWORD_MATCH_ALL != 0 {
+    let keyword_match = if keyword_flags & KEYWORD_MATCH_ALL != 0 {
         available & keywords == keywords
     } else {
         keywords == 0 || available & keywords != 0
     };
-    modifier.name == name
-        && modifier.kind == kind
-        && context.flags & modifier.flags == modifier.flags
-        && keyword_match
+    context.flags & flags == flags && keyword_match
 }
 
 fn source_prefix(source: &str) -> Option<&str> {

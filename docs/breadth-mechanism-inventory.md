@@ -134,7 +134,9 @@ when supplied with complete explicit context; 603 do not. This is not a coverage
 percentage: representing a Damage INC row does not construct its buff, recipient actor,
 dependency context or consuming action. No additional native build is admitted.
 
-The remaining shared requirements are complete conditional FLAG/GetCondition behavior
+The [native condition producer boundary](native-condition-producers.md) implements represented
+FLAG/GetCondition query dependencies. Complete source-producer and actor preparation
+coverage remains separate. The remaining shared requirements include full condition pipelines
 (including Lua truthiness for numeric zero), parent/enemy-targeted stat dependencies,
 named per-slot intermediates, action predicates, provider-owned transfers and reviewed
 data operations for opaque source functions. PerStat and Multiplier have different

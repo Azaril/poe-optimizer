@@ -32,7 +32,7 @@ Each PoB request
 uses a fresh `mlua` worker process with a deadline. Independent Spark mapping/bossing
 references plus a four-case attack/weapon/support matrix validate host and metric extraction.
 A parallel native Rust crate has parity-tested numerical helpers and numeric/conditional
-modifier aggregation and numeric scaling programs. A native build backend now parses
+modifier aggregation, data-driven condition producers and numeric scaling programs. A native build backend now parses
 restricted Spark and Mace Strike profiles across all pinned class/ascendancy identities,
 with connected capability-admitted ordinary passives, explicit attribute choices,
 and selected ascendancy resistance passives,

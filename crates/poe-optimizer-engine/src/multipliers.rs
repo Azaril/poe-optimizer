@@ -202,7 +202,7 @@ pub enum StatVariables {
     Sum(Vec<String>),
 }
 impl StatVariables {
-    fn names(&self) -> &[String] {
+    pub(crate) fn names(&self) -> &[String] {
         match self {
             Self::One(name) => std::slice::from_ref(name),
             Self::Sum(names) => names,
@@ -450,15 +450,12 @@ impl ScalingProgram {
                 }
                 ScalingTag::StatThreshold(tag) => {
                     let stats = stats.ok_or(MultiplierError::MissingStatContext)?;
-                    let value = tag.stats.value(stats)?;
-                    let mut threshold = match &tag.threshold {
-                        StatThresholdValue::Constant(value) => *value,
-                        StatThresholdValue::Stat(name) => stats.get_stat(name)?,
-                    };
-                    if let Some(percent) = &tag.percent {
-                        threshold *= environment.scalar(percent, query)? / 100.0;
-                    }
-                    if (tag.upper && value > threshold) || (!tag.upper && value < threshold) {
+                    let percent = tag
+                        .percent
+                        .as_ref()
+                        .map(|percent| environment.scalar(percent, query))
+                        .transpose()?;
+                    if !stat_threshold_matches(tag, stats, percent)? {
                         return Ok(None);
                     }
                 }
@@ -493,4 +490,22 @@ fn lua_min(left: f64, right: f64) -> f64 {
 }
 fn lua_max(left: f64, right: f64) -> f64 {
     if left > right { left } else { right }
+}
+
+/// Original current-store StatThreshold arithmetic, shared by numeric scaling
+/// and conditional FLAG predicates. The caller resolves an optional multiplier.
+pub(crate) fn stat_threshold_matches(
+    tag: &StatThreshold,
+    stats: &ResolvedStatEnvironment,
+    percent: Option<f64>,
+) -> Result<bool, StatError> {
+    let value = tag.stats.value(stats)?;
+    let mut threshold = match &tag.threshold {
+        StatThresholdValue::Constant(value) => *value,
+        StatThresholdValue::Stat(name) => stats.get_stat(name)?,
+    };
+    if let Some(percent) = percent {
+        threshold *= percent / 100.0;
+    }
+    Ok(!((tag.upper && value > threshold) || (!tag.upper && value < threshold)))
 }

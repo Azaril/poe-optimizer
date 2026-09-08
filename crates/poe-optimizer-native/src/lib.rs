@@ -372,6 +372,8 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("../../poe-optimizer-engine/src/mace_supports.rs"),
                 include_str!("../../poe-optimizer-engine/src/modifiers.rs"),
                 include_str!("../../poe-optimizer-engine/src/conditions.rs"),
+                include_str!("../../poe-optimizer-engine/src/conditions/condition_program.rs"),
+                include_str!("../../poe-optimizer-engine/src/stats.rs"),
                 include_str!("../../poe-optimizer-engine/src/defence.rs"),
                 include_str!("../../poe-optimizer-engine/src/resistance.rs"),
                 include_str!("../../poe-optimizer-engine/Cargo.toml"),

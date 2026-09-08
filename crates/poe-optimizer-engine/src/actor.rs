@@ -9,8 +9,9 @@ use crate::{
     armour::ArmourSlots,
     character::{CharacterAttributes, CharacterInput},
     conditions::{
-        ConditionActor, ConditionEnvironment, ConditionEnvironmentInput, ConditionVariables,
-        ModifierTag,
+        BoundConditionQuery, ConditionProgram, ConditionProgramActor, ConditionProgramInput,
+        ConditionQuery, ConditionStoreInput, ConditionValue, ConditionVariables, FlagModifierInput,
+        FlagTag, ModifierTag, ScalarConditions,
     },
     data::CompiledGameData,
     defence::round_to_integer,
@@ -253,7 +254,7 @@ trait ActorQueries {
     fn max(&self, name: &str) -> Result<Option<f64>, ActorError>;
     fn sum_positive(&self, name: &str) -> Result<f64, ActorError>;
     fn override_value(&self, name: &str) -> Result<Option<f64>, ActorError>;
-    fn flag(&self, name: &str) -> bool;
+    fn flag(&self, name: &str) -> Result<bool, ActorError>;
     fn update_conditions(&mut self, conditions: [bool; 12]) -> Result<(), ActorError>;
     fn set_movement_condition(&mut self, ignored: bool) -> Result<(), ActorError>;
     fn add_bonus(&mut self, record: BuiltinRecord);
@@ -297,8 +298,8 @@ impl ActorQueries for StackRecords {
     fn override_value(&self, _: &str) -> Result<Option<f64>, ActorError> {
         Ok(None)
     }
-    fn flag(&self, _: &str) -> bool {
-        false
+    fn flag(&self, _: &str) -> Result<bool, ActorError> {
+        Ok(false)
     }
     fn update_conditions(&mut self, _: [bool; 12]) -> Result<(), ActorError> {
         Ok(())
@@ -356,42 +357,38 @@ fn builtin(row: BuiltinRecord) -> TaggedModifierInput {
     }
     .into()
 }
-struct ActorFlag {
-    name: &'static str,
-    value: bool,
-    tags: Vec<ModifierTag>,
-}
 struct DatabaseQueries<'a> {
     layers: Vec<Vec<TaggedModifierInput>>,
     database: ModifierDatabase,
-    flags: Vec<ActorFlag>,
-    conditions: ConditionEnvironment,
+    condition_program: ConditionProgram,
+    conditions: Vec<ScalarConditions>,
+    query_context: QueryContext,
     precision: &'a MorePrecision,
     attribute_conditions: [bool; 12],
 }
-fn condition_environment(
+fn condition_values(
     values: [bool; 12],
     layer_count: usize,
     ignored_movement: bool,
-) -> Result<ConditionEnvironment, ActorError> {
+) -> Vec<ScalarConditions> {
     let mut layers = vec![
         CONDITIONS
             .into_iter()
             .zip(values)
-            .map(|(condition, value)| (condition.upstream_name().into(), value))
+            .map(|(condition, value)| {
+                (
+                    condition.upstream_name().into(),
+                    ConditionValue::Boolean(value),
+                )
+            })
             .chain(std::iter::once((
                 "IgnoreMovementPenalties".into(),
-                ignored_movement,
+                ConditionValue::Boolean(ignored_movement),
             )))
             .collect(),
     ];
     layers.resize_with(layer_count, Default::default);
-    ConditionEnvironment::try_new(ConditionEnvironmentInput {
-        store_conditions: layers,
-        actors: vec![ConditionActor::default()],
-        ..ConditionEnvironmentInput::default()
-    })
-    .map_err(|_| ActorError("Invalid actor condition environment"))
+    layers
 }
 impl<'a> DatabaseQueries<'a> {
     fn new(
@@ -401,10 +398,11 @@ impl<'a> DatabaseQueries<'a> {
     ) -> Result<Self, ActorError> {
         let mut numeric_layers: Vec<Vec<TaggedModifierInput>> =
             vec![base.as_slice().iter().copied().map(builtin).collect()];
-        let mut flags = vec![];
+        let mut flags: Vec<Vec<FlagModifierInput>> = vec![vec![]];
         for (index, layer) in layers.iter().enumerate() {
             if index > 0 {
                 numeric_layers.push(vec![]);
+                flags.push(vec![]);
             }
             for record in layer {
                 match record.effect {
@@ -421,10 +419,16 @@ impl<'a> DatabaseQueries<'a> {
                             },
                             tags: tags(&record.tags),
                         }),
-                    ActorModifierEffect::Flag { value } => flags.push(ActorFlag {
-                        name: record.stat.upstream_name(),
-                        value,
-                        tags: tags(&record.tags),
+                    ActorModifierEffect::Flag { value } => flags[index].push(FlagModifierInput {
+                        name: record.stat.upstream_name().into(),
+                        value: ConditionValue::Boolean(value),
+                        flags: record.flags,
+                        keyword_flags: record.keyword_flags,
+                        source: record.source.clone(),
+                        tags: tags(&record.tags)
+                            .into_iter()
+                            .map(FlagTag::Predicate)
+                            .collect(),
                     }),
                 }
             }
@@ -432,68 +436,92 @@ impl<'a> DatabaseQueries<'a> {
         let database = ModifierDatabase::try_new_tagged(numeric_layers.clone())
             .map_err(|_| ActorError("Invalid actor numeric database"))?;
         let layer_count = numeric_layers.len();
+        let condition_program = ConditionProgram::try_new(ConditionProgramInput {
+            stores: flags
+                .into_iter()
+                .enumerate()
+                .map(|(index, flags)| ConditionStoreInput {
+                    parent: (index + 1 < layer_count).then_some(index + 1),
+                    flags,
+                    ..ConditionStoreInput::default()
+                })
+                .collect(),
+            actors: vec![ConditionProgramActor::default()],
+            ..ConditionProgramInput::default()
+        })
+        .map_err(|_| ActorError("Invalid actor condition producers"))?;
         Ok(Self {
             layers: numeric_layers,
             database,
-            flags,
-            conditions: condition_environment([false; 12], layer_count, false)?,
+            condition_program,
+            conditions: condition_values([false; 12], layer_count, false),
+            query_context: QueryContext::default(),
             precision,
             attribute_conditions: [false; 12],
         })
+    }
+    fn bound_conditions(&self) -> Result<BoundConditionQuery<'_>, ActorError> {
+        self.condition_program
+            .bind(
+                0,
+                &ConditionQuery::new(&self.query_context, &self.conditions),
+            )
+            .map_err(|_| ActorError("Invalid actor condition query context"))
     }
 }
 impl ActorQueries for DatabaseQueries<'_> {
     fn sum(&self, kind: SumKind, names: &[&str]) -> Result<f64, ActorError> {
         self.database
-            .sum_with_conditions(kind, &QueryContext::default(), names, &self.conditions)
+            .sum_with_conditions(kind, &self.query_context, names, &self.bound_conditions()?)
             .map_err(|_| ActorError("Invalid actor BASE/INC query"))
     }
     fn max(&self, name: &str) -> Result<Option<f64>, ActorError> {
         self.database
-            .max_with_conditions(&QueryContext::default(), &[name], &self.conditions)
+            .max_with_conditions(&self.query_context, &[name], &self.bound_conditions()?)
             .map_err(|_| ActorError("Invalid actor MAX query"))
     }
     fn sum_positive(&self, name: &str) -> Result<f64, ActorError> {
         self.database
             .sum_positive_with_conditions(
                 SumKind::Increased,
-                &QueryContext::default(),
+                &self.query_context,
                 name,
-                &self.conditions,
+                &self.bound_conditions()?,
             )
             .map_err(|_| ActorError("Invalid actor positive INC query"))
     }
     fn more(&self, name: &str) -> Result<f64, ActorError> {
         self.database
             .more_with_conditions(
-                &QueryContext::default(),
+                &self.query_context,
                 &[name],
                 self.precision,
-                &self.conditions,
+                &self.bound_conditions()?,
             )
             .map_err(|_| ActorError("Invalid actor MORE query"))
     }
     fn override_value(&self, name: &str) -> Result<Option<f64>, ActorError> {
         self.database
-            .override_with_conditions(&QueryContext::default(), &[name], &self.conditions)
+            .override_with_conditions(&self.query_context, &[name], &self.bound_conditions()?)
             .map_err(|_| ActorError("Invalid actor override query"))
     }
-    fn flag(&self, name: &str) -> bool {
-        self.flags
-            .iter()
-            .any(|flag| flag.name == name && flag.value && self.conditions.matches(&flag.tags))
+    fn flag(&self, name: &str) -> Result<bool, ActorError> {
+        self.bound_conditions()?
+            .flag(&[name])
+            .map(|value| value.unwrap_or(false))
+            .map_err(|_| ActorError("Invalid actor FLAG query"))
     }
     fn update_conditions(&mut self, conditions: [bool; 12]) -> Result<(), ActorError> {
         self.attribute_conditions = conditions;
-        self.conditions = condition_environment(conditions, self.database.layer_count(), false)?;
+        self.conditions = condition_values(conditions, self.database.layer_count(), false);
         Ok(())
     }
     fn set_movement_condition(&mut self, ignored: bool) -> Result<(), ActorError> {
-        self.conditions = condition_environment(
+        self.conditions = condition_values(
             self.attribute_conditions,
             self.database.layer_count(),
             ignored,
-        )?;
+        );
         Ok(())
     }
     fn add_bonus(&mut self, record: BuiltinRecord) {
@@ -576,14 +604,14 @@ fn calculate(
         conditions = attribute_conditions(attributes);
         queries.update_conditions(conditions)?;
     }
-    if !queries.flag("NoAttributeBonuses") {
-        let multiplier = if queries.flag("DoubledInherentAttributeBonuses") {
+    if !queries.flag("NoAttributeBonuses")? {
+        let multiplier = if queries.flag("DoubledInherentAttributeBonuses")? {
             actor.doubled_attribute_bonus_multiplier
         } else {
             actor.attribute_bonus_multiplier
         };
-        if !queries.flag("NoStrengthAttributeBonuses") && !queries.flag("NoStrBonusToLife") {
-            let bonus = if queries.flag("HalvesLifeFromStrength") {
+        if !queries.flag("NoStrengthAttributeBonuses")? && !queries.flag("NoStrBonusToLife")? {
+            let bonus = if queries.flag("HalvesLifeFromStrength")? {
                 actor.halved_life_per_strength
             } else {
                 rules.life_per_strength
@@ -595,7 +623,7 @@ fn calculate(
                 source: "Strength",
             });
         }
-        if !queries.flag("NoDexterityAttributeBonuses") && !queries.flag("NoDexBonusToAccuracy") {
+        if !queries.flag("NoDexterityAttributeBonuses")? && !queries.flag("NoDexBonusToAccuracy")? {
             let bonus = queries
                 .override_value("DexAccBonusOverride")?
                 .unwrap_or(rules.accuracy_per_dexterity);
@@ -606,7 +634,7 @@ fn calculate(
                 source: "Dexterity",
             });
         }
-        if !queries.flag("NoIntelligenceAttributeBonuses") && !queries.flag("NoIntBonusToMana") {
+        if !queries.flag("NoIntelligenceAttributeBonuses")? && !queries.flag("NoIntBonusToMana")? {
             queries.add_bonus(BuiltinRecord {
                 stat: ActorStat::Mana,
                 operation: ActorNumericOperation::Base,
@@ -630,7 +658,7 @@ fn calculate(
         } else {
             actor.full_life_threshold
         };
-    let chaos_inoculation = queries.flag("ChaosInoculation");
+    let chaos_inoculation = queries.flag("ChaosInoculation")?;
     let mut pools = [0.0; 3];
     let mut overrides = [false; 3];
     for (index, (name, extra, total, conversions, minimum)) in [
@@ -741,7 +769,7 @@ fn calculate_complete(
     let names = &action_data.query_stats;
     let minimum = queries.max(names[0].upstream_name())?;
     let maximum = queries.max(names[1].upstream_name())?;
-    let unaffected = queries.flag(names[2].upstream_name());
+    let unaffected = queries.flag(names[2].upstream_name())?;
     let increased = if unaffected {
         queries.sum_positive(names[3].upstream_name())?
     } else {
@@ -762,7 +790,7 @@ fn calculate_complete(
     )?;
     // Source GetCondition resolves this flag from the final attribute state.
     // Its own tags cannot reference this condition, so there is no query cycle.
-    let ignored = queries.flag("Condition:IgnoreMovementPenalties");
+    let ignored = queries.flag("Condition:IgnoreMovementPenalties")?;
     queries.set_movement_condition(ignored)?;
     let movement = &compiled.snapshot().package().movement;
     let overridden = queries.override_value("MovementSpeed")?;
@@ -786,7 +814,7 @@ fn calculate_complete(
             increased,
             more,
             override_value: overridden,
-            cannot_be_below_base: queries.flag("MovementSpeedCannotBeBelowBase"),
+            cannot_be_below_base: queries.flag("MovementSpeedCannotBeBelowBase")?,
             ignore_movement_penalties: ignored,
             action_speed_mod: action_speed.action_speed_mod,
         },

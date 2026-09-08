@@ -1,13 +1,25 @@
 //! Typed, immutable condition inputs for the supported `ModStore::EvalMod` tags.
 //!
-//! These are explicit condition tables, not a complete actor/modifier importer.
-//! Condition-producing FLAG modifiers remain unsupported and must not be omitted
-//! when extracting these inputs. Actor references preserve upstream `getActor`
+//! The legacy context contains explicit condition tables. `ConditionProgram`
+//! additionally evaluates represented FLAG producers and their dependencies.
+//! Neither boundary is an actor/modifier importer. Actor references preserve `getActor`
 //! lookup, including the special player fallback through parent or enemy.
 
 use std::collections::BTreeMap;
 
 use crate::modifiers::ModifierError;
+
+mod condition_program;
+pub use condition_program::*;
+
+/// A bound condition query consumed by the ordinary numeric aggregation methods.
+pub trait ConditionResolver {
+    fn store_layer_count(&self) -> usize;
+    fn validate_query(&self, _query: &crate::modifiers::QueryContext) -> Result<(), ModifierError> {
+        Ok(())
+    }
+    fn matches(&self, tags: &[ModifierTag]) -> Result<bool, ModifierError>;
+}
 
 pub type Conditions = BTreeMap<String, bool>;
 
@@ -120,61 +132,8 @@ impl ConditionEnvironment {
     }
 
     pub(crate) fn matches(&self, tags: &[ModifierTag]) -> bool {
-        tags.iter().all(|tag| match tag {
-            ModifierTag::Global | ModifierTag::GlobalEffect { .. } => true,
-            ModifierTag::Condition { variables, negated } => {
-                let actor = &self.input.actors[self.input.current_actor];
-                let weapon = if actor.weapon_one.counts_as_all_one_handed {
-                    Some(&actor.weapon_one)
-                } else if actor.weapon_two.counts_as_all_one_handed {
-                    Some(&actor.weapon_two)
-                } else {
-                    None
-                };
-                let mut matched = false;
-                for variable in variables.iter() {
-                    if let Some(added) = weapon
-                        .filter(|_| *negated)
-                        .and_then(|weapon| weapon.added.get(variable))
-                    {
-                        // Upstream returns immediately for an original weapon
-                        // condition; a condition added by all-1H is ignored.
-                        if !added {
-                            return false;
-                        }
-                    } else if self.condition(&self.input.store_conditions, variable)
-                        || self
-                            .input
-                            .skill_conditions
-                            .get(variable)
-                            .copied()
-                            .unwrap_or(false)
-                    {
-                        matched = true;
-                        break;
-                    }
-                }
-                matched != *negated
-            }
-            ModifierTag::ActorCondition {
-                actor,
-                variables,
-                negated,
-            } => {
-                let target = match actor {
-                    None => Some(&self.input.store_conditions),
-                    Some(role) => self.actor(role).map(|actor| &actor.conditions),
-                };
-                let matched = match (target, variables) {
-                    (Some(target), Some(variables)) => variables
-                        .iter()
-                        .any(|variable| self.condition(target, variable)),
-                    _ => actor.is_some() && *actor == self.input.query_actor,
-                };
-                matched != *negated
-            }
-            ModifierTag::Unsupported(_) => unreachable!("Tags validated during DB construction"),
-        })
+        condition_program::matches_predicates(tags, &mut LegacyLookup(self))
+            .expect("Legacy context contains only validated condition predicates")
     }
 
     fn condition(&self, layers: &ConditionLayers, variable: &str) -> bool {
@@ -221,5 +180,52 @@ impl ConditionVariables {
             Self::One(variable) => std::slice::from_ref(variable).iter(),
             Self::Any(variables) => variables.iter(),
         }
+    }
+}
+
+impl ConditionResolver for ConditionEnvironment {
+    fn store_layer_count(&self) -> usize {
+        self.input.store_conditions.len()
+    }
+    fn matches(&self, tags: &[ModifierTag]) -> Result<bool, ModifierError> {
+        for tag in tags {
+            condition_program::validate_predicate(tag)?;
+        }
+        Ok(self.matches(tags))
+    }
+}
+
+struct LegacyLookup<'a>(&'a ConditionEnvironment);
+impl condition_program::PredicateLookup for LegacyLookup<'_> {
+    fn weapon(&self) -> Option<&WeaponConditions> {
+        let actor = &self.0.input.actors[self.0.input.current_actor];
+        if actor.weapon_one.counts_as_all_one_handed {
+            Some(&actor.weapon_one)
+        } else if actor.weapon_two.counts_as_all_one_handed {
+            Some(&actor.weapon_two)
+        } else {
+            None
+        }
+    }
+    fn query_actor(&self) -> Option<&str> {
+        self.0.input.query_actor.as_deref()
+    }
+    fn actor_exists(&self, role: &str) -> bool {
+        self.0.actor(role).is_some()
+    }
+    fn condition(&mut self, role: Option<&str>, variable: &str) -> Result<bool, ModifierError> {
+        let layers = match role {
+            None => Some(&self.0.input.store_conditions),
+            Some(role) => self.0.actor(role).map(|actor| &actor.conditions),
+        };
+        Ok(layers.is_some_and(|layers| self.0.condition(layers, variable)))
+    }
+    fn skill_condition(&self, variable: &str) -> bool {
+        self.0
+            .input
+            .skill_conditions
+            .get(variable)
+            .copied()
+            .unwrap_or(false)
     }
 }

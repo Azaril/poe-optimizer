@@ -2,23 +2,25 @@
 
 Last updated: 2026-09-08
 
-Current checkpoint: **ordered item source projection and dependency capability audit**,
-implemented, locally validated and published as
-`5b2ac700c01412b1778194b4b94ed291a6282c36` on main.
-[Exact-code CI run 34268455262](https://github.com/Azaril/poe-optimizer/actions/runs/34268455262)
-is in progress; no hosted pass is claimed. Caller-driven source inspection now
-preserves ordered item text/range instructions, saved equipment sets and passive-spec jewel
-ownership independently of numerical admission. The full native replacement is unfinished.
-See the [item source contract](item-source-and-loading.md) and current checkpoint below.
+Current checkpoint: **shared native condition producers and corpus query parity**,
+implemented and locally validated; publication is pending. The native FLAG/GetCondition
+component consumes caller-provided records and runtime context and is integrated into the
+supported actor pipeline. It retains the existing compiled candidate path. The broader
+five-build corpus still requires general actor/action, item and calculation pipelines;
+full native replacement remains unfinished. See the
+[condition contract](native-condition-producers.md) and checkpoint table below.
 
-The preceding breadth checkpoint is published as `ee5f589` with resume update `ecaf0c8`.
-[Exact-code CI run 34262898483](https://github.com/Azaril/poe-optimizer/actions/runs/34262898483)
-failed on Linux and Windows. Public annotations were truncated before the failing assertion;
-15 targeted local diagnostic tests pass. Diagnostic commit `88654d1` is pushed to main and
-splits annotations into small chunks, newest first. Its
-[diagnostic CI run 34266873370](https://github.com/Azaril/poe-optimizer/actions/runs/34266873370)
-is in progress. This repairs log visibility, not the
-unknown hosted failure. No hosted pass is claimed for the current changes.
+The preceding item-source checkpoint is published as
+`5b2ac700c01412b1778194b4b94ed291a6282c36` with resume update `ec17180`.
+The subsequent diagnostic run exposed the extraction test's explicit 30-second deadline
+on both platforms (Linux 30.02 seconds, Windows 30.04 seconds). Published fix `c7fb7fe`
+increases only that functional reproducibility test's budget to 120 seconds; its three
+cases pass locally, including two exact 23-section extractions and native reload.
+Production timeout defaults and timeout/kill tests are unchanged.
+[Fix CI run 34269405262](https://github.com/Azaril/poe-optimizer/actions/runs/34269405262)
+is still testing on both platforms; no hosted repair is claimed yet. Local diagnosis is in
+`runs/ci-extraction-functional-fix-evidence.json`. Earlier checkpoint entries below retain
+the information available when they were published; the log request is no longer needed.
 
 The preceding **skill source projection and injected identity catalogs** checkpoint is
 published as `19666a0ad754ac5514553a71138a568729022d2e` on main, with resume update `7318300`.
@@ -165,7 +167,9 @@ the design documents.
    item/gem/passive modifiers, resolved actors/conditions and resources, offence/defence,
    conversions, ailments, triggers and minions. PerStat/StatThreshold programs now support
    ordered numeric dependencies; actor-target multipliers, recursive producers and special
-   GetStat names remain explicit gaps. No profile count or shared trait establishes full
+   GetStat names remain explicit gaps. The shared ConditionProgram now represents ordered
+   FLAG/GetCondition and ordinary stat-threshold predicates; complete condition-producing
+   pipelines and their dependency scheduling remain open. No profile count or shared trait establishes full
    game replacement. Source/data upgrades require source identity and parity review.
 7. Specialize coordinated proposals with game-aware repair and diverse archives. Preserve
    exhaustive tiny references, deterministic one/many-worker comparisons, locks and empty
@@ -194,6 +198,57 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Native condition producers - validation checkpoint
+
+The preceding goal turn published `5b2ac70` and resume update `ec17180`. This turn began
+with a clean worktree. The concrete hosted extraction timeout was diagnosed and its
+functional-test fix published as `c7fb7fe`. The full native replacement goal remains active.
+
+The [shared native condition component](native-condition-producers.md) implements ordered
+ModDB FLAG/GetCondition producers over caller records and explicit actor/store references.
+Resolver-aware numeric queries share raw scalar truthiness, parent/actor lookup, source
+filtering, overrides, skill/weapon context and ordinary StatThreshold checks. Immutable
+programs index producer names in source order; runtime bindings borrow candidate values.
+A bounded local stack reports reached recursion and unsupported dependencies explicitly.
+No Lua runtime or subprocess is involved in native queries.
+
+The existing actor preparation now uses this resolver. Its compiled actor/candidate path
+retains the existing allocation-free loop. The API migration is limited to a condition
+resolver; no actor/action/candidate schema migration or new complete-build admission is
+implied. The B3 general model proposal remains under discussion.
+
+The corpus audit records **179 unique FLAG rows** and 19 query proposals. **15 represented
+closures** are replayed using actual records and frozen post-MAIN context; **four remain
+unresolved** (IgnoreCond, multiplier-threshold/provider context and weapon exceptions).
+The checked-in fixture retains source/runtime/provider identities and all exclusions.
+It does not depend on ignored run files at test time. ModList replays use only the common
+unfiltered semantics; arbitrary ModList source-filter behavior is not yet represented.
+Resolved stat snapshots are explicit test inputs, not native stat-production claims.
+
+| Gate | Current evidence |
+| --- | --- |
+| Core contracts | **6 pass**, including raw value kinds, context compatibility, explicit unsupported/cycle errors, immutable sharing and zero-allocation binding/FLAG/GetCondition/producer-aware SUM. Indexed lookup retains order with 4,096 irrelevant producers. `runs/condition-query-contract.log`. |
+| Original-source query parity | **13 pass / 1,020 paired query observations**, interpreted and proven warmed original LuaJIT functions. Includes 15 captured closures in both modes; four unresolved cases stay excluded. `runs/condition-source-corpus-test.log`. |
+| Existing modifier and actor regressions | **65 modifier parity tests** and **21 actor contract tests** pass, including varied compiled candidate allocation checks. `runs/condition-query-engine-regression.log`, `runs/native-conditions-actor-tests.log`. |
+| Complete-build differential checks | **8 pass** across actor, body-armour/movement and local-armour suites against original PoB. These are bounded existing profiles, not additional broader-build admissions. `runs/native-conditions-build-parity.log`. |
+| Native deployment | **69 native tests / 111 native-only CLI tests** pass. Strict native-only and workspace/all-target Clippy pass. Five portable libraries compile for WASM; normal native-only dependencies contain no PoB/Lua packages. `runs/native-conditions-deployment-checks.json`, `runs/native-conditions-workspace-clippy.log`. |
+| CI repair | The extraction functional test's three cases pass with the explicit 120-second test budget. Hosted run **34269405262** is still testing on both platforms. `runs/ci-extraction-functional-fix-evidence.json`. |
+| Fresh corpus | All **five source inspections and five PoB evaluations pass**; **110 measurements** and build/context/coverage evidence repeat bitwise. The same five native rejections remain: one-Skill limits for builds 1/3/4, one-SkillSet limits for 2/5. Inputs, XML, configuration source and item/skill inventories are unchanged. `runs/native-conditions-corpus-validation.json`. |
+| Preservation/publication | **26/26 protected file hashes match** and the pinned PoB submodule remains clean. Five changed Markdown files decode as UTF-8 and 175 local file links resolve. Code publication is pending. `runs/native-conditions-preservation.json`. |
+
+Successful generic queries are not all allocation-free: ordinary MORE still uses a
+per-layer vector. Whole-build preparation, dependency scheduling and realistic parallel
+search costs need separate measurements on broadly admitted builds. Full native PoB
+parity, complete input resolution and independent whole-build holdouts remain unfinished.
+
+Consolidated local evidence: `runs/native-conditions-validation-summary.json`.
+
+Next: complete this checkpoint's publication checks, then B2 producer/dependency closure
+and B4 whole-build holdout planning. The new primitive does not authorize freezing live
+conditions from PoB or silently ignoring unsupported producers. Continue independent
+source loading/injected definitions; discuss the pending
+[general build model proposal](general-build-input-proposal.md) before that migration.
 
 ## Ordered item-source projection - validation checkpoint
 
@@ -869,8 +924,10 @@ its game effects. The complete injected catalog and data-bound inspection are de
   [mechanism inventory](breadth-mechanism-inventory.md) covers all saved equipment/passive
   sets and fresh MAIN grants, actors, support links, allocation providers and conditional
   records. The observed static capability comparison now distinguishes native query primitives from
-  source producers; full dependency closure, inactive-selection inventory and whole-build
-  admission remain open.
+  source producers. Shared native FLAG/GetCondition now has actual-source parity and 15
+  captured query-closure replays, with four unresolved proposals retained; this does not
+  close complete actor dependencies. Full dependency closure, inactive-selection inventory
+  and whole-build admission remain open.
 - [ ] **B3 — general build-input seam review.** Audit hard-coded fixture inputs, closed
   Spark/Mace admission, skill IDs, level restrictions and implicit player-only assumptions.
   Normal evaluate/search already load caller files, but that alone does not establish

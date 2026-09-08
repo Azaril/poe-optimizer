@@ -97,6 +97,7 @@ global records through these primitives. This does not establish a complete modi
 | --- | --- |
 | `sum(Base / Increased)` | BASE/INC addition by query-name then insertion order; each local result adds its recursively grouped parent result. |
 | `more` | MORE percentages become multiplicative factors. Default rounding occurs per local stat bucket at two decimal places; explicit high precision truncates the accumulated result. Precision carries across query names within a layer and resets for each parent. |
+| `max` | Maximum selected MAX value; absence remains `None`. |
 | `override_value` | First matching local value in name/insertion order, then parent layers. Zero is a present override; absence returns `None`. |
 | Modifier flags | All required bits must occur in the query. Exactly representable nonnegative 53-bit masks are supported except bit 31, whose upstream signed-low-word behavior requires a separate extension. Every currently declared pinned `ModFlag` fits the supported domain. |
 | Keyword flags | Any matching keyword by default, all keywords when the modifier carries `MatchAll`. Empty requirements match. The `MatchAll` control bit is removed from both masks before matching; masks are bounded to bits 0-30. |
@@ -112,10 +113,11 @@ mistaken for the pinned game data. Precision inputs concern MORE aggregation onl
 modifier scaling has separate rules implemented by the bounded program below.
 
 The legacy `try_new` constructor still rejects every raw tag name. The explicit typed
-condition path below handles a declared subset of `EvalMod`; item, skill, multiplier,
-threshold, global-limit and other tags remain unsupported. FLAG/LIST/MAX and unknown
-modifier kinds, nonnumeric values including functions/tables/booleans/nil, unsupported
-flag masks and out-of-range precision fail explicitly. A future importer must carry
+condition path below handles a declared predicate subset of `EvalMod`; ordered multiplier
+and stat-threshold arithmetic uses the separate scaling program. Item/skill predicates,
+global limits and other unrepresented tags remain unsupported. Numeric MAX is represented;
+FLAG uses the separate condition program. LIST, unknown numeric modifier kinds, nonnumeric
+numeric-database values, unsupported flag masks and out-of-range precision fail explicitly. A future importer must carry
 unsupported metadata to validation rather than constructing an untagged approximation.
 This module does not derive a final stat by assuming a universal combination of BASE,
 INC, MORE and OVERRIDE.
@@ -166,17 +168,19 @@ They do not own Lua objects, mutable caches, a thread pool or operating-system s
 | All-one-handed weapon exception | Negated `Condition` tags retain `countsAsAll1H` and `Added<condition>` behavior, including first qualifying weapon precedence and list order. |
 | Disabled conditional values | BASE/INC contribute zero; MORE uses zero but still influences precision selection; OVERRIDE is absent. Active numeric zero remains a present override. Source errors occur before tag evaluation. |
 
-This is an **explicit condition-table subset**. `GetCondition` also consults
-`Condition:<name>` FLAG modifiers upstream. FLAG inputs still reject at numeric DB
-construction, and condition-producing FLAG entries in actor/context extraction must be
-retained as unsupported features. They must not be pre-resolved into apparently complete
-booleans unless a separate extraction contract proves equivalence across the exact query
-flags, source and overrides. No real-build modifier extractor is provided yet.
+`ConditionEnvironment` remains an **explicit condition-table subset**. The separate
+[`ConditionProgram`](native-condition-producers.md) now implements ordered ModDB FLAG
+producers and `GetCondition`, with raw scalar kinds, parent/actor contexts, source filters,
+ordinary stat thresholds and reached-cycle errors. Resolver-aware numeric queries accept
+either boundary; the existing actor preparation path uses the producer program. FLAG
+records remain separate from the numeric database and cannot be silently converted to
+frozen booleans. Unsupported producers and missing runtime dependencies still reject.
 
 The multiplier slice below handles explicit values and conditional numeric producers.
-Recursive multiplier-producing tags, global limits, item/skill predicates, modifier
-functions and condition-producing FLAG queries still need their own typed input and
-parity scope before activation.
+Recursive multiplier-producing tags, global limits, item/skill predicates and modifier
+functions still need their own typed input and parity scope before activation. Passing
+condition queries does not establish a complete real-build modifier extractor or the
+native actor/action dependency pipeline.
 
 The differential suite uses the same source-hashed, actual upstream `ModStore`/`ModDB`
 harness as numeric aggregation; it does not replace `EvalMod` or `GetCondition` with a
