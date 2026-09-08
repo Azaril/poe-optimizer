@@ -8,6 +8,7 @@ use poe_optimizer_core::{
     evaluation::{BackendIdentity, BuildDocument, BuildFormat, EvaluationResult},
     options::{EvaluationContext, EvaluationOptions, Scalar},
 };
+use poe_optimizer_data::class_tree::{self, ClassTreeSelection, ResolvedClassTree};
 use poe_optimizer_data::game_data::{
     self, GameDataPackage, GameDataSnapshot, RequirementData, SupportColor,
 };
@@ -39,6 +40,7 @@ pub struct ControlledMaceAlternative {
     pub id: String,
     pub weapon_id: String,
     pub support: MaceSupportChoice,
+    pub tree: ClassTreeSelection,
     pub xml_sha256: String,
     pub candidate: Candidate,
 }
@@ -94,11 +96,16 @@ struct Profile {
     weapon: String,
     active_attributes: BTreeMap<String, String>,
     has_support: bool,
+    tree: Arc<ResolvedClassTree>,
+    tree_attribute_ranges: BTreeMap<String, Range<usize>>,
+    ascendancy_insert: usize,
 }
 #[derive(Debug, Clone)]
 struct Choice {
     weapon: String,
     support: MaceSupportChoice,
+    tree: Arc<ResolvedClassTree>,
+    patch_tree: bool,
 }
 /// Fresh validated template evidence; baseline-derived, not an independent golden.
 #[derive(Debug)]
@@ -125,6 +132,9 @@ pub struct ControlledMaceCatalog {
     catalog: CandidateCatalog,
     alternatives: Vec<ControlledMaceAlternative>,
     choices: BTreeMap<Candidate, Choice>,
+    tree_choices: Vec<ClassTreeSelection>,
+    candidate_index:
+        BTreeMap<ClassTreeSelection, BTreeMap<String, BTreeMap<MaceSupportChoice, usize>>>,
 }
 impl ControlledMaceCatalog {
     pub fn new(
@@ -144,6 +154,26 @@ impl ControlledMaceCatalog {
         weapons: Vec<NormalMaceAlternative>,
         supports: Vec<MaceSupportChoice>,
     ) -> Result<Self> {
+        Self::build(data, template_xml, weapons, supports, None)
+    }
+    /// Compose finite class/ascendancy/ordinary-entrance choices with equipment and support.
+    /// The snapshot is shared with requirements and evaluator admission; no Lua runs here.
+    pub fn with_tree_choices(
+        data: Arc<GameDataSnapshot>,
+        template_xml: String,
+        weapons: Vec<NormalMaceAlternative>,
+        supports: Vec<MaceSupportChoice>,
+        tree_choices: Vec<ClassTreeSelection>,
+    ) -> Result<Self> {
+        Self::build(data, template_xml, weapons, supports, Some(tree_choices))
+    }
+    fn build(
+        data: Arc<GameDataSnapshot>,
+        template_xml: String,
+        weapons: Vec<NormalMaceAlternative>,
+        supports: Vec<MaceSupportChoice>,
+        requested_trees: Option<Vec<ClassTreeSelection>>,
+    ) -> Result<Self> {
         let package = data.package();
         if package
             .quests
@@ -157,10 +187,29 @@ impl ControlledMaceCatalog {
         }
         let profile = profile(&template_xml, package)?;
         let support_xml = support_xml(package);
-        let class = package
-            .tree
-            .class(6)
-            .map_err(|error| unsupported(&error.to_string()))?;
+        let patch_tree = requested_trees.is_some();
+        if !patch_tree && profile.tree.selection != fixed_warrior() {
+            return Err(unsupported(
+                "fixed catalog requires Warrior without ascendancy or paid passives",
+            ));
+        }
+        let mut tree_choices = requested_trees.unwrap_or_else(|| vec![fixed_warrior()]);
+        if tree_choices.is_empty() || tree_choices.len() > 93 {
+            return Err(unsupported("provide 1..93 distinct tree choices"));
+        }
+        tree_choices.sort();
+        if tree_choices.windows(2).any(|pair| pair[0] == pair[1]) {
+            return Err(unsupported("duplicate tree alternatives"));
+        }
+        let resolved_trees = tree_choices
+            .iter()
+            .map(|selection| {
+                selection
+                    .resolve(&package.tree)
+                    .map(Arc::new)
+                    .map_err(|error| unsupported(&error.to_string()))
+            })
+            .collect::<Result<Vec<_>>>()?;
         if weapons.is_empty() || weapons.len() > 64 || supports.is_empty() || supports.len() > 2 {
             return Err(unsupported(
                 "provide 1..64 weapons and 1..2 distinct support choices",
@@ -189,19 +238,44 @@ impl ControlledMaceCatalog {
             return Err(unsupported("duplicate support alternatives"));
         }
         parsed.sort();
+        let preparations = parsed
+            .len()
+            .checked_mul(support_set.len())
+            .and_then(|count| count.checked_mul(tree_choices.len()))
+            .and_then(|count| count.checked_mul(template_xml.len().saturating_add(4096)));
+        if preparations.is_none_or(|bytes| bytes > 256 * 1024 * 1024) {
+            return Err(unsupported(
+                "controlled materialization hashing exceeds 256 MiB preparation budget",
+            ));
+        }
+        let graph = class_tree::candidate_catalog(&data)
+            .map_err(|error| unsupported(&error.to_string()))?;
         let identity = CatalogIdentity {
             schema_version: 1,
             game: "path_of_exile_2".into(),
             rules_revision: PINNED_RULES_REVISION.into(),
             content_fingerprint: hash(
-                &serde_json::to_string(&(
-                    "pob-controlled-mace-v2",
-                    data.identity(),
-                    SOURCE,
-                    hash(&template_xml),
-                    &parsed,
-                    &support_set,
-                ))
+                &if patch_tree {
+                    serde_json::to_string(&(
+                        "pob-controlled-mace-v3",
+                        data.identity(),
+                        SOURCE,
+                        hash(&template_xml),
+                        &parsed,
+                        &support_set,
+                        &tree_choices,
+                        &graph.identity,
+                    ))
+                } else {
+                    serde_json::to_string(&(
+                        "pob-controlled-mace-v2",
+                        data.identity(),
+                        SOURCE,
+                        hash(&template_xml),
+                        &parsed,
+                        &support_set,
+                    ))
+                }
                 .map_err(|error| unsupported(&error.to_string()))?,
             ),
         };
@@ -217,24 +291,37 @@ impl ControlledMaceCatalog {
             serde_json::to_string(&attributes(support_document.root_element())).unwrap(),
         );
         let support_id = format!("pob-gem:{}", support_payload.sha256);
+        let legacy_root = profile.tree.class.start_node_id;
         let mut catalog = CandidateCatalog {
             identity: identity.clone(),
-            classes: BTreeMap::from([(
-                "6".into(),
-                ClassDefinition {
-                    start_node_id: class.start_node_id,
-                },
-            )]),
-            ascendancies: BTreeMap::new(),
-            passive_nodes: BTreeMap::from([(
-                class.start_node_id,
-                PassiveNode {
-                    kind: PassiveKind::ClassStart {
-                        class_ids: BTreeSet::from(["6".into()]),
+            classes: if patch_tree {
+                graph.classes
+            } else {
+                BTreeMap::from([(
+                    "6".into(),
+                    ClassDefinition {
+                        start_node_id: legacy_root,
                     },
-                    ..Default::default()
-                },
-            )]),
+                )])
+            },
+            ascendancies: if patch_tree {
+                graph.ascendancies
+            } else {
+                BTreeMap::new()
+            },
+            passive_nodes: if patch_tree {
+                graph.passive_nodes
+            } else {
+                BTreeMap::from([(
+                    legacy_root,
+                    PassiveNode {
+                        kind: PassiveKind::ClassStart {
+                            class_ids: BTreeSet::from(["6".into()]),
+                        },
+                        ..Default::default()
+                    },
+                )])
+            },
             equipment_slots: BTreeSet::from(["Weapon 1".into()]),
             skill_slots: BTreeSet::from([SLOT.into()]),
             items: BTreeMap::new(),
@@ -266,6 +353,11 @@ impl ControlledMaceCatalog {
         }
         let mut choices = BTreeMap::new();
         let mut alternatives = Vec::new();
+        let mut hashed_bytes = 0usize;
+        let mut candidate_index: BTreeMap<
+            ClassTreeSelection,
+            BTreeMap<String, BTreeMap<MaceSupportChoice, usize>>,
+        > = BTreeMap::new();
         for (id, weapon) in parsed {
             let item_payload = payload("pob2-item-text-v1", weapon.clone());
             let item_id = format!("pob-item-1:{}", item_payload.sha256);
@@ -279,44 +371,77 @@ impl ControlledMaceCatalog {
                 },
             );
             for support in &support_set {
-                let candidate = Candidate {
-                    catalog: identity.clone(),
-                    class_id: "6".into(),
-                    ascendancy_id: None,
-                    passives: BTreeSet::new(),
-                    equipment: BTreeMap::from([("Weapon 1".into(), item_id.clone())]),
-                    skills: BTreeMap::from([(
-                        SLOT.into(),
-                        SkillAssignment {
-                            active_instance_id: active_id.clone(),
-                            support_instance_ids: if *support == MaceSupportChoice::None {
-                                BTreeSet::new()
-                            } else {
-                                BTreeSet::from([support_id.clone()])
+                for tree in &resolved_trees {
+                    let candidate = Candidate {
+                        catalog: identity.clone(),
+                        class_id: tree.class.integer_id.to_string(),
+                        ascendancy_id: tree.ascendancy.as_ref().map(|asc| asc.internal_id.clone()),
+                        passives: tree.selection.entrance_node_id.into_iter().collect(),
+                        equipment: BTreeMap::from([("Weapon 1".into(), item_id.clone())]),
+                        skills: BTreeMap::from([(
+                            SLOT.into(),
+                            SkillAssignment {
+                                active_instance_id: active_id.clone(),
+                                support_instance_ids: if *support == MaceSupportChoice::None {
+                                    BTreeSet::new()
+                                } else {
+                                    BTreeSet::from([support_id.clone()])
+                                },
                             },
-                        },
-                    )]),
-                };
-                let choice = Choice {
-                    weapon: weapon.clone(),
-                    support: *support,
-                };
-                let xml = patch(&template_xml, &profile, &choice, &support_xml);
-                alternatives.push(ControlledMaceAlternative {
-                    id: format!(
-                        "{id}/{}",
-                        if *support == MaceSupportChoice::None {
-                            "none"
-                        } else {
-                            "brutality_i"
-                        }
-                    ),
-                    weapon_id: id.clone(),
-                    support: *support,
-                    xml_sha256: hash(&xml),
-                    candidate: candidate.clone(),
-                });
-                choices.insert(candidate, choice);
+                        )]),
+                    };
+                    let choice = Choice {
+                        weapon: weapon.clone(),
+                        support: *support,
+                        tree: tree.clone(),
+                        patch_tree,
+                    };
+                    let xml = patch(&template_xml, &profile, &choice, &support_xml);
+                    hashed_bytes = hashed_bytes.checked_add(xml.len()).ok_or_else(|| {
+                        unsupported(
+                            "controlled materialization hashing exceeds 256 MiB preparation budget",
+                        )
+                    })?;
+                    if hashed_bytes > 256 * 1024 * 1024 {
+                        return Err(unsupported(
+                            "controlled materialization hashing exceeds 256 MiB preparation budget",
+                        ));
+                    }
+                    candidate_index
+                        .entry(tree.selection.clone())
+                        .or_default()
+                        .entry(id.clone())
+                        .or_default()
+                        .insert(*support, alternatives.len());
+                    alternatives.push(ControlledMaceAlternative {
+                        id: format!(
+                            "{}{id}/{}",
+                            if patch_tree {
+                                format!(
+                                    "class/{}/asc/{}/entrance/{}/",
+                                    tree.selection.class_id,
+                                    tree.selection.ascendancy_id.as_deref().unwrap_or("none"),
+                                    tree.selection
+                                        .entrance_node_id
+                                        .map_or_else(|| "none".into(), |id| id.to_string())
+                                )
+                            } else {
+                                String::new()
+                            },
+                            if *support == MaceSupportChoice::None {
+                                "none"
+                            } else {
+                                "brutality_i"
+                            }
+                        ),
+                        weapon_id: id.clone(),
+                        support: *support,
+                        tree: tree.selection.clone(),
+                        xml_sha256: hash(&xml),
+                        candidate: candidate.clone(),
+                    });
+                    choices.insert(candidate, choice);
+                }
             }
         }
         Ok(Self {
@@ -327,6 +452,8 @@ impl ControlledMaceCatalog {
             catalog,
             alternatives,
             choices,
+            tree_choices,
+            candidate_index,
         })
     }
     pub fn snapshot(&self) -> &Arc<GameDataSnapshot> {
@@ -344,17 +471,31 @@ impl ControlledMaceCatalog {
     pub fn alternatives(&self) -> &[ControlledMaceAlternative] {
         &self.alternatives
     }
+    pub fn tree_choices(&self) -> &[ClassTreeSelection] {
+        &self.tree_choices
+    }
+    pub fn resolve_tree_candidate(
+        &self,
+        tree: &ClassTreeSelection,
+        weapon_id: &str,
+        support: MaceSupportChoice,
+    ) -> Option<&Candidate> {
+        let index = self
+            .candidate_index
+            .get(tree)?
+            .get(weapon_id)?
+            .get(&support)?;
+        self.alternatives.get(*index).map(|value| &value.candidate)
+    }
+    /// Resolve a weapon/support choice under the imported template's tree identity.
     pub fn resolve_candidate(
         &self,
         weapon_id: &str,
         support: MaceSupportChoice,
     ) -> Option<&Candidate> {
-        self.alternatives
-            .iter()
-            .find(|value| value.weapon_id == weapon_id && value.support == support)
-            .map(|value| &value.candidate)
+        self.resolve_tree_candidate(&self.profile.tree.selection, weapon_id, support)
     }
-    /// No paid passives, attribute modifiers or equipment dependencies are admitted here.
+    /// The admitted ordinary entrances do not change attributes; equipment dependencies are excluded.
     /// Aggregate support-color costs compete with individual requirements by maximum;
     /// they are never added to weapon or active-gem requirements.
     pub fn requirements(&self, candidate: &Candidate) -> Result<MaceRequirementAssessment> {
@@ -363,10 +504,7 @@ impl ControlledMaceCatalog {
             .get(candidate)
             .ok_or(ControlledMutationError::UnknownCandidate)?;
         let data = self.data.package();
-        let class = data
-            .tree
-            .class(6)
-            .map_err(|error| unsupported(&error.to_string()))?;
+        let class = &choice.tree.class;
         let available = MaceRequirementValues {
             level: self.profile.level,
             strength: class.base_strength,
@@ -464,6 +602,8 @@ impl ControlledMaceCatalog {
     pub fn bind_baseline(&self, result: &EvaluationResult) -> Result<VerifiedMaceScenario> {
         let choice = Choice {
             weapon: self.profile.weapon.clone(),
+            tree: self.profile.tree.clone(),
+            patch_tree: false,
             support: if self.profile.has_support {
                 MaceSupportChoice::BrutalityI
             } else {
@@ -550,6 +690,8 @@ impl ControlledMaceCatalog {
         }
         let choice = Choice {
             weapon: self.profile.weapon.clone(),
+            tree: self.profile.tree.clone(),
+            patch_tree: false,
             support: if self.profile.has_support {
                 MaceSupportChoice::BrutalityI
             } else {
@@ -682,6 +824,57 @@ impl ControlledMaceCatalog {
                 "native resolved weapon or support differs from candidate payload",
             ));
         }
+        self.check_native_tree(choice, result)?;
+        Ok(())
+    }
+    fn check_native_tree(&self, choice: &Choice, result: &EvaluationResult) -> Result<()> {
+        let attachments: Vec<_> = result
+            .attachments
+            .iter()
+            .filter(|attachment| {
+                attachment.media_type == "application/vnd.poe-optimizer.native-tree+json;version=1"
+            })
+            .collect();
+        if attachments.len() != 1 || attachments[0].content.len() > 64 * 1024 {
+            return Err(mismatch(
+                "one bounded native resolved-tree attachment is required",
+            ));
+        }
+        let actual: serde_json::Value = serde_json::from_str(&attachments[0].content)
+            .map_err(|error| mismatch(&error.to_string()))?;
+        let tree = &choice.tree;
+        let ascendancy = tree.ascendancy.as_ref().map(|asc| {
+            serde_json::json!({
+                "index":asc.class_index,"internal_id":asc.internal_id,"catalog_id":asc.catalog_id,
+                "name":asc.name,"start_node_id":asc.start_node_id,
+            })
+        });
+        let paid_nodes: Vec<_> = tree.paid_node.iter().map(|node| serde_json::json!({
+            "physical_node_id":node.physical_node_id,"effective_node_id":node.effective_source_id,
+            "name":node.name,"stats":node.stats,"override_provenance":node.provenance,
+        })).collect();
+        let expected = serde_json::json!({
+            "schema_version":1,
+            "class":{"index":tree.class.integer_id,"internal_id":tree.class.integer_id,
+                "source_index":tree.class.source_index,"name":tree.class.name,"start_node_id":tree.class.start_node_id},
+            "ascendancy":ascendancy,"allocated_nodes":tree.allocated_nodes,
+            "ordinary_allocated_count":paid_nodes.len(),"paid_nodes":paid_nodes,
+            "source":{"upstream_revision":self.data.tree().source.upstream_revision,
+                "tree_version":self.data.tree().source.tree_version,
+                "bundled_content_sha256":poe_optimizer_data::bundled::content_sha256()},
+            "data_identity":self.data.identity(),
+            "configured_effects":self.data.package().entrance_effects.iter().filter(|entry|
+                entry.class_id == tree.class.integer_id && tree.paid_node.as_ref().is_some_and(|node|
+                    entry.physical_node_id == node.physical_node_id)).collect::<Vec<_>>(),
+            "point_budget_verified":false,
+            "evidence_kind":"native_source_resolution",
+            "scope":"class_identity_and_zero_or_one_ordinary_entrance",
+        });
+        if actual != expected {
+            return Err(mismatch(
+                "native tree resolution differs from selected class, ascendancy, allocation or configured effects",
+            ));
+        }
         Ok(())
     }
     fn check_common_realization(&self, choice: &Choice, result: &EvaluationResult) -> Result<()> {
@@ -699,12 +892,23 @@ impl ControlledMaceCatalog {
         }
         let build = &result.build;
         if build.level != self.profile.level
-            || build.class_name != "Warrior"
-            || build.ascendancy_name != "None"
-            || build.tree_version != "0_5"
+            || build.class_name != choice.tree.class.name
+            || build.ascendancy_name
+                != choice
+                    .tree
+                    .ascendancy
+                    .as_ref()
+                    .map_or("None", |asc| asc.name.as_str())
+            || build.tree_version != self.data.package().tree.source.tree_version
             || build.main_socket_group != 1
             || build.skill_groups != 1
-            || build.allocated_nodes != [47175]
+            || build
+                .allocated_nodes
+                .iter()
+                .copied()
+                .collect::<BTreeSet<_>>()
+                != choice.tree.allocated_nodes
+            || build.allocated_nodes.len() != choice.tree.allocated_nodes.len()
         {
             return Err(mismatch("class, ascendancy, level, tree or group changed"));
         }
@@ -816,8 +1020,18 @@ impl ControlledMaceCatalog {
             &result.context,
             self.data.package(),
         )?;
-        check_template_frame(&self.template, &result.exports[0].content)?;
+        check_template_frame(
+            &patch(&self.template, &self.profile, choice, &self.support_xml),
+            &result.exports[0].content,
+        )?;
         Ok(())
+    }
+}
+fn fixed_warrior() -> ClassTreeSelection {
+    ClassTreeSelection {
+        class_id: 6,
+        ascendancy_id: None,
+        entrance_node_id: None,
     }
 }
 fn same_backend(left: &BackendIdentity, right: &BackendIdentity) -> bool {
@@ -849,8 +1063,6 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
     fixed(
         build,
         &[
-            ("className", "Warrior"),
-            ("ascendClassName", "None"),
             ("targetVersion", "0_1"),
             ("characterLevelAutoMode", "false"),
             ("mainSocketGroup", "1"),
@@ -862,11 +1074,6 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
     only(tree, &["activeSpec"], &["Spec"])?;
     fixed(tree, &[("activeSpec", "1")])?;
     let spec = child(tree, "Spec")?;
-    if !matches!(spec.attribute("classId"), Some("3" | "6")) {
-        return Err(unsupported(
-            "legacy classId must be 3 or canonical 6 under classInternalId 6",
-        ));
-    }
     only(
         spec,
         &[
@@ -874,6 +1081,7 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
             "classId",
             "classInternalId",
             "ascendClassId",
+            "ascendancyInternalId",
             "treeVersion",
             "nodes",
             "masteryEffects",
@@ -883,13 +1091,115 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
     fixed(
         spec,
         &[
-            ("classInternalId", "6"),
-            ("ascendClassId", "0"),
-            ("treeVersion", "0_5"),
-            ("nodes", ""),
+            ("treeVersion", data.tree.source.tree_version.as_str()),
             ("masteryEffects", ""),
         ],
     )?;
+    let class_id = integer(
+        spec.attribute("classInternalId"),
+        0,
+        u32::MAX,
+        "classInternalId",
+    )?;
+    let class = data
+        .tree
+        .class(class_id)
+        .map_err(|error| unsupported(&error.to_string()))?;
+    let source_class = integer(spec.attribute("classId"), 0, u32::MAX, "classId")?;
+    if (source_class != class_id && source_class != class.source_index)
+        || build.attribute("className") != Some(class.name.as_str())
+    {
+        return Err(unsupported("class identity fields disagree"));
+    }
+    let ascendancy_index = integer(
+        spec.attribute("ascendClassId"),
+        0,
+        u32::MAX,
+        "ascendClassId",
+    )?;
+    let ascendancy_id = spec.attribute("ascendancyInternalId").unwrap_or("");
+    let selection = ClassTreeSelection {
+        class_id,
+        ascendancy_id: if ascendancy_index == 0 {
+            None
+        } else {
+            Some(ascendancy_id.into())
+        },
+        entrance_node_id: None,
+    };
+    let base = selection
+        .resolve(&data.tree)
+        .map_err(|error| unsupported(&error.to_string()))?;
+    if base.ascendancy.as_ref().map_or(0, |asc| asc.class_index) != ascendancy_index
+        || base
+            .ascendancy
+            .as_ref()
+            .map_or("", |asc| asc.internal_id.as_str())
+            != ascendancy_id
+        || build.attribute("ascendClassName")
+            != Some(
+                base.ascendancy
+                    .as_ref()
+                    .map_or("None", |asc| asc.name.as_str()),
+            )
+    {
+        return Err(unsupported("ascendancy identity fields disagree"));
+    }
+    let nodes = spec
+        .attribute("nodes")
+        .ok_or_else(|| unsupported("explicit nodes required"))?;
+    let mut requested = BTreeSet::new();
+    if !nodes.is_empty() {
+        for node in nodes.split(',') {
+            if !requested.insert(integer(Some(node), 0, u32::MAX, "allocated node")?) {
+                return Err(unsupported("duplicate allocated node"));
+            }
+        }
+    }
+    let paid: Vec<_> = requested
+        .difference(&base.implicit_roots)
+        .copied()
+        .collect();
+    if paid.len() > 1 {
+        return Err(unsupported("at most one ordinary entrance is supported"));
+    }
+    let tree = ClassTreeSelection {
+        entrance_node_id: paid.first().copied(),
+        ..selection
+    }
+    .resolve(&data.tree)
+    .map(Arc::new)
+    .map_err(|error| unsupported(&error.to_string()))?;
+    let mut tree_attribute_ranges = BTreeMap::new();
+    for (node, fields) in [
+        (build, &["className", "ascendClassName"][..]),
+        (
+            spec,
+            &[
+                "classId",
+                "classInternalId",
+                "ascendClassId",
+                "ascendancyInternalId",
+                "nodes",
+            ][..],
+        ),
+    ] {
+        for name in fields {
+            if let Some(attribute) = node
+                .attributes()
+                .find(|attribute| attribute.name() == *name)
+            {
+                tree_attribute_ranges.insert((*name).into(), attribute.range_value());
+            }
+        }
+    }
+    // Insert a missing optional ascendancy identity before the first existing attribute.
+    let ascendancy_insert = spec
+        .attributes()
+        .next()
+        .expect("validated Spec attributes")
+        .range()
+        .start;
     let skills = child(root, "Skills")?;
     only(
         skills,
@@ -1010,6 +1320,9 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
         weapon,
         active_attributes: attributes(gems[0]),
         has_support: gems.len() == 2,
+        tree,
+        tree_attribute_ranges,
+        ascendancy_insert,
     })
 }
 const INPUT_NAMES: &[&str] = &[
@@ -1103,8 +1416,15 @@ fn check_export(
     fixed(
         build,
         &[
-            ("className", "Warrior"),
-            ("ascendClassName", "None"),
+            ("className", choice.tree.class.name.as_str()),
+            (
+                "ascendClassName",
+                choice
+                    .tree
+                    .ascendancy
+                    .as_ref()
+                    .map_or("None", |asc| asc.name.as_str()),
+            ),
             ("mainSocketGroup", "1"),
         ],
     )?;
@@ -1117,15 +1437,41 @@ fn check_export(
     fixed(
         spec,
         &[
-            ("classId", "6"),
-            ("classInternalId", "6"),
-            ("ascendancyInternalId", ""),
-            ("ascendClassId", "0"),
-            ("treeVersion", "0_5"),
-            ("nodes", "47175"),
+            ("classId", &choice.tree.class.integer_id.to_string()),
+            ("classInternalId", &choice.tree.class.integer_id.to_string()),
+            (
+                "ascendancyInternalId",
+                choice
+                    .tree
+                    .ascendancy
+                    .as_ref()
+                    .map_or("", |asc| asc.internal_id.as_str()),
+            ),
+            (
+                "ascendClassId",
+                &choice
+                    .tree
+                    .ascendancy
+                    .as_ref()
+                    .map_or(0, |asc| asc.class_index)
+                    .to_string(),
+            ),
+            ("treeVersion", &data.tree.source.tree_version),
             ("masteryEffects", ""),
         ],
     )?;
+    let nodes = spec
+        .attribute("nodes")
+        .ok_or_else(|| mismatch("exported nodes missing"))?;
+    let mut allocated = BTreeSet::new();
+    for node in nodes.split(',') {
+        if !allocated.insert(integer(Some(node), 0, u32::MAX, "exported node")?) {
+            return Err(mismatch("duplicate exported allocation"));
+        }
+    }
+    if allocated != choice.tree.allocated_nodes {
+        return Err(mismatch("exported allocations differ from selected tree"));
+    }
     if spec
         .attribute("secondaryAscendClassId")
         .is_some_and(|value| value != "nil")
@@ -1350,7 +1696,31 @@ fn exported_scenario(xml: &str, support_id: &str) -> Result<String> {
         {
             return String::new();
         }
-        let mut output = format!("<{tag}:{:?}>", attributes(node));
+        if tag == "URL"
+            && node
+                .parent_element()
+                .is_some_and(|parent| parent.has_tag_name("Spec"))
+        {
+            return String::new();
+        }
+        let mut fields = attributes(node);
+        if tag == "Build" {
+            for name in ["className", "ascendClassName"] {
+                fields.remove(name);
+            }
+        }
+        if tag == "Spec" {
+            for name in [
+                "classId",
+                "classInternalId",
+                "ascendClassId",
+                "ascendancyInternalId",
+                "nodes",
+            ] {
+                fields.remove(name);
+            }
+        }
+        let mut output = format!("<{tag}:{fields:?}>");
         if !(tag == "Item"
             && node
                 .parent_element()
@@ -1418,6 +1788,53 @@ fn patch(template: &str, profile: &Profile, choice: &Choice, support_xml: &str) 
         ),
         (profile.support_range.clone(), support),
     ];
+    if choice.patch_tree {
+        let tree = &choice.tree;
+        let fields = [
+            ("className", tree.class.name.clone()),
+            (
+                "ascendClassName",
+                tree.ascendancy
+                    .as_ref()
+                    .map_or("None", |asc| asc.name.as_str())
+                    .into(),
+            ),
+            ("classId", tree.class.integer_id.to_string()),
+            ("classInternalId", tree.class.integer_id.to_string()),
+            (
+                "ascendClassId",
+                tree.ascendancy
+                    .as_ref()
+                    .map_or(0, |asc| asc.class_index)
+                    .to_string(),
+            ),
+            (
+                "ascendancyInternalId",
+                tree.ascendancy
+                    .as_ref()
+                    .map_or("", |asc| asc.internal_id.as_str())
+                    .into(),
+            ),
+            // Roots are implicit; preserve only the paid physical node in authored XML.
+            (
+                "nodes",
+                tree.selection
+                    .entrance_node_id
+                    .map_or_else(String::new, |id| id.to_string()),
+            ),
+        ];
+        for (name, value) in fields {
+            if let Some(range) = profile.tree_attribute_ranges.get(name) {
+                patches.push((range.clone(), escape_attribute(&value)));
+            } else {
+                debug_assert_eq!(name, "ascendancyInternalId");
+                patches.push((
+                    profile.ascendancy_insert..profile.ascendancy_insert,
+                    format!("{name}=\"{}\" ", escape_attribute(&value)),
+                ));
+            }
+        }
+    }
     patches.sort_by_key(|(range, _)| std::cmp::Reverse(range.start));
     let mut output = template.to_owned();
     for (range, replacement) in patches {

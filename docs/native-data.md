@@ -132,7 +132,10 @@ Evaluation reports use schema **3**; saved assessment accepts schemas 2 and 3, a
 native reports require a valid data identity. Native results carry reviewed/custom trust in
 warnings, so it remains visible without `--raw`; raw mode additionally retains structured
 `game-data` and configured entrance-effect diagnostics. Controlled-search schema **2** records selected data identity/trust, requirement rejection
-evidence and the existing evaluation budget ledger. Its native export companion retains
+evidence and the existing evaluation budget ledger. Expanded class/tree search uses report
+schema **3**, adding ordered tree choices and canonical admission evidence. The same selected
+snapshot supplies class attributes, resolved physical/effective entrance views, graph
+projection, generated XML and numerical configuration. It adds no package schema or data change. Its native export companion retains
 structured trust and the selected package path as a reload hint. Benchmark schema **2** reports
 structured `data_trust`, identity and separate backend/data initialization time.
 

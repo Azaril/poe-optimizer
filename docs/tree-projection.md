@@ -155,3 +155,14 @@ overlays, tampered contents with unchanged source labels, stable identities and
 coverage separation. The helper test is ignored in direct enumeration and invoked
 by the parent tests. Targeted Clippy passes with warnings denied. These are
 projection/finite-contract tests; live mutation parity remains a separate gate.
+
+## Portable class/entrance composition
+
+`poe_optimizer_data::class_tree` resolves a typed `ClassTreeSelection` against the selected
+validated `GameDataSnapshot`. Its partial candidate catalog contains retained roots and
+ordinary entrance nodes with exact owner sets and retained links. It preserves physical
+allocation IDs and class-specific effective views, including Witch `4739 -> 17306` and
+Huntress `56651 -> 39263`. Its identity binds the projection implementation and full dataset.
+The controlled Mace adapter rebinds the final catalog to supplied skills/items and selected
+tree choices. Caller budgets and locks are separate canonical constraints. This path
+requires neither a complete extraction nor PoB at runtime; excluded nodes stay excluded.

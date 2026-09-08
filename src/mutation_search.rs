@@ -1,7 +1,8 @@
 //! Experimental, explicitly bounded normal-Mace mutation search.
 use poe_optimizer_core::{
     candidate::{
-        Candidate, CandidateBudgets, CandidateConstraints, CandidateDomain, SkillGroupLocks,
+        AscendancyLock, Candidate, CandidateBudgets, CandidateConstraints, CandidateDomain,
+        SkillGroupLocks,
     },
     evaluation::{
         BackendIdentity, CalculationBackend, Engine, EvaluationBudget, EvaluationEngine,
@@ -11,6 +12,7 @@ use poe_optimizer_core::{
     objective::{ObjectiveSpec, ScoringPolicy},
     options::EvaluationOptions,
 };
+use poe_optimizer_data::class_tree::{self, ClassTreeSelection};
 #[cfg(feature = "pob")]
 use poe_optimizer_import::controlled_mace::VerifiedMaceScenario;
 use poe_optimizer_import::{
@@ -39,7 +41,7 @@ pub(crate) enum Strategy {
 }
 #[derive(clap::Args)]
 pub(crate) struct Args {
-    /// JSON problem containing a supported template, finite weapon/support choices and objective.
+    /// JSON problem containing a supported template, finite build choices and objective.
     #[arg(long)]
     problem: PathBuf,
     /// Native Rust calculation or optional PoB reference adapter.
@@ -78,15 +80,31 @@ struct Problem {
     supports: Vec<MaceSupportChoice>,
     objective: ObjectiveSpec,
     #[serde(default)]
+    tree_search: Option<TreeSearch>,
+    #[serde(default)]
     locks: Locks,
     #[serde(default)]
     neighborhood: Neighborhood,
 }
+/// Explicit available points; neither level nor observed allocations supply a budget.
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+struct TreeSearch {
+    ordinary_passive_points: u32,
+    ascendancy_passive_points: u32,
+    #[serde(default)]
+    selections: Option<Vec<ClassTreeSelection>>,
+}
+const MAX_COMPOSED_CANDIDATES: usize = 93 * 128;
 #[derive(Debug, Default, Deserialize, Serialize)]
 #[serde(default, deny_unknown_fields)]
 struct Locks {
     weapon_id: Option<String>,
     support: Option<MaceSupportChoice>,
+    class_id: Option<u32>,
+    ascendancy: Option<AscendancyLock>,
+    allocated_passives: BTreeSet<u32>,
+    unallocated_passives: BTreeSet<u32>,
 }
 struct Domain<'a> {
     registry: &'a ControlledMaceCatalog,
@@ -94,17 +112,21 @@ struct Domain<'a> {
     space: DiscreteSpace,
     weapons: Vec<String>,
     supports: Vec<MaceSupportChoice>,
+    tree_choices: Option<Vec<ClassTreeSelection>>,
     neighborhood: Neighborhood,
 }
 impl Domain<'_> {
     fn resolve(&self, point: &DiscretePoint) -> Result<&Candidate, String> {
         self.space.validate(point)?;
-        self.registry
-            .resolve_candidate(
-                &self.weapons[point.choices[0] as usize],
-                self.supports[point.choices[1] as usize],
-            )
-            .ok_or_else(|| "Unregistered complete candidate".into())
+        let weapon = &self.weapons[point.choices[0] as usize];
+        let support = self.supports[point.choices[1] as usize];
+        let candidate = if let Some(trees) = &self.tree_choices {
+            self.registry
+                .resolve_tree_candidate(&trees[point.choices[2] as usize], weapon, support)
+        } else {
+            self.registry.resolve_candidate(weapon, support)
+        };
+        candidate.ok_or_else(|| "Unregistered complete candidate".into())
     }
 }
 impl SearchDomain<DiscretePoint> for Domain<'_> {
@@ -262,8 +284,28 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         }
     }
     let problem = super::read_json::<Problem>(&args.problem, 512 * 1024)?;
-    if problem.schema_version != 1 {
-        return Err("Unsupported mutation problem schema".into());
+    let expanded = match (problem.schema_version, problem.tree_search.as_ref()) {
+        (1, None) => false,
+        (2, Some(tree)) if tree.ordinary_passive_points <= 1 && tree.ascendancy_passive_points == 0 => true,
+        (2, Some(_)) => return Err("Tree search requires an ordinary point budget of 0 or 1 and an ascendancy point budget of 0".into()),
+        _ => return Err("Use problem schema 1 without tree_search, or schema 2 with explicit tree_search point budgets".into()),
+    };
+    if !expanded
+        && (problem.locks.class_id.is_some()
+            || problem.locks.ascendancy.is_some()
+            || !problem.locks.allocated_passives.is_empty()
+            || !problem.locks.unallocated_passives.is_empty())
+    {
+        return Err(
+            "Class, ascendancy and passive locks require problem schema 2 with tree_search".into(),
+        );
+    }
+    if !problem
+        .locks
+        .allocated_passives
+        .is_disjoint(&problem.locks.unallocated_passives)
+    {
+        return Err("A passive cannot be locked both allocated and unallocated".into());
     }
     problem.neighborhood.validate()?;
     let input = args
@@ -277,12 +319,32 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         return Err("--data is supported only by the native backend".into());
     }
     let snapshot = args.data.snapshot()?;
-    let registry = ControlledMaceCatalog::with_data(
-        Arc::clone(&snapshot),
-        imported.xml,
-        problem.weapons.clone(),
-        problem.supports.clone(),
-    )?;
+    let registry = if let Some(tree) = &problem.tree_search {
+        let selections = if let Some(selections) = &tree.selections {
+            selections.clone()
+        } else {
+            class_tree::selections(snapshot.tree())?
+                .into_iter()
+                .filter(|selection| {
+                    tree.ordinary_passive_points > 0 || selection.entrance_node_id.is_none()
+                })
+                .collect()
+        };
+        ControlledMaceCatalog::with_tree_choices(
+            Arc::clone(&snapshot),
+            imported.xml,
+            problem.weapons.clone(),
+            problem.supports.clone(),
+            selections,
+        )?
+    } else {
+        ControlledMaceCatalog::with_data(
+            Arc::clone(&snapshot),
+            imported.xml,
+            problem.weapons.clone(),
+            problem.supports.clone(),
+        )?
+    };
     let backend: Box<dyn CalculationBackend + Send + Sync> = match args.backend {
         super::BackendChoice::Native => Box::new(poe_optimizer_native::NativeBackend::with_data(
             Arc::new(poe_optimizer_native::CompiledGameData::compile(
@@ -318,6 +380,45 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         .collect::<BTreeSet<_>>()
         .into_iter()
         .collect();
+    let tree_choices = if expanded {
+        let choices: Vec<_> = registry
+            .tree_choices()
+            .iter()
+            .filter(|selection| {
+                let passives: BTreeSet<_> = selection.entrance_node_id.into_iter().collect();
+                problem
+                    .locks
+                    .class_id
+                    .is_none_or(|id| id == selection.class_id)
+                    && problem
+                        .locks
+                        .ascendancy
+                        .as_ref()
+                        .is_none_or(|lock| match lock {
+                            AscendancyLock::None => selection.ascendancy_id.is_none(),
+                            AscendancyLock::Id(id) => selection.ascendancy_id.as_ref() == Some(id),
+                        })
+                    && problem.locks.allocated_passives.is_subset(&passives)
+                    && problem.locks.unallocated_passives.is_disjoint(&passives)
+            })
+            .cloned()
+            .collect();
+        if choices.is_empty() {
+            return Err(
+                "No supplied tree selections match the class, ascendancy and passive locks".into(),
+            );
+        }
+        Some(choices)
+    } else {
+        None
+    };
+    let exemplar = |weapon: &str, support| {
+        if let Some(trees) = &tree_choices {
+            registry.resolve_tree_candidate(&trees[0], weapon, support)
+        } else {
+            registry.resolve_candidate(weapon, support)
+        }
+    };
     let mut locks = BTreeMap::new();
     if let Some(id) = &problem.locks.weapon_id {
         locks.insert(
@@ -340,16 +441,26 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let mut constraints = CandidateConstraints {
         required_skill_ids: BTreeSet::from([registry.required_skill_id().into()]),
         budgets: CandidateBudgets {
+            ordinary_passive_points: problem
+                .tree_search
+                .as_ref()
+                .map_or(0, |tree| tree.ordinary_passive_points),
+            ascendancy_passive_points: problem
+                .tree_search
+                .as_ref()
+                .map_or(0, |tree| tree.ascendancy_passive_points),
             active_skill_count: 1,
             supports_per_skill: 1,
             ..Default::default()
         },
         ..Default::default()
     };
+    constraints.locks.class_id = problem.locks.class_id.map(|id| id.to_string());
+    constraints.locks.ascendancy = problem.locks.ascendancy.clone();
+    constraints.locks.allocated_passives = problem.locks.allocated_passives.clone();
+    constraints.locks.unallocated_passives = problem.locks.unallocated_passives.clone();
     if let Some(id) = &problem.locks.weapon_id {
-        let exemplar = registry
-            .resolve_candidate(id, supports[0])
-            .ok_or("Unknown locked weapon")?;
+        let exemplar = exemplar(id, supports[0]).ok_or("Unknown locked weapon")?;
         let item = exemplar.equipment["Weapon 1"].clone();
         constraints.required_item_instance_ids.insert(item.clone());
         constraints
@@ -358,9 +469,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             .insert("Weapon 1".into(), Some(item));
     }
     if let Some(support) = problem.locks.support {
-        let exemplar = registry
-            .resolve_candidate(&weapons[0], support)
-            .ok_or("Unknown locked support")?;
+        let exemplar = exemplar(&weapons[0], support).ok_or("Unknown locked support")?;
         constraints.locks.skill_groups.insert(
             "pob-group-1".into(),
             SkillGroupLocks {
@@ -374,32 +483,54 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let id = format!(
         "{:x}",
         Sha256::digest(serde_json::to_vec(&(
-            "controlled-mace-axes-v1",
+            "controlled-mace-axes-v2",
             &registry.catalog().identity,
             &weapons,
             &supports,
+            &tree_choices,
+            &constraints,
             &locks
         ))?)
     );
+    let mut cardinalities = vec![weapons.len() as u32, supports.len() as u32];
+    if let Some(trees) = &tree_choices {
+        cardinalities.push(trees.len() as u32);
+    }
     let domain = Domain {
         registry: &registry,
         rules: CandidateDomain::new(registry.catalog().clone(), constraints.clone())?,
-        space: DiscreteSpace::new(id, vec![weapons.len() as u32, supports.len() as u32], locks)?,
+        space: DiscreteSpace::new(id, cardinalities, locks)?,
         weapons,
         supports,
+        tree_choices,
         neighborhood: problem.neighborhood.clone(),
     };
-    // This closed domain has at most 128 combinations. Preflight the locked domain
-    // before even the diagnostic template attempt, independently of proposal budget.
+    // Preflight bounded lock-admissible choices before the diagnostic template attempt.
+    // Index once: composed domains must not scan every alternative per candidate.
+    let alternative_index: BTreeMap<_, _> = registry
+        .alternatives()
+        .iter()
+        .map(|alternative| (&alternative.candidate, alternative))
+        .collect();
     let mut legal_candidates = Vec::new();
     let mut rejected_candidates = Vec::new();
-    for point in domain.space.enumerate(128)? {
+    let mut rejected_rules = Vec::new();
+    let mut checked_candidates = 0usize;
+    for point in domain.space.enumerate(MAX_COMPOSED_CANDIDATES)? {
+        if Instant::now() >= deadline {
+            break;
+        }
         let candidate = domain.resolve(&point)?;
-        let alternative = registry
-            .alternatives()
-            .iter()
-            .find(|entry| &entry.candidate == candidate)
+        let alternative = alternative_index
+            .get(&candidate)
             .ok_or("Missing requirement alternative")?;
+        checked_candidates += 1;
+        let validation = domain.rules.validate(candidate);
+        if !validation.is_searchable() {
+            rejected_rules
+                .push(serde_json::json!({"alternative_id":alternative.id,"validation":validation}));
+            continue;
+        }
         let assessment = registry.requirements(candidate)?;
         if assessment.is_legal() {
             legal_candidates.push(alternative.id.clone());
@@ -409,11 +540,13 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         }
     }
     let mut report = serde_json::json!({
-        "schema_version":2,"status":"experimental_mutation_search","diagnostic_only":true,
+        "schema_version":if expanded {3} else {2},"status":"experimental_mutation_search","diagnostic_only":true,
         "requested_backend":engine.capabilities().id,"execution_kind":if execution == ExecutionKind::RustCpu {"rust_cpu"} else {"external_process"},
         "data":{"identity":snapshot.identity(),"trust":snapshot.trust(),"uses_packaged_default":args.data.data.is_none()},
         "requirements":{"scope":"controlled_mace_requirements_v1","legal_candidates":legal_candidates,"rejected_candidates":rejected_candidates},
-        "scope":"normal_mace_weapon_support_profile_v1","problem":problem,"template_xml_sha256":imported.sha256,
+        "admission":{"complete":Some(checked_candidates as u128)==domain.space.size(),"checked_candidates":checked_candidates,"rejected_candidates":rejected_rules},
+        "tree_choices":domain.tree_choices,
+        "scope":if expanded {"normal_mace_class_entrance_weapon_support_profile_v1"} else {"normal_mace_weapon_support_profile_v1"},"problem":problem,"template_xml_sha256":imported.sha256,
         "template":registry.template_build(),"catalog":registry.catalog(),"alternatives":registry.alternatives(),
         "candidate_constraints":constraints,"space":domain.space,"strategy":args.strategy,"neighborhood":domain.neighborhood,
         "run_budget":{"max_evaluations":args.max_evaluations,"timeout_seconds":args.timeout_seconds,"jobs":args.jobs,"seed":args.seed,"max_proposals":args.max_proposals,"max_rounds":args.max_rounds,"reserved_template_attempts":1,"reserved_verification_attempts":1},
@@ -427,7 +560,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     if legal_candidates.is_empty() {
         report["termination"] = serde_json::json!("empty_legal_domain");
         report["export"]["reason"] = serde_json::json!(
-            "Every choice allowed by the locks fails controlled-profile requirements; see requirements.rejected_candidates"
+            "Every choice allowed by the locks fails finite rules or controlled-profile requirements; see admission.rejected_candidates and requirements.rejected_candidates"
         );
         report["elapsed_ms"] = serde_json::json!(started.elapsed().as_secs_f64() * 1000.);
         return emit(&args, report);

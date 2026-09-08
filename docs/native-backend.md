@@ -169,10 +169,14 @@ not establish optimizer quality, browser speed or a speedup over PoB.
 
 ## Verification and expansion gates
 
-The controlled Mace search accepts selected compatible datasets and remains limited to Warrior without paid passives or ascendancy;
-new evaluator coverage is not automatically added to its finite search catalog.
+The controlled Mace search accepts selected compatible datasets. Its schema-1 problem keeps
+the original fixed Warrior profile; schema 2 adds all 31 admitted class/ascendancy identities
+and zero or one class-local ordinary entrance, composed with the existing weapons/supports.
+Point budgets come from the caller and requirements use selected class attributes. This is
+still a finite restricted catalog; new evaluator coverage is not automatically searchable.
 Native controlled search checks the exact materialized source export, class/root/skill
-projection, resolved weapon and support evidence, fixed external configuration and backend
+projection, physical/effective entrance IDs and configured effects, resolved weapon and
+support evidence, fixed external configuration and backend
 identity. The top feasible candidate must pass a fresh evaluation with matching assessment
 before export. Derived condition tables are allowed to reflect the candidate. Every result
 retains `diagnostic_only`; repeatability is not complete game-legality certification.

@@ -2,19 +2,20 @@
 
 Last updated: 2026-09-07
 
-Completed checkpoint: dataset-bound controlled Mace search and explicit requirement
-validation (D4), starting from clean `6176123`. The selected immutable snapshot now binds
-catalog materialization, pre-dispatch legality, native evaluation and export metadata.
-All 333 workspace tests, 32 native-only CLI tests, lint, formatting, dependency isolation,
-five portable WASM libraries and release reproduction pass. Code `9388935` is published
-on main; hosted Windows/Linux CI passes for that commit. Next: connect class/ascendancy/passive materialization to finite search.
+Completed local checkpoint: class/ascendancy/entrance catalog composition, starting from
+clean `ed128f5`. The shared portable resolver, partial candidate graph, source-preserving
+materializer and schema-2 search problem are implemented. Expanded reports use schema 3;
+explicit point budgets, locks and selected-class requirements run before evaluation.
+All 353 workspace tests, 40 native-only CLI tests, lint, formatting, dependency isolation,
+five portable WASM libraries and release reproduction pass. Publication and hosted CI
+status is tracked below.
 
-The package is schema 2 / `poe2-native-profiles-v2`, with source-derived equipment,
-active-gem and support requirements. The fixed Warrior/no-paid-passive search scope,
-PoB source pin, existing numerical values and independent goldens remain unchanged.
-Earlier throughput evidence remains tied to `1a44c13`; no new speed measurement is claimed.
-Full native coverage, the supplied minion build and the first usable all-six-dimension
-optimizer remain unfinished.
+The data package remains schema 2 / `poe2-native-profiles-v2`, **141,502 bytes**, SHA-256
+`854dca85abcd031905761d9533b7437ce28e40b5154c23c99655084fbb719507`.
+The PoB source pin, package/tree artifacts, supplied originals, numerical formulas and
+independent goldens are unchanged. Earlier throughput evidence remains tied to `1a44c13`;
+no new speed measurement is claimed. Full native coverage, the supplied minion build and
+the first usable all-six-dimension optimizer remain unfinished.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
 work, and the next session's starting point. [Design](design.md) defines the intended system
@@ -39,22 +40,15 @@ the design documents.
 2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve supplied
    original exports and independent Spark/Mace goldens. Maintain actual-source interpreted
    and warmed parity, full-build differential cases and strict unsupported-mechanic errors.
-3. Continue class/ascendancy/passive catalog composition next, using the same selected
-   snapshot and explicit caller point budgets. The bounded data-search slice below is
-   implemented; broader source compatibility is a separate remaining D4 gate.
-   Preserve schema-2 requirement checks, exact source/tree compatibility and default golden
-   parity; review the compatibility contract before admitting another upstream revision.
-4. Add source-preserving class/ascendancy/passive materialization and connect it to a finite search
-   catalog using the authenticated portable data. Rebind composed catalog identities to
-   tree, skill and item payloads; validate requested versus realized physical allocations,
-   effective entrance stats and source exports. Start with the numerically validated
-   31 identities and 16 ordinary entrance cases, explicit caller 0/1 ordinary-point and
-   zero ascendancy-point budgets, shared-root ownership and exact locks. The native
-   evaluator's observed allocation count must never establish its available point budget.
-   Extend the implemented equipment/gem requirement seam to the resolved selected class
-   and admitted passive effects before cross-class item recommendations. Diagnostic
-   calculation alone does not prove that the items and gems can be equipped.
-   The current controlled Mace search remains Warrior/no-paid-passives/none-ascendancy.
+3. Complete or inspect the current class/entrance checkpoint validation and publication
+   table below. The agreed bounded composition is implemented: selected data, shared typed
+   class/tree resolution, composed finite graph/catalog, exact source spans, independent
+   locks and caller 0/1 ordinary-point / zero ascendancy-point budgets. Legacy fixed Warrior
+   problems remain supported. Never infer an available point budget from observed counts.
+4. Continue the source-audited signed resistance modifier slice below next. Preserve physical and
+   effective node identity, selected-data requirements and strict unknown-mechanic rejection.
+   Broader source compatibility remains a separate D4 gate; review that contract before
+   admitting another upstream revision. Keep the source pin and independent goldens stable.
 5. Broaden source-derived passive/modifier extraction beyond the twelve exact admitted
    stat strings and nine numeric modifier fields, with actual-source and full-build parity
    before relaxing admission. Preserve the data bundle's distinction between retained and
@@ -72,7 +66,7 @@ the design documents.
 7. Specialize coordinated proposals with game-aware repair and diverse archives. Preserve
    exhaustive tiny references, deterministic one/many-worker comparisons, locks and empty
    sample retry bounds. Benchmark random, greedy and alternating baselines at 5, 15 and 30
-   minutes in mapping/bossing before making optimizer-quality claims. Current eight-state
+   minutes in mapping/bossing before making optimizer-quality claims. Current finite
    Mace search is a diagnostic integration test, not that benchmark or the first product.
 8. Profile preparation/calculation/result costs on realistic supported native builds before
    tuning. Reuse immutable prepared inputs, compiled modifiers and task-local scratch state;
@@ -96,6 +90,79 @@ Assessment reports constraint evidence and primary availability; it does not cer
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
 
+## Class/entrance catalog composition - 2026-09-07
+
+Starting point: clean `ed128f5`. The next slice of the existing plan composes admitted
+class/ascendancy/ordinary-entrance choices with the current Mace equipment/support catalog.
+It introduces no new game formulas, data records, dependencies or upstream revision.
+
+| Checkpoint | State |
+| --- | --- |
+| Portable resolution | `poe_optimizer_data::class_tree` owns typed selection/resolution and a partial candidate graph. All 93 admitted combinations preserve shared root ownership, physical allocations and class-specific effective entrance sources. Native XML admission uses the same resolver. No complete tree extraction is fabricated from the partial bundle. |
+| Catalog/materialization | `ControlledMaceCatalog::with_tree_choices` composes ordered selections with weapon/support payloads, binding full selected data and all payloads in catalog identity. Exact Build/Spec attribute edits preserve untouched source bytes; legacy constructors retain fixed Warrior behavior. Requirements use resolved selected class attributes. Preparation is capped at 11,904 candidates and 256 MiB of estimated source-hashing work. |
+| CLI and legality | Problem schema 2 requires explicit available ordinary points 0/1 and ascendancy points 0. Optional supplied selections and independent class/ascendancy/paid-node/item/support locks precede dispatch. Report schema 3 records ordered third-axis choices and canonical admission evidence, alongside requirements and the existing full ledger. Legacy problem/report schemas remain 1/2. |
+| Realization | Both backends validate the requested selected class/tree state. Native checks exact XML plus physical/effective entrance and configured-effect diagnostics; PoB checks its normalized export against the requested selection and immutable source frame. Finalists require fresh calculation and exact reloadable exports. |
+| Targeted evidence | Eight native CLI tests and a four-candidate expanded PoB CLI search pass. Full 744-state serial/Rayon checks admit 504 combinations and reject 240 strength failures; all-entrance budget-zero domains consume zero evaluations. Twelve fresh mixed materializations across all eight classes and two fresh override exports match PoB; native diagnostic tampering rejects. |
+| Integrated validation | **353 workspace tests pass, zero failures**, with nine ignored child helpers exercised by parents. **40 native-only CLI tests pass**. Workspace/native-only Clippy, formatting, dependency isolation and five portable WASM libraries pass. The unchanged six numerical goldens and 100-case prior PoB matrix still pass. Logs: `runs/class-search-{workspace-tests,workspace-clippy,native-only-tests,native-only-clippy,fmt,wasm,release}.log`, `runs/class-search-native-dependencies.txt`. |
+| Review/static audit | Independent catalog/CLI and source-preservation/identity reviews found no remaining blockers. Audit passes: 30 Markdown files, 234 local file links and 19 heading links; strict UTF-8, source pin, package/tree artifacts and independent/original fixtures remain unchanged. Evidence: `runs/class-search-static-audit.json`. |
+| Release evidence | Native-only release build passes. Complete serial/four-worker archives and finalists match, each using 506 attempts. Reviewed winner: `class/6/asc/none/entrance/3936/smithing-q20/none`, **22.760867499999996 DPS**. Prior custom package with quadrupled Wooden Club endpoints selects `class/8/asc/none/entrance/56651/wooden-q20/brutality_i`, **71.44014424999999 DPS**. Fresh XML reevaluation and backend/data/trust metadata match. Locked Witch 4739 resolves effect 17306 in three attempts; its explicit over-budget variant uses zero. Artifacts: `runs/class-search-release-check/summary.json`; executable SHA-256 `215828d7944f34ccbbac33169284afaaf8edb457ed03e423f9fa98c0fd438409`. |
+| Publication | All local code, release and documentation checks pass. Ready for authorized commit/push to main; hosted Windows/Linux CI pending. |
+
+The [expanded example](../examples/mace-class-search.json) combines 93 tree choices with
+four weapons and two supports. Complete default-data search takes 506 calculations:
+one template, 504 legal alternatives and one finalist. This is a tiny integration reference,
+not a realistic optimizer-quality benchmark. Ascendancy selections allocate no ascendancy
+passives; the ordinary tree scope remains zero or one entrance. General equipment
+self-dependencies, supporting active skills, multiple support slots and full game coverage
+remain unimplemented.
+
+### Next implementation slice: signed resistance modifiers
+
+The read-only pinned-source audit identifies unconditional signed player BASE resistances
+as the next bounded expansion. This makes defensive constraints respond to passive choices
+without introducing attribute/equipment dependencies. Keep broader native mechanics as the
+end state; these four source records are a validation slice, not a hard-coded Rust database:
+
+| Owned ascendancy / physical node | Pinned source stat | Direct root |
+| --- | --- | --- |
+| Warrior3 / 14960 | +8% Fire Resistance | 5852 |
+| Druid2 / 61722 | +3% to all Elemental Resistances | 35535 |
+| Monk3 / 24475 | +7% Chaos Resistance | 74 |
+| Huntress3 / 17058 | -20% to all Elemental Resistances | 36365 |
+
+Source evidence is in pinned `src/TreeData/0_5/tree.lua`. `src/Modules/ModParser.lua:289`
+maps elemental resistance separately from chaos. `CalcDefence.lua:926–963` adds elemental
+resistance only to elemental types, truncates the final sum toward zero before floor/cap,
+and `CalcSetup.lua:847–849` applies the penalty only to fire/cold/lightning. Current Spark
+and Mace code duplicate the quest/penalty calculation and fixed zero chaos value. Next:
+
+1. Introduce a shared player-resistance kernel using injected limits and typed signed BASE
+   contributions. Preserve existing outputs and goldens. Reject max-resistance, INC/MORE,
+   OVERRIDE, actor/minion/totem/DoT, conversion and conditional mechanics until separately
+   implemented. Negative values must be allowed only for the new operations; preserve
+   existing nonnegative checks elsewhere.
+2. Generalize entrance-only effect records to explicit owned passive-effect records through
+   a deliberate data schema/semantics migration. Extend source extraction policy to reviewed
+   records and reject parser remainder, unexpected flags/tags/actor scope or extra modifiers.
+   Keep numeric values outside Rust and excluded-record evidence explicit. Preserve the PoB
+   revision; expanding retained data requires regenerated package/tree evidence, not relaxing
+   source identity checks.
+3. Extend typed selections/partial graph/materialization to zero or one admitted ascendancy
+   passive, retaining zero or one ordinary entrance. Require caller ascendancy budget 0/1;
+   store paid physical IDs and check ownership, connectivity and exact locks. Used counts
+   must never supply available points. Update result/schema contracts explicitly.
+4. Add original-source cold/warm parser and defence-branch tests for signed/fractional values,
+   floor/cap boundaries, elemental-versus-chaos, quest toggles and penalties. Extend the
+   existing character/Mace source harnesses; do not generate expected values with Rust.
+   Compare fresh Spark/Mace builds across the four nodes with ordinary entrances and support
+   on/off, all existing metrics and export reimports; confirm live ascendancy count/ownership.
+   Add tiny serial/Rayon search, point-zero rejection, wrong-owner and lock cases, plus custom
+   data changing constraint feasibility without borrowing reviewed parity status.
+
+This remains within the agreed native/data/finite-search direction and needs no product
+answer. Broader equipment, support and supporting-skill catalogs remain later slices.
+Profile XML/result costs before selecting a prepared native candidate representation.
+
 ## Dataset-bound controlled search - 2026-09-07
 
 Starting point: clean `6176123`. This completes the bounded D4 plan retained below. The
@@ -117,13 +184,13 @@ added to native search. The PoB backend remains an explicit optional reference.
 | Review/documentation | Independent source/data-binding and CLI reviews found no remaining blockers. Seven new import tests, seven new CLI tests and a native scenario-reuse test cover requirement boundaries, maximum semantics, XML escaping, selected quest defaults, identity mismatches, locks and budgets. Static audit confirms seven unchanged sections, preserved prior numeric fields, valid UTF-8 and all 232 local file links plus 19 heading links across 30 Markdown files; evidence: `runs/dataset-search-static-audit.json`. |
 | Publication | Code `9388935` is pushed to main. Local code, release and documentation checks pass. [Windows/Linux CI run 34179412604](https://github.com/Azaril/poe-optimizer/actions/runs/34179412604) passes both jobs, including formatting, workspace/native-only lint and tests, dependency isolation and five portable WASM libraries. This following update changes documentation only. |
 
-The current requirement seam is deliberately scoped to fixed Warrior attributes with no
+At that checkpoint the requirement seam was deliberately scoped to fixed Warrior attributes with no
 paid passives or attribute-granting equipment. It does not resolve general equipment
 self-dependencies, all-game legality, broader source compatibility, browser execution or
 optimizer quality. Requirements affect search admission; diagnostic evaluation remains
 separate and does not become a recommendation certificate.
 
-### Next implementation slice: class/passive catalog composition
+### Prior plan: class/passive catalog composition
 
 The audit found no reusable production class/tree XML materializer yet. The existing
 `NativeTree::resolve` in `crates/poe-optimizer-native/src/tree.rs` evaluates the admitted
@@ -415,8 +482,8 @@ current behavior/validation is recorded in the newer checkpoint above.
   and cross-data cache/catalog cases, one/many-worker isolation, native-only dependencies and
   five portable WASM libraries. Measure initialization separately and confirm repeated prepared
   calculation neither reloads nor hashes configuration. Record memory ownership and supported
-  fixture/machine identities before judging throughput. Update this resume point, then continue
-  class/passive materialization with explicit point and equipment/gem legality rules.
+  fixture/machine identities before judging throughput. Class/entrance materialization now composes these rules; preserve this evidence while
+  broadening source-derived modifiers and supported native build pipelines.
 
 After D1 establishes concrete interfaces, numeric record extraction and independent
 contract/parity fixtures can proceed in parallel in separate files. Keep backend identity
@@ -751,10 +818,11 @@ scope to weapon/support selection.
   reinterpret units against a new catalog or certify complete mechanics and game legality.
 - [CLI](../src/main.rs): `import`, `evaluate`, `metrics`, `assess`, `search-experimental`
   and `benchmark-native` work in native-only builds. The default developer feature also adds
-  `search-calibration`, `extract-tree` and hidden PoB workers. `--backend native|pob` selects
+  `search-calibration`, `extract-tree`, `extract-game-data` and hidden PoB workers. `--backend native|pob` selects
   evaluation and controlled search where the reference feature exists; native-only builds
-  default to native and reject the unavailable PoB choice. Evaluation reports and the private
-  PoB protocol use schema/version 2; controlled-search and benchmark reports use schema 1.
+  default to native and reject the unavailable PoB choice. Evaluation reports use schema 3;
+  the private PoB protocol and benchmark reports use version 2. Controlled-search reports
+  use schema 2 for legacy problems and schema 3 for expanded class/tree problems.
   `--options` supplies supported skill/encounter selection; repeatable `--metric` filters
   typed actor queries, and `--raw` retains backend-specific diagnostic attachments.
   `evaluate --objective` compiles goals against the selected catalog and retains their
@@ -824,8 +892,9 @@ scope to weapon/support selection.
   [Authenticated projection](tree-projection.md) admits selected ordinary Normal nodes with
   owner sets and a graph containing only included endpoints. Unsupported selected mechanics
   reject. The portable data crate owns these consumers and the authenticated class/entrance
-  bundle; native calculations now apply the supported entrance effects. Broader passive
-  effects and class/passive search materialization remain incomplete.
+  bundle; native calculations apply supported entrance effects and the shared typed resolver
+  composes bounded class/ascendancy/entrance choices into source-preserving finite search.
+  Broader passive effects and general tree mutation remain incomplete.
 - [Candidates](candidate-model.md) and [search](search-kernel.md) provide finite rules,
   all-dimension locks, bounded parallel evaluation, proposals and fresh verification.
   `search-calibration` retains four immutable PoB sources; the [experimental command](experimental-search.md)
@@ -852,7 +921,7 @@ is concrete; real-build recommendations depend on both.
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
 | M5: richer objective policies | Not started | Unit-checked expressions, composite and ordered priorities, soft preferences, Pareto selection, and explicit robust aggregation. Test policy-specific selection and preserve hard constraints. |
 | Desktop GUI | Deferred until CLI/report contracts stabilize | Choose frontend; Tauri is a candidate. Reuse core jobs, results and comparison models. Verify CLI/GUI parity, responsive cancellation and native evaluator packaging; package optional reference workers separately. Does not depend on finishing every M4/M5 feature. |
-| Native Rust calculation replacement | Active; all class/ascendancy identities and ordinary entrances supported by restricted Spark/Mace pipelines; portable data and native weapon/support search implemented | Extend dataset-bound catalog composition to class/passive materialization and explicit finite search rules; retain reviewed source compatibility, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
+| Native Rust calculation replacement | Active; all class/ascendancy identities and ordinary entrances supported by restricted Spark/Mace pipelines; portable data and native weapon/support search implemented | Class/entrance materialization and explicit finite search rules are implemented; retain reviewed source compatibility, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
 | PoE1 adapter | Later, separate track | Add a distinct versioned rules/data/evaluator adapter after PoE2 interfaces are proven; do not mix game identities or reuse PoE2 parity claims. |
 
 Narrow passive/item/skill experiments are internal validation steps. The first usable release
@@ -898,12 +967,13 @@ skills together within explicit finite catalogs. It must support 1..N required s
       actual allocated paths. Same-adapter A/B/A/export comparisons remain useful separate
       evidence; cached export values are not a reference oracle.
 
-- [ ] **M1.5 Mutation parity — partial weapon/support structural profile implemented.** Shared
+- [ ] **M1.5 Mutation parity — partial class/entrance/weapon/support structural profile implemented.** Shared
       materialization preserves exact payloads and external settings for native and reference
       checks against the four Q0 goldens. Q20/level cases extend native admission evidence;
       Pinnacle realization is reference-only while native Mace admits normal enemies.
-      Class/ordinary-entrance evaluation parity now passes, but reusable class/passive
-      materialization and its finite search catalog still need implementation.
+      Class/ordinary-entrance evaluation parity, reusable materialization and the bounded
+      class/ascendancy/entrance finite search catalog are implemented; expanded validation
+      and publication status is tracked in the current checkpoint.
       Exercise legal
       passive, item, support, supporting-skill, class and ascendancy changes separately
       and jointly. Preserve locks and verify export, point/resource accounting and effect
@@ -929,7 +999,8 @@ skills together within explicit finite catalogs. It must support 1..N required s
 - [ ] **M1.8 Configurable native data — current-profile injection, extraction and controlled search implemented; broader updates pending.**
       D1–D3 provide packages, immutable injection, numeric data and typed effects. D4 supplies
       external loading, a bounded pinned source extractor and schema-2 data-bound controlled
-      catalog/requirement rules. Broader source compatibility and general catalogs remain.
+      catalog/requirement rules and bounded class/entrance composition. Broader source
+      compatibility and general catalogs remain.
       D5 current-profile evidence is recorded above.
 
 The planner JSON export is preserved as auxiliary input/provenance. Raw PoB XML and PoB

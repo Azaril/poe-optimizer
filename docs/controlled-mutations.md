@@ -1,10 +1,18 @@
 # Controlled build mutations
 
-Status: experimental finite-domain adapter, `poe_optimizer_import::controlled_mace` (also re-exported by `pob::mutation`), alongside the unchanged four-fixture `pob::candidate` calibration registry. This phase supplies parameterized weapon/support search inputs. The end state remains joint class, ascendancy, passive, item, active-skill, and support search with configurable requirements and independent locks.
+Status: experimental finite-domain adapter, `poe_optimizer_import::controlled_mace` (also re-exported by `pob::mutation`), alongside the unchanged four-fixture `pob::candidate` calibration registry. It supplies parameterized weapon/support and bounded class/ascendancy/entrance search inputs. The end state remains joint class, ascendancy, passive, item, active-skill, and support search with configurable requirements and independent locks.
 
 ## Supported structural profile
 
 `ControlledMaceCatalog::with_data(snapshot, template_xml, weapons, supports)` retains an immutable selected dataset and checks structure and values, rather than requiring one of four XML hashes. `new(template_xml, weapons, supports)` remains a convenience constructor for the reviewed default. The template is an unallocated Warrior with no ascendancy, tree `0_5`, one active item/skill/configuration set, exactly one manually specified Mace Strike at level 1/quality 0, and zero or one Brutality I at level 1/quality 0. The only equipped item is slot `Weapon 1`, XML item ID `1`. Character level is explicit, 1–100, with automatic leveling disabled. No extra allocated passives, equipment, runes, modifiers, active skills, item-granted skills, minions, alternate sets, or unknown mechanics are accepted.
+
+`with_tree_choices(snapshot, template_xml, weapons, supports, selections)` adds explicit
+`ClassTreeSelection` values: canonical numeric `class_id`, optional internal `ascendancy_id`,
+and optional physical `entrance_node_id`. The template may use any admitted selection.
+`poe_optimizer_data::class_tree` owns the shared resolver and partial candidate graph; the
+partial bundle is never represented as a complete extracted tree. All 31 class/ascendancy
+identities support none or either of two class-local ordinary entrances, giving 93 choices.
+Ascendancy roots remain implicit and statless; allocated ascendancy effects stay unsupported.
 
 The weapon list contains 1–64 distinct exact item payloads with distinct user labels. Payloads have exactly these five lines:
 
@@ -18,7 +26,10 @@ Implicits: 0
 
 The reviewed base names are Wooden Club and Smithing Hammer; custom records may rename these two supported slots; item level is 1–100 and quality is 0–20, as canonical integers. Whitespace around the complete payload and CRLF line endings normalize before hashing. Extra modifier lines, nonnormal rarity, range settings, corrupted items, and unknown bases fail closed. The selected records supply equip-level and attribute requirements; item level does not determine equip level. The reviewed bases have no level requirement; Smithing Hammer requires 11 strength. This is a bounded compatibility check, not a general equipment-requirement solver.
 
-Support choices are `none` and/or `brutality_i`. Their Cartesian product with weapons produces at most 128 candidates. The compatibility claim is tied to the pinned source: `src/Data/Skills/sup_str.lua` defines Brutality I as supporting damaging attacks, and Mace Strike is the known one-hand Mace attack. Quality and level variants of support gems, support families, multiple supports, and arbitrary skill compatibility require further data translation and tests.
+Support choices are `none` and/or `brutality_i`. Their Cartesian product with weapons produces at most 128 candidates per tree selection,
+or 11,904 with all 93 selections. Catalog construction also requires
+`candidate_count * (template_bytes + 4096) <= 256 MiB` to bound source-hashing work; this is
+not a process-memory limit. Oversized preparation rejects before evaluation. The compatibility claim is tied to the pinned source: `src/Data/Skills/sup_str.lua` defines Brutality I as supporting damaging attacks, and Mace Strike is the known one-hand Mace attack. Quality and level variants of support gems, support families, multiple supports, and arbitrary skill compatibility require further data translation and tests.
 
 Every encounter input used by the original Mace template remains explicit. Permitted parameter changes include enemy level 1–85, boss setting `None`/`Boss`/`Pinnacle`, enemy armour, resistances, incoming damage components, penetration/overwhelm, and attack interval within conservative numeric bounds. Damage type stays Melee, enemy crit chance stays zero, the five optional condition toggles stay false, and nearby-enemy counts stay 1/0. Incoming damage must contain a positive component. Unknown configuration keys, custom modifiers, alternate scalar types, nonfinite values, omitted required inputs, and duplicates are rejected. These are fixed scenario inputs for the entire search, not optimizable choices.
 
@@ -26,8 +37,9 @@ Every encounter input used by the original Mace template remains explicit. Permi
 
 `requirements(candidate)` returns available and required level/strength/dexterity/intelligence,
 plus each failed boundary. `validate_requirements(candidate)` rejects a failure. Available
-attributes come from the selected Warrior class record; this profile has no attribute-granting
-items, paid passives or supporting effects. Each attribute requirement takes the maximum of
+attributes come from the resolved selected class record. The admitted entrance operations
+do not change strength/dexterity/intelligence, and the profile has no attribute-granting
+items or supporting effects. Each attribute requirement takes the maximum of
 individual item/active/support requirements and the sum of matching-color support costs.
 For example, 11 weapon strength and one red support costing 5 require 11 strength. The generic
 additive resource budget is not used for this rule. Level requirements take a maximum too.
@@ -41,9 +53,13 @@ self-dependencies, acquired inventory and broader build legality are outside thi
 
 ## Identity and source preservation
 
-The catalog identity includes the exact template SHA-256, sorted named weapon payloads, support choice set, projection version, pinned PoB source identity, and complete selected `DataIdentity`. Identical-content snapshots are compatible; different data rejects even if a result matches its own evaluator. Item and gem instances use hashes of exact normalized payloads; repeated PoB XML item ID `1` never merges different weapon settings. Catalog and candidate ordering are deterministic, and each materialization includes all canonical dimensions. `resolve_candidate(weapon_id, support)` exposes the stable two-axis mapping.
+The catalog identity includes the exact template SHA-256, sorted named weapon payloads, support choice set, projection version, pinned PoB source identity, and complete selected `DataIdentity`. Identical-content snapshots are compatible; different data rejects even if a result matches its own evaluator. Item and gem instances use hashes of exact normalized payloads; repeated PoB XML item ID `1` never merges different weapon settings. Catalog and candidate ordering are deterministic, and each materialization includes all canonical dimensions. `resolve_candidate(weapon_id, support)` retains the template-tree mapping. Expanded
+`resolve_tree_candidate(selection, weapon_id, support)` addresses the complete selection.
+Expanded catalog identity also includes ordered tree choices and every composed payload.
 
-Materialization patches only the source ranges for the item element and optional support gem. It preserves every other template byte, including configuration, labels, Notes, comments, unknown prose, and formatting. Structural fields with unknown mechanics are rejected before mutation, so preservation does not silently imply support. The user's source file is not modified. A candidate from another catalog or any combination outside this finite registry cannot be materialized.
+Materialization patches the source ranges for the item element, optional support gem and,
+in expanded catalogs, selected Build/Spec class, ascendancy and allocation attributes. It
+preserves every other template byte, including configuration, labels, Notes, comments, unknown prose, and formatting. Structural fields with unknown mechanics are rejected before mutation, so preservation does not silently imply support. The user's source file is not modified. A candidate from another catalog or any combination outside this finite registry cannot be materialized.
 
 ## Baseline and realization evidence
 
@@ -62,7 +78,8 @@ This baseline is **runtime-derived drift evidence**, not an independent numerica
 The native path uses `bind_native_baseline(result, expected_backend)` and
 `validate_native_realization(candidate, result, scenario)`. It validates the selected native
 backend/rules and matching catalog/data identity, exact materialized XML export, class/root, active/support identities and
-settings, source configuration, stable external placeholders and parsed weapon base,
+settings, selected physical allocations, implicit roots, effective node IDs and configured
+entrance effects, source configuration, stable external placeholders and parsed weapon base,
 quality, item level and support evidence. It expects native source preservation, not PoB's
 normalization. Candidate-derived condition tables remain free to change. Both paths retain
 the same candidate locks, budgets, objective contracts and diagnostic status.
@@ -81,4 +98,10 @@ reference evaluation or fallback. See [native backend](native-backend.md) for co
 compatibility, cross-data rejection, custom names/quest selectors, serial/Rayon agreement,
 empty domains and finalist reloads.
 
-The four original goldens remain the independent numerical reference. Parameterized round trips establish requested state and interaction behavior; they are not newly independent absolute-number goldens. Future phases should expand independently calibrated item/support families, integrate translated tree and class data, preserve full candidate legality across combinations, and extend native calculation parity beyond the admitted profiles. No general source-document mutation or complete six-dimension release claim is made by this adapter.
+`tests/class_search_cli.rs` and `tests/class_search_parity.rs` add coupled class/tree/item/
+support checks, caller budgets, exact locks, source-preserving exports and fresh PoB
+materialization/reimport comparisons. Search rejects illegal point/ownership/requirement
+combinations before dispatch. The native diagnostic allocation count remains evidence of
+used points only; it does not supply the caller's budget.
+
+The four original goldens remain the independent numerical reference. Parameterized round trips establish requested state and interaction behavior; they are not newly independent absolute-number goldens. Future phases should expand independently calibrated item/support families, broaden translated tree and class effects, preserve full candidate legality across combinations, and extend native calculation parity beyond the admitted profiles. No general source-document mutation or complete six-dimension release claim is made by this adapter.

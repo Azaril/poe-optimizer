@@ -41,7 +41,8 @@ see [native backend and optional reference mode](docs/native-backend.md).
 Canonical candidates and locks represent all six dimensions. A generic search kernel has
 bounded parallel evaluation, feasible/infeasible beams, deduplication and fresh finalist
 checks. `search-experimental --backend native` searches supplied normal-Mace weapon/support
-choices directly on Rayon with exact locks and source-preserving mutations; `--backend pob`
+choices and optional class/ascendancy/entrance selections directly on Rayon with exact locks
+and source-preserving mutations; `--backend pob`
 selects the optional reference backend; `search-calibration` retains the four original
 fixtures. `extract-tree` exports pinned topology and source/override metadata for broader
 mutation work, with live passive coverage and authenticated bounded graph projections. A portable data
@@ -81,6 +82,7 @@ For the native-only executable (supported profiles are listed in [native backend
 cargo build -p poe-optimizer-cli --release --no-default-features --locked
 cargo run -p poe-optimizer-cli --no-default-features --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-search.json --jobs 4 --max-evaluations 10
+cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-class-search.json --jobs 4 --max-evaluations 746
 ```
 
 For the full development workspace, including optional PoB references and parity tests:
@@ -131,7 +133,8 @@ configuration/conditions, which are not yet a complete resolved scenario model. 
 [skill coverage](docs/skill-coverage.md) for action provenance and unresolved entries.
 
 Evaluation-report JSON uses schema 3; the PoB worker protocol, controlled-search reports and
-native benchmark reports use schema 2. Results identify backend,
+native benchmark reports use schema 2. Expanded class/tree search reports use schema 3
+with explicit budgets and admission evidence. Results identify backend,
 rules/source/adapter fingerprints, observed selection, metric schema/units and coverage.
 `--raw` adds the complete PoB diagnostic snapshot as an opaque JSON attachment. Objective code
 must use typed measurements rather than inspect raw PoB fields. Unknown fields in options,

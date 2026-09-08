@@ -1,6 +1,7 @@
 //! Resolve the admitted native class/entrance subset from authenticated portable data.
 //! This records native source resolution, not observations of PoB's Lua object graph.
 use poe_optimizer_core::evaluation::{EvaluationError, EvaluationErrorKind};
+use poe_optimizer_data::class_tree::ClassTreeSelection;
 use poe_optimizer_data::tree_data::{
     EffectiveTreeNode, TREE_PATH, TreeAscendancy, TreeClass, TreeSourceIdentity,
 };
@@ -127,34 +128,33 @@ impl NativeTree {
                 "Native class/tree profile currently admits zero or one ordinary entrance allocation",
             ));
         }
-        let paid_node = paid_ids
-            .first()
-            .map(|id| {
-                data.entrance(internal_id, *id)
-                    .map_err(|error| unsupported(error.to_string()))
-            })
-            .transpose()?;
-        let modifiers = if let Some(node) = paid_node {
+        let resolved = ClassTreeSelection {
+            class_id: internal_id,
+            ascendancy_id: ascendancy.map(|asc| asc.internal_id.clone()),
+            entrance_node_id: paid_ids.first().copied(),
+        }
+        .resolve(data)
+        .map_err(|error| unsupported(error.to_string()))?;
+        let modifiers = if let Some(node) = &resolved.paid_node {
             *compiled
                 .entrance_modifiers(internal_id, node.physical_node_id)
                 .ok_or_else(|| unsupported("Missing compiled ordinary entrance effects"))?
         } else {
             CharacterModifiers::default()
         };
-        requested.extend(roots);
         Ok(Self {
             character: CharacterInput {
                 attributes: CharacterAttributes {
-                    strength: f64::from(class.base_strength),
-                    dexterity: f64::from(class.base_dexterity),
-                    intelligence: f64::from(class.base_intelligence),
+                    strength: f64::from(resolved.base_attributes.strength),
+                    dexterity: f64::from(resolved.base_attributes.dexterity),
+                    intelligence: f64::from(resolved.base_attributes.intelligence),
                 },
                 modifiers,
             },
-            class: class.clone(),
-            ascendancy: ascendancy.cloned(),
-            allocated_nodes: requested.into_iter().collect(),
-            paid_node: paid_node.cloned(),
+            class: resolved.class,
+            ascendancy: resolved.ascendancy,
+            allocated_nodes: resolved.allocated_nodes.into_iter().collect(),
+            paid_node: resolved.paid_node,
         })
     }
     pub fn ascendancy_name(&self) -> &str {
