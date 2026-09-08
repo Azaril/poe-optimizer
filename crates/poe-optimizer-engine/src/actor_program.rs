@@ -40,9 +40,14 @@ impl Predicate {
         let mut result = Self {
             any: [0; 8],
             negated: 0,
-            len: tags.len() as u8,
+            len: 0,
         };
-        for (index, ActorModifierTag::Condition { variables, negated }) in tags.iter().enumerate() {
+        for tag in tags {
+            let ActorModifierTag::Condition { variables, negated } = tag else {
+                continue;
+            };
+            let index = usize::from(result.len);
+            result.len += 1;
             for variable in variables {
                 let bit = CONDITIONS
                     .iter()
@@ -82,6 +87,7 @@ pub struct CompiledActorModifiers {
     rows: Vec<Row>,
     buckets: Vec<Bucket>,
     requires_downstream_defences: bool,
+    requires_receiving_stage: bool,
 }
 impl CompiledActorModifiers {
     pub fn record_count(&self) -> usize {
@@ -326,6 +332,9 @@ impl CompiledGameData {
             requires_downstream_defences: records
                 .iter()
                 .any(|record| requires_downstream_defences(record.stat)),
+            requires_receiving_stage: records
+                .iter()
+                .any(|record| record.stat.is_receiving_defence()),
         })
     }
     /// Calculate a fresh actor from already compiled ordered source fragments.
@@ -339,7 +348,36 @@ impl CompiledGameData {
         layers: &[ActorModifierLayer<'_>],
         scratch: &mut ActorScratch,
     ) -> Result<PreparedActorResources, ActorError> {
+        self.evaluate_actor_internal(level, quests, None, character, layers, scratch)
+    }
+    /// Complete player preparation over borrowed source components. Conditions
+    /// produced by both attribute passes feed the receiving queries immediately.
+    pub fn evaluate_actor(
+        &self,
+        level: u32,
+        quests: ActorQuestSelection,
+        receiving: ReceivingScenario,
+        character: &CharacterInput,
+        layers: &[ActorModifierLayer<'_>],
+        scratch: &mut ActorScratch,
+    ) -> Result<PreparedActorResources, ActorError> {
+        self.evaluate_actor_internal(level, quests, Some(receiving), character, layers, scratch)
+    }
+    #[allow(clippy::too_many_arguments)]
+    fn evaluate_actor_internal(
+        &self,
+        level: u32,
+        quests: ActorQuestSelection,
+        receiving: Option<ReceivingScenario>,
+        character: &CharacterInput,
+        layers: &[ActorModifierLayer<'_>],
+        scratch: &mut ActorScratch,
+    ) -> Result<PreparedActorResources, ActorError> {
         scratch.reset();
+        if let Some(scenario) = receiving {
+            scenario.validate()?;
+            receiving::validate_source_character(character)?;
+        }
         character.validate().map_err(|error| ActorError(error.0))?;
         if !(1..=100).contains(&level) {
             return Err(ActorError("Actor character level must be 1..100"));
@@ -352,6 +390,7 @@ impl CompiledGameData {
         let mut count = 0usize;
         let mut programs = 0usize;
         let mut requires_downstream_defences = false;
+        let mut requires_receiving_stage = false;
         for layer in layers {
             programs = programs
                 .checked_add(layer.programs.len())
@@ -374,11 +413,16 @@ impl CompiledGameData {
                     ));
                 }
                 requires_downstream_defences |= program.requires_downstream_defences;
+                requires_receiving_stage |= program.requires_receiving_stage;
             }
         }
         scratch.base = self.actor_base_records(level, quests, character);
+        if let Some(scenario) = receiving {
+            self.add_receiving_base(&mut scratch.base, scenario);
+        }
         scratch.base_len = scratch.base.len;
-        let output = calculate(&mut ProgramQueries { layers, scratch }, self)?;
+        let (output, receiving_output) =
+            calculate_complete(&mut ProgramQueries { layers, scratch }, self, receiving)?;
         Ok(PreparedActorResources {
             binding: self.actor_binding.clone(),
             level,
@@ -386,6 +430,8 @@ impl CompiledGameData {
             character: *character,
             output,
             requires_downstream_defences,
+            requires_receiving_stage,
+            receiving: receiving_output,
         })
     }
 }

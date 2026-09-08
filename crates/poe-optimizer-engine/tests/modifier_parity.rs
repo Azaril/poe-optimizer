@@ -659,6 +659,7 @@ impl Oracle {
                 for (i, tag) in input.tags.iter().enumerate() {
                     let table = self.lua.create_table().unwrap();
                     match tag {
+                        ModifierTag::Global => table.set("type", "Global").unwrap(),
                         ModifierTag::Condition { variables, negated } => {
                             table.set("type", "Condition").unwrap();
                             self.variables(&table, variables);
@@ -1364,6 +1365,7 @@ impl Oracle {
                     self.scalar_fields(&table, value, "limit", "limitVar");
                     table.set("neg", *negative).unwrap();
                 }
+                ScalingTag::Condition(ModifierTag::Global) => table.set("type", "Global").unwrap(),
                 ScalingTag::Condition(ModifierTag::Condition { variables, negated }) => {
                     table.set("type", "Condition").unwrap();
                     self.variables(&table, variables);
@@ -2736,3 +2738,6 @@ mod weapon_parity;
 
 #[path = "support/actor_parity.rs"]
 mod actor_parity;
+
+#[path = "support/receiving_parity.rs"]
+mod receiving_parity;

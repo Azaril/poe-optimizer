@@ -38,14 +38,15 @@ belong to one evaluation context and must demonstrate request-order independence
 
 ## Shared actor preparation
 
-`CompiledGameData::prepare_actor_resources` translates source attribute and maximum-resource
+`CompiledGameData::prepare_actor` translates source attribute, maximum-resource and receiving-defence
 stages into an immutable reusable component. Both skill pipelines and catalog attribute
-requirements consume this shared stage. Source-derived schema-6 records, precision and
+requirements consume this shared stage. Source-derived schema-8 records, precision and
 quest data are injected; calculation order remains Rust code. Prepared components support
 direct concurrent use and keep no XML or owned modifier database. See [actor resources](actor-resources.md)
 for exact two-pass conditions, raw-function versus complete-build scope, source input fidelity
 and the pure Rust import-to-engine requirement seam. Current profile identifiers are
-`poe2-spark-actor-resources-v2` and `poe2-mace-strike-actor-resources-v6`.
+`poe2-spark-receiving-defence-v4` and `poe2-mace-strike-receiving-defence-v8`.
+See [receiving defences](receiving-defences.md) for the complete versus raw preparation contract.
 
 ## First translation boundary: defence kernels
 
@@ -303,7 +304,7 @@ remain outside this profile. Enemy resistance uses the pinned configurable ceili
 records. `CompiledGameData` resolves the package once; `evaluate_with_data` borrows it.
 See [native data packages](native-data.md) for the loader and compatibility wrappers. `SOURCE_FILES` identifies
 12 complete normalized source files, including the modifier parser semantic oracle.
-`PROFILE_ID` is `poe2-spark-level1-class-passives-v3`.
+`PROFILE_ID` is `poe2-spark-receiving-defence-v4`.
 The production function uses no parsing, allocation, I/O, timing, Lua or shared state. The
 application adapter owns XML admission, source identity, evaluation clock, metric coverage
 and prepared-input reuse. A native-only build and WASM consumer can therefore call the
@@ -363,7 +364,7 @@ a top-level AverageHit for this attack, and the typed metric remains unavailable
 that existing contract. This profile claims hit DPS, not combined or ailment DPS.
 
 Twenty-one normalized source hashes accompany the Rust data; the profile identity is
-`poe2-mace-strike-local-weapons-v5`. The differential test executes
+`poe2-mace-strike-receiving-defence-v8`. The differential test executes
 actual pinned Item/ModDB/resource/offence source with resolved closed-profile scaffolding,
 including the real Brutality stat map and damage-disable flags. Interpreted and warmed
 runs cover every admitted quality, both weapons and support choices, character levels,

@@ -1,4 +1,5 @@
-//! Player BASE resistance branch shared by the admitted Spark/Mace pipelines.
+//! Legacy scalar BASE resistance adapter for explicit Spark/Mace numeric callers.
+//! Complete source preparation uses actor_receiving with ordered BASE/INC records.
 //!
 //! CalcSetup applies the penalty only to elemental types. CalcDefence sums each
 //! type with ElementalResist only for elemental types, truncates the total and

@@ -14,7 +14,7 @@ use crate::{
 };
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-mace-strike-passive-equipment-v7";
+pub const PROFILE_ID: &str = "poe2-mace-strike-receiving-defence-v8";
 pub const TREE_VERSION: &str = "0_5";
 /// Index in the pinned tree classes table; XML classInternalId is a separate id.
 pub const CLASS_ID: u32 = 3;
@@ -211,6 +211,9 @@ pub fn evaluate_with_actor(
     actor
         .validate_profile(compiled, input.character_level, input.quests, character)
         .map_err(|error| MaceError(error.0))?;
+    let receiving = actor
+        .receiving_for(compiled.receiving_scenario(input.quests, input.resistance_penalty))
+        .map_err(|error| MaceError(error.0))?;
     let actor = actor.values();
     if !compiled.owns_weapon(weapon) {
         return Err(MaceError(
@@ -267,23 +270,25 @@ pub fn evaluate_with_actor(
     let shared = compiled.spark();
     let life = actor.life;
     let mana = actor.mana;
-    let resistance = crate::resistance::calculate(
-        &modifiers,
-        input.resistance_penalty,
-        [
-            input.quests.blackjaw,
-            input.quests.beira,
-            input.quests.garukhan,
-        ]
-        .map(|enabled| {
-            if enabled {
-                shared.quest_elemental_resistance
-            } else {
-                0.0
-            }
-        }),
-        compiled.defence(),
-    );
+    let resistance = receiving.map(|value| value.resistances).unwrap_or_else(|| {
+        crate::resistance::calculate(
+            &modifiers,
+            input.resistance_penalty,
+            [
+                input.quests.blackjaw,
+                input.quests.beira,
+                input.quests.garukhan,
+            ]
+            .map(|enabled| {
+                if enabled {
+                    shared.quest_elemental_resistance
+                } else {
+                    0.0
+                }
+            }),
+            compiled.defence(),
+        )
+    });
     let weapon = weapon.stats();
     // Local flat/INC/quality assembly, local rate and critical rounding were
     // prepared once from the selected item's exact data rules and ordered rolls.
@@ -367,9 +372,15 @@ pub fn evaluate_with_actor(
         life,
         mana,
         spirit: actor.spirit,
-        energy_shield: round_to_integer(modifiers.energy_shield_flat).max(0.0),
-        armour: round_to_integer(modifiers.armour_flat).max(0.0),
-        evasion: round_to_integer(rules.base_evasion + modifiers.evasion_flat).max(0.0),
+        energy_shield: receiving
+            .map(|value| value.energy_shield)
+            .unwrap_or_else(|| round_to_integer(modifiers.energy_shield_flat).max(0.0)),
+        armour: receiving
+            .map(|value| value.armour)
+            .unwrap_or_else(|| round_to_integer(modifiers.armour_flat).max(0.0)),
+        evasion: receiving.map(|value| value.evasion).unwrap_or_else(|| {
+            round_to_integer(rules.base_evasion + modifiers.evasion_flat).max(0.0)
+        }),
         fire_resistance: resistance.fire,
         cold_resistance: resistance.cold,
         lightning_resistance: resistance.lightning,

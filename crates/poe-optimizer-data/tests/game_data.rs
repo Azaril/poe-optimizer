@@ -44,7 +44,7 @@ fn embedded_and_external_bytes_share_one_validated_loader() {
         embedded.package().canonical_bytes().unwrap(),
         bundled_package_bytes()
     );
-    assert_eq!(embedded.package().passive_effects.len(), 1142);
+    assert_eq!(embedded.package().passive_effects.len(), 1270);
 }
 #[test]
 fn explicit_custom_balance_has_content_identity_without_claiming_review() {
@@ -280,10 +280,10 @@ fn unknown_nested_source_enum_fields_and_integer_key_aliases_do_not_disappear() 
 #[test]
 fn requirement_schema_is_explicit_bounded_and_content_bound() {
     let original = reviewed();
-    assert_eq!(original.identity().schema_version, 7);
+    assert_eq!(original.identity().schema_version, 8);
     assert_eq!(
         original.identity().semantics_version,
-        "poe2-native-profiles-v7"
+        "poe2-native-profiles-v8"
     );
     let mut package = original.package().clone();
     package.weapons[0].requirements = RequirementData {
@@ -345,37 +345,56 @@ fn requirement_schema_is_explicit_bounded_and_content_bound() {
 }
 
 #[test]
-fn signed_values_are_allowed_only_for_closed_resistance_operations() {
+fn signed_receiving_values_are_normalized_once_and_legacy_scalar_defences_are_rejected() {
     let original = reviewed();
+    for value in [-1_000_000.0, -0.75, 0.0, 1_000_000.0] {
+        let mut package = original.package().clone();
+        let record = package
+            .passive_effects
+            .iter_mut()
+            .find(|r| r.key.physical_node_id == 14960)
+            .unwrap();
+        let template = record.actor_modifiers[0].clone();
+        record.actor_modifiers = [
+            ActorStat::FireResist,
+            ActorStat::ColdResist,
+            ActorStat::LightningResist,
+            ActorStat::ChaosResist,
+            ActorStat::ElementalResist,
+            ActorStat::Armour,
+            ActorStat::Evasion,
+            ActorStat::EnergyShield,
+            ActorStat::ArmourAndEvasion,
+        ]
+        .into_iter()
+        .map(|stat| ActorModifierRecord {
+            stat,
+            effect: ActorModifierEffect::Numeric {
+                operation: ActorNumericOperation::Base,
+                value,
+            },
+            ..template.clone()
+        })
+        .collect();
+        let edited = custom(package).unwrap();
+        assert_ne!(edited.identity(), original.identity());
+    }
     for stat in [
+        PassiveStat::ArmourFlat,
+        PassiveStat::EvasionFlat,
+        PassiveStat::EnergyShieldFlat,
         PassiveStat::FireResistanceFlat,
         PassiveStat::ColdResistanceFlat,
         PassiveStat::LightningResistanceFlat,
         PassiveStat::ChaosResistanceFlat,
         PassiveStat::ElementalResistanceFlat,
     ] {
-        for value in [-1_000_000.0, -0.75, 0.0, 1_000_000.0] {
-            let mut package = original.package().clone();
-            let effect = &mut package
-                .passive_effects
-                .iter_mut()
-                .find(|record| record.key.physical_node_id == 14960)
-                .unwrap()
-                .effects[0];
-            *effect = PassiveEffect { stat, value };
-            let edited = custom(package).unwrap();
-            assert_ne!(edited.identity(), original.identity());
-        }
-        for value in [-1_000_001.0, 1_000_001.0, f64::INFINITY, f64::NAN] {
-            let mut package = original.package().clone();
-            *scalar(&mut package) = PassiveEffect { stat, value };
-            assert!(custom(package).is_err());
-        }
+        let mut package = original.package().clone();
+        *scalar(&mut package) = PassiveEffect { stat, value: 10.0 };
+        assert!(custom(package).is_err(), "legacy scalar {stat:?}");
     }
+
     for stat in [
-        PassiveStat::ArmourFlat,
-        PassiveStat::EvasionFlat,
-        PassiveStat::EnergyShieldFlat,
         PassiveStat::SkillSpeedIncreased,
         PassiveStat::SpellDamageIncreased,
         PassiveStat::AttackDamageIncreased,
@@ -398,11 +417,19 @@ fn passive_effect_records_require_complete_exact_class_and_ascendancy_ownership(
     let warrior = snapshot
         .passive_effects(6, Some("Warrior3"), 14960)
         .unwrap();
+    assert!(warrior.effects.is_empty());
     assert_eq!(
-        warrior.effects,
-        [PassiveEffect {
-            stat: PassiveStat::FireResistanceFlat,
-            value: 8.0
+        warrior.actor_modifiers,
+        [ActorModifierRecord {
+            stat: ActorStat::FireResist,
+            effect: ActorModifierEffect::Numeric {
+                operation: ActorNumericOperation::Base,
+                value: 8.0
+            },
+            source: Some("Tree:14960".into()),
+            flags: 0,
+            keyword_flags: 0,
+            tags: vec![],
         }]
     );
     assert!(snapshot.passive_effects(6, None, 14960).is_none());
@@ -446,7 +473,7 @@ fn passive_effect_records_require_complete_exact_class_and_ascendancy_ownership(
             }
             5 => package.passive_effects[index].key.physical_node_id = 3936,
             6 => package.passive_effects[index].effective_node_id = 3936,
-            _ => package.passive_effects[index].effects.clear(),
+            _ => package.passive_effects[index].actor_modifiers.clear(),
         }
         assert!(custom(package).is_err(), "edit {edit}");
     }

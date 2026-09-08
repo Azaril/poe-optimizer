@@ -1,6 +1,6 @@
 # Experimental controlled search
 
-This guide describes the preserved `search-experimental` command and problem schemas 1–6. For the lazy native graph/equipment search using problem schema 7, see [passive/equipment assembly](passive-equipment-assembly.md).
+This guide describes the preserved `search-experimental` command and problem schemas 1–6. For the lazy native graph/equipment search using problem schemas 7/8, see [passive/equipment assembly](passive-equipment-assembly.md).
 
 `search-experimental` searches supplied Mace weapons, support loadouts and optional
 class/ascendancy/passive selections with the native Rust backend or the optional PoB
@@ -46,7 +46,7 @@ PoB checkout and never starts a Lua worker or falls back to PoB. Native-only bui
 PoB worker, extraction and calibration-harness commands.
 
 Native controlled search accepts `--data <package.json>` and optional `--data-sha256`.
-It loads the [schema-7 game-data package](native-data.md#schema-migration) once and shares
+It loads the [schema-8 game-data package](native-data.md#schema-migration) once and shares
 the snapshot between its catalog and native evaluator. Base values, item-rule grammar,
 modifier mappings and the critical-chance cap come from that selected package. The public
 `ControlledMaceCatalog::with_data` API binds

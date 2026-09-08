@@ -2,7 +2,14 @@
 
 Last updated: 2026-09-08
 
-Current implementation checkpoint: **normalized passive and equipment source assembly**, implemented, locally validated and published as `a2586a89a8160ae0b31d42d23ed921cb3b5823b2`. Exact-code Windows/Linux CI run `34208805533` is in progress; hosted success is not yet claimed.
+Current implementation checkpoint: **shared receiving defences and resistances**, implemented
+and locally validated; publication is the final checkpoint action. Schema 8 moves defensive
+passive contributions into ordered actor records; configuration, weapon, amulet and passive
+sources use the same receiving stage. All required local checks and release measurements
+are complete, with the scope and evidence below.
+The preceding **normalized passive and equipment source assembly** is implemented,
+locally validated and published as `a2586a89a8160ae0b31d42d23ed921cb3b5823b2`.
+Exact-code Windows/Linux CI run `34208805533` is in progress; hosted success is not yet claimed.
 The preceding **shared actor attributes and maximum resources** checkpoint is implemented,
 locally validated and published as `4df9a4fcefe271011cd612fc1f8c7bc43d863c66`.
 Exact-code Windows/Linux CI run `34199225766` passes on both platforms. Schema-6 injected actor data, shared Rust
@@ -50,15 +57,16 @@ the design documents.
    identities, selected-data requirements, exact materialized source and fresh counted
    finalist checks. Whole actor admission and repeated skill calculation have different
    costs; record both. No Cartesian actor/result cache or implicit Lua fallback is allowed.
-5. Next, extend normalized assembly into receiving defences and resistance modifiers before
-   admitting more passive/item mechanics. Start with complete unconditional BASE/INC
-   Armour/Evasion/Energy Shield and resistance records, preserving item-local versus global
-   scope, inherent attribute effects and source order. Add actual-source stage tests and
-   fresh full-build/export parity before broadening data admission. Reservation, arbitrary
-   supports/supporting skills and minions remain later complete-pipeline work. Review broader
-   source compatibility separately under D4. Keep the source pin and independent goldens
-   stable; schema-1/2/3/4/5/6 packages must be regenerated for schema 7. Preserve the distinction
-   between structural records, admitted effective views and explicit exclusions.
+5. Check publication/hosted CI for the [receiving-defence checkpoint](receiving-defences.md).
+   Local workspace/native-only checks, release measurements, preservation and independent
+   source/full-build parity pass. The shared global BASE/INC stage and ordered actor-record
+   migration are implemented. Schema-1/2/3/4/5/6/7 packages require regeneration for
+   schema 8. Next extend equipment through a complete local armour-slot pipeline: injected
+   bases and rules, local BASE/INC and quality, local/global rounding, per-level bases and
+   movement penalties. Add explicit Armour/Evasion metric contracts; currently only their
+   diagnostics expose them. Preserve receiving query order and reject unconsumed mechanics.
+   Reservation, arbitrary supports/supporting skills and minions remain later complete-
+   pipeline work. Review broader source compatibility separately under D4.
 6. Replace closed profiles with reusable complete native pipelines as coverage permits:
    item/gem/passive modifiers, resolved actors/conditions and resources, offence/defence,
    conversions, ailments, triggers and minions. PerStat/StatThreshold programs now support
@@ -92,6 +100,115 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Shared receiving defences and resistances - implementation checkpoint
+
+Implementation, integrated local validation and release measurements are complete for
+this bounded scope. [Operational guide](receiving-defences.md) documents the new data,
+API and CLI contracts. Publication is pending; no hosted result is claimed yet.
+
+| Area | Current evidence |
+| --- | --- |
+| Injected data | Package schema **8**, `poe2-native-profiles-v8`, **3,561,244 bytes**, SHA `fdd924e0449d06c338df95cf8e309986abf07a73e3f2f0131acf222d5d24ae30`. Sixteen sections include ordered receiving query groups. **1,270 admitted / 3,488 excluded** effective passive views, **320** grammar templates and **seven** amulet bases. Tree schema 3 and its bytes remain unchanged. |
+| Source evidence | Independent original-parser/ProcessStats/amulet/query checks pass: all admitted views and **3,642 authored parser inputs** cold/warm. New receiver source tests cover **1,178** cold/warm cases (1,104 boundary/group/signed-zero, 38 condition/order/quest, 36 injected-rule cases), comparing fresh DB and compiled programs against original Lua branches. |
+| Shared engine | `prepare_actor` / `evaluate_actor` combine resource and receiving stages from the same ordered query object. Prepared fixed output binds data owner, character and receiving scenario, retaining no XML or source database. **95 engine tests** and scoped Clippy pass; **3,000** changing actor/receiver preparations followed by both skill kernels allocate zero times in counted loops. Scratch is **792 bytes**. Raw resource compatibility cannot silently consume receiving records or authorize changed defensive scalars. |
+| Import/native | All **102 import + 47 native tests** pass across full and focused runs. Lunar/Pearlescent level boundaries, source Global markers, condition/pair parsing, selected passive migration, injected rules/quests/caps, typed/document equality, private scenario/data binding and receiving-evidence tampering are checked. One stale scalar-evidence tamper test was migrated to the ordered actor path and its full target rerun. |
+| Full-build parity | **27 fresh native/PoB pairs and 10 native-export PoB reimports** pass, covering source groups, conditions, signed/fractional boundaries, configuration/gear/passive composition and formatting preservation. Two new source fixtures are separate from original goldens. The final diagnostic fixtures pass again in the integrated run. Evidence: `runs/receiving-build-parity.log`, `runs/receiving-workspace-tests.log`. A separate fresh PoB evaluation of the exact release-search finalist also matches all three objective/constraint metrics (`runs/receiving-finalist-pob.json`). |
+| CLI | Graph problem **8** / report **9** adds authored receiving scope. Graph 7 and mutation 1–6 retain their authored scope; migrated passive records still work. **9 search integration tests** pass, including typed/document × one/four workers, identical archives/ledgers/XML/companions, new scope gates and the existing locks/output/budget regressions. An initially infeasible example seed was corrected; no evaluator assertion was relaxed. Evidence: `runs/receiving-search-cli-final.log`. |
+| Extraction and preservation | Two fresh extractions agree byte-for-byte across package/tree/evidence; three extraction CLI checks pass. Evidence SHA `d5370031f67a5a59562473d2458d434928147a5b20fbdaa383463c6bf4f864e9`; extractor SHA `943c9cf9924552a82e167f6d63b6e9891421572693498d1fe217b231b3b58747`. Source pin/clean submodule, full snapshot, six independent golden pairs, original inputs, dependencies and eleven existing numerical sections are preserved. All 1,142 prior views are semantically preserved; exactly 36 defensive scalar records migrate once, with 128 newly admitted views. Original 116 grammar rules, actor constants/precision/quests and five amulets are unchanged. Evidence: `runs/receiving-preservation-final.json`. |
+| Integrated validation | **580 unique workspace tests + 79 native-only CLI tests pass** across integrated and focused runs; nine source-worker helpers are ignored directly and exercised by parents. The initial full invocation used an old custom-resistance test editing a removed scalar field; the corrected complete target and all remaining CLI targets pass, as does the full library invocation. Its signed-value/feasibility/export assertions are preserved. Coverage is assembled explicitly, not presented as one all-green workspace invocation. Every integration target is reconciled in `runs/receiving-test-coverage.json`. Strict workspace/native-only Clippy, final benchmark Clippy, formatting, five WASM libraries, runtime dependency isolation and 31-document link checks pass. No unresolved local failures remain. |
+| Release search | All **24** complete searches (typed/document × 1/2/4/32 workers × three repeats) agree on archives, ledger, finalist, XML and data companion. They use 3,480 proposals/admissions, 759 duplicates, 1,723 rejections and exactly 1,000 full attempts (baseline 1 + search 998 + fresh verification 1), with no failures/late results; termination is the evaluation budget. The diagnostic finalist has DPS 151.96940651249997, fire resistance 75 and ES 52, satisfying the example's 75/50 floors. This is reproducibility, not optimizer-quality, obtainable-affix or global-optimum evidence. |
+
+### Receiving release measurements
+
+[The assembly benchmark](../examples/benchmark_assembly.rs) now accepts `--receiving-defence`.
+The native-only release run on the AMD Ryzen 9 9950X3D uses 1,806 admitted selections,
+129 allocations, eight classes, 23 named ascendancies, three attribute options, seven support
+loadouts and ten equipment selections. Its 1,318 distinct checksums consume all metric
+availability/value fields plus all thirteen receiving outputs. Sixteen fresh complete native
+document comparisons check both metrics and receiving diagnostics outside timed loops.
+Independent PoB parity is supplied by the separate source and full-build suites above.
+
+Median attempts/second, three samples per worker count and mode:
+
+| Workers | Fresh admission + calculation | Reused admitted actor + calculation |
+| --- | ---: | ---: |
+| 1 | 52,903 | 6,530,000 |
+| 2 | 62,020 | 9,350,000 |
+| 4 | 96,893 | 19,309,000 |
+| 32 | 437,760 | 129,215,000 |
+
+All 24 samples and calibration checksums agree. Samples last 1.173–1.417 seconds except
+32-worker reused-actor samples, which hit the 100-million-attempt cap at 0.773–0.784 seconds.
+Fresh admission includes cloning, source/tree resolution, actor/receiver execution,
+requirements and handle allocation/destruction. Reused-actor measurement excludes that
+preparation. Both include full checksum consumption and Rayon; neither includes XML/JSON,
+objective/proposal/archive work, final exports or a candidate-result cache.
+
+Data setup takes 240.50 ms, catalog 6.14 ms, numerical components 1.18 ms and 1,806 initial
+admissions 37.36 ms. Partial storage estimates are 218,624 actor-owned bytes, 3,575 source
+XML bytes, 1,550 numerical component bytes and 792 bytes of scratch per worker. These exclude
+shared data, selection/map/allocator overhead and thread stacks; they are not peak memory.
+Raw evidence: `runs/receiving-benchmark-release.json`, summaries `runs/receiving-benchmark-summary.{json,md}`.
+Benchmark binary SHA `87f6d662cf3831fa1864c73a8927c82c9c68b2efa6feb375ddf4011af03325d1`.
+
+The separate whole-CLI release runs include source/data/catalog setup and search, and
+exclude final report publication. Median milliseconds for typed/document modes respectively:
+
+| Workers | Typed | Document |
+| --- | ---: | ---: |
+| 1 | 340.56 | 2,268.28 |
+| 2 | 312.27 | 1,420.08 |
+| 4 | 315.22 | 903.32 |
+| 32 | 324.89 | 541.22 |
+
+These small runs show that setup and search work can dominate inexpensive typed calculation;
+additional workers need not improve overall runtime. Measure realistic 5–30 minute workloads
+and optimizer quality separately. No other builds/tests/benchmarks ran during either timing
+window. The benchmark and whole CLI have identical native/data identities.
+
+CLI binary SHA `0dc1e802ae5f8ea39e49bb1db284758dcd42e7c173f99c24ca8efa467af8e3a6`;
+search implementation SHA `16fda8e5f23baeafc4ac1f14d44534d7bc8d091be91e65c04d65bcc70359e9e9`;
+final XML SHA `f8dc2c5ee21f5e39f68dce88d4b8de81e92ae0b053a2f2de7ef18014fc5d8d80`.
+Evidence: `runs/receiving-release-search/summary.json` (SHA
+`4161506cb94225122f68f5554a9881640d4a7f0642ce05e02180fb9bf53dd73f`), with verification
+script `runs/verify-receiving-release.py` and the per-run reports/XML/companions.
+
+### Next local-armour stage: source audit and acceptance
+
+A read-only audit identifies normal/rare Helmets, Gloves and Boots with fixed
+Armour/Evasion/Energy-Shield bases as the next useful equipment scope. Extract eligible
+bases by complete supported source shape, including requirements, rather than embedding
+base names in Rust. Their pinned base files lack movement penalties and per-level bases;
+body armour already introduces movement effects and needs its downstream consumer.
+
+- Keep prepared local armour as privately data-bound, per-slot numerical components.
+  Do not flatten rounded item defences into ordinary global actor BASE records: the
+  receiver queries slot contributions separately before global contributions.
+- Follow literal `Item.lua:2384` local consumption and `:2522` calculation: individual and
+  paired defence records, Defences INC, separate multiplicative quality and local rounding.
+  Local negative results are not clamped; final receiver totals are. Global and conditional
+  records survive local consumption. Increased maximum ES and increased ES have different
+  source tags even when their English wording looks similar.
+- Extend ordered equipment assembly to Weapon 1, Helmet, Gloves, Boots, Amulet, preserving
+  the relative order in `ItemsTab.lua:32` / `CalcSetup.lua:1270`. Requirements still use the
+  final shared actor; base requirements, explicit LevelReq and item level remain distinct.
+- Initially reject per-level defence modifiers or implement their separate rounding:
+  `Item.lua:2373,2554` scales the fractional local coefficient by character level and rounds
+  separately from the fixed local defence. Do not use item level. Body movement penalties,
+  Ward, block, special quality, slot-specific conditions, conversions and granted skills
+  require complete consumers before admission.
+- Compare original local outputs and `CalcDefence.lua:1365,1431` slot/global receiver paths.
+  Full fixtures should cover bare/single/three-slot gear, pure/hybrid bases, normal/rare,
+  quality 0/intermediate/20, local/global/conditional duplicate combinations, signed and
+  fractional boundaries, add/remove/replacement, requirement locks and injected values.
+  Compare existing PoB snapshot `*On<slot>`, `Gear:*` and final ratings, respecting their
+  positive-only diagnostic branches, then exact exports, tampering and parallel search.
+
+This is the next part of the existing equipment/native replacement plan. Movement,
+reservation, arbitrary skills/supporting actors, minions and full-game parity remain
+required later work. Armour/Evasion objective metrics need explicit unit/availability
+contracts in both backends before they can be requested by users.
 
 ## Normalized passive and equipment source assembly - completed local checkpoint
 

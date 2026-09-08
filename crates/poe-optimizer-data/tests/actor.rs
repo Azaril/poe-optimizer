@@ -12,9 +12,9 @@ fn custom(mut package: GameDataPackage) -> Result<GameDataSnapshot, GameDataErro
 fn actor_schema_is_required_and_all_source_records_are_retained() {
     let snapshot = bundled_snapshot().unwrap();
     let package = snapshot.package();
-    assert_eq!(snapshot.identity().schema_version, 7);
+    assert_eq!(snapshot.identity().schema_version, 8);
     assert_eq!(package.actor.high_precision_mods.len(), 40);
-    assert_eq!(package.actor.modifier_rules.len(), 116);
+    assert_eq!(package.actor.modifier_rules.len(), 320);
     assert_eq!(package.actor.spirit_quests.len(), 3);
     let more: Vec<_> = package
         .actor
@@ -200,7 +200,7 @@ fn actor_grammar_mapping_and_scope_fail_closed() {
     }
     let original = bundled_snapshot().unwrap();
     for (field, value) in [
-        ("stat", json!("energy_shield")),
+        ("stat", json!("ward")),
         ("unknown", json!(0)),
         (
             "tags",

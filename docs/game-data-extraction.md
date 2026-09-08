@@ -4,12 +4,12 @@
 It is optional development tooling: native evaluation loads the exported package and has
 no Lua or worker-process dependency. No website is scraped or downloaded.
 
-The exporter covers the same fifteen explicitly partial sections as the
-[native data package](native-data.md): tree, character, actor, quests, Spark, Mace, supports, weapons,
+The exporter covers the same sixteen explicitly partial sections as the
+[native data package](native-data.md): tree, character, actor, receiving defences, quests, Spark, Mace, supports, weapons,
 item modifier rules, jewellery bases, defence, monsters, encounters, typed owned passive
 effects and explicit passive exclusions. Whole ordinary structure is separate from
-capability admission: 1,142 complete source views are supported, including the four
-admitted ascendancy resistance nodes; 3,616 source views are explicitly excluded. It does not infer arbitrary build mechanics
+capability admission: 1,270 complete source views are supported, including the four
+admitted ascendancy resistance nodes; 3,488 source views are explicitly excluded. It does not infer arbitrary build mechanics
 or broaden accepted source revisions. Progress and validation evidence belong in the
 [living implementation record](implementation.md).
 
@@ -91,7 +91,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 7 and `poe2-native-profiles-v7`, including source-keyed passive/actor effects,
+schema 8 and `poe2-native-profiles-v8`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery bases and explicit excluded views. It
 retains normalized actor modifiers, actor rules,
 the full source precision table and Spirit quest records, alongside the existing item rules,
@@ -130,9 +130,9 @@ scoped, tagged or changed-operation records reject. Cold/warm parser and local-a
 oracles remain independent checks. See [local weapon configuration](local-weapons.md).
 
 
-The schema-6 actor converter observes the actual source parser's form, special-modifier and
+The actor converter observes the actual source parser's form, special-modifier and
 condition tables, then invokes the original parser with distinct signed, fractional or
-integer operands as appropriate. The 116 reviewed templates cover seven individual
+integer operands as appropriate. The original 116 templates cover seven individual
 attribute/resource/accuracy targets with BASE, increased/reduced and more/less forms,
 including two attribute-comparison suffixes, plus fixed bonus/override phrases and the
 Dexterity accuracy override. It retains every emitted target, effect, source, scope field
@@ -147,7 +147,11 @@ including BASE entries; MORE consumers select their explicit operation from the 
 Three actual Spirit quest callbacks supply keys, defaults, values and `Quest:` source
 strings. No existing character or quest balance table is duplicated in the actor section.
 
-Independent checks execute the pinned parser in cold and warmed modes over 1,206 cases,
+The receiving extension adds 204 templates, preserving exact Global tags, complete paired
+outputs and source receiver query groups. All defensive passive effects are ordered actor
+records; the extractor refuses an incomplete or mixed conversion.
+
+Independent checks execute the pinned parser in cold and warmed modes over 3,642 inputs,
 compare all 40 precision records and exercise the original quest callbacks and actor
 constant branches. Separate extraction mutation tests reject discarded fields, changed
 source scope, unsupported tags and mismatched rule operands. These checks prove the stated

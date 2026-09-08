@@ -127,8 +127,8 @@ impl ControlledBuildCatalog {
         }
         self.check_skill_evidence(handle, result)?;
         let media = match source.profile() {
-            TemplateProfile::Spark => "application/vnd.poe-optimizer.native-profile+json;version=3",
-            TemplateProfile::Mace => "application/vnd.poe-optimizer.native-profile+json;version=5",
+            TemplateProfile::Spark => "application/vnd.poe-optimizer.native-profile+json;version=4",
+            TemplateProfile::Mace => "application/vnd.poe-optimizer.native-profile+json;version=6",
         };
         let evidence = attachment(result, media)?;
         let expected_profile = match source.profile() {
@@ -164,6 +164,17 @@ impl ControlledBuildCatalog {
             "low_life_percentage":actor.low_life_percentage,"full_life_percentage":actor.full_life_percentage,
             "life_has_override":actor.life_has_override,"mana_has_override":actor.mana_has_override,"spirit_has_override":actor.spirit_has_override,
             "chaos_inoculation":actor.chaos_inoculation,"full_life_from_chaos_inoculation":actor.full_life_from_chaos_inoculation});
+        let receiving = handle
+            .actor()
+            .receiving()
+            .ok_or_else(|| mismatch("candidate receiving preparation is incomplete"))?;
+        if evidence["receiving_defence"]
+            != crate::actor_assembly::receiving_defence_evidence(receiving)
+        {
+            return Err(mismatch(
+                "fresh receiving defences differ from admitted preparation",
+            ));
+        }
         if evidence["actor_resources"] != resources {
             return Err(mismatch(
                 "fresh shared actor resources differ from admitted preparation",

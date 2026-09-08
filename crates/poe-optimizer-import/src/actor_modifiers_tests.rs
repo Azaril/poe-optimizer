@@ -373,3 +373,36 @@ fn source_neutral_line_parser_preserves_item_identity_and_rejects_ambiguity() {
     data.actor.modifier_rules.push(rule);
     assert!(match_actor_modifier_line("+20 to Strength", "Node:1", &data).is_err());
 }
+
+#[test]
+fn receiving_records_preserve_global_markers_pairs_conditions_and_strict_scope() {
+    use poe_optimizer_data::game_data::ActorModifierTag;
+    let data = data();
+    let text = "\r\n\t+11 to Armour\r\n15% increased maximum Energy Shield\r\n+7% to all Resistances\r\n20% increased Armour if Strength is higher than Intelligence\r\n";
+    let parsed = parse_actor_modifier_text(text, &data).unwrap();
+    assert_eq!(parsed.records().len(), 5);
+    assert_eq!(parsed.records()[0].stat, ActorStat::Armour);
+    assert_eq!(parsed.records()[1].tags, vec![ActorModifierTag::Global]);
+    assert_eq!(parsed.records()[2].stat, ActorStat::ElementalResist);
+    assert_eq!(parsed.records()[3].stat, ActorStat::ChaosResist);
+    assert!(matches!(
+        parsed.records()[4].tags.as_slice(),
+        [ActorModifierTag::Condition { .. }]
+    ));
+    assert_eq!(parsed.blocks()[0].text, text);
+    for line in parsed.lines() {
+        assert_eq!(&text[line.byte_range.clone()], line.source);
+    }
+    for bad in [
+        "10% more Armour",
+        "+5% to maximum Fire Resistance",
+        "+5 to Defences",
+        "10% increased Armour while on Low Life",
+        "Gain 10% of maximum Life as Extra maximum Energy Shield",
+    ] {
+        assert!(
+            parse_actor_modifier_text(bad, &data).is_err(),
+            "accepted {bad}"
+        );
+    }
+}

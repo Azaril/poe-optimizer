@@ -9,7 +9,9 @@ use either implementation without exposing Lua values or process APIs.
 Both profiles use [shared actor preparation](actor-resources.md) for attributes, inherent
 bonuses, maximum Life/Mana/Spirit and global Accuracy. Data owns admitted modifier templates,
 operations, condition tags, precision and Spirit quest settings. Native profile evidence is
-Spark version 3 or Mace version 5; unsupported receiving defences and reservation still reject.
+Spark version 4 or Mace version 6. [Shared receiving defences](receiving-defences.md)
+adds global ratings and resistance BASE/INC; conversion receivers, reservation and other
+unsupported mechanics still reject.
 
 ## Implemented build profiles
 

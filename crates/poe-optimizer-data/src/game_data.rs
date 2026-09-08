@@ -12,13 +12,14 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 7;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v7";
+pub const SCHEMA_VERSION: u32 = 8;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v8";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
     "character",
     "actor",
+    "receiving_defence",
     "quests",
     "spark",
     "mace",
@@ -370,6 +371,7 @@ pub struct GameDataPackage {
     pub tree: BundledClassTree,
     pub character: CharacterData,
     pub actor: ActorData,
+    pub receiving_defence: ReceivingDefenceData,
     pub quests: QuestData,
     pub spark: SparkData,
     pub mace: MaceData,
@@ -667,6 +669,7 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
         validate_requirement(name, requirement)?;
     }
     validate_supports(package)?;
+    package.receiving_defence.validate()?;
     let c = &package.character;
     number("minimum_life", c.minimum_life, 1.0, 1e6)?;
     number("minimum_mana", c.minimum_mana, 1.0, 1e6)?;
@@ -1104,6 +1107,21 @@ fn validate_passive_catalog(package: &GameDataPackage, limits: &LoadLimits) -> R
             }
         }
         for effect in &record.effects {
+            if matches!(
+                effect.stat,
+                PassiveStat::ArmourFlat
+                    | PassiveStat::EvasionFlat
+                    | PassiveStat::EnergyShieldFlat
+                    | PassiveStat::FireResistanceFlat
+                    | PassiveStat::ColdResistanceFlat
+                    | PassiveStat::LightningResistanceFlat
+                    | PassiveStat::ChaosResistanceFlat
+                    | PassiveStat::ElementalResistanceFlat
+            ) {
+                return Err(error(
+                    "schema8 passive defence/resistance values require normalized actor records; legacy scalar representation would lose source ordering",
+                ));
+            }
             let minimum = if matches!(
                 effect.stat,
                 PassiveStat::FireResistanceFlat

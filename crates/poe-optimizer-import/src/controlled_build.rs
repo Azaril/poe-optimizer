@@ -20,7 +20,7 @@ use poe_optimizer_engine::{
     CompiledGameData,
     actor::{
         ActorModifierLayer, ActorQuestSelection, ActorScratch, CompiledActorModifiers,
-        PreparedActorResources,
+        PreparedActorResources, ReceivingScenario,
     },
     character::CharacterInput,
     spark::SparkQuestRewards,
@@ -153,6 +153,7 @@ pub struct ControlledBuildCatalog {
     config_program: CompiledActorModifiers,
     passive_programs: BTreeMap<PassiveViewKey, CompiledActorModifiers>,
     quests: ActorQuestSelection,
+    receiving_scenario: ReceivingScenario,
     binding: Arc<()>,
 }
 #[derive(Debug, Clone, Serialize)]
@@ -331,6 +332,13 @@ impl ControlledBuildCatalog {
                 quests.spirit[index] = *v;
             }
         }
+        let penalty = match source.config().get("resistancePenalty") {
+            Some(Scalar::Number(value)) => *value,
+            None => data.encounters.default_resistance_penalty,
+            _ => unreachable!("validated resistance penalty"),
+        };
+        let receiving_scenario =
+            compiled.receiving_scenario(SparkQuestRewards::from_enabled(enabled), penalty);
         Ok(Self {
             compiled,
             source,
@@ -341,8 +349,21 @@ impl ControlledBuildCatalog {
             config_program,
             passive_programs,
             quests,
+            receiving_scenario,
             binding: Arc::new(()),
         })
+    }
+    /// Authored receiving configuration or equipment, including source implicits.
+    /// Migrated passive records do not expand the legacy problem source scope.
+    pub fn uses_receiving_defence_scope(&self) -> bool {
+        self.source.actor_modifiers().uses_receiving_defence()
+            || self.items.values().any(|component| {
+                component
+                    .item
+                    .actor_modifiers()
+                    .iter()
+                    .any(|record| record.stat.is_receiving_defence())
+            })
     }
     pub fn compiled(&self) -> &Arc<CompiledGameData> {
         &self.compiled
@@ -665,9 +686,10 @@ impl ControlledBuildDomain {
         let actor = self
             .catalog
             .compiled
-            .evaluate_actor_resources(
+            .evaluate_actor(
                 self.catalog.source.level(),
                 self.catalog.quests,
+                self.catalog.receiving_scenario,
                 &actor_character,
                 &[ActorModifierLayer {
                     programs: &programs,

@@ -1,6 +1,6 @@
 {
-  "schema_version": 5,
-  "id": "poe2-pinned-current-profile-extraction-v7",
+  "schema_version": 6,
+  "id": "poe2-pinned-current-profile-extraction-v8",
   "release": "poe2-0_5-native-profiles-3887ae6",
   "source_role": "reviewed partial source transcriptions; source parity required for release",
   "spark_skill": "SparkPlayer",
@@ -37,7 +37,10 @@
     "source_critical_chance_cap_before_attack_accuracy_roll",
     "shared_actor_attributes_maximum_resources_and_audited_global_modifier_records",
     "whole_source_capability_admission_of_ordinary_passives_and_explicit_attribute_options",
-    "source_configured_actor_only_jewellery_bases_after_complete_implicit_admission"
+    "source_configured_actor_and_receiving_defence_jewellery_after_complete_implicit_admission",
+    "global_receiving_armour_evasion_energy_shield_base_and_increased_with_exact_query_groups",
+    "player_resistance_base_and_increased_with_paired_and_all_expansions",
+    "exact_global_scope_marker_and_reviewed_attribute_conditions_no_ward_base_or_local_armour"
   ],
   "supports": [
     [
@@ -899,6 +902,1434 @@
       "source_kind": "special",
       "pattern": "dexterity's accuracy bonus instead grants %+(%d+) to accuracy rating per dexterity",
       "condition_pattern": null
+    },
+    {
+      "id": "armour_base",
+      "template": "{0} to Armour",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "armour_base_dex_higher_int",
+      "template": "{0} to Armour if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "armour_base_str_higher_int",
+      "template": "{0} to Armour if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "armour_increased",
+      "template": "{0}% increased Armour",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "armour_increased_dex_higher_int",
+      "template": "{0}% increased Armour if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "armour_increased_str_higher_int",
+      "template": "{0}% increased Armour if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "armour_reduced",
+      "template": "{0}% reduced Armour",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "armour_reduced_dex_higher_int",
+      "template": "{0}% reduced Armour if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "armour_reduced_str_higher_int",
+      "template": "{0}% reduced Armour if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "evasion_base",
+      "template": "{0} to Evasion Rating",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "evasion_base_dex_higher_int",
+      "template": "{0} to Evasion Rating if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "evasion_base_str_higher_int",
+      "template": "{0} to Evasion Rating if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "evasion_increased",
+      "template": "{0}% increased Evasion Rating",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "evasion_increased_dex_higher_int",
+      "template": "{0}% increased Evasion Rating if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "evasion_increased_str_higher_int",
+      "template": "{0}% increased Evasion Rating if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "evasion_reduced",
+      "template": "{0}% reduced Evasion Rating",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "evasion_reduced_dex_higher_int",
+      "template": "{0}% reduced Evasion Rating if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "evasion_reduced_str_higher_int",
+      "template": "{0}% reduced Evasion Rating if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_base",
+      "template": "{0} to Energy Shield",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "energy_shield_base_dex_higher_int",
+      "template": "{0} to Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_base_str_higher_int",
+      "template": "{0} to Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_increased",
+      "template": "{0}% increased Energy Shield",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "energy_shield_increased_dex_higher_int",
+      "template": "{0}% increased Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_increased_str_higher_int",
+      "template": "{0}% increased Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_reduced",
+      "template": "{0}% reduced Energy Shield",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "energy_shield_reduced_dex_higher_int",
+      "template": "{0}% reduced Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_reduced_str_higher_int",
+      "template": "{0}% reduced Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_maximum_base",
+      "template": "{0} to maximum Energy Shield",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "energy_shield_maximum_base_dex_higher_int",
+      "template": "{0} to maximum Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_maximum_base_str_higher_int",
+      "template": "{0} to maximum Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_maximum_increased",
+      "template": "{0}% increased maximum Energy Shield",
+      "source_kind": "special",
+      "pattern": "(%d+)%% increased maximum energy shield",
+      "condition_pattern": null
+    },
+    {
+      "id": "energy_shield_maximum_increased_dex_higher_int",
+      "template": "{0}% increased maximum Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "special",
+      "pattern": "(%d+)%% increased maximum energy shield",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_maximum_increased_str_higher_int",
+      "template": "{0}% increased maximum Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "special",
+      "pattern": "(%d+)%% increased maximum energy shield",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_maximum_reduced",
+      "template": "{0}% reduced maximum Energy Shield",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "energy_shield_maximum_reduced_dex_higher_int",
+      "template": "{0}% reduced maximum Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "energy_shield_maximum_reduced_str_higher_int",
+      "template": "{0}% reduced maximum Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "armour_and_evasion_base",
+      "template": "{0} to Armour and Evasion",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "armour_and_evasion_base_dex_higher_int",
+      "template": "{0} to Armour and Evasion if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "armour_and_evasion_base_str_higher_int",
+      "template": "{0} to Armour and Evasion if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "armour_and_evasion_increased",
+      "template": "{0}% increased Armour and Evasion",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "armour_and_evasion_increased_dex_higher_int",
+      "template": "{0}% increased Armour and Evasion if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "armour_and_evasion_increased_str_higher_int",
+      "template": "{0}% increased Armour and Evasion if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "armour_and_evasion_reduced",
+      "template": "{0}% reduced Armour and Evasion",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "armour_and_evasion_reduced_dex_higher_int",
+      "template": "{0}% reduced Armour and Evasion if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "armour_and_evasion_reduced_str_higher_int",
+      "template": "{0}% reduced Armour and Evasion if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "evasion_and_energy_shield_global_base",
+      "template": "{0} to global Evasion Rating and Energy Shield",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "evasion_and_energy_shield_global_base_dex_higher_int",
+      "template": "{0} to global Evasion Rating and Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "evasion_and_energy_shield_global_base_str_higher_int",
+      "template": "{0} to global Evasion Rating and Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "evasion_and_energy_shield_global_increased",
+      "template": "{0}% increased global Evasion Rating and Energy Shield",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "evasion_and_energy_shield_global_increased_dex_higher_int",
+      "template": "{0}% increased global Evasion Rating and Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "evasion_and_energy_shield_global_increased_str_higher_int",
+      "template": "{0}% increased global Evasion Rating and Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "evasion_and_energy_shield_global_reduced",
+      "template": "{0}% reduced global Evasion Rating and Energy Shield",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "evasion_and_energy_shield_global_reduced_dex_higher_int",
+      "template": "{0}% reduced global Evasion Rating and Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "evasion_and_energy_shield_global_reduced_str_higher_int",
+      "template": "{0}% reduced global Evasion Rating and Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "armour_evasion_energy_shield_base",
+      "template": "{0} to Armour, Evasion and Energy Shield",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "armour_evasion_energy_shield_base_dex_higher_int",
+      "template": "{0} to Armour, Evasion and Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "armour_evasion_energy_shield_base_str_higher_int",
+      "template": "{0} to Armour, Evasion and Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "armour_evasion_energy_shield_increased",
+      "template": "{0}% increased Armour, Evasion and Energy Shield",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "armour_evasion_energy_shield_increased_dex_higher_int",
+      "template": "{0}% increased Armour, Evasion and Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "armour_evasion_energy_shield_increased_str_higher_int",
+      "template": "{0}% increased Armour, Evasion and Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "armour_evasion_energy_shield_reduced",
+      "template": "{0}% reduced Armour, Evasion and Energy Shield",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "armour_evasion_energy_shield_reduced_dex_higher_int",
+      "template": "{0}% reduced Armour, Evasion and Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "armour_evasion_energy_shield_reduced_str_higher_int",
+      "template": "{0}% reduced Armour, Evasion and Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "defences_increased",
+      "template": "{0}% increased Defences",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "defences_increased_dex_higher_int",
+      "template": "{0}% increased Defences if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "defences_increased_str_higher_int",
+      "template": "{0}% increased Defences if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "defences_reduced",
+      "template": "{0}% reduced Defences",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "defences_reduced_dex_higher_int",
+      "template": "{0}% reduced Defences if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "defences_reduced_str_higher_int",
+      "template": "{0}% reduced Defences if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_resistance_base",
+      "template": "{0}% to Fire Resistance",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_resistance_base_dex_higher_int",
+      "template": "{0}% to Fire Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_resistance_base_str_higher_int",
+      "template": "{0}% to Fire Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_resistance_increased",
+      "template": "{0}% increased Fire Resistance",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_resistance_increased_dex_higher_int",
+      "template": "{0}% increased Fire Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_resistance_increased_str_higher_int",
+      "template": "{0}% increased Fire Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_resistance_reduced",
+      "template": "{0}% reduced Fire Resistance",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_resistance_reduced_dex_higher_int",
+      "template": "{0}% reduced Fire Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_resistance_reduced_str_higher_int",
+      "template": "{0}% reduced Fire Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "cold_resistance_base",
+      "template": "{0}% to Cold Resistance",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "cold_resistance_base_dex_higher_int",
+      "template": "{0}% to Cold Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "cold_resistance_base_str_higher_int",
+      "template": "{0}% to Cold Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "cold_resistance_increased",
+      "template": "{0}% increased Cold Resistance",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "cold_resistance_increased_dex_higher_int",
+      "template": "{0}% increased Cold Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "cold_resistance_increased_str_higher_int",
+      "template": "{0}% increased Cold Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "cold_resistance_reduced",
+      "template": "{0}% reduced Cold Resistance",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "cold_resistance_reduced_dex_higher_int",
+      "template": "{0}% reduced Cold Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "cold_resistance_reduced_str_higher_int",
+      "template": "{0}% reduced Cold Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "lightning_resistance_base",
+      "template": "{0}% to Lightning Resistance",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "lightning_resistance_base_dex_higher_int",
+      "template": "{0}% to Lightning Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "lightning_resistance_base_str_higher_int",
+      "template": "{0}% to Lightning Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "lightning_resistance_increased",
+      "template": "{0}% increased Lightning Resistance",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "lightning_resistance_increased_dex_higher_int",
+      "template": "{0}% increased Lightning Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "lightning_resistance_increased_str_higher_int",
+      "template": "{0}% increased Lightning Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "lightning_resistance_reduced",
+      "template": "{0}% reduced Lightning Resistance",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "lightning_resistance_reduced_dex_higher_int",
+      "template": "{0}% reduced Lightning Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "lightning_resistance_reduced_str_higher_int",
+      "template": "{0}% reduced Lightning Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "chaos_resistance_base",
+      "template": "{0}% to Chaos Resistance",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "chaos_resistance_base_dex_higher_int",
+      "template": "{0}% to Chaos Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "chaos_resistance_base_str_higher_int",
+      "template": "{0}% to Chaos Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "chaos_resistance_increased",
+      "template": "{0}% increased Chaos Resistance",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "chaos_resistance_increased_dex_higher_int",
+      "template": "{0}% increased Chaos Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "chaos_resistance_increased_str_higher_int",
+      "template": "{0}% increased Chaos Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "chaos_resistance_reduced",
+      "template": "{0}% reduced Chaos Resistance",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "chaos_resistance_reduced_dex_higher_int",
+      "template": "{0}% reduced Chaos Resistance if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "chaos_resistance_reduced_str_higher_int",
+      "template": "{0}% reduced Chaos Resistance if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "elemental_resistance_base",
+      "template": "{0}% to all Elemental Resistances",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "elemental_resistance_base_dex_higher_int",
+      "template": "{0}% to all Elemental Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "elemental_resistance_base_str_higher_int",
+      "template": "{0}% to all Elemental Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "elemental_resistance_increased",
+      "template": "{0}% increased all Elemental Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "elemental_resistance_increased_dex_higher_int",
+      "template": "{0}% increased all Elemental Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "elemental_resistance_increased_str_higher_int",
+      "template": "{0}% increased all Elemental Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "elemental_resistance_reduced",
+      "template": "{0}% reduced all Elemental Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "elemental_resistance_reduced_dex_higher_int",
+      "template": "{0}% reduced all Elemental Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "elemental_resistance_reduced_str_higher_int",
+      "template": "{0}% reduced all Elemental Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "all_resistances_base",
+      "template": "{0}% to all Resistances",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "all_resistances_base_dex_higher_int",
+      "template": "{0}% to all Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "all_resistances_base_str_higher_int",
+      "template": "{0}% to all Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "all_resistances_increased",
+      "template": "{0}% increased all Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "all_resistances_increased_dex_higher_int",
+      "template": "{0}% increased all Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "all_resistances_increased_str_higher_int",
+      "template": "{0}% increased all Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "all_resistances_reduced",
+      "template": "{0}% reduced all Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "all_resistances_reduced_dex_higher_int",
+      "template": "{0}% reduced all Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "all_resistances_reduced_str_higher_int",
+      "template": "{0}% reduced all Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_cold_resistances_base",
+      "template": "{0}% to Fire and Cold Resistances",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_cold_resistances_base_dex_higher_int",
+      "template": "{0}% to Fire and Cold Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_cold_resistances_base_str_higher_int",
+      "template": "{0}% to Fire and Cold Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_cold_resistances_increased",
+      "template": "{0}% increased Fire and Cold Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_cold_resistances_increased_dex_higher_int",
+      "template": "{0}% increased Fire and Cold Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_cold_resistances_increased_str_higher_int",
+      "template": "{0}% increased Fire and Cold Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_cold_resistances_reduced",
+      "template": "{0}% reduced Fire and Cold Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_cold_resistances_reduced_dex_higher_int",
+      "template": "{0}% reduced Fire and Cold Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_cold_resistances_reduced_str_higher_int",
+      "template": "{0}% reduced Fire and Cold Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_lightning_resistances_base",
+      "template": "{0}% to Fire and Lightning Resistances",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_lightning_resistances_base_dex_higher_int",
+      "template": "{0}% to Fire and Lightning Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_lightning_resistances_base_str_higher_int",
+      "template": "{0}% to Fire and Lightning Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_lightning_resistances_increased",
+      "template": "{0}% increased Fire and Lightning Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_lightning_resistances_increased_dex_higher_int",
+      "template": "{0}% increased Fire and Lightning Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_lightning_resistances_increased_str_higher_int",
+      "template": "{0}% increased Fire and Lightning Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_lightning_resistances_reduced",
+      "template": "{0}% reduced Fire and Lightning Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_lightning_resistances_reduced_dex_higher_int",
+      "template": "{0}% reduced Fire and Lightning Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_lightning_resistances_reduced_str_higher_int",
+      "template": "{0}% reduced Fire and Lightning Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "cold_lightning_resistances_base",
+      "template": "{0}% to Cold and Lightning Resistances",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "cold_lightning_resistances_base_dex_higher_int",
+      "template": "{0}% to Cold and Lightning Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "cold_lightning_resistances_base_str_higher_int",
+      "template": "{0}% to Cold and Lightning Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "cold_lightning_resistances_increased",
+      "template": "{0}% increased Cold and Lightning Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "cold_lightning_resistances_increased_dex_higher_int",
+      "template": "{0}% increased Cold and Lightning Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "cold_lightning_resistances_increased_str_higher_int",
+      "template": "{0}% increased Cold and Lightning Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "cold_lightning_resistances_reduced",
+      "template": "{0}% reduced Cold and Lightning Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "cold_lightning_resistances_reduced_dex_higher_int",
+      "template": "{0}% reduced Cold and Lightning Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "cold_lightning_resistances_reduced_str_higher_int",
+      "template": "{0}% reduced Cold and Lightning Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_chaos_resistances_base",
+      "template": "{0}% to Fire and Chaos Resistances",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_chaos_resistances_base_dex_higher_int",
+      "template": "{0}% to Fire and Chaos Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_chaos_resistances_base_str_higher_int",
+      "template": "{0}% to Fire and Chaos Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_chaos_resistances_increased",
+      "template": "{0}% increased Fire and Chaos Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_chaos_resistances_increased_dex_higher_int",
+      "template": "{0}% increased Fire and Chaos Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_chaos_resistances_increased_str_higher_int",
+      "template": "{0}% increased Fire and Chaos Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "fire_chaos_resistances_reduced",
+      "template": "{0}% reduced Fire and Chaos Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "fire_chaos_resistances_reduced_dex_higher_int",
+      "template": "{0}% reduced Fire and Chaos Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "fire_chaos_resistances_reduced_str_higher_int",
+      "template": "{0}% reduced Fire and Chaos Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "cold_chaos_resistances_base",
+      "template": "{0}% to Cold and Chaos Resistances",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "cold_chaos_resistances_base_dex_higher_int",
+      "template": "{0}% to Cold and Chaos Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "cold_chaos_resistances_base_str_higher_int",
+      "template": "{0}% to Cold and Chaos Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "cold_chaos_resistances_increased",
+      "template": "{0}% increased Cold and Chaos Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "cold_chaos_resistances_increased_dex_higher_int",
+      "template": "{0}% increased Cold and Chaos Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "cold_chaos_resistances_increased_str_higher_int",
+      "template": "{0}% increased Cold and Chaos Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "cold_chaos_resistances_reduced",
+      "template": "{0}% reduced Cold and Chaos Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "cold_chaos_resistances_reduced_dex_higher_int",
+      "template": "{0}% reduced Cold and Chaos Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "cold_chaos_resistances_reduced_str_higher_int",
+      "template": "{0}% reduced Cold and Chaos Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "lightning_chaos_resistances_base",
+      "template": "{0}% to Lightning and Chaos Resistances",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "lightning_chaos_resistances_base_dex_higher_int",
+      "template": "{0}% to Lightning and Chaos Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "lightning_chaos_resistances_base_str_higher_int",
+      "template": "{0}% to Lightning and Chaos Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "lightning_chaos_resistances_increased",
+      "template": "{0}% increased Lightning and Chaos Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "lightning_chaos_resistances_increased_dex_higher_int",
+      "template": "{0}% increased Lightning and Chaos Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "lightning_chaos_resistances_increased_str_higher_int",
+      "template": "{0}% increased Lightning and Chaos Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "lightning_chaos_resistances_reduced",
+      "template": "{0}% reduced Lightning and Chaos Resistances",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "lightning_chaos_resistances_reduced_dex_higher_int",
+      "template": "{0}% reduced Lightning and Chaos Resistances if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "lightning_chaos_resistances_reduced_str_higher_int",
+      "template": "{0}% reduced Lightning and Chaos Resistances if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "global_armour_base",
+      "template": "{0} to Global Armour",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "global_armour_base_dex_higher_int",
+      "template": "{0} to Global Armour if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "global_armour_base_str_higher_int",
+      "template": "{0} to Global Armour if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "global_armour_increased",
+      "template": "{0}% increased Global Armour",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "global_armour_increased_dex_higher_int",
+      "template": "{0}% increased Global Armour if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "global_armour_increased_str_higher_int",
+      "template": "{0}% increased Global Armour if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "global_armour_reduced",
+      "template": "{0}% reduced Global Armour",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "global_armour_reduced_dex_higher_int",
+      "template": "{0}% reduced Global Armour if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "global_armour_reduced_str_higher_int",
+      "template": "{0}% reduced Global Armour if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "global_evasion_base",
+      "template": "{0} to Global Evasion Rating",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "global_evasion_base_dex_higher_int",
+      "template": "{0} to Global Evasion Rating if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "global_evasion_base_str_higher_int",
+      "template": "{0} to Global Evasion Rating if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "global_evasion_increased",
+      "template": "{0}% increased Global Evasion Rating",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "global_evasion_increased_dex_higher_int",
+      "template": "{0}% increased Global Evasion Rating if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "global_evasion_increased_str_higher_int",
+      "template": "{0}% increased Global Evasion Rating if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "global_evasion_reduced",
+      "template": "{0}% reduced Global Evasion Rating",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "global_evasion_reduced_dex_higher_int",
+      "template": "{0}% reduced Global Evasion Rating if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "global_evasion_reduced_str_higher_int",
+      "template": "{0}% reduced Global Evasion Rating if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "global_energy_shield_base",
+      "template": "{0} to Global Energy Shield",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "global_energy_shield_base_dex_higher_int",
+      "template": "{0} to Global Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "global_energy_shield_base_str_higher_int",
+      "template": "{0} to Global Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "global_energy_shield_increased",
+      "template": "{0}% increased Global Energy Shield",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "global_energy_shield_increased_dex_higher_int",
+      "template": "{0}% increased Global Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "global_energy_shield_increased_str_higher_int",
+      "template": "{0}% increased Global Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "global_energy_shield_reduced",
+      "template": "{0}% reduced Global Energy Shield",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "global_energy_shield_reduced_dex_higher_int",
+      "template": "{0}% reduced Global Energy Shield if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "global_energy_shield_reduced_str_higher_int",
+      "template": "{0}% reduced Global Energy Shield if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
     }
   ]
 }

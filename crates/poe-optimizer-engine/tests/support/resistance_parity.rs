@@ -114,28 +114,38 @@ fn resistance_operations_match_original_parser_for_signed_fractional_values_and_
                 parser.call(stats.get::<String>(1).unwrap()).unwrap();
             assert!(remainder.is_none());
             let modifier: Table = mods.get(1).unwrap();
-            let expected = CharacterInput {
-                modifiers: *compiled.passive_modifiers(class, Some(owner), id).unwrap(),
-                ..spark::default_character()
-            };
-            let actual = character_parity::input_table(lua, &expected)
-                .get::<Table>("mods")
+            // Schema8 retains source receiver records exclusively in the actor
+            // program stream. The compatibility scalar projection is offence-only.
+            let source = compiled
+                .snapshot()
+                .passive_effects(class, Some(owner), id)
                 .unwrap();
-            assert_eq!(actual.raw_len(), 1);
-            let actual: Table = actual.get(1).unwrap();
-            for field in ["name", "type"] {
-                assert_eq!(
-                    actual.get::<String>(field).unwrap(),
-                    modifier.get::<String>(field).unwrap()
-                );
-            }
-            for field in ["value", "flags", "keywordFlags"] {
-                assert_eq!(
-                    actual.get::<f64>(field).unwrap(),
-                    modifier.get::<f64>(field).unwrap()
-                );
-            }
+            assert!(source.effects.is_empty());
+            assert_eq!(source.actor_modifiers.len(), 1);
+            let actual = &source.actor_modifiers[0];
+            assert_eq!(
+                actual.stat.upstream_name(),
+                modifier.get::<String>("name").unwrap()
+            );
+            let game_data::ActorModifierEffect::Numeric { operation, value } = actual.effect else {
+                panic!("numeric source receiver")
+            };
+            assert_eq!(
+                operation.upstream_name(),
+                modifier.get::<String>("type").unwrap()
+            );
+            assert_eq!(value, modifier.get::<f64>("value").unwrap());
+            assert_eq!(actual.flags as f64, modifier.get::<f64>("flags").unwrap());
+            assert_eq!(
+                actual.keyword_flags as f64,
+                modifier.get::<f64>("keywordFlags").unwrap()
+            );
+            assert!(actual.tags.is_empty());
             assert_eq!(modifier.raw_len(), 0);
+            assert_eq!(
+                *compiled.passive_modifiers(class, Some(owner), id).unwrap(),
+                CharacterModifiers::NONE
+            );
             assert!(compiled.passive_modifiers(class, None, id).is_none());
             assert!(
                 compiled

@@ -23,6 +23,8 @@ pub enum ConditionVariables {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ModifierTag {
+    /// Exact source marker: item classification metadata, neutral in global queries.
+    Global,
     Condition {
         variables: ConditionVariables,
         negated: bool,
@@ -114,6 +116,7 @@ impl ConditionEnvironment {
 
     pub(crate) fn matches(&self, tags: &[ModifierTag]) -> bool {
         tags.iter().all(|tag| match tag {
+            ModifierTag::Global => true,
             ModifierTag::Condition { variables, negated } => {
                 let actor = &self.input.actors[self.input.current_actor];
                 let weapon = if actor.weapon_one.counts_as_all_one_handed {

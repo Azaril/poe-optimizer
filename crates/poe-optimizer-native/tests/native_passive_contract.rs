@@ -93,7 +93,7 @@ fn fixture(
     )
     .replace(
         "<Notes>",
-        "<!-- source identity notes -->\n<Notes>café &amp; manual choices. ",
+        "<!-- source identity notes -->\n<Notes>cafÃ© &amp; manual choices. ",
     )
 }
 fn check_identity(
@@ -523,7 +523,7 @@ fn native_realization_rejects_tampered_ascendancy_resolution_and_effect_evidence
         "/paid_nodes/1/effective_node_id",
         "/paid_nodes/1/allocation_kind",
         "/configured_effects/1/key/physical_node_id",
-        "/configured_effects/1/effects/0/value",
+        "/configured_effects/1/actor_modifiers/0/effect/value",
         "/data_identity/content_sha256",
         "/point_budget_verified",
     ] {

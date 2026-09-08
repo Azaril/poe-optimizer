@@ -446,6 +446,12 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             supports,
         )?
     };
+    if registry.uses_receiving_defence_scope() {
+        return Err(
+            "Authored receiving-defence modifiers require search-build with problem schema 8"
+                .into(),
+        );
+    }
     if !actor_modifiers_enabled && registry.uses_extended_actor_scope() {
         return Err("Actor modifier blocks, legacy custom modifiers and Spirit quest inputs require problem schema 6".into());
     }

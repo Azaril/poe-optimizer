@@ -38,12 +38,18 @@ fn conditional(mut record: Record, conditions: Vec<AC>, negated: bool) -> Record
     });
     record
 }
-struct ActorOracle {
+pub(super) struct ActorOracle {
     oracle: Oracle,
     calculate: Function,
 }
 impl ActorOracle {
     fn new(warm: bool) -> Self {
+        Self::new_scoped(warm, false)
+    }
+    pub(super) fn new_receiving(warm: bool) -> Self {
+        Self::new_scoped(warm, true)
+    }
+    fn new_scoped(warm: bool, receiving: bool) -> Self {
         let oracle = SparkOracle::new(warm).oracle;
         let lua = &oracle.lua;
         let perform = SPARK_PERFORM.replace("\r\n", "\n");
@@ -55,7 +61,7 @@ impl ActorOracle {
             "local function calculateAttributes(",
             "-- Calculate attributes, and set conditions",
         ));
-        body.push_str("local function calculate(input) local parent; for i=#input.layers,2,-1 do local db=new('ModDB'):ModDB(parent); for _,mod in ipairs(input.layers[i]) do db:AddMod(copyTable(mod)) end; parent=db end; local modDB=new('ModDB'):ModDB(parent); local output={}; local condList=modDB.conditions; local actor={modDB=modDB,output=output}; modDB.actor=actor; local breakdown=nil; modDB.multipliers.Level=input.level; ");
+        body.push_str("local function calculate(input) local parent; for i=#input.layers,2,-1 do local db=new('ModDB'):ModDB(parent); for _,mod in ipairs(input.layers[i]) do db:AddMod(copyTable(mod)) end; parent=db end; local modDB=new('ModDB'):ModDB(parent); local output={}; local condList=modDB.conditions; local actor={modDB=modDB,output=output,itemList={}}; modDB.actor=actor; local breakdown=nil; modDB.multipliers.Level=input.level; ");
         body.push_str("for _,stat in ipairs({'Str','Dex','Int'}) do modDB:NewMod(stat,'BASE',input.attributes[stat],'Base') end; ");
         body.push_str(section(
             &setup,
@@ -69,6 +75,18 @@ impl ActorOracle {
             "modDB:NewMod(\"Accuracy\", \"BASE\", data.characterConstants",
         ));
         body.push('\n');
+        if receiving {
+            body.push_str("local env={configInput={resistancePenalty=input.receiving_penalty}}; ");
+            body.push_str(source_line(
+                &setup,
+                "modDB:NewMod(\"Evasion\", \"BASE\", data.characterConstants",
+            ));
+            body.push('\n');
+            for prefix in resistance_parity::SETUP_PREFIXES {
+                body.push_str(source_line(&setup, prefix));
+                body.push('\n');
+            }
+        }
         body.push_str("for _,mod in ipairs(input.quests) do modDB:AddMod(copyTable(mod)) end; for _,mod in ipairs(input.layers[1] or {}) do modDB:AddMod(copyTable(mod)) end; calculateAttributes(modDB,output,nil,condList); ");
         body.push_str(source_line(
             &perform,
@@ -90,6 +108,15 @@ impl ActorOracle {
             body.push_str(source_line(&offence, prefix));
             body.push('\n');
         }
+        if receiving {
+            let defence = SPARK_DEFENCE.replace("\r\n", "\n");
+            body.push_str(section(
+                &defence,
+                "\t\tlocal resourceList = {",
+                "\n\t\toutput[\"Gear:Ward\"]",
+            ));
+            body.push_str("\nplayerResistances(modDB,output); ");
+        }
         body.push_str("return {output=output,conditions=condList} end; return function(input,warm) local last; for i=1,(warm and 200 or 1) do last=calculate(input) end; return last end");
         let calculate = lua
             .load(format!("local m_floor=math.floor; {body}"))
@@ -106,9 +133,34 @@ impl ActorOracle {
         character: &CharacterInput,
         layers: &[Vec<Record>],
     ) -> Table {
+        self.calculate_impl(data, level, quests, character, layers, None)
+    }
+    pub(super) fn calculate_receiving(
+        &self,
+        data: &CompiledGameData,
+        level: u32,
+        quests: ActorQuestSelection,
+        scenario: poe_optimizer_engine::actor::ReceivingScenario,
+        character: &CharacterInput,
+        layers: &[Vec<Record>],
+    ) -> Table {
+        self.calculate_impl(data, level, quests, character, layers, Some(scenario))
+    }
+    fn calculate_impl(
+        &self,
+        data: &CompiledGameData,
+        level: u32,
+        quests: ActorQuestSelection,
+        character: &CharacterInput,
+        layers: &[Vec<Record>],
+        receiving: Option<poe_optimizer_engine::actor::ReceivingScenario>,
+    ) -> Table {
         let lua = &self.oracle.lua;
         let input = lua.create_table().unwrap();
         input.set("level", level).unwrap();
+        input
+            .set("receiving_penalty", receiving.map(|v| v.resistance_penalty))
+            .unwrap();
         let attrs = lua.create_table().unwrap();
         for (name, value) in [
             ("Str", character.attributes.strength),
@@ -154,6 +206,33 @@ impl ActorOracle {
                 records.extend(quest.modifiers.clone());
             }
         }
+        if let Some(scenario) = receiving {
+            for (enabled, stat) in scenario.resistance_quests.into_iter().zip([
+                Stat::FireResist,
+                Stat::ColdResist,
+                Stat::LightningResist,
+            ]) {
+                if enabled {
+                    records.push(numeric(stat, Op::Base, package.quests.elemental_resistance));
+                }
+            }
+            let lua_data: Table = lua.globals().get("data").unwrap();
+            let misc: Table = lua_data.get("misc").unwrap();
+            misc.set("ResistFloor", package.defence.resistance_floor)
+                .unwrap();
+            misc.set("MaxResistCap", package.defence.resistance_maximum_cap)
+                .unwrap();
+            let constants: Table = lua_data.get("characterConstants").unwrap();
+            constants
+                .set(
+                    "base_maximum_all_resistances_%",
+                    package.defence.player_resistance_cap,
+                )
+                .unwrap();
+            constants
+                .set("base_evasion_rating", package.character.base_evasion)
+                .unwrap();
+        }
         input.set("quests", record_table(lua, &records)).unwrap();
         // Precision is an explicit source data input, including injected More entries.
         let precision = lua.create_table().unwrap();
@@ -191,18 +270,23 @@ fn record_table(lua: &Lua, records: &[Record]) -> Table {
         row.set("flags", record.flags as f64).unwrap();
         row.set("keywordFlags", record.keyword_flags as f64)
             .unwrap();
-        for Tag::Condition { variables, negated } in &record.tags {
+        for source in &record.tags {
             let tag = lua.create_table().unwrap();
-            tag.set("type", "Condition").unwrap();
-            tag.set(
-                "varList",
-                lua.create_sequence_from(
-                    variables.iter().map(|condition| condition.upstream_name()),
-                )
-                .unwrap(),
-            )
-            .unwrap();
-            tag.set("neg", *negated).unwrap();
+            match source {
+                Tag::Global => tag.set("type", "Global").unwrap(),
+                Tag::Condition { variables, negated } => {
+                    tag.set("type", "Condition").unwrap();
+                    tag.set(
+                        "varList",
+                        lua.create_sequence_from(
+                            variables.iter().map(|condition| condition.upstream_name()),
+                        )
+                        .unwrap(),
+                    )
+                    .unwrap();
+                    tag.set("neg", *negated).unwrap();
+                }
+            }
             row.push(tag).unwrap();
         }
         rows.push(row).unwrap();

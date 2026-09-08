@@ -377,23 +377,31 @@ impl<C: EvaluationClock> NativeBackend<C> {
             .iter()
             .map(|resolved| tree::character_from_resolved(resolved, &self.data))
             .collect();
-        let actor_layers = if baseline.profile.actor_modifiers.records().is_empty() {
-            Vec::new()
-        } else {
-            vec![baseline.profile.actor_modifiers.records().to_vec()]
-        };
         let actors = characters
             .iter()
-            .map(|character| {
+            .zip(components.trees())
+            .map(|(character, resolved)| {
                 let character = character
                     .as_ref()
                     .map_err(|error| EvaluationError::new(error.kind, error.message.clone()))?;
+                let mut records = baseline.profile.actor_modifiers.records().to_vec();
+                records.extend(
+                    poe_optimizer_import::actor_assembly::legacy_passive_actor_records(
+                        self.data.snapshot(),
+                        resolved,
+                    )
+                    .map_err(|error| {
+                        EvaluationError::new(EvaluationErrorKind::UnsupportedCapability, error)
+                    })?,
+                );
                 self.data
-                    .prepare_actor_resources(
+                    .prepare_actor(
                         scenario.character_level,
                         baseline.profile.actor_quests,
+                        self.data
+                            .receiving_scenario(scenario.quests, scenario.resistance_penalty),
                         character,
-                        &actor_layers,
+                        std::slice::from_ref(&records),
                     )
                     .map_err(|error| {
                         EvaluationError::new(

@@ -35,10 +35,11 @@ the default `typed` path evaluates admitted numerical inputs directly. The new c
 explicitly native-only. The legacy `search-experimental --backend native|pob` command and
 problem schemas 1–6 remain available.
 
-## Problem schema 7
+## Problem schemas 7 and 8
 
 [The example problem](../examples/passive-equipment-search.json) is the complete runnable
-schema. Its template path is relative to the problem file. All unknown fields reject.
+schema-7 shape. [Receiving-defence problems](receiving-defences.md) use schema 8 with
+the same fields and new authored defensive source scope. Its template path is relative to the problem file. All unknown fields reject.
 
 | Field | Purpose |
 | --- | --- |
@@ -71,10 +72,10 @@ that the full legal domain is empty or that the best-found result is globally op
 
 ## Data and source identity
 
-Package schema 7 / `poe2-native-profiles-v7` supplies numeric values, requirements, implicit
+Package schema 8 / `poe2-native-profiles-v8` supplies numeric values, requirements, implicit
 ranges, modifier grammar and source-view effect records. Tree schema 3 records 4,109
-structural ordinary nodes and 4,758 effective source views. Of these, 1,142 have fully
-admitted effects and 3,616 carry explicit exclusions. The four previously reviewed
+structural ordinary nodes and 4,758 effective source views. Of these, 1,270 have fully
+admitted effects and 3,488 carry explicit exclusions. The four previously reviewed
 ascendancy nodes remain supported. A source view contains its physical key, selector,
 effective node ID, source stat lines and source digest.
 
@@ -100,10 +101,10 @@ once by the local weapon pipeline; surviving global actor records enter shared a
 preparation. Unknown, ambiguous, partial or unsupported lines reject.
 
 The current slots are `Weapon 1` and `Amulet`. Mace requires one of the two admitted mace
-bases; Spark currently admits jewellery only. Five source-derived amulet bases are
-supported: Amber, Jade, Lapis, Bloodstone and Solar. An amulet has quality 0 and exactly
+bases; Spark currently admits jewellery only. Seven source-derived amulet bases are
+supported: Amber, Jade, Lapis, Bloodstone, Solar, Lunar and Pearlescent. An amulet has quality 0 and exactly
 one implicit matching its configured range; normal and rare supplied payloads can contain
-reviewed global attribute/resource/accuracy lines. Stellar Amulet remains excluded because
+reviewed global attribute/resource/accuracy lines and the [receiving-defence subset](receiving-defences.md). Stellar Amulet remains excluded because
 its source emits additional unsupported `All` bookkeeping. Untagged weapon Accuracy also
 rejects because PoB rewrites it with hand-specific conditions; tagged attribute-condition
 Accuracy and jewellery Accuracy follow their admitted source behavior.

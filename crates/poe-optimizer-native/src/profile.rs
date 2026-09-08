@@ -786,7 +786,13 @@ fn parse_projection(
     actor_records.extend(resolved_tree.actor_modifiers().cloned());
     let actor_layers = vec![actor_records];
     let prepared_actor = data
-        .prepare_actor_resources(level, actor_quests, &resolved_tree.character, &actor_layers)
+        .prepare_actor(
+            level,
+            actor_quests,
+            data.receiving_scenario(quests, penalty),
+            &resolved_tree.character,
+            &actor_layers,
+        )
         .map_err(|error| unsupported(error.to_string()))?;
     let prepared_weapon = weapon
         .as_ref()

@@ -171,3 +171,65 @@ fn xml_retains_raw_crlf_tabs_named_entities_and_rejects_hidden_item_metadata() {
         assert!(parse_equipment_item_xml(doc.root_element(), &data).is_err());
     }
 }
+
+#[test]
+fn lunar_and_pearlescent_source_ranges_global_effects_and_equip_requirements_remain_distinct() {
+    use poe_optimizer_data::game_data::ActorModifierTag;
+    let data = data();
+    for (base, min, max, level, suffix) in [
+        ("Lunar Amulet", 20, 30, 14, " to maximum Energy Shield"),
+        (
+            "Pearlescent Amulet",
+            7,
+            10,
+            30,
+            "% to all Elemental Resistances",
+        ),
+    ] {
+        for roll in [min, max] {
+            let text = amulet(
+                base,
+                &format!("+{roll}{suffix}"),
+                "15% increased maximum Energy Shield\n+20 to Armour\n",
+            )
+            .replace('\n', "\r\n");
+            let parsed = parse_equipment_item(&text, &data, 73).unwrap();
+            assert_eq!(parsed.source_text(), text);
+            assert_eq!(parsed.item_level(), 82);
+            assert_eq!(parsed.requirements().level, level);
+            assert_eq!(parsed.allowed_slots(), &["Amulet"]);
+            assert_eq!(
+                parsed.actor_modifiers()[1].tags,
+                vec![ActorModifierTag::Global]
+            );
+            assert_eq!(
+                parsed.actor_modifiers()[0].source.as_deref(),
+                Some(format!("Item:73:Test Pendant, {base}").as_str())
+            );
+            let explicit = text.replace("Implicits: 1", "LevelReq: 1\r\nImplicits: 1");
+            let lowered = parse_equipment_item(&explicit, &data, 73).unwrap();
+            assert_eq!(lowered.requirements().level, 1);
+            assert_eq!(lowered.item_level(), 82);
+        }
+        for roll in [min - 1, max + 1] {
+            assert!(
+                parse_equipment_item(&amulet(base, &format!("+{roll}{suffix}"), ""), &data, 73)
+                    .is_err()
+            );
+        }
+    }
+    let weapon = "Rarity: RARE\nReceiving Club\nWooden Club\nItem Level: 1\nQuality: 20\nImplicits: 0\nAdds 5 to 10 Physical Damage\n+20 to Armour\n15% increased maximum Energy Shield\n+7% to all Elemental Resistances";
+    let parsed = parse_equipment_item(weapon, &data, 11).unwrap();
+    assert_eq!(parsed.weapon().unwrap().local_modifiers().len(), 1);
+    assert_eq!(parsed.actor_modifiers().len(), 3);
+    assert_eq!(
+        parsed.actor_modifiers()[1].tags,
+        vec![ActorModifierTag::Global]
+    );
+    assert!(
+        parsed
+            .actor_modifiers()
+            .iter()
+            .all(|record| record.source.as_deref() == Some("Item:11:Receiving Club, Wooden Club"))
+    );
+}

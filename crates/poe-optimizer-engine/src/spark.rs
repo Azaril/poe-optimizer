@@ -10,7 +10,7 @@ use crate::data::CompiledGameData;
 use crate::defence::round_to_integer;
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-spark-passive-equipment-v3";
+pub const PROFILE_ID: &str = "poe2-spark-receiving-defence-v4";
 pub const TREE_VERSION: &str = "0_5";
 pub const CLASS_ID: u32 = 7;
 pub const SKILL_ID: &str = "SparkPlayer";
@@ -195,6 +195,9 @@ pub fn evaluate_with_actor(
     actor
         .validate_profile(compiled, input.character_level, input.quests, character)
         .map_err(|error| SparkError(error.0))?;
+    let receiving = actor
+        .receiving_for(compiled.receiving_scenario(input.quests, input.resistance_penalty))
+        .map_err(|error| SparkError(error.0))?;
     let actor = actor.values();
     let data = compiled.spark();
     let rules = &compiled.snapshot().package().character;
@@ -218,23 +221,25 @@ pub fn evaluate_with_actor(
     }
     let life = actor.life;
     let mana = actor.mana;
-    let resistance = crate::resistance::calculate(
-        &modifiers,
-        input.resistance_penalty,
-        [
-            input.quests.blackjaw,
-            input.quests.beira,
-            input.quests.garukhan,
-        ]
-        .map(|enabled| {
-            if enabled {
-                data.quest_elemental_resistance
-            } else {
-                0.0
-            }
-        }),
-        compiled.defence(),
-    );
+    let resistance = receiving.map(|value| value.resistances).unwrap_or_else(|| {
+        crate::resistance::calculate(
+            &modifiers,
+            input.resistance_penalty,
+            [
+                input.quests.blackjaw,
+                input.quests.beira,
+                input.quests.garukhan,
+            ]
+            .map(|enabled| {
+                if enabled {
+                    data.quest_elemental_resistance
+                } else {
+                    0.0
+                }
+            }),
+            compiled.defence(),
+        )
+    });
     // For this profile calcResistForType's configurable maximum admits values
     // above75 but caps them at90; no enemyMaxResist override is active.
     let enemy_resistance = input
@@ -267,9 +272,15 @@ pub fn evaluate_with_actor(
         life,
         mana,
         spirit: actor.spirit,
-        energy_shield: round_to_integer(modifiers.energy_shield_flat).max(0.0),
-        armour: round_to_integer(modifiers.armour_flat).max(0.0),
-        evasion: round_to_integer(rules.base_evasion + modifiers.evasion_flat).max(0.0),
+        energy_shield: receiving
+            .map(|value| value.energy_shield)
+            .unwrap_or_else(|| round_to_integer(modifiers.energy_shield_flat).max(0.0)),
+        armour: receiving
+            .map(|value| value.armour)
+            .unwrap_or_else(|| round_to_integer(modifiers.armour_flat).max(0.0)),
+        evasion: receiving.map(|value| value.evasion).unwrap_or_else(|| {
+            round_to_integer(rules.base_evasion + modifiers.evasion_flat).max(0.0)
+        }),
         fire_resistance: resistance.fire,
         cold_resistance: resistance.cold,
         lightning_resistance: resistance.lightning,

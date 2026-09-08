@@ -461,7 +461,7 @@ fn scalar_composition_failure_is_deferred_without_relabeling_legal_requirements(
     for view in &mut package.passive_effects {
         if keys.contains(&view.key) {
             view.effects = vec![game_data::PassiveEffect {
-                stat: game_data::PassiveStat::ArmourFlat,
+                stat: game_data::PassiveStat::SkillSpeedIncreased,
                 value: 750_000.0,
             }];
         }
@@ -510,4 +510,71 @@ fn oversized_unknown_selection_rejects_before_per_node_diagnostic_allocation() {
         .to_string();
     assert!(error.contains("preparation bound"));
     assert!(error.len() < 128);
+}
+
+#[test]
+fn receiving_preparation_keeps_same_actor_requirements_and_level_rejections() {
+    for (base, implicit, required_level) in [
+        ("Lunar Amulet", "+25 to maximum Energy Shield", 14),
+        ("Pearlescent Amulet", "+8% to all Elemental Resistances", 30),
+    ] {
+        for level in [required_level - 1, required_level] {
+            let source = MACE.replace("<Build level=\"60\"", &format!("<Build level=\"{level}\""));
+            let item = EquipmentAlternative {
+                instance_id: "defence".into(),
+                pob_item_id: 73,
+                item_text: format!(
+                    "Rarity: RARE\nReceiving Pendant\n{base}\nItem Level: 82\nQuality: 0\nImplicits: 1\n{implicit}\n+20 to Strength\n+100 to Armour\n150% increased Armour"
+                ),
+            };
+            let catalog = catalog(&source, vec![item]);
+            let domain = domain(catalog.clone());
+            let mut selection = catalog.source_selection();
+            selection
+                .candidate
+                .equipment
+                .insert("Amulet".into(), "defence".into());
+            let prepared = domain
+                .prepare(selection.clone(), &mut ActorScratch::default())
+                .unwrap();
+            assert_eq!(
+                prepared.requirements().available.strength as f64,
+                prepared.actor().values().attributes.strength
+            );
+            assert_eq!(prepared.actor().receiving().unwrap().armour, 250.0);
+            if level == required_level {
+                assert!(
+                    domain
+                        .admit(selection, &mut ActorScratch::default())
+                        .is_ok()
+                );
+            } else {
+                let error = domain
+                    .admit(selection, &mut ActorScratch::default())
+                    .unwrap_err();
+                let BuildCatalogError::Requirements(assessment) = error else {
+                    panic!("wrong error: {error}")
+                };
+                assert_eq!(assessment.violations.len(), 1);
+                assert_eq!(assessment.violations[0].requirement, "level");
+                assert_eq!(assessment.violations[0].required, required_level);
+            }
+        }
+    }
+}
+
+#[test]
+fn authored_receiver_scope_gate_ignores_migrated_passives_but_includes_unused_new_items() {
+    let original = catalog(MACE, vec![]);
+    assert!(!original.uses_receiving_defence_scope());
+    let source = MACE.replace("nodes=\"\"", "nodes=\"38646\"");
+    assert!(!catalog(&source, vec![]).uses_receiving_defence_scope());
+    let receiving = EquipmentAlternative { instance_id:"unused".into(),pob_item_id:73,
+        item_text:"Rarity: NORMAL\nLunar Amulet\nItem Level: 1\nQuality: 0\nImplicits: 1\n+20 to maximum Energy Shield".into() };
+    assert!(catalog(MACE, vec![receiving]).uses_receiving_defence_scope());
+    let source = MACE.replace(
+        "</ConfigSet>",
+        "<CustomModifierBlock enabled=\"true\">+1 to Armour</CustomModifierBlock></ConfigSet>",
+    );
+    assert!(catalog(&source, vec![]).uses_receiving_defence_scope());
 }

@@ -260,7 +260,17 @@ fn injected_signed_values_change_feasibility_and_export_provenance() {
         .iter_mut()
         .find(|e| e.key.physical_node_id == 24475)
         .unwrap();
-    effect.effects[0].value = -7.5;
+    assert!(effect.effects.is_empty());
+    assert_eq!(
+        effect.actor_modifiers[0].stat,
+        poe_optimizer_data::game_data::ActorStat::ChaosResist
+    );
+    let poe_optimizer_data::game_data::ActorModifierEffect::Numeric { value, .. } =
+        &mut effect.actor_modifiers[0].effect
+    else {
+        panic!("Expected source resistance BASE record")
+    };
+    *value = -7.5;
     package.refresh_section_digests().unwrap();
     let bytes = package.canonical_bytes().unwrap();
     let custom =

@@ -3,7 +3,8 @@
 //! Source inputs are normalized, ordered global records. Preparation reuses the
 //! modifier/condition primitives and executes exactly two attribute passes. The
 //! immutable result is bound to one compiled dataset and retains no modifier DB.
-//! Reservation and receiving defences are outside this stage's function scope.
+//! Optional receiving preparation shares the exact same source queries and final
+//! attribute conditions. Reservation and conversion receivers remain unsupported.
 use crate::{
     character::{CharacterAttributes, CharacterInput},
     conditions::{
@@ -27,6 +28,9 @@ use std::{error::Error, fmt, sync::Arc};
 #[path = "actor_program.rs"]
 mod program;
 pub use program::{ActorModifierLayer, ActorScratch, CompiledActorModifiers};
+#[path = "actor_receiving.rs"]
+mod receiving;
+pub use receiving::{ReceivingOutput, ReceivingScenario};
 
 const CONDITIONS: [ActorCondition; 12] = [
     ActorCondition::TwoHighestAttributesEqual,
@@ -96,8 +100,32 @@ pub struct PreparedActorResources {
     character: CharacterInput,
     output: ActorResourceOutput,
     requires_downstream_defences: bool,
+    requires_receiving_stage: bool,
+    receiving: Option<(ReceivingScenario, ReceivingOutput)>,
 }
 impl PreparedActorResources {
+    pub fn receiving(&self) -> Option<ReceivingOutput> {
+        self.receiving.map(|(_, output)| output)
+    }
+    pub(crate) fn receiving_for(
+        &self,
+        scenario: ReceivingScenario,
+    ) -> Result<Option<ReceivingOutput>, ActorError> {
+        if let Some((prepared, output)) = self.receiving {
+            if prepared != scenario {
+                return Err(ActorError(
+                    "Prepared receiving scenario differs from resistance penalty or quests",
+                ));
+            }
+            Ok(Some(output))
+        } else if self.requires_receiving_stage {
+            Err(ActorError(
+                "Receiver records require complete actor preparation",
+            ))
+        } else {
+            Ok(None)
+        }
+    }
     pub fn values(&self) -> ActorResourceOutput {
         self.output
     }
@@ -110,15 +138,24 @@ impl PreparedActorResources {
     pub fn character(&self) -> &CharacterInput {
         &self.character
     }
-    /// Attach independently validated scalar skill/defence modifiers after actor
-    /// preparation. Only the base class attributes affect this actor stage;
-    /// changing them requires fresh calculation. Owner, level, quests, computed
-    /// outputs and downstream-coverage guard remain exactly bound as before.
+    /// Attach independently validated scalar modifiers after preparation. Base
+    /// attributes always remain bound. Complete receiving preparation also binds
+    /// all defensive scalar fields; only offence fields can then change. Raw
+    /// resource-only callers retain their explicit legacy scalar behaviour.
+    /// Owner, level, quests, outputs and downstream-coverage guards remain bound.
     pub fn with_character(&self, character: &CharacterInput) -> Result<Self, ActorError> {
         character.validate().map_err(|error| ActorError(error.0))?;
         if self.character.attributes != character.attributes {
             return Err(ActorError(
                 "Prepared actor base attributes differ from the selected character",
+            ));
+        }
+        if self.receiving.is_some()
+            && receiving::legacy_values(&self.character.modifiers)
+                != receiving::legacy_values(&character.modifiers)
+        {
+            return Err(ActorError(
+                "Prepared receiving values cannot be rebound to changed defensive scalars",
             ));
         }
         let mut rebound = self.clone();
@@ -168,14 +205,15 @@ const EMPTY_RECORD: BuiltinRecord = BuiltinRecord {
     value: 0.0,
     source: "Base",
 };
+// Thirteen actor prefix records, eight receiving prefix records, three bonuses.
 struct StackRecords {
-    rows: [BuiltinRecord; 16],
+    rows: [BuiltinRecord; 24],
     len: usize,
 }
 impl StackRecords {
     fn new() -> Self {
         Self {
-            rows: [EMPTY_RECORD; 16],
+            rows: [EMPTY_RECORD; 24],
             len: 0,
         }
     }
@@ -255,8 +293,9 @@ fn numeric_kind(operation: ActorNumericOperation) -> NumericKind {
 }
 fn tags(tags: &[ActorModifierTag]) -> Vec<ModifierTag> {
     tags.iter()
-        .map(
-            |ActorModifierTag::Condition { variables, negated }| ModifierTag::Condition {
+        .map(|tag| match tag {
+            ActorModifierTag::Global => ModifierTag::Global,
+            ActorModifierTag::Condition { variables, negated } => ModifierTag::Condition {
                 variables: ConditionVariables::Any(
                     variables
                         .iter()
@@ -265,9 +304,10 @@ fn tags(tags: &[ActorModifierTag]) -> Vec<ModifierTag> {
                 ),
                 negated: *negated,
             },
-        )
+        })
         .collect()
 }
+
 fn builtin(row: BuiltinRecord) -> TaggedModifierInput {
     ModifierInput {
         name: row.stat.upstream_name().into(),
@@ -611,6 +651,24 @@ fn calculate(
         conditions,
     })
 }
+fn calculate_complete(
+    queries: &mut impl ActorQueries,
+    compiled: &CompiledGameData,
+    scenario: Option<ReceivingScenario>,
+) -> Result<
+    (
+        ActorResourceOutput,
+        Option<(ReceivingScenario, ReceivingOutput)>,
+    ),
+    ActorError,
+> {
+    let actor = calculate(queries, compiled)?;
+    let receiving = scenario
+        .map(|scenario| receiving::calculate(queries, compiled).map(|output| (scenario, output)))
+        .transpose()?;
+    Ok((actor, receiving))
+}
+
 impl CompiledGameData {
     pub fn actor_quest_selection(&self, quests: SparkQuestRewards) -> ActorQuestSelection {
         ActorQuestSelection {
@@ -632,7 +690,33 @@ impl CompiledGameData {
         character: &CharacterInput,
         modifier_layers: &[Vec<ActorModifierRecord>],
     ) -> Result<PreparedActorResources, ActorError> {
+        self.prepare_actor_internal(level, quests, None, character, modifier_layers)
+    }
+    /// Complete source-ordered actor and receiving-defence preparation. Receiver
+    /// contributions must be ordered records, never aggregated legacy scalars.
+    pub fn prepare_actor(
+        &self,
+        level: u32,
+        quests: ActorQuestSelection,
+        receiving: ReceivingScenario,
+        character: &CharacterInput,
+        modifier_layers: &[Vec<ActorModifierRecord>],
+    ) -> Result<PreparedActorResources, ActorError> {
+        self.prepare_actor_internal(level, quests, Some(receiving), character, modifier_layers)
+    }
+    fn prepare_actor_internal(
+        &self,
+        level: u32,
+        quests: ActorQuestSelection,
+        receiving: Option<ReceivingScenario>,
+        character: &CharacterInput,
+        modifier_layers: &[Vec<ActorModifierRecord>],
+    ) -> Result<PreparedActorResources, ActorError> {
         character.validate().map_err(|error| ActorError(error.0))?;
+        if let Some(scenario) = receiving {
+            scenario.validate()?;
+            receiving::validate_source_character(character)?;
+        }
         if !(1..=100).contains(&level) {
             return Err(ActorError("Actor character level must be 1..100"));
         }
@@ -645,12 +729,16 @@ impl CompiledGameData {
             record.validate().map_err(|_|ActorError("Invalid normalized actor target, operation, numeric bound, flags, source or condition tags"))?;
         }
         let mut base = self.actor_base_records(level, quests, character);
-        let output = if modifier_layers.iter().all(Vec::is_empty) {
-            calculate(&mut base, self)?
+        if let Some(scenario) = receiving {
+            self.add_receiving_base(&mut base, scenario);
+        }
+        let (output, receiving_output) = if modifier_layers.iter().all(Vec::is_empty) {
+            calculate_complete(&mut base, self, receiving)?
         } else {
-            calculate(
+            calculate_complete(
                 &mut DatabaseQueries::new(base, modifier_layers, &self.actor_precision)?,
                 self,
+                receiving,
             )?
         };
         let requires_downstream_defences = modifier_layers
@@ -664,6 +752,11 @@ impl CompiledGameData {
             character: *character,
             output,
             requires_downstream_defences,
+            requires_receiving_stage: modifier_layers
+                .iter()
+                .flatten()
+                .any(|record| record.stat.is_receiving_defence()),
+            receiving: receiving_output,
         })
     }
     fn actor_base_records(

@@ -310,7 +310,7 @@ fn imported_numeric_failure_is_counted_without_suppressing_legal_alternatives() 
     for view in &mut package.passive_effects {
         if [3936, 13397].contains(&view.key.physical_node_id) {
             view.effects = vec![PassiveEffect {
-                stat: PassiveStat::ArmourFlat,
+                stat: PassiveStat::SkillSpeedIncreased,
                 value: 750_000.0,
             }];
         }
@@ -363,4 +363,114 @@ fn imported_numeric_failure_is_counted_without_suppressing_legal_alternatives() 
             reference = Some((report, xml, companion));
         }
     }
+}
+
+#[test]
+fn receiving_search_has_versioned_scope_and_identical_parallel_verified_results() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    let mut value: Value =
+        serde_json::from_str(include_str!("../examples/receiving-defence-search.json")).unwrap();
+    value["template"] = json!(dir.join("template.xml"));
+    // Seeded complete composition meets the constraints; the budget also explores changes.
+    fs::write(
+        dir.join("template.xml"),
+        include_str!("fixtures/builds/mace-receiving-defence.xml"),
+    )
+    .unwrap();
+    fs::write(
+        dir.join("problem.json"),
+        serde_json::to_vec_pretty(&value).unwrap(),
+    )
+    .unwrap();
+    let mut reference = None;
+    for mode in ["typed", "document"] {
+        for jobs in [1, 4] {
+            let name = format!("receiving-{mode}-{jobs}.xml");
+            let report = success(
+                command(dir, mode, jobs, 60)
+                    .args(["--export", &name])
+                    .output()
+                    .unwrap(),
+            );
+            assert_eq!(report["schema_version"], 9);
+            assert_eq!(report["scope"], "receiving_defence_native_search_v1");
+            assert_ledger(&report, 60);
+            let (xml, companion) = assert_export(dir, &name, &report);
+            if let Some((expected, expected_xml, expected_companion)) = &reference {
+                same_search(expected, &report);
+                assert_eq!(&xml, expected_xml);
+                assert_eq!(&companion, expected_companion);
+            } else {
+                reference = Some((report, xml, companion));
+            }
+        }
+    }
+    value["schema_version"] = json!(7);
+    fs::write(
+        dir.join("problem.json"),
+        serde_json::to_vec_pretty(&value).unwrap(),
+    )
+    .unwrap();
+    let output = command(dir, "typed", 1, 3)
+        .args(["--export", "old-scope.xml"])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("requires graph problem schema 8"));
+    assert!(!dir.join("old-scope.xml").exists());
+    assert!(!dir.join("old-scope.xml.data.json").exists());
+}
+
+#[test]
+fn receiving_equipment_alone_requires_new_graph_scope() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    let mut value = problem(dir);
+    value["equipment"][0]["item_text"] = json!(
+        "Rarity: RARE\nReceiving\nLunar Amulet\nItem Level: 60\nQuality: 0\nImplicits: 1\n+25 to maximum Energy Shield"
+    );
+    write_problem(dir, &value);
+    let output = command(dir, "typed", 1, 3).output().unwrap();
+    assert!(!output.status.success());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("requires graph problem schema 8"));
+    value["schema_version"] = json!(8);
+    write_problem(dir, &value);
+    let report = success(command(dir, "typed", 1, 3).output().unwrap());
+    assert_eq!(report["schema_version"], 9);
+    assert_ledger(&report, 3);
+}
+
+#[test]
+fn legacy_actor_problem_rejects_new_authored_receiving_scope() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    let mut value: Value =
+        serde_json::from_str(include_str!("../examples/mace-actor-search.json")).unwrap();
+    value["template"] = json!(dir.join("template.xml"));
+    let template=include_str!("fixtures/builds/mace-actor-resources.xml").replace("</ConfigSet>","<CustomModifierBlock title=\"Defence\" enabled=\"true\">+25 to Armour</CustomModifierBlock></ConfigSet>");
+    fs::write(dir.join("template.xml"), template).unwrap();
+    fs::write(
+        dir.join("problem.json"),
+        serde_json::to_vec_pretty(&value).unwrap(),
+    )
+    .unwrap();
+    let output = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
+        .current_dir(dir)
+        .args([
+            "search-experimental",
+            "--backend",
+            "native",
+            "--problem",
+            "problem.json",
+        ])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(
+        String::from_utf8_lossy(&output.stderr)
+            .contains("receiving-defence modifiers require search-build with problem schema 8"),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
 }

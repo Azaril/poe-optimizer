@@ -149,7 +149,7 @@ continue to avoid heap allocation. Item preparation, owned metric conversion, ob
 assessment, search bookkeeping, diagnostics and reporting still allocate.
 
 The native Mace profile attachment uses
-`application/vnd.poe-optimizer.native-profile+json;version=3`. Its `weapon_item` evidence
+`application/vnd.poe-optimizer.native-profile+json;version=6`. Its `weapon_item` evidence
 records exact source identity, rarity/name, metadata, equip-level selection, rule IDs and
 roll provenance. `weapon_stats` exposes prepared local stats and consumed-modifier counts;
 existing base/quality/item-level fields remain available. Full native realization checks

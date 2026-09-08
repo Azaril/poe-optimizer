@@ -15,6 +15,16 @@ pub enum ActorStat {
     Mana,
     Spirit,
     Accuracy,
+    Armour,
+    Evasion,
+    EnergyShield,
+    ArmourAndEvasion,
+    Defences,
+    FireResist,
+    ColdResist,
+    LightningResist,
+    ChaosResist,
+    ElementalResist,
     ExtraLife,
     ExtraMana,
     ExtraSpirit,
@@ -54,6 +64,16 @@ impl ActorStat {
             Self::Mana => "Mana",
             Self::Spirit => "Spirit",
             Self::Accuracy => "Accuracy",
+            Self::Armour => "Armour",
+            Self::Evasion => "Evasion",
+            Self::EnergyShield => "EnergyShield",
+            Self::ArmourAndEvasion => "ArmourAndEvasion",
+            Self::Defences => "Defences",
+            Self::FireResist => "FireResist",
+            Self::ColdResist => "ColdResist",
+            Self::LightningResist => "LightningResist",
+            Self::ChaosResist => "ChaosResist",
+            Self::ElementalResist => "ElementalResist",
             Self::ExtraLife => "ExtraLife",
             Self::ExtraMana => "ExtraMana",
             Self::ExtraSpirit => "ExtraSpirit",
@@ -138,14 +158,37 @@ impl ActorNumericOperation {
         }
     }
 }
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(tag = "type", rename_all = "snake_case", deny_unknown_fields)]
 pub enum ActorModifierTag {
+    /// Exact source scope marker. It prevents local item consumption while
+    /// remaining numerically neutral in global modifier queries.
+    Global,
     /// Ordered OR variables; separate tags combine in source order.
     Condition {
         variables: Vec<ActorCondition>,
         negated: bool,
     },
+}
+// Serde ignores extra map fields on an internally tagged unit variant, even
+// with deny_unknown_fields. An empty struct variant makes Global fail closed
+// without changing the convenient public unit variant or its wire encoding.
+impl<'de> Deserialize<'de> for ActorModifierTag {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        #[derive(Deserialize)]
+        #[serde(tag = "type", rename_all = "snake_case", deny_unknown_fields)]
+        enum WireTag {
+            Global {},
+            Condition {
+                variables: Vec<ActorCondition>,
+                negated: bool,
+            },
+        }
+        Ok(match WireTag::deserialize(deserializer)? {
+            WireTag::Global {} => Self::Global,
+            WireTag::Condition { variables, negated } => Self::Condition { variables, negated },
+        })
+    }
 }
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
@@ -253,6 +296,21 @@ fn bounded(value: f64) -> bool {
     value.is_finite() && value.abs() <= 1_000_000.0
 }
 impl ActorStat {
+    pub const fn is_receiving_defence(self) -> bool {
+        matches!(
+            self,
+            Self::Armour
+                | Self::Evasion
+                | Self::EnergyShield
+                | Self::ArmourAndEvasion
+                | Self::Defences
+                | Self::FireResist
+                | Self::ColdResist
+                | Self::LightningResist
+                | Self::ChaosResist
+                | Self::ElementalResist
+        )
+    }
     pub const fn is_flag(self) -> bool {
         use ActorStat::*;
         matches!(
@@ -274,6 +332,11 @@ impl ActorStat {
         use ActorStat::*;
         match self {
             Str | Dex | Int | Life | Mana | Spirit | Accuracy => true,
+            Armour | Evasion | EnergyShield | ArmourAndEvasion | FireResist | ColdResist
+            | LightningResist | ChaosResist | ElementalResist => {
+                matches!(operation, Base | Increased)
+            }
+            Defences => matches!(operation, Increased),
             DexAccBonusOverride => matches!(operation, Override),
             ExtraLife
             | ExtraMana
@@ -306,12 +369,26 @@ fn validate_scope(
             "actor modifiers require global flags/keywords and at most eight audited tags",
         ));
     }
-    for ActorModifierTag::Condition { variables, .. } in tags {
-        if variables.is_empty() || variables.len() > 12 {
+    for tag in tags {
+        if let ActorModifierTag::Condition { variables, .. } = tag
+            && (variables.is_empty() || variables.len() > 12)
+        {
             return Err(invalid(
                 "actor conditions require one to twelve ordered variables",
             ));
         }
+    }
+    Ok(())
+}
+fn validate_target_tags(stat: ActorStat, tags: &[ActorModifierTag]) -> Result<(), GameDataError> {
+    if !stat.is_receiving_defence()
+        && tags
+            .iter()
+            .any(|tag| matches!(tag, ActorModifierTag::Global))
+    {
+        return Err(invalid(
+            "Global marker is admitted only for reviewed receiving-defence targets",
+        ));
     }
     Ok(())
 }
@@ -320,6 +397,7 @@ impl ActorModifierRecord {
     /// build implements downstream effects such as donor conversions or immunity.
     pub fn validate(&self) -> Result<(), GameDataError> {
         validate_scope(self.flags, self.keyword_flags, &self.tags)?;
+        validate_target_tags(self.stat, &self.tags)?;
         if self
             .source
             .as_ref()
@@ -446,9 +524,9 @@ pub(crate) fn validate_actor(data: &ActorData) -> Result<(), GameDataError> {
             ));
         }
     }
-    if data.modifier_rules.is_empty() || data.modifier_rules.len() > 256 {
+    if data.modifier_rules.is_empty() || data.modifier_rules.len() > 512 {
         return Err(invalid(
-            "actor modifier rules require one to 256 bounded records",
+            "actor modifier rules require one to 512 bounded records",
         ));
     }
     let mut ids = BTreeSet::new();
@@ -478,6 +556,7 @@ pub(crate) fn validate_actor(data: &ActorData) -> Result<(), GameDataError> {
         let mut used = BTreeSet::new();
         for mapping in &rule.modifiers {
             validate_scope(mapping.flags, mapping.keyword_flags, &mapping.tags)?;
+            validate_target_tags(mapping.stat, &mapping.tags)?;
             match mapping.effect {
                 ActorRuleEffect::Numeric { operation, value }
                     if mapping.stat.admits_operation(operation) =>
@@ -507,4 +586,53 @@ pub(crate) fn validate_actor(data: &ActorData) -> Result<(), GameDataError> {
         }
     }
     Ok(())
+}
+
+/// Ordered query membership extracted from the pinned receiving-defence stage.
+/// Membership is a reviewed semantic capability, not a new balance constant.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ReceivingDefenceQuery {
+    pub stat: ActorStat,
+    pub query_stats: Vec<ActorStat>,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ReceivingDefenceData {
+    pub resources: Vec<ReceivingDefenceQuery>,
+    pub resistances: Vec<ReceivingDefenceQuery>,
+}
+impl ReceivingDefenceData {
+    pub(crate) fn validate(&self) -> Result<(), GameDataError> {
+        use ActorStat::*;
+        let resources: &[(ActorStat, &[ActorStat])] = &[
+            (Armour, &[Armour, ArmourAndEvasion, Defences]),
+            (Evasion, &[Evasion, ArmourAndEvasion, Defences]),
+            (EnergyShield, &[EnergyShield, Defences]),
+        ];
+        let resistances: &[(ActorStat, &[ActorStat])] = &[
+            (FireResist, &[FireResist, ElementalResist]),
+            (ColdResist, &[ColdResist, ElementalResist]),
+            (LightningResist, &[LightningResist, ElementalResist]),
+            (ChaosResist, &[ChaosResist]),
+        ];
+        for (actual, expected) in [
+            (&self.resources, resources),
+            (&self.resistances, resistances),
+        ] {
+            if actual.len() != expected.len()
+                || actual
+                    .iter()
+                    .zip(expected)
+                    .any(|(actual, (stat, queries))| {
+                        actual.stat != *stat || actual.query_stats != *queries
+                    })
+            {
+                return Err(invalid(
+                    "receiving defence query membership/order differs from source-reviewed capability",
+                ));
+            }
+        }
+        Ok(())
+    }
 }

@@ -154,13 +154,17 @@ fn custom_snapshot() -> Arc<GameDataSnapshot> {
             .value = 13.25;
         package.weapons[0].physical_minimum += 0.75;
         package.character.life_per_strength = 2.75;
-        package
+        let effect = &mut package
             .passive_effects
             .iter_mut()
             .find(|effect| effect.key.physical_node_id == 24475)
             .unwrap()
-            .effects[0]
-            .value = -7.5;
+            .actor_modifiers[0]
+            .effect;
+        let game_data::ActorModifierEffect::Numeric { value, .. } = effect else {
+            panic!("numeric resistance record")
+        };
+        *value = -7.5;
     })
 }
 fn assert_measurements(actual: &[MetricMeasurement], expected: &[MetricMeasurement]) {
@@ -564,8 +568,10 @@ fn unused_custom_character_composition_failures_do_not_abort_other_candidates() 
         for record in package.passive_effects.iter_mut().filter(|record| {
             record.key.physical_node_id == 3936 || record.key.physical_node_id == 14960
         }) {
-            record.effects[0].stat = game_data::PassiveStat::FireResistanceFlat;
-            record.effects[0].value = 1_000_000.0;
+            record.effects = vec![game_data::PassiveEffect {
+                stat: game_data::PassiveStat::SkillSpeedIncreased,
+                value: 1_000_000.0,
+            }];
         }
     });
     let registry = catalog(data.clone(), TEMPLATE);

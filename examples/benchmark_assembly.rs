@@ -1,5 +1,6 @@
 //! Developer timings for component assembly/admission and already-admitted measures.
 //! Run with --release --no-default-features. This is not an optimizer-quality benchmark.
+#![recursion_limit = "256"]
 use clap::{Parser, ValueEnum};
 use poe_optimizer_core::{
     candidate::{CandidateBudgets, CandidateConstraints, PassiveKind},
@@ -49,6 +50,9 @@ impl Mode {
 }
 #[derive(Parser)]
 struct Args {
+    /// Use the receiving-defence source template and supplied equipment corpus.
+    #[arg(long)]
+    receiving_defence: bool,
     /// Approximate duration of each sample; calibration is reported separately.
     #[arg(long, default_value_t = 1200)]
     sample_ms: u64,
@@ -234,12 +238,50 @@ fn snapshot_checksum(snapshot: &NativeMetricSnapshot) -> u64 {
             sum.wrapping_add(bits.rotate_left((index as u32 * 7) % 64))
         })
 }
+fn measured_checksum(
+    snapshot: &NativeMetricSnapshot,
+    handle: &AdmittedBuildSelection,
+    include_receiving: bool,
+) -> u64 {
+    let metrics = snapshot_checksum(snapshot);
+    if !include_receiving {
+        return metrics;
+    }
+    let r = black_box(
+        handle
+            .actor()
+            .receiving()
+            .expect("complete receiving preparation"),
+    );
+    [
+        r.armour,
+        r.evasion,
+        r.energy_shield,
+        r.resistances.fire,
+        r.resistances.cold,
+        r.resistances.lightning,
+        r.resistances.chaos,
+        r.resistance_totals.fire,
+        r.resistance_totals.cold,
+        r.resistance_totals.lightning,
+        r.resistance_totals.chaos,
+        r.resistance_cap,
+        r.resistance_floor,
+    ]
+    .into_iter()
+    .enumerate()
+    .fold(metrics, |sum, (index, value)| {
+        sum.wrapping_add(value.to_bits().rotate_left((index as u32 * 11 + 3) % 64))
+    })
+}
+
 struct Workload<'a> {
     domain: &'a ControlledBuildDomain,
     prepared: &'a PreparedBuildCandidates,
     selections: &'a [BuildSelection],
     handles: &'a [AdmittedBuildSelection],
     checksums: Vec<u64>,
+    include_receiving: bool,
 }
 impl Workload<'_> {
     fn expected(&self, evaluations: usize) -> u64 {
@@ -257,20 +299,30 @@ impl Workload<'_> {
                 .into_par_iter()
                 .map_init(ActorScratch::default, |scratch, iteration| {
                     let index = iteration % self.handles.len();
-                    let snapshot = match mode {
+                    let measure = |handle: &AdmittedBuildSelection| {
+                        self.prepared
+                            .measure(black_box(handle))
+                            .map(|snapshot| {
+                                measured_checksum(
+                                    black_box(&snapshot),
+                                    handle,
+                                    self.include_receiving,
+                                )
+                            })
+                            .map_err(|error| error.to_string())
+                    };
+                    match mode {
                         Mode::AdmitMeasure => {
                             // Includes selection cloning, structural/data proof, actor program
                             // execution, requirements, owned handle construction and destruction.
                             let handle = self
                                 .domain
                                 .admit(black_box(self.selections[index].clone()), scratch)
-                                .map_err(|e| e.to_string())?;
-                            self.prepared.measure(black_box(&handle))
+                                .map_err(|error| error.to_string())?;
+                            measure(&handle)
                         }
-                        Mode::Measure => self.prepared.measure(black_box(&self.handles[index])),
+                        Mode::Measure => measure(&self.handles[index]),
                     }
-                    .map_err(|e| e.to_string())?;
-                    Ok(snapshot_checksum(black_box(&snapshot)))
                 })
                 .try_reduce(|| 0_u64, |a, b| Ok(a.wrapping_add(b)))
         })
@@ -319,17 +371,35 @@ fn main() -> Result<(), Box<dyn Error>> {
     {
         return Err("Require 100..10000 sample-ms, 1..10 repeats, distinct jobs in 1..256 and distinct modes".into());
     }
+    let (candidate_set, template_path, template, equipment_path, equipment_json) =
+        if args.receiving_defence {
+            (
+                "receiving-defence",
+                "tests/fixtures/builds/mace-receiving-defence.xml",
+                include_str!("../tests/fixtures/builds/mace-receiving-defence.xml"),
+                "examples/receiving-defence-search.json",
+                include_str!("receiving-defence-search.json"),
+            )
+        } else {
+            (
+                "passive-equipment",
+                "tests/fixtures/builds/mace-passive-equipment.xml",
+                TEMPLATE,
+                "examples/passive-equipment-search.json",
+                EQUIPMENT,
+            )
+        };
     let start = Instant::now();
     let snapshot = Arc::new(bundled_snapshot()?);
     let compiled = Arc::new(CompiledGameData::compile(snapshot.clone())?);
     let backend = Arc::new(NativeBackend::with_data(compiled.clone(), HostClock)?);
     let dataset_ms = milliseconds(start);
     let start = Instant::now();
-    let input: Value = serde_json::from_str(EQUIPMENT)?;
+    let input: Value = serde_json::from_str(equipment_json)?;
     let equipment: Vec<EquipmentAlternative> = serde_json::from_value(input["equipment"].clone())?;
     let catalog = Arc::new(ControlledBuildCatalog::new(
         compiled,
-        TEMPLATE.into(),
+        template.into(),
         equipment,
     )?);
     let catalog_ms = milliseconds(start);
@@ -380,7 +450,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let start = Instant::now();
     let checksums = handles
         .iter()
-        .map(|handle| prepared.measure(handle).map(|s| snapshot_checksum(&s)))
+        .map(|handle| {
+            prepared
+                .measure(handle)
+                .map(|s| measured_checksum(&s, handle, args.receiving_defence))
+        })
         .collect::<Result<Vec<_>, _>>()?;
     let initial_measure_ms = milliseconds(start);
     let distinct_output_checksums = checksums.iter().copied().collect::<BTreeSet<_>>().len();
@@ -408,6 +482,24 @@ fn main() -> Result<(), Box<dyn Error>> {
             serde_json::to_value(result.measurements)?,
             "fresh full-document comparison {index}"
         );
+        if args.receiving_defence {
+            let attachment = result
+                .attachments
+                .iter()
+                .find(|value| value.media_type.contains("native-profile+"))
+                .ok_or("Missing native profile evidence")?;
+            let profile: Value = serde_json::from_str(&attachment.content)?;
+            let expected = poe_optimizer_import::actor_assembly::receiving_defence_evidence(
+                handles[*index]
+                    .actor()
+                    .receiving()
+                    .ok_or("Missing receiver output")?,
+            );
+            assert_eq!(
+                expected, profile["receiving_defence"],
+                "fresh receiving comparison {index}"
+            );
+        }
         assert!(result.diagnostic_only);
     }
     let validation_ms = milliseconds(start);
@@ -417,6 +509,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         selections: &selections,
         handles: &handles,
         checksums,
+        include_receiving: args.receiving_defence,
     };
     let mut samples = Vec::new();
     let mut worker_setups = Vec::new();
@@ -477,9 +570,12 @@ fn main() -> Result<(), Box<dyn Error>> {
         serde_json::to_string_pretty(&json!({
             "schema_version":1,"status":"developer_native_assembly_benchmark","diagnostic_only":true,
             "scope":"bounded_varied_admitted_mace_builds_not_whole_optimizer_or_full_game_coverage",
-            "fixed_template":"tests/fixtures/builds/mace-passive-equipment.xml","template_sha256":hash(TEMPLATE.as_bytes()),
-            "equipment_source":"examples/passive-equipment-search.json","equipment_source_fields_used":["equipment"],
-            "equipment_source_sha256":hash(EQUIPMENT.as_bytes()),"benchmark_source_sha256":hash(SOURCE.as_bytes()),
+            "candidate_set":candidate_set,"receiving_defence":args.receiving_defence,
+            "checksum_scope":if args.receiving_defence { "metric_snapshot_and_all_13_receiving_output_fields" } else { "metric_snapshot" },
+            "metric_ids":poe_optimizer_native::metric_catalog().into_iter().map(|metric|metric.id).collect::<Vec<_>>(),
+            "fixed_template":template_path,"template_sha256":hash(template.as_bytes()),
+            "equipment_source":equipment_path,"equipment_source_fields_used":["equipment"],
+            "equipment_source_sha256":hash(equipment_json.as_bytes()),"benchmark_source_sha256":hash(SOURCE.as_bytes()),
             "executable_sha256":hash(&std::fs::read(executable)?),"backend":backend.identity(),
             "data_identity":snapshot.identity(),"data_manifest":snapshot.package().manifest,"data_trust":snapshot.trust(),
             "catalog_identity":catalog.catalog().identity,"cpu_label":args.cpu_label,
@@ -497,6 +593,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 "admission_ms":admission_setup_ms,"admission_attempts":structural_candidates,
                 "initial_measure_ms":initial_measure_ms,"initial_measure_calculations":handles.len(),
                 "full_document_equivalence_ms":validation_ms,"full_document_equivalence_pairs":validation_indices.len(),
+                "complete_receiving_equivalence_pairs":if args.receiving_defence { validation_indices.len() } else { 0 },
                 "prepared_components_parse_source_once":true},
             "footprints":{"catalog":catalog.footprint(),"prepared":prepared.footprint(),
                 "actor_scratch_inline_bytes":ActorScratch::storage_bytes(),
@@ -508,11 +605,12 @@ fn main() -> Result<(), Box<dyn Error>> {
             "checksums_match_preflight_for_every_calibration_and_sample":true,
             "limitations":[
                 "Admission mode includes candidate cloning, structural validation/resolution, actor program execution, requirements, owned handle allocation/destruction and fresh skill metrics; it allocates.",
-                "Measure mode reuses already-admitted handles containing prepared actor resources. It excludes actor assembly/admission and is not whole-evaluator or optimizer throughput.",
+                "Measure mode reuses already-admitted handles containing prepared actor resources and receiving defences. It excludes actor assembly/admission and is not whole-evaluator or optimizer throughput.",
                 "Both timed modes omit XML, JSON, diagnostics, exports, deadline checks, owned measurement conversion, objective scoring and search proposal generation. Neither uses an evaluation-result cache.",
                 "The benchmark retains a bounded input/handle corpus for repeatability; production component catalogs do not retain a Cartesian candidate-result cache.",
                 "Only equipment is read from the example JSON. The fixed source template, generated corpus and explicit benchmark budgets govern this run; JSON objective/search settings are not interpreted.",
                 "Reported footprint fields are partial capacity estimates; preparing admitted benchmark handles and catalogs is timed separately.",
+                "Receiving-defence mode additionally reads and checksums all 13 prepared receiving fields, including diagnostic Armour/Evasion and uncapped resistance totals. That consumption overhead is included in both timed modes; the default retains its metric-only checksum.",
                 "Calibration and worker startup are outside samples. Automatic iteration counts vary by API and worker count; checksums are compared with the exact rotating input sequence.",
                 "Fresh full native document comparisons are setup evidence, not independent Path of Building parity; separate source/full-build tests provide that evidence."
             ]

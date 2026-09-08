@@ -693,7 +693,11 @@ fn typed_effect(lua: &Lua, effect: &Value) -> Table {
 }
 #[test]
 fn reviewed_quest_defaults_and_every_typed_passive_match_actual_configuration_and_parser() {
-    let p = package();
+    let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+    assert_quests_and_passives(snapshot.package());
+}
+fn assert_quests_and_passives(data: &poe_optimizer_data::game_data::GameDataPackage) {
+    let p = serde_json::to_value(data).unwrap();
     for warm in [false, true] {
         let o = Oracle::new(warm);
         let lua = &o.lua;
@@ -765,8 +769,7 @@ fn reviewed_quest_defaults_and_every_typed_passive_match_actual_configuration_an
         let tree: Table = lua.globals().get("sourceTree").unwrap();
         let classes: Table = tree.get("classes").unwrap();
         let nodes: Table = tree.get("nodes").unwrap();
-        let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
-        assert_eq!(snapshot.package().passive_effects.len(), 1142);
+        assert_eq!(data.passive_effects.len(), 1270);
         for class in classes
             .clone()
             .sequence_values::<Table>()
@@ -807,15 +810,15 @@ fn reviewed_quest_defaults_and_every_typed_passive_match_actual_configuration_an
             .eval()
             .unwrap();
         let set_source: Function = lua.load("return modLib.setSource").eval().unwrap();
-        for record in &snapshot.package().passive_effects {
+        for record in &data.passive_effects {
             use poe_optimizer_data::class_tree::PassiveViewSelector;
             let selector = match &record.key.selector {
                 PassiveViewSelector::Base => mlua::Value::Nil,
-                PassiveViewSelector::Class { class_id } => lua
-                    .to_value(&snapshot.tree().classes[class_id].name)
-                    .unwrap(),
+                PassiveViewSelector::Class { class_id } => {
+                    lua.to_value(&data.tree.classes[class_id].name).unwrap()
+                }
                 PassiveViewSelector::Ascendancy { ascendancy_id } => lua
-                    .to_value(&snapshot.tree().ascendancies[ascendancy_id].name)
+                    .to_value(&data.tree.ascendancies[ascendancy_id].name)
                     .unwrap(),
                 PassiveViewSelector::Attribute { option } => {
                     mlua::Value::Integer(i64::from(option.source_index()))
@@ -1481,44 +1484,54 @@ fn assert_actor_source_modifier(
         actual.clone().pairs::<mlua::Value, mlua::Value>().count(),
         5 + usize::from(expected.source.is_some()) + expected.tags.len()
     );
-    for (index, ActorModifierTag::Condition { variables, negated }) in
-        expected.tags.iter().enumerate()
-    {
+    for (index, expected_tag) in expected.tags.iter().enumerate() {
         let tag: Table = actual.get(index + 1).unwrap();
-        assert_eq!(tag.get::<String>("type").unwrap(), "Condition");
-        let negative = tag.get::<Option<bool>>("neg").unwrap();
-        assert_eq!(negative.unwrap_or(false), *negated);
-        let names: Vec<String> = if let Some(var) = tag.get::<Option<String>>("var").unwrap() {
-            vec![var]
-        } else {
-            tag.get::<Table>("varList")
-                .unwrap()
-                .sequence_values()
-                .map(Result::unwrap)
-                .collect()
-        };
-        assert_eq!(
-            names,
-            variables
-                .iter()
-                .map(|v| v.upstream_name().to_owned())
-                .collect::<Vec<_>>()
-        );
-        assert_eq!(
-            tag.pairs::<mlua::Value, mlua::Value>().count(),
-            2 + usize::from(negative.is_some())
-        );
+        match expected_tag {
+            ActorModifierTag::Global => {
+                assert_eq!(tag.get::<String>("type").unwrap(), "Global");
+                assert_eq!(tag.pairs::<mlua::Value, mlua::Value>().count(), 1);
+            }
+            ActorModifierTag::Condition { variables, negated } => {
+                assert_eq!(tag.get::<String>("type").unwrap(), "Condition");
+                let negative = tag.get::<Option<bool>>("neg").unwrap();
+                assert_eq!(negative.unwrap_or(false), *negated);
+                let names: Vec<String> =
+                    if let Some(var) = tag.get::<Option<String>>("var").unwrap() {
+                        vec![var]
+                    } else {
+                        tag.get::<Table>("varList")
+                            .unwrap()
+                            .sequence_values()
+                            .map(Result::unwrap)
+                            .collect()
+                    };
+                assert_eq!(
+                    names,
+                    variables
+                        .iter()
+                        .map(|v| v.upstream_name().to_owned())
+                        .collect::<Vec<_>>()
+                );
+                assert_eq!(
+                    tag.pairs::<mlua::Value, mlua::Value>().count(),
+                    2 + usize::from(negative.is_some())
+                );
+            }
+        }
     }
 }
 #[test]
 fn actor_rules_match_independent_original_parser_for_signed_fractional_and_conditional_inputs() {
+    let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+    assert_actor_rules(snapshot.package());
+}
+fn assert_actor_rules(data: &poe_optimizer_data::game_data::GameDataPackage) {
     use poe_optimizer_data::game_data::*;
-    let snapshot = bundled_snapshot().unwrap();
     let mut checked = 0;
     for warm in [false, true] {
         let oracle = Oracle::new(warm);
         if warm {
-            oracle.lua.load("for i=1,500 do modLib.parseMod('+'..i..' to Strength');modLib.parseMod(i..'% increased maximum Life if Strength is higher than Intelligence');modLib.parseMod(i..'% less maximum Mana');modLib.parseMod('Gain no inherent bonuses from attributes') end").exec().unwrap();
+            oracle.lua.load("for i=1,500 do modLib.parseMod('+'..i..' to Strength');modLib.parseMod(i..'% increased maximum Life if Strength is higher than Intelligence');modLib.parseMod(i..'% less maximum Mana');modLib.parseMod('Gain no inherent bonuses from attributes');modLib.parseMod(i..'% increased Global Armour');modLib.parseMod('+'..i..'% to all Resistances');modLib.parseMod(i..'% increased maximum Energy Shield if Strength is higher than Intelligence') end").exec().unwrap();
         }
         let parser: Function = oracle
             .lua
@@ -1527,7 +1540,7 @@ fn actor_rules_match_independent_original_parser_for_signed_fractional_and_condi
             .unwrap()
             .get("parseMod")
             .unwrap();
-        for rule in &snapshot.package().actor.modifier_rules {
+        for rule in &data.actor.modifier_rules {
             let values: &[f64] = match rule.captures.first() {
                 Some(ActorCaptureKind::SignedDecimal) => {
                     &[-17.5, -1.0, 0.0, 1.0, 2.25, 17.0, 999.0, 1_000_000.0]
@@ -1595,7 +1608,7 @@ fn actor_rules_match_independent_original_parser_for_signed_fractional_and_condi
             "All"
         );
     }
-    assert_eq!(checked, 1206);
+    assert_eq!(checked, 3642);
 }
 #[test]
 fn actor_constants_precision_and_spirit_quests_match_independent_cold_and_warm_source() {
@@ -1720,6 +1733,10 @@ fn actor_constants_precision_and_spirit_quests_match_independent_cold_and_warm_s
 #[test]
 fn complete_jewellery_base_values_and_implicit_expansions_match_cold_and_warm_source() {
     let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+    assert_jewellery(snapshot.package());
+}
+fn assert_jewellery(data: &poe_optimizer_data::game_data::GameDataPackage) {
+    assert_eq!(data.jewellery_bases.len(), 7);
     for warm in [false, true] {
         let oracle = Oracle::new(warm);
         let lua = &oracle.lua;
@@ -1735,7 +1752,7 @@ fn complete_jewellery_base_values_and_implicit_expansions_match_cold_and_warm_so
             .unwrap()
             .get("parseMod")
             .unwrap();
-        for base in &snapshot.package().jewellery_bases {
+        for base in &data.jewellery_bases {
             let raw: Table = bases.get(base.name.as_str()).unwrap();
             assert_eq!(raw.clone().pairs::<String, mlua::Value>().count(), 5);
             assert_eq!(raw.get::<String>("type").unwrap(), "Amulet");
@@ -1767,8 +1784,7 @@ fn complete_jewellery_base_values_and_implicit_expansions_match_cold_and_warm_so
                     .collect::<Vec<_>>(),
                 base.implicit.modifier_types
             );
-            let rule = snapshot
-                .package()
+            let rule = data
                 .actor
                 .modifier_rule(&base.implicit.actor_rule_id)
                 .unwrap();
@@ -1793,6 +1809,91 @@ fn complete_jewellery_base_values_and_implicit_expansions_match_cold_and_warm_so
                     assert_actor_source_modifier(mods.get(index + 1).unwrap(), &record);
                 }
             }
+        }
+    }
+}
+
+/// Run before installing a changed bundled package: no native evaluator or compiled
+/// package supplies either side of these original-source comparisons.
+#[test]
+fn fresh_reviewed_receiving_package_matches_independent_original_source() {
+    let extracted = poe_optimizer_pob::game_data::extract_pinned_game_data_for_review(
+        &repository().join("vendor/path-of-building-poe2"),
+    )
+    .unwrap();
+    let data = &extracted.package;
+    assert_eq!(data.actor.modifier_rules.len(), 320);
+    assert_quests_and_passives(data);
+    assert_actor_rules(data);
+    assert_jewellery(data);
+    assert_receiving_queries(data);
+}
+fn assert_receiving_queries(data: &poe_optimizer_data::game_data::GameDataPackage) {
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        let lua = &oracle.lua;
+        let source = &oracle.sources["src/Modules/CalcDefence.lua"];
+        let resources: Table = lua
+            .load(format!(
+                "local modDB={{Flag=function() return false end}};{};return resourceList",
+                section(
+                    source,
+                    "local resourceList = {",
+                    "\n\t\tfor _, source in ipairs(resourceList) do"
+                )
+            ))
+            .eval()
+            .unwrap();
+        assert_eq!(resources.raw_len(), 6, "Ward remains outside this profile");
+        for (index, query) in data.receiving_defence.resources.iter().enumerate() {
+            let actual: Table = resources.get(index + 1).unwrap();
+            assert_eq!(
+                actual.get::<String>("name").unwrap(),
+                query.stat.upstream_name()
+            );
+            let actual = actual
+                .get::<Table>("mods")
+                .unwrap()
+                .sequence_values::<String>()
+                .map(Result::unwrap)
+                .collect::<Vec<_>>();
+            assert_eq!(
+                actual,
+                query
+                    .query_stats
+                    .iter()
+                    .map(|v| v.upstream_name().to_owned())
+                    .collect::<Vec<_>>()
+            );
+        }
+        let (types, elemental): (Table, Table) = lua
+            .load(format!(
+                "{};{};return resistTypeList,isElemental",
+                line(source, "local resistTypeList ="),
+                line(source, "local isElemental =")
+            ))
+            .eval()
+            .unwrap();
+        assert_eq!(types.raw_len(), data.receiving_defence.resistances.len());
+        for (index, query) in data.receiving_defence.resistances.iter().enumerate() {
+            let name: String = types.get(index + 1).unwrap();
+            let mut expected = vec![format!("{name}Resist")];
+            if elemental
+                .get::<Option<bool>>(name.as_str())
+                .unwrap()
+                .unwrap_or(false)
+            {
+                expected.push("ElementalResist".into());
+            }
+            assert_eq!(expected[0], query.stat.upstream_name());
+            assert_eq!(
+                expected,
+                query
+                    .query_stats
+                    .iter()
+                    .map(|v| v.upstream_name().to_owned())
+                    .collect::<Vec<_>>()
+            );
         }
     }
 }

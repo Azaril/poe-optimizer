@@ -12,7 +12,7 @@ parsing, I/O or data hashing. This implements the current-profile slice of the
 The reviewed package contains complete structural ordinary-node metadata, capability-admitted
 passive views, the existing class roots and selected ascendancy passives, character
 resource and accuracy parameters, level-one Spark/Mace identities and values, three reviewed supports,
-two weapon bases, five jewellery bases with source-derived implicit ranges and requirements,
+two weapon bases, seven jewellery bases with source-derived implicit ranges and requirements,
 five local item-modifier grammar/mapping rules, shared actor configuration,
 quest rewards/defaults, defence coefficients/caps, 100-level
 monster armour/evasion tables, encounter defaults, typed owned passive effects and explicit
@@ -23,13 +23,13 @@ stat text is source evidence; typed effect IDs and values drive the calculation.
 The `actor` section supplies the shared attribute and maximum-resource stage used by Spark
 and Mace. Its normalized modifier records retain typed targets, numeric or flag effects,
 source, flags/keyword flags and ordered attribute-condition tags. The section includes
-116 reviewed custom-modifier templates, the complete 40-record source precision table,
+320 reviewed custom-modifier templates, the complete 40-record source precision table,
 three Spirit quest records and the additional source constants for attribute bonuses,
 pool thresholds and Spirit. Existing Life/Mana/Accuracy balance fields remain in
 `character`; existing quest fields remain in `quests`.
 
 The package is explicitly partial. It records 4,109 structural ordinary nodes and 4,758
-source views: 1,142 have complete admitted effects and 3,616 are explicitly excluded.
+source views: 1,270 have complete admitted effects and 3,488 are explicitly excluded.
 Class/ascendancy replacements and physical attribute choices resolve before capability
 admission. Its ascendancy effect coverage includes four directly connected
 ascendancy small nodes with signed BASE player resistance effects. Local item rules admit
@@ -49,8 +49,9 @@ supplied minion build and unrestricted native evaluation remain unsupported.
 
 `ActorModifierRecord` represents numeric BASE/INC/MORE/OVERRIDE or boolean FLAG effects.
 Supported numeric targets cover attributes, Life/Mana/Spirit, Accuracy and the explicit
-inputs to the maximum-resource function. `ActorModifierTag::Condition` preserves ordered
-OR variables and negation; multiple tags retain source order. Global records require zero
+inputs to the maximum-resource and admitted receiving-defence functions. `ActorModifierTag::Condition` preserves ordered
+OR variables and negation; `Global` retains exact nonrestricting item-scope metadata.
+Multiple tags retain source order. Global records require zero
 flags and keyword flags. Unknown fields, targets, tags and incompatible operations reject.
 The raw stage can represent donor conversions and Chaos Inoculation, but this does not
 admit those mechanics in a complete build: receiver defences and the full immunity effects
@@ -191,7 +192,8 @@ snapshot supplies class attributes, resolved physical/effective entrance views, 
 projection, generated XML and numerical configuration. The schema-3 problem adds paid ascendancy choices and uses report schema **4**. Schema-4
 support-loadout problems use report **5**; schema-5 local-weapon problems use report **6**.
 Schema-6 actor-customization problems use report **7**. The lazy schema-7 `search-build`
-problem uses report **8**. Mace profile evidence uses media **5**, and Spark uses media **3**, with normalized actor modifier evidence and maximum Spirit
+problem uses report **8**; graph problem **8** adds authored receiving scope and report **9**.
+Mace profile evidence uses media **6**, and Spark uses media **4**, with normalized actor modifier evidence and maximum Spirit
 alongside the existing outputs. Mace additionally retains exact parsed item provenance and
 prepared local weapon stats. Native-tree
 diagnostics use version **3**, with separate ordinary/ascendancy counts, physical/effective
@@ -207,7 +209,13 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
-Current package schema **7**, semantics **`poe2-native-profiles-v7`**, adds `jewellery_bases`
+Current package schema **8**, semantics **`poe2-native-profiles-v8`**, adds
+`receiving_defence` with ordered source query groups. Defensive passive scalars move into
+ordered actor records; only offence remains in scalar passive effects. Unknown or mixed
+legacy defensive representations reject. See [shared receiving defences](receiving-defences.md)
+for supported operations, scenario binding and schema-8 search.
+
+Package schema **7**, semantics **`poe2-native-profiles-v7`**, introduced `jewellery_bases`
 and `passive_exclusions`. Passive effects are keyed by physical node and source-view
 selector (`base`, class, ascendancy or explicit attribute option), retaining the effective
 node separately. Effects may contain scalar operations and compiled actor records. The
@@ -235,16 +243,16 @@ Package schema **4**, semantics **`poe2-native-profiles-v4`**, moved `mace.bruta
 to the source-derived `supports` section and adds Mace skill types and explicit zero cost.
 See [support-loadout configuration](support-loadouts.md#configuration-and-calculation) for
 fields and compatibility. Older packages require regeneration and review of custom changes.
-The following resistance migration remains part of the current schema.
+The following historical resistance migration is superseded by schema-8 ordered records.
 
 Package schema **3** and semantics **`poe2-native-profiles-v3`** rename `entrance_effects`
 to `passive_effects`. Each record has an explicit nullable `ascendancy_id`: null selects
 an ordinary class entrance, while an internal ID selects that ascendancy's admitted node.
 Selectors include class, owner, physical ID and effective ID; every admitted view has exactly
 one record. That historical migration used bundle schema **2** with 44 physical nodes;
-current schema 7 replaces those effect selectors with complete source-view keys.
+schema 7 replaced those effect selectors with complete source-view keys.
 
-Five new operations are `fire_resistance_flat`, `cold_resistance_flat`,
+The schema-3 scalar operations were `fire_resistance_flat`, `cold_resistance_flat`,
 `lightning_resistance_flat`, `chaos_resistance_flat` and `elemental_resistance_flat`.
 Among the passive-effect operations, these admit signed finite values in -1,000,000..1,000,000. Other passive operations
 retain nonnegative validation. Source stat strings remain provenance; custom typed values
@@ -255,10 +263,11 @@ and apply injected floor/cap values. `defence.resistance_maximum_cap` separately
 base player maximum, sourced from PoB's global maximum rule. Elemental bonuses, penalties and quest rewards do not
 apply to chaos. Fractional custom floor/cap values are also truncated, correcting the older
 custom-data behavior to match source. Reviewed integer-default outputs remain unchanged.
-The selector data does not admit maximum-resistance, conditional, INC/MORE, override,
-conversion or other-actor mechanics.
+Schema 8 additionally admits supported conditional and INC resistance records through the
+shared receiver. Maximum-resistance, MORE, override, conversion and other-actor mechanics
+remain excluded.
 
-Schema-1/2/3/4/5/6 packages fail explicitly. Regenerate with `extract-game-data`, then review/reapply
+Schema-1/2/3/4/5/6/7 packages fail explicitly. Regenerate with `extract-game-data`, then review/reapply
 custom edits and reseal; changing the version number alone cannot migrate missing records
 or the retained-tree artifact. Schema-2 level/attribute/support-color requirement records
 remain unchanged. PoB source revision, full source snapshot and numerical goldens stay fixed.
@@ -266,11 +275,11 @@ remain unchanged. PoB source revision, full source snapshot and numerical golden
 ## Validation and update procedure
 
 The default package SHA-256 is
-`bbea2a7b0eb2e6c9334a4b7cfccaff61ad57a41010949253ff540f61e535b10d`.
+`fdd924e0449d06c338df95cf8e309986abf07a73e3f2f0131acf222d5d24ae30`.
 The partial tree SHA-256 is
 `31cac8a09de2babc34e450d0caf975c45aca3caf222853d863dcad607c6f8779`.
 The full source snapshot/manifest and six independent goldens remain unchanged; the partial
-retained-tree bundle expands explicitly in this passive/equipment migration.
+retained-tree bundle is unchanged by the receiving-defence migration.
 
 ```powershell
 cargo test -p poe-optimizer-data --locked
@@ -282,9 +291,9 @@ cargo test -p poe-optimizer-cli --test native_passive_parity --locked
 
 The optional source tests verify package records against pinned Lua data, modifier parsing
 and source expressions, including warmed functions and every effective entrance. Actor data
-checks include 1,206 independent cold/warm parser cases for the 116 reviewed templates,
+checks include 3,642 independent cold/warm parser inputs for the 320 reviewed templates,
 complete precision records and actual Spirit quest configuration callbacks. Independent
-original `PassiveTree.ProcessStats` tests compare all 1,142 admitted views in cold and warm
+original `PassiveTree.ProcessStats` tests compare all 1,270 admitted views in cold and warm
 source runs; jewellery tests check every admitted base. Those parser
 comparisons establish normalized input parity, not complete native build parity. The full
 matrix checks complete native builds against fresh PoB evaluations. Custom-package tests

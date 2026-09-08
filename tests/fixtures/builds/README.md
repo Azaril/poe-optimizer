@@ -19,3 +19,12 @@ The XML is untrusted imported data. The importer bounds decoding and XML
 size, rejects DTD/entity expansion, and preserves unknown fields. Never execute
 content in a build export. Derived mutation/calibration fixtures must use separate
 files and provenance; do not edit this raw reference in place.
+
+
+`spark-receiving-defence.xml` and `mace-receiving-defence.xml` are separate synthetic
+receiving-stage fixtures derived from the passive/equipment study fixtures. They combine
+connected source passives, Lunar/Pearlescent amulets, reviewed global item modifiers and
+authored configuration. Their full outputs are compared with fresh native/PoB evaluations
+and source-preserving export reimports; they are not independent saved numerical goldens
+or assertions that the supplied rare rolls are obtainable. See
+[receiving defences](../../../docs/receiving-defences.md).

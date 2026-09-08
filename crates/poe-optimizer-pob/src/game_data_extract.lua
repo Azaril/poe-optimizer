@@ -222,7 +222,8 @@ function source_critical_chance_cap(modifier)
     return value
 end
 
-local actor_stats={Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true,ExtraLife=true,ExtraMana=true,ExtraSpirit=true,LifeTotal=true,ManaTotal=true,SpiritTotal=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,DexAccBonusOverride=true,LowLifePercentage=true,FullLifePercentage=true}
+local receiving_stats={Armour=true,Evasion=true,EnergyShield=true,ArmourAndEvasion=true,Defences=true,FireResist=true,ColdResist=true,LightningResist=true,ChaosResist=true,ElementalResist=true}
+local actor_stats={Armour=true,Evasion=true,EnergyShield=true,ArmourAndEvasion=true,Defences=true,FireResist=true,ColdResist=true,LightningResist=true,ChaosResist=true,ElementalResist=true,Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true,ExtraLife=true,ExtraMana=true,ExtraSpirit=true,LifeTotal=true,ManaTotal=true,SpiritTotal=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,DexAccBonusOverride=true,LowLifePercentage=true,FullLifePercentage=true}
 local actor_flags={NoAttributeBonuses=true,DoubledInherentAttributeBonuses=true,NoStrengthAttributeBonuses=true,NoStrBonusToLife=true,HalvesLifeFromStrength=true,NoDexterityAttributeBonuses=true,NoDexBonusToAccuracy=true,NoIntelligenceAttributeBonuses=true,NoIntBonusToMana=true,ChaosInoculation=true}
 local actor_conditions={TwoHighestAttributesEqual=true,DexHigherThanInt=true,StrHigherThanInt=true,IntHigherThanDex=true,StrHigherThanDex=true,IntHigherThanStr=true,DexHigherThanStr=true,StrHighestAttribute=true,IntHighestAttribute=true,DexHighestAttribute=true,IntSingleHighestAttribute=true,DexSingleHighestAttribute=true}
 local actor_operations={BASE='base',INC='increased',MORE='more',OVERRIDE='override'}
@@ -235,14 +236,19 @@ function source_convert_actor_modifier(modifier)
     assert(modifier.flags==0 and modifier.keywordFlags==0,'actor modifier has unsupported flags or keyword flags')
     assert(modifier.source==nil or type(modifier.source)=='string','actor source is not text')
     for _,tag in ipairs(modifier) do
-        keys(tag,{type=true,var=true,varList=true,neg=true},'actor condition')
-        assert(tag.type=='Condition' and ((type(tag.var)=='string' and tag.varList==nil) or (tag.var==nil and type(tag.varList)=='table')),'unsupported actor condition shape')
-        assert(tag.neg==nil or type(tag.neg)=='boolean','invalid actor negation')
-        local vars=tag.varList or {tag.var};dense_array(vars,'actor condition variables')
-        local names={}
-        for _,var in ipairs(vars) do assert(actor_conditions[var],'unsupported actor condition variable');names[#names+1]=actor_name(var) end
-        assert(#names>=1 and #names<=12,'actor condition count')
-        tags[#tags+1]={type='condition',variables=names,negated=tag.neg or false}
+        if tag.type=='Global' then
+            keys(tag,{type=true},'Global marker');assert(receiving_stats[modifier.name],'Global marker is outside reviewed receiving targets')
+            tags[#tags+1]={type='global'}
+        else
+            keys(tag,{type=true,var=true,varList=true,neg=true},'actor condition')
+            assert(tag.type=='Condition' and ((type(tag.var)=='string' and tag.varList==nil) or (tag.var==nil and type(tag.varList)=='table')),'unsupported actor condition shape')
+            assert(tag.neg==nil or type(tag.neg)=='boolean','invalid actor negation')
+            local vars=tag.varList or {tag.var};dense_array(vars,'actor condition variables')
+            local names={}
+            for _,var in ipairs(vars) do assert(actor_conditions[var],'unsupported actor condition variable');names[#names+1]=actor_name(var) end
+            assert(#names>=1 and #names<=12,'actor condition count')
+            tags[#tags+1]={type='condition',variables=names,negated=tag.neg or false}
+        end
         rawTags[#rawTags+1]=tag
     end
     local effect
@@ -252,7 +258,7 @@ function source_convert_actor_modifier(modifier)
     else
         assert(actor_stats[modifier.name] and actor_operations[modifier.type],'unsupported actor numeric target or operation')
         local allOperations={Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true}
-        assert(allOperations[modifier.name] or (modifier.name=='DexAccBonusOverride' and modifier.type=='OVERRIDE') or (modifier.name~='DexAccBonusOverride' and modifier.type=='BASE'),'actor numeric operation does not apply to target')
+        assert((receiving_stats[modifier.name] and (modifier.type=='INC' or (modifier.type=='BASE' and modifier.name~='Defences'))) or (not receiving_stats[modifier.name] and (allOperations[modifier.name] or (modifier.name=='DexAccBonusOverride' and modifier.type=='OVERRIDE') or (modifier.name~='DexAccBonusOverride' and modifier.type=='BASE'))),'actor numeric operation does not apply to target')
         effect={kind='numeric',operation=actor_operations[modifier.type],value=numeric(modifier.value,true)}
     end
     assert(equal(modifier,modLib.createMod(modifier.name,modifier.type,modifier.value,modifier.source,0,0,unpack(rawTags))),'unconsumed actor modifier structure')
@@ -372,6 +378,28 @@ function source_extract_actor_data(policy,character,init,resource_actor)
     return data_actor
 end
 
+function source_extract_receiving_defence()
+    local resources,resistances={},{}
+    dense_array(sourceReceiverResources,'receiving source resources');assert(#sourceReceiverResources==6,'receiving resource stage changed')
+    for i,source in ipairs(sourceReceiverResources) do
+        if i<=3 then
+            keys(source,{name=true,basePerSlot=true,globalBase=true,conversionRate=true,mods=true,modsTotal=true,defence=true},'receiving resource')
+            assert(source.defence==true and empty(source.basePerSlot) and empty(source.conversionRate) and source.globalBase==0,'receiving initial state changed')
+            assert(equal(source.modsTotal,{source.name..'Total'}),'receiving total-stat query changed')
+            local names={};dense_array(source.mods,'receiving query names')
+            for _,name in ipairs(source.mods)do assert(receiving_stats[name],'unknown receiving source query');names[#names+1]=actor_name(name)end
+            resources[#resources+1]={stat=actor_name(source.name),query_stats=names}
+        end
+    end
+    dense_array(sourceReceiverResistTypes,'source resistance types')
+    for _,name in ipairs(sourceReceiverResistTypes)do
+        local names={actor_name(name..'Resist')};assert(receiving_stats[name..'Resist'],'unknown source resistance')
+        if sourceReceiverElemental[name] then names[#names+1]='elemental_resist' end
+        resistances[#resistances+1]={stat=actor_name(name..'Resist'),query_stats=names}
+    end
+    return {resources=resources,resistances=resistances}
+end
+
 function source_extract_records(policy)
     local constants=data.characterConstants
     local init=sourceResourceInitialization()
@@ -442,7 +470,7 @@ function source_extract_records(policy)
         assert(quests[target[3]]==nil or quests[target[3]]==value,'elemental quest values diverged; schema expansion required')
         quests[target[3]]=value
     end
-    return {character=character,actor=source_extract_actor_data(policy,character,init,actor),spark=spark,mace=mace,supports=supports,weapons=weapons,item_modifier_rules=item_modifier_rules,quests=quests,monsters={armour=data.monsterArmourTable,evasion=data.monsterEvasionTable}}
+    return {receiving_defence=source_extract_receiving_defence(),character=character,actor=source_extract_actor_data(policy,character,init,actor),spark=spark,mace=mace,supports=supports,weapons=weapons,item_modifier_rules=item_modifier_rules,quests=quests,monsters={armour=data.monsterArmourTable,evasion=data.monsterEvasionTable}}
 end
 function source_encounter_build(level)
     local build={characterLevel=level}

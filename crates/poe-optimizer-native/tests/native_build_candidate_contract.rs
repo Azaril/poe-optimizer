@@ -231,7 +231,7 @@ fn failing_imported_scalar_composition_is_deferred_while_legal_roots_evaluate() 
         for view in &mut package.passive_effects {
             if nodes.contains(&view.key.physical_node_id) {
                 view.effects = vec![PassiveEffect {
-                    stat: PassiveStat::ArmourFlat,
+                    stat: PassiveStat::SkillSpeedIncreased,
                     value: 750_000.0,
                 }];
             }

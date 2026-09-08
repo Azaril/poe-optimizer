@@ -61,6 +61,12 @@ impl ValidatedActorModifiers {
     pub fn lines(&self) -> &[ActorModifierLine] {
         &self.lines
     }
+    /// Enabled authored records requiring the receiving-defence source capability.
+    pub fn uses_receiving_defence(&self) -> bool {
+        self.records
+            .iter()
+            .any(|record| record.stat.is_receiving_defence())
+    }
     pub fn is_empty(&self) -> bool {
         self.records.is_empty()
     }

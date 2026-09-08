@@ -108,7 +108,7 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v7",
+        "poe-game-data-extractor-v8",
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
@@ -250,7 +250,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         AuthenticatedTreeSnapshot::from_trusted_extraction(snapshot, &digest).map_err(error)?;
     let tree = BundledClassTree::from_authenticated_snapshot(&authenticated).map_err(error)?;
     let policy: Policy = serde_json::from_str(POLICY)?;
-    if policy.schema_version != 5
+    if policy.schema_version != 6
         || policy.spirit_quests.len() != 3
         || policy.actor_rules.is_empty()
         || policy.quests.len() != 6
@@ -313,6 +313,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         tree,
         character: extractor.record(&records, "character")?,
         actor: extractor.record(&records, "actor")?,
+        receiving_defence: extractor.record(&records, "receiving_defence")?,
         quests: extractor.record(&records, "quests")?,
         spark: extractor.record(&records, "spark")?,
         mace: extractor.record(&records, "mace")?,
@@ -579,6 +580,34 @@ impl Extractor {
         lua.globals().set("sourceQuestConfig", config)?;
         let calcs: Table = lua.load(source("src/Modules/CalcDefence.lua")?).eval()?;
         lua.globals().set("sourceCalcs", calcs)?;
+        let receiver_resources: Table = lua
+            .load(format!(
+                "local modDB={{Flag=function() return false end}};{};return resourceList",
+                section(
+                    source("src/Modules/CalcDefence.lua")?,
+                    "local resourceList = {",
+                    "\n\t\tfor _, source in ipairs(resourceList) do"
+                )?
+            ))
+            .eval()?;
+        lua.globals()
+            .set("sourceReceiverResources", receiver_resources)?;
+        let (resist_types, elemental): (Table, Table) = lua
+            .load(format!(
+                "{};{};return resistTypeList,isElemental",
+                line(
+                    source("src/Modules/CalcDefence.lua")?,
+                    "local resistTypeList ="
+                )?,
+                line(
+                    source("src/Modules/CalcDefence.lua")?,
+                    "local isElemental ="
+                )?
+            ))
+            .eval()?;
+        lua.globals()
+            .set("sourceReceiverResistTypes", resist_types)?;
+        lua.globals().set("sourceReceiverElemental", elemental)?;
         lua.load(section(
             source("src/Modules/CalcTools.lua")?,
             "calcLib = { }",
@@ -1006,6 +1035,49 @@ mod tests {
         }
     }
     #[test]
+    fn receiving_modifier_conversion_preserves_exact_global_scope_and_rejects_partial_targets() {
+        let lua = conversion();
+        for expression in [
+            "modLib.createMod('Armour','BASE',-2.5,'Item:1',0,0,{type='Global'})",
+            "modLib.createMod('ArmourAndEvasion','INC',17,nil,0,0,{type='Condition',var='StrHigherThanInt'})",
+            "modLib.createMod('EnergyShield','INC',17,nil,0,0,{type='Global'},{type='Condition',var='DexHigherThanInt'})",
+            "modLib.createMod('ElementalResist','BASE',-17.5)",
+            "modLib.createMod('ChaosResist','INC',-117)",
+            "modLib.createMod('Defences','INC',17)",
+        ] {
+            let converted: Value = lua
+                .load(format!(
+                    "return source_convert_actor_modifier({expression})"
+                ))
+                .eval()
+                .unwrap();
+            let record: ActorModifierRecord = lua.from_value(converted).unwrap();
+            record.validate().unwrap();
+        }
+        for mutation in [
+            "m.type='MORE'",
+            "m.type='OVERRIDE'",
+            "m.name='Defences'",
+            "m.name='ArmourAndEnergyShield'",
+            "m.name='FireResistMax'",
+            "m.name='Ward'",
+            "m.flags=1",
+            "m.keywordFlags=1",
+            "m.hidden=true",
+            "m[1].actor='enemy'",
+            "m[1].value=1",
+            "m[1].var='StrHigherThanInt'",
+            "m[1].type='InSlot';m[1].slot=1",
+            "m[1].type='Condition';m[1].var='Unknown'",
+            "m.name='Life'",
+            "m.name='Accuracy'",
+        ] {
+            assert!(lua.load(format!(
+                "local m=modLib.createMod('Armour','BASE',10,nil,0,0,{{type='Global'}});{mutation};return source_convert_actor_modifier(m)"
+            )).eval::<Value>().is_err(), "{mutation}");
+        }
+    }
+    #[test]
     fn actor_rule_extraction_requires_actual_source_grammar_and_complete_parser_outputs() {
         let sources = READ_PATHS
             .iter()
@@ -1029,7 +1101,7 @@ mod tests {
         }
         for template in [
             "{0} to all Attributes",
-            "{0} to Energy Shield",
+            "{0} to Ward",
             "{0} to maximum Life while holding a Shield",
             "{0} to Strength trailing text",
             "{1} to Strength",
@@ -1449,6 +1521,30 @@ mod passive_assembly_source_tests {
         assert!(mutate.call::<bool>(()).unwrap());
     }
     #[test]
+    fn receiving_query_extraction_rejects_unconsumed_source_initialization() {
+        let e = extractor();
+        let check: Function = e.lua.load("return function(mutate) local old=sourceReceiverResources;sourceReceiverResources=copyTable(old);mutate(sourceReceiverResources);local ok=pcall(source_extract_receiving_defence);sourceReceiverResources=old;return ok end").eval().unwrap();
+        for edit in [
+            "r[1].hidden=true",
+            "r[1].globalBase=1",
+            "r[1].basePerSlot.Helmet=1",
+            "r[1].conversionRate.EnergyShield=1",
+            "r[1].defence=false",
+            "r[1].modsTotal={'Armour'}",
+            "r[1].mods[1]='Ward'",
+            "r[1].mods.extra='Armour'",
+            "r[6]=nil",
+            "r.extra={}",
+        ] {
+            let mutate: Function = e
+                .lua
+                .load(format!("return function(r){edit} end"))
+                .eval()
+                .unwrap();
+            assert!(!check.call::<bool>(mutate).unwrap(), "{edit}");
+        }
+    }
+    #[test]
     fn jewellery_extraction_enumerates_whole_family_and_rejects_unconsumed_source_changes() {
         let e = extractor();
         let rules = e
@@ -1457,7 +1553,7 @@ mod passive_assembly_source_tests {
             .unwrap();
         let f: Function = e.lua.globals().get("source_extract_jewellery").unwrap();
         let (accepted, excluded): (Table, Table) = f.call(rules.clone()).unwrap();
-        assert_eq!(accepted.raw_len(), 5);
+        assert_eq!(accepted.raw_len(), 7);
         assert!(
             excluded
                 .sequence_values::<String>()

@@ -8,7 +8,7 @@ item, passive, skill and supporting-actor coverage expands.
 
 ## Data and calculation boundary
 
-The schema-6 `GameDataPackage.actor` model owns normalized records, literal modifier
+The `GameDataPackage.actor` model (introduced in schema 6) owns normalized records, literal modifier
 rules, source-derived precision and quest/default constants. Existing class and level
 bases remain in the character model. `CompiledGameData` validates and compiles the selected
 snapshot; callers can inject a reviewed or custom dataset without changing evaluator code.
@@ -52,7 +52,7 @@ fragments, block order/title/enabled state, duplicate lines and per-line rule/ro
 Active unknown or partially parsed lines fail. Disabled blocks preserve inactive text.
 Legacy input and explicit blocks cannot be mixed ambiguously. Limits include 8 KiB decoded
 text, 64 enabled lines, 16 blocks, 512 mapped records and 64 KiB aggregate encoded actor
-source. Mace media-4 realization caps the resulting diagnostic at 8 MiB; arbitrary custom
+source. Current Mace realization caps the resulting diagnostic at 8 MiB; arbitrary custom
 rule fan-out must stay within the data model bounds.
 
 PoB's XML reader preserves literal whitespace in legacy attributes. A narrow native XML
@@ -65,15 +65,16 @@ Controlled catalog requirements privately calculate available attributes for eac
 class/tree through the same Rust actor stage. This introduces a pure Rust import-to-engine
 dependency for semantic catalog admission; the generic container reader does not invoke
 Lua. It avoids maintaining a second attribute formula or accepting caller-supplied available
-attributes. Current scalar passive combat effects do not alter attributes/resources;
-future normalized passive actor effects must enter this shared preparation layer.
+attributes. Normalized passive actor effects and selected global equipment records enter this shared
+preparation layer. [Receiving defences](receiving-defences.md) extends it with ordered ratings
+and resistance calculation through `prepare_actor` / `evaluate_actor`.
 Available attributes must be whole, nonnegative and representable in the requirement
 model; casts must not silently saturate. Optional PoB controlled search uses this tested
 attribute preflight, while its build calculations remain explicit PoB evaluations.
 
 ## Prepared searches and reports
 
-Problem schema **6** enables authored actor configuration, with existing local weapons,
+Problem schema **6** enables authored attribute/resource configuration, with existing local weapons,
 class/ascendancy, finite passive and support-loadout axes. Schemas 1–5 reject authored actor
 blocks, legacy custom modifiers and explicit Spirit quest keys. Report schema **7** uses
 scope `mace_actor_local_weapon_class_passive_support_loadouts_v1`.

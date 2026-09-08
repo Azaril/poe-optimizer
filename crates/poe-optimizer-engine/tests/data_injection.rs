@@ -630,7 +630,7 @@ fn shared_allocation_character_helpers_validate_views_and_defer_unrelated_scalar
     forged.views[0].source.effective_node_id += 1;
     assert!(data.class_character_from_allocation(&forged).is_err());
     let mut forged = allocation.clone();
-    forged.views[0].effects.clear();
+    forged.views[0].source.name.push_str(" forged");
     assert!(data.character_from_allocation(&forged).is_err());
     let selected_keys = allocation
         .views
@@ -642,7 +642,7 @@ fn shared_allocation_character_helpers_validate_views_and_defer_unrelated_scalar
         for record in &mut package.passive_effects {
             if selected_keys.contains(&record.key) {
                 record.effects = vec![poe_optimizer_data::game_data::PassiveEffect {
-                    stat: PassiveStat::FireResistanceFlat,
+                    stat: PassiveStat::AttackDamageIncreased,
                     value: 1_000_000.0,
                 }];
             }

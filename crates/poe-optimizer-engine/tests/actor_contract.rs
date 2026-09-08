@@ -857,3 +857,201 @@ fn actor_can_bind_validated_scalar_character_modifiers_without_recalculating_att
             .contains("unsupported receiving defence")
     );
 }
+
+#[test]
+fn complete_receiving_preparation_binds_scenario_and_refuses_scalar_reordering_or_missing_stage() {
+    let data = CompiledGameData::bundled().unwrap();
+    let input = spark_input();
+    let character = data.default_spark_character();
+    let quests = data.actor_quest_selection(input.quests);
+    let scenario = data.receiving_scenario(input.quests, input.resistance_penalty);
+    let records = vec![vec![
+        numeric(ActorStat::EnergyShield, Op::Base, 11.5),
+        numeric(ActorStat::Defences, Op::Increased, 50.0),
+        numeric(ActorStat::FireResist, Op::Base, 81.5),
+    ]];
+    let prepared = data
+        .prepare_actor(60, quests, scenario, &character, &records)
+        .unwrap();
+    let output = spark::evaluate_with_actor(&input, &character, &data, &prepared).unwrap();
+    assert_eq!(output.energy_shield, 17.0);
+    assert_eq!(
+        output.energy_shield,
+        prepared.receiving().unwrap().energy_shield
+    );
+    assert_eq!(
+        output.fire_resistance,
+        prepared.receiving().unwrap().resistances.fire
+    );
+    assert!(
+        spark::evaluate_with_actor(
+            &SparkInput {
+                resistance_penalty: -20.0,
+                ..input
+            },
+            &character,
+            &data,
+            &prepared
+        )
+        .is_err()
+    );
+    let mut different = input;
+    different.quests.beira = !different.quests.beira;
+    assert!(spark::evaluate_with_actor(&different, &character, &data, &prepared).is_err());
+    let foreign = CompiledGameData::compile(std::sync::Arc::new(
+        poe_optimizer_data::game_data::bundled_snapshot().unwrap(),
+    ))
+    .unwrap();
+    assert!(spark::evaluate_with_actor(&input, &character, &foreign, &prepared).is_err());
+    let mut different = character;
+    different.modifiers.attack_damage_increased = 25.0;
+    let rebound = prepared.with_character(&different).unwrap();
+    assert_eq!(rebound.receiving(), prepared.receiving());
+    different.modifiers.fire_resistance_flat = 1.0;
+    assert!(prepared.with_character(&different).is_err());
+    assert!(
+        data.prepare_actor(60, quests, scenario, &different, &records)
+            .is_err()
+    );
+    let resources = data
+        .prepare_actor_resources(60, quests, &character, &records)
+        .unwrap();
+    assert!(resources.receiving().is_none());
+    assert!(spark::evaluate_with_actor(&input, &character, &data, &resources).is_err());
+    for record in [
+        numeric(ActorStat::LifeConvertToEnergyShield, Op::Base, 20.0),
+        flag(ActorStat::ChaosInoculation, true),
+    ] {
+        let incomplete = data
+            .prepare_actor(60, quests, scenario, &character, &[vec![record]])
+            .unwrap();
+        assert!(spark::evaluate_with_actor(&input, &character, &data, &incomplete).is_err());
+    }
+    for invalid in [
+        numeric(ActorStat::Defences, Op::Base, 20.0),
+        numeric(ActorStat::Armour, Op::More, 20.0),
+        numeric(ActorStat::FireResist, Op::Override, 50.0),
+    ] {
+        assert!(data.compile_actor_modifiers(&[invalid]).is_err());
+    }
+}
+#[test]
+fn changing_actor_receiver_source_programs_and_both_prepared_skills_allocate_nothing() {
+    use poe_optimizer_data::game_data::{ActorCondition, ActorModifierTag};
+    use poe_optimizer_engine::actor::{ActorModifierLayer, ActorScratch};
+    let data = CompiledGameData::bundled().unwrap();
+    let input = spark_input();
+    let mace = mace_input();
+    let character = data.default_mace_character();
+    let quests = data.actor_quest_selection(input.quests);
+    let scenario = data.receiving_scenario(input.quests, input.resistance_penalty);
+    let mut es = numeric(ActorStat::EnergyShield, Op::Base, 20.5);
+    es.tags = vec![
+        ActorModifierTag::Global,
+        ActorModifierTag::Condition {
+            variables: vec![ActorCondition::DexHigherThanInt],
+            negated: false,
+        },
+    ];
+    let config = data
+        .compile_actor_modifiers(&[es, numeric(ActorStat::Defences, Op::Increased, 25.0)])
+        .unwrap();
+    let equipment = [0.0, 10.0, 40.0].map(|value| {
+        data.compile_actor_modifiers(&[
+            numeric(ActorStat::Dex, Op::Base, value),
+            numeric(ActorStat::FireResist, Op::Base, value),
+        ])
+        .unwrap()
+    });
+    let passives = [0.0, 25.0, 50.0].map(|value| {
+        data.compile_actor_modifiers(&[
+            numeric(ActorStat::Int, Op::Base, value),
+            numeric(ActorStat::ArmourAndEvasion, Op::Base, value),
+        ])
+        .unwrap()
+    });
+    let weapon = data
+        .prepare_mace_weapon(mace.weapon, mace.quality, mace.item_level, &[])
+        .unwrap();
+    let supports = data.mace_support_loadout(&[]).unwrap();
+    let mut scratch = ActorScratch::default();
+    let (checksum, count) = allocations(|| {
+        let mut checksum = 0.0;
+        for iteration in 0..3000 {
+            let programs = [
+                &config,
+                &equipment[iteration % 3],
+                &passives[(iteration / 3) % 3],
+            ];
+            let actor = data
+                .evaluate_actor(
+                    60,
+                    quests,
+                    scenario,
+                    &character,
+                    &[ActorModifierLayer {
+                        programs: &programs,
+                    }],
+                    &mut scratch,
+                )
+                .unwrap();
+            let output =
+                black_box(spark::evaluate_with_actor(&input, &character, &data, &actor).unwrap());
+            let melee = black_box(
+                mace::evaluate_with_actor(&mace, &character, &data, &weapon, supports, &actor)
+                    .unwrap(),
+            );
+            checksum += output.energy_shield
+                + output.evasion
+                + output.fire_resistance
+                + melee.armour
+                + melee.hit_dps;
+        }
+        checksum
+    });
+    assert!(checksum.is_finite());
+    assert_eq!(count, 0);
+    let foreign = CompiledGameData::compile(std::sync::Arc::new(
+        poe_optimizer_data::game_data::bundled_snapshot().unwrap(),
+    ))
+    .unwrap();
+    let before = data
+        .evaluate_actor(
+            60,
+            quests,
+            scenario,
+            &character,
+            &[ActorModifierLayer {
+                programs: &[&config],
+            }],
+            &mut scratch,
+        )
+        .unwrap();
+    assert!(
+        foreign
+            .evaluate_actor(
+                60,
+                quests,
+                scenario,
+                &character,
+                &[ActorModifierLayer {
+                    programs: &[&config]
+                }],
+                &mut scratch
+            )
+            .is_err()
+    );
+    let after = data
+        .evaluate_actor(
+            60,
+            quests,
+            scenario,
+            &character,
+            &[ActorModifierLayer {
+                programs: &[&config],
+            }],
+            &mut scratch,
+        )
+        .unwrap();
+    assert_eq!(before.receiving(), after.receiving());
+}

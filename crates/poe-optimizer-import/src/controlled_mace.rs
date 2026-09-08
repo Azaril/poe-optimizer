@@ -320,6 +320,7 @@ pub struct VerifiedNativeMaceScenario {
 #[derive(Debug)]
 pub struct ControlledMaceCatalog {
     data: Arc<GameDataSnapshot>,
+    compiled: CompiledGameData,
     support_xml: BTreeMap<String, String>,
     template: String,
     profile: Profile,
@@ -732,6 +733,7 @@ impl ControlledMaceCatalog {
         }
         Ok(Self {
             data,
+            compiled,
             support_xml,
             template: template_xml,
             profile,
@@ -745,6 +747,11 @@ impl ControlledMaceCatalog {
         })
     }
     /// Authored actor configuration requires an explicit CLI problem scope even when disabled.
+    /// This legacy weapon catalog admits local-only items; only enabled authored
+    /// configuration records can require the new receiving source grammar.
+    pub fn uses_receiving_defence_scope(&self) -> bool {
+        self.profile.actor_modifiers.uses_receiving_defence()
+    }
     pub fn uses_extended_actor_scope(&self) -> bool {
         self.profile.actor_modifiers.uses_extended_scope()
             || self
@@ -1175,7 +1182,7 @@ impl ControlledMaceCatalog {
             .iter()
             .filter(|attachment| {
                 attachment.media_type
-                    == "application/vnd.poe-optimizer.native-profile+json;version=5"
+                    == "application/vnd.poe-optimizer.native-profile+json;version=6"
             })
             .collect();
         if evidence.len() != 1 || evidence[0].content.len() > MAX_NATIVE_MACE_PROFILE_BYTES {
@@ -1207,6 +1214,16 @@ impl ControlledMaceCatalog {
         {
             return Err(mismatch(
                 "native resolved weapon or support differs from candidate payload",
+            ));
+        }
+        let receiving = prepared_actor(&self.compiled, &self.profile, &choice.tree)?
+            .receiving()
+            .ok_or_else(|| mismatch("native receiver preparation is incomplete"))?;
+        if evidence["receiving_defence"]
+            != crate::actor_assembly::receiving_defence_evidence(receiving)
+        {
+            return Err(mismatch(
+                "native receiving defences differ from selected source",
             ));
         }
         self.check_native_tree(choice, result)?;
@@ -1746,13 +1763,13 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
     })
 }
 /// Requirement availability is computed by the same pure actor stage as numerical evaluation.
-/// Current scalar passive effects contain no attribute/resource operations. Any future
-/// normalized actor passive records must join this exact source-bound layer here too.
-fn actor_requirement_values(
+/// Selected passive actor records follow configuration in the same ordered layer.
+/// Scalar offence composition is independent of requirement availability.
+fn prepared_actor(
     compiled: &CompiledGameData,
     profile: &Profile,
     tree: &ResolvedClassTree,
-) -> Result<MaceRequirementValues> {
+) -> Result<poe_optimizer_engine::actor::PreparedActorResources> {
     let package = compiled.snapshot().package();
     let enabled =
         std::array::from_fn(
@@ -1776,16 +1793,32 @@ fn actor_requirement_values(
         },
         ..Default::default()
     };
-    let records = profile.actor_modifiers.records().to_vec();
-    let actor = compiled
-        .prepare_actor_resources(
+    let mut records = profile.actor_modifiers.records().to_vec();
+    records.extend(
+        crate::actor_assembly::legacy_passive_actor_records(compiled.snapshot(), tree)
+            .map_err(|error| unsupported(&error))?,
+    );
+    let penalty = match profile.config.get("resistancePenalty") {
+        Some(Scalar::Number(value)) => *value,
+        None => package.encounters.default_resistance_penalty,
+        _ => unreachable!("admitted resistance penalty"),
+    };
+    compiled
+        .prepare_actor(
             profile.level,
             quests,
+            compiled.receiving_scenario(SparkQuestRewards::from_enabled(enabled), penalty),
             &character,
             std::slice::from_ref(&records),
         )
-        .map_err(|e| unsupported(&format!("actor requirement preparation: {e}")))?;
-    let attributes = actor.values().attributes;
+        .map_err(|e| unsupported(&format!("actor requirement preparation: {e}")))
+}
+fn actor_requirement_values(
+    compiled: &CompiledGameData,
+    profile: &Profile,
+    tree: &ResolvedClassTree,
+) -> Result<MaceRequirementValues> {
+    let attributes = prepared_actor(compiled, profile, tree)?.values().attributes;
     let whole = |value: f64| -> Result<u32> {
         if !value.is_finite()
             || value.fract() != 0.0
