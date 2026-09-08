@@ -2,13 +2,14 @@
 
 Last updated: 2026-09-07
 
-Completed local checkpoint: class/ascendancy/entrance catalog composition, starting from
+Completed implementation checkpoint: class/ascendancy/entrance catalog composition, starting from
 clean `ed128f5`. The shared portable resolver, partial candidate graph, source-preserving
 materializer and schema-2 search problem are implemented. Expanded reports use schema 3;
 explicit point budgets, locks and selected-class requirements run before evaluation.
 All 353 workspace tests, 40 native-only CLI tests, lint, formatting, dependency isolation,
-five portable WASM libraries and release reproduction pass. Publication and hosted CI
-status is tracked below.
+five portable WASM libraries and release reproduction pass. Code `2135ed0` is pushed to
+main; hosted Windows/Linux CI is in progress, not yet verified complete. Its exact run is
+linked below. Next: the source-audited signed resistance modifier slice.
 
 The data package remains schema 2 / `poe2-native-profiles-v2`, **141,502 bytes**, SHA-256
 `854dca85abcd031905761d9533b7437ce28e40b5154c23c99655084fbb719507`.
@@ -40,8 +41,8 @@ the design documents.
 2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve supplied
    original exports and independent Spark/Mace goldens. Maintain actual-source interpreted
    and warmed parity, full-build differential cases and strict unsupported-mechanic errors.
-3. Complete or inspect the current class/entrance checkpoint validation and publication
-   table below. The agreed bounded composition is implemented: selected data, shared typed
+3. Check the exact code-commit CI run in the class/entrance checkpoint table below; it was
+   still running at this handoff. Resolve any failure before expanding mechanics. The agreed bounded composition is implemented: selected data, shared typed
    class/tree resolution, composed finite graph/catalog, exact source spans, independent
    locks and caller 0/1 ordinary-point / zero ascendancy-point budgets. Legacy fixed Warrior
    problems remain supported. Never infer an available point budget from observed counts.
@@ -106,7 +107,7 @@ It introduces no new game formulas, data records, dependencies or upstream revis
 | Integrated validation | **353 workspace tests pass, zero failures**, with nine ignored child helpers exercised by parents. **40 native-only CLI tests pass**. Workspace/native-only Clippy, formatting, dependency isolation and five portable WASM libraries pass. The unchanged six numerical goldens and 100-case prior PoB matrix still pass. Logs: `runs/class-search-{workspace-tests,workspace-clippy,native-only-tests,native-only-clippy,fmt,wasm,release}.log`, `runs/class-search-native-dependencies.txt`. |
 | Review/static audit | Independent catalog/CLI and source-preservation/identity reviews found no remaining blockers. Audit passes: 30 Markdown files, 234 local file links and 19 heading links; strict UTF-8, source pin, package/tree artifacts and independent/original fixtures remain unchanged. Evidence: `runs/class-search-static-audit.json`. |
 | Release evidence | Native-only release build passes. Complete serial/four-worker archives and finalists match, each using 506 attempts. Reviewed winner: `class/6/asc/none/entrance/3936/smithing-q20/none`, **22.760867499999996 DPS**. Prior custom package with quadrupled Wooden Club endpoints selects `class/8/asc/none/entrance/56651/wooden-q20/brutality_i`, **71.44014424999999 DPS**. Fresh XML reevaluation and backend/data/trust metadata match. Locked Witch 4739 resolves effect 17306 in three attempts; its explicit over-budget variant uses zero. Artifacts: `runs/class-search-release-check/summary.json`; executable SHA-256 `215828d7944f34ccbbac33169284afaaf8edb457ed03e423f9fa98c0fd438409`. |
-| Publication | All local code, release and documentation checks pass. Ready for authorized commit/push to main; hosted Windows/Linux CI pending. |
+| Publication | Code **`2135ed0af5ddee5d74d7eb66551f13f14a02900e`** is pushed to main. All local code, release and documentation checks pass. [Windows/Linux CI run 34181992200](https://github.com/Azaril/poe-optimizer/actions/runs/34181992200) is **in progress**; no hosted success is claimed yet. Snapshots: `runs/class-search-main-ci.json` and `runs/class-search-main-ci-jobs.json`. This following update changes documentation only. |
 
 The [expanded example](../examples/mace-class-search.json) combines 93 tree choices with
 four weapons and two supports. Complete default-data search takes 506 calculations:
@@ -1238,6 +1239,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `1a44c13` | Implemented current-profile data packages, immutable native injection, external CLI selection and data-bound identities/exports. All 303 workspace tests, 24 native-only CLI tests, lint, formatting, dependency isolation and five portable WASM libraries pass. All 4.5 million fixed-profile benchmark evaluations pass; both hosted Windows/Linux CI jobs pass in run `34173951380`. Source-update generation and data-driven materialization remain next. |
 | 2026-09-07 | `2bd56de` | Added deterministic all-section pinned source extraction, separate policy/evidence, bounded offline supervision and the `extract-game-data` CLI. All 316 local workspace tests, 24 native-only CLI tests, lint, formatting, dependency isolation and portable WASM checks pass. Release regeneration reproduces the reviewed package/evidence and preserves native results; both hosted Windows/Linux CI jobs pass in run `34176865681`. Broader source compatibility and data-driven materialization remain next. |
 | 2026-09-07 | `9388935` | Added schema-2 source-derived requirements, dataset-bound controlled catalog/native search, pre-dispatch legality and actual data/trust export evidence. All 333 workspace tests, 32 native-only CLI tests, lint, formatting, dependency isolation and five portable WASM libraries pass. Release custom-data ranking, serial/Rayon results and fresh export reevaluation agree; both hosted Windows/Linux CI jobs pass in `34179412604`. Next: production class/passive materialization and finite catalog composition. |
+| 2026-09-07 | `2135ed0` | Added shared class/tree resolution and partial graph, source-preserving class/ascendancy/entrance composition, explicit caller budgets/locks, selected-class requirements and expanded native/reference search. All 353 workspace tests, 40 native-only CLI tests, lint, formatting, dependency isolation, portable WASM and release checks pass. Full 744-state serial/Rayon search admits 504 alternatives; fresh PoB interaction/export checks pass. Code is pushed to main; hosted run `34181992200` is in progress. Next: signed resistance modifiers and a small owned ascendancy-node slice. |
 
 ### Hosting decision checkpoint
 
