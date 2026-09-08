@@ -10,7 +10,7 @@ use crate::data::CompiledGameData;
 use crate::defence::round_to_integer;
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-spark-level1-class-passives-v3";
+pub const PROFILE_ID: &str = "poe2-spark-actor-resources-v2";
 pub const TREE_VERSION: &str = "0_5";
 pub const CLASS_ID: u32 = 7;
 pub const SKILL_ID: &str = "SparkPlayer";
@@ -119,6 +119,7 @@ pub struct SparkOutput {
     pub intelligence: f64,
     pub life: f64,
     pub mana: f64,
+    pub spirit: f64,
     pub energy_shield: f64,
     pub armour: f64,
     pub evasion: f64,
@@ -172,10 +173,33 @@ pub fn evaluate_with_data(
     character: &CharacterInput,
     compiled: &CompiledGameData,
 ) -> Result<SparkOutput, SparkError> {
+    let actor = compiled
+        .prepare_actor_resources(
+            input.character_level,
+            compiled.actor_quest_selection(input.quests),
+            character,
+            &[],
+        )
+        .map_err(|error| SparkError(error.0))?;
+    evaluate_with_actor(input, character, compiled, &actor)
+}
+
+/// Calculate skill output from a prepared shared actor stage. No actor queries
+/// or source/configuration parsing run during this successful numerical call.
+pub fn evaluate_with_actor(
+    input: &SparkInput,
+    character: &CharacterInput,
+    compiled: &CompiledGameData,
+    actor: &crate::actor::PreparedActorResources,
+) -> Result<SparkOutput, SparkError> {
+    actor
+        .validate_profile(compiled, input.character_level, input.quests, character)
+        .map_err(|error| SparkError(error.0))?;
+    let actor = actor.values();
     let data = compiled.spark();
     let rules = &compiled.snapshot().package().character;
     character.validate().map_err(|error| SparkError(error.0))?;
-    let attributes = character.attributes;
+    let attributes = actor.attributes;
     let modifiers = character.modifiers;
     if !(1..=100).contains(&input.character_level) {
         return Err(SparkError("Spark profile character level must be 1..100"));
@@ -192,32 +216,8 @@ pub fn evaluate_with_data(
             "Spark profile enemy lightning resistance must be finite and -200..200",
         ));
     }
-    let level = f64::from(input.character_level);
-    // CalcSetup level multipliers, default quest modifiers, CalcPerform attribute
-    // bonuses, then the rounding/minimum of CalcDefence.doActorLifeManaSpirit.
-    let life_base = data.life_per_level * level
-        + data.initial_life
-        + if input.quests.candlemass {
-            data.quest_flat_life
-        } else {
-            0.0
-        }
-        + attributes.strength * data.life_per_strength;
-    let life_increased = if input.quests.molten_shrine {
-        data.quest_life_increased
-    } else {
-        0.0
-    };
-    let mana_base = data.mana_per_level * level
-        + data.initial_mana
-        + attributes.intelligence * data.mana_per_intelligence;
-    let mana_increased = if input.quests.silent_hall {
-        data.quest_mana_increased
-    } else {
-        0.0
-    };
-    let life = round_to_integer(life_base * (1.0 + life_increased / 100.0)).max(rules.minimum_life);
-    let mana = round_to_integer(mana_base * (1.0 + mana_increased / 100.0)).max(rules.minimum_mana);
+    let life = actor.life;
+    let mana = actor.mana;
     let resistance = crate::resistance::calculate(
         &modifiers,
         input.resistance_penalty,
@@ -266,6 +266,7 @@ pub fn evaluate_with_data(
         intelligence: attributes.intelligence,
         life,
         mana,
+        spirit: actor.spirit,
         energy_shield: round_to_integer(modifiers.energy_shield_flat).max(0.0),
         armour: round_to_integer(modifiers.armour_flat).max(0.0),
         evasion: round_to_integer(rules.base_evasion + modifiers.evasion_flat).max(0.0),

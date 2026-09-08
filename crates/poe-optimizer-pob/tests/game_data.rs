@@ -1389,3 +1389,275 @@ fn local_item_rule_captures_flags_and_operations_match_original_parser_cold_and_
         }
     }
 }
+
+fn assert_actor_source_modifier(
+    actual: Table,
+    expected: &poe_optimizer_data::game_data::ActorModifierRecord,
+) {
+    use poe_optimizer_data::game_data::*;
+    assert_eq!(
+        actual.get::<String>("name").unwrap(),
+        expected.stat.upstream_name()
+    );
+    match expected.effect {
+        ActorModifierEffect::Numeric { operation, value } => {
+            assert_eq!(
+                actual.get::<String>("type").unwrap(),
+                operation.upstream_name()
+            );
+            assert_eq!(actual.get::<f64>("value").unwrap(), value);
+        }
+        ActorModifierEffect::Flag { value } => {
+            assert_eq!(actual.get::<String>("type").unwrap(), "FLAG");
+            assert_eq!(actual.get::<bool>("value").unwrap(), value);
+        }
+    }
+    assert_eq!(actual.get::<u64>("flags").unwrap(), expected.flags);
+    assert_eq!(
+        actual.get::<u64>("keywordFlags").unwrap(),
+        expected.keyword_flags
+    );
+    assert_eq!(
+        actual.get::<Option<String>>("source").unwrap(),
+        expected.source
+    );
+    assert_eq!(actual.raw_len(), expected.tags.len());
+    assert_eq!(
+        actual.clone().pairs::<mlua::Value, mlua::Value>().count(),
+        5 + usize::from(expected.source.is_some()) + expected.tags.len()
+    );
+    for (index, ActorModifierTag::Condition { variables, negated }) in
+        expected.tags.iter().enumerate()
+    {
+        let tag: Table = actual.get(index + 1).unwrap();
+        assert_eq!(tag.get::<String>("type").unwrap(), "Condition");
+        let negative = tag.get::<Option<bool>>("neg").unwrap();
+        assert_eq!(negative.unwrap_or(false), *negated);
+        let names: Vec<String> = if let Some(var) = tag.get::<Option<String>>("var").unwrap() {
+            vec![var]
+        } else {
+            tag.get::<Table>("varList")
+                .unwrap()
+                .sequence_values()
+                .map(Result::unwrap)
+                .collect()
+        };
+        assert_eq!(
+            names,
+            variables
+                .iter()
+                .map(|v| v.upstream_name().to_owned())
+                .collect::<Vec<_>>()
+        );
+        assert_eq!(
+            tag.pairs::<mlua::Value, mlua::Value>().count(),
+            2 + usize::from(negative.is_some())
+        );
+    }
+}
+#[test]
+fn actor_rules_match_independent_original_parser_for_signed_fractional_and_conditional_inputs() {
+    use poe_optimizer_data::game_data::*;
+    let snapshot = bundled_snapshot().unwrap();
+    let mut checked = 0;
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        if warm {
+            oracle.lua.load("for i=1,500 do modLib.parseMod('+'..i..' to Strength');modLib.parseMod(i..'% increased maximum Life if Strength is higher than Intelligence');modLib.parseMod(i..'% less maximum Mana');modLib.parseMod('Gain no inherent bonuses from attributes') end").exec().unwrap();
+        }
+        let parser: Function = oracle
+            .lua
+            .globals()
+            .get::<Table>("modLib")
+            .unwrap()
+            .get("parseMod")
+            .unwrap();
+        for rule in &snapshot.package().actor.modifier_rules {
+            let values: &[f64] = match rule.captures.first() {
+                Some(ActorCaptureKind::SignedDecimal) => {
+                    &[-17.5, -1.0, 0.0, 1.0, 2.25, 17.0, 999.0, 1_000_000.0]
+                }
+                Some(_) => &[0.0, 1.0, 17.0, 999.0, 1_000_000.0],
+                None => &[0.0],
+            };
+            for value in values {
+                let word = if rule.captures.first() == Some(&ActorCaptureKind::SignedDecimal) {
+                    format!("{value:+}")
+                } else {
+                    value.to_string()
+                };
+                let text = rule.template.replace("{0}", &word);
+                let (mods, extra): (Table, Option<String>) = parser.call(text.as_str()).unwrap();
+                assert!(extra.is_none(), "{text} warm{warm}");
+                assert_eq!(mods.raw_len(), rule.modifiers.len());
+                for (index, mapping) in rule.modifiers.iter().enumerate() {
+                    let effect = match mapping.effect {
+                        ActorRuleEffect::Numeric {
+                            operation,
+                            value: operand,
+                        } => ActorModifierEffect::Numeric {
+                            operation,
+                            value: match operand {
+                                ActorRuleValue::Capture { index, multiplier } => {
+                                    assert_eq!(index, 0);
+                                    value * multiplier
+                                }
+                                ActorRuleValue::Constant { value } => value,
+                            },
+                        },
+                        ActorRuleEffect::Flag { value } => ActorModifierEffect::Flag { value },
+                    };
+                    let record = ActorModifierRecord {
+                        stat: mapping.stat,
+                        effect,
+                        source: None,
+                        flags: mapping.flags,
+                        keyword_flags: mapping.keyword_flags,
+                        tags: mapping.tags.clone(),
+                    };
+                    assert_actor_source_modifier(mods.get(index + 1).unwrap(), &record);
+                }
+                checked += 1;
+            }
+        }
+        for text in [
+            "1.5% increased Strength",
+            "-1% more maximum Life",
+            "1e3% increased Spirit",
+        ] {
+            let (mods, extra): (Option<Table>, Option<String>) = parser.call(text).unwrap();
+            assert!(mods.is_none() || extra.is_some(), "{text}");
+        }
+        let (mods, extra): (Table, Option<String>) = parser.call("+5 to all Attributes").unwrap();
+        assert!(extra.is_none());
+        assert_eq!(
+            mods.raw_len(),
+            4,
+            "All bookkeeping output must never silently disappear"
+        );
+        assert_eq!(
+            mods.get::<Table>(4).unwrap().get::<String>("name").unwrap(),
+            "All"
+        );
+    }
+    assert_eq!(checked, 1206);
+}
+#[test]
+fn actor_constants_precision_and_spirit_quests_match_independent_cold_and_warm_source() {
+    use poe_optimizer_data::game_data::*;
+    let snapshot = bundled_snapshot().unwrap();
+    let data = &snapshot.package().actor;
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        let lua = &oracle.lua;
+        let precision: Table = lua
+            .globals()
+            .get::<Table>("data")
+            .unwrap()
+            .get("highPrecisionMods")
+            .unwrap();
+        assert_eq!(
+            precision.clone().pairs::<String, Table>().count(),
+            data.high_precision_mods.len()
+        );
+        for (name, operations) in &data.high_precision_mods {
+            let original: Table = precision.get(name.as_str()).unwrap();
+            assert_eq!(
+                original.clone().pairs::<String, u8>().count(),
+                operations.len()
+            );
+            for (operation, places) in operations {
+                assert_eq!(
+                    original.get::<u8>(operation.upstream_name()).unwrap(),
+                    *places
+                );
+            }
+        }
+        let baseline:Table=lua.load("local actor={modDB=new('ModDB'):ModDB(),output={}};sourceCalcs.doActorLifeManaSpirit(actor,true);return actor.output").eval().unwrap();
+        assert_eq!(baseline.get::<f64>("Spirit").unwrap(), data.minimum_spirit);
+        assert_eq!(
+            baseline.get::<f64>("LowLifePercentage").unwrap() / 100.0,
+            data.low_life_threshold
+        );
+        assert_eq!(
+            baseline.get::<f64>("FullLifePercentage").unwrap() / 100.0,
+            data.full_life_threshold
+        );
+        let spirit: f64 = lua
+            .load(format!(
+                "local modDB=new('ModDB'):ModDB();{};return modDB:Sum('BASE',nil,'Spirit')",
+                line(
+                    &oracle.sources["src/Modules/CalcSetup.lua"],
+                    "modDB:NewMod(\"Spirit\", \"BASE\", 0,"
+                )
+            ))
+            .eval()
+            .unwrap();
+        assert_eq!(spirit, data.initial_spirit);
+        let normal: f64 = lua
+            .load(format!(
+                "{};return inherentAttributeMultiplier",
+                line(
+                    &oracle.sources["src/Modules/CalcPerform.lua"],
+                    "local inherentAttributeMultiplier ="
+                )
+            ))
+            .eval()
+            .unwrap();
+        assert_eq!(normal, data.attribute_bonus_multiplier);
+        let bonuses:Function=lua.load(format!("return function(flags) local modDB=new('ModDB'):ModDB();for _,flag in ipairs(flags) do modDB:NewMod(flag,'FLAG',true) end;local output={{Str=1,Dex=1,Int=1}};{};return modDB:Sum('BASE',nil,'Life') end",section(&oracle.sources["src/Modules/CalcPerform.lua"],"\t-- Add attribute bonuses\n","\t-- Calculate Presence / Surrounded"))).eval().unwrap();
+        assert_eq!(
+            bonuses
+                .call::<f64>(
+                    lua.create_sequence_from(["DoubledInherentAttributeBonuses"])
+                        .unwrap()
+                )
+                .unwrap()
+                / snapshot.package().character.life_per_strength,
+            data.doubled_attribute_bonus_multiplier
+        );
+        assert_eq!(
+            bonuses
+                .call::<f64>(
+                    lua.create_sequence_from(["HalvesLifeFromStrength"])
+                        .unwrap()
+                )
+                .unwrap()
+                / normal,
+            data.halved_life_per_strength
+        );
+        let life:f64=lua.load("local actor={modDB=new('ModDB'):ModDB(),output={}};actor.modDB:NewMod('ChaosInoculation','FLAG',true);sourceCalcs.doActorLifeManaSpirit(actor,true);assert(actor.modDB.conditions.FullLife);return actor.output.Life").eval().unwrap();
+        assert_eq!(life, data.chaos_inoculation_life);
+        lua.load(section(
+            &oracle.sources["src/Modules/ModTools.lua"],
+            "function modLib.setSource(",
+            "function modLib.hasTag(",
+        ))
+        .exec()
+        .unwrap();
+        let configs:Table=lua.load(format!("local StripEscapes=function(text) assert(not text:find('^',1,true));return text end;{};local config={{}};addQuestModsRewardsConfigOptions(config);return config",section(&oracle.sources["src/Modules/ConfigOptions.lua"],"local function questModsRewards(","\nlocal configSettings = {"))).eval().unwrap();
+        for quest in &data.spirit_quests {
+            let config = configs
+                .clone()
+                .sequence_values::<Table>()
+                .map(Result::unwrap)
+                .find(|c| {
+                    c.get::<Option<String>>("var").unwrap().as_deref() == Some(&quest.config_key)
+                })
+                .unwrap();
+            assert_eq!(
+                config.get::<bool>("defaultState").unwrap(),
+                quest.default_enabled
+            );
+            assert_eq!(config.get::<String>("type").unwrap(), "check");
+            let db: Table = lua.load("return new('ModDB'):ModDB()").eval().unwrap();
+            let apply: Function = config.get("apply").unwrap();
+            apply.call::<()>((true, db.clone(), db.clone())).unwrap();
+            let mods: Table = db.get("mods").unwrap();
+            assert_eq!(mods.clone().pairs::<String, Table>().count(), 1);
+            let spirit: Table = mods.get("Spirit").unwrap();
+            assert_eq!(spirit.raw_len(), 1);
+            assert_actor_source_modifier(spirit.get(1).unwrap(), &quest.modifiers[0]);
+        }
+    }
+}

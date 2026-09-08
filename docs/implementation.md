@@ -2,19 +2,17 @@
 
 Last updated: 2026-09-08
 
-Current implementation checkpoint: **local weapon-modifier assembly**, implemented, locally
-validated and pushed as `da168e94410730b8ee97764d54feb126484d12d3`. Exact-code Windows/Linux
-CI run `34193804854` is in progress. The next phase is shared actor attributes and maximum
-resources. Schema-5 source-derived rules, shared item admission, prepared weapon assembly
-and CLI problem
-schema 5/report 6 are complete for the bounded scope below. The preceding typed-candidate
-code `f022d1925a3d21ef595f50eade3ac279793ec517` passes hosted Windows and Linux CI.
+Current implementation checkpoint: **shared actor attributes and maximum resources**, implemented
+and locally validated; publication is next. Schema-6 injected actor data, shared Rust
+preparation, source configuration admission and CLI problem 6/report 7 are complete for the
+bounded scope below. The preceding local-weapon code `da168e94410730b8ee97764d54feb126484d12d3`
+passes hosted Windows and Linux CI run `34193804854`.
 The full implementation-plan/native-parity goal remains active.
 
 Native support remains limited to the documented Spark/Mace pipelines. The supplied
 minion build, general equipment/skill/modifier pipelines and full PoB parity remain
 unfinished. Source revision, tree/full source snapshot, supplied originals and six
-independent goldens stay fixed. The new item grammar and effect values are injected data;
+independent goldens stay fixed. Actor/item grammar and effect values are injected data;
 supplied synthetic rare rolls do not certify affix-tier or acquisition legality.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
@@ -46,8 +44,8 @@ the design documents.
    class/tree resolution, composed finite graph/catalog, exact source spans, independent
    locks and caller 0/1 ordinary-point / zero/one ascendancy-point budgets. Legacy fixed Warrior
    problems remain supported. Never infer an available point budget from observed counts.
-4. Check the local weapon checkpoint publication/CI state, then implement the shared actor
-   attributes and maximum-resource phase specified below.
+4. Review the actor checkpoint publication/CI state below, then implement the normalized
+   passive/equipment source-assembly plan. Read [actor resources](actor-resources.md).
    Preserve typed/document equivalence and fresh counted finalist checks. Preserve physical and
    effective node identity, selected-data requirements and strict unknown-mechanic rejection.
    Broader source compatibility remains a separate D4 gate; review that contract before
@@ -55,7 +53,7 @@ the design documents.
 5. Broaden source-derived passive/modifier extraction beyond the currently admitted
    stat strings and typed numeric modifier operations, with actual-source and full-build parity
    before relaxing admission. Preserve the data bundle's distinction between retained and
-   excluded records; schema-1/2/3/4 packages must be regenerated for schema 5. Connect broader
+   excluded records; schema-1/2/3/4/5 packages must be regenerated for schema 6. Connect broader
    equipment, support and supporting-skill catalogs together, keeping multiple required
    skills/items, cross-class search, exact locks and ownership/resource/point accounting.
    No selected special node, grant, socket or unknown mechanic may disappear during projection.
@@ -94,6 +92,124 @@ Assessment reports constraint evidence and primary availability; it does not cer
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
 
+## Shared actor attributes and maximum resources - 2026-09-08
+
+Starting point: `ffbca64`. The [actor design](actor-resources.md) specifies the data,
+calculation, import and prepared-search seams. No change to the end-state native target
+or source pin is implied. Full native replacement remains unfinished.
+
+| Checkpoint | Current state |
+| --- | --- |
+| Injected data | Schema **6**, 116 literal actor rules, 40 source precision records, three actual Spirit quest closures/defaults and portable ordered actor modifier records. Package **198,104 bytes**, SHA-256 `7040fdf73dfd1500bb84b91c38944f1c4149524f30c962c5696a70115a4cc010`. Two fresh source extractions reproduce package/tree/evidence bytes; evidence SHA `5d54b6b0384e5a66302bc21fbca2ac92fd4bec6125e555ba88c3a5609d15ab30`. **36 data tests**, ten source-oracle tests (including 1,206 actor-parser comparisons), extraction/worker/CLI checks pass. |
+| Shared kernel | Exactly two attribute passes, twelve comparison conditions, inherent bonuses, maximum Life/Mana/Spirit and global Accuracy share one Rust stage. Prepared components are dataset/input bound and retain no source database. **84 engine tests** pass, including **1,244 cold/warm actor source comparisons**, 384 empty/generic compatibility combinations, raw donor/CI guards and zero allocations across 5,000 prepared/compatibility calls. |
+| Source/import | Block and legacy custom-modifier source are preserved. Configurable grammar and private attribute requirement preflight use the same engine. Narrow XML handling preserves actual legacy whitespace behavior. **79 import tests** pass. Decoded text/active lines/record and encoded-source limits bound evidence, with media-4 realization capped at 8 MiB. Review fixed missing Spirit defaults in native realization and bounded exact encoded actor source. |
+| Native/CLI | Both profiles and typed Mace candidates consume prepared actors. Spirit metric, Spark/Mace evidence 2/4, problem 6/report 7 and actor search example are implemented. **39 native tests** pass, including all 4,410 states with 3,675 legal candidates under reviewed and injected actor data, exact typed/document equality and zero allocations across 8,000 mixed actor/local-weapon iterations. Four native CLI tests cover 84 states/70 legal/14 rejected/72 attempts across typed/document × one/four workers, empty attribute domains, strict scope and custom grammar/quest/precision replay. An additional explicit PoB CLI test validates three-attempt locked searches for blocks and legacy migration. |
+| Full build parity | **60 fresh complete native/PoB build pairs and 13 exact native-export reimports pass**, covering Spark mapping/bossing, composed Monk/passives/rare Mace/two supports, numeric operations, inherent flags, zero overrides, two-pass feedback, LF/CRLF/tab legacy inputs, inactive unknown blocks, removal and Spirit quest selection. Mace's nested hand Accuracy is absent from the flat snapshot; actual-source Accuracy and complete-build HitChance/DPS provide the corresponding checks. Existing local-weapon, support, resistance, class/passive and independent golden suites also pass. |
+| Integrated validation | The integrated workspace ran 502 tests: 501 passed and one old all-quests test omitted the newly exposed Spirit quests. The corrected seven-test Mace target passes, and one additional reference CLI test passes. **503 unique workspace tests are covered across the integrated run and focused checks**, with nine child helpers ignored directly and exercised by parents. **65 native-only CLI tests**, strict workspace/native-only Clippy, formatting, native runtime dependency isolation and five WASM libraries pass. No unresolved failure remains; this does not claim a second all-green full workspace command. Evidence: `runs/actor-test-coverage.json` and the named raw logs. |
+| Release reproduction | **24 searches** (typed/document × 1/2/4/32 workers × three repeats) agree on archives, ledgers, exact finalist XML and dataset companions: **4,410 states / 3,675 legal / 735 LevelReq rejections / 3,677 attempts**. Fresh Spirit is 130. Custom grammar, Spirit quest values and precision produce 143 versus 142 at default precision; infeasible floors, attribute-empty domains and budgets 3/7 pass. Correcting the developer harness's initial precision expectation reused and hash-verified the completed timing artifacts, then ran only new edge checks. Final evidence: `runs/actor-release-edges/summary.json`, with original measured reports under `runs/actor-release-check/`. |
+| Static preservation | All 1,082 pinned source-manifest files, source pin, tree/full snapshot, supplied originals and six independent golden pairs are unchanged. All twelve old data sections are identical; only the new actor section and expected manifest fields differ. Lockfile versions are unchanged: import adds the pure engine dependency, and engine adds host-only roxmltree for its existing shared XML oracle test. UTF-8, fences and local Markdown links pass. Evidence: `runs/actor-data-static-audit.json`. |
+| Publication | Local implementation and validation complete; code publication to main is next. Previous exact local-weapon code passes Windows/Linux CI. |
+
+The raw resource kernel validates donor conversion and Chaos Inoculation function behavior;
+full build profiles reject these incomplete downstream mechanics. Reservation, receiving
+ES/armour/evasion, general normalized passive/item assembly, actor recursion and the supplied
+minion build remain unfinished. Import adds a pure engine dependency for shared semantic
+requirement checks; dependency versions and native-only isolation are verified.
+
+### Actor release measurements
+
+Windows x86-64, **AMD Ryzen 9 9950X3D, 16 physical / 32 logical cores**; project builds and
+tests finished before measurement. The explicit actor benchmark set rotates all 3,675
+legal candidates. Each invocation performs one baseline and 7,350 fresh equivalence
+calculations before timing, with equal checksums across every chosen layer/worker/repeat.
+No candidate results are cached.
+
+Median evaluations/second, rounded. Complete-document and prepared-result layers use
+20,000 calls × three repeats; inexpensive layers use 1,000,000 calls × five repeats.
+
+| Workers | Full document | Prepared full result | Pure calculation | Timed typed snapshot | Typed + owned metrics |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 1 | 4,485 | 20,221 | 15,164,980 | 5,634,508 | 4,315,967 |
+| 2 | 4,975 | 22,951 | 18,247,143 | 7,574,891 | 5,584,290 |
+| 4 | 8,491 | 34,072 | 36,834,583 | 15,178,998 | 11,272,788 |
+| 32 | 28,621 | 129,506 | 240,286,421 | 103,558,262 | 73,879,798 |
+
+Longer timed-snapshot samples span **5.58–5.82 million/s** at one worker and **95.6–105.8
+million/s** at 32. The fastest samples still last only a few milliseconds; these are
+bounded Mace API measurements, not sustained-load or general-build scaling evidence.
+Raw distributions and summaries: `runs/actor-benchmark{,-fast}-isolated{,-summary}.json`.
+
+In the first invocation, catalog preparation takes **37.80 ms**, actor/weapon/tree/support
+component preparation **1.356 ms** and legal-handle construction **10.04 ms**. The numerical
+prepared object accounts for **47,279 bytes**, with six weapons, 105 trees, 105 actors,
+seven loadouts and one selector; no retained XML or result-cache entries. Handles use
+117,600 inline bytes; comparison requests contain 13,448,890 XML bytes. These estimates
+exclude shared data, catalog storage and allocator/Arc metadata; they are not peak RSS.
+Actor preparation performs numerical work even though its full-build calculation count is zero.
+
+Whole CLI runs include admission, preparation, scoring, fresh verification, serialization
+and export. The example selects `wooden-physical`, Monk3/10364/24475 and Brutality I + Heavy
+Swing at **113.35145523 DPS** and 130 maximum Spirit. Three-repeat wall times below are
+minimum / median / maximum milliseconds.
+
+| Workers | Typed candidates | Complete documents |
+| --- | ---: | ---: |
+| 1 | 247.4 / 248.5 / 384.0 | 1636.2 / 1644.8 / 1652.7 |
+| 2 | 221.8 / 230.9 / 233.6 | 1068.3 / 1092.3 / 1096.7 |
+| 4 | 234.4 / 240.2 / 250.1 | 726.9 / 727.2 / 735.8 |
+| 32 | 244.5 / 255.7 / 267.5 | 510.1 / 510.4 / 513.8 |
+
+One-worker median whole-search time is about **6.6× lower** with typed candidates. More
+workers do not improve this small typed whole-search case; catalog/admission/report work
+dominates. These results do not certify naturally obtainable rare items, realistic
+mapping/bossing optimizer quality, complete builds or browser performance.
+
+Artifact identities:
+
+- Native-only release CLI: `de48ddce0331d4a70b631c9faeccf2e280937d8e004f9941980ba9f071e8be11`.
+- Benchmark executable: `b3f89c413d1b870404f3fcc6685fd0e2741c00ffb5234a178ab837fbd80710e7`.
+- Reviewed package: `7040fdf73dfd1500bb84b91c38944f1c4149524f30c962c5696a70115a4cc010`.
+- Custom actor package: `e5304e9fdf138c3c94baeb77fdd7fed14518e4ecc251f6e48300df5d6f4e1862`.
+
+### Next: normalized passive and equipment source assembly
+
+Advance from authored custom modifiers to actual allocated-passive and equipped-item
+sources feeding the shared actor stage. This is part of the existing native pipeline plan;
+reservation is deferred until active-skill assembly supplies its prerequisites.
+
+1. Extract complete ordered records for qualifying ordinary passive nodes and admit a whole
+   node by supported mechanics. Preserve physical allocations, effective attribute choices,
+   connectivity, class ownership, explicit point budgets and locks. The pinned tree contains
+   329 nodes named Attribute/Strength/Dexterity/Intelligence; this is an inventory, not a
+   promise that every node is supported. `PassiveSpec.lua` loads `AttributeOverride` and
+   resolves selected options; do not treat attribute-node names as complete semantics.
+2. Assemble equipment global records after exact local consumption. Reuse the current Maces
+   first, then source-configured jewellery whose complete implicit/explicit behavior can be
+   evaluated. `Item.lua` consumes local records before `CalcSetup.lua` merges item and passive
+   sources. Spirit on a Spirit-bearing base can be locally consumed and scaled; forwarding
+   every actor-looking line globally would double count it. Preserve order and provenance.
+3. Replace fixed scalar-only passive assembly with normalized supported records. Compile
+   source contributions once, then compose selected records using reusable indexed inputs
+   and bounded worker scratch. Gear attributes introduce tree/equipment interactions, so
+   actor-per-tree preparation is insufficient. Avoid a Cartesian actor-result cache and
+   avoid rebuilding XML or an owned modifier database per candidate. Requirements and skill
+   calculations must consume the same resolved actor result.
+4. Validate complete Spark builds with connected attribute choices and actual attribute or
+   resource jewellery, plus Mace builds combining local weapon rolls and global attribute,
+   Accuracy and resource effects. Include a coordinated gear/tree change that flips an
+   attribute condition and crosses a support requirement. Compare fresh PoB values and
+   reimports, typed/document candidates, custom-data binding and serial/Rayon archives.
+5. Reject disconnected paths, duplicate/conflicting overrides, incorrect slots, unknown
+   local/global scope and any unsupported second effect. Preserve multi-dimension locks,
+   zero-attempt empty domains, per-source evidence and source revision. Measure preparation,
+   allocation and varied-candidate throughput after correctness passes.
+
+This covers real ingredients in the supplied build without claiming its minion, granted
+skill or defence mechanics. Reservation requires skill-local modifier queries, counts,
+supports, forced reservations and condition feedback; receiving defensive resources also
+require repeated stages. Keep those future boundaries explicit rather than admitting their
+outputs from an isolated formula.
+
 ## Local weapon-modifier assembly - 2026-09-08
 
 Starting point: clean `5bc00db`. This implements the prior source-audited weapon plan below.
@@ -111,7 +227,7 @@ unfinished and the source pin/independent goldens are unchanged.
 | Integrated validation | The first workspace command ran 457 tests: 456 passed, one native rejection contract failed, and nine child helpers were ignored directly but exercised by parent tests. Review restored canonical numeric headers and changed the now-supported local-physical rejection case to an unsupported global-to-Attacks line. Afterward **all 66 import, 38 native and 61 native-only CLI tests pass**, covering **460 unique workspace tests across the integrated run and focused reruns**, with no unresolved failures. This does not claim a second full workspace command. Final workspace/native-only Clippy, formatting, runtime-dependency isolation and five WASM libraries pass. Evidence: `runs/local-weapon-test-coverage.json` records raw logs and the focused agent tool transcripts separately. |
 | Release reproduction | Full **4,410-state / 2,949-legal / 1,461-rejected** searches use **2,951 attempts** and agree at 1/2/4/32 workers in typed/document modes, three repeats each. Archives, fresh finalist XML and dataset companions match. Custom grammar, critical cap, signed resistance and support data preserve agreement for full infeasible runs and a three-attempt locked export. LevelReq-80 empty domains spend zero; partial budgets remain bounded. Evidence: `runs/local-weapon-release-check/summary.json`, `runs/verify-local-weapon-release.py`. |
 | Static preservation | All 1,082 source-manifest file hashes/lengths verify; the PoB submodule is clean. Source pin, tree/full snapshot, supplied originals, six independent golden XML/reference pairs and dependency manifests/lockfile remain unchanged. Ten old data sections and every preexisting Character field are identical. UTF-8, fenced blocks and local links pass across 33 Markdown files. Evidence: `runs/local-weapon-static-final-audit.json`. |
-| Publication | Code **`da168e94410730b8ee97764d54feb126484d12d3`** is pushed to main. [Windows/Linux run 34193804854](https://github.com/Azaril/poe-optimizer/actions/runs/34193804854) is **in progress on both platforms**; no hosted success is claimed yet. Exact-code snapshots: `runs/local-weapon-main-ci.json`, `runs/local-weapon-main-ci-jobs.json`. This following publication update changes documentation only. |
+| Publication | Code **`da168e94410730b8ee97764d54feb126484d12d3`** is pushed to main. [Windows/Linux run 34193804854](https://github.com/Azaril/poe-optimizer/actions/runs/34193804854) is **successful on both platforms** (confirmed at the actor checkpoint). Exact-code snapshots: `runs/local-weapon-main-ci.json`, `runs/local-weapon-main-ci-jobs.json`. This following publication update changes documentation only. |
 
 Native-only calculations use no Lua or per-candidate subprocess. The PoB backend stays an
 explicit parity/reference selection. The synthetic local-weapon example demonstrates
@@ -175,7 +291,7 @@ Artifact SHA-256 identities:
 - Reviewed schema-5 package: `5a258250c10e8148c21193672f1af69ce0aeb16ce779081fca1882fc68b8006a`.
 - Injected custom package: `01e45c2449e2249b6da2ea82c4375456cd6b58ef04efd54244b02cc56c5647d7`.
 
-### Next: shared actor attributes and maximum resources
+### Prior plan: shared actor attributes and maximum resources (implemented above)
 
 Build a reusable actor-preparation stage consumed by both Spark and Mace. This advances the
 existing complete-native-pipeline plan: their present attribute/Life/Mana/Spirit preparation
@@ -1202,7 +1318,7 @@ scope to weapon/support selection.
   evaluation and controlled search where the reference feature exists; native-only builds
   default to native and reject the unavailable PoB choice. Evaluation reports use schema 3;
   the private PoB protocol and benchmark reports use version 2. Controlled-search reports
-  use schema 2 for legacy problems and schema 3 for expanded class/tree problems.
+  use schemas 2–7 according to declared item/tree/support/actor scope; problem 6 uses report 7.
   `--options` supplies supported skill/encounter selection; repeatable `--metric` filters
   typed actor queries, and `--raw` retains backend-specific diagnostic attachments.
   `evaluate --objective` compiles goals against the selected catalog and retains their
@@ -1223,10 +1339,10 @@ scope to weapon/support selection.
   controlled Mace search uses Rayon directly and checks fresh realization without PoB.
   General native build mechanics and the supplied complex minion build remain unsupported.
 - Metric catalogs are backend-specific. [Native](../crates/poe-optimizer-native/src/lib.rs)
-  declares nine player queries: Spark returns nine finite resource/resistance/hit values;
-  Mace returns eight finite values plus explicitly unavailable `selected_average_hit` because
+  declares ten player queries: Spark returns ten finite resource/resistance/hit values;
+  Mace returns nine finite values plus explicitly unavailable `selected_average_hit` because
   the contract does not aggregate attack hands. [PoB](../crates/poe-optimizer-pob/src/metrics.rs)
-  declares 15 definitions and 17 actor queries, including diagnostic EHP and five maximum-hit
+  declares 16 definitions and 18 actor queries, including diagnostic EHP and five maximum-hit
   values and selected-player/minion hit metrics. Units and availability are explicit.
   Combined DPS and Full DPS remain diagnostics rather than objective metrics. Unsupported
   actor/metric requests reject according to the selected backend's capabilities.
@@ -1260,9 +1376,9 @@ scope to weapon/support selection.
 - [Native calculations](native-engine.md) include six numerical helpers, numeric modifier
   aggregation, Condition/ActorCondition contexts, multiplier programs and ordered PerStat/
   StatThreshold dependencies, plus complete admitted Spark/Mace numerical pipelines with shared
-  class attributes, nine ordinary-entrance modifier fields and five signed resistance fields.
-  Source-executed numerical and XML compatibility tests cover these slices and the shared import boundary. FLAG-derived conditions, broader tags,
-  real modifier extraction and general build pipelines remain explicit gaps. The numerical
+  shared actor attributes/resources and conditions, nine ordinary-entrance modifier fields and five signed resistance fields.
+  Source-executed numerical and XML compatibility tests cover these slices and the shared import boundary. Broader tags,
+  general passive/equipment source assembly and full build pipelines remain explicit gaps. The numerical
   engine has no production Lua/I/O/scheduling dependency; the native adapter adds portable
   parsing, contracts and injected timing. WASM compilation does not establish browser
   execution or speed. [Benchmarking](native-backend.md#fixed-input-throughput-benchmark)
@@ -1330,7 +1446,7 @@ skills together within explicit finite catalogs. It must support 1..N required s
       The synchronous engine has no worker pool or preemptive native execution boundary.
 - [ ] **M1.3 Import and metrics — container/preflight complete; semantics partial.**
       PoB typed units/availability cover 15 definitions and 17 actor queries; native profiles
-      declare nine player queries, with Mace average hit explicitly unavailable. PoB coverage
+      declare ten player queries including maximum Spirit, with Mace average hit explicitly unavailable. PoB coverage
       classifies the three unresolved supplied entries and exposes selected ownership,
       Full DPS membership, manual/generated provenance and missing tree connections.
       No automatic repair is performed. Extend selected minion command/usage-model coverage
@@ -1380,7 +1496,7 @@ skills together within explicit finite catalogs. It must support 1..N required s
 
 - [ ] **M1.8 Configurable native data — current-profile injection, extraction and controlled search implemented; broader updates pending.**
       D1–D3 provide packages, immutable injection, numeric data and typed effects. D4 supplies
-      external loading, a bounded pinned source extractor and schema-5 data-bound controlled
+      external loading, a bounded pinned source extractor and schema-6 data-bound controlled
       catalog/requirement rules, local item modifiers and bounded class/entrance/support composition. Broader source
       compatibility and general catalogs remain.
       D5 current-profile evidence is recorded above.
@@ -1625,7 +1741,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `c91fab1` | Added a shared signed-resistance kernel, injected global cap, schema-3 owned passive data/extraction and four one-point ascendancy passives. Problem/report schemas 3/4 preserve older input scopes. All 374 workspace tests, 44 native-only CLI tests, lint, formatting, dependency isolation, five portable WASM libraries, source reproduction and native release checks pass. New 840-state search admits 576 alternatives; complete builds and effect removal match fresh PoB. Code is pushed to main; hosted run `34185229809` is in progress. Next: configurable zero-to-two support loadouts. |
 | 2026-09-08 | `4845efe` | Added injected schema-4 support loadouts and all seven bounded Mace combinations. Local validation and Windows/Linux CI pass. Next: typed native candidate preparation. |
 | 2026-09-08 | `f022d19` | Added private typed native candidate preparation, stack metrics and a fresh full-document verification hook. All 421 workspace and 56 native-only CLI tests, lint, portable checks and release comparisons pass. Identical bounded Mace search results take 164.5 ms versus 397.0 ms one-worker median; full native parity remains unfinished. Pushed to main; exact hosted run `34190091048` passes on Windows and Linux. Next: injected local weapon-modifier assembly. |
-| 2026-09-08 | `da168e9` | Added injected schema-5 local weapon rules, normal/rare source-preserving admission, prepared numeric weapon assembly and problem/report schemas 5/6. Integrated validation plus focused review reruns cover 460 workspace tests, with 61 native-only CLI tests passing and no unresolved failures. Source/build parity, release reproduction, lint and portable checks pass. Typed/document searches agree across 1/2/4/32 workers; one-worker median 236.7 ms versus 668.1 ms for this diagnostic domain. Pushed to main; exact hosted run `34193804854` is in progress. Next: shared actor attributes and maximum resources. |
+| 2026-09-08 | `da168e9` | Added injected schema-5 local weapon rules, normal/rare source-preserving admission, prepared numeric weapon assembly and problem/report schemas 5/6. Integrated validation plus focused review reruns cover 460 workspace tests, with 61 native-only CLI tests passing and no unresolved failures. Source/build parity, release reproduction, lint and portable checks pass. Typed/document searches agree across 1/2/4/32 workers; one-worker median 236.7 ms versus 668.1 ms for this diagnostic domain. Pushed to main; exact hosted run `34193804854` passes Windows/Linux (confirmed at the actor checkpoint). Next actor phase is implemented above. |
 
 ### Hosting decision checkpoint
 

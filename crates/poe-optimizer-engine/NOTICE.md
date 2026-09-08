@@ -1,7 +1,7 @@
 # Upstream attribution
 
 The defence kernels in `src/defence.rs` and numeric modifier queries in
-`src/modifiers.rs`, conditional evaluation in `src/conditions.rs`, explicit multiplier/stat scaling in `src/multipliers.rs` and `src/stats.rs`, and the closed profiles in `src/spark.rs` and `src/mace.rs`, are translated from Path of Building
+`src/modifiers.rs`, conditional evaluation in `src/conditions.rs`, explicit multiplier/stat scaling in `src/multipliers.rs` and `src/stats.rs`, shared actor attributes/resources in `src/actor.rs`, and the closed profiles in `src/spark.rs` and `src/mace.rs`, are translated from Path of Building
 Community PoE2 at revision `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`:
 
 - `src/Modules/CalcDefence.lua:33-69`: hitChance, monsterHitChance,
@@ -18,6 +18,7 @@ Community PoE2 at revision `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`:
 - `src/character.rs` and the class/entrance profile branches derive ordinary class attribute bonuses, global defence bases, flagged damage and speed rounding from the existing profile source lists. Exact entrance stat semantics are checked against `src/Modules/ModParser.lua` and class-specific `src/TreeData/0_5/tree.lua` options; both full source hashes are retained.
 - `src/Data/Global.lua:122-332`: supported flag and keyword matching semantics.
 - `src/Modules/Data.lua:597-603`: MORE precision entries.
+- `src/actor.rs` translates the ordered attribute/inherent-bonus stages in `CalcPerform.lua`, base/quest assembly in `CalcSetup.lua` and `ConfigOptions.lua`, maximum-resource calculation in `CalcDefence.lua`, and the global Accuracy prerequisite in `CalcOffence.lua`. Actor constants, precision and quest records are extracted from this pinned source into the injected data package.
 
 Source: https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2
 

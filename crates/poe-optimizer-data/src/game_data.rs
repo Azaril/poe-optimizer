@@ -1,5 +1,6 @@
 //! Bounded, portable decoding of complete, explicitly partial game-data packages.
 //! The host supplies bytes and trust policy; no runtime I/O or process-global selection.
+pub use crate::actor::*;
 use crate::bundled::BundledClassTree;
 pub use crate::item_rules::{
     ItemCaptureKind, ItemModifierMapping, ItemModifierRoll, ItemModifierRule, LocalWeaponOperation,
@@ -11,12 +12,13 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 5;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v5";
+pub const SCHEMA_VERSION: u32 = 6;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v6";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
     "character",
+    "actor",
     "quests",
     "spark",
     "mace",
@@ -341,6 +343,7 @@ pub struct GameDataPackage {
     pub manifest: GameDataManifest,
     pub tree: BundledClassTree,
     pub character: CharacterData,
+    pub actor: ActorData,
     pub quests: QuestData,
     pub spark: SparkData,
     pub mace: MaceData,
@@ -701,6 +704,17 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
         }
     }
     crate::item_rules::validate_rules(&package.item_modifier_rules)?;
+    crate::actor::validate_actor(&package.actor)?;
+    if package
+        .actor
+        .spirit_quests
+        .iter()
+        .any(|quest| package.quests.config_keys.contains(&quest.config_key))
+    {
+        return Err(error(
+            "actor Spirit quest keys overlap existing quest records",
+        ));
+    }
     number(
         "critical_chance_cap",
         package.character.critical_chance_cap,

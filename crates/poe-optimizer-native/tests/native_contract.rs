@@ -59,8 +59,13 @@ fn complete_native_documents_match_both_unchanged_independent_goldens() {
             ("selected_hit_dps", "TotalDPS"),
             ("selected_average_hit", "AverageHit"),
         ]);
-        assert_eq!(result.measurements.len(), raw.len());
-        for (name, value) in values(&result) {
+        // Spirit is tested against fresh source in the actor differential suite;
+        // the independent original goldens deliberately remain unchanged.
+        assert_eq!(result.measurements.len(), raw.len() + 1);
+        for (name, value) in values(&result)
+            .into_iter()
+            .filter(|(name, _)| name != "spirit")
+        {
             let reference = expected["metrics"][raw[name.as_str()]].as_f64().unwrap();
             assert!(
                 (value - reference).abs() <= 1e-9 * reference.abs().max(1.0),

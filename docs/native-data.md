@@ -11,11 +11,20 @@ parsing, I/O or data hashing. This implements the current-profile slice of the
 
 The reviewed package contains the existing class/root/entrance and selected ascendancy-passive tree subset, character
 resource and accuracy parameters, level-one Spark/Mace identities and values, three reviewed supports,
-two weapon bases, five local item-modifier grammar/mapping rules, quest rewards/defaults, defence coefficients/caps, 100-level
+two weapon bases, five local item-modifier grammar/mapping rules, shared actor configuration,
+quest rewards/defaults, defence coefficients/caps, 100-level
 monster armour/evasion tables, encounter defaults, typed owned passive effects and explicit
 level/attribute requirements for the included skills, support and weapon bases. Support
 color and per-color aggregate attribute costs also come from data. Display
 stat text is source evidence; typed effect IDs and values drive the calculation.
+
+The `actor` section supplies the shared attribute and maximum-resource stage used by Spark
+and Mace. Its normalized modifier records retain typed targets, numeric or flag effects,
+source, flags/keyword flags and ordered attribute-condition tags. The section includes
+116 reviewed custom-modifier templates, the complete 40-record source precision table,
+three Spirit quest records and the additional source constants for attribute bonuses,
+pool thresholds and Spirit. Existing Life/Mana/Accuracy balance fields remain in
+`character`; existing quest fields remain in `quests`.
 
 The package is explicitly partial. Its tree coverage now includes four directly connected
 ascendancy small nodes with signed BASE player resistance effects. Local item rules admit
@@ -30,6 +39,38 @@ Structural tree content and class attributes remain bound to the reviewed tree a
 and exact source compatibility guard. Custom numerical/effect records can change; editing
 topology or its provenance requires the remaining source/compatibility migration. The
 supplied minion build and unrestricted native evaluation remain unsupported.
+
+## Actor configuration and modifier records
+
+`ActorModifierRecord` represents numeric BASE/INC/MORE/OVERRIDE or boolean FLAG effects.
+Supported numeric targets cover attributes, Life/Mana/Spirit, Accuracy and the explicit
+inputs to the maximum-resource function. `ActorModifierTag::Condition` preserves ordered
+OR variables and negation; multiple tags retain source order. Global records require zero
+flags and keyword flags. Unknown fields, targets, tags and incompatible operations reject.
+The raw stage can represent donor conversions and Chaos Inoculation, but this does not
+admit those mechanics in a complete build: receiver defences and the full immunity effects
+remain outside the supported native profiles.
+
+`actor.modifier_rules` contains exact text templates, capture kinds and complete ordered
+effect mappings. Signed decimal BASE captures and unsigned integer INC/MORE captures retain
+the source grammar; reduced/less forms carry their source-derived negative multiplier.
+Fixed phrases can emit flags or zero-valued overrides. For example, the reviewed rules
+include `+5 to Strength`, `15% more maximum Mana`, `Removes all mana`, and the suffix
+` if Strength is higher than Intelligence`. Combined attribute wording that emits an
+additional `All` bookkeeping record is not silently reduced to three attribute records.
+The configured templates are a bounded parser surface, not unrestricted PoB modifier syntax.
+
+`actor.high_precision_mods` retains all 40 source entries and their operations. The engine
+selects the two reviewed MORE entries from this explicit table; it does not inherit a
+pinned precision table from a primitive helper. Custom precision data is part of the
+selected package and its identity.
+
+`actor.spirit_quests` retains three independent checkbox keys, defaults and exact modifier
+sources for King In The Mists, Ignagduk and Lythara. Their reviewed BASE values are 30, 30
+and 40; all three source checkbox defaults are enabled independently of character level.
+Keys must be unique and disjoint from the existing six quest records. Build admission
+also rejects collisions with other recognized configuration fields. Quest choice lists,
+reservation and supporting skill effects are not inferred from these records.
 
 ## CLI loading and authoring
 
@@ -122,7 +163,10 @@ checks it in addition to capability IDs. Native always advertises it.
 Pure Spark/Mace `evaluate_with_data` functions receive `&CompiledGameData` explicitly.
 Legacy `evaluate`, `evaluate_with_character`, `data()` and default-character helpers obtain
 the same reviewed package. They contain no duplicate balance-value database. New hot paths
-should use the injected APIs.
+should use the injected APIs. `CompiledGameData::prepare_actor_resources` produces
+`PreparedActorResources` bound to the exact compiled instance. Both skills consume that
+shared actor stage; its base/class/quest and modifier inputs are prepared before repeated
+numerical evaluation.
 
 ## Identity, reports and exports
 
@@ -141,7 +185,9 @@ schema **3**, adding ordered tree choices and canonical admission evidence. The 
 snapshot supplies class attributes, resolved physical/effective entrance views, graph
 projection, generated XML and numerical configuration. The schema-3 problem adds paid ascendancy choices and uses report schema **4**. Schema-4
 support-loadout problems use report **5**; schema-5 local-weapon problems use report **6**.
-Current Mace profile evidence uses media **3**, including exact parsed item provenance and
+Schema-6 actor-customization problems use report **7**. Mace profile evidence uses media
+**4**, and Spark uses media **2**, with normalized actor modifier evidence and maximum Spirit
+alongside the existing outputs. Mace additionally retains exact parsed item provenance and
 prepared local weapon stats. Native-tree
 diagnostics use version **2**, with separate ordinary/ascendancy counts and allocation kinds. Its native export companion retains
 structured trust and the selected package path as a reload hint. Benchmark schema **2** reports
@@ -155,7 +201,13 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
-Current package schema **5**, semantics **`poe2-native-profiles-v5`**, adds `item_modifier_rules`
+Current package schema **6**, semantics **`poe2-native-profiles-v6`**, adds the required `actor`
+section. It contains normalized actor records/rules, additional source constants, the complete
+precision table and three Spirit quest selectors/defaults. All preexisting non-manifest
+sections remain unchanged. Schema-1/2/3/4/5 packages require regeneration and review of custom
+changes; increasing the schema number alone does not supply the missing configuration.
+
+Package schema **5**, semantics **`poe2-native-profiles-v5`**, adds `item_modifier_rules`
 and `character.critical_chance_cap`. Rule templates, numeric capture kinds and stat/operation/
 scope mappings are configuration. Supplied item values are validated separately and compiled
 once per weapon; Rust defines operation and parsing semantics. The global critical cap and
@@ -176,7 +228,7 @@ one record. The regenerated partial bundle uses schema **2** and retains 44 phys
 
 Five new operations are `fire_resistance_flat`, `cold_resistance_flat`,
 `lightning_resistance_flat`, `chaos_resistance_flat` and `elemental_resistance_flat`.
-Only these operations admit signed finite values in -1,000,000..1,000,000. Existing operations
+Among the passive-effect operations, these admit signed finite values in -1,000,000..1,000,000. Other passive operations
 retain nonnegative validation. Source stat strings remain provenance; custom typed values
 and supported operations may change, retaining custom/unreviewed trust.
 
@@ -188,17 +240,17 @@ custom-data behavior to match source. Reviewed integer-default outputs remain un
 The selector data does not admit maximum-resistance, conditional, INC/MORE, override,
 conversion or other-actor mechanics.
 
-Schema-1/2/3/4 packages fail explicitly. Regenerate with `extract-game-data`, then review/reapply
+Schema-1/2/3/4/5 packages fail explicitly. Regenerate with `extract-game-data`, then review/reapply
 custom edits and reseal; changing the version number alone cannot migrate missing records
 or the retained-tree artifact. Schema-2 level/attribute/support-color requirement records
 remain unchanged. PoB source revision, full source snapshot and numerical goldens stay fixed.
 
 ## Validation and update procedure
 
-The default package is 156,410 bytes, SHA-256
-`5a258250c10e8148c21193672f1af69ce0aeb16ce779081fca1882fc68b8006a`.
+The default package is 198,104 bytes, SHA-256
+`7040fdf73dfd1500bb84b91c38944f1c4149524f30c962c5696a70115a4cc010`.
 The full source snapshot/manifest and six independent goldens remain unchanged; the partial
-retained-tree bundle remains byte-identical through this item-rule migration.
+retained-tree bundle remains byte-identical through this actor-data migration.
 
 ```powershell
 cargo test -p poe-optimizer-data --locked
@@ -209,7 +261,10 @@ cargo test -p poe-optimizer-cli --test native_passive_parity --locked
 ```
 
 The optional source tests verify package records against pinned Lua data, modifier parsing
-and source expressions, including warmed functions and every effective entrance. The full
+and source expressions, including warmed functions and every effective entrance. Actor data
+checks include 1,206 independent cold/warm parser cases for the 116 reviewed templates,
+complete precision records and actual Spirit quest configuration callbacks. Those parser
+comparisons establish normalized input parity, not complete native build parity. The full
 matrix checks complete native builds against fresh PoB evaluations. Custom-package tests
 are isolation and controlled-change evidence, not PoB parity claims. Preserve source review,
 strict compatibility and new differential evidence when deliberately updating a package.

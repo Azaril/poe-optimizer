@@ -8,6 +8,7 @@
 
 #![forbid(unsafe_code)]
 
+pub mod actor;
 pub mod character;
 pub mod conditions;
 pub mod data;

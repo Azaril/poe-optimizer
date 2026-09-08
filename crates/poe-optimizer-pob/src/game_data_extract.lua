@@ -221,6 +221,157 @@ function source_critical_chance_cap(modifier)
     assert(equal(modifier,modLib.createMod('CritChanceCap','BASE',value,'Base')),'unconsumed critical chance cap operation, source, flags or tags')
     return value
 end
+
+local actor_stats={Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true,ExtraLife=true,ExtraMana=true,ExtraSpirit=true,LifeTotal=true,ManaTotal=true,SpiritTotal=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,DexAccBonusOverride=true,LowLifePercentage=true,FullLifePercentage=true}
+local actor_flags={NoAttributeBonuses=true,DoubledInherentAttributeBonuses=true,NoStrengthAttributeBonuses=true,NoStrBonusToLife=true,HalvesLifeFromStrength=true,NoDexterityAttributeBonuses=true,NoDexBonusToAccuracy=true,NoIntelligenceAttributeBonuses=true,NoIntBonusToMana=true,ChaosInoculation=true}
+local actor_conditions={TwoHighestAttributesEqual=true,DexHigherThanInt=true,StrHigherThanInt=true,IntHigherThanDex=true,StrHigherThanDex=true,IntHigherThanStr=true,DexHigherThanStr=true,StrHighestAttribute=true,IntHighestAttribute=true,DexHighestAttribute=true,IntSingleHighestAttribute=true,DexSingleHighestAttribute=true}
+local actor_operations={BASE='base',INC='increased',MORE='more',OVERRIDE='override'}
+local function actor_name(name) return (name:gsub('(%l)(%u)','%1_%2'):lower()) end
+function source_convert_actor_modifier(modifier)
+    local tags,rawTags={},{}
+    for key in pairs(modifier) do
+        assert(({name=true,type=true,value=true,source=true,flags=true,keywordFlags=true})[key] or (type(key)=='number' and key%1==0 and key>=1 and key<=#modifier),'unconsumed actor modifier field')
+    end
+    assert(modifier.flags==0 and modifier.keywordFlags==0,'actor modifier has unsupported flags or keyword flags')
+    assert(modifier.source==nil or type(modifier.source)=='string','actor source is not text')
+    for _,tag in ipairs(modifier) do
+        keys(tag,{type=true,var=true,varList=true,neg=true},'actor condition')
+        assert(tag.type=='Condition' and ((type(tag.var)=='string' and tag.varList==nil) or (tag.var==nil and type(tag.varList)=='table')),'unsupported actor condition shape')
+        assert(tag.neg==nil or type(tag.neg)=='boolean','invalid actor negation')
+        local vars=tag.varList or {tag.var};dense_array(vars,'actor condition variables')
+        local names={}
+        for _,var in ipairs(vars) do assert(actor_conditions[var],'unsupported actor condition variable');names[#names+1]=actor_name(var) end
+        assert(#names>=1 and #names<=12,'actor condition count')
+        tags[#tags+1]={type='condition',variables=names,negated=tag.neg or false}
+        rawTags[#rawTags+1]=tag
+    end
+    local effect
+    if modifier.type=='FLAG' then
+        assert(actor_flags[modifier.name] and type(modifier.value)=='boolean','unsupported actor flag target or value')
+        effect={kind='flag',value=modifier.value}
+    else
+        assert(actor_stats[modifier.name] and actor_operations[modifier.type],'unsupported actor numeric target or operation')
+        local allOperations={Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true}
+        assert(allOperations[modifier.name] or (modifier.name=='DexAccBonusOverride' and modifier.type=='OVERRIDE') or (modifier.name~='DexAccBonusOverride' and modifier.type=='BASE'),'actor numeric operation does not apply to target')
+        effect={kind='numeric',operation=actor_operations[modifier.type],value=numeric(modifier.value,true)}
+    end
+    assert(equal(modifier,modLib.createMod(modifier.name,modifier.type,modifier.value,modifier.source,0,0,unpack(rawTags))),'unconsumed actor modifier structure')
+    return {stat=actor_name(modifier.name),effect=effect,source=modifier.source,flags=modifier.flags,keyword_flags=modifier.keywordFlags,tags=tags}
+end
+local function actor_captures(pattern)
+    local captures={}
+    for token in pattern:gmatch('%b()') do
+        if token=='(%d+)' then captures[#captures+1]='unsigned_integer'
+        elseif token=='([%+%-][%d%.]+)' then captures[#captures+1]='signed_decimal'
+        elseif token=='([%d%.]+)' then captures[#captures+1]='unsigned_decimal'
+        else error('unrepresented actor source numeric capture '..token) end
+    end
+    return captures
+end
+function source_extract_actor_rule(selection)
+    local actual
+    if selection.source_kind=='form' then actual=assert(sourceActorForms[selection.pattern],'actor form missing from actual source table')
+    elseif selection.source_kind=='special' then actual=assert(sourceActorSpecials[selection.pattern],'actor special missing from actual source table')
+    else error('unknown actor source rule kind') end
+    if selection.condition_pattern then assert(sourceActorTags[selection.condition_pattern],'actor condition pattern missing from source') end
+    local captures=actor_captures(selection.pattern)
+    local function render(values)
+        local text=selection.template
+        for i,kind in ipairs(captures) do
+            local value=values[i]
+            local word=(kind=='signed_decimal' and value>=0 and '+' or '')..tostring(value)
+            local marker='{'..(i-1)..'}';local first=text:find(marker,1,true)
+            assert(first and not text:find(marker,first+#marker,true),'missing/duplicate actor template capture')
+            text=text:sub(1,first-1)..word..text:sub(first+#marker)
+        end
+        assert(not text:find('[{}]'),'unknown actor template placeholder')
+        return text
+    end
+    local function parse(values)
+        local mods,extra=modLib.parseMod(render(values))
+        assert(mods and extra==nil,'actor template not fully consumed by actual source parser: '..render(values))
+        dense_array(mods,'actor parser output');assert(#mods>=1 and #mods<=8,'unsupported actor output count')
+        local converted={}
+        for _,mod in ipairs(mods) do converted[#converted+1]=source_convert_actor_modifier(mod) end
+        return converted
+    end
+    local values={101,211};local records=parse(values);local modifiers={}
+    for _,record in ipairs(records) do
+        local mapping={stat=record.stat,flags=record.flags,keyword_flags=record.keyword_flags,tags=record.tags}
+        assert(record.source==nil,'actor grammar produced an unexpected intrinsic source')
+        if record.effect.kind=='flag' then
+            assert(#captures==0,'flag actor rule consumed numeric input without effect')
+            mapping.effect=record.effect
+        elseif #captures==0 then
+            mapping.effect={kind='numeric',operation=record.effect.operation,value={kind='constant',value=record.effect.value}}
+        else
+            assert(#captures==1,'multiple actor numeric captures need an explicit source mapping expansion')
+            local multiplier=record.effect.value/values[1]
+            assert(multiplier==1 or multiplier==-1,'source actor capture has unrepresented numerical transform')
+            mapping.effect={kind='numeric',operation=record.effect.operation,value={kind='capture',index=0,multiplier=multiplier}}
+        end
+        modifiers[#modifiers+1]=mapping
+    end
+    for _,probe in ipairs({0,1,17,999}) do
+        local concrete=parse({probe,probe+37});local expected={}
+        for _,mapping in ipairs(modifiers) do
+            local effect=mapping.effect
+            if effect.kind=='numeric' then
+                effect={kind='numeric',operation=effect.operation,value=effect.value.kind=='capture' and probe*effect.value.multiplier or effect.value.value}
+            end
+            expected[#expected+1]={stat=mapping.stat,effect=effect,flags=mapping.flags,keyword_flags=mapping.keyword_flags,tags=mapping.tags}
+        end
+        assert(equal(concrete,expected),'actor source rule changes capture semantics')
+    end
+    if captures[1]=='signed_decimal' then
+        local concrete=parse({-17.5})
+        for i,mapping in ipairs(modifiers) do assert(concrete[i].effect.value==-17.5*mapping.effect.value.multiplier,'actor signed/decimal source grammar changed') end
+    end
+    return {id=selection.id,template=selection.template,captures=captures,modifiers=modifiers}
+end
+function source_extract_actor_data(policy,character,init,resource_actor)
+    local function exact_base(name)
+        local modifier=one_mod(init,name);local value=numeric(modifier.value)
+        assert(equal(modifier,modLib.createMod(name,'BASE',value,'Base')),'actor base record changed shape')
+        return value
+    end
+    for _,entry in ipairs({{'Life',character.life_per_level,character.initial_life},{'Mana',character.mana_per_level,character.initial_mana},{'Accuracy',character.accuracy_per_level,-character.accuracy_per_level}}) do
+        assert(equal(one_mod(init,entry[1]),modLib.createMod(entry[1],'BASE',entry[2],'Base',{type='Multiplier',var='Level',base=entry[3]})),'actor level record changed complete shape')
+    end
+    local ci={modDB=new('ModDB'):ModDB(),output={}};ci.modDB:NewMod('ChaosInoculation','FLAG',true);sourceCalcs.doActorLifeManaSpirit(ci,true)
+    local data_actor={
+        initial_spirit=exact_base('Spirit'),minimum_spirit=resource_actor.output.Spirit,
+        low_life_threshold=resource_actor.output.LowLifePercentage/100,full_life_threshold=resource_actor.output.FullLifePercentage/100,
+        attribute_bonus_multiplier=sourceNormalAttributeMultiplier,
+        doubled_attribute_bonus_multiplier=sourceAttributeBonuses({'DoubledInherentAttributeBonuses'}):Sum('BASE',nil,'Life')/character.life_per_strength,
+        halved_life_per_strength=sourceAttributeBonuses({'HalvesLifeFromStrength'}):Sum('BASE',nil,'Life')/sourceNormalAttributeMultiplier,
+        chaos_inoculation_life=ci.output.Life,
+        high_precision_mods={},spirit_quests={},modifier_rules={}
+    }
+    for name,operations in pairs(data.highPrecisionMods) do
+        local record={}
+        for operation,places in pairs(operations) do
+            assert(actor_operations[operation] and type(places)=='number' and places%1==0 and places>=0 and places<=15,'unsupported source precision record')
+            record[actor_operations[operation]]=places
+        end
+        assert(not empty(record),'empty source precision record');data_actor.high_precision_mods[name]=record
+    end
+    for _,info in ipairs(policy.spirit_quests) do
+        local quest=unique(data.questRewards,function(q)return q.Info==info end,'Spirit quest '..info)
+        local key='quest'..quest.Description..quest.Area..quest.Info
+        local config=unique(sourceQuestConfig,function(c)return c.var==key end,'Spirit quest config')
+        assert(config.type=='check' and type(config.defaultState)=='boolean','unsupported Spirit quest config')
+        local db=new('ModDB'):ModDB();config.apply(true,db,new('ModDB'):ModDB())
+        local modifier=one_mod(db,'Spirit')
+        local record=source_convert_actor_modifier(modifier)
+        assert(record.stat=='spirit' and record.effect.kind=='numeric' and record.effect.operation=='base' and #record.tags==0,'Spirit quest changed target/operation')
+        local count=0;for _,mods in pairs(db.mods) do count=count+#mods end;assert(count==1,'unconsumed Spirit quest modifiers')
+        data_actor.spirit_quests[#data_actor.spirit_quests+1]={config_key=key,default_enabled=config.defaultState,modifiers={record}}
+    end
+    for _,selection in ipairs(policy.actor_rules) do data_actor.modifier_rules[#data_actor.modifier_rules+1]=source_extract_actor_rule(selection) end
+    return data_actor
+end
+
 function source_extract_records(policy)
     local constants=data.characterConstants
     local init=sourceResourceInitialization()
@@ -235,10 +386,10 @@ function source_extract_records(policy)
         initial_life=one_mod(init,'Life')[1].base,
         mana_per_level=constants.mana_per_level,
         initial_mana=one_mod(init,'Mana')[1].base,
-        life_per_strength=bonuses:Sum('BASE',nil,'Life'),
-        mana_per_intelligence=bonuses:Sum('BASE',nil,'Mana'),
+        life_per_strength=bonuses:Sum('BASE',nil,'Life')/sourceNormalAttributeMultiplier,
+        mana_per_intelligence=bonuses:Sum('BASE',nil,'Mana')/sourceNormalAttributeMultiplier,
         accuracy_per_level=constants.accuracy_rating_per_level,
-        accuracy_per_dexterity=bonuses:Sum('BASE',nil,'Accuracy'),
+        accuracy_per_dexterity=bonuses:Sum('BASE',nil,'Accuracy')/sourceNormalAttributeMultiplier,
         minimum_life=actor.output.Life,minimum_mana=actor.output.Mana,
     }
     assert(character.accuracy_per_dexterity==data.misc.AccuracyPerDexBase,'inconsistent accuracy operands')
@@ -291,7 +442,7 @@ function source_extract_records(policy)
         assert(quests[target[3]]==nil or quests[target[3]]==value,'elemental quest values diverged; schema expansion required')
         quests[target[3]]=value
     end
-    return {character=character,spark=spark,mace=mace,supports=supports,weapons=weapons,item_modifier_rules=item_modifier_rules,quests=quests,monsters={armour=data.monsterArmourTable,evasion=data.monsterEvasionTable}}
+    return {character=character,actor=source_extract_actor_data(policy,character,init,actor),spark=spark,mace=mace,supports=supports,weapons=weapons,item_modifier_rules=item_modifier_rules,quests=quests,monsters={armour=data.monsterArmourTable,evasion=data.monsterEvasionTable}}
 end
 function source_encounter_build(level)
     local build={characterLevel=level}

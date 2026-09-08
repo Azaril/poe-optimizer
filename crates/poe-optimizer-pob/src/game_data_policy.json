@@ -1,6 +1,6 @@
 {
-  "schema_version": 3,
-  "id": "poe2-pinned-current-profile-extraction-v5",
+  "schema_version": 4,
+  "id": "poe2-pinned-current-profile-extraction-v6",
   "release": "poe2-0_5-native-profiles-3887ae6",
   "source_role": "reviewed partial source transcriptions; source parity required for release",
   "spark_skill": "SparkPlayer",
@@ -35,7 +35,8 @@
     "no_general_equipment_self_dependency_or_point_budget_certificate",
     "brutality_i_heavy_swing_rapid_attacks_i_level_one_quality_zero_with_typed_modifiers_and_eligibility",
     "five_reviewed_local_weapon_modifier_families_with_source_grammar_and_flags",
-    "source_critical_chance_cap_before_attack_accuracy_roll"
+    "source_critical_chance_cap_before_attack_accuracy_roll",
+    "shared_actor_attributes_maximum_resources_and_audited_global_modifier_records"
   ],
   "supports": [
     [
@@ -78,6 +79,825 @@
       "id": "local_critical_chance_increased",
       "template": "{0}% increased Critical Hit Chance",
       "form_pattern": "^(%d+)%% increased"
+    }
+  ],
+  "spirit_quests": [
+    "King In The Mists",
+    "Ignagduk",
+    "Lythara"
+  ],
+  "actor_rules": [
+    {
+      "id": "strength_base",
+      "template": "{0} to Strength",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "strength_base_dex_higher_int",
+      "template": "{0} to Strength if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "strength_base_str_higher_int",
+      "template": "{0} to Strength if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "strength_increased",
+      "template": "{0}% increased Strength",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "strength_increased_dex_higher_int",
+      "template": "{0}% increased Strength if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "strength_increased_str_higher_int",
+      "template": "{0}% increased Strength if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "strength_reduced",
+      "template": "{0}% reduced Strength",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "strength_reduced_dex_higher_int",
+      "template": "{0}% reduced Strength if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "strength_reduced_str_higher_int",
+      "template": "{0}% reduced Strength if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "strength_more",
+      "template": "{0}% more Strength",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": null
+    },
+    {
+      "id": "strength_more_dex_higher_int",
+      "template": "{0}% more Strength if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "strength_more_str_higher_int",
+      "template": "{0}% more Strength if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "strength_less",
+      "template": "{0}% less Strength",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": null
+    },
+    {
+      "id": "strength_less_dex_higher_int",
+      "template": "{0}% less Strength if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "strength_less_str_higher_int",
+      "template": "{0}% less Strength if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "dexterity_base",
+      "template": "{0} to Dexterity",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "dexterity_base_dex_higher_int",
+      "template": "{0} to Dexterity if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "dexterity_base_str_higher_int",
+      "template": "{0} to Dexterity if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "dexterity_increased",
+      "template": "{0}% increased Dexterity",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "dexterity_increased_dex_higher_int",
+      "template": "{0}% increased Dexterity if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "dexterity_increased_str_higher_int",
+      "template": "{0}% increased Dexterity if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "dexterity_reduced",
+      "template": "{0}% reduced Dexterity",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "dexterity_reduced_dex_higher_int",
+      "template": "{0}% reduced Dexterity if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "dexterity_reduced_str_higher_int",
+      "template": "{0}% reduced Dexterity if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "dexterity_more",
+      "template": "{0}% more Dexterity",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": null
+    },
+    {
+      "id": "dexterity_more_dex_higher_int",
+      "template": "{0}% more Dexterity if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "dexterity_more_str_higher_int",
+      "template": "{0}% more Dexterity if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "dexterity_less",
+      "template": "{0}% less Dexterity",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": null
+    },
+    {
+      "id": "dexterity_less_dex_higher_int",
+      "template": "{0}% less Dexterity if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "dexterity_less_str_higher_int",
+      "template": "{0}% less Dexterity if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "intelligence_base",
+      "template": "{0} to Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "intelligence_base_dex_higher_int",
+      "template": "{0} to Intelligence if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "intelligence_base_str_higher_int",
+      "template": "{0} to Intelligence if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "intelligence_increased",
+      "template": "{0}% increased Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "intelligence_increased_dex_higher_int",
+      "template": "{0}% increased Intelligence if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "intelligence_increased_str_higher_int",
+      "template": "{0}% increased Intelligence if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "intelligence_reduced",
+      "template": "{0}% reduced Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "intelligence_reduced_dex_higher_int",
+      "template": "{0}% reduced Intelligence if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "intelligence_reduced_str_higher_int",
+      "template": "{0}% reduced Intelligence if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "intelligence_more",
+      "template": "{0}% more Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": null
+    },
+    {
+      "id": "intelligence_more_dex_higher_int",
+      "template": "{0}% more Intelligence if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "intelligence_more_str_higher_int",
+      "template": "{0}% more Intelligence if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "intelligence_less",
+      "template": "{0}% less Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": null
+    },
+    {
+      "id": "intelligence_less_dex_higher_int",
+      "template": "{0}% less Intelligence if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "intelligence_less_str_higher_int",
+      "template": "{0}% less Intelligence if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "life_base",
+      "template": "{0} to maximum Life",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "life_base_dex_higher_int",
+      "template": "{0} to maximum Life if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "life_base_str_higher_int",
+      "template": "{0} to maximum Life if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "life_increased",
+      "template": "{0}% increased maximum Life",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "life_increased_dex_higher_int",
+      "template": "{0}% increased maximum Life if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "life_increased_str_higher_int",
+      "template": "{0}% increased maximum Life if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "life_reduced",
+      "template": "{0}% reduced maximum Life",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "life_reduced_dex_higher_int",
+      "template": "{0}% reduced maximum Life if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "life_reduced_str_higher_int",
+      "template": "{0}% reduced maximum Life if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "life_more",
+      "template": "{0}% more maximum Life",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": null
+    },
+    {
+      "id": "life_more_dex_higher_int",
+      "template": "{0}% more maximum Life if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "life_more_str_higher_int",
+      "template": "{0}% more maximum Life if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "life_less",
+      "template": "{0}% less maximum Life",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": null
+    },
+    {
+      "id": "life_less_dex_higher_int",
+      "template": "{0}% less maximum Life if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "life_less_str_higher_int",
+      "template": "{0}% less maximum Life if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "mana_base",
+      "template": "{0} to maximum Mana",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "mana_base_dex_higher_int",
+      "template": "{0} to maximum Mana if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "mana_base_str_higher_int",
+      "template": "{0} to maximum Mana if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "mana_increased",
+      "template": "{0}% increased maximum Mana",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "mana_increased_dex_higher_int",
+      "template": "{0}% increased maximum Mana if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "mana_increased_str_higher_int",
+      "template": "{0}% increased maximum Mana if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "mana_reduced",
+      "template": "{0}% reduced maximum Mana",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "mana_reduced_dex_higher_int",
+      "template": "{0}% reduced maximum Mana if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "mana_reduced_str_higher_int",
+      "template": "{0}% reduced maximum Mana if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "mana_more",
+      "template": "{0}% more maximum Mana",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": null
+    },
+    {
+      "id": "mana_more_dex_higher_int",
+      "template": "{0}% more maximum Mana if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "mana_more_str_higher_int",
+      "template": "{0}% more maximum Mana if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "mana_less",
+      "template": "{0}% less maximum Mana",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": null
+    },
+    {
+      "id": "mana_less_dex_higher_int",
+      "template": "{0}% less maximum Mana if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "mana_less_str_higher_int",
+      "template": "{0}% less maximum Mana if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "spirit_base",
+      "template": "{0} to Spirit",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "spirit_base_dex_higher_int",
+      "template": "{0} to Spirit if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "spirit_base_str_higher_int",
+      "template": "{0} to Spirit if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "spirit_increased",
+      "template": "{0}% increased Spirit",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "spirit_increased_dex_higher_int",
+      "template": "{0}% increased Spirit if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "spirit_increased_str_higher_int",
+      "template": "{0}% increased Spirit if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "spirit_reduced",
+      "template": "{0}% reduced Spirit",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "spirit_reduced_dex_higher_int",
+      "template": "{0}% reduced Spirit if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "spirit_reduced_str_higher_int",
+      "template": "{0}% reduced Spirit if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "spirit_more",
+      "template": "{0}% more Spirit",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": null
+    },
+    {
+      "id": "spirit_more_dex_higher_int",
+      "template": "{0}% more Spirit if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "spirit_more_str_higher_int",
+      "template": "{0}% more Spirit if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "spirit_less",
+      "template": "{0}% less Spirit",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": null
+    },
+    {
+      "id": "spirit_less_dex_higher_int",
+      "template": "{0}% less Spirit if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "spirit_less_str_higher_int",
+      "template": "{0}% less Spirit if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "accuracy_base",
+      "template": "{0} to Accuracy Rating",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "accuracy_base_dex_higher_int",
+      "template": "{0} to Accuracy Rating if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "accuracy_base_str_higher_int",
+      "template": "{0} to Accuracy Rating if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "accuracy_increased",
+      "template": "{0}% increased Accuracy Rating",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "accuracy_increased_dex_higher_int",
+      "template": "{0}% increased Accuracy Rating if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "accuracy_increased_str_higher_int",
+      "template": "{0}% increased Accuracy Rating if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "accuracy_reduced",
+      "template": "{0}% reduced Accuracy Rating",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "accuracy_reduced_dex_higher_int",
+      "template": "{0}% reduced Accuracy Rating if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "accuracy_reduced_str_higher_int",
+      "template": "{0}% reduced Accuracy Rating if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "accuracy_more",
+      "template": "{0}% more Accuracy Rating",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": null
+    },
+    {
+      "id": "accuracy_more_dex_higher_int",
+      "template": "{0}% more Accuracy Rating if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "accuracy_more_str_higher_int",
+      "template": "{0}% more Accuracy Rating if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "accuracy_less",
+      "template": "{0}% less Accuracy Rating",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": null
+    },
+    {
+      "id": "accuracy_less_dex_higher_int",
+      "template": "{0}% less Accuracy Rating if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "accuracy_less_str_higher_int",
+      "template": "{0}% less Accuracy Rating if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "no_attribute_bonuses",
+      "template": "Gain no inherent bonuses from attributes",
+      "source_kind": "special",
+      "pattern": "gain no inherent bonuses from attributes",
+      "condition_pattern": null
+    },
+    {
+      "id": "no_strength_bonuses",
+      "template": "Gain no inherent bonuses from strength",
+      "source_kind": "special",
+      "pattern": "gain no inherent bonuses from strength",
+      "condition_pattern": null
+    },
+    {
+      "id": "no_dexterity_bonuses",
+      "template": "Gain no inherent bonuses from dexterity",
+      "source_kind": "special",
+      "pattern": "gain no inherent bonuses from dexterity",
+      "condition_pattern": null
+    },
+    {
+      "id": "no_intelligence_bonuses",
+      "template": "Gain no inherent bonuses from intelligence",
+      "source_kind": "special",
+      "pattern": "gain no inherent bonuses from intelligence",
+      "condition_pattern": null
+    },
+    {
+      "id": "halved_strength_life",
+      "template": "Inherent life granted by strength is halved",
+      "source_kind": "special",
+      "pattern": "inherent life granted by strength is halved",
+      "condition_pattern": null
+    },
+    {
+      "id": "doubled_attribute_bonuses",
+      "template": "Inherent bonuses gained from attributes are doubled",
+      "source_kind": "special",
+      "pattern": "inherent bonuses gained from attributes are doubled",
+      "condition_pattern": null
+    },
+    {
+      "id": "no_strength_life",
+      "template": "Strength provides no inherent bonus to maximum life",
+      "source_kind": "special",
+      "pattern": "strength provides no inherent bonus to maximum life",
+      "condition_pattern": null
+    },
+    {
+      "id": "no_intelligence_mana",
+      "template": "Intelligence provides no inherent bonus to maximum mana",
+      "source_kind": "special",
+      "pattern": "intelligence provides no inherent bonus to maximum mana",
+      "condition_pattern": null
+    },
+    {
+      "id": "remove_mana",
+      "template": "Removes all mana",
+      "source_kind": "special",
+      "pattern": "removes all mana",
+      "condition_pattern": null
+    },
+    {
+      "id": "remove_spirit",
+      "template": "Removes all spirit",
+      "source_kind": "special",
+      "pattern": "removes all spirit",
+      "condition_pattern": null
+    },
+    {
+      "id": "dexterity_accuracy_override",
+      "template": "Dexterity's accuracy bonus instead grants +{0} to accuracy rating per dexterity",
+      "source_kind": "special",
+      "pattern": "dexterity's accuracy bonus instead grants %+(%d+) to accuracy rating per dexterity",
+      "condition_pattern": null
     }
   ]
 }

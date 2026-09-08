@@ -67,7 +67,7 @@ fn compare(label: &str, native: &EvaluationResult, pob: &EvaluationResult) {
         &native
             .attachments
             .iter()
-            .find(|a| a.media_type == "application/vnd.poe-optimizer.native-profile+json;version=3")
+            .find(|a| a.media_type == "application/vnd.poe-optimizer.native-profile+json;version=4")
             .unwrap()
             .content,
     )

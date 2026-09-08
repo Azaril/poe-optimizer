@@ -102,7 +102,7 @@ fn four_complete_mace_documents_match_unchanged_independent_goldens() {
             result.backend.rules_revision,
             expected["provenance"]["upstream_revision"]
         );
-        assert_eq!(result.measurements.len(), 9);
+        assert_eq!(result.measurements.len(), 10);
         for (name, raw) in &metric_names {
             close(
                 number(&result, name),
@@ -208,7 +208,7 @@ fn structural_parameter_variants_preserve_source_and_do_not_use_fixture_hashes()
 
 #[test]
 fn all_quest_inputs_and_penalty_keep_shared_resource_semantics() {
-    let quest_inputs = [
+    let mut quest_inputs = [
         "questAct 1Ogham ManorCandlemass",
         "questInterlude 2Khari CrossingMolten Shrine",
         "questAct 4Eye of HinekoraSilent Hall",
@@ -216,7 +216,16 @@ fn all_quest_inputs_and_penalty_keep_shared_resource_semantics() {
         "questAct 2Spires of DesharSisters of Garukhan Shrine",
         "questAct 3Jiquani's MachinariumBlackjaw",
     ]
-    .map(|name| format!("<Input name=\"{name}\" boolean=\"false\"/>"));
+    .map(|name| format!("<Input name=\"{name}\" boolean=\"false\"/>"))
+    .to_vec();
+    let data = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+    quest_inputs.extend(
+        data.package()
+            .actor
+            .spirit_quests
+            .iter()
+            .map(|quest| format!("<Input name=\"{}\" boolean=\"false\"/>", quest.config_key)),
+    );
     let xml = add_config(
         WOODEN,
         &format!(
@@ -227,6 +236,8 @@ fn all_quest_inputs_and_penalty_keep_shared_resource_semantics() {
     let result = evaluate(&xml);
     assert_eq!(number(&result, "life"), 766.0);
     assert_eq!(number(&result, "mana"), 284.0);
+    // The pinned maximum-resource function applies its minimum without an override.
+    assert_eq!(number(&result, "spirit"), 1.0);
     for metric in [
         "fire_resistance_capped_pct",
         "cold_resistance_capped_pct",

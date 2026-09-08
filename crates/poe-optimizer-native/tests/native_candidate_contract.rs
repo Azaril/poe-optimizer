@@ -214,7 +214,8 @@ fn parity_matrix(data: Arc<GameDataSnapshot>, xml: &str) -> (usize, usize) {
     assert_eq!(footprint.retained_xml_bytes, 0);
     assert_eq!(footprint.cached_candidate_results, 0);
     assert!(
-        footprint.owned_component_bytes < 32 * 1024,
+        // Includes 105 newly retained, bounded numeric actor components.
+        footprint.owned_component_bytes < 64 * 1024,
         "bounded axis buffers: {footprint:?}"
     );
     let mut legal = 0;
@@ -490,7 +491,7 @@ fn mixed_typed_calculations_allocate_nothing_but_scheduler_adaptation_is_explici
     let snapshot = prepared.measure(&handles[0]).unwrap();
     let (measurements, allocations) =
         allocation_count(|| prepared.snapshot_measurements(&snapshot));
-    assert_eq!(measurements.len(), 9);
+    assert_eq!(measurements.len(), 10);
     assert!(
         allocations > 0,
         "owned scheduler contract remains an explicit cost"
@@ -628,7 +629,7 @@ fn local_weapon_catalog(data: Arc<GameDataSnapshot>, xml: &str) -> ControlledMac
     )
     .unwrap()
 }
-fn local_weapon_matrix(data: Arc<GameDataSnapshot>, xml: &str) {
+fn local_weapon_matrix(data: Arc<GameDataSnapshot>, xml: &str) -> usize {
     let registry = local_weapon_catalog(data.clone(), xml);
     let backend = backend(data);
     let baseline = backend.calculate(&request(xml), BUDGET).unwrap();
@@ -689,6 +690,8 @@ fn local_weapon_matrix(data: Arc<GameDataSnapshot>, xml: &str) {
     assert_eq!(level_rejections, 105 * 7);
     assert_eq!(registry.alternatives().len(), 4410);
     assert!(legal > 2000, "matrix must cover broad mixed axes: {legal}");
+    assert_eq!(footprint.actor_components, 105);
+    legal
 }
 #[test]
 fn normal_and_rare_weapon_candidates_match_full_documents_across_all_class_support_axes() {
@@ -726,11 +729,12 @@ fn local_weapons_retain_injected_rounding_caps_damage_presence_and_support_value
     local_weapon_matrix(data, &xml);
 }
 #[test]
-fn mixed_local_weapon_snapshots_remain_allocation_free() {
+fn mixed_local_weapon_and_actor_snapshots_remain_allocation_free() {
+    let template = include_str!("../../../tests/fixtures/builds/mace-actor-resources.xml");
     let data = Arc::new(game_data::bundled_snapshot().unwrap());
-    let registry = local_weapon_catalog(data.clone(), TEMPLATE);
+    let registry = local_weapon_catalog(data.clone(), template);
     let backend = backend(data);
-    let baseline = backend.calculate(&request(TEMPLATE), BUDGET).unwrap();
+    let baseline = backend.calculate(&request(template), BUDGET).unwrap();
     let scenario = registry
         .bind_native_baseline(&baseline, &backend.identity())
         .unwrap();
@@ -765,4 +769,33 @@ fn mixed_local_weapon_snapshots_remain_allocation_free() {
         }
     });
     assert_eq!(allocations, 0);
+}
+
+#[test]
+fn actor_config_all_joint_axes_match_documents_with_injected_resources() {
+    let xml = include_str!("../../../tests/fixtures/builds/mace-actor-resources.xml");
+    assert_eq!(
+        local_weapon_matrix(Arc::new(game_data::bundled_snapshot().unwrap()), xml),
+        3675
+    );
+    let data = custom(|p| {
+        p.character.life_per_strength = 2.75;
+        if let poe_optimizer_data::game_data::ActorModifierEffect::Numeric { value, .. } =
+            &mut p.actor.spirit_quests[0].modifiers[0].effect
+        {
+            *value += 7.0;
+        } else {
+            panic!("numeric Spirit quest");
+        }
+        p.actor
+            .high_precision_mods
+            .entry("Life".into())
+            .or_default()
+            .insert(
+                poe_optimizer_data::game_data::ActorNumericOperation::More,
+                2,
+            );
+    });
+    let xml = xml.replace("+30 to Spirit", "+30 to Spirit\n1% more maximum Life\n1% more maximum Life\nGain no inherent bonuses from dexterity");
+    assert_eq!(local_weapon_matrix(data, &xml), 3675);
 }

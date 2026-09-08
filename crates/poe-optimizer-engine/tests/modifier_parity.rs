@@ -2733,3 +2733,6 @@ mod resistance_parity;
 
 #[path = "support/weapon_parity.rs"]
 mod weapon_parity;
+
+#[path = "support/actor_parity.rs"]
+mod actor_parity;

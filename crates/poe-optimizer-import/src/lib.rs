@@ -3,6 +3,7 @@
 //! Import validates the container, not the build's mechanics. In particular, cached
 //! metrics in an export are preserved as source data and are never evaluated here.
 
+pub mod actor_modifiers;
 pub mod controlled_mace;
 pub mod mace_item;
 pub mod preflight;

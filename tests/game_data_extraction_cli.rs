@@ -15,9 +15,10 @@ use std::{
     process::{Command, Output},
 };
 
-const SECTIONS: [&str; 12] = [
+const SECTIONS: [&str; 13] = [
     "tree",
     "character",
+    "actor",
     "quests",
     "spark",
     "mace",
@@ -124,7 +125,7 @@ fn assert_no_outputs(path: &Path) {
 }
 
 #[test]
-fn fresh_cli_extractions_reproduce_all_twelve_sections_and_stable_source_evidence() {
+fn fresh_cli_extractions_reproduce_all_thirteen_sections_and_stable_source_evidence() {
     let temp = tempfile::tempdir().unwrap();
     let first = temp.path().join("first extracted package.json");
     let second = temp.path().join("second extracted package.json");

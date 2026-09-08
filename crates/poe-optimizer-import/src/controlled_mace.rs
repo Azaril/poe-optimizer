@@ -1,6 +1,7 @@
 //! Source-preserving, bounded weapon/support mutations for a structural Mace profile.
 //! Pure Rust source projection shared by native and optional reference evaluators.
 //! Experimental diagnostic domain, not a general build-legality claim.
+use crate::actor_modifiers::{ValidatedActorModifiers, parse_actor_configuration};
 pub use crate::mace_item::ValidatedMaceWeapon;
 use crate::mace_item::{parse_mace_item, parse_mace_item_element};
 use poe_optimizer_core::{
@@ -14,6 +15,11 @@ use poe_optimizer_data::class_tree::{self, ClassTreeSelection, ResolvedClassTree
 use poe_optimizer_data::game_data::{
     self, GameDataPackage, GameDataSnapshot, RequirementData, SupportColor, SupportData,
 };
+use poe_optimizer_engine::{
+    CompiledGameData,
+    character::{CharacterAttributes, CharacterInput},
+    spark::SparkQuestRewards,
+};
 use roxmltree::{Document, Node, ParsingOptions};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -24,6 +30,10 @@ use thiserror::Error;
 /// Rules/data pin for this finite format projection; not a runtime dependency.
 pub const PINNED_RULES_REVISION: &str = "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4";
 const SLOT: &str = "pob-group-1";
+// Actor source evidence may contain 512 normalized records with eight bounded
+// condition tags each. This guard covers their complete ordered diagnostics plus
+// weapon/support evidence; source text/record counts remain independently bounded.
+pub(crate) const MAX_NATIVE_MACE_PROFILE_BYTES: usize = 8 * 1024 * 1024;
 const SOURCE: &str = "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675";
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -158,6 +168,7 @@ type Result<T> = std::result::Result<T, ControlledMutationError>;
 struct Profile {
     level: u32,
     config: BTreeMap<String, Scalar>,
+    actor_modifiers: Arc<ValidatedActorModifiers>,
     item_range: Range<usize>,
     support_range: Range<usize>,
     extra_support_ranges: Vec<Range<usize>>,
@@ -185,6 +196,8 @@ struct NativeMaceAxes {
     weapons: Vec<ValidatedMaceWeapon>,
     trees: Vec<Arc<ResolvedClassTree>>,
     loadouts: Vec<MaceSupportLoadout>,
+    actor_modifiers: Arc<ValidatedActorModifiers>,
+    available_attributes: Vec<MaceRequirementValues>,
 }
 /// Immutable source components admitted by this catalog and its verified native baseline.
 /// This stores one template and the sum of axis sizes, never materialized candidate XML.
@@ -242,6 +255,9 @@ impl NativeMaceComponents {
     }
     pub fn loadouts(&self) -> &[MaceSupportLoadout] {
         &self.axes.loadouts
+    }
+    pub fn actor_modifiers(&self) -> &ValidatedActorModifiers {
+        &self.axes.actor_modifiers
     }
     /// Counts in weapon/tree/loadout order. These count source components, not heap bytes.
     pub fn axis_counts(&self) -> [usize; 3] {
@@ -387,7 +403,17 @@ impl ControlledMaceCatalog {
             .quests
             .config_keys
             .iter()
-            .any(|key| INPUT_NAMES.contains(&key.as_str()) || key == "resistancePenalty")
+            .map(String::as_str)
+            .chain(
+                package
+                    .actor
+                    .spirit_quests
+                    .iter()
+                    .map(|quest| quest.config_key.as_str()),
+            )
+            .any(|key| {
+                INPUT_NAMES.contains(&key) || ["resistancePenalty", "customMods"].contains(&key)
+            })
         {
             return Err(unsupported(
                 "selected quest keys overlap controlled encounter configuration",
@@ -478,7 +504,7 @@ impl ControlledMaceCatalog {
             content_fingerprint: hash(
                 &if patch_tree {
                     serde_json::to_string(&(
-                        "pob-controlled-mace-v6",
+                        "pob-controlled-mace-v7",
                         data.identity(),
                         SOURCE,
                         hash(&template_xml),
@@ -489,7 +515,7 @@ impl ControlledMaceCatalog {
                     ))
                 } else {
                     serde_json::to_string(&(
-                        "pob-controlled-mace-v4",
+                        "pob-controlled-mace-v5",
                         data.identity(),
                         SOURCE,
                         hash(&template_xml),
@@ -589,6 +615,12 @@ impl ControlledMaceCatalog {
             ClassTreeSelection,
             BTreeMap<String, BTreeMap<MaceSupportLoadout, usize>>,
         > = BTreeMap::new();
+        let compiled = CompiledGameData::compile(Arc::clone(&data))
+            .map_err(|e| unsupported(&format!("actor requirement data: {e}")))?;
+        let available_attributes = resolved_trees
+            .iter()
+            .map(|tree| actor_requirement_values(&compiled, &profile, tree))
+            .collect::<Result<Vec<_>>>()?;
         let native_axes = Arc::new(NativeMaceAxes {
             weapons: parsed
                 .iter()
@@ -596,6 +628,8 @@ impl ControlledMaceCatalog {
                 .collect(),
             trees: resolved_trees.clone(),
             loadouts: support_set.iter().cloned().collect(),
+            actor_modifiers: Arc::clone(&profile.actor_modifiers),
+            available_attributes,
         });
         for (weapon_index, (id, weapon)) in parsed.into_iter().enumerate() {
             let item_payload = payload("pob2-item-text-v1", weapon.clone());
@@ -710,6 +744,17 @@ impl ControlledMaceCatalog {
             candidate_index,
         })
     }
+    /// Authored actor configuration requires an explicit CLI problem scope even when disabled.
+    pub fn uses_extended_actor_scope(&self) -> bool {
+        self.profile.actor_modifiers.uses_extended_scope()
+            || self
+                .data
+                .package()
+                .actor
+                .spirit_quests
+                .iter()
+                .any(|quest| self.profile.config.contains_key(&quest.config_key))
+    }
     /// True when the template or any supplied weapon needs the expanded item grammar.
     pub fn uses_extended_weapon_scope(&self) -> bool {
         !parse_mace_item(&self.profile.weapon, self.data.package())
@@ -784,13 +829,8 @@ impl ControlledMaceCatalog {
             .get(candidate)
             .ok_or(ControlledMutationError::UnknownCandidate)?;
         let data = self.data.package();
-        let class = &choice.tree.class;
-        let available = MaceRequirementValues {
-            level: self.profile.level,
-            strength: class.base_strength,
-            dexterity: class.base_dexterity,
-            intelligence: class.base_intelligence,
-        };
+        let available = self.native_axes.available_attributes
+            [choice.native_indices.expect("registered choice").tree];
         let mut required = MaceRequirementValues {
             level: 0,
             strength: 0,
@@ -1103,6 +1143,14 @@ impl ControlledMaceCatalog {
             .filter(|(name, _)| !self.profile.config.contains_key(*name))
             .map(|(name, enabled)| (name.clone(), Scalar::Boolean(enabled)))
             .collect();
+        for quest in &self.data.package().actor.spirit_quests {
+            if !self.profile.config.contains_key(&quest.config_key) {
+                expected_defaults.insert(
+                    quest.config_key.clone(),
+                    Scalar::Boolean(quest.default_enabled),
+                );
+            }
+        }
         if !self.profile.config.contains_key("resistancePenalty") {
             expected_defaults.insert(
                 "resistancePenalty".into(),
@@ -1127,10 +1175,10 @@ impl ControlledMaceCatalog {
             .iter()
             .filter(|attachment| {
                 attachment.media_type
-                    == "application/vnd.poe-optimizer.native-profile+json;version=3"
+                    == "application/vnd.poe-optimizer.native-profile+json;version=4"
             })
             .collect();
-        if evidence.len() != 1 || evidence[0].content.len() > 64 * 1024 {
+        if evidence.len() != 1 || evidence[0].content.len() > MAX_NATIVE_MACE_PROFILE_BYTES {
             return Err(mismatch(
                 "one bounded native resolved-profile attachment is required",
             ));
@@ -1143,6 +1191,7 @@ impl ControlledMaceCatalog {
             || evidence["weapon_quality"].as_u64() != Some(u64::from(weapon.quality()))
             || evidence["weapon_item_level"].as_u64() != Some(u64::from(weapon.item_level()))
             || evidence["weapon_item"] != weapon.diagnostic()
+            || evidence["actor_modifiers"] != self.profile.actor_modifiers.diagnostic()
             || evidence["support_loadout"] != serde_json::json!(choice.support.keys())
             || evidence["configured_supports"]
                 != serde_json::json!(
@@ -1354,6 +1403,7 @@ impl ControlledMaceCatalog {
             self.profile.level,
             &result.context,
             self.data.package(),
+            &self.profile.actor_modifiers,
         )?;
         check_template_frame(
             &patch(&self.template, &self.profile, choice, &self.support_xml),
@@ -1374,8 +1424,9 @@ fn same_backend(left: &BackendIdentity, right: &BackendIdentity) -> bool {
     left == right
 }
 fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
-    crate::xml_compat::validate_native(xml).map_err(|error| unsupported(&error.to_string()))?;
     let document = parse(xml)?;
+    crate::xml_compat::validate_native_with_actor_inputs(&document)
+        .map_err(|error| unsupported(&error.to_string()))?;
     let root = document.root_element();
     only(
         root,
@@ -1628,10 +1679,20 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
     only(config, &["activeConfigSet"], &["ConfigSet"])?;
     fixed(config, &[("activeConfigSet", "1")])?;
     let config_set = child(config, "ConfigSet")?;
-    only(config_set, &["id", "title"], &["Input"])?;
+    only(
+        config_set,
+        &["id", "title"],
+        &["Input", "CustomModifierBlock"],
+    )?;
     fixed(config_set, &[("id", "1")])?;
+    let actor_modifiers = Arc::new(
+        parse_actor_configuration(config_set, data).map_err(|e| unsupported(&e.to_string()))?,
+    );
     let mut inputs = BTreeMap::new();
-    for node in config_set.children().filter(Node::is_element) {
+    for node in config_set
+        .children()
+        .filter(|node| node.has_tag_name("Input") && node.attribute("name") != Some("customMods"))
+    {
         let name = node
             .attribute("name")
             .ok_or_else(|| unsupported("configuration name missing"))?;
@@ -1668,6 +1729,7 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
     Ok(Profile {
         level,
         config: inputs,
+        actor_modifiers,
         item_range: item.range(),
         support_range,
         extra_support_ranges: gems.iter().skip(2).map(Node::range).collect(),
@@ -1678,6 +1740,65 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
         tree,
         tree_attribute_ranges,
         ascendancy_insert,
+    })
+}
+/// Requirement availability is computed by the same pure actor stage as numerical evaluation.
+/// Current scalar passive effects contain no attribute/resource operations. Any future
+/// normalized actor passive records must join this exact source-bound layer here too.
+fn actor_requirement_values(
+    compiled: &CompiledGameData,
+    profile: &Profile,
+    tree: &ResolvedClassTree,
+) -> Result<MaceRequirementValues> {
+    let package = compiled.snapshot().package();
+    let enabled =
+        std::array::from_fn(
+            |index| match profile.config.get(&package.quests.config_keys[index]) {
+                Some(Scalar::Boolean(value)) => *value,
+                None => package.quests.default_enabled[index],
+                _ => unreachable!("admitted quest scalar"),
+            },
+        );
+    let mut quests = compiled.actor_quest_selection(SparkQuestRewards::from_enabled(enabled));
+    for (index, quest) in package.actor.spirit_quests.iter().enumerate() {
+        if let Some(Scalar::Boolean(value)) = profile.config.get(&quest.config_key) {
+            quests.spirit[index] = *value;
+        }
+    }
+    let character = CharacterInput {
+        attributes: CharacterAttributes {
+            strength: f64::from(tree.class.base_strength),
+            dexterity: f64::from(tree.class.base_dexterity),
+            intelligence: f64::from(tree.class.base_intelligence),
+        },
+        ..Default::default()
+    };
+    let records = profile.actor_modifiers.records().to_vec();
+    let actor = compiled
+        .prepare_actor_resources(
+            profile.level,
+            quests,
+            &character,
+            std::slice::from_ref(&records),
+        )
+        .map_err(|e| unsupported(&format!("actor requirement preparation: {e}")))?;
+    let attributes = actor.values().attributes;
+    let whole = |value: f64| -> Result<u32> {
+        if !value.is_finite()
+            || value.fract() != 0.0
+            || !(0.0..=f64::from(u32::MAX)).contains(&value)
+        {
+            return Err(unsupported(
+                "resolved requirement attributes must be finite whole u32 values",
+            ));
+        }
+        Ok(value as u32)
+    };
+    Ok(MaceRequirementValues {
+        level: profile.level,
+        strength: whole(attributes.strength)?,
+        dexterity: whole(attributes.dexterity)?,
+        intelligence: whole(attributes.intelligence)?,
     })
 }
 const INPUT_NAMES: &[&str] = &[
@@ -1710,7 +1831,16 @@ const INPUT_NAMES: &[&str] = &[
 ];
 fn validate_input(name: &str, value: &Scalar, data: &GameDataPackage) -> Result<()> {
     let valid = match (name, value) {
-        (name, Scalar::Boolean(_)) if data.quests.config_keys.iter().any(|key| key == name) => true,
+        (name, Scalar::Boolean(_))
+            if data.quests.config_keys.iter().any(|key| key == name)
+                || data
+                    .actor
+                    .spirit_quests
+                    .iter()
+                    .any(|quest| quest.config_key == name) =>
+        {
+            true
+        }
         ("resistancePenalty", Scalar::Number(value)) => (-60.0..=0.0).contains(value),
         ("enemyIsBoss", Scalar::Text(value)) => {
             ["None", "Boss", "Pinnacle"].contains(&value.as_str())
@@ -1798,6 +1928,7 @@ fn check_export(
     level: u32,
     context: &EvaluationContext,
     data: &GameDataPackage,
+    actor_modifiers: &ValidatedActorModifiers,
 ) -> Result<()> {
     let document = parse(xml)?;
     let root = document.root_element();
@@ -1951,10 +2082,13 @@ fn check_export(
     fixed(config, &[("activeConfigSet", "1")])?;
     let set = child(config, "ConfigSet")?;
     fixed(set, &[("id", "1")])?;
+    actor_modifiers
+        .validate_reference_blocks(set)
+        .map_err(|e| mismatch(&e.to_string()))?;
     let mut names = BTreeSet::new();
     for entry in set.children().filter(Node::is_element) {
         let kind = entry.tag_name().name();
-        if !names.insert((kind, entry.attribute("name"))) {
+        if kind != "CustomModifierBlock" && !names.insert((kind, entry.attribute("name"))) {
             return Err(mismatch("duplicate exported configuration"));
         }
         match kind {
@@ -1971,12 +2105,7 @@ fn check_export(
                     ));
                 }
             }
-            "CustomModifierBlock"
-                if entry.attribute("title") == Some("Default")
-                    && entry.attribute("enabled") == Some("true")
-                    && !entry.children().any(|node| {
-                        node.is_element() || node.text().is_some_and(|text| !text.trim().is_empty())
-                    }) => {}
+            "CustomModifierBlock" => {} // Complete ordered block comparison is performed above.
             _ => return Err(mismatch("unsupported exported configuration")),
         }
     }

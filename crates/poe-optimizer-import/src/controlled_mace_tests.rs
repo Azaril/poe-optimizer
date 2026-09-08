@@ -983,7 +983,7 @@ fn unknown_or_ineligible_supports_never_silently_disappear() {
 }
 
 // Binding-unit tests construct the private baseline proof so this import-only crate
-// does not acquire an evaluator dependency. Native integration tests exercise the
+// does not require a document evaluator. Native integration tests exercise the
 // public fresh-baseline admission and full-template parser before using these axes.
 fn native_components_for_test(registry: &ControlledMaceCatalog) -> NativeMaceComponents {
     let backend = BackendIdentity {
@@ -1437,4 +1437,209 @@ fn reference_item_normalization_requires_exact_neutral_ranges_and_keeps_duplicat
     );
     let document = Document::parse(&normal_xml).unwrap();
     check_reference_item(document.root_element(), &normal, data.package()).unwrap();
+}
+
+fn actor_template(text: &str) -> String {
+    TEMPLATE.replace("</ConfigSet>", &format!("<CustomModifierBlock title=\"Study\" enabled=\"true\">{text}</CustomModifierBlock></ConfigSet>"))
+}
+#[test]
+fn actor_modifiers_change_equipment_and_support_admission_before_private_handles() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let tree = ClassTreeSelection {
+        class_id: 1,
+        ascendancy_id: None,
+        entrance_node_id: None,
+        ascendancy_node_id: None,
+    };
+    for (text, strength) in [
+        ("+2.49 to Strength", 9),
+        ("+2.5 to Strength", 10),
+        ("+3.5 to Strength", 11),
+        ("-100 to Strength", 0),
+        ("+20 to Strength\n50% increased Strength", 41),
+    ] {
+        let xml = actor_template(text);
+        let registry = ControlledMaceCatalog::with_tree_loadouts(
+            data.clone(),
+            xml.clone(),
+            weapons(data.package()),
+            vec![
+                MaceSupportLoadout::new(vec!["brutality_i".into(), "heavy_swing".into()]).unwrap(),
+            ],
+            vec![tree.clone()],
+        )
+        .unwrap();
+        assert!(registry.uses_extended_actor_scope());
+        let components = native_components_for_test(&registry);
+        assert_eq!(
+            components.actor_modifiers().records(),
+            registry.profile.actor_modifiers.records()
+        );
+        for alternative in registry.alternatives() {
+            let assessment = registry.requirements(&alternative.candidate).unwrap();
+            assert_eq!(assessment.available.strength, strength, "{text}");
+            let weapon_requirement = data
+                .package()
+                .weapons
+                .iter()
+                .find(|weapon| weapon.id == alternative.weapon_id)
+                .unwrap()
+                .requirements
+                .attributes
+                .strength;
+            assert_eq!(assessment.required.strength, weapon_requirement.max(10));
+            let legal = strength >= weapon_requirement.max(10);
+            assert_eq!(assessment.is_legal(), legal, "{text}");
+            assert_eq!(
+                registry
+                    .validated_native_candidate(&alternative.candidate, &components)
+                    .is_ok(),
+                legal
+            );
+            let output = registry
+                .materialize(&alternative.candidate)
+                .unwrap()
+                .content;
+            let source = Document::parse(&xml).unwrap();
+            let result = Document::parse(&output).unwrap();
+            let find_config = |doc: &Document<'_>| {
+                doc.descendants()
+                    .find(|n| n.has_tag_name("Config"))
+                    .unwrap()
+                    .range()
+            };
+            assert_eq!(&xml[find_config(&source)], &output[find_config(&result)]);
+            let actor = parse_actor_configuration(
+                result
+                    .descendants()
+                    .find(|n| n.has_tag_name("ConfigSet"))
+                    .unwrap(),
+                data.package(),
+            )
+            .unwrap();
+            assert_eq!(
+                actor.diagnostic(),
+                registry.profile.actor_modifiers.diagnostic()
+            );
+        }
+    }
+}
+#[test]
+fn actor_scope_tracks_authored_empty_disabled_legacy_and_spirit_quest_configuration() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    assert!(!catalog(data.clone()).uses_extended_actor_scope());
+    for element in [
+        "<CustomModifierBlock/>",
+        "<CustomModifierBlock enabled=\"false\">Unknown future text</CustomModifierBlock>",
+        "<Input name=\"customMods\" string=\"\"/>",
+    ] {
+        let registry = ControlledMaceCatalog::with_data(
+            data.clone(),
+            TEMPLATE.replace("</ConfigSet>", &format!("{element}</ConfigSet>")),
+            weapons(data.package()),
+            vec![MaceSupportChoice::None],
+        )
+        .unwrap();
+        assert!(registry.uses_extended_actor_scope());
+        assert!(registry.profile.actor_modifiers.is_empty());
+    }
+    for quest in &data.package().actor.spirit_quests {
+        let xml = TEMPLATE.replace(
+            "</ConfigSet>",
+            &format!(
+                "<Input name=\"{}\" boolean=\"false\"/></ConfigSet>",
+                quest.config_key
+            ),
+        );
+        let registry = ControlledMaceCatalog::with_data(
+            data.clone(),
+            xml,
+            weapons(data.package()),
+            vec![MaceSupportChoice::None],
+        )
+        .unwrap();
+        assert!(registry.uses_extended_actor_scope());
+        assert_eq!(
+            registry.profile.config[&quest.config_key],
+            Scalar::Boolean(false)
+        );
+        assert!(registry.profile.actor_modifiers.is_empty());
+    }
+}
+#[test]
+fn renamed_actor_rule_data_controls_requirement_admission_without_reviewed_text_fallback() {
+    let data = custom(|package| {
+        let rule = package
+            .actor
+            .modifier_rules
+            .iter_mut()
+            .find(|rule| rule.id == "strength_base")
+            .unwrap();
+        rule.id = "custom_strength".into();
+        rule.template = "{0} to configured Strength".into();
+    });
+    let make = |text: &str| {
+        ControlledMaceCatalog::with_data(
+            data.clone(),
+            actor_template(text),
+            weapons(data.package()),
+            vec![MaceSupportChoice::None],
+        )
+    };
+    assert!(make("+5 to Strength").is_err());
+    let registry = make("+5 to configured Strength").unwrap();
+    assert_eq!(
+        registry.profile.actor_modifiers.lines()[0].rule_id,
+        "custom_strength"
+    );
+    for alternative in registry.alternatives() {
+        assert_eq!(
+            registry
+                .requirements(&alternative.candidate)
+                .unwrap()
+                .available
+                .strength,
+            20
+        );
+    }
+}
+
+#[test]
+fn multiline_legacy_actor_inputs_keep_source_and_share_block_requirement_semantics() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let text = "\t+3 to Strength\r\n+5 to Intelligence\n";
+    let legacy = TEMPLATE.replace(
+        "</ConfigSet>",
+        &format!("<Input name=\"customMods\" string=\"{text}\"/></ConfigSet>"),
+    );
+    let build = |xml: String| {
+        ControlledMaceCatalog::with_data(
+            data.clone(),
+            xml,
+            weapons(data.package()),
+            vec![MaceSupportChoice::None],
+        )
+        .unwrap()
+    };
+    let legacy_catalog = build(legacy.clone());
+    let block_catalog = build(actor_template(text));
+    assert!(!legacy_catalog.profile.config.contains_key("customMods"));
+    assert_eq!(
+        legacy_catalog.profile.actor_modifiers.blocks()[0].text,
+        text
+    );
+    let candidate = legacy_catalog
+        .resolve_candidate("wooden_club", MaceSupportChoice::None)
+        .unwrap();
+    assert_eq!(
+        legacy_catalog.requirements(candidate).unwrap(),
+        assessment(&block_catalog, 0, MaceSupportChoice::None)
+    );
+    let materialized = legacy_catalog.materialize(candidate).unwrap();
+    assert!(materialized.content.contains(&format!("string=\"{text}\"")));
+    let reparsed = profile(&materialized.content, data.package()).unwrap();
+    assert_eq!(
+        reparsed.actor_modifiers.diagnostic(),
+        legacy_catalog.profile.actor_modifiers.diagnostic()
+    );
 }

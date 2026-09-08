@@ -14,7 +14,7 @@ use crate::{
 };
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-mace-strike-local-weapons-v5";
+pub const PROFILE_ID: &str = "poe2-mace-strike-actor-resources-v6";
 pub const TREE_VERSION: &str = "0_5";
 /// Index in the pinned tree classes table; XML classInternalId is a separate id.
 pub const CLASS_ID: u32 = 3;
@@ -94,6 +94,7 @@ pub struct MaceOutput {
     pub intelligence: f64,
     pub life: f64,
     pub mana: f64,
+    pub spirit: f64,
     pub energy_shield: f64,
     pub armour: f64,
     pub evasion: f64,
@@ -186,6 +187,31 @@ pub fn evaluate_with_components(
     weapon: &PreparedWeaponStats,
     supports: &PreparedMaceSupports,
 ) -> Result<MaceOutput, MaceError> {
+    let actor = compiled
+        .prepare_actor_resources(
+            input.character_level,
+            compiled.actor_quest_selection(input.quests),
+            character,
+            &[],
+        )
+        .map_err(|error| MaceError(error.0))?;
+    evaluate_with_actor(input, character, compiled, weapon, supports, &actor)
+}
+
+/// Calculate using separately prepared actor, weapon and support components.
+/// All components retain exact compiled-data binding and source input identity.
+pub fn evaluate_with_actor(
+    input: &MaceInput,
+    character: &CharacterInput,
+    compiled: &CompiledGameData,
+    weapon: &PreparedWeaponStats,
+    supports: &PreparedMaceSupports,
+    actor: &crate::actor::PreparedActorResources,
+) -> Result<MaceOutput, MaceError> {
+    actor
+        .validate_profile(compiled, input.character_level, input.quests, character)
+        .map_err(|error| MaceError(error.0))?;
+    let actor = actor.values();
     if !compiled.owns_weapon(weapon) {
         return Err(MaceError(
             "Prepared Mace weapon belongs to a different compiled dataset",
@@ -207,7 +233,7 @@ pub fn evaluate_with_components(
     let data = compiled.mace();
     let rules = &compiled.snapshot().package().character;
     character.validate().map_err(|error| MaceError(error.0))?;
-    let attributes = character.attributes;
+    let attributes = actor.attributes;
     let modifiers = character.modifiers;
     if !(1..=100).contains(&input.character_level) {
         return Err(MaceError("Mace profile character level must be 1..100"));
@@ -238,32 +264,9 @@ pub fn evaluate_with_components(
             "Mace profile resolved enemy armour and evasion must be finite and nonnegative",
         ));
     }
-    let level = f64::from(input.character_level);
     let shared = compiled.spark();
-    // Same CalcSetup/CalcPerform/CalcDefence pipeline as Spark, with Warrior attributes.
-    let life_base = shared.life_per_level * level
-        + shared.initial_life
-        + if input.quests.candlemass {
-            shared.quest_flat_life
-        } else {
-            0.0
-        }
-        + attributes.strength * shared.life_per_strength;
-    let mana_base = shared.mana_per_level * level
-        + shared.initial_mana
-        + attributes.intelligence * shared.mana_per_intelligence;
-    let life_increased = if input.quests.molten_shrine {
-        shared.quest_life_increased
-    } else {
-        0.0
-    };
-    let mana_increased = if input.quests.silent_hall {
-        shared.quest_mana_increased
-    } else {
-        0.0
-    };
-    let life = round_to_integer(life_base * (1.0 + life_increased / 100.0)).max(rules.minimum_life);
-    let mana = round_to_integer(mana_base * (1.0 + mana_increased / 100.0)).max(rules.minimum_mana);
+    let life = actor.life;
+    let mana = actor.mana;
     let resistance = crate::resistance::calculate(
         &modifiers,
         input.resistance_penalty,
@@ -310,12 +313,7 @@ pub fn evaluate_with_components(
             round_to_integer(weapon.fire_maximum * increased),
         )
     };
-    // CalcSetup's level multiplier carries a negative one-level base adjustment;
-    // CalcPerform adds the dexterity bonus before CalcOffence floors accuracy.
-    let accuracy = (data.accuracy_per_level * level - data.accuracy_per_level
-        + attributes.dexterity * data.accuracy_per_dexterity)
-        .floor()
-        .max(0.0);
+    let accuracy = actor.accuracy;
     let enemy_evasion = round_to_integer(input.enemy_evasion).max(0.0);
     let hit = hit_chance_with_data(enemy_evasion, accuracy, false, compiled.defence());
     // A critical attack rolls accuracy twice; a failed second check becomes a normal hit.
@@ -368,6 +366,7 @@ pub fn evaluate_with_components(
         intelligence: attributes.intelligence,
         life,
         mana,
+        spirit: actor.spirit,
         energy_shield: round_to_integer(modifiers.energy_shield_flat).max(0.0),
         armour: round_to_integer(modifiers.armour_flat).max(0.0),
         evasion: round_to_integer(rules.base_evasion + modifiers.evasion_flat).max(0.0),

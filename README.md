@@ -47,7 +47,9 @@ and source-preserving mutations. Mace support choices include all seven zero/one
 loadouts from Brutality I, Heavy Swing and Rapid Attacks I, with values and eligibility in
 [the injected data package](docs/support-loadouts.md). [Local item rules](docs/local-weapons.md)
 also admit supplied normal/rare Maces with physical/fire damage, local speed and critical
-modifiers; `--backend pob`
+modifiers. [Shared actor preparation](docs/actor-resources.md) adds configurable attribute and
+maximum-resource modifiers with the same calculations for skill output and item/support
+requirements; `player.spirit` exposes maximum Spirit before reservation. `--backend pob`
 selects the optional reference backend. Native search uses [typed candidate calculation](docs/native-candidate-evaluation.md)
 by default, with complete document evaluation available through `--native-evaluation document`.
 Baseline and finalist checks always recalculate complete documents. `search-calibration` retains the four original
@@ -93,6 +95,7 @@ cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experime
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-resistance-search.json --jobs 4 --max-evaluations 842
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-support-search.json --jobs 4 --max-evaluations 2942
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-local-weapon-search.json --jobs 4 --max-proposals 8192 --max-evaluations 4412
+cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-actor-search.json --jobs 4 --max-proposals 8192 --max-evaluations 4412
 ```
 
 For the full development workspace, including optional PoB references and parity tests:
@@ -146,7 +149,8 @@ Evaluation-report JSON uses schema 3; the PoB worker protocol, controlled-search
 native benchmark reports use schema 2. Expanded class/tree search reports use schema 3
 with explicit budgets and admission evidence; paid-ascendancy problems use report schema 4.
 [Configurable support-loadout problems](docs/support-loadouts.md) use report schema 5;
-[local-weapon problems](docs/local-weapons.md) use report schema 6. Synthetic item rolls in
+[local-weapon problems](docs/local-weapons.md) use report schema 6;
+[actor-configuration problems](docs/actor-resources.md) use problem 6/report 7. Synthetic item rolls in
 the latter example exercise calculation rules; they do not certify obtainable affix sets.
 Results identify backend,
 rules/source/adapter fingerprints, observed selection, metric schema/units and coverage.

@@ -24,7 +24,8 @@ The local-weapon extension advances the catalog fingerprint for exact payload pr
 problem schema 5/report 6 records that expanded item scope.
 
 `NativeBackend::prepare_controlled_mace` parses and checks the source scenario once, then
-prepares local weapon stats, tree and support axes. `PreparedMaceCandidates` retains numerical
+prepares local weapon stats, tree, actor-resource and support axes. Actor preparation
+uses the shared kernel once per tree/scenario and is bound to the selected compiled data. `PreparedMaceCandidates` retains numerical
 components, selectors, identities and shared compiled data; it retains no XML and no
 candidate result cache. Component storage scales with the sum of axis lengths, rather
 than one prepared XML object per Cartesian candidate. Catalog construction and hashing
@@ -62,8 +63,9 @@ the already verified candidate without an extra calculation. Empty legal domains
 zero attempts; baseline, ordinary evaluations and verification share one ledger.
 
 Reports add `calculation_path` and optional `native_candidate_preparation` evidence. The
-latter records elapsed setup time, admitted handles, axis capacity estimates and zero
-preparation calculations. It is not a process-memory measurement. An explicit native
+latter records elapsed setup time, admitted handles, axis capacity estimates and the number of actor preparations. Zero full build
+preparation calculations does not mean no numerical setup work: attributes/resources are
+computed components. It is not a process-memory measurement. An explicit native
 mode with `--backend pob` rejects; there is no implicit backend fallback.
 
 ## Reproducing performance measurements
@@ -79,10 +81,17 @@ cargo run --release --no-default-features --locked --example benchmark_mace_cand
 The default `--candidate-set normal` uses weapon/support alternatives from
 `examples/mace-support-search.json`. Add `--candidate-set local-weapons` to use the
 supplied normal/rare alternatives and loadouts in `examples/mace-local-weapon-search.json`.
-Both sets use the pinned `mace-wooden.xml` calibration fixture and all 105 admitted tree
+The normal/local-weapon sets use the pinned `mace-wooden.xml` calibration fixture and all 105 admitted tree
 selections; the candidate-set file's template, objective, locks, neighborhood and tree
 budgets are not benchmark inputs. JSON records the selected set and the two source fields
 used. With bundled data, the local-weapon set has 4,410 structural and 2,949 legal candidates.
+
+The `--candidate-set actor-resources` variant explicitly selects
+`tests/fixtures/builds/mace-actor-resources.xml` and the weapon/support axes from
+`examples/mace-actor-search.json`. Its authored actor modifiers affect eligibility and
+resource preparation; bundled data produces 4,410 structural and 3,675 legal states.
+The JSON identifies the actual fixed template. The benchmark resolves DPS by catalog ID,
+so adding a metric such as Spirit cannot change its checksum input.
 
 Choose worker counts for the machine. For longer samples of the inexpensive layers,
 repeat with `--evaluations 1000000 --repeats 5 --modes pure_calculation,typed_snapshot,typed_owned_measurements`.

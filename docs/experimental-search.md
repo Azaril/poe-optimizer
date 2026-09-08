@@ -2,7 +2,10 @@
 
 `search-experimental` searches supplied Mace weapons, support loadouts and optional
 class/ascendancy/passive selections with the native Rust backend or the optional PoB
-reference backend. Problem schema 5 adds normal or rare weapons with five admitted local
+reference backend. Problem schema 6 adds [actor configuration](actor-resources.md) and
+uses report schema 7. Actor modifiers are fixed configuration for the run and affect
+requirements/resources; the search still varies the declared item/tree/support axes.
+Problem schema 5 adds normal or rare weapons with five admitted local
 modifier families; earlier schemas keep their original weapon scope. Both backends use the
 same canonical candidates, objective policy, budgets, locks and fresh finalist verification.
 This remains a restricted
@@ -41,7 +44,7 @@ PoB checkout and never starts a Lua worker or falls back to PoB. Native-only bui
 PoB worker, extraction and calibration-harness commands.
 
 Native controlled search accepts `--data <package.json>` and optional `--data-sha256`.
-It loads the [schema-5 game-data package](native-data.md#schema-migration) once and shares
+It loads the [schema-6 game-data package](native-data.md#schema-migration) once and shares
 the snapshot between its catalog and native evaluator. Base values, item-rule grammar,
 modifier mappings and the critical-chance cap come from that selected package. The public
 `ControlledMaceCatalog::with_data` API binds

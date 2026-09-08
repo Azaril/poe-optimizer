@@ -34,7 +34,7 @@ fn native_cli_evaluates_and_exports_without_a_pob_checkout_in_the_working_direct
             .as_array()
             .unwrap()
             .len(),
-        9
+        10
     );
     assert_eq!(fs::read(&export).unwrap(), fs::read(fixture()).unwrap());
     assert_eq!(value["evaluation"]["diagnostic_only"], true);
@@ -56,7 +56,7 @@ fn native_catalog_and_unsupported_metrics_do_not_fall_back_to_pob() {
         .unwrap();
     assert!(output.status.success());
     let catalog: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
-    assert_eq!(catalog.as_array().unwrap().len(), 9);
+    assert_eq!(catalog.as_array().unwrap().len(), 10);
     let output = cli()
         .arg("evaluate")
         .arg(fixture())

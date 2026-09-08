@@ -269,6 +269,33 @@ pub enum ScalingTag {
     Unsupported(String),
 }
 
+/// Execute a Multiplier tag after its explicit numeric inputs are resolved.
+/// Shared by the generic scaling interpreter and allocation-free actor base records.
+/// NaN/infinity handling deliberately follows the existing raw scaling primitive;
+/// admitting an actor separately enforces finite inputs and outputs.
+pub fn apply_resolved_multiplier(
+    value: f64,
+    multiplier: f64,
+    divisor: f64,
+    base: f64,
+    invert: bool,
+    limit: Option<(f64, MultiplierLimitMode)>,
+) -> f64 {
+    let mut factor = (multiplier / divisor + 0.0001).floor();
+    if let Some((limit, MultiplierLimitMode::FactorMaximum)) = limit {
+        factor = lua_min(factor, limit);
+    }
+    if invert && factor != 0.0 {
+        factor = 1.0 / factor;
+    }
+    let value = value * factor + base;
+    match limit {
+        Some((limit, MultiplierLimitMode::TotalMaximum)) => lua_min(value, limit),
+        Some((limit, MultiplierLimitMode::TotalMinimum)) => lua_max(value, limit),
+        _ => value,
+    }
+}
+
 /// A complete, ordered sequence of numeric tags. Validation checks every entry,
 /// including tags following a condition that would disable this modifier.
 #[derive(Debug, Clone, PartialEq)]
@@ -370,30 +397,20 @@ impl ScalingProgram {
         for tag in &self.tags {
             match tag {
                 ScalingTag::Multiplier(tag) => {
-                    let base = environment.variable_sum(&tag.variables, query)?;
+                    let multiplier = environment.variable_sum(&tag.variables, query)?;
                     let divisor = environment.scalar(&tag.divisor, query)?;
-                    let mut multiplier = (base / divisor + 0.0001).floor();
                     let limit = tag
                         .limit
                         .as_ref()
-                        .map(|limit| environment.scalar(&limit.value, query))
+                        .map(|limit| {
+                            environment
+                                .scalar(&limit.value, query)
+                                .map(|value| (value, limit.mode))
+                        })
                         .transpose()?;
-                    if let (Some(limit), Some(spec)) = (limit, &tag.limit)
-                        && spec.mode == MultiplierLimitMode::FactorMaximum
-                    {
-                        multiplier = lua_min(multiplier, limit);
-                    }
-                    if tag.invert && multiplier != 0.0 {
-                        multiplier = 1.0 / multiplier;
-                    }
-                    value = value * multiplier + tag.base;
-                    if let (Some(limit), Some(spec)) = (limit, &tag.limit) {
-                        match spec.mode {
-                            MultiplierLimitMode::FactorMaximum => {}
-                            MultiplierLimitMode::TotalMaximum => value = lua_min(value, limit),
-                            MultiplierLimitMode::TotalMinimum => value = lua_max(value, limit),
-                        }
-                    }
+                    value = apply_resolved_multiplier(
+                        value, multiplier, divisor, tag.base, tag.invert, limit,
+                    );
                 }
                 ScalingTag::Threshold(tag) => {
                     let multiplier = environment.variable_sum(&tag.variables, query)?;

@@ -19,6 +19,9 @@ pub(crate) struct Profile {
     pub prepared_supports: Option<poe_optimizer_engine::mace_supports::PreparedMaceSupports>,
     pub weapon_record: Option<poe_optimizer_import::mace_item::ValidatedMaceWeapon>,
     pub prepared_weapon: Option<poe_optimizer_engine::weapon::PreparedWeaponStats>,
+    pub actor_modifiers: poe_optimizer_import::actor_modifiers::ValidatedActorModifiers,
+    pub actor_quests: poe_optimizer_engine::actor::ActorQuestSelection,
+    pub prepared_actor: poe_optimizer_engine::actor::PreparedActorResources,
     pub tree: crate::tree::NativeTree,
     pub enemy_level: u32,
     pub config: BTreeMap<String, Scalar>,
@@ -150,7 +153,14 @@ fn validate_config(
                 .quests
                 .config_keys
                 .iter()
-                .any(|key| key == name) =>
+                .any(|key| key == name)
+                || data
+                    .snapshot()
+                    .package()
+                    .actor
+                    .spirit_quests
+                    .iter()
+                    .any(|quest| quest.config_key == name) =>
         {
             true
         }
@@ -195,7 +205,7 @@ pub(crate) fn parse(
         },
     )
     .map_err(|e| EvaluationError::new(EvaluationErrorKind::InvalidRequest, e.to_string()))?;
-    poe_optimizer_import::xml_compat::validate_native(&request.build.content)
+    poe_optimizer_import::xml_compat::validate_native_with_actor_inputs(&doc)
         .map_err(|error| unsupported(format!("Native {error}")))?;
     let root = doc.root_element();
     if root.tag_name().name() != "PathOfBuilding2" {
@@ -397,11 +407,26 @@ pub(crate) fn parse(
     only(config_node, &["activeConfigSet"], &["ConfigSet"])?;
     fixed(config_node, &[("activeConfigSet", "1")])?;
     let config_set = child(config_node, "ConfigSet")?;
-    only(config_set, &["id", "title"], &["Input"])?;
+    only(
+        config_set,
+        &["id", "title"],
+        &["Input", "CustomModifierBlock"],
+    )?;
     fixed(config_set, &[("id", "1")])?;
+    let actor_modifiers =
+        poe_optimizer_import::actor_modifiers::parse_actor_configuration(config_set, package)
+            .map_err(|error| unsupported(error.to_string()))?;
     let mut config = BTreeMap::new();
     let mut ranges = BTreeMap::new();
-    for input in config_set.children().filter(Node::is_element) {
+    for input in config_set
+        .children()
+        .filter(|node| node.has_tag_name("Input"))
+    {
+        // The shared actor parser validates legacy text and current modifier blocks.
+        // Like PoB's migration, it keeps actor sources outside the scalar encounter map.
+        if input.attribute("name") == Some("customMods") {
+            continue;
+        }
         let name = input
             .attribute("name")
             .ok_or_else(|| unsupported("Missing configuration name"))?;
@@ -442,6 +467,33 @@ pub(crate) fn parse(
     .into_iter()
     .map(str::to_owned)
     .collect();
+    if package
+        .quests
+        .config_keys
+        .iter()
+        .map(String::as_str)
+        .chain(
+            package
+                .actor
+                .spirit_quests
+                .iter()
+                .map(|quest| quest.config_key.as_str()),
+        )
+        .any(|key| {
+            expected.contains(key)
+                || [
+                    "resistancePenalty",
+                    "enemyArmour",
+                    "enemyEvasion",
+                    "customMods",
+                ]
+                .contains(&key)
+        })
+    {
+        return Err(unsupported(
+            "Quest configuration keys conflict with native encounter or actor inputs",
+        ));
+    }
     if !expected.is_subset(&config.keys().cloned().collect::<BTreeSet<_>>()) {
         return Err(unsupported(
             "Native build profile requires all explicit encounter inputs",
@@ -566,6 +618,20 @@ pub(crate) fn parse(
         garukhan: quest(4),
         blackjaw: quest(5),
     };
+    let mut actor_quests = data.actor_quest_selection(quests);
+    for (index, quest) in package.actor.spirit_quests.iter().enumerate() {
+        if let Some(Scalar::Boolean(enabled)) = config.get(&quest.config_key) {
+            actor_quests.spirit[index] = *enabled;
+        }
+    }
+    let actor_layers = if actor_modifiers.records().is_empty() {
+        Vec::new()
+    } else {
+        vec![actor_modifiers.records().to_vec()]
+    };
+    let prepared_actor = data
+        .prepare_actor_resources(level, actor_quests, &resolved_tree.character, &actor_layers)
+        .map_err(|error| unsupported(error.to_string()))?;
     let enemy_level = number(&config, "enemyLevel") as u32;
     let prepared_weapon = weapon
         .as_ref()
@@ -617,6 +683,9 @@ pub(crate) fn parse(
         prepared_supports,
         weapon_record: weapon,
         prepared_weapon,
+        actor_modifiers,
+        actor_quests,
+        prepared_actor,
         tree: resolved_tree,
         enemy_level,
         config,

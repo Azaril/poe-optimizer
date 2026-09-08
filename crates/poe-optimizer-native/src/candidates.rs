@@ -56,7 +56,7 @@ impl NativeMetricValue {
 /// No strings, XML, JSON, diagnostics or cached build result are constructed.
 #[derive(Debug, Clone, Copy)]
 pub struct NativeMetricSnapshot {
-    values: [NativeMetricValue; 9],
+    values: [NativeMetricValue; 10],
     elapsed_ms: f64,
 }
 impl NativeMetricSnapshot {
@@ -84,6 +84,7 @@ impl NativeMetricSnapshot {
                 NativeMetricValue::from_number(output.chaos_resistance),
                 NativeMetricValue::Unavailable(MACE_AVERAGE_REASON),
                 NativeMetricValue::from_number(output.hit_dps),
+                NativeMetricValue::from_number(output.spirit),
             ],
             elapsed_ms: 0.0,
         }
@@ -107,6 +108,8 @@ pub struct PreparedMaceFootprint {
     pub metric_selectors: usize,
     pub deferred_character_errors: usize,
     pub deferred_weapon_errors: usize,
+    pub actor_components: usize,
+    pub deferred_actor_errors: usize,
     pub owned_component_bytes: usize,
     pub retained_xml_bytes: usize,
     pub cached_candidate_results: usize,
@@ -121,6 +124,7 @@ pub struct PreparedMaceCandidates {
     inputs: Vec<MaceInput>,
     weapons: Vec<Result<poe_optimizer_engine::weapon::PreparedWeaponStats, EvaluationError>>,
     characters: Vec<Result<CharacterInput, EvaluationError>>,
+    actors: Vec<Result<poe_optimizer_engine::actor::PreparedActorResources, EvaluationError>>,
     supports: Vec<PreparedMaceSupports>,
     metrics: Vec<SelectedMetric>,
 }
@@ -147,6 +151,8 @@ impl PreparedMaceCandidates {
             weapon_components: self.inputs.len(),
             deferred_weapon_errors: self.weapons.iter().filter(|entry| entry.is_err()).count(),
             tree_components: self.characters.len(),
+            actor_components: self.actors.len(),
+            deferred_actor_errors: self.actors.iter().filter(|entry| entry.is_err()).count(),
             support_components: self.supports.len(),
             metric_selectors: self.metrics.len(),
             deferred_character_errors: self
@@ -161,6 +167,19 @@ impl PreparedMaceCandidates {
                     >()
                 + self
                     .weapons
+                    .iter()
+                    .filter_map(|entry| entry.as_ref().err())
+                    .map(|error| error.message.capacity())
+                    .sum::<usize>()
+                + self.actors.capacity()
+                    * size_of::<
+                        Result<
+                            poe_optimizer_engine::actor::PreparedActorResources,
+                            EvaluationError,
+                        >,
+                    >()
+                + self
+                    .actors
                     .iter()
                     .filter_map(|entry| entry.as_ref().err())
                     .map(|error| error.message.capacity())
@@ -216,7 +235,13 @@ impl PreparedMaceCandidates {
             .supports
             .get(candidate.loadout_index())
             .ok_or_else(|| contract("Invalid native support axis"))?;
-        mace::evaluate_with_components(input, character, &self.data, weapon, supports).map_err(
+        let actor = self
+            .actors
+            .get(candidate.tree_index())
+            .ok_or_else(|| contract("Invalid native actor axis"))?
+            .as_ref()
+            .map_err(|error| EvaluationError::new(error.kind, error.message.clone()))?;
+        mace::evaluate_with_actor(input, character, &self.data, weapon, supports, actor).map_err(
             |error| EvaluationError::new(EvaluationErrorKind::CalculationFailed, error.to_string()),
         )
     }
@@ -324,10 +349,36 @@ impl<C: EvaluationClock> NativeBackend<C> {
         // A custom dataset can admit individual effects whose selected sum is
         // outside the numeric scope. Preserve the full-document path's deferred
         // failure: unused/locked-out axes must not abort a valid search domain.
-        let characters = components
+        let characters: Vec<Result<CharacterInput, EvaluationError>> = components
             .trees()
             .iter()
             .map(|resolved| tree::character_from_resolved(resolved, &self.data))
+            .collect();
+        let actor_layers = if baseline.profile.actor_modifiers.records().is_empty() {
+            Vec::new()
+        } else {
+            vec![baseline.profile.actor_modifiers.records().to_vec()]
+        };
+        let actors = characters
+            .iter()
+            .map(|character| {
+                let character = character
+                    .as_ref()
+                    .map_err(|error| EvaluationError::new(error.kind, error.message.clone()))?;
+                self.data
+                    .prepare_actor_resources(
+                        scenario.character_level,
+                        baseline.profile.actor_quests,
+                        character,
+                        &actor_layers,
+                    )
+                    .map_err(|error| {
+                        EvaluationError::new(
+                            EvaluationErrorKind::UnsupportedCapability,
+                            error.to_string(),
+                        )
+                    })
+            })
             .collect();
         let supports = components
             .loadouts()
@@ -368,6 +419,7 @@ impl<C: EvaluationClock> NativeBackend<C> {
             inputs,
             weapons,
             characters,
+            actors,
             supports,
             metrics,
         })

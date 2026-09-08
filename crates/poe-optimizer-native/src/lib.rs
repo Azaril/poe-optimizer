@@ -48,7 +48,7 @@ impl Default for NativeBackend<HostClock> {
 }
 
 /// Validated immutable source and resolved inputs, reusable across independent calculations.
-/// It caches parsing only: every evaluation recomputes the complete supported pipeline.
+/// Shared actor/weapon components are prepared once; every evaluation computes fresh skill outputs.
 pub struct PreparedEvaluation {
     data: Arc<CompiledGameData>,
     identity: BackendIdentity,
@@ -65,14 +65,17 @@ impl PreparedEvaluation {
     /// Pure calculation entry point for native/browser hosts. No time or OS calls.
     pub fn calculate(&self) -> Result<NativeCalculation, EvaluationError> {
         match &self.profile.input {
-            NativeInput::Spark(input) => {
-                spark::evaluate_with_data(input, &self.profile.tree.character, &self.data)
-                    .map(NativeCalculation::Spark)
-                    .map_err(|e| {
-                        EvaluationError::new(EvaluationErrorKind::CalculationFailed, e.to_string())
-                    })
-            }
-            NativeInput::Mace(input) => mace::evaluate_with_components(
+            NativeInput::Spark(input) => spark::evaluate_with_actor(
+                input,
+                &self.profile.tree.character,
+                &self.data,
+                &self.profile.prepared_actor,
+            )
+            .map(NativeCalculation::Spark)
+            .map_err(|e| {
+                EvaluationError::new(EvaluationErrorKind::CalculationFailed, e.to_string())
+            }),
+            NativeInput::Mace(input) => mace::evaluate_with_actor(
                 input,
                 &self.profile.tree.character,
                 &self.data,
@@ -84,6 +87,7 @@ impl PreparedEvaluation {
                     .prepared_supports
                     .as_ref()
                     .expect("prepared Mace support loadout"),
+                &self.profile.prepared_actor,
             )
             .map(NativeCalculation::Mace)
             .map_err(|e| {
@@ -118,6 +122,7 @@ impl NativeCalculation {
                     ("lightning_resistance_capped_pct", o.lightning_resistance),
                     ("chaos_resistance_capped_pct", o.chaos_resistance),
                     ("selected_hit_dps", o.hit_dps),
+                    ("spirit", o.spirit),
                 ]
             }};
         }
@@ -184,6 +189,19 @@ impl NativeCalculation {
             value["resolved_enemy_armour"] = serde_json::json!(i.enemy_armour);
             value["resolved_enemy_evasion"] = serde_json::json!(i.enemy_evasion);
         }
+        value["actor_modifiers"] = profile.actor_modifiers.diagnostic();
+        let actor = profile.prepared_actor.values();
+        value["actor_resources"] = serde_json::json!({
+            "strength":actor.attributes.strength,"dexterity":actor.attributes.dexterity,
+            "intelligence":actor.attributes.intelligence,"life":actor.life,"mana":actor.mana,
+            "spirit":actor.spirit,"accuracy":actor.accuracy,
+            "lowest_of_maximum_life_and_maximum_mana":actor.lowest_of_maximum_life_and_maximum_mana,
+            "lowest_attribute":actor.lowest_attribute,"total_attributes":actor.total_attributes,
+            "low_life_percentage":actor.low_life_percentage,"full_life_percentage":actor.full_life_percentage,
+            "life_has_override":actor.life_has_override,"mana_has_override":actor.mana_has_override,
+            "spirit_has_override":actor.spirit_has_override,"chaos_inoculation":actor.chaos_inoculation,
+            "full_life_from_chaos_inoculation":actor.full_life_from_chaos_inoculation,
+        });
         value["profile"] = serde_json::json!(self.profile_id());
         value["supports_prepared_inputs"] = serde_json::json!(true);
         value["calculation_result_cached"] = serde_json::json!(false);
@@ -238,6 +256,7 @@ pub fn metric_catalog() -> Vec<MetricDefinition> {
         ("chaos_resistance_capped_pct", Percent),
         ("selected_average_hit", Damage),
         ("selected_hit_dps", DamagePerSecond),
+        ("spirit", PoolPoints),
     ]
     .into_iter()
     .map(|(id, unit)| MetricDefinition {
@@ -275,6 +294,9 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("candidates.rs"),
                 include_str!("../../poe-optimizer-import/src/controlled_mace.rs"),
                 include_str!("../../poe-optimizer-import/src/mace_item.rs"),
+                include_str!("../../poe-optimizer-import/src/actor_modifiers.rs"),
+                include_str!("../../poe-optimizer-engine/src/actor.rs"),
+                include_str!("../../poe-optimizer-engine/src/multipliers.rs"),
                 include_str!("../../poe-optimizer-engine/src/weapon.rs"),
                 include_str!("../../poe-optimizer-engine/src/offence.rs"),
                 include_str!("../../poe-optimizer-engine/src/character.rs"),
@@ -450,6 +472,14 @@ impl<C: EvaluationClock> NativeBackend<C> {
                 defaults.insert(name.clone(), Scalar::Boolean(enabled));
             }
         }
+        for quest in &self.data.snapshot().package().actor.spirit_quests {
+            if !prepared.profile.config.contains_key(&quest.config_key) {
+                defaults.insert(
+                    quest.config_key.clone(),
+                    Scalar::Boolean(quest.default_enabled),
+                );
+            }
+        }
         if !prepared.profile.config.contains_key("resistancePenalty") {
             defaults.insert(
                 "resistancePenalty".into(),
@@ -465,12 +495,12 @@ impl<C: EvaluationClock> NativeBackend<C> {
         let mut result=EvaluationResult {
             backend:self.identity.clone(),
             build:BuildSummary{level:info.level,class_name:prepared.profile.tree.class.name.clone(),ascendancy_name:prepared.profile.tree.ascendancy_name().into(),tree_version:self.data.snapshot().tree().source.tree_version.clone(),main_socket_group:1,allocated_nodes:prepared.profile.tree.allocated_nodes.clone(),skill_groups:1},
-            context:EvaluationContext{requested:prepared.request.options.clone(),calculation_mode:"MAIN".into(),enemy_level:prepared.profile.enemy_level,config_inputs:prepared.profile.config.clone(),config_placeholders:defaults,player_conditions:BTreeMap::new(),enemy_conditions:BTreeMap::new()},
+            context:EvaluationContext{requested:prepared.request.options.clone(),calculation_mode:"MAIN".into(),enemy_level:prepared.profile.enemy_level,config_inputs:prepared.profile.config.clone(),config_placeholders:defaults,player_conditions:prepared.profile.prepared_actor.values().conditions().map(|(name,value)|(name.to_owned(),value)).collect(),enemy_conditions:BTreeMap::new()},
             coverage:coverage(prepared.profile.group_label.clone(), &info),measurements,
             exports:vec![BuildDocument{format:BuildFormat::PathOfBuilding2Xml,content:prepared.profile.export_xml.clone()}],
             warnings:vec![format!("Native supported profile: {}. Other build mechanics are rejected.",output.profile_id()),"Full DPS rollups, EHP and maximum-hit calculations are not implemented by this backend.".into()],
             elapsed_ms:0.0,diagnostic_only:true,
-            attachments:vec![DiagnosticAttachment{media_type:match &prepared.profile.input { NativeInput::Spark(_) => "application/vnd.poe-optimizer.native-profile+json;version=1", NativeInput::Mace(_) => "application/vnd.poe-optimizer.native-profile+json;version=3" }.into(),content:output.diagnostic(&prepared.profile, &self.data).to_string()}, DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-tree+json;version=2".into(),content:prepared.profile.tree.diagnostic(&self.data).to_string()}],
+            attachments:vec![DiagnosticAttachment{media_type:match &prepared.profile.input { NativeInput::Spark(_) => "application/vnd.poe-optimizer.native-profile+json;version=2", NativeInput::Mace(_) => "application/vnd.poe-optimizer.native-profile+json;version=4" }.into(),content:output.diagnostic(&prepared.profile, &self.data).to_string()}, DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-tree+json;version=2".into(),content:prepared.profile.tree.diagnostic(&self.data).to_string()}],
         };
         result.attachments.push(DiagnosticAttachment {
             media_type: "application/vnd.poe-optimizer.game-data+json;version=1".into(),

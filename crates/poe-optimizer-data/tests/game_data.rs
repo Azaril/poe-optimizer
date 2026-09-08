@@ -265,10 +265,10 @@ fn unknown_nested_source_enum_fields_and_integer_key_aliases_do_not_disappear() 
 #[test]
 fn requirement_schema_is_explicit_bounded_and_content_bound() {
     let original = reviewed();
-    assert_eq!(original.identity().schema_version, 5);
+    assert_eq!(original.identity().schema_version, 6);
     assert_eq!(
         original.identity().semantics_version,
-        "poe2-native-profiles-v5"
+        "poe2-native-profiles-v6"
     );
     let mut package = original.package().clone();
     package.weapons[0].requirements = RequirementData {

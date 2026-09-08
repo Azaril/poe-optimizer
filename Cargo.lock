@@ -498,6 +498,7 @@ version = "0.1.0"
 dependencies = [
  "mlua",
  "poe-optimizer-data",
+ "roxmltree",
  "serde_json",
  "sha2",
 ]
@@ -510,6 +511,7 @@ dependencies = [
  "flate2",
  "poe-optimizer-core",
  "poe-optimizer-data",
+ "poe-optimizer-engine",
  "roxmltree",
  "serde",
  "serde_json",

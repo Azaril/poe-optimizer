@@ -6,6 +6,11 @@ reference backend for parity checks and update investigation. The shared
 `CalculationBackend` / `EvaluationEngine` interfaces let objectives, search and front ends
 use either implementation without exposing Lua values or process APIs.
 
+Both profiles use [shared actor preparation](actor-resources.md) for attributes, inherent
+bonuses, maximum Life/Mana/Spirit and global Accuracy. Data owns admitted modifier templates,
+operations, condition tags, precision and Spirit quest settings. Native profile evidence is
+Spark version 2 or Mace version 4; unsupported receiving defences and reservation still reject.
+
 ## Implemented build profiles
 
 `native-poe2` currently supports two restricted document profiles:
@@ -33,8 +38,8 @@ inputs and supported quest/resistance settings. A native Mace request with a bos
 rejects. The optional PoB controlled profile also admits its supported boss scenarios;
 selecting a backend does not imply equal mechanic coverage.
 
-Spark returns nine finite metrics: life, mana, energy shield, four capped resistances,
-selected average hit and selected hit DPS. Mace returns eight finite metrics and an explicit
+Spark returns ten finite metrics: life, mana, Spirit, energy shield, four capped resistances,
+selected average hit and selected hit DPS. Mace returns nine finite metrics and an explicit
 `Unavailable` for `selected_average_hit`: the existing shared metric does not aggregate
 per-hand attack averages. The resolved main-hand average remains diagnostic evidence. EHP,
 maximum hits, Full DPS, minions and broader builds are outside native coverage. Unsupported
@@ -239,7 +244,8 @@ The controlled Mace search accepts selected compatible datasets. Its schema-1 pr
 the original fixed Warrior profile; schema 2 adds all 31 admitted class/ascendancy identities
 and zero or one class-local ordinary entrance, composed with the existing weapons/supports.
 Problem schema 3 adds the four paid ascendancy choices with an explicit 0/1 ascendancy
-budget; schema 4 adds the seven zero/one/two-support loadouts; schema 5 adds supplied local
+budget; schema 4 adds the seven zero/one/two-support loadouts; schema 6 adds actor
+configuration over schema 5 supplied local
 weapon modifiers and rare payloads. Schemas 1–4 retain their original item scope. Point budgets come from the
 caller and requirements use selected class attributes. This is still a finite restricted
 catalog; new evaluator coverage is not automatically searchable.

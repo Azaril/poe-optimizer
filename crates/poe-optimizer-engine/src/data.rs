@@ -38,6 +38,8 @@ pub struct CompiledGameData {
     mace: MaceData,
     weapon_indices: [usize; 2],
     pub(crate) weapon_binding: Arc<()>,
+    pub(crate) actor_binding: Arc<()>,
+    pub(crate) actor_precision: crate::modifiers::MorePrecision,
     supports: MaceSupportCatalog,
     passives: BTreeMap<(u32, u32), BTreeMap<String, CharacterModifiers>>,
 }
@@ -186,11 +188,26 @@ impl CompiledGameData {
         let supports = MaceSupportCatalog::compile(package)?;
         Ok(Self {
             supports,
-            snapshot,
+            snapshot: snapshot.clone(),
             spark,
             mace,
             weapon_indices,
             weapon_binding: Arc::new(()),
+            actor_binding: Arc::new(()),
+            actor_precision: crate::modifiers::MorePrecision::try_new(
+                snapshot
+                    .package()
+                    .actor
+                    .high_precision_mods
+                    .iter()
+                    .filter_map(|(name, operations)| {
+                        operations
+                            .get(&game_data::ActorNumericOperation::More)
+                            .map(|places| (name.clone(), *places))
+                    })
+                    .collect(),
+            )
+            .map_err(|error| GameDataError(error.to_string()))?,
             passives,
         })
     }

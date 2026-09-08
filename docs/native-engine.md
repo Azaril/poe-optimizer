@@ -36,6 +36,17 @@ budget. A browser runner supplies its own scheduling, progress, cancellation and
 loading while calling the same Rust calculations. Persistent mutable caches, when added,
 belong to one evaluation context and must demonstrate request-order independence.
 
+## Shared actor preparation
+
+`CompiledGameData::prepare_actor_resources` translates source attribute and maximum-resource
+stages into an immutable reusable component. Both skill pipelines and catalog attribute
+requirements consume this shared stage. Source-derived schema-6 records, precision and
+quest data are injected; calculation order remains Rust code. Prepared components support
+direct concurrent use and keep no XML or owned modifier database. See [actor resources](actor-resources.md)
+for exact two-pass conditions, raw-function versus complete-build scope, source input fidelity
+and the pure Rust import-to-engine requirement seam. Current profile identifiers are
+`poe2-spark-actor-resources-v2` and `poe2-mace-strike-actor-resources-v6`.
+
 ## First translation boundary: defence kernels
 
 The initial native surface is small enough to compare directly with upstream code, and
@@ -70,7 +81,8 @@ entire modifier store and not `ModList` interchangeability. A `ModifierInput` pr
 its source, modifier/value kinds and tag names until validation. Construction rejects the
 entire input if any layer contains an unsupported entry, even if a particular query
 would not select that entry. This keeps partial extraction from silently changing a build.
-No automatic Lua extraction or full-build adapter is attached to this slice yet.
+The [actor-resource pipeline](actor-resources.md) now consumes supported normalized
+global records through these primitives. This does not establish a complete modifier store.
 
 | Surface | Supported semantics |
 | --- | --- |

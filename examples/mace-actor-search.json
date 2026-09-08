@@ -1,0 +1,100 @@
+{
+  "schema_version": 6,
+  "template": "../tests/fixtures/builds/mace-actor-resources.xml",
+  "weapons": [
+    {
+      "id": "wooden-normal",
+      "item_text": "Rarity: NORMAL\nWooden Club\nItem Level: 1\nQuality: 0\nImplicits: 0"
+    },
+    {
+      "id": "wooden-physical",
+      "item_text": "Rarity: RARE\nStudy Maul\nWooden Club\nItem Level: 10\nQuality: 20\nLevelReq: 1\nImplicits: 0\nAdds 10 to 20 Physical Damage\n80% increased Physical Damage"
+    },
+    {
+      "id": "smithing-fire",
+      "item_text": "Rarity: RARE\nStudy Flame\nSmithing Hammer\nItem Level: 10\nQuality: 20\nLevelReq: 1\nImplicits: 0\nAdds 12 to 24 Fire Damage\n20% increased Attack Speed"
+    },
+    {
+      "id": "wooden-balanced",
+      "item_text": "Rarity: RARE\nStudy Hammer\nWooden Club\nItem Level: 10\nQuality: 20\nLevelReq: 1\nImplicits: 0\nAdds 2 to 5 Physical Damage\nAdds 3 to 7 Fire Damage\n50% increased Physical Damage\n20% increased Attack Speed\n100% increased Critical Hit Chance"
+    },
+    {
+      "id": "wooden-critical",
+      "item_text": "Rarity: RARE\nStudy Edge\nWooden Club\nItem Level: 10\nQuality: 20\nLevelReq: 1\nImplicits: 0\nAdds 5 to 12 Physical Damage\n2500% increased Critical Hit Chance"
+    },
+    {
+      "id": "wooden-level-80",
+      "item_text": "Rarity: RARE\nStudy Requirement\nWooden Club\nItem Level: 1\nQuality: 20\nLevelReq: 80\nImplicits: 0\nAdds 10 to 20 Physical Damage"
+    }
+  ],
+  "objective": {
+    "schema_version": 1,
+    "objective": {
+      "kind": "scalar",
+      "metric": {
+        "actor": "player",
+        "id": "selected_hit_dps"
+      },
+      "unit": "damage_per_second",
+      "direction": "maximize"
+    },
+    "constraints": [
+      {
+        "id": "chaos-floor",
+        "metric": {
+          "actor": "player",
+          "id": "chaos_resistance_capped_pct"
+        },
+        "unit": "percent",
+        "operator": ">=",
+        "threshold": 1.0,
+        "violation_scale": 1.0
+      },
+      {
+        "id": "spirit-floor",
+        "metric": {
+          "actor": "player",
+          "id": "spirit"
+        },
+        "unit": "pool_points",
+        "operator": ">=",
+        "threshold": 130.0,
+        "violation_scale": 100.0
+      }
+    ]
+  },
+  "locks": {},
+  "neighborhood": {
+    "proposals_per_round": 32,
+    "restart_every": 4,
+    "max_changed_axes": 0
+  },
+  "tree_search": {
+    "ordinary_passive_points": 1,
+    "ascendancy_passive_points": 1
+  },
+  "support_loadouts": [
+    [],
+    [
+      "brutality_i"
+    ],
+    [
+      "heavy_swing"
+    ],
+    [
+      "rapid_attacks_i"
+    ],
+    [
+      "brutality_i",
+      "heavy_swing"
+    ],
+    [
+      "brutality_i",
+      "rapid_attacks_i"
+    ],
+    [
+      "heavy_swing",
+      "rapid_attacks_i"
+    ]
+  ]
+}

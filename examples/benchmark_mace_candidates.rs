@@ -22,10 +22,11 @@ use std::{error::Error, hint::black_box, path::PathBuf, sync::Arc, time::Instant
 enum CandidateSet {
     Normal,
     LocalWeapons,
+    ActorResources,
 }
 #[derive(Parser)]
 struct Args {
-    /// Select supplied weapon/support axes; template, trees and benchmark metrics stay fixed.
+    /// Select supplied weapon/support axes and an explicit fixed calibration template.
     #[arg(long, value_enum, default_value = "normal")]
     candidate_set: CandidateSet,
     #[arg(long, default_value_t = 20_000)]
@@ -103,8 +104,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     )?);
     let engine = Engine::new(SharedBackend::new(backend.clone()));
     let dataset_ms = start.elapsed().as_secs_f64() * 1000.0;
-    // These fixtures supply only weapon and support axes. Their template, search
-    // settings and objective are not benchmark inputs.
+    // JSON supplies weapon/support axes. Templates are selected explicitly below;
+    // JSON search settings and objectives remain outside benchmark inputs.
     let (candidate_set, candidate_source, candidate_json) = match args.candidate_set {
         CandidateSet::Normal => (
             "normal",
@@ -116,7 +117,26 @@ fn main() -> Result<(), Box<dyn Error>> {
             "examples/mace-local-weapon-search.json",
             include_str!("mace-local-weapon-search.json"),
         ),
+        CandidateSet::ActorResources => (
+            "actor-resources",
+            "examples/mace-actor-search.json",
+            include_str!("mace-actor-search.json"),
+        ),
     };
+    let (fixed_template, template) = match args.candidate_set {
+        CandidateSet::ActorResources => (
+            "tests/fixtures/builds/mace-actor-resources.xml",
+            include_str!("../tests/fixtures/builds/mace-actor-resources.xml"),
+        ),
+        _ => (
+            "tests/fixtures/calibration/mace-wooden.xml",
+            include_str!("../tests/fixtures/calibration/mace-wooden.xml"),
+        ),
+    };
+    let dps_catalog_index = poe_optimizer_native::metric_catalog()
+        .iter()
+        .position(|metric| metric.id == "selected_hit_dps")
+        .ok_or("DPS metric missing")?;
     let input: serde_json::Value = serde_json::from_str(candidate_json)?;
     let weapons: Vec<NormalMaceAlternative> = serde_json::from_value(input["weapons"].clone())?;
     let loadouts: Vec<MaceSupportLoadout> =
@@ -124,7 +144,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let start = Instant::now();
     let catalog = ControlledMaceCatalog::with_tree_loadouts(
         snapshot.clone(),
-        include_str!("../tests/fixtures/calibration/mace-wooden.xml").into(),
+        template.into(),
         weapons,
         loadouts,
         class_tree::selections(snapshot.tree())?,
@@ -232,7 +252,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                                         .unwrap(),
                                 )
                                 .values()
-                                .last()
+                                .get(dps_catalog_index)
                                 .unwrap()
                                 .finite()
                                 .unwrap(),
@@ -270,7 +290,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             "scope":"mixed_admitted_mace_candidates_not_general_game_or_optimizer_quality",
             "candidate_set":candidate_set,"candidate_source":candidate_source,
             "candidate_source_fields_used":["weapons","support_loadouts"],
-            "fixed_template":"tests/fixtures/calibration/mace-wooden.xml",
+            "fixed_template":fixed_template,
             "tree_selections":"all_admitted_class_tree_selections_from_selected_data",
             "cpu_label":args.cpu_label,"available_parallelism":std::thread::available_parallelism()?.get(),
             "os":std::env::consts::OS,"arch":std::env::consts::ARCH,"debug_assertions":cfg!(debug_assertions),

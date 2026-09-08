@@ -102,7 +102,7 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v5",
+        "poe-game-data-extractor-v6",
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
@@ -180,6 +180,16 @@ struct ItemRulePolicy {
 }
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
+struct ActorRulePolicy {
+    id: String,
+    template: String,
+    source_kind: String,
+    pattern: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    condition_pattern: Option<String>,
+}
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 struct Policy {
     schema_version: u32,
     id: String,
@@ -194,6 +204,8 @@ struct Policy {
     mace_default_class: String,
     weapons: Vec<[String; 2]>,
     item_rules: Vec<ItemRulePolicy>,
+    actor_rules: Vec<ActorRulePolicy>,
+    spirit_quests: Vec<String>,
     quests: Vec<String>,
     coverage: Vec<String>,
 }
@@ -232,7 +244,9 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         AuthenticatedTreeSnapshot::from_trusted_extraction(snapshot, &digest).map_err(error)?;
     let tree = BundledClassTree::from_authenticated_snapshot(&authenticated).map_err(error)?;
     let policy: Policy = serde_json::from_str(POLICY)?;
-    if policy.schema_version != 3
+    if policy.schema_version != 4
+        || policy.spirit_quests.len() != 3
+        || policy.actor_rules.is_empty()
         || policy.quests.len() != 6
         || policy.weapons.len() != 2
         || policy.item_rules.len() != 5
@@ -299,6 +313,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         },
         tree,
         character: extractor.record(&records, "character")?,
+        actor: extractor.record(&records, "actor")?,
         quests: extractor.record(&records, "quests")?,
         spark: extractor.record(&records, "spark")?,
         mace: extractor.record(&records, "mace")?,
@@ -442,6 +457,12 @@ impl Extractor {
             "\nmodLib.parseMod,",
         )?)
         .exec()?;
+        lua.load(section(
+            source("src/Modules/ModTools.lua")?,
+            "function modLib.setSource(",
+            "function modLib.hasTag(",
+        )?)
+        .exec()?;
         lua.load(source("src/Classes/ModStore.lua")?).exec()?;
         lua.load(source("src/Classes/ModDB.lua")?).exec()?;
         let gems: Table = lua.load(source("src/Data/Gems.lua")?).eval()?;
@@ -459,7 +480,15 @@ impl Extractor {
             ))
             .eval()?;
         lua.globals().set("sourceItemForms", item_forms)?;
-        let parser: Function = lua.load(source("src/Modules/ModParser.lua")?).eval()?;
+        // Expose actual local parser tables for grammar evidence without changing
+        // its parsing branches. The complete source parser still interprets probes.
+        let parser_source = source("src/Modules/ModParser.lua")?;
+        let anchor = "\nreturn function(line, isComb)";
+        if parser_source.matches(anchor).count() != 1 {
+            return Err(error("ambiguous actor parser table observation anchor"));
+        }
+        let parser: Function = lua.load(parser_source.replacen(anchor,
+            "\nsourceActorForms=formList;sourceActorSpecials=oldList;sourceActorTags=modTagList;\nreturn function(line, isComb)",1)).eval()?;
         lua.globals()
             .get::<Table>("modLib")?
             .set("parseMod", parser)?;
@@ -521,10 +550,10 @@ impl Extractor {
             .set("questRewards", quests)?;
         let config: Table = lua
             .load(format!(
-                "{}\nlocal config={{}};addQuestModsRewardsConfigOptions(config);return config",
+                "local StripEscapes=function(text) assert(not text:find(\"^\",1,true),\"quest colour escape requires source support\");return text end;{}\nlocal config={{}};addQuestModsRewardsConfigOptions(config);return config",
                 section(
                     source("src/Modules/ConfigOptions.lua")?,
-                    "local function addQuestModsRewardsConfigOptions(",
+                    "local function questModsRewards(",
                     "\nlocal configSettings = {"
                 )?
             ))
@@ -594,6 +623,7 @@ impl Extractor {
             "modDB:NewMod(\"Mana\", \"BASE\", data.characterConstants",
             "modDB:NewMod(\"Accuracy\", \"BASE\", data.characterConstants",
             "modDB:NewMod(\"CritChanceCap\", \"BASE\",",
+            "modDB:NewMod(\"Spirit\", \"BASE\", 0,",
         ] {
             initialization.push_str(line(source("src/Modules/CalcSetup.lua")?, prefix)?);
             initialization.push('\n');
@@ -603,7 +633,18 @@ impl Extractor {
             "sourceResourceInitialization",
             lua.load(initialization).eval::<Function>()?,
         )?;
-        let bonuses=lua.load(format!("return function() local modDB=new('ModDB'):ModDB();local output={{Str=1,Dex=1,Int=1}};{}\nreturn modDB end",section(source("src/Modules/CalcPerform.lua")?,"\t-- Add attribute bonuses\n","\t-- Calculate Presence / Surrounded")?)).eval::<Function>()?;
+        let bonuses=lua.load(format!("return function(flags) local modDB=new('ModDB'):ModDB();for _,flag in ipairs(flags or {{}}) do modDB:NewMod(flag,'FLAG',true) end;local output={{Str=1,Dex=1,Int=1}};{}\nreturn modDB end",section(source("src/Modules/CalcPerform.lua")?,"\t-- Add attribute bonuses\n","\t-- Calculate Presence / Surrounded")?)).eval::<Function>()?;
+        let normal_multiplier: f64 = lua
+            .load(format!(
+                "{};return inherentAttributeMultiplier",
+                line(
+                    source("src/Modules/CalcPerform.lua")?,
+                    "local inherentAttributeMultiplier ="
+                )?
+            ))
+            .eval()?;
+        lua.globals()
+            .set("sourceNormalAttributeMultiplier", normal_multiplier)?;
         lua.globals().set("sourceAttributeBonuses", bonuses)?;
         // The source omits level-one Mace's baseMultiplier. Evaluate the actual
         // CalcOffence fallback expression rather than filling a copied constant.
@@ -905,6 +946,112 @@ mod tests {
             "m.value=-1",
         ] {
             assert!(lua.load(format!("local m=modLib.createMod('CritChanceCap','BASE',100,'Base');{mutation};return source_critical_chance_cap(m)")).eval::<f64>().is_err(), "{mutation}");
+        }
+    }
+    #[test]
+    fn actor_record_conversion_preserves_all_fields_and_rejects_unconsumed_shapes() {
+        let lua = conversion();
+        for expression in [
+            "modLib.createMod('Str','BASE',-2.5,'Custom:One')",
+            "modLib.createMod('Mana','OVERRIDE',0)",
+            "modLib.createMod('LifeConvertToEnergyShield','BASE',100)",
+            "modLib.createMod('NoAttributeBonuses','FLAG',false)",
+            "modLib.createMod('Life','MORE',10,nil,0,0,{type='Condition',varList={'DexHigherThanInt','StrHigherThanInt'},neg=true})",
+        ] {
+            lua.load(format!(
+                "return source_convert_actor_modifier({expression})"
+            ))
+            .eval::<Table>()
+            .unwrap();
+        }
+        for mutation in [
+            "m.flags=1",
+            "m.keywordFlags=1",
+            "m.type='LIST'",
+            "m.name='All'",
+            "m.source={}",
+            "m.value=0/0",
+            "m.value=1/0",
+            "m.value=-1000001",
+            "m.hidden=true",
+            "m[99]={type='Condition',var='StrHigherThanInt'}",
+            "m[1]={type='Condition',var='Unknown'}",
+            "m[1]={type='Condition',var='StrHigherThanInt',actor='enemy'}",
+            "m[1]={type='PerStat',stat='Str'}",
+            "m[1]={type='Condition',var='StrHigherThanInt',neg=0}",
+            "m.name='ExtraLife';m.type='MORE'",
+            "m.name='NoAttributeBonuses';m.type='FLAG'",
+            "m.type='FLAG'",
+            "m.name='DexAccBonusOverride'",
+        ] {
+            assert!(lua.load(format!("local m=modLib.createMod('Life','BASE',10);{mutation};return source_convert_actor_modifier(m)")).eval::<Table>().is_err(),"{mutation}");
+        }
+    }
+    #[test]
+    fn actor_rule_extraction_requires_actual_source_grammar_and_complete_parser_outputs() {
+        let sources = READ_PATHS
+            .iter()
+            .map(|p| ((*p).into(), source::read_verified_text(&root(), p).unwrap()))
+            .collect();
+        let extractor = Extractor::new(sources).unwrap();
+        let lua = &extractor.lua;
+        let policy: Policy = serde_json::from_str(POLICY).unwrap();
+        let convert: Function = lua.globals().get("source_extract_actor_rule").unwrap();
+        let reviewed = bundled_snapshot().unwrap();
+        for (selection, expected) in policy
+            .actor_rules
+            .iter()
+            .zip(&reviewed.package().actor.modifier_rules)
+        {
+            let actual: Value = convert.call(lua.to_value(selection).unwrap()).unwrap();
+            assert_eq!(
+                &lua.from_value::<ActorModifierRule>(actual).unwrap(),
+                expected
+            );
+        }
+        for template in [
+            "{0} to all Attributes",
+            "{0} to Energy Shield",
+            "{0} to maximum Life while holding a Shield",
+            "{0} to Strength trailing text",
+            "{1} to Strength",
+        ] {
+            let selection = ActorRulePolicy {
+                id: "invalid".into(),
+                template: template.into(),
+                source_kind: "form".into(),
+                pattern: policy.actor_rules[0].pattern.clone(),
+                condition_pattern: None,
+            };
+            assert!(
+                convert
+                    .call::<Value>(lua.to_value(&selection).unwrap())
+                    .is_err(),
+                "{template}"
+            );
+        }
+        let check:Function=lua.load("return function(selection,mutate) local original=modLib.parseMod;modLib.parseMod=function(text) local mods,extra=original(text);mutate(mods);return mods,extra end;local ok=pcall(source_extract_actor_rule,selection);modLib.parseMod=original;return ok end").eval().unwrap();
+        for mutation in [
+            "mods[1].source='Hidden'",
+            "mods[1].hidden=true",
+            "mods[1].flags=1",
+            "mods[1].keywordFlags=1",
+            "mods[1][1]={type='Condition',var='Unknown'}",
+            "mods[1].value=mods[1].value+1",
+            "mods[99]=mods[1]",
+            "mods.extra=true",
+            "mods[1].type='FLAG'",
+        ] {
+            let mutate: Function = lua
+                .load(format!("return function(mods) {mutation} end"))
+                .eval()
+                .unwrap();
+            assert!(
+                !check
+                    .call::<bool>((lua.to_value(&policy.actor_rules[0]).unwrap(), mutate))
+                    .unwrap(),
+                "{mutation}"
+            );
         }
     }
     #[test]

@@ -114,6 +114,13 @@ const BINDINGS: &[Binding] = &[
         minion: true,
         description: "Selected actor/action average hit including critical strike weighting; not damage per second.",
     },
+    Binding {
+        id: "spirit",
+        raw: "Spirit",
+        unit: MetricUnit::PoolPoints,
+        minion: false,
+        description: "Maximum Spirit pool, before reservation.",
+    },
 ];
 
 pub fn catalog() -> Vec<MetricDefinition> {

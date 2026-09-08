@@ -4,8 +4,8 @@
 It is optional development tooling: native evaluation loads the exported package and has
 no Lua or worker-process dependency. No website is scraped or downloaded.
 
-The exporter covers the same twelve explicitly partial sections as the
-[native data package](native-data.md): tree, character, quests, Spark, Mace, supports, weapons,
+The exporter covers the same thirteen explicitly partial sections as the
+[native data package](native-data.md): tree, character, actor, quests, Spark, Mace, supports, weapons,
 item modifier rules, defence, monsters, encounters and typed owned passive effects. The current version includes the four admitted ascendancy
 resistance nodes. It does not infer arbitrary build mechanics
 or broaden accepted source revisions. Progress and validation evidence belong in the
@@ -89,10 +89,11 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 5 and `poe2-native-profiles-v5`, including source-derived item grammar/mappings,
-global critical-chance cap, level/attribute requirements,
-support-color costs and owned passive effects. Signed values are allowed only for the
-new unconditional player BASE resistance operations. The structural selection policy in
+schema 6 and `poe2-native-profiles-v6`, including normalized actor modifiers, actor rules,
+the full source precision table and Spirit quest records, alongside the existing item rules,
+critical-chance cap, requirements, support-color costs and passive effects. Signed actor
+numeric values and unconditional player BASE resistance values retain their distinct typed
+operation and scope validation. The structural selection policy in
 `crates/poe-optimizer-data/data/class-tree-policy.json` identifies the four source nodes;
 Rust does not contain their numeric values. Regenerate older packages rather than silently filling missing
 records. Native controlled search consumes the same selected data; new tree revisions and
@@ -122,3 +123,28 @@ reviewed five templates use source-verified integer capture grammar. Source crit
 extraction requires the exact unconditional `BASE` modifier shape before taking its value;
 scoped, tagged or changed-operation records reject. Cold/warm parser and local-assembly
 oracles remain independent checks. See [local weapon configuration](local-weapons.md).
+
+
+The schema-6 actor converter observes the actual source parser's form, special-modifier and
+condition tables, then invokes the original parser with distinct signed, fractional or
+integer operands as appropriate. The 116 reviewed templates cover seven individual
+attribute/resource/accuracy targets with BASE, increased/reduced and more/less forms,
+including two attribute-comparison suffixes, plus fixed bonus/override phrases and the
+Dexterity accuracy override. It retains every emitted target, effect, source, scope field
+and ordered supported condition tag. Unconsumed bookkeeping, unknown targets/conditions,
+extra fields, scoped flags and unsupported numerical transforms reject. This is a reviewed
+grammar subset, not a general transcription of `ModParser`.
+
+Actor constants come from the original setup, attribute-bonus and maximum-resource code.
+Level-based initialization is checked as a complete source modifier, including its Level
+multiplier tag and offset. The converter retains the full `data.highPrecisionMods` table,
+including BASE entries; MORE consumers select their explicit operation from the package.
+Three actual Spirit quest callbacks supply keys, defaults, values and `Quest:` source
+strings. No existing character or quest balance table is duplicated in the actor section.
+
+Independent checks execute the pinned parser in cold and warmed modes over 1,206 cases,
+compare all 40 precision records and exercise the original quest callbacks and actor
+constant branches. Separate extraction mutation tests reject discarded fields, changed
+source scope, unsupported tags and mismatched rule operands. These checks prove the stated
+data/input boundaries. Native build parity, resource reservation, conversion receivers,
+additional skills and minion actors still require their own differential validation.
