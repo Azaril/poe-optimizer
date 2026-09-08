@@ -38,8 +38,10 @@ All 14 currently missing targets are also absent as top-level node records in ev
 
 ## Ascendancy components and separate point budgets
 
-The separate ascendancy trees are expected. All **23** ascendancies in the pinned catalog
-resolve to valid roots, including the shared Lich/Abyssal Lich location. Their allocations
+Ascendancies have separate allocation roots and point allowances. They are not necessarily
+separate connected components of the raw `linkedId` graph: that graph includes class-to-
+ascendancy connectors even when they are not drawn. All **23** ascendancies in the pinned
+catalog resolve to valid roots, including the shared Lich/Abyssal Lich location. Their allocations
 are validated from the selected ascendancy's root, with its own allowance; they do not
 need a paid path through ordinary nodes. The selected class root and ascendancy root are
 implicit and cannot be submitted as paid allocations.
@@ -59,6 +61,27 @@ that were merely omitted from an ordinary-tree traversal. The fact that they all
 at class starts makes filtered ascendancy data a plausible explanation, but does not prove
 their identities. Retain them as source-coverage diagnostics; do not join separate trees,
 spend ordinary points on ascendancies, or fabricate missing nodes to eliminate the warning.
+
+## Six isolated ordinary notables in the broader corpus
+
+The 2026-09-08 [breadth inventory](breadth-mechanism-inventory.md) finds six ordinary
+notables in build 1 without an ordinary allocated path: **338 Invocated Limit, 8483 Ruin,
+47441 Stigmata, 49088 Splintering Force, 55180 Relentless Fallen and 59387 Infusion of Power**.
+These are present in the full pinned tree and are not ascendancy allocations or missing
+node definitions.
+
+Fresh original-PoB MAIN state preserves all six as allocated, with `connectedToStart=false`
+and `intuitiveLeapLikesAffecting=[7960]`. Socket 7960 contains item 16, **From Nothing
+(Diamond)**, whose `fromNothingKeystone` is `ritual cadence`. Its small-radius provider
+permits those allocations without an ordinary path. The separate Time-Lost jewel at socket
+61419 overlaps one of them; it is not the shared provider for all six.
+
+The native legality model must resolve the enabling item/radius provider before applying
+ordinary connectivity rules, and revalidate allocations if that provider changes. The
+observed relationship does not by itself establish point entitlement or complete game
+legality. None of the five corpus builds allocates any of the 14 source-missing target IDs.
+Local provenance and node/provider details are retained in
+`runs/breadth-passives-inventory.json` and `runs/breadth-dependencies-analysis-3/summary.json`.
 
 ## Likely source of the dangling references, and limits
 

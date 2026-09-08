@@ -217,22 +217,31 @@ list and executable/backend paths explicitly. The output must be a new directory
 existing parent. For example, after building a CLI with the optional PoB backend:
 
 ```powershell
-python scripts/intake-build-corpus.py --input example.import.txt --output runs/breadth-check --import-cli target/debug/poe-optimizer.exe --backend native=target/debug/poe-optimizer.exe --backend pob=target/debug/poe-optimizer.exe --pob vendor/path-of-building-poe2 --inspect-configuration --jobs 2 --deadline-seconds 600
+python scripts/intake-build-corpus.py --input example.import.txt --output runs/breadth-check --import-cli target/debug/poe-optimizer.exe --backend native=target/debug/poe-optimizer.exe --backend pob=target/debug/poe-optimizer.exe --pob vendor/path-of-building-poe2 --inspect-build --with-definitions --jobs 2 --deadline-seconds 600
 python scripts/test_intake_build_corpus.py
 ```
 
-`--data` and `--options` select caller-supplied native data and evaluation assumptions;
-`--data-sha256` retains the native CLI's external review digest contract. Every source line,
+`--data` selects caller-supplied definitions for build inspection and the native backend;
+`--options` selects evaluation assumptions. `--data-sha256` retains the CLI's external
+review digest contract for the selected snapshot. Every source line,
 including blank lines and original line endings, is preserved with byte offsets and hashes.
 The index retains saved skill/item/tree/config set identity, independent backend results,
 exact raw reports and exported XML. It never fills a failed entry with a fixture.
 
-Optional `--inspect-configuration` calls the explicitly selected import CLI for source
-inspection before independent backend evaluations. Manifest schema 2 records whether it was
-requested, raw report hashes, exact commands and validated per-set source counts. The ordinary XML
-summary labels its attributes as standard-XML-normalized; use the configuration projection
-for PoB source values. Inspector failures remain separate from numerical backend outcomes;
-changed decoded XML is rejected before it can be evaluated as the original import.
+Optional `--inspect-build` calls the explicitly selected import CLI to retain source sections,
+configuration and every authored skill occurrence before independent backend evaluations.
+Add `--with-definitions` for bundled identity lookup or `--data PACKAGE` for the selected
+snapshot; `--data` also enables lookup. Source inspection without either flag loads no data.
+`--inspect-configuration` remains available for a separate configuration-only report.
+
+Manifest schema 3 records which inspections were requested, raw report hashes, exact commands
+and validated occurrence/identity counts. It checks source ranges, container/set/group
+ownership, duplicate or omitted lookup records, selected data identity and explicit
+non-evaluation labels. Local projection failures remain in the full raw reports. The ordinary
+XML summary labels its attributes as standard-XML-normalized; use the source projection for
+PoB values. Inspector failures remain separate from numerical backend outcomes; changed
+decoded XML stops subsequent inspection and evaluation. These are report-consistency checks,
+not proof of game mechanics or native admission.
 
 Exit 0 means the requested observations completed, not numerical parity or certified legality.
 Exit 1 retains per-entry/backend failures or changed-input evidence; exit 2 is a setup error.
@@ -366,6 +375,14 @@ admitted. Comparison evidence is `runs/skill-source-breadth-comparison.json`.
 A repeated production-path review found no fixture or skill-name dispatch in inspection:
 the required caller input and selected portable catalog supply every source/identity result.
 The remaining Spark/Mace calculation dispatch is explicitly B3 work. The shared model
-proposal remains under discussion before that migration; B2 still needs modifier, passive,
-condition, actor/grant and dependency coverage, and B4 still needs independent whole-build
-holdouts across the planned mechanic families.
+proposal remains under discussion before that migration. The subsequent
+[mechanism inventory](breadth-mechanism-inventory.md) covers all 116 authored items, 16
+passive specs and fresh MAIN actor/grant/dependency state. B2 still needs the complete native
+capability matrix for those records, and B4 still needs independent whole-build holdouts
+across the planned mechanic families.
+
+The schema-3 runner checkpoint at `runs/breadth-mechanisms-corpus/index.json` successfully
+inspects all five originals and repeats all 110 reference measurements with unchanged
+build/context evidence. Fifteen runner tests cover transport, source preservation, nested
+selectors, data provenance and independent failures. The mixed run exits 1 because all five
+native exclusions remain. See the living plan for current publication evidence.

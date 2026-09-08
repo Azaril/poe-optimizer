@@ -6,6 +6,11 @@ and [configuration catalog](configuration-data-proposal.md). It does not add mec
 coverage or admit the five supplied originals. The [implementation record](implementation.md)
 remains the authority for delivered capabilities and the next resume point.
 
+The subsequent [whole-corpus mechanism inventory](breadth-mechanism-inventory.md) adds
+item-range loading, allocation-provider, parent-actor and conditional receiver evidence to
+this proposal. It does not change the proposal's approval status or claim broader native
+calculation support.
+
 ## Recommendation
 
 Introduce a portable build-instance model between source projection and native preparation.

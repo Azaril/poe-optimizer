@@ -1,5 +1,6 @@
 """Standard-library contract checks for caller-controlled corpus observations."""
 import contextlib
+import copy
 import hashlib
 import importlib.util
 import io
@@ -34,6 +35,55 @@ def configuration_report(xml):
                                              "active_set_resolution": "default_one",
                                              "sets": [{"id": 1, "inputs": [], "placeholders": [],
                                                        "blocks": [], "unknown_records": []}]}}}
+
+
+BUILD_XML = b"<PathOfBuilding2><Skills><SkillSet id='9'><Skill label='caller'><Gem nameSpec='Caller'/></Skill></SkillSet></Skills></PathOfBuilding2>"
+DATA_HASH = "a" * 64
+
+
+def build_report(xml=BUILD_XML, definitions=False):
+    def span(start, end):
+        return {"start": start, "end": end}
+    def node(tag, role, children):
+        start = xml.index(("<" + tag).encode())
+        opening_end = xml.index(b">", start) + 1
+        end = (opening_end if xml[opening_end - 2:opening_end] == b"/>" else
+               xml.index(("</" + tag + ">").encode(), start) + len(tag) + 3)
+        return {"element": {"name": tag, "source_range": span(start, end)},
+                "source_use": role, "children": children}
+    gem = node("Gem", "gem_instance", [])
+    group = node("Skill", "group", [gem])
+    # '<Skill' is also a prefix of '<Skills' and '<SkillSet'. Use its unique spelling.
+    group["element"]["source_range"]["start"] = xml.index(b"<Skill label")
+    saved = node("SkillSet", "saved_set", [group])
+    container = node("Skills", "container", [saved])
+    config = configuration_report(xml)
+    result = {**config, "scope": "build_source_projection_v1",
+              "configuration": {"status": "source_projected", "projection": config["configuration"]},
+              "build": {"source_sha256": config["input"]["xml_sha256"],
+                        "root": {"source_range": span(0, len(xml))},
+                        "sections": [{"kind": "skills", "element": container["element"]}]},
+              "skills": {"status": "source_projected",
+                         "projection": {"source_sha256": config["input"]["xml_sha256"],
+                                        "containers": [container]}}}
+    result["verification"].update(calculation_context="not_resolved", native_admission="not_checked")
+    if definitions:
+        data = {"content_sha256": DATA_HASH, "game": "poe2", "schema_version": 13}
+        trust = {"status": "custom_unreviewed"}
+        lookup = {"schema_version": 1, "source_xml_sha256": config["input"]["xml_sha256"],
+                  "interpretation": "authored_identity_before_socket_group_processing",
+                  "data": data, "data_trust": trust, "active_set_selection": "not_resolved",
+                  "actor_resolution": "not_resolved", "name_matching": "not_run",
+                  "socket_group_processing": "not_run", "game_mechanics": "not_evaluated",
+                  "records": [{"container_index": 0,
+                               "set_source_range": saved["element"]["source_range"],
+                               "group_source_range": group["element"]["source_range"],
+                               "record": {"kind": "instance", "lookup": {
+                                   "source_range": gem["element"]["source_range"],
+                                   "resolution": {"kind": "name_only_not_resolved"}}}}]}
+        result["definition_lookup"] = {"data": data, "data_trust": trust,
+            "game_mechanics": "not_evaluated", "skills": {"status": "looked_up", "lookup": lookup}}
+    return result
 
 
 class CorpusTests(unittest.TestCase):
@@ -202,7 +252,7 @@ class CorpusTests(unittest.TestCase):
                 with patch.object(INTAKE, "invoke", side_effect=fake_invoke), contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(INTAKE.main(args), 0 if outcome == "success" else 1)
                 index = json.loads((output / "index.json").read_bytes())
-                self.assertEqual(index["schema_version"], 2)
+                self.assertEqual(index["schema_version"], 3)
                 self.assertTrue(index["configuration_inspection_requested"])
                 entry = index["entries"][0]
                 self.assertEqual(entry["status"], "imported")
@@ -302,6 +352,179 @@ class CorpusTests(unittest.TestCase):
                 else:
                     self.assertEqual(target.read_bytes(), changed)
                     self.assertEqual(entry["configuration"]["source_after_inspection_sha256"], hashlib.sha256(changed).hexdigest())
+
+
+    def test_full_build_source_counts_keep_saved_occurrences_and_data_identity_separate(self):
+        for definitions in [False, True]:
+            report = build_report(definitions=definitions)
+            summary = INTAKE.build_source_summary(report, hashlib.sha256(BUILD_XML).hexdigest(),
+                                                  len(BUILD_XML), definitions, DATA_HASH if definitions else None)
+            self.assertEqual(summary["sections"], {"skills": 1})
+            self.assertEqual(summary["skill_source_counts"],
+                             {"container": 1, "saved_set": 1, "group": 1, "gem_instance": 1})
+            if definitions:
+                self.assertEqual(summary["skill_identity_counts"], {"name_only_not_resolved": 1})
+                self.assertEqual(summary["data_identity_check"], "selected_snapshot")
+            else:
+                self.assertNotIn("data", summary)
+        report = build_report(definitions=True)
+        report["configuration"] = {"status": "not_projected", "error": {"reason": "unknown scalar"}}
+        summary = INTAKE.build_source_summary(report, hashlib.sha256(BUILD_XML).hexdigest(), len(BUILD_XML), True, None)
+        self.assertEqual(summary["configuration_status"], "not_projected")
+        self.assertEqual(summary["data_identity_check"], "reported_by_inspector")
+        report["skills"] = {"status": "not_projected", "error": {"reason": "bound"}}
+        report["definition_lookup"]["skills"] = {"status": "not_looked_up", "source_error": {"reason": "bound"}}
+        summary = INTAKE.build_source_summary(report, hashlib.sha256(BUILD_XML).hexdigest(), len(BUILD_XML), True, None)
+        self.assertEqual(summary["skill_identity_status"], "not_looked_up")
+        self.assertNotIn("skill_identity_counts", summary)
+
+    def test_nested_selectors_retain_duplicate_occurrences_without_becoming_gem_instances(self):
+        selectors = [b"<StatSetIndex skillId='same' index='1'/>",
+                     b"<StatSetIndex skillId='same' index='2'/>",
+                     b"<MinionSkillIndexLookup skillId='missing'/>"]
+        xml = BUILD_XML.replace(b"<Gem nameSpec='Caller'/>",
+                                b"<Gem nameSpec='Caller'>" + b"".join(selectors) + b"</Gem>")
+        report = build_report(xml, definitions=True)
+        gem = report["skills"]["projection"]["containers"][0]["children"][0]["children"][0]["children"][0]
+        records = report["definition_lookup"]["skills"]["lookup"]["records"]
+        for index, source in enumerate(selectors):
+            start = xml.index(source)
+            bounds = {"start": start, "end": start + len(source)}
+            role = "main_stat_set_selection" if index < 2 else "main_minion_lookup"
+            gem["children"].append({"element": {"source_range": bounds},
+                                    "source_use": role, "children": []})
+            record = {**records[0], "record": {"kind": "effect_selection", "lookup": {
+                "source_range": bounds, "source_use": role,
+                "matched": {"effect_id": "same"} if index < 2 else None}}}
+            records.append(record)
+        xml_hash = hashlib.sha256(xml).hexdigest()
+        summary = INTAKE.build_source_summary(report, xml_hash, len(xml), True, DATA_HASH)
+        self.assertEqual(summary["skill_source_counts"]["gem_instance"], 1)
+        self.assertEqual(summary["skill_identity_counts"], {"name_only_not_resolved": 1,
+                         "effect_selection_resolved": 2, "effect_selection_unresolved": 1})
+        # Same effect ID is still two authored occurrences; dropping either loses evidence.
+        missing = copy.deepcopy(report)
+        missing["definition_lookup"]["skills"]["lookup"]["records"].pop(1)
+        with self.assertRaisesRegex(ValueError, "omitted an authored"):
+            INTAKE.build_source_summary(missing, xml_hash, len(xml), True, DATA_HASH)
+        records[-1]["record"]["lookup"]["source_use"] = "calcs_minion_lookup"
+        with self.assertRaisesRegex(ValueError, "differs from source role"):
+            INTAKE.build_source_summary(report, xml_hash, len(xml), True, DATA_HASH)
+
+    def test_build_source_contract_rejects_loss_wrong_ownership_and_mechanic_overclaims(self):
+        def records(r): return r["definition_lookup"]["skills"]["lookup"]["records"]
+        mutations = [
+            lambda r: r.update(schema_version=True),
+            lambda r: r["input"].update(xml_sha256="0" * 64),
+            lambda r: r["input"].update(xml_bytes=True),
+            lambda r: r["verification"].update(native_admission="verified"),
+            lambda r: r["build"].update(sections=[]),
+            lambda r: r["skills"]["projection"].update(containers=[]),
+            lambda r: r["skills"]["projection"]["containers"].append(r["skills"]["projection"]["containers"][0]),
+            lambda r: r["definition_lookup"]["skills"]["lookup"].update(records=[]),
+            lambda r: records(r).append(copy.deepcopy(records(r)[0])),
+            lambda r: records(r)[0].update(container_index=True),
+            lambda r: records(r)[0].update(set_source_range=None),
+            lambda r: records(r)[0]["record"]["lookup"].update(source_range={"start": 0, "end": 1}),
+            lambda r: r["definition_lookup"]["skills"]["lookup"].update(actor_resolution="resolved"),
+            lambda r: r["definition_lookup"]["skills"]["lookup"].update(data={"content_sha256": "b" * 64}),
+            lambda r: records(r)[0]["record"]["lookup"].update(resolution={"kind": "external_gem", "status": "exact", "candidates": []}),
+            lambda r: records(r)[0]["record"]["lookup"].update(resolution={"kind": "external_gem", "status": "ambiguous", "candidates": [{}]}),
+            lambda r: r["configuration"].update(status="future"),
+        ]
+        for index, mutation in enumerate(mutations):
+            report = build_report(definitions=True)
+            mutation(report)
+            with self.subTest(mutation=index), self.assertRaises((ValueError, KeyError, TypeError)):
+                INTAKE.build_source_summary(report, hashlib.sha256(BUILD_XML).hexdigest(), len(BUILD_XML), True, DATA_HASH)
+        for definitions, report in [(False, build_report(definitions=True)), (True, build_report())]:
+            with self.assertRaisesRegex(ValueError, "presence"):
+                INTAKE.build_source_summary(report, hashlib.sha256(BUILD_XML).hexdigest(), len(BUILD_XML), definitions, None)
+        with self.assertRaisesRegex(ValueError, "different data"):
+            INTAKE.build_source_summary(build_report(definitions=True), hashlib.sha256(BUILD_XML).hexdigest(), len(BUILD_XML), True, "f" * 64)
+
+    def test_build_inspection_command_and_failure_are_independent_of_backend_results(self):
+        for outcome in ["success", "process_error", "wrong_hash", "wrong_data"]:
+            with self.subTest(outcome=outcome), tempfile.TemporaryDirectory() as name:
+                root = Path(name)
+                source = root / "caller.imports"
+                source.write_bytes(b"caller\n")
+                data = root / "caller-data.json"
+                data.write_bytes(b'{"caller":"data"}')
+                expected_data_hash = hashlib.sha256(data.read_bytes()).hexdigest()
+                output = root / "observations"
+                calls = []
+                def fake_invoke(command, directory, prefix, workdir, deadline, timeout):
+                    calls.append(prefix)
+                    if prefix == "import":
+                        Path(command[command.index("--output") + 1]).write_bytes(BUILD_XML)
+                        value = {"xml_sha256": hashlib.sha256(BUILD_XML).hexdigest()}
+                    elif prefix == "build_source":
+                        self.assertEqual(command[1], "inspect-build")
+                        self.assertIn("--with-definitions", command)
+                        self.assertEqual(Path(command[command.index("--data") + 1]).read_bytes(), data.read_bytes())
+                        self.assertEqual(command[command.index("--data-sha256") + 1], expected_data_hash)
+                        if outcome == "process_error": return {"status": "process_error", "exit_code": 1}
+                        value = build_report(definitions=True)
+                        value["definition_lookup"]["data"]["content_sha256"] = expected_data_hash if outcome != "wrong_data" else "b" * 64
+                        if outcome == "wrong_hash": value["input"]["xml_sha256"] = "0" * 64
+                    else:
+                        Path(command[command.index("--export") + 1]).write_bytes(BUILD_XML)
+                        value = {"evaluation": {"backend": {"id": prefix}, "build": {}, "coverage": {}, "measurements": []}}
+                    (directory / f"{prefix}.stdout").write_text(json.dumps(value), encoding="utf-8")
+                    return {"status": "success", "exit_code": 0}
+                args = ["--input", str(source), "--output", str(output), "--import-cli", sys.executable,
+                        "--backend", f"pob={sys.executable}", "--pob", str(root), "--deadline-seconds", "30",
+                        "--inspect-build", "--with-definitions", "--data", str(data), "--data-sha256", expected_data_hash]
+                with patch.object(INTAKE, "invoke", side_effect=fake_invoke), contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(INTAKE.main(args), 0 if outcome == "success" else 1)
+                index = json.loads((output / "index.json").read_bytes())
+                self.assertEqual(index["schema_version"], 3)
+                self.assertTrue(index["build_inspection_requested"])
+                self.assertTrue(index["definition_lookup_requested"])
+                self.assertEqual(calls, ["import", "build_source", "pob"])
+                self.assertEqual(index["entries"][0]["evaluations"]["pob"]["status"], "success")
+                self.assertEqual(source.read_bytes(), b"caller\n")
+
+    def test_changed_build_inspection_source_stops_remaining_inspection_and_evaluations(self):
+        for changer in ["configuration", "build_source"]:
+            with self.subTest(changer=changer), tempfile.TemporaryDirectory() as name:
+                root = Path(name)
+                source = root / "caller.imports"
+                source.write_bytes(b"caller\n")
+                calls = []
+                def fake_invoke(command, directory, prefix, workdir, deadline, timeout):
+                    calls.append(prefix)
+                    if prefix == "import":
+                        Path(command[command.index("--output") + 1]).write_bytes(BUILD_XML)
+                        value = {"xml_sha256": hashlib.sha256(BUILD_XML).hexdigest()}
+                    elif prefix in {"configuration", "build_source"}:
+                        if prefix == changer: Path(command[2]).write_bytes(b"<PathOfBuilding2/>")
+                        value = configuration_report(BUILD_XML) if prefix == "configuration" else build_report()
+                    else:
+                        self.fail("changed source must never reach evaluation")
+                    (directory / f"{prefix}.stdout").write_text(json.dumps(value), encoding="utf-8")
+                    return {"status": "success", "exit_code": 0}
+                args = ["--input", str(source), "--output", str(root / "output"), "--import-cli", sys.executable,
+                        "--backend", f"native={sys.executable}", "--deadline-seconds", "30",
+                        "--inspect-configuration", "--inspect-build"]
+                with patch.object(INTAKE, "invoke", side_effect=fake_invoke), contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(INTAKE.main(args), 1)
+                index = json.loads((root / "output/index.json").read_bytes())
+                self.assertEqual(index["entries"][0]["evaluations"]["native"]["status"], "source_changed")
+                self.assertEqual(calls, ["import", "configuration"] if changer == "configuration" else
+                                 ["import", "configuration", "build_source"])
+
+    def test_definition_lookup_requires_explicit_build_inspection(self):
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            source = root / "caller.imports"
+            source.write_bytes(b"caller\n")
+            args = ["--input", str(source), "--output", str(root / "output"), "--import-cli", sys.executable,
+                    "--backend", f"native={sys.executable}", "--deadline-seconds", "30", "--with-definitions"]
+            with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                INTAKE.parse_args(args)
+            self.assertFalse((root / "output").exists())
 
 
 

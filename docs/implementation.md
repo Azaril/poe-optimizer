@@ -2,14 +2,21 @@
 
 Last updated: 2026-09-08
 
-Current checkpoint: **skill source projection and injected identity catalogs**, implemented;
-locally validated and published as `19666a0ad754ac5514553a71138a568729022d2e` on main.
+Current checkpoint: **breadth mechanism inventory and reusable corpus inspection**, locally
+validated and ready for publication, including the CI diagnostic tooling checks below. All five
+caller builds retain their complete authored inputs and repeat the reference measurements.
+The inventory identifies shared item, allocation-provider, actor and condition dependencies;
+no additional complete build is admitted by native evaluation. See the
+[mechanism inventory](breadth-mechanism-inventory.md) and current checkpoint below.
+
+The preceding **skill source projection and injected identity catalogs** checkpoint is
+published as `19666a0ad754ac5514553a71138a568729022d2e` on main, with resume update `7318300`.
 [Exact-code CI run 34257699126](https://github.com/Azaril/poe-optimizer/actions/runs/34257699126)
-is in progress; no hosted pass is claimed. The source/catalog CLI
-preserves all saved skill occurrences and uses selected data for exact, fallback, ambiguous
-or unresolved identity evidence. Independent original-source comparisons pass for all
-constructed identities and all five supplied builds. No additional build is claimed as
-native-supported. See the current checkpoint below and the
+completed with Linux failure and Windows cancellation. Its actual failing assertion is not
+available through the current public API/browser access; additional local checks pass.
+Its local validation remains recorded below. The source/catalog CLI preserves all saved occurrences
+and uses selected data for exact, fallback, ambiguous or unresolved identity evidence.
+No additional build is claimed as native-supported. See the
 [skill source contract](skill-source-and-identities.md).
 
 The preceding checkpoint, **source build containers and shared MAIN admission**, implemented;
@@ -134,8 +141,10 @@ the design documents.
    mechanism inventory beyond configuration. [Source containers](build-source-containers.md)
    now preserve and narrowly admit inert Import/Party/Calcs/TreeView metadata. All five
    originals next encounter the one-Skill/one-SkillSet profile limits. Complete the B2
-   instance/grant/actor/dependency inventory (the skill/source portion is recorded below)
-   and the [skill source/catalog boundary](skill-source-and-identities.md). Its source and
+   capability classification using the [mechanism inventory](breadth-mechanism-inventory.md)
+   and the [skill source/catalog boundary](skill-source-and-identities.md). The latest audit
+   covers all 116 items, 16 passive specs and fresh MAIN actor/grant/dependency relationships;
+   the full native supported/unsupported/unresolved matrix is still open. Its source and
    identity portion now preserves all 15 saved sets, 200 groups and 541 occurrences, with
    independent original-source construction and lookup tests. Effective name/socket-group,
    grant, actor and selected-action resolution remain open. Review
@@ -174,6 +183,66 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Breadth mechanism inventory and corpus integration - validation checkpoint
+
+The preceding goal turn made concrete progress: code `19666a0` and resume update `7318300`
+are published. This continuation began with a clean main worktree. The full native-parity
+goal remains active and incomplete. The existing B3 architecture question remains pending;
+this checkpoint implements independent corpus tooling and evidence, without changing the
+actor/action/candidate architecture.
+
+The [mechanism inventory](breadth-mechanism-inventory.md) now records all **116 authored
+items, 15 item sets, 486 modifier-range records and 16 passive specs**. Three independent
+audits bind item/source parsing, full-tree lookups and fresh MAIN actors/dependencies to
+the original inputs and pinned data. All 1,369 authored node occurrences are accounted for:
+549 supported native node views, 788 excluded views and 32 implicit roots. These are
+node lookups, not complete-build admission or legality.
+
+The six isolated ordinary notables in build 1 are linked by the live reference to the
+**From Nothing jewel at socket 7960**. They are separate from ascendancy roots/budgets and
+from the 14 source-missing targets; none of the five builds allocates a missing target.
+The source graph includes class-to-ascendancy connectors, so raw component counts do not
+define point categories. See the [topology investigation](tree-topology-investigation.md).
+
+Fresh MAIN captures retain **94 prepared player actions, 25 minion representations, 68
+minion actions, 14 item/tree grant links, 310 applied-support links, 47 constructed buffs
+and one explicit trigger binding**. Conditional records are not automatically active
+contributions. Five unique source-unknown passive IDs have empty actual parsed/final
+modifier lists; that narrow source limitation remains distinct from missing Rust mechanics.
+
+The reusable corpus runner now has `--inspect-build` and `--with-definitions`, using the
+caller-selected import CLI and optional data snapshot. Manifest schema 3 retains source,
+configuration, skill occurrence and identity counts alongside independent backend outcomes.
+It checks input/data identities, source ownership, complete occurrence coverage and explicit
+non-evaluation labels. Inspection failures stay separate; changed XML stops later work.
+
+| Gate | Current result / evidence |
+| --- | --- |
+| Runner contract | **15 Python tests pass**, including unchanged-source/data bindings, independent failures and duplicate nested selectors. `runs/breadth-runner-source-tests-final.log`. |
+| Real corpus | All five `inspect-build` reports succeed: **15 skill sets / 200 groups / 541 gems**, **537 exact external IDs + 1 explicit effect + 3 unprocessed names**. All **110** prior reference measurements and build/context evidence repeat exactly. Existing five native rejections remain; mixed-run exit 1 is expected. `runs/breadth-mechanisms-corpus-validation.json`. |
+| Item/passive audits | All saved sets/specs retained; item audit reproduces byte-for-byte. Source and provider identities remain explicit in `runs/breadth-items-inventory.json` and `runs/breadth-passives-inventory.json`. |
+| Independent MAIN audit | Five fresh original-source snapshots match previous build/player/minion/context/coverage/warnings, including float bits. Final captures `runs/breadth-dependencies-reference-4/index.json`; analysis and preservation `runs/breadth-dependencies-analysis-3/`. |
+| Review | Independent script review found no blocker. Factual review corrected interleaved item-processing order and clarified that support/buff totals cover all prepared actions in active MAIN environments. |
+| Additional local CI diagnosis | Complete PoB unit target: **60 pass**, three ignored child helpers; existing source data oracles: **19 pass**. Extraction CLI: **3 pass** even with this test process restricted to two logical CPUs; original affinity restored. No failure reproduced and no speculative Rust/timeout change made. `runs/breadth-ci-pob-library.log`, `runs/breadth-ci-pob-data-oracles.log`, `runs/breadth-ci-extraction-two-cpus.json`. |
+| Prior hosted CI | Exact-code run **34257699126** failed on Linux; Windows was cancelled. Public metadata exposes only exit 101. The actual assertion remains unknown; a request for that log is pending. `runs/breadth-mechanisms-prior-ci-final.json`. |
+| Static preservation | Six changed Markdown files pass UTF-8 checks; 190 local links and 17 heading targets resolve. Caller inputs, numerical goldens, data and pinned source are preserved; final CI workflow changes are checked separately. `runs/breadth-mechanisms-static-validation.json`. |
+| CI diagnostic tooling | Both Cargo test commands retain streaming output and exact exit codes while publishing a bounded failure tail. Three subprocess checks pass for exits 0/7/7, stdout/stderr streaming, 120-line / 16,000-character bounds and annotation escaping. Matrix fail-fast is disabled so each platform retains its outcome. `runs/ci-annotation-wrapper-validation.json`. |
+| Publication | Locally validated and ready to publish. The prior hosted failure remains explicitly unresolved; the next exact-code run must be inspected. |
+
+The full checkpoint evidence is `runs/breadth-mechanisms-validation-summary.json`.
+CI diagnostic work adds bounded public failure annotations and independent platform outcomes;
+it does not repair or reinterpret the earlier unknown failure. Stored-credential access was
+rejected by automatic approval review; it was not retried. Normal browser initialization
+also failed, and public job metadata does not include the assertion. Use user-provided logs
+or the next run's annotations for a concrete repair.
+
+Next resume point: inspect the new hosted run and resolve any failure, then finish B2's native capability matrix for
+the retained modifier/dependency records and plan B4 whole-build holdouts. Item source/load
+instructions and injected parsing data can proceed independently of the pending
+[shared actor/action model discussion](general-build-input-proposal.md). Do not begin its
+architecture migration until that direction is settled. General build support, broad
+held-out numerical parity and realistic parallel search benchmarks remain unfinished.
 
 ## Skill source projection and identity catalogs — validation checkpoint
 
@@ -220,7 +289,7 @@ JSON values and digests, and the separate tree bytes, remain unchanged.
 | Breadth | All five source/identity inspections pass: **537 exact external matches, one explicit effect and three name-only records left unresolved before processing**. All 110 fresh reference measurement records, build/context evidence and original XMLs exactly repeat the prior corpus. Native still rejects one-Skill/one-SkillSet layouts. |
 | Integration gates | Workspace and native-only strict Clippy, formatting, five portable WASM libraries and the no-PoB/no-Lua native normal dependency graph pass. UTF-8 and modified-document links pass. This is **358 affected workspace-target tests**, plus the separate 107 native-only tests; no new full-workspace test run is claimed. |
 | Preservation | All 22 old section raw JSON values/digests, 47 checked tracked files, six independent reference JSON goldens, both user input files and tree/source inventories are preserved. The pinned submodule remains clean. |
-| Publication | Code `19666a0ad754ac5514553a71138a568729022d2e` is pushed to `origin/main`. [Exact-code CI 34257699126](https://github.com/Azaril/poe-optimizer/actions/runs/34257699126) is in progress; no hosted pass is claimed. |
+| Publication | Code `19666a0ad754ac5514553a71138a568729022d2e` is pushed to `origin/main`. [Exact-code CI 34257699126](https://github.com/Azaril/poe-optimizer/actions/runs/34257699126) later failed on Linux; Windows was cancelled. Diagnosis is recorded in the current checkpoint. |
 
 Consolidated evidence: `runs/skill-source-validation-summary.json`,
 `runs/skill-catalog-preservation.json`, `runs/skill-source-identity-corpus/index.json`,
@@ -734,7 +803,10 @@ its game effects. The complete injected catalog and data-bound inspection are de
   alternate saved set as an independent held-out build. Investigate the existing three
   unresolved entries in line 1 against the pinned reference before inventing replacements.
   The configuration catalog, root-container, complete skill identity and three-label audits are now recorded in
-  [breadth validation](breadth-validation.md); the rest of this inventory remains open.
+  [breadth validation](breadth-validation.md). The subsequent
+  [mechanism inventory](breadth-mechanism-inventory.md) covers all saved equipment/passive
+  sets and fresh MAIN grants, actors, support links, allocation providers and conditional
+  records. Complete native capability classification for those records remains open.
 - [ ] **B3 — general build-input seam review.** Audit hard-coded fixture inputs, closed
   Spark/Mace admission, skill IDs, level restrictions and implicit player-only assumptions.
   Normal evaluate/search already load caller files, but that alone does not establish
@@ -760,8 +832,8 @@ its game effects. The complete injected catalog and data-bound inspection are de
   support/equipment/passive deltas. Check ordinary and ascendancy paths from their separate
   roots with independent point budgets; starts are implicit and cannot spend the other's
   points. Preserve weapon-set and exceptional-allocation provenance. Report source-missing
-  node targets separately from a valid disconnected ascendancy component and from candidate
-  paths disconnected by a mutation. Fresh realized output must match the intended candidate.
+  node targets separately from semantic ascendancy roots, item-enabled radius allocations
+  and candidate paths disconnected by a mutation. Fresh realized output must match the intended candidate.
 - [ ] **B6 — coverage-led delivery and performance gates.** Rank shared dependencies by the
   number and variety of corpus builds they unblock, rather than adding isolated skill
   profiles. Track admitted/unsupported builds and available metrics alongside parity results.
@@ -779,7 +851,9 @@ reported unavailable/nonfinite outcomes, exact realization, and useful parallel 
 The [tree investigation](tree-topology-investigation.md#ascendancy-components-and-separate-point-budgets)
 confirms all 23 catalogued ascendancies have roots. The 14 existing warnings concern IDs
 absent from source, not the ordinary/ascendancy point split. Their individual identities
-remain unproven; no synthetic reconnection is planned.
+remain unproven; no synthetic reconnection is planned. The corpus's six ordinary singleton
+notables have observed From Nothing radius-provider links; their legality must retain that
+item dependency and a separate point-budget check.
 
 ## Local armour equipment and rating objectives - implementation checkpoint
 

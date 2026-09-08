@@ -186,6 +186,205 @@ def configuration_source_summary(report: dict, expected_hash: str, expected_byte
             "verification": verification}
 
 
+def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
+                         definitions_requested: bool, expected_data_hash: str | None) -> dict:
+    """Validate source/lookup transport and summarize occurrences, not game support.
+
+    Original Rust/Lua tests establish reader semantics. This check binds captured
+    reports to this invocation and prevents a lost/duplicated instance or a new
+    calculation claim from becoming a successful corpus observation.
+    """
+    def mapping(value, label):
+        if not isinstance(value, dict):
+            raise ValueError(f"{label} must be an object")
+        return value
+
+    def array(value, limit, label):
+        if not isinstance(value, list) or len(value) > limit:
+            raise ValueError(f"{label} must be a bounded array")
+        return value
+
+    def number(value, lower, upper, label):
+        if type(value) is not int or not lower <= value <= upper:
+            raise ValueError(f"{label} must be a bounded integer")
+        return value
+
+    def source_range(value):
+        value = mapping(value, "source range")
+        start = number(value["start"], 0, expected_bytes, "range start")
+        end = number(value["end"], start + 1, expected_bytes, "range end")
+        return start, end
+
+    def label(value):
+        if not isinstance(value, str) or not value or len(value) > 128:
+            raise ValueError("invalid source/identity classification")
+        return value
+
+    def require(values, expected, context):
+        mapping(values, context)
+        for key, value in expected.items():
+            if type(values.get(key)) is not type(value) or values[key] != value:
+                raise ValueError(f"{context} must declare {key}={value}")
+
+    require(report, {"schema_version": 1, "scope": "build_source_projection_v1",
+                     "status": "source_projected"}, "build report")
+    require(report["input"], {"format": "raw_xml", "input_sha256": expected_hash,
+                              "xml_sha256": expected_hash, "input_bytes": expected_bytes,
+                              "xml_bytes": expected_bytes}, "build input")
+    verification = report["verification"]
+    require(verification, {"calculation_context": "not_resolved",
+                           "effective_configuration": "not_evaluated", "game_mechanics": "not_evaluated",
+                           "build_legality": "not_checked", "native_admission": "not_checked",
+                           "reference_calculation": "not_run"}, "build verification")
+    build = mapping(report["build"], "build projection")
+    require(build, {"source_sha256": expected_hash}, "build projection")
+    root_range = source_range(build["root"]["source_range"])
+    section_counts, skill_container_ranges = {}, []
+    previous_section = root_range[0]
+    for section in array(build["sections"], 128, "build sections"):
+        bounds = source_range(section["element"]["source_range"])
+        if not root_range[0] < bounds[0] < bounds[1] < root_range[1]:
+            raise ValueError("section source range is outside root")
+        if bounds[0] < previous_section:
+            raise ValueError("build sections overlap or lost source order")
+        previous_section = bounds[1]
+        if section["element"].get("name") == "Skills":
+            skill_container_ranges.append(bounds)
+        kind = label(section["kind"])
+        section_counts[kind] = section_counts.get(kind, 0) + 1
+    result = {"report_schema_version": 1, "source_xml_sha256": expected_hash,
+              "sections": section_counts, "verification": verification,
+              "implementation_sha256": report.get("implementation_sha256")}
+    configuration = mapping(report["configuration"], "configuration result")
+    result["configuration_status"] = configuration["status"]
+    if configuration["status"] == "source_projected":
+        config_report = {**report, "scope": "configuration_source_projection_v1",
+                         "configuration": configuration["projection"]}
+        result["configuration_source_state"] = configuration_source_summary(
+            config_report, expected_hash, expected_bytes)["source_state"]
+    elif configuration["status"] != "not_projected" or not isinstance(configuration.get("error"), dict):
+        raise ValueError("unknown configuration projection outcome")
+    skills = mapping(report["skills"], "skills")
+    result["skills_status"] = skills["status"]
+    locations, counts, selection_ranges = {}, {}, set()
+    if skills["status"] == "source_projected":
+        projection = mapping(skills["projection"], "skill projection")
+        require(projection, {"source_sha256": expected_hash}, "skill projection")
+        remaining = 32768
+        def visit(node, container, parent_range, saved_set, group, depth):
+            nonlocal remaining
+            remaining -= 1
+            if remaining < 0 or depth > 32:
+                raise ValueError("skill source node/depth bound exceeded")
+            bounds = source_range(node["element"]["source_range"])
+            if not parent_range[0] < bounds[0] < bounds[1] < parent_range[1]:
+                raise ValueError("skill source range is outside its parent")
+            role = label(node["source_use"])
+            counts[role] = counts.get(role, 0) + 1
+            if role == "saved_set":
+                saved_set, group = bounds, None
+            elif role == "group":
+                group = bounds
+            if role in {"gem_instance", "main_stat_set_selection", "calcs_stat_set_selection",
+                        "main_minion_lookup", "calcs_minion_lookup"}:
+                if bounds in locations:
+                    raise ValueError("duplicated skill source occurrence")
+                locations[bounds] = (container, saved_set, group, role)
+                if role != "gem_instance":
+                    selection_ranges.add(bounds)
+            previous = bounds[0]
+            for child in array(node["children"], 32768, "skill children"):
+                child_range = source_range(child["element"]["source_range"])
+                if child_range[0] < previous:
+                    raise ValueError("skill children overlap or lost source order")
+                previous = child_range[1]
+                visit(child, container, bounds, saved_set, group, depth + 1)
+        containers = array(projection["containers"], 128, "skill containers")
+        if [source_range(node["element"]["source_range"]) for node in containers] != skill_container_ranges:
+            raise ValueError("skill containers differ from preserved root sections")
+        for index, node in enumerate(containers):
+            visit(node, index, root_range, None, None, 1)
+        result["skill_source_counts"] = counts
+    elif skills["status"] != "not_projected" or not isinstance(skills.get("error"), dict):
+        raise ValueError("unknown skill projection outcome")
+
+    if definitions_requested != ("definition_lookup" in report):
+        raise ValueError("definition lookup presence differs from requested inspection")
+    if not definitions_requested:
+        return result
+    definitions = mapping(report["definition_lookup"], "definition lookup")
+    require(definitions, {"game_mechanics": "not_evaluated"}, "definition lookup")
+    data = mapping(definitions["data"], "selected data identity")
+    data_hash = data.get("content_sha256")
+    if (not isinstance(data_hash, str) or len(data_hash) != 64
+            or any(c not in "0123456789abcdef" for c in data_hash)):
+        raise ValueError("invalid selected data content hash")
+    if expected_data_hash is not None and data_hash != expected_data_hash:
+        raise ValueError("identity lookup used different data from the supplied snapshot")
+    result.update(data=data, data_trust=definitions["data_trust"],
+                  data_identity_check="selected_snapshot" if expected_data_hash else "reported_by_inspector",
+                  definition_implementation_sha256=report.get("definition_implementation_sha256"))
+    identity = mapping(definitions["skills"], "skill definition result")
+    if skills["status"] != "source_projected":
+        require(identity, {"status": "not_looked_up"}, "skill definition result")
+        result["skill_identity_status"] = "not_looked_up"
+        return result
+    require(identity, {"status": "looked_up"}, "skill definition result")
+    lookup = mapping(identity["lookup"], "skill definition lookup")
+    require(lookup, {"schema_version": 1, "source_xml_sha256": expected_hash,
+                     "interpretation": "authored_identity_before_socket_group_processing",
+                     "active_set_selection": "not_resolved", "actor_resolution": "not_resolved",
+                     "name_matching": "not_run", "socket_group_processing": "not_run",
+                     "game_mechanics": "not_evaluated"}, "skill definition lookup")
+    if lookup["data"] != data or lookup["data_trust"] != definitions["data_trust"]:
+        raise ValueError("skill lookup data identity/trust differs from selected data")
+    seen, identity_counts = set(), {}
+    for located in array(lookup["records"], 32768, "identity records"):
+        record = mapping(located["record"], "identity record")
+        value = mapping(record["lookup"], "identity value")
+        bounds = source_range(value["source_range"])
+        if bounds not in locations or bounds in seen:
+            raise ValueError("identity record is missing its unique source occurrence")
+        seen.add(bounds)
+        container, saved_set, group, role = locations[bounds]
+        def optional_range(value):
+            return None if value is None else source_range(value)
+        if (type(located["container_index"]) is not int or located["container_index"] != container
+                or optional_range(located["set_source_range"]) != saved_set
+                or optional_range(located["group_source_range"]) != group):
+            raise ValueError("identity lookup changed source set/group ownership")
+        if bounds in selection_ranges:
+            if record["kind"] != "effect_selection" or value["source_use"] != role:
+                raise ValueError("effect selection differs from source role")
+            key = "effect_selection_resolved" if value["matched"] is not None else "effect_selection_unresolved"
+        else:
+            if record["kind"] != "instance":
+                raise ValueError("gem instance identity differs from source role")
+            resolution = mapping(value["resolution"], "instance resolution")
+            kind = resolution["kind"]
+            if kind == "external_gem":
+                status = resolution["status"]
+                candidates = array(resolution["candidates"], 50000, "gem candidates")
+                expected_count = {"exact": 1, "single_fallback": 1, "missing": 0}.get(status)
+                if status == "ambiguous":
+                    if len(candidates) < 2:
+                        raise ValueError("ambiguous identity requires multiple candidates")
+                elif expected_count is None or len(candidates) != expected_count:
+                    raise ValueError("external identity status/candidate count mismatch")
+                key = "external_gem_" + status
+            elif kind == "explicit_effect":
+                key = "explicit_effect_resolved" if resolution["matched"] is not None else "explicit_effect_unresolved"
+            elif kind in {"name_only_not_resolved", "missing_identity"}:
+                key = kind
+            else:
+                raise ValueError("unknown instance identity interpretation")
+        identity_counts[key] = identity_counts.get(key, 0) + 1
+    if seen != set(locations):
+        raise ValueError("identity lookup omitted an authored source reference")
+    result.update(skill_identity_status="looked_up", skill_identity_counts=identity_counts)
+    return result
+
+
 def xml_summary(path: Path) -> dict:
     data = read_bounded(path, MAX_XML_BYTES)
     if b"<!DOCTYPE" in data.upper() or b"<!ENTITY" in data.upper():
@@ -325,8 +524,12 @@ def parse_args(argv=None):
     parser.add_argument("--backend", action="append", required=True, metavar="native=CLI|pob=CLI")
     parser.add_argument("--inspect-configuration", action="store_true",
                         help="collect source configuration evidence using the explicit import CLI")
-    parser.add_argument("--data", type=regular_file, help="native dataset; copied and hashed")
-    parser.add_argument("--data-sha256", help="external review digest passed to the native CLI")
+    parser.add_argument("--inspect-build", action="store_true",
+                        help="collect full source/container and skill occurrence evidence")
+    parser.add_argument("--with-definitions", action="store_true",
+                        help="look up injected identities during --inspect-build; does not evaluate effects")
+    parser.add_argument("--data", type=regular_file, help="native/inspection dataset; copied and hashed")
+    parser.add_argument("--data-sha256", help="external review digest passed to native evaluation and build inspection")
     parser.add_argument("--options", type=regular_file, help="evaluation options; copied and hashed")
     parser.add_argument("--pob", type=Path, help="required explicit checkout when using the pob backend")
     parser.add_argument("--workdir", type=Path, default=Path.cwd())
@@ -358,8 +561,10 @@ def parse_args(argv=None):
     if args.data_sha256 and (args.data is None or len(args.data_sha256) != 64
                             or any(c not in "0123456789abcdefABCDEF" for c in args.data_sha256)):
         parser.error("--data-sha256 requires --data and 64 hexadecimal characters")
-    if args.data is not None and "native" not in dict(backends):
-        parser.error("--data requires a native backend observation")
+    if args.with_definitions and not args.inspect_build:
+        parser.error("--with-definitions requires --inspect-build")
+    if args.data is not None and "native" not in dict(backends) and not args.inspect_build:
+        parser.error("--data requires a native backend or build inspection")
     return args
 
 
@@ -457,11 +662,49 @@ def main(argv=None) -> int:
                             except (OSError, ValueError, TypeError, KeyError) as error:
                                 result["status"] = "configuration_evidence_error"
                                 result["error"] = f"{type(error).__name__}: {error}"
+                    if args.inspect_build:
+                        if source_changed:
+                            record["build_source"] = {"status": "source_changed",
+                                "error": "Imported XML changed during an earlier inspection; build inspection not run"}
+                        else:
+                            expected_hash = record.get("imported_xml_sha256") or digest(xml)
+                            expected_bytes = xml.stat().st_size
+                            command = [str(args.import_cli), "inspect-build", str(xml)]
+                            definitions_requested = args.with_definitions or args.data is not None
+                            if args.with_definitions:
+                                command.append("--with-definitions")
+                            if args.data is not None:
+                                command.extend(["--data", str(inputs["data"])])
+                                if args.data_sha256:
+                                    command.extend(["--data-sha256", args.data_sha256])
+                            result = invoke(command, directory, "build_source", args.workdir,
+                                            deadline, args.import_timeout_seconds)
+                            record["build_source"] = result
+                            result["invocation_status"] = result["status"]
+                            result["source_before_inspection_sha256"] = expected_hash
+                            try:
+                                after_hash = digest(xml)
+                            except OSError:
+                                after_hash = None
+                            result["source_after_inspection_sha256"] = after_hash
+                            source_changed = after_hash != expected_hash
+                            result["source_changed"] = source_changed
+                            if source_changed:
+                                result["status"] = "build_source_evidence_error"
+                                result["error"] = "Imported XML changed during build inspection; changed source is retained and will not be evaluated"
+                            elif result["status"] == "success":
+                                try:
+                                    report = bounded_json(directory / "build_source.stdout")
+                                    result.update(build_source_summary(report, expected_hash, expected_bytes,
+                                                  definitions_requested, provenance["data"]["sha256"] if args.data else None))
+                                except (OSError, ValueError, TypeError, KeyError) as error:
+                                    result["status"] = "build_source_evidence_error"
+                                    result["error"] = f"{type(error).__name__}: {error}"
                     for name, cli in args.backends:
                         if source_changed:
                             record["evaluations"][name] = {
                                 "status": "source_changed",
-                                "error": "Imported XML changed during configuration inspection; evaluation not run"}
+                                "error": "Imported XML changed during source inspection; evaluation not run"}
                             continue
                         budget = min(args.evaluation_timeout_seconds, max(0, deadline-time.monotonic()))
                         command = [str(cli), "evaluate", str(xml), "--backend", name, "--raw",
@@ -522,10 +765,13 @@ def main(argv=None) -> int:
     failed = sum(record.get("status") not in {"imported","blank_line"}
                  or any(value["status"]!="success" for value in record["evaluations"].values())
                  or record.get("configuration", {}).get("status", "success") != "success"
+                 or record.get("build_source", {}).get("status", "success") != "success"
                  for record in records)
     changed_inputs = [name for name, value in provenance.items() if not value["unchanged_after_run"]]
-    manifest = {"schema_version":2,"scope":"independent_import_and_fresh_evaluation_observations",
+    manifest = {"schema_version":3,"scope":"independent_import_and_fresh_evaluation_observations",
                 "configuration_inspection_requested": args.inspect_configuration,
+                "build_inspection_requested": args.inspect_build,
+                "definition_lookup_requested": args.inspect_build and (args.with_definitions or args.data is not None),
                 "claims":{"container_import_only":True,"build_legality_verified":False,"numerical_parity_verified":False},
                 "provenance":provenance,"changed_inputs":changed_inputs,"pob_path":str(args.pob) if args.pob else None,
                 "jobs":args.jobs,"deadline_seconds":args.deadline_seconds,
