@@ -9,7 +9,7 @@ and usable evaluation path while the native engine grows through verified slices
 
 `poe-optimizer-engine` owns game calculations that can run without Lua or an operating
 system. It accepts resolved numeric inputs, validated numeric modifier layers, and explicit condition contexts now,
-and will accept typed build/modifier inputs against injected, immutable compiled game data.
+and the current Spark/Mace pipelines accept injected, immutable compiled game data.
 The independent `poe-optimizer-data` model owns content and balance parameters. The engine
 owns operation semantics and compiles supported records into borrowed calculation views;
 see the [data-boundary decision](game-data-boundary.md). Most game values must be loaded
@@ -211,7 +211,7 @@ hash checks as the earlier modifier tests. Cases cover both interpreted and warm
 conditional and source-filtered producers, zero overrides, parent grouping, absent
 variables, ordered and repeated variable lists, threshold equality, rounding-boundary
 neighbors, zero/negative divisors, inversion and cap order, condition short-circuit errors,
-nonfinite arithmetic and signed zero. Production code remains dependency-free and
+nonfinite arithmetic and signed zero. Production calculation code remains portable and
 immutable, with no Lua objects, I/O or host scheduling.
 
 Sources: [GetMultiplier](https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2/blob/3887ae68a6a6b8bb7b41d1b61998f1aa184201e4/src/Classes/ModStore.lua#L417-L423),
@@ -286,8 +286,9 @@ boss damage reduction, an explicit `enemyMaxResist` flag and other damage-taken 
 remain outside this profile. Enemy resistance uses the pinned configurable ceiling (up to
 90%) and floor (-200%); player resistances retain upstream truncation before clamping.
 
-`SparkData` is a compact Rust transcription of skill level data, class attributes, character
-constants, quest effects and explicit calculation constants. `SOURCE_FILES` identifies
+`SparkData` is a compact compiled view of injected skill, class, character, quest and rules
+records. `CompiledGameData` resolves the package once; `evaluate_with_data` borrows it.
+See [native data packages](native-data.md) for the loader and compatibility wrappers. `SOURCE_FILES` identifies
 12 complete normalized source files, including the modifier parser semantic oracle.
 `PROFILE_ID` is `poe2-spark-level1-class-entrance-v2`.
 The production function uses no parsing, allocation, I/O, timing, Lua or shared state. The
@@ -392,8 +393,10 @@ entrances introduce no flat/increased life, mana, accuracy or attribute modifier
 input does not imply support for those wider modifier forms. Nonfinite, negative or
 fractional attributes reject. Modifier values must be finite and nonnegative. The numeric
 boundary caps every field at 1,000,000 to keep admitted calculations finite; this is an
-implementation scope bound, not a game stat maximum. The adapter restricts actual admitted
-values to versioned source effects and zero or one ordinary entrance allocation. Diagnostic
+implementation scope bound, not a game stat maximum. The adapter restricts operations to
+the currently supported effects and zero or one ordinary entrance allocation. Magnitudes
+come from the selected validated package; only the reviewed default has source-parity
+evidence. Diagnostic
 evaluation does not certify available passive points or skill/item attribute requirements;
 search must enforce its explicit progression and legality constraints separately.
 

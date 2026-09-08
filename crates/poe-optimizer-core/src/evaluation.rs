@@ -46,8 +46,11 @@ pub struct BackendCapabilities {
     pub encounter_overrides: bool,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BackendIdentity {
+    /// Explicit injected data identity; absent for legacy/reference adapters.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub data: Option<crate::data::DataIdentity>,
     pub id: String,
     pub implementation_version: String,
     pub rules_revision: String,
@@ -86,6 +89,9 @@ impl EvaluationResult {
     /// Both replay consumers and live engines should validate before using a result.
     pub fn validate_recorded(&self) -> Result<(), EvaluationError> {
         let invalid = |message| EvaluationError::new(EvaluationErrorKind::BackendContract, message);
+        if let Some(data) = &self.backend.data {
+            data.validate().map_err(invalid)?;
+        }
         self.context.requested.validate().map_err(|message| {
             invalid(format!(
                 "Recorded evaluation options are invalid: {message}"
@@ -231,6 +237,10 @@ impl std::error::Error for EvaluationError {}
 /// while an isolated process backend can terminate its worker. `elapsed_ms` is
 /// evidence, not a substitute for enforcing the budget during calculation.
 pub trait CalculationBackend {
+    /// Expected identity of this instance, when available before calculation.
+    fn identity(&self) -> Option<BackendIdentity> {
+        None
+    }
     fn capabilities(&self) -> BackendCapabilities;
     fn calculate(
         &self,
@@ -259,6 +269,9 @@ impl<B: CalculationBackend> Engine<B> {
     }
 }
 impl<B: CalculationBackend + ?Sized> CalculationBackend for Box<B> {
+    fn identity(&self) -> Option<BackendIdentity> {
+        (**self).identity()
+    }
     fn capabilities(&self) -> BackendCapabilities {
         (**self).capabilities()
     }
@@ -327,8 +340,14 @@ impl<B: CalculationBackend> EvaluationEngine for Engine<B> {
         } else {
             request.metrics.iter().cloned().collect()
         };
+        let identity = self.backend.identity();
         let mut result = self.backend.calculate(request, budget)?;
-        if result.backend.id != capabilities.id || result.context.requested != request.options {
+        if identity
+            .as_ref()
+            .is_some_and(|expected| expected != &result.backend)
+            || result.backend.id != capabilities.id
+            || result.context.requested != request.options
+        {
             return Err(EvaluationError::new(
                 EvaluationErrorKind::BackendContract,
                 "Backend returned a different identity or requested evaluation options",

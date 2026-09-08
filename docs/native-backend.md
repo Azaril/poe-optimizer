@@ -54,7 +54,7 @@ unchanged.
 
 `poe-optimizer-engine` owns numerical calculations and modifier semantics.
 `poe-optimizer-native` projects source XML into immutable inputs, calls the selected pipeline
-and builds the shared typed result. The formulas and constants come from pinned source;
+and builds the shared typed result. Rust formulas and reviewed package values come from pinned source;
 unchanged independently generated full-build outputs are tests, not implementation data.
 Before resolving a native document, the bundle's rules revision, tree version and source
 tree digest must agree with both numerical pipelines. A mismatch returns a backend contract
@@ -63,18 +63,17 @@ Default quest rewards and the resistance penalty are explicit in result context.
 source numerical outputs are ignored and removed from native exports. Encounter overrides
 are written into exported configuration so re-import preserves the selected scenario.
 
-## Planned data injection boundary
+## Injected game data
 
-The current native backend still uses a global bundled-tree loader and compiled numerical
-constants. A portable data crate alone does not establish runtime injection. The
-[accepted data design](game-data-boundary.md) moves package selection to the host and gives
-each backend shared immutable compiled data. Prepared evaluations retain the originating
-data identity; cross-dataset reuse rejects. Skills, item bases, monster tables, rewards,
-balance parameters and typed passive effects migrate to configuration while Rust retains
-operation semantics and coverage checks. Embedded defaults use the same loader as external
-packages. These APIs are planned; this document's commands do not yet expose external data
-selection. The [implementation plan](implementation.md#injectable-game-data-design--2026-09-07)
-tracks this migration before further class/passive search expansion.
+Native backend instances now own shared `CompiledGameData`; prepared evaluations retain
+the same data and semantic identity. The loader accepts embedded or external package bytes
+through one bounded validation path. Skill/item records, monster tables, rewards, balance
+parameters and typed entrance effects come from configuration. Different datasets can run
+concurrently, and incompatible prepared reuse rejects before calculation.
+
+See [native data packages](native-data.md) for `--data`, trust, the package authoring helper,
+identity/report schemas and export metadata. The strict structural-tree guard remains;
+custom-data search and automatic source-update generation still require further work.
 
 ## CLI and dependency separation
 
@@ -119,7 +118,7 @@ including removal of large cached-stat sections.
 
 ## Preparation, parallel execution and clocks
 
-`NativeBackend::prepare` returns an immutable `PreparedEvaluation`. Reuse avoids source
+`NativeBackend::prepare` returns an immutable `PreparedEvaluation` bound to the instance's injected dataset. Reuse avoids source
 parsing/projection; every calculation still recomputes its supported numerical pipeline.
 `PreparedEvaluation::calculate` has no clocks or OS calls. `evaluate_prepared` additionally
 creates a fresh complete typed result, including context, measurements, validation, export
@@ -169,7 +168,7 @@ not establish optimizer quality, browser speed or a speedup over PoB.
 
 ## Verification and expansion gates
 
-The controlled Mace search remains limited to Warrior without paid passives or ascendancy;
+The controlled Mace search remains limited to the reviewed default data and Warrior without paid passives or ascendancy;
 new evaluator coverage is not automatically added to its finite search catalog.
 Native controlled search checks the exact materialized source export, class/root/skill
 projection, resolved weapon and support evidence, fixed external configuration and backend

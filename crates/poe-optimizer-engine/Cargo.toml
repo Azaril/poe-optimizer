@@ -7,6 +7,7 @@ description = "Incremental native Rust translation of pinned PoB calculation ker
 publish = false
 
 [dependencies]
+poe-optimizer-data = { path = "../poe-optimizer-data" }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
 mlua = { version = "=0.12.1", features = ["luajit", "vendored"] }

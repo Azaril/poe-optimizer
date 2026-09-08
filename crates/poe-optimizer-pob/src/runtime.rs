@@ -245,6 +245,7 @@ pub fn evaluate_with_options(
     hash.update(include_str!("backend.rs"));
     hash.update(include_str!("supervisor.rs"));
     hash.update(include_str!("../../poe-optimizer-core/src/evaluation.rs"));
+    hash.update(include_str!("../../poe-optimizer-core/src/data.rs"));
     hash.update(include_str!("../../poe-optimizer-core/src/options.rs"));
     hash.update(include_str!("../../poe-optimizer-core/src/metrics.rs"));
     hash.update(include_str!("../../poe-optimizer-core/src/coverage.rs"));

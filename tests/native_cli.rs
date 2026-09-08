@@ -27,7 +27,7 @@ fn native_cli_evaluates_and_exports_without_a_pob_checkout_in_the_working_direct
         String::from_utf8_lossy(&output.stderr)
     );
     let value: serde_json::Value = serde_json::from_slice(&fs::read(&report).unwrap()).unwrap();
-    assert_eq!(value["schema_version"], 2);
+    assert_eq!(value["schema_version"], 3);
     assert_eq!(value["evaluation"]["backend"]["id"], "native-poe2");
     assert_eq!(
         value["evaluation"]["measurements"]

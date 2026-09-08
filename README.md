@@ -45,7 +45,9 @@ choices directly on Rayon with exact locks and source-preserving mutations; `--b
 selects the optional reference backend; `search-calibration` retains the four original
 fixtures. `extract-tree` exports pinned topology and source/override metadata for broader
 mutation work, with live passive coverage and authenticated bounded graph projections. A portable data
-crate supplies native class/root/entrance records without loading PoB.
+crate supplies native class/root/entrance records and numeric game configuration without loading PoB.
+Native evaluation and benchmarking accept `--data <package.json>`; immutable data is shared
+across workers, with dataset identity recorded in results and export companions.
 `benchmark-native` measures prepared or full-document typed evaluation throughput.
 General joint mutation, full native mechanic coverage, HTML reports and browser
 bindings remain unimplemented. See [the runnable experimental workflow](docs/experimental-search.md)
@@ -164,7 +166,7 @@ cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data 
 - `src/`: thin CLI and hidden worker protocol entry point.
 - `crates/poe-optimizer-core/`: backend-neutral evaluation contracts, options, metrics and coverage.
 - `crates/poe-optimizer-engine/`: portable native calculation kernels and differential tests.
-- `crates/poe-optimizer-data/`: authenticated portable tree models, projections and native class/entrance data. The [data-boundary design](docs/game-data-boundary.md) defines its expansion to injectable configuration packages; runtime package selection is planned.
+- `crates/poe-optimizer-data/`: authenticated portable tree models, projections and native class/entrance data. Native evaluation now accepts [injectable data packages](docs/native-data.md); broader source/tree update compatibility remains in progress.
 - `crates/poe-optimizer-native/`: strict native document profiles, preparation and typed backend.
 - `crates/poe-optimizer-import/`: portable bounded decoding, preflight and controlled materialization.
 - `crates/poe-optimizer-pob/`: optional reference host, source extraction, verification and supervision.

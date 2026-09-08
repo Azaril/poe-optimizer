@@ -1,20 +1,12 @@
 //! Strict source-document projection for the closed native Spark and Mace profiles.
 use poe_optimizer_core::{evaluation::*, options::*};
 use poe_optimizer_engine::{
-    mace::{self, MaceInput, MaceWeapon},
+    mace::{MaceInput, MaceWeapon},
     spark::{SparkInput, SparkQuestRewards},
 };
 use roxmltree::{Document, Node, ParsingOptions};
 use std::collections::{BTreeMap, BTreeSet};
 
-pub(crate) const QUEST_KEYS: [&str; 6] = [
-    "questAct 1Ogham ManorCandlemass",
-    "questInterlude 2Khari CrossingMolten Shrine",
-    "questAct 4Eye of HinekoraSilent Hall",
-    "questAct 1ClearfellBeira",
-    "questAct 2Spires of DesharSisters of Garukhan Shrine",
-    "questAct 3Jiquani's MachinariumBlackjaw",
-];
 #[derive(Debug, Clone, Copy)]
 pub(crate) enum NativeInput {
     Spark(SparkInput),
@@ -98,7 +90,12 @@ fn scalar(node: Node<'_, '_>) -> Result<Scalar, EvaluationError> {
         _ => Err(unsupported("Invalid configuration scalar")),
     }
 }
-fn validate_config(name: &str, value: &Scalar, is_mace: bool) -> Result<(), EvaluationError> {
+fn validate_config(
+    name: &str,
+    value: &Scalar,
+    is_mace: bool,
+    data: &crate::CompiledGameData,
+) -> Result<(), EvaluationError> {
     let valid = match (name, value) {
         ("enemyIsBoss", Scalar::Text(v)) => {
             if is_mace {
@@ -141,7 +138,17 @@ fn validate_config(name: &str, value: &Scalar, is_mace: bool) -> Result<(), Eval
         ("multiplierNearbyEnemies", Scalar::Number(v)) => *v == 1.0,
         ("multiplierNearbyRareOrUniqueEnemies", Scalar::Number(v)) => *v == 0.0 || *v == 1.0,
         ("resistancePenalty", Scalar::Number(v)) => (-60.0..=0.0).contains(v),
-        (name, Scalar::Boolean(_)) if QUEST_KEYS.contains(&name) => true,
+        (name, Scalar::Boolean(_))
+            if data
+                .snapshot()
+                .package()
+                .quests
+                .config_keys
+                .iter()
+                .any(|key| key == name) =>
+        {
+            true
+        }
         _ => false,
     };
     if !valid {
@@ -163,7 +170,10 @@ fn escape(s: &str) -> String {
         .replace('"', "&quot;")
 }
 
-pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationError> {
+pub(crate) fn parse(
+    request: &EvaluationRequest,
+    data: &crate::CompiledGameData,
+) -> Result<Profile, EvaluationError> {
     request
         .options
         .validate()
@@ -198,8 +208,8 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
         .find(|node| node.has_tag_name("Gem"))
         .ok_or_else(|| unsupported("Native profile requires a main active gem"))?;
     let is_mace = match main_gem.attribute("skillId") {
-        Some("SparkPlayer") => false,
-        Some("Melee1HMacePlayer") => true,
+        Some(id) if id == data.snapshot().package().spark.skill_id => false,
+        Some(id) if id == data.snapshot().package().mace.skill_id => true,
         _ => {
             return Err(unsupported(
                 "Native profiles currently support Spark or Mace Strike",
@@ -253,8 +263,14 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
         ],
         &[],
     )?;
-    fixed(spec, &[("treeVersion", "0_5"), ("masteryEffects", "")])?;
-    let resolved_tree = crate::tree::NativeTree::resolve(build, spec)?;
+    fixed(
+        spec,
+        &[
+            ("treeVersion", &data.snapshot().tree().source.tree_version),
+            ("masteryEffects", ""),
+        ],
+    )?;
+    let resolved_tree = crate::tree::NativeTree::resolve(build, spec, data)?;
     let skills = child(root, "Skills")?;
     only(
         skills,
@@ -301,31 +317,35 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
             "Native profile requires one active skill and only the supported optional Brutality I",
         ));
     }
+    let package = data.snapshot().package();
     if is_mace {
+        let gem = &package.mace;
         validate_gem(
             gems[0],
-            "Mace Strike",
-            "Melee1HMacePlayer",
-            "Metadata/Items/Gem/SkillGemPlayerDefault1HMace",
-            "PlayerDefault1HMace",
+            &gem.name,
+            &gem.skill_id,
+            &gem.game_id,
+            &gem.variant_id,
         )?;
     } else {
+        let gem = &package.spark;
         validate_gem(
             gems[0],
-            "Spark",
-            "SparkPlayer",
-            "Metadata/Items/Gems/SkillGemSpark",
-            "Spark",
+            &gem.name,
+            &gem.skill_id,
+            &gem.game_id,
+            &gem.variant_id,
         )?;
     }
     let brutality = gems.len() == 2;
     if brutality {
+        let gem = &package.mace.brutality;
         validate_gem(
             gems[1],
-            "Brutality I",
-            "SupportBrutalityPlayer",
-            "Metadata/Items/Gems/SupportGemBrutality",
-            "BrutalitySupport",
+            &gem.name,
+            &gem.skill_id,
+            &gem.game_id,
+            &gem.variant_id,
         )?;
     }
     let items = child(root, "Items")?;
@@ -346,7 +366,7 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
         let slot = child(item_set, "Slot")?;
         only(slot, &["name", "itemId"], &[])?;
         fixed(slot, &[("name", "Weapon 1"), ("itemId", "1")])?;
-        Some(parse_weapon(child(items, "Item")?)?)
+        Some(parse_weapon(child(items, "Item")?, data)?)
     } else {
         only(item_set, &["id", "title"], &[])?;
         fixed(item_set, &[("id", "1")])?;
@@ -365,7 +385,7 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
             .attribute("name")
             .ok_or_else(|| unsupported("Missing configuration name"))?;
         let value = scalar(input)?;
-        validate_config(name, &value, is_mace)?;
+        validate_config(name, &value, is_mace, data)?;
         if config.insert(name.to_owned(), value).is_some() {
             return Err(unsupported("Duplicate configuration input"));
         }
@@ -465,7 +485,7 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
         }
     }
     for (key, value) in &config {
-        validate_config(key, value, is_mace)?;
+        validate_config(key, value, is_mace, data)?;
     }
     if [
         "enemyPhysicalDamage",
@@ -501,14 +521,20 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
         }
     }
     let export_xml = apply_source_edits(&request.build.content, replacements)?;
-    let quest = |index: usize| match config.get(QUEST_KEYS[index]) {
-        Some(Scalar::Boolean(v)) => *v,
-        None => true,
-        _ => unreachable!(),
-    };
+    let quest =
+        |index: usize| match config.get(&data.snapshot().package().quests.config_keys[index]) {
+            Some(Scalar::Boolean(v)) => *v,
+            None => data.snapshot().package().quests.default_enabled[index],
+            _ => unreachable!(),
+        };
     let penalty = match config.get("resistancePenalty") {
         Some(Scalar::Number(n)) => *n,
-        None => -60.0,
+        None => {
+            data.snapshot()
+                .package()
+                .encounters
+                .default_resistance_penalty
+        }
         _ => unreachable!(),
     };
     let quests = SparkQuestRewards {
@@ -523,7 +549,8 @@ pub(crate) fn parse(request: &EvaluationRequest) -> Result<Profile, EvaluationEr
     let input = if let Some((weapon, item_level, quality)) = weapon {
         let enemy_evasion = match config.get("enemyEvasion") {
             Some(Scalar::Number(value)) => *value,
-            None => mace::monster_evasion(enemy_level)
+            None => data
+                .monster_evasion(enemy_level)
                 .map_err(|error| unsupported(error.to_string()))?,
             _ => unreachable!("validated evasion type"),
         };
@@ -597,7 +624,10 @@ fn validate_gem(
     )
 }
 
-fn parse_weapon(item: Node<'_, '_>) -> Result<(MaceWeapon, u32, u32), EvaluationError> {
+fn parse_weapon(
+    item: Node<'_, '_>,
+    data: &crate::CompiledGameData,
+) -> Result<(MaceWeapon, u32, u32), EvaluationError> {
     if item.tag_name().namespace().is_some()
         || item
             .attributes()
@@ -622,8 +652,8 @@ fn parse_weapon(item: Node<'_, '_>) -> Result<(MaceWeapon, u32, u32), Evaluation
         ));
     }
     let weapon = match lines[1] {
-        "Wooden Club" => MaceWeapon::WoodenClub,
-        "Smithing Hammer" => MaceWeapon::SmithingHammer,
+        name if name == data.weapon(MaceWeapon::WoodenClub).name => MaceWeapon::WoodenClub,
+        name if name == data.weapon(MaceWeapon::SmithingHammer).name => MaceWeapon::SmithingHammer,
         _ => {
             return Err(unsupported(
                 "Native Mace supports only Wooden Club and Smithing Hammer",

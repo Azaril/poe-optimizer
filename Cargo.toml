@@ -21,6 +21,7 @@ pob = ["dep:poe-optimizer-pob"]
 [dependencies]
 clap = { version = "4", features = ["derive"] }
 poe-optimizer-core = { path = "crates/poe-optimizer-core" }
+poe-optimizer-data = { path = "crates/poe-optimizer-data" }
 poe-optimizer-pob = { path = "crates/poe-optimizer-pob", optional = true }
 poe-optimizer-import = { path = "crates/poe-optimizer-import" }
 poe-optimizer-native = { path = "crates/poe-optimizer-native" }
@@ -30,6 +31,3 @@ serde_json = "1"
 sha2 = "0.10"
 serde = "1"
 tempfile = "3"
-
-[dev-dependencies]
-poe-optimizer-data = { path = "crates/poe-optimizer-data" }

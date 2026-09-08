@@ -30,6 +30,8 @@ pub(crate) enum Mode {
 
 #[derive(clap::Args)]
 pub(crate) struct Args {
+    #[command(flatten)]
+    data: super::data_loading::DataArgs,
     /// Supported native build XML or import string. Every iteration uses this fixed input.
     input: PathBuf,
     /// Local Rayon worker limit, 1..64.
@@ -134,12 +136,17 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         options: EvaluationOptions::default(),
         metrics: Vec::new(),
     };
-    let backend = NativeBackend::new();
+    let data_started = Instant::now();
+    let backend = args.data.backend()?;
+    let data_load_ms = data_started.elapsed().as_secs_f64() * 1000.0;
     // Validate the fixed profile before dispatch even in document mode. Document
     // iterations still parse/validate independently; no calculation is performed here.
     let prepared = backend.prepare(black_box(&request))?;
-    let identity = poe_optimizer_native::backend_identity();
-    let engine = Engine::new(NativeBackend::new());
+    let identity = backend.identity();
+    let engine = Engine::new(NativeBackend::with_data(
+        std::sync::Arc::clone(backend.data()),
+        poe_optimizer_native::HostClock,
+    )?);
     let resolved_jobs = args.jobs.min(args.evaluations);
     let pool = rayon::ThreadPoolBuilder::new()
         .num_threads(resolved_jobs)
@@ -208,10 +215,12 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         None
     };
     let report = serde_json::json!({
-        "schema_version":1, "status":status, "termination":termination,
+        "schema_version":2, "status":status, "termination":termination,
         "benchmark":"fixed_input_native_typed_evaluation", "mode":args.mode,
         "input_xml_sha256":imported.sha256, "input_xml_bytes":request.build.content.len(), "source_format":imported.format,
         "backend":identity,
+        "data_trust":backend.data().snapshot().trust(),
+        "initialization":{"backend_and_data_ms":data_load_ms},
         "budget":{"evaluations":args.evaluations,"timeout_seconds":args.timeout_seconds,"requested_jobs":args.jobs,"resolved_jobs":resolved_jobs},
         "preparation":{"elapsed_ms":preparation_ms,"profile_preparations":1,"calculation_warmups":0,"includes":"input_decode_profile_validation_backend_identity_and_local_pool_creation"},
         "iterations":{"elapsed_ms":iteration_seconds*1000.0,"attempts":attempts,"completed":completed,"failures":failures,"discarded_late":discarded_late,
@@ -315,11 +324,7 @@ fn iterate(
     observed
 }
 fn same_identity(left: &BackendIdentity, right: &BackendIdentity) -> bool {
-    left.id == right.id
-        && left.implementation_version == right.implementation_version
-        && left.rules_revision == right.rules_revision
-        && left.source_fingerprint == right.source_fingerprint
-        && left.adapter_fingerprint == right.adapter_fingerprint
+    left == right
 }
 fn finite_digest(result: &EvaluationResult) -> Option<[u8; 32]> {
     let mut measurements: Vec<_> = result.measurements.iter().collect();

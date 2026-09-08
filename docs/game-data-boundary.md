@@ -1,6 +1,6 @@
 # ADR: injectable game data for native evaluation
 
-- Status: accepted direction; the interfaces below are planned, not implemented APIs
+- Status: accepted; delivery scope and remaining work are tracked in implementation.md
 - Date: 2026-09-07
 - Decider: user direction to load game data from configuration and inject it into evaluation
 - Scope: portable game-data model, loading, native calculation inputs and dataset identity
@@ -13,10 +13,9 @@ content must therefore be configuration data with its own model and lifecycle. T
 Lua tables into Rust constants would keep the runtime native but leave updates coupled to
 compiling and releasing the evaluator.
 
-The existing `poe-optimizer-data` crate is the starting point, not a completed injection
-boundary. It currently supplies a compiled class/tree subset through a global loader;
-Spark/Mace values, weapon definitions, monster tables and exact passive-effect mappings
-still live in Rust. Current implementation and migration evidence belong in the
+At this decision's starting point, `poe-optimizer-data` supplied a compiled class/tree subset
+through a global loader. Spark/Mace values, weapon definitions, monster tables and exact
+passive-effect mappings still lived in Rust. Current implementation and migration evidence belong in the
 [living implementation plan](implementation.md), not in this end-state decision.
 
 ## Decision
@@ -101,7 +100,7 @@ stat. Alternative package sources converge at byte loading and validated snapsho
 construction. Introduce a provider trait only if acquisition adapters need one; it must not
 perform I/O during preparation or calculation.
 
-Illustrative future API, not code available today:
+Injection API shape (host acquisition and imports omitted):
 
 ```rust,ignore
 let snapshot = GameDataLoader::from_bytes(&package_bytes, &trust_policy, &load_limits)?;

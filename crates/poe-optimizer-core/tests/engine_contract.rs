@@ -88,6 +88,7 @@ fn measurements() -> Vec<MetricMeasurement> {
 fn result(id: &str, options: EvaluationOptions) -> EvaluationResult {
     EvaluationResult {
         backend: BackendIdentity {
+            data: None,
             id: id.into(),
             implementation_version: "test-1".into(),
             rules_revision: "test-rules".into(),

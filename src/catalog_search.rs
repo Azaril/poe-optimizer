@@ -125,11 +125,7 @@ struct CalibrationEvaluator<'a> {
 }
 
 fn same_identity(left: &BackendIdentity, right: &BackendIdentity) -> bool {
-    left.id == right.id
-        && left.implementation_version == right.implementation_version
-        && left.rules_revision == right.rules_revision
-        && left.source_fingerprint == right.source_fingerprint
-        && left.adapter_fingerprint == right.adapter_fingerprint
+    left == right
 }
 
 impl CandidateEvaluator<Candidate> for CalibrationEvaluator<'_> {

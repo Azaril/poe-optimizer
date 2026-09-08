@@ -2,10 +2,11 @@
 //! and supported entrance effects, no equipment or supports. The host must validate
 //! that complete build scope before constructing these explicit inputs.
 //!
-//! Constants are transcribed from versioned upstream data, not calibration output.
+//! Balance records are supplied by an immutable compiled game-data snapshot.
 //! See SOURCE_FILES and the source-executing tests; this is not a general build engine.
 
-use crate::character::{BASE_EVASION, CharacterAttributes, CharacterInput, CharacterModifiers};
+use crate::character::CharacterInput;
+use crate::data::CompiledGameData;
 use crate::defence::round_to_integer;
 use std::{error::Error, fmt};
 
@@ -45,31 +46,13 @@ pub struct SparkData {
     pub enemy_resistance_cap: f64,
 }
 
-/// Sorceress tree class data; Spark level-one statSet; character and quest data;
-/// resource initialization and attribute bonuses; resistance caps from Modules/Data.
-pub const DATA: SparkData = SparkData {
-    strength: 7.0,
-    dexterity: 7.0,
-    intelligence: 15.0,
-    life_per_level: 12.0,
-    initial_life: 16.0,
-    mana_per_level: 4.0,
-    initial_mana: 30.0,
-    life_per_strength: 2.0,
-    mana_per_intelligence: 2.0,
-    lightning_minimum: 1.0,
-    lightning_maximum: 10.0,
-    cast_time: 0.7,
-    critical_chance: 9.0,
-    critical_damage_bonus: 100.0,
-    quest_flat_life: 20.0,
-    quest_life_increased: 5.0,
-    quest_mana_increased: 5.0,
-    quest_elemental_resistance: 10.0,
-    resistance_floor: -200.0,
-    player_resistance_cap: 75.0,
-    enemy_resistance_cap: 90.0,
-};
+/// Reviewed default profile parameters, loaded through the same package compiler.
+/// Explicit evaluator instances must use their injected `CompiledGameData` instead.
+pub fn data() -> &'static SparkData {
+    crate::data::bundled_reference()
+        .expect("reviewed game-data package")
+        .spark()
+}
 
 /// PoB's generated quest config checkboxes default true, independently of level.
 /// Quest choice lists default None. Only these six defaults affect this profile's outputs.
@@ -84,13 +67,36 @@ pub struct SparkQuestRewards {
 }
 impl Default for SparkQuestRewards {
     fn default() -> Self {
+        Self::from_enabled(
+            crate::data::bundled_reference()
+                .expect("reviewed game-data package")
+                .snapshot()
+                .package()
+                .quests
+                .default_enabled,
+        )
+    }
+}
+
+impl SparkQuestRewards {
+    /// Preserve the package's ordered quest contract: life, increased life/mana,
+    /// then cold/lightning/fire resistance rewards.
+    pub fn from_enabled(enabled: [bool; 6]) -> Self {
+        let [
+            candlemass,
+            molten_shrine,
+            silent_hall,
+            beira,
+            garukhan,
+            blackjaw,
+        ] = enabled;
         Self {
-            candlemass: true,
-            molten_shrine: true,
-            silent_hall: true,
-            beira: true,
-            garukhan: true,
-            blackjaw: true,
+            candlemass,
+            molten_shrine,
+            silent_hall,
+            beira,
+            garukhan,
+            blackjaw,
         }
     }
 }
@@ -137,27 +143,37 @@ impl fmt::Display for SparkError {
 }
 impl Error for SparkError {}
 
-/// Legacy profile attributes with no passive modifiers.
-pub const DEFAULT_CHARACTER: CharacterInput = CharacterInput {
-    attributes: CharacterAttributes {
-        strength: DATA.strength,
-        dexterity: DATA.dexterity,
-        intelligence: DATA.intelligence,
-    },
-    modifiers: CharacterModifiers::NONE,
-};
-
-/// Evaluate the original Sorceress/no-passive profile without parsing, Lua or I/O.
-pub fn evaluate(input: &SparkInput) -> Result<SparkOutput, SparkError> {
-    evaluate_with_character(input, &DEFAULT_CHARACTER)
+/// Reviewed default class attributes with no passive modifiers.
+pub fn default_character() -> CharacterInput {
+    crate::data::bundled_reference()
+        .expect("reviewed game-data package")
+        .default_spark_character()
 }
 
-/// Evaluate explicit resolved class attributes and admitted entrance modifiers.
-/// The caller must validate the full document and source allocation independently.
+/// Convenience evaluation using the reviewed package through the common compiler.
+pub fn evaluate(input: &SparkInput) -> Result<SparkOutput, SparkError> {
+    evaluate_with_character(input, &default_character())
+}
+
+/// Convenience evaluation using the reviewed package and explicit character inputs.
 pub fn evaluate_with_character(
     input: &SparkInput,
     character: &CharacterInput,
 ) -> Result<SparkOutput, SparkError> {
+    let data = crate::data::bundled_reference()
+        .map_err(|_| SparkError("The reviewed game-data package failed compilation"))?;
+    evaluate_with_data(input, character, data)
+}
+
+/// Calculate using only the explicitly supplied immutable dataset and resolved inputs.
+/// The caller must validate the full document and allocation scope independently.
+pub fn evaluate_with_data(
+    input: &SparkInput,
+    character: &CharacterInput,
+    compiled: &CompiledGameData,
+) -> Result<SparkOutput, SparkError> {
+    let data = compiled.spark();
+    let rules = &compiled.snapshot().package().character;
     character.validate().map_err(|error| SparkError(error.0))?;
     let attributes = character.attributes;
     let modifiers = character.modifiers;
@@ -179,54 +195,54 @@ pub fn evaluate_with_character(
     let level = f64::from(input.character_level);
     // CalcSetup level multipliers, default quest modifiers, CalcPerform attribute
     // bonuses, then the rounding/minimum of CalcDefence.doActorLifeManaSpirit.
-    let life_base = DATA.life_per_level * level
-        + DATA.initial_life
+    let life_base = data.life_per_level * level
+        + data.initial_life
         + if input.quests.candlemass {
-            DATA.quest_flat_life
+            data.quest_flat_life
         } else {
             0.0
         }
-        + attributes.strength * DATA.life_per_strength;
+        + attributes.strength * data.life_per_strength;
     let life_increased = if input.quests.molten_shrine {
-        DATA.quest_life_increased
+        data.quest_life_increased
     } else {
         0.0
     };
-    let mana_base = DATA.mana_per_level * level
-        + DATA.initial_mana
-        + attributes.intelligence * DATA.mana_per_intelligence;
+    let mana_base = data.mana_per_level * level
+        + data.initial_mana
+        + attributes.intelligence * data.mana_per_intelligence;
     let mana_increased = if input.quests.silent_hall {
-        DATA.quest_mana_increased
+        data.quest_mana_increased
     } else {
         0.0
     };
-    let life = round_to_integer(life_base * (1.0 + life_increased / 100.0)).max(1.0);
-    let mana = round_to_integer(mana_base * (1.0 + mana_increased / 100.0)).max(1.0);
+    let life = round_to_integer(life_base * (1.0 + life_increased / 100.0)).max(rules.minimum_life);
+    let mana = round_to_integer(mana_base * (1.0 + mana_increased / 100.0)).max(rules.minimum_mana);
     let resistance = |quest| {
         let total = input.resistance_penalty
             + if quest {
-                DATA.quest_elemental_resistance
+                data.quest_elemental_resistance
             } else {
                 0.0
             };
         total
             .trunc()
-            .clamp(DATA.resistance_floor, DATA.player_resistance_cap)
+            .clamp(data.resistance_floor, data.player_resistance_cap)
     };
     // For this profile calcResistForType's configurable maximum admits values
     // above75 but caps them at90; no enemyMaxResist override is active.
     let enemy_resistance = input
         .enemy_lightning_resistance
-        .clamp(DATA.resistance_floor, DATA.enemy_resistance_cap);
+        .clamp(data.resistance_floor, data.enemy_resistance_cap);
     let effective_multiplier = 1.0 - enemy_resistance / 100.0;
-    let crit_chance = DATA.critical_chance;
-    let crit_multiplier = 1.0 + DATA.critical_damage_bonus / 100.0;
+    let crit_chance = data.critical_chance;
+    let crit_multiplier = 1.0 + data.critical_damage_bonus / 100.0;
     // CalcOffence executes separate ordinary/critical damage passes, averages
     // their damage endpoints, applies resistance, then weights by crit chance.
     let damage_increased = modifiers.spell_damage_increased + modifiers.projectile_damage_increased;
     let damage_multiplier = 1.0 + damage_increased / 100.0;
-    let lightning_minimum = round_to_integer(DATA.lightning_minimum * damage_multiplier);
-    let lightning_maximum = round_to_integer(DATA.lightning_maximum * damage_multiplier);
+    let lightning_minimum = round_to_integer(data.lightning_minimum * damage_multiplier);
+    let lightning_maximum = round_to_integer(data.lightning_maximum * damage_multiplier);
     let hit_average = (lightning_minimum / 2.0 + lightning_maximum / 2.0) * effective_multiplier;
     let crit_average = (lightning_minimum * crit_multiplier / 2.0
         + lightning_maximum * crit_multiplier / 2.0)
@@ -236,7 +252,7 @@ pub fn evaluate_with_character(
     let average_damage = average_hit * 100.0 / 100.0;
     let speed_multiplier =
         round_to_integer((1.0 + modifiers.skill_speed_increased / 100.0) * 100.0) / 100.0;
-    let cast_rate = 1.0 / (DATA.cast_time / speed_multiplier);
+    let cast_rate = 1.0 / (data.cast_time / speed_multiplier);
     Ok(SparkOutput {
         strength: attributes.strength,
         dexterity: attributes.dexterity,
@@ -245,7 +261,7 @@ pub fn evaluate_with_character(
         mana,
         energy_shield: round_to_integer(modifiers.energy_shield_flat).max(0.0),
         armour: round_to_integer(modifiers.armour_flat).max(0.0),
-        evasion: round_to_integer(BASE_EVASION + modifiers.evasion_flat).max(0.0),
+        evasion: round_to_integer(rules.base_evasion + modifiers.evasion_flat).max(0.0),
         fire_resistance: resistance(input.quests.blackjaw),
         cold_resistance: resistance(input.quests.beira),
         lightning_resistance: resistance(input.quests.garukhan),

@@ -83,7 +83,7 @@ fn evaluate_case(name: &str, smithing: bool, brutality: bool) -> f64 {
         String::from_utf8_lossy(&output.stderr)
     );
     let report: Value = serde_json::from_slice(&output.stdout).unwrap();
-    assert_eq!(report["schema_version"], 2);
+    assert_eq!(report["schema_version"], 3);
     assert_eq!(
         report["source"]["xml_sha256"],
         reference["provenance"]["fixture_sha256"]

@@ -37,6 +37,12 @@ Native execution uses a local Rayon pool with `ExecutionKind::RustCpu`. PoB exec
 PoB checkout and never starts a Lua worker or falls back to PoB. Native-only builds omit
 PoB worker, extraction and calibration-harness commands.
 
+Native controlled search is bound to the reviewed default [game-data package](native-data.md).
+Its public catalog API also rejects custom datasets until materialization and requirements
+consume injected data. Evaluation and benchmarking already support external packages. Native
+search XML exports include a `.data.json` companion recording the selected dataset and XML
+hash; existing destination/alias checks include that companion.
+
 ## Supported input and locks
 
 `template` is relative to the problem file or an absolute path. XML/share codes pass through

@@ -303,7 +303,7 @@ impl MaceOracle {
         Self { oracle, calculate }
     }
     fn calculate(&self, input: &MaceInput) -> Table {
-        self.calculate_with_character(input, &mace::DEFAULT_CHARACTER)
+        self.calculate_with_character(input, &mace::default_character())
     }
 
     fn calculate_with_character(
@@ -492,20 +492,20 @@ fn mace_versioned_data_bounds_and_stateless_evaluation_are_explicit() {
     assert_eq!(character.get::<String>("name").unwrap(), "Warrior");
     assert_eq!(
         character.get::<f64>("base_str").unwrap(),
-        mace::DATA.strength
+        mace::data().strength
     );
     assert_eq!(
         character.get::<f64>("base_dex").unwrap(),
-        mace::DATA.dexterity
+        mace::data().dexterity
     );
     assert_eq!(
         character.get::<f64>("base_int").unwrap(),
-        mace::DATA.intelligence
+        mace::data().intelligence
     );
     let misc: Table = data.get("misc").unwrap();
     assert_eq!(
         misc.get::<f64>("EnemyPhysicalDamageReductionCap").unwrap(),
-        mace::DATA.enemy_physical_reduction_cap
+        mace::data().enemy_physical_reduction_cap
     );
     let bases: Table = lua.globals().get("maceBases").unwrap();
     for weapon in [MaceWeapon::WoodenClub, MaceWeapon::SmithingHammer] {
@@ -637,7 +637,7 @@ fn all_class_entrances_match_actual_mace_source_with_armour_and_brutality() {
                     evasion_flat: value,
                     ..Default::default()
                 },
-                ..mace::DEFAULT_CHARACTER
+                ..mace::default_character()
             };
             for weapon in [MaceWeapon::WoodenClub, MaceWeapon::SmithingHammer] {
                 let case = MaceInput {
@@ -653,7 +653,7 @@ fn all_class_entrances_match_actual_mace_source_with_armour_and_brutality() {
             }
         }
         let before = mace::evaluate(&input()).unwrap();
-        let mut invalid = mace::DEFAULT_CHARACTER;
+        let mut invalid = mace::default_character();
         invalid.modifiers.armour_flat = f64::NAN;
         assert!(mace::evaluate_with_character(&input(), &invalid).is_err());
         assert_eq!(mace::evaluate(&input()).unwrap(), before);

@@ -192,8 +192,9 @@ subset validation. Shared and inherited root display names remain source evidenc
 they do not add modifiers. Allocated ascendancy effects are outside this subset.
 
 This artifact supplies exact data, not a generic stat translator. The current
-[native backend](native-backend.md) maps the reviewed entrance stat strings and
-admits zero or one ordinary entrance connected to the selected class root. Point
+[native backend](native-backend.md) consumes configured typed entrance effects, retaining
+source stat text as evidence, and admits zero or one ordinary entrance connected to
+the selected class root. Point
 allowances remain explicit caller constraints. `validate_scope()` checks subset
 semantics but does not authenticate arbitrary deserialized data.
 
@@ -204,14 +205,14 @@ pinned source. Six Lua-free data tests separately check authentication, identity
 mapping, shared roots and class-specific effects, owner rejection, and rejection
 of unmodeled root mechanics. Data tests and WASM compilation require no PoB source.
 
-## Planned general data boundary
+## General data package integration
 
-This compiled tree subset and its global loader are the current implementation. The
-[game-data decision](game-data-boundary.md) extends the portable model to injectable
-versioned packages for all supported game content. The default bundle will use the same
-validated loading path as external bytes. Existing exact source checks remain in force
-until an explicit data/semantic compatibility contract replaces them; this design does not
-make arbitrary edited bundles valid for the current loader.
+The authenticated tree subset is included in the injected native game-data package. Native
+preparation reads the instance-owned snapshot rather than selecting the global tree loader;
+compatibility/extraction helpers retain their original bundled APIs. Structural tree bytes,
+class attributes and source identity remain pinned until their compatibility migration.
+See [native data packages](native-data.md) for external numeric/effect configuration and
+[the data boundary](game-data-boundary.md) for the broader target.
 
 ## Reproduce or deliberately refresh the bundle
 

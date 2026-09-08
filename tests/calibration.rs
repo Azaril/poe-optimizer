@@ -132,7 +132,7 @@ fn compare_reference(scenario: &str) {
         String::from_utf8_lossy(&output.stderr)
     );
     let report: Value = serde_json::from_slice(&output.stdout).expect("CLI emits one JSON report");
-    assert_eq!(report["schema_version"], 2);
+    assert_eq!(report["schema_version"], 3);
     assert_eq!(report["status"], "experimental_evaluation");
     assert_eq!(report["source"]["format"], "raw_xml");
     assert_eq!(report["source"]["xml_sha256"], provenance["fixture_sha256"]);

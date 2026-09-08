@@ -221,7 +221,19 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let deadline = started
         .checked_add(Duration::from_secs(args.timeout_seconds))
         .ok_or("Timeout is too large")?;
-    for path in [&args.output, &args.export].into_iter().flatten() {
+    let export_manifest = if matches!(args.backend, super::BackendChoice::Native) {
+        args.export.as_ref().map(|path| {
+            let mut name = path.as_os_str().to_os_string();
+            name.push(".data.json");
+            PathBuf::from(name)
+        })
+    } else {
+        None
+    };
+    for path in [&args.output, &args.export, &export_manifest]
+        .into_iter()
+        .flatten()
+    {
         if path.exists() {
             return Err(format!("Output already exists: {}", path.display()).into());
         }
@@ -239,6 +251,12 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     if out.is_some() && out == export {
         return Err("JSON and XML outputs need different paths".into());
     }
+    if let Some(path) = &export_manifest {
+        let metadata_identity = super::destination_identity(path)?;
+        if out.as_ref() == Some(&metadata_identity) || export.as_ref() == Some(&metadata_identity) {
+            return Err("Data metadata, JSON and XML outputs need different paths".into());
+        }
+    }
     let problem = super::read_json::<Problem>(&args.problem, 512 * 1024)?;
     if problem.schema_version != 1 {
         return Err("Unsupported mutation problem schema".into());
@@ -255,7 +273,13 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         problem.weapons.clone(),
         problem.supports.clone(),
     )?;
-    let engine = Engine::new(super::make_backend(args.backend, args.pob.clone())?);
+    let backend = super::make_backend(
+        args.backend,
+        args.pob.clone(),
+        &super::data_loading::DataArgs::default(),
+    )?;
+    let selected_identity = backend.identity();
+    let engine = Engine::new(backend);
     let execution = match args.backend {
         super::BackendChoice::Native => ExecutionKind::RustCpu,
         #[cfg(feature = "pob")]
@@ -391,7 +415,12 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     };
     let scenario = match args.backend {
         super::BackendChoice::Native => registry
-            .bind_native_baseline(&baseline, &poe_optimizer_native::backend_identity())
+            .bind_native_baseline(
+                &baseline,
+                selected_identity
+                    .as_ref()
+                    .ok_or("Native backend did not declare its data identity")?,
+            )
             .map(Scenario::Native),
         #[cfg(feature = "pob")]
         super::BackendChoice::Pob => registry.bind_baseline(&baseline).map(Scenario::Pob),
@@ -469,6 +498,15 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             super::write_new(path, source.content.as_bytes())?;
             report["export"] =
                 serde_json::json!({"status":"written","source":"materialized_xml","path":path});
+            if let Some(metadata_path) = &export_manifest {
+                let metadata = serde_json::json!({"schema_version":1,"status":"native_export_data",
+                    "backend":selected_identity,"uses_packaged_default":true,"xml_sha256":alternative.xml_sha256,
+                    "reload_requirement":"Use a package matching backend.data; the controlled search catalog admits only the reviewed default."});
+                let mut bytes = serde_json::to_vec_pretty(&metadata)?;
+                bytes.push(b'\n');
+                super::write_new(metadata_path, &bytes)?;
+                report["export"]["data_manifest"] = serde_json::json!(metadata_path);
+            }
         }
     }
     if args.export.is_none() {

@@ -4,10 +4,11 @@
 //! allocated ascendancy effects, supports or external modifiers.
 //! Enemy values are resolved by the host; this kernel does not select encounters.
 
-use crate::character::{BASE_EVASION, CharacterAttributes, CharacterInput, CharacterModifiers};
+use crate::character::CharacterInput;
+use crate::data::CompiledGameData;
 use crate::{
-    defence::{PINNED_CONSTANTS, armour_reduction_percent, hit_chance, round_to_integer},
-    spark::{self, SourceFile, SparkQuestRewards},
+    defence::{armour_reduction_percent, hit_chance_with_data, round_to_integer},
+    spark::{SourceFile, SparkQuestRewards},
 };
 use std::{error::Error, fmt};
 
@@ -26,8 +27,8 @@ pub enum MaceWeapon {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct MaceWeaponData {
-    pub name: &'static str,
+pub struct MaceWeaponData<'a> {
+    pub name: &'a str,
     pub physical_minimum: f64,
     pub physical_maximum: f64,
     pub fire_minimum: f64,
@@ -37,29 +38,12 @@ pub struct MaceWeaponData {
     pub required_strength: u32,
 }
 impl MaceWeapon {
-    pub const fn data(self) -> MaceWeaponData {
-        match self {
-            Self::WoodenClub => MaceWeaponData {
-                name: "Wooden Club",
-                physical_minimum: 6.0,
-                physical_maximum: 10.0,
-                fire_minimum: 0.0,
-                fire_maximum: 0.0,
-                attack_rate: 1.45,
-                critical_chance: 5.0,
-                required_strength: 0,
-            },
-            Self::SmithingHammer => MaceWeaponData {
-                name: "Smithing Hammer",
-                physical_minimum: 5.0,
-                physical_maximum: 9.0,
-                fire_minimum: 5.0,
-                fire_maximum: 9.0,
-                attack_rate: 1.45,
-                critical_chance: 5.0,
-                required_strength: 11,
-            },
-        }
+    /// Convenience lookup in the reviewed package. Instance evaluators use
+    /// `CompiledGameData::weapon` so separate datasets remain isolated.
+    pub fn data(self) -> MaceWeaponData<'static> {
+        crate::data::bundled_reference()
+            .expect("reviewed game-data package")
+            .weapon(self)
     }
 }
 
@@ -73,15 +57,12 @@ pub struct MaceData {
     pub brutality_physical_more: f64,
     pub enemy_physical_reduction_cap: f64,
 }
-pub const DATA: MaceData = MaceData {
-    strength: 15.0,
-    dexterity: 7.0,
-    intelligence: 7.0,
-    accuracy_per_level: 6.0,
-    accuracy_per_dexterity: 6.0,
-    brutality_physical_more: 25.0,
-    enemy_physical_reduction_cap: 75.0,
-};
+/// Reviewed default parameters, loaded through the common package compiler.
+pub fn data() -> &'static MaceData {
+    crate::data::bundled_reference()
+        .expect("reviewed game-data package")
+        .mace()
+}
 
 /// Effective-mode enemy armour/evasion must already include encounter defaults.
 /// This profile has no accuracy distance penalty at the default melee distance,
@@ -146,27 +127,36 @@ impl fmt::Display for MaceError {
 }
 impl Error for MaceError {}
 
-/// Legacy profile attributes with no passive modifiers.
-pub const DEFAULT_CHARACTER: CharacterInput = CharacterInput {
-    attributes: CharacterAttributes {
-        strength: DATA.strength,
-        dexterity: DATA.dexterity,
-        intelligence: DATA.intelligence,
-    },
-    modifiers: CharacterModifiers::NONE,
-};
-
-/// Evaluate the original Warrior/no-passive profile without parsing, Lua or I/O.
-pub fn evaluate(input: &MaceInput) -> Result<MaceOutput, MaceError> {
-    evaluate_with_character(input, &DEFAULT_CHARACTER)
+/// Reviewed default class attributes with no passive modifiers.
+pub fn default_character() -> CharacterInput {
+    crate::data::bundled_reference()
+        .expect("reviewed game-data package")
+        .default_mace_character()
 }
 
-/// Evaluate explicit resolved class attributes and admitted entrance modifiers.
-/// The caller must validate the full document and source allocation independently.
+/// Convenience evaluation using the reviewed package through the common compiler.
+pub fn evaluate(input: &MaceInput) -> Result<MaceOutput, MaceError> {
+    evaluate_with_character(input, &default_character())
+}
+
+/// Convenience evaluation using the reviewed package and explicit character inputs.
 pub fn evaluate_with_character(
     input: &MaceInput,
     character: &CharacterInput,
 ) -> Result<MaceOutput, MaceError> {
+    let data = crate::data::bundled_reference()
+        .map_err(|_| MaceError("The reviewed game-data package failed compilation"))?;
+    evaluate_with_data(input, character, data)
+}
+
+/// Calculate using only the explicitly supplied immutable dataset and resolved inputs.
+pub fn evaluate_with_data(
+    input: &MaceInput,
+    character: &CharacterInput,
+    compiled: &CompiledGameData,
+) -> Result<MaceOutput, MaceError> {
+    let data = compiled.mace();
+    let rules = &compiled.snapshot().package().character;
     character.validate().map_err(|error| MaceError(error.0))?;
     let attributes = character.attributes;
     let modifiers = character.modifiers;
@@ -200,7 +190,7 @@ pub fn evaluate_with_character(
         ));
     }
     let level = f64::from(input.character_level);
-    let shared = spark::DATA;
+    let shared = compiled.spark();
     // Same CalcSetup/CalcPerform/CalcDefence pipeline as Spark, with Warrior attributes.
     let life_base = shared.life_per_level * level
         + shared.initial_life
@@ -223,8 +213,8 @@ pub fn evaluate_with_character(
     } else {
         0.0
     };
-    let life = round_to_integer(life_base * (1.0 + life_increased / 100.0)).max(1.0);
-    let mana = round_to_integer(mana_base * (1.0 + mana_increased / 100.0)).max(1.0);
+    let life = round_to_integer(life_base * (1.0 + life_increased / 100.0)).max(rules.minimum_life);
+    let mana = round_to_integer(mana_base * (1.0 + mana_increased / 100.0)).max(rules.minimum_mana);
     let resistance = |quest| {
         (input.resistance_penalty
             + if quest {
@@ -235,7 +225,7 @@ pub fn evaluate_with_character(
         .trunc()
         .clamp(shared.resistance_floor, shared.player_resistance_cap)
     };
-    let weapon = input.weapon.data();
+    let weapon = compiled.weapon(input.weapon);
     // Classes/Item: physical quality applies locally, rounding each endpoint.
     // Item level does not enter these ordinary unmodified weapon base calculations.
     let quality_multiplier = 1.0 + f64::from(input.quality) / 100.0;
@@ -243,7 +233,7 @@ pub fn evaluate_with_character(
     let weapon_physical_maximum = round_to_integer(weapon.physical_maximum * quality_multiplier);
     // calcDamage rounds again after damage modifiers, before critical scaling/armour.
     let more = if input.brutality {
-        1.0 + DATA.brutality_physical_more / 100.0
+        1.0 + data.brutality_physical_more / 100.0
     } else {
         1.0
     };
@@ -261,12 +251,12 @@ pub fn evaluate_with_character(
     };
     // CalcSetup's level multiplier carries a negative one-level base adjustment;
     // CalcPerform adds the dexterity bonus before CalcOffence floors accuracy.
-    let accuracy = (DATA.accuracy_per_level * level - DATA.accuracy_per_level
-        + attributes.dexterity * DATA.accuracy_per_dexterity)
+    let accuracy = (data.accuracy_per_level * level - data.accuracy_per_level
+        + attributes.dexterity * data.accuracy_per_dexterity)
         .floor()
         .max(0.0);
     let enemy_evasion = round_to_integer(input.enemy_evasion).max(0.0);
-    let hit = hit_chance(enemy_evasion, accuracy, false);
+    let hit = hit_chance_with_data(enemy_evasion, accuracy, false, compiled.defence());
     // A critical attack rolls accuracy twice; a failed second check becomes a normal hit.
     let crit_chance = round_to_integer(weapon.critical_chance * 100.0) / 100.0 * hit / 100.0;
     let crit_multiplier = 1.0 + shared.critical_damage_bonus / 100.0;
@@ -277,9 +267,12 @@ pub fn evaluate_with_character(
     let damage_pass = |critical_multiplier: f64| {
         let physical_average = physical_minimum * critical_multiplier / 2.0
             + physical_maximum * critical_multiplier / 2.0;
-        let physical_reduction =
-            armour_reduction_percent(input.enemy_armour, physical_average, PINNED_CONSTANTS)
-                .clamp(-100.0, DATA.enemy_physical_reduction_cap);
+        let physical_reduction = armour_reduction_percent(
+            input.enemy_armour,
+            physical_average,
+            compiled.defence_constants(),
+        )
+        .clamp(-100.0, data.enemy_physical_reduction_cap);
         let physical = physical_average * (1.0 - physical_reduction / 100.0);
         let fire = (fire_minimum * critical_multiplier / 2.0
             + fire_maximum * critical_multiplier / 2.0)
@@ -308,7 +301,7 @@ pub fn evaluate_with_character(
         mana,
         energy_shield: round_to_integer(modifiers.energy_shield_flat).max(0.0),
         armour: round_to_integer(modifiers.armour_flat).max(0.0),
-        evasion: round_to_integer(BASE_EVASION + modifiers.evasion_flat).max(0.0),
+        evasion: round_to_integer(rules.base_evasion + modifiers.evasion_flat).max(0.0),
         fire_resistance: resistance(input.quests.blackjaw),
         cold_resistance: resistance(input.quests.beira),
         lightning_resistance: resistance(input.quests.garukhan),
@@ -332,47 +325,18 @@ pub fn evaluate_with_character(
     })
 }
 
-/// Raw normal-monster table values. Host encounter resolution handles PoB's
-/// configured level bounds and any boss multipliers before constructing MaceInput.
+/// Convenience normal-monster lookup in the reviewed package.
+/// Injected evaluators use their own `CompiledGameData` lookup methods.
 pub fn monster_evasion(level: u32) -> Result<f64, MaceError> {
-    let index = level
-        .checked_sub(1)
-        .ok_or(MaceError("Monster table level must be 1..100"))?;
-    MONSTER_EVASION
-        .get(index as usize)
-        .copied()
-        .ok_or(MaceError("Monster table level must be 1..100"))
+    crate::data::bundled_reference()
+        .map_err(|_| MaceError("The reviewed game-data package failed compilation"))?
+        .monster_evasion(level)
 }
 pub fn monster_armour(level: u32) -> Result<f64, MaceError> {
-    let index = level
-        .checked_sub(1)
-        .ok_or(MaceError("Monster table level must be 1..100"))?;
-    MONSTER_ARMOUR
-        .get(index as usize)
-        .copied()
-        .ok_or(MaceError("Monster table level must be 1..100"))
+    crate::data::bundled_reference()
+        .map_err(|_| MaceError("The reviewed game-data package failed compilation"))?
+        .monster_armour(level)
 }
-const MONSTER_EVASION: [f64; 100] = [
-    24.0, 30.0, 36.0, 43.0, 49.0, 56.0, 63.0, 70.0, 77.0, 84.0, 91.0, 98.0, 105.0, 113.0, 120.0,
-    128.0, 136.0, 144.0, 152.0, 160.0, 168.0, 176.0, 185.0, 193.0, 202.0, 211.0, 220.0, 229.0,
-    238.0, 247.0, 257.0, 266.0, 276.0, 286.0, 296.0, 306.0, 316.0, 326.0, 337.0, 347.0, 358.0,
-    369.0, 380.0, 391.0, 403.0, 414.0, 426.0, 438.0, 449.0, 462.0, 474.0, 486.0, 499.0, 511.0,
-    524.0, 537.0, 551.0, 564.0, 578.0, 591.0, 605.0, 619.0, 634.0, 648.0, 663.0, 677.0, 692.0,
-    708.0, 723.0, 738.0, 754.0, 770.0, 786.0, 803.0, 819.0, 836.0, 853.0, 870.0, 887.0, 905.0,
-    923.0, 941.0, 959.0, 977.0, 996.0, 1015.0, 1034.0, 1053.0, 1073.0, 1093.0, 1113.0, 1133.0,
-    1154.0, 1174.0, 1195.0, 1217.0, 1238.0, 1260.0, 1282.0, 1304.0,
-];
-
-const MONSTER_ARMOUR: [f64; 100] = [
-    3.0, 6.0, 8.0, 10.0, 13.0, 16.0, 19.0, 22.0, 26.0, 30.0, 34.0, 39.0, 43.0, 49.0, 54.0, 60.0,
-    67.0, 73.0, 81.0, 89.0, 97.0, 106.0, 116.0, 126.0, 137.0, 149.0, 161.0, 174.0, 189.0, 204.0,
-    220.0, 237.0, 255.0, 274.0, 295.0, 317.0, 340.0, 364.0, 391.0, 418.0, 448.0, 479.0, 512.0,
-    547.0, 585.0, 624.0, 666.0, 711.0, 758.0, 808.0, 861.0, 917.0, 976.0, 1039.0, 1105.0, 1176.0,
-    1250.0, 1329.0, 1412.0, 1500.0, 1594.0, 1692.0, 1796.0, 1906.0, 2023.0, 2146.0, 2276.0, 2413.0,
-    2558.0, 2712.0, 2874.0, 3044.0, 3225.0, 3416.0, 3617.0, 3829.0, 4053.0, 4290.0, 4540.0, 4803.0,
-    5081.0, 5375.0, 5684.0, 6011.0, 6355.0, 6718.0, 7101.0, 7505.0, 7930.0, 8379.0, 8852.0, 9351.0,
-    9877.0, 10431.0, 11015.0, 11630.0, 12279.0, 12962.0, 13682.0, 14441.0,
-];
 
 /// Normalized full source hashes for this versioned profile's data and translated branches.
 pub const SOURCE_FILES: &[SourceFile] = &[

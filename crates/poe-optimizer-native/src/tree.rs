@@ -1,9 +1,8 @@
 //! Resolve the admitted native class/entrance subset from authenticated portable data.
 //! This records native source resolution, not observations of PoB's Lua object graph.
 use poe_optimizer_core::evaluation::{EvaluationError, EvaluationErrorKind};
-use poe_optimizer_data::{
-    bundled,
-    tree_data::{EffectiveTreeNode, TREE_PATH, TreeAscendancy, TreeClass, TreeSourceIdentity},
+use poe_optimizer_data::tree_data::{
+    EffectiveTreeNode, TREE_PATH, TreeAscendancy, TreeClass, TreeSourceIdentity,
 };
 use poe_optimizer_engine::character::{CharacterAttributes, CharacterInput, CharacterModifiers};
 use roxmltree::Node;
@@ -11,10 +10,10 @@ use std::collections::BTreeSet;
 
 pub(crate) struct NativeTree {
     pub character: CharacterInput,
-    pub class: &'static TreeClass,
-    pub ascendancy: Option<&'static TreeAscendancy>,
+    pub class: TreeClass,
+    pub ascendancy: Option<TreeAscendancy>,
     pub allocated_nodes: Vec<u32>,
-    paid_node: Option<&'static EffectiveTreeNode>,
+    paid_node: Option<EffectiveTreeNode>,
 }
 fn unsupported(message: impl Into<String>) -> EvaluationError {
     EvaluationError::new(EvaluationErrorKind::UnsupportedCapability, message)
@@ -56,10 +55,12 @@ fn integer(node: Node<'_, '_>, field: &str) -> Result<u32, EvaluationError> {
         .map_err(|_| unsupported(format!("Native tree {field} exceeds its integer range")))
 }
 impl NativeTree {
-    pub fn resolve(build: Node<'_, '_>, spec: Node<'_, '_>) -> Result<Self, EvaluationError> {
-        let data = bundled::class_tree().map_err(|error| {
-            EvaluationError::new(EvaluationErrorKind::BackendContract, error.to_string())
-        })?;
+    pub fn resolve(
+        build: Node<'_, '_>,
+        spec: Node<'_, '_>,
+        compiled: &crate::CompiledGameData,
+    ) -> Result<Self, EvaluationError> {
+        let data = compiled.snapshot().tree();
         validate_calculation_source(&data.source)?;
         let internal_id = integer(spec, "classInternalId")?;
         let class = data
@@ -133,12 +134,13 @@ impl NativeTree {
                     .map_err(|error| unsupported(error.to_string()))
             })
             .transpose()?;
-        let mut modifiers = CharacterModifiers::default();
-        if let Some(node) = paid_node {
-            for stat in &node.stats {
-                apply_stat(&mut modifiers, stat)?;
-            }
-        }
+        let modifiers = if let Some(node) = paid_node {
+            *compiled
+                .entrance_modifiers(internal_id, node.physical_node_id)
+                .ok_or_else(|| unsupported("Missing compiled ordinary entrance effects"))?
+        } else {
+            CharacterModifiers::default()
+        };
         requested.extend(roots);
         Ok(Self {
             character: CharacterInput {
@@ -149,17 +151,19 @@ impl NativeTree {
                 },
                 modifiers,
             },
-            class,
-            ascendancy,
+            class: class.clone(),
+            ascendancy: ascendancy.cloned(),
             allocated_nodes: requested.into_iter().collect(),
-            paid_node,
+            paid_node: paid_node.cloned(),
         })
     }
     pub fn ascendancy_name(&self) -> &str {
-        self.ascendancy.map_or("None", |asc| asc.name.as_str())
+        self.ascendancy
+            .as_ref()
+            .map_or("None", |asc| asc.name.as_str())
     }
-    pub fn diagnostic(&self) -> serde_json::Value {
-        let ascendancy = self.ascendancy.map(|asc| {
+    pub fn diagnostic(&self, compiled: &crate::CompiledGameData) -> serde_json::Value {
+        let ascendancy = self.ascendancy.as_ref().map(|asc| {
             serde_json::json!({
                 "index":asc.class_index,"internal_id":asc.internal_id,"catalog_id":asc.catalog_id,
                 "name":asc.name,"start_node_id":asc.start_node_id,
@@ -175,42 +179,20 @@ impl NativeTree {
                 "source_index":self.class.source_index,"name":self.class.name,"start_node_id":self.class.start_node_id},
             "ascendancy":ascendancy,"allocated_nodes":self.allocated_nodes,
             "ordinary_allocated_count":paid_nodes.len(),"paid_nodes":paid_nodes,
-            "source":{"upstream_revision":poe_optimizer_engine::UPSTREAM_REVISION,"tree_version":"0_5",
-                "bundled_content_sha256":bundled::content_sha256()},
+            "source":{"upstream_revision":compiled.snapshot().tree().source.upstream_revision,"tree_version":compiled.snapshot().tree().source.tree_version,
+                "bundled_content_sha256":poe_optimizer_data::bundled::content_sha256()},
+            "data_identity":compiled.identity(),
+            "configured_effects":compiled.snapshot().package().entrance_effects.iter().filter(|entry| entry.class_id == self.class.integer_id && self.paid_node.as_ref().is_some_and(|node| entry.physical_node_id == node.physical_node_id)).collect::<Vec<_>>(),
             "point_budget_verified":false,
             "evidence_kind":"native_source_resolution",
             "scope":"class_identity_and_zero_or_one_ordinary_entrance",
         })
     }
 }
-// Exact admitted source lines, resolved before numerical evaluation. New forms
-// require parser/source parity and full-build tests before they can be admitted.
-fn apply_stat(modifiers: &mut CharacterModifiers, stat: &str) -> Result<(), EvaluationError> {
-    match stat {
-        "4% increased Skill Speed" => modifiers.skill_speed_increased += 4.0,
-        "+8 to Evasion Rating" => modifiers.evasion_flat += 8.0,
-        "+16 to Evasion Rating" => modifiers.evasion_flat += 16.0,
-        "+5 to maximum Energy Shield" => modifiers.energy_shield_flat += 5.0,
-        "+10 to maximum Energy Shield" => modifiers.energy_shield_flat += 10.0,
-        "+10 to Armour" => modifiers.armour_flat += 10.0,
-        "+20 to Armour" => modifiers.armour_flat += 20.0,
-        "10% increased Melee Damage" => modifiers.melee_damage_increased += 10.0,
-        "10% increased Projectile Damage" => modifiers.projectile_damage_increased += 10.0,
-        "10% increased Spell Damage" => modifiers.spell_damage_increased += 10.0,
-        "10% increased Attack Damage" => modifiers.attack_damage_increased += 10.0,
-        "Minions deal 10% increased Damage" => modifiers.minion_damage_increased += 10.0,
-        _ => {
-            return Err(unsupported(format!(
-                "Unsupported native ordinary-passive stat: {stat}"
-            )));
-        }
-    }
-    Ok(())
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+    use poe_optimizer_data::bundled;
 
     #[test]
     fn bundled_data_cannot_mix_with_another_calculation_pin_or_tree() {

@@ -86,6 +86,7 @@ pub struct ActorOutput {
 pub mod candidate;
 
 pub mod coverage;
+pub mod data;
 pub mod evaluation;
 pub mod metrics;
 pub mod options;

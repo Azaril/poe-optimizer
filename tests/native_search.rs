@@ -414,3 +414,39 @@ fn native_only_search_defaults_to_native_and_rejects_reference_backend() {
             .success()
     );
 }
+
+#[test]
+fn pinned_native_catalog_rejects_custom_data_even_with_matching_backend_identity() {
+    use poe_optimizer_data::game_data::{
+        GameDataLoader, LoadLimits, TrustPolicy, bundled_snapshot,
+    };
+    use poe_optimizer_native::{CompiledGameData, HostClock};
+    use std::sync::Arc;
+    let registry = registry();
+    let mut package = bundled_snapshot().unwrap().package().clone();
+    package.character.accuracy_per_level += 1.0;
+    package.refresh_section_digests().unwrap();
+    let snapshot = GameDataLoader::from_bytes(
+        &package.canonical_bytes().unwrap(),
+        &TrustPolicy::AllowCustom,
+        &LoadLimits::default(),
+    )
+    .unwrap();
+    let data = Arc::new(CompiledGameData::compile(Arc::new(snapshot)).unwrap());
+    let backend = NativeBackend::with_data(data, HostClock).unwrap();
+    let identity = backend.identity();
+    let result = Engine::new(backend)
+        .evaluate(
+            &EvaluationRequest {
+                build: registry.template_build(),
+                options: EvaluationOptions::default(),
+                metrics: vec![],
+            },
+            EvaluationBudget { timeout_ms: 5000 },
+        )
+        .unwrap();
+    let error = registry
+        .bind_native_baseline(&result, &identity)
+        .unwrap_err();
+    assert!(error.to_string().contains("reviewed default data"));
+}

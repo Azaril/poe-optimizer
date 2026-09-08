@@ -46,6 +46,7 @@ impl CalculationBackend for PobBackend {
         })?;
         Ok(EvaluationResult {
             backend: BackendIdentity {
+                data: None,
                 id: "pob-poe2-mlua".into(),
                 implementation_version: env!("CARGO_PKG_VERSION").into(),
                 rules_revision: snapshot.runtime.upstream_revision,

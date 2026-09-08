@@ -367,6 +367,18 @@ impl ControlledMaceCatalog {
                 "native baseline backend identity differs from the selected implementation",
             ));
         }
+        // Catalog payloads and requirement rules still describe the reviewed data only.
+        // Matching a caller-selected backend does not make this catalog valid for custom data.
+        if expected_backend.data.as_ref().is_none_or(|data| {
+            data.game != "poe2"
+                || data.schema_version != poe_optimizer_data::game_data::SCHEMA_VERSION
+                || data.semantics_version != poe_optimizer_data::game_data::SEMANTICS_VERSION
+                || data.content_sha256 != poe_optimizer_data::game_data::bundled_package_sha256()
+        }) {
+            return Err(mismatch(
+                "controlled native Mace search requires the reviewed default data package",
+            ));
+        }
         let choice = Choice {
             weapon: self.profile.weapon.clone(),
             support: if self.profile.has_support {
@@ -611,11 +623,7 @@ impl ControlledMaceCatalog {
     }
 }
 fn same_backend(left: &BackendIdentity, right: &BackendIdentity) -> bool {
-    left.id == right.id
-        && left.implementation_version == right.implementation_version
-        && left.rules_revision == right.rules_revision
-        && left.source_fingerprint == right.source_fingerprint
-        && left.adapter_fingerprint == right.adapter_fingerprint
+    left == right
 }
 fn profile(xml: &str) -> Result<Profile> {
     let document = parse(xml)?;

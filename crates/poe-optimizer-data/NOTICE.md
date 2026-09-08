@@ -7,6 +7,13 @@ Community PoE2 revision `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`:
 - `src/Classes/PassiveTree.lua` and `src/Classes/PassiveSpec.lua`: topology and automatic
   source-switch interpretation.
 
+The injectable `data/game-data.json` package additionally transcribes the current native
+profiles' skill/gem identities, weapon bases, quests, character/defence parameters,
+monster tables and typed entrance effects. Its manifest records complete SHA-256 source
+hashes for `Data/Misc.lua`, `Data/QuestRewards.lua`, `Data/Gems.lua`, skill/base tables,
+`ModParser.lua`, `ConfigOptions.lua`, `Modules/Data.lua` and the calculation modules.
+This package is explicitly partial and contains no precomputed build output.
+
 Source: https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2
 
 Passive-tree/game data are (c) Grinding Gear Games. Complete source file hashes,

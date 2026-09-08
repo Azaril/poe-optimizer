@@ -1,5 +1,6 @@
 #[cfg(feature = "pob")]
 mod catalog_search;
+mod data_loading;
 mod mutation_search;
 mod native_benchmark;
 
@@ -74,6 +75,8 @@ enum Action {
     SearchCalibration(catalog_search::Args),
     /// List the typed measurement catalog without starting a calculation.
     Metrics {
+        #[command(flatten)]
+        data: data_loading::DataArgs,
         #[arg(long, value_enum, default_value_t = default_backend())]
         backend: BackendChoice,
     },
@@ -94,6 +97,8 @@ enum Action {
     },
     /// Evaluate with the selected calculation backend and optionally assess an objective.
     Evaluate {
+        #[command(flatten)]
+        data: data_loading::DataArgs,
         input: PathBuf,
         #[arg(long, value_enum, default_value_t = default_backend())]
         backend: BackendChoice,
@@ -150,14 +155,20 @@ fn default_backend() -> BackendChoice {
 fn make_backend(
     selection: BackendChoice,
     _pob: PathBuf,
+    data: &data_loading::DataArgs,
 ) -> Result<Box<dyn CalculationBackend + Send + Sync>, Box<dyn std::error::Error>> {
     Ok(match selection {
-        BackendChoice::Native => Box::new(poe_optimizer_native::NativeBackend::new()),
+        BackendChoice::Native => Box::new(data.backend()?),
         #[cfg(feature = "pob")]
-        BackendChoice::Pob => Box::new(poe_optimizer_pob::backend::PobBackend::new(
-            std::env::current_exe()?,
-            _pob,
-        )),
+        BackendChoice::Pob => {
+            if data.is_selected() {
+                return Err("--data is supported only by the native backend".into());
+            }
+            Box::new(poe_optimizer_pob::backend::PobBackend::new(
+                std::env::current_exe()?,
+                _pob,
+            ))
+        }
     })
 }
 
@@ -220,11 +231,11 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             Cli::command().print_help()?;
             println!();
         }
-        Some(Action::Metrics { backend }) => {
+        Some(Action::Metrics { backend, data }) => {
             println!(
                 "{}",
                 serde_json::to_string_pretty(
-                    &make_backend(backend, PathBuf::new())?
+                    &make_backend(backend, PathBuf::new(), &data)?
                         .capabilities()
                         .metrics
                 )?
@@ -246,6 +257,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             );
         }
         Some(Action::Evaluate {
+            data,
             input,
             backend,
             pob,
@@ -257,8 +269,18 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             objective,
             raw,
         }) => {
+            // Export metadata preserves the selected dataset even though PoB XML has no data-package field.
+            let export_manifest = if matches!(backend, BackendChoice::Native) {
+                export.as_ref().map(|path| {
+                    let mut name = path.as_os_str().to_os_string();
+                    name.push(".data.json");
+                    PathBuf::from(name)
+                })
+            } else {
+                None
+            };
             // Reject conflicting/existing destinations before spending the evaluation budget.
-            for path in [&output, &export].into_iter().flatten() {
+            for path in [&output, &export, &export_manifest].into_iter().flatten() {
                 if path.exists() {
                     return Err(format!("Output already exists: {}", path.display()).into());
                 }
@@ -268,12 +290,22 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             if output_identity.is_some() && output_identity == export_identity {
                 return Err("JSON and XML outputs need different paths".into());
             }
+            if let Some(path) = &export_manifest {
+                let metadata_identity = destination_identity(path)?;
+                if output_identity.as_ref() == Some(&metadata_identity)
+                    || export_identity.as_ref() == Some(&metadata_identity)
+                {
+                    return Err("Data metadata, JSON and XML outputs need different paths".into());
+                }
+            }
             let imported = decode_build(&read_input(&input)?)?;
             let options = match options {
                 Some(path) => read_json::<EvaluationOptions>(&path, 64 * 1024)?,
                 None => EvaluationOptions::default(),
             };
-            let backend = make_backend(backend, pob)?;
+            let data_started = std::time::Instant::now();
+            let backend = make_backend(backend, pob, &data)?;
+            let data_load_ms = data_started.elapsed().as_secs_f64() * 1000.0;
             let engine = Engine::new(backend);
             let policy = objective
                 .map(|path| {
@@ -314,8 +346,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 .map(|policy| policy.assess(&result.measurements))
                 .transpose()?;
             let mut report = serde_json::json!({
-                "schema_version": 2,
+                "schema_version": 3,
                 "status": "experimental_evaluation",
+                "initialization": {"backend_and_data_ms": data_load_ms},
                 "source": { "format": imported.format, "xml_sha256": imported.sha256 },
                 "evaluation": result,
             });
@@ -335,6 +368,19 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                     .first()
                     .ok_or("Backend did not provide a build export")?;
                 write_new(&path, document.content.as_bytes())?;
+                if let Some(metadata_path) = export_manifest {
+                    use sha2::{Digest, Sha256};
+                    let metadata = serde_json::json!({
+                        "schema_version":1, "status":"native_export_data",
+                        "backend":result.backend, "warnings":result.warnings,
+                        "xml_sha256":format!("{:x}",Sha256::digest(document.content.as_bytes())),
+                        "package_path_hint":data.data, "uses_packaged_default":data.data.is_none(),
+                        "reload_requirement":"Load a package matching backend.data before evaluating this XML; the path hint is not identity or trust."
+                    });
+                    let mut bytes = serde_json::to_vec_pretty(&metadata)?;
+                    bytes.push(b'\n');
+                    write_new(&metadata_path, &bytes)?;
+                }
             }
         }
         Some(Action::Assess {
@@ -346,8 +392,17 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 return Err("Output already exists".into());
             }
             let saved: SavedEvaluation = read_json(&input, MAX_WIRE_BYTES)?;
-            if saved.schema_version != 2 || saved.status != "experimental_evaluation" {
-                return Err("Assess requires an evaluation report with schema version 2".into());
+            if ![2, 3].contains(&saved.schema_version) || saved.status != "experimental_evaluation"
+            {
+                return Err(
+                    "Assess requires an evaluation report with schema version 2 or 3".into(),
+                );
+            }
+            if saved.schema_version == 3
+                && saved.evaluation.backend.id == "native-poe2"
+                && saved.evaluation.backend.data.is_none()
+            {
+                return Err("Schema 3 native evaluation requires a data identity".into());
             }
             saved.evaluation.validate_recorded()?;
             // Use the recorded metric versions, never today's PoB catalog or a Lua process.

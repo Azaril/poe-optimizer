@@ -2528,7 +2528,7 @@ impl SparkOracle {
     }
 
     fn calculate(&self, input: &SparkInput) -> Table {
-        self.calculate_with_character(input, &spark::DEFAULT_CHARACTER)
+        self.calculate_with_character(input, &spark::default_character())
     }
 
     fn calculate_with_character(
@@ -2615,26 +2615,35 @@ fn closed_spark_pipeline_matches_pinned_resource_and_offense_source_sections() {
 fn closed_spark_data_is_transcribed_from_source_and_rejects_invalid_profile_inputs() {
     let oracle = SparkOracle::new(false);
     let class: Table = oracle.oracle.lua.globals().get("sparkClass").unwrap();
-    assert_eq!(class.get::<f64>("base_str").unwrap(), spark::DATA.strength);
-    assert_eq!(class.get::<f64>("base_dex").unwrap(), spark::DATA.dexterity);
+    assert_eq!(
+        class.get::<f64>("base_str").unwrap(),
+        spark::data().strength
+    );
+    assert_eq!(
+        class.get::<f64>("base_dex").unwrap(),
+        spark::data().dexterity
+    );
     assert_eq!(
         class.get::<f64>("base_int").unwrap(),
-        spark::DATA.intelligence
+        spark::data().intelligence
     );
     let skill: Table = oracle.oracle.lua.globals().get("sparkSkill").unwrap();
-    assert_eq!(skill.get::<f64>("castTime").unwrap(), spark::DATA.cast_time);
+    assert_eq!(
+        skill.get::<f64>("castTime").unwrap(),
+        spark::data().cast_time
+    );
     let data: Table = oracle.oracle.lua.globals().get("data").unwrap();
     let constants: Table = data.get("characterConstants").unwrap();
     for (name, value) in [
-        ("life_per_level", spark::DATA.life_per_level),
-        ("mana_per_level", spark::DATA.mana_per_level),
+        ("life_per_level", spark::data().life_per_level),
+        ("mana_per_level", spark::data().mana_per_level),
         (
             "base_critical_hit_damage_bonus",
-            spark::DATA.critical_damage_bonus,
+            spark::data().critical_damage_bonus,
         ),
         (
             "base_maximum_all_resistances_%",
-            spark::DATA.player_resistance_cap,
+            spark::data().player_resistance_cap,
         ),
     ] {
         assert_eq!(constants.get::<f64>(name).unwrap(), value);

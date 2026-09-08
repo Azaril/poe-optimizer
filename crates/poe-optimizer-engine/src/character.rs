@@ -100,5 +100,12 @@ impl CharacterInput {
     }
 }
 
-/// Misc.characterConstants.base_evasion_rating, applied by CalcSetup.
-pub const BASE_EVASION: f64 = 7.0;
+/// Reviewed default base evasion; injected kernels read their supplied snapshot.
+pub fn base_evasion() -> f64 {
+    crate::data::bundled_reference()
+        .expect("reviewed game-data package")
+        .snapshot()
+        .package()
+        .character
+        .base_evasion
+}

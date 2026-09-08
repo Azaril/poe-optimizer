@@ -285,7 +285,7 @@ fn explicit_character_guards_preserve_defaults_and_reject_nonfinite_or_unsupport
     };
     assert_eq!(
         spark::evaluate(&spark_input),
-        spark::evaluate_with_character(&spark_input, &spark::DEFAULT_CHARACTER)
+        spark::evaluate_with_character(&spark_input, &spark::default_character())
     );
     for value in [
         f64::NAN,
@@ -296,7 +296,7 @@ fn explicit_character_guards_preserve_defaults_and_reject_nonfinite_or_unsupport
         0.5,
     ] {
         for field in 0..3 {
-            let mut character = spark::DEFAULT_CHARACTER;
+            let mut character = spark::default_character();
             match field {
                 0 => character.attributes.strength = value,
                 1 => character.attributes.dexterity = value,
@@ -313,7 +313,7 @@ fn explicit_character_guards_preserve_defaults_and_reject_nonfinite_or_unsupport
         1_000_001.0,
     ] {
         for field in 0..9 {
-            let mut c = spark::DEFAULT_CHARACTER;
+            let mut c = spark::default_character();
             let m = &mut c.modifiers;
             match field {
                 0 => m.armour_flat = value,
@@ -351,12 +351,12 @@ fn explicit_character_guards_preserve_defaults_and_reject_nonfinite_or_unsupport
     let output = spark::evaluate_with_character(&spark_input, &extremes).unwrap();
     assert!(output.hit_dps.is_finite() && output.life.is_finite() && output.mana.is_finite());
     assert_eq!(spark::evaluate(&spark_input).unwrap(), before);
-    let mut zero = spark::DEFAULT_CHARACTER;
+    let mut zero = spark::default_character();
     zero.attributes = CharacterAttributes::default();
     assert_eq!(
         spark::evaluate_with_character(&spark_input, &zero)
             .unwrap()
             .evasion,
-        character::BASE_EVASION
+        character::base_evasion()
     );
 }

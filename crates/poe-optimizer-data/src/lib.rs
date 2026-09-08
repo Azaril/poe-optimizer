@@ -1,6 +1,7 @@
 //! Portable, authenticated versioned game data. No Lua, I/O or host runtime.
 #![forbid(unsafe_code)]
 pub mod bundled;
+pub mod game_data;
 pub mod tree_data;
 pub mod tree_projection;
 use sha2::{Digest, Sha256};
@@ -12,6 +13,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("tree_data.rs"),
         include_str!("tree_projection.rs"),
         include_str!("bundled.rs"),
+        include_str!("game_data.rs"),
         include_str!("../Cargo.toml"),
         include_str!("../data/tree-source-identity.json"),
         include_str!("../data/class-tree.json"),

@@ -46,7 +46,7 @@ fn prepared_and_document_modes_preserve_finite_results_across_worker_counts() {
     for mode in ["prepared", "document"] {
         for jobs in [1, 4] {
             let report = run(temp.path(), &input, mode, jobs, 64);
-            assert_eq!(report["schema_version"], 1);
+            assert_eq!(report["schema_version"], 2);
             assert_eq!(report["mode"], mode);
             assert_eq!(report["status"], "completed");
             assert_eq!(report["termination"], "evaluation_limit");
