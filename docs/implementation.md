@@ -2,12 +2,13 @@
 
 Last updated: 2026-09-07
 
-Completed local checkpoint: signed resistance modifiers and owned ascendancy passives, starting from
+Completed implementation checkpoint: signed resistance modifiers and owned ascendancy passives, starting from
 clean `3493cfd`. The native shared calculation, schema-3 data/extraction, source-preserving
 projection and schema-3 CLI problem are implemented. All **374 workspace tests**, **44
 native-only CLI tests**, lint, formatting, dependency isolation, five portable WASM libraries,
-release reproduction and independent reviews pass. Publication is tracked below. Previous
-code `2135ed0` passes hosted Windows/Linux CI.
+release reproduction and independent reviews pass. Code **`c91fab1`** is pushed to main;
+hosted Windows/Linux CI is running and not yet verified complete. Previous code `2135ed0`
+passes both hosts. Next: configurable support loadouts.
 
 The new package is schema **3** / **`poe2-native-profiles-v3`**, **153,014 bytes**, SHA-256
 `7f5c1ed6e959984df095a2f87ef96fb450ccfda7ea1b41cfeeb65f5bdd4a7de4`.
@@ -39,8 +40,8 @@ the design documents.
 2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve supplied
    original exports and independent Spark/Mace goldens. Maintain actual-source interpreted
    and warmed parity, full-build differential cases and strict unsupported-mechanic errors.
-3. The exact class/entrance code-commit CI run passes both hosts. Continue the signed
-   resistance checkpoint below and retain its validation/publication evidence. The agreed bounded composition is implemented: selected data, shared typed
+3. Check the exact resistance code-commit CI run in the current checkpoint table; it was
+   running at handoff. Resolve any failure before expanding support mechanics. The agreed bounded composition is implemented: selected data, shared typed
    class/tree resolution, composed finite graph/catalog, exact source spans, independent
    locks and caller 0/1 ordinary-point / zero/one ascendancy-point budgets. Legacy fixed Warrior
    problems remain supported. Never infer an available point budget from observed counts.
@@ -107,7 +108,7 @@ one-point ascendancy passive choices; selected configuration supplies every effe
 | Release reproduction | Two fresh release extractor processes produce identical reviewed package bytes and identical extraction evidence. Native-only release serial/four-worker feasible/infeasible archives and finalists match; both complete runs use 578 attempts. Winner `class/10/asc/Monk3/entrance/10364/ascendancy-passive/24475/wooden-q20/brutality_i`: **16.62515712 DPS**, **7% chaos resistance**. Injected -7.5 makes the chaos constraint infeasible; a locked diagnostic export recalculates to -7 with matching data/trust metadata. Locked calculation uses three attempts; explicit over-budget domain uses zero. Artifacts: `runs/resistance-release-check/summary.json`. |
 | Artifact identities | Native-only release executable `33613951ed8dd271916cea136f9c5a224fe454923437d21aca3c70202934cdb4`; reference-feature executable `b93c393b6d016f8b6d494727426df419ee7d633788d65b6d64cbf24199d093f2`; extraction evidence `3889aa8ddf4f9a7a777276b90e33958f3376e8bc357a84d07e6010c7530ab901`; custom package `a17358a98e29bfd23462dc94f5c679c10bafa93c4aa92522137cac46ce29674d`. |
 | Static audit | Strict UTF-8, all 237 local file links and 20 heading links pass across 30 tracked Markdown files. Seven numerical/data sections, old defence fields and all 16 original entrance records are unchanged. Source revision/full snapshot, dependency manifests, original exports and independent goldens are unchanged. Evidence: `runs/resistance-static-audit.json`. |
-| Publication | All local implementation, release and documentation checks pass. Ready for authorized commit/push to main; hosted Windows/Linux CI pending. |
+| Publication | Code **`c91fab1ace2a649cbbe22fc2d5ccd999c247c72f`** is pushed to main. Local implementation, release and documentation checks pass. [Windows/Linux CI run 34185229809](https://github.com/Azaril/poe-optimizer/actions/runs/34185229809) is **in progress**; no hosted success is claimed yet. Snapshots: `runs/resistance-main-ci.json`, `runs/resistance-main-ci-jobs.json`. This following update changes documentation only. |
 
 The [resistance example](../examples/mace-resistance-search.json) maximizes Mace hit DPS
 subject to chaos resistance >= 1%. With reviewed data this selects the admitted Monk3 chaos
@@ -984,7 +985,7 @@ is concrete; real-build recommendations depend on both.
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
 | M5: richer objective policies | Not started | Unit-checked expressions, composite and ordered priorities, soft preferences, Pareto selection, and explicit robust aggregation. Test policy-specific selection and preserve hard constraints. |
 | Desktop GUI | Deferred until CLI/report contracts stabilize | Choose frontend; Tauri is a candidate. Reuse core jobs, results and comparison models. Verify CLI/GUI parity, responsive cancellation and native evaluator packaging; package optional reference workers separately. Does not depend on finishing every M4/M5 feature. |
-| Native Rust calculation replacement | Active; all class/ascendancy identities and ordinary entrances supported by restricted Spark/Mace pipelines; portable data and native weapon/support search implemented | Class/entrance materialization and explicit finite search rules are implemented; retain reviewed source compatibility, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
+| Native Rust calculation replacement | Active; all class/ascendancy identities, ordinary entrances and four resistance ascendancy passives supported by restricted Spark/Mace pipelines; injected data and finite native search implemented | Class/entrance materialization and explicit finite search rules are implemented; retain reviewed source compatibility, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
 | PoE1 adapter | Later, separate track | Add a distinct versioned rules/data/evaluator adapter after PoE2 interfaces are proven; do not mix game identities or reuse PoE2 parity claims. |
 
 Narrow passive/item/skill experiments are internal validation steps. The first usable release
@@ -1302,6 +1303,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `2bd56de` | Added deterministic all-section pinned source extraction, separate policy/evidence, bounded offline supervision and the `extract-game-data` CLI. All 316 local workspace tests, 24 native-only CLI tests, lint, formatting, dependency isolation and portable WASM checks pass. Release regeneration reproduces the reviewed package/evidence and preserves native results; both hosted Windows/Linux CI jobs pass in run `34176865681`. Broader source compatibility and data-driven materialization remain next. |
 | 2026-09-07 | `9388935` | Added schema-2 source-derived requirements, dataset-bound controlled catalog/native search, pre-dispatch legality and actual data/trust export evidence. All 333 workspace tests, 32 native-only CLI tests, lint, formatting, dependency isolation and five portable WASM libraries pass. Release custom-data ranking, serial/Rayon results and fresh export reevaluation agree; both hosted Windows/Linux CI jobs pass in `34179412604`. Next: production class/passive materialization and finite catalog composition. |
 | 2026-09-07 | `2135ed0` | Added shared class/tree resolution and partial graph, source-preserving class/ascendancy/entrance composition, explicit caller budgets/locks, selected-class requirements and expanded native/reference search. All 353 workspace tests, 40 native-only CLI tests, lint, formatting, dependency isolation, portable WASM and release checks pass. Full 744-state serial/Rayon search admits 504 alternatives; fresh PoB interaction/export checks pass. Code is pushed to main; hosted run `34181992200` is in progress. Next: signed resistance modifiers and a small owned ascendancy-node slice. |
+| 2026-09-07 | `c91fab1` | Added a shared signed-resistance kernel, injected global cap, schema-3 owned passive data/extraction and four one-point ascendancy passives. Problem/report schemas 3/4 preserve older input scopes. All 374 workspace tests, 44 native-only CLI tests, lint, formatting, dependency isolation, five portable WASM libraries, source reproduction and native release checks pass. New 840-state search admits 576 alternatives; complete builds and effect removal match fresh PoB. Code is pushed to main; hosted run `34185229809` is in progress. Next: configurable zero-to-two support loadouts. |
 
 ### Hosting decision checkpoint
 
