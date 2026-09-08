@@ -2,8 +2,10 @@
 
 Last updated: 2026-09-08
 
-Current implementation checkpoint: **local weapon-modifier assembly**, implemented and
-locally validated from `5bc00db`; publication is the remaining checkpoint step. Schema-5
+Current implementation checkpoint: **local weapon-modifier assembly**, implemented, locally
+validated and pushed as `da168e94410730b8ee97764d54feb126484d12d3`. Exact-code Windows/Linux
+CI run `34193804854` is in progress. The next phase is shared actor attributes and maximum
+resources. Schema-5
 source-derived rules, shared item admission, prepared weapon assembly and CLI problem
 schema 5/report 6 are complete for the bounded scope below. The preceding typed-candidate
 code `f022d1925a3d21ef595f50eade3ac279793ec517` passes hosted Windows and Linux CI.
@@ -109,7 +111,7 @@ unfinished and the source pin/independent goldens are unchanged.
 | Integrated validation | The first workspace command ran 457 tests: 456 passed, one native rejection contract failed, and nine child helpers were ignored directly but exercised by parent tests. Review restored canonical numeric headers and changed the now-supported local-physical rejection case to an unsupported global-to-Attacks line. Afterward **all 66 import, 38 native and 61 native-only CLI tests pass**, covering **460 unique workspace tests across the integrated run and focused reruns**, with no unresolved failures. This does not claim a second full workspace command. Final workspace/native-only Clippy, formatting, runtime-dependency isolation and five WASM libraries pass. Evidence: `runs/local-weapon-test-coverage.json` records raw logs and the focused agent tool transcripts separately. |
 | Release reproduction | Full **4,410-state / 2,949-legal / 1,461-rejected** searches use **2,951 attempts** and agree at 1/2/4/32 workers in typed/document modes, three repeats each. Archives, fresh finalist XML and dataset companions match. Custom grammar, critical cap, signed resistance and support data preserve agreement for full infeasible runs and a three-attempt locked export. LevelReq-80 empty domains spend zero; partial budgets remain bounded. Evidence: `runs/local-weapon-release-check/summary.json`, `runs/verify-local-weapon-release.py`. |
 | Static preservation | All 1,082 source-manifest file hashes/lengths verify; the PoB submodule is clean. Source pin, tree/full snapshot, supplied originals, six independent golden XML/reference pairs and dependency manifests/lockfile remain unchanged. Ten old data sections and every preexisting Character field are identical. UTF-8, fenced blocks and local links pass across 33 Markdown files. Evidence: `runs/local-weapon-static-final-audit.json`. |
-| Publication | Local code/review/reproduction complete; commit/push and exact-code Windows/Linux CI tracking remain. No hosted success for this checkpoint is claimed before its actual run completes. |
+| Publication | Code **`da168e94410730b8ee97764d54feb126484d12d3`** is pushed to main. [Windows/Linux run 34193804854](https://github.com/Azaril/poe-optimizer/actions/runs/34193804854) is **in progress on both platforms**; no hosted success is claimed yet. Exact-code snapshots: `runs/local-weapon-main-ci.json`, `runs/local-weapon-main-ci-jobs.json`. This following publication update changes documentation only. |
 
 Native-only calculations use no Lua or per-candidate subprocess. The PoB backend stays an
 explicit parity/reference selection. The synthetic local-weapon example demonstrates
@@ -1646,3 +1648,5 @@ release; confirm the desktop framework and packaging before GUI work; choose acq
 data sources before trade/upgrade ingestion. Benchmark-specific metrics and usage profiles
 must be documented when those fixtures are made runnable, without turning their choices
 into mandatory goals for all users.
+
+| 2026-09-08 | `da168e9` | Added injected schema-5 local weapon rules, normal/rare source-preserving admission, prepared numeric weapon assembly and problem/report schemas 5/6. Integrated validation plus focused review reruns cover 460 workspace tests, with 61 native-only CLI tests passing and no unresolved failures. Source/build parity, release reproduction, lint and portable checks pass. Typed/document searches agree across 1/2/4/32 workers; one-worker median 236.7 ms versus 668.1 ms for this diagnostic domain. Pushed to main; exact hosted run `34193804854` is in progress. Next: shared actor attributes and maximum resources. |
