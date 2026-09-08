@@ -85,8 +85,10 @@ fn failure(output: Output) -> String {
 }
 fn extract(output: &Path, explicit_source: bool) -> Value {
     let mut command = cli();
+    // This checks complete catalog/evidence reproducibility, not extraction speed.
+    // Hosted debug builds have exceeded 30 seconds; deadline rejection is tested separately.
     command
-        .args(["extract-game-data", "--timeout-seconds", "30", "--output"])
+        .args(["extract-game-data", "--timeout-seconds", "120", "--output"])
         .arg(output);
     if explicit_source {
         // An explicit source path must work independently of the working directory.
