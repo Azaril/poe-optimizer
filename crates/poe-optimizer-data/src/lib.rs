@@ -4,6 +4,7 @@ mod action_speed;
 mod actor;
 pub mod bundled;
 pub mod class_tree;
+pub mod configuration;
 pub mod game_data;
 mod item_formatting;
 mod item_rules;
@@ -20,6 +21,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("actor.rs"),
         include_str!("action_speed.rs"),
         include_str!("class_tree.rs"),
+        include_str!("configuration.rs"),
         include_str!("tree_data.rs"),
         include_str!("tree_projection.rs"),
         include_str!("bundled.rs"),

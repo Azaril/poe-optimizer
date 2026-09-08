@@ -4,10 +4,10 @@
 It is optional development tooling: native evaluation loads the exported package and has
 no Lua or worker-process dependency. No website is scraped or downloaded.
 
-The exporter covers the same twenty-one explicitly partial sections as the
+The exporter covers the same twenty-two explicitly partial sections as the
 [native data package](native-data.md): tree, character, actor, receiving defences, movement, action speed, direct timing, quests, Spark, Mace, supports, weapons,
 item modifier rules, item source formatting, jewellery and fixed armour bases, defence, monsters, encounters, typed owned passive
-effects and explicit passive exclusions. Whole ordinary structure is separate from
+effects, explicit passive exclusions and configuration metadata. Whole ordinary structure is separate from
 capability admission: 1,282 complete source views are supported, including the four
 admitted ascendancy resistance nodes; 3,476 source views are explicitly excluded. It does not infer arbitrary build mechanics
 or broaden accepted source revisions. Progress and validation evidence belong in the
@@ -54,21 +54,31 @@ actor scope and values. Unconsumed or ambiguous modifiers reject.
 
 The companion retains source revision/inventory identity, consumed-file hashes,
 extractor/policy identity, package schema/semantics and the resulting package digest. Its
-35 direct source-file entries cover extraction and retained provenance reads. Additional
+37 direct source-file entries cover extraction and retained provenance reads. Additional
 tree/loader/spec evidence remains in the package's `tree.source` record.
 It describes how this artifact was produced. Native loading continues to use explicit
 host trust and actual content identity; a sidecar claim does not grant trust or establish
 numerical parity. The normal package loader validates records and section digests.
 
+The configuration extractor constructs all original `ConfigOptions.lua` rows, including
+generated quest choices, using the original global/misc definitions and boss-data tooltip
+producer. `Bosses.lua` and `BossSkills.lua` are authenticated construction dependencies.
+It preserves ordered duplicate keys, original typed values and recursive metadata; callback
+source locations/hashes are inert descriptors. It does not execute effect or UI callbacks.
+Independent original `ConfigTab` default-state oracles remain separate from the exporter.
+
 ## Isolation and limits
 
 Extraction runs in a fresh supervised process with no inherited standard I/O and a hidden
 window on Windows. Lua libraries/module access and source chunks are restricted. LuaJIT
-is disabled; Lua allocations are limited to 128 MiB, with an instruction hook checking
-every 10,000 instructions and rejecting after approximately 200 million instructions.
+is disabled. The numerical extractor VM has a 128 MiB allocation limit and an instruction
+hook checking every 10,000 instructions, rejecting after approximately 200 million
+instructions. The separate configuration-construction VM has a 64 MiB limit and an
+approximately 100-million-instruction bound. These are per-VM bounds, not a total process
+memory limit.
 Direct consumed source text is limited to 64 MiB; full-inventory verification and tree
 extraction retain their separate read/record limits. This is offline extraction of reviewed source, not a general-purpose Lua sandbox.
-The parent bounds the private package/evidence envelope to 4 MiB and error output to
+The parent bounds the private package/evidence envelope to 17 MiB and error output to
 64 KiB, checks ordinary-file status and rejects noncanonical or malformed envelopes.
 The package retains its separate 16 MiB portable-loader limit and one-million-value bound. The deadline includes the
 parent's decoding and evidence validation; Rust conversion and serialization are covered
@@ -91,7 +101,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 11 and `poe2-native-profiles-v11`, including source-keyed passive/actor effects,
+schema 12 and `poe2-native-profiles-v12`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It

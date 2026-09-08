@@ -146,7 +146,10 @@ cargo run --locked -- evaluate tests/fixtures/builds/pobarchives-Dfz36mCq.import
 The current `example.import.txt` contains five builds, one per line; use the
 [corpus intake runner](docs/breadth-validation.md#reproduce-corpus-intake) for that file. Add `--inspect-configuration`
 to retain exact configuration source values and selection provenance. Individual XML/share
-inputs can also be inspected with `inspect-configuration INPUT`; it works without PoB and
+inputs can also be inspected with `inspect-configuration INPUT --with-definitions` to look
+up settings in the complete injected catalog; `--data PACKAGE` selects custom definitions.
+Definition recognition does not evaluate effects. Omitting both options gives source-only
+`inspect-configuration INPUT`; it works without PoB and
 reports source data separately from unimplemented mechanics.
 Single-build commands accept one build document or share string.
 

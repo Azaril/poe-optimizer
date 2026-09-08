@@ -206,8 +206,9 @@ action/configuration evidence, coverage and normalized-export hashes. Fresh fina
 establish numeric consistency under the same backend; generic realization and game legality
 remain `unverified`. Exporting the exact requested XML does not establish that PoB preserved
 all its semantics. The old `PobCandidateCatalog` four-fixture allowlist and fixed realization
-checks remain separately tested library debt, outside this production command path. Fixed
-test inputs remain appropriate; production build-ID special cases remain a breadth concern.
+checks now live only in integration-test support; the production library no longer exports
+that fixture-specific API. Fixed test inputs remain appropriate. Broad native pipeline
+admission remains separate work.
 
 ## Reproduce corpus intake
 
@@ -265,3 +266,31 @@ skill. Native benchmarks must disclose admitted/excluded builds and separate pre
 allocation-free calculation and whole-search costs. Broad numerical parity, useful multicore
 execution and source-preserving realization are all required before claiming full native
 replacement.
+
+## Injected configuration catalog checkpoint
+
+The complete pinned catalog is now a portable package section: 564 ordered definition
+occurrences for 563 keys, including 17 generated quest definitions and 540 inert callback
+descriptors. All 228 scalar occurrences in the five originals can be looked up without
+rewriting source or discarding placeholders. This is metadata recognition; effective
+configuration and native support for these complete builds remain unimplemented.
+
+```powershell
+cargo run --no-default-features --locked -- inspect-configuration tests/fixtures/builds/breadth-20260908/build-01.xml --with-definitions
+cargo run --no-default-features --locked -- inspect-configuration path/to/caller-build.xml --data path/to/caller-data.json --output runs/new-definition-report.json
+```
+
+The first path is an explicit development example; the command requires the caller to
+supply a build. All sets and original scalar values remain in its report, together with
+data identity/trust, definition occurrences, option-match diagnostics and initial defaults
+before load. Unknown keys and unlisted values remain visible. No reference process runs.
+See [configuration definitions](configuration-data-proposal.md) for limits and pending
+resolution/effect work. Current validation/publication evidence is in the living plan.
+
+A further production-path audit found no embedded build fallback in import, evaluate,
+configuration inspection, caller-driven benchmarks or search. Residual coupling remains in
+`NativeProfile` and controlled-template dispatch to the two Spark/Mace pipelines, two
+weapon capability keys and restrictive group/set/mechanic admission. The legacy four-fixture
+PoB candidate helper has been moved entirely into test support. The remaining admission
+limits are B3 work items, not general-build support. Removing them requires the reviewed shared
+actor/action/build representation; accepting any XML path alone cannot establish breadth.

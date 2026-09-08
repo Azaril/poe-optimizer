@@ -1,4 +1,4 @@
-//! Exact, calibrated whole-build alternatives for the experimental finite search path.
+//! Test-only exact alternatives for the four historical calibration fixtures.
 //!
 //! This adapter intentionally accepts only the four independently calibrated Mace
 //! fixtures. It is not an arbitrary XML mutation engine or a game-legality validator.
@@ -203,9 +203,9 @@ impl PobCandidateCatalog {
                     "alternative IDs must be unique, nonblank, and at most 128 bytes".into(),
                 ));
             }
-            let imported = crate::import::decode_build(build.xml.as_bytes())
+            let imported = poe_optimizer_import::decode_build(build.xml.as_bytes())
                 .map_err(|error| CandidateBridgeError::InvalidCatalog(error.to_string()))?;
-            if imported.format != crate::import::ImportFormat::RawXml
+            if imported.format != poe_optimizer_import::ImportFormat::RawXml
                 || !APPROVED_SOURCES.contains(&imported.sha256.as_str())
             {
                 return Err(CandidateBridgeError::UnsupportedSource);
@@ -219,14 +219,14 @@ impl PobCandidateCatalog {
         }
         let fingerprint = hash(&format!(
             "pob-calibrated-mace-projection-v1\n{}\n{}\n{}",
-            crate::runtime::UPSTREAM_REVISION,
+            poe_optimizer_pob::runtime::UPSTREAM_REVISION,
             SOURCE_FINGERPRINT,
             hashes.into_iter().collect::<Vec<_>>().join("\n")
         ));
         let identity = CatalogIdentity {
             schema_version: 1,
             game: "path_of_exile_2".into(),
-            rules_revision: crate::runtime::UPSTREAM_REVISION.into(),
+            rules_revision: poe_optimizer_pob::runtime::UPSTREAM_REVISION.into(),
             content_fingerprint: fingerprint,
         };
         let mut catalog = CandidateCatalog {
@@ -400,7 +400,7 @@ impl PobCandidateCatalog {
             .validate_recorded()
             .map_err(|error| mismatch(&error.to_string()))?;
         if result.backend.id != "pob-poe2-mlua"
-            || result.backend.rules_revision != crate::runtime::UPSTREAM_REVISION
+            || result.backend.rules_revision != poe_optimizer_pob::runtime::UPSTREAM_REVISION
             || result.backend.source_fingerprint != SOURCE_FINGERPRINT
         {
             return Err(mismatch(
@@ -747,13 +747,13 @@ fn payload(format: &str, content: String) -> ExactPayload {
 }
 
 fn parse(xml: &str) -> Result<Document<'_>, CandidateBridgeError> {
-    crate::preflight::validate(xml)
+    poe_optimizer_import::preflight::validate(xml)
         .map_err(|error| CandidateBridgeError::Realization(error.to_string()))?;
     Document::parse_with_options(
         xml,
         ParsingOptions {
             allow_dtd: false,
-            nodes_limit: crate::import::MAX_XML_NODES,
+            nodes_limit: poe_optimizer_import::MAX_XML_NODES,
             entity_resolver: None,
         },
     )

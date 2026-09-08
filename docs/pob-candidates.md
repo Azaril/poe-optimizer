@@ -4,7 +4,7 @@
 PoB backend. The command requires a catalog and has no embedded character or fixture fallback.
 It verifies finalist numerical consistency, while generic requested-versus-realized fidelity
 and game legality remain explicitly unverified. The older four-fixture canonical projection
-is retained as a separate regression utility described below.
+is retained only in test support, as described below.
 
 ## Supplied catalog CLI
 
@@ -76,11 +76,12 @@ states means only that this finite list was processed.
 
 ## Legacy calibrated candidate bridge
 
-`poe-optimizer-pob::candidate::PobCandidateCatalog` still connects the shared canonical
-candidate model to the four committed Mace calibration fixtures, verified by SHA-256. The
-production `search-calibration` command no longer depends on this utility. Its fixed hashes
-and realization guards remain unchanged for regression coverage; they do not accept arbitrary
-builds into mutable candidates or establish the general optimizer release.
+The test-only [calibrated candidate helper](../crates/poe-optimizer-pob/tests/support/calibrated_candidate.rs)
+connects the shared canonical candidate model to the four committed Mace calibration
+fixtures, verified by SHA-256. It is compiled only by the candidate materialization test;
+the PoB library no longer exports a fixture-specific candidate module. Its fixed hashes and
+realization guards remain unchanged for regression coverage. Production document comparison
+and build search continue to use caller-supplied input.
 
 The end-state candidate/search contracts retain class, ascendancy, paid passives, equipment,
 active skills and supports. This legacy bridge maps only a level-60 Warrior with no ascendancy
@@ -88,9 +89,9 @@ or paid passives, one Mace Strike group, one equipped normal weapon, and optiona
 Other class/tree/skill/item configurations require a general source-preserving projection with
 requested-versus-realized tests, rather than extending production fixture allowlists.
 
-### API and identities
+### Test helper and identities
 
-Construct the registry with `PobCandidateCatalog::from_builds(Vec<PobBuildAlternative { id, xml }>)`. A registry may contain any nonempty subset of the four approved sources. Display IDs must be unique; duplicate documents and changed XML bytes fail before calculation. Share strings must first be decoded with the ordinary importer; the registry requires approved raw XML.
+The regression test constructs its registry with `PobCandidateCatalog::from_builds(Vec<PobBuildAlternative { id, xml }>)`. A registry may contain any nonempty subset of the four approved sources. Display IDs must be unique; duplicate documents and changed XML bytes fail before calculation. Share strings must first be decoded with the ordinary importer; the registry requires approved raw XML.
 
 `catalog()` exposes an immutable `CandidateCatalog`; `alternatives()` associates display IDs and source hashes with canonical candidates. `materialize(&Candidate)` accepts only exact registered states and returns their original XML bytes. It never patches XML or silently maps an unsupported mutation back to a known build. Changing even one candidate field, including the catalog identity, requires membership in the registry.
 
@@ -100,7 +101,7 @@ PoB automatically adds Warrior root `47175`. The canonical candidate's `passives
 
 ### Requested-versus-realized checks
 
-The legacy bridge exposes `validate_realization(&Candidate, &EvaluationResult)` for its narrow projection. Its regression tests apply this guard to fresh calculations; the supplied-document CLI does not use it. The guard checks:
+The test helper provides `validate_realization(&Candidate, &EvaluationResult)` for its narrow projection. The regression test applies this guard to fresh calculations; production code does not compile or use the helper. The guard checks:
 
 - The pinned PoB backend, rules revision and source-manifest identity, plus the shared recorded-result contract.
 - Level, class, ascendancy, implicit root, selected skill group and absence of extra or unresolved groups/minions.
@@ -131,8 +132,8 @@ build recommendations or a production default corpus.
 
 ## Validation and expansion
 
-`crates/poe-optimizer-pob/tests/candidate_materialization.rs` continues to test the legacy
-projection's source/payload identities, order-independent catalogs, unsupported mutations
+[The candidate materialization target](../crates/poe-optimizer-pob/tests/candidate_materialization.rs)
+compiles the historical helper and continues to test its source/payload identities, order-independent catalogs, unsupported mutations
 and fresh realization of all four alternatives. Drift regressions cover passive allocations,
 action/gem identity, item text and mixed content, backend provenance, encounter values,
 custom modifiers, runes and stat sets. Its source-hash and realization guards are unchanged.

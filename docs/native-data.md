@@ -210,7 +210,15 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
-Current package schema **11**, semantics **`poe2-native-profiles-v11`**, adds the `action_speed`
+Current package schema **12**, semantics **`poe2-native-profiles-v12`**, adds the complete
+ordered `configuration` metadata section. It contains 564 definition occurrences (563 keys),
+17 generated quests, exact typed options/defaults and 540 inert callback descriptors.
+`GameDataSnapshot::configuration()` exposes an immutable indexed catalog without requiring
+native skill compilation. All preceding 21 section contents and digests remain unchanged;
+the package now has 22 sections. Regenerate older packages; recognition of configuration
+metadata does not grant support for its effects. See [configuration definitions](configuration-data-proposal.md).
+
+Package schema **11**, semantics **`poe2-native-profiles-v11`**, adds the `action_speed`
 and `direct_action_timing` sections, source MAX/positive queries and shared ordinary timing.
 The package has 21 sections, 402 fixed bases, 359 actor templates, 87 formatting keys and
 1,282 admitted passive views. Movement consumes the same resolved action result as offence;

@@ -4,9 +4,9 @@ use poe_optimizer_core::{
     EvaluationSnapshot,
     evaluation::{BackendIdentity, BuildDocument, BuildFormat, EvaluationResult},
 };
-use poe_optimizer_pob::candidate::{
-    CandidateBridgeError, PobBuildAlternative, PobCandidateCatalog,
-};
+#[path = "support/calibrated_candidate.rs"]
+mod calibrated_candidate;
+use calibrated_candidate::{CandidateBridgeError, PobBuildAlternative, PobCandidateCatalog};
 use sha2::{Digest, Sha256};
 use std::{
     fs,

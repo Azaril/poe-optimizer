@@ -13,13 +13,18 @@ pub(crate) struct Args {
     /// Write a source-projection report to a new file instead of stdout.
     #[arg(long)]
     output: Option<PathBuf>,
+    /// Look up authored settings in the selected configuration catalog; does not evaluate effects.
+    #[arg(long)]
+    with_definitions: bool,
+    #[command(flatten)]
+    data: crate::data_loading::DataArgs,
 }
 
 pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let source = super::read_input(&args.input)?;
     let imported = poe_optimizer_import::decode_build(&source)?;
     let projection = poe_optimizer_import::configuration::project_xml(&imported.xml)?;
-    let report = serde_json::json!({
+    let mut report = serde_json::json!({
         "schema_version": 1,
         "scope": "configuration_source_projection_v1",
         "status": "source_projected",
@@ -40,6 +45,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         "implementation_sha256": format!("{:x}", Sha256::digest(concat!(
             include_str!("configuration_inspect.rs"),
             include_str!("../crates/poe-optimizer-import/src/configuration.rs"),
+            include_str!("../crates/poe-optimizer-import/src/configuration_definitions.rs"),
             include_str!("../crates/poe-optimizer-import/src/source_xml.rs"),
             include_str!("../crates/poe-optimizer-import/src/xml_compat.rs"),
             include_str!("../crates/poe-optimizer-import/src/lib.rs"),
@@ -48,6 +54,16 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             include_str!("../Cargo.lock")
         ).as_bytes()))
     });
+    if args.with_definitions || args.data.data.is_some() {
+        let snapshot = args.data.snapshot()?;
+        let definitions = poe_optimizer_import::configuration_definitions::lookup_definitions(
+            &projection,
+            &snapshot,
+        )?;
+        report["definition_lookup"] = serde_json::to_value(definitions)?;
+        report["definition_implementation_sha256"] =
+            poe_optimizer_data::implementation_fingerprint().into();
+    }
     let bytes = serde_json::to_vec_pretty(&report)?;
     if let Some(path) = args.output {
         super::write_new(&path, &bytes)?;

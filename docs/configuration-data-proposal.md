@@ -1,9 +1,11 @@
 # Injectable configuration definitions: audit and proposal
 
-Status: source-audited proposal, with no production model or package changes. This is a
-bounded next step in [breadth validation](breadth-validation.md), not a claim that the five
-supplied builds can already be evaluated natively. Broad skill/actor architecture remains a
-separate design discussion.
+Status: the portable catalog, authenticated extraction and caller-driven definition lookup
+are implemented in package schema 12; validation/publication is tracked in the
+[implementation log](implementation.md). Effective configuration resolution and effect
+translation below remain planned. This boundary advances [breadth validation](breadth-validation.md);
+it does not establish native support for the five supplied builds. Broad skill/actor
+architecture remains a separate design discussion.
 
 ## Audit evidence
 
@@ -77,36 +79,40 @@ placeholder map. Preserve raw node kind and scalar kind before making a compatib
 decision. Numeric XML entities and other unsupported lexical forms retain their existing
 source-reader guards; a configuration catalog does not authorize lossy XML rewriting.
 
-## Proposed data and API boundary
+## Data and API boundary
 
-Add a portable `ConfigDefinitionCatalog` in `poe-optimizer-data`, exposed through the selected
+Use a portable `ConfigDefinitionCatalog` in `poe-optimizer-data`, exposed through the selected
 data snapshot and injected into configuration consumers. Extract the complete source
 metadata catalog rather than selecting definitions by the current corpus or skill profile.
-The first package integration can contain this catalog as a `configuration` section. Its
+The package contains this catalog as a `configuration` section. Its
 public read API should accept the catalog independently of `CompiledGameData`, so generic
 input preservation and metadata inspection do not require Spark/Mace calculation compilation. Keep
 catalog scalar-kind metadata in data/core; the data crate must not depend on import. The
 borrowed source projection stays in import, and admission/preparation bridges that source
 model to the injected catalog.
 
-Proposed shapes, subject to the source validation gates below:
+The portable records separate authored input expectations from initial scalar defaults:
 
 ```rust
-struct ConfigDefinitionCatalog {
+struct ConfigurationData {
     schema_version: u32,
     source: ConfigSourceIdentity,
-    definitions: Vec<ConfigDefinition>, // all ordered source rows with a var
+    source_table_rows: u32,             // includes presentation-only rows
+    definitions: Vec<ConfigDefinition>, // every ordered source row with a var
+    capability: ConfigCapability,       // MetadataOnly
 }
 struct ConfigDefinition {
-    id: ConfigDefinitionId,            // source-bound occurrence, not just key
+    id: String,                        // source-bound occurrence, not just key
     key: String,
-    source_order: u32,
-    source_widget: ConfigWidgetKind,
-    scalar_kinds: Vec<ScalarKind>,     // list choices can mix numbers and strings
-    options: Vec<ConfigOption>,       // exact ordered typed values and labels
+    source_table_index: u32,
+    source_variable_order: u32,
+    widget: ConfigWidgetKind,
+    scalar_kinds: Vec<ConfigScalarKind>,
+    label: Option<String>,
+    options: Vec<ConfigOption>,
     defaults: ConfigDeclaredDefaults,
     source: ConfigDefinitionSource,
-    behavior: ConfigBehaviorEvidence,
+    metadata: BTreeMap<String, ConfigMetadataValue>,
 }
 struct ConfigDeclaredDefaults {
     input: Option<Scalar>,
@@ -115,13 +121,19 @@ struct ConfigDeclaredDefaults {
 }
 ```
 
+The immutable Arc-backed catalog indexes keys to ordered row indexes and exposes
+`initial_state()` for the original `CreateConfigSet` assignment sequence. It does not apply
+load migrations, UI fallback values or dynamic callbacks. A finite declared default may
+differ from the widget's expected authored-input kind, as in Lua; neither metadata nor a
+list-option match is a universal import whitelist.
+
 Reuse `core::options::Scalar` for boolean/number/text values; keep numbers finite at the
 portable catalog boundary. An absent default must remain distinct from explicit false,
 zero and empty text. Retain exact string bytes and original scalar lexemes in the shared
 source projection; a parsed `Scalar` alone cannot preserve XML representation. A mixed
 number/text list must not become a text-only enum or stringify numeric options.
 
-`ConfigDefinitionId` should identify an occurrence within its source/data identity. Build a
+A definition ID identifies an occurrence within its source/data identity. Build a
 secondary `key -> ordered definition indexes` lookup, not an overwriting map. Exact source
 file/hash plus row/quest provenance bind definitions; source option order is part of that
 identity. Hashes for Lua callback spans can identify unsupported behavior without embedding
@@ -131,7 +143,7 @@ metadata can be separate, optional presentation evidence.
 The implemented source-preserving import seam exposes immutable ordered sets through
 `ConfigurationProjection::sets()` and `active_set()`. Each `ConfigSetProjection` exposes
 `inputs()`, `placeholders()`, `blocks()`, `unknown_records()` and `records_in_source_order()`;
-records retain source range/text and ownership. Definition lookup should enrich this
+records retain source range/text and ownership. Definition lookup enriches this
 projection without deleting unknown fields, choosing a fallback build, trimming quest
 strings or marking mechanics supported. Duplicate authored XML inputs remain distinct from
 duplicate definition rows. The generic projection currently rejects duplicate same-kind
@@ -183,6 +195,25 @@ suppression. The generic modifier engine has broader condition primitives, but a
 configuration conditions such as Combat/Effective, ailments and recent actions require
 source-owned dependencies and actual receiving consumers. Do not turn definition metadata
 into unvalidated condition flags or treat a UI `ifCond` as an evaluated condition.
+
+## Inspection API
+
+`inspect-configuration INPUT --with-definitions` uses the reviewed catalog. Supplying
+`--data PACKAGE` also enables lookup; `--data-sha256 HASH` binds an externally reviewed
+custom package. Without either option, inspection remains independent of game data.
+The CLI loads only a validated snapshot, without compiling a skill pipeline or loading PoB.
+
+`configuration_definitions::lookup_definitions` enriches every authored set and ordered
+record with all matching definition IDs, scalar-kind diagnostics and exact option indexes.
+Unknown keys, unlisted options and type mismatches remain visible. It preserves source and
+data identities, data trust and initial defaults before load; effects and callbacks remain
+unevaluated. Runtime input paths have no fixture fallback.
+
+The package bounds metadata depth, rows, options, strings and source locations. Lookup
+additionally bounds total definition matches and option comparisons to 65,536 each, so
+custom duplicate rows and long lists cannot expand work or reports indefinitely. Exceeding
+a limit rejects the lookup before publication. Native preparation consumes the separately
+supported numerical rules; it does not execute catalog callback descriptors.
 
 ## Bounded delivery and parity gates
 

@@ -5,6 +5,7 @@ pub use crate::action_speed::{
 };
 pub use crate::actor::*;
 use crate::bundled::BundledClassTree;
+pub use crate::configuration::*;
 pub use crate::item_formatting::{ItemFormattingData, ItemFormattingRule, ItemNumberFormat};
 pub use crate::item_rules::{
     ItemCaptureKind, ItemModifierMapping, ItemModifierRoll, ItemModifierRule, LocalWeaponOperation,
@@ -17,8 +18,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 11;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v11";
+pub const SCHEMA_VERSION: u32 = 12;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v12";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -42,6 +43,7 @@ const SECTIONS: &[&str] = &[
     "movement",
     "action_speed",
     "direct_action_timing",
+    "configuration",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -426,6 +428,7 @@ pub struct GameDataPackage {
     pub movement: MovementData,
     pub action_speed: ActionSpeedData,
     pub direct_action_timing: DirectActionTimingData,
+    pub configuration: ConfigurationData,
 }
 impl GameDataPackage {
     pub fn armour_base(&self, id: &str) -> Option<&ArmourBaseData> {
@@ -502,6 +505,7 @@ pub struct GameDataSnapshot {
     identity: DataIdentity,
     trust: DataTrust,
     package: GameDataPackage,
+    configuration: ConfigDefinitionCatalog,
 }
 impl GameDataSnapshot {
     pub fn identity(&self) -> &DataIdentity {
@@ -512,6 +516,9 @@ impl GameDataSnapshot {
     }
     pub fn package(&self) -> &GameDataPackage {
         &self.package
+    }
+    pub fn configuration(&self) -> &ConfigDefinitionCatalog {
+        &self.configuration
     }
     pub fn passive_effects(
         &self,
@@ -567,10 +574,12 @@ impl GameDataLoader {
             semantics_version: package.manifest.semantics_version.clone(),
         };
         identity.validate().map_err(error)?;
+        let configuration = ConfigDefinitionCatalog::new(package.configuration.clone())?;
         Ok(GameDataSnapshot {
             identity,
             trust,
             package,
+            configuration,
         })
     }
 }

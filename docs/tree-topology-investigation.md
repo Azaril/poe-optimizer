@@ -99,3 +99,19 @@ These are proposed tests, **not tests run by this investigation**:
 | Round-trip identity | Import, normalize, export and import again; require stable effective nodes, overrides, allocation modes and identities. Preserve the original XML and report intentional normalization separately. |
 
 The first four cases allow useful cross-class fixture coverage without inventing any missing node. Broader topology certification remains a tracked data question, not a reason to remove cross-class search from the design.
+
+## Executable identity and root coverage
+
+The existing [native passive parity regression](../tests/native_passive_parity.rs) was rerun
+at the injected-configuration checkpoint: 100 fresh PoB evaluations pass. It derives 98
+class/ascendancy/entrance combinations from the two small Spark/Mace fixtures and reimports
+two selected cases. It compares requested and realized class/ascendancy identities, effective
+source records, implicit roots, ordinary entrance allocations and supported measurements.
+All 23 catalogued ascendancies are represented; none requires an ordinary paid route to its
+ascendancy root. Separate point-budget enforcement remains the candidate validator's job;
+this diagnostic evaluator explicitly does not certify a character's point entitlement.
+
+These generated combinations are identity/topology regression cases, not independent
+held-out builds or coverage of arbitrary paid ascendancy effects. The full-build breadth
+phase still needs imported allocation provenance, separate budget boundaries and exceptional
+allocation cases. The 14 absent source targets remain a separate diagnostic.

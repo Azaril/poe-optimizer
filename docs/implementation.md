@@ -2,8 +2,14 @@
 
 Last updated: 2026-09-08
 
-Current checkpoint: **breadth configuration source projection**, implemented and locally
-validated. The shared reader, original-PoB parser comparisons, injected-definition inventory
+Current checkpoint: **injected configuration definitions**, implemented and locally validated. The portable schema-12 catalog, complete authenticated extractor,
+original-source default-state oracles and caller-driven CLI lookup are implemented. All five
+original builds retain exact source values; definition recognition does not grant mechanic
+support. Numeric section content and the pinned tree remain unchanged. Publication is pending;
+see the checkpoint evidence below. Full native replacement remains unfinished.
+
+The preceding checkpoint, **breadth configuration source projection**, is implemented and
+locally validated. The shared reader, original-PoB parser comparisons, injected-definition inventory
 and caller-driven inspection are complete. Native/search scalar readers share exact source
 semantics; all five corpus projections and fresh PoB runs succeed. Native still rejects the
 broader build layout. Preserving unknown configuration does not admit its game effects;
@@ -100,9 +106,9 @@ the design documents.
    mechanic coverage and numeric parity independently. Audit build-specific runtime coupling;
    review a concrete general build-model proposal before changing major architecture.
    Source-preserving configuration projection is now implemented; read its current checkpoint
-   below and the [configuration-data proposal](configuration-data-proposal.md). Next extract
-   and inject the complete ordered definition catalog, with explicit unsupported behavior.
-   Preserve duplicate rows, exact typed options and separate default origins. Extend the
+   below and the [configuration-data proposal](configuration-data-proposal.md). The complete
+   injected catalog and definition lookup are now implemented and locally validated. Check
+   publication status below, then extend the
    mechanism inventory beyond configuration. The next root guard excludes Import, Party,
    Calcs and TreeView on all five originals; preserve their distinct metadata/calculation
    semantics through a classified source container projection. Review the general actor/build
@@ -140,6 +146,72 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Injected configuration definitions — validation checkpoint
+
+The new `configuration` package section contains the complete ordered source metadata,
+independent of current skill profiles and corpus keys. An immutable `ConfigDefinitionCatalog`
+indexes occurrences and keys once per snapshot, retaining duplicates. Import lookup consumes
+that snapshot without `CompiledGameData`, native calculation or a PoB runtime. The optional
+CLI `--with-definitions` / `--data` path exposes source/data-bound evidence; default inspection
+remains data-free. Custom renamed keys, mixed typed options and changed defaults are tested.
+The legacy four-fixture PoB materializer and frozen expected configuration were moved into
+integration-test support; production input APIs no longer export that fixture-only registry.
+
+The catalog retains 663 source table positions, 564 definitions for 563 keys, 142 typed
+options, 17 generated quests and 540 inert callback descriptors. `initial_state()` reproduces
+ordered `CreateConfigSet` assignments, including removal by nil and `defaultIndex` precedence.
+It does not apply UI fallback, load migrations, dynamic placeholders or modifier callbacks.
+A stored scalar's type can differ from expected authored-input metadata, as in Lua. Unknown
+keys, unlisted options and scalar-kind mismatches are diagnostics, not silent data deletion.
+
+Package schema **12**, semantics **`poe2-native-profiles-v12`**, has 22 sections, **4,427,011 bytes**,
+SHA-256 **`ee37ded45933ec240d087dea7f270c0be8a30bf9a4d29cce46420a72df9b72bd`**.
+All previous 21 payloads and section hashes, plus both tree artifacts, are unchanged. The
+extractor authenticates 37 direct files, including original boss metadata and its tooltip
+producer. Function locations use original source line information; callback code is not
+serialized or executed by the native catalog. The private offline extraction envelope is
+bounded to 17 MiB; the public package keeps its independent 16 MiB limit. Lookup additionally
+limits total definition matches and option comparisons to 65,536 each before publication.
+
+| Gate | Current result / evidence |
+| --- | --- |
+| Portable data | 74 data tests pass, including 17 catalog tests; `runs/configuration-data-all-tests.log` |
+| Original-source catalog/default parity | 4 tests pass, cold and 100-repeat warm, all metadata/options/defaults/callback spans compared independently; `runs/configuration-catalog-parity.log` |
+| Generic import lookup | 6 tests pass, including every scalar in all five originals, custom injection and expansion limits; `runs/catalog-definition-import.log` |
+| CLI inspection / fresh extraction | 12 final CLI tests pass (5 new definition, 4 source, 3 extraction); both fresh extractions exactly reproduce the final package/evidence; `runs/catalog-final-cli-tests.log` |
+| Native-only CLI | 100 tests pass and strict lint passes on the final package; `runs/config-catalog-native-cli-all-tests.log` |
+| Combined workspace target coverage | 740 tests pass: 587 final library tests plus 148 existing CLI regressions and 5 new CLI tests. Final changed CLI targets rerun separately; see validation note below and `runs/catalog-validation-summary.json` |
+| Test-only fixture registry | 5 tests pass; unchanged test bodies/assertions and no production module export; `runs/config-test-only-candidates.log` |
+| Strict lint / WASM / isolation / docs | Final workspace and native-only Clippy, formatting, five portable WASM libraries, no-Lua dependency checks and 35-document/396-link audit pass |
+| Breadth | All five sources and 228 scalar lookups preserved; five fresh PoB successes with 110 unchanged measurements, five explicit native root-layout rejections; `runs/catalog-breadth-summary.json` |
+| Class/ascendancy roots | Existing native passive regression passes 100 fresh PoB evaluations; generated Spark/Mace identity cases, not held-out breadth |
+| Corpus runner | 9 Python tests pass; `runs/catalog-corpus-tool-tests.log` |
+| Numerical/tree preservation | All 21 original payloads/digests and tree bytes unchanged; source pin/user inputs/46 recorded files preserved; `runs/catalog-section-preservation.json`, `runs/catalog-source-preservation.json` |
+| Publication / hosted CI | Pending; preceding source checkpoint hosted run remains in progress |
+
+Validation accounting: the initial full-workspace run began before the metadata-only
+function-span correction and test-only API cleanup. It completed all 148 existing CLI
+regressions, then failed the new strict function-end assertion against its earlier compiled
+catalog artifact. That draft retained the adjacent comment after `CreateConfigSet`; the
+independent oracle had already identified and corrected this metadata span. The final
+artifact records exactly lines 1317–1334. A separate final non-CLI all-target command passes
+587 tests, including all four strict catalog oracles, and the final
+12-test CLI rerun includes all five new definition cases plus source inspection and fresh
+extraction. Thus the 740 total is combined target coverage, not a claim that one pristine
+final full-workspace command produced it. Nine ignored harness entries are dedicated child
+helpers invoked by their parent tests. The final package, original numeric values, goldens,
+source pin and caller imports are all checked. A passing source-definition comparison is
+neither full-build numerical parity nor support for a newly observed mechanic.
+
+**Resume after validation/publication:** continue B2 with a classified root-container projection
+for Import, Party, Calcs and TreeView. All five builds currently reach this root-layout guard;
+classify workflow/UI records separately from calculation-bearing party and selection data,
+without ignoring unknown effects. Extend the complete mechanism inventory beyond configuration.
+Then propose the shared actor/action/build model under B3 before significant architecture
+changes. Effective configuration resolution and migration of native quest/encounter bindings
+are subsequent work with independent source dispatch and full-build parity gates. Keep the
+separate ordinary/ascendancy roots and budgets; the 14 missing targets remain source findings.
 
 ## Configuration source projection — validation checkpoint
 
@@ -496,8 +568,8 @@ copy beside the indexed XML decouples this corpus from future edits to the user'
 file. The generic admission/coverage matrix and held-out corpus are still pending.
 The first common native barrier was one multiline quest-reward string in active ConfigSet 1.
 The shared source projection now resolves that XML-semantic mismatch without implementing
-its game effects. The configuration inventory and proposed injected catalog are described in
-[the source configuration checkpoint](#configuration-source-projection--validation-checkpoint).
+its game effects. The complete injected catalog and data-bound inspection are described in
+[the configuration checkpoint](#injected-configuration-definitions--validation-checkpoint).
 
 - [x] **B1 — caller-configured corpus and provenance.** Load a versioned manifest or
   line-delimited import file supplied by the caller. Preserve exact inputs, hashes,
@@ -519,7 +591,8 @@ its game effects. The configuration inventory and proposed injected catalog are 
   Spark/Mace admission, skill IDs, level restrictions and implicit player-only assumptions.
   Normal evaluate/search already load caller files, but that alone does not establish
   generic admission. The shipped developer `search-calibration` command now requires a
-  caller-supplied catalog; embedded production payloads have been removed. Its schema-2
+  caller-supplied catalog; embedded production payloads have been removed. The old four-fixture
+  PoB materializer now exists only in integration-test support, outside the production API. Its schema-2
   report separates exact requested source from observed realization and unverified legality.
   The assembly benchmark likewise requires an explicit caller problem path.
   Propose a normalized build model for item/skill instances, grants, actor relationships,
@@ -2598,6 +2671,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-08 | `56dcbc5` | Added schema-10 injected Body Armour and shared movement, source-generated penalties, case-normalized grammar, movement objective metrics and graph problem 10/report 11. 658 workspace + 87 native-only CLI tests pass, followed by 19 passing tests in complete affected targets after CRLF fixture repairs. Source/full-build parity, strict lint, WASM, preservation and 24 agreeing release searches pass; exact finalist matches PoB. Pushed to main; exact-code Windows/Linux CI `34228787060` has passed on both platforms. Next: verify hosted CI, then shared ActionSpeed and complete Spark/Mace timing including the source server-tick cap. |
 | 2026-09-08 | `f1d8a1c` | Added schema-8 injected receiving data, shared source-ordered native Armour/Evasion/ES and resistance calculation, Lunar/Pearlescent bases, scenario/evidence bindings and graph problem 8/report 9. 580 workspace + 79 native-only CLI tests pass across integrated/focused runs; source/full-build parity, Clippy, WASM, preservation and release checks pass. All 24 complete searches agree; exact release finalist matches fresh PoB. Pushed to main; exact-code CI `34214745950` now passes on Windows and Linux. Local Helmet/Gloves/Boots components and rating metrics are implemented in the following checkpoint. |
 | 2026-09-08 | `a2586a8` | Added schema-7 injected passive/equipment data, complete ordinary structure with 1,142 admitted source views, component actor programs, lazy typed Spark/Mace assembly and native graph search with exact locks/attribute choices. 556 workspace tests and 76 native-only CLI tests pass across integrated/focused runs; local Clippy, WASM, preservation and release reproduction pass. All 24 full searches agree across modes/workers. Pushed to main; exact CI run `34208805533` now passes on Windows and Linux. Shared receiving defences and resistance modifiers are implemented in the following checkpoint. |
+| 2026-09-08 | Publication pending | Added schema-12 injected configuration catalog, original-source metadata/default parity, caller-driven definition lookup and test-only isolation of the old fixture registry. Combined target coverage totals 740 passing Rust tests, plus 100 native-only CLI and 9 corpus tests. All five inputs preserve 228 scalar records and 110 fresh reference measurements; native broad-build support remains pending. |
 | 2026-09-08 | `0da5c5c` | Added exact configuration source projection, caller-only CLI inspection, shared native/search scalar readers and schema-2 corpus evidence. 354 relevant workspace-target tests plus 95 native-only CLI tests and 9 runner tests pass; strict lint, WASM, isolation, preservation and docs checks pass. All five inputs project and repeat their PoB measurements, while native retains explicit root-layout exclusions. Ordered configuration definitions, container semantics and unresolved actor/action labels are audited; broader native admission and full parity remain unfinished. |
 
 ### Hosting decision checkpoint

@@ -13,8 +13,9 @@ use std::{
     time::{Duration, Instant},
 };
 
-/// The contained package retains its independent 2 MiB portable-loader limit.
-pub const MAX_GAME_DATA_ARTIFACT_BYTES: u64 = 4 * 1024 * 1024;
+/// Private canonical package/evidence envelope. The contained portable package
+/// retains its independent 16 MiB loader limit; 1 MiB allows bounded source evidence.
+pub const MAX_GAME_DATA_ARTIFACT_BYTES: u64 = 17 * 1024 * 1024;
 const MAX_ERROR_BYTES: u64 = 64 * 1024;
 
 #[derive(Debug, thiserror::Error)]

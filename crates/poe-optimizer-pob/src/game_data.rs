@@ -42,6 +42,8 @@ const READ_PATHS: &[&str] = &[
     "src/Modules/ConfigOptions.lua",
     "src/Classes/ConfigTab.lua",
     "src/Data/QuestRewards.lua",
+    "src/Data/Bosses.lua",
+    "src/Data/BossSkills.lua",
     "src/Data/Gems.lua",
     "src/Data/Skills/act_int.lua",
     "src/Data/Skills/other.lua",
@@ -93,7 +95,7 @@ const MAX_SOURCE_BYTES: usize = 64 * 1024 * 1024;
 #[error("pinned game-data extraction failed: {0}")]
 pub struct GameDataExtractionError(pub String);
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
-fn error(e: impl std::fmt::Display) -> GameDataExtractionError {
+pub(crate) fn error(e: impl std::fmt::Display) -> GameDataExtractionError {
     GameDataExtractionError(e.to_string())
 }
 impl From<mlua::Error> for GameDataExtractionError {
@@ -111,7 +113,7 @@ impl From<source::SourceError> for GameDataExtractionError {
         error(e)
     }
 }
-fn hash(bytes: &[u8]) -> String {
+pub(crate) fn hash(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
 fn normalized_hash(text: &str) -> String {
@@ -120,7 +122,8 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v11",
+        "poe-game-data-extractor-v12",
+        include_str!("configuration_extract.rs"),
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
@@ -373,6 +376,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         movement: extractor.record(&records, "movement")?,
         action_speed: extractor.record(&records, "action_speed")?,
         direct_action_timing: extractor.record(&records, "direct_action_timing")?,
+        configuration: crate::configuration_extract::extract(&extractor.sources)?,
     };
     package.refresh_section_digests().map_err(error)?;
     let evidence = GameDataExtractionEvidence {
@@ -388,7 +392,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
     };
     Ok(ExtractedGameData { package, evidence })
 }
-fn section<'a>(source: &'a str, begin: &str, end: &str) -> Result<&'a str> {
+pub(crate) fn section<'a>(source: &'a str, begin: &str, end: &str) -> Result<&'a str> {
     let matches: Vec<_> = source.match_indices(begin).collect();
     if matches.len() != 1 {
         return Err(error(format!(
