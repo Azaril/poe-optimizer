@@ -157,7 +157,7 @@ fn custom_snapshot() -> Arc<GameDataSnapshot> {
         package
             .passive_effects
             .iter_mut()
-            .find(|effect| effect.ascendancy_id.as_deref() == Some("Monk3"))
+            .find(|effect| effect.key.physical_node_id == 24475)
             .unwrap()
             .effects[0]
             .value = -7.5;
@@ -560,15 +560,14 @@ fn typed_deadlines_use_the_same_host_clock_contract_as_full_evaluation() {
 
 #[test]
 fn unused_custom_character_composition_failures_do_not_abort_other_candidates() {
-    let data =
-        custom(|package| {
-            for record in package.passive_effects.iter_mut().filter(|record| {
-                record.physical_node_id == 3936 || record.physical_node_id == 14960
-            }) {
-                record.effects[0].stat = game_data::PassiveStat::FireResistanceFlat;
-                record.effects[0].value = 1_000_000.0;
-            }
-        });
+    let data = custom(|package| {
+        for record in package.passive_effects.iter_mut().filter(|record| {
+            record.key.physical_node_id == 3936 || record.key.physical_node_id == 14960
+        }) {
+            record.effects[0].stat = game_data::PassiveStat::FireResistanceFlat;
+            record.effects[0].value = 1_000_000.0;
+        }
+    });
     let registry = catalog(data.clone(), TEMPLATE);
     let backend = backend(data);
     let baseline = backend.calculate(&request(TEMPLATE), BUDGET).unwrap();

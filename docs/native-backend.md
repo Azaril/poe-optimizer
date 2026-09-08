@@ -9,7 +9,7 @@ use either implementation without exposing Lua values or process APIs.
 Both profiles use [shared actor preparation](actor-resources.md) for attributes, inherent
 bonuses, maximum Life/Mana/Spirit and global Accuracy. Data owns admitted modifier templates,
 operations, condition tags, precision and Spirit quest settings. Native profile evidence is
-Spark version 2 or Mace version 4; unsupported receiving defences and reservation still reject.
+Spark version 3 or Mace version 5; unsupported receiving defences and reservation still reject.
 
 ## Implemented build profiles
 
@@ -17,18 +17,19 @@ Spark version 2 or Mace version 4; unsupported receiving defences and reservatio
 
 | Profile | Character and skills | Equipment and encounter scope |
 | --- | --- | --- |
-| Spark | One level-1 quality-0 Spark; supported class/tree selection described below | No equipment/supports; supported explicit normal, boss or Pinnacle encounter configuration |
-| Mace Strike | One level-1 quality-0 Mace Strike; zero to two level-1 quality-0 reviewed supports; supported class/tree selection described below | One normal/rare supplied weapon from two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, five reviewed local modifier families and explicit equip-level metadata; zero implicits; normal enemies only |
+| Spark | One level-1 quality-0 Spark; supported class/tree selection described below | Optional supported amulet; no supports; supported explicit normal, boss or Pinnacle encounter configuration |
+| Mace Strike | One level-1 quality-0 Mace Strike; zero to two level-1 quality-0 reviewed supports; supported class/tree selection described below | One normal/rare supplied weapon from two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, five reviewed local modifier families and explicit equip-level metadata; zero weapon implicits; optional supported amulet and admitted global actor lines; normal enemies only |
 
 Both profiles accept all eight pinned classes and 23 ascendancy identities, with implicit
-roots and zero or one ordinary entrance passive connected to the selected class. They also
+roots and connected capability-admitted ordinary passives, including supported notables
+and explicit physical attribute choices. They also
 admit zero or one of four directly connected ascendancy small nodes: Warrior3/14960 (fire),
 Druid2/61722 (elemental), Monk3/24475 (chaos) and Huntress3/17058 (negative elemental).
 Owned typed effect values come from the injected package. Class
 attributes affect resources and attack accuracy. Admitted entrance effects include skill
 speed, skill-type damage increases and flat armour, evasion or energy shield. Shared physical
 roots and class-specific node substitutions retain their distinct source identities.
-Other ascendancy passives, other ordinary nodes, attribute choices, jewels, grants and
+Excluded passive views, other ascendancy passives, jewels, grants and
 weapon-set allocations remain unsupported. Selecting an ascendancy identity does not imply
 coverage for its other effects. The evaluator does not infer an available point budget
 or certify equipment/gem requirements; search must separately apply explicit finite rules.
@@ -46,14 +47,14 @@ maximum hits, Full DPS, minions and broader builds are outside native coverage. 
 mechanics or unknown metric queries reject; there is no automatic Lua fallback.
 
 `poe-optimizer-data` owns the portable tree model, finite projections and an authenticated
-bundled subset of class/root/entrance source records. Native builds load this data without
+bundled ordinary structure and explicitly admitted/excluded effective source views. Native builds load this data without
 a PoB checkout. The bundle identifies retained and excluded records explicitly; it is not
 a complete game database. Optional PoB extraction produces fresh artifacts for updates and
 parity. See [tree projection](tree-projection.md).
 
 Native results include a `native-tree` diagnostic attachment with the selected class and
-ascendancy, physical allocations, effective entrance stat lines and the bundled-data digest.
-Use CLI `--raw` to retain these diagnostic attachments. The attachment uses schema/media version **2** with separate ordinary/ascendancy used counts
+ascendancy, physical allocations, effective passive stat lines and the bundled-data digest.
+Use CLI `--raw` to retain these diagnostic attachments. The attachment uses schema/media version **3** with explicit attribute choices, source-view keys and separate ordinary/ascendancy used counts
 and a kind on each paid physical/effective view. The tree evidence kind is
 `native_source_resolution`; `point_budget_verified` is false. The
 PoB-specific live passive observation field remains absent on native results, because native
@@ -135,7 +136,12 @@ request and export XML. `PreparedEvaluation::calculate` has no clocks or OS call
 `evaluate_prepared` also creates a fresh complete result with context, measurements,
 validation, export and diagnostics.
 
-Controlled native search defaults to `--native-evaluation typed`. It uses the private
+The lazy [`search-build` workflow](passive-equipment-assembly.md) uses `ControlledBuildCatalog`,
+component actor programs and privately admitted `PreparedBuildCandidates` handles. It
+combines equipment and passive fragments per candidate without a Cartesian catalog. The
+remaining preparation details in this section describe the preserved legacy API.
+
+Legacy controlled native search defaults to `--native-evaluation typed`. It uses the private
 admission boundary in `poe_optimizer_import::controlled_mace`:
 
 1. A fresh full-document baseline passes `bind_native_baseline` against the selected
@@ -225,7 +231,7 @@ requires a new path and rejects collisions before work.
 A checksum is emitted only when every completed result contains finite values for the
 entire requested catalog. It hashes sorted metric query/unit/schema/value bits and uses an
 order-independent aggregate across workers. Spark satisfies that gate. Mace currently has
-`metric_checksum: null` because its average-hit metric is unavailable; eight finite values
+`metric_checksum: null` because its average-hit metric is unavailable; nine finite values
 remain visible in `sample_measurements`. The
 `non_finite_or_unavailable_completed_results` counter counts results containing either
 kind of missing finite value. Throughput is specific to these admitted profiles and does
@@ -275,7 +281,7 @@ can use the native evaluator. See [native calculation coverage](native-engine.md
 
 The Mace profile now uses [data-derived support loadouts](support-loadouts.md), with
 prepared modifier aggregates and exact configured-support evidence (profile attachment
-version 3, including exact item provenance and prepared local weapon stats). Spark support coverage remains empty.
+version 5, including exact item provenance, global actor records and prepared local weapon stats). Spark support coverage remains empty.
 
 The [local weapon pipeline](local-weapons.md) parses supplied item text once, compiles its
 injected rule mappings into `PreparedWeaponStats`, and uses that bound object in both full

@@ -1,5 +1,7 @@
 # Typed native candidate evaluation
 
+The current lazy allocation/equipment API is documented in [passive/equipment assembly](passive-equipment-assembly.md). It prepares source components and admits graph selections without enumerating their Cartesian product. This document retains the legacy `ControlledMaceCatalog` / `PreparedMaceCandidates` API used by `search-experimental`.
+
 The native search path prepares immutable components once and calculates privately
 validated candidate handles directly in Rust. It shares the numerical engine and injected
 data with complete document evaluation. PoB remains an optional, explicitly selected

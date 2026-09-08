@@ -4,10 +4,12 @@
 It is optional development tooling: native evaluation loads the exported package and has
 no Lua or worker-process dependency. No website is scraped or downloaded.
 
-The exporter covers the same thirteen explicitly partial sections as the
+The exporter covers the same fifteen explicitly partial sections as the
 [native data package](native-data.md): tree, character, actor, quests, Spark, Mace, supports, weapons,
-item modifier rules, defence, monsters, encounters and typed owned passive effects. The current version includes the four admitted ascendancy
-resistance nodes. It does not infer arbitrary build mechanics
+item modifier rules, jewellery bases, defence, monsters, encounters, typed owned passive
+effects and explicit passive exclusions. Whole ordinary structure is separate from
+capability admission: 1,142 complete source views are supported, including the four
+admitted ascendancy resistance nodes; 3,616 source views are explicitly excluded. It does not infer arbitrary build mechanics
 or broaden accepted source revisions. Progress and validation evidence belong in the
 [living implementation record](implementation.md).
 
@@ -52,7 +54,7 @@ actor scope and values. Unconsumed or ambiguous modifiers reject.
 
 The companion retains source revision/inventory identity, consumed-file hashes,
 extractor/policy identity, package schema/semantics and the resulting package digest. Its
-26 direct source-file entries cover extraction and retained provenance reads. Additional
+29 direct source-file entries cover extraction and retained provenance reads. Additional
 tree/loader/spec evidence remains in the package's `tree.source` record.
 It describes how this artifact was produced. Native loading continues to use explicit
 host trust and actual content identity; a sidecar claim does not grant trust or establish
@@ -68,7 +70,7 @@ Direct consumed source text is limited to 64 MiB; full-inventory verification an
 extraction retain their separate read/record limits. This is offline extraction of reviewed source, not a general-purpose Lua sandbox.
 The parent bounds the private package/evidence envelope to 4 MiB and error output to
 64 KiB, checks ordinary-file status and rejects noncanonical or malformed envelopes.
-The package retains its separate 2 MiB portable-loader limit. The deadline includes the
+The package retains its separate 16 MiB portable-loader limit and one-million-value bound. The deadline includes the
 parent's decoding and evidence validation; Rust conversion and serialization are covered
 by process supervision.
 
@@ -89,12 +91,15 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 6 and `poe2-native-profiles-v6`, including normalized actor modifiers, actor rules,
+schema 7 and `poe2-native-profiles-v7`, including source-keyed passive/actor effects,
+structural attribute/replacement metadata, jewellery bases and explicit excluded views. It
+retains normalized actor modifiers, actor rules,
 the full source precision table and Spirit quest records, alongside the existing item rules,
 critical-chance cap, requirements, support-color costs and passive effects. Signed actor
 numeric values and unconditional player BASE resistance values retain their distinct typed
 operation and scope validation. The structural selection policy in
-`crates/poe-optimizer-data/data/class-tree-policy.json` identifies the four source nodes;
+`crates/poe-optimizer-data/data/class-tree-policy.json` identifies the four admitted ascendancy source nodes; complete ordinary structure is
+converted separately and admitted by whole-effect capability rather than an ID allowlist;
 Rust does not contain their numeric values. Regenerate older packages rather than silently filling missing
 records. Native controlled search consumes the same selected data; new tree revisions and
 arbitrary operation versions still require compatibility review.

@@ -1,10 +1,7 @@
 //! Authenticated, explicitly partial class/root/admitted-passive data for native hosts.
 //! The artifact is generated from a freshly verified full snapshot. Runtime readers
 //! authenticate its complete bytes against a compiled trusted digest, not its labels.
-use crate::{
-    tree_data::*,
-    tree_projection::{AuthenticatedTreeSnapshot, TreeProjection},
-};
+use crate::{tree_data::*, tree_projection::AuthenticatedTreeSnapshot};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::{
@@ -13,10 +10,11 @@ use std::{
 };
 use thiserror::Error;
 
-pub const BUNDLE_SCHEMA: u32 = 2;
-pub const BUNDLE_POLICY: &str = "all_roots_ordinary_entrances_and_reviewed_ascendancy_passives_v2";
+pub const BUNDLE_SCHEMA: u32 = 3;
+pub const BUNDLE_POLICY: &str =
+    "all_roots_complete_ordinary_source_views_and_reviewed_ascendancy_passives_v3";
 const BUNDLE_BYTES: &[u8] = include_bytes!("../data/class-tree.json");
-const MAX_BUNDLE_BYTES: usize = 1024 * 1024;
+const MAX_BUNDLE_BYTES: usize = 16 * 1024 * 1024;
 #[derive(Debug, Clone, Error)]
 #[error("invalid bundled class tree: {0}")]
 pub struct BundleError(pub String);
@@ -60,6 +58,10 @@ pub struct BundledClassTree {
     pub ascendancy_nodes: BTreeMap<u32, TreeNode>,
     pub ascendancy_passives: BTreeMap<String, BTreeMap<u32, EffectiveTreeNode>>,
     pub coverage: BundledTreeCoverage,
+    /// Complete compact ordinary topology, including unsupported/non-admitted nodes.
+    pub allocation_nodes: BTreeMap<u32, crate::passive_allocation::AllocationNode>,
+    /// Complete possible ordinary views and the reviewed ascendancy views. Admission is package data.
+    pub allocation_views: Vec<crate::passive_allocation::PassiveNodeView>,
 }
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -215,16 +217,29 @@ impl BundledClassTree {
             }
             ascendancy_passives.insert(ascendancy_id, views);
         }
-        let projection = TreeProjection::new(
-            source,
-            paid.iter()
-                .chain(ascendancy_nodes.keys())
-                .copied()
-                .collect(),
-        )
-        .map_err(error)?;
-        let retained_node_count = roots.len() + paid.len() + ascendancy_nodes.len();
+        let (allocation_nodes, allocation_views) =
+            crate::passive_allocation::source_allocation_views(snapshot, &ascendancy_passives)
+                .map_err(error)?;
+        let retained: BTreeSet<_> = roots
+            .keys()
+            .chain(allocation_nodes.keys())
+            .chain(ascendancy_nodes.keys())
+            .copied()
+            .collect();
+        let retained_node_count = retained.len();
+        let boundary_edges = retained
+            .iter()
+            .flat_map(|id| {
+                snapshot.nodes[id]
+                    .adjacent
+                    .iter()
+                    .filter(|neighbor| !retained.contains(neighbor))
+                    .map(|neighbor| (*id, *neighbor))
+            })
+            .collect();
         let result = Self {
+            allocation_nodes,
+            allocation_views,
             schema_version: BUNDLE_SCHEMA,
             policy: BUNDLE_POLICY.into(),
             source: snapshot.identity.clone(),
@@ -250,13 +265,14 @@ impl BundledClassTree {
                     .map(BTreeSet::len)
                     .sum(),
                 no_effect_implicit_root_selections: 31,
-                boundary_edges: projection.source_coverage().boundary_edges.clone(),
+                boundary_edges,
                 source_dangling_connections: snapshot.dangling_connections.clone(),
                 source_unsupported_mechanics: snapshot.unsupported_mechanics.clone(),
                 limitations: [
                     "strict_subset_not_full_tree",
                     "raw_adjacency_includes_excluded_endpoints",
-                    "zero_or_one_ordinary_entrance",
+                    "legacy_helpers_admit_zero_or_one_ordinary_entrance",
+                    "complete_ordinary_structural_graph_with_separate_package_capability_admission",
                     "zero_or_one_reviewed_ascendancy_passive",
                     "explicit_ascendancy_point_budget_required",
                     "explicit_ordinary_point_budget_required",
@@ -281,11 +297,24 @@ impl BundledClassTree {
             || self.coverage.class_entrance_view_count != 16
             || self.coverage.no_effect_implicit_root_selections != 31
             || self.coverage.retained_node_count
-                != self.roots.len() + self.ordinary_nodes.len() + self.ascendancy_nodes.len()
+                != self.roots.len() + self.allocation_nodes.len() + self.ascendancy_nodes.len()
             || self.coverage.excluded_node_count + self.coverage.retained_node_count
                 != self.coverage.source_node_count
         {
-            return Err(error("subset scope/count metadata is inconsistent"));
+            return Err(error(format!(
+                "subset scope/count metadata is inconsistent: schema={} policy={} classes={} ascendancies={} entrances={} entrance_views={} implicit={} retained={} expected_retained={} excluded={} source={}",
+                self.schema_version,
+                self.policy,
+                self.classes.len(),
+                self.ascendancies.len(),
+                self.class_entrances.len(),
+                self.coverage.class_entrance_view_count,
+                self.coverage.no_effect_implicit_root_selections,
+                self.coverage.retained_node_count,
+                self.roots.len() + self.allocation_nodes.len() + self.ascendancy_nodes.len(),
+                self.coverage.excluded_node_count,
+                self.coverage.source_node_count
+            )));
         }
         let root_fields = [
             "ascendancyName",
@@ -483,6 +512,7 @@ impl BundledClassTree {
                 }
             }
         }
+        crate::passive_allocation::validate_source_views(self).map_err(error)?;
         Ok(())
     }
     pub fn canonical_bytes(&self) -> Result<Vec<u8>> {

@@ -72,6 +72,29 @@ impl NativeMetricSnapshot {
     pub fn diagnostic_only(&self) -> bool {
         true
     }
+    pub(crate) fn set_elapsed(&mut self, elapsed_ms: f64) {
+        self.elapsed_ms = elapsed_ms;
+    }
+    pub(crate) fn from_calculation(output: crate::NativeCalculation) -> Self {
+        match output {
+            crate::NativeCalculation::Mace(output) => Self::from_output(output),
+            crate::NativeCalculation::Spark(output) => Self {
+                values: [
+                    NativeMetricValue::from_number(output.life),
+                    NativeMetricValue::from_number(output.mana),
+                    NativeMetricValue::from_number(output.energy_shield),
+                    NativeMetricValue::from_number(output.fire_resistance),
+                    NativeMetricValue::from_number(output.cold_resistance),
+                    NativeMetricValue::from_number(output.lightning_resistance),
+                    NativeMetricValue::from_number(output.chaos_resistance),
+                    NativeMetricValue::from_number(output.average_hit),
+                    NativeMetricValue::from_number(output.hit_dps),
+                    NativeMetricValue::from_number(output.spirit),
+                ],
+                elapsed_ms: 0.0,
+            },
+        }
+    }
     fn from_output(output: MaceOutput) -> Self {
         Self {
             values: [

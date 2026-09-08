@@ -50,6 +50,15 @@ pub enum SearchPlan<C> {
 }
 
 pub trait SearchDomain<C>: Sync {
+    /// Optional compact identity for domains whose candidates own prepared data.
+    /// It must be stable, complete, at most256bytes and equivalent to candidate
+    /// equality throughout this run. None preserves the original Ord identity.
+    /// Only keys are retained for deduplication; prepared inputs can leave memory
+    /// when they leave the current batch and bounded archives.
+    fn deduplication_key(&self, _candidate: &C) -> Option<Vec<u8>> {
+        None
+    }
+
     /// Stochastic proposers may have empty samples before later radii/restarts.
     /// Round and duration limits still bound these retries.
     fn can_propose_after_empty(&self) -> bool {
@@ -295,6 +304,7 @@ where
         errors: Vec::new(),
     };
     let mut seen = BTreeSet::new();
+    let mut seen_keys = BTreeSet::new();
     let mut seed = budget.seed;
     let search_limit = budget.max_evaluations - budget.verification_attempts;
     let keep = budget.archive_size.max(budget.beam_per_status);
@@ -317,7 +327,15 @@ where
                 break 'rounds;
             }
             report.statistics.proposals += 1;
-            if !seen.insert(candidate.clone()) {
+            let fresh = if let Some(key) = domain.deduplication_key(&candidate) {
+                if key.is_empty() || key.len() > 256 {
+                    return Err("Candidate deduplication key must contain1..256bytes".into());
+                }
+                seen_keys.insert(key)
+            } else {
+                seen.insert(candidate.clone())
+            };
+            if !fresh {
                 report.statistics.duplicates += 1;
                 continue;
             }

@@ -1,6 +1,6 @@
 {
-  "schema_version": 4,
-  "id": "poe2-pinned-current-profile-extraction-v6",
+  "schema_version": 5,
+  "id": "poe2-pinned-current-profile-extraction-v7",
   "release": "poe2-0_5-native-profiles-3887ae6",
   "source_role": "reviewed partial source transcriptions; source parity required for release",
   "spark_skill": "SparkPlayer",
@@ -29,14 +29,15 @@
     "spark_level_one_quality_zero_no_equipment_or_supports",
     "mace_strike_one_hand_mace_zero_to_two_reviewed_supports_with_local_item_modifiers",
     "all_class_and_ascendancy_identities_with_zero_or_one_reviewed_ascendancy_passive",
-    "zero_or_one_ordinary_class_entrance",
     "strict_partial_game_data_not_general_build_coverage",
     "level_one_gem_and_normal_base_requirements_with_support_color_costs",
     "no_general_equipment_self_dependency_or_point_budget_certificate",
     "brutality_i_heavy_swing_rapid_attacks_i_level_one_quality_zero_with_typed_modifiers_and_eligibility",
     "five_reviewed_local_weapon_modifier_families_with_source_grammar_and_flags",
     "source_critical_chance_cap_before_attack_accuracy_roll",
-    "shared_actor_attributes_maximum_resources_and_audited_global_modifier_records"
+    "shared_actor_attributes_maximum_resources_and_audited_global_modifier_records",
+    "whole_source_capability_admission_of_ordinary_passives_and_explicit_attribute_options",
+    "source_configured_actor_only_jewellery_bases_after_complete_implicit_admission"
   ],
   "supports": [
     [

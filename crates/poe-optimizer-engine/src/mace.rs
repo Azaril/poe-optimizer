@@ -14,7 +14,7 @@ use crate::{
 };
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-mace-strike-actor-resources-v6";
+pub const PROFILE_ID: &str = "poe2-mace-strike-passive-equipment-v7";
 pub const TREE_VERSION: &str = "0_5";
 /// Index in the pinned tree classes table; XML classInternalId is a separate id.
 pub const CLASS_ID: u32 = 3;

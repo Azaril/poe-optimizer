@@ -1,13 +1,14 @@
-//! Resolve admitted class, ordinary entrance and ascendancy passive selections from portable data.
+//! Resolve connected, capability-admitted passive selections and physical attribute choices.
 //! This records native source resolution, not observations of PoB's Lua object graph.
 use poe_optimizer_core::evaluation::{EvaluationError, EvaluationErrorKind};
-use poe_optimizer_data::class_tree::{ClassTreeSelection, ResolvedClassTree};
+use poe_optimizer_data::class_tree::{
+    ClassTreeSelection, ResolvedClassTree, ResolvedPassiveAllocation,
+};
 use poe_optimizer_data::tree_data::{
     EffectiveTreeNode, TREE_PATH, TreeAscendancy, TreeClass, TreeSourceIdentity,
 };
 use poe_optimizer_engine::character::{CharacterAttributes, CharacterInput, CharacterModifiers};
 use roxmltree::Node;
-use std::collections::BTreeSet;
 
 pub(crate) struct NativeTree {
     pub character: CharacterInput,
@@ -16,13 +17,16 @@ pub(crate) struct NativeTree {
     pub allocated_nodes: Vec<u32>,
     paid_node: Option<EffectiveTreeNode>,
     ascendancy_node: Option<EffectiveTreeNode>,
+    pub allocation: ResolvedPassiveAllocation,
 }
 fn unsupported(message: impl Into<String>) -> EvaluationError {
     EvaluationError::new(EvaluationErrorKind::UnsupportedCapability, message)
 }
 // Data artifacts and numerical source pins evolve independently. Refuse mixed
 // revisions or tree data before any document can reach the calculation kernel.
-fn validate_calculation_source(source: &TreeSourceIdentity) -> Result<(), EvaluationError> {
+pub(crate) fn validate_calculation_source(
+    source: &TreeSourceIdentity,
+) -> Result<(), EvaluationError> {
     use poe_optimizer_engine::{UPSTREAM_REVISION, mace, spark};
     let tree_hash = source.source_files_sha256.get(TREE_PATH);
     let matching_tree = [spark::SOURCE_FILES, mace::SOURCE_FILES]
@@ -44,18 +48,6 @@ fn validate_calculation_source(source: &TreeSourceIdentity) -> Result<(), Evalua
     }
     Ok(())
 }
-fn integer(node: Node<'_, '_>, field: &str) -> Result<u32, EvaluationError> {
-    let text = node
-        .attribute(field)
-        .ok_or_else(|| unsupported(format!("Native tree requires {field}")))?;
-    if text.is_empty() || !text.bytes().all(|byte| byte.is_ascii_digit()) {
-        return Err(unsupported(format!(
-            "Native tree {field} must be an unsigned integer"
-        )));
-    }
-    text.parse()
-        .map_err(|_| unsupported(format!("Native tree {field} exceeds its integer range")))
-}
 impl NativeTree {
     pub fn resolve(
         build: Node<'_, '_>,
@@ -64,91 +56,52 @@ impl NativeTree {
     ) -> Result<Self, EvaluationError> {
         let data = compiled.snapshot().tree();
         validate_calculation_source(&data.source)?;
-        let internal_id = integer(spec, "classInternalId")?;
-        let class = data
-            .class(internal_id)
-            .map_err(|error| unsupported(error.to_string()))?;
-        let source_id = integer(spec, "classId")?;
-        // PassiveSpec loads the canonical internal ID; older exports may retain
-        // the raw data array position in classId. Both must identify this class.
-        if (source_id != class.integer_id && source_id != class.source_index)
-            || build.attribute("className") != Some(class.name.as_str())
-        {
-            return Err(unsupported(
-                "Native class name/index disagrees with classInternalId",
-            ));
-        }
-        let ascendancy_index = integer(spec, "ascendClassId")?;
-        let ascendancy_id = spec.attribute("ascendancyInternalId").unwrap_or("");
-        let ascendancy = if ascendancy_index == 0 {
-            if !ascendancy_id.is_empty() || build.attribute("ascendClassName") != Some("None") {
-                return Err(unsupported(
-                    "Native no-ascendancy selection has conflicting identity fields",
-                ));
-            }
-            None
-        } else {
-            let asc = data
-                .ascendancy(internal_id, ascendancy_id)
-                .map_err(|error| unsupported(error.to_string()))?;
-            if ascendancy_index != asc.class_index
-                || build.attribute("ascendClassName") != Some(asc.name.as_str())
-            {
-                return Err(unsupported(
-                    "Native ascendancy name/index disagrees with its internal identity",
-                ));
-            }
-            Some(asc)
-        };
-        let mut roots = BTreeSet::from([class.start_node_id]);
-        if let Some(ascendancy) = ascendancy {
-            roots.insert(ascendancy.start_node_id);
-        }
-        let node_text = spec
-            .attribute("nodes")
-            .ok_or_else(|| unsupported("Native tree requires explicit nodes"))?;
-        let mut requested = BTreeSet::new();
-        if !node_text.is_empty() {
-            for node in node_text.split(',') {
-                if node.is_empty() || !node.bytes().all(|byte| byte.is_ascii_digit()) {
-                    return Err(unsupported(
-                        "Native allocated node IDs must be comma-separated unsigned integers",
-                    ));
-                }
-                let id = node.parse::<u32>().map_err(|_| {
-                    unsupported("Native allocated node ID exceeds its integer range")
-                })?;
-                if !requested.insert(id) {
-                    return Err(unsupported("Native allocated node IDs must be unique"));
-                }
-            }
-        }
-        let (ascendancy_ids, ordinary_ids): (Vec<_>, Vec<_>) = requested
-            .difference(&roots)
-            .copied()
-            .partition(|id| data.ascendancy_nodes.contains_key(id));
-        if ordinary_ids.len() > 1 || ascendancy_ids.len() > 1 {
-            return Err(unsupported(
-                "Native class/tree profile admits zero or one ordinary entrance and zero or one reviewed ascendancy passive",
-            ));
-        }
-        let resolved = ClassTreeSelection {
-            class_id: internal_id,
-            ascendancy_id: ascendancy.map(|asc| asc.internal_id.clone()),
-            entrance_node_id: ordinary_ids.first().copied(),
-            ascendancy_node_id: ascendancy_ids.first().copied(),
-        }
-        .resolve(data)
+        let selection = poe_optimizer_import::controlled_build::parse_passive_allocation(
+            build,
+            spec,
+            compiled.snapshot().package(),
+        )
         .map_err(|error| unsupported(error.to_string()))?;
-        let character = character_from_resolved(&resolved, compiled)?;
+        let allocation = selection
+            .resolve(compiled.snapshot())
+            .map_err(|error| unsupported(error.to_string()))?;
+        let character = compiled
+            .character_from_allocation(&allocation)
+            .map_err(|error| unsupported(error.to_string()))?;
+        let legacy = if selection.ordinary_nodes.len() <= 1
+            && selection.ascendancy_nodes.len() <= 1
+            && selection.attribute_options.is_empty()
+        {
+            ClassTreeSelection {
+                class_id: selection.class_id,
+                ascendancy_id: selection.ascendancy_id.clone(),
+                entrance_node_id: selection.ordinary_nodes.first().copied(),
+                ascendancy_node_id: selection.ascendancy_nodes.first().copied(),
+            }
+            .resolve(data)
+            .ok()
+        } else {
+            None
+        };
         Ok(Self {
             character,
-            class: resolved.class,
-            ascendancy: resolved.ascendancy,
-            allocated_nodes: resolved.allocated_nodes.into_iter().collect(),
-            paid_node: resolved.paid_node,
-            ascendancy_node: resolved.ascendancy_node,
+            class: allocation.class.clone(),
+            ascendancy: allocation.ascendancy.clone(),
+            allocated_nodes: allocation.allocated_nodes.iter().copied().collect(),
+            paid_node: legacy.as_ref().and_then(|tree| tree.paid_node.clone()),
+            ascendancy_node: legacy
+                .as_ref()
+                .and_then(|tree| tree.ascendancy_node.clone()),
+            allocation,
         })
+    }
+    pub fn actor_modifiers(
+        &self,
+    ) -> impl Iterator<Item = &poe_optimizer_data::game_data::ActorModifierRecord> {
+        self.allocation
+            .views
+            .iter()
+            .flat_map(|view| &view.actor_modifiers)
     }
     pub fn ascendancy_name(&self) -> &str {
         self.ascendancy
@@ -162,31 +115,37 @@ impl NativeTree {
                 "name":asc.name,"start_node_id":asc.start_node_id,
             })
         });
-        let paid_nodes: Vec<_> = self.paid_node.iter().map(|node| ("ordinary", node))
+        let mut paid_nodes: Vec<_> = self.paid_node.iter().map(|node| ("ordinary", node))
             .chain(self.ascendancy_node.iter().map(|node| ("ascendancy", node)))
             .map(|(kind, node)| serde_json::json!({
             "allocation_kind":kind,
             "physical_node_id":node.physical_node_id,"effective_node_id":node.effective_source_id,
             "name":node.name,"stats":node.stats,"override_provenance":node.provenance,
         })).collect();
+        if paid_nodes.len() != self.allocation.views.len() {
+            paid_nodes = self.allocation.views.iter().map(|view| serde_json::json!({
+                "allocation_kind":if self.allocation.selection.ordinary_nodes.contains(&view.source.key.physical_node_id) {"ordinary"} else {"ascendancy"},
+                "physical_node_id":view.source.key.physical_node_id,"effective_node_id":view.source.effective_node_id,
+                "name":view.source.name,"stats":view.source.stats,"source_view":view.source.key,
+                "source_sha256":view.source.source_sha256,
+            })).collect();
+        }
         serde_json::json!({
-            "schema_version":2,
+            "schema_version":3,
             "class":{"index":self.class.integer_id,"internal_id":self.class.integer_id,
                 "source_index":self.class.source_index,"name":self.class.name,"start_node_id":self.class.start_node_id},
             "ascendancy":ascendancy,"allocated_nodes":self.allocated_nodes,
-            "ordinary_allocated_count":usize::from(self.paid_node.is_some()),
-            "ascendancy_allocated_count":usize::from(self.ascendancy_node.is_some()),"paid_nodes":paid_nodes,
+            "ordinary_allocated_count":self.allocation.selection.ordinary_nodes.len(),
+            "ascendancy_allocated_count":self.allocation.selection.ascendancy_nodes.len(),"paid_nodes":paid_nodes,
+            "attribute_options":self.allocation.selection.attribute_options,
             "source":{"upstream_revision":compiled.snapshot().tree().source.upstream_revision,"tree_version":compiled.snapshot().tree().source.tree_version,
                 "bundled_content_sha256":poe_optimizer_data::bundled::content_sha256()},
             "data_identity":compiled.identity(),
-            "configured_effects":compiled.snapshot().package().passive_effects.iter().filter(|entry|
-                entry.class_id == self.class.integer_id && (
-                    (entry.ascendancy_id.is_none() && self.paid_node.as_ref().is_some_and(|node| entry.physical_node_id == node.physical_node_id)) ||
-                    (entry.ascendancy_id.as_deref() == self.ascendancy.as_ref().map(|asc| asc.internal_id.as_str()) && self.ascendancy_node.as_ref().is_some_and(|node| entry.physical_node_id == node.physical_node_id))
-                )).collect::<Vec<_>>(),
+            "configured_effects":self.allocation.views.iter().filter_map(|view|
+                compiled.snapshot().package().passive_view_effects(&view.source.key)).collect::<Vec<_>>(),
             "point_budget_verified":false,
             "evidence_kind":"native_source_resolution",
-            "scope":"class_identity_and_zero_or_one_ordinary_and_ascendancy_passive",
+            "scope":"connected_capability_admitted_passives_and_explicit_attribute_options",
         })
     }
 }
@@ -208,9 +167,9 @@ pub(crate) fn character_from_resolved(
         let effect = compiled
             .passive_modifiers(resolved.selection.class_id, owner, node.physical_node_id)
             .ok_or_else(|| unsupported("Missing compiled selected passive effects"))?;
-        modifiers = modifiers
-            .checked_add(*effect)
-            .map_err(|error| unsupported(error.to_string()))?;
+        modifiers = modifiers.checked_add(*effect).map_err(|error| {
+            unsupported(poe_optimizer_engine::data::GameDataError(error.to_string()).to_string())
+        })?;
     }
     Ok(CharacterInput {
         attributes: CharacterAttributes {

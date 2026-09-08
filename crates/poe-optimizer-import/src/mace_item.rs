@@ -1,7 +1,8 @@
 //! Strict, source-preserving admission for the reviewed local Mace item families.
 //! Understanding supplied rolls does not establish affix, roll-tier or acquisition legality.
 use poe_optimizer_data::game_data::{
-    GameDataPackage, ItemCaptureKind, ItemModifierRoll, ItemModifierRule,
+    ActorModifierRecord, ActorStat, GameDataPackage, ItemCaptureKind, ItemModifierRoll,
+    ItemModifierRule,
 };
 use serde::Serialize;
 use sha2::{Digest, Sha256};
@@ -55,6 +56,7 @@ pub struct ValidatedMaceWeapon {
     source_sha256: String,
     local_modifiers: Vec<ItemModifierRoll>,
     modifier_lines: Vec<MaceModifierLine>,
+    actor_modifiers: Vec<ActorModifierRecord>,
 }
 impl ValidatedMaceWeapon {
     pub fn weapon_key(&self) -> &str {
@@ -95,11 +97,16 @@ impl ValidatedMaceWeapon {
     pub fn modifier_lines(&self) -> &[MaceModifierLine] {
         &self.modifier_lines
     }
+    /// Global actor records remaining after reviewed weapon-local consumption.
+    pub fn actor_modifiers(&self) -> &[ActorModifierRecord] {
+        &self.actor_modifiers
+    }
     /// Historical schemas require the former exact five-line normal-item grammar.
     pub fn is_legacy_normal_payload(&self) -> bool {
         if self.rarity != MaceItemRarity::Normal
             || self.explicit_level_requirement.is_some()
             || !self.local_modifiers.is_empty()
+            || !self.actor_modifiers.is_empty()
             || self.source_text.len() > 1024
         {
             return false;
@@ -125,6 +132,7 @@ impl ValidatedMaceWeapon {
             "explicit_level_requirement":self.explicit_level_requirement,
             "effective_level_requirement":self.effective_level_requirement,
             "modifier_lines":self.modifier_lines,"local_modifiers":self.local_modifiers,
+            "actor_modifiers":self.actor_modifiers,
             "affix_legality_verified":false,
         })
     }
@@ -243,6 +251,11 @@ pub fn parse_mace_item_element(
     item: roxmltree::Node<'_, '_>,
     data: &GameDataPackage,
 ) -> Result<ValidatedMaceWeapon, MaceItemError> {
+    parse_mace_item(&decode_item_payload(item)?, data)
+}
+
+/// Preserve item bytes before XML text normalization; shared by equipment families.
+pub(crate) fn decode_item_payload(item: roxmltree::Node<'_, '_>) -> Result<String, MaceItemError> {
     if !item.has_tag_name("Item")
         || item.tag_name().namespace().is_some()
         || item.children().count() != 1
@@ -286,7 +299,7 @@ pub fn parse_mace_item_element(
                 "unsupported split or comment-containing CDATA item",
             ));
         }
-        return parse_mace_item(cdata, data);
+        return Ok(cdata.into());
     }
     if content.contains('<') {
         return Err(invalid("item contains unsupported XML text fragments"));
@@ -316,7 +329,10 @@ pub fn parse_mace_item_element(
         }
     }
     decoded.push_str(rest);
-    parse_mace_item(&decoded, data)
+    if decoded.len() > MAX_MACE_ITEM_BYTES {
+        return Err(invalid("decoded item text exceeds bounded payload size"));
+    }
+    Ok(decoded)
 }
 
 /// Admit a bounded exact payload with explicit local rolls. Only line-edge ASCII
@@ -326,6 +342,22 @@ pub fn parse_mace_item_element(
 pub fn parse_mace_item(
     input: &str,
     data: &GameDataPackage,
+) -> Result<ValidatedMaceWeapon, MaceItemError> {
+    parse_mace_item_inner(input, data, None)
+}
+
+/// Expanded equipment assembly is separate from the historical local-only API.
+pub(crate) fn parse_mace_equipment(
+    input: &str,
+    data: &GameDataPackage,
+    item_id: u32,
+) -> Result<ValidatedMaceWeapon, MaceItemError> {
+    parse_mace_item_inner(input, data, Some(item_id))
+}
+fn parse_mace_item_inner(
+    input: &str,
+    data: &GameDataPackage,
+    item_id: Option<u32>,
 ) -> Result<ValidatedMaceWeapon, MaceItemError> {
     if input.is_empty() || input.len() > MAX_MACE_ITEM_BYTES {
         return Err(invalid("item payload must contain 1..=8192 bytes"));
@@ -421,6 +453,16 @@ pub fn parse_mace_item(
     }
     let mut modifier_lines = Vec::new();
     let mut local_modifiers = Vec::new();
+    let mut actor_modifiers = Vec::new();
+    let actor_source = item_id.map(|id| {
+        format!(
+            "Item:{id}:{}",
+            rare_name
+                .as_ref()
+                .map(|name| format!("{name}, {base_name}"))
+                .unwrap_or_else(|| base_name.into())
+        )
+    });
     for line in &lines[at..] {
         let mut found = None;
         for rule in &data.item_modifier_rules {
@@ -437,20 +479,51 @@ pub fn parse_mace_item(
                 });
             }
         }
-        let roll = found.ok_or_else(|| {
-            invalid(format!(
+        let actor = actor_source
+            .as_ref()
+            .map(|source| {
+                crate::actor_modifiers::match_actor_modifier_line(line.trimmed, source, data)
+                    .map_err(|e| invalid(e.to_string()))
+            })
+            .transpose()?
+            .flatten();
+        if found.is_some() && actor.is_some() {
+            return Err(invalid(format!(
+                "line {} ambiguously matches local and actor grammar",
+                line.number
+            )));
+        }
+        let (rule_id, values) = if let Some(roll) = found {
+            let evidence = (roll.rule_id.clone(), roll.values.clone());
+            local_modifiers.push(roll);
+            evidence
+        } else if let Some(actor) = actor {
+            // Item:BuildModListForSlotNum adds a hand condition to untagged Accuracy.
+            // A tagged attribute condition is retained unchanged by that source branch.
+            if actor
+                .records()
+                .iter()
+                .any(|r| r.stat == ActorStat::Accuracy && r.tags.is_empty())
+            {
+                return Err(invalid(
+                    "weapon Accuracy requires the downstream hand-specific condition",
+                ));
+            }
+            actor_modifiers.extend_from_slice(actor.records());
+            (actor.rule_id().into(), actor.values().to_vec())
+        } else {
+            return Err(invalid(format!(
                 "line {} is unknown, malformed or outside the supported local modifier grammar",
                 line.number
-            ))
-        })?;
+            )));
+        };
         modifier_lines.push(MaceModifierLine {
             line_number: line.number,
             byte_range: line.range.clone(),
             source: line.raw.into(),
-            rule_id: roll.rule_id.clone(),
-            values: roll.values.clone(),
+            rule_id,
+            values,
         });
-        local_modifiers.push(roll);
     }
     Ok(ValidatedMaceWeapon {
         weapon_key: weapon.id.clone(),
@@ -466,6 +539,7 @@ pub fn parse_mace_item(
         source_sha256: format!("{:x}", Sha256::digest(input.as_bytes())),
         local_modifiers,
         modifier_lines,
+        actor_modifiers,
     })
 }
 

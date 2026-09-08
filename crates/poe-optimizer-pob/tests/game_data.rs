@@ -56,6 +56,9 @@ impl Oracle {
             "src/Modules/ModParser.lua",
             "src/Classes/ModStore.lua",
             "src/Classes/ModDB.lua",
+            "src/Classes/ModList.lua",
+            "src/Classes/PassiveTree.lua",
+            "src/Data/Bases/amulet.lua",
             "src/Modules/CalcSetup.lua",
             "src/Modules/CalcPerform.lua",
             "src/Modules/CalcDefence.lua",
@@ -135,6 +138,20 @@ impl Oracle {
             .exec()
             .unwrap();
         lua.load(&sources["src/Classes/ModDB.lua"]).exec().unwrap();
+        lua.load(&sources["src/Classes/ModList.lua"])
+            .exec()
+            .unwrap();
+        lua.load(format!("local t_insert=table.insert;local t_sort=table.sort;local s_format=string.format;local band=AND64;{}", section(&sources["src/Modules/ModTools.lua"],"function modLib.formatFlags(","-- Check if a mod contains a specific tag already"))).exec().unwrap();
+        lua.load(format!(
+            "PassiveTreeClass={{}};local t_insert=table.insert;local t_remove=table.remove;{}",
+            section(
+                &sources["src/Classes/PassiveTree.lua"],
+                "function PassiveTreeClass:ProcessStats(",
+                "-- Common processing code for nodes"
+            )
+        ))
+        .exec()
+        .unwrap();
         let gems: Table = lua.load(&sources["src/Data/Gems.lua"]).eval().unwrap();
         // Full gem source is retained separately. ModParser's unused dynamic
         // extra-skill catalog is empty; ordinary numeric lines do not query it.
@@ -748,75 +765,113 @@ fn reviewed_quest_defaults_and_every_typed_passive_match_actual_configuration_an
         let tree: Table = lua.globals().get("sourceTree").unwrap();
         let classes: Table = tree.get("classes").unwrap();
         let nodes: Table = tree.get("nodes").unwrap();
-        assert_eq!(p["passive_effects"].as_array().unwrap().len(), 20);
-        let mut seen = BTreeSet::new();
-        for record in p["passive_effects"].as_array().unwrap() {
-            let class_id = record["class_id"].as_u64().unwrap();
-            let physical = record["physical_node_id"].as_u64().unwrap();
-            let ascendancy_id = record["ascendancy_id"].as_str();
-            assert!(seen.insert((class_id, ascendancy_id, physical)));
-            let class = classes
-                .clone()
-                .sequence_values::<Table>()
-                .map(Result::unwrap)
-                .find(|class| class.get::<u64>("integerId").unwrap() == class_id)
-                .unwrap();
-            let class_name: String = class.get("name").unwrap();
-            let bundled = &p["tree"]["classes"][class_id.to_string()];
+        let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+        assert_eq!(snapshot.package().passive_effects.len(), 1142);
+        for class in classes
+            .clone()
+            .sequence_values::<Table>()
+            .map(Result::unwrap)
+        {
+            let id = class.get::<u64>("integerId").unwrap();
             for (field, key) in [
                 ("base_strength", "base_str"),
                 ("base_dexterity", "base_dex"),
                 ("base_intelligence", "base_int"),
             ] {
                 assert_eq!(
-                    bundled[field].as_f64().unwrap(),
+                    p["tree"]["classes"][id.to_string()][field]
+                        .as_f64()
+                        .unwrap(),
                     class.get::<f64>(key).unwrap()
                 );
             }
-            let node = nodes
-                .clone()
-                .pairs::<mlua::Value, Table>()
-                .map(Result::unwrap)
-                .map(|(_, node)| node)
-                .find(|node| node.get::<Option<u64>>("skill").unwrap() == Some(physical))
+        }
+        let select: Function = lua
+            .load(
+                r#"return function(nodes,id,kind,selector)
+          local node
+          for _,n in pairs(nodes) do if n.skill==id then node=copyTable(n);break end end
+          assert(node,'missing physical source node')
+          if kind~='base' then
+            local option=node.options and node.options[selector]
+            assert(option,'missing actual source option')
+            for k,v in pairs(option)do node[k]=type(v)=="table" and copyTable(v) or v end
+          end
+          local sourceId=node.id or id
+          node.sd=copyTable(node.stats);node.id=id;node.dn=node.name
+          PassiveTreeClass:ProcessStats(node)
+          assert(not node.unknown and not node.extra,'whole source parser coverage')
+          return sourceId,node.modList
+        end"#,
+            )
+            .eval()
+            .unwrap();
+        let set_source: Function = lua.load("return modLib.setSource").eval().unwrap();
+        for record in &snapshot.package().passive_effects {
+            use poe_optimizer_data::class_tree::PassiveViewSelector;
+            let selector = match &record.key.selector {
+                PassiveViewSelector::Base => mlua::Value::Nil,
+                PassiveViewSelector::Class { class_id } => lua
+                    .to_value(&snapshot.tree().classes[class_id].name)
+                    .unwrap(),
+                PassiveViewSelector::Ascendancy { ascendancy_id } => lua
+                    .to_value(&snapshot.tree().ascendancies[ascendancy_id].name)
+                    .unwrap(),
+                PassiveViewSelector::Attribute { option } => {
+                    mlua::Value::Integer(i64::from(option.source_index()))
+                }
+            };
+            let kind = if matches!(record.key.selector, PassiveViewSelector::Base) {
+                "base"
+            } else {
+                "option"
+            };
+            let (effective, actual): (u32, Table) = select
+                .call((nodes.clone(), record.key.physical_node_id, kind, selector))
                 .unwrap();
-            if let Some(ascendancy_id) = ascendancy_id {
-                let asc = class
-                    .get::<Table>("ascendancies")
-                    .unwrap()
+            assert_eq!(effective, record.effective_node_id);
+            let mut remaining = actual
+                .sequence_values::<Table>()
+                .map(Result::unwrap)
+                .collect::<Vec<_>>();
+            // Actor records are compared field-for-field, including nested tags/source.
+            for actor in &record.actor_modifiers {
+                let position = remaining
+                    .iter()
+                    .position(|m| m.get::<String>("name").unwrap() == actor.stat.upstream_name())
+                    .unwrap();
+                assert_actor_source_modifier(remaining.remove(position), actor);
+            }
+            // Scalar expansion is independent of the production converter and retains
+            // every nested source/tag/scope field in the JSON comparison.
+            let mut expected = Vec::new();
+            for effect in &record.effects {
+                for modifier in typed_effect(lua, &serde_json::to_value(effect).unwrap())
                     .sequence_values::<Table>()
                     .map(Result::unwrap)
-                    .find(|asc| asc.get::<String>("internalId").unwrap() == ascendancy_id)
-                    .unwrap();
-                assert_eq!(
-                    node.get::<String>("ascendancyName").unwrap(),
-                    asc.get::<String>("name").unwrap()
-                );
-                assert!(node.get::<Option<Table>>("options").unwrap().is_none());
+                {
+                    let modifier: Table = set_source
+                        .call((modifier, format!("Tree:{}", record.key.physical_node_id)))
+                        .unwrap();
+                    expected.push(
+                        serde_json::to_string(
+                            &lua.from_value::<Value>(mlua::Value::Table(modifier))
+                                .unwrap(),
+                        )
+                        .unwrap(),
+                    );
+                }
             }
-            let effective = node
-                .get::<Option<Table>>("options")
-                .unwrap()
-                .and_then(|options| options.get::<Option<Table>>(class_name).unwrap())
-                .unwrap_or(node);
-            let source_id = effective
-                .get::<Option<u64>>("id")
-                .unwrap()
-                .unwrap_or(physical);
-            assert_eq!(record["effective_node_id"].as_u64().unwrap(), source_id);
-            let stats: Table = effective.get("stats").unwrap();
-            let effects = record["effects"].as_array().unwrap();
-            assert_eq!(effects.len(), stats.raw_len());
-            for (index, effect) in effects.iter().enumerate() {
-                let text: String = stats.get(index + 1).unwrap();
-                let (mods, extra): (Table, Option<String>) = parser.call(text.as_str()).unwrap();
-                assert!(extra.is_none(), "{text}");
-                assert_eq!(
-                    canonical(lua, typed_effect(lua, effect)),
-                    canonical(lua, mods),
-                    "{class_id}:{physical} effect{index} {text}"
-                );
-            }
+            let mut actual = remaining
+                .into_iter()
+                .map(|m| {
+                    serde_json::to_string(&lua.from_value::<Value>(mlua::Value::Table(m)).unwrap())
+                        .unwrap()
+                })
+                .collect::<Vec<_>>();
+            actual.sort();
+            expected.sort();
+            assert_eq!(actual, expected, "{:?}", record.key);
         }
     }
 }
@@ -1658,6 +1713,86 @@ fn actor_constants_precision_and_spirit_quests_match_independent_cold_and_warm_s
             let spirit: Table = mods.get("Spirit").unwrap();
             assert_eq!(spirit.raw_len(), 1);
             assert_actor_source_modifier(spirit.get(1).unwrap(), &quest.modifiers[0]);
+        }
+    }
+}
+
+#[test]
+fn complete_jewellery_base_values_and_implicit_expansions_match_cold_and_warm_source() {
+    let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        let lua = &oracle.lua;
+        let bases = lua.create_table().unwrap();
+        lua.load(&oracle.sources["src/Data/Bases/amulet.lua"])
+            .eval::<Function>()
+            .unwrap()
+            .call::<()>(bases.clone())
+            .unwrap();
+        let parser: Function = lua
+            .globals()
+            .get::<Table>("modLib")
+            .unwrap()
+            .get("parseMod")
+            .unwrap();
+        for base in &snapshot.package().jewellery_bases {
+            let raw: Table = bases.get(base.name.as_str()).unwrap();
+            assert_eq!(raw.clone().pairs::<String, mlua::Value>().count(), 5);
+            assert_eq!(raw.get::<String>("type").unwrap(), "Amulet");
+            let tags: Table = raw.get("tags").unwrap();
+            assert_eq!(tags.clone().pairs::<String, bool>().count(), 2);
+            assert!(tags.get::<bool>("amulet").unwrap() && tags.get::<bool>("default").unwrap());
+            let req: Table = raw.get("req").unwrap();
+            assert_eq!(base.requirements.level, req.get::<u32>("level").unwrap());
+            for (value, name) in [
+                (base.requirements.attributes.strength, "str"),
+                (base.requirements.attributes.dexterity, "dex"),
+                (base.requirements.attributes.intelligence, "int"),
+            ] {
+                assert_eq!(value, req.get::<Option<u32>>(name).unwrap().unwrap_or(0));
+            }
+            let text: String = raw.get("implicit").unwrap();
+            assert_eq!(text, base.implicit.source_text);
+            let range:Function=lua.load("return function(s)local a,b=s:match('^%+%((%d+)%-(%d+)%)');return tonumber(a),tonumber(b)end").eval().unwrap();
+            let (min, max): (f64, f64) = range.call(text.as_str()).unwrap();
+            assert_eq!((min, max), (base.implicit.minimum, base.implicit.maximum));
+            let types: Table = raw.get("implicitModTypes").unwrap();
+            assert_eq!(types.raw_len(), 1);
+            assert_eq!(
+                types
+                    .get::<Table>(1)
+                    .unwrap()
+                    .sequence_values::<String>()
+                    .map(Result::unwrap)
+                    .collect::<Vec<_>>(),
+                base.implicit.modifier_types
+            );
+            let rule = snapshot
+                .package()
+                .actor
+                .modifier_rule(&base.implicit.actor_rule_id)
+                .unwrap();
+            for value in [min, max] {
+                let line = rule.template.replace("{0}", &format!("+{value}"));
+                let (mods, extra): (Table, Option<String>) = parser.call(line).unwrap();
+                assert!(extra.is_none());
+                assert_eq!(mods.raw_len(), rule.modifiers.len());
+                for (index, mapping) in rule.modifiers.iter().enumerate() {
+                    use poe_optimizer_data::game_data::*;
+                    let record = ActorModifierRecord {
+                        stat: mapping.stat,
+                        effect: ActorModifierEffect::Numeric {
+                            operation: ActorNumericOperation::Base,
+                            value,
+                        },
+                        source: None,
+                        flags: mapping.flags,
+                        keyword_flags: mapping.keyword_flags,
+                        tags: mapping.tags.clone(),
+                    };
+                    assert_actor_source_modifier(mods.get(index + 1).unwrap(), &record);
+                }
+            }
         }
     }
 }

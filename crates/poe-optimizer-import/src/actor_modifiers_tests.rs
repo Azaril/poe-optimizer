@@ -348,3 +348,28 @@ fn encoded_actor_source_bounds_legacy_formatting_and_all_block_fragments() {
         .is_err()
     );
 }
+
+#[test]
+fn source_neutral_line_parser_preserves_item_identity_and_rejects_ambiguity() {
+    let mut data = configured();
+    let parsed = match_actor_modifier_line("+20 to Strength", "Item:7:Amber Amulet", &data)
+        .unwrap()
+        .unwrap();
+    assert_eq!(parsed.rule_id(), "str_base");
+    assert_eq!(parsed.values(), &[20.0]);
+    assert_eq!(
+        parsed.records()[0].source.as_deref(),
+        Some("Item:7:Amber Amulet")
+    );
+    assert!(
+        match_actor_modifier_line("unknown", "Node:1", &data)
+            .unwrap()
+            .is_none()
+    );
+    assert!(match_actor_modifier_line("+20 to Strength\n", "Node:1", &data).is_err());
+    assert!(match_actor_modifier_line("+20 to Strength", "", &data).is_err());
+    let mut rule = data.actor.modifier_rules[0].clone();
+    rule.id = "ambiguous".into();
+    data.actor.modifier_rules.push(rule);
+    assert!(match_actor_modifier_line("+20 to Strength", "Node:1", &data).is_err());
+}

@@ -4,7 +4,9 @@
 //! metrics in an export are preserved as source data and are never evaluated here.
 
 pub mod actor_modifiers;
+pub mod controlled_build;
 pub mod controlled_mace;
+pub mod equipment;
 pub mod mace_item;
 pub mod preflight;
 pub mod xml_compat;

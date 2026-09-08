@@ -19,6 +19,7 @@ pub(crate) struct Profile {
     pub prepared_supports: Option<poe_optimizer_engine::mace_supports::PreparedMaceSupports>,
     pub weapon_record: Option<poe_optimizer_import::mace_item::ValidatedMaceWeapon>,
     pub prepared_weapon: Option<poe_optimizer_engine::weapon::PreparedWeaponStats>,
+    pub equipment: BTreeMap<String, poe_optimizer_import::equipment::ValidatedEquipmentItem>,
     pub actor_modifiers: poe_optimizer_import::actor_modifiers::ValidatedActorModifiers,
     pub actor_quests: poe_optimizer_engine::actor::ActorQuestSelection,
     pub prepared_actor: poe_optimizer_engine::actor::PreparedActorResources,
@@ -185,10 +186,65 @@ fn escape(s: &str) -> String {
         .replace('"', "&quot;")
 }
 
+/// Fixed encounter/quest inputs validated through the complete source parser.
+/// No selected character, resource, or local weapon calculation is performed.
+pub(crate) struct ScenarioProfile {
+    pub input: NativeInput,
+    pub config: BTreeMap<String, Scalar>,
+    pub actor_quests: poe_optimizer_engine::actor::ActorQuestSelection,
+}
+// This short-lived projection stays on the stack rather than adding a heap
+// allocation to every full document preparation.
+#[allow(clippy::large_enum_variant)]
+enum ProfileProjection {
+    Complete(Profile),
+    Scenario(ScenarioProfile),
+}
 pub(crate) fn parse(
     request: &EvaluationRequest,
     data: &crate::CompiledGameData,
 ) -> Result<Profile, EvaluationError> {
+    match parse_projection(request, data, true)? {
+        ProfileProjection::Complete(profile) => Ok(profile),
+        ProfileProjection::Scenario(_) => unreachable!("full projection requested"),
+    }
+}
+pub(crate) fn prepare_scenario(
+    request: &EvaluationRequest,
+    data: &crate::CompiledGameData,
+) -> Result<ScenarioProfile, EvaluationError> {
+    let known = crate::metric_catalog();
+    let mut queries = BTreeSet::new();
+    for query in &request.metrics {
+        if !queries.insert(query) {
+            return Err(EvaluationError::new(
+                EvaluationErrorKind::InvalidRequest,
+                "Duplicate metric query",
+            ));
+        }
+        if !known
+            .iter()
+            .any(|metric| metric.id == query.id && metric.actors.contains(&query.actor))
+        {
+            return Err(EvaluationError::new(
+                EvaluationErrorKind::UnsupportedCapability,
+                format!(
+                    "Native backend does not implement {:?}.{}",
+                    query.actor, query.id
+                ),
+            ));
+        }
+    }
+    match parse_projection(request, data, false)? {
+        ProfileProjection::Scenario(profile) => Ok(profile),
+        ProfileProjection::Complete(_) => unreachable!("scenario projection requested"),
+    }
+}
+fn parse_projection(
+    request: &EvaluationRequest,
+    data: &crate::CompiledGameData,
+    prepare_numeric: bool,
+) -> Result<ProfileProjection, EvaluationError> {
     request
         .options
         .validate()
@@ -276,7 +332,7 @@ pub(crate) fn parse(
             "nodes",
             "masteryEffects",
         ],
-        &[],
+        &["Overrides"],
     )?;
     fixed(
         spec,
@@ -285,7 +341,20 @@ pub(crate) fn parse(
             ("masteryEffects", ""),
         ],
     )?;
-    let resolved_tree = crate::tree::NativeTree::resolve(build, spec, data)?;
+    let resolved_tree = if prepare_numeric {
+        Some(crate::tree::NativeTree::resolve(build, spec, data)?)
+    } else {
+        crate::tree::validate_calculation_source(&data.snapshot().tree().source)?;
+        poe_optimizer_import::controlled_build::parse_passive_allocation(
+            build,
+            spec,
+            data.snapshot().package(),
+        )
+        .map_err(|error| unsupported(error.to_string()))?
+        .resolve(data.snapshot())
+        .map_err(|error| unsupported(error.to_string()))?;
+        None
+    };
     let skills = child(root, "Skills")?;
     only(
         skills,
@@ -380,29 +449,71 @@ pub(crate) fn parse(
         None
     };
     let items = child(root, "Items")?;
-    only(
-        items,
-        &["activeItemSet"],
-        if is_mace {
-            &["Item", "ItemSet"]
-        } else {
-            &["ItemSet"]
-        },
-    )?;
+    only(items, &["activeItemSet"], &["Item", "ItemSet"])?;
     fixed(items, &[("activeItemSet", "1")])?;
     let item_set = child(items, "ItemSet")?;
-    let weapon = if is_mace {
-        only(item_set, &["id", "title", "useSecondWeaponSet"], &["Slot"])?;
-        fixed(item_set, &[("id", "1"), ("useSecondWeaponSet", "false")])?;
-        let slot = child(item_set, "Slot")?;
+    only(item_set, &["id", "title", "useSecondWeaponSet"], &["Slot"])?;
+    fixed(item_set, &[("id", "1")])?;
+    if item_set
+        .attribute("useSecondWeaponSet")
+        .is_some_and(|value| value != "false")
+        || (is_mace && item_set.attribute("useSecondWeaponSet") != Some("false"))
+    {
+        return Err(unsupported(
+            "Native equipment requires the first weapon set",
+        ));
+    }
+    let mut supplied = BTreeMap::new();
+    for item in items.children().filter(|node| node.has_tag_name("Item")) {
+        let parsed = poe_optimizer_import::equipment::parse_equipment_item_xml(item, package)
+            .map_err(|error| unsupported(error.to_string()))?;
+        if supplied.insert(parsed.pob_item_id(), parsed).is_some() {
+            return Err(unsupported("Duplicate physical item ID"));
+        }
+    }
+    let mut equipment = BTreeMap::new();
+    let mut selected_slots = BTreeSet::new();
+    for slot in item_set.children().filter(Node::is_element) {
         only(slot, &["name", "itemId"], &[])?;
-        fixed(slot, &[("name", "Weapon 1"), ("itemId", "1")])?;
-        Some(parse_weapon(child(items, "Item")?, data)?)
-    } else {
-        only(item_set, &["id", "title"], &[])?;
-        fixed(item_set, &[("id", "1")])?;
-        None
-    };
+        let name = slot
+            .attribute("name")
+            .ok_or_else(|| unsupported("Missing equipment slot name"))?;
+        if !["Weapon 1", "Amulet"].contains(&name) || !selected_slots.insert(name) {
+            return Err(unsupported("Unsupported or duplicate equipment slot"));
+        }
+        let raw_id = slot
+            .attribute("itemId")
+            .ok_or_else(|| unsupported("Missing equipment slot itemId"))?;
+        let id = raw_id
+            .parse::<u32>()
+            .ok()
+            .filter(|id| raw_id == id.to_string())
+            .ok_or_else(|| {
+                unsupported("Equipment slot itemId must be canonical unsigned integer")
+            })?;
+        if id == 0 {
+            continue;
+        }
+        let item = supplied
+            .remove(&id)
+            .ok_or_else(|| unsupported("Unknown or multiply equipped physical item"))?;
+        if !item.allowed_slots().iter().any(|slot| slot == name)
+            || (!is_mace && item.weapon().is_some())
+            || equipment.insert(name.to_owned(), item).is_some()
+        {
+            return Err(unsupported(
+                "Unsupported, duplicate or incompatible equipment slot",
+            ));
+        }
+    }
+    // Known unequipped inventory is preserved in source and contributes no modifiers.
+    let weapon = equipment
+        .get("Weapon 1")
+        .and_then(|item| item.weapon())
+        .cloned();
+    if is_mace && weapon.is_none() {
+        return Err(unsupported("Native Mace requires one main-hand weapon"));
+    }
     let config_node = child(root, "Config")?;
     only(config_node, &["activeConfigSet"], &["ConfigSet"])?;
     fixed(config_node, &[("activeConfigSet", "1")])?;
@@ -624,27 +735,7 @@ pub(crate) fn parse(
             actor_quests.spirit[index] = *enabled;
         }
     }
-    let actor_layers = if actor_modifiers.records().is_empty() {
-        Vec::new()
-    } else {
-        vec![actor_modifiers.records().to_vec()]
-    };
-    let prepared_actor = data
-        .prepare_actor_resources(level, actor_quests, &resolved_tree.character, &actor_layers)
-        .map_err(|error| unsupported(error.to_string()))?;
     let enemy_level = number(&config, "enemyLevel") as u32;
-    let prepared_weapon = weapon
-        .as_ref()
-        .map(|record| {
-            data.prepare_mace_weapon(
-                weapon_slot(record.weapon_key())?,
-                record.quality(),
-                record.item_level(),
-                record.local_modifiers(),
-            )
-            .map_err(|error| unsupported(error.to_string()))
-        })
-        .transpose()?;
     let input = if let Some(record) = &weapon {
         let weapon = weapon_slot(record.weapon_key())?;
         let item_level = record.item_level();
@@ -676,7 +767,40 @@ pub(crate) fn parse(
             quests,
         })
     };
-    Ok(Profile {
+    if !prepare_numeric {
+        return Ok(ProfileProjection::Scenario(ScenarioProfile {
+            input,
+            config,
+            actor_quests,
+        }));
+    }
+    let resolved_tree = resolved_tree.expect("full numeric tree requested");
+    // PoB constructs one local actor layer: configuration, source slot order, passives.
+    // Supported slots have weapon first, then amulet; lexical map order is not that order.
+    let mut actor_records = actor_modifiers.records().to_vec();
+    for slot in ["Weapon 1", "Amulet"] {
+        if let Some(item) = equipment.get(slot) {
+            actor_records.extend_from_slice(item.actor_modifiers());
+        }
+    }
+    actor_records.extend(resolved_tree.actor_modifiers().cloned());
+    let actor_layers = vec![actor_records];
+    let prepared_actor = data
+        .prepare_actor_resources(level, actor_quests, &resolved_tree.character, &actor_layers)
+        .map_err(|error| unsupported(error.to_string()))?;
+    let prepared_weapon = weapon
+        .as_ref()
+        .map(|record| {
+            data.prepare_mace_weapon(
+                weapon_slot(record.weapon_key())?,
+                record.quality(),
+                record.item_level(),
+                record.local_modifiers(),
+            )
+            .map_err(|error| unsupported(error.to_string()))
+        })
+        .transpose()?;
+    Ok(ProfileProjection::Complete(Profile {
         input,
         support_keys,
         support_order,
@@ -684,6 +808,7 @@ pub(crate) fn parse(
         weapon_record: weapon,
         prepared_weapon,
         actor_modifiers,
+        equipment,
         actor_quests,
         prepared_actor,
         tree: resolved_tree,
@@ -691,7 +816,7 @@ pub(crate) fn parse(
         config,
         export_xml,
         group_label: skill.attribute("label").map(str::to_owned),
-    })
+    }))
 }
 
 fn validate_gem(
@@ -741,26 +866,6 @@ fn weapon_slot(key: &str) -> Result<MaceWeapon, EvaluationError> {
         _ => Err(unsupported("Unknown native Mace weapon capability slot")),
     }
 }
-fn parse_weapon(
-    item: Node<'_, '_>,
-    data: &crate::CompiledGameData,
-) -> Result<poe_optimizer_import::mace_item::ValidatedMaceWeapon, EvaluationError> {
-    if item.tag_name().namespace().is_some()
-        || item
-            .attributes()
-            .any(|attribute| attribute.namespace().is_some() || attribute.name() != "id")
-        || item.attribute("id") != Some("1")
-        || item.children().count() != 1
-        || !item.first_child().is_some_and(|node| node.is_text())
-    {
-        return Err(unsupported(
-            "Native Mace item must be one exact admitted text payload at XML item ID 1",
-        ));
-    }
-    poe_optimizer_import::mace_item::parse_mace_item_element(item, data.snapshot().package())
-        .map_err(|error| unsupported(error.to_string()))
-}
-
 /// Copy each untouched source span once, including potentially large trailing Notes.
 /// All edit spans refer to the original XML and must be disjoint UTF-8 boundaries.
 fn apply_source_edits(
@@ -799,4 +904,40 @@ fn apply_source_edits(
     exported.push_str(&source[cursor..]);
     debug_assert_eq!(exported.len(), length);
     Ok(exported)
+}
+
+#[cfg(test)]
+mod scenario_tests {
+    use super::*;
+    const MACE: &str = include_str!("../../../tests/fixtures/builds/mace-passive-equipment.xml");
+    #[test]
+    fn fixed_scenario_and_full_projection_reject_the_same_unsupported_source() {
+        let data = crate::NativeBackend::new();
+        for source in [
+            MACE.replace(
+                "name=\"enemyCritChance\" number=\"0\"",
+                "name=\"enemyCritChance\" number=\"1\"",
+            ),
+            MACE.replace("<Gem nameSpec=", "<Gem unsupported=\"ignored\" nameSpec="),
+            MACE.replace("<PathOfBuilding2>", "<PathOfBuilding2 xmlns=\"foreign\">"),
+            MACE.replace("</PathOfBuilding2>", "<Party/></PathOfBuilding2>"),
+        ] {
+            let request = EvaluationRequest {
+                build: BuildDocument {
+                    format: BuildFormat::PathOfBuilding2Xml,
+                    content: source,
+                },
+                options: EvaluationOptions::default(),
+                metrics: vec![],
+            };
+            let full = parse(&request, data.data())
+                .err()
+                .expect("invalid full source");
+            let scenario = prepare_scenario(&request, data.data())
+                .err()
+                .expect("invalid scenario source");
+            assert_eq!(scenario.kind, full.kind);
+            assert_eq!(scenario.message, full.message);
+        }
+    }
 }

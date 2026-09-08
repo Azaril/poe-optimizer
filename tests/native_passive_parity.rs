@@ -254,11 +254,11 @@ fn check_passives(
         .attachments
         .iter()
         .find(|attachment| {
-            attachment.media_type == "application/vnd.poe-optimizer.native-tree+json;version=2"
+            attachment.media_type == "application/vnd.poe-optimizer.native-tree+json;version=3"
         })
         .expect("native class/tree projection diagnostic");
     let projection: serde_json::Value = serde_json::from_str(&attachment.content).unwrap();
-    assert_eq!(projection["schema_version"], 2);
+    assert_eq!(projection["schema_version"], 3);
     assert_eq!(projection["evidence_kind"], "native_source_resolution");
     assert_eq!(projection["source"]["tree_version"], "0_5");
     assert_eq!(

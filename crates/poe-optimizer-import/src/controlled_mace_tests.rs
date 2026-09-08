@@ -1577,6 +1577,11 @@ fn renamed_actor_rule_data_controls_requirement_admission_without_reviewed_text_
             .unwrap();
         rule.id = "custom_strength".into();
         rule.template = "{0} to configured Strength".into();
+        for base in &mut package.jewellery_bases {
+            if base.implicit.actor_rule_id == "strength_base" {
+                base.implicit.actor_rule_id = "custom_strength".into();
+            }
+        }
     });
     let make = |text: &str| {
         ControlledMaceCatalog::with_data(

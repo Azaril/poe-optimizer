@@ -77,6 +77,15 @@ Keep these representations separate:
    snapshot. Mutable scratch buffers, actor state and candidate-dependent caches belong to
    one evaluation/task and never mutate the shared data.
 
+Source components must be reusable independently of complete build combinations. Compile
+item/passive/configuration programs once; candidate admission selects and combines borrowed
+programs in the correct actor/database layer using task-local scratch. Layer boundaries
+are semantic: splitting one source layer must not add intermediate rounding. Requirement
+checks and skill calculations consume the same resolved actor. Preserve physical item and
+passive identity separately from their effective data records. A failed candidate-dependent
+numeric composition belongs to that selection, rather than poisoning otherwise usable
+source components or the entire search catalog.
+
 The manifest needs game namespace, data release/patch, schema version, required semantic
 versions, section/file digests, coverage and source/extractor provenance. `DataIdentity`
 uses verified content digests, not a mutable filename or display label. Source lineage may

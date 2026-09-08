@@ -538,3 +538,134 @@ fn malformed_finite_policy_evidence_is_never_ranked_or_verified() {
     assert!(report.verifications.is_empty());
     assert_eq!(report.statistics.unavailable, 1);
 }
+
+#[test]
+fn compact_deduplication_releases_old_prepared_payloads_without_changing_search_results() {
+    use std::sync::{Arc, Weak};
+    #[derive(Clone, Debug)]
+    struct Prepared {
+        id: u8,
+        payload: Arc<Vec<u8>>,
+    }
+    impl PartialEq for Prepared {
+        fn eq(&self, other: &Self) -> bool {
+            self.id == other.id
+        }
+    }
+    impl Eq for Prepared {}
+    impl PartialOrd for Prepared {
+        fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+            Some(self.cmp(other))
+        }
+    }
+    impl Ord for Prepared {
+        fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+            self.id.cmp(&other.id)
+        }
+    }
+    struct PreparedDomain {
+        compact: bool,
+        retained: Mutex<Vec<Weak<Vec<u8>>>>,
+    }
+    impl PreparedDomain {
+        fn state(&self, id: u8) -> Prepared {
+            let payload = Arc::new(vec![id; 32 * 1024]);
+            self.retained.lock().unwrap().push(Arc::downgrade(&payload));
+            Prepared { id, payload }
+        }
+    }
+    impl SearchDomain<Prepared> for PreparedDomain {
+        fn deduplication_key(&self, c: &Prepared) -> Option<Vec<u8>> {
+            self.compact.then(|| vec![c.id])
+        }
+        fn validate(&self, _: &Prepared, _: &EvaluationControl<'_>) -> Result<(), String> {
+            Ok(())
+        }
+        fn propose(
+            &self,
+            _: &[Prepared],
+            round: usize,
+            _: u64,
+            limit: usize,
+            _: &EvaluationControl<'_>,
+        ) -> Result<Vec<Prepared>, String> {
+            if round > 16 || limit == 0 {
+                Ok(vec![])
+            } else {
+                Ok(vec![self.state(round as u8), self.state(round as u8)])
+            }
+        }
+    }
+    struct PreparedEvaluator<'a> {
+        domain: &'a PreparedDomain,
+        peak: AtomicUsize,
+    }
+    impl CandidateEvaluator<Prepared> for PreparedEvaluator<'_> {
+        fn execution_kind(&self) -> ExecutionKind {
+            ExecutionKind::RustCpu
+        }
+        fn evaluate(
+            &self,
+            c: &Prepared,
+            _: &EvaluationControl<'_>,
+        ) -> Result<CandidateMeasurements, String> {
+            assert_eq!(c.payload[0], c.id);
+            let live = self
+                .domain
+                .retained
+                .lock()
+                .unwrap()
+                .iter()
+                .filter(|p| p.strong_count() > 0)
+                .count();
+            self.peak.fetch_max(live, Ordering::Relaxed);
+            Ok(CandidateMeasurements {
+                measurements: vec![value("score", f64::from(c.id)), value("floor", 1.0)],
+                diagnostic_only: true,
+            })
+        }
+    }
+    let mut results = Vec::new();
+    for compact in [false, true] {
+        let domain = PreparedDomain {
+            compact,
+            retained: Mutex::new(vec![]),
+        };
+        let evaluator = PreparedEvaluator {
+            domain: &domain,
+            peak: AtomicUsize::new(0),
+        };
+        let budget = SearchBudget {
+            max_evaluations: 64,
+            max_proposals: 64,
+            max_rounds: 24,
+            archive_size: 1,
+            beam_per_status: 1,
+            verification_attempts: 0,
+            ..Default::default()
+        };
+        let result = search(
+            &domain,
+            &evaluator,
+            &policy(false),
+            SearchPlan::Explore(vec![domain.state(0)]),
+            &budget,
+            &AtomicBool::new(false),
+        )
+        .unwrap();
+        results.push((
+            result.feasible[0].candidate.id,
+            result.statistics.evaluations,
+            result.statistics.duplicates,
+            evaluator.peak.load(Ordering::Relaxed),
+        ));
+    }
+    assert_eq!(results[0].0, results[1].0);
+    assert_eq!(results[0].1, results[1].1);
+    assert_eq!(results[0].2, results[1].2);
+    assert!(results[0].3 >= 16);
+    assert!(
+        results[1].3 <= 4,
+        "compact keys retained old preparation: {results:?}"
+    );
+}

@@ -1,7 +1,9 @@
 //! Native build evaluation: owned Rust inputs and calculations, with an injectable clock.
 //! No PoB checkout, Lua state, subprocess, filesystem or network access is required.
 #![forbid(unsafe_code)]
+mod build_candidates;
 mod candidates;
+pub use build_candidates::{PreparedBuildCandidates, PreparedBuildFootprint};
 mod profile;
 pub use candidates::{
     NativeMetricSnapshot, NativeMetricValue, PreparedMaceCandidates, PreparedMaceFootprint,
@@ -10,6 +12,7 @@ mod tree;
 
 use poe_optimizer_core::{BuildSummary, coverage::*, evaluation::*, metrics::*, options::*};
 pub use poe_optimizer_engine::CompiledGameData;
+pub use poe_optimizer_engine::actor::ActorScratch;
 use poe_optimizer_engine::{mace, spark};
 use profile::NativeInput;
 use sha2::{Digest, Sha256};
@@ -151,6 +154,13 @@ impl NativeCalculation {
                 serde_json::json!({"strength":o.strength,"dexterity":o.dexterity,"intelligence":o.intelligence,"armour":o.armour,"evasion":o.evasion,"attack_rate":o.attack_rate,"accuracy":o.accuracy,"hit_chance":o.hit_chance,"crit_chance":o.crit_chance,"crit_multiplier":o.crit_multiplier,"main_hand_average_hit":o.main_hand_average_hit,"average_damage":o.average_damage,"effective_enemy_fire_resistance":o.effective_enemy_fire_resistance,"effective_enemy_evasion":o.effective_enemy_evasion})
             }
         };
+        value["equipment"] = serde_json::json!(
+            profile
+                .equipment
+                .iter()
+                .map(|(slot, item)| (slot, item.diagnostic()))
+                .collect::<BTreeMap<_, _>>()
+        );
         if let NativeInput::Mace(i) = &profile.input {
             let record = profile
                 .weapon_record
@@ -292,6 +302,13 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("profile.rs"),
                 include_str!("tree.rs"),
                 include_str!("candidates.rs"),
+                include_str!("build_candidates.rs"),
+                include_str!("../../poe-optimizer-import/src/equipment.rs"),
+                include_str!("../../poe-optimizer-import/src/controlled_build.rs"),
+                include_str!("../../poe-optimizer-import/src/controlled_build_template.rs"),
+                include_str!("../../poe-optimizer-import/src/controlled_build_xml.rs"),
+                include_str!("../../poe-optimizer-import/src/controlled_build_evidence.rs"),
+                include_str!("../../poe-optimizer-engine/src/actor_program.rs"),
                 include_str!("../../poe-optimizer-import/src/controlled_mace.rs"),
                 include_str!("../../poe-optimizer-import/src/mace_item.rs"),
                 include_str!("../../poe-optimizer-import/src/actor_modifiers.rs"),
@@ -500,7 +517,7 @@ impl<C: EvaluationClock> NativeBackend<C> {
             exports:vec![BuildDocument{format:BuildFormat::PathOfBuilding2Xml,content:prepared.profile.export_xml.clone()}],
             warnings:vec![format!("Native supported profile: {}. Other build mechanics are rejected.",output.profile_id()),"Full DPS rollups, EHP and maximum-hit calculations are not implemented by this backend.".into()],
             elapsed_ms:0.0,diagnostic_only:true,
-            attachments:vec![DiagnosticAttachment{media_type:match &prepared.profile.input { NativeInput::Spark(_) => "application/vnd.poe-optimizer.native-profile+json;version=2", NativeInput::Mace(_) => "application/vnd.poe-optimizer.native-profile+json;version=4" }.into(),content:output.diagnostic(&prepared.profile, &self.data).to_string()}, DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-tree+json;version=2".into(),content:prepared.profile.tree.diagnostic(&self.data).to_string()}],
+            attachments:vec![DiagnosticAttachment{media_type:match &prepared.profile.input { NativeInput::Spark(_) => "application/vnd.poe-optimizer.native-profile+json;version=3", NativeInput::Mace(_) => "application/vnd.poe-optimizer.native-profile+json;version=5" }.into(),content:output.diagnostic(&prepared.profile, &self.data).to_string()}, DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-tree+json;version=3".into(),content:prepared.profile.tree.diagnostic(&self.data).to_string()}],
         };
         result.attachments.push(DiagnosticAttachment {
             media_type: "application/vnd.poe-optimizer.game-data+json;version=1".into(),

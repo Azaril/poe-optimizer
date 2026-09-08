@@ -11,6 +11,7 @@ use crate::{
     spark::SparkData,
 };
 use poe_optimizer_data::{
+    class_tree::{PassiveViewKey, ResolvedPassiveAllocation},
     game_data::{self, DataIdentity, DefenceData, GameDataSnapshot, PassiveStat},
     tree_data::TREE_PATH,
 };
@@ -41,7 +42,7 @@ pub struct CompiledGameData {
     pub(crate) actor_binding: Arc<()>,
     pub(crate) actor_precision: crate::modifiers::MorePrecision,
     supports: MaceSupportCatalog,
-    passives: BTreeMap<(u32, u32), BTreeMap<String, CharacterModifiers>>,
+    passives: BTreeMap<PassiveViewKey, CharacterModifiers>,
 }
 impl CompiledGameData {
     pub fn compile(snapshot: Arc<GameDataSnapshot>) -> Result<Self, GameDataError> {
@@ -139,8 +140,7 @@ impl CompiledGameData {
                 "monster tables must cover every supported level 1..100".into(),
             ));
         }
-        let mut passives: BTreeMap<(u32, u32), BTreeMap<String, CharacterModifiers>> =
-            BTreeMap::new();
+        let mut passives: BTreeMap<PassiveViewKey, CharacterModifiers> = BTreeMap::new();
         for passive in &package.passive_effects {
             let mut modifiers = CharacterModifiers::NONE;
             for effect in &passive.effects {
@@ -174,14 +174,9 @@ impl CompiledGameData {
             }
             .validate()
             .map_err(|error| GameDataError(error.to_string()))?;
-            if passives
-                .entry((passive.class_id, passive.physical_node_id))
-                .or_default()
-                .insert(passive.ascendancy_id.clone().unwrap_or_default(), modifiers)
-                .is_some()
-            {
+            if passives.insert(passive.key.clone(), modifiers).is_some() {
                 return Err(GameDataError(
-                    "duplicate class/ascendancy/physical passive effect record".into(),
+                    "duplicate physical/source-view passive effect record".into(),
                 ));
             }
         }
@@ -289,14 +284,66 @@ impl CompiledGameData {
         ascendancy_id: Option<&str>,
         physical_id: u32,
     ) -> Option<&CharacterModifiers> {
-        // Validated ascendancy identifiers are nonempty, leaving the empty key
-        // for ordinary ownership. Borrowed lookup allocates no per-build strings.
-        if ascendancy_id == Some("") {
-            return None;
+        let record = self
+            .snapshot
+            .passive_effects(class_id, ascendancy_id, physical_id)?;
+        self.passive_view_modifiers(&record.key)
+    }
+    /// Borrow numeric effects by exact physical allocation and selected source view.
+    pub fn passive_view_modifiers(&self, key: &PassiveViewKey) -> Option<&CharacterModifiers> {
+        self.passives.get(key)
+    }
+    /// Verify public resolved input against this snapshot before deriving class
+    /// attributes. Scalar passive effects are deliberately deferred so unrelated
+    /// skill/defence overflow cannot hide an otherwise legal requirement choice.
+    /// This structural preparation may allocate; it is not a candidate hot path.
+    pub fn class_character_from_allocation(
+        &self,
+        allocation: &ResolvedPassiveAllocation,
+    ) -> Result<CharacterInput, GameDataError> {
+        let canonical = allocation
+            .selection
+            .resolve(self.snapshot())
+            .map_err(|error| GameDataError(error.to_string()))?;
+        if canonical != *allocation {
+            return Err(GameDataError(
+                "Resolved passive allocation differs from selected snapshot source views".into(),
+            ));
         }
-        self.passives
-            .get(&(class_id, physical_id))?
-            .get(ascendancy_id.unwrap_or(""))
+        let attributes = &canonical.base_attributes;
+        let character = CharacterInput {
+            attributes: CharacterAttributes {
+                strength: f64::from(attributes.strength),
+                dexterity: f64::from(attributes.dexterity),
+                intelligence: f64::from(attributes.intelligence),
+            },
+            modifiers: CharacterModifiers::NONE,
+        };
+        character
+            .validate()
+            .map_err(|error| GameDataError(error.to_string()))?;
+        Ok(character)
+    }
+    /// Resolve the same admitted class inputs and compose every selected scalar
+    /// passive view with checked addition. Actor records remain separate source
+    /// programs; a class-only actor can attach this result with with_character.
+    pub fn character_from_allocation(
+        &self,
+        allocation: &ResolvedPassiveAllocation,
+    ) -> Result<CharacterInput, GameDataError> {
+        let mut character = self.class_character_from_allocation(allocation)?;
+        for view in &allocation.views {
+            let effects = self
+                .passive_view_modifiers(&view.source.key)
+                .ok_or_else(|| {
+                    GameDataError("Missing compiled selected passive view effects".into())
+                })?;
+            character.modifiers = character
+                .modifiers
+                .checked_add(*effects)
+                .map_err(|error| GameDataError(error.to_string()))?;
+        }
+        Ok(character)
     }
     pub fn weapon(&self, weapon: MaceWeapon) -> MaceWeaponData<'_> {
         let slot = match weapon {

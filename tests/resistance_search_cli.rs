@@ -150,7 +150,7 @@ fn all_840_choices_agree_across_workers_and_resistance_constraint_selects_paid_a
             .as_array()
             .unwrap()
             .iter()
-            .find(|a| a["media_type"] == "application/vnd.poe-optimizer.native-tree+json;version=2")
+            .find(|a| a["media_type"] == "application/vnd.poe-optimizer.native-tree+json;version=3")
             .unwrap()["content"]
             .as_str()
             .unwrap(),
@@ -258,7 +258,7 @@ fn injected_signed_values_change_feasibility_and_export_provenance() {
     let effect = package
         .passive_effects
         .iter_mut()
-        .find(|e| e.ascendancy_id.as_deref() == Some("Monk3") && e.physical_node_id == 24475)
+        .find(|e| e.key.physical_node_id == 24475)
         .unwrap();
     effect.effects[0].value = -7.5;
     package.refresh_section_digests().unwrap();

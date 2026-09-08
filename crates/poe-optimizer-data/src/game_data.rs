@@ -12,8 +12,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 6;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v6";
+pub const SCHEMA_VERSION: u32 = 7;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v7";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -29,6 +29,8 @@ const SECTIONS: &[&str] = &[
     "monsters",
     "encounters",
     "passive_effects",
+    "passive_exclusions",
+    "jewellery_bases",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -66,9 +68,9 @@ pub struct LoadLimits {
 impl Default for LoadLimits {
     fn default() -> Self {
         Self {
-            max_bytes: 2 * 1024 * 1024,
+            max_bytes: 16 * 1024 * 1024,
             max_depth: 64,
-            max_values: 100_000,
+            max_values: 1_000_000,
             max_string_bytes: 4096,
             max_effects_per_passive: 32,
         }
@@ -330,12 +332,36 @@ pub struct PassiveEffect {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PassiveEffects {
-    pub class_id: u32,
-    pub ascendancy_id: Option<String>,
-    pub physical_node_id: u32,
+    pub key: crate::passive_allocation::PassiveViewKey,
     pub effective_node_id: u32,
-    /// Source order is preserved even when aggregation currently commutes.
+    /// Source order within one effect family is retained; order-sensitive forms reject.
     pub effects: Vec<PassiveEffect>,
+    pub actor_modifiers: Vec<ActorModifierRecord>,
+}
+/// Source-owned accessory slot identity; equipment admission is handled by the importer.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum EquipmentSlot {
+    Amulet,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct JewelleryImplicitData {
+    pub actor_rule_id: String,
+    pub minimum: f64,
+    pub maximum: f64,
+    pub source_text: String,
+    pub modifier_types: Vec<String>,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct JewelleryBaseData {
+    pub id: String,
+    pub name: String,
+    pub slot: EquipmentSlot,
+    pub requirements: RequirementData,
+    pub implicit: JewelleryImplicitData,
+    pub source: crate::tree_data::SourceTable,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -354,8 +380,25 @@ pub struct GameDataPackage {
     pub monsters: MonsterData,
     pub encounters: EncounterData,
     pub passive_effects: Vec<PassiveEffects>,
+    pub passive_exclusions: Vec<crate::passive_allocation::ExcludedPassiveView>,
+    pub jewellery_bases: Vec<JewelleryBaseData>,
 }
 impl GameDataPackage {
+    pub fn jewellery_base(&self, id: &str) -> Option<&JewelleryBaseData> {
+        self.jewellery_bases.iter().find(|base| base.id == id)
+    }
+    pub fn jewellery_base_by_name(&self, name: &str) -> Option<&JewelleryBaseData> {
+        self.jewellery_bases.iter().find(|base| base.name == name)
+    }
+    pub fn passive_view_effects(
+        &self,
+        key: &crate::passive_allocation::PassiveViewKey,
+    ) -> Option<&PassiveEffects> {
+        self.passive_effects
+            .iter()
+            .find(|record| &record.key == key)
+    }
+
     pub fn item_modifier_rule(&self, id: &str) -> Option<&ItemModifierRule> {
         self.item_modifier_rules.iter().find(|rule| rule.id == id)
     }
@@ -426,12 +469,17 @@ impl GameDataSnapshot {
         ascendancy_id: Option<&str>,
         physical_node_id: u32,
     ) -> Option<&PassiveEffects> {
-        self.package.passive_effects.iter().find(|record| {
-            record.class_id == class_id
-                && record.ascendancy_id.as_deref() == ascendancy_id
-                && record.physical_node_id == physical_node_id
-        })
+        let view = match ascendancy_id {
+            Some(asc) => self
+                .tree()
+                .ascendancy_passive(class_id, asc, physical_node_id)
+                .ok()?,
+            None => self.tree().entrance(class_id, physical_node_id).ok()?,
+        };
+        let key = crate::passive_allocation::key_for_effective(view);
+        self.package.passive_view_effects(&key)
     }
+
     pub fn tree(&self) -> &BundledClassTree {
         &self.package.tree
     }
@@ -771,74 +819,8 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
         -60.0,
         0.0,
     )?;
-    let mut found = BTreeSet::new();
-    for effects in &package.passive_effects {
-        if !found.insert((
-            effects.class_id,
-            effects.ascendancy_id.clone(),
-            effects.physical_node_id,
-        )) {
-            return Err(error("duplicate owned passive effect selector"));
-        }
-        let node = match effects.ascendancy_id.as_deref() {
-            Some(ascendancy_id) => package.tree.ascendancy_passive(
-                effects.class_id,
-                ascendancy_id,
-                effects.physical_node_id,
-            ),
-            None => package
-                .tree
-                .entrance(effects.class_id, effects.physical_node_id),
-        }
-        .map_err(error)?;
-        if effects.effective_node_id != node.effective_source_id
-            || effects.effects.len() != node.stats.len()
-            || effects.effects.is_empty()
-            || effects.effects.len() > limits.max_effects_per_passive
-        {
-            return Err(error(
-                "passive effect references, source ordering or effect limits disagree",
-            ));
-        }
-        for effect in &effects.effects {
-            let minimum = match effect.stat {
-                PassiveStat::FireResistanceFlat
-                | PassiveStat::ColdResistanceFlat
-                | PassiveStat::LightningResistanceFlat
-                | PassiveStat::ChaosResistanceFlat
-                | PassiveStat::ElementalResistanceFlat => -1e6,
-                _ => 0.0,
-            };
-            number("passive effect value", effect.value, minimum, 1e6)?;
-        }
-        let stats: BTreeSet<_> = effects.effects.iter().map(|v| v.stat).collect();
-        if stats.len() != effects.effects.len() {
-            return Err(error("duplicate passive stat operations"));
-        }
-    }
-    let expected: BTreeSet<_> = package
-        .tree
-        .class_entrances
-        .iter()
-        .flat_map(|(class, values)| values.keys().map(|node| (*class, None, *node)))
-        .chain(
-            package
-                .tree
-                .ascendancy_passives
-                .iter()
-                .flat_map(|(ascendancy, nodes)| {
-                    let class_id = package.tree.ascendancies[ascendancy].class_id;
-                    nodes
-                        .keys()
-                        .map(move |node| (class_id, Some(ascendancy.clone()), *node))
-                }),
-        )
-        .collect();
-    if found != expected {
-        return Err(error(
-            "typed effects must cover every admitted owned passive exactly once",
-        ));
-    }
+    validate_passive_catalog(package, limits)?;
+    validate_jewellery(package)?;
     Ok(())
 }
 fn validate_requirement(name: &str, requirement: &RequirementData) -> Result<()> {
@@ -1071,4 +1053,221 @@ fn validate_supports(package: &GameDataPackage) -> Result<()> {
         }
     }
     Ok(())
+}
+
+fn validate_passive_catalog(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
+    use crate::passive_allocation::PassiveViewSelector;
+    let expected: BTreeMap<_, _> = package
+        .tree
+        .allocation_views
+        .iter()
+        .map(|view| (&view.key, view))
+        .collect();
+    let mut found = BTreeSet::new();
+    for record in &package.passive_effects {
+        if !found.insert(&record.key) {
+            return Err(error("duplicate passive source-view admission"));
+        }
+        let source = expected
+            .get(&record.key)
+            .ok_or_else(|| error("unknown passive source-view key"))?;
+        if record.effects.is_empty() && record.actor_modifiers.is_empty() {
+            return Err(error("admitted passive requires complete nonempty effects"));
+        }
+        if source.effective_node_id != record.effective_node_id
+            || record.effects.len() + record.actor_modifiers.len() > limits.max_effects_per_passive
+        {
+            return Err(error("passive source identity or effect count mismatch"));
+        }
+        if let Some(node) = package
+            .tree
+            .allocation_nodes
+            .get(&record.key.physical_node_id)
+        {
+            if !matches!(
+                node.kind,
+                crate::tree_data::TreeNodeKind::Normal | crate::tree_data::TreeNodeKind::Notable
+            ) || node.source_default_point_cost != Some(1)
+                || node
+                    .unsupported_mechanics
+                    .iter()
+                    .any(|m| m != "attribute_choice")
+            {
+                return Err(error(
+                    "unsupported whole passive structure cannot be admitted",
+                ));
+            }
+            if matches!(record.key.selector, PassiveViewSelector::Attribute { .. })
+                && node.attribute_options.is_empty()
+            {
+                return Err(error("attribute passive selector lacks source options"));
+            }
+        }
+        for effect in &record.effects {
+            let minimum = if matches!(
+                effect.stat,
+                PassiveStat::FireResistanceFlat
+                    | PassiveStat::ColdResistanceFlat
+                    | PassiveStat::LightningResistanceFlat
+                    | PassiveStat::ChaosResistanceFlat
+                    | PassiveStat::ElementalResistanceFlat
+            ) {
+                -1e6
+            } else {
+                0.0
+            };
+            number("passive effect value", effect.value, minimum, 1e6)?;
+        }
+        for modifier in &record.actor_modifiers {
+            modifier.validate().map_err(error)?;
+            if matches!(
+                modifier.stat,
+                ActorStat::LifeConvertToEnergyShield
+                    | ActorStat::LifeConvertToArmour
+                    | ActorStat::LifeConvertToEvasion
+                    | ActorStat::ManaConvertToEnergyShield
+                    | ActorStat::ManaConvertToArmour
+                    | ActorStat::ManaConvertToEvasion
+                    | ActorStat::SpiritConvertToEnergyShield
+                    | ActorStat::SpiritConvertToArmour
+                    | ActorStat::SpiritConvertToEvasion
+                    | ActorStat::ChaosInoculation
+            ) {
+                return Err(error("passive requires unsupported downstream mechanics"));
+            }
+            if matches!(
+                modifier.effect,
+                ActorModifierEffect::Numeric {
+                    operation: ActorNumericOperation::More | ActorNumericOperation::Override,
+                    ..
+                }
+            ) {
+                return Err(error(
+                    "passive source traversal order does not admit MORE or OVERRIDE",
+                ));
+            }
+        }
+    }
+    for entry in &package.passive_exclusions {
+        if !expected.contains_key(&entry.key)
+            || !found.insert(&entry.key)
+            || entry.reason.is_empty()
+            || entry.reason.len() > 256
+            || entry.reason.chars().any(char::is_control)
+        {
+            return Err(error("invalid or duplicate passive source exclusion"));
+        }
+    }
+    if found != expected.keys().copied().collect() {
+        return Err(error(
+            "passive admission/exclusions must partition all source views exactly",
+        ));
+    }
+    let admitted: BTreeSet<_> = package
+        .passive_effects
+        .iter()
+        .map(|record| record.key.clone())
+        .collect();
+    if &admitted != reviewed_passive_capability_keys()? {
+        return Err(error(
+            "custom package cannot expand or replace the source-reviewed passive capability set",
+        ));
+    }
+    Ok(())
+}
+fn validate_jewellery(package: &GameDataPackage) -> Result<()> {
+    let mut ids = BTreeSet::new();
+    let mut names = BTreeSet::new();
+    if package.jewellery_bases.is_empty() || package.jewellery_bases.len() > 256 {
+        return Err(error("invalid jewellery source base count"));
+    }
+    for base in &package.jewellery_bases {
+        if base.id.is_empty()
+            || base.id.len() > 128
+            || !base
+                .id
+                .bytes()
+                .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'_')
+            || !ids.insert(&base.id)
+            || base.name.is_empty()
+            || base.name.len() > 256
+            || base.name.chars().any(char::is_control)
+            || !names.insert(&base.name)
+        {
+            return Err(error("invalid jewellery source identity"));
+        }
+        validate_requirement("jewellery", &base.requirements)?;
+        let rule = package
+            .actor
+            .modifier_rule(&base.implicit.actor_rule_id)
+            .ok_or_else(|| error("jewellery implicit references unknown actor rule"))?;
+        if rule.captures.len() != 1
+            || rule.modifiers.is_empty()
+            || rule.modifiers.iter().any(|m| {
+                !matches!(
+                    m.effect,
+                    ActorRuleEffect::Numeric {
+                        operation: ActorNumericOperation::Base,
+                        ..
+                    }
+                )
+            })
+        {
+            return Err(error(
+                "jewellery implicit requires one numeric BASE capture",
+            ));
+        }
+        number(
+            "jewellery implicit minimum",
+            base.implicit.minimum,
+            0.0,
+            1e6,
+        )?;
+        number(
+            "jewellery implicit maximum",
+            base.implicit.maximum,
+            base.implicit.minimum,
+            1e6,
+        )?;
+        if base.implicit.source_text.is_empty()
+            || base.implicit.source_text.len() > 4096
+            || base.implicit.modifier_types.len() > 32
+            || base.implicit.modifier_types.iter().any(|name| {
+                name.is_empty() || name.len() > 128 || name.chars().any(char::is_control)
+            })
+        {
+            return Err(error("invalid jewellery implicit source evidence"));
+        }
+    }
+    Ok(())
+}
+
+/// Read source capability keys directly, without recursive package validation.
+fn reviewed_passive_capability_keys()
+-> Result<&'static BTreeSet<crate::passive_allocation::PassiveViewKey>> {
+    use crate::passive_allocation::PassiveViewKey;
+    static KEYS: std::sync::OnceLock<std::result::Result<BTreeSet<PassiveViewKey>, String>> =
+        std::sync::OnceLock::new();
+    KEYS.get_or_init(|| {
+        let value: serde_json::Value =
+            serde_json::from_slice(PACKAGE_BYTES).map_err(|e| e.to_string())?;
+        let records = value
+            .get("passive_effects")
+            .and_then(serde_json::Value::as_array)
+            .ok_or("reviewed passive capability records absent")?;
+        records
+            .iter()
+            .map(|record| {
+                serde_json::from_value(
+                    record
+                        .get("key")
+                        .ok_or("reviewed passive capability key absent")?
+                        .clone(),
+                )
+                .map_err(|e| e.to_string())
+            })
+            .collect()
+    })
+    .as_ref()
+    .map_err(error)
 }

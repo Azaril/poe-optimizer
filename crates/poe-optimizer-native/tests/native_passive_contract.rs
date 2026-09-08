@@ -39,7 +39,7 @@ fn projection(result: &EvaluationResult) -> serde_json::Value {
             .attachments
             .iter()
             .find(|attachment| {
-                attachment.media_type == "application/vnd.poe-optimizer.native-tree+json;version=2"
+                attachment.media_type == "application/vnd.poe-optimizer.native-tree+json;version=3"
             })
             .expect("native source projection")
             .content,
@@ -116,7 +116,7 @@ fn check_identity(
     let nodes: Vec<_> = nodes.into_iter().collect();
     assert_eq!(result.build.allocated_nodes, nodes);
     let report = projection(result);
-    assert_eq!(report["schema_version"], 2);
+    assert_eq!(report["schema_version"], 3);
     assert_eq!(report["ascendancy_allocated_count"], 0);
     assert_eq!(report["evidence_kind"], "native_source_resolution");
     assert_eq!(report["point_budget_verified"], false);
@@ -309,13 +309,6 @@ fn invalid_identities_and_out_of_scope_allocations_fail_without_silent_repair() 
             ),
         ),
         (
-            "two paid nodes",
-            xml.replace(
-                "nodes=\"\"",
-                &format!("nodes=\"{},{}\"", entrances[0], entrances[1]),
-            ),
-        ),
-        (
             "repeated paid ID",
             xml.replace(
                 "nodes=\"\"",
@@ -373,6 +366,14 @@ fn invalid_identities_and_out_of_scope_allocations_fail_without_silent_repair() 
             "{label}: {error}"
         );
     }
+    // Connected, capability-admitted multi-node ordinary allocations now pass.
+    let expanded_xml = xml.replace(
+        "nodes=\"\"",
+        &format!("nodes=\"{},{}\"", entrances[0], entrances[1]),
+    );
+    let expanded = evaluate(&expanded_xml);
+    assert_eq!(projection(&expanded)["ordinary_allocated_count"], 2);
+    assert_eq!(expanded.exports[0].content, expanded_xml);
     // This is a genuine allocated node owned by the selected ascendancy;
     // ownership alone must not widen admission beyond reviewed passive records.
     for id in ["Witch3", "Witch3b"] {
@@ -425,7 +426,7 @@ fn all_reviewed_ascendancy_passives_compose_on_both_profiles_and_preserve_source
                 resolved.allocated_nodes
             );
             let report = projection(&result);
-            assert_eq!(report["schema_version"], 2);
+            assert_eq!(report["schema_version"], 3);
             assert_eq!(
                 report["ordinary_allocated_count"],
                 usize::from(selection.entrance_node_id.is_some())
@@ -451,10 +452,12 @@ fn all_reviewed_ascendancy_passives_compose_on_both_profiles_and_preserve_source
                 effects.len(),
                 1 + usize::from(selection.entrance_node_id.is_some())
             );
-            assert!(effects.iter().any(|effect| effect["ascendancy_id"].as_str()
-                == selection.ascendancy_id.as_deref()
-                && effect["physical_node_id"].as_u64()
-                    == selection.ascendancy_node_id.map(u64::from)));
+            assert!(
+                effects
+                    .iter()
+                    .any(|effect| effect["key"]["physical_node_id"].as_u64()
+                        == selection.ascendancy_node_id.map(u64::from))
+            );
             let reimported = evaluate(&result.exports[0].content);
             assert_eq!(measurements(&result), measurements(&reimported));
             assert_eq!(projection(&result), projection(&reimported));
@@ -519,7 +522,7 @@ fn native_realization_rejects_tampered_ascendancy_resolution_and_effect_evidence
         "/paid_nodes/1/physical_node_id",
         "/paid_nodes/1/effective_node_id",
         "/paid_nodes/1/allocation_kind",
-        "/configured_effects/1/ascendancy_id",
+        "/configured_effects/1/key/physical_node_id",
         "/configured_effects/1/effects/0/value",
         "/data_identity/content_sha256",
         "/point_budget_verified",
@@ -529,7 +532,7 @@ fn native_realization_rejects_tampered_ascendancy_resolution_and_effect_evidence
         let attachment = altered
             .attachments
             .iter_mut()
-            .find(|a| a.media_type == "application/vnd.poe-optimizer.native-tree+json;version=2")
+            .find(|a| a.media_type == "application/vnd.poe-optimizer.native-tree+json;version=3")
             .unwrap();
         let mut report: serde_json::Value = serde_json::from_str(&attachment.content).unwrap();
         *report
@@ -548,7 +551,7 @@ fn native_realization_rejects_tampered_ascendancy_resolution_and_effect_evidence
     old_version
         .attachments
         .iter_mut()
-        .find(|a| a.media_type == "application/vnd.poe-optimizer.native-tree+json;version=2")
+        .find(|a| a.media_type == "application/vnd.poe-optimizer.native-tree+json;version=3")
         .unwrap()
         .media_type = "application/vnd.poe-optimizer.native-tree+json;version=1".into();
     assert!(
@@ -573,8 +576,13 @@ fn ascendancy_allocations_require_the_exact_owner_and_separate_category_limits()
     let foreign_asc = *data
         .tree()
         .ascendancy_nodes
-        .keys()
-        .find(|id| **id != selected_asc)
+        .iter()
+        .find(|(_, node)| {
+            !node
+                .ascendancy_ids
+                .contains(selection.ascendancy_id.as_ref().unwrap())
+        })
+        .map(|(id, _)| id)
         .unwrap();
     let ordinary: Vec<_> = data.tree().class_entrances[&selection.class_id]
         .keys()
@@ -583,7 +591,6 @@ fn ascendancy_allocations_require_the_exact_owner_and_separate_category_limits()
     for paid in [
         format!("{foreign_asc}"),
         format!("{selected_asc},{foreign_asc}"),
-        format!("{selected_asc},{},{}", ordinary[0], ordinary[1]),
     ] {
         let xml = source.replace("nodes=\"\"", &format!("nodes=\"{paid}\""));
         assert_ne!(xml, source);
@@ -593,4 +600,15 @@ fn ascendancy_allocations_require_the_exact_owner_and_separate_category_limits()
             .expect("unsupported allocations admitted");
         assert_eq!(error.kind, EvaluationErrorKind::UnsupportedCapability);
     }
+    let paid = format!("{selected_asc},{},{}", ordinary[0], ordinary[1]);
+    let expanded_xml = source.replace("nodes=\"\"", &format!("nodes=\"{paid}\""));
+    let expanded = evaluate(&expanded_xml);
+    let report = projection(&expanded);
+    assert_eq!(report["ordinary_allocated_count"], 2);
+    assert_eq!(report["ascendancy_allocated_count"], 1);
+    assert_eq!(
+        report["point_budget_verified"], false,
+        "per-run budget checks remain in the controlled domain"
+    );
+    assert_eq!(expanded.exports[0].content, expanded_xml);
 }

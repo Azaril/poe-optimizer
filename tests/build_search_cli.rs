@@ -1,0 +1,366 @@
+//! Graph search preserves admission, ledgers and fresh verified artifacts across backends/workers.
+use serde_json::{Value, json};
+use sha2::{Digest, Sha256};
+use std::{
+    fs,
+    path::Path,
+    process::{Command, Output},
+};
+const TEMPLATE: &str = include_str!("fixtures/builds/mace-passive-equipment.xml");
+fn problem(dir: &Path) -> Value {
+    let mut value: Value =
+        serde_json::from_str(include_str!("../examples/passive-equipment-search.json")).unwrap();
+    value["template"] = json!(dir.join("template.xml"));
+    value
+}
+fn write_problem(dir: &Path, value: &Value) {
+    fs::write(dir.join("template.xml"), TEMPLATE).unwrap();
+    fs::write(
+        dir.join("problem.json"),
+        serde_json::to_vec_pretty(value).unwrap(),
+    )
+    .unwrap();
+}
+fn command(dir: &Path, mode: &str, jobs: usize, evaluations: usize) -> Command {
+    let mut command = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"));
+    command.current_dir(dir).args([
+        "search-build",
+        "--problem",
+        "problem.json",
+        "--native-evaluation",
+        mode,
+        "--jobs",
+        &jobs.to_string(),
+        "--max-evaluations",
+        &evaluations.to_string(),
+        "--max-proposals",
+        "256",
+        "--max-rounds",
+        "3",
+        "--timeout-seconds",
+        "60",
+    ]);
+    command
+}
+fn success(output: Output) -> Value {
+    assert!(
+        output.status.success(),
+        "stderr:{} stdout:{}",
+        String::from_utf8_lossy(&output.stderr),
+        String::from_utf8_lossy(&output.stdout)
+    );
+    serde_json::from_slice(&output.stdout).unwrap()
+}
+fn same_search(a: &Value, b: &Value) {
+    for key in [
+        "feasible",
+        "infeasible",
+        "verifications",
+        "statistics",
+        "termination",
+    ] {
+        assert_eq!(a["search"][key], b["search"][key], "search.{key}");
+    }
+    for key in [
+        "catalog",
+        "best_verified",
+        "total_evaluations",
+        "source_assembly_attempts",
+        "baseline_attempts",
+        "baseline_error",
+    ] {
+        assert_eq!(a[key], b[key], "{key}");
+    }
+}
+fn assert_ledger(report: &Value, maximum: u64) {
+    let total = report["total_evaluations"].as_u64().unwrap();
+    let search = report["search"]["statistics"]["evaluations"]
+        .as_u64()
+        .unwrap();
+    assert!(total <= maximum);
+    assert_eq!(
+        total,
+        search + report["baseline_attempts"].as_u64().unwrap()
+    );
+    assert_eq!(report["search"]["statistics"]["evaluation_failures"], 0);
+    assert_eq!(report["search"]["statistics"]["discarded_late"], 0);
+}
+fn assert_export(dir: &Path, name: &str, report: &Value) -> (Vec<u8>, Value) {
+    assert_eq!(report["export"]["status"], "written");
+    let xml = fs::read(dir.join(name)).unwrap();
+    let companion: Value =
+        serde_json::from_slice(&fs::read(dir.join(format!("{name}.data.json"))).unwrap()).unwrap();
+    let digest = format!("{:x}", Sha256::digest(&xml));
+    assert_eq!(report["best_verified"]["source_xml_sha256"], digest);
+    assert_eq!(companion["xml_sha256"], digest);
+    assert_eq!(companion["backend"], report["backend"]);
+    assert_eq!(companion["uses_packaged_default"], true);
+    assert_eq!(companion["status"], "native_export_data");
+    assert_eq!(
+        report["search"]["statistics"]["verification_evaluations"],
+        1
+    );
+    assert_eq!(
+        report["search"]["verifications"].as_array().unwrap().len(),
+        1
+    );
+    assert_eq!(report["search"]["verifications"][0]["consistent"], true);
+    (xml, companion)
+}
+#[test]
+fn graph_archives_ledgers_and_fresh_exports_match_typed_document_and_worker_counts() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    write_problem(dir, &problem(dir));
+    let mut reference: Option<(Value, Vec<u8>, Value)> = None;
+    for mode in ["typed", "document"] {
+        for jobs in [1, 4] {
+            let name = format!("{mode}-{jobs}.xml");
+            let report = success(
+                command(dir, mode, jobs, 40)
+                    .args(["--export", &name])
+                    .output()
+                    .unwrap(),
+            );
+            assert_eq!(report["schema_version"], 8);
+            assert_eq!(
+                report["scope"],
+                "connected_passive_equipment_native_search_v1"
+            );
+            assert_eq!(report["diagnostic_only"], true);
+            assert_ledger(&report, 40);
+            assert!(!report["best_verified"].is_null());
+            assert_eq!(report["native_preparation"]["retained_xml_bytes"], 0);
+            assert_eq!(report["native_preparation"]["cached_candidate_results"], 0);
+            assert_eq!(report["catalog_preparation"]["materialized_candidates"], 0);
+            assert_eq!(report["catalog_preparation"]["cached_candidate_results"], 0);
+            let (xml, companion) = assert_export(dir, &name, &report);
+            if let Some((expected, expected_xml, expected_companion)) = &reference {
+                same_search(expected, &report);
+                assert_eq!(&xml, expected_xml);
+                assert_eq!(&companion, expected_companion);
+            } else {
+                reference = Some((report, xml, companion));
+            }
+        }
+    }
+}
+#[test]
+fn minimum_three_attempt_budget_reserves_fresh_finalist_once() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    write_problem(dir, &problem(dir));
+    let mut reference = None;
+    for mode in ["typed", "document"] {
+        let name = format!("tight-{mode}.xml");
+        let report = success(
+            command(dir, mode, 4, 3)
+                .args(["--export", &name])
+                .output()
+                .unwrap(),
+        );
+        assert_ledger(&report, 3);
+        assert_eq!(report["total_evaluations"], 3);
+        assert_export(dir, &name, &report);
+        if let Some(expected) = &reference {
+            same_search(expected, &report);
+        } else {
+            reference = Some(report);
+        }
+    }
+}
+#[test]
+fn required_two_items_and_connected_attribute_locks_are_repaired_before_search() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    let mut problem = problem(dir);
+    problem["constraints"]["required_item_instance_ids"] =
+        json!(["wooden-physical", "solar-resource"]);
+    problem["constraints"]["locks"]["class_id"] = json!("6");
+    problem["constraints"]["locks"]["ascendancy"] = json!({"kind":"none"});
+    problem["constraints"]["locks"]["allocated_passives"] = json!([13397]);
+    problem["constraints"]["budgets"]["ordinary_passive_points"] = json!(2);
+    problem["attribute_locks"]["required"] = json!({"13397":"intelligence"});
+    write_problem(dir, &problem);
+    let mut reference = None;
+    for mode in ["typed", "document"] {
+        let name = format!("locks-{mode}.xml");
+        let report = success(
+            command(dir, mode, 4, 40)
+                .args(["--export", &name])
+                .output()
+                .unwrap(),
+        );
+        assert_ledger(&report, 40);
+        let (xml, _) = assert_export(dir, &name, &report);
+        let selected = &report["best_verified"]["candidate"];
+        assert_eq!(selected["candidate"]["class_id"], "6");
+        assert!(selected["candidate"]["ascendancy_id"].is_null());
+        assert_eq!(
+            selected["candidate"]["equipment"]["Weapon 1"],
+            "wooden-physical"
+        );
+        assert_eq!(
+            selected["candidate"]["equipment"]["Amulet"],
+            "solar-resource"
+        );
+        assert_eq!(selected["candidate"]["passives"], json!([3936, 13397]));
+        assert_eq!(selected["attribute_options"]["13397"], "intelligence");
+        assert!(String::from_utf8_lossy(&xml).contains("intNodes=\"13397\""));
+        if let Some(expected) = &reference {
+            same_search(expected, &report);
+        } else {
+            reference = Some(report);
+        }
+    }
+}
+#[test]
+fn impossible_locked_item_level_spends_no_calculations_and_writes_no_artifacts() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    let mut problem = problem(dir);
+    let text = problem["equipment"][1]["item_text"]
+        .as_str()
+        .unwrap()
+        .replace("Implicits: 0", "LevelReq: 61\nImplicits: 0");
+    problem["equipment"][1]["item_text"] = json!(text);
+    problem["constraints"]["required_item_instance_ids"] = json!(["wooden-physical"]);
+    write_problem(dir, &problem);
+    for mode in ["typed", "document"] {
+        let name = format!("impossible-{mode}.xml");
+        let report = success(
+            command(dir, mode, 4, 40)
+                .args(["--export", &name])
+                .output()
+                .unwrap(),
+        );
+        assert_ledger(&report, 0);
+        assert_eq!(report["total_evaluations"], 0);
+        assert!(report["baseline"].is_null());
+        assert!(report["best_verified"].is_null());
+        assert_eq!(
+            report["search"]["statistics"]["verification_evaluations"],
+            0
+        );
+        assert!(report["search"]["feasible"].as_array().unwrap().is_empty());
+        assert!(report["search"]["statistics"]["rejected"].as_u64().unwrap() > 0);
+        assert_eq!(report["export"]["status"], "not_written");
+        assert!(!dir.join(&name).exists());
+        assert!(!dir.join(format!("{name}.data.json")).exists());
+    }
+}
+#[test]
+fn output_collisions_preserve_existing_files_and_do_not_publish_partial_artifacts() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    write_problem(dir, &problem(dir));
+    fs::write(
+        dir.join("keep.xml.data.json"),
+        b"preserve existing companion",
+    )
+    .unwrap();
+    let output = command(dir, "typed", 1, 3)
+        .args(["--export", "keep.xml", "--output", "report.json"])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert_eq!(
+        fs::read(dir.join("keep.xml.data.json")).unwrap(),
+        b"preserve existing companion"
+    );
+    assert!(!dir.join("keep.xml").exists());
+    assert!(!dir.join("report.json").exists());
+    let output = command(dir, "typed", 1, 3)
+        .args(["--export", "same.json", "--output", "same.json"])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(!dir.join("same.json").exists());
+    fs::create_dir(dir.join("nested")).unwrap();
+    let output = command(dir, "typed", 1, 3)
+        .args(["--export", "alias.xml", "--output", "nested/../alias.xml"])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(!dir.join("alias.xml").exists());
+    assert!(!dir.join("alias.xml.data.json").exists());
+    #[cfg(windows)]
+    {
+        let output = command(dir, "typed", 1, 3)
+            .args(["--export", "case.xml", "--output", "CASE.XML"])
+            .output()
+            .unwrap();
+        assert!(!output.status.success());
+        assert!(!dir.join("case.xml").exists());
+    }
+}
+
+#[test]
+fn imported_numeric_failure_is_counted_without_suppressing_legal_alternatives() {
+    use poe_optimizer_data::game_data::{self, PassiveEffect, PassiveStat};
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    let mut problem = problem(dir);
+    // Root-only search keeps the failing imported composition out of the legal
+    // search domain, but its actual baseline attempt must still be reported.
+    problem["constraints"]["budgets"]["ordinary_passive_points"] = json!(0);
+    problem["constraints"]["budgets"]["ascendancy_passive_points"] = json!(0);
+    write_problem(dir, &problem);
+    let mut package = game_data::bundled_snapshot().unwrap().package().clone();
+    for view in &mut package.passive_effects {
+        if [3936, 13397].contains(&view.key.physical_node_id) {
+            view.effects = vec![PassiveEffect {
+                stat: PassiveStat::ArmourFlat,
+                value: 750_000.0,
+            }];
+        }
+    }
+    package.refresh_section_digests().unwrap();
+    fs::write(dir.join("custom.json"), package.canonical_bytes().unwrap()).unwrap();
+    let mut reference: Option<(Value, Vec<u8>, Value)> = None;
+    for mode in ["typed", "document"] {
+        let name = format!("overflow-{mode}.xml");
+        let report = success(
+            command(dir, mode, 4, 40)
+                .args(["--data", "custom.json", "--export", &name])
+                .output()
+                .unwrap(),
+        );
+        assert_ledger(&report, 40);
+        assert!(report["baseline"].is_null());
+        assert_eq!(report["baseline_attempts"], 1);
+        assert!(
+            report["baseline_error"]["message"]
+                .as_str()
+                .unwrap()
+                .contains("Character non-resistance modifiers must be finite and in 0..1000000")
+        );
+        assert!(!report["best_verified"].is_null());
+        assert_eq!(
+            report["best_verified"]["candidate"]["candidate"]["passives"],
+            json!([])
+        );
+        assert_eq!(
+            report["search"]["statistics"]["verification_evaluations"],
+            1
+        );
+        assert_eq!(report["search"]["verifications"][0]["consistent"], true);
+        assert_eq!(report["export"]["status"], "written");
+        let xml = fs::read(dir.join(&name)).unwrap();
+        let companion: Value =
+            serde_json::from_slice(&fs::read(dir.join(format!("{name}.data.json"))).unwrap())
+                .unwrap();
+        let digest = format!("{:x}", Sha256::digest(&xml));
+        assert_eq!(report["best_verified"]["source_xml_sha256"], digest);
+        assert_eq!(companion["xml_sha256"], digest);
+        assert_eq!(companion["backend"], report["backend"]);
+        assert_eq!(companion["uses_packaged_default"], false);
+        if let Some((expected, expected_xml, expected_companion)) = &reference {
+            same_search(expected, &report);
+            assert_eq!(&xml, expected_xml);
+            assert_eq!(&companion, expected_companion);
+        } else {
+            reference = Some((report, xml, companion));
+        }
+    }
+}

@@ -25,6 +25,9 @@ const READ_PATHS: &[&str] = &[
     "src/Modules/ModParser.lua",
     "src/Classes/ModStore.lua",
     "src/Classes/ModDB.lua",
+    "src/Classes/ModList.lua",
+    "src/Classes/PassiveTree.lua",
+    "src/Data/Bases/amulet.lua",
     "src/Modules/CalcSetup.lua",
     "src/Modules/CalcPerform.lua",
     "src/Modules/CalcDefence.lua",
@@ -66,6 +69,9 @@ const PROVENANCE_PATHS: &[&str] = &[
     "src/Classes/SkillsTab.lua",
     "src/Modules/CalcTools.lua",
     "src/Data/Gems.lua",
+    "src/Classes/ModList.lua",
+    "src/Classes/PassiveTree.lua",
+    "src/Data/Bases/amulet.lua",
 ];
 const POLICY: &str = include_str!("game_data_policy.json");
 const CONVERSION: &str = include_str!("game_data_extract.lua");
@@ -102,7 +108,7 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v6",
+        "poe-game-data-extractor-v7",
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
@@ -244,7 +250,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         AuthenticatedTreeSnapshot::from_trusted_extraction(snapshot, &digest).map_err(error)?;
     let tree = BundledClassTree::from_authenticated_snapshot(&authenticated).map_err(error)?;
     let policy: Policy = serde_json::from_str(POLICY)?;
-    if policy.schema_version != 4
+    if policy.schema_version != 5
         || policy.spirit_quests.len() != 3
         || policy.actor_rules.is_empty()
         || policy.quests.len() != 6
@@ -259,39 +265,32 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
     let extractor = Extractor::new(sources)?;
     let record_function: Function = extractor.lua.globals().get("source_extract_records")?;
     let records: Table = record_function.call(extractor.lua.to_value(&policy)?)?;
-    let mut passive_effects = Vec::new();
-    let convert: Function = extractor.lua.globals().get("source_extract_effect")?;
-    for (class_id, nodes) in &tree.class_entrances {
-        for (physical_node_id, node) in nodes {
-            let mut effects = Vec::new();
-            for line in &node.stats {
-                let value: Value = convert.call(line.as_str())?;
-                effects.push(extractor.lua.from_value(value)?);
-            }
-            passive_effects.push(PassiveEffects {
-                class_id: *class_id,
-                ascendancy_id: None,
-                physical_node_id: *physical_node_id,
-                effective_node_id: node.effective_source_id,
-                effects,
-            });
-        }
-    }
-    for (ascendancy_id, nodes) in &tree.ascendancy_passives {
-        for (physical_node_id, node) in nodes {
-            let mut effects = Vec::new();
-            for line in &node.stats {
-                let value: Value = convert.call(line.as_str())?;
-                effects.push(extractor.lua.from_value(value)?);
-            }
-            passive_effects.push(PassiveEffects {
-                class_id: tree.ascendancies[ascendancy_id].class_id,
-                ascendancy_id: Some(ascendancy_id.clone()),
-                physical_node_id: *physical_node_id,
-                effective_node_id: node.effective_source_id,
-                effects,
-            });
-        }
+    let (passive_effects, passive_exclusions) =
+        extract_passive_catalog(&tree, authenticated.snapshot(), &extractor)?;
+    let jewellery: Function = extractor.lua.globals().get("source_extract_jewellery")?;
+    let (jewellery, _excluded): (Table, Table) = jewellery.call(
+        records
+            .get::<Table>("actor")?
+            .get::<Table>("modifier_rules")?,
+    )?;
+    let mut jewellery_bases: Vec<JewelleryBaseData> = Vec::new();
+    let bases: Table = extractor.lua.globals().get("sourceJewelleryBases")?;
+    for row in jewellery.sequence_values::<Table>() {
+        let row = row?;
+        let source_table =
+            copy_primitive_source_table(bases.get::<Table>(row.get::<String>("name")?)?, 0)?;
+        // Deserialize the simple row by its declared shape, then attach source
+        // maps in Rust; Lua's generic content buffering cannot preserve every
+        // empty/integer-keyed map versus empty sequence distinction.
+        let record: ExtractedJewelleryBase = extractor.lua.from_value(Value::Table(row))?;
+        jewellery_bases.push(JewelleryBaseData {
+            id: record.id,
+            name: record.name,
+            slot: record.slot,
+            requirements: record.requirements,
+            implicit: record.implicit,
+            source: source_table,
+        });
     }
     let mut provenance = BTreeMap::new();
     for path in PROVENANCE_PATHS {
@@ -324,6 +323,8 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         defence: extractor.defence()?,
         encounters: extractor.encounters()?,
         passive_effects,
+        passive_exclusions,
+        jewellery_bases,
     };
     package.refresh_section_digests().map_err(error)?;
     let evidence = GameDataExtractionEvidence {
@@ -465,6 +466,23 @@ impl Extractor {
         .exec()?;
         lua.load(source("src/Classes/ModStore.lua")?).exec()?;
         lua.load(source("src/Classes/ModDB.lua")?).exec()?;
+        lua.load(source("src/Classes/ModList.lua")?).exec()?;
+        lua.load(format!("local t_insert=table.insert;local t_sort=table.sort;local s_format=string.format;local band=AND64;{}",section(source("src/Modules/ModTools.lua")?,"function modLib.formatFlags(","-- Check if a mod contains a specific tag already")?)).exec()?;
+        lua.load(format!(
+            "PassiveTreeClass={{}};local t_insert=table.insert;local t_remove=table.remove;{}",
+            section(
+                source("src/Classes/PassiveTree.lua")?,
+                "function PassiveTreeClass:ProcessStats(",
+                "-- Common processing code for nodes"
+            )?
+        ))
+        .exec()?;
+        let jewellery = lua.create_table()?;
+        lua.load(source("src/Data/Bases/amulet.lua")?)
+            .eval::<Function>()?
+            .call::<()>(jewellery.clone())?;
+        lua.globals().set("sourceJewelleryBases", jewellery)?;
+
         let gems: Table = lua.load(source("src/Data/Gems.lua")?).eval()?;
         lua.globals().set("sourceGems", gems)?;
         lua.load("data.gems={};data.keystones={};data.skills={}")
@@ -1178,5 +1196,294 @@ mod tests {
                 .exec()
                 .is_err()
         );
+    }
+}
+
+fn passive_option_fields_consumed(
+    snapshot: &poe_optimizer_data::tree_data::TreeDataSnapshot,
+    key: &poe_optimizer_data::class_tree::PassiveViewKey,
+) -> bool {
+    use poe_optimizer_data::{class_tree::PassiveViewSelector, tree_data::SourceValue};
+    let node = &snapshot.nodes[&key.physical_node_id];
+    let table = match &key.selector {
+        PassiveViewSelector::Base => return true,
+        PassiveViewSelector::Class { class_id } => snapshot
+            .classes
+            .get(class_id)
+            .and_then(|class| node.automatic_overrides.get(&class.name)),
+        PassiveViewSelector::Ascendancy { ascendancy_id } => snapshot
+            .ascendancies
+            .get(ascendancy_id)
+            .and_then(|asc| node.automatic_overrides.get(&asc.name)),
+        PassiveViewSelector::Attribute { option } => match node.source.named.get("options") {
+            Some(SourceValue::Table(options)) => {
+                match options.indexed.get(&i64::from(option.source_index())) {
+                    Some(SourceValue::Table(table)) => Some(table),
+                    _ => None,
+                }
+            }
+            _ => None,
+        },
+    };
+    table.is_some_and(passive_option_table_consumed)
+}
+fn passive_option_table_consumed(table: &poe_optimizer_data::tree_data::SourceTable) -> bool {
+    table.indexed.is_empty()
+        && table
+            .named
+            .keys()
+            .all(|key| ["id", "name", "stats", "icon"].contains(&key.as_str()))
+}
+
+fn extract_passive_catalog(
+    tree: &BundledClassTree,
+    snapshot: &poe_optimizer_data::tree_data::TreeDataSnapshot,
+    extractor: &Extractor,
+) -> Result<(
+    Vec<PassiveEffects>,
+    Vec<poe_optimizer_data::passive_allocation::ExcludedPassiveView>,
+)> {
+    use poe_optimizer_data::{passive_allocation::ExcludedPassiveView, tree_data::TreeNodeKind};
+    let parse: Function = extractor.lua.globals().get("source_extract_passive")?;
+    let mut effects = Vec::new();
+    let mut exclusions = Vec::new();
+    const FIELDS: &[&str] = &[
+        "activeEffectImage",
+        "connections",
+        "group",
+        "icon",
+        "isAttribute",
+        "isNotable",
+        "isSwitchable",
+        "name",
+        "options",
+        "orbit",
+        "orbitIndex",
+        "recipe",
+        "skill",
+        "stats",
+        "stringId",
+    ];
+    for view in &tree.allocation_views {
+        let reason = if let Some(node) = tree.allocation_nodes.get(&view.key.physical_node_id) {
+            if !matches!(node.kind, TreeNodeKind::Normal | TreeNodeKind::Notable)
+                || node.source_default_point_cost != Some(1)
+            {
+                Some("unsupported_structural_node_kind")
+            } else if node
+                .unsupported_mechanics
+                .iter()
+                .any(|m| m != "attribute_choice")
+            {
+                Some("unsupported_structural_node_mechanic")
+            } else if !passive_option_fields_consumed(snapshot, &view.key) {
+                Some("unconsumed_structural_option_field")
+            } else if snapshot.nodes[&view.key.physical_node_id]
+                .source
+                .named
+                .keys()
+                .any(|k| !FIELDS.contains(&k.as_str()))
+            {
+                Some("unconsumed_structural_source_field")
+            } else {
+                None
+            }
+        } else {
+            None
+        };
+        if let Some(reason) = reason {
+            exclusions.push(ExcludedPassiveView {
+                key: view.key.clone(),
+                reason: reason.into(),
+            });
+            continue;
+        }
+        let (parsed, reason): (Option<Table>, Option<String>) = parse.call((
+            extractor.lua.to_value(&view.stats)?,
+            view.key.physical_node_id,
+            view.name.as_str(),
+        ))?;
+        if let Some(parsed) = parsed {
+            effects.push(PassiveEffects {
+                key: view.key.clone(),
+                effective_node_id: view.effective_node_id,
+                effects: extractor.lua.from_value(parsed.get("effects")?)?,
+                actor_modifiers: extractor.lua.from_value(parsed.get("actor_modifiers")?)?,
+            });
+        } else {
+            exclusions.push(ExcludedPassiveView {
+                key: view.key.clone(),
+                reason: reason.ok_or_else(|| error("missing source exclusion reason"))?,
+            });
+        }
+    }
+    Ok((effects, exclusions))
+}
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct ExtractedJewelleryBase {
+    id: String,
+    name: String,
+    slot: EquipmentSlot,
+    requirements: RequirementData,
+    implicit: JewelleryImplicitData,
+}
+fn copy_primitive_source_table(
+    table: Table,
+    depth: usize,
+) -> Result<poe_optimizer_data::tree_data::SourceTable> {
+    use poe_optimizer_data::tree_data::{SourceTable, SourceValue};
+    if depth > 16 || table.metatable().is_some() {
+        return Err(error("unsupported primitive source depth/metatable"));
+    }
+    let mut result = SourceTable::default();
+    let mut count = 0;
+    for pair in table.pairs::<Value, Value>() {
+        let (key, value) = pair?;
+        count += 1;
+        if count > 256 {
+            return Err(error("primitive source table is too large"));
+        }
+        let value = match value {
+            Value::Boolean(v) => SourceValue::Boolean(v),
+            Value::Integer(v) => SourceValue::Integer(v),
+            Value::Number(v) if v.is_finite() => SourceValue::Number(v),
+            Value::String(v) => {
+                let v = v.to_str()?.to_owned();
+                if v.len() > 16384 {
+                    return Err(error("primitive source text too long"));
+                }
+                SourceValue::String(v)
+            }
+            Value::Table(v) => SourceValue::Table(copy_primitive_source_table(v, depth + 1)?),
+            _ => return Err(error("nonprimitive source base value")),
+        };
+        match key {
+            Value::String(k) => {
+                result.named.insert(k.to_str()?.to_owned(), value);
+            }
+            Value::Integer(k) => {
+                result.indexed.insert(k, value);
+            }
+            Value::Number(k) if k.is_finite() && k.fract() == 0.0 && k.abs() <= 1e6 => {
+                result.indexed.insert(k as i64, value);
+            }
+            _ => return Err(error("unsupported primitive source key")),
+        }
+    }
+    Ok(result)
+}
+
+#[cfg(test)]
+mod passive_assembly_source_tests {
+    use super::*;
+    fn extractor() -> Extractor {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../vendor/path-of-building-poe2");
+        Extractor::new(
+            READ_PATHS
+                .iter()
+                .map(|p| ((*p).into(), source::read_verified_text(&root, p).unwrap()))
+                .collect(),
+        )
+        .unwrap()
+    }
+    #[test]
+    fn source_option_metadata_cannot_change_unimplemented_topology_or_mechanics() {
+        use poe_optimizer_data::tree_data::{SourceTable, SourceValue};
+        let mut option = SourceTable::default();
+        option
+            .named
+            .insert("id".into(), SourceValue::Integer(26297));
+        option
+            .named
+            .insert("name".into(), SourceValue::String("Strength".into()));
+        assert!(passive_option_table_consumed(&option));
+        for field in [
+            "connections",
+            "unlockConstraint",
+            "nodeOverlay",
+            "grantedPassive",
+            "unknown",
+        ] {
+            let mut edited = option.clone();
+            edited
+                .named
+                .insert(field.into(), SourceValue::Boolean(true));
+            assert!(!passive_option_table_consumed(&edited));
+        }
+        option.indexed.insert(1, SourceValue::Integer(1));
+        assert!(!passive_option_table_consumed(&option));
+    }
+    #[test]
+    fn whole_passive_source_lines_never_drop_unsupported_parts_or_unmodeled_order() {
+        let e = extractor();
+        let parse: Function = e.lua.globals().get("source_extract_passive").unwrap();
+        let accepted: (Option<Table>, Option<String>) = parse
+            .call((
+                e.lua
+                    .to_value(&["10% increased Spell Damage", "+10 to Intelligence"])
+                    .unwrap(),
+                51184,
+                "Raw Power",
+            ))
+            .unwrap();
+        let accepted = accepted.0.unwrap();
+        assert_eq!(accepted.get::<Table>("effects").unwrap().raw_len(), 1);
+        assert_eq!(
+            accepted.get::<Table>("actor_modifiers").unwrap().raw_len(),
+            1
+        );
+        for text in [
+            "+10 to Intelligence\n10% increased Cast Speed while Dual Wielding",
+            "10% more maximum Life",
+            "Your Maximum Life is 1",
+            "+10 to all Attributes",
+            "10% increased Spell Damage plus an unknown effect",
+        ] {
+            let (result, reason): (Option<Table>, Option<String>) = parse
+                .call((e.lua.to_value(&[text]).unwrap(), 51184, "Rejected"))
+                .unwrap();
+            assert!(result.is_none() && reason.is_some(), "{text}");
+        }
+        let mutate:Function=e.lua.load("return function() local original=modLib.parseMod;modLib.parseMod=function(...)local list,extra=original(...);if list and list[1]then list[1].hidden=true end;return list,extra end;local result=source_extract_passive({'+10 to Intelligence'},51184,'Hidden');modLib.parseMod=original;return result==nil end").eval().unwrap();
+        assert!(mutate.call::<bool>(()).unwrap());
+    }
+    #[test]
+    fn jewellery_extraction_enumerates_whole_family_and_rejects_unconsumed_source_changes() {
+        let e = extractor();
+        let rules = e
+            .lua
+            .to_value(&bundled_snapshot().unwrap().package().actor.modifier_rules)
+            .unwrap();
+        let f: Function = e.lua.globals().get("source_extract_jewellery").unwrap();
+        let (accepted, excluded): (Table, Table) = f.call(rules.clone()).unwrap();
+        assert_eq!(accepted.raw_len(), 5);
+        assert!(
+            excluded
+                .sequence_values::<String>()
+                .map(|value| value.unwrap())
+                .any(|name| name == "Stellar Amulet")
+        );
+        let check:Function=e.lua.load("return function(rules,mutate) local old=sourceJewelleryBases;local base=copyTable(old['Amber Amulet']);sourceJewelleryBases={['Amber Amulet']=base};mutate(base);local result,excluded=source_extract_jewellery(rules);sourceJewelleryBases=old;return #result==0 and #excluded==1 end").eval().unwrap();
+        for edit in [
+            "b.hidden=true",
+            "b.tags.attack=true",
+            "b.req.extra=1",
+            "b.implicit=b.implicit..'\\n+10 to maximum Life'",
+            "b.implicit='+(10-15) to all Attributes'",
+            "b.implicitModTypes[2]={}",
+            "b.implicit='+(15-10) to Strength'",
+            "b.implicit='+(1.5-10) to Strength'",
+        ] {
+            let mutate: Function = e
+                .lua
+                .load(format!("return function(b){edit} end"))
+                .eval()
+                .unwrap();
+            assert!(
+                check.call::<bool>((rules.clone(), mutate)).unwrap(),
+                "{edit}"
+            );
+        }
     }
 }

@@ -373,6 +373,86 @@ fn source_capability(record: &ActorModifierRecord) -> Result<()> {
     }
     Ok(())
 }
+/// Exact, source-neutral expansion of one configured actor line. Only this parser
+/// constructs the evidence; callers still apply equipment/passive source transformations.
+#[derive(Debug, Clone, Serialize)]
+pub struct ParsedActorModifierLine {
+    rule_id: String,
+    values: Vec<f64>,
+    records: Vec<ActorModifierRecord>,
+}
+impl ParsedActorModifierLine {
+    pub fn rule_id(&self) -> &str {
+        &self.rule_id
+    }
+    pub fn values(&self) -> &[f64] {
+        &self.values
+    }
+    pub fn records(&self) -> &[ActorModifierRecord] {
+        &self.records
+    }
+}
+/// Match an entire literal line without inventing a Custom modifier source. `None`
+/// means no rule matched; ambiguous or downstream-incomplete rules are errors.
+pub fn match_actor_modifier_line(
+    line: &str,
+    source: &str,
+    data: &GameDataPackage,
+) -> Result<Option<ParsedActorModifierLine>> {
+    if line.is_empty() || line.len() > MAX_LINE_BYTES || line.chars().any(char::is_control) {
+        return Err(invalid("actor line must be bounded literal text"));
+    }
+    if source.is_empty() || source.len() > 256 || source.chars().any(char::is_control) {
+        return Err(invalid("actor source must be bounded literal text"));
+    }
+    let mut found = None;
+    for rule in &data.actor.modifier_rules {
+        if let Some(values) = match_rule(line, rule)?
+            && found.replace((rule, values)).is_some()
+        {
+            return Err(invalid("ambiguous actor modifier rule"));
+        }
+    }
+    let Some((rule, values)) = found else {
+        return Ok(None);
+    };
+    let mut records = Vec::new();
+    for mapping in &rule.modifiers {
+        let effect = match mapping.effect {
+            ActorRuleEffect::Flag { value } => ActorModifierEffect::Flag { value },
+            ActorRuleEffect::Numeric { operation, value } => {
+                let value = match value {
+                    ActorRuleValue::Constant { value } => value,
+                    ActorRuleValue::Capture { index, multiplier } => {
+                        *values
+                            .get(index as usize)
+                            .ok_or_else(|| invalid("actor rule capture index missing"))?
+                            * multiplier
+                    }
+                };
+                if !value.is_finite() || value.abs() > MAX_VALUE {
+                    return Err(invalid("actor modifier value exceeds numeric bounds"));
+                }
+                ActorModifierEffect::Numeric { operation, value }
+            }
+        };
+        let record = ActorModifierRecord {
+            stat: mapping.stat,
+            effect,
+            source: Some(source.into()),
+            flags: mapping.flags,
+            keyword_flags: mapping.keyword_flags,
+            tags: mapping.tags.clone(),
+        };
+        source_capability(&record)?;
+        records.push(record);
+    }
+    Ok(Some(ParsedActorModifierLine {
+        rule_id: rule.id.clone(),
+        values,
+        records,
+    }))
+}
 fn prepare(
     blocks: Vec<ActorModifierBlock>,
     source_fragments: Vec<String>,
@@ -409,58 +489,24 @@ fn prepare(
                 if lines.len() >= MAX_ACTOR_MODIFIER_LINES {
                     return Err(invalid("more than 64 enabled actor modifier lines"));
                 }
-                let mut found = None;
-                for rule in &data.actor.modifier_rules {
-                    if let Some(values) = match_rule(text, rule)?
-                        && found.replace((rule, values)).is_some()
-                    {
-                        return Err(invalid("ambiguous actor modifier rule"));
-                    }
-                }
-                let (rule, values) = found.ok_or_else(|| {
-                    invalid(format!(
-                        "unrecognized actor modifier at block {} line {}: {text}",
-                        block_index + 1,
-                        line_index + 1
-                    ))
-                })?;
-                let mut mapped = Vec::new();
-                for mapping in &rule.modifiers {
-                    let effect = match mapping.effect {
-                        ActorRuleEffect::Flag { value } => ActorModifierEffect::Flag { value },
-                        ActorRuleEffect::Numeric { operation, value } => {
-                            let value = match value {
-                                ActorRuleValue::Constant { value } => value,
-                                ActorRuleValue::Capture { index, multiplier } => {
-                                    *values.get(index as usize).ok_or_else(|| {
-                                        invalid("actor rule capture index missing")
-                                    })? * multiplier
-                                }
-                            };
-                            if !value.is_finite() || value.abs() > MAX_VALUE {
-                                return Err(invalid("actor modifier value exceeds numeric bounds"));
-                            }
-                            ActorModifierEffect::Numeric { operation, value }
-                        }
-                    };
-                    let record = ActorModifierRecord {
-                        stat: mapping.stat,
-                        effect,
-                        source: Some(format!("Custom:{}", block.title)),
-                        flags: mapping.flags,
-                        keyword_flags: mapping.keyword_flags,
-                        tags: mapping.tags.clone(),
-                    };
-                    source_capability(&record)?;
-                    mapped.push(record);
-                }
+                let parsed =
+                    match_actor_modifier_line(text, &format!("Custom:{}", block.title), data)?
+                        .ok_or_else(|| {
+                            invalid(format!(
+                                "unrecognized actor modifier at block {} line {}: {text}",
+                                block_index + 1,
+                                line_index + 1
+                            ))
+                        })?;
+                let mapped = parsed.records;
+                let values = parsed.values;
                 records.extend(mapped.iter().cloned());
                 lines.push(ActorModifierLine {
                     block_index,
                     line_number: line_index + 1,
                     byte_range: offset..offset + source.len(),
                     source: source.into(),
-                    rule_id: rule.id.clone(),
+                    rule_id: parsed.rule_id,
                     values,
                     records: mapped,
                 });

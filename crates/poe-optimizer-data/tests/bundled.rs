@@ -32,8 +32,8 @@ fn bundled_scope_preserves_all_identities_without_claiming_full_tree_coverage() 
     assert_eq!(tree.coverage.class_entrance_view_count, 16);
     assert_eq!(tree.coverage.no_effect_implicit_root_selections, 31);
     assert_eq!(tree.coverage.source_node_count, 4914);
-    assert_eq!(tree.coverage.retained_node_count, 44);
-    assert_eq!(tree.coverage.excluded_node_count, 4870);
+    assert_eq!(tree.coverage.retained_node_count, 4141);
+    assert_eq!(tree.coverage.excluded_node_count, 773);
     assert_eq!(tree.coverage.source_dangling_connections.len(), 14);
     assert!(!tree.coverage.boundary_edges.is_empty());
     assert!(

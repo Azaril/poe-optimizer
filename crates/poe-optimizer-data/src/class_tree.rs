@@ -5,6 +5,10 @@
 //! already validated bundle; they do not authenticate arbitrary deserialized data or
 //! certify point budgets, item requirements, or whole-game legality.
 
+pub use crate::passive_allocation::{
+    AttributeOption, PassiveAllocationSelection, PassiveViewKey, PassiveViewSelector,
+    ResolvedPassiveAllocation, ResolvedPassiveView, allocation_candidate_catalog,
+};
 use crate::{
     bundled::BundledClassTree,
     game_data::GameDataSnapshot,

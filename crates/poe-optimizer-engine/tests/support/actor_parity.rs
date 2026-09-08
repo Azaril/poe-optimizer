@@ -266,10 +266,40 @@ fn run(
         .prepare_actor_resources(level, quests, character, layers)
         .unwrap()
         .values();
-    compare(
-        actual,
-        oracle.calculate(data, level, quests, character, layers),
+    let programs: Vec<Vec<_>> = layers
+        .iter()
+        .map(|records| {
+            records
+                .chunks(2)
+                .map(|chunk| data.compile_actor_modifiers(chunk).unwrap())
+                .collect()
+        })
+        .collect();
+    let references: Vec<Vec<_>> = programs
+        .iter()
+        .map(|programs| programs.iter().collect())
+        .collect();
+    let compiled_layers: Vec<_> = references
+        .iter()
+        .map(|programs| poe_optimizer_engine::actor::ActorModifierLayer { programs })
+        .collect();
+    let compiled = data
+        .evaluate_actor_resources(
+            level,
+            quests,
+            character,
+            &compiled_layers,
+            &mut poe_optimizer_engine::actor::ActorScratch::default(),
+        )
+        .unwrap()
+        .values();
+    assert_eq!(
+        compiled, actual,
+        "compiled source fragments vs complete DB preparation"
     );
+    let source = oracle.calculate(data, level, quests, character, layers);
+    compare(actual, source.clone());
+    compare(compiled, source);
     actual
 }
 #[test]
@@ -581,6 +611,97 @@ fn injected_more_precision_is_used_for_attributes_and_resource_parent_products()
                     .values();
                 assert_ne!(output.attributes.strength, old.attributes.strength);
                 assert_ne!(output.life, old.life);
+            }
+        }
+    }
+}
+
+#[test]
+fn reused_source_programs_follow_actual_source_when_equipment_and_passives_change() {
+    use poe_optimizer_engine::actor::{ActorModifierLayer, ActorScratch};
+    let data = CompiledGameData::bundled().unwrap();
+    let config = vec![
+        conditional(
+            numeric(Stat::Str, Op::Base, -30.0),
+            vec![AC::StrHigherThanInt],
+            false,
+        ),
+        numeric(Stat::Life, Op::More, 13.0),
+    ];
+    let gear = [
+        vec![],
+        vec![
+            numeric(Stat::Str, Op::Base, 20.0),
+            numeric(Stat::Life, Op::More, 13.0),
+        ],
+        vec![
+            numeric(Stat::Dex, Op::Base, 20.0),
+            numeric(Stat::Mana, Op::Override, 0.0),
+        ],
+    ];
+    let trees = [
+        vec![],
+        vec![numeric(Stat::Str, Op::Base, 10.0)],
+        vec![
+            numeric(Stat::Int, Op::Base, 20.0),
+            numeric(Stat::Life, Op::More, 17.0),
+        ],
+    ];
+    let config_program = data.compile_actor_modifiers(&config).unwrap();
+    let gear_programs = gear
+        .iter()
+        .map(|records| data.compile_actor_modifiers(records).unwrap())
+        .collect::<Vec<_>>();
+    let tree_programs = trees
+        .iter()
+        .map(|records| data.compile_actor_modifiers(records).unwrap())
+        .collect::<Vec<_>>();
+    let quests = data.actor_quest_selection(SparkQuestRewards::default());
+    let mut scratch = ActorScratch::default();
+    for warm in [false, true] {
+        let oracle = ActorOracle::new(warm);
+        for character in [
+            data.default_mace_character(),
+            data.default_spark_character(),
+        ] {
+            for (gear_index, gear_records) in gear.iter().enumerate() {
+                for (tree_index, tree_records) in trees.iter().enumerate() {
+                    let sources = [
+                        &config_program,
+                        &gear_programs[gear_index],
+                        &tree_programs[tree_index],
+                    ];
+                    let actual = data
+                        .evaluate_actor_resources(
+                            60,
+                            quests,
+                            &character,
+                            &[ActorModifierLayer { programs: &sources }],
+                            &mut scratch,
+                        )
+                        .unwrap()
+                        .values();
+                    let full_records = [
+                        config.as_slice(),
+                        gear_records.as_slice(),
+                        tree_records.as_slice(),
+                    ]
+                    .concat();
+                    let full = data
+                        .prepare_actor_resources(
+                            60,
+                            quests,
+                            &character,
+                            std::slice::from_ref(&full_records),
+                        )
+                        .unwrap()
+                        .values();
+                    assert_eq!(actual, full);
+                    compare(
+                        actual,
+                        oracle.calculate(&data, 60, quests, &character, &[full_records]),
+                    );
+                }
             }
         }
     }

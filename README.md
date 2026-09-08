@@ -34,14 +34,19 @@ references plus a four-case attack/weapon/support matrix validate host and metri
 A parallel native Rust crate has parity-tested numerical helpers and numeric/conditional
 modifier aggregation and numeric scaling programs. A native build backend now parses
 restricted Spark and Mace Strike profiles across all pinned class/ascendancy identities,
-with zero or one ordinary entrance and one admitted ascendancy resistance passive,
+with connected capability-admitted ordinary passives, explicit attribute choices,
+and selected ascendancy resistance passives,
 and computes their supported resource,
 resistance and hit metrics entirely in Rust. `evaluate --backend native` uses the same result/objective APIs, and a
 native-only CLI build excludes Lua and PoB. General native build coverage remains in progress;
 see [native backend and optional reference mode](docs/native-backend.md).
 Canonical candidates and locks represent all six dimensions. A generic search kernel has
 bounded parallel evaluation, feasible/infeasible beams, deduplication and fresh finalist
-checks. `search-experimental --backend native` searches supplied Mace item/support
+checks. The native [`search-build` workflow](docs/passive-equipment-assembly.md) lazily
+searches connected passives, physical attribute choices, supplied weapons/amulets,
+class/ascendancy identities and the admitted support loadouts. Compiled actor components
+are combined per candidate; no Cartesian build or result table is constructed.
+Legacy `search-experimental --backend native` searches supplied Mace item/support
 choices and optional class/ascendancy/ordinary and ascendancy passive selections directly on Rayon with exact locks
 and source-preserving mutations. Mace support choices include all seven zero/one/two-gem
 loadouts from Brutality I, Heavy Swing and Rapid Attacks I, with values and eligibility in
@@ -49,10 +54,10 @@ loadouts from Brutality I, Heavy Swing and Rapid Attacks I, with values and elig
 also admit supplied normal/rare Maces with physical/fire damage, local speed and critical
 modifiers. [Shared actor preparation](docs/actor-resources.md) adds configurable attribute and
 maximum-resource modifiers with the same calculations for skill output and item/support
-requirements; `player.spirit` exposes maximum Spirit before reservation. `--backend pob`
+requirements; `player.spirit` exposes maximum Spirit before reservation. On the legacy command, `--backend pob`
 selects the optional reference backend. Native search uses [typed candidate calculation](docs/native-candidate-evaluation.md)
 by default, with complete document evaluation available through `--native-evaluation document`.
-Baseline and finalist checks always recalculate complete documents. `search-calibration` retains the four original
+Search baselines, when a legal initial seed exists, and finalist checks recalculate complete documents. `search-calibration` retains the four original
 fixtures. `extract-tree` exports pinned topology and source/override metadata for broader
 mutation work, with live passive coverage and authenticated bounded graph projections. A portable data
 crate supplies native class/root/entrance records and numeric game configuration without loading PoB.
@@ -61,7 +66,7 @@ across workers, with dataset identity recorded in results and export companions.
 Optional [`extract-game-data`](docs/game-data-extraction.md) regenerates the current native
 package from pinned source with a separate extraction-evidence companion.
 `benchmark-native` measures prepared or full-document typed evaluation throughput.
-General joint mutation, full native mechanic coverage, HTML reports and browser
+Unrestricted joint mutation, full native mechanic coverage, HTML reports and browser
 bindings remain unimplemented. See [the runnable experimental workflow](docs/experimental-search.md)
 and [search contracts](docs/search-kernel.md).
 The [living implementation document](docs/implementation.md) is the progress and resume record;
@@ -90,6 +95,7 @@ For the native-only executable (supported profiles are listed in [native backend
 ```powershell
 cargo build -p poe-optimizer-cli --release --no-default-features --locked
 cargo run -p poe-optimizer-cli --no-default-features --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml
+cargo run -p poe-optimizer-cli --no-default-features --locked -- search-build --problem examples/passive-equipment-search.json --jobs 4 --max-evaluations 1000
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-search.json --jobs 4 --max-evaluations 10
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-class-search.json --jobs 4 --max-evaluations 746
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-resistance-search.json --jobs 4 --max-evaluations 842
@@ -150,7 +156,8 @@ native benchmark reports use schema 2. Expanded class/tree search reports use sc
 with explicit budgets and admission evidence; paid-ascendancy problems use report schema 4.
 [Configurable support-loadout problems](docs/support-loadouts.md) use report schema 5;
 [local-weapon problems](docs/local-weapons.md) use report schema 6;
-[actor-configuration problems](docs/actor-resources.md) use problem 6/report 7. Synthetic item rolls in
+[actor-configuration problems](docs/actor-resources.md) use problem 6/report 7;
+[passive/equipment problems](docs/passive-equipment-assembly.md) use problem 7/report 8. Synthetic item rolls in
 the latter example exercise calculation rules; they do not certify obtainable affix sets.
 Results identify backend,
 rules/source/adapter fingerprints, observed selection, metric schema/units and coverage.
@@ -190,7 +197,7 @@ cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data 
 - `src/`: thin CLI and hidden worker protocol entry point.
 - `crates/poe-optimizer-core/`: backend-neutral evaluation contracts, options, metrics and coverage.
 - `crates/poe-optimizer-engine/`: portable native calculation kernels and differential tests.
-- `crates/poe-optimizer-data/`: authenticated portable tree models, projections and native class/entrance data. Native evaluation now accepts [injectable data packages](docs/native-data.md); broader source/tree update compatibility remains in progress.
+- `crates/poe-optimizer-data/`: authenticated portable tree models, projections and native passive/equipment data. Native evaluation now accepts [injectable data packages](docs/native-data.md); broader source/tree update compatibility remains in progress.
 - `crates/poe-optimizer-native/`: strict native document profiles, preparation and typed backend.
 - `crates/poe-optimizer-import/`: portable bounded decoding, preflight and controlled materialization.
 - `crates/poe-optimizer-pob/`: optional reference host, source extraction, verification and supervision.

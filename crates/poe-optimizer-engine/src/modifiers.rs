@@ -184,6 +184,10 @@ pub struct MorePrecision {
 }
 
 impl MorePrecision {
+    pub(crate) fn decimal_places(&self, name: &str) -> Option<u8> {
+        self.decimal_places.get(name).copied()
+    }
+
     pub fn try_new(decimal_places: BTreeMap<String, u8>) -> Result<Self, ModifierError> {
         for (name, places) in &decimal_places {
             if *places > 15 {
@@ -437,12 +441,7 @@ impl ModifierDatabase {
                         }
                     }
                 }
-                if let Some(places) = decimal_places {
-                    let power = 10_u64.pow(u32::from(places)) as f64;
-                    result = (result * mod_result * power).floor() / power;
-                } else {
-                    result *= (mod_result * 100.0 + 0.5).floor() / 100.0;
-                }
+                result = round_more_product(result, mod_result, decimal_places);
             }
             local_results.push(result);
         }
@@ -563,4 +562,16 @@ fn matches_prefix(
             modifier: index,
         })?;
     Ok(source_prefix(source) == Some(required))
+}
+
+/// Source MORE per-name arithmetic after the matching records are multiplied.
+/// Precision has already been selected from every matching record, including
+/// conditional records whose effective numeric contribution is zero.
+pub(crate) fn round_more_product(result: f64, mod_result: f64, decimal_places: Option<u8>) -> f64 {
+    if let Some(places) = decimal_places {
+        let power = 10_u64.pow(u32::from(places)) as f64;
+        (result * mod_result * power).floor() / power
+    } else {
+        result * ((mod_result * 100.0 + 0.5).floor() / 100.0)
+    }
 }

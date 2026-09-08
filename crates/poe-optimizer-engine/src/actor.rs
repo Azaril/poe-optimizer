@@ -24,6 +24,10 @@ use poe_optimizer_data::game_data::{
 };
 use std::{error::Error, fmt, sync::Arc};
 
+#[path = "actor_program.rs"]
+mod program;
+pub use program::{ActorModifierLayer, ActorScratch, CompiledActorModifiers};
+
 const CONDITIONS: [ActorCondition; 12] = [
     ActorCondition::TwoHighestAttributesEqual,
     ActorCondition::DexHigherThanInt,
@@ -105,6 +109,21 @@ impl PreparedActorResources {
     }
     pub fn character(&self) -> &CharacterInput {
         &self.character
+    }
+    /// Attach independently validated scalar skill/defence modifiers after actor
+    /// preparation. Only the base class attributes affect this actor stage;
+    /// changing them requires fresh calculation. Owner, level, quests, computed
+    /// outputs and downstream-coverage guard remain exactly bound as before.
+    pub fn with_character(&self, character: &CharacterInput) -> Result<Self, ActorError> {
+        character.validate().map_err(|error| ActorError(error.0))?;
+        if self.character.attributes != character.attributes {
+            return Err(ActorError(
+                "Prepared actor base attributes differ from the selected character",
+            ));
+        }
+        let mut rebound = self.clone();
+        rebound.character = *character;
+        Ok(rebound)
     }
     pub(crate) fn validate_profile(
         &self,
@@ -625,6 +644,34 @@ impl CompiledGameData {
         for record in modifier_layers.iter().flatten() {
             record.validate().map_err(|_|ActorError("Invalid normalized actor target, operation, numeric bound, flags, source or condition tags"))?;
         }
+        let mut base = self.actor_base_records(level, quests, character);
+        let output = if modifier_layers.iter().all(Vec::is_empty) {
+            calculate(&mut base, self)?
+        } else {
+            calculate(
+                &mut DatabaseQueries::new(base, modifier_layers, &self.actor_precision)?,
+                self,
+            )?
+        };
+        let requires_downstream_defences = modifier_layers
+            .iter()
+            .flatten()
+            .any(|record| requires_downstream_defences(record.stat));
+        Ok(PreparedActorResources {
+            binding: self.actor_binding.clone(),
+            level,
+            quests,
+            character: *character,
+            output,
+            requires_downstream_defences,
+        })
+    }
+    fn actor_base_records(
+        &self,
+        level: u32,
+        quests: ActorQuestSelection,
+        character: &CharacterInput,
+    ) -> StackRecords {
         let package = self.snapshot().package();
         let rules = &package.character;
         let mut base = StackRecords::new();
@@ -693,36 +740,22 @@ impl CompiledGameData {
                 base.push(ActorStat::Spirit, operation, value, "Config");
             }
         }
-        let output = if modifier_layers.iter().all(Vec::is_empty) {
-            calculate(&mut base, self)?
-        } else {
-            calculate(
-                &mut DatabaseQueries::new(base, modifier_layers, &self.actor_precision)?,
-                self,
-            )?
-        };
-        let requires_downstream_defences = modifier_layers.iter().flatten().any(|record| {
-            matches!(
-                record.stat,
-                ActorStat::LifeConvertToEnergyShield
-                    | ActorStat::LifeConvertToArmour
-                    | ActorStat::LifeConvertToEvasion
-                    | ActorStat::ManaConvertToEnergyShield
-                    | ActorStat::ManaConvertToArmour
-                    | ActorStat::ManaConvertToEvasion
-                    | ActorStat::SpiritConvertToEnergyShield
-                    | ActorStat::SpiritConvertToArmour
-                    | ActorStat::SpiritConvertToEvasion
-                    | ActorStat::ChaosInoculation
-            )
-        });
-        Ok(PreparedActorResources {
-            binding: self.actor_binding.clone(),
-            level,
-            quests,
-            character: *character,
-            output,
-            requires_downstream_defences,
-        })
+        base
     }
+}
+
+fn requires_downstream_defences(stat: ActorStat) -> bool {
+    matches!(
+        stat,
+        ActorStat::LifeConvertToEnergyShield
+            | ActorStat::LifeConvertToArmour
+            | ActorStat::LifeConvertToEvasion
+            | ActorStat::ManaConvertToEnergyShield
+            | ActorStat::ManaConvertToArmour
+            | ActorStat::ManaConvertToEvasion
+            | ActorStat::SpiritConvertToEnergyShield
+            | ActorStat::SpiritConvertToArmour
+            | ActorStat::SpiritConvertToEvasion
+            | ActorStat::ChaosInoculation
+    )
 }

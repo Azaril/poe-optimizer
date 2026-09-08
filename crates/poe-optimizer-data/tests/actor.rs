@@ -12,7 +12,7 @@ fn custom(mut package: GameDataPackage) -> Result<GameDataSnapshot, GameDataErro
 fn actor_schema_is_required_and_all_source_records_are_retained() {
     let snapshot = bundled_snapshot().unwrap();
     let package = snapshot.package();
-    assert_eq!(snapshot.identity().schema_version, 6);
+    assert_eq!(snapshot.identity().schema_version, 7);
     assert_eq!(package.actor.high_precision_mods.len(), 40);
     assert_eq!(package.actor.modifier_rules.len(), 116);
     assert_eq!(package.actor.spirit_quests.len(), 3);
@@ -74,6 +74,12 @@ fn actor_constants_precision_and_quests_are_injected_and_content_bound() {
         .insert(ActorNumericOperation::More, 5);
     p.actor.spirit_quests[0].config_key = "custom_spirit_reward".into();
     p.actor.spirit_quests[0].default_enabled = false;
+    let previous_rule_id = p.actor.modifier_rules[0].id.clone();
+    for base in &mut p.jewellery_bases {
+        if base.implicit.actor_rule_id == previous_rule_id {
+            base.implicit.actor_rule_id = "custom_strength".into();
+        }
+    }
     p.actor.modifier_rules[0].id = "custom_strength".into();
     p.actor.modifier_rules[0].template = "{0} to Authored Strength".into();
     let edited = custom(p).unwrap();

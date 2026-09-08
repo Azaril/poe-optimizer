@@ -1,3 +1,4 @@
+mod build_search;
 #[cfg(feature = "pob")]
 mod catalog_search;
 mod data_loading;
@@ -48,6 +49,8 @@ enum Action {
     BenchmarkNative(native_benchmark::Args),
     /// Search supplied Mace item/support choices (experimental supported profile).
     SearchExperimental(mutation_search::Args),
+    /// Search connected passive allocations and supplied equipment with the native evaluator.
+    SearchBuild(build_search::Args),
     /// Generate the current native game-data package and source evidence from pinned PoB.
     #[cfg(feature = "pob")]
     ExtractGameData(game_data_extract::Args),
@@ -201,6 +204,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,
         Some(Action::SearchExperimental(args)) => mutation_search::run(args)?,
+        Some(Action::SearchBuild(args)) => build_search::run(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExtractGameData(args)) => game_data_extract::run(args)?,
         #[cfg(feature = "pob")]

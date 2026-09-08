@@ -1175,7 +1175,7 @@ impl ControlledMaceCatalog {
             .iter()
             .filter(|attachment| {
                 attachment.media_type
-                    == "application/vnd.poe-optimizer.native-profile+json;version=4"
+                    == "application/vnd.poe-optimizer.native-profile+json;version=5"
             })
             .collect();
         if evidence.len() != 1 || evidence[0].content.len() > MAX_NATIVE_MACE_PROFILE_BYTES {
@@ -1192,6 +1192,8 @@ impl ControlledMaceCatalog {
             || evidence["weapon_item_level"].as_u64() != Some(u64::from(weapon.item_level()))
             || evidence["weapon_item"] != weapon.diagnostic()
             || evidence["actor_modifiers"] != self.profile.actor_modifiers.diagnostic()
+            || evidence["equipment"]
+                != serde_json::json!({"Weapon 1":crate::equipment::parse_equipment_item(&choice.weapon,self.data.package(),1).map_err(|error|mismatch(&error.to_string()))?.diagnostic()})
             || evidence["support_loadout"] != serde_json::json!(choice.support.keys())
             || evidence["configured_supports"]
                 != serde_json::json!(
@@ -1215,7 +1217,7 @@ impl ControlledMaceCatalog {
             .attachments
             .iter()
             .filter(|attachment| {
-                attachment.media_type == "application/vnd.poe-optimizer.native-tree+json;version=2"
+                attachment.media_type == "application/vnd.poe-optimizer.native-tree+json;version=3"
             })
             .collect();
         if attachments.len() != 1 || attachments[0].content.len() > 64 * 1024 {
@@ -1240,7 +1242,7 @@ impl ControlledMaceCatalog {
             "name":node.name,"stats":node.stats,"override_provenance":node.provenance,
         })).collect();
         let expected = serde_json::json!({
-            "schema_version":2,
+            "schema_version":3,
             "class":{"index":tree.class.integer_id,"internal_id":tree.class.integer_id,
                 "source_index":tree.class.source_index,"name":tree.class.name,"start_node_id":tree.class.start_node_id},
             "ascendancy":ascendancy,"allocated_nodes":tree.allocated_nodes,
@@ -1250,14 +1252,15 @@ impl ControlledMaceCatalog {
                 "tree_version":self.data.tree().source.tree_version,
                 "bundled_content_sha256":poe_optimizer_data::bundled::content_sha256()},
             "data_identity":self.data.identity(),
-            "configured_effects":self.data.package().passive_effects.iter().filter(|entry|
-                entry.class_id == tree.class.integer_id && (
-                    (entry.ascendancy_id.is_none() && tree.paid_node.as_ref().is_some_and(|node| entry.physical_node_id == node.physical_node_id)) ||
-                    (entry.ascendancy_id.as_deref() == tree.selection.ascendancy_id.as_deref() && tree.ascendancy_node.as_ref().is_some_and(|node| entry.physical_node_id == node.physical_node_id))
-                )).collect::<Vec<_>>(),
+            "attribute_options":{},
+            "configured_effects":tree.paid_node.iter().chain(tree.ascendancy_node.iter())
+                .filter_map(|node| {
+                    let key=poe_optimizer_data::passive_allocation::key_for_effective(node);
+                    self.data.package().passive_view_effects(&key).map(|effect|(key,effect))
+                }).collect::<BTreeMap<_,_>>().into_values().collect::<Vec<_>>(),
             "point_budget_verified":false,
             "evidence_kind":"native_source_resolution",
-            "scope":"class_identity_and_zero_or_one_ordinary_and_ascendancy_passive",
+            "scope":"connected_capability_admitted_passives_and_explicit_attribute_options",
         });
         if actual != expected {
             return Err(mismatch(

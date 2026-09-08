@@ -15,7 +15,7 @@ use std::{
     process::{Command, Output},
 };
 
-const SECTIONS: [&str; 13] = [
+const SECTIONS: [&str; 15] = [
     "tree",
     "character",
     "actor",
@@ -29,6 +29,8 @@ const SECTIONS: [&str; 13] = [
     "monsters",
     "encounters",
     "passive_effects",
+    "passive_exclusions",
+    "jewellery_bases",
 ];
 fn repository() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -125,7 +127,7 @@ fn assert_no_outputs(path: &Path) {
 }
 
 #[test]
-fn fresh_cli_extractions_reproduce_all_thirteen_sections_and_stable_source_evidence() {
+fn fresh_cli_extractions_reproduce_all_fifteen_sections_and_stable_source_evidence() {
     let temp = tempfile::tempdir().unwrap();
     let first = temp.path().join("first extracted package.json");
     let second = temp.path().join("second extracted package.json");
@@ -217,7 +219,7 @@ fn fresh_cli_extractions_reproduce_all_thirteen_sections_and_stable_source_evide
             .all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase())
     );
     let source_files = evidence["source_files_sha256"].as_object().unwrap();
-    assert_eq!(source_files.len(), 26);
+    assert_eq!(source_files.len(), 29);
     assert!(source_files.contains_key("src/Classes/SkillsTab.lua"));
     for (path, recorded_hash) in source_files {
         let entry = manifest["files"]

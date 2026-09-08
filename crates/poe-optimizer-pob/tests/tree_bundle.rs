@@ -66,10 +66,12 @@ fn compiled_bundle_matches_fresh_full_source_extraction() {
         }
         thread::sleep(Duration::from_millis(10));
     }
-    assert!(fs::metadata(&output).unwrap().len() < 1024 * 1024);
+    assert!(fs::metadata(&output).unwrap().len() < 16 * 1024 * 1024);
     let bytes = fs::read(output).unwrap();
     let fresh = poe_optimizer_data::bundled::authenticate_bundle(&bytes).unwrap();
     assert_eq!(&fresh, poe_optimizer_data::bundled::class_tree().unwrap());
+    assert_eq!(fresh.allocation_nodes.len(), 4109);
+    assert_eq!(fresh.allocation_views.len(), 4758);
     assert_eq!(fresh.classes.len(), 8);
     assert_eq!(fresh.ascendancies.len(), 23);
     assert_eq!(

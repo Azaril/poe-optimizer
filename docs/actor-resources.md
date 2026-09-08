@@ -95,8 +95,9 @@ counted in the same attempt budget. Empty legal domains still use zero build att
 `player.spirit` is a pool-points metric for maximum Spirit before reservation in both
 backends. It is appended to the native catalog, preserving previous indices. Mace's
 `selected_average_hit` remains explicitly unavailable. Native profile evidence advances
-to Spark media version 2 and Mace version 4 and records actor source evidence and numeric
-attributes/resources. Tree media stays at version 2.
+to Spark media version 3 and Mace version 5 and records actor source evidence and numeric
+attributes/resources. Tree media version 3 adds connected source views and physical attribute
+choices; see [passive/equipment assembly](passive-equipment-assembly.md).
 
 ## Evidence and limits
 

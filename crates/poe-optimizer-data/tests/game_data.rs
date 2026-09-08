@@ -1,4 +1,13 @@
+use poe_optimizer_data::class_tree::{AttributeOption, PassiveViewSelector};
 use poe_optimizer_data::game_data::*;
+fn scalar(package: &mut GameDataPackage) -> &mut PassiveEffect {
+    &mut package
+        .passive_effects
+        .iter_mut()
+        .find(|r| !r.effects.is_empty())
+        .unwrap()
+        .effects[0]
+}
 
 fn custom(mut package: GameDataPackage) -> Result<GameDataSnapshot, GameDataError> {
     package.refresh_section_digests()?;
@@ -35,7 +44,7 @@ fn embedded_and_external_bytes_share_one_validated_loader() {
         embedded.package().canonical_bytes().unwrap(),
         bundled_package_bytes()
     );
-    assert_eq!(embedded.package().passive_effects.len(), 20);
+    assert_eq!(embedded.package().passive_effects.len(), 1142);
 }
 #[test]
 fn explicit_custom_balance_has_content_identity_without_claiming_review() {
@@ -163,7 +172,13 @@ fn manifest_versions_required_fields_and_unknown_operations_are_closed() {
         .is_err()
     );
     let mut value = serde_json::to_value(reviewed().package()).unwrap();
-    value["passive_effects"][0]["effects"][0]["stat"] = "run_arbitrary_script".into();
+    let index = value["passive_effects"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .position(|r| !r["effects"].as_array().unwrap().is_empty())
+        .unwrap();
+    value["passive_effects"][index]["effects"][0]["stat"] = "run_arbitrary_script".into();
     assert!(
         GameDataLoader::from_bytes(
             &serde_json::to_vec(&value).unwrap(),
@@ -265,10 +280,10 @@ fn unknown_nested_source_enum_fields_and_integer_key_aliases_do_not_disappear() 
 #[test]
 fn requirement_schema_is_explicit_bounded_and_content_bound() {
     let original = reviewed();
-    assert_eq!(original.identity().schema_version, 6);
+    assert_eq!(original.identity().schema_version, 7);
     assert_eq!(
         original.identity().semantics_version,
-        "poe2-native-profiles-v6"
+        "poe2-native-profiles-v7"
     );
     let mut package = original.package().clone();
     package.weapons[0].requirements = RequirementData {
@@ -344,7 +359,7 @@ fn signed_values_are_allowed_only_for_closed_resistance_operations() {
             let effect = &mut package
                 .passive_effects
                 .iter_mut()
-                .find(|record| record.ascendancy_id.is_some())
+                .find(|record| record.key.physical_node_id == 14960)
                 .unwrap()
                 .effects[0];
             *effect = PassiveEffect { stat, value };
@@ -353,7 +368,7 @@ fn signed_values_are_allowed_only_for_closed_resistance_operations() {
         }
         for value in [-1_000_001.0, 1_000_001.0, f64::INFINITY, f64::NAN] {
             let mut package = original.package().clone();
-            package.passive_effects[0].effects[0] = PassiveEffect { stat, value };
+            *scalar(&mut package) = PassiveEffect { stat, value };
             assert!(custom(package).is_err());
         }
     }
@@ -369,7 +384,7 @@ fn signed_values_are_allowed_only_for_closed_resistance_operations() {
         PassiveStat::MinionDamageIncreased,
     ] {
         let mut package = original.package().clone();
-        package.passive_effects[0].effects[0] = PassiveEffect { stat, value: -0.5 };
+        *scalar(&mut package) = PassiveEffect { stat, value: -0.5 };
         assert!(custom(package).is_err());
     }
     let mut package = original.package().clone();
@@ -406,7 +421,7 @@ fn passive_effect_records_require_complete_exact_class_and_ascendancy_ownership(
         let index = package
             .passive_effects
             .iter()
-            .position(|record| record.ascendancy_id.as_deref() == Some("Warrior3"))
+            .position(|record| record.key.physical_node_id == 14960)
             .unwrap();
         match edit {
             0 => {
@@ -415,10 +430,21 @@ fn passive_effect_records_require_complete_exact_class_and_ascendancy_ownership(
             1 => package
                 .passive_effects
                 .push(package.passive_effects[index].clone()),
-            2 => package.passive_effects[index].class_id = 11,
-            3 => package.passive_effects[index].ascendancy_id = None,
-            4 => package.passive_effects[index].ascendancy_id = Some("Warrior1".into()),
-            5 => package.passive_effects[index].physical_node_id = 3936,
+            2 => {
+                package.passive_effects[index].key.selector =
+                    PassiveViewSelector::Class { class_id: 11 }
+            }
+            3 => {
+                package.passive_effects[index].key.selector = PassiveViewSelector::Attribute {
+                    option: AttributeOption::Strength,
+                }
+            }
+            4 => {
+                package.passive_effects[index].key.selector = PassiveViewSelector::Ascendancy {
+                    ascendancy_id: "Warrior1".into(),
+                }
+            }
+            5 => package.passive_effects[index].key.physical_node_id = 3936,
             6 => package.passive_effects[index].effective_node_id = 3936,
             _ => package.passive_effects[index].effects.clear(),
         }

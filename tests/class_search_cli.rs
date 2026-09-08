@@ -452,7 +452,7 @@ fn locked_override_export_preserves_unrelated_source_and_resolves_exact_tree_ide
         .unwrap()
         .iter()
         .find(|entry| {
-            entry["media_type"] == "application/vnd.poe-optimizer.native-tree+json;version=2"
+            entry["media_type"] == "application/vnd.poe-optimizer.native-tree+json;version=3"
         })
         .unwrap();
     let projection: Value = serde_json::from_str(attachment["content"].as_str().unwrap()).unwrap();
@@ -664,7 +664,7 @@ fn native_realization_rejects_tampered_tree_identity_and_injected_effect_evidenc
             .attachments
             .iter_mut()
             .find(|entry| {
-                entry.media_type == "application/vnd.poe-optimizer.native-tree+json;version=2"
+                entry.media_type == "application/vnd.poe-optimizer.native-tree+json;version=3"
             })
             .unwrap();
         let mut diagnostic: Value = serde_json::from_str(&attachment.content).unwrap();

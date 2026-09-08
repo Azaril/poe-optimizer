@@ -1,5 +1,7 @@
 # Controlled passive-tree projection
 
+Current native graph search uses `class_tree::allocation_candidate_catalog(snapshot)`, resolving complete ordinary structure and capability-admitted source views, including explicit attribute options. See [passive/equipment assembly](passive-equipment-assembly.md). The generic projection policy described below remains a separate, intentionally narrower API.
+
 `poe_optimizer_data::tree_projection` converts an authenticated
 [tree snapshot](tree-data.md) into a finite core `CandidateCatalog`. The projection
 keeps all **8 classes and 23 ascendancies**, their **28 shared physical implicit

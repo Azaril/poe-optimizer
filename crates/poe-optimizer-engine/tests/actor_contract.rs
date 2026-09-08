@@ -121,6 +121,8 @@ fn layers() -> Vec<Vec<ActorModifierRecord>> {
 fn one_prepared_actor_changes_both_skills_and_preserves_empty_adapter_outputs() {
     fn send_sync<T: Send + Sync>() {}
     send_sync::<PreparedActorResources>();
+    send_sync::<poe_optimizer_engine::actor::CompiledActorModifiers>();
+    send_sync::<poe_optimizer_engine::actor::ActorScratch>();
     let data = CompiledGameData::bundled().unwrap();
     let character = data.default_mace_character();
     let spark = spark_input();
@@ -433,4 +435,425 @@ fn prepared_skill_loops_and_empty_compatibility_adapters_allocate_nothing() {
     assert_eq!(hot_allocations, 0);
     // Fixed metadata plus the numeric snapshot; no hidden record/condition heap.
     assert!(std::mem::size_of::<PreparedActorResources>() <= 512);
+}
+
+#[test]
+fn compiled_fragments_preserve_one_layer_more_rounding_and_source_override_order() {
+    use poe_optimizer_engine::actor::{ActorModifierLayer, ActorScratch};
+    let data = CompiledGameData::bundled().unwrap();
+    let character = data.default_mace_character();
+    let quests = data.actor_quest_selection(spark_input().quests);
+    let sources = [
+        vec![
+            numeric(ActorStat::Life, Op::More, 13.0),
+            numeric(ActorStat::Mana, Op::Override, 0.0),
+        ],
+        vec![
+            numeric(ActorStat::Life, Op::More, 13.0),
+            numeric(ActorStat::Mana, Op::Override, 17.5),
+        ],
+        vec![numeric(ActorStat::Str, Op::Base, 11.0)],
+    ];
+    let programs = sources
+        .iter()
+        .map(|source| data.compile_actor_modifiers(source).unwrap())
+        .collect::<Vec<_>>();
+    let refs = programs.iter().collect::<Vec<_>>();
+    let mut scratch = ActorScratch::default();
+    let actual = data
+        .evaluate_actor_resources(
+            60,
+            quests,
+            &character,
+            &[ActorModifierLayer { programs: &refs }],
+            &mut scratch,
+        )
+        .unwrap()
+        .values();
+    let full = data
+        .prepare_actor_resources(60, quests, &character, &[sources.concat()])
+        .unwrap()
+        .values();
+    assert_eq!(actual, full);
+    assert_eq!(actual.mana, 0.0);
+    let parent_refs = refs.iter().map(std::slice::from_ref).collect::<Vec<_>>();
+    let parents = parent_refs
+        .iter()
+        .map(|programs| ActorModifierLayer { programs })
+        .collect::<Vec<_>>();
+    let grouped_as_parents = data
+        .evaluate_actor_resources(60, quests, &character, &parents, &mut scratch)
+        .unwrap()
+        .values();
+    assert_ne!(
+        actual.life, grouped_as_parents.life,
+        "fragment boundaries cannot introduce a MORE rounding step"
+    );
+    let reversed = [&programs[1], &programs[0], &programs[2]];
+    assert_eq!(
+        data.evaluate_actor_resources(
+            60,
+            quests,
+            &character,
+            &[ActorModifierLayer {
+                programs: &reversed
+            }],
+            &mut scratch
+        )
+        .unwrap()
+        .values()
+        .mana,
+        17.5
+    );
+}
+
+#[test]
+fn changing_tree_and_equipment_programs_match_fresh_preparation_without_allocating() {
+    use poe_optimizer_data::game_data::{ActorCondition, ActorModifierTag};
+    use poe_optimizer_engine::actor::{ActorModifierLayer, ActorScratch};
+    let data = CompiledGameData::bundled().unwrap();
+    let condition = |mut record: ActorModifierRecord| {
+        record.tags.push(ActorModifierTag::Condition {
+            variables: vec![ActorCondition::StrHigherThanInt],
+            negated: false,
+        });
+        record
+    };
+    let configs = [
+        vec![],
+        vec![
+            condition(numeric(ActorStat::Str, Op::Base, -30.0)),
+            numeric(ActorStat::Life, Op::More, 13.0),
+        ],
+    ];
+    let equipment = [
+        vec![],
+        vec![
+            numeric(ActorStat::Str, Op::Base, 20.0),
+            numeric(ActorStat::Life, Op::More, 13.0),
+        ],
+        vec![
+            numeric(ActorStat::Dex, Op::Base, 21.0),
+            numeric(ActorStat::Int, Op::Increased, 23.0),
+            numeric(ActorStat::Mana, Op::Base, 19.0),
+        ],
+    ];
+    let passives = [
+        vec![],
+        vec![numeric(ActorStat::Str, Op::Base, 10.0)],
+        vec![
+            numeric(ActorStat::Int, Op::Base, 30.0),
+            condition(numeric(ActorStat::Life, Op::More, 17.0)),
+        ],
+    ];
+    let compile = |sources: &[Vec<ActorModifierRecord>]| {
+        sources
+            .iter()
+            .map(|source| data.compile_actor_modifiers(source).unwrap())
+            .collect::<Vec<_>>()
+    };
+    let configs_compiled = compile(&configs);
+    let equipment_compiled = compile(&equipment);
+    let passives_compiled = compile(&passives);
+    let characters = [
+        data.default_spark_character(),
+        data.default_mace_character(),
+    ];
+    let mut expected = Vec::new();
+    for level in [1, 60, 100] {
+        for (class, character) in characters.iter().enumerate() {
+            for quest in [false, true] {
+                let mut quests = data.actor_quest_selection(spark_input().quests);
+                quests.spirit = [quest, !quest, quest];
+                for (config, config_records) in configs.iter().enumerate() {
+                    for (gear, equipment_records) in equipment.iter().enumerate() {
+                        for (tree, passive_records) in passives.iter().enumerate() {
+                            let records = [
+                                config_records.as_slice(),
+                                equipment_records.as_slice(),
+                                passive_records.as_slice(),
+                            ]
+                            .concat();
+                            let full = data
+                                .prepare_actor_resources(level, quests, character, &[records])
+                                .unwrap()
+                                .values();
+                            expected.push((level, class, quests, config, gear, tree, full));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    assert_eq!(expected.len(), 216);
+    let mace = mace_input();
+    let weapon = data
+        .prepare_mace_weapon(mace.weapon, mace.quality, mace.item_level, &[])
+        .unwrap();
+    let supports = data.mace_support_loadout(&[]).unwrap();
+    let mut scratch = ActorScratch::default();
+    let (_, count) = allocations(|| {
+        for index in 0..2160 {
+            let (level, class, quests, config, gear, tree, full) = expected[index % expected.len()];
+            let character = &characters[class];
+            let sources = [
+                &configs_compiled[config],
+                &equipment_compiled[gear],
+                &passives_compiled[tree],
+            ];
+            let actor = data
+                .evaluate_actor_resources(
+                    level,
+                    quests,
+                    character,
+                    &[ActorModifierLayer { programs: &sources }],
+                    &mut scratch,
+                )
+                .unwrap();
+            assert_eq!(actor.values(), full);
+            black_box(
+                spark::evaluate_with_actor(
+                    &SparkInput {
+                        character_level: level,
+                        ..spark_input()
+                    },
+                    character,
+                    &data,
+                    &actor,
+                )
+                .unwrap(),
+            );
+            black_box(
+                mace::evaluate_with_actor(
+                    &MaceInput {
+                        character_level: level,
+                        ..mace
+                    },
+                    character,
+                    &data,
+                    &weapon,
+                    supports,
+                    &actor,
+                )
+                .unwrap(),
+            );
+        }
+    });
+    assert_eq!(
+        count, 0,
+        "program assembly, actor calculation and both skill kernels allocate nothing"
+    );
+    assert!(
+        expected
+            .iter()
+            .any(|entry| entry.6.attributes.strength == 0.0),
+        "changing sources exercise the two-pass condition flip"
+    );
+    assert!(ActorScratch::storage_bytes() <= 1024);
+    assert!(equipment_compiled[1].owned_heap_bytes() > 0);
+    assert_eq!(equipment_compiled[1].record_count(), 2);
+}
+
+#[test]
+fn compiled_program_ownership_bounds_and_failed_scratch_reuse_are_explicit() {
+    use poe_optimizer_data::game_data::{ActorCondition, ActorModifierTag};
+    use poe_optimizer_engine::actor::{ActorModifierLayer, ActorScratch};
+    let data = CompiledGameData::bundled().unwrap();
+    let foreign = CompiledGameData::compile(std::sync::Arc::new(
+        poe_optimizer_data::game_data::bundled_snapshot().unwrap(),
+    ))
+    .unwrap();
+    let character = data.default_mace_character();
+    let quests = data.actor_quest_selection(spark_input().quests);
+    let records = [numeric(ActorStat::Str, Op::Base, 20.0)];
+    let program = data.compile_actor_modifiers(&records).unwrap();
+    let foreign_program = foreign.compile_actor_modifiers(&records).unwrap();
+    let mut scratch = ActorScratch::default();
+    let reference = data
+        .prepare_actor_resources(60, quests, &character, &[records.to_vec()])
+        .unwrap()
+        .values();
+    let valid = [&program];
+    let foreign_refs = [&foreign_program];
+    let overflow = data
+        .compile_actor_modifiers(&vec![numeric(ActorStat::Str, Op::Base, 1_000_000.0); 2])
+        .unwrap();
+    let overflow_refs = [&overflow];
+    let many = vec![&program; 257];
+    for invalid in [&foreign_refs[..], &overflow_refs[..], many.as_slice()] {
+        assert!(
+            data.evaluate_actor_resources(
+                60,
+                quests,
+                &character,
+                &[ActorModifierLayer { programs: invalid }],
+                &mut scratch
+            )
+            .is_err()
+        );
+        assert_eq!(
+            data.evaluate_actor_resources(
+                60,
+                quests,
+                &character,
+                &[ActorModifierLayer { programs: &valid }],
+                &mut scratch
+            )
+            .unwrap()
+            .values(),
+            reference
+        );
+    }
+    let layers = vec![ActorModifierLayer { programs: &valid }; 17];
+    assert!(
+        data.evaluate_actor_resources(60, quests, &character, &layers, &mut scratch)
+            .is_err()
+    );
+    let oversized = data
+        .compile_actor_modifiers(&vec![numeric(ActorStat::Life, Op::Base, 1.0); 257])
+        .unwrap();
+    assert!(
+        data.evaluate_actor_resources(
+            60,
+            quests,
+            &character,
+            &[ActorModifierLayer {
+                programs: &[&oversized, &oversized]
+            }],
+            &mut scratch
+        )
+        .is_err()
+    );
+    let mut unsupported = numeric(ActorStat::Life, Op::Base, 1.0);
+    unsupported.flags = 1;
+    unsupported.tags = vec![ActorModifierTag::Condition {
+        variables: vec![ActorCondition::StrHigherThanInt],
+        negated: true,
+    }];
+    assert!(
+        data.compile_actor_modifiers(&[unsupported]).is_err(),
+        "unsupported metadata cannot hide behind a false condition"
+    );
+    assert!(
+        data.compile_actor_modifiers(&vec![numeric(ActorStat::Life, Op::Base, 1.0); 513])
+            .is_err()
+    );
+    for record in [
+        numeric(ActorStat::LifeConvertToArmour, Op::Base, 50.0),
+        flag(ActorStat::ChaosInoculation, true),
+    ] {
+        let program = data
+            .compile_actor_modifiers(std::slice::from_ref(&record))
+            .unwrap();
+        let actor = data
+            .evaluate_actor_resources(
+                60,
+                quests,
+                &character,
+                &[ActorModifierLayer {
+                    programs: &[&program],
+                }],
+                &mut scratch,
+            )
+            .unwrap();
+        assert_eq!(
+            actor.values(),
+            data.prepare_actor_resources(60, quests, &character, &[vec![record]])
+                .unwrap()
+                .values()
+        );
+        assert!(
+            spark::evaluate_with_actor(&spark_input(), &character, &data, &actor)
+                .unwrap_err()
+                .0
+                .contains("unsupported receiving defence")
+        );
+    }
+}
+
+#[test]
+fn actor_can_bind_validated_scalar_character_modifiers_without_recalculating_attributes() {
+    let data = CompiledGameData::bundled().unwrap();
+    let character = data.default_mace_character();
+    let spark = spark_input();
+    let mace = mace_input();
+    let actor = data
+        .prepare_actor_resources(
+            60,
+            data.actor_quest_selection(spark.quests),
+            &character,
+            &layers(),
+        )
+        .unwrap();
+    let mut full = character;
+    full.modifiers.skill_speed_increased = 15.0;
+    full.modifiers.energy_shield_flat = 17.0;
+    assert!(
+        spark::evaluate_with_actor(&spark, &full, &data, &actor).is_err(),
+        "implicit rebinding remains forbidden"
+    );
+    let (rebound, count) = allocations(|| actor.with_character(&full).unwrap());
+    assert_eq!(count, 0);
+    assert_eq!(rebound.values(), actor.values());
+    assert_eq!(rebound.character_level(), actor.character_level());
+    assert_eq!(rebound.quests(), actor.quests());
+    let before = spark::evaluate_with_actor(&spark, &character, &data, &actor).unwrap();
+    let after = spark::evaluate_with_actor(&spark, &full, &data, &rebound).unwrap();
+    assert_eq!(before.life, after.life);
+    assert_eq!(before.mana, after.mana);
+    assert_eq!(before.spirit, after.spirit);
+    assert!(after.hit_dps > before.hit_dps);
+    assert_eq!(after.energy_shield, 17.0);
+    let weapon = data
+        .prepare_mace_weapon(mace.weapon, mace.quality, mace.item_level, &[])
+        .unwrap();
+    let supports = data.mace_support_loadout(&[]).unwrap();
+    assert_eq!(
+        mace::evaluate_with_actor(&mace, &full, &data, &weapon, supports, &rebound)
+            .unwrap()
+            .life,
+        after.life
+    );
+    let mut wrong_attributes = full;
+    wrong_attributes.attributes.strength += 1.0;
+    assert!(actor.with_character(&wrong_attributes).is_err());
+    let mut wrong_scalar = full;
+    wrong_scalar.modifiers.energy_shield_flat = -1.0;
+    assert!(actor.with_character(&wrong_scalar).is_err());
+    let foreign = CompiledGameData::compile(std::sync::Arc::new(
+        poe_optimizer_data::game_data::bundled_snapshot().unwrap(),
+    ))
+    .unwrap();
+    assert!(spark::evaluate_with_actor(&spark, &full, &foreign, &rebound).is_err());
+    assert!(
+        spark::evaluate_with_actor(
+            &SparkInput {
+                character_level: 59,
+                ..spark
+            },
+            &full,
+            &data,
+            &rebound
+        )
+        .is_err()
+    );
+    let donor = data
+        .prepare_actor_resources(
+            60,
+            data.actor_quest_selection(spark.quests),
+            &character,
+            &[vec![numeric(
+                ActorStat::LifeConvertToArmour,
+                Op::Base,
+                50.0,
+            )]],
+        )
+        .unwrap();
+    let donor = donor.with_character(&full).unwrap();
+    assert!(
+        spark::evaluate_with_actor(&spark, &full, &data, &donor)
+            .unwrap_err()
+            .0
+            .contains("unsupported receiving defence")
+    );
 }

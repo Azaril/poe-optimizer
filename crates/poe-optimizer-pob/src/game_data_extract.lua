@@ -454,3 +454,68 @@ function source_encounter_build(level)
     end})
     return build
 end
+-- Complete original PassiveTree.ProcessStats output, including multiline combination.
+-- BASE/INC integer source sums and boolean flags are admitted; source table traversal
+-- does not establish a portable ordering for passive MORE or competing OVERRIDE.
+function source_extract_passive(stats,id,name)
+ local node={id=id,sd=copyTable(stats),dn=name,type='Normal'}
+ local ok=pcall(PassiveTreeClass.ProcessStats,PassiveTreeClass,node)
+ if not ok or node.unknown or node.extra then return nil,'unsupported_source_parser_output' end
+ local effects,actor={},{}
+ local forbidden={LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,ChaosInoculation=true}
+ for _,line in ipairs(node.mods) do
+  local list=copyTable(line.list or {})
+  if #list>0 then
+   local converted={};local allactor=true
+   for _,mod in ipairs(list) do
+    local success,record=pcall(source_convert_actor_modifier,mod)
+    if not success or forbidden[mod.name] or (mod.type~='BASE' and mod.type~='INC' and mod.type~='FLAG') then allactor=false;break end
+    assert(type(mod.value)~='number' or mod.value%1==0,'noninteger passive actor source requires explicit order audit')
+    converted[#converted+1]=record
+   end
+   if allactor then for _,record in ipairs(converted) do actor[#actor+1]=record end
+   else
+    for _,mod in ipairs(list) do
+     assert(mod.source=='Tree:'..id,'unexpected passive modifier source');mod.source=nil
+     if type(mod.value)=='table' and mod.value.mod then assert(mod.value.mod.source=='Tree:'..id,'unexpected nested passive source');mod.value.mod.source=nil end
+    end
+    local success,effect=pcall(source_convert_modifiers,list)
+    if not success then return nil,'unsupported_whole_modifier_effect' end
+    effects[#effects+1]=effect
+   end
+  end
+ end
+ return {effects=effects,actor_modifiers=actor}
+end
+-- Enumerate an entire source base family and admit by complete data/implicit capability.
+function source_extract_jewellery(rules)
+ local result={};local excluded={}
+ local allowed={type=true,tags=true,implicit=true,implicitModTypes=true,req=true}
+ for name,base in pairs(sourceJewelleryBases) do
+  local ok,value=pcall(function()
+   keys(base,allowed,'jewellery base');assert(base.type=='Amulet','unsupported jewellery type')
+   assert(equal(base.tags,{amulet=true,default=true}),'unsupported jewellery base tags')
+   keys(base.req or {},{level=true,str=true,dex=true,int=true},'jewellery requirements')
+   local text=assert(base.implicit);assert(type(text)=='string' and not text:find('\n',1,true),'multiple implicit source lines')
+   local minimum,maximum=text:match('^%+%((%d+)%-(%d+)%)')
+   assert(minimum and maximum,'unsupported source implicit range grammar')
+   minimum=tonumber(minimum);maximum=tonumber(maximum);numeric(minimum);numeric(maximum);assert(minimum<=maximum)
+   local template=text:gsub('^%+%(%d+%-%d+%)','{0}')
+   local rule=unique(rules,function(r)return r.template==template and #r.captures==1 and r.captures[1]=='signed_decimal' end,'jewellery actor rule')
+   local parsed,extra=modLib.parseMod(text:gsub('^%+%(%d+%-%d+%)','+101'))
+   assert(extra==nil);dense_array(parsed,'jewellery implicit')
+   for _,m in ipairs(parsed) do assert(m.type=='BASE');source_convert_actor_modifier(m) end
+   assert(#parsed==#rule.modifiers,'incomplete jewellery implicit rule')
+   for i,m in ipairs(parsed) do
+    local map=rule.modifiers[i];assert(map.effect.kind=='numeric' and map.effect.operation=='base' and map.effect.value.kind=='capture' and map.effect.value.index==0 and map.effect.value.multiplier==1,'unsupported implicit parameter mapping')
+    assert(m.flags==map.flags and m.keywordFlags==map.keyword_flags and #m==0 and #map.tags==0,'implicit scope mismatch')
+    assert(actor_name(m.name)==map.stat and m.value==101,'implicit target/value mismatch')
+   end
+   dense_array(base.implicitModTypes,'implicit type groups');assert(#base.implicitModTypes==1);dense_array(base.implicitModTypes[1],'implicit types')
+   return {id=name:lower():gsub(' ','_'),name=name,slot='amulet',requirements={level=(base.req or{}).level or 0,attributes={strength=(base.req or{}).str or 0,dexterity=(base.req or{}).dex or 0,intelligence=(base.req or{}).int or 0}},implicit={actor_rule_id=rule.id,minimum=minimum,maximum=maximum,source_text=text,modifier_types=base.implicitModTypes[1]}}
+  end)
+  if ok then result[#result+1]=value else excluded[#excluded+1]=name end
+ end
+ table.sort(result,function(a,b)return a.id<b.id end);table.sort(excluded)
+ return result,excluded
+end
