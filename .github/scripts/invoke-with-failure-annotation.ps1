@@ -35,11 +35,26 @@ $tailCharacters = 0
 $commandExitCode = $LASTEXITCODE
 
 if ($commandExitCode -ne 0) {
-    $message = "Command exited with code ${commandExitCode}: $FilePath $($ArgumentList -join ' ')`n" +
-        "Last $($tail.Count) output lines (at most $maximumCharacters characters):`n" +
-        [string]::Join("`n", $tail.ToArray())
-    # Escape percent first so literal strings such as %0A remain literal.
-    $message = $message.Replace('%', '%25').Replace("`r", '%0D').Replace("`n", '%0A')
-    Write-Host "::error title=Test command failed::$message"
+    $outputTail = [string]::Join("`n", $tail.ToArray())
+    $commandSummary = "$FilePath $($ArgumentList -join ' ')"
+    if ($commandSummary.Length -gt 300) {
+        $commandSummary = $commandSummary.Substring(0, 297) + '...'
+    }
+    # Public check-run messages are truncated at 4096 characters. Keep each
+    # decoded body below that bound, including a bounded command/header. Emit
+    # the newest chunk first so even the first annotation contains the failure.
+    $chunkSize = 3500
+    $chunkCount = [Math]::Max(1, [int][Math]::Ceiling($outputTail.Length / $chunkSize))
+    for ($chunkIndex = $chunkCount - 1; $chunkIndex -ge 0; $chunkIndex--) {
+        $start = $chunkIndex * $chunkSize
+        $length = [Math]::Min($chunkSize, $outputTail.Length - $start)
+        $body = $outputTail.Substring($start, $length)
+        $message = "Command exited with code ${commandExitCode}: $commandSummary`n" +
+            "Output tail chunk $($chunkIndex + 1)/$chunkCount (newest first; last $($tail.Count) lines, at most $maximumCharacters characters):`n" +
+            $body
+        # Escape percent first so literal strings such as %0A remain literal.
+        $message = $message.Replace('%', '%25').Replace("`r", '%0D').Replace("`n", '%0A')
+        Write-Host "::error title=Test command failed::$message"
+    }
 }
 exit $commandExitCode
