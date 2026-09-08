@@ -3,7 +3,9 @@
 Last updated: 2026-09-08
 
 Current checkpoint: **breadth mechanism inventory and reusable corpus inspection**, locally
-validated and ready for publication, including the CI diagnostic tooling checks below. All five
+validated and published as `ee5f589ff27a3ecaa6d37aa7007bb10b45f5983d` on main.
+[Exact-code CI run 34262898483](https://github.com/Azaril/poe-optimizer/actions/runs/34262898483)
+is in progress on Linux and Windows; no hosted pass is claimed. All five
 caller builds retain their complete authored inputs and repeat the reference measurements.
 The inventory identifies shared item, allocation-provider, actor and condition dependencies;
 no additional complete build is admitted by native evaluation. See the
@@ -228,7 +230,7 @@ non-evaluation labels. Inspection failures stay separate; changed XML stops late
 | Prior hosted CI | Exact-code run **34257699126** failed on Linux; Windows was cancelled. Public metadata exposes only exit 101. The actual assertion remains unknown; a request for that log is pending. `runs/breadth-mechanisms-prior-ci-final.json`. |
 | Static preservation | Six changed Markdown files pass UTF-8 checks; 190 local links and 17 heading targets resolve. Caller inputs, numerical goldens, data and pinned source are preserved; final CI workflow changes are checked separately. `runs/breadth-mechanisms-static-validation.json`. |
 | CI diagnostic tooling | Both Cargo test commands retain streaming output and exact exit codes while publishing a bounded failure tail. Three subprocess checks pass for exits 0/7/7, stdout/stderr streaming, 120-line / 16,000-character bounds and annotation escaping. Matrix fail-fast is disabled so each platform retains its outcome. `runs/ci-annotation-wrapper-validation.json`. |
-| Publication | Locally validated and ready to publish. The prior hosted failure remains explicitly unresolved; the next exact-code run must be inspected. |
+| Publication | Code `ee5f589ff27a3ecaa6d37aa7007bb10b45f5983d` is pushed to `origin/main`. [Exact-code CI run 34262898483](https://github.com/Azaril/poe-optimizer/actions/runs/34262898483) is in progress on both platforms. No hosted pass or repair of the preceding failure is claimed. `runs/breadth-mechanisms-publication-ci.json`. |
 
 The full checkpoint evidence is `runs/breadth-mechanisms-validation-summary.json`.
 CI diagnostic work adds bounded public failure annotations and independent platform outcomes;
@@ -237,7 +239,8 @@ rejected by automatic approval review; it was not retried. Normal browser initia
 also failed, and public job metadata does not include the assertion. Use user-provided logs
 or the next run's annotations for a concrete repair.
 
-Next resume point: inspect the new hosted run and resolve any failure, then finish B2's native capability matrix for
+Next resume point: inspect exact-code run **34262898483**, using its public failure
+annotations for any concrete diagnosis. Then finish B2's native capability matrix for
 the retained modifier/dependency records and plan B4 whole-build holdouts. Item source/load
 instructions and injected parsing data can proceed independently of the pending
 [shared actor/action model discussion](general-build-input-proposal.md). Do not begin its
