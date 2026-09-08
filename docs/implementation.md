@@ -2,12 +2,12 @@
 
 Last updated: 2026-09-07
 
-Completed local checkpoint: dataset-bound controlled Mace search and explicit requirement
+Completed checkpoint: dataset-bound controlled Mace search and explicit requirement
 validation (D4), starting from clean `6176123`. The selected immutable snapshot now binds
 catalog materialization, pre-dispatch legality, native evaluation and export metadata.
 All 333 workspace tests, 32 native-only CLI tests, lint, formatting, dependency isolation,
-five portable WASM libraries and release reproduction pass. Publication/hosted CI is pending
-in the table below. Next: connect class/ascendancy/passive materialization to finite search.
+five portable WASM libraries and release reproduction pass. Code `9388935` is published
+on main; hosted Windows/Linux CI passes for that commit. Next: connect class/ascendancy/passive materialization to finite search.
 
 The package is schema 2 / `poe2-native-profiles-v2`, with source-derived equipment,
 active-gem and support requirements. The fixed Warrior/no-paid-passive search scope,
@@ -44,7 +44,7 @@ the design documents.
    implemented; broader source compatibility is a separate remaining D4 gate.
    Preserve schema-2 requirement checks, exact source/tree compatibility and default golden
    parity; review the compatibility contract before admitting another upstream revision.
-4. Connect source-preserving class/ascendancy/passive materialization to a finite search
+4. Add source-preserving class/ascendancy/passive materialization and connect it to a finite search
    catalog using the authenticated portable data. Rebind composed catalog identities to
    tree, skill and item payloads; validate requested versus realized physical allocations,
    effective entrance stats and source exports. Start with the numerically validated
@@ -114,8 +114,8 @@ added to native search. The PoB backend remains an explicit optional reference.
 | Integrated validation | **333 workspace tests pass, zero failures**, with nine ignored child helpers exercised by parents. **32 native-only CLI tests pass**. Existing six numerical goldens and the 100-case fresh PoB matrix pass. Workspace/native-only Clippy, formatting, dependency isolation and five portable WASM libraries pass. Logs: `runs/dataset-search-{workspace-tests,workspace-clippy,native-only-tests,native-only-clippy,fmt,wasm,release}.log`, `runs/dataset-search-native-dependencies.txt`. |
 | Release evidence | Two release extractor processes produce identical reviewed packages and evidence. Default eight-state winner: **`smithing-q20/none`, 20.1596255 DPS**. Quadrupled Wooden Club endpoints select **`wooden-q20/brutality_i`, 62.429807999999994 DPS**. Serial/four-worker archives and finalists match exactly; fresh export reevaluation matches DPS and backend/data identity. Each complete search uses ten attempts; the all-illegal eight-state case uses zero. Artifacts and `summary.json`: `runs/dataset-search-release-check/`. |
 | Artifact identity | Custom package SHA-256 `8b35214bbcc9d639d59286dd3124860729d3b4cc78b99dd9563a4559c11e42d3`; release executable `48bfb84621f8794163b9b8649b2de5ab2dad4813cfa1a1996a07e4a05a3b8d2d`; extractor `90640baa6adf5b71903d282c84bd08d9aa1352239244e77e316aedbfca2328fd`; extraction-evidence file `d642eced202189c9dd3f99548cd3604d228ad3a905022798e9ee068fe983668d`. |
-| Review/documentation | Independent source/data-binding and CLI reviews found no remaining blockers. Seven new import tests, seven new CLI tests and a native scenario-reuse test cover requirement boundaries, maximum semantics, XML escaping, selected quest defaults, identity mismatches, locks and budgets. Static audit confirms seven unchanged sections, preserved prior numeric fields and Markdown links; evidence: `runs/dataset-search-static-audit.json`. |
-| Publication | Local code, release and documentation checks pass. Main-branch publication and hosted Windows/Linux CI are pending. |
+| Review/documentation | Independent source/data-binding and CLI reviews found no remaining blockers. Seven new import tests, seven new CLI tests and a native scenario-reuse test cover requirement boundaries, maximum semantics, XML escaping, selected quest defaults, identity mismatches, locks and budgets. Static audit confirms seven unchanged sections, preserved prior numeric fields, valid UTF-8 and all 232 local file links plus 19 heading links across 30 Markdown files; evidence: `runs/dataset-search-static-audit.json`. |
+| Publication | Code `9388935` is pushed to main. Local code, release and documentation checks pass. [Windows/Linux CI run 34179412604](https://github.com/Azaril/poe-optimizer/actions/runs/34179412604) passes both jobs, including formatting, workspace/native-only lint and tests, dependency isolation and five portable WASM libraries. This following update changes documentation only. |
 
 The current requirement seam is deliberately scoped to fixed Warrior attributes with no
 paid passives or attribute-granting equipment. It does not resolve general equipment
@@ -125,21 +125,49 @@ separate and does not become a recommendation certificate.
 
 ### Next implementation slice: class/passive catalog composition
 
-Use the already authenticated tree projection and source-preserving class/passive
-materialization APIs to extend the finite native search domain. Retain the same injected
-snapshot across tree, skill, item, requirement and evaluator code. Start with the validated
-31 class/ascendancy identities and ordinary entrance views, caller-supplied ordinary point
-budget 0 or 1, ascendancy point budget 0, and exact class/ascendancy/node/item/skill locks.
-Available attributes must come from the selected class and admitted effects; allocated
-counts observed in an evaluator result never establish the available point budget.
+The audit found no reusable production class/tree XML materializer yet. The existing
+`NativeTree::resolve` in `crates/poe-optimizer-native/src/tree.rs` evaluates the admitted
+choices; `tests/native_passive_parity.rs::case/cases` builds parity inputs with fixture
+replacements. Those test helpers are not a production materialization API.
 
-Validate requested versus realized physical nodes, shared-root ownership, class-specific
-effective entrance effects and exact exports. Preserve source/default numerical parity,
-compare tiny exhaustive references and one/many-worker runs, and reject unsupported selected
-special mechanics. Existing native identity/entrance coverage is a starting point, not a
-blanket claim of legal cross-class recommendations. General attribute/circular equipment
-requirements, broader modifier extraction and source revision migration remain later gates.
-No additional product decision is needed for this agreed scope.
+- Reuse `GameDataSnapshot::tree()` and
+  `BundledClassTree::{class, ascendancy, entrances, entrance}` from the selected snapshot.
+  Introduce a portable typed selected-class/tree resolver shared with native admission and
+  a bounded bundle-to-candidate projection/composition seam. `TreeProjection::new` currently
+  requires a complete `AuthenticatedTreeSnapshot`; do not treat the partial bundle as a
+  complete extraction or introduce PoB extraction into native search.
+- Extend controlled materialization to typed Build/Spec attribute spans: canonical class ID,
+  owned ascendancy index/internal ID and zero or one ordinary physical node. Preserve other
+  source spans, shared-root ownership and independent class/ascendancy/node/item/skill locks.
+  Candidate roots remain implicit; use physical allocation IDs and class-specific effective
+  views. Witch `4739 -> 17306` and Huntress `56651 -> 39263` are effect-source overrides,
+  not replacement allocation IDs.
+- Derive available attributes from the explicitly selected class, rather than mutable profile
+  defaults or evaluator diagnostics. All currently admitted roots are statless and entrance
+  operations cannot modify strength/dexterity/intelligence. A future attribute opcode needs
+  explicit semantic and requirement-resolution work. Apply the existing maximum requirement
+  check to the selected class before dispatch.
+- Require caller-supplied ordinary point budget 0 or 1 and ascendancy point budget 0.
+  `CandidateDomain` already checks paid costs, connectivity and locks. Observed allocation
+  counts establish used points, never available points. Preserve rejection of selected
+  special nodes and unsupported mechanics.
+- Replace Warrior-specific realization assumptions with checks against the complete candidate,
+  including native-tree physical/effective node and configured-effect evidence. Keep encounter
+  inputs, untouched source metadata and fresh finalist exports guarded. Extend CLI axes/locks,
+  versioned domain identity and the explicit preflight cardinality bound; the current resolver
+  has two axes and a hard cap of 128 combinations.
+
+There are 31 valid class/ascendancy identity selections and three ordinary-node choices per
+identity (none or either class-local entrance), giving 93 structural combinations before
+weapons/supports. The supplied eight-state weapon/support example would yield 744 combinations.
+Keep preparation bounded and partial-budget reporting accurate. Validate coupled class/item/
+support effects with fresh PoB comparisons, exact locks and one/many-worker tiny exhaustive
+references; do not infer a complete interaction matrix from the previous 100-build parity
+suite (98 distinct cases plus two reimports).
+
+No new numerical formula or product decision blocks this bounded composition slice.
+General attribute/circular equipment requirements, broader modifier extraction and source
+revision migration remain later gates.
 
 ## Pinned package source extraction — 2026-09-07
 
@@ -1138,6 +1166,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | Injectable game-data design (after `2675ffb`) | Recorded the user-directed configuration/model seam, immutable compiled-data injection, instance/prepared identity, strict compatibility and D1–D5 migration gates. Reprioritized this work before broader class/passive search. Documentation only; runtime injection and external package selection remain unimplemented. |
 | 2026-09-07 | `1a44c13` | Implemented current-profile data packages, immutable native injection, external CLI selection and data-bound identities/exports. All 303 workspace tests, 24 native-only CLI tests, lint, formatting, dependency isolation and five portable WASM libraries pass. All 4.5 million fixed-profile benchmark evaluations pass; both hosted Windows/Linux CI jobs pass in run `34173951380`. Source-update generation and data-driven materialization remain next. |
 | 2026-09-07 | `2bd56de` | Added deterministic all-section pinned source extraction, separate policy/evidence, bounded offline supervision and the `extract-game-data` CLI. All 316 local workspace tests, 24 native-only CLI tests, lint, formatting, dependency isolation and portable WASM checks pass. Release regeneration reproduces the reviewed package/evidence and preserves native results; both hosted Windows/Linux CI jobs pass in run `34176865681`. Broader source compatibility and data-driven materialization remain next. |
+| 2026-09-07 | `9388935` | Added schema-2 source-derived requirements, dataset-bound controlled catalog/native search, pre-dispatch legality and actual data/trust export evidence. All 333 workspace tests, 32 native-only CLI tests, lint, formatting, dependency isolation and five portable WASM libraries pass. Release custom-data ranking, serial/Rayon results and fresh export reevaluation agree; both hosted Windows/Linux CI jobs pass in `34179412604`. Next: production class/passive materialization and finite catalog composition. |
 
 ### Hosting decision checkpoint
 
@@ -1156,7 +1185,7 @@ when implementing M1. No Cargo dependencies or runtime code changed at this chec
 
 ## Decisions still deferred
 
-No answer is needed before M1. Choose the project's distribution license before a public
+No product-scope answer blocks the next slice. Choose the project's distribution license before a public
 release; confirm the desktop framework and packaging before GUI work; choose acquisition
 data sources before trade/upgrade ingestion. Benchmark-specific metrics and usage profiles
 must be documented when those fixtures are made runnable, without turning their choices
