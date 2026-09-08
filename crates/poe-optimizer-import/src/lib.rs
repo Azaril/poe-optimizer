@@ -16,6 +16,8 @@ pub mod mace_item;
 mod modifier_syntax;
 pub mod preflight;
 pub mod root_admission;
+pub mod skill_definitions;
+pub mod skill_source;
 pub mod source_xml;
 pub mod xml_compat;
 

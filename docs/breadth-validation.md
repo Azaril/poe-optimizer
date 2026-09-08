@@ -338,3 +338,34 @@ caveats instead of resolving them from similar display names.
 These findings inform the [general build-model proposal](general-build-input-proposal.md),
 which remains a design discussion. Broader modifier, passive, condition/dependency,
 legality and independent held-out-family inventory is still required under B2–B5.
+
+## Constructed identity checkpoint
+
+The [skill source/catalog boundary](skill-source-and-identities.md) preserves all **15 saved
+sets, 200 groups and 541 gem occurrences** through the caller-driven native-only CLI.
+Injected identity lookup reports **537 exact external ID/variant matches**, **one explicit
+effect match**, and **three name-only records left unresolved at this stage**. The complete
+constructed catalog, rather than the earlier static declaration scan, supplies these
+results. Local evidence is `runs/skill-source-identity-corpus/index.json`; the parameterized
+inspection audit is `runs/inspect_skill_corpus.py`.
+
+The portable schema-13 catalog retains 967 gem declarations / 966 constructed gems and
+1,439 effect declarations / 1,436 constructed effects. It records 16 missing-reference
+occurrences (eight effect IDs appear at both declared and constructed stages); that count
+is not a count of unsupported build mechanics. Independent original-source tests verify
+all declarations, constructed rows, exact source spans, loader behavior and corpus lookup
+before socket-group processing. Subsequent name matching, source-generated group changes,
+actor/action resolution and numerical admission remain separate unfinished stages.
+
+The final mixed run `runs/skill-source-breadth-reviewed/index.json` preserves the five
+complete original imports and repeats all **110 reference measurement records exactly**, with
+unchanged selected build/context evidence. Native still reports one Skill on lines 1/3/4
+and one SkillSet on lines 2/5. These first failures are retained; none is counted as newly
+admitted. Comparison evidence is `runs/skill-source-breadth-comparison.json`.
+
+A repeated production-path review found no fixture or skill-name dispatch in inspection:
+the required caller input and selected portable catalog supply every source/identity result.
+The remaining Spark/Mace calculation dispatch is explicitly B3 work. The shared model
+proposal remains under discussion before that migration; B2 still needs modifier, passive,
+condition, actor/grant and dependency coverage, and B4 still needs independent whole-build
+holdouts across the planned mechanic families.

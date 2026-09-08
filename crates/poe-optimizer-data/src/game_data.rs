@@ -12,14 +12,15 @@ pub use crate::item_rules::{
     LocalWeaponStat,
 };
 pub use crate::movement::MovementData;
+pub use crate::skill_identities::*;
 pub use poe_optimizer_core::data::DataIdentity;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 12;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v12";
+pub const SCHEMA_VERSION: u32 = 13;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v13";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -44,6 +45,7 @@ const SECTIONS: &[&str] = &[
     "action_speed",
     "direct_action_timing",
     "configuration",
+    "skill_identities",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -429,6 +431,7 @@ pub struct GameDataPackage {
     pub action_speed: ActionSpeedData,
     pub direct_action_timing: DirectActionTimingData,
     pub configuration: ConfigurationData,
+    pub skill_identities: SkillIdentityData,
 }
 impl GameDataPackage {
     pub fn armour_base(&self, id: &str) -> Option<&ArmourBaseData> {
@@ -506,6 +509,7 @@ pub struct GameDataSnapshot {
     trust: DataTrust,
     package: GameDataPackage,
     configuration: ConfigDefinitionCatalog,
+    skill_identities: SkillIdentityCatalog,
 }
 impl GameDataSnapshot {
     pub fn identity(&self) -> &DataIdentity {
@@ -519,6 +523,9 @@ impl GameDataSnapshot {
     }
     pub fn configuration(&self) -> &ConfigDefinitionCatalog {
         &self.configuration
+    }
+    pub fn skill_identities(&self) -> &SkillIdentityCatalog {
+        &self.skill_identities
     }
     pub fn passive_effects(
         &self,
@@ -575,11 +582,13 @@ impl GameDataLoader {
         };
         identity.validate().map_err(error)?;
         let configuration = ConfigDefinitionCatalog::new(package.configuration.clone())?;
+        let skill_identities = SkillIdentityCatalog::new(package.skill_identities.clone())?;
         Ok(GameDataSnapshot {
             identity,
             trust,
             package,
             configuration,
+            skill_identities,
         })
     }
 }
@@ -674,6 +683,7 @@ fn number(name: &str, value: f64, minimum: f64, maximum: f64) -> Result<()> {
     Ok(())
 }
 fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
+    package.skill_identities.validate()?;
     let m = &package.manifest;
     if m.schema_version != SCHEMA_VERSION {
         return Err(error("unsupported schema_version"));

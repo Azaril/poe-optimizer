@@ -13,7 +13,9 @@ injected through the [data boundary](game-data-boundary.md).
    root/section attributes, child shape, and ordered auxiliary records. Unknown nested
    payloads remain opaque source, not partially interpreted mechanics. Namespaced
    lookalikes cannot acquire the meaning of unnamespaced PoB records.
-2. **Project authored values.** `Config` uses the separate source-preserving configuration
+2. **Project authored values.** `Skills` uses the separate [skill source projection](skill-source-and-identities.md),
+   preserving all saved sets, groups, instances and selectors without resolving them.
+   `Config` uses the separate source-preserving configuration
    model. `Calcs/Input` uses the same typed scalar reader; an invalid scalar remains
    visible with a local diagnostic in a generic root projection. No UI default,
    Placeholder migration, legacy setting migration, or saved selector is applied here.
@@ -36,6 +38,11 @@ containers. It explicitly reports calculation context, native admission, mechani
 legality as unresolved/not checked. The library exposes exact borrowed XML slices;
 JSON omits repeated opaque XML payloads and retains their ranges. Existing output files
 are never overwritten.
+
+Add `--with-definitions` to look up configuration and skill references in the bundled
+portable catalog, or `--data PACKAGE` to select injected definitions. This optional lookup
+loads a data snapshot without native compilation or a reference runtime. Source projection,
+identity recognition and game-mechanic admission remain separate stages.
 
 ## Pinned consumer semantics
 

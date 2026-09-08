@@ -210,7 +210,16 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
-Current package schema **12**, semantics **`poe2-native-profiles-v12`**, adds the complete
+Current package schema **13**, semantics **`poe2-native-profiles-v13`**, adds the complete
+constructed `skill_identities` metadata section: 967 gem declarations / 966 final gems and
+1,439 effect declarations / 1,436 final effects. Original and constructed references remain
+distinct, including 16 missing-reference records. `GameDataSnapshot::skill_identities()`
+exposes immutable identity lookup without native skill compilation. All preceding 22 section
+contents and digests remain unchanged; the package now has 23 sections. Regenerate older
+packages. This section grants identity evidence only, not numerical capabilities. See
+[skill source and identity contracts](skill-source-and-identities.md).
+
+Package schema **12**, semantics **`poe2-native-profiles-v12`**, adds the complete
 ordered `configuration` metadata section. It contains 564 definition occurrences (563 keys),
 17 generated quests, exact typed options/defaults and 540 inert callback descriptors.
 `GameDataSnapshot::configuration()` exposes an immutable indexed catalog without requiring

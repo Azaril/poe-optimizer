@@ -186,7 +186,7 @@ impl<'input> RootProjection<'input> {
         &self.sections
     }
 }
-fn element<'input>(
+pub(crate) fn element<'input>(
     node: Node<'_, 'input>,
     budget: &mut usize,
 ) -> Result<SourceElement<'input>, SourceXmlError> {

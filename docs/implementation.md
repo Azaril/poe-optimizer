@@ -2,7 +2,15 @@
 
 Last updated: 2026-09-08
 
-Current checkpoint: **source build containers and shared MAIN admission**, implemented;
+Current checkpoint: **skill source projection and injected identity catalogs**, implemented;
+local validation is complete and publication is pending. The source/catalog CLI
+preserves all saved skill occurrences and uses selected data for exact, fallback, ambiguous
+or unresolved identity evidence. Independent original-source comparisons pass for all
+constructed identities and all five supplied builds. No additional build is claimed as
+native-supported. See the current checkpoint below and the
+[skill source contract](skill-source-and-identities.md).
+
+The preceding checkpoint, **source build containers and shared MAIN admission**, implemented;
 locally validated and published as `b109b941dd7d6f7f928b69e27d7e651ffd507415` on main.
 [Windows/Linux CI run 34253146642](https://github.com/Azaril/poe-optimizer/actions/runs/34253146642)
 is in progress; no hosted pass is claimed. Arbitrary caller inputs can be inspected
@@ -125,7 +133,11 @@ the design documents.
    now preserve and narrowly admit inert Import/Party/Calcs/TreeView metadata. All five
    originals next encounter the one-Skill/one-SkillSet profile limits. Complete the B2
    instance/grant/actor/dependency inventory (the skill/source portion is recorded below)
-   and review [the concrete general model proposal](general-build-input-proposal.md) before
+   and the [skill source/catalog boundary](skill-source-and-identities.md). Its source and
+   identity portion now preserves all 15 saved sets, 200 groups and 541 occurrences, with
+   independent original-source construction and lookup tests. Effective name/socket-group,
+   grant, actor and selected-action resolution remain open. Review
+   [the concrete general model proposal](general-build-input-proposal.md) before
    changing that architecture; do not delete saved sets or supporting skills.
    Then replace closed profiles with reusable complete native pipelines as coverage permits:
    item/gem/passive modifiers, resolved actors/conditions and resources, offence/defence,
@@ -160,6 +172,69 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Skill source projection and identity catalogs — validation checkpoint
+
+This checkpoint continues from published root-container code `b109b94` and resume update
+`2c19854`. Their exact-code CI remained in progress at the last read
+(`runs/skill-source-prior-ci-final.json`). The full implementation/parity goal is active
+and incomplete.
+
+The B3 actor/action/candidate migration proposal has been presented for user discussion.
+The delivered independent work preserves authored skill inputs and constructs an injected
+identity catalog; it does not implement that broader architecture or widen numerical
+admission. Delivered scope:
+
+- Bounded, source-preserving Skills/SkillSet/Skill/Gem and nested selection projection,
+  retaining ordered duplicates, unknown fragments, all saved sets and exact attribute bytes.
+  Source-consumer roles are separate from syntactic names and effective/default state.
+- Complete authenticated gem/skill identity construction from the pinned original source,
+  with ordered declarations separate from constructed winners, generated additional effects,
+  stat-set references and ambiguous lookup provenance. The schema-13 identity-only
+  section preserves all 22 existing package sections exactly.
+- Independent original SkillsTab Load/Save/set and Data.lua identity oracles. Pre-processing
+  observations are labelled separately from ProcessSocketGroup/effective interpretation.
+- Caller-driven `inspect-build --with-definitions` / `--data` integration over portable
+  snapshots, without native compilation, PoB runtime, fixture fallback or effect admission.
+
+Gem external game IDs, variants, internal keys and granted-effect IDs are distinct. An
+explicit unknown gemId must not fall through to skillId; source `pairs` fallback cannot
+become an invented portable sorted choice. Primary/additional global-effect flags are not
+weapon-set numbers. Legacy selector attributes may be reset before nested maps load.
+The source projection retains these facts without reproducing lossy overwrite/migration
+as if it were authored input. The corrected identity artifact is 6,034,967 bytes, SHA-256
+`91d72da5882d40c822044763e19e9894e26027bb8d97766b4d65b27e8e586acb`.
+Its source spans reconstruct from advertised inclusive lines; an independent oracle caught
+and prompted repair of the initial trailing-blank-line mismatch. All 22 old section raw
+JSON values and digests, and the separate tree bytes, remain unchanged.
+
+| Check | Final local evidence |
+| --- | --- |
+| Source projection and adapter | 13 source tests and 9 independently authored lookup tests pass. All saved sets, unknown/duplicate/legacy records, exact source values, precedence, ambiguity and report expansion limits are covered. |
+| Portable data/import/native | **330 tests pass**, including 85 data tests, 176 import tests and 69 native tests. Unchanged independent Spark/Mace goldens and allocation-free prepared calculations still pass. Log: `runs/skill-source-portable-tests.log`. |
+| Original-source comparisons | **9 tests pass**, cold/warm, covering all declarations/constructed identities and exact corpus LoadSkill/ProcessSocketGroup observations. Five focused extractor tests cover real construction, source spans, declaration scanner restrictions and metadata type coercion rejection. |
+| CLI and extraction | **14 feature-enabled CLI tests pass**, including two fresh-process extraction runs and native loading of their output. The three extraction CLI tests pass again after final extractor hardening. **107 native-only CLI tests pass**. |
+| Catalog reproduction | Two final fresh extractions reproduce all five artifacts exactly. Extractor SHA-256 `1407957e20ce437b64ef203a99a1f3fda63c582265db9a4e17d8e5f49605fee8`; 44 authenticated extraction files, including 17 identity-construction files. |
+| Breadth | All five source/identity inspections pass: **537 exact external matches, one explicit effect and three name-only records left unresolved before processing**. All 110 fresh reference measurement records, build/context evidence and original XMLs exactly repeat the prior corpus. Native still rejects one-Skill/one-SkillSet layouts. |
+| Integration gates | Workspace and native-only strict Clippy, formatting, five portable WASM libraries and the no-PoB/no-Lua native normal dependency graph pass. UTF-8 and modified-document links pass. This is **358 affected workspace-target tests**, plus the separate 107 native-only tests; no new full-workspace test run is claimed. |
+| Preservation | All 22 old section raw JSON values/digests, 47 checked tracked files, six independent reference JSON goldens, both user input files and tree/source inventories are preserved. The pinned submodule remains clean. |
+| Publication | Local validation complete; publication/hosted status will be recorded after push. |
+
+Consolidated evidence: `runs/skill-source-validation-summary.json`,
+`runs/skill-catalog-preservation.json`, `runs/skill-source-identity-corpus/index.json`,
+`runs/skill-source-breadth-reviewed/index.json` and `runs/skill-source-breadth-comparison.json`.
+Final logs use `runs/skill-source-*` and `runs/skill-catalog-*`. The earlier
+`runs/skill-source-breadth-final` exploratory run used the preceding native executable;
+`breadth-reviewed` is the final rebuilt-binary evidence above. Repeated checks are not
+added to the affected-test count.
+
+Next resume point: review the already-presented B3 actor/action/candidate proposal before
+migrating closed native profiles. The effective resolver must own saved-set overwrite and
+fallback rules, ProcessSocketGroup name/level/requirement processing, independent MAIN/CALCS
+stat/minion selectors, grants and actor/effect ownership. While that discussion is pending,
+B2 modifier/passive/condition/dependency inventory and B4 held-out-family planning remain
+independent useful work. Do not remove saved sets/supporting skills or route unsupported
+builds through hidden PoB fallback. This slice does not claim any new numerical capability.
 
 ## Source build containers — validation checkpoint
 
@@ -655,7 +730,7 @@ its game effects. The complete injected catalog and data-bound inspection are de
   whole-build family, including exclusion counts; do not count a shared archetype or an
   alternate saved set as an independent held-out build. Investigate the existing three
   unresolved entries in line 1 against the pinned reference before inventing replacements.
-  The configuration catalog, root-container and three-label audits are now recorded in
+  The configuration catalog, root-container, complete skill identity and three-label audits are now recorded in
   [breadth validation](breadth-validation.md); the rest of this inventory remains open.
 - [ ] **B3 — general build-input seam review.** Audit hard-coded fixture inputs, closed
   Spark/Mace admission, skill IDs, level restrictions and implicit player-only assumptions.

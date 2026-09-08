@@ -3,6 +3,7 @@ mod configuration_extract;
 pub mod game_data;
 pub mod game_data_worker;
 pub mod mutation;
+mod skill_identity_extract;
 pub mod tree_data;
 pub mod tree_projection;
 pub mod tree_worker;

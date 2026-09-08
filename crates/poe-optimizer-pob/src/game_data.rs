@@ -54,6 +54,13 @@ const READ_PATHS: &[&str] = &[
     "src/Classes/Item.lua",
     "src/Classes/SkillsTab.lua",
     "src/Data/SkillStatMap.lua",
+    "src/Data/Assets.lua",
+    "src/Data/Skills/SkillAssets.lua",
+    "src/Data/Skills/act_str.lua",
+    "src/Data/Skills/act_dex.lua",
+    "src/Data/Skills/minion.lua",
+    "src/Data/Skills/spectre.lua",
+    "src/Data/Skills/sup_int.lua",
 ];
 const PROVENANCE_PATHS: &[&str] = &[
     "src/Modules/ModParser.lua",
@@ -122,7 +129,8 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v12",
+        "poe-game-data-extractor-v13",
+        include_str!("skill_identity_extract.rs"),
         include_str!("configuration_extract.rs"),
         include_str!("game_data.rs"),
         CONVERSION,
@@ -377,6 +385,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         action_speed: extractor.record(&records, "action_speed")?,
         direct_action_timing: extractor.record(&records, "direct_action_timing")?,
         configuration: crate::configuration_extract::extract(&extractor.sources)?,
+        skill_identities: crate::skill_identity_extract::extract(&extractor.sources)?,
     };
     package.refresh_section_digests().map_err(error)?;
     let evidence = GameDataExtractionEvidence {

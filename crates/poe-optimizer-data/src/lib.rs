@@ -10,6 +10,7 @@ mod item_formatting;
 mod item_rules;
 mod movement;
 pub mod passive_allocation;
+pub mod skill_identities;
 pub mod tree_data;
 pub mod tree_projection;
 use sha2::{Digest, Sha256};
@@ -22,6 +23,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("action_speed.rs"),
         include_str!("class_tree.rs"),
         include_str!("configuration.rs"),
+        include_str!("skill_identities.rs"),
         include_str!("tree_data.rs"),
         include_str!("tree_projection.rs"),
         include_str!("bundled.rs"),

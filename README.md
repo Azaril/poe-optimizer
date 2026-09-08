@@ -155,6 +155,12 @@ Definition recognition does not evaluate effects. Omitting both options gives so
 reports source data separately from unimplemented mechanics.
 Single-build commands accept one build document or share string.
 
+`inspect-build INPUT` also preserves all authored skill sets, groups, gems and selectors.
+Add `--with-definitions` or `--data PACKAGE` for source-bound skill/configuration identity
+lookup. Ambiguous identities and unprocessed names remain explicit. See
+[skill inspection](docs/skill-source-and-identities.md); this works with the native-only CLI
+and does not claim numerical support for recognized skills.
+
 Output files must be new paths; existing files are never overwritten. Without `--output`,
 evaluation JSON goes to stdout. `--pob` selects a source directory matching the committed
 source manifest. The evaluator validates its source directly and does not run Git at runtime.
