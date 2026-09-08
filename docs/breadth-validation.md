@@ -229,15 +229,28 @@ The index retains saved skill/item/tree/config set identity, independent backend
 exact raw reports and exported XML. It never fills a failed entry with a fixture.
 
 Optional `--inspect-build` calls the explicitly selected import CLI to retain source sections,
-configuration and every authored skill occurrence before independent backend evaluations.
+configuration, every authored skill occurrence and independent item-source evidence before
+backend evaluations. Build report schema 2 preserves raw item fragments, XML-consumed
+string/ModRange order, all saved equipment sets and passive-spec jewel ownership; see
+[item source and loading](item-source-and-loading.md).
 Add `--with-definitions` for bundled identity lookup or `--data PACKAGE` for the selected
 snapshot; `--data` also enables lookup. Source inspection without either flag loads no data.
 `--inspect-configuration` remains available for a separate configuration-only report.
 
-Manifest schema 3 records which inspections were requested, raw report hashes, exact commands
+Manifest schema 4 records which inspections were requested, raw report hashes, exact commands
 and validated occurrence/identity counts. It checks source ranges, container/set/group
-ownership, duplicate or omitted lookup records, selected data identity and explicit
-non-evaluation labels. Local projection failures remain in the full raw reports. The ordinary
+ownership, ordered item fragments and consumed instructions, distinct passive-spec jewel
+owners, duplicate or omitted lookup records, selected data identity and explicit
+non-evaluation labels. Inventory IDs, set IDs and selected-item references remain authored
+values, not resolved equipment. RuneSlot and SocketIdURL evidence is distinct from a
+Tree/Spec/Sockets/Socket jewel assignment.
+
+The runner accepts build inspection report schemas 1 and 2. Schema 1 records item source as
+`not_reported_by_inspector`; absent evidence does not mean no items. Schema 2 requires the
+item outcome and labels item loading as not run, equipment resolution as unresolved and
+passive allocation as unchecked. Local projection failures remain in the full raw reports
+once the document-wide XML/lexical gate has passed; a global failure can prevent the entire
+inspection report. No Item.ParseRaw or range application is performed. The ordinary
 XML summary labels its attributes as standard-XML-normalized; use the source projection for
 PoB values. Inspector failures remain separate from numerical backend outcomes; changed
 decoded XML stops subsequent inspection and evaluation. These are report-consistency checks,
@@ -309,8 +322,10 @@ actor/action/build representation; accepting any XML path alone cannot establish
 [Source build containers](build-source-containers.md) preserve all ten root sections in
 each original import, including 51/51/51/52/51 Calcs records. A separate conservative MAIN
 gate accepts the proven-inert metadata shapes without dropping or rewriting them. It is
-shared by native evaluation and both controlled-template paths. `inspect-build` takes any
-caller XML/share code and needs no PoB runtime or game-data package.
+shared by native evaluation and both controlled-template paths. `inspect-build` requires
+caller XML/share-code input and needs no PoB runtime or game-data package. Source projection
+retains unknown content within the shared bounded XML/lexical subset; it is not a promise
+to recover every valid standard-XML document.
 
 The fresh run `runs/root-container-breadth-final/index.json` retains all five exact imports,
 configuration projections and successful reference calculations. Native's next first
@@ -377,12 +392,37 @@ the required caller input and selected portable catalog supply every source/iden
 The remaining Spark/Mace calculation dispatch is explicitly B3 work. The shared model
 proposal remains under discussion before that migration. The subsequent
 [mechanism inventory](breadth-mechanism-inventory.md) covers all 116 authored items, 16
-passive specs and fresh MAIN actor/grant/dependency state. B2 still needs the complete native
-capability matrix for those records, and B4 still needs independent whole-build holdouts
-across the planned mechanic families.
+passive specs and fresh MAIN actor/grant/dependency state. The read-only native capability
+matrix in `runs/item-source-capability-matrix.json` separates represented query shapes from
+source production and complete actor/action admission; it does not turn retained reference
+modifiers into native coverage. B4 still needs independent whole-build holdouts across the
+planned mechanic families.
 
 The schema-3 runner checkpoint at `runs/breadth-mechanisms-corpus/index.json` successfully
 inspects all five originals and repeats all 110 reference measurements with unchanged
 build/context evidence. Fifteen runner tests cover transport, source preservation, nested
 selectors, data provenance and independent failures. The mixed run exits 1 because all five
 native exclusions remain. See the living plan for current publication evidence.
+
+
+## Item-source inspection checkpoint
+
+`inspect-build` report schema 2 adds portable authored item evidence without expanding
+native calculation admission. It retains inventory occurrences, duplicate/missing IDs,
+unknown records and attributes, inactive saved sets and raw selector values. Exact text,
+comments and CDATA fragments remain distinct from the ordered strings and child records
+consumed by the pinned XML reader. A ModRange instruction remains at its original position
+between those strings; no item parse/reset or range application is inferred from the report.
+
+Saved ItemSet/Slot ownership is separate from Tree/Spec/Sockets/Socket jewel assignments,
+including legacy root Specs. Character RuneSlot and SocketIdURL metadata are not promoted
+to passive-jewel assignments. Source ranges and hashes bind these records to the complete
+unchanged caller document. Item parsing, equipment resolution, item-derived grants,
+allocation-provider effects and numerical support remain separate unfinished stages.
+
+The schema-4 runner validates item evidence alongside source skills/configuration and
+independent backend outcomes. Its consistency checks reject omitted/reordered consumed
+records, lost fragment references, reassigned jewel owners and false admission labels.
+Older build-report schema 1 remains readable with explicit unavailable item evidence.
+See [item source and ordered loading](item-source-and-loading.md) for the source-consumer
+contract and the [living plan](implementation.md) for current validation and CI status.

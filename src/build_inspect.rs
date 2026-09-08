@@ -37,9 +37,16 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         Ok(skills) => serde_json::json!({"status": "source_projected", "projection": skills}),
         Err(error) => serde_json::json!({"status": "not_projected", "error": error}),
     };
+    // Authored item loading instructions and jewel references remain independent
+    // from equipment resolution, item parsing and passive-allocation admission.
+    let item_projection = poe_optimizer_import::item_source::project_xml(&imported.xml);
+    let items = match &item_projection {
+        Ok(items) => serde_json::json!({"status": "source_projected", "projection": items}),
+        Err(error) => serde_json::json!({"status": "not_projected", "error": error}),
+    };
     let mut report = serde_json::json!({
-        "schema_version": 1,
-        "scope": "build_source_projection_v1",
+        "schema_version": 2,
+        "scope": "build_source_projection_v2",
         "status": "source_projected",
         "input": {
             "format": imported.format,
@@ -51,7 +58,11 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         "build": projection,
         "configuration": configuration,
         "skills": skills,
+        "items": items,
         "verification": {
+            "item_loading": "not_run",
+            "equipment_resolution": "not_resolved",
+            "passive_allocation": "not_checked",
             "calculation_context": "not_resolved",
             "effective_configuration": "not_evaluated",
             "game_mechanics": "not_evaluated",
@@ -63,6 +74,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             include_str!("build_inspect.rs"),
             include_str!("../crates/poe-optimizer-import/src/build_source.rs"),
             include_str!("../crates/poe-optimizer-import/src/skill_source.rs"),
+            include_str!("../crates/poe-optimizer-import/src/item_source.rs"),
             include_str!("../crates/poe-optimizer-import/src/skill_definitions.rs"),
             include_str!("../crates/poe-optimizer-import/src/configuration.rs"),
             include_str!("../crates/poe-optimizer-import/src/configuration_definitions.rs"),

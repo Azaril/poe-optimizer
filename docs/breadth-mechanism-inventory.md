@@ -122,6 +122,31 @@ consumers. Their descriptions must not be treated as implemented effects merely 
 they appear on a valid allocated node. Preserve source/reference limitations
 separately from mechanics the Rust evaluator has not implemented.
 
+## Observed native dependency capabilities
+
+A source-audited comparison of the five fresh MAIN captures retains **3,469 per-build
+unique records**, **2,162 cross-build unique records** and **53,824 owner/layer uses**.
+It preserves 179 exact tag values and 363 ordered operation/value/flags/tag/producer
+signatures. Conditional and repeated parent-store records remain in the inventory.
+
+Of those 2,162 top-level records, 1,559 have a representable primitive numeric shape
+when supplied with complete explicit context; 603 do not. This is not a coverage
+percentage: representing a Damage INC row does not construct its buff, recipient actor,
+dependency context or consuming action. No additional native build is admitted.
+
+The remaining shared requirements are complete conditional FLAG/GetCondition behavior
+(including Lua truthiness for numeric zero), parent/enemy-targeted stat dependencies,
+named per-slot intermediates, action predicates, provider-owned transfers and reviewed
+data operations for opaque source functions. PerStat and Multiplier have different
+missing-actor fallbacks and cannot share an assumed default. Actor query primitives,
+source producers and complete native pipelines must retain separate support statuses.
+
+The reproducible local evidence is `runs/item-source-capability-matrix.json` and
+`runs/item-source-capability-report.md`, produced by `runs/item-source-capability-audit.py`
+from the pinned captures and data. This static comparison does not execute source
+functions, prove every inactive selection, or establish dependency cycles or trigger
+sustainability. Its technical ordering informs the pending general-model discussion.
+
 ## Shared delivery priorities
 
 1. Preserve and interpret ordered item text/range instructions, inventory identities and
@@ -138,8 +163,10 @@ separately from mechanics the Rust evaluator has not implemented.
 
 The [B3 model proposal](general-build-input-proposal.md) remains under discussion before its
 architecture migration. Item/source parsing and data inventory can proceed independently.
-B2 still needs a complete native capability matrix for the retained modifier/dependency
-records. B4 still needs held-out whole builds across missing mechanic families. Upstream
+The static capability audit now classifies the observed modifier records against native
+query primitives and source producers separately. B2 still needs complete dependency
+closure and inactive-selection coverage; a representable primitive is not a supported
+producer or a supported build. B4 still needs held-out whole builds across missing mechanic families. Upstream
 system tests supply useful independent synthetic regressions, including ailments, triggers,
 reservation and minions; they do not substitute for those whole-build holdouts.
 
@@ -152,7 +179,8 @@ python scripts/intake-build-corpus.py --input example.import.txt --output runs/n
 python scripts/test_intake_build_corpus.py
 ```
 
-Manifest schema 3 records source/identity inspection separately from numerical outcomes.
+Manifest schema 4 records source, identity and ordered item inspection separately from
+numerical outcomes. See the [item source contract](item-source-and-loading.md).
 All source occurrences and lookup records must retain their source ownership and selected
 data identity. Inspection failures remain visible; altered XML is never passed on as the
 original build. Local `runs/breadth-mechanisms-corpus` repeats all 110 prior reference

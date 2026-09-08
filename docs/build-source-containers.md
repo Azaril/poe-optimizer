@@ -1,9 +1,9 @@
 # Source build containers and calculation admission
 
-The source model must represent arbitrary caller imports before choosing a native
-calculation pipeline. It preserves authored bytes, section order, duplicate/unknown
-sections and saved display settings. A structural projection does not establish build
-legality, resolve an actor/action, or evaluate any mechanic. Game definitions remain
+The source model represents caller imports before choosing a native calculation pipeline,
+within a bounded source-compatible XML subset. It preserves authored bytes, section order,
+duplicate/unknown sections and saved display settings. A structural projection does not
+establish build legality, resolve an actor/action, or evaluate any mechanic. Game definitions remain
 injected through the [data boundary](game-data-boundary.md).
 
 ## Three distinct stages
@@ -15,10 +15,13 @@ injected through the [data boundary](game-data-boundary.md).
    lookalikes cannot acquire the meaning of unnamespaced PoB records.
 2. **Project authored values.** `Skills` uses the separate [skill source projection](skill-source-and-identities.md),
    preserving all saved sets, groups, instances and selectors without resolving them.
-   `Config` uses the separate source-preserving configuration
-   model. `Calcs/Input` uses the same typed scalar reader; an invalid scalar remains
-   visible with a local diagnostic in a generic root projection. No UI default,
-   Placeholder migration, legacy setting migration, or saved selector is applied here.
+   `Config` uses the separate source-preserving configuration model. The
+   [item projection](item-source-and-loading.md) preserves inventory, saved equipment sets,
+   ordered raw fragments and XML-consumed item/range instructions, plus jewel references
+   under their owning passive specs. `Calcs/Input` uses the same typed scalar reader;
+   an invalid scalar remains visible with a local diagnostic in a generic root projection.
+   No UI default, Placeholder migration, legacy setting migration, saved selector,
+   `Item.ParseRaw` call or ModRange application runs here.
 3. **Admit an explicit calculation context.** A calculation consumer validates the
    supported fields and effects. MAIN admission is separate from the CALCS display
    context. The shared private admission result is constructed from an actual document;
@@ -32,17 +35,26 @@ build statistics can supply a hidden default. For source-only inspection:
 cargo run --no-default-features --locked -- inspect-build path/to/caller-build.xml --output runs/new-build-inspection.json
 ```
 
-The command needs neither PoB nor a game-data package. Its report binds source ranges to
-exact input/XML hashes and separates configuration projection errors from other preserved
-containers. It explicitly reports calculation context, native admission, mechanics and
-legality as unresolved/not checked. The library exposes exact borrowed XML slices;
-JSON omits repeated opaque XML payloads and retains their ranges. Existing output files
-are never overwritten.
+The command needs neither PoB nor a game-data package. Report schema 2
+(`build_source_projection_v2`) binds source ranges to exact input/XML hashes and includes
+independent `configuration`, `skills` and `items` outcomes. After the shared document gate
+passes, one projection's local error does not erase the other preserved sections. Global
+XML/lexical or root-projection failures prevent a report; this is not an unrestricted XML
+recovery parser.
+
+The report labels item loading `not_run`, equipment resolution `not_resolved` and passive
+allocation `not_checked`, alongside the existing non-evaluation labels. The library exposes
+exact borrowed XML slices. Generic element JSON uses ranges for opaque payloads; item JSON
+also includes authored text fragments and separate XML-consumed strings with occurrence
+references. Existing output files are never overwritten.
 
 Add `--with-definitions` to look up configuration and skill references in the bundled
 portable catalog, or `--data PACKAGE` to select injected definitions. This optional lookup
 loads a data snapshot without native compilation or a reference runtime. Source projection,
-identity recognition and game-mechanic admission remain separate stages.
+identity recognition and game-mechanic admission remain separate stages. Item definition
+resolution is not part of this optional lookup. The corpus runner writes schema 4 and also
+accepts older schema-1 build inspection reports, marking their item evidence
+`not_reported_by_inspector` rather than treating missing evidence as empty equipment.
 
 ## Pinned consumer semantics
 
@@ -75,15 +87,26 @@ source preservation cannot establish intended-versus-realized identity by itself
 Projection enforces the shared 8 MiB XML / 100,000-node limits, at most 128 root sections,
 4,096 auxiliary records, 128 attributes per projected element, 1,024-byte names,
 64 KiB attribute values and a 2 MiB aggregate projected attribute/name budget. Unknown
-opaque descendants remain subject to global limits. The PoB lexical subset rejects
-forms the pinned reader would silently reinterpret. Native attribute whitespace remains
-strict except for separately proven configuration Input string ranges.
+opaque descendants remain subject to global limits. The document-wide lexical gate rejects
+forms the pinned reader would silently reinterpret, including numeric entities in decoded
+text/attributes and unsupported attribute spelling. Ordered source projection can preserve
+mixed ordinary text, comments, CDATA and child elements; ambiguous comment/CDATA shapes
+still fail. These checks apply even inside otherwise unknown or opaque sections.
+
+Item projection additionally bounds 32,768 nodes, depth 32, 65,536 attributes, 131,072
+fragments, aggregate text and diagnostics. A local item-projection bound can be reported
+without discarding a successfully projected root, configuration or skills. Source projection
+is broader than calculation admission: evaluator compatibility checks still reject mixed
+text forms it cannot consume safely, and native attribute whitespace remains strict except
+for separately proven configuration Input string ranges.
 
 Independent tests execute original XML and container Load/Save methods, MAIN/CALCS
 selection blocks, legacy migration, and actual Party numeric/flag parsing. Full-build
 reference tests transplant only auxiliary sections into supported complete builds and
 compare against fresh PoB calculations and unchanged baselines. These derived cases
 must never replace the original broad corpus or claim support for its gameplay mechanics.
+Item tests separately compare original XML consumption and ordered source loading, retaining
+any instrumented ParseRaw boundary as such; those observations are not numerical item parity.
 Exact candidate materialization/finalist guards remain required through this boundary.
 See the [living checkpoint](implementation.md#source-build-containers--validation-checkpoint)
 for delivered scope and evidence, and [breadth validation](breadth-validation.md) for

@@ -1,9 +1,9 @@
 # Authored skills and injected identities
 
 Skill inputs must be represented independently of the skills the native evaluator currently
-supports. The import layer preserves the caller's skill groups, saved sets, gems and nested
-selectors. A separately injected catalog provides identity evidence. Neither stage chooses
-an actor/action or grants numerical mechanic support.
+supports. Within the shared bounded XML/lexical subset, the import layer preserves the caller's
+skill groups, saved sets, gems and nested selectors. A separately injected catalog provides
+identity evidence. Neither stage chooses an actor/action or grants numerical mechanic support.
 
 The [general build-input proposal](general-build-input-proposal.md) describes the broader
 resolution and calculation architecture under discussion. This source/catalog boundary is
@@ -34,7 +34,10 @@ the original loader subsequently resets their maps before consuming nested selec
 The shared 8 MiB XML / 100,000-node limits apply. Skill projection additionally bounds
 containers, sets, groups, gem occurrences, projected nodes, depth, attributes, diagnostics
 and aggregate projected strings. Limits reject before an unbounded report can be built;
-they are input-resource limits, not gameplay legality rules.
+they are input-resource limits, not gameplay legality rules. The whole document first passes
+the shared lexical gate, including opaque sections. Unsupported entities/attribute spelling
+or ambiguous comment/CDATA forms can therefore prevent all projection; per-section error
+isolation applies only after that gate succeeds.
 
 ## Identity catalog
 
@@ -94,8 +97,15 @@ Omitting both definition options performs source-only inspection without a game-
 package. `--with-definitions` uses the bundled snapshot; `--data` selects a supplied package
 and enables lookup. Reports include actual source/data identities and explicitly mark
 native admission, legality, actor resolution and calculations as not checked or not run.
-A malformed configuration projection does not erase preserved skills. Existing output
-paths are never overwritten. No production fixture or hard-coded skill supplies the input.
+Report schema 2 contains independent configuration, skill and
+[item-source projections](item-source-and-loading.md). A local configuration or item
+projection error does not erase preserved skills after the global document gate succeeds.
+Item text/range instructions, saved equipment sets and passive-spec jewel references remain
+source evidence; no Item.ParseRaw, equipment selection, item-grant assembly or allocation
+check runs. Optional definition lookup still covers skills/configuration only. The corpus
+runner writes schema 4, retaining older schema-1 inspection reports with item evidence
+explicitly unavailable. Existing output paths are never overwritten. No production fixture
+or hard-coded skill supplies the input.
 
 ## Validation contract
 

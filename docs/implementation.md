@@ -2,14 +2,20 @@
 
 Last updated: 2026-09-08
 
-Current checkpoint: **breadth mechanism inventory and reusable corpus inspection**, locally
-validated and published as `ee5f589ff27a3ecaa6d37aa7007bb10b45f5983d` on main.
+Current checkpoint: **ordered item source projection and dependency capability audit**,
+implemented and locally validated; final publication is pending. Caller-driven source inspection now
+preserves ordered item text/range instructions, saved equipment sets and passive-spec jewel
+ownership independently of numerical admission. The full native replacement is unfinished.
+See the [item source contract](item-source-and-loading.md) and current checkpoint below.
+
+The preceding breadth checkpoint is published as `ee5f589` with resume update `ecaf0c8`.
 [Exact-code CI run 34262898483](https://github.com/Azaril/poe-optimizer/actions/runs/34262898483)
-is in progress on Linux and Windows; no hosted pass is claimed. All five
-caller builds retain their complete authored inputs and repeat the reference measurements.
-The inventory identifies shared item, allocation-provider, actor and condition dependencies;
-no additional complete build is admitted by native evaluation. See the
-[mechanism inventory](breadth-mechanism-inventory.md) and current checkpoint below.
+failed on Linux and Windows. Public annotations were truncated before the failing assertion;
+15 targeted local diagnostic tests pass. Diagnostic commit `88654d1` is pushed to main and
+splits annotations into small chunks, newest first. Its
+[diagnostic CI run 34266873370](https://github.com/Azaril/poe-optimizer/actions/runs/34266873370)
+is in progress. This repairs log visibility, not the
+unknown hosted failure. No hosted pass is claimed for the current changes.
 
 The preceding **skill source projection and injected identity catalogs** checkpoint is
 published as `19666a0ad754ac5514553a71138a568729022d2e` on main, with resume update `7318300`.
@@ -24,7 +30,7 @@ No additional build is claimed as native-supported. See the
 The preceding checkpoint, **source build containers and shared MAIN admission**, implemented;
 locally validated and published as `b109b941dd7d6f7f928b69e27d7e651ffd507415` on main.
 [Windows/Linux CI run 34253146642](https://github.com/Azaril/poe-optimizer/actions/runs/34253146642)
-is in progress; no hosted pass is claimed. Arbitrary caller inputs can be inspected
+passed on Windows and Linux. Arbitrary caller inputs can be inspected
 without a data package or PoB runtime. Proven-inert Import/Party/Calcs/TreeView shapes now
 pass a shared native gate while unknown/effectful content remains rejected. The five
 original builds advance to the existing one-Skill/one-SkillSet limits; this is structural
@@ -37,7 +43,7 @@ original builds retain exact source values; definition recognition does not gran
 support. Numeric section content and the pinned tree remain unchanged. Code is published as
 `87bf0056209653d9b46d922477e9cfe920aeb6b4` on `origin/main`. Exact-code
 [Windows/Linux CI run 34249708752](https://github.com/Azaril/poe-optimizer/actions/runs/34249708752)
-is in progress; no hosted pass is claimed. Full native replacement remains unfinished.
+passed on Windows and Linux. Full native replacement remains unfinished.
 
 The preceding checkpoint, **breadth configuration source projection**, is implemented and
 locally validated. The shared reader, original-PoB parser comparisons, injected-definition inventory
@@ -47,13 +53,13 @@ broader build layout. Preserving unknown configuration does not admit its game e
 broad skill/actor/build support remains pending. Code is published as
 `0da5c5c288442f1ac11cc5ffea0c948813dc6d9e` on `origin/main`. Exact-code
 [Windows/Linux CI run 34243706906](https://github.com/Azaril/poe-optimizer/actions/runs/34243706906)
-is in progress; neither hosted outcome is claimed as passed.
+passed on Windows and Linux.
 
 The preceding **shared ActionSpeed and ordinary direct-action timing** checkpoint is implemented.
 Data/extraction, shared Rust calculations, import/native adapters, CLI integration and
 complete-build parity, complete target validation and isolated release measurements pass.
 Published code: `caa56f4374da864acfb99cc19060ed356bd35105`. Its Windows/Linux CI run
-`34238329480` is in progress; broad native build support remains unfinished.
+`34238329480` passed on Windows and Linux; broad native build support remains unfinished.
 
 The completed **Body Armour and shared movement** checkpoint is published as
 `56dcbc500ebdf3f2011663462c4c0a0a794aaabe`. Its local validation and release measurements
@@ -185,6 +191,55 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Ordered item-source projection - validation checkpoint
+
+The preceding checkpoint `ee5f589` and resume update `ecaf0c8` are published. This turn
+began with a clean worktree and retains the original inputs, pinned source, package and
+goldens. The full native-parity goal remains active and incomplete. The B3 actor/action
+architecture proposal remains pending; this checkpoint implements an independent input
+component without starting that migration.
+
+The portable item projection preserves every authored Item, saved equipment set, slot,
+ModRange and Tree/legacy-Spec jewel occurrence with exact source ownership. It retains
+raw text/comment/CDATA/processing-instruction fragments separately from the ordered
+records consumed by the original XML reader. A later ParseRaw may replace earlier range
+state, so the input cannot be flattened to one item string with ranges applied afterward.
+Item loading, definition resolution, equipment selection and game effects remain later
+stages; base/modifier/slot rules will come from injected data.
+
+`inspect-build` report schema 2 exposes item source evidence independently of configuration
+and skills. Item loading is `not_run`, equipment resolution is `not_resolved`, and passive
+allocation is `not_checked`. The source-only lexical gate accepts the modeled mixed-text
+cases; strict native/reference admission is unchanged. Corpus manifest schema 4 preserves
+schema-1 reports as lacking item evidence, rather than treating absent fields as empty
+inventories. It validates ordered records and source ownership against the caller XML.
+
+The B2 static capability audit retains 3,469 per-build / 2,162 cross-build unique modifier
+records and 53,824 owner/layer uses. It distinguishes query primitives from producers and
+complete native pipelines. The 1,559 representable primitive numeric records are not a
+support percentage; complete conditions, targeted stats, named intermediates, provider
+transfers and dependency closure remain open. See the
+[capability findings](breadth-mechanism-inventory.md#observed-native-dependency-capabilities).
+
+| Gate | Current evidence |
+| --- | --- |
+| Portable import | **187 tests pass**, including 11 initial item-source cases. The final focused item suite passes **12 tests**, including an additional namespace-parser rejection regression; no new full-import suite run is claimed. `runs/item-source-import-focused-final.log`. Strict import Clippy passes. `runs/item-source-import-tests.log`. |
+| Original-source comparison | **9 tests pass** against the original XML reader and ItemsTab/PassiveSpec load methods, across all five builds and synthetic ordering cases. ParseRaw/GUI boundaries are explicitly instrumented; no numerical item parity is implied. Interpreted/JIT-enabled modes are not claimed to be warmed traces. `runs/item-source-oracle-tests.log`. |
+| CLI | **111 native-only CLI tests pass**, including all existing bounded native behavior; **15 feature-enabled inspection tests pass**. `runs/item-source-native-only-tests.log`, `runs/item-source-cli-tests.log`. |
+| Runner/corpus | Fresh schema-4 inspection passes for all five original builds: **116 items / 15 item sets / 486 ModRange records / 16 passive specs / 21 jewel assignments**, plus all **15 skill sets / 200 groups / 541 gems**. All **110** reference measurements and build/context/coverage evidence repeat bitwise. The existing five native rejections remain; mixed-run exit 1 is expected. `runs/item-source-corpus-validation.json`. **23 Python contract tests pass**, covering omitted/altered text, forged source slices, malformed attributes/roles, namespace/source bounds and the item depth boundary. `runs/item-source-runner-tests.log`. |
+| Hosted diagnosis | Prior exact-code run 34262898483 failed on both platforms. Four immediate targets after the last visible success pass locally: equipment parity 1, evaluation options 7, evaluator 4, extraction 3. Actual hosted assertion remains unknown. `runs/item-source-ci-targeted-tests.log`, `runs/item-source-ci-extraction-tests.log`. |
+| CI diagnostics | Published `88654d1` bounds individual annotations below the public 4096-character limit, newest chunk first. Four controlled cases pass, maximum 3907 characters, correct streaming/exits and simulated truncation. `runs/ci-annotation-chunks-validation.json`. |
+| Integration gates | Formatting, strict workspace/all-target and native-only Clippy, five portable WASM libraries and the no-PoB/no-Lua normal dependency graph pass. The final four inspection targets repeat **15/15** passes. `runs/item-source-final-*`. |
+| Preservation/publication | **26/26 protected raw file hashes match**, and the pinned PoB checkout remains clean. Seven changed Markdown files decode as UTF-8; 186 local links and 19 heading targets resolve. `runs/item-source-final-preservation.json`, `runs/item-source-final-docs-validation.json`. Feature publication pending. The final corpus uses `runs/item-source-corpus-final`; all input and executable identities are retained in its manifest. |
+
+Consolidated local evidence: `runs/item-source-validation-summary.json`.
+
+Next resume point: obtain a concrete hosted assertion from the bounded annotations and
+repair its cause. Finish B2 dependency/producer closure and B4 whole-build holdout planning.
+Source load resolution and injected item definitions can proceed independently of the
+pending [general model proposal](general-build-input-proposal.md). Broad native build
+support, full held-out parity and realistic parallel search remain unfinished.
 
 ## Breadth mechanism inventory and corpus integration - validation checkpoint
 
@@ -809,7 +864,9 @@ its game effects. The complete injected catalog and data-bound inspection are de
   [breadth validation](breadth-validation.md). The subsequent
   [mechanism inventory](breadth-mechanism-inventory.md) covers all saved equipment/passive
   sets and fresh MAIN grants, actors, support links, allocation providers and conditional
-  records. Complete native capability classification for those records remains open.
+  records. The observed static capability comparison now distinguishes native query primitives from
+  source producers; full dependency closure, inactive-selection inventory and whole-build
+  admission remain open.
 - [ ] **B3 — general build-input seam review.** Audit hard-coded fixture inputs, closed
   Spark/Mace admission, skill IDs, level restrictions and implicit player-only assumptions.
   Normal evaluate/search already load caller files, but that alone does not establish

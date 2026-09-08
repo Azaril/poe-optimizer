@@ -86,6 +86,65 @@ def build_report(xml=BUILD_XML, definitions=False):
     return result
 
 
+def item_report():
+    payload = (b"<Items><Item id='42'> first<!--c-->second<ModRange id='1' range='.5'/>"
+               b"<![CDATA[ tail ]]></Item><ItemSet id='8'><Slot name='Amulet' itemId='42'/>"
+               b"<SocketIdURL nodeId='5'/></ItemSet></Items>"
+               b"<Tree><Spec title='first'><Sockets><Socket nodeId='5' itemId='42'/></Sockets></Spec></Tree>"
+               b"<Spec title='legacy'><Sockets><Socket nodeId='6' itemId='42'/></Sockets></Spec>")
+    xml = BUILD_XML.replace(b"</PathOfBuilding2>", payload + b"</PathOfBuilding2>")
+    report = build_report(xml)
+    report.update(schema_version=2, scope="build_source_projection_v2")
+    report["verification"].update(item_loading="not_run", equipment_resolution="not_resolved",
+                                  passive_allocation="not_checked")
+    def node(token, tag, role, children=(), attributes=None, after=0, fragments=None, consumed=None):
+        start = xml.index(token, after)
+        opening_end = xml.index(b">", start) + 1
+        end = opening_end if xml[opening_end-2:opening_end] == b"/>" else xml.index(("</"+tag+">").encode(), start)+len(tag)+3
+        attrs = []
+        for key, value in (attributes or {}).items():
+            value_start = xml.index((key+"='").encode(), start)+len(key)+2
+            attrs.append({"name": key, "namespace": None, "value": {"range": {"start": value_start, "end": value_start+len(value)},
+                                                 "raw": value, "decoded": value}})
+        result = {"element": {"name": tag, "namespace": None, "has_namespaces": False,
+                              "source_range": {"start": start, "end": end}, "attributes": attrs},
+                  "kind": INTAKE.item_source_classification(None, tag, False)[0],
+                  "source_use": role, "children": list(children)}
+        result["ordered_content"] = {"fragments": fragments if fragments is not None else
+            [{"kind": "element", "range": child["element"]["source_range"], "child_index": i}
+             for i, child in enumerate(children)], "consumed": consumed if consumed is not None else
+            [{"kind": "element", "child_index": i} for i in range(len(children))]}
+        return result
+    mod = node(b"<ModRange ", "ModRange", "modifier_range_instruction", attributes={"id": "1", "range": ".5"})
+    fragments = []
+    for kind, raw in [("text", b" first"), ("comment", b"<!--c-->"), ("text", b"second"),
+                      ("element", b"<ModRange id='1' range='.5'/>"), ("cdata", b"<![CDATA[ tail ]]>")]:
+        start = xml.index(raw)
+        fragments.append({"kind": kind, "range": {"start": start, "end": start+len(raw)},
+                          **({"child_index": 0} if kind == "element" else {"text_source": raw.decode("utf-8")})})
+    item = node(b"<Item id=", "Item", "inventory_item", [mod], {"id": "42"}, fragments=fragments,
+                consumed=[{"kind": "text", "text_kind": "ordinary", "text": "firstsecond", "fragment_indices": [0,1,2]},
+                          {"kind": "element", "child_index": 0},
+                          {"kind": "text", "text_kind": "cdata", "text": " tail ", "fragment_indices": [4]}])
+    slot = node(b"<Slot ", "Slot", "equipment_slot", attributes={"name": "Amulet", "itemId": "42"})
+    url = node(b"<SocketIdURL ", "SocketIdURL", "socket_url_metadata", attributes={"nodeId": "5"})
+    saved = node(b"<ItemSet ", "ItemSet", "saved_set", [slot,url], {"id": "8"})
+    container = node(b"<Items>", "Items", "container", [item,saved])
+    specs = []
+    for title, identity in [("first","5"), ("legacy","6")]:
+        begin = xml.index(("<Spec title='"+title+"'>").encode())
+        socket = node(("<Socket nodeId='"+identity+"'").encode(), "Socket", "jewel_assignment",
+                      attributes={"nodeId": identity, "itemId": "42"})
+        sockets = node(b"<Sockets>", "Sockets", "jewel_sockets", [socket], after=begin)
+        specs.append(node(("<Spec title='"+title+"'>").encode(), "Spec", "passive_spec", [sockets], {"title": title}))
+    tree = node(b"<Tree>", "Tree", "tree", [specs[0]])
+    for kind, root in [("items",container), ("tree",tree), ("legacy_spec",specs[1])]:
+        report["build"]["sections"].append({"kind": kind, "element": root["element"]})
+    report["items"] = {"status": "source_projected", "projection": {
+        "source_sha256": hashlib.sha256(xml).hexdigest(), "containers": [container], "trees": [tree,specs[1]]}}
+    return xml, report
+
+
 class CorpusTests(unittest.TestCase):
     def test_lines_preserve_offsets_bom_blank_and_mixed_endings(self):
         raw = b"\xef\xbb\xbfone\r\n\n two \nlast"
@@ -252,7 +311,7 @@ class CorpusTests(unittest.TestCase):
                 with patch.object(INTAKE, "invoke", side_effect=fake_invoke), contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(INTAKE.main(args), 0 if outcome == "success" else 1)
                 index = json.loads((output / "index.json").read_bytes())
-                self.assertEqual(index["schema_version"], 3)
+                self.assertEqual(index["schema_version"], 4)
                 self.assertTrue(index["configuration_inspection_requested"])
                 entry = index["entries"][0]
                 self.assertEqual(entry["status"], "imported")
@@ -479,7 +538,7 @@ class CorpusTests(unittest.TestCase):
                 with patch.object(INTAKE, "invoke", side_effect=fake_invoke), contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(INTAKE.main(args), 0 if outcome == "success" else 1)
                 index = json.loads((output / "index.json").read_bytes())
-                self.assertEqual(index["schema_version"], 3)
+                self.assertEqual(index["schema_version"], 4)
                 self.assertTrue(index["build_inspection_requested"])
                 self.assertTrue(index["definition_lookup_requested"])
                 self.assertEqual(calls, ["import", "build_source", "pob"])
@@ -514,6 +573,213 @@ class CorpusTests(unittest.TestCase):
                 self.assertEqual(index["entries"][0]["evaluations"]["native"]["status"], "source_changed")
                 self.assertEqual(calls, ["import", "configuration"] if changer == "configuration" else
                                  ["import", "configuration", "build_source"])
+
+    def test_item_report_retains_load_order_and_distinct_passive_spec_jewel_owners(self):
+        xml, report = item_report()
+        summary = INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), False, None)
+        self.assertEqual(summary["report_schema_version"], 2)
+        self.assertEqual(summary["item_source_counts"]["socket_url_metadata"], 1)
+        self.assertEqual(summary["item_source_counts"]["jewel_assignment"], 2)
+        self.assertEqual([i["kind"] for i in summary["item_inventory"][0]["instructions"]],
+                         ["text", "modifier_range", "text"])
+        self.assertEqual([j["tree_root_index"] for j in summary["item_jewel_assignments"]], [0, 1])
+        self.assertNotEqual(summary["item_jewel_assignments"][0]["spec_source_range"],
+                            summary["item_jewel_assignments"][1]["spec_source_range"])
+        self.assertEqual(summary["item_sets"][0]["source_id"]["decoded"], "8")
+        report["items"] = {"status": "not_projected", "error": {"reason": "source bound"}}
+        partial = INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), False, None)
+        self.assertEqual(partial["item_source_status"], "not_projected")
+        self.assertEqual(partial["skills_status"], "source_projected")
+        legacy = INTAKE.build_source_summary(build_report(), hashlib.sha256(BUILD_XML).hexdigest(), len(BUILD_XML), False, None)
+        self.assertEqual(legacy["item_source_status"], "not_reported_by_inspector")
+        self.assertNotIn("item_inventory", legacy)
+
+    def test_item_report_rejects_lost_reordered_reowned_content_and_admission_claims(self):
+        def inventory(r): return r["items"]["projection"]["containers"][0]["children"][0]
+        mutations = [
+            lambda r: r["verification"].update(item_loading="applied"),
+            lambda r: r["items"]["projection"].update(trees=[]),
+            lambda r: r["items"]["projection"].update(source_sha256="0"*64),
+            lambda r: inventory(r)["ordered_content"]["consumed"].pop(1),
+            lambda r: inventory(r)["ordered_content"]["consumed"].reverse(),
+            lambda r: inventory(r)["ordered_content"]["fragments"][3].update(child_index=True),
+            lambda r: inventory(r)["ordered_content"]["fragments"][0].update(text_source="lost"),
+            lambda r: inventory(r)["ordered_content"]["consumed"][2].update(fragment_indices=[0]),
+            lambda r: inventory(r)["ordered_content"]["consumed"][0].update(fragment_indices=[0,0]),
+            lambda r: r["items"]["projection"]["trees"][1].update(source_use="ignored"),
+            lambda r: r.update(schema_version=1, scope="build_source_projection_v1"),
+        ]
+        for index, mutation in enumerate(mutations):
+            xml, report = item_report()
+            mutation(report)
+            with self.subTest(mutation=index), self.assertRaises((ValueError, KeyError, TypeError)):
+                INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), False, None)
+
+
+    def test_item_report_rejects_missing_forged_text_and_invalid_source_fields(self):
+        def item(r): return r["items"]["projection"]["containers"][0]["children"][0]
+        mutations = [
+            lambda r: item(r)["ordered_content"]["consumed"].pop(0),
+            lambda r: item(r)["ordered_content"]["consumed"][0].update(text="forged different item"),
+            lambda r: item(r)["element"]["attributes"][0].update(value=17),
+            lambda r: item(r)["element"]["attributes"][0]["value"].update(decoded=17),
+            lambda r: item(r)["element"]["attributes"][0]["value"]["range"].update(start=True),
+            lambda r: item(r)["element"]["attributes"][0]["value"].update(decoded="wrong"),
+            lambda r: item(r).update(source_use="ignored"),
+            lambda r: item(r).update(kind="unknown"),
+            lambda r: item(r)["children"][0].update(source_use="ignored"),
+        ]
+        for index, mutation in enumerate(mutations):
+            for bind_source in [False, True]:
+                xml, report = item_report()
+                mutation(report)
+                with self.subTest(mutation=index, bind_source=bind_source), self.assertRaises((ValueError, KeyError, TypeError)):
+                    INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), False, None,
+                                                expected_xml=xml if bind_source else None)
+
+    def test_exact_imported_bytes_reject_internally_consistent_forged_source_and_omissions(self):
+        def item(r): return r["items"]["projection"]["containers"][0]["children"][0]
+        def fake_raw_and_text(r):
+            node = item(r)
+            node["ordered_content"]["fragments"][0]["text_source"] = " wrong"
+            node["ordered_content"]["consumed"][0]["text"] = "wrongsecond"
+        def fake_attribute(r):
+            item(r)["element"]["attributes"][0]["value"].update(raw="99", decoded="99")
+        def omit_text_fragment(r):
+            item(r)["ordered_content"]["fragments"].pop()
+            item(r)["ordered_content"]["consumed"].pop()
+        def omit_attribute(r):
+            item(r)["element"]["attributes"] = []
+        def fake_namespace(r):
+            def hide(node):
+                node["element"]["has_namespaces"] = True
+                node.update(kind="unknown", source_use="namespace_unknown")
+                for child in node["children"]: hide(child)
+            hide(r["items"]["projection"]["containers"][0])
+        for mutate in [fake_raw_and_text, fake_attribute, omit_text_fragment, omit_attribute, fake_namespace]:
+            xml, report = item_report()
+            mutate(report)
+            with self.subTest(mutation=mutate.__name__), self.assertRaises(ValueError):
+                INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), False, None,
+                                            expected_xml=xml)
+        xml, report = item_report()
+        INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), False, None, expected_xml=xml)
+        for bad in [xml[:-1], xml.replace(b"first", b"wrong")]:
+            with self.assertRaisesRegex(ValueError, "import identity"):
+                INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), False, None,
+                                            expected_xml=bad)
+
+    def test_item_text_derivation_matches_comment_cdata_pi_and_named_entity_order(self):
+        fragments = [{"kind": kind, "text_source": raw} for kind, raw in [
+            ("text", " \r\n a&amp;"), ("comment", "<!-- join -->"), ("text", "b  "),
+            ("cdata", "<![CDATA[ \r\n&amp; x<!--deleted-->y ]]>" ),
+            ("cdata", "<![CDATA[ <!-- all whitespace --> \t]]>"),
+            ("text", "\u00a0"), ("processing_instruction", "<?cut here?>"),
+            ("text", " &amp;lt; "), ("cdata", "<![CDATA[unterminated <!-- literal]]>"),
+        ]]
+        expected = [
+            {"kind": "text", "text_kind": "ordinary", "text": "a&b", "fragment_indices": [0, 1, 2]},
+            {"kind": "text", "text_kind": "cdata", "text": " \r\n&amp; xy ", "fragment_indices": [3]},
+            {"kind": "text", "text_kind": "ordinary", "text": "\u00a0", "fragment_indices": [5]},
+            {"kind": "text", "text_kind": "ordinary", "text": "&lt;", "fragment_indices": [7]},
+            {"kind": "text", "text_kind": "cdata", "text": "unterminated <!-- literal", "fragment_indices": [8]},
+        ]
+        self.assertEqual(INTAKE.derive_item_content(fragments), expected)
+        with self.assertRaisesRegex(ValueError, "structure"):
+            INTAKE.derive_item_content([{"kind": "cdata", "text_source": "<![CDATA[a]<!--remove-->]>b]]>"}])
+        with self.assertRaisesRegex(ValueError, "entity"):
+            INTAKE.source_named_entities("&#10;")
+        self.assertEqual(INTAKE.source_named_entities("&lt;&gt;&amp;&quot;&apos;\r\n\t"), "<>&\"'\r\n\t")
+
+    def test_item_fragment_boundaries_are_exact_and_global_comment_removal_cannot_cross_cdata(self):
+        for fragments in [
+            [{"kind": "text", "text_source": "split"}, {"kind": "text", "text_source": "text"}],
+            [{"kind": "comment", "text_source": "<!--one--><!--two-->"}],
+        ]:
+            with self.assertRaises(ValueError): INTAKE.derive_item_content(fragments)
+        xml = b"<Item><![CDATA[ab<!-- ]]><!-- ends --></Item>"
+        start = xml.index(b"<![CDATA[")
+        end = xml.index(b"]]>") + 3
+        fragments = [{"kind": "cdata", "range": {"start": start, "end": end},
+                      "text_source": xml[start:end].decode("utf-8")}]
+        with self.assertRaisesRegex(ValueError, "crosses a CDATA boundary"):
+            INTAKE.derive_item_content(fragments, expected_xml=xml)
+        no_end = b"<Item><![CDATA[ab<!-- ]]></Item>"
+        self.assertEqual(INTAKE.derive_item_content(fragments, expected_xml=no_end),
+                         [{"kind": "text", "text_kind": "cdata", "text": "ab<!-- ", "fragment_indices": [0]}])
+
+    def test_item_source_index_preserves_raw_attribute_bytes_and_namespace_ownership(self):
+        xml = ("<PathOfBuilding2><Items><ItemSet id='' title='caf\u00e9\r\n\t&amp;lt;'/></Items>"
+               "<Items xmlns='urn:foreign'><Item xmlns='' id='1'/></Items></PathOfBuilding2>").encode("utf-8")
+        indexed = INTAKE.source_element_index(xml)
+        saved = next(node for node in indexed.values() if node["name"] == "ItemSet")
+        self.assertEqual(saved["attributes"][0]["value"]["raw"], "")
+        self.assertEqual(saved["attributes"][0]["value"]["range"]["start"],
+                         saved["attributes"][0]["value"]["range"]["end"])
+        title = saved["attributes"][1]["value"]
+        self.assertEqual(title["raw"], "caf\u00e9\r\n\t&amp;lt;")
+        self.assertEqual(title["decoded"], "caf\u00e9\r\n\t&lt;")
+        self.assertEqual(xml[title["range"]["start"]:title["range"]["end"]], title["raw"].encode("utf-8"))
+        foreign = next(node for node in indexed.values() if node["name"] == "Items" and node["namespace"])
+        self.assertTrue(foreign["has_namespaces"])
+        reset = foreign["children"][0]
+        self.assertIsNone(reset["namespace"])
+        self.assertTrue(reset["has_namespaces"])  # explicit empty default binding remains authored
+        self.assertEqual(INTAKE.item_source_classification("namespace_unknown", "Item", True),
+                         ("unknown", "namespace_unknown"))
+        for bad in [b"<!DOCTYPE PathOfBuilding2><PathOfBuilding2/>",
+                    b"<PathOfBuilding2><Item></PathOfBuilding2>"]:
+            with self.assertRaises(ValueError): INTAKE.source_element_index(bad)
+
+    def test_item_depth_zero_boundary_matches_portable_projection(self):
+        def report_at_depth(depth):
+            root_open, items_open = b"<PathOfBuilding2>", b"<Items>"
+            xml = root_open + items_open + b"<Future>" * depth + b"</Future>" * depth + b"</Items></PathOfBuilding2>"
+            opening_base = len(root_open) + len(items_open)
+            branch = []
+            for level in reversed(range(depth)):
+                start = opening_base + level * len(b"<Future>")
+                end = opening_base + depth * len(b"<Future>") + (depth - level) * len(b"</Future>")
+                span = {"start": start, "end": end}
+                children = branch
+                branch = [{"kind": "unknown", "source_use": "ignored",
+                           "element": {"name": "Future", "namespace": None, "has_namespaces": False,
+                                       "source_range": span, "attributes": []},
+                           "children": children,
+                           "ordered_content": {
+                               "fragments": [{"kind": "element", "range": child["element"]["source_range"], "child_index": i}
+                                             for i, child in enumerate(children)],
+                               "consumed": [{"kind": "element", "child_index": i} for i in range(len(children))]}}]
+            container = {"kind": "items", "source_use": "container",
+                         "element": {"name": "Items", "namespace": None, "has_namespaces": False,
+                                     "source_range": {"start": len(root_open), "end": xml.index(b"</Items>") + len(b"</Items>")},
+                                     "attributes": []},
+                         "children": branch,
+                         "ordered_content": {
+                             "fragments": [{"kind": "element", "range": child["element"]["source_range"], "child_index": i}
+                                           for i, child in enumerate(branch)],
+                             "consumed": [{"kind": "element", "child_index": i} for i in range(len(branch))]}}
+            base = configuration_report(xml)
+            base.update(schema_version=2, scope="build_source_projection_v2",
+                        build={"source_sha256": hashlib.sha256(xml).hexdigest(),
+                               "root": {"source_range": {"start": 0, "end": len(xml)}},
+                               "sections": [{"kind": "items", "element": container["element"]}]},
+                        configuration={"status": "source_projected", "projection": base["configuration"]},
+                        skills={"status": "source_projected",
+                                "projection": {"source_sha256": hashlib.sha256(xml).hexdigest(), "containers": []}},
+                        items={"status": "source_projected",
+                               "projection": {"source_sha256": hashlib.sha256(xml).hexdigest(), "containers": [container], "trees": []}})
+            base["verification"].update(calculation_context="not_resolved", native_admission="not_checked",
+                                        item_loading="not_run", equipment_resolution="not_resolved", passive_allocation="not_checked")
+            return xml, base
+        xml, report = report_at_depth(32)
+        summary = INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), False, None,
+                                              expected_xml=xml)
+        self.assertEqual(summary["item_source_counts"]["ignored"], 32)
+        xml, report = report_at_depth(33)
+        with self.assertRaisesRegex(ValueError, "depth"):
+            INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), False, None,
+                                       expected_xml=xml)
 
     def test_definition_lookup_requires_explicit_build_inspection(self):
         with tempfile.TemporaryDirectory() as name:

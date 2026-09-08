@@ -17,12 +17,14 @@ import hashlib
 import json
 import math
 import os
+import re
 from pathlib import Path
 import signal
 import subprocess
 import sys
 import time
 import xml.etree.ElementTree as ET
+import xml.parsers.expat as EXPAT
 
 MAX_INPUT_BYTES = 64 * 1024 * 1024
 MAX_ENTRY_BYTES = 16 * 1024 * 1024
@@ -186,8 +188,225 @@ def configuration_source_summary(report: dict, expected_hash: str, expected_byte
             "verification": verification}
 
 
+
+_XML_SPACE = " \t\r\n\v\f"
+_NAMED_ENTITIES = {"lt": "<", "gt": ">", "amp": "&", "apos": "'", "quot": '"'}
+_SOURCE_TAG = re.compile(rb"<([^\s/>]+)")
+_SOURCE_SPACE = re.compile(rb"\s*")
+_SOURCE_ATTRIBUTE = re.compile(rb"""([^\s=/>]+)\s*=\s*(["'])(.*?)\2""", re.DOTALL)
+
+
+def source_named_entities(raw: str) -> str:
+    """Exactly one XML.lua named-entity pass; unsupported forms fail closed."""
+    result, at = [], 0
+    while True:
+        start = raw.find("&", at)
+        if start < 0:
+            result.append(raw[at:])
+            return "".join(result)
+        result.append(raw[at:start])
+        end = raw.find(";", start + 1)
+        if end < 0 or raw[start + 1:end] not in _NAMED_ENTITIES:
+            raise ValueError("unsupported source entity in item evidence")
+        result.append(_NAMED_ENTITIES[raw[start + 1:end]])
+        at = end + 1
+
+
+def source_element_index(xml: bytes) -> dict:
+    """Index exact source spans with a bounded XML parser, never item semantics.
+
+    Expat supplies structural offsets only. Attribute evidence is sliced from
+    caller bytes so standard XML whitespace normalization cannot replace it.
+    """
+    if type(xml) is not bytes or len(xml) > MAX_XML_BYTES:
+        raise ValueError("source XML bytes exceed inspection binding limit")
+    parser = EXPAT.ParserCreate()
+    parser.ordered_attributes = True
+    parser.SetParamEntityParsing(EXPAT.XML_PARAM_ENTITY_PARSING_NEVER)
+    result, stack = {}, []
+
+    def reject_declaration(*_):
+        raise ValueError("DTD/entity declarations are not source inspection evidence")
+    parser.StartDoctypeDeclHandler = reject_declaration
+    parser.EntityDeclHandler = reject_declaration
+    parser.ExternalEntityRefHandler = lambda *_: 0
+
+    def start(name, normalized):
+        if len(result) >= 100000:
+            raise ValueError("source XML node bound exceeded")
+        at = parser.CurrentByteIndex
+        cursor, quote = at + 1, None
+        while cursor < len(xml):
+            byte = xml[cursor]
+            if quote is not None:
+                if byte == quote:
+                    quote = None
+            elif byte in (34, 39):
+                quote = byte
+            elif byte == 62:
+                break
+            cursor += 1
+        if cursor == len(xml):
+            raise ValueError("unterminated source opening tag")
+        opening_end = cursor + 1
+        prefix = _SOURCE_TAG.match(xml, at, opening_end)
+        if prefix is None:
+            raise ValueError("missing source element name")
+        attributes, position = [], prefix.end()
+        while position < cursor:
+            whitespace = _SOURCE_SPACE.match(xml, position, cursor)
+            position = whitespace.end()
+            if position == cursor or xml[position:position + 2] == b"/>":
+                break
+            match = _SOURCE_ATTRIBUTE.match(xml, position, cursor)
+            if match is None:
+                raise ValueError("invalid source attribute token")
+            key = match[1].decode("utf-8")
+            value_start = match.start(3)
+            raw = match[3].decode("utf-8")
+            attributes.append((key, value_start, value_start + len(match[3]), raw))
+            position = match.end()
+        values = dict(zip(normalized[::2], normalized[1::2]))
+        namespaces = stack[-1]["namespaces"] if stack else {}
+        if any(key == "xmlns" or key.startswith("xmlns:") for key, _, _, _ in attributes):
+            namespaces = dict(namespaces)
+        for key, _, _, _ in attributes:
+            if key == "xmlns":
+                namespaces[""] = values[key]
+            elif key.startswith("xmlns:") and key != "xmlns:xml":
+                namespaces[key[6:]] = values[key]
+        if len(namespaces) > 1024:
+            raise ValueError("source namespace bound exceeded")
+        def expanded(key, attribute=False):
+            if ":" in key:
+                prefix, local = key.split(":", 1)
+                uri = ("http://www.w3.org/XML/1998/namespace" if prefix == "xml"
+                       else namespaces.get(prefix))
+                if uri is None:
+                    raise ValueError("unbound source namespace")
+                return local, uri or None
+            return key, None if attribute else namespaces.get("") or None
+        local, namespace = expanded(name)
+        source_attributes = []
+        for key, begin, end, raw in attributes:
+            if key == "xmlns" or key.startswith("xmlns:"):
+                continue
+            attr_name, attr_namespace = expanded(key, True)
+            source_attributes.append({"name": attr_name, "namespace": attr_namespace,
+                "value": {"range": {"start": begin, "end": end}, "raw": raw,
+                          "decoded": source_named_entities(raw)}})
+        item = {"start": at, "opening_end": opening_end, "empty": xml[cursor - 1:cursor] == b"/",
+                "name": local, "namespace": namespace, "has_namespaces": bool(namespaces),
+                "namespaces": namespaces, "attributes": source_attributes, "children": []}
+        result[at] = item
+        if stack:
+            stack[-1]["children"].append(item)
+        stack.append(item)
+
+    def end(_):
+        item = stack.pop()
+        item.pop("namespaces")  # only open ancestors need namespace lookup state
+        if item["empty"]:
+            item["closing_start"] = item["opening_end"]
+            item["end"] = item["opening_end"]
+        else:
+            item["closing_start"] = parser.CurrentByteIndex
+            finish = xml.find(b">", item["closing_start"])
+            if finish < 0:
+                raise ValueError("unterminated source closing tag")
+            item["end"] = finish + 1
+    parser.StartElementHandler = start
+    parser.EndElementHandler = end
+    try:
+        parser.Parse(xml, True)
+    except EXPAT.ExpatError as error:
+        raise ValueError(f"invalid source XML while binding inspection: {error}") from error
+    return result
+
+
+def item_source_classification(parent, name, namespace):
+    """Source-use classification, with no slot/base/modifier interpretation."""
+    names = {"Items": "items", "Item": "item", "ItemSet": "item_set", "Slot": "slot",
+             "RuneSlot": "rune_slot", "SocketIdURL": "socket_id_url", "ModRange": "mod_range",
+             "TradeSearchWeights": "trade_search_weights", "Stat": "stat", "Tree": "tree",
+             "Spec": "spec", "Sockets": "sockets", "Socket": "socket"}
+    if namespace:
+        return "unknown", "namespace_unknown"
+    roles = {(None, "Items"): "container", (None, "Tree"): "tree", (None, "Spec"): "passive_spec",
+             ("container", "Item"): "inventory_item", ("container", "ItemSet"): "saved_set",
+             ("container", "Slot"): "legacy_equipment_slot",
+             ("container", "TradeSearchWeights"): "trade_weights",
+             ("saved_set", "Slot"): "equipment_slot", ("saved_set", "RuneSlot"): "character_rune_slot",
+             ("saved_set", "SocketIdURL"): "socket_url_metadata",
+             ("inventory_item", "ModRange"): "modifier_range_instruction",
+             ("tree", "Spec"): "passive_spec", ("passive_spec", "Sockets"): "jewel_sockets",
+             ("jewel_sockets", "Socket"): "jewel_assignment"}
+    return names.get(name, "unknown"), ("trade_weight" if parent == "trade_weights" else
+                                      roles.get((parent, name), "ignored"))
+
+
+def derive_item_content(fragments, expected_xml=None):
+    """Reconstruct only XML.lua text/element records, not ItemsTab or Item loading."""
+    consumed, pending, indices = [], [], []
+    def flush():
+        text = "".join(pending).strip(_XML_SPACE)
+        if text:
+            consumed.append({"kind": "text", "text_kind": "ordinary",
+                             "text": source_named_entities(text), "fragment_indices": list(indices)})
+        pending.clear()
+        indices.clear()
+    for index, fragment in enumerate(fragments):
+        kind = fragment["kind"]
+        raw = fragment.get("text_source")
+        if kind == "text":
+            if index and fragments[index - 1]["kind"] == "text":
+                raise ValueError("adjacent ordinary source text must be one raw fragment")
+            if "<" in raw:
+                raise ValueError("ordinary item text contains an unclassified XML construct")
+            pending.append(raw)
+            indices.append(index)
+        elif kind == "comment":
+            if not raw.startswith("<!--") or not raw.endswith("-->") or "--" in raw[4:-3]:
+                raise ValueError("invalid comment fragment")
+            indices.append(index)
+        elif kind == "cdata":
+            flush()
+            if not raw.startswith("<![CDATA[") or not raw.endswith("]]>") or "]]>" in raw[9:-3]:
+                raise ValueError("invalid CDATA fragment")
+            if expected_xml is not None:
+                begin, end = fragment["range"]["start"] + 9, fragment["range"]["end"] - 3
+                position = begin
+                while True:
+                    comment = expected_xml.find(b"<!--", position, end)
+                    if comment < 0:
+                        break
+                    close = expected_xml.find(b"-->", comment + 4)
+                    if close < 0:
+                        break  # Lua's global pattern leaves an unmatched opener literal.
+                    if close + 3 > end:
+                        raise ValueError("global comment removal crosses a CDATA boundary")
+                    position = close + 3
+            text = re.sub(r"<!--.*?-->", "", raw[9:-3], flags=re.DOTALL)
+            if "]]>" in text:
+                raise ValueError("comment removal changes CDATA structure")
+            if text.strip(_XML_SPACE):
+                consumed.append({"kind": "text", "text_kind": "cdata", "text": text,
+                                 "fragment_indices": [index]})
+        elif kind == "processing_instruction":
+            flush()
+            if not raw.startswith("<?") or not raw.endswith("?>") or ">" in raw[2:-2]:
+                raise ValueError("invalid processing instruction fragment")
+        elif kind == "element":
+            flush()
+            consumed.append({"kind": "element", "child_index": fragment["child_index"]})
+        else:
+            raise ValueError("unknown item fragment kind")
+    flush()
+    return consumed
+
 def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
-                         definitions_requested: bool, expected_data_hash: str | None) -> dict:
+                         definitions_requested: bool, expected_data_hash: str | None,
+                         expected_xml: bytes | None = None) -> dict:
     """Validate source/lookup transport and summarize occurrences, not game support.
 
     Original Rust/Lua tests establish reader semantics. This check binds captured
@@ -226,7 +445,17 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
             if type(values.get(key)) is not type(value) or values[key] != value:
                 raise ValueError(f"{context} must declare {key}={value}")
 
-    require(report, {"schema_version": 1, "scope": "build_source_projection_v1",
+    source_index = None
+    if expected_xml is not None:
+        if (type(expected_xml) is not bytes or len(expected_xml) != expected_bytes
+                or hashlib.sha256(expected_xml).hexdigest() != expected_hash):
+            raise ValueError("supplied source XML bytes differ from the import identity")
+        source_index = source_element_index(expected_xml)
+
+    version = report.get("schema_version")
+    if type(version) is not int or version not in {1, 2}:
+        raise ValueError("unsupported build report schema")
+    require(report, {"schema_version": version, "scope": f"build_source_projection_v{version}",
                      "status": "source_projected"}, "build report")
     require(report["input"], {"format": "raw_xml", "input_sha256": expected_hash,
                               "xml_sha256": expected_hash, "input_bytes": expected_bytes,
@@ -239,7 +468,7 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
     build = mapping(report["build"], "build projection")
     require(build, {"source_sha256": expected_hash}, "build projection")
     root_range = source_range(build["root"]["source_range"])
-    section_counts, skill_container_ranges = {}, []
+    section_counts, skill_container_ranges, item_container_ranges, item_tree_ranges = {}, [], [], []
     previous_section = root_range[0]
     for section in array(build["sections"], 128, "build sections"):
         bounds = source_range(section["element"]["source_range"])
@@ -250,15 +479,239 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
         previous_section = bounds[1]
         if section["element"].get("name") == "Skills":
             skill_container_ranges.append(bounds)
+        if section["element"].get("name") == "Items":
+            item_container_ranges.append(bounds)
+        if section["element"].get("name") in {"Tree", "Spec"}:
+            item_tree_ranges.append(bounds)
         kind = label(section["kind"])
         section_counts[kind] = section_counts.get(kind, 0) + 1
-    result = {"report_schema_version": 1, "source_xml_sha256": expected_hash,
+    result = {"report_schema_version": version, "source_xml_sha256": expected_hash,
               "sections": section_counts, "verification": verification,
               "implementation_sha256": report.get("implementation_sha256")}
+    if version == 1:
+        if "items" in report:
+            raise ValueError("schema-1 inspection cannot claim schema-2 item evidence")
+        result["item_source_status"] = "not_reported_by_inspector"
+    else:
+        require(verification, {"item_loading": "not_run", "equipment_resolution": "not_resolved",
+                               "passive_allocation": "not_checked"}, "item verification")
+        items = mapping(report["items"], "item source result")
+        result["item_source_status"] = items["status"]
+        if items["status"] == "not_projected":
+            mapping(items["error"], "item projection error")
+        elif items["status"] != "source_projected":
+            raise ValueError("unknown item projection outcome")
+        else:
+            item_projection = mapping(items["projection"], "item projection")
+            require(item_projection, {"source_sha256": expected_hash}, "item projection")
+            item_counts, fragment_counts = {}, {}
+            inventories, saved_sets, jewels = [], [], []
+            item_nodes_left, fragments_left = 32768, 131072
+            item_attributes_left, item_attribute_bytes_left, item_text_left = 65536, 2 * 1024 * 1024, 8 * 1024 * 1024
+            roles = {"container", "inventory_item", "saved_set", "equipment_slot",
+                     "legacy_equipment_slot", "character_rune_slot", "socket_url_metadata",
+                     "modifier_range_instruction", "trade_weights", "trade_weight", "tree",
+                     "passive_spec", "jewel_sockets", "jewel_assignment", "ignored", "namespace_unknown"}
+            def source_value(node, name):
+                values = [a["value"] for a in array(node["element"]["attributes"], 128, "item attributes")
+                          if a["name"] == name and a.get("namespace") is None]
+                if len(values) > 1:
+                    raise ValueError("duplicate source attribute in item report")
+                return values[0] if values else None
+            def validate_item_element(element, bounds):
+                nonlocal item_attributes_left, item_attribute_bytes_left
+                element = mapping(element, "item source element")
+                name, namespace = element["name"], element.get("namespace")
+                if not isinstance(name, str) or not name or len(name.encode("utf-8")) > 1024:
+                    raise ValueError("invalid item source element name")
+                if namespace is not None and not isinstance(namespace, str):
+                    raise ValueError("invalid item source element namespace")
+                has_namespaces = element.get("has_namespaces")
+                if type(has_namespaces) is not bool:
+                    raise ValueError("item namespace context must be a boolean")
+                attributes = array(element["attributes"], 128, "item source attributes")
+                item_attributes_left -= len(attributes)
+                item_attribute_bytes_left -= len(name.encode("utf-8")) + len((namespace or "").encode("utf-8"))
+                seen_attributes = set()
+                for attr in attributes:
+                    attr = mapping(attr, "item source attribute")
+                    key, uri = attr["name"], attr.get("namespace")
+                    if not isinstance(key, str) or not key or len(key.encode("utf-8")) > 1024:
+                        raise ValueError("invalid item attribute name")
+                    if uri is not None and not isinstance(uri, str):
+                        raise ValueError("invalid item attribute namespace")
+                    if (key, uri) in seen_attributes:
+                        raise ValueError("duplicate item attribute occurrence")
+                    seen_attributes.add((key, uri))
+                    value = mapping(attr["value"], "item SourceText")
+                    raw, decoded = value["raw"], value["decoded"]
+                    if not isinstance(raw, str) or not isinstance(decoded, str):
+                        raise ValueError("item SourceText requires raw and decoded strings")
+                    span = mapping(value["range"], "item attribute range")
+                    begin = number(span["start"], bounds[0] + 1, bounds[1] - 1, "attribute start")
+                    end = number(span["end"], begin, bounds[1] - 1, "attribute end")
+                    encoded = raw.encode("utf-8")
+                    if len(encoded) != end - begin or len(encoded) > 65536:
+                        raise ValueError("item attribute raw bytes differ from its range or bound")
+                    if source_named_entities(raw) != decoded:
+                        raise ValueError("item attribute decoding differs from source named entities")
+                    if expected_xml is not None and expected_xml[begin:end] != encoded:
+                        raise ValueError("item attribute raw bytes differ from imported XML")
+                    item_attribute_bytes_left -= len(encoded) + len(key.encode("utf-8")) + len((uri or "").encode("utf-8"))
+                if item_attributes_left < 0 or item_attribute_bytes_left < 0:
+                    raise ValueError("item aggregate attribute bound exceeded")
+                actual = source_index.get(bounds[0]) if source_index is not None else None
+                if source_index is not None:
+                    if actual is None or actual["end"] != bounds[1]:
+                        raise ValueError("item source element range is not an exact imported occurrence")
+                    if (name != actual["name"] or namespace != actual["namespace"]
+                            or has_namespaces != actual["has_namespaces"]
+                            or attributes != actual["attributes"]):
+                        raise ValueError("item source element/attributes differ from imported XML")
+                return actual
+
+            def visit_item(node, collection, owner_index, parent_bounds, spec, sockets, depth,
+                           parent_role=None, inherited_namespace=False):
+                nonlocal item_nodes_left, fragments_left, item_text_left
+                item_nodes_left -= 1
+                if item_nodes_left < 0 or depth > 32:
+                    raise ValueError("item source node/depth bound exceeded")
+                bounds = source_range(node["element"]["source_range"])
+                if not parent_bounds[0] < bounds[0] < bounds[1] < parent_bounds[1]:
+                    raise ValueError("item source range is outside its parent")
+                actual = validate_item_element(node["element"], bounds)
+                namespace = inherited_namespace or node["element"]["has_namespaces"] or node["element"].get("namespace") is not None
+                expected_kind, expected_role = item_source_classification(parent_role, node["element"]["name"], namespace)
+                role = node["source_use"]
+                if role not in roles or role != expected_role or node.get("kind") != expected_kind:
+                    raise ValueError("item source role/name/parent/namespace classification differs")
+                item_counts[role] = item_counts.get(role, 0) + 1
+                if role == "passive_spec":
+                    spec, sockets = bounds, None
+                if role == "jewel_sockets":
+                    sockets = bounds
+                children = array(node["children"], 32768, "item children")
+                child_ranges = [source_range(child["element"]["source_range"]) for child in children]
+                if actual is not None and child_ranges != [(c["start"], c["end"]) for c in actual["children"]]:
+                    raise ValueError("item children differ from complete imported source occurrences")
+                previous = bounds[0]
+                for child_bounds in child_ranges:
+                    if not bounds[0] < child_bounds[0] < child_bounds[1] < bounds[1] or child_bounds[0] < previous:
+                        raise ValueError("item children overlap, changed order or escaped their owner")
+                    previous = child_bounds[1]
+                content = mapping(node["ordered_content"], "ordered item content")
+                fragments = array(content["fragments"], 131072, "item fragments")
+                fragments_left -= len(fragments)
+                if fragments_left < 0:
+                    raise ValueError("item fragment bound exceeded")
+                element_fragments = {}
+                previous = None
+                for index, fragment in enumerate(fragments):
+                    span = source_range(fragment["range"])
+                    if not bounds[0] < span[0] < span[1] < bounds[1] or (previous is not None and span[0] != previous):
+                        raise ValueError("item fragments overlap, have gaps or escaped their owner")
+                    previous = span[1]
+                    kind = fragment["kind"]
+                    if kind not in {"element", "text", "cdata", "comment", "processing_instruction"}:
+                        raise ValueError("unknown item fragment kind")
+                    fragment_counts[kind] = fragment_counts.get(kind, 0) + 1
+                    if kind == "element":
+                        child = number(fragment["child_index"], 0, len(children) - 1, "fragment child index")
+                        if child in element_fragments or span != child_ranges[child] or "text_source" in fragment:
+                            raise ValueError("item element fragment changed its unique child reference")
+                        element_fragments[child] = index
+                    elif ("child_index" in fragment or not isinstance(fragment.get("text_source"), str)
+                          or len(fragment["text_source"].encode("utf-8")) != span[1] - span[0]):
+                        raise ValueError("item raw text fragment differs from its source byte range")
+                    if expected_xml is not None and kind != "element" and expected_xml[span[0]:span[1]] != fragment["text_source"].encode("utf-8"):
+                        raise ValueError("item raw fragment differs from exact imported XML bytes")
+                if actual is not None:
+                    body = (actual["opening_end"], actual["closing_start"])
+                    if (not fragments and body[0] != body[1]) or (fragments and
+                            (source_range(fragments[0]["range"])[0] != body[0] or
+                             source_range(fragments[-1]["range"])[1] != body[1])):
+                        raise ValueError("item fragments do not cover the complete source body")
+                if list(element_fragments) != list(range(len(children))):
+                    raise ValueError("item fragments omitted or reordered a child")
+                consumed_children, used_text, instructions = [], set(), []
+                previous_entry = -1
+                for entry_index, entry in enumerate(array(content["consumed"], 131072, "item consumed records")):
+                    if entry["kind"] == "element":
+                        child = number(entry["child_index"], 0, len(children) - 1, "consumed child index")
+                        position = element_fragments[child]
+                        if position <= previous_entry:
+                            raise ValueError("consumed item child is duplicated or out of source order")
+                        previous_entry = position
+                        consumed_children.append(child)
+                        if role == "inventory_item" and children[child]["source_use"] == "modifier_range_instruction":
+                            instructions.append({"kind": "modifier_range", "consumed_index": entry_index,
+                                                 "child_index": child, "source_range": list(child_ranges[child])})
+                    elif entry["kind"] == "text":
+                        indices = array(entry["fragment_indices"], 131072, "text fragment references")
+                        if not indices or not isinstance(entry["text"], str) or not entry["text"]:
+                            raise ValueError("consumed item text requires source fragments and text")
+                        text_kind = entry["text_kind"]
+                        if text_kind not in {"ordinary", "cdata"} or (text_kind == "cdata" and len(indices) != 1):
+                            raise ValueError("unknown or fragmented CDATA text record")
+                        raw_text_present = False
+                        for index in indices:
+                            index = number(index, 0, len(fragments) - 1, "text fragment index")
+                            kind = fragments[index]["kind"]
+                            if (index <= previous_entry or index in used_text
+                                    or kind not in ({"text", "comment"} if text_kind == "ordinary" else {"cdata"})):
+                                raise ValueError("consumed item text changed source order, kind or ownership")
+                            raw_text_present |= kind in {"text", "cdata"}
+                            previous_entry = index
+                            used_text.add(index)
+                        if not raw_text_present:
+                            raise ValueError("comment-only fragments cannot supply consumed item text")
+                        if role == "inventory_item":
+                            instructions.append({"kind": "text", "consumed_index": entry_index,
+                                                 "text_kind": text_kind, "text_sha256": hashlib.sha256(entry["text"].encode("utf-8")).hexdigest()})
+                    else:
+                        raise ValueError("unknown consumed item record")
+                if consumed_children != list(range(len(children))):
+                    raise ValueError("item XML-consumed records omitted a child")
+                if content["consumed"] != derive_item_content(fragments, expected_xml):
+                    raise ValueError("item XML-consumed text/entries differ from complete raw source derivation")
+                item_text_left -= sum(len(e["text"].encode("utf-8")) for e in content["consumed"] if e["kind"] == "text")
+                if item_text_left < 0:
+                    raise ValueError("item aggregate decoded text bound exceeded")
+                if role == "inventory_item":
+                    inventories.append({"container_index": owner_index, "source_range": list(bounds),
+                                        "source_id": source_value(node, "id"), "instructions": instructions})
+                elif role == "saved_set":
+                    saved_sets.append({"container_index": owner_index, "source_range": list(bounds),
+                                       "source_id": source_value(node, "id")})
+                elif role == "jewel_assignment":
+                    if collection != "trees" or spec is None or sockets is None:
+                        raise ValueError("jewel assignment lost its passive-spec ownership")
+                    jewels.append({"tree_root_index": owner_index, "spec_source_range": list(spec),
+                                   "sockets_source_range": list(sockets), "source_range": list(bounds),
+                                   "node_id": source_value(node, "nodeId"), "item_id": source_value(node, "itemId")})
+                for child in children:
+                    visit_item(child, collection, owner_index, bounds, spec, sockets, depth + 1, role, namespace)
+            for collection, ranges in [("containers", item_container_ranges), ("trees", item_tree_ranges)]:
+                nodes = array(item_projection[collection], 128, "item source roots")
+                if [source_range(node["element"]["source_range"]) for node in nodes] != ranges:
+                    raise ValueError("item source roots differ from preserved root sections")
+                if source_index is not None:
+                    source_root = source_index.get(root_range[0])
+                    if source_root is None or source_root["end"] != root_range[1]:
+                        raise ValueError("build root differs from exact imported XML")
+                    names = {"Items"} if collection == "containers" else {"Tree", "Spec"}
+                    expected_roots = [(n["start"], n["end"]) for n in source_root["children"] if n["name"] in names]
+                    if ranges != expected_roots:
+                        raise ValueError("item roots differ from complete imported source")
+                for index, node in enumerate(nodes):
+                    root_namespace = source_index[root_range[0]]["has_namespaces"] if source_index is not None else build["root"].get("has_namespaces", False)
+                    visit_item(node, collection, index, root_range, None, None, 0, None, root_namespace)
+            result.update(item_source_counts=item_counts, item_fragment_counts=fragment_counts,
+                          item_inventory=inventories, item_sets=saved_sets, item_jewel_assignments=jewels)
     configuration = mapping(report["configuration"], "configuration result")
     result["configuration_status"] = configuration["status"]
     if configuration["status"] == "source_projected":
-        config_report = {**report, "scope": "configuration_source_projection_v1",
+        config_report = {**report, "schema_version": 1, "scope": "configuration_source_projection_v1",
                          "configuration": configuration["projection"]}
         result["configuration_source_state"] = configuration_source_summary(
             config_report, expected_hash, expected_bytes)["source_state"]
@@ -696,7 +1149,8 @@ def main(argv=None) -> int:
                                 try:
                                     report = bounded_json(directory / "build_source.stdout")
                                     result.update(build_source_summary(report, expected_hash, expected_bytes,
-                                                  definitions_requested, provenance["data"]["sha256"] if args.data else None))
+                                                  definitions_requested, provenance["data"]["sha256"] if args.data else None,
+                                                  expected_xml=read_bounded(xml, MAX_XML_BYTES)))
                                 except (OSError, ValueError, TypeError, KeyError) as error:
                                     result["status"] = "build_source_evidence_error"
                                     result["error"] = f"{type(error).__name__}: {error}"
@@ -768,7 +1222,7 @@ def main(argv=None) -> int:
                  or record.get("build_source", {}).get("status", "success") != "success"
                  for record in records)
     changed_inputs = [name for name, value in provenance.items() if not value["unchanged_after_run"]]
-    manifest = {"schema_version":3,"scope":"independent_import_and_fresh_evaluation_observations",
+    manifest = {"schema_version":4,"scope":"independent_import_and_fresh_evaluation_observations",
                 "configuration_inspection_requested": args.inspect_configuration,
                 "build_inspection_requested": args.inspect_build,
                 "definition_lookup_requested": args.inspect_build and (args.with_definitions or args.data is not None),

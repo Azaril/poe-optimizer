@@ -544,7 +544,7 @@ pub fn project<'input>(
     {
         return Err(invalid(0, "build XML exceeds projection limits"));
     }
-    crate::xml_compat::validate(xml).map_err(|e| invalid(e.byte_offset, e.reason))?;
+    crate::source_xml::validate_ordered_xml(xml)?;
     let root = document.root_element();
     if !root.has_tag_name("PathOfBuilding2")
         || root.tag_name().namespace().is_some()
