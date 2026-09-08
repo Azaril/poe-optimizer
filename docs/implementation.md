@@ -3,7 +3,10 @@
 Last updated: 2026-09-08
 
 Current checkpoint: **mixed ModList/ModDB query semantics and ordered item-loading audit**,
-implemented and locally validated; publication is pending. Native numeric and condition
+implemented, locally validated and published as
+`5f8b70e220e2bd19ed79d0e3b6979a2347970ab2` on main.
+[Exact-code CI run 34274132680](https://github.com/Azaril/poe-optimizer/actions/runs/34274132680)
+is in progress; no hosted pass is claimed. Native numeric and condition
 programs now preserve every store kind in a parent chain and enforce matching query
 contexts. Shared SUM retains child-first error traversal, grouped arithmetic and bounded
 allocation-free scratch. The full native replacement remains unfinished; this change does
@@ -235,7 +238,7 @@ B3 general-model proposal is unchanged. No additional complete build is admitted
 | Existing query/actor regression | **65 modifier parity tests**, **13 condition-source tests**, **6 condition contracts** and **21 actor contracts** pass. The final condition/actor runs include the compiled kind-chain optimization and preserve varied candidate allocation checks. `runs/mixed-store-existing-parity.log`, `runs/mixed-store-root-final-contracts.log`. |
 | Full-build regression | **2 actor build parity tests pass**, including fresh mapping/bossing Spark, composed Mace, condition passes, source removal and inherent flags. These remain the existing bounded profiles. `runs/mixed-store-actor-build-parity.log`. |
 | Deployment | **69 native / 111 native-only CLI tests pass**. Strict native-only and workspace/all-target Clippy, formatting, five portable WASM libraries and the normal no-PoB/no-Lua dependency graph pass. Source hashes are unchanged across deployment checks. `runs/mixed-store-deployment-checks.json`, `runs/mixed-store-workspace-clippy.log`. |
-| Preservation/publication | **26/26 protected files match** and the pinned PoB checkout remains clean. Four changed Markdown files decode as UTF-8 and 133 local links resolve. Code publication is pending. `runs/mixed-store-preservation.json`, `runs/mixed-store-docs-validation.json`. |
+| Preservation/publication | **26/26 protected files match** and the pinned PoB checkout remains clean. Four changed Markdown files decode as UTF-8 and 133 local links resolve. Code `5f8b70e220e2bd19ed79d0e3b6979a2347970ab2` is pushed to main. [Exact-code CI run 34274132680](https://github.com/Azaril/poe-optimizer/actions/runs/34274132680) is in progress. `runs/mixed-store-preservation.json`, `runs/mixed-store-docs-validation.json`, `runs/mixed-store-publication-ci.json`. |
 
 The independent item-loading audit exercised original ItemsTab.Load, Item.ParseRaw,
 ModParser and BuildModList for all **116 inventory occurrences** without replacing parser
@@ -260,7 +263,9 @@ allocation-free contract for every query or a whole-build throughput result. Ord
 numeric values and represented predicates do not imply all source modifier kinds/tags.
 Full native coverage, original/held-out full-build parity and realistic search remain open.
 
-Next: finish publication checks, then implement the ordered item-loading boundary
+Next: inspect exact-code CI **34274132680** and the still-live preceding runs
+**34271992799 / 34269405262**, diagnosing any actual failures from their bounded annotations.
+Then implement the ordered item-loading boundary
 against injected definitions and explicit parser outcomes. Continue B2 producer/dependency
 closure and B4 whole-build holdouts. The pending
 [general model proposal](general-build-input-proposal.md) must be discussed before its
