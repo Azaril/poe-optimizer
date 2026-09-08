@@ -5,8 +5,10 @@ Last updated: 2026-09-08
 Current checkpoint: **injected configuration definitions**, implemented and locally validated. The portable schema-12 catalog, complete authenticated extractor,
 original-source default-state oracles and caller-driven CLI lookup are implemented. All five
 original builds retain exact source values; definition recognition does not grant mechanic
-support. Numeric section content and the pinned tree remain unchanged. Publication is pending;
-see the checkpoint evidence below. Full native replacement remains unfinished.
+support. Numeric section content and the pinned tree remain unchanged. Code is published as
+`87bf0056209653d9b46d922477e9cfe920aeb6b4` on `origin/main`. Exact-code
+[Windows/Linux CI run 34249708752](https://github.com/Azaril/poe-optimizer/actions/runs/34249708752)
+is in progress; no hosted pass is claimed. Full native replacement remains unfinished.
 
 The preceding checkpoint, **breadth configuration source projection**, is implemented and
 locally validated. The shared reader, original-PoB parser comparisons, injected-definition inventory
@@ -188,7 +190,7 @@ limits total definition matches and option comparisons to 65,536 each before pub
 | Class/ascendancy roots | Existing native passive regression passes 100 fresh PoB evaluations; generated Spark/Mace identity cases, not held-out breadth |
 | Corpus runner | 9 Python tests pass; `runs/catalog-corpus-tool-tests.log` |
 | Numerical/tree preservation | All 21 original payloads/digests and tree bytes unchanged; source pin/user inputs/46 recorded files preserved; `runs/catalog-section-preservation.json`, `runs/catalog-source-preservation.json` |
-| Publication / hosted CI | Pending; preceding source checkpoint hosted run remains in progress |
+| Publication / hosted CI | Code `87bf0056209653d9b46d922477e9cfe920aeb6b4` is on main; Windows/Linux run `34249708752` is in progress. Preceding source checkpoint run also remains in progress |
 
 Validation accounting: the initial full-workspace run began before the metadata-only
 function-span correction and test-only API cleanup. It completed all 148 existing CLI
@@ -204,7 +206,7 @@ helpers invoked by their parent tests. The final package, original numeric value
 source pin and caller imports are all checked. A passing source-definition comparison is
 neither full-build numerical parity nor support for a newly observed mechanic.
 
-**Resume after validation/publication:** continue B2 with a classified root-container projection
+**Resume next:** continue B2 with a classified root-container projection
 for Import, Party, Calcs and TreeView. All five builds currently reach this root-layout guard;
 classify workflow/UI records separately from calculation-bearing party and selection data,
 without ignoring unknown effects. Extend the complete mechanism inventory beyond configuration.
@@ -2671,7 +2673,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-08 | `56dcbc5` | Added schema-10 injected Body Armour and shared movement, source-generated penalties, case-normalized grammar, movement objective metrics and graph problem 10/report 11. 658 workspace + 87 native-only CLI tests pass, followed by 19 passing tests in complete affected targets after CRLF fixture repairs. Source/full-build parity, strict lint, WASM, preservation and 24 agreeing release searches pass; exact finalist matches PoB. Pushed to main; exact-code Windows/Linux CI `34228787060` has passed on both platforms. Next: verify hosted CI, then shared ActionSpeed and complete Spark/Mace timing including the source server-tick cap. |
 | 2026-09-08 | `f1d8a1c` | Added schema-8 injected receiving data, shared source-ordered native Armour/Evasion/ES and resistance calculation, Lunar/Pearlescent bases, scenario/evidence bindings and graph problem 8/report 9. 580 workspace + 79 native-only CLI tests pass across integrated/focused runs; source/full-build parity, Clippy, WASM, preservation and release checks pass. All 24 complete searches agree; exact release finalist matches fresh PoB. Pushed to main; exact-code CI `34214745950` now passes on Windows and Linux. Local Helmet/Gloves/Boots components and rating metrics are implemented in the following checkpoint. |
 | 2026-09-08 | `a2586a8` | Added schema-7 injected passive/equipment data, complete ordinary structure with 1,142 admitted source views, component actor programs, lazy typed Spark/Mace assembly and native graph search with exact locks/attribute choices. 556 workspace tests and 76 native-only CLI tests pass across integrated/focused runs; local Clippy, WASM, preservation and release reproduction pass. All 24 full searches agree across modes/workers. Pushed to main; exact CI run `34208805533` now passes on Windows and Linux. Shared receiving defences and resistance modifiers are implemented in the following checkpoint. |
-| 2026-09-08 | Publication pending | Added schema-12 injected configuration catalog, original-source metadata/default parity, caller-driven definition lookup and test-only isolation of the old fixture registry. Combined target coverage totals 740 passing Rust tests, plus 100 native-only CLI and 9 corpus tests. All five inputs preserve 228 scalar records and 110 fresh reference measurements; native broad-build support remains pending. |
+| 2026-09-08 | `87bf005` | Added schema-12 injected configuration catalog, original-source metadata/default parity, caller-driven definition lookup and test-only isolation of the old fixture registry. Combined target coverage totals 740 passing Rust tests, plus 100 native-only CLI and 9 corpus tests. All five inputs preserve 228 scalar records and 110 fresh reference measurements; native broad-build support remains pending. |
 | 2026-09-08 | `0da5c5c` | Added exact configuration source projection, caller-only CLI inspection, shared native/search scalar readers and schema-2 corpus evidence. 354 relevant workspace-target tests plus 95 native-only CLI tests and 9 runner tests pass; strict lint, WASM, isolation, preservation and docs checks pass. All five inputs project and repeat their PoB measurements, while native retains explicit root-layout exclusions. Ordered configuration definitions, container semantics and unresolved actor/action labels are audited; broader native admission and full parity remain unfinished. |
 
 ### Hosting decision checkpoint
