@@ -3,7 +3,9 @@
 Last updated: 2026-09-08
 
 Current checkpoint: **source build containers and shared MAIN admission**, implemented;
-local validation passes; publication is being finalized. Arbitrary caller inputs can be inspected
+locally validated and published as `b109b941dd7d6f7f928b69e27d7e651ffd507415` on main.
+[Windows/Linux CI run 34253146642](https://github.com/Azaril/poe-optimizer/actions/runs/34253146642)
+is in progress; no hosted pass is claimed. Arbitrary caller inputs can be inspected
 without a data package or PoB runtime. Proven-inert Import/Party/Calcs/TreeView shapes now
 pass a shared native gate while unknown/effectful content remains rejected. The five
 original builds advance to the existing one-Skill/one-SkillSet limits; this is structural
@@ -183,7 +185,7 @@ The source contract and limits are in [source build containers](build-source-con
 | Caller-only inspection | Three new CLI tests pass, including all five XML/share-code pairs, execution outside the repository, missing-input rejection and no overwrite. |
 | Broad originals | Five exact imports/configuration projections and five fresh PoB evaluations succeed. Native now reports one-Skill restrictions on lines 1/3/4 and one-SkillSet restrictions on lines 2/5. The mixed runner intentionally exits 1; no original build is newly admitted. |
 | Final affected validation | 223 import/native tests, 23 original-source regression tests and eight relevant CLI tests pass (254 workspace-target tests). The full native-only CLI suite passes 103 tests. Workspace/native-only strict Clippy, formatting and five portable WASM libraries pass; native-only normal dependencies contain no Lua/PoB. This is affected-target validation, not a new complete workspace test run. |
-| Publication | Working tree; not yet published. Previous catalog code `87bf005` CI remains in progress on Windows/Linux at the last check. |
+| Publication | Code `b109b941dd7d6f7f928b69e27d7e651ffd507415` is on main. Exact-code Windows/Linux [CI run 34253146642](https://github.com/Azaril/poe-optimizer/actions/runs/34253146642) is in progress. `runs/root-container-published-ci.json` records the observed state; no hosted pass is claimed. |
 
 Local evidence: `runs/root-container-semantics.json`, `runs/root-container-oracle-tests.log`,
 `runs/root-container-projection-tests.log`, `runs/root-container-cli-tests.log` and
@@ -192,6 +194,10 @@ optional-reference binaries. `runs/root-container-validation-summary.json` recon
 all 110 exactly repeated reference measurements and source/data preservation. The manifest records exact commands,
 input/data/binary hashes and independent outcomes. Schema-12 data, pinned tree/source,
 user imports and six independent numeric goldens remain unchanged.
+Integration updated two old empty-Party rejection cases to effectful Party payloads;
+new positive tests cover empty Party. An unrelated existing Unicode test-text rewrite
+was restored to HEAD bytes; 30 Mace import and eight native-contract tests were repeated
+after restoration. The final affected suite passes and no unresolved failure remains.
 
 The B2 skill/source inventory now covers all **15 saved skill sets**, **200 groups** and
 **541 gem occurrences**: 537 exact external game-ID/variant matches, one explicit known
@@ -2737,6 +2743,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-08 | `a2586a8` | Added schema-7 injected passive/equipment data, complete ordinary structure with 1,142 admitted source views, component actor programs, lazy typed Spark/Mace assembly and native graph search with exact locks/attribute choices. 556 workspace tests and 76 native-only CLI tests pass across integrated/focused runs; local Clippy, WASM, preservation and release reproduction pass. All 24 full searches agree across modes/workers. Pushed to main; exact CI run `34208805533` now passes on Windows and Linux. Shared receiving defences and resistance modifiers are implemented in the following checkpoint. |
 | 2026-09-08 | `87bf005` | Added schema-12 injected configuration catalog, original-source metadata/default parity, caller-driven definition lookup and test-only isolation of the old fixture registry. Combined target coverage totals 740 passing Rust tests, plus 100 native-only CLI and 9 corpus tests. All five inputs preserve 228 scalar records and 110 fresh reference measurements; native broad-build support remains pending. |
 | 2026-09-08 | `0da5c5c` | Added exact configuration source projection, caller-only CLI inspection, shared native/search scalar readers and schema-2 corpus evidence. 354 relevant workspace-target tests plus 95 native-only CLI tests and 9 runner tests pass; strict lint, WASM, isolation, preservation and docs checks pass. All five inputs project and repeat their PoB measurements, while native retains explicit root-layout exclusions. Ordered configuration definitions, container semantics and unresolved actor/action labels are audited; broader native admission and full parity remain unfinished. |
+| 2026-09-08 | `b109b94` | Added caller-driven build inspection, shared strict MAIN admission and independent source/full-build metadata parity. All five originals retain exact bytes and now expose single-skill/set profile limits. B2 source inventory covers 15 sets/200 groups/541 occurrences; general model proposal awaits design discussion. Full native parity remains unfinished. |
 
 ### Hosting decision checkpoint
 
@@ -2760,5 +2767,3 @@ release; confirm the desktop framework and packaging before GUI work; choose acq
 data sources before trade/upgrade ingestion. Benchmark-specific metrics and usage profiles
 must be documented when those fixtures are made runnable, without turning their choices
 into mandatory goals for all users.
-
-| 2026-09-08 | Root-container checkpoint | Added caller-driven build inspection, shared strict MAIN admission and independent source/full-build metadata parity. All five originals retain exact bytes and now expose single-skill/set profile limits. B2 source inventory covers 15 sets/200 groups/541 occurrences; general model proposal awaits design discussion. Full native parity remains unfinished. |
