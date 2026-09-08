@@ -5,11 +5,12 @@ Last updated: 2026-09-08
 Current checkpoint: **shared ActionSpeed and ordinary direct-action timing**, implemented.
 Data/extraction, shared Rust calculations, import/native adapters, CLI integration and
 complete-build parity, complete target validation and isolated release measurements pass.
-Publication is being finalized below; broad native build support remains unfinished.
+Published code: `caa56f4374da864acfb99cc19060ed356bd35105`. Its Windows/Linux CI run
+`34238329480` is in progress; broad native build support remains unfinished.
 
 The completed **Body Armour and shared movement** checkpoint is published as
 `56dcbc500ebdf3f2011663462c4c0a0a794aaabe`. Its local validation and release measurements
-pass; exact-code Windows/Linux CI run `34228787060` was last observed in progress.
+pass; exact-code Windows/Linux CI run `34228787060` has passed on both platforms.
 Next after action timing: **breadth of validation and data-driven build admission**, before
 another individual-skill port. The user's five new line-delimited imports are the initial
 corpus, not a replacement for the original independent reference fixtures.
@@ -167,11 +168,17 @@ Spark documents outside the old four-build corpus. The assembly benchmark also r
 an explicit caller problem. The legacy four-source library utility remains isolated
 regression coverage, with its restrictive realization guards intact.
 
-Next: publish this checkpoint, then continue B2/B3 breadth and general source/model work. A new individual-skill
+Next: check hosted CI, then continue B2/B3 breadth and general source/model work. A new individual-skill
 port is not the next priority. Start with the source-preserving configuration seam described
 in [breadth validation](breadth-validation.md#next-sourceconfiguration-seam), preserving
 strict unsupported-mechanic decisions. Then produce the complete coverage inventory and a
 concrete general build-model proposal for discussion before a major architecture change.
+
+Publication: code **`caa56f4374da864acfb99cc19060ed356bd35105`** is pushed to main.
+[Exact-code Windows/Linux CI run 34238329480](https://github.com/Azaril/poe-optimizer/actions/runs/34238329480)
+is **in progress** on both platforms; hosted success is not yet claimed. Exact-commit check
+snapshot: `runs/action-speed-main-check-runs.json`. The following publication-record commit
+changes documentation only. Check the completed hosted outcome at the next resume point.
 
 ### Isolated action-timing release evidence
 
@@ -344,8 +351,8 @@ finalist XML SHA `0229c476e87039dd4f79775559504d4ea7e4e4b832d6cf8331f5904e856104
 
 Publication: code **`56dcbc500ebdf3f2011663462c4c0a0a794aaabe`** is pushed to main.
 [Exact-code Windows/Linux CI run 34228787060](https://github.com/Azaril/poe-optimizer/actions/runs/34228787060)
-is **in progress** on both platforms; no hosted success is claimed. Snapshots:
-`runs/movement-main-ci.json` and `runs/movement-main-ci-jobs.json`.
+has **passed on Windows and Linux**. Refreshed jobs snapshot:
+`runs/movement-main-ci-final-jobs.json`.
 The following publication-record commit changes documentation only.
 
 ### Completed scope: shared action speed and action timing
