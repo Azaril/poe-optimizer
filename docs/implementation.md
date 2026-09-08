@@ -2,17 +2,19 @@
 
 Last updated: 2026-09-08
 
-Active implementation checkpoint: **typed native candidate evaluation**, starting from
-clean `f2985be`. Implementation, full integrated validation and isolated release measurements pass;
-publication is the remaining checkpoint step. The previous
-goal turn made verified progress by delivering schema-4 support loadouts. The full
-implementation-plan/native-parity goal remains active.
+Latest completed implementation checkpoint: **typed native candidate evaluation**, code
+**`f022d1925a3d21ef595f50eade3ac279793ec517`**, pushed to main. Implementation, **421 workspace /
+56 native-only CLI tests**, portable checks and isolated release measurements pass.
+[Its exact Windows/Linux CI run](https://github.com/Azaril/poe-optimizer/actions/runs/34190091048)
+is in progress. The preceding support checkpoint now passes both hosted jobs. This goal
+turn made verified progress; the full implementation-plan/native-parity goal remains active.
+The next implementation slice is local weapon-modifier assembly, detailed below.
 
 Native support is still limited to the documented Spark/Mace profiles. The supplied
 minion build, general equipment/skill/modifier pipelines and full PoB parity remain
 unfinished. This performance checkpoint does not expand admitted game mechanics.
 PoB source revision, full source snapshot, supplied originals and six independent goldens
-remain fixed. The next source-audited coverage slice is local weapon-modifier assembly.
+remain fixed.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
 work, and the next session's starting point. [Design](design.md) defines the intended system
@@ -43,7 +45,7 @@ the design documents.
    class/tree resolution, composed finite graph/catalog, exact source spans, independent
    locks and caller 0/1 ordinary-point / zero/one ascendancy-point budgets. Legacy fixed Warrior
    problems remain supported. Never infer an available point budget from observed counts.
-4. Finish current publication gates, then implement the local weapon-modifier slice below.
+4. Inspect the exact typed-code CI run above, then implement the local weapon-modifier slice below.
    Preserve typed/document equivalence and fresh counted finalist checks. Preserve physical and
    effective node identity, selected-data requirements and strict unknown-mechanic rejection.
    Broader source compatibility remains a separate D4 gate; review that contract before
@@ -94,8 +96,8 @@ compare independent hosts/extractors using shared PoB calculations, not independ
 
 Starting point: clean `f2985be`. This implements the previously planned typed-candidate
 slice below without changing package, tree, source pin, independent goldens, candidate
-identity inputs or report schema versions. Current validation evidence is updated before
-publication; no pending check is recorded as successful.
+identity inputs or report schema versions. Local validation and publication are complete;
+exact-commit hosted validation is still running.
 
 | Checkpoint | State |
 | --- | --- |
@@ -107,7 +109,7 @@ publication; no pending check is recorded as successful.
 | Integrated validation | **421 workspace tests pass, zero failures**, with nine ignored child helpers exercised by their parents. **56 native-only CLI tests**, workspace/native-only Clippy, formatting, dependency isolation and five portable WASM libraries pass. The benchmark's later mode-selection change separately passes Clippy. Evidence: `runs/typed-test-coverage.json` and `runs/typed-{workspace-tests,native-only-tests,workspace-clippy,native-only-clippy,benchmark-clippy,wasm,fmt}.log`. |
 | Release reproduction | Typed/document searches at **1/2/4/32 workers**, three repeats each, agree on feasible/infeasible archives, exact finalist XML and selected data. Full domain uses **1,886** attempts. Custom signed resistance/support data has matching infeasible archives and a three-attempt locked export; empty domains spend zero and partial runs stay within budget. Fresh exported evaluations and companion hashes agree. Evidence: `runs/typed-release-check/summary.json`. |
 | Static preservation | UTF-8 and **264 local file / 24 heading links** pass across **32 Markdown files**. Source pin/full snapshot, schema-4 package, tree, original exports, dependency manifests and independent goldens remain unchanged. Evidence: `runs/typed-static-audit.json`. |
-| Publication | Not yet committed or pushed for this checkpoint. |
+| Publication | Code **`f022d1925a3d21ef595f50eade3ac279793ec517`** is pushed to main. [Windows/Linux CI run 34190091048](https://github.com/Azaril/poe-optimizer/actions/runs/34190091048) is **in progress**; no hosted success is claimed yet. Exact-commit snapshots: `runs/typed-main-ci.json`, `runs/typed-main-ci-jobs.json`. This following publication update changes documentation only. |
 
 See [typed candidate evaluation](native-candidate-evaluation.md) for ownership, APIs,
 allocation scope and benchmark reproduction. Eager catalog materialization/hashing and
@@ -1502,6 +1504,8 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `9388935` | Added schema-2 source-derived requirements, dataset-bound controlled catalog/native search, pre-dispatch legality and actual data/trust export evidence. All 333 workspace tests, 32 native-only CLI tests, lint, formatting, dependency isolation and five portable WASM libraries pass. Release custom-data ranking, serial/Rayon results and fresh export reevaluation agree; both hosted Windows/Linux CI jobs pass in `34179412604`. Next: production class/passive materialization and finite catalog composition. |
 | 2026-09-07 | `2135ed0` | Added shared class/tree resolution and partial graph, source-preserving class/ascendancy/entrance composition, explicit caller budgets/locks, selected-class requirements and expanded native/reference search. All 353 workspace tests, 40 native-only CLI tests, lint, formatting, dependency isolation, portable WASM and release checks pass. Full 744-state serial/Rayon search admits 504 alternatives; fresh PoB interaction/export checks pass. Code is pushed to main; hosted run `34181992200` is in progress. Next: signed resistance modifiers and a small owned ascendancy-node slice. |
 | 2026-09-07 | `c91fab1` | Added a shared signed-resistance kernel, injected global cap, schema-3 owned passive data/extraction and four one-point ascendancy passives. Problem/report schemas 3/4 preserve older input scopes. All 374 workspace tests, 44 native-only CLI tests, lint, formatting, dependency isolation, five portable WASM libraries, source reproduction and native release checks pass. New 840-state search admits 576 alternatives; complete builds and effect removal match fresh PoB. Code is pushed to main; hosted run `34185229809` is in progress. Next: configurable zero-to-two support loadouts. |
+| 2026-09-08 | `4845efe` | Added injected schema-4 support loadouts and all seven bounded Mace combinations. Local validation and Windows/Linux CI pass. Next: typed native candidate preparation. |
+| 2026-09-08 | `f022d19` | Added private typed native candidate preparation, stack metrics and a fresh full-document verification hook. All 421 workspace and 56 native-only CLI tests, lint, portable checks and release comparisons pass. Identical bounded Mace search results take 164.5 ms versus 397.0 ms one-worker median; full native parity remains unfinished. Pushed to main; exact hosted run `34190091048` is in progress. Next: injected local weapon-modifier assembly. |
 
 ### Hosting decision checkpoint
 
