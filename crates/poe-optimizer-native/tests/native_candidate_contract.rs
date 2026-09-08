@@ -612,3 +612,157 @@ fn unused_custom_character_composition_failures_do_not_abort_other_candidates() 
     assert_eq!(bad, 28);
     assert_eq!(good, 1856);
 }
+
+fn local_weapon_catalog(data: Arc<GameDataSnapshot>, xml: &str) -> ControlledMaceCatalog {
+    let example: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../examples/mace-local-weapon-search.json"
+    ))
+    .unwrap();
+    let alternatives = serde_json::from_value(example["weapons"].clone()).unwrap();
+    ControlledMaceCatalog::with_tree_loadouts(
+        data.clone(),
+        xml.into(),
+        alternatives,
+        loadouts(),
+        class_tree::selections(data.tree()).unwrap(),
+    )
+    .unwrap()
+}
+fn local_weapon_matrix(data: Arc<GameDataSnapshot>, xml: &str) {
+    let registry = local_weapon_catalog(data.clone(), xml);
+    let backend = backend(data);
+    let baseline = backend.calculate(&request(xml), BUDGET).unwrap();
+    let scenario = registry
+        .bind_native_baseline(&baseline, &backend.identity())
+        .unwrap();
+    let components = registry
+        .native_components(&scenario, &backend.identity())
+        .unwrap();
+    assert_eq!(components.axis_counts(), [6, 105, 7]);
+    let prepared = backend.prepare_controlled_mace(&components, &[]).unwrap();
+    let footprint = prepared.footprint();
+    assert_eq!(footprint.retained_xml_bytes, 0);
+    assert_eq!(footprint.cached_candidate_results, 0);
+    assert_eq!(footprint.deferred_weapon_errors, 0);
+    let mut legal = 0;
+    let mut level_rejections = 0;
+    for alternative in registry.alternatives() {
+        let handle = registry.validated_native_candidate(&alternative.candidate, &components);
+        let requirements = registry.requirements(&alternative.candidate).unwrap();
+        if alternative.weapon_id == "wooden-level-80" {
+            assert_eq!(requirements.required.level, 80);
+            assert_eq!(requirements.available.level, 60);
+            assert!(!requirements.is_legal());
+            level_rejections += 1;
+        }
+        if !requirements.is_legal() {
+            assert!(handle.is_err());
+            continue;
+        }
+        let handle = handle.unwrap();
+        let req = request(
+            &registry
+                .materialize(&alternative.candidate)
+                .unwrap()
+                .content,
+        );
+        let result = backend.calculate(&req, BUDGET).unwrap();
+        registry
+            .validate_native_realization(&alternative.candidate, &result, &scenario)
+            .unwrap();
+        assert_eq!(result.exports[0].content, req.build.content);
+        let snapshot = backend
+            .evaluate_controlled_mace(&prepared, &handle, BUDGET)
+            .unwrap();
+        assert_measurements(
+            &prepared.snapshot_measurements(&snapshot),
+            &result.measurements,
+        );
+        let poe_optimizer_native::NativeCalculation::Mace(full) =
+            backend.prepare(&req).unwrap().calculate().unwrap()
+        else {
+            panic!("Mace profile")
+        };
+        assert_eq!(prepared.calculate(&handle).unwrap(), full);
+        legal += 1;
+    }
+    assert_eq!(level_rejections, 105 * 7);
+    assert_eq!(registry.alternatives().len(), 4410);
+    assert!(legal > 2000, "matrix must cover broad mixed axes: {legal}");
+}
+#[test]
+fn normal_and_rare_weapon_candidates_match_full_documents_across_all_class_support_axes() {
+    local_weapon_matrix(Arc::new(game_data::bundled_snapshot().unwrap()), TEMPLATE);
+}
+#[test]
+fn local_weapons_retain_injected_rounding_caps_damage_presence_and_support_values() {
+    let data = custom(|package| {
+        package.character.critical_chance_cap = 17.5;
+        for weapon in &mut package.weapons {
+            weapon.attack_rate = 1.235;
+            weapon.physical_minimum = 0.0;
+            weapon.physical_maximum = 12.49;
+            weapon.fire_minimum = 0.0;
+            weapon.fire_maximum = 2.5;
+        }
+        package
+            .supports
+            .iter_mut()
+            .find(|s| s.id == "rapid_attacks_i")
+            .unwrap()
+            .modifiers[0]
+            .value = 37.0;
+    });
+    let xml = TEMPLATE
+        .replace(
+            "enemyArmour\" number=\"0\"",
+            "enemyArmour\" number=\"125.25\"",
+        )
+        .replace(
+            "enemyFireResist\" number=\"0\"",
+            "enemyFireResist\" number=\"-37.5\"",
+        );
+    assert_ne!(xml, TEMPLATE);
+    local_weapon_matrix(data, &xml);
+}
+#[test]
+fn mixed_local_weapon_snapshots_remain_allocation_free() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let registry = local_weapon_catalog(data.clone(), TEMPLATE);
+    let backend = backend(data);
+    let baseline = backend.calculate(&request(TEMPLATE), BUDGET).unwrap();
+    let scenario = registry
+        .bind_native_baseline(&baseline, &backend.identity())
+        .unwrap();
+    let components = registry
+        .native_components(&scenario, &backend.identity())
+        .unwrap();
+    assert!(
+        components
+            .weapons()
+            .iter()
+            .any(|w| !w.local_modifiers().is_empty())
+    );
+    let prepared = backend.prepare_controlled_mace(&components, &[]).unwrap();
+    let handles: Vec<_> = registry
+        .alternatives()
+        .iter()
+        .filter_map(|a| {
+            registry
+                .validated_native_candidate(&a.candidate, &components)
+                .ok()
+        })
+        .collect();
+    let (_, allocations) = allocation_count(|| {
+        for handle in handles.iter().cycle().take(8000) {
+            black_box(prepared.calculate(black_box(handle)).unwrap());
+            black_box(prepared.measure(black_box(handle)).unwrap());
+            black_box(
+                backend
+                    .evaluate_controlled_mace(&prepared, black_box(handle), BUDGET)
+                    .unwrap(),
+            );
+        }
+    });
+    assert_eq!(allocations, 0);
+}

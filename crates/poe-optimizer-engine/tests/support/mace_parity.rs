@@ -134,7 +134,7 @@ impl MaceOracle {
             "local function calcLocal(",
             "-- Build list of modifiers in a given slot number",
         ));
-        weapon_function.push_str("return function(input) local self={base=maceBases[input.weapon],quality=input.quality,name=input.weapon,weaponData={}}; local slotNum=1; local modList={}; ");
+        weapon_function.push_str("return function(input) local self={base=input.weapon_base or maceBases[input.weapon],quality=input.quality,name=input.weapon,weaponData={}}; local slotNum=1; local modList=copyTable(input.weapon_mods or {}); ");
         weapon_function.push_str(section(
             &item,
             "\tif self.base.weapon then\n\t\tlocal weaponData",
@@ -235,7 +235,7 @@ impl MaceOracle {
             &offence,
             "output.Speed = 1 / (baseTime / round(",
         ));
-        body.push_str("\nglobalOutput.Speed=output.Speed; local baseCrit=source.CritChance; base,inc,more=0,0,1; ");
+        body.push_str("\nglobalOutput.Speed=output.Speed; local baseCrit=source.CritChance; base,inc,more=0,0,1; if input.critical_cap then modDB:NewMod('CritChanceCap','OVERRIDE',input.critical_cap,'Explicit test data') end; ");
         body.push_str(source_line(
             &offence,
             "output.CritChance = round((baseCrit + base)",
@@ -363,6 +363,27 @@ impl MaceOracle {
         character: &poe_optimizer_engine::character::CharacterInput,
         ids: &[&str],
     ) -> Table {
+        self.calculate_with_local_modifiers(input, character, ids, &[])
+    }
+
+    pub(super) fn calculate_with_local_modifiers(
+        &self,
+        input: &MaceInput,
+        character: &poe_optimizer_engine::character::CharacterInput,
+        ids: &[&str],
+        modifiers: &[ModifierInput],
+    ) -> Table {
+        self.calculate_with_weapon_overrides(input, character, ids, modifiers, None)
+    }
+
+    pub(super) fn calculate_with_weapon_overrides(
+        &self,
+        input: &MaceInput,
+        character: &poe_optimizer_engine::character::CharacterInput,
+        ids: &[&str],
+        modifiers: &[ModifierInput],
+        weapon_override: Option<(mace::MaceWeaponData<'_>, f64)>,
+    ) -> Table {
         let lua = &self.oracle.lua;
         let table = lua.create_table().unwrap();
         table
@@ -376,7 +397,40 @@ impl MaceOracle {
             .set("character", character_parity::input_table(lua, character))
             .unwrap();
         table.set("weapon", input.weapon.data().name).unwrap();
+        if let Some((base, critical_cap)) = weapon_override {
+            let original: Table = lua
+                .globals()
+                .get::<Table>("maceBases")
+                .unwrap()
+                .get(input.weapon.data().name)
+                .unwrap();
+            let copy: Table = lua
+                .globals()
+                .get::<Function>("copyTable")
+                .unwrap()
+                .call(original)
+                .unwrap();
+            let weapon: Table = copy.get("weapon").unwrap();
+            for (name, value) in [
+                ("PhysicalMin", base.physical_minimum),
+                ("PhysicalMax", base.physical_maximum),
+                ("FireMin", base.fire_minimum),
+                ("FireMax", base.fire_maximum),
+                ("AttackRateBase", base.attack_rate),
+                ("CritChanceBase", base.critical_chance),
+            ] {
+                weapon.set(name, value).unwrap();
+            }
+            table.set("weapon_base", copy).unwrap();
+            table.set("critical_cap", critical_cap).unwrap();
+        }
         table.set("quality", input.quality).unwrap();
+        table
+            .set(
+                "weapon_mods",
+                super::weapon_parity::modifier_table(lua, modifiers),
+            )
+            .unwrap();
         table.set("brutality", input.brutality).unwrap();
         table.set("penalty", input.resistance_penalty).unwrap();
         table.set("armour", input.enemy_armour).unwrap();

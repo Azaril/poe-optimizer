@@ -2437,6 +2437,8 @@ impl SparkOracle {
             "\t\tmodDB:NewMod(\"ManaRegen\"",
         ));
         body.push_str("local env={configInput={resistancePenalty=input.penalty}}; ");
+        body.push_str(source_line(&setup, "modDB:NewMod(\"CritChanceCap\","));
+        body.push_str("\nif input.critical_cap then modDB:NewMod('CritChanceCap','OVERRIDE',input.critical_cap,'Explicit test data') end; ");
         for prefix in resistance_parity::SETUP_PREFIXES {
             body.push_str(source_line(&setup, prefix));
             body.push('\n');
@@ -2453,10 +2455,20 @@ impl SparkOracle {
             "\tlocal function calcResistForType(",
             "\n\tlocal function runSkillFunc(",
         ));
-        body.push_str("local cfg={flags=OR64(ModFlag.Spell,ModFlag.Cast,ModFlag.Projectile,ModFlag.Hit)}; local skillCfg=cfg; local skillModList=modDB; local skillData={}; local activeSkill={skillModList=modDB,conversionTable={},activeEffect={grantedEffect=sparkSkill}}; local globalOutput={ActionSpeedMod=1}; local baseCrit=sparkSkill.levels[1].critChance; local base,inc,more=0,0,1;\n");
+        body.push_str("local cfg={flags=OR64(ModFlag.Spell,ModFlag.Cast,ModFlag.Projectile,ModFlag.Hit)}; local skillCfg=cfg; local skillModList=modDB; local skillData={}; local activeSkill={skillModList=modDB,conversionTable={},activeEffect={grantedEffect=sparkSkill}}; local globalOutput={ActionSpeedMod=1}; local baseCrit=input.critical_chance or sparkSkill.levels[1].critChance; local base,inc,more=0,0,1;\n");
         body.push_str(source_line(
             &offence,
             "output.CritChance = round((baseCrit + base)",
+        ));
+        body.push('\n');
+        body.push_str(source_line(
+            &offence,
+            "output.CritChance = m_min(output.CritChance, skillModList:Override",
+        ));
+        body.push('\n');
+        body.push_str(source_line(
+            &offence,
+            "output.CritChance = m_max(output.CritChance, 0)",
         ));
         body.push_str("\nmodDB:NewMod('CritMultiplier','BASE',data.characterConstants.base_critical_hit_damage_bonus,'Base');\n");
         let crit = section(
@@ -2542,8 +2554,20 @@ impl SparkOracle {
         input: &SparkInput,
         character: &poe_optimizer_engine::character::CharacterInput,
     ) -> Table {
+        self.calculate_with_critical_data(input, character, None)
+    }
+    fn calculate_with_critical_data(
+        &self,
+        input: &SparkInput,
+        character: &poe_optimizer_engine::character::CharacterInput,
+        critical_data: Option<(f64, f64)>,
+    ) -> Table {
         let lua = &self.oracle.lua;
         let table = lua.create_table().unwrap();
+        if let Some((chance, cap)) = critical_data {
+            table.set("critical_chance", chance).unwrap();
+            table.set("critical_cap", cap).unwrap();
+        }
         table.set("level", input.character_level).unwrap();
         table.set("penalty", input.resistance_penalty).unwrap();
         table
@@ -2706,3 +2730,6 @@ mod character_parity;
 
 #[path = "support/resistance_parity.rs"]
 mod resistance_parity;
+
+#[path = "support/weapon_parity.rs"]
+mod weapon_parity;

@@ -241,7 +241,8 @@ pub fn evaluate_with_data(
         .enemy_lightning_resistance
         .clamp(data.resistance_floor, data.enemy_resistance_cap);
     let effective_multiplier = 1.0 - enemy_resistance / 100.0;
-    let crit_chance = data.critical_chance;
+    let crit_chance =
+        crate::offence::capped_critical_chance(data.critical_chance, rules.critical_chance_cap);
     let crit_multiplier = 1.0 + data.critical_damage_bonus / 100.0;
     // CalcOffence executes separate ordinary/critical damage passes, averages
     // their damage endpoints, applies resistance, then weights by crit chance.

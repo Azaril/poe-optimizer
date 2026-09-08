@@ -102,7 +102,7 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v4",
+        "poe-game-data-extractor-v5",
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
@@ -173,6 +173,13 @@ impl ExtractedGameData {
 }
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
+struct ItemRulePolicy {
+    id: String,
+    template: String,
+    form_pattern: String,
+}
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 struct Policy {
     schema_version: u32,
     id: String,
@@ -186,6 +193,7 @@ struct Policy {
     spark_default_class: String,
     mace_default_class: String,
     weapons: Vec<[String; 2]>,
+    item_rules: Vec<ItemRulePolicy>,
     quests: Vec<String>,
     coverage: Vec<String>,
 }
@@ -224,9 +232,10 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         AuthenticatedTreeSnapshot::from_trusted_extraction(snapshot, &digest).map_err(error)?;
     let tree = BundledClassTree::from_authenticated_snapshot(&authenticated).map_err(error)?;
     let policy: Policy = serde_json::from_str(POLICY)?;
-    if policy.schema_version != 2
+    if policy.schema_version != 3
         || policy.quests.len() != 6
         || policy.weapons.len() != 2
+        || policy.item_rules.len() != 5
         || policy.supports.len() != 3
         || policy.support_level != 1
         || policy.support_quality != 0
@@ -295,6 +304,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         mace: extractor.record(&records, "mace")?,
         supports: extractor.record(&records, "supports")?,
         weapons: extractor.record(&records, "weapons")?,
+        item_modifier_rules: extractor.record(&records, "item_modifier_rules")?,
         monsters: extractor.record(&records, "monsters")?,
         defence: extractor.defence()?,
         encounters: extractor.encounters()?,
@@ -438,6 +448,17 @@ impl Extractor {
         lua.globals().set("sourceGems", gems)?;
         lua.load("data.gems={};data.keystones={};data.skills={}")
             .exec()?;
+        let item_forms: Table = lua
+            .load(format!(
+                "{}\nreturn formList",
+                section(
+                    source("src/Modules/ModParser.lua")?,
+                    "local formList = {",
+                    "\n-- Map of modifier names"
+                )?
+            ))
+            .eval()?;
+        lua.globals().set("sourceItemForms", item_forms)?;
         let parser: Function = lua.load(source("src/Modules/ModParser.lua")?).eval()?;
         lua.globals()
             .get::<Table>("modLib")?
@@ -572,6 +593,7 @@ impl Extractor {
             "modDB:NewMod(\"Life\", \"BASE\", data.characterConstants",
             "modDB:NewMod(\"Mana\", \"BASE\", data.characterConstants",
             "modDB:NewMod(\"Accuracy\", \"BASE\", data.characterConstants",
+            "modDB:NewMod(\"CritChanceCap\", \"BASE\",",
         ] {
             initialization.push_str(line(source("src/Modules/CalcSetup.lua")?, prefix)?);
             initialization.push('\n');
@@ -861,6 +883,99 @@ mod tests {
         assert!(literal("operand=1;operand=2;", "operand=", ";").is_err());
         assert!(literal("operand=no;", "operand=", ";").is_err());
         assert_eq!(literal("operand=1.25;", "operand=", ";").unwrap(), 1.25);
+    }
+    #[test]
+    fn critical_chance_cap_conversion_requires_complete_unscoped_base_initialization() {
+        let lua = conversion();
+        assert_eq!(lua.load("return source_critical_chance_cap(modLib.createMod('CritChanceCap','BASE',100,'Base'))").eval::<f64>().unwrap(), 100.0);
+        for mutation in [
+            "m.type='MORE'",
+            "m.type='INC'",
+            "m.type='OVERRIDE'",
+            "m.name='CritChance'",
+            "m.source=nil",
+            "m.source='Other'",
+            "m.flags=ModFlag.Attack",
+            "m.keywordFlags=1",
+            "m[1]={type='Condition',var='Unknown'}",
+            "m[1]={type='InSlot',num=1}",
+            "m.unconsumed=true",
+            "m.value=0/0",
+            "m.value=1/0",
+            "m.value=-1",
+        ] {
+            assert!(lua.load(format!("local m=modLib.createMod('CritChanceCap','BASE',100,'Base');{mutation};return source_critical_chance_cap(m)")).eval::<f64>().is_err(), "{mutation}");
+        }
+    }
+    #[test]
+    fn source_item_conversion_rejects_partial_global_tagged_or_unconsumed_mechanics() {
+        let sources = READ_PATHS
+            .iter()
+            .map(|p| ((*p).into(), source::read_verified_text(&root(), p).unwrap()))
+            .collect();
+        let extractor = Extractor::new(sources).unwrap();
+        let lua = &extractor.lua;
+        let policy: Policy = serde_json::from_str(POLICY).unwrap();
+        let convert: Function = lua.globals().get("source_extract_item_rule").unwrap();
+        let reviewed = bundled_snapshot().unwrap();
+        for (selection, expected) in policy
+            .item_rules
+            .iter()
+            .zip(&reviewed.package().item_modifier_rules)
+        {
+            let actual: Value = convert.call(lua.to_value(selection).unwrap()).unwrap();
+            assert_eq!(
+                &lua.from_value::<ItemModifierRule>(actual).unwrap(),
+                expected
+            );
+        }
+        for text in [
+            "Adds {0} to {1} Lightning Damage",
+            "Adds {0} to {1} Physical Damage to Attacks",
+            "Adds {0} to {1} Physical Damage to Spells",
+            "Adds {0} to {1} Physical Damage while holding a Shield",
+            "Adds {0} to {1} Physical Damage unconsumed text",
+            "Adds {0} to {0} Physical Damage",
+        ] {
+            let selection = ItemRulePolicy {
+                id: "probe".into(),
+                template: text.into(),
+                form_pattern: policy.item_rules[0].form_pattern.clone(),
+            };
+            assert!(
+                convert
+                    .call::<Value>(lua.to_value(&selection).unwrap())
+                    .is_err(),
+                "{text}"
+            );
+        }
+        let check: Function = lua.load("return function(selection,mutate) local original=modLib.parseMod;modLib.parseMod=function(text) local mods,extra=original(text);mutate(mods);return mods,extra end;local ok=pcall(source_extract_item_rule,selection);modLib.parseMod=original;return ok end").eval().unwrap();
+        for mutation in [
+            "mods[1].flags=ModFlag.Attack",
+            "mods[1].keywordFlags=1",
+            "mods[1][1]={type='Condition',var='Unknown'}",
+            "mods[1][1]={type='InSlot',num=1}",
+            "mods[1].source='Unconsumed'",
+            "mods.extra=true",
+            "mods[99]=mods[1]",
+            "mods[1].hidden=true",
+            "mods[3]=mods[1]",
+            "mods[1].value=mods[1].value+1",
+            "mods[1].type='MORE'",
+            "mods[1].name='ColdMin'",
+            "mods[1],mods[2]=mods[2],mods[1]",
+        ] {
+            let mutate: Function = lua
+                .load(format!("return function(mods) {mutation} end"))
+                .eval()
+                .unwrap();
+            assert!(
+                !check
+                    .call::<bool>((lua.to_value(&policy.item_rules[0]).unwrap(), mutate))
+                    .unwrap(),
+                "{mutation}"
+            );
+        }
     }
     #[test]
     fn source_support_conversion_rejects_unconsumed_mechanics_and_type_expressions() {

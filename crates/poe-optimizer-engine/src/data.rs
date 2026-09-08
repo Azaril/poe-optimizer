@@ -37,6 +37,7 @@ pub struct CompiledGameData {
     spark: SparkData,
     mace: MaceData,
     weapon_indices: [usize; 2],
+    pub(crate) weapon_binding: Arc<()>,
     supports: MaceSupportCatalog,
     passives: BTreeMap<(u32, u32), BTreeMap<String, CharacterModifiers>>,
 }
@@ -189,6 +190,7 @@ impl CompiledGameData {
             spark,
             mace,
             weapon_indices,
+            weapon_binding: Arc::new(()),
             passives,
         })
     }

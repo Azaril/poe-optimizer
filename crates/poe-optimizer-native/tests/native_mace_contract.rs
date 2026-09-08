@@ -396,10 +396,10 @@ fn unsupported_mace_mechanics_are_rejected_at_preparation() {
             WOODEN.replace("Item Level: 1", "Item Level: 101"),
         ),
         (
-            "item explicit modifier",
+            "global attack modifier",
             WOODEN.replace(
                 "Implicits: 0",
-                "Implicits: 0\nAdds 10 to 20 Physical Damage",
+                "Implicits: 0\nAdds 10 to 20 Physical Damage to Attacks",
             ),
         ),
         (

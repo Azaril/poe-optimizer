@@ -41,11 +41,13 @@ native-only CLI build excludes Lua and PoB. General native build coverage remain
 see [native backend and optional reference mode](docs/native-backend.md).
 Canonical candidates and locks represent all six dimensions. A generic search kernel has
 bounded parallel evaluation, feasible/infeasible beams, deduplication and fresh finalist
-checks. `search-experimental --backend native` searches supplied normal-Mace weapon/support
+checks. `search-experimental --backend native` searches supplied Mace item/support
 choices and optional class/ascendancy/ordinary and ascendancy passive selections directly on Rayon with exact locks
 and source-preserving mutations. Mace support choices include all seven zero/one/two-gem
 loadouts from Brutality I, Heavy Swing and Rapid Attacks I, with values and eligibility in
-[the injected data package](docs/support-loadouts.md); `--backend pob`
+[the injected data package](docs/support-loadouts.md). [Local item rules](docs/local-weapons.md)
+also admit supplied normal/rare Maces with physical/fire damage, local speed and critical
+modifiers; `--backend pob`
 selects the optional reference backend. Native search uses [typed candidate calculation](docs/native-candidate-evaluation.md)
 by default, with complete document evaluation available through `--native-evaluation document`.
 Baseline and finalist checks always recalculate complete documents. `search-calibration` retains the four original
@@ -90,6 +92,7 @@ cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experime
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-class-search.json --jobs 4 --max-evaluations 746
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-resistance-search.json --jobs 4 --max-evaluations 842
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-support-search.json --jobs 4 --max-evaluations 2942
+cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-local-weapon-search.json --jobs 4 --max-proposals 8192 --max-evaluations 4412
 ```
 
 For the full development workspace, including optional PoB references and parity tests:
@@ -142,7 +145,9 @@ configuration/conditions, which are not yet a complete resolved scenario model. 
 Evaluation-report JSON uses schema 3; the PoB worker protocol, controlled-search reports and
 native benchmark reports use schema 2. Expanded class/tree search reports use schema 3
 with explicit budgets and admission evidence; paid-ascendancy problems use report schema 4.
-[Configurable support-loadout problems](docs/support-loadouts.md) use report schema 5.
+[Configurable support-loadout problems](docs/support-loadouts.md) use report schema 5;
+[local-weapon problems](docs/local-weapons.md) use report schema 6. Synthetic item rolls in
+the latter example exercise calculation rules; they do not certify obtainable affix sets.
 Results identify backend,
 rules/source/adapter fingerprints, observed selection, metric schema/units and coverage.
 `--raw` adds the complete PoB diagnostic snapshot as an opaque JSON attachment. Objective code

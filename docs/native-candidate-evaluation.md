@@ -19,18 +19,19 @@ applies its own locks and point budgets through `CandidateDomain` before dispatc
 A private shared binding identifies the originating component set. Cloning that set
 preserves compatibility; an independently created, equal-content catalog cannot supply
 its handles to another prepared set. Backend and selected-data identities are checked
-separately. Catalog identity and eager alternative XML hashes retain their existing
-meaning and report versions.
+separately. Catalog identity and eager alternative XML hashes describe exact materialized source.
+The local-weapon extension advances the catalog fingerprint for exact payload preservation;
+problem schema 5/report 6 records that expanded item scope.
 
 `NativeBackend::prepare_controlled_mace` parses and checks the source scenario once, then
-prepares weapon, tree and support axes. `PreparedMaceCandidates` retains numerical
+prepares local weapon stats, tree and support axes. `PreparedMaceCandidates` retains numerical
 components, selectors, identities and shared compiled data; it retains no XML and no
 candidate result cache. Component storage scales with the sum of axis lengths, rather
 than one prepared XML object per Cartesian candidate. Catalog construction and hashing
 still visit the Cartesian alternatives, and the CLI retains admitted handles. Those
 costs are outside the prepared numerical object's footprint.
 
-Composition errors caused by injected modifiers are retained per tree choice. Evaluating
+Composition errors caused by injected modifiers are retained per tree or weapon choice. Evaluating
 an affected handle reports the same error as complete document evaluation; an unrelated
 choice does not fail preparation merely because that tree exists in the catalog.
 
@@ -74,6 +75,14 @@ timed typed snapshots and typed snapshots converted to owned measurements.
 ```powershell
 cargo run --release --no-default-features --locked --example benchmark_mace_candidates --target-dir target/native-only -- --evaluations 20000 --repeats 3 --jobs 1,2,4,32 --cpu-label "Describe the measured CPU" > runs/candidate-benchmark.json
 ```
+
+The default `--candidate-set normal` uses weapon/support alternatives from
+`examples/mace-support-search.json`. Add `--candidate-set local-weapons` to use the
+supplied normal/rare alternatives and loadouts in `examples/mace-local-weapon-search.json`.
+Both sets use the pinned `mace-wooden.xml` calibration fixture and all 105 admitted tree
+selections; the candidate-set file's template, objective, locks, neighborhood and tree
+budgets are not benchmark inputs. JSON records the selected set and the two source fields
+used. With bundled data, the local-weapon set has 4,410 structural and 2,949 legal candidates.
 
 Choose worker counts for the machine. For longer samples of the inexpensive layers,
 repeat with `--evaluations 1000000 --repeats 5 --modes pure_calculation,typed_snapshot,typed_owned_measurements`.

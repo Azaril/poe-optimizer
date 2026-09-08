@@ -320,8 +320,8 @@ Sources: [Spark skill data](https://github.com/PathOfBuildingCommunity/PathOfBui
 
 ### Closed Mace Strike profile
 
-The `mace` profile accepts level-one Mace Strike, one normal Wooden Club or Smithing
-Hammer, integer quality 0..20 and item level 1..100. Zero to two level-one quality-zero supports from
+The `mace` profile accepts level-one Mace Strike, one supplied normal/rare Wooden Club or
+Smithing Hammer with admitted local modifiers, integer quality 0..20 and item level 1..100. Zero to two level-one quality-zero supports from
 Brutality I, Heavy Swing and Rapid Attacks I are admitted. See [support composition](support-loadouts.md). `evaluate_with_character` adds resolved class attributes
 and the ordinary entrance/ascendancy resistance effects below. There are no other items,
 supports, ascendancy effects or external modifiers. The legacy `evaluate(input)` wrapper preserves
@@ -351,7 +351,7 @@ a top-level AverageHit for this attack, and the typed metric remains unavailable
 that existing contract. This profile claims hit DPS, not combined or ailment DPS.
 
 Twenty-one normalized source hashes accompany the Rust data; the profile identity is
-`poe2-mace-strike-support-loadouts-v4`. The differential test executes
+`poe2-mace-strike-local-weapons-v5`. The differential test executes
 actual pinned Item/ModDB/resource/offence source with resolved closed-profile scaffolding,
 including the real Brutality stat map and damage-disable flags. Interpreted and warmed
 runs cover every admitted quality, both weapons and support choices, character levels,
@@ -363,16 +363,18 @@ closed profile and do not establish a general native build engine or game certif
 
 ### Prepared typed candidate boundary
 
-The numerical kernel remains `mace::evaluate_with_supports`, receiving resolved
-`MaceInput`, `CharacterInput`, selected `CompiledGameData` and a privately bound
-`PreparedMaceSupports`. The typed search adapter calls that same function. It introduces no
+The numerical kernel is `mace::evaluate_with_components`, receiving resolved
+`MaceInput`, `CharacterInput`, selected `CompiledGameData`, a privately bound
+`PreparedWeaponStats` and `PreparedMaceSupports`. Legacy wrappers prepare an unmodified
+weapon through the same local assembly pipeline. The typed search adapter calls that same function. It introduces no
 second damage model, game-balance constants or Lua fallback.
 
 `NativeBackend::prepare_controlled_mace` accepts an immutable `NativeMaceComponents` view
 issued by portable import after a verified full-document baseline. The native adapter
 reuses the exact document parser once for scenario admission and metric validation, then
 reuses the shared character resolver for class attributes and owned passive effects.
-The resulting `PreparedMaceCandidates` stores one numerical input per weapon, one resolved
+The resulting `PreparedMaceCandidates` stores one numerical input and prepared local
+stat object per weapon, one resolved
 character per tree choice and one compiled support handle per loadout. Preparation and
 retained component storage therefore grow with the sum of axis sizes. The separate import
 catalog still performs eager Cartesian alternative hashing.
@@ -598,3 +600,24 @@ values and cap/floor boundaries. Fresh complete-build comparisons cover the four
 ascendancy nodes, ordinary entrance/support interactions, effect removal and export reloads.
 Maximum-resistance modifiers, conditions, INC/MORE/OVERRIDE, conversions and other actors
 remain unsupported. Successful validation is scoped to these admitted records.
+
+### Source-local weapon assembly and shared critical cap
+
+`weapon.rs` is a reusable local numeric assembly seam. `consume_local_numeric` follows
+`Item.calcLocal` exact name/type/flags equality, zero keyword flags and the literal first-tag
+predicate. Matched entries are removed in source order; unmatched entries remain explicit.
+It is separate from ModDB subset matching. The supported item compiler rejects leftovers
+rather than turning them into global effects.
+
+Physical endpoints use `(base + flat) * (1 + local INC/100) * (1 + quality/100)` with one final
+integer rounding. Fire endpoints round without quality. A damage pair is emitted only if
+both endpoints are positive; prepared stats retain presence flags as well as numeric zeros
+for omitted pairs. Local attack rate and critical chance round to two decimals. Attack
+rate then receives the supported global/support modifiers downstream.
+
+`offence.rs` shares source two-decimal critical rounding, cap and floor semantics between
+Spark and Mace. `character.critical_chance_cap` is injected data; Mace applies the cap before
+its second accuracy check. Local `WeaponStats.critical_chance` remains uncapped item evidence.
+These rules include custom-base rounding/suppression cases and preserve reviewed goldens.
+The [local weapon guide](local-weapons.md) documents the admitted data/grammar, API and
+remaining item/mechanic coverage. All unknown effects still reject explicitly.

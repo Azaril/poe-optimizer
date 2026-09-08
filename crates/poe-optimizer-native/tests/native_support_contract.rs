@@ -65,7 +65,7 @@ fn diagnostic(result: &EvaluationResult) -> serde_json::Value {
         &result
             .attachments
             .iter()
-            .find(|a| a.media_type == "application/vnd.poe-optimizer.native-profile+json;version=2")
+            .find(|a| a.media_type == "application/vnd.poe-optimizer.native-profile+json;version=3")
             .unwrap()
             .content,
     )
@@ -183,7 +183,7 @@ fn support_evidence_tampering_and_old_attachment_versions_fail_realization() {
         let attachment = changed
             .attachments
             .iter_mut()
-            .find(|a| a.media_type == "application/vnd.poe-optimizer.native-profile+json;version=2")
+            .find(|a| a.media_type == "application/vnd.poe-optimizer.native-profile+json;version=3")
             .unwrap();
         let mut evidence: serde_json::Value = serde_json::from_str(&attachment.content).unwrap();
         *evidence.pointer_mut(pointer).unwrap() = serde_json::json!("tampered");
@@ -199,7 +199,7 @@ fn support_evidence_tampering_and_old_attachment_versions_fail_realization() {
     changed
         .attachments
         .iter_mut()
-        .find(|a| a.media_type == "application/vnd.poe-optimizer.native-profile+json;version=2")
+        .find(|a| a.media_type == "application/vnd.poe-optimizer.native-profile+json;version=3")
         .unwrap()
         .media_type = "application/vnd.poe-optimizer.native-profile+json;version=1".into();
     assert!(

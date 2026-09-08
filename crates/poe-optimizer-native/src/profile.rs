@@ -17,6 +17,8 @@ pub(crate) struct Profile {
     pub support_keys: Vec<String>,
     pub support_order: Vec<String>,
     pub prepared_supports: Option<poe_optimizer_engine::mace_supports::PreparedMaceSupports>,
+    pub weapon_record: Option<poe_optimizer_import::mace_item::ValidatedMaceWeapon>,
+    pub prepared_weapon: Option<poe_optimizer_engine::weapon::PreparedWeaponStats>,
     pub tree: crate::tree::NativeTree,
     pub enemy_level: u32,
     pub config: BTreeMap<String, Scalar>,
@@ -565,7 +567,22 @@ pub(crate) fn parse(
         blackjaw: quest(5),
     };
     let enemy_level = number(&config, "enemyLevel") as u32;
-    let input = if let Some((weapon, item_level, quality)) = weapon {
+    let prepared_weapon = weapon
+        .as_ref()
+        .map(|record| {
+            data.prepare_mace_weapon(
+                weapon_slot(record.weapon_key())?,
+                record.quality(),
+                record.item_level(),
+                record.local_modifiers(),
+            )
+            .map_err(|error| unsupported(error.to_string()))
+        })
+        .transpose()?;
+    let input = if let Some(record) = &weapon {
+        let weapon = weapon_slot(record.weapon_key())?;
+        let item_level = record.item_level();
+        let quality = record.quality();
         let enemy_evasion = match config.get("enemyEvasion") {
             Some(Scalar::Number(value)) => *value,
             None => data
@@ -598,6 +615,8 @@ pub(crate) fn parse(
         support_keys,
         support_order,
         prepared_supports,
+        weapon_record: weapon,
+        prepared_weapon,
         tree: resolved_tree,
         enemy_level,
         config,
@@ -646,10 +665,17 @@ fn validate_gem(
     )
 }
 
+fn weapon_slot(key: &str) -> Result<MaceWeapon, EvaluationError> {
+    match key {
+        "wooden_club" => Ok(MaceWeapon::WoodenClub),
+        "smithing_hammer" => Ok(MaceWeapon::SmithingHammer),
+        _ => Err(unsupported("Unknown native Mace weapon capability slot")),
+    }
+}
 fn parse_weapon(
     item: Node<'_, '_>,
     data: &crate::CompiledGameData,
-) -> Result<(MaceWeapon, u32, u32), EvaluationError> {
+) -> Result<poe_optimizer_import::mace_item::ValidatedMaceWeapon, EvaluationError> {
     if item.tag_name().namespace().is_some()
         || item
             .attributes()
@@ -659,50 +685,11 @@ fn parse_weapon(
         || !item.first_child().is_some_and(|node| node.is_text())
     {
         return Err(unsupported(
-            "Native Mace item must be one exact unmodified text payload at XML item ID 1",
+            "Native Mace item must be one exact admitted text payload at XML item ID 1",
         ));
     }
-    let raw = item.text().unwrap_or_default();
-    if raw.len() > 1024 {
-        return Err(unsupported("Native normal mace payload exceeds 1024 bytes"));
-    }
-    let normalized = raw.replace("\r\n", "\n");
-    let lines: Vec<_> = normalized.trim().lines().collect();
-    if lines.len() != 5 || lines[0] != "Rarity: NORMAL" || lines[4] != "Implicits: 0" {
-        return Err(unsupported(
-            "Native Mace requires NORMAL rarity, zero implicits and no modifiers",
-        ));
-    }
-    let weapon = match lines[1] {
-        name if name == data.weapon(MaceWeapon::WoodenClub).name => MaceWeapon::WoodenClub,
-        name if name == data.weapon(MaceWeapon::SmithingHammer).name => MaceWeapon::SmithingHammer,
-        _ => {
-            return Err(unsupported(
-                "Native Mace supports only Wooden Club and Smithing Hammer",
-            ));
-        }
-    };
-    fn integer(
-        text: Option<&str>,
-        min: u32,
-        max: u32,
-        field: &str,
-    ) -> Result<u32, EvaluationError> {
-        text.and_then(|text| {
-            text.parse::<u32>()
-                .ok()
-                .filter(|value| value.to_string() == text)
-        })
-        .filter(|value| (min..=max).contains(value))
-        .ok_or_else(|| {
-            unsupported(format!(
-                "Native Mace {field} must be a canonical integer in {min}..={max}"
-            ))
-        })
-    }
-    let item_level = integer(lines[2].strip_prefix("Item Level: "), 1, 100, "item level")?;
-    let quality = integer(lines[3].strip_prefix("Quality: "), 0, 20, "quality")?;
-    Ok((weapon, item_level, quality))
+    poe_optimizer_import::mace_item::parse_mace_item_element(item, data.snapshot().package())
+        .map_err(|error| unsupported(error.to_string()))
 }
 
 /// Copy each untouched source span once, including potentially large trailing Notes.

@@ -69,6 +69,67 @@ function source_extract_effect(text)
     assert(extra==nil,'partially parsed source stat')
     return source_convert_modifiers(mods)
 end
+-- Select textual forms from the actual parser table, then derive every typed
+-- mapping from actual parser results. Probe numbers identify parameter positions;
+-- they are extraction operands, not game balance or generated build expectations.
+function source_extract_item_rule(selection)
+    local pattern=selection.form_pattern
+    local form=assert(sourceItemForms[pattern],'item form absent from source parser')
+    assert(form=='DMG' or form=='INC','unsupported item source form')
+    local captures={}
+    local at=1
+    while true do
+        local first,last=pattern:find('(%d+)',at,true)
+        if not first then break end
+        captures[#captures+1]='unsigned_integer';at=last+1
+    end
+    assert(#captures>=1 and #captures<=2,'unsupported item numeric source captures')
+    local function render(values)
+        local seen={}
+        local text=selection.template:gsub('{(%d)}',function(index)
+            local i=tonumber(index)+1
+            assert(values[i]~=nil and not seen[i],'invalid item capture placeholder')
+            seen[i]=true;return tostring(values[i])
+        end)
+        for i in ipairs(values) do assert(seen[i],'unused item capture') end
+        return text
+    end
+    local probes=#captures==2 and {101,211} or {101}
+    local mods,extra=modLib.parseMod(render(probes))
+    assert(extra==nil,'partially parsed item source form')
+    dense_array(mods,'item source modifiers')
+    assert(#mods==#captures,'unsupported item source modifier count')
+    local names={PhysicalMin='physical_minimum',PhysicalMax='physical_maximum',FireMin='fire_minimum',FireMax='fire_maximum',PhysicalDamage='physical_damage',Speed='speed',CritChance='critical_chance'}
+    local mappings={}
+    for _,modifier in ipairs(mods) do
+        local stat=assert(names[modifier.name],'unsupported local item modifier target')
+        local operation=assert(({BASE='base',INC='increased'})[modifier.type],'unsupported local item modifier operation')
+        local capture
+        for index,value in ipairs(probes) do if value==modifier.value then capture=index-1 end end
+        assert(capture~=nil,'item source modifier does not preserve captured roll')
+        local expectedFlags=modifier.name=='Speed' and ModFlag.Attack or 0
+        assert(modifier.flags==expectedFlags and modifier.keywordFlags==0,'item source modifier is not exact local scope')
+        assert(equal(modifier,modLib.createMod(modifier.name,modifier.type,modifier.value,nil,modifier.flags,modifier.keywordFlags)),'unconsumed item source fields or tags')
+        mappings[#mappings+1]={stat=stat,operation=operation,capture=capture,flags=modifier.flags,keyword_flags=modifier.keywordFlags}
+    end
+    if form=='DMG' then
+        assert(#mappings==2 and mappings[1].operation=='base' and mappings[2].operation=='base' and mappings[1].capture==0 and mappings[2].capture==1,'unsupported local damage source mapping shape')
+        assert((mappings[1].stat=='physical_minimum' and mappings[2].stat=='physical_maximum') or (mappings[1].stat=='fire_minimum' and mappings[2].stat=='fire_maximum'),'unsupported local damage source endpoints')
+    else
+        assert(#mappings==1 and mappings[1].operation=='increased' and mappings[1].capture==0,'unsupported local increased source mapping shape')
+        assert(mappings[1].stat=='physical_damage' or mappings[1].stat=='speed' or mappings[1].stat=='critical_chance','unsupported local increased source target')
+    end
+    for _,values in ipairs(#captures==2 and {{0,1},{17,37},{999,1000}} or {{0},{17},{999}}) do
+        local actual,remainder=modLib.parseMod(render(values))
+        local expected={}
+        for index,mapping in ipairs(mappings) do
+            local original=mods[index]
+            expected[index]=modLib.createMod(original.name,original.type,values[mapping.capture+1],nil,original.flags,original.keywordFlags)
+        end
+        assert(remainder==nil and equal(actual,expected),'item source mapping changes with captured operands')
+    end
+    return {id=selection.id,template=selection.template,captures=captures,modifiers=mappings}
+end
 local function gem(id)
     local g=unique(sourceGems,function(g)return g.grantedEffectId==id end,'gem '..id)
     return {skill_id=g.grantedEffectId,game_id=g.gameId,variant_id=g.variantId,name=g.name,requirements=sourceGemRequirements(g,assert(skills[id]))}
@@ -155,6 +216,11 @@ local function one_mod(db,name)
     assert(#mods==1,'ambiguous resource initialization')
     return mods[1]
 end
+function source_critical_chance_cap(modifier)
+    local value=numeric(modifier.value)
+    assert(equal(modifier,modLib.createMod('CritChanceCap','BASE',value,'Base')),'unconsumed critical chance cap operation, source, flags or tags')
+    return value
+end
 function source_extract_records(policy)
     local constants=data.characterConstants
     local init=sourceResourceInitialization()
@@ -164,6 +230,7 @@ function source_extract_records(policy)
     local character={
         base_evasion=constants.base_evasion_rating,
         critical_damage_bonus=constants.base_critical_hit_damage_bonus,
+        critical_chance_cap=source_critical_chance_cap(one_mod(init,'CritChanceCap')),
         life_per_level=constants.life_per_level,
         initial_life=one_mod(init,'Life')[1].base,
         mana_per_level=constants.mana_per_level,
@@ -195,6 +262,8 @@ function source_extract_records(policy)
     for _,selection in ipairs(policy.supports) do
         supports[#supports+1]=source_extract_support(selection,policy.support_level,policy.support_quality)
     end
+    local item_modifier_rules={}
+    for _,selection in ipairs(policy.item_rules) do item_modifier_rules[#item_modifier_rules+1]=source_extract_item_rule(selection) end
     local weapons={}
     for _,selection in ipairs(policy.weapons) do
         local base=assert(sourceBases[selection[2]],'missing weapon base')
@@ -222,7 +291,7 @@ function source_extract_records(policy)
         assert(quests[target[3]]==nil or quests[target[3]]==value,'elemental quest values diverged; schema expansion required')
         quests[target[3]]=value
     end
-    return {character=character,spark=spark,mace=mace,supports=supports,weapons=weapons,quests=quests,monsters={armour=data.monsterArmourTable,evasion=data.monsterEvasionTable}}
+    return {character=character,spark=spark,mace=mace,supports=supports,weapons=weapons,item_modifier_rules=item_modifier_rules,quests=quests,monsters={armour=data.monsterArmourTable,evasion=data.monsterEvasionTable}}
 end
 function source_encounter_build(level)
     local build={characterLevel=level}

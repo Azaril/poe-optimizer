@@ -1,4 +1,4 @@
-//! Experimental, explicitly bounded normal-Mace mutation search.
+//! Experimental, explicitly bounded supplied-Mace mutation search.
 use poe_optimizer_core::{
     candidate::{
         AscendancyLock, Candidate, CandidateBudgets, CandidateConstraints, CandidateDomain,
@@ -17,8 +17,8 @@ use poe_optimizer_data::class_tree::{self, ClassTreeSelection};
 use poe_optimizer_import::controlled_mace::VerifiedMaceScenario;
 use poe_optimizer_import::{
     controlled_mace::{
-        ControlledMaceCatalog, MaceSupportChoice, MaceSupportLoadout, NativeMaceCandidate,
-        NormalMaceAlternative, VerifiedNativeMaceScenario,
+        ControlledMaceCatalog, MaceSupportChoice, MaceSupportLoadout, MaceWeaponAlternative,
+        NativeMaceCandidate, VerifiedNativeMaceScenario,
     },
     decode_build,
 };
@@ -86,7 +86,7 @@ pub(crate) struct Args {
 struct Problem {
     schema_version: u32,
     template: PathBuf,
-    weapons: Vec<NormalMaceAlternative>,
+    weapons: Vec<MaceWeaponAlternative>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     supports: Option<Vec<MaceSupportChoice>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -350,15 +350,16 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         }
     }
     let problem = super::read_json::<Problem>(&args.problem, 512 * 1024)?;
-    let support_loadouts_enabled = problem.schema_version == 4;
-    let ascendancy_passives = matches!(problem.schema_version, 3 | 4);
+    let local_weapons_enabled = problem.schema_version == 5;
+    let support_loadouts_enabled = matches!(problem.schema_version, 4 | 5);
+    let ascendancy_passives = matches!(problem.schema_version, 3..=5);
     // Versioned inputs avoid silently widening legacy search scopes or ignoring locks.
     let supports = match (problem.schema_version, &problem.supports, &problem.support_loadouts) {
         (1..=3, Some(legacy), None) if problem.locks.support_loadout.is_none() => {
             legacy.iter().copied().map(MaceSupportLoadout::from).collect()
         }
-        (4, None, Some(loadouts)) if problem.locks.support.is_none() => loadouts.clone(),
-        _ => return Err("Schemas 1-3 require supports and legacy support locks; schema 4 requires support_loadouts and support_loadout locks, without legacy fields".into()),
+        (4 | 5, None, Some(loadouts)) if problem.locks.support.is_none() => loadouts.clone(),
+        _ => return Err("Schemas 1-3 require supports and legacy support locks; schemas 4/5 require support_loadouts and support_loadout locks, without legacy fields".into()),
     };
     let locked_support = problem
         .locks
@@ -368,10 +369,10 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let expanded = match (problem.schema_version, problem.tree_search.as_ref()) {
         (1, None) => false,
         (2, Some(tree)) if tree.ordinary_passive_points <= 1 && tree.ascendancy_passive_points == 0 => true,
-        (3 | 4, Some(tree)) if tree.ordinary_passive_points <= 1 && tree.ascendancy_passive_points <= 1 => true,
+        (3..=5, Some(tree)) if tree.ordinary_passive_points <= 1 && tree.ascendancy_passive_points <= 1 => true,
         (2, Some(_)) => return Err("Schema 2 requires ordinary points 0 or 1 and ascendancy points 0".into()),
-        (3 | 4, Some(_)) => return Err("Schemas 3/4 require explicit ordinary and ascendancy point budgets of 0 or 1".into()),
-        _ => return Err("Use schema 1 without tree_search, or schema 2/3/4 with explicit tree_search point budgets".into()),
+        (3..=5, Some(_)) => return Err("Schemas 3/4/5 require explicit ordinary and ascendancy point budgets of 0 or 1".into()),
+        _ => return Err("Use schema 1 without tree_search, or schema 2/3/4/5 with explicit tree_search point budgets".into()),
     };
     if !ascendancy_passives
         && problem
@@ -384,7 +385,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
                     .any(|tree| tree.ascendancy_node_id.is_some())
             })
     {
-        return Err("Allocated ascendancy choices require problem schema 3 or 4".into());
+        return Err("Allocated ascendancy choices require problem schema 3, 4 or 5".into());
     }
     if !expanded
         && (problem.locks.class_id.is_some()
@@ -393,7 +394,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             || !problem.locks.unallocated_passives.is_empty())
     {
         return Err(
-            "Class, ascendancy and passive locks require problem schema 2, 3 or 4 with tree_search"
+            "Class, ascendancy and passive locks require problem schema 2, 3, 4 or 5 with tree_search"
                 .into(),
         );
     }
@@ -444,6 +445,9 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             supports,
         )?
     };
+    if !local_weapons_enabled && registry.uses_extended_weapon_scope() {
+        return Err("Rare or modified Mace payloads and explicit item requirements require problem schema 5".into());
+    }
     #[cfg(feature = "pob")]
     if matches!(args.backend, super::BackendChoice::Pob) && args.native_evaluation.is_some() {
         return Err("--native-evaluation requires --backend native".into());
@@ -671,13 +675,13 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         }
     }
     let mut report = serde_json::json!({
-        "schema_version":if support_loadouts_enabled {5} else if ascendancy_passives {4} else if expanded {3} else {2},"status":"experimental_mutation_search","diagnostic_only":true,
+        "schema_version":if local_weapons_enabled {6} else if support_loadouts_enabled {5} else if ascendancy_passives {4} else if expanded {3} else {2},"status":"experimental_mutation_search","diagnostic_only":true,
         "requested_backend":engine.capabilities().id,"execution_kind":if execution == ExecutionKind::RustCpu {"rust_cpu"} else {"external_process"},
         "data":{"identity":snapshot.identity(),"trust":snapshot.trust(),"uses_packaged_default":args.data.data.is_none()},
         "requirements":{"scope":"controlled_mace_requirements_v1","legal_candidates":legal_candidates,"rejected_candidates":rejected_candidates},
         "admission":{"complete":Some(checked_candidates as u128)==domain.space.size(),"checked_candidates":checked_candidates,"rejected_candidates":rejected_rules},
         "tree_choices":domain.tree_choices,
-        "scope":if support_loadouts_enabled {"normal_mace_class_passive_weapon_support_loadouts_v1"} else if ascendancy_passives {"normal_mace_class_passive_weapon_support_profile_v2"} else if expanded {"normal_mace_class_entrance_weapon_support_profile_v1"} else {"normal_mace_weapon_support_profile_v1"},"problem":problem,"template_xml_sha256":imported.sha256,
+        "scope":if local_weapons_enabled {"mace_local_weapon_class_passive_support_loadouts_v1"} else if support_loadouts_enabled {"normal_mace_class_passive_weapon_support_loadouts_v1"} else if ascendancy_passives {"normal_mace_class_passive_weapon_support_profile_v2"} else if expanded {"normal_mace_class_entrance_weapon_support_profile_v1"} else {"normal_mace_weapon_support_profile_v1"},"problem":problem,"template_xml_sha256":imported.sha256,
         "template":registry.template_build(),"catalog":registry.catalog(),"alternatives":alternatives,
         "candidate_constraints":constraints,"space":domain.space,"strategy":args.strategy,"neighborhood":domain.neighborhood,
         "run_budget":{"max_evaluations":args.max_evaluations,"timeout_seconds":args.timeout_seconds,"jobs":args.jobs,"seed":args.seed,"max_proposals":args.max_proposals,"max_rounds":args.max_rounds,"reserved_template_attempts":1,"reserved_verification_attempts":1},

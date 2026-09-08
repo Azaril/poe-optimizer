@@ -7,13 +7,14 @@
 use crate::character::CharacterInput;
 use crate::data::CompiledGameData;
 use crate::mace_supports::PreparedMaceSupports;
+use crate::weapon::PreparedWeaponStats;
 use crate::{
     defence::{armour_reduction_percent, hit_chance_with_data, round_to_integer},
     spark::{SourceFile, SparkQuestRewards},
 };
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-mace-strike-support-loadouts-v4";
+pub const PROFILE_ID: &str = "poe2-mace-strike-local-weapons-v5";
 pub const TREE_VERSION: &str = "0_5";
 /// Index in the pinned tree classes table; XML classInternalId is a separate id.
 pub const CLASS_ID: u32 = 3;
@@ -170,6 +171,34 @@ pub fn evaluate_with_supports(
     compiled: &CompiledGameData,
     supports: &PreparedMaceSupports,
 ) -> Result<MaceOutput, MaceError> {
+    let weapon =
+        compiled.prepare_mace_weapon(input.weapon, input.quality, input.item_level, &[])?;
+    evaluate_with_components(input, character, compiled, &weapon, supports)
+}
+
+/// Fresh calculation using explicitly prepared weapon and support components.
+/// The legacy brutality selector is ignored; weapon key/quality/item-level must
+/// still match the validated input so stale components cannot change a candidate.
+pub fn evaluate_with_components(
+    input: &MaceInput,
+    character: &CharacterInput,
+    compiled: &CompiledGameData,
+    weapon: &PreparedWeaponStats,
+    supports: &PreparedMaceSupports,
+) -> Result<MaceOutput, MaceError> {
+    if !compiled.owns_weapon(weapon) {
+        return Err(MaceError(
+            "Prepared Mace weapon belongs to a different compiled dataset",
+        ));
+    }
+    if weapon.weapon() != input.weapon
+        || weapon.quality() != input.quality
+        || weapon.item_level() != input.item_level
+    {
+        return Err(MaceError(
+            "Prepared Mace weapon differs from the selected input identity",
+        ));
+    }
     if !compiled.owns_mace_supports(supports) {
         return Err(MaceError(
             "Prepared Mace supports belong to a different compiled dataset",
@@ -252,12 +281,11 @@ pub fn evaluate_with_supports(
         }),
         compiled.defence(),
     );
-    let weapon = compiled.weapon(input.weapon);
-    // Classes/Item: physical quality applies locally, rounding each endpoint.
-    // Item level does not enter these ordinary unmodified weapon base calculations.
-    let quality_multiplier = 1.0 + f64::from(input.quality) / 100.0;
-    let weapon_physical_minimum = round_to_integer(weapon.physical_minimum * quality_multiplier);
-    let weapon_physical_maximum = round_to_integer(weapon.physical_maximum * quality_multiplier);
+    let weapon = weapon.stats();
+    // Local flat/INC/quality assembly, local rate and critical rounding were
+    // prepared once from the selected item's exact data rules and ordered rolls.
+    let weapon_physical_minimum = weapon.physical_minimum;
+    let weapon_physical_maximum = weapon.physical_maximum;
     // calcDamage rounds again after damage modifiers, before critical scaling/armour.
     let increased =
         1.0 + (modifiers.attack_damage_increased + modifiers.melee_damage_increased) / 100.0;
@@ -291,7 +319,10 @@ pub fn evaluate_with_supports(
     let enemy_evasion = round_to_integer(input.enemy_evasion).max(0.0);
     let hit = hit_chance_with_data(enemy_evasion, accuracy, false, compiled.defence());
     // A critical attack rolls accuracy twice; a failed second check becomes a normal hit.
-    let crit_chance = round_to_integer(weapon.critical_chance * 100.0) / 100.0 * hit / 100.0;
+    let crit_chance =
+        crate::offence::capped_critical_chance(weapon.critical_chance, rules.critical_chance_cap)
+            * hit
+            / 100.0;
     let crit_multiplier = 1.0 + shared.critical_damage_bonus / 100.0;
     let enemy_resistance = input
         .enemy_fire_resistance

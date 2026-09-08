@@ -106,6 +106,7 @@ pub struct PreparedMaceFootprint {
     pub support_components: usize,
     pub metric_selectors: usize,
     pub deferred_character_errors: usize,
+    pub deferred_weapon_errors: usize,
     pub owned_component_bytes: usize,
     pub retained_xml_bytes: usize,
     pub cached_candidate_results: usize,
@@ -118,6 +119,7 @@ pub struct PreparedMaceCandidates {
     identity: BackendIdentity,
     binding: NativeMaceBinding,
     inputs: Vec<MaceInput>,
+    weapons: Vec<Result<poe_optimizer_engine::weapon::PreparedWeaponStats, EvaluationError>>,
     characters: Vec<Result<CharacterInput, EvaluationError>>,
     supports: Vec<PreparedMaceSupports>,
     metrics: Vec<SelectedMetric>,
@@ -143,6 +145,7 @@ impl PreparedMaceCandidates {
             .sum::<usize>();
         PreparedMaceFootprint {
             weapon_components: self.inputs.len(),
+            deferred_weapon_errors: self.weapons.iter().filter(|entry| entry.is_err()).count(),
             tree_components: self.characters.len(),
             support_components: self.supports.len(),
             metric_selectors: self.metrics.len(),
@@ -152,6 +155,16 @@ impl PreparedMaceCandidates {
                 .filter(|entry| entry.is_err())
                 .count(),
             owned_component_bytes: self.inputs.capacity() * size_of::<MaceInput>()
+                + self.weapons.capacity()
+                    * size_of::<
+                        Result<poe_optimizer_engine::weapon::PreparedWeaponStats, EvaluationError>,
+                    >()
+                + self
+                    .weapons
+                    .iter()
+                    .filter_map(|entry| entry.as_ref().err())
+                    .map(|error| error.message.capacity())
+                    .sum::<usize>()
                 + self.characters.capacity() * size_of::<Result<CharacterInput, EvaluationError>>()
                 + self
                     .characters
@@ -187,6 +200,12 @@ impl PreparedMaceCandidates {
             .inputs
             .get(candidate.weapon_index())
             .ok_or_else(|| contract("Invalid native weapon axis"))?;
+        let weapon = self
+            .weapons
+            .get(candidate.weapon_index())
+            .ok_or_else(|| contract("Invalid native prepared weapon axis"))?
+            .as_ref()
+            .map_err(|error| EvaluationError::new(error.kind, error.message.clone()))?;
         let character = self
             .characters
             .get(candidate.tree_index())
@@ -197,9 +216,9 @@ impl PreparedMaceCandidates {
             .supports
             .get(candidate.loadout_index())
             .ok_or_else(|| contract("Invalid native support axis"))?;
-        mace::evaluate_with_supports(input, character, &self.data, supports).map_err(|error| {
-            EvaluationError::new(EvaluationErrorKind::CalculationFailed, error.to_string())
-        })
+        mace::evaluate_with_components(input, character, &self.data, weapon, supports).map_err(
+            |error| EvaluationError::new(EvaluationErrorKind::CalculationFailed, error.to_string()),
+        )
     }
     /// Pure stack measurements; no host clock or OS services are consulted.
     pub fn measure(
@@ -280,6 +299,28 @@ impl<C: EvaluationClock> NativeBackend<C> {
                 })
             })
             .collect::<Result<Vec<_>, EvaluationError>>()?;
+        // Preserve per-candidate failure accounting when custom numerical item
+        // data makes one weapon impossible to prepare; unrelated axes remain usable.
+        let weapons = components
+            .weapons()
+            .iter()
+            .zip(&inputs)
+            .map(|(record, input)| {
+                self.data
+                    .prepare_mace_weapon(
+                        input.weapon,
+                        input.quality,
+                        input.item_level,
+                        record.local_modifiers(),
+                    )
+                    .map_err(|error| {
+                        EvaluationError::new(
+                            EvaluationErrorKind::UnsupportedCapability,
+                            error.to_string(),
+                        )
+                    })
+            })
+            .collect();
         // A custom dataset can admit individual effects whose selected sum is
         // outside the numeric scope. Preserve the full-document path's deferred
         // failure: unused/locked-out axes must not abort a valid search domain.
@@ -325,6 +366,7 @@ impl<C: EvaluationClock> NativeBackend<C> {
             identity: self.identity.clone(),
             binding: components.binding().clone(),
             inputs,
+            weapons,
             characters,
             supports,
             metrics,

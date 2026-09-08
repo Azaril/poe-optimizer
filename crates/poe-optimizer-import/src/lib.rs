@@ -4,6 +4,7 @@
 //! metrics in an export are preserved as source data and are never evaluated here.
 
 pub mod controlled_mace;
+pub mod mace_item;
 pub mod preflight;
 pub mod xml_compat;
 

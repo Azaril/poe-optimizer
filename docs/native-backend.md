@@ -13,7 +13,7 @@ use either implementation without exposing Lua values or process APIs.
 | Profile | Character and skills | Equipment and encounter scope |
 | --- | --- | --- |
 | Spark | One level-1 quality-0 Spark; supported class/tree selection described below | No equipment/supports; supported explicit normal, boss or Pinnacle encounter configuration |
-| Mace Strike | One level-1 quality-0 Mace Strike; zero to two level-1 quality-0 reviewed supports; supported class/tree selection described below | One normal weapon from the two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, no modifiers/implicits; normal enemies only |
+| Mace Strike | One level-1 quality-0 Mace Strike; zero to two level-1 quality-0 reviewed supports; supported class/tree selection described below | One normal/rare supplied weapon from two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, five reviewed local modifier families and explicit equip-level metadata; zero implicits; normal enemies only |
 
 Both profiles accept all eight pinned classes and 23 ascendancy identities, with implicit
 roots and zero or one ordinary entrance passive connected to the selected class. They also
@@ -162,7 +162,7 @@ that separate cost is unchanged.
 | `PreparedMaceCandidates::measure` | Stack `NativeMetricSnapshot` containing the complete native Mace metric catalog and explicit availability. |
 | `NativeBackend::evaluate_controlled_mace` | The same snapshot with elapsed time and native deadline/backend-identity checks. |
 | `PreparedMaceCandidates::snapshot_measurements` | Requested metrics in native catalog order, converted into the shared owned `Vec<MetricMeasurement>`. |
-| `PreparedMaceCandidates::footprint` | Axis/selector counts, deferred character-error count and bounded component-storage accounting, excluding shared data/catalog and allocator metadata. |
+| `PreparedMaceCandidates::footprint` | Axis/selector counts, deferred character/weapon-error counts and bounded component-storage accounting, excluding shared data/catalog and allocator metadata. |
 
 The successful calculation, stack snapshot and timed snapshot calls allocate nothing in
 the mixed-candidate allocation regression. Conversion to owned scheduler measurements
@@ -239,7 +239,8 @@ The controlled Mace search accepts selected compatible datasets. Its schema-1 pr
 the original fixed Warrior profile; schema 2 adds all 31 admitted class/ascendancy identities
 and zero or one class-local ordinary entrance, composed with the existing weapons/supports.
 Problem schema 3 adds the four paid ascendancy choices with an explicit 0/1 ascendancy
-budget; schema 4 adds the seven zero/one/two-support loadouts. Point budgets come from the
+budget; schema 4 adds the seven zero/one/two-support loadouts; schema 5 adds supplied local
+weapon modifiers and rare payloads. Schemas 1–4 retain their original item scope. Point budgets come from the
 caller and requirements use selected class attributes. This is still a finite restricted
 catalog; new evaluator coverage is not automatically searchable.
 The initial native baseline and fresh finalist verify the exact materialized source export,
@@ -268,4 +269,11 @@ can use the native evaluator. See [native calculation coverage](native-engine.md
 
 The Mace profile now uses [data-derived support loadouts](support-loadouts.md), with
 prepared modifier aggregates and exact configured-support evidence (profile attachment
-version 2). Spark support coverage remains empty.
+version 3, including exact item provenance and prepared local weapon stats). Spark support coverage remains empty.
+
+The [local weapon pipeline](local-weapons.md) parses supplied item text once, compiles its
+injected rule mappings into `PreparedWeaponStats`, and uses that bound object in both full
+document and typed candidate calculation. Exact payload/line provenance and local stats
+are separate diagnostic evidence. Explicit `LevelReq` follows PoB's non-unique override
+rule; item level does not supply equip level. Broader affix, acquisition and equipment
+legality remain outside this calculation profile.

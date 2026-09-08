@@ -72,10 +72,14 @@ impl PreparedEvaluation {
                         EvaluationError::new(EvaluationErrorKind::CalculationFailed, e.to_string())
                     })
             }
-            NativeInput::Mace(input) => mace::evaluate_with_supports(
+            NativeInput::Mace(input) => mace::evaluate_with_components(
                 input,
                 &self.profile.tree.character,
                 &self.data,
+                self.profile
+                    .prepared_weapon
+                    .as_ref()
+                    .expect("prepared Mace weapon"),
                 self.profile
                     .prepared_supports
                     .as_ref()
@@ -143,6 +147,25 @@ impl NativeCalculation {
             }
         };
         if let NativeInput::Mace(i) = &profile.input {
+            let record = profile
+                .weapon_record
+                .as_ref()
+                .expect("admitted Mace weapon");
+            let prepared = profile
+                .prepared_weapon
+                .as_ref()
+                .expect("prepared Mace weapon");
+            let weapon = prepared.stats();
+            value["weapon_item"] = record.diagnostic();
+            value["weapon_stats"] = serde_json::json!({
+                "physical_minimum":weapon.physical_minimum,"physical_maximum":weapon.physical_maximum,
+                "fire_minimum":weapon.fire_minimum,"fire_maximum":weapon.fire_maximum,
+                "physical_present":weapon.physical_present,"fire_present":weapon.fire_present,
+                "attack_speed_increased":weapon.attack_speed_increased,"attack_rate":weapon.attack_rate,
+                "critical_chance":weapon.critical_chance,
+                "consumed_modifier_count":prepared.consumed_modifier_count(),
+                "modifier_roll_count":prepared.modifier_roll_count(),
+            });
             value["weapon_base"] = serde_json::json!(data.weapon(i.weapon).name);
             value["weapon_quality"] = serde_json::json!(i.quality);
             value["weapon_item_level"] = serde_json::json!(i.item_level);
@@ -251,6 +274,9 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("tree.rs"),
                 include_str!("candidates.rs"),
                 include_str!("../../poe-optimizer-import/src/controlled_mace.rs"),
+                include_str!("../../poe-optimizer-import/src/mace_item.rs"),
+                include_str!("../../poe-optimizer-engine/src/weapon.rs"),
+                include_str!("../../poe-optimizer-engine/src/offence.rs"),
                 include_str!("../../poe-optimizer-engine/src/character.rs"),
                 include_str!("../../poe-optimizer-engine/src/data.rs"),
                 include_str!("../../poe-optimizer-core/src/data.rs"),
@@ -444,7 +470,7 @@ impl<C: EvaluationClock> NativeBackend<C> {
             exports:vec![BuildDocument{format:BuildFormat::PathOfBuilding2Xml,content:prepared.profile.export_xml.clone()}],
             warnings:vec![format!("Native supported profile: {}. Other build mechanics are rejected.",output.profile_id()),"Full DPS rollups, EHP and maximum-hit calculations are not implemented by this backend.".into()],
             elapsed_ms:0.0,diagnostic_only:true,
-            attachments:vec![DiagnosticAttachment{media_type:match &prepared.profile.input { NativeInput::Spark(_) => "application/vnd.poe-optimizer.native-profile+json;version=1", NativeInput::Mace(_) => "application/vnd.poe-optimizer.native-profile+json;version=2" }.into(),content:output.diagnostic(&prepared.profile, &self.data).to_string()}, DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-tree+json;version=2".into(),content:prepared.profile.tree.diagnostic(&self.data).to_string()}],
+            attachments:vec![DiagnosticAttachment{media_type:match &prepared.profile.input { NativeInput::Spark(_) => "application/vnd.poe-optimizer.native-profile+json;version=1", NativeInput::Mace(_) => "application/vnd.poe-optimizer.native-profile+json;version=3" }.into(),content:output.diagnostic(&prepared.profile, &self.data).to_string()}, DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-tree+json;version=2".into(),content:prepared.profile.tree.diagnostic(&self.data).to_string()}],
         };
         result.attachments.push(DiagnosticAttachment {
             media_type: "application/vnd.poe-optimizer.game-data+json;version=1".into(),

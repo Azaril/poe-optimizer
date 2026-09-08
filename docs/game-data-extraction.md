@@ -4,9 +4,9 @@
 It is optional development tooling: native evaluation loads the exported package and has
 no Lua or worker-process dependency. No website is scraped or downloaded.
 
-The exporter covers the same eleven explicitly partial sections as the
-[native data package](native-data.md): tree, character, quests, Spark, Mace, weapons,
-defence, monsters, encounters and typed owned passive effects. The current version includes the four admitted ascendancy
+The exporter covers the same twelve explicitly partial sections as the
+[native data package](native-data.md): tree, character, quests, Spark, Mace, supports, weapons,
+item modifier rules, defence, monsters, encounters and typed owned passive effects. The current version includes the four admitted ascendancy
 resistance nodes. It does not infer arbitrary build mechanics
 or broaden accepted source revisions. Progress and validation evidence belong in the
 [living implementation record](implementation.md).
@@ -52,7 +52,7 @@ actor scope and values. Unconsumed or ambiguous modifiers reject.
 
 The companion retains source revision/inventory identity, consumed-file hashes,
 extractor/policy identity, package schema/semantics and the resulting package digest. Its
-25 direct source-file entries cover extraction and retained provenance reads. Additional
+26 direct source-file entries cover extraction and retained provenance reads. Additional
 tree/loader/spec evidence remains in the package's `tree.source` record.
 It describes how this artifact was produced. Native loading continues to use explicit
 host trust and actual content identity; a sidecar claim does not grant trust or establish
@@ -89,7 +89,8 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 4 and `poe2-native-profiles-v4`, including source-derived level/attribute requirements,
+schema 5 and `poe2-native-profiles-v5`, including source-derived item grammar/mappings,
+global critical-chance cap, level/attribute requirements,
 support-color costs and owned passive effects. Signed values are allowed only for the
 new unconditional player BASE resistance operations. The structural selection policy in
 `crates/poe-optimizer-data/data/class-tree-policy.json` identifies the four source nodes;
@@ -114,3 +115,10 @@ continues to authenticate its output against the committed reviewed tree/package
 Support identities, eligibility, scoped modifiers and damage flags are extracted into the
 `supports` section; see [support data and migration](support-loadouts.md). The retained
 tree bytes and upstream revision do not change for this support extension.
+
+The schema-5 item-rule converter invokes original `ModParser` with distinct numeric sentinels
+to retain the complete local stat, operation, flags, keyword flags and capture mapping. The
+reviewed five templates use source-verified integer capture grammar. Source critical-cap
+extraction requires the exact unconditional `BASE` modifier shape before taking its value;
+scoped, tagged or changed-operation records reject. Cold/warm parser and local-assembly
+oracles remain independent checks. See [local weapon configuration](local-weapons.md).

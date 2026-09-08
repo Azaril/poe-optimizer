@@ -11,15 +11,16 @@ parsing, I/O or data hashing. This implements the current-profile slice of the
 
 The reviewed package contains the existing class/root/entrance and selected ascendancy-passive tree subset, character
 resource and accuracy parameters, level-one Spark/Mace identities and values, three reviewed supports,
-two normal weapon bases, quest rewards/defaults, defence coefficients/caps, 100-level
+two weapon bases, five local item-modifier grammar/mapping rules, quest rewards/defaults, defence coefficients/caps, 100-level
 monster armour/evasion tables, encounter defaults, typed owned passive effects and explicit
 level/attribute requirements for the included skills, support and weapon bases. Support
 color and per-color aggregate attribute costs also come from data. Display
 stat text is source evidence; typed effect IDs and values drive the calculation.
 
 The package is explicitly partial. Its tree coverage now includes four directly connected
-ascendancy small nodes with signed BASE player resistance effects; it adds no active-skill or
-equipment families. It now represents all seven zero/one/two-support loadouts from
+ascendancy small nodes with signed BASE player resistance effects. Local item rules admit
+normal/rare supplied Maces with the five reviewed modifier families; see [local weapons](local-weapons.md).
+It also represents all seven zero/one/two-support loadouts from
 Brutality I, Heavy Swing and Rapid Attacks I; see [support loadouts](support-loadouts.md).
 The two Mace weapon IDs are compiled capability slots whose records come from the package.
 Unknown fields/operations, malformed identities, missing records and unsupported selectors
@@ -139,7 +140,9 @@ evidence and the existing evaluation budget ledger. Expanded class/tree search u
 schema **3**, adding ordered tree choices and canonical admission evidence. The same selected
 snapshot supplies class attributes, resolved physical/effective entrance views, graph
 projection, generated XML and numerical configuration. The schema-3 problem adds paid ascendancy choices and uses report schema **4**. Schema-4
-support-loadout problems use report **5** and Mace profile evidence **2**. Native-tree
+support-loadout problems use report **5**; schema-5 local-weapon problems use report **6**.
+Current Mace profile evidence uses media **3**, including exact parsed item provenance and
+prepared local weapon stats. Native-tree
 diagnostics use version **2**, with separate ordinary/ascendancy counts and allocation kinds. Its native export companion retains
 structured trust and the selected package path as a reload hint. Benchmark schema **2** reports
 structured `data_trust`, identity and separate backend/data initialization time.
@@ -152,7 +155,14 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
-Current package schema **4**, semantics **`poe2-native-profiles-v4`**, moves `mace.brutality`
+Current package schema **5**, semantics **`poe2-native-profiles-v5`**, adds `item_modifier_rules`
+and `character.critical_chance_cap`. Rule templates, numeric capture kinds and stat/operation/
+scope mappings are configuration. Supplied item values are validated separately and compiled
+once per weapon; Rust defines operation and parsing semantics. The global critical cap and
+two-decimal offence rounding apply to both Spark and Mace. See [local weapon data](local-weapons.md).
+Schema-1/2/3/4 packages require regeneration and review of custom changes.
+
+Package schema **4**, semantics **`poe2-native-profiles-v4`**, moved `mace.brutality`
 to the source-derived `supports` section and adds Mace skill types and explicit zero cost.
 See [support-loadout configuration](support-loadouts.md#configuration-and-calculation) for
 fields and compatibility. Older packages require regeneration and review of custom changes.
@@ -178,17 +188,17 @@ custom-data behavior to match source. Reviewed integer-default outputs remain un
 The selector data does not admit maximum-resistance, conditional, INC/MORE, override,
 conversion or other-actor mechanics.
 
-Schema-1/2/3 packages fail explicitly. Regenerate with `extract-game-data`, then review/reapply
+Schema-1/2/3/4 packages fail explicitly. Regenerate with `extract-game-data`, then review/reapply
 custom edits and reseal; changing the version number alone cannot migrate missing records
 or the retained-tree artifact. Schema-2 level/attribute/support-color requirement records
 remain unchanged. PoB source revision, full source snapshot and numerical goldens stay fixed.
 
 ## Validation and update procedure
 
-The default package is 154,848 bytes, SHA-256
-`b792b5c079dc7659cc588326a06c308a79f04464e7e023f703310662e02f2561`.
+The default package is 156,410 bytes, SHA-256
+`5a258250c10e8148c21193672f1af69ce0aeb16ce779081fca1882fc68b8006a`.
 The full source snapshot/manifest and six independent goldens remain unchanged; the partial
-retained-tree bundle remains byte-identical through this support migration.
+retained-tree bundle remains byte-identical through this item-rule migration.
 
 ```powershell
 cargo test -p poe-optimizer-data --locked

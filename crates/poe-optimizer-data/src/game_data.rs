@@ -1,14 +1,18 @@
 //! Bounded, portable decoding of complete, explicitly partial game-data packages.
 //! The host supplies bytes and trust policy; no runtime I/O or process-global selection.
 use crate::bundled::BundledClassTree;
+pub use crate::item_rules::{
+    ItemCaptureKind, ItemModifierMapping, ItemModifierRoll, ItemModifierRule, LocalWeaponOperation,
+    LocalWeaponStat,
+};
 pub use poe_optimizer_core::data::DataIdentity;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 4;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v4";
+pub const SCHEMA_VERSION: u32 = 5;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v5";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -18,6 +22,7 @@ const SECTIONS: &[&str] = &[
     "mace",
     "supports",
     "weapons",
+    "item_modifier_rules",
     "defence",
     "monsters",
     "encounters",
@@ -85,6 +90,7 @@ pub struct GameDataManifest {
 pub struct CharacterData {
     pub base_evasion: f64,
     pub critical_damage_bonus: f64,
+    pub critical_chance_cap: f64,
     pub life_per_level: f64,
     pub initial_life: f64,
     pub mana_per_level: f64,
@@ -340,12 +346,16 @@ pub struct GameDataPackage {
     pub mace: MaceData,
     pub supports: Vec<SupportData>,
     pub weapons: Vec<MaceWeaponData>,
+    pub item_modifier_rules: Vec<ItemModifierRule>,
     pub defence: DefenceData,
     pub monsters: MonsterData,
     pub encounters: EncounterData,
     pub passive_effects: Vec<PassiveEffects>,
 }
 impl GameDataPackage {
+    pub fn item_modifier_rule(&self, id: &str) -> Option<&ItemModifierRule> {
+        self.item_modifier_rules.iter().find(|rule| rule.id == id)
+    }
     pub fn support(&self, id: &str) -> Option<&SupportData> {
         self.supports.iter().find(|support| support.id == id)
     }
@@ -690,6 +700,13 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
             return Err(error("weapon damage endpoints are reversed"));
         }
     }
+    crate::item_rules::validate_rules(&package.item_modifier_rules)?;
+    number(
+        "critical_chance_cap",
+        package.character.critical_chance_cap,
+        0.0,
+        100.0,
+    )?;
     let d = &package.defence;
     for (name, value) in [
         ("armour_ratio", d.armour_ratio),

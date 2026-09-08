@@ -265,10 +265,10 @@ fn unknown_nested_source_enum_fields_and_integer_key_aliases_do_not_disappear() 
 #[test]
 fn requirement_schema_is_explicit_bounded_and_content_bound() {
     let original = reviewed();
-    assert_eq!(original.identity().schema_version, 4);
+    assert_eq!(original.identity().schema_version, 5);
     assert_eq!(
         original.identity().semantics_version,
-        "poe2-native-profiles-v4"
+        "poe2-native-profiles-v5"
     );
     let mut package = original.package().clone();
     package.weapons[0].requirements = RequirementData {
@@ -586,6 +586,153 @@ fn support_catalog_operations_and_loadouts_are_closed_and_content_bound() {
     ] {
         let mut value = serde_json::to_value(p).unwrap();
         *value.pointer_mut(path).unwrap() = unknown.into();
+        assert!(
+            GameDataPackage::decode_for_authoring(
+                &serde_json::to_vec(&value).unwrap(),
+                &LoadLimits::default()
+            )
+            .is_err()
+        );
+    }
+}
+
+#[test]
+fn local_item_rules_have_complete_unambiguous_grammar_and_exact_local_scope() {
+    let original = reviewed();
+    assert_eq!(original.package().item_modifier_rules.len(), 5);
+    for rule in &original.package().item_modifier_rules {
+        assert_eq!(
+            rule.template_literals().unwrap().len(),
+            rule.captures.len() + 1
+        );
+        assert!(
+            rule.captures
+                .iter()
+                .all(|capture| *capture == ItemCaptureKind::UnsignedInteger)
+        );
+    }
+    for mutate in [
+        |p: &mut GameDataPackage| {
+            p.item_modifier_rules.pop();
+        },
+        |p: &mut GameDataPackage| p.item_modifier_rules.push(p.item_modifier_rules[0].clone()),
+        |p: &mut GameDataPackage| p.item_modifier_rules[1].id = p.item_modifier_rules[0].id.clone(),
+        |p: &mut GameDataPackage| {
+            p.item_modifier_rules[1].template = p.item_modifier_rules[0].template.clone()
+        },
+        |p: &mut GameDataPackage| {
+            p.item_modifier_rules[0].template = "Adds {1} to {0} Physical Damage".into()
+        },
+        |p: &mut GameDataPackage| {
+            p.item_modifier_rules[0].template = "Adds {0}{1} Physical Damage".into()
+        },
+        |p: &mut GameDataPackage| {
+            p.item_modifier_rules[0].template = "Adds {0} to {0} Physical Damage".into()
+        },
+        |p: &mut GameDataPackage| {
+            p.item_modifier_rules[0].template = "Adds {0} to {1} or {2} Physical Damage".into()
+        },
+        |p: &mut GameDataPackage| {
+            p.item_modifier_rules[0].template = "Adds {0} to 1{1} Physical Damage".into()
+        },
+        |p: &mut GameDataPackage| {
+            p.item_modifier_rules[0].template = "Adds {0} to .{1} Physical Damage".into()
+        },
+        |p: &mut GameDataPackage| {
+            p.item_modifier_rules[0].template = "Adds {0} to {1} Physical Damage\n".into()
+        },
+        |p: &mut GameDataPackage| p.item_modifier_rules[0].template = "{0} {1}".repeat(100),
+        |p: &mut GameDataPackage| p.item_modifier_rules[0].captures.clear(),
+        |p: &mut GameDataPackage| p.item_modifier_rules[0].modifiers.swap(0, 1),
+        |p: &mut GameDataPackage| p.item_modifier_rules[0].modifiers[0].capture = 1,
+        |p: &mut GameDataPackage| {
+            p.item_modifier_rules[0].modifiers[0].operation = LocalWeaponOperation::Increased
+        },
+        |p: &mut GameDataPackage| p.item_modifier_rules[0].modifiers[0].flags = 1,
+        |p: &mut GameDataPackage| p.item_modifier_rules[0].modifiers[0].keyword_flags = 1,
+        |p: &mut GameDataPackage| p.item_modifier_rules[3].modifiers[0].flags = 0,
+        |p: &mut GameDataPackage| p.item_modifier_rules[3].modifiers[0].flags = 3,
+        |p: &mut GameDataPackage| p.item_modifier_rules[3].modifiers[0].keyword_flags = 1,
+        |p: &mut GameDataPackage| {
+            p.item_modifier_rules[4].modifiers[0].stat = LocalWeaponStat::PhysicalDamage
+        },
+    ] {
+        let mut package = original.package().clone();
+        mutate(&mut package);
+        assert!(custom(package).is_err());
+    }
+}
+#[test]
+fn local_item_grammar_edits_are_explicit_custom_data_with_no_reviewed_fallback() {
+    let original = reviewed();
+    let mut package = original.package().clone();
+    package.item_modifier_rules[2].id = "local_physical_custom".into();
+    package.item_modifier_rules[2].template = "{0}% Custom Physical Damage".into();
+    package.item_modifier_rules[2].captures[0] = ItemCaptureKind::UnsignedDecimal;
+    package.character.critical_chance_cap = 25.5;
+    let changed = custom(package).unwrap();
+    assert_ne!(changed.identity(), original.identity());
+    assert_eq!(changed.trust(), &DataTrust::CustomUnreviewed);
+    assert!(
+        changed
+            .package()
+            .item_modifier_rule("local_physical_custom")
+            .is_some()
+    );
+    assert!(
+        changed
+            .package()
+            .item_modifier_rule("local_physical_increased")
+            .is_none()
+    );
+    for (field, value) in [
+        ("stat", serde_json::json!("lightning_minimum")),
+        ("operation", serde_json::json!("more")),
+        ("tags", serde_json::json!([])),
+    ] {
+        let mut value_package = serde_json::to_value(original.package()).unwrap();
+        value_package["item_modifier_rules"][0]["modifiers"][0][field] = value;
+        assert!(
+            GameDataPackage::decode_for_authoring(
+                &serde_json::to_vec(&value_package).unwrap(),
+                &LoadLimits::default()
+            )
+            .is_err()
+        );
+    }
+    let mut value = serde_json::to_value(original.package()).unwrap();
+    value["item_modifier_rules"][0]["captures"][0] = serde_json::json!("signed_decimal");
+    assert!(
+        GameDataPackage::decode_for_authoring(
+            &serde_json::to_vec(&value).unwrap(),
+            &LoadLimits::default()
+        )
+        .is_err()
+    );
+}
+#[test]
+fn local_weapon_schema_and_critical_cap_require_explicit_migration() {
+    let original = reviewed();
+    for cap in [0.0, 0.5, 100.0] {
+        let mut package = original.package().clone();
+        package.character.critical_chance_cap = cap;
+        assert!(custom(package).is_ok());
+    }
+    for cap in [-0.1, 100.1, f64::INFINITY, f64::NAN] {
+        let mut package = original.package().clone();
+        package.character.critical_chance_cap = cap;
+        assert!(custom(package).is_err());
+    }
+    let mut package = original.package().clone();
+    package.manifest.schema_version = 4;
+    assert!(custom(package).is_err());
+    for missing in ["item_modifier_rules", "critical_chance_cap"] {
+        let mut value = serde_json::to_value(original.package()).unwrap();
+        if missing == "critical_chance_cap" {
+            value["character"].as_object_mut().unwrap().remove(missing);
+        } else {
+            value.as_object_mut().unwrap().remove(missing);
+        }
         assert!(
             GameDataPackage::decode_for_authoring(
                 &serde_json::to_vec(&value).unwrap(),

@@ -1,9 +1,11 @@
 # Experimental controlled search
 
-`search-experimental` searches supplied normal-Mace weapon/support choices and optional
-class/ascendancy/entrance selections with the native
-Rust backend or the optional PoB reference backend. Both use the same canonical candidates,
-objective policy, budgets, locks and fresh finalist verification. This remains a restricted
+`search-experimental` searches supplied Mace weapons, support loadouts and optional
+class/ascendancy/passive selections with the native Rust backend or the optional PoB
+reference backend. Problem schema 5 adds normal or rare weapons with five admitted local
+modifier families; earlier schemas keep their original weapon scope. Both backends use the
+same canonical candidates, objective policy, budgets, locks and fresh finalist verification.
+This remains a restricted
 diagnostic development profile. The intended general release still requires joint search
 across all six build dimensions, multiple required skills/items and broad mechanic coverage.
 
@@ -39,8 +41,10 @@ PoB checkout and never starts a Lua worker or falls back to PoB. Native-only bui
 PoB worker, extraction and calibration-harness commands.
 
 Native controlled search accepts `--data <package.json>` and optional `--data-sha256`.
-It loads the [game-data package](native-data.md) once and shares the snapshot between its
-catalog and native evaluator. The public `ControlledMaceCatalog::with_data` API binds
+It loads the [schema-5 game-data package](native-data.md#schema-migration) once and shares
+the snapshot between its catalog and native evaluator. Base values, item-rule grammar,
+modifier mappings and the critical-chance cap come from that selected package. The public
+`ControlledMaceCatalog::with_data` API binds
 candidate identities, generated XML, requirements and realization checks to that dataset.
 PoB reference runs still use reviewed default content and reject `--data` selection.
 Native XML exports include a `.data.json` companion with actual dataset identity, trust,
@@ -54,8 +58,9 @@ cargo run --no-default-features --locked -- search-experimental --problem exampl
 
 Native search defaults to `--native-evaluation typed`. After the fresh template calculation
 binds its scenario, preparation compiles immutable weapon, tree and support components
-against the same selected dataset and backend. The CLI creates private handles only for
-candidates that passed full domain and requirement admission. Each search attempt computes
+against the same selected dataset and backend. Each weapon's admitted local rolls resolve
+once into prepared local stats, reused across its tree/support combinations. The CLI creates
+private handles only for candidates that passed full domain and requirement admission. Each search attempt computes
 a fresh numeric snapshot from those components, without materializing or parsing candidate
 XML or constructing full diagnostic attachments. Preparation does not calculate or cache
 candidate results.
@@ -191,14 +196,31 @@ with report schema **5**. See [support search](support-loadouts.md#cli-problem-a
 and [the complete example](../examples/mace-support-search.json). Schemas 1–3 retain their
 existing input scopes and output layouts.
 
+## Supplied local weapon modifiers
+
+Problem schema **5** retains the schema-4 loadout and tree inputs and adds supplied normal
+or rare items with local flat physical/fire damage, increased physical damage, increased
+attack speed and increased critical chance. Reports use schema **6**. The
+[local-weapon example](../examples/mace-local-weapon-search.json) combines these item choices
+with all seven support loadouts and the admitted class/tree selections. Its synthetic rolls
+exercise calculations; they do not establish affix legality or item availability.
+
+The [local weapon guide](local-weapons.md) documents exact source preservation, injected
+modifier templates, numeric bounds, optional `LevelReq`, prepared weapon components and
+reference realization. Unknown, global, conditional, socket/rune/enchant or unique item
+mechanics remain unsupported. Schemas 1–4 reject rare items, modifiers or explicit item
+requirements in their template or alternatives before starting evaluation.
+
 ## Supported input and locks
 
 `template` is relative to the problem file or an absolute path. XML/share codes pass through
 the bounded importer. The legacy template fixes an unallocated Warrior without ascendancy. Expanded templates
-accept any admitted class/ascendancy/entrance selection. Both require one
-level-1 quality-0 Mace Strike, one normal base (reviewed names: Wooden Club or Smithing Hammer), and zero to two
-level-1 quality-0 reviewed supports. Legacy search choices remain none or Brutality I. Supplied item alternatives can change their base, quality
-0–20 and item level 1–100 while retaining the exact supported five-line item format.
+accept any admitted class/ascendancy/passive selection. All require one
+level-1 quality-0 Mace Strike, one admitted weapon base (reviewed names: Wooden Club or
+Smithing Hammer), and level-1 quality-0 reviewed supports. Schemas 1–3 allow no support or
+Brutality I; schemas 4–5 allow zero to two supports in an explicit loadout. Supplied items
+can change their base, quality 0–20 and item level 1–100. Schemas 1–4 require the original
+normal, modifier-free five-line format; schema 5 uses the bounded normal/rare grammar above.
 Character level, configuration and source fields outside the selected mutation ranges
 remain fixed throughout a run.
 
@@ -216,16 +238,19 @@ values cannot produce a feasible recommendation. The standalone native evaluator
 supports its restricted Spark profile, but this mutation command currently operates on the
 Mace profile only.
 
-Optional `locks.weapon_id` fixes an exact supplied weapon. `locks.support` fixes `none` or
-`brutality_i`. Both are represented in discrete axes and canonical candidate constraints;
-replaying validation therefore preserves the locks. The main skill is fixed by this profile. Class, ascendancy and tree are fixed in legacy
-problems and controlled by the expanded selections/locks above in schema-2 problems.
+Optional `locks.weapon_id` fixes an exact supplied weapon. In schemas 1–3, `locks.support`
+fixes `none` or `brutality_i`; schemas 4–5 use the exact `locks.support_loadout` set instead.
+These locks are represented in discrete axes and canonical candidate constraints;
+replaying validation therefore preserves them. The main skill is fixed by this profile.
+Class, ascendancy and tree are fixed in schema 1 and controlled by the expanded
+selections/locks above in schemas 2–5.
 
 The CLI checks canonical point/connectivity/ownership rules, then selected-data equip/use
 level and attribute requirements before dispatch. Available attributes come from the
 resolved selected class; admitted entrance operations do not modify attributes.
-Each attribute uses the maximum of individual requirements and the matching support-color
-aggregate; weapon and support requirements are not added. Requirement evidence reports
+A weapon's explicit `LevelReq` replaces its base equip-level requirement when present;
+item level remains separate. Each attribute uses the maximum of individual requirements and
+the matching support-color aggregate; weapon and support requirements are not added. Requirement evidence reports
 available/required values and failed boundaries for choices allowed by the locks. Illegal
 choices consume no calculations. If all fail, `empty_legal_domain` reports zero evaluations
 without even a template attempt or XML export. Source materialization and diagnostic
@@ -301,12 +326,15 @@ Full document realization, used for the baseline and every reserved finalist in 
 native modes, requires the backend's XML export to equal the exact materialized candidate
 bytes. It checks selected class/ascendancy, implicit roots, physical paid node,
 effective entrance and configured effect evidence, the selected Mace action and exact support
-gem projection. It separately checks resolved weapon base/quality/item level and support
-choice from the immutable native calculation inputs recorded in diagnostic evidence. The
-backend identity and external configuration/placeholders must match the fresh template;
+gem projection. Native Mace media version **3** retains the resolved weapon base/quality/item
+level and support records, and adds exact `weapon_item` source/roll evidence plus prepared
+`weapon_stats`. Realization compares the parsed item diagnostics with the selected payload.
+The backend identity and external configuration/placeholders must match the fresh template;
 candidate-derived condition tables are not frozen. Native validation never calls the
-PoB-normalized baseline binder. PoB realization retains its existing normalized-export and
-live coverage checks.
+PoB-normalized baseline binder. PoB realization checks normalized metadata and live
+coverage, allowing only the exact derived `LevelReq` and one neutral `ModRange` per admitted
+modifier line with ordered IDs and `range="0.5"`. See the
+[reference item boundary](local-weapons.md#prepared-calculations-and-verification).
 
 Requested XML export contains the materialized source with only item/support and selected
 Build/Spec class, ascendancy and allocation attribute ranges changed;

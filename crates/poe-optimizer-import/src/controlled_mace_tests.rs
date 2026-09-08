@@ -1075,7 +1075,7 @@ fn native_components_share_axis_storage_and_resolve_exact_legal_candidates() {
                 .iter()
                 .find(|weapon| weapon.id == alternative.weapon_id)
                 .unwrap();
-            let (_, expected) = parse_normal_mace(&original.item_text, data.package()).unwrap();
+            let expected = parse_mace_item(&original.item_text, data.package()).unwrap();
             assert_eq!(weapon.weapon_key(), expected.weapon_key());
             assert_eq!(weapon.quality(), expected.quality());
             assert_eq!(weapon.item_level(), expected.item_level());
@@ -1198,4 +1198,243 @@ fn native_components_reject_changed_verified_scenario_backend_or_data() {
         .config_inputs
         .insert("enemyArmour".into(), Scalar::Number(123456.0));
     assert!(registry.native_components(&scenario, backend).is_err());
+}
+
+fn local_rare(level: u32) -> String {
+    format!(
+        "Rarity: RARE\nStudy Hammer\nWooden Club\nItem Level: 100\nQuality: 20\nLevelReq: {level}\nImplicits: 0\nAdds 2 to 5 Physical Damage\n20% increased Attack Speed\n20% increased Attack Speed"
+    )
+}
+#[test]
+fn item_definition_uses_validated_base_for_rare_names_and_leading_blank_payloads() {
+    let reviewed = Arc::new(game_data::bundled_snapshot().unwrap());
+    let injected = custom(|data| data.weapons[0].name = "Injected Club".into());
+    for data in [reviewed, injected] {
+        let base = &data.package().weapons[0];
+        let expected_base = base.name.clone();
+        let expected_key = base.id.clone();
+        let normal =
+            format!("Rarity: NORMAL\n{expected_base}\nItem Level: 1\nQuality: 0\nImplicits: 0");
+        let rare = format!(
+            "Rarity: RARE\nDistinct Rare Name\n{expected_base}\nItem Level: 1\nQuality: 0\nImplicits: 0"
+        );
+        let alternatives: Vec<_> = [
+            ("normal", normal.clone()),
+            ("normal-leading-blanks", format!("\n\n{normal}")),
+            ("rare", rare.clone()),
+            ("rare-leading-blanks", format!("\r\n\r\n{rare}")),
+        ]
+        .into_iter()
+        .map(|(id, item_text)| MaceWeaponAlternative {
+            id: id.into(),
+            item_text,
+        })
+        .collect();
+        let registry = ControlledMaceCatalog::with_data(
+            data,
+            TEMPLATE.replace("Wooden Club", &expected_base),
+            alternatives.clone(),
+            vec![MaceSupportChoice::None],
+        )
+        .unwrap();
+        let components = native_components_for_test(&registry);
+        for alternative in alternatives {
+            let candidate = registry
+                .resolve_candidate(&alternative.id, MaceSupportChoice::None)
+                .unwrap();
+            let item_id = &candidate.equipment["Weapon 1"];
+            let instance = &registry.catalog().items[item_id];
+            assert_eq!(instance.definition_id, expected_base, "{}", alternative.id);
+            assert_eq!(instance.payload.content, alternative.item_text);
+            let handle = registry
+                .validated_native_candidate(candidate, &components)
+                .unwrap();
+            let weapon = &components.weapons()[handle.weapon_index()];
+            assert_eq!(weapon.base_name(), expected_base);
+            assert_eq!(weapon.weapon_key(), expected_key);
+        }
+    }
+}
+#[test]
+fn local_item_catalog_preserves_raw_crlf_payloads_comments_and_private_component_evidence() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let template = TEMPLATE.replace("<Items ", "<!-- equipment marker survives -->\n  <Items ");
+    let rare = local_rare(1);
+    let decorated = format!("\r\n\t{} \r\n", rare.replace('\n', " \r\n\t"));
+    let alternatives = vec![
+        MaceWeaponAlternative {
+            id: "plain".into(),
+            item_text: rare.clone(),
+        },
+        MaceWeaponAlternative {
+            id: "decorated".into(),
+            item_text: decorated.clone(),
+        },
+    ];
+    let registry = ControlledMaceCatalog::with_data(
+        data.clone(),
+        template.clone(),
+        alternatives.clone(),
+        vec![MaceSupportChoice::None],
+    )
+    .unwrap();
+    assert!(registry.uses_extended_weapon_scope());
+    assert_ne!(
+        registry.alternatives()[0].candidate,
+        registry.alternatives()[1].candidate
+    );
+    let components = native_components_for_test(&registry);
+    for supplied in alternatives {
+        let candidate = registry
+            .resolve_candidate(&supplied.id, MaceSupportChoice::None)
+            .unwrap();
+        let handle = registry
+            .validated_native_candidate(candidate, &components)
+            .unwrap();
+        let typed = &components.weapons()[handle.weapon_index()];
+        assert_eq!(typed.source_text(), supplied.item_text);
+        let materialized = registry.materialize(candidate).unwrap().content;
+        crate::xml_compat::validate_native(&materialized).unwrap();
+        let document = Document::parse(&materialized).unwrap();
+        let item = document
+            .descendants()
+            .find(|node| node.has_tag_name("Item"))
+            .unwrap();
+        let reimported = parse_mace_item_element(item, data.package()).unwrap();
+        assert_eq!(typed.diagnostic(), reimported.diagnostic());
+        assert_eq!(typed.source_text(), reimported.source_text());
+        assert_eq!(
+            &materialized[..item.range().start],
+            &template[..registry.profile.item_range.start]
+        );
+        assert_eq!(
+            &materialized[item.range().end..],
+            &template[registry.profile.item_range.end..]
+        );
+        assert!(materialized.contains("<!-- equipment marker survives -->"));
+        let rebuilt = ControlledMaceCatalog::with_data(
+            data.clone(),
+            materialized,
+            vec![supplied],
+            vec![MaceSupportChoice::None],
+        )
+        .unwrap();
+        assert!(rebuilt.uses_extended_weapon_scope());
+    }
+}
+#[test]
+fn explicit_equip_level_checks_and_handles_use_authoring_independently_of_base_and_item_levels() {
+    let data = custom(|data| {
+        data.weapons
+            .iter_mut()
+            .find(|weapon| weapon.id == "wooden_club")
+            .unwrap()
+            .requirements
+            .level = 70
+    });
+    let alternatives = [0, 59, 60, 61, 100]
+        .map(|level| MaceWeaponAlternative {
+            id: format!("level-{level}"),
+            item_text: local_rare(level),
+        })
+        .to_vec();
+    let registry = ControlledMaceCatalog::with_data(
+        data,
+        TEMPLATE.into(),
+        alternatives,
+        vec![MaceSupportChoice::None],
+    )
+    .unwrap();
+    let components = native_components_for_test(&registry);
+    for level in [0, 59, 60, 61, 100] {
+        let candidate = registry
+            .resolve_candidate(&format!("level-{level}"), MaceSupportChoice::None)
+            .unwrap();
+        let requirements = registry.requirements(candidate).unwrap();
+        assert_eq!(
+            requirements.required.level,
+            level.max(registry.snapshot().package().mace.requirements.level)
+        );
+        assert_eq!(requirements.available.level, 60);
+        assert_eq!(requirements.is_legal(), level <= 60);
+        assert_eq!(
+            registry
+                .validated_native_candidate(candidate, &components)
+                .is_ok(),
+            level <= 60
+        );
+    }
+}
+#[test]
+fn extended_item_scope_detects_template_changes_even_when_all_alternatives_are_legacy() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let legacy = catalog(data.clone());
+    assert!(!legacy.uses_extended_weapon_scope());
+    let mut alternatives = weapons(data.package());
+    alternatives[0].item_text = local_rare(1);
+    let changed = ControlledMaceCatalog::with_data(
+        data.clone(),
+        TEMPLATE.into(),
+        alternatives,
+        vec![MaceSupportChoice::None],
+    )
+    .unwrap();
+    assert!(changed.uses_extended_weapon_scope());
+    let source = changed
+        .materialize(
+            changed
+                .resolve_candidate("wooden_club", MaceSupportChoice::None)
+                .unwrap(),
+        )
+        .unwrap()
+        .content;
+    let template_only = ControlledMaceCatalog::with_data(
+        data.clone(),
+        source,
+        weapons(data.package()),
+        vec![MaceSupportChoice::None],
+    )
+    .unwrap();
+    assert!(template_only.uses_extended_weapon_scope());
+}
+#[test]
+fn reference_item_normalization_requires_exact_neutral_ranges_and_keeps_duplicate_lines() {
+    let data = game_data::bundled_snapshot().unwrap();
+    let source = local_rare(12);
+    let parsed = parse_mace_item(&source, data.package()).unwrap();
+    let canonical = parsed.pob_export_lines().join("\n");
+    let ranges = "<ModRange id=\"1\" range=\"0.5\"/><ModRange id=\"2\" range=\"0.5\"/><ModRange id=\"3\" range=\"0.5\"/>";
+    let xml = format!("<Item id=\"1\">\n\t{canonical}\n{ranges}\n</Item>");
+    let check = |xml: &str| {
+        let document = Document::parse(xml).unwrap();
+        check_reference_item(document.root_element(), &source, data.package())
+    };
+    check(&xml).unwrap();
+    for bad in [
+        xml.replace("range=\"0.5\"", "range=\"0.6\""),
+        xml.replacen("id=\"2\"", "id=\"1\"", 1),
+        xml.replace("<ModRange id=\"3\" range=\"0.5\"/>", ""),
+        xml.replace("</Item>", "<ModRange id=\"4\" range=\"0.5\"/></Item>"),
+        xml.replace("<ModRange id=\"2\"", "<ModRange extra=\"yes\" id=\"2\""),
+        xml.replace("LevelReq: 12", "LevelReq: 0"),
+        xml.replacen(
+            "20% increased Attack Speed",
+            "21% increased Attack Speed",
+            1,
+        ),
+        xml.replace("Study Hammer", "Another Hammer"),
+        xml.replace("Rarity: RARE", "Rarity: NORMAL"),
+    ] {
+        assert!(check(&bad).is_err(), "accepted {bad}");
+    }
+    let normal = weapons(data.package()).remove(0).item_text;
+    let normal_xml = format!(
+        "<Item id=\"1\">{}</Item>",
+        parse_mace_item(&normal, data.package())
+            .unwrap()
+            .pob_export_lines()
+            .join("\n")
+    );
+    let document = Document::parse(&normal_xml).unwrap();
+    check_reference_item(document.root_element(), &normal, data.package()).unwrap();
 }

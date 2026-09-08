@@ -1,6 +1,6 @@
 //! Developer benchmark of mixed candidates across native API layers.
 //! Run with --release --no-default-features; JSON keeps setup, checksum and scope explicit.
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use poe_optimizer_core::{
     evaluation::*,
     metrics::{ActorScope, MetricMeasurement, MetricQuery},
@@ -18,8 +18,16 @@ use rayon::prelude::*;
 use serde_json::json;
 use sha2::{Digest, Sha256};
 use std::{error::Error, hint::black_box, path::PathBuf, sync::Arc, time::Instant};
+#[derive(Clone, Copy, ValueEnum)]
+enum CandidateSet {
+    Normal,
+    LocalWeapons,
+}
 #[derive(Parser)]
 struct Args {
+    /// Select supplied weapon/support axes; template, trees and benchmark metrics stay fixed.
+    #[arg(long, value_enum, default_value = "normal")]
+    candidate_set: CandidateSet,
     #[arg(long, default_value_t = 20_000)]
     evaluations: usize,
     #[arg(long, default_value_t = 3)]
@@ -95,7 +103,21 @@ fn main() -> Result<(), Box<dyn Error>> {
     )?);
     let engine = Engine::new(SharedBackend::new(backend.clone()));
     let dataset_ms = start.elapsed().as_secs_f64() * 1000.0;
-    let input: serde_json::Value = serde_json::from_str(include_str!("mace-support-search.json"))?;
+    // These fixtures supply only weapon and support axes. Their template, search
+    // settings and objective are not benchmark inputs.
+    let (candidate_set, candidate_source, candidate_json) = match args.candidate_set {
+        CandidateSet::Normal => (
+            "normal",
+            "examples/mace-support-search.json",
+            include_str!("mace-support-search.json"),
+        ),
+        CandidateSet::LocalWeapons => (
+            "local-weapons",
+            "examples/mace-local-weapon-search.json",
+            include_str!("mace-local-weapon-search.json"),
+        ),
+    };
+    let input: serde_json::Value = serde_json::from_str(candidate_json)?;
     let weapons: Vec<NormalMaceAlternative> = serde_json::from_value(input["weapons"].clone())?;
     let loadouts: Vec<MaceSupportLoadout> =
         serde_json::from_value(input["support_loadouts"].clone())?;
@@ -246,6 +268,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         serde_json::to_string_pretty(&json!({
             "schema_version":1,"status":"developer_native_candidate_benchmark","diagnostic_only":true,
             "scope":"mixed_admitted_mace_candidates_not_general_game_or_optimizer_quality",
+            "candidate_set":candidate_set,"candidate_source":candidate_source,
+            "candidate_source_fields_used":["weapons","support_loadouts"],
+            "fixed_template":"tests/fixtures/calibration/mace-wooden.xml",
+            "tree_selections":"all_admitted_class_tree_selections_from_selected_data",
             "cpu_label":args.cpu_label,"available_parallelism":std::thread::available_parallelism()?.get(),
             "os":std::env::consts::OS,"arch":std::env::consts::ARCH,"debug_assertions":cfg!(debug_assertions),
             "executable_sha256":format!("{:x}",Sha256::digest(std::fs::read(executable)?)),
@@ -255,7 +281,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             "setup":{"dataset_ms":dataset_ms,"catalog_ms":catalog_ms,"typed_components_ms":typed_ms,"handles_ms":handles_ms,"document_materialization_ms":document_materialization_ms,"document_preparation_ms":document_preparation_ms,"baseline_calculations":1,"equivalence_calculations":2*handles.len(),"equivalence_ms":validation_ms},
             "storage":{"request_xml_bytes":requests.iter().map(|r|r.build.content.len()).sum::<usize>(),"candidate_handles_inline_bytes":std::mem::size_of_val(handles.as_slice()),"footprint_excludes":"shared data, import catalog, allocator metadata and Arc control blocks"},
             "checksum_matches_all_selected_modes_workers_and_repeats":true,"selected_modes":args.modes,"samples":samples,
-            "limitations":["Pure calculation omits metrics and deadline checks; other modes include different API/result work.","Component capacity estimates are not process peak-memory measurements.","Whole-search/catalog costs and realistic build coverage remain separate evidence."]
+            "limitations":["Candidate-set fixtures supply only weapons/support_loadouts; their template, objective, locks, neighborhood and tree_search settings are not used.","Pure calculation omits metrics and deadline checks; other modes include different API/result work.","Component capacity estimates are not process peak-memory measurements.","Whole-search/catalog costs and realistic build coverage remain separate evidence."]
         }))?
     );
     Ok(())

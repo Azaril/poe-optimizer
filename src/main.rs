@@ -46,7 +46,7 @@ struct Cli {
 enum Action {
     /// Measure native fixed-input API throughput with a bounded local Rayon pool.
     BenchmarkNative(native_benchmark::Args),
-    /// Search supplied normal-Mace weapon/support choices (experimental supported profile).
+    /// Search supplied Mace item/support choices (experimental supported profile).
     SearchExperimental(mutation_search::Args),
     /// Generate the current native game-data package and source evidence from pinned PoB.
     #[cfg(feature = "pob")]

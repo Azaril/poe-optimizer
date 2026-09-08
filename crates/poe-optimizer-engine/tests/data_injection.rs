@@ -359,3 +359,241 @@ fn combined_negative_support_increases_reject_before_evaluation() {
         );
     }
 }
+
+fn local_roll(
+    data: &CompiledGameData,
+    stat: game_data::LocalWeaponStat,
+    values: Vec<f64>,
+) -> game_data::ItemModifierRoll {
+    game_data::ItemModifierRoll {
+        rule_id: data
+            .snapshot()
+            .package()
+            .item_modifier_rules
+            .iter()
+            .find(|rule| rule.modifiers[0].stat == stat)
+            .unwrap()
+            .id
+            .clone(),
+        values,
+    }
+}
+#[test]
+fn prepared_weapons_bind_exact_compiled_data_and_selected_input_fields() {
+    use game_data::LocalWeaponStat as Stat;
+    let first = CompiledGameData::bundled().unwrap();
+    let second =
+        CompiledGameData::compile(Arc::new(game_data::bundled_snapshot().unwrap())).unwrap();
+    let input = mace_input();
+    let character = mace::default_character();
+    let rolls = [
+        local_roll(&first, Stat::PhysicalMinimum, vec![3.0, 7.0]),
+        local_roll(&first, Stat::Speed, vec![13.0]),
+    ];
+    let weapon = first
+        .prepare_mace_weapon(input.weapon, input.quality, input.item_level, &rolls)
+        .unwrap();
+    assert_eq!(weapon.modifier_roll_count(), 2);
+    assert_eq!(weapon.consumed_modifier_count(), 3);
+    assert!(
+        mace::evaluate_with_components(
+            &input,
+            &character,
+            &first,
+            &weapon,
+            first.mace_support_loadout(&[]).unwrap()
+        )
+        .is_ok()
+    );
+    assert!(
+        mace::evaluate_with_components(
+            &input,
+            &character,
+            &second,
+            &weapon,
+            second.mace_support_loadout(&[]).unwrap()
+        )
+        .is_err()
+    );
+    for changed in [
+        MaceInput {
+            quality: 1,
+            ..input
+        },
+        MaceInput {
+            item_level: 1,
+            ..input
+        },
+        MaceInput {
+            weapon: MaceWeapon::WoodenClub,
+            ..input
+        },
+    ] {
+        assert!(
+            mace::evaluate_with_components(
+                &changed,
+                &character,
+                &first,
+                &weapon,
+                first.mace_support_loadout(&[]).unwrap()
+            )
+            .is_err()
+        );
+    }
+    fn send_sync<T: Send + Sync>() {}
+    send_sync::<poe_optimizer_engine::weapon::PreparedWeaponStats>();
+}
+#[test]
+fn custom_item_capture_policy_and_global_crit_cap_are_selected_data() {
+    use game_data::LocalWeaponStat as Stat;
+    let default = CompiledGameData::bundled().unwrap();
+    let changed = custom(|package| {
+        let rule = package
+            .item_modifier_rules
+            .iter_mut()
+            .find(|rule| rule.modifiers[0].stat == Stat::Speed)
+            .unwrap();
+        rule.id = "custom_local_speed".into();
+        rule.captures[0] = game_data::ItemCaptureKind::UnsignedDecimal;
+        package.character.critical_chance_cap = 0.0;
+    });
+    let input = mace_input();
+    let character = mace::default_character();
+    let roll = local_roll(&changed, Stat::Speed, vec![13.5]);
+    assert!(
+        default
+            .prepare_mace_weapon(
+                input.weapon,
+                0,
+                input.item_level,
+                std::slice::from_ref(&roll)
+            )
+            .is_err()
+    );
+    let integer_rule = local_roll(&default, Stat::Speed, vec![13.5]);
+    assert!(
+        default
+            .prepare_mace_weapon(input.weapon, 0, input.item_level, &[integer_rule])
+            .is_err()
+    );
+    let weapon = changed
+        .prepare_mace_weapon(input.weapon, 0, input.item_level, &[roll])
+        .unwrap();
+    assert_eq!(weapon.stats().attack_speed_increased, 13.5);
+    let output = mace::evaluate_with_components(
+        &input,
+        &character,
+        &changed,
+        &weapon,
+        changed.mace_support_loadout(&[]).unwrap(),
+    )
+    .unwrap();
+    assert_eq!(output.crit_chance, 0.0);
+    assert_eq!(
+        spark::evaluate_with_data(&spark_input(), &spark::default_character(), &changed)
+            .unwrap()
+            .crit_chance,
+        0.0
+    );
+}
+#[test]
+fn local_modifier_roll_limits_and_unknown_or_unconsumed_inputs_reject() {
+    use game_data::LocalWeaponStat as Stat;
+    use poe_optimizer_engine::{modifiers::*, weapon};
+    let data = CompiledGameData::bundled().unwrap();
+    for values in [
+        vec![],
+        vec![1.0],
+        vec![1.0, 2.0, 3.0],
+        vec![-1.0, 2.0],
+        vec![2.0, 1.0],
+        vec![f64::NAN, 2.0],
+        vec![1.0, f64::INFINITY],
+        vec![1.0, 1_000_001.0],
+        vec![1.25, 2.0],
+    ] {
+        let roll = local_roll(&data, Stat::PhysicalMinimum, values);
+        assert!(
+            data.prepare_mace_weapon(MaceWeapon::WoodenClub, 0, 1, &[roll])
+                .is_err()
+        );
+    }
+    let roll = local_roll(&data, Stat::PhysicalMinimum, vec![1.0, 2.0]);
+    assert!(
+        data.prepare_mace_weapon(MaceWeapon::WoodenClub, 0, 1, &vec![roll.clone(); 65])
+            .is_err()
+    );
+    assert!(
+        data.prepare_mace_weapon(MaceWeapon::WoodenClub, 21, 1, &[])
+            .is_err()
+    );
+    for item_level in [0, 101] {
+        assert!(
+            data.prepare_mace_weapon(MaceWeapon::WoodenClub, 0, item_level, &[])
+                .is_err()
+        );
+    }
+    let large = data
+        .prepare_mace_weapon(MaceWeapon::WoodenClub, 0, 1, &vec![roll; 64])
+        .unwrap();
+    assert_eq!(large.consumed_modifier_count(), 128);
+    let global = ModifierInput {
+        name: "PhysicalMin".into(),
+        kind: ModifierKind::Numeric(NumericKind::Base),
+        value: ModifierValue::Number(7.0),
+        flags: 0,
+        keyword_flags: 65_536,
+        source: None,
+        tag_kinds: vec![],
+    };
+    let mut remaining = vec![global.clone()];
+    weapon::assemble_local_weapon(data.weapon(MaceWeapon::WoodenClub), 0, &mut remaining).unwrap();
+    assert_eq!(remaining, vec![global]);
+    let mut nonnumeric = vec![ModifierInput {
+        name: "PhysicalMin".into(),
+        kind: ModifierKind::Numeric(NumericKind::Base),
+        value: ModifierValue::Unsupported {
+            kind: "boolean".into(),
+        },
+        flags: 0,
+        keyword_flags: 0,
+        source: None,
+        tag_kinds: vec![],
+    }];
+    assert!(
+        weapon::consume_local_numeric(&mut nonnumeric, "PhysicalMin", NumericKind::Base, 0)
+            .is_err()
+    );
+}
+#[test]
+fn legacy_mace_entry_points_delegate_to_empty_local_weapon_preparation() {
+    let data = CompiledGameData::bundled().unwrap();
+    let character = mace::default_character();
+    for base in [MaceWeapon::WoodenClub, MaceWeapon::SmithingHammer] {
+        for quality in 0..=20 {
+            for brutality in [false, true] {
+                let input = MaceInput {
+                    weapon: base,
+                    quality,
+                    brutality,
+                    ..mace_input()
+                };
+                let weapon = data
+                    .prepare_mace_weapon(base, quality, input.item_level, &[])
+                    .unwrap();
+                let supports = data
+                    .mace_support_loadout(&if brutality {
+                        vec!["brutality_i".into()]
+                    } else {
+                        vec![]
+                    })
+                    .unwrap();
+                assert_eq!(
+                    mace::evaluate_with_data(&input, &character, &data).unwrap(),
+                    mace::evaluate_with_components(&input, &character, &data, &weapon, supports)
+                        .unwrap()
+                );
+            }
+        }
+    }
+}

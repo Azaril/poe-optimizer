@@ -269,6 +269,7 @@ impl Oracle {
             "modDB:NewMod(\"Life\", \"BASE\", data.characterConstants",
             "modDB:NewMod(\"Mana\", \"BASE\", data.characterConstants",
             "modDB:NewMod(\"Accuracy\", \"BASE\", data.characterConstants",
+            "modDB:NewMod(\"CritChanceCap\", \"BASE\",",
         ] {
             body.push_str(line(setup, prefix));
             body.push('\n');
@@ -1286,6 +1287,105 @@ fn support_catalog_matches_raw_source_maps_flags_families_and_type_expressions_c
                     support.id
                 );
             }
+        }
+    }
+}
+
+#[test]
+fn local_item_rule_captures_flags_and_operations_match_original_parser_cold_and_warm() {
+    use poe_optimizer_data::game_data::{LocalWeaponOperation, LocalWeaponStat};
+    let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+    let package = snapshot.package();
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        assert_eq!(
+            package.character.critical_chance_cap,
+            oracle.mod_value(oracle.resource_initialization(), "CritChanceCap")
+        );
+        let parse: Function = oracle.lua.load("return function(text) local mods,extra=modLib.parseMod(text);return mods,extra end").eval().unwrap();
+        if warm {
+            oracle.lua.load("for i=1,500 do modLib.parseMod('Adds '..i..' to '..(i+1)..' Physical Damage');modLib.parseMod(i..'% increased Attack Speed');modLib.parseMod(i..'% increased Critical Hit Chance') end").exec().unwrap();
+        }
+        for rule in &package.item_modifier_rules {
+            for first in [0, 1, 7, 17, 99, 100, 333, 999, 1000000] {
+                let values = if rule.captures.len() == 2 {
+                    vec![first, (first + 13).min(1000000)]
+                } else {
+                    vec![first]
+                };
+                let mut text = rule.template.clone();
+                for (index, value) in values.iter().enumerate() {
+                    text = text.replace(&format!("{{{index}}}"), &value.to_string());
+                }
+                let (mods, extra): (Table, Option<String>) = parse.call(text.as_str()).unwrap();
+                assert!(extra.is_none(), "{text}: {extra:?}");
+                assert_eq!(mods.raw_len(), rule.modifiers.len(), "{text}");
+                for (index, mapping) in rule.modifiers.iter().enumerate() {
+                    let actual: Table = mods.get(index + 1).unwrap();
+                    let expected_name = match mapping.stat {
+                        LocalWeaponStat::PhysicalMinimum => "PhysicalMin",
+                        LocalWeaponStat::PhysicalMaximum => "PhysicalMax",
+                        LocalWeaponStat::FireMinimum => "FireMin",
+                        LocalWeaponStat::FireMaximum => "FireMax",
+                        LocalWeaponStat::PhysicalDamage => "PhysicalDamage",
+                        LocalWeaponStat::Speed => "Speed",
+                        LocalWeaponStat::CriticalChance => "CritChance",
+                    };
+                    assert_eq!(
+                        actual.get::<String>("name").unwrap(),
+                        expected_name,
+                        "{text}"
+                    );
+                    assert_eq!(
+                        actual.get::<String>("type").unwrap(),
+                        match mapping.operation {
+                            LocalWeaponOperation::Base => "BASE",
+                            LocalWeaponOperation::Increased => "INC",
+                        }
+                    );
+                    assert_eq!(
+                        actual.get::<f64>("value").unwrap(),
+                        f64::from(values[mapping.capture as usize]),
+                        "{text}"
+                    );
+                    assert_eq!(actual.get::<u64>("flags").unwrap(), mapping.flags, "{text}");
+                    assert_eq!(
+                        actual.get::<u64>("keywordFlags").unwrap(),
+                        mapping.keyword_flags,
+                        "{text}"
+                    );
+                    assert_eq!(actual.raw_len(), 0, "unexpected source tag: {text}");
+                    assert!(actual.get::<mlua::Value>("source").unwrap().is_nil());
+                }
+            }
+        }
+        // These superficially similar source lines are global/conditional or do
+        // not match the reviewed numeric grammar. Never reinterpret them locally.
+        for text in [
+            "Adds 1 to 2 Physical Damage to Attacks",
+            "Adds 1 to 2 Fire Damage to Spells",
+            "10% increased Attack Speed while holding a Shield",
+        ] {
+            let (mods, extra): (Table, Option<String>) = parse.call(text).unwrap();
+            let local = extra.is_none()
+                && mods.clone().sequence_values::<Table>().all(|m| {
+                    let m = m.unwrap();
+                    m.get::<u64>("keywordFlags").unwrap() == 0 && m.raw_len() == 0
+                });
+            assert!(!local, "source scope must not look local: {text}");
+        }
+        for text in [
+            "1.5% increased Physical Damage",
+            "1.5% increased Attack Speed",
+            "1.5% increased Critical Hit Chance",
+            "Adds 1.5 to 2 Physical Damage",
+            "Adds 1 to 2.5 Fire Damage",
+        ] {
+            let result: (mlua::Value, Option<String>) = parse.call(text).unwrap();
+            assert!(
+                result.1.is_some() || result.0.is_nil(),
+                "unexpected complete decimal source grammar: {text}"
+            );
         }
     }
 }

@@ -1,6 +1,8 @@
 //! Source-preserving, bounded weapon/support mutations for a structural Mace profile.
 //! Pure Rust source projection shared by native and optional reference evaluators.
 //! Experimental diagnostic domain, not a general build-legality claim.
+pub use crate::mace_item::ValidatedMaceWeapon;
+use crate::mace_item::{parse_mace_item, parse_mace_item_element};
 use poe_optimizer_core::{
     candidate::*,
     coverage::{SkillActor, SkillOrigin, SkillResolution},
@@ -25,10 +27,13 @@ const SLOT: &str = "pob-group-1";
 const SOURCE: &str = "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675";
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct NormalMaceAlternative {
+pub struct MaceWeaponAlternative {
     pub id: String,
     pub item_text: String,
 }
+/// Compatibility name for the supplied weapon payload API; generalized catalogs also
+/// admit the explicitly supported rare/local-modifier item grammar.
+pub type NormalMaceAlternative = MaceWeaponAlternative;
 #[derive(Debug, Clone, Copy, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum MaceSupportChoice {
@@ -163,25 +168,6 @@ struct Profile {
     tree: Arc<ResolvedClassTree>,
     tree_attribute_ranges: BTreeMap<String, Range<usize>>,
     ascendancy_insert: usize,
-}
-/// A weapon admitted once from an exact modifier-free source payload.
-/// Its capability key addresses injected data; no numerical weapon stats are copied here.
-#[derive(Debug, Clone)]
-pub struct ValidatedMaceWeapon {
-    weapon_key: String,
-    quality: u32,
-    item_level: u32,
-}
-impl ValidatedMaceWeapon {
-    pub fn weapon_key(&self) -> &str {
-        &self.weapon_key
-    }
-    pub fn quality(&self) -> u32 {
-        self.quality
-    }
-    pub fn item_level(&self) -> u32 {
-        self.item_level
-    }
 }
 /// Unforgeable process-local ownership proof for a single immutable catalog.
 /// Clones interoperate; a separately constructed catalog gets a distinct binding,
@@ -454,7 +440,9 @@ impl ControlledMaceCatalog {
                     "weapon IDs must be distinct nonblank strings of at most 128 bytes",
                 ));
             }
-            let (text, typed) = parse_normal_mace(&weapon.item_text, package)?;
+            let typed = parse_mace_item(&weapon.item_text, package)
+                .map_err(|error| unsupported(error.to_string().as_str()))?;
+            let text = typed.source_text().to_owned();
             typed_weapons.insert(weapon.id.clone(), typed);
             if !payloads.insert(text.clone()) {
                 return Err(unsupported("duplicate exact weapon alternatives"));
@@ -490,7 +478,7 @@ impl ControlledMaceCatalog {
             content_fingerprint: hash(
                 &if patch_tree {
                     serde_json::to_string(&(
-                        "pob-controlled-mace-v5",
+                        "pob-controlled-mace-v6",
                         data.identity(),
                         SOURCE,
                         hash(&template_xml),
@@ -501,7 +489,7 @@ impl ControlledMaceCatalog {
                     ))
                 } else {
                     serde_json::to_string(&(
-                        "pob-controlled-mace-v3",
+                        "pob-controlled-mace-v4",
                         data.identity(),
                         SOURCE,
                         hash(&template_xml),
@@ -615,7 +603,7 @@ impl ControlledMaceCatalog {
             catalog.items.insert(
                 item_id.clone(),
                 ItemInstance {
-                    definition_id: weapon.lines().nth(1).unwrap().into(),
+                    definition_id: native_axes.weapons[weapon_index].base_name().into(),
                     payload: item_payload,
                     compatible_slots: BTreeSet::from(["Weapon 1".into()]),
                     ..Default::default()
@@ -722,6 +710,17 @@ impl ControlledMaceCatalog {
             candidate_index,
         })
     }
+    /// True when the template or any supplied weapon needs the expanded item grammar.
+    pub fn uses_extended_weapon_scope(&self) -> bool {
+        !parse_mace_item(&self.profile.weapon, self.data.package())
+            .expect("admitted template weapon")
+            .is_legacy_normal_payload()
+            || self
+                .native_axes
+                .weapons
+                .iter()
+                .any(|weapon| !weapon.is_legacy_normal_payload())
+    }
     pub fn snapshot(&self) -> &Arc<GameDataSnapshot> {
         &self.data
     }
@@ -798,15 +797,18 @@ impl ControlledMaceCatalog {
             dexterity: 0,
             intelligence: 0,
         };
-        let weapon_key = self.native_axes.weapons
-            [choice.native_indices.expect("registered choice").weapon]
-            .weapon_key();
+        let selected_weapon =
+            &self.native_axes.weapons[choice.native_indices.expect("registered choice").weapon];
+        let weapon_key = selected_weapon.weapon_key();
         let weapon = data
             .weapons
             .iter()
             .find(|weapon| weapon.id == weapon_key)
             .expect("validated selected weapon");
         required.include(&weapon.requirements);
+        // Authored equip level replaces the base level on PoB's non-unique item path;
+        // item level never sets a character requirement.
+        required.level = selected_weapon.effective_level_requirement();
         required.include(&data.mace.requirements);
         let costs = &data.mace.support_attribute_costs;
         let mut support_costs = MaceRequirementValues {
@@ -1125,7 +1127,7 @@ impl ControlledMaceCatalog {
             .iter()
             .filter(|attachment| {
                 attachment.media_type
-                    == "application/vnd.poe-optimizer.native-profile+json;version=2"
+                    == "application/vnd.poe-optimizer.native-profile+json;version=3"
             })
             .collect();
         if evidence.len() != 1 || evidence[0].content.len() > 64 * 1024 {
@@ -1135,18 +1137,12 @@ impl ControlledMaceCatalog {
         }
         let evidence: serde_json::Value = serde_json::from_str(&evidence[0].content)
             .map_err(|error| mismatch(&error.to_string()))?;
-        let lines: Vec<_> = choice.weapon.lines().collect();
-        let item_level = lines[2]
-            .strip_prefix("Item Level: ")
-            .and_then(|text| text.parse::<u64>().ok())
-            .ok_or_else(|| mismatch("invalid registered item level"))?;
-        let quality = lines[3]
-            .strip_prefix("Quality: ")
-            .and_then(|text| text.parse::<u64>().ok())
-            .ok_or_else(|| mismatch("invalid registered item quality"))?;
-        if evidence["weapon_base"].as_str() != Some(lines[1])
-            || evidence["weapon_quality"].as_u64() != Some(quality)
-            || evidence["weapon_item_level"].as_u64() != Some(item_level)
+        let weapon = parse_mace_item(&choice.weapon, self.data.package())
+            .map_err(|error| mismatch(&error.to_string()))?;
+        if evidence["weapon_base"].as_str() != Some(weapon.base_name())
+            || evidence["weapon_quality"].as_u64() != Some(u64::from(weapon.quality()))
+            || evidence["weapon_item_level"].as_u64() != Some(u64::from(weapon.item_level()))
+            || evidence["weapon_item"] != weapon.diagnostic()
             || evidence["support_loadout"] != serde_json::json!(choice.support.keys())
             || evidence["configured_supports"]
                 != serde_json::json!(
@@ -1618,7 +1614,10 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
     if item.children().count() != 1 || !item.first_child().is_some_and(|node| node.is_text()) {
         return Err(unsupported("item must contain one unsplit text payload"));
     }
-    let weapon = normal_mace(item.text().unwrap_or_default(), data)?;
+    let weapon = parse_mace_item_element(item, data)
+        .map_err(|error| unsupported(&error.to_string()))?
+        .source_text()
+        .to_owned();
     let item_set = child(items, "ItemSet")?;
     only(item_set, &["id", "title", "useSecondWeaponSet"], &["Slot"])?;
     fixed(item_set, &[("id", "1"), ("useSecondWeaponSet", "false")])?;
@@ -1759,6 +1758,40 @@ fn validate_input(name: &str, value: &Scalar, data: &GameDataPackage) -> Result<
         )))
     }
 }
+fn check_reference_item(item: Node<'_, '_>, weapon: &str, data: &GameDataPackage) -> Result<()> {
+    only(item, &["id"], &["ModRange"])?;
+    fixed(item, &[("id", "1")])?;
+    let expected = parse_mace_item(weapon, data).map_err(|error| mismatch(&error.to_string()))?;
+    let ranges: Vec<_> = item.children().filter(Node::is_element).collect();
+    if ranges.len() != expected.modifier_lines().len() {
+        return Err(mismatch("reference item modifier range count differs"));
+    }
+    for (index, range) in ranges.iter().enumerate() {
+        only(*range, &["id", "range"], &[])?;
+        fixed(
+            *range,
+            &[("id", &(index + 1).to_string()), ("range", "0.5")],
+        )?;
+        if range
+            .children()
+            .any(|node| node.is_text() && !node.text().unwrap_or_default().trim().is_empty())
+        {
+            return Err(mismatch("reference modifier range has unexpected content"));
+        }
+    }
+    let actual: Vec<_> = item
+        .children()
+        .filter(Node::is_text)
+        .filter_map(|node| node.text())
+        .flat_map(str::lines)
+        .map(str::trim)
+        .filter(|line| !line.is_empty())
+        .collect();
+    if actual != expected.pob_export_lines() {
+        return Err(mismatch("exact equipped item payload changed"));
+    }
+    Ok(())
+}
 fn check_export(
     xml: &str,
     choice: &Choice,
@@ -1875,24 +1908,7 @@ fn check_export(
     {
         return Err(mismatch("equipment rune added"));
     }
-    let item = child(items, "Item")?;
-    only(item, &["id"], &[])?;
-    fixed(item, &[("id", "1")])?;
-    if item.children().count() != 1 || !item.first_child().is_some_and(|node| node.is_text()) {
-        return Err(mismatch("exported item payload split"));
-    }
-    let actual: Vec<_> = item
-        .text()
-        .unwrap_or_default()
-        .lines()
-        .map(str::trim)
-        .filter(|line| !line.is_empty())
-        .collect();
-    let mut expected: Vec<_> = choice.weapon.lines().collect();
-    expected.insert(4, "LevelReq: 0");
-    if actual != expected {
-        return Err(mismatch("exact equipped item payload changed"));
-    }
+    check_reference_item(child(items, "Item")?, &choice.weapon, data)?;
     let skills = child(root, "Skills")?;
     fixed(skills, &[("activeSkillSet", "1")])?;
     let set = child(skills, "SkillSet")?;
@@ -2111,43 +2127,6 @@ fn exported_scenario(xml: &str, data: &GameDataPackage) -> Result<String> {
     let document = parse(xml)?;
     Ok(visit(document.root_element(), data))
 }
-fn normal_mace(input: &str, data: &GameDataPackage) -> Result<String> {
-    parse_normal_mace(input, data).map(|(text, _)| text)
-}
-fn parse_normal_mace(input: &str, data: &GameDataPackage) -> Result<(String, ValidatedMaceWeapon)> {
-    if input.len() > 1024 {
-        return Err(unsupported("normal mace text exceeds 1024 bytes"));
-    }
-    let text = input.replace("\r\n", "\n");
-    let text = text.trim();
-    let lines: Vec<_> = text.lines().collect();
-    if lines.len() != 5
-        || lines[0] != "Rarity: NORMAL"
-        || !data.weapons.iter().any(|weapon| weapon.name == lines[1])
-        || lines[4] != "Implicits: 0"
-    {
-        return Err(unsupported(
-            "only exact normal mace payloads selected by the data package without modifiers are supported",
-        ));
-    }
-    let item_level = integer(lines[2].strip_prefix("Item Level: "), 1, 100, "item level")?;
-    let quality = integer(lines[3].strip_prefix("Quality: "), 0, 20, "weapon quality")?;
-    let weapon_key = data
-        .weapons
-        .iter()
-        .find(|weapon| weapon.name == lines[1])
-        .expect("validated base")
-        .id
-        .clone();
-    Ok((
-        text.into(),
-        ValidatedMaceWeapon {
-            weapon_key,
-            quality,
-            item_level,
-        },
-    ))
-}
 fn patch(
     template: &str,
     profile: &Profile,
@@ -2167,7 +2146,7 @@ fn patch(
     let mut patches = vec![
         (
             profile.item_range.clone(),
-            format!("<Item id=\"1\">{}\n</Item>", escape(&choice.weapon)),
+            format!("<Item id=\"1\">{}</Item>", escape(&choice.weapon)),
         ),
         (profile.support_range.clone(), support),
     ];
