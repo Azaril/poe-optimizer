@@ -307,7 +307,7 @@ fn native_realization_rejects_changed_projection_context_or_resolved_item_eviden
                 match field {
                     "item" => evidence["weapon_base"] = json!("Wooden Club"),
                     "quality" => evidence["weapon_quality"] = json!(20),
-                    _ => evidence["brutality_i"] = json!(false),
+                    _ => evidence["support_loadout"] = json!([]),
                 }
                 value["attachments"][0]["content"] = json!(evidence.to_string());
             }

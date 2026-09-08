@@ -320,8 +320,8 @@ Sources: [Spark skill data](https://github.com/PathOfBuildingCommunity/PathOfBui
 ### Closed Mace Strike profile
 
 The `mace` profile accepts level-one Mace Strike, one normal Wooden Club or Smithing
-Hammer, integer quality 0..20 and item level 1..100. Brutality I at level one and quality
-zero is the only admitted support. `evaluate_with_character` adds resolved class attributes
+Hammer, integer quality 0..20 and item level 1..100. Zero to two level-one quality-zero supports from
+Brutality I, Heavy Swing and Rapid Attacks I are admitted. See [support composition](support-loadouts.md). `evaluate_with_character` adds resolved class attributes
 and the ordinary entrance/ascendancy resistance effects below. There are no other items,
 supports, ascendancy effects or external modifiers. The legacy `evaluate(input)` wrapper preserves
 Warrior attributes and no passive effects. Warrior is entry 3 in the raw tree classes array;
@@ -349,8 +349,8 @@ coverage. Per-hand average hit is exposed as `main_hand_average_hit`; PoB does n
 a top-level AverageHit for this attack, and the typed metric remains unavailable under
 that existing contract. This profile claims hit DPS, not combined or ailment DPS.
 
-Seventeen normalized source hashes accompany the Rust data; the profile identity is
-`poe2-mace-strike-class-passives-v3`. The differential test executes
+Twenty-one normalized source hashes accompany the Rust data; the profile identity is
+`poe2-mace-strike-support-loadouts-v4`. The differential test executes
 actual pinned Item/ModDB/resource/offence source with resolved closed-profile scaffolding,
 including the real Brutality stat map and damage-disable flags. Interpreted and warmed
 runs cover every admitted quality, both weapons and support choices, character levels,

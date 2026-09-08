@@ -10,7 +10,7 @@ use poe_optimizer_core::{
 };
 use poe_optimizer_data::class_tree::{self, ClassTreeSelection, ResolvedClassTree};
 use poe_optimizer_data::game_data::{
-    self, GameDataPackage, GameDataSnapshot, RequirementData, SupportColor,
+    self, GameDataPackage, GameDataSnapshot, RequirementData, SupportColor, SupportData,
 };
 use roxmltree::{Document, Node, ParsingOptions};
 use serde::{Deserialize, Serialize};
@@ -35,11 +35,73 @@ pub enum MaceSupportChoice {
     None,
     BrutalityI,
 }
+/// Canonical unordered support identities selected from the injected data package.
+/// Construction checks shape; catalog construction also checks family and eligibility rules.
+#[derive(Debug, Clone, Default, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(transparent)]
+pub struct MaceSupportLoadout(Vec<String>);
+impl MaceSupportLoadout {
+    pub fn new(mut keys: Vec<String>) -> Result<Self> {
+        if keys.len() > 2
+            || keys.iter().any(|key| {
+                key.is_empty()
+                    || key.len() > 64
+                    || !key.bytes().all(|byte| {
+                        byte.is_ascii_lowercase() || byte.is_ascii_digit() || byte == b'_'
+                    })
+            })
+        {
+            return Err(unsupported(
+                "support loadouts require zero to two bounded data keys",
+            ));
+        }
+        keys.sort();
+        if keys.windows(2).any(|pair| pair[0] == pair[1]) {
+            return Err(unsupported("duplicate support in loadout"));
+        }
+        Ok(Self(keys))
+    }
+    pub fn keys(&self) -> &[String] {
+        &self.0
+    }
+    pub fn support_ids(&self) -> &[String] {
+        &self.0
+    }
+    pub fn id(&self) -> String {
+        if self.0.is_empty() {
+            "none".into()
+        } else {
+            self.0.join("+")
+        }
+    }
+    pub fn legacy_choice(&self) -> Option<MaceSupportChoice> {
+        match self.0.as_slice() {
+            [] => Some(MaceSupportChoice::None),
+            [key] if key == "brutality_i" => Some(MaceSupportChoice::BrutalityI),
+            _ => None,
+        }
+    }
+}
+impl From<MaceSupportChoice> for MaceSupportLoadout {
+    fn from(value: MaceSupportChoice) -> Self {
+        Self(match value {
+            MaceSupportChoice::None => Vec::new(),
+            MaceSupportChoice::BrutalityI => vec!["brutality_i".into()],
+        })
+    }
+}
+impl<'de> Deserialize<'de> for MaceSupportLoadout {
+    fn deserialize<D: serde::Deserializer<'de>>(
+        deserializer: D,
+    ) -> std::result::Result<Self, D::Error> {
+        Self::new(Vec::<String>::deserialize(deserializer)?).map_err(serde::de::Error::custom)
+    }
+}
 #[derive(Debug, Clone, Serialize)]
 pub struct ControlledMaceAlternative {
     pub id: String,
     pub weapon_id: String,
-    pub support: MaceSupportChoice,
+    pub support: MaceSupportLoadout,
     pub tree: ClassTreeSelection,
     pub xml_sha256: String,
     pub candidate: Candidate,
@@ -93,9 +155,11 @@ struct Profile {
     config: BTreeMap<String, Scalar>,
     item_range: Range<usize>,
     support_range: Range<usize>,
+    extra_support_ranges: Vec<Range<usize>>,
     weapon: String,
     active_attributes: BTreeMap<String, String>,
-    has_support: bool,
+    support: MaceSupportLoadout,
+    support_order: Vec<String>,
     tree: Arc<ResolvedClassTree>,
     tree_attribute_ranges: BTreeMap<String, Range<usize>>,
     ascendancy_insert: usize,
@@ -103,7 +167,8 @@ struct Profile {
 #[derive(Debug, Clone)]
 struct Choice {
     weapon: String,
-    support: MaceSupportChoice,
+    support: MaceSupportLoadout,
+    support_order: Vec<String>,
     tree: Arc<ResolvedClassTree>,
     patch_tree: bool,
 }
@@ -126,7 +191,7 @@ pub struct VerifiedNativeMaceScenario {
 #[derive(Debug)]
 pub struct ControlledMaceCatalog {
     data: Arc<GameDataSnapshot>,
-    support_xml: String,
+    support_xml: BTreeMap<String, String>,
     template: String,
     profile: Profile,
     catalog: CandidateCatalog,
@@ -134,7 +199,7 @@ pub struct ControlledMaceCatalog {
     choices: BTreeMap<Candidate, Choice>,
     tree_choices: Vec<ClassTreeSelection>,
     candidate_index:
-        BTreeMap<ClassTreeSelection, BTreeMap<String, BTreeMap<MaceSupportChoice, usize>>>,
+        BTreeMap<ClassTreeSelection, BTreeMap<String, BTreeMap<MaceSupportLoadout, usize>>>,
 }
 impl ControlledMaceCatalog {
     pub fn new(
@@ -154,7 +219,12 @@ impl ControlledMaceCatalog {
         weapons: Vec<NormalMaceAlternative>,
         supports: Vec<MaceSupportChoice>,
     ) -> Result<Self> {
-        Self::build(data, template_xml, weapons, supports, None)
+        Self::with_loadouts(
+            data,
+            template_xml,
+            weapons,
+            supports.into_iter().map(Into::into).collect(),
+        )
     }
     /// Compose finite class/ascendancy/ordinary-entrance/ascendancy-passive choices with equipment and support.
     /// The snapshot is shared with requirements and evaluator admission; no Lua runs here.
@@ -165,13 +235,36 @@ impl ControlledMaceCatalog {
         supports: Vec<MaceSupportChoice>,
         tree_choices: Vec<ClassTreeSelection>,
     ) -> Result<Self> {
+        Self::with_tree_loadouts(
+            data,
+            template_xml,
+            weapons,
+            supports.into_iter().map(Into::into).collect(),
+            tree_choices,
+        )
+    }
+    pub fn with_loadouts(
+        data: Arc<GameDataSnapshot>,
+        template_xml: String,
+        weapons: Vec<NormalMaceAlternative>,
+        supports: Vec<MaceSupportLoadout>,
+    ) -> Result<Self> {
+        Self::build(data, template_xml, weapons, supports, None)
+    }
+    pub fn with_tree_loadouts(
+        data: Arc<GameDataSnapshot>,
+        template_xml: String,
+        weapons: Vec<NormalMaceAlternative>,
+        supports: Vec<MaceSupportLoadout>,
+        tree_choices: Vec<ClassTreeSelection>,
+    ) -> Result<Self> {
         Self::build(data, template_xml, weapons, supports, Some(tree_choices))
     }
     fn build(
         data: Arc<GameDataSnapshot>,
         template_xml: String,
         weapons: Vec<NormalMaceAlternative>,
-        supports: Vec<MaceSupportChoice>,
+        supports: Vec<MaceSupportLoadout>,
         requested_trees: Option<Vec<ClassTreeSelection>>,
     ) -> Result<Self> {
         let package = data.package();
@@ -186,7 +279,11 @@ impl ControlledMaceCatalog {
             ));
         }
         let profile = profile(&template_xml, package)?;
-        let support_xml = support_xml(package);
+        let support_xml: BTreeMap<_, _> = package
+            .supports
+            .iter()
+            .map(|gem| (gem.id.clone(), support_xml(gem)))
+            .collect();
         let patch_tree = requested_trees.is_some();
         if !patch_tree && profile.tree.selection != fixed_warrior() {
             return Err(unsupported(
@@ -210,9 +307,9 @@ impl ControlledMaceCatalog {
                     .map_err(|error| unsupported(&error.to_string()))
             })
             .collect::<Result<Vec<_>>>()?;
-        if weapons.is_empty() || weapons.len() > 64 || supports.is_empty() || supports.len() > 2 {
+        if weapons.is_empty() || weapons.len() > 64 || supports.is_empty() || supports.len() > 7 {
             return Err(unsupported(
-                "provide 1..64 weapons and 1..2 distinct support choices",
+                "provide 1..64 weapons and 1..7 distinct support loadouts",
             ));
         }
         let mut ids = BTreeSet::new();
@@ -233,9 +330,14 @@ impl ControlledMaceCatalog {
             }
             parsed.push((weapon.id, text));
         }
-        let support_set: BTreeSet<_> = supports.iter().copied().collect();
+        let support_set: BTreeSet<_> = supports.iter().cloned().collect();
         if support_set.len() != supports.len() {
             return Err(unsupported("duplicate support alternatives"));
+        }
+        for support in &support_set {
+            package
+                .validate_mace_support_loadout(support.keys())
+                .map_err(|error| unsupported(&error.to_string()))?;
         }
         parsed.sort();
         let preparations = parsed
@@ -257,7 +359,7 @@ impl ControlledMaceCatalog {
             content_fingerprint: hash(
                 &if patch_tree {
                     serde_json::to_string(&(
-                        "pob-controlled-mace-v4",
+                        "pob-controlled-mace-v5",
                         data.identity(),
                         SOURCE,
                         hash(&template_xml),
@@ -268,7 +370,7 @@ impl ControlledMaceCatalog {
                     ))
                 } else {
                     serde_json::to_string(&(
-                        "pob-controlled-mace-v2",
+                        "pob-controlled-mace-v3",
                         data.identity(),
                         SOURCE,
                         hash(&template_xml),
@@ -284,13 +386,17 @@ impl ControlledMaceCatalog {
             serde_json::to_string(&profile.active_attributes).unwrap(),
         );
         let active_id = format!("pob-gem:{}", active_payload.sha256);
-        let support_document =
-            Document::parse(&support_xml).map_err(|error| unsupported(&error.to_string()))?;
-        let support_payload = payload(
-            "pob2-gem-attributes-json-v1",
-            serde_json::to_string(&attributes(support_document.root_element())).unwrap(),
-        );
-        let support_id = format!("pob-gem:{}", support_payload.sha256);
+        let mut support_instances = BTreeMap::new();
+        for gem in &package.supports {
+            let document = Document::parse(&support_xml[&gem.id])
+                .map_err(|error| unsupported(&error.to_string()))?;
+            let gem_payload = payload(
+                "pob2-gem-attributes-json-v1",
+                serde_json::to_string(&attributes(document.root_element())).unwrap(),
+            );
+            let id = format!("pob-gem:{}", gem_payload.sha256);
+            support_instances.insert(gem.id.clone(), (id, gem_payload));
+        }
         let legacy_root = profile.tree.class.start_node_id;
         let mut catalog = CandidateCatalog {
             identity: identity.clone(),
@@ -337,26 +443,32 @@ impl ControlledMaceCatalog {
             support_definition_limits: BTreeMap::new(),
             unsupported_mechanics: BTreeSet::new(),
         };
-        if support_set.contains(&MaceSupportChoice::BrutalityI) {
+        for key in support_set
+            .iter()
+            .flat_map(|loadout| loadout.keys())
+            .collect::<BTreeSet<_>>()
+        {
+            let gem = package.support(key).expect("validated support");
+            let (support_id, support_payload) = &support_instances[key];
             catalog.supports.insert(
                 support_id.clone(),
                 SupportInstance {
-                    definition_id: package.mace.brutality.skill_id.clone(),
-                    payload: support_payload,
+                    definition_id: gem.skill_id.clone(),
+                    payload: support_payload.clone(),
                     compatible_active_skill_ids: BTreeSet::from([package.mace.skill_id.clone()]),
                     ..Default::default()
                 },
             );
             catalog
                 .support_definition_limits
-                .insert(package.mace.brutality.skill_id.clone(), 1);
+                .insert(gem.skill_id.clone(), 1);
         }
         let mut choices = BTreeMap::new();
         let mut alternatives = Vec::new();
         let mut hashed_bytes = 0usize;
         let mut candidate_index: BTreeMap<
             ClassTreeSelection,
-            BTreeMap<String, BTreeMap<MaceSupportChoice, usize>>,
+            BTreeMap<String, BTreeMap<MaceSupportLoadout, usize>>,
         > = BTreeMap::new();
         for (id, weapon) in parsed {
             let item_payload = payload("pob2-item-text-v1", weapon.clone());
@@ -387,17 +499,18 @@ impl ControlledMaceCatalog {
                             SLOT.into(),
                             SkillAssignment {
                                 active_instance_id: active_id.clone(),
-                                support_instance_ids: if *support == MaceSupportChoice::None {
-                                    BTreeSet::new()
-                                } else {
-                                    BTreeSet::from([support_id.clone()])
-                                },
+                                support_instance_ids: support
+                                    .keys()
+                                    .iter()
+                                    .map(|key| support_instances[key].0.clone())
+                                    .collect(),
                             },
                         )]),
                     };
                     let choice = Choice {
                         weapon: weapon.clone(),
-                        support: *support,
+                        support: support.clone(),
+                        support_order: support.keys().to_vec(),
                         tree: tree.clone(),
                         patch_tree,
                     };
@@ -417,7 +530,7 @@ impl ControlledMaceCatalog {
                         .or_default()
                         .entry(id.clone())
                         .or_default()
-                        .insert(*support, alternatives.len());
+                        .insert(support.clone(), alternatives.len());
                     alternatives.push(ControlledMaceAlternative {
                         id: format!(
                             "{}{id}/{}",
@@ -439,14 +552,10 @@ impl ControlledMaceCatalog {
                             } else {
                                 String::new()
                             },
-                            if *support == MaceSupportChoice::None {
-                                "none"
-                            } else {
-                                "brutality_i"
-                            }
+                            support.id()
                         ),
                         weapon_id: id.clone(),
-                        support: *support,
+                        support: support.clone(),
                         tree: tree.selection.clone(),
                         xml_sha256: hash(&xml),
                         candidate: candidate.clone(),
@@ -491,20 +600,35 @@ impl ControlledMaceCatalog {
         weapon_id: &str,
         support: MaceSupportChoice,
     ) -> Option<&Candidate> {
+        self.resolve_tree_loadout_candidate(tree, weapon_id, &support.into())
+    }
+    pub fn resolve_tree_loadout_candidate(
+        &self,
+        tree: &ClassTreeSelection,
+        weapon_id: &str,
+        support: &MaceSupportLoadout,
+    ) -> Option<&Candidate> {
         let index = self
             .candidate_index
             .get(tree)?
             .get(weapon_id)?
-            .get(&support)?;
+            .get(support)?;
         self.alternatives.get(*index).map(|value| &value.candidate)
     }
-    /// Resolve a weapon/support choice under the imported template's tree identity.
+    /// Resolve a legacy support choice under the imported template's tree identity.
     pub fn resolve_candidate(
         &self,
         weapon_id: &str,
         support: MaceSupportChoice,
     ) -> Option<&Candidate> {
-        self.resolve_tree_candidate(&self.profile.tree.selection, weapon_id, support)
+        self.resolve_loadout_candidate(weapon_id, &support.into())
+    }
+    pub fn resolve_loadout_candidate(
+        &self,
+        weapon_id: &str,
+        support: &MaceSupportLoadout,
+    ) -> Option<&Candidate> {
+        self.resolve_tree_loadout_candidate(&self.profile.tree.selection, weapon_id, support)
     }
     /// Admitted passive records do not change attributes; equipment dependencies are excluded.
     /// Aggregate support-color costs compete with individual requirements by maximum;
@@ -536,18 +660,25 @@ impl ControlledMaceCatalog {
             .expect("validated selected weapon");
         required.include(&weapon.requirements);
         required.include(&data.mace.requirements);
-        if choice.support == MaceSupportChoice::BrutalityI {
-            required.include(&data.mace.brutality.requirements);
-            // Exactly one support socket is admitted by this profile.
-            let costs = &data.mace.support_attribute_costs;
-            match data.mace.brutality.color {
-                SupportColor::Red => required.strength = required.strength.max(costs.strength),
-                SupportColor::Green => required.dexterity = required.dexterity.max(costs.dexterity),
-                SupportColor::Blue => {
-                    required.intelligence = required.intelligence.max(costs.intelligence)
-                }
+        let costs = &data.mace.support_attribute_costs;
+        let mut support_costs = MaceRequirementValues {
+            level: 0,
+            strength: 0,
+            dexterity: 0,
+            intelligence: 0,
+        };
+        for key in choice.support.keys() {
+            let gem = data.support(key).expect("validated selected support");
+            required.include(&gem.requirements);
+            match gem.color {
+                SupportColor::Red => support_costs.strength += costs.strength,
+                SupportColor::Green => support_costs.dexterity += costs.dexterity,
+                SupportColor::Blue => support_costs.intelligence += costs.intelligence,
             }
         }
+        required.strength = required.strength.max(support_costs.strength);
+        required.dexterity = required.dexterity.max(support_costs.dexterity);
+        required.intelligence = required.intelligence.max(support_costs.intelligence);
         let mut violations = Vec::new();
         for (name, required, available) in [
             ("level", required.level, available.level),
@@ -615,21 +746,15 @@ impl ControlledMaceCatalog {
             weapon: self.profile.weapon.clone(),
             tree: self.profile.tree.clone(),
             patch_tree: false,
-            support: if self.profile.has_support {
-                MaceSupportChoice::BrutalityI
-            } else {
-                MaceSupportChoice::None
-            },
+            support: self.profile.support.clone(),
+            support_order: self.profile.support_order.clone(),
         };
         self.check_realization(&choice, result)?;
         Ok(VerifiedMaceScenario {
             identity: self.catalog.identity.clone(),
             context: result.context.clone(),
             backend: result.backend.clone(),
-            exported_scenario: exported_scenario(
-                &result.exports[0].content,
-                &self.data.package().mace.brutality.skill_id,
-            )?,
+            exported_scenario: exported_scenario(&result.exports[0].content, self.data.package())?,
         })
     }
     pub fn validate_realization(
@@ -659,10 +784,7 @@ impl ControlledMaceCatalog {
                 "effective immutable scenario changed from the verified template",
             ));
         }
-        let signature = exported_scenario(
-            &result.exports[0].content,
-            &self.data.package().mace.brutality.skill_id,
-        )?;
+        let signature = exported_scenario(&result.exports[0].content, self.data.package())?;
         if signature != scenario.exported_scenario {
             let at = signature
                 .chars()
@@ -703,11 +825,8 @@ impl ControlledMaceCatalog {
             weapon: self.profile.weapon.clone(),
             tree: self.profile.tree.clone(),
             patch_tree: false,
-            support: if self.profile.has_support {
-                MaceSupportChoice::BrutalityI
-            } else {
-                MaceSupportChoice::None
-            },
+            support: self.profile.support.clone(),
+            support_order: self.profile.support_order.clone(),
         };
         self.check_native_realization(&choice, result, &self.template)?;
         Ok(VerifiedNativeMaceScenario {
@@ -806,7 +925,7 @@ impl ControlledMaceCatalog {
             .iter()
             .filter(|attachment| {
                 attachment.media_type
-                    == "application/vnd.poe-optimizer.native-profile+json;version=1"
+                    == "application/vnd.poe-optimizer.native-profile+json;version=2"
             })
             .collect();
         if evidence.len() != 1 || evidence[0].content.len() > 64 * 1024 {
@@ -828,8 +947,16 @@ impl ControlledMaceCatalog {
         if evidence["weapon_base"].as_str() != Some(lines[1])
             || evidence["weapon_quality"].as_u64() != Some(quality)
             || evidence["weapon_item_level"].as_u64() != Some(item_level)
-            || evidence["brutality_i"].as_bool()
-                != Some(choice.support == MaceSupportChoice::BrutalityI)
+            || evidence["support_loadout"] != serde_json::json!(choice.support.keys())
+            || evidence["configured_supports"]
+                != serde_json::json!(
+                    choice
+                        .support
+                        .keys()
+                        .iter()
+                        .map(|key| self.data.package().support(key).expect("validated support"))
+                        .collect::<Vec<_>>()
+                )
         {
             return Err(mismatch(
                 "native resolved weapon or support differs from candidate payload",
@@ -930,11 +1057,7 @@ impl ControlledMaceCatalog {
             return Err(mismatch("class, ascendancy, level, tree or group changed"));
         }
         let coverage = &result.coverage;
-        let count = if choice.support == MaceSupportChoice::None {
-            1
-        } else {
-            2
-        };
+        let count = 1 + choice.support.keys().len();
         if coverage.active_skill_set_id != Some(1)
             || coverage.groups.len() != 1
             || coverage.unresolved_entry_count != 0
@@ -985,11 +1108,10 @@ impl ControlledMaceCatalog {
                     &data.mace.variant_id,
                 )
             } else {
-                (
-                    &data.mace.brutality.skill_id,
-                    &data.mace.brutality.game_id,
-                    &data.mace.brutality.variant_id,
-                )
+                let support = data
+                    .support(&choice.support_order[index - 1])
+                    .expect("validated support");
+                (&support.skill_id, &support.game_id, &support.variant_id)
             };
             if gem.index != index + 1
                 || !gem.enabled
@@ -1263,16 +1385,26 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
         ],
     )?;
     let gems: Vec<_> = group.children().filter(Node::is_element).collect();
-    if !(1..=2).contains(&gems.len()) {
+    if !(1..=3).contains(&gems.len()) {
         return Err(unsupported(
-            "one Mace Strike and zero or one Brutality I required",
+            "one Mace Strike and zero to two reviewed supports required",
         ));
     }
-    check_gem(gems[0], false, false, data)?;
-    if gems.len() == 2 {
-        check_gem(gems[1], true, false, data)?;
+    check_gem(gems[0], None, false, data)?;
+    let mut support_order = Vec::new();
+    for node in &gems[1..] {
+        let gem = data
+            .supports
+            .iter()
+            .find(|gem| Some(gem.skill_id.as_str()) == node.attribute("skillId"))
+            .ok_or_else(|| unsupported("unknown support gem"))?;
+        check_gem(*node, Some(gem), false, data)?;
+        support_order.push(gem.id.clone());
     }
-    let support_range = if gems.len() == 2 {
+    let support = MaceSupportLoadout::new(support_order.clone())?;
+    data.validate_mace_support_loadout(support.keys())
+        .map_err(|error| unsupported(&error.to_string()))?;
+    let support_range = if gems.len() > 1 {
         gems[1].range()
     } else {
         gems[0].range().end..gems[0].range().end
@@ -1339,9 +1471,11 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
         config: inputs,
         item_range: item.range(),
         support_range,
+        extra_support_ranges: gems.iter().skip(2).map(Node::range).collect(),
         weapon,
         active_attributes: attributes(gems[0]),
-        has_support: gems.len() == 2,
+        support,
+        support_order,
         tree,
         tree_attribute_ranges,
         ascendancy_insert,
@@ -1587,17 +1721,15 @@ fn check_export(
         ],
     )?;
     let gems: Vec<_> = group.children().filter(Node::is_element).collect();
-    if gems.len()
-        != if choice.support == MaceSupportChoice::None {
-            1
-        } else {
-            2
-        }
-    {
+    if gems.len() != 1 + choice.support.keys().len() {
         return Err(mismatch("exported support count changed"));
     }
     for (index, gem) in gems.iter().enumerate() {
-        check_gem(*gem, index > 0, true, data)?;
+        let support = index.checked_sub(1).map(|index| {
+            data.support(&choice.support_order[index])
+                .expect("validated support")
+        });
+        check_gem(*gem, support, true, data)?;
     }
     let config = child(root, "Config")?;
     fixed(config, &[("activeConfigSet", "1")])?;
@@ -1636,7 +1768,7 @@ fn check_export(
 }
 fn check_gem(
     node: Node<'_, '_>,
-    support: bool,
+    support: Option<&SupportData>,
     exported: bool,
     data: &GameDataPackage,
 ) -> Result<()> {
@@ -1661,12 +1793,12 @@ fn check_gem(
         ]);
     }
     only(node, &allowed, &[])?;
-    let (name, skill, game, variant) = if support {
+    let (name, skill, game, variant) = if let Some(support) = support {
         (
-            &data.mace.brutality.name,
-            &data.mace.brutality.skill_id,
-            &data.mace.brutality.game_id,
-            &data.mace.brutality.variant_id,
+            &support.name,
+            &support.skill_id,
+            &support.game_id,
+            &support.variant_id,
         )
     } else {
         (
@@ -1704,13 +1836,17 @@ fn check_gem(
     Ok(())
 }
 /// Canonical normalized XML except numeric Build outputs and validated mutable build state.
-fn exported_scenario(xml: &str, support_id: &str) -> Result<String> {
-    fn visit(node: Node<'_, '_>, support_id: &str) -> String {
+fn exported_scenario(xml: &str, data: &GameDataPackage) -> Result<String> {
+    fn visit(node: Node<'_, '_>, data: &GameDataPackage) -> String {
         if !node.is_element() {
             return String::new();
         }
         let tag = node.tag_name().name();
-        if (tag == "Gem" && node.attribute("skillId") == Some(support_id))
+        if (tag == "Gem"
+            && data
+                .supports
+                .iter()
+                .any(|support| node.attribute("skillId") == Some(support.skill_id.as_str())))
             || (["PlayerStat", "MinionStat", "FullDPSSkill"].contains(&tag)
                 && node
                     .parent_element()
@@ -1753,7 +1889,7 @@ fn exported_scenario(xml: &str, support_id: &str) -> Result<String> {
             let mut children: Vec<_> = node
                 .children()
                 .filter(Node::is_element)
-                .map(|node| visit(node, support_id))
+                .map(|node| visit(node, data))
                 .filter(|value| !value.is_empty())
                 .collect();
             children.sort();
@@ -1773,7 +1909,7 @@ fn exported_scenario(xml: &str, support_id: &str) -> Result<String> {
         output
     }
     let document = parse(xml)?;
-    Ok(visit(document.root_element(), support_id))
+    Ok(visit(document.root_element(), data))
 }
 fn normal_mace(input: &str, data: &GameDataPackage) -> Result<String> {
     if input.len() > 1024 {
@@ -1795,14 +1931,22 @@ fn normal_mace(input: &str, data: &GameDataPackage) -> Result<String> {
     integer(lines[3].strip_prefix("Quality: "), 0, 20, "weapon quality")?;
     Ok(text.into())
 }
-fn patch(template: &str, profile: &Profile, choice: &Choice, support_xml: &str) -> String {
-    let support = if choice.support == MaceSupportChoice::None {
-        String::new()
-    } else if profile.has_support {
-        support_xml.into()
-    } else {
-        format!("\n        {support_xml}")
-    };
+fn patch(
+    template: &str,
+    profile: &Profile,
+    choice: &Choice,
+    support_xml: &BTreeMap<String, String>,
+) -> String {
+    let mut support = choice
+        .support
+        .keys()
+        .iter()
+        .map(|key| support_xml[key].as_str())
+        .collect::<Vec<_>>()
+        .join("\n        ");
+    if !support.is_empty() && profile.support.keys().is_empty() {
+        support.insert_str(0, "\n        ");
+    }
     let mut patches = vec![
         (
             profile.item_range.clone(),
@@ -1810,6 +1954,13 @@ fn patch(template: &str, profile: &Profile, choice: &Choice, support_xml: &str) 
         ),
         (profile.support_range.clone(), support),
     ];
+    patches.extend(
+        profile
+            .extra_support_ranges
+            .iter()
+            .cloned()
+            .map(|range| (range, String::new())),
+    );
     if choice.patch_tree {
         let tree = &choice.tree;
         let fields = [
@@ -1870,8 +2021,7 @@ fn patch(template: &str, profile: &Profile, choice: &Choice, support_xml: &str) 
     }
     output
 }
-fn support_xml(data: &GameDataPackage) -> String {
-    let support = &data.mace.brutality;
+fn support_xml(support: &SupportData) -> String {
     format!(
         r#"<Gem nameSpec="{}" skillId="{}" gemId="{}" variantId="{}" level="1" quality="0" enabled="true" enableGlobal1="true" enableGlobal2="true" count="1"/>"#,
         escape_attribute(&support.name),

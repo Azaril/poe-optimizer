@@ -37,6 +37,7 @@ const READ_PATHS: &[&str] = &[
     "src/Data/Skills/act_int.lua",
     "src/Data/Skills/other.lua",
     "src/Data/Skills/sup_str.lua",
+    "src/Data/Skills/sup_dex.lua",
     "src/Data/Bases/mace.lua",
     "src/TreeData/0_5/tree.lua",
     "src/Classes/Item.lua",
@@ -59,6 +60,7 @@ const PROVENANCE_PATHS: &[&str] = &[
     "src/Data/Bases/mace.lua",
     "src/Data/Skills/other.lua",
     "src/Data/Skills/sup_str.lua",
+    "src/Data/Skills/sup_dex.lua",
     "src/Data/SkillStatMap.lua",
     "src/Classes/Item.lua",
     "src/Classes/SkillsTab.lua",
@@ -100,7 +102,7 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v3",
+        "poe-game-data-extractor-v4",
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
@@ -178,7 +180,9 @@ struct Policy {
     source_role: String,
     spark_skill: String,
     mace_skill: String,
-    support_skill: String,
+    supports: Vec<[String; 2]>,
+    support_level: u32,
+    support_quality: u32,
     spark_default_class: String,
     mace_default_class: String,
     weapons: Vec<[String; 2]>,
@@ -220,7 +224,13 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         AuthenticatedTreeSnapshot::from_trusted_extraction(snapshot, &digest).map_err(error)?;
     let tree = BundledClassTree::from_authenticated_snapshot(&authenticated).map_err(error)?;
     let policy: Policy = serde_json::from_str(POLICY)?;
-    if policy.schema_version != 1 || policy.quests.len() != 6 || policy.weapons.len() != 2 {
+    if policy.schema_version != 2
+        || policy.quests.len() != 6
+        || policy.weapons.len() != 2
+        || policy.supports.len() != 3
+        || policy.support_level != 1
+        || policy.support_quality != 0
+    {
         return Err(error("unsupported extraction selection policy"));
     }
     let extractor = Extractor::new(sources)?;
@@ -283,6 +293,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         quests: extractor.record(&records, "quests")?,
         spark: extractor.record(&records, "spark")?,
         mace: extractor.record(&records, "mace")?,
+        supports: extractor.record(&records, "supports")?,
         weapons: extractor.record(&records, "weapons")?,
         monsters: extractor.record(&records, "monsters")?,
         defence: extractor.defence()?,
@@ -431,7 +442,24 @@ impl Extractor {
         lua.globals()
             .get::<Table>("modLib")?
             .set("parseMod", parser)?;
-        lua.load("skills={};mod=modLib.createMod").exec()?;
+        lua.load(format!(
+            "{}\nmod=makeSkillMod;flag=makeFlagMod;skill=makeSkillDataMod;skills={{}}",
+            section(
+                source("src/Modules/Data.lua")?,
+                "local function makeSkillMod(",
+                "local function processMod("
+            )?
+        ))
+        .exec()?;
+        let stat_map = lua
+            .load(source("src/Data/SkillStatMap.lua")?)
+            .eval::<Function>()?
+            .call::<Table>((
+                lua.globals().get::<Function>("mod")?,
+                lua.globals().get::<Function>("flag")?,
+                lua.globals().get::<Function>("skill")?,
+            ))?;
+        lua.globals().set("sourceSupportStatMap", stat_map)?;
         for (path, begin, end) in [
             (
                 "src/Data/Skills/act_int.lua",
@@ -447,6 +475,16 @@ impl Extractor {
                 "src/Data/Skills/sup_str.lua",
                 "skills[\"SupportBrutalityPlayer\"] = {",
                 "\nskills[\"SupportBrutalityPlayerTwo\"]",
+            ),
+            (
+                "src/Data/Skills/sup_str.lua",
+                "skills[\"SupportMeleePhysicalDamagePlayer\"] = {",
+                "\nskills[\"SupportHeftPlayer\"]",
+            ),
+            (
+                "src/Data/Skills/sup_dex.lua",
+                "skills[\"SupportRapidAttacksPlayer\"] = {",
+                "\nskills[\"SupportRapidAttacksPlayerTwo\"]",
             ),
         ] {
             lua.load(section(source(path)?, begin, end)?).exec()?;
@@ -823,6 +861,45 @@ mod tests {
         assert!(literal("operand=1;operand=2;", "operand=", ";").is_err());
         assert!(literal("operand=no;", "operand=", ";").is_err());
         assert_eq!(literal("operand=1.25;", "operand=", ";").unwrap(), 1.25);
+    }
+    #[test]
+    fn source_support_conversion_rejects_unconsumed_mechanics_and_type_expressions() {
+        let sources = READ_PATHS
+            .iter()
+            .map(|p| ((*p).into(), source::read_verified_text(&root(), p).unwrap()))
+            .collect();
+        let extractor = Extractor::new(sources).unwrap();
+        let check: Function = extractor.lua.load("return function(mutate) local original=skills.SupportMeleePhysicalDamagePlayer;skills.SupportMeleePhysicalDamagePlayer=copyTable(original);local s=skills.SupportMeleePhysicalDamagePlayer;mutate(s);local ok,err=pcall(source_extract_support,{'heavy_swing','SupportMeleePhysicalDamagePlayer'},1,0);skills.SupportMeleePhysicalDamagePlayer=original;return ok end").eval().unwrap();
+        for mutation in [
+            "s.extraEffect=true",
+            "s.gemFamily[2]='OtherFamily'",
+            "s.gemFamily.extra='HiddenFamily'",
+            "s.statSets.extra=s.statSets[1]",
+            "s.requireSkillTypes={SkillType.Melee,SkillType.Attack,SkillType.AND}",
+            "s.excludeSkillTypes={SkillType.NOT}",
+            "s.addSkillTypes={SkillType.Attack}",
+            "s.levels[1].cost={Mana=1}",
+            "s.statSets[1].baseFlags.attack=true",
+            "s.statSets[1].constantStats[1][2]=0/0",
+            "s.statSets[1].constantStats[3]=s.statSets[1].constantStats[1]",
+            "s.statSets[1].constantStats.hidden={'unknown',5}",
+            "s.statSets[1].constantStats[99]={'unknown',5}",
+            "s.statSets[1].constantStats[1].hidden=5",
+            "s.statSets[1].constantStats[1][99]=5",
+            "s.statSets[1].stats.hidden='unknown'",
+            "s.statSets[1].stats[99]='unknown'",
+            "s.statSets[1].statMap.support_melee_physical_damage_foo={mod('PhysicalDamage','MORE',nil)}",
+            "s.statSets[1].statMap['support_melee_physical_damage_+%_final'][1][1]={type='Condition',var='Unimplemented'}",
+            "s.statSets[1].statMap['support_melee_physical_damage_+%_final'][1].flags=ModFlag.Spell",
+            "s.statSets[1].statMap['support_melee_physical_damage_+%_final'][1].keywordFlags=1",
+        ] {
+            let mutate: Function = extractor
+                .lua
+                .load(format!("return function(s) {mutation} end"))
+                .eval()
+                .unwrap();
+            assert!(!check.call::<bool>(mutate).unwrap(), "{mutation}");
+        }
     }
     #[test]
     fn extractor_state_has_no_file_loader_or_general_module_access() {

@@ -1,18 +1,19 @@
-//! Closed native Mace Strike profile with one normal mace and optional
-//! level-one quality-zero Brutality I. Hosts validate the complete document:
+//! Closed native Mace Strike profile with one normal mace and zero to two
+//! configured level-one quality-zero supports. Hosts validate the complete document:
 //! explicit class attributes and admitted owned passive effects, no other equipment,
 //! supports or external modifiers.
 //! Enemy values are resolved by the host; this kernel does not select encounters.
 
 use crate::character::CharacterInput;
 use crate::data::CompiledGameData;
+use crate::mace_supports::PreparedMaceSupports;
 use crate::{
     defence::{armour_reduction_percent, hit_chance_with_data, round_to_integer},
     spark::{SourceFile, SparkQuestRewards},
 };
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-mace-strike-class-passives-v3";
+pub const PROFILE_ID: &str = "poe2-mace-strike-support-loadouts-v4";
 pub const TREE_VERSION: &str = "0_5";
 /// Index in the pinned tree classes table; XML classInternalId is a separate id.
 pub const CLASS_ID: u32 = 3;
@@ -54,7 +55,6 @@ pub struct MaceData {
     pub intelligence: f64,
     pub accuracy_per_level: f64,
     pub accuracy_per_dexterity: f64,
-    pub brutality_physical_more: f64,
     pub enemy_physical_reduction_cap: f64,
 }
 /// Reviewed default parameters, loaded through the common package compiler.
@@ -76,6 +76,8 @@ pub struct MaceInput {
     pub quality: u32,
     /// Validated identity/legality input; normal unmodified base stats do not scale with item level.
     pub item_level: u32,
+    /// Legacy convenience selector, consulted only by the old evaluate wrappers.
+    /// Explicit prepared evaluation ignores this field and uses its bound loadout.
     pub brutality: bool,
     pub resistance_penalty: f64,
     pub quests: SparkQuestRewards,
@@ -155,6 +157,24 @@ pub fn evaluate_with_data(
     character: &CharacterInput,
     compiled: &CompiledGameData,
 ) -> Result<MaceOutput, MaceError> {
+    let supports = compiled.legacy_mace_supports(input.brutality)?;
+    evaluate_with_supports(input, character, compiled, supports)
+}
+
+/// Calculate with an immutable prepared support loadout. The legacy
+/// `input.brutality` selector is deliberately not part of this path.
+/// A loadout prepared by another compiled dataset is rejected before calculation.
+pub fn evaluate_with_supports(
+    input: &MaceInput,
+    character: &CharacterInput,
+    compiled: &CompiledGameData,
+    supports: &PreparedMaceSupports,
+) -> Result<MaceOutput, MaceError> {
+    if !compiled.owns_mace_supports(supports) {
+        return Err(MaceError(
+            "Prepared Mace supports belong to a different compiled dataset",
+        ));
+    }
     let data = compiled.mace();
     let rules = &compiled.snapshot().package().character;
     character.validate().map_err(|error| MaceError(error.0))?;
@@ -239,16 +259,22 @@ pub fn evaluate_with_data(
     let weapon_physical_minimum = round_to_integer(weapon.physical_minimum * quality_multiplier);
     let weapon_physical_maximum = round_to_integer(weapon.physical_maximum * quality_multiplier);
     // calcDamage rounds again after damage modifiers, before critical scaling/armour.
-    let more = if input.brutality {
-        1.0 + data.brutality_physical_more / 100.0
-    } else {
-        1.0
-    };
     let increased =
         1.0 + (modifiers.attack_damage_increased + modifiers.melee_damage_increased) / 100.0;
-    let physical_minimum = round_to_integer(weapon_physical_minimum * increased * more);
-    let physical_maximum = round_to_integer(weapon_physical_maximum * increased * more);
-    let (fire_minimum, fire_maximum) = if input.brutality {
+    let physical_increased = 1.0
+        + (modifiers.attack_damage_increased
+            + modifiers.melee_damage_increased
+            + supports.physical_increased)
+            / 100.0;
+    let (physical_minimum, physical_maximum) = if supports.disable_physical {
+        (0.0, 0.0)
+    } else {
+        (
+            round_to_integer(weapon_physical_minimum * physical_increased * supports.physical_more),
+            round_to_integer(weapon_physical_maximum * physical_increased * supports.physical_more),
+        )
+    };
+    let (fire_minimum, fire_maximum) = if supports.disable_fire {
         (0.0, 0.0)
     } else {
         (
@@ -296,8 +322,13 @@ pub fn evaluate_with_data(
         total_hit_average * (1.0 - crit_chance / 100.0) + total_crit_average * crit_chance / 100.0;
     let average_damage = main_hand_average_hit * hit / 100.0;
     let base_time = 1.0 / weapon.attack_rate;
-    let speed_multiplier =
-        round_to_integer((1.0 + modifiers.skill_speed_increased / 100.0) * 100.0) / 100.0;
+    // ModDB rounds each MORE name first, then CalcOffence combines all INC
+    // with that product and rounds the resulting speed multiplier to two places.
+    let speed_multiplier = round_to_integer(
+        (1.0 + (modifiers.skill_speed_increased + supports.speed_increased) / 100.0)
+            * supports.speed_more
+            * 100.0,
+    ) / 100.0;
     let attack_rate = 1.0 / (base_time / speed_multiplier);
     let hit_dps = average_damage * attack_rate;
     Ok(MaceOutput {
@@ -347,6 +378,22 @@ pub fn monster_armour(level: u32) -> Result<f64, MaceError> {
 
 /// Normalized full source hashes for this versioned profile's data and translated branches.
 pub const SOURCE_FILES: &[SourceFile] = &[
+    SourceFile {
+        path: "src/Data/Skills/sup_dex.lua",
+        sha256: "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac",
+    },
+    SourceFile {
+        path: "src/Data/Global.lua",
+        sha256: "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c",
+    },
+    SourceFile {
+        path: "src/Classes/ModDB.lua",
+        sha256: "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6",
+    },
+    SourceFile {
+        path: "src/Classes/ModStore.lua",
+        sha256: "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62",
+    },
     SourceFile {
         path: "src/Modules/ModParser.lua",
         sha256: "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",

@@ -7,8 +7,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 3;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v3";
+pub const SCHEMA_VERSION: u32 = 4;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v4";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -16,6 +16,7 @@ const SECTIONS: &[&str] = &[
     "quests",
     "spark",
     "mace",
+    "supports",
     "weapons",
     "defence",
     "monsters",
@@ -144,16 +145,88 @@ pub struct SparkData {
     pub cast_time: f64,
     pub critical_chance: f64,
 }
+/// Closed source skill-type vocabulary represented by this profile.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SupportSkillType {
+    Attack,
+    MeleeSingleTarget,
+    Melee,
+    Area,
+    AttackInPlace,
+    Damage,
+    DamageOverTime,
+    CrossbowAmmoSkill,
+    Herald,
+    NoAttackOrCastTime,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SupportEligibility {
+    /// Source type expressions with OR semantics only; compound operators reject extraction.
+    pub require_any: Vec<SupportSkillType>,
+    pub exclude: Vec<SupportSkillType>,
+}
+impl SupportEligibility {
+    pub fn admits(&self, types: &[SupportSkillType]) -> bool {
+        (self.require_any.is_empty() || self.require_any.iter().any(|t| types.contains(t)))
+            && !self.exclude.iter().any(|t| types.contains(t))
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SupportStat {
+    PhysicalDamage,
+    Speed,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SupportOperation {
+    Increased,
+    More,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SupportScope {
+    Any,
+    Melee,
+    Attack,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SupportDamageType {
+    Physical,
+    Fire,
+    Cold,
+    Lightning,
+    Chaos,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SupportModifier {
+    pub stat: SupportStat,
+    pub operation: SupportOperation,
+    pub scope: SupportScope,
+    pub value: f64,
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SupportData {
+    pub id: String,
+    pub family: String,
+    pub level: u32,
+    pub quality: u32,
     pub requirements: RequirementData,
     pub color: SupportColor,
     pub skill_id: String,
     pub game_id: String,
     pub variant_id: String,
     pub name: String,
-    pub physical_more: f64,
+    pub eligibility: SupportEligibility,
+    pub modifiers: Vec<SupportModifier>,
+    pub disable_damage: Vec<SupportDamageType>,
+    /// Retained source metadata. Current zero-cost Mace cannot exercise cost scaling.
+    pub mana_multiplier: Option<f64>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -166,7 +239,9 @@ pub struct MaceData {
     pub variant_id: String,
     pub name: String,
     pub default_class_id: u32,
-    pub brutality: SupportData,
+    pub skill_types: Vec<SupportSkillType>,
+    /// Nonzero costs require a future resource model and reject this package schema.
+    pub mana_cost: f64,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -263,6 +338,7 @@ pub struct GameDataPackage {
     pub quests: QuestData,
     pub spark: SparkData,
     pub mace: MaceData,
+    pub supports: Vec<SupportData>,
     pub weapons: Vec<MaceWeaponData>,
     pub defence: DefenceData,
     pub monsters: MonsterData,
@@ -270,6 +346,32 @@ pub struct GameDataPackage {
     pub passive_effects: Vec<PassiveEffects>,
 }
 impl GameDataPackage {
+    pub fn support(&self, id: &str) -> Option<&SupportData> {
+        self.supports.iter().find(|support| support.id == id)
+    }
+    /// Canonical, bounded socket selection. Order is lexicographic by stable data key.
+    pub fn validate_mace_support_loadout(&self, ids: &[String]) -> Result<Vec<&SupportData>> {
+        if ids.len() > 2 || ids.windows(2).any(|pair| pair[0] >= pair[1]) {
+            return Err(error(
+                "support loadout must contain zero to two unique sorted IDs",
+            ));
+        }
+        let mut families = BTreeSet::new();
+        let mut selected = Vec::with_capacity(ids.len());
+        for id in ids {
+            let support = self
+                .support(id)
+                .ok_or_else(|| error(format!("unknown support ID {id}")))?;
+            if !families.insert(&support.family) {
+                return Err(error("duplicate support family in loadout"));
+            }
+            if !support.eligibility.admits(&self.mace.skill_types) {
+                return Err(error(format!("support {id} is ineligible for Mace Strike")));
+            }
+            selected.push(support);
+        }
+        Ok(selected)
+    }
     /// Bounded producer decoding only: duplicate keys and resource excess reject,
     /// but records and stale section digests remain unvalidated mutable data.
     /// Callers must use GameDataLoader before publishing an evaluation snapshot.
@@ -500,17 +602,10 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     for (name, requirement) in [
         ("Spark", &package.spark.requirements),
         ("Mace Strike", &package.mace.requirements),
-        ("Brutality", &package.mace.brutality.requirements),
     ] {
         validate_requirement(name, requirement)?;
     }
-    // Support attributes are represented by aggregate color costs. A second,
-    // nonzero individual attribute requirement would describe unsupported semantics.
-    if package.mace.brutality.requirements.attributes != AttributeRequirements::default() {
-        return Err(error(
-            "support individual attribute requirements must be zero; use support_attribute_costs",
-        ));
-    }
+    validate_supports(package)?;
     let c = &package.character;
     number("minimum_life", c.minimum_life, 1.0, 1e6)?;
     number("minimum_mana", c.minimum_mana, 1.0, 1e6)?;
@@ -520,7 +615,7 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     if s.lightning_minimum > s.lightning_maximum {
         return Err(error("Spark lightning damage endpoints are reversed"));
     }
-    let identities = [
+    let mut identities = vec![
         (&s.skill_id, &s.game_id, &s.variant_id, &s.name),
         (
             &package.mace.skill_id,
@@ -528,13 +623,13 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
             &package.mace.variant_id,
             &package.mace.name,
         ),
-        (
-            &package.mace.brutality.skill_id,
-            &package.mace.brutality.game_id,
-            &package.mace.brutality.variant_id,
-            &package.mace.brutality.name,
-        ),
     ];
+    identities.extend(
+        package
+            .supports
+            .iter()
+            .map(|s| (&s.skill_id, &s.game_id, &s.variant_id, &s.name)),
+    );
     for field in 0..4 {
         let values: BTreeSet<_> = identities
             .iter()
@@ -867,4 +962,82 @@ fn bounded_json(bytes: &[u8], limits: &LoadLimits) -> Result<serde_json::Value> 
     .map_err(error)?;
     deserializer.end().map_err(error)?;
     Ok(value)
+}
+
+fn validate_supports(package: &GameDataPackage) -> Result<()> {
+    if package.supports.is_empty() || package.supports.len() > 3 {
+        return Err(error("support catalog must contain 1..3 records"));
+    }
+    if package.mace.mana_cost != 0.0 {
+        return Err(error(
+            "nonzero Mace mana cost is outside the implemented profile",
+        ));
+    }
+    let unique_types =
+        |types: &[SupportSkillType]| types.iter().collect::<BTreeSet<_>>().len() == types.len();
+    if package.mace.skill_types.is_empty() || !unique_types(&package.mace.skill_types) {
+        return Err(error("Mace skill types must be nonempty and unique"));
+    }
+    let mut ids = BTreeSet::new();
+    let mut families = BTreeSet::new();
+    for support in &package.supports {
+        if support.id.is_empty()
+            || support.id == "none"
+            || support.id.len() > 64
+            || !support
+                .id
+                .bytes()
+                .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'_')
+            || !ids.insert(&support.id)
+            || support.family.trim().is_empty()
+            || support.family.trim() != support.family
+            || support.family.chars().any(char::is_control)
+            || !families.insert(&support.family)
+        {
+            return Err(error(
+                "support IDs and families must be unique nonempty selectors",
+            ));
+        }
+        if support.level != 1 || support.quality != 0 {
+            return Err(error(
+                "only level-one quality-zero supports are implemented",
+            ));
+        }
+        validate_requirement(&support.name, &support.requirements)?;
+        if support.requirements.attributes != AttributeRequirements::default() {
+            return Err(error(
+                "support individual attribute requirements must be zero; use support_attribute_costs",
+            ));
+        }
+        if !unique_types(&support.eligibility.require_any)
+            || !unique_types(&support.eligibility.exclude)
+        {
+            return Err(error("support eligibility types must be unique"));
+        }
+        if support.modifiers.len() > 8
+            || support.disable_damage.len() > 5
+            || (support.modifiers.is_empty() && support.disable_damage.is_empty())
+        {
+            return Err(error(
+                "support modifier or damage flag counts are outside limits",
+            ));
+        }
+        if let Some(value) = support.mana_multiplier {
+            number("support mana multiplier", value, 0.0, 1e6)?;
+        }
+        let mut modifiers = BTreeSet::new();
+        for modifier in &support.modifiers {
+            // Nonpositive multiplicative factors need a wider damage/speed model.
+            number("support modifier value", modifier.value, -99.999_999, 1e6)?;
+            if !modifiers.insert((modifier.stat, modifier.operation, modifier.scope)) {
+                return Err(error("duplicate support modifier operation"));
+            }
+        }
+        if support.disable_damage.iter().collect::<BTreeSet<_>>().len()
+            != support.disable_damage.len()
+        {
+            return Err(error("duplicate support damage-disable flag"));
+        }
+    }
+    Ok(())
 }

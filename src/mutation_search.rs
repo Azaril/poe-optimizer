@@ -17,7 +17,8 @@ use poe_optimizer_data::class_tree::{self, ClassTreeSelection};
 use poe_optimizer_import::controlled_mace::VerifiedMaceScenario;
 use poe_optimizer_import::{
     controlled_mace::{
-        ControlledMaceCatalog, MaceSupportChoice, NormalMaceAlternative, VerifiedNativeMaceScenario,
+        ControlledMaceCatalog, MaceSupportChoice, MaceSupportLoadout, NormalMaceAlternative,
+        VerifiedNativeMaceScenario,
     },
     decode_build,
 };
@@ -77,7 +78,10 @@ struct Problem {
     schema_version: u32,
     template: PathBuf,
     weapons: Vec<NormalMaceAlternative>,
-    supports: Vec<MaceSupportChoice>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    supports: Option<Vec<MaceSupportChoice>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    support_loadouts: Option<Vec<MaceSupportLoadout>>,
     objective: ObjectiveSpec,
     #[serde(default)]
     tree_search: Option<TreeSearch>,
@@ -95,12 +99,14 @@ struct TreeSearch {
     #[serde(default)]
     selections: Option<Vec<ClassTreeSelection>>,
 }
-const MAX_COMPOSED_CANDIDATES: usize = 105 * 128;
+const MAX_COMPOSED_CANDIDATES: usize = 105 * 64 * 7;
 #[derive(Debug, Default, Deserialize, Serialize)]
 #[serde(default, deny_unknown_fields)]
 struct Locks {
     weapon_id: Option<String>,
     support: Option<MaceSupportChoice>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    support_loadout: Option<MaceSupportLoadout>,
     class_id: Option<u32>,
     ascendancy: Option<AscendancyLock>,
     allocated_passives: BTreeSet<u32>,
@@ -111,7 +117,7 @@ struct Domain<'a> {
     rules: CandidateDomain,
     space: DiscreteSpace,
     weapons: Vec<String>,
-    supports: Vec<MaceSupportChoice>,
+    supports: Vec<MaceSupportLoadout>,
     tree_choices: Option<Vec<ClassTreeSelection>>,
     neighborhood: Neighborhood,
 }
@@ -119,12 +125,15 @@ impl Domain<'_> {
     fn resolve(&self, point: &DiscretePoint) -> Result<&Candidate, String> {
         self.space.validate(point)?;
         let weapon = &self.weapons[point.choices[0] as usize];
-        let support = self.supports[point.choices[1] as usize];
+        let support = &self.supports[point.choices[1] as usize];
         let candidate = if let Some(trees) = &self.tree_choices {
-            self.registry
-                .resolve_tree_candidate(&trees[point.choices[2] as usize], weapon, support)
+            self.registry.resolve_tree_loadout_candidate(
+                &trees[point.choices[2] as usize],
+                weapon,
+                support,
+            )
         } else {
-            self.registry.resolve_candidate(weapon, support)
+            self.registry.resolve_loadout_candidate(weapon, support)
         };
         candidate.ok_or_else(|| "Unregistered complete candidate".into())
     }
@@ -284,14 +293,28 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         }
     }
     let problem = super::read_json::<Problem>(&args.problem, 512 * 1024)?;
-    let ascendancy_passives = problem.schema_version == 3;
+    let support_loadouts_enabled = problem.schema_version == 4;
+    let ascendancy_passives = matches!(problem.schema_version, 3 | 4);
+    // Versioned inputs avoid silently widening legacy search scopes or ignoring locks.
+    let supports = match (problem.schema_version, &problem.supports, &problem.support_loadouts) {
+        (1..=3, Some(legacy), None) if problem.locks.support_loadout.is_none() => {
+            legacy.iter().copied().map(MaceSupportLoadout::from).collect()
+        }
+        (4, None, Some(loadouts)) if problem.locks.support.is_none() => loadouts.clone(),
+        _ => return Err("Schemas 1-3 require supports and legacy support locks; schema 4 requires support_loadouts and support_loadout locks, without legacy fields".into()),
+    };
+    let locked_support = problem
+        .locks
+        .support_loadout
+        .clone()
+        .or_else(|| problem.locks.support.map(MaceSupportLoadout::from));
     let expanded = match (problem.schema_version, problem.tree_search.as_ref()) {
         (1, None) => false,
         (2, Some(tree)) if tree.ordinary_passive_points <= 1 && tree.ascendancy_passive_points == 0 => true,
-        (3, Some(tree)) if tree.ordinary_passive_points <= 1 && tree.ascendancy_passive_points <= 1 => true,
+        (3 | 4, Some(tree)) if tree.ordinary_passive_points <= 1 && tree.ascendancy_passive_points <= 1 => true,
         (2, Some(_)) => return Err("Schema 2 requires ordinary points 0 or 1 and ascendancy points 0".into()),
-        (3, Some(_)) => return Err("Schema 3 requires explicit ordinary and ascendancy point budgets of 0 or 1".into()),
-        _ => return Err("Use schema 1 without tree_search, or schema 2/3 with explicit tree_search point budgets".into()),
+        (3 | 4, Some(_)) => return Err("Schemas 3/4 require explicit ordinary and ascendancy point budgets of 0 or 1".into()),
+        _ => return Err("Use schema 1 without tree_search, or schema 2/3/4 with explicit tree_search point budgets".into()),
     };
     if !ascendancy_passives
         && problem
@@ -304,7 +327,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
                     .any(|tree| tree.ascendancy_node_id.is_some())
             })
     {
-        return Err("Allocated ascendancy choices require problem schema 3".into());
+        return Err("Allocated ascendancy choices require problem schema 3 or 4".into());
     }
     if !expanded
         && (problem.locks.class_id.is_some()
@@ -313,7 +336,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             || !problem.locks.unallocated_passives.is_empty())
     {
         return Err(
-            "Class, ascendancy and passive locks require problem schema 2 or 3 with tree_search"
+            "Class, ascendancy and passive locks require problem schema 2, 3 or 4 with tree_search"
                 .into(),
         );
     }
@@ -349,19 +372,19 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
                 })
                 .collect()
         };
-        ControlledMaceCatalog::with_tree_choices(
+        ControlledMaceCatalog::with_tree_loadouts(
             Arc::clone(&snapshot),
             imported.xml,
             problem.weapons.clone(),
-            problem.supports.clone(),
+            supports,
             selections,
         )?
     } else {
-        ControlledMaceCatalog::with_data(
+        ControlledMaceCatalog::with_loadouts(
             Arc::clone(&snapshot),
             imported.xml,
             problem.weapons.clone(),
-            problem.supports.clone(),
+            supports,
         )?
     };
     let backend: Box<dyn CalculationBackend + Send + Sync> = match args.backend {
@@ -395,7 +418,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let supports: Vec<_> = registry
         .alternatives()
         .iter()
-        .map(|a| a.support)
+        .map(|a| a.support.clone())
         .collect::<BTreeSet<_>>()
         .into_iter()
         .collect();
@@ -435,11 +458,11 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     } else {
         None
     };
-    let exemplar = |weapon: &str, support| {
+    let exemplar = |weapon: &str, support: &MaceSupportLoadout| {
         if let Some(trees) = &tree_choices {
-            registry.resolve_tree_candidate(&trees[0], weapon, support)
+            registry.resolve_tree_loadout_candidate(&trees[0], weapon, support)
         } else {
-            registry.resolve_candidate(weapon, support)
+            registry.resolve_loadout_candidate(weapon, support)
         }
     };
     let mut locks = BTreeMap::new();
@@ -452,12 +475,12 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
                 .ok_or("Locked weapon is absent")? as u32,
         );
     }
-    if let Some(support) = problem.locks.support {
+    if let Some(support) = &locked_support {
         locks.insert(
             1,
             supports
                 .iter()
-                .position(|v| *v == support)
+                .position(|v| v == support)
                 .ok_or("Locked support is absent")? as u32,
         );
     }
@@ -473,7 +496,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
                 .as_ref()
                 .map_or(0, |tree| tree.ascendancy_passive_points),
             active_skill_count: 1,
-            supports_per_skill: 1,
+            supports_per_skill: if support_loadouts_enabled { 2 } else { 1 },
             ..Default::default()
         },
         ..Default::default()
@@ -483,7 +506,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     constraints.locks.allocated_passives = problem.locks.allocated_passives.clone();
     constraints.locks.unallocated_passives = problem.locks.unallocated_passives.clone();
     if let Some(id) = &problem.locks.weapon_id {
-        let exemplar = exemplar(id, supports[0]).ok_or("Unknown locked weapon")?;
+        let exemplar = exemplar(id, &supports[0]).ok_or("Unknown locked weapon")?;
         let item = exemplar.equipment["Weapon 1"].clone();
         constraints.required_item_instance_ids.insert(item.clone());
         constraints
@@ -491,7 +514,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             .equipment
             .insert("Weapon 1".into(), Some(item));
     }
-    if let Some(support) = problem.locks.support {
+    if let Some(support) = &locked_support {
         let exemplar = exemplar(&weapons[0], support).ok_or("Unknown locked support")?;
         constraints.locks.skill_groups.insert(
             "pob-group-1".into(),
@@ -506,7 +529,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let id = format!(
         "{:x}",
         Sha256::digest(serde_json::to_vec(&(
-            "controlled-mace-axes-v2",
+            "controlled-mace-axes-v3",
             &registry.catalog().identity,
             &weapons,
             &supports,
@@ -562,15 +585,27 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
                 .push(serde_json::json!({"alternative_id":alternative.id,"assessment":assessment}));
         }
     }
+    let mut alternatives = serde_json::to_value(registry.alternatives())?;
+    if !support_loadouts_enabled {
+        // Keep report schemas 2-4 stable for legacy problem inputs. The registry
+        // internally uses one canonical loadout representation for every version.
+        for alternative in alternatives.as_array_mut().ok_or("Invalid alternatives")? {
+            alternative["support"] = match alternative["support"].as_array().map(Vec::as_slice) {
+                Some([]) => serde_json::json!("none"),
+                Some([id]) if id == "brutality_i" => serde_json::json!("brutality_i"),
+                _ => return Err("Legacy problem contains a non-legacy support loadout".into()),
+            };
+        }
+    }
     let mut report = serde_json::json!({
-        "schema_version":if ascendancy_passives {4} else if expanded {3} else {2},"status":"experimental_mutation_search","diagnostic_only":true,
+        "schema_version":if support_loadouts_enabled {5} else if ascendancy_passives {4} else if expanded {3} else {2},"status":"experimental_mutation_search","diagnostic_only":true,
         "requested_backend":engine.capabilities().id,"execution_kind":if execution == ExecutionKind::RustCpu {"rust_cpu"} else {"external_process"},
         "data":{"identity":snapshot.identity(),"trust":snapshot.trust(),"uses_packaged_default":args.data.data.is_none()},
         "requirements":{"scope":"controlled_mace_requirements_v1","legal_candidates":legal_candidates,"rejected_candidates":rejected_candidates},
         "admission":{"complete":Some(checked_candidates as u128)==domain.space.size(),"checked_candidates":checked_candidates,"rejected_candidates":rejected_rules},
         "tree_choices":domain.tree_choices,
-        "scope":if ascendancy_passives {"normal_mace_class_passive_weapon_support_profile_v2"} else if expanded {"normal_mace_class_entrance_weapon_support_profile_v1"} else {"normal_mace_weapon_support_profile_v1"},"problem":problem,"template_xml_sha256":imported.sha256,
-        "template":registry.template_build(),"catalog":registry.catalog(),"alternatives":registry.alternatives(),
+        "scope":if support_loadouts_enabled {"normal_mace_class_passive_weapon_support_loadouts_v1"} else if ascendancy_passives {"normal_mace_class_passive_weapon_support_profile_v2"} else if expanded {"normal_mace_class_entrance_weapon_support_profile_v1"} else {"normal_mace_weapon_support_profile_v1"},"problem":problem,"template_xml_sha256":imported.sha256,
+        "template":registry.template_build(),"catalog":registry.catalog(),"alternatives":alternatives,
         "candidate_constraints":constraints,"space":domain.space,"strategy":args.strategy,"neighborhood":domain.neighborhood,
         "run_budget":{"max_evaluations":args.max_evaluations,"timeout_seconds":args.timeout_seconds,"jobs":args.jobs,"seed":args.seed,"max_proposals":args.max_proposals,"max_rounds":args.max_rounds,"reserved_template_attempts":1,"reserved_verification_attempts":1},
         "preparation":{"attempts":0},"search":null,"best_verified":null,"export":{"status":"not_written"},"total_evaluations":0

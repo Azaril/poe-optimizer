@@ -8,6 +8,8 @@ const SKILLS: &str =
     include_str!("../../../../vendor/path-of-building-poe2/src/Data/Skills/other.lua");
 const SUPPORTS: &str =
     include_str!("../../../../vendor/path-of-building-poe2/src/Data/Skills/sup_str.lua");
+const DEX_SUPPORTS: &str =
+    include_str!("../../../../vendor/path-of-building-poe2/src/Data/Skills/sup_dex.lua");
 const STAT_MAP: &str =
     include_str!("../../../../vendor/path-of-building-poe2/src/Data/SkillStatMap.lua");
 const ITEM: &str = include_str!("../../../../vendor/path-of-building-poe2/src/Classes/Item.lua");
@@ -21,6 +23,10 @@ fn source_checks() {
             "src/Data/Bases/mace.lua" => BASES,
             "src/Data/Skills/other.lua" => SKILLS,
             "src/Data/Skills/sup_str.lua" => SUPPORTS,
+            "src/Data/Skills/sup_dex.lua" => DEX_SUPPORTS,
+            "src/Data/Global.lua" => GLOBAL,
+            "src/Classes/ModDB.lua" => DB,
+            "src/Classes/ModStore.lua" => STORE,
             "src/Data/SkillStatMap.lua" => STAT_MAP,
             "src/Classes/Item.lua" => ITEM,
             "src/TreeData/0_5/tree.lua" => SPARK_TREE,
@@ -66,16 +72,18 @@ impl MaceOracle {
             .call::<()>(bases.clone())
             .unwrap();
         lua.globals().set("maceBases", bases).unwrap();
-        lua.globals()
-            .set(
-                "mod",
-                lua.globals()
-                    .get::<Table>("modLib")
-                    .unwrap()
-                    .get::<Function>("createMod")
-                    .unwrap(),
+        // Skill stat maps use Data.lua's constructor, whose fourth argument is
+        // a flag mask. ModTools.createMod has a source argument in that position.
+        lua.load(format!(
+            "{}\nmod=makeSkillMod;flag=makeFlagMod;skill=makeSkillDataMod",
+            section(
+                &DATA.replace("\r\n", "\n"),
+                "local function makeSkillMod(",
+                "local function processMod("
             )
-            .unwrap();
+        ))
+        .exec()
+        .unwrap();
         lua.load(section(
             &SKILLS.replace("\r\n", "\n"),
             "skills[\"Melee1HMacePlayer\"] = {",
@@ -91,6 +99,31 @@ impl MaceOracle {
         .exec()
         .unwrap();
         lua.load(format!("local flag=function(name) return modLib.createMod(name,'FLAG',true,'Support') end; maceSupportFlags = {{ {} }}", section(&STAT_MAP.replace("\r\n", "\n"), "[\"deal_no_elemental_damage\"] = {", "[\"all_damage_can_ignite\"]"))).exec().unwrap();
+
+        lua.load(section(
+            &SUPPORTS.replace("\r\n", "\n"),
+            "skills[\"SupportMeleePhysicalDamagePlayer\"] = {",
+            "\nskills[\"SupportHeftPlayer\"]",
+        ))
+        .exec()
+        .unwrap();
+        lua.load(section(
+            &DEX_SUPPORTS.replace("\r\n", "\n"),
+            "skills[\"SupportRapidAttacksPlayer\"] = {",
+            "\nskills[\"SupportRapidAttacksPlayerTwo\"]",
+        ))
+        .exec()
+        .unwrap();
+        lua.load(format!(
+            "maceGlobalSupportMap = {{ {} }}",
+            section(
+                &STAT_MAP.replace("\r\n", "\n"),
+                "[\"attack_speed_+%\"] = {",
+                "[\"active_skill_attack_speed_+%_final\"]",
+            )
+        ))
+        .exec()
+        .unwrap();
 
         let item = ITEM.replace("\r\n", "\n");
         let mut weapon_function = String::from(
@@ -164,7 +197,7 @@ impl MaceOracle {
             "\n\t\toutput[elem..\"ResistOverCap\"]",
         ));
         body.push_str("\nend; local source=maceWeapon(input); output.Weapon=source; local enemyDB=new('ModDB'):ModDB(); enemyDB:NewMod('Armour','BASE',input.armour,'Config'); enemyDB:NewMod('Evasion','BASE',input.evasion,'Config'); enemyDB:NewMod('FireResist','BASE',input.resistance,'Config'); local skillModList=modDB; local cfg={flags=OR64(ModFlag.Attack,ModFlag.Melee,ModFlag.Hit)}; local skillCfg=cfg; local skillData={}; local activeSkill={skillModList=skillModList,activeEffect={grantedEffect=skills.Melee1HMacePlayer,grantedEffectLevel=skills.Melee1HMacePlayer.levels[1]},conversionTable={},gainTable={}}; local globalOutput={ActionSpeedMod=1}; local skillFlags={hit=true}; local isAttack=true; ");
-        body.push_str("if input.brutality then local support=skills.SupportBrutalityPlayer.statSets[1]; for _, stat in ipairs(support.constantStats) do for _, mod in ipairs(support.statMap[stat[1]]) do local resolved=copyTable(mod); resolved.value=stat[2]; modDB:AddMod(resolved) end end; for _, name in ipairs(support.stats) do for _, flag in ipairs(maceSupportFlags[name]) do modDB:AddMod(copyTable(flag)) end end end; ");
+        body.push_str("for _, id in ipairs(input.supports) do local support=skills[id].statSets[1]; for _, stat in ipairs(support.constantStats) do local map = support.statMap and support.statMap[stat[1]] or maceGlobalSupportMap[stat[1]]; for _, mod in ipairs(map) do local resolved=copyTable(mod); resolved.value=stat[2]; modDB:AddMod(resolved) end end; for _, name in ipairs(support.stats) do for _, flag in ipairs(maceSupportFlags[name]) do modDB:AddMod(copyTable(flag)) end end end; ");
         body.push_str(section(
             &offence,
             "\tlocal function calcResistForType(",
@@ -191,6 +224,11 @@ impl MaceOracle {
         body.push_str(source_line(
             section(&offence, "\t\t\tif skillModList:Sum(\"BASE\", skillCfg, \"Multiplier:TraumaStacks\") == 0 then", "\n\t\t\tif skillFlags.warcry then"),
             "local inc = skillModList:Sum(\"INC\", cfg, \"Speed\")",
+        ));
+        body.push('\n');
+        body.push_str(source_line(
+            &offence,
+            "local more = skillModList:More(cfg, \"Speed\")",
         ));
         body.push('\n');
         body.push_str(source_line(
@@ -311,8 +349,28 @@ impl MaceOracle {
         input: &MaceInput,
         character: &poe_optimizer_engine::character::CharacterInput,
     ) -> Table {
+        let ids = if input.brutality {
+            vec![mace::SUPPORT_ID]
+        } else {
+            vec![]
+        };
+        self.calculate_with_support_ids(input, character, &ids)
+    }
+
+    fn calculate_with_support_ids(
+        &self,
+        input: &MaceInput,
+        character: &poe_optimizer_engine::character::CharacterInput,
+        ids: &[&str],
+    ) -> Table {
         let lua = &self.oracle.lua;
         let table = lua.create_table().unwrap();
+        table
+            .set(
+                "supports",
+                lua.create_sequence_from(ids.iter().copied()).unwrap(),
+            )
+            .unwrap();
         table.set("level", input.character_level).unwrap();
         table
             .set("character", character_parity::input_table(lua, character))
@@ -657,5 +715,163 @@ fn all_class_entrances_match_actual_mace_source_with_armour_and_brutality() {
         invalid.modifiers.armour_flat = f64::NAN;
         assert!(mace::evaluate_with_character(&input(), &invalid).is_err());
         assert_eq!(mace::evaluate(&input()).unwrap(), before);
+    }
+}
+
+#[test]
+fn all_seven_support_loadouts_match_source_with_rounding_armour_fire_and_passive_interactions() {
+    use poe_optimizer_engine::{
+        CompiledGameData,
+        character::{CharacterInput, CharacterModifiers},
+    };
+    let compiled = CompiledGameData::bundled().unwrap();
+    // Source identities are independent of the injected Rust values used by the
+    // calculation. The oracle executes each original stat map and modifier query.
+    let source_supports = [
+        ("brutality_i", "SupportBrutalityPlayer"),
+        ("heavy_swing", "SupportMeleePhysicalDamagePlayer"),
+        ("rapid_attacks_i", "SupportRapidAttacksPlayer"),
+    ];
+    let mut choices = vec![vec![]];
+    for (index, support) in source_supports.iter().enumerate() {
+        choices.push(vec![*support]);
+        for other in &source_supports[index + 1..] {
+            choices.push(vec![*support, *other]);
+        }
+    }
+    assert_eq!(choices.len(), 7);
+    for warm in [false, true] {
+        let oracle = MaceOracle::new(warm);
+        let mut characters: Vec<_> = character_parity::entrances(&oracle.oracle.lua)
+            .into_iter()
+            .map(|entrance| entrance.character)
+            .collect();
+        for (class, owner, node) in [
+            (6, "Warrior3", 14960),
+            (11, "Druid2", 61722),
+            (10, "Monk3", 24475),
+            (8, "Huntress3", 17058),
+        ] {
+            characters.push(CharacterInput {
+                modifiers: *compiled
+                    .passive_modifiers(class, Some(owner), node)
+                    .unwrap(),
+                ..mace::default_character()
+            });
+        }
+        for value in [0.0, 0.49, 0.5, 0.51, 4.49, 4.5, 9.99, 10.01] {
+            characters.push(CharacterInput {
+                modifiers: CharacterModifiers {
+                    skill_speed_increased: value,
+                    attack_damage_increased: value,
+                    melee_damage_increased: value,
+                    ..Default::default()
+                },
+                ..mace::default_character()
+            });
+        }
+        for choice in &choices {
+            let keys: Vec<String> = choice.iter().map(|(key, _)| (*key).into()).collect();
+            let ids: Vec<_> = choice.iter().map(|(_, id)| *id).collect();
+            for (key, source_id) in choice {
+                assert_eq!(
+                    compiled.snapshot().package().support(key).unwrap().skill_id,
+                    *source_id
+                );
+            }
+            let supports = compiled.mace_support_loadout(&keys).unwrap();
+            for weapon in [MaceWeapon::WoodenClub, MaceWeapon::SmithingHammer] {
+                for quality in [0, 1, 9, 20] {
+                    for armour in [0.0, 1500.0, 1e9] {
+                        for character in &characters {
+                            let case = MaceInput {
+                                weapon,
+                                quality,
+                                enemy_armour: armour,
+                                enemy_fire_resistance: 50.0,
+                                ..input()
+                            };
+                            compare(
+                                mace::evaluate_with_supports(&case, character, &compiled, supports)
+                                    .unwrap(),
+                                oracle.calculate_with_support_ids(&case, character, &ids),
+                            );
+                        }
+                    }
+                }
+            }
+            // Reordering the same actual source supports cannot change this
+            // two-support slice; imported source order remains separately preserved.
+            let reversed: Vec<_> = ids.iter().rev().copied().collect();
+            compare(
+                mace::evaluate_with_supports(
+                    &input(),
+                    &mace::default_character(),
+                    &compiled,
+                    supports,
+                )
+                .unwrap(),
+                oracle.calculate_with_support_ids(&input(), &mace::default_character(), &reversed),
+            );
+        }
+    }
+}
+
+#[test]
+fn rounded_zero_support_speed_more_matches_actual_source_without_negative_or_nonfinite_dps() {
+    use poe_optimizer_data::game_data::{
+        self, GameDataLoader, LoadLimits, SupportStat, TrustPolicy,
+    };
+    use poe_optimizer_engine::CompiledGameData;
+    use std::sync::Arc;
+    let mut package = game_data::bundled_snapshot().unwrap().package().clone();
+    package
+        .supports
+        .iter_mut()
+        .find(|support| support.id == "heavy_swing")
+        .unwrap()
+        .modifiers
+        .iter_mut()
+        .find(|modifier| modifier.stat == SupportStat::Speed)
+        .unwrap()
+        .value = -99.99;
+    package.refresh_section_digests().unwrap();
+    let compiled = CompiledGameData::compile(Arc::new(
+        GameDataLoader::from_bytes(
+            &package.canonical_bytes().unwrap(),
+            &TrustPolicy::AllowCustom,
+            &LoadLimits::default(),
+        )
+        .unwrap(),
+    ))
+    .unwrap();
+    let prepared = compiled
+        .mace_support_loadout(&["heavy_swing".into()])
+        .unwrap();
+    for warm in [false, true] {
+        let oracle = MaceOracle::new(warm);
+        // Alter only a numeric source input; original constructors, ModDB MORE
+        // rounding and CalcOffence division remain the oracle implementation.
+        oracle
+            .oracle
+            .lua
+            .load(
+                "skills.SupportMeleePhysicalDamagePlayer.statSets[1].constantStats[2][2] = -99.99",
+            )
+            .exec()
+            .unwrap();
+        let output =
+            mace::evaluate_with_supports(&input(), &mace::default_character(), &compiled, prepared)
+                .unwrap();
+        compare(
+            output,
+            oracle.calculate_with_support_ids(
+                &input(),
+                &mace::default_character(),
+                &["SupportMeleePhysicalDamagePlayer"],
+            ),
+        );
+        assert_eq!(output.attack_rate, 0.0);
+        assert_eq!(output.hit_dps, 0.0);
     }
 }

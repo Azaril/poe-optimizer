@@ -14,6 +14,9 @@ pub(crate) enum NativeInput {
 }
 pub(crate) struct Profile {
     pub input: NativeInput,
+    pub support_keys: Vec<String>,
+    pub support_order: Vec<String>,
+    pub prepared_supports: Option<poe_optimizer_engine::mace_supports::PreparedMaceSupports>,
     pub tree: crate::tree::NativeTree,
     pub enemy_level: u32,
     pub config: BTreeMap<String, Scalar>,
@@ -312,9 +315,9 @@ pub(crate) fn parse(
         ],
     )?;
     let gems: Vec<_> = skill.children().filter(Node::is_element).collect();
-    if gems.is_empty() || gems.len() > if is_mace { 2 } else { 1 } {
+    if gems.is_empty() || gems.len() > if is_mace { 3 } else { 1 } {
         return Err(unsupported(
-            "Native profile requires one active skill and only the supported optional Brutality I",
+            "Native profile requires one active skill and zero to two reviewed Mace supports",
         ));
     }
     let package = data.snapshot().package();
@@ -337,17 +340,33 @@ pub(crate) fn parse(
             &gem.variant_id,
         )?;
     }
-    let brutality = gems.len() == 2;
-    if brutality {
-        let gem = &package.mace.brutality;
+    let mut support_order = Vec::new();
+    for node in &gems[1..] {
+        let gem = package
+            .supports
+            .iter()
+            .find(|gem| Some(gem.skill_id.as_str()) == node.attribute("skillId"))
+            .ok_or_else(|| unsupported("Unknown native Mace support"))?;
         validate_gem(
-            gems[1],
+            *node,
             &gem.name,
             &gem.skill_id,
             &gem.game_id,
             &gem.variant_id,
         )?;
+        support_order.push(gem.id.clone());
     }
+    let mut support_keys = support_order.clone();
+    support_keys.sort();
+    let prepared_supports = if is_mace {
+        Some(
+            data.mace_support_loadout(&support_keys)
+                .map_err(|error| unsupported(error.to_string()))?
+                .clone(),
+        )
+    } else {
+        None
+    };
     let items = child(root, "Items")?;
     only(
         items,
@@ -559,7 +578,7 @@ pub(crate) fn parse(
             weapon,
             quality,
             item_level,
-            brutality,
+            brutality: false,
             resistance_penalty: penalty,
             quests,
             enemy_armour: number(&config, "enemyArmour"),
@@ -576,6 +595,9 @@ pub(crate) fn parse(
     };
     Ok(Profile {
         input,
+        support_keys,
+        support_order,
+        prepared_supports,
         tree: resolved_tree,
         enemy_level,
         config,

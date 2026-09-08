@@ -86,10 +86,10 @@ fn structural_profile_preserves_nonmutable_source_bytes_and_exact_payloads() {
             materialized
                 .matches("skillId=\"SupportBrutalityPlayer\"")
                 .count(),
-            usize::from(alternative.support == MaceSupportChoice::BrutalityI)
+            usize::from(alternative.support.legacy_choice() == Some(MaceSupportChoice::BrutalityI))
         );
         assert_eq!(
-            catalog.resolve_candidate(&alternative.weapon_id, alternative.support),
+            catalog.resolve_loadout_candidate(&alternative.weapon_id, &alternative.support),
             Some(&alternative.candidate)
         );
     }
@@ -108,7 +108,7 @@ fn existing_support_is_removed_or_replaced_without_changing_the_active_gem() {
         assert_eq!(xml.matches("skillId=\"Melee1HMacePlayer\"").count(), 1);
         assert_eq!(
             xml.matches("skillId=\"SupportBrutalityPlayer\"").count(),
-            usize::from(alternative.support == MaceSupportChoice::BrutalityI)
+            usize::from(alternative.support.legacy_choice() == Some(MaceSupportChoice::BrutalityI))
         );
         assert_eq!(
             xml.split_once("<Config").unwrap().1,
@@ -314,7 +314,7 @@ fn generated_product_retains_independent_calibration_values_and_detects_realizat
         catalog
             .validate_realization(&alternative.candidate, &result, &scenario)
             .unwrap_or_else(|error| panic!("{}: {error}", alternative.id));
-        let suffix = if alternative.support == MaceSupportChoice::None {
+        let suffix = if alternative.support.legacy_choice() == Some(MaceSupportChoice::None) {
             ""
         } else {
             "-brutality"

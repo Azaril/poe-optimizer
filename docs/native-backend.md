@@ -13,7 +13,7 @@ use either implementation without exposing Lua values or process APIs.
 | Profile | Character and skills | Equipment and encounter scope |
 | --- | --- | --- |
 | Spark | One level-1 quality-0 Spark; supported class/tree selection described below | No equipment/supports; supported explicit normal, boss or Pinnacle encounter configuration |
-| Mace Strike | One level-1 quality-0 Mace Strike; optional level-1 quality-0 Brutality I; supported class/tree selection described below | One normal the two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, no modifiers/implicits; normal enemies only |
+| Mace Strike | One level-1 quality-0 Mace Strike; zero to two level-1 quality-0 reviewed supports; supported class/tree selection described below | One normal the two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, no modifiers/implicits; normal enemies only |
 
 Both profiles accept all eight pinned classes and 23 ascendancy identities, with implicit
 roots and zero or one ordinary entrance passive connected to the selected class. They also
@@ -197,3 +197,7 @@ skill/supporting-skill and defence/offence coverage is still required before gen
 can use the native evaluator. See [native calculation coverage](native-engine.md),
 [controlled search](experimental-search.md), [tree projection](tree-projection.md) and the
 [living implementation record](implementation.md).
+
+The Mace profile now uses [data-derived support loadouts](support-loadouts.md), with
+prepared modifier aggregates and exact configured-support evidence (profile attachment
+version 2). Spark support coverage remains empty.

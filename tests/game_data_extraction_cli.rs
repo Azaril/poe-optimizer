@@ -15,12 +15,13 @@ use std::{
     process::{Command, Output},
 };
 
-const SECTIONS: [&str; 10] = [
+const SECTIONS: [&str; 11] = [
     "tree",
     "character",
     "quests",
     "spark",
     "mace",
+    "supports",
     "weapons",
     "defence",
     "monsters",
@@ -122,7 +123,7 @@ fn assert_no_outputs(path: &Path) {
 }
 
 #[test]
-fn fresh_cli_extractions_reproduce_all_ten_sections_and_stable_source_evidence() {
+fn fresh_cli_extractions_reproduce_all_eleven_sections_and_stable_source_evidence() {
     let temp = tempfile::tempdir().unwrap();
     let first = temp.path().join("first extracted package.json");
     let second = temp.path().join("second extracted package.json");
@@ -214,7 +215,7 @@ fn fresh_cli_extractions_reproduce_all_ten_sections_and_stable_source_evidence()
             .all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase())
     );
     let source_files = evidence["source_files_sha256"].as_object().unwrap();
-    assert_eq!(source_files.len(), 25);
+    assert_eq!(source_files.len(), 26);
     assert!(source_files.contains_key("src/Classes/SkillsTab.lua"));
     for (path, recorded_hash) in source_files {
         let entry = manifest["files"]

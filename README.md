@@ -43,7 +43,9 @@ Canonical candidates and locks represent all six dimensions. A generic search ke
 bounded parallel evaluation, feasible/infeasible beams, deduplication and fresh finalist
 checks. `search-experimental --backend native` searches supplied normal-Mace weapon/support
 choices and optional class/ascendancy/ordinary and ascendancy passive selections directly on Rayon with exact locks
-and source-preserving mutations; `--backend pob`
+and source-preserving mutations. Mace support choices include all seven zero/one/two-gem
+loadouts from Brutality I, Heavy Swing and Rapid Attacks I, with values and eligibility in
+[the injected data package](docs/support-loadouts.md); `--backend pob`
 selects the optional reference backend; `search-calibration` retains the four original
 fixtures. `extract-tree` exports pinned topology and source/override metadata for broader
 mutation work, with live passive coverage and authenticated bounded graph projections. A portable data
@@ -85,6 +87,7 @@ cargo run -p poe-optimizer-cli --no-default-features --locked -- evaluate tests/
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-search.json --jobs 4 --max-evaluations 10
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-class-search.json --jobs 4 --max-evaluations 746
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-resistance-search.json --jobs 4 --max-evaluations 842
+cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-support-search.json --jobs 4 --max-evaluations 2942
 ```
 
 For the full development workspace, including optional PoB references and parity tests:
@@ -137,6 +140,7 @@ configuration/conditions, which are not yet a complete resolved scenario model. 
 Evaluation-report JSON uses schema 3; the PoB worker protocol, controlled-search reports and
 native benchmark reports use schema 2. Expanded class/tree search reports use schema 3
 with explicit budgets and admission evidence; paid-ascendancy problems use report schema 4.
+[Configurable support-loadout problems](docs/support-loadouts.md) use report schema 5.
 Results identify backend,
 rules/source/adapter fingerprints, observed selection, metric schema/units and coverage.
 `--raw` adds the complete PoB diagnostic snapshot as an opaque JSON attachment. Objective code

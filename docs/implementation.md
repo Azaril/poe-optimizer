@@ -1,20 +1,23 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-07
+Last updated: 2026-09-08
 
-Completed implementation checkpoint: signed resistance modifiers and owned ascendancy passives, starting from
-clean `3493cfd`. The native shared calculation, schema-3 data/extraction, source-preserving
-projection and schema-3 CLI problem are implemented. All **374 workspace tests**, **44
-native-only CLI tests**, lint, formatting, dependency isolation, five portable WASM libraries,
-release reproduction and independent reviews pass. Code **`c91fab1`** is pushed to main;
-hosted Windows/Linux CI is running and not yet verified complete. Previous code `2135ed0`
-passes both hosts. Next: configurable support loadouts.
+Completed implementation checkpoint: configurable support loadouts, starting from clean
+`ac8b441`. The source-data, prepared native calculation, import/export and CLI changes are
+implemented. **398 workspace tests pass across the full suite and corrected migration-test
+reruns**, as do **51 native-only CLI tests**, lint, formatting, dependency isolation, five
+portable WASM libraries, release reproduction and independent reviews. Commit/publication
+is the remaining checkpoint step; see the current table below.
 
-The new package is schema **3** / **`poe2-native-profiles-v3`**, **153,014 bytes**, SHA-256
-`7f5c1ed6e959984df095a2f87ef96fb450ccfda7ea1b41cfeeb65f5bdd4a7de4`.
-The retained tree uses schema **2**, 44 physical nodes and 105 admitted class/tree selections.
+All seven zero/one/two-support loadouts from Brutality I, Heavy Swing and Rapid Attacks I
+compose with 105 class/tree choices and supplied normal weapons. Package schema **4** and
+problem schema **4** make the expansion explicit. Next: typed native candidate evaluation,
+removing per-candidate XML/diagnostic overhead while retaining fresh full finalist checks.
+
+Prior resistance code **`c91fab1ace2a649cbbe22fc2d5ccd999c247c72f`** now passes
+[Windows and Linux CI](https://github.com/Azaril/poe-optimizer/actions/runs/34185229809).
 PoB source revision, full source snapshot, supplied originals and six independent goldens
-remain unchanged. Broader native coverage and the supplied minion build remain unfinished;
+remain fixed. Broader native coverage and the supplied minion build remain unfinished;
 no new throughput or realistic optimizer-quality result is claimed.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
@@ -40,19 +43,21 @@ the design documents.
 2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve supplied
    original exports and independent Spark/Mace goldens. Maintain actual-source interpreted
    and warmed parity, full-build differential cases and strict unsupported-mechanic errors.
-3. Check the exact resistance code-commit CI run in the current checkpoint table; it was
-   running at handoff. Resolve any failure before expanding support mechanics. The agreed bounded composition is implemented: selected data, shared typed
+3. The resistance code-commit CI passes both hosts. Inspect the support checkpoint
+   publication status below and resolve any hosted failures before the next expansion.
+   The agreed bounded composition is implemented: selected data, shared typed
    class/tree resolution, composed finite graph/catalog, exact source spans, independent
    locks and caller 0/1 ordinary-point / zero/one ascendancy-point budgets. Legacy fixed Warrior
    problems remain supported. Never infer an available point budget from observed counts.
-4. Continue the source-audited configurable support-loadout slice below next. Preserve physical and
+4. Continue the typed native candidate path
+   below next. Preserve physical and
    effective node identity, selected-data requirements and strict unknown-mechanic rejection.
    Broader source compatibility remains a separate D4 gate; review that contract before
    admitting another upstream revision. Keep the source pin and independent goldens stable.
-5. Broaden source-derived passive/modifier extraction beyond the twelve exact admitted
-   stat strings and nine numeric modifier fields, with actual-source and full-build parity
+5. Broaden source-derived passive/modifier extraction beyond the currently admitted
+   stat strings and typed numeric modifier operations, with actual-source and full-build parity
    before relaxing admission. Preserve the data bundle's distinction between retained and
-   excluded records; schema-1/2 packages must be regenerated for schema 3. Connect broader
+   excluded records; schema-1/2/3 packages must be regenerated for schema 4. Connect broader
    equipment, support and supporting-skill catalogs together, keeping multiple required
    skills/items, cross-class search, exact locks and ownership/resource/point accounting.
    No selected special node, grant, socket or unknown mechanic may disappear during projection.
@@ -90,6 +95,69 @@ Assessment reports constraint evidence and primary availability; it does not cer
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
 
+## Configurable support loadouts - 2026-09-08
+
+Starting point: clean `ac8b441`. The prior resistance implementation passes both hosted
+Windows/Linux jobs. This implements the source-audited support plan below, preserving
+source revision, retained tree bytes and independent goldens.
+
+| Checkpoint | State |
+| --- | --- |
+| Data and migration | Package schema **4**, semantics **`poe2-native-profiles-v4`**. New `supports` section replaces `mace.brutality`, with explicit identities, family/color, L1Q0, requirements, complete source eligibility, scoped typed modifiers, damage flags and cost metadata. Source Mace types and zero mana cost are retained. Nonzero costs and old package schemas reject. **154,848 bytes**, SHA-256 `b792b5c079dc7659cc588326a06c308a79f04464e7e023f703310662e02f2561`. |
+| Source extraction | Policy schema 2/identity v4. Actual `Data.lua.makeSkillMod` preserves scoped flags. Dense-array guards reject hidden/sparse source values, unconsumed mechanics and compound type expressions. Seven source-oracle tests include all 1,024 represented skill-type subsets for each support in interpreted/warmed Lua. Fifteen loader and five extractor tests pass. Two release extractor processes reproduce the reviewed package and identical evidence; tree schema 2/44 nodes remains byte-identical. |
+| Native core | Immutable `PreparedMaceSupports` uses existing ModDB semantics at dataset compilation. The prepared calculation does no key parsing or allocation and checks originating compiled-instance binding in O(1). Legacy Boolean wrappers remain for compatibility; native preparation uses explicit support handles. Physical INC/MORE, combined speed multiplier rounding, critical/ordinary armour and explicit damage disabling follow source. Composed INC below -100% rejects; rounded-zero MORE produces finite zero speed/DPS with source parity. Mace profile ID is `poe2-mace-strike-support-loadouts-v4`. |
+| Projection and search | Canonical zero/one/two-key loadouts; new constructors/resolvers coexist with old wrappers. Exact gem instances, source order and comments survive import/export/removal. Native Mace evidence media version 2 includes exact support records. Problem schema 4 uses `support_loadouts` and exact `locks.support_loadout`; report schema 5. Legacy problem/report layouts retain their old scope. At most 105 × 64 × 7 = **47,040** alternatives, still under the 256 MiB preparation-work guards. Canonical rules and per-color aggregate requirements precede evaluation. |
+| Targeted parity | **61 engine tests** pass, including **9,422** new cold/warm source comparisons and original six goldens. **76 import/native tests** pass. Fresh full-build parity covers **48** cases plus **two baseline pairs and two reimports**, all seven loadouts, both weapons, armour/fire-resistance scenarios, Monk speed and all four resistance owners. Seven CLI loadout tests cover serial/Rayon, tiny guided/exhaustive domains, exact/empty locks, tiny proposals, partial/empty budgets, custom modifiers and export replay. |
+| Independent review | Fixed reserved `none` identity collision, source constructor wiring, composed negative modifiers and sparse/hidden source arrays. Follow-up data, engine, import/native, CLI and documentation reviews found no remaining blockers. Legacy source-data tests were migrated to the new support section; original goldens stayed unchanged. |
+| Integrated validation | **398 unique workspace tests pass**, with nine ignored child helpers exercised by parents. The full suite recorded two stale migration-test failures; both corrected targets pass their reruns, with no unresolved failure. Latest-per-target evidence: `runs/support-test-coverage.json`; raw logs: `runs/support-workspace-tests.log`, `runs/support-schema-regressions.log`. **51 native-only CLI tests**, workspace/native-only Clippy, formatting, dependency isolation and five WASM libraries pass. Logs: `runs/support-{native-only-tests,native-only-clippy,workspace-clippy,fmt,wasm}.log`; isolated native test target directory avoids overwriting the reference executable. |
+| Release reproduction | Reviewed full **2,940-state** search admits **1,884**, rejects **1,056** requirements and spends **1,886** attempts. Serial/four-worker feasible/infeasible archives and fresh finalists match. Winner: `class/10/asc/Monk3/entrance/10364/ascendancy-passive/24475/wooden-q20/brutality_i+rapid_attacks_i`, **19.02301632 DPS**, **7% chaos resistance**. Custom numeric support/resistance data replays with matching identity/trust; infeasible and over-budget cases do not export. Evidence: `runs/support-release-check/summary.json`. |
+| Artifact identities | Reference release executable `baf47ab23c18deda78ec71a6023aea78fb804c495a0ceffc5d0164a22ef9a204`; native-only executable `a5939c124e2c0d4e0d56ab85ba05efc9b268a1b08dd1dcf79479618efac8b943`; extraction evidence `6acd477bed98419ab78bb3e8b500eecb27e79d7561e091728e4fb15a5242a546`; custom package `c11cd406a78fa70431633bebe3c42bd18a87de32f6f48e92cd4e6bb2bebee91d`. |
+| Static audit | Strict UTF-8, local file links and heading links pass across 31 Markdown files. Nine unrelated data sections, all old Mace fields and Brutality values/identities are unchanged. Dependency manifests, source pin/full snapshot/tree, supplied originals and six goldens are unchanged. Evidence: `runs/support-static-audit.json`. |
+| Publication | Local validation complete. Pending commit/push and exact code-commit hosted CI status. |
+
+See [support loadouts](support-loadouts.md) for the configuration/API migration and
+[the example](../examples/mace-support-search.json). These are bounded diagnostic
+integration results; no general build-optimizer quality or new throughput claim is made.
+
+### Next implementation slice: typed native candidate evaluation
+
+The source/code audit identifies repeated XML and JSON work in
+`src/mutation_search.rs::Evaluator::evaluate`: materialization, native profile parsing,
+result attachments/export, and strict realization reparsing. The numerical Mace kernel
+already accepts immutable prepared support data. The next slice uses the existing
+`CandidateEvaluator<C>: Sync` seam to measure and remove this overhead while preserving
+switchable backends and the eventual general native calculation boundary:
+
+1. Expose a privately validated typed controlled-Mace scenario/candidate view from import,
+   created by strict source admission and bound to template/configuration/data/catalog
+   identity. Reuse class/tree ownership resolution and requirements; do not introduce a
+   second weaker legality path or accept arbitrary numerical fields as validated builds.
+2. Prepare immutable class/weapon/loadout components, scaling preparation with the sum of
+   axis sizes. Compose candidate indices into native calculation inputs and selected metric
+   measurements. Avoid an XML-bearing `PreparedEvaluation` for each Cartesian candidate.
+   The native candidate loop should perform no XML/JSON parsing, export or diagnostics.
+3. Retain full document evaluation for the initial baseline and fresh finalist, with exact
+   realization/export checks and the shared calculation ledger. Consider a default
+   `CandidateEvaluator::verify` hook only if needed to keep verification counted once.
+   PoB remains an explicit reference backend; it never becomes a native fallback.
+4. Keep eager alternative `xml_sha256` semantics unchanged in the first slice. Catalog
+   preparation/hashing is a separate measurable cost. Lazy payload hashing requires an
+   explicit report/identity version and equivalent boundary checks before adoption.
+5. Differentially compare every legal finite candidate's typed measurements against the
+   full native XML path, plus fresh selected PoB cases. Include custom datasets, invalid
+   owners/requirements/supports, identity mismatches, exact locks, serial/Rayon archives,
+   partial/empty budgets and fresh exports. Retain dependency isolation and WASM checks.
+6. Measure release distributions/checksums for full XML evaluation, prepared evaluation
+   including attachments, the pure kernel, the typed metric path and whole search at
+   one/two/four/available-core worker counts. Rotate real mixed candidates with uncached
+   calculations; record CPU, dataset/backend identities, setup time and storage/allocation
+   evidence. Avoid machine-specific speed thresholds in CI and kernel-only scaling claims.
+
+This follows the already agreed native-performance architecture; no product-scope answer
+blocks it. General support/active-skill, equipment, minion and complete native pipeline
+coverage, realistic mapping/bossing search-quality benchmarks and GUI work remain future
+work, independent of any improvement to this restricted search path.
+
 ## Signed resistance modifiers - 2026-09-07
 
 Starting point: clean `3493cfd`. This implements the prior signed-resistance plan retained
@@ -108,7 +176,7 @@ one-point ascendancy passive choices; selected configuration supplies every effe
 | Release reproduction | Two fresh release extractor processes produce identical reviewed package bytes and identical extraction evidence. Native-only release serial/four-worker feasible/infeasible archives and finalists match; both complete runs use 578 attempts. Winner `class/10/asc/Monk3/entrance/10364/ascendancy-passive/24475/wooden-q20/brutality_i`: **16.62515712 DPS**, **7% chaos resistance**. Injected -7.5 makes the chaos constraint infeasible; a locked diagnostic export recalculates to -7 with matching data/trust metadata. Locked calculation uses three attempts; explicit over-budget domain uses zero. Artifacts: `runs/resistance-release-check/summary.json`. |
 | Artifact identities | Native-only release executable `33613951ed8dd271916cea136f9c5a224fe454923437d21aca3c70202934cdb4`; reference-feature executable `b93c393b6d016f8b6d494727426df419ee7d633788d65b6d64cbf24199d093f2`; extraction evidence `3889aa8ddf4f9a7a777276b90e33958f3376e8bc357a84d07e6010c7530ab901`; custom package `a17358a98e29bfd23462dc94f5c679c10bafa93c4aa92522137cac46ce29674d`. |
 | Static audit | Strict UTF-8, all 237 local file links and 20 heading links pass across 30 tracked Markdown files. Seven numerical/data sections, old defence fields and all 16 original entrance records are unchanged. Source revision/full snapshot, dependency manifests, original exports and independent goldens are unchanged. Evidence: `runs/resistance-static-audit.json`. |
-| Publication | Code **`c91fab1ace2a649cbbe22fc2d5ccd999c247c72f`** is pushed to main. Local implementation, release and documentation checks pass. [Windows/Linux CI run 34185229809](https://github.com/Azaril/poe-optimizer/actions/runs/34185229809) is **in progress**; no hosted success is claimed yet. Snapshots: `runs/resistance-main-ci.json`, `runs/resistance-main-ci-jobs.json`. This following update changes documentation only. |
+| Publication | Code **`c91fab1ace2a649cbbe22fc2d5ccd999c247c72f`** is pushed to main. Local implementation, release and documentation checks pass. [Windows/Linux CI run 34185229809](https://github.com/Azaril/poe-optimizer/actions/runs/34185229809) is **successful on Windows and Linux**, verified at the next checkpoint. Completed snapshots: `runs/resistance-main-ci-complete.json`, `runs/resistance-main-ci-jobs-complete.json`. |
 
 The [resistance example](../examples/mace-resistance-search.json) maximizes Mace hit DPS
 subject to chaos resistance >= 1%. With reviewed data this selects the admitted Monk3 chaos
@@ -116,7 +184,7 @@ passive. These finite profiles remain diagnostic; they do not cover general asce
 paths, equipment requirements involving attribute dependencies, multiple supports,
 supporting active skills, minions or complete game mechanics.
 
-### Next implementation slice: configurable support loadouts
+### Source-audited support plan (implemented 2026-09-08)
 
 The source audit recommends replacing Mace's fixed Brutality boolean with zero-to-two
 support loadouts drawn from three reviewed families. This extends the user's priority of

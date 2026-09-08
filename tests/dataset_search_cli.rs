@@ -275,15 +275,21 @@ fn selected_dataset_gem_identifiers_names_and_quest_keys_round_trip_through_lock
             &format!("{xml_attribute}=\"{}\"", attribute(&replacement)),
         );
         data["mace"][field] = json!(replacement);
-        let old = data["mace"]["brutality"][field].as_str().unwrap();
-        data["mace"]["brutality"][field] = json!(format!("{old} &'\"<> caf\u{e9}"));
+        let support = data["supports"]
+            .as_array_mut()
+            .unwrap()
+            .iter_mut()
+            .find(|s| s["id"] == "brutality_i")
+            .unwrap();
+        let old = support[field].as_str().unwrap();
+        support[field] = json!(format!("{old} &'\"<> caf\u{e9}"));
         package = serde_json::from_value(data).unwrap();
     }
     for key in &mut package.quests.config_keys {
         key.push_str(" &'\"<> quest");
     }
     let selected_skill = package.mace.skill_id.clone();
-    let selected_support = package.mace.brutality.skill_id.clone();
+    let selected_support = package.support("brutality_i").unwrap().skill_id.clone();
     let quest_keys = package.quests.config_keys.clone();
     let quest_inputs = quest_keys
         .iter()

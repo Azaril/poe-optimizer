@@ -265,10 +265,10 @@ fn unknown_nested_source_enum_fields_and_integer_key_aliases_do_not_disappear() 
 #[test]
 fn requirement_schema_is_explicit_bounded_and_content_bound() {
     let original = reviewed();
-    assert_eq!(original.identity().schema_version, 3);
+    assert_eq!(original.identity().schema_version, 4);
     assert_eq!(
         original.identity().semantics_version,
-        "poe2-native-profiles-v3"
+        "poe2-native-profiles-v4"
     );
     let mut package = original.package().clone();
     package.weapons[0].requirements = RequirementData {
@@ -280,18 +280,18 @@ fn requirement_schema_is_explicit_bounded_and_content_bound() {
         },
     };
     package.mace.requirements.attributes.strength = 15;
-    package.mace.brutality.color = SupportColor::Blue;
+    package.supports[0].color = SupportColor::Blue;
     package.mace.support_attribute_costs.intelligence = 7;
     let changed = custom(package).unwrap();
     assert_ne!(changed.identity(), original.identity());
     assert_eq!(changed.trust(), &DataTrust::CustomUnreviewed);
-    assert_eq!(changed.package().mace.brutality.color, SupportColor::Blue);
+    assert_eq!(changed.package().supports[0].color, SupportColor::Blue);
     for mutate in [
         |p: &mut GameDataPackage| p.weapons[0].requirements.level = 101,
         |p: &mut GameDataPackage| p.spark.requirements.level = 101,
         |p: &mut GameDataPackage| p.mace.requirements.level = 101,
-        |p: &mut GameDataPackage| p.mace.brutality.requirements.level = 101,
-        |p: &mut GameDataPackage| p.mace.brutality.requirements.attributes.strength = 1,
+        |p: &mut GameDataPackage| p.supports[0].requirements.level = 101,
+        |p: &mut GameDataPackage| p.supports[0].requirements.attributes.strength = 1,
         |p: &mut GameDataPackage| p.mace.support_attribute_costs.strength = 1_000_001,
         |p: &mut GameDataPackage| p.weapons[0].requirements.attributes.strength = 1_000_001,
         |p: &mut GameDataPackage| p.manifest.schema_version = 1,
@@ -315,7 +315,7 @@ fn requirement_schema_is_explicit_bounded_and_content_bound() {
             v["weapons"][0]["requirements"]["attributes"]["strength"] = 1.5.into()
         },
         |v: &mut serde_json::Value| v["weapons"][0]["requirements"]["item_level"] = 1.into(),
-        |v: &mut serde_json::Value| v["mace"]["brutality"]["color"] = "white".into(),
+        |v: &mut serde_json::Value| v["supports"][0]["color"] = "white".into(),
     ] {
         let mut value = serde_json::to_value(original.package()).unwrap();
         mutate(&mut value);
@@ -485,4 +485,113 @@ fn player_global_resistance_cap_is_injected_required_and_bounded() {
         )
         .is_err()
     );
+}
+
+#[test]
+fn support_catalog_operations_and_loadouts_are_closed_and_content_bound() {
+    let original = reviewed();
+    let p = original.package();
+    assert_eq!(p.supports.len(), 3);
+    assert_eq!(p.mace.mana_cost, 0.0);
+    let ids: Vec<String> = p.supports.iter().map(|s| s.id.clone()).collect();
+    let mut admitted = 1;
+    assert!(p.validate_mace_support_loadout(&[]).unwrap().is_empty());
+    for (i, first) in ids.iter().enumerate() {
+        assert_eq!(
+            p.validate_mace_support_loadout(std::slice::from_ref(first))
+                .unwrap()
+                .len(),
+            1
+        );
+        admitted += 1;
+        for second in &ids[i + 1..] {
+            assert_eq!(
+                p.validate_mace_support_loadout(&[first.clone(), second.clone()])
+                    .unwrap()
+                    .len(),
+                2
+            );
+            admitted += 1;
+        }
+    }
+    assert_eq!(admitted, 7);
+    for bad in [
+        ids.clone(),
+        vec![ids[0].clone(), ids[0].clone()],
+        vec![ids[1].clone(), ids[0].clone()],
+        vec!["unknown".into()],
+    ] {
+        assert!(p.validate_mace_support_loadout(&bad).is_err());
+    }
+    let mut edited = p.clone();
+    edited.supports[1].modifiers[1].value = -12.5;
+    edited.supports[2]
+        .eligibility
+        .exclude
+        .push(SupportSkillType::Attack);
+    let changed = custom(edited).unwrap();
+    assert_ne!(changed.identity(), original.identity());
+    assert!(
+        changed
+            .package()
+            .validate_mace_support_loadout(&[ids[2].clone()])
+            .is_err()
+    );
+    assert!(
+        changed
+            .package()
+            .validate_mace_support_loadout(&[ids[1].clone()])
+            .is_ok()
+    );
+    let mutations: Vec<fn(&mut GameDataPackage)> = vec![
+        |p| p.supports.clear(),
+        |p| p.supports.push(p.supports[0].clone()),
+        |p| p.supports[1].id = p.supports[0].id.clone(),
+        |p| p.supports[1].family = p.supports[0].family.clone(),
+        |p| p.supports[0].id = "unsafe/key".into(),
+        |p| p.supports[0].id = "none".into(),
+        |p| p.supports[0].family = " ".into(),
+        |p| p.supports[0].level = 2,
+        |p| p.supports[0].quality = 1,
+        |p| p.supports[0].modifiers[0].value = -100.0,
+        |p| p.supports[0].modifiers[0].value = 1_000_001.0,
+        |p| {
+            let m = p.supports[0].modifiers[0].clone();
+            p.supports[0].modifiers.push(m);
+        },
+        |p| p.supports[0].disable_damage.push(SupportDamageType::Fire),
+        |p| {
+            p.supports[0]
+                .eligibility
+                .require_any
+                .push(SupportSkillType::Attack)
+        },
+        |p| p.supports[0].mana_multiplier = Some(-1.0),
+        |p| p.mace.mana_cost = 1.0,
+        |p| p.mace.skill_types.clear(),
+        |p| p.mace.skill_types.push(SupportSkillType::Attack),
+        |p| p.manifest.schema_version = 3,
+    ];
+    for mutate in mutations {
+        let mut package = p.clone();
+        mutate(&mut package);
+        assert!(custom(package).is_err());
+    }
+    for (path, unknown) in [
+        ("/supports/0/modifiers/0/stat", "resource_cost"),
+        ("/supports/0/modifiers/0/operation", "execute"),
+        ("/supports/0/modifiers/0/scope", "minion"),
+        ("/supports/0/disable_damage/0", "elemental"),
+        ("/supports/0/eligibility/require_any/0", "and"),
+    ] {
+        let mut value = serde_json::to_value(p).unwrap();
+        *value.pointer_mut(path).unwrap() = unknown.into();
+        assert!(
+            GameDataPackage::decode_for_authoring(
+                &serde_json::to_vec(&value).unwrap(),
+                &LoadLimits::default()
+            )
+            .is_err()
+        );
+    }
 }

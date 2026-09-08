@@ -4,7 +4,7 @@ Status: experimental finite-domain adapter, `poe_optimizer_import::controlled_ma
 
 ## Supported structural profile
 
-`ControlledMaceCatalog::with_data(snapshot, template_xml, weapons, supports)` retains an immutable selected dataset and checks structure and values, rather than requiring one of four XML hashes. `new(template_xml, weapons, supports)` remains a convenience constructor for the reviewed default. The template is an unallocated Warrior with no ascendancy, tree `0_5`, one active item/skill/configuration set, exactly one manually specified Mace Strike at level 1/quality 0, and zero or one Brutality I at level 1/quality 0. The only equipped item is slot `Weapon 1`, XML item ID `1`. Character level is explicit, 1–100, with automatic leveling disabled. No extra allocated passives, equipment, runes, modifiers, active skills, item-granted skills, minions, alternate sets, or unknown mechanics are accepted.
+`ControlledMaceCatalog::with_data(snapshot, template_xml, weapons, supports)` retains an immutable selected dataset and checks structure and values, rather than requiring one of four XML hashes. `new(template_xml, weapons, supports)` remains a convenience constructor for the reviewed default. The template is an unallocated Warrior with no ascendancy, tree `0_5`, one active item/skill/configuration set, exactly one manually specified Mace Strike at level 1/quality 0, and zero to two reviewed supports at level 1/quality 0; legacy constructors retain the single-Brutality choice interface. The only equipped item is slot `Weapon 1`, XML item ID `1`. Character level is explicit, 1–100, with automatic leveling disabled. No extra allocated passives, equipment, runes, modifiers, active skills, item-granted skills, minions, alternate sets, or unknown mechanics are accepted.
 
 `with_tree_choices(snapshot, template_xml, weapons, supports, selections)` adds explicit
 `ClassTreeSelection` values: canonical numeric `class_id`, optional internal `ascendancy_id`,
@@ -29,10 +29,13 @@ Implicits: 0
 
 The reviewed base names are Wooden Club and Smithing Hammer; custom records may rename these two supported slots; item level is 1–100 and quality is 0–20, as canonical integers. Whitespace around the complete payload and CRLF line endings normalize before hashing. Extra modifier lines, nonnormal rarity, range settings, corrupted items, and unknown bases fail closed. The selected records supply equip-level and attribute requirements; item level does not determine equip level. The reviewed bases have no level requirement; Smithing Hammer requires 11 strength. This is a bounded compatibility check, not a general equipment-requirement solver.
 
-Support choices are `none` and/or `brutality_i`. Their Cartesian product with weapons produces at most 128 candidates per tree selection,
-or 13,440 with all 105 selections. Catalog construction also requires
-`candidate_count * (template_bytes + 4096) <= 256 MiB` to bound source-hashing work; this is
-not a process-memory limit. Oversized preparation rejects before evaluation. The compatibility claim is tied to the pinned source: `src/Data/Skills/sup_str.lua` defines Brutality I as supporting damaging attacks, and Mace Strike is the known one-hand Mace attack. Quality and level variants of support gems, support families, multiple supports, and arbitrary skill compatibility require further data translation and tests.
+[Support loadouts](support-loadouts.md) contain zero to two data keys from Brutality I,
+Heavy Swing and Rapid Attacks I. `with_loadouts` and `with_tree_loadouts` accept these
+canonical unordered choices; the old constructors map `none`/`brutality_i` to the same
+representation. Seven loadouts and 64 weapons produce at most 448 alternatives per tree,
+or 47,040 with all 105 selections. The estimated and cumulative 256 MiB source-hashing
+work cap still applies. Duplicate keys/families and unsupported eligibility reject.
+Gem levels/qualities other than 1/0 and other support mechanics remain unsupported.
 
 Every encounter input used by the original Mace template remains explicit. Permitted parameter changes include enemy level 1–85, boss setting `None`/`Boss`/`Pinnacle`, enemy armour, resistances, incoming damage components, penetration/overwhelm, and attack interval within conservative numeric bounds. Damage type stays Melee, enemy crit chance stays zero, the five optional condition toggles stay false, and nearby-enemy counts stay 1/0. Incoming damage must contain a positive component. Unknown configuration keys, custom modifiers, alternate scalar types, nonfinite values, omitted required inputs, and duplicates are rejected. These are fixed scenario inputs for the entire search, not optimizable choices.
 
@@ -44,7 +47,7 @@ attributes come from the resolved selected class record. The admitted entrance o
 do not change strength/dexterity/intelligence, and the profile has no attribute-granting
 items or supporting effects. Each attribute requirement takes the maximum of
 individual item/active/support requirements and the sum of matching-color support costs.
-For example, 11 weapon strength and one red support costing 5 require 11 strength. The generic
+For example, 11 weapon strength and one red support costing 5 require 11 strength. Two red supports aggregate to 10 strength; red/green costs remain separate. The generic
 additive resource budget is not used for this rule. Level requirements take a maximum too.
 
 The CLI preflights every choice allowed by the locks before the diagnostic baseline, then
@@ -60,7 +63,7 @@ The catalog identity includes the exact template SHA-256, sorted named weapon pa
 `resolve_tree_candidate(selection, weapon_id, support)` addresses the complete selection.
 Expanded catalog identity also includes ordered tree choices and every composed payload.
 
-Materialization patches the source ranges for the item element, optional support gem and,
+Materialization patches the source ranges for the item element, support gem ranges and,
 in expanded catalogs, selected Build/Spec class, ascendancy and allocation attributes. It
 preserves every other template byte, including configuration, labels, Notes, comments, unknown prose, and formatting. Structural fields with unknown mechanics are rejected before mutation, so preservation does not silently imply support. The user's source file is not modified. A candidate from another catalog or any combination outside this finite registry cannot be materialized.
 

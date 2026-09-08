@@ -154,13 +154,20 @@ IDs and exact configured effects. These observed counts do not establish availab
 Custom signed resistance values can change feasibility using `--data`; export companions
 retain their actual identity and custom status. See [package migration](native-data.md#schema-migration).
 
+## Configurable support loadouts
+
+Problem schema **4** adds explicit zero/one/two-support arrays and exact loadout locks,
+with report schema **5**. See [support search](support-loadouts.md#cli-problem-and-locks)
+and [the complete example](../examples/mace-support-search.json). Schemas 1–3 retain their
+existing input scopes and output layouts.
+
 ## Supported input and locks
 
 `template` is relative to the problem file or an absolute path. XML/share codes pass through
 the bounded importer. The legacy template fixes an unallocated Warrior without ascendancy. Expanded templates
 accept any admitted class/ascendancy/entrance selection. Both require one
-level-1 quality-0 Mace Strike, one normal base (reviewed names: Wooden Club or Smithing Hammer), and zero or one
-level-1 quality-0 Brutality I. Supplied item alternatives can change their base, quality
+level-1 quality-0 Mace Strike, one normal base (reviewed names: Wooden Club or Smithing Hammer), and zero to two
+level-1 quality-0 reviewed supports. Legacy search choices remain none or Brutality I. Supplied item alternatives can change their base, quality
 0–20 and item level 1–100 while retaining the exact supported five-line item format.
 Character level, configuration and source fields outside the selected mutation ranges
 remain fixed throughout a run.
@@ -201,8 +208,8 @@ evaluation checks. Both are pure Rust, with compatibility re-exports at the old
 
 ## Strategies and accounting
 
-Catalog preparation is bounded to 105 tree choices and 128 weapon/support combinations per
-tree (13,440 candidates). A second cap requires `candidate_count * (template_bytes + 4096) <= 256 MiB` to limit
+Catalog preparation is bounded to 105 tree choices and 448 weapon/support combinations per
+tree (47,040 candidates; legacy inputs remain bounded to 128 combinations per tree). A second cap requires `candidate_count * (template_bytes + 4096) <= 256 MiB` to limit
 source-hashing work. Admission checks the entire lock-admissible domain, independently of
 proposal count; `admission.complete` and `checked_candidates` record whether that check
 finished before the deadline. This cap does not implement process-memory admission.

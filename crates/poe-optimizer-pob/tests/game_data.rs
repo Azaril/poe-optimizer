@@ -70,6 +70,8 @@ impl Oracle {
             "src/Data/Skills/act_int.lua",
             "src/Data/Skills/other.lua",
             "src/Data/Skills/sup_str.lua",
+            "src/Data/Skills/sup_dex.lua",
+            "src/Data/SkillStatMap.lua",
             "src/Data/Bases/mace.lua",
             "src/TreeData/0_5/tree.lua",
         ];
@@ -149,7 +151,27 @@ impl Oracle {
             .unwrap()
             .set("parseMod", parser)
             .unwrap();
-        lua.load("skills={}; mod=modLib.createMod;").exec().unwrap();
+        lua.load(format!(
+            "{}\nmod=makeSkillMod;flag=makeFlagMod;skill=makeSkillDataMod;skills={{}}",
+            section(
+                &sources["src/Modules/Data.lua"],
+                "local function makeSkillMod(",
+                "local function processMod("
+            )
+        ))
+        .exec()
+        .unwrap();
+        let stat_map = lua
+            .load(&sources["src/Data/SkillStatMap.lua"])
+            .eval::<Function>()
+            .unwrap()
+            .call::<Table>((
+                lua.globals().get::<Function>("mod").unwrap(),
+                lua.globals().get::<Function>("flag").unwrap(),
+                lua.globals().get::<Function>("skill").unwrap(),
+            ))
+            .unwrap();
+        lua.globals().set("sourceSupportStatMap", stat_map).unwrap();
         for (path, start, end) in [
             (
                 "src/Data/Skills/act_int.lua",
@@ -165,6 +187,16 @@ impl Oracle {
                 "src/Data/Skills/sup_str.lua",
                 "skills[\"SupportBrutalityPlayer\"] = {",
                 "\nskills[\"SupportBrutalityPlayerTwo\"]",
+            ),
+            (
+                "src/Data/Skills/sup_str.lua",
+                "skills[\"SupportMeleePhysicalDamagePlayer\"] = {",
+                "\nskills[\"SupportHeftPlayer\"]",
+            ),
+            (
+                "src/Data/Skills/sup_dex.lua",
+                "skills[\"SupportRapidAttacksPlayer\"] = {",
+                "\nskills[\"SupportRapidAttacksPlayerTwo\"]",
             ),
         ] {
             lua.load(section(&sources[path], start, end))
@@ -334,7 +366,7 @@ fn reviewed_character_skill_weapon_monster_values_match_actual_pinned_lua() {
                 "skills.SparkPlayer.levels[1].critChance",
             ),
             (
-                "/mace/brutality/physical_more",
+                "/supports/0/modifiers/0/value",
                 "skills.SupportBrutalityPlayer.statSets[1].constantStats[1][2]",
             ),
             ("/encounters/normal_level_cap", "data.misc.MaxEnemyLevel"),
@@ -384,7 +416,9 @@ fn reviewed_character_skill_weapon_monster_values_match_actual_pinned_lua() {
         for (section, skill) in [
             ("spark", "SparkPlayer"),
             ("mace", "Melee1HMacePlayer"),
-            ("mace/brutality", "SupportBrutalityPlayer"),
+            ("supports/0", "SupportBrutalityPlayer"),
+            ("supports/1", "SupportMeleePhysicalDamagePlayer"),
+            ("supports/2", "SupportRapidAttacksPlayer"),
         ] {
             let gem:Table=oracle.lua.load("return function(id) for _,gem in pairs(sourceGems) do if gem.grantedEffectId==id then return gem end end; error('source gem missing') end").eval::<Function>().unwrap().call(skill).unwrap();
             for (field, source) in [
@@ -485,6 +519,8 @@ fn reviewed_character_skill_weapon_monster_values_match_actual_pinned_lua() {
             "src/Data/Skills/act_int.lua",
             "src/Data/Skills/other.lua",
             "src/Data/Skills/sup_str.lua",
+            "src/Data/Skills/sup_dex.lua",
+            "src/Data/SkillStatMap.lua",
             "src/Data/Bases/mace.lua",
             "src/TreeData/0_5/tree.lua",
         ] {
@@ -918,7 +954,9 @@ fn requirements_match_source_gem_functions_support_counts_and_maximum_aggregatio
         for (path, skill) in [
             ("spark", "SparkPlayer"),
             ("mace", "Melee1HMacePlayer"),
-            ("mace/brutality", "SupportBrutalityPlayer"),
+            ("supports/0", "SupportBrutalityPlayer"),
+            ("supports/1", "SupportMeleePhysicalDamagePlayer"),
+            ("supports/2", "SupportRapidAttacksPlayer"),
         ] {
             let gem: Table = oracle.lua.load("return function(id) for _,gem in pairs(sourceGems) do if gem.grantedEffectId==id then return gem end end; error('source gem missing') end").eval::<Function>().unwrap().call(skill).unwrap();
             let effect: Table = oracle
@@ -998,7 +1036,7 @@ fn requirements_match_source_gem_functions_support_counts_and_maximum_aggregatio
             3 => "blue",
             _ => panic!("unsupported source color"),
         };
-        assert_eq!(package["mace"]["brutality"]["color"], color_name);
+        assert_eq!(package["supports"][0]["color"], color_name);
         // Supports in disabled groups and hidden effects do not contribute;
         // colors aggregate across all enabled groups, including inactive skills.
         let groups: Table = oracle.lua.load("return {{enabled=true,gemList={{supportEffect={grantedEffect={color=1}}},{supportEffect={grantedEffect={color=1}}},{supportEffect={grantedEffect={color=2,hidden=true}}}}},{enabled=true,gemList={{supportEffect={grantedEffect={color=1}}}}},{enabled=false,gemList={{supportEffect={grantedEffect={color=2}}}}}}").eval().unwrap();
@@ -1064,6 +1102,190 @@ fn original_cold_and_warm_parser_distinguishes_signed_elemental_chaos_and_indivi
                 ),
                 "{text}; warm={warm}"
             );
+        }
+    }
+}
+
+#[test]
+fn support_catalog_matches_raw_source_maps_flags_families_and_type_expressions_cold_and_warm() {
+    use poe_optimizer_data::game_data::{
+        SupportDamageType, SupportOperation, SupportScope, SupportSkillType, SupportStat,
+    };
+    let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+    let package = snapshot.package();
+    let types = [
+        (SupportSkillType::Attack, "Attack"),
+        (SupportSkillType::MeleeSingleTarget, "MeleeSingleTarget"),
+        (SupportSkillType::Melee, "Melee"),
+        (SupportSkillType::Area, "Area"),
+        (SupportSkillType::AttackInPlace, "AttackInPlace"),
+        (SupportSkillType::Damage, "Damage"),
+        (SupportSkillType::DamageOverTime, "DamageOverTime"),
+        (SupportSkillType::CrossbowAmmoSkill, "CrossbowAmmoSkill"),
+        (SupportSkillType::Herald, "Herald"),
+        (SupportSkillType::NoAttackOrCastTime, "NoAttackOrCastTime"),
+    ];
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        oracle
+            .lua
+            .load(section(
+                &oracle.sources["src/Modules/CalcTools.lua"],
+                "local typeExpressionStack = { }",
+                "-- Check if given gem is of the given type",
+            ))
+            .exec()
+            .unwrap();
+        let can_support: Function = oracle
+            .lua
+            .globals()
+            .get::<Table>("calcLib")
+            .unwrap()
+            .get("canGrantedEffectSupportActiveSkill")
+            .unwrap();
+        let source_types: Table = oracle.lua.globals().get("SkillType").unwrap();
+        let skills: Table = oracle.lua.globals().get("skills").unwrap();
+        let source_mace: Table = skills.get(package.mace.skill_id.as_str()).unwrap();
+        let mace_types: Table = source_mace.get("skillTypes").unwrap();
+        assert_eq!(
+            mace_types.clone().pairs::<u32, bool>().count(),
+            package.mace.skill_types.len()
+        );
+        for (kind, name) in types {
+            let value = mace_types
+                .get::<Option<bool>>(source_types.get::<u32>(name).unwrap())
+                .unwrap()
+                .unwrap_or(false);
+            assert_eq!(package.mace.skill_types.contains(&kind), value);
+        }
+        assert_eq!(
+            source_mace
+                .get::<Table>("levels")
+                .unwrap()
+                .get::<Table>(1)
+                .unwrap()
+                .get::<Table>("cost")
+                .unwrap()
+                .get::<f64>("Mana")
+                .unwrap(),
+            package.mace.mana_cost
+        );
+        for support in &package.supports {
+            let raw: Table = skills.get(support.skill_id.as_str()).unwrap();
+            let family: Vec<String> = raw
+                .get::<Table>("gemFamily")
+                .unwrap()
+                .sequence_values()
+                .collect::<mlua::Result<_>>()
+                .unwrap();
+            assert_eq!(family, vec![support.family.clone()]);
+            let level: Table = raw
+                .get::<Table>("levels")
+                .unwrap()
+                .get(support.level)
+                .unwrap();
+            assert_eq!(
+                level.get::<Option<f64>>("manaMultiplier").unwrap(),
+                support.mana_multiplier
+            );
+            let source_color: u32 = raw.get("color").unwrap();
+            assert_eq!(
+                serde_json::to_value(support.color).unwrap(),
+                ["red", "green", "blue"][(source_color - 1) as usize]
+            );
+            let stats: Table = raw.get::<Table>("statSets").unwrap().get(1).unwrap();
+            let constants: Table = stats.get("constantStats").unwrap();
+            let local_map: Option<Table> = stats.get("statMap").unwrap();
+            let shared_map: Table = oracle.lua.globals().get("sourceSupportStatMap").unwrap();
+            assert_eq!(constants.raw_len(), support.modifiers.len());
+            for (index, modifier) in support.modifiers.iter().enumerate() {
+                let constant: Table = constants.get(index + 1).unwrap();
+                assert_eq!(constant.get::<f64>(2).unwrap(), modifier.value);
+                let stat: String = constant.get(1).unwrap();
+                let mapping: Table = local_map
+                    .as_ref()
+                    .and_then(|map| map.get::<Option<Table>>(stat.as_str()).unwrap())
+                    .unwrap_or_else(|| shared_map.get(stat.as_str()).unwrap());
+                assert_eq!(mapping.raw_len(), 1);
+                let raw_mod: Table = mapping.get(1).unwrap();
+                assert_eq!(
+                    raw_mod.get::<String>("name").unwrap(),
+                    match modifier.stat {
+                        SupportStat::PhysicalDamage => "PhysicalDamage",
+                        SupportStat::Speed => "Speed",
+                    }
+                );
+                assert_eq!(
+                    raw_mod.get::<String>("type").unwrap(),
+                    match modifier.operation {
+                        SupportOperation::Increased => "INC",
+                        SupportOperation::More => "MORE",
+                    }
+                );
+                let flag = match modifier.scope {
+                    SupportScope::Any => 0,
+                    SupportScope::Melee => oracle.number("ModFlag.Melee") as u32,
+                    SupportScope::Attack => oracle.number("ModFlag.Attack") as u32,
+                };
+                assert_eq!(raw_mod.get::<u32>("flags").unwrap(), flag);
+                assert_eq!(raw_mod.get::<u32>("keywordFlags").unwrap(), 0);
+                assert!(matches!(
+                    raw_mod.get::<mlua::Value>("value").unwrap(),
+                    mlua::Value::Nil
+                ));
+                assert_eq!(raw_mod.raw_len(), 0);
+            }
+            let mut source_disabled = Vec::new();
+            for stat in stats
+                .get::<Table>("stats")
+                .unwrap()
+                .sequence_values::<String>()
+            {
+                let mapping: Table = shared_map.get(stat.unwrap().as_str()).unwrap();
+                for raw_mod in mapping.sequence_values::<Table>() {
+                    let raw_mod = raw_mod.unwrap();
+                    assert_eq!(raw_mod.get::<String>("type").unwrap(), "FLAG");
+                    assert!(raw_mod.get::<bool>("value").unwrap());
+                    assert_eq!(raw_mod.get::<u32>("flags").unwrap(), 0);
+                    assert_eq!(raw_mod.get::<u32>("keywordFlags").unwrap(), 0);
+                    assert_eq!(raw_mod.raw_len(), 0);
+                    source_disabled.push(match raw_mod.get::<String>("name").unwrap().as_str() {
+                        "DealNoPhysical" => SupportDamageType::Physical,
+                        "DealNoFire" => SupportDamageType::Fire,
+                        "DealNoCold" => SupportDamageType::Cold,
+                        "DealNoLightning" => SupportDamageType::Lightning,
+                        "DealNoChaos" => SupportDamageType::Chaos,
+                        other => panic!("unrepresented source flag {other}"),
+                    });
+                }
+            }
+            assert_eq!(source_disabled, support.disable_damage);
+            // Independent source predicate covers every subset of the represented vocabulary.
+            // Repeated calls also exercise LuaJIT warm traces when enabled.
+            for mask in 0_u32..(1 << types.len()) {
+                let active_types = oracle.lua.create_table().unwrap();
+                let mut native_types = Vec::new();
+                for (index, (kind, name)) in types.iter().enumerate() {
+                    if mask & (1 << index) != 0 {
+                        active_types
+                            .set(source_types.get::<u32>(*name).unwrap(), true)
+                            .unwrap();
+                        native_types.push(*kind);
+                    }
+                }
+                let active = oracle.lua.create_table().unwrap();
+                let effect = oracle.lua.create_table().unwrap();
+                effect.set("grantedEffect", source_mace.clone()).unwrap();
+                active.set("activeEffect", effect).unwrap();
+                active.set("skillTypes", active_types).unwrap();
+                let expected: bool = can_support.call((raw.clone(), active)).unwrap();
+                assert_eq!(
+                    support.eligibility.admits(&native_types),
+                    expected,
+                    "{} mask {mask} warm {warm}",
+                    support.id
+                );
+            }
         }
     }
 }

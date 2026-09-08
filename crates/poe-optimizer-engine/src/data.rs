@@ -7,6 +7,7 @@ use crate::{
     character::{CharacterAttributes, CharacterInput, CharacterModifiers},
     defence::DefenceConstants,
     mace::{MaceData, MaceError, MaceWeapon, MaceWeaponData},
+    mace_supports::{MaceSupportCatalog, PreparedMaceSupports},
     spark::SparkData,
 };
 use poe_optimizer_data::{
@@ -36,6 +37,7 @@ pub struct CompiledGameData {
     spark: SparkData,
     mace: MaceData,
     weapon_indices: [usize; 2],
+    supports: MaceSupportCatalog,
     passives: BTreeMap<(u32, u32), BTreeMap<String, CharacterModifiers>>,
 }
 impl CompiledGameData {
@@ -112,7 +114,6 @@ impl CompiledGameData {
             intelligence: f64::from(default_mace.base_intelligence),
             accuracy_per_level: character.accuracy_per_level,
             accuracy_per_dexterity: character.accuracy_per_dexterity,
-            brutality_physical_more: package.mace.brutality.physical_more,
             enemy_physical_reduction_cap: defence.enemy_physical_reduction_cap,
         };
         if package.weapons.len() != 2 {
@@ -181,7 +182,9 @@ impl CompiledGameData {
                 ));
             }
         }
+        let supports = MaceSupportCatalog::compile(package)?;
         Ok(Self {
+            supports,
             snapshot,
             spark,
             mace,
@@ -206,6 +209,22 @@ impl CompiledGameData {
     }
     pub fn mace(&self) -> &MaceData {
         &self.mace
+    }
+    /// Resolve a canonical data-key loadout once during build preparation.
+    pub fn mace_support_loadout(
+        &self,
+        keys: &[String],
+    ) -> Result<&PreparedMaceSupports, MaceError> {
+        self.supports.loadout(keys)
+    }
+    pub(crate) fn legacy_mace_supports(
+        &self,
+        brutality: bool,
+    ) -> Result<&PreparedMaceSupports, MaceError> {
+        self.supports.legacy(brutality)
+    }
+    pub(crate) fn owns_mace_supports(&self, supports: &PreparedMaceSupports) -> bool {
+        self.supports.contains(supports)
     }
     pub fn defence(&self) -> &DefenceData {
         &self.snapshot.package().defence

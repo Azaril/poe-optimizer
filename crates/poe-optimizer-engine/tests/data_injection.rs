@@ -111,7 +111,13 @@ fn weapon_support_monster_and_typed_effect_records_reach_calculation() {
             .find(|w| w.id == "smithing_hammer")
             .unwrap();
         weapon.attack_rate *= 2.0;
-        package.mace.brutality.physical_more += 100.0;
+        package
+            .supports
+            .iter_mut()
+            .find(|support| support.id == "brutality_i")
+            .unwrap()
+            .modifiers[0]
+            .value += 100.0;
         package.monsters.evasion[59] *= 2.0;
         package.monsters.armour[59] *= 2.0;
         let effects = package
@@ -201,4 +207,155 @@ fn structurally_valid_unknown_weapon_capabilities_fail_compilation() {
     .unwrap();
     let error = CompiledGameData::compile(Arc::new(snapshot)).unwrap_err();
     assert!(error.to_string().contains("weapon capability slot"));
+}
+
+#[test]
+fn prepared_supports_are_bound_to_their_dataset_and_ignore_the_legacy_selector() {
+    use poe_optimizer_engine::mace_supports::PreparedMaceSupports;
+    fn assert_send_sync<T: Send + Sync>() {}
+    assert_send_sync::<PreparedMaceSupports>();
+    let a = CompiledGameData::bundled().unwrap();
+    let b = custom(|_| {});
+    let keys = vec!["heavy_swing".into(), "rapid_attacks_i".into()];
+    let prepared = a.mace_support_loadout(&keys).unwrap().clone();
+    assert_eq!(prepared.keys(), keys);
+    let input = mace_input();
+    let actual =
+        mace::evaluate_with_supports(&input, &a.default_mace_character(), &a, &prepared).unwrap();
+    assert_eq!(
+        actual,
+        mace::evaluate_with_supports(
+            &MaceInput {
+                brutality: true,
+                ..input
+            },
+            &a.default_mace_character(),
+            &a,
+            &prepared
+        )
+        .unwrap()
+    );
+    assert!(
+        mace::evaluate_with_supports(&input, &b.default_mace_character(), &b, &prepared)
+            .unwrap_err()
+            .to_string()
+            .contains("different compiled dataset")
+    );
+    for invalid in [
+        vec!["unknown".into()],
+        vec!["heavy_swing".into(), "heavy_swing".into()],
+        vec!["rapid_attacks_i".into(), "heavy_swing".into()],
+        vec![
+            "brutality_i".into(),
+            "heavy_swing".into(),
+            "rapid_attacks_i".into(),
+        ],
+    ] {
+        assert!(a.mace_support_loadout(&invalid).is_err());
+    }
+    std::thread::scope(|scope| {
+        for _ in 0..8 {
+            let a = &a;
+            let prepared = &prepared;
+            scope.spawn(move || {
+                for _ in 0..100 {
+                    assert_eq!(
+                        actual,
+                        mace::evaluate_with_supports(
+                            &input,
+                            &a.default_mace_character(),
+                            a,
+                            prepared
+                        )
+                        .unwrap()
+                    );
+                }
+            });
+        }
+    });
+}
+
+#[test]
+fn injected_support_numeric_operations_and_damage_disables_reach_prepared_calculation() {
+    use poe_optimizer_data::game_data::{SupportDamageType, SupportStat};
+    let a = CompiledGameData::bundled().unwrap();
+    let b = custom(|package| {
+        let heavy = package
+            .supports
+            .iter_mut()
+            .find(|support| support.id == "heavy_swing")
+            .unwrap();
+        heavy
+            .modifiers
+            .iter_mut()
+            .find(|modifier| modifier.stat == SupportStat::Speed)
+            .unwrap()
+            .value = -50.0;
+        heavy.disable_damage.push(SupportDamageType::Physical);
+        package
+            .supports
+            .iter_mut()
+            .find(|support| support.id == "brutality_i")
+            .unwrap()
+            .disable_damage
+            .clear();
+    });
+    let input = mace_input();
+    let calculate = |data: &CompiledGameData, keys: &[String]| {
+        mace::evaluate_with_supports(
+            &input,
+            &data.default_mace_character(),
+            data,
+            data.mace_support_loadout(keys).unwrap(),
+        )
+        .unwrap()
+    };
+    let heavy = vec!["heavy_swing".into()];
+    let before = calculate(&a, &heavy);
+    let changed = calculate(&b, &heavy);
+    assert!(before.physical_hit_average > 0.0);
+    assert_eq!(changed.physical_hit_average, 0.0);
+    assert!(changed.attack_rate < before.attack_rate);
+    assert_eq!(changed.fire_hit_average, before.fire_hit_average);
+    let brutality = vec!["brutality_i".into()];
+    assert_eq!(calculate(&a, &brutality).fire_hit_average, 0.0);
+    assert!(calculate(&b, &brutality).fire_hit_average > 0.0);
+    assert_eq!(calculate(&a, &heavy), before);
+}
+
+#[test]
+fn combined_negative_support_increases_reject_before_evaluation() {
+    use poe_optimizer_data::game_data::{SupportOperation, SupportScope, SupportStat};
+    for stat in [SupportStat::PhysicalDamage, SupportStat::Speed] {
+        let mut package = game_data::bundled_snapshot().unwrap().package().clone();
+        for id in ["heavy_swing", "rapid_attacks_i"] {
+            let support = package
+                .supports
+                .iter_mut()
+                .find(|support| support.id == id)
+                .unwrap();
+            support.modifiers.clear();
+            support
+                .modifiers
+                .push(poe_optimizer_data::game_data::SupportModifier {
+                    stat,
+                    operation: SupportOperation::Increased,
+                    scope: SupportScope::Attack,
+                    value: -60.0,
+                });
+        }
+        package.refresh_section_digests().unwrap();
+        let snapshot = GameDataLoader::from_bytes(
+            &package.canonical_bytes().unwrap(),
+            &TrustPolicy::AllowCustom,
+            &LoadLimits::default(),
+        )
+        .unwrap();
+        assert!(
+            CompiledGameData::compile(Arc::new(snapshot))
+                .unwrap_err()
+                .to_string()
+                .contains("negative physical damage or speed")
+        );
+    }
 }

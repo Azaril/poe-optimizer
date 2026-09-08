@@ -4,7 +4,7 @@
 It is optional development tooling: native evaluation loads the exported package and has
 no Lua or worker-process dependency. No website is scraped or downloaded.
 
-The exporter covers the same ten explicitly partial sections as the
+The exporter covers the same eleven explicitly partial sections as the
 [native data package](native-data.md): tree, character, quests, Spark, Mace, weapons,
 defence, monsters, encounters and typed owned passive effects. The current version includes the four admitted ascendancy
 resistance nodes. It does not infer arbitrary build mechanics
@@ -89,7 +89,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 3 and `poe2-native-profiles-v3`, including source-derived level/attribute requirements,
+schema 4 and `poe2-native-profiles-v4`, including source-derived level/attribute requirements,
 support-color costs and owned passive effects. Signed values are allowed only for the
 new unconditional player BASE resistance operations. The structural selection policy in
 `crates/poe-optimizer-data/data/class-tree-policy.json` identifies the four source nodes;
@@ -110,3 +110,7 @@ source, and writes package/tree bytes, their digests and extraction evidence. It
 the committed artifacts or grants runtime trust. Review policy/data changes and independent
 parity first, then deliberately update the reviewed artifacts. Ordinary `extract-game-data`
 continues to authenticate its output against the committed reviewed tree/package scope.
+
+Support identities, eligibility, scoped modifiers and damage flags are extracted into the
+`supports` section; see [support data and migration](support-loadouts.md). The retained
+tree bytes and upstream revision do not change for this support extension.

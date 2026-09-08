@@ -66,7 +66,7 @@ fn reviewed_default_preserves_materialization_and_maximum_semantics() {
         .range();
     for alternative in default.alternatives() {
         let candidate = explicit
-            .resolve_candidate(&alternative.weapon_id, alternative.support)
+            .resolve_loadout_candidate(&alternative.weapon_id, &alternative.support)
             .unwrap();
         assert_eq!(&alternative.candidate, candidate);
         assert_eq!(
@@ -149,7 +149,11 @@ fn support_color_cost_boundaries_and_active_attributes_use_maximum() {
         };
         for cost in [available - 1, available, available + 1] {
             let registry = catalog(custom(|data| {
-                data.mace.brutality.color = color;
+                data.supports
+                    .iter_mut()
+                    .find(|support| support.id == "brutality_i")
+                    .unwrap()
+                    .color = color;
                 match color {
                     SupportColor::Red => data.mace.support_attribute_costs.strength = cost,
                     SupportColor::Green => data.mace.support_attribute_costs.dexterity = cost,
@@ -193,7 +197,14 @@ fn equip_and_gem_level_requirements_are_distinct_from_item_level() {
             let registry = catalog(custom(|data| match target {
                 "weapon" => data.weapons[0].requirements.level = required,
                 "active" => data.mace.requirements.level = required,
-                _ => data.mace.brutality.requirements.level = required,
+                _ => {
+                    data.supports
+                        .iter_mut()
+                        .find(|support| support.id == "brutality_i")
+                        .unwrap()
+                        .requirements
+                        .level = required
+                }
             }));
             let result = assessment(&registry, 0, MaceSupportChoice::BrutalityI);
             assert_eq!(result.required.level, required);
@@ -252,10 +263,26 @@ fn selected_skill_support_and_weapon_strings_round_trip_through_xml() {
         data.mace.skill_id = "active\"&<>'ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
         data.mace.game_id = "active-game\"&<>'ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
         data.mace.variant_id = "active-variant\"&<>'ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
-        data.mace.brutality.name = "Brutality \"&<>' ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
-        data.mace.brutality.skill_id = "support\"&<>'ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
-        data.mace.brutality.game_id = "support-game\"&<>'ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
-        data.mace.brutality.variant_id = "support-variant\"&<>'ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
+        data.supports
+            .iter_mut()
+            .find(|support| support.id == "brutality_i")
+            .unwrap()
+            .name = "Brutality \"&<>' ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
+        data.supports
+            .iter_mut()
+            .find(|support| support.id == "brutality_i")
+            .unwrap()
+            .skill_id = "support\"&<>'ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
+        data.supports
+            .iter_mut()
+            .find(|support| support.id == "brutality_i")
+            .unwrap()
+            .game_id = "support-game\"&<>'ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
+        data.supports
+            .iter_mut()
+            .find(|support| support.id == "brutality_i")
+            .unwrap()
+            .variant_id = "support-variant\"&<>'ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
         data.weapons[0].name = "Club \"&<>' ÃƒÂ©Ã¢â‚¬ÂºÃ‚Âª".into();
     });
     let package = data.package();
@@ -300,7 +327,7 @@ fn selected_skill_support_and_weapon_strings_round_trip_through_xml() {
             registry.required_skill_id()
         );
         let document = Document::parse(&xml).unwrap();
-        if alternative.support == MaceSupportChoice::BrutalityI {
+        if alternative.support.legacy_choice() == Some(MaceSupportChoice::BrutalityI) {
             let support = document
                 .descendants()
                 .filter(|node| node.has_tag_name("Gem"))
@@ -308,7 +335,15 @@ fn selected_skill_support_and_weapon_strings_round_trip_through_xml() {
                 .unwrap();
             assert_eq!(
                 support.attribute("nameSpec"),
-                Some(registry.snapshot().package().mace.brutality.name.as_str())
+                Some(
+                    registry
+                        .snapshot()
+                        .package()
+                        .support("brutality_i")
+                        .unwrap()
+                        .name
+                        .as_str()
+                )
             );
             assert_eq!(
                 support.attribute("skillId"),
@@ -316,8 +351,8 @@ fn selected_skill_support_and_weapon_strings_round_trip_through_xml() {
                     registry
                         .snapshot()
                         .package()
-                        .mace
-                        .brutality
+                        .support("brutality_i")
+                        .unwrap()
                         .skill_id
                         .as_str()
                 )
@@ -418,10 +453,10 @@ fn all_admitted_tree_choices_compose_and_round_trip_without_touching_source_pros
     for alternative in registry.alternatives() {
         let resolved = alternative.tree.resolve(data.tree()).unwrap();
         let candidate = registry
-            .resolve_tree_candidate(
+            .resolve_tree_loadout_candidate(
                 &alternative.tree,
                 &alternative.weapon_id,
-                alternative.support,
+                &alternative.support,
             )
             .unwrap();
         assert_eq!(candidate, &alternative.candidate);
@@ -746,4 +781,203 @@ fn ascendancy_passive_materialization_preserves_two_allocations_and_rejects_fore
     );
     assert_ne!(duplicated, source);
     assert!(make(duplicated, vec![chosen]).is_err());
+}
+
+fn all_loadouts() -> Vec<MaceSupportLoadout> {
+    [
+        vec![],
+        vec!["brutality_i"],
+        vec!["heavy_swing"],
+        vec!["rapid_attacks_i"],
+        vec!["brutality_i", "heavy_swing"],
+        vec!["brutality_i", "rapid_attacks_i"],
+        vec!["heavy_swing", "rapid_attacks_i"],
+    ]
+    .into_iter()
+    .map(|keys| MaceSupportLoadout::new(keys.into_iter().map(str::to_owned).collect()).unwrap())
+    .collect()
+}
+#[test]
+fn support_loadouts_are_unordered_unique_bounded_data_keys() {
+    let pair: MaceSupportLoadout =
+        serde_json::from_str(r#"["rapid_attacks_i","heavy_swing"]"#).unwrap();
+    assert_eq!(pair.id(), "heavy_swing+rapid_attacks_i");
+    assert_eq!(
+        serde_json::to_string(&pair).unwrap(),
+        r#"["heavy_swing","rapid_attacks_i"]"#
+    );
+    for invalid in [
+        r#"["heavy_swing","heavy_swing"]"#,
+        r#"["brutality_i","heavy_swing","rapid_attacks_i"]"#,
+        r#"["heavy_swing+rapid_attacks_i"]"#,
+        r#"[""]"#,
+    ] {
+        assert!(serde_json::from_str::<MaceSupportLoadout>(invalid).is_err());
+    }
+    assert_eq!(
+        MaceSupportLoadout::from(MaceSupportChoice::None).id(),
+        "none"
+    );
+    assert_eq!(
+        MaceSupportLoadout::from(MaceSupportChoice::BrutalityI).legacy_choice(),
+        Some(MaceSupportChoice::BrutalityI)
+    );
+    assert_eq!(pair.legacy_choice(), None);
+}
+#[test]
+fn seven_support_loadouts_preserve_exact_gem_instances_and_comments_on_removal() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let registry = ControlledMaceCatalog::with_loadouts(
+        data.clone(),
+        TEMPLATE.into(),
+        weapons(data.package()),
+        all_loadouts(),
+    )
+    .unwrap();
+    assert_eq!(registry.alternatives().len(), 14);
+    assert_eq!(registry.catalog().supports.len(), 3);
+    for alternative in registry.alternatives() {
+        assert_eq!(
+            registry.resolve_loadout_candidate(&alternative.weapon_id, &alternative.support),
+            Some(&alternative.candidate)
+        );
+        let xml = registry
+            .materialize(&alternative.candidate)
+            .unwrap()
+            .content;
+        let parsed = profile(&xml, data.package()).unwrap();
+        assert_eq!(parsed.support, alternative.support);
+        assert_eq!(parsed.support_order, alternative.support.keys());
+        assert_eq!(
+            alternative.candidate.skills[SLOT]
+                .support_instance_ids
+                .len(),
+            alternative.support.keys().len()
+        );
+        assert_eq!(hash(&xml), alternative.xml_sha256);
+        for key in alternative.support.keys() {
+            let gem = data.package().support(key).unwrap();
+            let instance = registry
+                .catalog()
+                .supports
+                .values()
+                .find(|instance| instance.definition_id == gem.skill_id)
+                .unwrap();
+            let fields: BTreeMap<String, String> =
+                serde_json::from_str(&instance.payload.content).unwrap();
+            assert_eq!(fields["skillId"], gem.skill_id);
+            assert_eq!(fields["gemId"], gem.game_id);
+            assert_eq!(fields["variantId"], gem.variant_id);
+        }
+    }
+    let pair =
+        MaceSupportLoadout::new(vec!["brutality_i".into(), "rapid_attacks_i".into()]).unwrap();
+    let pair_candidate = registry
+        .resolve_loadout_candidate(&data.package().weapons[0].id, &pair)
+        .unwrap();
+    let mut source = registry.materialize(pair_candidate).unwrap().content;
+    let rapid = support_xml(data.package().support("rapid_attacks_i").unwrap());
+    source = source.replace(
+        &rapid,
+        &format!("<!-- preserve socket annotation -->{rapid}"),
+    );
+    let removal = ControlledMaceCatalog::with_loadouts(
+        data.clone(),
+        source,
+        weapons(data.package()),
+        vec![MaceSupportLoadout::default()],
+    )
+    .unwrap();
+    let xml = removal
+        .materialize(&removal.alternatives()[0].candidate)
+        .unwrap()
+        .content;
+    assert!(xml.contains("<!-- preserve socket annotation -->"));
+    assert_eq!(
+        profile(&xml, data.package()).unwrap().support,
+        MaceSupportLoadout::default()
+    );
+}
+#[test]
+fn every_enabled_support_contributes_to_its_color_requirement() {
+    let data = custom(|data| {
+        for weapon in &mut data.weapons {
+            weapon.requirements.attributes = Default::default();
+        }
+        data.mace.requirements.attributes = Default::default();
+    });
+    let registry = ControlledMaceCatalog::with_tree_loadouts(
+        data.clone(),
+        TEMPLATE.into(),
+        weapons(data.package()),
+        all_loadouts(),
+        class_tree::selections(data.tree()).unwrap(),
+    )
+    .unwrap();
+    let selection = registry
+        .tree_choices()
+        .iter()
+        .find(|selection| {
+            selection.ascendancy_id.is_none()
+                && selection.entrance_node_id.is_none()
+                && data.tree().class(selection.class_id).unwrap().base_strength == 7
+        })
+        .unwrap();
+    let red_red =
+        MaceSupportLoadout::new(vec!["brutality_i".into(), "heavy_swing".into()]).unwrap();
+    let red_green =
+        MaceSupportLoadout::new(vec!["brutality_i".into(), "rapid_attacks_i".into()]).unwrap();
+    let assess = |loadout| {
+        registry
+            .requirements(
+                registry
+                    .resolve_tree_loadout_candidate(
+                        selection,
+                        &data.package().weapons[0].id,
+                        loadout,
+                    )
+                    .unwrap(),
+            )
+            .unwrap()
+    };
+    let red_red = assess(&red_red);
+    assert_eq!(red_red.required.strength, 10);
+    assert!(!red_red.is_legal());
+    let red_green = assess(&red_green);
+    assert_eq!(red_green.required.strength, 5);
+    assert_eq!(red_green.required.dexterity, 5);
+    assert!(red_green.is_legal());
+}
+#[test]
+fn unknown_or_ineligible_supports_never_silently_disappear() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let unknown = MaceSupportLoadout::new(vec!["unreviewed".into()]).unwrap();
+    assert!(
+        ControlledMaceCatalog::with_loadouts(
+            data.clone(),
+            TEMPLATE.into(),
+            weapons(data.package()),
+            vec![unknown]
+        )
+        .is_err()
+    );
+    let data = custom(|package| {
+        package
+            .supports
+            .iter_mut()
+            .find(|gem| gem.id == "heavy_swing")
+            .unwrap()
+            .eligibility
+            .exclude = package.mace.skill_types.clone();
+    });
+    let ineligible = MaceSupportLoadout::new(vec!["heavy_swing".into()]).unwrap();
+    assert!(
+        ControlledMaceCatalog::with_loadouts(
+            data.clone(),
+            TEMPLATE.into(),
+            weapons(data.package()),
+            vec![ineligible]
+        )
+        .is_err()
+    );
 }
