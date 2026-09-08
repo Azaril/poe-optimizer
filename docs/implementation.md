@@ -3,7 +3,10 @@
 Last updated: 2026-09-08
 
 Current checkpoint: **ordered item source projection and dependency capability audit**,
-implemented and locally validated; final publication is pending. Caller-driven source inspection now
+implemented, locally validated and published as
+`5b2ac700c01412b1778194b4b94ed291a6282c36` on main.
+[Exact-code CI run 34268455262](https://github.com/Azaril/poe-optimizer/actions/runs/34268455262)
+is in progress; no hosted pass is claimed. Caller-driven source inspection now
 preserves ordered item text/range instructions, saved equipment sets and passive-spec jewel
 ownership independently of numerical admission. The full native replacement is unfinished.
 See the [item source contract](item-source-and-loading.md) and current checkpoint below.
@@ -231,12 +234,13 @@ transfers and dependency closure remain open. See the
 | Hosted diagnosis | Prior exact-code run 34262898483 failed on both platforms. Four immediate targets after the last visible success pass locally: equipment parity 1, evaluation options 7, evaluator 4, extraction 3. Actual hosted assertion remains unknown. `runs/item-source-ci-targeted-tests.log`, `runs/item-source-ci-extraction-tests.log`. |
 | CI diagnostics | Published `88654d1` bounds individual annotations below the public 4096-character limit, newest chunk first. Four controlled cases pass, maximum 3907 characters, correct streaming/exits and simulated truncation. `runs/ci-annotation-chunks-validation.json`. |
 | Integration gates | Formatting, strict workspace/all-target and native-only Clippy, five portable WASM libraries and the no-PoB/no-Lua normal dependency graph pass. The final four inspection targets repeat **15/15** passes. `runs/item-source-final-*`. |
-| Preservation/publication | **26/26 protected raw file hashes match**, and the pinned PoB checkout remains clean. Seven changed Markdown files decode as UTF-8; 186 local links and 19 heading targets resolve. `runs/item-source-final-preservation.json`, `runs/item-source-final-docs-validation.json`. Feature publication pending. The final corpus uses `runs/item-source-corpus-final`; all input and executable identities are retained in its manifest. |
+| Preservation/publication | **26/26 protected raw file hashes match**, and the pinned PoB checkout remains clean. Seven changed Markdown files decode as UTF-8; 186 local links and 19 heading targets resolve. `runs/item-source-final-preservation.json`, `runs/item-source-final-docs-validation.json`. Code `5b2ac700c01412b1778194b4b94ed291a6282c36` is pushed to `origin/main`. [Exact-code CI run 34268455262](https://github.com/Azaril/poe-optimizer/actions/runs/34268455262) is in progress; no hosted pass is claimed. The final corpus uses `runs/item-source-corpus-final`; all input and executable identities are retained in its manifest. |
 
 Consolidated local evidence: `runs/item-source-validation-summary.json`.
 
-Next resume point: obtain a concrete hosted assertion from the bounded annotations and
-repair its cause. Finish B2 dependency/producer closure and B4 whole-build holdout planning.
+Next resume point: inspect exact-code run **34268455262** and diagnostic-only run
+**34266873370**, obtaining any concrete hosted assertion from the bounded annotations
+before repairing its cause. Finish B2 dependency/producer closure and B4 whole-build holdout planning.
 Source load resolution and injected item definitions can proceed independently of the
 pending [general model proposal](general-build-input-proposal.md). Broad native build
 support, full held-out parity and realistic parallel search remain unfinished.
