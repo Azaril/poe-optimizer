@@ -13,7 +13,7 @@ use either implementation without exposing Lua values or process APIs.
 | Profile | Character and skills | Equipment and encounter scope |
 | --- | --- | --- |
 | Spark | One level-1 quality-0 Spark; supported class/tree selection described below | No equipment/supports; supported explicit normal, boss or Pinnacle encounter configuration |
-| Mace Strike | One level-1 quality-0 Mace Strike; zero to two level-1 quality-0 reviewed supports; supported class/tree selection described below | One normal the two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, no modifiers/implicits; normal enemies only |
+| Mace Strike | One level-1 quality-0 Mace Strike; zero to two level-1 quality-0 reviewed supports; supported class/tree selection described below | One normal weapon from the two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, no modifiers/implicits; normal enemies only |
 
 Both profiles accept all eight pinned classes and 23 ascendancy identities, with implicit
 roots and zero or one ordinary entrance passive connected to the selected class. They also
@@ -123,19 +123,74 @@ including removal of large cached-stat sections.
 
 ## Preparation, parallel execution and clocks
 
-`NativeBackend::prepare` returns an immutable `PreparedEvaluation` bound to the instance's injected dataset. Reuse avoids source
-parsing/projection; every calculation still recomputes its supported numerical pipeline.
-`PreparedEvaluation::calculate` has no clocks or OS calls. `evaluate_prepared` additionally
-creates a fresh complete typed result, including context, measurements, validation, export
-and diagnostics. Prepared inputs can be shared across Rayon tasks. Controlled native search
-currently evaluates each materialized XML through the shared engine and uses its local
-Rayon pool; PoB search uses separately supervised processes.
+`NativeBackend::prepare` returns an immutable `PreparedEvaluation` bound to the instance's
+injected dataset. Reuse avoids source parsing/projection; every calculation still
+recomputes its supported numerical pipeline. This document-oriented object retains its
+request and export XML. `PreparedEvaluation::calculate` has no clocks or OS calls;
+`evaluate_prepared` also creates a fresh complete result with context, measurements,
+validation, export and diagnostics.
+
+Controlled native search defaults to `--native-evaluation typed`. It uses the private
+admission boundary in `poe_optimizer_import::controlled_mace`:
+
+1. A fresh full-document baseline passes `bind_native_baseline` against the selected
+   backend identity. `native_components` then exposes immutable source-derived weapon,
+   tree and loadout axes, bound to that catalog, template, configuration and dataset.
+2. `NativeBackend::prepare_controlled_mace` parses the template once through the same
+   strict native parser and resolves the scenario and metric queries. It checks selected
+   backend/data identity, then prepares numerical inputs for each weapon, a character
+   input for each tree choice and compiled modifiers for each support loadout.
+3. `validated_native_candidate` issues a private handle only for an exact registered
+   candidate whose selected-data requirements pass. Class/ascendancy ownership and support
+   eligibility were checked during catalog creation. The search caller separately applies
+   its exact locks, connectivity and explicit point budgets before dispatch.
+4. Candidate calculations read these prepared components by index and check an opaque
+   catalog-instance binding in constant time. A handle from another catalog rejects even
+   when its content fingerprints match. Arbitrary numeric inputs cannot manufacture a
+   validated candidate handle.
+
+`PreparedMaceCandidates` owns numerical axes, prepared metric selectors, a binding token
+and shared compiled data. It retains no template/request XML, export, diagnostics or
+candidate result cache, and stays usable after the source catalog/view is dropped.
+Native component preparation and storage grow with the sum of axis sizes. Existing catalog
+construction and eager alternative `xml_sha256` hashing still visit the Cartesian domain;
+that separate cost is unchanged.
+
+| Typed API | Result and responsibility |
+| --- | --- |
+| `PreparedMaceCandidates::calculate` | Fresh `MaceOutput`; no clock or OS services. |
+| `PreparedMaceCandidates::measure` | Stack `NativeMetricSnapshot` containing the complete native Mace metric catalog and explicit availability. |
+| `NativeBackend::evaluate_controlled_mace` | The same snapshot with elapsed time and native deadline/backend-identity checks. |
+| `PreparedMaceCandidates::snapshot_measurements` | Requested metrics in native catalog order, converted into the shared owned `Vec<MetricMeasurement>`. |
+| `PreparedMaceCandidates::footprint` | Axis/selector counts, deferred character-error count and bounded component-storage accounting, excluding shared data/catalog and allocator metadata. |
+
+The successful calculation, stack snapshot and timed snapshot calls allocate nothing in
+the mixed-candidate allocation regression. Conversion to owned scheduler measurements
+allocates the vector and query/reason strings. Search scheduling, archives and preparation
+also have costs; the allocation result does not describe the whole search loop. Snapshots
+always retain `diagnostic_only`, including when every selected metric is finite.
+
+A valid custom package can contain individually admitted passive contributions whose
+selected sum exceeds the numerical scope. Preparation retains such a character-axis error
+and returns it only when that handle is evaluated. A locked-out combination therefore
+cannot abort otherwise valid candidates, and selected failures retain the document path's
+error kind/message and attempt accounting. This deferred behavior does not admit unknown
+owners, unsupported operations or requirement failures.
+
+Initial baseline and fresh finalist checks always use full document evaluation with exact
+realization and export checks. `CandidateEvaluator::verify` performs that fresh finalist
+calculation once in the shared search ledger before comparison/export. For differential
+investigation, `--native-evaluation document` also evaluates every intermediate candidate
+through the full document path. Both native modes use the local Rayon pool; PoB search
+continues to use its explicitly selected supervised reference backend.
 
 `EvaluationClock` is supplied by the host. Desktop `HostClock` uses monotonic time; browser
 bindings must supply their own clock. Checks surround preparation, calculation and result
-validation. Deadlines are cooperative rather than hard CPU preemption. The pure calculation
-API leaves admission and cancellation to its host. Browser bindings and browser execution
-tests remain separate work from successful WASM compilation.
+validation for full document calls. Typed calls check the clock before and after numerical
+calculation; preparation and owned scheduler conversion remain within the search host's
+outer deadline. Deadlines are cooperative rather than hard CPU preemption. The pure
+calculation API leaves admission and cancellation to its host. Browser bindings and browser
+execution tests remain separate work from successful WASM compilation.
 
 ## Fixed-input throughput benchmark
 
@@ -171,25 +226,38 @@ remain visible in `sample_measurements`. The
 kind of missing finite value. Throughput is specific to these admitted profiles and does
 not establish optimizer quality, browser speed or a speedup over PoB.
 
+The [mixed-candidate benchmark](../examples/benchmark_mace_candidates.rs) separately
+measures full document calls, prepared results, pure calculation, typed snapshots and owned
+measurement conversion. It records axis/catalog setup and rotating candidate checksums;
+fixed-input benchmark results above do not substitute for that comparison or whole-search
+measurements. Current evidence and command results belong in the
+[implementation record](implementation.md).
+
 ## Verification and expansion gates
 
 The controlled Mace search accepts selected compatible datasets. Its schema-1 problem keeps
 the original fixed Warrior profile; schema 2 adds all 31 admitted class/ascendancy identities
 and zero or one class-local ordinary entrance, composed with the existing weapons/supports.
 Problem schema 3 adds the four paid ascendancy choices with an explicit 0/1 ascendancy
-budget. Point budgets come from the caller and requirements use selected class attributes. This is
-still a finite restricted catalog; new evaluator coverage is not automatically searchable.
-Native controlled search checks the exact materialized source export, class/root/skill
-projection, physical/effective entrance IDs and configured effects, resolved weapon and
-support evidence, fixed external configuration and backend
-identity. The top feasible candidate must pass a fresh evaluation with matching assessment
-before export. Derived condition tables are allowed to reflect the candidate. Every result
-retains `diagnostic_only`; repeatability is not complete game-legality certification.
+budget; schema 4 adds the seven zero/one/two-support loadouts. Point budgets come from the
+caller and requirements use selected class attributes. This is still a finite restricted
+catalog; new evaluator coverage is not automatically searchable.
+The initial native baseline and fresh finalist verify the exact materialized source export,
+class/root/skill projection, physical/effective passive IDs and configured effects, resolved
+weapon/support evidence, fixed external configuration and backend identity. Intermediate
+typed evaluations use the private prepared admission above. The top feasible candidate must
+pass a fresh full-document evaluation with matching assessment before export. Derived
+condition tables are allowed to reflect the candidate. Every result retains `diagnostic_only`; repeatability is not complete game-legality certification.
 
 Parity uses unchanged independent full-build goldens, actual pinned Lua functions for
 numerical boundary grids, and fresh PoB full-build comparisons for supported mutations and
-exports. Changing source slices or implementation dependencies changes provenance; an
-identity label does not authenticate an edited result file.
+exports. Adapter differential tests compare every legal finite candidate's complete Mace
+output and metric values with the full native document path, including finite value bits,
+custom data and explicit unavailable metrics. They also cover foreign bindings, invalid
+owners/requirements, deferred numeric errors and clock failures. Agreement between the two
+native adapters does not independently prove game mechanics or full PoB parity. Changing
+source slices or implementation dependencies changes provenance; an identity label does
+not authenticate an edited result file.
 
 Expansion must preserve exact source/data identity, requested-versus-realized state,
 unsupported-mechanic rejection and full-build parity. Broad tree/class/ascendancy, equipment,

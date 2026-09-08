@@ -1,7 +1,7 @@
 //! Resolve admitted class, ordinary entrance and ascendancy passive selections from portable data.
 //! This records native source resolution, not observations of PoB's Lua object graph.
 use poe_optimizer_core::evaluation::{EvaluationError, EvaluationErrorKind};
-use poe_optimizer_data::class_tree::ClassTreeSelection;
+use poe_optimizer_data::class_tree::{ClassTreeSelection, ResolvedClassTree};
 use poe_optimizer_data::tree_data::{
     EffectiveTreeNode, TREE_PATH, TreeAscendancy, TreeClass, TreeSourceIdentity,
 };
@@ -140,29 +140,9 @@ impl NativeTree {
         }
         .resolve(data)
         .map_err(|error| unsupported(error.to_string()))?;
-        let mut modifiers = CharacterModifiers::default();
-        for (owner, node) in resolved.paid_node.iter().map(|node| (None, node)).chain(
-            resolved
-                .ascendancy_node
-                .iter()
-                .map(|node| (resolved.selection.ascendancy_id.as_deref(), node)),
-        ) {
-            let effect = compiled
-                .passive_modifiers(internal_id, owner, node.physical_node_id)
-                .ok_or_else(|| unsupported("Missing compiled selected passive effects"))?;
-            modifiers = modifiers
-                .checked_add(*effect)
-                .map_err(|error| unsupported(error.to_string()))?;
-        }
+        let character = character_from_resolved(&resolved, compiled)?;
         Ok(Self {
-            character: CharacterInput {
-                attributes: CharacterAttributes {
-                    strength: f64::from(resolved.base_attributes.strength),
-                    dexterity: f64::from(resolved.base_attributes.dexterity),
-                    intelligence: f64::from(resolved.base_attributes.intelligence),
-                },
-                modifiers,
-            },
+            character,
             class: resolved.class,
             ascendancy: resolved.ascendancy,
             allocated_nodes: resolved.allocated_nodes.into_iter().collect(),
@@ -210,6 +190,38 @@ impl NativeTree {
         })
     }
 }
+/// Shared native composition used after either strict XML resolution or private
+/// catalog admission. The caller supplies a resolved record from the same data
+/// snapshot; ownership and physical/effective node resolution are data operations.
+pub(crate) fn character_from_resolved(
+    resolved: &ResolvedClassTree,
+    compiled: &crate::CompiledGameData,
+) -> Result<CharacterInput, EvaluationError> {
+    validate_calculation_source(&compiled.snapshot().tree().source)?;
+    let mut modifiers = CharacterModifiers::default();
+    for (owner, node) in resolved.paid_node.iter().map(|node| (None, node)).chain(
+        resolved
+            .ascendancy_node
+            .iter()
+            .map(|node| (resolved.selection.ascendancy_id.as_deref(), node)),
+    ) {
+        let effect = compiled
+            .passive_modifiers(resolved.selection.class_id, owner, node.physical_node_id)
+            .ok_or_else(|| unsupported("Missing compiled selected passive effects"))?;
+        modifiers = modifiers
+            .checked_add(*effect)
+            .map_err(|error| unsupported(error.to_string()))?;
+    }
+    Ok(CharacterInput {
+        attributes: CharacterAttributes {
+            strength: f64::from(resolved.base_attributes.strength),
+            dexterity: f64::from(resolved.base_attributes.dexterity),
+            intelligence: f64::from(resolved.base_attributes.intelligence),
+        },
+        modifiers,
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

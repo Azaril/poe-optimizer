@@ -90,6 +90,14 @@ quality, item level and support evidence. It expects native source preservation,
 normalization. Candidate-derived condition tables remain free to change. Both paths retain
 the same candidate locks, budgets, objective contracts and diagnostic status.
 
+Ordinary native search attempts use [private typed candidate handles](native-candidate-evaluation.md)
+by default. `native_components` requires this fresh bound baseline, and
+`validated_native_candidate` checks catalog membership and requirements before creating a
+handle. The prepared numerical axes retain no XML. Candidate locks and caller point budgets
+remain domain responsibilities. The reserved finalist uses the complete native realization
+path above, with one fresh calculation counted in the shared ledger. The optional
+`--native-evaluation document` mode applies that path to every ordinary attempt as well.
+
 Native controlled search currently supports the normal-enemy subset; unsupported boss
 scenarios fail preparation explicitly. Each native calculation runs directly on Rayon and
 fresh finalist verification recomputes in fresh native state without PoB. There is no hidden

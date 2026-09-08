@@ -108,6 +108,19 @@ pub trait CandidateEvaluator<C>: Sync {
         candidate: &C,
         control: &EvaluationControl<'_>,
     ) -> Result<CandidateMeasurements, String>;
+
+    /// Independently compute a fresh finalist under the reserved evaluation budget.
+    /// The default preserves adapters whose search and verification paths are identical.
+    /// Adapters with a prepared search path may override this with a complete realization
+    /// and evaluation path. It must honor the same control and must not reuse a cached
+    /// search result. Search compares its returned evidence with the ranked candidate.
+    fn verify(
+        &self,
+        candidate: &C,
+        control: &EvaluationControl<'_>,
+    ) -> Result<CandidateMeasurements, String> {
+        self.evaluate(candidate, control)
+    }
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -482,7 +495,7 @@ where
         report.statistics.evaluations += 1;
         report.statistics.verification_evaluations += 1;
         let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            evaluator.evaluate(&entry.candidate, &control)
+            evaluator.verify(&entry.candidate, &control)
         }))
         .unwrap_or_else(|_| Err("Candidate evaluator panicked".into()));
         let mut verification = Verification {

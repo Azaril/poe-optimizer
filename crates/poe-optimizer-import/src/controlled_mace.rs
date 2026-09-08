@@ -164,8 +164,135 @@ struct Profile {
     tree_attribute_ranges: BTreeMap<String, Range<usize>>,
     ascendancy_insert: usize,
 }
+/// A weapon admitted once from an exact modifier-free source payload.
+/// Its capability key addresses injected data; no numerical weapon stats are copied here.
+#[derive(Debug, Clone)]
+pub struct ValidatedMaceWeapon {
+    weapon_key: String,
+    quality: u32,
+    item_level: u32,
+}
+impl ValidatedMaceWeapon {
+    pub fn weapon_key(&self) -> &str {
+        &self.weapon_key
+    }
+    pub fn quality(&self) -> u32 {
+        self.quality
+    }
+    pub fn item_level(&self) -> u32 {
+        self.item_level
+    }
+}
+/// Unforgeable process-local ownership proof for a single immutable catalog.
+/// Clones interoperate; a separately constructed catalog gets a distinct binding,
+/// even when its source/data identities are equal.
+#[derive(Debug, Clone)]
+pub struct NativeMaceBinding(Arc<()>);
+#[derive(Debug, Clone, Copy)]
+struct NativeMaceIndices {
+    weapon: usize,
+    tree: usize,
+    loadout: usize,
+}
+#[derive(Debug)]
+struct NativeMaceAxes {
+    weapons: Vec<ValidatedMaceWeapon>,
+    trees: Vec<Arc<ResolvedClassTree>>,
+    loadouts: Vec<MaceSupportLoadout>,
+}
+/// Immutable source components admitted by this catalog and its verified native baseline.
+/// This stores one template and the sum of axis sizes, never materialized candidate XML.
+/// Native consumers still perform their own full template admission once at preparation.
+#[derive(Debug, Clone)]
+pub struct NativeMaceComponents {
+    binding: NativeMaceBinding,
+    axes: Arc<NativeMaceAxes>,
+    snapshot: Arc<GameDataSnapshot>,
+    identity: CatalogIdentity,
+    backend: BackendIdentity,
+    character_level: u32,
+    context: EvaluationContext,
+    template: Arc<str>,
+}
+impl NativeMaceComponents {
+    pub fn binding(&self) -> &NativeMaceBinding {
+        &self.binding
+    }
+    pub fn snapshot(&self) -> &Arc<GameDataSnapshot> {
+        &self.snapshot
+    }
+    pub fn data_identity(&self) -> &DataIdentity {
+        self.snapshot.identity()
+    }
+    pub fn catalog_identity(&self) -> &CatalogIdentity {
+        &self.identity
+    }
+    pub fn catalog_fingerprint(&self) -> &str {
+        &self.identity.content_fingerprint
+    }
+    pub fn backend_identity(&self) -> &BackendIdentity {
+        &self.backend
+    }
+    pub fn character_level(&self) -> u32 {
+        self.character_level
+    }
+    pub fn context(&self) -> &EvaluationContext {
+        &self.context
+    }
+    pub fn config(&self) -> &BTreeMap<String, Scalar> {
+        &self.context.config_inputs
+    }
+    pub fn template_build(&self) -> BuildDocument {
+        BuildDocument {
+            format: BuildFormat::PathOfBuilding2Xml,
+            content: self.template.to_string(),
+        }
+    }
+    pub fn weapons(&self) -> &[ValidatedMaceWeapon] {
+        &self.axes.weapons
+    }
+    pub fn trees(&self) -> &[Arc<ResolvedClassTree>] {
+        &self.axes.trees
+    }
+    pub fn loadouts(&self) -> &[MaceSupportLoadout] {
+        &self.axes.loadouts
+    }
+    /// Counts in weapon/tree/loadout order. These count source components, not heap bytes.
+    pub fn axis_counts(&self) -> [usize; 3] {
+        [
+            self.axes.weapons.len(),
+            self.axes.trees.len(),
+            self.axes.loadouts.len(),
+        ]
+    }
+}
+/// Exact registered candidate with requirements checked against its selected dataset.
+/// Neither callers nor deserializers can manufacture or mutate this handle.
+#[derive(Debug, Clone)]
+pub struct NativeMaceCandidate {
+    binding: NativeMaceBinding,
+    indices: NativeMaceIndices,
+}
+impl NativeMaceCandidate {
+    pub fn weapon_index(&self) -> usize {
+        self.indices.weapon
+    }
+    pub fn tree_index(&self) -> usize {
+        self.indices.tree
+    }
+    pub fn loadout_index(&self) -> usize {
+        self.indices.loadout
+    }
+    pub fn belongs_to(&self, components: &NativeMaceComponents) -> bool {
+        self.belongs_to_binding(components.binding())
+    }
+    pub fn belongs_to_binding(&self, binding: &NativeMaceBinding) -> bool {
+        Arc::ptr_eq(&self.binding.0, &binding.0)
+    }
+}
 #[derive(Debug, Clone)]
 struct Choice {
+    native_indices: Option<NativeMaceIndices>,
     weapon: String,
     support: MaceSupportLoadout,
     support_order: Vec<String>,
@@ -197,6 +324,8 @@ pub struct ControlledMaceCatalog {
     catalog: CandidateCatalog,
     alternatives: Vec<ControlledMaceAlternative>,
     choices: BTreeMap<Candidate, Choice>,
+    native_binding: NativeMaceBinding,
+    native_axes: Arc<NativeMaceAxes>,
     tree_choices: Vec<ClassTreeSelection>,
     candidate_index:
         BTreeMap<ClassTreeSelection, BTreeMap<String, BTreeMap<MaceSupportLoadout, usize>>>,
@@ -315,6 +444,7 @@ impl ControlledMaceCatalog {
         let mut ids = BTreeSet::new();
         let mut payloads = BTreeSet::new();
         let mut parsed = Vec::new();
+        let mut typed_weapons = BTreeMap::new();
         for weapon in weapons {
             if weapon.id.trim().is_empty()
                 || weapon.id.len() > 128
@@ -324,7 +454,8 @@ impl ControlledMaceCatalog {
                     "weapon IDs must be distinct nonblank strings of at most 128 bytes",
                 ));
             }
-            let text = normal_mace(&weapon.item_text, package)?;
+            let (text, typed) = parse_normal_mace(&weapon.item_text, package)?;
+            typed_weapons.insert(weapon.id.clone(), typed);
             if !payloads.insert(text.clone()) {
                 return Err(unsupported("duplicate exact weapon alternatives"));
             }
@@ -470,7 +601,15 @@ impl ControlledMaceCatalog {
             ClassTreeSelection,
             BTreeMap<String, BTreeMap<MaceSupportLoadout, usize>>,
         > = BTreeMap::new();
-        for (id, weapon) in parsed {
+        let native_axes = Arc::new(NativeMaceAxes {
+            weapons: parsed
+                .iter()
+                .map(|(id, _)| typed_weapons.remove(id).expect("parsed weapon"))
+                .collect(),
+            trees: resolved_trees.clone(),
+            loadouts: support_set.iter().cloned().collect(),
+        });
+        for (weapon_index, (id, weapon)) in parsed.into_iter().enumerate() {
             let item_payload = payload("pob2-item-text-v1", weapon.clone());
             let item_id = format!("pob-item-1:{}", item_payload.sha256);
             catalog.items.insert(
@@ -482,8 +621,8 @@ impl ControlledMaceCatalog {
                     ..Default::default()
                 },
             );
-            for support in &support_set {
-                for tree in &resolved_trees {
+            for (loadout_index, support) in support_set.iter().enumerate() {
+                for (tree_index, tree) in resolved_trees.iter().enumerate() {
                     let candidate = Candidate {
                         catalog: identity.clone(),
                         class_id: tree.class.integer_id.to_string(),
@@ -508,6 +647,11 @@ impl ControlledMaceCatalog {
                         )]),
                     };
                     let choice = Choice {
+                        native_indices: Some(NativeMaceIndices {
+                            weapon: weapon_index,
+                            tree: tree_index,
+                            loadout: loadout_index,
+                        }),
                         weapon: weapon.clone(),
                         support: support.clone(),
                         support_order: support.keys().to_vec(),
@@ -572,6 +716,8 @@ impl ControlledMaceCatalog {
             catalog,
             alternatives,
             choices,
+            native_binding: NativeMaceBinding(Arc::new(())),
+            native_axes,
             tree_choices,
             candidate_index,
         })
@@ -652,11 +798,13 @@ impl ControlledMaceCatalog {
             dexterity: 0,
             intelligence: 0,
         };
-        let name = choice.weapon.lines().nth(1).expect("validated weapon name");
+        let weapon_key = self.native_axes.weapons
+            [choice.native_indices.expect("registered choice").weapon]
+            .weapon_key();
         let weapon = data
             .weapons
             .iter()
-            .find(|weapon| weapon.name == name)
+            .find(|weapon| weapon.id == weapon_key)
             .expect("validated selected weapon");
         required.include(&weapon.requirements);
         required.include(&data.mace.requirements);
@@ -743,6 +891,7 @@ impl ControlledMaceCatalog {
     /// Caller budgets this fresh template attempt; it does not replace final verification.
     pub fn bind_baseline(&self, result: &EvaluationResult) -> Result<VerifiedMaceScenario> {
         let choice = Choice {
+            native_indices: None,
             weapon: self.profile.weapon.clone(),
             tree: self.profile.tree.clone(),
             patch_tree: false,
@@ -822,6 +971,7 @@ impl ControlledMaceCatalog {
             ));
         }
         let choice = Choice {
+            native_indices: None,
             weapon: self.profile.weapon.clone(),
             tree: self.profile.tree.clone(),
             patch_tree: false,
@@ -833,6 +983,56 @@ impl ControlledMaceCatalog {
             identity: self.catalog.identity.clone(),
             backend: expected_backend.clone(),
             context: result.context.clone(),
+        })
+    }
+    /// Share the validated source axes after a fresh native baseline. Backend and data
+    /// identities must come from the selected implementation, never from a caller-edited result.
+    pub fn native_components(
+        &self,
+        scenario: &VerifiedNativeMaceScenario,
+        expected_backend: &BackendIdentity,
+    ) -> Result<NativeMaceComponents> {
+        if scenario.identity != self.catalog.identity
+            || !same_backend(&scenario.backend, expected_backend)
+            || expected_backend.data.as_ref() != Some(self.data.identity())
+            || scenario.context.config_inputs != self.profile.config
+        {
+            return Err(mismatch(
+                "native components belong to another catalog, backend or scenario",
+            ));
+        }
+        Ok(NativeMaceComponents {
+            binding: self.native_binding.clone(),
+            axes: self.native_axes.clone(),
+            snapshot: self.data.clone(),
+            identity: self.catalog.identity.clone(),
+            backend: expected_backend.clone(),
+            character_level: self.profile.level,
+            context: scenario.context.clone(),
+            template: Arc::from(self.template.as_str()),
+        })
+    }
+    /// Resolve exact immutable membership and existing requirement rules once before
+    /// the hot loop. Source parsing, class ownership and loadout eligibility were checked
+    /// when building the catalog; no second numerical/legality model is introduced here.
+    pub fn validated_native_candidate(
+        &self,
+        candidate: &Candidate,
+        components: &NativeMaceComponents,
+    ) -> Result<NativeMaceCandidate> {
+        if !Arc::ptr_eq(&self.native_binding.0, &components.binding.0) {
+            return Err(mismatch(
+                "native components belong to another catalog instance",
+            ));
+        }
+        let choice = self
+            .choices
+            .get(candidate)
+            .ok_or(ControlledMutationError::UnknownCandidate)?;
+        self.validate_requirements(candidate)?;
+        Ok(NativeMaceCandidate {
+            binding: self.native_binding.clone(),
+            indices: choice.native_indices.expect("registered choice"),
         })
     }
     /// Check the exact requested materialization, resolved item/skill evidence and fixed encounter.
@@ -1912,6 +2112,9 @@ fn exported_scenario(xml: &str, data: &GameDataPackage) -> Result<String> {
     Ok(visit(document.root_element(), data))
 }
 fn normal_mace(input: &str, data: &GameDataPackage) -> Result<String> {
+    parse_normal_mace(input, data).map(|(text, _)| text)
+}
+fn parse_normal_mace(input: &str, data: &GameDataPackage) -> Result<(String, ValidatedMaceWeapon)> {
     if input.len() > 1024 {
         return Err(unsupported("normal mace text exceeds 1024 bytes"));
     }
@@ -1927,9 +2130,23 @@ fn normal_mace(input: &str, data: &GameDataPackage) -> Result<String> {
             "only exact normal mace payloads selected by the data package without modifiers are supported",
         ));
     }
-    integer(lines[2].strip_prefix("Item Level: "), 1, 100, "item level")?;
-    integer(lines[3].strip_prefix("Quality: "), 0, 20, "weapon quality")?;
-    Ok(text.into())
+    let item_level = integer(lines[2].strip_prefix("Item Level: "), 1, 100, "item level")?;
+    let quality = integer(lines[3].strip_prefix("Quality: "), 0, 20, "weapon quality")?;
+    let weapon_key = data
+        .weapons
+        .iter()
+        .find(|weapon| weapon.name == lines[1])
+        .expect("validated base")
+        .id
+        .clone();
+    Ok((
+        text.into(),
+        ValidatedMaceWeapon {
+            weapon_key,
+            quality,
+            item_level,
+        },
+    ))
 }
 fn patch(
     template: &str,

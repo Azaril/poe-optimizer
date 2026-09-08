@@ -283,6 +283,29 @@ impl<B: CalculationBackend + ?Sized> CalculationBackend for Box<B> {
         (**self).calculate(request, budget)
     }
 }
+/// Explicit shared ownership for using one backend in document and typed APIs.
+/// A wrapper avoids shadowing inherent methods on `Arc<Backend>` at call sites.
+pub struct SharedBackend<B: ?Sized>(std::sync::Arc<B>);
+impl<B: ?Sized> SharedBackend<B> {
+    pub fn new(backend: std::sync::Arc<B>) -> Self {
+        Self(backend)
+    }
+}
+impl<B: CalculationBackend + ?Sized> CalculationBackend for SharedBackend<B> {
+    fn identity(&self) -> Option<BackendIdentity> {
+        self.0.identity()
+    }
+    fn capabilities(&self) -> BackendCapabilities {
+        self.0.capabilities()
+    }
+    fn calculate(
+        &self,
+        request: &EvaluationRequest,
+        budget: EvaluationBudget,
+    ) -> Result<EvaluationResult, EvaluationError> {
+        self.0.calculate(request, budget)
+    }
+}
 impl<B: CalculationBackend> EvaluationEngine for Engine<B> {
     fn capabilities(&self) -> BackendCapabilities {
         self.backend.capabilities()

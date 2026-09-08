@@ -58,13 +58,22 @@ callback that ignores its control; scoped work is joined before returning. Cance
 is currently a library `AtomicBool`, not a CLI signal-handling or desktop run-control API.
 
 The attempt limit includes failures and reserved finalist calculations. Reservation
-reduces exploration capacity even if no feasible finalist exists. Every evaluator call
-must calculate fresh: the kernel deduplicates ordinary proposals, then deliberately
-calls the evaluator again for verification. Backend adapters must not silently cache
-those calls. A stopped/late result does not enter the search archive. Verification errors
-and late results remain visible and count in the aggregate statistics. Search termination
-records the exploration phase; verification has separate entries, so completion of the
-finite list does not imply verification completed before the deadline.
+reduces exploration capacity even if no feasible finalist exists. Ordinary batches call
+`CandidateEvaluator::evaluate`; reserved finalists call `CandidateEvaluator::verify` once
+per selected feasible candidate, in rank order. The default `verify` calls `evaluate`, so
+existing adapters retain their fresh calculation behavior. An adapter can override the
+hook to perform complete document realization after a prepared numeric search path.
+Both methods must calculate fresh; immutable prepared inputs are reusable, cached search
+results are not verification evidence.
+
+Verification shares the run's control, reserved attempt ledger, panic guard and assessment
+comparison. Failed or inconsistent attempts are counted and are not silently retried.
+A stopped/late result does not enter the search archive or certify a finalist, and no next
+verification starts after stopping. `diagnostic_only` remains set if either the search or
+verification path reported diagnostic evidence. Verification errors and late results remain
+visible in the aggregate statistics. Search termination records the exploration phase;
+verification has separate entries, so completion of the finite list does not imply
+verification completed before the deadline.
 
 A run retains a bounded seen-set, bounded archives and at most 32 error samples. The
 proposal budget bounds candidate count, not candidate byte size. There is no persistent

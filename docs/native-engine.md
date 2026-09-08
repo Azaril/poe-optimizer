@@ -17,8 +17,9 @@ from configuration, including patch-dependent formula coefficients. Compatible v
 changes must not require Rust edits; new operations still require code and parity review.
 
 The optimizer core owns objectives, constraints and search;
-portable import owns interchange and materialization, the native adapter owns document
-preparation and typed native results, and the PoB adapter owns optional Lua reference hosting.
+portable import owns interchange, materialization and private candidate admission, the
+native adapter owns document/typed candidate preparation and native results, and the PoB
+adapter owns optional Lua reference hosting.
 Neither the native engine nor future browser bindings should depend on the native PoB
 worker package.
 
@@ -330,8 +331,8 @@ document, identities and scenario before constructing `MaceInput` and `Character
 Unmodified weapon base stats do not scale with item level.
 
 The production kernel translates local weapon quality and endpoint rounding, the skill's
-base damage and Brutality's modifier/elemental damage exclusion, inherent accuracy,
-rounded enemy evasion, hit chance, a second accuracy check for critical strikes, attack
+base damage, prepared support INC/MORE modifiers and explicit damage exclusions, inherent
+accuracy, rounded enemy evasion, hit chance, a second accuracy check for critical strikes, attack
 speed, separate critical/ordinary armour mitigation and final hit DPS. The enemy physical
 mitigation cap is 75%, separately sourced from the player cap. Applying one armour
 reduction to the combined average would be incorrect because a critical strike's larger
@@ -360,6 +361,56 @@ goldens provide an additional check. Full document/mutation comparisons remain n
 before an adapter expands its accepted scope. These tests establish parity for this
 closed profile and do not establish a general native build engine or game certification.
 
+### Prepared typed candidate boundary
+
+The numerical kernel remains `mace::evaluate_with_supports`, receiving resolved
+`MaceInput`, `CharacterInput`, selected `CompiledGameData` and a privately bound
+`PreparedMaceSupports`. The typed search adapter calls that same function. It introduces no
+second damage model, game-balance constants or Lua fallback.
+
+`NativeBackend::prepare_controlled_mace` accepts an immutable `NativeMaceComponents` view
+issued by portable import after a verified full-document baseline. The native adapter
+reuses the exact document parser once for scenario admission and metric validation, then
+reuses the shared character resolver for class attributes and owned passive effects.
+The resulting `PreparedMaceCandidates` stores one numerical input per weapon, one resolved
+character per tree choice and one compiled support handle per loadout. Preparation and
+retained component storage therefore grow with the sum of axis sizes. The separate import
+catalog still performs eager Cartesian alternative hashing.
+
+Candidate handles preserve exact catalog membership and selected-data requirements without
+exposing mutable numerical fields. They carry a private catalog-instance binding and axis
+indices; the prepared native object checks that binding before reading inputs. Backend and
+data identities are checked at preparation and timed execution. Compiled support handles
+also retain their originating compiled-dataset binding. Ownership, support eligibility and
+source/frame admission are preserved; point budgets and user locks remain search policies.
+
+`PreparedMaceCandidates::calculate` recomputes the supported kernel, and `measure` produces
+a stack snapshot without clocks or OS services. Timed `evaluate_controlled_mace` applies
+the host clock around the calculation. These successful calls allocate nothing in the
+mixed-candidate regression and retain no XML, JSON, diagnostic construction or build-result
+cache. `snapshot_measurements` converts selected values into the shared owned measurement
+contract and allocates query/reason strings and a vector. This separation does not imply
+allocation-free scheduling, archives, preparation or complete search runs.
+
+Valid individual custom passive values can exceed the numerical scope when combined.
+Character preparation preserves that axis's error until an affected candidate is actually
+evaluated. Other candidates continue to calculate, including when the invalid combination
+is excluded by a lock. Unknown owners/operations and invalid requirements do not become
+valid through this deferred numeric-error path.
+
+Initial baseline and fresh finalist calculations still use full document evaluation,
+source-preserving materialization and strict realization/export checks. Verification is
+one counted calculation through the search evaluator's `verify` hook. Typed snapshots
+remain diagnostic and do not expand mechanic coverage. Full native parity with PoB,
+including the supplied minion build, is unfinished.
+
+The [adapter contract](native-backend.md#preparation-parallel-execution-and-clocks)
+describes these APIs and their clocks. Differential tests compare every admitted legal
+candidate against the full native document path, with injected data, complete numerical
+outputs, availability and finite metric bits. Pinned-source oracles and fresh PoB build
+comparisons remain separate requirements for numerical parity. Measurement commands and
+checkpoint results belong in the [implementation record](implementation.md).
+
 ### Resolved class attributes and ordinary entrance effects
 
 `character::CharacterInput` is shared by both complete kernels. Its `attributes` field
@@ -379,7 +430,7 @@ modifier parser:
 | `armour_flat`, `evasion_flat`, `energy_shield_flat` | Global defence bases with upstream final integer rounding. Base evasion is 7; armour and energy shield otherwise begin at zero. |
 | `skill_speed_increased` | Applies to each profile's attack/cast speed; the total multiplier rounds to two decimals before dividing base time. The source also creates warcry/totem-placement speed modifiers, which have no action target in these profiles. |
 | `spell_damage_increased`, `projectile_damage_increased` | Both match Spark and add before each lightning damage endpoint is rounded. They do not match Mace Strike. |
-| `attack_damage_increased`, `melee_damage_increased` | Both match Mace Strike and add before damage scaling by Brutality and endpoint rounding. The physical weapon endpoints have already passed local quality rounding. They do not match Spark. |
+| `attack_damage_increased`, `melee_damage_increased` | Both match Mace Strike and combine with applicable support increases before MORE scaling and endpoint rounding. The physical weapon endpoints have already passed local quality rounding. They do not match Spark. |
 | `fire_resistance_flat`, `cold_resistance_flat`, `lightning_resistance_flat`, `chaos_resistance_flat`, `elemental_resistance_flat` | Signed BASE player contributions, using the shared resistance calculation described below. |
 | `minion_damage_increased` | Preserves the Witch entrance's explicitly scoped minion bonus. Neither zero-minion profile has an actor to receive it; it does not increase player damage. |
 
@@ -457,10 +508,10 @@ positive-domain monotonicity, nonfinite classifications and signed zero. Finite 
 results use a declared `1e-11 * max(1, abs(reference))` tolerance; infinities retain their
 signs and NaN is compared by classification. No performance claim follows from these tests.
 
-The Rust production library has no external dependencies. Lua and source hashing are
-native-only development dependencies used by the test oracle. Maintain this separation
-as the native evaluator expands; shared data types must not introduce a transitive Lua
-runtime dependency.
+The Rust calculation library depends on the portable data model. Lua and the source-oracle
+harness are native-only development dependencies, excluded from the production/WASM graph.
+Maintain this separation as the native evaluator expands; shared data types must not
+introduce a transitive Lua runtime dependency.
 
 ## Expansion order and hard boundaries
 

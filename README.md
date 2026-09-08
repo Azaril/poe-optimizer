@@ -46,7 +46,9 @@ choices and optional class/ascendancy/ordinary and ascendancy passive selections
 and source-preserving mutations. Mace support choices include all seven zero/one/two-gem
 loadouts from Brutality I, Heavy Swing and Rapid Attacks I, with values and eligibility in
 [the injected data package](docs/support-loadouts.md); `--backend pob`
-selects the optional reference backend; `search-calibration` retains the four original
+selects the optional reference backend. Native search uses [typed candidate calculation](docs/native-candidate-evaluation.md)
+by default, with complete document evaluation available through `--native-evaluation document`.
+Baseline and finalist checks always recalculate complete documents. `search-calibration` retains the four original
 fixtures. `extract-tree` exports pinned topology and source/override metadata for broader
 mutation work, with live passive coverage and authenticated bounded graph projections. A portable data
 crate supplies native class/root/entrance records and numeric game configuration without loading PoB.

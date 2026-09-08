@@ -35,6 +35,14 @@ model: complete class/ascendancy/tree/equipment/skill/support state, stable requ
 mutation/export fidelity need their own typed models. Native import must not call Lua at
 runtime. Add formats and normalized data deliberately rather than expose private PoB state.
 
+Native candidate adapters may prepare privately validated typed components and return
+selected measurements without serializing a document or constructing diagnostics on each
+search attempt. This is an additional prepared-input boundary over the same injected data
+and calculation semantics. Complete document evaluation remains the interchange, baseline
+and fresh-finalist contract. The generic search kernel delegates that final check through
+`CandidateEvaluator::verify`; it does not require a native handle type or an IPC transport.
+See [typed candidate evaluation](native-candidate-evaluation.md) for the current bounded adapter.
+
 Metric IDs are extensible strings with actor scopes, versioned definitions and explicit
 units. A requested metric has exactly one finite, classified nonfinite or unavailable
 value. Unknown metrics, mismatched units, missing results, wrong backend identity and

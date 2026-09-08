@@ -1,7 +1,11 @@
 //! Native build evaluation: owned Rust inputs and calculations, with an injectable clock.
 //! No PoB checkout, Lua state, subprocess, filesystem or network access is required.
 #![forbid(unsafe_code)]
+mod candidates;
 mod profile;
+pub use candidates::{
+    NativeMetricSnapshot, NativeMetricValue, PreparedMaceCandidates, PreparedMaceFootprint,
+};
 mod tree;
 
 use poe_optimizer_core::{BuildSummary, coverage::*, evaluation::*, metrics::*, options::*};
@@ -113,9 +117,14 @@ impl NativeCalculation {
                 ]
             }};
         }
-        let (raw,average)=match self {
-            Self::Spark(o)=>(resources!(o),MeasurementValue::from_number(o.average_hit)),
-            Self::Mace(o)=>(resources!(o),MeasurementValue::Unavailable{reason:"Attack AverageHit is stored per hand; the current metric contract does not aggregate hands.".into()}),
+        let (raw, average) = match self {
+            Self::Spark(o) => (resources!(o), MeasurementValue::from_number(o.average_hit)),
+            Self::Mace(o) => (
+                resources!(o),
+                MeasurementValue::Unavailable {
+                    reason: candidates::MACE_AVERAGE_REASON.into(),
+                },
+            ),
         };
         let mut values: BTreeMap<_, _> = raw
             .into_iter()
@@ -240,6 +249,8 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("lib.rs"),
                 include_str!("profile.rs"),
                 include_str!("tree.rs"),
+                include_str!("candidates.rs"),
+                include_str!("../../poe-optimizer-import/src/controlled_mace.rs"),
                 include_str!("../../poe-optimizer-engine/src/character.rs"),
                 include_str!("../../poe-optimizer-engine/src/data.rs"),
                 include_str!("../../poe-optimizer-core/src/data.rs"),

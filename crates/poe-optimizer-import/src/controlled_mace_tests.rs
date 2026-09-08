@@ -981,3 +981,221 @@ fn unknown_or_ineligible_supports_never_silently_disappear() {
         .is_err()
     );
 }
+
+// Binding-unit tests construct the private baseline proof so this import-only crate
+// does not acquire an evaluator dependency. Native integration tests exercise the
+// public fresh-baseline admission and full-template parser before using these axes.
+fn native_components_for_test(registry: &ControlledMaceCatalog) -> NativeMaceComponents {
+    let backend = BackendIdentity {
+        data: Some(registry.data_identity().clone()),
+        id: "native-poe2".into(),
+        implementation_version: "test".into(),
+        rules_revision: PINNED_RULES_REVISION.into(),
+        source_fingerprint: "test source".into(),
+        adapter_fingerprint: "test adapter".into(),
+    };
+    let scenario = VerifiedNativeMaceScenario {
+        identity: registry.catalog.identity.clone(),
+        backend: backend.clone(),
+        context: EvaluationContext {
+            requested: EvaluationOptions::default(),
+            calculation_mode: "MAIN".into(),
+            enemy_level: scalar_number(&registry.profile.config["enemyLevel"]).unwrap() as u32,
+            config_inputs: registry.profile.config.clone(),
+            config_placeholders: BTreeMap::new(),
+            player_conditions: BTreeMap::new(),
+            enemy_conditions: BTreeMap::new(),
+        },
+    };
+    registry.native_components(&scenario, &backend).unwrap()
+}
+#[test]
+fn native_components_share_axis_storage_and_resolve_exact_legal_candidates() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let mut alternatives = weapons(data.package());
+    alternatives[0].item_text = alternatives[0]
+        .item_text
+        .replace("Quality: 0", "Quality: 20")
+        .replace("Item Level: 1", "Item Level: 100");
+    let loadouts = [
+        vec![],
+        vec!["brutality_i"],
+        vec!["heavy_swing"],
+        vec!["rapid_attacks_i"],
+        vec!["brutality_i", "heavy_swing"],
+        vec!["brutality_i", "rapid_attacks_i"],
+        vec!["heavy_swing", "rapid_attacks_i"],
+    ]
+    .into_iter()
+    .map(|keys| MaceSupportLoadout::new(keys.into_iter().map(String::from).collect()).unwrap())
+    .collect();
+    let registry = ControlledMaceCatalog::with_tree_loadouts(
+        data.clone(),
+        TEMPLATE.into(),
+        alternatives.clone(),
+        loadouts,
+        class_tree::selections(data.tree()).unwrap(),
+    )
+    .unwrap();
+    let components = native_components_for_test(&registry);
+    assert_eq!(components.axis_counts(), [2, 105, 7]);
+    assert_eq!(registry.alternatives.len(), 1470);
+    assert!(Arc::ptr_eq(&components.axes, &registry.native_axes));
+    assert!(Arc::ptr_eq(components.snapshot(), registry.snapshot()));
+    assert_eq!(components.data_identity(), registry.data_identity());
+    assert_eq!(components.catalog_identity(), &registry.catalog.identity);
+    assert_eq!(components.character_level(), registry.profile.level);
+    assert_eq!(components.config(), &registry.profile.config);
+    assert_eq!(components.template_build().content, TEMPLATE);
+    let cloned = components.clone();
+    let mut admitted = 0;
+    let mut rejected = 0;
+    for alternative in registry.alternatives() {
+        let legal = registry
+            .requirements(&alternative.candidate)
+            .unwrap()
+            .is_legal();
+        let handle = registry.validated_native_candidate(&alternative.candidate, &components);
+        assert_eq!(handle.is_ok(), legal, "{}", alternative.id);
+        if let Ok(handle) = handle {
+            admitted += 1;
+            assert!(handle.belongs_to(&components));
+            assert!(handle.clone().belongs_to(&cloned));
+            assert!(handle.belongs_to_binding(cloned.binding()));
+            assert_eq!(
+                components.trees()[handle.tree_index()].selection,
+                alternative.tree
+            );
+            assert_eq!(
+                &components.loadouts()[handle.loadout_index()],
+                &alternative.support
+            );
+            let weapon = &components.weapons()[handle.weapon_index()];
+            let original = alternatives
+                .iter()
+                .find(|weapon| weapon.id == alternative.weapon_id)
+                .unwrap();
+            let (_, expected) = parse_normal_mace(&original.item_text, data.package()).unwrap();
+            assert_eq!(weapon.weapon_key(), expected.weapon_key());
+            assert_eq!(weapon.quality(), expected.quality());
+            assert_eq!(weapon.item_level(), expected.item_level());
+        } else {
+            rejected += 1;
+        }
+        assert_eq!(
+            hash(
+                &registry
+                    .materialize(&alternative.candidate)
+                    .unwrap()
+                    .content
+            ),
+            alternative.xml_sha256
+        );
+    }
+    assert!(admitted > 0 && rejected > 0);
+}
+#[test]
+fn native_handles_reject_foreign_bindings_and_forged_candidate_state() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let registry = catalog(data.clone());
+    let components = native_components_for_test(&registry);
+    let candidate = &registry.alternatives[0].candidate;
+    let handle = registry
+        .validated_native_candidate(candidate, &components)
+        .unwrap();
+    let equal = catalog(data);
+    let equal_components = native_components_for_test(&equal);
+    assert_eq!(registry.catalog.identity, equal.catalog.identity);
+    assert!(!handle.belongs_to(&equal_components));
+    assert!(
+        registry
+            .validated_native_candidate(candidate, &equal_components)
+            .is_err()
+    );
+    let changed = catalog(custom(|data| data.character.initial_life += 1.0));
+    let changed_components = native_components_for_test(&changed);
+    assert!(!handle.belongs_to(&changed_components));
+    assert!(
+        changed
+            .validated_native_candidate(candidate, &changed_components)
+            .is_err()
+    );
+    let other_template = ControlledMaceCatalog::with_data(
+        registry.snapshot().clone(),
+        TEMPLATE.replace(
+            "Controlled attack/weapon/support",
+            "Another attack/weapon/support",
+        ),
+        weapons(registry.snapshot().package()),
+        vec![MaceSupportChoice::None],
+    )
+    .unwrap();
+    assert!(!handle.belongs_to(&native_components_for_test(&other_template)));
+    let mut forgeries = Vec::new();
+    let mut value = candidate.clone();
+    value.class_id = "10".into();
+    forgeries.push(value);
+    let mut value = candidate.clone();
+    value.ascendancy_id = Some("Monk3".into());
+    forgeries.push(value);
+    let mut value = candidate.clone();
+    value.passives.insert(24475);
+    forgeries.push(value);
+    let mut value = candidate.clone();
+    value.equipment.insert("Weapon 1".into(), "unknown".into());
+    forgeries.push(value);
+    let mut value = candidate.clone();
+    value
+        .skills
+        .get_mut(SLOT)
+        .unwrap()
+        .support_instance_ids
+        .insert("unknown".into());
+    forgeries.push(value);
+    let mut value = candidate.clone();
+    value.catalog.content_fingerprint.push('0');
+    forgeries.push(value);
+    for forged in forgeries {
+        assert!(matches!(
+            registry.validated_native_candidate(&forged, &components),
+            Err(ControlledMutationError::UnknownCandidate)
+        ));
+    }
+}
+#[test]
+fn native_components_reject_changed_verified_scenario_backend_or_data() {
+    let registry = catalog(Arc::new(game_data::bundled_snapshot().unwrap()));
+    let components = native_components_for_test(&registry);
+    let mut scenario = VerifiedNativeMaceScenario {
+        identity: components.catalog_identity().clone(),
+        backend: components.backend_identity().clone(),
+        context: components.context().clone(),
+    };
+    let backend = components.backend_identity();
+    let mut other_backend = backend.clone();
+    other_backend.adapter_fingerprint.push('0');
+    assert!(
+        registry
+            .native_components(&scenario, &other_backend)
+            .is_err()
+    );
+    other_backend = backend.clone();
+    other_backend.data = Some(
+        custom(|data| data.character.initial_life += 1.0)
+            .identity()
+            .clone(),
+    );
+    assert!(
+        registry
+            .native_components(&scenario, &other_backend)
+            .is_err()
+    );
+    scenario.identity.content_fingerprint.push('0');
+    assert!(registry.native_components(&scenario, backend).is_err());
+    scenario.identity = components.catalog_identity().clone();
+    scenario
+        .context
+        .config_inputs
+        .insert("enemyArmour".into(), Scalar::Number(123456.0));
+    assert!(registry.native_components(&scenario, backend).is_err());
+}

@@ -17,8 +17,8 @@ use poe_optimizer_data::class_tree::{self, ClassTreeSelection};
 use poe_optimizer_import::controlled_mace::VerifiedMaceScenario;
 use poe_optimizer_import::{
     controlled_mace::{
-        ControlledMaceCatalog, MaceSupportChoice, MaceSupportLoadout, NormalMaceAlternative,
-        VerifiedNativeMaceScenario,
+        ControlledMaceCatalog, MaceSupportChoice, MaceSupportLoadout, NativeMaceCandidate,
+        NormalMaceAlternative, VerifiedNativeMaceScenario,
     },
     decode_build,
 };
@@ -40,6 +40,12 @@ pub(crate) enum Strategy {
     Exhaustive,
     Guided,
 }
+#[derive(Clone, Copy, Debug, PartialEq, Eq, clap::ValueEnum, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum NativeEvaluation {
+    Typed,
+    Document,
+}
 #[derive(clap::Args)]
 pub(crate) struct Args {
     /// JSON problem containing a supported template, finite build choices and objective.
@@ -48,6 +54,9 @@ pub(crate) struct Args {
     /// Native Rust calculation or optional PoB reference adapter.
     #[arg(long, value_enum, default_value_t = super::default_backend())]
     backend: super::BackendChoice,
+    /// Native candidate calculation, or complete document evaluation for comparison.
+    #[arg(long, value_enum)]
+    native_evaluation: Option<NativeEvaluation>,
     #[command(flatten)]
     data: super::data_loading::DataArgs,
     #[arg(long, default_value = "vendor/path-of-building-poe2")]
@@ -176,6 +185,11 @@ enum Scenario {
     #[cfg(feature = "pob")]
     Pob(VerifiedMaceScenario),
 }
+struct TypedEvaluator {
+    backend: Arc<poe_optimizer_native::NativeBackend>,
+    prepared: poe_optimizer_native::PreparedMaceCandidates,
+    handles: BTreeMap<DiscretePoint, NativeMaceCandidate>,
+}
 struct Evaluator<'a> {
     domain: &'a Domain<'a>,
     engine: &'a SearchEngine,
@@ -184,12 +198,10 @@ struct Evaluator<'a> {
     identity: &'a BackendIdentity,
     metrics: Vec<MetricQuery>,
     warnings: Mutex<BTreeSet<String>>,
+    typed: Option<TypedEvaluator>,
 }
-impl CandidateEvaluator<DiscretePoint> for Evaluator<'_> {
-    fn execution_kind(&self) -> ExecutionKind {
-        self.execution
-    }
-    fn evaluate(
+impl Evaluator<'_> {
+    fn evaluate_document(
         &self,
         point: &DiscretePoint,
         control: &EvaluationControl<'_>,
@@ -227,9 +239,7 @@ impl CandidateEvaluator<DiscretePoint> for Evaluator<'_> {
                 .validate_realization(candidate, &result, scenario),
         }
         .map_err(|error| error.to_string())?;
-        if serde_json::to_value(&result.backend).map_err(|e| e.to_string())?
-            != serde_json::to_value(self.identity).map_err(|e| e.to_string())?
-        {
+        if &result.backend != self.identity {
             return Err("Backend identity changed during search".into());
         }
         self.warnings
@@ -240,6 +250,53 @@ impl CandidateEvaluator<DiscretePoint> for Evaluator<'_> {
             measurements: result.measurements,
             diagnostic_only: result.diagnostic_only,
         })
+    }
+}
+
+impl CandidateEvaluator<DiscretePoint> for Evaluator<'_> {
+    fn execution_kind(&self) -> ExecutionKind {
+        self.execution
+    }
+    fn evaluate(
+        &self,
+        point: &DiscretePoint,
+        control: &EvaluationControl<'_>,
+    ) -> Result<CandidateMeasurements, String> {
+        let Some(typed) = &self.typed else {
+            return self.evaluate_document(point, control);
+        };
+        if control.should_stop() {
+            return Err("Search stopped before native calculation".into());
+        }
+        let handle = typed
+            .handles
+            .get(point)
+            .ok_or("Native candidate was not admitted during preparation")?;
+        let snapshot = typed
+            .backend
+            .evaluate_controlled_mace(
+                &typed.prepared,
+                handle,
+                EvaluationBudget {
+                    timeout_ms: control.remaining().min(Duration::from_secs(30)).as_millis() as u64,
+                },
+            )
+            .map_err(|e| e.to_string())?;
+        if control.should_stop() {
+            return Err("Search stopped after native calculation".into());
+        }
+        Ok(CandidateMeasurements {
+            measurements: typed.prepared.snapshot_measurements(&snapshot),
+            diagnostic_only: snapshot.diagnostic_only(),
+        })
+    }
+    fn verify(
+        &self,
+        point: &DiscretePoint,
+        control: &EvaluationControl<'_>,
+    ) -> Result<CandidateMeasurements, String> {
+        // Verification is one fresh complete document calculation in the search ledger.
+        self.evaluate_document(point, control)
     }
 }
 
@@ -387,18 +444,32 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             supports,
         )?
     };
-    let backend: Box<dyn CalculationBackend + Send + Sync> = match args.backend {
-        super::BackendChoice::Native => Box::new(poe_optimizer_native::NativeBackend::with_data(
+    #[cfg(feature = "pob")]
+    if matches!(args.backend, super::BackendChoice::Pob) && args.native_evaluation.is_some() {
+        return Err("--native-evaluation requires --backend native".into());
+    }
+    let native_mode = args.native_evaluation.unwrap_or(NativeEvaluation::Typed);
+    let native_backend = if matches!(args.backend, super::BackendChoice::Native) {
+        Some(Arc::new(poe_optimizer_native::NativeBackend::with_data(
             Arc::new(poe_optimizer_native::CompiledGameData::compile(
                 Arc::clone(&snapshot),
             )?),
             poe_optimizer_native::HostClock,
-        )?),
+        )?))
+    } else {
+        None
+    };
+    let backend: Box<dyn CalculationBackend + Send + Sync> = match &native_backend {
+        Some(backend) => Box::new(poe_optimizer_core::evaluation::SharedBackend::new(
+            Arc::clone(backend),
+        )),
         #[cfg(feature = "pob")]
-        super::BackendChoice::Pob => Box::new(poe_optimizer_pob::backend::PobBackend::new(
+        None => Box::new(poe_optimizer_pob::backend::PobBackend::new(
             std::env::current_exe()?,
             args.pob.clone(),
         )),
+        #[cfg(not(feature = "pob"))]
+        None => unreachable!("native-only backend selection"),
     };
     let selected_identity = backend.identity();
     let engine = Engine::new(backend);
@@ -562,6 +633,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let mut rejected_candidates = Vec::new();
     let mut rejected_rules = Vec::new();
     let mut checked_candidates = 0usize;
+    let mut legal_points = Vec::new();
     for point in domain.space.enumerate(MAX_COMPOSED_CANDIDATES)? {
         if Instant::now() >= deadline {
             break;
@@ -580,6 +652,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         let assessment = registry.requirements(candidate)?;
         if assessment.is_legal() {
             legal_candidates.push(alternative.id.clone());
+            legal_points.push(point);
         } else {
             rejected_candidates
                 .push(serde_json::json!({"alternative_id":alternative.id,"assessment":assessment}));
@@ -608,6 +681,8 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         "template":registry.template_build(),"catalog":registry.catalog(),"alternatives":alternatives,
         "candidate_constraints":constraints,"space":domain.space,"strategy":args.strategy,"neighborhood":domain.neighborhood,
         "run_budget":{"max_evaluations":args.max_evaluations,"timeout_seconds":args.timeout_seconds,"jobs":args.jobs,"seed":args.seed,"max_proposals":args.max_proposals,"max_rounds":args.max_rounds,"reserved_template_attempts":1,"reserved_verification_attempts":1},
+        "calculation_path":if native_backend.is_some() {if native_mode == NativeEvaluation::Typed {"native_typed_candidates"} else {"native_documents"}} else {"pob_documents"},
+        "native_candidate_preparation":null,
         "preparation":{"attempts":0},"search":null,"best_verified":null,"export":{"status":"not_written"},"total_evaluations":0
     });
     if Instant::now() >= deadline {
@@ -674,6 +749,47 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             return emit(&args, report);
         }
     };
+    let typed = if let (Some(backend), Scenario::Native(scenario), NativeEvaluation::Typed) =
+        (&native_backend, &scenario, native_mode)
+    {
+        let typed_started = Instant::now();
+        let prepared = (|| -> Result<TypedEvaluator, Box<dyn Error>> {
+            let components = registry.native_components(scenario, &baseline.backend)?;
+            let prepared =
+                backend.prepare_controlled_mace(&components, &policy.required_metrics())?;
+            let handles = legal_points
+                .iter()
+                .map(|point| {
+                    Ok((
+                        point.clone(),
+                        registry.validated_native_candidate(domain.resolve(point)?, &components)?,
+                    ))
+                })
+                .collect::<Result<BTreeMap<_, _>, Box<dyn Error>>>()?;
+            report["native_candidate_preparation"] = serde_json::json!({
+                "footprint":prepared.footprint(),"admitted_handles":handles.len(),
+                "elapsed_ms":typed_started.elapsed().as_secs_f64()*1000.0,"calculations":0,
+                "scope":"immutable_axes_and_private_candidate_handles","caches_results":false,
+            });
+            Ok(TypedEvaluator {
+                backend: Arc::clone(backend),
+                prepared,
+                handles,
+            })
+        })();
+        match prepared {
+            Ok(value) => Some(value),
+            Err(error) => {
+                report["preparation"]["error"] = serde_json::json!(error.to_string());
+                report["termination"] = serde_json::json!("preparation_failed");
+                report["total_evaluations"] = serde_json::json!(1);
+                report["elapsed_ms"] = serde_json::json!(started.elapsed().as_secs_f64() * 1000.0);
+                return emit(&args, report);
+            }
+        }
+    } else {
+        None
+    };
     let remaining = deadline.saturating_duration_since(Instant::now());
     if remaining.is_zero() {
         report["termination"] = serde_json::json!("time_budget");
@@ -687,7 +803,8 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         execution,
         identity: &baseline.backend,
         metrics: policy.required_metrics(),
-        warnings: Mutex::new(BTreeSet::new()),
+        warnings: Mutex::new(baseline.warnings.iter().cloned().collect()),
+        typed,
     };
     let budget = SearchBudget {
         max_evaluations: args.max_evaluations - 1,

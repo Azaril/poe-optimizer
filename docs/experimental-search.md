@@ -50,6 +50,36 @@ package path hint and XML hash; destination/alias checks include that companion.
 cargo run --no-default-features --locked -- search-experimental --problem examples/mace-search.json --data runs/custom.json --jobs 4 --max-evaluations 10
 ```
 
+## Native candidate and document paths
+
+Native search defaults to `--native-evaluation typed`. After the fresh template calculation
+binds its scenario, preparation compiles immutable weapon, tree and support components
+against the same selected dataset and backend. The CLI creates private handles only for
+candidates that passed full domain and requirement admission. Each search attempt computes
+a fresh numeric snapshot from those components, without materializing or parsing candidate
+XML or constructing full diagnostic attachments. Preparation does not calculate or cache
+candidate results.
+
+Use `--native-evaluation document` to compare the complete document path under the same
+objective, locks and budgets:
+
+```powershell
+cargo run --no-default-features --locked -- search-experimental --problem examples/mace-search.json --native-evaluation document --jobs 4 --max-evaluations 10
+```
+
+Both native modes perform the template calculation and reserved finalist verification
+through the full document evaluator. The finalist is materialized, parsed, calculated and
+checked against its requested state and baseline identity before its fresh measurements
+are compared with the search assessment. The generic [verification hook](search-kernel.md#scheduling-and-limits)
+charges this work as the reserved attempt; exporting the verified source adds no calculation.
+PoB keeps its document path and rejects an explicitly supplied `--native-evaluation` flag.
+
+The successful prepared numeric snapshot path performs no heap allocation. Its conversion
+to owned metric measurements, objective scoring, candidate validation, search archives and
+reporting still allocate. Catalog construction also retains its existing bounded XML
+materialization and hashing work. This is not an allocation-free optimizer or an expansion
+of native mechanic coverage.
+
 ## Joint class and entrance example
 
 ```powershell
@@ -233,7 +263,10 @@ and broader island/diversity policies remain future work.
 finalist attempt; its minimum is three. Preparation binds the immutable scenario and is
 not a scored seed or independent mechanics golden. Search receives only the remaining
 attempt capacity and duration. Failures count. Reports separate preparation, search and
-verification, and `total_evaluations` includes all three.
+verification, and `total_evaluations` includes all three. Typed component preparation uses
+run time but zero calculation attempts. A typed candidate calculation failure counts in
+its dispatched search attempt, just as a document calculation failure does. A wholly
+infeasible or unavailable result set does not spend the unused finalist reservation.
 
 The deadline starts before problem import/catalog construction. These bounded host
 operations have cooperative checks, with no hard CPU preemption. Each engine call receives
@@ -247,13 +280,26 @@ CLI signal cancellation and hard process-memory admission are not implemented.
 Search JSON retains selected data identity/trust and requirement rejections, the
 template/hash, problem, exact catalogs and payloads, discrete layout,
 canonical constraints, requested backend/execution kind, baseline identity/evaluation,
-budgets/statistics, ranked assessments and fresh verification. Preparation failure emits
-an explicit report with no search or XML export. `best_verified` appears only when the top
+budgets/statistics, ranked assessments and fresh verification. The additive `calculation_path`
+field is `native_typed_candidates`, `native_documents` or `pob_documents`; existing report
+schema versions and candidate/catalog identities remain unchanged between native modes.
+
+`native_candidate_preparation` is null unless typed preparation succeeds. Its
+`admitted_handles` counts the legal candidates, `elapsed_ms` records component preparation
+time, and `calculations: 0` plus `caches_results: false` describe what preparation does.
+The `footprint` reports component/metric-selector counts, deferred character errors and
+owned component bytes; `retained_xml_bytes` and `cached_candidate_results` are zero for
+these prepared numeric components. That estimate excludes shared game data, the import
+catalog and candidate handles, backend identity, allocator metadata, Arc control blocks
+and stack frames. It is not total run memory or a memory limit.
+
+Preparation failure emits an explicit report with no search or XML export. `best_verified` appears only when the top
 feasible candidate passes a fresh calculation with matching assessment and realized state.
 The diagnostic marker remains set; consistency does not certify complete game legality.
 
-Native realization requires the backend's XML export to equal the exact materialized
-candidate bytes. It checks selected class/ascendancy, implicit roots, physical paid node,
+Full document realization, used for the baseline and every reserved finalist in both
+native modes, requires the backend's XML export to equal the exact materialized candidate
+bytes. It checks selected class/ascendancy, implicit roots, physical paid node,
 effective entrance and configured effect evidence, the selected Mace action and exact support
 gem projection. It separately checks resolved weapon base/quality/item level and support
 choice from the immutable native calculation inputs recorded in diagnostic evidence. The
@@ -267,7 +313,10 @@ Build/Spec class, ascendancy and allocation attribute ranges changed;
 other source bytes are retained. A fresh verification attempt must pass before writing it,
 and existing output files are never overwritten. No export is written for an unverified
 or infeasible best candidate. Re-import and native re-evaluation of the exported winner are
-covered by tests.
+covered by tests. Typed/document comparison tests additionally match complete, tight-budget,
+empty, infeasible and unavailable searches, including archives, attempt counts, warnings,
+fresh finalist assessments and exact XML/data companion exports. Complete and tight-budget
+comparisons run with one and four workers.
 
 The four unchanged independent C-host quality-zero Mace references anchor numerical parity
 for generated candidates. Serial and four-worker native runs match those values. The
