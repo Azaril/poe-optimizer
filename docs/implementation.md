@@ -2,8 +2,10 @@
 
 Last updated: 2026-09-08
 
-Current implementation checkpoint: **shared receiving defences and resistances**, implemented
-and locally validated; publication is the final checkpoint action. Schema 8 moves defensive
+Current implementation checkpoint: **shared receiving defences and resistances**, implemented,
+locally validated and published as `f1d8a1c404a8c3dc77b11d7ff4410a241b0d902b`.
+Exact-code Windows/Linux CI run `34214745950` is in progress; hosted success is not yet claimed.
+Schema 8 moves defensive
 passive contributions into ordered actor records; configuration, weapon, amulet and passive
 sources use the same receiving stage. All required local checks and release measurements
 are complete, with the scope and evidence below.
@@ -105,7 +107,7 @@ compare independent hosts/extractors using shared PoB calculations, not independ
 
 Implementation, integrated local validation and release measurements are complete for
 this bounded scope. [Operational guide](receiving-defences.md) documents the new data,
-API and CLI contracts. Publication is pending; no hosted result is claimed yet.
+API and CLI contracts. Code is published; hosted validation is in progress.
 
 | Area | Current evidence |
 | --- | --- |
@@ -118,6 +120,11 @@ API and CLI contracts. Publication is pending; no hosted result is claimed yet.
 | Extraction and preservation | Two fresh extractions agree byte-for-byte across package/tree/evidence; three extraction CLI checks pass. Evidence SHA `d5370031f67a5a59562473d2458d434928147a5b20fbdaa383463c6bf4f864e9`; extractor SHA `943c9cf9924552a82e167f6d63b6e9891421572693498d1fe217b231b3b58747`. Source pin/clean submodule, full snapshot, six independent golden pairs, original inputs, dependencies and eleven existing numerical sections are preserved. All 1,142 prior views are semantically preserved; exactly 36 defensive scalar records migrate once, with 128 newly admitted views. Original 116 grammar rules, actor constants/precision/quests and five amulets are unchanged. Evidence: `runs/receiving-preservation-final.json`. |
 | Integrated validation | **580 unique workspace tests + 79 native-only CLI tests pass** across integrated and focused runs; nine source-worker helpers are ignored directly and exercised by parents. The initial full invocation used an old custom-resistance test editing a removed scalar field; the corrected complete target and all remaining CLI targets pass, as does the full library invocation. Its signed-value/feasibility/export assertions are preserved. Coverage is assembled explicitly, not presented as one all-green workspace invocation. Every integration target is reconciled in `runs/receiving-test-coverage.json`. Strict workspace/native-only Clippy, final benchmark Clippy, formatting, five WASM libraries, runtime dependency isolation and 31-document link checks pass. No unresolved local failures remain. |
 | Release search | All **24** complete searches (typed/document × 1/2/4/32 workers × three repeats) agree on archives, ledger, finalist, XML and data companion. They use 3,480 proposals/admissions, 759 duplicates, 1,723 rejections and exactly 1,000 full attempts (baseline 1 + search 998 + fresh verification 1), with no failures/late results; termination is the evaluation budget. The diagnostic finalist has DPS 151.96940651249997, fire resistance 75 and ES 52, satisfying the example's 75/50 floors. This is reproducibility, not optimizer-quality, obtainable-affix or global-optimum evidence. |
+
+Publication: code **`f1d8a1c404a8c3dc77b11d7ff4410a241b0d902b`** is pushed to main.
+[Exact-code Windows/Linux CI run 34214745950](https://github.com/Azaril/poe-optimizer/actions/runs/34214745950)
+is **in progress**; no hosted success is claimed. Snapshot: `runs/receiving-main-ci.json`.
+The following publication-record commit changes documentation only.
 
 ### Receiving release measurements
 
@@ -1994,6 +2001,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-08 | `f022d19` | Added private typed native candidate preparation, stack metrics and a fresh full-document verification hook. All 421 workspace and 56 native-only CLI tests, lint, portable checks and release comparisons pass. Identical bounded Mace search results take 164.5 ms versus 397.0 ms one-worker median; full native parity remains unfinished. Pushed to main; exact hosted run `34190091048` passes on Windows and Linux. Next: injected local weapon-modifier assembly. |
 | 2026-09-08 | `da168e9` | Added injected schema-5 local weapon rules, normal/rare source-preserving admission, prepared numeric weapon assembly and problem/report schemas 5/6. Integrated validation plus focused review reruns cover 460 workspace tests, with 61 native-only CLI tests passing and no unresolved failures. Source/build parity, release reproduction, lint and portable checks pass. Typed/document searches agree across 1/2/4/32 workers; one-worker median 236.7 ms versus 668.1 ms for this diagnostic domain. Pushed to main; exact hosted run `34193804854` passes Windows/Linux (confirmed at the actor checkpoint). Next actor phase is implemented above. |
 | 2026-09-08 | `4df9a4f` | Added schema-6 injected actor records, source configuration parsing, shared native attributes/resources and requirement checks, Spirit metric and problem/report schemas 6/7. Validation covers 503 workspace tests and 65 native-only CLI tests across integrated/focused runs, with no unresolved failures; source/build parity, zero-allocation prepared calls, release reproduction, Clippy and WASM checks pass. Full search agrees across 1/2/4/32 workers; one-worker typed median 248.5 ms versus 1,644.8 ms for this diagnostic domain. Pushed to main; exact CI run `34199225766` subsequently passed on Windows and Linux. The next normalized passive/equipment phase is recorded above. |
+| 2026-09-08 | `f1d8a1c` | Added schema-8 injected receiving data, shared source-ordered native Armour/Evasion/ES and resistance calculation, Lunar/Pearlescent bases, scenario/evidence bindings and graph problem 8/report 9. 580 workspace + 79 native-only CLI tests pass across integrated/focused runs; source/full-build parity, Clippy, WASM, preservation and release checks pass. All 24 complete searches agree; exact release finalist matches fresh PoB. Pushed to main; exact-code CI `34214745950` is in progress. Next: verify hosted CI and implement local Helmet/Gloves/Boots components with per-slot receiving inputs and explicit rating metrics. |
 | 2026-09-08 | `a2586a8` | Added schema-7 injected passive/equipment data, complete ordinary structure with 1,142 admitted source views, component actor programs, lazy typed Spark/Mace assembly and native graph search with exact locks/attribute choices. 556 workspace tests and 76 native-only CLI tests pass across integrated/focused runs; local Clippy, WASM, preservation and release reproduction pass. All 24 full searches agree across modes/workers. Pushed to main; exact CI run `34208805533` is in progress. Next: verify hosted CI, then shared receiving defences and resistance modifiers. |
 
 ### Hosting decision checkpoint
