@@ -7,7 +7,10 @@ validated. The shared reader, original-PoB parser comparisons, injected-definiti
 and caller-driven inspection are complete. Native/search scalar readers share exact source
 semantics; all five corpus projections and fresh PoB runs succeed. Native still rejects the
 broader build layout. Preserving unknown configuration does not admit its game effects;
-broad skill/actor/build support remains pending. Publication status is recorded below.
+broad skill/actor/build support remains pending. Code is published as
+`0da5c5c288442f1ac11cc5ffea0c948813dc6d9e` on `origin/main`. Exact-code
+[Windows/Linux CI run 34243706906](https://github.com/Azaril/poe-optimizer/actions/runs/34243706906)
+is in progress; neither hosted outcome is claimed as passed.
 
 The preceding **shared ActionSpeed and ordinary direct-action timing** checkpoint is implemented.
 Data/extraction, shared Rust calculations, import/native adapters, CLI integration and
@@ -177,7 +180,7 @@ Local validation is complete:
 | Corpus | All five unchanged inputs import/project successfully and all five fresh PoB runs complete. Native reaches the restricted root-layout guard on all five. Exact source counts: 58 Inputs, 170 Placeholders, one block; no modified inputs/executables. `runs/config-breadth-validated-20260908/index.json` and `runs/config-breadth-summary.json` retain hashes/outcomes. |
 | Runner integrity | Nine Python tests pass, including malformed source reports and inspection-time XML mutation/deletion. Failed inspection remains independent; changed decoded XML cannot reach a backend as the original source. |
 | Tooling and portability | Workspace/native-only strict Clippy, formatting, all five portable libraries on `wasm32-unknown-unknown` and native-only Lua dependency exclusion pass. All 35 documents / 390 local links and Git whitespace checks pass. |
-| Publication | Local validation passes; code publication and exact hosted CI status will be recorded below. |
+| Publication | Code `0da5c5c288442f1ac11cc5ffea0c948813dc6d9e` is pushed to main. Both exact-code [Windows/Linux CI jobs in run 34243706906](https://github.com/Azaril/poe-optimizer/actions/runs/34243706906) are in progress (`runs/config-main-check-runs.json`). The following publication/resume update changes documentation only. |
 
 Logs use `runs/config-*`, plus `runs/configuration-source-parity.log` and
 `runs/configuration-existing-xml-parity.log`. The preceding action-timing checkpoint remains
@@ -190,7 +193,7 @@ No numerical data package, source pin, independent golden or original corpus byt
 The configuration audit artifact is `runs/config-definition-inventory.json`, SHA-256
 `35a4bfc22905d5b8896ab8f3b0d007b8c2d6ad40e75169ba05069effb262fba4`.
 
-Next: publish this validated checkpoint and check exact hosted CI, then implement ordered
+Next: check exact hosted CI for `0da5c5c` and resolve any failure, then implement ordered
 injected configuration definitions with source parity gates. Continue
 B2/B3 inventories and the general build-model review; broad native mechanics and full parity
 remain unfinished.
@@ -2595,7 +2598,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-08 | `56dcbc5` | Added schema-10 injected Body Armour and shared movement, source-generated penalties, case-normalized grammar, movement objective metrics and graph problem 10/report 11. 658 workspace + 87 native-only CLI tests pass, followed by 19 passing tests in complete affected targets after CRLF fixture repairs. Source/full-build parity, strict lint, WASM, preservation and 24 agreeing release searches pass; exact finalist matches PoB. Pushed to main; exact-code Windows/Linux CI `34228787060` has passed on both platforms. Next: verify hosted CI, then shared ActionSpeed and complete Spark/Mace timing including the source server-tick cap. |
 | 2026-09-08 | `f1d8a1c` | Added schema-8 injected receiving data, shared source-ordered native Armour/Evasion/ES and resistance calculation, Lunar/Pearlescent bases, scenario/evidence bindings and graph problem 8/report 9. 580 workspace + 79 native-only CLI tests pass across integrated/focused runs; source/full-build parity, Clippy, WASM, preservation and release checks pass. All 24 complete searches agree; exact release finalist matches fresh PoB. Pushed to main; exact-code CI `34214745950` now passes on Windows and Linux. Local Helmet/Gloves/Boots components and rating metrics are implemented in the following checkpoint. |
 | 2026-09-08 | `a2586a8` | Added schema-7 injected passive/equipment data, complete ordinary structure with 1,142 admitted source views, component actor programs, lazy typed Spark/Mace assembly and native graph search with exact locks/attribute choices. 556 workspace tests and 76 native-only CLI tests pass across integrated/focused runs; local Clippy, WASM, preservation and release reproduction pass. All 24 full searches agree across modes/workers. Pushed to main; exact CI run `34208805533` now passes on Windows and Linux. Shared receiving defences and resistance modifiers are implemented in the following checkpoint. |
-| 2026-09-08 | Configuration source projection (this checkpoint) | Added exact configuration source projection, caller-only CLI inspection, shared native/search scalar readers and schema-2 corpus evidence. 354 relevant workspace-target tests plus 95 native-only CLI tests and 9 runner tests pass; strict lint, WASM, isolation, preservation and docs checks pass. All five inputs project and repeat their PoB measurements, while native retains explicit root-layout exclusions. Ordered configuration definitions, container semantics and unresolved actor/action labels are audited; broader native admission and full parity remain unfinished. |
+| 2026-09-08 | `0da5c5c` | Added exact configuration source projection, caller-only CLI inspection, shared native/search scalar readers and schema-2 corpus evidence. 354 relevant workspace-target tests plus 95 native-only CLI tests and 9 runner tests pass; strict lint, WASM, isolation, preservation and docs checks pass. All five inputs project and repeat their PoB measurements, while native retains explicit root-layout exclusions. Ordered configuration definitions, container semantics and unresolved actor/action labels are audited; broader native admission and full parity remain unfinished. |
 
 ### Hosting decision checkpoint
 
