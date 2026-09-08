@@ -6,7 +6,8 @@ no Lua or worker-process dependency. No website is scraped or downloaded.
 
 The exporter covers the same ten explicitly partial sections as the
 [native data package](native-data.md): tree, character, quests, Spark, Mace, weapons,
-defence, monsters, encounters and typed entrance effects. It does not add build mechanics
+defence, monsters, encounters and typed owned passive effects. The current version includes the four admitted ascendancy
+resistance nodes. It does not infer arbitrary build mechanics
 or broaden accepted source revisions. Progress and validation evidence belong in the
 [living implementation record](implementation.md).
 
@@ -88,7 +89,24 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 2 and `poe2-native-profiles-v2`, including source-derived level/attribute requirements
-and support-color costs. Regenerate older packages rather than silently filling missing
+schema 3 and `poe2-native-profiles-v3`, including source-derived level/attribute requirements,
+support-color costs and owned passive effects. Signed values are allowed only for the
+new unconditional player BASE resistance operations. The structural selection policy in
+`crates/poe-optimizer-data/data/class-tree-policy.json` identifies the four source nodes;
+Rust does not contain their numeric values. Regenerate older packages rather than silently filling missing
 records. Native controlled search consumes the same selected data; new tree revisions and
 arbitrary operation versions still require compatibility review.
+
+
+When intentionally changing the retained policy or package schema, maintainers can prepare
+new artifacts before changing the compiled reviewed digests:
+
+```powershell
+cargo run -p poe-optimizer-pob --example regenerate_game_data --locked -- runs/reviewed-migration
+```
+
+This explicit source-review helper requires a new directory, verifies the same pinned full
+source, and writes package/tree bytes, their digests and extraction evidence. It never edits
+the committed artifacts or grants runtime trust. Review policy/data changes and independent
+parity first, then deliberately update the reviewed artifacts. Ordinary `extract-game-data`
+continues to authenticate its output against the committed reviewed tree/package scope.

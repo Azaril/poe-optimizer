@@ -267,7 +267,7 @@ backend selected deliberately by the caller rather than hidden inside a native c
 
 The `spark` profile accepts level-one, quality-zero Spark with no equipment or supports.
 `evaluate_with_character` receives resolved class attributes and the explicitly admitted
-ordinary entrance effects described below. The host validates the complete scope before
+ordinary entrance and ascendancy resistance effects described below. The host validates the complete scope before
 constructing `SparkInput` and `CharacterInput`; the numeric engine does not parse XML.
 The legacy `evaluate(input)` wrapper preserves Sorceress attributes and no passive effects.
 The input exposes character level, resistance penalty, resolved enemy lightning resistance
@@ -290,7 +290,7 @@ remain outside this profile. Enemy resistance uses the pinned configurable ceili
 records. `CompiledGameData` resolves the package once; `evaluate_with_data` borrows it.
 See [native data packages](native-data.md) for the loader and compatibility wrappers. `SOURCE_FILES` identifies
 12 complete normalized source files, including the modifier parser semantic oracle.
-`PROFILE_ID` is `poe2-spark-level1-class-entrance-v2`.
+`PROFILE_ID` is `poe2-spark-level1-class-passives-v3`.
 The production function uses no parsing, allocation, I/O, timing, Lua or shared state. The
 application adapter owns XML admission, source identity, evaluation clock, metric coverage
 and prepared-input reuse. A native-only build and WASM consumer can therefore call the
@@ -322,8 +322,8 @@ Sources: [Spark skill data](https://github.com/PathOfBuildingCommunity/PathOfBui
 The `mace` profile accepts level-one Mace Strike, one normal Wooden Club or Smithing
 Hammer, integer quality 0..20 and item level 1..100. Brutality I at level one and quality
 zero is the only admitted support. `evaluate_with_character` adds resolved class attributes
-and the ordinary entrance effects below. There are no other items, supports, allocated
-ascendancy effects or external modifiers. The legacy `evaluate(input)` wrapper preserves
+and the ordinary entrance/ascendancy resistance effects below. There are no other items,
+supports, ascendancy effects or external modifiers. The legacy `evaluate(input)` wrapper preserves
 Warrior attributes and no passive effects. Warrior is entry 3 in the raw tree classes array;
 its `integerId` and PoB's rekeyed live class index are 6. The host validates the complete
 document, identities and scenario before constructing `MaceInput` and `CharacterInput`.
@@ -350,7 +350,7 @@ a top-level AverageHit for this attack, and the typed metric remains unavailable
 that existing contract. This profile claims hit DPS, not combined or ailment DPS.
 
 Seventeen normalized source hashes accompany the Rust data; the profile identity is
-`poe2-mace-strike-class-entrance-v2`. The differential test executes
+`poe2-mace-strike-class-passives-v3`. The differential test executes
 actual pinned Item/ModDB/resource/offence source with resolved closed-profile scaffolding,
 including the real Brutality stat map and damage-disable flags. Interpreted and warmed
 runs cover every admitted quality, both weapons and support choices, character levels,
@@ -370,8 +370,9 @@ Lua, operating-system services and mutable caches. Every class in the pinned cat
 supply these values. An ascendancy identity with no allocated ascendancy effects does not
 add numeric modifiers to these profiles.
 
-`CharacterModifiers` admits exactly the numeric forms present on the two ordinary entrance
-nodes for each of the eight catalog classes. It is not a general modifier parser:
+`CharacterModifiers` admits the numeric forms present on the two ordinary entrance
+nodes for each class plus five signed BASE resistance operations. It is not a general
+modifier parser:
 
 | Explicit fields | Closed-profile effect |
 | --- | --- |
@@ -379,6 +380,7 @@ nodes for each of the eight catalog classes. It is not a general modifier parser
 | `skill_speed_increased` | Applies to each profile's attack/cast speed; the total multiplier rounds to two decimals before dividing base time. The source also creates warcry/totem-placement speed modifiers, which have no action target in these profiles. |
 | `spell_damage_increased`, `projectile_damage_increased` | Both match Spark and add before each lightning damage endpoint is rounded. They do not match Mace Strike. |
 | `attack_damage_increased`, `melee_damage_increased` | Both match Mace Strike and add before damage scaling by Brutality and endpoint rounding. The physical weapon endpoints have already passed local quality rounding. They do not match Spark. |
+| `fire_resistance_flat`, `cold_resistance_flat`, `lightning_resistance_flat`, `chaos_resistance_flat`, `elemental_resistance_flat` | Signed BASE player contributions, using the shared resistance calculation described below. |
 | `minion_damage_increased` | Preserves the Witch entrance's explicitly scoped minion bonus. Neither zero-minion profile has an actor to receive it; it does not increase player damage. |
 
 The Witch replacement at physical node 4739 has spell and minion damage; the Huntress
@@ -391,10 +393,12 @@ node effects or use the effective replacement ID as a physical graph allocation.
 Attributes affect life, mana and accuracy through the actual inherent bonuses. These
 entrances introduce no flat/increased life, mana, accuracy or attribute modifiers, so the
 input does not imply support for those wider modifier forms. Nonfinite, negative or
-fractional attributes reject. Modifier values must be finite and nonnegative. The numeric
+fractional attributes reject. Old modifier fields must be finite and nonnegative; the five
+resistance fields admit signed finite values. The numeric
 boundary caps every field at 1,000,000 to keep admitted calculations finite; this is an
 implementation scope bound, not a game stat maximum. The adapter restricts operations to
-the currently supported effects and zero or one ordinary entrance allocation. Magnitudes
+the currently supported effects and zero or one ordinary entrance plus zero or one
+admitted ascendancy passive. Magnitudes
 come from the selected validated package; only the reviewed default has source-parity
 evidence. Diagnostic
 evaluation does not certify available passive points or skill/item attribute requirements;
@@ -521,3 +525,25 @@ cargo test -p poe-optimizer-engine --locked
 ```
 
 Record actual command results and unverified targets in the living implementation log.
+
+## Shared player resistance calculation
+
+The admitted Spark and Mace pipelines use `resistance.rs` with injected BASE contributions,
+quest rewards, penalty and defence limits. Five typed flat operations cover fire, cold,
+lightning, chaos and elemental resistance. Only the new resistance operations admit negative
+values; old modifier fields retain nonnegative bounds. Ordinary and ascendancy contributions
+combine through `CharacterModifiers::checked_add` and retain explicit ownership in the
+compiled lookup. Text matching occurs only in reviewed offline extraction.
+
+For each elemental type the kernel sums that type, penalty and its quest reward, then
+adds the elemental bucket. Chaos uses only its own bucket. It truncates totals and limits
+toward zero, caps the configured base maximum by injected `resistance_maximum_cap`, then
+applies the floor. This matches the pinned `CalcDefence` branch, including negative totals
+and fractional custom limits. Earlier custom data could retain fractional limits or exceed
+the global maximum; these cases now follow source. Reviewed defaults and goldens are stable.
+
+Original parser and defence-branch tests execute cold and warmed Lua with signed/fractional
+values and cap/floor boundaries. Fresh complete-build comparisons cover the four owned
+ascendancy nodes, ordinary entrance/support interactions, effect removal and export reloads.
+Maximum-resistance modifiers, conditions, INC/MORE/OVERRIDE, conversions and other actors
+remain unsupported. Successful validation is scoped to these admitted records.

@@ -219,7 +219,7 @@ impl Oracle {
             .unwrap();
         lua.globals().set("sourceTree", tree).unwrap();
         if warm {
-            lua.load("for i=1,200 do sourceCalcs.hitChance(i*3,i*7,false); sourceCalcs.monsterHitChance(i*3,i*7); sourceCalcs.deflectChance(i*3,i*7); modLib.parseMod(tostring(i)..'% increased Spell Damage'); local actor={modDB=new('ModDB'):ModDB(),output={}}; sourceCalcs.doActorLifeManaSpirit(actor,true); end").exec().unwrap();
+            lua.load("for i=1,200 do sourceCalcs.hitChance(i*3,i*7,false); sourceCalcs.monsterHitChance(i*3,i*7); sourceCalcs.deflectChance(i*3,i*7); modLib.parseMod(tostring(i)..'% increased Spell Damage'); modLib.parseMod('-'..tostring(i)..'% to all Elemental Resistances'); modLib.parseMod('+'..tostring(i)..'% to Chaos Resistance'); modLib.parseMod('+'..tostring(i)..'% to Fire Resistance'); local actor={modDB=new('ModDB'):ModDB(),output={}}; sourceCalcs.doActorLifeManaSpirit(actor,true); end").exec().unwrap();
         }
         Self { lua, sources }
     }
@@ -315,6 +315,7 @@ fn reviewed_character_skill_weapon_monster_values_match_actual_pinned_lua() {
                 "data.characterConstants['base_maximum_all_resistances_%']",
             ),
             ("/defence/enemy_resistance_cap", "data.misc.MaxResistCap"),
+            ("/defence/resistance_maximum_cap", "data.misc.MaxResistCap"),
             (
                 "/defence/enemy_physical_reduction_cap",
                 "data.monsterConstants['maximum_physical_damage_reduction_%']",
@@ -623,6 +624,8 @@ fn typed_effect(lua: &Lua, effect: &Value) -> Table {
     let stat = effect["stat"].as_str().unwrap();
     let constructor:Function=lua.load(r#"return function(stat,value)
         local mod=modLib.createMod
+        local resistance={fire_resistance_flat='FireResist',cold_resistance_flat='ColdResist',lightning_resistance_flat='LightningResist',chaos_resistance_flat='ChaosResist',elemental_resistance_flat='ElementalResist'}
+        if resistance[stat] then return {mod(resistance[stat],'BASE',value)} end
         if stat=='armour_flat' then return {mod('Armour','BASE',value)} end
         if stat=='evasion_flat' then return {mod('Evasion','BASE',value)} end
         if stat=='energy_shield_flat' then return {mod('EnergyShield','BASE',value)} end
@@ -635,7 +638,7 @@ fn typed_effect(lua: &Lua, effect: &Value) -> Table {
     constructor.call((stat, value)).unwrap()
 }
 #[test]
-fn reviewed_quest_defaults_and_every_typed_entrance_match_actual_configuration_and_parser() {
+fn reviewed_quest_defaults_and_every_typed_passive_match_actual_configuration_and_parser() {
     let p = package();
     for warm in [false, true] {
         let o = Oracle::new(warm);
@@ -708,12 +711,13 @@ fn reviewed_quest_defaults_and_every_typed_entrance_match_actual_configuration_a
         let tree: Table = lua.globals().get("sourceTree").unwrap();
         let classes: Table = tree.get("classes").unwrap();
         let nodes: Table = tree.get("nodes").unwrap();
-        assert_eq!(p["entrance_effects"].as_array().unwrap().len(), 16);
+        assert_eq!(p["passive_effects"].as_array().unwrap().len(), 20);
         let mut seen = BTreeSet::new();
-        for record in p["entrance_effects"].as_array().unwrap() {
+        for record in p["passive_effects"].as_array().unwrap() {
             let class_id = record["class_id"].as_u64().unwrap();
             let physical = record["physical_node_id"].as_u64().unwrap();
-            assert!(seen.insert((class_id, physical)));
+            let ascendancy_id = record["ascendancy_id"].as_str();
+            assert!(seen.insert((class_id, ascendancy_id, physical)));
             let class = classes
                 .clone()
                 .sequence_values::<Table>()
@@ -739,6 +743,20 @@ fn reviewed_quest_defaults_and_every_typed_entrance_match_actual_configuration_a
                 .map(|(_, node)| node)
                 .find(|node| node.get::<Option<u64>>("skill").unwrap() == Some(physical))
                 .unwrap();
+            if let Some(ascendancy_id) = ascendancy_id {
+                let asc = class
+                    .get::<Table>("ascendancies")
+                    .unwrap()
+                    .sequence_values::<Table>()
+                    .map(Result::unwrap)
+                    .find(|asc| asc.get::<String>("internalId").unwrap() == ascendancy_id)
+                    .unwrap();
+                assert_eq!(
+                    node.get::<String>("ascendancyName").unwrap(),
+                    asc.get::<String>("name").unwrap()
+                );
+                assert!(node.get::<Option<Table>>("options").unwrap().is_none());
+            }
             let effective = node
                 .get::<Option<Table>>("options")
                 .unwrap()
@@ -1005,6 +1023,46 @@ fn requirements_match_source_gem_functions_support_counts_and_maximum_aggregatio
             assert_eq!(
                 result.get::<Option<u32>>("ReqStr").unwrap().unwrap_or(0),
                 expected
+            );
+        }
+    }
+}
+
+#[test]
+fn original_cold_and_warm_parser_distinguishes_signed_elemental_chaos_and_individual_resistances() {
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        let parser: Function = oracle
+            .lua
+            .globals()
+            .get::<Table>("modLib")
+            .unwrap()
+            .get("parseMod")
+            .unwrap();
+        for (text, stat, value) in [
+            ("+8% to Fire Resistance", "fire_resistance_flat", 8.0),
+            (
+                "-20% to all Elemental Resistances",
+                "elemental_resistance_flat",
+                -20.0,
+            ),
+            ("+7% to Chaos Resistance", "chaos_resistance_flat", 7.0),
+            ("-3.5% to Cold Resistance", "cold_resistance_flat", -3.5),
+            (
+                "+4.25% to Lightning Resistance",
+                "lightning_resistance_flat",
+                4.25,
+            ),
+        ] {
+            let (mods, extra): (Table, Option<String>) = parser.call(text).unwrap();
+            assert!(extra.is_none(), "{text}");
+            assert_eq!(
+                canonical(&oracle.lua, mods),
+                canonical(
+                    &oracle.lua,
+                    typed_effect(&oracle.lua, &serde_json::json!({"stat":stat,"value":value}))
+                ),
+                "{text}; warm={warm}"
             );
         }
     }

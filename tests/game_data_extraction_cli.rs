@@ -25,7 +25,7 @@ const SECTIONS: [&str; 10] = [
     "defence",
     "monsters",
     "encounters",
-    "entrance_effects",
+    "passive_effects",
 ];
 fn repository() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))

@@ -18,8 +18,8 @@ local function equal(a,b,depth)
     for k in pairs(b) do if a[k]==nil then return false end end
     return true
 end
-local function numeric(value)
-    assert(type(value)=='number' and value==value and value>=0 and value<=1000000, 'unsupported numeric source value')
+local function numeric(value, signed)
+    assert(type(value)=='number' and value==value and value>=(signed and -1000000 or 0) and value<=1000000, 'unsupported numeric source value')
     return value
 end
 local function empty(t) return next(t)==nil end
@@ -41,8 +41,9 @@ function source_convert_modifiers(mods)
         value=numeric(value); stat='skill_speed_increased'
         expected={make('Speed','INC',value),make('WarcrySpeed','INC',value),make('TotemPlacementSpeed','INC',value)}
     elseif m.type=='BASE' then
-        value=numeric(value)
-        stat=({Armour='armour_flat',Evasion='evasion_flat',EnergyShield='energy_shield_flat'})[m.name]
+        local resistances={FireResist='fire_resistance_flat',ColdResist='cold_resistance_flat',LightningResist='lightning_resistance_flat',ChaosResist='chaos_resistance_flat',ElementalResist='elemental_resistance_flat'}
+        value=numeric(value,resistances[m.name]~=nil)
+        stat=resistances[m.name] or ({Armour='armour_flat',Evasion='evasion_flat',EnergyShield='energy_shield_flat'})[m.name]
         assert(stat,'unsupported base modifier target')
         expected={make(m.name,'BASE',value)}
     elseif m.name=='Damage' and m.type=='INC' then

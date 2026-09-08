@@ -156,7 +156,7 @@ impl ControlledMaceCatalog {
     ) -> Result<Self> {
         Self::build(data, template_xml, weapons, supports, None)
     }
-    /// Compose finite class/ascendancy/ordinary-entrance choices with equipment and support.
+    /// Compose finite class/ascendancy/ordinary-entrance/ascendancy-passive choices with equipment and support.
     /// The snapshot is shared with requirements and evaluator admission; no Lua runs here.
     pub fn with_tree_choices(
         data: Arc<GameDataSnapshot>,
@@ -194,8 +194,8 @@ impl ControlledMaceCatalog {
             ));
         }
         let mut tree_choices = requested_trees.unwrap_or_else(|| vec![fixed_warrior()]);
-        if tree_choices.is_empty() || tree_choices.len() > 93 {
-            return Err(unsupported("provide 1..93 distinct tree choices"));
+        if tree_choices.is_empty() || tree_choices.len() > 105 {
+            return Err(unsupported("provide 1..105 distinct tree choices"));
         }
         tree_choices.sort();
         if tree_choices.windows(2).any(|pair| pair[0] == pair[1]) {
@@ -257,7 +257,7 @@ impl ControlledMaceCatalog {
             content_fingerprint: hash(
                 &if patch_tree {
                     serde_json::to_string(&(
-                        "pob-controlled-mace-v3",
+                        "pob-controlled-mace-v4",
                         data.identity(),
                         SOURCE,
                         hash(&template_xml),
@@ -376,7 +376,12 @@ impl ControlledMaceCatalog {
                         catalog: identity.clone(),
                         class_id: tree.class.integer_id.to_string(),
                         ascendancy_id: tree.ascendancy.as_ref().map(|asc| asc.internal_id.clone()),
-                        passives: tree.selection.entrance_node_id.into_iter().collect(),
+                        passives: tree
+                            .selection
+                            .entrance_node_id
+                            .into_iter()
+                            .chain(tree.selection.ascendancy_node_id)
+                            .collect(),
                         equipment: BTreeMap::from([("Weapon 1".into(), item_id.clone())]),
                         skills: BTreeMap::from([(
                             SLOT.into(),
@@ -418,12 +423,18 @@ impl ControlledMaceCatalog {
                             "{}{id}/{}",
                             if patch_tree {
                                 format!(
-                                    "class/{}/asc/{}/entrance/{}/",
+                                    "class/{}/asc/{}/entrance/{}/{ascendancy_passive}",
                                     tree.selection.class_id,
                                     tree.selection.ascendancy_id.as_deref().unwrap_or("none"),
                                     tree.selection
                                         .entrance_node_id
-                                        .map_or_else(|| "none".into(), |id| id.to_string())
+                                        .map_or_else(|| "none".into(), |id| id.to_string()),
+                                    ascendancy_passive = tree
+                                        .selection
+                                        .ascendancy_node_id
+                                        .map_or_else(String::new, |id| format!(
+                                            "ascendancy-passive/{id}/"
+                                        ))
                                 )
                             } else {
                                 String::new()
@@ -495,7 +506,7 @@ impl ControlledMaceCatalog {
     ) -> Option<&Candidate> {
         self.resolve_tree_candidate(&self.profile.tree.selection, weapon_id, support)
     }
-    /// The admitted ordinary entrances do not change attributes; equipment dependencies are excluded.
+    /// Admitted passive records do not change attributes; equipment dependencies are excluded.
     /// Aggregate support-color costs compete with individual requirements by maximum;
     /// they are never added to weapon or active-gem requirements.
     pub fn requirements(&self, candidate: &Candidate) -> Result<MaceRequirementAssessment> {
@@ -832,7 +843,7 @@ impl ControlledMaceCatalog {
             .attachments
             .iter()
             .filter(|attachment| {
-                attachment.media_type == "application/vnd.poe-optimizer.native-tree+json;version=1"
+                attachment.media_type == "application/vnd.poe-optimizer.native-tree+json;version=2"
             })
             .collect();
         if attachments.len() != 1 || attachments[0].content.len() > 64 * 1024 {
@@ -849,26 +860,32 @@ impl ControlledMaceCatalog {
                 "name":asc.name,"start_node_id":asc.start_node_id,
             })
         });
-        let paid_nodes: Vec<_> = tree.paid_node.iter().map(|node| serde_json::json!({
+        let paid_nodes: Vec<_> = tree.paid_node.iter().map(|node| ("ordinary", node))
+            .chain(tree.ascendancy_node.iter().map(|node| ("ascendancy", node)))
+            .map(|(kind, node)| serde_json::json!({
+            "allocation_kind":kind,
             "physical_node_id":node.physical_node_id,"effective_node_id":node.effective_source_id,
             "name":node.name,"stats":node.stats,"override_provenance":node.provenance,
         })).collect();
         let expected = serde_json::json!({
-            "schema_version":1,
+            "schema_version":2,
             "class":{"index":tree.class.integer_id,"internal_id":tree.class.integer_id,
                 "source_index":tree.class.source_index,"name":tree.class.name,"start_node_id":tree.class.start_node_id},
             "ascendancy":ascendancy,"allocated_nodes":tree.allocated_nodes,
-            "ordinary_allocated_count":paid_nodes.len(),"paid_nodes":paid_nodes,
+            "ordinary_allocated_count":usize::from(tree.paid_node.is_some()),
+            "ascendancy_allocated_count":usize::from(tree.ascendancy_node.is_some()),"paid_nodes":paid_nodes,
             "source":{"upstream_revision":self.data.tree().source.upstream_revision,
                 "tree_version":self.data.tree().source.tree_version,
                 "bundled_content_sha256":poe_optimizer_data::bundled::content_sha256()},
             "data_identity":self.data.identity(),
-            "configured_effects":self.data.package().entrance_effects.iter().filter(|entry|
-                entry.class_id == tree.class.integer_id && tree.paid_node.as_ref().is_some_and(|node|
-                    entry.physical_node_id == node.physical_node_id)).collect::<Vec<_>>(),
+            "configured_effects":self.data.package().passive_effects.iter().filter(|entry|
+                entry.class_id == tree.class.integer_id && (
+                    (entry.ascendancy_id.is_none() && tree.paid_node.as_ref().is_some_and(|node| entry.physical_node_id == node.physical_node_id)) ||
+                    (entry.ascendancy_id.as_deref() == tree.selection.ascendancy_id.as_deref() && tree.ascendancy_node.as_ref().is_some_and(|node| entry.physical_node_id == node.physical_node_id))
+                )).collect::<Vec<_>>(),
             "point_budget_verified":false,
             "evidence_kind":"native_source_resolution",
-            "scope":"class_identity_and_zero_or_one_ordinary_entrance",
+            "scope":"class_identity_and_zero_or_one_ordinary_and_ascendancy_passive",
         });
         if actual != expected {
             return Err(mismatch(
@@ -1032,6 +1049,7 @@ fn fixed_warrior() -> ClassTreeSelection {
         class_id: 6,
         ascendancy_id: None,
         entrance_node_id: None,
+        ascendancy_node_id: None,
     }
 }
 fn same_backend(left: &BackendIdentity, right: &BackendIdentity) -> bool {
@@ -1126,6 +1144,7 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
             Some(ascendancy_id.into())
         },
         entrance_node_id: None,
+        ascendancy_node_id: None,
     };
     let base = selection
         .resolve(&data.tree)
@@ -1156,15 +1175,18 @@ fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
             }
         }
     }
-    let paid: Vec<_> = requested
+    let (ascendancy_ids, ordinary_ids): (Vec<_>, Vec<_>) = requested
         .difference(&base.implicit_roots)
         .copied()
-        .collect();
-    if paid.len() > 1 {
-        return Err(unsupported("at most one ordinary entrance is supported"));
+        .partition(|id| data.tree.ascendancy_nodes.contains_key(id));
+    if ordinary_ids.len() > 1 || ascendancy_ids.len() > 1 {
+        return Err(unsupported(
+            "at most one ordinary entrance and one reviewed ascendancy passive are supported",
+        ));
     }
     let tree = ClassTreeSelection {
-        entrance_node_id: paid.first().copied(),
+        entrance_node_id: ordinary_ids.first().copied(),
+        ascendancy_node_id: ascendancy_ids.first().copied(),
         ..selection
     }
     .resolve(&data.tree)
@@ -1681,7 +1703,7 @@ fn check_gem(
     }
     Ok(())
 }
-/// Canonical normalized XML except numeric Build outputs and the two mutable fields.
+/// Canonical normalized XML except numeric Build outputs and validated mutable build state.
 fn exported_scenario(xml: &str, support_id: &str) -> Result<String> {
     fn visit(node: Node<'_, '_>, support_id: &str) -> String {
         if !node.is_element() {
@@ -1815,12 +1837,18 @@ fn patch(template: &str, profile: &Profile, choice: &Choice, support_xml: &str) 
                     .map_or("", |asc| asc.internal_id.as_str())
                     .into(),
             ),
-            // Roots are implicit; preserve only the paid physical node in authored XML.
+            // Roots are implicit; preserve the selected paid physical nodes in authored XML.
             (
                 "nodes",
                 tree.selection
                     .entrance_node_id
-                    .map_or_else(String::new, |id| id.to_string()),
+                    .into_iter()
+                    .chain(tree.selection.ascendancy_node_id)
+                    .collect::<BTreeSet<_>>()
+                    .iter()
+                    .map(u32::to_string)
+                    .collect::<Vec<_>>()
+                    .join(","),
             ),
         ];
         for (name, value) in fields {

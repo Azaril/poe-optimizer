@@ -1,4 +1,4 @@
-//! Resolve the admitted native class/entrance subset from authenticated portable data.
+//! Resolve admitted class, ordinary entrance and ascendancy passive selections from portable data.
 //! This records native source resolution, not observations of PoB's Lua object graph.
 use poe_optimizer_core::evaluation::{EvaluationError, EvaluationErrorKind};
 use poe_optimizer_data::class_tree::ClassTreeSelection;
@@ -15,6 +15,7 @@ pub(crate) struct NativeTree {
     pub ascendancy: Option<TreeAscendancy>,
     pub allocated_nodes: Vec<u32>,
     paid_node: Option<EffectiveTreeNode>,
+    ascendancy_node: Option<EffectiveTreeNode>,
 }
 fn unsupported(message: impl Into<String>) -> EvaluationError {
     EvaluationError::new(EvaluationErrorKind::UnsupportedCapability, message)
@@ -122,26 +123,37 @@ impl NativeTree {
                 }
             }
         }
-        let paid_ids: Vec<_> = requested.difference(&roots).copied().collect();
-        if paid_ids.len() > 1 {
+        let (ascendancy_ids, ordinary_ids): (Vec<_>, Vec<_>) = requested
+            .difference(&roots)
+            .copied()
+            .partition(|id| data.ascendancy_nodes.contains_key(id));
+        if ordinary_ids.len() > 1 || ascendancy_ids.len() > 1 {
             return Err(unsupported(
-                "Native class/tree profile currently admits zero or one ordinary entrance allocation",
+                "Native class/tree profile admits zero or one ordinary entrance and zero or one reviewed ascendancy passive",
             ));
         }
         let resolved = ClassTreeSelection {
             class_id: internal_id,
             ascendancy_id: ascendancy.map(|asc| asc.internal_id.clone()),
-            entrance_node_id: paid_ids.first().copied(),
+            entrance_node_id: ordinary_ids.first().copied(),
+            ascendancy_node_id: ascendancy_ids.first().copied(),
         }
         .resolve(data)
         .map_err(|error| unsupported(error.to_string()))?;
-        let modifiers = if let Some(node) = &resolved.paid_node {
-            *compiled
-                .entrance_modifiers(internal_id, node.physical_node_id)
-                .ok_or_else(|| unsupported("Missing compiled ordinary entrance effects"))?
-        } else {
-            CharacterModifiers::default()
-        };
+        let mut modifiers = CharacterModifiers::default();
+        for (owner, node) in resolved.paid_node.iter().map(|node| (None, node)).chain(
+            resolved
+                .ascendancy_node
+                .iter()
+                .map(|node| (resolved.selection.ascendancy_id.as_deref(), node)),
+        ) {
+            let effect = compiled
+                .passive_modifiers(internal_id, owner, node.physical_node_id)
+                .ok_or_else(|| unsupported("Missing compiled selected passive effects"))?;
+            modifiers = modifiers
+                .checked_add(*effect)
+                .map_err(|error| unsupported(error.to_string()))?;
+        }
         Ok(Self {
             character: CharacterInput {
                 attributes: CharacterAttributes {
@@ -155,6 +167,7 @@ impl NativeTree {
             ascendancy: resolved.ascendancy,
             allocated_nodes: resolved.allocated_nodes.into_iter().collect(),
             paid_node: resolved.paid_node,
+            ascendancy_node: resolved.ascendancy_node,
         })
     }
     pub fn ascendancy_name(&self) -> &str {
@@ -169,23 +182,31 @@ impl NativeTree {
                 "name":asc.name,"start_node_id":asc.start_node_id,
             })
         });
-        let paid_nodes: Vec<_> = self.paid_node.iter().map(|node| serde_json::json!({
+        let paid_nodes: Vec<_> = self.paid_node.iter().map(|node| ("ordinary", node))
+            .chain(self.ascendancy_node.iter().map(|node| ("ascendancy", node)))
+            .map(|(kind, node)| serde_json::json!({
+            "allocation_kind":kind,
             "physical_node_id":node.physical_node_id,"effective_node_id":node.effective_source_id,
             "name":node.name,"stats":node.stats,"override_provenance":node.provenance,
         })).collect();
         serde_json::json!({
-            "schema_version":1,
+            "schema_version":2,
             "class":{"index":self.class.integer_id,"internal_id":self.class.integer_id,
                 "source_index":self.class.source_index,"name":self.class.name,"start_node_id":self.class.start_node_id},
             "ascendancy":ascendancy,"allocated_nodes":self.allocated_nodes,
-            "ordinary_allocated_count":paid_nodes.len(),"paid_nodes":paid_nodes,
+            "ordinary_allocated_count":usize::from(self.paid_node.is_some()),
+            "ascendancy_allocated_count":usize::from(self.ascendancy_node.is_some()),"paid_nodes":paid_nodes,
             "source":{"upstream_revision":compiled.snapshot().tree().source.upstream_revision,"tree_version":compiled.snapshot().tree().source.tree_version,
                 "bundled_content_sha256":poe_optimizer_data::bundled::content_sha256()},
             "data_identity":compiled.identity(),
-            "configured_effects":compiled.snapshot().package().entrance_effects.iter().filter(|entry| entry.class_id == self.class.integer_id && self.paid_node.as_ref().is_some_and(|node| entry.physical_node_id == node.physical_node_id)).collect::<Vec<_>>(),
+            "configured_effects":compiled.snapshot().package().passive_effects.iter().filter(|entry|
+                entry.class_id == self.class.integer_id && (
+                    (entry.ascendancy_id.is_none() && self.paid_node.as_ref().is_some_and(|node| entry.physical_node_id == node.physical_node_id)) ||
+                    (entry.ascendancy_id.as_deref() == self.ascendancy.as_ref().map(|asc| asc.internal_id.as_str()) && self.ascendancy_node.as_ref().is_some_and(|node| entry.physical_node_id == node.physical_node_id))
+                )).collect::<Vec<_>>(),
             "point_budget_verified":false,
             "evidence_kind":"native_source_resolution",
-            "scope":"class_identity_and_zero_or_one_ordinary_entrance",
+            "scope":"class_identity_and_zero_or_one_ordinary_and_ascendancy_passive",
         })
     }
 }

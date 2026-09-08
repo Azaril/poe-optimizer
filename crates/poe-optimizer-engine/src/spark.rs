@@ -1,5 +1,5 @@
 //! Closed native pipeline: level-one quality-zero Spark, explicit class attributes
-//! and supported entrance effects, no equipment or supports. The host must validate
+//! and supported passive effects, no equipment or supports. The host must validate
 //! that complete build scope before constructing these explicit inputs.
 //!
 //! Balance records are supplied by an immutable compiled game-data snapshot.
@@ -10,7 +10,7 @@ use crate::data::CompiledGameData;
 use crate::defence::round_to_integer;
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-spark-level1-class-entrance-v2";
+pub const PROFILE_ID: &str = "poe2-spark-level1-class-passives-v3";
 pub const TREE_VERSION: &str = "0_5";
 pub const CLASS_ID: u32 = 7;
 pub const SKILL_ID: &str = "SparkPlayer";
@@ -218,17 +218,23 @@ pub fn evaluate_with_data(
     };
     let life = round_to_integer(life_base * (1.0 + life_increased / 100.0)).max(rules.minimum_life);
     let mana = round_to_integer(mana_base * (1.0 + mana_increased / 100.0)).max(rules.minimum_mana);
-    let resistance = |quest| {
-        let total = input.resistance_penalty
-            + if quest {
+    let resistance = crate::resistance::calculate(
+        &modifiers,
+        input.resistance_penalty,
+        [
+            input.quests.blackjaw,
+            input.quests.beira,
+            input.quests.garukhan,
+        ]
+        .map(|enabled| {
+            if enabled {
                 data.quest_elemental_resistance
             } else {
                 0.0
-            };
-        total
-            .trunc()
-            .clamp(data.resistance_floor, data.player_resistance_cap)
-    };
+            }
+        }),
+        compiled.defence(),
+    );
     // For this profile calcResistForType's configurable maximum admits values
     // above75 but caps them at90; no enemyMaxResist override is active.
     let enemy_resistance = input
@@ -262,10 +268,10 @@ pub fn evaluate_with_data(
         energy_shield: round_to_integer(modifiers.energy_shield_flat).max(0.0),
         armour: round_to_integer(modifiers.armour_flat).max(0.0),
         evasion: round_to_integer(rules.base_evasion + modifiers.evasion_flat).max(0.0),
-        fire_resistance: resistance(input.quests.blackjaw),
-        cold_resistance: resistance(input.quests.beira),
-        lightning_resistance: resistance(input.quests.garukhan),
-        chaos_resistance: 0.0,
+        fire_resistance: resistance.fire,
+        cold_resistance: resistance.cold,
+        lightning_resistance: resistance.lightning,
+        chaos_resistance: resistance.chaos,
         average_hit,
         hit_dps: average_damage * cast_rate,
         cast_rate,

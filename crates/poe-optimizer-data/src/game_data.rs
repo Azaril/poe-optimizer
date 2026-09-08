@@ -7,8 +7,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 2;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v2";
+pub const SCHEMA_VERSION: u32 = 3;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v3";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -20,7 +20,7 @@ const SECTIONS: &[&str] = &[
     "defence",
     "monsters",
     "encounters",
-    "entrance_effects",
+    "passive_effects",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -53,7 +53,7 @@ pub struct LoadLimits {
     pub max_depth: usize,
     pub max_values: usize,
     pub max_string_bytes: usize,
-    pub max_effects_per_entrance: usize,
+    pub max_effects_per_passive: usize,
 }
 impl Default for LoadLimits {
     fn default() -> Self {
@@ -62,7 +62,7 @@ impl Default for LoadLimits {
             max_depth: 64,
             max_values: 100_000,
             max_string_bytes: 4096,
-            max_effects_per_entrance: 32,
+            max_effects_per_passive: 32,
         }
     }
 }
@@ -198,6 +198,7 @@ pub struct DefenceData {
     pub deflection_rating_floor: f64,
     pub resistance_floor: f64,
     pub player_resistance_cap: f64,
+    pub resistance_maximum_cap: f64,
     pub enemy_resistance_cap: f64,
     pub enemy_physical_reduction_cap: f64,
 }
@@ -231,21 +232,27 @@ pub enum PassiveStat {
     MeleeDamageIncreased,
     ProjectileDamageIncreased,
     MinionDamageIncreased,
+    FireResistanceFlat,
+    ColdResistanceFlat,
+    LightningResistanceFlat,
+    ChaosResistanceFlat,
+    ElementalResistanceFlat,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct EntranceEffect {
+pub struct PassiveEffect {
     pub stat: PassiveStat,
     pub value: f64,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct EntranceEffects {
+pub struct PassiveEffects {
     pub class_id: u32,
+    pub ascendancy_id: Option<String>,
     pub physical_node_id: u32,
     pub effective_node_id: u32,
     /// Source order is preserved even when aggregation currently commutes.
-    pub effects: Vec<EntranceEffect>,
+    pub effects: Vec<PassiveEffect>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -260,7 +267,7 @@ pub struct GameDataPackage {
     pub defence: DefenceData,
     pub monsters: MonsterData,
     pub encounters: EncounterData,
-    pub entrance_effects: Vec<EntranceEffects>,
+    pub passive_effects: Vec<PassiveEffects>,
 }
 impl GameDataPackage {
     /// Bounded producer decoding only: duplicate keys and resource excess reject,
@@ -297,6 +304,18 @@ impl GameDataSnapshot {
     }
     pub fn package(&self) -> &GameDataPackage {
         &self.package
+    }
+    pub fn passive_effects(
+        &self,
+        class_id: u32,
+        ascendancy_id: Option<&str>,
+        physical_node_id: u32,
+    ) -> Option<&PassiveEffects> {
+        self.package.passive_effects.iter().find(|record| {
+            record.class_id == class_id
+                && record.ascendancy_id.as_deref() == ascendancy_id
+                && record.physical_node_id == physical_node_id
+        })
     }
     pub fn tree(&self) -> &BundledClassTree {
         &self.package.tree
@@ -401,7 +420,7 @@ fn check_limits(bytes: &[u8], limits: &LoadLimits) -> Result<()> {
     if limits.max_depth == 0
         || limits.max_values == 0
         || limits.max_string_bytes == 0
-        || limits.max_effects_per_entrance == 0
+        || limits.max_effects_per_passive == 0
     {
         return Err(error("loader limits must be positive"));
     }
@@ -469,7 +488,6 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
         "defence",
         "monsters",
         "encounters",
-        "entrance_effects",
     ] {
         validate_numbers(section, &value[section])?;
     }
@@ -595,6 +613,7 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
         ("hit_chance_floor", d.hit_chance_floor),
         ("hit_chance_cap", d.hit_chance_cap),
         ("player_resistance_cap", d.player_resistance_cap),
+        ("resistance_maximum_cap", d.resistance_maximum_cap),
         ("enemy_resistance_cap", d.enemy_resistance_cap),
         (
             "enemy_physical_reduction_cap",
@@ -606,6 +625,7 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     if d.hit_chance_floor > d.hit_chance_cap
         || d.resistance_floor > d.player_resistance_cap
         || d.resistance_floor > d.enemy_resistance_cap
+        || d.resistance_floor > d.resistance_maximum_cap
     {
         return Err(error("defence floors exceed caps"));
     }
@@ -626,37 +646,71 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
         0.0,
     )?;
     let mut found = BTreeSet::new();
-    for effects in &package.entrance_effects {
-        if !found.insert((effects.class_id, effects.physical_node_id)) {
-            return Err(error("duplicate class/entrance effect selector"));
+    for effects in &package.passive_effects {
+        if !found.insert((
+            effects.class_id,
+            effects.ascendancy_id.clone(),
+            effects.physical_node_id,
+        )) {
+            return Err(error("duplicate owned passive effect selector"));
         }
-        let node = package
-            .tree
-            .entrance(effects.class_id, effects.physical_node_id)
-            .map_err(error)?;
+        let node = match effects.ascendancy_id.as_deref() {
+            Some(ascendancy_id) => package.tree.ascendancy_passive(
+                effects.class_id,
+                ascendancy_id,
+                effects.physical_node_id,
+            ),
+            None => package
+                .tree
+                .entrance(effects.class_id, effects.physical_node_id),
+        }
+        .map_err(error)?;
         if effects.effective_node_id != node.effective_source_id
             || effects.effects.len() != node.stats.len()
             || effects.effects.is_empty()
-            || effects.effects.len() > limits.max_effects_per_entrance
+            || effects.effects.len() > limits.max_effects_per_passive
         {
             return Err(error(
-                "entrance effect references, source ordering or effect limits disagree",
+                "passive effect references, source ordering or effect limits disagree",
             ));
+        }
+        for effect in &effects.effects {
+            let minimum = match effect.stat {
+                PassiveStat::FireResistanceFlat
+                | PassiveStat::ColdResistanceFlat
+                | PassiveStat::LightningResistanceFlat
+                | PassiveStat::ChaosResistanceFlat
+                | PassiveStat::ElementalResistanceFlat => -1e6,
+                _ => 0.0,
+            };
+            number("passive effect value", effect.value, minimum, 1e6)?;
         }
         let stats: BTreeSet<_> = effects.effects.iter().map(|v| v.stat).collect();
         if stats.len() != effects.effects.len() {
-            return Err(error("duplicate entrance stat operations"));
+            return Err(error("duplicate passive stat operations"));
         }
     }
     let expected: BTreeSet<_> = package
         .tree
         .class_entrances
         .iter()
-        .flat_map(|(class, values)| values.keys().map(|node| (*class, *node)))
+        .flat_map(|(class, values)| values.keys().map(|node| (*class, None, *node)))
+        .chain(
+            package
+                .tree
+                .ascendancy_passives
+                .iter()
+                .flat_map(|(ascendancy, nodes)| {
+                    let class_id = package.tree.ascendancies[ascendancy].class_id;
+                    nodes
+                        .keys()
+                        .map(move |node| (class_id, Some(ascendancy.clone()), *node))
+                }),
+        )
         .collect();
     if found != expected {
         return Err(error(
-            "typed effects must cover every admitted class/entrance exactly once",
+            "typed effects must cover every admitted owned passive exactly once",
         ));
     }
     Ok(())

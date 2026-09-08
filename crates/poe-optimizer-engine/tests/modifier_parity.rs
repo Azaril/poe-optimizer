@@ -2417,6 +2417,7 @@ impl SparkOracle {
         }
         lua.globals().set("sparkQuests", selected_quests).unwrap();
         character_parity::install_defence_oracle(lua);
+        resistance_parity::install_defence_oracle(lua);
         // Insert unchanged upstream functions/expressions for the exact branches
         // admitted by this profile. Scaffolding supplies resolved skill/context data;
         // no expected values or rewritten Lua arithmetic are used.
@@ -2435,13 +2436,18 @@ impl SparkOracle {
             "\t\tmodDB:NewMod(\"Life\", \"BASE\", data.characterConstants",
             "\t\tmodDB:NewMod(\"ManaRegen\"",
         ));
+        body.push_str("local env={configInput={resistancePenalty=input.penalty}}; ");
+        for prefix in resistance_parity::SETUP_PREFIXES {
+            body.push_str(source_line(&setup, prefix));
+            body.push('\n');
+        }
         body.push_str("for field, quest in pairs(sparkQuests) do if input.quests[field] then modDB:NewMod(quest.name,quest.kind,quest.value,'Quest') end end\n");
         body.push_str(section(
             &perform,
             "\t-- Add attribute bonuses\n",
             "\t-- Calculate Presence / Surrounded",
         ));
-        body.push_str("sparkCalcs.doActorLifeManaSpirit({modDB=modDB,output=output},true); characterDefences(modDB,output,input.level); local enemyDB=new('ModDB'):ModDB(); enemyDB:NewMod('LightningResist','BASE',input.resistance,'Config'); local env={configInput={enemyLightningResist=input.resistance},modDB=modDB,partyMembers={modDB=modDB},mode_effective=true}; local isElemental={Lightning=true}; ");
+        body.push_str("sparkCalcs.doActorLifeManaSpirit({modDB=modDB,output=output},true); characterDefences(modDB,output,input.level); playerResistances(modDB,output); local enemyDB=new('ModDB'):ModDB(); enemyDB:NewMod('LightningResist','BASE',input.resistance,'Config'); local env={configInput={enemyLightningResist=input.resistance},modDB=modDB,partyMembers={modDB=modDB},mode_effective=true}; local isElemental={Lightning=true}; ");
         body.push_str(section(
             &offence,
             "\tlocal function calcResistForType(",
@@ -2539,6 +2545,7 @@ impl SparkOracle {
         let lua = &self.oracle.lua;
         let table = lua.create_table().unwrap();
         table.set("level", input.character_level).unwrap();
+        table.set("penalty", input.resistance_penalty).unwrap();
         table
             .set("character", character_parity::input_table(lua, character))
             .unwrap();
@@ -2696,3 +2703,6 @@ mod mace_parity;
 
 #[path = "support/character_parity.rs"]
 mod character_parity;
+
+#[path = "support/resistance_parity.rs"]
+mod resistance_parity;

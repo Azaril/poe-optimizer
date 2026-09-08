@@ -100,7 +100,7 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v2",
+        "poe-game-data-extractor-v3",
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
@@ -188,6 +188,15 @@ struct Policy {
 /// Generate all current package sections from authenticated source, never from
 /// the embedded package. A separate policy owns selection and conversion rules.
 pub fn extract_pinned_game_data(root: &Path) -> Result<ExtractedGameData> {
+    let output = extract_pinned_game_data_for_review(root)?;
+    output.validate()?;
+    Ok(output)
+}
+/// Offline maintainer generation for an explicitly reviewed package/schema migration.
+/// Verifies the pinned complete source, but does not assert that newly generated
+/// bytes already match the compiled reviewed artifact. Runtime/CLI extraction uses
+/// `extract_pinned_game_data`, which additionally enforces that reviewed digest.
+pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameData> {
     let source_manifest_sha256 = source::verify(root)?;
     let mut sources = BTreeMap::new();
     let mut total = 0usize;
@@ -217,7 +226,7 @@ pub fn extract_pinned_game_data(root: &Path) -> Result<ExtractedGameData> {
     let extractor = Extractor::new(sources)?;
     let record_function: Function = extractor.lua.globals().get("source_extract_records")?;
     let records: Table = record_function.call(extractor.lua.to_value(&policy)?)?;
-    let mut entrance_effects = Vec::new();
+    let mut passive_effects = Vec::new();
     let convert: Function = extractor.lua.globals().get("source_extract_effect")?;
     for (class_id, nodes) in &tree.class_entrances {
         for (physical_node_id, node) in nodes {
@@ -226,8 +235,25 @@ pub fn extract_pinned_game_data(root: &Path) -> Result<ExtractedGameData> {
                 let value: Value = convert.call(line.as_str())?;
                 effects.push(extractor.lua.from_value(value)?);
             }
-            entrance_effects.push(EntranceEffects {
+            passive_effects.push(PassiveEffects {
                 class_id: *class_id,
+                ascendancy_id: None,
+                physical_node_id: *physical_node_id,
+                effective_node_id: node.effective_source_id,
+                effects,
+            });
+        }
+    }
+    for (ascendancy_id, nodes) in &tree.ascendancy_passives {
+        for (physical_node_id, node) in nodes {
+            let mut effects = Vec::new();
+            for line in &node.stats {
+                let value: Value = convert.call(line.as_str())?;
+                effects.push(extractor.lua.from_value(value)?);
+            }
+            passive_effects.push(PassiveEffects {
+                class_id: tree.ascendancies[ascendancy_id].class_id,
+                ascendancy_id: Some(ascendancy_id.clone()),
                 physical_node_id: *physical_node_id,
                 effective_node_id: node.effective_source_id,
                 effects,
@@ -261,7 +287,7 @@ pub fn extract_pinned_game_data(root: &Path) -> Result<ExtractedGameData> {
         monsters: extractor.record(&records, "monsters")?,
         defence: extractor.defence()?,
         encounters: extractor.encounters()?,
-        entrance_effects,
+        passive_effects,
     };
     package.refresh_section_digests().map_err(error)?;
     let evidence = GameDataExtractionEvidence {
@@ -275,9 +301,7 @@ pub fn extract_pinned_game_data(root: &Path) -> Result<ExtractedGameData> {
         semantics_version: SEMANTICS_VERSION.into(),
         package_sha256: hash(&package.canonical_bytes().map_err(error)?),
     };
-    let output = ExtractedGameData { package, evidence };
-    output.validate()?;
-    Ok(output)
+    Ok(ExtractedGameData { package, evidence })
 }
 fn section<'a>(source: &'a str, begin: &str, end: &str) -> Result<&'a str> {
     let matches: Vec<_> = source.match_indices(begin).collect();
@@ -578,6 +602,7 @@ impl Extractor {
             resistance_floor: self.number("data.misc.ResistFloor")?,
             player_resistance_cap: self
                 .number("data.characterConstants['base_maximum_all_resistances_%']")?,
+            resistance_maximum_cap: self.number("data.misc.MaxResistCap")?,
             enemy_resistance_cap: self.number("data.misc.MaxResistCap")?,
             enemy_physical_reduction_cap: self
                 .number("data.monsterConstants['maximum_physical_damage_reduction_%']")?,
@@ -739,6 +764,11 @@ mod tests {
         let lua = conversion();
         for expression in [
             "{modLib.createMod('Damage','INC',10,nil,ModFlag.Spell)}",
+            "{modLib.createMod('FireResist','BASE',-0.5)}",
+            "{modLib.createMod('ColdResist','BASE',-1000000)}",
+            "{modLib.createMod('LightningResist','BASE',1000000)}",
+            "{modLib.createMod('ChaosResist','BASE',7)}",
+            "{modLib.createMod('ElementalResist','BASE',-20)}",
             "{modLib.createMod('Speed','INC',4),modLib.createMod('WarcrySpeed','INC',4),modLib.createMod('TotemPlacementSpeed','INC',4)}",
             "{modLib.createMod('MinionModifier','LIST',{mod=modLib.createMod('Damage','INC',10)})}",
         ] {
@@ -755,6 +785,18 @@ mod tests {
             "{modLib.createMod('Speed','INC',4),modLib.createMod('TotemPlacementSpeed','INC',4),modLib.createMod('WarcrySpeed','INC',4)}",
             "{modLib.createMod('MinionModifier','LIST',{mod=modLib.createMod('Damage','INC',10,nil,ModFlag.Spell)})}",
             "{modLib.createMod('Armour','BASE',0/0)}",
+            "{modLib.createMod('Armour','BASE',-1)}",
+            "{modLib.createMod('FireResist','BASE',0/0)}",
+            "{modLib.createMod('FireResist','BASE',1/0)}",
+            "{modLib.createMod('FireResist','BASE',-1000001)}",
+            "{modLib.createMod('FireResist','INC',8)}",
+            "{modLib.createMod('FireResist','MORE',8)}",
+            "{modLib.createMod('FireResist','OVERRIDE',8)}",
+            "{modLib.createMod('FireResistMax','BASE',8)}",
+            "{modLib.createMod('FireResist','BASE',8,nil,ModFlag.Spell)}",
+            "{modLib.createMod('FireResist','BASE',8,nil,0,0,{type='Condition',var='Unknown'})}",
+            "{modLib.createMod('FireResist','BASE',8),modLib.createMod('ChaosResist','BASE',8)}",
+            "{modLib.createMod('MinionModifier','LIST',{mod=modLib.createMod('FireResist','BASE',8)})}",
         ] {
             assert!(
                 lua.load(format!("return source_convert_modifiers({expression})"))

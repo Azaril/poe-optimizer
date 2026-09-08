@@ -1,4 +1,4 @@
-//! Typed selections and finite graph composition for the admitted class/entrance bundle.
+//! Typed selections and finite graph composition for the admitted class/passive bundle.
 //!
 //! A selection contains paid physical IDs only. Roots are implicit, and an effective
 //! source override never replaces the physical allocation ID. These helpers use an
@@ -8,7 +8,7 @@
 use crate::{
     bundled::BundledClassTree,
     game_data::GameDataSnapshot,
-    tree_data::{EffectiveTreeNode, TreeAscendancy, TreeClass, TreeNodeKind},
+    tree_data::{EffectiveTreeNode, TreeAscendancy, TreeClass, TreeNodeKind, TreePointCategory},
 };
 use poe_optimizer_core::candidate::{
     AscendancyDefinition, CandidateCatalog, CandidateConstraints, CandidateDomain, CatalogIdentity,
@@ -27,7 +27,7 @@ fn error(value: impl std::fmt::Display) -> ClassTreeError {
     ClassTreeError(value.to_string())
 }
 
-/// Zero or one ordinary entrance, with no paid ascendancy nodes. The caller must
+/// Zero or one ordinary entrance, and zero or one reviewed ascendancy passive. The caller must
 /// supply progression budgets separately; choosing a node does not establish one.
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 #[serde(deny_unknown_fields)]
@@ -35,10 +35,12 @@ pub struct ClassTreeSelection {
     pub class_id: u32,
     pub ascendancy_id: Option<String>,
     pub entrance_node_id: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ascendancy_node_id: Option<u32>,
 }
 
 /// Available base attributes from the selected class. Admitted roots are statless
-/// and current entrance operations do not modify attributes. New attribute effects
+/// and current admitted passive operations do not modify attributes. New attribute effects
 /// require explicit requirement-resolution work before expanding this contract.
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
@@ -54,8 +56,9 @@ pub struct ResolvedClassTree {
     pub class: TreeClass,
     pub ascendancy: Option<TreeAscendancy>,
     pub paid_node: Option<EffectiveTreeNode>,
+    pub ascendancy_node: Option<EffectiveTreeNode>,
     pub implicit_roots: BTreeSet<u32>,
-    /// Canonical realized allocation: implicit roots plus the optional paid ID.
+    /// Canonical realized allocation: implicit roots plus both optional paid IDs.
     pub allocated_nodes: BTreeSet<u32>,
     pub base_attributes: ClassBaseAttributes,
 }
@@ -75,17 +78,29 @@ impl ClassTreeSelection {
             .entrance_node_id
             .map(|id| tree.entrance(self.class_id, id).map_err(error))
             .transpose()?;
+        let ascendancy_node = self
+            .ascendancy_node_id
+            .map(|id| {
+                let asc = ascendancy.ok_or_else(|| {
+                    error("an ascendancy passive requires an ascendancy selection")
+                })?;
+                tree.ascendancy_passive(self.class_id, &asc.internal_id, id)
+                    .map_err(error)
+            })
+            .transpose()?;
         let mut implicit_roots = BTreeSet::from([class.start_node_id]);
         if let Some(ascendancy) = ascendancy {
             implicit_roots.insert(ascendancy.start_node_id);
         }
         let mut allocated_nodes = implicit_roots.clone();
         allocated_nodes.extend(self.entrance_node_id);
+        allocated_nodes.extend(self.ascendancy_node_id);
         Ok(ResolvedClassTree {
             selection: self.clone(),
             class: class.clone(),
             ascendancy: ascendancy.cloned(),
             paid_node: paid_node.cloned(),
+            ascendancy_node: ascendancy_node.cloned(),
             implicit_roots,
             allocated_nodes,
             base_attributes: ClassBaseAttributes {
@@ -97,8 +112,9 @@ impl ClassTreeSelection {
     }
 }
 
-/// All admitted structural selections in class, ascendancy, entrance order, with
-/// `None` before named/paid choices. The pinned bundle has 93; callers filter this
+/// All admitted structural selections in class, ascendancy, ordinary entrance and
+/// ascendancy passive order, with
+/// `None` before named/paid choices. The pinned bundle has 105; callers filter this
 /// finite list with their own explicit budgets and locks before calculation.
 pub fn selections(tree: &BundledClassTree) -> Result<Vec<ClassTreeSelection>, ClassTreeError> {
     tree.validate_scope().map_err(error)?;
@@ -108,13 +124,21 @@ pub fn selections(tree: &BundledClassTree) -> Result<Vec<ClassTreeSelection>, Cl
             for entrance_node_id in std::iter::once(None)
                 .chain(tree.entrances(*class_id).map_err(error)?.keys().map(Some))
             {
-                let selection = ClassTreeSelection {
-                    class_id: *class_id,
-                    ascendancy_id: ascendancy_id.cloned(),
-                    entrance_node_id: entrance_node_id.copied(),
-                };
-                selection.resolve(tree)?;
-                result.push(selection);
+                let asc_nodes = ascendancy_id.and_then(|id| tree.ascendancy_passives.get(id));
+                for ascendancy_node_id in std::iter::once(None).chain(
+                    asc_nodes
+                        .into_iter()
+                        .flat_map(|nodes| nodes.keys().copied().map(Some)),
+                ) {
+                    let selection = ClassTreeSelection {
+                        class_id: *class_id,
+                        ascendancy_id: ascendancy_id.cloned(),
+                        entrance_node_id: entrance_node_id.copied(),
+                        ascendancy_node_id,
+                    };
+                    selection.resolve(tree)?;
+                    result.push(selection);
+                }
             }
         }
     }
@@ -122,7 +146,7 @@ pub fn selections(tree: &BundledClassTree) -> Result<Vec<ClassTreeSelection>, Cl
 }
 
 /// Construct an empty non-tree catalog for composition from an explicitly partial
-/// bundle. Only retained roots/ordinary entrances and edges between retained nodes
+/// bundle. Only retained roots/admitted passives and edges between retained nodes
 /// are included. Shared physical root owner sets remain intact. Coverage omissions
 /// remain in `snapshot.tree().coverage`, outside selected-mechanic blockers.
 ///
@@ -136,10 +160,16 @@ pub fn candidate_catalog(snapshot: &GameDataSnapshot) -> Result<CandidateCatalog
         .roots
         .keys()
         .chain(tree.ordinary_nodes.keys())
+        .chain(tree.ascendancy_nodes.keys())
         .copied()
         .collect();
     let mut passive_nodes = BTreeMap::new();
-    for (id, node) in tree.roots.iter().chain(&tree.ordinary_nodes) {
+    for (id, node) in tree
+        .roots
+        .iter()
+        .chain(&tree.ordinary_nodes)
+        .chain(&tree.ascendancy_nodes)
+    {
         let kind = match node.kind {
             TreeNodeKind::ClassStart => PassiveKind::ClassStart {
                 class_ids: node.class_ids.iter().map(u32::to_string).collect(),
@@ -147,6 +177,11 @@ pub fn candidate_catalog(snapshot: &GameDataSnapshot) -> Result<CandidateCatalog
             TreeNodeKind::AscendancyStart => PassiveKind::AscendancyStart {
                 ascendancy_ids: node.ascendancy_ids.clone(),
             },
+            TreeNodeKind::Normal if node.point_category == TreePointCategory::Ascendancy => {
+                PassiveKind::Ascendancy {
+                    ascendancy_ids: node.ascendancy_ids.clone(),
+                }
+            }
             TreeNodeKind::Normal => PassiveKind::Ordinary,
             _ => return Err(error("unsupported node reached admitted bundle projection")),
         };
@@ -171,7 +206,7 @@ pub fn candidate_catalog(snapshot: &GameDataSnapshot) -> Result<CandidateCatalog
         )
     );
     let identity_bytes = serde_json::to_vec(&(
-        "bundled-class-tree-catalog-v1",
+        "bundled-class-tree-catalog-v2",
         snapshot.identity(),
         projection_source_sha256,
     ))

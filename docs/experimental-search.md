@@ -111,6 +111,49 @@ problem requires no `tree_search` and keeps class/tree fixed. Expanded reports u
 **3** and the discrete axis order `[weapon, support, tree]`; `tree_choices` maps the third
 axis after tree-lock filtering. Legacy reports stay schema **2** with two axes.
 
+## Resistance objectives and ascendancy passives
+
+Problem schema **3** allows one of four admitted ascendancy small nodes in addition to
+an ordinary entrance. Both available point budgets are explicit 0/1 inputs. The nullable
+`ascendancy_node_id` selects a paid physical node owned by the chosen ascendancy; omitting
+it means no paid ascendancy node. Schema-2 problems retain their no-paid-ascendancy scope.
+
+```powershell
+cargo run --no-default-features --locked -- search-experimental --problem examples/mace-resistance-search.json --jobs 4 --max-evaluations 842 --output runs/mace-resistance-search.json --export runs/mace-resistance-best.xml
+```
+
+The [resistance example](../examples/mace-resistance-search.json) maximizes selected DPS
+subject to chaos resistance >= 1%. Its 105 tree selections and eight weapon/support choices
+yield 840 structural alternatives. Reviewed requirements admit 576 and reject 264, so a
+complete run uses 578 calculations. Only the admitted Monk3 passive supplies positive chaos
+resistance in the reviewed package; the constraint therefore changes the chosen build.
+The 842 ceiling accommodates a fully legal supplied product.
+
+For an exact ordinary-plus-ascendancy allocation, supply:
+
+```json
+"tree_search": {
+  "ordinary_passive_points": 1,
+  "ascendancy_passive_points": 1,
+  "selections": [
+    {"class_id": 6, "ascendancy_id": "Warrior3", "entrance_node_id": 3936,
+     "ascendancy_node_id": 14960}
+  ]
+}
+```
+
+`locks.allocated_passives: [3936, 14960]` requires both paid nodes; the corresponding
+unallocated lock excludes either category. Roots remain implicit. Wrong ownership,
+unsupported nodes and more than one node per category reject; an explicit selection over
+its point budget remains diagnostic rejection evidence and consumes no calculation.
+
+Schema-3 problems produce report schema **4**, retaining the `[weapon, support, tree]` axis
+layout and actual data identity/trust. Native tree attachments use version **2**, with
+separate used ordinary/ascendancy counts, per-node allocation kinds, physical/effective
+IDs and exact configured effects. These observed counts do not establish available budgets.
+Custom signed resistance values can change feasibility using `--data`; export companions
+retain their actual identity and custom status. See [package migration](native-data.md#schema-migration).
+
 ## Supported input and locks
 
 `template` is relative to the problem file or an absolute path. XML/share codes pass through
@@ -158,8 +201,8 @@ evaluation checks. Both are pure Rust, with compatibility re-exports at the old
 
 ## Strategies and accounting
 
-Catalog preparation is bounded to 93 tree choices and 128 weapon/support combinations per
-tree. A second cap requires `candidate_count * (template_bytes + 4096) <= 256 MiB` to limit
+Catalog preparation is bounded to 105 tree choices and 128 weapon/support combinations per
+tree (13,440 candidates). A second cap requires `candidate_count * (template_bytes + 4096) <= 256 MiB` to limit
 source-hashing work. Admission checks the entire lock-admissible domain, independently of
 proposal count; `admission.complete` and `checked_candidates` record whether that check
 finished before the deadline. This cap does not implement process-memory admission.

@@ -1,7 +1,7 @@
 //! Closed native Mace Strike profile with one normal mace and optional
 //! level-one quality-zero Brutality I. Hosts validate the complete document:
-//! explicit class attributes and admitted entrance effects, no other equipment,
-//! allocated ascendancy effects, supports or external modifiers.
+//! explicit class attributes and admitted owned passive effects, no other equipment,
+//! supports or external modifiers.
 //! Enemy values are resolved by the host; this kernel does not select encounters.
 
 use crate::character::CharacterInput;
@@ -12,7 +12,7 @@ use crate::{
 };
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-mace-strike-class-entrance-v2";
+pub const PROFILE_ID: &str = "poe2-mace-strike-class-passives-v3";
 pub const TREE_VERSION: &str = "0_5";
 /// Index in the pinned tree classes table; XML classInternalId is a separate id.
 pub const CLASS_ID: u32 = 3;
@@ -215,16 +215,23 @@ pub fn evaluate_with_data(
     };
     let life = round_to_integer(life_base * (1.0 + life_increased / 100.0)).max(rules.minimum_life);
     let mana = round_to_integer(mana_base * (1.0 + mana_increased / 100.0)).max(rules.minimum_mana);
-    let resistance = |quest| {
-        (input.resistance_penalty
-            + if quest {
+    let resistance = crate::resistance::calculate(
+        &modifiers,
+        input.resistance_penalty,
+        [
+            input.quests.blackjaw,
+            input.quests.beira,
+            input.quests.garukhan,
+        ]
+        .map(|enabled| {
+            if enabled {
                 shared.quest_elemental_resistance
             } else {
                 0.0
-            })
-        .trunc()
-        .clamp(shared.resistance_floor, shared.player_resistance_cap)
-    };
+            }
+        }),
+        compiled.defence(),
+    );
     let weapon = compiled.weapon(input.weapon);
     // Classes/Item: physical quality applies locally, rounding each endpoint.
     // Item level does not enter these ordinary unmodified weapon base calculations.
@@ -302,10 +309,10 @@ pub fn evaluate_with_data(
         energy_shield: round_to_integer(modifiers.energy_shield_flat).max(0.0),
         armour: round_to_integer(modifiers.armour_flat).max(0.0),
         evasion: round_to_integer(rules.base_evasion + modifiers.evasion_flat).max(0.0),
-        fire_resistance: resistance(input.quests.blackjaw),
-        cold_resistance: resistance(input.quests.beira),
-        lightning_resistance: resistance(input.quests.garukhan),
-        chaos_resistance: 0.0,
+        fire_resistance: resistance.fire,
+        cold_resistance: resistance.cold,
+        lightning_resistance: resistance.lightning,
+        chaos_resistance: resistance.chaos,
         accuracy,
         hit_chance: hit,
         main_hand_average_hit,

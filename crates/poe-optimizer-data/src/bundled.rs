@@ -1,4 +1,4 @@
-//! Authenticated, explicitly partial class/root/ordinary-entrance data for native hosts.
+//! Authenticated, explicitly partial class/root/admitted-passive data for native hosts.
 //! The artifact is generated from a freshly verified full snapshot. Runtime readers
 //! authenticate its complete bytes against a compiled trusted digest, not its labels.
 use crate::{
@@ -13,8 +13,8 @@ use std::{
 };
 use thiserror::Error;
 
-pub const BUNDLE_SCHEMA: u32 = 1;
-pub const BUNDLE_POLICY: &str = "all_class_ascendancy_roots_and_ordinary_entrances_v1";
+pub const BUNDLE_SCHEMA: u32 = 2;
+pub const BUNDLE_POLICY: &str = "all_roots_ordinary_entrances_and_reviewed_ascendancy_passives_v2";
 const BUNDLE_BYTES: &[u8] = include_bytes!("../data/class-tree.json");
 const MAX_BUNDLE_BYTES: usize = 1024 * 1024;
 #[derive(Debug, Clone, Error)]
@@ -32,6 +32,7 @@ pub struct BundledTreeCoverage {
     pub retained_node_count: usize,
     pub excluded_node_count: usize,
     pub class_entrance_view_count: usize,
+    pub ascendancy_passive_view_count: usize,
     /// Class-only plus class/ascendancy choices whose implicit roots have zero stats.
     pub no_effect_implicit_root_selections: usize,
     /// Source edges crossing from a retained node to an excluded one.
@@ -42,7 +43,8 @@ pub struct BundledTreeCoverage {
 }
 /// A subset, never a partial object masquerading as a complete TreeDataSnapshot.
 /// Raw retained node adjacency may point outside this subset; coverage preserves
-/// those omitted boundaries. Only class_entrances is an admitted native choice map.
+/// those omitted boundaries. class_entrances and ascendancy_passives define the
+/// admitted native choices; no other retained/raw adjacency grants admission.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct BundledClassTree {
@@ -55,7 +57,31 @@ pub struct BundledClassTree {
     pub roots: BTreeMap<u32, TreeNode>,
     pub ordinary_nodes: BTreeMap<u32, TreeNode>,
     pub class_entrances: BTreeMap<u32, BTreeMap<u32, EffectiveTreeNode>>,
+    pub ascendancy_nodes: BTreeMap<u32, TreeNode>,
+    pub ascendancy_passives: BTreeMap<String, BTreeMap<u32, EffectiveTreeNode>>,
     pub coverage: BundledTreeCoverage,
+}
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct SelectionPolicy {
+    schema_version: u32,
+    ascendancy_passives: BTreeMap<String, BTreeSet<u32>>,
+}
+fn selection_policy() -> Result<SelectionPolicy> {
+    let policy: SelectionPolicy =
+        serde_json::from_str(include_str!("../data/class-tree-policy.json")).map_err(error)?;
+    if policy.schema_version != 1
+        || policy.ascendancy_passives.is_empty()
+        || policy
+            .ascendancy_passives
+            .values()
+            .any(|nodes| nodes.len() != 1)
+    {
+        return Err(error(
+            "unsupported or ambiguous ascendancy selection policy",
+        ));
+    }
+    Ok(policy)
 }
 impl BundledClassTree {
     pub fn class(&self, class_id: u32) -> Result<&TreeClass> {
@@ -82,6 +108,18 @@ impl BundledClassTree {
         self.entrances(class_id)?
             .get(&node_id)
             .ok_or_else(|| error("node is not an admitted ordinary entrance for selected class"))
+    }
+    pub fn ascendancy_passive(
+        &self,
+        class_id: u32,
+        ascendancy_id: &str,
+        node_id: u32,
+    ) -> Result<&EffectiveTreeNode> {
+        self.ascendancy(class_id, ascendancy_id)?;
+        self.ascendancy_passives
+            .get(ascendancy_id)
+            .and_then(|nodes| nodes.get(&node_id))
+            .ok_or_else(|| error("node is not an admitted passive for selected ascendancy"))
     }
     /// Deterministic generation only from a caller-authenticated complete source.
     /// The caller must preserve its trust boundary; provenance labels alone do not suffice.
@@ -154,8 +192,38 @@ impl BundledClassTree {
                     .clone(),
             );
         }
-        let projection = TreeProjection::new(source, paid.clone()).map_err(error)?;
-        let retained_node_count = roots.len() + paid.len();
+        let mut ascendancy_nodes = BTreeMap::new();
+        let mut ascendancy_passives = BTreeMap::new();
+        for (ascendancy_id, ids) in selection_policy()?.ascendancy_passives {
+            let asc = snapshot
+                .ascendancies
+                .get(&ascendancy_id)
+                .ok_or_else(|| error("policy ascendancy missing from source"))?;
+            let mut views = BTreeMap::new();
+            for id in ids {
+                let node = snapshot
+                    .nodes
+                    .get(&id)
+                    .ok_or_else(|| error("policy passive missing from source"))?;
+                ascendancy_nodes.insert(id, node.clone());
+                views.insert(
+                    id,
+                    snapshot
+                        .effective_node(asc.class_id, Some(&ascendancy_id), id)
+                        .map_err(error)?,
+                );
+            }
+            ascendancy_passives.insert(ascendancy_id, views);
+        }
+        let projection = TreeProjection::new(
+            source,
+            paid.iter()
+                .chain(ascendancy_nodes.keys())
+                .copied()
+                .collect(),
+        )
+        .map_err(error)?;
+        let retained_node_count = roots.len() + paid.len() + ascendancy_nodes.len();
         let result = Self {
             schema_version: BUNDLE_SCHEMA,
             policy: BUNDLE_POLICY.into(),
@@ -169,11 +237,18 @@ impl BundledClassTree {
                 .map(|id| (id, snapshot.nodes[&id].clone()))
                 .collect(),
             class_entrances,
+            ascendancy_nodes,
+            ascendancy_passives,
             coverage: BundledTreeCoverage {
                 source_node_count: snapshot.nodes.len(),
                 retained_node_count,
                 excluded_node_count: snapshot.nodes.len() - retained_node_count,
                 class_entrance_view_count: 16,
+                ascendancy_passive_view_count: selection_policy()?
+                    .ascendancy_passives
+                    .values()
+                    .map(BTreeSet::len)
+                    .sum(),
                 no_effect_implicit_root_selections: 31,
                 boundary_edges: projection.source_coverage().boundary_edges.clone(),
                 source_dangling_connections: snapshot.dangling_connections.clone(),
@@ -181,8 +256,9 @@ impl BundledClassTree {
                 limitations: [
                     "strict_subset_not_full_tree",
                     "raw_adjacency_includes_excluded_endpoints",
-                    "ordinary_entrances_only",
-                    "no_allocated_ascendancy_effects",
+                    "zero_or_one_ordinary_entrance",
+                    "zero_or_one_reviewed_ascendancy_passive",
+                    "explicit_ascendancy_point_budget_required",
                     "explicit_ordinary_point_budget_required",
                     "stats_are_exact_source_strings_not_generic_modifier_translation",
                     "source_views_do_not_certify_live_pointer_or_game_legality",
@@ -204,7 +280,8 @@ impl BundledClassTree {
             || self.class_entrances.len() != 8
             || self.coverage.class_entrance_view_count != 16
             || self.coverage.no_effect_implicit_root_selections != 31
-            || self.coverage.retained_node_count != self.roots.len() + self.ordinary_nodes.len()
+            || self.coverage.retained_node_count
+                != self.roots.len() + self.ordinary_nodes.len() + self.ascendancy_nodes.len()
             || self.coverage.excluded_node_count + self.coverage.retained_node_count
                 != self.coverage.source_node_count
         {
@@ -319,6 +396,90 @@ impl BundledClassTree {
                             "entrance effect, owner connection or normal-node semantics changed",
                         ));
                     }
+                }
+            }
+        }
+        let expected = selection_policy()?.ascendancy_passives;
+        let found: BTreeMap<_, BTreeSet<_>> = self
+            .ascendancy_passives
+            .iter()
+            .map(|(id, nodes)| (id.clone(), nodes.keys().copied().collect()))
+            .collect();
+        if found != expected
+            || self.coverage.ascendancy_passive_view_count
+                != expected.values().map(BTreeSet::len).sum::<usize>()
+            || self
+                .ascendancy_nodes
+                .keys()
+                .copied()
+                .collect::<BTreeSet<_>>()
+                != expected.values().flatten().copied().collect()
+            || self
+                .ascendancy_nodes
+                .keys()
+                .any(|id| self.ordinary_nodes.contains_key(id) || self.roots.contains_key(id))
+        {
+            return Err(error(
+                "ascendancy subset selectors or coverage disagree with selection policy",
+            ));
+        }
+        let passive_fields = [
+            "ascendancyName",
+            "connections",
+            "group",
+            "icon",
+            "name",
+            "nodeOverlay",
+            "orbit",
+            "orbitIndex",
+            "skill",
+            "stats",
+            "stringId",
+        ];
+        for (ascendancy_id, views) in &self.ascendancy_passives {
+            let asc = self
+                .ascendancies
+                .get(ascendancy_id)
+                .ok_or_else(|| error("unknown ascendancy passive owner"))?;
+            let class = self.class(asc.class_id)?;
+            let root = self
+                .roots
+                .get(&asc.start_node_id)
+                .ok_or_else(|| error("missing ascendancy root"))?;
+            for (id, view) in views {
+                let node = self
+                    .ascendancy_nodes
+                    .get(id)
+                    .ok_or_else(|| error("ascendancy raw record missing"))?;
+                crate::tree_projection::validate_node_metadata_for_catalog(
+                    &self.classes,
+                    &self.ascendancies,
+                    node,
+                )
+                .map_err(error)?;
+                if node.id != *id
+                    || node.kind != TreeNodeKind::Normal
+                    || node.point_category != TreePointCategory::Ascendancy
+                    || node.source_default_point_cost != Some(1)
+                    || node.ascendancy_ids != BTreeSet::from([ascendancy_id.clone()])
+                    || !node.class_ids.is_empty()
+                    || !node.automatic_overrides.is_empty()
+                    || !node.unsupported_mechanics.is_empty()
+                    || node.stats.len() != 1
+                    || node
+                        .source
+                        .named
+                        .keys()
+                        .any(|key| !passive_fields.contains(&key.as_str()))
+                    || !root.adjacent.contains(id)
+                    || !node.adjacent.contains(&root.id)
+                    || &crate::tree_data::effective_source_node(class, Some(asc), node)
+                        .map_err(error)?
+                        != view
+                {
+                    return Err(error(
+                        "ascendancy passive effect, owner, root connection or source semantics changed",
+                    ));
                 }
             }
         }

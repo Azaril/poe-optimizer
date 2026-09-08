@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "ascendancy_passives": {
+    "Warrior3": [
+      14960
+    ],
+    "Druid2": [
+      61722
+    ],
+    "Monk3": [
+      24475
+    ],
+    "Huntress3": [
+      17058
+    ]
+  }
+}

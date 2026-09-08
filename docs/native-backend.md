@@ -16,13 +16,16 @@ use either implementation without exposing Lua values or process APIs.
 | Mace Strike | One level-1 quality-0 Mace Strike; optional level-1 quality-0 Brutality I; supported class/tree selection described below | One normal the two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, no modifiers/implicits; normal enemies only |
 
 Both profiles accept all eight pinned classes and 23 ascendancy identities, with implicit
-roots and zero or one ordinary entrance passive connected to the selected class. Class
+roots and zero or one ordinary entrance passive connected to the selected class. They also
+admit zero or one of four directly connected ascendancy small nodes: Warrior3/14960 (fire),
+Druid2/61722 (elemental), Monk3/24475 (chaos) and Huntress3/17058 (negative elemental).
+Owned typed effect values come from the injected package. Class
 attributes affect resources and attack accuracy. Admitted entrance effects include skill
 speed, skill-type damage increases and flat armour, evasion or energy shield. Shared physical
 roots and class-specific node substitutions retain their distinct source identities.
-Allocated ascendancy passives, other ordinary nodes, attribute choices, jewels, grants and
-weapon-set allocations remain unsupported. Selecting an ascendancy identity does not claim
-coverage for its allocated effects. The evaluator does not infer an available point budget
+Other ascendancy passives, other ordinary nodes, attribute choices, jewels, grants and
+weapon-set allocations remain unsupported. Selecting an ascendancy identity does not imply
+coverage for its other effects. The evaluator does not infer an available point budget
 or certify equipment/gem requirements; search must separately apply explicit finite rules.
 
 Both profiles accept character levels 1–100, enemy levels 1–85, explicit supported encounter
@@ -45,7 +48,8 @@ parity. See [tree projection](tree-projection.md).
 
 Native results include a `native-tree` diagnostic attachment with the selected class and
 ascendancy, physical allocations, effective entrance stat lines and the bundled-data digest.
-Use CLI `--raw` to retain these diagnostic attachments. The tree evidence kind is
+Use CLI `--raw` to retain these diagnostic attachments. The attachment uses schema/media version **2** with separate ordinary/ascendancy used counts
+and a kind on each paid physical/effective view. The tree evidence kind is
 `native_source_resolution`; `point_budget_verified` is false. The
 PoB-specific live passive observation field remains absent on native results, because native
 source resolution cannot establish Lua object-reference observations. Armour and evasion
@@ -172,7 +176,8 @@ not establish optimizer quality, browser speed or a speedup over PoB.
 The controlled Mace search accepts selected compatible datasets. Its schema-1 problem keeps
 the original fixed Warrior profile; schema 2 adds all 31 admitted class/ascendancy identities
 and zero or one class-local ordinary entrance, composed with the existing weapons/supports.
-Point budgets come from the caller and requirements use selected class attributes. This is
+Problem schema 3 adds the four paid ascendancy choices with an explicit 0/1 ascendancy
+budget. Point budgets come from the caller and requirements use selected class attributes. This is
 still a finite restricted catalog; new evaluator coverage is not automatically searchable.
 Native controlled search checks the exact materialized source export, class/root/skill
 projection, physical/effective entrance IDs and configured effects, resolved weapon and

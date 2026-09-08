@@ -1,7 +1,7 @@
 //! Compile one validated configuration snapshot into immutable numeric inputs.
 //!
 //! Only operation semantics and capability keys live here. Balance values, class
-//! attributes, item bases, monster tables and entrance effects come from the
+//! attributes, item bases, monster tables and owned passive effects come from the
 //! supplied snapshot. Compilation performs no I/O and creates no build results.
 use crate::{
     character::{CharacterAttributes, CharacterInput, CharacterModifiers},
@@ -36,7 +36,7 @@ pub struct CompiledGameData {
     spark: SparkData,
     mace: MaceData,
     weapon_indices: [usize; 2],
-    entrances: BTreeMap<(u32, u32), CharacterModifiers>,
+    passives: BTreeMap<(u32, u32), BTreeMap<String, CharacterModifiers>>,
 }
 impl CompiledGameData {
     pub fn compile(snapshot: Arc<GameDataSnapshot>) -> Result<Self, GameDataError> {
@@ -135,10 +135,11 @@ impl CompiledGameData {
                 "monster tables must cover every supported level 1..100".into(),
             ));
         }
-        let mut entrances = BTreeMap::new();
-        for entrance in &package.entrance_effects {
+        let mut passives: BTreeMap<(u32, u32), BTreeMap<String, CharacterModifiers>> =
+            BTreeMap::new();
+        for passive in &package.passive_effects {
             let mut modifiers = CharacterModifiers::NONE;
-            for effect in &entrance.effects {
+            for effect in &passive.effects {
                 let field = match effect.stat {
                     PassiveStat::ArmourFlat => &mut modifiers.armour_flat,
                     PassiveStat::EvasionFlat => &mut modifiers.evasion_flat,
@@ -151,6 +152,15 @@ impl CompiledGameData {
                         &mut modifiers.projectile_damage_increased
                     }
                     PassiveStat::MinionDamageIncreased => &mut modifiers.minion_damage_increased,
+                    PassiveStat::FireResistanceFlat => &mut modifiers.fire_resistance_flat,
+                    PassiveStat::ColdResistanceFlat => &mut modifiers.cold_resistance_flat,
+                    PassiveStat::LightningResistanceFlat => {
+                        &mut modifiers.lightning_resistance_flat
+                    }
+                    PassiveStat::ChaosResistanceFlat => &mut modifiers.chaos_resistance_flat,
+                    PassiveStat::ElementalResistanceFlat => {
+                        &mut modifiers.elemental_resistance_flat
+                    }
                 };
                 *field += effect.value;
             }
@@ -160,12 +170,14 @@ impl CompiledGameData {
             }
             .validate()
             .map_err(|error| GameDataError(error.to_string()))?;
-            if entrances
-                .insert((entrance.class_id, entrance.physical_node_id), modifiers)
+            if passives
+                .entry((passive.class_id, passive.physical_node_id))
+                .or_default()
+                .insert(passive.ascendancy_id.clone().unwrap_or_default(), modifiers)
                 .is_some()
             {
                 return Err(GameDataError(
-                    "duplicate class/physical entrance effect record".into(),
+                    "duplicate class/ascendancy/physical passive effect record".into(),
                 ));
             }
         }
@@ -174,7 +186,7 @@ impl CompiledGameData {
             spark,
             mace,
             weapon_indices,
-            entrances,
+            passives,
         })
     }
 
@@ -229,7 +241,24 @@ impl CompiledGameData {
         class_id: u32,
         physical_id: u32,
     ) -> Option<&CharacterModifiers> {
-        self.entrances.get(&(class_id, physical_id))
+        self.passive_modifiers(class_id, None, physical_id)
+    }
+    /// Resolve a compiled record with explicit ordinary/ascendancy ownership.
+    /// Physical allocation identity is preserved even for class-specific effects.
+    pub fn passive_modifiers(
+        &self,
+        class_id: u32,
+        ascendancy_id: Option<&str>,
+        physical_id: u32,
+    ) -> Option<&CharacterModifiers> {
+        // Validated ascendancy identifiers are nonempty, leaving the empty key
+        // for ordinary ownership. Borrowed lookup allocates no per-build strings.
+        if ascendancy_id == Some("") {
+            return None;
+        }
+        self.passives
+            .get(&(class_id, physical_id))?
+            .get(ascendancy_id.unwrap_or(""))
     }
     pub fn weapon(&self, weapon: MaceWeapon) -> MaceWeaponData<'_> {
         let slot = match weapon {

@@ -13,26 +13,30 @@ fn candidate(catalog: &CandidateCatalog, selection: &ClassTreeSelection) -> Cand
         catalog: catalog.identity.clone(),
         class_id: selection.class_id.to_string(),
         ascendancy_id: selection.ascendancy_id.clone(),
-        passives: selection.entrance_node_id.into_iter().collect(),
+        passives: selection
+            .entrance_node_id
+            .into_iter()
+            .chain(selection.ascendancy_node_id)
+            .collect(),
         equipment: BTreeMap::new(),
         skills: BTreeMap::new(),
     }
 }
 
 #[test]
-fn all_93_selections_resolve_deterministically_with_implicit_roots_and_selected_attributes() {
+fn all_105_selections_resolve_deterministically_with_implicit_roots_and_selected_attributes() {
     let snapshot = bundled_snapshot().unwrap();
     let tree = snapshot.tree();
     let choices = selections(tree).unwrap();
     assert_eq!(choices, selections(tree).unwrap());
-    assert_eq!(choices.len(), 93);
+    assert_eq!(choices.len(), 105);
     assert!(choices.windows(2).all(|pair| pair[0] < pair[1]));
     assert_eq!(
         choices
             .iter()
             .filter(|choice| choice.entrance_node_id.is_none())
             .count(),
-        31
+        35
     );
     for choice in choices {
         let resolved = choice.resolve(tree).unwrap();
@@ -66,7 +70,9 @@ fn all_93_selections_resolve_deterministically_with_implicit_roots_and_selected_
         }
         assert_eq!(
             resolved.allocated_nodes.len(),
-            resolved.implicit_roots.len() + usize::from(choice.entrance_node_id.is_some())
+            resolved.implicit_roots.len()
+                + usize::from(choice.entrance_node_id.is_some())
+                + usize::from(choice.ascendancy_node_id.is_some())
         );
         assert_eq!(
             resolved
@@ -74,7 +80,13 @@ fn all_93_selections_resolve_deterministically_with_implicit_roots_and_selected_
                 .difference(&resolved.implicit_roots)
                 .copied()
                 .collect::<Vec<_>>(),
-            choice.entrance_node_id.into_iter().collect::<Vec<_>>()
+            choice
+                .entrance_node_id
+                .into_iter()
+                .chain(choice.ascendancy_node_id)
+                .collect::<BTreeSet<_>>()
+                .into_iter()
+                .collect::<Vec<_>>()
         );
         assert_eq!(
             resolved
@@ -94,6 +106,7 @@ fn shared_root_ownership_does_not_replace_class_specific_effects_or_physical_all
             class_id,
             ascendancy_id: ascendancy_id.map(str::to_owned),
             entrance_node_id,
+            ascendancy_node_id: None,
         }
         .resolve(snapshot.tree())
         .unwrap()
@@ -137,41 +150,49 @@ fn selections_reject_cross_class_ascendancies_unowned_roots_and_effect_source_id
             class_id: 3,
             ascendancy_id: None,
             entrance_node_id: None,
+            ascendancy_node_id: None,
         },
         ClassTreeSelection {
             class_id: 6,
             ascendancy_id: Some("Witch3".into()),
             entrance_node_id: None,
+            ascendancy_node_id: None,
         },
         ClassTreeSelection {
             class_id: 1,
             ascendancy_id: Some(String::new()),
             entrance_node_id: None,
+            ascendancy_node_id: None,
         },
         ClassTreeSelection {
             class_id: 6,
             ascendancy_id: None,
             entrance_node_id: Some(4739),
+            ascendancy_node_id: None,
         },
         ClassTreeSelection {
             class_id: 1,
             ascendancy_id: None,
             entrance_node_id: Some(17306),
+            ascendancy_node_id: None,
         },
         ClassTreeSelection {
             class_id: 8,
             ascendancy_id: None,
             entrance_node_id: Some(39263),
+            ascendancy_node_id: None,
         },
         ClassTreeSelection {
             class_id: 6,
             ascendancy_id: None,
             entrance_node_id: Some(47175),
+            ascendancy_node_id: None,
         },
         ClassTreeSelection {
             class_id: 1,
             ascendancy_id: Some("Witch3".into()),
             entrance_node_id: Some(23710),
+            ascendancy_node_id: None,
         },
     ] {
         assert!(choice.resolve(snapshot.tree()).is_err(), "{choice:?}");
@@ -184,7 +205,7 @@ fn partial_graph_enforces_caller_point_budgets_connectivity_categories_and_indep
     let catalog = candidate_catalog(&snapshot).unwrap();
     assert_eq!(catalog.classes.len(), 8);
     assert_eq!(catalog.ascendancies.len(), 23);
-    assert_eq!(catalog.passive_nodes.len(), 40);
+    assert_eq!(catalog.passive_nodes.len(), 44);
     assert!(catalog.unsupported_mechanics.is_empty());
     assert!(snapshot.tree().coverage.excluded_node_count > catalog.passive_nodes.len());
     assert!(
@@ -217,6 +238,7 @@ fn partial_graph_enforces_caller_point_budgets_connectivity_categories_and_indep
             CandidateConstraints {
                 budgets: CandidateBudgets {
                     ordinary_passive_points: budget,
+                    ascendancy_passive_points: 1,
                     ..Default::default()
                 },
                 ..Default::default()
@@ -236,6 +258,7 @@ fn partial_graph_enforces_caller_point_budgets_connectivity_categories_and_indep
         class_id: 1,
         ascendancy_id: Some("Witch3".into()),
         entrance_node_id: Some(4739),
+        ascendancy_node_id: None,
     };
     let domain = CandidateDomain::new(
         catalog.clone(),
@@ -321,6 +344,7 @@ fn graph_identity_binds_all_selected_data_even_when_tree_bytes_are_unchanged() {
         class_id: 6,
         ascendancy_id: None,
         entrance_node_id: None,
+        ascendancy_node_id: None,
     };
     let domain = CandidateDomain::new(altered_catalog, CandidateConstraints::default()).unwrap();
     assert!(
@@ -329,5 +353,100 @@ fn graph_identity_binds_all_selected_data_even_when_tree_bytes_are_unchanged() {
             .violations
             .iter()
             .any(|issue| issue.code == CandidateIssueCode::CatalogMismatch)
+    );
+}
+
+#[test]
+fn ascendancy_passives_require_their_owner_and_explicit_independent_point_budget() {
+    let snapshot = bundled_snapshot().unwrap();
+    let catalog = candidate_catalog(&snapshot).unwrap();
+    let choice = ClassTreeSelection {
+        class_id: 6,
+        ascendancy_id: Some("Warrior3".into()),
+        entrance_node_id: Some(3936),
+        ascendancy_node_id: Some(14960),
+    };
+    let resolved = choice.resolve(snapshot.tree()).unwrap();
+    assert_eq!(
+        resolved.ascendancy_node.as_ref().unwrap().physical_node_id,
+        14960
+    );
+    assert_eq!(
+        catalog.passive_nodes[&14960].kind,
+        PassiveKind::Ascendancy {
+            ascendancy_ids: BTreeSet::from(["Warrior3".into()])
+        }
+    );
+    for ordinary in [0, 1] {
+        for ascendancy in [0, 1] {
+            let domain = CandidateDomain::new(
+                catalog.clone(),
+                CandidateConstraints {
+                    budgets: CandidateBudgets {
+                        ordinary_passive_points: ordinary,
+                        ascendancy_passive_points: ascendancy,
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                },
+            )
+            .unwrap();
+            for selection in selections(snapshot.tree()).unwrap() {
+                let report = domain.validate(&candidate(&catalog, &selection));
+                assert_eq!(
+                    report.is_searchable(),
+                    (ordinary == 1 || selection.entrance_node_id.is_none())
+                        && (ascendancy == 1 || selection.ascendancy_node_id.is_none()),
+                    "{selection:?}: {report:?}"
+                );
+            }
+        }
+    }
+    for ascendancy_id in [None, Some("Warrior1".into()), Some("Druid2".into())] {
+        let wrong = ClassTreeSelection {
+            ascendancy_id,
+            ..choice.clone()
+        };
+        assert!(wrong.resolve(snapshot.tree()).is_err());
+    }
+    let domain = CandidateDomain::new(
+        catalog.clone(),
+        CandidateConstraints {
+            budgets: CandidateBudgets {
+                ordinary_passive_points: 1,
+                ascendancy_passive_points: 1,
+                ..Default::default()
+            },
+            locks: CandidateLocks {
+                allocated_passives: BTreeSet::from([14960]),
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+    )
+    .unwrap();
+    assert!(
+        domain
+            .validate(&candidate(&catalog, &choice))
+            .is_searchable()
+    );
+    let omitted = ClassTreeSelection {
+        ascendancy_node_id: None,
+        ..choice
+    };
+    assert!(
+        !domain
+            .validate(&candidate(&catalog, &omitted))
+            .is_searchable()
+    );
+    let legacy: ClassTreeSelection =
+        serde_json::from_str(r#"{"class_id":6,"ascendancy_id":null,"entrance_node_id":null}"#)
+            .unwrap();
+    assert_eq!(legacy.ascendancy_node_id, None);
+    assert!(
+        serde_json::to_value(legacy)
+            .unwrap()
+            .get("ascendancy_node_id")
+            .is_none()
     );
 }

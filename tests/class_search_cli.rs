@@ -389,7 +389,11 @@ fn locked_override_export_preserves_unrelated_source_and_resolves_exact_tree_ide
     );
     verified(&report, 3);
     let snapshot = Arc::new(bundled_snapshot().unwrap());
-    let trees = selections(&snapshot.package().tree).unwrap();
+    let trees = selections(&snapshot.package().tree)
+        .unwrap()
+        .into_iter()
+        .filter(|tree| tree.ascendancy_node_id.is_none())
+        .collect();
     let weapons: Vec<NormalMaceAlternative> =
         serde_json::from_value(problem["weapons"].clone()).unwrap();
     let catalog = ControlledMaceCatalog::with_tree_choices(
@@ -448,7 +452,7 @@ fn locked_override_export_preserves_unrelated_source_and_resolves_exact_tree_ide
         .unwrap()
         .iter()
         .find(|entry| {
-            entry["media_type"] == "application/vnd.poe-optimizer.native-tree+json;version=1"
+            entry["media_type"] == "application/vnd.poe-optimizer.native-tree+json;version=2"
         })
         .unwrap();
     let projection: Value = serde_json::from_str(attachment["content"].as_str().unwrap()).unwrap();
@@ -603,7 +607,11 @@ fn native_realization_rejects_tampered_tree_identity_and_injected_effect_evidenc
     use poe_optimizer_core::{evaluation::*, options::EvaluationOptions};
     use poe_optimizer_native::NativeBackend;
     let snapshot = Arc::new(bundled_snapshot().unwrap());
-    let trees = selections(&snapshot.package().tree).unwrap();
+    let trees = selections(&snapshot.package().tree)
+        .unwrap()
+        .into_iter()
+        .filter(|tree| tree.ascendancy_node_id.is_none())
+        .collect();
     let weapons: Vec<NormalMaceAlternative> =
         serde_json::from_value(input()["weapons"].clone()).unwrap();
     let catalog = ControlledMaceCatalog::with_tree_choices(
@@ -631,6 +639,7 @@ fn native_realization_rejects_tampered_tree_identity_and_injected_effect_evidenc
         class_id: 1,
         ascendancy_id: Some("Witch3b".into()),
         entrance_node_id: Some(4739),
+        ascendancy_node_id: None,
     };
     let candidate = catalog
         .resolve_tree_candidate(&selection, "wooden-q0", MaceSupportChoice::BrutalityI)
@@ -655,7 +664,7 @@ fn native_realization_rejects_tampered_tree_identity_and_injected_effect_evidenc
             .attachments
             .iter_mut()
             .find(|entry| {
-                entry.media_type == "application/vnd.poe-optimizer.native-tree+json;version=1"
+                entry.media_type == "application/vnd.poe-optimizer.native-tree+json;version=2"
             })
             .unwrap();
         let mut diagnostic: Value = serde_json::from_str(&attachment.content).unwrap();

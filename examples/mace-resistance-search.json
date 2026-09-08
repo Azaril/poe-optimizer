@@ -1,0 +1,61 @@
+{
+  "schema_version": 3,
+  "template": "../tests/fixtures/calibration/mace-wooden.xml",
+  "weapons": [
+    {
+      "id": "wooden-q0",
+      "item_text": "Rarity: NORMAL\nWooden Club\nItem Level: 1\nQuality: 0\nImplicits: 0"
+    },
+    {
+      "id": "wooden-q20",
+      "item_text": "Rarity: NORMAL\nWooden Club\nItem Level: 1\nQuality: 20\nImplicits: 0"
+    },
+    {
+      "id": "smithing-q0",
+      "item_text": "Rarity: NORMAL\nSmithing Hammer\nItem Level: 1\nQuality: 0\nImplicits: 0"
+    },
+    {
+      "id": "smithing-q20",
+      "item_text": "Rarity: NORMAL\nSmithing Hammer\nItem Level: 1\nQuality: 20\nImplicits: 0"
+    }
+  ],
+  "supports": [
+    "none",
+    "brutality_i"
+  ],
+  "objective": {
+    "schema_version": 1,
+    "objective": {
+      "kind": "scalar",
+      "metric": {
+        "actor": "player",
+        "id": "selected_hit_dps"
+      },
+      "unit": "damage_per_second",
+      "direction": "maximize"
+    },
+    "constraints": [
+      {
+        "id": "chaos-floor",
+        "metric": {
+          "actor": "player",
+          "id": "chaos_resistance_capped_pct"
+        },
+        "unit": "percent",
+        "operator": ">=",
+        "threshold": 1.0,
+        "violation_scale": 1.0
+      }
+    ]
+  },
+  "locks": {},
+  "neighborhood": {
+    "proposals_per_round": 32,
+    "restart_every": 4,
+    "max_changed_axes": 0
+  },
+  "tree_search": {
+    "ordinary_passive_points": 1,
+    "ascendancy_passive_points": 1
+  }
+}

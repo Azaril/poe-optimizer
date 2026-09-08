@@ -43,12 +43,12 @@ fn source_checks() {
     }
 }
 
-struct MaceOracle {
+pub(super) struct MaceOracle {
     oracle: Oracle,
     calculate: Function,
 }
 impl MaceOracle {
-    fn new(warm: bool) -> Self {
+    pub(super) fn new(warm: bool) -> Self {
         source_checks();
         // Reuse only source/module setup, not Spark's arithmetic or expected output.
         let spark = SparkOracle::new(warm);
@@ -306,7 +306,7 @@ impl MaceOracle {
         self.calculate_with_character(input, &mace::default_character())
     }
 
-    fn calculate_with_character(
+    pub(super) fn calculate_with_character(
         &self,
         input: &MaceInput,
         character: &poe_optimizer_engine::character::CharacterInput,
@@ -345,7 +345,7 @@ impl MaceOracle {
     }
 }
 
-fn input() -> MaceInput {
+pub(super) fn input() -> MaceInput {
     MaceInput {
         character_level: 60,
         weapon: MaceWeapon::WoodenClub,
@@ -359,7 +359,7 @@ fn input() -> MaceInput {
         enemy_fire_resistance: 0.0,
     }
 }
-fn compare(output: MaceOutput, expected: Table) {
+pub(super) fn compare(output: MaceOutput, expected: Table) {
     for (name, actual) in [
         ("Str", output.strength),
         ("Dex", output.dexterity),

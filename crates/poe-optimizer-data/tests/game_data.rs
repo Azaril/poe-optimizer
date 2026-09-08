@@ -35,7 +35,7 @@ fn embedded_and_external_bytes_share_one_validated_loader() {
         embedded.package().canonical_bytes().unwrap(),
         bundled_package_bytes()
     );
-    assert_eq!(embedded.package().entrance_effects.len(), 16);
+    assert_eq!(embedded.package().passive_effects.len(), 20);
 }
 #[test]
 fn explicit_custom_balance_has_content_identity_without_claiming_review() {
@@ -163,7 +163,7 @@ fn manifest_versions_required_fields_and_unknown_operations_are_closed() {
         .is_err()
     );
     let mut value = serde_json::to_value(reviewed().package()).unwrap();
-    value["entrance_effects"][0]["effects"][0]["stat"] = "run_arbitrary_script".into();
+    value["passive_effects"][0]["effects"][0]["stat"] = "run_arbitrary_script".into();
     assert!(
         GameDataLoader::from_bytes(
             &serde_json::to_vec(&value).unwrap(),
@@ -179,11 +179,11 @@ fn manifest_versions_required_fields_and_unknown_operations_are_closed() {
 fn record_references_duplicate_selectors_and_ambiguous_fields_reject() {
     let mutations: Vec<fn(&mut GameDataPackage)> = vec![
         |p| p.weapons.push(p.weapons[0].clone()),
-        |p| p.entrance_effects.push(p.entrance_effects[0].clone()),
+        |p| p.passive_effects.push(p.passive_effects[0].clone()),
         |p| {
-            p.entrance_effects.pop();
+            p.passive_effects.pop();
         },
-        |p| p.entrance_effects[0].effective_node_id = 1,
+        |p| p.passive_effects[0].effective_node_id = 1,
         |p| p.spark.default_class_id = u32::MAX,
         |p| p.quests.config_keys[0] = "enemyIsBoss".into(),
         |p| p.quests.config_keys[0] = p.quests.config_keys[1].clone(),
@@ -265,10 +265,10 @@ fn unknown_nested_source_enum_fields_and_integer_key_aliases_do_not_disappear() 
 #[test]
 fn requirement_schema_is_explicit_bounded_and_content_bound() {
     let original = reviewed();
-    assert_eq!(original.identity().schema_version, 2);
+    assert_eq!(original.identity().schema_version, 3);
     assert_eq!(
         original.identity().semantics_version,
-        "poe2-native-profiles-v2"
+        "poe2-native-profiles-v3"
     );
     let mut package = original.package().clone();
     package.weapons[0].requirements = RequirementData {
@@ -327,4 +327,162 @@ fn requirement_schema_is_explicit_bounded_and_content_bound() {
             .is_err()
         );
     }
+}
+
+#[test]
+fn signed_values_are_allowed_only_for_closed_resistance_operations() {
+    let original = reviewed();
+    for stat in [
+        PassiveStat::FireResistanceFlat,
+        PassiveStat::ColdResistanceFlat,
+        PassiveStat::LightningResistanceFlat,
+        PassiveStat::ChaosResistanceFlat,
+        PassiveStat::ElementalResistanceFlat,
+    ] {
+        for value in [-1_000_000.0, -0.75, 0.0, 1_000_000.0] {
+            let mut package = original.package().clone();
+            let effect = &mut package
+                .passive_effects
+                .iter_mut()
+                .find(|record| record.ascendancy_id.is_some())
+                .unwrap()
+                .effects[0];
+            *effect = PassiveEffect { stat, value };
+            let edited = custom(package).unwrap();
+            assert_ne!(edited.identity(), original.identity());
+        }
+        for value in [-1_000_001.0, 1_000_001.0, f64::INFINITY, f64::NAN] {
+            let mut package = original.package().clone();
+            package.passive_effects[0].effects[0] = PassiveEffect { stat, value };
+            assert!(custom(package).is_err());
+        }
+    }
+    for stat in [
+        PassiveStat::ArmourFlat,
+        PassiveStat::EvasionFlat,
+        PassiveStat::EnergyShieldFlat,
+        PassiveStat::SkillSpeedIncreased,
+        PassiveStat::SpellDamageIncreased,
+        PassiveStat::AttackDamageIncreased,
+        PassiveStat::MeleeDamageIncreased,
+        PassiveStat::ProjectileDamageIncreased,
+        PassiveStat::MinionDamageIncreased,
+    ] {
+        let mut package = original.package().clone();
+        package.passive_effects[0].effects[0] = PassiveEffect { stat, value: -0.5 };
+        assert!(custom(package).is_err());
+    }
+    let mut package = original.package().clone();
+    package.character.life_per_level = -0.5;
+    assert!(custom(package).is_err());
+}
+
+#[test]
+fn passive_effect_records_require_complete_exact_class_and_ascendancy_ownership() {
+    let snapshot = reviewed();
+    let warrior = snapshot
+        .passive_effects(6, Some("Warrior3"), 14960)
+        .unwrap();
+    assert_eq!(
+        warrior.effects,
+        [PassiveEffect {
+            stat: PassiveStat::FireResistanceFlat,
+            value: 8.0
+        }]
+    );
+    assert!(snapshot.passive_effects(6, None, 14960).is_none());
+    assert!(
+        snapshot
+            .passive_effects(11, Some("Warrior3"), 14960)
+            .is_none()
+    );
+    assert!(
+        snapshot
+            .passive_effects(6, Some("Warrior1"), 14960)
+            .is_none()
+    );
+    for edit in 0..8 {
+        let mut package = snapshot.package().clone();
+        let index = package
+            .passive_effects
+            .iter()
+            .position(|record| record.ascendancy_id.as_deref() == Some("Warrior3"))
+            .unwrap();
+        match edit {
+            0 => {
+                package.passive_effects.remove(index);
+            }
+            1 => package
+                .passive_effects
+                .push(package.passive_effects[index].clone()),
+            2 => package.passive_effects[index].class_id = 11,
+            3 => package.passive_effects[index].ascendancy_id = None,
+            4 => package.passive_effects[index].ascendancy_id = Some("Warrior1".into()),
+            5 => package.passive_effects[index].physical_node_id = 3936,
+            6 => package.passive_effects[index].effective_node_id = 3936,
+            _ => package.passive_effects[index].effects.clear(),
+        }
+        assert!(custom(package).is_err(), "edit {edit}");
+    }
+}
+
+#[test]
+fn resistance_schema_requires_explicit_regeneration_of_old_packages() {
+    let snapshot = reviewed();
+    for edit in 0..3 {
+        let mut package = snapshot.package().clone();
+        match edit {
+            0 => package.manifest.schema_version = 2,
+            1 => package.manifest.semantics_version = "poe2-native-profiles-v2".into(),
+            _ => package.tree.schema_version = 1,
+        }
+        assert!(custom(package).is_err());
+    }
+    let mut old = serde_json::to_value(snapshot.package()).unwrap();
+    let effects = old
+        .as_object_mut()
+        .unwrap()
+        .remove("passive_effects")
+        .unwrap();
+    old["entrance_effects"] = effects;
+    assert!(
+        GameDataPackage::decode_for_authoring(
+            &serde_json::to_vec(&old).unwrap(),
+            &LoadLimits::default()
+        )
+        .is_err()
+    );
+}
+
+#[test]
+fn player_global_resistance_cap_is_injected_required_and_bounded() {
+    let snapshot = reviewed();
+    assert_eq!(snapshot.package().defence.resistance_maximum_cap, 90.0);
+    let mut package = snapshot.package().clone();
+    package.defence.resistance_maximum_cap = 70.0;
+    assert_eq!(
+        custom(package)
+            .unwrap()
+            .package()
+            .defence
+            .resistance_maximum_cap,
+        70.0
+    );
+    for cap in [-1.0, 101.0, f64::NAN] {
+        let mut package = snapshot.package().clone();
+        package.defence.resistance_maximum_cap = cap;
+        assert!(custom(package).is_err());
+    }
+    let mut value = serde_json::to_value(snapshot.package()).unwrap();
+    value["defence"]
+        .as_object_mut()
+        .unwrap()
+        .remove("resistance_maximum_cap");
+    assert!(
+        GameDataPackage::decode_for_authoring(
+            &serde_json::to_vec(&value).unwrap(),
+            &LoadLimits::default()
+        )
+        .is_err()
+    );
 }

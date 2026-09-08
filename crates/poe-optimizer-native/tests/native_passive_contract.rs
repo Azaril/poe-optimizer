@@ -39,7 +39,7 @@ fn projection(result: &EvaluationResult) -> serde_json::Value {
             .attachments
             .iter()
             .find(|attachment| {
-                attachment.media_type == "application/vnd.poe-optimizer.native-tree+json;version=1"
+                attachment.media_type == "application/vnd.poe-optimizer.native-tree+json;version=2"
             })
             .expect("native source projection")
             .content,
@@ -116,7 +116,8 @@ fn check_identity(
     let nodes: Vec<_> = nodes.into_iter().collect();
     assert_eq!(result.build.allocated_nodes, nodes);
     let report = projection(result);
-    assert_eq!(report["schema_version"], 1);
+    assert_eq!(report["schema_version"], 2);
+    assert_eq!(report["ascendancy_allocated_count"], 0);
     assert_eq!(report["evidence_kind"], "native_source_resolution");
     assert_eq!(report["point_budget_verified"], false);
     assert_eq!(report["class"]["index"], class.integer_id);
@@ -373,7 +374,7 @@ fn invalid_identities_and_out_of_scope_allocations_fail_without_silent_repair() 
         );
     }
     // This is a genuine allocated node owned by the selected ascendancy;
-    // ownership alone must not widen admission beyond ordinary entrances.
+    // ownership alone must not widen admission beyond reviewed passive records.
     for id in ["Witch3", "Witch3b"] {
         let xml = fixture(
             &data.classes[&1],
@@ -385,6 +386,211 @@ fn invalid_identities_and_out_of_scope_allocations_fail_without_silent_repair() 
             .prepare(&request(&xml))
             .err()
             .expect("ascendancy node effects remain unsupported");
+        assert_eq!(error.kind, EvaluationErrorKind::UnsupportedCapability);
+    }
+}
+
+#[test]
+fn all_reviewed_ascendancy_passives_compose_on_both_profiles_and_preserve_source_identity() {
+    use poe_optimizer_data::class_tree;
+    let data = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+    let selections = class_tree::selections(data.tree()).unwrap();
+    let mut cases = 0;
+    for selection in selections
+        .iter()
+        .filter(|tree| tree.ascendancy_node_id.is_some())
+    {
+        let resolved = selection.resolve(data.tree()).unwrap();
+        for mace in [false, true] {
+            let xml = fixture(&resolved.class, resolved.ascendancy.as_ref(), None, mace);
+            let paid = selection
+                .entrance_node_id
+                .into_iter()
+                .chain(selection.ascendancy_node_id)
+                .collect::<BTreeSet<_>>()
+                .iter()
+                .map(u32::to_string)
+                .collect::<Vec<_>>()
+                .join(",");
+            let xml = xml.replace("nodes=\"\"", &format!("nodes=\"{paid}\""));
+            let result = evaluate(&xml);
+            assert_eq!(result.exports[0].content, xml);
+            assert_eq!(
+                result
+                    .build
+                    .allocated_nodes
+                    .iter()
+                    .copied()
+                    .collect::<BTreeSet<_>>(),
+                resolved.allocated_nodes
+            );
+            let report = projection(&result);
+            assert_eq!(report["schema_version"], 2);
+            assert_eq!(
+                report["ordinary_allocated_count"],
+                usize::from(selection.entrance_node_id.is_some())
+            );
+            assert_eq!(report["ascendancy_allocated_count"], 1);
+            let paid_nodes = report["paid_nodes"].as_array().unwrap();
+            let asc = paid_nodes.last().unwrap();
+            assert_eq!(asc["allocation_kind"], "ascendancy");
+            assert_eq!(
+                asc["physical_node_id"],
+                selection.ascendancy_node_id.unwrap()
+            );
+            assert_eq!(
+                asc["effective_node_id"],
+                resolved
+                    .ascendancy_node
+                    .as_ref()
+                    .unwrap()
+                    .effective_source_id
+            );
+            let effects = report["configured_effects"].as_array().unwrap();
+            assert_eq!(
+                effects.len(),
+                1 + usize::from(selection.entrance_node_id.is_some())
+            );
+            assert!(effects.iter().any(|effect| effect["ascendancy_id"].as_str()
+                == selection.ascendancy_id.as_deref()
+                && effect["physical_node_id"].as_u64()
+                    == selection.ascendancy_node_id.map(u64::from)));
+            let reimported = evaluate(&result.exports[0].content);
+            assert_eq!(measurements(&result), measurements(&reimported));
+            assert_eq!(projection(&result), projection(&reimported));
+            let without_owner = fixture(
+                &resolved.class,
+                None,
+                Some(selection.ascendancy_node_id.unwrap()),
+                mace,
+            );
+            assert!(
+                NativeBackend::new()
+                    .prepare(&request(&without_owner))
+                    .is_err()
+            );
+            cases += 1;
+        }
+    }
+    assert_eq!(cases, 24);
+}
+
+#[test]
+fn native_realization_rejects_tampered_ascendancy_resolution_and_effect_evidence() {
+    use poe_optimizer_data::{class_tree, game_data};
+    use poe_optimizer_import::controlled_mace::{
+        ControlledMaceCatalog, MaceSupportChoice, NormalMaceAlternative,
+    };
+    use std::sync::Arc;
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let selected = class_tree::selections(data.tree())
+        .unwrap()
+        .into_iter()
+        .find(|tree| tree.entrance_node_id.is_some() && tree.ascendancy_node_id.is_some())
+        .unwrap();
+    let registry = ControlledMaceCatalog::with_tree_choices(
+        data.clone(),
+        MACE.into(),
+        vec![NormalMaceAlternative {
+            id: "weapon".into(),
+            item_text: format!(
+                "Rarity: NORMAL\n{}\nItem Level: 1\nQuality: 0\nImplicits: 0",
+                data.package().weapons[0].name
+            ),
+        }],
+        vec![MaceSupportChoice::None],
+        vec![selected],
+    )
+    .unwrap();
+    let baseline = evaluate(MACE);
+    let scenario = registry
+        .bind_native_baseline(&baseline, &poe_optimizer_native::backend_identity())
+        .unwrap();
+    let candidate = &registry.alternatives()[0].candidate;
+    let materialized = registry.materialize(candidate).unwrap();
+    let result = evaluate(&materialized.content);
+    registry
+        .validate_native_realization(candidate, &result, &scenario)
+        .unwrap();
+    for pointer in [
+        "/schema_version",
+        "/ordinary_allocated_count",
+        "/ascendancy_allocated_count",
+        "/paid_nodes/1/physical_node_id",
+        "/paid_nodes/1/effective_node_id",
+        "/paid_nodes/1/allocation_kind",
+        "/configured_effects/1/ascendancy_id",
+        "/configured_effects/1/effects/0/value",
+        "/data_identity/content_sha256",
+        "/point_budget_verified",
+    ] {
+        let mut altered: EvaluationResult =
+            serde_json::from_value(serde_json::to_value(&result).unwrap()).unwrap();
+        let attachment = altered
+            .attachments
+            .iter_mut()
+            .find(|a| a.media_type == "application/vnd.poe-optimizer.native-tree+json;version=2")
+            .unwrap();
+        let mut report: serde_json::Value = serde_json::from_str(&attachment.content).unwrap();
+        *report
+            .pointer_mut(pointer)
+            .unwrap_or_else(|| panic!("missing evidence {pointer}")) =
+            serde_json::json!("tampered");
+        attachment.content = report.to_string();
+        assert!(
+            registry
+                .validate_native_realization(candidate, &altered, &scenario)
+                .is_err(),
+            "accepted {pointer}"
+        );
+    }
+    let mut old_version = result;
+    old_version
+        .attachments
+        .iter_mut()
+        .find(|a| a.media_type == "application/vnd.poe-optimizer.native-tree+json;version=2")
+        .unwrap()
+        .media_type = "application/vnd.poe-optimizer.native-tree+json;version=1".into();
+    assert!(
+        registry
+            .validate_native_realization(candidate, &old_version, &scenario)
+            .is_err()
+    );
+}
+
+#[test]
+fn ascendancy_allocations_require_the_exact_owner_and_separate_category_limits() {
+    use poe_optimizer_data::{class_tree, game_data};
+    let data = game_data::bundled_snapshot().unwrap();
+    let selection = class_tree::selections(data.tree())
+        .unwrap()
+        .into_iter()
+        .find(|tree| tree.entrance_node_id.is_some() && tree.ascendancy_node_id.is_some())
+        .unwrap();
+    let resolved = selection.resolve(data.tree()).unwrap();
+    let source = fixture(&resolved.class, resolved.ascendancy.as_ref(), None, true);
+    let selected_asc = selection.ascendancy_node_id.unwrap();
+    let foreign_asc = *data
+        .tree()
+        .ascendancy_nodes
+        .keys()
+        .find(|id| **id != selected_asc)
+        .unwrap();
+    let ordinary: Vec<_> = data.tree().class_entrances[&selection.class_id]
+        .keys()
+        .copied()
+        .collect();
+    for paid in [
+        format!("{foreign_asc}"),
+        format!("{selected_asc},{foreign_asc}"),
+        format!("{selected_asc},{},{}", ordinary[0], ordinary[1]),
+    ] {
+        let xml = source.replace("nodes=\"\"", &format!("nodes=\"{paid}\""));
+        assert_ne!(xml, source);
+        let error = NativeBackend::new()
+            .prepare(&request(&xml))
+            .err()
+            .expect("unsupported allocations admitted");
         assert_eq!(error.kind, EvaluationErrorKind::UnsupportedCapability);
     }
 }

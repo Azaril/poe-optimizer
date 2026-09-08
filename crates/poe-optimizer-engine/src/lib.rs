@@ -16,6 +16,7 @@ pub use data::CompiledGameData;
 pub mod mace;
 pub mod modifiers;
 pub mod multipliers;
+pub mod resistance;
 pub mod spark;
 pub mod stats;
 

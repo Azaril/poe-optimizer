@@ -226,6 +226,7 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("../../poe-optimizer-engine/src/spark.rs"),
                 include_str!("../../poe-optimizer-engine/src/mace.rs"),
                 include_str!("../../poe-optimizer-engine/src/defence.rs"),
+                include_str!("../../poe-optimizer-engine/src/resistance.rs"),
                 include_str!("../../poe-optimizer-engine/Cargo.toml"),
                 include_str!("../../poe-optimizer-import/src/lib.rs"),
                 include_str!("../../poe-optimizer-import/src/xml_compat.rs"),
@@ -408,7 +409,7 @@ impl<C: EvaluationClock> NativeBackend<C> {
             exports:vec![BuildDocument{format:BuildFormat::PathOfBuilding2Xml,content:prepared.profile.export_xml.clone()}],
             warnings:vec![format!("Native supported profile: {}. Other build mechanics are rejected.",output.profile_id()),"Full DPS rollups, EHP and maximum-hit calculations are not implemented by this backend.".into()],
             elapsed_ms:0.0,diagnostic_only:true,
-            attachments:vec![DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-profile+json;version=1".into(),content:output.diagnostic(&prepared.profile.input, &self.data).to_string()}, DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-tree+json;version=1".into(),content:prepared.profile.tree.diagnostic(&self.data).to_string()}],
+            attachments:vec![DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-profile+json;version=1".into(),content:output.diagnostic(&prepared.profile.input, &self.data).to_string()}, DiagnosticAttachment{media_type:"application/vnd.poe-optimizer.native-tree+json;version=2".into(),content:prepared.profile.tree.diagnostic(&self.data).to_string()}],
         };
         result.attachments.push(DiagnosticAttachment {
             media_type: "application/vnd.poe-optimizer.game-data+json;version=1".into(),

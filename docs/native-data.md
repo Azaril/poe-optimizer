@@ -9,15 +9,17 @@ parsing, I/O or data hashing. This implements the current-profile slice of the
 
 ## Included data and current limits
 
-The reviewed package contains the existing class/root/entrance tree subset, character
+The reviewed package contains the existing class/root/entrance and selected ascendancy-passive tree subset, character
 resource and accuracy parameters, level-one Spark/Mace identities and values, Brutality I,
 two normal weapon bases, quest rewards/defaults, defence coefficients/caps, 100-level
-monster armour/evasion tables, encounter defaults, typed entrance effects and explicit
+monster armour/evasion tables, encounter defaults, typed owned passive effects and explicit
 level/attribute requirements for the included skills, support and weapon bases. Support
 color and per-color aggregate attribute costs also come from data. Display
 stat text is source evidence; typed effect IDs and values drive the calculation.
 
-The package is explicitly partial. It adds no new skill, support, equipment or tree coverage.
+The package is explicitly partial. Its tree coverage now includes four directly connected
+ascendancy small nodes with signed BASE player resistance effects; it adds no skill,
+support or equipment families.
 The two Mace weapon IDs are compiled capability slots whose records come from the package.
 Unknown fields/operations, malformed identities, missing records and unsupported selectors
 reject. Gameplay input bounds and supported operations remain enforced in Rust.
@@ -135,7 +137,8 @@ warnings, so it remains visible without `--raw`; raw mode additionally retains s
 evidence and the existing evaluation budget ledger. Expanded class/tree search uses report
 schema **3**, adding ordered tree choices and canonical admission evidence. The same selected
 snapshot supplies class attributes, resolved physical/effective entrance views, graph
-projection, generated XML and numerical configuration. It adds no package schema or data change. Its native export companion retains
+projection, generated XML and numerical configuration. The schema-3 problem adds paid ascendancy choices and uses report schema **4**. Native-tree
+diagnostics use version **2**, with separate ordinary/ascendancy counts and allocation kinds. Its native export companion retains
 structured trust and the selected package path as a reload hint. Benchmark schema **2** reports
 structured `data_trust`, identity and separate backend/data initialization time.
 
@@ -147,21 +150,37 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
-Package schema **2** and semantics **`poe2-native-profiles-v2`** require explicit
-`requirements` records on Spark, Mace, Brutality and each weapon. Weapon requirements replace
-`required_strength` with level and all three attributes. Mace additionally records support
-attribute costs, and Brutality records its color. Support individual attribute requirements
-must remain zero; change the matching-color cost to configure their attribute demand.
-Schema-1 packages fail explicitly; use
-`extract-game-data` to regenerate from the pinned source, then reapply and review custom
-edits. Changing only the schema number does not migrate missing records. Existing tree
-schemas, source pin and numerical goldens are unchanged.
+Package schema **3** and semantics **`poe2-native-profiles-v3`** rename `entrance_effects`
+to `passive_effects`. Each record has an explicit nullable `ascendancy_id`: null selects
+an ordinary class entrance, while an internal ID selects that ascendancy's admitted node.
+Selectors include class, owner, physical ID and effective ID; every admitted view has exactly
+one record. The regenerated partial bundle uses schema **2** and retains 44 physical nodes.
+
+Five new operations are `fire_resistance_flat`, `cold_resistance_flat`,
+`lightning_resistance_flat`, `chaos_resistance_flat` and `elemental_resistance_flat`.
+Only these operations admit signed finite values in -1,000,000..1,000,000. Existing operations
+retain nonnegative validation. Source stat strings remain provenance; custom typed values
+and supported operations may change, retaining custom/unreviewed trust.
+
+Both supported native pipelines sum the applicable BASE values, then truncate toward zero
+and apply injected floor/cap values. `defence.resistance_maximum_cap` separately caps the
+base player maximum, sourced from PoB's global maximum rule. Elemental bonuses, penalties and quest rewards do not
+apply to chaos. Fractional custom floor/cap values are also truncated, correcting the older
+custom-data behavior to match source. Reviewed integer-default outputs remain unchanged.
+The selector data does not admit maximum-resistance, conditional, INC/MORE, override,
+conversion or other-actor mechanics.
+
+Schema-1/2 packages fail explicitly. Regenerate with `extract-game-data`, then review/reapply
+custom edits and reseal; changing the version number alone cannot migrate missing records
+or the retained-tree artifact. Schema-2 level/attribute/support-color requirement records
+remain unchanged. PoB source revision, full source snapshot and numerical goldens stay fixed.
 
 ## Validation and update procedure
 
-The default package is 141,502 bytes, SHA-256
-`854dca85abcd031905761d9533b7437ce28e40b5154c23c99655084fbb719507`.
-Its original tree bytes/source manifest and six independent goldens remain unchanged.
+The default package is 153,014 bytes, SHA-256
+`7f5c1ed6e959984df095a2f87ef96fb450ccfda7ea1b41cfeeb65f5bdd4a7de4`.
+The full source snapshot/manifest and six independent goldens remain unchanged; the partial
+retained-tree bundle is regenerated under the versioned policy.
 
 ```powershell
 cargo test -p poe-optimizer-data --locked

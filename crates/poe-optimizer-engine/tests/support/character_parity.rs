@@ -57,6 +57,11 @@ pub(super) fn input_table(lua: &Lua, input: &CharacterInput) -> Table {
         ("Armour", "BASE", m.armour_flat, 0.0),
         ("Evasion", "BASE", m.evasion_flat, 0.0),
         ("EnergyShield", "BASE", m.energy_shield_flat, 0.0),
+        ("FireResist", "BASE", m.fire_resistance_flat, 0.0),
+        ("ColdResist", "BASE", m.cold_resistance_flat, 0.0),
+        ("LightningResist", "BASE", m.lightning_resistance_flat, 0.0),
+        ("ChaosResist", "BASE", m.chaos_resistance_flat, 0.0),
+        ("ElementalResist", "BASE", m.elemental_resistance_flat, 0.0),
         ("Speed", "INC", m.skill_speed_increased, 0.0),
         ("WarcrySpeed", "INC", m.skill_speed_increased, 0.0),
         ("TotemPlacementSpeed", "INC", m.skill_speed_increased, 0.0),
@@ -346,6 +351,7 @@ fn explicit_character_guards_preserve_defaults_and_reject_nonfinite_or_unsupport
             melee_damage_increased: 1_000_000.0,
             projectile_damage_increased: 1_000_000.0,
             minion_damage_increased: 1_000_000.0,
+            ..Default::default()
         },
     };
     let output = spark::evaluate_with_character(&spark_input, &extremes).unwrap();

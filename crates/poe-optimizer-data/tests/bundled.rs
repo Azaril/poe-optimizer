@@ -32,8 +32,8 @@ fn bundled_scope_preserves_all_identities_without_claiming_full_tree_coverage() 
     assert_eq!(tree.coverage.class_entrance_view_count, 16);
     assert_eq!(tree.coverage.no_effect_implicit_root_selections, 31);
     assert_eq!(tree.coverage.source_node_count, 4914);
-    assert_eq!(tree.coverage.retained_node_count, 40);
-    assert_eq!(tree.coverage.excluded_node_count, 4874);
+    assert_eq!(tree.coverage.retained_node_count, 44);
+    assert_eq!(tree.coverage.excluded_node_count, 4870);
     assert_eq!(tree.coverage.source_dangling_connections.len(), 14);
     assert!(!tree.coverage.boundary_edges.is_empty());
     assert!(
@@ -219,4 +219,67 @@ fn source_identity_check_and_external_content_authentication_are_separate() {
     snapshot.identity.schema_version = 1;
     assert!(snapshot.validate_source_identity().is_err());
     assert_eq!(poe_optimizer_data::implementation_fingerprint().len(), 64);
+}
+
+#[test]
+fn ascendancy_subset_preserves_full_source_ownership_and_rejects_extra_semantics() {
+    let tree = class_tree().unwrap();
+    assert_eq!(tree.ascendancy_nodes.len(), 4);
+    assert_eq!(tree.coverage.ascendancy_passive_view_count, 4);
+    for (class_id, ascendancy, node, root, stat) in [
+        (6, "Warrior3", 14960, 5852, "+8% to Fire Resistance"),
+        (
+            11,
+            "Druid2",
+            61722,
+            35535,
+            "+3% to all Elemental Resistances",
+        ),
+        (10, "Monk3", 24475, 74, "+7% to Chaos Resistance"),
+        (
+            8,
+            "Huntress3",
+            17058,
+            36365,
+            "-20% to all Elemental Resistances",
+        ),
+    ] {
+        let view = tree.ascendancy_passive(class_id, ascendancy, node).unwrap();
+        assert_eq!(view.physical_node_id, node);
+        assert_eq!(view.effective_source_id, node);
+        assert_eq!(view.stats, [stat]);
+        assert!(tree.ascendancy_nodes[&node].adjacent.contains(&root));
+        assert!(tree.roots[&root].adjacent.contains(&node));
+    }
+    assert!(tree.ascendancy_passive(6, "Warrior1", 14960).is_err());
+    for edit in 0..6 {
+        let mut changed = tree.clone();
+        let node = changed.ascendancy_nodes.get_mut(&14960).unwrap();
+        match edit {
+            0 => node.ascendancy_ids = BTreeSet::from(["Warrior1".into()]),
+            1 => {
+                node.adjacent.remove(&5852);
+            }
+            2 => node.source_default_point_cost = Some(0),
+            3 => {
+                node.source
+                    .named
+                    .insert("grantsPassivePoints".into(), SourceValue::Integer(1));
+            }
+            4 => {
+                changed
+                    .ascendancy_passives
+                    .get_mut("Warrior3")
+                    .unwrap()
+                    .get_mut(&14960)
+                    .unwrap()
+                    .stats
+                    .clear();
+            }
+            _ => {
+                changed.ascendancy_passives.remove("Warrior3");
+            }
+        }
+        assert!(changed.validate_scope().is_err(), "edit {edit}");
+    }
 }

@@ -20,6 +20,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("../data/tree-source-identity.json"),
         include_str!("../data/class-tree.json"),
         include_str!("../data/class-tree.sha256"),
+        include_str!("../data/class-tree-policy.json"),
     ] {
         digest.update(source.replace("\r\n", "\n"));
     }

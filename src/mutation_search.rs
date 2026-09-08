@@ -95,7 +95,7 @@ struct TreeSearch {
     #[serde(default)]
     selections: Option<Vec<ClassTreeSelection>>,
 }
-const MAX_COMPOSED_CANDIDATES: usize = 93 * 128;
+const MAX_COMPOSED_CANDIDATES: usize = 105 * 128;
 #[derive(Debug, Default, Deserialize, Serialize)]
 #[serde(default, deny_unknown_fields)]
 struct Locks {
@@ -284,12 +284,28 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         }
     }
     let problem = super::read_json::<Problem>(&args.problem, 512 * 1024)?;
+    let ascendancy_passives = problem.schema_version == 3;
     let expanded = match (problem.schema_version, problem.tree_search.as_ref()) {
         (1, None) => false,
         (2, Some(tree)) if tree.ordinary_passive_points <= 1 && tree.ascendancy_passive_points == 0 => true,
-        (2, Some(_)) => return Err("Tree search requires an ordinary point budget of 0 or 1 and an ascendancy point budget of 0".into()),
-        _ => return Err("Use problem schema 1 without tree_search, or schema 2 with explicit tree_search point budgets".into()),
+        (3, Some(tree)) if tree.ordinary_passive_points <= 1 && tree.ascendancy_passive_points <= 1 => true,
+        (2, Some(_)) => return Err("Schema 2 requires ordinary points 0 or 1 and ascendancy points 0".into()),
+        (3, Some(_)) => return Err("Schema 3 requires explicit ordinary and ascendancy point budgets of 0 or 1".into()),
+        _ => return Err("Use schema 1 without tree_search, or schema 2/3 with explicit tree_search point budgets".into()),
     };
+    if !ascendancy_passives
+        && problem
+            .tree_search
+            .as_ref()
+            .and_then(|tree| tree.selections.as_ref())
+            .is_some_and(|selections| {
+                selections
+                    .iter()
+                    .any(|tree| tree.ascendancy_node_id.is_some())
+            })
+    {
+        return Err("Allocated ascendancy choices require problem schema 3".into());
+    }
     if !expanded
         && (problem.locks.class_id.is_some()
             || problem.locks.ascendancy.is_some()
@@ -297,7 +313,8 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             || !problem.locks.unallocated_passives.is_empty())
     {
         return Err(
-            "Class, ascendancy and passive locks require problem schema 2 with tree_search".into(),
+            "Class, ascendancy and passive locks require problem schema 2 or 3 with tree_search"
+                .into(),
         );
     }
     if !problem
@@ -326,7 +343,9 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             class_tree::selections(snapshot.tree())?
                 .into_iter()
                 .filter(|selection| {
-                    tree.ordinary_passive_points > 0 || selection.entrance_node_id.is_none()
+                    (tree.ordinary_passive_points > 0 || selection.entrance_node_id.is_none())
+                        && (tree.ascendancy_passive_points > 0
+                            || selection.ascendancy_node_id.is_none())
                 })
                 .collect()
         };
@@ -385,7 +404,11 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             .tree_choices()
             .iter()
             .filter(|selection| {
-                let passives: BTreeSet<_> = selection.entrance_node_id.into_iter().collect();
+                let passives: BTreeSet<_> = selection
+                    .entrance_node_id
+                    .into_iter()
+                    .chain(selection.ascendancy_node_id)
+                    .collect();
                 problem
                     .locks
                     .class_id
@@ -540,13 +563,13 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         }
     }
     let mut report = serde_json::json!({
-        "schema_version":if expanded {3} else {2},"status":"experimental_mutation_search","diagnostic_only":true,
+        "schema_version":if ascendancy_passives {4} else if expanded {3} else {2},"status":"experimental_mutation_search","diagnostic_only":true,
         "requested_backend":engine.capabilities().id,"execution_kind":if execution == ExecutionKind::RustCpu {"rust_cpu"} else {"external_process"},
         "data":{"identity":snapshot.identity(),"trust":snapshot.trust(),"uses_packaged_default":args.data.data.is_none()},
         "requirements":{"scope":"controlled_mace_requirements_v1","legal_candidates":legal_candidates,"rejected_candidates":rejected_candidates},
         "admission":{"complete":Some(checked_candidates as u128)==domain.space.size(),"checked_candidates":checked_candidates,"rejected_candidates":rejected_rules},
         "tree_choices":domain.tree_choices,
-        "scope":if expanded {"normal_mace_class_entrance_weapon_support_profile_v1"} else {"normal_mace_weapon_support_profile_v1"},"problem":problem,"template_xml_sha256":imported.sha256,
+        "scope":if ascendancy_passives {"normal_mace_class_passive_weapon_support_profile_v2"} else if expanded {"normal_mace_class_entrance_weapon_support_profile_v1"} else {"normal_mace_weapon_support_profile_v1"},"problem":problem,"template_xml_sha256":imported.sha256,
         "template":registry.template_build(),"catalog":registry.catalog(),"alternatives":registry.alternatives(),
         "candidate_constraints":constraints,"space":domain.space,"strategy":args.strategy,"neighborhood":domain.neighborhood,
         "run_budget":{"max_evaluations":args.max_evaluations,"timeout_seconds":args.timeout_seconds,"jobs":args.jobs,"seed":args.seed,"max_proposals":args.max_proposals,"max_rounds":args.max_rounds,"reserved_template_attempts":1,"reserved_verification_attempts":1},

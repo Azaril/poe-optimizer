@@ -115,7 +115,7 @@ fn weapon_support_monster_and_typed_effect_records_reach_calculation() {
         package.monsters.evasion[59] *= 2.0;
         package.monsters.armour[59] *= 2.0;
         let effects = package
-            .entrance_effects
+            .passive_effects
             .iter_mut()
             .find(|e| e.class_id == 1 && e.physical_node_id == 4739)
             .unwrap();

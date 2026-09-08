@@ -373,7 +373,7 @@ fn selected_quest_names_are_validated_and_lexical_normalization_rejects() {
 fn all_admitted_tree_choices_compose_and_round_trip_without_touching_source_prose() {
     let data = Arc::new(game_data::bundled_snapshot().unwrap());
     let trees = class_tree::selections(data.tree()).unwrap();
-    assert_eq!(trees.len(), 93);
+    assert_eq!(trees.len(), 105);
     let source = TEMPLATE
         .replace(
             "<Tree activeSpec=\"1\">",
@@ -392,7 +392,7 @@ fn all_admitted_tree_choices_compose_and_round_trip_without_touching_source_pros
     )
     .unwrap();
     assert_eq!(registry.tree_choices(), trees);
-    assert_eq!(registry.alternatives().len(), 372);
+    assert_eq!(registry.alternatives().len(), 420);
     let source_document = Document::parse(&source).unwrap();
     let source_build = child(source_document.root_element(), "Build").unwrap();
     let source_spec = child(
@@ -405,6 +405,7 @@ fn all_admitted_tree_choices_compose_and_round_trip_without_touching_source_pros
         CandidateConstraints {
             budgets: CandidateBudgets {
                 ordinary_passive_points: 1,
+                ascendancy_passive_points: 1,
                 active_skill_count: 1,
                 supports_per_skill: 1,
                 ..Default::default()
@@ -441,7 +442,12 @@ fn all_admitted_tree_choices_compose_and_round_trip_without_touching_source_pros
         );
         assert_eq!(
             candidate.passives,
-            alternative.tree.entrance_node_id.into_iter().collect()
+            alternative
+                .tree
+                .entrance_node_id
+                .into_iter()
+                .chain(alternative.tree.ascendancy_node_id)
+                .collect()
         );
         let xml = registry.materialize(candidate).unwrap().content;
         assert_eq!(hash(&xml), alternative.xml_sha256);
@@ -466,7 +472,13 @@ fn all_admitted_tree_choices_compose_and_round_trip_without_touching_source_pros
                 alternative
                     .tree
                     .entrance_node_id
-                    .map_or_else(String::new, |id| id.to_string())
+                    .into_iter()
+                    .chain(alternative.tree.ascendancy_node_id)
+                    .collect::<BTreeSet<_>>()
+                    .iter()
+                    .map(u32::to_string)
+                    .collect::<Vec<_>>()
+                    .join(",")
                     .as_str()
             )
         );
@@ -665,4 +677,73 @@ fn expanded_materialization_preparation_work_is_bounded() {
             .to_string()
             .contains("256 MiB preparation budget")
     );
+}
+
+#[test]
+fn ascendancy_passive_materialization_preserves_two_allocations_and_rejects_foreign_ownership() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let chosen = class_tree::selections(data.tree())
+        .unwrap()
+        .into_iter()
+        .find(|tree| tree.entrance_node_id.is_some() && tree.ascendancy_node_id.is_some())
+        .unwrap();
+    let make = |source: String, trees| {
+        ControlledMaceCatalog::with_tree_choices(
+            data.clone(),
+            source,
+            weapons(data.package()),
+            vec![MaceSupportChoice::None],
+            trees,
+        )
+    };
+    let first = make(TEMPLATE.into(), vec![chosen.clone()]).unwrap();
+    let source = first
+        .materialize(&first.alternatives()[0].candidate)
+        .unwrap()
+        .content;
+    let parsed = profile(&source, data.package()).unwrap();
+    assert_eq!(parsed.tree.selection, chosen);
+    assert_eq!(parsed.tree.allocated_nodes.len(), 4);
+    let second = make(source.clone(), vec![chosen.clone(), fixed_warrior()]).unwrap();
+    let restored = second
+        .resolve_tree_candidate(
+            &fixed_warrior(),
+            &data.package().weapons[0].id,
+            MaceSupportChoice::None,
+        )
+        .unwrap();
+    let restored_xml = second.materialize(restored).unwrap().content;
+    assert!(restored_xml.contains("nodes=\"\""));
+    assert!(restored_xml.contains("Controlled attack/weapon/support host-calibration fixture"));
+    assert_eq!(
+        profile(&restored_xml, data.package())
+            .unwrap()
+            .tree
+            .selection,
+        fixed_warrior()
+    );
+    let invalid = ClassTreeSelection {
+        ascendancy_id: None,
+        ..chosen.clone()
+    };
+    assert!(make(TEMPLATE.into(), vec![invalid]).is_err());
+    let foreign = ClassTreeSelection {
+        ascendancy_node_id: chosen.ascendancy_node_id,
+        ..fixed_warrior()
+    };
+    assert!(make(TEMPLATE.into(), vec![foreign]).is_err());
+    let old_node = chosen.ascendancy_node_id.unwrap();
+    let old_nodes = [chosen.entrance_node_id.unwrap(), old_node]
+        .into_iter()
+        .collect::<BTreeSet<_>>()
+        .iter()
+        .map(u32::to_string)
+        .collect::<Vec<_>>()
+        .join(",");
+    let duplicated = source.replace(
+        &format!("nodes=\"{old_nodes}\""),
+        &format!("nodes=\"{old_nodes},{old_node}\""),
+    );
+    assert_ne!(duplicated, source);
+    assert!(make(duplicated, vec![chosen]).is_err());
 }

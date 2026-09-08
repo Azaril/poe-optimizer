@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "id": "poe2-pinned-current-profile-extraction-v2",
+  "id": "poe2-pinned-current-profile-extraction-v3",
   "release": "poe2-0_5-native-profiles-3887ae6",
   "source_role": "reviewed partial source transcriptions; source parity required for release",
   "spark_skill": "SparkPlayer",
@@ -10,5 +10,5 @@
   "mace_default_class": "Warrior",
   "weapons": [["wooden_club", "Wooden Club"], ["smithing_hammer", "Smithing Hammer"]],
   "quests": ["Candlemass", "Molten Shrine", "Silent Hall", "Beira", "Sisters of Garukhan Shrine", "Blackjaw"],
-  "coverage": ["spark_level_one_quality_zero_no_equipment_or_supports", "mace_strike_normal_mace_optional_brutality_i", "all_class_and_ascendancy_identities_no_allocated_ascendancy_effects", "zero_or_one_ordinary_class_entrance", "strict_partial_game_data_not_general_build_coverage", "level_one_gem_and_normal_base_requirements_with_support_color_costs", "no_general_equipment_self_dependency_or_point_budget_certificate"]
+  "coverage": ["spark_level_one_quality_zero_no_equipment_or_supports", "mace_strike_normal_mace_optional_brutality_i", "all_class_and_ascendancy_identities_with_zero_or_one_reviewed_ascendancy_passive", "zero_or_one_ordinary_class_entrance", "strict_partial_game_data_not_general_build_coverage", "level_one_gem_and_normal_base_requirements_with_support_color_costs", "no_general_equipment_self_dependency_or_point_budget_certificate"]
 }

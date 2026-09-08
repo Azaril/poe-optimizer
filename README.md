@@ -34,14 +34,15 @@ references plus a four-case attack/weapon/support matrix validate host and metri
 A parallel native Rust crate has parity-tested numerical helpers and numeric/conditional
 modifier aggregation and numeric scaling programs. A native build backend now parses
 restricted Spark and Mace Strike profiles across all pinned class/ascendancy identities,
-with zero or one ordinary entrance passive, and computes their supported resource,
+with zero or one ordinary entrance and one admitted ascendancy resistance passive,
+and computes their supported resource,
 resistance and hit metrics entirely in Rust. `evaluate --backend native` uses the same result/objective APIs, and a
 native-only CLI build excludes Lua and PoB. General native build coverage remains in progress;
 see [native backend and optional reference mode](docs/native-backend.md).
 Canonical candidates and locks represent all six dimensions. A generic search kernel has
 bounded parallel evaluation, feasible/infeasible beams, deduplication and fresh finalist
 checks. `search-experimental --backend native` searches supplied normal-Mace weapon/support
-choices and optional class/ascendancy/entrance selections directly on Rayon with exact locks
+choices and optional class/ascendancy/ordinary and ascendancy passive selections directly on Rayon with exact locks
 and source-preserving mutations; `--backend pob`
 selects the optional reference backend; `search-calibration` retains the four original
 fixtures. `extract-tree` exports pinned topology and source/override metadata for broader
@@ -83,6 +84,7 @@ cargo build -p poe-optimizer-cli --release --no-default-features --locked
 cargo run -p poe-optimizer-cli --no-default-features --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-search.json --jobs 4 --max-evaluations 10
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-class-search.json --jobs 4 --max-evaluations 746
+cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-resistance-search.json --jobs 4 --max-evaluations 842
 ```
 
 For the full development workspace, including optional PoB references and parity tests:
@@ -134,7 +136,8 @@ configuration/conditions, which are not yet a complete resolved scenario model. 
 
 Evaluation-report JSON uses schema 3; the PoB worker protocol, controlled-search reports and
 native benchmark reports use schema 2. Expanded class/tree search reports use schema 3
-with explicit budgets and admission evidence. Results identify backend,
+with explicit budgets and admission evidence; paid-ascendancy problems use report schema 4.
+Results identify backend,
 rules/source/adapter fingerprints, observed selection, metric schema/units and coverage.
 `--raw` adds the complete PoB diagnostic snapshot as an opaque JSON attachment. Objective code
 must use typed measurements rather than inspect raw PoB fields. Unknown fields in options,

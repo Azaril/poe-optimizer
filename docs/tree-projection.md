@@ -166,3 +166,12 @@ Huntress `56651 -> 39263`. Its identity binds the projection implementation and 
 The controlled Mace adapter rebinds the final catalog to supplied skills/items and selected
 tree choices. Caller budgets and locks are separate canonical constraints. This path
 requires neither a complete extraction nor PoB at runtime; excluded nodes stay excluded.
+
+
+The regenerated schema-2 partial bundle also retains four policy-selected ascendancy Normal
+nodes, with exact owner maps and direct root connections. The resolver admits at most one
+ordinary entrance and one owned ascendancy node together. The projected canonical graph
+keeps their distinct point categories; explicit available budgets and locks remain caller
+inputs. The 44 retained physical records leave 4,870 source nodes excluded, with boundary
+edges and all 14 source dangling connections still explicit. New paid choices use schema-3
+search problems and native-tree evidence v2; no broader ascendancy-path coverage is implied.

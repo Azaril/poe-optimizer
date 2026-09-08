@@ -160,21 +160,25 @@ fn joint_materializations_and_fresh_export_reimports_match_pinned_pob() {
             class_id: 1,
             ascendancy_id: Some("Witch3".into()),
             entrance_node_id: None,
+            ascendancy_node_id: None,
         },
         ClassTreeSelection {
             class_id: 1,
             ascendancy_id: Some("Witch3b".into()),
             entrance_node_id: Some(4739),
+            ascendancy_node_id: None,
         },
         ClassTreeSelection {
             class_id: 8,
             ascendancy_id: Some("Huntress1".into()),
             entrance_node_id: Some(56651),
+            ascendancy_node_id: None,
         },
         ClassTreeSelection {
             class_id: 6,
             ascendancy_id: None,
             entrance_node_id: None,
+            ascendancy_node_id: None,
         },
     ] {
         cases.push((selection, "wood", MaceSupportChoice::BrutalityI));

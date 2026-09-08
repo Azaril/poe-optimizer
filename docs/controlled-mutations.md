@@ -8,11 +8,14 @@ Status: experimental finite-domain adapter, `poe_optimizer_import::controlled_ma
 
 `with_tree_choices(snapshot, template_xml, weapons, supports, selections)` adds explicit
 `ClassTreeSelection` values: canonical numeric `class_id`, optional internal `ascendancy_id`,
-and optional physical `entrance_node_id`. The template may use any admitted selection.
+optional physical `entrance_node_id`, and optional `ascendancy_node_id`. The template may use any admitted selection.
 `poe_optimizer_data::class_tree` owns the shared resolver and partial candidate graph; the
 partial bundle is never represented as a complete extracted tree. All 31 class/ascendancy
-identities support none or either of two class-local ordinary entrances, giving 93 choices.
-Ascendancy roots remain implicit and statless; allocated ascendancy effects stay unsupported.
+identities support none or either of two class-local ordinary entrances, giving 93 choices before paid ascendancy nodes. An optional `ascendancy_node_id` adds one
+of four reviewed owned small nodes, yielding 105 selections. These grant signed
+unconditional player BASE resistance effects: Warrior3/14960, Druid2/61722, Monk3/24475
+and Huntress3/17058. Ascendancy roots remain implicit and statless. Other allocated
+ascendancy effects stay unsupported.
 
 The weapon list contains 1–64 distinct exact item payloads with distinct user labels. Payloads have exactly these five lines:
 
@@ -27,7 +30,7 @@ Implicits: 0
 The reviewed base names are Wooden Club and Smithing Hammer; custom records may rename these two supported slots; item level is 1–100 and quality is 0–20, as canonical integers. Whitespace around the complete payload and CRLF line endings normalize before hashing. Extra modifier lines, nonnormal rarity, range settings, corrupted items, and unknown bases fail closed. The selected records supply equip-level and attribute requirements; item level does not determine equip level. The reviewed bases have no level requirement; Smithing Hammer requires 11 strength. This is a bounded compatibility check, not a general equipment-requirement solver.
 
 Support choices are `none` and/or `brutality_i`. Their Cartesian product with weapons produces at most 128 candidates per tree selection,
-or 11,904 with all 93 selections. Catalog construction also requires
+or 13,440 with all 105 selections. Catalog construction also requires
 `candidate_count * (template_bytes + 4096) <= 256 MiB` to bound source-hashing work; this is
 not a process-memory limit. Oversized preparation rejects before evaluation. The compatibility claim is tied to the pinned source: `src/Data/Skills/sup_str.lua` defines Brutality I as supporting damaging attacks, and Mace Strike is the known one-hand Mace attack. Quality and level variants of support gems, support families, multiple supports, and arbitrary skill compatibility require further data translation and tests.
 
@@ -78,7 +81,7 @@ This baseline is **runtime-derived drift evidence**, not an independent numerica
 The native path uses `bind_native_baseline(result, expected_backend)` and
 `validate_native_realization(candidate, result, scenario)`. It validates the selected native
 backend/rules and matching catalog/data identity, exact materialized XML export, class/root, active/support identities and
-settings, selected physical allocations, implicit roots, effective node IDs and configured
+settings, selected physical ordinary/ascendancy allocations, implicit roots, effective node IDs and configured
 entrance effects, source configuration, stable external placeholders and parsed weapon base,
 quality, item level and support evidence. It expects native source preservation, not PoB's
 normalization. Candidate-derived condition tables remain free to change. Both paths retain
@@ -98,7 +101,8 @@ reference evaluation or fallback. See [native backend](native-backend.md) for co
 compatibility, cross-data rejection, custom names/quest selectors, serial/Rayon agreement,
 empty domains and finalist reloads.
 
-`tests/class_search_cli.rs` and `tests/class_search_parity.rs` add coupled class/tree/item/
+`tests/class_search_cli.rs`, `tests/class_search_parity.rs`,
+`tests/resistance_search_cli.rs` and `tests/resistance_build_parity.rs` add coupled class/tree/item/
 support checks, caller budgets, exact locks, source-preserving exports and fresh PoB
 materialization/reimport comparisons. Search rejects illegal point/ownership/requirement
 combinations before dispatch. The native diagnostic allocation count remains evidence of
