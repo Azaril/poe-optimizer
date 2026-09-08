@@ -85,26 +85,41 @@ portable core/native calculation builds are checked independently.
 
 ## Calibration CLI
 
-`search-calibration` is a developer integration harness over the four exact Mace source
-fixtures, using the [calibrated PoB registry](pob-candidates.md). It runs the normal fresh
-process evaluator, rejects requested-versus-realized state drift and backend identity
-changes, and emits versioned JSON with candidate/catalog identity, settings, assessments,
-failures and fresh verification. It can export the unchanged source XML for a verified
-feasible finalist. Diagnostic coverage remains diagnostic after verification.
+`search-calibration` is a developer comparison harness over complete documents selected by
+required `--catalog`. Its [schema 1 manifest](pob-candidates.md#supplied-catalog-cli) contains
+caller-provided IDs and paths; relative paths resolve from the manifest. Every input passes
+through the portable PoB XML/share-code decoder. There is no embedded build corpus or
+fallback to a calibrated build. The former four-fixture registry remains a separately tested
+[legacy utility](pob-candidates.md#legacy-calibrated-candidate-bridge), outside this CLI path.
 
-The registry deliberately accepts only independently calibrated byte identities. It
-currently has no user build input, arbitrary tree/class/ascendancy mutations, encounter
-selector or generic equipment pool. That restriction is an integration gate; it does not
-change the first usable optimizer's joint search scope.
+This finite domain checks exact supplied-document membership. It does not project arbitrary
+builds into mutable canonical candidates or certify general realization/game legality. Each
+calculation uses the document's imported action selection and configuration, which may differ
+between alternatives. The adapter evaluates fresh in isolated PoB processes and rejects
+backend identity changes during a run.
 
 ```powershell
-cargo run --locked -- search-calibration --objective examples/calibration-objective.json --jobs 2 --max-evaluations 5 --output runs/calibration-search.json --export runs/calibration-best.xml
+New-Item -ItemType Directory -Force runs | Out-Null
+cargo run --locked -- search-calibration --catalog examples/calibration-catalog.json --objective examples/calibration-objective.json --jobs 2 --max-evaluations 5 --output runs/calibration-search.json --export runs/calibration-best.xml
 ```
 
-Five attempts permit four distinct alternatives and one independent finalist calculation.
-With a smaller budget, the JSON explicitly records a partial search. If no feasible
-candidate passes fresh verification, an export is omitted with a reason. Existing output
-files are never overwritten. The complete four-case optimum for selected hit DPS is
-Smithing Hammer without Brutality (`18.208694`). Among the two Brutality cases, Wooden
-Club wins (`13.6565205` versus `11.0552785`), demonstrating a real support/weapon interaction.
-Neither comparison is a recommendation for an actual character.
+The example manifest explicitly lists the four original Mace regression fixtures. Five
+attempts permit those four alternatives and one fresh finalist calculation. Proposal, beam
+and archive limits derive from the loaded entry count; the configurable attempt and deadline
+budgets still apply. With a smaller budget, JSON records a partial comparison. Catalog input
+is bounded to 1..64 entries, 64 KiB of manifest, the portable per-input limits and 32 MiB of
+total decoded XML.
+
+Report schema 2 records requested source identities separately from observed PoB summaries,
+selected-action coverage, configuration and export identities. Fresh finalist verification
+compares numerical assessments under the same backend. Generic realization and game legality
+are explicitly `unverified`, including for the winner. `--export` saves the winner's exact
+requested XML after successful fresh verification; matching or preserving source bytes is
+not a no-normalization certificate. If no feasible candidate passes, the export is omitted
+with a reason. Existing output files are never overwritten.
+
+For the four-case regression corpus, the highest selected hit DPS is Smithing Hammer without
+Brutality (`18.208694`). Among the two Brutality cases, Wooden Club wins (`13.6565205` versus
+`11.0552785`), demonstrating a support/weapon interaction. These independent numerical
+references remain test provenance, not a built-in production corpus or a recommendation
+for an actual character.

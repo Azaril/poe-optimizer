@@ -677,3 +677,36 @@ fn body_and_unused_movement_items_are_gated_and_obey_slot_and_requirement_locks(
         ControlledBuildDomain::new(catalog, rules, AttributeOptionLocks::default()).unwrap();
     assert!(locked.admit(bare, &mut ActorScratch::default()).is_err());
 }
+
+#[test]
+fn action_scope_covers_enabled_config_and_every_supplied_or_template_item() {
+    let original = catalog(MACE, vec![]);
+    assert!(!original.uses_action_speed_scope());
+    for source in [MACE, SPARK] {
+        let configured=source.replace("</ConfigSet>","<CustomModifierBlock title=\"Action\" enabled=\"true\">20% increased Action Speed</CustomModifierBlock></ConfigSet>");
+        assert!(catalog(&configured, vec![]).uses_action_speed_scope());
+        let disabled=source.replace("</ConfigSet>","<CustomModifierBlock title=\"Action\" enabled=\"false\">20% increased Action Speed</CustomModifierBlock></ConfigSet>");
+        assert!(!catalog(&disabled, vec![]).uses_action_speed_scope());
+        let extra = amulet(
+            "unselected-action",
+            81,
+            "Action speed cannot be modified to below base value",
+        );
+        let supplied = catalog(source, vec![extra]);
+        assert!(supplied.uses_action_speed_scope());
+        assert!(
+            !supplied
+                .source_selection()
+                .candidate
+                .equipment
+                .values()
+                .any(|id| id == "unselected-action")
+        );
+        let raw = "Rarity: RARE\nInventory Action\nRusted Greathelm\nItem Level: 60\nQuality: 0\nImplicits: 0\n20% increased Action Speed";
+        let inventory = source.replace(
+            "<ItemSet ",
+            &format!("<Item id=\"82\">{raw}</Item><ItemSet "),
+        );
+        assert!(catalog(&inventory, vec![]).uses_action_speed_scope());
+    }
+}

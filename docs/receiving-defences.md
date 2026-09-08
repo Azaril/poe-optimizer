@@ -89,8 +89,8 @@ unit `rating_points`; see [local armour and rating objectives](local-armour.md).
 Shield and capped resistances retain their existing units and definitions.
 Unsupported metrics remain unavailable; the receiver does not add an EHP approximation.
 
-Native profile IDs are `poe2-spark-body-movement-v6` and
-`poe2-mace-strike-body-movement-v10`, with profile media versions **6** and **8**. Each
+Native profile IDs are `poe2-spark-action-timing-v7` and
+`poe2-mace-strike-action-timing-v11`, with profile media versions **7** and **9**. Each
 profile carries a separate `receiving_defence` evidence object (schema 1). Realization checks
 recompute expected receiving evidence from selected sources and reject tampering, a foreign
 data owner or different scenario. Output XML preserves source; its companion binds exact data.

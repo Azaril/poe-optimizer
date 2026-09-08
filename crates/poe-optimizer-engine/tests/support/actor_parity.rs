@@ -295,6 +295,16 @@ impl ActorOracle {
                 .unwrap();
         }
         input.set("quests", record_table(lua, &records)).unwrap();
+        lua.globals()
+            .get::<Table>("data")
+            .unwrap()
+            .get::<Table>("misc")
+            .unwrap()
+            .set(
+                "TemporalChainsEffectCap",
+                package.action_speed.temporal_chains_effect_cap,
+            )
+            .unwrap();
         // Precision is an explicit source data input, including injected More entries.
         let precision = lua.create_table().unwrap();
         for (name, entries) in &package.actor.high_precision_mods {
@@ -335,6 +345,11 @@ pub(super) fn record_table(lua: &Lua, records: &[Record]) -> Table {
             let tag = lua.create_table().unwrap();
             match source {
                 Tag::Global => tag.set("type", "Global").unwrap(),
+                Tag::GlobalEffect { unscalable, .. } => {
+                    tag.set("type", "GlobalEffect").unwrap();
+                    tag.set("effectType", "Global").unwrap();
+                    tag.set("unscalable", *unscalable).unwrap();
+                }
                 Tag::Condition { variables, negated } => {
                     tag.set("type", "Condition").unwrap();
                     tag.set(

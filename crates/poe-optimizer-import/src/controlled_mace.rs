@@ -749,6 +749,9 @@ impl ControlledMaceCatalog {
     /// Authored actor configuration requires an explicit CLI problem scope even when disabled.
     /// This legacy weapon catalog admits local-only items; only enabled authored
     /// configuration records can require the new receiving source grammar.
+    pub fn uses_action_speed_scope(&self) -> bool {
+        self.profile.actor_modifiers.uses_action_speed()
+    }
     pub fn uses_movement_scope(&self) -> bool {
         self.profile.actor_modifiers.uses_movement()
     }
@@ -1185,7 +1188,7 @@ impl ControlledMaceCatalog {
             .iter()
             .filter(|attachment| {
                 attachment.media_type
-                    == "application/vnd.poe-optimizer.native-profile+json;version=8"
+                    == "application/vnd.poe-optimizer.native-profile+json;version=9"
             })
             .collect();
         if evidence.len() != 1 || evidence[0].content.len() > MAX_NATIVE_MACE_PROFILE_BYTES {
@@ -1224,6 +1227,41 @@ impl ControlledMaceCatalog {
             != crate::actor_assembly::movement_evidence(prepared_actor.movement())
         {
             return Err(mismatch("native movement differs from selected source"));
+        }
+        let action_speed = prepared_actor.action_speed();
+        if evidence["action_speed"] != crate::actor_assembly::action_speed_evidence(action_speed) {
+            return Err(mismatch("native action speed differs from selected source"));
+        }
+        let allocation = class_tree::PassiveAllocationSelection {
+            class_id: choice.tree.selection.class_id,
+            ascendancy_id: choice.tree.selection.ascendancy_id.clone(),
+            ordinary_nodes: choice.tree.selection.entrance_node_id.into_iter().collect(),
+            ascendancy_nodes: choice
+                .tree
+                .selection
+                .ascendancy_node_id
+                .into_iter()
+                .collect(),
+            attribute_options: Default::default(),
+        }
+        .resolve(&self.data)
+        .map_err(|error| mismatch(&error.to_string()))?;
+        let character = self
+            .compiled
+            .character_from_allocation(&allocation)
+            .map_err(|error| mismatch(&error.to_string()))?;
+        let timing = crate::actor_assembly::mace_action_timing(
+            &self.compiled,
+            &character,
+            &weapon,
+            choice.support.keys(),
+            action_speed.action_speed_mod,
+        )
+        .map_err(|error| mismatch(&error))?;
+        if evidence["action_timing"] != crate::actor_assembly::action_timing_evidence(timing) {
+            return Err(mismatch(
+                "native action timing differs from selected source components",
+            ));
         }
         let receiving = prepared_actor
             .receiving()

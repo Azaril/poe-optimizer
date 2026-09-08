@@ -4,8 +4,8 @@
 It is optional development tooling: native evaluation loads the exported package and has
 no Lua or worker-process dependency. No website is scraped or downloaded.
 
-The exporter covers the same nineteen explicitly partial sections as the
-[native data package](native-data.md): tree, character, actor, receiving defences, movement, quests, Spark, Mace, supports, weapons,
+The exporter covers the same twenty-one explicitly partial sections as the
+[native data package](native-data.md): tree, character, actor, receiving defences, movement, action speed, direct timing, quests, Spark, Mace, supports, weapons,
 item modifier rules, item source formatting, jewellery and fixed armour bases, defence, monsters, encounters, typed owned passive
 effects and explicit passive exclusions. Whole ordinary structure is separate from
 capability admission: 1,282 complete source views are supported, including the four
@@ -91,9 +91,9 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 10 and `poe2-native-profiles-v10`, including source-keyed passive/actor effects,
+schema 11 and `poe2-native-profiles-v11`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
-formula/penalty data and explicit excluded views. Item penalty absence and zero remain
+formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
 retains normalized actor modifiers, actor rules,
 the full source precision table and Spirit quest records, alongside the existing item rules,

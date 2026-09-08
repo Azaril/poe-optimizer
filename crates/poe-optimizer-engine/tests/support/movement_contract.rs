@@ -122,7 +122,7 @@ fn body_penalties_preserve_source_zero_presence_and_owner_guards() {
     }
 }
 #[test]
-fn movement_condition_cycles_and_unimplemented_actions_are_not_admitted() {
+fn movement_condition_cycles_and_unimplemented_repeats_are_not_admitted() {
     let data = CompiledGameData::bundled().unwrap();
     let character = data.default_mace_character();
     let quests = data.actor_quest_selection(SparkQuestRewards::default());
@@ -147,7 +147,7 @@ fn movement_condition_cycles_and_unimplemented_actions_are_not_admitted() {
         );
     }
     let mut package = data.snapshot().package().clone();
-    package.movement.default_action_speed_multiplier = 1.5;
+    package.direct_action_timing.default_repeats = 2;
     package.refresh_section_digests().unwrap();
     assert!(
         game_data::GameDataLoader::from_bytes(
@@ -172,7 +172,11 @@ fn varied_four_slot_movement_and_both_skills_allocate_nothing_after_preparation(
         negated: false,
     });
     let config = data
-        .compile_actor_modifiers(&[ignore, numeric(ActorStat::MovementSpeed, Op::More, 13.3333)])
+        .compile_actor_modifiers(&[
+            ignore,
+            numeric(ActorStat::MovementSpeed, Op::More, 13.3333),
+            numeric(ActorStat::TemporalChainsActionSpeed, Op::Increased, -20.0),
+        ])
         .unwrap();
     // Actor global order is H/Body/G/B; receiving order is H/G/B/Body.
     let items = [
@@ -199,6 +203,7 @@ fn varied_four_slot_movement_and_both_skills_allocate_nothing_after_preparation(
                     numeric(ActorStat::Int, Op::Base, f64::from(quality)),
                     numeric(ActorStat::ArmourAndEvasion, Op::Base, 17.5),
                     numeric(ActorStat::MovementSpeed, Op::Increased, f64::from(quality)),
+                    numeric(ActorStat::ActionSpeed, Op::Increased, f64::from(quality)),
                 ],
             )
             .unwrap()

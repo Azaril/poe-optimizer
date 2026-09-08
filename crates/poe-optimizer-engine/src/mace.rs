@@ -14,7 +14,7 @@ use crate::{
 };
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-mace-strike-body-movement-v10";
+pub const PROFILE_ID: &str = "poe2-mace-strike-action-timing-v11";
 pub const TREE_VERSION: &str = "0_5";
 /// Index in the pinned tree classes table; XML classInternalId is a separate id.
 pub const CLASS_ID: u32 = 3;
@@ -110,6 +110,8 @@ pub struct MaceOutput {
     pub average_damage: f64,
     pub hit_dps: f64,
     pub attack_rate: f64,
+    pub action_speed_mod: f64,
+    pub timing: crate::timing::DirectActionTimingOutput,
     pub crit_chance: f64,
     pub crit_multiplier: f64,
     pub weapon_physical_minimum: f64,
@@ -216,6 +218,13 @@ pub fn evaluate_with_actor(
         .receiving_for(compiled.receiving_scenario(input.quests, input.resistance_penalty))
         .map_err(|error| MaceError(error.0))?;
     let movement = actor.movement();
+    let timing = action_timing(
+        compiled,
+        character,
+        weapon,
+        supports,
+        actor.action_speed().action_speed_mod,
+    )?;
     let actor = actor.values();
     if !compiled.owns_weapon(weapon) {
         return Err(MaceError(
@@ -357,15 +366,7 @@ pub fn evaluate_with_actor(
     let main_hand_average_hit =
         total_hit_average * (1.0 - crit_chance / 100.0) + total_crit_average * crit_chance / 100.0;
     let average_damage = main_hand_average_hit * hit / 100.0;
-    let base_time = 1.0 / weapon.attack_rate;
-    // ModDB rounds each MORE name first, then CalcOffence combines all INC
-    // with that product and rounds the resulting speed multiplier to two places.
-    let speed_multiplier = round_to_integer(
-        (1.0 + (modifiers.skill_speed_increased + supports.speed_increased) / 100.0)
-            * supports.speed_more
-            * 100.0,
-    ) / 100.0;
-    let attack_rate = 1.0 / (base_time / speed_multiplier);
+    let attack_rate = timing.speed;
     let hit_dps = average_damage * attack_rate;
     Ok(MaceOutput {
         strength: attributes.strength,
@@ -394,6 +395,8 @@ pub fn evaluate_with_actor(
         average_damage,
         hit_dps,
         attack_rate,
+        action_speed_mod: timing.action_speed_mod,
+        timing,
         crit_chance,
         crit_multiplier,
         weapon_physical_minimum,
@@ -405,6 +408,40 @@ pub fn evaluate_with_actor(
         effective_enemy_fire_resistance: enemy_resistance,
         effective_enemy_evasion: enemy_evasion,
     })
+}
+
+/// Timing-only component evaluation used by full evaluation and exact import
+/// realization. Components must belong to this dataset; no encounter defaults
+/// or other irrelevant build values need to be synthesized by the caller.
+pub fn action_timing(
+    compiled: &CompiledGameData,
+    character: &CharacterInput,
+    weapon: &PreparedWeaponStats,
+    supports: &PreparedMaceSupports,
+    action_speed_mod: f64,
+) -> Result<crate::timing::DirectActionTimingOutput, MaceError> {
+    character.validate().map_err(|error| MaceError(error.0))?;
+    if !compiled.owns_weapon(weapon) || !compiled.owns_mace_supports(supports) {
+        return Err(MaceError(
+            "Prepared timing component belongs to a different compiled dataset",
+        ));
+    }
+    if !action_speed_mod.is_finite() {
+        return Err(MaceError("Action speed input must be finite"));
+    }
+    let data = &compiled.snapshot().package().direct_action_timing;
+    Ok(crate::timing::calculate(
+        data,
+        crate::timing::DirectActionTimingInput {
+            base_time: 1.0 / weapon.stats().attack_rate,
+            increased: character.modifiers.skill_speed_increased + supports.speed_increased,
+            more: supports.speed_more,
+            additional_attack_time: 0.0,
+            additional_cast_time: 0.0,
+            action_speed_mod,
+            repeats: f64::from(data.default_repeats),
+        },
+    ))
 }
 
 /// Convenience normal-monster lookup in the reviewed package.

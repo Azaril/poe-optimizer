@@ -1,9 +1,11 @@
 # Build fixtures
 
 `pobarchives-Dfz36mCq.xml` is the exact decoded byte stream from the user-supplied
-`example.import.txt`. Its adjacent metadata JSON records source hashes, structural
+original `example.import.txt` (now preserved as `pobarchives-Dfz36mCq.import.txt`). Its adjacent metadata JSON records source hashes, structural
 observations, source assumptions, and compatibility limits. The original
-`example.build` and `example.import.txt` were read only and left unchanged.
+`example.build` was left unchanged. On 2026-09-08 the user replaced `example.import.txt`
+with five imports; the exact decoded corpus and intake index are in `breadth-20260908/`.
+See [breadth validation](../../../docs/breadth-validation.md).
 
 This is a Path of Exile 2 level 96 Sorceress / Disciple of Varashta minion army
 build, with tree version `0_5`; its planner title claims patch 0.5.5. The selected

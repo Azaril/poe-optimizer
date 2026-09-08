@@ -303,7 +303,7 @@ fn armour_rejects_incomplete_local_semantics_and_unmodeled_item_properties() {
         valid.replace("+7 to Armour", "Sockets: S"),
         valid.replace("+7 to Armour", "Has +1 to Evasion Rating per Player Level"),
         valid.replace("+7 to Armour", "+7 to Runic Ward"),
-        valid.replace("+7 to Armour", "20% increased Action Speed"),
+        valid.replace("+7 to Armour", "20% increased Cooldown Recovery Rate"),
         valid.replace(
             "+7 to Armour",
             "+7 to Armour and Energy Shield if Strength is higher than Intelligence",

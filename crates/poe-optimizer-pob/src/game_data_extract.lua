@@ -223,10 +223,10 @@ function source_critical_chance_cap(modifier)
 end
 
 local receiving_stats={Armour=true,Evasion=true,EnergyShield=true,ArmourAndEvasion=true,Defences=true,FireResist=true,ColdResist=true,LightningResist=true,ChaosResist=true,ElementalResist=true}
-local actor_stats={MovementSpeed=true,ArmourAndEnergyShield=true,EvasionAndEnergyShield=true,Armour=true,Evasion=true,EnergyShield=true,ArmourAndEvasion=true,Defences=true,FireResist=true,ColdResist=true,LightningResist=true,ChaosResist=true,ElementalResist=true,Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true,ExtraLife=true,ExtraMana=true,ExtraSpirit=true,LifeTotal=true,ManaTotal=true,SpiritTotal=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,DexAccBonusOverride=true,LowLifePercentage=true,FullLifePercentage=true}
-local actor_flags={["Condition:IgnoreMovementPenalties"]=true,MovementSpeedCannotBeBelowBase=true,NoAttributeBonuses=true,DoubledInherentAttributeBonuses=true,NoStrengthAttributeBonuses=true,NoStrBonusToLife=true,HalvesLifeFromStrength=true,NoDexterityAttributeBonuses=true,NoDexBonusToAccuracy=true,NoIntelligenceAttributeBonuses=true,NoIntBonusToMana=true,ChaosInoculation=true}
+local actor_stats={ActionSpeed=true,TemporalChainsActionSpeed=true,MinimumActionSpeed=true,MaximumActionSpeedReduction=true,MovementSpeed=true,ArmourAndEnergyShield=true,EvasionAndEnergyShield=true,Armour=true,Evasion=true,EnergyShield=true,ArmourAndEvasion=true,Defences=true,FireResist=true,ColdResist=true,LightningResist=true,ChaosResist=true,ElementalResist=true,Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true,ExtraLife=true,ExtraMana=true,ExtraSpirit=true,LifeTotal=true,ManaTotal=true,SpiritTotal=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,DexAccBonusOverride=true,LowLifePercentage=true,FullLifePercentage=true}
+local actor_flags={UnaffectedBySlows=true,["Condition:IgnoreMovementPenalties"]=true,MovementSpeedCannotBeBelowBase=true,NoAttributeBonuses=true,DoubledInherentAttributeBonuses=true,NoStrengthAttributeBonuses=true,NoStrBonusToLife=true,HalvesLifeFromStrength=true,NoDexterityAttributeBonuses=true,NoDexBonusToAccuracy=true,NoIntelligenceAttributeBonuses=true,NoIntBonusToMana=true,ChaosInoculation=true}
 local actor_conditions={IgnoreMovementPenalties=true,TwoHighestAttributesEqual=true,DexHigherThanInt=true,StrHigherThanInt=true,IntHigherThanDex=true,StrHigherThanDex=true,IntHigherThanStr=true,DexHigherThanStr=true,StrHighestAttribute=true,IntHighestAttribute=true,DexHighestAttribute=true,IntSingleHighestAttribute=true,DexSingleHighestAttribute=true}
-local actor_operations={BASE='base',INC='increased',MORE='more',OVERRIDE='override'}
+local actor_operations={BASE='base',INC='increased',MORE='more',OVERRIDE='override',MAX='max'}
 local function actor_name(name) if name=='Condition:IgnoreMovementPenalties' then return 'ignore_movement_penalties' end;return (name:gsub('(%l)(%u)','%1_%2'):lower()) end
 function source_convert_actor_modifier(modifier)
     local tags,rawTags={},{}
@@ -239,6 +239,10 @@ function source_convert_actor_modifier(modifier)
         if tag.type=='Global' then
             keys(tag,{type=true},'Global marker');assert(receiving_stats[modifier.name],'Global marker is outside reviewed receiving targets')
             tags[#tags+1]={type='global'}
+        elseif tag.type=='GlobalEffect' then
+            keys(tag,{type=true,effectType=true,unscalable=true},'GlobalEffect metadata')
+            assert(modifier.name=='MinimumActionSpeed' and tag.effectType=='Global' and tag.unscalable==true,'unsupported GlobalEffect target/type/scaling')
+            tags[#tags+1]={type='global_effect',effect_type='global',unscalable=true}
         else
             keys(tag,{type=true,var=true,varList=true,neg=true},'actor condition')
             assert(tag.type=='Condition' and ((type(tag.var)=='string' and tag.varList==nil) or (tag.var==nil and type(tag.varList)=='table')),'unsupported actor condition shape')
@@ -259,7 +263,14 @@ function source_convert_actor_modifier(modifier)
         assert(actor_stats[modifier.name] and actor_operations[modifier.type],'unsupported actor numeric target or operation')
         local allOperations={MovementSpeed=true,Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true}
         local localArmour=modifier.name=='ArmourAndEnergyShield' or modifier.name=='EvasionAndEnergyShield'
-        assert((receiving_stats[modifier.name] and (modifier.type=='INC' or (modifier.type=='BASE' and modifier.name~='Defences'))) or (localArmour and (modifier.type=='BASE' or modifier.type=='INC')) or (not receiving_stats[modifier.name] and not localArmour and (allOperations[modifier.name] or (modifier.name=='DexAccBonusOverride' and modifier.type=='OVERRIDE') or (modifier.name~='DexAccBonusOverride' and modifier.type=='BASE'))),'actor numeric operation does not apply to target')
+        local actionInc=modifier.name=='ActionSpeed' or modifier.name=='TemporalChainsActionSpeed'
+        local actionMax=modifier.name=='MinimumActionSpeed' or modifier.name=='MaximumActionSpeedReduction'
+        assert((actionInc and modifier.type=='INC') or (actionMax and modifier.type=='MAX') or
+            (receiving_stats[modifier.name] and (modifier.type=='INC' or (modifier.type=='BASE' and modifier.name~='Defences'))) or
+            (localArmour and (modifier.type=='BASE' or modifier.type=='INC')) or
+            (not actionInc and not actionMax and not receiving_stats[modifier.name] and not localArmour and
+            ((allOperations[modifier.name] and modifier.type~='MAX') or (modifier.name=='DexAccBonusOverride' and modifier.type=='OVERRIDE') or
+            (not allOperations[modifier.name] and modifier.name~='DexAccBonusOverride' and modifier.type=='BASE'))),'actor numeric operation does not apply to target')
         effect={kind='numeric',operation=actor_operations[modifier.type],value=numeric(modifier.value,true)}
     end
     assert(equal(modifier,modLib.createMod(modifier.name,modifier.type,modifier.value,modifier.source,0,0,unpack(rawTags))),'unconsumed actor modifier structure')
@@ -478,7 +489,7 @@ function source_extract_records(policy)
         assert(quests[target[3]]==nil or quests[target[3]]==value,'elemental quest values diverged; schema expansion required')
         quests[target[3]]=value
     end
-    return {receiving_defence=source_extract_receiving_defence(),movement=source_extract_movement(),character=character,actor=source_extract_actor_data(policy,character,init,actor),spark=spark,mace=mace,supports=supports,weapons=weapons,item_modifier_rules=item_modifier_rules,quests=quests,monsters={armour=data.monsterArmourTable,evasion=data.monsterEvasionTable}}
+    return {receiving_defence=source_extract_receiving_defence(),movement=source_extract_movement(),action_speed=source_extract_action_speed(),direct_action_timing=source_extract_direct_action_timing(),character=character,actor=source_extract_actor_data(policy,character,init,actor),spark=spark,mace=mace,supports=supports,weapons=weapons,item_modifier_rules=item_modifier_rules,quests=quests,monsters={armour=data.monsterArmourTable,evasion=data.monsterEvasionTable}}
 end
 function source_encounter_build(level)
     local build={characterLevel=level}
@@ -498,14 +509,14 @@ function source_extract_passive(stats,id,name)
  local ok=pcall(PassiveTreeClass.ProcessStats,PassiveTreeClass,node)
  if not ok or node.unknown or node.extra then return nil,'unsupported_source_parser_output' end
  local effects,actor={},{}
- local forbidden={ArmourAndEnergyShield=true,EvasionAndEnergyShield=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,ChaosInoculation=true}
+ local forbidden={TemporalChainsActionSpeed=true,MaximumActionSpeedReduction=true,ArmourAndEnergyShield=true,EvasionAndEnergyShield=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,ChaosInoculation=true}
  for _,line in ipairs(node.mods) do
   local list=copyTable(line.list or {})
   if #list>0 then
    local converted={};local allactor=true
    for _,mod in ipairs(list) do
     local success,record=pcall(source_convert_actor_modifier,mod)
-    if not success or forbidden[mod.name] or (mod.type~='BASE' and mod.type~='INC' and mod.type~='FLAG') then allactor=false;break end
+    if not success or forbidden[mod.name] or (mod.type~='BASE' and mod.type~='INC' and mod.type~='FLAG' and mod.type~='MAX') then allactor=false;break end
     assert(type(mod.value)~='number' or mod.value%1==0,'noninteger passive actor source requires explicit order audit')
     converted[#converted+1]=record
    end
@@ -621,10 +632,10 @@ function source_extract_item_formatting(records)
 end
 
 -- Execute actual source branches to observe defaults, queries, precision and the
--- synthetic item modifier. Neutral action speed remains an admission proof.
+-- synthetic item modifier. Shared action-speed extraction owns action semantics.
 function source_extract_movement()
  local baseActor={modDB=new('ModDB'):ModDB(),output={}}
- local action=sourceCalcs.actionSpeedMod(baseActor);assert(action==1,'nonneutral action baseline requires offence support')
+ local actionData=source_extract_action_speed();local action=sourceCalcs.actionSpeedMod(baseActor);assert(action==math.max(actionData.default_minimum_percent/actionData.percent_divisor,actionData.base_multiplier),'action baseline mismatch')
  baseActor.output.ActionSpeedMod=action
  local originalRound=round;local precision
  sourceMovementRound=function(value,places)assert(type(places)=='number' and places%1==0 and (precision==nil or precision==places),'movement rounding changed');precision=places;return originalRound(value,places)end
@@ -643,5 +654,43 @@ function source_extract_movement()
  assert(equal(modifier,modLib.createMod('MovementSpeed','BASE',-101,'Item:1:Source probe',{type='Condition',var='IgnoreMovementPenalties',neg=true})),'generated movement penalty shape changed')
  modifier=copyTable(modifier);modifier.source=nil;local converted=source_convert_actor_modifier(modifier)
  local mapping={stat=converted.stat,effect={kind='numeric',operation=converted.effect.operation,value={kind='capture',index=0,multiplier=converted.effect.value/101}},flags=converted.flags,keyword_flags=converted.keyword_flags,tags=converted.tags}
- return {base_multiplier=base,minimum_multiplier=minimum,default_action_speed_multiplier=action,rounding_precision=precision,query_stats={actor_name(observed[1].name)},penalty_modifier=mapping}
+ return {base_multiplier=base,minimum_multiplier=minimum,rounding_precision=precision,query_stats={actor_name(observed[1].name)},penalty_modifier=mapping}
+end
+
+-- Literal source constants are retained exactly; numerical probing alone could
+-- reconstruct /100 as an inexact reciprocal from a rounded floating-point delta.
+function source_extract_action_speed()
+ local text=sourceActionSpeedText
+ local base,divisor=text:match('local actionSpeedMod = ([%d%.]+) %+ %(m_max%(%-data%.misc%.TemporalChainsEffectCap, tempChainsSum%) %+ actionSpeedSum%) / ([%d%.]+)')
+ local minimum=text:match('local minimumActionSpeed = modDB:Max%(nil, "MinimumActionSpeed"%) or ([%d%.]+)')
+ local minDiv=text:match('m_max%(minimumActionSpeed / ([%d%.]+), actionSpeedMod%)')
+ local maxNumerator,maxDiv=text:match('m_min%(%(([%d%.]+) %- maximumActionSpeedReduction%) / ([%d%.]+), actionSpeedMod%)')
+ base=assert(tonumber(base),'action base expression changed');divisor=assert(tonumber(divisor),'action denominator changed');minimum=assert(tonumber(minimum),'action minimum fallback changed')
+ assert(tonumber(minDiv)==divisor and tonumber(maxDiv)==divisor and tonumber(maxNumerator)==divisor,'action percentage operands diverged')
+ local expected={'Max:MinimumActionSpeed','Max:MaximumActionSpeedReduction','Flag:UnaffectedBySlows','Sum:ActionSpeed','Sum:TemporalChainsActionSpeed'}
+ for _,positive in ipairs({false,true})do
+  local observed={};local db={}
+  for _,method in ipairs({'Max','Flag','Sum','SumPositiveValues'})do
+   db[method]=function(_,...)local args={...};local name=args[select('#',...)];observed[#observed+1]=method..':'..name;if method=='Max'then return nil elseif method=='Flag'then return positive else return 0 end end
+  end
+  local value=sourceCalcs.actionSpeedMod({modDB=db});assert(value==math.max(minimum/divisor,base),'action baseline source expression changed')
+  local wanted=copyTable(expected);if positive then wanted[4]='SumPositiveValues:ActionSpeed';wanted[5]='SumPositiveValues:TemporalChainsActionSpeed'end
+  assert(equal(observed,wanted),'action query methods/targets/order changed')
+ end
+ local names={};for _,entry in ipairs(expected)do names[#names+1]=actor_name(entry:match(':(.+)$'))end
+ return {base_multiplier=base,default_minimum_percent=minimum,percent_divisor=divisor,temporal_chains_effect_cap=numeric(data.misc.TemporalChainsEffectCap),query_stats=names}
+end
+function source_extract_direct_action_timing()
+ local db=new('ModList'):ModList();local precision;local originalRound=round
+ sourceTimingRound=function(value,places)assert(type(places)=='number' and places%1==0 and (precision==nil or precision==places),'direct timing precision changed');precision=places;return originalRound(value,places)end
+ local neutral=sourceDirectActionTiming(1,db,{ActionSpeedMod=1},{selfCast=true},false)
+ sourceTimingRound=nil
+ assert(neutral.Speed==1 and neutral.CastRate==1 and neutral.Repeats==1,'ordinary timing source baseline changed')
+ local action=sourceDirectActionTiming(1,db,{ActionSpeedMod=2},{selfCast=true},false)
+ local indirect=sourceDirectActionTiming(1,db,{ActionSpeedMod=2},{selfCast=false},false)
+ assert(action.Speed==2 and action.CastRate==2 and indirect.Speed==1 and indirect.CastRate==1,'direct-action source eligibility changed')
+ local fast=sourceDirectActionTiming(.001,db,{ActionSpeedMod=2},{selfCast=true},false)
+ local channel=sourceDirectActionTiming(.001,db,{ActionSpeedMod=2},{selfCast=true},true)
+ assert(fast.CastRate==2000 and fast.Speed==data.misc.ServerTickRate and channel.Speed==2000,'source CastRate action order/server cap/eligibility changed')
+ return {server_tick_rate=numeric(data.misc.ServerTickRate),speed_multiplier_rounding_precision=precision,default_repeats=neutral.Repeats,eligibility='ordinary_self_cast'}
 end

@@ -79,7 +79,11 @@ fn explicit_encounter_and_action_selection_preserve_requested_context() {
 
 #[test]
 fn supplied_minion_coverage_preserves_ambiguity_and_nonfinite_kind() {
-    let result = success(run(&root().join("example.import.txt"), &json!({}), &[]));
+    let result = success(run(
+        &root().join("tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt"),
+        &json!({}),
+        &[],
+    ));
     let coverage = &result["coverage"];
     assert_eq!(coverage["unresolved_entry_count"], 3);
     assert_eq!(coverage["full_dps"]["included_group_count"], 0);
@@ -129,7 +133,7 @@ fn supplied_minion_coverage_preserves_ambiguity_and_nonfinite_kind() {
 #[test]
 fn minion_action_selection_changes_resolved_action() {
     let result = success(run(
-        &root().join("example.import.txt"),
+        &root().join("tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt"),
         &json!({"selection":{"socket_group":1,"active_skill":1,"minion_skill":1}}),
         &[],
     ));

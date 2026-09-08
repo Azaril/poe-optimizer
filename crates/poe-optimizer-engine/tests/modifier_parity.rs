@@ -23,6 +23,20 @@ const DATA: &str = include_str!("../../../vendor/path-of-building-poe2/src/Modul
 const MODTOOLS: &str =
     include_str!("../../../vendor/path-of-building-poe2/src/Modules/ModTools.lua");
 
+fn append_direct_action_tail(body: &mut String, offence: &str) {
+    body.push('\n');
+    body.push_str(section(
+        offence,
+        "\t\t\toutput.CastRate = output.Speed",
+        "\t\t\t-- Crossbows:",
+    ));
+    body.push_str(section(
+        offence,
+        "\t\t\tif output.Speed == 0 then",
+        "\t\t\tif breakdown then",
+    ));
+}
+
 struct Oracle {
     lua: Lua,
     make_db: Function,
@@ -138,6 +152,8 @@ impl Oracle {
              for i = 1, (warm and 200 or 1) do \
                if kind == 'MORE' then value = db:More(cfg, unpack(names)) \
                elseif kind == 'OVERRIDE' then value = db:Override(cfg, unpack(names)) \
+               elseif kind == 'MAX' then value = db:Max(cfg, unpack(names)) \
+               elseif kind == 'POSITIVE_INC' then value = db:SumPositiveValues('INC', cfg, unpack(names)) \
                else value = db:Sum(kind, cfg, unpack(names)) end \
              end; return value end",
             )
@@ -245,6 +261,7 @@ fn compare_all(
             NumericKind::Increased,
             NumericKind::More,
             NumericKind::Override,
+            NumericKind::Max,
         ] {
             let result = match kind {
                 NumericKind::Base => Some(native.sum(SumKind::Base, context, names).unwrap()),
@@ -253,6 +270,7 @@ fn compare_all(
                 }
                 NumericKind::More => Some(native.more(context, names, precision).unwrap()),
                 NumericKind::Override => native.override_value(context, names).unwrap(),
+                NumericKind::Max => native.max(context, names).unwrap(),
             };
             assert_number(result, oracle.calculate(&db, context, names, kind).unwrap());
         }
@@ -279,6 +297,7 @@ fn flags_keyword_any_all_and_parent_layers_match_actual_queries() {
                 NumericKind::Increased,
                 NumericKind::More,
                 NumericKind::Override,
+                NumericKind::Max,
             ] {
                 let mut entry = modifier("Damage", kind, ((i * 7 + j) as f64 - 20.0) / 10.0);
                 entry.flags = *flag;
@@ -330,6 +349,7 @@ fn source_filters_and_override_precedence_match_actual_queries() {
             NumericKind::Increased,
             NumericKind::More,
             NumericKind::Override,
+            NumericKind::Max,
         ] {
             let mut entry = modifier(if i % 2 == 0 { "A" } else { "B" }, kind, i as f64);
             entry.source = Some(source.to_owned());
@@ -475,6 +495,7 @@ fn exceptional_arithmetic_and_grouped_cancellation_match_actual_queries() {
                 NumericKind::Increased,
                 NumericKind::More,
                 NumericKind::Override,
+                NumericKind::Max,
             ] {
                 layers[0].push(modifier("A", kind, value));
                 layers[1].push(modifier("A", kind, -1e16));
@@ -592,6 +613,7 @@ fn absent_sources_preserve_sum_behavior_and_report_upstream_errors() {
         NumericKind::Increased,
         NumericKind::More,
         NumericKind::Override,
+        NumericKind::Max,
     ] {
         let mut entry = modifier("A", kind, 12.0);
         entry.source = None;
@@ -628,7 +650,7 @@ fn absent_sources_preserve_sum_behavior_and_report_upstream_errors() {
         native.override_value(&context, &["A"]),
         Err(ModifierError::MissingSource { .. })
     ));
-    for kind in [NumericKind::More, NumericKind::Override] {
+    for kind in [NumericKind::More, NumericKind::Override, NumericKind::Max] {
         assert!(oracle.calculate(&db, &context, &["A"], kind).is_err());
     }
     // No matching candidate reaches the source dereference, so no error occurs.
@@ -660,6 +682,14 @@ impl Oracle {
                     let table = self.lua.create_table().unwrap();
                     match tag {
                         ModifierTag::Global => table.set("type", "Global").unwrap(),
+                        ModifierTag::GlobalEffect {
+                            effect_type,
+                            unscalable,
+                        } => {
+                            table.set("type", "GlobalEffect").unwrap();
+                            table.set("effectType", effect_type.as_str()).unwrap();
+                            table.set("unscalable", *unscalable).unwrap();
+                        }
                         ModifierTag::Condition { variables, negated } => {
                             table.set("type", "Condition").unwrap();
                             self.variables(&table, variables);
@@ -802,6 +832,7 @@ fn tagged_modifiers(tags: &[Vec<ModifierTag>]) -> Vec<Vec<TaggedModifierInput>> 
             NumericKind::Increased,
             NumericKind::More,
             NumericKind::Override,
+            NumericKind::Max,
         ] {
             for name in ["A", "SupportManaMultiplier"] {
                 let mut modifier = modifier(name, kind, i as f64 + 0.37);
@@ -855,6 +886,7 @@ fn compare_conditions(
                 NumericKind::Increased,
                 NumericKind::More,
                 NumericKind::Override,
+                NumericKind::Max,
             ] {
                 let expected = oracle
                     .query
@@ -890,6 +922,9 @@ fn compare_conditions(
                             )
                             .unwrap(),
                     ),
+                    NumericKind::Max => native
+                        .max_with_conditions(&query, &names, &environment)
+                        .unwrap(),
                     NumericKind::Override => native
                         .override_with_conditions(&query, &names, &environment)
                         .unwrap(),
@@ -1081,6 +1116,7 @@ fn conditional_queries_preserve_inactive_more_precision_zero_overrides_and_error
                 NumericKind::Increased,
                 NumericKind::More,
                 NumericKind::Override,
+                NumericKind::Max,
             ] {
                 layers[0].push(TaggedModifierInput {
                     modifier: modifier("SupportManaMultiplier", kind, value),
@@ -1364,6 +1400,14 @@ impl Oracle {
                     table.set("type", "Limit").unwrap();
                     self.scalar_fields(&table, value, "limit", "limitVar");
                     table.set("neg", *negative).unwrap();
+                }
+                ScalingTag::Condition(ModifierTag::GlobalEffect {
+                    effect_type,
+                    unscalable,
+                }) => {
+                    table.set("type", "GlobalEffect").unwrap();
+                    table.set("effectType", effect_type.as_str()).unwrap();
+                    table.set("unscalable", *unscalable).unwrap();
                 }
                 ScalingTag::Condition(ModifierTag::Global) => table.set("type", "Global").unwrap(),
                 ScalingTag::Condition(ModifierTag::Condition { variables, negated }) => {
@@ -2457,7 +2501,7 @@ impl SparkOracle {
             "\tlocal function calcResistForType(",
             "\n\tlocal function runSkillFunc(",
         ));
-        body.push_str("local cfg={flags=OR64(ModFlag.Spell,ModFlag.Cast,ModFlag.Projectile,ModFlag.Hit)}; local skillCfg=cfg; local skillModList=modDB; local skillData={}; local activeSkill={skillModList=modDB,conversionTable={},activeEffect={grantedEffect=sparkSkill}}; local globalOutput={ActionSpeedMod=1}; local baseCrit=input.critical_chance or sparkSkill.levels[1].critChance; local base,inc,more=0,0,1;\n");
+        body.push_str("local cfg={flags=OR64(ModFlag.Spell,ModFlag.Cast,ModFlag.Projectile,ModFlag.Hit)}; local skillCfg=cfg; local skillModList=modDB; local skillData={}; local activeSkill={skillTypes={},skillModList=modDB,conversionTable={},activeEffect={grantedEffect=sparkSkill}}; local skillFlags={selfCast=true}; output.Repeats=1; local globalOutput={ActionSpeedMod=testActionSpeed or 1}; local baseCrit=input.critical_chance or sparkSkill.levels[1].critChance; local base,inc,more=0,0,1;\n");
         body.push_str(source_line(
             &offence,
             "output.CritChance = round((baseCrit + base)",
@@ -2495,6 +2539,7 @@ impl SparkOracle {
             &offence,
             "output.Speed = 1 / (baseTime / round(",
         ));
+        append_direct_action_tail(&mut body, &offence);
         body.push_str("\nglobalOutput.Speed=output.Speed; local effectiveResist=calcResistForType('Lightning',cfg); local totalHitAvg,totalCritAvg; for pass=1,2 do output.LightningSummedMinBase=sparkSkill.statSets[1].levels[1][1]; output.LightningSummedMaxBase=sparkSkill.statSets[1].levels[1][2]; local damageTypeHitMin,damageTypeHitMax=calcDamage(activeSkill,output,cfg,nil,'Lightning',0); local allMult=1; ");
         body.push_str(section(
             &offence,
@@ -2628,7 +2673,9 @@ fn closed_spark_pipeline_matches_pinned_resource_and_offense_source_sections() {
                         ("Int", actual.intelligence),
                         ("AverageHit", actual.average_hit),
                         ("TotalDPS", actual.hit_dps),
-                        ("Speed", actual.cast_rate),
+                        ("Speed", actual.timing.speed),
+                        ("CastRate", actual.cast_rate),
+                        ("Time", actual.timing.time),
                         ("CritChance", actual.crit_chance),
                         ("CritMultiplier", actual.crit_multiplier),
                         (
@@ -2747,3 +2794,6 @@ mod armour_parity;
 
 #[path = "support/movement_parity.rs"]
 mod movement_parity;
+
+#[path = "support/action_speed_parity.rs"]
+mod action_speed_parity;

@@ -149,6 +149,7 @@ fn raw_records(records: &[ActorModifierRecord]) -> Vec<ModifierInput> {
                 .map(|tag| {
                     match tag {
                         ActorModifierTag::Global => "Global",
+                        ActorModifierTag::GlobalEffect { .. } => "GlobalEffect",
                         ActorModifierTag::Condition { .. } => "Condition",
                     }
                     .into()

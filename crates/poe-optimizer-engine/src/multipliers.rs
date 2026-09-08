@@ -317,6 +317,10 @@ impl ScalingProgram {
                     Some("Actor-targeted MultiplierThreshold")
                 }
                 ScalingTag::PerStat(tag) if tag.actor.is_some() => Some("Actor-targeted PerStat"),
+                ScalingTag::Condition(ModifierTag::GlobalEffect {
+                    effect_type,
+                    unscalable,
+                }) if effect_type != "Global" || !unscalable => Some("GlobalEffect"),
                 ScalingTag::Unsupported(feature)
                 | ScalingTag::Condition(ModifierTag::Unsupported(feature)) => {
                     Some(feature.as_str())

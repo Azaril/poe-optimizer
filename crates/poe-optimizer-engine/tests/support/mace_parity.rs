@@ -50,7 +50,7 @@ fn source_checks() {
 }
 
 pub(super) struct MaceOracle {
-    oracle: Oracle,
+    pub(super) oracle: Oracle,
     calculate: Function,
 }
 impl MaceOracle {
@@ -196,7 +196,7 @@ impl MaceOracle {
             "\tfor _, elem in ipairs(resistTypeList) do\n\t\tlocal min, max, total, dotTotal",
             "\n\t\toutput[elem..\"ResistOverCap\"]",
         ));
-        body.push_str("\nend; local source=maceWeapon(input); output.Weapon=source; local enemyDB=new('ModDB'):ModDB(); enemyDB:NewMod('Armour','BASE',input.armour,'Config'); enemyDB:NewMod('Evasion','BASE',input.evasion,'Config'); enemyDB:NewMod('FireResist','BASE',input.resistance,'Config'); local skillModList=modDB; local cfg={flags=OR64(ModFlag.Attack,ModFlag.Melee,ModFlag.Hit)}; local skillCfg=cfg; local skillData={}; local activeSkill={skillModList=skillModList,activeEffect={grantedEffect=skills.Melee1HMacePlayer,grantedEffectLevel=skills.Melee1HMacePlayer.levels[1]},conversionTable={},gainTable={}}; local globalOutput={ActionSpeedMod=1}; local skillFlags={hit=true}; local isAttack=true; ");
+        body.push_str("\nend; local source=maceWeapon(input); output.Weapon=source; local enemyDB=new('ModDB'):ModDB(); enemyDB:NewMod('Armour','BASE',input.armour,'Config'); enemyDB:NewMod('Evasion','BASE',input.evasion,'Config'); enemyDB:NewMod('FireResist','BASE',input.resistance,'Config'); local skillModList=modDB; local cfg={flags=OR64(ModFlag.Attack,ModFlag.Melee,ModFlag.Hit)}; local skillCfg=cfg; local skillData={}; local activeSkill={skillTypes={},skillModList=skillModList,activeEffect={grantedEffect=skills.Melee1HMacePlayer,grantedEffectLevel=skills.Melee1HMacePlayer.levels[1]},conversionTable={},gainTable={}}; local globalOutput={ActionSpeedMod=testActionSpeed or 1}; output.Repeats=1; local skillFlags={hit=true,selfCast=true}; local isAttack=true; ");
         body.push_str("for _, id in ipairs(input.supports) do local support=skills[id].statSets[1]; for _, stat in ipairs(support.constantStats) do local map = support.statMap and support.statMap[stat[1]] or maceGlobalSupportMap[stat[1]]; for _, mod in ipairs(map) do local resolved=copyTable(mod); resolved.value=stat[2]; modDB:AddMod(resolved) end end; for _, name in ipairs(support.stats) do for _, flag in ipairs(maceSupportFlags[name]) do modDB:AddMod(copyTable(flag)) end end end; ");
         body.push_str(section(
             &offence,
@@ -235,6 +235,7 @@ impl MaceOracle {
             &offence,
             "output.Speed = 1 / (baseTime / round(",
         ));
+        append_direct_action_tail(&mut body, &offence);
         body.push_str("\nglobalOutput.Speed=output.Speed; local baseCrit=source.CritChance; base,inc,more=0,0,1; if input.critical_cap then modDB:NewMod('CritChanceCap','OVERRIDE',input.critical_cap,'Explicit test data') end; ");
         body.push_str(source_line(
             &offence,
@@ -357,7 +358,7 @@ impl MaceOracle {
         self.calculate_with_support_ids(input, character, &ids)
     }
 
-    fn calculate_with_support_ids(
+    pub(super) fn calculate_with_support_ids(
         &self,
         input: &MaceInput,
         character: &poe_optimizer_engine::character::CharacterInput,
@@ -491,6 +492,8 @@ pub(super) fn compare(output: MaceOutput, expected: Table) {
         ("AverageDamage", output.average_damage),
         ("TotalDPS", output.hit_dps),
         ("Speed", output.attack_rate),
+        ("CastRate", output.timing.cast_rate),
+        ("Time", output.timing.time),
         ("CritChance", output.crit_chance),
         ("CritMultiplier", output.crit_multiplier),
         ("PhysicalHitAverage", output.physical_hit_average),

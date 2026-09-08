@@ -267,7 +267,7 @@ fn all_class_entrances_match_actual_spark_resource_defence_and_damage_source() {
                         ("EnergyShield", output.energy_shield),
                         ("Armour", output.armour),
                         ("Evasion", output.evasion),
-                        ("Speed", output.cast_rate),
+                        ("Speed", output.timing.speed),
                         ("AverageHit", output.average_hit),
                         ("TotalDPS", output.hit_dps),
                     ] {

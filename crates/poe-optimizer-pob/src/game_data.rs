@@ -120,11 +120,12 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v10",
+        "poe-game-data-extractor-v11",
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
         include_str!("../Cargo.toml"),
+        include_str!("../../../Cargo.toml"),
     ] {
         digest.update(text.replace("\r\n", "\n"));
     }
@@ -262,7 +263,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         AuthenticatedTreeSnapshot::from_trusted_extraction(snapshot, &digest).map_err(error)?;
     let tree = BundledClassTree::from_authenticated_snapshot(&authenticated).map_err(error)?;
     let policy: Policy = serde_json::from_str(POLICY)?;
-    if policy.schema_version != 8
+    if policy.schema_version != 9
         || policy.spirit_quests.len() != 3
         || policy.actor_rules.is_empty()
         || policy.quests.len() != 6
@@ -370,6 +371,8 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         armour_bases,
         item_formatting,
         movement: extractor.record(&records, "movement")?,
+        action_speed: extractor.record(&records, "action_speed")?,
+        direct_action_timing: extractor.record(&records, "direct_action_timing")?,
     };
     package.refresh_section_digests().map_err(error)?;
     let evidence = GameDataExtractionEvidence {
@@ -670,6 +673,15 @@ impl Extractor {
             )?
         ))
         .exec()?;
+        lua.globals().set(
+            "sourceActionSpeedText",
+            section(
+                source("src/Modules/CalcPerform.lua")?,
+                "function calcs.actionSpeedMod(actor)",
+                "-- Initialises a minion's modifier database",
+            )?,
+        )?;
+        lua.globals().set("sourceDirectActionTiming", lua.load(format!("local originalRound=round;local round=function(v,p)return (sourceTimingRound or originalRound)(v,p)end;local m_min=math.min;local m_max=math.max;return function(baseTime,skillModList,globalOutput,skillFlags,channel) local output={{}};local cfg=nil;local skillCfg=nil;local source={{}};local skillData={{}};local activeSkill={{skillTypes={{[SkillType.Channel]=channel}}}};local more=skillModList:More(cfg, 'Speed');{}\n{}\n{}\nreturn output end", line(source("src/Modules/CalcOffence.lua")?, "output.Repeats = globalOutput.Repeats or")?, section(source("src/Modules/CalcOffence.lua")?, "\n\t\t\tlocal inc = skillModList:Sum(\"INC\", cfg, \"Speed\")", "\t\t\t-- Crossbows: Adjust attack speed values")?, section(source("src/Modules/CalcOffence.lua")?, "\n\t\t\tif output.Speed == 0 then", "\n\t\t\tif breakdown then")?)).eval::<Function>()?)?;
         lua.globals().set("sourceMovement",lua.load(format!("local originalRound=round;local round=function(v,p)return (sourceMovementRound or originalRound)(v,p)end;return function(actor) local modDB=actor.modDB;local output=actor.output;local m_max=math.max;{};return output end",section(source("src/Modules/CalcDefence.lua")?,"\t-- Miscellaneous: move speed, avoidance, weapon swap speed","\n\tif breakdown then\n\t\tbreakdown.EffectiveMovementSpeedMod")?)).eval::<Function>()?)?;
         lua.globals().set("sourceArmourPenalty",lua.load(format!("local t_remove=table.remove;local m_floor=math.floor;{};return function(value) local self={{base={{armour={{MovementPenalty=value}}}},quality=0,armourData={{}},modSource='Item:1:Source probe'}};local modList=new('ModList'):ModList();{};return modList end",section(source("src/Classes/Item.lua")?,"local function calcLocal(","-- Build list of modifiers")?,section(source("src/Classes/Item.lua")?,"\t\tlocal armourData = self.armourData","\telseif self.base.flask then")?)).eval::<Function>()?)?;
 
@@ -1767,6 +1779,86 @@ mod passive_assembly_source_tests {
             .get::<Table>("sourceCalcs")
             .unwrap()
             .set("actionSpeedMod", original)
+            .unwrap();
+    }
+    #[test]
+    fn action_speed_source_conversion_rejects_discarded_metadata_and_query_timing_drift() {
+        let e = extractor();
+        for edit in [
+            "m[1].unscalable=false",
+            "m[1].effectType='Aura'",
+            "m[1].extra=true",
+            "m.name='ActionSpeed'",
+            "m.type='BASE'",
+            "m.flags=1",
+        ] {
+            let check:Function=e.lua.load(format!("return function()local m=modLib.createMod('MinimumActionSpeed','MAX',100,nil,0,0,{{type='GlobalEffect',effectType='Global',unscalable=true}});{};return pcall(source_convert_actor_modifier,m)end",edit)).eval().unwrap();
+            assert!(!check.call::<bool>(()).unwrap(), "{edit}");
+        }
+        for (target, operation) in [
+            ("Str", "MAX"),
+            ("MovementSpeed", "MAX"),
+            ("ActionSpeed", "BASE"),
+            ("ActionSpeed", "MORE"),
+            ("ActionSpeed", "OVERRIDE"),
+            ("TemporalChainsActionSpeed", "BASE"),
+            ("MinimumActionSpeed", "INC"),
+        ] {
+            assert!(e.lua.load(format!("return source_convert_actor_modifier(modLib.createMod('{target}','{operation}',17))")).eval::<Value>().is_err(),"{target}/{operation}");
+        }
+        let action: Function = e.lua.globals().get("source_extract_action_speed").unwrap();
+        let old: Function = e
+            .lua
+            .globals()
+            .get::<Table>("sourceCalcs")
+            .unwrap()
+            .get("actionSpeedMod")
+            .unwrap();
+        e.lua
+            .globals()
+            .set("originalActionForTest", old.clone())
+            .unwrap();
+        for body in [
+            "return 1.01",
+            "local result=originalActionForTest(actor);actor.modDB:Sum('INC',nil,'ExtraUnconsumedQuery');return result",
+        ] {
+            e.lua
+                .globals()
+                .get::<Table>("sourceCalcs")
+                .unwrap()
+                .set(
+                    "actionSpeedMod",
+                    e.lua
+                        .load(format!("return function(actor){body} end"))
+                        .eval::<Function>()
+                        .unwrap(),
+                )
+                .unwrap();
+            assert!(action.call::<Value>(()).is_err(), "{body}");
+        }
+        e.lua
+            .globals()
+            .get::<Table>("sourceCalcs")
+            .unwrap()
+            .set("actionSpeedMod", old)
+            .unwrap();
+        let timing: Function = e.lua.globals().get("sourceDirectActionTiming").unwrap();
+        e.lua
+            .globals()
+            .set("originalTimingForTest", timing.clone())
+            .unwrap();
+        e.lua.globals().set("sourceDirectActionTiming",e.lua.load("return function(base,db,actor,flags,channel)local value=originalTimingForTest(base,db,actor,flags,channel);value.CastRate=value.Speed;return value end").eval::<Function>().unwrap()).unwrap();
+        assert!(
+            e.lua
+                .globals()
+                .get::<Function>("source_extract_direct_action_timing")
+                .unwrap()
+                .call::<Value>(())
+                .is_err()
+        );
+        e.lua
+            .globals()
+            .set("sourceDirectActionTiming", timing)
             .unwrap();
     }
     #[test]

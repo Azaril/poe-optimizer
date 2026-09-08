@@ -2,6 +2,10 @@
 members = ["crates/poe-optimizer-core", "crates/poe-optimizer-pob", "crates/poe-optimizer-lua-utf8", "crates/poe-optimizer-engine", "crates/poe-optimizer-search", "crates/poe-optimizer-import", "crates/poe-optimizer-native", "crates/poe-optimizer-data"]
 resolver = "3"
 
+[workspace.dependencies]
+# Preserve finite numerical data, measurements, and evidence exactly through JSON.
+serde_json = { version = "1", features = ["float_roundtrip"] }
+
 [package]
 name = "poe-optimizer-cli"
 version = "0.1.0"
@@ -27,7 +31,7 @@ poe-optimizer-import = { path = "crates/poe-optimizer-import" }
 poe-optimizer-native = { path = "crates/poe-optimizer-native" }
 poe-optimizer-search = { path = "crates/poe-optimizer-search" }
 rayon = "1"
-serde_json = "1"
+serde_json = { workspace = true }
 sha2 = "0.10"
 serde = "1"
 tempfile = "3"

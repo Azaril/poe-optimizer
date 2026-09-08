@@ -21,6 +21,7 @@ pub enum NumericKind {
     Increased,
     More,
     Override,
+    Max,
 }
 
 impl NumericKind {
@@ -30,6 +31,7 @@ impl NumericKind {
             Self::Increased => "INC",
             Self::More => "MORE",
             Self::Override => "OVERRIDE",
+            Self::Max => "MAX",
         }
     }
 }
@@ -280,6 +282,18 @@ impl ModifierDatabase {
             let mut layer_inputs = Vec::with_capacity(entries.len());
             for (modifier, entry) in entries.into_iter().enumerate() {
                 for tag in &entry.tags {
+                    if let ModifierTag::GlobalEffect {
+                        effect_type,
+                        unscalable,
+                    } = tag
+                        && (effect_type != "Global" || !unscalable)
+                    {
+                        return Err(ModifierError::UnsupportedTag {
+                            layer,
+                            modifier,
+                            tag: "GlobalEffect".into(),
+                        });
+                    }
                     if let ModifierTag::Unsupported(tag) = tag {
                         return Err(ModifierError::UnsupportedTag {
                             layer,
@@ -389,6 +403,99 @@ impl ModifierDatabase {
             parent_result = Some(result);
         }
         Ok(parent_result.unwrap_or(0.0))
+    }
+
+    /// Source Tabulate row order: local names/insertion, then parents. Only
+    /// positive evaluated rows contribute; this is not a clamped aggregate Sum.
+    /// The source helper forwards only its first name, represented explicitly here.
+    pub fn sum_positive_values(
+        &self,
+        kind: SumKind,
+        context: &QueryContext,
+        name: &str,
+    ) -> Result<f64, ModifierError> {
+        self.sum_positive_internal(kind, context, name, None)
+    }
+    pub fn sum_positive_with_conditions(
+        &self,
+        kind: SumKind,
+        context: &QueryContext,
+        name: &str,
+        conditions: &ConditionEnvironment,
+    ) -> Result<f64, ModifierError> {
+        self.sum_positive_internal(kind, context, name, Some(conditions))
+    }
+    fn sum_positive_internal(
+        &self,
+        kind: SumKind,
+        context: &QueryContext,
+        name: &str,
+        conditions: Option<&ConditionEnvironment>,
+    ) -> Result<f64, ModifierError> {
+        validate_query(context, &[name])?;
+        self.validate_conditions(conditions)?;
+        let kind = match kind {
+            SumKind::Base => NumericKind::Base,
+            SumKind::Increased => NumericKind::Increased,
+        };
+        let mut result = 0.0;
+        for (layer_index, layer) in self.layers.iter().enumerate() {
+            for (index, modifier) in layer.iter().enumerate() {
+                if matches(modifier, kind, context, name)
+                    && matches_prefix(modifier, context, layer_index, index)?
+                    && let Some(value) = modifier.evaluated_value(conditions)
+                    && value > 0.0
+                {
+                    result += value;
+                }
+            }
+        }
+        Ok(result)
+    }
+    /// Source MAX returns absence if no strictly positive candidate exists.
+    /// Tabulate filters rows first, then requesting-store EvalMod runs AGAIN on
+    /// each surviving modifier. Parent tags therefore use the queried root context.
+    pub fn max(
+        &self,
+        context: &QueryContext,
+        names: &[&str],
+    ) -> Result<Option<f64>, ModifierError> {
+        self.max_internal(context, names, None)
+    }
+    pub fn max_with_conditions(
+        &self,
+        context: &QueryContext,
+        names: &[&str],
+        conditions: &ConditionEnvironment,
+    ) -> Result<Option<f64>, ModifierError> {
+        self.max_internal(context, names, Some(conditions))
+    }
+    fn max_internal(
+        &self,
+        context: &QueryContext,
+        names: &[&str],
+        conditions: Option<&ConditionEnvironment>,
+    ) -> Result<Option<f64>, ModifierError> {
+        validate_query(context, names)?;
+        self.validate_conditions(conditions)?;
+        let mut result = None;
+        for (layer_index, layer) in self.layers.iter().enumerate() {
+            for name in names {
+                for (index, modifier) in layer.iter().enumerate() {
+                    if matches(modifier, NumericKind::Max, context, name)
+                        && matches_prefix(modifier, context, layer_index, index)?
+                        && modifier
+                            .evaluated_value(conditions)
+                            .is_some_and(|value| value != 0.0)
+                        && let Some(value) = modifier.evaluated_value(conditions)
+                        && value > result.unwrap_or(0.0)
+                    {
+                        result = Some(value);
+                    }
+                }
+            }
+        }
+        Ok(result)
     }
 
     /// Multiply MORE factors using upstream per-name rounding/truncation and

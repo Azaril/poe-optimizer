@@ -99,7 +99,7 @@ fn fresh_fixed_armour_package_matches_every_original_base_and_local_data_cold_an
     .unwrap();
     let package = &extracted.package;
     assert_eq!(package.armour_bases.len(), 402);
-    assert_eq!(package.actor.modifier_rules.len(), 347);
+    assert_eq!(package.actor.modifier_rules.len(), 359);
     let mut cases = 0;
     for warm in [false, true] {
         let oracle = Oracle::new(warm);

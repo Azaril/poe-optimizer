@@ -1,5 +1,8 @@
 //! Bounded, portable decoding of complete, explicitly partial game-data packages.
 //! The host supplies bytes and trust policy; no runtime I/O or process-global selection.
+pub use crate::action_speed::{
+    ActionSpeedData, DirectActionTimingData, DirectActionTimingEligibility,
+};
 pub use crate::actor::*;
 use crate::bundled::BundledClassTree;
 pub use crate::item_formatting::{ItemFormattingData, ItemFormattingRule, ItemNumberFormat};
@@ -14,8 +17,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 10;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v10";
+pub const SCHEMA_VERSION: u32 = 11;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v11";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -37,6 +40,8 @@ const SECTIONS: &[&str] = &[
     "armour_bases",
     "item_formatting",
     "movement",
+    "action_speed",
+    "direct_action_timing",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -419,6 +424,8 @@ pub struct GameDataPackage {
     pub armour_bases: Vec<ArmourBaseData>,
     pub item_formatting: ItemFormattingData,
     pub movement: MovementData,
+    pub action_speed: ActionSpeedData,
+    pub direct_action_timing: DirectActionTimingData,
 }
 impl GameDataPackage {
     pub fn armour_base(&self, id: &str) -> Option<&ArmourBaseData> {
@@ -711,6 +718,8 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     }
     validate_supports(package)?;
     package.receiving_defence.validate()?;
+    package.action_speed.validate()?;
+    package.direct_action_timing.validate()?;
     let c = &package.character;
     number("minimum_life", c.minimum_life, 1.0, 1e6)?;
     number("minimum_mana", c.minimum_mana, 1.0, 1e6)?;
@@ -1216,6 +1225,8 @@ fn validate_passive_catalog(package: &GameDataPackage, limits: &LoadLimits) -> R
                     | ActorStat::SpiritConvertToArmour
                     | ActorStat::SpiritConvertToEvasion
                     | ActorStat::ChaosInoculation
+                    | ActorStat::TemporalChainsActionSpeed
+                    | ActorStat::MaximumActionSpeedReduction
             ) {
                 return Err(error("passive requires unsupported downstream mechanics"));
             }

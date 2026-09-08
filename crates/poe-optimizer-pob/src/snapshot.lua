@@ -1,13 +1,24 @@
 local function actor_output(actor)
     if not actor then return nil end
     local metrics, non_finite, non_finite_values = {}, {}, {}
-    for key, value in pairs(actor.output or {}) do
+    local function capture(key, value)
         if type(key) == "string" and type(value) == "number" then
             if value == value and value ~= math.huge and value ~= -math.huge then
                 metrics[key] = value
             else
                 table.insert(non_finite, key)
                 non_finite_values[key] = value ~= value and "not_a_number" or (value > 0 and "positive_infinity" or "negative_infinity")
+            end
+        end
+    end
+    for key, value in pairs(actor.output or {}) do capture(key, value) end
+    -- Attack timing is calculated per hand. Preserve its actual source path;
+    -- do not substitute aggregate Speed for the pre-cap hand CastRate.
+    for _, hand in ipairs({ "MainHand", "OffHand" }) do
+        local output = actor.output and actor.output[hand]
+        if type(output) == "table" then
+            for _, field in ipairs({ "CastRate", "Speed", "Time" }) do
+                capture(hand .. "." .. field, output[field])
             end
         end
     end

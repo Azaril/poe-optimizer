@@ -34,7 +34,7 @@ fn native_cli_evaluates_and_exports_without_a_pob_checkout_in_the_working_direct
             .as_array()
             .unwrap()
             .len(),
-        13
+        14
     );
     assert_eq!(fs::read(&export).unwrap(), fs::read(fixture()).unwrap());
     assert_eq!(value["evaluation"]["diagnostic_only"], true);
@@ -56,7 +56,7 @@ fn native_catalog_and_unsupported_metrics_do_not_fall_back_to_pob() {
         .unwrap();
     assert!(output.status.success());
     let catalog: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
-    assert_eq!(catalog.as_array().unwrap().len(), 13);
+    assert_eq!(catalog.as_array().unwrap().len(), 14);
     let output = cli()
         .arg("evaluate")
         .arg(fixture())
@@ -67,7 +67,10 @@ fn native_catalog_and_unsupported_metrics_do_not_fall_back_to_pob() {
     assert!(String::from_utf8_lossy(&output.stderr).contains("metric"));
     let output = cli()
         .arg("evaluate")
-        .arg(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("example.import.txt"))
+        .arg(
+            std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt"),
+        )
         .args(["--backend", "native"])
         .output()
         .unwrap();

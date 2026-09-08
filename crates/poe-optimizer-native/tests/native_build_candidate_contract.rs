@@ -320,7 +320,7 @@ fn fixed_scenario_projection_retains_metric_guards() {
 }
 
 #[test]
-fn prepared_armour_selections_keep_thirteen_metric_calculations_allocation_free() {
+fn prepared_armour_selections_keep_fourteen_metric_calculations_allocation_free() {
     for source in [
         include_str!("../../../tests/fixtures/builds/mace-local-armour.xml"),
         include_str!("../../../tests/fixtures/builds/spark-local-armour.xml"),
@@ -356,20 +356,30 @@ fn prepared_armour_selections_keep_thirteen_metric_calculations_allocation_free(
             }
         });
         assert_eq!(allocations, 0);
-        assert_eq!(prepared.measure(&handles[0]).unwrap().values().len(), 13);
+        assert_eq!(prepared.measure(&handles[0]).unwrap().values().len(), 14);
         assert_eq!(prepared.footprint().retained_xml_bytes, 0);
         assert_eq!(prepared.footprint().cached_candidate_results, 0);
     }
 }
 
 #[test]
-fn body_movement_and_all_sixteen_armour_combinations_calculate_without_allocating() {
+fn body_movement_action_and_all_sixteen_armour_combinations_calculate_without_allocating() {
     for source in [
         include_str!("../../../tests/fixtures/builds/mace-body-armour.xml"),
         include_str!("../../../tests/fixtures/builds/spark-body-armour.xml"),
     ] {
+        let source = source
+            .replace(
+                "35% increased Armour and Evasion",
+                "35% increased Armour and Evasion\n20% increased Action Speed",
+            )
+            .replace(
+                "10% increased Movement Speed",
+                "10% increased Movement Speed\n5% increased Action Speed",
+            );
+        assert!(source.contains("20% increased Action Speed"));
         let backend = NativeBackend::new();
-        let domain = make_domain(&backend, source);
+        let domain = make_domain(&backend, &source);
         let prepared = backend
             .prepare_controlled_build(domain.catalog(), &[])
             .unwrap();
@@ -402,7 +412,7 @@ fn body_movement_and_all_sixteen_armour_combinations_calculate_without_allocatin
             }
         });
         assert_eq!(count, 0);
-        assert_eq!(prepared.measure(&handles[0]).unwrap().values().len(), 13);
+        assert_eq!(prepared.measure(&handles[0]).unwrap().values().len(), 14);
         assert_eq!(prepared.footprint().retained_xml_bytes, 0);
         assert_eq!(prepared.footprint().cached_candidate_results, 0);
     }

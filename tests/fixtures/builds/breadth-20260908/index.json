@@ -1,0 +1,367 @@
+{
+  "schema_version": 1,
+  "purpose": "Initial intake observations, not numerical goldens or certified legality. All entries are development corpus; whole-build holdouts remain to be selected.",
+  "input_file": "imports.txt",
+  "input_sha256": "3e763f109adb27d48f2cf63a8a95aaea649e5336dcaf37959931725c29f6c745",
+  "input_bytes": 68354,
+  "source_bytes_preserved": true,
+  "observed_date": "2026-09-08",
+  "baseline_implementation": "56dcbc500ebdf3f2011663462c4c0a0a794aaabe",
+  "pob_cli_sha256": "606e1659ccc771cff56d60b12d7f032d1e1493318a900f9ab4e82ab7f09cfb2e",
+  "native_cli_sha256": "a37056389d956082a858ed787685fefccd6f7f80b7b9d3356416a71eece2d32c",
+  "builds": [
+    {
+      "id": "user-20260908-line-01",
+      "source_line": 1,
+      "import_sha256": "348c890f8cfb4287788b569c7e6f29bef04999ad7d0dbcd01224b0ae98846a98",
+      "xml": "build-01.xml",
+      "xml_bytes": 49642,
+      "xml_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+      "build_attributes": {
+        "level": "96",
+        "className": "Sorceress",
+        "ascendClassName": "Disciple of Varashta",
+        "targetVersion": "0_1",
+        "characterLevelAutoMode": "false",
+        "mainSocketGroup": "1",
+        "viewMode": "TREE"
+      },
+      "saved_skill_sets": 1,
+      "saved_item_sets": 1,
+      "tree_versions": [
+        "0_5"
+      ],
+      "reference": {
+        "exit": 0,
+        "backend": {
+          "adapter_fingerprint": "cc7584f21841ae7b4ddea1f4be9f3acfb196c662ae7c071e077c5625f0eb92fc",
+          "id": "pob-poe2-mlua",
+          "implementation_version": "0.1.0",
+          "rules_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_fingerprint": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+        },
+        "active_skill_set_id": 1,
+        "active_group_count": 19,
+        "selected_player": {
+          "actor": "player",
+          "actor_skill_index": 1,
+          "gem_index": 1,
+          "group_index": 1,
+          "minion_id": null,
+          "part_index": null,
+          "part_name": "Kelari's Deception",
+          "show_average": false,
+          "skill_id": "SummonSandDjinnPlayer",
+          "skill_name": "Kelari, the Tainted Sands",
+          "stat_set_index": 1,
+          "stat_set_label": "Kelari, the Tainted Sands",
+          "synthesized_default_attack": false
+        },
+        "selected_minion": {
+          "actor": "minion",
+          "actor_skill_index": 2,
+          "gem_index": 1,
+          "group_index": 1,
+          "minion_id": "SandDjinn",
+          "part_index": null,
+          "part_name": null,
+          "show_average": false,
+          "skill_id": "ExplosiveTeleportSandDjinn",
+          "skill_name": "Kelari's Deception",
+          "stat_set_index": 1,
+          "stat_set_label": "Kelari's Deception",
+          "synthesized_default_attack": false
+        },
+        "unresolved_entry_count": 3,
+        "full_dps_included_group_count": 0,
+        "warnings": [
+          "Experimental raw MAIN outputs; metric semantics, build legality and mechanic coverage are not certified.",
+          "PoB may normalize imported data during export; this is not a lossless replacement for the source XML.",
+          "Unresolved skill in group 6, gem 1: Spectre: Powered Zealot",
+          "Unresolved skill in group 13, gem 1: Navira's Well",
+          "Unresolved skill in group 14, gem 1: Kelari's Deception",
+          "No skill groups are included in Full DPS; that roll-up is not a build damage objective.",
+          "14 dangling upstream passive-tree connections; cross-class topology coverage is unverified"
+        ]
+      },
+      "native_first_result": {
+        "exit": 1,
+        "error": "Error: Native XML compatibility check failed at byte 46397: literal tabs and line breaks in attribute values normalize differently in XML and PoB"
+      }
+    },
+    {
+      "id": "user-20260908-line-02",
+      "source_line": 2,
+      "import_sha256": "9b4237c2aafbbb7e730b6eebde417c2700d4c15ecda2e8a2ce140cdd081c97d2",
+      "xml": "build-02.xml",
+      "xml_bytes": 116512,
+      "xml_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+      "build_attributes": {
+        "ascendClassName": "Gemling Legionnaire",
+        "characterLevelAutoMode": "false",
+        "mainSocketGroup": "8",
+        "targetVersion": "0_1",
+        "viewMode": "IMPORT",
+        "level": "88",
+        "className": "Mercenary"
+      },
+      "saved_skill_sets": 6,
+      "saved_item_sets": 6,
+      "tree_versions": [
+        "0_5",
+        "0_5",
+        "0_5",
+        "0_5",
+        "0_5",
+        "0_5"
+      ],
+      "reference": {
+        "exit": 0,
+        "backend": {
+          "adapter_fingerprint": "cc7584f21841ae7b4ddea1f4be9f3acfb196c662ae7c071e077c5625f0eb92fc",
+          "id": "pob-poe2-mlua",
+          "implementation_version": "0.1.0",
+          "rules_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_fingerprint": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+        },
+        "active_skill_set_id": 6,
+        "active_group_count": 18,
+        "selected_player": {
+          "actor": "player",
+          "actor_skill_index": 9,
+          "gem_index": 1,
+          "group_index": 8,
+          "minion_id": null,
+          "part_index": null,
+          "part_name": null,
+          "show_average": false,
+          "skill_id": "TwisterPlayer",
+          "skill_name": "Twister",
+          "stat_set_index": 1,
+          "stat_set_label": "Twister",
+          "synthesized_default_attack": false
+        },
+        "selected_minion": null,
+        "unresolved_entry_count": 0,
+        "full_dps_included_group_count": 0,
+        "warnings": [
+          "Experimental raw MAIN outputs; metric semantics, build legality and mechanic coverage are not certified.",
+          "PoB may normalize imported data during export; this is not a lossless replacement for the source XML.",
+          "No skill groups are included in Full DPS; that roll-up is not a build damage objective.",
+          "14 dangling upstream passive-tree connections; cross-class topology coverage is unverified"
+        ]
+      },
+      "native_first_result": {
+        "exit": 1,
+        "error": "Error: Native XML compatibility check failed at byte 83544: literal tabs and line breaks in attribute values normalize differently in XML and PoB"
+      }
+    },
+    {
+      "id": "user-20260908-line-03",
+      "source_line": 3,
+      "import_sha256": "849a99763132f627980aae4c38dd3c185dc40afc48a9ff25e92d2dc44ce9d1b3",
+      "xml": "build-03.xml",
+      "xml_bytes": 46532,
+      "xml_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490",
+      "build_attributes": {
+        "characterLevelAutoMode": "false",
+        "mainSocketGroup": "5",
+        "className": "Monk",
+        "ascendClassName": "Martial Artist",
+        "viewMode": "IMPORT",
+        "level": "93",
+        "targetVersion": "0_1"
+      },
+      "saved_skill_sets": 1,
+      "saved_item_sets": 1,
+      "tree_versions": [
+        "0_5"
+      ],
+      "reference": {
+        "exit": 0,
+        "backend": {
+          "adapter_fingerprint": "cc7584f21841ae7b4ddea1f4be9f3acfb196c662ae7c071e077c5625f0eb92fc",
+          "id": "pob-poe2-mlua",
+          "implementation_version": "0.1.0",
+          "rules_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_fingerprint": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+        },
+        "active_skill_set_id": 1,
+        "active_group_count": 14,
+        "selected_player": {
+          "actor": "player",
+          "actor_skill_index": 7,
+          "gem_index": 1,
+          "group_index": 5,
+          "minion_id": null,
+          "part_index": null,
+          "part_name": null,
+          "show_average": true,
+          "skill_id": "WhirlingAssaultPlayer",
+          "skill_name": "Whirling Assault",
+          "stat_set_index": 1,
+          "stat_set_label": "Whirling Assault",
+          "synthesized_default_attack": false
+        },
+        "selected_minion": null,
+        "unresolved_entry_count": 0,
+        "full_dps_included_group_count": 0,
+        "warnings": [
+          "Experimental raw MAIN outputs; metric semantics, build legality and mechanic coverage are not certified.",
+          "PoB may normalize imported data during export; this is not a lossless replacement for the source XML.",
+          "No skill groups are included in Full DPS; that roll-up is not a build damage objective.",
+          "14 dangling upstream passive-tree connections; cross-class topology coverage is unverified"
+        ]
+      },
+      "native_first_result": {
+        "exit": 1,
+        "error": "Error: Native XML compatibility check failed at byte 28019: literal tabs and line breaks in attribute values normalize differently in XML and PoB"
+      }
+    },
+    {
+      "id": "user-20260908-line-04",
+      "source_line": 4,
+      "import_sha256": "617a2b25b33272d076d63f2844adeaf0143428fc5399d5e43dc970a700aa5dcf",
+      "xml": "build-04.xml",
+      "xml_bytes": 46397,
+      "xml_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711",
+      "build_attributes": {
+        "level": "96",
+        "className": "Mercenary",
+        "targetVersion": "0_1",
+        "mainSocketGroup": "14",
+        "characterLevelAutoMode": "false",
+        "viewMode": "IMPORT",
+        "ascendClassName": "Gemling Legionnaire"
+      },
+      "saved_skill_sets": 1,
+      "saved_item_sets": 1,
+      "tree_versions": [
+        "0_5"
+      ],
+      "reference": {
+        "exit": 0,
+        "backend": {
+          "adapter_fingerprint": "cc7584f21841ae7b4ddea1f4be9f3acfb196c662ae7c071e077c5625f0eb92fc",
+          "id": "pob-poe2-mlua",
+          "implementation_version": "0.1.0",
+          "rules_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_fingerprint": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+        },
+        "active_skill_set_id": 1,
+        "active_group_count": 15,
+        "selected_player": {
+          "actor": "player",
+          "actor_skill_index": 17,
+          "gem_index": 1,
+          "group_index": 14,
+          "minion_id": null,
+          "part_index": null,
+          "part_name": null,
+          "show_average": false,
+          "skill_id": "MeleeCrossbowPlayer",
+          "skill_name": "Crossbow Shot",
+          "stat_set_index": 1,
+          "stat_set_label": "Crossbow Shot",
+          "synthesized_default_attack": false
+        },
+        "selected_minion": null,
+        "unresolved_entry_count": 0,
+        "full_dps_included_group_count": 0,
+        "warnings": [
+          "Experimental raw MAIN outputs; metric semantics, build legality and mechanic coverage are not certified.",
+          "PoB may normalize imported data during export; this is not a lossless replacement for the source XML.",
+          "No skill groups are included in Full DPS; that roll-up is not a build damage objective.",
+          "14 dangling upstream passive-tree connections; cross-class topology coverage is unverified"
+        ]
+      },
+      "native_first_result": {
+        "exit": 1,
+        "error": "Error: Native XML compatibility check failed at byte 43552: literal tabs and line breaks in attribute values normalize differently in XML and PoB"
+      }
+    },
+    {
+      "id": "user-20260908-line-05",
+      "source_line": 5,
+      "import_sha256": "ea7b87f3a1f90f008f8aa7ee5fc3a35b3e03c46bda1c66c5ddfb7e1c047ef54e",
+      "xml": "build-05.xml",
+      "xml_bytes": 106378,
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "build_attributes": {
+        "viewMode": "IMPORT",
+        "targetVersion": "0_1",
+        "characterLevelAutoMode": "false",
+        "className": "Sorceress",
+        "level": "92",
+        "ascendClassName": "Disciple of Varashta",
+        "mainSocketGroup": "3"
+      },
+      "saved_skill_sets": 6,
+      "saved_item_sets": 6,
+      "tree_versions": [
+        "0_5",
+        "0_5",
+        "0_5",
+        "0_5",
+        "0_5",
+        "0_5",
+        "0_5"
+      ],
+      "reference": {
+        "exit": 0,
+        "backend": {
+          "adapter_fingerprint": "cc7584f21841ae7b4ddea1f4be9f3acfb196c662ae7c071e077c5625f0eb92fc",
+          "id": "pob-poe2-mlua",
+          "implementation_version": "0.1.0",
+          "rules_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_fingerprint": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+        },
+        "active_skill_set_id": 4,
+        "active_group_count": 12,
+        "selected_player": {
+          "actor": "player",
+          "actor_skill_index": 4,
+          "gem_index": 1,
+          "group_index": 3,
+          "minion_id": null,
+          "part_index": null,
+          "part_name": "Basic Attack",
+          "show_average": false,
+          "skill_id": "SummonSkeletalSnipersPlayer",
+          "skill_name": "Skeletal Sniper Minion",
+          "stat_set_index": 1,
+          "stat_set_label": "Minion Info",
+          "synthesized_default_attack": false
+        },
+        "selected_minion": {
+          "actor": "minion",
+          "actor_skill_index": 1,
+          "gem_index": 1,
+          "group_index": 3,
+          "minion_id": "RaisedSkeletonSniper",
+          "part_index": null,
+          "part_name": null,
+          "show_average": false,
+          "skill_id": "MinionMeleeBow",
+          "skill_name": "Basic Attack",
+          "stat_set_index": 1,
+          "stat_set_label": "Basic Attack",
+          "synthesized_default_attack": false
+        },
+        "unresolved_entry_count": 0,
+        "full_dps_included_group_count": 0,
+        "warnings": [
+          "Experimental raw MAIN outputs; metric semantics, build legality and mechanic coverage are not certified.",
+          "PoB may normalize imported data during export; this is not a lossless replacement for the source XML.",
+          "No skill groups are included in Full DPS; that roll-up is not a build damage objective.",
+          "14 dangling upstream passive-tree connections; cross-class topology coverage is unverified"
+        ]
+      },
+      "native_first_result": {
+        "exit": 1,
+        "error": "Error: Native XML compatibility check failed at byte 77792: literal tabs and line breaks in attribute values normalize differently in XML and PoB"
+      }
+    }
+  ],
+  "original_input_file": "../../../../example.import.txt"
+}

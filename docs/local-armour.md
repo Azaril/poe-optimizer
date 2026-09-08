@@ -93,8 +93,8 @@ on the encounter and require their own metrics. Selected-minion queries are unsu
 for these definitions. The example maximizes selected hit DPS subject to resistance,
 Energy-Shield, armour and evasion floors; these are configurable examples.
 
-Current native profile IDs are `poe2-spark-body-movement-v6` and
-`poe2-mace-strike-body-movement-v10`; profile media versions are **6** and **8**. Separate
+Current native profile IDs are `poe2-spark-action-timing-v7` and
+`poe2-mace-strike-action-timing-v11`; profile media versions are **6** and **8**. Separate
 `local_armour` evidence schema 2
 records each selected component's source hash, local values and surviving records.
 `receiving_defence` evidence remains schema 1. Fresh document realization reconstructs

@@ -8,6 +8,7 @@
 
 #![forbid(unsafe_code)]
 
+pub mod action_speed;
 pub mod actor;
 pub mod armour;
 pub mod character;
@@ -15,6 +16,7 @@ pub mod conditions;
 pub mod data;
 pub mod defence;
 pub mod item_format;
+pub mod timing;
 pub use data::CompiledGameData;
 pub mod mace;
 pub mod mace_supports;

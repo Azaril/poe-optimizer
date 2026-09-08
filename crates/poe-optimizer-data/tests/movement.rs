@@ -11,7 +11,7 @@ fn custom(mut p: GameDataPackage) -> Result<GameDataSnapshot, GameDataError> {
 fn body_penalties_preserve_absence_zero_and_injected_values_in_any_armour_slot() {
     let original = bundled_snapshot().unwrap();
     let p = original.package();
-    assert_eq!(p.manifest.schema_version, 10);
+    assert_eq!(p.manifest.schema_version, 11);
     assert_eq!(
         p.armour_bases
             .iter()
@@ -61,7 +61,7 @@ fn body_penalties_preserve_absence_zero_and_injected_values_in_any_armour_slot()
     );
 }
 #[test]
-fn movement_formula_values_are_injected_but_action_speed_and_query_scope_remain_closed() {
+fn movement_formula_values_are_injected_but_query_scope_remains_closed() {
     let original = bundled_snapshot().unwrap();
     let mut p = original.package().clone();
     p.movement.base_multiplier = 1.125;
@@ -77,7 +77,6 @@ fn movement_formula_values_are_injected_but_action_speed_and_query_scope_remain_
     let changed = custom(p).unwrap();
     assert_ne!(changed.identity(), original.identity());
     let edits: &[fn(&mut GameDataPackage)] = &[
-        |p| p.movement.default_action_speed_multiplier = 1.01,
         |p| p.movement.rounding_precision = 13,
         |p| p.movement.base_multiplier = f64::NAN,
         |p| p.movement.minimum_multiplier = -1.0,

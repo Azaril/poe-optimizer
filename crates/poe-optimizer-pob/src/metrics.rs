@@ -162,6 +162,14 @@ const BINDINGS: &[Binding] = &[
         minion: false,
         description: "Effective movement speed as a percentage of baseline; 100 means baseline, 120 means 20 percent faster. Includes movement and action-speed modifiers, not absolute travel speed.",
     },
+    Binding {
+        id: "action_speed_pct",
+        raw: "ActionSpeedMod",
+        value_scale: 100.0,
+        unit: MetricUnit::Percent,
+        minion: false,
+        description: "Resolved player action speed as a percentage of baseline; 100 means baseline. Includes action-speed floors and ceilings, before skill-specific speed and server-tick limits.",
+    },
 ];
 
 pub fn catalog() -> Vec<MetricDefinition> {
@@ -327,59 +335,62 @@ mod tests {
     }
 
     #[test]
-    fn movement_percentage_scales_baseline_and_preserves_unavailable_and_nonfinite() {
-        let definition = catalog().pop().unwrap();
-        assert_eq!(definition.id, "movement_speed_pct");
-        assert_eq!(definition.unit, MetricUnit::Percent);
-        assert_eq!(definition.actors, [ActorScope::Player]);
-        assert_eq!(definition.schema_version, 1);
-        let binding = BINDINGS.last().unwrap();
-        let mut actor = ActorOutput {
-            skill_name: None,
-            skill_id: None,
-            has_hit_damage: false,
-            metrics: BTreeMap::new(),
-            non_finite_metrics: Vec::new(),
-            non_finite_values: BTreeMap::new(),
-        };
-        let read = |actor: &ActorOutput| {
-            value(
-                Some(actor),
-                binding.raw,
-                binding.minion,
-                binding.value_scale,
-            )
-        };
-        assert!(matches!(read(&actor), MeasurementValue::Unavailable { .. }));
-        for (ratio, percentage) in [
-            (1.0, 100.0),
-            (0.96, 96.0),
-            (1.2, 120.0),
-            (-0.25, -25.0),
-            (0.0, 0.0),
-        ] {
-            actor.metrics.insert(binding.raw.into(), ratio);
-            assert_eq!(read(&actor), MeasurementValue::Finite { value: percentage });
-        }
-        actor.metrics.insert(binding.raw.into(), f64::MAX);
-        assert_eq!(
-            read(&actor),
-            MeasurementValue::NonFinite {
-                kind: NonFiniteKind::PositiveInfinity
+    fn speed_percentages_scale_baseline_and_preserve_unavailable_and_nonfinite() {
+        assert_eq!(catalog()[18].id, "movement_speed_pct");
+        assert_eq!(catalog()[19].id, "action_speed_pct");
+        for id in ["movement_speed_pct", "action_speed_pct"] {
+            let definition = catalog().into_iter().find(|v| v.id == id).unwrap();
+            assert_eq!(definition.unit, MetricUnit::Percent);
+            assert_eq!(definition.actors, [ActorScope::Player]);
+            assert_eq!(definition.schema_version, 1);
+            let binding = BINDINGS.iter().find(|v| v.id == id).unwrap();
+            let mut actor = ActorOutput {
+                skill_name: None,
+                skill_id: None,
+                has_hit_damage: false,
+                metrics: BTreeMap::new(),
+                non_finite_metrics: Vec::new(),
+                non_finite_values: BTreeMap::new(),
+            };
+            let read = |actor: &ActorOutput| {
+                value(
+                    Some(actor),
+                    binding.raw,
+                    binding.minion,
+                    binding.value_scale,
+                )
+            };
+            assert!(matches!(read(&actor), MeasurementValue::Unavailable { .. }));
+            for (ratio, percentage) in [
+                (1.0, 100.0),
+                (0.96, 96.0),
+                (1.2, 120.0),
+                (-0.25, -25.0),
+                (0.0, 0.0),
+            ] {
+                actor.metrics.insert(binding.raw.into(), ratio);
+                assert_eq!(read(&actor), MeasurementValue::Finite { value: percentage });
             }
-        );
-        actor.metrics.clear();
-        for kind in [
-            NonFiniteKind::PositiveInfinity,
-            NonFiniteKind::NegativeInfinity,
-            NonFiniteKind::NotANumber,
-        ] {
-            actor.non_finite_values.insert(binding.raw.into(), kind);
-            assert_eq!(read(&actor), MeasurementValue::NonFinite { kind });
+            actor.metrics.insert(binding.raw.into(), f64::MAX);
+            assert_eq!(
+                read(&actor),
+                MeasurementValue::NonFinite {
+                    kind: NonFiniteKind::PositiveInfinity
+                }
+            );
+            actor.metrics.clear();
+            for kind in [
+                NonFiniteKind::PositiveInfinity,
+                NonFiniteKind::NegativeInfinity,
+                NonFiniteKind::NotANumber,
+            ] {
+                actor.non_finite_values.insert(binding.raw.into(), kind);
+                assert_eq!(read(&actor), MeasurementValue::NonFinite { kind });
+            }
+            assert!(matches!(
+                value(None, binding.raw, binding.minion, binding.value_scale),
+                MeasurementValue::Unavailable { .. }
+            ));
         }
-        assert!(matches!(
-            value(None, binding.raw, binding.minion, binding.value_scale),
-            MeasurementValue::Unavailable { .. }
-        ));
     }
 }

@@ -6,8 +6,6 @@ use serde::{Deserialize, Serialize};
 pub struct MovementData {
     pub base_multiplier: f64,
     pub minimum_multiplier: f64,
-    /// Coverage proof for profiles that reject action-speed mechanics.
-    pub default_action_speed_multiplier: f64,
     pub rounding_precision: u32,
     pub query_stats: Vec<ActorStat>,
     /// Capture0 is the selected base's MovementPenalty ratio; generated after
@@ -21,11 +19,10 @@ impl MovementData {
             || !(0.0..=1_000_000.0).contains(&self.base_multiplier)
             || !self.minimum_multiplier.is_finite()
             || !(0.0..=1_000_000.0).contains(&self.minimum_multiplier)
-            || self.default_action_speed_multiplier != 1.0
             || self.rounding_precision > 12
         {
             return Err(invalid(
-                "movement defaults/rounding exceed bounded capabilities; action-speed default must remain one until offence supports it",
+                "movement defaults/rounding exceed bounded capabilities",
             ));
         }
         if self.query_stats != [ActorStat::MovementSpeed] {

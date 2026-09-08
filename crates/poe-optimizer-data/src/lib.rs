@@ -1,5 +1,6 @@
 //! Portable, authenticated versioned game data. No Lua, I/O or host runtime.
 #![forbid(unsafe_code)]
+mod action_speed;
 mod actor;
 pub mod bundled;
 pub mod class_tree;
@@ -17,6 +18,7 @@ pub fn implementation_fingerprint() -> String {
     for source in [
         include_str!("lib.rs"),
         include_str!("actor.rs"),
+        include_str!("action_speed.rs"),
         include_str!("class_tree.rs"),
         include_str!("tree_data.rs"),
         include_str!("tree_projection.rs"),
@@ -27,6 +29,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("movement.rs"),
         include_str!("passive_allocation.rs"),
         include_str!("../Cargo.toml"),
+        include_str!("../../../Cargo.toml"),
         include_str!("../data/tree-source-identity.json"),
         include_str!("../data/class-tree.json"),
         include_str!("../data/class-tree.sha256"),

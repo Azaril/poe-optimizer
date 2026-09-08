@@ -1,6 +1,6 @@
 {
-  "schema_version": 8,
-  "id": "poe2-pinned-current-profile-extraction-v10",
+  "schema_version": 9,
+  "id": "poe2-pinned-current-profile-extraction-v11",
   "release": "poe2-0_5-native-profiles-3887ae6",
   "source_role": "reviewed partial source transcriptions; source parity required for release",
   "spark_skill": "SparkPlayer",
@@ -26,7 +26,7 @@
     "Blackjaw"
   ],
   "coverage": [
-    "spark_level_one_quality_zero_no_equipment_or_supports",
+    "spark_level_one_quality_zero_with_admitted_equipment_no_supports",
     "mace_strike_one_hand_mace_zero_to_two_reviewed_supports_with_local_item_modifiers",
     "all_class_and_ascendancy_identities_with_zero_or_one_reviewed_ascendancy_passive",
     "strict_partial_game_data_not_general_build_coverage",
@@ -40,12 +40,13 @@
     "source_configured_actor_and_receiving_defence_jewellery_after_complete_implicit_admission",
     "global_receiving_armour_evasion_energy_shield_base_and_increased_with_exact_query_groups",
     "player_resistance_base_and_increased_with_paired_and_all_expansions",
-    "exact_global_scope_marker_and_reviewed_attribute_conditions_no_ward_base_or_local_armour",
+    "exact_global_scope_marker_and_reviewed_attribute_conditions_no_ward_base",
     "source_enumerated_fixed_helmet_gloves_boots_bases",
     "exact_local_armour_paired_modifiers_quality_and_global_leftovers",
-    "armour_per_level_ward_block_movement_alternate_quality_and_data_overrides_excluded",
+    "armour_per_level_ward_block_alternate_quality_and_data_overrides_excluded",
     "source_fixed_body_armour_bases_and_presence_preserving_movement_penalties",
-    "shared_movement_after_attributes_with_dynamic_ignore_condition_and_neutral_action_speed"
+    "shared_movement_after_attributes_with_dynamic_ignore_condition_and_shared_action_speed",
+    "shared_player_action_speed_and_ordinary_direct_self_cast_timing_no_curse_enemy_or_alternate_timing_producers"
   ],
   "supports": [
     [
@@ -2523,6 +2524,90 @@
       "template": "Movement speed cannot be modified to below base value",
       "source_kind": "special",
       "pattern": "movement speed cannot be modified to below base value",
+      "condition_pattern": null
+    },
+    {
+      "id": "action_speed_increased",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "template": "{0}% increased Action Speed",
+      "condition_pattern": null
+    },
+    {
+      "id": "action_speed_increased_dex_higher_int",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "template": "{0}% increased Action Speed if Dexterity is higher than Intelligence",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "action_speed_increased_str_higher_int",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "template": "{0}% increased Action Speed if Strength is higher than Intelligence",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "action_speed_reduced",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "template": "{0}% reduced Action Speed",
+      "condition_pattern": null
+    },
+    {
+      "id": "action_speed_reduced_dex_higher_int",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "template": "{0}% reduced Action Speed if Dexterity is higher than Intelligence",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "action_speed_reduced_str_higher_int",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "template": "{0}% reduced Action Speed if Strength is higher than Intelligence",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "minimum_action_speed_base",
+      "source_kind": "special",
+      "pattern": "action speed cannot be modified to below base value",
+      "template": "Action speed cannot be modified to below base value",
+      "condition_pattern": null
+    },
+    {
+      "id": "minimum_action_speed_you",
+      "source_kind": "special",
+      "pattern": "you cannot be slowed to below base speed",
+      "template": "You cannot be slowed to below base speed",
+      "condition_pattern": null
+    },
+    {
+      "id": "minimum_action_speed_cannot",
+      "source_kind": "special",
+      "pattern": "cannot be slowed to below base speed",
+      "template": "Cannot be slowed to below base speed",
+      "condition_pattern": null
+    },
+    {
+      "id": "minimum_action_speed_at_least",
+      "source_kind": "special",
+      "pattern": "your action speed is at least (%d+)%% of base value",
+      "template": "Your action speed is at least {0}% of base value",
+      "condition_pattern": null
+    },
+    {
+      "id": "minimum_action_speed_percent",
+      "source_kind": "special",
+      "pattern": "action speed cannot be modified to below (%d+)%% base value",
+      "template": "Action speed cannot be modified to below {0}% base value",
+      "condition_pattern": null
+    },
+    {
+      "id": "unaffected_by_slows",
+      "source_kind": "special",
+      "pattern": "your speed is unaffected by slows",
+      "template": "Your speed is unaffected by slows",
       "condition_pattern": null
     }
   ]

@@ -106,6 +106,11 @@ impl ValidatedEquipmentItem {
         format!("Item:{}:{name}", self.pob_item_id)
     }
     /// Authored movement records or a body component needing generated movement evidence.
+    pub fn uses_action_speed(&self) -> bool {
+        self.actor_modifiers
+            .iter()
+            .any(|record| record.stat.is_action_speed())
+    }
     pub fn uses_movement(&self) -> bool {
         self.allowed_slots.iter().any(|slot| slot == "Body Armour")
             || self

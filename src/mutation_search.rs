@@ -446,6 +446,11 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             supports,
         )?
     };
+    if registry.uses_action_speed_scope() {
+        return Err(
+            "Authored action-speed modifiers require search-build with problem schema 11".into(),
+        );
+    }
     if registry.uses_movement_scope() {
         return Err(
             "Authored movement modifiers require search-build with problem schema 10".into(),

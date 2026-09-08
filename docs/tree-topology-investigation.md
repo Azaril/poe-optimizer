@@ -36,6 +36,30 @@ Some classes/ascendancies share a location or switch the record's contents. For 
 
 All 14 currently missing targets are also absent as top-level node records in every bundled historical tree, `0_1` through `0_4`. Other dangling start references became available in later bundled versions: 11495 and 63493 appear in `0_5`, for example. This establishes persistent references, not their intended gameplay meaning. No archived node definition or replacement mapping for the current 14 targets was found in those trees.
 
+## Ascendancy components and separate point budgets
+
+The separate ascendancy trees are expected. All **23** ascendancies in the pinned catalog
+resolve to valid roots, including the shared Lich/Abyssal Lich location. Their allocations
+are validated from the selected ascendancy's root, with its own allowance; they do not
+need a paid path through ordinary nodes. The selected class root and ascendancy root are
+implicit and cannot be submitted as paid allocations.
+
+This is already implemented in the canonical
+[candidate validator](../crates/poe-optimizer-core/src/candidate.rs) and the injected-data
+[passive allocation validator](../crates/poe-optimizer-data/src/passive_allocation.rs):
+ordinary and ascendancy node sets receive separate connectivity checks, with ascendancy
+ownership validated against the selected class. The core candidate validator additionally
+enforces their separate point budgets; the data resolver has no budget input and does not
+certify point entitlement. The new breadth phase
+will exercise these rules on complete imported builds as well as small graph cases.
+
+The **14 dangling references** above are a different condition: their target IDs have no
+node record anywhere in the pinned extracted graph. They are not valid ascendancy nodes
+that were merely omitted from an ordinary-tree traversal. The fact that they all originate
+at class starts makes filtered ascendancy data a plausible explanation, but does not prove
+their identities. Retain them as source-coverage diagnostics; do not join separate trees,
+spend ordinary points on ascendancies, or fabricate missing nodes to eliminate the warning.
+
 ## Likely source of the dangling references, and limits
 
 The pinned data exporter can create exactly this structural condition. [passivetree.lua](../vendor/path-of-building-poe2/src/Export/Scripts/passivetree.lua), lines 689-744, skips nodes with empty names, filtered `[DNT...]` names, or disabled/filtered ascendancies. Lines 1064-1075 copy the surviving record's connection IDs without checking whether their targets were emitted. Its class exporter also excludes classes with no included ascendancies (lines 566-618), while start labels are copied separately (lines 1037-1044).

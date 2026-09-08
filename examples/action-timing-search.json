@@ -1,0 +1,178 @@
+{
+  "schema_version": 11,
+  "template": "../tests/fixtures/builds/mace-action-timing.xml",
+  "equipment": [
+    {
+      "instance_id": "solar-resource",
+      "pob_item_id": 3,
+      "item_text": "Rarity: RARE\nStudy Sun\nSolar Amulet\nItem Level: 60\nQuality: 0\nImplicits: 1\n+15 to Spirit\n+20 to Strength\n+20 to Dexterity\n+50 to Accuracy Rating"
+    },
+    {
+      "instance_id": "wooden-physical",
+      "pob_item_id": 4,
+      "item_text": "Rarity: RARE\nStudy Maul\nWooden Club\nItem Level: 60\nQuality: 20\nImplicits: 0\nAdds 10 to 20 Physical Damage\n80% increased Physical Damage\n+10 to Strength"
+    },
+    {
+      "instance_id": "lunar-defence",
+      "pob_item_id": 5,
+      "item_text": "Rarity: RARE\nStudy Moon\nLunar Amulet\nItem Level: 60\nQuality: 0\nImplicits: 1\n+30 to maximum Energy Shield\n40% increased maximum Energy Shield\n+25% to all Elemental Resistances\n+20 to Dexterity"
+    },
+    {
+      "instance_id": "pearl-defence",
+      "pob_item_id": 6,
+      "item_text": "Rarity: RARE\nStudy Pearl\nPearlescent Amulet\nItem Level: 60\nQuality: 0\nImplicits: 1\n+10% to all Elemental Resistances\n+40% to Fire and Cold Resistances\n+30% to Lightning Resistance\n+20 to Dexterity"
+    },
+    {
+      "instance_id": "helmet-10",
+      "pob_item_id": 10,
+      "item_text": "Rarity: RARE\nArmour Search 10\nRusted Greathelm\nItem Level: 60\nQuality: 20\nImplicits: 0\n+71 to Armour\n60% increased Armour\n+15 to Strength"
+    },
+    {
+      "instance_id": "helmet-11",
+      "pob_item_id": 11,
+      "item_text": "Rarity: RARE\nArmour Search 11\nTwig Circlet\nItem Level: 60\nQuality: 20\nImplicits: 0\n+27 to maximum Energy Shield\n70% increased Energy Shield\n+10 to Dexterity"
+    },
+    {
+      "instance_id": "gloves-12",
+      "pob_item_id": 12,
+      "item_text": "Rarity: RARE\nArmour Search 12\nStocky Mitts\nItem Level: 60\nQuality: 20\nImplicits: 0\n+81 to Armour\n40% increased Armour\n+30 to Dexterity"
+    },
+    {
+      "instance_id": "gloves-13",
+      "pob_item_id": 13,
+      "item_text": "Rarity: RARE\nArmour Search 13\nSuede Bracers\nItem Level: 60\nQuality: 20\nImplicits: 0\n+81 to Evasion Rating\n40% increased Evasion Rating\n+20 to Strength"
+    },
+    {
+      "instance_id": "boots-14",
+      "pob_item_id": 14,
+      "item_text": "Rarity: RARE\nArmour Search 14\nRough Greaves\nItem Level: 60\nQuality: 20\nImplicits: 0\n+61 to Armour\n50% increased Armour\n+7% to all Elemental Resistances"
+    },
+    {
+      "instance_id": "boots-15",
+      "pob_item_id": 15,
+      "item_text": "Rarity: RARE\nArmour Search 15\nStraw Sandals\nItem Level: 60\nQuality: 20\nImplicits: 0\n+41 to maximum Energy Shield\n60% increased Energy Shield\n+15 to Dexterity"
+    },
+    {
+      "instance_id": "body-16",
+      "pob_item_id": 16,
+      "item_text": "Rarity: RARE\nMovement Search 16\nRusted Cuirass\nItem Level: 60\nQuality: 20\nImplicits: 0\n+70 to Armour\n100% increased Armour\n5% increased Movement Speed\n10% increased Action Speed"
+    },
+    {
+      "instance_id": "body-17",
+      "pob_item_id": 17,
+      "item_text": "Rarity: RARE\nMovement Search 17\nLeather Vest\nItem Level: 60\nQuality: 20\nImplicits: 0\n+31 to Evasion Rating\n50% increased Evasion Rating\n20% increased Movement Speed\n20% increased Action Speed"
+    },
+    {
+      "instance_id": "body-18",
+      "pob_item_id": 18,
+      "item_text": "Rarity: RARE\nMovement Search 18\nTattered Robe\nItem Level: 60\nQuality: 20\nImplicits: 0\n+21 to maximum Energy Shield\n50% increased Energy Shield\n15% increased Movement Speed\n15% increased Action Speed"
+    }
+  ],
+  "objective": {
+    "schema_version": 1,
+    "objective": {
+      "kind": "scalar",
+      "metric": {
+        "actor": "player",
+        "id": "selected_hit_dps"
+      },
+      "unit": "damage_per_second",
+      "direction": "maximize"
+    },
+    "constraints": [
+      {
+        "id": "fire-floor",
+        "metric": {
+          "actor": "player",
+          "id": "fire_resistance_capped_pct"
+        },
+        "unit": "percent",
+        "operator": ">=",
+        "threshold": 75,
+        "violation_scale": 75
+      },
+      {
+        "id": "shield-floor",
+        "metric": {
+          "actor": "player",
+          "id": "energy_shield"
+        },
+        "unit": "pool_points",
+        "operator": ">=",
+        "threshold": 50,
+        "violation_scale": 50
+      },
+      {
+        "id": "armour-floor",
+        "metric": {
+          "actor": "player",
+          "id": "armour"
+        },
+        "unit": "rating_points",
+        "operator": ">=",
+        "threshold": 200,
+        "violation_scale": 200
+      },
+      {
+        "id": "evasion-floor",
+        "metric": {
+          "actor": "player",
+          "id": "evasion"
+        },
+        "unit": "rating_points",
+        "operator": ">=",
+        "threshold": 150,
+        "violation_scale": 150
+      },
+      {
+        "id": "movement-floor",
+        "metric": {
+          "actor": "player",
+          "id": "movement_speed_pct"
+        },
+        "unit": "percent",
+        "operator": ">=",
+        "threshold": 115,
+        "violation_scale": 100
+      },
+      {
+        "id": "action-floor",
+        "metric": {
+          "actor": "player",
+          "id": "action_speed_pct"
+        },
+        "unit": "percent",
+        "operator": ">=",
+        "threshold": 120,
+        "violation_scale": 100
+      }
+    ]
+  },
+  "constraints": {
+    "required_skill_ids": [
+      "Melee1HMacePlayer"
+    ],
+    "required_item_instance_ids": [],
+    "locks": {
+      "class_id": null,
+      "ascendancy": null,
+      "allocated_passives": [],
+      "unallocated_passives": [],
+      "equipment": {},
+      "skill_groups": {},
+      "empty_skill_groups": []
+    },
+    "budgets": {
+      "ordinary_passive_points": 4,
+      "ascendancy_passive_points": 1,
+      "active_skill_count": 1,
+      "supports_per_skill": 2,
+      "resource_limits": {}
+    }
+  },
+  "attribute_locks": {
+    "required": {},
+    "forbidden": {}
+  },
+  "initial_allocations": []
+}

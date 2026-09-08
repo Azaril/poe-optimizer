@@ -14,6 +14,7 @@ enum Kind {
     Increased,
     More,
     Override,
+    Max,
     Flag,
 }
 impl From<ActorNumericOperation> for Kind {
@@ -23,6 +24,7 @@ impl From<ActorNumericOperation> for Kind {
             ActorNumericOperation::Increased => Self::Increased,
             ActorNumericOperation::More => Self::More,
             ActorNumericOperation::Override => Self::Override,
+            ActorNumericOperation::Max => Self::Max,
         }
     }
 }
@@ -213,6 +215,62 @@ impl ActorQueries for ProgramQueries<'_, '_> {
             parent = Some(result);
         }
         Ok(parent.unwrap_or(0.0))
+    }
+    fn max(&self, name: &str) -> Result<Option<f64>, ActorError> {
+        let mut result = None;
+        for layer in 0..self.layer_count() {
+            for program in self.programs(layer) {
+                if let Some(bucket) = program.bucket(name, Kind::Max) {
+                    for row in program.rows(bucket) {
+                        // Tabulate first, then requesting-store EvalMod again.
+                        // Validated predicates are pure and both use root conditions.
+                        if row.predicate.matches(self.scratch.conditions)
+                            && row.value != 0.0
+                            && row.predicate.matches(self.scratch.conditions)
+                            && row.value > result.unwrap_or(0.0)
+                        {
+                            result = Some(row.value);
+                        }
+                    }
+                }
+            }
+        }
+        Ok(result)
+    }
+    fn sum_positive(&self, name: &str) -> Result<f64, ActorError> {
+        let mut result = 0.0;
+        for layer in 0..self.layer_count() {
+            if layer == 0 {
+                for row in &self.scratch.base.as_slice()[..self.scratch.base_len] {
+                    if row.stat.upstream_name() == name
+                        && row.operation == ActorNumericOperation::Increased
+                        && row.value > 0.0
+                    {
+                        result += row.value;
+                    }
+                }
+            }
+            for program in self.programs(layer) {
+                if let Some(bucket) = program.bucket(name, Kind::Increased) {
+                    for row in program.rows(bucket) {
+                        if row.predicate.matches(self.scratch.conditions) && row.value > 0.0 {
+                            result += row.value;
+                        }
+                    }
+                }
+            }
+            if layer == 0 {
+                for row in &self.scratch.base.as_slice()[self.scratch.base_len..] {
+                    if row.stat.upstream_name() == name
+                        && row.operation == ActorNumericOperation::Increased
+                        && row.value > 0.0
+                    {
+                        result += row.value;
+                    }
+                }
+            }
+        }
+        Ok(result)
     }
     fn more(&self, name: &str) -> Result<f64, ActorError> {
         let mut parent = None;
@@ -475,6 +533,7 @@ impl CompiledGameData {
             resources: output,
             receiving: receiving_output,
             movement,
+            action_speed,
         } = calculate_complete(
             &mut ProgramQueries { layers, scratch },
             self,
@@ -491,6 +550,7 @@ impl CompiledGameData {
             requires_receiving_stage,
             receiving: receiving_output,
             movement,
+            action_speed,
         })
     }
 }

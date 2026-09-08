@@ -405,6 +405,13 @@ impl ControlledBuildCatalog {
             .values()
             .any(|component| component.armour.is_some())
     }
+    pub fn uses_action_speed_scope(&self) -> bool {
+        self.source.actor_modifiers().uses_action_speed()
+            || self
+                .items
+                .values()
+                .any(|component| component.item.uses_action_speed())
+    }
     pub fn uses_movement_scope(&self) -> bool {
         self.source.actor_modifiers().uses_movement()
             || self.items.values().any(|component| {

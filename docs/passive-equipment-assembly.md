@@ -37,6 +37,7 @@ problem schemas 1–6 remain available.
 
 ## Problem schemas 7, 8, 9 and 10
 
+[Action timing](action-timing.md) uses schema 11/report 12.
 [Body Armour and movement problems](body-armour-movement.md) use schema 10/report 11,
 adding the body slot and effective movement percentage. Older schemas reject authored
 movement effects and any supplied body item, even when unselected.
@@ -80,7 +81,7 @@ that the full legal domain is empty or that the best-found result is globally op
 
 ## Data and source identity
 
-Package schema 10 / `poe2-native-profiles-v10` supplies numeric values, requirements, implicit
+Package schema 11 / `poe2-native-profiles-v11` supplies numeric values, requirements, implicit
 ranges, modifier grammar and source-view effect records. Tree schema 3 records 4,109
 structural ordinary nodes and 4,758 effective source views. Of these, 1,282 have fully
 admitted effects and 3,476 carry explicit exclusions. The four previously reviewed

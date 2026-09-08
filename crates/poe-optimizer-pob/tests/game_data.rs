@@ -1526,6 +1526,15 @@ fn assert_actor_source_modifier(
                 assert_eq!(tag.get::<String>("type").unwrap(), "Global");
                 assert_eq!(tag.pairs::<mlua::Value, mlua::Value>().count(), 1);
             }
+            ActorModifierTag::GlobalEffect {
+                effect_type: ActorGlobalEffectType::Global,
+                unscalable,
+            } => {
+                assert_eq!(tag.get::<String>("type").unwrap(), "GlobalEffect");
+                assert_eq!(tag.get::<String>("effectType").unwrap(), "Global");
+                assert_eq!(tag.get::<bool>("unscalable").unwrap(), *unscalable);
+                assert_eq!(tag.pairs::<mlua::Value, mlua::Value>().count(), 3);
+            }
             ActorModifierTag::Condition { variables, negated } => {
                 assert_eq!(tag.get::<String>("type").unwrap(), "Condition");
                 let negative = tag.get::<Option<bool>>("neg").unwrap();
@@ -1647,7 +1656,7 @@ fn assert_actor_rules(data: &poe_optimizer_data::game_data::GameDataPackage) {
             "All"
         );
     }
-    assert_eq!(checked, 3932);
+    assert_eq!(checked, 4020);
 }
 #[test]
 fn actor_constants_precision_and_spirit_quests_match_independent_cold_and_warm_source() {
@@ -1861,7 +1870,7 @@ fn fresh_reviewed_receiving_package_matches_independent_original_source() {
     )
     .unwrap();
     let data = &extracted.package;
-    assert_eq!(data.actor.modifier_rules.len(), 347);
+    assert_eq!(data.actor.modifier_rules.len(), 359);
     assert_quests_and_passives(data);
     assert_actor_rules(data);
     assert_jewellery(data);
@@ -1945,3 +1954,6 @@ mod item_formatting_source;
 
 #[path = "support/movement_source.rs"]
 mod movement_source;
+
+#[path = "support/action_speed_source.rs"]
+mod action_speed_source;

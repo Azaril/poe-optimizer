@@ -11,7 +11,7 @@ defines the richer target policy and joint optimizer.
 Evaluate once with an explicit scalar objective and constraints:
 
 ```powershell
-cargo run --locked -- evaluate example.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
+cargo run --locked -- evaluate tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
 ```
 
 Use a new output path; create `runs` first if necessary. The example maximizes PoB EHP and

@@ -61,6 +61,78 @@ pub fn movement_evidence(output: poe_optimizer_engine::movement::MovementOutput)
         "has_override":output.has_override})
 }
 
+/// Shared action-speed queries retain resolved MAX availability; authored records
+/// separately preserve zero values that the source MAX query omits.
+pub fn action_speed_evidence(output: poe_optimizer_engine::actor::ActionSpeedOutput) -> Value {
+    json!({"schema_version":1,
+        "action_speed_mod":output.action_speed_mod,
+        "minimum_action_speed":output.minimum_action_speed,
+        "maximum_action_speed_reduction":output.maximum_action_speed_reduction,
+        "action_speed_increased":output.action_speed_increased,
+        "temporal_chains_action_speed_increased":output.temporal_chains_action_speed_increased,
+        "unaffected_by_slows":output.unaffected_by_slows})
+}
+/// CastRate includes action speed before the server cap; Speed/Time follow it.
+pub fn action_timing_evidence(
+    output: poe_optimizer_engine::timing::DirectActionTimingOutput,
+) -> Value {
+    let mut value = json!({"schema_version":1,
+        "speed_multiplier":output.speed_multiplier,"base_time":output.base_time,
+        "cast_rate":output.cast_rate,"speed":output.speed,"time":output.time,
+        "action_speed_mod":output.action_speed_mod});
+    let mut non_finite = std::collections::BTreeMap::new();
+    for (name, number) in [
+        ("speed_multiplier", output.speed_multiplier),
+        ("base_time", output.base_time),
+        ("cast_rate", output.cast_rate),
+        ("speed", output.speed),
+        ("time", output.time),
+        ("action_speed_mod", output.action_speed_mod),
+    ] {
+        if let poe_optimizer_core::metrics::MeasurementValue::NonFinite { kind } =
+            poe_optimizer_core::metrics::MeasurementValue::from_number(number)
+        {
+            non_finite.insert(name, kind);
+        }
+    }
+    value["non_finite_values"] = json!(non_finite);
+    value
+}
+/// Reconstruct timing from exact admitted weapon/support data without evaluating damage.
+pub fn mace_action_timing(
+    data: &poe_optimizer_engine::CompiledGameData,
+    character: &poe_optimizer_engine::character::CharacterInput,
+    weapon: &crate::mace_item::ValidatedMaceWeapon,
+    supports: &[String],
+    action_speed_mod: f64,
+) -> Result<poe_optimizer_engine::timing::DirectActionTimingOutput, String> {
+    use poe_optimizer_engine::mace::MaceWeapon;
+    let slot = match weapon.weapon_key() {
+        "wooden_club" => MaceWeapon::WoodenClub,
+        "smithing_hammer" => MaceWeapon::SmithingHammer,
+        _ => return Err("Unknown native Mace weapon capability slot".into()),
+    };
+    let prepared = data
+        .prepare_mace_weapon(
+            slot,
+            weapon.quality(),
+            weapon.item_level(),
+            weapon.local_modifiers(),
+        )
+        .map_err(|error| error.to_string())?;
+    let supports = data
+        .mace_support_loadout(supports)
+        .map_err(|error| error.to_string())?;
+    poe_optimizer_engine::mace::action_timing(
+        data,
+        character,
+        &prepared,
+        supports,
+        action_speed_mod,
+    )
+    .map_err(|error| error.to_string())
+}
+
 /// Source-bound local armour evidence; no global BASE surrogate is introduced.
 pub fn local_armour_evidence<'a>(
     items: impl Iterator<

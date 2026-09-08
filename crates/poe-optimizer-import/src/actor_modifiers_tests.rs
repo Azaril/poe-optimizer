@@ -474,11 +474,109 @@ fn movement_override_retains_exact_division_and_rejects_dynamic_condition_cycles
         .is_err()
     );
     for line in [
-        "20% increased Action Speed",
+        "20% increased Cooldown Recovery Rate",
         "20% increased Movement Speed while using a Skill",
     ] {
         assert!(
             match_actor_modifier_line(line, "Custom:Study", &data)
+                .unwrap()
+                .is_none()
+        );
+    }
+}
+
+#[test]
+fn action_speed_rules_preserve_global_effect_metadata_and_reject_unmodeled_producers() {
+    use poe_optimizer_data::game_data::{ActorGlobalEffectType, ActorModifierTag};
+    let data = data();
+    for line in [
+        "Action Speed cannot be modified to below base value",
+        "You cannot be slowed to below base speed",
+        "Cannot be slowed to below base speed",
+    ] {
+        let parsed = match_actor_modifier_line(line, "Custom:Action", &data)
+            .unwrap()
+            .unwrap();
+        assert_eq!(parsed.records()[0].stat, ActorStat::MinimumActionSpeed);
+        assert_eq!(
+            parsed.records()[0].effect,
+            ActorModifierEffect::Numeric {
+                operation: ActorNumericOperation::Max,
+                value: 100.0
+            }
+        );
+        assert_eq!(
+            parsed.records()[0].tags,
+            [ActorModifierTag::GlobalEffect {
+                effect_type: ActorGlobalEffectType::Global,
+                unscalable: true
+            }]
+        );
+        let equipment = match_equipment_modifier_line(line, "Item:41:Helmet", &data)
+            .unwrap()
+            .unwrap();
+        assert_eq!(equipment.records()[0].tags, parsed.records()[0].tags);
+    }
+    for (line, stat, value) in [
+        (
+            "Your Action Speed is at least 0% of base value",
+            ActorStat::MinimumActionSpeed,
+            0.0,
+        ),
+        (
+            "Action Speed cannot be modified to below 80% base value",
+            ActorStat::MinimumActionSpeed,
+            80.0,
+        ),
+        ("20% increased Action Speed", ActorStat::ActionSpeed, 20.0),
+        ("20% reduced Action Speed", ActorStat::ActionSpeed, -20.0),
+    ] {
+        let parsed = match_actor_modifier_line(line, "Custom:Action", &data)
+            .unwrap()
+            .unwrap();
+        assert_eq!(parsed.records()[0].stat, stat);
+        let ActorModifierEffect::Numeric { value: actual, .. } = parsed.records()[0].effect else {
+            panic!("numeric");
+        };
+        assert_eq!(actual, value);
+    }
+    // Public unvalidated authored packages must not bypass whole-source admission.
+    for stat in [
+        ActorStat::TemporalChainsActionSpeed,
+        ActorStat::MaximumActionSpeedReduction,
+    ] {
+        let mut altered = data.clone();
+        altered.actor.modifier_rules = vec![rule(
+            "unsupported_producer",
+            "{0}% Authored Hidden Producer",
+            ActorCaptureKind::UnsignedInteger,
+            stat,
+            if stat == ActorStat::TemporalChainsActionSpeed {
+                ActorNumericOperation::Increased
+            } else {
+                ActorNumericOperation::Max
+            },
+        )];
+        assert!(
+            match_actor_modifier_line("20% Authored Hidden Producer", "Custom:Action", &altered)
+                .is_err()
+        );
+        assert!(
+            match_equipment_modifier_line(
+                "20% Authored Hidden Producer",
+                "Item:41:Helmet",
+                &altered
+            )
+            .is_err()
+        );
+    }
+    for line in [
+        "Nearby allies' Action Speed cannot be modified to below base value",
+        "Nearby Enemy Monsters' Action Speed is at most 80% of base value",
+        "20% more Action Speed",
+    ] {
+        assert!(
+            match_actor_modifier_line(line, "Custom:Action", &data)
                 .unwrap()
                 .is_none()
         );

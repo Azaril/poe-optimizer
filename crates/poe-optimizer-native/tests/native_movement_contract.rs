@@ -112,7 +112,7 @@ fn compare(
     let xml = domain.materialize(handle).unwrap();
     let full = backend.calculate(&request(&xml.content), BUDGET).unwrap();
     let snapshot = prepared.measure(handle).unwrap();
-    assert_eq!(snapshot.values().len(), 13);
+    assert_eq!(snapshot.values().len(), 14);
     assert_eq!(
         serde_json::to_value(prepared.snapshot_measurements(&snapshot)).unwrap(),
         serde_json::to_value(&full.measurements).unwrap()
@@ -439,7 +439,7 @@ fn injected_penalty_presence_values_and_requirements_bind_both_native_paths() {
 fn unsupported_action_party_skill_and_item_mechanics_remain_fail_closed() {
     let backend = NativeBackend::new();
     for line in [
-        "20% increased Action Speed",
+        "20% increased Cooldown Recovery Rate",
         "Movement Speed is equal to the highest Movement Speed among Linked Players",
         "20% increased Movement Speed while using a Skill",
         "Grants Level 1 Dash",

@@ -31,6 +31,7 @@ mod program;
 pub use program::{ActorModifierLayer, ActorScratch, CompiledActorModifiers};
 #[path = "actor_receiving.rs"]
 mod receiving;
+pub use crate::action_speed::ActionSpeedOutput;
 pub use crate::movement::MovementOutput;
 pub use receiving::{ReceivingOutput, ReceivingScenario};
 
@@ -105,8 +106,12 @@ pub struct PreparedActorResources {
     requires_receiving_stage: bool,
     receiving: Option<(ReceivingScenario, ReceivingOutput)>,
     movement: MovementOutput,
+    action_speed: ActionSpeedOutput,
 }
 impl PreparedActorResources {
+    pub fn action_speed(&self) -> ActionSpeedOutput {
+        self.action_speed
+    }
     pub fn movement(&self) -> MovementOutput {
         self.movement
     }
@@ -245,6 +250,8 @@ impl StackRecords {
 trait ActorQueries {
     fn sum(&self, kind: SumKind, names: &[&str]) -> Result<f64, ActorError>;
     fn more(&self, name: &str) -> Result<f64, ActorError>;
+    fn max(&self, name: &str) -> Result<Option<f64>, ActorError>;
+    fn sum_positive(&self, name: &str) -> Result<f64, ActorError>;
     fn override_value(&self, name: &str) -> Result<Option<f64>, ActorError>;
     fn flag(&self, name: &str) -> bool;
     fn update_conditions(&mut self, conditions: [bool; 12]) -> Result<(), ActorError>;
@@ -269,6 +276,20 @@ impl ActorQueries for StackRecords {
             }
         }
         Ok(value)
+    }
+    fn max(&self, _: &str) -> Result<Option<f64>, ActorError> {
+        Ok(None)
+    }
+    fn sum_positive(&self, name: &str) -> Result<f64, ActorError> {
+        Ok(self
+            .as_slice()
+            .iter()
+            .filter(|row| {
+                row.stat.upstream_name() == name
+                    && row.operation == ActorNumericOperation::Increased
+                    && row.value > 0.0
+            })
+            .fold(0.0, |sum, row| sum + row.value))
     }
     fn more(&self, _: &str) -> Result<f64, ActorError> {
         Ok(1.0)
@@ -299,12 +320,17 @@ fn numeric_kind(operation: ActorNumericOperation) -> NumericKind {
         ActorNumericOperation::Increased => NumericKind::Increased,
         ActorNumericOperation::More => NumericKind::More,
         ActorNumericOperation::Override => NumericKind::Override,
+        ActorNumericOperation::Max => NumericKind::Max,
     }
 }
 fn tags(tags: &[ActorModifierTag]) -> Vec<ModifierTag> {
     tags.iter()
         .map(|tag| match tag {
             ActorModifierTag::Global => ModifierTag::Global,
+            ActorModifierTag::GlobalEffect { unscalable, .. } => ModifierTag::GlobalEffect {
+                effect_type: "Global".into(),
+                unscalable: *unscalable,
+            },
             ActorModifierTag::Condition { variables, negated } => ModifierTag::Condition {
                 variables: ConditionVariables::Any(
                     variables
@@ -421,6 +447,21 @@ impl ActorQueries for DatabaseQueries<'_> {
         self.database
             .sum_with_conditions(kind, &QueryContext::default(), names, &self.conditions)
             .map_err(|_| ActorError("Invalid actor BASE/INC query"))
+    }
+    fn max(&self, name: &str) -> Result<Option<f64>, ActorError> {
+        self.database
+            .max_with_conditions(&QueryContext::default(), &[name], &self.conditions)
+            .map_err(|_| ActorError("Invalid actor MAX query"))
+    }
+    fn sum_positive(&self, name: &str) -> Result<f64, ActorError> {
+        self.database
+            .sum_positive_with_conditions(
+                SumKind::Increased,
+                &QueryContext::default(),
+                name,
+                &self.conditions,
+            )
+            .map_err(|_| ActorError("Invalid actor positive INC query"))
     }
     fn more(&self, name: &str) -> Result<f64, ActorError> {
         self.database
@@ -681,6 +722,7 @@ struct ActorOutputs {
     resources: ActorResourceOutput,
     receiving: Option<(ReceivingScenario, ReceivingOutput)>,
     movement: MovementOutput,
+    action_speed: ActionSpeedOutput,
 }
 fn calculate_complete(
     queries: &mut impl ActorQueries,
@@ -694,6 +736,30 @@ fn calculate_complete(
             receiving::calculate(queries, compiled, armour).map(|output| (scenario, output))
         })
         .transpose()?;
+    // Query order follows actionSpeedMod after final attribute conditions.
+    let action_data = &compiled.snapshot().package().action_speed;
+    let names = &action_data.query_stats;
+    let minimum = queries.max(names[0].upstream_name())?;
+    let maximum = queries.max(names[1].upstream_name())?;
+    let unaffected = queries.flag(names[2].upstream_name());
+    let increased = if unaffected {
+        queries.sum_positive(names[3].upstream_name())?
+    } else {
+        queries.sum(SumKind::Increased, &[names[3].upstream_name()])?
+    };
+    let temporal = if unaffected {
+        queries.sum_positive(names[4].upstream_name())?
+    } else {
+        queries.sum(SumKind::Increased, &[names[4].upstream_name()])?
+    };
+    let action_speed = crate::action_speed::calculate(
+        action_data,
+        minimum,
+        maximum,
+        increased,
+        temporal,
+        unaffected,
+    )?;
     // Source GetCondition resolves this flag from the final attribute state.
     // Its own tags cannot reference this condition, so there is no query cycle.
     let ignored = queries.flag("Condition:IgnoreMovementPenalties");
@@ -722,13 +788,14 @@ fn calculate_complete(
             override_value: overridden,
             cannot_be_below_base: queries.flag("MovementSpeedCannotBeBelowBase"),
             ignore_movement_penalties: ignored,
-            action_speed_mod: movement.default_action_speed_multiplier,
+            action_speed_mod: action_speed.action_speed_mod,
         },
     )?;
     Ok(ActorOutputs {
         resources: actor,
         receiving,
         movement,
+        action_speed,
     })
 }
 
@@ -838,6 +905,7 @@ impl CompiledGameData {
             resources: output,
             receiving: receiving_output,
             movement,
+            action_speed,
         } = if modifier_layers.iter().all(Vec::is_empty) {
             calculate_complete(&mut base, self, receiving, armour)?
         } else {
@@ -865,6 +933,7 @@ impl CompiledGameData {
                 .any(|record| record.stat.is_receiving_defence()),
             receiving: receiving_output,
             movement,
+            action_speed,
         })
     }
     fn actor_base_records(

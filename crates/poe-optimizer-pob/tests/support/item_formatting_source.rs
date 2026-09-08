@@ -8,7 +8,7 @@ fn fresh_item_formatting_matches_original_metadata_and_literal_dispatch_cold_and
     )
     .unwrap();
     let rules = &extracted.package.item_formatting.rules;
-    assert_eq!(rules.len(), 83);
+    assert_eq!(rules.len(), 87);
     let mut cases = 0;
     for warm in [false, true] {
         let oracle = Oracle::new(warm);
@@ -69,5 +69,5 @@ fn fresh_item_formatting_matches_original_metadata_and_literal_dispatch_cold_and
             );
         }
     }
-    assert_eq!(cases, 664);
+    assert_eq!(cases, 696);
 }

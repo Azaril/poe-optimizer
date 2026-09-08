@@ -31,11 +31,10 @@ the source ASCII case normalization while preserving original source bytes. Conf
 captures retain their raw values. Differently capitalized item text can therefore use a
 different formatting key before producing the same modifier kind.
 
-The current complete build pipelines require neutral ActionSpeed and reject action-speed,
-party-linked movement, moving-while-using-skills, reservation, minion and other unrepresented
-effects. A non-neutral injected action-speed default is rejected because it also requires
-complete offence consumers. The raw movement primitive accepts an explicit action-speed
-input; that helper alone does not establish complete build admission.
+[Schema-11 action timing](action-timing.md) extends this stage with shared ActionSpeed for
+movement and both ordinary offence consumers. Party-linked movement, moving-while-using-skills,
+reservation, minion and other unrepresented producers remain unsupported. A raw movement
+primitive alone does not establish complete build admission.
 
 ## Shared calculation and ordering
 
@@ -76,9 +75,9 @@ even when present only in unselected supplied alternatives. Constraints, require
 subsets, locks, class/ascendancy choices and supported passive/skill choices remain
 configurable. The example maximizes DPS under resistance, defence and movement floors.
 
-Native profile IDs are `poe2-spark-body-movement-v6` and
-`poe2-mace-strike-body-movement-v10`, with profile media versions 6 and 8. The thirteen-metric
-snapshot appends movement after evasion. `local_armour` evidence schema 2 distinguishes
+Native profile IDs are `poe2-spark-action-timing-v7` and
+`poe2-mace-strike-action-timing-v11`, with profile media versions 7 and 9. The fourteen-metric
+snapshot retains movement after evasion and appends action speed. `local_armour` evidence schema 2 distinguishes
 source and generated global records; `movement` schema 1 records three movement ratios and
 three flags. Receiving evidence remains schema 1. Fresh realization validates all evidence
 against exact selected data and source; exports preserve original bytes and the data companion.

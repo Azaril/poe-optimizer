@@ -203,7 +203,10 @@ impl PreparedArmour {
                             .tags
                             .iter()
                             .map(|tag| match tag {
-                                poe_optimizer_data::game_data::ActorModifierTag::Global => 0,
+                                poe_optimizer_data::game_data::ActorModifierTag::Global
+                                | poe_optimizer_data::game_data::ActorModifierTag::GlobalEffect {
+                                    ..
+                                } => 0,
                                 poe_optimizer_data::game_data::ActorModifierTag::Condition {
                                     variables,
                                     ..

@@ -779,3 +779,139 @@ fn legacy_actor_problem_rejects_new_authored_movement_scope() {
         String::from_utf8_lossy(&output.stderr)
     );
 }
+
+#[test]
+fn action_timing_search_preserves_modes_workers_locks_and_configured_floors() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    let mut value: Value =
+        serde_json::from_str(include_str!("../examples/action-timing-search.json")).unwrap();
+    value["template"] = json!(dir.join("template.xml"));
+    value["constraints"]["required_item_instance_ids"] = json!(["body-17"]);
+    fs::write(
+        dir.join("template.xml"),
+        include_str!("fixtures/builds/mace-action-timing.xml"),
+    )
+    .unwrap();
+    fs::write(
+        dir.join("problem.json"),
+        serde_json::to_vec_pretty(&value).unwrap(),
+    )
+    .unwrap();
+    let mut reference = None;
+    for mode in ["typed", "document"] {
+        for jobs in [1, 4] {
+            let name = format!("action-{mode}-{jobs}.xml");
+            let report = success(
+                command(dir, mode, jobs, 60)
+                    .args(["--export", &name])
+                    .output()
+                    .unwrap(),
+            );
+            assert_eq!(report["schema_version"], 12);
+            assert_eq!(report["scope"], "action_timing_native_search_v1");
+            assert_ledger(&report, 60);
+            assert_eq!(
+                report["best_verified"]["candidate"]["candidate"]["equipment"]["Body Armour"],
+                "body-17"
+            );
+            assert_eq!(
+                report["best_verified"]["assessment"]["status"],
+                "constraints_satisfied"
+            );
+            let movement = report["best_verified"]["assessment"]["measurements"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|m| m["query"]["id"] == "movement_speed_pct")
+                .unwrap();
+            assert_eq!(movement["unit"], "percent");
+            assert!(movement["value"]["value"].as_f64().unwrap() >= 115.0);
+            let action = report["best_verified"]["assessment"]["measurements"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|m| m["query"]["id"] == "action_speed_pct")
+                .unwrap();
+            assert_eq!(action["unit"], "percent");
+            assert!((action["value"]["value"].as_f64().unwrap() - 130.0).abs() < 1e-9);
+            let (xml, companion) = assert_export(dir, &name, &report);
+            if let Some((expected, expected_xml, expected_companion)) = &reference {
+                same_search(expected, &report);
+                assert_eq!(&xml, expected_xml);
+                assert_eq!(&companion, expected_companion);
+            } else {
+                reference = Some((report, xml, companion));
+            }
+        }
+    }
+}
+
+#[test]
+fn old_graph_schemas_reject_action_speed_in_config_equipped_and_unselected_sources() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    for kind in ["equipped", "config", "unselected"] {
+        for schema in [7, 8, 9, 10] {
+            let mut value = problem(dir);
+            value["schema_version"] = json!(schema);
+            let template=match kind {
+                "equipped"=>TEMPLATE.replacen("</Item>", "\n20% increased Action Speed\n</Item>", 1),
+                "config"=>TEMPLATE.replace("</ConfigSet>","<CustomModifierBlock title=\"Movement\" enabled=\"true\">20% increased Action Speed</CustomModifierBlock></ConfigSet>"),
+                _=>TEMPLATE.to_owned(),
+            };
+            if kind == "unselected" {
+                value["equipment"].as_array_mut().unwrap().push(json!({"instance_id":"unselected-movement","pob_item_id":71,"item_text":"Rarity: RARE\nUnselected Movement\nWooden Club\nItem Level: 60\nQuality: 0\nImplicits: 0\n20% increased Action Speed"}));
+            }
+            write_problem(dir, &value);
+            fs::write(dir.join("template.xml"), template).unwrap();
+            let name = format!("denied-{kind}-{schema}.xml");
+            let output = command(dir, "typed", 1, 3)
+                .args(["--export", &name])
+                .output()
+                .unwrap();
+            assert!(!output.status.success(), "{kind}/{schema}");
+            assert!(
+                String::from_utf8_lossy(&output.stderr).contains("require graph problem schema 11"),
+                "{kind}/{schema}: {}",
+                String::from_utf8_lossy(&output.stderr)
+            );
+            assert!(!dir.join(&name).exists());
+            assert!(!dir.join(format!("{name}.data.json")).exists());
+        }
+    }
+}
+
+#[test]
+fn legacy_actor_problem_rejects_action_speed_scope() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    let mut value: Value =
+        serde_json::from_str(include_str!("../examples/mace-actor-search.json")).unwrap();
+    value["template"] = json!(dir.join("template.xml"));
+    let template=include_str!("fixtures/builds/mace-actor-resources.xml").replace("</ConfigSet>","<CustomModifierBlock title=\"Defence\" enabled=\"true\">20% increased Action Speed</CustomModifierBlock></ConfigSet>");
+    fs::write(dir.join("template.xml"), template).unwrap();
+    fs::write(
+        dir.join("problem.json"),
+        serde_json::to_vec_pretty(&value).unwrap(),
+    )
+    .unwrap();
+    let output = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
+        .current_dir(dir)
+        .args([
+            "search-experimental",
+            "--backend",
+            "native",
+            "--problem",
+            "problem.json",
+        ])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(
+        String::from_utf8_lossy(&output.stderr)
+            .contains("action-speed modifiers require search-build with problem schema 11"),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+}

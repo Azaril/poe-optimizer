@@ -88,7 +88,7 @@ enum Action {
         #[arg(long)]
         error_file: PathBuf,
     },
-    /// Search the four calibrated weapon/support alternatives (developer harness).
+    /// Compare a supplied catalog of complete builds (developer diagnostic harness).
     #[cfg(feature = "pob")]
     SearchCalibration(catalog_search::Args),
     /// List the typed measurement catalog without starting a calculation.

@@ -10,7 +10,7 @@ use crate::data::CompiledGameData;
 use crate::defence::round_to_integer;
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-spark-body-movement-v6";
+pub const PROFILE_ID: &str = "poe2-spark-action-timing-v7";
 pub const TREE_VERSION: &str = "0_5";
 pub const CLASS_ID: u32 = 7;
 pub const SKILL_ID: &str = "SparkPlayer";
@@ -131,6 +131,8 @@ pub struct SparkOutput {
     pub average_hit: f64,
     pub hit_dps: f64,
     pub cast_rate: f64,
+    pub action_speed_mod: f64,
+    pub timing: crate::timing::DirectActionTimingOutput,
     pub crit_chance: f64,
     pub crit_multiplier: f64,
     pub effective_enemy_lightning_resistance: f64,
@@ -200,6 +202,7 @@ pub fn evaluate_with_actor(
         .receiving_for(compiled.receiving_scenario(input.quests, input.resistance_penalty))
         .map_err(|error| SparkError(error.0))?;
     let movement = actor.movement();
+    let timing = action_timing(compiled, character, actor.action_speed().action_speed_mod)?;
     let actor = actor.values();
     let data = compiled.spark();
     let rules = &compiled.snapshot().package().character;
@@ -264,9 +267,7 @@ pub fn evaluate_with_actor(
     let average_hit =
         hit_average * (1.0 - crit_chance / 100.0) + crit_average * crit_chance / 100.0;
     let average_damage = average_hit * 100.0 / 100.0;
-    let speed_multiplier =
-        round_to_integer((1.0 + modifiers.skill_speed_increased / 100.0) * 100.0) / 100.0;
-    let cast_rate = 1.0 / (data.cast_time / speed_multiplier);
+    let cast_rate = timing.cast_rate;
     Ok(SparkOutput {
         strength: attributes.strength,
         dexterity: attributes.dexterity,
@@ -289,12 +290,40 @@ pub fn evaluate_with_actor(
         lightning_resistance: resistance.lightning,
         chaos_resistance: resistance.chaos,
         average_hit,
-        hit_dps: average_damage * cast_rate,
+        hit_dps: average_damage * timing.speed,
         cast_rate,
+        action_speed_mod: timing.action_speed_mod,
+        timing,
         crit_chance,
         crit_multiplier,
         effective_enemy_lightning_resistance: enemy_resistance,
     })
+}
+
+/// Timing-only component evaluation, shared with full evaluation and import
+/// realization. The caller supplies the prepared actor's resolved action speed.
+pub fn action_timing(
+    compiled: &CompiledGameData,
+    character: &CharacterInput,
+    action_speed_mod: f64,
+) -> Result<crate::timing::DirectActionTimingOutput, SparkError> {
+    character.validate().map_err(|error| SparkError(error.0))?;
+    if !action_speed_mod.is_finite() {
+        return Err(SparkError("Action speed input must be finite"));
+    }
+    let data = &compiled.snapshot().package().direct_action_timing;
+    Ok(crate::timing::calculate(
+        data,
+        crate::timing::DirectActionTimingInput {
+            base_time: compiled.spark().cast_time,
+            increased: character.modifiers.skill_speed_increased,
+            more: 1.0,
+            additional_attack_time: 0.0,
+            additional_cast_time: 0.0,
+            action_speed_mod,
+            repeats: f64::from(data.default_repeats),
+        },
+    ))
 }
 
 /// SHA-256 over full upstream source files, normalized from CRLF to LF.

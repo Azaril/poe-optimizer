@@ -218,8 +218,12 @@ fn parity_matrix(data: Arc<GameDataSnapshot>, xml: &str) -> (usize, usize) {
     assert_eq!(footprint.retained_xml_bytes, 0);
     assert_eq!(footprint.cached_candidate_results, 0);
     assert!(
-        // Includes 105 newly retained, bounded numeric actor components.
-        footprint.owned_component_bytes < 64 * 1024,
+        // Preserve the earlier component bound while accounting for the shared
+        // action query output retained once per actor, never per candidate.
+        footprint.owned_component_bytes
+            < 64 * 1024
+                + footprint.actor_components
+                    * std::mem::size_of::<poe_optimizer_engine::actor::ActionSpeedOutput>(),
         "bounded axis buffers: {footprint:?}"
     );
     let mut legal = 0;
@@ -495,7 +499,7 @@ fn mixed_typed_calculations_allocate_nothing_but_scheduler_adaptation_is_explici
     let snapshot = prepared.measure(&handles[0]).unwrap();
     let (measurements, allocations) =
         allocation_count(|| prepared.snapshot_measurements(&snapshot));
-    assert_eq!(measurements.len(), 13);
+    assert_eq!(measurements.len(), 14);
     assert!(
         allocations > 0,
         "owned scheduler contract remains an explicit cost"

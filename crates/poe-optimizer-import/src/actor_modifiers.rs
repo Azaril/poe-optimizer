@@ -62,6 +62,11 @@ impl ValidatedActorModifiers {
         &self.lines
     }
     /// Enabled authored records requiring the receiving-defence source capability.
+    pub fn uses_action_speed(&self) -> bool {
+        self.records
+            .iter()
+            .any(|record| record.stat.is_action_speed())
+    }
     pub fn uses_movement(&self) -> bool {
         self.records.iter().any(|record| record.stat.is_movement())
     }
@@ -365,6 +370,14 @@ fn source_capability(record: &ActorModifierRecord, armour: bool) -> Result<()> {
         ));
     }
     use ActorStat::*;
+    if matches!(
+        record.stat,
+        TemporalChainsActionSpeed | MaximumActionSpeedReduction
+    ) {
+        return Err(invalid(
+            "temporal-chain and maximum-reduction records require unsupported source producers",
+        ));
+    }
     if matches!(
         record.stat,
         ChaosInoculation

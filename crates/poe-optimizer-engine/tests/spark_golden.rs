@@ -47,7 +47,7 @@ fn closed_spark_pipeline_matches_immutable_independent_calibration_goldens() {
             ("ChaosResist", output.chaos_resistance),
             ("AverageHit", output.average_hit),
             ("TotalDPS", output.hit_dps),
-            ("Speed", output.cast_rate),
+            ("Speed", output.timing.speed),
             ("CritChance", output.crit_chance),
             ("CritMultiplier", output.crit_multiplier),
         ] {

@@ -169,7 +169,7 @@ fn compare_spark(output: spark::SparkOutput, expected: Table) {
         ("EnergyShield", output.energy_shield),
         ("TotalDPS", output.hit_dps),
         ("AverageHit", output.average_hit),
-        ("Speed", output.cast_rate),
+        ("Speed", output.timing.speed),
     ] {
         let value: f64 = expected.get(name).unwrap();
         assert!(

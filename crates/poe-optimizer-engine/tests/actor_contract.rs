@@ -1344,3 +1344,6 @@ fn changing_three_local_armour_slots_actor_composition_and_both_skills_allocate_
 
 #[path = "support/movement_contract.rs"]
 mod movement_contract;
+
+#[path = "support/action_speed_contract.rs"]
+mod action_speed_contract;

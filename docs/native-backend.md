@@ -67,8 +67,9 @@ source resolution cannot establish Lua object-reference observations. Player `ar
 `evasion` are final ratings exposed as definition-schema-1 `rating_points` metrics and in
 the native profile diagnostic. They do not represent mitigation or chance to evade.
 `movement_speed_pct` uses schema-1 `percent`, with 100 representing baseline effective
-movement speed. Complete native builds currently require neutral ActionSpeed; action-speed
-and party/skill movement effects remain rejected until their other consumers are implemented.
+movement speed. [Shared action timing](action-timing.md) adds `action_speed_pct`, with 100
+representing baseline player action speed, and resolves supported action-speed sources for
+both movement and offence. Party/linked-skill and other unrepresented producers still reject.
 
 `poe-optimizer-engine` owns numerical calculations and modifier semantics.
 `poe-optimizer-native` projects source XML into immutable inputs, calls the selected pipeline

@@ -84,6 +84,35 @@ PoB's modeled numbers are the initial parity target, with its supported-mechanic
 carried into our reports. Narrow native profiles are incremental validation steps, not
 completion of that replacement.
 
+## Data-driven builds and breadth of validation
+
+Every production build comes from caller-provided input. Item and skill instances, levels,
+quality, support groups, selected sets/actors/actions, passives, conditions and encounter
+assumptions belong to versioned data. Game definitions and numeric constants enter through
+the injected game-data seam; reusable Rust operations implement mechanics. No embedded
+example character, fixture identifier, source hash or known build combination may supply a
+hidden default or choose a special numerical branch. Test fixtures may be fixed, but the
+same production APIs must accept unrelated caller inputs within declared mechanic coverage.
+
+Validation spans complete builds and interacting mechanics, in addition to small numerical
+oracles. Maintain a caller-configurable corpus, preserve original imports and reference
+provenance, and reserve whole-build holdouts before extending mechanics. Include both
+mapping and bossing and a range of skills, weapons, support interactions, actors, ailments,
+triggers, reservations and defences. Report what remains excluded. A growing number of
+passing variations of one profile does not establish broad evaluator coverage.
+
+Keep import fidelity, realized candidate identity, legality, supported mechanics, metric
+availability and numerical agreement as independent outcomes. Reference calculations must
+be fresh and version-matched; cached statistics inside an import are not expected values.
+An original build must remain intact when creating a reduced diagnostic or a perturbation.
+Use coverage evidence to prioritize shared pipelines, and preserve exact failures rather
+than adjusting tolerances or selections to make a build appear supported.
+
+Ordinary and ascendancy allocations have distinct roots, ownership and point budgets.
+A valid ascendancy component does not need an ordinary-tree route. Missing source node
+references, disconnected candidate paths and supported exceptional allocation mechanisms
+require distinct diagnostics; graph layout alone cannot establish legality.
+
 ## Product workflows and gaps identified in review
 
 The [WoW prior-art and product review](prior-art-and-product-review.md) compares Raidbots,

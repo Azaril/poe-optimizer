@@ -51,7 +51,7 @@ fn profile(result: &EvaluationResult) -> Value {
 #[test]
 fn armour_remove_replace_replay_and_parallel_dispatch_match_fresh_document_evidence() {
     let backend = NativeBackend::new();
-    for (source, media) in [(MACE, "version=8"), (SPARK, "version=6")] {
+    for (source, media) in [(MACE, "version=9"), (SPARK, "version=7")] {
         let source = source.replace("\r\n", "\n").replace('\n', "\r\n");
         let domain = make_domain(&backend, &source);
         let catalog = domain.catalog();
@@ -82,7 +82,7 @@ fn armour_remove_replace_replay_and_parallel_dispatch_match_fresh_document_evide
                 .calculate(&request(&document.content), BUDGET)
                 .unwrap();
             let snapshot = prepared.measure(&handle).unwrap();
-            assert_eq!(snapshot.values().len(), 13);
+            assert_eq!(snapshot.values().len(), 14);
             assert_eq!(
                 serde_json::to_value(prepared.snapshot_measurements(&snapshot)).unwrap(),
                 serde_json::to_value(&result.measurements).unwrap()
@@ -311,7 +311,7 @@ fn native_armour_source_rejects_wrong_slots_sets_and_unmodeled_local_effects() {
         ),
         MACE.replace(
             "35% increased Armour and Evasion",
-            "20% increased Action Speed",
+            "20% increased Cooldown Recovery Rate",
         ),
         MACE.replace("35% increased Armour and Evasion", "+15 to Runic Ward"),
     ] {

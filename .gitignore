@@ -2,3 +2,5 @@
 /runs/
 /local/
 *.log
+__pycache__/
+*.py[cod]

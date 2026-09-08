@@ -62,11 +62,18 @@ Energy Shield and resistance BASE/INC from configuration, gear and passives. Gra
 288 injected fixed bases and player armour/evasion rating metrics; graph problem 9/report
 10 searches this equipment scope. [Body Armour and movement](docs/body-armour-movement.md)
 adds 114 body bases, source movement penalties and `player.movement_speed_pct` (100 is
-baseline); graph problem 10/report 11 searches that scope. On the legacy command, `--backend pob`
+baseline); graph problem 10/report 11 searches that scope. [Shared action timing](docs/action-timing.md)
+adds actor action speed, the ordinary server-tick cap and `player.action_speed_pct`; graph
+problem 11/report 12 searches authored action-speed sources. [Breadth validation](docs/breadth-validation.md)
+uses the five newly supplied full builds to guide general native admission and further shared
+pipelines. Current native support remains bounded to Spark/Mace. On the legacy command, `--backend pob`
 selects the optional reference backend. Native search uses [typed candidate calculation](docs/native-candidate-evaluation.md)
 by default, with complete document evaluation available through `--native-evaluation document`.
-Search baselines, when a legal initial seed exists, and finalist checks recalculate complete documents. `search-calibration` retains the four original
-fixtures. `extract-tree` exports pinned topology and source/override metadata for broader
+Search baselines, when a legal initial seed exists, and finalist checks recalculate complete documents.
+The developer `search-calibration` command compares complete builds from a required
+[caller-supplied catalog](docs/pob-candidates.md); it has no embedded build corpus.
+Its fresh finalist checks establish numerical consistency while generic realization and
+game legality remain unverified. `extract-tree` exports pinned topology and source/override metadata for broader
 mutation work, with live passive coverage and authenticated bounded graph projections. A portable data
 crate supplies native class/root/entrance records and numeric game configuration without loading PoB.
 Native evaluation, benchmarking and controlled search accept `--data <package.json>`; immutable data is shared
@@ -128,13 +135,17 @@ builds a pinned LuaJIT runtime and the native UTF-8 module when the PoB feature 
 executable or upstream Windows DLL is required. The native C compiler is needed in
 addition to the Rust linker. CI checks the full workspace on Windows and Linux.
 
-Import and evaluate the supplied fixture:
+Import and evaluate the preserved original single-build fixture:
 
 ```powershell
-cargo run --locked -- import example.import.txt
+cargo run --locked -- import tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt
 New-Item -ItemType Directory -Force runs | Out-Null
-cargo run --locked -- evaluate example.import.txt --timeout-seconds 30 --output runs/example.json --export runs/example.xml
+cargo run --locked -- evaluate tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --timeout-seconds 30 --output runs/example.json --export runs/example.xml
 ```
+
+The current `example.import.txt` contains five builds, one per line; use the
+[corpus intake runner](docs/breadth-validation.md#reproduce-corpus-intake) for that file.
+Single-build commands accept one build document or share string.
 
 Output files must be new paths; existing files are never overwritten. Without `--output`,
 evaluation JSON goes to stdout. `--pob` selects a source directory matching the committed
@@ -183,7 +194,7 @@ and average-damage modes do not yield an invented sustainable DPS objective.
 Configure an objective or reassess a saved evaluation:
 
 ```powershell
-cargo run --locked -- evaluate example.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
+cargo run --locked -- evaluate tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
 cargo run --locked -- assess runs/assessed.json --objective examples/evaluation-objective.json
 ```
 
@@ -191,6 +202,22 @@ The example maximizes EHP with three resistance constraints; the supplied build 
 lightning threshold by four percentage points. Every objective and threshold is configurable.
 See [objective assessment](docs/objective-assessment.md) for strict comparisons, units,
 unavailability and saved-result behavior. Passing these constraints is not a legality verdict.
+
+Compare complete caller-supplied builds with the optional PoB reference backend:
+
+```powershell
+New-Item -ItemType Directory -Force runs | Out-Null
+cargo run --locked -- search-calibration --catalog examples/calibration-catalog.json --objective examples/calibration-objective.json --jobs 2 --max-evaluations 5 --output runs/calibration-search.json --export runs/calibration-best.xml
+```
+
+The required catalog uses schema 1 with `builds: [{ "id": "...", "path": "..." }]`;
+relative paths resolve from the catalog file and accept PoB XML or share codes. The example
+manifest explicitly selects the four original regression fixtures. Supply another manifest
+to compare other complete documents. Report schema 2 separates exact requested XML hashes
+from observed PoB summaries, selected actions/configuration, coverage and normalized-export
+hashes. Export saves the exact requested XML after fresh numeric verification; it does not
+certify that PoB preserved every requested mechanic or that the build is legal. See the
+[catalog contract and bounds](docs/pob-candidates.md#supplied-catalog-cli).
 
 The [calculation boundary decision](docs/calculation-boundary.md) explains replacing the PoB
 backend without changing callers. See the [native engine design](docs/native-engine.md) for
@@ -217,6 +244,7 @@ cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data 
 - `docs/prior-art-and-product-review.md`: cited references, prioritized gaps, and decision status.
 - `examples/evaluation-objective.json`: runnable scalar objective and hard constraints.
 - `examples/evaluation-options.json`: runnable diagnostic selection and encounter overrides.
+- `examples/calibration-catalog.json`: explicit four-fixture input manifest for the developer comparison command.
 - `examples/objective.toml`: illustrative future configuration, not a supported CLI input.
 - `vendor/path-of-building-poe2/`: unmodified Git submodule.
 - `local/`, `runs/`: ignored locations for private build inputs and generated results.

@@ -186,7 +186,7 @@ mod tests {
     ));
     const FIXTURE_SHARE: &[u8] = include_bytes!(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../../example.import.txt"
+        "/../../tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt"
     ));
     const FIXTURE_HASH: &str = "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194";
 

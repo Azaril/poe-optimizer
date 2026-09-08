@@ -1,6 +1,6 @@
 //! Shared source movement arithmetic over already resolved numeric queries.
 //! Action speed is explicit in this raw helper. Complete actor preparation uses
-//! the selected data's proven default and admits no action-speed modifiers yet.
+//! the selected data and the shared prepared action-speed stage.
 use crate::actor::ActorError;
 use poe_optimizer_data::game_data::MovementData;
 

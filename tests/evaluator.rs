@@ -168,7 +168,7 @@ fn import_preserves_bytes_and_output_aliases_fail_before_evaluation() {
     let imported = scratch.path().join("imported.xml");
     let output = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
         .arg("import")
-        .arg(root().join("example.import.txt"))
+        .arg(root().join("tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt"))
         .arg("--output")
         .arg(&imported)
         .output()

@@ -23,7 +23,7 @@ fn attachment(result: &EvaluationResult, media: &str) -> Result<Value> {
 impl ControlledBuildCatalog {
     /// The expected identity must come from the live selected backend. This checks
     /// its fresh document result against this private admitted selection without
-    /// performing an extra calculation or trusting caller-authored attributes.
+    /// performing another full build evaluation or trusting caller-authored attributes.
     pub fn validate_native_realization(
         &self,
         handle: &AdmittedBuildSelection,
@@ -127,8 +127,8 @@ impl ControlledBuildCatalog {
         }
         self.check_skill_evidence(handle, result)?;
         let media = match source.profile() {
-            TemplateProfile::Spark => "application/vnd.poe-optimizer.native-profile+json;version=6",
-            TemplateProfile::Mace => "application/vnd.poe-optimizer.native-profile+json;version=8",
+            TemplateProfile::Spark => "application/vnd.poe-optimizer.native-profile+json;version=7",
+            TemplateProfile::Mace => "application/vnd.poe-optimizer.native-profile+json;version=9",
         };
         let evidence = attachment(result, media)?;
         let expected_profile = match source.profile() {
@@ -179,6 +179,37 @@ impl ControlledBuildCatalog {
             != crate::actor_assembly::movement_evidence(handle.actor().movement())
         {
             return Err(mismatch("fresh movement differs from admitted preparation"));
+        }
+        let action_speed = handle.actor().action_speed();
+        if evidence["action_speed"] != crate::actor_assembly::action_speed_evidence(action_speed) {
+            return Err(mismatch(
+                "fresh action speed differs from admitted preparation",
+            ));
+        }
+        let character = handle.character().map_err(mismatch)?;
+        let timing = match source.profile() {
+            TemplateProfile::Spark => poe_optimizer_engine::spark::action_timing(
+                &self.compiled,
+                character,
+                action_speed.action_speed_mod,
+            )
+            .map_err(|error| mismatch(&error.to_string()))?,
+            TemplateProfile::Mace => crate::actor_assembly::mace_action_timing(
+                &self.compiled,
+                character,
+                self.items[&handle.selection().candidate.equipment["Weapon 1"]]
+                    .item
+                    .weapon()
+                    .expect("admitted main hand"),
+                handle.support_keys(),
+                action_speed.action_speed_mod,
+            )
+            .map_err(|error| mismatch(&error))?,
+        };
+        if evidence["action_timing"] != crate::actor_assembly::action_timing_evidence(timing) {
+            return Err(mismatch(
+                "fresh action timing differs from selected source components",
+            ));
         }
         if evidence["local_armour"] != self.local_armour_evidence(handle.selection()) {
             return Err(mismatch(

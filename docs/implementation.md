@@ -2,14 +2,17 @@
 
 Last updated: 2026-09-08
 
-Current checkpoint: **Body Armour and shared movement calculation**. Implementation, the full
-workspace/native-only test runs, source/full-build parity and isolated release measurements
-pass. Publication is recorded below. The CLI now searches four armour slots
-and admits configured movement objectives through problem 10/report 11. The native actor
-uses injected movement data and source-generated penalties, with no Lua runtime fallback.
-Code `56dcbc500ebdf3f2011663462c4c0a0a794aaabe` is published to main; exact-code
-Windows/Linux CI run `34228787060` is in progress.
-Next: **shared ActionSpeed and complete Spark/Mace action timing**.
+Current checkpoint: **shared ActionSpeed and ordinary direct-action timing**, implemented.
+Data/extraction, shared Rust calculations, import/native adapters, CLI integration and
+complete-build parity, complete target validation and isolated release measurements pass.
+Publication is being finalized below; broad native build support remains unfinished.
+
+The completed **Body Armour and shared movement** checkpoint is published as
+`56dcbc500ebdf3f2011663462c4c0a0a794aaabe`. Its local validation and release measurements
+pass; exact-code Windows/Linux CI run `34228787060` was last observed in progress.
+Next after action timing: **breadth of validation and data-driven build admission**, before
+another individual-skill port. The user's five new line-delimited imports are the initial
+corpus, not a replacement for the original independent reference fixtures.
 
 The preceding **local armour equipment and rating objectives** checkpoint is published as
 `e42760d233e37d75fcc04b07e6a30634fb7fdae9`. Its exact-code CI run `34221294167` passed
@@ -34,8 +37,9 @@ The full implementation-plan/native-parity goal remains active.
 
 Native support remains limited to the documented Spark/Mace pipelines. The supplied
 minion build, general equipment/skill/modifier pipelines and full PoB parity remain
-unfinished. Source revision, tree/full source snapshot, supplied originals and six
-independent goldens stay fixed. Actor/item grammar and effect values are injected data;
+unfinished. Source revision, tree/full source snapshot and six independent goldens stay fixed.
+The user intentionally replaced `example.import.txt` with five imports on 2026-09-08;
+preserve these bytes and retain the original decoded build/reference fixtures. Actor/item grammar and effect values are injected data;
 supplied synthetic rare rolls do not certify affix-tier or acquisition legality.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
@@ -71,19 +75,20 @@ the design documents.
    identities, selected-data requirements, exact materialized source and fresh counted
    finalist checks. Whole actor admission and repeated skill calculation have different
    costs; record both. No Cartesian actor/result cache or implicit Lua fallback is allowed.
-5. Check publication/hosted CI for the [Body Armour/movement checkpoint](body-armour-movement.md).
-   Schema 10 adds 114 Body Armour bases, source-generated movement penalties and a shared
-   movement consumer. Problem 10/report 11 exposes player `movement_speed_pct` (100 at
-   baseline). Earlier package schemas require regeneration. Preserve the distinct global
-   modifier and receiving-numeric slot orders, generated-record evidence, exact division
-   and parser case normalization without changing the case-sensitive formatting keys.
-   Continue with **shared ActionSpeed and complete Spark/Mace action timing**, following
-   the current source audit below. Replace the current neutral ActionSpeed coverage guard
-   only when movement and both offence consumers use the same resolved actor result.
-   Include source server-tick saturation; do not just multiply the existing DPS formula.
-   Per-level/hidden/implicit armour and Ward remain later complete-pipeline work.
-   Review broader source compatibility separately under D4.
-6. Replace closed profiles with reusable complete native pipelines as coverage permits:
+5. Check publication/hosted CI for the [action-timing checkpoint](action-timing.md).
+   Schema 11 resolves action speed once for movement and both ordinary offence consumers;
+   problem 11/report 12 exposes player `action_speed_pct`. Preserve source MAX absence,
+   positive-row queries, minimum/maximum order and server-tick saturation. Direct authored
+   integer percentages and raw numerical operations are distinct admission seams.
+   JSON float transport must remain bit-preserving for realization/data identities.
+   Per-level/hidden/implicit armour and Ward remain later complete-pipeline work;
+   broader source compatibility is prioritized under breadth validation.
+6. Execute [breadth validation](#breadth-of-validation-and-data-driven-build-admission--next-phase)
+   before another individual-skill port. Inventory all five caller-provided imports and their
+   active/saved selections, capture fresh reference results, and report import, realization,
+   mechanic coverage and numeric parity independently. Audit build-specific runtime coupling;
+   review a concrete general build-model proposal before changing major architecture.
+   Then replace closed profiles with reusable complete native pipelines as coverage permits:
    item/gem/passive modifiers, resolved actors/conditions and resources, offence/defence,
    conversions, ailments, triggers and minions. PerStat/StatThreshold programs now support
    ordered numeric dependencies; actor-target multipliers, recursive producers and special
@@ -116,6 +121,107 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Action speed, timing and breadth intake — validation checkpoint
+
+The shared schema-11 pipeline, root CLI problem 11/report 12, and corpus intake are implemented.
+All workspace targets, native-only CLI checks, isolated release measurements and fresh finalist parity pass.
+The [action-timing guide](action-timing.md) defines exact semantics and producer limits.
+The five original corpus inputs remain unmodified; they are not yet native-supported builds.
+
+| Area | Evidence currently available |
+| --- | --- |
+| Data/source | Package schema 11, 21 sections, 35 direct source files, 359 actor rules, 87 formatting keys and 402 armour bases. All 1,282 prior passive views and 3,476 exclusions remain unchanged. Source checks include 6,000 action-speed cases, 5,184 complete timing cases, 4,020 grammar inputs and 696 formatting observations. |
+| Engine | 116 engine tests pass, including original cold/warm MAX, positive-row sums and complete timing branches. A new loop prepares 8,400 changing actors and runs 16,800 skill calculations with zero allocations; the prior four-slot allocation loop now also varies action sources. |
+| Import/native | 118 import and 66 native tests pass in an unfiltered final all-target run; Clippy passes. Native metric 14 is player action speed. MAX absence, source records, exact realization and explicit nonfinite derived timing remain distinct. Evidence: `runs/action-adapter-final.log`. |
+| Complete builds/CLI | 20 fresh native/PoB pairs plus four fresh export/reimport pairs pass, including hand-specific CastRate/Speed/Time, shared movement, source integer grammar, zero speed, floors and the tick cap. All 18 graph CLI tests pass across typed/document and one/four workers. The benchmark metric count and one older local-weapon test's media-version selector were updated; all numerical assertions remain unchanged. Full workspace coverage is reconciled below. |
+| Breadth | Five exact imported builds and immutable share strings are indexed, independently audited and exercised by the reusable corpus runner. All five reference runs complete; native admission rejects the multiline quest attribute. Six runner tests pass. Ascendancy ownership/root connectivity and separate core point budgets are already implemented; the 14 source-missing targets are different diagnostics. |
+| Integrated checks | **689 passed**, nine source worker helpers exercised by parent tests, across **96** workspace target batches / all **81** metadata-declared integration targets. The native-only CLI passes **91** tests across 39 batches. Strict workspace/native-only Clippy, formatting, five-library WASM compilation and native-only dependency isolation pass. Python corpus tooling passes six tests. |
+
+The first combined run stopped at an obsolete version-8 evidence selector in the older
+local-weapon parity test. Correcting that selector to version 9 preserves every numerical
+comparison; the full target then passes. Already passing unchanged CLI targets, the resumed
+CLI targets and a complete independent library run are reconciled against Cargo metadata in
+`runs/action-speed-test-coverage.json`. This is complete target coverage without repeating
+unchanged passing tests. All remaining commands exited successfully.
+
+The action phase exposed a pre-existing JSON transport defect: default serde_json parsing can
+move finite values by one floating-point step, including ordinary movement evidence and
+large/small custom values. Typed evaluation succeeded while document realization rejected
+its own numerical evidence. The workspace now enables `float_roundtrip` consistently, with
+bit-preserving core/data/native regressions. Numerical comparisons were not relaxed. Source
+package and tree bytes are unchanged, and backend/extractor fingerprints include the central
+workspace feature policy. No dependency version or Cargo.lock change was needed.
+
+Final package **4,013,067 bytes**, SHA
+`b7943c63d0997d88779e48ec74e1a97ef13d67e293f3250b2640340b034cdee4`.
+Two fresh transport-final extractions agree on all five files. Extraction evidence SHA
+`d66c2708b6bccf766da5db3c89d7f39c670ccfe99cd3912360ea135133c42c67`, extractor SHA
+`52e675a0d87106f473302dffc74d32f2765cfa328824ce7f8facd884a2046f7a`.
+Evidence: `runs/action-speed-transport-final-preservation.json`.
+
+The caller-supplied calibration migration is complete: schema-1 catalogs load explicit
+source paths, while schema-2 reports distinguish requested identities, observed reference
+realization and unverified game legality. Six CLI tests pass, including caller-provided
+Spark documents outside the old four-build corpus. The assembly benchmark also requires
+an explicit caller problem. The legacy four-source library utility remains isolated
+regression coverage, with its restrictive realization guards intact.
+
+Next: publish this checkpoint, then continue B2/B3 breadth and general source/model work. A new individual-skill
+port is not the next priority. Start with the source-preserving configuration seam described
+in [breadth validation](breadth-validation.md#next-sourceconfiguration-seam), preserving
+strict unsupported-mechanic decisions. Then produce the complete coverage inventory and a
+concrete general build-model proposal for discussion before a major architecture change.
+
+### Isolated action-timing release evidence
+
+Windows x86-64, 32 available logical processors, three samples per mode/worker count,
+700 ms target (actual 661–752 ms), with no concurrent builds or tests. The caller-loaded
+[example](../examples/action-timing-search.json) generates 1,806 diagnostic selections:
+eight classes, 23 named ascendancies plus no ascendancy, 129 allocations, seven support
+loadouts and twenty equipment selections. This remains a bounded Mace working set; the five
+new corpus builds are excluded by native admission and contribute no throughput claim.
+
+| Workers | Fresh admission + calculation / second | Already-admitted calculation / second |
+| --- | ---: | ---: |
+| 1 | 38,868 | 4.81 million |
+| 2 | 50,984 | 6.67 million |
+| 4 | 97,889 | 13.28 million |
+| 32 | 386,199 | 89.34 million |
+
+All 24 samples and calibration checksums agree with preflight. Checksums consume all fourteen
+metric statuses/values, thirteen receiving outputs, six movement outputs and six action-speed
+fields, including optional MAX presence. Sixteen fresh document comparisons independently
+check actor evidence. Timing intermediates absent from metrics are covered by separate
+source/full-build parity, not by this benchmark checksum. Fresh admission includes allocations;
+the already-admitted mode excludes actor assembly, XML, scoring, proposals and owned reports.
+Neither is whole-optimizer throughput and neither uses a candidate-result cache.
+
+All 24 complete CLI runs (typed/document × 1/2/4/32 workers × three repeats) produce identical
+archives, statistics, verified selection, XML and data companions. Each consumes exactly
+1,000 total evaluations: one baseline plus 999 search attempts including one fresh finalist
+check, with zero evaluation failures. Typed median elapsed time is 352–377 ms; document
+medians fall from 3,261 ms at one worker to 704 ms at 32. Dataset preparation alone is about
+290 ms in this run, so the small typed search is dominated by setup. These budgets are
+reproducibility checks, not the planned 5–30 minute optimizer-quality benchmarks.
+
+The exported finalist matches fresh native and PoB results on all seven objective metrics:
+153.92085991099998 selected hit DPS, 130% action speed, 170.3% movement speed, 212 Armour,
+358 Evasion, 97 Energy Shield and 75% Fire Resistance. All constraints hold. XML SHA
+`2262dc512808fbd9bc71f75236979818bc018c93ed8dd29008c1b3d27d772601`.
+
+Reproduce the measurement harness with:
+
+```powershell
+cargo run --release --no-default-features --locked --example benchmark_assembly -- --problem examples/action-timing-search.json --sample-ms 700 --repeats 3 --jobs 1,2,4,32
+```
+
+Evidence: `runs/action-speed-benchmark-release.json`, `runs/action-speed-benchmark-summary.json`,
+`runs/action-speed-release-search/summary.json` and `runs/action-speed-finalist-parity.json`.
+Release CLI SHA `1f4b5fab1b271857c6730cad77f2924aebb63b22a847db21522dce1022a0806d`,
+benchmark SHA `b592482ecb060cd1154361f0f87224374b5e3a98223d1581bf3654b5b8ef1c36`.
+Source problem, implementation, template, dataset and extraction identities are retained in
+the reports. Original source/golden preservation and the 34-document local-link audit pass.
 
 ## Body Armour and shared movement - implementation checkpoint
 
@@ -242,12 +348,12 @@ is **in progress** on both platforms; no hosted success is claimed. Snapshots:
 `runs/movement-main-ci.json` and `runs/movement-main-ci-jobs.json`.
 The following publication-record commit changes documentation only.
 
-### Next complete pipeline: shared action speed and action timing
+### Completed scope: shared action speed and action timing
 
-The next slice should resolve ActionSpeed once after final attributes/conditions, then feed
-movement and both ordinary direct-action pipelines. This replaces the current movement-only
-neutral default guard only when all consumers are wired together. No product answer blocks
-this technical ordering; non-neutral action speed remains rejected in the present phase.
+This slice resolves ActionSpeed once after final attributes/conditions, then feeds
+movement and both ordinary direct-action pipelines. All three consumers now share the result; the prior movement-only neutral default guard
+has been replaced within the documented source-admission scope. The following source audit
+and acceptance requirements are implemented and retained for future parity work.
 
 1. Extract ActionSpeed INC, TemporalChainsActionSpeed INC, MinimumActionSpeed MAX,
    MaximumActionSpeedReduction MAX and UnaffectedBySlows FLAG plus the source grammar,
@@ -261,11 +367,12 @@ this technical ordering; non-neutral action speed remains rejected in the presen
 3. Prepare a fixed, owner-bound ActionSpeed result with source min/max order and no added
    rounding. A shared direct-action timing helper must round skill INC × MORE speed to two
    decimals before ActionSpeed, then apply server-tick saturation. In `CalcOffence.lua:2980–3017`,
-   CastRate captures the pre-ActionSpeed/pre-cap speed; selfCast multiplies by ActionSpeed
-   and Speed is capped at ServerTickRate × Repeats. Time (3049–3053) and DPS (4576) consume
-   capped Speed. Both ordinary Mace and Spark are selfCast (`CalcActiveSkill.lua:635–643`).
-   The current native kernels and partial source harnesses omit this high-rate cap; this
-   source audit identifies an existing boundary gap, not a reproduced runtime failure.
+   CastRate is assigned again after selfCast multiplies by ActionSpeed, before Speed is
+   capped at ServerTickRate × Repeats. The final CastRate therefore includes ActionSpeed
+   and excludes the cap. Time (3049–3053) is zero when Speed is zero, otherwise its
+   reciprocal; DPS (4576) consumes capped Speed. Both ordinary Mace and Spark are selfCast (`CalcActiveSkill.lua:635–643`).
+   This checkpoint closes the prior high-rate cap gap in native kernels and their
+   independent source harnesses.
 4. Validate original cold/warm MAX/Tabulate/actionSpeedMod and the complete offence branch;
    include mixed-sign rows and layers, absent/zero/negative MAX, floor/ceiling conflicts,
    conditional flags, neutral preservation, zero/tiny/high speeds, tick-boundary neighbors,
@@ -280,6 +387,92 @@ unscalable implicit lines; the runeforged form also needs Ward receiver/recovery
 semantics (`CalcDefence.lua:1348,1460,2054,3182,3625`). Retain rejection until the whole
 producer and all required consumers are represented. Ailment, party, trigger, channel,
 warcry, totem and reload producers likewise need complete dependency paths.
+
+## Breadth of validation and data-driven build admission — next phase
+
+Delivery order: immediately after the action-timing checkpoint and before another
+individual-skill port. This phase addresses the user's concern that a small Spark/Mace
+working set can hide structural assumptions. The end state remains the fully native,
+injectable-data evaluator with optional PoB parity; no product scope has been narrowed.
+
+Initial intake on 2026-09-08 preserved all **68,354 bytes** of the five-line input, SHA-256
+`3e763f109adb27d48f2cf63a8a95aaea649e5336dcaf37959931725c29f6c745`.
+All five share strings decode and run in the pinned PoB reference. They represent three
+class/ascendancy combinations, minions, spear and quarterstaff actions, triggered/supporting
+skills, weapon-set allocations, and multiple saved skill/item/tree sets. All five native
+runs stop at the XML literal attribute-whitespace compatibility guard. This first error is
+not a full mechanic coverage inventory, and a successful reference run is not a legality
+or Full DPS certification. Details and the checked-in intake index belong in
+[breadth validation](breadth-validation.md); local raw evidence is
+`runs/breadth-intake-20260908/manifest.json` and the per-build outputs beside it.
+
+B1 intake tooling and the initial reproducible corpus are implemented: `scripts/intake-build-corpus.py` takes explicit corpus,
+backend executable/data/options paths and budgets. Six regression tests pass. A real mixed
+backend run preserves all five entries, five reference successes and five native first-error
+rejections, with no changed inputs (`runs/breadth-validated-20260908/index.json`). An immutable
+copy beside the indexed XML decouples this corpus from future edits to the user's working
+file. The generic admission/coverage matrix and held-out corpus are still pending.
+The common native barrier is one multiline quest-reward string in active ConfigSet 1;
+source-preserving generic XML/config handling must precede new skill admission.
+
+- [x] **B1 — caller-configured corpus and provenance.** Load a versioned manifest or
+  line-delimited import file supplied by the caller. Preserve exact inputs, hashes,
+  source/data/backend versions, active and inactive sets, selected actor/action/part,
+  configuration and encounter assumptions. Decode each entry independently and report
+  per-entry errors without discarding the rest. Capture fresh PoB outputs independently
+  of cached XML statistics. Do not silently migrate tree versions or skill selections.
+- [ ] **B2 — breadth and coverage inventory.** Resolve every represented skill, support,
+  item modifier, passive allocation, actor, condition and dependency as supported,
+  unsupported or unresolved. Separate container decoding, XML semantic compatibility,
+  intended-versus-realized build identity, legality and numerical parity. Keep first-failure
+  admission results distinct from the complete static inventory. Summarize by mechanism and
+  whole-build family, including exclusion counts; do not count a shared archetype or an
+  alternate saved set as an independent held-out build. Investigate the existing three
+  unresolved entries in line 1 against the pinned reference before inventing replacements.
+- [ ] **B3 — general build-input seam review.** Audit hard-coded fixture inputs, closed
+  Spark/Mace admission, skill IDs, level restrictions and implicit player-only assumptions.
+  Normal evaluate/search already load caller files, but that alone does not establish
+  generic admission. The shipped developer `search-calibration` command now requires a
+  caller-supplied catalog; embedded production payloads have been removed. Its schema-2
+  report separates exact requested source from observed realization and unverified legality.
+  The assembly benchmark likewise requires an explicit caller problem path.
+  Propose a normalized build model for item/skill instances, grants, actor relationships,
+  conditions and shared calculation dependencies. The native engine receives data and typed
+  operations; fixture names, source hashes or character identities must never select
+  special calculation code. Discuss a significant architecture change before implementing it.
+- [ ] **B4 — independent differential corpus.** Keep small kernel fixtures for diagnosis
+  and add complete development and held-out builds across attacks, spells, minions, damage
+  over time, conversion, triggers, cooldown/repeat/channel behavior, defence/recovery,
+  reservations and supporting-skill interactions. Include bossing and mapping with explicit
+  assumptions. The five supplied builds seed the inventory; they do not cover all families.
+  Use whole-build holdouts chosen before porting a mechanic, source-derived tolerances and
+  intermediate actor/action evidence. Never regenerate expectations from the native result
+  or simplify an original build to make it pass. Store derived perturbations separately.
+- [ ] **B5 — identity, legality and interaction regressions.** Exercise import/export/reimport,
+  active-set changes, required 1..N skills/items, locks, quality/level changes and interacting
+  support/equipment/passive deltas. Check ordinary and ascendancy paths from their separate
+  roots with independent point budgets; starts are implicit and cannot spend the other's
+  points. Preserve weapon-set and exceptional-allocation provenance. Report source-missing
+  node targets separately from a valid disconnected ascendancy component and from candidate
+  paths disconnected by a mutation. Fresh realized output must match the intended candidate.
+- [ ] **B6 — coverage-led delivery and performance gates.** Rank shared dependencies by the
+  number and variety of corpus builds they unblock, rather than adding isolated skill
+  profiles. Track admitted/unsupported builds and available metrics alongside parity results.
+  Require full-build differential checks for each newly claimed capability; exclusions stay
+  visible and do not count as passing parity. Measure native preparation, direct parallel
+  evaluation and complete search separately on realistic admitted builds. Reference worker
+  costs are not native costs; no Lua subprocess or hidden PoB fallback belongs in the hot path.
+
+Exit from the initial breadth phase requires a reproducible corpus runner/index, an honest
+coverage matrix with independently captured reference results, and an agreed prioritized
+shared-pipeline plan. It does **not** require pretending all five builds already work natively.
+Full replacement completion later requires broad held-out full-build parity, including
+reported unavailable/nonfinite outcomes, exact realization, and useful parallel performance.
+
+The [tree investigation](tree-topology-investigation.md#ascendancy-components-and-separate-point-budgets)
+confirms all 23 catalogued ascendancies have roots. The 14 existing warnings concern IDs
+absent from source, not the ordinary/ascendancy point split. Their individual identities
+remain unproven; no synthetic reconnection is planned.
 
 ## Local armour equipment and rating objectives - implementation checkpoint
 

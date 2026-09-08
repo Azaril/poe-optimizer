@@ -15,6 +15,11 @@ pub enum ActorStat {
     Mana,
     Spirit,
     Accuracy,
+    ActionSpeed,
+    TemporalChainsActionSpeed,
+    MinimumActionSpeed,
+    MaximumActionSpeedReduction,
+    UnaffectedBySlows,
     MovementSpeed,
     IgnoreMovementPenalties,
     MovementSpeedCannotBeBelowBase,
@@ -69,6 +74,11 @@ impl ActorStat {
             Self::Mana => "Mana",
             Self::Spirit => "Spirit",
             Self::Accuracy => "Accuracy",
+            Self::ActionSpeed => "ActionSpeed",
+            Self::TemporalChainsActionSpeed => "TemporalChainsActionSpeed",
+            Self::MinimumActionSpeed => "MinimumActionSpeed",
+            Self::MaximumActionSpeedReduction => "MaximumActionSpeedReduction",
+            Self::UnaffectedBySlows => "UnaffectedBySlows",
             Self::MovementSpeed => "MovementSpeed",
             Self::IgnoreMovementPenalties => "Condition:IgnoreMovementPenalties",
             Self::MovementSpeedCannotBeBelowBase => "MovementSpeedCannotBeBelowBase",
@@ -159,6 +169,7 @@ pub enum ActorNumericOperation {
     Increased,
     More,
     Override,
+    Max,
 }
 impl ActorNumericOperation {
     pub const fn upstream_name(self) -> &'static str {
@@ -167,8 +178,14 @@ impl ActorNumericOperation {
             Self::Increased => "INC",
             Self::More => "MORE",
             Self::Override => "OVERRIDE",
+            Self::Max => "MAX",
         }
     }
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ActorGlobalEffectType {
+    Global,
 }
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(tag = "type", rename_all = "snake_case", deny_unknown_fields)]
@@ -176,6 +193,11 @@ pub enum ActorModifierTag {
     /// Exact source scope marker. It prevents local item consumption while
     /// remaining numerically neutral in global modifier queries.
     Global,
+    /// Exact original metadata on the global minimum-action-speed aliases.
+    GlobalEffect {
+        effect_type: ActorGlobalEffectType,
+        unscalable: bool,
+    },
     /// Ordered OR variables; separate tags combine in source order.
     Condition {
         variables: Vec<ActorCondition>,
@@ -191,6 +213,10 @@ impl<'de> Deserialize<'de> for ActorModifierTag {
         #[serde(tag = "type", rename_all = "snake_case", deny_unknown_fields)]
         enum WireTag {
             Global {},
+            GlobalEffect {
+                effect_type: ActorGlobalEffectType,
+                unscalable: bool,
+            },
             Condition {
                 variables: Vec<ActorCondition>,
                 negated: bool,
@@ -198,6 +224,13 @@ impl<'de> Deserialize<'de> for ActorModifierTag {
         }
         Ok(match WireTag::deserialize(deserializer)? {
             WireTag::Global {} => Self::Global,
+            WireTag::GlobalEffect {
+                effect_type,
+                unscalable,
+            } => Self::GlobalEffect {
+                effect_type,
+                unscalable,
+            },
             WireTag::Condition { variables, negated } => Self::Condition { variables, negated },
         })
     }
@@ -336,6 +369,16 @@ impl ActorStat {
                 | Self::ElementalResist
         )
     }
+    pub const fn is_action_speed(self) -> bool {
+        matches!(
+            self,
+            Self::ActionSpeed
+                | Self::TemporalChainsActionSpeed
+                | Self::MinimumActionSpeed
+                | Self::MaximumActionSpeedReduction
+                | Self::UnaffectedBySlows
+        )
+    }
     pub const fn is_movement(self) -> bool {
         matches!(
             self,
@@ -360,13 +403,18 @@ impl ActorStat {
                 | ChaosInoculation
                 | IgnoreMovementPenalties
                 | MovementSpeedCannotBeBelowBase
+                | UnaffectedBySlows
         )
     }
     pub const fn admits_operation(self, operation: ActorNumericOperation) -> bool {
         use ActorNumericOperation::*;
         use ActorStat::*;
         match self {
-            Str | Dex | Int | Life | Mana | Spirit | Accuracy | MovementSpeed => true,
+            Str | Dex | Int | Life | Mana | Spirit | Accuracy | MovementSpeed => {
+                matches!(operation, Base | Increased | More | Override)
+            }
+            ActionSpeed | TemporalChainsActionSpeed => matches!(operation, Increased),
+            MinimumActionSpeed | MaximumActionSpeedReduction => matches!(operation, Max),
             Armour
             | Evasion
             | EnergyShield
@@ -425,6 +473,20 @@ fn validate_scope(
     Ok(())
 }
 fn validate_target_tags(stat: ActorStat, tags: &[ActorModifierTag]) -> Result<(), GameDataError> {
+    for tag in tags {
+        if let ActorModifierTag::GlobalEffect {
+            effect_type,
+            unscalable,
+        } = tag
+            && (stat != ActorStat::MinimumActionSpeed
+                || *effect_type != ActorGlobalEffectType::Global
+                || !unscalable)
+        {
+            return Err(invalid(
+                "GlobalEffect requires MinimumActionSpeed, effect_type Global and unscalable true",
+            ));
+        }
+    }
     if stat!=ActorStat::MovementSpeed && tags.iter().any(|tag| matches!(tag,ActorModifierTag::Condition{variables,..} if variables.contains(&ActorCondition::IgnoreMovementPenalties))) {
         return Err(invalid("dynamic movement condition is admitted only on MovementSpeed numeric records, preventing cycles and actor-stage feedback"));
     }
@@ -602,6 +664,14 @@ pub(crate) fn validate_actor(data: &ActorData) -> Result<(), GameDataError> {
         }
         let mut used = BTreeSet::new();
         for mapping in &rule.modifiers {
+            if matches!(
+                mapping.stat,
+                ActorStat::TemporalChainsActionSpeed | ActorStat::MaximumActionSpeedReduction
+            ) {
+                return Err(invalid(
+                    "actor grammar cannot produce unimplemented curse or enemy action-speed sources",
+                ));
+            }
             validate_scope(mapping.flags, mapping.keyword_flags, &mapping.tags)?;
             validate_target_tags(mapping.stat, &mapping.tags)?;
             match mapping.effect {

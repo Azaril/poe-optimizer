@@ -229,7 +229,7 @@ pub fn evaluate_with_options(
             .eval()?,
     )?;
     if !coverage.tree_connections.is_empty() {
-        snapshot.warnings.push(format!("{} dangling upstream passive-tree connections; cross-class topology coverage is unverified", coverage.tree_connections.len()));
+        snapshot.warnings.push(format!("{} passive-tree links reference node IDs missing from the pinned data; these are separate from valid ascendancy-tree components. Complete game-tree coverage is unverified", coverage.tree_connections.len()));
     }
     let jit: Table = globals.get("jit")?;
     let mut hash = Sha256::new();
