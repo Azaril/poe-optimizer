@@ -57,7 +57,17 @@ cargo run --no-default-features --locked -- evaluate tests/fixtures/calibration/
 package, then writes it. It does not derive values from PoB, confer trusted origin,
 or overwrite existing output. The native executable can read the resulting package without
 recompilation. Do not edit the reviewed artifact or original numerical goldens to manufacture
-parity. An automated exporter/update workflow for all package sections remains unfinished.
+parity. The optional [pinned source exporter](game-data-extraction.md) produces all current
+sections from source; broader source-version updates remain unfinished.
+
+To regenerate the reviewed package from the pinned PoB checkout, use the development CLI:
+
+```powershell
+cargo run --locked -- extract-game-data --output runs/extracted-game-data.json
+```
+
+It also writes an `.extraction.json` evidence companion. Native evaluation can load the
+result through `--data`; extraction is separate from the native runtime.
 
 `search-experimental` currently uses only the reviewed default dataset. Its public native
 catalog-binding API also rejects a different data digest, even if the supplied evaluator

@@ -2,20 +2,16 @@
 
 Last updated: 2026-09-07
 
-Current phase: native data injection and external numeric configuration are implemented
-for the admitted Spark/Mace profiles. The host loads a versioned package, the engine compiles
-immutable data, and native backends/prepared builds retain its identity. CLI evaluation and
-benchmarking accept external packages; controlled search remains on the reviewed default.
-The strict structural-tree/source guard and existing mechanic coverage are unchanged.
-All 303 workspace tests and 24 native-only CLI tests pass, with formatting, lint, dependency
-isolation and five portable WASM libraries. Release evaluation loads reviewed and edited data
-with identical source exports and the expected numerical change. Code is published as
-`1a44c13`; 4.5 million fixed-profile benchmark evaluations pass. Hosted Windows/Linux CI
-also passes. The next phase is deterministic source extraction for the package.
+Current phase: the bounded, pinned `extract-game-data` workflow (D4) is implemented.
+The CLI generates all ten current sections from source, publishing canonical bytes and an
+extraction-evidence companion. All 316 workspace tests, 24 native-only CLI tests, lint,
+formatting, portable WASM checks and release reproduction pass locally. The native package, source pin, schemas, supported mechanics
+and search scope are preserved.
 
-Published code: `1a44c13` on `main` (started at `e4c8995`); the current 303-test validation
-includes the 100-case fresh PoB matrix. This phase adds no new build mechanics. Full native coverage,
-the supplied minion build and the first usable all-six-dimension optimizer remain unfinished.
+Starting point: clean `fbf37c4` on `main`. Current source-extraction validation includes the
+unchanged independent goldens and 100-case fresh PoB matrix. Publication and hosted CI are
+the remaining checkpoint steps. Earlier throughput evidence remains tied to `1a44c13`. Full native coverage, the supplied minion build and the first usable
+all-six-dimension optimizer remain unfinished.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
 work, and the next session's starting point. [Design](design.md) defines the intended system
@@ -29,9 +25,10 @@ the design documents.
 ## Resume here
 
 1. Inspect `git status --short --branch` and the current validation/publication table below.
-   Read [native data packages](native-data.md) and the [data-boundary decision](game-data-boundary.md).
-   Runtime injection and numeric configuration are validated and published. Continue the
-   immediate D4 source-extraction slice below, then the remaining data/source and search gates.
+   Read [native data packages](native-data.md), the [source-extraction guide](game-data-extraction.md),
+   and the [data-boundary decision](game-data-boundary.md).
+   Runtime injection and numeric configuration are validated and published. Finish the current
+   D4 source-extraction validation/publication checkpoint, then the remaining data/source and search gates.
    Also read [native backend](native-backend.md),
    [native calculations](native-engine.md), [live passive coverage](passive-coverage.md)
    and [tree projection](tree-projection.md). The production target is a fully native
@@ -39,9 +36,10 @@ the design documents.
 2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve supplied
    original exports and independent Spark/Mace goldens. Maintain actual-source interpreted
    and warmed parity, full-build differential cases and strict unsupported-mechanic errors.
-3. Finish the remaining D4 data/source update work: deterministic source generation for all
-   package sections, an explicit reviewed tree/operation compatibility upgrade path, and
-   data-driven controlled materialization/requirements. Numeric custom packages already work;
+3. Finish the remaining D4 data/source update work: an explicit reviewed tree/operation
+   compatibility upgrade path and data-driven controlled materialization/requirements.
+   Deterministic source generation now covers all current package sections. Numeric custom
+   packages already work;
    structural tree/class attributes remain pinned, and custom-data search intentionally rejects.
    Bind candidate catalogs, source payloads and legality rules to the same injected dataset
    before enabling it in search. Preserve default source/golden parity and strict admission.
@@ -96,6 +94,25 @@ Assessment reports constraint evidence and primary availability; it does not cer
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
 
+## Pinned package source extraction — 2026-09-07
+
+Starting point: `fbf37c4`. This implements the immediate D4 slice described below: generate
+all ten current sections from verified source, retain separate conversion-policy/source
+identity, and publish through a bounded offline worker. The committed package and independent
+source/golden tests remain unchanged. Broader source compatibility and custom-data search
+remain separate work.
+
+| Checkpoint | State |
+| --- | --- |
+| Source extractor | Four extractor tests and the new verified-read test pass. All ten source-generated sections reproduce the exact reviewed package. Source selections live in explicit policy JSON; typed modifier conversion rejects unconsumed fields/flags/tags and ambiguous records. Source byte hashes, policy and extractor identity are validated in the parent. |
+| Worker and host | Five worker tests pass (plus one ignored child helper exercised by parent tests): deadlines/cleanup, ordinary bounded artifacts, canonical envelopes and collisions. CLI checks the deadline after host validation/serialization and before publication. Two-file output is explicitly nontransactional. |
+| Independent validation | Three new CLI tests pass: fresh-process whole-package/evidence reproduction, all ten sections, 24 actual source hashes, native loading against an independent Spark golden, output preservation and invalid source/deadline rejection. Four existing independent Lua source-oracle tests pass unchanged. |
+| Integrated checks | **316 workspace tests pass, zero failures**, with nine ignored child helpers exercised by parents. **24 native-only CLI tests pass**. The unchanged six goldens and 100-case fresh PoB matrix pass. Workspace/native-only Clippy, formatting, native-only dependency isolation and five portable WASM libraries pass. Logs: `runs/game-data-extraction-{workspace-tests,workspace-clippy,native-only-tests,native-only-clippy,worker-tests,cli-tests,source-parity,wasm,fmt}.log` and `runs/game-data-extraction-native-dependencies.txt`. |
+| Documentation and review | All 231 local file links and 19 heading links across 30 Markdown documents pass. Independent integration review found and resolved the host deadline gap; no remaining concrete source-authenticity or typed-conversion issue was found. |
+| Release reproduction | Two release CLI processes generate the same 140,853 package bytes and identical evidence. Native evaluation using the exported data matches the prior native backend identity and all nine measurements; Witch/entrance DPS is **9.342857142857143**, with the exact 2,831-byte source XML export. Artifacts and summary: `runs/game-data-extraction-release-check/`. Release executable SHA-256 `c0aa062251ef2492cbc5a6956a3575ee28c4d93889920b891d7bec3b2ab8ac57`; package SHA-256 `cfc9f4d0d6251e4d04e6ac1809dbcdd5459033cd61fbe6c4694b8346198d42a7`. |
+| Extraction identity | Extractor SHA-256 `5baa1cab64c6f2b92c2ed4941d84622dd43f2019533200c401a63b99f5a6a8bd`; policy SHA-256 `7d56fa4aceab97737fce29aaed2923a7b49a121fadcda8ac951df9321f77a3a3`; evidence-file SHA-256 `3dcc27f5667c99445c1ba7f835039bdb39070afc2767d1d25056841c7313d8e3`. All 24 direct source hashes are checked independently; tree/loader/spec evidence remains in `package.tree.source`. |
+| Publication | Local validation complete; main publication and hosted Windows/Linux CI follow. |
+
 ## Injectable native data packages — 2026-09-07
 
 Starting point: clean `e4c8995`. The implementation delivers D1–D3 for the existing admitted
@@ -146,13 +163,15 @@ commands are in [native data packages](native-data.md).
 | Throughput | All 4,500,000 evaluations in 18 runs completed, with identical finite-metric checksums, stable backend/data identity and zero failures or late results. Fixed-profile timing and scope are recorded below. |
 | Publication | Code `1a44c13` is pushed to main; [Windows/Linux CI run 34173951380](https://github.com/Azaril/poe-optimizer/actions/runs/34173951380) passes both jobs, including formatting, lint, full tests, native-only tests/dependencies and five portable WASM libraries. The following living-document update changes documentation only. |
 
-Remaining D4 work is source-generation/update orchestration and data-driven materialization,
-not an alternative evaluator runtime. Do not remove the structural pin or accept arbitrary
+The newer source-extraction checkpoint delivers pinned generation. Remaining D4 work is
+broader source compatibility/update orchestration and data-driven materialization. Do not remove the structural pin or accept arbitrary
 new operation versions merely to make a new package load. Browser execution and general
 native build coverage remain separate gates. New full-result diagnostics change benchmark
 work; previous throughput measurements remain tied to their recorded commits/profiles.
 
-### Immediate D4 implementation slice
+### Prior D4 source-extraction plan
+
+This planned slice is implemented in the newer checkpoint above. Its acceptance scope was:
 
 Add optional `extract-game-data` at the current pin, generating all ten package sections
 without using the bundled package as a template. Reuse source verification, authenticated
@@ -271,10 +290,10 @@ current behavior/validation is recorded in the newer checkpoint above.
   values; compatibility wrappers may not become a second hard-coded source of truth. A
   controlled synthetic package must change a supported result without Rust changes and must
   not inherit the reviewed dataset's identity or PoB parity status.
-- [ ] **D4 — host loading implemented for evaluation/benchmarking; source updates and custom-data search remain.** Compose CLI default/external byte loading through
+- [ ] **D4 — host loading and pinned package extraction implemented; broader source updates and custom-data search remain.** Compose CLI default/external byte loading through
   one path, with explicit selection failures and no fallback. Carry effective data identity into
-  run/checkpoint manifests, exports and search configuration. Build deterministic optional PoB
-  extraction for the expanded package and retain exact source/parity provenance. Embedded and
+  run/checkpoint manifests, exports and search configuration. Deterministic optional PoB
+  extraction now reproduces the current complete package with separate source/policy evidence. Embedded and
   external copies of identical data must yield identical semantic identity/results. New source
   releases using supported operations update data/compatibility evidence without recompiling
   a Rust allowlist. Keep arbitrary custom packages clearly distinct from reviewed parity data.
@@ -796,8 +815,8 @@ skills together within explicit finite catalogs. It must support 1..N required s
 
 - [ ] **M1.8 Configurable native data — current-profile injection implemented; update/search integration pending.**
       D1–D3 now provide packages, immutable injection, numeric data and typed effects. D4 supplies
-      external evaluation/benchmark loading; finish source-update generation and data-driven
-      catalog/requirement rules before custom-data search. D5 current-profile evidence is recorded above.
+      external evaluation/benchmark loading and pinned all-section source extraction. Finish
+      broader source compatibility and data-driven catalog/requirement rules before custom-data search. D5 current-profile evidence is recorded above.
 
 The planner JSON export is preserved as auxiliary input/provenance. Raw PoB XML and PoB
 share codes are runnable import paths; planner conversion follows only when its format

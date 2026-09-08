@@ -99,6 +99,36 @@ pub fn verify(root: &Path) -> Result<String, SourceError> {
     ))
 }
 
+/// Hash of the compiled normalized manifest, without filesystem access.
+pub fn manifest_sha256() -> String {
+    format!("{:x}", Sha256::digest(normalize(MANIFEST).as_bytes()))
+}
+/// Expected normalized hash for a path in the compiled, validated manifest.
+pub fn expected_file_sha256(path: &str) -> Result<String, SourceError> {
+    let manifest: Manifest =
+        serde_json::from_str(MANIFEST).map_err(|e| SourceError::Manifest(e.to_string()))?;
+    validate_manifest(&manifest)?;
+    manifest
+        .files
+        .into_iter()
+        .find(|file| file.path == path)
+        .map(|file| file.sha256)
+        .ok_or_else(|| SourceError::Manifest(format!("source path is not manifested: {path}")))
+}
+/// Read and authenticate the exact normalized bytes an offline extractor will use.
+/// This checks one file; callers separately call `verify` for the full inventory.
+pub fn read_verified_text(root: &Path, path: &str) -> Result<String, SourceError> {
+    let manifest: Manifest =
+        serde_json::from_str(MANIFEST).map_err(|e| SourceError::Manifest(e.to_string()))?;
+    validate_manifest(&manifest)?;
+    let file = manifest
+        .files
+        .iter()
+        .find(|file| file.path == path)
+        .ok_or_else(|| SourceError::Manifest(format!("source path is not manifested: {path}")))?;
+    let root = fs::canonicalize(root).map_err(|e| io_error(root, e))?;
+    verify_file(&root, file)
+}
 fn verify_manifest(root: &Path, manifest: &Manifest) -> Result<(), SourceError> {
     validate_manifest(manifest)?;
     let root = fs::canonicalize(root).map_err(|source| io_error(root, source))?;
@@ -168,7 +198,7 @@ fn validate_manifest(manifest: &Manifest) -> Result<(), SourceError> {
     Ok(())
 }
 
-fn verify_file(root: &Path, source: &SourceFile) -> Result<(), SourceError> {
+fn verify_file(root: &Path, source: &SourceFile) -> Result<String, SourceError> {
     let path = root.join(&source.path);
     let resolved = fs::canonicalize(&path).map_err(|error| io_error(&path, error))?;
     if !resolved.starts_with(root) {
@@ -224,7 +254,7 @@ fn verify_file(root: &Path, source: &SourceFile) -> Result<(), SourceError> {
             detail: format!("expected SHA-256 {}, found {actual}", source.sha256),
         });
     }
-    Ok(())
+    Ok(normalized.into_owned())
 }
 
 fn reject_additional_lua(root: &Path, manifest: &Manifest) -> Result<(), SourceError> {
@@ -411,5 +441,25 @@ mod tests {
             verify_manifest(directory.path(), &manifest),
             Err(SourceError::OutsideRoot(_))
         ));
+    }
+    #[test]
+    fn verified_read_returns_exact_normalized_bytes_and_rejects_later_edits() {
+        let (directory, manifest) = fixture();
+        verify_manifest(directory.path(), &manifest).unwrap();
+        let canonical_root = fs::canonicalize(directory.path()).unwrap();
+        let record = &manifest.files[1];
+        let path = directory.path().join(&record.path);
+        fs::write(&path, "return 42\r\n").unwrap();
+        assert_eq!(verify_file(&canonical_root, record).unwrap(), "return 42\n");
+        fs::write(&path, "return 43\n").unwrap();
+        assert!(matches!(
+            verify_file(&canonical_root, record),
+            Err(SourceError::Mismatch { .. })
+        ));
+        assert_eq!(
+            manifest_sha256(),
+            format!("{:x}", Sha256::digest(normalize(MANIFEST).as_bytes()))
+        );
+        assert!(expected_file_sha256("../outside.lua").is_err());
     }
 }

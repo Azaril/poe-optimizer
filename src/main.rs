@@ -1,6 +1,8 @@
 #[cfg(feature = "pob")]
 mod catalog_search;
 mod data_loading;
+#[cfg(feature = "pob")]
+mod game_data_extract;
 mod mutation_search;
 mod native_benchmark;
 
@@ -33,7 +35,7 @@ use std::io::BufRead;
     name = "poe-optimizer",
     version,
     about = "Experimental Path of Exile 2 build evaluator",
-    long_about = "Import build XML/share codes and select a native Rust or optional PoB reference backend. Native coverage is currently restricted and rejects unsupported builds. Controlled search supports both backends; tree extraction requires the PoB reference feature. Results remain diagnostic."
+    long_about = "Import build XML/share codes and select a native Rust or optional PoB reference backend. Native coverage is currently restricted and rejects unsupported builds. Controlled search supports both backends; source-data extraction requires the PoB reference feature. Results remain diagnostic."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -46,6 +48,19 @@ enum Action {
     BenchmarkNative(native_benchmark::Args),
     /// Search supplied normal-Mace weapon/support choices (experimental supported profile).
     SearchExperimental(mutation_search::Args),
+    /// Generate the current native game-data package and source evidence from pinned PoB.
+    #[cfg(feature = "pob")]
+    ExtractGameData(game_data_extract::Args),
+    #[command(name = "__game-data-worker", hide = true)]
+    #[cfg(feature = "pob")]
+    GameDataWorker {
+        #[arg(long)]
+        pob: PathBuf,
+        #[arg(long)]
+        artifact: PathBuf,
+        #[arg(long)]
+        error_file: PathBuf,
+    },
     /// Export the pinned passive-tree data from an isolated, bounded extraction worker.
     #[cfg(feature = "pob")]
     ExtractTree {
@@ -186,6 +201,16 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,
         Some(Action::SearchExperimental(args)) => mutation_search::run(args)?,
+        #[cfg(feature = "pob")]
+        Some(Action::ExtractGameData(args)) => game_data_extract::run(args)?,
+        #[cfg(feature = "pob")]
+        Some(Action::GameDataWorker {
+            pob,
+            artifact,
+            error_file,
+        }) => {
+            poe_optimizer_pob::game_data_worker::worker(&pob, &artifact, &error_file)?;
+        }
         #[cfg(feature = "pob")]
         Some(Action::ExtractTree {
             pob,

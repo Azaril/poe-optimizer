@@ -48,6 +48,8 @@ mutation work, with live passive coverage and authenticated bounded graph projec
 crate supplies native class/root/entrance records and numeric game configuration without loading PoB.
 Native evaluation and benchmarking accept `--data <package.json>`; immutable data is shared
 across workers, with dataset identity recorded in results and export companions.
+Optional [`extract-game-data`](docs/game-data-extraction.md) regenerates the current native
+package from pinned source with a separate extraction-evidence companion.
 `benchmark-native` measures prepared or full-document typed evaluation throughput.
 General joint mutation, full native mechanic coverage, HTML reports and browser
 bindings remain unimplemented. See [the runnable experimental workflow](docs/experimental-search.md)
