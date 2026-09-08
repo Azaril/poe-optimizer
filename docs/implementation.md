@@ -5,8 +5,8 @@ Last updated: 2026-09-08
 Current implementation checkpoint: **local weapon-modifier assembly**, implemented, locally
 validated and pushed as `da168e94410730b8ee97764d54feb126484d12d3`. Exact-code Windows/Linux
 CI run `34193804854` is in progress. The next phase is shared actor attributes and maximum
-resources. Schema-5
-source-derived rules, shared item admission, prepared weapon assembly and CLI problem
+resources. Schema-5 source-derived rules, shared item admission, prepared weapon assembly
+and CLI problem
 schema 5/report 6 are complete for the bounded scope below. The preceding typed-candidate
 code `f022d1925a3d21ef595f50eade3ac279793ec517` passes hosted Windows and Linux CI.
 The full implementation-plan/native-parity goal remains active.
@@ -1625,6 +1625,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `c91fab1` | Added a shared signed-resistance kernel, injected global cap, schema-3 owned passive data/extraction and four one-point ascendancy passives. Problem/report schemas 3/4 preserve older input scopes. All 374 workspace tests, 44 native-only CLI tests, lint, formatting, dependency isolation, five portable WASM libraries, source reproduction and native release checks pass. New 840-state search admits 576 alternatives; complete builds and effect removal match fresh PoB. Code is pushed to main; hosted run `34185229809` is in progress. Next: configurable zero-to-two support loadouts. |
 | 2026-09-08 | `4845efe` | Added injected schema-4 support loadouts and all seven bounded Mace combinations. Local validation and Windows/Linux CI pass. Next: typed native candidate preparation. |
 | 2026-09-08 | `f022d19` | Added private typed native candidate preparation, stack metrics and a fresh full-document verification hook. All 421 workspace and 56 native-only CLI tests, lint, portable checks and release comparisons pass. Identical bounded Mace search results take 164.5 ms versus 397.0 ms one-worker median; full native parity remains unfinished. Pushed to main; exact hosted run `34190091048` passes on Windows and Linux. Next: injected local weapon-modifier assembly. |
+| 2026-09-08 | `da168e9` | Added injected schema-5 local weapon rules, normal/rare source-preserving admission, prepared numeric weapon assembly and problem/report schemas 5/6. Integrated validation plus focused review reruns cover 460 workspace tests, with 61 native-only CLI tests passing and no unresolved failures. Source/build parity, release reproduction, lint and portable checks pass. Typed/document searches agree across 1/2/4/32 workers; one-worker median 236.7 ms versus 668.1 ms for this diagnostic domain. Pushed to main; exact hosted run `34193804854` is in progress. Next: shared actor attributes and maximum resources. |
 
 ### Hosting decision checkpoint
 
@@ -1648,5 +1649,3 @@ release; confirm the desktop framework and packaging before GUI work; choose acq
 data sources before trade/upgrade ingestion. Benchmark-specific metrics and usage profiles
 must be documented when those fixtures are made runnable, without turning their choices
 into mandatory goals for all users.
-
-| 2026-09-08 | `da168e9` | Added injected schema-5 local weapon rules, normal/rare source-preserving admission, prepared numeric weapon assembly and problem/report schemas 5/6. Integrated validation plus focused review reruns cover 460 workspace tests, with 61 native-only CLI tests passing and no unresolved failures. Source/build parity, release reproduction, lint and portable checks pass. Typed/document searches agree across 1/2/4/32 workers; one-worker median 236.7 ms versus 668.1 ms for this diagnostic domain. Pushed to main; exact hosted run `34193804854` is in progress. Next: shared actor attributes and maximum resources. |
