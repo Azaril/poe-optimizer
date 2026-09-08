@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-08
 
-Current implementation checkpoint: **normalized passive and equipment source assembly**, implemented and locally validated; publication is pending.
+Current implementation checkpoint: **normalized passive and equipment source assembly**, implemented, locally validated and published as `a2586a89a8160ae0b31d42d23ed921cb3b5823b2`. Exact-code Windows/Linux CI run `34208805533` is in progress; hosted success is not yet claimed.
 The preceding **shared actor attributes and maximum resources** checkpoint is implemented,
 locally validated and published as `4df9a4fcefe271011cd612fc1f8c7bc43d863c66`.
 Exact-code Windows/Linux CI run `34199225766` passes on both platforms. Schema-6 injected actor data, shared Rust
@@ -95,8 +95,8 @@ compare independent hosts/extractors using shared PoB calculations, not independ
 
 ## Normalized passive and equipment source assembly - completed local checkpoint
 
-Implementation and local regression/performance checks are complete for the bounded scope;
-publication is pending. Read [the operational guide](passive-equipment-assembly.md)
+Implementation and local regression/performance checks are complete for the bounded scope.
+Code is published; exact-code hosted validation is in progress. Read [the operational guide](passive-equipment-assembly.md)
 for schemas, APIs, command examples and limits.
 
 | Area | Current evidence |
@@ -110,7 +110,7 @@ for schemas, APIs, command examples and limits.
 | CLI/search | Native-only `search-build` uses problem **7** / report **8**, caller constraints and attribute locks, bounded graph proposals, repaired required items/passives/skills and class/ascendancy restarts. Compact scheduler identity keys release old prepared candidates. Five seed and six integration tests pass for typed/document × one/four workers, exact archives/ledger/XML/companions, three-attempt verification, repaired two-item locks, impossible LevelReq with zero full calculations and output collision/alias preservation and failed imported baseline isolation. Seed repair is a heuristic, not an infeasibility proof. |
 | Integrated validation | **556 unique workspace tests and 76 native-only CLI tests pass across integrated and focused runs**, with nine unique source-worker helpers ignored directly and exercised by parents. Initial broad runs found two stale expectations: the tree artifact's former 1 MiB test cap and a version-2 tree diagnostic assertion. Both were corrected, and their complete suites plus remaining targets pass. This records assembled coverage rather than claiming a single all-green workspace invocation. Full workspace/native-only Clippy, formatting, five WASM libraries, runtime dependency isolation and documentation links pass. Full import/native final run is **141/141**. Evidence: `runs/assembly-test-coverage.json` and named raw logs. |
 | Preservation | Six independent XML/reference pairs, supplied originals, full snapshot SHA `68445629df3af8bb934aad91f5e6b457f8fe7e478b67e306493ee9a017d171f7`, source inventory/pin and dependency versions are unchanged. All eleven original nonpassive numerical sections and twenty legacy passive effects are preserved. PoB submodule is clean. Evidence: `runs/assembly-preservation-final.json`. |
-| Publication | Not yet committed or pushed. Preceding actor CI passes on both platforms. |
+| Publication | Code **`a2586a89a8160ae0b31d42d23ed921cb3b5823b2`** is pushed to main. [Windows/Linux CI run 34208805533](https://github.com/Azaril/poe-optimizer/actions/runs/34208805533) is **in progress**; no hosted success is claimed yet. Snapshots: `runs/assembly-main-ci.json`, `runs/assembly-main-ci-jobs.json`. The following publication-record commit changes documentation only. |
 
 The lazy generalized PoB realization adapter remains unimplemented: the new search command
 is explicitly native-only, while full-document `evaluate --backend pob`, independent source
@@ -1892,6 +1892,8 @@ local build, ABI validation or PoB calculation; subsequent results are recorded 
 Windows native-module dependency and bootstrap requirements recorded in the
 [integration notes](pob-integration.md#embedding-bootstrap-checks). Pin the dependency/runtime selection
 when implementing M1. No Cargo dependencies or runtime code changed at this checkpoint.
+
+| 2026-09-08 | `a2586a8` | Added schema-7 injected passive/equipment data, complete ordinary structure with 1,142 admitted source views, component actor programs, lazy typed Spark/Mace assembly and native graph search with exact locks/attribute choices. 556 workspace tests and 76 native-only CLI tests pass across integrated/focused runs; local Clippy, WASM, preservation and release reproduction pass. All 24 full searches agree across modes/workers. Pushed to main; exact CI run `34208805533` is in progress. Next: verify hosted CI, then shared receiving defences and resistance modifiers. |
 
 ## Decisions still deferred
 
