@@ -3,7 +3,10 @@
 Last updated: 2026-09-08
 
 Current checkpoint: **shared native condition producers and corpus query parity**,
-implemented and locally validated; publication is pending. The native FLAG/GetCondition
+implemented, locally validated and published as
+`d09252bc22a2f0a8788274e52b3275ae1885f5d6` on main.
+[Exact-code CI run 34271992799](https://github.com/Azaril/poe-optimizer/actions/runs/34271992799)
+is in progress; no hosted pass is claimed. The native FLAG/GetCondition
 component consumes caller-provided records and runtime context and is integrated into the
 supported actor pipeline. It retains the existing compiled candidate path. The broader
 five-build corpus still requires general actor/action, item and calculation pipelines;
@@ -235,7 +238,7 @@ Resolved stat snapshots are explicit test inputs, not native stat-production cla
 | Native deployment | **69 native tests / 111 native-only CLI tests** pass. Strict native-only and workspace/all-target Clippy pass. Five portable libraries compile for WASM; normal native-only dependencies contain no PoB/Lua packages. `runs/native-conditions-deployment-checks.json`, `runs/native-conditions-workspace-clippy.log`. |
 | CI repair | The extraction functional test's three cases pass with the explicit 120-second test budget. Hosted run **34269405262** is still testing on both platforms. `runs/ci-extraction-functional-fix-evidence.json`. |
 | Fresh corpus | All **five source inspections and five PoB evaluations pass**; **110 measurements** and build/context/coverage evidence repeat bitwise. The same five native rejections remain: one-Skill limits for builds 1/3/4, one-SkillSet limits for 2/5. Inputs, XML, configuration source and item/skill inventories are unchanged. `runs/native-conditions-corpus-validation.json`. |
-| Preservation/publication | **26/26 protected file hashes match** and the pinned PoB submodule remains clean. Five changed Markdown files decode as UTF-8 and 175 local file links resolve. Code publication is pending. `runs/native-conditions-preservation.json`. |
+| Preservation/publication | **26/26 protected file hashes match** and the pinned PoB submodule remains clean. Five changed Markdown files decode as UTF-8 and 175 local file links resolve. Code `d09252bc22a2f0a8788274e52b3275ae1885f5d6` is pushed to main; [exact-code run 34271992799](https://github.com/Azaril/poe-optimizer/actions/runs/34271992799) is in progress. `runs/native-conditions-preservation.json`, `runs/native-conditions-publication-ci.json`. |
 
 Successful generic queries are not all allocation-free: ordinary MORE still uses a
 per-layer vector. Whole-build preparation, dependency scheduling and realistic parallel
@@ -244,7 +247,8 @@ parity, complete input resolution and independent whole-build holdouts remain un
 
 Consolidated local evidence: `runs/native-conditions-validation-summary.json`.
 
-Next: complete this checkpoint's publication checks, then B2 producer/dependency closure
+Next: inspect exact-code CI **34271992799** and the extraction-fix run **34269405262**,
+resolving any concrete failure. Continue B2 producer/dependency closure
 and B4 whole-build holdout planning. The new primitive does not authorize freezing live
 conditions from PoB or silently ignoring unsupported producers. Continue independent
 source loading/injected definitions; discuss the pending
