@@ -8,7 +8,7 @@ use poe_optimizer_engine::{
     },
     modifiers::{
         ModifierDatabase, ModifierInput, ModifierKind, ModifierLayerInput, ModifierStoreKind,
-        ModifierValue, NumericKind, QueryContext, SumKind, TaggedModifierInput,
+        ModifierValue, MorePrecision, NumericKind, QueryContext, SumKind, TaggedModifierInput,
     },
     multipliers::{ScalarSource, StatThreshold, StatThresholdValue, StatVariables},
     stats::{ResolvedStatEnvironment, StatValues},
@@ -234,7 +234,7 @@ pub fn query(input: &Value) -> Result<Observed, String> {
                 ConditionResult::Text(value) => Observed::Text(value.into()),
             },
         ),
-        "sum" => {
+        "sum" | "more" | "override" | "max" | "positive" => {
             let mut layers = Vec::new();
             let mut current = Some(input["root"].as_u64().unwrap() as usize - 1);
             while let Some(index) = current {
@@ -248,6 +248,9 @@ pub fn query(input: &Value) -> Result<Observed, String> {
                     let kind = match record["type"].as_str().unwrap() {
                         "BASE" => NumericKind::Base,
                         "INC" => NumericKind::Increased,
+                        "MORE" => NumericKind::More,
+                        "OVERRIDE" => NumericKind::Override,
+                        "MAX" => NumericKind::Max,
                         other => return Err(format!("unsupported numeric fixture {other}")),
                     };
                     let tags = record["tags"]
@@ -263,7 +266,7 @@ pub fn query(input: &Value) -> Result<Observed, String> {
                         modifier: ModifierInput {
                             name: record["name"].as_str().unwrap().into(),
                             kind: ModifierKind::Numeric(kind),
-                            value: ModifierValue::Number(record["value"].as_f64().unwrap()),
+                            value: numeric_value(record),
                             flags: record["flags"].as_u64().unwrap(),
                             keyword_flags: record["keywordFlags"].as_u64().unwrap(),
                             source: record["source"].as_str().map(str::to_owned),
@@ -273,7 +276,7 @@ pub fn query(input: &Value) -> Result<Observed, String> {
                     });
                 }
                 layers.push(ModifierLayerInput {
-                    kind: program.input().stores[index].kind,
+                    kind: store_kind(&stores[index]),
                     modifiers: layer,
                 });
                 current = stores[index]["parent"].as_u64().map(|v| v as usize - 1);
@@ -285,17 +288,76 @@ pub fn query(input: &Value) -> Result<Observed, String> {
                 .iter()
                 .map(|v| v.as_str().unwrap())
                 .collect();
-            let kind = match input["query"]["operation"].as_str().unwrap() {
-                "BASE" => SumKind::Base,
-                "INC" => SumKind::Increased,
-                other => panic!("unknown fixture sum {other}"),
+            let operation = input["query"]["kind"].as_str().unwrap();
+            let optional = |value: Option<f64>| value.map_or(Observed::Nil, Observed::Number);
+            let result = match operation {
+                "sum" | "positive" => {
+                    let kind = match input["query"]["operation"].as_str().unwrap() {
+                        "BASE" => SumKind::Base,
+                        "INC" => SumKind::Increased,
+                        other => panic!("unknown fixture sum {other}"),
+                    };
+                    if operation == "sum" {
+                        database.sum_with_conditions(kind, &context, &names, &bound)
+                    } else {
+                        database.sum_positive_with_conditions(kind, &context, names[0], &bound)
+                    }
+                    .map(Observed::Number)
+                }
+                "more" => {
+                    let precision = MorePrecision::try_new(
+                        input["precision"]
+                            .as_object()
+                            .into_iter()
+                            .flatten()
+                            .map(|(k, v)| (k.clone(), v.as_u64().unwrap() as u8))
+                            .collect(),
+                    )
+                    .unwrap();
+                    database
+                        .more_with_conditions(&context, &names, &precision, &bound)
+                        .map(Observed::Number)
+                }
+                "override" => database
+                    .override_with_conditions(&context, &names, &bound)
+                    .map(optional),
+                "max" => database
+                    .max_with_conditions(&context, &names, &bound)
+                    .map(optional),
+                _ => unreachable!(),
             };
-            Ok(Observed::Number(
-                database
-                    .sum_with_conditions(kind, &context, &names, &bound)
-                    .map_err(|e| e.to_string())?,
-            ))
+            result.map_err(|e| e.to_string())
         }
         other => panic!("unsupported paired test operation {other}"),
+    }
+}
+
+fn store_kind(store: &Value) -> ModifierStoreKind {
+    match store["store_type"].as_str().unwrap_or("ModDB") {
+        "ModDB" => ModifierStoreKind::ModDb,
+        "ModList" => ModifierStoreKind::ModList,
+        other => panic!("unknown test store {other}"),
+    }
+}
+fn numeric_value(record: &Value) -> ModifierValue {
+    if let Some(kind) = record["nonfinite_value"].as_str() {
+        return ModifierValue::Number(match kind {
+            "nan" => f64::NAN,
+            "positive_infinity" => f64::INFINITY,
+            "negative_infinity" => f64::NEG_INFINITY,
+            _ => panic!("unknown nonfinite fixture"),
+        });
+    }
+    if let Some(value) = record["value"].as_f64() {
+        ModifierValue::Number(value)
+    } else {
+        ModifierValue::Unsupported {
+            kind: if record["value"].is_boolean() {
+                "boolean"
+            } else {
+                "nil"
+            }
+            .into(),
+        }
     }
 }

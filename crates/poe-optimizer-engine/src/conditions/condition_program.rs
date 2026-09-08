@@ -3,14 +3,14 @@
 
 use super::{ConditionResolver, ConditionVariables, ModifierTag, WeaponConditions};
 use crate::{
-    modifiers::{ModifierError, QueryContext, validate_flags},
+    modifiers::{ModifierError, ModifierStoreKind, QueryContext, validate_flags},
     multipliers::{ScalarSource, StatThreshold, StatThresholdValue, stat_threshold_matches},
     stats::{ResolvedStatEnvironment, validate_stat},
 };
 use std::collections::BTreeMap;
 
 pub const MAX_CONDITION_DEPTH: usize = 64;
-const MAX_STORES: usize = 256;
+const MAX_STORES: usize = crate::modifiers::MAX_MODIFIER_LAYERS;
 const MAX_FLAGS: usize = 65_536;
 const MAX_TEXT_BYTES: usize = 4_096;
 
@@ -79,6 +79,9 @@ pub struct FlagModifierInput {
 }
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct ConditionStoreInput {
+    /// Query semantics belong to the producer's actual store, independently of
+    /// the queried child whose actor/condition context evaluates the record.
+    pub kind: ModifierStoreKind,
     pub parent: Option<usize>,
     pub actor: usize,
     pub flags: Vec<FlagModifierInput>,
@@ -102,7 +105,7 @@ pub struct ConditionProgramInput {
 #[derive(Debug, Clone, PartialEq)]
 pub struct ConditionProgram {
     input: ConditionProgramInput,
-    layer_counts: Vec<usize>,
+    layer_kinds: Vec<Vec<ModifierStoreKind>>,
     indices: Vec<StoreFlagIndex>,
     requires_stats: bool,
 }
@@ -287,20 +290,20 @@ impl ConditionProgram {
                 validate_text(role)?;
             }
         }
-        let mut layer_counts = Vec::with_capacity(input.stores.len());
+        let mut layer_kinds = Vec::with_capacity(input.stores.len());
         for index in 0..input.stores.len() {
             let mut seen = [false; MAX_STORES];
             let mut current = Some(index);
-            let mut layers = 0;
+            let mut kinds = Vec::new();
             while let Some(store) = current {
                 if seen[store] {
                     return Err(invalid("Condition store parent cycle"));
                 }
                 seen[store] = true;
-                layers += 1;
+                kinds.push(input.stores[store].kind);
                 current = input.stores[store].parent;
             }
-            layer_counts.push(layers);
+            layer_kinds.push(kinds);
         }
         let indices = input
             .stores
@@ -326,7 +329,7 @@ impl ConditionProgram {
             .collect();
         Ok(Self {
             input,
-            layer_counts,
+            layer_kinds,
             indices,
             requires_stats,
         })
@@ -380,7 +383,10 @@ impl<'a> BoundConditionQuery<'a> {
 }
 impl ConditionResolver for BoundConditionQuery<'_> {
     fn store_layer_count(&self) -> usize {
-        self.program.layer_counts[self.store]
+        self.program.layer_kinds[self.store].len()
+    }
+    fn store_kind(&self, layer: usize) -> Option<ModifierStoreKind> {
+        self.program.layer_kinds[self.store].get(layer).copied()
     }
     fn validate_query(&self, query: &QueryContext) -> Result<(), ModifierError> {
         if self.query.context == query {
@@ -519,9 +525,9 @@ impl<'a> State<'a> {
             if !crate::modifiers::matches_masks(flag.flags, flag.keyword_flags, query) {
                 continue;
             }
-            if !self.query.ignore_source_in_check_conditions
-                && let Some(required) = query.source.as_deref()
-            {
+            let bypass_source = self.program.input.stores[layer].kind == ModifierStoreKind::ModDb
+                && self.query.ignore_source_in_check_conditions;
+            if !bypass_source && let Some(required) = query.source.as_deref() {
                 let source = flag.source.as_deref().ok_or(ModifierError::MissingSource {
                     layer,
                     modifier: index,

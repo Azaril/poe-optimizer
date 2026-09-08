@@ -82,11 +82,12 @@ These helpers do not collect modifiers, apply item/passive rules, compute comple
 or evaluate a build. Their constants are passed explicitly rather than being a second
 independent game-data database.
 
-## Second translation boundary: numeric ModDB queries
+## Second translation boundary: numeric modifier-store queries
 
 `modifiers::ModifierDatabase` is an immutable numeric aggregation slice with explicit
-`QueryContext` and `MorePrecision` inputs. It models the pinned `ModDB` methods, not the
-entire modifier store and not `ModList` interchangeability. A `ModifierInput` preserves
+`QueryContext` and `MorePrecision` inputs. It models typed numeric queries over explicit
+ModDB and ModList layers; the two kinds retain their distinct source rules. It is not the
+entire modifier store. A `ModifierInput` preserves
 its source, modifier/value kinds and tag names until validation. Construction rejects the
 entire input if any layer contains an unsupported entry, even if a particular query
 would not select that entry. This keeps partial extraction from silently changing a build.
@@ -101,9 +102,23 @@ global records through these primitives. This does not establish a complete modi
 | `override_value` | First matching local value in name/insertion order, then parent layers. Zero is a present override; absence returns `None`. |
 | Modifier flags | All required bits must occur in the query. Exactly representable nonnegative 53-bit masks are supported except bit 31, whose upstream signed-low-word behavior requires a separate extension. Every currently declared pinned `ModFlag` fits the supported domain. |
 | Keyword flags | Any matching keyword by default, all keywords when the modifier carries `MatchAll`. Empty requirements match. The `MatchAll` control bit is removed from both masks before matching; masks are bounded to bits 0-30. |
-| Source provenance | Strings remain attached to modifiers. BASE/INC accept the exact source or its first nonempty colon-delimited component. MORE/OVERRIDE match only that component. A selected modifier with absent source and a source-filtered MORE/OVERRIDE query produces an explicit error, matching the upstream error boundary. |
-| Parent layers | Layer zero is the queried DB and following layers are its successive parents. Layer and insertion order are semantic inputs, retained for rounding, floating-point cancellation and override priority. |
+| Source provenance | Strings remain attached to modifiers. ModDB BASE/INC accept the exact source or its first nonempty colon-delimited component and skip absent sources. ModList BASE/INC require the component and error on a reached absent source. MORE/OVERRIDE/Tabulate-derived operations require the component in both kinds. |
+| Parent layers | Layer zero is the queried store and following layers are its successive parents, each explicitly ModDB or ModList. Layer and insertion order are semantic inputs, retained for rounding, floating-point cancellation, error traversal and override priority. |
 | Query names | Zero through eight names, preserving order and repeated names. More than eight is rejected. |
+
+`ModifierDatabase::try_new_layers` accepts typed `ModifierLayerInput` records with a
+`ModifierStoreKind` per layer. Existing constructors select ModDB for every layer. A bound
+condition resolver must agree with the numeric program's complete kind sequence. This
+prevents an action's list layers from silently inheriting actor-database filtering rules.
+Supported numeric queries share their existing typed records and predicate validation;
+unrepresented global-limit/stateful tags are still rejected in either kind. ModList and
+ModDB do not have identical behavior for malformed raw values, so numeric-input rejection
+must not be described as source equivalence for booleans, tables or missing values.
+
+The 256-layer limit is an explicit implementation resource bound shared with the condition
+program, not a game rule. SUM visits children before parents, storing local subtotals in
+fixed scratch space and then combining them from the deepest parent. This preserves both
+source error traversal and grouped floating-point arithmetic without query allocations.
 
 `MorePrecision::pinned()` contains the two MORE entries from pinned `Modules/Data.lua`:
 `SupportManaMultiplier` and `ReservationMultiplier`, both at four decimal places.
@@ -169,7 +184,7 @@ They do not own Lua objects, mutable caches, a thread pool or operating-system s
 | Disabled conditional values | BASE/INC contribute zero; MORE uses zero but still influences precision selection; OVERRIDE is absent. Active numeric zero remains a present override. Source errors occur before tag evaluation. |
 
 `ConditionEnvironment` remains an **explicit condition-table subset**. The separate
-[`ConditionProgram`](native-condition-producers.md) now implements ordered ModDB FLAG
+[`ConditionProgram`](native-condition-producers.md) now implements ordered ModDB/ModList FLAG
 producers and `GetCondition`, with raw scalar kinds, parent/actor contexts, source filters,
 ordinary stat thresholds and reached-cycle errors. Resolver-aware numeric queries accept
 either boundary; the existing actor preparation path uses the producer program. FLAG

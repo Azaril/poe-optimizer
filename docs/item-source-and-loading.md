@@ -68,6 +68,40 @@ provenance and the passive socket reference is required before applying ordinary
 checks. Separate ascendancy ownership and point budgets still apply. Loading or calculating
 an item does not establish character progression, point entitlement or acquisition legality.
 
+## Ordered loading and injected definitions
+
+Native loading must interpret the projected instruction stream as an ordered state machine.
+An Item constructor performs an empty ParseRaw before authored text is loaded. A subsequent
+ParseRaw resets some fields, including base, quality, line lists and requirements, while
+other state remains until explicitly overwritten. Repeated text cannot be modeled as a
+fresh independent item each time. Range instructions act on the state present at that
+point, with the original list order and rune-line exclusion; an out-of-range instruction
+must retain its source evidence even when the original loader makes no change.
+
+Modifier-parser results feed back into loading. Original
+[Item.lua](../vendor/path-of-building-poe2/src/Classes/Item.lua) `:1219–1231` attempts a
+combined two-line modifier when parsing leaves a remainder; success changes which line is
+consumed next. `:1303–1353` uses parse outcomes to assign line categories. The loader therefore
+needs explicit parser outcomes, consumed spans and unparsed remainders as inputs to its
+state transitions. A partial metadata report must identify that boundary when the native
+modifier parser or a required definition is unavailable.
+
+Definitions must be injected independently of caller item instances: the complete base
+catalog and aliases, affix/unique metadata, rune and bonded effects, jewel radii, header
+formatting and named compatibility policies. Normal/magic base-name fallback searches the
+complete catalog. Native mechanic capability does not determine identity lookup candidates.
+Ambiguous or unresolved names require retained evidence, rather than a fixture-selected
+fallback. Preserve hidden entries and unknown fields without assuming their effects work.
+Requirements combine rune, unique, imported and base data in the source's order
+(`Item.lua:1699–1726`). Catalog recognition alone does not resolve that pipeline.
+
+Validation must include repeated ParseRaw resets and retained state, failed and successful
+two-line parsing, partial remainders, range indices at category boundaries, rune exclusion,
+variant/version/group selection, catalysts, advanced copied items and conflicting header
+or requirement inputs. Corpus examples and independent synthetic source cases complement
+one another; absence from the current corpus must not become an unsupported behavior's
+default value.
+
 ## Caller-facing evidence
 
 `inspect-build INPUT` is the caller-driven entry point. Report schema 2 adds an independent

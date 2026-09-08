@@ -2,16 +2,19 @@
 
 Last updated: 2026-09-08
 
-Current checkpoint: **shared native condition producers and corpus query parity**,
-implemented, locally validated and published as
-`d09252bc22a2f0a8788274e52b3275ae1885f5d6` on main.
+Current checkpoint: **mixed ModList/ModDB query semantics and ordered item-loading audit**,
+implemented and locally validated; publication is pending. Native numeric and condition
+programs now preserve every store kind in a parent chain and enforce matching query
+contexts. Shared SUM retains child-first error traversal, grouped arithmetic and bounded
+allocation-free scratch. The full native replacement remains unfinished; this change does
+not admit additional complete builds. See the validation checkpoint below.
+
+The preceding condition checkpoint is published as
+`d09252bc22a2f0a8788274e52b3275ae1885f5d6`, with resume update `ba8343c`.
 [Exact-code CI run 34271992799](https://github.com/Azaril/poe-optimizer/actions/runs/34271992799)
-is in progress; no hosted pass is claimed. The native FLAG/GetCondition
-component consumes caller-provided records and runtime context and is integrated into the
-supported actor pipeline. It retains the existing compiled candidate path. The broader
-five-build corpus still requires general actor/action, item and calculation pipelines;
-full native replacement remains unfinished. See the
-[condition contract](native-condition-producers.md) and checkpoint table below.
+is still in progress. No hosted pass is claimed. The broader five-build corpus still needs
+general actor/action, item and calculation pipelines; the shared query implementation is
+one component of that work.
 
 The preceding item-source checkpoint is published as
 `5b2ac700c01412b1778194b4b94ed291a6282c36` with resume update `ec17180`.
@@ -201,6 +204,67 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Mixed modifier stores - validation checkpoint
+
+The preceding goal turn was progress: shared condition code `d09252b` and resume update
+`ba8343c` were published. This turn started from a clean worktree and reverified all 26
+protected inputs/data/goldens. The prior exact-code and extraction-fix hosted runs remain
+live and testing; this checkpoint does not claim their completion.
+
+Actual action layers use ModList above actor ModDB stores. Native numeric and condition
+programs now preserve every layer's explicit kind, with complete kind-chain compatibility
+checks. ModList SUM uses prefix-only source matching and errors on reached absent sources;
+ModDB retains exact-or-prefix matching and skips absent sources. The FLAG source bypass
+belongs to each producing ModDB layer and does not bypass a ModList parent or child.
+Predicates retain the originally queried actor/store context across parent layers.
+
+All constructors share an explicit **256-layer implementation bound**. SUM evaluates local
+subtotals child-first, then combines them in parent grouping using fixed scratch space.
+This preserves both error traversal and floating-point arithmetic without successful-query
+allocations. Compiled condition kind chains make validation linear in layer count. Legacy
+actor inputs remain ModDB and retain their compiled fast path. Stateful/global-limit tags,
+opaque modifier values and complete actor/action preparation remain unimplemented; the
+B3 general-model proposal is unchanged. No additional complete build is admitted.
+
+| Gate | Current evidence |
+| --- | --- |
+| Mixed contracts | **7 numeric / 4 condition tests pass**, covering constructor bounds, source rules, exact kind-chain binding, child-first evaluation, actual parent references and allocation-free SUM. `runs/mixed-store-contract-final.log`, `runs/mixed-store-root-final-contracts.log`. |
+| Original-source query parity | **9 tests / 8,762 paired observations pass**, plus **two separate direct error-order checks**. Both original store kinds execute interpreted and in proven completed LuaJIT traces. Negative cells require the exact source failure and native MissingSource location. `runs/mixed-store-oracle-final-tests.log`. |
+| Captured breadth | The new suite replays **15 represented condition closures and two isolated numeric rows** from the unchanged captured corpus. Four unresolved closures remain explicit. Frozen post-MAIN context is not complete native build preparation. Original source-only Tabulate/malformed-value controls are identified separately from native parity. |
+| Existing query/actor regression | **65 modifier parity tests**, **13 condition-source tests**, **6 condition contracts** and **21 actor contracts** pass. The final condition/actor runs include the compiled kind-chain optimization and preserve varied candidate allocation checks. `runs/mixed-store-existing-parity.log`, `runs/mixed-store-root-final-contracts.log`. |
+| Full-build regression | **2 actor build parity tests pass**, including fresh mapping/bossing Spark, composed Mace, condition passes, source removal and inherent flags. These remain the existing bounded profiles. `runs/mixed-store-actor-build-parity.log`. |
+| Deployment | **69 native / 111 native-only CLI tests pass**. Strict native-only and workspace/all-target Clippy, formatting, five portable WASM libraries and the normal no-PoB/no-Lua dependency graph pass. Source hashes are unchanged across deployment checks. `runs/mixed-store-deployment-checks.json`, `runs/mixed-store-workspace-clippy.log`. |
+| Preservation/publication | **26/26 protected files match** and the pinned PoB checkout remains clean. Four changed Markdown files decode as UTF-8 and 133 local links resolve. Code publication is pending. `runs/mixed-store-preservation.json`, `runs/mixed-store-docs-validation.json`. |
+
+The independent item-loading audit exercised original ItemsTab.Load, Item.ParseRaw,
+ModParser and BuildModList for all **116 inventory occurrences** without replacing parser
+results. It observed **232 ParseRaw calls** (116 empty constructor calls), **727 parser
+calls**, **32 two-line attempts**, and **47 partial/unparsed remainders on 24 items**.
+There are **43 rune-bearing items / 76 rune names**, plus advanced-copy and crafted cases.
+Two fresh instrumented captures reproduced item-loading evidence byte-for-byte, and each
+complete build snapshot matched the preceding uninstrumented reference bitwise. The
+original runtime contains **1,756 item bases**. These observations guide the
+[ordered loader and injected-definition seam](item-source-and-loading.md#ordered-loading-and-injected-definitions);
+they do not constitute a native parser. Variants/groups/catalysts and repeated authored
+strings still require independent source fixtures. Local source anchors and next tests are
+in `runs/mixed-store-item-loading-audit-source.json`. Of the **486 ModRange instructions**,
+**402 address existing line buckets and 84 exceed the loader's lists**. All requested values
+are 0.5 and no final range-field changes were observed; this is not evidence that every
+instruction was applied. The final audit is byte-reproducible from its unchanged captures.
+
+Consolidated evidence: `runs/mixed-store-validation-summary.json`.
+
+Generic MORE still uses a per-layer vector; this checkpoint does not establish an
+allocation-free contract for every query or a whole-build throughput result. Ordinary
+numeric values and represented predicates do not imply all source modifier kinds/tags.
+Full native coverage, original/held-out full-build parity and realistic search remain open.
+
+Next: finish publication checks, then implement the ordered item-loading boundary
+against injected definitions and explicit parser outcomes. Continue B2 producer/dependency
+closure and B4 whole-build holdouts. The pending
+[general model proposal](general-build-input-proposal.md) must be discussed before its
+actor/action/candidate migration; the item and query components can advance independently.
 
 ## Native condition producers - validation checkpoint
 

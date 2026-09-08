@@ -10,20 +10,22 @@ remains a separate design discussion. Delivery and validation status belong in t
 ## Inputs and ownership
 
 `ConditionProgram` compiles explicit stores, their parent links, actor references and
-ordered FLAG records. Every record retains its value kind, masks, source and represented
-tags. Store-local numeric and condition values remain runtime inputs, so changing a
+ordered FLAG records. Each store explicitly selects ModDB or ModList semantics. Every
+record retains its value kind, masks, source and represented tags. Store-local numeric and condition values remain runtime inputs, so changing a
 candidate's values does not require recompiling unchanged producer definitions. Actor-role
 links and a queried skill store are distinct from the actor's own base modifier store.
 
 Compiled per-store indexes retain original record positions and group both complete FLAG
 names and `Condition:` suffixes. Lookup visits matching producers in source order; it does
 not scan every unrelated modifier or construct condition-name strings for each query.
+Compiled parent-kind chains make numeric/condition kind validation linear in layer count.
 Programs are immutable and shareable. Runtime bindings borrow the selected query context,
 scalar tables and resolved stat tables; they do not own Lua state or spawn processes.
 
 A binding validates store counts, represented values, masks and stat context. Numeric
 queries must use the same flags, keyword flags and source filter as their condition
-binding. Matching layer counts alone does not mean two independently supplied programs
+binding and must agree on each store kind in the parent chain. Matching layer counts alone
+does not mean two independently supplied programs
 represent the same build; the higher-level native preparation must bind their provenance.
 
 ## Source semantics
@@ -39,9 +41,10 @@ Parent FLAG records evaluate in the queried child's context. Condition tags can 
 to skill-local values; ActorCondition tags use their target store and preserve the source
 actor-role fallback. Negated weapon conditions retain the distinction between an absent
 `Added` field and a present false field. FLAG source filtering uses the first nonempty
-colon-delimited component and honors `ignoreSourceInCheckConditions`. This is the ModDB
-filtering contract. ModList differs for that bypass option; captured ModList records are
-replayed only in the common unfiltered contexts until store-kind-specific semantics exist.
+colon-delimited component. ModDB honors `ignoreSourceInCheckConditions`; ModList continues
+filtering. Each producing layer applies its own rule, while its predicates still evaluate
+in the originally queried child's context. A bypass at a child ModDB does not disable a
+parent ModList's filter. Reached absent sources fail before false FLAG values are discarded.
 
 The represented producer predicates include Condition, ActorCondition, reviewed global
 metadata and ordinary StatThreshold checks. Threshold comparisons retain source operation
@@ -81,7 +84,7 @@ measurement on broadly admitted builds.
 
 ## Validation scope
 
-Independent tests execute authenticated original ModStore/ModDB code and helpers. Warm
+Independent tests execute authenticated original ModStore/ModDB/ModList code and helpers. Warm
 claims require traces containing the original query functions. Paired tests cover raw
 returns, masks, source filters, parent/actor context, ordered predicates, thresholds and
 errors. Original corpus records ground selected query replays in the wider build set;

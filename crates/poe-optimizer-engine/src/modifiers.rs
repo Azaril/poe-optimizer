@@ -1,4 +1,4 @@
-//! Validated numeric subset of the pinned PoB `ModDB` query semantics.
+//! Validated numeric subset of the pinned PoB `ModDB` and `ModList` query semantics.
 //!
 //! The typed condition path implements a declared `EvalMod` subset, not an importer. Callers must
 //! supply every modifier and preserve its tags/value kind so unsupported input
@@ -14,6 +14,23 @@ use crate::conditions::{ConditionResolver, ModifierTag};
 pub const SUPPORTED_MOD_FLAG_BITS: u64 = ((1_u64 << 53) - 1) & !(1_u64 << 31);
 pub const SUPPORTED_KEYWORD_FLAG_BITS: u64 = 0x7fff_ffff;
 pub const KEYWORD_MATCH_ALL: u64 = 0x4000_0000;
+
+/// Implementation resource bound shared with condition-store preparation, not a game rule.
+pub const MAX_MODIFIER_LAYERS: usize = 256;
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum ModifierStoreKind {
+    #[default]
+    ModDb,
+    ModList,
+}
+
+/// A local store followed by its parents. Record order is preserved within each name.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct ModifierLayerInput {
+    pub kind: ModifierStoreKind,
+    pub modifiers: Vec<TaggedModifierInput>,
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum NumericKind {
@@ -133,14 +150,23 @@ impl NumericModifier {
 pub struct QueryContext {
     pub flags: u64,
     pub keyword_flags: u64,
-    /// Lua's cfg.source: BASE/INC accept the first colon-delimited component
-    /// or the exact string. MORE/OVERRIDE only accept the first component.
+    /// Lua's cfg.source: ModDb BASE/INC accepts exact or prefix matches and
+    /// skips absent sources. ModList BASE/INC and all other supported queries
+    /// require the first colon-delimited component and error on an absent source.
     pub source: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ModifierError {
     MissingConditionContext,
+    TooManyLayers {
+        count: usize,
+    },
+    StoreKindMismatch {
+        layer: usize,
+        numeric: ModifierStoreKind,
+        conditions: Option<ModifierStoreKind>,
+    },
     InvalidConditionContext {
         reason: String,
     },
@@ -224,11 +250,14 @@ impl MorePrecision {
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct ModifierDatabase {
     layers: Vec<Vec<NumericModifier>>,
+    kinds: Vec<ModifierStoreKind>,
     has_tags: bool,
 }
 
 impl ModifierDatabase {
     pub fn try_new(layers: Vec<Vec<ModifierInput>>) -> Result<Self, ModifierError> {
+        validate_layer_count(layers.len())?;
+        let kinds = vec![ModifierStoreKind::ModDb; layers.len()];
         let mut resolved = Vec::with_capacity(layers.len());
         for (layer, inputs) in layers.into_iter().enumerate() {
             let mut modifiers = Vec::with_capacity(inputs.len());
@@ -275,12 +304,14 @@ impl ModifierDatabase {
         }
         Ok(Self {
             layers: resolved,
+            kinds,
             has_tags: false,
         })
     }
 
     /// Validate typed tags and every numeric modifier before accepting any layer.
     pub fn try_new_tagged(layers: Vec<Vec<TaggedModifierInput>>) -> Result<Self, ModifierError> {
+        validate_layer_count(layers.len())?;
         let mut tags = Vec::with_capacity(layers.len());
         let mut untagged = Vec::with_capacity(layers.len());
         for (layer, entries) in layers.into_iter().enumerate() {
@@ -324,6 +355,23 @@ impl ModifierDatabase {
         Ok(result)
     }
 
+    /// Preserve the concrete store kind of every layer. Existing constructors
+    /// continue to create ModDb layers; no kind is inferred from the records.
+    pub fn try_new_layers(layers: Vec<ModifierLayerInput>) -> Result<Self, ModifierError> {
+        validate_layer_count(layers.len())?;
+        let (kinds, entries): (Vec<_>, Vec<_>) = layers
+            .into_iter()
+            .map(|layer| (layer.kind, layer.modifiers))
+            .unzip();
+        let mut result = Self::try_new_tagged(entries)?;
+        result.kinds = kinds;
+        Ok(result)
+    }
+
+    pub fn store_kind(&self, layer: usize) -> Option<ModifierStoreKind> {
+        self.kinds.get(layer).copied()
+    }
+
     fn validate_conditions(
         &self,
         conditions: Option<&dyn ConditionResolver>,
@@ -345,6 +393,16 @@ impl ModifierDatabase {
         }
         if let Some(conditions) = conditions {
             conditions.validate_query(query)?;
+            for (layer, &numeric) in self.kinds.iter().enumerate() {
+                let actual = conditions.store_kind(layer);
+                if actual != Some(numeric) {
+                    return Err(ModifierError::StoreKindMismatch {
+                        layer,
+                        numeric,
+                        conditions: actual,
+                    });
+                }
+            }
         }
         Ok(())
     }
@@ -358,6 +416,7 @@ impl ModifierDatabase {
     }
 
     /// Add BASE or INC modifiers in query-name, insertion, then parent order.
+    /// ModDb and ModList retain their distinct source-filter and missing-source behavior.
     pub fn sum(
         &self,
         kind: SumKind,
@@ -390,27 +449,34 @@ impl ModifierDatabase {
             SumKind::Base => NumericKind::Base,
             SumKind::Increased => NumericKind::Increased,
         };
-        let mut parent_result = None;
-        // This is a right fold: local_sum + parent_sum, not a flattened sum.
-        for layer in self.layers.iter().rev() {
+        // Evaluate child first, exactly like the source calls. Right-fold only
+        // after all local queries succeed, preserving grouped floating-point sums.
+        let mut subtotals = [0.0; MAX_MODIFIER_LAYERS];
+        for (layer_index, layer) in self.layers.iter().enumerate() {
             let mut result = 0.0;
             for name in names {
-                for modifier in layer {
+                for (index, modifier) in layer.iter().enumerate() {
                     if matches(modifier, kind, context, name)
-                        && (context.source.is_none()
-                            || modifier.source.as_deref().is_some_and(|source| {
-                                Some(source) == context.source.as_deref()
-                                    || source_prefix(source) == context.source.as_deref()
-                            }))
+                        && matches_sum_source(
+                            modifier,
+                            self.kinds[layer_index],
+                            context,
+                            layer_index,
+                            index,
+                        )?
                     {
                         result += modifier.evaluated_value(conditions)?.unwrap_or(0.0);
                     }
                 }
             }
-            if let Some(parent) = parent_result {
-                result += parent;
-            }
-            parent_result = Some(result);
+            subtotals[layer_index] = result;
+        }
+        let mut parent_result = None;
+        for &local in subtotals[..self.layers.len()].iter().rev() {
+            parent_result = Some(match parent_result {
+                Some(parent) => local + parent,
+                None => local,
+            });
         }
         Ok(parent_result.unwrap_or(0.0))
     }
@@ -694,4 +760,31 @@ pub(crate) fn round_more_product(result: f64, mod_result: f64, decimal_places: O
     } else {
         result * ((mod_result * 100.0 + 0.5).floor() / 100.0)
     }
+}
+
+fn validate_layer_count(count: usize) -> Result<(), ModifierError> {
+    if count > MAX_MODIFIER_LAYERS {
+        Err(ModifierError::TooManyLayers { count })
+    } else {
+        Ok(())
+    }
+}
+
+fn matches_sum_source(
+    modifier: &NumericModifier,
+    kind: ModifierStoreKind,
+    context: &QueryContext,
+    layer: usize,
+    index: usize,
+) -> Result<bool, ModifierError> {
+    if kind == ModifierStoreKind::ModList {
+        return matches_prefix(modifier, context, layer, index);
+    }
+    let Some(required) = context.source.as_deref() else {
+        return Ok(true);
+    };
+    Ok(modifier
+        .source
+        .as_deref()
+        .is_some_and(|source| source == required || source_prefix(source) == Some(required)))
 }

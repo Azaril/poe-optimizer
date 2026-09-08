@@ -15,6 +15,11 @@ pub use condition_program::*;
 /// A bound condition query consumed by the ordinary numeric aggregation methods.
 pub trait ConditionResolver {
     fn store_layer_count(&self) -> usize;
+    /// Legacy explicit-table contexts describe ModDB layers. Producer-aware
+    /// bindings override this to retain each actual store kind in the parent chain.
+    fn store_kind(&self, layer: usize) -> Option<crate::modifiers::ModifierStoreKind> {
+        (layer < self.store_layer_count()).then_some(crate::modifiers::ModifierStoreKind::ModDb)
+    }
     fn validate_query(&self, _query: &crate::modifiers::QueryContext) -> Result<(), ModifierError> {
         Ok(())
     }
