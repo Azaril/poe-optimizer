@@ -6,8 +6,9 @@ Current checkpoint: **local armour equipment and rating objectives**, implemente
 locally validated. Source-selected Helmet/Gloves/Boots, shared Rust local calculations,
 source-configured item formatting, import/native evidence and CLI rating objectives are
 complete for the admitted forms. All regression targets, independent source/full-build
-parity, native-only checks and isolated release measurements pass. Publication status is
-recorded below. Next: **Body Armour and shared movement calculation**.
+parity, native-only checks and isolated release measurements pass. Code is published as
+`e42760d233e37d75fcc04b07e6a30634fb7fdae9`; exact-code Windows/Linux CI run `34221294167`
+is in progress. Next: **Body Armour and shared movement calculation**.
 
 The preceding **shared receiving defences and resistances** checkpoint is implemented,
 locally validated and published as `f1d8a1c404a8c3dc77b11d7ff4410a241b0d902b`.
@@ -153,9 +154,11 @@ unchanged full source snapshot/tree, original exports and six independent golden
 dependency/workflow content, fifteen prior non-actor numeric sections, original 320 actor
 rules/constants, seven amulets and all **1,270** passive views/**3,488** exclusions.
 
-Publication: local implementation and validation are complete; the code commit/push and
-exact-code hosted validation are the remaining publication steps. The next documentation
-checkpoint will record their identities and observed status.
+Publication: code **`e42760d233e37d75fcc04b07e6a30634fb7fdae9`** is pushed to main.
+[Exact-code Windows/Linux CI run 34221294167](https://github.com/Azaril/poe-optimizer/actions/runs/34221294167)
+is **in progress** on both platforms; no hosted success is claimed. Snapshots:
+`runs/armour-main-ci.json`, `runs/armour-main-ci-jobs.json`. The following publication-record
+commit changes documentation only.
 
 ### Local armour release measurements
 
@@ -2138,6 +2141,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-08 | `f022d19` | Added private typed native candidate preparation, stack metrics and a fresh full-document verification hook. All 421 workspace and 56 native-only CLI tests, lint, portable checks and release comparisons pass. Identical bounded Mace search results take 164.5 ms versus 397.0 ms one-worker median; full native parity remains unfinished. Pushed to main; exact hosted run `34190091048` passes on Windows and Linux. Next: injected local weapon-modifier assembly. |
 | 2026-09-08 | `da168e9` | Added injected schema-5 local weapon rules, normal/rare source-preserving admission, prepared numeric weapon assembly and problem/report schemas 5/6. Integrated validation plus focused review reruns cover 460 workspace tests, with 61 native-only CLI tests passing and no unresolved failures. Source/build parity, release reproduction, lint and portable checks pass. Typed/document searches agree across 1/2/4/32 workers; one-worker median 236.7 ms versus 668.1 ms for this diagnostic domain. Pushed to main; exact hosted run `34193804854` passes Windows/Linux (confirmed at the actor checkpoint). Next actor phase is implemented above. |
 | 2026-09-08 | `4df9a4f` | Added schema-6 injected actor records, source configuration parsing, shared native attributes/resources and requirement checks, Spirit metric and problem/report schemas 6/7. Validation covers 503 workspace tests and 65 native-only CLI tests across integrated/focused runs, with no unresolved failures; source/build parity, zero-allocation prepared calls, release reproduction, Clippy and WASM checks pass. Full search agrees across 1/2/4/32 workers; one-worker typed median 248.5 ms versus 1,644.8 ms for this diagnostic domain. Pushed to main; exact CI run `34199225766` subsequently passed on Windows and Linux. The next normalized passive/equipment phase is recorded above. |
+| 2026-09-08 | `e42760d` | Added schema-9 injected fixed Helmet/Gloves/Boots, source item formatting, shared native local components and player Armour/Evasion rating objectives; graph problem 9/report 10. 618 workspace + 82 native-only CLI tests pass across reconciled runs, with 33 fresh PoB pairs, 11 export reimports, source oracles, Clippy, WASM and preservation checks. All 24 release searches agree and the exact finalist matches PoB. Pushed to main; exact-code CI `34221294167` is in progress. Next: verify hosted CI, then Body Armour and shared movement calculation. |
 | 2026-09-08 | `f1d8a1c` | Added schema-8 injected receiving data, shared source-ordered native Armour/Evasion/ES and resistance calculation, Lunar/Pearlescent bases, scenario/evidence bindings and graph problem 8/report 9. 580 workspace + 79 native-only CLI tests pass across integrated/focused runs; source/full-build parity, Clippy, WASM, preservation and release checks pass. All 24 complete searches agree; exact release finalist matches fresh PoB. Pushed to main; exact-code CI `34214745950` now passes on Windows and Linux. Local Helmet/Gloves/Boots components and rating metrics are implemented in the following checkpoint. |
 | 2026-09-08 | `a2586a8` | Added schema-7 injected passive/equipment data, complete ordinary structure with 1,142 admitted source views, component actor programs, lazy typed Spark/Mace assembly and native graph search with exact locks/attribute choices. 556 workspace tests and 76 native-only CLI tests pass across integrated/focused runs; local Clippy, WASM, preservation and release reproduction pass. All 24 full searches agree across modes/workers. Pushed to main; exact CI run `34208805533` now passes on Windows and Linux. Shared receiving defences and resistance modifiers are implemented in the following checkpoint. |
 
