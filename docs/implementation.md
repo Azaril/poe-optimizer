@@ -9,11 +9,12 @@ benchmarking accept external packages; controlled search remains on the reviewed
 The strict structural-tree/source guard and existing mechanic coverage are unchanged.
 All 303 workspace tests and 24 native-only CLI tests pass, with formatting, lint, dependency
 isolation and five portable WASM libraries. Release evaluation loads reviewed and edited data
-with identical source exports and the expected numerical change. Publication and current
-throughput measurements are the remaining checkpoint steps.
+with identical source exports and the expected numerical change. Code is published as
+`1a44c13`; 4.5 million fixed-profile benchmark evaluations pass. Hosted Windows/Linux CI
+also passes. The next phase is deterministic source extraction for the package.
 
-Starting code: `e4c8995` on `main`; prior numerical validation remains `36fc552` (277 tests and
-100 fresh PoB comparisons). This phase adds no new build mechanics. Full native coverage,
+Published code: `1a44c13` on `main` (started at `e4c8995`); the current 303-test validation
+includes the 100-case fresh PoB matrix. This phase adds no new build mechanics. Full native coverage,
 the supplied minion build and the first usable all-six-dimension optimizer remain unfinished.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
@@ -29,8 +30,8 @@ the design documents.
 
 1. Inspect `git status --short --branch` and the current validation/publication table below.
    Read [native data packages](native-data.md) and the [data-boundary decision](game-data-boundary.md).
-   Runtime injection and numeric configuration are implemented; finish any pending validation
-   in the latest checkpoint before continuing the remaining data/source and search gates.
+   Runtime injection and numeric configuration are validated and published. Continue the
+   immediate D4 source-extraction slice below, then the remaining data/source and search gates.
    Also read [native backend](native-backend.md),
    [native calculations](native-engine.md), [live passive coverage](passive-coverage.md)
    and [tree projection](tree-projection.md). The production target is a fully native
@@ -139,16 +140,86 @@ commands are in [native data packages](native-data.md).
 | Isolation/contracts | Three native-only tests pass: changed Spark values, A/B/A and concurrent isolation, equal-content instances, cross-data prepared rejection and dishonest boxed-backend identity rejection. |
 | CLI and default-only search | 21 targeted native-only CLI/benchmark/search tests pass, including four new external-package/export tests and custom-data catalog rejection. Log: `runs/injectable-cli-targeted-tests.log`. |
 | Integrated checks | **303 workspace tests pass, zero failures**, with eight ignored child helpers exercised by parent tests; **24 native-only CLI tests pass**. This includes the unchanged six goldens and 100-case fresh PoB matrix. Workspace/native-only Clippy, formatting, native-only dependency isolation and five portable WASM library builds pass. Logs: `runs/injectable-workspace-tests.log`, `runs/injectable-native-only-tests.log`, `runs/injectable-integration-clippy.log`, `runs/injectable-native-only-clippy.log`, `runs/injectable-wasm.log`, `runs/injectable-dependencies.txt`. |
-| Review corrections | Reserved quest-selector collisions, nested discarded fields and integer aliases reject; benchmark reports retain trust; public pinned catalogs reject custom data; native exports retain dataset companions. Independent integration review found no remaining cross-data ownership/identity issue. |
+| Review corrections | Reserved quest-selector collisions, nested discarded fields and integer aliases reject; benchmark reports retain trust; public pinned catalogs reject custom data; native exports retain dataset companions. Independent integration review found no remaining cross-data ownership/identity issue. A separate evidence review recomputed all 18 benchmark reports and confirmed the recorded figures and scope. |
 | Release evaluation | The same native-only executable loads the reviewed package and a custom package with doubled Spark endpoints. Witch/entrance DPS changes from **9.342857142857143** to **18.685714285714287**; both 2,831-byte XML exports match the input, and their companion metadata matches result identity/XML hash. Artifacts: `runs/injectable-release-{example,custom}.json`, `.xml`, `.xml.data.json`; custom data SHA-256 `99a0b5868e44e2373edf248918ffbb6a7861c19c4ae38a23b417533982ead634`; release executable SHA-256 `1bfe1970b418ec63e41553a4709167f8a390f3ef7ae409cf96a3bc5479030e2c`. |
 | Documentation | All 226 local file links and 19 heading links across 29 Markdown documents pass; `git diff --check` passes. Original fixtures and the PoB submodule remain unchanged. |
-| Publication | Local checks complete; hosted CI and fresh throughput measurements follow main publication. |
+| Throughput | All 4,500,000 evaluations in 18 runs completed, with identical finite-metric checksums, stable backend/data identity and zero failures or late results. Fixed-profile timing and scope are recorded below. |
+| Publication | Code `1a44c13` is pushed to main; [Windows/Linux CI run 34173951380](https://github.com/Azaril/poe-optimizer/actions/runs/34173951380) passes both jobs, including formatting, lint, full tests, native-only tests/dependencies and five portable WASM libraries. The following living-document update changes documentation only. |
 
 Remaining D4 work is source-generation/update orchestration and data-driven materialization,
 not an alternative evaluator runtime. Do not remove the structural pin or accept arbitrary
 new operation versions merely to make a new package load. Browser execution and general
 native build coverage remain separate gates. New full-result diagnostics change benchmark
 work; previous throughput measurements remain tied to their recorded commits/profiles.
+
+### Immediate D4 implementation slice
+
+Add optional `extract-game-data` at the current pin, generating all ten package sections
+without using the bundled package as a template. Reuse source verification, authenticated
+tree extraction/projection and the existing bounded offline-worker supervision pattern.
+Add a package extractor and supervised host command in the optional PoB crate/CLI; keep
+Lua outside native evaluation. Verify the exact normalized bytes subsequently executed,
+restrict module/library access, bound resource use and refuse output collisions.
+
+Keep source values separate from reviewed conversion policy (profile selection, quest
+positions, absent optional fields, typed modifier conversion and deterministic ordering).
+Record source/file hashes, extractor/policy identity and output digest as extraction evidence.
+Typed effects must account for the complete parsed modifier structure and actor/flag scope;
+reject unconsumed modifiers or ambiguous reward records. Preserve the independent source
+oracle and full-build parity tests. Require complete-package/section reproduction, repeated
+fresh-process determinism on Windows/Linux, changed-source rejection and bounded failures.
+
+This slice needs no new product decision. Retain schema, source pin, mechanic coverage and
+default-only search. Broader source compatibility and data-driven search requirements remain
+subsequent D4 slices; neither follows merely from a deterministic exporter.
+
+### Current fixed-profile throughput checkpoint
+
+Measured code `1a44c13bf8b973731174be3c79fd58bcb05ef5a7`, native-only release executable
+SHA-256 `1bfe1970b418ec63e41553a4709167f8a390f3ef7ae409cf96a3bc5479030e2c`.
+Reviewed external package SHA-256
+`cfc9f4d0d6251e4d04e6ac1809dbcdd5459033cd61fbe6c4694b8346198d42a7`. Input
+`examples/native-witch-entrance.xml` is 2,831 bytes, SHA-256
+`fcb6ad36f0991733fe9ed9ec9fada97ee4cebab4d68247c1a53a50aab54c63ed`.
+
+Machine: AMD Ryzen 9 9950X3D, 16 physical cores / 32 logical processors; Windows 11 Pro
+10.0.26200; Rust 1.93.0. Run start: 2026-09-08 00:38:18 UTC (September 7 local time).
+Each cell below has three separate CLI runs of 250,000 evaluations, with a 60-second
+per-run deadline. No local Cargo or PoB work ran concurrently; OS background load was
+uncontrolled. Prepared mode parses the immutable profile once; document mode parses it
+per evaluation. Both recompute and validate full typed results, including XML/diagnostic
+construction, Rayon scheduling, shared accounting and checksum observation. Results are
+not cached. Package validation and compilation occur once per CLI invocation, outside the
+iteration timer; backend/data initialization had a median 11.61 ms (range 10.00–21.95 ms).
+
+| Mode | Workers | Median evaluations/sec | Min–max evaluations/sec | Median ratio to one worker |
+| --- | ---: | ---: | ---: | ---: |
+| Prepared | 1 | 66,280 | 66,003–67,546 | 1.00× |
+| Prepared | 4 | 188,956 | 186,891–193,387 | 2.85× |
+| Prepared | 32 | 351,947 | 337,109–370,360 | 5.31× |
+| Document | 1 | 20,377 | 20,325–21,133 | 1.00× |
+| Document | 4 | 56,401 | 55,812–57,872 | 2.77× |
+| Document | 32 | 124,531 | 112,168–124,755 | 6.11× |
+
+All 4,500,000 attempts completed with zero failures, late results, nonfinite/unavailable
+metrics or backend/data identity changes. All 18 runs share metric checksum
+`3dbf33c2ddbdc3595304372a141f9cfc98df9368736a196b7087ff99982c14d1`.
+Reports, machine identity and aggregation are in ignored
+`runs/injectable-throughput/{prepared,document}-jobs{1,4,32}-r{1,2,3}.json`, `machine.json`
+and `summary.json`. Reproduce a cell with the command below; vary `--mode` and `--jobs`,
+and use a new output path for each repetition:
+
+```powershell
+cargo run --release --no-default-features --locked -- benchmark-native examples/native-witch-entrance.xml --data crates/poe-optimizer-data/data/game-data.json --mode prepared --jobs 32 --evaluations 250000 --timeout-seconds 60 --output runs/unique-benchmark.json
+```
+
+This is fixed-input full-API throughput for the restricted Spark fixture. It does not
+measure a bare calculation kernel, optimizer quality, general build throughput, PoB
+speedup, allocation cost or browser performance. Prepared 32-worker iteration windows
+were only 0.675–0.742 seconds, so the range matters. Diagnostics/result shape differs from
+older checkpoints; those commit-specific figures are not a controlled before/after test.
+Shared immutable `Arc` ownership and isolation are tested; realistic-build memory and
+hot-path profiling remain future work.
 
 ## Injectable game-data design — 2026-09-07
 
@@ -207,7 +278,7 @@ current behavior/validation is recorded in the newer checkpoint above.
   external copies of identical data must yield identical semantic identity/results. New source
   releases using supported operations update data/compatibility evidence without recompiling
   a Rust allowlist. Keep arbitrary custom packages clearly distinct from reviewed parity data.
-- [ ] **D5 — parity and portability pass; fresh throughput measurements pending.** Preserve the six independent
+- [x] **D5 — current-profile parity, portability and throughput evidence recorded.** Preserve the six independent
   goldens and 100-case fresh PoB matrix for the reviewed default data. Exercise invalid-package
   and cross-data cache/catalog cases, one/many-worker isolation, native-only dependencies and
   five portable WASM libraries. Measure initialization separately and confirm repeated prepared
@@ -649,7 +720,7 @@ is concrete; real-build recommendations depend on both.
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
 | M5: richer objective policies | Not started | Unit-checked expressions, composite and ordered priorities, soft preferences, Pareto selection, and explicit robust aggregation. Test policy-specific selection and preserve hard constraints. |
 | Desktop GUI | Deferred until CLI/report contracts stabilize | Choose frontend; Tauri is a candidate. Reuse core jobs, results and comparison models. Verify CLI/GUI parity, responsive cancellation and native evaluator packaging; package optional reference workers separately. Does not depend on finishing every M4/M5 feature. |
-| Native Rust calculation replacement | Active; all class/ascendancy identities and ordinary entrances supported by restricted Spark/Mace pipelines; portable data and native weapon/support search implemented | Finish D4 source/materialization integration and D5 validation before broadening class/passive materialization and explicit finite search rules, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
+| Native Rust calculation replacement | Active; all class/ascendancy identities and ordinary entrances supported by restricted Spark/Mace pipelines; portable data and native weapon/support search implemented | Finish D4 source/materialization integration before broadening class/passive materialization and explicit finite search rules, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
 | PoE1 adapter | Later, separate track | Add a distinct versioned rules/data/evaluator adapter after PoE2 interfaces are proven; do not mix game identities or reuse PoE2 parity claims. |
 
 Narrow passive/item/skill experiments are internal validation steps. The first usable release
@@ -726,7 +797,7 @@ skills together within explicit finite catalogs. It must support 1..N required s
 - [ ] **M1.8 Configurable native data — current-profile injection implemented; update/search integration pending.**
       D1–D3 now provide packages, immutable injection, numeric data and typed effects. D4 supplies
       external evaluation/benchmark loading; finish source-update generation and data-driven
-      catalog/requirement rules before custom-data search. Complete D5 integrated evidence.
+      catalog/requirement rules before custom-data search. D5 current-profile evidence is recorded above.
 
 The planner JSON export is preserved as auxiliary input/provenance. Raw PoB XML and PoB
 share codes are runnable import paths; planner conversion follows only when its format
@@ -960,6 +1031,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `a09c406` + `115a902` | Added native Spark/Mace build pipelines, switchable backends, native-only packaging, Rayon controlled search, fixed-input throughput measurements and live passive/tree parity groundwork. All 260 workspace tests, 16 native-only CLI tests, formatting, lint, dependency checks and four portable WASM library builds pass locally; both hosted Windows/Linux jobs pass in run `34166302194` on main. Full native game coverage remains incomplete; class/passive calculations are next. |
 | 2026-09-07 | `fa5136b` + `36fc552` | Added portable authenticated game data, native class/ascendancy identity and ordinary-entrance evaluation, source-alignment guards and fixed-input multicore measurements. All 277 workspace tests, 16 native-only CLI tests, formatting, lint, dependency checks and five portable WASM libraries pass. One hundred fresh PoB evaluations show zero observed numeric difference; both hosted Windows/Linux jobs pass in run `34170105192` on main. Next: source-preserving class/passive materialization, explicit search budgets and equipment requirements; full native game coverage remains incomplete. |
 | 2026-09-07 | Injectable game-data design (after `2675ffb`) | Recorded the user-directed configuration/model seam, immutable compiled-data injection, instance/prepared identity, strict compatibility and D1–D5 migration gates. Reprioritized this work before broader class/passive search. Documentation only; runtime injection and external package selection remain unimplemented. |
+| 2026-09-07 | `1a44c13` | Implemented current-profile data packages, immutable native injection, external CLI selection and data-bound identities/exports. All 303 workspace tests, 24 native-only CLI tests, lint, formatting, dependency isolation and five portable WASM libraries pass. All 4.5 million fixed-profile benchmark evaluations pass; both hosted Windows/Linux CI jobs pass in run `34173951380`. Source-update generation and data-driven materialization remain next. |
 
 ### Hosting decision checkpoint
 
