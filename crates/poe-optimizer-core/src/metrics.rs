@@ -19,6 +19,8 @@ pub struct MetricQuery {
 #[serde(rename_all = "snake_case")]
 pub enum MetricUnit {
     PoolPoints,
+    /// A rating before any encounter-dependent mitigation or avoidance calculation.
+    RatingPoints,
     Percent,
     Damage,
     DamagePerSecond,

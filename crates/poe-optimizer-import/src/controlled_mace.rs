@@ -1182,7 +1182,7 @@ impl ControlledMaceCatalog {
             .iter()
             .filter(|attachment| {
                 attachment.media_type
-                    == "application/vnd.poe-optimizer.native-profile+json;version=6"
+                    == "application/vnd.poe-optimizer.native-profile+json;version=7"
             })
             .collect();
         if evidence.len() != 1 || evidence[0].content.len() > MAX_NATIVE_MACE_PROFILE_BYTES {
@@ -1224,6 +1224,11 @@ impl ControlledMaceCatalog {
         {
             return Err(mismatch(
                 "native receiving defences differ from selected source",
+            ));
+        }
+        if evidence["local_armour"] != serde_json::json!({"schema_version":1,"items":{}}) {
+            return Err(mismatch(
+                "legacy Mace candidate cannot contain local armour",
             ));
         }
         self.check_native_tree(choice, result)?;

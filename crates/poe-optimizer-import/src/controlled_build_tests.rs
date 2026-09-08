@@ -578,3 +578,55 @@ fn authored_receiver_scope_gate_ignores_migrated_passives_but_includes_unused_ne
     );
     assert!(catalog(&source, vec![]).uses_receiving_defence_scope());
 }
+
+#[test]
+fn armour_scope_requirements_slots_and_empty_selections_remain_separate() {
+    let item = EquipmentAlternative { instance_id:"helm".into(),pob_item_id:77,
+        item_text:"Rarity: NORMAL\nBrimmed Helm\nItem Level: 82\nQuality: 20\nImplicits: 0\n+20 to Strength".into() };
+    let source = MACE.replace("level=\"60\"", "level=\"4\"");
+    let catalog = catalog(&source, vec![item]);
+    assert!(catalog.uses_local_armour_scope());
+    let domain = domain(catalog.clone());
+    let bare = catalog.source_selection();
+    assert!(
+        domain
+            .admit(bare.clone(), &mut ActorScratch::default())
+            .is_ok()
+    );
+    let mut selected = bare.clone();
+    selected
+        .candidate
+        .equipment
+        .insert("Helmet".into(), "helm".into());
+    let prepared = domain
+        .prepare(selected.clone(), &mut ActorScratch::default())
+        .unwrap();
+    assert_eq!(prepared.requirements().violations.len(), 1);
+    assert_eq!(prepared.requirements().violations[0].requirement, "level");
+    assert_eq!(prepared.requirements().violations[0].required, 5);
+    assert_eq!(prepared.requirements().violations[0].available, 4);
+    assert!(
+        domain
+            .admit(selected.clone(), &mut ActorScratch::default())
+            .is_err()
+    );
+    selected.candidate.equipment.remove("Helmet");
+    selected
+        .candidate
+        .equipment
+        .insert("Gloves".into(), "helm".into());
+    assert!(
+        domain
+            .prepare(selected, &mut ActorScratch::default())
+            .is_err()
+    );
+    let mut locked = constraints();
+    locked.required_item_instance_ids.insert("helm".into());
+    let locked =
+        ControlledBuildDomain::new(catalog.clone(), locked, AttributeOptionLocks::default())
+            .unwrap();
+    assert!(locked.admit(bare, &mut ActorScratch::default()).is_err());
+    assert_eq!(catalog.footprint().materialized_candidates, 0);
+    assert_eq!(catalog.footprint().cached_candidate_results, 0);
+    assert_eq!(catalog.footprint().local_armour_components, 1);
+}

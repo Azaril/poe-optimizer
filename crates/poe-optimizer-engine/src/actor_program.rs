@@ -289,7 +289,7 @@ impl CompiledGameData {
         }
         let mut ordered = Vec::with_capacity(records.len());
         for record in records {
-            record.validate().map_err(|_|ActorError("Invalid normalized actor target, operation, numeric bound, flags, source or condition tags"))?;
+            validate_global_record(record)?;
             let (kind, value) = match record.effect {
                 ActorModifierEffect::Numeric { operation, value } => (Kind::from(operation), value),
                 ActorModifierEffect::Flag { value } => (Kind::Flag, f64::from(value)),
@@ -348,7 +348,15 @@ impl CompiledGameData {
         layers: &[ActorModifierLayer<'_>],
         scratch: &mut ActorScratch,
     ) -> Result<PreparedActorResources, ActorError> {
-        self.evaluate_actor_internal(level, quests, None, character, layers, scratch)
+        self.evaluate_actor_internal(
+            level,
+            quests,
+            None,
+            character,
+            layers,
+            ArmourSlots::default(),
+            scratch,
+        )
     }
     /// Complete player preparation over borrowed source components. Conditions
     /// produced by both attribute passes feed the receiving queries immediately.
@@ -361,7 +369,39 @@ impl CompiledGameData {
         layers: &[ActorModifierLayer<'_>],
         scratch: &mut ActorScratch,
     ) -> Result<PreparedActorResources, ActorError> {
-        self.evaluate_actor_internal(level, quests, Some(receiving), character, layers, scratch)
+        self.evaluate_actor_with_armour(
+            level,
+            quests,
+            receiving,
+            character,
+            layers,
+            ArmourSlots::default(),
+            scratch,
+        )
+    }
+    /// Evaluate with immutable local armour components, preserving per-slot sums.
+    /// Each selected component's global_program must occur exactly once in the
+    /// caller's ordered equipment layer; these slots supply only local bases.
+    #[allow(clippy::too_many_arguments)]
+    pub fn evaluate_actor_with_armour(
+        &self,
+        level: u32,
+        quests: ActorQuestSelection,
+        receiving: ReceivingScenario,
+        character: &CharacterInput,
+        layers: &[ActorModifierLayer<'_>],
+        armour: ArmourSlots<'_>,
+        scratch: &mut ActorScratch,
+    ) -> Result<PreparedActorResources, ActorError> {
+        self.evaluate_actor_internal(
+            level,
+            quests,
+            Some(receiving),
+            character,
+            layers,
+            armour,
+            scratch,
+        )
     }
     #[allow(clippy::too_many_arguments)]
     fn evaluate_actor_internal(
@@ -371,9 +411,11 @@ impl CompiledGameData {
         receiving: Option<ReceivingScenario>,
         character: &CharacterInput,
         layers: &[ActorModifierLayer<'_>],
+        armour: ArmourSlots<'_>,
         scratch: &mut ActorScratch,
     ) -> Result<PreparedActorResources, ActorError> {
         scratch.reset();
+        armour.validate(self)?;
         if let Some(scenario) = receiving {
             scenario.validate()?;
             receiving::validate_source_character(character)?;
@@ -421,8 +463,12 @@ impl CompiledGameData {
             self.add_receiving_base(&mut scratch.base, scenario);
         }
         scratch.base_len = scratch.base.len;
-        let (output, receiving_output) =
-            calculate_complete(&mut ProgramQueries { layers, scratch }, self, receiving)?;
+        let (output, receiving_output) = calculate_complete(
+            &mut ProgramQueries { layers, scratch },
+            self,
+            receiving,
+            armour,
+        )?;
         Ok(PreparedActorResources {
             binding: self.actor_binding.clone(),
             level,

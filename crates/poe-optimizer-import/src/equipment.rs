@@ -1,6 +1,8 @@
 //! Source-preserving equipment assembly. Local weapon effects are consumed once;
 //! only supported surviving global actor records enter the shared actor layer.
-use crate::actor_modifiers::{ParsedActorModifierLine, match_actor_modifier_line};
+use crate::actor_modifiers::{
+    ParsedActorModifierLine, match_armour_modifier_line, match_equipment_modifier_line,
+};
 use crate::mace_item::{
     MaceItemRarity, ValidatedMaceWeapon, decode_item_payload, parse_mace_equipment,
 };
@@ -11,6 +13,9 @@ use serde::Serialize;
 use sha2::{Digest, Sha256};
 use std::ops::Range;
 use thiserror::Error;
+
+/// Canonical supported PoB item source order; non-weapon slots are shared by weapon sets.
+pub const EQUIPMENT_SOURCE_ORDER: [&str; 5] = ["Weapon 1", "Helmet", "Gloves", "Boots", "Amulet"];
 
 #[derive(Debug, Error)]
 #[error("unsupported equipment: {0}")]
@@ -28,6 +33,7 @@ pub struct EquipmentModifierLine {
     pub implicit: bool,
     pub rule_id: String,
     pub values: Vec<f64>,
+    pub effective_values: Vec<f64>,
     pub records: Vec<ActorModifierRecord>,
 }
 #[derive(Debug, Clone)]
@@ -45,6 +51,7 @@ pub struct ValidatedEquipmentItem {
     source_text: String,
     source_sha256: String,
     weapon: Option<ValidatedMaceWeapon>,
+    armour_modifiers: Option<Vec<ActorModifierRecord>>,
     actor_modifiers: Vec<ActorModifierRecord>,
     modifier_lines: Vec<EquipmentModifierLine>,
 }
@@ -88,6 +95,10 @@ impl ValidatedEquipmentItem {
     pub fn weapon(&self) -> Option<&ValidatedMaceWeapon> {
         self.weapon.as_ref()
     }
+    /// Complete source records for a fixed-base armour item, before local consumption.
+    pub fn armour_modifiers(&self) -> Option<&[ActorModifierRecord]> {
+        self.armour_modifiers.as_deref()
+    }
     pub fn actor_modifiers(&self) -> &[ActorModifierRecord] {
         &self.actor_modifiers
     }
@@ -102,6 +113,7 @@ impl ValidatedEquipmentItem {
             "explicit_level_requirement":self.explicit_level_requirement,
             "source_sha256":self.source_sha256,"actor_modifiers":self.actor_modifiers,
             "modifier_lines":self.modifier_lines,"weapon":self.weapon.as_ref().map(|w|w.diagnostic()),
+            "armour_modifiers":self.armour_modifiers,
             "affix_legality_verified":false})
     }
     /// Reviewed Item:BuildRaw normalization; modifier spelling and order remain intact.
@@ -124,7 +136,12 @@ impl ValidatedEquipmentItem {
             format!("Item Level: {}", self.item_level),
             format!("Quality: {}", self.quality),
             format!("LevelReq: {}", self.requirements.level),
-            "Implicits: 1".into(),
+            if self.armour_modifiers.is_some() {
+                "Implicits: 0"
+            } else {
+                "Implicits: 1"
+            }
+            .into(),
         ]);
         lines.extend(
             self.modifier_lines
@@ -205,6 +222,7 @@ fn evidence(
         implicit,
         rule_id: parsed.rule_id().into(),
         values: parsed.values().to_vec(),
+        effective_values: parsed.effective_values().to_vec(),
         records: parsed.records().to_vec(),
     }
 }
@@ -267,7 +285,11 @@ pub fn parse_equipment_item(
             actor_modifiers: weapon.actor_modifiers().to_vec(),
             modifier_lines: vec![],
             weapon: Some(weapon),
+            armour_modifiers: None,
         });
+    }
+    if data.armour_base_by_name(base_name).is_some() {
+        return parse_armour(input, data, pob_item_id, &lines, rarity, rare_name, at);
     }
     let base = data
         .jewellery_bases
@@ -307,12 +329,12 @@ pub fn parse_equipment_item(
         .map(|name| format!("{name}, {base_name}"))
         .unwrap_or_else(|| base_name.into());
     let source = format!("Item:{pob_item_id}:{source_name}");
-    let parsed = match_actor_modifier_line(implicit.text, &source, data)
+    let parsed = match_equipment_modifier_line(implicit.text, &source, data)
         .map_err(|e| invalid(e.to_string()))?
         .ok_or_else(|| invalid("unsupported jewellery implicit"))?;
     if parsed.rule_id() != base.implicit.actor_rule_id
-        || parsed.values().len() != 1
-        || !(base.implicit.minimum..=base.implicit.maximum).contains(&parsed.values()[0])
+        || parsed.effective_values().len() != 1
+        || !(base.implicit.minimum..=base.implicit.maximum).contains(&parsed.effective_values()[0])
     {
         return Err(invalid(
             "jewellery implicit does not match selected base rule and source roll range",
@@ -327,7 +349,7 @@ pub fn parse_equipment_item(
         ));
     }
     for line in &lines[at..] {
-        let parsed = match_actor_modifier_line(line.text, &source, data)
+        let parsed = match_equipment_modifier_line(line.text, &source, data)
             .map_err(|e| invalid(e.to_string()))?
             .ok_or_else(|| {
                 invalid(format!(
@@ -342,6 +364,7 @@ pub fn parse_equipment_item(
     requirements.level = explicit_level_requirement.unwrap_or(requirements.level);
     let slot = match base.slot {
         EquipmentSlot::Amulet => "Amulet",
+        _ => return Err(invalid("jewellery base requires its own admitted slot")),
     };
     Ok(ValidatedEquipmentItem {
         pob_item_id,
@@ -357,6 +380,89 @@ pub fn parse_equipment_item(
         source_text: input.into(),
         source_sha256: format!("{:x}", Sha256::digest(input.as_bytes())),
         weapon: None,
+        armour_modifiers: None,
+        actor_modifiers,
+        modifier_lines,
+    })
+}
+fn parse_armour(
+    input: &str,
+    data: &GameDataPackage,
+    pob_item_id: u32,
+    lines: &[Line<'_>],
+    rarity: MaceItemRarity,
+    rare_name: Option<String>,
+    mut at: usize,
+) -> Result<ValidatedEquipmentItem> {
+    let base_name = lines[at].text;
+    let base = data
+        .armour_base_by_name(base_name)
+        .expect("matched armour base");
+    at += 1;
+    let item_level = unsigned(field(lines.get(at), "Item Level: ")?, 1, 100, "item level")?;
+    at += 1;
+    let quality = unsigned(field(lines.get(at), "Quality: ")?, 0, 20, "armour quality")?;
+    at += 1;
+    let explicit_level_requirement = if let Some(value) = lines
+        .get(at)
+        .and_then(|line| line.text.strip_prefix("LevelReq: "))
+    {
+        at += 1;
+        Some(unsigned(value, 0, 100, "equip level")?)
+    } else {
+        None
+    };
+    if lines.get(at).map(|line| line.text) != Some("Implicits: 0") {
+        return Err(invalid("fixed-base armour requires exactly zero implicits"));
+    }
+    at += 1;
+    if lines.len() - at > 64 {
+        return Err(invalid(
+            "at most 64 explicit equipment modifier lines are supported",
+        ));
+    }
+    let source_name = rare_name
+        .as_ref()
+        .map(|name| format!("{name}, {base_name}"))
+        .unwrap_or_else(|| base_name.into());
+    let source = format!("Item:{pob_item_id}:{source_name}");
+    let mut records = Vec::new();
+    let mut modifier_lines = Vec::new();
+    for line in &lines[at..] {
+        let parsed = match_armour_modifier_line(line.text, &source, data)
+            .map_err(|e| invalid(e.to_string()))?
+            .ok_or_else(|| invalid(format!("unknown armour modifier at line {}", line.number)))?;
+        records.extend_from_slice(parsed.records());
+        modifier_lines.push(evidence(line, &parsed, false));
+    }
+    let actor_modifiers = records
+        .iter()
+        .filter(|record| !poe_optimizer_engine::armour::is_local_modifier(record))
+        .cloned()
+        .collect();
+    let mut requirements = base.requirements;
+    requirements.level = explicit_level_requirement.unwrap_or(requirements.level);
+    let slot = match base.slot {
+        EquipmentSlot::Helmet => "Helmet",
+        EquipmentSlot::Gloves => "Gloves",
+        EquipmentSlot::Boots => "Boots",
+        _ => return Err(invalid("armour base requires an admitted armour slot")),
+    };
+    Ok(ValidatedEquipmentItem {
+        pob_item_id,
+        base_id: base.id.clone(),
+        base_name: base_name.into(),
+        allowed_slots: vec![slot.into()],
+        requirements,
+        rarity,
+        rare_name,
+        item_level,
+        quality,
+        explicit_level_requirement,
+        source_text: input.into(),
+        source_sha256: format!("{:x}", Sha256::digest(input.as_bytes())),
+        weapon: None,
+        armour_modifiers: Some(records),
         actor_modifiers,
         modifier_lines,
     })

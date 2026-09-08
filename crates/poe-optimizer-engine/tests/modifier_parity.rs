@@ -2741,3 +2741,6 @@ mod actor_parity;
 
 #[path = "support/receiving_parity.rs"]
 mod receiving_parity;
+
+#[path = "support/armour_parity.rs"]
+mod armour_parity;

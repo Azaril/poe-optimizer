@@ -59,12 +59,12 @@ fn complete_native_documents_match_both_unchanged_independent_goldens() {
             ("selected_hit_dps", "TotalDPS"),
             ("selected_average_hit", "AverageHit"),
         ]);
-        // Spirit is tested against fresh source in the actor differential suite;
+        // Spirit and armour/evasion ratings are tested against fresh source;
         // the independent original goldens deliberately remain unchanged.
-        assert_eq!(result.measurements.len(), raw.len() + 1);
+        assert_eq!(result.measurements.len(), raw.len() + 3);
         for (name, value) in values(&result)
             .into_iter()
-            .filter(|(name, _)| name != "spirit")
+            .filter(|(name, _)| raw.contains_key(name.as_str()))
         {
             let reference = expected["metrics"][raw[name.as_str()]].as_f64().unwrap();
             assert!(
@@ -265,7 +265,7 @@ fn native_deadlines_and_clock_errors_are_typed_without_spawning_workers() {
 fn many_cached_rows_and_large_notes_export_in_one_source_preserving_pass() {
     let notes = format!(
         "<Notes>{}</Notes>",
-        "café &amp; preserve every note byte.\r\n".repeat(100_000)
+        "cafÃ© &amp; preserve every note byte.\r\n".repeat(100_000)
     );
     let start = MAPPING.find("<Notes>").unwrap();
     let end = MAPPING.find("</Notes>").unwrap() + "</Notes>".len();

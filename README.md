@@ -43,7 +43,7 @@ see [native backend and optional reference mode](docs/native-backend.md).
 Canonical candidates and locks represent all six dimensions. A generic search kernel has
 bounded parallel evaluation, feasible/infeasible beams, deduplication and fresh finalist
 checks. The native [`search-build` workflow](docs/passive-equipment-assembly.md) lazily
-searches connected passives, physical attribute choices, supplied weapons/amulets,
+searches connected passives, physical attribute choices, supplied weapons/amulets and fixed helmets/gloves/boots,
 class/ascendancy identities and the admitted support loadouts. Compiled actor components
 are combined per candidate; no Cartesian build or result table is constructed.
 Legacy `search-experimental --backend native` searches supplied Mace item/support
@@ -57,7 +57,10 @@ maximum-resource modifiers with the same calculations for skill output and item/
 requirements; `player.spirit` exposes maximum Spirit before reservation.
 [Shared receiving defences](docs/receiving-defences.md) adds source-ordered Armour, Evasion,
 Energy Shield and resistance BASE/INC from configuration, gear and passives. Graph problem
-8 exposes this scope with configurable defence constraints and report 9. On the legacy command, `--backend pob`
+8 exposes this scope with configurable defence constraints and report 9.
+[Local armour equipment](docs/local-armour.md) adds separate item quality/local rounding,
+288 injected fixed bases and player armour/evasion rating metrics; graph problem 9/report
+10 searches this equipment scope. On the legacy command, `--backend pob`
 selects the optional reference backend. Native search uses [typed candidate calculation](docs/native-candidate-evaluation.md)
 by default, with complete document evaluation available through `--native-evaluation document`.
 Search baselines, when a legal initial seed exists, and finalist checks recalculate complete documents. `search-calibration` retains the four original

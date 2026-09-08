@@ -2,16 +2,21 @@
 
 Last updated: 2026-09-08
 
-Current implementation checkpoint: **shared receiving defences and resistances**, implemented,
+Current checkpoint: **local armour equipment and rating objectives**, implemented and
+locally validated. Source-selected Helmet/Gloves/Boots, shared Rust local calculations,
+source-configured item formatting, import/native evidence and CLI rating objectives are
+complete for the admitted forms. All regression targets, independent source/full-build
+parity, native-only checks and isolated release measurements pass. Publication status is
+recorded below. Next: **Body Armour and shared movement calculation**.
+
+The preceding **shared receiving defences and resistances** checkpoint is implemented,
 locally validated and published as `f1d8a1c404a8c3dc77b11d7ff4410a241b0d902b`.
-Exact-code Windows/Linux CI run `34214745950` is in progress; hosted success is not yet claimed.
-Schema 8 moves defensive
-passive contributions into ordered actor records; configuration, weapon, amulet and passive
-sources use the same receiving stage. All required local checks and release measurements
-are complete, with the scope and evidence below.
+Exact-code Windows/Linux CI run `34214745950` has completed successfully on both platforms.
+Schema 8 moved defensive passive contributions into ordered actor records; configuration,
+weapon, amulet and passive sources use the same receiving stage.
 The preceding **normalized passive and equipment source assembly** is implemented,
 locally validated and published as `a2586a89a8160ae0b31d42d23ed921cb3b5823b2`.
-Exact-code Windows/Linux CI run `34208805533` is in progress; hosted success is not yet claimed.
+Exact-code Windows/Linux CI run `34208805533` has completed successfully on both platforms.
 The preceding **shared actor attributes and maximum resources** checkpoint is implemented,
 locally validated and published as `4df9a4fcefe271011cd612fc1f8c7bc43d863c66`.
 Exact-code Windows/Linux CI run `34199225766` passes on both platforms. Schema-6 injected actor data, shared Rust
@@ -59,14 +64,15 @@ the design documents.
    identities, selected-data requirements, exact materialized source and fresh counted
    finalist checks. Whole actor admission and repeated skill calculation have different
    costs; record both. No Cartesian actor/result cache or implicit Lua fallback is allowed.
-5. Check publication/hosted CI for the [receiving-defence checkpoint](receiving-defences.md).
-   Local workspace/native-only checks, release measurements, preservation and independent
-   source/full-build parity pass. The shared global BASE/INC stage and ordered actor-record
-   migration are implemented. Schema-1/2/3/4/5/6/7 packages require regeneration for
-   schema 8. Next extend equipment through a complete local armour-slot pipeline: injected
-   bases and rules, local BASE/INC and quality, local/global rounding, per-level bases and
-   movement penalties. Add explicit Armour/Evasion metric contracts; currently only their
-   diagnostics expose them. Preserve receiving query order and reject unconsumed mechanics.
+5. Check publication/hosted CI for the [local-armour checkpoint](local-armour.md).
+   Schema 9 adds injected fixed Helmet/Gloves/Boots and source item-formatting policy;
+   older packages require regeneration. Local components, source-ordered receiving inputs,
+   player Armour/Evasion rating metrics and graph problem 9/report 10 are implemented.
+   Continue with **Body Armour and shared movement calculation** using the source audit
+   below: inject movement penalties, preserve generated conditional records, and implement
+   the complete movement consumer before admitting body equipment or exposing its metric.
+   Keep per-level bases, Ward, block, alternate quality and unrepresented movement effects
+   rejected. Preserve source query order, exact exports and privately data-bound components.
    Reservation, arbitrary supports/supporting skills and minions remain later complete-
    pipeline work. Review broader source compatibility separately under D4.
 6. Replace closed profiles with reusable complete native pipelines as coverage permits:
@@ -103,11 +109,142 @@ Assessment reports constraint evidence and primary availability; it does not cer
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
 
+## Local armour equipment and rating objectives - implementation checkpoint
+
+Implementation, integrated local validation and release measurements are complete for
+this bounded scope. The [operational guide](local-armour.md) describes admitted forms,
+configuration data, local/global composition, metric contracts and unsupported mechanics.
+
+The shared engine consumes eligible item BASE/INC records, applies quality separately and
+rounds local ratings. Surviving globals contribute exactly once in source slot order;
+receiving aggregation adds each slot separately before the global term. Energy-Shield BASE
+and INC pair orders remain distinct. Prepared local components bind their dataset and slot;
+prepared actors retain numerical outputs without XML or borrowed equipment references.
+
+The item-formatting seam fixes a full-build discrepancy: original `ItemTools.applyRange`
+formats `+17.5 to Evasion Rating` as `+18` before ModParser, producing Evasion 47 where raw
+native parsing gave 46. Injected exact case-sensitive keys govern this step, including
+weapon and amulet lines. Missing keys preserve decimals; configuration remains raw. Raw
+and effective captures are separate evidence and exports keep original bytes. Custom
+formatting that emits decimal text for an integer-only capture is rejected, preserving
+the admitted source grammar. Both cases have retained regressions.
+
+| Area | Current evidence |
+| --- | --- |
+| Injected data | Schema **9**, `poe2-native-profiles-v9`; **18** sections, **34** verified source files, **288** complete fixed bases (112 Helmet / 88 Gloves / 88 Boots) from 649 final definitions. Shape-based extraction excludes 361 unsupported definitions. **329** actor grammar templates and **77** exact item-format keys. No evaluator base-name allowlist or embedded patch-specific base values. |
+| Shared Rust engine | Immutable `PreparedArmour`, borrowed `ArmourSlots`, complete actor preparation and separate per-slot receiver inputs. **101 engine tests** pass, including **1,694** original local/getter/receiver comparisons and **3,360** original numeric formatter comparisons across cold/warm modes. **3,240** changing three-slot actor + Spark/Mace loops allocate zero times; per-worker scratch remains **792 bytes**. |
+| Import/native | **110 import + 52 native tests** pass. Shared source classification applies item formatting, local consumption, remaining globals and final requirements. Private catalogue/data/scenario bindings, exact source/raw/effective evidence and fresh realization reject tampering. Varied typed equipment calculations retain the allocation-free path; preparation costs are measured separately. |
+| Independent source data | **49 data tests**, **48 PoB unit tests** and **14 direct source tests** pass. Original parser checks cover **3,750** cold/warm inputs; **5,760** original base/local-armour cases include actual applyRange before ModParser. Formatting policy checks cover **616** source observations and **28** explicit case/sign/fallback examples. |
+| Full-build parity | **33 fresh native/PoB pairs + 11 native-export PoB reimports** pass, covering signed/fractional boundaries, quality, local/global pairs, condition/order effects, requirements and configuration/gear/passive composition. New Spark/Mace fixtures are separate from original goldens. The exact release-search finalist also matches fresh PoB on all five objective/constraint metrics (maximum absolute difference `1.43e-14`). Evidence: `runs/armour-cli-remaining-final.log`, `runs/armour-finalist-parity.json`, `runs/armour-finalist-pob.json`. |
+| CLI contracts | Graph problem **9** / report **10**, scope `local_armour_native_search_v1`. Graph 7/8 reject armour-bearing templates and supplied alternatives, including unselected alternatives. Earlier receiving gates and mutation 1–6 scope remain. **11** graph integration tests pass, including typed/document × one/four workers with identical archives, ledgers, exact XML and companions. Player `armour` / `evasion` use definition schema 1 and `rating_points`; both backends reject selected-minion requests for these definitions. Native snapshots contain twelve metrics. |
+| Integrated validation | **618 unique workspace tests + 82 native-only CLI tests pass** across integrated/focused runs. All **73** direct integration targets are reconciled against Cargo metadata; nine ignored source-worker helpers are exercised by parents. The initial full workspace invocation stopped at a stale legacy Mace media-version expectation (6 to 7); the corrected complete target, all remaining CLI targets and full final library invocation pass with numeric assertions unchanged. This is reconciled coverage, not one all-green workspace invocation. Evidence: `runs/armour-test-coverage.json`, `runs/armour-libraries-final.log`, `runs/armour-cli-remaining-final.log`, `runs/armour-native-only-tests-final.log`. |
+| Additional checks | Strict workspace/native-only all-target Clippy, formatting, five portable WASM libraries, runtime PoB/Lua dependency isolation, documentation links and diff whitespace pass. Final read-only cross-agent review found no blockers. No unresolved local failures remain. |
+| Release search | **24** complete native-only searches (typed/document × 1/2/4/32 workers × three repeats) agree on archives, ledger, finalist, exact XML and data companion. Each uses 1,496 proposals/source admissions, 172 duplicates, 226 rejections, seven rounds and exactly **1,000** full attempts (baseline 1 + search 998 + fresh verification 1). No failures, late results or unavailable assessments; termination is the evaluation budget. The finalist has DPS 122.17940598499999, fire resistance 75, ES 177, Armour 212 and Evasion 231, satisfying the configurable 75/50/200/150 floors. This establishes reproducibility for the diagnostic example, not optimizer quality, affix legality or a global optimum. |
+
+Final package **3,865,166 bytes**, SHA
+`afe99d3e5943f093487d0c885ee1b8facfcfbc80f7bda65d641d8aec0bfce384`.
+Two fresh source extractions agree byte-for-byte across all five output files
+(`runs/armour-complete-extraction-a` and `-b`); installed data matches exactly.
+Evidence SHA `489f3d59d04139227a808887e677b432c820d478f02f541b86daaaef5be447e6`;
+extractor SHA `777cb0ad19ce4833a9abfc955a3afb77b02b4da5220569969587a6ef26e353e1`;
+policy SHA `06eaaacc41c1fb2954fff2041b215bee9d9f24c54cfedae0794265223342d960`.
+The preservation audit (`runs/armour-preservation-final.json`) confirms clean pinned source,
+unchanged full source snapshot/tree, original exports and six independent golden pairs,
+dependency/workflow content, fifteen prior non-actor numeric sections, original 320 actor
+rules/constants, seven amulets and all **1,270** passive views/**3,488** exclusions.
+
+Publication: local implementation and validation are complete; the code commit/push and
+exact-code hosted validation are the remaining publication steps. The next documentation
+checkpoint will record their identities and observed status.
+
+### Local armour release measurements
+
+[The assembly benchmark](../examples/benchmark_assembly.rs) accepts `--local-armour`.
+The native-only release run on the AMD Ryzen 9 9950X3D uses **1,806** admitted selections,
+129 distinct allocations, eight classes, 23 named ascendancies plus no ascendancy, three
+attribute options, seven support loadouts and twenty equipment selections. Optional armour
+slots rotate through supplied items and empty slots. Its **1,518** distinct checksums consume
+all twelve metric availability/value fields and all thirteen receiving outputs. Sixteen
+fresh full native document comparisons check metrics and receiving values outside timing;
+independent PoB evidence comes from the source/full-build tests above.
+
+Median attempts/second, three samples per worker count and mode:
+
+| Workers | Fresh admission + calculation | Reused admitted actor + calculation |
+| --- | ---: | ---: |
+| 1 | 46,592 | 5,958,199 |
+| 2 | 55,424 | 8,819,737 |
+| 4 | 85,377 | 17,912,117 |
+| 32 | 274,462 | 119,521,365 |
+
+All 24 sample/calibration checksums agree. Samples last 1.100–1.244 seconds except
+32-worker reused-actor samples, which hit the 100-million-attempt cap at 0.824–0.843 seconds.
+Fresh admission includes selection cloning, structural/source resolution, actor execution,
+requirements and handle allocation/destruction. Reused-actor timing excludes that work.
+Both timed loops omit XML/JSON, objective/proposal/archive work and exports. Neither uses
+an evaluation-result cache. These rates are not full optimizer throughput.
+
+Data setup takes 278.65 ms, catalog 14.29 ms, numerical components 3.58 ms and 1,806 initial
+admissions 42.74 ms. Partial storage estimates include 218,624 compiled-actor heap bytes,
+5,578 local-armour heap bytes across nine armour components, 4,302 source XML bytes,
+1,755 prepared numerical component bytes and 792 bytes of scratch per worker. They exclude
+shared data, selection/map/allocator overhead and thread stacks; they are not peak memory.
+
+Complete CLI medians in milliseconds (three separate-process runs per cell):
+
+| Workers | Typed path | Fresh document path |
+| --- | ---: | ---: |
+| 1 | 353.56 | 3,461.81 |
+| 2 | 353.13 | 2,051.35 |
+| 4 | 344.30 | 1,252.69 |
+| 32 | 347.56 | 672.86 |
+
+CLI elapsed time includes source/data/catalog preparation and search, excluding final
+report/export publication. Process medians include those remaining costs. Dataset setup
+dominates this small typed example; the result does not establish scaling or search quality
+on general builds. All builds/tests were stopped during each release measurement window.
+
+Raw evidence: `runs/armour-benchmark-release.json`, `runs/armour-benchmark-summary.{json,md}`
+and `runs/armour-release-search/summary.json`. Benchmark binary SHA
+`0076738fdfefd8fee299eb3cc3b66c6b8620a1ed933e35448cf4c830111f0c86`;
+CLI binary SHA `d8032a634dc2879345f6f47ac977fead63d5a6d4bd6caf4f695f466634d4bd4e`;
+search implementation SHA `6f11701084844c3c94e9137555f8ad50dbe0e125bafffee571c983f4ba219368`.
+Finalist XML SHA `815ff4994a33465084ed4b93bf7942ef278281fed31e797fabcda32afe7844cc`.
+
+### Next complete pipeline after this checkpoint
+
+Source audit recommends **Body Armour and shared movement calculation**. Add injected
+body base movement penalties, the fourth armour slot and exact generated movement records
+before exposing a movement objective metric. Do not admit the slot while discarding its
+penalty. `Item.lua:2561–2562` emits MovementSpeed BASE `-movementPenalty` with negated
+IgnoreMovementPenalties condition after local consumption; preserve its source/order.
+`CalcDefence.lua:1911–1915` computes the modifier from BASE/INC/MORE or OVERRIDE, rounds
+at three decimals, applies the optional cannot-be-below-base floor and multiplies by
+ActionSpeed. Source condition resolution is in `ModStore.lua:409–413`. The existing strict
+profiles can establish ActionSpeed 1 while rejecting unsupported action/party/skill
+movement effects; extract that default from source rather than silently assuming it.
+
+The source text inventory suggests 114 complete fixed/unhidden/no-implicit/no-Ward body
+bases among 347 final names, with movement penalty ratios .03/.04/.05. Confirm counts by
+executing original source before publication. New source grammar/flags, attribute-conditioned
+ignore/floor cases, source query order, full Spark/Mace PoB/export parity, slot removal,
+custom-data ranking, locks and allocation-free varied actor loops need independent tests.
+No product answer blocks this continuation.
+
+Per-level local Evasion/ES is a following extension. `Item.lua:2530–2531,2554–2555` keeps
+unrounded local slopes; `GetArmourDataValue` at 2373–2379 adds the separately rounded slope
+multiplied by **character level**. Do not use item level or round a combined fixed/sloped
+sum. Actual coefficients are modifier records, not a generic per-level base field. Current
+base-file producers are hidden Fists of Stone variants (`gloves.lua:2038–2059`) with special
+multi-line `{unscalable}` implicits; one also needs Ward. Keep these bases excluded until
+whole special-base/implicit policy and downstream consumers are represented.
+
+
 ## Shared receiving defences and resistances - implementation checkpoint
 
 Implementation, integrated local validation and release measurements are complete for
 this bounded scope. [Operational guide](receiving-defences.md) documents the new data,
-API and CLI contracts. Code is published; hosted validation is in progress.
+API and CLI contracts. Code is published; exact-code Windows/Linux CI passes.
 
 | Area | Current evidence |
 | --- | --- |
@@ -123,7 +260,7 @@ API and CLI contracts. Code is published; hosted validation is in progress.
 
 Publication: code **`f1d8a1c404a8c3dc77b11d7ff4410a241b0d902b`** is pushed to main.
 [Exact-code Windows/Linux CI run 34214745950](https://github.com/Azaril/poe-optimizer/actions/runs/34214745950)
-is **in progress**; no hosted success is claimed. Snapshot: `runs/receiving-main-ci.json`.
+has **passed on Windows and Linux**. Refreshed snapshot: `runs/armour-receiving-ci.json`.
 The following publication-record commit changes documentation only.
 
 ### Receiving release measurements
@@ -220,7 +357,7 @@ contracts in both backends before they can be requested by users.
 ## Normalized passive and equipment source assembly - completed local checkpoint
 
 Implementation and local regression/performance checks are complete for the bounded scope.
-Code is published; exact-code hosted validation is in progress. Read [the operational guide](passive-equipment-assembly.md)
+Code is published; exact-code Windows/Linux CI passes. Read [the operational guide](passive-equipment-assembly.md)
 for schemas, APIs, command examples and limits.
 
 | Area | Current evidence |
@@ -234,7 +371,7 @@ for schemas, APIs, command examples and limits.
 | CLI/search | Native-only `search-build` uses problem **7** / report **8**, caller constraints and attribute locks, bounded graph proposals, repaired required items/passives/skills and class/ascendancy restarts. Compact scheduler identity keys release old prepared candidates. Five seed and six integration tests pass for typed/document × one/four workers, exact archives/ledger/XML/companions, three-attempt verification, repaired two-item locks, impossible LevelReq with zero full calculations and output collision/alias preservation and failed imported baseline isolation. Seed repair is a heuristic, not an infeasibility proof. |
 | Integrated validation | **556 unique workspace tests and 76 native-only CLI tests pass across integrated and focused runs**, with nine unique source-worker helpers ignored directly and exercised by parents. Initial broad runs found two stale expectations: the tree artifact's former 1 MiB test cap and a version-2 tree diagnostic assertion. Both were corrected, and their complete suites plus remaining targets pass. This records assembled coverage rather than claiming a single all-green workspace invocation. Full workspace/native-only Clippy, formatting, five WASM libraries, runtime dependency isolation and documentation links pass. Full import/native final run is **141/141**. Evidence: `runs/assembly-test-coverage.json` and named raw logs. |
 | Preservation | Six independent XML/reference pairs, supplied originals, full snapshot SHA `68445629df3af8bb934aad91f5e6b457f8fe7e478b67e306493ee9a017d171f7`, source inventory/pin and dependency versions are unchanged. All eleven original nonpassive numerical sections and twenty legacy passive effects are preserved. PoB submodule is clean. Evidence: `runs/assembly-preservation-final.json`. |
-| Publication | Code **`a2586a89a8160ae0b31d42d23ed921cb3b5823b2`** is pushed to main. [Windows/Linux CI run 34208805533](https://github.com/Azaril/poe-optimizer/actions/runs/34208805533) is **in progress**; no hosted success is claimed yet. Snapshots: `runs/assembly-main-ci.json`, `runs/assembly-main-ci-jobs.json`. The following publication-record commit changes documentation only. |
+| Publication | Code **`a2586a89a8160ae0b31d42d23ed921cb3b5823b2`** is pushed to main. [Windows/Linux CI run 34208805533](https://github.com/Azaril/poe-optimizer/actions/runs/34208805533) has **passed on Windows and Linux**. Refreshed snapshots: `runs/ci-34208805533-current.json`, `runs/ci-34208805533-jobs.json`. The following publication-record commit changes documentation only. |
 
 The lazy generalized PoB realization adapter remains unimplemented: the new search command
 is explicitly native-only, while full-document `evaluate --backend pob`, independent source
@@ -2001,8 +2138,8 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-08 | `f022d19` | Added private typed native candidate preparation, stack metrics and a fresh full-document verification hook. All 421 workspace and 56 native-only CLI tests, lint, portable checks and release comparisons pass. Identical bounded Mace search results take 164.5 ms versus 397.0 ms one-worker median; full native parity remains unfinished. Pushed to main; exact hosted run `34190091048` passes on Windows and Linux. Next: injected local weapon-modifier assembly. |
 | 2026-09-08 | `da168e9` | Added injected schema-5 local weapon rules, normal/rare source-preserving admission, prepared numeric weapon assembly and problem/report schemas 5/6. Integrated validation plus focused review reruns cover 460 workspace tests, with 61 native-only CLI tests passing and no unresolved failures. Source/build parity, release reproduction, lint and portable checks pass. Typed/document searches agree across 1/2/4/32 workers; one-worker median 236.7 ms versus 668.1 ms for this diagnostic domain. Pushed to main; exact hosted run `34193804854` passes Windows/Linux (confirmed at the actor checkpoint). Next actor phase is implemented above. |
 | 2026-09-08 | `4df9a4f` | Added schema-6 injected actor records, source configuration parsing, shared native attributes/resources and requirement checks, Spirit metric and problem/report schemas 6/7. Validation covers 503 workspace tests and 65 native-only CLI tests across integrated/focused runs, with no unresolved failures; source/build parity, zero-allocation prepared calls, release reproduction, Clippy and WASM checks pass. Full search agrees across 1/2/4/32 workers; one-worker typed median 248.5 ms versus 1,644.8 ms for this diagnostic domain. Pushed to main; exact CI run `34199225766` subsequently passed on Windows and Linux. The next normalized passive/equipment phase is recorded above. |
-| 2026-09-08 | `f1d8a1c` | Added schema-8 injected receiving data, shared source-ordered native Armour/Evasion/ES and resistance calculation, Lunar/Pearlescent bases, scenario/evidence bindings and graph problem 8/report 9. 580 workspace + 79 native-only CLI tests pass across integrated/focused runs; source/full-build parity, Clippy, WASM, preservation and release checks pass. All 24 complete searches agree; exact release finalist matches fresh PoB. Pushed to main; exact-code CI `34214745950` is in progress. Next: verify hosted CI and implement local Helmet/Gloves/Boots components with per-slot receiving inputs and explicit rating metrics. |
-| 2026-09-08 | `a2586a8` | Added schema-7 injected passive/equipment data, complete ordinary structure with 1,142 admitted source views, component actor programs, lazy typed Spark/Mace assembly and native graph search with exact locks/attribute choices. 556 workspace tests and 76 native-only CLI tests pass across integrated/focused runs; local Clippy, WASM, preservation and release reproduction pass. All 24 full searches agree across modes/workers. Pushed to main; exact CI run `34208805533` is in progress. Next: verify hosted CI, then shared receiving defences and resistance modifiers. |
+| 2026-09-08 | `f1d8a1c` | Added schema-8 injected receiving data, shared source-ordered native Armour/Evasion/ES and resistance calculation, Lunar/Pearlescent bases, scenario/evidence bindings and graph problem 8/report 9. 580 workspace + 79 native-only CLI tests pass across integrated/focused runs; source/full-build parity, Clippy, WASM, preservation and release checks pass. All 24 complete searches agree; exact release finalist matches fresh PoB. Pushed to main; exact-code CI `34214745950` now passes on Windows and Linux. Local Helmet/Gloves/Boots components and rating metrics are implemented in the following checkpoint. |
+| 2026-09-08 | `a2586a8` | Added schema-7 injected passive/equipment data, complete ordinary structure with 1,142 admitted source views, component actor programs, lazy typed Spark/Mace assembly and native graph search with exact locks/attribute choices. 556 workspace tests and 76 native-only CLI tests pass across integrated/focused runs; local Clippy, WASM, preservation and release reproduction pass. All 24 full searches agree across modes/workers. Pushed to main; exact CI run `34208805533` now passes on Windows and Linux. Shared receiving defences and resistance modifiers are implemented in the following checkpoint. |
 
 ### Hosting decision checkpoint
 

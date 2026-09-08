@@ -333,3 +333,51 @@ fn primary_unavailability_keeps_satisfied_constraints_and_versioned_evidence() {
     assert_eq!(result.status, AssessmentStatus::Unavailable);
     assert_eq!(result.constraints[0].status, ConstraintStatus::Satisfied);
 }
+
+#[test]
+fn rating_objectives_round_trip_and_reject_pool_or_percentage_units() {
+    let value = serde_json::json!({
+        "schema_version": 1,
+        "objective": {"kind": "scalar", "metric": {"actor": "player", "id": "armour"}, "unit": "rating_points", "direction": "maximize"},
+        "constraints": [{"id": "evasion-floor", "metric": {"actor": "player", "id": "evasion"}, "unit": "rating_points", "operator": ">=", "threshold": 500.0, "violation_scale": 500.0}]
+    });
+    let spec: ObjectiveSpec = serde_json::from_value(value.clone()).unwrap();
+    assert_eq!(serde_json::to_value(&spec).unwrap(), value);
+    let definitions = ["armour", "evasion"].map(|id| MetricDefinition {
+        id: id.into(),
+        unit: MetricUnit::RatingPoints,
+        actors: vec![ActorScope::Player],
+        description: "Final rating".into(),
+        schema_version: 1,
+    });
+    let policy = spec.compile(&definitions).unwrap();
+    let mut measurements = ["armour", "evasion"].map(|id| MetricMeasurement {
+        query: query(id),
+        unit: MetricUnit::RatingPoints,
+        value: MeasurementValue::from_number(500.0),
+        schema_version: 1,
+    });
+    assert_eq!(
+        policy.assess(&measurements).unwrap().status,
+        AssessmentStatus::ConstraintsSatisfied
+    );
+    measurements[1].value = MeasurementValue::from_number(499.0);
+    assert_ne!(
+        policy.assess(&measurements).unwrap().status,
+        AssessmentStatus::ConstraintsSatisfied
+    );
+    for unit in [
+        MetricUnit::Percent,
+        MetricUnit::PoolPoints,
+        MetricUnit::Damage,
+    ] {
+        let mut wrong = spec.clone();
+        wrong.constraints[0].unit = unit;
+        assert!(wrong.compile(&definitions).is_err());
+        measurements[1].unit = unit;
+        assert!(policy.assess(&measurements).is_err());
+    }
+    let mut wrong_actor = spec;
+    wrong_actor.constraints[0].metric.actor = ActorScope::SelectedMinion;
+    assert!(wrong_actor.compile(&definitions).is_err());
+}

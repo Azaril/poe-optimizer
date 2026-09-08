@@ -35,7 +35,11 @@ the default `typed` path evaluates admitted numerical inputs directly. The new c
 explicitly native-only. The legacy `search-experimental --backend native|pob` command and
 problem schemas 1–6 remain available.
 
-## Problem schemas 7 and 8
+## Problem schemas 7, 8 and 9
+
+[Local armour problems](local-armour.md) use schema 9/report 10 and add fixed helmet,
+glove and boot choices, with explicit armour/evasion rating metrics. Earlier schemas
+retain their source admission boundaries.
 
 [The example problem](../examples/passive-equipment-search.json) is the complete runnable
 schema-7 shape. [Receiving-defence problems](receiving-defences.md) use schema 8 with
@@ -72,7 +76,7 @@ that the full legal domain is empty or that the best-found result is globally op
 
 ## Data and source identity
 
-Package schema 8 / `poe2-native-profiles-v8` supplies numeric values, requirements, implicit
+Package schema 9 / `poe2-native-profiles-v9` supplies numeric values, requirements, implicit
 ranges, modifier grammar and source-view effect records. Tree schema 3 records 4,109
 structural ordinary nodes and 4,758 effective source views. Of these, 1,270 have fully
 admitted effects and 3,488 carry explicit exclusions. The four previously reviewed

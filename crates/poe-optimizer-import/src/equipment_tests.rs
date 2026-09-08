@@ -233,3 +233,101 @@ fn lunar_and_pearlescent_source_ranges_global_effects_and_equip_requirements_rem
             .all(|record| record.source.as_deref() == Some("Item:11:Receiving Club, Wooden Club"))
     );
 }
+
+fn armour_item(base: &str, extra: &str) -> String {
+    format!(
+        "Rarity: RARE\nTrial Armour\n{base}\nItem Level: 82\nQuality: 7\nLevelReq: 3\nImplicits: 0\n{extra}"
+    )
+}
+#[test]
+fn armour_source_records_are_partitioned_without_losing_global_tags_or_source_spans() {
+    let data = data();
+    for base_name in [
+        "Rusted Greathelm",
+        "Shabby Hood",
+        "Twig Circlet",
+        "Stocky Mitts",
+        "Suede Bracers",
+        "Torn Gloves",
+        "Rough Greaves",
+        "Rawhide Boots",
+        "Straw Sandals",
+        "Brimmed Helm",
+        "Iron Crown",
+    ] {
+        let text = armour_item(base_name, "+7 to Armour\n11% increased Armour\n+3 to Armour and Energy Shield\n+5 to Global Armour\n13% increased maximum Energy Shield\n+9 to Strength\n23% increased Armour if Strength is higher than Intelligence\n").replace('\n',"\r\n");
+        let item = parse_equipment_item(&text, &data, 41).unwrap();
+        assert_eq!(item.source_text(), text);
+        assert_eq!(item.item_level(), 82);
+        assert_eq!(item.quality(), 7);
+        assert_eq!(item.explicit_level_requirement(), Some(3));
+        let mut requirements = data.armour_base_by_name(base_name).unwrap().requirements;
+        requirements.level = 3;
+        assert_eq!(item.requirements(), &requirements);
+        assert_eq!(item.armour_modifiers().unwrap().len(), 7);
+        assert_eq!(item.actor_modifiers().len(), 4);
+        assert!(item.weapon().is_none());
+        assert_eq!(item.pob_export_lines()[6], "Implicits: 0");
+        assert!(
+            item.actor_modifiers()
+                .iter()
+                .all(|r| !poe_optimizer_engine::armour::is_local_modifier(r))
+        );
+        for line in item.modifier_lines() {
+            assert_eq!(&text[line.byte_range.clone()], line.source);
+            assert!(!line.implicit);
+        }
+        let xml = format!("<Item id=\"41\"><![CDATA[{text}]]></Item>");
+        let doc = roxmltree::Document::parse(&xml).unwrap();
+        let roundtrip = parse_equipment_item_xml(doc.root_element(), &data).unwrap();
+        assert_eq!(roundtrip.diagnostic(), item.diagnostic());
+        assert_eq!(roundtrip.source_text(), text);
+        let duplicate = parse_equipment_item(&text, &data, 42).unwrap();
+        assert_eq!(duplicate.source_sha256(), item.source_sha256());
+        assert_ne!(
+            duplicate.armour_modifiers().unwrap()[0].source,
+            item.armour_modifiers().unwrap()[0].source
+        );
+    }
+}
+#[test]
+fn armour_rejects_incomplete_local_semantics_and_unmodeled_item_properties() {
+    let data = data();
+    let valid = armour_item("Rusted Greathelm", "+7 to Armour");
+    for text in [
+        valid.replace("Rarity: RARE", "Rarity: UNIQUE"),
+        valid.replace("Rusted Greathelm", "Rusted Cuirass"),
+        valid.replace("Quality: 7", "Quality: 21"),
+        valid.replace("Item Level: 82", "Item Level: 082"),
+        valid.replace("Implicits: 0", "Implicits: 1"),
+        valid.replace("+7 to Armour", "Sockets: S"),
+        valid.replace("+7 to Armour", "Has +1 to Evasion Rating per Player Level"),
+        valid.replace("+7 to Armour", "+7 to Runic Ward"),
+        valid.replace("+7 to Armour", "20% increased Movement Speed"),
+        valid.replace(
+            "+7 to Armour",
+            "+7 to Armour and Energy Shield if Strength is higher than Intelligence",
+        ),
+        valid.replace("+7 to Armour", "20% reduced Attribute Requirements"),
+        valid.replace("+7 to Armour", "+7 to Armour and Global Energy Shield"),
+        valid.replace("+7 to Armour", "Armour: 123"),
+    ] {
+        assert!(
+            parse_equipment_item(&text, &data, 1).is_err(),
+            "accepted {text}"
+        );
+    }
+    for line in [
+        "+3 to Armour and Energy Shield",
+        "17% increased Evasion Rating and Energy Shield",
+    ] {
+        assert!(
+            crate::actor_modifiers::match_actor_modifier_line(line, "Custom:Test", &data).is_err()
+        );
+        let amulet = amulet("Amber Amulet", "+12 to Strength", line);
+        assert!(parse_equipment_item(&amulet, &data, 2).is_err());
+        let weapon =
+            format!("Rarity: NORMAL\nWooden Club\nItem Level: 1\nQuality: 0\nImplicits: 0\n{line}");
+        assert!(parse_equipment_item(&weapon, &data, 3).is_err());
+    }
+}

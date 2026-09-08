@@ -49,6 +49,29 @@ pub fn receiving_defence_evidence(output: ReceivingOutput) -> Value {
     })
 }
 
+/// Source-bound local armour evidence; no global BASE surrogate is introduced.
+pub fn local_armour_evidence<'a>(
+    items: impl Iterator<
+        Item = (
+            &'a str,
+            &'a crate::equipment::ValidatedEquipmentItem,
+            &'a poe_optimizer_engine::armour::PreparedArmour,
+        ),
+    >,
+) -> Value {
+    let items: std::collections::BTreeMap<_, _> = items.map(|(slot,item,armour)| {
+        let stats = armour.stats();
+        (slot, json!({
+            "base_id":armour.base_key(),"slot":armour.slot(),"quality":armour.quality(),"item_level":armour.item_level(),
+            "source_sha256":item.source_sha256(),"consumed_modifier_count":armour.consumed_modifier_count(),
+            "global_modifiers":armour.global_records(),
+            "base_armour":stats.base_armour,"base_evasion":stats.base_evasion,"base_energy_shield":stats.base_energy_shield,
+            "armour":stats.armour,"evasion":stats.evasion,"energy_shield":stats.energy_shield,
+        }))
+    }).collect();
+    json!({"schema_version":1,"items":items})
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

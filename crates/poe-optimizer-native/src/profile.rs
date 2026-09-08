@@ -23,6 +23,7 @@ pub(crate) struct Profile {
     pub actor_modifiers: poe_optimizer_import::actor_modifiers::ValidatedActorModifiers,
     pub actor_quests: poe_optimizer_engine::actor::ActorQuestSelection,
     pub prepared_actor: poe_optimizer_engine::actor::PreparedActorResources,
+    pub prepared_armour: BTreeMap<String, poe_optimizer_engine::armour::PreparedArmour>,
     pub tree: crate::tree::NativeTree,
     pub enemy_level: u32,
     pub config: BTreeMap<String, Scalar>,
@@ -478,7 +479,9 @@ fn parse_projection(
         let name = slot
             .attribute("name")
             .ok_or_else(|| unsupported("Missing equipment slot name"))?;
-        if !["Weapon 1", "Amulet"].contains(&name) || !selected_slots.insert(name) {
+        if !poe_optimizer_import::equipment::EQUIPMENT_SOURCE_ORDER.contains(&name)
+            || !selected_slots.insert(name)
+        {
             return Err(unsupported("Unsupported or duplicate equipment slot"));
         }
         let raw_id = slot
@@ -775,10 +778,23 @@ fn parse_projection(
         }));
     }
     let resolved_tree = resolved_tree.expect("full numeric tree requested");
+    let mut prepared_armour = BTreeMap::new();
+    for (slot, item) in &equipment {
+        if let Some(records) = item.armour_modifiers() {
+            let armour = data
+                .prepare_armour(item.base_id(), item.quality(), item.item_level(), records)
+                .map_err(|error| unsupported(error.to_string()))?;
+            if armour.global_records() != item.actor_modifiers() {
+                return Err(unsupported(
+                    "armour global record projection differs from selected preparation",
+                ));
+            }
+            prepared_armour.insert(slot.clone(), armour);
+        }
+    }
     // PoB constructs one local actor layer: configuration, source slot order, passives.
-    // Supported slots have weapon first, then amulet; lexical map order is not that order.
     let mut actor_records = actor_modifiers.records().to_vec();
-    for slot in ["Weapon 1", "Amulet"] {
+    for slot in poe_optimizer_import::equipment::EQUIPMENT_SOURCE_ORDER {
         if let Some(item) = equipment.get(slot) {
             actor_records.extend_from_slice(item.actor_modifiers());
         }
@@ -786,12 +802,17 @@ fn parse_projection(
     actor_records.extend(resolved_tree.actor_modifiers().cloned());
     let actor_layers = vec![actor_records];
     let prepared_actor = data
-        .prepare_actor(
+        .prepare_actor_with_armour(
             level,
             actor_quests,
             data.receiving_scenario(quests, penalty),
             &resolved_tree.character,
             &actor_layers,
+            poe_optimizer_engine::armour::ArmourSlots {
+                helmet: prepared_armour.get("Helmet"),
+                gloves: prepared_armour.get("Gloves"),
+                boots: prepared_armour.get("Boots"),
+            },
         )
         .map_err(|error| unsupported(error.to_string()))?;
     let prepared_weapon = weapon
@@ -817,6 +838,7 @@ fn parse_projection(
         equipment,
         actor_quests,
         prepared_actor,
+        prepared_armour,
         tree: resolved_tree,
         enemy_level,
         config,

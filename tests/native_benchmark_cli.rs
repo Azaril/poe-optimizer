@@ -89,7 +89,7 @@ fn prepared_and_document_modes_preserve_finite_results_across_worker_counts() {
                 64
             );
             let measurements = report["sample_measurements"].as_array().unwrap();
-            assert_eq!(measurements.len(), 10);
+            assert_eq!(measurements.len(), 12);
             assert!(
                 measurements
                     .iter()
@@ -253,7 +253,7 @@ fn mace_unavailable_average_keeps_the_complete_result_checksum_absent() {
                 .iter()
                 .filter(|value| value["value"]["status"] == "finite")
                 .count(),
-            9
+            11
         );
         let average = measurements
             .iter()

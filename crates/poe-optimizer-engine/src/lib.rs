@@ -9,10 +9,12 @@
 #![forbid(unsafe_code)]
 
 pub mod actor;
+pub mod armour;
 pub mod character;
 pub mod conditions;
 pub mod data;
 pub mod defence;
+pub mod item_format;
 pub use data::CompiledGameData;
 pub mod mace;
 pub mod mace_supports;

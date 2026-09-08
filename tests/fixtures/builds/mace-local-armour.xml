@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathOfBuilding2>
+  <Build level="60" className="Warrior" ascendClassName="None" targetVersion="0_1" characterLevelAutoMode="false" mainSocketGroup="1" viewMode="CALCS"/>
+  <Tree activeSpec="1">
+    <Spec title="Unallocated Warrior" classId="3" classInternalId="6" ascendClassId="0" treeVersion="0_5" nodes="38646,1913" masteryEffects=""><Overrides><AttributeOverride strNodes="" dexNodes="" intNodes=""/></Overrides></Spec>
+  </Tree>
+  <Skills activeSkillSet="1" defaultGemLevel="normalMaximum" defaultGemQuality="0">
+    <SkillSet id="1" title="Mace Strike">
+      <Skill enabled="true" includeInFullDPS="true" groupCount="1" label="Single Mace Strike" mainActiveSkill="1" mainActiveSkillCalcs="1">
+        <Gem nameSpec="Mace Strike" skillId="Melee1HMacePlayer" gemId="Metadata/Items/Gem/SkillGemPlayerDefault1HMace" variantId="PlayerDefault1HMace" level="1" quality="0" enabled="true" enableGlobal1="true" enableGlobal2="true" count="1"/>
+      </Skill>
+    </SkillSet>
+  </Skills>
+  <Items activeItemSet="1">
+    <Item id="1">Rarity: RARE
+Study Club
+Wooden Club
+Item Level: 60
+Quality: 20
+Implicits: 0
+Adds 5 to 10 Physical Damage
++10 to Strength
++10 to Intelligence
++17 to Global Armour
+20% increased Global Armour
++11% to Fire and Chaos Resistances</Item>
+    <Item id="2">Rarity: RARE
+Study Pendant
+Pearlescent Amulet
+Item Level: 60
+Quality: 0
+Implicits: 1
++9% to all Elemental Resistances
++20 to Dexterity
++40 to Spirit</Item>
+    <Item id="41">Rarity: RARE
+Armour Study Helmet
+Brimmed Helm
+Item Level: 60
+Quality: 20
+Implicits: 0
++17 to Armour and Evasion
+35% increased Armour and Evasion
++13 to Global Armour
++15 to Dexterity</Item>
+<Item id="42">Rarity: RARE
+Armour Study Gloves
+Torn Gloves
+Item Level: 60
+Quality: 12
+Implicits: 0
++13 to maximum Energy Shield
+20% increased Energy Shield
++7% to all Elemental Resistances</Item>
+<Item id="43">Rarity: RARE
+Armour Study Boots
+Rawhide Boots
+Item Level: 60
+Quality: 20
+Implicits: 0
++31 to Evasion Rating
+50% increased Evasion Rating
++9 to Global Energy Shield
++10 to Strength</Item>
+<ItemSet id="1" title="Wooden Club" useSecondWeaponSet="false">
+      <Slot name="Weapon 1" itemId="1"/>
+    <Slot name="Amulet" itemId="2"/><Slot name="Helmet" itemId="41"/><Slot name="Gloves" itemId="42"/><Slot name="Boots" itemId="43"/></ItemSet>
+  </Items>
+  <Config activeConfigSet="1">
+    <ConfigSet id="1" title="Mapping: normal enemy">
+      <Input name="enemyIsBoss" string="None"/>
+      <Input name="enemyLevel" number="60"/>
+      <Input name="enemyArmour" number="0"/>
+      <Input name="enemyFireResist" number="0"/>
+      <Input name="enemyColdResist" number="0"/>
+      <Input name="enemyLightningResist" number="0"/>
+      <Input name="enemyChaosResist" number="0"/>
+      <Input name="enemyDamageType" string="Melee"/>
+      <Input name="enemyPhysicalDamage" number="1000"/>
+      <Input name="enemyFireDamage" number="0"/>
+      <Input name="enemyColdDamage" number="0"/>
+      <Input name="enemyLightningDamage" number="0"/>
+      <Input name="enemyChaosDamage" number="0"/>
+      <Input name="enemyPhysicalOverwhelm" number="0"/>
+      <Input name="enemyFirePen" number="0"/>
+      <Input name="enemyColdPen" number="0"/>
+      <Input name="enemyLightningPen" number="0"/>
+      <Input name="enemyCritChance" number="0"/>
+      <Input name="enemySpeed" number="1000"/>
+      <Input name="conditionEnemyShocked" boolean="false"/>
+      <Input name="conditionEnemyChilled" boolean="false"/>
+      <Input name="conditionEnemyIgnited" boolean="false"/>
+      <Input name="conditionCritRecently" boolean="false"/>
+      <Input name="conditionBeenHitRecently" boolean="false"/>
+      <Input name="multiplierNearbyEnemies" number="1"/>
+      <Input name="multiplierNearbyRareOrUniqueEnemies" number="0"/>
+    <CustomModifierBlock title="Receiving defences" enabled="true">+101 to Armour
++51 to Evasion Rating
++45 to maximum Energy Shield
+15% increased Defences
++110% to all Elemental Resistances
+25% increased all Resistances</CustomModifierBlock></ConfigSet>
+  </Config>
+  <Notes>Local armour parity fixture: mace; fixed helmet/gloves/boots with local BASE/INC, quality, surviving globals and connected passives. Synthetic rare rolls do not certify acquisition or affix legality.</Notes>
+</PathOfBuilding2>

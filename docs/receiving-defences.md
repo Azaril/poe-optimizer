@@ -29,7 +29,8 @@ does not establish full defence, reservation, mitigation, recovery or full-game 
 
 ## Data and API contracts
 
-Package schema **8**, `poe2-native-profiles-v8`, adds the required `receiving_defence` section.
+Package schema 8 introduced the required `receiving_defence` section; current schema
+**9**, `poe2-native-profiles-v9`, retains it and adds [local armour data](local-armour.md).
 It holds ordered output/query membership; balance values remain in their existing injected
 character, quest, defence and source-modifier records. Rust implements operation semantics.
 The loader validates complete source-reviewed query shapes and allowed operation/tag scope.
@@ -80,12 +81,13 @@ Graph problem 7 and legacy mutation problems 1–6 keep their existing authored 
 new receiving configuration/equipment requires graph problem 8. Migrated passive records
 continue to work through the shared stage. Typed/document evaluation, per-worker deterministic
 archives, evaluation ledgers and fresh finalist export verification use the same contracts.
-Armour and Evasion currently appear in diagnostic evidence only; they are not yet direct
-objective/constraint metrics. Energy Shield and capped resistances are available metrics.
+Player `armour` and `evasion` are now direct rating metrics, definition schema 1 with
+unit `rating_points`; see [local armour and rating objectives](local-armour.md). Energy
+Shield and capped resistances retain their existing units and definitions.
 Unsupported metrics remain unavailable; the receiver does not add an EHP approximation.
 
-Native profile IDs are `poe2-spark-receiving-defence-v4` and
-`poe2-mace-strike-receiving-defence-v8`, with profile media versions **4** and **6**. Each
+Native profile IDs are `poe2-spark-local-armour-v5` and
+`poe2-mace-strike-local-armour-v9`, with profile media versions **5** and **7**. Each
 profile carries a separate `receiving_defence` evidence object (schema 1). Realization checks
 recompute expected receiving evidence from selected sources and reject tampering, a foreign
 data owner or different scenario. Output XML preserves source; its companion binds exact data.

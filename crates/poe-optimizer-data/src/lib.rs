@@ -4,6 +4,7 @@ mod actor;
 pub mod bundled;
 pub mod class_tree;
 pub mod game_data;
+mod item_formatting;
 mod item_rules;
 pub mod passive_allocation;
 pub mod tree_data;
@@ -21,6 +22,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("bundled.rs"),
         include_str!("game_data.rs"),
         include_str!("item_rules.rs"),
+        include_str!("item_formatting.rs"),
         include_str!("passive_allocation.rs"),
         include_str!("../Cargo.toml"),
         include_str!("../data/tree-source-identity.json"),

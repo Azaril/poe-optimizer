@@ -55,13 +55,23 @@ impl ActorOracle {
         let perform = SPARK_PERFORM.replace("\r\n", "\n");
         let setup = SPARK_SETUP.replace("\r\n", "\n");
         let offence = SPARK_OFFENCE.replace("\r\n", "\n");
-        let mut body = String::from("local m_min,m_max=math.min,math.max; ");
+        let mut body = String::from("local m_min,m_max=math.min,math.max; local ItemClass={}; ");
+        if receiving {
+            let item =
+                include_str!("../../../../vendor/path-of-building-poe2/src/Classes/Item.lua")
+                    .replace("\r\n", "\n");
+            body.push_str(section(
+                &item,
+                "function ItemClass:GetArmourDataValue(",
+                "-- Calculate local modifiers",
+            ));
+        }
         body.push_str(section(
             &perform,
             "local function calculateAttributes(",
             "-- Calculate attributes, and set conditions",
         ));
-        body.push_str("local function calculate(input) local parent; for i=#input.layers,2,-1 do local db=new('ModDB'):ModDB(parent); for _,mod in ipairs(input.layers[i]) do db:AddMod(copyTable(mod)) end; parent=db end; local modDB=new('ModDB'):ModDB(parent); local output={}; local condList=modDB.conditions; local actor={modDB=modDB,output=output,itemList={}}; modDB.actor=actor; local breakdown=nil; modDB.multipliers.Level=input.level; ");
+        body.push_str("local function calculate(input) local parent; for i=#input.layers,2,-1 do local db=new('ModDB'):ModDB(parent); for _,mod in ipairs(input.layers[i]) do db:AddMod(copyTable(mod)) end; parent=db end; local modDB=new('ModDB'):ModDB(parent); local output={}; local condList=modDB.conditions; local actor={modDB=modDB,output=output,itemList=input.armour_items or {},level=input.level}; for _,item in pairs(actor.itemList) do item.GetArmourDataValue=ItemClass.GetArmourDataValue end; modDB.actor=actor; local breakdown=nil; modDB.multipliers.Level=input.level; ");
         body.push_str("for _,stat in ipairs({'Str','Dex','Int'}) do modDB:NewMod(stat,'BASE',input.attributes[stat],'Base') end; ");
         body.push_str(section(
             &setup,
@@ -133,7 +143,7 @@ impl ActorOracle {
         character: &CharacterInput,
         layers: &[Vec<Record>],
     ) -> Table {
-        self.calculate_impl(data, level, quests, character, layers, None)
+        self.calculate_impl(data, level, quests, character, layers, None, &[])
     }
     pub(super) fn calculate_receiving(
         &self,
@@ -144,8 +154,30 @@ impl ActorOracle {
         character: &CharacterInput,
         layers: &[Vec<Record>],
     ) -> Table {
-        self.calculate_impl(data, level, quests, character, layers, Some(scenario))
+        self.calculate_impl(data, level, quests, character, layers, Some(scenario), &[])
     }
+    #[allow(clippy::too_many_arguments)]
+    pub(super) fn calculate_receiving_with_armour(
+        &self,
+        data: &CompiledGameData,
+        level: u32,
+        quests: ActorQuestSelection,
+        scenario: poe_optimizer_engine::actor::ReceivingScenario,
+        character: &CharacterInput,
+        layers: &[Vec<Record>],
+        armour: &[(&str, poe_optimizer_engine::armour::ArmourStats)],
+    ) -> Table {
+        self.calculate_impl(
+            data,
+            level,
+            quests,
+            character,
+            layers,
+            Some(scenario),
+            armour,
+        )
+    }
+    #[allow(clippy::too_many_arguments)]
     fn calculate_impl(
         &self,
         data: &CompiledGameData,
@@ -154,10 +186,26 @@ impl ActorOracle {
         character: &CharacterInput,
         layers: &[Vec<Record>],
         receiving: Option<poe_optimizer_engine::actor::ReceivingScenario>,
+        armour: &[(&str, poe_optimizer_engine::armour::ArmourStats)],
     ) -> Table {
         let lua = &self.oracle.lua;
         let input = lua.create_table().unwrap();
         input.set("level", level).unwrap();
+        let items = lua.create_table().unwrap();
+        for (slot, stats) in armour {
+            let item = lua.create_table().unwrap();
+            let values = lua.create_table().unwrap();
+            for (name, value) in [
+                ("Armour", stats.armour),
+                ("Evasion", stats.evasion),
+                ("EnergyShield", stats.energy_shield),
+            ] {
+                values.set(name, value).unwrap();
+            }
+            item.set("armourData", values).unwrap();
+            items.set(*slot, item).unwrap();
+        }
+        input.set("armour_items", items).unwrap();
         input
             .set("receiving_penalty", receiving.map(|v| v.resistance_penalty))
             .unwrap();

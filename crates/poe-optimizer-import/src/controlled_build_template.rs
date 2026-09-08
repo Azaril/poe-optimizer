@@ -309,7 +309,7 @@ impl SourceBuildTemplate {
                 .attribute("name")
                 .ok_or_else(|| fail("slot requires name"))?
                 .to_owned();
-            if !["Weapon 1", "Amulet"].contains(&name.as_str()) {
+            if !crate::equipment::EQUIPMENT_SOURCE_ORDER.contains(&name.as_str()) {
                 return Err(fail("equipment slot is outside the admitted profile"));
             }
             let id = integer(
@@ -333,7 +333,9 @@ impl SourceBuildTemplate {
             return Err(fail("Mace profile requires main hand weapon"));
         }
         if profile == TemplateProfile::Spark && equipment.contains_key("Weapon 1") {
-            return Err(fail("Spark equipment scope admits jewellery only"));
+            return Err(fail(
+                "Spark equipment scope admits armour and jewellery only",
+            ));
         }
         if equipment.values().collect::<BTreeSet<_>>().len() != equipment.len() {
             return Err(fail("one item instance cannot occupy multiple slots"));

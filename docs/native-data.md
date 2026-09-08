@@ -209,7 +209,16 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
-Current package schema **8**, semantics **`poe2-native-profiles-v8`**, adds
+Current package schema **9**, semantics **`poe2-native-profiles-v9`**, adds `armour_bases`
+for source-selected fixed Helmet/Gloves/Boots, nine local paired grammar aliases and
+`item_formatting` for source-keyed pre-parser numeric formatting. Configuration records
+do not undergo item formatting.
+The 288 base records and 329 grammar templates are injected configuration. Local-only
+paired records must be consumed by the item pipeline; global paths reject them. Tree
+schema 3 and previous receiving/passive semantics remain unchanged. Older packages
+require regeneration and review of custom changes. See [local armour](local-armour.md).
+
+Package schema **8**, semantics **`poe2-native-profiles-v8`**, introduced
 `receiving_defence` with ordered source query groups. Defensive passive scalars move into
 ordered actor records; only offence remains in scalar passive effects. Unknown or mixed
 legacy defensive representations reject. See [shared receiving defences](receiving-defences.md)

@@ -65,6 +65,7 @@ fn max(a: f64, b: f64) -> f64 {
 pub(super) fn calculate(
     queries: &impl ActorQueries,
     compiled: &CompiledGameData,
+    armour: ArmourSlots<'_>,
 ) -> Result<ReceivingOutput, ActorError> {
     let data = compiled.snapshot().package();
     let mut resources = [0.0; 3];
@@ -75,13 +76,20 @@ pub(super) fn calculate(
         }
         let names = &names[..resource.query_stats.len()];
         // Preserve literal resourceList operations, even with zero conversions.
-        // No armour-slot contributions, total additions, MORE or overrides enter
-        // this admitted receiver. INC is not clamped before final rounding.
+        // Local slots enter separately below; total additions, MORE, slot-specific
+        // query tags and overrides remain excluded. INC is not clamped.
         let global_base = queries.sum(SumKind::Base, names)? + 0.0;
         let global_base = global_base * (100.0 - 0.0) / 100.0;
         let inc = 1.0 + queries.sum(SumKind::Increased, names)? / 100.0;
+        // Literal Helmet/Gloves/Boots/Body Armour/Weapon 2/Weapon 3 additions.
+        // Each slot is multiplied before addition; flattening would change the
+        // floating-point order. No admitted tag changes a slot query's INC.
+        let mut value = 0.0;
+        for slot in armour.ordered_values(resource.stat) {
+            value += slot * inc * 1.0;
+        }
         let value = max(
-            round_to_integer(finite(0.0 + global_base * inc * 1.0 + 0.0)?),
+            round_to_integer(finite(value + global_base * inc * 1.0 + 0.0)?),
             0.0,
         );
         let index = match resource.stat {

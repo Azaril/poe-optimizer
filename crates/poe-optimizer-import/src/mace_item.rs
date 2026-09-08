@@ -38,6 +38,7 @@ pub struct MaceModifierLine {
     pub source: String,
     pub rule_id: String,
     pub values: Vec<f64>,
+    pub effective_values: Vec<f64>,
 }
 
 /// Immutable values admitted from a supplied payload against one selected data package.
@@ -482,7 +483,7 @@ fn parse_mace_item_inner(
         let actor = actor_source
             .as_ref()
             .map(|source| {
-                crate::actor_modifiers::match_actor_modifier_line(line.trimmed, source, data)
+                crate::actor_modifiers::match_equipment_modifier_line(line.trimmed, source, data)
                     .map_err(|e| invalid(e.to_string()))
             })
             .transpose()?
@@ -493,8 +494,30 @@ fn parse_mace_item_inner(
                 line.number
             )));
         }
-        let (rule_id, values) = if let Some(roll) = found {
-            let evidence = (roll.rule_id.clone(), roll.values.clone());
+        let (rule_id, values, effective_values) = if let Some(mut roll) = found {
+            let values = roll.values.clone();
+            let rule = data
+                .item_modifier_rules
+                .iter()
+                .find(|rule| rule.id == roll.rule_id)
+                .expect("matched local rule");
+            roll.values = crate::item_formatting::effective_values(
+                line.trimmed,
+                &values,
+                data,
+                &rule
+                    .captures
+                    .iter()
+                    .map(|kind| matches!(kind, ItemCaptureKind::UnsignedInteger))
+                    .collect::<Vec<_>>(),
+            )
+            .map_err(invalid)?;
+            if roll.values.len() == 2 && roll.values[0] > roll.values[1] {
+                return Err(invalid(
+                    "formatted local flat damage minimum exceeds maximum",
+                ));
+            }
+            let evidence = (roll.rule_id.clone(), values, roll.values.clone());
             local_modifiers.push(roll);
             evidence
         } else if let Some(actor) = actor {
@@ -510,7 +533,11 @@ fn parse_mace_item_inner(
                 ));
             }
             actor_modifiers.extend_from_slice(actor.records());
-            (actor.rule_id().into(), actor.values().to_vec())
+            (
+                actor.rule_id().into(),
+                actor.values().to_vec(),
+                actor.effective_values().to_vec(),
+            )
         } else {
             return Err(invalid(format!(
                 "line {} is unknown, malformed or outside the supported local modifier grammar",
@@ -523,6 +550,7 @@ fn parse_mace_item_inner(
             source: line.raw.into(),
             rule_id,
             values,
+            effective_values,
         });
     }
     Ok(ValidatedMaceWeapon {

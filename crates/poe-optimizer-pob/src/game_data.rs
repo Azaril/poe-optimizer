@@ -28,6 +28,11 @@ const READ_PATHS: &[&str] = &[
     "src/Classes/ModList.lua",
     "src/Classes/PassiveTree.lua",
     "src/Data/Bases/amulet.lua",
+    "src/Data/Bases/helmet.lua",
+    "src/Modules/ItemTools.lua",
+    "src/Data/ModScalability.lua",
+    "src/Data/Bases/gloves.lua",
+    "src/Data/Bases/boots.lua",
     "src/Modules/CalcSetup.lua",
     "src/Modules/CalcPerform.lua",
     "src/Modules/CalcDefence.lua",
@@ -72,6 +77,11 @@ const PROVENANCE_PATHS: &[&str] = &[
     "src/Classes/ModList.lua",
     "src/Classes/PassiveTree.lua",
     "src/Data/Bases/amulet.lua",
+    "src/Data/Bases/helmet.lua",
+    "src/Modules/ItemTools.lua",
+    "src/Data/ModScalability.lua",
+    "src/Data/Bases/gloves.lua",
+    "src/Data/Bases/boots.lua",
 ];
 const POLICY: &str = include_str!("game_data_policy.json");
 const CONVERSION: &str = include_str!("game_data_extract.lua");
@@ -108,7 +118,7 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v8",
+        "poe-game-data-extractor-v9",
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
@@ -250,7 +260,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         AuthenticatedTreeSnapshot::from_trusted_extraction(snapshot, &digest).map_err(error)?;
     let tree = BundledClassTree::from_authenticated_snapshot(&authenticated).map_err(error)?;
     let policy: Policy = serde_json::from_str(POLICY)?;
-    if policy.schema_version != 6
+    if policy.schema_version != 7
         || policy.spirit_quests.len() != 3
         || policy.actor_rules.is_empty()
         || policy.quests.len() != 6
@@ -292,6 +302,34 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
             source: source_table,
         });
     }
+    let armour: Function = extractor.lua.globals().get("source_extract_armour")?;
+    let (armour, _excluded): (Table, Table) = armour.call(())?;
+    let bases: Table = extractor.lua.globals().get("sourceArmourBases")?;
+    let mut armour_bases = Vec::new();
+    for row in armour.sequence_values::<Table>() {
+        let row = row?;
+        let source_table =
+            copy_primitive_source_table(bases.get::<Table>(row.get::<String>("name")?)?, 0)?;
+        let record: ExtractedArmourBase = extractor.lua.from_value(Value::Table(row))?;
+        armour_bases.push(ArmourBaseData {
+            id: record.id,
+            name: record.name,
+            slot: record.slot,
+            requirements: record.requirements,
+            quality: record.quality,
+            armour: record.armour,
+            evasion: record.evasion,
+            energy_shield: record.energy_shield,
+            source: source_table,
+        });
+    }
+    let item_formatting: Function = extractor
+        .lua
+        .globals()
+        .get("source_extract_item_formatting")?;
+    let item_formatting = extractor
+        .lua
+        .from_value(item_formatting.call::<Value>(records.clone())?)?;
     let mut provenance = BTreeMap::new();
     for path in PROVENANCE_PATHS {
         provenance.insert((*path).into(), hash(extractor.sources[*path].as_bytes()));
@@ -326,6 +364,8 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         passive_effects,
         passive_exclusions,
         jewellery_bases,
+        armour_bases,
+        item_formatting,
     };
     package.refresh_section_digests().map_err(error)?;
     let evidence = GameDataExtractionEvidence {
@@ -443,7 +483,32 @@ impl Extractor {
         .exec()?;
         lua.load(source("src/Data/Global.lua")?).exec()?;
         let data: Table = lua.load(source("src/Data/Misc.lua")?).eval()?;
-        lua.globals().set("data", data)?;
+        lua.globals().set("data", data.clone())?;
+        data.set(
+            "modScalability",
+            lua.load(source("src/Data/ModScalability.lua")?)
+                .eval::<Table>()?,
+        )?;
+        lua.load(format!(
+            "local m_floor=math.floor;local m_ceil=math.ceil;{}\n{}",
+            section(
+                common,
+                "function roundSymmetric(val, dec)",
+                "-- Symmetric ceil with precision:"
+            )?,
+            section(
+                common,
+                "function wipeTable(tbl)",
+                "-- Search a table for a value"
+            )?
+        ))
+        .exec()?;
+        lua.load(section(
+            source("src/Modules/ItemTools.lua")?,
+            "local t_insert = table.insert",
+            "function itemLib.formatModLine(",
+        )?)
+        .exec()?;
         for (begin, end) in [
             ("data.misc = {", "\ndata.skillColorMap = "),
             ("data.ailmentTypeList =", "data.buildupTypes ="),
@@ -483,6 +548,17 @@ impl Extractor {
             .eval::<Function>()?
             .call::<()>(jewellery.clone())?;
         lua.globals().set("sourceJewelleryBases", jewellery)?;
+        let armour = lua.create_table()?;
+        for path in [
+            "src/Data/Bases/helmet.lua",
+            "src/Data/Bases/gloves.lua",
+            "src/Data/Bases/boots.lua",
+        ] {
+            lua.load(source(path)?)
+                .eval::<Function>()?
+                .call::<()>(armour.clone())?;
+        }
+        lua.globals().set("sourceArmourBases", armour)?;
 
         let gems: Table = lua.load(source("src/Data/Gems.lua")?).eval()?;
         lua.globals().set("sourceGems", gems)?;
@@ -1393,6 +1469,18 @@ fn extract_passive_catalog(
 }
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
+struct ExtractedArmourBase {
+    id: String,
+    name: String,
+    slot: EquipmentSlot,
+    requirements: RequirementData,
+    quality: u32,
+    armour: f64,
+    evasion: f64,
+    energy_shield: f64,
+}
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
 struct ExtractedJewelleryBase {
     id: String,
     name: String,
@@ -1542,6 +1630,131 @@ mod passive_assembly_source_tests {
                 .eval()
                 .unwrap();
             assert!(!check.call::<bool>(mutate).unwrap(), "{edit}");
+        }
+    }
+    #[test]
+    fn item_formatting_extraction_observes_original_formats_and_rejects_incomplete_shapes() {
+        let e = extractor();
+        let records = e
+            .lua
+            .to_value(bundled_snapshot().unwrap().package())
+            .unwrap();
+        let check:Function=e.lua.load("return function(records,edit) local old=data.modScalability;local format=itemLib.formatValue;local row=copyTable(old['# to Evasion Rating']);data.modScalability={['# to Evasion Rating']=row};edit(row);local ok,result=pcall(source_extract_item_formatting,records);data.modScalability=old;itemLib.formatValue=format;return ok,result end").eval().unwrap();
+        for edit in [
+            "r.extra=true",
+            "r[1].hidden=true",
+            "r[1].isScalable=1",
+            "r[1].formats={hidden=true}",
+            "r[1].formats={1}",
+            "r[2]=copyTable(r[1])",
+        ] {
+            let mutate: Function = e
+                .lua
+                .load(format!("return function(r){edit} end"))
+                .eval()
+                .unwrap();
+            let (ok, _): (bool, Value) = check.call((records.clone(), mutate)).unwrap();
+            assert!(!ok, "{edit}");
+        }
+        for (format, precision, display, trim) in [
+            ("divide_by_ten_1dp", 10.0, Some(1), false),
+            ("divide_by_two_0dp", 2.0, Some(0), true),
+            ("negate", 1.0, None, false),
+        ] {
+            let mutate: Function = e
+                .lua
+                .load(format!("return function(r)r[1].formats={{'{format}'}} end"))
+                .eval()
+                .unwrap();
+            let (ok, value): (bool, Value) = check.call((records.clone(), mutate)).unwrap();
+            assert!(ok);
+            let parsed: ItemFormattingData = e.lua.from_value(value).unwrap();
+            assert_eq!(
+                parsed.rules[0].captures[0],
+                ItemNumberFormat {
+                    precision,
+                    display_precision: display,
+                    trim_trailing_zeroes: trim
+                }
+            );
+        }
+    }
+    #[test]
+    fn armour_base_extraction_requires_complete_fixed_source_shape() {
+        let e = extractor();
+        let f: Function = e.lua.globals().get("source_extract_armour").unwrap();
+        let (accepted, excluded): (Table, Table) = f.call(()).unwrap();
+        assert_eq!(accepted.raw_len(), 288);
+        assert_eq!(excluded.raw_len(), 361);
+        let check:Function=e.lua.load("return function(mutate) local old=sourceArmourBases;local base=copyTable(old['Rusted Greathelm']);sourceArmourBases={['Rusted Greathelm']=base};mutate(base);local result,excluded=source_extract_armour();sourceArmourBases=old;return #result==0 and #excluded==1 end").eval().unwrap();
+        for edit in [
+            "b.hidden=false",
+            "b.implicit='+10 to maximum Life'",
+            "b.implicitModTypes[1]={'life'}",
+            "b.type='Body Armour'",
+            "b.subType='Unknown'",
+            "b.quality=30",
+            "b.socketLimit=4",
+            "b.tags.hidden=true",
+            "b.tags.armour=false",
+            "b.tags.boots=true",
+            "b.tags.helmet=nil",
+            "b.armour.Ward=0",
+            "b.armour.BlockChance=0",
+            "b.armour.MovementPenalty=0",
+            "b.armour.EvasionPerLevel=0",
+            "b.armour.EnergyShieldPerLevel=0",
+            "b.armour.Armour=-1",
+            "b.armour.Armour=0/0",
+            "b.armour={}",
+            "b.req.extra=0",
+            "b.req.str=-1",
+            "b.req.int=1.5",
+            "b.req.level=101",
+        ] {
+            let mutate: Function = e
+                .lua
+                .load(format!("return function(b){edit} end"))
+                .eval()
+                .unwrap();
+            assert!(check.call::<bool>(mutate).unwrap(), "{edit}");
+        }
+    }
+    #[test]
+    fn armour_pairs_cannot_be_admitted_as_passive_or_global_actor_effects() {
+        let e = extractor();
+        for stat in ["ArmourAndEnergyShield", "EvasionAndEnergyShield"] {
+            let row: Value = e
+                .lua
+                .load(format!(
+                    "return source_convert_actor_modifier(modLib.createMod('{stat}','INC',25))"
+                ))
+                .eval()
+                .unwrap();
+            let row: ActorModifierRecord = e.lua.from_value(row).unwrap();
+            assert!(row.stat.is_local_armour_only());
+            row.validate().unwrap();
+            for tail in [
+                "m.type='MORE'",
+                "m[1]={type='Global'}",
+                "m[1]={type='Condition',var='Unknown'}",
+            ] {
+                assert!(e.lua.load(format!("local m=modLib.createMod('{stat}','BASE',25);{tail};return source_convert_actor_modifier(m)")).eval::<Value>().is_err(),"{stat} {tail}");
+            }
+        }
+        let parse: Function = e.lua.globals().get("source_extract_passive").unwrap();
+        for line in [
+            "+10 to Armour and Energy Shield",
+            "20% increased Evasion Rating and Energy Shield",
+        ] {
+            let (result, reason): (Option<Table>, Option<String>) = parse
+                .call((
+                    e.lua.to_value(&[line]).unwrap(),
+                    123,
+                    "Unsupported paired passive",
+                ))
+                .unwrap();
+            assert!(result.is_none() && reason.is_some(), "{line}");
         }
     }
     #[test]

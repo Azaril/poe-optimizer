@@ -223,7 +223,7 @@ function source_critical_chance_cap(modifier)
 end
 
 local receiving_stats={Armour=true,Evasion=true,EnergyShield=true,ArmourAndEvasion=true,Defences=true,FireResist=true,ColdResist=true,LightningResist=true,ChaosResist=true,ElementalResist=true}
-local actor_stats={Armour=true,Evasion=true,EnergyShield=true,ArmourAndEvasion=true,Defences=true,FireResist=true,ColdResist=true,LightningResist=true,ChaosResist=true,ElementalResist=true,Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true,ExtraLife=true,ExtraMana=true,ExtraSpirit=true,LifeTotal=true,ManaTotal=true,SpiritTotal=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,DexAccBonusOverride=true,LowLifePercentage=true,FullLifePercentage=true}
+local actor_stats={ArmourAndEnergyShield=true,EvasionAndEnergyShield=true,Armour=true,Evasion=true,EnergyShield=true,ArmourAndEvasion=true,Defences=true,FireResist=true,ColdResist=true,LightningResist=true,ChaosResist=true,ElementalResist=true,Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true,ExtraLife=true,ExtraMana=true,ExtraSpirit=true,LifeTotal=true,ManaTotal=true,SpiritTotal=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,DexAccBonusOverride=true,LowLifePercentage=true,FullLifePercentage=true}
 local actor_flags={NoAttributeBonuses=true,DoubledInherentAttributeBonuses=true,NoStrengthAttributeBonuses=true,NoStrBonusToLife=true,HalvesLifeFromStrength=true,NoDexterityAttributeBonuses=true,NoDexBonusToAccuracy=true,NoIntelligenceAttributeBonuses=true,NoIntBonusToMana=true,ChaosInoculation=true}
 local actor_conditions={TwoHighestAttributesEqual=true,DexHigherThanInt=true,StrHigherThanInt=true,IntHigherThanDex=true,StrHigherThanDex=true,IntHigherThanStr=true,DexHigherThanStr=true,StrHighestAttribute=true,IntHighestAttribute=true,DexHighestAttribute=true,IntSingleHighestAttribute=true,DexSingleHighestAttribute=true}
 local actor_operations={BASE='base',INC='increased',MORE='more',OVERRIDE='override'}
@@ -258,7 +258,8 @@ function source_convert_actor_modifier(modifier)
     else
         assert(actor_stats[modifier.name] and actor_operations[modifier.type],'unsupported actor numeric target or operation')
         local allOperations={Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true}
-        assert((receiving_stats[modifier.name] and (modifier.type=='INC' or (modifier.type=='BASE' and modifier.name~='Defences'))) or (not receiving_stats[modifier.name] and (allOperations[modifier.name] or (modifier.name=='DexAccBonusOverride' and modifier.type=='OVERRIDE') or (modifier.name~='DexAccBonusOverride' and modifier.type=='BASE'))),'actor numeric operation does not apply to target')
+        local localArmour=modifier.name=='ArmourAndEnergyShield' or modifier.name=='EvasionAndEnergyShield'
+        assert((receiving_stats[modifier.name] and (modifier.type=='INC' or (modifier.type=='BASE' and modifier.name~='Defences'))) or (localArmour and (modifier.type=='BASE' or modifier.type=='INC')) or (not receiving_stats[modifier.name] and not localArmour and (allOperations[modifier.name] or (modifier.name=='DexAccBonusOverride' and modifier.type=='OVERRIDE') or (modifier.name~='DexAccBonusOverride' and modifier.type=='BASE'))),'actor numeric operation does not apply to target')
         effect={kind='numeric',operation=actor_operations[modifier.type],value=numeric(modifier.value,true)}
     end
     assert(equal(modifier,modLib.createMod(modifier.name,modifier.type,modifier.value,modifier.source,0,0,unpack(rawTags))),'unconsumed actor modifier structure')
@@ -490,7 +491,7 @@ function source_extract_passive(stats,id,name)
  local ok=pcall(PassiveTreeClass.ProcessStats,PassiveTreeClass,node)
  if not ok or node.unknown or node.extra then return nil,'unsupported_source_parser_output' end
  local effects,actor={},{}
- local forbidden={LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,ChaosInoculation=true}
+ local forbidden={ArmourAndEnergyShield=true,EvasionAndEnergyShield=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,ChaosInoculation=true}
  for _,line in ipairs(node.mods) do
   local list=copyTable(line.list or {})
   if #list>0 then
@@ -546,4 +547,68 @@ function source_extract_jewellery(rules)
  end
  table.sort(result,function(a,b)return a.id<b.id end);table.sort(excluded)
  return result,excluded
+end
+
+-- Enumerate the three complete fixed armour families; unsupported whole bases
+-- stay excluded instead of stripping a Ward, implicit or hidden source field.
+function source_extract_armour()
+ local result,excluded={},{}
+ local allowed={type=true,subType=true,quality=true,socketLimit=true,tags=true,implicitModTypes=true,armour=true,req=true}
+ local slots={Helmet='helmet',Gloves='gloves',Boots='boots'}
+ local subtypes={['Armour']=true,['Evasion']=true,['Energy Shield']=true,['Armour/Evasion']=true,['Armour/Energy Shield']=true,['Evasion/Energy Shield']=true,['Armour/Evasion/Energy Shield']=true}
+ local tagNames={armour=true,default=true,helmet=true,gloves=true,boots=true,str_armour=true,dex_armour=true,int_armour=true,str_dex_armour=true,str_int_armour=true,dex_int_armour=true,str_dex_int_armour=true,ezomyte_basetype=true,maraketh_basetype=true,vaal_basetype=true,karui_basetype=true}
+ for name,base in pairs(sourceArmourBases)do
+  local ok,value=pcall(function()
+   keys(base,allowed,'armour base');assert(slots[base.type] and subtypes[base.subType],'unsupported armour slot/subtype')
+   assert(base.quality==20 and base.socketLimit==3,'unsupported base quality/socket defaults')
+   keys(base.tags,tagNames,'armour base tags');assert(base.tags.armour==true and base.tags.default==true and base.tags[slots[base.type]]==true,'missing armour base tags')
+   for tag,value in pairs(base.tags)do assert(value==true,'nonboolean armour tag');if tag=='helmet' or tag=='gloves' or tag=='boots' then assert(tag==slots[base.type],'conflicting armour slot tag')end end
+   assert(empty(base.implicitModTypes),'unconsumed armour implicit metadata')
+   keys(base.req or {},{level=true,str=true,dex=true,int=true},'armour requirements')
+   for key,value in pairs(base.req or {})do numeric(value);assert(value%1==0 and (key~='level' or value<=100),'unsupported armour requirement')end
+   keys(base.armour,{Armour=true,Evasion=true,EnergyShield=true},'fixed armour ratings');assert(not empty(base.armour),'empty armour base')
+   for _,value in pairs(base.armour)do numeric(value)end
+   local id=name:lower():gsub('[^%w]+','_'):gsub('^_',''):gsub('_$','')
+   return {id=id,name=name,slot=slots[base.type],quality=base.quality,armour=base.armour.Armour or 0,evasion=base.armour.Evasion or 0,energy_shield=base.armour.EnergyShield or 0,requirements={level=(base.req or{}).level or 0,attributes={strength=(base.req or{}).str or 0,dexterity=(base.req or{}).dex or 0,intelligence=(base.req or{}).int or 0}}}
+  end)
+  if ok then result[#result+1]=value else excluded[#excluded+1]=name end
+ end
+ table.sort(result,function(a,b)return a.id<b.id end);table.sort(excluded)
+ return result,excluded
+end
+
+-- Observe the original ItemTools dispatcher with one authenticated metadata row
+-- at a time. Its format-label interpretation remains original source code.
+function source_extract_item_formatting(records)
+ local function shape(text)
+  return text:gsub('{%d+}','#'):gsub('[%+%-]?#','#'):gsub('[%+%-]?%d+%.?%d*','#'):lower()
+ end
+ local shapes={}
+ for _,rule in ipairs(records.actor.modifier_rules)do shapes[shape(rule.template)]=true end
+ for _,rule in ipairs(records.item_modifier_rules)do shapes[shape(rule.template)]=true end
+ local all=data.modScalability;local original=itemLib.formatValue;local rules={}
+ for template,metadata in pairs(all)do
+  if shapes[shape(template)]then
+   dense_array(metadata,'item formatting metadata')
+   local _,count=template:gsub('#','');assert(count==#metadata and count<=2,'item formatting arity changed')
+   for _,record in ipairs(metadata)do
+    keys(record,{isScalable=true,formats=true},'item scalability record');assert(type(record.isScalable)=='boolean','item scalability flag')
+    if record.formats then dense_array(record.formats,'item format labels');for _,label in ipairs(record.formats)do assert(type(label)=='string','item format label')end end
+   end
+   local captures={}
+   itemLib.formatValue=function(value,baseScalar,scalar,precision,displayPrecision,ifRequired)
+    assert(baseScalar==1 and scalar==1,'non-unit item format probe')
+    captures[#captures+1]={precision=precision,display_precision=displayPrecision,trim_trailing_zeroes=ifRequired==true}
+    return original(value,baseScalar,scalar,precision,displayPrecision,ifRequired)
+   end
+   data.modScalability={[template]=metadata}
+   local probe=template:gsub('#','37.25')
+   itemLib.applyRange(probe,1,1)
+   data.modScalability=all;itemLib.formatValue=original
+   assert(#captures==count,'source item formatter did not consume exact key')
+   rules[#rules+1]={template=template,captures=captures}
+  end
+ end
+ table.sort(rules,function(a,b)return a.template<b.template end)
+ return {rules=rules}
 end

@@ -132,7 +132,16 @@ impl RequirementAssessment {
 }
 struct ItemComponent {
     item: ValidatedEquipmentItem,
-    program: CompiledActorModifiers,
+    program: Option<CompiledActorModifiers>,
+    armour: Option<poe_optimizer_engine::armour::PreparedArmour>,
+}
+impl ItemComponent {
+    fn program(&self) -> &CompiledActorModifiers {
+        self.armour.as_ref().map_or_else(
+            || self.program.as_ref().expect("ordinary item program"),
+            |armour| armour.global_program(),
+        )
+    }
 }
 /// Cloneable ownership token retaining no catalog, source XML or calculation data.
 #[derive(Clone)]
@@ -162,6 +171,8 @@ pub struct BuildCatalogFootprint {
     pub item_components: usize,
     pub passive_components: usize,
     pub compiled_actor_heap_bytes: usize,
+    pub local_armour_components: usize,
+    pub local_armour_heap_bytes: usize,
     pub materialized_candidates: usize,
     pub cached_candidate_results: usize,
 }
@@ -229,7 +240,7 @@ impl ControlledBuildCatalog {
         for (id, item) in &inputs {
             if source.profile() == TemplateProfile::Spark && item.weapon().is_some() {
                 return Err(xml::fail(
-                    "Spark supplied-equipment scope admits jewellery only",
+                    "Spark supplied-equipment scope admits armour and jewellery only",
                 ));
             }
             catalog
@@ -245,8 +256,12 @@ impl ControlledBuildCatalog {
                 },
             );
         }
-        // Empty supported jewellery slots remain legal even without a supplied item.
-        catalog.equipment_slots.insert("Amulet".into());
+        // Empty supported non-weapon slots remain legal without a supplied item.
+        catalog.equipment_slots.extend(
+            crate::equipment::EQUIPMENT_SOURCE_ORDER[1..]
+                .iter()
+                .map(|slot| (*slot).into()),
+        );
         if source.profile() == TemplateProfile::Mace {
             catalog.equipment_slots.insert("Weapon 1".into());
         }
@@ -305,10 +320,34 @@ impl ControlledBuildCatalog {
             .map_err(|e| BuildCatalogError::ActorPreparation(e.to_string()))?;
         let mut items = BTreeMap::new();
         for (id, item) in inputs {
-            let program = compiled
-                .compile_actor_modifiers(item.actor_modifiers())
-                .map_err(|e| BuildCatalogError::ActorPreparation(e.to_string()))?;
-            items.insert(id, ItemComponent { item, program });
+            let (program, armour) = if let Some(records) = item.armour_modifiers() {
+                let armour = compiled
+                    .prepare_armour(item.base_id(), item.quality(), item.item_level(), records)
+                    .map_err(|e| BuildCatalogError::ActorPreparation(e.to_string()))?;
+                if armour.global_records() != item.actor_modifiers() {
+                    return Err(xml::fail(
+                        "armour global record projection differs from selected data preparation",
+                    ));
+                }
+                (None, Some(armour))
+            } else {
+                (
+                    Some(
+                        compiled
+                            .compile_actor_modifiers(item.actor_modifiers())
+                            .map_err(|e| BuildCatalogError::ActorPreparation(e.to_string()))?,
+                    ),
+                    None,
+                )
+            };
+            items.insert(
+                id,
+                ItemComponent {
+                    item,
+                    program,
+                    armour,
+                },
+            );
         }
         let mut passive_programs = BTreeMap::new();
         for view in &data.passive_effects {
@@ -355,6 +394,11 @@ impl ControlledBuildCatalog {
     }
     /// Authored receiving configuration or equipment, including source implicits.
     /// Migrated passive records do not expand the legacy problem source scope.
+    pub fn uses_local_armour_scope(&self) -> bool {
+        self.items
+            .values()
+            .any(|component| component.armour.is_some())
+    }
     pub fn uses_receiving_defence_scope(&self) -> bool {
         self.source.actor_modifiers().uses_receiving_defence()
             || self.items.values().any(|component| {
@@ -393,6 +437,38 @@ impl ControlledBuildCatalog {
     }
     pub fn item(&self, id: &str) -> Option<&ValidatedEquipmentItem> {
         self.items.get(id).map(|v| &v.item)
+    }
+    fn selected_armour<'a>(
+        &'a self,
+        selection: &BuildSelection,
+    ) -> poe_optimizer_engine::armour::ArmourSlots<'a> {
+        let selected = |slot| {
+            selection
+                .candidate
+                .equipment
+                .get(slot)
+                .and_then(|id| self.items[id].armour.as_ref())
+        };
+        poe_optimizer_engine::armour::ArmourSlots {
+            helmet: selected("Helmet"),
+            gloves: selected("Gloves"),
+            boots: selected("Boots"),
+        }
+    }
+    fn local_armour_evidence(&self, selection: &BuildSelection) -> serde_json::Value {
+        crate::actor_assembly::local_armour_evidence(
+            selection
+                .candidate
+                .equipment
+                .iter()
+                .filter_map(|(slot, id)| {
+                    let component = &self.items[id];
+                    component
+                        .armour
+                        .as_ref()
+                        .map(|armour| (slot.as_str(), &component.item, armour))
+                }),
+        )
     }
     pub fn support_instance(&self, key: &str) -> Option<&str> {
         self.supports.get(key).map(String::as_str)
@@ -460,11 +536,19 @@ impl ControlledBuildCatalog {
             source_xml_bytes: self.source.source().len(),
             item_components: self.items.len(),
             passive_components: self.passive_programs.len(),
+            local_armour_components: self.items.values().filter(|v| v.armour.is_some()).count(),
+            local_armour_heap_bytes: self
+                .items
+                .values()
+                .filter_map(|v| v.armour.as_ref())
+                .map(|armour| armour.owned_heap_bytes())
+                .sum(),
             compiled_actor_heap_bytes: self.config_program.owned_heap_bytes()
                 + self
                     .items
                     .values()
-                    .map(|v| v.program.owned_heap_bytes())
+                    .filter_map(|v| v.program.as_ref())
+                    .map(|program| program.owned_heap_bytes())
                     .sum::<usize>()
                 + self
                     .passive_programs
@@ -668,9 +752,9 @@ impl ControlledBuildDomain {
         programs.push(&self.catalog.config_program);
         // Canonical supported PoB slot order is equipment before passives. Each
         // source fragment is part of one local layer, never a separate parent.
-        for slot in ["Weapon 1", "Amulet"] {
+        for slot in crate::equipment::EQUIPMENT_SOURCE_ORDER {
             if let Some(id) = selection.candidate.equipment.get(slot) {
-                programs.push(&self.catalog.items[id].program);
+                programs.push(self.catalog.items[id].program());
             }
         }
         for view in &tree.views {
@@ -686,7 +770,7 @@ impl ControlledBuildDomain {
         let actor = self
             .catalog
             .compiled
-            .evaluate_actor(
+            .evaluate_actor_with_armour(
                 self.catalog.source.level(),
                 self.catalog.quests,
                 self.catalog.receiving_scenario,
@@ -694,6 +778,7 @@ impl ControlledBuildDomain {
                 &[ActorModifierLayer {
                     programs: &programs,
                 }],
+                self.catalog.selected_armour(&selection),
                 scratch,
             )
             .map_err(|e| BuildCatalogError::ActorPreparation(e.to_string()))?;

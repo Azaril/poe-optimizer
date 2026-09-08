@@ -19,6 +19,8 @@ pub enum ActorStat {
     Evasion,
     EnergyShield,
     ArmourAndEvasion,
+    ArmourAndEnergyShield,
+    EvasionAndEnergyShield,
     Defences,
     FireResist,
     ColdResist,
@@ -68,6 +70,8 @@ impl ActorStat {
             Self::Evasion => "Evasion",
             Self::EnergyShield => "EnergyShield",
             Self::ArmourAndEvasion => "ArmourAndEvasion",
+            Self::ArmourAndEnergyShield => "ArmourAndEnergyShield",
+            Self::EvasionAndEnergyShield => "EvasionAndEnergyShield",
             Self::Defences => "Defences",
             Self::FireResist => "FireResist",
             Self::ColdResist => "ColdResist",
@@ -296,6 +300,14 @@ fn bounded(value: f64) -> bool {
     value.is_finite() && value.abs() <= 1_000_000.0
 }
 impl ActorStat {
+    /// Source local armour aliases. Global assembly must reject these unless
+    /// an equipped armour item consumes them before building actor programs.
+    pub const fn is_local_armour_only(self) -> bool {
+        matches!(
+            self,
+            Self::ArmourAndEnergyShield | Self::EvasionAndEnergyShield
+        )
+    }
     pub const fn is_receiving_defence(self) -> bool {
         matches!(
             self,
@@ -332,8 +344,17 @@ impl ActorStat {
         use ActorStat::*;
         match self {
             Str | Dex | Int | Life | Mana | Spirit | Accuracy => true,
-            Armour | Evasion | EnergyShield | ArmourAndEvasion | FireResist | ColdResist
-            | LightningResist | ChaosResist | ElementalResist => {
+            Armour
+            | Evasion
+            | EnergyShield
+            | ArmourAndEvasion
+            | ArmourAndEnergyShield
+            | EvasionAndEnergyShield
+            | FireResist
+            | ColdResist
+            | LightningResist
+            | ChaosResist
+            | ElementalResist => {
                 matches!(operation, Base | Increased)
             }
             Defences => matches!(operation, Increased),

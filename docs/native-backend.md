@@ -9,8 +9,9 @@ use either implementation without exposing Lua values or process APIs.
 Both profiles use [shared actor preparation](actor-resources.md) for attributes, inherent
 bonuses, maximum Life/Mana/Spirit and global Accuracy. Data owns admitted modifier templates,
 operations, condition tags, precision and Spirit quest settings. Native profile evidence is
-Spark version 4 or Mace version 6. [Shared receiving defences](receiving-defences.md)
-adds global ratings and resistance BASE/INC; conversion receivers, reservation and other
+Spark version 5 or Mace version 7. [Shared receiving defences](receiving-defences.md)
+adds global ratings and resistance BASE/INC. [Local armour](local-armour.md) supplies
+separately rounded equipment slot bases; conversion receivers, reservation and other
 unsupported mechanics still reject.
 
 ## Implemented build profiles
@@ -19,8 +20,8 @@ unsupported mechanics still reject.
 
 | Profile | Character and skills | Equipment and encounter scope |
 | --- | --- | --- |
-| Spark | One level-1 quality-0 Spark; supported class/tree selection described below | Optional supported amulet; no supports; supported explicit normal, boss or Pinnacle encounter configuration |
-| Mace Strike | One level-1 quality-0 Mace Strike; zero to two level-1 quality-0 reviewed supports; supported class/tree selection described below | One normal/rare supplied weapon from two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, five reviewed local modifier families and explicit equip-level metadata; zero weapon implicits; optional supported amulet and admitted global actor lines; normal enemies only |
+| Spark | One level-1 quality-0 Spark; supported class/tree selection described below | Optional supported amulet and fixed helmet/gloves/boots; no supports; supported explicit normal, boss or Pinnacle encounter configuration |
+| Mace Strike | One level-1 quality-0 Mace Strike; zero to two level-1 quality-0 reviewed supports; supported class/tree selection described below | One normal/rare supplied weapon from two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, five reviewed local modifier families and explicit equip-level metadata; zero weapon implicits; optional supported amulet, fixed helmet/gloves/boots and admitted global actor lines; normal enemies only |
 
 Both profiles accept all eight pinned classes and 23 ascendancy identities, with implicit
 roots and connected capability-admitted ordinary passives, including supported notables
@@ -60,9 +61,9 @@ Use CLI `--raw` to retain these diagnostic attachments. The attachment uses sche
 and a kind on each paid physical/effective view. The tree evidence kind is
 `native_source_resolution`; `point_budget_verified` is false. The
 PoB-specific live passive observation field remains absent on native results, because native
-source resolution cannot establish Lua object-reference observations. Armour and evasion
-are computed and included in the native profile diagnostic; the public metric catalog is
-unchanged.
+source resolution cannot establish Lua object-reference observations. Player `armour` and
+`evasion` are final ratings exposed as definition-schema-1 `rating_points` metrics and in
+the native profile diagnostic. They do not represent mitigation or chance to evade.
 
 `poe-optimizer-engine` owns numerical calculations and modifier semantics.
 `poe-optimizer-native` projects source XML into immutable inputs, calls the selected pipeline

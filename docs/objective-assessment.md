@@ -26,12 +26,12 @@ PoB or calculating again:
 cargo run --locked -- assess runs/assessed.json --objective examples/evaluation-objective.json --output runs/reassessed.json
 ```
 
-`evaluate --objective` adds `objective_assessment` to its schema-2 report. With an explicit
+`evaluate --objective` adds `objective_assessment` to its schema-3 report. With an explicit
 `--metric` filter it also requests the metrics needed by the objective, preserving the
 explicit filter's other queries. With no filter the complete declared catalog is returned.
 The CLI validates the objective against backend capabilities before launching its worker.
 
-`assess` accepts schema-2 evaluation reports and emits a schema-1 diagnostic assessment
+`assess` accepts schema-2/3 evaluation reports and emits a schema-1 diagnostic assessment
 artifact. It uses recorded metric units/versions, even for a backend or custom metric the
 current PoB adapter does not know. A filtered report cannot assess an unrecorded metric;
 obtain a new evaluation containing that metric. An unavailable recorded value remains
@@ -44,6 +44,11 @@ The supported specification has `schema_version: 1`, an explicit `scalar` policy
 or more constraints. [The runnable JSON example](../examples/evaluation-objective.json)
 contains all fields. Each metric uses its registered ID and an actor (`player` or
 `selected_minion`), plus an explicit unit. Inspect `poe-optimizer metrics` for the catalog.
+Player `armour` and `evasion` use `rating_points`, definition schema 1, in both backends.
+These final ratings are distinct from pool points, percentage mitigation and chance to evade.
+See the [native armour search example](../examples/local-armour-search.json) for configurable
+rating floors. Actor scope and unit mismatches reject before evaluation.
+
 One assessment addresses the selected actor/actions and encounter from one evaluation.
 Multiple independent scenarios/selectors and reducers remain future policy work.
 

@@ -4,9 +4,9 @@
 It is optional development tooling: native evaluation loads the exported package and has
 no Lua or worker-process dependency. No website is scraped or downloaded.
 
-The exporter covers the same sixteen explicitly partial sections as the
+The exporter covers the same eighteen explicitly partial sections as the
 [native data package](native-data.md): tree, character, actor, receiving defences, quests, Spark, Mace, supports, weapons,
-item modifier rules, jewellery bases, defence, monsters, encounters, typed owned passive
+item modifier rules, item source formatting, jewellery and fixed armour bases, defence, monsters, encounters, typed owned passive
 effects and explicit passive exclusions. Whole ordinary structure is separate from
 capability admission: 1,270 complete source views are supported, including the four
 admitted ascendancy resistance nodes; 3,488 source views are explicitly excluded. It does not infer arbitrary build mechanics
@@ -54,7 +54,7 @@ actor scope and values. Unconsumed or ambiguous modifiers reject.
 
 The companion retains source revision/inventory identity, consumed-file hashes,
 extractor/policy identity, package schema/semantics and the resulting package digest. Its
-29 direct source-file entries cover extraction and retained provenance reads. Additional
+34 direct source-file entries cover extraction and retained provenance reads. Additional
 tree/loader/spec evidence remains in the package's `tree.source` record.
 It describes how this artifact was produced. Native loading continues to use explicit
 host trust and actual content identity; a sidecar claim does not grant trust or establish
@@ -91,8 +91,8 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 8 and `poe2-native-profiles-v8`, including source-keyed passive/actor effects,
-structural attribute/replacement metadata, jewellery bases and explicit excluded views. It
+schema 9 and `poe2-native-profiles-v9`, including source-keyed passive/actor effects,
+structural attribute/replacement metadata, jewellery and fixed armour bases and explicit excluded views. It
 retains normalized actor modifiers, actor rules,
 the full source precision table and Spirit quest records, alongside the existing item rules,
 critical-chance cap, requirements, support-color costs and passive effects. Signed actor
@@ -151,7 +151,7 @@ The receiving extension adds 204 templates, preserving exact Global tags, comple
 outputs and source receiver query groups. All defensive passive effects are ordered actor
 records; the extractor refuses an incomplete or mixed conversion.
 
-Independent checks execute the pinned parser in cold and warmed modes over 3,642 inputs,
+Independent checks execute the pinned parser in cold and warmed modes over 3,750 inputs,
 compare all 40 precision records and exercise the original quest callbacks and actor
 constant branches. Separate extraction mutation tests reject discarded fields, changed
 source scope, unsupported tags and mismatched rule operands. These checks prove the stated

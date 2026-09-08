@@ -2,6 +2,7 @@
 //! The host supplies bytes and trust policy; no runtime I/O or process-global selection.
 pub use crate::actor::*;
 use crate::bundled::BundledClassTree;
+pub use crate::item_formatting::{ItemFormattingData, ItemFormattingRule, ItemNumberFormat};
 pub use crate::item_rules::{
     ItemCaptureKind, ItemModifierMapping, ItemModifierRoll, ItemModifierRule, LocalWeaponOperation,
     LocalWeaponStat,
@@ -12,8 +13,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 8;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v8";
+pub const SCHEMA_VERSION: u32 = 9;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v9";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -32,6 +33,8 @@ const SECTIONS: &[&str] = &[
     "passive_effects",
     "passive_exclusions",
     "jewellery_bases",
+    "armour_bases",
+    "item_formatting",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -344,6 +347,9 @@ pub struct PassiveEffects {
 #[serde(rename_all = "snake_case")]
 pub enum EquipmentSlot {
     Amulet,
+    Helmet,
+    Gloves,
+    Boots,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -362,6 +368,21 @@ pub struct JewelleryBaseData {
     pub slot: EquipmentSlot,
     pub requirements: RequirementData,
     pub implicit: JewelleryImplicitData,
+    pub source: crate::tree_data::SourceTable,
+}
+/// Complete supported fixed armour base, with source default quality and evidence.
+/// The three local defence ratings and requirements are injected numerical data.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ArmourBaseData {
+    pub id: String,
+    pub name: String,
+    pub slot: EquipmentSlot,
+    pub requirements: RequirementData,
+    pub quality: u32,
+    pub armour: f64,
+    pub evasion: f64,
+    pub energy_shield: f64,
     pub source: crate::tree_data::SourceTable,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -384,8 +405,16 @@ pub struct GameDataPackage {
     pub passive_effects: Vec<PassiveEffects>,
     pub passive_exclusions: Vec<crate::passive_allocation::ExcludedPassiveView>,
     pub jewellery_bases: Vec<JewelleryBaseData>,
+    pub armour_bases: Vec<ArmourBaseData>,
+    pub item_formatting: ItemFormattingData,
 }
 impl GameDataPackage {
+    pub fn armour_base(&self, id: &str) -> Option<&ArmourBaseData> {
+        self.armour_bases.iter().find(|base| base.id == id)
+    }
+    pub fn armour_base_by_name(&self, name: &str) -> Option<&ArmourBaseData> {
+        self.armour_bases.iter().find(|base| base.name == name)
+    }
     pub fn jewellery_base(&self, id: &str) -> Option<&JewelleryBaseData> {
         self.jewellery_bases.iter().find(|base| base.id == id)
     }
@@ -756,6 +785,7 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     }
     crate::item_rules::validate_rules(&package.item_modifier_rules)?;
     crate::actor::validate_actor(&package.actor)?;
+    package.item_formatting.validate()?;
     if package
         .actor
         .spirit_quests
@@ -824,6 +854,7 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     )?;
     validate_passive_catalog(package, limits)?;
     validate_jewellery(package)?;
+    validate_armour(package)?;
     Ok(())
 }
 fn validate_requirement(name: &str, requirement: &RequirementData) -> Result<()> {
@@ -1138,6 +1169,11 @@ fn validate_passive_catalog(package: &GameDataPackage, limits: &LoadLimits) -> R
         }
         for modifier in &record.actor_modifiers {
             modifier.validate().map_err(error)?;
+            if modifier.stat.is_local_armour_only() {
+                return Err(error(
+                    "local armour targets cannot enter passive actor records",
+                ));
+            }
             if matches!(
                 modifier.stat,
                 ActorStat::LifeConvertToEnergyShield
@@ -1288,4 +1324,49 @@ fn reviewed_passive_capability_keys()
     })
     .as_ref()
     .map_err(error)
+}
+
+fn validate_armour(package: &GameDataPackage) -> Result<()> {
+    if package.armour_bases.is_empty() || package.armour_bases.len() > 1024 {
+        return Err(error("armour base catalog requires one to 1024 records"));
+    }
+    let mut ids = BTreeSet::new();
+    let mut names = BTreeSet::new();
+    for base in &package.armour_bases {
+        if !matches!(
+            base.slot,
+            EquipmentSlot::Helmet | EquipmentSlot::Gloves | EquipmentSlot::Boots
+        ) || base.id.is_empty()
+            || base.id.len() > 128
+            || !base
+                .id
+                .bytes()
+                .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'_')
+            || !ids.insert(&base.id)
+            || base.name.trim() != base.name
+            || base.name.is_empty()
+            || base.name.len() > 256
+            || base.name.chars().any(char::is_control)
+            || !names.insert(&base.name)
+        {
+            return Err(error("invalid or duplicate armour source identity/slot"));
+        }
+        validate_requirement("armour", &base.requirements)?;
+        for value in [
+            base.requirements.attributes.strength,
+            base.requirements.attributes.dexterity,
+            base.requirements.attributes.intelligence,
+        ] {
+            number("armour attribute requirement", f64::from(value), 0.0, 1e6)?;
+        }
+        number("armour default quality", f64::from(base.quality), 0.0, 20.0)?;
+        for (name, value) in [
+            ("armour base armour", base.armour),
+            ("armour base evasion", base.evasion),
+            ("armour base energy shield", base.energy_shield),
+        ] {
+            number(name, value, 0.0, 1e6)?;
+        }
+    }
+    Ok(())
 }

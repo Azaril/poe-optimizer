@@ -1055,3 +1055,288 @@ fn changing_actor_receiver_source_programs_and_both_prepared_skills_allocate_not
         .unwrap();
     assert_eq!(before.receiving(), after.receiving());
 }
+
+#[test]
+fn local_armour_components_bind_data_slots_and_reject_unconsumed_local_only_records() {
+    use poe_optimizer_data::game_data::{ActorCondition, ActorModifierTag, EquipmentSlot};
+    use poe_optimizer_engine::{
+        actor::{ActorModifierLayer, ActorScratch},
+        armour::{self, ArmourSlots},
+    };
+    let data = CompiledGameData::bundled().unwrap();
+    let character = data.default_mace_character();
+    let input = spark_input();
+    let quests = data.actor_quest_selection(input.quests);
+    let scenario = data.receiving_scenario(input.quests, input.resistance_penalty);
+    let base = data
+        .snapshot()
+        .package()
+        .armour_bases
+        .iter()
+        .find(|base| base.slot == EquipmentSlot::Helmet)
+        .unwrap();
+    let mut global = numeric(ActorStat::EnergyShield, Op::Increased, 45.0);
+    global.tags.push(ActorModifierTag::Global);
+    let records = vec![
+        numeric(ActorStat::ArmourAndEnergyShield, Op::Base, 25.0),
+        numeric(ActorStat::EnergyShield, Op::Increased, -250.0),
+        global,
+    ];
+    let item = data.prepare_armour(&base.id, 7, 1, &records).unwrap();
+    assert_eq!(item.consumed_modifier_count(), 2);
+    assert_eq!(item.global_records(), &records[2..]);
+    assert_eq!(item.global_program().record_count(), 1);
+    assert!(item.stats().energy_shield < 0.0);
+    assert!(item.footprint() >= std::mem::size_of_val(&item));
+    for quality in [21, u32::MAX] {
+        assert!(data.prepare_armour(&base.id, quality, 1, &[]).is_err());
+    }
+    for level in [0, 101, u32::MAX] {
+        assert!(data.prepare_armour(&base.id, 0, level, &[]).is_err());
+    }
+    assert!(data.prepare_armour("unknown", 0, 1, &[]).is_err());
+    let slots = ArmourSlots {
+        helmet: Some(&item),
+        ..Default::default()
+    };
+    let actor = data
+        .prepare_actor_with_armour(
+            60,
+            quests,
+            scenario,
+            &character,
+            &[item.global_records().to_vec()],
+            slots,
+        )
+        .unwrap();
+    let mut scratch = ActorScratch::default();
+    let programs = [item.global_program()];
+    let layers = [ActorModifierLayer {
+        programs: &programs,
+    }];
+    assert_eq!(
+        actor.receiving(),
+        data.evaluate_actor_with_armour(
+            60,
+            quests,
+            scenario,
+            &character,
+            &layers,
+            slots,
+            &mut scratch
+        )
+        .unwrap()
+        .receiving()
+    );
+    let foreign = CompiledGameData::compile(std::sync::Arc::new(
+        poe_optimizer_data::game_data::bundled_snapshot().unwrap(),
+    ))
+    .unwrap();
+    assert!(
+        foreign
+            .prepare_actor_with_armour(60, quests, scenario, &character, &[], slots)
+            .unwrap_err()
+            .0
+            .contains("different compiled dataset")
+    );
+    assert!(
+        foreign
+            .evaluate_actor_with_armour(60, quests, scenario, &character, &[], slots, &mut scratch)
+            .is_err()
+    );
+    let wrong = ArmourSlots {
+        gloves: Some(&item),
+        ..Default::default()
+    };
+    assert!(
+        data.prepare_actor_with_armour(60, quests, scenario, &character, &[], wrong)
+            .is_err()
+    );
+    assert!(
+        data.evaluate_actor_with_armour(60, quests, scenario, &character, &[], wrong, &mut scratch)
+            .is_err()
+    );
+    assert_eq!(
+        actor.receiving(),
+        data.evaluate_actor_with_armour(
+            60,
+            quests,
+            scenario,
+            &character,
+            &layers,
+            slots,
+            &mut scratch
+        )
+        .unwrap()
+        .receiving()
+    );
+    for stat in [
+        ActorStat::ArmourAndEnergyShield,
+        ActorStat::EvasionAndEnergyShield,
+    ] {
+        for op in [Op::Base, Op::Increased] {
+            for conditional in [false, true] {
+                let mut record = numeric(stat, op, 25.0);
+                if conditional {
+                    record.tags.push(ActorModifierTag::Condition {
+                        variables: vec![ActorCondition::DexHigherThanInt],
+                        negated: false,
+                    });
+                }
+                assert_eq!(armour::is_local_modifier(&record), !conditional);
+                assert!(
+                    data.compile_actor_modifiers(std::slice::from_ref(&record))
+                        .is_err()
+                );
+                assert!(
+                    data.prepare_actor_resources(60, quests, &character, &[vec![record.clone()]])
+                        .is_err()
+                );
+                assert!(
+                    data.prepare_actor(60, quests, scenario, &character, &[vec![record.clone()]])
+                        .is_err()
+                );
+                assert!(
+                    data.prepare_actor_with_armour(
+                        60,
+                        quests,
+                        scenario,
+                        &character,
+                        &[vec![record.clone()]],
+                        slots
+                    )
+                    .is_err()
+                );
+                assert_eq!(
+                    data.prepare_armour(&base.id, 0, 1, &[record]).is_ok(),
+                    !conditional
+                );
+            }
+        }
+    }
+    let mut different = character;
+    different.modifiers.evasion_flat = 1.0;
+    assert!(actor.with_character(&different).is_err());
+    assert!(
+        spark::evaluate_with_actor(
+            &SparkInput {
+                resistance_penalty: 0.0,
+                ..input
+            },
+            &character,
+            &data,
+            &actor
+        )
+        .is_err()
+    );
+}
+#[test]
+fn changing_three_local_armour_slots_actor_composition_and_both_skills_allocate_nothing() {
+    use poe_optimizer_data::game_data::{ActorCondition, ActorModifierTag, EquipmentSlot};
+    use poe_optimizer_engine::{
+        actor::{ActorModifierLayer, ActorScratch},
+        armour::ArmourSlots,
+    };
+    let data = CompiledGameData::bundled().unwrap();
+    let character = data.default_mace_character();
+    let input = spark_input();
+    let mace = mace_input();
+    let quests = data.actor_quest_selection(input.quests);
+    let scenario = data.receiving_scenario(input.quests, input.resistance_penalty);
+    let mut conditional = numeric(ActorStat::EnergyShield, Op::Base, 12.5);
+    conditional.tags.push(ActorModifierTag::Condition {
+        variables: vec![ActorCondition::IntHigherThanDex],
+        negated: false,
+    });
+    let config = data
+        .compile_actor_modifiers(&[
+            conditional,
+            numeric(ActorStat::Defences, Op::Increased, 25.0),
+        ])
+        .unwrap();
+    let items = [
+        EquipmentSlot::Helmet,
+        EquipmentSlot::Gloves,
+        EquipmentSlot::Boots,
+    ]
+    .map(|slot| {
+        let base = data
+            .snapshot()
+            .package()
+            .armour_bases
+            .iter()
+            .find(|base| base.slot == slot)
+            .unwrap();
+        [0, 7, 20].map(|quality| {
+            data.prepare_armour(
+                &base.id,
+                quality,
+                1,
+                &[
+                    numeric(ActorStat::ArmourAndEvasion, Op::Base, 20.5),
+                    numeric(ActorStat::ArmourAndEnergyShield, Op::Increased, 33.333333),
+                    numeric(ActorStat::EnergyShield, Op::Base, quality as f64 + 1.5),
+                    numeric(ActorStat::Int, Op::Base, quality as f64),
+                    numeric(ActorStat::ElementalResist, Op::Base, quality as f64),
+                ],
+            )
+            .unwrap()
+        })
+    });
+    let passive = [0.0, 15.0, 40.0].map(|dex| {
+        data.compile_actor_modifiers(&[
+            numeric(ActorStat::Dex, Op::Base, dex),
+            numeric(ActorStat::Armour, Op::Base, dex),
+        ])
+        .unwrap()
+    });
+    let weapon = data
+        .prepare_mace_weapon(mace.weapon, mace.quality, mace.item_level, &[])
+        .unwrap();
+    let supports = data.mace_support_loadout(&[]).unwrap();
+    let mut scratch = ActorScratch::default();
+    let (checksum, count) = allocations(|| {
+        let mut checksum = 0.0;
+        for i in 0..3240 {
+            let helmet = &items[0][i % 3];
+            let gloves = &items[1][(i / 3) % 3];
+            let boots = &items[2][(i / 9) % 3];
+            let programs = [
+                &config,
+                helmet.global_program(),
+                gloves.global_program(),
+                boots.global_program(),
+                &passive[(i / 27) % 3],
+            ];
+            let actor = data
+                .evaluate_actor_with_armour(
+                    60,
+                    quests,
+                    scenario,
+                    &character,
+                    &[ActorModifierLayer {
+                        programs: &programs,
+                    }],
+                    ArmourSlots {
+                        helmet: Some(helmet),
+                        gloves: Some(gloves),
+                        boots: Some(boots),
+                    },
+                    &mut scratch,
+                )
+                .unwrap();
+            let spark =
+                black_box(spark::evaluate_with_actor(&input, &character, &data, &actor).unwrap());
+            let mace = black_box(
+                mace::evaluate_with_actor(&mace, &character, &data, &weapon, supports, &actor)
+                    .unwrap(),
+            );
+            checksum +=
+                spark.energy_shield + spark.armour + spark.evasion + spark.life + mace.hit_dps;
+        }
+        checksum
+    });
+    assert!(checksum.is_finite());
+    assert_eq!(count, 0);
+    assert!(std::mem::size_of::<ActorScratch>() <= 1024);
+}

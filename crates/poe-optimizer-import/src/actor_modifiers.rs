@@ -352,8 +352,15 @@ fn match_rule(line: &str, rule: &ActorModifierRule) -> Result<Option<Vec<f64>>> 
     }
     Ok(rest.is_empty().then_some(values))
 }
-fn source_capability(record: &ActorModifierRecord) -> Result<()> {
+fn source_capability(record: &ActorModifierRecord, armour: bool) -> Result<()> {
     record.validate().map_err(|e| invalid(e.to_string()))?;
+    if record.stat.is_local_armour_only()
+        && (!armour || !poe_optimizer_engine::armour::is_local_modifier(record))
+    {
+        return Err(invalid(
+            "paired local armour modifiers require an untagged armour item record",
+        ));
+    }
     use ActorStat::*;
     if matches!(
         record.stat,
@@ -385,6 +392,7 @@ fn source_capability(record: &ActorModifierRecord) -> Result<()> {
 pub struct ParsedActorModifierLine {
     rule_id: String,
     values: Vec<f64>,
+    effective_values: Vec<f64>,
     records: Vec<ActorModifierRecord>,
 }
 impl ParsedActorModifierLine {
@@ -393,6 +401,9 @@ impl ParsedActorModifierLine {
     }
     pub fn values(&self) -> &[f64] {
         &self.values
+    }
+    pub fn effective_values(&self) -> &[f64] {
+        &self.effective_values
     }
     pub fn records(&self) -> &[ActorModifierRecord] {
         &self.records
@@ -404,6 +415,33 @@ pub fn match_actor_modifier_line(
     line: &str,
     source: &str,
     data: &GameDataPackage,
+) -> Result<Option<ParsedActorModifierLine>> {
+    match_modifier_line(line, source, data, false, false)
+}
+/// Parse an equipment line using its selected-data item formatting policy before
+/// mapping numeric values to the surviving global actor records.
+pub fn match_equipment_modifier_line(
+    line: &str,
+    source: &str,
+    data: &GameDataPackage,
+) -> Result<Option<ParsedActorModifierLine>> {
+    match_modifier_line(line, source, data, false, true)
+}
+/// Parse the same injected source grammar while permitting complete local-only
+/// armour records. Such records must be consumed before global actor compilation.
+pub fn match_armour_modifier_line(
+    line: &str,
+    source: &str,
+    data: &GameDataPackage,
+) -> Result<Option<ParsedActorModifierLine>> {
+    match_modifier_line(line, source, data, true, true)
+}
+fn match_modifier_line(
+    line: &str,
+    source: &str,
+    data: &GameDataPackage,
+    armour: bool,
+    equipment: bool,
 ) -> Result<Option<ParsedActorModifierLine>> {
     if line.is_empty() || line.len() > MAX_LINE_BYTES || line.chars().any(char::is_control) {
         return Err(invalid("actor line must be bounded literal text"));
@@ -422,6 +460,21 @@ pub fn match_actor_modifier_line(
     let Some((rule, values)) = found else {
         return Ok(None);
     };
+    let effective_values = if equipment {
+        crate::item_formatting::effective_values(
+            line,
+            &values,
+            data,
+            &rule
+                .captures
+                .iter()
+                .map(|kind| matches!(kind, ActorCaptureKind::UnsignedInteger))
+                .collect::<Vec<_>>(),
+        )
+        .map_err(invalid)?
+    } else {
+        values.clone()
+    };
     let mut records = Vec::new();
     for mapping in &rule.modifiers {
         let effect = match mapping.effect {
@@ -430,7 +483,7 @@ pub fn match_actor_modifier_line(
                 let value = match value {
                     ActorRuleValue::Constant { value } => value,
                     ActorRuleValue::Capture { index, multiplier } => {
-                        *values
+                        *effective_values
                             .get(index as usize)
                             .ok_or_else(|| invalid("actor rule capture index missing"))?
                             * multiplier
@@ -450,12 +503,13 @@ pub fn match_actor_modifier_line(
             keyword_flags: mapping.keyword_flags,
             tags: mapping.tags.clone(),
         };
-        source_capability(&record)?;
+        source_capability(&record, armour)?;
         records.push(record);
     }
     Ok(Some(ParsedActorModifierLine {
         rule_id: rule.id.clone(),
         values,
+        effective_values,
         records,
     }))
 }

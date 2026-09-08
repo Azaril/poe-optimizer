@@ -28,7 +28,7 @@ fn conditioned(mut value: Record, condition: Condition) -> Record {
     });
     value
 }
-fn compare(actual: ReceivingOutput, reference: &Table) {
+pub(super) fn compare(actual: ReceivingOutput, reference: &Table) {
     let output: Table = reference.get("output").unwrap();
     for (name, value) in [
         ("Armour", actual.armour),

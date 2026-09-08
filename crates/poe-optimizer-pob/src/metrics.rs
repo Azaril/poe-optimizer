@@ -121,6 +121,20 @@ const BINDINGS: &[Binding] = &[
         minion: false,
         description: "Maximum Spirit pool, before reservation.",
     },
+    Binding {
+        id: "armour",
+        raw: "Armour",
+        unit: MetricUnit::RatingPoints,
+        minion: false,
+        description: "Final armour rating; not physical damage reduction or maximum hit taken.",
+    },
+    Binding {
+        id: "evasion",
+        raw: "Evasion",
+        unit: MetricUnit::RatingPoints,
+        minion: false,
+        description: "Final evasion rating; not chance to evade under an encounter.",
+    },
 ];
 
 pub fn catalog() -> Vec<MetricDefinition> {
@@ -201,4 +215,66 @@ pub fn measurements(snapshot: &EvaluationSnapshot) -> Vec<MetricMeasurement> {
         }
     }
     measurements
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::BTreeMap;
+
+    #[test]
+    fn defence_ratings_are_player_only_versioned_rating_points() {
+        let definitions = catalog();
+        for id in ["armour", "evasion"] {
+            let definition = definitions.iter().find(|entry| entry.id == id).unwrap();
+            assert_eq!(definition.unit, MetricUnit::RatingPoints);
+            assert_eq!(definition.actors, [ActorScope::Player]);
+            assert_eq!(definition.schema_version, 1);
+            assert_eq!(
+                serde_json::to_value(definition.unit).unwrap(),
+                "rating_points"
+            );
+        }
+        // New definitions append without changing existing catalog positions.
+        assert_eq!(definitions[15].id, "spirit");
+        assert_eq!(definitions[16].id, "armour");
+        assert_eq!(definitions[17].id, "evasion");
+    }
+
+    #[test]
+    fn rating_mapping_preserves_availability_without_requiring_a_hit_action() {
+        let mut actor = ActorOutput {
+            skill_name: None,
+            skill_id: None,
+            has_hit_damage: false,
+            metrics: BTreeMap::new(),
+            non_finite_metrics: Vec::new(),
+            non_finite_values: BTreeMap::new(),
+        };
+        for id in ["armour", "evasion"] {
+            let binding = BINDINGS.iter().find(|entry| entry.id == id).unwrap();
+            assert!(matches!(
+                value(Some(&actor), binding.raw, binding.minion),
+                MeasurementValue::Unavailable { .. }
+            ));
+            actor.metrics.insert(binding.raw.into(), 125.0);
+            assert_eq!(
+                value(Some(&actor), binding.raw, binding.minion),
+                MeasurementValue::Finite { value: 125.0 }
+            );
+            actor.metrics.remove(binding.raw);
+            for kind in [
+                NonFiniteKind::PositiveInfinity,
+                NonFiniteKind::NegativeInfinity,
+                NonFiniteKind::NotANumber,
+            ] {
+                actor.non_finite_values.insert(binding.raw.into(), kind);
+                assert_eq!(
+                    value(Some(&actor), binding.raw, binding.minion),
+                    MeasurementValue::NonFinite { kind }
+                );
+            }
+            actor.non_finite_values.remove(binding.raw);
+        }
+    }
 }

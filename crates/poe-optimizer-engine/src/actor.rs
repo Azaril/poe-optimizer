@@ -6,6 +6,7 @@
 //! Optional receiving preparation shares the exact same source queries and final
 //! attribute conditions. Reservation and conversion receivers remain unsupported.
 use crate::{
+    armour::ArmourSlots,
     character::{CharacterAttributes, CharacterInput},
     conditions::{
         ConditionActor, ConditionEnvironment, ConditionEnvironmentInput, ConditionVariables,
@@ -655,6 +656,7 @@ fn calculate_complete(
     queries: &mut impl ActorQueries,
     compiled: &CompiledGameData,
     scenario: Option<ReceivingScenario>,
+    armour: ArmourSlots<'_>,
 ) -> Result<
     (
         ActorResourceOutput,
@@ -664,7 +666,9 @@ fn calculate_complete(
 > {
     let actor = calculate(queries, compiled)?;
     let receiving = scenario
-        .map(|scenario| receiving::calculate(queries, compiled).map(|output| (scenario, output)))
+        .map(|scenario| {
+            receiving::calculate(queries, compiled, armour).map(|output| (scenario, output))
+        })
         .transpose()?;
     Ok((actor, receiving))
 }
@@ -690,7 +694,14 @@ impl CompiledGameData {
         character: &CharacterInput,
         modifier_layers: &[Vec<ActorModifierRecord>],
     ) -> Result<PreparedActorResources, ActorError> {
-        self.prepare_actor_internal(level, quests, None, character, modifier_layers)
+        self.prepare_actor_internal(
+            level,
+            quests,
+            None,
+            character,
+            modifier_layers,
+            ArmourSlots::default(),
+        )
     }
     /// Complete source-ordered actor and receiving-defence preparation. Receiver
     /// contributions must be ordered records, never aggregated legacy scalars.
@@ -702,8 +713,38 @@ impl CompiledGameData {
         character: &CharacterInput,
         modifier_layers: &[Vec<ActorModifierRecord>],
     ) -> Result<PreparedActorResources, ActorError> {
-        self.prepare_actor_internal(level, quests, Some(receiving), character, modifier_layers)
+        self.prepare_actor_with_armour(
+            level,
+            quests,
+            receiving,
+            character,
+            modifier_layers,
+            ArmourSlots::default(),
+        )
     }
+    /// Complete preparation with separately rounded local armour in fixed slots.
+    /// Callers must include each selected item's global_records exactly once in
+    /// the ordered equipment layer. Slot components supply local bases only.
+    #[allow(clippy::too_many_arguments)]
+    pub fn prepare_actor_with_armour(
+        &self,
+        level: u32,
+        quests: ActorQuestSelection,
+        receiving: ReceivingScenario,
+        character: &CharacterInput,
+        modifier_layers: &[Vec<ActorModifierRecord>],
+        armour: ArmourSlots<'_>,
+    ) -> Result<PreparedActorResources, ActorError> {
+        self.prepare_actor_internal(
+            level,
+            quests,
+            Some(receiving),
+            character,
+            modifier_layers,
+            armour,
+        )
+    }
+    #[allow(clippy::too_many_arguments)]
     fn prepare_actor_internal(
         &self,
         level: u32,
@@ -711,7 +752,9 @@ impl CompiledGameData {
         receiving: Option<ReceivingScenario>,
         character: &CharacterInput,
         modifier_layers: &[Vec<ActorModifierRecord>],
+        armour: ArmourSlots<'_>,
     ) -> Result<PreparedActorResources, ActorError> {
+        armour.validate(self)?;
         character.validate().map_err(|error| ActorError(error.0))?;
         if let Some(scenario) = receiving {
             scenario.validate()?;
@@ -726,19 +769,20 @@ impl CompiledGameData {
             ));
         }
         for record in modifier_layers.iter().flatten() {
-            record.validate().map_err(|_|ActorError("Invalid normalized actor target, operation, numeric bound, flags, source or condition tags"))?;
+            validate_global_record(record)?;
         }
         let mut base = self.actor_base_records(level, quests, character);
         if let Some(scenario) = receiving {
             self.add_receiving_base(&mut base, scenario);
         }
         let (output, receiving_output) = if modifier_layers.iter().all(Vec::is_empty) {
-            calculate_complete(&mut base, self, receiving)?
+            calculate_complete(&mut base, self, receiving, armour)?
         } else {
             calculate_complete(
                 &mut DatabaseQueries::new(base, modifier_layers, &self.actor_precision)?,
                 self,
                 receiving,
+                armour,
             )?
         };
         let requires_downstream_defences = modifier_layers
@@ -851,4 +895,14 @@ fn requires_downstream_defences(stat: ActorStat) -> bool {
             | ActorStat::SpiritConvertToEvasion
             | ActorStat::ChaosInoculation
     )
+}
+
+fn validate_global_record(record: &ActorModifierRecord) -> Result<(), ActorError> {
+    record.validate().map_err(|_| ActorError("Invalid normalized actor target, operation, numeric bound, flags, source or condition tags"))?;
+    if record.stat.is_local_armour_only() {
+        return Err(ActorError(
+            "Local-only armour modifiers require local armour consumption",
+        ));
+    }
+    Ok(())
 }

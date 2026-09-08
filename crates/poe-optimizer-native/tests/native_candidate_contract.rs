@@ -495,7 +495,7 @@ fn mixed_typed_calculations_allocate_nothing_but_scheduler_adaptation_is_explici
     let snapshot = prepared.measure(&handles[0]).unwrap();
     let (measurements, allocations) =
         allocation_count(|| prepared.snapshot_measurements(&snapshot));
-    assert_eq!(measurements.len(), 10);
+    assert_eq!(measurements.len(), 12);
     assert!(
         allocations > 0,
         "owned scheduler contract remains an explicit cost"

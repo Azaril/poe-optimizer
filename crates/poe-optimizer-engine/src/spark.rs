@@ -10,7 +10,7 @@ use crate::data::CompiledGameData;
 use crate::defence::round_to_integer;
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-spark-receiving-defence-v4";
+pub const PROFILE_ID: &str = "poe2-spark-local-armour-v5";
 pub const TREE_VERSION: &str = "0_5";
 pub const CLASS_ID: u32 = 7;
 pub const SKILL_ID: &str = "SparkPlayer";

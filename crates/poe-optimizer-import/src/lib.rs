@@ -8,6 +8,7 @@ pub mod actor_modifiers;
 pub mod controlled_build;
 pub mod controlled_mace;
 pub mod equipment;
+mod item_formatting;
 pub mod mace_item;
 pub mod preflight;
 pub mod xml_compat;

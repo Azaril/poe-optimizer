@@ -59,6 +59,11 @@ impl Oracle {
             "src/Classes/ModList.lua",
             "src/Classes/PassiveTree.lua",
             "src/Data/Bases/amulet.lua",
+            "src/Data/Bases/helmet.lua",
+            "src/Modules/ItemTools.lua",
+            "src/Data/ModScalability.lua",
+            "src/Data/Bases/gloves.lua",
+            "src/Data/Bases/boots.lua",
             "src/Modules/CalcSetup.lua",
             "src/Modules/CalcPerform.lua",
             "src/Modules/CalcDefence.lua",
@@ -117,7 +122,36 @@ impl Oracle {
         .unwrap();
         lua.load(&sources["src/Data/Global.lua"]).exec().unwrap();
         let data: Table = lua.load(&sources["src/Data/Misc.lua"]).eval().unwrap();
-        lua.globals().set("data", data).unwrap();
+        lua.globals().set("data", data.clone()).unwrap();
+        data.set(
+            "modScalability",
+            lua.load(&sources["src/Data/ModScalability.lua"])
+                .eval::<Table>()
+                .unwrap(),
+        )
+        .unwrap();
+        lua.load(format!(
+            "local m_floor=math.floor;local m_ceil=math.ceil;{}\n{}",
+            section(
+                common,
+                "function roundSymmetric(val, dec)",
+                "-- Symmetric ceil with precision:"
+            ),
+            section(
+                common,
+                "function wipeTable(tbl)",
+                "-- Search a table for a value"
+            )
+        ))
+        .exec()
+        .unwrap();
+        lua.load(section(
+            &sources["src/Modules/ItemTools.lua"],
+            "local t_insert = table.insert",
+            "function itemLib.formatModLine(",
+        ))
+        .exec()
+        .unwrap();
         let data_source = &sources["src/Modules/Data.lua"];
         for (begin, end) in [
             ("data.misc = {", "\ndata.skillColorMap = "),
@@ -1608,7 +1642,7 @@ fn assert_actor_rules(data: &poe_optimizer_data::game_data::GameDataPackage) {
             "All"
         );
     }
-    assert_eq!(checked, 3642);
+    assert_eq!(checked, 3750);
 }
 #[test]
 fn actor_constants_precision_and_spirit_quests_match_independent_cold_and_warm_source() {
@@ -1822,7 +1856,7 @@ fn fresh_reviewed_receiving_package_matches_independent_original_source() {
     )
     .unwrap();
     let data = &extracted.package;
-    assert_eq!(data.actor.modifier_rules.len(), 320);
+    assert_eq!(data.actor.modifier_rules.len(), 329);
     assert_quests_and_passives(data);
     assert_actor_rules(data);
     assert_jewellery(data);
@@ -1897,3 +1931,9 @@ fn assert_receiving_queries(data: &poe_optimizer_data::game_data::GameDataPackag
         }
     }
 }
+
+#[path = "support/armour_source.rs"]
+mod armour_source;
+
+#[path = "support/item_formatting_source.rs"]
+mod item_formatting_source;

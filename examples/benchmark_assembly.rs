@@ -53,6 +53,9 @@ struct Args {
     /// Use the receiving-defence source template and supplied equipment corpus.
     #[arg(long)]
     receiving_defence: bool,
+    /// Use fixed local armour slots together with receiving defences.
+    #[arg(long, conflicts_with = "receiving_defence")]
+    local_armour: bool,
     /// Approximate duration of each sample; calibration is reported separately.
     #[arg(long, default_value_t = 1200)]
     sample_ms: u64,
@@ -179,12 +182,22 @@ fn selections(catalog: &ControlledBuildCatalog) -> Result<Vec<BuildSelection>, B
     amulets.extend(
         catalog
             .items()
-            .filter(|(_, item)| item.weapon().is_none())
+            .filter(|(_, item)| item.allowed_slots().iter().any(|slot| slot == "Amulet"))
             .map(|(id, _)| Some(id.to_owned())),
     );
+    let armour_slots = ["Helmet", "Gloves", "Boots"].map(|slot| {
+        let mut choices = vec![None];
+        choices.extend(
+            catalog
+                .items()
+                .filter(|(_, item)| item.allowed_slots().iter().any(|allowed| allowed == slot))
+                .map(|(id, _)| Some(id.to_owned())),
+        );
+        (slot, choices)
+    });
     let mut unique = BTreeMap::new();
     // An intentionally bounded varied corpus, not a Cartesian candidate/result cache.
-    // Every tree sees all support loadouts; weapon/amulet choices rotate twice.
+    // Every tree sees all support loadouts; equipment choices rotate twice per loadout.
     for (tree_index, tree) in trees.iter().enumerate() {
         for (support_index, supports) in loadouts.iter().enumerate() {
             for variant in 0..2 {
@@ -200,6 +213,17 @@ fn selections(catalog: &ControlledBuildCatalog) -> Result<Vec<BuildSelection>, B
                         .candidate
                         .equipment
                         .insert("Amulet".into(), amulet.clone());
+                }
+                for (index, (slot, choices)) in armour_slots.iter().enumerate() {
+                    selection.candidate.equipment.remove(*slot);
+                    if let Some(item) =
+                        &choices[(tree_index + support_index + variant + index) % choices.len()]
+                    {
+                        selection
+                            .candidate
+                            .equipment
+                            .insert((*slot).into(), item.clone());
+                    }
                 }
                 selection
                     .candidate
@@ -371,8 +395,17 @@ fn main() -> Result<(), Box<dyn Error>> {
     {
         return Err("Require 100..10000 sample-ms, 1..10 repeats, distinct jobs in 1..256 and distinct modes".into());
     }
+    let include_receiving = args.receiving_defence || args.local_armour;
     let (candidate_set, template_path, template, equipment_path, equipment_json) =
-        if args.receiving_defence {
+        if args.local_armour {
+            (
+                "local-armour",
+                "tests/fixtures/builds/mace-local-armour.xml",
+                include_str!("../tests/fixtures/builds/mace-local-armour.xml"),
+                "examples/local-armour-search.json",
+                include_str!("local-armour-search.json"),
+            )
+        } else if args.receiving_defence {
             (
                 "receiving-defence",
                 "tests/fixtures/builds/mace-receiving-defence.xml",
@@ -453,7 +486,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .map(|handle| {
             prepared
                 .measure(handle)
-                .map(|s| measured_checksum(&s, handle, args.receiving_defence))
+                .map(|s| measured_checksum(&s, handle, include_receiving))
         })
         .collect::<Result<Vec<_>, _>>()?;
     let initial_measure_ms = milliseconds(start);
@@ -482,7 +515,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             serde_json::to_value(result.measurements)?,
             "fresh full-document comparison {index}"
         );
-        if args.receiving_defence {
+        if include_receiving {
             let attachment = result
                 .attachments
                 .iter()
@@ -509,7 +542,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         selections: &selections,
         handles: &handles,
         checksums,
-        include_receiving: args.receiving_defence,
+        include_receiving,
     };
     let mut samples = Vec::new();
     let mut worker_setups = Vec::new();
@@ -570,8 +603,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         serde_json::to_string_pretty(&json!({
             "schema_version":1,"status":"developer_native_assembly_benchmark","diagnostic_only":true,
             "scope":"bounded_varied_admitted_mace_builds_not_whole_optimizer_or_full_game_coverage",
-            "candidate_set":candidate_set,"receiving_defence":args.receiving_defence,
-            "checksum_scope":if args.receiving_defence { "metric_snapshot_and_all_13_receiving_output_fields" } else { "metric_snapshot" },
+            "candidate_set":candidate_set,"receiving_defence":include_receiving,"local_armour":args.local_armour,
+            "checksum_scope":if include_receiving { "metric_snapshot_and_all_13_receiving_output_fields" } else { "metric_snapshot" },
             "metric_ids":poe_optimizer_native::metric_catalog().into_iter().map(|metric|metric.id).collect::<Vec<_>>(),
             "fixed_template":template_path,"template_sha256":hash(template.as_bytes()),
             "equipment_source":equipment_path,"equipment_source_fields_used":["equipment"],
@@ -582,7 +615,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             "available_parallelism":std::thread::available_parallelism()?.get(),"os":std::env::consts::OS,
             "arch":std::env::consts::ARCH,"debug_assertions":cfg!(debug_assertions),
             "constraints":constraints,"attribute_locks":AttributeOptionLocks::default(),
-            "input_generation":"legacy reviewed class/tree choices plus one source-connected attribute path per class; all 0..2-support loadouts, rotating two weapon/amulet combinations per tree/loadout",
+            "input_generation":"legacy reviewed class/tree choices plus one source-connected attribute path per class; all 0..2-support loadouts, rotating two weapon/amulet/optional-armour selections per tree/loadout",
             "corpus":{"proposed":structural_candidates,"admitted":handles.len(),"rejected":structural_candidates-handles.len(),
                 "rejection_counts":rejected,"selection_fingerprints_sha256":hash(&serde_json::to_vec(&selected_fingerprints)?),
                 "class_ids":class_ids,"ascendancies":ascendancies,"distinct_allocations":trees.len(),
@@ -593,7 +626,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 "admission_ms":admission_setup_ms,"admission_attempts":structural_candidates,
                 "initial_measure_ms":initial_measure_ms,"initial_measure_calculations":handles.len(),
                 "full_document_equivalence_ms":validation_ms,"full_document_equivalence_pairs":validation_indices.len(),
-                "complete_receiving_equivalence_pairs":if args.receiving_defence { validation_indices.len() } else { 0 },
+                "complete_receiving_equivalence_pairs":if include_receiving { validation_indices.len() } else { 0 },
                 "prepared_components_parse_source_once":true},
             "footprints":{"catalog":catalog.footprint(),"prepared":prepared.footprint(),
                 "actor_scratch_inline_bytes":ActorScratch::storage_bytes(),
@@ -610,7 +643,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 "The benchmark retains a bounded input/handle corpus for repeatability; production component catalogs do not retain a Cartesian candidate-result cache.",
                 "Only equipment is read from the example JSON. The fixed source template, generated corpus and explicit benchmark budgets govern this run; JSON objective/search settings are not interpreted.",
                 "Reported footprint fields are partial capacity estimates; preparing admitted benchmark handles and catalogs is timed separately.",
-                "Receiving-defence mode additionally reads and checksums all 13 prepared receiving fields, including diagnostic Armour/Evasion and uncapped resistance totals. That consumption overhead is included in both timed modes; the default retains its metric-only checksum.",
+                "Receiving-defence mode additionally reads and checksums all 13 prepared receiving fields, including Armour/Evasion ratings and uncapped resistance totals. That consumption overhead is included in both timed modes; the default retains its metric-only checksum.",
                 "Calibration and worker startup are outside samples. Automatic iteration counts vary by API and worker count; checksums are compared with the exact rotating input sequence.",
                 "Fresh full native document comparisons are setup evidence, not independent Path of Building parity; separate source/full-build tests provide that evidence."
             ]

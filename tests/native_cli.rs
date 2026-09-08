@@ -34,7 +34,7 @@ fn native_cli_evaluates_and_exports_without_a_pob_checkout_in_the_working_direct
             .as_array()
             .unwrap()
             .len(),
-        10
+        12
     );
     assert_eq!(fs::read(&export).unwrap(), fs::read(fixture()).unwrap());
     assert_eq!(value["evaluation"]["diagnostic_only"], true);
@@ -56,7 +56,7 @@ fn native_catalog_and_unsupported_metrics_do_not_fall_back_to_pob() {
         .unwrap();
     assert!(output.status.success());
     let catalog: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
-    assert_eq!(catalog.as_array().unwrap().len(), 10);
+    assert_eq!(catalog.as_array().unwrap().len(), 12);
     let output = cli()
         .arg("evaluate")
         .arg(fixture())
@@ -138,4 +138,73 @@ fn native_only_cli_has_no_pob_backend_or_worker_commands() {
             .success()
     );
     assert!(!cli().arg("__worker").output().unwrap().status.success());
+}
+
+#[test]
+fn armour_rating_objective_reassesses_offline_and_rejects_minion_scope() {
+    let temp = tempfile::tempdir().unwrap();
+    let fixture = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/builds/mace-local-armour.xml");
+    let spec = serde_json::json!({"schema_version":1,"objective":{"kind":"scalar","metric":{"actor":"player","id":"armour"},"unit":"rating_points","direction":"maximize"},"constraints":[{"id":"evasion-floor","metric":{"actor":"player","id":"evasion"},"unit":"rating_points","operator":">=","threshold":150,"violation_scale":150}]});
+    let objective = temp.path().join("rating-objective.json");
+    fs::write(&objective, serde_json::to_vec(&spec).unwrap()).unwrap();
+    let report = temp.path().join("rating-run.json");
+    let output = cli()
+        .arg("evaluate")
+        .arg(&fixture)
+        .args([
+            "--backend",
+            "native",
+            "--metric",
+            "player.armour",
+            "--objective",
+        ])
+        .arg(&objective)
+        .arg("--output")
+        .arg(&report)
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let direct: serde_json::Value = serde_json::from_slice(&fs::read(&report).unwrap()).unwrap();
+    let output = cli()
+        .arg("assess")
+        .arg(&report)
+        .arg("--objective")
+        .arg(&objective)
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let assessed: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(
+        direct["objective_assessment"],
+        assessed["objective_assessment"]
+    );
+    assert_eq!(
+        direct["evaluation"]["measurements"]
+            .as_array()
+            .unwrap()
+            .len(),
+        2
+    );
+    for metric in direct["evaluation"]["measurements"].as_array().unwrap() {
+        assert_eq!(metric["unit"], "rating_points");
+        assert_eq!(metric["schema_version"], 1);
+        assert!(metric["value"]["value"].as_f64().unwrap() >= 150.0);
+    }
+    let output = cli()
+        .arg("evaluate")
+        .arg(&fixture)
+        .args(["--backend", "native", "--metric", "selected_minion.armour"])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("metric"));
 }
