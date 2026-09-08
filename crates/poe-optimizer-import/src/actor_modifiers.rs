@@ -233,82 +233,18 @@ fn parse_block(node: Node<'_, '_>) -> Result<ActorModifierBlock> {
         text: raw_block_text(node)?,
     })
 }
-fn decode_entities(content: &str) -> Result<String> {
-    let mut decoded = String::with_capacity(content.len());
-    let mut rest = content;
-    while let Some((prefix, entity)) = rest.split_once('&') {
-        decoded.push_str(prefix);
-        let (name, next) = entity
-            .split_once(';')
-            .ok_or_else(|| invalid("unterminated XML entity"))?;
-        decoded.push(match name {
-            "amp" => '&',
-            "lt" => '<',
-            "gt" => '>',
-            "apos" => '\'',
-            "quot" => '"',
-            _ => {
-                return Err(invalid(
-                    "only PoB-compatible named XML entities are admitted",
-                ));
-            }
-        });
-        rest = next;
-    }
-    decoded.push_str(rest);
-    Ok(decoded)
-}
 fn raw_attribute(node: Node<'_, '_>, name: &str) -> Result<Option<String>> {
-    node.attributes()
-        .find(|a| a.name() == name)
-        .map(|a| decode_entities(&node.document().input_text()[a.range_value()]))
-        .transpose()
+    crate::source_xml::attribute(node, name)
+        .map(|source| source.map(|value| value.decoded().to_owned()))
+        .map_err(|error| invalid(error.to_string()))
 }
 fn raw_block_text(node: Node<'_, '_>) -> Result<String> {
-    if node.children().any(|n| !n.is_text()) || node.children().count() > 1 {
-        return Err(invalid("actor block must contain one unsplit text payload"));
-    }
-    let source = &node.document().input_text()[node.range()];
-    if source.len() > MAX_ACTOR_MODIFIER_BYTES * 6 + 1024 {
+    if node.range().len() > MAX_ACTOR_MODIFIER_BYTES * 6 + 1024 {
         return Err(invalid("encoded actor block exceeds size limit"));
     }
-    let mut quote = None;
-    let mut start = None;
-    for (offset, byte) in source.bytes().enumerate() {
-        match quote {
-            Some(value) if value == byte => quote = None,
-            Some(_) => {}
-            None if matches!(byte, b'\'' | b'"') => quote = Some(byte),
-            None if byte == b'>' => {
-                start = Some(offset + 1);
-                break;
-            }
-            _ => {}
-        }
-    }
-    let start = start.ok_or_else(|| invalid("missing actor block opening tag"))?;
-    if source[..start].ends_with("/>") {
-        return Ok(String::new());
-    }
-    let end = source
-        .rfind("</")
-        .ok_or_else(|| invalid("missing actor block closing tag"))?;
-    let content = source
-        .get(start..end)
-        .ok_or_else(|| invalid("invalid actor block source range"))?;
-    if let Some(text) = content
-        .strip_prefix("<![CDATA[")
-        .and_then(|v| v.strip_suffix("]]>"))
-    {
-        if text.contains("]]>") || text.contains("<!--") {
-            return Err(invalid("split/comment-containing CDATA is unsupported"));
-        }
-        return Ok(text.into());
-    }
-    if content.contains('<') {
-        return Err(invalid("unsupported actor block text fragments"));
-    }
-    decode_entities(content)
+    crate::source_xml::element_text(node)
+        .map(|source| source.decoded().to_owned())
+        .map_err(|error| invalid(error.to_string()))
 }
 fn decimal(number: &str) -> bool {
     let mut parts = number.split('.');

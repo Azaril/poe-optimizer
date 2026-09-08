@@ -1,8 +1,7 @@
 //! Actual pinned parser oracle for the shared evaluator-only lexical gate.
 #![cfg(not(target_arch = "wasm32"))]
-#[path = "../../poe-optimizer-import/src/xml_compat.rs"]
-mod xml_compat;
 use mlua::{Function, Lua, Table};
+use poe_optimizer_import::xml_compat;
 use sha2::{Digest, Sha256};
 const XML: &str = include_str!("../../../vendor/path-of-building-poe2/runtime/lua/xml.lua");
 struct Reader {

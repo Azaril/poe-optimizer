@@ -77,28 +77,8 @@ fn fixed(node: Node<'_, '_>, pairs: &[(&str, &str)]) -> Result<(), EvaluationErr
     Ok(())
 }
 fn scalar(node: Node<'_, '_>) -> Result<Scalar, EvaluationError> {
-    only(node, &["name", "number", "string", "boolean"], &[])?;
-    let kinds: Vec<_> = ["number", "string", "boolean"]
-        .into_iter()
-        .filter_map(|k| node.attribute(k).map(|v| (k, v)))
-        .collect();
-    if kinds.len() != 1 {
-        return Err(unsupported(
-            "Configuration scalar must have exactly one type",
-        ));
-    }
-    match kinds[0] {
-        ("number", s) => s
-            .parse::<f64>()
-            .ok()
-            .filter(|v| v.is_finite())
-            .map(Scalar::Number)
-            .ok_or_else(|| unsupported("Configuration number must be finite")),
-        ("boolean", "true") => Ok(Scalar::Boolean(true)),
-        ("boolean", "false") => Ok(Scalar::Boolean(false)),
-        ("string", s) => Ok(Scalar::Text(s.into())),
-        _ => Err(unsupported("Invalid configuration scalar")),
-    }
+    poe_optimizer_import::configuration::read_input_scalar(node)
+        .map_err(|error| unsupported(error.to_string()))
 }
 fn validate_config(
     name: &str,
@@ -262,7 +242,7 @@ fn parse_projection(
         },
     )
     .map_err(|e| EvaluationError::new(EvaluationErrorKind::InvalidRequest, e.to_string()))?;
-    poe_optimizer_import::xml_compat::validate_native_with_actor_inputs(&doc)
+    poe_optimizer_import::xml_compat::validate_native_with_configuration(&doc)
         .map_err(|error| unsupported(format!("Native {error}")))?;
     let root = doc.root_element();
     if root.tag_name().name() != "PathOfBuilding2" {

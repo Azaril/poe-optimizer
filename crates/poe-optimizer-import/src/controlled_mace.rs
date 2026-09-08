@@ -1497,7 +1497,7 @@ fn same_backend(left: &BackendIdentity, right: &BackendIdentity) -> bool {
 }
 fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
     let document = parse(xml)?;
-    crate::xml_compat::validate_native_with_actor_inputs(&document)
+    crate::xml_compat::validate_native_with_configuration(&document)
         .map_err(|error| unsupported(&error.to_string()))?;
     let root = document.root_element();
     only(
@@ -2535,23 +2535,7 @@ fn fixed(node: Node<'_, '_>, expected: &[(&str, &str)]) -> Result<()> {
     Ok(())
 }
 fn scalar(node: Node<'_, '_>) -> Result<Scalar> {
-    only(node, &["name", "number", "string", "boolean"], &[])?;
-    let values: Vec<_> = ["number", "string", "boolean"]
-        .into_iter()
-        .filter_map(|name| node.attribute(name).map(|value| (name, value)))
-        .collect();
-    match values.as_slice() {
-        [("number", text)] => text
-            .parse::<f64>()
-            .ok()
-            .filter(|value| value.is_finite())
-            .map(Scalar::Number)
-            .ok_or_else(|| unsupported("nonfinite configuration number")),
-        [("string", text)] => Ok(Scalar::Text((*text).into())),
-        [("boolean", "true")] => Ok(Scalar::Boolean(true)),
-        [("boolean", "false")] => Ok(Scalar::Boolean(false)),
-        _ => Err(unsupported("configuration must contain exactly one scalar")),
-    }
+    crate::configuration::read_input_scalar(node).map_err(|error| unsupported(&error.to_string()))
 }
 fn scalar_number(value: &Scalar) -> Option<f64> {
     if let Scalar::Number(value) = value {

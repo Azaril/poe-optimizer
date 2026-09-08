@@ -93,6 +93,99 @@ def bounded_json(path: Path) -> dict:
     return value
 
 
+
+def configuration_source_summary(report: dict, expected_hash: str, expected_bytes: int) -> dict:
+    """Validate the source-report contract before interpreting its counts/selection.
+
+    This checks transport/schema consistency, never game settings or mechanical
+    correctness. Full source evidence remains in the invocation stdout artifact.
+    """
+    def object_value(value, label):
+        if not isinstance(value, dict):
+            raise ValueError(f"{label} must be an object")
+        return value
+
+    def positive_id(value, label):
+        if type(value) is not int or not 1 <= value <= 0xffffffff:
+            raise ValueError(f"{label} must be a positive u32 integer")
+        return value
+
+    if (type(report.get("schema_version")) is not int or report["schema_version"] != 1
+            or report.get("scope") != "configuration_source_projection_v1"
+            or report.get("status") != "source_projected"):
+        raise ValueError("unsupported configuration report schema or scope")
+    source = object_value(report["input"], "configuration input")
+    if (source.get("format") != "raw_xml" or source.get("input_sha256") != expected_hash
+            or source.get("xml_sha256") != expected_hash):
+        raise ValueError("configuration source hash/format differs from imported XML")
+    for field in ["input_bytes", "xml_bytes"]:
+        if type(source.get(field)) is not int or source[field] != expected_bytes:
+            raise ValueError(f"configuration {field} differs from imported XML")
+    diagnostic = object_value(report["configuration"], "configuration diagnostic")
+    if (type(diagnostic.get("schema_version")) is not int or diagnostic["schema_version"] != 1
+            or diagnostic.get("interpretation") != "authored_configuration_source"):
+        raise ValueError("unsupported configuration diagnostic schema or interpretation")
+    for field in ["effective_configuration", "mechanics", "game_legality"]:
+        if diagnostic.get(field) != "not_evaluated":
+            raise ValueError(f"configuration diagnostic must not claim evaluated {field}")
+    verification = object_value(report["verification"], "configuration verification")
+    for field, expected in {"effective_configuration": "not_evaluated",
+                            "game_mechanics": "not_evaluated", "build_legality": "not_checked",
+                            "reference_calculation": "not_run"}.items():
+        if verification.get(field) != expected:
+            raise ValueError(f"configuration verification must declare {field}={expected}")
+    observed = object_value(diagnostic["projection"], "configuration projection")
+    if observed.get("source_sha256") != expected_hash:
+        raise ValueError("configuration projection hash differs from imported XML")
+    layout = observed["layout"]
+    if layout not in {"missing", "empty", "legacy", "explicit_sets"}:
+        raise ValueError("unknown configuration layout")
+    sets = observed["sets"]
+    if not isinstance(sets, list) or not 1 <= len(sets) <= 64:
+        raise ValueError("configuration sets must be an array of 1..64 sets")
+    summaries, ids, record_count = [], [], 0
+    for node in sets:
+        node = object_value(node, "configuration set")
+        set_id = positive_id(node["id"], "configuration set ID")
+        if set_id in ids:
+            raise ValueError("duplicate configuration set ID")
+        ids.append(set_id)
+        summary = {"id": set_id}
+        for field, summary_field in [("inputs", "inputs"), ("placeholders", "placeholders"),
+                                     ("blocks", "custom_modifier_blocks"),
+                                     ("unknown_records", "unhandled_records")]:
+            records = node[field]
+            if not isinstance(records, list) or any(not isinstance(r, dict) for r in records):
+                raise ValueError(f"configuration {field} must be an array of record objects")
+            record_count += len(records)
+            summary[summary_field] = len(records)
+        summaries.append(summary)
+    if record_count > 4096:
+        raise ValueError("configuration exceeds the 4096-record limit")
+    if layout in {"missing", "empty", "legacy"} and ids != [1]:
+        raise ValueError("implicit configuration layouts require exactly set 1")
+    if layout in {"missing", "empty"} and record_count:
+        raise ValueError("missing/empty configuration cannot contain authored records")
+    requested = observed["requested_active_set_id"]
+    if requested is not None:
+        positive_id(requested, "requested configuration set ID")
+    requested_or_default = 1 if requested is None else requested
+    present = requested_or_default in ids
+    active = positive_id(observed["active_set_id"], "active configuration set ID")
+    expected_active = requested_or_default if present else ids[0]
+    expected_resolution = (("requested" if requested is not None else "default_one") if present
+                           else ("missing_requested_uses_first" if requested is not None
+                                 else "missing_default_uses_first"))
+    if active != expected_active or observed["active_set_resolution"] != expected_resolution:
+        raise ValueError("configuration active selection/fallback is inconsistent with source sets")
+    return {"report_schema_version": report["schema_version"],
+            "source_xml_sha256": expected_hash,
+            "source_state": {"layout": layout, "requested_active_set_id": requested,
+                             "active_set_id": active, "active_set_resolution": expected_resolution,
+                             "sets": summaries},
+            "verification": verification}
+
+
 def xml_summary(path: Path) -> dict:
     data = read_bounded(path, MAX_XML_BYTES)
     if b"<!DOCTYPE" in data.upper() or b"<!ENTITY" in data.upper():
@@ -119,6 +212,7 @@ def xml_summary(path: Path) -> dict:
 
     return {
         "root": root.tag,
+        "attribute_semantics": "standard_xml_normalized_not_pob_source_values",
         "build": dict(build.attrib) if build is not None else None,
         "tree": {"attributes": dict(tree.attrib),
                  "specs": [{"attributes": dict(node.attrib),
@@ -229,6 +323,8 @@ def parse_args(argv=None):
     parser.add_argument("--output", required=True, type=Path, help="new directory; never reused")
     parser.add_argument("--import-cli", required=True, type=regular_file)
     parser.add_argument("--backend", action="append", required=True, metavar="native=CLI|pob=CLI")
+    parser.add_argument("--inspect-configuration", action="store_true",
+                        help="collect source configuration evidence using the explicit import CLI")
     parser.add_argument("--data", type=regular_file, help="native dataset; copied and hashed")
     parser.add_argument("--data-sha256", help="external review digest passed to the native CLI")
     parser.add_argument("--options", type=regular_file, help="evaluation options; copied and hashed")
@@ -332,7 +428,41 @@ def main(argv=None) -> int:
                 # Fresh evaluations stay independent of one another. A malformed
                 # observation index does not replace or fabricate imported XML.
                 if xml.is_file():
+                    source_changed = False
+                    if args.inspect_configuration:
+                        # Pin the source established by import before invoking a helper.
+                        # Never accept a newly reported hash of rewritten XML as the same input.
+                        expected_hash = record.get("imported_xml_sha256") or digest(xml)
+                        expected_bytes = xml.stat().st_size
+                        result = invoke([str(args.import_cli), "inspect-configuration", str(xml)],
+                                        directory, "configuration", args.workdir, deadline,
+                                        args.import_timeout_seconds)
+                        record["configuration"] = result
+                        result["invocation_status"] = result["status"]
+                        result["source_before_inspection_sha256"] = expected_hash
+                        try:
+                            after_hash = digest(xml)
+                        except OSError:
+                            after_hash = None
+                        result["source_after_inspection_sha256"] = after_hash
+                        source_changed = after_hash != expected_hash
+                        result["source_changed"] = source_changed
+                        if source_changed:
+                            result["status"] = "configuration_evidence_error"
+                            result["error"] = "Imported XML changed during configuration inspection; changed source is retained and will not be evaluated"
+                        elif result["status"] == "success":
+                            try:
+                                report = bounded_json(directory / "configuration.stdout")
+                                result.update(configuration_source_summary(report, expected_hash, expected_bytes))
+                            except (OSError, ValueError, TypeError, KeyError) as error:
+                                result["status"] = "configuration_evidence_error"
+                                result["error"] = f"{type(error).__name__}: {error}"
                     for name, cli in args.backends:
+                        if source_changed:
+                            record["evaluations"][name] = {
+                                "status": "source_changed",
+                                "error": "Imported XML changed during configuration inspection; evaluation not run"}
+                            continue
                         budget = min(args.evaluation_timeout_seconds, max(0, deadline-time.monotonic()))
                         command = [str(cli), "evaluate", str(xml), "--backend", name, "--raw",
                                    "--timeout-seconds", str(max(1, math.ceil(budget))),
@@ -391,9 +521,11 @@ def main(argv=None) -> int:
             provenance[name]["unchanged_after_run"] = False
     failed = sum(record.get("status") not in {"imported","blank_line"}
                  or any(value["status"]!="success" for value in record["evaluations"].values())
+                 or record.get("configuration", {}).get("status", "success") != "success"
                  for record in records)
     changed_inputs = [name for name, value in provenance.items() if not value["unchanged_after_run"]]
-    manifest = {"schema_version":1,"scope":"independent_import_and_fresh_evaluation_observations",
+    manifest = {"schema_version":2,"scope":"independent_import_and_fresh_evaluation_observations",
+                "configuration_inspection_requested": args.inspect_configuration,
                 "claims":{"container_import_only":True,"build_legality_verified":False,"numerical_parity_verified":False},
                 "provenance":provenance,"changed_inputs":changed_inputs,"pob_path":str(args.pob) if args.pob else None,
                 "jobs":args.jobs,"deadline_seconds":args.deadline_seconds,

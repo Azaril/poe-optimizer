@@ -670,26 +670,7 @@ fn validate_gem(node: Node<'_, '_>, name: &str, id: &str, game: &str, variant: &
     )
 }
 fn scalar(node: Node<'_, '_>) -> Result<Scalar> {
-    only(node, &["name", "number", "string", "boolean"], &[])?;
-    let values: Vec<_> = ["number", "string", "boolean"]
-        .into_iter()
-        .filter_map(|k| node.attribute(k).map(|v| (k, v)))
-        .collect();
-    if values.len() != 1 {
-        return Err(fail("configuration requires exactly one scalar kind"));
-    }
-    match values[0] {
-        ("number", v) => v
-            .parse::<f64>()
-            .ok()
-            .filter(|v| v.is_finite())
-            .map(Scalar::Number)
-            .ok_or_else(|| fail("nonfinite config number")),
-        ("string", v) => Ok(Scalar::Text(v.to_owned())),
-        ("boolean", "true") => Ok(Scalar::Boolean(true)),
-        ("boolean", "false") => Ok(Scalar::Boolean(false)),
-        _ => Err(fail("invalid config scalar")),
-    }
+    crate::configuration::read_input_scalar(node).map_err(|error| fail(error.to_string()))
 }
 fn validate_config(
     name: &str,

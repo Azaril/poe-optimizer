@@ -5,6 +5,7 @@
 
 pub mod actor_assembly;
 pub mod actor_modifiers;
+pub mod configuration;
 pub mod controlled_build;
 pub mod controlled_mace;
 pub mod equipment;
@@ -12,6 +13,7 @@ mod item_formatting;
 pub mod mace_item;
 mod modifier_syntax;
 pub mod preflight;
+pub mod source_xml;
 pub mod xml_compat;
 
 use base64::{

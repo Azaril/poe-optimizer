@@ -1,6 +1,7 @@
 mod build_search;
 #[cfg(feature = "pob")]
 mod catalog_search;
+mod configuration_inspect;
 mod data_loading;
 #[cfg(feature = "pob")]
 mod game_data_extract;
@@ -45,6 +46,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Action {
+    /// Inspect authored configuration values without calculating or admitting build mechanics.
+    InspectConfiguration(configuration_inspect::Args),
     /// Measure native fixed-input API throughput with a bounded local Rayon pool.
     BenchmarkNative(native_benchmark::Args),
     /// Search supplied Mace item/support choices (experimental supported profile).
@@ -270,6 +273,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 )?
             );
         }
+        Some(Action::InspectConfiguration(args)) => configuration_inspect::run(args)?,
         Some(Action::Import { input, output }) => {
             let imported = decode_build(&read_input(&input)?)?;
             if let Some(path) = output {

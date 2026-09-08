@@ -2,7 +2,14 @@
 
 Last updated: 2026-09-08
 
-Current checkpoint: **shared ActionSpeed and ordinary direct-action timing**, implemented.
+Current checkpoint: **breadth configuration source projection**, implemented and locally
+validated. The shared reader, original-PoB parser comparisons, injected-definition inventory
+and caller-driven inspection are complete. Native/search scalar readers share exact source
+semantics; all five corpus projections and fresh PoB runs succeed. Native still rejects the
+broader build layout. Preserving unknown configuration does not admit its game effects;
+broad skill/actor/build support remains pending. Publication status is recorded below.
+
+The preceding **shared ActionSpeed and ordinary direct-action timing** checkpoint is implemented.
 Data/extraction, shared Rust calculations, import/native adapters, CLI integration and
 complete-build parity, complete target validation and isolated release measurements pass.
 Published code: `caa56f4374da864acfb99cc19060ed356bd35105`. Its Windows/Linux CI run
@@ -89,6 +96,14 @@ the design documents.
    active/saved selections, capture fresh reference results, and report import, realization,
    mechanic coverage and numeric parity independently. Audit build-specific runtime coupling;
    review a concrete general build-model proposal before changing major architecture.
+   Source-preserving configuration projection is now implemented; read its current checkpoint
+   below and the [configuration-data proposal](configuration-data-proposal.md). Next extract
+   and inject the complete ordered definition catalog, with explicit unsupported behavior.
+   Preserve duplicate rows, exact typed options and separate default origins. Extend the
+   mechanism inventory beyond configuration. The next root guard excludes Import, Party,
+   Calcs and TreeView on all five originals; preserve their distinct metadata/calculation
+   semantics through a classified source container projection. Review the general actor/build
+   model before changing its architecture.
    Then replace closed profiles with reusable complete native pipelines as coverage permits:
    item/gem/passive modifiers, resolved actors/conditions and resources, offence/defence,
    conversions, ailments, triggers and minions. PerStat/StatThreshold programs now support
@@ -122,6 +137,63 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Configuration source projection — validation checkpoint
+
+The shared source/configuration reader, native/search integrations and caller-driven
+`inspect-configuration` CLI are implemented. Source fields bind to the original XML with
+exact raw ranges, one-pass decoded scalars, set/record order and requested/resolved selection
+provenance. The same code serves arbitrary caller inputs; fixture names and quest names do
+not select production behavior. Legacy actor text parsing reuses the shared primitive.
+
+Source projection is separate from effective ConfigTab state and numerical admission. Unknown
+configuration remains visible without granting native capabilities. Only projected
+`Input.string` fields get the native literal-whitespace exemption; unknown fragments,
+Placeholder attributes, keys and titles remain strict. Three scalar consumer paths now use
+the shared reader. Native/backend evidence hashes include the new source modules.
+
+The complete source audit resolves all 59 corpus keys, preserving 58 Inputs, 170 Placeholders
+and one block. All five ConfigSets are active, with no inactive sets in these originals.
+Source definitions have 564 variable rows for 563 distinct keys; duplicate callbacks and
+separate default mechanisms are documented in the [catalog proposal](configuration-data-proposal.md).
+A portable injected catalog and capability-aware resolver are still pending.
+The follow-up root-container inventory identifies Import/Party/Calcs/TreeView as the next
+shared guard. Calcs and Party can carry real calculation semantics; blanket UI-only ignoring
+is inappropriate. See [container and selection barriers](breadth-validation.md#next-container-and-selection-barriers).
+All five retain later multi-group/set and unsupported-mechanic barriers.
+The [unresolved-label audit](breadth-validation.md#unresolved-labels-and-actor-ownership)
+traces all three line-1 labels to name-only rows: Djinn actions require their summoning
+owner, while Powered Zealot has two ambiguous monster identities. Existing reference
+coverage preserves this distinction; no source substitutions or new native capability
+were introduced.
+
+Local validation is complete:
+
+| Area | Evidence |
+| --- | --- |
+| Shared import | 118 import library tests and 9 new projection tests pass; source bounds, exact ranges, set/record order and strict native exemption scope are exercised. |
+| Native integration | All 66 native tests, all 148 reference-enabled CLI tests and all 95 native-only CLI tests pass. Production inspection requires caller input and runs from a directory without a reference checkout. |
+| Independent source oracle | 8 configuration tests and 5 relocated XML compatibility tests pass against original pinned Lua. ConfigTab tests use an empty default-variable list and stub UI callbacks; they do not claim full default or mechanic resolution. |
+| Corpus | All five unchanged inputs import/project successfully and all five fresh PoB runs complete. Native reaches the restricted root-layout guard on all five. Exact source counts: 58 Inputs, 170 Placeholders, one block; no modified inputs/executables. `runs/config-breadth-validated-20260908/index.json` and `runs/config-breadth-summary.json` retain hashes/outcomes. |
+| Runner integrity | Nine Python tests pass, including malformed source reports and inspection-time XML mutation/deletion. Failed inspection remains independent; changed decoded XML cannot reach a backend as the original source. |
+| Tooling and portability | Workspace/native-only strict Clippy, formatting, all five portable libraries on `wasm32-unknown-unknown` and native-only Lua dependency exclusion pass. All 35 documents / 390 local links and Git whitespace checks pass. |
+| Publication | Local validation passes; code publication and exact hosted CI status will be recorded below. |
+
+Logs use `runs/config-*`, plus `runs/configuration-source-parity.log` and
+`runs/configuration-existing-xml-parity.log`. The preceding action-timing checkpoint remains
+the full workspace numerical baseline; this phase does not claim a new full-workspace run.
+The completed source/import/native targets plus all reference-enabled CLI targets pass 354
+tests; the separate native-only CLI run passes 95. `runs/config-validation-summary.json`
+reconciles the complete logs. No failures remain. Fresh corpus reference measurements also
+repeat all 110 prior measurement records exactly, including availability/status.
+No numerical data package, source pin, independent golden or original corpus byte changed.
+The configuration audit artifact is `runs/config-definition-inventory.json`, SHA-256
+`35a4bfc22905d5b8896ab8f3b0d007b8c2d6ad40e75169ba05069effb262fba4`.
+
+Next: publish this validated checkpoint and check exact hosted CI, then implement ordered
+injected configuration definitions with source parity gates. Continue
+B2/B3 inventories and the general build-model review; broad native mechanics and full parity
+remain unfinished.
 
 ## Action speed, timing and breadth intake — validation checkpoint
 
@@ -170,7 +242,7 @@ regression coverage, with its restrictive realization guards intact.
 
 Next: check hosted CI, then continue B2/B3 breadth and general source/model work. A new individual-skill
 port is not the next priority. Start with the source-preserving configuration seam described
-in [breadth validation](breadth-validation.md#next-sourceconfiguration-seam), preserving
+in [breadth validation](breadth-validation.md#source-preserving-configuration-inspection), preserving
 strict unsupported-mechanic decisions. Then produce the complete coverage inventory and a
 concrete general build-model proposal for discussion before a major architecture change.
 
@@ -406,8 +478,8 @@ Initial intake on 2026-09-08 preserved all **68,354 bytes** of the five-line inp
 `3e763f109adb27d48f2cf63a8a95aaea649e5336dcaf37959931725c29f6c745`.
 All five share strings decode and run in the pinned PoB reference. They represent three
 class/ascendancy combinations, minions, spear and quarterstaff actions, triggered/supporting
-skills, weapon-set allocations, and multiple saved skill/item/tree sets. All five native
-runs stop at the XML literal attribute-whitespace compatibility guard. This first error is
+skills, weapon-set allocations, and multiple saved skill/item/tree sets. At initial intake, all five native
+runs stopped at the XML literal attribute-whitespace compatibility guard. This first error is
 not a full mechanic coverage inventory, and a successful reference run is not a legality
 or Full DPS certification. Details and the checked-in intake index belong in
 [breadth validation](breadth-validation.md); local raw evidence is
@@ -419,8 +491,10 @@ backend run preserves all five entries, five reference successes and five native
 rejections, with no changed inputs (`runs/breadth-validated-20260908/index.json`). An immutable
 copy beside the indexed XML decouples this corpus from future edits to the user's working
 file. The generic admission/coverage matrix and held-out corpus are still pending.
-The common native barrier is one multiline quest-reward string in active ConfigSet 1;
-source-preserving generic XML/config handling must precede new skill admission.
+The first common native barrier was one multiline quest-reward string in active ConfigSet 1.
+The shared source projection now resolves that XML-semantic mismatch without implementing
+its game effects. The configuration inventory and proposed injected catalog are described in
+[the source configuration checkpoint](#configuration-source-projection--validation-checkpoint).
 
 - [x] **B1 — caller-configured corpus and provenance.** Load a versioned manifest or
   line-delimited import file supplied by the caller. Preserve exact inputs, hashes,
@@ -436,6 +510,8 @@ source-preserving generic XML/config handling must precede new skill admission.
   whole-build family, including exclusion counts; do not count a shared archetype or an
   alternate saved set as an independent held-out build. Investigate the existing three
   unresolved entries in line 1 against the pinned reference before inventing replacements.
+  The configuration catalog, root-container and three-label audits are now recorded in
+  [breadth validation](breadth-validation.md); the rest of this inventory remains open.
 - [ ] **B3 — general build-input seam review.** Audit hard-coded fixture inputs, closed
   Spark/Mace admission, skill IDs, level restrictions and implicit player-only assumptions.
   Normal evaluate/search already load caller files, but that alone does not establish
@@ -2516,9 +2592,10 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-08 | `da168e9` | Added injected schema-5 local weapon rules, normal/rare source-preserving admission, prepared numeric weapon assembly and problem/report schemas 5/6. Integrated validation plus focused review reruns cover 460 workspace tests, with 61 native-only CLI tests passing and no unresolved failures. Source/build parity, release reproduction, lint and portable checks pass. Typed/document searches agree across 1/2/4/32 workers; one-worker median 236.7 ms versus 668.1 ms for this diagnostic domain. Pushed to main; exact hosted run `34193804854` passes Windows/Linux (confirmed at the actor checkpoint). Next actor phase is implemented above. |
 | 2026-09-08 | `4df9a4f` | Added schema-6 injected actor records, source configuration parsing, shared native attributes/resources and requirement checks, Spirit metric and problem/report schemas 6/7. Validation covers 503 workspace tests and 65 native-only CLI tests across integrated/focused runs, with no unresolved failures; source/build parity, zero-allocation prepared calls, release reproduction, Clippy and WASM checks pass. Full search agrees across 1/2/4/32 workers; one-worker typed median 248.5 ms versus 1,644.8 ms for this diagnostic domain. Pushed to main; exact CI run `34199225766` subsequently passed on Windows and Linux. The next normalized passive/equipment phase is recorded above. |
 | 2026-09-08 | `e42760d` | Added schema-9 injected fixed Helmet/Gloves/Boots, source item formatting, shared native local components and player Armour/Evasion rating objectives; graph problem 9/report 10. 618 workspace + 82 native-only CLI tests pass across reconciled runs, with 33 fresh PoB pairs, 11 export reimports, source oracles, Clippy, WASM and preservation checks. All 24 release searches agree and the exact finalist matches PoB. Pushed to main; exact-code CI `34221294167` passed Linux and failed a Windows LF-only fixture edit, reproduced and repaired in `56dcbc5`. Body Armour/movement follows below. |
-| 2026-09-08 | `56dcbc5` | Added schema-10 injected Body Armour and shared movement, source-generated penalties, case-normalized grammar, movement objective metrics and graph problem 10/report 11. 658 workspace + 87 native-only CLI tests pass, followed by 19 passing tests in complete affected targets after CRLF fixture repairs. Source/full-build parity, strict lint, WASM, preservation and 24 agreeing release searches pass; exact finalist matches PoB. Pushed to main; exact-code Windows/Linux CI `34228787060` is in progress. Next: verify hosted CI, then shared ActionSpeed and complete Spark/Mace timing including the source server-tick cap. |
+| 2026-09-08 | `56dcbc5` | Added schema-10 injected Body Armour and shared movement, source-generated penalties, case-normalized grammar, movement objective metrics and graph problem 10/report 11. 658 workspace + 87 native-only CLI tests pass, followed by 19 passing tests in complete affected targets after CRLF fixture repairs. Source/full-build parity, strict lint, WASM, preservation and 24 agreeing release searches pass; exact finalist matches PoB. Pushed to main; exact-code Windows/Linux CI `34228787060` has passed on both platforms. Next: verify hosted CI, then shared ActionSpeed and complete Spark/Mace timing including the source server-tick cap. |
 | 2026-09-08 | `f1d8a1c` | Added schema-8 injected receiving data, shared source-ordered native Armour/Evasion/ES and resistance calculation, Lunar/Pearlescent bases, scenario/evidence bindings and graph problem 8/report 9. 580 workspace + 79 native-only CLI tests pass across integrated/focused runs; source/full-build parity, Clippy, WASM, preservation and release checks pass. All 24 complete searches agree; exact release finalist matches fresh PoB. Pushed to main; exact-code CI `34214745950` now passes on Windows and Linux. Local Helmet/Gloves/Boots components and rating metrics are implemented in the following checkpoint. |
 | 2026-09-08 | `a2586a8` | Added schema-7 injected passive/equipment data, complete ordinary structure with 1,142 admitted source views, component actor programs, lazy typed Spark/Mace assembly and native graph search with exact locks/attribute choices. 556 workspace tests and 76 native-only CLI tests pass across integrated/focused runs; local Clippy, WASM, preservation and release reproduction pass. All 24 full searches agree across modes/workers. Pushed to main; exact CI run `34208805533` now passes on Windows and Linux. Shared receiving defences and resistance modifiers are implemented in the following checkpoint. |
+| 2026-09-08 | Configuration source projection (this checkpoint) | Added exact configuration source projection, caller-only CLI inspection, shared native/search scalar readers and schema-2 corpus evidence. 354 relevant workspace-target tests plus 95 native-only CLI tests and 9 runner tests pass; strict lint, WASM, isolation, preservation and docs checks pass. All five inputs project and repeat their PoB measurements, while native retains explicit root-layout exclusions. Ordered configuration definitions, container semantics and unresolved actor/action labels are audited; broader native admission and full parity remain unfinished. |
 
 ### Hosting decision checkpoint
 

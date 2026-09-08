@@ -22,7 +22,7 @@ pub(super) fn document(xml: &str) -> Result<Document<'_>> {
         },
     )
     .map_err(|e| fail(e.to_string()))?;
-    crate::xml_compat::validate_native_with_actor_inputs(&document)
+    crate::xml_compat::validate_native_with_configuration(&document)
         .map_err(|e| fail(e.to_string()))?;
     Ok(document)
 }

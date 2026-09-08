@@ -10,7 +10,7 @@ use std::{error::Error, fmt};
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct XmlCompatibilityError {
     pub byte_offset: usize,
-    pub reason: &'static str,
+    pub reason: String,
 }
 impl fmt::Display for XmlCompatibilityError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -23,10 +23,10 @@ impl fmt::Display for XmlCompatibilityError {
 }
 impl Error for XmlCompatibilityError {}
 
-fn error(byte_offset: usize, reason: &'static str) -> XmlCompatibilityError {
+fn error(byte_offset: usize, reason: impl Into<String>) -> XmlCompatibilityError {
     XmlCompatibilityError {
         byte_offset,
-        reason,
+        reason: reason.into(),
     }
 }
 fn whitespace(byte: u8) -> bool {
@@ -58,52 +58,29 @@ pub fn validate_native(xml: &str) -> Result<(), XmlCompatibilityError> {
     validate_impl(xml, true, &[])
 }
 
-/// Permit raw legacy customMods string whitespace only where actor admission reads
-/// the original attribute bytes. All other native attribute normalization rejects.
-/// Call the strict actor configuration parser after this lexical check.
+/// Permit source attribute whitespace only in string Input values covered by a
+/// successfully validated authored configuration projection. Unknown records,
+/// placeholders, titles, names, and arbitrary string attributes stay strict.
+/// Native capability checks remain the caller's responsibility.
+pub fn validate_native_with_configuration(
+    document: &roxmltree::Document<'_>,
+) -> Result<(), XmlCompatibilityError> {
+    let projection = crate::configuration::project(document).map_err(|e| {
+        error(
+            e.byte_offset,
+            format!("configuration source projection failed: {}", e.reason),
+        )
+    })?;
+    let mut preserved = projection.preserved_string_input_ranges();
+    preserved.sort_unstable_by_key(|range| range.start);
+    validate_impl(document.input_text(), true, &preserved)
+}
+
+/// Compatibility alias for the former customMods-only entry point.
 pub fn validate_native_with_actor_inputs(
     document: &roxmltree::Document<'_>,
 ) -> Result<(), XmlCompatibilityError> {
-    let mut preserved = Vec::new();
-    for node in document
-        .descendants()
-        .filter(|node| node.has_tag_name("Input"))
-    {
-        if node.tag_name().namespace().is_some()
-            || node.attribute("name") != Some("customMods")
-            || node.attributes().len() != 2
-            || node
-                .attributes()
-                .any(|a| a.namespace().is_some() || !["name", "string"].contains(&a.name()))
-            || node.children().next().is_some()
-        {
-            continue;
-        }
-        let Some(set) = node
-            .parent()
-            .filter(|n| n.has_tag_name("ConfigSet") && n.tag_name().namespace().is_none())
-        else {
-            continue;
-        };
-        let Some(config) = set
-            .parent()
-            .filter(|n| n.has_tag_name("Config") && n.tag_name().namespace().is_none())
-        else {
-            continue;
-        };
-        let Some(root) = config.parent().filter(|n| {
-            n.has_tag_name("PathOfBuilding2")
-                && n.tag_name().namespace().is_none()
-                && n.parent().is_some_and(|p| p.is_root())
-        }) else {
-            continue;
-        };
-        let _ = root;
-        if let Some(attribute) = node.attributes().find(|a| a.name() == "string") {
-            preserved.push(attribute.range_value());
-        }
-    }
-    validate_impl(document.input_text(), true, &preserved)
+    validate_native_with_configuration(document)
 }
 fn validate_impl(
     xml: &str,
@@ -246,7 +223,9 @@ fn validate_impl(
             while at < bytes.len() && bytes[at] != quote {
                 if native
                     && matches!(bytes[at], b'\t' | b'\r' | b'\n')
-                    && !preserved.iter().any(|range| range.contains(&at))
+                    && !preserved
+                        .get(preserved.partition_point(|range| range.end <= at))
+                        .is_some_and(|range| range.contains(&at))
                 {
                     return Err(error(
                         at,
@@ -281,7 +260,7 @@ mod tests {
     use super::*;
     #[test]
     fn actor_legacy_whitespace_exception_is_exactly_scoped_to_raw_parsed_string_attributes() {
-        let good = "<PathOfBuilding2><Config><ConfigSet><Input name=\"customMods\" string=\"\t+3 to Strength\r\n+5 to Intelligence\n\"/></ConfigSet></Config></PathOfBuilding2>";
+        let good = "<PathOfBuilding2><Config><ConfigSet id=\"1\"><Input name=\"customMods\" string=\"\t+3 to Strength\r\n+5 to Intelligence\n\"/></ConfigSet></Config></PathOfBuilding2>";
         let check = |xml: &str| {
             let document = roxmltree::Document::parse(xml).unwrap();
             validate_native_with_actor_inputs(&document)
@@ -289,11 +268,13 @@ mod tests {
         assert!(validate_native(good).is_err());
         check(good).unwrap();
         for bad in [
-            good.replace("name=\"customMods\"", "name=\"Other\""),
             good.replace("<Config>", "<Future>")
                 .replace("</Config>", "</Future>"),
             good.replace("<Input ", "<Input extra=\"true\" "),
-            good.replace("<ConfigSet>", "<ConfigSet xmlns=\"urn:lookalike\">"),
+            good.replace(
+                "<ConfigSet id=\"1\">",
+                "<ConfigSet id=\"1\" xmlns=\"urn:lookalike\">",
+            ),
             good.replace("<Config>", "<Config xmlns=\"urn:lookalike\">"),
             good.replace("<Input ", "<x:Input xmlns:x=\"urn:lookalike\" "),
             good.replace("<PathOfBuilding2>", "<Other>")

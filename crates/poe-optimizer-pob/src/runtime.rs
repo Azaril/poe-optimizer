@@ -258,6 +258,10 @@ pub fn evaluate_with_options(
     hash.update(include_str!("preflight.rs"));
     hash.update(include_str!("../../poe-optimizer-import/src/preflight.rs"));
     hash.update(include_str!("../../poe-optimizer-import/src/xml_compat.rs"));
+    hash.update(include_str!("../../poe-optimizer-import/src/source_xml.rs"));
+    hash.update(include_str!(
+        "../../poe-optimizer-import/src/configuration.rs"
+    ));
     hash.update(include_str!("../../poe-optimizer-core/src/lib.rs"));
     hash.update(include_str!("../../poe-optimizer-core/Cargo.toml"));
     hash.update(include_str!("source.rs"));
