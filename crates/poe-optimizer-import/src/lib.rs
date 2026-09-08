@@ -5,6 +5,7 @@
 
 pub mod actor_assembly;
 pub mod actor_modifiers;
+pub mod build_source;
 pub mod configuration;
 pub mod configuration_definitions;
 pub mod controlled_build;
@@ -14,6 +15,7 @@ mod item_formatting;
 pub mod mace_item;
 mod modifier_syntax;
 pub mod preflight;
+pub mod root_admission;
 pub mod source_xml;
 pub mod xml_compat;
 

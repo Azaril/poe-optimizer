@@ -82,14 +82,7 @@ impl SourceBuildTemplate {
     pub fn parse(source: String, data: &GameDataPackage) -> Result<Self> {
         let doc = document(&source)?;
         let root = doc.root_element();
-        if !root.has_tag_name("PathOfBuilding2") {
-            return Err(fail("expected PathOfBuilding2"));
-        }
-        only(
-            root,
-            &[],
-            &["Build", "Tree", "Skills", "Items", "Config", "Notes"],
-        )?;
+        crate::root_admission::validate_main(&doc).map_err(|e| fail(e.to_string()))?;
         let build = child(root, "Build")?;
         only(
             build,

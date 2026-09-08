@@ -1,3 +1,4 @@
+mod build_inspect;
 mod build_search;
 #[cfg(feature = "pob")]
 mod catalog_search;
@@ -46,6 +47,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Action {
+    /// Inspect authored build containers without calculating or admitting mechanics.
+    InspectBuild(build_inspect::Args),
     /// Inspect authored configuration values without calculating or admitting build mechanics.
     InspectConfiguration(configuration_inspect::Args),
     /// Measure native fixed-input API throughput with a bounded local Rayon pool.
@@ -273,6 +276,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 )?
             );
         }
+        Some(Action::InspectBuild(args)) => build_inspect::run(args)?,
         Some(Action::InspectConfiguration(args)) => configuration_inspect::run(args)?,
         Some(Action::Import { input, output }) => {
             let imported = decode_build(&read_input(&input)?)?;

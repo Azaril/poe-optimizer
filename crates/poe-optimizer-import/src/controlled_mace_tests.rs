@@ -1648,3 +1648,43 @@ fn multiline_legacy_actor_inputs_keep_source_and_share_block_requirement_semanti
         legacy_catalog.profile.actor_modifiers.diagnostic()
     );
 }
+
+#[test]
+fn inert_root_sections_are_preserved_by_every_legacy_mace_materialization() {
+    let data = Arc::new(game_data::bundled_snapshot().unwrap());
+    let auxiliary = r#"<Import exportParty="false" importLink="persist &amp; preserve"/><TreeView searchStr="test" zoomLevel="3"/><Party/><Calcs><Input name="skill_number" number="14"/><Input name="misc_buffMode" string="BUFFED"/><Section id="arbitrary" collapsed="true"/></Calcs>"#;
+    let source = TEMPLATE.replace(
+        "</PathOfBuilding2>",
+        &format!("{auxiliary}</PathOfBuilding2>"),
+    );
+    let registry = ControlledMaceCatalog::with_data(
+        data.clone(),
+        source,
+        weapons(data.package()),
+        vec![MaceSupportChoice::None, MaceSupportChoice::BrutalityI],
+    )
+    .unwrap();
+    assert_ne!(
+        registry.catalog().identity,
+        catalog(data).catalog().identity
+    );
+    for alternative in registry.alternatives() {
+        let output = registry.materialize(&alternative.candidate).unwrap();
+        assert!(output.content.contains(auxiliary));
+        assert!(
+            crate::root_admission::validate_main(&Document::parse(&output.content).unwrap())
+                .is_ok()
+        );
+    }
+    for unsafe_section in [
+        "<Party><ImportedBuffs/></Party>",
+        "<Import exportParty=\"true\"/>",
+        "<Calcs><Input name=\"misc_enemyLevel\" number=\"90\"/></Calcs>",
+    ] {
+        let source = TEMPLATE.replace(
+            "</PathOfBuilding2>",
+            &format!("{unsafe_section}</PathOfBuilding2>"),
+        );
+        assert!(profile(&source, registry.snapshot().package()).is_err());
+    }
+}

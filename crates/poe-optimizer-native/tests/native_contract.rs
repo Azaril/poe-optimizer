@@ -129,7 +129,10 @@ fn unknown_mechanics_in_any_section_are_rejected_instead_of_approximated() {
             "<PathOfBuilding2>",
             "<PathOfBuilding2 xmlns=\"unexpected\">",
         ),
-        MAPPING.replace("</PathOfBuilding2>", "<Party/></PathOfBuilding2>"),
+        MAPPING.replace(
+            "</PathOfBuilding2>",
+            "<Party><ImportedBuffs/></Party></PathOfBuilding2>",
+        ),
         MAPPING.replace("number=\"60\"", "number=\"NaN\""),
         MAPPING.replace(
             "<Gem nameSpec=\"Spark\"",

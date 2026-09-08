@@ -242,17 +242,9 @@ fn parse_projection(
         },
     )
     .map_err(|e| EvaluationError::new(EvaluationErrorKind::InvalidRequest, e.to_string()))?;
-    poe_optimizer_import::xml_compat::validate_native_with_configuration(&doc)
+    poe_optimizer_import::root_admission::validate_main(&doc)
         .map_err(|error| unsupported(format!("Native {error}")))?;
     let root = doc.root_element();
-    if root.tag_name().name() != "PathOfBuilding2" {
-        return Err(unsupported("Expected PathOfBuilding2 XML"));
-    }
-    only(
-        root,
-        &[],
-        &["Build", "Tree", "Skills", "Items", "Config", "Notes"],
-    )?;
     let build = child(root, "Build")?;
     let main_group = child(child(child(root, "Skills")?, "SkillSet")?, "Skill")?;
     let main_gem = main_group
@@ -930,6 +922,22 @@ mod scenario_tests {
     use super::*;
     const MACE: &str = include_str!("../../../tests/fixtures/builds/mace-passive-equipment.xml");
     #[test]
+    fn fixed_scenario_accepts_same_inert_root_source_as_full_profile() {
+        let backend = crate::NativeBackend::new();
+        let source = MACE.replace("</PathOfBuilding2>", "<Party/><Import exportParty=\"false\"/><TreeView/><Calcs><Input name=\"skill_number\" number=\"14\"/><Input name=\"misc_buffMode\" string=\"BUFFED\"/></Calcs></PathOfBuilding2>");
+        let request = EvaluationRequest {
+            build: BuildDocument {
+                format: BuildFormat::PathOfBuilding2Xml,
+                content: source.clone(),
+            },
+            options: EvaluationOptions::default(),
+            metrics: vec![],
+        };
+        let full = parse(&request, backend.data()).unwrap();
+        prepare_scenario(&request, backend.data()).unwrap();
+        assert_eq!(full.export_xml, source);
+    }
+    #[test]
     fn fixed_scenario_and_full_projection_reject_the_same_unsupported_source() {
         let data = crate::NativeBackend::new();
         for source in [
@@ -939,7 +947,10 @@ mod scenario_tests {
             ),
             MACE.replace("<Gem nameSpec=", "<Gem unsupported=\"ignored\" nameSpec="),
             MACE.replace("<PathOfBuilding2>", "<PathOfBuilding2 xmlns=\"foreign\">"),
-            MACE.replace("</PathOfBuilding2>", "<Party/></PathOfBuilding2>"),
+            MACE.replace(
+                "</PathOfBuilding2>",
+                "<Party><ImportedBuffs/></Party></PathOfBuilding2>",
+            ),
         ] {
             let request = EvaluationRequest {
                 build: BuildDocument {

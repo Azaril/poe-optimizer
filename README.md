@@ -66,7 +66,9 @@ baseline); graph problem 10/report 11 searches that scope. [Shared action timing
 adds actor action speed, the ordinary server-tick cap and `player.action_speed_pct`; graph
 problem 11/report 12 searches authored action-speed sources. [Breadth validation](docs/breadth-validation.md)
 uses the five newly supplied full builds to guide general native admission and further shared
-pipelines. Current native support remains bounded to Spark/Mace. On the legacy command, `--backend pob`
+pipelines. Caller-driven [`inspect-build`](docs/build-source-containers.md) preserves arbitrary
+root/container evidence without loading PoB or calculating effects; narrow metadata
+admission is separate from native skill coverage. Current native support remains bounded to Spark/Mace. On the legacy command, `--backend pob`
 selects the optional reference backend. Native search uses [typed candidate calculation](docs/native-candidate-evaluation.md)
 by default, with complete document evaluation available through `--native-evaluation document`.
 Search baselines, when a legal initial seed exists, and finalist checks recalculate complete documents.

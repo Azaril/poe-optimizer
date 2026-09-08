@@ -107,8 +107,8 @@ Placeholders**, and **one custom block**, across five active ConfigSets and no i
 The source contains **564 variable definition rows for 563 keys**; ordered duplicates cannot
 be collapsed into a key map. Source option lists are UI choices, not a universal import
 whitelist. The [injected catalog proposal](configuration-data-proposal.md) specifies separate
-default origins, exact typed options and capability-aware resolution. Catalog extraction and
-production injection are the next bounded delivery, not implemented by this projection.
+default origins, exact typed options and capability-aware resolution. At the source-projection checkpoint, extraction/injection remained pending; the later
+[injected catalog checkpoint](#injected-configuration-catalog-checkpoint) below records delivery.
 
 A fresh schema-2 run, `runs/config-breadth-validated-20260908/index.json`, reproduces five
 imports, five source projections and five fresh PoB successes. All decoded hashes match the
@@ -294,3 +294,47 @@ weapon capability keys and restrictive group/set/mechanic admission. The legacy 
 PoB candidate helper has been moved entirely into test support. The remaining admission
 limits are B3 work items, not general-build support. Removing them requires the reviewed shared
 actor/action/build representation; accepting any XML path alone cannot establish breadth.
+
+## Source-container checkpoint
+
+[Source build containers](build-source-containers.md) preserve all ten root sections in
+each original import, including 51/51/51/52/51 Calcs records. A separate conservative MAIN
+gate accepts the proven-inert metadata shapes without dropping or rewriting them. It is
+shared by native evaluation and both controlled-template paths. `inspect-build` takes any
+caller XML/share code and needs no PoB runtime or game-data package.
+
+The fresh run `runs/root-container-breadth-final/index.json` retains all five exact imports,
+configuration projections and successful reference calculations. Native's next first
+failure is one-Skill admission on lines 1/3/4 and one-SkillSet admission on lines 2/5.
+These explicit limits expose the remaining closed-profile assumptions. None of the five
+originals passes native evaluation; first failures remain distinct from a complete mechanic
+inventory. The living plan records final validation and publication status.
+
+Twenty fresh complete-build reference calculations (two baselines and eighteen metadata
+variants) test the admitted metadata against supported Spark/Mace calculations. All 13
+requested measurements remain unchanged; exact native exports retain those source bytes.
+The transplanted auxiliary sections are test-only perturbations, not simplified replacements
+for the original broad builds or new held-out gameplay examples.
+
+## Skill-instance breadth inventory
+
+The source audit covers every saved skill set, including inactive alternatives: **15 sets,
+200 groups and 541 gem occurrences**. It identifies 537 exact external gem-ID/variant
+matches, one known explicit EnemyExplode effect and the three already documented name-only
+unresolved entries. These are source identity observations, not native capability claims.
+The audit preserves 42 authored source groups, 20 slot-assigned groups and 14 referenced
+minion definitions; it does not treat saved generated groups as permanent authoritative
+skills. Local evidence and reproducible script are `runs/root-container-skill-inventory.json`
+and `runs/audit_root_container_skills.py`.
+
+Saved-set IDs/order, active item/skill selections and weapon context are independent.
+Global-effect flags refer to a gem's primary/additional effects; they are not weapon-set
+numbers. Main action indexes refer to the expanded active-effect list, not raw Gem rows.
+Grants can recreate/remove groups and minion actions require provider ownership. The pinned
+source also has an ordered duplicate SkeletalSniper literal key and ten referenced
+additional/minion action IDs without static definitions. Preserve these construction
+caveats instead of resolving them from similar display names.
+
+These findings inform the [general build-model proposal](general-build-input-proposal.md),
+which remains a design discussion. Broader modifier, passive, condition/dependency,
+legality and independent held-out-family inventory is still required under B2–B5.

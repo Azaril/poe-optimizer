@@ -2,7 +2,15 @@
 
 Last updated: 2026-09-08
 
-Current checkpoint: **injected configuration definitions**, implemented and locally validated. The portable schema-12 catalog, complete authenticated extractor,
+Current checkpoint: **source build containers and shared MAIN admission**, implemented;
+local validation passes; publication is being finalized. Arbitrary caller inputs can be inspected
+without a data package or PoB runtime. Proven-inert Import/Party/Calcs/TreeView shapes now
+pass a shared native gate while unknown/effectful content remains rejected. The five
+original builds advance to the existing one-Skill/one-SkillSet limits; this is structural
+progress, not broad numerical parity. See the checkpoint table below. Full native
+replacement remains unfinished.
+
+The preceding checkpoint, **injected configuration definitions**, implemented and locally validated. The portable schema-12 catalog, complete authenticated extractor,
 original-source default-state oracles and caller-driven CLI lookup are implemented. All five
 original builds retain exact source values; definition recognition does not grant mechanic
 support. Numeric section content and the pinned tree remain unchanged. Code is published as
@@ -111,10 +119,12 @@ the design documents.
    below and the [configuration-data proposal](configuration-data-proposal.md). The complete
    injected catalog and definition lookup are now implemented and locally validated. Check
    publication status below, then extend the
-   mechanism inventory beyond configuration. The next root guard excludes Import, Party,
-   Calcs and TreeView on all five originals; preserve their distinct metadata/calculation
-   semantics through a classified source container projection. Review the general actor/build
-   model before changing its architecture.
+   mechanism inventory beyond configuration. [Source containers](build-source-containers.md)
+   now preserve and narrowly admit inert Import/Party/Calcs/TreeView metadata. All five
+   originals next encounter the one-Skill/one-SkillSet profile limits. Complete the B2
+   instance/grant/actor/dependency inventory (the skill/source portion is recorded below)
+   and review [the concrete general model proposal](general-build-input-proposal.md) before
+   changing that architecture; do not delete saved sets or supporting skills.
    Then replace closed profiles with reusable complete native pipelines as coverage permits:
    item/gem/passive modifiers, resolved actors/conditions and resources, offence/defence,
    conversions, ailments, triggers and minions. PerStat/StatThreshold programs now support
@@ -148,6 +158,58 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Source build containers — validation checkpoint
+
+The caller-driven `inspect-build INPUT [--output NEW_FILE]` command and portable immutable
+root projection preserve arbitrary build containers independently of native skill coverage.
+Unknown/duplicate sections remain diagnostic source; malformed Calcs scalar values retain
+local errors rather than erasing other containers. The new shared MAIN gate replaces three
+root allowlists in native evaluation, general controlled templates and legacy Mace templates.
+Accepted bytes remain untouched through materialization/export and exact finalist checks.
+
+Original consumer evidence distinguishes MAIN from CALCS, display layout from effects,
+Import export flags from incoming Party payloads, and authored settings from Load migrations.
+Only three strictly typed Calcs display inputs and known layout rows are admitted; all
+Party payloads, exportParty=true, unknown fields, legacy Calcs keys and duplicate singleton
+sections remain excluded. No new game effect or build-specific default was introduced.
+The source contract and limits are in [source build containers](build-source-containers.md).
+
+| Check | Current evidence |
+| --- | --- |
+| Source semantics | 10 independent original-source oracle tests pass; all five original auxiliary projections match original XML values. MAIN/CALCS, 26 legacy mappings, actual Party numeric/flag parsing and Load/Save ordering are covered. Aura/curse numerical effects are not claimed. |
+| Generic projection | 12 independent tests pass: exact corpus hashes/order, arbitrary source, unknown/duplicate/namespaced shapes, scalar diagnostics and resource bounds. |
+| Full-build differential | 18 metadata variants across Spark/Mace plus two baselines complete 20 fresh PoB calculations; all 13 requested metrics match native and unchanged baselines, with exact native XML exports. This is metadata parity, not gameplay parity for the five broad originals. |
+| Caller-only inspection | Three new CLI tests pass, including all five XML/share-code pairs, execution outside the repository, missing-input rejection and no overwrite. |
+| Broad originals | Five exact imports/configuration projections and five fresh PoB evaluations succeed. Native now reports one-Skill restrictions on lines 1/3/4 and one-SkillSet restrictions on lines 2/5. The mixed runner intentionally exits 1; no original build is newly admitted. |
+| Final affected validation | 223 import/native tests, 23 original-source regression tests and eight relevant CLI tests pass (254 workspace-target tests). The full native-only CLI suite passes 103 tests. Workspace/native-only strict Clippy, formatting and five portable WASM libraries pass; native-only normal dependencies contain no Lua/PoB. This is affected-target validation, not a new complete workspace test run. |
+| Publication | Working tree; not yet published. Previous catalog code `87bf005` CI remains in progress on Windows/Linux at the last check. |
+
+Local evidence: `runs/root-container-semantics.json`, `runs/root-container-oracle-tests.log`,
+`runs/root-container-projection-tests.log`, `runs/root-container-cli-tests.log` and
+`runs/root-container-breadth-final/index.json`. The final corpus uses separate native-only and
+optional-reference binaries. `runs/root-container-validation-summary.json` reconciles
+all 110 exactly repeated reference measurements and source/data preservation. The manifest records exact commands,
+input/data/binary hashes and independent outcomes. Schema-12 data, pinned tree/source,
+user imports and six independent numeric goldens remain unchanged.
+
+The B2 skill/source inventory now covers all **15 saved skill sets**, **200 groups** and
+**541 gem occurrences**: 537 exact external game-ID/variant matches, one explicit known
+EnemyExplode effect and three retained name-only unresolved entries. It records 42 authored
+source groups, 20 slot-assigned groups and 14 referenced minion definitions. A duplicate
+literal SkeletalSniper catalog key and ten additional/minion action IDs without static
+skill definitions are explicit source-construction caveats, not guessed replacements.
+Identity recognition is separate from numeric support. Item-modifier, passive/condition and
+complete dependency/legality inventory remain open under B2. Evidence is
+`runs/root-container-skill-inventory.json`, SHA-256
+`0d3f143279587c9e363b233c07e20c053cef550dd6eaa13e2cc2f3d5cab850d8`.
+
+Next: review [the concrete B3 model proposal](general-build-input-proposal.md). User direction
+was requested before this broader interface migration; the proposal is not yet accepted or
+implemented. Independent source projection/identity inventory and remaining B2 audits can
+continue while that design discussion is pending.
+The root gate must not be bypassed by dropping settings, relabeling minions as player
+skills, treating a saved-set index as an effect index, or silently choosing a simpler build.
 
 ## Injected configuration definitions — validation checkpoint
 
@@ -2698,3 +2760,5 @@ release; confirm the desktop framework and packaging before GUI work; choose acq
 data sources before trade/upgrade ingestion. Benchmark-specific metrics and usage profiles
 must be documented when those fixtures are made runnable, without turning their choices
 into mandatory goals for all users.
+
+| 2026-09-08 | Root-container checkpoint | Added caller-driven build inspection, shared strict MAIN admission and independent source/full-build metadata parity. All five originals retain exact bytes and now expose single-skill/set profile limits. B2 source inventory covers 15 sets/200 groups/541 occurrences; general model proposal awaits design discussion. Full native parity remains unfinished. |

@@ -710,3 +710,26 @@ fn action_scope_covers_enabled_config_and_every_supplied_or_template_item() {
         assert!(catalog(&inventory, vec![]).uses_action_speed_scope());
     }
 }
+
+#[test]
+fn both_template_profiles_preserve_inert_auxiliary_source_through_lazy_materialization() {
+    let auxiliary = r#"<Party destination="All" append="false" ShowAdvanceTools="false"/><Import exportParty="false" importLink="caller-owned"/><TreeView searchStr="cooldown" zoomX="-1.5" zoomY="2.5" zoomLevel="8"/><Calcs><Input name="skill_number" number="14"/><Input name="misc_buffMode" string="COMBAT"/><Input name="showMinion" boolean="true"/></Calcs>"#;
+    for source in [MACE, SPARK] {
+        let source = source.replace(
+            "</PathOfBuilding2>",
+            &format!("{auxiliary}</PathOfBuilding2>"),
+        );
+        let catalog = catalog(&source, vec![]);
+        assert_eq!(catalog.source().source(), source);
+        let domain = domain(catalog.clone());
+        let handle = domain
+            .admit(catalog.source_selection(), &mut ActorScratch::default())
+            .unwrap();
+        let materialized = domain.materialize(&handle).unwrap();
+        assert!(materialized.content.contains(auxiliary));
+        let round_trip =
+            SourceBuildTemplate::parse(materialized.content, compiled().snapshot().package())
+                .unwrap();
+        assert_eq!(round_trip.allocation(), catalog.source().allocation());
+    }
+}

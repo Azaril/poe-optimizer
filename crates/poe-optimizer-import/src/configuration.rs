@@ -288,7 +288,7 @@ fn bounded_attribute<'input>(
     }
     attribute(node, name)
 }
-fn scalar_record<'input>(
+pub(crate) fn scalar_record<'input>(
     node: Node<'_, 'input>,
 ) -> Result<ScalarInput<'input>, ConfigurationError> {
     let placeholder = node.has_tag_name("Placeholder");

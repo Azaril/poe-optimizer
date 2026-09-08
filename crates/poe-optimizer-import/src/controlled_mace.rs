@@ -1497,14 +1497,9 @@ fn same_backend(left: &BackendIdentity, right: &BackendIdentity) -> bool {
 }
 fn profile(xml: &str, data: &GameDataPackage) -> Result<Profile> {
     let document = parse(xml)?;
-    crate::xml_compat::validate_native_with_configuration(&document)
+    crate::root_admission::validate_main(&document)
         .map_err(|error| unsupported(&error.to_string()))?;
     let root = document.root_element();
-    only(
-        root,
-        &[],
-        &["Build", "Tree", "Skills", "Items", "Config", "Notes"],
-    )?;
     let build = child(root, "Build")?;
     only(
         build,
