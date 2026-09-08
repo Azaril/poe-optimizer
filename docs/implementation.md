@@ -3,7 +3,9 @@
 Last updated: 2026-09-08
 
 Current checkpoint: **skill source projection and injected identity catalogs**, implemented;
-local validation is complete and publication is pending. The source/catalog CLI
+locally validated and published as `19666a0ad754ac5514553a71138a568729022d2e` on main.
+[Exact-code CI run 34257699126](https://github.com/Azaril/poe-optimizer/actions/runs/34257699126)
+is in progress; no hosted pass is claimed. The source/catalog CLI
 preserves all saved skill occurrences and uses selected data for exact, fallback, ambiguous
 or unresolved identity evidence. Independent original-source comparisons pass for all
 constructed identities and all five supplied builds. No additional build is claimed as
@@ -218,12 +220,13 @@ JSON values and digests, and the separate tree bytes, remain unchanged.
 | Breadth | All five source/identity inspections pass: **537 exact external matches, one explicit effect and three name-only records left unresolved before processing**. All 110 fresh reference measurement records, build/context evidence and original XMLs exactly repeat the prior corpus. Native still rejects one-Skill/one-SkillSet layouts. |
 | Integration gates | Workspace and native-only strict Clippy, formatting, five portable WASM libraries and the no-PoB/no-Lua native normal dependency graph pass. UTF-8 and modified-document links pass. This is **358 affected workspace-target tests**, plus the separate 107 native-only tests; no new full-workspace test run is claimed. |
 | Preservation | All 22 old section raw JSON values/digests, 47 checked tracked files, six independent reference JSON goldens, both user input files and tree/source inventories are preserved. The pinned submodule remains clean. |
-| Publication | Local validation complete; publication/hosted status will be recorded after push. |
+| Publication | Code `19666a0ad754ac5514553a71138a568729022d2e` is pushed to `origin/main`. [Exact-code CI 34257699126](https://github.com/Azaril/poe-optimizer/actions/runs/34257699126) is in progress; no hosted pass is claimed. |
 
 Consolidated evidence: `runs/skill-source-validation-summary.json`,
 `runs/skill-catalog-preservation.json`, `runs/skill-source-identity-corpus/index.json`,
 `runs/skill-source-breadth-reviewed/index.json` and `runs/skill-source-breadth-comparison.json`.
-Final logs use `runs/skill-source-*` and `runs/skill-catalog-*`. The earlier
+Final logs use `runs/skill-source-*` and `runs/skill-catalog-*`; publication evidence is
+`runs/skill-source-publication-ci.json`. The earlier
 `runs/skill-source-breadth-final` exploratory run used the preceding native executable;
 `breadth-reviewed` is the final rebuilt-binary evidence above. Repeated checks are not
 added to the affected-test count.
