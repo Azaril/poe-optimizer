@@ -2,16 +2,18 @@
 
 Last updated: 2026-09-07
 
-Current phase: the bounded, pinned `extract-game-data` workflow (D4) is implemented.
+Completed checkpoint: the bounded, pinned `extract-game-data` workflow (D4) is implemented
+and published. Next: dataset-bound controlled search and requirement validation.
 The CLI generates all ten current sections from source, publishing canonical bytes and an
 extraction-evidence companion. All 316 workspace tests, 24 native-only CLI tests, lint,
-formatting, portable WASM checks and release reproduction pass locally. The native package, source pin, schemas, supported mechanics
-and search scope are preserved.
+formatting, portable WASM checks and release reproduction pass locally. The native package,
+source pin, schemas, supported mechanics and search scope are preserved.
 
-Starting point: clean `fbf37c4` on `main`. Current source-extraction validation includes the
-unchanged independent goldens and 100-case fresh PoB matrix. Publication and hosted CI are
-the remaining checkpoint steps. Earlier throughput evidence remains tied to `1a44c13`. Full native coverage, the supplied minion build and the first usable
-all-six-dimension optimizer remain unfinished.
+Published code: `2bd56de` on `main` (started at clean `fbf37c4`). Current source-extraction
+validation includes the unchanged independent goldens and 100-case fresh PoB matrix. Hosted
+Windows/Linux CI passes for the published code. Earlier throughput evidence remains tied to
+`1a44c13`. Full native coverage, the supplied minion build and the first usable all-six-dimension
+optimizer remain unfinished.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
 work, and the next session's starting point. [Design](design.md) defines the intended system
@@ -27,8 +29,8 @@ the design documents.
 1. Inspect `git status --short --branch` and the current validation/publication table below.
    Read [native data packages](native-data.md), the [source-extraction guide](game-data-extraction.md),
    and the [data-boundary decision](game-data-boundary.md).
-   Runtime injection and numeric configuration are validated and published. Finish the current
-   D4 source-extraction validation/publication checkpoint, then the remaining data/source and search gates.
+   Runtime injection, numeric configuration and pinned source extraction are validated and
+   published. Continue the dataset-bound controlled search slice below.
    Also read [native backend](native-backend.md),
    [native calculations](native-engine.md), [live passive coverage](passive-coverage.md)
    and [tree projection](tree-projection.md). The production target is a fully native
@@ -36,13 +38,12 @@ the design documents.
 2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve supplied
    original exports and independent Spark/Mace goldens. Maintain actual-source interpreted
    and warmed parity, full-build differential cases and strict unsupported-mechanic errors.
-3. Finish the remaining D4 data/source update work: an explicit reviewed tree/operation
-   compatibility upgrade path and data-driven controlled materialization/requirements.
-   Deterministic source generation now covers all current package sections. Numeric custom
-   packages already work;
-   structural tree/class attributes remain pinned, and custom-data search intentionally rejects.
-   Bind candidate catalogs, source payloads and legality rules to the same injected dataset
-   before enabling it in search. Preserve default source/golden parity and strict admission.
+3. Implement the dataset-bound controlled Mace search slice below, retaining the current
+   source/tree guard. Add typed requirement data, then bind catalog parsing/materialization,
+   legality and the evaluator to the same immutable snapshot before enabling custom-data search.
+   This can proceed independently of broader source/tree compatibility migration. Preserve
+   default source/golden parity and strict admission; review the compatibility contract
+   explicitly before admitting another upstream revision.
 4. Connect source-preserving class/ascendancy/passive materialization to a finite search
    catalog using the authenticated portable data. Rebind composed catalog identities to
    tree, skill and item payloads; validate requested versus realized physical allocations,
@@ -96,7 +97,7 @@ compare independent hosts/extractors using shared PoB calculations, not independ
 
 ## Pinned package source extraction — 2026-09-07
 
-Starting point: `fbf37c4`. This implements the immediate D4 slice described below: generate
+Starting point: `fbf37c4`. This delivers the prior D4 source-extraction plan retained below: generate
 all ten current sections from verified source, retain separate conversion-policy/source
 identity, and publish through a bounded offline worker. The committed package and independent
 source/golden tests remain unchanged. Broader source compatibility and custom-data search
@@ -111,7 +112,42 @@ remain separate work.
 | Documentation and review | All 231 local file links and 19 heading links across 30 Markdown documents pass. Independent integration review found and resolved the host deadline gap; no remaining concrete source-authenticity or typed-conversion issue was found. |
 | Release reproduction | Two release CLI processes generate the same 140,853 package bytes and identical evidence. Native evaluation using the exported data matches the prior native backend identity and all nine measurements; Witch/entrance DPS is **9.342857142857143**, with the exact 2,831-byte source XML export. Artifacts and summary: `runs/game-data-extraction-release-check/`. Release executable SHA-256 `c0aa062251ef2492cbc5a6956a3575ee28c4d93889920b891d7bec3b2ab8ac57`; package SHA-256 `cfc9f4d0d6251e4d04e6ac1809dbcdd5459033cd61fbe6c4694b8346198d42a7`. |
 | Extraction identity | Extractor SHA-256 `5baa1cab64c6f2b92c2ed4941d84622dd43f2019533200c401a63b99f5a6a8bd`; policy SHA-256 `7d56fa4aceab97737fce29aaed2923a7b49a121fadcda8ac951df9321f77a3a3`; evidence-file SHA-256 `3dcc27f5667c99445c1ba7f835039bdb39070afc2767d1d25056841c7313d8e3`. All 24 direct source hashes are checked independently; tree/loader/spec evidence remains in `package.tree.source`. |
-| Publication | Local validation complete; main publication and hosted Windows/Linux CI follow. |
+| Publication | Code `2bd56de` is pushed to main. [Windows/Linux CI run 34176865681](https://github.com/Azaril/poe-optimizer/actions/runs/34176865681) passes both jobs, including formatting, lint, full tests, native-only tests/dependencies and five portable WASM libraries. The following living-document update changes documentation only. |
+
+### Next D4 slice: dataset-bound controlled search
+
+This can proceed with the current source pin and structural-tree guard. Keep the existing
+Warrior/no-ascendancy/no-paid-passive search profile, two normal weapon slots and optional
+Brutality I. Broader source compatibility, cross-class recommendations and general equipment
+self-dependencies remain separate work. No new product decision blocks this bounded slice.
+
+- Add explicit requirement records to the package and source extractor, with an intentional
+  schema/version migration. Weapon strength is already data; support attribute costs and
+  active-skill requirement semantics need source-derived records and coverage. Item level
+  and equip-level requirements are different fields.
+- Add a snapshot-retaining catalog constructor (proposed `ControlledMaceCatalog::with_data`),
+  preserving the reviewed default convenience API. Resolve skill/support identities, names,
+  item classification, quest normalization and generated gem XML from selected records.
+  Escape generated XML attributes correctly and preserve existing source spans/restrictions.
+- Bind catalog fingerprints and baseline/result validation to the selected `DataIdentity`.
+  Replace the default-SHA-only native guard with exact selected catalog/data/backend agreement;
+  retain default-only PoB reference binding. Identical-content snapshots remain compatible.
+- Add a closed-profile requirement-validation seam before search dispatch. Pinned PoB aggregates
+  support sockets by color times a data-derived cost (currently 5), then uses the maximum of
+  that aggregate and individual item/active-gem requirements for each attribute. Weapon
+  strength 11 plus one red support requiring 5 needs 11 strength. Additive
+  `CandidateBudgets.resource_costs` would encode the wrong rule. Source anchors are
+  `CalcSetup.lua` support counts and `CalcPerform.lua` requirement aggregation.
+- Load CLI data once, construct catalog/backend from the same snapshot, derive required skill
+  IDs from the catalog, and retain actual data identity/trust in reports and export companions.
+  Keep diagnostic native calculation distinct from search legality and preserve finalist checks.
+
+Acceptance: unchanged reviewed-default candidates/exports/objectives/parity; custom data
+changes rankings consistently; escaped IDs/names round-trip; requirement values below/at/above
+boundaries and maximum semantics work; mismatched candidates/scenarios/results reject;
+custom PoB selection rejects; one/many-worker searches preserve locks, budgets and fresh
+finalist exports. An empty legal domain must explain requirement failures without dispatching
+calculations. General attribute derivation and circular equipment requirements are out of scope.
 
 ## Injectable native data packages — 2026-09-07
 
@@ -739,7 +775,7 @@ is concrete; real-build recommendations depend on both.
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
 | M5: richer objective policies | Not started | Unit-checked expressions, composite and ordered priorities, soft preferences, Pareto selection, and explicit robust aggregation. Test policy-specific selection and preserve hard constraints. |
 | Desktop GUI | Deferred until CLI/report contracts stabilize | Choose frontend; Tauri is a candidate. Reuse core jobs, results and comparison models. Verify CLI/GUI parity, responsive cancellation and native evaluator packaging; package optional reference workers separately. Does not depend on finishing every M4/M5 feature. |
-| Native Rust calculation replacement | Active; all class/ascendancy identities and ordinary entrances supported by restricted Spark/Mace pipelines; portable data and native weapon/support search implemented | Finish D4 source/materialization integration before broadening class/passive materialization and explicit finite search rules, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
+| Native Rust calculation replacement | Active; all class/ascendancy identities and ordinary entrances supported by restricted Spark/Mace pipelines; portable data and native weapon/support search implemented | Finish D4 dataset-bound materialization and reviewed source compatibility before broadening class/passive materialization and explicit finite search rules, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
 | PoE1 adapter | Later, separate track | Add a distinct versioned rules/data/evaluator adapter after PoE2 interfaces are proven; do not mix game identities or reuse PoE2 parity claims. |
 
 Narrow passive/item/skill experiments are internal validation steps. The first usable release
@@ -1051,6 +1087,7 @@ feature completion, runtime experiment that changes direction, and before sessio
 | 2026-09-07 | `fa5136b` + `36fc552` | Added portable authenticated game data, native class/ascendancy identity and ordinary-entrance evaluation, source-alignment guards and fixed-input multicore measurements. All 277 workspace tests, 16 native-only CLI tests, formatting, lint, dependency checks and five portable WASM libraries pass. One hundred fresh PoB evaluations show zero observed numeric difference; both hosted Windows/Linux jobs pass in run `34170105192` on main. Next: source-preserving class/passive materialization, explicit search budgets and equipment requirements; full native game coverage remains incomplete. |
 | 2026-09-07 | Injectable game-data design (after `2675ffb`) | Recorded the user-directed configuration/model seam, immutable compiled-data injection, instance/prepared identity, strict compatibility and D1–D5 migration gates. Reprioritized this work before broader class/passive search. Documentation only; runtime injection and external package selection remain unimplemented. |
 | 2026-09-07 | `1a44c13` | Implemented current-profile data packages, immutable native injection, external CLI selection and data-bound identities/exports. All 303 workspace tests, 24 native-only CLI tests, lint, formatting, dependency isolation and five portable WASM libraries pass. All 4.5 million fixed-profile benchmark evaluations pass; both hosted Windows/Linux CI jobs pass in run `34173951380`. Source-update generation and data-driven materialization remain next. |
+| 2026-09-07 | `2bd56de` | Added deterministic all-section pinned source extraction, separate policy/evidence, bounded offline supervision and the `extract-game-data` CLI. All 316 local workspace tests, 24 native-only CLI tests, lint, formatting, dependency isolation and portable WASM checks pass. Release regeneration reproduces the reviewed package/evidence and preserves native results; both hosted Windows/Linux CI jobs pass in run `34176865681`. Broader source compatibility and data-driven materialization remain next. |
 
 ### Hosting decision checkpoint
 
