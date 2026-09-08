@@ -456,8 +456,8 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         .checked_add(duration)
         .ok_or("Search duration exceeds clock range")?;
     let problem: Problem = super::read_json(&args.problem, 1024 * 1024)?;
-    if ![7, 8, 9].contains(&problem.schema_version) {
-        return Err("Graph build search requires problem schema 7, 8 or 9".into());
+    if ![7, 8, 9, 10].contains(&problem.schema_version) {
+        return Err("Graph build search requires problem schema 7, 8, 9 or 10".into());
     }
     if problem.initial_allocations.len() > 256 {
         return Err("At most 256 explicit seed allocations are supported".into());
@@ -497,6 +497,11 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         source,
         problem.equipment.clone(),
     )?);
+    if problem.schema_version < 10 && catalog.uses_movement_scope() {
+        return Err(
+            "Body Armour or authored movement modifiers require graph problem schema 10".into(),
+        );
+    }
     if problem.schema_version < 9 && catalog.uses_local_armour_scope() {
         return Err("Local armour equipment requires graph problem schema 9".into());
     }
@@ -654,7 +659,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             .iter()
             .any(|v| v.candidate == best.candidate && v.consistent)
     });
-    let mut report = serde_json::json!({"schema_version":problem.schema_version + 1,"scope":match problem.schema_version {9 => "local_armour_native_search_v1", 8 => "receiving_defence_native_search_v1", _ => "connected_passive_equipment_native_search_v1"},"search_implementation_sha256":hash(concat!(include_str!("build_search.rs"),include_str!("build_search_seeds.rs"),include_str!("../crates/poe-optimizer-search/src/lib.rs")).as_bytes()),"diagnostic_only":true,
+    let mut report = serde_json::json!({"schema_version":problem.schema_version + 1,"scope":match problem.schema_version {10 => "movement_native_search_v1", 9 => "local_armour_native_search_v1", 8 => "receiving_defence_native_search_v1", _ => "connected_passive_equipment_native_search_v1"},"search_implementation_sha256":hash(concat!(include_str!("build_search.rs"),include_str!("build_search_seeds.rs"),include_str!("../crates/poe-optimizer-search/src/lib.rs")).as_bytes()),"diagnostic_only":true,
         "backend":backend.identity(),"data_trust":backend.data().snapshot().trust(),"problem":problem,"native_evaluation":args.native_evaluation,
         "seed_repair_errors":seed_repair_errors,"catalog":catalog.catalog().identity,"catalog_preparation":catalog.footprint(),"native_preparation":prepared.footprint(),
         "source_assembly_attempts":domain.preparations.load(Ordering::Relaxed),"total_evaluations":baseline_attempts+result.statistics.evaluations,

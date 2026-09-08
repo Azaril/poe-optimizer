@@ -67,9 +67,9 @@ fn receiving_layer_sources_conditions_and_removals_match_document_dispatch_and_r
                 attachment
                     .media_type
                     .ends_with(if source.contains("Mace Strike") {
-                        "version=7"
+                        "version=8"
                     } else {
-                        "version=5"
+                        "version=6"
                     })
             );
             let evidence: Value = serde_json::from_str(&attachment.content).unwrap();

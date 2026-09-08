@@ -122,7 +122,7 @@ pub(crate) fn validate_rules(rules: &[ItemModifierRule]) -> Result<(), GameDataE
             ));
         }
         rule.template_literals()?;
-        if !templates.insert(&rule.template) {
+        if !templates.insert(rule.template.to_ascii_lowercase()) {
             return Err(invalid("duplicate or ambiguous item modifier template"));
         }
         let family = match rule.modifiers.as_slice() {

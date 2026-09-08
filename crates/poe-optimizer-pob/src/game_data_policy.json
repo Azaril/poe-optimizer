@@ -1,6 +1,6 @@
 {
-  "schema_version": 7,
-  "id": "poe2-pinned-current-profile-extraction-v9",
+  "schema_version": 8,
+  "id": "poe2-pinned-current-profile-extraction-v10",
   "release": "poe2-0_5-native-profiles-3887ae6",
   "source_role": "reviewed partial source transcriptions; source parity required for release",
   "spark_skill": "SparkPlayer",
@@ -43,7 +43,9 @@
     "exact_global_scope_marker_and_reviewed_attribute_conditions_no_ward_base_or_local_armour",
     "source_enumerated_fixed_helmet_gloves_boots_bases",
     "exact_local_armour_paired_modifiers_quality_and_global_leftovers",
-    "armour_per_level_ward_block_movement_alternate_quality_and_data_overrides_excluded"
+    "armour_per_level_ward_block_movement_alternate_quality_and_data_overrides_excluded",
+    "source_fixed_body_armour_bases_and_presence_preserving_movement_penalties",
+    "shared_movement_after_attributes_with_dynamic_ignore_condition_and_neutral_action_speed"
   ],
   "supports": [
     [
@@ -2395,6 +2397,132 @@
       "template": "{0}% reduced Evasion and Energy Shield",
       "source_kind": "form",
       "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "movement_speed_base",
+      "template": "{0} to Movement Speed",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": null
+    },
+    {
+      "id": "movement_speed_base_dex_higher_int",
+      "template": "{0} to Movement Speed if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "movement_speed_base_str_higher_int",
+      "template": "{0} to Movement Speed if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^([%+%-][%d%.]+)%%? to",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "movement_speed_increased",
+      "template": "{0}% increased Movement Speed",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": null
+    },
+    {
+      "id": "movement_speed_increased_dex_higher_int",
+      "template": "{0}% increased Movement Speed if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "movement_speed_increased_str_higher_int",
+      "template": "{0}% increased Movement Speed if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% increased",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "movement_speed_reduced",
+      "template": "{0}% reduced Movement Speed",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": null
+    },
+    {
+      "id": "movement_speed_reduced_dex_higher_int",
+      "template": "{0}% reduced Movement Speed if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "movement_speed_reduced_str_higher_int",
+      "template": "{0}% reduced Movement Speed if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% reduced",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "movement_speed_more",
+      "template": "{0}% more Movement Speed",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": null
+    },
+    {
+      "id": "movement_speed_more_dex_higher_int",
+      "template": "{0}% more Movement Speed if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "movement_speed_more_str_higher_int",
+      "template": "{0}% more Movement Speed if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% more",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "movement_speed_less",
+      "template": "{0}% less Movement Speed",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": null
+    },
+    {
+      "id": "movement_speed_less_dex_higher_int",
+      "template": "{0}% less Movement Speed if Dexterity is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if dexterity is higher than intelligence"
+    },
+    {
+      "id": "movement_speed_less_str_higher_int",
+      "template": "{0}% less Movement Speed if Strength is higher than Intelligence",
+      "source_kind": "form",
+      "pattern": "^(%d+)%% less",
+      "condition_pattern": "if strength is higher than intelligence"
+    },
+    {
+      "id": "movement_speed_override",
+      "template": "Your movement speed is {0}% of its base value",
+      "source_kind": "special",
+      "pattern": "your movement speed is (%d+)%% of its base value",
+      "condition_pattern": null
+    },
+    {
+      "id": "movement_speed_ignore_penalties",
+      "template": "Ignore all movement penalties from armour",
+      "source_kind": "special",
+      "pattern": "ignore all movement penalties from armour",
+      "condition_pattern": null
+    },
+    {
+      "id": "movement_speed_cannot_be_below_base",
+      "template": "Movement speed cannot be modified to below base value",
+      "source_kind": "special",
+      "pattern": "movement speed cannot be modified to below base value",
       "condition_pattern": null
     }
   ]

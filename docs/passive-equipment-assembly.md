@@ -35,7 +35,11 @@ the default `typed` path evaluates admitted numerical inputs directly. The new c
 explicitly native-only. The legacy `search-experimental --backend native|pob` command and
 problem schemas 1–6 remain available.
 
-## Problem schemas 7, 8 and 9
+## Problem schemas 7, 8, 9 and 10
+
+[Body Armour and movement problems](body-armour-movement.md) use schema 10/report 11,
+adding the body slot and effective movement percentage. Older schemas reject authored
+movement effects and any supplied body item, even when unselected.
 
 [Local armour problems](local-armour.md) use schema 9/report 10 and add fixed helmet,
 glove and boot choices, with explicit armour/evasion rating metrics. Earlier schemas
@@ -76,10 +80,10 @@ that the full legal domain is empty or that the best-found result is globally op
 
 ## Data and source identity
 
-Package schema 9 / `poe2-native-profiles-v9` supplies numeric values, requirements, implicit
+Package schema 10 / `poe2-native-profiles-v10` supplies numeric values, requirements, implicit
 ranges, modifier grammar and source-view effect records. Tree schema 3 records 4,109
-structural ordinary nodes and 4,758 effective source views. Of these, 1,270 have fully
-admitted effects and 3,488 carry explicit exclusions. The four previously reviewed
+structural ordinary nodes and 4,758 effective source views. Of these, 1,282 have fully
+admitted effects and 3,476 carry explicit exclusions. The four previously reviewed
 ascendancy nodes remain supported. A source view contains its physical key, selector,
 effective node ID, source stat lines and source digest.
 
@@ -104,9 +108,11 @@ lines retain rule/capture evidence and item identity. Local weapon modifiers are
 once by the local weapon pipeline; surviving global actor records enter shared actor
 preparation. Unknown, ambiguous, partial or unsupported lines reject.
 
-The current slots are `Weapon 1` and `Amulet`. Mace requires one of the two admitted mace
-bases; Spark currently admits jewellery only. Seven source-derived amulet bases are
-supported: Amber, Jade, Lapis, Bloodstone, Solar, Lunar and Pearlescent. An amulet has quality 0 and exactly
+The current slots are `Weapon 1`, `Helmet`, `Body Armour`, `Gloves`, `Boots` and `Amulet`.
+Mace requires one of the two admitted mace bases; Spark admits the supported armour and
+jewellery without a weapon. Earlier problem schemas retain their narrower equipment scope.
+Seven source-derived amulet bases are supported: Amber, Jade, Lapis, Bloodstone, Solar,
+Lunar and Pearlescent. An amulet has quality 0 and exactly
 one implicit matching its configured range; normal and rare supplied payloads can contain
 reviewed global attribute/resource/accuracy lines and the [receiving-defence subset](receiving-defences.md). Stellar Amulet remains excluded because
 its source emits additional unsupported `All` bookkeeping. Untagged weapon Accuracy also
@@ -115,7 +121,8 @@ Accuracy and jewellery Accuracy follow their admitted source behavior.
 
 PoB assembles the local actor modifier layer in configuration, equipment-slot, then
 passive order. The native path combines borrowed compiled fragments in that same layer,
-using Weapon 1 before Amulet. Fragment boundaries must not create extra modifier database
+using Weapon 1, Helmet, Body Armour, Gloves, Boots and Amulet in that order. Fragment
+boundaries must not create extra modifier database
 layers or extra MORE rounding. Parent/local layers remain explicit. General order-sensitive
 passive MORE/OVERRIDE/FLAG records are not admitted; complete passive BASE/INC records are
 checked against actual `PassiveTree.ProcessStats` output.

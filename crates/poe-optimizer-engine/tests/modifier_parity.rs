@@ -2744,3 +2744,6 @@ mod receiving_parity;
 
 #[path = "support/armour_parity.rs"]
 mod armour_parity;
+
+#[path = "support/movement_parity.rs"]
+mod movement_parity;

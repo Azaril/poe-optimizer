@@ -560,3 +560,222 @@ fn unselected_supplied_armour_also_requires_explicit_graph_scope() {
     assert_eq!(report["schema_version"], 10);
     assert_ledger(&report, 3);
 }
+
+#[test]
+fn body_movement_search_preserves_modes_workers_locks_and_all_constraints() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    let mut value: Value =
+        serde_json::from_str(include_str!("../examples/body-armour-search.json")).unwrap();
+    value["template"] = json!(dir.join("template.xml"));
+    value["constraints"]["required_item_instance_ids"] = json!(["body-17"]);
+    fs::write(
+        dir.join("template.xml"),
+        include_str!("fixtures/builds/mace-body-armour.xml"),
+    )
+    .unwrap();
+    fs::write(
+        dir.join("problem.json"),
+        serde_json::to_vec_pretty(&value).unwrap(),
+    )
+    .unwrap();
+    let mut reference = None;
+    for mode in ["typed", "document"] {
+        for jobs in [1, 4] {
+            let name = format!("movement-{mode}-{jobs}.xml");
+            let report = success(
+                command(dir, mode, jobs, 60)
+                    .args(["--export", &name])
+                    .output()
+                    .unwrap(),
+            );
+            assert_eq!(report["schema_version"], 11);
+            assert_eq!(report["scope"], "movement_native_search_v1");
+            assert_ledger(&report, 60);
+            assert_eq!(
+                report["best_verified"]["candidate"]["candidate"]["equipment"]["Body Armour"],
+                "body-17"
+            );
+            assert_eq!(
+                report["best_verified"]["assessment"]["status"],
+                "constraints_satisfied"
+            );
+            let movement = report["best_verified"]["assessment"]["measurements"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|m| m["query"]["id"] == "movement_speed_pct")
+                .unwrap();
+            assert_eq!(movement["unit"], "percent");
+            assert!(movement["value"]["value"].as_f64().unwrap() >= 115.0);
+            let (xml, companion) = assert_export(dir, &name, &report);
+            if let Some((expected, expected_xml, expected_companion)) = &reference {
+                same_search(expected, &report);
+                assert_eq!(&xml, expected_xml);
+                assert_eq!(&companion, expected_companion);
+            } else {
+                reference = Some((report, xml, companion));
+            }
+        }
+    }
+}
+
+#[test]
+fn old_graph_schemas_reject_body_config_and_unselected_movement_sources() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    for kind in ["body", "config", "unselected"] {
+        for schema in [7, 8, 9] {
+            let mut value = problem(dir);
+            value["schema_version"] = json!(schema);
+            let template=match kind {
+                "body"=>include_str!("fixtures/builds/mace-body-armour.xml").to_owned(),
+                "config"=>TEMPLATE.replace("</ConfigSet>","<CustomModifierBlock title=\"Movement\" enabled=\"true\">20% increased Movement Speed</CustomModifierBlock></ConfigSet>"),
+                _=>TEMPLATE.to_owned(),
+            };
+            if kind == "unselected" {
+                value["equipment"].as_array_mut().unwrap().push(json!({"instance_id":"unselected-movement","pob_item_id":71,"item_text":"Rarity: RARE\nUnselected Movement\nWooden Club\nItem Level: 60\nQuality: 0\nImplicits: 0\n20% increased Movement Speed"}));
+            }
+            write_problem(dir, &value);
+            fs::write(dir.join("template.xml"), template).unwrap();
+            let name = format!("denied-{kind}-{schema}.xml");
+            let output = command(dir, "typed", 1, 3)
+                .args(["--export", &name])
+                .output()
+                .unwrap();
+            assert!(!output.status.success(), "{kind}/{schema}");
+            assert!(
+                String::from_utf8_lossy(&output.stderr).contains("require graph problem schema 10"),
+                "{kind}/{schema}: {}",
+                String::from_utf8_lossy(&output.stderr)
+            );
+            assert!(!dir.join(&name).exists());
+            assert!(!dir.join(format!("{name}.data.json")).exists());
+        }
+    }
+}
+
+#[test]
+fn injected_body_penalty_changes_search_ranking_with_exact_custom_data_exports() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    let mut value = problem(dir);
+    value["schema_version"] = json!(10);
+    value["equipment"] = json!([
+        {"instance_id":"heavy-body","pob_item_id":81,"item_text":"Rarity: RARE\nHeavy Ranking\nRusted Cuirass\nItem Level: 60\nQuality: 20\nImplicits: 0\n+200 to Armour"},
+        {"instance_id":"light-body","pob_item_id":82,"item_text":"Rarity: RARE\nLight Ranking\nLeather Vest\nItem Level: 60\nQuality: 20\nImplicits: 0\n+200 to Armour"}
+    ]);
+    value["objective"] = json!({"schema_version":1,"objective":{"kind":"scalar","metric":{"actor":"player","id":"movement_speed_pct"},"unit":"percent","direction":"maximize"},"constraints":[{"id":"equipped-defences","metric":{"actor":"player","id":"armour"},"unit":"rating_points","operator":">=","threshold":100,"violation_scale":100}]});
+    value["constraints"]["budgets"]["ordinary_passive_points"] = json!(0);
+    value["constraints"]["budgets"]["ascendancy_passive_points"] = json!(0);
+    value["constraints"]["budgets"]["supports_per_skill"] = json!(0);
+    value["constraints"]["locks"]["class_id"] = json!("6");
+    value["constraints"]["locks"]["ascendancy"] = json!({"kind":"none"});
+    write_problem(dir, &value);
+    fs::write(
+        dir.join("template.xml"),
+        include_str!("fixtures/calibration/mace-wooden.xml"),
+    )
+    .unwrap();
+    let mut custom = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    custom
+        .armour_bases
+        .iter_mut()
+        .find(|base| base.name == "Rusted Cuirass")
+        .unwrap()
+        .movement_penalty = Some(0.01);
+    custom.refresh_section_digests().unwrap();
+    fs::write(dir.join("custom.json"), custom.canonical_bytes().unwrap()).unwrap();
+    for (data, expected_item, expected_speed) in [
+        (None, "light-body", 97.0),
+        (Some("custom.json"), "heavy-body", 99.0),
+    ] {
+        let mut reference = None;
+        for mode in ["typed", "document"] {
+            let name = format!(
+                "ranking-{}-{mode}.xml",
+                if data.is_some() { "custom" } else { "bundled" }
+            );
+            let mut cmd = command(dir, mode, 4, 40);
+            cmd.args(["--export", &name]);
+            if let Some(path) = data {
+                cmd.args(["--data", path]);
+            }
+            let report = success(cmd.output().unwrap());
+            assert_ledger(&report, 40);
+            assert_eq!(
+                report["best_verified"]["candidate"]["candidate"]["equipment"]["Body Armour"],
+                expected_item
+            );
+            assert_eq!(
+                report["best_verified"]["assessment"]["status"],
+                "constraints_satisfied"
+            );
+            assert!(
+                (report["best_verified"]["assessment"]["objective_value"]["value"]
+                    .as_f64()
+                    .unwrap()
+                    - expected_speed)
+                    .abs()
+                    < 1e-9
+            );
+            assert_eq!(
+                report["search"]["statistics"]["verification_evaluations"],
+                1
+            );
+            let xml = fs::read(dir.join(&name)).unwrap();
+            let companion: Value =
+                serde_json::from_slice(&fs::read(dir.join(format!("{name}.data.json"))).unwrap())
+                    .unwrap();
+            let digest = format!("{:x}", Sha256::digest(&xml));
+            assert_eq!(companion["xml_sha256"], digest);
+            assert_eq!(report["best_verified"]["source_xml_sha256"], digest);
+            assert_eq!(companion["backend"], report["backend"]);
+            assert_eq!(companion["uses_packaged_default"], data.is_none());
+            if let Some((expected, expected_xml, expected_companion)) = &reference {
+                same_search(expected, &report);
+                assert_eq!(&xml, expected_xml);
+                assert_eq!(&companion, expected_companion);
+            } else {
+                reference = Some((report, xml, companion));
+            }
+        }
+    }
+}
+
+#[test]
+fn legacy_actor_problem_rejects_new_authored_movement_scope() {
+    let temporary = tempfile::tempdir().unwrap();
+    let dir = temporary.path();
+    let mut value: Value =
+        serde_json::from_str(include_str!("../examples/mace-actor-search.json")).unwrap();
+    value["template"] = json!(dir.join("template.xml"));
+    let template=include_str!("fixtures/builds/mace-actor-resources.xml").replace("</ConfigSet>","<CustomModifierBlock title=\"Defence\" enabled=\"true\">20% increased Movement Speed</CustomModifierBlock></ConfigSet>");
+    fs::write(dir.join("template.xml"), template).unwrap();
+    fs::write(
+        dir.join("problem.json"),
+        serde_json::to_vec_pretty(&value).unwrap(),
+    )
+    .unwrap();
+    let output = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
+        .current_dir(dir)
+        .args([
+            "search-experimental",
+            "--backend",
+            "native",
+            "--problem",
+            "problem.json",
+        ])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(
+        String::from_utf8_lossy(&output.stderr)
+            .contains("movement modifiers require search-build with problem schema 10"),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+}

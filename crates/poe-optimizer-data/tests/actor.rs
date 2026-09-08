@@ -12,9 +12,9 @@ fn custom(mut package: GameDataPackage) -> Result<GameDataSnapshot, GameDataErro
 fn actor_schema_is_required_and_all_source_records_are_retained() {
     let snapshot = bundled_snapshot().unwrap();
     let package = snapshot.package();
-    assert_eq!(snapshot.identity().schema_version, 9);
+    assert_eq!(snapshot.identity().schema_version, 10);
     assert_eq!(package.actor.high_precision_mods.len(), 40);
-    assert_eq!(package.actor.modifier_rules.len(), 329);
+    assert_eq!(package.actor.modifier_rules.len(), 347);
     assert_eq!(package.actor.spirit_quests.len(), 3);
     let more: Vec<_> = package
         .actor
@@ -268,4 +268,31 @@ fn actor_ir_validates_complete_stage_targets_and_retains_ordered_conditions() {
         value: f64::NAN,
     };
     assert!(record.validate().is_err());
+}
+
+#[test]
+fn actor_and_local_weapon_templates_reject_ascii_casefold_duplicates() {
+    let original = bundled_snapshot().unwrap();
+    let mut p = original.package().clone();
+    let mut rule = p.actor.modifier_rules[0].clone();
+    rule.id = "case_duplicate_actor".into();
+    rule.template = rule.template.to_ascii_uppercase();
+    p.actor.modifier_rules.push(rule);
+    assert!(custom(p).is_err());
+    let mut p = original.package().clone();
+    let mut rule = p.item_modifier_rules[0].clone();
+    rule.id = "case_duplicate_local".into();
+    rule.template = rule.template.to_ascii_uppercase();
+    p.item_modifier_rules.push(rule);
+    assert!(custom(p).is_err());
+    let mut p = original.package().clone();
+    p.actor.modifier_rules[0].template = p.actor.modifier_rules[0].template.to_ascii_uppercase();
+    p.item_modifier_rules[0].template = p.item_modifier_rules[0].template.to_ascii_uppercase();
+    assert!(custom(p).is_ok());
+    // The distinct pre-parser ItemTools key lookup remains case-sensitive.
+    let mut p = original.package().clone();
+    let mut key = p.item_formatting.rules[0].clone();
+    key.template = key.template.to_ascii_uppercase();
+    p.item_formatting.rules.push(key);
+    assert!(custom(p).is_ok());
 }

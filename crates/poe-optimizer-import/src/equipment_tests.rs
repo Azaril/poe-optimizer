@@ -296,14 +296,14 @@ fn armour_rejects_incomplete_local_semantics_and_unmodeled_item_properties() {
     let valid = armour_item("Rusted Greathelm", "+7 to Armour");
     for text in [
         valid.replace("Rarity: RARE", "Rarity: UNIQUE"),
-        valid.replace("Rusted Greathelm", "Rusted Cuirass"),
+        valid.replace("Rusted Greathelm", "Rotted Round Shield"),
         valid.replace("Quality: 7", "Quality: 21"),
         valid.replace("Item Level: 82", "Item Level: 082"),
         valid.replace("Implicits: 0", "Implicits: 1"),
         valid.replace("+7 to Armour", "Sockets: S"),
         valid.replace("+7 to Armour", "Has +1 to Evasion Rating per Player Level"),
         valid.replace("+7 to Armour", "+7 to Runic Ward"),
-        valid.replace("+7 to Armour", "20% increased Movement Speed"),
+        valid.replace("+7 to Armour", "20% increased Action Speed"),
         valid.replace(
             "+7 to Armour",
             "+7 to Armour and Energy Shield if Strength is higher than Intelligence",
@@ -329,5 +329,67 @@ fn armour_rejects_incomplete_local_semantics_and_unmodeled_item_properties() {
         let weapon =
             format!("Rarity: NORMAL\nWooden Club\nItem Level: 1\nQuality: 0\nImplicits: 0\n{line}");
         assert!(parse_equipment_item(&weapon, &data, 3).is_err());
+    }
+}
+
+#[test]
+fn body_source_projection_keeps_generated_penalty_out_of_authored_lines() {
+    let compiled = poe_optimizer_engine::CompiledGameData::bundled().unwrap();
+    let data = compiled.snapshot().package();
+    assert_eq!(
+        EQUIPMENT_SOURCE_ORDER,
+        [
+            "Weapon 1",
+            "Helmet",
+            "Body Armour",
+            "Gloves",
+            "Boots",
+            "Amulet"
+        ]
+    );
+    for (base, penalty) in [("Rusted Cuirass", 0.05), ("Tattered Robe", 0.03)] {
+        let text=armour_item(base,"+7 to Armour\n10% increased Movement Speed\nIgnore all movement penalties from armour\n").replace('\n',"\r\n");
+        let item = parse_equipment_item(&text, data, 44).unwrap();
+        assert_eq!(item.allowed_slots(), &["Body Armour"]);
+        assert!(item.uses_movement());
+        assert_eq!(item.source_text(), text);
+        assert_eq!(item.modifier_lines().len(), 3);
+        let source = item.modifier_source();
+        assert_eq!(source, format!("Item:44:Trial Armour, {base}"));
+        let records = item.armour_modifiers().unwrap();
+        assert_eq!(records.len(), 3);
+        assert_eq!(item.actor_modifiers().len(), 2);
+        let prepared = compiled
+            .prepare_armour_with_source(
+                item.base_id(),
+                item.quality(),
+                item.item_level(),
+                &source,
+                records,
+            )
+            .unwrap();
+        assert_eq!(prepared.source_global_records(), item.actor_modifiers());
+        assert_eq!(prepared.generated_global_records().len(), 1);
+        let generated = &prepared.generated_global_records()[0];
+        assert_eq!(generated.source.as_deref(), Some(source.as_str()));
+        assert_eq!(generated.stat, ActorStat::MovementSpeed);
+        assert_eq!(
+            generated.effect,
+            ActorModifierEffect::Numeric {
+                operation: ActorNumericOperation::Base,
+                value: -penalty
+            }
+        );
+        assert_eq!(prepared.global_records().len(), 3);
+        let xml = format!("<Item id=\"44\"><![CDATA[{text}]]></Item>");
+        let doc = roxmltree::Document::parse(&xml).unwrap();
+        let roundtrip = parse_equipment_item_xml(doc.root_element(), data).unwrap();
+        assert_eq!(roundtrip.diagnostic(), item.diagnostic());
+        assert_eq!(roundtrip.source_text(), text);
+        assert!(
+            compiled
+                .prepare_armour(item.base_id(), item.quality(), item.item_level(), records)
+                .is_err()
+        );
     }
 }

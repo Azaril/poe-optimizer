@@ -33,6 +33,7 @@ const READ_PATHS: &[&str] = &[
     "src/Data/ModScalability.lua",
     "src/Data/Bases/gloves.lua",
     "src/Data/Bases/boots.lua",
+    "src/Data/Bases/body.lua",
     "src/Modules/CalcSetup.lua",
     "src/Modules/CalcPerform.lua",
     "src/Modules/CalcDefence.lua",
@@ -82,6 +83,7 @@ const PROVENANCE_PATHS: &[&str] = &[
     "src/Data/ModScalability.lua",
     "src/Data/Bases/gloves.lua",
     "src/Data/Bases/boots.lua",
+    "src/Data/Bases/body.lua",
 ];
 const POLICY: &str = include_str!("game_data_policy.json");
 const CONVERSION: &str = include_str!("game_data_extract.lua");
@@ -118,7 +120,7 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v9",
+        "poe-game-data-extractor-v10",
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
@@ -260,7 +262,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         AuthenticatedTreeSnapshot::from_trusted_extraction(snapshot, &digest).map_err(error)?;
     let tree = BundledClassTree::from_authenticated_snapshot(&authenticated).map_err(error)?;
     let policy: Policy = serde_json::from_str(POLICY)?;
-    if policy.schema_version != 7
+    if policy.schema_version != 8
         || policy.spirit_quests.len() != 3
         || policy.actor_rules.is_empty()
         || policy.quests.len() != 6
@@ -320,6 +322,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
             armour: record.armour,
             evasion: record.evasion,
             energy_shield: record.energy_shield,
+            movement_penalty: record.movement_penalty,
             source: source_table,
         });
     }
@@ -366,6 +369,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         jewellery_bases,
         armour_bases,
         item_formatting,
+        movement: extractor.record(&records, "movement")?,
     };
     package.refresh_section_digests().map_err(error)?;
     let evidence = GameDataExtractionEvidence {
@@ -553,6 +557,7 @@ impl Extractor {
             "src/Data/Bases/helmet.lua",
             "src/Data/Bases/gloves.lua",
             "src/Data/Bases/boots.lua",
+            "src/Data/Bases/body.lua",
         ] {
             lua.load(source(path)?)
                 .eval::<Function>()?
@@ -656,6 +661,18 @@ impl Extractor {
         lua.globals().set("sourceQuestConfig", config)?;
         let calcs: Table = lua.load(source("src/Modules/CalcDefence.lua")?).eval()?;
         lua.globals().set("sourceCalcs", calcs)?;
+        lua.load(format!(
+            "local calcs=sourceCalcs;local m_min=math.min;local m_max=math.max;{}",
+            section(
+                source("src/Modules/CalcPerform.lua")?,
+                "function calcs.actionSpeedMod(actor)",
+                "-- Initialises a minion's modifier database"
+            )?
+        ))
+        .exec()?;
+        lua.globals().set("sourceMovement",lua.load(format!("local originalRound=round;local round=function(v,p)return (sourceMovementRound or originalRound)(v,p)end;return function(actor) local modDB=actor.modDB;local output=actor.output;local m_max=math.max;{};return output end",section(source("src/Modules/CalcDefence.lua")?,"\t-- Miscellaneous: move speed, avoidance, weapon swap speed","\n\tif breakdown then\n\t\tbreakdown.EffectiveMovementSpeedMod")?)).eval::<Function>()?)?;
+        lua.globals().set("sourceArmourPenalty",lua.load(format!("local t_remove=table.remove;local m_floor=math.floor;{};return function(value) local self={{base={{armour={{MovementPenalty=value}}}},quality=0,armourData={{}},modSource='Item:1:Source probe'}};local modList=new('ModList'):ModList();{};return modList end",section(source("src/Classes/Item.lua")?,"local function calcLocal(","-- Build list of modifiers")?,section(source("src/Classes/Item.lua")?,"\t\tlocal armourData = self.armourData","\telseif self.base.flask then")?)).eval::<Function>()?)?;
+
         let receiver_resources: Table = lua
             .load(format!(
                 "local modDB={{Flag=function() return false end}};{};return resourceList",
@@ -1478,6 +1495,7 @@ struct ExtractedArmourBase {
     armour: f64,
     evasion: f64,
     energy_shield: f64,
+    movement_penalty: Option<f64>,
 }
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -1680,12 +1698,90 @@ mod passive_assembly_source_tests {
         }
     }
     #[test]
+    fn movement_extraction_rejects_source_scope_flags_operations_and_dynamic_cycles() {
+        let e = extractor();
+        let check:Function=e.lua.load("return function(edit) local old=sourceArmourPenalty;sourceArmourPenalty=function(v)local mods=old(v);edit(mods);return mods end;local ok=pcall(source_extract_movement);sourceArmourPenalty=old;return ok end").eval().unwrap();
+        for edit in [
+            "m[1].type='INC'",
+            "m[1].source='Other'",
+            "m[1].flags=1",
+            "m[1].keywordFlags=1",
+            "m[1].hidden=true",
+            "m[1][1].neg=false",
+            "m[1][1].var='Unknown'",
+            "m[2]=copyTable(m[1])",
+        ] {
+            let mutate: Function = e
+                .lua
+                .load(format!("return function(m){edit} end"))
+                .eval()
+                .unwrap();
+            assert!(!check.call::<bool>(mutate).unwrap(), "{edit}");
+        }
+        for stat in [
+            "Str",
+            "Life",
+            "Armour",
+            "Condition:IgnoreMovementPenalties",
+            "MovementSpeedCannotBeBelowBase",
+        ] {
+            let kind = if stat == "Condition:IgnoreMovementPenalties"
+                || stat == "MovementSpeedCannotBeBelowBase"
+            {
+                "FLAG"
+            } else {
+                "BASE"
+            };
+            let value = if kind == "FLAG" { "true" } else { "1" };
+            assert!(e.lua.load(format!("return source_convert_actor_modifier(modLib.createMod('{stat}','{kind}',{value},nil,0,0,{{type='Condition',var='IgnoreMovementPenalties'}}))")).eval::<Value>().is_err(),"{stat}");
+        }
+        let original: Function = e
+            .lua
+            .globals()
+            .get::<Table>("sourceCalcs")
+            .unwrap()
+            .get("actionSpeedMod")
+            .unwrap();
+        e.lua
+            .globals()
+            .get::<Table>("sourceCalcs")
+            .unwrap()
+            .set(
+                "actionSpeedMod",
+                e.lua
+                    .load("return function()return 1.01 end")
+                    .eval::<Function>()
+                    .unwrap(),
+            )
+            .unwrap();
+        assert!(
+            e.lua
+                .globals()
+                .get::<Function>("source_extract_movement")
+                .unwrap()
+                .call::<Value>(())
+                .is_err()
+        );
+        e.lua
+            .globals()
+            .get::<Table>("sourceCalcs")
+            .unwrap()
+            .set("actionSpeedMod", original)
+            .unwrap();
+    }
+    #[test]
+    fn movement_base_extraction_preserves_absent_versus_explicit_zero_for_any_slot() {
+        let e = extractor();
+        let check:Function=e.lua.load("return function()local old=sourceArmourBases;local b=copyTable(old['Rusted Greathelm']);sourceArmourBases={['Rusted Greathelm']=b};local none=source_extract_armour();assert(none[1].movement_penalty==nil);b.armour.MovementPenalty=0;local zero=source_extract_armour();assert(zero[1].movement_penalty==0);b.armour.MovementPenalty=.125;local other=source_extract_armour();assert(other[1].movement_penalty==.125);sourceArmourBases=old;return true end").eval().unwrap();
+        assert!(check.call::<bool>(()).unwrap());
+    }
+    #[test]
     fn armour_base_extraction_requires_complete_fixed_source_shape() {
         let e = extractor();
         let f: Function = e.lua.globals().get("source_extract_armour").unwrap();
         let (accepted, excluded): (Table, Table) = f.call(()).unwrap();
-        assert_eq!(accepted.raw_len(), 288);
-        assert_eq!(excluded.raw_len(), 361);
+        assert_eq!(accepted.raw_len(), 402);
+        assert_eq!(excluded.raw_len(), 594);
         let check:Function=e.lua.load("return function(mutate) local old=sourceArmourBases;local base=copyTable(old['Rusted Greathelm']);sourceArmourBases={['Rusted Greathelm']=base};mutate(base);local result,excluded=source_extract_armour();sourceArmourBases=old;return #result==0 and #excluded==1 end").eval().unwrap();
         for edit in [
             "b.hidden=false",
@@ -1701,7 +1797,7 @@ mod passive_assembly_source_tests {
             "b.tags.helmet=nil",
             "b.armour.Ward=0",
             "b.armour.BlockChance=0",
-            "b.armour.MovementPenalty=0",
+            "b.armour.MovementPenalty=-0.1",
             "b.armour.EvasionPerLevel=0",
             "b.armour.EnergyShieldPerLevel=0",
             "b.armour.Armour=-1",

@@ -4,12 +4,12 @@
 It is optional development tooling: native evaluation loads the exported package and has
 no Lua or worker-process dependency. No website is scraped or downloaded.
 
-The exporter covers the same eighteen explicitly partial sections as the
-[native data package](native-data.md): tree, character, actor, receiving defences, quests, Spark, Mace, supports, weapons,
+The exporter covers the same nineteen explicitly partial sections as the
+[native data package](native-data.md): tree, character, actor, receiving defences, movement, quests, Spark, Mace, supports, weapons,
 item modifier rules, item source formatting, jewellery and fixed armour bases, defence, monsters, encounters, typed owned passive
 effects and explicit passive exclusions. Whole ordinary structure is separate from
-capability admission: 1,270 complete source views are supported, including the four
-admitted ascendancy resistance nodes; 3,488 source views are explicitly excluded. It does not infer arbitrary build mechanics
+capability admission: 1,282 complete source views are supported, including the four
+admitted ascendancy resistance nodes; 3,476 source views are explicitly excluded. It does not infer arbitrary build mechanics
 or broaden accepted source revisions. Progress and validation evidence belong in the
 [living implementation record](implementation.md).
 
@@ -54,7 +54,7 @@ actor scope and values. Unconsumed or ambiguous modifiers reject.
 
 The companion retains source revision/inventory identity, consumed-file hashes,
 extractor/policy identity, package schema/semantics and the resulting package digest. Its
-34 direct source-file entries cover extraction and retained provenance reads. Additional
+35 direct source-file entries cover extraction and retained provenance reads. Additional
 tree/loader/spec evidence remains in the package's `tree.source` record.
 It describes how this artifact was produced. Native loading continues to use explicit
 host trust and actual content identity; a sidecar claim does not grant trust or establish
@@ -91,8 +91,10 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 9 and `poe2-native-profiles-v9`, including source-keyed passive/actor effects,
-structural attribute/replacement metadata, jewellery and fixed armour bases and explicit excluded views. It
+schema 10 and `poe2-native-profiles-v10`, including source-keyed passive/actor effects,
+structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
+formula/penalty data and explicit excluded views. Item penalty absence and zero remain
+distinct; actual parser checks exclude unsupported conditional special phrases. It
 retains normalized actor modifiers, actor rules,
 the full source precision table and Spirit quest records, alongside the existing item rules,
 critical-chance cap, requirements, support-color costs and passive effects. Signed actor
@@ -151,9 +153,11 @@ The receiving extension adds 204 templates, preserving exact Global tags, comple
 outputs and source receiver query groups. All defensive passive effects are ordered actor
 records; the extractor refuses an incomplete or mixed conversion.
 
-Independent checks execute the pinned parser in cold and warmed modes over 3,750 inputs,
-compare all 40 precision records and exercise the original quest callbacks and actor
-constant branches. Separate extraction mutation tests reject discarded fields, changed
+Earlier validation recorded 3,750 pinned-parser inputs in cold and warmed modes, compared
+all 40 precision records and exercised the original quest callbacks and actor constant
+branches. These historical counts precede movement; see the
+[living implementation checkpoint](implementation.md) for current validation totals.
+Separate extraction mutation tests reject discarded fields, changed
 source scope, unsupported tags and mismatched rule operands. These checks prove the stated
 data/input boundaries. Native build parity, resource reservation, conversion receivers,
 additional skills and minion actors still require their own differential validation.

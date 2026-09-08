@@ -78,9 +78,10 @@ uniques and unrecognized lines remain unsupported.
 
 Line-edge ASCII whitespace and blank lines do not change interpretation. The parser retains
 the exact source text, its SHA-256 and each modifier's literal line, one-based line number,
-byte range, rule identity and numeric values. Inner template spelling and whitespace remain
-significant. Item identities therefore distinguish different authored byte sequences even
-when they calculate equally.
+byte range, rule identity and numeric values. Modifier templates match ASCII case-insensitively;
+inner whitespace remains significant. Item formatting runs before modifier parsing and uses
+exact case-sensitive keys. Item identities therefore distinguish different authored byte
+sequences even when they calculate equally.
 
 `parse_mace_item(input, package)` handles a supplied item string. Native profile parsing and
 catalog template admission share `parse_mace_item_element(item, package)`, which reads the

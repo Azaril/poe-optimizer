@@ -62,6 +62,9 @@ impl ValidatedActorModifiers {
         &self.lines
     }
     /// Enabled authored records requiring the receiving-defence source capability.
+    pub fn uses_movement(&self) -> bool {
+        self.records.iter().any(|record| record.stat.is_movement())
+    }
     pub fn uses_receiving_defence(&self) -> bool {
         self.records
             .iter()
@@ -316,7 +319,7 @@ fn match_rule(line: &str, rule: &ActorModifierRule) -> Result<Option<Vec<f64>>> 
     let literals = rule
         .template_literals()
         .map_err(|e| invalid(e.to_string()))?;
-    let Some(mut rest) = line.strip_prefix(literals[0]) else {
+    let Some(mut rest) = crate::modifier_syntax::strip_prefix_ascii(line, literals[0]) else {
         return Ok(None);
     };
     let mut values = Vec::with_capacity(rule.captures.len());
@@ -325,7 +328,7 @@ fn match_rule(line: &str, rule: &ActorModifierRule) -> Result<Option<Vec<f64>>> 
         let (number, remaining) = if next.is_empty() {
             (rest, "")
         } else {
-            let Some(parts) = rest.split_once(next) else {
+            let Some(parts) = crate::modifier_syntax::split_once_ascii(rest, next) else {
                 return Ok(None);
             };
             parts
@@ -487,6 +490,12 @@ fn match_modifier_line(
                             .get(index as usize)
                             .ok_or_else(|| invalid("actor rule capture index missing"))?
                             * multiplier
+                    }
+                    ActorRuleValue::CaptureDivided { index, divisor } => {
+                        *effective_values
+                            .get(index as usize)
+                            .ok_or_else(|| invalid("actor rule capture index missing"))?
+                            / divisor
                     }
                 };
                 if !value.is_finite() || value.abs() > MAX_VALUE {

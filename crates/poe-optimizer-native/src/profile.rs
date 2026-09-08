@@ -782,9 +782,15 @@ fn parse_projection(
     for (slot, item) in &equipment {
         if let Some(records) = item.armour_modifiers() {
             let armour = data
-                .prepare_armour(item.base_id(), item.quality(), item.item_level(), records)
+                .prepare_armour_with_source(
+                    item.base_id(),
+                    item.quality(),
+                    item.item_level(),
+                    &item.modifier_source(),
+                    records,
+                )
                 .map_err(|error| unsupported(error.to_string()))?;
-            if armour.global_records() != item.actor_modifiers() {
+            if armour.source_global_records() != item.actor_modifiers() {
                 return Err(unsupported(
                     "armour global record projection differs from selected preparation",
                 ));
@@ -796,7 +802,11 @@ fn parse_projection(
     let mut actor_records = actor_modifiers.records().to_vec();
     for slot in poe_optimizer_import::equipment::EQUIPMENT_SOURCE_ORDER {
         if let Some(item) = equipment.get(slot) {
-            actor_records.extend_from_slice(item.actor_modifiers());
+            actor_records.extend_from_slice(
+                prepared_armour
+                    .get(slot)
+                    .map_or(item.actor_modifiers(), |armour| armour.global_records()),
+            );
         }
     }
     actor_records.extend(resolved_tree.actor_modifiers().cloned());
@@ -812,6 +822,7 @@ fn parse_projection(
                 helmet: prepared_armour.get("Helmet"),
                 gloves: prepared_armour.get("Gloves"),
                 boots: prepared_armour.get("Boots"),
+                body_armour: prepared_armour.get("Body Armour"),
             },
         )
         .map_err(|error| unsupported(error.to_string()))?;

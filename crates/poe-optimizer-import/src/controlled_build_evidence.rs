@@ -127,8 +127,8 @@ impl ControlledBuildCatalog {
         }
         self.check_skill_evidence(handle, result)?;
         let media = match source.profile() {
-            TemplateProfile::Spark => "application/vnd.poe-optimizer.native-profile+json;version=5",
-            TemplateProfile::Mace => "application/vnd.poe-optimizer.native-profile+json;version=7",
+            TemplateProfile::Spark => "application/vnd.poe-optimizer.native-profile+json;version=6",
+            TemplateProfile::Mace => "application/vnd.poe-optimizer.native-profile+json;version=8",
         };
         let evidence = attachment(result, media)?;
         let expected_profile = match source.profile() {
@@ -174,6 +174,11 @@ impl ControlledBuildCatalog {
             return Err(mismatch(
                 "fresh receiving defences differ from admitted preparation",
             ));
+        }
+        if evidence["movement"]
+            != crate::actor_assembly::movement_evidence(handle.actor().movement())
+        {
+            return Err(mismatch("fresh movement differs from admitted preparation"));
         }
         if evidence["local_armour"] != self.local_armour_evidence(handle.selection()) {
             return Err(mismatch(

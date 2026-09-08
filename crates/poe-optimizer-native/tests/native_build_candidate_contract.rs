@@ -320,7 +320,7 @@ fn fixed_scenario_projection_retains_metric_guards() {
 }
 
 #[test]
-fn prepared_armour_selections_keep_twelve_metric_calculations_allocation_free() {
+fn prepared_armour_selections_keep_thirteen_metric_calculations_allocation_free() {
     for source in [
         include_str!("../../../tests/fixtures/builds/mace-local-armour.xml"),
         include_str!("../../../tests/fixtures/builds/spark-local-armour.xml"),
@@ -356,7 +356,53 @@ fn prepared_armour_selections_keep_twelve_metric_calculations_allocation_free() 
             }
         });
         assert_eq!(allocations, 0);
-        assert_eq!(prepared.measure(&handles[0]).unwrap().values().len(), 12);
+        assert_eq!(prepared.measure(&handles[0]).unwrap().values().len(), 13);
+        assert_eq!(prepared.footprint().retained_xml_bytes, 0);
+        assert_eq!(prepared.footprint().cached_candidate_results, 0);
+    }
+}
+
+#[test]
+fn body_movement_and_all_sixteen_armour_combinations_calculate_without_allocating() {
+    for source in [
+        include_str!("../../../tests/fixtures/builds/mace-body-armour.xml"),
+        include_str!("../../../tests/fixtures/builds/spark-body-armour.xml"),
+    ] {
+        let backend = NativeBackend::new();
+        let domain = make_domain(&backend, source);
+        let prepared = backend
+            .prepare_controlled_build(domain.catalog(), &[])
+            .unwrap();
+        let mut handles = Vec::new();
+        for mask in 0..16 {
+            let mut selection = domain.catalog().source_selection();
+            for (bit, slot) in ["Helmet", "Body Armour", "Gloves", "Boots"]
+                .into_iter()
+                .enumerate()
+            {
+                if mask & (1 << bit) == 0 {
+                    selection.candidate.equipment.remove(slot);
+                }
+            }
+            handles.push(
+                domain
+                    .admit(selection, &mut ActorScratch::default())
+                    .unwrap(),
+            );
+        }
+        let (_, count) = allocation_count(|| {
+            for handle in handles.iter().cycle().take(1024) {
+                black_box(prepared.calculate(black_box(handle)).unwrap());
+                black_box(prepared.measure(black_box(handle)).unwrap());
+                black_box(
+                    backend
+                        .evaluate_controlled_build(&prepared, black_box(handle), BUDGET)
+                        .unwrap(),
+                );
+            }
+        });
+        assert_eq!(count, 0);
+        assert_eq!(prepared.measure(&handles[0]).unwrap().values().len(), 13);
         assert_eq!(prepared.footprint().retained_xml_bytes, 0);
         assert_eq!(prepared.footprint().cached_candidate_results, 0);
     }

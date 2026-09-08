@@ -11,7 +11,7 @@ fn custom(mut package: GameDataPackage) -> Result<GameDataSnapshot, GameDataErro
 fn armour_base_catalog_is_complete_injected_and_content_bound() {
     let original = bundled_snapshot().unwrap();
     let package = original.package();
-    assert_eq!(package.armour_bases.len(), 288);
+    assert_eq!(package.armour_bases.len(), 402);
     for (slot, count) in [
         (EquipmentSlot::Helmet, 112),
         (EquipmentSlot::Gloves, 88),

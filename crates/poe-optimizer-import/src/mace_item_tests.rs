@@ -333,3 +333,23 @@ fn canonical_metadata_headers_preserve_legacy_scope_without_restricting_modifier
         "020% increased Attack Speed"
     );
 }
+
+#[test]
+fn local_weapon_modifier_case_follows_source_parser_without_rewriting_source() {
+    let data = data();
+    let text = format!("{RARE}\nAdDs 2 To 5 PhYsIcAl DaMaGe\n20% INCREASED ATTACK SPEED");
+    let weapon = parse_mace_item(&text, &data).unwrap();
+    assert_eq!(weapon.source_text(), text);
+    assert_eq!(weapon.local_modifiers()[0].values, vec![2.0, 5.0]);
+    assert_eq!(weapon.local_modifiers()[1].values, vec![20.0]);
+    assert_eq!(
+        weapon.modifier_lines()[0].source,
+        "AdDs 2 To 5 PhYsIcAl DaMaGe"
+    );
+    let mut ambiguous = data;
+    let mut duplicate = ambiguous.item_modifier_rules[0].clone();
+    duplicate.id = "case_duplicate".into();
+    duplicate.template = duplicate.template.to_ascii_lowercase();
+    ambiguous.item_modifier_rules.push(duplicate);
+    assert!(parse_mace_item(&text, &ambiguous).is_err());
+}

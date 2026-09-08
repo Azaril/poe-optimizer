@@ -56,7 +56,7 @@ impl NativeMetricValue {
 /// No strings, XML, JSON, diagnostics or cached build result are constructed.
 #[derive(Debug, Clone, Copy)]
 pub struct NativeMetricSnapshot {
-    values: [NativeMetricValue; 12],
+    values: [NativeMetricValue; 13],
     elapsed_ms: f64,
 }
 impl NativeMetricSnapshot {
@@ -92,6 +92,7 @@ impl NativeMetricSnapshot {
                     NativeMetricValue::from_number(output.spirit),
                     NativeMetricValue::from_number(output.armour),
                     NativeMetricValue::from_number(output.evasion),
+                    NativeMetricValue::from_number(100.0 * output.effective_movement_speed_mod),
                 ],
                 elapsed_ms: 0.0,
             },
@@ -112,6 +113,7 @@ impl NativeMetricSnapshot {
                 NativeMetricValue::from_number(output.spirit),
                 NativeMetricValue::from_number(output.armour),
                 NativeMetricValue::from_number(output.evasion),
+                NativeMetricValue::from_number(100.0 * output.effective_movement_speed_mod),
             ],
             elapsed_ms: 0.0,
         }

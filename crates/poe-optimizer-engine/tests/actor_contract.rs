@@ -1321,6 +1321,7 @@ fn changing_three_local_armour_slots_actor_composition_and_both_skills_allocate_
                         helmet: Some(helmet),
                         gloves: Some(gloves),
                         boots: Some(boots),
+                        body_armour: None,
                     },
                     &mut scratch,
                 )
@@ -1340,3 +1341,6 @@ fn changing_three_local_armour_slots_actor_composition_and_both_skills_allocate_
     assert_eq!(count, 0);
     assert!(std::mem::size_of::<ActorScratch>() <= 1024);
 }
+
+#[path = "support/movement_contract.rs"]
+mod movement_contract;

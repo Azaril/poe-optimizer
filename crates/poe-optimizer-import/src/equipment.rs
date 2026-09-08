@@ -15,7 +15,14 @@ use std::ops::Range;
 use thiserror::Error;
 
 /// Canonical supported PoB item source order; non-weapon slots are shared by weapon sets.
-pub const EQUIPMENT_SOURCE_ORDER: [&str; 5] = ["Weapon 1", "Helmet", "Gloves", "Boots", "Amulet"];
+pub const EQUIPMENT_SOURCE_ORDER: [&str; 6] = [
+    "Weapon 1",
+    "Helmet",
+    "Body Armour",
+    "Gloves",
+    "Boots",
+    "Amulet",
+];
 
 #[derive(Debug, Error)]
 #[error("unsupported equipment: {0}")]
@@ -88,6 +95,23 @@ impl ValidatedEquipmentItem {
     }
     pub fn source_text(&self) -> &str {
         &self.source_text
+    }
+    /// Exact Item.modSource identity, including the physical PoB item ID.
+    pub fn modifier_source(&self) -> String {
+        let name = self
+            .rare_name
+            .as_ref()
+            .map(|name| format!("{name}, {}", self.base_name))
+            .unwrap_or_else(|| self.base_name.clone());
+        format!("Item:{}:{name}", self.pob_item_id)
+    }
+    /// Authored movement records or a body component needing generated movement evidence.
+    pub fn uses_movement(&self) -> bool {
+        self.allowed_slots.iter().any(|slot| slot == "Body Armour")
+            || self
+                .actor_modifiers
+                .iter()
+                .any(|record| record.stat.is_movement())
     }
     pub fn source_sha256(&self) -> &str {
         &self.source_sha256
@@ -443,6 +467,7 @@ fn parse_armour(
     let mut requirements = base.requirements;
     requirements.level = explicit_level_requirement.unwrap_or(requirements.level);
     let slot = match base.slot {
+        EquipmentSlot::BodyArmour => "Body Armour",
         EquipmentSlot::Helmet => "Helmet",
         EquipmentSlot::Gloves => "Gloves",
         EquipmentSlot::Boots => "Boots",

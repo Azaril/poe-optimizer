@@ -1,5 +1,5 @@
 #![cfg(feature = "pob")]
-//! Independent complete PoB builds validate local armour, receiving ratings and exact exports.
+//! Fresh complete PoB builds validate body equipment and movement including actual source conditions.
 use poe_optimizer_core::{
     evaluation::*,
     metrics::{ActorScope, MetricQuery},
@@ -25,6 +25,7 @@ fn request(xml: &str) -> EvaluationRequest {
             "spirit",
             "armour",
             "evasion",
+            "movement_speed_pct",
             "energy_shield",
             "fire_resistance_capped_pct",
             "cold_resistance_capped_pct",
@@ -123,6 +124,19 @@ fn compare(label: &str, native: &EvaluationResult, pob: &EvaluationResult) {
             source["player"]["metrics"][key].as_f64().unwrap(),
         );
     }
+    let movement = &profile["movement"];
+    assert_eq!(movement["schema_version"], 1);
+    for (field, key) in [
+        ("movement_speed_mod", "MovementSpeedMod"),
+        ("action_speed_mod", "ActionSpeedMod"),
+        ("effective_movement_speed_mod", "EffectiveMovementSpeedMod"),
+    ] {
+        near(
+            &format!("{label}/{key}"),
+            movement[field].as_f64().unwrap(),
+            source["player"]["metrics"][key].as_f64().unwrap(),
+        );
+    }
     let local = &profile["local_armour"];
     assert_eq!(local["schema_version"], 2);
     for (slot, item) in local["items"].as_object().unwrap() {
@@ -216,6 +230,7 @@ fn armour_item(slot: &str, base: &str, quality: u32, text: &str, xml: &str) -> S
         "Helmet" => 41,
         "Gloves" => 42,
         "Boots" => 43,
+        "Body Armour" => 44,
         _ => panic!("test slot"),
     };
     let item = format!(
@@ -239,213 +254,263 @@ fn armour_item(slot: &str, base: &str, quality: u32, text: &str, xml: &str) -> S
 }
 
 #[test]
-fn fixed_slots_local_pairs_quality_and_signed_values_match_full_pob_builds() {
+fn body_penalties_local_quality_and_all_movement_operations_match_full_pob() {
     let (native, oracle) = engines();
     let cases = [
         (
-            "armour-quality",
-            "Helmet",
-            "Rusted Greathelm",
+            "armour",
+            "Rusted Cuirass",
             20,
-            "+31 to Armour\n35% increased Armour",
+            "+31 to Armour\n25% increased Armour",
+            "",
         ),
         (
-            "evasion-quality",
-            "Gloves",
-            "Suede Bracers",
+            "evasion",
+            "Leather Vest",
             13,
             "+17.5 to Evasion Rating\n27% increased Evasion Rating",
+            "",
         ),
         (
-            "es-local-global",
-            "Boots",
-            "Straw Sandals",
-            20,
-            "+23 to maximum Energy Shield\n40% increased Energy Shield\n15% increased maximum Energy Shield\n+7 to Global Energy Shield",
-        ),
-        (
-            "armour-evasion-pair",
-            "Helmet",
-            "Brimmed Helm",
-            12,
-            "+11 to Armour and Evasion\n23% increased Armour and Evasion",
-        ),
-        (
-            "armour-es-pair",
-            "Helmet",
-            "Iron Crown",
+            "energy-shield",
+            "Tattered Robe",
             17,
-            "+11 to Armour and Energy Shield\n23% increased Armour and Energy Shield",
+            "+21 to maximum Energy Shield\n35% increased Energy Shield",
+            "",
         ),
         (
-            "mixed-pairs",
-            "Gloves",
-            "Torn Gloves",
+            "movement-inc-more",
+            "Rusted Cuirass",
             20,
-            "+11 to Armour and Energy Shield\n+13 to Evasion Rating and Energy Shield\n17% increased Armour and Energy Shield\n19% increased Evasion Rating and Energy Shield\n23% increased Defences",
+            "13% increased Movement Speed",
+            "17% increased Movement Speed\n11% more Movement Speed\n7% less Movement Speed",
         ),
         (
-            "negative-local",
-            "Boots",
-            "Rough Greaves",
+            "fractional-base",
+            "Rusted Cuirass",
+            0,
+            "17% increased Movement Speed",
+            "+0.1235 to Movement Speed",
+        ),
+        (
+            "mixed-case-item-format",
+            "Leather Vest",
+            13,
+            "+17.5 to evasion rating\n27% INCREASED EVASION RATING",
+            "",
+        ),
+        (
+            "mixed-case-config",
+            "Rusted Cuirass",
             20,
-            "-51 to Armour\n150% reduced Armour",
+            "15% INCREASED MOVEMENT SPEED",
+            "IGNORE ALL MOVEMENT PENALTIES FROM ARMOUR",
         ),
         (
-            "negative-received",
-            "Helmet",
-            "Rusted Greathelm",
+            "override-division",
+            "Rusted Cuirass",
+            0,
+            "",
+            "YOUR MOVEMENT SPEED IS 57% OF ITS BASE VALUE",
+        ),
+        (
+            "negative-speed",
+            "Leather Vest",
+            0,
+            "150% reduced Movement Speed",
+            "",
+        ),
+        (
+            "floor",
+            "Rusted Cuirass",
+            0,
+            "150% reduced Movement Speed",
+            "Movement Speed cannot be modified to below base value",
+        ),
+        (
+            "ignore",
+            "Rusted Cuirass",
             20,
-            "150% reduced Armour\n+7 to Global Armour\n13% increased Global Armour",
+            "15% increased Movement Speed",
+            "Ignore all movement penalties from armour",
         ),
         (
-            "conditional-global",
-            "Boots",
-            "Rawhide Boots",
-            10,
-            "+31 to Evasion Rating\n+100 to Dexterity\n17% increased Evasion Rating if Dexterity is higher than Intelligence\n+13 to Armour if Dexterity is higher than Intelligence",
+            "override-31",
+            "Rusted Cuirass",
+            0,
+            "",
+            "Your Movement Speed is 31% of its base value",
+        ),
+        (
+            "override-117",
+            "Rusted Cuirass",
+            0,
+            "17% increased Movement Speed",
+            "Your Movement Speed is 117% of its base value",
+        ),
+        (
+            "zero-override",
+            "Rusted Cuirass",
+            0,
+            "",
+            "Your Movement Speed is 0% of its base value",
+        ),
+        (
+            "override-floor",
+            "Rusted Cuirass",
+            0,
+            "",
+            "Your Movement Speed is 31% of its base value\nMovement Speed cannot be modified to below base value",
         ),
     ];
     for (skill, template) in [("spark", SPARK), ("mace", MACE)] {
-        for (name, slot, base, quality, text) in cases {
-            let xml = armour_item(slot, base, quality, text, template);
+        for (name, base, quality, mods, config) in cases {
+            let xml = armour_item("Body Armour", base, quality, mods, template);
+            let xml = if config.is_empty() {
+                xml
+            } else {
+                block(&xml, config)
+            };
             let result = pair(
                 &format!("{skill}/{name}"),
                 &xml,
                 &native,
                 &oracle,
-                name == "es-local-global" || name == "negative-received",
+                matches!(name, "ignore" | "override-31" | "evasion"),
             );
             let profile = attachment(&result, "native-profile+");
-            assert_eq!(profile["local_armour"]["schema_version"], 2);
             assert_eq!(
                 profile["local_armour"]["items"].as_object().unwrap().len(),
                 1
             );
-            assert_eq!(profile["local_armour"]["items"][slot]["quality"], quality);
+            assert_eq!(
+                profile["local_armour"]["items"]["Body Armour"]["quality"],
+                quality
+            );
         }
     }
 }
 
 #[test]
-fn all_slots_compose_with_global_gear_config_passives_and_round_trip_exactly() {
+fn four_slots_source_globals_and_body_removal_preserve_exact_full_build_parity() {
     let (native, oracle) = engines();
     for (name, template) in [
         (
             "spark",
-            include_str!("fixtures/builds/spark-local-armour.xml"),
+            include_str!("fixtures/builds/spark-body-armour.xml"),
         ),
-        (
-            "mace",
-            include_str!("fixtures/builds/mace-local-armour.xml"),
-        ),
+        ("mace", include_str!("fixtures/builds/mace-body-armour.xml")),
     ] {
         let actual = pair(name, template, &native, &oracle, true);
-        let profile = attachment(&actual, "native-profile+");
         assert_eq!(
-            profile["local_armour"]["items"].as_object().unwrap().len(),
-            3
-        );
-        let conditioned = block(
-            template,
-            "+101 to Dexterity\n17% increased Armour if Dexterity is higher than Intelligence\n23% increased Evasion Rating\n11% increased maximum Energy Shield",
-        );
-        pair(
-            &format!("{name}/global-composition"),
-            &conditioned,
-            &native,
-            &oracle,
-            false,
+            attachment(&actual, "native-profile+")["local_armour"]["items"]
+                .as_object()
+                .unwrap()
+                .len(),
+            4
         );
         let formatted = template
             .replace("\r\n", "\n")
             .replace('\n', "\r\n")
             .replace(
                 "</Notes>",
-                " Formatting preserved.</Notes><!-- armour parity -->",
+                " Formatting preserved.</Notes><!-- movement parity -->",
             );
         pair(
-            &format!("{name}/formatting"),
+            &format!("{name}/format"),
             &formatted,
             &native,
             &oracle,
             true,
         );
-        let mut removed = template.to_owned();
-        for slot in ["Helmet", "Gloves", "Boots"] {
-            let id = match slot {
-                "Helmet" => 41,
-                "Gloves" => 42,
-                _ => 43,
-            };
-            removed = removed.replace(&format!("<Slot name=\"{slot}\" itemId=\"{id}\"/>"), "");
-        }
+        let removed = template.replace("<Slot name=\"Body Armour\" itemId=\"44\"/>", "");
         let result = pair(
-            &format!("{name}/removed"),
+            &format!("{name}/remove-body"),
             &removed,
             &native,
             &oracle,
             false,
         );
-        assert!(
+        assert_eq!(
             attachment(&result, "native-profile+")["local_armour"]["items"]
                 .as_object()
                 .unwrap()
-                .is_empty()
+                .len(),
+            3
+        );
+        // Both the generated penalty and the source global increase must disappear.
+        let normal = actual
+            .measurements
+            .iter()
+            .find(|m| m.query.id == "movement_speed_pct")
+            .unwrap()
+            .value
+            .finite()
+            .unwrap();
+        let without = result
+            .measurements
+            .iter()
+            .find(|m| m.query.id == "movement_speed_pct")
+            .unwrap()
+            .value
+            .finite()
+            .unwrap();
+        assert_ne!(normal, without);
+        pair(
+            &format!("{name}/global-order"),
+            &block(
+                template,
+                "+101 to Dexterity\n11% more Movement Speed\n7% less Movement Speed\n17% increased Movement Speed if Dexterity is higher than Intelligence",
+            ),
+            &native,
+            &oracle,
+            false,
+        );
+        let mut all_removed = template.to_owned();
+        for (slot, id) in [
+            ("Helmet", 41),
+            ("Body Armour", 44),
+            ("Gloves", 42),
+            ("Boots", 43),
+        ] {
+            all_removed =
+                all_removed.replace(&format!("<Slot name=\"{slot}\" itemId=\"{id}\"/>"), "");
+        }
+        let none = pair(
+            &format!("{name}/all-removed"),
+            &all_removed,
+            &native,
+            &oracle,
+            false,
+        );
+        near(
+            "unmodified baseline",
+            none.measurements
+                .iter()
+                .find(|m| m.query.id == "movement_speed_pct")
+                .unwrap()
+                .value
+                .finite()
+                .unwrap(),
+            100.0,
         );
     }
 }
 
 #[test]
-fn item_value_formatting_precedes_local_and_global_consumers_but_not_configuration() {
-    let (native, oracle) = engines();
-    let globals = "+17.5 to Strength\n+31.5 to maximum Life\n+7.5 to Global Armour\n+13.5% to Fire Resistance";
-    for (skill, template) in [("spark", SPARK), ("mace", MACE)] {
-        let mut xml = template.replace(
-            "<ItemSet id=\"1\" title=\"No equipment\"/>",
-            "<ItemSet id=\"1\" title=\"No equipment\"></ItemSet>",
-        );
-        let item = format!(
-            "Rarity: RARE\nFractional Pendant\nLunar Amulet\nItem Level: 60\nQuality: 0\nImplicits: 1\n+25.5 to maximum Energy Shield\n{globals}"
-        );
-        xml = xml
-            .replace(
-                "<ItemSet id=\"1\"",
-                &format!("<Item id=\"29\">{}</Item><ItemSet id=\"1\"", escape(&item)),
-            )
-            .replace(
-                "</ItemSet>",
-                "<Slot name=\"Amulet\" itemId=\"29\"/></ItemSet>",
+fn special_movement_phrases_reject_unparsed_condition_suffixes() {
+    let native = Engine::new(NativeBackend::new());
+    for template in [SPARK, MACE] {
+        for line in [
+            "Ignore all movement penalties from armour if Dexterity is higher than Intelligence",
+            "Movement Speed cannot be modified to below base value if Dexterity is higher than Intelligence",
+            "Your Movement Speed is 117% of its base value if Dexterity is higher than Intelligence",
+        ] {
+            let xml = block(
+                &armour_item("Body Armour", "Rusted Cuirass", 20, "", template),
+                line,
             );
-        pair(
-            &format!("{skill}/item-format-amulet"),
-            &xml,
-            &native,
-            &oracle,
-            true,
-        );
-        pair(
-            &format!("{skill}/item-format-config"),
-            &block(&xml, globals),
-            &native,
-            &oracle,
-            false,
-        );
-        let armour = armour_item(
-            "Helmet",
-            "Rusted Greathelm",
-            13,
-            &format!("+17.5 to Armour\n{globals}"),
-            &xml,
-        );
-        pair(
-            &format!("{skill}/item-format-composition"),
-            &armour,
-            &native,
-            &oracle,
-            false,
-        );
+            assert!(native.evaluate(&request(&xml), BUDGET).is_err(), "{line}");
+        }
     }
-    let xml = MACE.replace("Implicits: 0", &format!("Implicits: 0\n{globals}"));
-    pair("mace/item-format-weapon", &xml, &native, &oracle, true);
 }

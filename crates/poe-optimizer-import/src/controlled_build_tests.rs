@@ -630,3 +630,50 @@ fn armour_scope_requirements_slots_and_empty_selections_remain_separate() {
     assert_eq!(catalog.footprint().cached_candidate_results, 0);
     assert_eq!(catalog.footprint().local_armour_components, 1);
 }
+
+#[test]
+fn body_and_unused_movement_items_are_gated_and_obey_slot_and_requirement_locks() {
+    let body = EquipmentAlternative {
+        instance_id: "supplied-body".into(),
+        pob_item_id: 44,
+        item_text:
+            "Rarity: NORMAL\nRusted Cuirass\nItem Level: 82\nQuality: 0\nLevelReq: 61\nImplicits: 0"
+                .into(),
+    };
+    let catalog = catalog(SPARK, vec![body]);
+    assert!(catalog.uses_movement_scope());
+    let domain = domain(catalog.clone());
+    let bare = catalog.source_selection();
+    assert!(
+        domain
+            .admit(bare.clone(), &mut ActorScratch::default())
+            .is_ok()
+    );
+    let mut selected = bare.clone();
+    selected
+        .candidate
+        .equipment
+        .insert("Body Armour".into(), "supplied-body".into());
+    let checked = domain
+        .requirements(&selected, &mut ActorScratch::default())
+        .unwrap();
+    assert!(
+        checked
+            .violations
+            .iter()
+            .any(|v| v.requirement == "level" && v.required == 61 && v.available == 60)
+    );
+    selected.candidate.equipment.remove("Body Armour");
+    selected
+        .candidate
+        .equipment
+        .insert("Helmet".into(), "supplied-body".into());
+    assert!(domain.validate_structure(&selected).is_err());
+    let mut rules = constraints();
+    rules
+        .required_item_instance_ids
+        .insert("supplied-body".into());
+    let locked =
+        ControlledBuildDomain::new(catalog, rules, AttributeOptionLocks::default()).unwrap();
+    assert!(locked.admit(bare, &mut ActorScratch::default()).is_err());
+}

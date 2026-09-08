@@ -194,7 +194,7 @@ fn match_rule(line: &str, rule: &ItemModifierRule) -> Result<Option<Vec<f64>>, M
     let literals = rule
         .template_literals()
         .map_err(|e| invalid(e.to_string()))?;
-    let Some(mut rest) = line.strip_prefix(literals[0]) else {
+    let Some(mut rest) = crate::modifier_syntax::strip_prefix_ascii(line, literals[0]) else {
         return Ok(None);
     };
     let mut values = Vec::with_capacity(rule.captures.len());
@@ -203,7 +203,8 @@ fn match_rule(line: &str, rule: &ItemModifierRule) -> Result<Option<Vec<f64>>, M
         let (number, remaining) = if next.is_empty() {
             (rest, "")
         } else {
-            let Some((number, remaining)) = rest.split_once(next) else {
+            let Some((number, remaining)) = crate::modifier_syntax::split_once_ascii(rest, next)
+            else {
                 return Ok(None);
             };
             (number, remaining)

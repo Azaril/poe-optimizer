@@ -2,13 +2,17 @@
 
 Last updated: 2026-09-08
 
-Current checkpoint: **local armour equipment and rating objectives**, implemented and
-locally validated. Source-selected Helmet/Gloves/Boots, shared Rust local calculations,
-source-configured item formatting, import/native evidence and CLI rating objectives are
-complete for the admitted forms. All regression targets, independent source/full-build
-parity, native-only checks and isolated release measurements pass. Code is published as
-`e42760d233e37d75fcc04b07e6a30634fb7fdae9`; exact-code Windows/Linux CI run `34221294167`
-is in progress. Next: **Body Armour and shared movement calculation**.
+Current checkpoint: **Body Armour and shared movement calculation**. Implementation, the full
+workspace/native-only test runs, source/full-build parity and isolated release measurements
+pass. Publication is recorded below. The CLI now searches four armour slots
+and admits configured movement objectives through problem 10/report 11. The native actor
+uses injected movement data and source-generated penalties, with no Lua runtime fallback.
+Next: **shared ActionSpeed and complete Spark/Mace action timing**.
+
+The preceding **local armour equipment and rating objectives** checkpoint is published as
+`e42760d233e37d75fcc04b07e6a30634fb7fdae9`. Its exact-code CI run `34221294167` passed
+on Linux and failed a Windows test because an LF-only fixture edit silently missed CRLF
+input. That failure was reproduced locally and repaired in the current checkpoint; see below.
 
 The preceding **shared receiving defences and resistances** checkpoint is implemented,
 locally validated and published as `f1d8a1c404a8c3dc77b11d7ff4410a241b0d902b`.
@@ -65,17 +69,18 @@ the design documents.
    identities, selected-data requirements, exact materialized source and fresh counted
    finalist checks. Whole actor admission and repeated skill calculation have different
    costs; record both. No Cartesian actor/result cache or implicit Lua fallback is allowed.
-5. Check publication/hosted CI for the [local-armour checkpoint](local-armour.md).
-   Schema 9 adds injected fixed Helmet/Gloves/Boots and source item-formatting policy;
-   older packages require regeneration. Local components, source-ordered receiving inputs,
-   player Armour/Evasion rating metrics and graph problem 9/report 10 are implemented.
-   Continue with **Body Armour and shared movement calculation** using the source audit
-   below: inject movement penalties, preserve generated conditional records, and implement
-   the complete movement consumer before admitting body equipment or exposing its metric.
-   Keep per-level bases, Ward, block, alternate quality and unrepresented movement effects
-   rejected. Preserve source query order, exact exports and privately data-bound components.
-   Reservation, arbitrary supports/supporting skills and minions remain later complete-
-   pipeline work. Review broader source compatibility separately under D4.
+5. Check publication/hosted CI for the [Body Armour/movement checkpoint](body-armour-movement.md).
+   Schema 10 adds 114 Body Armour bases, source-generated movement penalties and a shared
+   movement consumer. Problem 10/report 11 exposes player `movement_speed_pct` (100 at
+   baseline). Earlier package schemas require regeneration. Preserve the distinct global
+   modifier and receiving-numeric slot orders, generated-record evidence, exact division
+   and parser case normalization without changing the case-sensitive formatting keys.
+   Continue with **shared ActionSpeed and complete Spark/Mace action timing**, following
+   the current source audit below. Replace the current neutral ActionSpeed coverage guard
+   only when movement and both offence consumers use the same resolved actor result.
+   Include source server-tick saturation; do not just multiply the existing DPS formula.
+   Per-level/hidden/implicit armour and Ward remain later complete-pipeline work.
+   Review broader source compatibility separately under D4.
 6. Replace closed profiles with reusable complete native pipelines as coverage permits:
    item/gem/passive modifiers, resolved actors/conditions and resources, offence/defence,
    conversions, ailments, triggers and minions. PerStat/StatThreshold programs now support
@@ -109,6 +114,167 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Body Armour and shared movement - implementation checkpoint
+
+Implementation is complete for the bounded forms in the [operational guide](body-armour-movement.md).
+Full integrated validation and isolated release measurements pass. Publication is recorded
+below. General skill/build replacement remains unfinished.
+
+Movement is prepared once from the same ordered actor queries as resources and receiving
+defences. Item-local consumption precedes surviving source globals and generated armour
+penalties. The penalty record preserves the item's source and a negated dynamic
+IgnoreMovementPenalties condition; absent and explicit zero base penalties remain distinct.
+The public metric is `100 * EffectiveMovementSpeedMod`, using definition schema 1, unit
+`percent` and player scope. It is a ratio against baseline, not an increased-speed stat.
+
+Full-build comparisons exposed a parser gap: original ModParser lowercases input, while
+native actor/local-weapon literal matching had been case-sensitive. Matching now uses ASCII
+case-insensitive literals, with original source bytes/captures retained. Exact item-formatting
+keys still run first and remain case-sensitive. Source rejects condition suffixes on the
+three special movement phrases; both native pipelines retain that rejection. No source
+numeric expectation was weakened to make these cases pass.
+
+| Area | Current evidence |
+| --- | --- |
+| Injected data | Schema **10**, `poe2-native-profiles-v10`, **19** sections and **35** verified source files. **402** armour bases include **114** admitted Body Armour definitions from 347 final body definitions. **347** actor templates, **83** exact formatting keys and **1,282 admitted / 3,476 excluded** passive views. Formula defaults, rounding, penalty mapping and grammar come from injected data; ActionSpeed must remain one until all consumers are represented. |
+| Shared Rust engine | Both full actor entry points prepare movement after final attributes/conditions. Override zero, skipped first rounding, literal division, floor order, signed values and final effective rounding follow source. Global equipment order is Helmet/Body/Gloves/Boots; numerical receiving order is Helmet/Gloves/Boots/Body. **109 engine tests** pass, including **620** new cold/warm source comparisons. **4,860** varied four-slot actor preparations followed by **9,720** Spark/Mace calls allocate zero times. |
+| Independent source data | **54 data tests**, **51 PoB unit tests** and **16 direct source tests** pass. New body/condition/formula oracles cover **2,736** cold/warm cases; mixed-case parser checks add **16** cold/warm pairs. ASCII-folded duplicate grammar templates are rejected, while exact formatting keys retain source precision behavior. |
+| Import/native | Privately bound typed actors preserve source, generated and final global records. `local_armour` evidence is schema **2**, `movement` evidence schema **1**. Native Spark/Mace media versions are **6 / 8**, engine profiles `poe2-spark-body-movement-v6` / `poe2-mace-strike-body-movement-v10`. Native snapshots contain thirteen metrics (all thirteen finite for Spark; twelve finite and the existing unavailable average-hit metric for Mace). **116 import + 60 native tests** pass on the final code, including the complete joint-search matrix. Evidence: `runs/movement-adapter-all-tests.log`. |
+| Full-build parity | **40 fresh native/PoB pairs + 10 exact native-export reimports** pass across both skills, four slots/removals, generated penalties, quality, local/global source composition, conditions, signed/fractional boundaries, INC/MORE/less, zero/57/31/117 overrides, floor/ignore flags, mixed case and source formatting. Six unsupported conditional-special-phrase cases reject. Fixtures are separate from original independent goldens. Evidence: `runs/movement-integration-final.log`. |
+| CLI | Graph problem **10** / report **11**, scope `movement_native_search_v1`; older 7/8/9 graphs reject movement/body scope, including unselected supplied alternatives. Mutation 1–6 reject authored movement. **15** graph integration tests pass, including typed/document × one/four workers, locks, configurable constraints and custom injected penalty ranking with exact replayable exports/data companions. |
+| Release search | **24** complete searches (typed/document × 1/2/4/32 workers × three repeats) agree on archives, ledger, finalist, exact XML and companion. Each uses 1,272 proposals/source admissions, 162 duplicates, 28 rejections, six rounds and **1,000** total attempts (baseline 1 + search 998 + fresh verification 1). No failures, late results or unavailable assessments. The finalist has DPS 122.17940598499999, fire resistance 75, ES 97, Armour 343, Evasion 231 and movement 118.8%, meeting the configurable 75/50/200/150/115 floors. Its exact export matches fresh native assessment and all six PoB metrics (maximum absolute difference `1.43e-14`). Evidence: `runs/movement-release-search/summary.json`, `runs/movement-finalist-parity.json`. This validates diagnostic reproducibility, not search quality, obtainable affixes or a global optimum. |
+| Final validation | **658 workspace tests + 87 native-only CLI tests pass**, each through a complete successful all-target invocation. All **76** integration targets reconcile with Cargo metadata; nine ignored source-worker helpers are exercised by parent tests. Strict workspace/native-only all-target Clippy, formatting, five portable WASM libraries, runtime PoB/Lua dependency isolation, 32-document/347-link audit and diff checks pass. Final cross-agent review found no blockers. Evidence: `runs/movement-test-coverage.json`, `runs/movement-workspace-tests.log`, `runs/movement-native-only-tests.log`, `runs/movement-doc-audit.json`. Later changes are formatting, the extraction test name, restored original notes bytes and CRLF-safe test fixture edits; all three affected native test targets pass in full (19 tests). See the hosted Windows diagnosis below. |
+
+Final package **4,007,917 bytes**, SHA
+`0d1c8e4dca686a3d90c3d2928b4108ca8f5c1d186a0085d7edd4057881e3db50`.
+Two fresh extractions (`runs/movement-final-extraction-a` and `-b`) agree across all five
+output files and match the installed package. Evidence **4,074 bytes**, SHA
+`6a2626aeb266d93e094562202af5fa81d06ad1b5c84ff0d71ff6a8c277bf1d84`;
+extractor SHA `0bbe7dd9e9de5ba5a719acbbd281f015f61ae98f6b94174ec0591db049921f85`;
+policy SHA `995239801ab9f4bd66658ea8818cd7c0b5e405d95c20be42821e4b673301f40d`.
+The final preservation audit (`runs/movement-preservation-final.json`) verifies pinned
+unmodified source, unchanged tree/full source snapshot, supplied originals, six independent
+golden pairs, dependencies/workflow, all 329 previous actor rules, 77 formatting keys,
+288 prior armour bases (apart from the explicit null penalty field), 1,270 prior passive
+views, seven amulets and thirteen other sections.
+
+### Hosted Windows test diagnosis and repair
+
+Prior code `e42760d2` passed Linux CI, but Windows run `34221294167` failed in
+`armour_bases_grammar_and_requirements_follow_selected_injected_data`. Git supplied CRLF
+fixture text, so an LF-only multi-line replacement silently omitted `LevelReq: 1`; the
+subsequent level-61 rejection was correct. Explicit CRLF input reproduced the same failure
+locally (`runs/movement-windows-crlf-reproduction.log`). No numerical expectation changed.
+
+The test now exercises LF and CRLF variants and asserts its unique source edit. Review
+found and fixed the same assumption in two new movement test mutations (requirement
+metadata and a rejected sockets line). All three complete affected targets pass: four
+armour, eight native contract and seven movement tests, with targeted strict Clippy.
+Evidence: `runs/movement-windows-crlf-final.log`, `runs/movement-crlf-native-tests.log`,
+`runs/movement-prior-windows.log` and `runs/movement-prior-ci-jobs.json`. An incidental
+encoding change in the large-notes test was restored to the original bytes. Production
+source and release binaries were unchanged, so measured release evidence remains valid.
+The new exact-code hosted run must still confirm Windows after publication.
+
+### Body Armour/movement release measurements
+
+[The assembly benchmark](../examples/benchmark_assembly.rs) accepts `--body-armour`.
+The native-only release run on the AMD Ryzen 9 9950X3D uses **1,806** admitted selections,
+129 allocations, eight classes, 23 named ascendancies plus no ascendancy, three attribute
+options, seven support loadouts and twenty equipment selections. Four optional armour slots
+rotate through supplied components and empty slots. The **1,518** distinct output checksums
+consume all thirteen metric availability/value fields, all thirteen receiving outputs and
+all six movement fields. Sixteen fresh full native document comparisons check metrics,
+receiving and movement outside timing; independent PoB checks are recorded above.
+
+Median attempts/second, three samples per worker count and mode:
+
+| Workers | Fresh admission + calculation | Reused admitted actor + calculation |
+| --- | ---: | ---: |
+| 1 | 43,312 | 6,046,279 |
+| 2 | 57,830 | 8,636,248 |
+| 4 | 98,716 | 16,998,490 |
+| 32 | 389,540 | 110,329,683 |
+
+All 24 calibration/sample checksums match preflight. Ordinary samples last
+1.070–1.294 seconds; the three 32-worker reused-actor samples hit the
+100-million-attempt cap at 0.906–0.946 seconds. Fresh admission includes selection
+cloning, structural/source resolution, actor execution, requirements and handle allocation/
+destruction. Reused-actor timing excludes those costs. Both loops omit XML/JSON,
+objective/proposal/archive work and exports, and use no evaluation-result cache. These
+rates are not full optimizer throughput or evidence for general-build performance.
+
+Setup takes 297.34 ms for data, 8.09 ms for the catalog, 1.73 ms for numerical components
+and 46.26 ms for 1,806 initial admissions. Partial storage includes 221,120 compiled-actor
+heap bytes, 8,478 local-armour heap bytes across thirteen components, 4,530 source XML
+bytes, 1,821 prepared numerical component bytes and 792 bytes of scratch per worker.
+Shared data, selections/maps, allocator metadata and thread stacks are excluded; these
+figures are not peak memory.
+
+Complete CLI medians in milliseconds, three separate-process runs per cell:
+
+| Workers | Typed path | Fresh document path |
+| --- | ---: | ---: |
+| 1 | 368.34 | 3,045.97 |
+| 2 | 352.19 | 1,805.28 |
+| 4 | 353.74 | 1,126.79 |
+| 32 | 347.59 | 676.06 |
+
+CLI elapsed time includes source/data/catalog preparation and search, excluding final
+report/export publication. Separate process medians are recorded in the raw summary.
+Data setup dominates this small typed example; it does not establish optimizer scaling
+or quality on general builds. All project builds/tests were finished before each isolated
+measurement window. Runtime execution uses Rust/Rayon only.
+
+Raw evidence: `runs/movement-benchmark-release.json`, `runs/movement-benchmark-summary.json`,
+`runs/movement-release-search/summary.json` and `runs/movement-finalist-parity.json`.
+Benchmark binary SHA `589c209e673e1fac115b421fe40de4e98f64f58dbbbf873e17d2af606b251a58`;
+CLI binary SHA `a37056389d956082a858ed787685fefccd6f7f80b7b9d3356416a71eece2d32c`;
+search implementation SHA `afe0533ee36bf97e3c4851ba006d9ab211d2a2d395d14438c6666ee4a6618f7e`;
+finalist XML SHA `0229c476e87039dd4f79775559504d4ea7e4e4b832d6cf8331f5904e85610438`.
+
+Publication: local validation is complete; the implementation commit and exact-code hosted
+CI identity will be recorded after the authorized push to main.
+
+### Next complete pipeline: shared action speed and action timing
+
+The next slice should resolve ActionSpeed once after final attributes/conditions, then feed
+movement and both ordinary direct-action pipelines. This replaces the current movement-only
+neutral default guard only when all consumers are wired together. No product answer blocks
+this technical ordering; non-neutral action speed remains rejected in the present phase.
+
+1. Extract ActionSpeed INC, TemporalChainsActionSpeed INC, MinimumActionSpeed MAX,
+   MaximumActionSpeedReduction MAX and UnaffectedBySlows FLAG plus the source grammar,
+   flags/tags, TemporalChainsEffectCap (75) and ServerTickRate (`1 / 0.033`). Do not admit
+   BASE/MORE/OVERRIDE ActionSpeed that the source function never queries. Popular minimum
+   phrases carry GlobalEffect/unscalable metadata and require whole-source admission.
+2. Extend ordered queries/programs with filtered positive-row sums and MAX returning
+   `Option`. `ModStore.lua:228–238` filters each evaluated Tabulate row; clamping the final
+   grouped sum changes semantics. MAX at 369–378 ignores zero/negative values and returns
+   nil when no positive row matches. Preserve layer order and row-level cancellation.
+3. Prepare a fixed, owner-bound ActionSpeed result with source min/max order and no added
+   rounding. A shared direct-action timing helper must round skill INC × MORE speed to two
+   decimals before ActionSpeed, then apply server-tick saturation. In `CalcOffence.lua:2980–3017`,
+   CastRate captures the pre-ActionSpeed/pre-cap speed; selfCast multiplies by ActionSpeed
+   and Speed is capped at ServerTickRate × Repeats. Time (3049–3053) and DPS (4576) consume
+   capped Speed. Both ordinary Mace and Spark are selfCast (`CalcActiveSkill.lua:635–643`).
+   The current native kernels and partial source harnesses omit this high-rate cap; this
+   source audit identifies an existing boundary gap, not a reproduced runtime failure.
+4. Validate original cold/warm MAX/Tabulate/actionSpeedMod and the complete offence branch;
+   include mixed-sign rows and layers, absent/zero/negative MAX, floor/ceiling conflicts,
+   conditional flags, neutral preservation, zero/tiny/high speeds, tick-boundary neighbors,
+   injected local-weapon/support speeds and all seven loadouts. Add complete PoB builds,
+   exact export/reimports and changing actor/skill loops with zero measured allocations.
+
+Per-level armour follows broader implicit/metadata admission and Ward consumers.
+`Item.lua:2530–2556` retains local slopes; `GetArmourDataValue:2373–2379` adds a separately
+rounded slope × **character level**, not item level or a rounded combined fixed/sloped sum.
+The actual Fists of Stone source gloves (`gloves.lua:2039–2059`) are hidden and have multiple
+unscalable implicit lines; the runeforged form also needs Ward receiver/recovery/hit-pool
+semantics (`CalcDefence.lua:1348,1460,2054,3182,3625`). Retain rejection until the whole
+producer and all required consumers are represented. Ailment, party, trigger, channel,
+warcry, totem and reload producers likewise need complete dependency paths.
 
 ## Local armour equipment and rating objectives - implementation checkpoint
 
@@ -156,7 +322,10 @@ rules/constants, seven amulets and all **1,270** passive views/**3,488** exclusi
 
 Publication: code **`e42760d233e37d75fcc04b07e6a30634fb7fdae9`** is pushed to main.
 [Exact-code Windows/Linux CI run 34221294167](https://github.com/Azaril/poe-optimizer/actions/runs/34221294167)
-is **in progress** on both platforms; no hosted success is claimed. Snapshots:
+has **passed on Linux** and **failed on Windows** in an LF-only test fixture mutation.
+The current Body Armour/movement checkpoint reproduces and fixes the CRLF case; see its
+hosted Windows diagnosis above. Refreshed snapshots: `runs/movement-prior-ci.json` and
+`runs/movement-prior-ci-jobs.json`. Prior snapshots:
 `runs/armour-main-ci.json`, `runs/armour-main-ci-jobs.json`. The following publication-record
 commit changes documentation only.
 
@@ -214,9 +383,9 @@ CLI binary SHA `d8032a634dc2879345f6f47ac977fead63d5a6d4bd6caf4f695f466634d4bd4e
 search implementation SHA `6f11701084844c3c94e9137555f8ad50dbe0e125bafffee571c983f4ba219368`.
 Finalist XML SHA `815ff4994a33465084ed4b93bf7942ef278281fed31e797fabcda32afe7844cc`.
 
-### Next complete pipeline after this checkpoint
+### Historical next-pipeline audit (completed by the checkpoint above)
 
-Source audit recommends **Body Armour and shared movement calculation**. Add injected
+Source audit recommended **Body Armour and shared movement calculation**. Add injected
 body base movement penalties, the fourth armour slot and exact generated movement records
 before exposing a movement objective metric. Do not admit the slot while discarding its
 penalty. `Item.lua:2561–2562` emits MovementSpeed BASE `-movementPenalty` with negated

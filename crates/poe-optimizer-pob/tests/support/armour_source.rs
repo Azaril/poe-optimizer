@@ -42,11 +42,19 @@ fn assert_base(lua: &Lua, raw: Table, base: &ArmourBaseData) -> Table {
     source_table(raw.clone(), &base.source);
     assert_eq!(raw.clone().pairs::<String, mlua::Value>().count(), 8);
     assert_eq!(raw.get::<u32>("quality").unwrap(), base.quality);
-    assert_eq!(raw.get::<u32>("socketLimit").unwrap(), 3);
+    assert_eq!(
+        raw.get::<u32>("socketLimit").unwrap(),
+        if base.slot == EquipmentSlot::BodyArmour {
+            4
+        } else {
+            3
+        }
+    );
     let slot = match base.slot {
         EquipmentSlot::Helmet => "Helmet",
         EquipmentSlot::Gloves => "Gloves",
         EquipmentSlot::Boots => "Boots",
+        EquipmentSlot::BodyArmour => "Body Armour",
         EquipmentSlot::Amulet => panic!("wrong slot"),
     };
     assert_eq!(raw.get::<String>("type").unwrap(), slot);
@@ -63,6 +71,13 @@ fn assert_base(lua: &Lua, raw: Table, base: &ArmourBaseData) -> Table {
             value
         );
         injected_ratings.set(field, value).unwrap();
+    }
+    assert_eq!(
+        ratings.get::<Option<f64>>("MovementPenalty").unwrap(),
+        base.movement_penalty
+    );
+    if let Some(value) = base.movement_penalty {
+        injected_ratings.set("MovementPenalty", value).unwrap();
     }
     let req: Table = raw.get("req").unwrap();
     for (field, value) in [
@@ -83,27 +98,28 @@ fn fresh_fixed_armour_package_matches_every_original_base_and_local_data_cold_an
     )
     .unwrap();
     let package = &extracted.package;
-    assert_eq!(package.armour_bases.len(), 288);
-    assert_eq!(package.actor.modifier_rules.len(), 329);
+    assert_eq!(package.armour_bases.len(), 402);
+    assert_eq!(package.actor.modifier_rules.len(), 347);
     let mut cases = 0;
     for warm in [false, true] {
         let oracle = Oracle::new(warm);
         let lua = &oracle.lua;
         let bases = lua.create_table().unwrap();
-        for name in ["helmet", "gloves", "boots"] {
+        for name in ["helmet", "gloves", "boots", "body"] {
             lua.load(&oracle.sources[&format!("src/Data/Bases/{name}.lua")])
                 .eval::<Function>()
                 .unwrap()
                 .call::<()>(bases.clone())
                 .unwrap();
         }
-        assert_eq!(bases.clone().pairs::<String, Table>().count(), 649);
+        assert_eq!(bases.clone().pairs::<String, Table>().count(), 996);
         let source = &oracle.sources["src/Classes/Item.lua"];
         let calculate:Function=lua.load(format!(
             "local t_remove=table.remove;local m_floor=math.floor;{}; return function(base,quality,lines) local self={{base=base,quality=quality,armourData={{}}}};local modList=new('ModList'):ModList();for _,line in ipairs(lines)do local mods,extra=modLib.parseMod(itemLib.applyRange(line,1,1));assert(mods and not extra,line);for _,m in ipairs(mods)do modList:AddMod(m)end end;{};local remaining={{}};for _,mod in ipairs(modList)do remaining[#remaining+1]=mod end;return self.armourData,remaining end",
             section(source,"local function calcLocal(","-- Build list of modifiers"),
             section(source,"\t\tlocal armourData = self.armourData","\telseif self.base.flask then")
         )).eval().unwrap();
+        let same:Function=lua.load("return function(a,b) local function eq(x,y) if type(x)~=type(y)then return false end;if type(x)~='table'then return x==y end;local nx,ny=0,0;for k,v in pairs(x)do nx=nx+1;if not eq(v,y[k])then return false end end;for _ in pairs(y)do ny=ny+1 end;return nx==ny end;return eq(a,b) end").eval().unwrap();
         let line_sets: &[&[&str]] = &[
             &[],
             &[
@@ -153,9 +169,8 @@ fn fresh_fixed_armour_package_matches_every_original_base_and_local_data_cold_an
                         "{} quality{quality} warm{warm}",
                         base.name
                     );
-                    assert_eq!(
-                        convert(left),
-                        convert(remaining),
+                    assert!(
+                        same.call::<bool>((left, remaining)).unwrap(),
                         "{} remaining global records",
                         base.name
                     );
@@ -164,5 +179,5 @@ fn fresh_fixed_armour_package_matches_every_original_base_and_local_data_cold_an
             }
         }
     }
-    assert_eq!(cases, 5760);
+    assert_eq!(cases, 8040);
 }

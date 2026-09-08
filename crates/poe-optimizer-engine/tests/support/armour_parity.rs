@@ -11,13 +11,13 @@ use poe_optimizer_engine::{
     mace,
 };
 const ITEM: &str = include_str!("../../../../vendor/path-of-building-poe2/src/Classes/Item.lua");
-struct ArmourOracle {
+pub(super) struct ArmourOracle {
     oracle: Oracle,
     assemble: Function,
     getter: Function,
 }
 impl ArmourOracle {
-    fn new(warm: bool) -> Self {
+    pub(super) fn new(warm: bool) -> Self {
         let identity = mace::SOURCE_FILES
             .iter()
             .find(|entry| entry.path == "src/Classes/Item.lua")
@@ -28,6 +28,17 @@ impl ArmourOracle {
         );
         let oracle = SparkOracle::new(warm).oracle;
         let lua = &oracle.lua;
+        const MODLIST: &str =
+            include_str!("../../../../vendor/path-of-building-poe2/src/Classes/ModList.lua");
+        let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+        assert_eq!(
+            format!("{:x}", Sha256::digest(MODLIST.replace("\r\n", "\n"))),
+            snapshot.package().manifest.provenance["src/Classes/ModList.lua"]
+        );
+        lua.load(MODLIST)
+            .set_name("unchanged-ModList-for-armour")
+            .exec()
+            .unwrap();
         let item = ITEM.replace("\r\n", "\n");
         let local = section(
             &item,
@@ -37,9 +48,9 @@ impl ArmourOracle {
         let block = section(
             &item,
             "\t\tlocal armourData = self.armourData\n",
-            "\n\t\tif self.base.armour.BlockChance then",
+            "\n\t\tfor _, value in ipairs(modList:List(nil, \"ArmourData\")) do",
         );
-        let assemble = lua.load(format!("local t_remove=table.remove; {local} local function calculate(input) local self={{base={{armour=input.base}},quality=input.quality,armourData={{}}}}; local modList=copyTable(input.mods); {block} return {{stats=self.armourData,remaining=modList}} end; return function(input,warm) local result; for i=1,(warm and 200 or 1) do result=calculate(input) end; return result end")).set_name("unchanged-Item-local-armour").eval().unwrap();
+        let assemble = lua.load(format!("local t_remove=table.remove; {local} local function calculate(input) local self={{base={{armour=input.base}},quality=input.quality,armourData={{}},modSource=input.source}}; local modList=new('ModList'):ModList(); for _,mod in ipairs(input.mods) do modList:AddMod(copyTable(mod)) end; {block} return {{stats=self.armourData,remaining=modList}} end; return function(input,warm) local result; for i=1,(warm and 200 or 1) do result=calculate(input) end; return result end")).set_name("unchanged-Item-local-armour").eval().unwrap();
         let getter = lua.load(format!("local ItemClass={{}}; {} return function(fixed,coefficient,level,warm) local item={{armourData={{Armour=fixed,ArmourPerLevel=coefficient}}}}; local result; for i=1,(warm and 200 or 1) do result=ItemClass.GetArmourDataValue(item,'Armour',level) end; return result end",section(&item,"function ItemClass:GetArmourDataValue(","-- Calculate local modifiers"))).set_name("unchanged-GetArmourDataValue").eval().unwrap();
         Self {
             oracle,
@@ -53,6 +64,16 @@ impl ArmourOracle {
         quality: u32,
         modifiers: &[ModifierInput],
     ) -> (ArmourStats, Table) {
+        self.assembly_with_penalty(base, quality, modifiers, None, "old fixed-only oracle")
+    }
+    pub(super) fn assembly_with_penalty(
+        &self,
+        base: ArmourBaseValues,
+        quality: u32,
+        modifiers: &[ModifierInput],
+        penalty: Option<f64>,
+        source: &str,
+    ) -> (ArmourStats, Table) {
         let lua = &self.oracle.lua;
         let input = lua.create_table().unwrap();
         let bases = lua.create_table().unwrap();
@@ -63,6 +84,8 @@ impl ArmourOracle {
         ] {
             bases.set(name, value).unwrap();
         }
+        bases.set("MovementPenalty", penalty).unwrap();
+        input.set("source", source).unwrap();
         input.set("base", bases).unwrap();
         input.set("quality", quality).unwrap();
         input
@@ -320,6 +343,7 @@ fn original_receiver_uses_local_slots_then_global_base_with_final_attribute_cond
                         helmet: (mask & 1 != 0).then_some(&items[0].0),
                         gloves: (mask & 2 != 0).then_some(&items[1].0),
                         boots: (mask & 4 != 0).then_some(&items[2].0),
+                        body_armour: None,
                     };
                     let expected = receiver.calculate_receiving_with_armour(
                         &data,

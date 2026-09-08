@@ -102,7 +102,7 @@ fn four_complete_mace_documents_match_unchanged_independent_goldens() {
             result.backend.rules_revision,
             expected["provenance"]["upstream_revision"]
         );
-        assert_eq!(result.measurements.len(), 12);
+        assert_eq!(result.measurements.len(), 13);
         for (name, raw) in &metric_names {
             close(
                 number(&result, name),

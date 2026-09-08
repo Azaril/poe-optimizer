@@ -223,11 +223,11 @@ function source_critical_chance_cap(modifier)
 end
 
 local receiving_stats={Armour=true,Evasion=true,EnergyShield=true,ArmourAndEvasion=true,Defences=true,FireResist=true,ColdResist=true,LightningResist=true,ChaosResist=true,ElementalResist=true}
-local actor_stats={ArmourAndEnergyShield=true,EvasionAndEnergyShield=true,Armour=true,Evasion=true,EnergyShield=true,ArmourAndEvasion=true,Defences=true,FireResist=true,ColdResist=true,LightningResist=true,ChaosResist=true,ElementalResist=true,Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true,ExtraLife=true,ExtraMana=true,ExtraSpirit=true,LifeTotal=true,ManaTotal=true,SpiritTotal=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,DexAccBonusOverride=true,LowLifePercentage=true,FullLifePercentage=true}
-local actor_flags={NoAttributeBonuses=true,DoubledInherentAttributeBonuses=true,NoStrengthAttributeBonuses=true,NoStrBonusToLife=true,HalvesLifeFromStrength=true,NoDexterityAttributeBonuses=true,NoDexBonusToAccuracy=true,NoIntelligenceAttributeBonuses=true,NoIntBonusToMana=true,ChaosInoculation=true}
-local actor_conditions={TwoHighestAttributesEqual=true,DexHigherThanInt=true,StrHigherThanInt=true,IntHigherThanDex=true,StrHigherThanDex=true,IntHigherThanStr=true,DexHigherThanStr=true,StrHighestAttribute=true,IntHighestAttribute=true,DexHighestAttribute=true,IntSingleHighestAttribute=true,DexSingleHighestAttribute=true}
+local actor_stats={MovementSpeed=true,ArmourAndEnergyShield=true,EvasionAndEnergyShield=true,Armour=true,Evasion=true,EnergyShield=true,ArmourAndEvasion=true,Defences=true,FireResist=true,ColdResist=true,LightningResist=true,ChaosResist=true,ElementalResist=true,Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true,ExtraLife=true,ExtraMana=true,ExtraSpirit=true,LifeTotal=true,ManaTotal=true,SpiritTotal=true,LifeConvertToEnergyShield=true,LifeConvertToArmour=true,LifeConvertToEvasion=true,ManaConvertToEnergyShield=true,ManaConvertToArmour=true,ManaConvertToEvasion=true,SpiritConvertToEnergyShield=true,SpiritConvertToArmour=true,SpiritConvertToEvasion=true,DexAccBonusOverride=true,LowLifePercentage=true,FullLifePercentage=true}
+local actor_flags={["Condition:IgnoreMovementPenalties"]=true,MovementSpeedCannotBeBelowBase=true,NoAttributeBonuses=true,DoubledInherentAttributeBonuses=true,NoStrengthAttributeBonuses=true,NoStrBonusToLife=true,HalvesLifeFromStrength=true,NoDexterityAttributeBonuses=true,NoDexBonusToAccuracy=true,NoIntelligenceAttributeBonuses=true,NoIntBonusToMana=true,ChaosInoculation=true}
+local actor_conditions={IgnoreMovementPenalties=true,TwoHighestAttributesEqual=true,DexHigherThanInt=true,StrHigherThanInt=true,IntHigherThanDex=true,StrHigherThanDex=true,IntHigherThanStr=true,DexHigherThanStr=true,StrHighestAttribute=true,IntHighestAttribute=true,DexHighestAttribute=true,IntSingleHighestAttribute=true,DexSingleHighestAttribute=true}
 local actor_operations={BASE='base',INC='increased',MORE='more',OVERRIDE='override'}
-local function actor_name(name) return (name:gsub('(%l)(%u)','%1_%2'):lower()) end
+local function actor_name(name) if name=='Condition:IgnoreMovementPenalties' then return 'ignore_movement_penalties' end;return (name:gsub('(%l)(%u)','%1_%2'):lower()) end
 function source_convert_actor_modifier(modifier)
     local tags,rawTags={},{}
     for key in pairs(modifier) do
@@ -245,7 +245,7 @@ function source_convert_actor_modifier(modifier)
             assert(tag.neg==nil or type(tag.neg)=='boolean','invalid actor negation')
             local vars=tag.varList or {tag.var};dense_array(vars,'actor condition variables')
             local names={}
-            for _,var in ipairs(vars) do assert(actor_conditions[var],'unsupported actor condition variable');names[#names+1]=actor_name(var) end
+            for _,var in ipairs(vars) do assert(actor_conditions[var],'unsupported actor condition variable');assert(var~='IgnoreMovementPenalties' or modifier.name=='MovementSpeed','dynamic movement condition target permits a cycle or stage feedback');names[#names+1]=actor_name(var) end
             assert(#names>=1 and #names<=12,'actor condition count')
             tags[#tags+1]={type='condition',variables=names,negated=tag.neg or false}
         end
@@ -257,7 +257,7 @@ function source_convert_actor_modifier(modifier)
         effect={kind='flag',value=modifier.value}
     else
         assert(actor_stats[modifier.name] and actor_operations[modifier.type],'unsupported actor numeric target or operation')
-        local allOperations={Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true}
+        local allOperations={MovementSpeed=true,Str=true,Dex=true,Int=true,Life=true,Mana=true,Spirit=true,Accuracy=true}
         local localArmour=modifier.name=='ArmourAndEnergyShield' or modifier.name=='EvasionAndEnergyShield'
         assert((receiving_stats[modifier.name] and (modifier.type=='INC' or (modifier.type=='BASE' and modifier.name~='Defences'))) or (localArmour and (modifier.type=='BASE' or modifier.type=='INC')) or (not receiving_stats[modifier.name] and not localArmour and (allOperations[modifier.name] or (modifier.name=='DexAccBonusOverride' and modifier.type=='OVERRIDE') or (modifier.name~='DexAccBonusOverride' and modifier.type=='BASE'))),'actor numeric operation does not apply to target')
         effect={kind='numeric',operation=actor_operations[modifier.type],value=numeric(modifier.value,true)}
@@ -314,8 +314,15 @@ function source_extract_actor_rule(selection)
         else
             assert(#captures==1,'multiple actor numeric captures need an explicit source mapping expansion')
             local multiplier=record.effect.value/values[1]
-            assert(multiplier==1 or multiplier==-1,'source actor capture has unrepresented numerical transform')
-            mapping.effect={kind='numeric',operation=record.effect.operation,value={kind='capture',index=0,multiplier=multiplier}}
+            local value
+            if selection.pattern=='your movement speed is (%d+)%% of its base value' then
+                assert(record.stat=='movement_speed' and record.effect.operation=='override','movement override changed target')
+                value={kind='capture_divided',index=0,divisor=values[1]/record.effect.value}
+            else
+                assert(multiplier==1 or multiplier==-1,'source actor capture has unrepresented numerical transform')
+                value={kind='capture',index=0,multiplier=multiplier}
+            end
+            mapping.effect={kind='numeric',operation=record.effect.operation,value=value}
         end
         modifiers[#modifiers+1]=mapping
     end
@@ -324,7 +331,7 @@ function source_extract_actor_rule(selection)
         for _,mapping in ipairs(modifiers) do
             local effect=mapping.effect
             if effect.kind=='numeric' then
-                effect={kind='numeric',operation=effect.operation,value=effect.value.kind=='capture' and probe*effect.value.multiplier or effect.value.value}
+                effect={kind='numeric',operation=effect.operation,value=effect.value.kind=='capture' and probe*effect.value.multiplier or effect.value.kind=='capture_divided' and probe/effect.value.divisor or effect.value.value}
             end
             expected[#expected+1]={stat=mapping.stat,effect=effect,flags=mapping.flags,keyword_flags=mapping.keyword_flags,tags=mapping.tags}
         end
@@ -471,7 +478,7 @@ function source_extract_records(policy)
         assert(quests[target[3]]==nil or quests[target[3]]==value,'elemental quest values diverged; schema expansion required')
         quests[target[3]]=value
     end
-    return {receiving_defence=source_extract_receiving_defence(),character=character,actor=source_extract_actor_data(policy,character,init,actor),spark=spark,mace=mace,supports=supports,weapons=weapons,item_modifier_rules=item_modifier_rules,quests=quests,monsters={armour=data.monsterArmourTable,evasion=data.monsterEvasionTable}}
+    return {receiving_defence=source_extract_receiving_defence(),movement=source_extract_movement(),character=character,actor=source_extract_actor_data(policy,character,init,actor),spark=spark,mace=mace,supports=supports,weapons=weapons,item_modifier_rules=item_modifier_rules,quests=quests,monsters={armour=data.monsterArmourTable,evasion=data.monsterEvasionTable}}
 end
 function source_encounter_build(level)
     local build={characterLevel=level}
@@ -549,27 +556,27 @@ function source_extract_jewellery(rules)
  return result,excluded
 end
 
--- Enumerate the three complete fixed armour families; unsupported whole bases
+-- Enumerate the four complete fixed armour families; unsupported whole bases
 -- stay excluded instead of stripping a Ward, implicit or hidden source field.
 function source_extract_armour()
  local result,excluded={},{}
  local allowed={type=true,subType=true,quality=true,socketLimit=true,tags=true,implicitModTypes=true,armour=true,req=true}
- local slots={Helmet='helmet',Gloves='gloves',Boots='boots'}
+ local slots={Helmet='helmet',Gloves='gloves',Boots='boots',['Body Armour']='body_armour'}
  local subtypes={['Armour']=true,['Evasion']=true,['Energy Shield']=true,['Armour/Evasion']=true,['Armour/Energy Shield']=true,['Evasion/Energy Shield']=true,['Armour/Evasion/Energy Shield']=true}
- local tagNames={armour=true,default=true,helmet=true,gloves=true,boots=true,str_armour=true,dex_armour=true,int_armour=true,str_dex_armour=true,str_int_armour=true,dex_int_armour=true,str_dex_int_armour=true,ezomyte_basetype=true,maraketh_basetype=true,vaal_basetype=true,karui_basetype=true}
+ local tagNames={armour=true,default=true,helmet=true,gloves=true,boots=true,body_armour=true,str_armour=true,dex_armour=true,int_armour=true,str_dex_armour=true,str_int_armour=true,dex_int_armour=true,str_dex_int_armour=true,ezomyte_basetype=true,maraketh_basetype=true,vaal_basetype=true,karui_basetype=true}
  for name,base in pairs(sourceArmourBases)do
   local ok,value=pcall(function()
    keys(base,allowed,'armour base');assert(slots[base.type] and subtypes[base.subType],'unsupported armour slot/subtype')
-   assert(base.quality==20 and base.socketLimit==3,'unsupported base quality/socket defaults')
+   assert(base.quality==20 and base.socketLimit==(base.type=='Body Armour' and 4 or 3),'unsupported base quality/socket defaults')
    keys(base.tags,tagNames,'armour base tags');assert(base.tags.armour==true and base.tags.default==true and base.tags[slots[base.type]]==true,'missing armour base tags')
-   for tag,value in pairs(base.tags)do assert(value==true,'nonboolean armour tag');if tag=='helmet' or tag=='gloves' or tag=='boots' then assert(tag==slots[base.type],'conflicting armour slot tag')end end
+   for tag,value in pairs(base.tags)do assert(value==true,'nonboolean armour tag');if tag=='helmet' or tag=='gloves' or tag=='boots' or tag=='body_armour' then assert(tag==slots[base.type],'conflicting armour slot tag')end end
    assert(empty(base.implicitModTypes),'unconsumed armour implicit metadata')
    keys(base.req or {},{level=true,str=true,dex=true,int=true},'armour requirements')
    for key,value in pairs(base.req or {})do numeric(value);assert(value%1==0 and (key~='level' or value<=100),'unsupported armour requirement')end
-   keys(base.armour,{Armour=true,Evasion=true,EnergyShield=true},'fixed armour ratings');assert(not empty(base.armour),'empty armour base')
+   keys(base.armour,{Armour=true,Evasion=true,EnergyShield=true,MovementPenalty=true},'fixed armour ratings');assert(not empty(base.armour),'empty armour base')
    for _,value in pairs(base.armour)do numeric(value)end
    local id=name:lower():gsub('[^%w]+','_'):gsub('^_',''):gsub('_$','')
-   return {id=id,name=name,slot=slots[base.type],quality=base.quality,armour=base.armour.Armour or 0,evasion=base.armour.Evasion or 0,energy_shield=base.armour.EnergyShield or 0,requirements={level=(base.req or{}).level or 0,attributes={strength=(base.req or{}).str or 0,dexterity=(base.req or{}).dex or 0,intelligence=(base.req or{}).int or 0}}}
+   return {id=id,name=name,slot=slots[base.type],quality=base.quality,armour=base.armour.Armour or 0,evasion=base.armour.Evasion or 0,energy_shield=base.armour.EnergyShield or 0,movement_penalty=base.armour.MovementPenalty,requirements={level=(base.req or{}).level or 0,attributes={strength=(base.req or{}).str or 0,dexterity=(base.req or{}).dex or 0,intelligence=(base.req or{}).int or 0}}}
   end)
   if ok then result[#result+1]=value else excluded[#excluded+1]=name end
  end
@@ -611,4 +618,30 @@ function source_extract_item_formatting(records)
  end
  table.sort(rules,function(a,b)return a.template<b.template end)
  return {rules=rules}
+end
+
+-- Execute actual source branches to observe defaults, queries, precision and the
+-- synthetic item modifier. Neutral action speed remains an admission proof.
+function source_extract_movement()
+ local baseActor={modDB=new('ModDB'):ModDB(),output={}}
+ local action=sourceCalcs.actionSpeedMod(baseActor);assert(action==1,'nonneutral action baseline requires offence support')
+ baseActor.output.ActionSpeedMod=action
+ local originalRound=round;local precision
+ sourceMovementRound=function(value,places)assert(type(places)=='number' and places%1==0 and (precision==nil or precision==places),'movement rounding changed');precision=places;return originalRound(value,places)end
+ local base=sourceMovement(baseActor).MovementSpeedMod
+ sourceMovementRound=nil
+ local minimumActor={modDB=new('ModDB'):ModDB(),output={ActionSpeedMod=action}}
+ minimumActor.modDB:NewMod('MovementSpeed','OVERRIDE',0);minimumActor.modDB:NewMod('MovementSpeedCannotBeBelowBase','FLAG',true)
+ local minimum=sourceMovement(minimumActor).MovementSpeedMod
+ local observed={};local query={}
+ for _,method in ipairs({'Override','Sum','More','Flag'})do
+  query[method]=function(_,...)local args={...};local name=args[select('#',...)];observed[#observed+1]={method=method,name=name};if method=='Override'then return nil elseif method=='Flag'then return false elseif method=='More'then return 1 else return 0 end end
+ end
+ sourceMovement({modDB=query,output={ActionSpeedMod=action}})
+ local observedText={};for _,q in ipairs(observed)do observedText[#observedText+1]=q.method..':'..tostring(q.name)end;assert(equal(observed,{{method='Override',name='MovementSpeed'},{method='Flag',name='MovementSpeedEqualHighestLinkedPlayers'},{method='Sum',name='MovementSpeed'},{method='Sum',name='MovementSpeed'},{method='More',name='MovementSpeed'},{method='Flag',name='MovementSpeedCannotBeBelowBase'}}),'movement query targets/order changed: '..table.concat(observedText,','))
+ local penalty=sourceArmourPenalty(101);assert(#penalty==1,'generated movement penalty count changed');local modifier=penalty[1]
+ assert(equal(modifier,modLib.createMod('MovementSpeed','BASE',-101,'Item:1:Source probe',{type='Condition',var='IgnoreMovementPenalties',neg=true})),'generated movement penalty shape changed')
+ modifier=copyTable(modifier);modifier.source=nil;local converted=source_convert_actor_modifier(modifier)
+ local mapping={stat=converted.stat,effect={kind='numeric',operation=converted.effect.operation,value={kind='capture',index=0,multiplier=converted.effect.value/101}},flags=converted.flags,keyword_flags=converted.keyword_flags,tags=converted.tags}
+ return {base_multiplier=base,minimum_multiplier=minimum,default_action_speed_multiplier=action,rounding_precision=precision,query_stats={actor_name(observed[1].name)},penalty_modifier=mapping}
 end

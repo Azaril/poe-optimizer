@@ -15,8 +15,9 @@ attribute-comparison conditions use the actor's final two-pass condition state. 
 subsequent global query. In particular, the source parser adds this tag to increased
 maximum Energy Shield even when the text does not say “global”.
 
-Configuration, Weapon 1, Amulet and passive records retain source order in one local
-modifier layer. Armour-slot local effects are not admitted yet. Existing two Mace bases
+Configuration, Weapon 1, Helmet, Body Armour, Gloves, Boots, Amulet and passive records
+retain source order in one local modifier layer. The four armour slots use shared local
+preparation; see [local armour](local-armour.md) and [body/movement](body-armour-movement.md). Existing two Mace bases
 and seven amulet bases are available: Amber, Jade, Lapis, Bloodstone, Solar, Lunar and
 Pearlescent. Lunar's base requirement is level 14; Pearlescent's is level 30. Item level
 is not a substitute for a requirement; an explicit supported `LevelReq` overrides it.
@@ -30,7 +31,8 @@ does not establish full defence, reservation, mitigation, recovery or full-game 
 ## Data and API contracts
 
 Package schema 8 introduced the required `receiving_defence` section; current schema
-**9**, `poe2-native-profiles-v9`, retains it and adds [local armour data](local-armour.md).
+**10**, `poe2-native-profiles-v10`, retains it alongside [local armour](local-armour.md)
+and [body/movement data](body-armour-movement.md).
 It holds ordered output/query membership; balance values remain in their existing injected
 character, quest, defence and source-modifier records. Rust implements operation semantics.
 The loader validates complete source-reviewed query shapes and allowed operation/tag scope.
@@ -78,7 +80,8 @@ examples, not a fixed optimizer objective. Equipment and passive choices can cha
 receiver while encounter and authored configuration stay fixed for the run.
 
 Graph problem 7 and legacy mutation problems 1–6 keep their existing authored input scope;
-new receiving configuration/equipment requires graph problem 8. Migrated passive records
+new receiving configuration/equipment requires graph problem 8 or later. Armour requires
+problem 9, and Body Armour/authored movement requires problem 10. Migrated passive records
 continue to work through the shared stage. Typed/document evaluation, per-worker deterministic
 archives, evaluation ledgers and fresh finalist export verification use the same contracts.
 Player `armour` and `evasion` are now direct rating metrics, definition schema 1 with
@@ -86,8 +89,8 @@ unit `rating_points`; see [local armour and rating objectives](local-armour.md).
 Shield and capped resistances retain their existing units and definitions.
 Unsupported metrics remain unavailable; the receiver does not add an EHP approximation.
 
-Native profile IDs are `poe2-spark-local-armour-v5` and
-`poe2-mace-strike-local-armour-v9`, with profile media versions **5** and **7**. Each
+Native profile IDs are `poe2-spark-body-movement-v6` and
+`poe2-mace-strike-body-movement-v10`, with profile media versions **6** and **8**. Each
 profile carries a separate `receiving_defence` evidence object (schema 1). Realization checks
 recompute expected receiving evidence from selected sources and reject tampering, a foreign
 data owner or different scenario. Output XML preserves source; its companion binds exact data.

@@ -19,6 +19,7 @@ pub use data::CompiledGameData;
 pub mod mace;
 pub mod mace_supports;
 pub mod modifiers;
+pub mod movement;
 pub mod multipliers;
 mod offence;
 pub mod resistance;

@@ -219,3 +219,63 @@ fn forced_decimal_item_text_cannot_bypass_source_integer_modifier_grammar() {
         &[17.5]
     );
 }
+
+#[test]
+fn mixed_case_grammar_preserves_case_sensitive_equipment_formatting_and_raw_source() {
+    let data = data();
+    let exact = match_armour_modifier_line("+17.5 to Evasion Rating", "Item:44:Study", &data)
+        .unwrap()
+        .unwrap();
+    let lower = match_armour_modifier_line("+17.5 to evasion rating", "Item:44:Study", &data)
+        .unwrap()
+        .unwrap();
+    assert_eq!(exact.rule_id(), lower.rule_id());
+    assert_eq!(exact.values(), lower.values());
+    assert_eq!(exact.effective_values(), &[18.0]);
+    assert_eq!(lower.effective_values(), &[17.5]);
+    assert_eq!(
+        match_actor_modifier_line("+17.5 TO EVASION RATING", "Custom:Study", &data)
+            .unwrap()
+            .unwrap()
+            .effective_values(),
+        &[17.5]
+    );
+    for line in [
+        "mOvEmEnT SpEeD CaNnOt bE MoDiFiEd tO BeLoW BaSe VaLuE",
+        "YoUr MoVeMeNt SpEeD iS 57% oF ItS bAsE VaLuE",
+        "IgNoRe AlL mOvEmEnT PeNaLtIeS FrOm ArMoUr",
+    ] {
+        assert!(
+            match_actor_modifier_line(line, "Custom:Study", &data)
+                .unwrap()
+                .is_some()
+        );
+        assert!(
+            match_equipment_modifier_line(line, "Item:44:Study", &data)
+                .unwrap()
+                .is_some()
+        );
+    }
+    let source = "Rarity: RARE\r\nMixed Source\r\nSuede Bracers\r\nItem Level: 60\r\nQuality: 13\r\nImplicits: 0\r\n+17.5 to evasion rating\r\n27% INCREASED EVASION RATING";
+    let item = parse_equipment_item(source, &data, 44).unwrap();
+    assert_eq!(item.source_text(), source);
+    assert_eq!(item.modifier_lines()[0].effective_values, vec![17.5]);
+    assert_eq!(item.modifier_lines()[1].values, vec![27.0]);
+    for line in item.modifier_lines() {
+        assert_eq!(&source[line.byte_range.clone()], line.source);
+    }
+    let mut ambiguous = data.clone();
+    let mut duplicate = ambiguous
+        .actor
+        .modifier_rules
+        .iter()
+        .find(|rule| rule.id == "evasion_base")
+        .unwrap()
+        .clone();
+    duplicate.id = "case_duplicate".into();
+    duplicate.template = duplicate.template.to_ascii_lowercase();
+    ambiguous.actor.modifier_rules.push(duplicate);
+    assert!(
+        match_armour_modifier_line("+17.5 to Evasion Rating", "Item:44:Study", &ambiguous).is_err()
+    );
+}

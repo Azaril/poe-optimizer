@@ -59,9 +59,9 @@ fn complete_native_documents_match_both_unchanged_independent_goldens() {
             ("selected_hit_dps", "TotalDPS"),
             ("selected_average_hit", "AverageHit"),
         ]);
-        // Spirit and armour/evasion ratings are tested against fresh source;
+        // Spirit, movement and armour/evasion ratings are tested against fresh source;
         // the independent original goldens deliberately remain unchanged.
-        assert_eq!(result.measurements.len(), raw.len() + 3);
+        assert_eq!(result.measurements.len(), raw.len() + 4);
         for (name, value) in values(&result)
             .into_iter()
             .filter(|(name, _)| raw.contains_key(name.as_str()))

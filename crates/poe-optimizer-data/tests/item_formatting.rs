@@ -11,7 +11,7 @@ fn custom(mut package: GameDataPackage) -> Result<GameDataSnapshot, GameDataErro
 fn item_formatting_preserves_exact_case_and_allows_explicit_custom_policy() {
     let original = bundled_snapshot().unwrap();
     let p = original.package();
-    assert_eq!(p.item_formatting.rules.len(), 77);
+    assert_eq!(p.item_formatting.rules.len(), 83);
     let evasion = p
         .item_formatting
         .rules

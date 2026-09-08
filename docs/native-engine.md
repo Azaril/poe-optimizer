@@ -39,14 +39,23 @@ belong to one evaluation context and must demonstrate request-order independence
 ## Shared actor preparation
 
 `CompiledGameData::prepare_actor` translates source attribute, maximum-resource and receiving-defence
-stages into an immutable reusable component. Both skill pipelines and catalog attribute
+stages into an immutable reusable component. Schema-10 [body and movement](body-armour-movement.md)
+adds the fourth armour slot, generated source penalties and prepared movement ratios/flags. Both skill pipelines and catalog attribute
 requirements consume this shared stage. Source-derived schema-8 records, precision and
 quest data are injected; calculation order remains Rust code. Prepared components support
 direct concurrent use and keep no XML or owned modifier database. See [actor resources](actor-resources.md)
 for exact two-pass conditions, raw-function versus complete-build scope, source input fidelity
 and the pure Rust import-to-engine requirement seam. Current profile identifiers are
-`poe2-spark-local-armour-v5` and `poe2-mace-strike-local-armour-v9`.
+`poe2-spark-body-movement-v6` and `poe2-mace-strike-body-movement-v10`.
 See [receiving defences](receiving-defences.md) for the complete versus raw preparation contract.
+
+Action timing remains incomplete: complete profiles reject non-neutral ActionSpeed, and
+current Spark/Mace kernels omit the source server-tick cap at very high action rates.
+The next shared timing stage must resolve ActionSpeed once for movement and offence,
+preserve uncapped CastRate versus capped Speed/Time/DPS, and extract the tick rate from
+data. The [implementation resume plan](implementation.md#next-complete-pipeline-shared-action-speed-and-action-timing)
+records the source audit and required boundary tests. Existing ordinary-rate parity does
+not establish parity for cap-saturating inputs.
 
 ## First translation boundary: defence kernels
 
@@ -304,7 +313,7 @@ remain outside this profile. Enemy resistance uses the pinned configurable ceili
 records. `CompiledGameData` resolves the package once; `evaluate_with_data` borrows it.
 See [native data packages](native-data.md) for the loader and compatibility wrappers. `SOURCE_FILES` identifies
 12 complete normalized source files, including the modifier parser semantic oracle.
-`PROFILE_ID` is `poe2-spark-local-armour-v5`.
+`PROFILE_ID` is `poe2-spark-body-movement-v6`.
 The production function uses no parsing, allocation, I/O, timing, Lua or shared state. The
 application adapter owns XML admission, source identity, evaluation clock, metric coverage
 and prepared-input reuse. A native-only build and WASM consumer can therefore call the
@@ -364,7 +373,7 @@ a top-level AverageHit for this attack, and the typed metric remains unavailable
 that existing contract. This profile claims hit DPS, not combined or ailment DPS.
 
 Twenty-one normalized source hashes accompany the Rust data; the profile identity is
-`poe2-mace-strike-local-armour-v9`. The differential test executes
+`poe2-mace-strike-body-movement-v10`. The differential test executes
 actual pinned Item/ModDB/resource/offence source with resolved closed-profile scaffolding,
 including the real Brutality stat map and damage-disable flags. Interpreted and warmed
 runs cover every admitted quality, both weapons and support choices, character levels,

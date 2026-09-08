@@ -23,13 +23,13 @@ stat text is source evidence; typed effect IDs and values drive the calculation.
 The `actor` section supplies the shared attribute and maximum-resource stage used by Spark
 and Mace. Its normalized modifier records retain typed targets, numeric or flag effects,
 source, flags/keyword flags and ordered attribute-condition tags. The section includes
-320 reviewed custom-modifier templates, the complete 40-record source precision table,
+347 reviewed custom-modifier templates, the complete 40-record source precision table,
 three Spirit quest records and the additional source constants for attribute bonuses,
 pool thresholds and Spirit. Existing Life/Mana/Accuracy balance fields remain in
 `character`; existing quest fields remain in `quests`.
 
 The package is explicitly partial. It records 4,109 structural ordinary nodes and 4,758
-source views: 1,270 have complete admitted effects and 3,488 are explicitly excluded.
+source views: 1,282 have complete admitted effects and 3,476 are explicitly excluded.
 Class/ascendancy replacements and physical attribute choices resolve before capability
 admission. Its ascendancy effect coverage includes four directly connected
 ascendancy small nodes with signed BASE player resistance effects. Local item rules admit
@@ -49,7 +49,7 @@ supplied minion build and unrestricted native evaluation remain unsupported.
 
 `ActorModifierRecord` represents numeric BASE/INC/MORE/OVERRIDE or boolean FLAG effects.
 Supported numeric targets cover attributes, Life/Mana/Spirit, Accuracy and the explicit
-inputs to the maximum-resource and admitted receiving-defence functions. `ActorModifierTag::Condition` preserves ordered
+inputs to the maximum-resource, admitted receiving-defence and movement functions. `ActorModifierTag::Condition` preserves ordered
 OR variables and negation; `Global` retains exact nonrestricting item-scope metadata.
 Multiple tags retain source order. Global records require zero
 flags and keyword flags. Unknown fields, targets, tags and incompatible operations reject.
@@ -193,7 +193,8 @@ projection, generated XML and numerical configuration. The schema-3 problem adds
 support-loadout problems use report **5**; schema-5 local-weapon problems use report **6**.
 Schema-6 actor-customization problems use report **7**. The lazy schema-7 `search-build`
 problem uses report **8**; graph problem **8** adds authored receiving scope and report **9**.
-Mace profile evidence uses media **6**, and Spark uses media **4**, with normalized actor modifier evidence and maximum Spirit
+Graph problem **9** adds local armour/report **10**; graph problem **10** adds Body Armour
+and movement/report **11**. Mace profile evidence uses media **8**, and Spark uses media **6**, with normalized actor modifier evidence and maximum Spirit
 alongside the existing outputs. Mace additionally retains exact parsed item provenance and
 prepared local weapon stats. Native-tree
 diagnostics use version **3**, with separate ordinary/ascendancy counts, physical/effective
@@ -209,7 +210,16 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
-Current package schema **9**, semantics **`poe2-native-profiles-v9`**, adds `armour_bases`
+Current package schema **10**, semantics **`poe2-native-profiles-v10`**, adds the `movement`
+section and source-selected Body Armour. Every armour base has an explicit nullable
+`movement_penalty`, preserving absence versus zero. Source-generated modifier metadata,
+movement query/default/rounding data and exact division captures remain injectable data.
+The package has 402 fixed bases, 347 actor templates, 83 exact item-format keys and 1,282
+admitted passive views. Non-neutral default ActionSpeed is rejected until offence also
+consumes it. Previous source values/tree semantics remain unchanged; regenerate older
+packages and review custom changes. See [Body Armour and movement](body-armour-movement.md).
+
+Package schema **9**, semantics **`poe2-native-profiles-v9`**, introduced `armour_bases`
 for source-selected fixed Helmet/Gloves/Boots, nine local paired grammar aliases and
 `item_formatting` for source-keyed pre-parser numeric formatting. Configuration records
 do not undergo item formatting.
@@ -299,11 +309,13 @@ cargo test -p poe-optimizer-cli --test native_passive_parity --locked
 ```
 
 The optional source tests verify package records against pinned Lua data, modifier parsing
-and source expressions, including warmed functions and every effective entrance. Actor data
-checks include 3,642 independent cold/warm parser inputs for the 320 reviewed templates,
-complete precision records and actual Spirit quest configuration callbacks. Independent
-original `PassiveTree.ProcessStats` tests compare all 1,270 admitted views in cold and warm
-source runs; jewellery tests check every admitted base. Those parser
+and source expressions, including warmed functions and every effective entrance. Earlier
+receiving-defence validation covered 3,642 independent cold/warm parser inputs for its 320
+reviewed templates, complete precision records and actual Spirit quest configuration callbacks.
+Independent original `PassiveTree.ProcessStats` tests compared all 1,270 views admitted at
+that checkpoint in cold and warm source runs; jewellery tests checked every admitted base.
+These historical counts precede local armour and movement; current coverage and validation
+counts are recorded in the [living implementation checkpoint](implementation.md). Those parser
 comparisons establish normalized input parity, not complete native build parity. The full
 matrix checks complete native builds against fresh PoB evaluations. Custom-package tests
 are isolation and controlled-change evidence, not PoB parity claims. Preserve source review,

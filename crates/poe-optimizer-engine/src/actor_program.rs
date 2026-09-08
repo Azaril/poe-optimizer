@@ -26,7 +26,7 @@ impl From<ActorNumericOperation> for Kind {
         }
     }
 }
-/// The actor IR admits only conditions produced by this exact attribute stage.
+/// Conditions come from the shared attribute stage and its acyclic movement flag.
 /// No external actor, weapon-condition override or skill-local condition enters
 /// this representation; those forms must first gain an explicit data/engine seam.
 #[derive(Debug, Clone, Copy)]
@@ -52,6 +52,9 @@ impl Predicate {
                 let bit = CONDITIONS
                     .iter()
                     .position(|condition| condition == variable)
+                    .or_else(|| {
+                        (*variable == ActorCondition::IgnoreMovementPenalties).then_some(12)
+                    })
                     .expect("complete actor condition vocabulary");
                 result.any[index] |= 1 << bit;
             }
@@ -270,6 +273,11 @@ impl ActorQueries for ProgramQueries<'_, '_> {
             .fold(0, |bits, (index, value)| bits | (u16::from(value) << index));
         Ok(())
     }
+    fn set_movement_condition(&mut self, ignored: bool) -> Result<(), ActorError> {
+        self.scratch.conditions =
+            (self.scratch.conditions & !(1 << 12)) | (u16::from(ignored) << 12);
+        Ok(())
+    }
     fn add_bonus(&mut self, record: BuiltinRecord) {
         self.scratch.base.add_bonus(record);
     }
@@ -463,7 +471,11 @@ impl CompiledGameData {
             self.add_receiving_base(&mut scratch.base, scenario);
         }
         scratch.base_len = scratch.base.len;
-        let (output, receiving_output) = calculate_complete(
+        let ActorOutputs {
+            resources: output,
+            receiving: receiving_output,
+            movement,
+        } = calculate_complete(
             &mut ProgramQueries { layers, scratch },
             self,
             receiving,
@@ -478,6 +490,7 @@ impl CompiledGameData {
             requires_downstream_defences,
             requires_receiving_stage,
             receiving: receiving_output,
+            movement,
         })
     }
 }

@@ -15,6 +15,9 @@ pub enum ActorStat {
     Mana,
     Spirit,
     Accuracy,
+    MovementSpeed,
+    IgnoreMovementPenalties,
+    MovementSpeedCannotBeBelowBase,
     Armour,
     Evasion,
     EnergyShield,
@@ -66,6 +69,9 @@ impl ActorStat {
             Self::Mana => "Mana",
             Self::Spirit => "Spirit",
             Self::Accuracy => "Accuracy",
+            Self::MovementSpeed => "MovementSpeed",
+            Self::IgnoreMovementPenalties => "Condition:IgnoreMovementPenalties",
+            Self::MovementSpeedCannotBeBelowBase => "MovementSpeedCannotBeBelowBase",
             Self::Armour => "Armour",
             Self::Evasion => "Evasion",
             Self::EnergyShield => "EnergyShield",
@@ -124,6 +130,7 @@ pub enum ActorCondition {
     DexHighestAttribute,
     IntSingleHighestAttribute,
     DexSingleHighestAttribute,
+    IgnoreMovementPenalties,
 }
 impl ActorCondition {
     pub const fn upstream_name(self) -> &'static str {
@@ -140,6 +147,7 @@ impl ActorCondition {
             Self::DexHighestAttribute => "DexHighestAttribute",
             Self::IntSingleHighestAttribute => "IntSingleHighestAttribute",
             Self::DexSingleHighestAttribute => "DexSingleHighestAttribute",
+            Self::IgnoreMovementPenalties => "IgnoreMovementPenalties",
         }
     }
 }
@@ -230,6 +238,11 @@ pub enum ActorRuleValue {
     Capture {
         index: u32,
         multiplier: f64,
+    },
+    /// Preserve a literal source division rather than reciprocal multiplication.
+    CaptureDivided {
+        index: u32,
+        divisor: f64,
     },
     Constant {
         value: f64,
@@ -323,6 +336,14 @@ impl ActorStat {
                 | Self::ElementalResist
         )
     }
+    pub const fn is_movement(self) -> bool {
+        matches!(
+            self,
+            Self::MovementSpeed
+                | Self::IgnoreMovementPenalties
+                | Self::MovementSpeedCannotBeBelowBase
+        )
+    }
     pub const fn is_flag(self) -> bool {
         use ActorStat::*;
         matches!(
@@ -337,13 +358,15 @@ impl ActorStat {
                 | NoIntelligenceAttributeBonuses
                 | NoIntBonusToMana
                 | ChaosInoculation
+                | IgnoreMovementPenalties
+                | MovementSpeedCannotBeBelowBase
         )
     }
     pub const fn admits_operation(self, operation: ActorNumericOperation) -> bool {
         use ActorNumericOperation::*;
         use ActorStat::*;
         match self {
-            Str | Dex | Int | Life | Mana | Spirit | Accuracy => true,
+            Str | Dex | Int | Life | Mana | Spirit | Accuracy | MovementSpeed => true,
             Armour
             | Evasion
             | EnergyShield
@@ -402,6 +425,9 @@ fn validate_scope(
     Ok(())
 }
 fn validate_target_tags(stat: ActorStat, tags: &[ActorModifierTag]) -> Result<(), GameDataError> {
+    if stat!=ActorStat::MovementSpeed && tags.iter().any(|tag| matches!(tag,ActorModifierTag::Condition{variables,..} if variables.contains(&ActorCondition::IgnoreMovementPenalties))) {
+        return Err(invalid("dynamic movement condition is admitted only on MovementSpeed numeric records, preventing cycles and actor-stage feedback"));
+    }
     if !stat.is_receiving_defence()
         && tags
             .iter()
@@ -566,7 +592,7 @@ pub(crate) fn validate_actor(data: &ActorData) -> Result<(), GameDataError> {
             ));
         }
         rule.template_literals()?;
-        if !templates.insert(&rule.template)
+        if !templates.insert(rule.template.to_ascii_lowercase())
             || rule.modifiers.is_empty()
             || rule.modifiers.len() > 8
         {
@@ -587,6 +613,13 @@ pub(crate) fn validate_actor(data: &ActorData) -> Result<(), GameDataError> {
                             if (index as usize) < rule.captures.len()
                                 && bounded(multiplier)
                                 && multiplier != 0.0 =>
+                        {
+                            used.insert(index);
+                        }
+                        ActorRuleValue::CaptureDivided { index, divisor }
+                            if (index as usize) < rule.captures.len()
+                                && bounded(divisor)
+                                && divisor > 0.0 =>
                         {
                             used.insert(index);
                         }

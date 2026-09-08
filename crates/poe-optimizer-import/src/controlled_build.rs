@@ -322,9 +322,15 @@ impl ControlledBuildCatalog {
         for (id, item) in inputs {
             let (program, armour) = if let Some(records) = item.armour_modifiers() {
                 let armour = compiled
-                    .prepare_armour(item.base_id(), item.quality(), item.item_level(), records)
+                    .prepare_armour_with_source(
+                        item.base_id(),
+                        item.quality(),
+                        item.item_level(),
+                        &item.modifier_source(),
+                        records,
+                    )
                     .map_err(|e| BuildCatalogError::ActorPreparation(e.to_string()))?;
-                if armour.global_records() != item.actor_modifiers() {
+                if armour.source_global_records() != item.actor_modifiers() {
                     return Err(xml::fail(
                         "armour global record projection differs from selected data preparation",
                     ));
@@ -399,6 +405,16 @@ impl ControlledBuildCatalog {
             .values()
             .any(|component| component.armour.is_some())
     }
+    pub fn uses_movement_scope(&self) -> bool {
+        self.source.actor_modifiers().uses_movement()
+            || self.items.values().any(|component| {
+                component.item.uses_movement()
+                    || component
+                        .armour
+                        .as_ref()
+                        .is_some_and(|armour| !armour.generated_global_records().is_empty())
+            })
+    }
     pub fn uses_receiving_defence_scope(&self) -> bool {
         self.source.actor_modifiers().uses_receiving_defence()
             || self.items.values().any(|component| {
@@ -453,6 +469,7 @@ impl ControlledBuildCatalog {
             helmet: selected("Helmet"),
             gloves: selected("Gloves"),
             boots: selected("Boots"),
+            body_armour: selected("Body Armour"),
         }
     }
     fn local_armour_evidence(&self, selection: &BuildSelection) -> serde_json::Value {

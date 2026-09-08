@@ -406,3 +406,81 @@ fn receiving_records_preserve_global_markers_pairs_conditions_and_strict_scope()
         );
     }
 }
+
+#[test]
+fn movement_override_retains_exact_division_and_rejects_dynamic_condition_cycles() {
+    let mut data = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    let parsed = match_actor_modifier_line(
+        "Your movement speed is 57% of its base value",
+        "Custom:Study",
+        &data,
+    )
+    .unwrap()
+    .unwrap();
+    assert_eq!(parsed.values(), &[57.0]);
+    assert_eq!(
+        parsed.records()[0].effect,
+        ActorModifierEffect::Numeric {
+            operation: poe_optimizer_data::game_data::ActorNumericOperation::Override,
+            value: 57.0 / 100.0
+        }
+    );
+    let rule = data
+        .actor
+        .modifier_rules
+        .iter_mut()
+        .find(|rule| rule.id == "movement_speed_override")
+        .unwrap();
+    rule.modifiers[0].effect = ActorRuleEffect::Numeric {
+        operation: poe_optimizer_data::game_data::ActorNumericOperation::Override,
+        value: ActorRuleValue::CaptureDivided {
+            index: 0,
+            divisor: 7.0,
+        },
+    };
+    let parsed = match_actor_modifier_line(
+        "Your movement speed is 57% of its base value",
+        "Custom:Study",
+        &data,
+    )
+    .unwrap()
+    .unwrap();
+    assert_eq!(
+        parsed.records()[0].effect,
+        ActorModifierEffect::Numeric {
+            operation: poe_optimizer_data::game_data::ActorNumericOperation::Override,
+            value: 57.0 / 7.0
+        }
+    );
+    let rule = data
+        .actor
+        .modifier_rules
+        .iter_mut()
+        .find(|rule| rule.id == "movement_speed_ignore_penalties")
+        .unwrap();
+    rule.modifiers[0].tags = vec![poe_optimizer_data::game_data::ActorModifierTag::Condition {
+        variables: vec![poe_optimizer_data::game_data::ActorCondition::IgnoreMovementPenalties],
+        negated: false,
+    }];
+    assert!(
+        match_actor_modifier_line(
+            "Ignore all movement penalties from armour",
+            "Custom:Study",
+            &data
+        )
+        .is_err()
+    );
+    for line in [
+        "20% increased Action Speed",
+        "20% increased Movement Speed while using a Skill",
+    ] {
+        assert!(
+            match_actor_modifier_line(line, "Custom:Study", &data)
+                .unwrap()
+                .is_none()
+        );
+    }
+}

@@ -9,7 +9,7 @@ complete native build evaluation remain unfinished.
 
 ## Configuration and calculation
 
-Current package schema **5**, semantics **`poe2-native-profiles-v5`**, retains the support
+Current package schema **10**, semantics **`poe2-native-profiles-v10`**, retains the support
 model introduced in schema **4**, which replaced `mace.brutality` with a top-level `supports`
 section. Schema 5 adds injected item modifier rules and the character critical-chance cap;
 see [package migration](native-data.md#schema-migration). Each support record stores its data
@@ -19,7 +19,7 @@ typed numerical modifiers and explicit damage-disable effects. Mace's source ski
 and zero mana cost are recorded separately. Support mana multipliers are retained as
 source metadata; the current profile rejects nonzero skill costs because it has no cost
 or reservation pipeline. Unknown fields, operations and unsupported source expressions
-reject. Schema-1/2/3/4 packages require regeneration and review of custom edits.
+reject. Older package schemas require regeneration and review of custom edits.
 
 | Key | Reviewed effect | Color |
 | --- | --- | --- |

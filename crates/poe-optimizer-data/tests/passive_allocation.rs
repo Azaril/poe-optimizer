@@ -26,8 +26,8 @@ fn whole_source_partition_keeps_exclusions_and_all_attribute_choices() {
     let t = s.tree();
     assert_eq!(t.allocation_nodes.len(), 4109);
     assert_eq!(t.allocation_views.len(), 4758);
-    assert_eq!(s.package().passive_effects.len(), 1270);
-    assert_eq!(s.package().passive_exclusions.len(), 3488);
+    assert_eq!(s.package().passive_effects.len(), 1282);
+    assert_eq!(s.package().passive_exclusions.len(), 3476);
     let admitted: BTreeSet<_> = s
         .package()
         .passive_effects

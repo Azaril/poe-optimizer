@@ -1,20 +1,22 @@
 # Local armour equipment and rating objectives
 
 The native Spark and Mace pipelines accept source-reviewed fixed helmet, glove and boot
-bases. Item and rule data is injected through the same immutable package used for passives,
+bases. [Body Armour and movement](body-armour-movement.md) extends this pipeline to the
+fourth slot in schema 10. Item and rule data is injected through the same immutable package used for passives,
 requirements, resources and receiving defences. Native execution uses Rust only; the pinned
 PoB checkout is an explicit development oracle. This is a complete calculation path for its
 admitted forms, with other mechanics rejected at admission.
 
 ## Data and supported inputs
 
-Package schema **9**, semantics `poe2-native-profiles-v9`, adds `armour_bases`. Each record
+Package schema **9** introduced `armour_bases`; the current schema **10** retains these
+three-slot inputs within its expanded armour data. Each record
 contains source identity, display name, slot, equip requirements, default quality and fixed
 Armour/Evasion/Energy-Shield bases. Extraction selects **288** complete fixed bases from
 **649** final source definitions by their represented field shape. No base-name list or
 patch-specific base values are embedded in the evaluator. The current extraction excludes
-implicit-bearing and otherwise unrepresented base shapes. Five additional source files
-bring extraction evidence to **34** verified files and **18** package sections.
+implicit-bearing and otherwise unrepresented base shapes. The current four-slot package has **35** verified source files and **19** sections;
+this three-slot subset retains its source-defined bases.
 
 Normal/rare items use source text, item level 1–100 and quality 0–20. Rare item text must
 include the rare name and base name. These bases have zero implicits. Explicit level
@@ -25,18 +27,18 @@ tiers, cost or acquisition legality.
 Ordered actor modifier rules provide individual Armour/Evasion/Energy-Shield BASE/INC,
 paired Armour-and-Evasion, Armour-and-Energy-Shield and Evasion-and-Energy-Shield BASE/INC,
 and Defences INC. The nine new plain paired rule aliases extend the grammar to **329**
-templates. Numeric captures and accepted wording come from the selected package. Source
+templates at that checkpoint; movement extends the current grammar to 347. Numeric captures and accepted wording come from the selected package. Source
 local consumption is record-specific: untagged records with zero flags are eligible;
 explicit Global markers and attribute conditions remain global. New local-only paired
 stats reject if left outside their local consumer, including configuration and passives.
 
-Per-level item bases, Body Armour movement penalties, Ward, block, alternate quality,
+Per-level item bases, Ward, block, alternate quality,
 ArmourData overrides, slot-specific conditions, conversions and item-granted skills remain
 unsupported. These effects cannot be silently discarded to admit an item.
 
 ## Item source formatting
 
-The required `item_formatting` section retains **77** exact source scalability keys, numeric
+The required `item_formatting` section retains **83** exact source scalability keys, including the original 77, numeric
 precision and display rules. Item text passes through this stage before modifier parsing,
 including surviving global weapon/amulet modifiers and implicit values. Case and literal
 number specialization matter: missing source keys preserve raw values. Configuration
@@ -48,10 +50,11 @@ matching keys and precision policy.
 
 ## Rust calculation seam
 
-`CompiledGameData::prepare_armour` binds base identity, quality, item level and normalized
-source records to the selected compiled dataset. `PreparedArmour` retains fixed local
+`CompiledGameData::prepare_armour_with_source` binds base identity, quality, item level,
+source identity and normalized records to the selected compiled dataset. The compatibility
+`prepare_armour` helper rejects bases requiring generated source-bound movement records. `PreparedArmour` retains fixed local
 stats and a compiled surviving global program. It is immutable and can be shared across
-workers. `ArmourSlots` borrows optional prepared helmet, glove and boot components.
+workers. `ArmourSlots` borrows optional prepared helmet, glove, boot and body components.
 
 Local arithmetic follows the original item calculation: sum individual and paired bases,
 apply summed local INC, multiply quality separately, then round. The Energy-Shield BASE
@@ -61,12 +64,12 @@ flattened into a global BASE surrogate.
 
 `prepare_actor_with_armour` / `evaluate_actor_with_armour` extend complete actor preparation.
 They validate data ownership and slot placement. Callers append surviving global programs
-exactly once in source order: configuration, Weapon 1, Helmet, Gloves, Boots, Amulet and
-passives. The slot input contributes local numerical bases only. Existing complete actor
+exactly once in source order: configuration, Weapon 1, Helmet, Body Armour when present,
+Gloves, Boots, Amulet and passives. The slot input contributes local numerical bases only. Existing complete actor
 APIs delegate with empty slots; raw helpers do not establish complete build admission.
 
-Receiving defences accumulate each equipment slot in source order, followed by the global
-term, then apply final rounding and clamp. The prepared actor stores fixed numerical
+Receiving defences accumulate Helmet, Gloves, Boots and Body Armour in that source order,
+followed by the global term, then apply final rounding and clamp. The prepared actor stores fixed numerical
 results, without retaining XML or borrowed item references. Repeated skill calculations
 reuse these outputs with task-local scratch through Rayon.
 
@@ -90,8 +93,9 @@ on the encounter and require their own metrics. Selected-minion queries are unsu
 for these definitions. The example maximizes selected hit DPS subject to resistance,
 Energy-Shield, armour and evasion floors; these are configurable examples.
 
-Native profile IDs are `poe2-spark-local-armour-v5` and `poe2-mace-strike-local-armour-v9`;
-profile media versions are **5** and **7**. Separate `local_armour` evidence schema 1
+Current native profile IDs are `poe2-spark-body-movement-v6` and
+`poe2-mace-strike-body-movement-v10`; profile media versions are **6** and **8**. Separate
+`local_armour` evidence schema 2
 records each selected component's source hash, local values and surviving records.
 `receiving_defence` evidence remains schema 1. Fresh document realization reconstructs
 both from selected source/data and rejects altered evidence. XML exports preserve source

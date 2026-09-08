@@ -14,7 +14,7 @@ use crate::{
 };
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-mace-strike-local-armour-v9";
+pub const PROFILE_ID: &str = "poe2-mace-strike-body-movement-v10";
 pub const TREE_VERSION: &str = "0_5";
 /// Index in the pinned tree classes table; XML classInternalId is a separate id.
 pub const CLASS_ID: u32 = 3;
@@ -95,6 +95,7 @@ pub struct MaceOutput {
     pub life: f64,
     pub mana: f64,
     pub spirit: f64,
+    pub effective_movement_speed_mod: f64,
     pub energy_shield: f64,
     pub armour: f64,
     pub evasion: f64,
@@ -214,6 +215,7 @@ pub fn evaluate_with_actor(
     let receiving = actor
         .receiving_for(compiled.receiving_scenario(input.quests, input.resistance_penalty))
         .map_err(|error| MaceError(error.0))?;
+    let movement = actor.movement();
     let actor = actor.values();
     if !compiled.owns_weapon(weapon) {
         return Err(MaceError(
@@ -372,6 +374,7 @@ pub fn evaluate_with_actor(
         life,
         mana,
         spirit: actor.spirit,
+        effective_movement_speed_mod: movement.effective_movement_speed_mod,
         energy_shield: receiving
             .map(|value| value.energy_shield)
             .unwrap_or_else(|| round_to_integer(modifiers.energy_shield_flat).max(0.0)),

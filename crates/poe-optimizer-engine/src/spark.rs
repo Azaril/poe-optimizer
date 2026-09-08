@@ -10,7 +10,7 @@ use crate::data::CompiledGameData;
 use crate::defence::round_to_integer;
 use std::{error::Error, fmt};
 
-pub const PROFILE_ID: &str = "poe2-spark-local-armour-v5";
+pub const PROFILE_ID: &str = "poe2-spark-body-movement-v6";
 pub const TREE_VERSION: &str = "0_5";
 pub const CLASS_ID: u32 = 7;
 pub const SKILL_ID: &str = "SparkPlayer";
@@ -120,6 +120,7 @@ pub struct SparkOutput {
     pub life: f64,
     pub mana: f64,
     pub spirit: f64,
+    pub effective_movement_speed_mod: f64,
     pub energy_shield: f64,
     pub armour: f64,
     pub evasion: f64,
@@ -198,6 +199,7 @@ pub fn evaluate_with_actor(
     let receiving = actor
         .receiving_for(compiled.receiving_scenario(input.quests, input.resistance_penalty))
         .map_err(|error| SparkError(error.0))?;
+    let movement = actor.movement();
     let actor = actor.values();
     let data = compiled.spark();
     let rules = &compiled.snapshot().package().character;
@@ -272,6 +274,7 @@ pub fn evaluate_with_actor(
         life,
         mana,
         spirit: actor.spirit,
+        effective_movement_speed_mod: movement.effective_movement_speed_mod,
         energy_shield: receiving
             .map(|value| value.energy_shield)
             .unwrap_or_else(|| round_to_integer(modifiers.energy_shield_flat).max(0.0)),

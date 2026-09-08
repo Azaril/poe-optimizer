@@ -49,6 +49,18 @@ pub fn receiving_defence_evidence(output: ReceivingOutput) -> Value {
     })
 }
 
+/// Shared movement ratios; the public percentage metric multiplies the effective
+/// ratio by 100, with 100 representing the selected baseline movement speed.
+pub fn movement_evidence(output: poe_optimizer_engine::movement::MovementOutput) -> Value {
+    json!({"schema_version":1,
+        "movement_speed_mod":output.movement_speed_mod,
+        "action_speed_mod":output.action_speed_mod,
+        "effective_movement_speed_mod":output.effective_movement_speed_mod,
+        "ignore_movement_penalties":output.ignore_movement_penalties,
+        "cannot_be_below_base":output.cannot_be_below_base,
+        "has_override":output.has_override})
+}
+
 /// Source-bound local armour evidence; no global BASE surrogate is introduced.
 pub fn local_armour_evidence<'a>(
     items: impl Iterator<
@@ -64,12 +76,14 @@ pub fn local_armour_evidence<'a>(
         (slot, json!({
             "base_id":armour.base_key(),"slot":armour.slot(),"quality":armour.quality(),"item_level":armour.item_level(),
             "source_sha256":item.source_sha256(),"consumed_modifier_count":armour.consumed_modifier_count(),
+            "source_global_modifiers":armour.source_global_records(),
+            "generated_global_modifiers":armour.generated_global_records(),
             "global_modifiers":armour.global_records(),
             "base_armour":stats.base_armour,"base_evasion":stats.base_evasion,"base_energy_shield":stats.base_energy_shield,
             "armour":stats.armour,"evasion":stats.evasion,"energy_shield":stats.energy_shield,
         }))
     }).collect();
-    json!({"schema_version":1,"items":items})
+    json!({"schema_version":2,"items":items})
 }
 
 #[cfg(test)]

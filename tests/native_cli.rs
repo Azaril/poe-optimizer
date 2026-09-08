@@ -34,7 +34,7 @@ fn native_cli_evaluates_and_exports_without_a_pob_checkout_in_the_working_direct
             .as_array()
             .unwrap()
             .len(),
-        12
+        13
     );
     assert_eq!(fs::read(&export).unwrap(), fs::read(fixture()).unwrap());
     assert_eq!(value["evaluation"]["diagnostic_only"], true);
@@ -56,7 +56,7 @@ fn native_catalog_and_unsupported_metrics_do_not_fall_back_to_pob() {
         .unwrap();
     assert!(output.status.success());
     let catalog: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
-    assert_eq!(catalog.as_array().unwrap().len(), 12);
+    assert_eq!(catalog.as_array().unwrap().len(), 13);
     let output = cli()
         .arg("evaluate")
         .arg(fixture())
@@ -203,6 +203,78 @@ fn armour_rating_objective_reassesses_offline_and_rejects_minion_scope() {
         .arg("evaluate")
         .arg(&fixture)
         .args(["--backend", "native", "--metric", "selected_minion.armour"])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("metric"));
+}
+
+#[test]
+fn movement_objective_records_baseline_percentage_and_reassesses_without_pob() {
+    let temp = tempfile::tempdir().unwrap();
+    let input = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/builds/mace-body-armour.xml");
+    let spec = serde_json::json!({"schema_version":1,"objective":{"kind":"scalar","direction":"maximize","metric":{"actor":"player","id":"movement_speed_pct"},"unit":"percent"},"constraints":[{"id":"baseline","metric":{"actor":"player","id":"movement_speed_pct"},"unit":"percent","operator":">=","threshold":100,"violation_scale":100}]});
+    let objective = temp.path().join("movement-objective.json");
+    let report = temp.path().join("movement.json");
+    fs::write(&objective, serde_json::to_vec(&spec).unwrap()).unwrap();
+    let output = cli()
+        .current_dir(temp.path())
+        .arg("evaluate")
+        .arg(&input)
+        .args(["--backend", "native", "--objective"])
+        .arg(&objective)
+        .arg("--output")
+        .arg(&report)
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let direct: serde_json::Value = serde_json::from_slice(&fs::read(&report).unwrap()).unwrap();
+    assert_eq!(
+        direct["objective_assessment"]["status"],
+        "constraints_satisfied"
+    );
+    let movement = direct["evaluation"]["measurements"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|m| m["query"]["id"] == "movement_speed_pct")
+        .unwrap();
+    assert_eq!(movement["schema_version"], 1);
+    assert_eq!(movement["unit"], "percent");
+    assert!((movement["value"]["value"].as_f64().unwrap() - 118.8).abs() < 1e-9);
+    let output = cli()
+        .current_dir(temp.path())
+        .arg("assess")
+        .arg(&report)
+        .arg("--objective")
+        .arg(&objective)
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let reassessed: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(
+        direct["objective_assessment"],
+        reassessed["objective_assessment"]
+    );
+    let output = cli()
+        .current_dir(temp.path())
+        .arg("evaluate")
+        .arg(&input)
+        .args([
+            "--backend",
+            "native",
+            "--metric",
+            "selected_minion.movement_speed_pct",
+        ])
         .output()
         .unwrap();
     assert!(!output.status.success());

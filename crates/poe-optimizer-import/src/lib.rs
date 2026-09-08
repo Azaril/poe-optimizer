@@ -10,6 +10,7 @@ pub mod controlled_mace;
 pub mod equipment;
 mod item_formatting;
 pub mod mace_item;
+mod modifier_syntax;
 pub mod preflight;
 pub mod xml_compat;
 

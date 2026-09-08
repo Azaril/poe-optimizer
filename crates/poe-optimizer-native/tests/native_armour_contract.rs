@@ -51,7 +51,7 @@ fn profile(result: &EvaluationResult) -> Value {
 #[test]
 fn armour_remove_replace_replay_and_parallel_dispatch_match_fresh_document_evidence() {
     let backend = NativeBackend::new();
-    for (source, media) in [(MACE, "version=7"), (SPARK, "version=5")] {
+    for (source, media) in [(MACE, "version=8"), (SPARK, "version=6")] {
         let source = source.replace("\r\n", "\n").replace('\n', "\r\n");
         let domain = make_domain(&backend, &source);
         let catalog = domain.catalog();
@@ -82,7 +82,7 @@ fn armour_remove_replace_replay_and_parallel_dispatch_match_fresh_document_evide
                 .calculate(&request(&document.content), BUDGET)
                 .unwrap();
             let snapshot = prepared.measure(&handle).unwrap();
-            assert_eq!(snapshot.values().len(), 12);
+            assert_eq!(snapshot.values().len(), 13);
             assert_eq!(
                 serde_json::to_value(prepared.snapshot_measurements(&snapshot)).unwrap(),
                 serde_json::to_value(&result.measurements).unwrap()
@@ -184,6 +184,13 @@ fn armour_remove_replace_replay_and_parallel_dispatch_match_fresh_document_evide
 }
 #[test]
 fn armour_bases_grammar_and_requirements_follow_selected_injected_data() {
+    for newline in ["\n", "\r\n"] {
+        let template = MACE.replace("\r\n", "\n").replace('\n', newline);
+        assert_armour_injected_requirements(&template, newline);
+    }
+}
+
+fn assert_armour_injected_requirements(template: &str, newline: &str) {
     let normal = NativeBackend::new();
     let mut package = normal.data().snapshot().package().clone();
     let base = package
@@ -214,12 +221,12 @@ fn armour_bases_grammar_and_requirements_follow_selected_injected_data() {
         HostClock,
     )
     .unwrap();
-    let source = MACE.replace("Brimmed Helm", "Study Helm").replace(
+    let source = template.replace("Brimmed Helm", "Study Helm").replace(
         "+17 to Armour and Evasion",
         "+17 to Study Armour and Evasion",
     );
     assert!(normal.prepare(&request(&source)).is_err());
-    assert!(custom.prepare(&request(MACE)).is_err());
+    assert!(custom.prepare(&request(template)).is_err());
     let rejected = make_domain(&custom, &source);
     let selection = rejected.catalog().source_selection();
     let available = rejected
@@ -236,10 +243,14 @@ fn armour_bases_grammar_and_requirements_follow_selected_injected_data() {
             .admit(selection, &mut ActorScratch::default())
             .is_err()
     );
-    let source = source.replace(
-        "Study Helm\nItem Level: 60\nQuality: 20",
-        "Study Helm\nItem Level: 60\nQuality: 20\nLevelReq: 1",
+    let marker = format!("Study Helm{newline}Item Level: 60{newline}Quality: 20");
+    assert_eq!(
+        source.matches(&marker).count(),
+        1,
+        "fixture item must be edited"
     );
+    let source = source.replacen(&marker, &format!("{marker}{newline}LevelReq: 1"), 1);
+    assert!(source.contains(&format!("Quality: 20{newline}LevelReq: 1")));
     let domain = make_domain(&custom, &source);
     let handle = domain
         .admit(
@@ -300,7 +311,7 @@ fn native_armour_source_rejects_wrong_slots_sets_and_unmodeled_local_effects() {
         ),
         MACE.replace(
             "35% increased Armour and Evasion",
-            "20% increased Movement Speed",
+            "20% increased Action Speed",
         ),
         MACE.replace("35% increased Armour and Evasion", "+15 to Runic Ward"),
     ] {

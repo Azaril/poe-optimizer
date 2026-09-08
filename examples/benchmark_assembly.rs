@@ -56,6 +56,9 @@ struct Args {
     /// Use fixed local armour slots together with receiving defences.
     #[arg(long, conflicts_with = "receiving_defence")]
     local_armour: bool,
+    /// Include body penalties and prepared movement outputs with all armour slots.
+    #[arg(long, conflicts_with_all = ["receiving_defence", "local_armour"])]
+    body_armour: bool,
     /// Approximate duration of each sample; calibration is reported separately.
     #[arg(long, default_value_t = 1200)]
     sample_ms: u64,
@@ -185,7 +188,7 @@ fn selections(catalog: &ControlledBuildCatalog) -> Result<Vec<BuildSelection>, B
             .filter(|(_, item)| item.allowed_slots().iter().any(|slot| slot == "Amulet"))
             .map(|(id, _)| Some(id.to_owned())),
     );
-    let armour_slots = ["Helmet", "Gloves", "Boots"].map(|slot| {
+    let armour_slots = ["Helmet", "Gloves", "Boots", "Body Armour"].map(|slot| {
         let mut choices = vec![None];
         choices.extend(
             catalog
@@ -266,6 +269,7 @@ fn measured_checksum(
     snapshot: &NativeMetricSnapshot,
     handle: &AdmittedBuildSelection,
     include_receiving: bool,
+    include_movement: bool,
 ) -> u64 {
     let metrics = snapshot_checksum(snapshot);
     if !include_receiving {
@@ -277,7 +281,7 @@ fn measured_checksum(
             .receiving()
             .expect("complete receiving preparation"),
     );
-    [
+    let checksum = [
         r.armour,
         r.evasion,
         r.energy_shield,
@@ -296,7 +300,24 @@ fn measured_checksum(
     .enumerate()
     .fold(metrics, |sum, (index, value)| {
         sum.wrapping_add(value.to_bits().rotate_left((index as u32 * 11 + 3) % 64))
+    });
+    if !include_movement {
+        return checksum;
+    }
+    let movement = black_box(handle.actor().movement());
+    [
+        movement.movement_speed_mod,
+        movement.action_speed_mod,
+        movement.effective_movement_speed_mod,
+    ]
+    .into_iter()
+    .enumerate()
+    .fold(checksum, |sum, (index, value)| {
+        sum.wrapping_add(value.to_bits().rotate_left((index as u32 * 13 + 5) % 64))
     })
+    .wrapping_add(u64::from(movement.ignore_movement_penalties).rotate_left(29))
+    .wrapping_add(u64::from(movement.cannot_be_below_base).rotate_left(37))
+    .wrapping_add(u64::from(movement.has_override).rotate_left(43))
 }
 
 struct Workload<'a> {
@@ -306,6 +327,7 @@ struct Workload<'a> {
     handles: &'a [AdmittedBuildSelection],
     checksums: Vec<u64>,
     include_receiving: bool,
+    include_movement: bool,
 }
 impl Workload<'_> {
     fn expected(&self, evaluations: usize) -> u64 {
@@ -331,6 +353,7 @@ impl Workload<'_> {
                                     black_box(&snapshot),
                                     handle,
                                     self.include_receiving,
+                                    self.include_movement,
                                 )
                             })
                             .map_err(|error| error.to_string())
@@ -395,9 +418,18 @@ fn main() -> Result<(), Box<dyn Error>> {
     {
         return Err("Require 100..10000 sample-ms, 1..10 repeats, distinct jobs in 1..256 and distinct modes".into());
     }
-    let include_receiving = args.receiving_defence || args.local_armour;
+    let include_receiving = args.receiving_defence || args.local_armour || args.body_armour;
+    let include_movement = args.body_armour;
     let (candidate_set, template_path, template, equipment_path, equipment_json) =
-        if args.local_armour {
+        if args.body_armour {
+            (
+                "body-armour",
+                "tests/fixtures/builds/mace-body-armour.xml",
+                include_str!("../tests/fixtures/builds/mace-body-armour.xml"),
+                "examples/body-armour-search.json",
+                include_str!("body-armour-search.json"),
+            )
+        } else if args.local_armour {
             (
                 "local-armour",
                 "tests/fixtures/builds/mace-local-armour.xml",
@@ -486,7 +518,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .map(|handle| {
             prepared
                 .measure(handle)
-                .map(|s| measured_checksum(&s, handle, include_receiving))
+                .map(|s| measured_checksum(&s, handle, include_receiving, include_movement))
         })
         .collect::<Result<Vec<_>, _>>()?;
     let initial_measure_ms = milliseconds(start);
@@ -532,6 +564,15 @@ fn main() -> Result<(), Box<dyn Error>> {
                 expected, profile["receiving_defence"],
                 "fresh receiving comparison {index}"
             );
+            if include_movement {
+                let expected = poe_optimizer_import::actor_assembly::movement_evidence(
+                    handles[*index].actor().movement(),
+                );
+                assert_eq!(
+                    expected, profile["movement"],
+                    "fresh movement comparison {index}"
+                );
+            }
         }
         assert!(result.diagnostic_only);
     }
@@ -543,6 +584,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         handles: &handles,
         checksums,
         include_receiving,
+        include_movement,
     };
     let mut samples = Vec::new();
     let mut worker_setups = Vec::new();
@@ -603,8 +645,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         serde_json::to_string_pretty(&json!({
             "schema_version":1,"status":"developer_native_assembly_benchmark","diagnostic_only":true,
             "scope":"bounded_varied_admitted_mace_builds_not_whole_optimizer_or_full_game_coverage",
-            "candidate_set":candidate_set,"receiving_defence":include_receiving,"local_armour":args.local_armour,
-            "checksum_scope":if include_receiving { "metric_snapshot_and_all_13_receiving_output_fields" } else { "metric_snapshot" },
+            "candidate_set":candidate_set,"receiving_defence":include_receiving,"local_armour":args.local_armour || args.body_armour,"body_armour":args.body_armour,
+            "checksum_scope":if include_movement { "metric_snapshot_all_13_receiving_fields_and_6_movement_fields" } else if include_receiving { "metric_snapshot_and_all_13_receiving_output_fields" } else { "metric_snapshot" },
             "metric_ids":poe_optimizer_native::metric_catalog().into_iter().map(|metric|metric.id).collect::<Vec<_>>(),
             "fixed_template":template_path,"template_sha256":hash(template.as_bytes()),
             "equipment_source":equipment_path,"equipment_source_fields_used":["equipment"],
@@ -627,6 +669,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 "initial_measure_ms":initial_measure_ms,"initial_measure_calculations":handles.len(),
                 "full_document_equivalence_ms":validation_ms,"full_document_equivalence_pairs":validation_indices.len(),
                 "complete_receiving_equivalence_pairs":if include_receiving { validation_indices.len() } else { 0 },
+                "complete_movement_equivalence_pairs":if include_movement { validation_indices.len() } else { 0 },
                 "prepared_components_parse_source_once":true},
             "footprints":{"catalog":catalog.footprint(),"prepared":prepared.footprint(),
                 "actor_scratch_inline_bytes":ActorScratch::storage_bytes(),
@@ -638,12 +681,13 @@ fn main() -> Result<(), Box<dyn Error>> {
             "checksums_match_preflight_for_every_calibration_and_sample":true,
             "limitations":[
                 "Admission mode includes candidate cloning, structural validation/resolution, actor program execution, requirements, owned handle allocation/destruction and fresh skill metrics; it allocates.",
-                "Measure mode reuses already-admitted handles containing prepared actor resources and receiving defences. It excludes actor assembly/admission and is not whole-evaluator or optimizer throughput.",
+                "Measure mode reuses already-admitted handles containing prepared actor resources, receiving defences and movement. It excludes actor assembly/admission and is not whole-evaluator or optimizer throughput.",
                 "Both timed modes omit XML, JSON, diagnostics, exports, deadline checks, owned measurement conversion, objective scoring and search proposal generation. Neither uses an evaluation-result cache.",
                 "The benchmark retains a bounded input/handle corpus for repeatability; production component catalogs do not retain a Cartesian candidate-result cache.",
                 "Only equipment is read from the example JSON. The fixed source template, generated corpus and explicit benchmark budgets govern this run; JSON objective/search settings are not interpreted.",
                 "Reported footprint fields are partial capacity estimates; preparing admitted benchmark handles and catalogs is timed separately.",
                 "Receiving-defence mode additionally reads and checksums all 13 prepared receiving fields, including Armour/Evasion ratings and uncapped resistance totals. That consumption overhead is included in both timed modes; the default retains its metric-only checksum.",
+                "Body-armour mode additionally reads and checksums all three prepared movement ratios and three flags. This consumption is included in both timed modes; preparation remains excluded from reused-handle measurements.",
                 "Calibration and worker startup are outside samples. Automatic iteration counts vary by API and worker count; checksums are compared with the exact rotating input sequence.",
                 "Fresh full native document comparisons are setup evidence, not independent Path of Building parity; separate source/full-build tests provide that evidence."
             ]

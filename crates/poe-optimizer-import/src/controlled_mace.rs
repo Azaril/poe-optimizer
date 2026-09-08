@@ -749,6 +749,9 @@ impl ControlledMaceCatalog {
     /// Authored actor configuration requires an explicit CLI problem scope even when disabled.
     /// This legacy weapon catalog admits local-only items; only enabled authored
     /// configuration records can require the new receiving source grammar.
+    pub fn uses_movement_scope(&self) -> bool {
+        self.profile.actor_modifiers.uses_movement()
+    }
     pub fn uses_receiving_defence_scope(&self) -> bool {
         self.profile.actor_modifiers.uses_receiving_defence()
     }
@@ -1182,7 +1185,7 @@ impl ControlledMaceCatalog {
             .iter()
             .filter(|attachment| {
                 attachment.media_type
-                    == "application/vnd.poe-optimizer.native-profile+json;version=7"
+                    == "application/vnd.poe-optimizer.native-profile+json;version=8"
             })
             .collect();
         if evidence.len() != 1 || evidence[0].content.len() > MAX_NATIVE_MACE_PROFILE_BYTES {
@@ -1216,7 +1219,13 @@ impl ControlledMaceCatalog {
                 "native resolved weapon or support differs from candidate payload",
             ));
         }
-        let receiving = prepared_actor(&self.compiled, &self.profile, &choice.tree)?
+        let prepared_actor = prepared_actor(&self.compiled, &self.profile, &choice.tree)?;
+        if evidence["movement"]
+            != crate::actor_assembly::movement_evidence(prepared_actor.movement())
+        {
+            return Err(mismatch("native movement differs from selected source"));
+        }
+        let receiving = prepared_actor
             .receiving()
             .ok_or_else(|| mismatch("native receiver preparation is incomplete"))?;
         if evidence["receiving_defence"]
@@ -1226,7 +1235,7 @@ impl ControlledMaceCatalog {
                 "native receiving defences differ from selected source",
             ));
         }
-        if evidence["local_armour"] != serde_json::json!({"schema_version":1,"items":{}}) {
+        if evidence["local_armour"] != serde_json::json!({"schema_version":2,"items":{}}) {
             return Err(mismatch(
                 "legacy Mace candidate cannot contain local armour",
             ));

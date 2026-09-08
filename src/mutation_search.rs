@@ -446,6 +446,11 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             supports,
         )?
     };
+    if registry.uses_movement_scope() {
+        return Err(
+            "Authored movement modifiers require search-build with problem schema 10".into(),
+        );
+    }
     if registry.uses_receiving_defence_scope() {
         return Err(
             "Authored receiving-defence modifiers require search-build with problem schema 8"

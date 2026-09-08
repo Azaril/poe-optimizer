@@ -55,7 +55,14 @@ impl ActorOracle {
         let perform = SPARK_PERFORM.replace("\r\n", "\n");
         let setup = SPARK_SETUP.replace("\r\n", "\n");
         let offence = SPARK_OFFENCE.replace("\r\n", "\n");
-        let mut body = String::from("local m_min,m_max=math.min,math.max; local ItemClass={}; ");
+        let mut body = String::from(
+            "local m_min,m_max=math.min,math.max; local ItemClass={}; local calcs={}; ",
+        );
+        body.push_str(section(
+            &perform,
+            "function calcs.actionSpeedMod(actor)",
+            "-- Initialises a minion",
+        ));
         if receiving {
             let item =
                 include_str!("../../../../vendor/path-of-building-poe2/src/Classes/Item.lua")
@@ -127,7 +134,13 @@ impl ActorOracle {
             ));
             body.push_str("\nplayerResistances(modDB,output); ");
         }
-        body.push_str("return {output=output,conditions=condList} end; return function(input,warm) local last; for i=1,(warm and 200 or 1) do last=calculate(input) end; return last end");
+        body.push_str("output.ActionSpeedMod=calcs.actionSpeedMod(actor); ");
+        body.push_str(section(
+            &SPARK_DEFENCE.replace("\r\n", "\n"),
+            "\toutput.MovementSpeedMod =",
+            "\tif breakdown then",
+        ));
+        body.push_str("return {output=output,conditions=condList,ignore_movement=modDB:GetCondition('IgnoreMovementPenalties'),movement_floor=modDB:Flag(nil,'MovementSpeedCannotBeBelowBase'),movement_override=modDB:Override(nil,'MovementSpeed')~=nil} end; return function(input,warm) local last; for i=1,(warm and 200 or 1) do last=calculate(input) end; return last end");
         let calculate = lua
             .load(format!("local m_floor=math.floor; {body}"))
             .set_name("pinned-actor-attributes-inherent-resources")
@@ -299,7 +312,7 @@ impl ActorOracle {
         self.calculate.call((input, self.oracle.warm)).unwrap()
     }
 }
-fn record_table(lua: &Lua, records: &[Record]) -> Table {
+pub(super) fn record_table(lua: &Lua, records: &[Record]) -> Table {
     let rows = lua.create_table().unwrap();
     for record in records {
         let row = lua.create_table().unwrap();

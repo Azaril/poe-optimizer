@@ -64,6 +64,7 @@ impl Oracle {
             "src/Data/ModScalability.lua",
             "src/Data/Bases/gloves.lua",
             "src/Data/Bases/boots.lua",
+            "src/Data/Bases/body.lua",
             "src/Modules/CalcSetup.lua",
             "src/Modules/CalcPerform.lua",
             "src/Modules/CalcDefence.lua",
@@ -803,7 +804,7 @@ fn assert_quests_and_passives(data: &poe_optimizer_data::game_data::GameDataPack
         let tree: Table = lua.globals().get("sourceTree").unwrap();
         let classes: Table = tree.get("classes").unwrap();
         let nodes: Table = tree.get("nodes").unwrap();
-        assert_eq!(data.passive_effects.len(), 1270);
+        assert_eq!(data.passive_effects.len(), 1282);
         for class in classes
             .clone()
             .sequence_values::<Table>()
@@ -1604,6 +1605,10 @@ fn assert_actor_rules(data: &poe_optimizer_data::game_data::GameDataPackage) {
                                     assert_eq!(index, 0);
                                     value * multiplier
                                 }
+                                ActorRuleValue::CaptureDivided { index, divisor } => {
+                                    assert_eq!(index, 0);
+                                    value / divisor
+                                }
                                 ActorRuleValue::Constant { value } => value,
                             },
                         },
@@ -1642,7 +1647,7 @@ fn assert_actor_rules(data: &poe_optimizer_data::game_data::GameDataPackage) {
             "All"
         );
     }
-    assert_eq!(checked, 3750);
+    assert_eq!(checked, 3932);
 }
 #[test]
 fn actor_constants_precision_and_spirit_quests_match_independent_cold_and_warm_source() {
@@ -1856,7 +1861,7 @@ fn fresh_reviewed_receiving_package_matches_independent_original_source() {
     )
     .unwrap();
     let data = &extracted.package;
-    assert_eq!(data.actor.modifier_rules.len(), 329);
+    assert_eq!(data.actor.modifier_rules.len(), 347);
     assert_quests_and_passives(data);
     assert_actor_rules(data);
     assert_jewellery(data);
@@ -1937,3 +1942,6 @@ mod armour_source;
 
 #[path = "support/item_formatting_source.rs"]
 mod item_formatting_source;
+
+#[path = "support/movement_source.rs"]
+mod movement_source;

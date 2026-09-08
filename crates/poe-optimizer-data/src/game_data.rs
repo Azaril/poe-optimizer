@@ -7,14 +7,15 @@ pub use crate::item_rules::{
     ItemCaptureKind, ItemModifierMapping, ItemModifierRoll, ItemModifierRule, LocalWeaponOperation,
     LocalWeaponStat,
 };
+pub use crate::movement::MovementData;
 pub use poe_optimizer_core::data::DataIdentity;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 9;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v9";
+pub const SCHEMA_VERSION: u32 = 10;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v10";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -35,6 +36,7 @@ const SECTIONS: &[&str] = &[
     "jewellery_bases",
     "armour_bases",
     "item_formatting",
+    "movement",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -350,6 +352,7 @@ pub enum EquipmentSlot {
     Helmet,
     Gloves,
     Boots,
+    BodyArmour,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -383,7 +386,15 @@ pub struct ArmourBaseData {
     pub armour: f64,
     pub evasion: f64,
     pub energy_shield: f64,
+    /// Explicit null is distinct from Some(0), which generates a source record.
+    #[serde(deserialize_with = "required_option")]
+    pub movement_penalty: Option<f64>,
     pub source: crate::tree_data::SourceTable,
+}
+fn required_option<'de, D: serde::Deserializer<'de>, T: Deserialize<'de>>(
+    deserializer: D,
+) -> std::result::Result<Option<T>, D::Error> {
+    Option::<T>::deserialize(deserializer)
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -407,6 +418,7 @@ pub struct GameDataPackage {
     pub jewellery_bases: Vec<JewelleryBaseData>,
     pub armour_bases: Vec<ArmourBaseData>,
     pub item_formatting: ItemFormattingData,
+    pub movement: MovementData,
 }
 impl GameDataPackage {
     pub fn armour_base(&self, id: &str) -> Option<&ArmourBaseData> {
@@ -786,6 +798,24 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     crate::item_rules::validate_rules(&package.item_modifier_rules)?;
     crate::actor::validate_actor(&package.actor)?;
     package.item_formatting.validate()?;
+    package.movement.validate()?;
+    if let ActorRuleEffect::Numeric {
+        value: ActorRuleValue::Capture { multiplier, .. },
+        ..
+    } = package.movement.penalty_modifier.effect
+    {
+        for base in &package.armour_bases {
+            if let Some(penalty) = base.movement_penalty {
+                number(
+                    "generated armour movement modifier",
+                    penalty * multiplier,
+                    -1e6,
+                    1e6,
+                )?;
+            }
+        }
+    }
+
     if package
         .actor
         .spirit_quests
@@ -1333,9 +1363,15 @@ fn validate_armour(package: &GameDataPackage) -> Result<()> {
     let mut ids = BTreeSet::new();
     let mut names = BTreeSet::new();
     for base in &package.armour_bases {
+        if let Some(value) = base.movement_penalty {
+            number("armour movement penalty", value, 0.0, 1e6)?;
+        }
         if !matches!(
             base.slot,
-            EquipmentSlot::Helmet | EquipmentSlot::Gloves | EquipmentSlot::Boots
+            EquipmentSlot::Helmet
+                | EquipmentSlot::Gloves
+                | EquipmentSlot::Boots
+                | EquipmentSlot::BodyArmour
         ) || base.id.is_empty()
             || base.id.len() > 128
             || !base

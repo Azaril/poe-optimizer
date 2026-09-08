@@ -9,9 +9,10 @@ use either implementation without exposing Lua values or process APIs.
 Both profiles use [shared actor preparation](actor-resources.md) for attributes, inherent
 bonuses, maximum Life/Mana/Spirit and global Accuracy. Data owns admitted modifier templates,
 operations, condition tags, precision and Spirit quest settings. Native profile evidence is
-Spark version 5 or Mace version 7. [Shared receiving defences](receiving-defences.md)
+Spark version 6 or Mace version 8. [Shared receiving defences](receiving-defences.md)
 adds global ratings and resistance BASE/INC. [Local armour](local-armour.md) supplies
-separately rounded equipment slot bases; conversion receivers, reservation and other
+separately rounded equipment slot bases. [Body Armour and movement](body-armour-movement.md)
+adds generated item penalties and shared movement output; conversion receivers, reservation and other
 unsupported mechanics still reject.
 
 ## Implemented build profiles
@@ -20,8 +21,8 @@ unsupported mechanics still reject.
 
 | Profile | Character and skills | Equipment and encounter scope |
 | --- | --- | --- |
-| Spark | One level-1 quality-0 Spark; supported class/tree selection described below | Optional supported amulet and fixed helmet/gloves/boots; no supports; supported explicit normal, boss or Pinnacle encounter configuration |
-| Mace Strike | One level-1 quality-0 Mace Strike; zero to two level-1 quality-0 reviewed supports; supported class/tree selection described below | One normal/rare supplied weapon from two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, five reviewed local modifier families and explicit equip-level metadata; zero weapon implicits; optional supported amulet, fixed helmet/gloves/boots and admitted global actor lines; normal enemies only |
+| Spark | One level-1 quality-0 Spark; supported class/tree selection described below | Optional supported amulet and fixed helmet/body-armour/gloves/boots; no supports; supported explicit normal, boss or Pinnacle encounter configuration |
+| Mace Strike | One level-1 quality-0 Mace Strike; zero to two level-1 quality-0 reviewed supports; supported class/tree selection described below | One normal/rare supplied weapon from two selected base records (reviewed names: Wooden Club and Smithing Hammer), quality 0–20, item level 1–100, five reviewed local modifier families and explicit equip-level metadata; zero weapon implicits; optional supported amulet, fixed helmet/body-armour/gloves/boots and admitted global actor lines; normal enemies only |
 
 Both profiles accept all eight pinned classes and 23 ascendancy identities, with implicit
 roots and connected capability-admitted ordinary passives, including supported notables
@@ -42,8 +43,9 @@ inputs and supported quest/resistance settings. A native Mace request with a bos
 rejects. The optional PoB controlled profile also admits its supported boss scenarios;
 selecting a backend does not imply equal mechanic coverage.
 
-Spark returns ten finite metrics: life, mana, Spirit, energy shield, four capped resistances,
-selected average hit and selected hit DPS. Mace returns nine finite metrics and an explicit
+Spark returns thirteen finite metrics: life, mana, Spirit, energy shield, four capped
+resistances, selected average hit, selected hit DPS, Armour, Evasion and movement percentage.
+Mace returns twelve finite metrics and an explicit
 `Unavailable` for `selected_average_hit`: the existing shared metric does not aggregate
 per-hand attack averages. The resolved main-hand average remains diagnostic evidence. EHP,
 maximum hits, Full DPS, minions and broader builds are outside native coverage. Unsupported
@@ -64,6 +66,9 @@ PoB-specific live passive observation field remains absent on native results, be
 source resolution cannot establish Lua object-reference observations. Player `armour` and
 `evasion` are final ratings exposed as definition-schema-1 `rating_points` metrics and in
 the native profile diagnostic. They do not represent mitigation or chance to evade.
+`movement_speed_pct` uses schema-1 `percent`, with 100 representing baseline effective
+movement speed. Complete native builds currently require neutral ActionSpeed; action-speed
+and party/skill movement effects remain rejected until their other consumers are implemented.
 
 `poe-optimizer-engine` owns numerical calculations and modifier semantics.
 `poe-optimizer-native` projects source XML into immutable inputs, calls the selected pipeline
@@ -284,7 +289,7 @@ can use the native evaluator. See [native calculation coverage](native-engine.md
 
 The Mace profile now uses [data-derived support loadouts](support-loadouts.md), with
 prepared modifier aggregates and exact configured-support evidence (profile attachment
-version 5, including exact item provenance, global actor records and prepared local weapon stats). Spark support coverage remains empty.
+version 8, including exact item provenance, global actor records and prepared local weapon stats). Spark support coverage remains empty.
 
 The [local weapon pipeline](local-weapons.md) parses supplied item text once, compiles its
 injected rule mappings into `PreparedWeaponStats`, and uses that bound object in both full

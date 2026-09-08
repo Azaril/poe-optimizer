@@ -150,6 +150,7 @@ pub struct PreparedArmour {
     item_level: u32,
     stats: ArmourStats,
     consumed_modifier_count: usize,
+    source_global_count: usize,
     global_records: Vec<ActorModifierRecord>,
     global_program: CompiledActorModifiers,
 }
@@ -171,6 +172,13 @@ impl PreparedArmour {
     }
     pub fn consumed_modifier_count(&self) -> usize {
         self.consumed_modifier_count
+    }
+    /// Surviving authored records before source-generated base effects.
+    pub fn source_global_records(&self) -> &[ActorModifierRecord] {
+        &self.global_records[..self.source_global_count]
+    }
+    pub fn generated_global_records(&self) -> &[ActorModifierRecord] {
+        &self.global_records[self.source_global_count..]
     }
     pub fn global_records(&self) -> &[ActorModifierRecord] {
         &self.global_records
@@ -221,6 +229,7 @@ pub struct ArmourSlots<'a> {
     pub helmet: Option<&'a PreparedArmour>,
     pub gloves: Option<&'a PreparedArmour>,
     pub boots: Option<&'a PreparedArmour>,
+    pub body_armour: Option<&'a PreparedArmour>,
 }
 impl ArmourSlots<'_> {
     pub(crate) fn validate(self, data: &CompiledGameData) -> Result<(), ActorError> {
@@ -228,6 +237,7 @@ impl ArmourSlots<'_> {
             (self.helmet, EquipmentSlot::Helmet),
             (self.gloves, EquipmentSlot::Gloves),
             (self.boots, EquipmentSlot::Boots),
+            (self.body_armour, EquipmentSlot::BodyArmour),
         ] {
             if let Some(item) = item {
                 if !Arc::ptr_eq(&item.binding, &data.actor_binding) {
@@ -249,7 +259,7 @@ impl ArmourSlots<'_> {
             self.helmet.map_or(0.0, |item| item.stats.value(stat)),
             self.gloves.map_or(0.0, |item| item.stats.value(stat)),
             self.boots.map_or(0.0, |item| item.stats.value(stat)),
-            0.0,
+            self.body_armour.map_or(0.0, |item| item.stats.value(stat)),
             0.0,
             0.0,
         ]
@@ -264,6 +274,28 @@ impl CompiledGameData {
         base_key: &str,
         quality: u32,
         item_level: u32,
+        records: &[ActorModifierRecord],
+    ) -> Result<PreparedArmour, ActorError> {
+        self.prepare_armour_internal(base_key, quality, item_level, None, records)
+    }
+    /// Source-aware item assembly. Generated base movement penalties require the
+    /// exact Item modSource even when the item has no authored modifiers.
+    pub fn prepare_armour_with_source(
+        &self,
+        base_key: &str,
+        quality: u32,
+        item_level: u32,
+        source: &str,
+        records: &[ActorModifierRecord],
+    ) -> Result<PreparedArmour, ActorError> {
+        self.prepare_armour_internal(base_key, quality, item_level, Some(source), records)
+    }
+    fn prepare_armour_internal(
+        &self,
+        base_key: &str,
+        quality: u32,
+        item_level: u32,
+        source: Option<&str>,
         records: &[ActorModifierRecord],
     ) -> Result<PreparedArmour, ActorError> {
         if quality > 20 || !(1..=100).contains(&item_level) || records.len() > 512 {
@@ -316,6 +348,40 @@ impl CompiledGameData {
         if !local.is_empty() {
             return Err(ActorError("Unconsumed local armour modifiers"));
         }
+        let source_global_count = globals.len();
+        if let Some(penalty) = base.movement_penalty {
+            use poe_optimizer_data::game_data::{ActorRuleEffect, ActorRuleValue};
+            let source = source.filter(|value| !value.is_empty()).ok_or(ActorError(
+                "Generated armour movement penalties require an explicit item modifier source",
+            ))?;
+            let mapping = &self.snapshot().package().movement.penalty_modifier;
+            let ActorRuleEffect::Numeric {
+                operation,
+                value:
+                    ActorRuleValue::Capture {
+                        index: 0,
+                        multiplier,
+                    },
+            } = mapping.effect
+            else {
+                return Err(ActorError("Unsupported generated movement penalty mapping"));
+            };
+            let generated = ActorModifierRecord {
+                stat: mapping.stat,
+                effect: ActorModifierEffect::Numeric {
+                    operation,
+                    value: penalty * multiplier,
+                },
+                source: Some(source.into()),
+                flags: mapping.flags,
+                keyword_flags: mapping.keyword_flags,
+                tags: mapping.tags.clone(),
+            };
+            generated
+                .validate()
+                .map_err(|_| ActorError("Invalid generated armour movement penalty"))?;
+            globals.push(generated);
+        }
         let global_program = self.compile_actor_modifiers(&globals)?;
         Ok(PreparedArmour {
             binding: self.actor_binding.clone(),
@@ -325,6 +391,7 @@ impl CompiledGameData {
             item_level,
             stats,
             consumed_modifier_count,
+            source_global_count,
             global_records: globals,
             global_program,
         })

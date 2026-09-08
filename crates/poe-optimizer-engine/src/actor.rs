@@ -31,6 +31,7 @@ mod program;
 pub use program::{ActorModifierLayer, ActorScratch, CompiledActorModifiers};
 #[path = "actor_receiving.rs"]
 mod receiving;
+pub use crate::movement::MovementOutput;
 pub use receiving::{ReceivingOutput, ReceivingScenario};
 
 const CONDITIONS: [ActorCondition; 12] = [
@@ -103,8 +104,12 @@ pub struct PreparedActorResources {
     requires_downstream_defences: bool,
     requires_receiving_stage: bool,
     receiving: Option<(ReceivingScenario, ReceivingOutput)>,
+    movement: MovementOutput,
 }
 impl PreparedActorResources {
+    pub fn movement(&self) -> MovementOutput {
+        self.movement
+    }
     pub fn receiving(&self) -> Option<ReceivingOutput> {
         self.receiving.map(|(_, output)| output)
     }
@@ -243,6 +248,7 @@ trait ActorQueries {
     fn override_value(&self, name: &str) -> Result<Option<f64>, ActorError>;
     fn flag(&self, name: &str) -> bool;
     fn update_conditions(&mut self, conditions: [bool; 12]) -> Result<(), ActorError>;
+    fn set_movement_condition(&mut self, ignored: bool) -> Result<(), ActorError>;
     fn add_bonus(&mut self, record: BuiltinRecord);
     fn finish_bonuses(&mut self) -> Result<(), ActorError>;
 }
@@ -274,6 +280,9 @@ impl ActorQueries for StackRecords {
         false
     }
     fn update_conditions(&mut self, _: [bool; 12]) -> Result<(), ActorError> {
+        Ok(())
+    }
+    fn set_movement_condition(&mut self, _: bool) -> Result<(), ActorError> {
         Ok(())
     }
     fn add_bonus(&mut self, record: BuiltinRecord) {
@@ -332,16 +341,22 @@ struct DatabaseQueries<'a> {
     flags: Vec<ActorFlag>,
     conditions: ConditionEnvironment,
     precision: &'a MorePrecision,
+    attribute_conditions: [bool; 12],
 }
 fn condition_environment(
     values: [bool; 12],
     layer_count: usize,
+    ignored_movement: bool,
 ) -> Result<ConditionEnvironment, ActorError> {
     let mut layers = vec![
         CONDITIONS
             .into_iter()
             .zip(values)
             .map(|(condition, value)| (condition.upstream_name().into(), value))
+            .chain(std::iter::once((
+                "IgnoreMovementPenalties".into(),
+                ignored_movement,
+            )))
             .collect(),
     ];
     layers.resize_with(layer_count, Default::default);
@@ -395,8 +410,9 @@ impl<'a> DatabaseQueries<'a> {
             layers: numeric_layers,
             database,
             flags,
-            conditions: condition_environment([false; 12], layer_count)?,
+            conditions: condition_environment([false; 12], layer_count, false)?,
             precision,
+            attribute_conditions: [false; 12],
         })
     }
 }
@@ -427,7 +443,16 @@ impl ActorQueries for DatabaseQueries<'_> {
             .any(|flag| flag.name == name && flag.value && self.conditions.matches(&flag.tags))
     }
     fn update_conditions(&mut self, conditions: [bool; 12]) -> Result<(), ActorError> {
-        self.conditions = condition_environment(conditions, self.database.layer_count())?;
+        self.attribute_conditions = conditions;
+        self.conditions = condition_environment(conditions, self.database.layer_count(), false)?;
+        Ok(())
+    }
+    fn set_movement_condition(&mut self, ignored: bool) -> Result<(), ActorError> {
+        self.conditions = condition_environment(
+            self.attribute_conditions,
+            self.database.layer_count(),
+            ignored,
+        )?;
         Ok(())
     }
     fn add_bonus(&mut self, record: BuiltinRecord) {
@@ -652,25 +677,59 @@ fn calculate(
         conditions,
     })
 }
+struct ActorOutputs {
+    resources: ActorResourceOutput,
+    receiving: Option<(ReceivingScenario, ReceivingOutput)>,
+    movement: MovementOutput,
+}
 fn calculate_complete(
     queries: &mut impl ActorQueries,
     compiled: &CompiledGameData,
     scenario: Option<ReceivingScenario>,
     armour: ArmourSlots<'_>,
-) -> Result<
-    (
-        ActorResourceOutput,
-        Option<(ReceivingScenario, ReceivingOutput)>,
-    ),
-    ActorError,
-> {
+) -> Result<ActorOutputs, ActorError> {
     let actor = calculate(queries, compiled)?;
     let receiving = scenario
         .map(|scenario| {
             receiving::calculate(queries, compiled, armour).map(|output| (scenario, output))
         })
         .transpose()?;
-    Ok((actor, receiving))
+    // Source GetCondition resolves this flag from the final attribute state.
+    // Its own tags cannot reference this condition, so there is no query cycle.
+    let ignored = queries.flag("Condition:IgnoreMovementPenalties");
+    queries.set_movement_condition(ignored)?;
+    let movement = &compiled.snapshot().package().movement;
+    let overridden = queries.override_value("MovementSpeed")?;
+    let (base, increased, more) = if overridden.is_some() {
+        (0.0, 0.0, 1.0)
+    } else {
+        let mut names = [""; 1];
+        for (name, stat) in names.iter_mut().zip(&movement.query_stats) {
+            *name = stat.upstream_name();
+        }
+        (
+            queries.sum(SumKind::Base, &names)?,
+            queries.sum(SumKind::Increased, &names)?,
+            queries.more("MovementSpeed")?,
+        )
+    };
+    let movement = crate::movement::calculate(
+        movement,
+        crate::movement::MovementInput {
+            base,
+            increased,
+            more,
+            override_value: overridden,
+            cannot_be_below_base: queries.flag("MovementSpeedCannotBeBelowBase"),
+            ignore_movement_penalties: ignored,
+            action_speed_mod: movement.default_action_speed_multiplier,
+        },
+    )?;
+    Ok(ActorOutputs {
+        resources: actor,
+        receiving,
+        movement,
+    })
 }
 
 impl CompiledGameData {
@@ -775,7 +834,11 @@ impl CompiledGameData {
         if let Some(scenario) = receiving {
             self.add_receiving_base(&mut base, scenario);
         }
-        let (output, receiving_output) = if modifier_layers.iter().all(Vec::is_empty) {
+        let ActorOutputs {
+            resources: output,
+            receiving: receiving_output,
+            movement,
+        } = if modifier_layers.iter().all(Vec::is_empty) {
             calculate_complete(&mut base, self, receiving, armour)?
         } else {
             calculate_complete(
@@ -801,6 +864,7 @@ impl CompiledGameData {
                 .flatten()
                 .any(|record| record.stat.is_receiving_defence()),
             receiving: receiving_output,
+            movement,
         })
     }
     fn actor_base_records(
