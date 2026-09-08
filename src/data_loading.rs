@@ -1,6 +1,7 @@
 //! Host-side byte acquisition for portable native data packages.
 use poe_optimizer_data::game_data::{
-    GameDataLoader, LoadLimits, TrustPolicy, bundled_package_sha256,
+    GameDataLoader, GameDataSnapshot, LoadLimits, TrustPolicy, bundled_package_sha256,
+    bundled_snapshot,
 };
 use poe_optimizer_native::{CompiledGameData, HostClock, NativeBackend};
 use sha2::{Digest, Sha256};
@@ -20,9 +21,10 @@ impl DataArgs {
     pub fn is_selected(&self) -> bool {
         self.data.is_some() || self.data_sha256.is_some()
     }
-    pub fn load(&self) -> Result<Arc<CompiledGameData>, Box<dyn Error>> {
+    /// Acquire and validate once; callers can share this exact snapshot with catalogs.
+    pub fn snapshot(&self) -> Result<Arc<GameDataSnapshot>, Box<dyn Error>> {
         let Some(path) = &self.data else {
-            return Ok(CompiledGameData::bundled()?);
+            return Ok(Arc::new(bundled_snapshot()?));
         };
         let limits = LoadLimits::default();
         if !std::fs::metadata(path)?.is_file() {
@@ -45,7 +47,13 @@ impl DataArgs {
             TrustPolicy::AllowCustom
         };
         let snapshot = GameDataLoader::from_bytes(&bytes, &policy, &limits)?;
-        Ok(Arc::new(CompiledGameData::compile(Arc::new(snapshot))?))
+        Ok(Arc::new(snapshot))
+    }
+    pub fn load(&self) -> Result<Arc<CompiledGameData>, Box<dyn Error>> {
+        if self.data.is_none() {
+            return Ok(CompiledGameData::bundled()?);
+        }
+        Ok(Arc::new(CompiledGameData::compile(self.snapshot()?)?))
     }
     pub fn backend(&self) -> Result<NativeBackend, Box<dyn Error>> {
         Ok(NativeBackend::with_data(self.load()?, HostClock)?)

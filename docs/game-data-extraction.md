@@ -51,7 +51,7 @@ actor scope and values. Unconsumed or ambiguous modifiers reject.
 
 The companion retains source revision/inventory identity, consumed-file hashes,
 extractor/policy identity, package schema/semantics and the resulting package digest. Its
-24 direct source-file entries cover extraction and retained provenance reads. Additional
+25 direct source-file entries cover extraction and retained provenance reads. Additional
 tree/loader/spec evidence remains in the package's `tree.source` record.
 It describes how this artifact was produced. Native loading continues to use explicit
 host trust and actual content identity; a sidecar claim does not grant trust or establish
@@ -87,7 +87,8 @@ cargo test -p poe-optimizer-pob --test game_data --locked
 cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
-The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`, schema 1 and
-`poe2-native-profiles-v1` operation semantics. Reproducing this package does not authorize
-new tree revisions, arbitrary operation versions or custom-data search. Those require the
-remaining compatibility and data-driven materialization work recorded in the plan.
+The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
+schema 2 and `poe2-native-profiles-v2`, including source-derived level/attribute requirements
+and support-color costs. Regenerate older packages rather than silently filling missing
+records. Native controlled search consumes the same selected data; new tree revisions and
+arbitrary operation versions still require compatibility review.

@@ -42,11 +42,11 @@ impl CompiledGameData {
     pub fn compile(snapshot: Arc<GameDataSnapshot>) -> Result<Self, GameDataError> {
         let package = snapshot.package();
         if package.manifest.game != "poe2"
-            || package.manifest.schema_version != 1
-            || package.manifest.semantics_version != "poe2-native-profiles-v1"
+            || package.manifest.schema_version != game_data::SCHEMA_VERSION
+            || package.manifest.semantics_version != game_data::SEMANTICS_VERSION
         {
             return Err(GameDataError(
-                "requires PoE2 package schema 1 and poe2-native-profiles-v1 operation semantics"
+                "requires the current PoE2 package schema and native profile operation semantics"
                     .into(),
             ));
         }
@@ -245,7 +245,7 @@ impl CompiledGameData {
             fire_maximum: record.fire_maximum,
             attack_rate: record.attack_rate,
             critical_chance: record.critical_chance,
-            required_strength: record.required_strength,
+            required_strength: record.requirements.attributes.strength,
         }
     }
     pub fn monster_evasion(&self, level: u32) -> Result<f64, MaceError> {

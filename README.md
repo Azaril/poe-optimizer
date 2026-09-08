@@ -46,7 +46,7 @@ selects the optional reference backend; `search-calibration` retains the four or
 fixtures. `extract-tree` exports pinned topology and source/override metadata for broader
 mutation work, with live passive coverage and authenticated bounded graph projections. A portable data
 crate supplies native class/root/entrance records and numeric game configuration without loading PoB.
-Native evaluation and benchmarking accept `--data <package.json>`; immutable data is shared
+Native evaluation, benchmarking and controlled search accept `--data <package.json>`; immutable data is shared
 across workers, with dataset identity recorded in results and export companions.
 Optional [`extract-game-data`](docs/game-data-extraction.md) regenerates the current native
 package from pinned source with a separate extraction-evidence companion.
@@ -130,7 +130,8 @@ buffs, conditions or enemy settings. The result records requested options and ob
 configuration/conditions, which are not yet a complete resolved scenario model. See
 [skill coverage](docs/skill-coverage.md) for action provenance and unresolved entries.
 
-Evaluation-report JSON and the PoB worker protocol are version 2; controlled-search and native benchmark reports use schema 1. Results identify backend,
+Evaluation-report JSON uses schema 3; the PoB worker protocol, controlled-search reports and
+native benchmark reports use schema 2. Results identify backend,
 rules/source/adapter fingerprints, observed selection, metric schema/units and coverage.
 `--raw` adds the complete PoB diagnostic snapshot as an opaque JSON attachment. Objective code
 must use typed measurements rather than inspect raw PoB fields. Unknown fields in options,

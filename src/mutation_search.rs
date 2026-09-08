@@ -27,7 +27,7 @@ use std::{
     error::Error,
     io::{self, Write},
     path::PathBuf,
-    sync::{Mutex, atomic::AtomicBool},
+    sync::{Arc, Mutex, atomic::AtomicBool},
     time::{Duration, Instant},
 };
 
@@ -45,6 +45,8 @@ pub(crate) struct Args {
     /// Native Rust calculation or optional PoB reference adapter.
     #[arg(long, value_enum, default_value_t = super::default_backend())]
     backend: super::BackendChoice,
+    #[command(flatten)]
+    data: super::data_loading::DataArgs,
     #[arg(long, default_value = "vendor/path-of-building-poe2")]
     pob: PathBuf,
     #[arg(long, default_value_t = 1)]
@@ -121,7 +123,9 @@ impl SearchDomain<DiscretePoint> for Domain<'_> {
         if !validation.is_searchable() {
             return Err(format!("Candidate failed finite rules: {validation:?}"));
         }
-        Ok(())
+        self.registry
+            .validate_requirements(self.resolve(point)?)
+            .map_err(|error| error.to_string())
     }
     fn propose(
         &self,
@@ -268,16 +272,30 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         .unwrap_or(std::path::Path::new("."))
         .join(&problem.template);
     let imported = decode_build(&super::read_input(&input)?)?;
-    let registry = ControlledMaceCatalog::new(
+    #[cfg(feature = "pob")]
+    if matches!(args.backend, super::BackendChoice::Pob) && args.data.is_selected() {
+        return Err("--data is supported only by the native backend".into());
+    }
+    let snapshot = args.data.snapshot()?;
+    let registry = ControlledMaceCatalog::with_data(
+        Arc::clone(&snapshot),
         imported.xml,
         problem.weapons.clone(),
         problem.supports.clone(),
     )?;
-    let backend = super::make_backend(
-        args.backend,
-        args.pob.clone(),
-        &super::data_loading::DataArgs::default(),
-    )?;
+    let backend: Box<dyn CalculationBackend + Send + Sync> = match args.backend {
+        super::BackendChoice::Native => Box::new(poe_optimizer_native::NativeBackend::with_data(
+            Arc::new(poe_optimizer_native::CompiledGameData::compile(
+                Arc::clone(&snapshot),
+            )?),
+            poe_optimizer_native::HostClock,
+        )?),
+        #[cfg(feature = "pob")]
+        super::BackendChoice::Pob => Box::new(poe_optimizer_pob::backend::PobBackend::new(
+            std::env::current_exe()?,
+            args.pob.clone(),
+        )),
+    };
     let selected_identity = backend.identity();
     let engine = Engine::new(backend);
     let execution = match args.backend {
@@ -320,7 +338,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         );
     }
     let mut constraints = CandidateConstraints {
-        required_skill_ids: BTreeSet::from(["Melee1HMacePlayer".into()]),
+        required_skill_ids: BTreeSet::from([registry.required_skill_id().into()]),
         budgets: CandidateBudgets {
             active_skill_count: 1,
             supports_per_skill: 1,
@@ -371,13 +389,30 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         supports,
         neighborhood: problem.neighborhood.clone(),
     };
-    let plan = match args.strategy {
-        Strategy::Exhaustive => SearchPlan::Finite(domain.space.enumerate(args.max_proposals)?),
-        Strategy::Guided => SearchPlan::Explore(vec![domain.space.first()]),
-    };
+    // This closed domain has at most 128 combinations. Preflight the locked domain
+    // before even the diagnostic template attempt, independently of proposal budget.
+    let mut legal_candidates = Vec::new();
+    let mut rejected_candidates = Vec::new();
+    for point in domain.space.enumerate(128)? {
+        let candidate = domain.resolve(&point)?;
+        let alternative = registry
+            .alternatives()
+            .iter()
+            .find(|entry| &entry.candidate == candidate)
+            .ok_or("Missing requirement alternative")?;
+        let assessment = registry.requirements(candidate)?;
+        if assessment.is_legal() {
+            legal_candidates.push(alternative.id.clone());
+        } else {
+            rejected_candidates
+                .push(serde_json::json!({"alternative_id":alternative.id,"assessment":assessment}));
+        }
+    }
     let mut report = serde_json::json!({
-        "schema_version":1,"status":"experimental_mutation_search","diagnostic_only":true,
+        "schema_version":2,"status":"experimental_mutation_search","diagnostic_only":true,
         "requested_backend":engine.capabilities().id,"execution_kind":if execution == ExecutionKind::RustCpu {"rust_cpu"} else {"external_process"},
+        "data":{"identity":snapshot.identity(),"trust":snapshot.trust(),"uses_packaged_default":args.data.data.is_none()},
+        "requirements":{"scope":"controlled_mace_requirements_v1","legal_candidates":legal_candidates,"rejected_candidates":rejected_candidates},
         "scope":"normal_mace_weapon_support_profile_v1","problem":problem,"template_xml_sha256":imported.sha256,
         "template":registry.template_build(),"catalog":registry.catalog(),"alternatives":registry.alternatives(),
         "candidate_constraints":constraints,"space":domain.space,"strategy":args.strategy,"neighborhood":domain.neighborhood,
@@ -389,6 +424,18 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         report["elapsed_ms"] = serde_json::json!(started.elapsed().as_secs_f64() * 1000.);
         return emit(&args, report);
     }
+    if legal_candidates.is_empty() {
+        report["termination"] = serde_json::json!("empty_legal_domain");
+        report["export"]["reason"] = serde_json::json!(
+            "Every choice allowed by the locks fails controlled-profile requirements; see requirements.rejected_candidates"
+        );
+        report["elapsed_ms"] = serde_json::json!(started.elapsed().as_secs_f64() * 1000.);
+        return emit(&args, report);
+    }
+    let plan = match args.strategy {
+        Strategy::Exhaustive => SearchPlan::Finite(domain.space.enumerate(args.max_proposals)?),
+        Strategy::Guided => SearchPlan::Explore(vec![domain.space.first()]),
+    };
     report["preparation"]["attempts"] = serde_json::json!(1);
     report["total_evaluations"] = serde_json::json!(1);
     let baseline = engine.evaluate(
@@ -500,8 +547,9 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
                 serde_json::json!({"status":"written","source":"materialized_xml","path":path});
             if let Some(metadata_path) = &export_manifest {
                 let metadata = serde_json::json!({"schema_version":1,"status":"native_export_data",
-                    "backend":selected_identity,"uses_packaged_default":true,"xml_sha256":alternative.xml_sha256,
-                    "reload_requirement":"Use a package matching backend.data; the controlled search catalog admits only the reviewed default."});
+                    "backend":selected_identity,"uses_packaged_default":args.data.data.is_none(),"xml_sha256":alternative.xml_sha256,
+                    "data_trust":snapshot.trust(),"package_path_hint":args.data.data,
+                    "reload_requirement":"Load a package matching backend.data before evaluating this XML; the path hint is not identity or trust."});
                 let mut bytes = serde_json::to_vec_pretty(&metadata)?;
                 bytes.push(b'\n');
                 super::write_new(metadata_path, &bytes)?;

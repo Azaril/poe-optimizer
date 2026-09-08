@@ -37,17 +37,23 @@ Native execution uses a local Rayon pool with `ExecutionKind::RustCpu`. PoB exec
 PoB checkout and never starts a Lua worker or falls back to PoB. Native-only builds omit
 PoB worker, extraction and calibration-harness commands.
 
-Native controlled search is bound to the reviewed default [game-data package](native-data.md).
-Its public catalog API also rejects custom datasets until materialization and requirements
-consume injected data. Evaluation and benchmarking already support external packages. Native
-search XML exports include a `.data.json` companion recording the selected dataset and XML
-hash; existing destination/alias checks include that companion.
+Native controlled search accepts `--data <package.json>` and optional `--data-sha256`.
+It loads the [game-data package](native-data.md) once and shares the snapshot between its
+catalog and native evaluator. The public `ControlledMaceCatalog::with_data` API binds
+candidate identities, generated XML, requirements and realization checks to that dataset.
+PoB reference runs still use reviewed default content and reject `--data` selection.
+Native XML exports include a `.data.json` companion with actual dataset identity, trust,
+package path hint and XML hash; destination/alias checks include that companion.
+
+```powershell
+cargo run --no-default-features --locked -- search-experimental --problem examples/mace-search.json --data runs/custom.json --jobs 4 --max-evaluations 10
+```
 
 ## Supported input and locks
 
 `template` is relative to the problem file or an absolute path. XML/share codes pass through
 the bounded importer. The template fixes an unallocated Warrior without ascendancy, one
-level-1 quality-0 Mace Strike, one normal Wooden Club or Smithing Hammer, and zero or one
+level-1 quality-0 Mace Strike, one normal base (reviewed names: Wooden Club or Smithing Hammer), and zero or one
 level-1 quality-0 Brutality I. Supplied item alternatives can change their base, quality
 0–20 and item level 1–100 while retaining the exact supported five-line item format.
 Character level, configuration and all other source fields remain fixed throughout a run.
@@ -70,6 +76,14 @@ Optional `locks.weapon_id` fixes an exact supplied weapon. `locks.support` fixes
 `brutality_i`. Both are represented in discrete axes and canonical candidate constraints;
 replaying validation therefore preserves the locks. Main skill, class, ascendancy and tree
 are fixed by this profile; they remain required dimensions of the overall design.
+
+The CLI checks selected-data equip/use level and attribute requirements before dispatch.
+Each attribute uses the maximum of individual requirements and the matching support-color
+aggregate; weapon and support requirements are not added. Requirement evidence reports
+available/required values and failed boundaries for choices allowed by the locks. Illegal
+choices consume no calculations. If all fail, `empty_legal_domain` reports zero evaluations
+without even a template attempt or XML export. Source materialization and diagnostic
+`evaluate` remain available for inspection and do not themselves certify legality.
 
 The shared `poe_optimizer_import::controlled_mace` module owns immutable catalogs,
 source-preserving materialization and realization checks. `preflight` owns shared structural
@@ -108,7 +122,7 @@ CLI signal cancellation and hard process-memory admission are not implemented.
 
 ## Realization evidence and export
 
-JSON retains the template/hash, problem, exact catalogs and payloads, discrete layout,
+Schema-2 JSON retains selected data identity/trust and requirement rejections, the template/hash, problem, exact catalogs and payloads, discrete layout,
 canonical constraints, requested backend/execution kind, baseline identity/evaluation,
 budgets/statistics, ranked assessments and fresh verification. Preparation failure emits
 an explicit report with no search or XML export. `best_verified` appears only when the top

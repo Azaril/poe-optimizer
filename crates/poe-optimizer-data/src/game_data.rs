@@ -7,8 +7,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 1;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v1";
+pub const SCHEMA_VERSION: u32 = 2;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v2";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -106,9 +106,34 @@ pub struct QuestData {
     /// Ordered Candlemass, Molten Shrine, Silent Hall, Beira, Garukhan, Blackjaw.
     pub config_keys: [String; 6],
 }
+/// Exact per-attribute requirements. Individual sources combine by maximum;
+/// support socket costs accumulate by color before that maximum is taken.
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct AttributeRequirements {
+    pub strength: u32,
+    pub dexterity: u32,
+    pub intelligence: u32,
+}
+/// Equip/use requirements for the represented base or level-one gem.
+/// `level` is character level required for use, never item level or gem level.
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct RequirementData {
+    pub level: u32,
+    pub attributes: AttributeRequirements,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SupportColor {
+    Red,
+    Green,
+    Blue,
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SparkData {
+    pub requirements: RequirementData,
     pub skill_id: String,
     pub game_id: String,
     pub variant_id: String,
@@ -122,6 +147,8 @@ pub struct SparkData {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SupportData {
+    pub requirements: RequirementData,
+    pub color: SupportColor,
     pub skill_id: String,
     pub game_id: String,
     pub variant_id: String,
@@ -131,6 +158,9 @@ pub struct SupportData {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct MaceData {
+    pub requirements: RequirementData,
+    /// Cost per red/green/blue support socket in its matching attribute.
+    pub support_attribute_costs: AttributeRequirements,
     pub skill_id: String,
     pub game_id: String,
     pub variant_id: String,
@@ -141,6 +171,7 @@ pub struct MaceData {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct MaceWeaponData {
+    pub requirements: RequirementData,
     pub id: String,
     pub name: String,
     pub physical_minimum: f64,
@@ -149,7 +180,6 @@ pub struct MaceWeaponData {
     pub fire_maximum: f64,
     pub attack_rate: f64,
     pub critical_chance: f64,
-    pub required_strength: u32,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -449,6 +479,20 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     ] {
         package.tree.class(class).map_err(error)?;
     }
+    for (name, requirement) in [
+        ("Spark", &package.spark.requirements),
+        ("Mace Strike", &package.mace.requirements),
+        ("Brutality", &package.mace.brutality.requirements),
+    ] {
+        validate_requirement(name, requirement)?;
+    }
+    // Support attributes are represented by aggregate color costs. A second,
+    // nonzero individual attribute requirement would describe unsupported semantics.
+    if package.mace.brutality.requirements.attributes != AttributeRequirements::default() {
+        return Err(error(
+            "support individual attribute requirements must be zero; use support_attribute_costs",
+        ));
+    }
     let c = &package.character;
     number("minimum_life", c.minimum_life, 1.0, 1e6)?;
     number("minimum_mana", c.minimum_mana, 1.0, 1e6)?;
@@ -513,6 +557,7 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     let mut ids = BTreeSet::new();
     let mut names = BTreeSet::new();
     for w in &package.weapons {
+        validate_requirement(&w.name, &w.requirements)?;
         if w.id.trim().is_empty()
             || w.name.trim().is_empty()
             || w.id.trim() != w.id
@@ -615,6 +660,14 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
         ));
     }
     Ok(())
+}
+fn validate_requirement(name: &str, requirement: &RequirementData) -> Result<()> {
+    number(
+        &format!("{name} required character level"),
+        requirement.level as f64,
+        0.0,
+        100.0,
+    )
 }
 fn validate_numbers(path: &str, value: &serde_json::Value) -> Result<()> {
     match value {

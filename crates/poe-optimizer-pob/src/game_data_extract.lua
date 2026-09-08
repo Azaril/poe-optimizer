@@ -61,7 +61,7 @@ function source_extract_effect(text)
 end
 local function gem(id)
     local g=unique(sourceGems,function(g)return g.grantedEffectId==id end,'gem '..id)
-    return {skill_id=g.grantedEffectId,game_id=g.gameId,variant_id=g.variantId,name=g.name}
+    return {skill_id=g.grantedEffectId,game_id=g.gameId,variant_id=g.variantId,name=g.name,requirements=sourceGemRequirements(g,assert(skills[id]))}
 end
 local function class_id(name)
     return unique(sourceTree.classes,function(c)return c.name==name end,'class '..name).integerId
@@ -102,6 +102,8 @@ function source_extract_records(policy)
     mace.default_class_id=class_id(policy.mace_default_class)
     assert(sourceBaseMultiplier(skills[policy.mace_skill].levels[1],{})==1,'Mace level-one multiplier needs schema expansion')
     mace.brutality=gem(policy.support_skill)
+    mace.brutality.color=assert(({[1]='red',[2]='green',[3]='blue'})[skills[policy.support_skill].color],'unsupported support color')
+    mace.support_attribute_costs=sourceSupportRequirements({1,2,3})
     local support=skills[policy.support_skill].statSets[1]
     assert(#support.constantStats==1 and support.constantStats[1][1]=='support_brutality_physical_damage_+%_final','unsupported Brutality constants')
     assert(equal(support.stats,{'deal_no_elemental_damage','base_deal_no_chaos_damage'}),'unsupported Brutality operations')
@@ -112,9 +114,9 @@ function source_extract_records(policy)
         keys(base,{type=true,quality=true,socketLimit=true,tags=true,implicitModTypes=true,weapon=true,req=true},'weapon base')
         assert(base.type=='One Hand Mace' and empty(base.implicitModTypes),'unsupported weapon type or implicit')
         keys(base.weapon,{PhysicalMin=true,PhysicalMax=true,FireMin=true,FireMax=true,AttackRateBase=true,CritChanceBase=true,Range=true},'weapon stats')
-        keys(base.req,{str=true},'weapon requirements')
+        keys(base.req,{level=true,str=true,dex=true,int=true},'weapon requirements')
         local w=base.weapon
-        weapons[#weapons+1]={id=selection[1],name=selection[2],physical_minimum=w.PhysicalMin,physical_maximum=w.PhysicalMax,fire_minimum=w.FireMin or 0,fire_maximum=w.FireMax or 0,attack_rate=w.AttackRateBase,critical_chance=w.CritChanceBase,required_strength=base.req.str or 0}
+        weapons[#weapons+1]={id=selection[1],name=selection[2],physical_minimum=w.PhysicalMin,physical_maximum=w.PhysicalMax,fire_minimum=w.FireMin or 0,fire_maximum=w.FireMax or 0,attack_rate=w.AttackRateBase,critical_chance=w.CritChanceBase,requirements=sourceItemRequirements(base)}
     end
     local quests={config_keys={},default_enabled={}}
     local targets={{'Life','BASE','flat_life'},{'Life','INC','life_increased'},{'Mana','INC','mana_increased'},{'ColdResist','BASE','elemental_resistance'},{'LightningResist','BASE','elemental_resistance'},{'FireResist','BASE','elemental_resistance'}}

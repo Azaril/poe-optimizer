@@ -63,6 +63,8 @@ impl Oracle {
             "src/Modules/CalcTools.lua",
             "src/Modules/ConfigOptions.lua",
             "src/Classes/ConfigTab.lua",
+            "src/Classes/Item.lua",
+            "src/Classes/SkillsTab.lua",
             "src/Data/QuestRewards.lua",
             "src/Data/Gems.lua",
             "src/Data/Skills/act_int.lua",
@@ -433,15 +435,27 @@ fn reviewed_character_skill_weapon_monster_values_match_actual_pinned_lua() {
                     "{name}:{field}"
                 );
             }
+            let requirements: Table = source.get("req").unwrap();
             assert_eq!(
-                weapon["required_strength"].as_f64().unwrap(),
-                source
-                    .get::<Table>("req")
+                weapon["requirements"]["level"].as_u64().unwrap(),
+                requirements
+                    .get::<Option<u64>>("level")
                     .unwrap()
-                    .get::<Option<f64>>("str")
-                    .unwrap()
-                    .unwrap_or(0.0)
+                    .unwrap_or(0)
             );
+            for (field, key) in [
+                ("strength", "str"),
+                ("dexterity", "dex"),
+                ("intelligence", "int"),
+            ] {
+                assert_eq!(
+                    weapon["requirements"]["attributes"][field]
+                        .as_u64()
+                        .unwrap(),
+                    requirements.get::<Option<u64>>(key).unwrap().unwrap_or(0),
+                    "{name} requirement {field}"
+                );
+            }
         }
         assert_eq!(seen, BTreeSet::from(["Wooden Club", "Smithing Hammer"]));
         for (key, source) in [
@@ -860,6 +874,138 @@ fn reviewed_encounter_defaults_execute_original_config_branches_and_level_resolu
                     );
                 }
             }
+        }
+    }
+}
+
+#[test]
+fn requirements_match_source_gem_functions_support_counts_and_maximum_aggregation() {
+    let package = package();
+    for warm in [false, true] {
+        let oracle = Oracle::new(warm);
+        oracle
+            .lua
+            .load(section(
+                &oracle.sources["src/Modules/CalcTools.lua"],
+                "function calcLib.getGemStatRequirement(",
+                "-- Build table of stats for the given skill instance statset",
+            ))
+            .exec()
+            .unwrap();
+        let requirements: Function = oracle
+            .lua
+            .load("return calcLib.getGemStatRequirement")
+            .eval()
+            .unwrap();
+        for (path, skill) in [
+            ("spark", "SparkPlayer"),
+            ("mace", "Melee1HMacePlayer"),
+            ("mace/brutality", "SupportBrutalityPlayer"),
+        ] {
+            let gem: Table = oracle.lua.load("return function(id) for _,gem in pairs(sourceGems) do if gem.grantedEffectId==id then return gem end end; error('source gem missing') end").eval::<Function>().unwrap().call(skill).unwrap();
+            let effect: Table = oracle
+                .lua
+                .globals()
+                .get::<Table>("skills")
+                .unwrap()
+                .get(skill)
+                .unwrap();
+            let level: u32 = effect
+                .get::<Table>("levels")
+                .unwrap()
+                .get::<Table>(1)
+                .unwrap()
+                .get("levelRequirement")
+                .unwrap();
+            let support = effect
+                .get::<Option<bool>>("support")
+                .unwrap()
+                .unwrap_or(false);
+            number(
+                &package,
+                &format!("/{path}/requirements/level"),
+                level as f64,
+            );
+            for (attr, key) in [
+                ("strength", "reqStr"),
+                ("dexterity", "reqDex"),
+                ("intelligence", "reqInt"),
+            ] {
+                let multiplier: u32 = gem.get(key).unwrap();
+                let value: u32 = requirements.call((level, multiplier, support)).unwrap();
+                number(
+                    &package,
+                    &format!("/{path}/requirements/attributes/{attr}"),
+                    value as f64,
+                );
+                assert!(
+                    line(
+                        &oracle.sources["src/Classes/SkillsTab.lua"],
+                        &format!("gemInstance.{key} =")
+                    )
+                    .contains("calcLib.getGemStatRequirement(gemInstance.reqLevel,")
+                );
+            }
+        }
+        // Nontrivial function inputs prove support status suppresses individual
+        // attribute requirements; source gem multipliers are percentages, not costs.
+        assert!(requirements.call::<u32>((20, 100, false)).unwrap() > 0);
+        assert_eq!(requirements.call::<u32>((20, 100, true)).unwrap(), 0);
+        assert_eq!(requirements.call::<u32>((20, 0, false)).unwrap(), 0);
+        let count: Function = oracle.lua.load(format!(
+            "return function(groups) local t_insert=table.insert; local env={{build={{skillsTab={{socketGroupList=groups}},calcsTab={{}}}},modDB={{multipliers={{}}}},requirementsTableGems={{}}}};{}\nreturn env.requirementsTableGems[1] end",
+            section(&oracle.sources["src/Modules/CalcSetup.lua"], "\tlocal slotSupportGemSocketsCount = { R = 0, G = 0, B = 0 }", "\t-- Merge Requirements Tables")
+        )).eval().unwrap();
+        let groups: Table = oracle.lua.load("return {{enabled=true,gemList={{supportEffect={grantedEffect={color=1}}},{supportEffect={grantedEffect={color=2}}},{supportEffect={grantedEffect={color=3}}}}}}").eval().unwrap();
+        let costs: Table = count.call(groups).unwrap();
+        for (attr, source_attr) in [
+            ("strength", "Str"),
+            ("dexterity", "Dex"),
+            ("intelligence", "Int"),
+        ] {
+            number(
+                &package,
+                &format!("/mace/support_attribute_costs/{attr}"),
+                costs.get(source_attr).unwrap(),
+            );
+        }
+        let color: u32 = oracle
+            .lua
+            .load("return skills.SupportBrutalityPlayer.color")
+            .eval()
+            .unwrap();
+        let color_name = match color {
+            1 => "red",
+            2 => "green",
+            3 => "blue",
+            _ => panic!("unsupported source color"),
+        };
+        assert_eq!(package["mace"]["brutality"]["color"], color_name);
+        // Supports in disabled groups and hidden effects do not contribute;
+        // colors aggregate across all enabled groups, including inactive skills.
+        let groups: Table = oracle.lua.load("return {{enabled=true,gemList={{supportEffect={grantedEffect={color=1}}},{supportEffect={grantedEffect={color=1}}},{supportEffect={grantedEffect={color=2,hidden=true}}}}},{enabled=true,gemList={{supportEffect={grantedEffect={color=1}}}}},{enabled=false,gemList={{supportEffect={grantedEffect={color=2}}}}}}").eval().unwrap();
+        let counted: Table = count.call(groups).unwrap();
+        assert_eq!(
+            counted.get::<u32>("Str").unwrap(),
+            3 * costs.get::<u32>("Str").unwrap()
+        );
+        assert_eq!(counted.get::<u32>("Dex").unwrap(), 0);
+        let aggregate: Function = oracle.lua.load(format!(
+            "return function(requirements) local m_floor=math.floor;local m_max=math.max;local modDB=new('ModDB'):ModDB();local env={{requirementsTable=requirements}};local output={{Str=15,Dex=7,Int=7}};local breakdown=nil;{}\nreturn output end",
+            section(&oracle.sources["src/Modules/CalcPerform.lua"], "\t-- Process attribute requirements", "\t-- Calculate number of active heralds and auras affecting self")
+        )).eval().unwrap();
+        for (weapon, active, support_count, expected) in [
+            (11, 0, 1, 11),
+            (11, 13, 1, 13),
+            (11, 0, 3, 15),
+            (0, 0, 0, 0),
+        ] {
+            let sources: Table = oracle.lua.load(format!("return {{{{source='Item',sourceSlot='Weapon 1',sourceItem={{base={{weapon={{}}}}}},Str={weapon}}},{{source='Gem',Str={active},sourceGem={{gemData={{tags={{}}}}}}}},{{source='Support Gems',Str={}}}}}", support_count * costs.get::<u32>("Str").unwrap())).eval().unwrap();
+            let result: Table = aggregate.call(sources).unwrap();
+            assert_eq!(
+                result.get::<Option<u32>>("ReqStr").unwrap().unwrap_or(0),
+                expected
+            );
         }
     }
 }

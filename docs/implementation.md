@@ -2,17 +2,18 @@
 
 Last updated: 2026-09-07
 
-Completed checkpoint: the bounded, pinned `extract-game-data` workflow (D4) is implemented
-and published. Next: dataset-bound controlled search and requirement validation.
-The CLI generates all ten current sections from source, publishing canonical bytes and an
-extraction-evidence companion. All 316 workspace tests, 24 native-only CLI tests, lint,
-formatting, portable WASM checks and release reproduction pass locally. The native package,
-source pin, schemas, supported mechanics and search scope are preserved.
+Completed local checkpoint: dataset-bound controlled Mace search and explicit requirement
+validation (D4), starting from clean `6176123`. The selected immutable snapshot now binds
+catalog materialization, pre-dispatch legality, native evaluation and export metadata.
+All 333 workspace tests, 32 native-only CLI tests, lint, formatting, dependency isolation,
+five portable WASM libraries and release reproduction pass. Publication/hosted CI is pending
+in the table below. Next: connect class/ascendancy/passive materialization to finite search.
 
-Published code: `2bd56de` on `main` (started at clean `fbf37c4`). Current source-extraction
-validation includes the unchanged independent goldens and 100-case fresh PoB matrix. Hosted
-Windows/Linux CI passes for the published code. Earlier throughput evidence remains tied to
-`1a44c13`. Full native coverage, the supplied minion build and the first usable all-six-dimension
+The package is schema 2 / `poe2-native-profiles-v2`, with source-derived equipment,
+active-gem and support requirements. The fixed Warrior/no-paid-passive search scope,
+PoB source pin, existing numerical values and independent goldens remain unchanged.
+Earlier throughput evidence remains tied to `1a44c13`; no new speed measurement is claimed.
+Full native coverage, the supplied minion build and the first usable all-six-dimension
 optimizer remain unfinished.
 
 This is the living record of delivery order, implemented behavior, validation, unresolved
@@ -29,8 +30,8 @@ the design documents.
 1. Inspect `git status --short --branch` and the current validation/publication table below.
    Read [native data packages](native-data.md), the [source-extraction guide](game-data-extraction.md),
    and the [data-boundary decision](game-data-boundary.md).
-   Runtime injection, numeric configuration and pinned source extraction are validated and
-   published. Continue the dataset-bound controlled search slice below.
+   Runtime injection, numeric configuration, pinned source extraction and dataset-bound
+   controlled search are implemented. Check publication status in the current table below.
    Also read [native backend](native-backend.md),
    [native calculations](native-engine.md), [live passive coverage](passive-coverage.md)
    and [tree projection](tree-projection.md). The production target is a fully native
@@ -38,12 +39,11 @@ the design documents.
 2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve supplied
    original exports and independent Spark/Mace goldens. Maintain actual-source interpreted
    and warmed parity, full-build differential cases and strict unsupported-mechanic errors.
-3. Implement the dataset-bound controlled Mace search slice below, retaining the current
-   source/tree guard. Add typed requirement data, then bind catalog parsing/materialization,
-   legality and the evaluator to the same immutable snapshot before enabling custom-data search.
-   This can proceed independently of broader source/tree compatibility migration. Preserve
-   default source/golden parity and strict admission; review the compatibility contract
-   explicitly before admitting another upstream revision.
+3. Continue class/ascendancy/passive catalog composition next, using the same selected
+   snapshot and explicit caller point budgets. The bounded data-search slice below is
+   implemented; broader source compatibility is a separate remaining D4 gate.
+   Preserve schema-2 requirement checks, exact source/tree compatibility and default golden
+   parity; review the compatibility contract before admitting another upstream revision.
 4. Connect source-preserving class/ascendancy/passive materialization to a finite search
    catalog using the authenticated portable data. Rebind composed catalog identities to
    tree, skill and item payloads; validate requested versus realized physical allocations,
@@ -51,8 +51,9 @@ the design documents.
    31 identities and 16 ordinary entrance cases, explicit caller 0/1 ordinary-point and
    zero ascendancy-point budgets, shared-root ownership and exact locks. The native
    evaluator's observed allocation count must never establish its available point budget.
-   Equipment/gem requirements also need explicit finite rules before cross-class item
-   recommendations: diagnostic calculation alone does not prove they can be equipped.
+   Extend the implemented equipment/gem requirement seam to the resolved selected class
+   and admitted passive effects before cross-class item recommendations. Diagnostic
+   calculation alone does not prove that the items and gems can be equipped.
    The current controlled Mace search remains Warrior/no-paid-passives/none-ascendancy.
 5. Broaden source-derived passive/modifier extraction beyond the twelve exact admitted
    stat strings and nine numeric modifier fields, with actual-source and full-build parity
@@ -95,6 +96,51 @@ Assessment reports constraint evidence and primary availability; it does not cer
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
 
+## Dataset-bound controlled search - 2026-09-07
+
+Starting point: clean `6176123`. This completes the bounded D4 plan retained below. The
+native CLI loads selected data once, shares the exact immutable snapshot with catalog and
+evaluator, and checks requirements before dispatch. No runtime Lua or subprocess work was
+added to native search. The PoB backend remains an explicit optional reference.
+
+| Checkpoint | State |
+| --- | --- |
+| Requirement data and migration | Package schema **2**, semantics **`poe2-native-profiles-v2`**. Explicit level/attribute records replace weapon `required_strength` and cover the represented level-one active/support gems. Support color and per-color aggregate costs are injected. Missing/old fields, invalid colors/levels/integers and nonzero individual support attribute requirements reject. Regenerate schema-1 packages from pinned source, then review/reapply custom edits. |
+| Source reproduction | All ten sections regenerate from verified source. **141,502 bytes**, SHA-256 `854dca85abcd031905761d9533b7437ce28e40b5154c23c99655084fbb719507`. Source evidence now has **25 direct files**, adding `SkillsTab.lua`. Seven sections and all prior numerical/identity fields remain unchanged after accounting for the explicit requirement migration. Tree artifact, source pin, supplied originals and six independent goldens are unchanged. |
+| Catalog and scenario | `ControlledMaceCatalog::with_data` retains the selected snapshot. Skill/support identities and XML, normal-base classification, quest selectors/defaults and requirement records consume selected data. Full `DataIdentity` binds catalog fingerprints; equal-content separate snapshots interoperate, while cross-dataset candidates, scenarios and results reject. Native realization checks full selected backend identity; PoB reference binding admits reviewed-default content only. |
+| Legality and dispatch | Typed available/required values and violations distinguish equip/use level from item level. The per-attribute requirement is the maximum of individual sources and the support-color aggregate. All alternatives remain available diagnostically; the CLI checks the lock-admissible domain before the template attempt and rejects illegal proposals before calculation. `empty_legal_domain` reports reasons and zero evaluations even when proposal budget is smaller than the product. Guided search can escape an illegal first point. |
+| CLI/report/export | `search-experimental --backend native --data ... [--data-sha256 ...]` shares one loaded snapshot with catalog/backend. Required skill IDs are derived from selected records. Search report schema **2** includes identity, trust, requirement rejection evidence and the existing ledger. Native export companions retain actual backend/data identity, structured trust, package hint and XML hash. Exact locks, fresh finalist checks and no-overwrite checks remain. |
+| Independent requirement evidence | Five PoB source-oracle tests pass, including actual gem requirement functions, repeated-color support counts with hidden/disabled exclusions, and the full pinned attribute-requirement aggregation block in cold/warm Lua. Weapon strength 11 and one red cost 5 need 11; active requirement 13 raises it to 13; three red supports need 15. These source probes do not expand the native catalog beyond its one support slot. |
+| Integrated validation | **333 workspace tests pass, zero failures**, with nine ignored child helpers exercised by parents. **32 native-only CLI tests pass**. Existing six numerical goldens and the 100-case fresh PoB matrix pass. Workspace/native-only Clippy, formatting, dependency isolation and five portable WASM libraries pass. Logs: `runs/dataset-search-{workspace-tests,workspace-clippy,native-only-tests,native-only-clippy,fmt,wasm,release}.log`, `runs/dataset-search-native-dependencies.txt`. |
+| Release evidence | Two release extractor processes produce identical reviewed packages and evidence. Default eight-state winner: **`smithing-q20/none`, 20.1596255 DPS**. Quadrupled Wooden Club endpoints select **`wooden-q20/brutality_i`, 62.429807999999994 DPS**. Serial/four-worker archives and finalists match exactly; fresh export reevaluation matches DPS and backend/data identity. Each complete search uses ten attempts; the all-illegal eight-state case uses zero. Artifacts and `summary.json`: `runs/dataset-search-release-check/`. |
+| Artifact identity | Custom package SHA-256 `8b35214bbcc9d639d59286dd3124860729d3b4cc78b99dd9563a4559c11e42d3`; release executable `48bfb84621f8794163b9b8649b2de5ab2dad4813cfa1a1996a07e4a05a3b8d2d`; extractor `90640baa6adf5b71903d282c84bd08d9aa1352239244e77e316aedbfca2328fd`; extraction-evidence file `d642eced202189c9dd3f99548cd3604d228ad3a905022798e9ee068fe983668d`. |
+| Review/documentation | Independent source/data-binding and CLI reviews found no remaining blockers. Seven new import tests, seven new CLI tests and a native scenario-reuse test cover requirement boundaries, maximum semantics, XML escaping, selected quest defaults, identity mismatches, locks and budgets. Static audit confirms seven unchanged sections, preserved prior numeric fields and Markdown links; evidence: `runs/dataset-search-static-audit.json`. |
+| Publication | Local code, release and documentation checks pass. Main-branch publication and hosted Windows/Linux CI are pending. |
+
+The current requirement seam is deliberately scoped to fixed Warrior attributes with no
+paid passives or attribute-granting equipment. It does not resolve general equipment
+self-dependencies, all-game legality, broader source compatibility, browser execution or
+optimizer quality. Requirements affect search admission; diagnostic evaluation remains
+separate and does not become a recommendation certificate.
+
+### Next implementation slice: class/passive catalog composition
+
+Use the already authenticated tree projection and source-preserving class/passive
+materialization APIs to extend the finite native search domain. Retain the same injected
+snapshot across tree, skill, item, requirement and evaluator code. Start with the validated
+31 class/ascendancy identities and ordinary entrance views, caller-supplied ordinary point
+budget 0 or 1, ascendancy point budget 0, and exact class/ascendancy/node/item/skill locks.
+Available attributes must come from the selected class and admitted effects; allocated
+counts observed in an evaluator result never establish the available point budget.
+
+Validate requested versus realized physical nodes, shared-root ownership, class-specific
+effective entrance effects and exact exports. Preserve source/default numerical parity,
+compare tiny exhaustive references and one/many-worker runs, and reject unsupported selected
+special mechanics. Existing native identity/entrance coverage is a starting point, not a
+blanket claim of legal cross-class recommendations. General attribute/circular equipment
+requirements, broader modifier extraction and source revision migration remain later gates.
+No additional product decision is needed for this agreed scope.
+
 ## Pinned package source extraction — 2026-09-07
 
 Starting point: `fbf37c4`. This delivers the prior D4 source-extraction plan retained below: generate
@@ -114,7 +160,10 @@ remain separate work.
 | Extraction identity | Extractor SHA-256 `5baa1cab64c6f2b92c2ed4941d84622dd43f2019533200c401a63b99f5a6a8bd`; policy SHA-256 `7d56fa4aceab97737fce29aaed2923a7b49a121fadcda8ac951df9321f77a3a3`; evidence-file SHA-256 `3dcc27f5667c99445c1ba7f835039bdb39070afc2767d1d25056841c7313d8e3`. All 24 direct source hashes are checked independently; tree/loader/spec evidence remains in `package.tree.source`. |
 | Publication | Code `2bd56de` is pushed to main. [Windows/Linux CI run 34176865681](https://github.com/Azaril/poe-optimizer/actions/runs/34176865681) passes both jobs, including formatting, lint, full tests, native-only tests/dependencies and five portable WASM libraries. The following living-document update changes documentation only. |
 
-### Next D4 slice: dataset-bound controlled search
+### Prior D4 plan: dataset-bound controlled search
+
+This plan is implemented by the newer checkpoint above; validation and remaining work are
+recorded there. The agreed acceptance scope was:
 
 This can proceed with the current source pin and structural-tree guard. Keep the existing
 Warrior/no-ascendancy/no-paid-passive search profile, two normal weapon slots and optional
@@ -199,8 +248,8 @@ commands are in [native data packages](native-data.md).
 | Throughput | All 4,500,000 evaluations in 18 runs completed, with identical finite-metric checksums, stable backend/data identity and zero failures or late results. Fixed-profile timing and scope are recorded below. |
 | Publication | Code `1a44c13` is pushed to main; [Windows/Linux CI run 34173951380](https://github.com/Azaril/poe-optimizer/actions/runs/34173951380) passes both jobs, including formatting, lint, full tests, native-only tests/dependencies and five portable WASM libraries. The following living-document update changes documentation only. |
 
-The newer source-extraction checkpoint delivers pinned generation. Remaining D4 work is
-broader source compatibility/update orchestration and data-driven materialization. Do not remove the structural pin or accept arbitrary
+The newer checkpoints deliver pinned generation and data-bound controlled materialization.
+Remaining D4 work is broader source compatibility/update orchestration and general catalogs. Do not remove the structural pin or accept arbitrary
 new operation versions merely to make a new package load. Browser execution and general
 native build coverage remain separate gates. New full-result diagnostics change benchmark
 work; previous throughput measurements remain tied to their recorded commits/profiles.
@@ -326,7 +375,7 @@ current behavior/validation is recorded in the newer checkpoint above.
   values; compatibility wrappers may not become a second hard-coded source of truth. A
   controlled synthetic package must change a supported result without Rust changes and must
   not inherit the reviewed dataset's identity or PoB parity status.
-- [ ] **D4 — host loading and pinned package extraction implemented; broader source updates and custom-data search remain.** Compose CLI default/external byte loading through
+- [ ] **D4 — host loading, pinned extraction and data-bound controlled search implemented; broader source updates remain.** Compose CLI default/external byte loading through
   one path, with explicit selection failures and no fallback. Carry effective data identity into
   run/checkpoint manifests, exports and search configuration. Deterministic optional PoB
   extraction now reproduces the current complete package with separate source/policy evidence. Embedded and
@@ -775,7 +824,7 @@ is concrete; real-build recommendations depend on both.
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
 | M5: richer objective policies | Not started | Unit-checked expressions, composite and ordered priorities, soft preferences, Pareto selection, and explicit robust aggregation. Test policy-specific selection and preserve hard constraints. |
 | Desktop GUI | Deferred until CLI/report contracts stabilize | Choose frontend; Tauri is a candidate. Reuse core jobs, results and comparison models. Verify CLI/GUI parity, responsive cancellation and native evaluator packaging; package optional reference workers separately. Does not depend on finishing every M4/M5 feature. |
-| Native Rust calculation replacement | Active; all class/ascendancy identities and ordinary entrances supported by restricted Spark/Mace pipelines; portable data and native weapon/support search implemented | Finish D4 dataset-bound materialization and reviewed source compatibility before broadening class/passive materialization and explicit finite search rules, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
+| Native Rust calculation replacement | Active; all class/ascendancy identities and ordinary entrances supported by restricted Spark/Mace pipelines; portable data and native weapon/support search implemented | Extend dataset-bound catalog composition to class/passive materialization and explicit finite search rules; retain reviewed source compatibility, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Fixed-input API benchmarking exists; broader performance, optimizer quality and browser execution still need evidence. |
 | PoE1 adapter | Later, separate track | Add a distinct versioned rules/data/evaluator adapter after PoE2 interfaces are proven; do not mix game identities or reuse PoE2 parity claims. |
 
 Narrow passive/item/skill experiments are internal validation steps. The first usable release
@@ -849,10 +898,11 @@ skills together within explicit finite catalogs. It must support 1..N required s
       historical standalone reference timings with a native scaling benchmark. Browser and
       realistic optimizer-quality measurements remain outstanding.
 
-- [ ] **M1.8 Configurable native data — current-profile injection implemented; update/search integration pending.**
-      D1–D3 now provide packages, immutable injection, numeric data and typed effects. D4 supplies
-      external evaluation/benchmark loading and pinned all-section source extraction. Finish
-      broader source compatibility and data-driven catalog/requirement rules before custom-data search. D5 current-profile evidence is recorded above.
+- [ ] **M1.8 Configurable native data — current-profile injection, extraction and controlled search implemented; broader updates pending.**
+      D1–D3 provide packages, immutable injection, numeric data and typed effects. D4 supplies
+      external loading, a bounded pinned source extractor and schema-2 data-bound controlled
+      catalog/requirement rules. Broader source compatibility and general catalogs remain.
+      D5 current-profile evidence is recorded above.
 
 The planner JSON export is preserved as auxiliary input/provenance. Raw PoB XML and PoB
 share codes are runnable import paths; planner conversion follows only when its format

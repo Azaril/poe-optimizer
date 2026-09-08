@@ -214,7 +214,8 @@ fn fresh_cli_extractions_reproduce_all_ten_sections_and_stable_source_evidence()
             .all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase())
     );
     let source_files = evidence["source_files_sha256"].as_object().unwrap();
-    assert_eq!(source_files.len(), 24);
+    assert_eq!(source_files.len(), 25);
+    assert!(source_files.contains_key("src/Classes/SkillsTab.lua"));
     for (path, recorded_hash) in source_files {
         let entry = manifest["files"]
             .as_array()

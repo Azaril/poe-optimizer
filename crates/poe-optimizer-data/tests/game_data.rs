@@ -261,3 +261,70 @@ fn unknown_nested_source_enum_fields_and_integer_key_aliases_do_not_disappear() 
         .is_err()
     );
 }
+
+#[test]
+fn requirement_schema_is_explicit_bounded_and_content_bound() {
+    let original = reviewed();
+    assert_eq!(original.identity().schema_version, 2);
+    assert_eq!(
+        original.identity().semantics_version,
+        "poe2-native-profiles-v2"
+    );
+    let mut package = original.package().clone();
+    package.weapons[0].requirements = RequirementData {
+        level: 100,
+        attributes: AttributeRequirements {
+            strength: 1_000_000,
+            dexterity: 17,
+            intelligence: 21,
+        },
+    };
+    package.mace.requirements.attributes.strength = 15;
+    package.mace.brutality.color = SupportColor::Blue;
+    package.mace.support_attribute_costs.intelligence = 7;
+    let changed = custom(package).unwrap();
+    assert_ne!(changed.identity(), original.identity());
+    assert_eq!(changed.trust(), &DataTrust::CustomUnreviewed);
+    assert_eq!(changed.package().mace.brutality.color, SupportColor::Blue);
+    for mutate in [
+        |p: &mut GameDataPackage| p.weapons[0].requirements.level = 101,
+        |p: &mut GameDataPackage| p.spark.requirements.level = 101,
+        |p: &mut GameDataPackage| p.mace.requirements.level = 101,
+        |p: &mut GameDataPackage| p.mace.brutality.requirements.level = 101,
+        |p: &mut GameDataPackage| p.mace.brutality.requirements.attributes.strength = 1,
+        |p: &mut GameDataPackage| p.mace.support_attribute_costs.strength = 1_000_001,
+        |p: &mut GameDataPackage| p.weapons[0].requirements.attributes.strength = 1_000_001,
+        |p: &mut GameDataPackage| p.manifest.schema_version = 1,
+        |p: &mut GameDataPackage| p.manifest.semantics_version = "poe2-native-profiles-v1".into(),
+    ] {
+        let mut package = original.package().clone();
+        mutate(&mut package);
+        assert!(custom(package).is_err());
+    }
+    for mutate in [
+        |v: &mut serde_json::Value| {
+            v["weapons"][0]
+                .as_object_mut()
+                .unwrap()
+                .remove("requirements");
+        },
+        |v: &mut serde_json::Value| {
+            v["weapons"][0]["requirements"]["attributes"]["strength"] = (-1).into()
+        },
+        |v: &mut serde_json::Value| {
+            v["weapons"][0]["requirements"]["attributes"]["strength"] = 1.5.into()
+        },
+        |v: &mut serde_json::Value| v["weapons"][0]["requirements"]["item_level"] = 1.into(),
+        |v: &mut serde_json::Value| v["mace"]["brutality"]["color"] = "white".into(),
+    ] {
+        let mut value = serde_json::to_value(original.package()).unwrap();
+        mutate(&mut value);
+        assert!(
+            GameDataPackage::decode_for_authoring(
+                &serde_json::to_vec(&value).unwrap(),
+                &LoadLimits::default()
+            )
+            .is_err()
+        );
+    }
+}

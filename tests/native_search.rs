@@ -416,7 +416,7 @@ fn native_only_search_defaults_to_native_and_rejects_reference_backend() {
 }
 
 #[test]
-fn pinned_native_catalog_rejects_custom_data_even_with_matching_backend_identity() {
+fn catalog_rejects_another_dataset_even_with_matching_backend_identity() {
     use poe_optimizer_data::game_data::{
         GameDataLoader, LoadLimits, TrustPolicy, bundled_snapshot,
     };
@@ -448,5 +448,134 @@ fn pinned_native_catalog_rejects_custom_data_even_with_matching_backend_identity
     let error = registry
         .bind_native_baseline(&result, &identity)
         .unwrap_err();
-    assert!(error.to_string().contains("reviewed default data"));
+    assert!(error.to_string().contains("data"));
+}
+
+#[test]
+fn selected_data_scenarios_reuse_equal_content_and_reject_cross_dataset_results() {
+    use poe_optimizer_data::game_data::{
+        GameDataLoader, LoadLimits, TrustPolicy, bundled_snapshot,
+    };
+    use poe_optimizer_native::{CompiledGameData, HostClock};
+    use std::sync::Arc;
+    let mut package = bundled_snapshot().unwrap().package().clone();
+    for (index, key) in package.quests.config_keys.iter_mut().enumerate() {
+        *key = format!("questCustom{index}");
+    }
+    package.quests.default_enabled = [false, true, false, true, false, true];
+    package.encounters.default_resistance_penalty = -20.0;
+    package.refresh_section_digests().unwrap();
+    let bytes = package.canonical_bytes().unwrap();
+    let load = |bytes: &[u8]| {
+        Arc::new(
+            GameDataLoader::from_bytes(bytes, &TrustPolicy::AllowCustom, &LoadLimits::default())
+                .unwrap(),
+        )
+    };
+    let first = load(&bytes);
+    let equal = load(&bytes);
+    assert!(!Arc::ptr_eq(&first, &equal));
+    let make_catalog = |snapshot| {
+        ControlledMaceCatalog::with_data(
+            snapshot,
+            TEMPLATE.into(),
+            weapons(),
+            vec![MaceSupportChoice::None, MaceSupportChoice::BrutalityI],
+        )
+        .unwrap()
+    };
+    let first_catalog = make_catalog(Arc::clone(&first));
+    let equal_catalog = make_catalog(Arc::clone(&equal));
+    let backend = |snapshot| {
+        NativeBackend::with_data(
+            Arc::new(CompiledGameData::compile(snapshot).unwrap()),
+            HostClock,
+        )
+        .unwrap()
+    };
+    let first_backend = backend(first);
+    let identity = first_backend.identity();
+    let first_engine = Engine::new(first_backend);
+    let equal_engine = Engine::new(backend(equal));
+    let request = |build| EvaluationRequest {
+        build,
+        options: EvaluationOptions::default(),
+        metrics: vec![],
+    };
+    let budget = EvaluationBudget { timeout_ms: 5000 };
+    let baseline = first_engine
+        .evaluate(&request(first_catalog.template_build()), budget)
+        .unwrap();
+    let scenario = first_catalog
+        .bind_native_baseline(&baseline, &identity)
+        .unwrap();
+    let equal_scenario = equal_catalog
+        .bind_native_baseline(&baseline, &identity)
+        .unwrap();
+    let candidate = first_catalog
+        .resolve_candidate("wood", MaceSupportChoice::BrutalityI)
+        .unwrap();
+    let result = equal_engine
+        .evaluate(
+            &request(equal_catalog.materialize(candidate).unwrap()),
+            budget,
+        )
+        .unwrap();
+    equal_catalog
+        .validate_native_realization(candidate, &result, &scenario)
+        .unwrap();
+    first_catalog
+        .validate_native_realization(candidate, &result, &equal_scenario)
+        .unwrap();
+    assert!(
+        baseline
+            .context
+            .config_placeholders
+            .contains_key("questCustom0")
+    );
+    let mut altered: EvaluationResult =
+        serde_json::from_value(serde_json::to_value(&result).unwrap()).unwrap();
+    altered.context.config_placeholders.insert(
+        "questCustom0".into(),
+        poe_optimizer_core::options::Scalar::Boolean(true),
+    );
+    assert!(
+        first_catalog
+            .validate_native_realization(candidate, &altered, &scenario)
+            .is_err()
+    );
+
+    package.character.accuracy_per_level += 1.0;
+    package.refresh_section_digests().unwrap();
+    let other = load(&package.canonical_bytes().unwrap());
+    let other_catalog = make_catalog(Arc::clone(&other));
+    let other_backend = backend(other);
+    let other_identity = other_backend.identity();
+    let other_engine = Engine::new(other_backend);
+    let other_baseline = other_engine
+        .evaluate(&request(other_catalog.template_build()), budget)
+        .unwrap();
+    let other_scenario = other_catalog
+        .bind_native_baseline(&other_baseline, &other_identity)
+        .unwrap();
+    assert!(
+        first_catalog
+            .bind_native_baseline(&other_baseline, &other_identity)
+            .is_err()
+    );
+    assert!(
+        first_catalog
+            .validate_native_realization(candidate, &result, &other_scenario)
+            .is_err()
+    );
+    assert!(
+        first_catalog
+            .validate_native_realization(candidate, &other_baseline, &scenario)
+            .is_err()
+    );
+    assert!(other_catalog.materialize(candidate).is_err());
+    assert!(
+        first_catalog.bind_baseline(&baseline).is_err(),
+        "custom native evidence cannot bind the PoB reference path"
+    );
 }

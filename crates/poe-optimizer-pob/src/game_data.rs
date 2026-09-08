@@ -40,6 +40,7 @@ const READ_PATHS: &[&str] = &[
     "src/Data/Bases/mace.lua",
     "src/TreeData/0_5/tree.lua",
     "src/Classes/Item.lua",
+    "src/Classes/SkillsTab.lua",
     "src/Data/SkillStatMap.lua",
 ];
 const PROVENANCE_PATHS: &[&str] = &[
@@ -60,6 +61,7 @@ const PROVENANCE_PATHS: &[&str] = &[
     "src/Data/Skills/sup_str.lua",
     "src/Data/SkillStatMap.lua",
     "src/Classes/Item.lua",
+    "src/Classes/SkillsTab.lua",
     "src/Modules/CalcTools.lua",
     "src/Data/Gems.lua",
 ];
@@ -98,7 +100,7 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v1",
+        "poe-game-data-extractor-v2",
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
@@ -453,6 +455,53 @@ impl Extractor {
             "-- Validate the level of the given gem",
         )?)
         .exec()?;
+        lua.load(section(
+            source("src/Modules/CalcTools.lua")?,
+            "function calcLib.getGemStatRequirement(",
+            "-- Build table of stats for the given skill instance statset",
+        )?)
+        .exec()?;
+        let mut gem_requirements = String::from(
+            "return function(gemData,grantedEffect) local gemInstance={gemData=gemData,level=1};\n",
+        );
+        for prefix in [
+            "gemInstance.reqLevel =",
+            "gemInstance.reqStr =",
+            "gemInstance.reqDex =",
+            "gemInstance.reqInt =",
+        ] {
+            gem_requirements.push_str(line(source("src/Classes/SkillsTab.lua")?, prefix)?);
+            gem_requirements.push('\n');
+        }
+        gem_requirements.push_str("return {level=gemInstance.reqLevel,attributes={strength=gemInstance.reqStr,dexterity=gemInstance.reqDex,intelligence=gemInstance.reqInt}} end");
+        lua.globals().set(
+            "sourceGemRequirements",
+            lua.load(gem_requirements).eval::<Function>()?,
+        )?;
+        let mut item_requirements = String::from(
+            "return function(base) local m_max=math.max;local self={base=base,requirements={}};\n",
+        );
+        for prefix in [
+            "self.requirements.runeLevel = 0",
+            "self.requirements.str = self.base.req.str",
+            "self.requirements.dex = self.base.req.dex",
+            "self.requirements.int = self.base.req.int",
+            "self.requirements.level = m_max(self.base.req.level",
+        ] {
+            item_requirements.push_str(line(source("src/Classes/Item.lua")?, prefix)?);
+            item_requirements.push('\n');
+        }
+        item_requirements.push_str("return {level=self.requirements.level,attributes={strength=self.requirements.str,dexterity=self.requirements.dex,intelligence=self.requirements.int}} end");
+        lua.globals().set(
+            "sourceItemRequirements",
+            lua.load(item_requirements).eval::<Function>()?,
+        )?;
+        let support_requirements = lua.load(format!(
+            "return function(colors) local t_insert=table.insert;local gems={{}};for _,color in ipairs(colors) do gems[#gems+1]={{supportEffect={{grantedEffect={{color=color}}}}}} end;local env={{build={{skillsTab={{socketGroupList={{{{enabled=true,gemList=gems}}}}}},calcsTab={{}}}},modDB={{multipliers={{}}}},requirementsTableGems={{}}}};{}\nlocal req=env.requirementsTableGems[1];return {{strength=req.Str,dexterity=req.Dex,intelligence=req.Int}} end",
+            section(source("src/Modules/CalcSetup.lua")?, "\tlocal slotSupportGemSocketsCount = { R = 0, G = 0, B = 0 }", "\t-- Merge Requirements Tables")?
+        )).eval::<Function>()?;
+        lua.globals()
+            .set("sourceSupportRequirements", support_requirements)?;
         let tree: Table = lua.load(source("src/TreeData/0_5/tree.lua")?).eval()?;
         lua.globals().set("sourceTree", tree)?;
         let mut initialization =
