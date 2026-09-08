@@ -6,8 +6,8 @@ Completed implementation checkpoint: configurable support loadouts, starting fro
 `ac8b441`. The source-data, prepared native calculation, import/export and CLI changes are
 implemented. **398 workspace tests pass across the full suite and corrected migration-test
 reruns**, as do **51 native-only CLI tests**, lint, formatting, dependency isolation, five
-portable WASM libraries, release reproduction and independent reviews. Commit/publication
-is the remaining checkpoint step; see the current table below.
+portable WASM libraries, release reproduction and independent reviews. Code **`4845efe`**
+is pushed to main; its hosted Windows/Linux CI is running and not yet verified complete.
 
 All seven zero/one/two-support loadouts from Brutality I, Heavy Swing and Rapid Attacks I
 compose with 105 class/tree choices and supplied normal weapons. Package schema **4** and
@@ -113,7 +113,7 @@ source revision, retained tree bytes and independent goldens.
 | Release reproduction | Reviewed full **2,940-state** search admits **1,884**, rejects **1,056** requirements and spends **1,886** attempts. Serial/four-worker feasible/infeasible archives and fresh finalists match. Winner: `class/10/asc/Monk3/entrance/10364/ascendancy-passive/24475/wooden-q20/brutality_i+rapid_attacks_i`, **19.02301632 DPS**, **7% chaos resistance**. Custom numeric support/resistance data replays with matching identity/trust; infeasible and over-budget cases do not export. Evidence: `runs/support-release-check/summary.json`. |
 | Artifact identities | Reference release executable `baf47ab23c18deda78ec71a6023aea78fb804c495a0ceffc5d0164a22ef9a204`; native-only executable `a5939c124e2c0d4e0d56ab85ba05efc9b268a1b08dd1dcf79479618efac8b943`; extraction evidence `6acd477bed98419ab78bb3e8b500eecb27e79d7561e091728e4fb15a5242a546`; custom package `c11cd406a78fa70431633bebe3c42bd18a87de32f6f48e92cd4e6bb2bebee91d`. |
 | Static audit | Strict UTF-8, local file links and heading links pass across 31 Markdown files. Nine unrelated data sections, all old Mace fields and Brutality values/identities are unchanged. Dependency manifests, source pin/full snapshot/tree, supplied originals and six goldens are unchanged. Evidence: `runs/support-static-audit.json`. |
-| Publication | Local validation complete. Pending commit/push and exact code-commit hosted CI status. |
+| Publication | Code **`4845efe8b2829fe3ca6815f1054a8bde850623a8`** is pushed to main. [Windows/Linux CI run 34188064859](https://github.com/Azaril/poe-optimizer/actions/runs/34188064859) is **in progress**; no hosted success is claimed yet. Snapshots: `runs/support-main-ci.json`, `runs/support-main-ci-jobs.json`. This following publication update changes documentation only. |
 
 See [support loadouts](support-loadouts.md) for the configuration/API migration and
 [the example](../examples/mace-support-search.json). These are bounded diagnostic
