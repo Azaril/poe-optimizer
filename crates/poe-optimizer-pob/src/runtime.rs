@@ -15,6 +15,9 @@ use thiserror::Error;
 pub const UPSTREAM_REVISION: &str = "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4";
 const HOST: &str = include_str!("host.lua");
 const SNAPSHOT: &str = include_str!("snapshot.lua");
+const INITIALIZATION: &str = include_str!("initialization.lua");
+// Operational guard, not a game-data count. The supervisor still owns the hard deadline.
+const MAX_ITEM_DATABASE_RESUMES: usize = 16_384;
 
 #[derive(Debug, Error)]
 pub enum RuntimeError {
@@ -175,6 +178,10 @@ pub fn evaluate_with_options(
         .set_name("@HeadlessWrapper.lua")
         .exec()?;
     check_prompt(&lua)?;
+    lua.load(INITIALIZATION)
+        .set_name("@optimizer-initialization.lua")
+        .call::<()>(MAX_ITEM_DATABASE_RESUMES)?;
+    check_prompt(&lua)?;
     let load: Function = globals.get("loadBuildFromXML")?;
     load.call::<()>((xml, "optimizer-input"))?;
     check_prompt(&lua)?;
@@ -236,6 +243,7 @@ pub fn evaluate_with_options(
     hash.update(include_str!("runtime.rs"));
     hash.update(poe_optimizer_data::implementation_fingerprint());
     hash.update(HOST);
+    hash.update(INITIALIZATION);
     hash.update(SNAPSHOT);
     hash.update(include_str!("options.lua"));
     hash.update(include_str!("context.lua"));
@@ -354,6 +362,84 @@ fn check_prompt(lua: &Lua) -> Result<(), RuntimeError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn item_initialization_completes_only_the_original_loading_callback() {
+        let lua = Lua::new();
+        lua.load(
+            r#"
+            launch = {}
+            main = { uniqueDB = {loading = true}, rareDB = {loading = true}, onFrameFuncs = {} }
+            local calls = 0
+            main.onFrameFuncs.Unrelated = function() error("Unrelated frame callback executed") end
+            main.onFrameFuncs.LoadItems = function()
+                calls = calls + 1
+                if calls == 1 then main.uniqueDB.loading = nil end
+                if calls == 3 then
+                    main.rareDB.loading = nil
+                    main.onFrameFuncs.LoadItems = nil
+                end
+                main.calls = calls
+            end
+            "#,
+        )
+        .exec()
+        .unwrap();
+        lua.load(INITIALIZATION).call::<()>(3).unwrap();
+        assert_eq!(lua.load("return main.calls").eval::<usize>().unwrap(), 3);
+        // Already initialized hosts require no extra callback or mutation.
+        lua.load(INITIALIZATION).call::<()>(0).unwrap();
+        assert_eq!(lua.load("return main.calls").eval::<usize>().unwrap(), 3);
+    }
+
+    #[test]
+    fn item_initialization_propagates_errors_and_rejects_incomplete_or_stalled_tasks() {
+        for (setup, limit, expected) in [
+            (
+                "main.onFrameFuncs.LoadItems = nil",
+                3,
+                "ended before databases were ready",
+            ),
+            (
+                "main.onFrameFuncs.LoadItems = function() main.calls = main.calls + 1 end",
+                3,
+                "exceeded callback limit",
+            ),
+            (
+                "main.onFrameFuncs.LoadItems = function() error('original loading error') end",
+                3,
+                "original loading error",
+            ),
+            (
+                "main.onFrameFuncs.LoadItems = function() launch.promptMsg = 'initialization prompt' end",
+                3,
+                "initialization prompt",
+            ),
+            ("main.uniqueDB = nil", 3, "Missing PoB item databases"),
+            (
+                "main.onFrameFuncs = nil",
+                3,
+                "Missing PoB initialization callbacks",
+            ),
+        ] {
+            let lua = Lua::new();
+            lua.load(
+                "launch = {}; main = {calls = 0, uniqueDB = {loading = true}, \
+                 rareDB = {loading = true}, onFrameFuncs = {}}",
+            )
+            .exec()
+            .unwrap();
+            lua.load(setup).exec().unwrap();
+            let error = lua.load(INITIALIZATION).call::<()>(limit).unwrap_err();
+            assert!(error.to_string().contains(expected), "{error}");
+            if expected == "exceeded callback limit" {
+                assert_eq!(
+                    lua.load("return main.calls").eval::<usize>().unwrap(),
+                    limit
+                );
+            }
+        }
+    }
 
     #[test]
     fn paths_preserve_unc_and_reject_writes_outside_scratch() {

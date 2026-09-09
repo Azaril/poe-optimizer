@@ -57,6 +57,17 @@ launch:OnInit()
 launch:OnFrame()
 assert(not launch.promptMsg, launch.promptMsg)
 local app = assert(launch.main)
+-- Initialization frames time-slice item construction. Run the upstream loading
+-- task to completion before any fixture item can consult its requirement cache.
+local loading_calls = 0
+while app.onFrameFuncs.LoadItems do
+    assert(loading_calls < 16384, "Reference item database loading exceeded callback limit")
+    loading_calls = loading_calls + 1
+    app.onFrameFuncs.LoadItems()
+    assert(not launch.promptMsg, launch.promptMsg)
+end
+assert(not app.uniqueDB.loading and not app.rareDB.loading,
+    "Reference item databases are not ready")
 app:SetMode("BUILD", false, "independent-calibration", xml_text)
 launch:OnFrame()
 assert(not launch.promptMsg, launch.promptMsg)

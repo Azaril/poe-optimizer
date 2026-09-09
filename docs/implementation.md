@@ -2,12 +2,21 @@
 
 Last updated: 2026-09-09
 
-Current work: **native base flask/charm buff loading**, implemented and locally validated
+Current work: **reference item-database readiness**, a confirmed correctness repair in
+`runs/reference-readiness-worktree` on branch `codex/reference-readiness`, based on the
+published combined item-loading branch. The original loading task now finishes before
+caller XML import; focused helper checks and independent calibration refresh pass, with
+the public-runtime regression and fresh five-build corpus comparison pass. See [the readiness checkpoint](#reference-item-database-readiness-checkpoint).
+
+Preceding work: **native base flask/charm buff loading**, implemented and locally validated
 in `runs/base-buffs-worktree` on branch `codex/base-buffs`. The preceding defence-header
 slice is included. Both use caller inputs and injected definitions; full native build
 coverage remains unchanged. Focused source/import/CLI/portable and fresh five-build gates
-pass. The combined implementation branch is being published to start clean CI while main
-retains the parser checkpoint. Integrate after its hosted validation is inspected.
+pass. The combined implementation branch is published as
+`8781c7c959ac548ea74d364f0207cb0e614633dc`; its
+[Windows/Linux CI run 34383255010](https://github.com/Azaril/poe-optimizer/actions/runs/34383255010)
+has passed formatting and lint and is running tests. Main retains the parser checkpoint.
+Integrate after its hosted validation is inspected.
 See [the buff checkpoint](#base-flaskcharm-buffs-checkpoint) and
 [the defence-header checkpoint](#defence-header-data-and-state-checkpoint).
 
@@ -562,7 +571,7 @@ native loading.
 | CLI | All ten native-only inspection tests pass; the new injected-buff contract also passes with PoB enabled. Strict CLI Clippy passes in both feature configurations |
 | Portable/static checks | Five WASM libraries compile; native runtime dependencies exclude PoB/Lua; workspace formatting and documentation link checks pass |
 | Fresh caller corpus | All five imports, inspections and reference evaluations succeed. All 110 reference measurements, full backend/context/coverage/warnings/raw actors, imported XML and 834 source instructions are preserved. All five native rejection reasons are unchanged |
-| Publication | Combined defence/buff implementation branch is ready for hosted CI; main still carries parser repair `15525b1e`. Do not report pending hosted validation or full native build coverage as complete |
+| Publication | Combined defence/buff branch published as `8781c7c959ac548ea74d364f0207cb0e614633dc`; [CI 34383255010](https://github.com/Azaril/poe-optimizer/actions/runs/34383255010) has passed formatting/lint on both platforms and is running tests. Main still carries parser repair `15525b1e`. Hosted validation remains pending |
 
 Exactly 15 generated buff rows advance the prior 15 buff stops: seven to assembly and eight
 to unique lookup. The other 101 complete loading reports remain exact. Final first stops are
@@ -588,9 +597,9 @@ Evidence: `runs/base-buffs-oracle-final.json`, `runs/base-buffs-import-targets-f
 
 ### Resume after hosted validation
 
-parser_data monitors parser-repair CI 34381171078 and retains prior-run 34379251966 evidence.
-Root owns the combined item-loading branch publication, documentation and eventual main
-integration. Preserve the final binary/data fingerprints and all passing local results;
+parser_data monitors combined-branch CI 34383255010 and parser-repair CI 34381171078,
+and retains prior-run 34379251966 evidence. Root owns documentation and eventual main
+integration of published branch `codex/base-buffs` at `8781c7c`. Preserve the final binary/data fingerprints and all passing local results;
 no broad local suite needs restarting. Keep any new CI failure and its precise repair as
 separate evidence.
 
@@ -601,6 +610,84 @@ already-built uniques and source iteration order is not guaranteed by sorted cat
 Read the upcoming `runs/base-buffs-next-unique-audit.md` before choosing an implementation
 slice. Stateful modifier parsing, callbacks and full assembly remain separate work; do not
 silently fill requirements or numerical effects from metadata recognition.
+
+The phase-only runtime probe progressed to a confirmed reference correctness defect;
+see the following checkpoint. Unique lookup implementation must use a completed database,
+not treat a still-loading absence as a missing unique.
+
+## Reference item-database readiness checkpoint
+
+Implemented in `runs/reference-readiness-worktree`, branch `codex/reference-readiness`,
+based on published `8781c7c`. This changes optional PoB reference initialization, not the
+native hot loop or build admission. No B3 model change is included.
+
+The ordinary host imported caller items while the upstream `LoadItems` coroutine still
+held `uniqueDB.loading = true`. A phase-only probe observed 15, 60 and 113 database entries
+after initialization, import and fresh calculation. Lookup tracing and a separate control
+that completed the original callback confirmed an observable requirement error: a copy
+of corpus line three with only Item 10's authored `LevelReq: 49` removed exported level 40
+for Lavianga's Spirits. Completing the database before import exported 49. Recalculating
+the prematurely imported item did not repair its cached requirements. The unchanged
+production executable reproduced level 40, so the finding does not rely solely on an
+instrumented runtime. Caller input and committed fixture/golden bytes are preserved.
+
+The adapter now runs the original `main.onFrameFuncs.LoadItems` callback to completion
+before `loadBuildFromXML`, retaining original prototype construction, iteration and parser
+cache behavior. Both unique and rare database loading flags must be cleared. Errors and
+prompts propagate; a 16,384-callback operational guard supplements the existing supervised
+process deadline. Unrelated frame callbacks do not run during this readiness step. The
+initialization script is included in the adapter fingerprint; old evidence identities stay
+unchanged. This also prevents rare-prototype parser initialization from interleaving with
+caller import.
+
+The independent bundled-DLL calibration harnesses now finish the same upstream loading
+task before fixture import, using their own bootstrap code. Fresh outputs retain their
+new harness provenance; the six original committed goldens remain unchanged.
+
+| Gate | Current result |
+| --- | --- |
+| Host helper contracts | Two tests pass, covering completion, already-ready state, original error/prompt propagation, missing state, premature completion and bounded stalls |
+| Static checks | Strict PoB all-target Clippy, final regression-target Clippy, workspace formatting and 46-document/496-link audit pass |
+| Independent reference refresh | Both standalone generators succeed. All six fresh outputs match every non-provenance field of the original goldens, including 138 numeric measurements; input hashes match |
+| Production regression | Self-contained public-runtime parent test passes; its intentionally ignored child helper executes. Caller items export required levels 49 without an authored level and 60 with a higher authored level. Both CLI calibration targets pass, covering all six Spark/Mace fixtures |
+| Caller breadth | All five fresh reference evaluations pass: 110 measurements, 116 source-loading item reports, all 834 source instructions and full source projections remain exact. All five native full-build rejections remain explicit |
+| Publication | Repair is local; combined item-loading branch CI 34383255010 remains separate and pending |
+
+Evidence: `runs/unique-readiness-phase-1.json`,
+`runs/unique-readiness-witness-phase-1.json`,
+`runs/unique-readiness-witness-lookup-1.json`,
+`runs/unique-readiness-witness-drain-lookup-1.json`,
+`runs/unique-readiness-witness-provenance.json`,
+`runs/unique-readiness-production.export.xml`,
+`runs/reference-readiness-helper-tests.log`,
+`runs/reference-readiness-lib-clippy.log` and
+`runs/reference-readiness-independent-final.json`,
+`runs/reference-readiness-all-targets-clippy.log`,
+`runs/reference-readiness-docs-audit.json`,
+`runs/reference-readiness-calibration-tests.log`,
+`runs/reference-readiness-cli-freeze.json` and
+`runs/reference-readiness-corpus-final.json`,
+`runs/reference-readiness-cli-validation-final.json` and
+`runs/reference-readiness-oracle-final.md`/`.json`.
+Independent callback-lifecycle review found no blocker. All local validation sessions
+are terminal. The public regression observes exported requirements; internal natural-level
+observations remain separately labeled probe evidence.
+
+The repaired corpus changes its adapter fingerprint from
+`c129b689c5de693b184fb40e130abea2e7f1078bbb4676a6fb9dade6a69bbe67` to
+`ea91cc1dd287936ceee4e3c2c1a686164adfc179013f112639283894f81c126b`.
+Diagnostics now record completion of both databases; startup timing, elapsed time and XML
+child order can differ. Exported XML trees compare equal when disregarding child order;
+no byte-identical export claim is made. The runner exits 1 only for the five unchanged
+native whole-build rejections. Original corpus and frozen binary/data fingerprints match.
+
+Resume: review hosted failures if any, and integrate the validated item-loading and readiness
+checkpoints while preserving main's resume edits. The read-only next-slice proposal is
+`runs/unique-native-seam-audit.md`: exact native lookup over injected, completed requirement
+facts needs explicit source identity/readiness, canonical keys, fallback policy and
+nil-preserving requirement semantics. Raw prototypes alone are insufficient; full native
+prototype construction remains separate unfinished work. Do not infer support for unique
+numerical effects from requirement lookup.
 
 ## General item formatting - locally validated checkpoint
 

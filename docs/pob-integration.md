@@ -25,7 +25,13 @@ scratch storage address the startup and lifetime issues found during implementat
 PoB can also load a fresh default character when Build/Tree data is absent, so evaluator
 preflight requires explicit supported identity and rejects duplicate core sections.
 Container-only import remains lossless and separate from these evaluator restrictions.
-Current tests and remaining acceptance work are in the [implementation record](implementation.md).
+The host completes the original item-database loading task before importing XML. A
+headless frame is only a time slice: unique requirements can otherwise be read from a
+partially populated database and remain wrong even after fresh calculation. Both unique
+and rare databases must finish loading, with original callback errors propagated and the
+supervisor retaining the hard deadline. Initialization behavior is part of the adapter
+fingerprint. Current tests and remaining acceptance work are in the
+[implementation record](implementation.md#reference-item-database-readiness-checkpoint).
 
 ## Verified source facts
 
