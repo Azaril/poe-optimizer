@@ -207,8 +207,126 @@ pub fn compare_armour_data(
     }
 }
 
+/// Source-derived portable affix evidence for optional corpus ledgers. The final
+/// comparison validates every table key, not merely the ipairs prefix.
+#[allow(dead_code)] // Used by the optional corpus ledger, not every shared-harness target.
+pub fn source_affixes(table: Table) -> ItemAffixList {
+    let limit = match table.get::<Value>("limit").unwrap() {
+        Value::Nil => None,
+        value => Some(number(value)),
+    };
+    let entries = table
+        .clone()
+        .sequence_values::<Table>()
+        .map(|row| {
+            let row = row.unwrap();
+            let Value::String(id) = row.get::<Value>("modId").unwrap() else {
+                panic!("source affix ID is not a string");
+            };
+            let range = match row.get::<Value>("range").unwrap() {
+                Value::Nil => None,
+                Value::Table(values) => Some(ItemAffixRange::Independent(
+                    values
+                        .sequence_values::<Value>()
+                        .map(|n| number(n.unwrap()))
+                        .collect(),
+                )),
+                value => Some(ItemAffixRange::Scalar(number(value))),
+            };
+            let fractured = match row.get::<Value>("fractured").unwrap() {
+                Value::Nil => None,
+                Value::Boolean(value) => Some(value),
+                value => panic!("source fractured type {value:?}"),
+            };
+            ItemAffix {
+                mod_id: id.to_str().unwrap().to_owned(),
+                range,
+                fractured,
+            }
+        })
+        .collect();
+    let result = ItemAffixList { entries, limit };
+    compare_affixes(&result, table, "complete source affix conversion");
+    result
+}
+
+/// Exact affix shape, including absent values, all rows, and array ranges.
+pub fn compare_affixes(native: &ItemAffixList, source: Table, label: &str) {
+    let fields = source
+        .clone()
+        .pairs::<Value, Value>()
+        .map(|r| r.unwrap().0)
+        .collect::<Vec<_>>();
+    assert_eq!(
+        fields.len(),
+        native.entries.len() + usize::from(native.limit.is_some()),
+        "{label} complete key count"
+    );
+    assert_number(
+        native.limit.unwrap_or(ItemNumber::Nil),
+        number(source.get("limit").unwrap()),
+        &format!("{label}.limit"),
+    );
+    for (index, affix) in native.entries.iter().enumerate() {
+        let row = source.get::<Table>(index + 1).unwrap();
+        assert_eq!(
+            row.clone().pairs::<Value, Value>().count(),
+            1 + usize::from(affix.range.is_some()) + usize::from(affix.fractured.is_some()),
+            "{label}[{index}] complete row keys"
+        );
+        let Value::String(mod_id) = row.get::<Value>("modId").unwrap() else {
+            panic!("{label}[{index}].modId must retain original string type");
+        };
+        assert_eq!(
+            mod_id.to_str().unwrap().as_ref(),
+            affix.mod_id,
+            "{label}[{index}].modId"
+        );
+        let fractured = match row.get::<Value>("fractured").unwrap() {
+            Value::Nil => None,
+            Value::Boolean(value) => Some(value),
+            value => panic!("{label}[{index}].fractured unexpected type {value:?}"),
+        };
+        assert_eq!(fractured, affix.fractured, "{label}[{index}].fractured");
+        let expected = row.get::<Value>("range").unwrap();
+        match (&affix.range, expected) {
+            (None, Value::Nil) => {}
+            (Some(ItemAffixRange::Scalar(value)), expected) => {
+                assert_number(*value, number(expected), &format!("{label}[{index}].range"))
+            }
+            (Some(ItemAffixRange::Independent(values)), Value::Table(expected)) => {
+                assert_eq!(
+                    expected.clone().pairs::<Value, Value>().count(),
+                    values.len(),
+                    "{label} all independent ranges"
+                );
+                for (index, value) in values.iter().enumerate() {
+                    assert_number(
+                        *value,
+                        number(expected.get(index + 1).unwrap()),
+                        "independent affix range",
+                    );
+                }
+            }
+            (actual, expected) => {
+                panic!("{label}[{index}].range shape: native={actual:?} source={expected:?}")
+            }
+        }
+    }
+}
+
 pub fn compare_state(native: &ItemState, source: &Table) {
     compare_armour_data(&native.armour_data, source.get("armourData").unwrap());
+    compare_affixes(
+        &native.prefixes,
+        source.get("prefixes").unwrap(),
+        "prefixes",
+    );
+    compare_affixes(
+        &native.suffixes,
+        source.get("suffixes").unwrap(),
+        "suffixes",
+    );
     for (key, value) in [
         ("raw", native.raw.as_str()),
         ("name", native.name.as_str()),

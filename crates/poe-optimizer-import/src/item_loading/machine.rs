@@ -1,6 +1,10 @@
+use super::affixes::{AffixError, AffixPrograms};
 use super::{ItemNumber, LineSelection, VariantState, syntax};
-use poe_optimizer_data::item_loading::{ItemLoadingCatalog, ItemMetadataTable, ItemMetadataValue};
+use poe_optimizer_data::item_loading::{
+    ItemAffixLookup, ItemAffixSide, ItemLoadingCatalog, ItemMetadataTable, ItemMetadataValue,
+};
 use poe_optimizer_data::item_scalability::CatalystScalingData;
+use poe_optimizer_engine::lua_pattern::{MatchBudget, PatternError};
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 pub const MAX_ITEM_LOADING_TEXT: usize = 1024 * 1024;
@@ -195,6 +199,26 @@ impl BaseBuffLines {
             || self.charm.as_mut().is_some_and(|set| set.remove(line))
     }
 }
+/// A present empty independent range is distinct from an absent scalar range.
+#[derive(Debug, Clone, PartialEq, Serialize)]
+#[serde(tag = "kind", content = "value", rename_all = "snake_case")]
+pub enum ItemAffixRange {
+    Scalar(ItemNumber),
+    Independent(Vec<ItemNumber>),
+}
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct ItemAffix {
+    pub mod_id: String,
+    pub range: Option<ItemAffixRange>,
+    pub fractured: Option<bool>,
+}
+/// ParseRaw resets both lists, including limits. Rows beyond the active limit
+/// remain authored loading state and are not silently truncated.
+#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+pub struct ItemAffixList {
+    pub entries: Vec<ItemAffix>,
+    pub limit: Option<ItemNumber>,
+}
 #[derive(Debug, Clone, Serialize)]
 pub struct ItemState {
     pub raw: String,
@@ -212,6 +236,8 @@ pub struct ItemState {
     pub armour_data: Option<BTreeMap<String, ItemNumber>>,
     pub variants: VariantState,
     pub requirements: BTreeMap<String, ItemNumber>,
+    pub prefixes: ItemAffixList,
+    pub suffixes: ItemAffixList,
     pub sockets: Vec<u32>,
     pub runes: Vec<String>,
     pub item_socket_count: usize,
@@ -245,6 +271,8 @@ impl Default for ItemState {
             armour_data: None,
             variants: VariantState::default(),
             requirements: BTreeMap::new(),
+            prefixes: ItemAffixList::default(),
+            suffixes: ItemAffixList::default(),
             sockets: Vec::new(),
             runes: Vec::new(),
             item_socket_count: 0,
@@ -272,6 +300,8 @@ pub struct ItemLoadMachine<'a> {
     status: ItemLoadStatus,
     pending: Option<PendingDependency>,
     work_bytes: usize,
+    affix_programs: Option<AffixPrograms>,
+    affix_budget: MatchBudget,
 }
 #[derive(Clone, Copy, PartialEq)]
 enum GameStage {
@@ -289,9 +319,14 @@ impl<'a> ItemLoadMachine<'a> {
             status: ItemLoadStatus::NoBase,
             pending: None,
             work_bytes: 0,
+            affix_programs: None,
+            affix_budget: MatchBudget::default(),
         };
         machine.reset("");
-        machine.number("affixLimit", ItemNumber::new(0.0));
+        machine.number(
+            "affixLimit",
+            ItemNumber::new(catalog.policy().affix_loading.reconcile.initial_limit),
+        );
         machine.state.assembly_calls = 1;
         machine
     }
@@ -443,6 +478,8 @@ impl<'a> ItemLoadMachine<'a> {
         self.state.item_socket_count = 0;
         self.state.jewel_socket_count = 0;
         self.state.requirements.clear();
+        self.state.prefixes = ItemAffixList::default();
+        self.state.suffixes = ItemAffixList::default();
         for k in ["runeLevel", "str", "dex", "int"] {
             self.state
                 .requirements
@@ -825,28 +862,25 @@ impl<'a> ItemLoadMachine<'a> {
                         outcome = result;
                     }
                 }
-                if !flags.contains("disabled") {
-                    self.apply_flags_policy("postparse_line_effects", &line.to_ascii_lowercase());
+                let lower = if flags.contains("disabled") {
+                    String::new()
+                } else {
+                    line.to_ascii_lowercase()
+                };
+                if !self.apply_postparse_effects(&lower, line_index)? {
+                    return Ok(());
                 }
-                if !flags.contains("disabled") {
-                    let lower = line.to_ascii_lowercase();
-                    if [
-                        " prefix modifier allowed",
-                        " prefix modifiers allowed",
-                        " suffix modifier allowed",
-                        " suffix modifiers allowed",
-                    ]
-                    .iter()
-                    .any(|token| lower.contains(token))
-                    {
-                        self.stop(
-                            DependencyKind::CraftedAffixes,
-                            Some(line_index),
-                            "prefix/suffix limit side effects are not represented",
-                        )?;
-                        return Ok(());
-                    }
-                    if lower.starts_with("this item gains bonuses from socketed items as though it was")||lower.starts_with("this item gains bonuses from socketed soul cores as though it was also") {self.stop(DependencyKind::RuneReconstruction,Some(line_index),"socketed augment type override/extra type requires rune reconstruction")?;return Ok(());}
+                if lower.starts_with("this item gains bonuses from socketed items as though it was")
+                    || lower.starts_with(
+                        "this item gains bonuses from socketed soul cores as though it was also",
+                    )
+                {
+                    self.stop(
+                        DependencyKind::RuneReconstruction,
+                        Some(line_index),
+                        "socketed augment type override/extra type requires rune reconstruction",
+                    )?;
+                    return Ok(());
                 }
                 if !flags.contains("disabled") && is_magnitude_line(&line) {
                     self.stop(DependencyKind::ModifierMagnitudes,Some(line_index),"modifier magnitude records require ordered reparsing and unique-database dependencies")?;
@@ -994,6 +1028,39 @@ impl<'a> ItemLoadMachine<'a> {
             // parsed as modifier text after the header operation.
             return Ok(Header::Known);
         }
+        if let Some(side) = self.catalog.affix_header(name) {
+            if !self.prepare_affix_programs(Some(line))? {
+                return Ok(Header::Stop);
+            }
+            let result = self
+                .affix_programs
+                .as_ref()
+                .expect("prepared affix programs")
+                .header(
+                    value,
+                    &self.catalog.policy().affix_loading,
+                    self.catalog.policy().default_affix_quality,
+                    &mut self.affix_budget,
+                );
+            let affix = match result {
+                Ok(value) => value,
+                Err(error) => {
+                    self.reject_affix(error, Some(line))?;
+                    return Ok(Header::Stop);
+                }
+            };
+            let ranges = match &affix.range {
+                Some(ItemAffixRange::Independent(v)) => v.len(),
+                _ => 1,
+            };
+            self.charge(affix.mod_id.len() + ranges * std::mem::size_of::<ItemNumber>() + 128)?;
+            let entries = &mut self.affix_list_mut(side).entries;
+            if entries.len() >= MAX_ITEM_LOADING_LINES {
+                return Err(ItemLoadError("affix row count bound".into()));
+            }
+            entries.push(affix);
+            return Ok(Header::Known);
+        }
         match name {
             "Implicits" => {
                 return Ok(Header::Implicits(
@@ -1021,10 +1088,6 @@ impl<'a> ItemLoadMachine<'a> {
             "Level" => {
                 *imported = number_option(syntax::spec_to_number(value));
                 return Ok(Header::Known);
-            }
-            "Prefix" | "Suffix" => {
-                self.stop(DependencyKind::CraftedAffixes,Some(line),"authored affix IDs and independent ranges require complete crafting dependencies")?;
-                return Ok(Header::Stop);
             }
             "Cluster Jewel Skill" | "Cluster Jewel Node Count" => {
                 self.stop(
@@ -1744,13 +1807,7 @@ impl<'a> ItemLoadMachine<'a> {
                 .requirements
                 .insert("level".into(), ItemNumber::new(level));
         }
-        self.number("affixLimit", ItemNumber::new(0.0));
-        if self.flag("crafted") {
-            self.stop(
-                DependencyKind::CraftedAffixes,
-                None,
-                "crafted affix reconciliation requires complete source affix dependencies",
-            )?;
+        if !self.reconcile_affixes()? {
             return Ok(());
         }
         self.state.variants.finish_legacy();
@@ -1758,6 +1815,213 @@ impl<'a> ItemLoadMachine<'a> {
             self.number("quality", ItemNumber::new(0.0));
         }
         self.assemble(false, provider)
+    }
+    fn affix_list_mut(&mut self, side: ItemAffixSide) -> &mut ItemAffixList {
+        match side {
+            ItemAffixSide::Prefix => &mut self.state.prefixes,
+            ItemAffixSide::Suffix => &mut self.state.suffixes,
+        }
+    }
+    fn reject_affix(
+        &mut self,
+        error: AffixError,
+        line: Option<usize>,
+    ) -> Result<(), ItemLoadError> {
+        match error {
+            AffixError::Unsupported(message) => {
+                self.stop(DependencyKind::CraftedAffixes, line, message)
+            }
+            AffixError::Source(_) | AffixError::Pattern(PatternError::Source(_)) => {
+                self.reject_dependency(error.to_string(), true)
+            }
+            AffixError::Resource(_) | AffixError::Pattern(PatternError::Resource(_)) => {
+                self.reject_dependency(error.to_string(), false)
+            }
+        }
+    }
+    fn prepare_affix_programs(&mut self, line: Option<usize>) -> Result<bool, ItemLoadError> {
+        if self.affix_programs.is_none() {
+            match AffixPrograms::compile(&self.catalog.policy().affix_loading) {
+                Ok(programs) => {
+                    self.charge(programs.compiled_bytes)?;
+                    self.affix_programs = Some(programs);
+                }
+                Err(error) => {
+                    self.reject_affix(error, line)?;
+                    return Ok(false);
+                }
+            }
+        }
+        Ok(true)
+    }
+    /// Original if/elseif ordering is observable when injected patterns overlap
+    /// an exact effect, or when a disabled line becomes the empty string.
+    fn apply_postparse_effects(&mut self, lower: &str, line: usize) -> Result<bool, ItemLoadError> {
+        if self
+            .catalog
+            .policy()
+            .affix_loading
+            .preceding_line_effects
+            .iter()
+            .any(|text| text == lower)
+        {
+            self.apply_flags_policy("postparse_line_effects", lower);
+            return Ok(true);
+        }
+        if !self.prepare_affix_programs(Some(line))? {
+            return Ok(false);
+        }
+        let default = self.catalog.policy().affix_loading.limit_default;
+        let result = self
+            .affix_programs
+            .as_ref()
+            .expect("prepared affix programs")
+            .limit_effect(lower, default, &mut self.affix_budget);
+        match result {
+            Ok(Some((side, positive, negative))) => {
+                let list = self.affix_list_mut(side);
+                list.limit = Some(ItemNumber::new(
+                    list.limit.and_then(ItemNumber::value).unwrap_or(default) + positive - negative,
+                ));
+            }
+            Ok(None) => {
+                self.apply_flags_policy("postparse_line_effects", lower);
+            }
+            Err(error) => {
+                self.reject_affix(error, Some(line))?;
+                return Ok(false);
+            }
+        }
+        Ok(true)
+    }
+    fn reconcile_affixes(&mut self) -> Result<bool, ItemLoadError> {
+        let catalog = self.catalog;
+        let policy = &catalog.policy().affix_loading;
+        let rules = &policy.reconcile;
+        self.number("affixLimit", ItemNumber::new(rules.initial_limit));
+        if !self.flag("crafted") {
+            return Ok(true);
+        }
+        let table = self.txt("affixes_table").map(str::to_owned);
+        if table
+            .as_deref()
+            .and_then(|name| catalog.modifier_table(name))
+            .is_none()
+        {
+            self.boolean("crafted", false);
+            return Ok(true);
+        }
+        let has_limits = self.state.prefixes.limit.is_some() || self.state.suffixes.limit.is_some();
+        let (mut limit, side_base, side_max) = if self.state.rarity == rules.magic_rarity {
+            (
+                rules.magic_limit,
+                rules.magic_side_base,
+                rules.magic_side_max,
+            )
+        } else if self.state.rarity == rules.rare_rarity {
+            let jewel = if self.state.item_type.as_deref() == Some(&rules.jewel_type) {
+                let Some(base) = self.base() else {
+                    return self.reject_dependency(
+                        "attempt to index absent base during crafted jewel reconciliation".into(),
+                        true,
+                    );
+                };
+                !(base.sub_type() == Some(&rules.corrupted_jewel_subtype) && self.flag("corrupted"))
+            } else {
+                false
+            };
+            let limit = if jewel {
+                rules.rare_jewel_limit
+            } else {
+                rules.rare_limit
+            };
+            // Source assigns the rare total before applying either side limit.
+            self.number("affixLimit", ItemNumber::new(limit));
+            (limit, limit / rules.side_divisor, limit)
+        } else {
+            self.boolean("crafted", false);
+            return Ok(true);
+        };
+        if has_limits {
+            for list in [&mut self.state.prefixes, &mut self.state.suffixes] {
+                let value = list
+                    .limit
+                    .and_then(ItemNumber::value)
+                    .unwrap_or(policy.limit_default);
+                list.limit = Some(ItemNumber::new(syntax::lua_max(
+                    syntax::lua_min(value + side_base, side_max),
+                    rules.minimum_limit,
+                )));
+            }
+            limit = self
+                .state
+                .prefixes
+                .limit
+                .and_then(ItemNumber::value)
+                .expect("assigned prefix limit")
+                + self
+                    .state
+                    .suffixes
+                    .limit
+                    .and_then(ItemNumber::value)
+                    .expect("assigned suffix limit");
+        }
+        self.number("affixLimit", ItemNumber::new(limit));
+        // Original source traverses prefixes before suffixes and retains rows
+        // beyond the active count. A pending lookup preserves that exact prefix.
+        for side in [ItemAffixSide::Prefix, ItemAffixSide::Suffix] {
+            let active = self
+                .affix_list_mut(side)
+                .limit
+                .and_then(ItemNumber::value)
+                .unwrap_or(limit / rules.side_divisor);
+            // Lua numeric for loops take no iterations for NaN or limits < 1.
+            if active.is_nan() || active < 1.0 {
+                continue;
+            }
+            if !active.is_finite() || active.floor() > MAX_ITEM_LOADING_LINES as f64 {
+                return Err(ItemLoadError("crafted affix active row bound".into()));
+            }
+            for index in 0..active.floor() as usize {
+                if index >= self.affix_list_mut(side).entries.len() {
+                    self.charge(policy.none_mod_id.len() + 128)?;
+                    self.affix_list_mut(side).entries.push(ItemAffix {
+                        mod_id: policy.none_mod_id.clone(),
+                        range: None,
+                        fractured: None,
+                    });
+                    continue;
+                }
+                let id = &self.affix_list_mut(side).entries[index].mod_id;
+                if id == &policy.none_mod_id {
+                    continue;
+                }
+                let replacement = match catalog.affix_lookup(table.as_deref(), id) {
+                    ItemAffixLookup::Exact { .. } => continue,
+                    ItemAffixLookup::Legacy { mod_id, .. } => mod_id,
+                    ItemAffixLookup::Missing => &policy.none_mod_id,
+                    ItemAffixLookup::Ambiguous => {
+                        self.stop(
+                            DependencyKind::CraftedAffixes,
+                            None,
+                            "legacy affix label has multiple source traversal candidates",
+                        )?;
+                        return Ok(false);
+                    }
+                    ItemAffixLookup::Unavailable => {
+                        self.stop(
+                            DependencyKind::CraftedAffixes,
+                            None,
+                            "affix fallback traversal or identity is not represented",
+                        )?;
+                        return Ok(false);
+                    }
+                };
+                self.charge(replacement.len())?;
+                self.affix_list_mut(side).entries[index].mod_id = replacement.to_owned();
+            }
+        }
+        Ok(true)
     }
     fn assemble(
         &mut self,

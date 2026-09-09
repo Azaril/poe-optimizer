@@ -6,6 +6,7 @@
 local originalNew = new
 local class = common.classes.Item
 local originalParse, originalBuild = class.ParseRaw, class.BuildModList
+local originalUniqueLookup = class.GetUniqueDBItem
 local originalParseMod = modLib.parseMod
 local originalFormat = itemLib.applyRange
 local state
@@ -21,7 +22,7 @@ end
 local function snapshot(item)
  local out={}
  for k,v in pairs(item)do if type(v)~='table' and type(v)~='function' then out[k]=v end end
- for _,k in ipairs({'rawLines','requirements','variantList','versionList','variantGroups','variantGroupSelections','sockets','runes','modMagnitudeMods','classRequirementModLines','weaponData','armourData','flaskData','jewelData','modList'})do out[k]=copy(item[k])end
+ for _,k in ipairs({'rawLines','requirements','prefixes','suffixes','variantList','versionList','variantGroups','variantGroupSelections','sockets','runes','modMagnitudeMods','classRequirementModLines','weaponData','armourData','flaskData','jewelData','modList'})do out[k]=copy(item[k])end
  for _,k in ipairs(lists)do out[k]=copy(item[k])end
  if item.affixes then for key,value in pairs(data.itemMods)do if value==item.affixes then out.selectedAffixesTableKey=key end end end
  out.hasBase=item.base~=nil
@@ -77,6 +78,15 @@ function class:BuildModList(...)
  event.after=snapshot(self)
  state.building=previous
  return result
+end
+-- Read-only phase witness: rune processing contains no prefix/suffix writes;
+-- GetUniqueDBItem precedes the original final crafted-affix reconciliation.
+function class:GetUniqueDBItem(...)
+ if state and state.current and not state.building then
+  assert(state.current.affix_before_reconcile==nil,'multiple source requirement-phase lookups')
+  state.current.affix_before_reconcile={prefixes=copy(self.prefixes),suffixes=copy(self.suffixes)}
+ end
+ return originalUniqueLookup(self,...)
 end
 function modLib.parseMod(text,combined,...)
  local mods,extra=originalParseMod(text,combined,...)

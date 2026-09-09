@@ -170,6 +170,39 @@ unavailable. Missing fields do not mean that a build has no items. Original XML 
 reports are retained when projection, loading or evaluation fails; changed input cannot be
 evaluated under the original build's identity.
 
+## Authored affix state
+
+`ItemState.prefixes` and `suffixes` each contain ordered entries and an optional limit.
+An entry retains its `mod_id`, optional scalar or independent range, and optional fractured
+marker. A present empty range array, numeric zero, signed zero, NaN and infinity remain
+separate from absence. Invalid numeric elements are omitted according to Lua insertion
+semantics; an invalid scalar uses the injected default except for the injected empty-slot
+identity. Both lists, including limits, reset on every `ParseRaw` call.
+
+Header names, Lua patterns, default quality, modifier-limit patterns, rarity roles, caps,
+empty-slot identity and legacy-label field come from the selected `item_loading` policy.
+The native pattern engine compiles the grammar with bounded storage and execution work.
+Source-derived reserved headers prevent an injected affix name from taking over another
+loading operation. Postparse effects retain source branch order: preceding exact effects,
+first matching prefix/suffix limit branch, then later exact effects. Disabled modifier lines
+supply the empty string to those branches.
+
+Reconciliation uses the retained selected modifier family, even after a later parse has
+lost its base. A missing family clears the crafted flag. Supported rarities determine the
+active side counts using the injected rules; entries beyond those counts remain intact.
+Empty active positions are filled, exact truthy IDs survive, unique legacy labels resolve,
+and definite misses become the empty-slot ID. Rewriting an ID preserves its range and
+fractured marker. Ambiguous legacy labels and unrepresented traversal behavior stop with
+an explicit dependency before changing the unresolved entry. Lookup does not choose a
+sorted winner for Lua `pairs` collisions.
+
+This is imported loading state. Original ordinary `ItemsTab.Load` does not call `Craft`,
+and native loading does not generate crafted modifier lines from these records. Complete
+item assembly and equipment legality remain separate dependencies. Lookup indices are
+immutable data-catalog preparation; native lookup requires neither Lua nor subprocesses.
+Per-item diagnostic pattern scratch and evidence are bounded independently of numerical
+candidate evaluation.
+
 ## Defence display state
 
 `ItemState.armour_data` distinguishes an absent table, an empty table and retained numeric

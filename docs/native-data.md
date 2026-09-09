@@ -210,6 +210,19 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Package schema **19**, semantics **`poe2-native-profiles-v19`**, advances
+`item_loading` to schema **3**. It injects authored affix header grammar, ordered limit
+branches, reserved header names/patterns, and reconciliation rules. All modifier families
+remain available to an immutable exact/legacy lookup index. Duplicate legacy labels,
+unrepresentable numeric identities and uncertain source traversal are explicit lookup
+outcomes, not arbitrary selections. See [authored affix state](item-source-and-loading.md#authored-affix-state).
+
+The package retains 27 sections. The 25 unrelated section values and digests are unchanged;
+`unique_requirements` retains all constructed facts and updates only its authenticated
+item-loading dependency. Editing that dependency in a custom package requires rebuilding
+this binding or marking unique requirements unavailable. No numerical build admission is
+implied by recognizing or reconciling an imported affix.
+
 Package schema **18**, semantics **`poe2-native-profiles-v18`**, adds
 `unique_requirements`: completed constructor facts, complete prototype accounting,
 construction dependencies and exact/runic lookup policy. The section has an explicit

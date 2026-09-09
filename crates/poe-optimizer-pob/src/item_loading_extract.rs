@@ -1,6 +1,6 @@
 //! Complete authenticated item-definition construction. No item/effect callbacks run.
 use crate::game_data::{GameDataExtractionError, error, hash, section};
-use mlua::{Function, HookTriggers, Lua, LuaOptions, StdLib, Table, Value, VmState};
+use mlua::{Function, HookTriggers, Lua, LuaOptions, LuaSerdeExt, StdLib, Table, Value, VmState};
 use poe_optimizer_data::item_loading::*;
 use std::collections::{BTreeMap, BTreeSet};
 use std::sync::{
@@ -231,6 +231,132 @@ fn defence_header_keys(
         }
     }
     Ok(keys)
+}
+const AFFIX_HEADER_START: &str = "\t\t\t\telseif specName == \"Prefix\" or";
+const AFFIX_HEADER_END: &str = "\t\t\t\telseif specName == \"Implicits\" then";
+const AFFIX_LIMIT_START: &str =
+    "\t\t\t\tif lineLower == \"implicit modifiers cannot be changed\" then";
+const AFFIX_LIMIT_END: &str = "\t\t\t\tmodLine.socketedAugmentTypeOverride =";
+const AFFIX_RECONCILE_START: &str = "\n\tself.affixLimit =";
+const AFFIX_RECONCILE_END: &str =
+    "\n\tif not self:UsesVersionedOrGroupedVariants() and self.variantList then";
+/// Read policy literals from complete authenticated source branches. Numeric
+/// operations remain native mechanisms; the source supplies all game values.
+fn affix_loading_policy(
+    lua: &Lua,
+    sources: &BTreeMap<String, String>,
+) -> Result<ItemAffixLoadingPolicy> {
+    let (headers, _) = chunk(sources, ITEM, AFFIX_HEADER_START, AFFIX_HEADER_END)?;
+    let (limits, _) = chunk(sources, ITEM, AFFIX_LIMIT_START, AFFIX_LIMIT_END)?;
+    let (reconcile, _) = chunk(sources, ITEM, AFFIX_RECONCILE_START, AFFIX_RECONCILE_END)?;
+    let all_headers = section(
+        source(sources, ITEM)?,
+        "\t\t\tlocal specName, specVal = parseItemSpec(line)",
+        "\t\t\tif line == \"Prefixes:\" then",
+    )?;
+    let scan: Function = lua.load(r#"return function(headers, limits, reconcile, all_headers)
+        local function capture(text, pattern)
+            local result = {text:match(pattern)}
+            assert(#result > 0, 'unsupported affix policy source shape: '..pattern)
+            return unpack(result)
+        end
+        local function number(text, pattern)
+            local value=tonumber(capture(text,pattern))
+            assert(value and value==value and value~=math.huge and value~=-math.huge, 'nonfinite affix policy number')
+            return value
+        end
+        local out={headers={},limit_rules={},preceding_line_effects={}}
+        local prefix=capture(headers,'local affixes = specName == "([^"]+)" and self%.prefixes or self%.suffixes')
+        local predicate=headers:match('([^\n]+)')
+        local count=0
+        for name in predicate:gmatch('specName == "([^"]+)"') do
+            assert(not out.headers[name], 'duplicate affix header')
+            out.headers[name]=(name==prefix and 'prefix' or 'suffix')
+            count=count+1
+        end
+        assert(count==2 and out.headers[prefix]=='prefix','unsupported affix header selector')
+        out.other_headers,out.other_header_patterns={},{}
+        local seen_headers,seen_patterns={},{}
+        for name in all_headers:gmatch('specName == "([^"]+)"') do
+            if not out.headers[name] and not seen_headers[name] then
+                out.other_headers[#out.other_headers+1]=name;seen_headers[name]=true
+            end
+        end
+        for pattern in all_headers:gmatch('specName:match%("([^"]+)"%)') do
+            if not seen_patterns[pattern] then
+                out.other_header_patterns[#out.other_header_patterns+1]=pattern;seen_patterns[pattern]=true
+            end
+        end
+        out.fractured_pattern=capture(headers,'local fractured = specVal:match%("([^"]+)"%) and true')
+        out.fractured_remove_pattern=capture(headers,'specVal = specVal:gsub%("([^"]+)", ""%)')
+        out.range_pattern=capture(headers,'local range, affix = specVal:match%("([^"]+)"%)')
+        out.range_separator=capture(headers,'range:find%("([^"]+)", 1, true%)')
+        out.range_value_pattern=capture(headers,'range:gmatch%("([^"]+)"%)')
+        out.none_mod_id=capture(headers,'%(affix or specVal%) ~= "([^"]+)"')
+        assert(headers:find('range = main.defaultItemAffixQuality',1,true),'changed affix quality default')
+        local pending
+        for line in (limits..'\n'):gmatch('(.-)\n') do
+            local pattern=line:match('elseif lineLower:match%("([^"]+)"%) then')
+            if pattern then
+                assert(not pending,'missing affix limit assignment')
+                pending={match_pattern=pattern}
+            elseif pending then
+                local side=capture(line,'self%.([%a]+)%.limit =')
+                assert(side=='prefixes' or side=='suffixes','unsupported affix side')
+                pending.side=(side=='prefixes' and 'prefix' or 'suffix')
+                pending.positive_pattern=capture(line,'%+ %(tonumber%(lineLower:match%("([^"]+)"%)%) or [%d.]+%)')
+                pending.negative_pattern=capture(line,'%- %(tonumber%(lineLower:match%("([^"]+)"%)%) or [%d.]+%)')
+                local defaults={}
+                for value in line:gmatch(' or ([%d.]+)%)') do defaults[#defaults+1]=tonumber(value) end
+                assert(#defaults==3 and defaults[1]==defaults[2] and defaults[1]==defaults[3],'nonuniform affix limit defaults')
+                assert(out.limit_default==nil or out.limit_default==defaults[1],'different side limit defaults')
+                out.limit_default=defaults[1]
+                out.limit_rules[#out.limit_rules+1]=pending
+                pending=nil
+            elseif #out.limit_rules==0 then
+                for effect in line:gmatch('lineLower == "([^"]+)"') do out.preceding_line_effects[#out.preceding_line_effects+1]=effect end
+            end
+        end
+        assert(not pending and #out.limit_rules==2,'incomplete affix limit branches')
+        local r={}
+        local rarities={}
+        for rarity in reconcile:gmatch('elseif self%.rarity == "([^"]+)" then') do rarities[#rarities+1]=rarity end
+        assert(#rarities==2,'unsupported affix rarity branches')
+        r.magic_rarity,r.rare_rarity=rarities[1],rarities[2]
+        r.initial_limit=number(reconcile,'^%s*self%.affixLimit = ([%d.]+)')
+        r.magic_limit=number(reconcile,'else%s+self%.affixLimit = ([%d.]+)')
+        r.jewel_type=capture(reconcile,'self%.type == "([^"]+)"')
+        r.corrupted_jewel_subtype=capture(reconcile,'self%.base%.subType == "([^"]+)" and self%.corrupted')
+        r.rare_jewel_limit=number(reconcile,'%)%) and ([%d.]+) or')
+        r.rare_limit=number(reconcile,'%)%) and [%d.]+ or ([%d.]+)%)')
+        local limits_seen=0
+        for side, default, offset, maximum, minimum in reconcile:gmatch('self%.([%a]+)%.limit = m_max%(m_min%(%(self%.[%a]+%.limit or ([%d.]+)%) %+ ([%d.]+), ([%d.]+)%), ([%d.]+)%)') do
+            assert(side=='prefixes' or side=='suffixes','unsupported magic affix side')
+            default,offset,maximum,minimum=tonumber(default),tonumber(offset),tonumber(maximum),tonumber(minimum)
+            assert(default==out.limit_default,'different reconciliation empty-limit default')
+            assert(r.magic_side_base==nil or (r.magic_side_base==offset and r.magic_side_max==maximum and r.minimum_limit==minimum),'different magic side clamps')
+            r.magic_side_base,r.magic_side_max,r.minimum_limit=offset,maximum,minimum
+            limits_seen=limits_seen+1
+        end
+        assert(limits_seen==2,'incomplete magic side clamps')
+        limits_seen=0
+        for default,divisor,minimum in reconcile:gmatch('%.limit = m_max%(m_min%(%(self%.[%a]+%.limit or ([%d.]+)%) %+ self%.affixLimit / ([%d.]+), self%.affixLimit%), ([%d.]+)%)') do
+            default,divisor,minimum=tonumber(default),tonumber(divisor),tonumber(minimum)
+            assert(default==out.limit_default and minimum==r.minimum_limit,'different rare side defaults')
+            assert(r.side_divisor==nil or r.side_divisor==divisor,'different rare side divisors')
+            r.side_divisor=divisor
+            limits_seen=limits_seen+1
+        end
+        assert(limits_seen==2,'incomplete rare side clamps')
+        for divisor in reconcile:gmatch('self%.affixLimit / ([%d.]+)') do assert(tonumber(divisor)==r.side_divisor,'different active-slot divisor') end
+        assert(reconcile:find('ipairs({self.prefixes,self.suffixes})',1,true),'changed side iteration order')
+        for sentinel in reconcile:gmatch('modId [~=]*= "([^"]+)"') do assert(sentinel==out.none_mod_id,'different affix empty sentinel') end
+        out.legacy_label_field=capture(reconcile,'list%[i%]%.modId == mod%.([%w_]+) then')
+        out.reconcile=r
+        return out
+    end"#).eval()?;
+    let value: Value = scan.call((headers, limits, reconcile, all_headers))?;
+    lua.from_value(value).map_err(error)
 }
 fn policy(lua: &Lua, sources: &BTreeMap<String, String>) -> Result<ItemLoadingPolicy> {
     let constants: Table = named_eval(
@@ -591,6 +717,7 @@ fn policy(lua: &Lua, sources: &BTreeMap<String, String>) -> Result<ItemLoadingPo
         metadata(Value::Table(fallback), sources, 0, &mut budget)?,
     );
     Ok(ItemLoadingPolicy {
+        affix_loading: affix_loading_policy(lua, sources)?,
         default_affix_quality: number("self.defaultItemAffixQuality = ")?,
         default_item_quality: number("self.defaultItemQuality = ")?,
         catalysts,
@@ -800,6 +927,17 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ItemLoadingD
     }
     let (_, defence_span) = chunk(sources, ITEM, DEFENCE_HEADER_START, DEFENCE_HEADER_END)?;
     construction_spans.insert("defence_headers".into(), defence_span);
+    for (name, begin, end) in [
+        ("affix_headers", AFFIX_HEADER_START, AFFIX_HEADER_END),
+        ("affix_limits", AFFIX_LIMIT_START, AFFIX_LIMIT_END),
+        (
+            "affix_reconciliation",
+            AFFIX_RECONCILE_START,
+            AFFIX_RECONCILE_END,
+        ),
+    ] {
+        construction_spans.insert(name.into(), chunk(sources, ITEM, begin, end)?.1);
+    }
     let source = ItemLoadingSource {
         upstream_revision: crate::source::UPSTREAM_REVISION.into(),
         files: files
@@ -846,6 +984,114 @@ mod tests {
         assert!(table(key, &sources, 0, &mut 100).is_err());
         let unknown: Function = lua.load("return function()end").eval().unwrap();
         assert!(metadata(Value::Function(unknown), &sources, 0, &mut 100).is_err());
+    }
+    #[test]
+    fn affix_policy_retains_complete_original_grammar_order_and_numeric_values() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../vendor/path-of-building-poe2");
+        let original = crate::source::read_verified_text(&root, ITEM).unwrap();
+        let sources = BTreeMap::from([(ITEM.into(), original)]);
+        let policy = affix_loading_policy(&Lua::new(), &sources).unwrap();
+        assert_eq!(
+            policy.headers,
+            BTreeMap::from([
+                ("Prefix".into(), ItemAffixSide::Prefix),
+                ("Suffix".into(), ItemAffixSide::Suffix)
+            ])
+        );
+        assert_eq!(policy.fractured_pattern, "^{fractured}");
+        assert_eq!(policy.fractured_remove_pattern, "^{fractured}");
+        assert_eq!(policy.range_pattern, "{range:([^}]+)}(.+)");
+        assert_eq!(policy.range_separator, ",");
+        assert_eq!(policy.range_value_pattern, "[^,]+");
+        assert_eq!(policy.none_mod_id, "None");
+        assert_eq!(policy.legacy_label_field, "affix");
+        assert_eq!(
+            policy.preceding_line_effects,
+            ["implicit modifiers cannot be changed"]
+        );
+        assert_eq!(policy.limit_default, 0.0);
+        assert_eq!(policy.limit_rules.len(), 2);
+        assert_eq!(policy.limit_rules[0].side, ItemAffixSide::Prefix);
+        assert_eq!(policy.limit_rules[1].side, ItemAffixSide::Suffix);
+        assert_eq!(
+            policy.limit_rules[0].match_pattern,
+            " prefix modifiers? allowed"
+        );
+        assert_eq!(
+            policy.limit_rules[0].positive_pattern,
+            "%+(%d+) prefix modifiers? allowed"
+        );
+        assert_eq!(
+            policy.limit_rules[1].negative_pattern,
+            "%-(%d+) suffix modifiers? allowed"
+        );
+        let r = policy.reconcile;
+        assert_eq!(
+            (r.magic_rarity.as_str(), r.rare_rarity.as_str()),
+            ("MAGIC", "RARE")
+        );
+        assert_eq!(
+            (r.jewel_type.as_str(), r.corrupted_jewel_subtype.as_str()),
+            ("Jewel", "Abyss")
+        );
+        assert_eq!(
+            (
+                r.initial_limit,
+                r.minimum_limit,
+                r.magic_limit,
+                r.magic_side_base,
+                r.magic_side_max,
+                r.rare_limit,
+                r.rare_jewel_limit,
+                r.side_divisor
+            ),
+            (0.0, 0.0, 2.0, 1.0, 2.0, 6.0, 4.0, 2.0)
+        );
+        for (begin, end, first, last) in [
+            (AFFIX_HEADER_START, AFFIX_HEADER_END, 894, 915),
+            (AFFIX_LIMIT_START, AFFIX_LIMIT_END, 1241, 1258),
+            (AFFIX_RECONCILE_START, AFFIX_RECONCILE_END, 1727, 1769),
+        ] {
+            let (_, observed) = chunk(&sources, ITEM, begin, end).unwrap();
+            assert_eq!((observed.line, observed.end_line), (first, last));
+        }
+    }
+    #[test]
+    fn affix_policy_follows_changed_source_literals_and_rejects_divergent_side_defaults() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../vendor/path-of-building-poe2");
+        let original = crate::source::read_verified_text(&root, ITEM).unwrap();
+        let changed = original
+            .replace("{fractured}", "{custom fracture}")
+            .replace("modifiers? allowed", "changes? allowed")
+            .replace("and 4 or 6)", "and 8 or 10)")
+            .replace("mod.affix then", "mod.customLabel then")
+            .replace("\"None\"", "\"CustomEmpty\"");
+        let policy =
+            affix_loading_policy(&Lua::new(), &BTreeMap::from([(ITEM.into(), changed)])).unwrap();
+        assert_eq!(policy.fractured_pattern, "^{custom fracture}");
+        assert_eq!(policy.none_mod_id, "CustomEmpty");
+        assert_eq!(policy.legacy_label_field, "customLabel");
+        assert_eq!(
+            policy.limit_rules[0].positive_pattern,
+            "%+(%d+) prefix changes? allowed"
+        );
+        assert_eq!(
+            (
+                policy.reconcile.rare_jewel_limit,
+                policy.reconcile.rare_limit
+            ),
+            (8.0, 10.0)
+        );
+        let changed = original.replacen(
+            "(self.suffixes.limit or 0) + 1, 2",
+            "(self.suffixes.limit or 0) + 3, 2",
+            1,
+        );
+        assert!(
+            affix_loading_policy(&Lua::new(), &BTreeMap::from([(ITEM.into(), changed)])).is_err()
+        );
     }
     #[test]
     fn defence_keys_are_observed_from_original_branch_and_follow_changed_source_literals() {

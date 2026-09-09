@@ -16,6 +16,51 @@ fn catalog() -> ItemLoadingCatalog {
         ItemMetadataValue::Table(table([("field", text(field)), ("kind", text(kind))]))
     };
     let policy = ItemLoadingPolicy {
+        affix_loading: ItemAffixLoadingPolicy {
+            headers: [
+                ("Prefix".into(), ItemAffixSide::Prefix),
+                ("Suffix".into(), ItemAffixSide::Suffix),
+            ]
+            .into_iter()
+            .collect(),
+            other_headers: BTreeSet::new(),
+            other_header_patterns: vec![],
+            fractured_pattern: "^{fractured}".into(),
+            fractured_remove_pattern: "^{fractured}".into(),
+            range_pattern: "{range:([^}]+)}(.+)".into(),
+            range_separator: ",".into(),
+            range_value_pattern: "[^,]+".into(),
+            none_mod_id: "None".into(),
+            legacy_label_field: "affix".into(),
+            limit_rules: [
+                ("prefix", ItemAffixSide::Prefix),
+                ("suffix", ItemAffixSide::Suffix),
+            ]
+            .into_iter()
+            .map(|(name, side)| ItemAffixLimitRule {
+                side,
+                match_pattern: format!(" {name} modifiers? allowed"),
+                positive_pattern: format!("%+(%d+) {name} modifiers? allowed"),
+                negative_pattern: format!("%-(%d+) {name} modifiers? allowed"),
+            })
+            .collect(),
+            preceding_line_effects: vec![],
+            limit_default: 0.0,
+            reconcile: ItemAffixReconciliationPolicy {
+                magic_rarity: "MAGIC".into(),
+                rare_rarity: "RARE".into(),
+                jewel_type: "Jewel".into(),
+                corrupted_jewel_subtype: "Abyss".into(),
+                initial_limit: 0.0,
+                minimum_limit: 0.0,
+                magic_limit: 2.0,
+                magic_side_base: 1.0,
+                magic_side_max: 2.0,
+                rare_limit: 6.0,
+                rare_jewel_limit: 4.0,
+                side_divisor: 2.0,
+            },
+        },
         default_affix_quality: 0.5,
         default_item_quality: 17.0,
         catalysts: vec![],
@@ -29,7 +74,7 @@ fn catalog() -> ItemLoadingCatalog {
             .into_iter()
             .map(str::to_owned)
             .collect(),
-        header_names: BTreeSet::new(),
+        header_names: ["Prefix".into(), "Suffix".into()].into_iter().collect(),
         defence_header_keys: BTreeMap::new(),
         compatibility: [
             (
@@ -492,8 +537,21 @@ fn malformed_finite_provider_numbers_never_serialize_as_null() {
 #[test]
 fn source_item_line_sideeffects_cannot_be_bypassed_with_empty_parse_results() {
     let data = catalog();
+    let mut m = ItemLoadMachine::new(&data);
+    m.apply_text(
+        "Rarity: NORMAL\nCaller Base\nImplicits: 0\n+1 prefix modifier allowed",
+        &mut CompleteProvider,
+    )
+    .unwrap();
+    assert!(m.pending().is_none());
+    assert_eq!(m.state().prefixes.limit, Some(ItemNumber::new(1.0)));
+    assert_eq!(m.state().explicit_mod_lines.len(), 1);
+    assert_eq!(
+        m.state().parser_calls.last().unwrap().text,
+        "+1 prefix modifier allowed"
+    );
+
     for (text, kind) in [
-        ("+1 prefix modifier allowed", DependencyKind::CraftedAffixes),
         (
             "This Item gains bonuses from socketed items as though it was a Helmet",
             DependencyKind::RuneReconstruction,
@@ -1552,4 +1610,112 @@ fn unique_requirement_maximum_reads_injected_rune_field_and_retains_source_error
             .to_bits(),
         (-0.0_f64).to_bits()
     );
+}
+
+#[test]
+fn affix_independent_range_resource_failure_preserves_the_completed_header_prefix() {
+    let data = catalog();
+    let mut machine = ItemLoadMachine::new(&data);
+    let raw = format!(
+        "Rarity: NORMAL\nCaller Base\nPrefix: retained\nSuffix: {{range:{}}}oversized\nPrefix: later",
+        "1,".repeat(8193)
+    );
+    let error = machine.apply_text(&raw, &mut CompleteProvider).unwrap_err();
+    assert!(
+        error
+            .to_string()
+            .contains("independent affix range count bound")
+    );
+    assert_ne!(machine.status(), ItemLoadStatus::SourceError);
+    assert!(machine.pending().is_none());
+    assert_eq!(machine.state().prefixes.entries.len(), 1);
+    assert_eq!(machine.state().prefixes.entries[0].mod_id, "retained");
+    assert!(machine.state().suffixes.entries.is_empty());
+}
+
+#[test]
+fn affix_pattern_reservation_rejects_a_custom_header_before_its_state_is_loaded() {
+    let mut data = catalog().data().clone();
+    data.policy.header_names.insert("Caller Collision".into());
+    data.policy
+        .affix_loading
+        .headers
+        .insert("Caller Collision".into(), ItemAffixSide::Prefix);
+    data.policy
+        .affix_loading
+        .other_header_patterns
+        .push("^Caller C.*$".into());
+    let data = ItemLoadingCatalog::new(data).unwrap();
+    let mut machine = ItemLoadMachine::new(&data);
+    machine
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nCaller Collision: candidate",
+            &mut CompleteProvider,
+        )
+        .unwrap();
+    let pending = machine.pending().unwrap();
+    assert_eq!(pending.kind, DependencyKind::CraftedAffixes);
+    assert!(pending.message.contains("reserved source header pattern"));
+    assert!(machine.state().prefixes.entries.is_empty());
+    assert!(machine.state().suffixes.entries.is_empty());
+}
+
+#[test]
+fn unused_malformed_affix_patterns_remain_lazy_across_source_branches() {
+    let mut data = catalog().data().clone();
+    data.policy.affix_loading.fractured_pattern = "[".into();
+    data.policy.affix_loading.range_pattern = "[".into();
+    data.policy.affix_loading.limit_rules[1].match_pattern = "[".into();
+    let data = ItemLoadingCatalog::new(data).unwrap();
+    let mut machine = ItemLoadMachine::new(&data);
+    machine
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nImplicits: 0\n+1 prefix modifier allowed",
+            &mut CompleteProvider,
+        )
+        .unwrap();
+    assert_eq!(machine.status(), ItemLoadStatus::Complete);
+    assert_eq!(machine.state().prefixes.limit, Some(ItemNumber::new(1.0)));
+    assert_eq!(machine.state().suffixes.limit, None);
+    // The same malformed header pattern becomes a source error only when an
+    // authored header actually executes it. Compilation alone does not execute it.
+    let error = machine
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nPrefix: identity",
+            &mut CompleteProvider,
+        )
+        .unwrap_err();
+    assert!(error.to_string().contains("malformed pattern"));
+    assert_eq!(machine.status(), ItemLoadStatus::SourceError);
+    assert!(machine.state().prefixes.entries.is_empty());
+}
+
+#[test]
+fn malformed_header_reservation_is_a_definition_boundary_not_an_item_source_error() {
+    let mut data = catalog().data().clone();
+    data.policy
+        .affix_loading
+        .other_header_patterns
+        .push("[".into());
+    let data = ItemLoadingCatalog::new(data).unwrap();
+    let mut machine = ItemLoadMachine::new(&data);
+    machine
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nPrefix: identity",
+            &mut CompleteProvider,
+        )
+        .unwrap();
+    assert_eq!(machine.status(), ItemLoadStatus::Pending);
+    assert_eq!(
+        machine.pending().unwrap().kind,
+        DependencyKind::CraftedAffixes
+    );
+    assert!(
+        machine
+            .pending()
+            .unwrap()
+            .message
+            .contains("cannot be validated")
+    );
+    assert!(machine.state().prefixes.entries.is_empty());
 }

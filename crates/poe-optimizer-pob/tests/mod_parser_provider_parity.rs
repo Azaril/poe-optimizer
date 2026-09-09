@@ -630,6 +630,7 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
     let mut counts = (0, 0, 0, 0, 0);
     let mut pending = BTreeMap::<String, usize>::new();
     let mut state_failures = vec![];
+    let mut affix_evidence = vec![];
     for row in index["builds"].as_array().unwrap() {
         let path = directory.join(row["xml"].as_str().unwrap());
         let bytes = std::fs::read(&path).unwrap();
@@ -662,6 +663,7 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
             counts.1 += parses;
             counts.2 += formats;
             counts.3 += precision;
+            let mut affix_boundary: Option<(&str, Table)> = None;
             if kind == DependencyKind::Assembly && !provider.assembly.is_empty() {
                 assert_eq!(provider.assembly.len(), 1);
                 let before = events(&loaded, "build_mod_list")
@@ -669,6 +671,7 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
                     .map(|event| event.get::<Table>("before").unwrap())
                     .find(|before| before.get::<String>("raw").unwrap() == raw)
                     .unwrap();
+                affix_boundary = Some(("complete_preassembly", before.clone()));
                 let compared = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                     reference::compare_state(machine.state(), &before);
                 }));
@@ -688,9 +691,81 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
                     counts.4 += 1;
                 }
             }
+            if affix_boundary.is_none()
+                && kind == DependencyKind::RuneReconstruction
+                && machine.pending().unwrap().line_index.is_none()
+            {
+                affix_boundary = Some((
+                    "after_raw_headers_before_affix_reconcile",
+                    parse.get::<Table>("affix_before_reconcile").unwrap(),
+                ));
+            }
+            if affix_boundary.is_none() {
+                let formats = events(&loaded, "format")
+                    .into_iter()
+                    .filter(|event| {
+                        event
+                            .get::<Table>("before")
+                            .unwrap()
+                            .get::<String>("raw")
+                            .unwrap()
+                            == raw
+                    })
+                    .collect::<Vec<_>>();
+                let chosen = if kind == DependencyKind::ModifierParser {
+                    provider
+                        .formats
+                        .len()
+                        .checked_sub(1)
+                        .map(|i| ("before_unavailable_parser", i))
+                } else if kind == DependencyKind::RuneReconstruction
+                    && machine.pending().unwrap().message
+                        == "rune display/reconstruction requires complete slot and modifier dependencies"
+                {
+                    Some(("before_rune_display_format", provider.formats.len()))
+                } else {
+                    None
+                };
+                if let Some((boundary, index)) = chosen {
+                    affix_boundary = Some((
+                        boundary,
+                        formats
+                            .get(index)
+                            .expect("matching source format boundary")
+                            .get::<Table>("before")
+                            .unwrap(),
+                    ));
+                }
+            }
+            let source_affixes = affix_boundary.as_ref().map(|(boundary, before)| {
+                reference::compare_affixes(&machine.state().prefixes, before.get("prefixes").unwrap(), "corpus prefixes at original frontier");
+                reference::compare_affixes(&machine.state().suffixes, before.get("suffixes").unwrap(), "corpus suffixes at original frontier");
+                serde_json::json!({"boundary":boundary,"prefixes":reference::source_affixes(before.get("prefixes").unwrap()),"suffixes":reference::source_affixes(before.get("suffixes").unwrap())})
+            });
+            affix_evidence.push(serde_json::json!({
+                "fixture":row["xml"],"fixture_sha256":row["xml_sha256"],"id":source_attributes(&parse).get("id"),
+                "raw_sha256":format!("{:x}",Sha256::digest(raw.as_bytes())),"pending":machine.pending(),
+                "source_affixes":source_affixes,
+                "native_affixes":{"prefixes":&machine.state().prefixes,"suffixes":&machine.state().suffixes}
+            }));
         }
         assert_eq!(std::fs::read(&path).unwrap(), bytes);
     }
+    if let Some(path) = std::env::var_os("POE_OPTIMIZER_AFFIX_ORACLE_LEDGER") {
+        let evidence = serde_json::json!({"schema_version":1,"upstream_revision":poe_optimizer_pob::source::UPSTREAM_REVISION,
+            "data":snapshot.identity(),"item_loading_implementation_sha256":implementation_fingerprint(),
+            "definition_implementation_sha256":poe_optimizer_data::implementation_fingerprint(),
+            "items":affix_evidence,"full_state_failures":state_failures});
+        std::fs::write(path, serde_json::to_vec_pretty(&evidence).unwrap()).unwrap();
+    }
+    eprintln!(
+        "Original affix frontier comparisons: {} of {} corpus occurrences",
+        affix_evidence
+            .iter()
+            .filter(|row| !row["source_affixes"].is_null())
+            .count(),
+        affix_evidence.len()
+    );
     assert_eq!(counts.0, 116);
     assert!(counts.1 > 0 && counts.2 > 0 && counts.4 > 0);
     eprintln!(

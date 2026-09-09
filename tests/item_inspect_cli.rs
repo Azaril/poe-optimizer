@@ -702,3 +702,122 @@ fn injected_unique_requirements_distinguish_hit_miss_unavailable_and_stale_input
     assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
     assert_eq!(fs::read(&data_path).unwrap(), unavailable_bytes);
 }
+
+#[test]
+fn injected_affix_records_limits_and_legacy_names_reach_cli_without_admission() {
+    use poe_optimizer_data::item_loading::{ItemMetadataTable, ItemMetadataValue};
+    use std::collections::BTreeMap;
+
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller-affixes.xml");
+    let data_path = temp.path().join("caller-affix-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    let base = package
+        .item_loading
+        .bases
+        .iter()
+        .find(|base| {
+            base.item_type
+                != package
+                    .item_loading
+                    .policy
+                    .affix_loading
+                    .reconcile
+                    .jewel_type
+                && base.sub_type().is_none()
+                && base.field("flask").is_none()
+                && base.field("charm").is_none()
+                && !base.name.contains(['&', '<', '>'])
+        })
+        .unwrap();
+    let base_name = base.name.clone();
+    let table_name = base.item_type.clone();
+    let mod_id = "CallerExactAffix";
+    let legacy = "Caller legacy affix label";
+    let label_field = "callerLegacyLabel";
+    let none = package
+        .item_loading
+        .policy
+        .affix_loading
+        .none_mod_id
+        .clone();
+    package.item_loading.policy.default_affix_quality = 0.375;
+    package.item_loading.policy.affix_loading.legacy_label_field = label_field.into();
+    let reconcile = &mut package.item_loading.policy.affix_loading.reconcile;
+    reconcile.magic_limit = 4.0;
+    reconcile.magic_side_base = 2.0;
+    reconcile.magic_side_max = 4.0;
+    package.item_loading.modifier_tables.insert(
+        table_name,
+        ItemMetadataTable {
+            fields: BTreeMap::from([(
+                mod_id.into(),
+                ItemMetadataValue::Table(ItemMetadataTable {
+                    fields: BTreeMap::from([(
+                        label_field.into(),
+                        ItemMetadataValue::Text(legacy.into()),
+                    )]),
+                    indexed: BTreeMap::new(),
+                }),
+            )]),
+            indexed: BTreeMap::new(),
+        },
+    );
+    package.unique_requirements =
+        poe_optimizer_data::unique_requirements::UniqueRequirementData::unavailable(
+            "caller changes affix construction inputs",
+        );
+    package.refresh_section_digests().unwrap();
+    let bytes = package.canonical_bytes().unwrap();
+    fs::write(&data_path, &bytes).unwrap();
+    let xml = format!(
+        "<PathOfBuilding2><Items><Item id='caller-affixes'>Rarity: Magic\n{base_name}\nCrafted: true\nPrefix: {{fractured}}{{range:0.25,invalid,0.75}}{mod_id}\nPrefix: {legacy}\nPrefix: {none}\nSuffix: CallerMissingAffix\nSuffix: {{range:,}}{none}\n+1 prefix modifier allowed\n-1 suffix modifier allowed\n</Item></Items></PathOfBuilding2>"
+    );
+    fs::write(&input, &xml).unwrap();
+    let report = inspect_definitions(&input, temp.path(), Some(&data_path));
+    let item = &report["definition_lookup"]["items"]["report"]["items"][0];
+    let state = &item["state"];
+    let finite = |value| serde_json::json!({"kind": "finite", "value": value});
+    let scalar = |value| serde_json::json!({"kind": "scalar", "value": finite(value)});
+    assert_eq!(state["base_name"], base_name);
+    assert_eq!(state["prefixes"]["limit"], finite(3.0));
+    assert_eq!(state["suffixes"]["limit"], finite(1.0));
+    assert_eq!(
+        state["retained_fields"]["affixLimit"],
+        serde_json::json!({"kind": "number", "value": finite(4.0)})
+    );
+    assert_eq!(
+        state["prefixes"]["entries"],
+        serde_json::json!([
+            {"mod_id": mod_id, "range": {"kind": "independent", "value": [finite(0.25), finite(0.75)]}, "fractured": true},
+            {"mod_id": mod_id, "range": scalar(0.375), "fractured": null},
+            {"mod_id": none, "range": null, "fractured": null}
+        ])
+    );
+    assert_eq!(
+        state["suffixes"]["entries"],
+        serde_json::json!([
+            {"mod_id": none, "range": scalar(0.375), "fractured": null},
+            {"mod_id": none, "range": {"kind": "independent", "value": []}, "fractured": null}
+        ]),
+        "authored rows beyond the active limit remain diagnostic state"
+    );
+    assert_eq!(item["status"], "pending");
+    assert_eq!(item["pending"]["kind"], "assembly");
+    assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
+    assert_eq!(report["verification"]["native_admission"], "not_checked");
+    assert_eq!(report["verification"]["reference_calculation"], "not_run");
+    assert_eq!(
+        report["definition_lookup"]["data"]["content_sha256"],
+        format!("{:x}", Sha256::digest(&bytes))
+    );
+    assert_eq!(
+        report["definition_lookup"]["data_trust"]["status"],
+        "custom_unreviewed"
+    );
+    assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+    assert_eq!(fs::read(&data_path).unwrap(), bytes);
+}

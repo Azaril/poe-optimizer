@@ -3,6 +3,7 @@
 //! A completed source-loading trace is not item legality, native calculation
 //! admission, or an equipment-selection certificate. Missing dependencies stop
 //! execution before any dependent state is invented.
+mod affixes;
 mod machine;
 mod parser;
 mod provider;
@@ -22,6 +23,7 @@ pub fn implementation_fingerprint() -> String {
     let mut hash = Sha256::new();
     for source in [
         include_str!("item_loading.rs"),
+        include_str!("item_loading/affixes.rs"),
         include_str!("item_loading/syntax.rs"),
         include_str!("item_loading/variants.rs"),
         include_str!("item_loading/machine.rs"),

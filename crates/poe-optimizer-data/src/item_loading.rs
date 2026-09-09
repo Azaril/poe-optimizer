@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 
-pub const ITEM_LOADING_SCHEMA_VERSION: u32 = 2;
+pub const ITEM_LOADING_SCHEMA_VERSION: u32 = 3;
 type Result<T> = std::result::Result<T, GameDataError>;
 fn error(message: impl std::fmt::Display) -> GameDataError {
     GameDataError(format!("item loading catalog: {message}"))
@@ -185,9 +185,80 @@ pub struct ItemCatalystDefinition {
     pub descriptor: String,
     pub tags: Vec<String>,
 }
+/// The two source-owned dense affix lists, independent of an authored header's spelling.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ItemAffixSide {
+    Prefix,
+    Suffix,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemAffixLimitRule {
+    pub side: ItemAffixSide,
+    pub match_pattern: String,
+    pub positive_pattern: String,
+    pub negative_pattern: String,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemAffixReconciliationPolicy {
+    pub magic_rarity: String,
+    pub rare_rarity: String,
+    pub jewel_type: String,
+    pub corrupted_jewel_subtype: String,
+    pub initial_limit: f64,
+    pub minimum_limit: f64,
+    pub magic_limit: f64,
+    pub magic_side_base: f64,
+    pub magic_side_max: f64,
+    pub rare_limit: f64,
+    pub rare_jewel_limit: f64,
+    pub side_divisor: f64,
+}
+/// Original loading grammar and reconciliation constants. This does not authorize
+/// Craft, modifier emission, or numerical item assembly.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemAffixLoadingPolicy {
+    #[serde(deserialize_with = "unique_named_map")]
+    pub headers: BTreeMap<String, ItemAffixSide>,
+    pub other_headers: BTreeSet<String>,
+    pub other_header_patterns: Vec<String>,
+    pub fractured_pattern: String,
+    pub fractured_remove_pattern: String,
+    pub range_pattern: String,
+    pub range_separator: String,
+    pub range_value_pattern: String,
+    pub none_mod_id: String,
+    pub legacy_label_field: String,
+    /// Source branch order is significant when patterns overlap.
+    pub limit_rules: Vec<ItemAffixLimitRule>,
+    /// Exact postparse line effects which precede the limit branches.
+    pub preceding_line_effects: Vec<String>,
+    pub limit_default: f64,
+    pub reconcile: ItemAffixReconciliationPolicy,
+}
+/// Existing exact values win using Lua truthiness. Legacy names only resolve
+/// when every relevant candidate has supported, unambiguous identity semantics.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum ItemAffixLookup<'a> {
+    Exact {
+        mod_id: &'a str,
+        value: &'a ItemMetadataValue,
+    },
+    Legacy {
+        mod_id: &'a str,
+        value: &'a ItemMetadataValue,
+    },
+    Missing,
+    Ambiguous,
+    Unavailable,
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemLoadingPolicy {
+    pub affix_loading: ItemAffixLoadingPolicy,
     pub default_affix_quality: f64,
     pub default_item_quality: f64,
     pub catalysts: Vec<ItemCatalystDefinition>,
@@ -224,7 +295,66 @@ pub struct ItemBaseRewrite<'a> {
     pub to: &'a str,
 }
 #[derive(Debug)]
+enum LegacyAffixIndex {
+    Id(String),
+    Ambiguous,
+    Unrepresentable,
+}
+#[derive(Debug, Default)]
+struct AffixTableIndex {
+    labels: BTreeMap<String, LegacyAffixIndex>,
+    uncertain_traversal: bool,
+}
+impl AffixTableIndex {
+    fn new(table: &ItemMetadataTable, label_field: &str) -> Self {
+        let mut out = Self::default();
+        for (key, value) in table
+            .fields
+            .iter()
+            .map(|(k, v)| (Some(k), v))
+            .chain(table.indexed.values().map(|v| (None, v)))
+        {
+            let row = match value {
+                ItemMetadataValue::Table(t) => t,
+                // Arrays have no named fields. Standard Lua string-library
+                // fields are nil/functions, never equal to the string modId.
+                ItemMetadataValue::Array(_) | ItemMetadataValue::Text(_) => continue,
+                _ => {
+                    out.uncertain_traversal = true;
+                    continue;
+                }
+            };
+            let Some(label) = row
+                .fields
+                .get(label_field)
+                .and_then(ItemMetadataValue::as_str)
+            else {
+                continue;
+            };
+            use std::collections::btree_map::Entry;
+            match (out.labels.entry(label.to_owned()), key) {
+                (Entry::Vacant(e), Some(key)) => {
+                    e.insert(LegacyAffixIndex::Id(key.clone()));
+                }
+                (Entry::Vacant(e), None) => {
+                    e.insert(LegacyAffixIndex::Unrepresentable);
+                }
+                (Entry::Occupied(mut e), None) => {
+                    e.insert(LegacyAffixIndex::Unrepresentable);
+                }
+                (Entry::Occupied(mut e), Some(_)) => {
+                    if !matches!(e.get(), LegacyAffixIndex::Unrepresentable) {
+                        e.insert(LegacyAffixIndex::Ambiguous);
+                    }
+                }
+            }
+        }
+        out
+    }
+}
+#[derive(Debug)]
 struct Inner {
+    affix_indices: BTreeMap<String, AffixTableIndex>,
     data: ItemLoadingData,
     by_name: BTreeMap<String, usize>,
 }
@@ -239,7 +369,21 @@ impl ItemLoadingCatalog {
             .enumerate()
             .map(|(i, b)| (b.name.clone(), i))
             .collect();
-        Ok(Self(Arc::new(Inner { data, by_name })))
+        let affix_indices = data
+            .modifier_tables
+            .iter()
+            .map(|(name, table)| {
+                (
+                    name.clone(),
+                    AffixTableIndex::new(table, &data.policy.affix_loading.legacy_label_field),
+                )
+            })
+            .collect();
+        Ok(Self(Arc::new(Inner {
+            data,
+            by_name,
+            affix_indices,
+        })))
     }
     pub fn data(&self) -> &ItemLoadingData {
         &self.0.data
@@ -278,6 +422,42 @@ impl ItemLoadingCatalog {
     }
     pub fn modifier_table(&self, name: &str) -> Option<&ItemMetadataTable> {
         self.0.data.modifier_tables.get(name)
+    }
+    pub fn affix_header(&self, header: &str) -> Option<ItemAffixSide> {
+        self.policy().affix_loading.headers.get(header).copied()
+    }
+    /// Allocation-free lookup within the selected source modifier family.
+    /// A missing family differs from a definite miss in a complete family.
+    pub fn affix_lookup(&self, table_name: Option<&str>, mod_id: &str) -> ItemAffixLookup<'_> {
+        let Some(name) = table_name else {
+            return ItemAffixLookup::Unavailable;
+        };
+        let Some(table) = self.modifier_table(name) else {
+            return ItemAffixLookup::Unavailable;
+        };
+        if let Some((key, value)) = table.fields.get_key_value(mod_id)
+            && !matches!(value, ItemMetadataValue::Boolean(false))
+        {
+            return ItemAffixLookup::Exact { mod_id: key, value };
+        }
+        let index = &self.0.affix_indices[name];
+        // A pairs traversal can encounter a value that errors before finding
+        // an otherwise valid legacy match. Its source order is not represented.
+        if index.uncertain_traversal {
+            return ItemAffixLookup::Unavailable;
+        }
+        match index.labels.get(mod_id) {
+            None => ItemAffixLookup::Missing,
+            Some(LegacyAffixIndex::Ambiguous) => ItemAffixLookup::Ambiguous,
+            Some(LegacyAffixIndex::Unrepresentable) => ItemAffixLookup::Unavailable,
+            Some(LegacyAffixIndex::Id(key)) => {
+                let (key, value) = table
+                    .fields
+                    .get_key_value(key)
+                    .expect("index constructed from immutable catalog");
+                ItemAffixLookup::Legacy { mod_id: key, value }
+            }
+        }
     }
     pub fn unique_groups(&self) -> &BTreeMap<String, Vec<String>> {
         &self.0.data.unique_groups
@@ -451,6 +631,130 @@ impl ItemLoadingPolicy {
                     return Err(error("literal line effects must be boolean"));
                 }
             }
+        }
+        let affix = &self.affix_loading;
+        if affix.headers.len() > 256
+            || affix.other_headers.len() > 256
+            || affix.other_header_patterns.len() > 256
+            || affix.limit_rules.len() > 256
+            || affix.preceding_line_effects.len() > 256
+        {
+            return Err(error("affix loading policy count bound"));
+        }
+        let mut affix_bytes = 0usize;
+        let mut check_text = |s: &str, allow_empty: bool| -> Result<()> {
+            text(s, 4096)?;
+            if !allow_empty && s.is_empty() {
+                return Err(error("empty affix loading policy token"));
+            }
+            affix_bytes = affix_bytes
+                .checked_add(s.len())
+                .ok_or_else(|| error("affix policy text overflow"))?;
+            if affix_bytes > 128 * 1024 {
+                return Err(error("affix policy aggregate text bound"));
+            }
+            Ok(())
+        };
+        for header in affix.headers.keys() {
+            check_text(header, false)?;
+            if !self.header_names.contains(header)
+                || affix.other_headers.contains(header)
+                || self.defence_header_keys.contains_key(header)
+                || named("selection_headers")?.fields.contains_key(header)
+                || named("header_assignments")?.fields.contains_key(header)
+            {
+                return Err(error(
+                    "affix header is unknown or conflicts with another operation",
+                ));
+            }
+        }
+        for header in &affix.other_headers {
+            check_text(header, false)?;
+            if !self.header_names.contains(header) {
+                return Err(error("unknown reserved affix header operation"));
+            }
+        }
+        let mut reserved_patterns = BTreeSet::new();
+        for pattern in &affix.other_header_patterns {
+            check_text(pattern, true)?;
+            if !reserved_patterns.insert(pattern) {
+                return Err(error("duplicated reserved affix header pattern"));
+            }
+        }
+        for pattern in [
+            &affix.fractured_pattern,
+            &affix.fractured_remove_pattern,
+            &affix.range_pattern,
+            &affix.range_separator,
+            &affix.range_value_pattern,
+        ] {
+            check_text(pattern, true)?;
+        }
+        for token in [
+            &affix.none_mod_id,
+            &affix.legacy_label_field,
+            &affix.reconcile.magic_rarity,
+            &affix.reconcile.rare_rarity,
+            &affix.reconcile.jewel_type,
+            &affix.reconcile.corrupted_jewel_subtype,
+        ] {
+            check_text(token, false)?;
+        }
+        let mut preceding = BTreeSet::new();
+        for line in &affix.preceding_line_effects {
+            check_text(line, true)?;
+            if !preceding.insert(line)
+                || !named("postparse_line_effects")?.fields.contains_key(line)
+            {
+                return Err(error(
+                    "affix preceding line effect is missing or duplicated",
+                ));
+            }
+        }
+        for rule in &affix.limit_rules {
+            for pattern in [
+                &rule.match_pattern,
+                &rule.positive_pattern,
+                &rule.negative_pattern,
+            ] {
+                check_text(pattern, true)?;
+            }
+        }
+        let reconcile = &affix.reconcile;
+        if !self.rarities.contains(&reconcile.rare_rarity)
+            || roles
+                .fields
+                .get("magic")
+                .and_then(ItemMetadataValue::as_str)
+                != Some(reconcile.magic_rarity.as_str())
+        {
+            return Err(error(
+                "affix reconciliation rarity disagrees with accepted source roles",
+            ));
+        }
+        for value in [
+            affix.limit_default,
+            reconcile.initial_limit,
+            reconcile.minimum_limit,
+            reconcile.magic_limit,
+            reconcile.magic_side_base,
+            reconcile.magic_side_max,
+            reconcile.rare_limit,
+            reconcile.rare_jewel_limit,
+            reconcile.side_divisor,
+        ] {
+            if !value.is_finite() || !(0.0..=4096.0).contains(&value) || value.fract() != 0.0 {
+                return Err(error("invalid affix loading numeric policy"));
+            }
+        }
+        if reconcile.side_divisor == 0.0
+            || reconcile.minimum_limit > reconcile.magic_side_max
+            || reconcile.minimum_limit > reconcile.rare_limit
+            || reconcile.minimum_limit > reconcile.rare_jewel_limit
+        {
+            return Err(error(
+                "invalid affix reconciliation divisor or clamp bounds",
+            ));
         }
         Ok(())
     }
