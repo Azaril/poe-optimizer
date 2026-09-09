@@ -2,13 +2,18 @@
 
 Last updated: 2026-09-09
 
-Current work: **pure Special modifier callback factories**, in
+Current completed checkpoint: **pure Special modifier callback factories**, in
 `runs/callback-factories-worktree`, branch `codex/callback-factories`, based on
 `4396725679d18f61e521f9470eded11937fb1045`. Production source and binaries are frozen.
 Implementation and scoped local validation pass, including the broader data/source
-regressions, public CLI checks, reproducible exports and five-build comparison. Final
-preservation checks pass; publication remains pending. See [the checkpoint](#pure-special-callback-factories-checkpoint); collect the
-existing running gates instead of duplicating long package-validation tests.
+regressions, public CLI checks, reproducible exports and five-build comparison. Published
+on `origin/main` as `27c11a2b253eacf2a21e9cd9c6905b07090c6013`. Preserve that worktree
+and its binaries; see [the checkpoint](#pure-special-callback-factories-checkpoint).
+Next work is pure Prefix/ModTag invocation, with the reviewed plan below.
+
+Exact-code [Windows/Linux CI run 34409563837](https://github.com/Azaril/poe-optimizer/actions/runs/34409563837)
+is in progress. At 2026-09-09 21:56:47 UTC Ubuntu was in lint and Windows was testing
+corpus tooling; neither reported a failed step. Hosted success is not yet claimed.
 
 Schema **21**, semantics `poe2-native-profiles-v21`, retains 27 sections and 129
 authenticated sources. Package SHA-256:
@@ -884,9 +889,15 @@ clone remains clean at the pinned revision. Final evidence is consolidated in
 Failed early fixtures, lint attempts, build preflight and the deliberate opaque-graph
 comparison remain preserved with their scoped replacements.
 
-Resume: commit and push this validated checkpoint, record exact code/docs CI separately,
-then create an isolated next worktree. Do not modify the frozen callback binaries or
-source after publication.
+Published code: `27c11a2b253eacf2a21e9cd9c6905b07090c6013` on `origin/main`. The
+publication ledger is `runs/callback-factories-publication.json`. All 496 frozen files
+retain raw hashes; all 496 main files have matching normalized content. Ninety-two raw
+cross-worktree differences are line endings only, including the 14 preexisting protected
+file differences. Both caller files remain exact. Hosted code/docs CI is tracked
+separately from local gates.
+
+Resume: inspect exact-head CI, then continue pure Prefix/ModTag invocation in an isolated
+worktree. Do not modify the frozen callback binaries or source after publication.
 The next audited slice is pure Prefix/ModTag invocation; see
 `runs/callback-factories-next-native-plan.md/json`. It changes no expression grammar,
 but requires an injected numeric-precheck pattern, exact argument conventions and
