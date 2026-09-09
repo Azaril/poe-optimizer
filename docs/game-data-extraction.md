@@ -114,7 +114,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 16 and `poe2-native-profiles-v16`, including source-keyed passive/actor effects,
+schema 17 and `poe2-native-profiles-v17`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -136,7 +136,11 @@ source locations for inert callbacks. Parsing those callbacks or constructing th
 unique database remains a separate consumer; catalog extraction does not silently replace
 missing modifier effects. Independent item-loading oracles execute the original parser and
 assembly methods separately from this exporter. Regeneration preserves all preceding section
-values and the pinned source/tree; see [item loading](item-source-and-loading.md).
+values and the pinned source/tree. Item-loading schema 2 additionally records defence-header
+keys by observing the complete original header branch and number conversion. Named base
+rewrites reuse the existing definition table; missing base references remain legal data.
+The independent runtime oracle checks state lifetime and rebind ordering rather than using
+extraction as its expected state. See [item loading](item-source-and-loading.md).
 
 
 The `item_scalability` section preserves complete exact-case keys and ordered capture

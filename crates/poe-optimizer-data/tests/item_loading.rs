@@ -40,12 +40,19 @@ fn compatibility() -> BTreeMap<String, ItemMetadataValue> {
                 .map(|k| (k, ItemMetadataValue::Text("CALLER".into()))),
         )),
     );
+    p.insert(
+        "base_aliases".into(),
+        ItemMetadataValue::Table(table([(
+            "armour_header_rewrites",
+            ItemMetadataValue::Table(ItemMetadataTable::default()),
+        )])),
+    );
     p
 }
 fn catalog() -> ItemLoadingData {
     let path = "src/Data/Bases/caller.lua".to_owned();
     ItemLoadingData {
-        schema_version: 1,
+        schema_version: ITEM_LOADING_SCHEMA_VERSION,
         capability: ItemLoadingCapability::DefinitionsOnly,
         source: ItemLoadingSource {
             upstream_revision: "a".repeat(40),
@@ -68,6 +75,7 @@ fn catalog() -> ItemLoadingData {
             line_flags: BTreeSet::from(["caller_flag".into()]),
             rarities: BTreeSet::from(["CALLER".into()]),
             header_names: BTreeSet::new(),
+            defence_header_keys: BTreeMap::new(),
             compatibility: compatibility(),
         },
         bases: vec![ItemBaseDefinition {
@@ -330,6 +338,211 @@ fn required_policy_shapes_fail_closed_but_empty_exclusion_arrays_are_valid() {
     data.policy.compatibility.insert(
         "noncorruptible_types".into(),
         ItemMetadataValue::Table(ItemMetadataTable::default()),
+    );
+    assert!(data.validate().is_err());
+}
+
+fn defence_catalog() -> ItemLoadingData {
+    let mut data = catalog();
+    data.policy
+        .header_names
+        .extend(["Caller Guard".into(), "Caller Rating".into()]);
+    data.policy.defence_header_keys = BTreeMap::from([
+        ("Caller Guard".into(), "GuardTotal".into()),
+        ("Caller Rating".into(), "GuardTotal".into()),
+    ]);
+    data.policy.compatibility.insert(
+        "base_aliases".into(),
+        ItemMetadataValue::Table(table([(
+            "armour_header_rewrites",
+            ItemMetadataValue::Table(table([(
+                "Caller Guard",
+                ItemMetadataValue::Table(table([
+                    (
+                        "from",
+                        ItemMetadataValue::Text("Absent starting base".into()),
+                    ),
+                    (
+                        "to",
+                        ItemMetadataValue::Text("Absent replacement base".into()),
+                    ),
+                ])),
+            )])),
+        )])),
+    );
+    data
+}
+fn rewrites(data: &mut ItemLoadingData) -> &mut ItemMetadataTable {
+    let ItemMetadataValue::Table(aliases) =
+        data.policy.compatibility.get_mut("base_aliases").unwrap()
+    else {
+        panic!()
+    };
+    let ItemMetadataValue::Table(rewrites) =
+        aliases.fields.get_mut("armour_header_rewrites").unwrap()
+    else {
+        panic!()
+    };
+    rewrites
+}
+#[test]
+fn defence_header_aliases_and_absent_base_references_are_injected_without_capability() {
+    let data = defence_catalog();
+    let compiled = ItemLoadingCatalog::new(data.clone()).unwrap();
+    assert_eq!(
+        compiled.defence_header_key("Caller Guard"),
+        Some("GuardTotal")
+    );
+    assert_eq!(
+        compiled.defence_header_key("Caller Rating"),
+        Some("GuardTotal")
+    );
+    assert_eq!(compiled.defence_header_key("Armour"), None);
+    assert_eq!(
+        compiled.armour_header_rewrite("Caller Guard"),
+        Some(ItemBaseRewrite {
+            from: "Absent starting base",
+            to: "Absent replacement base",
+        })
+    );
+    assert_eq!(compiled.armour_header_rewrite("Caller Rating"), None);
+    assert!(compiled.base("Absent replacement base").is_none());
+    assert_eq!(
+        compiled.data().capability,
+        ItemLoadingCapability::DefinitionsOnly
+    );
+    let mut changed = data;
+    changed
+        .policy
+        .defence_header_keys
+        .insert("Caller Guard".into(), "Different".into());
+    assert_eq!(
+        compiled.defence_header_key("Caller Guard"),
+        Some("GuardTotal")
+    );
+}
+#[test]
+fn defence_header_schema_rejects_missing_duplicate_unknown_and_oversized_entries() {
+    let data = defence_catalog();
+    let json = serde_json::to_string(&data).unwrap();
+    let duplicate = json.replace(
+        "\"Caller Guard\":\"GuardTotal\"",
+        "\"Caller Guard\":\"GuardTotal\",\"Caller Guard\":\"Other\"",
+    );
+    assert!(serde_json::from_str::<ItemLoadingData>(&duplicate).is_err());
+    let duplicate_from = json.replace(
+        "\"from\":\"Absent starting base\"",
+        "\"from\":\"Absent starting base\",\"from\":\"Other\"",
+    );
+    assert!(serde_json::from_str::<ItemLoadingData>(&duplicate_from).is_err());
+    let mut value = serde_json::to_value(&data).unwrap();
+    value["policy"]
+        .as_object_mut()
+        .unwrap()
+        .remove("defence_header_keys");
+    assert!(serde_json::from_value::<ItemLoadingData>(value).is_err());
+    let mut changed = data.clone();
+    changed.schema_version = 1;
+    assert!(changed.validate().is_err());
+    for (header, key) in [
+        ("Unknown", "Value"),
+        ("Caller Guard", ""),
+        ("Caller Guard", "bad\0key"),
+    ] {
+        let mut changed = data.clone();
+        changed
+            .policy
+            .defence_header_keys
+            .insert(header.into(), key.into());
+        assert!(changed.validate().is_err(), "{header} {key}");
+    }
+    let mut changed = data.clone();
+    changed
+        .policy
+        .defence_header_keys
+        .insert("Caller Guard".into(), "x".repeat(257));
+    assert!(changed.validate().is_err());
+    let mut changed = data;
+    changed.policy.defence_header_keys = (0..257)
+        .map(|i| (format!("Header {i}"), "Value".into()))
+        .collect();
+    changed.policy.header_names = changed.policy.defence_header_keys.keys().cloned().collect();
+    assert!(changed.validate().is_err());
+}
+#[test]
+fn defence_rewrites_validate_shape_and_header_membership_without_requiring_base_membership() {
+    let data = defence_catalog();
+    for rule in [
+        ItemMetadataValue::Text("wrong".into()),
+        ItemMetadataValue::Table(table([("from", ItemMetadataValue::Text("A".into()))])),
+        ItemMetadataValue::Table(table([
+            ("from", ItemMetadataValue::Text("A".into())),
+            ("to", ItemMetadataValue::Number(2.0)),
+        ])),
+        ItemMetadataValue::Table(table([
+            ("from", ItemMetadataValue::Text("".into())),
+            ("to", ItemMetadataValue::Text("B".into())),
+        ])),
+        ItemMetadataValue::Table(table([
+            ("from", ItemMetadataValue::Text("A".into())),
+            ("to", ItemMetadataValue::Text("B".into())),
+            ("extra", ItemMetadataValue::Boolean(true)),
+        ])),
+    ] {
+        let mut changed = data.clone();
+        rewrites(&mut changed)
+            .fields
+            .insert("Caller Guard".into(), rule);
+        assert!(changed.validate().is_err());
+    }
+    let mut changed = data.clone();
+    let rule = rewrites(&mut changed)
+        .fields
+        .remove("Caller Guard")
+        .unwrap();
+    rewrites(&mut changed)
+        .fields
+        .insert("Other Header".into(), rule);
+    assert!(changed.validate().is_err());
+    let mut changed = data.clone();
+    rewrites(&mut changed)
+        .indexed
+        .insert(1, ItemMetadataValue::Boolean(true));
+    assert!(changed.validate().is_err());
+    let mut changed = data;
+    if let ItemMetadataValue::Table(aliases) = changed
+        .policy
+        .compatibility
+        .get_mut("base_aliases")
+        .unwrap()
+    {
+        aliases.fields.remove("armour_header_rewrites");
+    }
+    assert!(changed.validate().is_err());
+}
+#[test]
+fn defence_headers_allow_later_hidden_overlap_but_reject_other_declared_operation_collisions() {
+    let mut data = defence_catalog();
+    data.policy.compatibility.insert(
+        "hidden_specs".into(),
+        ItemMetadataValue::Table(table([("Caller Guard", ItemMetadataValue::Boolean(true))])),
+    );
+    data.validate().unwrap();
+    let mut changed = data.clone();
+    changed.policy.compatibility.insert(
+        "selection_headers".into(),
+        ItemMetadataValue::Table(table([("Caller Guard", ItemMetadataValue::Boolean(true))])),
+    );
+    assert!(changed.validate().is_err());
+    data.policy.compatibility.insert(
+        "header_assignments".into(),
+        ItemMetadataValue::Table(table([(
+            "Caller Guard",
+            ItemMetadataValue::Table(table([
+                ("field", ItemMetadataValue::Text("other".into())),
+                ("kind", ItemMetadataValue::Text("number".into())),
+            ])),
+        )])),
     );
     assert!(data.validate().is_err());
 }

@@ -5,7 +5,7 @@ use poe_optimizer_data::item_scalability::*;
 fn complete_catalog_distinguishes_empty_keys_missing_keys_and_partial_formats() {
     let snapshot = bundled_snapshot().unwrap();
     let catalog = snapshot.item_scalability();
-    assert_eq!(snapshot.identity().schema_version, 16);
+    assert_eq!(snapshot.identity().schema_version, 17);
     assert_eq!(catalog.data().entries.len(), 15_090);
     let empty = catalog
         .data()

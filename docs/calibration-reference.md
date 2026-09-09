@@ -14,8 +14,9 @@ The [C driver](../scripts/reference-driver.c) loads the pinned PoB distribution'
 
 The [independent Lua harness](../scripts/reference-pob.lua) loads upstream
 `_SimpleGraphic.def.lua`, supplies its own minimal headless callbacks, and boots
-`Launch.lua` directly. It imports fixture XML through `main:SetMode`, checks
-initialization, clears PoB's global cache, and calls
+`Launch.lua` directly. It completes the original item-database loading callback before
+importing fixture XML through `main:SetMode`, checks initialization, clears PoB's global
+cache, and calls
 `character.calcsTab.calcs.buildOutput(character, "MAIN")` directly. It selects
 19 finite numeric values for the original Spark references. The separate attack
 extractor below additionally records weapon and per-hand details. Imported cached
@@ -102,6 +103,14 @@ budget. Results, executable, scratch directories, and logs go beneath a new
 `local/reference-calibration/run-*` directory. The current small C driver uses
 narrow Windows paths; the generation script explicitly requires ASCII paths.
 This reference limitation does not define the production path contract.
+
+The 2026-09-09 readiness repair added explicit completion of the upstream unique/rare
+loading task to both independent harnesses. A single initialization frame does not ensure
+all prototypes are available for imported-item requirements. Fresh runs of all six
+fixtures retained every non-provenance output field, including 138 measurements. The
+committed goldens preserve their original generator/harness identities; newly generated
+outputs record the repaired harness hashes. Validation and evidence are recorded in the
+[readiness checkpoint](implementation.md#reference-item-database-readiness-checkpoint).
 
 The script never runs the Rust evaluator or rewrites committed expected numbers.
 Review generated metrics and provenance before copying a new reference JSON

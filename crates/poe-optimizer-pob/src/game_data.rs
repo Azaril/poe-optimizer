@@ -207,7 +207,7 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v16",
+        "poe-game-data-extractor-v17",
         include_str!("item_loading_extract.rs"),
         include_str!("item_scalability_extract.rs"),
         include_str!("modifier_parser_extract.rs"),

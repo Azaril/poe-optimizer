@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 
-pub const ITEM_LOADING_SCHEMA_VERSION: u32 = 1;
+pub const ITEM_LOADING_SCHEMA_VERSION: u32 = 2;
 type Result<T> = std::result::Result<T, GameDataError>;
 fn error(message: impl std::fmt::Display) -> GameDataError {
     GameDataError(format!("item loading catalog: {message}"))
@@ -52,9 +52,38 @@ pub enum ItemMetadataValue {
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemMetadataTable {
+    #[serde(deserialize_with = "unique_named_map")]
     pub fields: BTreeMap<String, ItemMetadataValue>,
     #[serde(deserialize_with = "numeric_keys")]
     pub indexed: BTreeMap<i64, ItemMetadataValue>,
+}
+fn unique_named_map<'de, D, V>(
+    deserializer: D,
+) -> std::result::Result<BTreeMap<String, V>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+    V: Deserialize<'de>,
+{
+    struct Keys<V>(std::marker::PhantomData<V>);
+    impl<'de, V: Deserialize<'de>> serde::de::Visitor<'de> for Keys<V> {
+        type Value = BTreeMap<String, V>;
+        fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            f.write_str("unique named item keys")
+        }
+        fn visit_map<A: serde::de::MapAccess<'de>>(
+            self,
+            mut map: A,
+        ) -> std::result::Result<Self::Value, A::Error> {
+            let mut out = BTreeMap::new();
+            while let Some((key, value)) = map.next_entry::<String, V>()? {
+                if out.insert(key, value).is_some() {
+                    return Err(serde::de::Error::custom("duplicate named item key"));
+                }
+            }
+            Ok(out)
+        }
+    }
+    deserializer.deserialize_map(Keys(std::marker::PhantomData))
 }
 fn numeric_keys<'de, D: serde::Deserializer<'de>>(
     deserializer: D,
@@ -166,6 +195,11 @@ pub struct ItemLoadingPolicy {
     /// Literal source color-code lookup keys accepted after Rarity uppercasing.
     pub rarities: BTreeSet<String>,
     pub header_names: BTreeSet<String>,
+    /// Complete source defence-header branch: original spelling to armourData key.
+    /// Header membership describes a loading operation, not numerical capability.
+    #[serde(deserialize_with = "unique_named_map")]
+    pub defence_header_keys: BTreeMap<String, String>,
+    #[serde(deserialize_with = "unique_named_map")]
     pub compatibility: BTreeMap<String, ItemMetadataValue>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -181,6 +215,13 @@ pub struct ItemLoadingData {
     pub unique_groups: BTreeMap<String, Vec<String>>,
     /// All source versions, before selecting a tree or executing radius logic.
     pub jewel_radii: ItemMetadataTable,
+}
+/// Borrowed source identity rewrite. Missing base definitions are legitimate:
+/// a complete catalog lookup then corresponds to assigning nil to the Lua base.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct ItemBaseRewrite<'a> {
+    pub from: &'a str,
+    pub to: &'a str,
 }
 #[derive(Debug)]
 struct Inner {
@@ -211,6 +252,29 @@ impl ItemLoadingCatalog {
     }
     pub fn policy(&self) -> &ItemLoadingPolicy {
         &self.0.data.policy
+    }
+    pub fn defence_header_key(&self, header: &str) -> Option<&str> {
+        self.policy()
+            .defence_header_keys
+            .get(header)
+            .map(String::as_str)
+    }
+    pub fn armour_header_rewrite(&self, header: &str) -> Option<ItemBaseRewrite<'_>> {
+        let rule = self
+            .policy()
+            .compatibility
+            .get("base_aliases")?
+            .as_table()?
+            .fields
+            .get("armour_header_rewrites")?
+            .as_table()?
+            .fields
+            .get(header)?
+            .as_table()?;
+        Some(ItemBaseRewrite {
+            from: rule.fields.get("from")?.as_str()?,
+            to: rule.fields.get("to")?.as_str()?,
+        })
     }
     pub fn modifier_table(&self, name: &str) -> Option<&ItemMetadataTable> {
         self.0.data.modifier_tables.get(name)
@@ -264,7 +328,57 @@ impl ItemLoadingPolicy {
             }
             Ok(())
         };
-        named("base_aliases")?;
+        let aliases = named("base_aliases")?;
+        let rewrites = aliases
+            .fields
+            .get("armour_header_rewrites")
+            .and_then(ItemMetadataValue::as_table)
+            .ok_or_else(|| error("missing named armour header rewrites"))?;
+        if !rewrites.indexed.is_empty() || rewrites.fields.len() > 256 {
+            return Err(error("invalid armour header rewrite bounds/keys"));
+        }
+        if self.defence_header_keys.len() > 256 {
+            return Err(error("defence header count bound"));
+        }
+        for (header, key) in &self.defence_header_keys {
+            text(header, 256)?;
+            text(key, 256)?;
+            if header.is_empty() || key.is_empty() || !self.header_names.contains(header) {
+                return Err(error("invalid defence header identity or stored key"));
+            }
+            // Unlike hidden_specs, these tables describe different state operations.
+            if named("selection_headers")?.fields.contains_key(header)
+                || named("header_assignments")?.fields.contains_key(header)
+            {
+                return Err(error(
+                    "defence header conflicts with another header operation",
+                ));
+            }
+        }
+        for (header, value) in &rewrites.fields {
+            if !self.defence_header_keys.contains_key(header) {
+                return Err(error("armour rewrite has no defence header"));
+            }
+            let rule = value
+                .as_table()
+                .ok_or_else(|| error("armour rewrite must be named"))?;
+            if !rule.indexed.is_empty() || rule.fields.len() != 2 {
+                return Err(error("armour rewrite must have only from/to fields"));
+            }
+            for key in ["from", "to"] {
+                let name = rule
+                    .fields
+                    .get(key)
+                    .and_then(ItemMetadataValue::as_str)
+                    .ok_or_else(|| error("armour rewrite from/to must be text"))?;
+                text(name, 4096)?;
+                if name.is_empty() {
+                    return Err(error("empty armour rewrite base identity"));
+                }
+            }
+            // Do not require either string identity to resolve to a base. The
+            // original complete PoE2 data retains legacy rules with absent bases.
+        }
         for key in ["noncorruptible_types", "mod_magnitude_patterns"] {
             texts(key)?;
         }
@@ -386,7 +500,12 @@ impl ItemLoadingData {
             }
         }
         let mut budget = 1_500_000usize;
-        let mut strings = 0usize;
+        let mut strings = self
+            .policy
+            .defence_header_keys
+            .iter()
+            .map(|(header, key)| header.len() + key.len())
+            .sum::<usize>();
         fn value(
             v: &ItemMetadataValue,
             depth: usize,

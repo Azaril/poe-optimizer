@@ -141,10 +141,10 @@ provenance independently. The built-in provider, engine formatter and structural
 the loader implementation fingerprint; injected formatting definitions are bound separately
 by the selected data identity.
 
-Defence display headers have an earlier source operation than `hidden_specs`: they populate
-`armourData` and can rebind a Two-Toned base. Until that operation is represented completely,
-the native loader reports `BaseCompatibility` before consuming those headers. Their presence
-must not silently become hidden metadata or imply calculated defensive ratings.
+Defence display headers now populate first-class optional armour data before the source's
+later `hidden_specs` branch. Their keys and base rewrites come from the selected data
+package. The [state contract below](#defence-display-state) distinguishes these copied
+values from calculated defensive ratings.
 
 An item status of `pending` identifies the required dependency; `source_error` records an
 attempted source operation that failed. `no_base` means loading ended without a recognized
@@ -161,6 +161,69 @@ schema-1 and schema-2 build reports remain readable with loading evidence explic
 unavailable. Missing fields do not mean that a build has no items. Original XML and raw
 reports are retained when projection, loading or evaluation fails; changed input cannot be
 evaluated under the original build's identity.
+
+## Defence display state
+
+`ItemState.armour_data` distinguishes an absent table, an empty table and retained numeric
+entries. `ParseRaw` does not reset this table. A recognized header creates it even if numeric
+conversion returns nil; nil removes that key, while other keys and exact numeric values,
+including signed zero and explicit non-finite values, survive. Repeated headers and later
+text/range instructions observe the resulting state. No absent value receives a default.
+
+The injected rewrite operation compares the retained base name even when the current base
+reference is absent. It changes only that name and reference, before number conversion.
+It does not rerun base setup or reset the previous type, requirements or modifier state.
+A missing target leaves an absent reference with the rewritten name. The original pinned
+catalog's missing references remain visible; synthetic source tests inject bases separately
+to exercise successful rebinding without relabeling those cases as authentic catalog data.
+
+Recognizing a header does not bypass the remaining line-processing state machine. A header
+inside an explicit or implicit section can still cause a modifier-parser request. Assembly
+can subsequently replace or remove armour data before another text record is loaded.
+`AssemblyOutcome.armour_data` therefore uses `ArmourDataUpdate::{Preserve, Clear, Replace}`;
+`Replace` can supply an empty table. This provider boundary transfers observed state, not
+an implementation of the original item assembly calculations.
+
+State tables are bounded to 256 entries. Header keys and rewrite names are validated with
+the injected catalog, and provider replacement keys and numeric representations are checked
+before applying assembly updates. These diagnostics extend the existing loading state
+report without changing its numerical admission contract. Native complete item assembly,
+including how display state interacts with computed ratings, remains a required later phase.
+
+## Base buff generation
+
+Selected item bases can supply independent `flask.buff` and `charm.buff` definitions in the
+injected catalog. Loading handles flask first, then charm, once per family within each
+`ParseRaw` call. An initialized empty table still prevents regeneration when a later base
+is selected. Buff rows and both suppression sets reset on a subsequent parse. Base variant
+selection and ordinary base setup happen before these parser calls.
+
+Every consecutive definition entry invokes the parser directly with its exact text,
+including duplicate or empty strings. There is no formatting, annotation stripping,
+catalyst scaling or additional combined-line retry. A generated row keeps the parser's
+exact remainder; nil modifiers become an empty modifier list. Range, scalar and selection
+metadata start absent. Requests and rows retain the triggering authored base line as their
+source context, while the selected data identity binds the generated text.
+
+Each family also records a set of texts to suppress once from the later authored input.
+Suppression runs before separators, literal flags and headers. Repeated definition entries
+produce repeated rows and requests but one suppression key. When both families contain the
+same text, the first authored match consumes the flask entry and the next consumes the
+charm entry. Sparse indexed tables follow source `ipairs`: stop at the first missing integer
+key, without compacting holes or treating string keys as numeric keys.
+
+Parser unavailability, errors and resource bounds retain the completed prefix; the failing
+row is not appended. The string-only provider does not invent a request for a malformed
+non-string definition entry. Source tests distinguish attempted calls from completed string
+requests and separately prove the original type-error boundary. Generated rows, suppression
+keys, retained text and parser results share the bounded loading-evidence budget; generated
+row count has an explicit limit independent of authored line count.
+
+XML ModRange visits generated buff rows before enchant, implicit and explicit rows. A later
+parse rebuilds buff rows and their absent ranges; assembly-provided modifier payload updates
+remain visible until then. Loading these records does not implement flask/charm charges,
+duration, activation, effect calculations or complete item assembly. No package migration
+is needed: these definitions were already included in item-loading schema 2.
 
 ## Validation requirements
 

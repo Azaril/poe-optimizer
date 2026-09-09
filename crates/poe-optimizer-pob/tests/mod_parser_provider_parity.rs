@@ -666,7 +666,7 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
 }
 
 #[test]
-fn original_defence_header_precedence_is_explicitly_pending_until_armour_data_is_represented() {
+fn original_defence_header_precedence_preserves_armour_data_before_pending_assembly() {
     let snapshot = bundled_snapshot().unwrap();
     let source = runtime::Oracle::new();
     for (header, key) in [
@@ -709,14 +709,12 @@ fn original_defence_header_precedence_is_explicitly_pending_until_armour_data_is
         machine.apply_text(&raw, &mut provider).unwrap();
         assert_eq!(
             machine.pending().map(|pending| pending.kind),
-            Some(DependencyKind::BaseCompatibility)
+            Some(DependencyKind::Assembly)
         );
         assert!(!machine.state().retained_fields.contains_key("hidden_specs"));
-        assert!(
-            provider.parser.is_empty()
-                && provider.formats.is_empty()
-                && provider.assembly.is_empty()
-        );
+        assert!(provider.parser.is_empty() && provider.formats.is_empty());
+        assert_eq!(provider.assembly.len(), 1);
+        reference::compare_state(machine.state(), &before);
     }
 }
 

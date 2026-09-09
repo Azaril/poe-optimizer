@@ -95,7 +95,7 @@ fn native_parser_input_bound_is_a_resource_error_not_missing_support() {
 }
 
 #[test]
-fn defence_headers_stop_before_the_later_hidden_specs_branch() {
+fn defence_headers_preserve_data_before_the_later_hidden_specs_branch() {
     for header in [
         "Armour",
         "Evasion Rating",
@@ -117,15 +117,19 @@ fn defence_headers_stop_before_the_later_hidden_specs_branch() {
             .unwrap();
         assert_eq!(
             machine.pending().unwrap().kind,
-            DependencyKind::BaseCompatibility,
+            DependencyKind::Assembly,
             "{header}"
         );
         assert!(
             !machine.state().retained_fields.contains_key("hidden_specs"),
             "{header}"
         );
-        assert!(machine.state().parser_calls.is_empty(), "{header}");
-        // The original empty constructor performs one no-base assembly call.
-        assert_eq!(machine.state().assembly_calls, 1, "{header}");
+        let key = snapshot.item_loading().defence_header_key(header).unwrap();
+        assert_eq!(
+            machine.state().armour_data.as_ref().unwrap().get(key),
+            Some(&ItemNumber::new(24.0))
+        );
+        assert_eq!(machine.state().parser_calls.len(), 1, "{header}");
+        assert_eq!(machine.state().assembly_calls, 2, "{header}");
     }
 }

@@ -30,10 +30,14 @@ fn catalog() -> ItemLoadingCatalog {
             .map(str::to_owned)
             .collect(),
         header_names: BTreeSet::new(),
+        defence_header_keys: BTreeMap::new(),
         compatibility: [
             (
                 "base_aliases".into(),
-                ItemMetadataValue::Table(ItemMetadataTable::default()),
+                ItemMetadataValue::Table(table([(
+                    "armour_header_rewrites",
+                    ItemMetadataValue::Table(ItemMetadataTable::default()),
+                )])),
             ),
             (
                 "hidden_specs".into(),
@@ -102,7 +106,7 @@ fn catalog() -> ItemLoadingCatalog {
         .collect(),
     };
     ItemLoadingCatalog::new(ItemLoadingData {
-        schema_version: 1,
+        schema_version: ITEM_LOADING_SCHEMA_VERSION,
         capability: ItemLoadingCapability::DefinitionsOnly,
         source: ItemLoadingSource {
             upstream_revision: "a".repeat(40),
@@ -164,6 +168,7 @@ impl ItemLoadProvider for CompleteProvider {
     }
     fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
         DependencyResult::Available(AssemblyOutcome {
+            armour_data: Default::default(),
             modifier_payloads: None,
             requirements: None,
             state_updates: BTreeMap::new(),
@@ -235,6 +240,7 @@ fn parser_feedback_preserves_combined_fallback_text_and_unconsumed_next_line() {
         }
         fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
             DependencyResult::Available(AssemblyOutcome {
+                armour_data: Default::default(),
                 modifier_payloads: None,
                 requirements: None,
                 state_updates: BTreeMap::new(),
@@ -525,6 +531,7 @@ fn assembly_requirement_replacement_is_explicit_and_validated() {
                 },
             );
             DependencyResult::Available(AssemblyOutcome {
+                armour_data: Default::default(),
                 modifier_payloads: None,
                 requirements: Some(requirements),
                 state_updates: BTreeMap::new(),
@@ -564,6 +571,7 @@ fn explicit_assembly_nil_update_removes_retained_field() {
     impl ItemLoadProvider for Clear {
         fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
             DependencyResult::Available(AssemblyOutcome {
+                armour_data: Default::default(),
                 modifier_payloads: None,
                 requirements: None,
                 state_updates: [("note".into(), ItemScalar::Number(ItemNumber::Nil))]
@@ -605,6 +613,7 @@ fn assembly_modifier_payloads_preserve_row_identity_and_reject_count_mismatch() 
                 )])]);
             }
             DependencyResult::Available(AssemblyOutcome {
+                armour_data: Default::default(),
                 modifier_payloads: Some(payloads),
                 requirements: None,
                 state_updates: BTreeMap::new(),
@@ -868,6 +877,7 @@ fn assembly_state_bytes_are_bounded_before_any_update_is_applied() {
     impl ItemLoadProvider for Large {
         fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
             DependencyResult::Available(AssemblyOutcome {
+                armour_data: Default::default(),
                 modifier_payloads: None,
                 requirements: None,
                 state_updates: (0..17)
@@ -909,6 +919,7 @@ fn empty_assembly_modifier_tables_count_towards_the_metadata_bound() {
         }
         fn assemble(&mut self, r: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
             DependencyResult::Available(AssemblyOutcome {
+                armour_data: Default::default(),
                 modifier_payloads: Some(AssemblyModifierPayloads {
                     explicit_mod_lines: r
                         .state
@@ -947,4 +958,455 @@ fn empty_assembly_modifier_tables_count_towards_the_metadata_bound() {
             .iter()
             .all(|row| row.modifiers.is_empty())
     );
+}
+
+fn defence_catalog(target: Option<&str>, include_target: bool) -> ItemLoadingCatalog {
+    let mut data = catalog().data().clone();
+    data.policy
+        .header_names
+        .extend(["Caller Guard".into(), "Caller Second".into()]);
+    data.policy.defence_header_keys = [
+        ("Caller Guard".into(), "ChosenGuard".into()),
+        ("Caller Second".into(), "OtherGuard".into()),
+    ]
+    .into_iter()
+    .collect();
+    if let Some(target) = target {
+        let rewrite =
+            ItemMetadataValue::Table(table([("from", text("Caller Base")), ("to", text(target))]));
+        data.policy.compatibility.insert(
+            "base_aliases".into(),
+            ItemMetadataValue::Table(table([(
+                "armour_header_rewrites",
+                ItemMetadataValue::Table(table([("Caller Guard", rewrite)])),
+            )])),
+        );
+        if include_target {
+            let mut base = data.bases[0].clone();
+            base.name = target.into();
+            base.item_type = "Replacement Type".into();
+            base.fields
+                .fields
+                .insert("type".into(), text("Replacement Type"));
+            base.fields.fields.insert(
+                "req".into(),
+                ItemMetadataValue::Table(table([("str", ItemMetadataValue::Number(999.0))])),
+            );
+            data.bases.push(base);
+        }
+    }
+    ItemLoadingCatalog::new(data).unwrap()
+}
+
+#[test]
+fn injected_defence_header_rebinds_only_base_reference_before_invalid_number() {
+    for include_target in [false, true] {
+        let catalog = defence_catalog(Some("Replacement Base"), include_target);
+        let mut loader = ItemLoadMachine::new(&catalog);
+        loader
+            .apply_text(
+                "Rarity: NORMAL\nCaller Base\nCaller Guard: invalid\nImplicits: 0",
+                &mut CompleteProvider,
+            )
+            .unwrap();
+        assert_eq!(
+            loader.state().base_name.as_deref(),
+            Some("Replacement Base")
+        );
+        assert_eq!(loader.state().base_present, include_target);
+        assert_eq!(loader.state().item_type.as_deref(), Some("Caller Type"));
+        assert_eq!(
+            loader.state().requirements.get("str"),
+            Some(&ItemNumber::new(7.0))
+        );
+        assert_eq!(loader.state().armour_data, Some(BTreeMap::new()));
+        assert!(!loader.state().retained_fields.contains_key("hidden_specs"));
+        assert_eq!(
+            loader.status(),
+            if include_target {
+                ItemLoadStatus::Complete
+            } else {
+                ItemLoadStatus::NoBase
+            }
+        );
+    }
+}
+
+#[test]
+fn header_key_removal_and_reparse_retain_optional_table_and_other_values() {
+    let catalog = defence_catalog(None, false);
+    let mut loader = ItemLoadMachine::new(&catalog);
+    assert_eq!(loader.state().armour_data, None);
+    loader
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nCaller Guard: -0\nCaller Second: -3.5\nImplicits: 0",
+            &mut CompleteProvider,
+        )
+        .unwrap();
+    let data = loader.state().armour_data.as_ref().unwrap();
+    assert_eq!(
+        data["ChosenGuard"].value().unwrap().to_bits(),
+        (-0.0f64).to_bits()
+    );
+    loader
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nCaller Guard: invalid\nImplicits: 0",
+            &mut CompleteProvider,
+        )
+        .unwrap();
+    assert_eq!(
+        loader.state().armour_data,
+        Some(
+            [("OtherGuard".into(), ItemNumber::new(-3.5))]
+                .into_iter()
+                .collect()
+        )
+    );
+    loader
+        .apply_text("Rarity: NORMAL\nUnknown Base", &mut CompleteProvider)
+        .unwrap();
+    assert_eq!(loader.state().armour_data.as_ref().unwrap().len(), 1);
+    loader
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nCaller Second: invalid\nImplicits: 0",
+            &mut CompleteProvider,
+        )
+        .unwrap();
+    assert_eq!(loader.state().armour_data, Some(BTreeMap::new()));
+}
+
+struct ArmourUpdates(std::collections::VecDeque<ArmourDataUpdate>);
+impl ItemLoadProvider for ArmourUpdates {
+    fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+        DependencyResult::Available(AssemblyOutcome {
+            armour_data: self.0.pop_front().unwrap_or_default(),
+            modifier_payloads: None,
+            requirements: None,
+            state_updates: BTreeMap::new(),
+            evidence: ItemMetadataTable::default(),
+        })
+    }
+}
+#[test]
+fn assembly_armour_updates_distinguish_preserve_clear_and_empty_replacement() {
+    let catalog = defence_catalog(None, false);
+    let mut loader = ItemLoadMachine::new(&catalog);
+    let values: BTreeMap<_, _> = [("Computed".into(), ItemNumber::PositiveInfinity)]
+        .into_iter()
+        .collect();
+    let mut provider = ArmourUpdates(
+        [
+            ArmourDataUpdate::Replace(values.clone()),
+            ArmourDataUpdate::Preserve,
+            ArmourDataUpdate::Clear,
+            ArmourDataUpdate::Replace(BTreeMap::new()),
+        ]
+        .into_iter()
+        .collect(),
+    );
+    for expected in [
+        Some(values.clone()),
+        Some(values),
+        None,
+        Some(BTreeMap::new()),
+    ] {
+        loader
+            .apply_text("Rarity: NORMAL\nCaller Base\nImplicits: 0", &mut provider)
+            .unwrap();
+        assert_eq!(loader.state().armour_data, expected);
+    }
+}
+#[test]
+fn invalid_assembly_armour_replacement_does_not_overwrite_loaded_values() {
+    let invalid = [
+        [("Bad".into(), ItemNumber::Nil)].into_iter().collect(),
+        [("Bad".into(), ItemNumber::Finite(f64::NAN))]
+            .into_iter()
+            .collect(),
+        [("bad\0key".into(), ItemNumber::new(1.0))]
+            .into_iter()
+            .collect(),
+        [(String::new(), ItemNumber::new(1.0))]
+            .into_iter()
+            .collect(),
+        (0..257)
+            .map(|i| (format!("key{i}"), ItemNumber::new(1.0)))
+            .collect(),
+    ];
+    for invalid in invalid {
+        let catalog = defence_catalog(None, false);
+        let mut loader = ItemLoadMachine::new(&catalog);
+        let mut provider =
+            ArmourUpdates([ArmourDataUpdate::Replace(invalid)].into_iter().collect());
+        assert!(
+            loader
+                .apply_text(
+                    "Rarity: NORMAL\nCaller Base\nCaller Guard: 9\nImplicits: 0",
+                    &mut provider
+                )
+                .is_err()
+        );
+        assert_eq!(
+            loader.state().armour_data,
+            Some(
+                [("ChosenGuard".into(), ItemNumber::new(9.0))]
+                    .into_iter()
+                    .collect()
+            )
+        );
+    }
+}
+
+fn buff_catalog(
+    flask: Option<ItemMetadataValue>,
+    charm: Option<ItemMetadataValue>,
+) -> ItemLoadingCatalog {
+    let mut data = catalog().data().clone();
+    for (key, value) in [("flask", flask), ("charm", charm)] {
+        if let Some(value) = value {
+            data.bases[0].fields.fields.insert(key.into(), value);
+        }
+    }
+    ItemLoadingCatalog::new(data).unwrap()
+}
+fn buffs(lines: &[&str]) -> ItemMetadataValue {
+    ItemMetadataValue::Table(table([(
+        "buff",
+        ItemMetadataValue::Array(lines.iter().map(|line| text(line)).collect()),
+    )]))
+}
+#[derive(Default)]
+struct BuffProvider {
+    outcomes: BTreeMap<String, DependencyResult<ParseOutcome>>,
+}
+impl ItemLoadProvider for BuffProvider {
+    fn parse_modifier(&mut self, request: &ParseRequest) -> DependencyResult<ParseOutcome> {
+        self.outcomes
+            .get(&request.text)
+            .cloned()
+            .unwrap_or_else(|| CompleteProvider.parse_modifier(request))
+    }
+    fn format_line(&mut self, request: &FormatRequest) -> DependencyResult<String> {
+        CompleteProvider.format_line(request)
+    }
+    fn assemble(&mut self, request: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+        CompleteProvider.assemble(request)
+    }
+}
+#[test]
+fn base_buffs_preserve_duplicates_empty_text_and_independent_suppression_before_separators() {
+    let data = buff_catalog(
+        Some(buffs(&["F", "F", "--------"])),
+        Some(buffs(&["F", ""])),
+    );
+    let mut machine = ItemLoadMachine::new(&data);
+    machine
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nF\nF\nF\nImplicits: 0\nX\n--------",
+            &mut BuffProvider::default(),
+        )
+        .unwrap();
+    assert_eq!(machine.status(), ItemLoadStatus::Complete);
+    let state = machine.state();
+    let rows = &state.buff_mod_lines;
+    assert_eq!(
+        rows.iter().map(|row| row.line.as_str()).collect::<Vec<_>>(),
+        ["F", "F", "--------", "F", ""]
+    );
+    for row in rows {
+        assert_eq!(row.source_line, 2);
+        assert_eq!(row.selection, LineSelection::default());
+        assert!(row.flags.is_empty() && row.mod_tags.is_empty());
+        assert_eq!(row.range, ItemNumber::Nil);
+        assert_eq!(row.corrupted_range, ItemNumber::Nil);
+        assert_eq!(row.value_scalar, ItemNumber::Nil);
+    }
+    assert_eq!(
+        state
+            .parser_calls
+            .iter()
+            .map(|call| call.text.as_str())
+            .collect::<Vec<_>>(),
+        ["F", "F", "--------", "F", "", "F", "X"]
+    );
+    assert!(state.parser_calls.iter().all(|call| !call.combined));
+    assert_eq!(
+        state
+            .format_calls
+            .iter()
+            .map(|call| call.text.as_str())
+            .collect::<Vec<_>>(),
+        ["F", "X"]
+    );
+    assert_eq!(
+        state.retained_fields["checkSection"],
+        ItemScalar::Boolean(false)
+    );
+}
+#[test]
+fn base_buffs_keep_nil_parser_output_and_extra_without_external_retry_or_defaults() {
+    let data = buff_catalog(None, Some(buffs(&["Unknown", "Partial"])));
+    let mut provider = BuffProvider {
+        outcomes: [
+            (
+                "Unknown".into(),
+                DependencyResult::Available(ParseOutcome {
+                    modifiers: None,
+                    extra: Some("".into()),
+                }),
+            ),
+            (
+                "Partial".into(),
+                DependencyResult::Available(ParseOutcome {
+                    modifiers: Some(vec![]),
+                    extra: Some(" exact tail ".into()),
+                }),
+            ),
+        ]
+        .into_iter()
+        .collect(),
+    };
+    let mut machine = ItemLoadMachine::new(&data);
+    machine
+        .apply_text("Rarity: NORMAL\nCaller Base", &mut provider)
+        .unwrap();
+    assert_eq!(machine.state().parser_calls.len(), 2);
+    assert!(machine.state().format_calls.is_empty());
+    assert_eq!(machine.state().buff_mod_lines[0].extra.as_deref(), Some(""));
+    assert_eq!(
+        machine.state().buff_mod_lines[1].extra.as_deref(),
+        Some(" exact tail ")
+    );
+    assert!(
+        machine
+            .state()
+            .buff_mod_lines
+            .iter()
+            .all(|row| row.modifiers.is_empty())
+    );
+}
+#[test]
+fn base_buffs_reparse_regenerates_rows_and_modrange_indexes_them_before_ordinary_lines() {
+    let data = buff_catalog(None, Some(buffs(&["B"])));
+    let mut machine = ItemLoadMachine::new(&data);
+    let raw = "Rarity: NORMAL\nCaller Base\nB\nImplicits: 0\nOrdinary";
+    machine
+        .apply_text(raw, &mut BuffProvider::default())
+        .unwrap();
+    machine.apply_mod_range(Some("1"), Some("0.25")).unwrap();
+    machine.apply_mod_range(Some("2"), Some("0.75")).unwrap();
+    assert_eq!(
+        machine.state().buff_mod_lines[0].range,
+        ItemNumber::new(0.25)
+    );
+    assert_eq!(
+        machine.state().explicit_mod_lines[0].range,
+        ItemNumber::new(0.75)
+    );
+    machine
+        .apply_text(raw, &mut BuffProvider::default())
+        .unwrap();
+    assert_eq!(machine.state().buff_mod_lines.len(), 1);
+    assert_eq!(machine.state().buff_mod_lines[0].range, ItemNumber::Nil);
+    assert_eq!(
+        machine
+            .state()
+            .parser_calls
+            .iter()
+            .filter(|call| call.text == "B")
+            .count(),
+        2
+    );
+    assert_eq!(machine.state().explicit_mod_lines.len(), 1);
+}
+#[test]
+fn base_buffs_sparse_tables_stop_at_first_gap_and_ignore_named_or_negative_keys() {
+    let data = buff_catalog(
+        None,
+        Some(ItemMetadataValue::Table(table([(
+            "buff",
+            ItemMetadataValue::Table(ItemMetadataTable {
+                fields: [("1".into(), text("Named"))].into_iter().collect(),
+                indexed: [
+                    (-1, text("Negative")),
+                    (1, text("First")),
+                    (3, text("After gap")),
+                ]
+                .into_iter()
+                .collect(),
+            }),
+        )]))),
+    );
+    let mut machine = ItemLoadMachine::new(&data);
+    machine
+        .apply_text("Rarity: NORMAL\nCaller Base", &mut BuffProvider::default())
+        .unwrap();
+    assert_eq!(machine.state().parser_calls.len(), 1);
+    assert_eq!(machine.state().parser_calls[0].text, "First");
+    assert_eq!(machine.state().buff_mod_lines.len(), 1);
+}
+#[test]
+fn base_buffs_unavailable_or_failed_parser_preserves_only_the_completed_prefix() {
+    let data = buff_catalog(
+        Some(buffs(&["First", "Stop", "Later"])),
+        Some(buffs(&["Other family"])),
+    );
+    for result in [
+        DependencyResult::Unavailable("pending callback".into()),
+        DependencyResult::SourceError("source parser error".into()),
+        DependencyResult::ResourceError("parser work bound".into()),
+    ] {
+        let pending = matches!(result, DependencyResult::Unavailable(_));
+        let source = matches!(result, DependencyResult::SourceError(_));
+        let mut provider = BuffProvider {
+            outcomes: [("Stop".into(), result)].into_iter().collect(),
+        };
+        let mut machine = ItemLoadMachine::new(&data);
+        let result = machine.apply_text(
+            "Rarity: NORMAL\nCaller Base\nImplicits: 0\nAuthored tail",
+            &mut provider,
+        );
+        assert_eq!(result.is_ok(), pending);
+        assert_eq!(machine.state().base_name.as_deref(), Some("Caller Base"));
+        assert_eq!(machine.state().buff_mod_lines.len(), 1);
+        assert_eq!(machine.state().buff_mod_lines[0].line, "First");
+        assert_eq!(machine.state().parser_calls.len(), 2);
+        assert!(machine.state().format_calls.is_empty());
+        assert_eq!(machine.state().assembly_calls, 1); // Empty constructor only.
+        if pending {
+            assert_eq!(
+                machine.pending().unwrap().kind,
+                DependencyKind::ModifierParser
+            );
+        }
+        if source {
+            assert_eq!(machine.status(), ItemLoadStatus::SourceError);
+        }
+    }
+}
+
+#[test]
+fn base_buffs_bound_generated_rows_independently_of_authored_line_count() {
+    let data = buff_catalog(
+        None,
+        Some(ItemMetadataValue::Table(table([(
+            "buff",
+            ItemMetadataValue::Array(vec![text("B"); MAX_ITEM_LOADING_LINES + 1]),
+        )]))),
+    );
+    let mut machine = ItemLoadMachine::new(&data);
+    let error = machine
+        .apply_text("Rarity: NORMAL\nCaller Base", &mut BuffProvider::default())
+        .unwrap_err();
+    assert!(
+        error
+            .to_string()
+            .contains("base buff modifier line count bound")
+    );
+    assert_eq!(machine.state().raw_lines.len(), 2);
+    assert_eq!(machine.state().buff_mod_lines.len(), MAX_ITEM_LOADING_LINES);
+    assert_eq!(machine.state().parser_calls.len(), MAX_ITEM_LOADING_LINES);
+    assert_eq!(machine.state().assembly_calls, 1);
+    assert_ne!(machine.status(), ItemLoadStatus::SourceError);
+    assert!(machine.evidence_bytes() <= MAX_ITEM_LOADING_EVIDENCE_BYTES);
 }
