@@ -1763,9 +1763,24 @@ mod passive_assembly_source_tests {
     #[test]
     fn item_formatting_extraction_observes_original_formats_and_rejects_incomplete_shapes() {
         let e = extractor();
-        let records = e
-            .lua
-            .to_value(bundled_snapshot().unwrap().package())
+        let snapshot = bundled_snapshot().unwrap();
+        let package = snapshot.package();
+        // source_extract_item_formatting reads only these two rule collections.
+        // Keep unrelated package catalogs outside the extractor's bounded Lua state.
+        let actor = e.lua.create_table().unwrap();
+        actor
+            .set(
+                "modifier_rules",
+                e.lua.to_value(&package.actor.modifier_rules).unwrap(),
+            )
+            .unwrap();
+        let records = e.lua.create_table().unwrap();
+        records.set("actor", actor).unwrap();
+        records
+            .set(
+                "item_modifier_rules",
+                e.lua.to_value(&package.item_modifier_rules).unwrap(),
+            )
             .unwrap();
         let check:Function=e.lua.load("return function(records,edit) local old=data.modScalability;local format=itemLib.formatValue;local row=copyTable(old['# to Evasion Rating']);data.modScalability={['# to Evasion Rating']=row};edit(row);local ok,result=pcall(source_extract_item_formatting,records);data.modScalability=old;itemLib.formatValue=format;return ok,result end").eval().unwrap();
         for edit in [
