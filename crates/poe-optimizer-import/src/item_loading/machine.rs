@@ -1,5 +1,6 @@
 use super::{ItemNumber, LineSelection, VariantState, syntax};
 use poe_optimizer_data::item_loading::{ItemLoadingCatalog, ItemMetadataTable, ItemMetadataValue};
+use poe_optimizer_data::item_scalability::CatalystScalingData;
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 pub const MAX_ITEM_LOADING_TEXT: usize = 1024 * 1024;
@@ -49,10 +50,13 @@ pub struct PendingDependency {
     pub line_index: Option<usize>,
     pub message: String,
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
+#[serde(tag = "status", content = "value", rename_all = "snake_case")]
 pub enum DependencyResult<T> {
     Available(T),
     Unavailable(String),
+    SourceError(String),
+    ResourceError(String),
 }
 #[derive(Debug, Clone, Serialize)]
 pub struct ParseRequest {
@@ -74,6 +78,17 @@ pub struct FormatRequest {
     pub range: ItemNumber,
     pub scalar: ItemNumber,
     pub corrupted_range: ItemNumber,
+}
+/// A parser request issued by applyRange before the loader's modifier parse.
+#[derive(Debug, Clone, Serialize)]
+pub struct FormatParserCall {
+    pub request: ParseRequest,
+    pub result: DependencyResult<ParseOutcome>,
+}
+#[derive(Debug, Clone)]
+pub struct FormatOutcome {
+    pub result: DependencyResult<String>,
+    pub precision_parser_calls: Vec<FormatParserCall>,
 }
 #[derive(Debug, Clone, Serialize)]
 pub struct UniqueRequest {
@@ -119,6 +134,15 @@ pub trait ItemLoadProvider {
     }
     fn format_line(&mut self, _request: &FormatRequest) -> DependencyResult<String> {
         DependencyResult::Unavailable("general ItemTools range formatting is unavailable".into())
+    }
+    fn format_with_trace(&mut self, request: &FormatRequest) -> FormatOutcome {
+        FormatOutcome {
+            result: self.format_line(request),
+            precision_parser_calls: Vec::new(),
+        }
+    }
+    fn catalyst_scaling(&self) -> Option<&CatalystScalingData> {
+        None
     }
     fn lookup_unique(
         &mut self,
@@ -173,6 +197,7 @@ pub struct ItemState {
     pub explicit_mod_lines: Vec<LoadedModLine>,
     pub parser_calls: Vec<ParseRequest>,
     pub format_calls: Vec<FormatRequest>,
+    pub format_parser_calls: Vec<FormatParserCall>,
     pub assembly_calls: usize,
     pub assembly_evidence: Option<ItemMetadataTable>,
 }
@@ -204,6 +229,7 @@ impl Default for ItemState {
             explicit_mod_lines: Vec::new(),
             parser_calls: Vec::new(),
             format_calls: Vec::new(),
+            format_parser_calls: Vec::new(),
             assembly_calls: 0,
             assembly_evidence: None,
         }
@@ -342,6 +368,31 @@ impl<'a> ItemLoadMachine<'a> {
             line_index: line,
             message,
         });
+        Ok(())
+    }
+    fn reject_dependency<T>(&mut self, message: String, source: bool) -> Result<T, ItemLoadError> {
+        if message.len() > MAX_ITEM_LOADING_DEPENDENCY_MESSAGE {
+            return Err(ItemLoadError("dependency error message bound".into()));
+        }
+        self.charge(message.len())?;
+        if source {
+            self.status = ItemLoadStatus::SourceError;
+        }
+        Err(ItemLoadError(message))
+    }
+    fn charge_parse_outcome(&mut self, value: &ParseOutcome) -> Result<(), ItemLoadError> {
+        if value.modifiers.as_ref().is_some_and(|v| v.len() > 4096)
+            || value
+                .extra
+                .as_ref()
+                .is_some_and(|v| v.len() > MAX_ITEM_LOADING_TEXT)
+        {
+            return Err(ItemLoadError("parser result bound".into()));
+        }
+        self.charge(value.extra.as_ref().map_or(0, String::len))?;
+        if let Some(mods) = &value.modifiers {
+            self.charge(validate_metadata_tables(mods.iter())?)?;
+        }
         Ok(())
     }
     fn reset(&mut self, raw: &str) {
@@ -649,34 +700,54 @@ impl<'a> ItemLoadMachine<'a> {
                     self.stop(DependencyKind::RuneReconstruction,Some(line_index),"rune display/reconstruction requires complete slot and modifier dependencies")?;
                     return Ok(());
                 }
-                if self.num("catalyst").is_some() && !flags.contains("unscalable") {
-                    self.stop(
-                        DependencyKind::RangeFormatting,
-                        Some(line_index),
-                        "catalyst tag scalar requires represented ItemTools dependency",
-                    )?;
-                    return Ok(());
-                }
-                if line.contains('(')
-                    && line.contains(')')
-                    && line.bytes().any(|b| b.is_ascii_digit())
+                if line.ends_with(" - Unscalable Value")
+                    || line.ends_with(" \u{2014} Unscalable Value")
                 {
-                    self.stop(
-                        DependencyKind::RangeFormatting,
-                        Some(line_index),
-                        "advanced numeric/enum range normalization is not represented",
-                    )?;
-                    return Ok(());
-                }
-                if line.ends_with(" - Unscalable Value") || line.ends_with(" — Unscalable Value")
-                {
-                    line = line
-                        .trim_end_matches(" - Unscalable Value")
-                        .trim_end_matches(" — Unscalable Value")
+                    let stripped = line.strip_suffix(" - Unscalable Value").unwrap_or(&line);
+                    line = stripped
+                        .strip_suffix(" \u{2014} Unscalable Value")
+                        .unwrap_or(stripped)
                         .into();
                     flags.insert("unscalable".into());
                 }
-                let Some(ranged) = self.format(&line, line_index, corrupted_range, provider)?
+                let catalyst_scalar = if let Some(policy) = provider.catalyst_scaling() {
+                    poe_optimizer_engine::item_tools::catalyst_scalar(
+                        policy,
+                        &self.catalog.policy().catalysts,
+                        self.num("catalyst"),
+                        Some(&tags),
+                        &flags,
+                        flags.contains("unscalable"),
+                        self.num("catalystQuality"),
+                    )
+                    .map_err(|e| ItemLoadError(e.to_string()))?
+                } else if self.num("catalyst").is_some() && !flags.contains("unscalable") {
+                    self.stop(
+                        DependencyKind::RangeFormatting,
+                        Some(line_index),
+                        "catalyst tag scalar requires injected ItemTools policy",
+                    )?;
+                    return Ok(());
+                } else {
+                    1.0
+                };
+                // Advanced-copy current(value) and enum preprocessing belongs to
+                // Item.ParseRaw. Plain (min-max) ranges are handled by ItemTools.
+                if has_advanced_copy_numeric_or_enum(&line) {
+                    self.stop(
+                        DependencyKind::RangeFormatting,
+                        Some(line_index),
+                        "advanced-copy value/enum preprocessing is not represented",
+                    )?;
+                    return Ok(());
+                }
+                let Some(ranged) = self.format(
+                    &line,
+                    line_index,
+                    corrupted_range,
+                    catalyst_scalar,
+                    provider,
+                )?
                 else {
                     return Ok(());
                 };
@@ -688,8 +759,13 @@ impl<'a> ItemLoadMachine<'a> {
                 {
                     let next = syntax::strip_next(&lines[index + 1]);
                     let combined = format!("{line} {next}");
-                    let Some(ranged) =
-                        self.format(&combined, line_index, corrupted_range, provider)?
+                    let Some(ranged) = self.format(
+                        &combined,
+                        line_index,
+                        corrupted_range,
+                        catalyst_scalar,
+                        provider,
+                    )?
                     else {
                         return Ok(());
                     };
@@ -764,7 +840,7 @@ impl<'a> ItemLoadMachine<'a> {
                         },
                         corrupted_range,
                         value_scalar: if recognized {
-                            ItemNumber::new(1.0)
+                            ItemNumber::new(catalyst_scalar)
                         } else {
                             ItemNumber::Nil
                         },
@@ -1250,25 +1326,92 @@ impl<'a> ItemLoadMachine<'a> {
         text: &str,
         line: usize,
         corrupted: ItemNumber,
+        scalar: f64,
         provider: &mut impl ItemLoadProvider,
     ) -> Result<Option<String>, ItemLoadError> {
         if self.state.format_calls.len() >= MAX_ITEM_LOADING_CALLS {
             return Err(ItemLoadError("format request bound".into()));
         }
         let request = FormatRequest {
-            sequence: self.state.format_calls.len() + self.state.parser_calls.len(),
+            sequence: self.state.format_calls.len()
+                + self.state.parser_calls.len()
+                + self.state.format_parser_calls.len(),
             line_index: line,
             text: text.into(),
             range: ItemNumber::new(1.0),
-            scalar: ItemNumber::new(1.0),
+            scalar: ItemNumber::new(scalar),
             corrupted_range: corrupted,
         };
         self.charge(text.len())?;
-        let result = provider.format_line(&request);
+        let sequence = request.sequence;
+        let outcome = provider.format_with_trace(&request);
         self.state.format_calls.push(request);
-        match result {
+        if outcome.precision_parser_calls.len()
+            > MAX_ITEM_LOADING_CALLS.saturating_sub(self.state.format_parser_calls.len())
+        {
+            return Err(ItemLoadError(
+                "format precision parser request bound".into(),
+            ));
+        }
+        for (index, call) in outcome.precision_parser_calls.iter().enumerate() {
+            if matches!(call.result, DependencyResult::Available(_)) {
+                continue;
+            }
+            let consistent = match (&call.result, &outcome.result) {
+                (DependencyResult::Unavailable(a), DependencyResult::Unavailable(b))
+                | (DependencyResult::SourceError(a), DependencyResult::SourceError(b))
+                | (DependencyResult::ResourceError(a), DependencyResult::ResourceError(b)) => {
+                    a == b
+                }
+                _ => false,
+            };
+            if index + 1 != outcome.precision_parser_calls.len() || !consistent {
+                return Err(ItemLoadError(
+                    "inconsistent format precision parser result".into(),
+                ));
+            }
+        }
+        let parser_pending = outcome
+            .precision_parser_calls
+            .iter()
+            .any(|call| matches!(call.result, DependencyResult::Unavailable(_)));
+        for (index, call) in outcome.precision_parser_calls.into_iter().enumerate() {
+            if call.request.sequence != sequence + 1 + index
+                || call.request.line_index != line
+                || call.request.combined
+                || call.request.text.len() > MAX_ITEM_LOADING_TEXT
+            {
+                return Err(ItemLoadError(
+                    "invalid format precision parser request".into(),
+                ));
+            }
+            self.charge(call.request.text.len())?;
+            match &call.result {
+                DependencyResult::Available(value) => self.charge_parse_outcome(value)?,
+                DependencyResult::Unavailable(message)
+                | DependencyResult::SourceError(message)
+                | DependencyResult::ResourceError(message) => {
+                    if message.len() > MAX_ITEM_LOADING_DEPENDENCY_MESSAGE {
+                        return Err(ItemLoadError("dependency message bound".into()));
+                    }
+                    self.charge(message.len())?;
+                }
+            }
+            self.state.format_parser_calls.push(call);
+        }
+        match outcome.result {
+            DependencyResult::SourceError(message) => self.reject_dependency(message, true),
+            DependencyResult::ResourceError(message) => self.reject_dependency(message, false),
             DependencyResult::Unavailable(message) => {
-                self.stop(DependencyKind::RangeFormatting, Some(line), message)?;
+                self.stop(
+                    if parser_pending {
+                        DependencyKind::ModifierParser
+                    } else {
+                        DependencyKind::RangeFormatting
+                    },
+                    Some(line),
+                    message,
+                )?;
                 Ok(None)
             }
             DependencyResult::Available(value) => {
@@ -1291,7 +1434,9 @@ impl<'a> ItemLoadMachine<'a> {
             return Err(ItemLoadError("parser request bound".into()));
         }
         let request = ParseRequest {
-            sequence: self.state.format_calls.len() + self.state.parser_calls.len(),
+            sequence: self.state.format_calls.len()
+                + self.state.parser_calls.len()
+                + self.state.format_parser_calls.len(),
             line_index: line,
             text: text.into(),
             combined,
@@ -1300,23 +1445,14 @@ impl<'a> ItemLoadMachine<'a> {
         let result = provider.parse_modifier(&request);
         self.state.parser_calls.push(request);
         match result {
+            DependencyResult::SourceError(message) => self.reject_dependency(message, true),
+            DependencyResult::ResourceError(message) => self.reject_dependency(message, false),
             DependencyResult::Unavailable(message) => {
                 self.stop(DependencyKind::ModifierParser, Some(line), message)?;
                 Ok(None)
             }
             DependencyResult::Available(value) => {
-                if value.modifiers.as_ref().is_some_and(|v| v.len() > 4096)
-                    || value
-                        .extra
-                        .as_ref()
-                        .is_some_and(|v| v.len() > MAX_ITEM_LOADING_TEXT)
-                {
-                    return Err(ItemLoadError("parser result bound".into()));
-                }
-                self.charge(value.extra.as_ref().map_or(0, String::len))?;
-                if let Some(mods) = &value.modifiers {
-                    self.charge(validate_metadata_tables(mods.iter())?)?;
-                }
+                self.charge_parse_outcome(&value)?;
                 Ok(Some(value))
             }
         }
@@ -1366,6 +1502,12 @@ impl<'a> ItemLoadMachine<'a> {
                     base_name: self.state.base_name.clone(),
                 };
                 match provider.lookup_unique(&request) {
+                    DependencyResult::SourceError(message) => {
+                        return self.reject_dependency(message, true);
+                    }
+                    DependencyResult::ResourceError(message) => {
+                        return self.reject_dependency(message, false);
+                    }
                     DependencyResult::Unavailable(message) => {
                         self.stop(DependencyKind::UniqueDatabase, None, message)?;
                         return Ok(());
@@ -1458,6 +1600,10 @@ impl<'a> ItemLoadMachine<'a> {
             state: self.state.clone(),
         };
         match provider.assemble(&request) {
+            DependencyResult::SourceError(message) => return self.reject_dependency(message, true),
+            DependencyResult::ResourceError(message) => {
+                return self.reject_dependency(message, false);
+            }
             DependencyResult::Unavailable(message) => {
                 self.stop(DependencyKind::Assembly, None, message)?
             }
@@ -1868,4 +2014,31 @@ fn validate_metadata_tables<'a>(
         table(t, 0, &mut budget)?;
     }
     Ok(budget.bytes + budget.nodes * 64)
+}
+
+fn has_advanced_copy_numeric_or_enum(line: &str) -> bool {
+    // Lua's %b() matches balanced pairs. Track all pairs in one pass so nested
+    // annotations cannot accidentally pass through to the modifier parser.
+    let bytes = line.as_bytes();
+    let mut openings = Vec::new();
+    let mut digits = 0usize;
+    let mut hyphens = 0usize;
+    for (index, byte) in bytes.iter().copied().enumerate() {
+        if byte.is_ascii_digit() {
+            digits += 1;
+        } else if byte == b'-' {
+            hyphens += 1;
+        } else if byte == b'(' {
+            let numeric_prefix =
+                index > 0 && (bytes[index - 1].is_ascii_digit() || bytes[index - 1] == b'.');
+            openings.push((numeric_prefix, digits, hyphens));
+        } else if byte == b')'
+            && let Some((numeric_prefix, prior_digits, prior_hyphens)) = openings.pop()
+            && ((digits == prior_digits && hyphens != prior_hyphens)
+                || (numeric_prefix && digits != prior_digits))
+        {
+            return true;
+        }
+    }
+    false
 }

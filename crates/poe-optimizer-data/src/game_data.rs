@@ -12,6 +12,7 @@ pub use crate::item_rules::{
     ItemCaptureKind, ItemModifierMapping, ItemModifierRoll, ItemModifierRule, LocalWeaponOperation,
     LocalWeaponStat,
 };
+pub use crate::item_scalability::*;
 pub use crate::movement::MovementData;
 pub use crate::skill_identities::*;
 pub use poe_optimizer_core::data::DataIdentity;
@@ -20,8 +21,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 14;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v14";
+pub const SCHEMA_VERSION: u32 = 15;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v15";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -48,6 +49,7 @@ const SECTIONS: &[&str] = &[
     "configuration",
     "skill_identities",
     "item_loading",
+    "item_scalability",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -435,6 +437,7 @@ pub struct GameDataPackage {
     pub configuration: ConfigurationData,
     pub skill_identities: SkillIdentityData,
     pub item_loading: ItemLoadingData,
+    pub item_scalability: ItemScalabilityData,
 }
 impl GameDataPackage {
     pub fn armour_base(&self, id: &str) -> Option<&ArmourBaseData> {
@@ -514,6 +517,7 @@ pub struct GameDataSnapshot {
     configuration: ConfigDefinitionCatalog,
     skill_identities: SkillIdentityCatalog,
     item_loading: ItemLoadingCatalog,
+    item_scalability: ItemScalabilityCatalog,
 }
 impl GameDataSnapshot {
     pub fn identity(&self) -> &DataIdentity {
@@ -527,6 +531,9 @@ impl GameDataSnapshot {
     }
     pub fn configuration(&self) -> &ConfigDefinitionCatalog {
         &self.configuration
+    }
+    pub fn item_scalability(&self) -> &ItemScalabilityCatalog {
+        &self.item_scalability
     }
     pub fn item_loading(&self) -> &ItemLoadingCatalog {
         &self.item_loading
@@ -591,6 +598,7 @@ impl GameDataLoader {
         let configuration = ConfigDefinitionCatalog::new(package.configuration.clone())?;
         let skill_identities = SkillIdentityCatalog::new(package.skill_identities.clone())?;
         let item_loading = ItemLoadingCatalog::new(package.item_loading.clone())?;
+        let item_scalability = ItemScalabilityCatalog::new(package.item_scalability.clone())?;
         Ok(GameDataSnapshot {
             identity,
             trust,
@@ -598,6 +606,7 @@ impl GameDataLoader {
             configuration,
             skill_identities,
             item_loading,
+            item_scalability,
         })
     }
 }
@@ -694,6 +703,7 @@ fn number(name: &str, value: f64, minimum: f64, maximum: f64) -> Result<()> {
 fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     package.skill_identities.validate()?;
     package.item_loading.validate()?;
+    package.item_scalability.validate()?;
     let m = &package.manifest;
     if m.schema_version != SCHEMA_VERSION {
         return Err(error("unsupported schema_version"));

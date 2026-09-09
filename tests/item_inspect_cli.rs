@@ -330,3 +330,74 @@ fn item_loading_source_error_keeps_other_definition_sections_and_original_input(
     assert_eq!(report["verification"]["item_loading"], "not_reported");
     assert_eq!(fs::read_to_string(&input).unwrap(), xml);
 }
+
+#[test]
+fn caller_scalability_data_controls_formatting_before_explicit_parser_stop() {
+    use poe_optimizer_data::item_scalability::{ItemFormatAssignments, ItemScalabilityValue};
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller.xml");
+    let data_path = temp.path().join("caller-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    assert!(
+        !package
+            .item_scalability
+            .entries
+            .contains_key("Caller roll #")
+    );
+    package.item_scalability.entries.insert(
+        "Caller roll #".into(),
+        vec![ItemScalabilityValue {
+            is_scalable: true,
+            formats: Some(vec!["caller_precision".into()]),
+        }],
+    );
+    package.item_scalability.format_assignments.insert(
+        "caller_precision".into(),
+        ItemFormatAssignments {
+            precision: Some(10.0),
+            display_precision: Some(1),
+            if_required: Some(false),
+        },
+    );
+    package.refresh_section_digests().unwrap();
+    let data_bytes = package.canonical_bytes().unwrap();
+    fs::write(&data_path, &data_bytes).unwrap();
+    let xml = "<PathOfBuilding2><Items><Item id='caller'>Rarity: Normal\nRusted Greathelm\nItem Level: 1\nQuality: 0\nCaller roll 10.049\n</Item></Items></PathOfBuilding2>";
+    fs::write(&input, xml).unwrap();
+    let bundled = inspect_definitions(&input, temp.path(), None);
+    let selected = inspect_definitions(&input, temp.path(), Some(&data_path));
+    for (report, expected) in [
+        (&bundled, "Caller roll 10.049"),
+        (&selected, "Caller roll 10.0"),
+    ] {
+        let loaded = &report["definition_lookup"]["items"]["report"];
+        let item = &loaded["items"][0];
+        assert_eq!(item["status"], "pending", "{item}");
+        assert_eq!(item["pending"]["kind"], "modifier_parser", "{item}");
+        let calls = item["state"]["parser_calls"].as_array().unwrap();
+        assert_eq!(calls.len(), 1);
+        assert_eq!(calls[0]["text"], expected);
+        assert_eq!(loaded["data_identity"], report["definition_lookup"]["data"]);
+        assert_eq!(
+            loaded["implementation_sha256"],
+            report["item_loading_implementation_sha256"]
+        );
+        assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
+        assert_eq!(report["verification"]["native_admission"], "not_checked");
+        assert_eq!(report["verification"]["reference_calculation"], "not_run");
+    }
+    assert_ne!(
+        bundled["definition_lookup"]["data"],
+        selected["definition_lookup"]["data"]
+    );
+    assert_eq!(bundled["items"], selected["items"]);
+    assert_eq!(
+        selected["definition_lookup"]["data"]["content_sha256"],
+        format!("{:x}", Sha256::digest(&data_bytes))
+    );
+    assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+    assert_eq!(fs::read(&data_path).unwrap(), data_bytes);
+}

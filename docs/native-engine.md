@@ -36,6 +36,16 @@ budget. A browser runner supplies its own scheduling, progress, cancellation and
 loading while calling the same Rust calculations. Persistent mutable caches, when added,
 belong to one evaluation context and must demonstrate request-order independence.
 
+## Item formatting during preparation
+
+The pure [general item formatter](item-formatting.md) borrows an injected scalability
+catalog and actor precision definitions. It handles text/ranges and scaling separately from
+modifier parsing or full item assembly. Parser-dependent precision returns a bounded
+continuation for explicit ordered feedback. The import provider retains that call evidence;
+the engine neither starts a process nor falls back to Lua. A successfully formatted line
+is not a supported complete item or build. Prepared native evaluation can reuse resolved
+item components without repeating source text work for every candidate.
+
 ## Shared actor preparation
 
 `CompiledGameData::prepare_actor` translates source attribute, maximum-resource and receiving-defence

@@ -15,7 +15,7 @@ use std::{
     process::{Command, Output},
 };
 
-const SECTIONS: [&str; 24] = [
+const SECTIONS: [&str; 25] = [
     "tree",
     "character",
     "actor",
@@ -40,6 +40,7 @@ const SECTIONS: [&str; 24] = [
     "configuration",
     "skill_identities",
     "item_loading",
+    "item_scalability",
 ];
 fn repository() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -138,7 +139,7 @@ fn assert_no_outputs(path: &Path) {
 }
 
 #[test]
-fn fresh_cli_extractions_reproduce_all_twenty_four_sections_and_stable_source_evidence() {
+fn fresh_cli_extractions_reproduce_all_twenty_five_sections_and_stable_source_evidence() {
     let temp = tempfile::tempdir().unwrap();
     let first = temp.path().join("first extracted package.json");
     let second = temp.path().join("second extracted package.json");

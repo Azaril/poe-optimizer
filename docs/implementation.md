@@ -2,17 +2,21 @@
 
 Last updated: 2026-09-09
 
-Current checkpoint: **injected item definitions and ordered native item loading**,
-implemented, locally validated and published as
-`43251c748ce735783bb0df6357f54f16d4134e35` on main.
-[Exact-code CI run 34320179629](https://github.com/Azaril/poe-optimizer/actions/runs/34320179629)
-failed at Lint on Windows and Linux before tests ran. A local reproduction with current
-Rust/Clippy 1.98.1 found a new collapsible-match lint; repair and validation are in progress.
-The schema-14 data package
-contains the complete source item catalog. Native import preserves ordered loading state
-and stops at explicit missing parser/assembly dependencies. Original-source comparisons
-pass, including all 116 corpus items; this does not establish complete native item
-calculation or admit additional complete builds. See the validation checkpoint below.
+Current checkpoint: **general item formatting**, implemented and locally validated. The
+schema-15 catalog, pure Rust formatter, explicit parser continuation and CLI provider are
+integrated. Independent source, import/data, actor/build, package export, native-only,
+Clippy/WASM and fresh corpus checks pass. No additional complete native build is admitted.
+See the current checkpoint below for evidence, remaining scope and the publication resume
+point. Full native replacement remains unfinished.
+
+The preceding item definitions/loading implementation is published as
+`43251c748ce735783bb0df6357f54f16d4134e35`. Its
+[CI run 34320179629](https://github.com/Azaril/poe-optimizer/actions/runs/34320179629)
+failed on a new Rust/Clippy lint before tests. Published repair
+`1f1ad1f520db85045888f479edb6263481df5c95` pins Rust 1.98.1 and resolves that lint.
+All **941 local workspace tests pass** (nine intentional helper tests ignored by direct
+execution). [Repair CI run 34321961512](https://github.com/Azaril/poe-optimizer/actions/runs/34321961512)
+passes lint on Windows and Linux and is still running tests; no full hosted pass is claimed.
 
 The preceding mixed ModList/ModDB query checkpoint is published as
 `5f8b70e220e2bd19ed79d0e3b6979a2347970ab2`, with resume update `316ad8c`.
@@ -217,7 +221,7 @@ Assessment reports constraint evidence and primary availability; it does not cer
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
 
-## Toolchain lint repair - in progress
+## Toolchain lint repair - local validation complete
 
 The preceding goal turn was progress: item catalog/loading code `43251c7` and resume update
 `e224002` were published. This turn started from a clean worktree; 26 protected files were
@@ -231,11 +235,21 @@ for log access remains in place. Local `rustup check` identified stable 1.98.1 v
 previously installed 1.93.0. Running the exact full-workspace lint command with 1.98.1
 reproduced `clippy::collapsible_match` at the new item's FindImplicit transition.
 
+Repair code is published as `1f1ad1f520db85045888f479edb6263481df5c95` on main.
+[Exact repair CI run 34321961512](https://github.com/Azaril/poe-optimizer/actions/runs/34321961512)
+now passes Lint on both Windows and Linux and is running Test
+(`runs/ci-198-publication.json`); no complete hosted pass is claimed.
+Local full-workspace session **51809 completed with exit 0**: 941 tests passed across 124
+target results, with nine intentional helper tests ignored by direct execution. Do not
+restart it. `runs/ci-198-workspace-tests-final.json` records the exact commit, command and
+counts; `runs/item-formatting-pinned-workspace-tests.log` retains the full results. The
+known lint failure is resolved locally and on both hosted lint stages; hosted test results
+remain pending.
+
 The transition now uses an equivalent guarded match arm. The project toolchain is pinned
 to 1.98.1 so local and CI formatting/lints are reproducible; crate MSRV declarations remain
 unchanged. Formatting and strict full-workspace lint pass on the pinned toolchain. Full
-workspace tests are running in `target/ci-stable-198` (root session 51809); do not restart
-from a log timeout. Pinned native-only CLI strict lint and all five WASM libraries pass with source hashes
+workspace tests pass in `target/ci-stable-198` (completed root session 51809). Pinned native-only CLI strict lint and all five WASM libraries pass with source hashes
 unchanged (`runs/ci-198-portable-summary.json`). The existing bounded failure-annotation
 helper now also wraps both CI
 lint steps, with a generic command-failure title, so future lint diagnostics are available
@@ -253,7 +267,11 @@ only the shim's CRT (`runs/ci-198-windows-crt-artifacts.json`). Failure-annotati
 checks preserve exit 17, percent escaping and a successful command without false errors.
 All 26 protected files remain exact (`runs/ci-198-preservation.json`).
 
-The next formatter remains at read-only source audit until this repair is validated. Keep
+Formatter development is isolated in the detached worktree
+`runs/item-formatting-worktree` at repair commit `1f1ad1f`; the main checkout stays frozen
+through the completed local regression session 51809. The worktree has a separate
+local shared-object PoB clone at the same pinned revision, not a junction to main. Keep the validated source/data evidence intact when integrating this checkpoint; track
+hosted test status separately from the completed local and lint repair gates. Keep
 the existing restricted item_formatting section unchanged and inject a separate complete
 scalability catalog. Preserve ordered raw labels and their partial assignment semantics;
 unknown labels are original no-ops. Reuse the existing complete actor high-precision table
@@ -263,6 +281,82 @@ capture records; all 33 dispatcher assignments and 14 ignored labels are explici
 Its proposed catalog adds 77,073 JSON values and approximately 2.4–2.7 MB, within current
 package limits. Native runtime proofs are still required. No actor/action/candidate
 migration is included in this work.
+
+## General item formatting - locally validated checkpoint
+
+The reusable [general item formatter](item-formatting.md) is implemented in the detached
+worktree `C:/code/poe-optimizer/runs/item-formatting-worktree`. Data/extraction, the pure
+engine, explicit parser resumption, native loading provider and caller CLI are integrated.
+The main checkout was kept unchanged throughout local full-workspace regression session
+51809 (now passed). All 26 protected baseline files remained unchanged there; the formatter
+worktree deliberately changes only the package and one test-only Cargo.lock edge among them.
+
+The schema-15 package has 25 sections and 12,747,598 bytes, SHA-256
+`745e52fb8fcbb5c6292ad2f0b2abe17a7438dd3d021006697408c870d4b40329`.
+It adds 15,090 exact-case keys, 12,040 capture records, 33 ordered partial format assignments
+and source-derived defaults/catalyst policy. All 24 preceding section values and digests
+remain exact. Existing actor precision and catalyst matching definitions are reused. Final
+independent extractions C/D reproduce package and evidence bytes; their evidence digest is
+`52059d23951244d8c370c5cf64ada9cbbb7d7af53d6c93bccffcb061ff26d220`.
+The source pin, all 111 authenticated source files, old 87-rule formatting section, caller
+exports and independent goldens remain fixed (`runs/formatter-data-preservation.json`).
+
+The formatter returns exact text or an explicit bounded continuation requiring ordered
+modifier-parser feedback. The loader retains calls made within formatting separately from
+its subsequent modifier parse, with one shared sequence. Invalid or contradictory provider
+feedback is rejected; unavailable dependencies, source errors and resource limits remain
+distinct. The built-in provider supplies native formatting and injected catalyst scaling,
+while general parsing and full assembly remain explicitly unavailable. The loader fingerprint
+includes that provider and every engine formatter source file. The PoB oracle adds one
+engine dev-dependency, with no package version changes or native runtime dependency.
+
+Source review corrected repeated/Unicode suffix handling and distinguished Lua's indexable
+nested string/array feedback from nonindexable values. Balanced advanced-copy enums remain
+an explicit pending preprocessing boundary. Initial parsing still uses range 1, with authored
+range selections retained separately for later assembly. No native build admission expands.
+
+| Validation | Current evidence |
+| --- | --- |
+| Original formatter | All **13 independent tests pass**, strict scoped Clippy and formatting pass. Checks cover all catalog keys, 30,180 exact known-key strings, 8,094 raw formatValue/tostring cases, 3,000 applyValueScalar cases, 2,184 range/error observations and 10,944 catalyst cases. `runs/formatter-oracle-final-summary.json` records commands, counts and frozen hashes. |
+| Parser and loading integration | Original execution covers **116 corpus items / 592 formatter calls / six precision parses**, plus 24 LF/CRLF provider cases and explicit nested/ordered feedback, suffix and enum cases. Live traces prove original formatValue and applyRange; applyValueScalar callbacks are not separately claimed as traced. These are formatting/preassembly comparisons, not a Rust BuildModList or full-build parity claim. |
+| Native component contracts | **9 engine contracts and 218 import tests pass**; strict engine/import all-target Clippy passes. Source/resource errors, invalid provider traces, custom keys, selected ranges, nested enums and exact suffix ordering are covered. `runs/formatter-native-freeze.json`, `runs/formatter-import-all-targets.log`. |
+| Caller integration | **19 selected inspection tests pass**, including a custom data key changing parser input without granting mechanic support. **29 corpus-runner tests pass**. Raw loading state remains bounded diagnostic metadata under existing report/runner schemas. `runs/formatter-cli-inspection-tests.log`, `runs/formatter-runner-contracts.log`. |
+| Existing numerical and export behavior | Both complete actor/build comparison tests and all three package-extraction CLI tests pass, including two fresh complete 25-section exports. The extraction test was subsequently renamed to reflect the section count; assertions are unchanged. `runs/formatter-cli-extraction-build-parity.log`. |
+| Workspace/portable checks | Strict workspace all-target Clippy, native-only Clippy, formatting, all five WASM library checks, **115 native-only CLI and 69 native tests** pass. The normal native-only dependency graph excludes PoB/Lua. Session 95232 completed with exit 0. `runs/formatter-native-deployment-summary.json`, `runs/formatter-workspace-clippy.log`, `runs/formatter-native-final-clippy.log`, `runs/formatter-wasm-final-checks.log`. |
+| Fresh complete corpus | All five inspections and five reference calculations pass; **110 PoB measurements and all represented build/context/coverage/warnings are bitwise unchanged**. All 116 items still identify pending dependencies: 51 now reach modifier parsing after native formatting, with 24 rune, 18 crafted-affix, 15 base-buff, four Ward-header and four assembly stops unchanged. Native rejects the same three one-Skill and two one-SkillSet cases. Runner exit 1 represents these expected native rejections, not an inspection/reference failure. `runs/formatter-corpus-final/index.json`, `runs/formatter-corpus-validation.json`. |
+
+The final read-only source/provider/data review found no additional blocker; raw typed API
+limits and custom-provider provenance remain explicit. All **98 data tests and four
+extraction tests pass**, with strict data/PoB Clippy. The data run corrected one stale v14
+expectation to v15, preserving passed results and resuming the failed/unrun cases; source
+and golden expectations were not relaxed. The final corpus uses rebuilt binaries after a
+module-order rustfmt adjustment. All 139 captured production/data identities remain fixed
+through that refresh and corpus run (`runs/formatter-final-binaries.json`,
+`runs/formatter-validation-source-final.json`, `runs/formatter-freeze-format-adjustment.json`).
+
+Final preservation and documentation checks pass: 24 nonexception protected worktree files
+remain exact, all 139 captured implementation/data hashes are unchanged, and 45 documentation
+files contain 477 resolving local links (`runs/formatter-final-preservation.json`,
+`runs/formatter-docs-audit.json`).
+
+Publication resume: preserve these results, publish the coherent checkpoint to main and
+track its exact hosted CI revision. The known preceding lint failure is fixed and validated
+by both hosted lint stages plus all 941 local workspace tests. The preceding hosted test
+run is still in progress; do not label it passed or restart it. Publication authorization
+already covers main. Keep exact new hosted run evidence with the next progress update.
+
+Next implementation: the general modifier parser's matching/dispatch seam, using the
+read-only source audit in `runs/formatter-next-parser-audit.md` and `.json`. First capture
+complete constructed dictionaries and their source/declaration evidence, then prove a
+bounded byte-oriented matcher and the ordinary driver over injected records. Preserve
+scan priority, retry replacement, sparse metadata merge and wrapper/tag transfers. A
+selected unimplemented callback must defer explicitly; do not add a stat-name or corpus
+allowlist. Keep nonfinite/function-valued parser results unresolved until the result model
+can represent them honestly. This work uses the existing provider/formatter boundary;
+full item assembly and numerical admission remain later consumers.
+
+Full native actor/action/item calculation remains unfinished. The B3 general-model migration
+remains a separate design discussion and is not implemented by this checkpoint.
 
 ## Ordered native item loading - validation checkpoint
 

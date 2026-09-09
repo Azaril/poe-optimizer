@@ -210,7 +210,21 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
-Current package schema **14**, semantics **`poe2-native-profiles-v14`**, adds `item_loading`:
+Package schema **15**, semantics **`poe2-native-profiles-v15`**, adds `item_scalability`:
+complete exact-case keys, ordered per-capture scalability and raw labels, partial format
+assignments, fallback defaults, antonyms and catalyst scaling policy.
+`GameDataSnapshot::item_scalability()` exposes an immutable catalog. The native formatter
+borrows this data together with existing actor precision definitions; item catalyst
+matching definitions remain in `item_loading`. Unknown labels preserve source no-op
+behavior. No absent label, key, precision or quality is silently supplied by Rust policy.
+The [general formatting contract](item-formatting.md) defines the parser feedback boundary.
+
+Migration preserves all preceding 24 section values and digests and retains the 16 MiB
+package bound. Regenerate older packages. Extraction and formatting do not grant additional
+complete-build capability. Current migration and validation status are in the
+[implementation log](implementation.md).
+
+Package schema **14**, semantics **`poe2-native-profiles-v14`**, adds `item_loading`:
 the complete constructed item-base catalog, raw unique prototypes, modifier tables, jewel
 radii and source-derived loading policy. `GameDataSnapshot::item_loading()` exposes an
 immutable catalog independently of native calculation preparation. Metadata retains mixed

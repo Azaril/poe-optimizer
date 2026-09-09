@@ -125,15 +125,20 @@ not establish full evaluator performance. The eventual prepared item representat
 be immutable and reusable across candidates, with detailed tracing enabled separately from
 numerical execution.
 
-The production inspection provider has no modifier-parser or assembly implementation yet.
-It stops at the first required unavailable operation, retains the state established before
+The built-in inspection provider supplies [native item formatting](item-formatting.md)
+using the selected data. General modifier parsing and complete assembly remain explicit
+dependencies. A formatting fallback can itself require a parser call to discover precision;
+that request and its outcome remain distinct from the loader's subsequent modifier parse.
+The provider stops at the first required unavailable operation, retains the state established before
 that operation and marks later instructions `not_executed`. The empty constructor follows
 the source's no-base no-op behavior. Inspection never invokes PoB to fill a missing native
 operation. Explicit providers support comparison of loading transitions against original
 source callbacks in tests; supplying a parser result is not a native parser implementation.
 The report's data and loader fingerprints do not authenticate a caller-supplied provider's
 implementation or results. A host using a custom provider must retain that provider's
-provenance independently. The CLI's provider is fixed to explicit unavailable outcomes.
+provenance independently. The built-in provider and its engine formatter are included in
+the loader implementation fingerprint; injected formatting definitions are bound separately
+by the selected data identity.
 
 An item status of `pending` identifies the required dependency; `source_error` records an
 attempted source operation that failed. `no_base` means loading ended without a recognized

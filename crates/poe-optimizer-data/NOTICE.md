@@ -20,6 +20,10 @@ spans and file hashes accompany the package. Recognized definitions do not imply
 mechanic coverage. Numerical coverage is explicitly partial, and the package contains
 no precomputed build output.
 
+The item scalability section preserves original `src/Data/ModScalability.lua` records
+and formatting assignments/defaults from `src/Modules/ItemTools.lua`,
+`src/Modules/Data.lua` and `src/Classes/Item.lua`, with authenticated source provenance.
+
 Source: https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2
 
 Passive-tree/game data are (c) Grinding Gear Games. Complete source file hashes,

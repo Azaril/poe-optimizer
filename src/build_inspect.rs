@@ -87,7 +87,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         ).as_bytes()))
     });
     if args.with_definitions || args.data.data.is_some() {
-        // Metadata lookup loads a portable snapshot, never compiled calculations.
+        // Definitions and item formatting share a portable snapshot, without a build evaluator.
         let snapshot = args.data.snapshot()?;
         report["definition_lookup"] = serde_json::json!({
             "data": snapshot.identity(),
@@ -109,7 +109,8 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             },
             "items": match &item_projection {
                 Ok(items) => {
-                    let mut provider = poe_optimizer_import::item_loading::UnavailableItemLoadProvider;
+                    let mut provider =
+                        poe_optimizer_import::item_loading::BuiltinItemLoadProvider::new(&snapshot);
                     match poe_optimizer_import::item_loading::inspect(items, &snapshot, &mut provider) {
                         Ok(loaded) => serde_json::json!({"status": "load_reported", "report": loaded}),
                         Err(error) => serde_json::json!({"status": "not_reported", "error": error.to_string()}),

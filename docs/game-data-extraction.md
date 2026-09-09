@@ -4,10 +4,12 @@
 It is optional development tooling: native evaluation loads the exported package and has
 no Lua or worker-process dependency. No website is scraped or downloaded.
 
-The exporter covers the same twenty-three explicitly partial sections as the
+The exporter covers the versioned sections of the
 [native data package](native-data.md): tree, character, actor, receiving defences, movement, action speed, direct timing, quests, Spark, Mace, supports, weapons,
 item modifier rules, item source formatting, jewellery and fixed armour bases, defence, monsters, encounters, typed owned passive
-effects, explicit passive exclusions, configuration metadata and constructed skill/gem identities. Whole ordinary structure is separate from
+effects, explicit passive exclusions, configuration metadata, constructed skill/gem identities,
+item definitions and general item scalability. Numerical mechanic coverage remains partial.
+Whole ordinary structure is separate from
 capability admission: 1,282 complete source views are supported, including the four
 admitted ascendancy resistance nodes; 3,476 source views are explicitly excluded. It does not infer arbitrary build mechanics
 or broaden accepted source revisions. Progress and validation evidence belong in the
@@ -54,7 +56,7 @@ actor scope and values. Unconsumed or ambiguous modifiers reject.
 
 The companion retains source revision/inventory identity, consumed-file hashes,
 extractor/policy identity, package schema/semantics and the resulting package digest. Its
-44 direct source-file entries cover extraction and retained provenance reads. Additional
+direct source-file entries cover extraction and retained provenance reads. Additional
 tree/loader/spec evidence remains in the package's `tree.source` record.
 It describes how this artifact was produced. Native loading continues to use explicit
 host trust and actual content identity; a sidecar claim does not grant trust or establish
@@ -110,7 +112,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 14 and `poe2-native-profiles-v14`, including source-keyed passive/actor effects,
+schema 15 and `poe2-native-profiles-v15`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -134,6 +136,14 @@ missing modifier effects. Independent item-loading oracles execute the original 
 assembly methods separately from this exporter. Regeneration preserves all preceding section
 values and the pinned source/tree; see [item loading](item-source-and-loading.md).
 
+
+The `item_scalability` section preserves complete exact-case keys and ordered capture
+records from the original `Data/ModScalability.lua` table. Format dispatch is recorded as partial
+assignments, retaining raw ignored labels; numeric defaults, antonyms and catalyst policy
+come from their original source definitions. Existing actor precision and catalyst tables
+are reused. Extraction does not turn label names into behavior or admit unknown effects.
+Independent runtime comparisons validate the complete catalog and exercise original
+formatting separately from the exporter; see [general item formatting](item-formatting.md).
 
 When intentionally changing the retained policy or package schema, maintainers can prepare
 new artifacts before changing the compiled reviewed digests:

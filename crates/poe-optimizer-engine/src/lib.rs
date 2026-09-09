@@ -16,6 +16,7 @@ pub mod conditions;
 pub mod data;
 pub mod defence;
 pub mod item_format;
+pub mod item_tools;
 pub mod timing;
 pub use data::CompiledGameData;
 pub mod mace;

@@ -17,3 +17,6 @@ serde_json = { workspace = true }
 sha2 = "0.10"
 tempfile = "3"
 thiserror = "2"
+
+[dev-dependencies]
+poe-optimizer-engine = { path = "../poe-optimizer-engine" }

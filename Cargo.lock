@@ -549,6 +549,7 @@ dependencies = [
  "mlua",
  "poe-optimizer-core",
  "poe-optimizer-data",
+ "poe-optimizer-engine",
  "poe-optimizer-import",
  "poe-optimizer-lua-utf8",
  "roxmltree",

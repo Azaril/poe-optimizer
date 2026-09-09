@@ -20,6 +20,11 @@ Community PoE2 at revision `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`:
 - `src/Modules/Data.lua:597-603`: MORE precision entries.
 - `src/actor.rs` translates the ordered attribute/inherent-bonus stages in `CalcPerform.lua`, base/quest assembly in `CalcSetup.lua` and `ConfigOptions.lua`, maximum-resource calculation in `CalcDefence.lua`, and the global Accuracy prerequisite in `CalcOffence.lua`. Actor constants, precision and quest records are extracted from this pinned source into the injected data package.
 
+The pure item formatter in `src/item_tools.rs` and `src/item_tools/` translates
+`src/Modules/ItemTools.lua` applyValueScalar, formatValue and applyRange, with rounding
+helpers from `src/Modules/Common.lua` and catalyst scaling from `src/Classes/Item.lua`.
+Its tables and precision/default policies come from the injected data package.
+
 Source: https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2
 
 The upstream application's notice from `LICENSE.md` is retained below. It covers

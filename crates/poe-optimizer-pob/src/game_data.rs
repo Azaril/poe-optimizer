@@ -196,8 +196,9 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v14",
+        "poe-game-data-extractor-v15",
         include_str!("item_loading_extract.rs"),
+        include_str!("item_scalability_extract.rs"),
         include_str!("skill_identity_extract.rs"),
         include_str!("configuration_extract.rs"),
         include_str!("game_data.rs"),
@@ -455,6 +456,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         configuration: crate::configuration_extract::extract(&extractor.sources)?,
         skill_identities: crate::skill_identity_extract::extract(&extractor.sources)?,
         item_loading: crate::item_loading_extract::extract(&extractor.sources)?,
+        item_scalability: crate::item_scalability_extract::extract(&extractor.sources)?,
     };
     package.refresh_section_digests().map_err(error)?;
     let evidence = GameDataExtractionEvidence {

@@ -4,10 +4,12 @@
 //! admission, or an equipment-selection certificate. Missing dependencies stop
 //! execution before any dependent state is invented.
 mod machine;
+mod provider;
 mod report;
 mod syntax;
 mod variants;
 pub use machine::*;
+pub use provider::*;
 pub use report::*;
 use sha2::{Digest, Sha256};
 pub use syntax::{ItemNumber, spec_to_number};
@@ -22,7 +24,11 @@ pub fn implementation_fingerprint() -> String {
         include_str!("item_loading/variants.rs"),
         include_str!("item_loading/machine.rs"),
         include_str!("item_loading/report.rs"),
+        include_str!("item_loading/provider.rs"),
     ] {
+        hash.update(source.replace("\r\n", "\n").as_bytes());
+    }
+    for source in poe_optimizer_engine::item_tools::implementation_sources() {
         hash.update(source.replace("\r\n", "\n").as_bytes());
     }
     format!("{:x}", hash.finalize())
