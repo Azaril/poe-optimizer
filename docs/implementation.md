@@ -2,11 +2,12 @@
 
 Last updated: 2026-09-09
 
-Current work: **pure Prefix and ModTag factory invocation**, in
+Current completed checkpoint: **pure Prefix and ModTag factory invocation**, in
 `runs/ordinary-factories-worktree`, branch `codex/ordinary-factories`, based on
 `5b56dd2384eb56d128fc445daeaa5fb8c822bbd5`. Production and final CLI binaries are frozen.
-All scoped local gates, the five-build corpus/source join and reproducible exports
-pass. Final preservation checks and publication remain. See [the active checkpoint](#ordinary-factory-invocation-checkpoint).
+All scoped local gates, the five-build corpus/source join, reproducible exports and
+final preservation checks pass. Published on `origin/main` as
+`35960b6403c52be4a9ab2aed60c43fd3205ffe27`. See [the active checkpoint](#ordinary-factory-invocation-checkpoint).
 
 Schema **22**, semantics `poe2-native-profiles-v22`, retains 27 sections and 129
 authenticated sources. The 22,969,857-byte package has SHA-256
@@ -49,8 +50,9 @@ native states, with 109 full original states (79 preassembly and 30 parser front
 112 affix states, 589 parser and 491 formatter prefixes. Seven prior full-state
 observation boundaries remain explicit.
 
-Resume: publish the validated checkpoint and record exact-head hosted CI, then begin
-the reviewed bounded string-factory phase in a fresh isolated worktree. Root evidence is
+Resume: inspect exact-head hosted CI, then create a fresh worktree from current main for
+the reviewed bounded string-factory phase. Preserve the published ordinary/callback/rune
+worktrees and their frozen binaries. Root evidence is
 in `runs/ordinary-factories-root-validation.json`; the baseline and component records use
 the `ordinary-factories` prefix. The next read-only audit,
 `runs/ordinary-factories-next-native-plan.md/json`, identifies 38 whole-body syntax
@@ -61,6 +63,16 @@ The independent review in `runs/string-factories-oracle-plan.md` confirms this a
 routine extension, with operand evaluation, concat reduction order and exact one-argument
 helper lowering as explicit gates. No general helper language, branching or actor
 migration is implemented.
+
+Publication and preservation evidence: `runs/ordinary-factories-publication.json`.
+All 501 frozen files retain raw hashes; all 501 main files have matching normalized
+content. Ninety-five cross-worktree raw differences are line endings only. All 162 build
+inputs, 44 protected source/tree/golden files and both caller files remain exact.
+The final local validation ledger is `runs/ordinary-factories-validation-final.json`.
+
+Exact-code [Windows/Linux CI run 34412504547](https://github.com/Azaril/poe-optimizer/actions/runs/34412504547)
+is in progress. At 2026-09-09 22:31:24 UTC Ubuntu was testing and Windows was in lint,
+with no failed steps. Hosted completion is tracked separately from local validation.
 
 The preceding pure Special checkpoint is published as
 `27c11a2b253eacf2a21e9cd9c6905b07090c6013`, with resume update `5b56dd2`.
@@ -880,8 +892,14 @@ All 137 data tests and nine extractor/authentication tests pass. Final data evid
 initial target-name typo, transient unused test imports and narrowly corrected comparator
 allowance for the three planned provenance spans. No production repair was required.
 
-Resume: publish this validated checkpoint, then continue the reviewed 38-candidate
-string-factory slice in a new worktree. Keep this phase and its binaries frozen. Workspace
+Published as `35960b6403c52be4a9ab2aed60c43fd3205ffe27` on `origin/main`; preservation
+evidence is in `runs/ordinary-factories-publication.json`.
+
+Resume: continue the reviewed 38-candidate string-factory slice in a new worktree from
+current main. Keep this phase and its binaries frozen. The next plan and independent
+review are `runs/ordinary-factories-next-native-plan.md/json` and
+`runs/string-factories-oracle-plan.md`. No broader helper, branching or B3 approval is
+implied by the bounded extension. Workspace
 strict lint and formatting already pass on the frozen sources. Reuse terminal gate evidence instead of repeatedly running long
 package-validation targets without a source change. Record exact tests, failures and
 replacements, binary/source hashes and publication before starting another phase.
