@@ -6,7 +6,7 @@ Current work: **native structural modifier parsing**, implemented on main after
 `48983fa`, with final integration/workspace validation in progress. The complete schema-16
 catalog, Lua-compatible byte matcher, ordinary parser and import provider are integrated.
 Source comparisons and a fresh five-build regression pass; full native replacement remains
-unfinished. See the [active parser checkpoint](#general-modifier-parser--active-checkpoint).
+unfinished. See the [active parser checkpoint](#general-modifier-parser-active-checkpoint).
 
 Latest published checkpoint: **general item formatting**, implemented and locally validated. The
 schema-15 catalog, pure Rust formatter, explicit parser continuation and CLI provider are
@@ -291,7 +291,7 @@ Its proposed catalog adds 77,073 JSON values and approximately 2.4–2.7 MB, wit
 package limits. Native runtime proofs are still required. No actor/action/candidate
 migration is included in this work.
 
-## General modifier parser - active checkpoint
+## General modifier parser active checkpoint
 
 Started after `48983fa` on 2026-09-09. The implementation and source-validation work is
 progress toward reusable parsing for items, passives and skill effects. It does not yet

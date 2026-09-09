@@ -210,6 +210,24 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Package schema **17**, semantics **`poe2-native-profiles-v17`**, advances
+`item_loading` to schema **2**. Its injected `defence_header_keys` maps copied display
+headers to their stored armour-data keys. The loader borrows named base rewrites from the
+existing `base_aliases.armour_header_rewrites` table. Extraction observes the original
+header branch with the original number conversion, including aliases; Rust does not select
+game header names or base identities.
+
+A caller may inject an empty header map. Header names must be declared by the loading policy
+and cannot collide with selection or ordinary assignment headers. Overlap with hidden-spec
+names is allowed because the defence operation runs first in the source. Rewrite targets
+need not exist in the base catalog: the original data contains such references, and loading
+retains the new name with an absent base reference. Regenerate older packages.
+
+The package retains 26 sections and its 32 MiB bound. All 25 other sections and all earlier
+item-loading fields remain exact. Display values are ordered loading state, not assembled
+item ratings or additional native build support. See the
+[item loading contract](item-source-and-loading.md#defence-display-state).
+
 Package schema **16**, semantics **`poe2-native-profiles-v16`**, adds `modifier_parser`:
 all 28 constructed dictionaries, referenced table and callback graphs, helper identities,
 source declarations, generator dependencies and parser policy. `GameDataSnapshot::modifier_parser()`

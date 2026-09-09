@@ -178,6 +178,60 @@ fn quoted_after(text: &str, anchor: &str) -> Result<String> {
         .0
         .into())
 }
+const DEFENCE_HEADER_START: &str = "\t\t\t\telseif specName == \"Armour\" or";
+const DEFENCE_HEADER_END: &str = "\t\t\t\telseif specName == \"Level\" then";
+/// Observe the original complete header branch on a fresh source-style Item
+/// state. Its original numeric helper runs; no calculations or base records are
+/// substituted. Rewrites are exported separately from the same source branch.
+fn defence_header_keys(
+    lua: &Lua,
+    sources: &BTreeMap<String, String>,
+) -> Result<BTreeMap<String, String>> {
+    let (branch, _) = chunk(sources, ITEM, DEFENCE_HEADER_START, DEFENCE_HEADER_END)?;
+    let predicate = branch
+        .lines()
+        .next()
+        .ok_or_else(|| error("empty defence branch"))?;
+    let scan: Function = lua
+        .load(
+            r#"return function(s)
+        local names={}
+        for name in s:gmatch('specName == "([^"]+)"') do names[#names+1]=name end
+        return names
+    end"#,
+        )
+        .eval()?;
+    let headers = strings(scan.call(predicate)?)?;
+    if headers.is_empty() || headers.len() > 256 {
+        return Err(error("defence header source membership bound"));
+    }
+    let numeric: Function = named_eval(
+        lua,
+        sources,
+        ITEM,
+        "local function specToNumber(s)",
+        "local function parseItemSpec(line)",
+        "return specToNumber",
+    )?;
+    let projection: Function = lua.load(format!(
+        "return function(specToNumber, specName)\nlocal self={{}}\nlocal specVal='1'\n{}\nend\nreturn self.armourData\nend",
+        branch.replacen("elseif", "if", 1),
+    )).eval()?;
+    let mut keys = BTreeMap::new();
+    for header in headers {
+        let output: Table = projection.call((numeric.clone(), header.as_str()))?;
+        let mut entries = output.pairs::<String, f64>();
+        let (key, value) = entries
+            .next()
+            .ok_or_else(|| error("defence header writes no key"))??;
+        if entries.next().is_some() || value != 1.0 || keys.insert(header, key).is_some() {
+            return Err(error(
+                "defence header projection is not one numeric assignment",
+            ));
+        }
+    }
+    Ok(keys)
+}
 fn policy(lua: &Lua, sources: &BTreeMap<String, String>) -> Result<ItemLoadingPolicy> {
     let constants: Table = named_eval(
         lua,
@@ -543,6 +597,7 @@ fn policy(lua: &Lua, sources: &BTreeMap<String, String>) -> Result<ItemLoadingPo
         line_flags,
         rarities,
         header_names,
+        defence_header_keys: defence_header_keys(lua, sources)?,
         compatibility,
     })
 }
@@ -743,6 +798,8 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ItemLoadingD
             return Err(error(format!("missing complete {name} source span")));
         }
     }
+    let (_, defence_span) = chunk(sources, ITEM, DEFENCE_HEADER_START, DEFENCE_HEADER_END)?;
+    construction_spans.insert("defence_headers".into(), defence_span);
     let source = ItemLoadingSource {
         upstream_revision: crate::source::UPSTREAM_REVISION.into(),
         files: files
@@ -791,6 +848,23 @@ mod tests {
         assert!(metadata(Value::Function(unknown), &sources, 0, &mut 100).is_err());
     }
     #[test]
+    fn defence_keys_are_observed_from_original_branch_and_follow_changed_source_literals() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../vendor/path-of-building-poe2");
+        let original = crate::source::read_verified_text(&root, ITEM).unwrap();
+        let changed = original
+            .replace("Runic Ward", "Caller Guard")
+            .replace("specName = \"Ward\"", "specName = \"CallerValue\"");
+        let sources = BTreeMap::from([(ITEM.into(), changed)]);
+        let keys = defence_header_keys(&Lua::new(), &sources).unwrap();
+        assert_eq!(
+            keys.get("Caller Guard").map(String::as_str),
+            Some("CallerValue")
+        );
+        assert!(!keys.contains_key("Runic Ward"));
+        assert_eq!(keys.get("Ward").map(String::as_str), Some("Ward"));
+    }
+    #[test]
     fn complete_package_extension_preserves_existing_sections() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("../../vendor/path-of-building-poe2");
@@ -808,6 +882,31 @@ mod tests {
         for (name, value) in old.as_object().unwrap() {
             if name != "manifest" && name != "item_loading" {
                 assert_eq!(value, &new[name], "existing section changed: {name}");
+            }
+        }
+        let mut old_item = old["item_loading"].clone();
+        let mut new_item = new["item_loading"].clone();
+        for item in [&mut old_item, &mut new_item] {
+            item.as_object_mut().unwrap().remove("schema_version");
+            item["policy"]
+                .as_object_mut()
+                .unwrap()
+                .remove("defence_header_keys");
+            item["source"]["construction_spans"]
+                .as_object_mut()
+                .unwrap()
+                .remove("defence_headers");
+        }
+        assert_eq!(
+            old_item, new_item,
+            "unrelated item-loading definitions changed"
+        );
+        for (name, digest) in old["manifest"]["section_sha256"].as_object().unwrap() {
+            if name != "item_loading" {
+                assert_eq!(
+                    digest, &new["manifest"]["section_sha256"][name],
+                    "section digest changed: {name}"
+                );
             }
         }
         if let Some(out) = std::env::var_os("POE_ITEM_PACKAGE_OUTPUT") {
@@ -841,6 +940,25 @@ mod tests {
             );
         }
         let catalog = extract(&sources).unwrap();
+        assert_eq!(
+            catalog.policy.defence_header_keys,
+            BTreeMap::from([
+                ("Armour".into(), "Armour".into()),
+                ("Evasion Rating".into(), "Evasion".into()),
+                ("Evasion".into(), "Evasion".into()),
+                ("Energy Shield".into(), "EnergyShield".into()),
+                ("Ward".into(), "Ward".into()),
+                ("Runic Ward".into(), "Ward".into()),
+            ])
+        );
+        assert_eq!(
+            catalog.source.construction_spans["defence_headers"].line,
+            835
+        );
+        assert_eq!(
+            catalog.source.construction_spans["defence_headers"].end_line,
+            854
+        );
         assert_eq!(catalog.bases.len(), 1756);
         assert!(catalog.bases.iter().any(|b| b.hidden() == Some(true)));
         assert_eq!(catalog.modifier_tables.len(), 9);

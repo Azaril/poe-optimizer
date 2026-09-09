@@ -167,7 +167,48 @@ pub fn assert_number(a: ItemNumber, b: ItemNumber, label: &str) {
     }
 }
 
+/// Preserve an absent source table, an allocated empty table, and every numeric
+/// key/value. Nil removes keys in Lua, so there are no stored Nil entries.
+pub fn armour_data(source: Value) -> Option<std::collections::BTreeMap<String, ItemNumber>> {
+    match source {
+        Value::Nil => None,
+        Value::Table(table) => Some(
+            table
+                .pairs::<String, Value>()
+                .map(|row| {
+                    let (key, value) = row.unwrap();
+                    assert!(!matches!(value, Value::Nil));
+                    (key, number(value))
+                })
+                .collect(),
+        ),
+        other => panic!("original armourData is not an optional table: {other:?}"),
+    }
+}
+pub fn compare_armour_data(
+    native: &Option<std::collections::BTreeMap<String, ItemNumber>>,
+    source: Value,
+) {
+    let expected = armour_data(source);
+    assert_eq!(
+        native.is_some(),
+        expected.is_some(),
+        "armourData table presence"
+    );
+    if let (Some(native), Some(expected)) = (native.as_ref(), expected.as_ref()) {
+        assert_eq!(
+            native.keys().collect::<Vec<_>>(),
+            expected.keys().collect::<Vec<_>>(),
+            "complete armourData key inventory"
+        );
+        for (key, value) in native {
+            assert_number(*value, expected[key], &format!("armourData.{key}"));
+        }
+    }
+}
+
 pub fn compare_state(native: &ItemState, source: &Table) {
+    compare_armour_data(&native.armour_data, source.get("armourData").unwrap());
     for (key, value) in [
         ("raw", native.raw.as_str()),
         ("name", native.name.as_str()),
@@ -441,11 +482,16 @@ impl ItemLoadProvider for FrozenAssembly<'_> {
                 (k, number(v))
             })
             .collect();
+        let armour_data = match armour_data(after.get("armourData").unwrap()) {
+            None => ArmourDataUpdate::Clear,
+            Some(values) => ArmourDataUpdate::Replace(values),
+        };
         let digest = format!(
             "{:x}",
             Sha256::digest(super::canonical(Value::Table(after)).to_string().as_bytes())
         );
         DependencyResult::Available(AssemblyOutcome {
+            armour_data,
             state_updates,
             requirements: Some(requirements),
             modifier_payloads: Some(modifier_payloads),

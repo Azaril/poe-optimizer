@@ -173,8 +173,8 @@ passive-allocation checks remain separate. See
 
 Add `--with-definitions` or `--data PACKAGE` for source-bound skill/configuration identity
 lookup and ordered native item-loading diagnostics against the complete injected base catalog.
-Native formatting and ordinary modifier parsing are available; pending callback, conversion
-or assembly dependencies stop loading explicitly, preserving the state reached and later
+Native formatting, ordinary modifier parsing and data-driven defence-header state are
+available; pending callback, conversion or assembly dependencies stop loading explicitly, preserving the state reached and later
 unexecuted instructions. A loading report does not certify complete
 item calculations or build support. Ambiguous identities and unprocessed names remain explicit. [Skill inspection](docs/skill-source-and-identities.md) works with the native-only CLI
 and does not claim numerical support for recognized skills. Local projection errors remain

@@ -116,8 +116,18 @@ pub struct AssemblyModifierPayloads {
     pub implicit_mod_lines: Vec<Vec<ItemMetadataTable>>,
     pub explicit_mod_lines: Vec<Vec<ItemMetadataTable>>,
 }
+/// Explicit nested-state update; absence, an empty table and no update differ.
+#[derive(Debug, Clone, Default, Serialize)]
+#[serde(tag = "kind", content = "value", rename_all = "snake_case")]
+pub enum ArmourDataUpdate {
+    #[default]
+    Preserve,
+    Clear,
+    Replace(BTreeMap<String, ItemNumber>),
+}
 #[derive(Debug, Clone, Serialize)]
 pub struct AssemblyOutcome {
+    pub armour_data: ArmourDataUpdate,
     pub modifier_payloads: Option<AssemblyModifierPayloads>,
     /// Exact post-assembly requirement table supplied by the dependency. None
     /// leaves it untouched; Some replaces it, including removal of old keys.
@@ -182,6 +192,9 @@ pub struct ItemState {
     pub base_present: bool,
     pub item_type: Option<String>,
     pub retained_fields: BTreeMap<String, ItemScalar>,
+    /// Original optional armourData table, retained across reparses. Display
+    /// values are loading evidence, not assembled defensive calculation inputs.
+    pub armour_data: Option<BTreeMap<String, ItemNumber>>,
     pub variants: VariantState,
     pub requirements: BTreeMap<String, ItemNumber>,
     pub sockets: Vec<u32>,
@@ -214,6 +227,7 @@ impl Default for ItemState {
             base_present: false,
             item_type: None,
             retained_fields: BTreeMap::new(),
+            armour_data: None,
             variants: VariantState::default(),
             requirements: BTreeMap::new(),
             sockets: Vec::new(),
@@ -402,6 +416,7 @@ impl<'a> ItemLoadMachine<'a> {
         self.state.name_prefix.clear();
         self.state.name_suffix.clear();
         self.state.base_present = false;
+        // ParseRaw preserves baseName, type and the optional armourData table.
         self.state.rarity = self.role("default").into();
         for key in ["charmLimit", "spiritValue", "runicItem", "quality"] {
             self.state.retained_fields.remove(key);
@@ -924,6 +939,34 @@ impl<'a> ItemLoadMachine<'a> {
         {
             return Ok(Header::Known);
         }
+        if let Some(key) = self.catalog.defence_header_key(name).map(str::to_owned) {
+            // The source branch precedes hidden_specs, even for overlapping names.
+            // Only the base reference/name change; ordinary base setup would also
+            // reset unrelated requirements, type, affix and modifier state.
+            let target = self
+                .catalog
+                .armour_header_rewrite(name)
+                .filter(|rewrite| self.state.base_name.as_deref() == Some(rewrite.from))
+                .map(|rewrite| rewrite.to.to_owned());
+            self.charge(key.len() + target.as_ref().map_or(0, String::len) + 64)?;
+            if let Some(target) = target {
+                self.state.base_present = self.catalog.base(&target).is_some();
+                self.state.base_name = Some(target);
+            }
+            let number = syntax::spec_to_number(value);
+            let data = self.state.armour_data.get_or_insert_with(BTreeMap::new);
+            if number == ItemNumber::Nil {
+                data.remove(&key);
+            } else {
+                if data.len() >= 256 && !data.contains_key(&key) {
+                    return Err(ItemLoadError("armour data entry count bound".into()));
+                }
+                data.insert(key, number);
+            }
+            // Existing explicit/implicit state can still cause this line to be
+            // parsed as modifier text after the header operation.
+            return Ok(Header::Known);
+        }
         match name {
             "Implicits" => {
                 return Ok(Header::Implicits(
@@ -951,16 +994,6 @@ impl<'a> ItemLoadMachine<'a> {
             "Level" => {
                 *imported = number_option(syntax::spec_to_number(value));
                 return Ok(Header::Known);
-            }
-            "Armour" | "Evasion Rating" | "Evasion" | "Energy Shield" | "Ward" | "Runic Ward" => {
-                // ParseRaw consumes these in its earlier armourData/base-rebinding
-                // branch. They must never reach the later hidden_specs branch.
-                self.stop(
-                    DependencyKind::BaseCompatibility,
-                    Some(line),
-                    "display defence headers require source armourData and base-compatibility rebinding",
-                )?;
-                return Ok(Header::Stop);
             }
             "Prefix" | "Suffix" => {
                 self.stop(DependencyKind::CraftedAffixes,Some(line),"authored affix IDs and independent ranges require complete crafting dependencies")?;
@@ -1661,6 +1694,23 @@ impl<'a> ItemLoadMachine<'a> {
                         self.charge(key.len() + 32)?;
                     }
                 }
+                if let ArmourDataUpdate::Replace(data) = &result.armour_data {
+                    if data.len() > 256 {
+                        return Err(ItemLoadError("assembly armour data count bound".into()));
+                    }
+                    for (key, value) in data {
+                        if key.is_empty()
+                            || key.len() > 4096
+                            || key.contains('\0')
+                            || *value == ItemNumber::Nil
+                            || !value.canonical()
+                        {
+                            return Err(ItemLoadError("invalid assembly armour data entry".into()));
+                        }
+                        self.charge(key.len() + 64)?;
+                    }
+                    self.charge(64)?;
+                }
                 for (key, value) in &result.state_updates {
                     if key.len() > 4096
                         || matches!(value,ItemScalar::Text(t)if t.len()>MAX_ITEM_LOADING_TEXT)
@@ -1675,6 +1725,11 @@ impl<'a> ItemLoadMachine<'a> {
                                 _ => 32,
                             },
                     )?;
+                }
+                match result.armour_data {
+                    ArmourDataUpdate::Preserve => {}
+                    ArmourDataUpdate::Clear => self.state.armour_data = None,
+                    ArmourDataUpdate::Replace(data) => self.state.armour_data = Some(data),
                 }
                 if let Some(requirements) = result.requirements {
                     self.state.requirements = requirements;

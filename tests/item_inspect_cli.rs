@@ -408,3 +408,62 @@ fn caller_scalability_data_controls_formatting_and_preserves_unknown_lines_befor
     assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
     assert_eq!(fs::read(&data_path).unwrap(), data_bytes);
 }
+
+#[test]
+fn injected_defence_headers_reach_cli_state_without_granting_assembly_or_admission() {
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller-defence.xml");
+    let data_path = temp.path().join("caller-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    package
+        .item_loading
+        .policy
+        .header_names
+        .insert("Caller Guard".into());
+    package
+        .item_loading
+        .policy
+        .defence_header_keys
+        .insert("Caller Guard".into(), "CallerGuardValue".into());
+    package.refresh_section_digests().unwrap();
+    let data_bytes = package.canonical_bytes().unwrap();
+    fs::write(&data_path, &data_bytes).unwrap();
+    let xml = "<PathOfBuilding2><Items><Item id='header'>Rarity: Normal\nRusted Greathelm\nArmour: 42\nArmour: invalid\nCaller Guard: -3.5\n</Item></Items></PathOfBuilding2>";
+    fs::write(&input, xml).unwrap();
+    let bundled = inspect_definitions(&input, temp.path(), None);
+    let selected = inspect_definitions(&input, temp.path(), Some(&data_path));
+    for (report, expected) in [
+        (&bundled, serde_json::json!({})),
+        (
+            &selected,
+            serde_json::json!({"CallerGuardValue":{"kind":"finite","value":-3.5}}),
+        ),
+    ] {
+        let item = &report["definition_lookup"]["items"]["report"]["items"][0];
+        assert_eq!(item["state"]["armour_data"], expected);
+        assert!(
+            item["state"]["retained_fields"]
+                .get("hidden_specs")
+                .is_none()
+        );
+        assert_eq!(item["status"], "pending");
+        assert_eq!(item["pending"]["kind"], "assembly");
+        assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
+        assert_eq!(report["verification"]["native_admission"], "not_checked");
+        assert_eq!(report["verification"]["reference_calculation"], "not_run");
+    }
+    assert_eq!(bundled["items"], selected["items"]);
+    assert_ne!(
+        bundled["definition_lookup"]["data"],
+        selected["definition_lookup"]["data"]
+    );
+    assert_eq!(
+        selected["definition_lookup"]["data"]["content_sha256"],
+        format!("{:x}", Sha256::digest(&data_bytes))
+    );
+    assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+    assert_eq!(fs::read(&data_path).unwrap(), data_bytes);
+}
