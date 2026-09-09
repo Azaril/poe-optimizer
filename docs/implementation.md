@@ -2,77 +2,74 @@
 
 Last updated: 2026-09-09
 
-Current completed checkpoint: **pure Prefix and ModTag factory invocation**, in
-`runs/ordinary-factories-worktree`, branch `codex/ordinary-factories`, based on
-`5b56dd2384eb56d128fc445daeaa5fb8c822bbd5`. Production and final CLI binaries are frozen.
-All scoped local gates, the five-build corpus/source join, reproducible exports and
-final preservation checks pass. Published on `origin/main` as
-`35960b6403c52be4a9ab2aed60c43fd3205ffe27`. See [the active checkpoint](#ordinary-factory-invocation-checkpoint).
+Current completed checkpoint: **bounded native string factory expressions**, code
+`11e6f3906b30f5adba8e0847e6de6b84ea0f6894`, in the frozen
+`runs/string-factories-worktree` (`codex/string-factories`), based on
+`114e86b3ad97112cca087e345c90e3049d92ab4e`. Production, source fixtures and final
+CLI binaries are frozen. All scoped local gates, final corpus/source comparisons and
+reproducible exports pass. Code and this checkpoint update are published together;
+exact publication identity is recorded in `runs/string-factories-publication.json`. See [the checkpoint](#bounded-string-factory-checkpoint).
 
-Schema **22**, semantics `poe2-native-profiles-v22`, retains 27 sections and 129
-authenticated sources. The 22,969,857-byte package has SHA-256
-`7921802667c06905e11dfb8f68fd4a7b8e877df0a1e4132c4aacba77b48cb8bb`.
-Parser schema3 adds an injected tag numeric-precheck pattern and complete provenance
-spans for three invocation branches. All 26 other sections and the previous parser
-projection are exact. No factory expressions, callback graphs, caller inputs, goldens
-or PoB pin `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` are changed.
+Schema **23**, semantics `poe2-native-profiles-v23`, advances the parser to schema4.
+The 23,013,054-byte package has SHA-256
+`c0d6fe361fbacedebb0b661c1899a0d3215d3d7cdd2636f755b5924491359f5f`.
+It retains 27 sections and 129 authenticated sources. The complete source verifier
+admits 38 additional bodies: 28 Special and 10 ModTag. The catalog now has 1,073 Pure
+recipes and 578 Unsupported dispositions. All 1,035 prior Pure recipes, original
+callback/table graphs, declarations, dependencies and 26 other sections remain exact.
+Sixteen still-Unsupported callbacks now stop at later unrepresented tokens; their
+old/new reasons are enumerated rather than counted as native support.
 
-The native parser now invokes all existing three Pure Prefix and 107 Pure ModTag
-recipes through their original calling conventions, alongside the preceding 925 Pure
-Special entries. Invocation borrows raw captures and shares immutable compiled policy;
-matching, conditional conversion and expression work use per-request budgets. There is
-no Lua, subprocess or external data lookup in this native path. Unrepresented callbacks
-and complete assembly remain explicit dependencies.
+Concat retains unary precedence, parentheses and right association while evaluating
+operands in source order. FirstToUpper uses its authenticated captured helper and
+injected replacement pattern. Native execution preserves bytes, numeric rendering,
+captures, nil/method errors and lazy pattern errors, with cumulative request budgets.
+These operations use no Lua or subprocess and share immutable definitions across
+workers. Opaque callable receivers and the pre-existing constructor lexical-graph
+limitation remain explicit. See the [parser contract](modifier-parser.md#pure-factory-definitions).
 
-Current passing gates include 45 engine checks, 62 affected import tests, 40 CLI
-observations across native/default configurations, nine source extraction/authentication
-tests, 77 source integration tests and all 137 data tests. Final workspace/native
-strict lint, formatting, the
-normal native dependency audit and five portable WebAssembly libraries pass. Two fresh
-public exports reproduce the installed package exactly. These are scoped/reconciled
+Passing scoped gates: 52 engine tests, 62 affected import tests, 84 source integration
+tests, all 141 data tests, 16 source extraction/authentication tests and 42
+native/default CLI observations. Workspace/native strict lint,
+formatting, the native runtime dependency audit and five WebAssembly libraries pass.
+Two fresh public exports reproduce the installed package exactly. These are scoped
 gates, not a full workspace or full import-suite test claim.
 
-Seven new source tests cover all 217 real Prefix/first-tag/second-tag selections,
-49 injected argument graphs/four method errors, 95 configured-pattern graphs/38 ordered
-errors and 60 combined prefix/form/two-tag cases. All 110 closures are warmed through
-14,080 direct body calls, with 110 live source lines and exact metadata/public outputs.
-The preserved constructor's isolated descriptor still differs from the full module's
-lexical closure graph; both opaque function-valued outputs defer at item conversion.
-This limitation remains explicit in the [parser contract](modifier-parser.md#pure-factory-definitions).
+The five-build comparison preserves all 110 reference number bits, 834 instructions
+and five native rejection messages. Of 116 complete item reports, 114 are unchanged
+and exactly two advance from ModifierParser to Assembly. First stops are now
+84 Assembly, 28 ModifierParser, three RuneReconstruction and one AdvancedCopyAffixes.
+All 116 native states match the source ledger, including 109 complete original states
+(81 preassembly and 28 parser-frontier), 112 affix pairs, 594 parser and 492 formatter
+prefixes. Both progressed items are fully source-paired. Seven existing full-source
+observation boundaries remain explicit. Full native build admission remains Spark/Mace;
+the five breadth builds still encounter three one-Skill and two one-SkillSet limits.
 
-All five corpus imports, inspections and reference evaluations pass. Every one of the
-116 complete item reports, all 110 reference number bits, 834 instructions and five
-whole-native rejection messages are unchanged. Current first stops remain 82 Assembly,
-30 ModifierParser, three RuneReconstruction and one AdvancedCopyAffixes. The additional
-110 callback entries add breadth independently of these example builds: all current
-parser stops select seven other Special shapes. The strict source join matches all 116
-native states, with 109 full original states (79 preassembly and 30 parser frontier),
-112 affix states, 589 parser and 491 formatter prefixes. Seven prior full-state
-observation boundaries remain explicit.
+Resume: inspect the published head's hosted CI, then create a fresh worktree from main
+for the reviewed closed Flag-wrapper phase. Preserve this frozen worktree, its binaries
+and all component evidence. The next
+read-only audit is `runs/string-factories-next-native-plan.md/json`: 68 complete Special
+syntax candidates using the closed flag constructor wrapper. Its helper-to-constructor
+capture path, injected prefix and exact variadic nil positions require their own
+source proof. The independent review in `runs/flag-factories-oracle-plan.md/json`
+confirms this as a routine closed-seam extension; 23 candidate owners lack a direct
+constructor capture, so their helper-to-constructor linkage must stay explicit. No
+generic helper language, control flow or actor migration is included. The **B3 proposal remains
+unapproved**. Continue independent parser/item work without inferring that approval.
 
-Resume: inspect exact-head hosted CI, then create a fresh worktree from current main for
-the reviewed bounded string-factory phase. Preserve the published ordinary/callback/rune
-worktrees and their frozen binaries. Root evidence is
-in `runs/ordinary-factories-root-validation.json`; the baseline and component records use
-the `ordinary-factories` prefix. The next read-only audit,
-`runs/ordinary-factories-next-native-plan.md/json`, identifies 38 whole-body syntax
-candidates for a bounded Concat/FirstToUpper extension across the full catalog. They
-require precedence/grouping, byte gsub/capture semantics and original helper/global
-binding proof; they are not admitted yet. Only two current first-stop items select them.
-The independent review in `runs/string-factories-oracle-plan.md` confirms this as a
-routine extension, with operand evaluation, concat reduction order and exact one-argument
-helper lowering as explicit gates. No general helper language, branching or actor
-migration is implemented.
+The reconciled final ledger is `runs/string-factories-validation-final.json`. Component
+records use `runs/string-factories-*`, including root validation, data preservation,
+source oracle, CLI validation, corpus comparison and source join.
+The build manifest now hashes 187 source/resource inputs, including literal embedded
+resources, and retains the original 44 protected files and both caller files. Frozen
+prior checkpoint worktrees and their binary/evidence records remain intact.
 
-Publication and preservation evidence: `runs/ordinary-factories-publication.json`.
-All 501 frozen files retain raw hashes; all 501 main files have matching normalized
-content. Ninety-five cross-worktree raw differences are line endings only. All 162 build
-inputs, 44 protected source/tree/golden files and both caller files remain exact.
-The final local validation ledger is `runs/ordinary-factories-validation-final.json`.
-
-Exact-code [Windows/Linux CI run 34412504547](https://github.com/Azaril/poe-optimizer/actions/runs/34412504547)
-is in progress. At 2026-09-09 22:31:24 UTC Ubuntu was testing and Windows was in lint,
-with no failed steps. Hosted completion is tracked separately from local validation.
+The preceding ordinary factory checkpoint is published as code
+`35960b6403c52be4a9ab2aed60c43fd3205ffe27` and docs
+`114e86b3ad97112cca087e345c90e3049d92ab4e`. Its complete scoped validation and
+preservation records remain in `runs/ordinary-factories-validation-final.json` and
+`runs/ordinary-factories-publication.json`. See the
+[historical checkpoint](#ordinary-factory-invocation-checkpoint).
 
 The preceding pure Special checkpoint is published as
 `27c11a2b253eacf2a21e9cd9c6905b07090c6013`, with resume update `5b56dd2`.
@@ -815,6 +812,61 @@ full data-code fingerprint, including the new lookup implementation. A host usin
 the standalone item-loading report should additionally retain
 `poe_optimizer_data::implementation_fingerprint()`. The [library report contract](item-source-and-loading.md)
 now states that distinction; no numerical code or report schema change is involved.
+
+## Bounded string factory checkpoint
+
+Code: `11e6f3906b30f5adba8e0847e6de6b84ea0f6894`. Package schema23/parser4;
+PoB remains pinned at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. This extends
+the injected factory expression seam with Concat and the one closed FirstToUpper
+operation. It does not admit arbitrary helpers, callable tables, new build profiles
+or completed numerical mechanics merely because their text now parses.
+
+The extractor proves the complete three-line helper, its original global environment,
+raw string primitives and string metatable lookup, then consumes each owning callback's
+whole source body. It verifies the owning callback's captured helper identity and
+retains existing closure/table graphs. The new authored pattern is compiled once with
+the immutable catalog; selected native calls use per-request matching/output budgets.
+The lowerer preserves unary/concat precedence and parentheses and accepts exactly one
+helper argument. Complete unsupported bodies remain opaque even after their first
+newly recognized expression.
+
+Source parity covers all 38 new original bodies at 48 real selections (28 Special,
+10 first-tag and 10 second-tag). The additional alias matrix has 181 exact graphs and
+nine ordered source errors; concat/grouping has 104 graphs and 116 errors; configured
+helper patterns have 112 graphs and 38 errors. All 256 byte values are compared
+through original/native public outputs. The 127 non-NUL ASCII policy fields stay
+within the existing catalog text boundary, while raw captures and AST text retain
+NUL coverage. Direct original warm execution observes all 38 factory prototypes and
+the helper in live traces over 4,864 calls.
+
+Existing ordinary coverage expands to all 120 callbacks, 237 real public selections
+and 15,360 direct warm calls. Existing Special coverage retains whole-body graph and
+public-copy checks. Total source integration scope is 84 tests, zero failures/ignored.
+A callable table method stops natively at `firstToUpper receiver method` with its
+actual callback ID; this boundary is not mislabeled as a successful original function
+execution. The constructor's pre-existing isolated/full-module lexical graph difference
+also remains explicit.
+
+Preserved failed observations: the first source matrix passed five tests and exposed
+two fixture mistakes. A malformed custom helper pattern was applied before dictionary
+construction, where original source correctly errored; the corrected runtime control
+constructs the original dictionaries first and changes only the authenticated helper
+literal for selected calls. A policy-text fixture incorrectly contained NUL; corrected
+policy fields respect the schema while raw-byte/literal controls preserve NUL coverage.
+The final full seven-test matrix passes. Early compilation failures during coordinated
+AST/test edits are retained in component logs; final workspace and native strict lint pass.
+
+The final corpus has 48 generated rows, 58 generated calls and 57 origins. Exactly two
+formerly deferred leech items reach Assembly; 114 complete reports and all reference
+number bits remain unchanged. Native build failures stay byte-identical to baseline,
+and the corpus runner's nonzero exit is attributed only after independently checking
+all five successful imports, inspections and reference evaluations. No changed rejection
+is silently treated as an expected limitation.
+
+The next read-only Flag audit covers the complete catalog. Sixty-eight new syntax
+candidates include 23 whose owning callback has no direct mod capture. A future closed
+node must preserve flag-to-constructor provenance and injected type/value literals;
+it cannot invent a direct constructor capture or become a general function executor.
 
 ## Ordinary factory invocation checkpoint
 

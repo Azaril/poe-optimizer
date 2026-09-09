@@ -118,7 +118,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 22 and `poe2-native-profiles-v22`, including source-keyed passive/actor effects,
+schema 23 and `poe2-native-profiles-v23`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -258,3 +258,12 @@ numeric-precheck patterns to agree. Their complete source spans accompany the co
 pattern. This extends invocation support without translating additional function bodies
 or changing the preserved callback environment graph. See the
 [ordinary invocation checkpoint](implementation.md#ordinary-factory-invocation-checkpoint).
+
+String-factory extraction adds the complete `firstToUpper` helper span and its authored
+pattern. The source verifier checks the parenthesized single-result return, exact
+one-argument call shape, lexical helper binding, global string-library identity, raw
+`gsub`/`upper` primitives and string metatable `__index`. Unsupported control flow,
+additional helpers, parameter shadowing and unrepresented bindings remain opaque.
+Unary operators bind tighter than right-associated concatenation; parentheses retain
+the original operation order. Lowering examines every callback independently of example
+builds, and preservation checks retain all preceding recipes and graph definitions.

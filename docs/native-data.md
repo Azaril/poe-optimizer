@@ -210,6 +210,16 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Package schema **23**, semantics **`poe2-native-profiles-v23`**, advances the modifier
+parser section to schema **4**. It adds bounded `Concat` and `FirstToUpper` expressions,
+`first_to_upper_pattern` and the complete authenticated helper span. Helper expressions
+must bind the original helper ID and the owning callback's captured identity; argument
+types remain lazy runtime values. The entire callback source must lower successfully.
+All prior recipes, tables/callback graphs, declarations, dependencies and the 26 other
+sections remain unchanged. A caller can inject another bounded pattern or expression
+without acquiring a source-parity claim. See the
+[string operation contract](modifier-parser.md#pure-factory-definitions).
+
 Package schema **22**, semantics **`poe2-native-profiles-v22`**, advances the modifier
 parser section to schema **3**. It adds `tag_capture_numeric_pattern` and authenticated
 spans for Prefix, first-tag and second-tag invocation. The original pattern is extracted

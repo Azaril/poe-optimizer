@@ -46,7 +46,8 @@ rules. All 25 preceding package sections retain their values and digests.
 Source-derived pure factory recipes extend the same immutable catalog. Each original
 closure retains its source span, captured graph and an explicit lowering disposition.
 An admitted recipe records fixed argument slots, scalar literals and captures, policy
-field references, negation, ordered table fields and constructor calls. All game values,
+field references, negation, byte concatenation, a closed `firstToUpper` helper,
+ordered table fields and constructor calls. All game values,
 modifier names and field keys are selected data. Byte offsets and a function digest
 identify the complete function within its authenticated source span; constructor
 provenance binds the observed original helper. Modified external packages have their
@@ -84,8 +85,29 @@ enables the second scan using fresh captures. Returned metadata enters the exist
 contribution/tag/wrapper pipeline without an extra whole-result copy. Borrowed argument
 views and shared immutable compiled patterns keep invocation state request-local.
 
+Concatenation retains the source expression tree: unary precedence, parentheses and
+right association are explicit, while operands execute in source order. Only byte
+strings and numbers concatenate; numeric rendering uses the shared Lua-compatible
+primitive. Other values raise a source error when their operation is reached.
+
+`FirstToUpper` binds the owning callback's captured original helper and executes its
+single argument through an injected `first_to_upper_pattern`. Extraction authenticates
+the complete parenthesized helper return, original global string table, raw `gsub` and
+`upper` functions and string metatable method lookup. It admits exactly one helper
+argument. Native replacement interprets byte patterns, uppercases the first explicit
+capture (or whole match), converts position captures using Lua number text, and retains
+empty-match and anchored-substitution behavior. It preserves NUL and invalid UTF-8;
+Unicode casing and general helper execution are outside this operation.
+
+Receiver method lookup precedes pattern execution. Non-string scalar receivers and
+non-callable table methods raise source errors; a table's opaque `gsub` callback is
+reported as `firstToUpper receiver method` with its actual catalog identity. No
+callback is guessed or invoked through a hidden Lua fallback. Matching, replacement,
+number rendering and output allocations consume cumulative request budgets. Compiled
+patterns remain immutable and included in each evaluator's injected data identity.
+
 Current delivery and validation status belongs in the
-[implementation checkpoint](implementation.md#ordinary-factory-invocation-checkpoint).
+[implementation log](implementation.md).
 
 ## Execution boundary
 
