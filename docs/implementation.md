@@ -5,8 +5,8 @@ Last updated: 2026-09-09
 Current completed implementation checkpoint: **native socketed-augment loading and
 reconstruction**. Code and scoped local validation are complete in
 `runs/rune-loading-worktree`, branch `codex/rune-loading`, based on published
-`1d742b8d7c14ea2f9a76ce5bf70b4cc2640bfb00`. Publication is the next operation;
-record its exact commit and hosted run separately. See the
+`1d742b8d7c14ea2f9a76ce5bf70b4cc2640bfb00`. Code is published on `origin/main` as
+`db631fc91bf78be52002d096b0efc185c05f4d3e`; keep that worktree and its binaries frozen. See the
 [checkpoint evidence](#socketed-augment-loading-checkpoint) and
 [state contract](item-source-and-loading.md#socketed-augment-state).
 
@@ -42,7 +42,14 @@ loading dependencies are **67 assembly, 45 modifier parser, three rune reconstru
 and one advanced-copy ordering**. Every former rune stop executes further native work;
 these loading counts do not imply whole-build support.
 
-Next: check publication and exact-head hosted CI, then prepare the data-driven
+Exact-code [Windows/Linux CI run 34404829138](https://github.com/Azaril/poe-optimizer/actions/runs/34404829138)
+is in progress. At 2026-09-09 21:05:16 UTC Ubuntu was in lint and Windows was checking
+out; no failed steps were reported. Hosted success is not yet claimed. Publication
+and preservation evidence: `runs/rune-loading-publication.json`. Cross-worktree raw
+line endings differ for 14 protected files; their Git blobs and normalized content
+match, while all frozen raw hashes and both caller files remain exact.
+
+Next: inspect exact-head hosted CI, then prepare the data-driven
 modifier callback and ordered item-assembly phase using
 `runs/rune-loading-next-native-plan.md/json`. The 45 parser stops select 14 special
 callbacks: 23 direct constructor cases, two uppercase/concatenation cases, nine gem
@@ -841,7 +848,7 @@ binaries, logs, corpus and source ledger remain under `runs/rune-loading-*`; the
 code uses distinct `runs/rune-loading-final2-*` evidence. Never relabel earlier binaries
 as having incorporated those fixes. Caller files and all original goldens remain intact.
 
-Next resume work: finish publication/hosted checks, then use the
+Next resume work: inspect exact-code hosted CI (publication is complete), then use the
 read-only `runs/rune-loading-next-native-plan.md/json` audit to select a coherent
 modifier-callback or item-assembly phase in a fresh worktree. All 45 remaining parser
 stops currently reach special callbacks; their lowering must preserve injected data and
