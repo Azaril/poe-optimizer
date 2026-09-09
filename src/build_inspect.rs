@@ -13,7 +13,7 @@ pub(crate) struct Args {
     /// Write the inspection report to a new file instead of stdout.
     #[arg(long)]
     output: Option<PathBuf>,
-    /// Look up authored references in the selected data catalogs; does not evaluate effects.
+    /// Look up source references and inspect item loading using selected data; does not evaluate effects.
     #[arg(long)]
     with_definitions: bool,
     #[command(flatten)]
@@ -45,8 +45,8 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         Err(error) => serde_json::json!({"status": "not_projected", "error": error}),
     };
     let mut report = serde_json::json!({
-        "schema_version": 2,
-        "scope": "build_source_projection_v2",
+        "schema_version": 3,
+        "scope": "build_source_projection_v3",
         "status": "source_projected",
         "input": {
             "format": imported.format,
@@ -106,10 +106,28 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
                     "lookup": poe_optimizer_import::skill_definitions::lookup_definitions(skills, &snapshot)?
                 }),
                 Err(error) => serde_json::json!({"status": "not_looked_up", "source_error": error}),
+            },
+            "items": match &item_projection {
+                Ok(items) => {
+                    let mut provider = poe_optimizer_import::item_loading::UnavailableItemLoadProvider;
+                    match poe_optimizer_import::item_loading::inspect(items, &snapshot, &mut provider) {
+                        Ok(loaded) => serde_json::json!({"status": "load_reported", "report": loaded}),
+                        Err(error) => serde_json::json!({"status": "not_reported", "error": error.to_string()}),
+                    }
+                },
+                Err(error) => serde_json::json!({"status": "not_reported", "source_error": error}),
             }
         });
         report["definition_implementation_sha256"] =
             poe_optimizer_data::implementation_fingerprint().into();
+        report["verification"]["item_loading"] =
+            if report["definition_lookup"]["items"]["status"] == "load_reported" {
+                "reported".into()
+            } else {
+                "not_reported".into()
+            };
+        report["item_loading_implementation_sha256"] =
+            poe_optimizer_import::item_loading::implementation_fingerprint().into();
     }
     let bytes = serde_json::to_vec_pretty(&report)?;
     if let Some(path) = args.output {

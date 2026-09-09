@@ -1,21 +1,25 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
-Current checkpoint: **mixed ModList/ModDB query semantics and ordered item-loading audit**,
-implemented, locally validated and published as
-`5f8b70e220e2bd19ed79d0e3b6979a2347970ab2` on main.
+Current checkpoint: **injected item definitions and ordered native item loading**,
+implemented and locally validated; publication is underway. The schema-14 data package
+contains the complete source item catalog. Native import preserves ordered loading state
+and stops at explicit missing parser/assembly dependencies. Original-source comparisons
+pass, including all 116 corpus items; this does not establish complete native item
+calculation or admit additional complete builds. See the validation checkpoint below.
+
+The preceding mixed ModList/ModDB query checkpoint is published as
+`5f8b70e220e2bd19ed79d0e3b6979a2347970ab2`, with resume update `316ad8c`.
 [Exact-code CI run 34274132680](https://github.com/Azaril/poe-optimizer/actions/runs/34274132680)
-is in progress; no hosted pass is claimed. Native numeric and condition
-programs now preserve every store kind in a parent chain and enforce matching query
-contexts. Shared SUM retains child-first error traversal, grouped arithmetic and bounded
-allocation-free scratch. The full native replacement remains unfinished; this change does
-not admit additional complete builds. See the validation checkpoint below.
+passed on Windows and Linux. Native numeric and condition programs preserve every store
+kind in a parent chain and enforce matching query contexts; shared SUM retains child-first
+error traversal, grouped arithmetic and bounded allocation-free scratch.
 
 The preceding condition checkpoint is published as
 `d09252bc22a2f0a8788274e52b3275ae1885f5d6`, with resume update `ba8343c`.
 [Exact-code CI run 34271992799](https://github.com/Azaril/poe-optimizer/actions/runs/34271992799)
-is still in progress. No hosted pass is claimed. The broader five-build corpus still needs
+passed on Windows and Linux. The broader five-build corpus still needs
 general actor/action, item and calculation pipelines; the shared query implementation is
 one component of that work.
 
@@ -27,7 +31,7 @@ increases only that functional reproducibility test's budget to 120 seconds; its
 cases pass locally, including two exact 23-section extractions and native reload.
 Production timeout defaults and timeout/kill tests are unchanged.
 [Fix CI run 34269405262](https://github.com/Azaril/poe-optimizer/actions/runs/34269405262)
-is still testing on both platforms; no hosted repair is claimed yet. Local diagnosis is in
+passed on Windows and Linux. Local diagnosis is in
 `runs/ci-extraction-functional-fix-evidence.json`. Earlier checkpoint entries below retain
 the information available when they were published; the log request is no longer needed.
 
@@ -207,6 +211,75 @@ required skill/item subsets and encounter assumptions remain explicit per-run in
 Assessment reports constraint evidence and primary availability; it does not certify build
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
+
+## Ordered native item loading - validation checkpoint
+
+The preceding goal turn was progress: mixed-store code `5f8b70e` and resume update
+`316ad8c` were published. This phase started from a clean worktree and preserved the
+source/build/golden baseline. Interrupted validation resumed on 2026-09-09. The preceding
+exact-code runs 34274132680, 34271992799 and extraction-fix run 34269405262 now pass on
+Windows and Linux (`runs/item-loading-prior-ci-final.json`). The user has authorized CI
+log access for future failures. The full implementation/native-parity goal remains active.
+
+The [ordered item-loading seam](item-source-and-loading.md) now has a complete injected
+catalog and a portable Rust state machine. Schema 14 (`poe2-native-profiles-v14`) adds
+1,756 item bases, including 251 hidden entries; nine modifier groups with 9,369 records;
+30 raw unique groups with 443 prototypes; raw jewel radii and source-derived loading
+policies. Opaque callback descriptors preserve source provenance without executing Lua.
+Raw unique prototypes are not a constructed unique database or native mechanic support.
+
+The selected bundle is **11,417,402 bytes**, SHA-256
+`04ae73e51340a7ffacea213f4ac4bdf403bf71301d007949f4b55043c8120b07`.
+All prior 23 section values and digests remain exact. The item catalog authenticates 87
+source files; the full extractor authenticates 111. Two fresh review extractions reproduce
+package and evidence bytes. Independent source comparison found and corrected an empty
+noncorruptible-policy selector; reproducibility alone would not have detected that bug.
+Six oversized source prototypes require a path-specific maximum of 64 KiB; ordinary string
+limits and the 16 MiB package limit remain enforced.
+
+Loading preserves every source occurrence and consumed instruction, including empty
+construction, repeated text resets and retained fields, numeric/header syntax, variants,
+parser-controlled line consumption, category/range order and final assembly. Explicit
+provider results carry requirement replacements and modifier payload updates back to later
+steps. Provider result sizes, finite numbers and list counts are checked before applying
+those updates. Detailed traces belong to import/inspection, not the candidate hot loop.
+
+The production provider still lacks general modifier parsing, range formatting and complete
+item assembly. Advanced copied affixes, runes, unique construction, magnitude processing,
+crafted reconciliation and other unresolved operations stop execution explicitly. The CLI's
+schema-3 `inspect-build --with-definitions` / `--data` report preserves the established state
+and marks the suffix unexecuted. Source-only inspection remains independent of data and PoB.
+The schema-5 corpus runner checks occurrence ownership, consumed order, text hashes, source
+and data identities, stop/error semantics and loader fingerprint. It never converts this
+evidence into calculation capability. Custom provider provenance remains the host's duty.
+
+| Validation | Evidence and result |
+|---|---|
+| Injected definitions | All **94 unique data tests** pass across 13 integration targets; the final stale schema assertion was corrected and rerun. Strict all-target data Clippy passes. Three authenticated extraction tests pass. `runs/item-loading-data-all-tests.log` retains the initial assertion failure; combine it with `runs/item-loading-data-resumed-test.log`, `runs/item-loading-data-clippy-resumed.log` and `runs/item-loading-source-final.log`. |
+| Original item execution | **12 oracle tests pass**, strict scoped Clippy passes. The original runtime loads **116 items / 15 saved sets**, with 232 ParseRaw calls and 348 assembly calls. Of 486 authored range instructions, 402 write and 84 are ignored; no rune-list write occurs. Plain and observed source runs retain equal final item/list/assembled/set states. `runs/item-loading-oracle-frozen-tests.log`, `runs/item-loading-oracle-final-clippy.log`. |
+| Native loading contracts | All **21 final loader contracts** and strict import Clippy pass, covering provider text/metadata bounds, wasm32-safe aggregate accounting and cross-item report limits. Earlier full import regression passed **203 tests** before the final resource guards. `runs/item-loading-final-bounds-checks.json`, `runs/item-loading-native-checks.json`. |
+| Native/source transition parity | The same oracle suite compares represented scalar presence, requirements and complete modifier payloads across repeated text, parser retries, variants/version/groups, numeric/error cases and stopped formatting. Warmed execution proves surviving traces originate in original Item methods. Assembly replay uses freshly captured original results in test-only providers; it is **not a Rust BuildModList implementation**. |
+| CLI and corpus contracts | **29 Python runner contracts pass**, including negative source/data/order/suffix cases, no-op instruction stops and aggregate diagnostic limits. All **21 selected-data CLI tests pass**, including two complete 24-section extractions. Final corpus evidence is recorded below. `runs/item-loading-runner-final-tests.log`, `runs/item-loading-cli-final.log`. |
+| Fresh complete corpus | All **five inspections and five PoB evaluations pass**. All **110 measurements** and represented build/context/coverage/warnings match the previous checkpoint bit-for-bit. All **116 items** report explicit pending dependencies: 51 range formatting, 24 rune reconstruction, 18 crafted affixes, 15 base buffs, four unsupported Ward headers and four assembly. These are first stops, not complete dependency counts. Native still rejects three builds at one-Skill and two at one-SkillSet; the runner's exit 1 records those five expected rejections. Source/configuration/skill inventories and both binary identities remain unchanged during execution. `runs/item-loading-corpus-final/index.json`, `runs/item-loading-corpus-validation.json`. |
+| Existing numerical behavior | Both established actor/build parity tests pass with the final data package. `runs/item-loading-actor-build-parity.log`. No native build admission is expanded. |
+| Portable deployment | **69 native tests**, **114 native-only CLI tests**, strict native-only Clippy, all five WASM libraries and the normal-dependency check pass. The native-only dependency graph excludes PoB/Lua. Workspace all-target Clippy also passes. Broad suites precede the final resource-only guard edits; final loader/source tests, executable rebuild, native-only lint and five-library WASM refresh also pass. All 266 captured source/artifact hashes remain stable through that refresh. `runs/item-loading-deployment-summary.json`, `runs/item-loading-workspace-frozen-clippy.log`. |
+| Preservation | **25 non-package protected files** remain exact; all old 23 package sections and digests are unchanged. Pinned PoB, tree, caller exports and six independent calibration goldens remain fixed. `runs/item-loading-final-preservation.json`, `runs/item-loading-root-final-package-validation.json`. All 44 documentation/notice files decode as UTF-8, 467 local links resolve, formatting and diff checks pass (`runs/item-loading-docs-audit.json`). |
+| Publication | Local validation complete; push and exact-code hosted CI check follow. Full native parity remains unfinished. |
+
+Next resume point: publish this checkpoint and check its exact-code hosted CI, then
+continue B2 dependency closure with reusable native modifier parsing/formatting and item
+assembly components. The next bounded source port is exact ItemTools range/catalyst text
+formatting: inject the complete case-sensitive scalability keys, per-capture scalability,
+ordered format directives and precision policy. Preserve the separate initial range-1
+formatting call and later selected-range assembly calls. Fallback precision discovery calls
+the modifier parser; expose that dependency explicitly and stop when unavailable. Cover
+negative ties, signed zero, forced decimals, numeric specialization, nested modifier
+precision, missing/zero catalyst quality and unscalable tags against original source.
+The existing 87-rule rangeless formatter is not complete general formatting. Measure the
+expanded package before choosing limits. Keep the complete catalog independent of mechanic
+admission and test new preparation stages before expanding complete-build coverage.
+B4 whole-build holdout planning remains open. The proposed B3 actor/action/build/candidate
+migration still requires discussion and is not implemented by this component.
 
 ## Mixed modifier stores - validation checkpoint
 
@@ -999,7 +1072,9 @@ its game effects. The complete injected catalog and data-bound inspection are de
   records. The observed static capability comparison now distinguishes native query primitives from
   source producers. Shared native FLAG/GetCondition now has actual-source parity and 15
   captured query-closure replays, with four unresolved proposals retained; this does not
-  close complete actor dependencies. Full dependency closure, inactive-selection inventory
+  close complete actor dependencies. The ordered item-loading phase adds the complete
+  injected item catalog and source-bound partial execution reports, with native parser and
+  assembly dependencies explicit. Full dependency closure, inactive-selection inventory
   and whole-build admission remain open.
 - [ ] **B3 — general build-input seam review.** Audit hard-coded fixture inputs, closed
   Spark/Mace admission, skill IDs, level restrictions and implicit player-only assumptions.

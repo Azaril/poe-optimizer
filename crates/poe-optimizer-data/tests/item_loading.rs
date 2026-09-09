@@ -1,0 +1,335 @@
+use poe_optimizer_data::item_loading::*;
+use std::collections::{BTreeMap, BTreeSet};
+fn table(fields: impl IntoIterator<Item = (&'static str, ItemMetadataValue)>) -> ItemMetadataTable {
+    ItemMetadataTable {
+        fields: fields.into_iter().map(|(k, v)| (k.into(), v)).collect(),
+        indexed: BTreeMap::new(),
+    }
+}
+fn compatibility() -> BTreeMap<String, ItemMetadataValue> {
+    let mut p = BTreeMap::new();
+    for key in [
+        "base_aliases",
+        "hidden_specs",
+        "selection_headers",
+        "fallback_jewel_socket_counts",
+        "header_assignments",
+        "literal_state_flags",
+        "postparse_line_effects",
+    ] {
+        p.insert(
+            key.into(),
+            ItemMetadataValue::Table(ItemMetadataTable::default()),
+        );
+    }
+    for key in ["noncorruptible_types", "mod_magnitude_patterns"] {
+        p.insert(key.into(), ItemMetadataValue::Array(vec![]));
+    }
+    p.insert(
+        "superior_prefix".into(),
+        ItemMetadataValue::Text("Superior ".into()),
+    );
+    p.insert(
+        "fallback_modifier_table".into(),
+        ItemMetadataValue::Text("Caller Mods".into()),
+    );
+    p.insert(
+        "rarity_roles".into(),
+        ItemMetadataValue::Table(table(
+            ["default", "normal", "magic", "unique", "relic"]
+                .map(|k| (k, ItemMetadataValue::Text("CALLER".into()))),
+        )),
+    );
+    p
+}
+fn catalog() -> ItemLoadingData {
+    let path = "src/Data/Bases/caller.lua".to_owned();
+    ItemLoadingData {
+        schema_version: 1,
+        capability: ItemLoadingCapability::DefinitionsOnly,
+        source: ItemLoadingSource {
+            upstream_revision: "a".repeat(40),
+            files: BTreeMap::from([(path.clone(), "b".repeat(64))]),
+            construction_spans: BTreeMap::from([(
+                "bases".into(),
+                ItemSourceSpan {
+                    path: path.clone(),
+                    line: 1,
+                    end_line: 3,
+                    sha256: "c".repeat(64),
+                },
+            )]),
+            module_order: vec![path.clone()],
+        },
+        policy: ItemLoadingPolicy {
+            default_affix_quality: 0.25,
+            default_item_quality: 17.0,
+            catalysts: vec![],
+            line_flags: BTreeSet::from(["caller_flag".into()]),
+            rarities: BTreeSet::from(["CALLER".into()]),
+            header_names: BTreeSet::new(),
+            compatibility: compatibility(),
+        },
+        bases: vec![ItemBaseDefinition {
+            name: "Caller Base".into(),
+            item_type: "Caller Type".into(),
+            source_module: path,
+            fields: table([
+                ("type", ItemMetadataValue::Text("Caller Type".into())),
+                ("hidden", ItemMetadataValue::Boolean(true)),
+                ("quality", ItemMetadataValue::Number(17.0)),
+                (
+                    "req",
+                    ItemMetadataValue::Table(table([("level", ItemMetadataValue::Number(7.0))])),
+                ),
+            ]),
+        }],
+        modifier_tables: BTreeMap::from([("Caller Mods".into(), ItemMetadataTable::default())]),
+        unique_groups: BTreeMap::new(),
+        jewel_radii: ItemMetadataTable::default(),
+    }
+}
+#[test]
+fn caller_defined_catalog_is_injected_and_immutable_without_pob_or_named_bases() {
+    let data = catalog();
+    let compiled = ItemLoadingCatalog::new(data.clone()).unwrap();
+    let mut changed = data;
+    changed.bases[0].name = "Changed Base".into();
+    assert!(compiled.base("Changed Base").is_none());
+    assert_eq!(compiled.base("Caller Base").unwrap().hidden(), Some(true));
+    assert_eq!(compiled.base("Caller Base").unwrap().quality(), Some(17.0));
+    assert_eq!(compiled.policy().default_affix_quality, 0.25);
+    assert!(compiled.base("Rusted Greathelm").is_none());
+    assert_eq!(
+        compiled.data().capability,
+        ItemLoadingCapability::DefinitionsOnly
+    );
+}
+#[test]
+fn mixed_numeric_and_string_keys_roundtrip_without_aliasing() {
+    let raw = r#"{"fields":{"1":"text key","opaque":{"callback":{"path":"src/callback.lua","line":7,"end_line":9,"sha256":"abc"}}},"indexed":{"1":"numeric key","4294967295":1.25,"-2":false}}"#;
+    let value: ItemMetadataValue = serde_json::from_str(raw).unwrap();
+    let t = value.as_table().unwrap();
+    assert_eq!(t.fields["1"].as_str(), Some("text key"));
+    assert_eq!(t.indexed[&1].as_str(), Some("numeric key"));
+    assert_eq!(
+        serde_json::from_slice::<ItemMetadataValue>(&serde_json::to_vec(&value).unwrap()).unwrap(),
+        value
+    );
+    assert!(matches!(t.fields["opaque"], ItemMetadataValue::Callback(_)));
+}
+#[test]
+fn numeric_key_aliases_and_duplicates_are_rejected() {
+    for entries in [
+        r#""1":1,"01":2"#,
+        r#""1":1,"+1":2"#,
+        r#""0":1,"-0":2"#,
+        r#""1":1,"1":2"#,
+        r#""1.0":1"#,
+    ] {
+        let raw = format!("{{\"fields\":{{}},\"indexed\":{{{entries}}}}}");
+        assert!(
+            serde_json::from_str::<ItemMetadataValue>(&raw).is_err(),
+            "{raw}"
+        );
+    }
+}
+#[test]
+fn source_identity_and_typed_core_cannot_disagree() {
+    let mut data = catalog();
+    data.bases[0].item_type = "Other".into();
+    assert!(data.validate().is_err());
+    let mut data = catalog();
+    data.bases.push(data.bases[0].clone());
+    assert!(data.validate().is_err());
+    let mut data = catalog();
+    data.bases[0].source_module = "src/missing.lua".into();
+    assert!(data.validate().is_err());
+    let mut data = catalog();
+    data.source
+        .files
+        .insert("src/../escape.lua".into(), "a".repeat(64));
+    assert!(data.validate().is_err());
+}
+#[test]
+fn unknown_fields_are_retained_but_nonfinite_callbacks_and_depth_are_bounded() {
+    let mut data = catalog();
+    data.bases[0].fields.fields.insert(
+        "future".into(),
+        ItemMetadataValue::Array(vec![ItemMetadataValue::Boolean(false)]),
+    );
+    data.validate().unwrap();
+    data.bases[0]
+        .fields
+        .fields
+        .insert("bad".into(), ItemMetadataValue::Number(f64::NAN));
+    assert!(data.validate().is_err());
+    data.bases[0].fields.fields.remove("bad");
+    data.bases[0].fields.fields.insert(
+        "callback".into(),
+        ItemMetadataValue::Callback(ItemOpaqueFunction {
+            callback: ItemSourceSpan {
+                path: "src/missing.lua".into(),
+                line: 1,
+                end_line: 1,
+                sha256: "a".repeat(64),
+            },
+        }),
+    );
+    assert!(data.validate().is_err());
+    data.bases[0].fields.fields.remove("callback");
+    let mut v = ItemMetadataValue::Boolean(true);
+    for _ in 0..26 {
+        v = ItemMetadataValue::Array(vec![v]);
+    }
+    data.bases[0].fields.fields.insert("deep".into(), v);
+    assert!(data.validate().is_err());
+}
+#[test]
+fn large_raw_unique_prototypes_have_a_separate_bounded_contract() {
+    let mut data = catalog();
+    data.unique_groups
+        .insert("caller".into(), vec!["a".repeat(65_536)]);
+    data.validate().unwrap();
+    data.unique_groups.get_mut("caller").unwrap()[0].push('a');
+    assert!(data.validate().is_err());
+    data.unique_groups.clear();
+    data.bases[0]
+        .fields
+        .fields
+        .insert("large".into(), ItemMetadataValue::Text("a".repeat(4097)));
+    assert!(data.validate().is_err());
+}
+
+#[test]
+fn package_unique_string_exception_is_confined_to_exact_prototype_path() {
+    use poe_optimizer_data::game_data::{
+        GameDataLoader, LoadLimits, TrustPolicy, bundled_snapshot,
+    };
+    let snapshot = bundled_snapshot().unwrap();
+    let mut package = snapshot.package().clone();
+    let largest = package
+        .item_loading
+        .unique_groups
+        .values()
+        .flatten()
+        .max_by_key(|s| s.len())
+        .unwrap();
+    assert!(largest.len() > 4096 && largest.len() <= 65_536);
+    package
+        .item_loading
+        .unique_groups
+        .insert("caller".into(), vec!["x".repeat(65_536)]);
+    package.refresh_section_digests().unwrap();
+    GameDataLoader::from_bytes(
+        &package.canonical_bytes().unwrap(),
+        &TrustPolicy::AllowCustom,
+        &LoadLimits::default(),
+    )
+    .unwrap();
+    package
+        .item_loading
+        .unique_groups
+        .get_mut("caller")
+        .unwrap()[0]
+        .push('x');
+    package.refresh_section_digests().unwrap();
+    assert!(
+        GameDataLoader::from_bytes(
+            &package.canonical_bytes().unwrap(),
+            &TrustPolicy::AllowCustom,
+            &LoadLimits::default()
+        )
+        .unwrap_err()
+        .to_string()
+        .contains("string limit")
+    );
+    package.item_loading.unique_groups.remove("caller");
+    package.manifest.release = "x".repeat(4097);
+    package.refresh_section_digests().unwrap();
+    assert!(
+        GameDataLoader::from_bytes(
+            &package.canonical_bytes().unwrap(),
+            &TrustPolicy::AllowCustom,
+            &LoadLimits::default()
+        )
+        .unwrap_err()
+        .to_string()
+        .contains("string limit")
+    );
+    let mut v = serde_json::to_value(snapshot.package()).unwrap();
+    v["item_loading"]["unique_groups"]["forged"] = serde_json::json!({"nested":["x".repeat(4097)]});
+    assert!(
+        GameDataLoader::from_bytes(
+            &serde_json::to_vec(&v).unwrap(),
+            &TrustPolicy::AllowCustom,
+            &LoadLimits::default()
+        )
+        .unwrap_err()
+        .to_string()
+        .contains("string limit")
+    );
+}
+#[test]
+fn appended_base_and_altered_numeric_fields_use_selected_package_identity() {
+    use poe_optimizer_data::game_data::{
+        GameDataLoader, LoadLimits, TrustPolicy, bundled_snapshot,
+    };
+    let initial = bundled_snapshot().unwrap();
+    let mut p = initial.package().clone();
+    let mut base = p
+        .item_loading
+        .bases
+        .iter()
+        .find(|b| b.requirements().is_some())
+        .unwrap()
+        .clone();
+    base.name = "Arbitrary caller base".into();
+    base.fields
+        .fields
+        .insert("quality".into(), ItemMetadataValue::Number(13.5));
+    p.item_loading.bases.push(base);
+    p.refresh_section_digests().unwrap();
+    let changed = GameDataLoader::from_bytes(
+        &p.canonical_bytes().unwrap(),
+        &TrustPolicy::AllowCustom,
+        &LoadLimits::default(),
+    )
+    .unwrap();
+    assert_ne!(initial.identity(), changed.identity());
+    assert!(
+        initial
+            .item_loading()
+            .base("Arbitrary caller base")
+            .is_none()
+    );
+    assert_eq!(
+        changed
+            .item_loading()
+            .base("Arbitrary caller base")
+            .unwrap()
+            .quality(),
+        Some(13.5)
+    );
+    assert!(matches!(
+        changed.trust(),
+        poe_optimizer_data::game_data::DataTrust::CustomUnreviewed
+    ));
+}
+
+#[test]
+fn required_policy_shapes_fail_closed_but_empty_exclusion_arrays_are_valid() {
+    let data = catalog();
+    data.validate().unwrap();
+    for key in data.policy.compatibility.keys() {
+        let mut changed = data.clone();
+        changed.policy.compatibility.remove(key);
+        assert!(changed.validate().is_err(), "{key}");
+    }
+    let mut data = data;
+    data.policy.compatibility.insert(
+        "noncorruptible_types".into(),
+        ItemMetadataValue::Table(ItemMetadataTable::default()),
+    );
+    assert!(data.validate().is_err());
+}

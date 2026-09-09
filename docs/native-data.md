@@ -210,7 +210,22 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
-Current package schema **13**, semantics **`poe2-native-profiles-v13`**, adds the complete
+Current package schema **14**, semantics **`poe2-native-profiles-v14`**, adds `item_loading`:
+the complete constructed item-base catalog, raw unique prototypes, modifier tables, jewel
+radii and source-derived loading policy. `GameDataSnapshot::item_loading()` exposes an
+immutable catalog independently of native calculation preparation. Metadata retains mixed
+numeric/string table keys, hidden entries and inert source callback descriptors; raw unique
+prototypes do not supply the parsed `Main.uniqueDB` requirements pipeline. Named game
+exceptions belong in this injected policy, while Rust implements loading operations.
+
+All preceding 23 section contents and digests remain unchanged; the package has 24 sections.
+The existing 16 MiB package bound remains. Only `item_loading.unique_groups` prototype
+values allow up to 64 KiB each, accommodating actual generated unique definitions; existing
+field/key limits remain unchanged. Regenerate older packages. Definitions and partial
+loading evidence grant no additional native numerical capability. See
+[item source and loading](item-source-and-loading.md).
+
+Package schema **13**, semantics **`poe2-native-profiles-v13`**, adds the complete
 constructed `skill_identities` metadata section: 967 gem declarations / 966 final gems and
 1,439 effect declarations / 1,436 final effects. Original and constructed references remain
 distinct, including 16 missing-reference records. `GameDataSnapshot::skill_identities()`

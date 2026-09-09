@@ -86,6 +86,11 @@ needs explicit parser outcomes, consumed spans and unparsed remainders as inputs
 state transitions. A partial metadata report must identify that boundary when the native
 modifier parser or a required definition is unavailable.
 
+Assembly also mutates parsed state: the original method updates requirement records and
+modifier payloads, including item source labels, before later range/text operations run.
+The provider result must carry those typed changes back into the loader. Replaying an
+assembly's top-level scalar values alone does not preserve subsequent loading behavior.
+
 Definitions must be injected independently of caller item instances: the complete base
 catalog and aliases, affix/unique metadata, rune and bonded effects, jewel radii, header
 formatting and named compatibility policies. Normal/magic base-name fallback searches the
@@ -104,17 +109,47 @@ default value.
 
 ## Caller-facing evidence
 
-`inspect-build INPUT` is the caller-driven entry point. Report schema 2 adds an independent
-item projection to the existing configuration and skill projections. It labels item loading
-as not run, equipment resolution as unresolved and passive allocation as unchecked.
-Source-only inspection needs neither a data package nor a PoB runtime. Optional configuration
-and skill identity lookup remains separate from item interpretation.
+`inspect-build INPUT` is the caller-driven entry point. Report schema 3 retains independent
+configuration, skill and item source projections. Source-only inspection needs neither a
+data package nor a PoB runtime, and records item loading as `not_run`.
 
-The corpus runner's schema 4 records the item source evidence alongside independent
-numerical backend results. Older schema-1 build reports remain readable, with item evidence
-explicitly unavailable; missing fields do not mean that a build has no items. The original
-XML and raw report are retained when a projection or evaluation fails. A changed input
-cannot be evaluated under the original build's identity.
+`--with-definitions` or `--data PACKAGE` also runs the native ordered item loader against the
+selected catalog. `definition_lookup.items` contains the report or its independent error.
+The report binds the exact XML, data identity and loader implementation fingerprint. It
+preserves every inventory occurrence and every consumed instruction, including constructor
+and final assembly. Item IDs remain authored strings; they are not occurrence identities.
+
+This inspection path retains source text and detailed call evidence for diagnosis. It is an
+import/preparation component, not the optimizer's candidate hot loop; its throughput does
+not establish full evaluator performance. The eventual prepared item representation should
+be immutable and reusable across candidates, with detailed tracing enabled separately from
+numerical execution.
+
+The production inspection provider has no modifier-parser or assembly implementation yet.
+It stops at the first required unavailable operation, retains the state established before
+that operation and marks later instructions `not_executed`. The empty constructor follows
+the source's no-base no-op behavior. Inspection never invokes PoB to fill a missing native
+operation. Explicit providers support comparison of loading transitions against original
+source callbacks in tests; supplying a parser result is not a native parser implementation.
+The report's data and loader fingerprints do not authenticate a caller-supplied provider's
+implementation or results. A host using a custom provider must retain that provider's
+provenance independently. The CLI's provider is fixed to explicit unavailable outcomes.
+
+An item status of `pending` identifies the required dependency; `source_error` records an
+attempted source operation that failed. `no_base` means loading ended without a recognized
+base. `complete` describes completion of the supplied loading operations only. None of these
+statuses certifies equipment selection, mechanic coverage, gameplay legality or complete
+build evaluation. Top-level verification says `reported` when a loading report exists,
+including a partial one; numerical and legality gates remain separate.
+
+The corpus runner's schema 5 records this loading evidence alongside independent numerical
+backend results. It validates complete occurrence ownership, source instruction order and
+text hashes, the executed prefix and stopped suffix, selected data identity and loader
+fingerprint. It retains raw metadata without treating it as numerical capability. Earlier
+schema-1 and schema-2 build reports remain readable with loading evidence explicitly
+unavailable. Missing fields do not mean that a build has no items. Original XML and raw
+reports are retained when projection, loading or evaluation fails; changed input cannot be
+evaluated under the original build's identity.
 
 ## Validation requirements
 

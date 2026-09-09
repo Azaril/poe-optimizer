@@ -110,7 +110,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 13 and `poe2-native-profiles-v13`, including source-keyed passive/actor effects,
+schema 14 and `poe2-native-profiles-v14`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -124,6 +124,15 @@ converted separately and admitted by whole-effect capability rather than an ID a
 Rust does not contain their numeric values. Regenerate older packages rather than silently filling missing
 records. Native controlled search consumes the same selected data; new tree revisions and
 arbitrary operation versions still require compatibility review.
+
+
+The `item_loading` section executes authenticated source construction for the full item base,
+modifier, raw unique and jewel-radius definitions. It retains hidden/unknown metadata and
+source locations for inert callbacks. Parsing those callbacks or constructing the parsed
+unique database remains a separate consumer; catalog extraction does not silently replace
+missing modifier effects. Independent item-loading oracles execute the original parser and
+assembly methods separately from this exporter. Regeneration preserves all preceding section
+values and the pinned source/tree; see [item loading](item-source-and-loading.md).
 
 
 When intentionally changing the retained policy or package schema, maintainers can prepare

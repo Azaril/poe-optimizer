@@ -230,27 +230,34 @@ exact raw reports and exported XML. It never fills a failed entry with a fixture
 
 Optional `--inspect-build` calls the explicitly selected import CLI to retain source sections,
 configuration, every authored skill occurrence and independent item-source evidence before
-backend evaluations. Build report schema 2 preserves raw item fragments, XML-consumed
+backend evaluations. Build report schema 3 preserves raw item fragments, XML-consumed
 string/ModRange order, all saved equipment sets and passive-spec jewel ownership; see
 [item source and loading](item-source-and-loading.md).
-Add `--with-definitions` for bundled identity lookup or `--data PACKAGE` for the selected
-snapshot; `--data` also enables lookup. Source inspection without either flag loads no data.
-`--inspect-configuration` remains available for a separate configuration-only report.
+Add `--with-definitions` for bundled identity lookup and ordered item-loading diagnostics,
+or `--data PACKAGE` for the selected snapshot; `--data` also enables lookup/loading.
+Source inspection without either flag loads no data. `--inspect-configuration` remains
+available for a separate configuration-only report.
 
-Manifest schema 4 records which inspections were requested, raw report hashes, exact commands
+Manifest schema 5 records which inspections were requested, raw report hashes, exact commands
 and validated occurrence/identity counts. It checks source ranges, container/set/group
 ownership, ordered item fragments and consumed instructions, distinct passive-spec jewel
 owners, duplicate or omitted lookup records, selected data identity and explicit
-non-evaluation labels. Inventory IDs, set IDs and selected-item references remain authored
-values, not resolved equipment. RuneSlot and SocketIdURL evidence is distinct from a
-Tree/Spec/Sockets/Socket jewel assignment.
+non-evaluation labels. Loading reports also require every inventory occurrence, source-bound
+instruction order, the executed prefix and stopped suffix, and the loader fingerprint.
+Inventory IDs, set IDs and selected-item references remain authored values, not resolved
+equipment. RuneSlot and SocketIdURL evidence is distinct from a Tree/Spec/Sockets/Socket
+jewel assignment.
 
-The runner accepts build inspection report schemas 1 and 2. Schema 1 records item source as
-`not_reported_by_inspector`; absent evidence does not mean no items. Schema 2 requires the
-item outcome and labels item loading as not run, equipment resolution as unresolved and
-passive allocation as unchecked. Local projection failures remain in the full raw reports
-once the document-wide XML/lexical gate has passed; a global failure can prevent the entire
-inspection report. No Item.ParseRaw or range application is performed. The ordinary
+The runner accepts build inspection report schemas 1, 2 and 3. Schema 1 records item source
+as `not_reported_by_inspector`; absent evidence does not mean no items. Schema 2 requires the
+item source outcome and does not claim loading. Schema 3 can carry an independent loading
+report when definitions were requested. Its `reported` verification includes partial loads;
+`pending` and `source_error` remain explicit, with later instructions unexecuted. The
+production inspector has no implicit PoB parser or assembly fallback. All schemas keep
+equipment resolution, passive allocation and numerical admission separate.
+
+Local projection failures remain in full raw reports once the document-wide XML/lexical
+gate has passed; a global failure can prevent the entire inspection report. The ordinary
 XML summary labels its attributes as standard-XML-normalized; use the source projection for
 PoB values. Inspector failures remain separate from numerical backend outcomes; changed
 decoded XML stops subsequent inspection and evaluation. These are report-consistency checks,

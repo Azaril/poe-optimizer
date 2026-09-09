@@ -12,7 +12,13 @@ profiles' skill/gem identities, weapon bases, quests, character/defence paramete
 monster tables and typed owned passive effects. Its manifest records complete SHA-256 source
 hashes for `Data/Misc.lua`, `Data/QuestRewards.lua`, `Data/Gems.lua`, skill/base tables,
 `ModParser.lua`, `ConfigOptions.lua`, `Modules/Data.lua` and the calculation modules.
-This package is explicitly partial and contains no precomputed build output.
+The configuration, skill-identity and item-loading sections retain complete definition
+catalogs from the corresponding pinned source tables, including item bases, modifier
+tables and raw unique prototypes. Item loading policies derive from `Classes/Item.lua`,
+`Classes/ItemsTab.lua`, `Modules/Data.lua` and `Modules/Common.lua`; their exact source
+spans and file hashes accompany the package. Recognized definitions do not imply native
+mechanic coverage. Numerical coverage is explicitly partial, and the package contains
+no precomputed build output.
 
 Source: https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2
 

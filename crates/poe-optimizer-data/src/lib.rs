@@ -7,6 +7,7 @@ pub mod class_tree;
 pub mod configuration;
 pub mod game_data;
 mod item_formatting;
+pub mod item_loading;
 mod item_rules;
 mod movement;
 pub mod passive_allocation;
@@ -30,6 +31,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("game_data.rs"),
         include_str!("item_rules.rs"),
         include_str!("item_formatting.rs"),
+        include_str!("item_loading.rs"),
         include_str!("movement.rs"),
         include_str!("passive_allocation.rs"),
         include_str!("../Cargo.toml"),

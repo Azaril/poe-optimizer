@@ -61,6 +61,73 @@ const READ_PATHS: &[&str] = &[
     "src/Data/Skills/minion.lua",
     "src/Data/Skills/spectre.lua",
     "src/Data/Skills/sup_int.lua",
+    "src/Data/Bases/axe.lua",
+    "src/Data/Bases/belt.lua",
+    "src/Data/Bases/bow.lua",
+    "src/Data/Bases/claw.lua",
+    "src/Data/Bases/crossbow.lua",
+    "src/Data/Bases/dagger.lua",
+    "src/Data/Bases/fishing.lua",
+    "src/Data/Bases/flail.lua",
+    "src/Data/Bases/flask.lua",
+    "src/Data/Bases/focus.lua",
+    "src/Data/Bases/incursionlimb.lua",
+    "src/Data/Bases/jewel.lua",
+    "src/Data/Bases/quiver.lua",
+    "src/Data/Bases/ring.lua",
+    "src/Data/Bases/sceptre.lua",
+    "src/Data/Bases/shield.lua",
+    "src/Data/Bases/spear.lua",
+    "src/Data/Bases/staff.lua",
+    "src/Data/Bases/sword.lua",
+    "src/Data/Bases/talisman.lua",
+    "src/Data/Bases/traptool.lua",
+    "src/Data/Bases/wand.lua",
+    "src/Data/Uniques/Special/Generated.lua",
+    "src/Data/Uniques/Special/New.lua",
+    "src/Data/Uniques/Special/race.lua",
+    "src/Data/Uniques/amulet.lua",
+    "src/Data/Uniques/axe.lua",
+    "src/Data/Uniques/belt.lua",
+    "src/Data/Uniques/body.lua",
+    "src/Data/Uniques/boots.lua",
+    "src/Data/Uniques/bow.lua",
+    "src/Data/Uniques/claw.lua",
+    "src/Data/Uniques/crossbow.lua",
+    "src/Data/Uniques/dagger.lua",
+    "src/Data/Uniques/fishing.lua",
+    "src/Data/Uniques/flail.lua",
+    "src/Data/Uniques/flask.lua",
+    "src/Data/Uniques/focus.lua",
+    "src/Data/Uniques/gloves.lua",
+    "src/Data/Uniques/helmet.lua",
+    "src/Data/Uniques/incursionlimb.lua",
+    "src/Data/Uniques/jewel.lua",
+    "src/Data/Uniques/mace.lua",
+    "src/Data/Uniques/quiver.lua",
+    "src/Data/Uniques/ring.lua",
+    "src/Data/Uniques/sceptre.lua",
+    "src/Data/Uniques/shield.lua",
+    "src/Data/Uniques/soulcore.lua",
+    "src/Data/Uniques/spear.lua",
+    "src/Data/Uniques/staff.lua",
+    "src/Data/Uniques/sword.lua",
+    "src/Data/Uniques/talisman.lua",
+    "src/Data/Uniques/tincture.lua",
+    "src/Data/Uniques/traptool.lua",
+    "src/Data/Uniques/wand.lua",
+    "src/GameVersions.lua",
+    "src/Modules/Main.lua",
+    "src/Classes/ItemsTab.lua",
+    "src/Data/ModItem.lua",
+    "src/Data/ModFlask.lua",
+    "src/Data/ModCharm.lua",
+    "src/Data/ModIncursionLimb.lua",
+    "src/Data/ModJewel.lua",
+    "src/Data/ModCorrupted.lua",
+    "src/Data/ModRunes.lua",
+    "src/Data/ModItemExclusive.lua",
+    "src/Data/ModVeiled.lua",
 ];
 const PROVENANCE_PATHS: &[&str] = &[
     "src/Modules/ModParser.lua",
@@ -129,7 +196,8 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v13",
+        "poe-game-data-extractor-v14",
+        include_str!("item_loading_extract.rs"),
         include_str!("skill_identity_extract.rs"),
         include_str!("configuration_extract.rs"),
         include_str!("game_data.rs"),
@@ -142,7 +210,7 @@ fn extractor_sha256() -> String {
     }
     format!("{:x}", digest.finalize())
 }
-fn expected_source_files() -> Result<BTreeMap<String, String>> {
+pub(crate) fn expected_source_files() -> Result<BTreeMap<String, String>> {
     READ_PATHS
         .iter()
         .map(|path| Ok(((*path).into(), source::expected_file_sha256(path)?)))
@@ -386,6 +454,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         direct_action_timing: extractor.record(&records, "direct_action_timing")?,
         configuration: crate::configuration_extract::extract(&extractor.sources)?,
         skill_identities: crate::skill_identity_extract::extract(&extractor.sources)?,
+        item_loading: crate::item_loading_extract::extract(&extractor.sources)?,
     };
     package.refresh_section_digests().map_err(error)?;
     let evidence = GameDataExtractionEvidence {

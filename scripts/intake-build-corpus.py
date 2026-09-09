@@ -33,6 +33,7 @@ MAX_XML_BYTES = 32 * 1024 * 1024
 MAX_LINES = 10000
 MAX_DATA_BYTES = 16 * 1024 * 1024
 MAX_OPTIONS_BYTES = 1024 * 1024
+MAX_LOADING_TEXT_BYTES = 32 * 1024 * 1024
 
 
 def digest(path: Path) -> str:
@@ -453,7 +454,7 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
         source_index = source_element_index(expected_xml)
 
     version = report.get("schema_version")
-    if type(version) is not int or version not in {1, 2}:
+    if type(version) is not int or version not in {1, 2, 3}:
         raise ValueError("unsupported build report schema")
     require(report, {"schema_version": version, "scope": f"build_source_projection_v{version}",
                      "status": "source_projected"}, "build report")
@@ -493,8 +494,10 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
             raise ValueError("schema-1 inspection cannot claim schema-2 item evidence")
         result["item_source_status"] = "not_reported_by_inspector"
     else:
-        require(verification, {"item_loading": "not_run", "equipment_resolution": "not_resolved",
+        require(verification, {"equipment_resolution": "not_resolved",
                                "passive_allocation": "not_checked"}, "item verification")
+        if version < 3 or not definitions_requested:
+            require(verification, {"item_loading": "not_run"}, "item verification")
         items = mapping(report["items"], "item source result")
         result["item_source_status"] = items["status"]
         if items["status"] == "not_projected":
@@ -506,6 +509,7 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
             require(item_projection, {"source_sha256": expected_hash}, "item projection")
             item_counts, fragment_counts = {}, {}
             inventories, saved_sets, jewels = [], [], []
+            loading_sources, inventory_ordinals = [], {}
             item_nodes_left, fragments_left = 32768, 131072
             item_attributes_left, item_attribute_bytes_left, item_text_left = 65536, 2 * 1024 * 1024, 8 * 1024 * 1024
             roles = {"container", "inventory_item", "saved_set", "equipment_slot",
@@ -634,6 +638,7 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
                 if list(element_fragments) != list(range(len(children))):
                     raise ValueError("item fragments omitted or reordered a child")
                 consumed_children, used_text, instructions = [], set(), []
+                loading_instructions = []
                 previous_entry = -1
                 for entry_index, entry in enumerate(array(content["consumed"], 131072, "item consumed records")):
                     if entry["kind"] == "element":
@@ -646,6 +651,9 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
                         if role == "inventory_item" and children[child]["source_use"] == "modifier_range_instruction":
                             instructions.append({"kind": "modifier_range", "consumed_index": entry_index,
                                                  "child_index": child, "source_range": list(child_ranges[child])})
+                        if role == "inventory_item":
+                            loading_instructions.append({"kind": "mod_range" if children[child]["source_use"] == "modifier_range_instruction" else "ignored",
+                                "consumed_index": entry_index, "source_range": list(child_ranges[child]), "text_sha256": None})
                     elif entry["kind"] == "text":
                         indices = array(entry["fragment_indices"], 131072, "text fragment references")
                         if not indices or not isinstance(entry["text"], str) or not entry["text"]:
@@ -666,8 +674,13 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
                         if not raw_text_present:
                             raise ValueError("comment-only fragments cannot supply consumed item text")
                         if role == "inventory_item":
+                            text_hash = hashlib.sha256(entry["text"].encode("utf-8")).hexdigest()
                             instructions.append({"kind": "text", "consumed_index": entry_index,
-                                                 "text_kind": text_kind, "text_sha256": hashlib.sha256(entry["text"].encode("utf-8")).hexdigest()})
+                                                 "text_kind": text_kind, "text_sha256": text_hash})
+                            loading_instructions.append({"kind": "text", "consumed_index": entry_index,
+                                "source_range": [source_range(fragments[indices[0]]["range"])[0],
+                                                 source_range(fragments[indices[-1]]["range"])[1]],
+                                "text_sha256": text_hash})
                     else:
                         raise ValueError("unknown consumed item record")
                 if consumed_children != list(range(len(children))):
@@ -680,6 +693,12 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
                 if role == "inventory_item":
                     inventories.append({"container_index": owner_index, "source_range": list(bounds),
                                         "source_id": source_value(node, "id"), "instructions": instructions})
+                    ordinal = inventory_ordinals.get(owner_index, 0)
+                    inventory_ordinals[owner_index] = ordinal + 1
+                    identity = source_value(node, "id")
+                    loading_sources.append({"source_occurrence": {"container_index": owner_index, "item_index": ordinal},
+                        "source_range": list(bounds), "authored_id": identity["decoded"] if identity else None,
+                        "instructions": loading_instructions})
                 elif role == "saved_set":
                     saved_sets.append({"container_index": owner_index, "source_range": list(bounds),
                                        "source_id": source_value(node, "id")})
@@ -764,6 +783,9 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
     if definitions_requested != ("definition_lookup" in report):
         raise ValueError("definition lookup presence differs from requested inspection")
     if not definitions_requested:
+        if "item_loading_implementation_sha256" in report:
+            raise ValueError("source-only report cannot claim a loading implementation")
+        result["item_loading_status"] = "not_run" if version >= 2 else "not_reported_by_inspector"
         return result
     definitions = mapping(report["definition_lookup"], "definition lookup")
     require(definitions, {"game_mechanics": "not_evaluated"}, "definition lookup")
@@ -777,6 +799,13 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
     result.update(data=data, data_trust=definitions["data_trust"],
                   data_identity_check="selected_snapshot" if expected_data_hash else "reported_by_inspector",
                   definition_implementation_sha256=report.get("definition_implementation_sha256"))
+    if version == 3:
+        result.update(item_loading_summary(report, data, expected_hash,
+            loading_sources if result["item_source_status"] == "source_projected" else None))
+    else:
+        if "items" in definitions or "item_loading_implementation_sha256" in report:
+            raise ValueError("legacy build report cannot claim schema-3 loading evidence")
+        result["item_loading_status"] = "not_reported_by_inspector"
     identity = mapping(definitions["skills"], "skill definition result")
     if skills["status"] != "source_projected":
         require(identity, {"status": "not_looked_up"}, "skill definition result")
@@ -836,6 +865,153 @@ def build_source_summary(report: dict, expected_hash: str, expected_bytes: int,
         raise ValueError("identity lookup omitted an authored source reference")
     result.update(skill_identity_status="looked_up", skill_identity_counts=identity_counts)
     return result
+
+
+def item_loading_summary(report: dict, data: dict, source_hash: str, sources: list | None) -> dict:
+    """Bind diagnostic loading to every original occurrence; never certify effects."""
+    def obj(value, description):
+        if not isinstance(value, dict):
+            raise ValueError(f"{description} must be an object")
+        return value
+
+    def sha(value):
+        return isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+
+    def span(value):
+        obj(value, "loading source range")
+        start, end = value.get("start"), value.get("end")
+        if type(start) is not int or type(end) is not int or not 0 <= start < end:
+            raise ValueError("invalid loading source range")
+        return [start, end]
+
+    implementation = report.get("item_loading_implementation_sha256")
+    if not sha(implementation):
+        raise ValueError("missing or invalid loading implementation fingerprint")
+    result = {"item_loading_implementation_sha256": implementation}
+    value = obj(report["definition_lookup"].get("items"), "item loading result")
+    verification = report["verification"].get("item_loading")
+    if value.get("status") == "not_reported":
+        if verification != "not_reported" or "report" in value:
+            raise ValueError("unreported loading cannot claim a completed report")
+        if sources is None:
+            if value.get("source_error") != report["items"].get("error"):
+                raise ValueError("loading projection failure differs from original source failure")
+        elif not isinstance(value.get("error"), str) or not value["error"]:
+            raise ValueError("unreported loading requires its diagnostic")
+        return {**result, "item_loading_status": "not_reported"}
+    if value.get("status") != "load_reported" or verification != "reported" or sources is None:
+        raise ValueError("loading evidence requires projected source and matching verification")
+    loaded = obj(value.get("report"), "item loading report")
+    if (type(loaded.get("schema_version")) is not int or loaded["schema_version"] != 1
+            or loaded.get("source_sha256") != source_hash or loaded.get("data_identity") != data
+            or loaded.get("implementation_sha256") != implementation):
+        raise ValueError("loading report changed its schema, source, data or implementation identity")
+    records = loaded.get("items")
+    if not isinstance(records, list) or len(records) != len(sources):
+        raise ValueError("loading report omitted or added inventory occurrences")
+    # State remains raw diagnostic metadata. Bound it without interpreting it as
+    # numerical capability or freezing the entire engine's future item schema.
+    budget = [1_500_000, MAX_LOADING_TEXT_BYTES]
+    def metadata(value, depth=0):
+        budget[0] -= 1
+        if budget[0] < 0 or depth > 32:
+            raise ValueError("loading metadata exceeds value/depth bounds")
+        if isinstance(value, str):
+            budget[1] -= len(value.encode("utf-8"))
+            if budget[1] < 0:
+                raise ValueError("loading metadata exceeds text bound")
+        elif isinstance(value, dict):
+            for key, child in value.items():
+                metadata(key, depth + 1)
+                metadata(child, depth + 1)
+        elif isinstance(value, list):
+            for child in value:
+                metadata(child, depth + 1)
+        elif value is not None and (type(value) not in {bool, int, float}
+                or (type(value) is float and not math.isfinite(value))):
+            raise ValueError("loading metadata has an invalid JSON value")
+
+    statuses, dependencies, summaries = {}, {}, []
+    for record, expected in zip(records, sources):
+        obj(record, "loaded item occurrence")
+        occurrence = obj(record.get("source_occurrence"), "item occurrence")
+        if (any(type(occurrence.get(key)) is not int for key in ["container_index", "item_index"])
+                or occurrence != expected["source_occurrence"]
+                or span(record.get("source_range")) != expected["source_range"]
+                or record.get("authored_id") != expected["authored_id"]):
+            raise ValueError("loading changed inventory order, ownership, source range or authored ID")
+        state = obj(record.get("state"), "loaded item state")
+        metadata(state)
+        status = record.get("status")
+        if status not in {"complete", "no_base", "pending", "source_error"}:
+            raise ValueError("unknown item loading status")
+        pending = record.get("pending")
+        if status == "pending":
+            obj(pending, "pending item dependency")
+            if (not isinstance(pending.get("kind"), str) or not pending["kind"]
+                    or not isinstance(pending.get("message"), str) or not pending["message"]
+                    or (pending.get("line_index") is not None and
+                        (type(pending["line_index"]) is not int or pending["line_index"] < 0))):
+                raise ValueError("pending loading requires a specific dependency")
+            metadata(pending)
+            dependencies[pending["kind"]] = dependencies.get(pending["kind"], 0) + 1
+        elif pending is not None:
+            raise ValueError("non-pending item cannot claim a pending dependency")
+        instructions = record.get("instructions")
+        if not isinstance(instructions, list) or len(instructions) != len(expected["instructions"]) + 2:
+            raise ValueError("loading trace omitted constructor, consumed instructions or final assembly")
+        stopped, stop_count, instruction_counts = False, 0, {}
+        for index, instruction in enumerate(instructions):
+            obj(instruction, "item loading instruction")
+            if type(instruction.get("index")) is not int or instruction["index"] != index:
+                raise ValueError("loading instruction indices changed order")
+            if index in {0, len(instructions) - 1}:
+                kind = "constructor" if index == 0 else "final_assembly"
+                if (instruction.get("kind") != kind or instruction.get("consumed_index") is not None
+                        or instruction.get("text_sha256") is not None):
+                    raise ValueError("constructor/final instruction claimed authored content")
+                if instruction.get("source_range") is not None:
+                    raise ValueError("constructor/final instruction claimed an authored range")
+            else:
+                original = expected["instructions"][index-1]
+                if (instruction.get("kind") != original["kind"]
+                        or type(instruction.get("consumed_index")) is not int
+                        or instruction["consumed_index"] != original["consumed_index"]
+                        or instruction.get("text_sha256") != original["text_sha256"]
+                        or span(instruction.get("source_range")) != original["source_range"]):
+                    raise ValueError("loading instruction differs from original consumed source")
+            step = instruction.get("status")
+            if step not in {"executed", "pending", "not_executed"}:
+                raise ValueError("unknown loading instruction status")
+            if stopped and step != "not_executed":
+                raise ValueError("loading executed an instruction after a stopped dependency")
+            error = instruction.get("error")
+            if error is not None and (not isinstance(error, str) or not error):
+                raise ValueError("invalid instruction error")
+            if instruction["kind"] == "constructor" and (step != "executed" or error is not None):
+                raise ValueError("empty constructor must execute without a stop or error")
+            if instruction["kind"] == "ignored" and (error is not None or step != ("not_executed" if stopped else "executed")):
+                raise ValueError("ignored source instruction cannot stop or fail loading")
+            if error is not None:
+                metadata(error)
+            if error is not None and (status != "source_error" or step != "executed"):
+                raise ValueError("instruction error must stop an attempted source-error load")
+            if step == "pending" or error is not None:
+                stop_count += 1
+                stopped = True
+            elif step == "not_executed" and not stopped:
+                raise ValueError("loading skipped an instruction without a preceding stop")
+            instruction_counts[step] = instruction_counts.get(step, 0) + 1
+        if (status in {"complete", "no_base"} and stop_count != 0
+                or status in {"pending", "source_error"} and stop_count != 1):
+            raise ValueError("item loading status differs from its execution trace")
+        if status == "source_error" and not any(instruction.get("error") for instruction in instructions):
+            raise ValueError("source-error loading requires the original failure diagnostic")
+        statuses[status] = statuses.get(status, 0) + 1
+        summaries.append({**occurrence, "source_range": expected["source_range"], "authored_id": record.get("authored_id"),
+            "status": status, "pending": pending, "instruction_counts": instruction_counts})
+    return {**result, "item_loading_status": "reported", "item_loading_counts": statuses,
+            "item_loading_dependencies": dependencies, "item_loading_occurrences": summaries}
 
 
 def xml_summary(path: Path) -> dict:
@@ -1222,7 +1398,7 @@ def main(argv=None) -> int:
                  or record.get("build_source", {}).get("status", "success") != "success"
                  for record in records)
     changed_inputs = [name for name, value in provenance.items() if not value["unchanged_after_run"]]
-    manifest = {"schema_version":4,"scope":"independent_import_and_fresh_evaluation_observations",
+    manifest = {"schema_version":5,"scope":"independent_import_and_fresh_evaluation_observations",
                 "configuration_inspection_requested": args.inspect_configuration,
                 "build_inspection_requested": args.inspect_build,
                 "definition_lookup_requested": args.inspect_build and (args.with_definitions or args.data is not None),

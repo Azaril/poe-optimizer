@@ -1,0 +1,1872 @@
+use super::{ItemNumber, LineSelection, VariantState, syntax};
+use poe_optimizer_data::item_loading::{ItemLoadingCatalog, ItemMetadataTable, ItemMetadataValue};
+use serde::Serialize;
+use std::collections::{BTreeMap, BTreeSet};
+pub const MAX_ITEM_LOADING_TEXT: usize = 1024 * 1024;
+pub const MAX_ITEM_LOADING_LINES: usize = 8192;
+pub const MAX_ITEM_LOADING_CALLS: usize = 32768;
+pub const MAX_ITEM_LOADING_DEPENDENCY_MESSAGE: usize = 4096;
+pub const MAX_ITEM_LOADING_EVIDENCE_BYTES: usize = 16 * 1024 * 1024;
+#[derive(Debug, thiserror::Error)]
+#[error("native item loading: {0}")]
+pub struct ItemLoadError(pub(crate) String);
+#[derive(Debug, Clone, PartialEq, Serialize)]
+#[serde(tag = "kind", content = "value", rename_all = "snake_case")]
+pub enum ItemScalar {
+    Boolean(bool),
+    Number(ItemNumber),
+    Text(String),
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ItemLoadStatus {
+    Complete,
+    NoBase,
+    Pending,
+    SourceError,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DependencyKind {
+    ModifierParser,
+    RangeFormatting,
+    AdvancedCopyAffixes,
+    RuneReconstruction,
+    UniqueDatabase,
+    ModifierMagnitudes,
+    CraftedAffixes,
+    BaseBuffs,
+    BaseLookupAmbiguity,
+    BaseCompatibility,
+    ClusterJewel,
+    Assembly,
+    NumericIndex,
+    UnsupportedHeader,
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct PendingDependency {
+    pub kind: DependencyKind,
+    pub line_index: Option<usize>,
+    pub message: String,
+}
+#[derive(Debug, Clone)]
+pub enum DependencyResult<T> {
+    Available(T),
+    Unavailable(String),
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct ParseRequest {
+    pub sequence: usize,
+    pub line_index: usize,
+    pub text: String,
+    pub combined: bool,
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct ParseOutcome {
+    pub modifiers: Option<Vec<ItemMetadataTable>>,
+    pub extra: Option<String>,
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct FormatRequest {
+    pub sequence: usize,
+    pub line_index: usize,
+    pub text: String,
+    pub range: ItemNumber,
+    pub scalar: ItemNumber,
+    pub corrupted_range: ItemNumber,
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct UniqueRequest {
+    pub name: String,
+    pub title: Option<String>,
+    pub base_name: Option<String>,
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct UniqueOutcome {
+    pub natural_level: Option<ItemNumber>,
+    pub level: Option<ItemNumber>,
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct AssemblyRequest {
+    pub final_load: bool,
+    pub state: ItemState,
+}
+/// Post-assembly modifier payloads, retaining source row counts and order.
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct AssemblyModifierPayloads {
+    pub buff_mod_lines: Vec<Vec<ItemMetadataTable>>,
+    pub enchant_mod_lines: Vec<Vec<ItemMetadataTable>>,
+    pub rune_mod_lines: Vec<Vec<ItemMetadataTable>>,
+    pub class_requirement_mod_lines: Vec<Vec<ItemMetadataTable>>,
+    pub implicit_mod_lines: Vec<Vec<ItemMetadataTable>>,
+    pub explicit_mod_lines: Vec<Vec<ItemMetadataTable>>,
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct AssemblyOutcome {
+    pub modifier_payloads: Option<AssemblyModifierPayloads>,
+    /// Exact post-assembly requirement table supplied by the dependency. None
+    /// leaves it untouched; Some replaces it, including removal of old keys.
+    pub requirements: Option<BTreeMap<String, ItemNumber>>,
+    /// Number(Nil) removes a field, matching assignment of nil in Lua.
+    pub state_updates: BTreeMap<String, ItemScalar>,
+    pub evidence: ItemMetadataTable,
+}
+/// Explicit dependencies are supplied by a caller; the library has no Lua fallback.
+/// Available empty modifier lists mean a successful empty parse, distinct from nil.
+pub trait ItemLoadProvider {
+    fn parse_modifier(&mut self, _request: &ParseRequest) -> DependencyResult<ParseOutcome> {
+        DependencyResult::Unavailable("general modifier parser is unavailable".into())
+    }
+    fn format_line(&mut self, _request: &FormatRequest) -> DependencyResult<String> {
+        DependencyResult::Unavailable("general ItemTools range formatting is unavailable".into())
+    }
+    fn lookup_unique(
+        &mut self,
+        _request: &UniqueRequest,
+    ) -> DependencyResult<Option<UniqueOutcome>> {
+        DependencyResult::Unavailable("parsed unique database is unavailable".into())
+    }
+    fn assemble(&mut self, _request: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+        DependencyResult::Unavailable("complete item modifier assembly is unavailable".into())
+    }
+}
+#[derive(Debug, Default)]
+pub struct UnavailableItemLoadProvider;
+impl ItemLoadProvider for UnavailableItemLoadProvider {}
+#[derive(Debug, Clone, Serialize)]
+pub struct LoadedModLine {
+    pub line: String,
+    pub source_line: usize,
+    pub selection: LineSelection,
+    pub flags: BTreeSet<String>,
+    pub mod_tags: Vec<String>,
+    pub range: ItemNumber,
+    pub corrupted_range: ItemNumber,
+    pub value_scalar: ItemNumber,
+    pub modifiers: Vec<ItemMetadataTable>,
+    pub extra: Option<String>,
+}
+#[derive(Debug, Clone, Serialize)]
+pub struct ItemState {
+    pub raw: String,
+    pub raw_lines: Vec<String>,
+    pub name: String,
+    pub name_prefix: String,
+    pub name_suffix: String,
+    pub rarity: String,
+    pub base_name: Option<String>,
+    pub base_present: bool,
+    pub item_type: Option<String>,
+    pub retained_fields: BTreeMap<String, ItemScalar>,
+    pub variants: VariantState,
+    pub requirements: BTreeMap<String, ItemNumber>,
+    pub sockets: Vec<u32>,
+    pub runes: Vec<String>,
+    pub item_socket_count: usize,
+    pub jewel_socket_count: usize,
+    pub base_lines: BTreeMap<String, LineSelection>,
+    pub buff_mod_lines: Vec<LoadedModLine>,
+    pub enchant_mod_lines: Vec<LoadedModLine>,
+    pub rune_mod_lines: Vec<LoadedModLine>,
+    pub class_requirement_mod_lines: Vec<LoadedModLine>,
+    pub implicit_mod_lines: Vec<LoadedModLine>,
+    pub explicit_mod_lines: Vec<LoadedModLine>,
+    pub parser_calls: Vec<ParseRequest>,
+    pub format_calls: Vec<FormatRequest>,
+    pub assembly_calls: usize,
+    pub assembly_evidence: Option<ItemMetadataTable>,
+}
+impl Default for ItemState {
+    fn default() -> Self {
+        Self {
+            raw: String::new(),
+            raw_lines: Vec::new(),
+            name: "?".into(),
+            name_prefix: String::new(),
+            name_suffix: String::new(),
+            rarity: String::new(),
+            base_name: None,
+            base_present: false,
+            item_type: None,
+            retained_fields: BTreeMap::new(),
+            variants: VariantState::default(),
+            requirements: BTreeMap::new(),
+            sockets: Vec::new(),
+            runes: Vec::new(),
+            item_socket_count: 0,
+            jewel_socket_count: 0,
+            base_lines: BTreeMap::new(),
+            buff_mod_lines: Vec::new(),
+            enchant_mod_lines: Vec::new(),
+            rune_mod_lines: Vec::new(),
+            class_requirement_mod_lines: Vec::new(),
+            implicit_mod_lines: Vec::new(),
+            explicit_mod_lines: Vec::new(),
+            parser_calls: Vec::new(),
+            format_calls: Vec::new(),
+            assembly_calls: 0,
+            assembly_evidence: None,
+        }
+    }
+}
+/// One ordered Item instance. A pending dependency stops this instance. Callers
+/// can reconstruct it with a richer provider, keeping source instructions exact.
+pub struct ItemLoadMachine<'a> {
+    catalog: &'a ItemLoadingCatalog,
+    state: ItemState,
+    status: ItemLoadStatus,
+    pending: Option<PendingDependency>,
+    work_bytes: usize,
+}
+#[derive(Clone, Copy, PartialEq)]
+enum GameStage {
+    FindImplicit,
+    Implicit,
+    FindExplicit,
+    Explicit,
+    Done,
+}
+impl<'a> ItemLoadMachine<'a> {
+    pub fn new(catalog: &'a ItemLoadingCatalog) -> Self {
+        let mut machine = Self {
+            catalog,
+            state: ItemState::default(),
+            status: ItemLoadStatus::NoBase,
+            pending: None,
+            work_bytes: 0,
+        };
+        machine.reset("");
+        machine.number("affixLimit", ItemNumber::new(0.0));
+        machine.state.assembly_calls = 1;
+        machine
+    }
+    pub fn evidence_bytes(&self) -> usize {
+        self.work_bytes
+    }
+    fn charge(&mut self, bytes: usize) -> Result<(), ItemLoadError> {
+        self.work_bytes = self
+            .work_bytes
+            .checked_add(bytes)
+            .ok_or_else(|| ItemLoadError("item evidence size overflow".into()))?;
+        if self.work_bytes > MAX_ITEM_LOADING_EVIDENCE_BYTES {
+            return Err(ItemLoadError("item evidence size bound".into()));
+        }
+        Ok(())
+    }
+    pub fn state(&self) -> &ItemState {
+        &self.state
+    }
+    pub fn status(&self) -> ItemLoadStatus {
+        self.status
+    }
+    pub fn pending(&self) -> Option<&PendingDependency> {
+        self.pending.as_ref()
+    }
+    pub fn into_state(self) -> ItemState {
+        self.state
+    }
+    pub fn set_xml_attributes(&mut self, attributes: &BTreeMap<String, String>) {
+        for key in ["id", "variant"] {
+            let value = attributes
+                .get(key)
+                .map_or(ItemNumber::Nil, |s| syntax::lua_number(s));
+            if key == "variant" {
+                self.state.variants.selected = number_option(value);
+            } else {
+                self.number(key, value);
+            }
+        }
+        for i in 0..5 {
+            let key = if i == 0 {
+                "variantAlt".into()
+            } else {
+                format!("variantAlt{}", i + 1)
+            };
+            if let Some(value) = attributes.get(&key) {
+                self.state.variants.has_alternate[i] = true;
+                self.state.variants.alternate[i] = number_option(syntax::lua_number(value));
+            }
+        }
+    }
+    fn number(&mut self, key: &str, value: ItemNumber) {
+        if value == ItemNumber::Nil {
+            self.state.retained_fields.remove(key);
+        } else {
+            self.state
+                .retained_fields
+                .insert(key.into(), ItemScalar::Number(value));
+        }
+    }
+    fn boolean(&mut self, key: &str, value: bool) {
+        self.state
+            .retained_fields
+            .insert(key.into(), ItemScalar::Boolean(value));
+    }
+    fn text(&mut self, key: &str, value: &str) {
+        self.state
+            .retained_fields
+            .insert(key.into(), ItemScalar::Text(value.into()));
+    }
+    fn num(&self, key: &str) -> Option<f64> {
+        match self.state.retained_fields.get(key) {
+            Some(ItemScalar::Number(n)) => n.value(),
+            _ => None,
+        }
+    }
+    fn flag(&self, key: &str) -> bool {
+        matches!(
+            self.state.retained_fields.get(key),
+            Some(ItemScalar::Boolean(true))
+        )
+    }
+    fn txt(&self, key: &str) -> Option<&str> {
+        match self.state.retained_fields.get(key) {
+            Some(ItemScalar::Text(s)) => Some(s),
+            _ => None,
+        }
+    }
+    fn stop(
+        &mut self,
+        kind: DependencyKind,
+        line: Option<usize>,
+        message: impl Into<String>,
+    ) -> Result<(), ItemLoadError> {
+        let message = message.into();
+        if message.len() > MAX_ITEM_LOADING_DEPENDENCY_MESSAGE {
+            return Err(ItemLoadError("dependency message bound".into()));
+        }
+        self.charge(message.len())?;
+        self.status = ItemLoadStatus::Pending;
+        self.pending = Some(PendingDependency {
+            kind,
+            line_index: line,
+            message,
+        });
+        Ok(())
+    }
+    fn reset(&mut self, raw: &str) {
+        self.state.raw = raw.into();
+        self.state.raw_lines = syntax::raw_lines(raw);
+        self.state.name = "?".into();
+        self.state.name_prefix.clear();
+        self.state.name_suffix.clear();
+        self.state.base_present = false;
+        self.state.rarity = self.role("default").into();
+        for key in ["charmLimit", "spiritValue", "runicItem", "quality"] {
+            self.state.retained_fields.remove(key);
+        }
+        self.boolean("checkSection", false);
+        self.boolean("advancedCopy", false);
+        self.state.sockets.clear();
+        self.state.runes.clear();
+        self.state.item_socket_count = 0;
+        self.state.jewel_socket_count = 0;
+        self.state.requirements.clear();
+        for k in ["runeLevel", "str", "dex", "int"] {
+            self.state
+                .requirements
+                .insert(k.into(), ItemNumber::new(0.0));
+        }
+        self.state.base_lines.clear();
+        self.state.buff_mod_lines.clear();
+        self.state.enchant_mod_lines.clear();
+        self.state.rune_mod_lines.clear();
+        self.state.class_requirement_mod_lines.clear();
+        self.state.implicit_mod_lines.clear();
+        self.state.explicit_mod_lines.clear();
+        self.state
+            .retained_fields
+            .remove("socketedAugmentTypeOverride");
+        self.state.assembly_evidence = None;
+    }
+    pub fn apply_text(
+        &mut self,
+        raw: &str,
+        provider: &mut impl ItemLoadProvider,
+    ) -> Result<(), ItemLoadError> {
+        if self.status == ItemLoadStatus::Pending || self.status == ItemLoadStatus::SourceError {
+            return Ok(());
+        }
+        if raw.len() > MAX_ITEM_LOADING_TEXT {
+            return Err(ItemLoadError("item text exceeds limit".into()));
+        }
+        self.charge(raw.len().saturating_mul(2))?;
+        self.reset(raw);
+        if self.state.raw_lines.len() > MAX_ITEM_LOADING_LINES {
+            return Err(ItemLoadError("item line count exceeds limit".into()));
+        }
+        let lines = self.state.raw_lines.clone();
+        let mut index = 0;
+        let mut game = false;
+        let mut item_class = None;
+        if lines.first().is_some_and(|s| s.starts_with("Item Class:")) {
+            item_class = lines.first().cloned();
+            index += 1;
+            if index >= lines.len() {
+                self.status = ItemLoadStatus::SourceError;
+                return Err(ItemLoadError(
+                    "source Rarity lookup indexes an absent line after Item Class".into(),
+                ));
+            }
+        }
+        if let Some(line) = lines.get(index).and_then(|s| s.strip_prefix("Rarity: ")) {
+            let rarity: String = line.chars().take_while(char::is_ascii_alphabetic).collect();
+            if !rarity.is_empty() {
+                game = true;
+                let rarity = rarity.to_ascii_uppercase();
+                if self.catalog.policy().rarities.contains(&rarity) {
+                    self.state.rarity = rarity;
+                }
+                if self.state.rarity == self.role("unique")
+                    && lines.iter().any(|l| l.contains("Foil Unique"))
+                {
+                    self.state.rarity = self.role("relic").into();
+                }
+                index += 1;
+            }
+        }
+        if lines.get(index).is_some_and(|s| s == "--------") {
+            index += 1;
+        }
+        let mut unidentified = false;
+        if let Some(name) = lines.get(index) {
+            if self.state.rarity == self.role("unique")
+                && self.catalog.base(name).is_some()
+                && lines
+                    .get(index + 1)
+                    .is_none_or(|s| self.catalog.base(s).is_none())
+            {
+                self.state.name = "Unidentified item".into();
+                self.state.base_name = Some(name.clone());
+                self.state.base_present = true;
+                unidentified = true;
+            } else {
+                self.state.name = name.clone();
+            }
+            unidentified |= lines.iter().any(|s| s == "Unidentified");
+            if !self.plain_rarity() && !unidentified {
+                index += 1;
+            }
+        }
+        let selections = match self.state.variants.scan(&lines) {
+            Ok(v) => v,
+            Err(e) => {
+                self.stop(DependencyKind::NumericIndex, None, e)?;
+                return Ok(());
+            }
+        };
+        let mut stage = GameStage::FindImplicit;
+        let mut found_explicit = false;
+        let mut found_implicit = false;
+        let mut implicit_count = 0.0;
+        let mut check_section = false;
+        let mut imported_level = None;
+        while index < lines.len() {
+            let original = &lines[index];
+            let mut line = original.clone();
+            let line_index = index + 1;
+            if line == "--------" {
+                check_section = true;
+                self.boolean("checkSection", true);
+                index += 1;
+                continue;
+            }
+            if line == "Requirements:" {
+                index += 1;
+                continue;
+            }
+            if line.starts_with('(') && line.as_bytes().get(1).is_some_and(u8::is_ascii_alphabetic)
+            {
+                while index < lines.len() && !lines[index].ends_with(')') {
+                    index += 1;
+                }
+                index += 1;
+                continue;
+            }
+            if line.starts_with("{ ") {
+                self.stop(DependencyKind::AdvancedCopyAffixes,Some(line_index),"advanced-copy affix matching and spawn weights require represented dependencies")?;
+                return Ok(());
+            }
+            if self.apply_literal(&line) {
+                index += 1;
+                continue;
+            }
+            let base_implicit = self.base_implicit(&line, game);
+            if check_section {
+                match stage {
+                    GameStage::Implicit => {
+                        if found_implicit && !base_implicit {
+                            stage = GameStage::Explicit;
+                            found_explicit = true;
+                        } else {
+                            stage = GameStage::FindExplicit;
+                        }
+                    }
+                    GameStage::Explicit => stage = GameStage::Done,
+                    GameStage::FindImplicit => {
+                        if self.num("itemLevel").is_some()
+                            && !line.contains(" (implicit)")
+                            && !line.contains(" (enchant)")
+                            && !line.contains("Talisman Tier")
+                        {
+                            stage = GameStage::Explicit;
+                            found_explicit = true;
+                        }
+                    }
+                    _ => {}
+                }
+                check_section = false;
+                self.boolean("checkSection", false);
+            }
+            if let Some(n) = line
+                .strip_prefix("Requires Level ")
+                .or_else(|| line.strip_prefix("Requires: Level "))
+                .map(|s| {
+                    s.chars()
+                        .take_while(char::is_ascii_digit)
+                        .collect::<String>()
+                })
+                .filter(|s| !s.is_empty())
+            {
+                self.state
+                    .requirements
+                    .insert("level".into(), syntax::spec_to_number(&n));
+                index += 1;
+                continue;
+            }
+            let mut spec_exists = false;
+            if let Some((name, value)) = syntax::parse_spec(&line) {
+                spec_exists = true;
+                match self.apply_header(name, value, line_index, &mut imported_level)? {
+                    Header::Stop => return Ok(()),
+                    Header::Skip => {
+                        index += 1;
+                        continue;
+                    }
+                    Header::SkipNext => {
+                        index += 2;
+                        continue;
+                    }
+                    Header::Implicits(n) => {
+                        implicit_count = n;
+                        stage = GameStage::Explicit;
+                    }
+                    Header::Known => {}
+                    Header::Unknown => {
+                        if !base_implicit {
+                            let simple = |s: &str| {
+                                !s.bytes().any(|b| {
+                                    matches!(
+                                        b,
+                                        b'^' | b'$'
+                                            | b'('
+                                            | b')'
+                                            | b'%'
+                                            | b'.'
+                                            | b'['
+                                            | b']'
+                                            | b'*'
+                                            | b'+'
+                                            | b'-'
+                                            | b'?'
+                                    )
+                                })
+                            };
+                            if !simple(name) {
+                                self.stop(
+                                    DependencyKind::UnsupportedHeader,
+                                    Some(line_index),
+                                    "custom-name Lua pattern matching is not represented",
+                                )?;
+                                return Ok(());
+                            }
+                            let name_matches = self.state.name.contains(name);
+                            if name_matches && !simple(value) {
+                                self.stop(
+                                    DependencyKind::UnsupportedHeader,
+                                    Some(line_index),
+                                    "custom-name Lua value pattern matching is not represented",
+                                )?;
+                                return Ok(());
+                            }
+                            if !name_matches || !self.state.name.contains(value) {
+                                found_explicit = true;
+                                stage = GameStage::Explicit;
+                            }
+                        }
+                    }
+                }
+            }
+            if line == "Prefixes:" {
+                found_explicit = true;
+                stage = GameStage::Explicit;
+            }
+            if !spec_exists || found_explicit || found_implicit || base_implicit {
+                let AnnotatedLine {
+                    text: clean,
+                    mut flags,
+                    tags,
+                    range,
+                    corrupted_range,
+                    selection,
+                    has_range_tag,
+                } = match annotations(&line, self.catalog, &selections[index]) {
+                    Ok(value) => value,
+                    Err(message) => {
+                        self.stop(DependencyKind::NumericIndex, Some(line_index), message)?;
+                        return Ok(());
+                    }
+                };
+                line = clean;
+                if has_range_tag {
+                    self.boolean("advancedCopy", true);
+                }
+                if flags.contains("rune") {
+                    flags.insert("enchant".into());
+                }
+                if flags.contains("enchant") || base_implicit {
+                    flags.insert("implicit".into());
+                }
+                for key in ["desecrated", "mutated", "fractured"] {
+                    if flags.contains(key) {
+                        self.boolean(key, true);
+                    }
+                }
+                if self.resolve_base(&line, &selection, item_class.as_deref(), line_index)? {
+                    if self.status == ItemLoadStatus::Pending {
+                        return Ok(());
+                    }
+                    index += 1;
+                    continue;
+                }
+                if self.status == ItemLoadStatus::Pending {
+                    return Ok(());
+                }
+                if flags.contains("implicit") {
+                    found_implicit = true;
+                    stage = GameStage::Implicit;
+                }
+                if flags.contains("rune") {
+                    self.stop(DependencyKind::RuneReconstruction,Some(line_index),"rune display/reconstruction requires complete slot and modifier dependencies")?;
+                    return Ok(());
+                }
+                if self.num("catalyst").is_some() && !flags.contains("unscalable") {
+                    self.stop(
+                        DependencyKind::RangeFormatting,
+                        Some(line_index),
+                        "catalyst tag scalar requires represented ItemTools dependency",
+                    )?;
+                    return Ok(());
+                }
+                if line.contains('(')
+                    && line.contains(')')
+                    && line.bytes().any(|b| b.is_ascii_digit())
+                {
+                    self.stop(
+                        DependencyKind::RangeFormatting,
+                        Some(line_index),
+                        "advanced numeric/enum range normalization is not represented",
+                    )?;
+                    return Ok(());
+                }
+                if line.ends_with(" - Unscalable Value") || line.ends_with(" — Unscalable Value")
+                {
+                    line = line
+                        .trim_end_matches(" - Unscalable Value")
+                        .trim_end_matches(" — Unscalable Value")
+                        .into();
+                    flags.insert("unscalable".into());
+                }
+                let Some(ranged) = self.format(&line, line_index, corrupted_range, provider)?
+                else {
+                    return Ok(());
+                };
+                let Some(mut outcome) = self.parse(&ranged, line_index, false, provider)? else {
+                    return Ok(());
+                };
+                if (outcome.modifiers.is_none() || outcome.extra.is_some())
+                    && index + 1 < lines.len()
+                {
+                    let next = syntax::strip_next(&lines[index + 1]);
+                    let combined = format!("{line} {next}");
+                    let Some(ranged) =
+                        self.format(&combined, line_index, corrupted_range, provider)?
+                    else {
+                        return Ok(());
+                    };
+                    let Some(result) = self.parse(&ranged, line_index, true, provider)? else {
+                        return Ok(());
+                    };
+                    outcome = result;
+                    if outcome.modifiers.is_some() && outcome.extra.is_none() {
+                        line = format!("{line}\n{next}");
+                        index += 1;
+                    } else {
+                        let Some(result) = self.parse(&ranged, line_index, false, provider)? else {
+                            return Ok(());
+                        };
+                        outcome = result;
+                    }
+                }
+                if !flags.contains("disabled") {
+                    self.apply_flags_policy("postparse_line_effects", &line.to_ascii_lowercase());
+                }
+                if !flags.contains("disabled") {
+                    let lower = line.to_ascii_lowercase();
+                    if [
+                        " prefix modifier allowed",
+                        " prefix modifiers allowed",
+                        " suffix modifier allowed",
+                        " suffix modifiers allowed",
+                    ]
+                    .iter()
+                    .any(|token| lower.contains(token))
+                    {
+                        self.stop(
+                            DependencyKind::CraftedAffixes,
+                            Some(line_index),
+                            "prefix/suffix limit side effects are not represented",
+                        )?;
+                        return Ok(());
+                    }
+                    if lower.starts_with("this item gains bonuses from socketed items as though it was")||lower.starts_with("this item gains bonuses from socketed soul cores as though it was also") {self.stop(DependencyKind::RuneReconstruction,Some(line_index),"socketed augment type override/extra type requires rune reconstruction")?;return Ok(());}
+                }
+                if !flags.contains("disabled") && is_magnitude_line(&line) {
+                    self.stop(DependencyKind::ModifierMagnitudes,Some(line_index),"modifier magnitude records require ordered reparsing and unique-database dependencies")?;
+                    return Ok(());
+                }
+                let recognized = outcome.modifiers.is_some();
+                let save = recognized
+                    || if game {
+                        matches!(stage, GameStage::Implicit | GameStage::Explicit)
+                            || (stage == GameStage::FindImplicit
+                                && self.catalog.base(&line).is_none()
+                                && self.state.name != line
+                                && !self
+                                    .compat("base_aliases")
+                                    .and_then(|t| t.fields.get("two_toned_marker"))
+                                    .and_then(ItemMetadataValue::as_str)
+                                    .is_some_and(|s| line.contains(s))
+                                && !self.base_display_line(&line))
+                    } else {
+                        found_explicit || stage == GameStage::Explicit
+                    };
+                if save {
+                    let modline = LoadedModLine {
+                        line: line.clone(),
+                        source_line: line_index,
+                        selection,
+                        flags,
+                        mod_tags: tags,
+                        range: if recognized && range == ItemNumber::Nil {
+                            ItemNumber::new(self.catalog.policy().default_affix_quality)
+                        } else {
+                            range
+                        },
+                        corrupted_range,
+                        value_scalar: if recognized {
+                            ItemNumber::new(1.0)
+                        } else {
+                            ItemNumber::Nil
+                        },
+                        modifiers: outcome.modifiers.unwrap_or_default(),
+                        extra: if recognized {
+                            outcome.extra
+                        } else {
+                            Some(line.clone())
+                        },
+                    };
+                    self.push_line(modline, implicit_count);
+                }
+                if recognized {
+                    if game {
+                        match stage {
+                            GameStage::FindImplicit => stage = GameStage::Implicit,
+                            GameStage::FindExplicit => {
+                                found_explicit = true;
+                                stage = GameStage::Explicit;
+                            }
+                            GameStage::Explicit => found_explicit = true,
+                            _ => {}
+                        }
+                    } else {
+                        found_explicit = true;
+                    }
+                } else if game && stage == GameStage::FindExplicit {
+                    stage = GameStage::Done;
+                }
+            }
+            index += 1;
+        }
+        self.finish_parse(imported_level, provider)
+    }
+
+    fn role(&self, name: &str) -> &str {
+        self.compat("rarity_roles")
+            .and_then(|t| t.fields.get(name))
+            .and_then(ItemMetadataValue::as_str)
+            .unwrap_or("")
+    }
+    fn plain_rarity(&self) -> bool {
+        self.state.rarity == self.role("normal") || self.state.rarity == self.role("magic")
+    }
+    fn apply_flags_policy(&mut self, policy: &str, line: &str) -> bool {
+        let Some(fields) = self
+            .compat(policy)
+            .and_then(|t| t.fields.get(line))
+            .and_then(ItemMetadataValue::as_table)
+            .map(|t| t.fields.clone())
+        else {
+            return false;
+        };
+        for (field, value) in fields {
+            if let Some(value) = value.as_bool() {
+                self.boolean(&field, value);
+            }
+        }
+        true
+    }
+    fn apply_literal(&mut self, line: &str) -> bool {
+        self.apply_flags_policy("literal_state_flags", line)
+    }
+    fn compat(&self, key: &str) -> Option<&ItemMetadataTable> {
+        self.catalog
+            .policy()
+            .compatibility
+            .get(key)
+            .and_then(ItemMetadataValue::as_table)
+    }
+    fn apply_header(
+        &mut self,
+        name: &str,
+        value: &str,
+        line: usize,
+        imported: &mut Option<ItemNumber>,
+    ) -> Result<Header, ItemLoadError> {
+        if self
+            .compat("selection_headers")
+            .is_some_and(|t| t.fields.contains_key(name))
+        {
+            return Ok(Header::Known);
+        }
+        match name {
+            "Implicits" => {
+                return Ok(Header::Implicits(
+                    syntax::spec_to_number(value).value().unwrap_or(0.0),
+                ));
+            }
+            "Has Variants" | "Selected Variants" => return Ok(Header::SkipNext),
+            "Sockets" => {
+                let mut group = 0;
+                for b in value.bytes() {
+                    if b == b'S' {
+                        self.state.sockets.push(group);
+                        group += 1;
+                    } else if b == b'J' {
+                        self.state.jewel_socket_count += 1;
+                    }
+                }
+                self.state.item_socket_count = self.state.sockets.len();
+                return Ok(Header::Known);
+            }
+            "Rune" => {
+                self.state.runes.push(value.into());
+                return Ok(Header::Known);
+            }
+            "Level" => {
+                *imported = number_option(syntax::spec_to_number(value));
+                return Ok(Header::Known);
+            }
+            "Prefix" | "Suffix" => {
+                self.stop(DependencyKind::CraftedAffixes,Some(line),"authored affix IDs and independent ranges require complete crafting dependencies")?;
+                return Ok(Header::Stop);
+            }
+            "Cluster Jewel Skill" | "Cluster Jewel Node Count" => {
+                self.stop(
+                    DependencyKind::ClusterJewel,
+                    Some(line),
+                    "cluster-jewel initialization and selected tree data are unavailable",
+                )?;
+                return Ok(Header::Stop);
+            }
+            "Radius" => {
+                if self.state.item_type.as_deref() == Some("Jewel") {
+                    self.stop(
+                        DependencyKind::Assembly,
+                        Some(line),
+                        "jewel radius requires selected tree version and assembled jewel data",
+                    )?;
+                    return Ok(Header::Stop);
+                }
+            }
+            "Catalyst" => {
+                if let Some(i) = self
+                    .catalog
+                    .policy()
+                    .catalysts
+                    .iter()
+                    .position(|c| c.name == value)
+                {
+                    self.number("catalyst", ItemNumber::new((i + 1) as f64));
+                }
+                return Ok(Header::Known);
+            }
+            _ => {}
+        }
+        if name.starts_with("Quality (") && name.ends_with(" Modifiers)") {
+            let descriptor = &name[9..name.len() - 11];
+            let percent = value
+                .find('%')
+                .map(|end| {
+                    let start = value[..end]
+                        .rfind(|c: char| !c.is_ascii_digit())
+                        .map_or(0, |i| i + 1);
+                    syntax::spec_to_number(&value[start..end])
+                })
+                .unwrap_or(ItemNumber::Nil);
+            self.number("catalystQuality", percent);
+            if let Some(i) = self
+                .catalog
+                .policy()
+                .catalysts
+                .iter()
+                .position(|c| c.descriptor == descriptor)
+            {
+                self.number("catalyst", ItemNumber::new((i + 1) as f64));
+            }
+            return Ok(Header::Known);
+        }
+        if let Some(mapping) = self
+            .compat("header_assignments")
+            .and_then(|t| t.fields.get(name))
+            .and_then(ItemMetadataValue::as_table)
+        {
+            let field = mapping
+                .fields
+                .get("field")
+                .and_then(ItemMetadataValue::as_str)
+                .ok_or_else(|| ItemLoadError("header assignment has no target".into()))?
+                .to_owned();
+            let kind = mapping
+                .fields
+                .get("kind")
+                .and_then(ItemMetadataValue::as_str)
+                .ok_or_else(|| ItemLoadError("header assignment has no kind".into()))?;
+            if field.starts_with("armourData.") {
+                self.stop(
+                    DependencyKind::BaseCompatibility,
+                    Some(line),
+                    "display defence headers require source base-compatibility rebinding",
+                )?;
+                return Ok(Header::Stop);
+            }
+            match kind {
+                "number" => {
+                    let n = syntax::spec_to_number(value);
+                    if let Some(key) = field.strip_prefix("requirements.") {
+                        if n == ItemNumber::Nil {
+                            self.state.requirements.remove(key);
+                        } else {
+                            self.state.requirements.insert(key.into(), n);
+                        }
+                    } else {
+                        self.number(&field, n);
+                    }
+                }
+                "text" => self.text(&field, value),
+                "presence" => self.boolean(&field, true),
+                "boolean" => self.boolean(&field, value == "true"),
+                _ => return Err(ItemLoadError("unsupported header assignment kind".into())),
+            }
+            if let Some(i) = alternate_index(&field, "hasAltVariant") {
+                self.state.variants.has_alternate[i] = true;
+            }
+            if let Some(i) = alternate_index(&field, "variantAlt") {
+                self.state.variants.alternate[i] = number_option(syntax::spec_to_number(value));
+            }
+            if field == "allowDuplicateVariants" {
+                self.state.variants.allow_duplicates = value == "true";
+            }
+            return Ok(if field == "uniqueID" {
+                Header::Skip
+            } else {
+                Header::Known
+            });
+        }
+        if self
+            .compat("hidden_specs")
+            .is_some_and(|t| t.fields.contains_key(name))
+        {
+            self.boolean("hidden_specs", true);
+            return Ok(Header::Known);
+        }
+        if self.catalog.policy().header_names.contains(name) {
+            self.stop(
+                DependencyKind::UnsupportedHeader,
+                Some(line),
+                format!("source header {name:?} has an unrepresented state operation"),
+            )?;
+            return Ok(Header::Stop);
+        }
+        Ok(Header::Unknown)
+    }
+    fn base_implicit(&self, line: &str, game: bool) -> bool {
+        game && !self.flag("crafted")
+            && self.base().and_then(|b| b.implicit()).is_some_and(|s| {
+                s.lines()
+                    .any(|v| v.starts_with("Grants Skill:") && v == line)
+            })
+    }
+    fn base(&self) -> Option<&poe_optimizer_data::item_loading::ItemBaseDefinition> {
+        if self.state.base_present {
+            self.state
+                .base_name
+                .as_deref()
+                .and_then(|n| self.catalog.base(n))
+        } else {
+            None
+        }
+    }
+    fn base_display_line(&self, line: &str) -> bool {
+        self.base().is_some_and(|b| {
+            line == b.item_type
+                || b.sub_type()
+                    .is_some_and(|s| line == format!("{s} {}", b.item_type))
+        })
+    }
+    fn resolve_base(
+        &mut self,
+        line: &str,
+        selection: &LineSelection,
+        item_class: Option<&str>,
+        line_index: usize,
+    ) -> Result<bool, ItemLoadError> {
+        let mut chosen = None;
+        if !self.state.base_present && self.plain_rarity() {
+            if item_class.is_some()
+                && self
+                    .compat("base_aliases")
+                    .and_then(|t| t.fields.get("energy_blade_marker"))
+                    .and_then(ItemMetadataValue::as_str)
+                    .is_some_and(|s| self.state.name.contains(s))
+            {
+                self.stop(
+                    DependencyKind::BaseCompatibility,
+                    Some(line_index),
+                    "energy-blade class rewrite requires compatibility resolution",
+                )?;
+                return Ok(false);
+            }
+            if self.catalog.base(&self.state.name).is_some() {
+                chosen = Some(self.state.name.clone());
+            } else {
+                let mut matches = Vec::new();
+                let mut longest = 0;
+                for base in self.catalog.bases() {
+                    if let Some(start) = self.state.name.find(&base.name) {
+                        if base.name.len() > longest {
+                            matches.clear();
+                            longest = base.name.len();
+                        }
+                        if base.name.len() == longest {
+                            matches.push((base.name.clone(), start));
+                        }
+                    }
+                }
+                if matches.len() > 1 {
+                    self.stop(
+                        DependencyKind::BaseLookupAmbiguity,
+                        Some(line_index),
+                        "equal-length partial base matches depend on original pairs order",
+                    )?;
+                    return Ok(false);
+                }
+                if let Some((name, start)) = matches.pop() {
+                    self.state.name_prefix = self.state.name[..start].into();
+                    self.state.name_suffix = self.state.name[start + name.len()..].into();
+                    chosen = Some(name);
+                }
+            }
+            if chosen.is_none()
+                && let Some(marker) = self
+                    .compat("base_aliases")
+                    .and_then(|t| t.fields.get("two_toned_marker"))
+                    .and_then(ItemMetadataValue::as_str)
+                && let Some(start) = self.state.name.find(marker)
+            {
+                let marker = marker.to_owned();
+                self.state.name_prefix = self.state.name[..start].into();
+                self.state.name_suffix = self.state.name[start + marker.len()..].into();
+                chosen = Some(marker);
+            }
+            self.state.name = syntax::strip_name_parentheses(&self.state.name);
+        }
+        let mut name = chosen.unwrap_or_else(|| {
+            line.strip_prefix(
+                self.catalog
+                    .policy()
+                    .compatibility
+                    .get("superior_prefix")
+                    .and_then(ItemMetadataValue::as_str)
+                    .unwrap_or("\0"),
+            )
+            .unwrap_or(line)
+            .into()
+        });
+        if let Some(aliases) = self.compat("base_aliases") {
+            if aliases
+                .fields
+                .get("two_toned_marker")
+                .and_then(ItemMetadataValue::as_str)
+                == Some(name.as_str())
+                && let Some(value) = aliases
+                    .fields
+                    .get("two_toned_default")
+                    .and_then(ItemMetadataValue::as_str)
+            {
+                name = value.into();
+            }
+            let runic = aliases
+                .fields
+                .get("runic_markers")
+                .and_then(ItemMetadataValue::as_array)
+                .is_some_and(|a| {
+                    a.iter()
+                        .filter_map(ItemMetadataValue::as_str)
+                        .any(|s| name.contains(s))
+                });
+            if runic {
+                self.boolean("runicItem", true);
+            }
+        }
+        let Some(base) = self.catalog.base(&name) else {
+            return Ok(false);
+        };
+        self.state
+            .base_lines
+            .insert(name.clone(), selection.clone());
+        let matches = if self.state.variants.uses_versioned_or_grouped() {
+            self.state.variants.matches(selection)
+        } else {
+            self.state.variants.selected.is_none()
+                || selection.variants.as_ref().is_none_or(|set| {
+                    self.state
+                        .variants
+                        .selected
+                        .and_then(ItemNumber::value)
+                        .is_some_and(|n| set.iter().any(|&v| f64::from(v) == n))
+                })
+        };
+        if matches {
+            let item_type = base.item_type.clone();
+            let charm = base.field("charmLimit").and_then(ItemMetadataValue::as_f64);
+            let spirit = base.field("spirit").and_then(ItemMetadataValue::as_f64);
+            let reqs = base.requirements().cloned();
+            let buff = base
+                .field("flask")
+                .or_else(|| base.field("charm"))
+                .and_then(ItemMetadataValue::as_table)
+                .and_then(|t| t.fields.get("buff"))
+                .is_some();
+            self.state.base_name = Some(name);
+            self.state.base_present = true;
+            self.state.item_type = Some(item_type.clone());
+            if !self.plain_rarity() {
+                let title = self.state.name.clone();
+                self.text("title", &title);
+            }
+            self.number("charmLimit", charm.map_or(ItemNumber::Nil, ItemNumber::new));
+            self.number(
+                "spiritValue",
+                spirit.map_or(ItemNumber::Nil, ItemNumber::new),
+            );
+            let Some(noncorruptible) = self
+                .catalog
+                .policy()
+                .compatibility
+                .get("noncorruptible_types")
+                .and_then(ItemMetadataValue::as_array)
+            else {
+                self.stop(
+                    DependencyKind::BaseCompatibility,
+                    Some(line_index),
+                    "injected noncorruptible-type policy is missing",
+                )?;
+                return Ok(true);
+            };
+            let corruptible = !noncorruptible
+                .iter()
+                .filter_map(ItemMetadataValue::as_str)
+                .any(|t| t == item_type);
+            self.boolean("corruptible", corruptible);
+            let fallback = self
+                .catalog
+                .policy()
+                .compatibility
+                .get("fallback_modifier_table")
+                .and_then(ItemMetadataValue::as_str);
+            let table = base
+                .sub_type()
+                .map(|sub| format!("{}{sub}", base.item_type))
+                .filter(|key| self.catalog.modifier_table(key).is_some())
+                .or_else(|| {
+                    self.catalog
+                        .modifier_table(&base.item_type)
+                        .map(|_| base.item_type.clone())
+                })
+                .or_else(|| {
+                    fallback
+                        .filter(|key| self.catalog.modifier_table(key).is_some())
+                        .map(str::to_owned)
+                });
+            if let Some(table) = table {
+                self.text("affixes_table", &table);
+            } else {
+                self.state.retained_fields.remove("affixes_table");
+            }
+            for stat in ["str", "dex", "int"] {
+                self.state.requirements.insert(
+                    stat.into(),
+                    ItemNumber::new(
+                        reqs.as_ref()
+                            .and_then(|r| r.fields.get(stat))
+                            .and_then(ItemMetadataValue::as_f64)
+                            .unwrap_or(0.0),
+                    ),
+                );
+            }
+            self.text("defaultSocketColor", "S");
+            if buff {
+                self.stop(
+                    DependencyKind::BaseBuffs,
+                    Some(line_index),
+                    "base flask/charm buff parser calls are not represented",
+                )?;
+            }
+        }
+        Ok(true)
+    }
+    fn format(
+        &mut self,
+        text: &str,
+        line: usize,
+        corrupted: ItemNumber,
+        provider: &mut impl ItemLoadProvider,
+    ) -> Result<Option<String>, ItemLoadError> {
+        if self.state.format_calls.len() >= MAX_ITEM_LOADING_CALLS {
+            return Err(ItemLoadError("format request bound".into()));
+        }
+        let request = FormatRequest {
+            sequence: self.state.format_calls.len() + self.state.parser_calls.len(),
+            line_index: line,
+            text: text.into(),
+            range: ItemNumber::new(1.0),
+            scalar: ItemNumber::new(1.0),
+            corrupted_range: corrupted,
+        };
+        self.charge(text.len())?;
+        let result = provider.format_line(&request);
+        self.state.format_calls.push(request);
+        match result {
+            DependencyResult::Unavailable(message) => {
+                self.stop(DependencyKind::RangeFormatting, Some(line), message)?;
+                Ok(None)
+            }
+            DependencyResult::Available(value) => {
+                if value.len() > MAX_ITEM_LOADING_TEXT {
+                    return Err(ItemLoadError("formatted line bound".into()));
+                }
+                self.charge(value.len())?;
+                Ok(Some(value))
+            }
+        }
+    }
+    fn parse(
+        &mut self,
+        text: &str,
+        line: usize,
+        combined: bool,
+        provider: &mut impl ItemLoadProvider,
+    ) -> Result<Option<ParseOutcome>, ItemLoadError> {
+        if self.state.parser_calls.len() >= MAX_ITEM_LOADING_CALLS {
+            return Err(ItemLoadError("parser request bound".into()));
+        }
+        let request = ParseRequest {
+            sequence: self.state.format_calls.len() + self.state.parser_calls.len(),
+            line_index: line,
+            text: text.into(),
+            combined,
+        };
+        self.charge(text.len())?;
+        let result = provider.parse_modifier(&request);
+        self.state.parser_calls.push(request);
+        match result {
+            DependencyResult::Unavailable(message) => {
+                self.stop(DependencyKind::ModifierParser, Some(line), message)?;
+                Ok(None)
+            }
+            DependencyResult::Available(value) => {
+                if value.modifiers.as_ref().is_some_and(|v| v.len() > 4096)
+                    || value
+                        .extra
+                        .as_ref()
+                        .is_some_and(|v| v.len() > MAX_ITEM_LOADING_TEXT)
+                {
+                    return Err(ItemLoadError("parser result bound".into()));
+                }
+                self.charge(value.extra.as_ref().map_or(0, String::len))?;
+                if let Some(mods) = &value.modifiers {
+                    self.charge(validate_metadata_tables(mods.iter())?)?;
+                }
+                Ok(Some(value))
+            }
+        }
+    }
+    fn push_line(&mut self, line: LoadedModLine, implicit_count: f64) {
+        if line.flags.contains("rune") {
+            self.state.rune_mod_lines.push(line);
+        } else if line.flags.contains("enchant") {
+            self.state.enchant_mod_lines.push(line);
+        } else if line.line.contains("Requires Class") {
+            self.state.class_requirement_mod_lines.push(line);
+        } else if line.flags.contains("implicit")
+            || ((self.state.rune_mod_lines.len()
+                + self.state.enchant_mod_lines.len()
+                + self.state.implicit_mod_lines.len()) as f64)
+                < implicit_count
+        {
+            self.state.implicit_mod_lines.push(line);
+        } else {
+            self.state.explicit_mod_lines.push(line);
+        }
+    }
+    fn finish_parse(
+        &mut self,
+        imported: Option<ItemNumber>,
+        provider: &mut impl ItemLoadProvider,
+    ) -> Result<(), ItemLoadError> {
+        if let (Some(title), Some(base)) = (self.txt("title"), self.state.base_name.as_deref()) {
+            self.state.name = format!("{title}, {}", syntax::strip_name_parentheses(base));
+        }
+        if !self.state.runes.is_empty() {
+            self.stop(DependencyKind::RuneReconstruction,None,"rune reconstruction and rune-level requirements require complete modifier dependencies")?;
+            return Ok(());
+        }
+        if self.state.base_present {
+            let base_level = self
+                .base()
+                .and_then(|b| b.requirements())
+                .and_then(|r| r.fields.get("level"))
+                .and_then(ItemMetadataValue::as_f64)
+                .map(ItemNumber::new);
+            let mut unique = None;
+            if self.state.rarity == self.role("unique") || self.state.rarity == self.role("relic") {
+                let request = UniqueRequest {
+                    name: self.state.name.clone(),
+                    title: self.txt("title").map(str::to_owned),
+                    base_name: self.state.base_name.clone(),
+                };
+                match provider.lookup_unique(&request) {
+                    DependencyResult::Unavailable(message) => {
+                        self.stop(DependencyKind::UniqueDatabase, None, message)?;
+                        return Ok(());
+                    }
+                    DependencyResult::Available(value) => {
+                        if value.as_ref().is_some_and(|v| {
+                            v.natural_level.is_some_and(|n| !n.canonical())
+                                || v.level.is_some_and(|n| !n.canonical())
+                        }) {
+                            return Err(ItemLoadError(
+                                "unique provider returned noncanonical finite number".into(),
+                            ));
+                        }
+                        unique = value;
+                    }
+                }
+            }
+            let natural = if let Some(unique) = unique {
+                let n = unique
+                    .natural_level
+                    .or(unique.level)
+                    .and_then(ItemNumber::value);
+                let Some(n) = n else {
+                    self.status = ItemLoadStatus::SourceError;
+                    return Err(ItemLoadError(
+                        "unique database item has no natural or level requirement".into(),
+                    ));
+                };
+                ItemNumber::new(n.max(base_level.and_then(ItemNumber::value).unwrap_or(0.0)))
+            } else {
+                if !self.state.requirements.contains_key("level")
+                    && let Some(level) = if self.state.sockets.is_empty() {
+                        imported.or(base_level)
+                    } else {
+                        base_level
+                    }
+                {
+                    self.state.requirements.insert("level".into(), level);
+                }
+                self.state
+                    .requirements
+                    .get("level")
+                    .copied()
+                    .unwrap_or(ItemNumber::new(0.0))
+            };
+            self.state
+                .requirements
+                .insert("naturalLevel".into(), natural);
+            let level = self
+                .state
+                .requirements
+                .get("level")
+                .copied()
+                .unwrap_or(natural)
+                .value()
+                .unwrap_or(0.0)
+                .max(natural.value().unwrap_or(0.0))
+                .max(0.0);
+            self.state
+                .requirements
+                .insert("level".into(), ItemNumber::new(level));
+        }
+        self.number("affixLimit", ItemNumber::new(0.0));
+        if self.flag("crafted") {
+            self.stop(
+                DependencyKind::CraftedAffixes,
+                None,
+                "crafted affix reconciliation requires complete source affix dependencies",
+            )?;
+            return Ok(());
+        }
+        self.state.variants.finish_legacy();
+        if self.num("quality").is_none() && self.base().is_some_and(|b| b.quality().is_some()) {
+            self.number("quality", ItemNumber::new(0.0));
+        }
+        self.assemble(false, provider)
+    }
+    fn assemble(
+        &mut self,
+        final_load: bool,
+        provider: &mut impl ItemLoadProvider,
+    ) -> Result<(), ItemLoadError> {
+        self.state.assembly_calls += 1;
+        if !self.state.base_present {
+            self.status = ItemLoadStatus::NoBase;
+            return Ok(());
+        }
+        let request = AssemblyRequest {
+            final_load,
+            state: self.state.clone(),
+        };
+        match provider.assemble(&request) {
+            DependencyResult::Unavailable(message) => {
+                self.stop(DependencyKind::Assembly, None, message)?
+            }
+            DependencyResult::Available(result) => {
+                self.charge(validate_metadata(&result.evidence)?)?;
+                if result.state_updates.len() > 4096 {
+                    return Err(ItemLoadError("assembly state update bound".into()));
+                }
+                if let Some(payloads) = &result.modifier_payloads {
+                    let lists = [
+                        (&payloads.buff_mod_lines, &self.state.buff_mod_lines),
+                        (&payloads.enchant_mod_lines, &self.state.enchant_mod_lines),
+                        (&payloads.rune_mod_lines, &self.state.rune_mod_lines),
+                        (
+                            &payloads.class_requirement_mod_lines,
+                            &self.state.class_requirement_mod_lines,
+                        ),
+                        (&payloads.implicit_mod_lines, &self.state.implicit_mod_lines),
+                        (&payloads.explicit_mod_lines, &self.state.explicit_mod_lines),
+                    ];
+                    if lists.iter().any(|(payloads, rows)| {
+                        payloads.len() != rows.len() || payloads.iter().any(|row| row.len() > 4096)
+                    }) {
+                        return Err(ItemLoadError(
+                            "assembly modifier payload row count mismatch or bound".into(),
+                        ));
+                    }
+                    self.charge(validate_metadata_tables(lists.iter().flat_map(
+                        |(payloads, _)| payloads.iter().flat_map(|row| row.iter()),
+                    ))?)?;
+                }
+                if let Some(requirements) = &result.requirements {
+                    if requirements.len() > 256 {
+                        return Err(ItemLoadError("assembly requirement count bound".into()));
+                    }
+                    for (key, value) in requirements {
+                        if key.is_empty()
+                            || key.len() > 128
+                            || key.contains('\0')
+                            || *value == ItemNumber::Nil
+                            || !value.canonical()
+                        {
+                            return Err(ItemLoadError("invalid assembly requirement entry".into()));
+                        }
+                        self.charge(key.len() + 32)?;
+                    }
+                }
+                for (key, value) in &result.state_updates {
+                    if key.len() > 4096
+                        || matches!(value,ItemScalar::Text(t)if t.len()>MAX_ITEM_LOADING_TEXT)
+                        || matches!(value,ItemScalar::Number(n)if !n.canonical())
+                    {
+                        return Err(ItemLoadError("assembly state text bound".into()));
+                    }
+                    self.charge(
+                        key.len()
+                            + match value {
+                                ItemScalar::Text(t) => t.len(),
+                                _ => 32,
+                            },
+                    )?;
+                }
+                if let Some(requirements) = result.requirements {
+                    self.state.requirements = requirements;
+                }
+                for (key, value) in result.state_updates {
+                    if matches!(value, ItemScalar::Number(ItemNumber::Nil)) {
+                        self.state.retained_fields.remove(&key);
+                    } else {
+                        self.state.retained_fields.insert(key, value);
+                    }
+                }
+                if let Some(payloads) = result.modifier_payloads {
+                    for (payloads, rows) in [
+                        (payloads.buff_mod_lines, &mut self.state.buff_mod_lines),
+                        (
+                            payloads.enchant_mod_lines,
+                            &mut self.state.enchant_mod_lines,
+                        ),
+                        (payloads.rune_mod_lines, &mut self.state.rune_mod_lines),
+                        (
+                            payloads.class_requirement_mod_lines,
+                            &mut self.state.class_requirement_mod_lines,
+                        ),
+                        (
+                            payloads.implicit_mod_lines,
+                            &mut self.state.implicit_mod_lines,
+                        ),
+                        (
+                            payloads.explicit_mod_lines,
+                            &mut self.state.explicit_mod_lines,
+                        ),
+                    ] {
+                        for (payload, row) in payloads.into_iter().zip(rows) {
+                            row.modifiers = payload;
+                        }
+                    }
+                }
+                self.state.assembly_evidence = Some(result.evidence);
+                self.status = ItemLoadStatus::Complete;
+            }
+        }
+        Ok(())
+    }
+    pub fn apply_mod_range(
+        &mut self,
+        id: Option<&str>,
+        range: Option<&str>,
+    ) -> Result<(), ItemLoadError> {
+        if matches!(
+            self.status,
+            ItemLoadStatus::Pending | ItemLoadStatus::SourceError
+        ) {
+            return Ok(());
+        }
+        let mut id = id
+            .map_or(ItemNumber::Nil, syntax::lua_number)
+            .value()
+            .unwrap_or(0.0);
+        let range = range.map_or(ItemNumber::Nil, syntax::lua_number);
+        let range = if range == ItemNumber::Nil {
+            ItemNumber::new(1.0)
+        } else {
+            range
+        };
+        for list in [
+            &mut self.state.buff_mod_lines,
+            &mut self.state.enchant_mod_lines,
+            &mut self.state.implicit_mod_lines,
+            &mut self.state.explicit_mod_lines,
+        ] {
+            if id <= list.len() as f64 {
+                if !id.is_finite() || id < 1.0 || id.fract() != 0.0 {
+                    self.status = ItemLoadStatus::SourceError;
+                    return Err(ItemLoadError(
+                        "ModRange indexes an absent source modifier row".into(),
+                    ));
+                }
+                list[id as usize - 1].range = range;
+                return Ok(());
+            }
+            id -= list.len() as f64;
+        }
+        Ok(())
+    }
+    pub fn finish_load(
+        &mut self,
+        provider: &mut impl ItemLoadProvider,
+    ) -> Result<(), ItemLoadError> {
+        if matches!(
+            self.status,
+            ItemLoadStatus::Pending | ItemLoadStatus::SourceError
+        ) {
+            return Ok(());
+        }
+        if self.state.base_present
+            && self.state.jewel_socket_count == 0
+            && let Some(n) = self
+                .txt("title")
+                .and_then(|title| {
+                    self.compat("fallback_jewel_socket_counts")
+                        .and_then(|t| t.fields.get(title))
+                })
+                .and_then(ItemMetadataValue::as_f64)
+        {
+            if !n.is_finite() || n < 0.0 || n.fract() != 0.0 || n > MAX_ITEM_LOADING_LINES as f64 {
+                return Err(ItemLoadError(
+                    "fallback jewel socket count exceeds bound".into(),
+                ));
+            }
+            self.state.jewel_socket_count = n as usize;
+        }
+        if self.state.base_present {
+            self.assemble(true, provider)?;
+            if self.status == ItemLoadStatus::Complete && self.num("id").is_none_or(f64::is_nan) {
+                self.status = ItemLoadStatus::SourceError;
+                return Err(ItemLoadError(
+                    "source inventory insertion has nil or NaN item id".into(),
+                ));
+            }
+        }
+        Ok(())
+    }
+}
+#[derive(Debug)]
+enum Header {
+    Known,
+    Unknown,
+    Skip,
+    SkipNext,
+    Implicits(f64),
+    Stop,
+}
+fn number_option(n: ItemNumber) -> Option<ItemNumber> {
+    if n == ItemNumber::Nil { None } else { Some(n) }
+}
+fn alternate_index(field: &str, prefix: &str) -> Option<usize> {
+    let suffix = field.strip_prefix(prefix)?;
+    if suffix.is_empty() {
+        Some(0)
+    } else {
+        suffix
+            .parse::<usize>()
+            .ok()
+            .filter(|&v| (2..=5).contains(&v))
+            .map(|v| v - 1)
+    }
+}
+fn is_magnitude_line(line: &str) -> bool {
+    let line = line.to_ascii_lowercase();
+    line.contains("modifier magnitudes")
+        || line.contains("effect of suffixes")
+        || line.contains("effect of prefixes")
+}
+struct AnnotatedLine {
+    text: String,
+    flags: BTreeSet<String>,
+    tags: Vec<String>,
+    range: ItemNumber,
+    corrupted_range: ItemNumber,
+    selection: LineSelection,
+    has_range_tag: bool,
+}
+fn annotations(
+    line: &str,
+    catalog: &ItemLoadingCatalog,
+    preselected: &LineSelection,
+) -> Result<AnnotatedLine, &'static str> {
+    fn ids(text: &str, positive: bool) -> Result<BTreeSet<u32>, &'static str> {
+        for part in text
+            .split(|c: char| !c.is_ascii_digit())
+            .filter(|s| !s.is_empty())
+        {
+            if part.parse::<u32>().is_err() {
+                return Err("modifier selection tag exceeds native index bound");
+            }
+        }
+        Ok(syntax::ids(text, positive))
+    }
+    let mut selection = LineSelection::default();
+    let mut flags = BTreeSet::new();
+    let mut tags = Vec::new();
+    let mut range = ItemNumber::Nil;
+    let mut has_range_tag = false;
+    let mut corrupted = ItemNumber::Nil;
+    let mut clean = String::new();
+    let mut rest = line;
+    while let Some(start) = rest.find('{') {
+        clean.push_str(&rest[..start]);
+        let Some(end) = rest[start + 1..].find('}').map(|n| start + 1 + n) else {
+            clean.push_str(&rest[start..]);
+            rest = "";
+            break;
+        };
+        let inside = &rest[start + 1..end];
+        let split = inside.bytes().take_while(u8::is_ascii_alphabetic).count();
+        let key = &inside[..split];
+        let value = inside[split..]
+            .strip_prefix(':')
+            .unwrap_or(&inside[split..]);
+        match key {
+            "variant" => {
+                selection.variants = Some(if let Some(v) = &preselected.variants {
+                    v.clone()
+                } else {
+                    ids(value, false)?
+                })
+            }
+            "version" => {
+                selection.versions = Some(if let Some(v) = &preselected.versions {
+                    v.clone()
+                } else {
+                    ids(value, false)?
+                })
+            }
+            "group" => {
+                selection.groups = Some(if let Some(v) = &preselected.groups {
+                    v.clone()
+                } else {
+                    ids(value, true)?
+                })
+            }
+            "tags" => tags.extend(
+                value
+                    .split(|c: char| !c.is_ascii_alphabetic() && c != '_')
+                    .filter(|s| !s.is_empty())
+                    .map(str::to_owned),
+            ),
+            "range" => {
+                range = syntax::lua_number(value);
+                has_range_tag = true;
+            }
+            "corruptedRange" => corrupted = syntax::lua_number(value),
+            _ => {
+                if catalog.policy().line_flags.contains(key) {
+                    flags.insert(key.into());
+                }
+            }
+        }
+        rest = &rest[end + 1..];
+    }
+    clean.push_str(rest);
+    let mut at = 0;
+    while let Some(start) = clean[at..].find(" (").map(|n| at + n) {
+        let Some(end) = clean[start + 2..].find(')').map(|n| start + 2 + n) else {
+            break;
+        };
+        let flag = &clean[start + 2..end];
+        if !flag.is_empty() && flag.bytes().all(|b| b.is_ascii_lowercase()) {
+            if catalog.policy().line_flags.contains(flag) {
+                flags.insert(flag.into());
+            }
+            clean.replace_range(start..end + 1, "");
+            at = start;
+        } else {
+            at = end + 1;
+        }
+    }
+    Ok(AnnotatedLine {
+        text: clean,
+        flags,
+        tags,
+        range,
+        corrupted_range: corrupted,
+        selection,
+        has_range_tag,
+    })
+}
+fn validate_metadata(table: &ItemMetadataTable) -> Result<usize, ItemLoadError> {
+    validate_metadata_tables(std::iter::once(table))
+}
+fn validate_metadata_tables<'a>(
+    tables: impl Iterator<Item = &'a ItemMetadataTable>,
+) -> Result<usize, ItemLoadError> {
+    struct Budget {
+        nodes: usize,
+        bytes: usize,
+    }
+    fn text(s: &str, budget: &mut Budget) -> Result<(), ItemLoadError> {
+        budget.bytes = budget
+            .bytes
+            .checked_add(s.len())
+            .ok_or_else(|| ItemLoadError("dependency text overflow".into()))?;
+        if s.len() > MAX_ITEM_LOADING_TEXT || budget.bytes > 4 * MAX_ITEM_LOADING_TEXT {
+            return Err(ItemLoadError("dependency text bound".into()));
+        }
+        Ok(())
+    }
+    fn table(
+        t: &ItemMetadataTable,
+        depth: usize,
+        budget: &mut Budget,
+    ) -> Result<(), ItemLoadError> {
+        if depth > 24 {
+            return Err(ItemLoadError("dependency metadata depth bound".into()));
+        }
+        // Empty tables still occupy retained storage, including top-level
+        // modifier tables returned by parser and assembly dependencies.
+        budget.nodes += 1;
+        if budget.nodes > 65536 {
+            return Err(ItemLoadError("dependency metadata value bound".into()));
+        }
+        for (k, v) in &t.fields {
+            text(k, budget)?;
+            visit(v, depth + 1, budget)?;
+        }
+        for v in t.indexed.values() {
+            visit(v, depth + 1, budget)?;
+        }
+        Ok(())
+    }
+    fn visit(
+        v: &ItemMetadataValue,
+        depth: usize,
+        budget: &mut Budget,
+    ) -> Result<(), ItemLoadError> {
+        budget.nodes += 1;
+        if depth > 24 || budget.nodes > 65536 {
+            return Err(ItemLoadError("dependency metadata value bound".into()));
+        }
+        match v {
+            ItemMetadataValue::Number(n) if !n.is_finite() => {
+                return Err(ItemLoadError(
+                    "nonfinite dependency modifier metadata".into(),
+                ));
+            }
+            ItemMetadataValue::Text(s) => text(s, budget)?,
+            ItemMetadataValue::Array(a) => {
+                for v in a {
+                    visit(v, depth + 1, budget)?;
+                }
+            }
+            ItemMetadataValue::Table(t) => table(t, depth, budget)?,
+            ItemMetadataValue::Callback(function) => {
+                let span = &function.callback;
+                if span.path.len() > 4096 || span.sha256.len() > 64 {
+                    return Err(ItemLoadError("dependency callback descriptor bound".into()));
+                }
+                text(&span.path, budget)?;
+                text(&span.sha256, budget)?;
+            }
+            _ => {}
+        }
+        Ok(())
+    }
+    let mut budget = Budget { nodes: 0, bytes: 0 };
+    for t in tables {
+        table(t, 0, &mut budget)?;
+    }
+    Ok(budget.bytes + budget.nodes * 64)
+}

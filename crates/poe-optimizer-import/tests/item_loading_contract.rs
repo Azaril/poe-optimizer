@@ -1,0 +1,950 @@
+use poe_optimizer_data::item_loading::*;
+use poe_optimizer_import::item_loading::*;
+use std::collections::{BTreeMap, BTreeSet};
+fn table(fields: impl IntoIterator<Item = (&'static str, ItemMetadataValue)>) -> ItemMetadataTable {
+    ItemMetadataTable {
+        fields: fields.into_iter().map(|(k, v)| (k.into(), v)).collect(),
+        indexed: BTreeMap::new(),
+    }
+}
+fn text(s: &str) -> ItemMetadataValue {
+    ItemMetadataValue::Text(s.into())
+}
+fn catalog() -> ItemLoadingCatalog {
+    let source_file = "src/Item.lua".to_owned();
+    let assignment = |field, kind| {
+        ItemMetadataValue::Table(table([("field", text(field)), ("kind", text(kind))]))
+    };
+    let policy = ItemLoadingPolicy {
+        default_affix_quality: 0.5,
+        default_item_quality: 17.0,
+        catalysts: vec![],
+        line_flags: [
+            "implicit", "enchant", "rune", "disabled", "crafted", "custom",
+        ]
+        .into_iter()
+        .map(str::to_owned)
+        .collect(),
+        rarities: ["NORMAL", "MAGIC", "RARE", "UNIQUE", "RELIC"]
+            .into_iter()
+            .map(str::to_owned)
+            .collect(),
+        header_names: BTreeSet::new(),
+        compatibility: [
+            (
+                "base_aliases".into(),
+                ItemMetadataValue::Table(ItemMetadataTable::default()),
+            ),
+            (
+                "hidden_specs".into(),
+                ItemMetadataValue::Table(ItemMetadataTable::default()),
+            ),
+            (
+                "fallback_jewel_socket_counts".into(),
+                ItemMetadataValue::Table(ItemMetadataTable::default()),
+            ),
+            (
+                "mod_magnitude_patterns".into(),
+                ItemMetadataValue::Array(vec![]),
+            ),
+            (
+                "rarity_roles".into(),
+                ItemMetadataValue::Table(table([
+                    ("default", text("UNIQUE")),
+                    ("normal", text("NORMAL")),
+                    ("magic", text("MAGIC")),
+                    ("unique", text("UNIQUE")),
+                    ("relic", text("RELIC")),
+                ])),
+            ),
+            ("superior_prefix".into(), text("Superior ")),
+            (
+                "literal_state_flags".into(),
+                ItemMetadataValue::Table(table([(
+                    "Corrupted",
+                    ItemMetadataValue::Table(table([(
+                        "corrupted",
+                        ItemMetadataValue::Boolean(true),
+                    )])),
+                )])),
+            ),
+            (
+                "postparse_line_effects".into(),
+                ItemMetadataValue::Table(ItemMetadataTable::default()),
+            ),
+            (
+                "header_assignments".into(),
+                ItemMetadataValue::Table(table([
+                    ("Item Level", assignment("itemLevel", "number")),
+                    ("Authored Level", assignment("itemLevel", "number")),
+                    ("Quality", assignment("quality", "number")),
+                    ("LevelReq", assignment("requirements.level", "number")),
+                    ("Note", assignment("note", "text")),
+                ])),
+            ),
+            (
+                "selection_headers".into(),
+                ItemMetadataValue::Table(table([
+                    ("Version", ItemMetadataValue::Boolean(true)),
+                    ("Variant", ItemMetadataValue::Boolean(true)),
+                    ("Selected Version", ItemMetadataValue::Boolean(true)),
+                    ("Selected Variant", ItemMetadataValue::Boolean(true)),
+                    ("Selected Variant Group", ItemMetadataValue::Boolean(true)),
+                ])),
+            ),
+            (
+                "noncorruptible_types".into(),
+                ItemMetadataValue::Array(vec![]),
+            ),
+            ("fallback_modifier_table".into(), text("Item")),
+        ]
+        .into_iter()
+        .collect(),
+    };
+    ItemLoadingCatalog::new(ItemLoadingData {
+        schema_version: 1,
+        capability: ItemLoadingCapability::DefinitionsOnly,
+        source: ItemLoadingSource {
+            upstream_revision: "a".repeat(40),
+            files: [(source_file.clone(), "b".repeat(64))]
+                .into_iter()
+                .collect(),
+            construction_spans: [(
+                "all".into(),
+                ItemSourceSpan {
+                    path: source_file.clone(),
+                    line: 1,
+                    end_line: 2,
+                    sha256: "c".repeat(64),
+                },
+            )]
+            .into_iter()
+            .collect(),
+            module_order: vec![source_file.clone()],
+        },
+        policy,
+        bases: vec![ItemBaseDefinition {
+            name: "Caller Base".into(),
+            item_type: "Caller Type".into(),
+            source_module: source_file,
+            fields: table([
+                ("type", text("Caller Type")),
+                ("quality", ItemMetadataValue::Number(20.0)),
+                (
+                    "req",
+                    ItemMetadataValue::Table(table([
+                        ("level", ItemMetadataValue::Number(12.0)),
+                        ("str", ItemMetadataValue::Number(7.0)),
+                    ])),
+                ),
+            ]),
+        }],
+        modifier_tables: [("Item".into(), ItemMetadataTable::default())]
+            .into_iter()
+            .collect(),
+        unique_groups: BTreeMap::new(),
+        jewel_radii: ItemMetadataTable::default(),
+    })
+    .unwrap()
+}
+#[derive(Default)]
+struct CompleteProvider;
+impl ItemLoadProvider for CompleteProvider {
+    fn format_line(&mut self, r: &FormatRequest) -> DependencyResult<String> {
+        DependencyResult::Available(r.text.clone())
+    }
+    fn parse_modifier(&mut self, _: &ParseRequest) -> DependencyResult<ParseOutcome> {
+        DependencyResult::Available(ParseOutcome {
+            modifiers: Some(vec![]),
+            extra: None,
+        })
+    }
+    fn lookup_unique(&mut self, _: &UniqueRequest) -> DependencyResult<Option<UniqueOutcome>> {
+        DependencyResult::Available(None)
+    }
+    fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+        DependencyResult::Available(AssemblyOutcome {
+            modifier_payloads: None,
+            requirements: None,
+            state_updates: BTreeMap::new(),
+            evidence: ItemMetadataTable::default(),
+        })
+    }
+}
+#[test]
+fn constructor_no_base_and_source_reset_preserve_only_retained_fields() {
+    let data = catalog();
+    let mut machine = ItemLoadMachine::new(&data);
+    assert_eq!(machine.status(), ItemLoadStatus::NoBase);
+    assert_eq!(machine.state().assembly_calls, 1);
+    assert!(machine.state().raw_lines.is_empty());
+    let mut p = CompleteProvider;
+    machine.set_xml_attributes(&[("id".into(), "7".into())].into_iter().collect());
+    machine.apply_text("Rarity: NORMAL\nCaller Base\nAuthored Level: +60e2\nQuality: 13\nCorrupted\nImplicits: 0\nFirst",&mut p).unwrap();
+    assert_eq!(machine.status(), ItemLoadStatus::Complete);
+    assert_eq!(
+        machine.state().retained_fields["itemLevel"],
+        ItemScalar::Number(ItemNumber::Finite(60.0))
+    );
+    assert_eq!(machine.state().explicit_mod_lines.len(), 1);
+    machine
+        .apply_text("Rarity: NORMAL\nCaller Base\nImplicits: 0\nSecond", &mut p)
+        .unwrap();
+    assert_eq!(
+        machine.state().retained_fields["itemLevel"],
+        ItemScalar::Number(ItemNumber::Finite(60.0))
+    );
+    assert_eq!(
+        machine.state().retained_fields["corrupted"],
+        ItemScalar::Boolean(true)
+    );
+    assert_eq!(
+        machine.state().retained_fields["quality"],
+        ItemScalar::Number(ItemNumber::Finite(0.0))
+    );
+    assert_eq!(machine.state().explicit_mod_lines[0].line, "Second");
+    assert_eq!(
+        machine.state().requirements["level"],
+        ItemNumber::Finite(12.0)
+    );
+    machine.finish_load(&mut p).unwrap();
+    assert_eq!(machine.state().assembly_calls, 4);
+}
+#[test]
+fn parser_feedback_preserves_combined_fallback_text_and_unconsumed_next_line() {
+    struct Feedback {
+        calls: usize,
+    }
+    impl ItemLoadProvider for Feedback {
+        fn format_line(&mut self, r: &FormatRequest) -> DependencyResult<String> {
+            DependencyResult::Available(r.text.clone())
+        }
+        fn parse_modifier(&mut self, _: &ParseRequest) -> DependencyResult<ParseOutcome> {
+            self.calls += 1;
+            DependencyResult::Available(if self.calls <= 2 {
+                ParseOutcome {
+                    modifiers: None,
+                    extra: None,
+                }
+            } else {
+                ParseOutcome {
+                    modifiers: Some(vec![]),
+                    extra: None,
+                }
+            })
+        }
+        fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+            DependencyResult::Available(AssemblyOutcome {
+                modifier_payloads: None,
+                requirements: None,
+                state_updates: BTreeMap::new(),
+                evidence: ItemMetadataTable::default(),
+            })
+        }
+    }
+    let data = catalog();
+    let mut m = ItemLoadMachine::new(&data);
+    m.apply_text(
+        "Rarity: NORMAL\nCaller Base\nImplicits: 0\nFirst\n{crafted}Second (implicit)",
+        &mut Feedback { calls: 0 },
+    )
+    .unwrap();
+    assert_eq!(
+        m.state()
+            .parser_calls
+            .iter()
+            .map(|r| (r.text.as_str(), r.combined))
+            .collect::<Vec<_>>(),
+        vec![
+            ("First", false),
+            ("First Second", true),
+            ("First Second", false),
+            ("Second", false)
+        ]
+    );
+    assert_eq!(m.state().explicit_mod_lines[0].line, "First");
+    assert_eq!(m.state().implicit_mod_lines[0].line, "Second");
+    assert_eq!(
+        m.state()
+            .parser_calls
+            .iter()
+            .map(|r| r.sequence)
+            .collect::<Vec<_>>(),
+        vec![1, 3, 4, 6]
+    );
+}
+#[test]
+fn successful_combined_feedback_consumes_exactly_one_next_line() {
+    struct Combined;
+    impl ItemLoadProvider for Combined {
+        fn format_line(&mut self, r: &FormatRequest) -> DependencyResult<String> {
+            DependencyResult::Available(r.text.clone())
+        }
+        fn parse_modifier(&mut self, r: &ParseRequest) -> DependencyResult<ParseOutcome> {
+            DependencyResult::Available(ParseOutcome {
+                modifiers: if r.combined { Some(vec![]) } else { None },
+                extra: None,
+            })
+        }
+    }
+    let data = catalog();
+    let mut m = ItemLoadMachine::new(&data);
+    m.apply_text(
+        "Rarity: NORMAL\nCaller Base\nImplicits: 0\nFirst\nSecond",
+        &mut Combined,
+    )
+    .unwrap();
+    assert_eq!(m.state().parser_calls.len(), 2);
+    assert_eq!(m.state().explicit_mod_lines[0].line, "First\nSecond");
+    assert_eq!(m.pending().unwrap().kind, DependencyKind::Assembly);
+}
+#[test]
+fn unavailable_dependency_stops_state_and_following_text() {
+    let data = catalog();
+    let mut m = ItemLoadMachine::new(&data);
+    let mut p = UnavailableItemLoadProvider;
+    m.apply_text(
+        "Rarity: NORMAL\nCaller Base\nImplicits: 0\nFirst\nItem Level: 99",
+        &mut p,
+    )
+    .unwrap();
+    assert_eq!(m.status(), ItemLoadStatus::Pending);
+    assert_eq!(m.pending().unwrap().kind, DependencyKind::RangeFormatting);
+    assert!(!m.state().retained_fields.contains_key("itemLevel"));
+    let raw = m.state().raw.clone();
+    m.apply_text("Rarity: NORMAL\nCaller Base", &mut p).unwrap();
+    assert_eq!(m.state().raw, raw);
+    assert!(m.state().explicit_mod_lines.is_empty());
+}
+#[test]
+fn legacy_range_uses_category_order_and_source_nil_index_errors() {
+    let data = catalog();
+    let mut m = ItemLoadMachine::new(&data);
+    m.apply_text(
+        "Rarity: NORMAL\nCaller Base\nImplicits: 0\n{enchant}A\n{implicit}B\nC",
+        &mut CompleteProvider,
+    )
+    .unwrap();
+    m.apply_mod_range(Some("2"), Some("0x1p-2")).unwrap();
+    assert_eq!(
+        m.state().implicit_mod_lines[0].range,
+        ItemNumber::Finite(0.25)
+    );
+    assert_eq!(
+        m.state().enchant_mod_lines[0].range,
+        ItemNumber::Finite(0.5)
+    );
+    m.apply_mod_range(Some("99"), Some("nan")).unwrap();
+    assert_eq!(m.status(), ItemLoadStatus::Complete);
+    assert!(m.apply_mod_range(Some("garbage"), Some("1")).is_err());
+    assert_eq!(m.status(), ItemLoadStatus::SourceError);
+}
+#[test]
+fn lua_numeric_header_and_xml_identity_have_distinct_grammars() {
+    assert_eq!(spec_to_number("+12e3"), ItemNumber::Finite(12.0));
+    assert_eq!(spec_to_number("1.2.3"), ItemNumber::Nil);
+    assert_eq!(spec_to_number(" 12"), ItemNumber::Nil);
+    let data = catalog();
+    for (input, expected) in [
+        ("0x1.8p1", ItemNumber::Finite(3.0)),
+        ("0X.8P-1", ItemNumber::Finite(0.25)),
+        ("-0x1p-1074", ItemNumber::Finite(-f64::from_bits(1))),
+        ("0x1p1024", ItemNumber::PositiveInfinity),
+        ("+infinity", ItemNumber::PositiveInfinity),
+        ("-INF", ItemNumber::NegativeInfinity),
+    ] {
+        let mut m = ItemLoadMachine::new(&data);
+        m.set_xml_attributes(&[("id".into(), input.into())].into_iter().collect());
+        assert_eq!(
+            m.state().retained_fields["id"],
+            ItemScalar::Number(expected),
+            "{input}"
+        );
+    }
+}
+#[test]
+fn variant_group_prepass_is_ordered_distinct_and_not_range_expansion() {
+    let data = catalog();
+    let mut m = ItemLoadMachine::new(&data);
+    m.apply_text("Rarity: RARE\nCaller Name\nVariant: A\nVariant: B\nVariant: C\nVersion: Old\nVersion: New\nSelected Variant Group: 1 = 1\nSelected Variant Group: 2 = 1\n{variant:1-3}{version:2}{group:1,2}Caller Base\nImplicits: 0",&mut CompleteProvider).unwrap();
+    assert_eq!(
+        m.state().variants.group_selections[&1],
+        ItemNumber::Finite(1.0)
+    );
+    assert_eq!(
+        m.state().variants.group_selections[&2],
+        ItemNumber::Finite(3.0)
+    );
+    assert!(!m.state().variants.groups[&1].contains_key(&2));
+    assert!(m.state().base_present);
+    assert_eq!(m.state().name, "Caller Name, Caller Base");
+}
+#[test]
+fn ascii_line_whitespace_and_greedy_ggg_replacements_are_preserved() {
+    let data = catalog();
+    let mut m = ItemLoadMachine::new(&data);
+    m.apply_text(
+        "Rarity: NORMAL\nCaller Base\nImplicits: 0\n  [a|b]tail]  \n\u{a0}x\u{a0}",
+        &mut CompleteProvider,
+    )
+    .unwrap();
+    assert_eq!(m.state().raw_lines[3], "b]tail");
+    assert_eq!(m.state().raw_lines[4], "\u{a0}x\u{a0}");
+}
+
+#[test]
+fn inspection_binds_exact_occurrences_and_retains_stopped_instruction_suffix() {
+    use poe_optimizer_data::game_data::bundled_snapshot;
+    use poe_optimizer_import::item_source;
+    let snapshot = bundled_snapshot().unwrap();
+    let xml = "<PathOfBuilding2><Items><Item id='3'><![CDATA[Rarity: RARE\nCaller Named Item\nTribal Club\nImplicits: 0\n+17 to Strength]]><ModRange id='1' range='.2'/><![CDATA[Rarity: NORMAL\nTribal Club]]></Item><Item id='4'/></Items></PathOfBuilding2>";
+    let projection = item_source::project_xml(xml).unwrap();
+    let report = inspect(&projection, &snapshot, &mut UnavailableItemLoadProvider).unwrap();
+    assert_eq!(report.items.len(), 2);
+    assert_eq!(report.source_sha256, projection.source_sha256());
+    assert_eq!(&report.data_identity, snapshot.identity());
+    let first = &report.items[0];
+    assert_eq!(first.status, ItemLoadStatus::Pending);
+    assert_eq!(first.authored_id.as_deref(), Some("3"));
+    assert_eq!(
+        first
+            .instructions
+            .iter()
+            .map(|i| i.consumed_index)
+            .collect::<Vec<_>>(),
+        vec![None, Some(0), Some(1), Some(2), None]
+    );
+    assert_eq!(
+        first
+            .instructions
+            .iter()
+            .map(|i| i.status)
+            .collect::<Vec<_>>(),
+        vec![
+            InstructionStatus::Executed,
+            InstructionStatus::Pending,
+            InstructionStatus::NotExecuted,
+            InstructionStatus::NotExecuted,
+            InstructionStatus::NotExecuted
+        ]
+    );
+    assert!(first.instructions[0].text_sha256.is_none());
+    assert!(first.instructions[1].text_sha256.is_some());
+    assert_eq!(report.items[1].status, ItemLoadStatus::NoBase);
+}
+#[test]
+fn dependency_metadata_limits_and_source_errors_are_explicit() {
+    struct Invalid;
+    impl ItemLoadProvider for Invalid {
+        fn format_line(&mut self, r: &FormatRequest) -> DependencyResult<String> {
+            DependencyResult::Available(r.text.clone())
+        }
+        fn parse_modifier(&mut self, _: &ParseRequest) -> DependencyResult<ParseOutcome> {
+            DependencyResult::Available(ParseOutcome {
+                modifiers: Some(vec![table([("bad", ItemMetadataValue::Number(f64::NAN))])]),
+                extra: None,
+            })
+        }
+    }
+    let data = catalog();
+    let mut m = ItemLoadMachine::new(&data);
+    assert!(
+        m.apply_text("Rarity: NORMAL\nCaller Base\nImplicits: 0\nA", &mut Invalid)
+            .unwrap_err()
+            .to_string()
+            .contains("nonfinite")
+    );
+    assert!(m.state().explicit_mod_lines.is_empty());
+    let mut m = ItemLoadMachine::new(&data);
+    assert!(m.apply_text("Item Class: ", &mut CompleteProvider).is_err());
+    assert_eq!(m.status(), ItemLoadStatus::SourceError);
+}
+
+#[test]
+fn malformed_finite_provider_numbers_never_serialize_as_null() {
+    assert_eq!(
+        serde_json::to_value(ItemNumber::Finite(f64::INFINITY)).unwrap(),
+        serde_json::json!({"kind":"positive_infinity"})
+    );
+    struct Invalid;
+    impl ItemLoadProvider for Invalid {
+        fn lookup_unique(&mut self, _: &UniqueRequest) -> DependencyResult<Option<UniqueOutcome>> {
+            DependencyResult::Available(Some(UniqueOutcome {
+                natural_level: Some(ItemNumber::Finite(f64::NAN)),
+                level: None,
+            }))
+        }
+    }
+    let data = catalog();
+    let mut m = ItemLoadMachine::new(&data);
+    let error = m
+        .apply_text("Rarity: UNIQUE\nCaller Name\nCaller Base", &mut Invalid)
+        .unwrap_err();
+    assert!(error.to_string().contains("noncanonical"));
+}
+
+#[test]
+fn source_item_line_sideeffects_cannot_be_bypassed_with_empty_parse_results() {
+    let data = catalog();
+    for (text, kind) in [
+        ("+1 prefix modifier allowed", DependencyKind::CraftedAffixes),
+        (
+            "This Item gains bonuses from socketed items as though it was a Helmet",
+            DependencyKind::RuneReconstruction,
+        ),
+        (
+            "20% increased modifier magnitudes",
+            DependencyKind::ModifierMagnitudes,
+        ),
+    ] {
+        let mut m = ItemLoadMachine::new(&data);
+        m.apply_text(
+            &format!("Rarity: NORMAL\nCaller Base\nImplicits: 0\n{text}"),
+            &mut CompleteProvider,
+        )
+        .unwrap();
+        assert_eq!(m.pending().unwrap().kind, kind);
+        assert!(m.state().explicit_mod_lines.is_empty());
+    }
+}
+
+#[test]
+fn assembly_requirement_replacement_is_explicit_and_validated() {
+    struct Replace {
+        invalid: bool,
+    }
+    impl ItemLoadProvider for Replace {
+        fn assemble(&mut self, r: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+            let mut requirements = r.state.requirements.clone();
+            requirements.insert(
+                "strMod".into(),
+                if self.invalid {
+                    ItemNumber::Nil
+                } else {
+                    ItemNumber::Finite(42.0)
+                },
+            );
+            DependencyResult::Available(AssemblyOutcome {
+                modifier_payloads: None,
+                requirements: Some(requirements),
+                state_updates: BTreeMap::new(),
+                evidence: ItemMetadataTable::default(),
+            })
+        }
+    }
+    let data = catalog();
+    let mut valid = ItemLoadMachine::new(&data);
+    valid
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base",
+            &mut Replace { invalid: false },
+        )
+        .unwrap();
+    assert_eq!(
+        valid.state().requirements["strMod"],
+        ItemNumber::Finite(42.0)
+    );
+    let mut invalid = ItemLoadMachine::new(&data);
+    assert!(
+        invalid
+            .apply_text(
+                "Rarity: NORMAL\nCaller Base",
+                &mut Replace { invalid: true }
+            )
+            .unwrap_err()
+            .to_string()
+            .contains("requirement")
+    );
+    assert!(!invalid.state().requirements.contains_key("strMod"));
+}
+
+#[test]
+fn explicit_assembly_nil_update_removes_retained_field() {
+    struct Clear;
+    impl ItemLoadProvider for Clear {
+        fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+            DependencyResult::Available(AssemblyOutcome {
+                modifier_payloads: None,
+                requirements: None,
+                state_updates: [("note".into(), ItemScalar::Number(ItemNumber::Nil))]
+                    .into_iter()
+                    .collect(),
+                evidence: ItemMetadataTable::default(),
+            })
+        }
+    }
+    let data = catalog();
+    let mut machine = ItemLoadMachine::new(&data);
+    machine
+        .apply_text("Rarity: NORMAL\nCaller Base\nNote: old", &mut Clear)
+        .unwrap();
+    assert!(!machine.state().retained_fields.contains_key("note"));
+}
+
+#[test]
+fn assembly_modifier_payloads_preserve_row_identity_and_reject_count_mismatch() {
+    struct Replace {
+        invalid: bool,
+    }
+    impl ItemLoadProvider for Replace {
+        fn format_line(&mut self, r: &FormatRequest) -> DependencyResult<String> {
+            DependencyResult::Available(r.text.clone())
+        }
+        fn parse_modifier(&mut self, _: &ParseRequest) -> DependencyResult<ParseOutcome> {
+            DependencyResult::Available(ParseOutcome {
+                modifiers: Some(vec![]),
+                extra: None,
+            })
+        }
+        fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+            let mut payloads = AssemblyModifierPayloads::default();
+            if !self.invalid {
+                payloads.explicit_mod_lines.push(vec![table([(
+                    "source",
+                    text("caller dependency evidence"),
+                )])]);
+            }
+            DependencyResult::Available(AssemblyOutcome {
+                modifier_payloads: Some(payloads),
+                requirements: None,
+                state_updates: BTreeMap::new(),
+                evidence: ItemMetadataTable::default(),
+            })
+        }
+    }
+    let data = catalog();
+    let mut valid = ItemLoadMachine::new(&data);
+    valid
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nImplicits: 0\nOriginal line",
+            &mut Replace { invalid: false },
+        )
+        .unwrap();
+    assert_eq!(valid.state().explicit_mod_lines[0].line, "Original line");
+    assert_eq!(
+        valid.state().explicit_mod_lines[0].modifiers[0].fields["source"].as_str(),
+        Some("caller dependency evidence")
+    );
+    let mut invalid = ItemLoadMachine::new(&data);
+    assert!(
+        invalid
+            .apply_text(
+                "Rarity: NORMAL\nCaller Base\nImplicits: 0\nOriginal line",
+                &mut Replace { invalid: true }
+            )
+            .unwrap_err()
+            .to_string()
+            .contains("row count")
+    );
+    assert!(invalid.state().explicit_mod_lines[0].modifiers.is_empty());
+}
+
+#[test]
+fn oversized_callback_dependency_descriptor_is_rejected_before_loading() {
+    struct Callback;
+    impl ItemLoadProvider for Callback {
+        fn format_line(&mut self, r: &FormatRequest) -> DependencyResult<String> {
+            DependencyResult::Available(r.text.clone())
+        }
+        fn parse_modifier(&mut self, _: &ParseRequest) -> DependencyResult<ParseOutcome> {
+            DependencyResult::Available(ParseOutcome {
+                modifiers: Some(vec![table([(
+                    "value",
+                    ItemMetadataValue::Callback(ItemOpaqueFunction {
+                        callback: ItemSourceSpan {
+                            path: "x".repeat(4097),
+                            line: 1,
+                            end_line: 1,
+                            sha256: "a".repeat(64),
+                        },
+                    }),
+                )])]),
+                extra: None,
+            })
+        }
+    }
+    let data = catalog();
+    let mut machine = ItemLoadMachine::new(&data);
+    assert!(
+        machine
+            .apply_text(
+                "Rarity: NORMAL\nCaller Base\nImplicits: 0\nValue",
+                &mut Callback
+            )
+            .unwrap_err()
+            .to_string()
+            .contains("callback descriptor bound")
+    );
+    assert!(machine.state().explicit_mod_lines.is_empty());
+}
+
+#[test]
+fn every_unavailable_provider_message_is_bounded_and_charged_before_retention() {
+    struct Pending {
+        stage: DependencyKind,
+        bytes: usize,
+    }
+    impl ItemLoadProvider for Pending {
+        fn format_line(&mut self, r: &FormatRequest) -> DependencyResult<String> {
+            if self.stage == DependencyKind::RangeFormatting {
+                DependencyResult::Unavailable("x".repeat(self.bytes))
+            } else {
+                CompleteProvider.format_line(r)
+            }
+        }
+        fn parse_modifier(&mut self, r: &ParseRequest) -> DependencyResult<ParseOutcome> {
+            if self.stage == DependencyKind::ModifierParser {
+                DependencyResult::Unavailable("x".repeat(self.bytes))
+            } else {
+                CompleteProvider.parse_modifier(r)
+            }
+        }
+        fn lookup_unique(&mut self, r: &UniqueRequest) -> DependencyResult<Option<UniqueOutcome>> {
+            if self.stage == DependencyKind::UniqueDatabase {
+                DependencyResult::Unavailable("x".repeat(self.bytes))
+            } else {
+                CompleteProvider.lookup_unique(r)
+            }
+        }
+        fn assemble(&mut self, r: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+            if self.stage == DependencyKind::Assembly {
+                DependencyResult::Unavailable("x".repeat(self.bytes))
+            } else {
+                CompleteProvider.assemble(r)
+            }
+        }
+    }
+    let data = catalog();
+    for stage in [
+        DependencyKind::RangeFormatting,
+        DependencyKind::ModifierParser,
+        DependencyKind::UniqueDatabase,
+        DependencyKind::Assembly,
+    ] {
+        let raw = if stage == DependencyKind::UniqueDatabase {
+            "Rarity: UNIQUE\nCaller Name\nCaller Base"
+        } else {
+            "Rarity: NORMAL\nCaller Base\nImplicits: 0\nA"
+        };
+        let mut baseline = ItemLoadMachine::new(&data);
+        baseline
+            .apply_text(raw, &mut Pending { stage, bytes: 0 })
+            .unwrap();
+        assert_eq!(baseline.pending().unwrap().kind, stage);
+        let mut bounded = ItemLoadMachine::new(&data);
+        bounded
+            .apply_text(
+                raw,
+                &mut Pending {
+                    stage,
+                    bytes: MAX_ITEM_LOADING_DEPENDENCY_MESSAGE,
+                },
+            )
+            .unwrap();
+        assert_eq!(
+            bounded.pending().unwrap().message.len(),
+            MAX_ITEM_LOADING_DEPENDENCY_MESSAGE
+        );
+        assert_eq!(
+            bounded.evidence_bytes() - baseline.evidence_bytes(),
+            MAX_ITEM_LOADING_DEPENDENCY_MESSAGE
+        );
+        let mut oversized = ItemLoadMachine::new(&data);
+        let error = oversized
+            .apply_text(
+                raw,
+                &mut Pending {
+                    stage,
+                    bytes: MAX_ITEM_LOADING_DEPENDENCY_MESSAGE + 1,
+                },
+            )
+            .unwrap_err();
+        assert!(
+            error.to_string().contains("dependency message bound"),
+            "{stage:?}: {error}"
+        );
+        assert!(oversized.pending().is_none());
+    }
+}
+
+struct ExtraProvider {
+    bytes: usize,
+}
+impl ItemLoadProvider for ExtraProvider {
+    fn format_line(&mut self, r: &FormatRequest) -> DependencyResult<String> {
+        CompleteProvider.format_line(r)
+    }
+    fn parse_modifier(&mut self, _: &ParseRequest) -> DependencyResult<ParseOutcome> {
+        DependencyResult::Available(ParseOutcome {
+            modifiers: Some(vec![]),
+            extra: Some("x".repeat(self.bytes)),
+        })
+    }
+    fn assemble(&mut self, r: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+        CompleteProvider.assemble(r)
+    }
+}
+
+#[test]
+fn parser_extra_text_is_charged_and_cannot_accumulate_beyond_machine_budget() {
+    let data = catalog();
+    let raw = "Rarity: NORMAL\nCaller Base\nImplicits: 0\nA";
+    let mut baseline = ItemLoadMachine::new(&data);
+    baseline
+        .apply_text(raw, &mut ExtraProvider { bytes: 0 })
+        .unwrap();
+    let mut single = ItemLoadMachine::new(&data);
+    single
+        .apply_text(
+            raw,
+            &mut ExtraProvider {
+                bytes: MAX_ITEM_LOADING_TEXT,
+            },
+        )
+        .unwrap();
+    assert_eq!(
+        single.state().explicit_mod_lines[0]
+            .extra
+            .as_ref()
+            .unwrap()
+            .len(),
+        MAX_ITEM_LOADING_TEXT
+    );
+    assert_eq!(
+        single.evidence_bytes() - baseline.evidence_bytes(),
+        MAX_ITEM_LOADING_TEXT
+    );
+    let mut multiple = ItemLoadMachine::new(&data);
+    let error = multiple
+        .apply_text(
+            &format!("{raw}{}", "\nA".repeat(31)),
+            &mut ExtraProvider {
+                bytes: MAX_ITEM_LOADING_TEXT,
+            },
+        )
+        .unwrap_err();
+    assert!(error.to_string().contains("item evidence size bound"));
+    assert!(multiple.state().parser_calls.len() <= 16);
+    assert!(
+        multiple
+            .state()
+            .explicit_mod_lines
+            .iter()
+            .map(|row| row.extra.as_ref().map_or(0, String::len))
+            .sum::<usize>()
+            < MAX_ITEM_LOADING_EVIDENCE_BYTES
+    );
+}
+
+#[test]
+fn report_budget_includes_parser_extra_text_from_every_occurrence() {
+    let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+    let xml = format!(
+        "<PathOfBuilding2><Items>{}</Items></PathOfBuilding2>",
+        (1..=65)
+            .map(|id| format!(
+                "<Item id='{id}'><![CDATA[Rarity: NORMAL\nTribal Club\nImplicits: 0\nA]]></Item>"
+            ))
+            .collect::<String>()
+    );
+    let projection = poe_optimizer_import::item_source::project_xml(&xml).unwrap();
+    let error = inspect(
+        &projection,
+        &snapshot,
+        &mut ExtraProvider {
+            bytes: MAX_ITEM_LOADING_TEXT,
+        },
+    )
+    .unwrap_err();
+    assert!(
+        error.to_string().contains("report evidence size bound"),
+        "{error}"
+    );
+}
+
+#[test]
+fn assembly_state_bytes_are_bounded_before_any_update_is_applied() {
+    struct Large;
+    impl ItemLoadProvider for Large {
+        fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+            DependencyResult::Available(AssemblyOutcome {
+                modifier_payloads: None,
+                requirements: None,
+                state_updates: (0..17)
+                    .map(|i| {
+                        (
+                            format!("provider{i}"),
+                            ItemScalar::Text("x".repeat(MAX_ITEM_LOADING_TEXT)),
+                        )
+                    })
+                    .collect(),
+                evidence: ItemMetadataTable::default(),
+            })
+        }
+    }
+    let data = catalog();
+    let mut machine = ItemLoadMachine::new(&data);
+    let error = machine
+        .apply_text("Rarity: NORMAL\nCaller Base", &mut Large)
+        .unwrap_err();
+    assert!(error.to_string().contains("item evidence size bound"));
+    assert!(
+        !machine
+            .state()
+            .retained_fields
+            .keys()
+            .any(|key| key.starts_with("provider"))
+    );
+}
+
+#[test]
+fn empty_assembly_modifier_tables_count_towards_the_metadata_bound() {
+    struct EmptyTables;
+    impl ItemLoadProvider for EmptyTables {
+        fn format_line(&mut self, r: &FormatRequest) -> DependencyResult<String> {
+            CompleteProvider.format_line(r)
+        }
+        fn parse_modifier(&mut self, r: &ParseRequest) -> DependencyResult<ParseOutcome> {
+            CompleteProvider.parse_modifier(r)
+        }
+        fn assemble(&mut self, r: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+            DependencyResult::Available(AssemblyOutcome {
+                modifier_payloads: Some(AssemblyModifierPayloads {
+                    explicit_mod_lines: r
+                        .state
+                        .explicit_mod_lines
+                        .iter()
+                        .map(|_| vec![ItemMetadataTable::default(); 4096])
+                        .collect(),
+                    ..AssemblyModifierPayloads::default()
+                }),
+                requirements: None,
+                state_updates: BTreeMap::new(),
+                evidence: ItemMetadataTable::default(),
+            })
+        }
+    }
+    let data = catalog();
+    let mut machine = ItemLoadMachine::new(&data);
+    let error = machine
+        .apply_text(
+            &format!(
+                "Rarity: NORMAL\nCaller Base\nImplicits: 0{}",
+                "\nA".repeat(17)
+            ),
+            &mut EmptyTables,
+        )
+        .unwrap_err();
+    assert!(
+        error
+            .to_string()
+            .contains("dependency metadata value bound")
+    );
+    assert!(
+        machine
+            .state()
+            .explicit_mod_lines
+            .iter()
+            .all(|row| row.modifiers.is_empty())
+    );
+}

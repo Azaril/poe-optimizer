@@ -55,7 +55,7 @@ fn bundled_catalog_retains_complete_declarations_and_constructed_rows() {
             .unwrap()
             .identity()
             .schema_version,
-        13
+        14
     );
     let catalog = SkillIdentityCatalog::new(data.clone()).unwrap();
     for gem in &data.gems {

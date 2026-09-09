@@ -43,8 +43,8 @@ fn caller_mixed_item_content_preserves_distinct_loads_without_blocking_other_sec
     let xml = "<PathOfBuilding2><Skills><SkillSet id='8'/></Skills><Config><Input name='enemyLevel' number='90'/></Config><Items><Item id='007'>first<!--keep-->second<ModRange id='1' range='.25'/><![CDATA[ next &literal; ]]></Item><ItemSet id='9'><SocketIdURL nodeId='55' itemPbURL='caller metadata'/></ItemSet></Items><Spec><Sockets><Socket nodeId='55' itemId='007'/></Sockets></Spec></PathOfBuilding2>";
     fs::write(&input, xml).unwrap();
     let report = inspect(&input, temp.path());
-    assert_eq!(report["schema_version"], 2);
-    assert_eq!(report["scope"], "build_source_projection_v2");
+    assert_eq!(report["schema_version"], 3);
+    assert_eq!(report["scope"], "build_source_projection_v3");
     for section in ["items", "skills", "configuration"] {
         assert_eq!(report[section]["status"], "source_projected", "{section}");
     }
@@ -158,4 +158,175 @@ fn item_source_inspection_does_not_bypass_existing_native_lexical_admission() {
     );
     assert_eq!(fs::read_to_string(input).unwrap(), xml);
     assert_eq!(fs::read_to_string(fixture).unwrap(), original);
+}
+
+fn inspect_definitions(path: &Path, cwd: &Path, data: Option<&Path>) -> Value {
+    let mut command = cli();
+    command.current_dir(cwd).arg("inspect-build").arg(path);
+    if let Some(data) = data {
+        command.arg("--data").arg(data);
+    } else {
+        command.arg("--with-definitions");
+    }
+    let output = command.output().unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    serde_json::from_slice(&output.stdout).unwrap()
+}
+#[test]
+fn caller_catalog_changes_item_resolution_and_keeps_unavailable_operations_explicit() {
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller.xml");
+    let data_path = temp.path().join("caller-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    let mut base = package
+        .item_loading
+        .bases
+        .iter()
+        .find(|base| base.name == "Rusted Greathelm")
+        .unwrap()
+        .clone();
+    base.name = "Caller Supplied Helmet Base".into();
+    package.item_loading.bases.push(base);
+    package.refresh_section_digests().unwrap();
+    let data_bytes = package.canonical_bytes().unwrap();
+    fs::write(&data_path, &data_bytes).unwrap();
+    let xml = "<PathOfBuilding2><Items><Item id='007'>Rarity: Normal\nCaller Supplied Helmet Base\nItem Level: 1\nQuality: 0\n</Item></Items></PathOfBuilding2>";
+    fs::write(&input, xml).unwrap();
+    let bundled = inspect_definitions(&input, temp.path(), None);
+    assert_eq!(
+        bundled["definition_lookup"]["items"]["report"]["items"][0]["state"]["base_present"],
+        false
+    );
+    let selected = inspect_definitions(&input, temp.path(), Some(&data_path));
+    let loaded = &selected["definition_lookup"]["items"]["report"];
+    let item = &loaded["items"][0];
+    assert_eq!(item["authored_id"], "007");
+    assert_eq!(
+        item["source_occurrence"],
+        serde_json::json!({"container_index":0,"item_index":0})
+    );
+    assert_eq!(item["state"]["base_present"], true);
+    assert_eq!(item["state"]["base_name"], "Caller Supplied Helmet Base");
+    assert_eq!(item["status"], "pending");
+    assert!(
+        item["pending"]["message"]
+            .as_str()
+            .is_some_and(|value| !value.is_empty())
+    );
+    assert_eq!(item["instructions"][0]["kind"], "constructor");
+    assert_eq!(item["instructions"][0]["status"], "executed");
+    assert_eq!(
+        loaded["source_sha256"],
+        format!("{:x}", Sha256::digest(xml.as_bytes()))
+    );
+    assert_eq!(
+        loaded["data_identity"],
+        selected["definition_lookup"]["data"]
+    );
+    assert_eq!(
+        loaded["data_identity"]["content_sha256"],
+        format!("{:x}", Sha256::digest(&data_bytes))
+    );
+    assert_eq!(
+        loaded["implementation_sha256"],
+        selected["item_loading_implementation_sha256"]
+    );
+    assert_eq!(
+        loaded["implementation_sha256"],
+        poe_optimizer_import::item_loading::implementation_fingerprint()
+    );
+    assert_eq!(
+        selected["definition_lookup"]["data_trust"]["status"],
+        "custom_unreviewed"
+    );
+    assert_eq!(selected["verification"]["item_loading"], "reported");
+    assert_eq!(selected["verification"]["native_admission"], "not_checked");
+    assert_eq!(selected["verification"]["reference_calculation"], "not_run");
+    assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+    assert_eq!(fs::read(&data_path).unwrap(), data_bytes);
+}
+#[test]
+fn complete_corpus_inventory_receives_loading_evidence_without_changing_admission() {
+    let temp = tempfile::tempdir().unwrap();
+    let corpus =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/builds/breadth-20260908");
+    let mut count = 0;
+    let mut pending = 0;
+    for i in 1..=5 {
+        let input = corpus.join(format!("build-{i:02}.xml"));
+        let before = fs::read(&input).unwrap();
+        let report = inspect_definitions(&input, temp.path(), None);
+        let loaded = &report["definition_lookup"]["items"]["report"];
+        let items = loaded["items"].as_array().unwrap();
+        assert_eq!(items.len(), projection_count(&report, "inventory_item"));
+        assert_eq!(
+            loaded["source_sha256"],
+            format!("{:x}", Sha256::digest(&before))
+        );
+        assert_eq!(loaded["data_identity"], report["definition_lookup"]["data"]);
+        for item in items {
+            assert_eq!(
+                item["instructions"][0]["status"], "executed",
+                "empty constructor must advance"
+            );
+            assert_eq!(
+                item["instructions"].as_array().unwrap().last().unwrap()["kind"],
+                "final_assembly"
+            );
+            if item["status"] == "pending" {
+                pending += 1;
+                assert!(item["pending"]["message"].is_string());
+                let instructions = item["instructions"].as_array().unwrap();
+                let stop = instructions
+                    .iter()
+                    .position(|entry| entry["status"] == "pending")
+                    .unwrap();
+                assert!(
+                    instructions[stop + 1..]
+                        .iter()
+                        .all(|entry| entry["status"] == "not_executed")
+                );
+            }
+        }
+        count += items.len();
+        assert_eq!(report["verification"]["native_admission"], "not_checked");
+        assert_eq!(report["verification"]["reference_calculation"], "not_run");
+        assert_eq!(fs::read(&input).unwrap(), before);
+    }
+    assert_eq!(count, 116);
+    assert!(
+        pending > 0,
+        "missing native parser/assembly must remain observable"
+    );
+}
+#[test]
+fn item_loading_source_error_keeps_other_definition_sections_and_original_input() {
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("deep.xml");
+    let depth = poe_optimizer_import::item_source::MAX_ITEM_SOURCE_DEPTH + 1;
+    let xml = format!(
+        "<PathOfBuilding2><Items>{}{}</Items><Skills><SkillSet id='1'/></Skills></PathOfBuilding2>",
+        "<Future>".repeat(depth),
+        "</Future>".repeat(depth)
+    );
+    fs::write(&input, &xml).unwrap();
+    let report = inspect_definitions(&input, temp.path(), None);
+    assert_eq!(
+        report["definition_lookup"]["items"]["status"],
+        "not_reported"
+    );
+    assert_eq!(
+        report["definition_lookup"]["items"]["source_error"],
+        report["items"]["error"]
+    );
+    assert_eq!(report["definition_lookup"]["skills"]["status"], "looked_up");
+    assert_eq!(report["verification"]["item_loading"], "not_reported");
+    assert_eq!(fs::read_to_string(&input).unwrap(), xml);
 }

@@ -145,7 +145,155 @@ def item_report():
     return xml, report
 
 
+def loading_report():
+    xml, report = item_report()
+    report.update(schema_version=3, scope="build_source_projection_v3")
+    report["definition_lookup"] = build_report(xml, definitions=True)["definition_lookup"]
+    report["verification"]["item_loading"] = "reported"
+    implementation = "b" * 64
+    report["item_loading_implementation_sha256"] = implementation
+    item = report["items"]["projection"]["containers"][0]["children"][0]
+    fragments = item["ordered_content"]["fragments"]
+    def instruction(index, kind, consumed=None, bounds=None, text=None):
+        return {"index": index, "kind": kind, "consumed_index": consumed, "source_range": bounds,
+                "text_sha256": hashlib.sha256(text.encode()).hexdigest() if text is not None else None,
+                "status": "executed", "error": None}
+    instructions = [instruction(0, "constructor")]
+    for index, entry in enumerate(item["ordered_content"]["consumed"]):
+        if entry["kind"] == "text":
+            indices = entry["fragment_indices"]
+            bounds = {"start": fragments[indices[0]]["range"]["start"], "end": fragments[indices[-1]]["range"]["end"]}
+            instructions.append(instruction(index+1, "text", index, bounds, entry["text"]))
+        else:
+            instructions.append(instruction(index+1, "mod_range", index,
+                item["children"][entry["child_index"]]["element"]["source_range"]))
+    instructions.append(instruction(len(instructions), "final_assembly"))
+    # A deliberately incomplete provider result exercises transport only.
+    instructions[1]["status"] = "pending"
+    for entry in instructions[2:]:
+        entry["status"] = "not_executed"
+    record = {"source_occurrence": {"container_index": 0, "item_index": 0},
+              "source_range": item["element"]["source_range"], "authored_id": "42",
+              "instructions": instructions, "state": {"raw": "firstsecond"}, "status": "pending",
+              "pending": {"kind": "modifier_parser", "line_index": 0, "message": "not implemented"}}
+    report["definition_lookup"]["items"] = {"status": "load_reported", "report": {
+        "schema_version": 1, "source_sha256": report["input"]["xml_sha256"],
+        "data_identity": report["definition_lookup"]["data"], "implementation_sha256": implementation,
+        "items": [record]}}
+    return xml, report
+
+
 class CorpusTests(unittest.TestCase):
+    def test_loading_schema3_binds_partial_trace_to_every_authored_instruction(self):
+        xml, report = loading_report()
+        summary = INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), True, DATA_HASH, xml)
+        self.assertEqual(summary["report_schema_version"], 3)
+        self.assertEqual(summary["item_loading_counts"], {"pending": 1})
+        self.assertEqual(summary["item_loading_dependencies"], {"modifier_parser": 1})
+        self.assertEqual(summary["item_loading_occurrences"][0]["instruction_counts"],
+                         {"executed": 1, "pending": 1, "not_executed": 3})
+        self.assertEqual(summary["verification"]["native_admission"], "not_checked")
+
+    def test_loading_rejects_changed_provenance_omissions_and_invalid_execution_suffix(self):
+        xml, original = loading_report()
+        mutations = [
+            lambda r: r["definition_lookup"]["items"]["report"].update(source_sha256="c"*64),
+            lambda r: r["definition_lookup"]["items"]["report"].update(data_identity={"content_sha256":"c"*64}),
+            lambda r: r["definition_lookup"]["items"]["report"].update(implementation_sha256="c"*64),
+            lambda r: r["definition_lookup"]["items"]["report"]["items"].clear(),
+            lambda r: r["definition_lookup"]["items"]["report"]["items"][0].update(authored_id="042"),
+            lambda r: r["definition_lookup"]["items"]["report"]["items"][0]["source_occurrence"].update(item_index=1),
+            lambda r: r["definition_lookup"]["items"]["report"]["items"][0]["instructions"].pop(),
+            lambda r: r["definition_lookup"]["items"]["report"]["items"][0]["instructions"][1].update(text_sha256="c"*64),
+            lambda r: r["definition_lookup"]["items"]["report"]["items"][0]["instructions"][1].update(consumed_index=1),
+            lambda r: r["definition_lookup"]["items"]["report"]["items"][0]["instructions"][2].update(status="executed"),
+            lambda r: r["definition_lookup"]["items"]["report"]["items"][0].update(status="complete",pending=None),
+            lambda r: r["definition_lookup"]["items"]["report"]["items"][0].update(pending=None),
+            lambda r: r["definition_lookup"]["items"]["report"]["items"][0]["state"].update(number=float("nan")),
+            lambda r: r["verification"].update(item_loading="not_run"),
+        ]
+        for index, mutate in enumerate(mutations):
+            with self.subTest(mutation=index), self.assertRaises(ValueError):
+                report = copy.deepcopy(original)
+                mutate(report)
+                INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), True, DATA_HASH, xml)
+
+    def test_loading_no_op_instructions_cannot_invent_stops_or_errors(self):
+        for kind in ["constructor", "ignored"]:
+            for failed in [False, True]:
+                xml, report = loading_report()
+                record = report["definition_lookup"]["items"]["report"]["items"][0]
+                instructions = record["instructions"]
+                # The ignored case tests the loading boundary with an independent
+                # projected no-op instruction, without forging the source reader.
+                if kind == "ignored":
+                    instructions[2]["kind"] = "ignored"
+                    instructions[1]["status"] = "executed"
+                    instructions[2]["status"] = "executed"
+                    instructions[3]["status"] = "pending"
+                sources = [{key: record[key] for key in ["source_occurrence", "authored_id"]}]
+                sources[0]["source_range"] = list(record["source_range"].values())
+                sources[0]["instructions"] = [
+                    {"kind": i["kind"], "consumed_index": i["consumed_index"],
+                     "text_sha256": i["text_sha256"], "source_range": list(i["source_range"].values())}
+                    for i in instructions[1:-1]]
+                def summarize():
+                    return INTAKE.item_loading_summary(report, report["definition_lookup"]["data"],
+                                                       hashlib.sha256(xml).hexdigest(), sources)
+                summarize()  # The ordinary prefix and pending text remain valid.
+                stop = 0 if kind == "constructor" else 2
+                instructions[stop].update(status="executed" if failed else "pending",
+                                          error="invented failure" if failed else None)
+                for instruction in instructions[stop+1:]:
+                    instruction.update(status="not_executed", error=None)
+                if failed:
+                    record.update(status="source_error", pending=None)
+                with self.subTest(kind=kind, failed=failed), self.assertRaisesRegex(ValueError, kind):
+                    summarize()
+
+    def test_loading_dependency_and_error_diagnostics_share_the_metadata_budget(self):
+        for failed in [False, True]:
+            xml, report = loading_report()
+            record = report["definition_lookup"]["items"]["report"]["items"][0]
+            if failed:
+                record.update(status="source_error", pending=None)
+                record["instructions"][1].update(status="executed", error="x" * 100)
+            else:
+                record["pending"]["message"] = "x" * 100
+            with self.subTest(failed=failed), patch.object(INTAKE, "MAX_LOADING_TEXT_BYTES", 99):
+                with self.assertRaisesRegex(ValueError, "text bound"):
+                    INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), True, DATA_HASH, xml)
+
+    def test_loading_source_failure_stops_suffix_and_is_not_a_provider_dependency(self):
+        xml, report = loading_report()
+        record = report["definition_lookup"]["items"]["report"]["items"][0]
+        record.update(status="source_error", pending=None)
+        record["instructions"][1].update(status="executed", error="original operation failed")
+        summary = INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), True, DATA_HASH, xml)
+        self.assertEqual(summary["item_loading_counts"], {"source_error": 1})
+        self.assertEqual(summary["item_loading_dependencies"], {})
+        record["instructions"][1]["error"] = None
+        with self.assertRaises(ValueError):
+            INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), True, DATA_HASH, xml)
+
+    def test_loading_keeps_section_errors_and_legacy_reports_distinct(self):
+        xml, report = loading_report()
+        error = {"reason": "source bound"}
+        report["items"] = {"status": "not_projected", "error": error}
+        report["definition_lookup"]["items"] = {"status": "not_reported", "source_error": error}
+        report["verification"]["item_loading"] = "not_reported"
+        summary = INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), True, DATA_HASH, xml)
+        self.assertEqual(summary["item_loading_status"], "not_reported")
+        self.assertEqual(summary["skill_identity_status"], "looked_up")
+        report["definition_lookup"]["items"]["source_error"] = {"reason": "different"}
+        with self.assertRaises(ValueError):
+            INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), True, DATA_HASH, xml)
+        xml, report = loading_report()
+        report.update(schema_version=2, scope="build_source_projection_v2")
+        report["verification"]["item_loading"] = "not_run"
+        with self.assertRaises(ValueError):
+            INTAKE.build_source_summary(report, hashlib.sha256(xml).hexdigest(), len(xml), True, DATA_HASH, xml)
+
     def test_lines_preserve_offsets_bom_blank_and_mixed_endings(self):
         raw = b"\xef\xbb\xbfone\r\n\n two \nlast"
         rows = INTAKE.line_records(raw)
@@ -311,7 +459,7 @@ class CorpusTests(unittest.TestCase):
                 with patch.object(INTAKE, "invoke", side_effect=fake_invoke), contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(INTAKE.main(args), 0 if outcome == "success" else 1)
                 index = json.loads((output / "index.json").read_bytes())
-                self.assertEqual(index["schema_version"], 4)
+                self.assertEqual(index["schema_version"], 5)
                 self.assertTrue(index["configuration_inspection_requested"])
                 entry = index["entries"][0]
                 self.assertEqual(entry["status"], "imported")
@@ -538,7 +686,7 @@ class CorpusTests(unittest.TestCase):
                 with patch.object(INTAKE, "invoke", side_effect=fake_invoke), contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(INTAKE.main(args), 0 if outcome == "success" else 1)
                 index = json.loads((output / "index.json").read_bytes())
-                self.assertEqual(index["schema_version"], 4)
+                self.assertEqual(index["schema_version"], 5)
                 self.assertTrue(index["build_inspection_requested"])
                 self.assertTrue(index["definition_lookup_requested"])
                 self.assertEqual(calls, ["import", "build_source", "pob"])

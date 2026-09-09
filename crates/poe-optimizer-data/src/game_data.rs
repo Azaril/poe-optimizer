@@ -7,6 +7,7 @@ pub use crate::actor::*;
 use crate::bundled::BundledClassTree;
 pub use crate::configuration::*;
 pub use crate::item_formatting::{ItemFormattingData, ItemFormattingRule, ItemNumberFormat};
+pub use crate::item_loading::*;
 pub use crate::item_rules::{
     ItemCaptureKind, ItemModifierMapping, ItemModifierRoll, ItemModifierRule, LocalWeaponOperation,
     LocalWeaponStat,
@@ -19,8 +20,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 13;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v13";
+pub const SCHEMA_VERSION: u32 = 14;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v14";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -46,6 +47,7 @@ const SECTIONS: &[&str] = &[
     "direct_action_timing",
     "configuration",
     "skill_identities",
+    "item_loading",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -432,6 +434,7 @@ pub struct GameDataPackage {
     pub direct_action_timing: DirectActionTimingData,
     pub configuration: ConfigurationData,
     pub skill_identities: SkillIdentityData,
+    pub item_loading: ItemLoadingData,
 }
 impl GameDataPackage {
     pub fn armour_base(&self, id: &str) -> Option<&ArmourBaseData> {
@@ -510,6 +513,7 @@ pub struct GameDataSnapshot {
     package: GameDataPackage,
     configuration: ConfigDefinitionCatalog,
     skill_identities: SkillIdentityCatalog,
+    item_loading: ItemLoadingCatalog,
 }
 impl GameDataSnapshot {
     pub fn identity(&self) -> &DataIdentity {
@@ -523,6 +527,9 @@ impl GameDataSnapshot {
     }
     pub fn configuration(&self) -> &ConfigDefinitionCatalog {
         &self.configuration
+    }
+    pub fn item_loading(&self) -> &ItemLoadingCatalog {
+        &self.item_loading
     }
     pub fn skill_identities(&self) -> &SkillIdentityCatalog {
         &self.skill_identities
@@ -583,12 +590,14 @@ impl GameDataLoader {
         identity.validate().map_err(error)?;
         let configuration = ConfigDefinitionCatalog::new(package.configuration.clone())?;
         let skill_identities = SkillIdentityCatalog::new(package.skill_identities.clone())?;
+        let item_loading = ItemLoadingCatalog::new(package.item_loading.clone())?;
         Ok(GameDataSnapshot {
             identity,
             trust,
             package,
             configuration,
             skill_identities,
+            item_loading,
         })
     }
 }
@@ -684,6 +693,7 @@ fn number(name: &str, value: f64, minimum: f64, maximum: f64) -> Result<()> {
 }
 fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     package.skill_identities.validate()?;
+    package.item_loading.validate()?;
     let m = &package.manifest;
     if m.schema_version != SCHEMA_VERSION {
         return Err(error("unsupported schema_version"));
@@ -960,10 +970,20 @@ fn validate_numbers(path: &str, value: &serde_json::Value) -> Result<()> {
 // before serde's ordinary map handling could silently keep the last occurrence.
 fn bounded_json(bytes: &[u8], limits: &LoadLimits) -> Result<serde_json::Value> {
     use serde::de::{DeserializeSeed, Error as _};
+    #[derive(Clone, Copy)]
+    enum ItemStringScope {
+        Root,
+        ItemLoading,
+        UniqueGroups,
+        PrototypeGroup,
+        Prototype,
+        Other,
+    }
     struct Seed<'a> {
         limits: &'a LoadLimits,
         remaining: &'a mut usize,
         depth: usize,
+        item_scope: ItemStringScope,
     }
     impl<'de> DeserializeSeed<'de> for Seed<'_> {
         type Value = serde_json::Value;
@@ -998,7 +1018,13 @@ fn bounded_json(bytes: &[u8], limits: &LoadLimits) -> Result<serde_json::Value> 
                 .ok_or_else(|| E::custom("nonfinite JSON number"))
         }
         fn visit_str<E: serde::de::Error>(self, v: &str) -> std::result::Result<Self::Value, E> {
-            if v.len() > self.limits.max_string_bytes {
+            if v.len()
+                > if matches!(self.item_scope, ItemStringScope::Prototype) {
+                    self.limits.max_string_bytes.saturating_mul(16).min(65_536)
+                } else {
+                    self.limits.max_string_bytes
+                }
+            {
                 Err(E::custom("JSON string limit exceeded"))
             } else {
                 Ok(v.into())
@@ -1008,7 +1034,13 @@ fn bounded_json(bytes: &[u8], limits: &LoadLimits) -> Result<serde_json::Value> 
             self,
             v: String,
         ) -> std::result::Result<Self::Value, E> {
-            if v.len() > self.limits.max_string_bytes {
+            if v.len()
+                > if matches!(self.item_scope, ItemStringScope::Prototype) {
+                    self.limits.max_string_bytes.saturating_mul(16).min(65_536)
+                } else {
+                    self.limits.max_string_bytes
+                }
+            {
                 Err(E::custom("JSON string limit exceeded"))
             } else {
                 Ok(v.into())
@@ -1029,6 +1061,11 @@ fn bounded_json(bytes: &[u8], limits: &LoadLimits) -> Result<serde_json::Value> 
                 limits: self.limits,
                 remaining: self.remaining,
                 depth: self.depth + 1,
+                item_scope: if matches!(self.item_scope, ItemStringScope::PrototypeGroup) {
+                    ItemStringScope::Prototype
+                } else {
+                    ItemStringScope::Other
+                },
             })? {
                 values.push(v)
             }
@@ -1050,6 +1087,14 @@ fn bounded_json(bytes: &[u8], limits: &LoadLimits) -> Result<serde_json::Value> 
                     limits: self.limits,
                     remaining: self.remaining,
                     depth: self.depth + 1,
+                    item_scope: match (self.item_scope, k.as_str()) {
+                        (ItemStringScope::Root, "item_loading") => ItemStringScope::ItemLoading,
+                        (ItemStringScope::ItemLoading, "unique_groups") => {
+                            ItemStringScope::UniqueGroups
+                        }
+                        (ItemStringScope::UniqueGroups, _) => ItemStringScope::PrototypeGroup,
+                        _ => ItemStringScope::Other,
+                    },
                 })?;
                 values.insert(k, v);
             }
@@ -1062,6 +1107,7 @@ fn bounded_json(bytes: &[u8], limits: &LoadLimits) -> Result<serde_json::Value> 
         limits,
         remaining: &mut remaining,
         depth: 1,
+        item_scope: ItemStringScope::Root,
     }
     .deserialize(&mut deserializer)
     .map_err(error)?;

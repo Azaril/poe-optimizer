@@ -23,8 +23,8 @@ fn caller_structure_is_preserved_without_a_runtime_or_build_default() {
         String::from_utf8_lossy(&output.stderr)
     );
     let report: Value = serde_json::from_slice(&output.stdout).unwrap();
-    assert_eq!(report["schema_version"], 2);
-    assert_eq!(report["scope"], "build_source_projection_v2");
+    assert_eq!(report["schema_version"], 3);
+    assert_eq!(report["scope"], "build_source_projection_v3");
     assert_eq!(report["items"]["status"], "source_projected");
     assert_eq!(report["verification"]["item_loading"], "not_run");
     assert_eq!(

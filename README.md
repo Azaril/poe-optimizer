@@ -68,8 +68,10 @@ problem 11/report 12 searches authored action-speed sources. [Breadth validation
 uses the five newly supplied full builds to guide general native admission and further shared
 pipelines. Caller-driven [`inspect-build`](docs/build-source-containers.md) preserves
 root/container, skill, configuration and [item-source evidence](docs/item-source-and-loading.md)
-within the shared bounded XML/lexical subset. It does not load PoB, run item parsing or
-calculate effects; narrow metadata admission is separate from native skill coverage. Current native support remains bounded to Spark/Mace. On the legacy command, `--backend pob`
+within the shared bounded XML/lexical subset. With `--with-definitions` or `--data`, it also
+reports ordered native item loading against the selected catalog, stopping at missing
+parser/assembly operations. Inspection does not calculate effects; native skill admission
+remains separate and currently bounded to Spark/Mace. On the legacy command, `--backend pob`
 selects the optional reference backend. Native search uses [typed candidate calculation](docs/native-candidate-evaluation.md)
 by default, with complete document evaluation available through `--native-evaluation document`.
 Search baselines, when a legal initial seed exists, and finalist checks recalculate complete documents.
@@ -150,7 +152,7 @@ The current `example.import.txt` contains five builds, one per line; use the
 [corpus intake runner](docs/breadth-validation.md#reproduce-corpus-intake) for that file. Add
 `--inspect-build --with-definitions` to retain source skill occurrences, ordered raw item/range
 instructions, saved equipment sets, passive-spec jewel references and injected skill/configuration
-identity evidence alongside the independent evaluation results. The runner writes corpus schema 4. `--inspect-configuration`
+identity evidence and explicit native item-loading stops alongside independent evaluation results. The runner writes corpus schema 5. `--inspect-configuration`
 retains a separate configuration source report. Individual XML/share
 inputs can also be inspected with `inspect-configuration INPUT --with-definitions` to look
 up settings in the complete injected catalog; `--data PACKAGE` selects custom definitions.
@@ -159,16 +161,19 @@ Definition recognition does not evaluate effects. Omitting both options gives so
 reports source data separately from unimplemented mechanics.
 Single-build commands accept one build document or share string.
 
-`inspect-build INPUT` report schema 2 preserves authored skill sets, groups, gems and selectors,
+`inspect-build INPUT` report schema 3 preserves authored skill sets, groups, gems and selectors,
 plus an independent item projection. Item evidence separates exact text/comment/CDATA fragments
 from ordered strings and child instructions consumed by the PoB XML reader. It preserves
 ModRange order, inactive equipment sets and jewel assignments under their original passive specs.
-`Item.ParseRaw`, equipment resolution and passive-allocation checks are not run. See
+Source-only inspection does not execute item loading. Equipment resolution and
+passive-allocation checks remain separate. See
 [item source and loading](docs/item-source-and-loading.md).
 
 Add `--with-definitions` or `--data PACKAGE` for source-bound skill/configuration identity
-lookup; these options do not resolve items. Ambiguous identities and unprocessed names remain
-explicit. [Skill inspection](docs/skill-source-and-identities.md) works with the native-only CLI
+lookup and ordered native item-loading diagnostics against the complete injected base catalog.
+Missing parser, formatting or assembly dependencies stop loading explicitly, preserving the
+state reached and later unexecuted instructions. A loading report does not certify complete
+item calculations or build support. Ambiguous identities and unprocessed names remain explicit. [Skill inspection](docs/skill-source-and-identities.md) works with the native-only CLI
 and does not claim numerical support for recognized skills. Local projection errors remain
 separate after the document passes the shared XML/lexical gate; a global failure prevents the
 inspection report.

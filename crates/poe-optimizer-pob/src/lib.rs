@@ -2,6 +2,7 @@
 mod configuration_extract;
 pub mod game_data;
 pub mod game_data_worker;
+mod item_loading_extract;
 pub mod mutation;
 mod skill_identity_extract;
 pub mod tree_data;
