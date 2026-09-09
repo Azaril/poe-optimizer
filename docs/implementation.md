@@ -3,7 +3,10 @@
 Last updated: 2026-09-09
 
 Current checkpoint: **injected item definitions and ordered native item loading**,
-implemented and locally validated; publication is underway. The schema-14 data package
+implemented, locally validated and published as
+`43251c748ce735783bb0df6357f54f16d4134e35` on main.
+[Exact-code CI run 34320179629](https://github.com/Azaril/poe-optimizer/actions/runs/34320179629)
+is running on Windows and Linux; no hosted pass is claimed yet. The schema-14 data package
 contains the complete source item catalog. Native import preserves ordered loading state
 and stops at explicit missing parser/assembly dependencies. Original-source comparisons
 pass, including all 116 corpus items; this does not establish complete native item
@@ -264,9 +267,9 @@ evidence into calculation capability. Custom provider provenance remains the hos
 | Existing numerical behavior | Both established actor/build parity tests pass with the final data package. `runs/item-loading-actor-build-parity.log`. No native build admission is expanded. |
 | Portable deployment | **69 native tests**, **114 native-only CLI tests**, strict native-only Clippy, all five WASM libraries and the normal-dependency check pass. The native-only dependency graph excludes PoB/Lua. Workspace all-target Clippy also passes. Broad suites precede the final resource-only guard edits; final loader/source tests, executable rebuild, native-only lint and five-library WASM refresh also pass. All 266 captured source/artifact hashes remain stable through that refresh. `runs/item-loading-deployment-summary.json`, `runs/item-loading-workspace-frozen-clippy.log`. |
 | Preservation | **25 non-package protected files** remain exact; all old 23 package sections and digests are unchanged. Pinned PoB, tree, caller exports and six independent calibration goldens remain fixed. `runs/item-loading-final-preservation.json`, `runs/item-loading-root-final-package-validation.json`. All 44 documentation/notice files decode as UTF-8, 467 local links resolve, formatting and diff checks pass (`runs/item-loading-docs-audit.json`). |
-| Publication | Local validation complete; push and exact-code hosted CI check follow. Full native parity remains unfinished. |
+| Publication | Code `43251c748ce735783bb0df6357f54f16d4134e35` is pushed to main. [Exact-code CI run 34320179629](https://github.com/Azaril/poe-optimizer/actions/runs/34320179629) is running on Windows and Linux; no hosted pass is claimed. `runs/item-loading-publication-ci.json`. Full native parity remains unfinished. |
 
-Next resume point: publish this checkpoint and check its exact-code hosted CI, then
+Next resume point: check exact-code run 34320179629 and diagnose any failure from its logs, then
 continue B2 dependency closure with reusable native modifier parsing/formatting and item
 assembly components. The next bounded source port is exact ItemTools range/catalyst text
 formatting: inject the complete case-sensitive scalability keys, per-capture scalability,
