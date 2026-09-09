@@ -405,7 +405,7 @@ fn bundled_snapshot_exposes_complete_ordered_catalog_independently_of_an_evaluat
     use poe_optimizer_data::game_data::*;
     let snapshot = bundled_snapshot().unwrap();
     let catalog = snapshot.configuration();
-    assert_eq!(snapshot.identity().schema_version, 19);
+    assert_eq!(snapshot.identity().schema_version, 20);
     assert_eq!(catalog.data(), &snapshot.package().configuration);
     assert_eq!(catalog.definitions().len(), 564);
     assert_eq!(catalog.unique_key_count(), 563);

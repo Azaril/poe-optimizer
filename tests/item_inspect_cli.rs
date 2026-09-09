@@ -821,3 +821,151 @@ fn injected_affix_records_limits_and_legacy_names_reach_cli_without_admission() 
     assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
     assert_eq!(fs::read(&data_path).unwrap(), bytes);
 }
+
+#[test]
+fn injected_rune_names_slots_and_numeric_grammar_rebuild_with_generated_origins() {
+    use poe_optimizer_data::item_loading::{ItemMetadataTable, ItemMetadataValue};
+    use std::collections::BTreeMap;
+
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller-runes.xml");
+    let data_path = temp.path().join("caller-rune-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    let base_name = package
+        .item_loading
+        .bases
+        .iter()
+        .find(|base| {
+            base.field("weapon")
+                .is_some_and(|value| !matches!(value, ItemMetadataValue::Boolean(false)))
+                && !base.name.contains(['&', '<', '>'])
+        })
+        .unwrap()
+        .name
+        .clone();
+    let family = "Caller Rune Definitions";
+    let names = ["Caller Azure Fragment", "Caller Ochre Fragment"];
+    let slot = "caller weapon slot";
+    let rune_header = "CallerRune";
+    let socket_header = "CallerSockets";
+    package
+        .item_loading
+        .policy
+        .header_names
+        .extend([rune_header.into(), socket_header.into()]);
+    let policy = &mut package.item_loading.policy.rune_loading;
+    policy.rune_header = rune_header.into();
+    policy.socket_header = socket_header.into();
+    policy.rune_table = family.into();
+    policy.broad_weapon_type = slot.into();
+    policy.socket_character_pattern = "q".into();
+    policy.item_socket_pattern = "^q$".into();
+    // This caller grammar treats a multi-digit decimal as one capture. The
+    // shipped rune grammar would split 12.34 into separate 12 and 34 captures.
+    policy.numeric_pattern = "(%d+%.?%d*)".into();
+    policy.stripped_marker = "@".into();
+    policy.order_default = 7.5;
+    let augment_type = policy.rune_augment_type.clone();
+    let definitions = names
+        .into_iter()
+        .zip(["+12.34 to maximum Life", "+5.67 to maximum Life"])
+        .map(|(name, line)| {
+            (
+                name.into(),
+                ItemMetadataValue::Table(ItemMetadataTable {
+                    fields: BTreeMap::from([(
+                        slot.into(),
+                        ItemMetadataValue::Table(ItemMetadataTable {
+                            fields: BTreeMap::from([
+                                ("type".into(), ItemMetadataValue::Text(augment_type.clone())),
+                                ("levelReq".into(), ItemMetadataValue::Number(1.0)),
+                            ]),
+                            indexed: BTreeMap::from([(1, ItemMetadataValue::Text(line.into()))]),
+                        }),
+                    )]),
+                    indexed: BTreeMap::new(),
+                }),
+            )
+        })
+        .collect();
+    package.item_loading.modifier_tables.insert(
+        family.into(),
+        ItemMetadataTable {
+            fields: definitions,
+            indexed: BTreeMap::new(),
+        },
+    );
+    package.unique_requirements =
+        poe_optimizer_data::unique_requirements::UniqueRequirementData::unavailable(
+            "caller changes rune construction inputs",
+        );
+    package.refresh_section_digests().unwrap();
+    let bytes = package.canonical_bytes().unwrap();
+    fs::write(&data_path, &bytes).unwrap();
+    let xml = format!(
+        "<PathOfBuilding2><Items><Item id='caller-runes'>Rarity: Normal\n{base_name}\n{socket_header}: qq\n{rune_header}: {}\n{rune_header}: {}\n</Item></Items></PathOfBuilding2>",
+        names[0], names[1]
+    );
+    fs::write(&input, &xml).unwrap();
+    let report = inspect_definitions(&input, temp.path(), Some(&data_path));
+    let item = &report["definition_lookup"]["items"]["report"]["items"][0];
+    let state = &item["state"];
+    assert_eq!(state["base_name"], base_name);
+    assert_eq!(state["runes"], serde_json::json!(names));
+    assert_eq!(state["sockets"], serde_json::json!([0, 1]));
+    assert_eq!(state["item_socket_count"], 2);
+    let lines = state["rune_mod_lines"].as_array().unwrap();
+    assert_eq!(lines.len(), 1, "{item:#}");
+    let line = &lines[0];
+    assert_eq!(line["line"], "+18.01 to maximum Life");
+    assert!(line["source_line"].is_null());
+    assert_eq!(line["augment_type"], augment_type);
+    assert_eq!(
+        line["order"],
+        serde_json::json!({"kind":"finite","value":7.5})
+    );
+    assert_eq!(
+        line["rune_origins"],
+        serde_json::json!([
+            {"socket_index":1,"slot_key":slot,"bonded":false,"definition_line_index":1,"combined":false},
+            {"socket_index":2,"slot_key":slot,"bonded":false,"definition_line_index":1,"combined":true}
+        ])
+    );
+    let calls = state["parser_calls"].as_array().unwrap();
+    assert_eq!(calls.len(), 2, "{item:#}");
+    for (index, text) in ["+12.34 to maximum Life", "+18.01 to maximum Life"]
+        .into_iter()
+        .enumerate()
+    {
+        assert_eq!(calls[index]["text"], text);
+        assert!(calls[index]["line_index"].is_null());
+        assert_eq!(calls[index]["origin"], line["rune_origins"][index]);
+        assert_eq!(
+            calls[index]["combined"], false,
+            "parser argument differs from contribution provenance"
+        );
+    }
+    assert_eq!(item["status"], "pending", "{item:#}");
+    assert_eq!(item["pending"]["kind"], "assembly", "{item:#}");
+    assert_eq!(
+        line["rune_count"],
+        serde_json::json!({"kind":"finite","value":2.0})
+    );
+    assert_eq!(line["socketed_rune_effect_already_applied"], false);
+    assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
+    assert_eq!(report["verification"]["native_admission"], "not_checked");
+    assert_eq!(report["verification"]["reference_calculation"], "not_run");
+    assert_eq!(
+        report["definition_lookup"]["data_trust"]["status"],
+        "custom_unreviewed"
+    );
+    assert_eq!(
+        report["definition_lookup"]["data"]["content_sha256"],
+        format!("{:x}", Sha256::digest(&bytes))
+    );
+    assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+    assert_eq!(fs::read(&data_path).unwrap(), bytes);
+}

@@ -118,7 +118,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 19 and `poe2-native-profiles-v19`, including source-keyed passive/actor effects,
+schema 20 and `poe2-native-profiles-v20`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -234,3 +234,11 @@ Separate extraction mutation tests reject discarded fields, changed
 source scope, unsupported tags and mismatched rule operands. These checks prove the stated
 data/input boundaries. Native build parity, resource reservation, conversion receivers,
 additional skills and minion actors still require their own differential validation.
+
+Item-loading schema 4 also extracts socketed-augment loading policy from the authenticated
+`Item.ParseRaw`, `UpdateRunes`, `GetSocketedAugmentTypes` and display-scalar source spans.
+The complete raw rune family remains source data, including ordinary/Bonded rows, stat
+orders, augment types and all-slot requirements. Changed-literal extraction tests verify
+that policy values are read from source; divergent source structure is rejected. Primitive
+and full-method parity tests execute original Lua separately from the extractor. Native
+runtime consumes only the portable selected package.

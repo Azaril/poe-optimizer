@@ -15,7 +15,21 @@ fn catalog() -> ItemLoadingCatalog {
     let assignment = |field, kind| {
         ItemMetadataValue::Table(table([("field", text(field)), ("kind", text(kind))]))
     };
+    static RUNE_POLICY: std::sync::OnceLock<ItemRuneLoadingPolicy> = std::sync::OnceLock::new();
+    let mut rune_loading = RUNE_POLICY
+        .get_or_init(|| {
+            poe_optimizer_data::game_data::bundled_snapshot()
+                .unwrap()
+                .item_loading()
+                .policy()
+                .rune_loading
+                .clone()
+        })
+        .clone();
+    rune_loading.other_headers = ["Prefix".into(), "Suffix".into()].into();
+    rune_loading.other_header_patterns.clear();
     let policy = ItemLoadingPolicy {
+        rune_loading,
         affix_loading: ItemAffixLoadingPolicy {
             headers: [
                 ("Prefix".into(), ItemAffixSide::Prefix),
@@ -74,7 +88,14 @@ fn catalog() -> ItemLoadingCatalog {
             .into_iter()
             .map(str::to_owned)
             .collect(),
-        header_names: ["Prefix".into(), "Suffix".into()].into_iter().collect(),
+        header_names: [
+            "Prefix".into(),
+            "Suffix".into(),
+            "Rune".into(),
+            "Sockets".into(),
+        ]
+        .into_iter()
+        .collect(),
         defence_header_keys: BTreeMap::new(),
         compatibility: [
             (
@@ -178,6 +199,10 @@ fn catalog() -> ItemLoadingCatalog {
             source_module: source_file,
             fields: table([
                 ("type", text("Caller Type")),
+                (
+                    "tags",
+                    ItemMetadataValue::Table(ItemMetadataTable::default()),
+                ),
                 ("quality", ItemMetadataValue::Number(20.0)),
                 (
                     "req",
@@ -188,9 +213,12 @@ fn catalog() -> ItemLoadingCatalog {
                 ),
             ]),
         }],
-        modifier_tables: [("Item".into(), ItemMetadataTable::default())]
-            .into_iter()
-            .collect(),
+        modifier_tables: [
+            ("Item".into(), ItemMetadataTable::default()),
+            ("Runes".into(), ItemMetadataTable::default()),
+        ]
+        .into_iter()
+        .collect(),
         unique_groups: BTreeMap::new(),
         jewel_radii: ItemMetadataTable::default(),
     })
@@ -551,25 +579,36 @@ fn source_item_line_sideeffects_cannot_be_bypassed_with_empty_parse_results() {
         "+1 prefix modifier allowed"
     );
 
-    for (text, kind) in [
-        (
-            "This Item gains bonuses from socketed items as though it was a Helmet",
-            DependencyKind::RuneReconstruction,
-        ),
-        (
-            "20% increased modifier magnitudes",
-            DependencyKind::ModifierMagnitudes,
-        ),
-    ] {
-        let mut m = ItemLoadMachine::new(&data);
-        m.apply_text(
-            &format!("Rarity: NORMAL\nCaller Base\nImplicits: 0\n{text}"),
-            &mut CompleteProvider,
-        )
-        .unwrap();
-        assert_eq!(m.pending().unwrap().kind, kind);
-        assert!(m.state().explicit_mod_lines.is_empty());
-    }
+    let text = "This Item gains bonuses from socketed items as though it was a Helmet";
+    let mut m = ItemLoadMachine::new(&data);
+    m.apply_text(
+        &format!("Rarity: NORMAL\nCaller Base\nImplicits: 0\n{text}"),
+        &mut CompleteProvider,
+    )
+    .unwrap();
+    assert!(m.pending().is_none());
+    assert_eq!(
+        m.state().retained_fields["socketedAugmentTypeOverride"],
+        ItemScalar::Text("helmet".into())
+    );
+    assert_eq!(
+        m.state().explicit_mod_lines[0]
+            .socketed_augment_type_override
+            .as_deref(),
+        Some("helmet")
+    );
+
+    let mut m = ItemLoadMachine::new(&data);
+    m.apply_text(
+        "Rarity: NORMAL\nCaller Base\nImplicits: 0\n20% increased modifier magnitudes",
+        &mut CompleteProvider,
+    )
+    .unwrap();
+    assert_eq!(
+        m.pending().unwrap().kind,
+        DependencyKind::ModifierMagnitudes
+    );
+    assert!(m.state().explicit_mod_lines.is_empty());
 }
 
 #[test]
@@ -1272,7 +1311,7 @@ fn base_buffs_preserve_duplicates_empty_text_and_independent_suppression_before_
         ["F", "F", "--------", "F", ""]
     );
     for row in rows {
-        assert_eq!(row.source_line, 2);
+        assert_eq!(row.source_line, Some(2));
         assert_eq!(row.selection, LineSelection::default());
         assert!(row.flags.is_empty() && row.mod_tags.is_empty());
         assert_eq!(row.range, ItemNumber::Nil);

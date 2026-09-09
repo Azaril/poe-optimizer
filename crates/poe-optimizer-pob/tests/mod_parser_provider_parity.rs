@@ -23,7 +23,8 @@ use std::collections::{BTreeMap, BTreeSet};
 fn request(text: &str) -> ParseRequest {
     ParseRequest {
         sequence: 0,
-        line_index: 0,
+        line_index: Some(0),
+        origin: None,
         text: text.into(),
         combined: false,
     }
@@ -627,7 +628,7 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
     let directory = runtime::repository().join("tests/fixtures/builds/breadth-20260908");
     let index: serde_json::Value =
         serde_json::from_slice(&std::fs::read(directory.join("index.json")).unwrap()).unwrap();
-    let mut counts = (0, 0, 0, 0, 0);
+    let mut counts = (0, 0, 0, 0, 0, 0);
     let mut pending = BTreeMap::<String, usize>::new();
     let mut state_failures = vec![];
     let mut affix_evidence = vec![];
@@ -664,6 +665,8 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
             counts.2 += formats;
             counts.3 += precision;
             let mut affix_boundary: Option<(&str, Table)> = None;
+            let mut full_state_boundary = None;
+            let mut full_state_paired = false;
             if kind == DependencyKind::Assembly && !provider.assembly.is_empty() {
                 assert_eq!(provider.assembly.len(), 1);
                 let before = events(&loaded, "build_mod_list")
@@ -672,6 +675,7 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
                     .find(|before| before.get::<String>("raw").unwrap() == raw)
                     .unwrap();
                 affix_boundary = Some(("complete_preassembly", before.clone()));
+                full_state_boundary = Some("complete_preassembly");
                 let compared = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                     reference::compare_state(machine.state(), &before);
                 }));
@@ -689,6 +693,43 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
                     state_failures.push(format!("{}: {detail}", path.display()));
                 } else {
                     counts.4 += 1;
+                    full_state_paired = true;
+                }
+            }
+            if kind == DependencyKind::ModifierParser {
+                let call = parse
+                    .get::<Table>("calls")
+                    .unwrap()
+                    .sequence_values::<Table>()
+                    .map(Result::unwrap)
+                    .filter(|call| call.get::<String>("phase").unwrap() == "parse_raw")
+                    .nth(
+                        parses
+                            .checked_sub(1)
+                            .expect("unavailable parser was attempted"),
+                    )
+                    .expect("matching original parser frontier");
+                let before = call.get::<Table>("before").unwrap();
+                affix_boundary = Some(("before_unavailable_parser", before.clone()));
+                full_state_boundary = Some("before_unavailable_parser");
+                let compared = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                    reference::compare_state(machine.state(), &before);
+                }));
+                if let Err(error) = compared {
+                    let detail = error
+                        .downcast_ref::<String>()
+                        .map(String::as_str)
+                        .or_else(|| error.downcast_ref::<&str>().copied())
+                        .unwrap_or("unknown panic");
+                    eprintln!(
+                        "Corpus parser frontier mismatch {} id {:?}: {detail}\n{raw}",
+                        path.display(),
+                        source_attributes(&parse).get("id")
+                    );
+                    state_failures.push(format!("{}: {detail}", path.display()));
+                } else {
+                    counts.5 += 1;
+                    full_state_paired = true;
                 }
             }
             if affix_boundary.is_none()
@@ -746,13 +787,16 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
                 "fixture":row["xml"],"fixture_sha256":row["xml_sha256"],"id":source_attributes(&parse).get("id"),
                 "raw_sha256":format!("{:x}",Sha256::digest(raw.as_bytes())),"pending":machine.pending(),
                 "source_affixes":source_affixes,
-                "native_affixes":{"prefixes":&machine.state().prefixes,"suffixes":&machine.state().suffixes}
+                "native_affixes":{"prefixes":&machine.state().prefixes,"suffixes":&machine.state().suffixes},
+                "native_state":machine.state(),
+                "parser_prefix_calls":parses,"format_prefix_calls":formats,"precision_parser_calls":precision,
+                "source_full_state_boundary":full_state_boundary,"source_full_state_paired":full_state_paired
             }));
         }
         assert_eq!(std::fs::read(&path).unwrap(), bytes);
     }
     if let Some(path) = std::env::var_os("POE_OPTIMIZER_AFFIX_ORACLE_LEDGER") {
-        let evidence = serde_json::json!({"schema_version":1,"upstream_revision":poe_optimizer_pob::source::UPSTREAM_REVISION,
+        let evidence = serde_json::json!({"schema_version":2,"upstream_revision":poe_optimizer_pob::source::UPSTREAM_REVISION,
             "data":snapshot.identity(),"item_loading_implementation_sha256":implementation_fingerprint(),
             "definition_implementation_sha256":poe_optimizer_data::implementation_fingerprint(),
             "items":affix_evidence,"full_state_failures":state_failures});
@@ -769,12 +813,12 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
     assert_eq!(counts.0, 116);
     assert!(counts.1 > 0 && counts.2 > 0 && counts.4 > 0);
     eprintln!(
-        "Combined corpus provider {} items, {} parser prefix calls, {} format prefixes, {} precision calls, {} complete preassembly states, pending {pending:?}",
-        counts.0, counts.1, counts.2, counts.3, counts.4
+        "Combined corpus provider {} items, {} parser prefix calls, {} format prefixes, {} precision calls, {} complete preassembly states, {} complete parser frontier states, pending {pending:?}",
+        counts.0, counts.1, counts.2, counts.3, counts.4, counts.5
     );
     assert!(
         state_failures.is_empty(),
-        "{} preassembly state mismatches",
+        "{} full-state frontier mismatches",
         state_failures.len()
     );
 }

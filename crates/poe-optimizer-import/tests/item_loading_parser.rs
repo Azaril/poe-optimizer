@@ -8,7 +8,8 @@ fn data() -> &'static GameDataSnapshot {
 fn request(text: &str) -> ParseRequest {
     ParseRequest {
         sequence: 0,
-        line_index: 0,
+        line_index: Some(0),
+        origin: None,
         text: text.into(),
         combined: false,
     }

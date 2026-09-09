@@ -170,6 +170,65 @@ unavailable. Missing fields do not mean that a build has no items. Original XML 
 reports are retained when projection, loading or evaluation fails; changed input cannot be
 evaluated under the original build's identity.
 
+## Socketed-augment state
+
+Socketed augments use the selected `item_loading.rune_loading` policy and a borrowed
+view over the complete rune family. The native loader selects a constructed base's broad
+and specific slot contexts, then any extra SoulCore contexts. Classification precedence,
+subtype rewrites, header grammar, empty-slot identity, numeric patterns, display markers
+and vector rules come from data. Record membership does not establish socket legality;
+loading must preserve original behavior even for an unusable authored combination.
+
+Authored rune names retain order, including empty slots, unknown names and entries beyond
+the active socket count. All names participate in the source's rebuild eligibility check;
+only active positions contribute rebuilt modifiers. Requirement calculation subsequently
+examines every slot record of every authored name, including inactive positions. An
+unknown name prevents that rebuild but does not skip preceding raw-line loading or the
+subsequent annotation operations.
+
+Enabled Bonded display lines skip the raw modifier parser and contribute to implicit-line
+routing counts. Disabled Bonded rows follow the ordinary formatting/parsing path. Context
+hints are captured per row, applied only for the selected variant and reset on each reparse.
+An item override has last-write semantics; extra SoulCore types form a distinct set.
+
+Rebuilding restores the natural level, clears rune rows and visits socket contributions
+in source order. Broad, specific and extra slot contributions are deliberately not
+deduplicated. Stacking keys contain augment type, Bonded status and Lua-rendered stat order;
+they do not contain the line template. Numeric callbacks reproduce Lua text round trips,
+including the source pattern's unusual treatment of multi-digit decimals. A new row is
+parsed before insertion. A combined row assigns its rewritten text before parsing and
+only then replaces its modifier payload. Failed dependencies retain that exact prefix of
+state. Disabled flags are restored by normalized-template counts after a successful rebuild.
+
+`ParseRequest.line_index` and `LoadedModLine.source_line` are nullable: generated rune
+contributions have no authored line. Each generated request carries a `RuneContribution`
+with socket index, selected slot, definition line index, Bonded status and whether the text
+was combined. Rows retain all contributions to their current text. The request's separate
+`combined` flag preserves the parser argument; it stays false for rune reconstruction.
+Optional order, augment type, rune count and effect/display annotations distinguish absence
+from false and zero. Ordinary authored reports keep their existing numeric line indices.
+
+Contextual grouping and minimum-count searches also run for explicitly named runes. A
+unique count vector can annotate normal and Bonded rows without choosing an arbitrary Lua
+traversal order. Ties that affect inferred identities or final types remain explicit
+`RuneReconstruction` dependencies, including equal vectors with implicit trailing zeroes.
+Multi-slot floating sums and multiple extra-slot contribution orders require proof before
+execution. Resource exhaustion is an error, never a no-solution result. Pattern work,
+callback text, temporary grouping rows, sort comparisons and search expansion have bounds.
+
+Unscaled inference can identify omitted names and rebuild their lines. GAME inference that
+requires ranged augment-effect modifiers remains a separate dependency, as do nonzero
+configured effect defaults, unrepresented metadata operations, advanced-copy unique stat
+ordering and complete item assembly. These boundaries must be implemented with their own
+source parity before admitting dependent builds. They must not be replaced with fixture
+identities or an implicit reference-backend fallback.
+
+The numeric primitives are portable Rust. Catalogs are immutable and shareable; per-item
+loading scratch is local. Diagnostic grouping is preparation work, not the numerical
+candidate hot path. A future prepared-item layer should cache proven contextual programs
+and keep item parsing, data loading and hashing outside parallel evaluation loops. Original
+PoB methods remain optional development oracles for the same state and call boundaries.
+
 ## Authored affix state
 
 `ItemState.prefixes` and `suffixes` each contain ordered entries and an optional limit.

@@ -24,6 +24,7 @@ pub fn implementation_fingerprint() -> String {
     for source in [
         include_str!("item_loading.rs"),
         include_str!("item_loading/affixes.rs"),
+        include_str!("item_loading/runes.rs"),
         include_str!("item_loading/syntax.rs"),
         include_str!("item_loading/variants.rs"),
         include_str!("item_loading/machine.rs"),
@@ -37,6 +38,9 @@ pub fn implementation_fingerprint() -> String {
         hash.update(source.replace("\r\n", "\n").as_bytes());
     }
     for source in poe_optimizer_engine::modifier_parser::implementation_sources() {
+        hash.update(source.replace("\r\n", "\n").as_bytes());
+    }
+    for source in poe_optimizer_engine::item_runes::implementation_sources() {
         hash.update(source.replace("\r\n", "\n").as_bytes());
     }
     format!("{:x}", hash.finalize())

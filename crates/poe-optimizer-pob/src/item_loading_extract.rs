@@ -358,6 +358,143 @@ fn affix_loading_policy(
     let value: Value = scan.call((headers, limits, reconcile, all_headers))?;
     lua.from_value(value).map_err(error)
 }
+const RUNE_UPDATE_START: &str = "function ItemClass:UpdateRunes()";
+const RUNE_UPDATE_END: &str = "function ItemClass:ApplySocketedRuneDisplayScalars()";
+const RUNE_CLASS_START: &str = "function ItemClass:GetSocketedAugmentTypes()";
+const RUNE_CLASS_END: &str = "-- Return the name of the slot this item is equipped in";
+const RUNE_RECONSTRUCTION_START: &str =
+    "\t-- this will need more advanced logic for jewel sockets in items to work properly";
+const RUNE_RECONSTRUCTION_END: &str = "\tif self.advancedCopy and (self.rarity == \"UNIQUE\"";
+fn rune_loading_policy(
+    lua: &Lua,
+    sources: &BTreeMap<String, String>,
+) -> Result<ItemRuneLoadingPolicy> {
+    let all = source(sources, ITEM)?;
+    let (update, _) = chunk(sources, ITEM, RUNE_UPDATE_START, RUNE_UPDATE_END)?;
+    let (classify, _) = chunk(sources, ITEM, RUNE_CLASS_START, RUNE_CLASS_END)?;
+    let (reconstruct, _) = chunk(
+        sources,
+        ITEM,
+        RUNE_RECONSTRUCTION_START,
+        RUNE_RECONSTRUCTION_END,
+    )?;
+    let headers = section(
+        all,
+        "\t\t\tlocal specName, specVal = parseItemSpec(line)",
+        "\t\t\tif line == \"Prefixes:\" then",
+    )?;
+    let (display, _) = chunk(
+        sources,
+        ITEM,
+        RUNE_UPDATE_END,
+        "-- Return the item's calculated modifiers for a slot, including only Bonded modifiers",
+    )?;
+    let scan: Function = lua.load(r#"return function(all, headers, update, classify, reconstruct, display)
+        local function capture(text, pattern)
+            local result={text:match(pattern)}
+            assert(#result>0, 'unsupported rune policy source shape: '..pattern)
+            return unpack(result)
+        end
+        local function number(text, pattern)
+            local n=tonumber(capture(text,pattern))
+            assert(n and n==n and n~=math.huge and n~=-math.huge, 'nonfinite rune source policy')
+            return n
+        end
+        local function same(text, pattern, expected)
+            local count=0
+            for value in text:gmatch(pattern) do
+                assert(value==expected, 'divergent rune source policy: '..pattern)
+                count=count+1
+            end
+            assert(count>0, 'missing rune source policy: '..pattern)
+        end
+        local out={}
+        out.rune_header=capture(headers,'specName == "([^"]*)" then%s+t_insert%(self%.runes, specVal%)')
+        out.socket_header=capture(headers,'specName == "([^"]*)" then%s+local group = 0%s+for c in specVal:gmatch')
+        out.socket_character_pattern=capture(headers,'for c in specVal:gmatch%("([^"]*)"%)')
+        out.item_socket_pattern=capture(headers,'if c:match%("([^"]*)"%) then%s+t_insert%(self%.sockets')
+        out.jewel_socket_pattern=capture(headers,'elseif c:match%("([^"]*)"%) then')
+        out.other_headers,out.other_header_patterns={},{}
+        local seen,patterns={},{}
+        for name in headers:gmatch('specName == "([^"]*)"') do
+            if name~=out.rune_header and name~=out.socket_header and not seen[name] then
+                out.other_headers[#out.other_headers+1]=name;seen[name]=true
+            end
+        end
+        for pattern in headers:gmatch('specName:match%("([^"]*)"%)') do
+            if not patterns[pattern] then out.other_header_patterns[#out.other_header_patterns+1]=pattern;patterns[pattern]=true end
+        end
+        out.none_rune_id=capture(update,'name ~= "([^"]*)"')
+        same(reconstruct,'rune ~= "([^"]*)"',out.none_rune_id)
+        out.rune_table=capture(update,'local rune = data%.itemMods%.([%w_]+)%[name%]')
+        same(reconstruct,'data%.itemMods%.([%w_]+)',out.rune_table)
+        out.bonded_skip_pattern=capture(all,'if modLine%.rune and not modLine%.disabled and line:match%("([^"]*)"%)')
+        out.augment_override_pattern=capture(all,'modLine%.socketedAugmentTypeOverride = lineLower:match%("([^"]*)"%)')
+        out.soul_core_pattern=capture(all,'modLine%.socketedSoulCoreType = lineLower:match%("([^"]*)"%)')
+        out.numeric_pattern=capture(reconstruct,'local strippedModLine = modLine:gsub%("([^"]*)"')
+        same(update,'[.:]gsub%("([^"]*)", function%(num%)',out.numeric_pattern)
+        same(update,'displayLine:find%("([^"]*)", start%)',out.numeric_pattern)
+        out.stripped_marker=capture(reconstruct,'t_insert%(values, tonumber%(val%)%)%s+return "([^"]*)"')
+        out.no_number_value=number(reconstruct,'if #values == 0 then%s+t_insert%(values, ([%d.eE+%-]+)%)')
+        out.vector_default=number(reconstruct,'local aVal = a%[i%] or ([%d.eE+%-]+)')
+        local vectors=capture(reconstruct,'(local function compareRuneValueSets.-)local function findRuneCombination')
+        for value in vectors:gmatch(' or ([%d.eE+%-]+)') do assert(tonumber(value)==out.vector_default,'divergent vector defaults') end
+        out.vector_tolerance=number(vectors,'math%.abs%([^\n]+%) > ([%d.eE+%-]+)')
+        assert(number(vectors,'%(target%[i%] or [%d.eE+%-]+%) %+ ([%d.eE+%-]+)')==out.vector_tolerance,'divergent vector tolerances')
+        out.order_default=number(update,'local orderValue = order or ([%d.eE+%-]+)')
+        out.order_separator,out.bonded_order_marker=capture(update,'local orderKey = mod%.type %.%. "([^"]*)" %.%. %(bonded and "([^"]*)" or ""%) %.%. orderValue')
+        out.bonded_display_prefix=capture(update,'local displayLine = bonded and "([^"]*)" %.%. line or line')
+        same(reconstruct,'addModToGroupedRunes%("([^"]*)" %.%. modLine%)',out.bonded_display_prefix)
+        out.combined_parse_strip_pattern=capture(update,'local parseLine = statOrder%[orderKey%]%.line:gsub%("([^"]*)", ""%)')
+        out.bonded_range_capture_pattern=capture(reconstruct,'local bondedPrefix = line:match%("([^"]*)"%)')
+        out.bonded_range_strip_pattern=capture(reconstruct,'itemLib%.applyRange%(line:gsub%("([^"]*)", ""%)')
+        out.extra_slot_augment_type=capture(update,'soulCoreMod%.type == "([^"]*)"')
+        same(reconstruct,'slotMod%.type == "([^"]*)"',out.extra_slot_augment_type)
+        out.rune_augment_type=capture(display,'elseif modLine%.augmentType == "([^"]*)"')
+        same(display,'\n%s*if modLine%.augmentType == "([^"]*)"',out.extra_slot_augment_type)
+        out.broad_weapon_type,out.broad_armour_type,out.broad_caster_type=capture(classify,'local baseType = self%.base%.weapon and "([^"]*)" or self%.base%.armour and "([^"]*)" or %([^\n]+%) and "([^"]*)"')
+        out.caster_tags={}
+        local broad=capture(classify,'(local baseType =[^\n]+)')
+        for tag in broad:gmatch('self%.base%.tags%.([%w_]+)') do out.caster_tags[#out.caster_tags+1]=tag end
+        assert(#out.caster_tags>0,'no classifier tags')
+        local eligibility=capture(reconstruct,'if self%.base%.weapon or self%.base%.armour or ([^\n]+) or self%.itemSocketCount > 0 then')
+        local index=0
+        for tag in eligibility:gmatch('self%.base%.tags%.([%w_]+)') do index=index+1;assert(tag==out.caster_tags[index],'classifier/eligibility tags differ') end
+        assert(index==#out.caster_tags,'classifier/eligibility tag count differs')
+        out.specific_type_rewrites={}
+        local represented={}
+        local specific=capture(classify,'local specificType =%s*(.-)%s*if self%.socketedAugmentTypeOverride')
+        for predicate,target in specific:gmatch('%((.-) and "([^"]*)"%) or') do
+            local item=predicate:match('itemType == "([^"]*)"')
+            local subtype=capture(predicate,'subType == "([^"]*)"')
+            local exact=(item and ('itemType == "'..item..'" and ') or '')..'subType == "'..subtype..'"'
+            assert(predicate==exact,'unsupported classifier rewrite predicate')
+            represented[#represented+1]="("..predicate..' and "'..target..'") or'
+            out.specific_type_rewrites[#out.specific_type_rewrites+1]={item_type=item,sub_type=subtype,to=target}
+        end
+        assert(#out.specific_type_rewrites>0 and specific:gsub('%s','')==(table.concat(represented)..'itemType'):gsub('%s',''),'incomplete classifier rewrites')
+        out.override_broad_type=capture(classify,'return "([^"]*)", self%.socketedAugmentTypeOverride')
+        out.game_mode=capture(reconstruct,'if mode == "([^"]*)" and shouldFixRunesOnItem')
+        out.effect_mod_type=capture(reconstruct,'if mod%.type == "([^"]*)" and gameSocketedAugmentEffectModifiers')
+        same(reconstruct,'if mod%.type == "([^"]*)" and gameSocketedAugmentEffectModifiers',out.effect_mod_type)
+        out.effect_global_name=capture(reconstruct,'local effectModifier = gameSocketedAugmentEffectModifiers%.([%w_]+)')
+        out.effect_name_prefix,out.effect_name_suffix=capture(reconstruct,'gameSocketedAugmentEffectModifiers%["([^"]*)" %.%. slotMod%.type %.%. "([^"]*)"%]')
+        out.effect_divisor=number(reconstruct,'mod%.value / ([%d.eE+%-]+)')
+        out.effect_default=number(display,'local effectModifier = self%.socketedAugmentItemEffectModifier or ([%d.eE+%-]+)')
+        out.scalar_base=number(display,'modLine%.displayValueScalar = ([%d.eE+%-]+) %+ effectModifier')
+        assert(number(reconstruct,'valueScalar = effectModifier ~= [%d.eE+%-]+ and ([%d.eE+%-]+) %+ effectModifier')==out.scalar_base,'divergent scalar base')
+        local defaults=capture(reconstruct,'local gameSocketedAugmentEffectModifiers = ({.-})')
+        local keys={}
+        for key,value in defaults:gmatch('([%w_]+) = ([%d.eE+%-]+)') do assert(tonumber(value)==out.effect_default,'divergent effect default'); keys[key]=true end
+        for _,key in ipairs({out.effect_global_name,out.effect_name_prefix..out.rune_augment_type..out.effect_name_suffix,out.effect_name_prefix..out.extra_slot_augment_type..out.effect_name_suffix}) do
+            assert(keys[key],'effect lookup/default keys differ');keys[key]=nil
+        end
+        assert(next(keys)==nil,'unrepresented effect key')
+        return out
+    end"#).eval()?;
+    let value: Value = scan.call((all, headers, update, classify, reconstruct, display))?;
+    lua.from_value(value).map_err(error)
+}
 fn policy(lua: &Lua, sources: &BTreeMap<String, String>) -> Result<ItemLoadingPolicy> {
     let constants: Table = named_eval(
         lua,
@@ -718,6 +855,7 @@ fn policy(lua: &Lua, sources: &BTreeMap<String, String>) -> Result<ItemLoadingPo
     );
     Ok(ItemLoadingPolicy {
         affix_loading: affix_loading_policy(lua, sources)?,
+        rune_loading: rune_loading_policy(lua, sources)?,
         default_affix_quality: number("self.defaultItemAffixQuality = ")?,
         default_item_quality: number("self.defaultItemQuality = ")?,
         catalysts,
@@ -938,6 +1076,27 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ItemLoadingD
     ] {
         construction_spans.insert(name.into(), chunk(sources, ITEM, begin, end)?.1);
     }
+    for (name, begin, end) in [
+        ("rune_update", RUNE_UPDATE_START, RUNE_UPDATE_END),
+        ("rune_classification", RUNE_CLASS_START, RUNE_CLASS_END),
+        (
+            "rune_reconstruction",
+            RUNE_RECONSTRUCTION_START,
+            RUNE_RECONSTRUCTION_END,
+        ),
+        (
+            "rune_display_scalars",
+            RUNE_UPDATE_END,
+            "-- Return the item's calculated modifiers for a slot, including only Bonded modifiers",
+        ),
+        (
+            "rune_requirement_scan",
+            "\tfor _, runeName in ipairs(self.runes) do",
+            "\tif self.base then\n\t\tlocal dbItem = self:GetUniqueDBItem()",
+        ),
+    ] {
+        construction_spans.insert(name.into(), chunk(sources, ITEM, begin, end)?.1);
+    }
     let source = ItemLoadingSource {
         upstream_revision: crate::source::UPSTREAM_REVISION.into(),
         files: files
@@ -984,6 +1143,111 @@ mod tests {
         assert!(table(key, &sources, 0, &mut 100).is_err());
         let unknown: Function = lua.load("return function()end").eval().unwrap();
         assert!(metadata(Value::Function(unknown), &sources, 0, &mut 100).is_err());
+    }
+    #[test]
+    fn rune_policy_observes_full_original_patterns_numbers_and_classifier_order() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../vendor/path-of-building-poe2");
+        let original = crate::source::read_verified_text(&root, ITEM).unwrap();
+        let p =
+            rune_loading_policy(&Lua::new(), &BTreeMap::from([(ITEM.into(), original)])).unwrap();
+        assert_eq!(
+            (p.rune_header.as_str(), p.socket_header.as_str()),
+            ("Rune", "Sockets")
+        );
+        assert_eq!(
+            (
+                p.socket_character_pattern.as_str(),
+                p.item_socket_pattern.as_str(),
+                p.jewel_socket_pattern.as_str()
+            ),
+            (".", "[S]", "[J]")
+        );
+        assert_eq!(p.numeric_pattern, "(%d%.?%d*)");
+        assert_eq!(
+            (
+                p.no_number_value,
+                p.vector_default,
+                p.vector_tolerance,
+                p.order_default
+            ),
+            (1.0, 0.0, 1e-9, 0.0)
+        );
+        assert_eq!(p.caster_tags, ["wand", "staff", "sceptre"]);
+        assert_eq!(
+            p.specific_type_rewrites,
+            [
+                ItemRuneTypeRewrite {
+                    item_type: None,
+                    sub_type: "warstaff".into(),
+                    to: "quarterstaff".into()
+                },
+                ItemRuneTypeRewrite {
+                    item_type: Some("shield".into()),
+                    sub_type: "evasion".into(),
+                    to: "buckler".into()
+                }
+            ]
+        );
+        assert_eq!(
+            (
+                p.extra_slot_augment_type.as_str(),
+                p.rune_augment_type.as_str()
+            ),
+            ("SoulCore", "Rune")
+        );
+        assert_eq!(p.bonded_display_prefix, "Bonded: ");
+        assert_eq!(p.combined_parse_strip_pattern, "^Bonded:%s*");
+        assert_eq!(p.effect_global_name, "SocketedAugmentItemEffect");
+        assert_eq!(
+            (p.effect_divisor, p.effect_default, p.scalar_base),
+            (100.0, 0.0, 1.0)
+        );
+        assert!(!p.other_headers.contains("Rune") && !p.other_headers.contains("Sockets"));
+        assert!(p.other_headers.contains("Prefix"));
+    }
+    #[test]
+    fn rune_policy_follows_authored_literals_and_rejects_divergent_source_operations() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../vendor/path-of-building-poe2");
+        let original = crate::source::read_verified_text(&root, ITEM).unwrap();
+        let changed = original
+            .replace("(%d%.?%d*)", "(%d+)")
+            .replace("\"None\"", "\"Vacant\"")
+            .replace("\"warstaff\"", "\"new subtype\"")
+            .replace("1e-9", "2e-8")
+            .replace("[S]", "[XY]");
+        let p =
+            rune_loading_policy(&Lua::new(), &BTreeMap::from([(ITEM.into(), changed)])).unwrap();
+        assert_eq!(p.numeric_pattern, "(%d+)");
+        assert_eq!(p.none_rune_id, "Vacant");
+        assert_eq!(p.specific_type_rewrites[0].sub_type, "new subtype");
+        assert_eq!(p.vector_tolerance, 2e-8);
+        assert_eq!(p.item_socket_pattern, "[XY]");
+        let changed = original.replacen(
+            "local specificType =",
+            "local specificType = extraRule() or",
+            1,
+        );
+        assert!(
+            rune_loading_policy(&Lua::new(), &BTreeMap::from([(ITEM.into(), changed)])).is_err()
+        );
+        let changed = original.replacen(
+            "local orderValue = order or 0",
+            "local orderValue = order or math.huge",
+            1,
+        );
+        assert!(
+            rune_loading_policy(&Lua::new(), &BTreeMap::from([(ITEM.into(), changed)])).is_err()
+        );
+        let changed = original.replacen(
+            "local _, e, other = displayLine:find(\"(%d%.?%d*)\"",
+            "local _, e, other = displayLine:find(\"(%d+)\"",
+            1,
+        );
+        assert!(
+            rune_loading_policy(&Lua::new(), &BTreeMap::from([(ITEM.into(), changed)])).is_err()
+        );
     }
     #[test]
     fn affix_policy_retains_complete_original_grammar_order_and_numeric_values() {

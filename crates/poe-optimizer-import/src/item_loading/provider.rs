@@ -85,7 +85,8 @@ impl<P: ItemLoadProvider> ItemLoadProvider for NativeItemLoadProvider<'_, P> {
                 };
                 let parser_request = ParseRequest {
                     sequence,
-                    line_index: request.line_index,
+                    line_index: Some(request.line_index),
+                    origin: None,
                     text: fallback.parser_text().into(),
                     combined: false,
                 };

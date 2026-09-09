@@ -22,7 +22,7 @@ end
 local function snapshot(item)
  local out={}
  for k,v in pairs(item)do if type(v)~='table' and type(v)~='function' then out[k]=v end end
- for _,k in ipairs({'rawLines','requirements','prefixes','suffixes','variantList','versionList','variantGroups','variantGroupSelections','sockets','runes','modMagnitudeMods','classRequirementModLines','weaponData','armourData','flaskData','jewelData','modList'})do out[k]=copy(item[k])end
+ for _,k in ipairs({'rawLines','requirements','prefixes','suffixes','variantList','versionList','variantGroups','variantGroupSelections','sockets','runes','socketedSoulCoreTypes','modMagnitudeMods','classRequirementModLines','weaponData','armourData','flaskData','jewelData','modList'})do out[k]=copy(item[k])end
  for _,k in ipairs(lists)do out[k]=copy(item[k])end
  if item.affixes then for key,value in pairs(data.itemMods)do if value==item.affixes then out.selectedAffixesTableKey=key end end end
  out.hasBase=item.base~=nil
@@ -89,9 +89,10 @@ function class:GetUniqueDBItem(...)
  return originalUniqueLookup(self,...)
 end
 function modLib.parseMod(text,combined,...)
+ local before=state and state.current and not state.building and snapshot(state.created[state.current.item]) or nil
  local mods,extra=originalParseMod(text,combined,...)
  if state and state.current then
-  state.current.calls[#state.current.calls+1]={text=text,combined=combined==true,phase=state.building and 'build_mod_list' or 'parse_raw',has_modifiers=mods~=nil,modifiers=copy(mods),extra=extra}
+  state.current.calls[#state.current.calls+1]={text=text,combined=combined==true,phase=state.building and 'build_mod_list' or 'parse_raw',before=before,has_modifiers=mods~=nil,modifiers=copy(mods),extra=extra}
  end
  return mods,extra
 end

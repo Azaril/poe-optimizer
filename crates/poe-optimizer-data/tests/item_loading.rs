@@ -49,6 +49,50 @@ fn compatibility() -> BTreeMap<String, ItemMetadataValue> {
     );
     p
 }
+fn rune_policy() -> ItemRuneLoadingPolicy {
+    ItemRuneLoadingPolicy {
+        rune_header: "caller rune_header".into(),
+        socket_header: "caller socket_header".into(),
+        other_headers: BTreeSet::new(),
+        other_header_patterns: vec![],
+        socket_character_pattern: "caller socket_character_pattern".into(),
+        item_socket_pattern: "caller item_socket_pattern".into(),
+        jewel_socket_pattern: "caller jewel_socket_pattern".into(),
+        none_rune_id: "caller none_rune_id".into(),
+        rune_table: "caller rune_table".into(),
+        bonded_skip_pattern: "caller bonded_skip_pattern".into(),
+        augment_override_pattern: "caller augment_override_pattern".into(),
+        soul_core_pattern: "caller soul_core_pattern".into(),
+        numeric_pattern: "caller numeric_pattern".into(),
+        stripped_marker: "caller stripped_marker".into(),
+        no_number_value: 0.0,
+        vector_default: 0.0,
+        vector_tolerance: 0.0,
+        order_default: 0.0,
+        order_separator: "caller order_separator".into(),
+        bonded_order_marker: "caller bonded_order_marker".into(),
+        bonded_display_prefix: "caller bonded_display_prefix".into(),
+        combined_parse_strip_pattern: "caller combined_parse_strip_pattern".into(),
+        bonded_range_capture_pattern: "caller bonded_range_capture_pattern".into(),
+        bonded_range_strip_pattern: "caller bonded_range_strip_pattern".into(),
+        extra_slot_augment_type: "caller extra_slot_augment_type".into(),
+        rune_augment_type: "caller rune_augment_type".into(),
+        broad_weapon_type: "caller broad_weapon_type".into(),
+        broad_armour_type: "caller broad_armour_type".into(),
+        broad_caster_type: "caller broad_caster_type".into(),
+        caster_tags: vec![],
+        specific_type_rewrites: vec![],
+        override_broad_type: "caller override_broad_type".into(),
+        game_mode: "caller game_mode".into(),
+        effect_mod_type: "caller effect_mod_type".into(),
+        effect_global_name: "caller effect_global_name".into(),
+        effect_name_prefix: "caller effect_name_prefix".into(),
+        effect_name_suffix: "caller effect_name_suffix".into(),
+        effect_divisor: 0.0,
+        effect_default: 0.0,
+        scalar_base: 0.0,
+    }
+}
 fn catalog() -> ItemLoadingData {
     let path = "src/Data/Bases/caller.lua".to_owned();
     ItemLoadingData {
@@ -69,6 +113,7 @@ fn catalog() -> ItemLoadingData {
             module_order: vec![path.clone()],
         },
         policy: ItemLoadingPolicy {
+            rune_loading: rune_policy(),
             affix_loading: ItemAffixLoadingPolicy {
                 headers: BTreeMap::new(),
                 other_headers: BTreeSet::new(),
@@ -103,7 +148,10 @@ fn catalog() -> ItemLoadingData {
             catalysts: vec![],
             line_flags: BTreeSet::from(["caller_flag".into()]),
             rarities: BTreeSet::from(["CALLER".into()]),
-            header_names: BTreeSet::new(),
+            header_names: BTreeSet::from([
+                "caller rune_header".into(),
+                "caller socket_header".into(),
+            ]),
             defence_header_keys: BTreeMap::new(),
             compatibility: compatibility(),
         },
@@ -503,7 +551,10 @@ fn defence_header_schema_rejects_missing_duplicate_unknown_and_oversized_entries
     changed.policy.defence_header_keys = (0..257)
         .map(|i| (format!("Header {i}"), "Value".into()))
         .collect();
-    changed.policy.header_names = changed.policy.defence_header_keys.keys().cloned().collect();
+    changed
+        .policy
+        .header_names
+        .extend(changed.policy.defence_header_keys.keys().cloned());
     assert!(changed.validate().is_err());
 }
 #[test]

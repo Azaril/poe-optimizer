@@ -377,6 +377,20 @@ pub fn compare_state(native: &ItemState, source: &Table) {
             .collect::<Vec<_>>(),
         native.runes
     );
+    let soul_core_types = source
+        .get::<Table>("socketedSoulCoreTypes")
+        .unwrap()
+        .pairs::<String, Value>()
+        .map(|row| {
+            let (key, value) = row.unwrap();
+            assert!(matches!(value, Value::Boolean(true)), "SoulCore type flag");
+            key
+        })
+        .collect::<std::collections::BTreeSet<_>>();
+    assert_eq!(
+        native.socketed_soul_core_types, soul_core_types,
+        "complete SoulCore type set"
+    );
     compare_variants(&native.variants, source);
     for key in represented_scalar_fields() {
         let source_key = if key == "affixes_table" {
@@ -466,6 +480,50 @@ pub fn compare_state(native: &ItemState, source: &Table) {
                 number(row.get("valueScalar").unwrap()),
                 &format!("valueScalar for {:?}", line.line),
             );
+            for (field, value) in [
+                ("order", line.order),
+                ("runeCount", line.rune_count),
+                ("displayValueScalar", line.display_value_scalar),
+            ] {
+                let source_value = row.get::<Value>(field).unwrap();
+                assert_eq!(
+                    value.is_some(),
+                    !matches!(source_value, Value::Nil),
+                    "optional row field {field}"
+                );
+                assert_number(
+                    value.unwrap_or(ItemNumber::Nil),
+                    number(source_value),
+                    field,
+                );
+            }
+            for (field, value) in [
+                ("augmentType", &line.augment_type),
+                (
+                    "socketedAugmentTypeOverride",
+                    &line.socketed_augment_type_override,
+                ),
+                ("socketedSoulCoreType", &line.socketed_soul_core_type),
+            ] {
+                let source_value = match row.get::<Value>(field).unwrap() {
+                    Value::Nil => None,
+                    Value::String(value) => Some(value.to_str().unwrap().to_owned()),
+                    value => panic!("source string field {field} has type {value:?}"),
+                };
+                assert_eq!(*value, source_value, "optional row field {field}");
+            }
+            let applied = match row
+                .get::<Value>("socketedRuneEffectAlreadyApplied")
+                .unwrap()
+            {
+                Value::Nil => None,
+                Value::Boolean(value) => Some(value),
+                value => panic!("source effect-applied flag {value:?}"),
+            };
+            assert_eq!(
+                line.socketed_rune_effect_already_applied, applied,
+                "effect-applied flag presence/value"
+            );
             let modifiers = row
                 .get::<Option<Table>>("modList")
                 .unwrap()
@@ -488,8 +546,10 @@ pub fn compare_state(native: &ItemState, source: &Table) {
             assert_eq!(line.mod_tags, tags, "ordered modTags");
             let flags = line_flags()
                 .iter()
-                .filter(|name| row.get::<Option<bool>>(name.as_str()).unwrap() == Some(true))
-                .cloned()
+                .map(String::as_str)
+                .chain(std::iter::once("bonded"))
+                .filter(|name| row.get::<Option<bool>>(*name).unwrap() == Some(true))
+                .map(str::to_owned)
                 .collect::<std::collections::BTreeSet<_>>();
             assert_eq!(line.flags, flags, "line flags");
             for (key, selection) in [

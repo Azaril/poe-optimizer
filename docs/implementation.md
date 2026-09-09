@@ -2,48 +2,69 @@
 
 Last updated: 2026-09-09
 
-Current checkpoint: **native authored affix loading and reconciliation**. Prefix/suffix
-headers, independent ranges, fractured markers, limit changes and active-slot reconciliation
-now use the selected immutable data catalog. The native path uses no Lua or subprocesses.
-All 18 former affix stops in the 116-item corpus advance to their next real dependency.
-Complete native build admission remains Spark/Mace; full native parity and the broad joint
-optimizer remain unfinished. The general B3 actor/action/candidate proposal still awaits
-user direction.
+Current completed implementation checkpoint: **native socketed-augment loading and
+reconstruction**. Code and scoped local validation are complete in
+`runs/rune-loading-worktree`, branch `codex/rune-loading`, based on published
+`1d742b8d7c14ea2f9a76ce5bf70b4cc2640bfb00`. Publication is the next operation;
+record its exact commit and hosted run separately. See the
+[checkpoint evidence](#socketed-augment-loading-checkpoint) and
+[state contract](item-source-and-loading.md#socketed-augment-state).
 
-The implementation worktree is `runs/affix-loading-worktree`, branch `codex/affix-loading`,
-based on `25b8b93db260a93a638b0808831fe84f5bbcc62a`. Data schema **19**, semantics
-`poe2-native-profiles-v19`, retains 27 sections and all 443 unique requirement facts. The
-package digest is `dcd0b2fd14a8271f710188312fe5664e39b1edac8f06aa078ab2911b840e79ca`.
-See [the affix checkpoint](#authored-affix-loading-active-checkpoint) for evidence and
-[the state contract](item-source-and-loading.md#authored-affix-state) for the design.
+The loader uses injected rune definitions and policy for ordered authored rebuilding,
+number-text stacking, disabled-row restoration, contextual normal/Bonded annotation
+and all-slot level requirements. Generated text preserves socket/slot/definition
+provenance. Rust loading and numeric operations use no Lua or subprocesses. Source
+errors retain partial state; unproven ordering and exhausted resources remain explicit.
 
-Local gates are complete for 124 reconciled data tests, 241 import tests, 13 engine
-injection tests, 67 source integration tests and three extractor/source tests. A source
-child-worker entry is intentionally ignored as a direct test and exercised by its parents.
-Final workspace strict lint, formatting, five WebAssembly library checks, all 34 CLI
-observations and the frozen corpus/source join pass against the final guard correction.
-Do not infer a full current workspace test pass from these scoped gates.
+Schema **20**, semantics `poe2-native-profiles-v20`, has 27 sections and 129 authenticated
+sources. Package SHA-256:
+`a3c7515db5afb650bb1d1618c8ca85a5db92f16eee0cfaf73d51f1ed67e5aea9`.
+All 25 unrelated sections, original raw rune records, existing affix data and all 443
+unique requirement facts remain unchanged. Two fresh public exports reproduce it exactly.
+Caller inputs, original goldens and PoB pin `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`
+remain intact.
 
-Direct source observation pairs 113 full affix tables, including all 18 newly progressed
-items; three preexisting jewel-radius stops remain explicitly unpaired. The full comparison
-preserves all 834 source instructions, all 110 reference measurements and all five full
-native rejections. The remaining native dependencies are **53 assembly, 38 rune
-reconstruction and 25 modifier-parser stops**. These are loading frontiers, not build
-support or numerical parity counts.
+Local validation reconciles **129 data tests, 252 import tests, 14 rune numeric tests,
+13 engine injection tests, 81 source integration tests**, three extractor/source tests
+and 36 CLI observations. One direct-entry source worker is intentionally ignored and
+exercised through parent tests. Workspace/native strict lint, formatting, five WebAssembly
+library checks and the normal native dependency audit pass. These are scoped/reconciled
+gates; they are not a full current workspace test run. Original failed attempts and final
+replacement results are retained in `runs/rune-loading-validation-final.json` and the
+component ledgers it references.
 
-Next: implement the separately scoped [socketed-augment loading/reconstruction phase](#next-native-dependency-socketed-augment-reconstruction) in a fresh worktree. Preserve exact caller inputs, source pin, original goldens
-and explicit ambiguity boundaries. The [prior scope audit](#next-native-dependency-authored-affix-loading)
-records why rune reconstruction needs its own work.
+All five corpus imports, inspections and reference evaluations pass. All **110 reference
+measurements**, **834 instructions** and five full-native rejection messages are exact;
+77 complete item reports are unchanged. The final source join covers all 116 native
+states, with **109 independently paired original-source full states**, 511 parser and
+424 formatter calls. Seven full-state boundaries remain explicitly unpaired. The next
+loading dependencies are **67 assembly, 45 modifier parser, three rune reconstruction
+and one advanced-copy ordering**. Every former rune stop executes further native work;
+these loading counts do not imply whole-build support.
 
-Hosted validation remains separate. Published unique-requirements repair run
-[34392127898](https://github.com/Azaril/poe-optimizer/actions/runs/34392127898) passed lint on
-Windows and Linux and was still testing at 2026-09-09 19:55:41 UTC. Both failures in the
-older [34379251966](https://github.com/Azaril/poe-optimizer/actions/runs/34379251966) identify
-the same allocation-bound formatting fixture already repaired by ancestor `765ae933`.
-The separate `2d804a4b` run `34391273364` failed two test-only needless-borrow lint checks;
-`25b8b93` repaired both. Full-log access returned HTTP 403, but public check annotations
-provided the complete actionable errors. Preserve those failed runs and their annotations;
-never relabel them as passed because a later local repair passes.
+Next: check publication and exact-head hosted CI, then prepare the data-driven
+modifier callback and ordered item-assembly phase using
+`runs/rune-loading-next-native-plan.md/json`. The 45 parser stops select 14 special
+callbacks: 23 direct constructor cases, two uppercase/concatenation cases, nine gem
+property cases and 11 granted-skill cases. Cover complete admitted source shapes, not
+these IDs or a small build whitelist. Review the callback representation before
+implementation; preserve opaque unsupported callbacks and their source dependencies.
+
+The complete native evaluator and broad joint optimizer remain unfinished. Native
+whole-build admission is still limited to Spark/Mace; the five breadth builds still
+reach three one-Skill and two one-SkillSet limits. The general **B3 actor/action/candidate
+proposal remains unapproved**. Continue independent parser/item work without inferring
+approval for that migration.
+
+The preceding authored-affix checkpoint is published as `1d742b8d7c14ea2f9a76ce5bf70b4cc2640bfb00`.
+Its frozen worktree, binaries and observations remain preserved under
+`runs/affix-loading-worktree` and `runs/affix-loading-*`. Hosted status is independent:
+[run 34398269518](https://github.com/Azaril/poe-optimizer/actions/runs/34398269518)
+had passed formatting/lint and was still testing on both platforms at
+2026-09-09 20:28:22 UTC. User authorization for CI log access remains in place.
+Earlier full-log downloads returned HTTP 403; available public annotations supplied
+actionable diagnostics. Preserve failed historical runs rather than relabeling them
+based on a later local repair.
 
 Earlier checkpoint entries below retain their original validation observations. Use this
 resume point and the newest evidence records for current status.
@@ -762,6 +783,70 @@ full data-code fingerprint, including the new lookup implementation. A host usin
 the standalone item-loading report should additionally retain
 `poe_optimizer_data::implementation_fingerprint()`. The [library report contract](item-source-and-loading.md)
 now states that distinction; no numerical code or report schema change is involved.
+
+## Socketed-augment loading checkpoint
+
+Implementation is in `runs/rune-loading-worktree`, branch `codex/rune-loading`, based on
+`1d742b8d7c14ea2f9a76ce5bf70b4cc2640bfb00`. See the
+[state contract](item-source-and-loading.md#socketed-augment-state) and
+[data seam](native-data.md#schema-migration). The complete native evaluator and broad
+joint optimizer remain unfinished; this phase does not change Spark/Mace admission.
+
+Schema **20** / `poe2-native-profiles-v20`, item-loading schema **4**, contains
+21,836,454 bytes with digest
+`a3c7515db5afb650bb1d1618c8ca85a5db92f16eee0cfaf73d51f1ed67e5aea9`.
+All 25 unrelated sections, existing affix data, all raw rune records, the pinned tree and
+all 443 unique requirement facts are unchanged. Original constructors regenerate the
+unique input binding to the new item catalog; two fresh public exports reproduce the
+reviewed package exactly. The source pin remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`.
+
+Implemented operations include injected rune/socket headers, variant-selected context
+hints, Bonded raw-line skipping, source slot classification, ordered authored rebuilds,
+number-text stacking, disabled-template restoration, normal/Bonded annotation searches
+and all-slot level requirements. Generated parser calls and rows carry explicit socket,
+slot and definition origins; source line indices are absent for generated text. Native
+numeric and loading work uses no Lua or subprocesses. Stateful assembly and unsupported
+parser callbacks still stop explicitly.
+
+The annotation proof checks complete minimum count vectors and source-order effects.
+It does not choose a sorted winner for equally good identities. Equal vectors with
+implicit trailing components can still produce ambiguous types under Bonded caps;
+original opposite dictionary orders demonstrate that boundary. Group storage, sorting,
+patterns and recursive-search equivalents all have independent work limits. Source
+errors retain their partial state; exhausted native resources are not no-solution results.
+
+| Gate | Evidence and result |
+| --- | --- |
+| Data and extraction | 129 data tests, two policy/source tests and one complete original catalog test pass. `runs/rune-loading-data-final.json` records preservation, failed setup attempts and the final catalog fingerprint correction. |
+| Numeric helpers | 14 tests pass, including original text combination/search callbacks, injected grammar, 10,020 number-order renderings and independent ambiguity enumeration. `runs/rune-numeric-final.json`. |
+| Import contracts | 252 reconciled tests: 159 unaffected tests from the broad run, 82 final existing loading/source targets, and 11 final rune boundary tests. Retain original failures from the synthetic catalog migration and the old unconditional rune-stop assertion; their replacements pass. |
+| Engine injection | All 13 existing data-injection tests pass; `runs/rune-loading-engine-injection-final.log`. |
+| Portable/native gates | Workspace strict lint, native-only strict lint, five WebAssembly libraries, formatting and the normal native dependency graph pass. The native graph has no PoB, mlua or LuaJIT dependency. |
+| CLI | 36 reconciled observations: final binaries pass 20 native and 13 reference-build inspection tests; three unchanged extraction tests independently produced two identical exports. `runs/rune-loading-final2-cli-validation-final.json`. |
+| Final corpus | All five imports, inspections and reference evaluations pass; all 110 reference measurements, all 834 instructions and all five whole-native rejection messages remain exact. 77 complete item reports are unchanged. `runs/rune-loading-final2-corpus-final.json`. All 116 final CLI native states join the frozen source ledger exactly; `runs/rune-loading-final2-source-corpus-join.json`. |
+| Original source | 81 source integration tests pass: 14 new rune cases and 67 existing cases. One ignored direct-entry worker is exercised by parents. The final observer pairs 109 full states (64 before assembly, 45 before unavailable parser calls), 511 parser calls, 424 formatter calls and 112 full affix tables, with zero mismatches. `runs/rune-loading-oracle-final.json`. |
+
+The independent corpus frontier is **67 assembly, 45 modifier parser, three rune
+reconstruction and one advanced-copy ordering dependency**. Every one of the 38 former
+rune stops executes additional native operations. Three reach later rune ambiguities;
+35 reach their next non-rune dependency. One former assembly stop now correctly stops
+before unimplemented advanced-copy unique ordering. This correction must not be described
+as new assembly coverage. The three preexisting jewel-radius stops, the advanced-copy
+stop and three rune stops remain outside full-state source pairing.
+
+Late review corrected padded-vector tie checks, bounded temporary grouping storage and
+sorting, Lua string-slot indexing, and an ignored injected copy-mode selection. Eleven
+native boundary tests cover these cases and resource/error distinctions. The original
+binaries, logs, corpus and source ledger remain under `runs/rune-loading-*`; the final
+code uses distinct `runs/rune-loading-final2-*` evidence. Never relabel earlier binaries
+as having incorporated those fixes. Caller files and all original goldens remain intact.
+
+Next resume work: finish publication/hosted checks, then use the
+read-only `runs/rune-loading-next-native-plan.md/json` audit to select a coherent
+modifier-callback or item-assembly phase in a fresh worktree. All 45 remaining parser
+stops currently reach special callbacks; their lowering must preserve injected data and
+actual-source parity. The general B3 actor/action/candidate design still awaits user
+input and is not implicitly approved by these item-loading phases.
 
 ## Authored affix loading active checkpoint
 

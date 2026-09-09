@@ -72,7 +72,8 @@ within the shared bounded XML/lexical subset. With `--with-definitions` or `--da
 reports ordered native item loading with [data-driven formatting](docs/item-formatting.md),
 [structural modifier parsing](docs/modifier-parser.md),
 [unique requirements](docs/unique-requirements.md) and
-[authored affix reconciliation](docs/item-source-and-loading.md#authored-affix-state) from the selected catalog.
+[authored affix reconciliation](docs/item-source-and-loading.md#authored-affix-state) and
+[socketed-augment reconstruction](docs/item-source-and-loading.md#socketed-augment-state) from the selected catalog.
 Pending callbacks and assembly operations stop explicitly. Inspection does not calculate effects; native skill admission
 remains separate and currently bounded to Spark/Mace. On the legacy command, `--backend pob`
 selects the optional reference backend. Native search uses [typed candidate calculation](docs/native-candidate-evaluation.md)

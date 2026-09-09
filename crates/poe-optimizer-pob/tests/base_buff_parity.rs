@@ -152,7 +152,7 @@ fn all_shipped_charm_buffs_match_original_with_native_parser_and_exact_empty_row
                 source.calls()
             );
             let row = &machine.state().buff_mod_lines[0];
-            assert_eq!(row.source_line, 2);
+            assert_eq!(row.source_line, Some(2));
             assert_eq!(row.range, ItemNumber::Nil);
             assert_eq!(row.corrupted_range, ItemNumber::Nil);
             assert_eq!(row.value_scalar, ItemNumber::Nil);
@@ -160,7 +160,7 @@ fn all_shipped_charm_buffs_match_original_with_native_parser_and_exact_empty_row
             let first = &machine.state().parser_calls[0];
             assert_eq!(
                 (first.line_index, first.sequence, first.combined),
-                (2, 0, false)
+                (Some(2), 0, false)
             );
             assert_eq!(first.text, text);
             if text.is_empty() {
@@ -215,7 +215,7 @@ fn independent_family_order_duplicates_and_suppression_precedence_match_original
         for (i, request) in state.parser_calls.iter().take(5).enumerate() {
             assert_eq!(
                 (request.sequence, request.line_index, request.combined),
-                (i, 2, false)
+                (i, Some(2), false)
             );
         }
         count += 1;

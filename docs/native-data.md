@@ -210,6 +210,19 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Package schema **20**, semantics **`poe2-native-profiles-v20`**, advances
+`item_loading` to schema **4**. It adds extracted rune header/socket patterns, slot
+classification roles and rewrites, rebuilding/text-combination rules, vector comparison
+constants and effect-scaling policy. `ItemLoadingCatalog::runes()` borrows the selected
+complete family; raw types, sparse sequences and unused optional fields remain visible
+until their source operation is reached. It does not duplicate or prefilter the database.
+See [socketed-augment state](item-source-and-loading.md#socketed-augment-state).
+
+The package retains 27 sections. All 25 unrelated sections, prior affix policy and raw
+rune definitions remain unchanged. All 443 unique requirement facts are regenerated from
+original constructors; only their authenticated item-loading input binding changes.
+Policy recognition and imported rune reconstruction do not broaden whole-build admission.
+
 Package schema **19**, semantics **`poe2-native-profiles-v19`**, advances
 `item_loading` to schema **3**. It injects authored affix header grammar, ordered limit
 branches, reserved header names/patterns, and reconciliation rules. All modifier families

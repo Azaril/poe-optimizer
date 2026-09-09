@@ -804,8 +804,10 @@ fn missing_dependencies_stop_at_actual_source_format_boundary_and_catalysts_rema
         .unwrap();
     assert_eq!(
         machine.pending().map(|p| p.kind),
-        Some(DependencyKind::RuneReconstruction)
+        Some(DependencyKind::RangeFormatting)
     );
+    assert_eq!(machine.state().format_calls.len(), 1);
+    assert!(machine.state().parser_calls.is_empty());
     let format = events(&source, "format").remove(0);
     native::compare_state(machine.state(), &format.get::<Table>("before").unwrap());
 }

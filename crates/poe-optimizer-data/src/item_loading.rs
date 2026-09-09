@@ -4,7 +4,9 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 
-pub const ITEM_LOADING_SCHEMA_VERSION: u32 = 3;
+pub const ITEM_LOADING_SCHEMA_VERSION: u32 = 4;
+mod runes;
+pub use runes::*;
 type Result<T> = std::result::Result<T, GameDataError>;
 fn error(message: impl std::fmt::Display) -> GameDataError {
     GameDataError(format!("item loading catalog: {message}"))
@@ -259,6 +261,7 @@ pub enum ItemAffixLookup<'a> {
 #[serde(deny_unknown_fields)]
 pub struct ItemLoadingPolicy {
     pub affix_loading: ItemAffixLoadingPolicy,
+    pub rune_loading: ItemRuneLoadingPolicy,
     pub default_affix_quality: f64,
     pub default_item_quality: f64,
     pub catalysts: Vec<ItemCatalystDefinition>,
@@ -422,6 +425,11 @@ impl ItemLoadingCatalog {
     }
     pub fn modifier_table(&self, name: &str) -> Option<&ItemMetadataTable> {
         self.0.data.modifier_tables.get(name)
+    }
+    /// Complete raw rune family; storage order is not a Lua pairs traversal order.
+    pub fn runes(&self) -> Option<ItemRuneCatalog<'_>> {
+        self.modifier_table(&self.policy().rune_loading.rune_table)
+            .map(ItemRuneCatalog::new)
     }
     pub fn affix_header(&self, header: &str) -> Option<ItemAffixSide> {
         self.policy().affix_loading.headers.get(header).copied()
@@ -632,6 +640,7 @@ impl ItemLoadingPolicy {
                 }
             }
         }
+        self.rune_loading.validate(self)?;
         let affix = &self.affix_loading;
         if affix.headers.len() > 256
             || affix.other_headers.len() > 256

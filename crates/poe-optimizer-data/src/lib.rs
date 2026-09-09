@@ -35,6 +35,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("item_rules.rs"),
         include_str!("item_formatting.rs"),
         include_str!("item_loading.rs"),
+        include_str!("item_loading/runes.rs"),
         include_str!("item_scalability.rs"),
         include_str!("modifier_parser.rs"),
         include_str!("unique_requirements.rs"),

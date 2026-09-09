@@ -1,3 +1,5 @@
+#[path = "runes.rs"]
+mod runes;
 use super::affixes::{AffixError, AffixPrograms};
 use super::{ItemNumber, LineSelection, VariantState, syntax};
 use poe_optimizer_data::item_loading::{
@@ -5,6 +7,7 @@ use poe_optimizer_data::item_loading::{
 };
 use poe_optimizer_data::item_scalability::CatalystScalingData;
 use poe_optimizer_engine::lua_pattern::{MatchBudget, PatternError};
+use runes::RunePrograms;
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 pub const MAX_ITEM_LOADING_TEXT: usize = 1024 * 1024;
@@ -65,7 +68,9 @@ pub enum DependencyResult<T> {
 #[derive(Debug, Clone, Serialize)]
 pub struct ParseRequest {
     pub sequence: usize,
-    pub line_index: usize,
+    pub line_index: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin: Option<RuneContribution>,
     pub text: String,
     pub combined: bool,
 }
@@ -172,10 +177,35 @@ pub trait ItemLoadProvider {
 #[derive(Debug, Default)]
 pub struct UnavailableItemLoadProvider;
 impl ItemLoadProvider for UnavailableItemLoadProvider {}
+/// A source definition contribution; generated rows have no authored text index.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct RuneContribution {
+    pub socket_index: usize,
+    pub slot_key: String,
+    pub bonded: bool,
+    pub definition_line_index: usize,
+    pub combined: bool,
+}
 #[derive(Debug, Clone, Serialize)]
 pub struct LoadedModLine {
     pub line: String,
-    pub source_line: usize,
+    pub source_line: Option<usize>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub rune_origins: Vec<RuneContribution>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub order: Option<ItemNumber>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub augment_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rune_count: Option<ItemNumber>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub socketed_rune_effect_already_applied: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_value_scalar: Option<ItemNumber>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub socketed_augment_type_override: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub socketed_soul_core_type: Option<String>,
     pub selection: LineSelection,
     pub flags: BTreeSet<String>,
     pub mod_tags: Vec<String>,
@@ -240,6 +270,8 @@ pub struct ItemState {
     pub suffixes: ItemAffixList,
     pub sockets: Vec<u32>,
     pub runes: Vec<String>,
+    #[serde(skip_serializing_if = "BTreeSet::is_empty")]
+    pub socketed_soul_core_types: BTreeSet<String>,
     pub item_socket_count: usize,
     pub jewel_socket_count: usize,
     pub base_lines: BTreeMap<String, LineSelection>,
@@ -275,6 +307,7 @@ impl Default for ItemState {
             suffixes: ItemAffixList::default(),
             sockets: Vec::new(),
             runes: Vec::new(),
+            socketed_soul_core_types: BTreeSet::new(),
             item_socket_count: 0,
             jewel_socket_count: 0,
             base_lines: BTreeMap::new(),
@@ -302,6 +335,7 @@ pub struct ItemLoadMachine<'a> {
     work_bytes: usize,
     affix_programs: Option<AffixPrograms>,
     affix_budget: MatchBudget,
+    rune_programs: Option<RunePrograms>,
 }
 #[derive(Clone, Copy, PartialEq)]
 enum GameStage {
@@ -321,6 +355,7 @@ impl<'a> ItemLoadMachine<'a> {
             work_bytes: 0,
             affix_programs: None,
             affix_budget: MatchBudget::default(),
+            rune_programs: None,
         };
         machine.reset("");
         machine.number(
@@ -475,6 +510,7 @@ impl<'a> ItemLoadMachine<'a> {
         self.boolean("advancedCopy", false);
         self.state.sockets.clear();
         self.state.runes.clear();
+        self.state.socketed_soul_core_types.clear();
         self.state.item_socket_count = 0;
         self.state.jewel_socket_count = 0;
         self.state.requirements.clear();
@@ -580,6 +616,7 @@ impl<'a> ItemLoadMachine<'a> {
         let mut check_section = false;
         let mut imported_level = None;
         let mut base_buffs = BaseBuffLines::default();
+        let mut skipped_rune_lines = 0usize;
         while index < lines.len() {
             let original = &lines[index];
             let mut line = original.clone();
@@ -775,9 +812,15 @@ impl<'a> ItemLoadMachine<'a> {
                     found_implicit = true;
                     stage = GameStage::Implicit;
                 }
-                if flags.contains("rune") {
-                    self.stop(DependencyKind::RuneReconstruction,Some(line_index),"rune display/reconstruction requires complete slot and modifier dependencies")?;
-                    return Ok(());
+                if flags.contains("rune") && !flags.contains("disabled") {
+                    let Some(skip) = self.skip_bonded_rune_line(&line, line_index)? else {
+                        return Ok(());
+                    };
+                    if skip {
+                        skipped_rune_lines += 1;
+                        index += 1;
+                        continue;
+                    }
                 }
                 if line.ends_with(" - Unscalable Value")
                     || line.ends_with(" \u{2014} Unscalable Value")
@@ -870,21 +913,21 @@ impl<'a> ItemLoadMachine<'a> {
                 if !self.apply_postparse_effects(&lower, line_index)? {
                     return Ok(());
                 }
-                if lower.starts_with("this item gains bonuses from socketed items as though it was")
-                    || lower.starts_with(
-                        "this item gains bonuses from socketed soul cores as though it was also",
-                    )
-                {
-                    self.stop(
-                        DependencyKind::RuneReconstruction,
-                        Some(line_index),
-                        "socketed augment type override/extra type requires rune reconstruction",
-                    )?;
+                let Some((augment_override, soul_core_type)) =
+                    self.rune_line_hints(&lower, line_index)?
+                else {
                     return Ok(());
-                }
+                };
                 if !flags.contains("disabled") && is_magnitude_line(&line) {
                     self.stop(DependencyKind::ModifierMagnitudes,Some(line_index),"modifier magnitude records require ordered reparsing and unique-database dependencies")?;
                     return Ok(());
+                }
+                if self.state.variants.matches(&selection) {
+                    if let Some(value) = &augment_override {
+                        self.text("socketedAugmentTypeOverride", value);
+                    } else if let Some(value) = &soul_core_type {
+                        self.state.socketed_soul_core_types.insert(value.clone());
+                    }
                 }
                 let recognized = outcome.modifiers.is_some();
                 let save = recognized
@@ -905,7 +948,15 @@ impl<'a> ItemLoadMachine<'a> {
                 if save {
                     let modline = LoadedModLine {
                         line: line.clone(),
-                        source_line: line_index,
+                        source_line: Some(line_index),
+                        rune_origins: Vec::new(),
+                        order: None,
+                        augment_type: None,
+                        rune_count: None,
+                        socketed_rune_effect_already_applied: None,
+                        display_value_scalar: None,
+                        socketed_augment_type_override: augment_override,
+                        socketed_soul_core_type: soul_core_type,
                         selection,
                         flags,
                         mod_tags: tags,
@@ -927,7 +978,7 @@ impl<'a> ItemLoadMachine<'a> {
                             Some(line.clone())
                         },
                     };
-                    self.push_line(modline, implicit_count);
+                    self.push_line(modline, implicit_count, skipped_rune_lines);
                 }
                 if recognized {
                     if game {
@@ -949,7 +1000,7 @@ impl<'a> ItemLoadMachine<'a> {
             }
             index += 1;
         }
-        self.finish_parse(imported_level, provider)
+        self.finish_parse(imported_level, game, provider)
     }
 
     fn role(&self, name: &str) -> &str {
@@ -1061,6 +1112,20 @@ impl<'a> ItemLoadMachine<'a> {
             entries.push(affix);
             return Ok(Header::Known);
         }
+        if name == self.catalog.policy().rune_loading.socket_header {
+            return Ok(if self.rune_sockets(value, line)? {
+                Header::Known
+            } else {
+                Header::Stop
+            });
+        }
+        if name == self.catalog.policy().rune_loading.rune_header {
+            if !self.prepare_rune_header(line)? {
+                return Ok(Header::Stop);
+            }
+            self.state.runes.push(value.into());
+            return Ok(Header::Known);
+        }
         match name {
             "Implicits" => {
                 return Ok(Header::Implicits(
@@ -1068,23 +1133,6 @@ impl<'a> ItemLoadMachine<'a> {
                 ));
             }
             "Has Variants" | "Selected Variants" => return Ok(Header::SkipNext),
-            "Sockets" => {
-                let mut group = 0;
-                for b in value.bytes() {
-                    if b == b'S' {
-                        self.state.sockets.push(group);
-                        group += 1;
-                    } else if b == b'J' {
-                        self.state.jewel_socket_count += 1;
-                    }
-                }
-                self.state.item_socket_count = self.state.sockets.len();
-                return Ok(Header::Known);
-            }
-            "Rune" => {
-                self.state.runes.push(value.into());
-                return Ok(Header::Known);
-            }
             "Level" => {
                 *imported = number_option(syntax::spec_to_number(value));
                 return Ok(Header::Known);
@@ -1527,7 +1575,15 @@ impl<'a> ItemLoadMachine<'a> {
                 self.charge(text.len() + 128)?;
                 self.state.buff_mod_lines.push(LoadedModLine {
                     line: text.clone(),
-                    source_line: line_index,
+                    source_line: Some(line_index),
+                    rune_origins: Vec::new(),
+                    order: None,
+                    augment_type: None,
+                    rune_count: None,
+                    socketed_rune_effect_already_applied: None,
+                    display_value_scalar: None,
+                    socketed_augment_type_override: None,
+                    socketed_soul_core_type: None,
                     selection: LineSelection::default(),
                     flags: BTreeSet::new(),
                     mod_tags: Vec::new(),
@@ -1598,7 +1654,8 @@ impl<'a> ItemLoadMachine<'a> {
             .any(|call| matches!(call.result, DependencyResult::Unavailable(_)));
         for (index, call) in outcome.precision_parser_calls.into_iter().enumerate() {
             if call.request.sequence != sequence + 1 + index
-                || call.request.line_index != line
+                || call.request.line_index != Some(line)
+                || call.request.origin.is_some()
                 || call.request.combined
                 || call.request.text.len() > MAX_ITEM_LOADING_TEXT
             {
@@ -1659,7 +1716,8 @@ impl<'a> ItemLoadMachine<'a> {
             sequence: self.state.format_calls.len()
                 + self.state.parser_calls.len()
                 + self.state.format_parser_calls.len(),
-            line_index: line,
+            line_index: Some(line),
+            origin: None,
             text: text.into(),
             combined,
         };
@@ -1678,7 +1736,7 @@ impl<'a> ItemLoadMachine<'a> {
             }
         }
     }
-    fn push_line(&mut self, line: LoadedModLine, implicit_count: f64) {
+    fn push_line(&mut self, line: LoadedModLine, implicit_count: f64, skipped_rune_lines: usize) {
         if line.flags.contains("rune") {
             self.state.rune_mod_lines.push(line);
         } else if line.flags.contains("enchant") {
@@ -1687,6 +1745,7 @@ impl<'a> ItemLoadMachine<'a> {
             self.state.class_requirement_mod_lines.push(line);
         } else if line.flags.contains("implicit")
             || ((self.state.rune_mod_lines.len()
+                + skipped_rune_lines
                 + self.state.enchant_mod_lines.len()
                 + self.state.implicit_mod_lines.len()) as f64)
                 < implicit_count
@@ -1699,13 +1758,27 @@ impl<'a> ItemLoadMachine<'a> {
     fn finish_parse(
         &mut self,
         imported: Option<ItemNumber>,
+        game: bool,
         provider: &mut impl ItemLoadProvider,
     ) -> Result<(), ItemLoadError> {
         if let (Some(title), Some(base)) = (self.txt("title"), self.state.base_name.as_deref()) {
             self.state.name = format!("{title}, {}", syntax::strip_name_parentheses(base));
         }
-        if !self.state.runes.is_empty() {
-            self.stop(DependencyKind::RuneReconstruction,None,"rune reconstruction and rune-level requirements require complete modifier dependencies")?;
+        if !self.finish_runes(game, provider)? {
+            return Ok(());
+        }
+        if self.flag("advancedCopy")
+            && (self.state.rarity == self.role("unique") || self.state.rarity == self.role("relic"))
+            && !self.state.variants.uses_versioned_or_grouped()
+        {
+            self.stop(
+                DependencyKind::AdvancedCopyAffixes,
+                None,
+                "advanced-copy unique stat reordering requires represented source ordering",
+            )?;
+            return Ok(());
+        }
+        if !self.apply_rune_requirements()? {
             return Ok(());
         }
         if self.state.base_present {

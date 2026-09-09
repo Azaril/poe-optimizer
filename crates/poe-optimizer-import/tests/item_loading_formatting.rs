@@ -171,7 +171,8 @@ fn formatter_errors_are_not_unavailable_and_trace_messages_remain_bounded() {
                 precision_parser_calls: vec![FormatParserCall {
                     request: ParseRequest {
                         sequence: r.sequence + 1,
-                        line_index: r.line_index,
+                        line_index: Some(r.line_index),
+                        origin: None,
                         text: "Line".into(),
                         combined: false,
                     },
@@ -300,7 +301,8 @@ fn custom_formatter_cannot_resume_after_failed_precision_dependency() {
             let mut calls = vec![FormatParserCall {
                 request: ParseRequest {
                     sequence: r.sequence + 1,
-                    line_index: r.line_index,
+                    line_index: Some(r.line_index),
+                    origin: None,
                     text: r.text.clone(),
                     combined: false,
                 },
@@ -310,7 +312,8 @@ fn custom_formatter_cannot_resume_after_failed_precision_dependency() {
                 calls.push(FormatParserCall {
                     request: ParseRequest {
                         sequence: r.sequence + 2,
-                        line_index: r.line_index,
+                        line_index: Some(r.line_index),
+                        origin: None,
                         text: r.text.clone(),
                         combined: false,
                     },
