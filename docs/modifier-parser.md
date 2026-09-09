@@ -47,7 +47,7 @@ Source-derived pure factory recipes extend the same immutable catalog. Each orig
 closure retains its source span, captured graph and an explicit lowering disposition.
 An admitted recipe records fixed argument slots, scalar literals and captures, policy
 field references, negation, byte concatenation, a closed `firstToUpper` helper,
-ordered table fields and constructor calls. All game values,
+ordered table fields, constructor calls and the closed `flag` constructor wrapper. All game values,
 modifier names and field keys are selected data. Byte offsets and a function digest
 identify the complete function within its authenticated source span; constructor
 provenance binds the observed original helper. Modified external packages have their
@@ -105,6 +105,24 @@ reported as `firstToUpper receiver method` with its actual catalog identity. No
 callback is guessed or invoked through a hidden Lua fallback. Matching, replacement,
 number rendering and output allocations consume cumulative request budgets. Compiled
 patterns remain immutable and included in each evaluator's injected data identity.
+
+`Flag` records the owning callback's captured helper and the exact evaluated actual
+arguments. Its binding path is owner.flag to helper.mod to the authenticated original
+constructor. A flag-only owner retains no direct constructor provenance; the helper's
+callee must match the authenticated constructor rather than another callback with a
+convenient name. Extraction proves the complete wrapper, actual function identities,
+environments and captured values. It injects the literal type string and boolean value
+as `flag_mod_type`/`flag_mod_value`; text payloads can contain NUL and UTF-8 because they
+are constructor metadata, not patterns.
+
+All arguments evaluate in source order before the wrapper binds the first value as its
+name (nil when absent), inserts the two configured literals, and forwards every remaining
+argument. Nil holes and trailing nils are not compacted. The constructor consumes this
+prefix/tail view without a second argument vector, preserving its independent absolute
+source/flags/keyword positions. The wrapper adds no table copy; the normal public copy
+boundary remains. A root Flag returns the constructor table and does not imply that its
+shape or mechanic is numerically admissible. Opaque returned flag functions inherit the
+existing nested constructor-graph limitation and remain unavailable for execution.
 
 Current delivery and validation status belongs in the
 [implementation log](implementation.md).

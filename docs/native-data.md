@@ -210,6 +210,15 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Package schema **24**, semantics **`poe2-native-profiles-v24`**, advances the modifier
+parser to schema **5**. It adds one closed `Flag` expression, the authored string/boolean
+constructor prefix and authenticated helper evidence. The helper's captured constructor
+is bound through its own source identity; flag-only factories do not acquire fictitious
+direct constructor provenance. Existing graph definitions, all 1,073 preceding Pure
+recipes and 26 other package sections remain unchanged. Zero-argument calls and explicit
+nil slots retain their source meaning. See the
+[factory contract](modifier-parser.md#pure-factory-definitions).
+
 Package schema **23**, semantics **`poe2-native-profiles-v23`**, advances the modifier
 parser section to schema **4**. It adds bounded `Concat` and `FirstToUpper` expressions,
 `first_to_upper_pattern` and the complete authenticated helper span. Helper expressions

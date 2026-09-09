@@ -118,7 +118,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 23 and `poe2-native-profiles-v23`, including source-keyed passive/actor effects,
+schema 24 and `poe2-native-profiles-v24`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -267,3 +267,11 @@ additional helpers, parameter shadowing and unrepresented bindings remain opaque
 Unary operators bind tighter than right-associated concatenation; parentheses retain
 the original operation order. Lowering examines every callback independently of example
 builds, and preservation checks retain all preceding recipes and graph definitions.
+
+The closed Flag wrapper exports its literal string/boolean prefix and complete helper
+span. Authentication follows the actual owning callback's captured flag function to
+that helper's captured mod function and the existing original constructor. There is no
+inferred direct constructor capture on a flag-only owner and no dependency on fixed
+graph IDs. The whole wrapper's variadic tail position is verified; source statements,
+computed callees and broader function execution remain outside the closed grammar.
+The injected type is literal metadata, so bounded empty/NUL/UTF-8 strings are retained.

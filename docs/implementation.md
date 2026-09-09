@@ -2,67 +2,52 @@
 
 Last updated: 2026-09-09
 
-Current completed checkpoint: **bounded native string factory expressions**, code
-`11e6f3906b30f5adba8e0847e6de6b84ea0f6894`, in the frozen
-`runs/string-factories-worktree` (`codex/string-factories`), based on
-`114e86b3ad97112cca087e345c90e3049d92ab4e`. Production, source fixtures and final
-CLI binaries are frozen. All scoped local gates, final corpus/source comparisons and
-reproducible exports pass. Code and this checkpoint update are published together;
-exact publication identity is recorded in `runs/string-factories-publication.json`. See [the checkpoint](#bounded-string-factory-checkpoint).
+Current completed local checkpoint: **native Flag constructor expressions**, in
+`runs/flag-factories-worktree` (`codex/flag-factories`), based on
+`c79003a21082d2b0e86424755f518db2d2e9ed7d`. Production and source tests are frozen.
+Code: `e862651c0143ad1973b9cd50f1583d90059d47be`. All scoped local gates pass:
+421 test observations, two exact exports, corpus/source comparisons, strict lint and
+portable compilation. Code and this document form one checkpoint; exact remote
+publication and hosted CI status are recorded in `runs/flag-factories-publication.json`.
+See [the checkpoint](#closed-flag-factory-checkpoint).
 
-Schema **23**, semantics `poe2-native-profiles-v23`, advances the parser to schema4.
-The 23,013,054-byte package has SHA-256
-`c0d6fe361fbacedebb0b661c1899a0d3215d3d7cdd2636f755b5924491359f5f`.
-It retains 27 sections and 129 authenticated sources. The complete source verifier
-admits 38 additional bodies: 28 Special and 10 ModTag. The catalog now has 1,073 Pure
-recipes and 578 Unsupported dispositions. All 1,035 prior Pure recipes, original
-callback/table graphs, declarations, dependencies and 26 other sections remain exact.
-Sixteen still-Unsupported callbacks now stop at later unrepresented tokens; their
-old/new reasons are enumerated rather than counted as native support.
-
-Concat retains unary precedence, parentheses and right association while evaluating
-operands in source order. FirstToUpper uses its authenticated captured helper and
-injected replacement pattern. Native execution preserves bytes, numeric rendering,
-captures, nil/method errors and lazy pattern errors, with cumulative request budgets.
-These operations use no Lua or subprocess and share immutable definitions across
-workers. Opaque callable receivers and the pre-existing constructor lexical-graph
-limitation remain explicit. See the [parser contract](modifier-parser.md#pure-factory-definitions).
-
-Passing scoped gates: 52 engine tests, 62 affected import tests, 84 source integration
-tests, all 141 data tests, 16 source extraction/authentication tests and 42
-native/default CLI observations. Workspace/native strict lint,
-formatting, the native runtime dependency audit and five WebAssembly libraries pass.
-Two fresh public exports reproduce the installed package exactly. These are scoped
-gates, not a full workspace or full import-suite test claim.
+Schema **24**, semantics `poe2-native-profiles-v24`, advances the parser to schema **5**.
+The package admits 68 complete additional Special bodies, taking the catalog to
+**1,141 Pure recipes** and 510 Unsupported dispositions. All 1,073 prior recipes,
+original graphs/dependencies and 26 other sections remain exact. Fifteen unsupported
+reasons advance without being counted as support. The constructor prefix comes from
+injected data; native execution uses neither Lua nor subprocesses.
 
 The five-build comparison preserves all 110 reference number bits, 834 instructions
-and five native rejection messages. Of 116 complete item reports, 114 are unchanged
-and exactly two advance from ModifierParser to Assembly. First stops are now
-84 Assembly, 28 ModifierParser, three RuneReconstruction and one AdvancedCopyAffixes.
-All 116 native states match the source ledger, including 109 complete original states
-(81 preassembly and 28 parser-frontier), 112 affix pairs, 594 parser and 492 formatter
-prefixes. Both progressed items are fully source-paired. Seven existing full-source
-observation boundaries remain explicit. Full native build admission remains Spark/Mace;
-the five breadth builds still encounter three one-Skill and two one-SkillSet limits.
+and five native rejection messages. Of 116 complete item reports, 115 are unchanged
+and one advances from ModifierParser to Assembly. First stops are now 85 Assembly,
+27 ModifierParser, three RuneReconstruction and one AdvancedCopyAffixes. All native
+states match the source ledger; 109 complete original states are paired. Full native
+build admission remains Spark/Mace, and the five breadth builds still encounter three
+one-Skill and two one-SkillSet limits. Parser coverage is not full evaluator parity.
 
-Resume: inspect the published head's hosted CI, then create a fresh worktree from main
-for the reviewed closed Flag-wrapper phase. Preserve this frozen worktree, its binaries
-and all component evidence. The next
-read-only audit is `runs/string-factories-next-native-plan.md/json`: 68 complete Special
-syntax candidates using the closed flag constructor wrapper. Its helper-to-constructor
-capture path, injected prefix and exact variadic nil positions require their own
-source proof. The independent review in `runs/flag-factories-oracle-plan.md/json`
-confirms this as a routine closed-seam extension; 23 candidate owners lack a direct
-constructor capture, so their helper-to-constructor linkage must stay explicit. No
-generic helper language, control flow or actor migration is included. The **B3 proposal remains
-unapproved**. Continue independent parser/item work without inferring that approval.
+Resume: verify publication and inspect its exact-head hosted CI before creating a
+fresh worktree for the reviewed
+one-argument number-conversion phase. The whole-catalog audit and independent review
+are `runs/flag-factories-next-native-plan.md/json` and
+`runs/number-factories-oracle-plan.md/json`: 81 candidate complete bodies across Special,
+ModTag and Prefix. This reuses the existing numeric reader and does not clear the
+remaining gem-property, skill-grant or ring-conditional corpus boundaries by itself.
+Actual warmed conversion-bearing callback execution is a required next-phase gate.
 
-The reconciled final ledger is `runs/string-factories-validation-final.json`. Component
-records use `runs/string-factories-*`, including root validation, data preservation,
-source oracle, CLI validation, corpus comparison and source join.
-The build manifest now hashes 187 source/resource inputs, including literal embedded
-resources, and retains the original 44 protected files and both caller files. Frozen
-prior checkpoint worktrees and their binary/evidence records remain intact.
+The proposed [conditional parser operations](conditional-parser-operations-proposal.md)
+design is awaiting user input; no branching/lookup implementation is included here.
+That choice does not block the separate numeric primitive. The **B3 actor/action/candidate
+proposal remains unapproved**. Continue independent work without inferring either answer.
+Keep the frozen worktree, binaries, caller files and prior evidence intact.
+
+The preceding string checkpoint is published as code
+`11e6f3906b30f5adba8e0847e6de6b84ea0f6894` and docs
+`c79003a21082d2b0e86424755f518db2d2e9ed7d`.
+Its [historical checkpoint](#bounded-string-factory-checkpoint),
+`runs/string-factories-validation-final.json` and publication record retain all scoped
+validation and preservation evidence. Hosted run 34415712762 had passed formatting/lint
+and was testing on both platforms at 2026-09-09 23:12:45 UTC; no failed steps were reported.
 
 The preceding ordinary factory checkpoint is published as code
 `35960b6403c52be4a9ab2aed60c43fd3205ffe27` and docs
@@ -812,6 +797,67 @@ full data-code fingerprint, including the new lookup implementation. A host usin
 the standalone item-loading report should additionally retain
 `poe_optimizer_data::implementation_fingerprint()`. The [library report contract](item-source-and-loading.md)
 now states that distinction; no numerical code or report schema change is involved.
+
+## Closed Flag factory checkpoint
+
+Code: `e862651c0143ad1973b9cd50f1583d90059d47be`. All scoped local gates pass.
+Package schema 24/parser 5; semantics `poe2-native-profiles-v24`;
+23,085,269 bytes, 27 sections, 129 authenticated sources; SHA-256
+`dd7f7f2dd75ae5655c830a41a783f37674ea4a1b5f11b5cbbc2a5708725e721d`.
+The PoB source remains pinned at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`.
+
+The complete source verifier admits 68 additional Special bodies. Their pre-anchor
+aliases are not another 68 bodies. Every owner captures the authenticated Flag helper,
+which captures the authenticated constructor. Twenty-three owners lack a direct
+constructor capture; their provenance retains that distinction. The extractor verifies
+the complete wrapper, actual function bindings and literal prefix types. Data validation
+checks the captured path and source anchors; no production callback-ID whitelist is used.
+
+The engine evaluates arguments in order, binds the first value or nil as the name,
+inserts the injected string/boolean prefix and forwards every remaining position,
+including nil holes. It reuses constructor logic without a second argument vector.
+Immutable definitions remain shareable across workers, with request work/output bounds.
+An independently injected empty/NUL/UTF-8 prefix and false value are supported. The
+existing opaque function-value boundary remains: the preserved isolated constructor
+has a different lexical capture graph from the full module, including when nested
+inside a returned Flag helper. Operational table parity does not erase that difference.
+
+| Scoped gate | Result |
+|---|---|
+| Engine library/contracts/data injection | 57 passed |
+| Affected import loading/formatting/parser/runes | 62 passed |
+| Data library/integration | All 146 passed |
+| Extraction/authentication | 21 passed |
+| Original-source integration | 91 passed |
+| Native/default CLI observations | 44 passed |
+| Workspace/native strict all-target lint, formatting and dependency audit | Passed |
+| Five WebAssembly libraries | Passed |
+| Two independent public exports | Byte-exact package reproduction |
+
+These are scoped gates, not a full workspace or full import-suite test claim.
+
+The new source matrix covers every admitted Flag selection, 408 alias graphs,
+constructor forwarding, source errors, arbitrary injected prefixes, nested calls,
+copy behavior and 8,704 live warmed calls. Existing factory/string/caller/item/session/rune
+regressions remain passing. A stale negative extraction fixture and a nested formatting
+lint in a source-test helper were corrected; original failed attempts are preserved.
+The corrected source target passed again. Only one external test helper changed after
+the CLI freeze; its generated Lua text and all production/embedded inputs stayed exact.
+
+The final corpus preserves 110 reference values bit-for-bit and all 834 source instructions.
+One item advances from parsing to assembly; 115 complete reports remain identical.
+The strict join covers all 116 native states, 109 complete original states (82 preassembly
+and 27 parser-frontier), 112 affix states, 598 parser prefixes and 496 formatter prefixes.
+Seven full-source observation gaps and four affix gaps remain explicit. No new whole
+build or complete item-assembly support is claimed.
+
+The reconciled ledger is `runs/flag-factories-validation-final.json`. Component
+evidence uses `runs/flag-factories-*`: root/data validation, preservation,
+source oracle, CLI validation, corpus comparison and source join. The original 209-input
+CLI manifest is retained; the final current manifest reconciles the one test-only edit.
+Preservation verifies 44 protected files, both caller inputs and the preceding
+507-file string-worktree freeze; publication checks the same content in main. The reviewed next numeric slice and pending conditional
+proposal are described in the resume point above; neither is implemented by this phase.
 
 ## Bounded string factory checkpoint
 
