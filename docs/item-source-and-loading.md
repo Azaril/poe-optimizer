@@ -126,7 +126,8 @@ be immutable and reusable across candidates, with detailed tracing enabled separ
 numerical execution.
 
 The built-in inspection provider supplies [native item formatting](item-formatting.md)
-and [ordinary structural modifier parsing](modifier-parser.md) using the selected data.
+[ordinary structural modifier parsing](modifier-parser.md) and
+[completed unique requirements](unique-requirements.md) using the selected data.
 Selected callback execution, stateful parsing and complete assembly remain explicit
 dependencies. A formatting fallback can itself require a parser call to discover precision;
 that request and its outcome remain distinct from the loader's subsequent modifier parse.
@@ -138,8 +139,8 @@ source callbacks in tests; supplying a parser result is not a native parser impl
 The report's data and loader fingerprints do not authenticate a caller-supplied provider's
 implementation or results. A host using a custom provider must retain that provider's
 provenance independently. The built-in provider, engine formatter and structural parser are included in
-the loader implementation fingerprint; injected formatting definitions are bound separately
-by the selected data identity.
+the loader implementation fingerprint; injected formatting and unique-requirement definitions
+are bound separately by the selected data identity.
 
 Defence display headers now populate first-class optional armour data before the source's
 later `hidden_specs` branch. Their keys and base rewrites come from the selected data

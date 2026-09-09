@@ -1410,3 +1410,146 @@ fn base_buffs_bound_generated_rows_independently_of_authored_line_count() {
     assert_ne!(machine.status(), ItemLoadStatus::SourceError);
     assert!(machine.evidence_bytes() <= MAX_ITEM_LOADING_EVIDENCE_BYTES);
 }
+
+#[test]
+fn unique_requirements_treat_nil_as_absent_but_preserve_numeric_zero_and_authored_maximum() {
+    struct Requirements(UniqueOutcome);
+    impl ItemLoadProvider for Requirements {
+        fn lookup_unique(&mut self, _: &UniqueRequest) -> DependencyResult<Option<UniqueOutcome>> {
+            DependencyResult::Available(Some(self.0.clone()))
+        }
+        fn assemble(&mut self, request: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+            CompleteProvider.assemble(request)
+        }
+    }
+    let data = catalog();
+    for (natural_level, level, expected_natural) in [
+        (None, Some(ItemNumber::new(49.0)), 49.0),
+        (Some(ItemNumber::Nil), Some(ItemNumber::new(49.0)), 49.0),
+        (
+            Some(ItemNumber::new(0.0)),
+            Some(ItemNumber::new(49.0)),
+            12.0,
+        ),
+    ] {
+        let mut machine = ItemLoadMachine::new(&data);
+        machine
+            .apply_text(
+                "Rarity: UNIQUE\nCaller Name\nCaller Base\nLevelReq: 60",
+                &mut Requirements(UniqueOutcome {
+                    natural_level,
+                    level,
+                }),
+            )
+            .unwrap();
+        assert_eq!(machine.status(), ItemLoadStatus::Complete);
+        assert_eq!(
+            machine.state().requirements["naturalLevel"].value(),
+            Some(expected_natural)
+        );
+        assert_eq!(machine.state().requirements["level"].value(), Some(60.0));
+    }
+    for (natural_level, level) in [(None, None), (Some(ItemNumber::Nil), Some(ItemNumber::Nil))] {
+        let mut machine = ItemLoadMachine::new(&data);
+        let error = machine
+            .apply_text(
+                "Rarity: UNIQUE\nCaller Name\nCaller Base",
+                &mut Requirements(UniqueOutcome {
+                    natural_level,
+                    level,
+                }),
+            )
+            .unwrap_err();
+        assert_eq!(machine.status(), ItemLoadStatus::SourceError);
+        assert!(
+            error
+                .to_string()
+                .contains("no natural or level requirement")
+        );
+    }
+}
+
+#[test]
+fn unique_requirement_maximum_reads_injected_rune_field_and_retains_source_error_prefix() {
+    let mut data = catalog().data().clone();
+    let ItemMetadataValue::Table(requirements) =
+        data.bases[0].fields.fields.get_mut("req").unwrap()
+    else {
+        panic!()
+    };
+    requirements
+        .fields
+        .insert("level".into(), ItemMetadataValue::Number(-0.0));
+    let ItemMetadataValue::Table(headers) = data
+        .policy
+        .compatibility
+        .get_mut("header_assignments")
+        .unwrap()
+    else {
+        panic!()
+    };
+    headers.fields.insert(
+        "Caller Rune Requirement".into(),
+        ItemMetadataValue::Table(table([
+            ("field", text("requirements.runeLevel")),
+            ("kind", text("number")),
+        ])),
+    );
+    let data = ItemLoadingCatalog::new(data).unwrap();
+    struct ZeroRequirement;
+    impl ItemLoadProvider for ZeroRequirement {
+        fn lookup_unique(&mut self, _: &UniqueRequest) -> DependencyResult<Option<UniqueOutcome>> {
+            DependencyResult::Available(Some(UniqueOutcome {
+                natural_level: Some(ItemNumber::new(-0.0)),
+                level: None,
+            }))
+        }
+        fn assemble(&mut self, request: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+            CompleteProvider.assemble(request)
+        }
+    }
+    for (value, expected) in [("-0", -0.0_f64), ("35", 35.0_f64)] {
+        let mut machine = ItemLoadMachine::new(&data);
+        machine
+            .apply_text(
+                &format!(
+                    "Rarity: UNIQUE\nCaller Name\nCaller Base\nCaller Rune Requirement: {value}"
+                ),
+                &mut ZeroRequirement,
+            )
+            .unwrap();
+        assert_eq!(machine.status(), ItemLoadStatus::Complete);
+        assert_eq!(
+            machine.state().requirements["naturalLevel"]
+                .value()
+                .unwrap()
+                .to_bits(),
+            (-0.0_f64).to_bits()
+        );
+        assert_eq!(
+            machine.state().requirements["level"]
+                .value()
+                .unwrap()
+                .to_bits(),
+            expected.to_bits()
+        );
+    }
+    let mut machine = ItemLoadMachine::new(&data);
+    let error = machine
+        .apply_text(
+            "Rarity: UNIQUE\nCaller Name\nCaller Base\nCaller Rune Requirement: unavailable",
+            &mut ZeroRequirement,
+        )
+        .unwrap_err();
+    assert_eq!(machine.status(), ItemLoadStatus::SourceError);
+    assert!(error.to_string().contains("rune level requirement"));
+    assert!(!machine.state().requirements.contains_key("runeLevel"));
+    // Original source assigns level from naturalLevel before the failing m_max.
+    assert_eq!(
+        machine.state().requirements["level"]
+            .value()
+            .unwrap()
+            .to_bits(),
+        (-0.0_f64).to_bits()
+    );
+}

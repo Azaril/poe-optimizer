@@ -98,6 +98,7 @@ pub struct UniqueRequest {
 }
 #[derive(Debug, Clone, Serialize)]
 pub struct UniqueOutcome {
+    /// None and ItemNumber::Nil both represent Lua absence; numeric zero is present.
     pub natural_level: Option<ItemNumber>,
     pub level: Option<ItemNumber>,
 }
@@ -1685,15 +1686,18 @@ impl<'a> ItemLoadMachine<'a> {
             let natural = if let Some(unique) = unique {
                 let n = unique
                     .natural_level
-                    .or(unique.level)
-                    .and_then(ItemNumber::value);
+                    .and_then(ItemNumber::value)
+                    .or_else(|| unique.level.and_then(ItemNumber::value));
                 let Some(n) = n else {
                     self.status = ItemLoadStatus::SourceError;
                     return Err(ItemLoadError(
                         "unique database item has no natural or level requirement".into(),
                     ));
                 };
-                ItemNumber::new(n.max(base_level.and_then(ItemNumber::value).unwrap_or(0.0)))
+                ItemNumber::new(syntax::lua_max(
+                    n,
+                    base_level.and_then(ItemNumber::value).unwrap_or(0.0),
+                ))
             } else {
                 if !self.state.requirements.contains_key("level")
                     && let Some(level) = if self.state.sockets.is_empty() {
@@ -1713,16 +1717,29 @@ impl<'a> ItemLoadMachine<'a> {
             self.state
                 .requirements
                 .insert("naturalLevel".into(), natural);
+            let natural = natural.value().unwrap_or(0.0);
             let level = self
                 .state
                 .requirements
                 .get("level")
                 .copied()
-                .unwrap_or(natural)
-                .value()
-                .unwrap_or(0.0)
-                .max(natural.value().unwrap_or(0.0))
-                .max(0.0);
+                .and_then(ItemNumber::value)
+                .unwrap_or(natural);
+            // Source assigns this fallback before m_max can fail on runeLevel.
+            self.state
+                .requirements
+                .insert("level".into(), ItemNumber::new(level));
+            let Some(rune_level) = self
+                .state
+                .requirements
+                .get("runeLevel")
+                .copied()
+                .and_then(ItemNumber::value)
+            else {
+                self.status = ItemLoadStatus::SourceError;
+                return Err(ItemLoadError("item has no rune level requirement".into()));
+            };
+            let level = syntax::lua_max(syntax::lua_max(level, natural), rune_level);
             self.state
                 .requirements
                 .insert("level".into(), ItemNumber::new(level));

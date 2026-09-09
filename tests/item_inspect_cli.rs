@@ -194,6 +194,10 @@ fn caller_catalog_changes_item_resolution_and_keeps_unavailable_operations_expli
         .clone();
     base.name = "Caller Supplied Helmet Base".into();
     package.item_loading.bases.push(base);
+    package.unique_requirements =
+        poe_optimizer_data::unique_requirements::UniqueRequirementData::unavailable(
+            "test changes item loading construction inputs",
+        );
     package.refresh_section_digests().unwrap();
     let data_bytes = package.canonical_bytes().unwrap();
     fs::write(&data_path, &data_bytes).unwrap();
@@ -428,6 +432,10 @@ fn injected_defence_headers_reach_cli_state_without_granting_assembly_or_admissi
         .policy
         .defence_header_keys
         .insert("Caller Guard".into(), "CallerGuardValue".into());
+    package.unique_requirements =
+        poe_optimizer_data::unique_requirements::UniqueRequirementData::unavailable(
+            "test changes item loading construction inputs",
+        );
     package.refresh_section_digests().unwrap();
     let data_bytes = package.canonical_bytes().unwrap();
     fs::write(&data_path, &data_bytes).unwrap();
@@ -497,6 +505,10 @@ fn injected_base_buffs_reach_cli_loading_state_without_numerical_admission() {
                 .collect(),
         ),
     );
+    package.unique_requirements =
+        poe_optimizer_data::unique_requirements::UniqueRequirementData::unavailable(
+            "test changes base buff construction inputs",
+        );
     package.refresh_section_digests().unwrap();
     let bytes = package.canonical_bytes().unwrap();
     fs::write(&data_path, &bytes).unwrap();
@@ -530,4 +542,163 @@ fn injected_base_buffs_reach_cli_loading_state_without_numerical_admission() {
     );
     assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
     assert_eq!(fs::read(&data_path).unwrap(), bytes);
+}
+
+#[test]
+fn injected_unique_requirements_distinguish_hit_miss_unavailable_and_stale_inputs() {
+    use poe_optimizer_data::unique_requirements::UniqueRequirementData;
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller-unique.xml");
+    let data_path = temp.path().join("caller-unique-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    // Select fixture identity from injected data; no production item/level mapping.
+    // Omit base buffs so this test reaches the requirement seam directly.
+    let (key, title, base_name, base_level) = package
+        .unique_requirements
+        .complete()
+        .unwrap()
+        .entries
+        .iter()
+        .find_map(|entry| {
+            let base = package
+                .item_loading
+                .bases
+                .iter()
+                .find(|base| base.name == entry.base_name)?;
+            if base.fields.fields.contains_key("flask") || base.fields.fields.contains_key("charm")
+            {
+                return None;
+            }
+            let title = entry
+                .canonical_key
+                .strip_suffix(&format!(", {}", entry.base_name))?;
+            let level = base.requirements()?.fields.get("level")?.as_f64()?;
+            Some((
+                entry.canonical_key.clone(),
+                title.to_owned(),
+                entry.base_name.clone(),
+                level,
+            ))
+        })
+        .expect("completed catalog contains an ordinary base fixture");
+    let missing_title = format!("{title} Caller Missing");
+    let missing_key = format!("{missing_title}, {base_name}");
+    assert!(
+        package
+            .unique_requirements
+            .complete()
+            .unwrap()
+            .entries
+            .iter()
+            .all(|entry| entry.canonical_key != missing_key)
+    );
+    let xml = format!(
+        "<PathOfBuilding2><Items><Item id='hit'><![CDATA[Rarity: UNIQUE\n{title}\n{base_name}\nImplicits: 0]]></Item><Item id='miss'><![CDATA[Rarity: UNIQUE\n{missing_title}\n{base_name}\nImplicits: 0]]></Item></Items></PathOfBuilding2>"
+    );
+    fs::write(&input, &xml).unwrap();
+    let natural = base_level + 13.5;
+    let entry = package
+        .unique_requirements
+        .complete_mut()
+        .unwrap()
+        .entries
+        .iter_mut()
+        .find(|entry| entry.canonical_key == key)
+        .unwrap();
+    entry.natural_level = Some(natural);
+    // A present natural requirement takes precedence over this larger DB level.
+    entry.level = Some(natural + 20.0);
+    package.refresh_section_digests().unwrap();
+    let complete_bytes = package.canonical_bytes().unwrap();
+    fs::write(&data_path, &complete_bytes).unwrap();
+    let complete = inspect_definitions(&input, temp.path(), Some(&data_path));
+    let items = complete["definition_lookup"]["items"]["report"]["items"]
+        .as_array()
+        .unwrap();
+    assert_eq!(items.len(), 2);
+    for (item, name, level) in [
+        (&items[0], &key, natural),
+        (&items[1], &missing_key, base_level),
+    ] {
+        assert_eq!(item["state"]["name"], *name);
+        assert_eq!(item["status"], "pending");
+        assert_eq!(item["pending"]["kind"], "assembly", "{item}");
+        for requirement in ["naturalLevel", "level"] {
+            assert_eq!(
+                item["state"]["requirements"][requirement],
+                serde_json::json!({"kind":"finite","value":level})
+            );
+        }
+    }
+    assert_eq!(
+        complete["definition_lookup"]["data"]["content_sha256"],
+        format!("{:x}", Sha256::digest(&complete_bytes))
+    );
+    assert_eq!(
+        complete["definition_lookup"]["data_trust"]["status"],
+        "custom_unreviewed"
+    );
+    assert_eq!(complete["verification"]["native_admission"], "not_checked");
+    assert_eq!(complete["verification"]["reference_calculation"], "not_run");
+    assert_eq!(fs::read(&data_path).unwrap(), complete_bytes);
+
+    // Reusing completed facts after changing a construction dependency is rejected.
+    package.item_loading.policy.default_item_quality += 1.0;
+    package.refresh_section_digests().unwrap();
+    let stale_bytes = package.canonical_bytes().unwrap();
+    fs::write(&data_path, &stale_bytes).unwrap();
+    let failed = cli()
+        .current_dir(temp.path())
+        .arg("inspect-build")
+        .arg(&input)
+        .arg("--data")
+        .arg(&data_path)
+        .output()
+        .unwrap();
+    assert!(!failed.status.success());
+    assert!(failed.stdout.is_empty());
+    assert!(
+        String::from_utf8_lossy(&failed.stderr).contains("stale construction input identity"),
+        "{}",
+        String::from_utf8_lossy(&failed.stderr)
+    );
+    assert_eq!(fs::read(&data_path).unwrap(), stale_bytes);
+
+    // An explicitly unavailable catalog is distinct from a complete negative lookup.
+    package.unique_requirements =
+        UniqueRequirementData::unavailable("caller requires new construction");
+    package.refresh_section_digests().unwrap();
+    let unavailable_bytes = package.canonical_bytes().unwrap();
+    fs::write(&data_path, &unavailable_bytes).unwrap();
+    let unavailable = inspect_definitions(&input, temp.path(), Some(&data_path));
+    assert_eq!(complete["items"], unavailable["items"]);
+    assert_ne!(
+        complete["definition_lookup"]["data"],
+        unavailable["definition_lookup"]["data"]
+    );
+    for item in unavailable["definition_lookup"]["items"]["report"]["items"]
+        .as_array()
+        .unwrap()
+    {
+        assert_eq!(item["status"], "pending");
+        assert_eq!(item["pending"]["kind"], "unique_database");
+        assert_eq!(
+            item["pending"]["message"],
+            "caller requires new construction"
+        );
+        assert!(item["state"]["requirements"].get("naturalLevel").is_none());
+    }
+    assert_eq!(
+        unavailable["verification"]["native_admission"],
+        "not_checked"
+    );
+    assert_eq!(
+        unavailable["verification"]["reference_calculation"],
+        "not_run"
+    );
+    assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+    assert_eq!(fs::read(&data_path).unwrap(), unavailable_bytes);
 }

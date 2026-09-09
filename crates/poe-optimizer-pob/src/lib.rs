@@ -10,6 +10,7 @@ mod skill_identity_extract;
 pub mod tree_data;
 pub mod tree_projection;
 pub mod tree_worker;
+mod unique_requirements_extract;
 
 pub mod backend;
 pub mod import;

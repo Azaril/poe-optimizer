@@ -1,7 +1,8 @@
-//! Native formatting with explicitly supplied parsing and assembly dependencies.
+//! Native formatting and unique lookup with explicitly supplied remaining dependencies.
 use super::*;
 use poe_optimizer_data::game_data::GameDataSnapshot;
 use poe_optimizer_data::item_scalability::CatalystScalingData;
+use poe_optimizer_data::unique_requirements::{UniqueRequirementCatalog, UniqueRequirementLookup};
 use poe_optimizer_engine::item_tools::{
     FormatError, FormatInput, FormatResult, ItemFormatter, ParserFeedback, RangeInput,
 };
@@ -9,21 +10,34 @@ use poe_optimizer_engine::item_tools::{
 pub struct NativeItemLoadProvider<'a, P> {
     snapshot: &'a GameDataSnapshot,
     dependencies: P,
+    unique_requirements: Option<&'a UniqueRequirementCatalog>,
 }
 pub type BuiltinItemLoadProvider<'a> = NativeItemLoadProvider<'a, NativeModifierParserProvider>;
 impl<'a> NativeItemLoadProvider<'a, NativeModifierParserProvider> {
     pub fn new(snapshot: &'a GameDataSnapshot) -> Self {
-        Self::with_dependencies(
+        Self::with_native_unique_lookup(
             snapshot,
             NativeModifierParserProvider::new(snapshot.modifier_parser()),
         )
     }
 }
 impl<'a, P> NativeItemLoadProvider<'a, P> {
+    /// Use native formatting, forwarding parsing, unique lookup and assembly to
+    /// the explicitly supplied provider. This preserves source-oracle composition.
     pub fn with_dependencies(snapshot: &'a GameDataSnapshot, dependencies: P) -> Self {
         Self {
             snapshot,
             dependencies,
+            unique_requirements: None,
+        }
+    }
+    /// Resolve unique requirements from this snapshot; parsing and assembly still
+    /// use the supplied provider. An unavailable catalog never falls back to it.
+    pub fn with_native_unique_lookup(snapshot: &'a GameDataSnapshot, dependencies: P) -> Self {
+        Self {
+            snapshot,
+            dependencies,
+            unique_requirements: Some(snapshot.unique_requirements()),
         }
     }
     pub fn dependencies(&self) -> &P {
@@ -133,7 +147,28 @@ impl<P: ItemLoadProvider> ItemLoadProvider for NativeItemLoadProvider<'_, P> {
         &mut self,
         request: &UniqueRequest,
     ) -> DependencyResult<Option<UniqueOutcome>> {
-        self.dependencies.lookup_unique(request)
+        let Some(catalog) = self.unique_requirements else {
+            return self.dependencies.lookup_unique(request);
+        };
+        match catalog.lookup(
+            &request.name,
+            request.title.as_deref(),
+            request.base_name.as_deref(),
+        ) {
+            UniqueRequirementLookup::Unavailable(reason) => {
+                // The catalog validates this bound before any provider is constructed.
+                if reason.len() > MAX_ITEM_LOADING_DEPENDENCY_MESSAGE {
+                    return DependencyResult::ResourceError("unique catalog message bound".into());
+                }
+                DependencyResult::Unavailable(reason.into())
+            }
+            UniqueRequirementLookup::Ready(entry) => {
+                DependencyResult::Available(entry.map(|entry| UniqueOutcome {
+                    natural_level: entry.natural_level.map(ItemNumber::new),
+                    level: entry.level.map(ItemNumber::new),
+                }))
+            }
+        }
     }
     fn assemble(&mut self, request: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
         self.dependencies.assemble(request)

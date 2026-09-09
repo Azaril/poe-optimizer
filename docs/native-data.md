@@ -210,6 +210,22 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Package schema **18**, semantics **`poe2-native-profiles-v18`**, adds
+`unique_requirements`: completed constructor facts, complete prototype accounting,
+construction dependencies and exact/runic lookup policy. The section has an explicit
+`unavailable` or `complete` state; an absent lookup in a complete catalog is a confirmed
+miss. `GameDataSnapshot::unique_requirements()` exposes immutable lookup independently of
+native build preparation. Native runtime lookup executes no Lua or source constructor.
+See [unique requirements](unique-requirements.md) for extraction, composition and parity
+contracts.
+
+The package has 27 sections and retains its 32 MiB bound. All 26 preceding section values
+and digests remain unchanged. Complete records bind the selected item-loading and tree
+inputs; editing those dependencies requires regeneration or an explicit unavailable
+section. Custom packages retain custom/unreviewed trust. Regenerate older packages;
+changing only a schema number does not supply the new records. These facts do not implement
+complete native item assembly or broaden complete-build admission.
+
 Package schema **17**, semantics **`poe2-native-profiles-v17`**, advances
 `item_loading` to schema **2**. Its injected `defence_header_keys` maps copied display
 headers to their stored armour-data keys. The loader borrows named base rewrites from the
@@ -223,7 +239,7 @@ names is allowed because the defence operation runs first in the source. Rewrite
 need not exist in the base catalog: the original data contains such references, and loading
 retains the new name with an absent base reference. Regenerate older packages.
 
-The package retains 26 sections and its 32 MiB bound. All 25 other sections and all earlier
+That migration retained 26 sections and its 32 MiB bound. All 25 other sections and all earlier
 item-loading fields remain exact. Display values are ordered loading state, not assembled
 item ratings or additional native build support. See the
 [item loading contract](item-source-and-loading.md#defence-display-state).
@@ -236,7 +252,7 @@ sparse keys, nil upvalues and non-finite sentinels remain explicit. Named C buil
 primitive identities; their internal runtime closures are not serialized. Every raw gem
 base-name assignment candidate is retained, including three ambiguous mappings.
 
-The package now has 26 sections; all 25 preceding section values and digests remain exact.
+That migration added the 26th section; all 25 preceding section values and digests remained exact.
 The portable package bound is 32 MiB and two million JSON values, accommodating the full
 construction graph without a build/profile whitelist. Regenerate older packages. Definition
 recognition and structural parsing do not grant numerical support or execute callbacks.
@@ -379,7 +395,7 @@ remain unchanged. PoB source revision, full source snapshot and numerical golden
 ## Validation and update procedure
 
 The default package SHA-256 is
-`fdd924e0449d06c338df95cf8e309986abf07a73e3f2f0131acf222d5d24ae30`.
+`4e1d7ff27c1c079ed7ef49690a3192cf9c0b36ac7e24539fe56f6cbb6cd70c1e`.
 The partial tree SHA-256 is
 `31cac8a09de2babc34e450d0caf975c45aca3caf222853d863dcad607c6f8779`.
 The full source snapshot/manifest and six independent goldens remain unchanged; the partial

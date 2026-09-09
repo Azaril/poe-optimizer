@@ -16,14 +16,15 @@ pub use crate::item_scalability::*;
 pub use crate::modifier_parser::*;
 pub use crate::movement::MovementData;
 pub use crate::skill_identities::*;
+pub use crate::unique_requirements::*;
 pub use poe_optimizer_core::data::DataIdentity;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 17;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v17";
+pub const SCHEMA_VERSION: u32 = 18;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v18";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -52,6 +53,7 @@ const SECTIONS: &[&str] = &[
     "item_loading",
     "item_scalability",
     "modifier_parser",
+    "unique_requirements",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -441,6 +443,7 @@ pub struct GameDataPackage {
     pub item_loading: ItemLoadingData,
     pub item_scalability: ItemScalabilityData,
     pub modifier_parser: ModifierParserData,
+    pub unique_requirements: UniqueRequirementData,
 }
 impl GameDataPackage {
     pub fn armour_base(&self, id: &str) -> Option<&ArmourBaseData> {
@@ -522,6 +525,7 @@ pub struct GameDataSnapshot {
     item_loading: ItemLoadingCatalog,
     item_scalability: ItemScalabilityCatalog,
     modifier_parser: ModifierParserCatalog,
+    unique_requirements: UniqueRequirementCatalog,
 }
 impl GameDataSnapshot {
     pub fn identity(&self) -> &DataIdentity {
@@ -538,6 +542,9 @@ impl GameDataSnapshot {
     }
     pub fn modifier_parser(&self) -> &ModifierParserCatalog {
         &self.modifier_parser
+    }
+    pub fn unique_requirements(&self) -> &UniqueRequirementCatalog {
+        &self.unique_requirements
     }
     pub fn item_scalability(&self) -> &ItemScalabilityCatalog {
         &self.item_scalability
@@ -607,6 +614,8 @@ impl GameDataLoader {
         let item_loading = ItemLoadingCatalog::new(package.item_loading.clone())?;
         let item_scalability = ItemScalabilityCatalog::new(package.item_scalability.clone())?;
         let modifier_parser = ModifierParserCatalog::new(package.modifier_parser.clone())?;
+        let unique_requirements =
+            UniqueRequirementCatalog::new(package.unique_requirements.clone())?;
         Ok(GameDataSnapshot {
             identity,
             trust,
@@ -616,6 +625,7 @@ impl GameDataLoader {
             item_loading,
             item_scalability,
             modifier_parser,
+            unique_requirements,
         })
     }
 }
@@ -714,6 +724,9 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     package.item_loading.validate()?;
     package.item_scalability.validate()?;
     package.modifier_parser.validate()?;
+    package
+        .unique_requirements
+        .validate_inputs(&package.item_loading, &package.tree)?;
     let m = &package.manifest;
     if m.schema_version != SCHEMA_VERSION {
         return Err(error("unsupported schema_version"));

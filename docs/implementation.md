@@ -2,23 +2,39 @@
 
 Last updated: 2026-09-09
 
-Current checkpoint: **native defence headers and base flask/charm buffs, plus reference
-item-database readiness**, integrated on main. Native item-loading implementation is
-`8781c7c959ac548ea74d364f0207cb0e614633dc`; the reference correctness repair is
-`45ed37149b48a634613bfaf36b6ac1e656040a84`. Focused source/import/CLI/portable checks,
-independent calibration and the fresh five-build corpus gates pass. Full native build
-support remains limited to the admitted Spark/Mace pipelines.
+Current checkpoint: **injected completed unique requirements and native lookup**,
+implemented and locally validated for publication on `main`. The schema-18 data catalog,
+optional source exporter and independent native/source comparisons cover all 443 unique
+entries. The native provider uses immutable selected data without Lua or subprocesses.
+All 12 prior unique-database stops advance in the 116-item corpus; all 110 reference
+measurements remain exact. Complete native build support remains the admitted Spark/Mace
+pipelines. See [the unique-requirements checkpoint](#unique-requirements-active-checkpoint).
 
-Hosted validation remains pending. The preceding combined-branch
-[Windows/Linux CI run 34383255010](https://github.com/Azaril/poe-optimizer/actions/runs/34383255010)
-has passed formatting/lint and is running workspace tests on both platforms, with no
-reported failure at the last inspection. The integrated main checkpoint needs its own
-[main workflow result](https://github.com/Azaril/poe-optimizer/actions/workflows/rust.yml?query=branch%3Amain);
-report that result separately when available. Do not present pending hosted tests as passed.
+The implementation worktree is `runs/unique-requirements-worktree`, branch
+`codex/unique-requirements`, based on published main
+`d213a1fcfe7f82740064d7e88b8b2f7d67b477cd`. Local gates are complete: 118 reconciled data
+tests, 237 import tests, 13 engine injection tests, 31 original-source/parity tests and
+32 CLI test observations pass, with strict lint, formatting, five portable library checks
+and a fresh five-build comparison. Original failing migration-test attempts remain beside
+their passing repairs. No full workspace pass is inferred from these focused gates.
 
-Next: inspect hosted results, then continue the data-driven native unique-requirement
-lookup dependency using the completed readiness audit. The general B3 model proposal
-still awaits user direction; no dependent migration is authorized by this checkpoint.
+Hosted validation is separate. At 2026-09-09 18:42 UTC, the preceding published main
+[Windows/Linux run 34385695246](https://github.com/Azaril/poe-optimizer/actions/runs/34385695246)
+and combined-branch [run 34383255010](https://github.com/Azaril/poe-optimizer/actions/runs/34383255010)
+have passed formatting/lint and remain in workspace tests, with no reported failed step.
+parser_number retains CI monitoring. Discover this checkpoint's exact published-head run
+and record its outcome separately; do not present pending hosted tests as passed.
+Publication identity and exact-head discovery are retained in `runs/unique-requirements-publication.json`.
+
+Next: follow hosted results and implement authored Prefix/Suffix loading/reconciliation
+through existing injected modifier definitions. See [the bounded next slice](#next-native-dependency-authored-affix-loading).
+The general B3 actor/action/candidate model proposal still awaits user direction; this
+checkpoint does not authorize or implement that migration. Full native parity and the
+broad joint optimizer remain unfinished.
+
+The preceding checkpoint added native defence headers/base buffs and reference item-database
+readiness. Native loading code is `8781c7c959ac548ea74d364f0207cb0e614633dc`;
+the reference repair is `45ed37149b48a634613bfaf36b6ac1e656040a84`, integrated as `d213a1fc`.
 See [readiness](#reference-item-database-readiness-checkpoint),
 [base buffs](#base-flaskcharm-buffs-checkpoint) and
 [defence headers](#defence-header-data-and-state-checkpoint).
@@ -618,6 +634,111 @@ silently fill requirements or numerical effects from metadata recognition.
 The phase-only runtime probe progressed to a confirmed reference correctness defect;
 see the following checkpoint. Unique lookup implementation must use a completed database,
 not treat a still-loading absence as a missing unique.
+
+## Unique requirements active checkpoint
+
+Worktree `runs/unique-requirements-worktree`, branch `codex/unique-requirements`, starts
+from main `d213a1fc`. This implements the next existing item-loading dependency through
+the injected data seam. It does not change the B3 actor/action/candidate model, admit
+unique numerical effects, or claim full native item construction/assembly.
+
+The schema-18 package adds a distinct `unique_requirements` section while
+retaining all 26 previous section values and digests. A validated complete catalog
+contains exact canonical keys, optional finite natural/equipment levels, source-derived
+ordered runic-prefix/separator policy, input identities and a disposition for every raw
+prototype. Unavailable data cannot produce a definite miss. Constructor failures,
+unfinished loading, omitted outcomes, collisions or cross-entry fallback dependencies
+must be resolved or explicitly rejected, not converted into absent records. Fully native
+prototype construction remains unfinished; these are injected item requirement facts,
+not cached candidate evaluations.
+
+The existing snapshot gains `unique_requirements()` with immutable borrowed lookup.
+Exact-key lookup precedes one source-defined leading-prefix removal with a nonempty
+suffix. The native provider performs no Lua execution, I/O, subprocess startup or key
+concatenation allocation. Builtin providers use the selected snapshot and stop explicitly
+when its catalog is unavailable. Existing `with_dependencies` composition continues to
+forward caller-supplied unique lookup; `with_native_unique_lookup` explicitly combines
+selected-data lookup with supplied parsing/assembly dependencies. Native and reference
+backends stay independently selectable.
+
+| Owner | Work and evidence required |
+| --- | --- |
+| parser_data | Data schema/catalog, bounded complete/unavailable validation, source-authenticated full constructor extraction, two exact package/evidence exports, previous-section identity preservation |
+| parser_oracle | Every original constructor/insertion/missing-base outcome, potential exact/runic reads and overwrite audit, original and alternate legal traversal observations, complete lookup and requirement differential tests |
+| root | Native provider integration, nil/number requirement semantics, provider composition/boundary tests, documentation and final review/integration |
+| parser_number | Native-only/default CLI tests, extraction schema assertions, fresh five-build comparison after freeze, published main/preceding CI monitoring and actionable failure logs |
+
+The frozen package has **443 entries / 443 accounted prototypes**, 27 sections and
+21,830,730 bytes; SHA-256
+`4e1d7ff27c1c079ed7ef49690a3192cf9c0b36ac7e24539fe56f6cbb6cd70c1e`.
+All 26 previous section values/digests remain exact. Construction provenance records 115
+source files; the complete extraction allowlist contains 129. Original stored modifier
+cache mode is explicit. See [the end-state contract](unique-requirements.md).
+
+Seven observed original constructor passes, spanning traversal and cache changes, agree
+bit-for-bit on all 443 entries. An unobserved original control also agrees. The pinned
+inventory has no overwrites, missing-base omissions or cross-entry reads. Deliberate
+collision, runic dependency and missing-base witnesses verify why the model rejects or
+accounts for those cases; this evidence does not certify arbitrary future input order.
+
+Two native numeric defects were reproduced before repair: explicit Lua nil blocked the
+natural-to-current requirement fallback, and Rust maximum/default-rune handling lost
+source operand order and signed-zero behavior. Native loading now uses the actual rune
+field and preserves state assigned before a missing-rune source error. Portable catalog
+numbers remain finite; explicit-provider tests also cover non-finite source semantics.
+
+| Validation at this checkpoint | Result |
+| --- | --- |
+| Data regression | 118 unique tests pass after reconciling two test-only migration repairs; includes 9 new complete/unavailable, stale dependency and full accounting contracts |
+| Original exporter tests | 4 passed; strict source number types, all constructed records, failed loading marker and source-derived policy |
+| Independent original-source/native target | 6 passed, with one intentional child entry exercised by parents; 443 entries, 1,773 shipped and 15 injected lookups, 14 consumer numeric witnesses |
+| Existing affected source targets | 21 passed across base buffs, defence headers and modifier-provider tests; all 12 former unique-database stops advance |
+| Native import | All 237 tests passed; focused loading targets include 49 tests covering the numeric repairs and explicit-provider composition |
+| CLI | Native 18 and default 14 passed, including two fresh exact public exports; native/default strict Clippy passed |
+| Portable libraries | Core, data, engine, import and native compile for `wasm32-unknown-unknown`; browser execution/performance remains untested |
+| Strict checks | Data/import all-target, PoB library and four affected PoB test targets pass strict Clippy; workspace formatting and Git whitespace checks pass |
+| Engine data injection | 13 passed; selected numerical records still reach prepared calculations |
+| Fresh five-build corpus | All 110 reference measurements exact; 104 complete loading reports unchanged and 12 unique-database stops advance to assembly; all 834 source instructions preserved. All five native rejection messages remain exact |
+
+Current evidence is under `runs/unique-requirements-*`, including section-preservation,
+data-source-freeze, source-order-audit, oracle-final, root-freeze, binary-freeze,
+corpus-final, data-final, cli-validation-final, production-review, import tests/Clippy,
+WASM and CLI logs. All 152 recorded final
+production/manifest fingerprints match the binaries used for the corpus. Original
+fail-before logs remain alongside the passing regressions. Preserve caller input,
+independent goldens, the source pin and all prior frozen binaries/evidence.
+
+All local validation sessions are terminal. The independent production review found no
+actionable correctness issues in the catalog, exporter or provider boundary. Two original
+migration-test failures remain recorded: a tree mutation now first hits the derived-input
+check, and a skill-catalog fixture still asserted schema 17. The repaired tree fixture
+explicitly makes unique requirements unavailable to preserve its independent structural-pin
+assertion; the other fixture now asserts schema 18. Changed cases and all unreached tests
+pass. These repairs do not change production behavior or the frozen validation binaries.
+
+Resume: verify the publication identity and hosted CI outcome, then continue the authored
+affix slice below. Stateful modifier parsing, callbacks, crafted-stat generation, runes and
+complete item assembly remain separate native work. The full native-parity and broad
+optimizer goal remains incomplete.
+
+### Next native dependency: authored affix loading
+
+The bounded follow-up audit is `runs/unique-requirements-next-affix-rune-audit.md/json`.
+Implement first-class bounded Prefix/Suffix records and final loading reconciliation,
+using the existing injected modifier-table selection. Ordinary XML loading does not call
+`Craft`; do not generate crafted stats as a side effect of preserving these records.
+Reset lifetime, numeric/array ranges, fractured flags, per-list limits, exact IDs and
+source error prefixes need independent original-source tests. Source-derived rarity,
+jewel and corruption rules belong in the data policy. Legacy label lookup must distinguish
+unique matches from selected ambiguity; sorting a map cannot determine a Lua `pairs`
+winner. Preserve original item text and caller-selected data.
+
+The corpus contains 18 such items with 104 authored rows (59 `None`, 30 distinct real IDs);
+14 also author runes. These are input counts, not promised advances. Compare every new
+state field and actual next dependency against original source before updating coverage.
+Rune reconstruction follows separately: authored/rebuilt/inferred rows, socket type/order,
+bonded contributions, scalars and authentically missing IDs need their own model and
+parity work. Neither phase changes the pending general B3 model proposal.
 
 ## Reference item-database readiness checkpoint
 

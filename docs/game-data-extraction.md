@@ -8,7 +8,7 @@ The exporter covers the versioned sections of the
 [native data package](native-data.md): tree, character, actor, receiving defences, movement, action speed, direct timing, quests, Spark, Mace, supports, weapons,
 item modifier rules, item source formatting, jewellery and fixed armour bases, defence, monsters, encounters, typed owned passive
 effects, explicit passive exclusions, configuration metadata, constructed skill/gem identities,
-item definitions and general item scalability. Numerical mechanic coverage remains partial.
+item definitions, general item scalability and completed unique requirements. Numerical mechanic coverage remains partial.
 Whole ordinary structure is separate from
 capability admission: 1,282 complete source views are supported, including the four
 admitted ascendancy resistance nodes; 3,476 source views are explicitly excluded. It does not infer arbitrary build mechanics
@@ -88,7 +88,11 @@ approximately 100-million-instruction bound. The separate skill/gem construction
 256 MiB limit and an approximately one-billion-instruction bound, checked every 100,000
 instructions, with JIT disabled. Complete modifier-parser construction uses a separate
 256 MiB VM with JIT disabled and an approximately 1.5-billion-instruction limit, checked
-every 100,000 instructions. These are per-VM bounds, not a total process memory limit.
+every 100,000 instructions. Completed unique construction uses a separate 768 MiB VM,
+with JIT disabled and a 120-second internal wall-time check every 100,000 instructions;
+the enclosing caller-selected extraction deadline can expire earlier. Its real item/parser
+construction and stored cache remain confined to offline extraction. These are per-VM
+bounds, not a total process memory limit.
 Direct consumed source text is limited to 64 MiB; full-inventory verification and tree
 extraction retain their separate read/record limits. This is offline extraction of reviewed source, not a general-purpose Lua sandbox.
 The parent bounds the private package/evidence envelope to 33 MiB and error output to
@@ -114,7 +118,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 17 and `poe2-native-profiles-v17`, including source-keyed passive/actor effects,
+schema 18 and `poe2-native-profiles-v18`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -132,15 +136,31 @@ arbitrary operation versions still require compatibility review.
 
 The `item_loading` section executes authenticated source construction for the full item base,
 modifier, raw unique and jewel-radius definitions. It retains hidden/unknown metadata and
-source locations for inert callbacks. Parsing those callbacks or constructing the parsed
-unique database remains a separate consumer; catalog extraction does not silently replace
-missing modifier effects. Independent item-loading oracles execute the original parser and
+source locations for inert callbacks. Native callback execution remains a separate consumer;
+catalog extraction does not silently replace missing modifier effects. Independent item-loading oracles execute the original parser and
 assembly methods separately from this exporter. Regeneration preserves all preceding section
 values and the pinned source/tree. Item-loading schema 2 additionally records defence-header
 keys by observing the complete original header branch and number conversion. Named base
 rewrites reuse the existing definition table; missing base references remain legal data.
 The independent runtime oracle checks state lifetime and rebind ordering rather than using
 extraction as its expected state. See [item loading](item-source-and-loading.md).
+
+
+The `unique_requirements` section runs the original completed unique-database constructor
+loop separately from raw definition extraction. It authenticates the original item/parser
+implementation, stored modifier cache, construction defaults and tree data. Its observer
+retains every prototype outcome, finished constructor and potential database lookup key;
+missing-base prototypes are accounted for without inserting an entry. Exact-key overwrites
+and cross-entry constructor dependencies reject this projection. Constructor execution
+order is not replaced with a sorted traversal; only the completed evidence is canonically
+ordered for export. Independent tests exercise original lookup, construction orders and
+cache states separately from the exporter.
+
+Only requirements, base identity and their construction provenance are exported here.
+These are reusable item-data facts, not cached build evaluations. The native consumer uses
+injected immutable lookup data and never launches this exporter during evaluation. The
+[unique-requirements contract](unique-requirements.md) describes unavailable data, explicit
+provider composition and custom-package dependency checks.
 
 
 The `item_scalability` section preserves complete exact-case keys and ordered capture

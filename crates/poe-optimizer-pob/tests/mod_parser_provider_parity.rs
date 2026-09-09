@@ -335,6 +335,7 @@ struct TracedNative<'a> {
     parser: Vec<(ParseRequest, DependencyResult<ParseOutcome>)>,
     formats: Vec<(FormatRequest, FormatOutcome)>,
     assembly: Vec<AssemblyRequest>,
+    uniques: Vec<(UniqueRequest, DependencyResult<Option<UniqueOutcome>>)>,
 }
 impl<'a> TracedNative<'a> {
     fn new(snapshot: &'a poe_optimizer_data::game_data::GameDataSnapshot) -> Self {
@@ -343,6 +344,7 @@ impl<'a> TracedNative<'a> {
             parser: vec![],
             formats: vec![],
             assembly: vec![],
+            uniques: vec![],
         }
     }
 }
@@ -355,6 +357,14 @@ impl ItemLoadProvider for TracedNative<'_> {
     fn format_with_trace(&mut self, request: &FormatRequest) -> FormatOutcome {
         let result = self.inner.format_with_trace(request);
         self.formats.push((request.clone(), result.clone()));
+        result
+    }
+    fn lookup_unique(
+        &mut self,
+        request: &UniqueRequest,
+    ) -> DependencyResult<Option<UniqueOutcome>> {
+        let result = self.inner.lookup_unique(request);
+        self.uniques.push((request.clone(), result.clone()));
         result
     }
     fn assemble(&mut self, request: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
@@ -388,6 +398,35 @@ fn verify_trace(
     oracle: &oracle::FormatterOracle,
 ) -> (usize, usize, usize) {
     let consumed = parse.get::<String>("raw").unwrap();
+    let mut original = reference::OriginalDependencies::new(&oracle.source);
+    for (request, actual) in &provider.uniques {
+        let expected = original.lookup_unique(request);
+        match (actual, expected) {
+            (DependencyResult::Available(None), DependencyResult::Available(None)) => {}
+            (
+                DependencyResult::Available(Some(actual)),
+                DependencyResult::Available(Some(expected)),
+            ) => {
+                for (name, a, b) in [
+                    (
+                        "natural unique requirement",
+                        actual.natural_level,
+                        expected.natural_level,
+                    ),
+                    ("equipped unique requirement", actual.level, expected.level),
+                ] {
+                    assert_eq!(a.is_some(), b.is_some(), "{name}: {request:?}");
+                    if let (Some(a), Some(b)) = (a, b) {
+                        reference::assert_number(a, b, name);
+                    }
+                }
+            }
+            (actual, expected) => {
+                panic!("unique lookup mismatch for {request:?}: {actual:?} != {expected:?}")
+            }
+        }
+    }
+
     let expected = parse
         .get::<Table>("calls")
         .unwrap()

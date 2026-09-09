@@ -158,6 +158,11 @@ fn with_bases(
     bases: &[(&str, &str)],
 ) -> GameDataSnapshot {
     let mut package = snapshot.package().clone();
+    // Test-owned item definitions invalidate the source-constructed projection.
+    package.unique_requirements =
+        poe_optimizer_data::unique_requirements::UniqueRequirementData::unavailable(
+            "test fixture changes item construction inputs",
+        );
     for &(name, template) in bases {
         source.copy_base(name, template);
         let mut row = package

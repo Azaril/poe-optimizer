@@ -16,6 +16,7 @@ pub mod passive_allocation;
 pub mod skill_identities;
 pub mod tree_data;
 pub mod tree_projection;
+pub mod unique_requirements;
 use sha2::{Digest, Sha256};
 /// Fingerprint the portable implementation independently of bundled content provenance.
 pub fn implementation_fingerprint() -> String {
@@ -36,6 +37,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("item_loading.rs"),
         include_str!("item_scalability.rs"),
         include_str!("modifier_parser.rs"),
+        include_str!("unique_requirements.rs"),
         include_str!("movement.rs"),
         include_str!("passive_allocation.rs"),
         include_str!("../Cargo.toml"),

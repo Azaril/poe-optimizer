@@ -17,6 +17,13 @@ use std::{
 };
 
 const READ_PATHS: &[&str] = &[
+    "src/Modules/CalcFormat.lua",
+    "src/Data/ModCache.lua",
+    "runtime/lua/xml.lua",
+    "runtime/lua/base64.lua",
+    "runtime/lua/sha1/init.lua",
+    "runtime/lua/sha1/common.lua",
+    "runtime/lua/sha1/bit_ops.lua",
     "src/Data/Costs.lua",
     "src/Data/Essence.lua",
     "src/Data/FlavourText.lua",
@@ -207,8 +214,14 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v17",
+        "poe-game-data-extractor-v18",
         include_str!("item_loading_extract.rs"),
+        include_str!("unique_requirements_extract.rs"),
+        include_str!("../../poe-optimizer-lua-utf8/src/lib.rs"),
+        include_str!("../../poe-optimizer-lua-utf8/build.rs"),
+        include_str!("../../poe-optimizer-lua-utf8/vendor/luautf8/lutf8lib.c"),
+        include_str!("../../poe-optimizer-lua-utf8/vendor/luautf8/unidata.h"),
+        include_str!("../../poe-optimizer-lua-utf8/vendor/provenance.json"),
         include_str!("item_scalability_extract.rs"),
         include_str!("modifier_parser_extract.rs"),
         include_str!("modifier_parser_inputs.lua"),
@@ -471,7 +484,15 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         item_loading: crate::item_loading_extract::extract(&extractor.sources)?,
         item_scalability: crate::item_scalability_extract::extract(&extractor.sources)?,
         modifier_parser: crate::modifier_parser_extract::extract(&extractor.sources)?,
+        unique_requirements: UniqueRequirementData::unavailable(
+            "complete unique construction not yet exported",
+        ),
     };
+    package.unique_requirements = crate::unique_requirements_extract::extract(
+        &extractor.sources,
+        &package.item_loading,
+        &package.tree,
+    )?;
     package.refresh_section_digests().map_err(error)?;
     let evidence = GameDataExtractionEvidence {
         schema_version: 1,

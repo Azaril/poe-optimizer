@@ -216,6 +216,10 @@ fn package_unique_string_exception_is_confined_to_exact_prototype_path() {
     };
     let snapshot = bundled_snapshot().unwrap();
     let mut package = snapshot.package().clone();
+    package.unique_requirements =
+        poe_optimizer_data::unique_requirements::UniqueRequirementData::unavailable(
+            "test changed raw prototype construction inputs",
+        );
     let largest = package
         .item_loading
         .unique_groups
@@ -285,6 +289,10 @@ fn appended_base_and_altered_numeric_fields_use_selected_package_identity() {
     };
     let initial = bundled_snapshot().unwrap();
     let mut p = initial.package().clone();
+    p.unique_requirements =
+        poe_optimizer_data::unique_requirements::UniqueRequirementData::unavailable(
+            "test changed item base construction inputs",
+        );
     let mut base = p
         .item_loading
         .bases

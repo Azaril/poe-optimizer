@@ -49,6 +49,11 @@ fn custom(
 ) -> GameDataSnapshot {
     let definitions = source.oracle.lua.load(definitions).eval::<Table>().unwrap();
     let mut package = snapshot.package().clone();
+    // Test-owned item definitions invalidate the source-constructed projection.
+    package.unique_requirements =
+        poe_optimizer_data::unique_requirements::UniqueRequirementData::unavailable(
+            "test fixture changes item construction inputs",
+        );
     for entry in definitions.pairs::<String, Table>() {
         let (name, parts) = entry.unwrap();
         let base = source.base(&name).unwrap();
