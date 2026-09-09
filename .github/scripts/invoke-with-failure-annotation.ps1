@@ -54,7 +54,7 @@ if ($commandExitCode -ne 0) {
             $body
         # Escape percent first so literal strings such as %0A remain literal.
         $message = $message.Replace('%', '%25').Replace("`r", '%0D').Replace("`n", '%0A')
-        Write-Host "::error title=Test command failed::$message"
+        Write-Host "::error title=Command failed::$message"
     }
 }
 exit $commandExitCode

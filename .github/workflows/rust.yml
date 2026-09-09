@@ -23,7 +23,8 @@ jobs:
       - name: Check formatting
         run: cargo fmt --all -- --check
       - name: Lint
-        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+        shell: pwsh
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('clippy', '--workspace', '--all-targets', '--locked', '--', '-D', 'warnings')
       - name: Test
         shell: pwsh
         run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--all-targets', '--locked')
@@ -31,7 +32,8 @@ jobs:
         shell: pwsh
         run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-cli', '--no-default-features', '--all-targets', '--locked')
       - name: Lint native-only CLI
-        run: cargo clippy -p poe-optimizer-cli --no-default-features --all-targets --locked -- -D warnings
+        shell: pwsh
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('clippy', '-p', 'poe-optimizer-cli', '--no-default-features', '--all-targets', '--locked', '--', '-D', 'warnings')
       - name: Verify native-only runtime dependencies
         shell: pwsh
         run: |

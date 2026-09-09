@@ -503,15 +503,14 @@ impl<'a> ItemLoadMachine<'a> {
                         }
                     }
                     GameStage::Explicit => stage = GameStage::Done,
-                    GameStage::FindImplicit => {
+                    GameStage::FindImplicit
                         if self.num("itemLevel").is_some()
                             && !line.contains(" (implicit)")
                             && !line.contains(" (enchant)")
-                            && !line.contains("Talisman Tier")
-                        {
-                            stage = GameStage::Explicit;
-                            found_explicit = true;
-                        }
+                            && !line.contains("Talisman Tier") =>
+                    {
+                        stage = GameStage::Explicit;
+                        found_explicit = true;
                     }
                     _ => {}
                 }

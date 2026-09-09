@@ -1,4 +1,5 @@
 [toolchain]
-channel = "stable"
+# Keep local formatting/lint behavior identical to CI; update deliberately.
+channel = "1.98.1"
 profile = "minimal"
 components = ["clippy", "rustfmt"]

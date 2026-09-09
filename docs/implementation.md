@@ -6,7 +6,9 @@ Current checkpoint: **injected item definitions and ordered native item loading*
 implemented, locally validated and published as
 `43251c748ce735783bb0df6357f54f16d4134e35` on main.
 [Exact-code CI run 34320179629](https://github.com/Azaril/poe-optimizer/actions/runs/34320179629)
-is running on Windows and Linux; no hosted pass is claimed yet. The schema-14 data package
+failed at Lint on Windows and Linux before tests ran. A local reproduction with current
+Rust/Clippy 1.98.1 found a new collapsible-match lint; repair and validation are in progress.
+The schema-14 data package
 contains the complete source item catalog. Native import preserves ordered loading state
 and stops at explicit missing parser/assembly dependencies. Original-source comparisons
 pass, including all 116 corpus items; this does not establish complete native item
@@ -215,6 +217,53 @@ Assessment reports constraint evidence and primary availability; it does not cer
 legality or turn diagnostic calculation output into a recommendation. All calibration cases
 compare independent hosts/extractors using shared PoB calculations, not independent game models.
 
+## Toolchain lint repair - in progress
+
+The preceding goal turn was progress: item catalog/loading code `43251c7` and resume update
+`e224002` were published. This turn started from a clean worktree; 26 protected files were
+captured in `runs/item-formatting-baseline.json`, with the schema-14 package copied to
+`runs/item-formatting-original-game-data.json`. The whole native parity goal remains active.
+
+Exact-code run 34320179629 failed at Lint on both operating systems; later tests did not
+run. Public annotations expose only exit codes, the public log download returns HTTP 403,
+and the authenticated browser helper is unavailable in this runtime. User authorization
+for log access remains in place. Local `rustup check` identified stable 1.98.1 versus the
+previously installed 1.93.0. Running the exact full-workspace lint command with 1.98.1
+reproduced `clippy::collapsible_match` at the new item's FindImplicit transition.
+
+The transition now uses an equivalent guarded match arm. The project toolchain is pinned
+to 1.98.1 so local and CI formatting/lints are reproducible; crate MSRV declarations remain
+unchanged. Formatting and strict full-workspace lint pass on the pinned toolchain. Full
+workspace tests are running in `target/ci-stable-198` (root session 51809); do not restart
+from a log timeout. Pinned native-only CLI strict lint and all five WASM libraries pass with source hashes
+unchanged (`runs/ci-198-portable-summary.json`). The existing bounded failure-annotation
+helper now also wraps both CI
+lint steps, with a generic command-failure title, so future lint diagnostics are available
+through public check annotations.
+
+Evidence: `runs/item-formatting-prior-ci.json`, job-specific annotation JSON files,
+`runs/item-formatting-toolchain-install.log`, `runs/item-formatting-stable-clippy-before.log`,
+`runs/item-formatting-stable-clippy-after.log`, `runs/item-formatting-pinned-workspace-tests.log`.
+Rust 1.98 additionally surfaces a pre-existing Windows mixed-CRT linker warning: LuaJIT
+archives contain LIBCMT directives while the UTF-8 shim and Rust use the dynamic CRT.
+Earlier artifacts have the same split. No runtime failure was demonstrated; native-only
+deployment excludes both archives. A follow-up should make the vendored LuaJIT build honor
+the target CRT while preserving static Lua linkage. Do not suppress the warning or switch
+only the shim's CRT (`runs/ci-198-windows-crt-artifacts.json`). Failure-annotation smoke
+checks preserve exit 17, percent escaping and a successful command without false errors.
+All 26 protected files remain exact (`runs/ci-198-preservation.json`).
+
+The next formatter remains at read-only source audit until this repair is validated. Keep
+the existing restricted item_formatting section unchanged and inject a separate complete
+scalability catalog. Preserve ordered raw labels and their partial assignment semantics;
+unknown labels are original no-ops. Reuse the existing complete actor high-precision table
+rather than copying it. The implementation-ready source audit is retained in
+`runs/item-formatting-data-audit.json`: 15,090 keys, 3,321 empty entries and 12,040 ordered
+capture records; all 33 dispatcher assignments and 14 ignored labels are explicit.
+Its proposed catalog adds 77,073 JSON values and approximately 2.4–2.7 MB, within current
+package limits. Native runtime proofs are still required. No actor/action/candidate
+migration is included in this work.
+
 ## Ordered native item loading - validation checkpoint
 
 The preceding goal turn was progress: mixed-store code `5f8b70e` and resume update
@@ -267,7 +316,7 @@ evidence into calculation capability. Custom provider provenance remains the hos
 | Existing numerical behavior | Both established actor/build parity tests pass with the final data package. `runs/item-loading-actor-build-parity.log`. No native build admission is expanded. |
 | Portable deployment | **69 native tests**, **114 native-only CLI tests**, strict native-only Clippy, all five WASM libraries and the normal-dependency check pass. The native-only dependency graph excludes PoB/Lua. Workspace all-target Clippy also passes. Broad suites precede the final resource-only guard edits; final loader/source tests, executable rebuild, native-only lint and five-library WASM refresh also pass. All 266 captured source/artifact hashes remain stable through that refresh. `runs/item-loading-deployment-summary.json`, `runs/item-loading-workspace-frozen-clippy.log`. |
 | Preservation | **25 non-package protected files** remain exact; all old 23 package sections and digests are unchanged. Pinned PoB, tree, caller exports and six independent calibration goldens remain fixed. `runs/item-loading-final-preservation.json`, `runs/item-loading-root-final-package-validation.json`. All 44 documentation/notice files decode as UTF-8, 467 local links resolve, formatting and diff checks pass (`runs/item-loading-docs-audit.json`). |
-| Publication | Code `43251c748ce735783bb0df6357f54f16d4134e35` is pushed to main. [Exact-code CI run 34320179629](https://github.com/Azaril/poe-optimizer/actions/runs/34320179629) is running on Windows and Linux; no hosted pass is claimed. `runs/item-loading-publication-ci.json`. Full native parity remains unfinished. |
+| Publication | Code `43251c748ce735783bb0df6357f54f16d4134e35` is pushed to main. [Exact-code CI run 34320179629](https://github.com/Azaril/poe-optimizer/actions/runs/34320179629) failed at Lint on both platforms before tests. Local 1.98.1 reproduction found the collapsible-match diagnostic; the repair checkpoint below retains exact evidence. `runs/item-formatting-prior-ci.json`, `runs/item-formatting-stable-clippy-before.log`. Full native parity remains unfinished. |
 
 Next resume point: check exact-code run 34320179629 and diagnose any failure from its logs, then
 continue B2 dependency closure with reusable native modifier parsing/formatting and item

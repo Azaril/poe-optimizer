@@ -109,6 +109,7 @@ The output is not a certified build recommendation; cached values are never the 
 
 Install Git and Rust through rustup, with a working native linker
 (on Windows, Visual Studio Build Tools with the C++ toolchain).
+Use the repository-pinned Rust toolchain so local formatting and lint checks match CI.
 
 For the native-only executable (supported profiles are listed in [native backend](docs/native-backend.md)):
 
