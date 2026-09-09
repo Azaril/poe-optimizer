@@ -467,3 +467,67 @@ fn injected_defence_headers_reach_cli_state_without_granting_assembly_or_admissi
     assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
     assert_eq!(fs::read(&data_path).unwrap(), data_bytes);
 }
+
+#[test]
+fn injected_base_buffs_reach_cli_loading_state_without_numerical_admission() {
+    use poe_optimizer_data::item_loading::ItemMetadataValue;
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller-buffs.xml");
+    let data_path = temp.path().join("caller-buff-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    let base = package
+        .item_loading
+        .bases
+        .iter_mut()
+        .find(|base| base.name == "Amethyst Charm")
+        .unwrap();
+    let ItemMetadataValue::Table(charm) = base.fields.fields.get_mut("charm").unwrap() else {
+        panic!("fixture charm shape");
+    };
+    let text = "+123 to maximum Life";
+    charm.fields.insert(
+        "buff".into(),
+        ItemMetadataValue::Array(
+            [text, text, ""]
+                .into_iter()
+                .map(|line| ItemMetadataValue::Text(line.into()))
+                .collect(),
+        ),
+    );
+    package.refresh_section_digests().unwrap();
+    let bytes = package.canonical_bytes().unwrap();
+    fs::write(&data_path, &bytes).unwrap();
+    let xml = format!(
+        "<PathOfBuilding2><Items><Item id='caller-buff'>Rarity: Normal\nAmethyst Charm\n{text}\n{text}\n</Item></Items></PathOfBuilding2>"
+    );
+    fs::write(&input, &xml).unwrap();
+    let report = inspect_definitions(&input, temp.path(), Some(&data_path));
+    let state = &report["definition_lookup"]["items"]["report"]["items"][0]["state"];
+    let rows = state["buff_mod_lines"].as_array().unwrap();
+    assert_eq!(rows.len(), 3);
+    for (row, expected) in rows.iter().zip([text, text, ""]) {
+        assert_eq!(row["line"], expected);
+        assert_eq!(row["range"]["kind"], "nil");
+        assert_eq!(row["value_scalar"]["kind"], "nil");
+    }
+    assert_eq!(state["explicit_mod_lines"].as_array().unwrap().len(), 1);
+    assert_eq!(state["explicit_mod_lines"][0]["line"], text);
+    assert_eq!(state["parser_calls"].as_array().unwrap().len(), 4);
+    assert_eq!(state["format_calls"].as_array().unwrap().len(), 1);
+    assert_eq!(
+        report["definition_lookup"]["items"]["report"]["items"][0]["pending"]["kind"],
+        "assembly"
+    );
+    assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
+    assert_eq!(report["verification"]["native_admission"], "not_checked");
+    assert_eq!(report["verification"]["reference_calculation"], "not_run");
+    assert_eq!(
+        report["definition_lookup"]["data"]["content_sha256"],
+        format!("{:x}", Sha256::digest(&bytes))
+    );
+    assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+    assert_eq!(fs::read(&data_path).unwrap(), bytes);
+}

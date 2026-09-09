@@ -190,6 +190,41 @@ before applying assembly updates. These diagnostics extend the existing loading 
 report without changing its numerical admission contract. Native complete item assembly,
 including how display state interacts with computed ratings, remains a required later phase.
 
+## Base buff generation
+
+Selected item bases can supply independent `flask.buff` and `charm.buff` definitions in the
+injected catalog. Loading handles flask first, then charm, once per family within each
+`ParseRaw` call. An initialized empty table still prevents regeneration when a later base
+is selected. Buff rows and both suppression sets reset on a subsequent parse. Base variant
+selection and ordinary base setup happen before these parser calls.
+
+Every consecutive definition entry invokes the parser directly with its exact text,
+including duplicate or empty strings. There is no formatting, annotation stripping,
+catalyst scaling or additional combined-line retry. A generated row keeps the parser's
+exact remainder; nil modifiers become an empty modifier list. Range, scalar and selection
+metadata start absent. Requests and rows retain the triggering authored base line as their
+source context, while the selected data identity binds the generated text.
+
+Each family also records a set of texts to suppress once from the later authored input.
+Suppression runs before separators, literal flags and headers. Repeated definition entries
+produce repeated rows and requests but one suppression key. When both families contain the
+same text, the first authored match consumes the flask entry and the next consumes the
+charm entry. Sparse indexed tables follow source `ipairs`: stop at the first missing integer
+key, without compacting holes or treating string keys as numeric keys.
+
+Parser unavailability, errors and resource bounds retain the completed prefix; the failing
+row is not appended. The string-only provider does not invent a request for a malformed
+non-string definition entry. Source tests distinguish attempted calls from completed string
+requests and separately prove the original type-error boundary. Generated rows, suppression
+keys, retained text and parser results share the bounded loading-evidence budget; generated
+row count has an explicit limit independent of authored line count.
+
+XML ModRange visits generated buff rows before enchant, implicit and explicit rows. A later
+parse rebuilds buff rows and their absent ranges; assembly-provided modifier payload updates
+remain visible until then. Loading these records does not implement flask/charm charges,
+duration, activation, effect calculations or complete item assembly. No package migration
+is needed: these definitions were already included in item-loading schema 2.
+
 ## Validation requirements
 
 Independent tests must execute the original XML reader and source load methods, retain

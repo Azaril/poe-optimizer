@@ -1156,3 +1156,257 @@ fn invalid_assembly_armour_replacement_does_not_overwrite_loaded_values() {
         );
     }
 }
+
+fn buff_catalog(
+    flask: Option<ItemMetadataValue>,
+    charm: Option<ItemMetadataValue>,
+) -> ItemLoadingCatalog {
+    let mut data = catalog().data().clone();
+    for (key, value) in [("flask", flask), ("charm", charm)] {
+        if let Some(value) = value {
+            data.bases[0].fields.fields.insert(key.into(), value);
+        }
+    }
+    ItemLoadingCatalog::new(data).unwrap()
+}
+fn buffs(lines: &[&str]) -> ItemMetadataValue {
+    ItemMetadataValue::Table(table([(
+        "buff",
+        ItemMetadataValue::Array(lines.iter().map(|line| text(line)).collect()),
+    )]))
+}
+#[derive(Default)]
+struct BuffProvider {
+    outcomes: BTreeMap<String, DependencyResult<ParseOutcome>>,
+}
+impl ItemLoadProvider for BuffProvider {
+    fn parse_modifier(&mut self, request: &ParseRequest) -> DependencyResult<ParseOutcome> {
+        self.outcomes
+            .get(&request.text)
+            .cloned()
+            .unwrap_or_else(|| CompleteProvider.parse_modifier(request))
+    }
+    fn format_line(&mut self, request: &FormatRequest) -> DependencyResult<String> {
+        CompleteProvider.format_line(request)
+    }
+    fn assemble(&mut self, request: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+        CompleteProvider.assemble(request)
+    }
+}
+#[test]
+fn base_buffs_preserve_duplicates_empty_text_and_independent_suppression_before_separators() {
+    let data = buff_catalog(
+        Some(buffs(&["F", "F", "--------"])),
+        Some(buffs(&["F", ""])),
+    );
+    let mut machine = ItemLoadMachine::new(&data);
+    machine
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nF\nF\nF\nImplicits: 0\nX\n--------",
+            &mut BuffProvider::default(),
+        )
+        .unwrap();
+    assert_eq!(machine.status(), ItemLoadStatus::Complete);
+    let state = machine.state();
+    let rows = &state.buff_mod_lines;
+    assert_eq!(
+        rows.iter().map(|row| row.line.as_str()).collect::<Vec<_>>(),
+        ["F", "F", "--------", "F", ""]
+    );
+    for row in rows {
+        assert_eq!(row.source_line, 2);
+        assert_eq!(row.selection, LineSelection::default());
+        assert!(row.flags.is_empty() && row.mod_tags.is_empty());
+        assert_eq!(row.range, ItemNumber::Nil);
+        assert_eq!(row.corrupted_range, ItemNumber::Nil);
+        assert_eq!(row.value_scalar, ItemNumber::Nil);
+    }
+    assert_eq!(
+        state
+            .parser_calls
+            .iter()
+            .map(|call| call.text.as_str())
+            .collect::<Vec<_>>(),
+        ["F", "F", "--------", "F", "", "F", "X"]
+    );
+    assert!(state.parser_calls.iter().all(|call| !call.combined));
+    assert_eq!(
+        state
+            .format_calls
+            .iter()
+            .map(|call| call.text.as_str())
+            .collect::<Vec<_>>(),
+        ["F", "X"]
+    );
+    assert_eq!(
+        state.retained_fields["checkSection"],
+        ItemScalar::Boolean(false)
+    );
+}
+#[test]
+fn base_buffs_keep_nil_parser_output_and_extra_without_external_retry_or_defaults() {
+    let data = buff_catalog(None, Some(buffs(&["Unknown", "Partial"])));
+    let mut provider = BuffProvider {
+        outcomes: [
+            (
+                "Unknown".into(),
+                DependencyResult::Available(ParseOutcome {
+                    modifiers: None,
+                    extra: Some("".into()),
+                }),
+            ),
+            (
+                "Partial".into(),
+                DependencyResult::Available(ParseOutcome {
+                    modifiers: Some(vec![]),
+                    extra: Some(" exact tail ".into()),
+                }),
+            ),
+        ]
+        .into_iter()
+        .collect(),
+    };
+    let mut machine = ItemLoadMachine::new(&data);
+    machine
+        .apply_text("Rarity: NORMAL\nCaller Base", &mut provider)
+        .unwrap();
+    assert_eq!(machine.state().parser_calls.len(), 2);
+    assert!(machine.state().format_calls.is_empty());
+    assert_eq!(machine.state().buff_mod_lines[0].extra.as_deref(), Some(""));
+    assert_eq!(
+        machine.state().buff_mod_lines[1].extra.as_deref(),
+        Some(" exact tail ")
+    );
+    assert!(
+        machine
+            .state()
+            .buff_mod_lines
+            .iter()
+            .all(|row| row.modifiers.is_empty())
+    );
+}
+#[test]
+fn base_buffs_reparse_regenerates_rows_and_modrange_indexes_them_before_ordinary_lines() {
+    let data = buff_catalog(None, Some(buffs(&["B"])));
+    let mut machine = ItemLoadMachine::new(&data);
+    let raw = "Rarity: NORMAL\nCaller Base\nB\nImplicits: 0\nOrdinary";
+    machine
+        .apply_text(raw, &mut BuffProvider::default())
+        .unwrap();
+    machine.apply_mod_range(Some("1"), Some("0.25")).unwrap();
+    machine.apply_mod_range(Some("2"), Some("0.75")).unwrap();
+    assert_eq!(
+        machine.state().buff_mod_lines[0].range,
+        ItemNumber::new(0.25)
+    );
+    assert_eq!(
+        machine.state().explicit_mod_lines[0].range,
+        ItemNumber::new(0.75)
+    );
+    machine
+        .apply_text(raw, &mut BuffProvider::default())
+        .unwrap();
+    assert_eq!(machine.state().buff_mod_lines.len(), 1);
+    assert_eq!(machine.state().buff_mod_lines[0].range, ItemNumber::Nil);
+    assert_eq!(
+        machine
+            .state()
+            .parser_calls
+            .iter()
+            .filter(|call| call.text == "B")
+            .count(),
+        2
+    );
+    assert_eq!(machine.state().explicit_mod_lines.len(), 1);
+}
+#[test]
+fn base_buffs_sparse_tables_stop_at_first_gap_and_ignore_named_or_negative_keys() {
+    let data = buff_catalog(
+        None,
+        Some(ItemMetadataValue::Table(table([(
+            "buff",
+            ItemMetadataValue::Table(ItemMetadataTable {
+                fields: [("1".into(), text("Named"))].into_iter().collect(),
+                indexed: [
+                    (-1, text("Negative")),
+                    (1, text("First")),
+                    (3, text("After gap")),
+                ]
+                .into_iter()
+                .collect(),
+            }),
+        )]))),
+    );
+    let mut machine = ItemLoadMachine::new(&data);
+    machine
+        .apply_text("Rarity: NORMAL\nCaller Base", &mut BuffProvider::default())
+        .unwrap();
+    assert_eq!(machine.state().parser_calls.len(), 1);
+    assert_eq!(machine.state().parser_calls[0].text, "First");
+    assert_eq!(machine.state().buff_mod_lines.len(), 1);
+}
+#[test]
+fn base_buffs_unavailable_or_failed_parser_preserves_only_the_completed_prefix() {
+    let data = buff_catalog(
+        Some(buffs(&["First", "Stop", "Later"])),
+        Some(buffs(&["Other family"])),
+    );
+    for result in [
+        DependencyResult::Unavailable("pending callback".into()),
+        DependencyResult::SourceError("source parser error".into()),
+        DependencyResult::ResourceError("parser work bound".into()),
+    ] {
+        let pending = matches!(result, DependencyResult::Unavailable(_));
+        let source = matches!(result, DependencyResult::SourceError(_));
+        let mut provider = BuffProvider {
+            outcomes: [("Stop".into(), result)].into_iter().collect(),
+        };
+        let mut machine = ItemLoadMachine::new(&data);
+        let result = machine.apply_text(
+            "Rarity: NORMAL\nCaller Base\nImplicits: 0\nAuthored tail",
+            &mut provider,
+        );
+        assert_eq!(result.is_ok(), pending);
+        assert_eq!(machine.state().base_name.as_deref(), Some("Caller Base"));
+        assert_eq!(machine.state().buff_mod_lines.len(), 1);
+        assert_eq!(machine.state().buff_mod_lines[0].line, "First");
+        assert_eq!(machine.state().parser_calls.len(), 2);
+        assert!(machine.state().format_calls.is_empty());
+        assert_eq!(machine.state().assembly_calls, 1); // Empty constructor only.
+        if pending {
+            assert_eq!(
+                machine.pending().unwrap().kind,
+                DependencyKind::ModifierParser
+            );
+        }
+        if source {
+            assert_eq!(machine.status(), ItemLoadStatus::SourceError);
+        }
+    }
+}
+
+#[test]
+fn base_buffs_bound_generated_rows_independently_of_authored_line_count() {
+    let data = buff_catalog(
+        None,
+        Some(ItemMetadataValue::Table(table([(
+            "buff",
+            ItemMetadataValue::Array(vec![text("B"); MAX_ITEM_LOADING_LINES + 1]),
+        )]))),
+    );
+    let mut machine = ItemLoadMachine::new(&data);
+    let error = machine
+        .apply_text("Rarity: NORMAL\nCaller Base", &mut BuffProvider::default())
+        .unwrap_err();
+    assert!(
+        error
+            .to_string()
+            .contains("base buff modifier line count bound")
+    );
+    assert_eq!(machine.state().raw_lines.len(), 2);
+    assert_eq!(machine.state().buff_mod_lines.len(), MAX_ITEM_LOADING_LINES);
+    assert_eq!(machine.state().parser_calls.len(), MAX_ITEM_LOADING_LINES);
+    assert_eq!(machine.state().assembly_calls, 1);
+    assert_ne!(machine.status(), ItemLoadStatus::SourceError);
+    assert!(machine.evidence_bytes() <= MAX_ITEM_LOADING_EVIDENCE_BYTES);
+}

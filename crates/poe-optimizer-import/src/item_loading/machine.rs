@@ -180,6 +180,20 @@ pub struct LoadedModLine {
     pub modifiers: Vec<ItemMetadataTable>,
     pub extra: Option<String>,
 }
+/// ParseRaw-local suppression sets. Present-empty still prevents regeneration.
+#[derive(Default)]
+struct BaseBuffLines {
+    flask: Option<BTreeSet<String>>,
+    charm: Option<BTreeSet<String>>,
+}
+impl BaseBuffLines {
+    fn consume(&mut self, line: &str) -> bool {
+        // Original if/elseif order: a shared text can consume one entry from each
+        // set on successive authored lines, never both on the first line.
+        self.flask.as_mut().is_some_and(|set| set.remove(line))
+            || self.charm.as_mut().is_some_and(|set| set.remove(line))
+    }
+}
 #[derive(Debug, Clone, Serialize)]
 pub struct ItemState {
     pub raw: String,
@@ -527,10 +541,15 @@ impl<'a> ItemLoadMachine<'a> {
         let mut implicit_count = 0.0;
         let mut check_section = false;
         let mut imported_level = None;
+        let mut base_buffs = BaseBuffLines::default();
         while index < lines.len() {
             let original = &lines[index];
             let mut line = original.clone();
             let line_index = index + 1;
+            if base_buffs.consume(&line) {
+                index += 1;
+                continue;
+            }
             if line == "--------" {
                 check_section = true;
                 self.boolean("checkSection", true);
@@ -697,7 +716,14 @@ impl<'a> ItemLoadMachine<'a> {
                         self.boolean(key, true);
                     }
                 }
-                if self.resolve_base(&line, &selection, item_class.as_deref(), line_index)? {
+                if self.resolve_base(
+                    &line,
+                    &selection,
+                    item_class.as_deref(),
+                    line_index,
+                    &mut base_buffs,
+                    provider,
+                )? {
                     if self.status == ItemLoadStatus::Pending {
                         return Ok(());
                     }
@@ -1158,6 +1184,8 @@ impl<'a> ItemLoadMachine<'a> {
         selection: &LineSelection,
         item_class: Option<&str>,
         line_index: usize,
+        base_buffs: &mut BaseBuffLines,
+        provider: &mut impl ItemLoadProvider,
     ) -> Result<bool, ItemLoadError> {
         let mut chosen = None;
         if !self.state.base_present && self.plain_rarity() {
@@ -1280,12 +1308,6 @@ impl<'a> ItemLoadMachine<'a> {
             let charm = base.field("charmLimit").and_then(ItemMetadataValue::as_f64);
             let spirit = base.field("spirit").and_then(ItemMetadataValue::as_f64);
             let reqs = base.requirements().cloned();
-            let buff = base
-                .field("flask")
-                .or_else(|| base.field("charm"))
-                .and_then(ItemMetadataValue::as_table)
-                .and_then(|t| t.fields.get("buff"))
-                .is_some();
             self.state.base_name = Some(name);
             self.state.base_present = true;
             self.state.item_type = Some(item_type.clone());
@@ -1354,15 +1376,107 @@ impl<'a> ItemLoadMachine<'a> {
                 );
             }
             self.text("defaultSocketColor", "S");
-            if buff {
-                self.stop(
-                    DependencyKind::BaseBuffs,
-                    Some(line_index),
-                    "base flask/charm buff parser calls are not represented",
-                )?;
-            }
+            self.load_base_buffs(base_buffs, line_index, provider)?;
         }
         Ok(true)
+    }
+    fn load_base_buffs(
+        &mut self,
+        local: &mut BaseBuffLines,
+        line_index: usize,
+        provider: &mut impl ItemLoadProvider,
+    ) -> Result<(), ItemLoadError> {
+        // Clone the immutable catalog handle, not the definitions or buff arrays.
+        let catalog = self.catalog.clone();
+        let base = self
+            .state
+            .base_name
+            .as_deref()
+            .and_then(|name| catalog.base(name));
+        let Some(base) = base else {
+            return Ok(());
+        };
+        for (kind, seen) in [("flask", &mut local.flask), ("charm", &mut local.charm)] {
+            let buff = match base.field(kind) {
+                None | Some(ItemMetadataValue::Boolean(false)) => continue,
+                Some(ItemMetadataValue::Table(table)) => table.fields.get("buff"),
+                // A sequence has no string key. Lua strings use the standard
+                // string metatable, whose "buff" member is also absent.
+                Some(ItemMetadataValue::Array(_) | ItemMetadataValue::Text(_)) => None,
+                Some(_) => {
+                    return self.reject_dependency(
+                        format!("source base {kind}.buff indexes a non-table value"),
+                        true,
+                    );
+                }
+            };
+            let Some(buff) =
+                buff.filter(|value| !matches!(value, ItemMetadataValue::Boolean(false)))
+            else {
+                continue;
+            };
+            // The source reads the parent's buff field before testing the local
+            // set, but evaluates ipairs only for its first truthy definition.
+            if seen.is_some() {
+                continue;
+            }
+            self.charge(64)?;
+            *seen = Some(BTreeSet::new());
+            if !matches!(
+                buff,
+                ItemMetadataValue::Array(_) | ItemMetadataValue::Table(_)
+            ) {
+                return self.reject_dependency(
+                    format!("source base {kind} buff ipairs expects a table"),
+                    true,
+                );
+            }
+            let mut index = 1_i64;
+            loop {
+                let value = match buff {
+                    ItemMetadataValue::Array(values) => values.get((index - 1) as usize),
+                    ItemMetadataValue::Table(table) => table.indexed.get(&index),
+                    _ => unreachable!("buff shape checked above"),
+                };
+                let Some(value) = value else {
+                    break;
+                };
+                let ItemMetadataValue::Text(text) = value else {
+                    return self.reject_dependency(
+                        format!("source base {kind} buff modifier is not a string"),
+                        true,
+                    );
+                };
+                if self.state.buff_mod_lines.len() >= MAX_ITEM_LOADING_LINES {
+                    return Err(ItemLoadError("base buff modifier line count bound".into()));
+                }
+                let set = seen.as_mut().expect("initialized before ipairs");
+                if !set.contains(text) {
+                    self.charge(text.len() + 64)?;
+                    set.insert(text.clone());
+                }
+                // Base buffs call the parser directly: no formatting, annotation
+                // stripping, combined-line retry, or base variant inheritance.
+                let Some(outcome) = self.parse(text, line_index, false, provider)? else {
+                    return Ok(());
+                };
+                self.charge(text.len() + 128)?;
+                self.state.buff_mod_lines.push(LoadedModLine {
+                    line: text.clone(),
+                    source_line: line_index,
+                    selection: LineSelection::default(),
+                    flags: BTreeSet::new(),
+                    mod_tags: Vec::new(),
+                    range: ItemNumber::Nil,
+                    corrupted_range: ItemNumber::Nil,
+                    value_scalar: ItemNumber::Nil,
+                    modifiers: outcome.modifiers.unwrap_or_default(),
+                    extra: outcome.extra,
+                });
+                index += 1;
+            }
+        }
+        Ok(())
     }
     fn format(
         &mut self,
@@ -1476,6 +1590,7 @@ impl<'a> ItemLoadMachine<'a> {
         if self.state.parser_calls.len() >= MAX_ITEM_LOADING_CALLS {
             return Err(ItemLoadError("parser request bound".into()));
         }
+        self.charge(text.len())?;
         let request = ParseRequest {
             sequence: self.state.format_calls.len()
                 + self.state.parser_calls.len()
@@ -1484,7 +1599,6 @@ impl<'a> ItemLoadMachine<'a> {
             text: text.into(),
             combined,
         };
-        self.charge(text.len())?;
         let result = provider.parse_modifier(&request);
         self.state.parser_calls.push(request);
         match result {

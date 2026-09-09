@@ -2,22 +2,28 @@
 
 Last updated: 2026-09-09
 
-Current work: **data-driven defence-header loading**, implemented and locally validated in
-`runs/defence-header-worktree` on branch `codex/defence-headers`. Code commit `2d13d4f`
-preserves optional armour data, injected header/base rewrites, and assembly/reparse state.
-All focused source/data/import/CLI, portable and fresh-corpus gates pass. Integration into
-main awaits the preceding parser checkpoint's local reconciliation and CI inspection.
-See [the defence-header checkpoint](#defence-header-data-and-state-checkpoint).
+Current work: **native base flask/charm buff loading**, implemented and locally validated
+in `runs/base-buffs-worktree` on branch `codex/base-buffs`. The preceding defence-header
+slice is included. Both use caller inputs and injected definitions; full native build
+coverage remains unchanged. Focused source/import/CLI/portable and fresh five-build gates
+pass. The combined implementation branch is being published to start clean CI while main
+retains the parser checkpoint. Integrate after its hosted validation is inspected.
+See [the buff checkpoint](#base-flaskcharm-buffs-checkpoint) and
+[the defence-header checkpoint](#defence-header-data-and-state-checkpoint).
 
-Latest published checkpoint: **native structural modifier parsing**, code commit
-`415ab742a5585888541c3f6da34ca8eddd4085c6`, with resume update
-`85d4b9e7a46bd697ef9f310bcfcd72417c47f657` on main. Final changed-source gates pass;
-the full local workspace suite is still running under parser_number. Its repaired stale
-extraction assertion is covered by a passing current-code rerun. Exact-code
-[Windows/Linux CI run 34379251966](https://github.com/Azaril/poe-optimizer/actions/runs/34379251966)
-is running; parser_data supervises it. Do not report either unfinished gate as passed.
-Full native build support remains limited to the admitted Spark/Mace pipelines.
-See the [parser checkpoint](#general-modifier-parser-active-checkpoint).
+Latest published checkpoint: **native structural modifier parsing**, code `415ab742`,
+test-fixture repair `765ae933`, and resume update
+`15525b1ec25e4877024e20a06efecb812c03dc9d` on main. Local reconciled validation is complete:
+**1,066 passed, zero unresolved failures across all 140 current targets**, plus **115
+native-only CLI tests**. Nine ignored direct-entry helper tests are exercised by passing
+parent subprocess tests. All 360 final input fingerprints match. Original failures and
+current-code replacements remain in `runs/parser-workspace-validation-final.json`.
+
+Exact repair-publication [Windows/Linux CI run 34381171078](https://github.com/Azaril/poe-optimizer/actions/runs/34381171078)
+is running; both platforms have passed formatting and strict lint. parser_data supervises
+it and preserves the preceding pre-repair run 34379251966 separately. Do not report pending
+hosted tests as passed. Full native build support remains limited to the admitted
+Spark/Mace pipelines. See the [parser checkpoint](#general-modifier-parser-active-checkpoint).
 
 The preceding **general item formatting** checkpoint is published as
 `48983fa7f57ec66d26ab9e6525a01fd3b97e55f5`.
@@ -366,8 +372,8 @@ exact; only the intended package migration changes its protected baseline bytes.
 | Fresh caller corpus | Five imports/inspections/reference runs succeed; all 110 reference measurements and native rejection reasons unchanged |
 | Corpus tooling | 29 tests pass; bounded data copy now accepts the schema-16 package size |
 | Native-only complete CLI regression | Session 34129 completed with exit 0: all 115 tests across 45 target results pass, none failed or ignored. Final binary SHA-256 `cdf38223e457a83167a448517d4781c8142416f18c23b2511b6dbf7d62833665`. |
-| Full workspace/current import regression | Workspace session 37729 is supervised by parser_number. Its one stale 25-section CLI assertion is repaired and the fresh extraction target passes. All 223 current-code import tests across ten targets pass. Final full-workspace completion and changed-source reconciliation remain in progress. Preserve successful results instead of restarting the suite. |
-| Publication | Code `415ab742` and resume update `85d4b9e7` are published on main. Exact CI run 34379251966 is in progress on both platforms alongside the local full regression. Previous formatter and repair exact-code CI both pass. |
+| Full workspace/current import regression | Session 37729 is terminal with its three original failures retained. Final identity-aware reconciliation covers all 140 targets: 1,066 pass, zero unresolved failures, nine explained helper entry points. All 223 current-code import tests are included without duplicate counts. All 360 final fingerprints match. See runs/parser-workspace-validation-final.json. |
+| Publication | Code `415ab742`, fixture repair `765ae933` and resume update `15525b1e` are published on main. Exact repair CI 34381171078 is running after passing formatting/lint on both platforms; original run 34379251966 is tracked separately. |
 
 Final item diagnostics preserve all 116 inventory items, 486 range instructions, 15 saved
 skill/equipment sets, 200 groups, 541 gem occurrences, 16 passive specs and 21 jewel
@@ -401,10 +407,9 @@ committed tests; they are not independent game truth.
 
 ### Resume point
 
-Independent provider/source integration and native-only validation pass. Complete the full
-workspace regression and changed-source reconciliation. Publication now proceeds in parallel
-to start clean Windows/Linux CI sooner; inspect the exact published commit and preserve
-any failure evidence. Do not present pending gates as passed.
+Independent provider/source integration, native-only validation and full current-target
+reconciliation pass. Inspect the exact repair-publication CI run 34381171078 and preserve
+any failure evidence. Do not present pending hosted gates as passed.
 Keep successful terminal results; do not restart old or still-running sessions.
 
 Next, implement selected callback operations and explicit source parser session state.
@@ -431,6 +436,24 @@ operations), effective skill/grant/action resolution and numerical producers.
 Numerical support, item assembly and complete-build admission remain separate gates. The
 full native-parity and broad joint-search goal remains active; this checkpoint completes
 neither the B2 mechanism matrix nor the proposed B3 architecture migration.
+
+### Formatting extraction fixture memory repair
+
+The full workspace found an mlua `MemoryError` before the formatting extraction assertions:
+the legacy fixture copied the entire schema-16 package into a bounded Lua state. Original
+`game_data_extract.lua:605–606` consumes only `records.actor.modifier_rules` and
+`records.item_modifier_rules`. Commit `765ae933` supplies exactly those collections. All six
+malformed-shape mutations and three format-result assertions remain unchanged; the production
+Lua cap stays 128 MiB. The focused test, strict PoB all-target Clippy and workspace formatting
+pass. Evidence is `runs/parser-formatting-extractor-repaired.log`,
+`runs/parser-pob-clippy-after-fixture-repair.log` and
+`runs/parser-format-after-fixture-repair.log`.
+
+Both isolated worktrees carry the same repair as `e602ba3`, without changing their native
+loading code or package bytes. The extractor fingerprint includes this Rust file's text,
+so future extraction evidence has a new extractor identity even though the generated game
+data and production extraction behavior are unchanged. Preserve earlier evidence under its
+original identity; do not relabel old binaries or rerun unrelated numerical suites.
 
 ## Defence-header data and state checkpoint
 
@@ -490,9 +513,10 @@ These local ledgers supplement committed reproducible tests.
 
 ### Resume after validation
 
-Root owns integration/docs. parser_number retains the live main workspace session 37729 and
-its final changed-source reconciliation. parser_data owns CI run 34379251966. Keep these
-sessions and successful targeted results; do not restart broad suites merely for bookkeeping.
+Root owns integration/docs. Main workspace session 37729 and its final changed-source
+reconciliation are complete; no main validation process remains live. parser_data owns
+repair CI run 34381171078 and preceding run 34379251966. Keep successful targeted results;
+do not restart broad suites merely for bookkeeping.
 The defence-header worktree contains the complete next slice, ready for integration once the
 preceding gates are resolved. Preserve both documentation histories when reconciling updates.
 
@@ -503,6 +527,80 @@ Both independent source branches, per-ParseRaw duplicate suppression, repeated b
 parser error ordering and assembly-mutated line payloads need explicit coverage. Catalogue
 records remain injected. Stateful parser/callback execution and complete assembly remain
 separate pending work; no broader build admission follows from this loading step.
+
+## Base flask/charm buffs checkpoint
+
+Implemented and locally validated in `C:/code/poe-optimizer/runs/base-buffs-worktree`,
+branch `codex/base-buffs`, based on defence checkpoint `89af004` and the shared fixture
+repair `e602ba3`. Main's parser implementation and the preceding defence worktree remain
+separate. The new source clone is clean at the existing pin. No data migration or general
+actor/action/candidate model change is included; the B3 decision request remains pending.
+
+Selected bases invoke the existing native parser directly for each injected buff string,
+including duplicates and empty strings. Flask/charm initialization and once-only authored
+suppression are independent and ordered. Present-empty tables prevent regeneration within
+a parse; reparses reset both rows and suppression sets. Sparse metadata follows first-gap
+`ipairs` traversal. Generated rows start with absent range/scalar/selection values. XML
+ModRange visits them before ordinary rows; provider errors and unavailable operations
+preserve only completed rows. Source probes distinguish malformed non-string attempts from
+the string-only native trace without inventing values or requests. The worktree extends
+[the item-loading contract](item-source-and-loading.md) with the complete behavior.
+
+The parser request now charges text before cloning it. Independent review corrected its
+initial oversized-example estimate: metadata strings are capped at 4 KiB, so this closes a
+bounded budget-accounting gap rather than a large-allocation bypass. Limits and source/provider
+call ordering are unchanged. Generated rows have a separate count bound even for short
+authored inputs. Immutable catalogs remain shared; no Lua runtime or subprocess enters
+native loading.
+
+| Gate | Result |
+| --- | --- |
+| Import/provider contracts | 45 pass: 31 loading contracts including six new buff/resource cases, nine formatter and five parser-provider regressions; strict affected-target Clippy passes |
+| New independent source tests | Nine have passing current coverage: shipped native parser states, independent family/duplicate/empty cases, sparse/false definitions, base variants, reparses, genuine parser errors/deferrals, real assembly and XML ranges |
+| Existing source regressions | 19 pass: 12 item-loading and seven provider tests; all 116 corpus prefixes match, including 257 parser requests, 216 formats and 36 complete preassembly states |
+| Final source/code identity | Two native-source regressions rerun after charge-before-clone change; strict affected-target Clippy passes. The ledger retains the earlier fixture failures and passing replacements without claiming a failed full attempt exited successfully |
+| CLI | All ten native-only inspection tests pass; the new injected-buff contract also passes with PoB enabled. Strict CLI Clippy passes in both feature configurations |
+| Portable/static checks | Five WASM libraries compile; native runtime dependencies exclude PoB/Lua; workspace formatting and documentation link checks pass |
+| Fresh caller corpus | All five imports, inspections and reference evaluations succeed. All 110 reference measurements, full backend/context/coverage/warnings/raw actors, imported XML and 834 source instructions are preserved. All five native rejection reasons are unchanged |
+| Publication | Combined defence/buff implementation branch is ready for hosted CI; main still carries parser repair `15525b1e`. Do not report pending hosted validation or full native build coverage as complete |
+
+Exactly 15 generated buff rows advance the prior 15 buff stops: seven to assembly and eight
+to unique lookup. The other 101 complete loading reports remain exact. Final first stops are
+39 assembly, 28 rune reconstruction, 19 parser, 18 crafted affixes and 12 unique database;
+all 116 items remain pending. Runner exit 1 records the five expected full-native rejections,
+not failed source or reference evaluation. Independent complete-build goldens remain fixed.
+
+Frozen production machine SHA-256:
+`2e37309bc1cd75d246620e972d17cdee1d0e9b6e92be4c5e2311a80923446650`.
+Package bytes retain schema 17 and SHA-256
+`220ea3decf5ee887c2b2d7890be253837f21e6c6bf45424e07a85a8573000acf`.
+Native CLI SHA-256: `c8108f3b3298f5cd5cbecd6f60c980a5e708573450c212a11a72b04e7dfc586c`;
+reference CLI: `b4c8e12e434642b6d66215762f511c9b193803e0bc655f041bc53f4741a36614`.
+
+Evidence: `runs/base-buffs-oracle-final.json`, `runs/base-buffs-import-targets-final.log`,
+`runs/base-buffs-import-clippy-final.log`, `runs/base-buffs-resource-contract.log`,
+`runs/base-buffs-native-cli-all-inspection.log`, `runs/base-buffs-native-cli-clippy.log`,
+`runs/base-buffs-default-cli-contract.log`, `runs/base-buffs-default-cli-clippy.log`,
+`runs/base-buffs-wasm.log`, `runs/base-buffs-format-final.log`,
+`runs/base-buffs-docs-audit.json`, `runs/base-buffs-resource-review.json`,
+`runs/base-buffs-binary-freeze.json`, `runs/base-buffs-corpus-final.json` and
+`runs/base-buffs-corpus/index.json`. All local validation sessions are terminal.
+
+### Resume after hosted validation
+
+parser_data monitors parser-repair CI 34381171078 and retains prior-run 34379251966 evidence.
+Root owns the combined item-loading branch publication, documentation and eventual main
+integration. Preserve the final binary/data fingerprints and all passing local results;
+no broad local suite needs restarting. Keep any new CI failure and its precise repair as
+separate evidence.
+
+Next dependency investigation is the original unique-database construction and requirement
+lookup, owned by parser_oracle. The catalog contains 443 raw prototypes in 30 groups; raw
+base-level projection cannot replace executed-item requirements. Construction can consult
+already-built uniques and source iteration order is not guaranteed by sorted catalog keys.
+Read the upcoming `runs/base-buffs-next-unique-audit.md` before choosing an implementation
+slice. Stateful modifier parsing, callbacks and full assembly remain separate work; do not
+silently fill requirements or numerical effects from metadata recognition.
 
 ## General item formatting - locally validated checkpoint
 
