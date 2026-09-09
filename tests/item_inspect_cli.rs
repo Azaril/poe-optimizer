@@ -1490,3 +1490,314 @@ fn injected_ordinary_factories_preserve_capture_types_and_conditional_error_stag
     assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
     assert_eq!(fs::read(&data_path).unwrap(), data_bytes);
 }
+
+#[test]
+fn injected_string_factories_preserve_bytes_and_distinguish_opaque_methods() {
+    use poe_optimizer_data::modifier_parser::{
+        ParserDictionary as Dict, ParserFactoryDisposition, ParserFactoryExpr as Expr,
+        ParserFactoryField as Field, ParserFactoryLiteral as Literal, ParserValue,
+    };
+
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller-strings.xml");
+    let data_path = temp.path().join("caller-string-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    let base_name = package
+        .item_loading
+        .bases
+        .iter()
+        .find(|base| {
+            base.item_type
+                != package
+                    .item_loading
+                    .policy
+                    .affix_loading
+                    .reconcile
+                    .jewel_type
+                && base.field("flask").is_none()
+                && base.field("charm").is_none()
+                && !base.name.contains(['&', '<', '>'])
+        })
+        .unwrap()
+        .name
+        .clone();
+    let helper = package.modifier_parser.helpers["firstToUpper"];
+    // Keep the real captured helper binding while the caller's package identity
+    // supplies these expression bodies. Selection is by capability, not game ID.
+    let pure_helpers = |dictionary| {
+        let table = package.modifier_parser.dictionaries[&dictionary];
+        package.modifier_parser.tables[table.0 as usize - 1]
+            .fields
+            .values()
+            .filter_map(|value| {
+                let ParserValue::Callback(id) = value else {
+                    return None;
+                };
+                let Some(ParserFactoryDisposition::Pure(factory)) =
+                    package.modifier_parser.factories.get(id)
+                else {
+                    return None;
+                };
+                (factory.provenance.constructor.is_some()
+                    && package.modifier_parser.callbacks[id.0 as usize - 1]
+                        .upvalues
+                        .iter()
+                        .any(|upvalue| {
+                            upvalue.name == "firstToUpper"
+                                && upvalue.value == ParserValue::Callback(helper)
+                        }))
+                .then_some(*id)
+            })
+            .collect::<std::collections::BTreeSet<_>>()
+    };
+    let special_ids = pure_helpers(Dict::Special)
+        .into_iter()
+        .take(3)
+        .collect::<Vec<_>>();
+    assert_eq!(special_ids.len(), 3);
+    let tag_table = package.modifier_parser.dictionaries[&Dict::ModTag];
+    let tag_id = package.modifier_parser.tables[tag_table.0 as usize - 1]
+        .fields
+        .values()
+        .find_map(|value| {
+            let ParserValue::Callback(id) = value else {
+                return None;
+            };
+            (!special_ids.contains(id)
+                && matches!(
+                    package.modifier_parser.factories.get(id),
+                    Some(ParserFactoryDisposition::Pure(_))
+                )
+                && package.modifier_parser.callbacks[id.0 as usize - 1]
+                    .upvalues
+                    .iter()
+                    .any(|upvalue| {
+                        upvalue.name == "firstToUpper"
+                            && upvalue.value == ParserValue::Callback(helper)
+                    }))
+            .then_some(*id)
+        })
+        .unwrap();
+    let text = |value: &str| Expr::Literal(Literal::Text(value.into()));
+    let concat = |left, right| Expr::Concat {
+        left: Box::new(left),
+        right: Box::new(right),
+    };
+    let upper = |value| Expr::FirstToUpper {
+        helper,
+        value: Box::new(value),
+    };
+    let named = |key: &str, value| Field::Named {
+        key: key.into(),
+        value,
+    };
+    let constants = package.modifier_parser.policy.mod_flags;
+    assert!(
+        package.modifier_parser.tables[constants.0 as usize - 1]
+            .fields
+            .insert("CallerOpaqueMethod".into(), ParserValue::Callback(helper))
+            .is_none()
+    );
+    let success_body = Expr::Table(vec![Field::List(Expr::CreateMod {
+        args: vec![
+            concat(text("Caller"), upper(Expr::Argument(2))),
+            text("BASE"),
+            Expr::Argument(0),
+            text("Caller string source"),
+            Expr::Literal(Literal::Number(0.0)),
+            Expr::Literal(Literal::Number(0.0)),
+            Expr::Table(vec![
+                named("type", text("CallerStringBytes")),
+                named("raw", concat(text("nul\0é/"), Expr::Argument(1))),
+                named("numeric", concat(text("n="), Expr::Argument(0))),
+                named("byte_positions", upper(text("a\0éz"))),
+            ]),
+        ],
+    })]);
+    let error_body = Expr::Table(vec![named(
+        "failure",
+        upper(Expr::Literal(Literal::Boolean(false))),
+    )]);
+    let opaque_body = Expr::Table(vec![named(
+        "opaque",
+        upper(Expr::Table(vec![named(
+            "gsub",
+            Expr::ConstantField {
+                table: constants,
+                key: "CallerOpaqueMethod".into(),
+            },
+        )])),
+    )]);
+    let tag_body = Expr::Table(vec![named(
+        "tag",
+        Expr::Table(vec![
+            named("type", text("CallerStringTag")),
+            named("label", upper(Expr::Argument(0))),
+            named("raw", concat(text("raw:"), Expr::Argument(1))),
+        ]),
+    )]);
+    for (id, parameters, body, constructor) in [
+        (special_ids[0], 3, success_body, true),
+        (special_ids[1], 0, error_body, false),
+        (special_ids[2], 0, opaque_body, false),
+        (tag_id, 2, tag_body, false),
+    ] {
+        let ParserFactoryDisposition::Pure(factory) =
+            package.modifier_parser.factories.get_mut(&id).unwrap()
+        else {
+            unreachable!()
+        };
+        factory.parameter_count = parameters;
+        factory.body = body;
+        if !constructor {
+            factory.provenance.constructor = None;
+        }
+    }
+    for (dictionary, pattern, value) in [
+        (
+            Dict::Special,
+            "^caller (%d+) bytes (.+)$",
+            ParserValue::Callback(special_ids[0]),
+        ),
+        (
+            Dict::Special,
+            "^caller bad helper$",
+            ParserValue::Callback(special_ids[1]),
+        ),
+        (
+            Dict::Special,
+            "^caller opaque helper$",
+            ParserValue::Callback(special_ids[2]),
+        ),
+        (
+            Dict::ModTag,
+            "caller marker (%w+)",
+            ParserValue::Callback(tag_id),
+        ),
+        (
+            Dict::ModName,
+            "caller string stat",
+            ParserValue::Text("CallerStringAmount".into()),
+        ),
+    ] {
+        let table = package.modifier_parser.dictionaries[&dictionary];
+        assert!(
+            package.modifier_parser.tables[table.0 as usize - 1]
+                .fields
+                .insert(pattern.into(), value)
+                .is_none()
+        );
+    }
+    let lines = [
+        "caller 007 bytes aéz",
+        "+2 to caller string stat caller marker ab",
+        "caller bad helper",
+        "caller opaque helper",
+    ];
+    let items = lines
+        .iter()
+        .enumerate()
+        .map(|(index, line)| {
+            format!("<Item id='caller-{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
+        })
+        .collect::<String>();
+    let xml = format!("<PathOfBuilding2><Items>{items}</Items></PathOfBuilding2>");
+    fs::write(&input, &xml).unwrap();
+    let mut digests = Vec::new();
+    for (pattern, expected_name, expected_bytes, expected_tag) in [
+        ("(.)", "CallerAéZ", "A\0éZ", "AB"),
+        ("()(.)", "Caller1234", "12345", "12"),
+    ] {
+        package.modifier_parser.policy.first_to_upper_pattern = pattern.into();
+        package.refresh_section_digests().unwrap();
+        let data_bytes = package.canonical_bytes().unwrap();
+        let digest = format!("{:x}", Sha256::digest(&data_bytes));
+        fs::write(&data_path, &data_bytes).unwrap();
+        let report = inspect_definitions(&input, temp.path(), Some(&data_path));
+        let loaded = &report["definition_lookup"]["items"]["report"];
+        let items = loaded["items"].as_array().unwrap();
+        assert_eq!(items.len(), lines.len());
+        let special_rows = items[0]["state"]["explicit_mod_lines"].as_array().unwrap();
+        assert_eq!(special_rows.len(), 1, "{items:#?}");
+        assert_eq!(
+            special_rows[0]["modifiers"],
+            serde_json::json!([{
+                "fields": {"name":expected_name,"type":"BASE","value":7.0,"flags":0.0,"keywordFlags":0.0,"source":"Caller string source"},
+                "indexed": {"1":{"fields":{"type":"CallerStringBytes","raw":"nul\0é/007","numeric":"n=7","byte_positions":expected_bytes},"indexed":{}}}
+            }]),
+            "configured pattern {pattern}"
+        );
+        let tag_rows = items[1]["state"]["explicit_mod_lines"].as_array().unwrap();
+        assert_eq!(tag_rows.len(), 1);
+        assert_eq!(
+            tag_rows[0]["modifiers"],
+            serde_json::json!([{
+                "fields": {"name":"CallerStringAmount","type":"BASE","value":2.0,"flags":0.0,"keywordFlags":0.0},
+                "indexed": {"1":{"fields":{"type":"CallerStringTag","label":expected_tag,"raw":"raw:ab"},"indexed":{}}}
+            }])
+        );
+        for (index, rows) in [special_rows, tag_rows].into_iter().enumerate() {
+            assert_eq!(items[index]["status"], "pending", "{}", items[index]);
+            assert_eq!(items[index]["pending"]["kind"], "assembly");
+            assert_eq!(rows[0]["line"], lines[index]);
+            assert_eq!(rows[0]["source_line"], 3);
+            assert!(rows[0]["extra"].is_null());
+        }
+        let error = &items[2];
+        assert_eq!(error["status"], "source_error", "{error:#}");
+        assert!(error["pending"].is_null());
+        assert!(
+            error["instructions"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|instruction| instruction["error"].is_string())
+        );
+        assert_eq!(
+            error["instructions"].as_array().unwrap().last().unwrap()["status"],
+            "not_executed"
+        );
+        let opaque = &items[3];
+        assert_eq!(opaque["status"], "pending", "{opaque:#}");
+        assert_eq!(opaque["pending"]["kind"], "modifier_parser");
+        assert!(
+            opaque["pending"]["message"]
+                .as_str()
+                .unwrap()
+                .contains("firstToUpper receiver method"),
+            "{opaque:#}"
+        );
+        for (index, item) in items.iter().enumerate() {
+            assert_eq!(item["authored_id"], format!("caller-{index}"));
+            let calls = item["state"]["parser_calls"].as_array().unwrap();
+            assert_eq!(calls.len(), 1, "{item:#}");
+            assert_eq!(calls[0]["text"], lines[index]);
+            assert_eq!(calls[0]["line_index"], 3);
+            assert_eq!(calls[0]["combined"], false);
+            assert!(calls[0].get("origin").is_none());
+        }
+        assert_eq!(report["verification"]["item_loading"], "reported");
+        assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
+        assert_eq!(report["verification"]["native_admission"], "not_checked");
+        assert_eq!(report["verification"]["reference_calculation"], "not_run");
+        assert_eq!(
+            report["definition_lookup"]["data_trust"]["status"],
+            "custom_unreviewed"
+        );
+        assert_eq!(loaded["data_identity"]["content_sha256"], digest);
+        assert_eq!(
+            loaded["implementation_sha256"],
+            poe_optimizer_import::item_loading::implementation_fingerprint()
+        );
+        assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+        assert_eq!(fs::read(&data_path).unwrap(), data_bytes);
+        digests.push(digest);
+    }
+    assert_ne!(
+        digests[0], digests[1],
+        "injected pattern has its own identity"
+    );
+}

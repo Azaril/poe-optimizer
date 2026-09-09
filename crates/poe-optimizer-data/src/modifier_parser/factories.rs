@@ -59,6 +59,16 @@ pub enum ParserFactoryExpr {
         key: String,
     },
     Negate(Box<ParserFactoryExpr>),
+    /// Source grouping and operand order are retained, including right associativity.
+    Concat {
+        left: Box<ParserFactoryExpr>,
+        right: Box<ParserFactoryExpr>,
+    },
+    /// One closed source helper; arbitrary callable methods remain unsupported.
+    FirstToUpper {
+        helper: ParserCallbackId,
+        value: Box<ParserFactoryExpr>,
+    },
     Table(Vec<ParserFactoryField>),
     /// Includes name/type/value and all variadic nil holes.
     CreateMod {
@@ -234,6 +244,54 @@ fn expression(
             depth + 1,
             uses_constructor,
         )?,
+        ParserFactoryExpr::Concat { left, right } => {
+            expression(
+                left,
+                factory,
+                callback,
+                data,
+                bounds,
+                depth + 1,
+                uses_constructor,
+            )?;
+            expression(
+                right,
+                factory,
+                callback,
+                data,
+                bounds,
+                depth + 1,
+                uses_constructor,
+            )?;
+        }
+        ParserFactoryExpr::FirstToUpper { helper, value } => {
+            let target = helper
+                .0
+                .checked_sub(1)
+                .and_then(|i| data.callbacks.get(i as usize));
+            if data.helpers.get("firstToUpper") != Some(helper)
+                || !target.is_some_and(|c| {
+                    matches!(c.kind, ParserCallbackKind::Lua { .. }) && c.upvalues.is_empty()
+                })
+                || !callback
+                    .upvalues
+                    .iter()
+                    .any(|u| u.name == "firstToUpper" && u.value == ParserValue::Callback(*helper))
+            {
+                return Err(catalog_error(
+                    "factory firstToUpper is not its captured helper binding",
+                ));
+            }
+            expression(
+                value,
+                factory,
+                callback,
+                data,
+                bounds,
+                depth + 1,
+                uses_constructor,
+            )?;
+        }
         ParserFactoryExpr::Table(fields) => {
             if fields.len() > 4096 {
                 return Err(catalog_error("factory table field bound"));

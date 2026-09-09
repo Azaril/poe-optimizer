@@ -1,4 +1,4 @@
--- Direct calls to retained original ordinary factories, without public cache.
+-- Direct retained original ordinary bodies. Public cache is never consulted in these loops.
 local cases=...
 jit.flush();jit.on();jit.opt.start('hotloop=1','hotexit=1','maxtrace=4000')
 local util=require('jit.util')
@@ -14,20 +14,21 @@ local function trace(event,id)
 end
 jit.attach(record,'record');jit.attach(trace,'trace')
 local results,executions={},0
-for i,case in ipairs(cases) do
- local callback,result=case.callback
- if case.prefix then
-  for iteration=1,128 do result=callback();executions=executions+1 end
- else
-  for iteration=1,128 do result=callback(12,'12','34','56','78','90');executions=executions+1 end
+for i,case in ipairs(cases)do
+ local callback,args,result=case.callback,case.args
+ -- The original nonvariadic bodies inspect fixed parameters only; explicit nil
+ -- trailing arguments do not alter their values or evaluate synthetic expressions.
+ for iteration=1,128 do
+  result=callback(args[1],args[2],args[3],args[4],args[5],args[6])
+  executions=executions+1
  end
  results[i]=copyTable(result)
 end
 jit.attach(record);jit.attach(trace)
 local live={}
-for id in pairs(completed) do
- if util.traceinfo(id) then
-  for line in pairs(recorded[id]or{}) do live[#live+1]={id=id,line=line} end
+for id in pairs(completed)do
+ if util.traceinfo(id)then
+  for line in pairs(recorded[id]or{})do live[#live+1]={id=id,line=line}end
  end
 end
 return {results=results,executions=executions,live=live}

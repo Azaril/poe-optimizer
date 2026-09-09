@@ -12,6 +12,7 @@ use std::{
 };
 mod factories;
 mod ordinary;
+mod strings;
 
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
 const PARSER: &str = "src/Modules/ModParser.lua";
@@ -291,6 +292,7 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
             LuaOptions::default(),
         )
     };
+    let original_strings = strings::StringLibrary::capture(&lua)?;
     let original_type: Function = lua.globals().get("type")?;
     let original_select: Function = lua.globals().get("select")?;
     lua.set_memory_limit(256 * 1024 * 1024)?;
@@ -508,6 +510,17 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
         return Err(error("unequal base thorns pair needs extended policy"));
     }
     let tag_capture_numeric_pattern = ordinary::extract(&lua, sources, &mut spans)?;
+    let first_to_upper_pattern = strings::source_policy(&lua, sources, &mut spans)?;
+    original_strings.verify(&lua)?;
+    let upper_id = helpers["firstToUpper"];
+    strings::verify_helper(
+        &lua,
+        &roots.get::<Function>("firstToUpper")?,
+        upper_id,
+        &graph.callbacks[upper_id.0 as usize - 1],
+        &graph.seen_callbacks,
+        &spans["first_to_upper_primitive"],
+    )?;
     factories::constructor(sources)?;
     factories::verify_environment(
         &lua,
@@ -552,6 +565,7 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
             cluster_prefix_pattern: between(parser, "local addToCluster = line:match(\"", "\")")?
                 .to_string(),
             tag_capture_numeric_pattern,
+            first_to_upper_pattern,
             immune_max_single_words: word_limit(parser, "(numWords > ", ") then")?,
             immune_combined_min_words_exclusive: word_limit(parser, "if numWords > ", " then")?,
             immune_max_part_words: word_limit(parser, "if preWordNum > ", " or")?,

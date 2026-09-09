@@ -186,13 +186,30 @@ impl<'a> Lowerer<'a> {
         })
     }
     fn expr(&mut self, depth: usize) -> LowerResult<ParserFactoryExpr> {
+        let left = self.unary(depth)?;
+        if self.peek() == "."
+            && self.at_text(1) == "."
+            && self.tokens[self.at].text.as_ptr() as usize + 1
+                == self.tokens[self.at + 1].text.as_ptr() as usize
+        {
+            self.at += 2;
+            self.nodes += 1;
+            let right = self.expr(depth + 1)?;
+            return Ok(ParserFactoryExpr::Concat {
+                left: Box::new(left),
+                right: Box::new(right),
+            });
+        }
+        Ok(left)
+    }
+    fn unary(&mut self, depth: usize) -> LowerResult<ParserFactoryExpr> {
         if depth > 32 || self.nodes >= 4096 {
             return Err("factory expression resource bound".into());
         }
         self.nodes += 1;
         if self.peek() == "-" {
             self.at += 1;
-            return Ok(ParserFactoryExpr::Negate(Box::new(self.expr(depth + 1)?)));
+            return Ok(ParserFactoryExpr::Negate(Box::new(self.unary(depth + 1)?)));
         }
         if self.peek() == "(" {
             self.at += 1;
@@ -253,6 +270,36 @@ impl<'a> Lowerer<'a> {
         }
         let name = self.name()?;
         if self.peek() == "(" {
+            if name == "firstToUpper" {
+                let helper = self
+                    .data
+                    .helpers
+                    .get(name)
+                    .copied()
+                    .ok_or_else(|| "missing firstToUpper helper".to_owned())?;
+                if self.parameters.contains(&name)
+                    || !self
+                        .callback
+                        .upvalues
+                        .iter()
+                        .any(|u| u.name == name && u.value == ParserValue::Callback(helper))
+                {
+                    return Err("firstToUpper is not the captured helper".into());
+                }
+                self.at += 1;
+                if self.peek() == ")" {
+                    return Err("firstToUpper requires exactly one argument".into());
+                }
+                let value = self.expr(depth + 1)?;
+                if self.peek() != ")" {
+                    return Err("firstToUpper requires exactly one argument".into());
+                }
+                self.take(")")?;
+                return Ok(ParserFactoryExpr::FirstToUpper {
+                    helper,
+                    value: Box::new(value),
+                });
+            }
             if name != "mod"
                 || !self
                     .callback
@@ -495,6 +542,13 @@ mod tests {
     }
 
     fn one(body: &str, captured: ParserValue) -> LowerResult<ParserPureFactory> {
+        one_callback(body, captured, |_| {})
+    }
+    fn one_callback(
+        body: &str,
+        captured: ParserValue,
+        edit: impl FnOnce(&mut ParserCallback),
+    ) -> LowerResult<ParserPureFactory> {
         static DATA: std::sync::OnceLock<ModifierParserCatalog> = std::sync::OnceLock::new();
         let data = DATA
             .get_or_init(|| {
@@ -523,7 +577,7 @@ mod tests {
             end_line: body.lines().count() as u32,
             sha256: hash(body.as_bytes()),
         };
-        let callback = ParserCallback {
+        let mut callback = ParserCallback {
             kind: ParserCallbackKind::Lua {
                 source: source.clone(),
             },
@@ -537,8 +591,13 @@ mod tests {
                     name: "captured".into(),
                     value: captured,
                 },
+                ParserUpvalue {
+                    name: "firstToUpper".into(),
+                    value: ParserValue::Callback(data.helpers["firstToUpper"]),
+                },
             ],
         };
+        edit(&mut callback);
         let lua = Lua::new();
         Lowerer {
             lua: &lua,
@@ -615,7 +674,6 @@ mod tests {
             "function(x) return {a=1, ['a']=2} end",
             "function(x) return {[1]=x, x} end",
             "function(x) return {[x]=1} end",
-            "function(x) return {x .. 'tail'} end",
             "function(x) return {function() end} end",
             "function(x) return x end",
             "function(x) return {},{} end",
@@ -638,5 +696,104 @@ mod tests {
             )
             .is_err()
         );
+    }
+    #[test]
+    fn string_lowering_retains_unary_precedence_right_association_and_parentheses() {
+        fn first(body: &str) -> ParserFactoryExpr {
+            let f = one(body, ParserValue::Nil).unwrap();
+            let ParserFactoryExpr::Table(mut fields) = f.body else {
+                panic!()
+            };
+            let ParserFactoryField::List(value) = fields.remove(0) else {
+                panic!()
+            };
+            value
+        }
+        fn arg(n: u16) -> Box<ParserFactoryExpr> {
+            Box::new(ParserFactoryExpr::Argument(n))
+        }
+        assert_eq!(
+            first("function(a,b,c) return {-a .. b .. c} end"),
+            ParserFactoryExpr::Concat {
+                left: Box::new(ParserFactoryExpr::Negate(arg(0))),
+                right: Box::new(ParserFactoryExpr::Concat {
+                    left: arg(1),
+                    right: arg(2)
+                })
+            }
+        );
+        assert_eq!(
+            first("function(a,b,c) return {(a .. b) .. c} end"),
+            ParserFactoryExpr::Concat {
+                left: Box::new(ParserFactoryExpr::Concat {
+                    left: arg(0),
+                    right: arg(1)
+                }),
+                right: arg(2)
+            }
+        );
+        assert_eq!(
+            first("function(a,b) return {-(a .. b)} end"),
+            ParserFactoryExpr::Negate(Box::new(ParserFactoryExpr::Concat {
+                left: arg(0),
+                right: arg(1)
+            }))
+        );
+        let value = first("function(a) return {mod(firstToUpper(a) .. 'Tail', 'BASE', 1)} end");
+        assert!(
+            matches!(value, ParserFactoryExpr::CreateMod { args } if matches!(&args[0], ParserFactoryExpr::Concat { left, .. } if matches!(**left, ParserFactoryExpr::FirstToUpper { .. })))
+        );
+    }
+    #[test]
+    fn string_helper_arity_shadowing_captured_identity_and_complete_shape_are_closed() {
+        for body in [
+            "function() return {firstToUpper()} end",
+            "function(a,b) return {firstToUpper(a,b)} end",
+            "function(a) return {firstToUpper(a,firstToUpper(nil))} end",
+            "function(firstToUpper) return {firstToUpper('a')} end",
+            "function(a) return {a . . 'b'} end",
+            "function(a) return {firstToUpper(a):gsub('a','b')} end",
+            "function(a) return {string.upper(a)} end",
+            "function(a) return firstToUpper(a) end",
+        ] {
+            assert!(one(body, ParserValue::Nil).is_err(), "{body}");
+        }
+        for change in 0..3 {
+            assert!(
+                one_callback(
+                    "function(a) return {firstToUpper(a)} end",
+                    ParserValue::Nil,
+                    |callback| {
+                        let u = callback
+                            .upvalues
+                            .iter_mut()
+                            .find(|u| u.name == "firstToUpper")
+                            .unwrap();
+                        match change {
+                            0 => u.name = "otherHelper".into(),
+                            1 => u.value = ParserValue::Callback(ParserCallbackId(0)),
+                            _ => u.value = ParserValue::Nil,
+                        }
+                    }
+                )
+                .is_err()
+            );
+        }
+    }
+    #[test]
+    fn string_expression_recursion_remains_bounded_before_catalog_installation() {
+        let concat = std::iter::repeat_n("a", 100)
+            .collect::<Vec<_>>()
+            .join(" .. ");
+        let nested = format!("{}a{}", "firstToUpper(".repeat(100), ")".repeat(100));
+        for expr in [concat, nested] {
+            assert!(
+                one(
+                    &format!("function(a) return {{{expr}}} end"),
+                    ParserValue::Nil
+                )
+                .is_err()
+            );
+        }
     }
 }

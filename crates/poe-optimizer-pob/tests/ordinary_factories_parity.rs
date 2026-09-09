@@ -15,7 +15,7 @@ mod public_source;
 #[allow(dead_code)]
 #[path = "support/item_loading_runtime.rs"]
 mod runtime;
-use mlua::{Function, Table, Value};
+use mlua::{Function, MultiValue, Table, Value};
 use ordinary_source::{OrdinarySource, clear};
 use poe_optimizer_data::{
     game_data::bundled_snapshot,
@@ -141,7 +141,7 @@ fn every_real_pure_prefix_and_both_tag_positions_match_the_unchanged_public_pars
         .public
         .source
         .lua
-        .load(include_str!("support/lua_pattern_witness.lua"))
+        .load(include_str!("support/lua_pattern_witness.lua").replace("{55,97,65", "{97,55,65"))
         .eval()
         .unwrap();
     let mut covered = BTreeMap::<(D, bool), BTreeSet<ParserCallbackId>>::new();
@@ -574,55 +574,63 @@ fn every_original_ordinary_factory_runs_directly_in_live_traces_and_preserves_pu
     let source = OrdinarySource::new();
     let lua = &source.source.public.source.lua;
     let generate: Function = lua
-        .load(include_str!("support/lua_pattern_witness.lua"))
+        .load(include_str!("support/lua_pattern_witness.lua").replace("{55,97,65", "{97,55,65"))
         .eval()
         .unwrap();
     let copy: Function = lua.globals().get("copyTable").unwrap();
     let cases = lua.create_table().unwrap();
     let mut cold = vec![];
-    let mut seen = BTreeSet::new();
     for family in [D::PreFlag, D::ModTag] {
-        for (pattern, value) in &catalog.dictionary(family).fields {
-            let P::Callback(id) = value else { continue };
-            if !matches!(catalog.factory(*id), Some(F::Pure(_))) || !seen.insert(*id) {
-                continue;
-            }
-            let callback = source
-                .source
-                .dictionary(family.source_name())
-                .get::<Function>(pattern.as_str())
+        for (pattern, id) in
+            catalog
+                .dictionary(family)
+                .fields
+                .iter()
+                .filter_map(|(pattern, value)| {
+                    let P::Callback(id) = value else { return None };
+                    matches!(catalog.factory(*id), Some(F::Pure(_)))
+                        .then_some((pattern.clone(), *id))
+                })
+        {
+            let dictionary = source.source.dictionary(family.source_name());
+            let original: Function = dictionary.get(pattern.as_str()).unwrap();
+            let label = format!("warm:{}", id.0);
+            dictionary
+                .set(pattern.as_str(), source.wrap(original.clone(), &label))
                 .unwrap();
-            let args = if family == D::PreFlag {
-                vec![]
-            } else {
-                vec![
-                    Value::Number(12.0),
-                    source.source.text("12"),
-                    source.source.text("34"),
-                    source.source.text("56"),
-                    source.source.text("78"),
-                    source.source.text("90"),
-                ]
-            };
-            let result: Value = callback.call(mlua::MultiValue::from_vec(args)).unwrap();
-            let copied: Value = copy.call(result).unwrap();
-            let graph = source
-                .source
-                .public
-                .capture(mlua::MultiValue::from_vec(vec![copied]))
-                .unwrap();
-            let row = lua.create_table().unwrap();
-            row.set("callback", callback.clone()).unwrap();
-            row.set("prefix", family == D::PreFlag).unwrap();
-            cases.set(cold.len() + 1, row).unwrap();
             let witness: mlua::LuaString = generate.call(pattern.as_str()).unwrap();
             let witness = witness.as_bytes();
-            let text = if family == D::PreFlag {
+            let input = if family == D::PreFlag {
                 [witness.as_ref(), b"7% increased damage"].concat()
             } else {
                 [b"+7 to maximum Life ", witness.as_ref()].concat()
             };
-            cold.push((callback.info().line_defined.unwrap(), graph, text));
+            assert!(matches!(source.observe(&input), Observation::Returned(_)));
+            let events: Table = lua.globals().get("ordinary_events").unwrap();
+            let event = events
+                .sequence_values::<Table>()
+                .map(Result::unwrap)
+                .find(|r| r.get::<String>("label").unwrap() == label)
+                .unwrap();
+            let args: Table = event.get("args").unwrap();
+            let count: usize = args.get("count").unwrap();
+            let result: Value = original
+                .call(MultiValue::from_vec(
+                    (1..=count).map(|i| args.get(i).unwrap()).collect(),
+                ))
+                .unwrap();
+            let copied: Value = copy.call(result).unwrap();
+            let graph = source
+                .source
+                .public
+                .capture(MultiValue::from_vec(vec![copied]))
+                .unwrap();
+            dictionary.set(pattern.as_str(), original.clone()).unwrap();
+            let row = lua.create_table().unwrap();
+            row.set("callback", original.clone()).unwrap();
+            row.set("args", args).unwrap();
+            cases.set(cold.len() + 1, row).unwrap();
+            cold.push((original.info().line_defined.unwrap(), graph, input));
         }
     }
     let observed: Table = lua
@@ -639,30 +647,27 @@ fn every_original_ordinary_factory_runs_directly_in_live_traces_and_preserves_pu
         .unwrap()
         .sequence_values::<Table>()
         .map(Result::unwrap)
-        .map(|row| row.get::<usize>("line").unwrap())
+        .map(|r| r.get::<usize>("line").unwrap())
         .collect::<BTreeSet<_>>();
-    let results: Table = observed.get("results").unwrap();
     let native = CompiledModifierParser::new(catalog).unwrap();
-    for (index, (line, graph, text)) in cold.iter().enumerate() {
+    let results: Table = observed.get("results").unwrap();
+    for (index, (line, graph, input)) in cold.iter().enumerate() {
         assert!(
             live.contains(line),
-            "ordinary source prototype line{line} did not reach a completed live trace"
+            "original factory line{line} absent from live traces:{live:?}"
         );
         let warmed = source
             .source
             .public
-            .capture(mlua::MultiValue::from_vec(vec![
-                results.get(index + 1).unwrap(),
-            ]))
+            .capture(MultiValue::from_vec(vec![results.get(index + 1).unwrap()]))
             .unwrap();
-        assert_eq!(graph, &warmed, "cold/warm metadata atline{line}");
-        assert!(compare(&source, &native, text));
+        assert_eq!(graph, &warmed, "cold/warm line{line}");
+        assert!(compare(&source, &native, input));
     }
     eprintln!(
-        "Warm ordinary source:{}retained closures,{}direct executions,{}live source prototype lines; every cold/warm metadata and warmed full public/native graph exact",
+        "Warm ordinary source:{} original factories,{} direct executions; exact actual-call cold/warm metadata and warmed full public native graphs",
         cold.len(),
-        cold.len() * 128,
-        live.len()
+        cold.len() * 128
     );
 }
 

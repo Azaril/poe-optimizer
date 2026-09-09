@@ -227,6 +227,23 @@ impl Run<'_> {
                 self.output.charge(0)?;
                 value.negated()
             }
+            ParserFactoryExpr::Concat { left, right } => {
+                // Evaluate operands in source order before reducing this node.
+                // Right association is represented by the injected expression tree.
+                let left = self.factory_expr(left, callback, arguments, depth + 1)?;
+                let right = self.factory_expr(right, callback, arguments, depth + 1)?;
+                strings::concat(&left, &right, self.budget, &mut self.output)
+            }
+            ParserFactoryExpr::FirstToUpper { value, .. } => {
+                // Catalog validation proves this node's captured helper identity.
+                let value = self.factory_expr(value, callback, arguments, depth + 1)?;
+                strings::first_to_upper(
+                    &value,
+                    &self.parser.first_to_upper,
+                    self.budget,
+                    &mut self.output,
+                )
+            }
             ParserFactoryExpr::Table(fields) => {
                 self.output.charge(0)?;
                 let mut table = ModifierTable::default();

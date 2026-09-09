@@ -6,6 +6,7 @@
 mod emit;
 mod factory;
 mod ordinary;
+mod strings;
 mod value;
 use crate::lua_pattern::{LuaPattern, MatchBudget, PatternError};
 use crate::modifier_scan::{ScanCapture, ScanError, ScanTable};
@@ -88,6 +89,7 @@ pub struct CompiledModifierParser {
     dictionaries: BTreeMap<ParserDictionary, Dictionary>,
     cluster: LuaPattern,
     tag_capture_numeric: LuaPattern,
+    first_to_upper: LuaPattern,
 }
 impl CompiledModifierParser {
     pub fn new(catalog: &ModifierParserCatalog) -> ParserResult<Self> {
@@ -112,9 +114,12 @@ impl CompiledModifierParser {
         let cluster = LuaPattern::compile(catalog.data().policy.cluster_prefix_pattern.as_bytes())?;
         let tag_capture_numeric =
             LuaPattern::compile(catalog.data().policy.tag_capture_numeric_pattern.as_bytes())?;
+        let first_to_upper =
+            LuaPattern::compile(catalog.data().policy.first_to_upper_pattern.as_bytes())?;
         if bytes
             .checked_add(cluster.compiled_bytes())
             .and_then(|bytes| bytes.checked_add(tag_capture_numeric.compiled_bytes()))
+            .and_then(|bytes| bytes.checked_add(first_to_upper.compiled_bytes()))
             .is_none_or(|n| n > MAX_PARSER_COMPILED_BYTES)
         {
             return Err(ParserError::ResourceBound("compiled dictionary bytes"));
@@ -124,6 +129,7 @@ impl CompiledModifierParser {
             dictionaries,
             cluster,
             tag_capture_numeric,
+            first_to_upper,
         })
     }
     pub fn catalog(&self) -> &ModifierParserCatalog {
@@ -380,13 +386,14 @@ fn make_mod(
 }
 
 /// Files entering adapter fingerprints; hosts normalize checkout newlines.
-pub fn implementation_sources() -> [&'static str; 9] {
+pub fn implementation_sources() -> [&'static str; 10] {
     [
         include_str!("modifier_parser.rs"),
         include_str!("modifier_parser/value.rs"),
         include_str!("modifier_parser/ordinary.rs"),
         include_str!("modifier_parser/emit.rs"),
         include_str!("modifier_parser/factory.rs"),
+        include_str!("modifier_parser/strings.rs"),
         include_str!("modifier_scan.rs"),
         include_str!("lua_pattern.rs"),
         include_str!("lua_number.rs"),

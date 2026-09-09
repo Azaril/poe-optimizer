@@ -1020,6 +1020,15 @@ fn recipe_operations(expr: &E, operations: &mut std::collections::BTreeSet<&'sta
             operations.insert("negate");
             recipe_operations(v, operations);
         }
+        E::Concat { left, right } => {
+            operations.insert("concat");
+            recipe_operations(left, operations);
+            recipe_operations(right, operations);
+        }
+        E::FirstToUpper { value, .. } => {
+            operations.insert("firstToUpper");
+            recipe_operations(value, operations);
+        }
         E::Table(fields) => {
             operations.insert("table");
             for field in fields {
