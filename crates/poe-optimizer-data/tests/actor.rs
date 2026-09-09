@@ -12,7 +12,7 @@ fn custom(mut package: GameDataPackage) -> Result<GameDataSnapshot, GameDataErro
 fn actor_schema_is_required_and_all_source_records_are_retained() {
     let snapshot = bundled_snapshot().unwrap();
     let package = snapshot.package();
-    assert_eq!(snapshot.identity().schema_version, 23);
+    assert_eq!(snapshot.identity().schema_version, 24);
     assert_eq!(package.actor.high_precision_mods.len(), 40);
     assert_eq!(package.actor.modifier_rules.len(), 359);
     assert_eq!(package.actor.spirit_quests.len(), 3);

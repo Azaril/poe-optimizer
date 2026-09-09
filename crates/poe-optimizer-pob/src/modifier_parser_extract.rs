@@ -11,6 +11,7 @@ use std::{
     },
 };
 mod factories;
+mod flags;
 mod ordinary;
 mod strings;
 
@@ -354,6 +355,8 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
         .set_name(format!("@{TOOLS}"))
         .exec()?;
     spans.insert("create_mod".into(), sp);
+    let original_constructor: Function =
+        lua.globals().get::<Table>("modLib")?.raw_get("createMod")?;
     let parser = source(sources, PARSER)?;
     let body = section(
         parser,
@@ -511,6 +514,7 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
     }
     let tag_capture_numeric_pattern = ordinary::extract(&lua, sources, &mut spans)?;
     let first_to_upper_pattern = strings::source_policy(&lua, sources, &mut spans)?;
+    let (flag_mod_type, flag_mod_value) = flags::source_policy(&lua, sources, &mut spans)?;
     original_strings.verify(&lua)?;
     let upper_id = helpers["firstToUpper"];
     strings::verify_helper(
@@ -538,6 +542,14 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
         .seen_callbacks
         .get(&(actual_constructor.to_pointer() as usize))
         .ok_or_else(|| error("original createMod absent from callback graph"))?;
+    flags::verify_helper(
+        &lua,
+        &roots.get::<Function>("flag")?,
+        helpers["flag"],
+        &original_constructor,
+        &graph,
+        &spans,
+    )?;
     let mut out = ModifierParserData {
         schema_version: MODIFIER_PARSER_SCHEMA_VERSION,
         source: ItemLoadingSource {
@@ -566,6 +578,8 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
                 .to_string(),
             tag_capture_numeric_pattern,
             first_to_upper_pattern,
+            flag_mod_type,
+            flag_mod_value,
             immune_max_single_words: word_limit(parser, "(numWords > ", ") then")?,
             immune_combined_min_words_exclusive: word_limit(parser, "if numWords > ", " then")?,
             immune_max_part_words: word_limit(parser, "if preWordNum > ", " or")?,

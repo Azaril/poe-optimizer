@@ -8,7 +8,7 @@ use std::sync::Arc;
 mod factories;
 pub use factories::*;
 
-pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 4;
+pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 5;
 type Result<T> = std::result::Result<T, GameDataError>;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -166,6 +166,9 @@ pub struct ParserPolicy {
     pub tag_capture_numeric_pattern: String,
     /// Pattern in the authenticated firstToUpper helper's callback replacement.
     pub first_to_upper_pattern: String,
+    /// Literal constructor prefix from the authenticated closed flag wrapper.
+    pub flag_mod_type: String,
+    pub flag_mod_value: bool,
     pub immune_max_single_words: u32,
     pub immune_combined_min_words_exclusive: u32,
     pub immune_max_part_words: u32,
@@ -554,6 +557,7 @@ impl ModifierParserData {
         charge(p.cluster_prefix_pattern.len())?;
         charge(p.tag_capture_numeric_pattern.len())?;
         charge(p.first_to_upper_pattern.len())?;
+        charge(p.flag_mod_type.len())?;
         for text in &p.immune_effect_blacklist {
             charge(text.len())?;
         }
@@ -564,6 +568,7 @@ impl ModifierParserData {
             || !text(&p.cluster_prefix_pattern, 4096)
             || !text(&p.tag_capture_numeric_pattern, 4096)
             || !text(&p.first_to_upper_pattern, 4096)
+            || p.flag_mod_type.len() > 4096
             || [
                 p.immune_max_single_words,
                 p.immune_combined_min_words_exclusive,

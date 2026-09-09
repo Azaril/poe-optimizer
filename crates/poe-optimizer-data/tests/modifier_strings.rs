@@ -47,9 +47,9 @@ fn source_string_factories_have_complete_dictionary_breadth_and_binding() {
         })
         .map(|(id, _)| *id)
         .collect::<std::collections::BTreeSet<_>>();
-    assert_eq!(candidates.len(), 38);
+    assert_eq!(candidates.len(), 53);
     for (dictionary, count) in [
-        (ParserDictionary::Special, 28),
+        (ParserDictionary::Special, 43),
         (ParserDictionary::ModTag, 10),
     ] {
         let table = &data.tables[data.dictionaries[&dictionary].0 as usize - 1];

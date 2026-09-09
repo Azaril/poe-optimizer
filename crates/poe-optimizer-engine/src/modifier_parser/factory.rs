@@ -270,18 +270,45 @@ impl Run<'_> {
                 Ok(V::Table(Arc::new(table)))
             }
             ParserFactoryExpr::CreateMod { args } => {
-                let bytes = args
-                    .len()
-                    .checked_mul(std::mem::size_of::<V>())
-                    .ok_or(ParserError::ResourceBound("factory argument storage"))?;
-                self.output.charge(bytes)?;
-                let mut values = Vec::with_capacity(args.len());
-                for expression in args {
-                    values.push(self.factory_expr(expression, callback, arguments, depth + 1)?);
-                }
+                let values = self.factory_arguments(args, callback, arguments, depth)?;
                 Ok(V::Table(Arc::new(create_mod(values, &mut self.output)?)))
             }
+            ParserFactoryExpr::Flag { args, .. } => {
+                // Validation proves owner.flag -> helper.mod -> original constructor.
+                // Evaluate every source argument before invoking that closed helper.
+                let values = self.factory_arguments(args, callback, arguments, depth)?;
+                let policy = &self.parser.catalog.data().policy;
+                Ok(V::Table(Arc::new(create_flag(
+                    values,
+                    &policy.flag_mod_type,
+                    policy.flag_mod_value,
+                    self.budget,
+                    &mut self.output,
+                )?)))
+            }
         }
+    }
+
+    fn factory_arguments(
+        &mut self,
+        expressions: &[ParserFactoryExpr],
+        callback: ParserCallbackId,
+        arguments: FactoryArguments<'_>,
+        depth: usize,
+    ) -> ParserResult<Vec<V>> {
+        let bytes = expressions
+            .len()
+            .checked_mul(std::mem::size_of::<V>())
+            .ok_or(ParserError::ResourceBound("factory argument storage"))?;
+        self.output.charge(bytes)?;
+        let mut values = Vec::new();
+        values
+            .try_reserve_exact(expressions.len())
+            .map_err(|_| ParserError::ResourceBound("factory argument allocation"))?;
+        for expression in expressions {
+            values.push(self.factory_expr(expression, callback, arguments, depth + 1)?);
+        }
+        Ok(values)
     }
 
     fn factory_scalar(
@@ -299,9 +326,30 @@ impl Run<'_> {
     }
 }
 
+/// The proven flag wrapper inserts two injected literals after the bound name.
+/// Its evaluated varargs are forwarded without a second vector or nil compaction.
+fn create_flag(
+    arguments: Vec<V>,
+    kind: &str,
+    value: bool,
+    work: &mut MatchBudget,
+    budget: &mut OutputBudget,
+) -> ParserResult<ModifierTable> {
+    work.charge(kind.len() as u64 + 3)?;
+    budget.charge(kind.len())?;
+    budget.charge(0)?;
+    let mut arguments = arguments.into_iter();
+    let name = arguments.next().unwrap_or(V::Nil);
+    let prefix = [name, V::Bytes(kind.as_bytes().to_vec()), V::Boolean(value)];
+    create_mod(prefix.into_iter().chain(arguments), budget)
+}
+
 /// Exact positional createMod construction over owned arguments, including nil
 /// holes and non-string names/types. Argument evaluation is a separate prior step.
-fn create_mod(arguments: Vec<V>, budget: &mut OutputBudget) -> ParserResult<ModifierTable> {
+fn create_mod(
+    arguments: impl IntoIterator<Item = V>,
+    budget: &mut OutputBudget,
+) -> ParserResult<ModifierTable> {
     budget.charge(0)?;
     let mut arguments = arguments.into_iter();
     let name = arguments.next().unwrap_or(V::Nil);
@@ -372,6 +420,115 @@ mod tests {
         ];
         args.extend(tail);
         create_mod(args, &mut OutputBudget::default()).unwrap()
+    }
+
+    #[test]
+    fn flag_zero_arguments_bind_a_missing_name_and_injected_prefix() {
+        let row = create_flag(
+            vec![],
+            "Caller\0Type",
+            false,
+            &mut MatchBudget::default(),
+            &mut OutputBudget::default(),
+        )
+        .unwrap();
+        assert_eq!(row.fields.len(), 4);
+        assert!(!row.fields.contains_key("name"));
+        assert_eq!(row.field("type"), &V::Bytes(b"Caller\0Type".to_vec()));
+        assert_eq!(row.field("value"), &V::Boolean(false));
+        assert_eq!(row.field("flags"), &V::Number(0.0));
+        assert_eq!(row.field("keywordFlags"), &V::Number(0.0));
+        assert!(row.indexed.is_empty());
+    }
+
+    #[test]
+    fn flag_nil_tail_positions_and_shared_tables_are_not_compacted_or_copied() {
+        let shared = Arc::new(ModifierTable::default());
+        let row = create_flag(
+            vec![
+                V::Table(shared.clone()),
+                V::Nil,
+                V::Bytes(b"7".to_vec()),
+                V::Number(-0.0),
+                V::Nil,
+                V::Table(shared.clone()),
+                V::Nil,
+            ],
+            "CallerType",
+            false,
+            &mut MatchBudget::default(),
+            &mut OutputBudget::default(),
+        )
+        .unwrap();
+        assert_eq!(row.field("flags"), &V::Number(0.0));
+        let V::Number(keywords) = row.field("keywordFlags") else {
+            panic!("keywords")
+        };
+        assert_eq!(keywords.to_bits(), (-0.0_f64).to_bits());
+        assert!(!row.fields.contains_key("source"));
+        assert_eq!(row.indexed.len(), 1);
+        assert!(!row.indexed.contains_key(&1));
+        let V::Table(tag) = row.indexed_value(2) else {
+            panic!("tag")
+        };
+        let V::Table(name) = row.field("name") else {
+            panic!("name")
+        };
+        assert!(Arc::ptr_eq(tag, &shared));
+        assert!(Arc::ptr_eq(name, &shared));
+    }
+
+    #[test]
+    fn flag_keeps_raw_source_and_independent_numeric_tail_types() {
+        let row = create_flag(
+            vec![
+                V::Number(5.0),
+                V::Bytes(vec![0xff, 0]),
+                V::Number(f64::NAN),
+                V::Number(f64::INFINITY),
+                V::Nil,
+                V::Boolean(false),
+            ],
+            "Kind",
+            true,
+            &mut MatchBudget::default(),
+            &mut OutputBudget::default(),
+        )
+        .unwrap();
+        assert_eq!(row.field("name"), &V::Number(5.0));
+        assert_eq!(row.field("source"), &V::Bytes(vec![0xff, 0]));
+        assert_eq!(row.field("value"), &V::Boolean(true));
+        let V::Number(flags) = row.field("flags") else {
+            panic!("flags")
+        };
+        assert!(flags.is_nan());
+        assert_eq!(row.field("keywordFlags"), &V::Number(f64::INFINITY));
+        assert_eq!(row.indexed_value(2), &V::Boolean(false));
+        assert!(!row.indexed.contains_key(&1));
+    }
+
+    #[test]
+    fn flag_prefix_copy_consumes_work_and_output_budgets_before_growth() {
+        let mut work = MatchBudget::new(crate::lua_pattern::MatchLimits {
+            max_steps: 2,
+            ..Default::default()
+        });
+        assert!(matches!(
+            create_flag(vec![], "", false, &mut work, &mut OutputBudget::default()),
+            Err(ParserError::Scan(_))
+        ));
+        let mut output = OutputBudget::default();
+        output.charge(value::MAX_OUTPUT_BYTES - 1).unwrap();
+        assert!(matches!(
+            create_flag(
+                vec![],
+                "Kind",
+                false,
+                &mut MatchBudget::default(),
+                &mut output
+            ),
+            Err(ParserError::ResourceBound(_))
+        ));
     }
 
     #[test]

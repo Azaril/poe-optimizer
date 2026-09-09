@@ -1801,3 +1801,270 @@ fn injected_string_factories_preserve_bytes_and_distinguish_opaque_methods() {
         "injected pattern has its own identity"
     );
 }
+
+#[test]
+fn injected_flag_factories_preserve_prefixes_and_variadic_slots() {
+    use poe_optimizer_data::modifier_parser::{
+        ParserDictionary as Dict, ParserFactoryDisposition, ParserFactoryExpr as Expr,
+        ParserFactoryField as Field, ParserFactoryLiteral as Literal, ParserValue,
+    };
+
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller-flags.xml");
+    let data_path = temp.path().join("caller-flag-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    let base_name = package
+        .item_loading
+        .bases
+        .iter()
+        .find(|base| {
+            base.item_type
+                != package
+                    .item_loading
+                    .policy
+                    .affix_loading
+                    .reconcile
+                    .jewel_type
+                && base.field("flask").is_none()
+                && base.field("charm").is_none()
+                && !base.name.contains(['&', '<', '>'])
+        })
+        .unwrap()
+        .name
+        .clone();
+    let helper = package.modifier_parser.helpers["flag"];
+    let special = package.modifier_parser.dictionaries[&Dict::Special];
+    // A Flag-only owner has no direct constructor provenance. Its captured
+    // helper supplies the separate authenticated constructor path.
+    let ids = package.modifier_parser.tables[special.0 as usize - 1]
+        .fields
+        .values()
+        .filter_map(|value| {
+            let ParserValue::Callback(id) = value else {
+                return None;
+            };
+            let Some(ParserFactoryDisposition::Pure(factory)) =
+                package.modifier_parser.factories.get(id)
+            else {
+                return None;
+            };
+            (factory.provenance.constructor.is_none()
+                && package.modifier_parser.callbacks[id.0 as usize - 1]
+                    .upvalues
+                    .iter()
+                    .any(|upvalue| {
+                        upvalue.name == "flag" && upvalue.value == ParserValue::Callback(helper)
+                    }))
+            .then_some(*id)
+        })
+        .collect::<std::collections::BTreeSet<_>>()
+        .into_iter()
+        .take(4)
+        .collect::<Vec<_>>();
+    assert_eq!(ids.len(), 4);
+    let text = |value: &str| Expr::Literal(Literal::Text(value.into()));
+    let number = |value| Expr::Literal(Literal::Number(value));
+    let nil = || Expr::Literal(Literal::Nil);
+    let named = |key: &str, value| Field::Named {
+        key: key.into(),
+        value,
+    };
+    let flag = |args| Expr::Flag { helper, args };
+    let constants = package.modifier_parser.policy.mod_flags;
+    assert!(
+        package.modifier_parser.tables[constants.0 as usize - 1]
+            .fields
+            .insert("CallerFlagOpaque".into(), ParserValue::Callback(helper))
+            .is_none()
+    );
+    let success = Expr::Table(vec![
+        Field::List(flag(vec![
+            Expr::Concat {
+                left: Box::new(text("Caller/")),
+                right: Box::new(Expr::Argument(2)),
+            },
+            nil(),
+            number(16.0),
+            number(32.0),
+            Expr::Table(vec![
+                named("type", text("CallerFlagTag")),
+                named("raw", Expr::Argument(1)),
+                named("numeric", Expr::Argument(0)),
+            ]),
+            nil(),
+            Expr::Table(vec![named("type", text("CallerAfterHoleTag"))]),
+            nil(),
+        ])),
+        Field::List(flag(vec![
+            text("Caller/TextFlags"),
+            text("Caller flag source"),
+            text("64"),
+            number(128.0),
+            Expr::Table(vec![named("type", text("CallerTextFlagTag"))]),
+        ])),
+    ]);
+    let empty = Expr::Table(vec![Field::List(flag(vec![]))]);
+    let opaque = Expr::Table(vec![Field::List(flag(vec![
+        text("Caller/Opaque"),
+        nil(),
+        number(0.0),
+        number(0.0),
+        Expr::Table(vec![named(
+            "opaque",
+            Expr::ConstantField {
+                table: constants,
+                key: "CallerFlagOpaque".into(),
+            },
+        )]),
+    ]))]);
+    let error = Expr::Table(vec![Field::List(flag(vec![
+        text("Caller/Bad"),
+        Expr::Negate(Box::new(Expr::Literal(Literal::Boolean(false)))),
+    ]))]);
+    for (id, parameters, body) in [
+        (ids[0], 3, success),
+        (ids[1], 0, empty),
+        (ids[2], 0, opaque),
+        (ids[3], 0, error),
+    ] {
+        let ParserFactoryDisposition::Pure(factory) =
+            package.modifier_parser.factories.get_mut(&id).unwrap()
+        else {
+            unreachable!()
+        };
+        assert!(factory.provenance.constructor.is_none());
+        factory.parameter_count = parameters;
+        factory.body = body;
+    }
+    for (pattern, id) in [
+        ("^caller flag (%d+) (.+)$", ids[0]),
+        ("^caller empty flag$", ids[1]),
+        ("^caller opaque flag$", ids[2]),
+        ("^caller bad flag$", ids[3]),
+    ] {
+        assert!(
+            package.modifier_parser.tables[special.0 as usize - 1]
+                .fields
+                .insert(pattern.into(), ParserValue::Callback(id))
+                .is_none()
+        );
+    }
+    let lines = [
+        "caller flag 007 alpha",
+        "caller empty flag",
+        "caller opaque flag",
+        "caller bad flag",
+    ];
+    let items = lines
+        .iter()
+        .enumerate()
+        .map(|(index, line)| {
+            format!("<Item id='caller-{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
+        })
+        .collect::<String>();
+    let xml = format!("<PathOfBuilding2><Items>{items}</Items></PathOfBuilding2>");
+    fs::write(&input, &xml).unwrap();
+    let mut digests = Vec::new();
+    for (mod_type, mod_value) in [("CALLER_SWITCH", false), ("CALLER_TOGGLE", true)] {
+        package.modifier_parser.policy.flag_mod_type = mod_type.into();
+        package.modifier_parser.policy.flag_mod_value = mod_value;
+        package.refresh_section_digests().unwrap();
+        let data_bytes = package.canonical_bytes().unwrap();
+        let digest = format!("{:x}", Sha256::digest(&data_bytes));
+        fs::write(&data_path, &data_bytes).unwrap();
+        let report = inspect_definitions(&input, temp.path(), Some(&data_path));
+        let loaded = &report["definition_lookup"]["items"]["report"];
+        let items = loaded["items"].as_array().unwrap();
+        assert_eq!(items.len(), lines.len());
+        let rows = items[0]["state"]["explicit_mod_lines"].as_array().unwrap();
+        assert_eq!(rows.len(), 1, "{items:#?}");
+        assert_eq!(
+            rows[0]["modifiers"],
+            serde_json::json!([
+                {
+                    "fields":{"name":"Caller/alpha","type":mod_type,"value":mod_value,"flags":16.0,"keywordFlags":32.0},
+                    "indexed":{
+                        "1":{"fields":{"type":"CallerFlagTag","raw":"007","numeric":7.0},"indexed":{}},
+                        "3":{"fields":{"type":"CallerAfterHoleTag"},"indexed":{}}
+                    }
+                },
+                {
+                    "fields":{"name":"Caller/TextFlags","type":mod_type,"value":mod_value,"source":"Caller flag source","flags":0.0,"keywordFlags":128.0},
+                    "indexed":{"1":{"fields":{"type":"CallerTextFlagTag"},"indexed":{}}}
+                }
+            ])
+        );
+        let empty_rows = items[1]["state"]["explicit_mod_lines"].as_array().unwrap();
+        assert_eq!(empty_rows.len(), 1);
+        assert_eq!(
+            empty_rows[0]["modifiers"],
+            serde_json::json!([{
+                "fields":{"type":mod_type,"value":mod_value,"flags":0.0,"keywordFlags":0.0},
+                "indexed":{}
+            }])
+        );
+        for (index, rows) in [rows, empty_rows].into_iter().enumerate() {
+            assert_eq!(items[index]["status"], "pending", "{}", items[index]);
+            assert_eq!(items[index]["pending"]["kind"], "assembly");
+            assert_eq!(rows[0]["line"], lines[index]);
+            assert_eq!(rows[0]["source_line"], 3);
+            assert!(rows[0]["extra"].is_null());
+        }
+        let opaque = &items[2];
+        assert_eq!(opaque["status"], "pending", "{opaque:#}");
+        assert_eq!(opaque["pending"]["kind"], "modifier_parser");
+        assert!(
+            opaque["pending"]["message"]
+                .as_str()
+                .unwrap()
+                .contains("parser callback output requires its captured-state item assembly model"),
+            "{opaque:#}"
+        );
+        let error = &items[3];
+        assert_eq!(error["status"], "source_error", "{error:#}");
+        assert!(error["pending"].is_null());
+        assert!(
+            error["instructions"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|instruction| instruction["error"].is_string())
+        );
+        assert_eq!(
+            error["instructions"].as_array().unwrap().last().unwrap()["status"],
+            "not_executed"
+        );
+        for (index, item) in items.iter().enumerate() {
+            assert_eq!(item["authored_id"], format!("caller-{index}"));
+            let calls = item["state"]["parser_calls"].as_array().unwrap();
+            assert_eq!(calls.len(), 1, "{item:#}");
+            assert_eq!(calls[0]["text"], lines[index]);
+            assert_eq!(calls[0]["line_index"], 3);
+            assert_eq!(calls[0]["combined"], false);
+            assert!(calls[0].get("origin").is_none());
+        }
+        assert_eq!(report["verification"]["item_loading"], "reported");
+        assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
+        assert_eq!(report["verification"]["native_admission"], "not_checked");
+        assert_eq!(report["verification"]["reference_calculation"], "not_run");
+        assert_eq!(
+            report["definition_lookup"]["data_trust"]["status"],
+            "custom_unreviewed"
+        );
+        assert_eq!(loaded["data_identity"]["content_sha256"], digest);
+        assert_eq!(
+            loaded["implementation_sha256"],
+            poe_optimizer_import::item_loading::implementation_fingerprint()
+        );
+        assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+        assert_eq!(fs::read(&data_path).unwrap(), data_bytes);
+        digests.push(digest);
+    }
+    assert_ne!(
+        digests[0], digests[1],
+        "injected prefix has its own identity"
+    );
+}

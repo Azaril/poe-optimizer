@@ -214,7 +214,7 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v23",
+        "poe-game-data-extractor-v24",
         include_str!("item_loading_extract.rs"),
         include_str!("unique_requirements_extract.rs"),
         include_str!("../../poe-optimizer-lua-utf8/src/lib.rs"),
@@ -225,6 +225,7 @@ fn extractor_sha256() -> String {
         include_str!("item_scalability_extract.rs"),
         include_str!("modifier_parser_extract.rs"),
         include_str!("modifier_parser_extract/factories.rs"),
+        include_str!("modifier_parser_extract/flags.rs"),
         include_str!("modifier_parser_extract/ordinary.rs"),
         include_str!("modifier_parser_extract/strings.rs"),
         include_str!("modifier_parser_inputs.lua"),

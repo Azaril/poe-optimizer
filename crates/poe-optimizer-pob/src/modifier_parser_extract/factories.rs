@@ -158,6 +158,7 @@ impl<'a> Lowerer<'a> {
             expr,
             ParserFactoryExpr::Table(_)
                 | ParserFactoryExpr::CreateMod { .. }
+                | ParserFactoryExpr::Flag { .. }
                 | ParserFactoryExpr::Literal(ParserFactoryLiteral::Nil)
         ) {
             return Err("top result is not statically table or nil".into());
@@ -299,6 +300,39 @@ impl<'a> Lowerer<'a> {
                     helper,
                     value: Box::new(value),
                 });
+            }
+            if name == "flag" {
+                let helper = self
+                    .data
+                    .helpers
+                    .get(name)
+                    .copied()
+                    .ok_or_else(|| "missing flag helper".to_owned())?;
+                if self.parameters.contains(&name)
+                    || !self
+                        .callback
+                        .upvalues
+                        .iter()
+                        .any(|u| u.name == name && u.value == ParserValue::Callback(helper))
+                {
+                    return Err("flag is not the captured helper".into());
+                }
+                self.at += 1;
+                let mut args = vec![];
+                if self.peek() != ")" {
+                    loop {
+                        if args.len() >= 4096 {
+                            return Err("flag argument bound".into());
+                        }
+                        args.push(self.expr(depth + 1)?);
+                        if self.peek() != "," {
+                            break;
+                        }
+                        self.at += 1;
+                    }
+                }
+                self.take(")")?;
+                return Ok(ParserFactoryExpr::Flag { helper, args });
             }
             if name != "mod"
                 || !self
@@ -592,6 +626,10 @@ mod tests {
                     value: captured,
                 },
                 ParserUpvalue {
+                    name: "flag".into(),
+                    value: ParserValue::Callback(data.helpers["flag"]),
+                },
+                ParserUpvalue {
                     name: "firstToUpper".into(),
                     value: ParserValue::Callback(data.helpers["firstToUpper"]),
                 },
@@ -667,7 +705,7 @@ mod tests {
             "function(x) return {x + 1} end",
             "function(x) return {x / 2} end",
             "function(x) return {tonumber(x)} end",
-            "function(x) return {flag(x)} end",
+            "function(x) return {combineToUpper(x)} end",
             "function(x) local a=x return {a} end",
             "function(x) return {} print(x) end",
             "function(x) return {} end print('tail')",
@@ -795,5 +833,63 @@ mod tests {
                 .is_err()
             );
         }
+    }
+    #[test]
+    fn flag_lowering_retains_exact_actual_vector_without_direct_constructor_provenance() {
+        for (body, length) in [
+            ("function() return flag() end", 0),
+            ("function() return flag(nil) end", 1),
+            ("function(a) return flag(a, nil, 2, nil, false, nil) end", 6),
+        ] {
+            let f = one(body, ParserValue::Nil).unwrap();
+            assert!(f.provenance.constructor.is_none());
+            let ParserFactoryExpr::Flag { args, .. } = f.body else {
+                panic!()
+            };
+            assert_eq!(args.len(), length);
+            if length == 6 {
+                assert!(matches!(
+                    args[1],
+                    ParserFactoryExpr::Literal(ParserFactoryLiteral::Nil)
+                ));
+                assert!(matches!(
+                    args[5],
+                    ParserFactoryExpr::Literal(ParserFactoryLiteral::Nil)
+                ));
+            }
+        }
+        let f = one(
+            "function() return {flag('A'), mod('B', 'BASE', 1), flag('C')} end",
+            ParserValue::Nil,
+        )
+        .unwrap();
+        assert!(f.provenance.constructor.is_some());
+    }
+    #[test]
+    fn flag_lowering_rejects_shadowed_rebound_and_general_variadic_calls() {
+        for body in [
+            "function(flag) return flag('A') end",
+            "function(...) return flag(...) end",
+            "function() return flag('A',) end",
+            "function() return flag(other()) end",
+        ] {
+            assert!(one(body, ParserValue::Nil).is_err(), "{body}");
+        }
+        assert!(
+            one_callback("function() return flag('A') end", ParserValue::Nil, |c| c
+                .upvalues
+                .retain(|u| u.name != "flag"))
+            .is_err()
+        );
+        assert!(
+            one_callback("function() return flag('A') end", ParserValue::Nil, |c| c
+                .upvalues
+                .iter_mut()
+                .find(|u| u.name == "flag")
+                .unwrap()
+                .value =
+                ParserValue::Nil)
+            .is_err()
+        );
     }
 }

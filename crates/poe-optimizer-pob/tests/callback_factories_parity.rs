@@ -1044,6 +1044,12 @@ fn recipe_operations(expr: &E, operations: &mut std::collections::BTreeSet<&'sta
                 }
             }
         }
+        E::Flag { args, .. } => {
+            operations.insert("flag");
+            for arg in args {
+                recipe_operations(arg, operations);
+            }
+        }
         E::CreateMod { args } => {
             operations.insert("createMod");
             for arg in args {

@@ -69,6 +69,11 @@ pub enum ParserFactoryExpr {
         helper: ParserCallbackId,
         value: Box<ParserFactoryExpr>,
     },
+    /// Exact actual arguments to the authenticated variadic constructor wrapper.
+    Flag {
+        helper: ParserCallbackId,
+        args: Vec<ParserFactoryExpr>,
+    },
     Table(Vec<ParserFactoryField>),
     /// Includes name/type/value and all variadic nil holes.
     CreateMod {
@@ -152,6 +157,7 @@ pub(super) fn validate(data: &ModifierParserData) -> Result<()> {
                     factory.body,
                     ParserFactoryExpr::Table(_)
                         | ParserFactoryExpr::CreateMod { .. }
+                        | ParserFactoryExpr::Flag { .. }
                         | ParserFactoryExpr::Literal(ParserFactoryLiteral::Nil)
                 ) {
                     return Err(catalog_error("factory result must be a table or nil"));
@@ -292,6 +298,23 @@ fn expression(
                 uses_constructor,
             )?;
         }
+        ParserFactoryExpr::Flag { helper, args } => {
+            validate_flag_binding(data, callback, *helper)?;
+            if args.len() > 4096 {
+                return Err(catalog_error("factory argument count bound"));
+            }
+            for arg in args {
+                expression(
+                    arg,
+                    factory,
+                    callback,
+                    data,
+                    bounds,
+                    depth + 1,
+                    uses_constructor,
+                )?;
+            }
+        }
         ParserFactoryExpr::Table(fields) => {
             if fields.len() > 4096 {
                 return Err(catalog_error("factory table field bound"));
@@ -336,6 +359,62 @@ fn expression(
                 )?;
             }
         }
+    }
+    Ok(())
+}
+
+/// The indirect constructor path never grants a fictitious direct owner capture.
+fn validate_flag_binding(
+    data: &ModifierParserData,
+    owner: &ParserCallback,
+    helper: ParserCallbackId,
+) -> Result<()> {
+    let get = |id: ParserCallbackId| {
+        id.0.checked_sub(1)
+            .and_then(|i| data.callbacks.get(i as usize))
+    };
+    let target = get(helper).ok_or_else(|| catalog_error("dangling flag helper"))?;
+    let span = data
+        .source
+        .construction_spans
+        .get("flag_primitive")
+        .ok_or_else(|| catalog_error("missing flag primitive source"))?;
+    if data.helpers.get("flag") != Some(&helper)
+        || target.kind
+            != (ParserCallbackKind::Lua {
+                source: span.clone(),
+            })
+        || target.environment != ParserEnvironment::OriginalGlobals
+        || target.upvalues.len() != 1
+        || target.upvalues[0].name != "mod"
+        || !owner
+            .upvalues
+            .iter()
+            .any(|u| u.name == "flag" && u.value == ParserValue::Callback(helper))
+    {
+        return Err(catalog_error(
+            "factory flag is not its closed captured helper binding",
+        ));
+    }
+    let ParserValue::Callback(constructor) = target.upvalues[0].value else {
+        return Err(catalog_error("flag constructor capture is not a callback"));
+    };
+    let constructor = get(constructor).ok_or_else(|| catalog_error("dangling flag constructor"))?;
+    let source = data
+        .source
+        .construction_spans
+        .get("create_mod")
+        .ok_or_else(|| catalog_error("missing authenticated createMod source"))?;
+    if constructor.kind
+        != (ParserCallbackKind::Lua {
+            source: source.clone(),
+        })
+        || constructor.environment != ParserEnvironment::OriginalGlobals
+        || !constructor.upvalues.is_empty()
+    {
+        return Err(catalog_error(
+            "flag constructor is not the authenticated closed createMod descriptor",
+        ));
     }
     Ok(())
 }
