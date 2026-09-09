@@ -3,7 +3,10 @@
 Last updated: 2026-09-09
 
 Current work: **native structural modifier parsing**, implemented on main after
-`48983fa`, with final integration/workspace validation in progress. The complete schema-16
+`48983fa`, locally committed as `415ab742a5585888541c3f6da34ca8eddd4085c6`,
+with final workspace validation in progress. Publication is proceeding so clean Windows/Linux
+CI can run alongside the remaining local regression; this is not a release or a broader
+native-build admission claim. The complete schema-16
 catalog, Lua-compatible byte matcher, ordinary parser and import provider are integrated.
 Source comparisons and a fresh five-build regression pass; full native replacement remains
 unfinished. See the [active parser checkpoint](#general-modifier-parser-active-checkpoint).
@@ -359,8 +362,8 @@ exact; only the intended package migration changes its protected baseline bytes.
 | Fresh caller corpus | Five imports/inspections/reference runs succeed; all 110 reference measurements and native rejection reasons unchanged |
 | Corpus tooling | 29 tests pass; bounded data copy now accepts the schema-16 package size |
 | Native-only complete CLI regression | Session 34129 completed with exit 0: all 115 tests across 45 target results pass, none failed or ignored. Final binary SHA-256 `cdf38223e457a83167a448517d4781c8142416f18c23b2511b6dbf7d62833665`. |
-| Full workspace/current import regression | Workspace session 37729 is supervised by parser_number. The old build has one stale 25-section CLI assertion; its corrected target must rerun. Final-code import all-target tests and changed-source reconciliation are in progress. Preserve successful results instead of restarting the suite. |
-| Publication | Local code checkpoint; push pending full regression completion. Previous formatter and repair exact-code CI both pass on Windows/Linux |
+| Full workspace/current import regression | Workspace session 37729 is supervised by parser_number. Its one stale 25-section CLI assertion is repaired and the fresh extraction target passes. All 223 current-code import tests across ten targets pass. Final full-workspace completion and changed-source reconciliation remain in progress. Preserve successful results instead of restarting the suite. |
+| Publication | Code commit `415ab742a5585888541c3f6da34ca8eddd4085c6`; publishing with this resume update to start clean Windows/Linux CI alongside remaining local regression. Previous formatter and repair exact-code CI both pass on Windows/Linux. Current CI result remains pending. |
 
 Final item diagnostics preserve all 116 inventory items, 486 range instructions, 15 saved
 skill/equipment sets, 200 groups, 541 gem occurrences, 16 passive specs and 21 jewel
@@ -386,16 +389,18 @@ Evidence: `runs/parser-data-final.json`, `runs/parser-data-tests-final.json`,
 `runs/parser-cli-validation.json`, `runs/parser-native-cli-test-ledger.json`,
 `runs/parser-wrapper-review-fix.json`,
 `runs/parser-import-final.log`, `runs/parser-provider-public-final.log`,
-`runs/parser-session-audit-final.log`,
+`runs/parser-session-audit-final.log`, `runs/parser-import-all-final.log`,
+`runs/parser-extraction-cli-repaired.log`,
 `runs/parser-corpus-reviewed-validation.json`, `runs/parser-final-preservation.json` and
 `runs/parser-corpus-reviewed/index.json`. These ignored local ledgers supplement reproducible
 committed tests; they are not independent game truth.
 
 ### Resume point
 
-Independent provider/source integration and native-only validation pass. Finish the full
-workspace/current-import regression and repaired extraction target, then push this local
-checkpoint and inspect its exact-code Windows/Linux CI.
+Independent provider/source integration and native-only validation pass. Complete the full
+workspace regression and changed-source reconciliation. Publication now proceeds in parallel
+to start clean Windows/Linux CI sooner; inspect the exact published commit and preserve
+any failure evidence. Do not present pending gates as passed.
 Keep successful terminal results; do not restart old or still-running sessions.
 
 Next, implement selected callback operations and explicit source parser session state.
@@ -422,6 +427,45 @@ operations), effective skill/grant/action resolution and numerical producers.
 Numerical support, item assembly and complete-build admission remain separate gates. The
 full native-parity and broad joint-search goal remains active; this checkpoint completes
 neither the B2 mechanism matrix nor the proposed B3 architecture migration.
+
+## Defence-header data/state - isolated work in progress
+
+This subsequent slice runs only in `C:/code/poe-optimizer/runs/defence-header-worktree`,
+branch `codex/defence-headers`, based on local parser commit `415ab742`. Main stays frozen
+while the parser checkpoint's full regression finishes. The worktree has a separate clean
+local shared-object PoB clone at the same pinned revision. Do not mix its outputs with the
+frozen `runs/parser-final-bin` or edit the older formatter worktree.
+
+The agreed routine API adds injected `ItemLoadingPolicy.defence_header_keys` with typed
+catalog key/rewrite accessors, reusing the original rewrite records. Data/extraction has reproduced package schema/semantics 17 and item-loading schema 2
+twice, preserving all 25 other section values/digests and earlier item-loading fields. Native `ItemState.armour_data` distinguishes absent and empty
+numeric tables and retains them across reparses. `AssemblyOutcome.armour_data` uses
+`ArmourDataUpdate::{Preserve, Clear, Replace}` with bounded canonical numeric entries.
+Original-header mappings and base names stay injected; no actor/action/candidate migration
+or additional numerical build admission is included.
+
+Root owns import implementation/contracts; parser_data owns data/extraction/reproduction;
+parser_oracle owns independent original Item source tests. All **39 targeted import tests**
+pass (25 loading contracts, nine formatting, five parser-provider tests). All **17 data and
+extractor tests** pass. The **24 affected source-oracle tests** pass: five new defence-header,
+12 existing item loading, and seven parser-provider tests. New source cases cover numeric
+aliases, explicit/implicit continuation, real assembly and stale-base reparses; all 116
+caller items have matching executed trace prefixes, including 29 full preassembly states.
+Strict affected-target Clippy, workspace formatting and all five WASM libraries pass.
+
+Package bytes: 21,598,920; SHA-256
+`220ea3decf5ee887c2b2d7890be253837f21e6c6bf45424e07a85a8573000acf`.
+Evidence: `runs/defence-header-data-final.json`, `runs/defence-header-oracle-final.json`,
+`runs/defence-header-import-targets.log`, `runs/defence-header-import-clippy.log`,
+`runs/defence-header-format.log` and `runs/defence-header-wasm.log`.
+
+Final CLI regression and fresh native/reference five-build corpus checks are in progress.
+Logs use `runs/defence-header-*` under the main checkout, with distinct
+`target/defence-header-*` build directories. None of this slice is committed or validated
+for publication. Continue its remaining targeted gates independently; integrate and
+publish only after the preceding parser checkpoint has completed local reconciliation
+and its exact-code CI is inspected. Keep the source and caller inputs unchanged; expected native rejections
+remain numerical coverage evidence, not a reason to relax admission.
 
 ## General item formatting - locally validated checkpoint
 
