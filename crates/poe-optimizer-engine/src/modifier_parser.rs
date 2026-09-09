@@ -87,6 +87,7 @@ pub struct CompiledModifierParser {
     catalog: ModifierParserCatalog,
     dictionaries: BTreeMap<ParserDictionary, Dictionary>,
     cluster: LuaPattern,
+    tag_capture_numeric: LuaPattern,
 }
 impl CompiledModifierParser {
     pub fn new(catalog: &ModifierParserCatalog) -> ParserResult<Self> {
@@ -109,8 +110,11 @@ impl CompiledModifierParser {
             dictionaries.insert(name, Dictionary { keys, values, scan });
         }
         let cluster = LuaPattern::compile(catalog.data().policy.cluster_prefix_pattern.as_bytes())?;
+        let tag_capture_numeric =
+            LuaPattern::compile(catalog.data().policy.tag_capture_numeric_pattern.as_bytes())?;
         if bytes
             .checked_add(cluster.compiled_bytes())
+            .and_then(|bytes| bytes.checked_add(tag_capture_numeric.compiled_bytes()))
             .is_none_or(|n| n > MAX_PARSER_COMPILED_BYTES)
         {
             return Err(ParserError::ResourceBound("compiled dictionary bytes"));
@@ -119,6 +123,7 @@ impl CompiledModifierParser {
             catalog: catalog.clone(),
             dictionaries,
             cluster,
+            tag_capture_numeric,
         })
     }
     pub fn catalog(&self) -> &ModifierParserCatalog {
@@ -271,16 +276,6 @@ impl Run<'_> {
             .collect();
         *line = remainder;
         Ok(Selected { value, captures })
-    }
-    fn callback(&self, value: ModifierValue, stage: &'static str) -> ParserResult<ModifierValue> {
-        if let ModifierValue::Callback(callback) = value {
-            Err(ParserError::Deferred {
-                stage,
-                callback: Some(callback),
-            })
-        } else {
-            Ok(value)
-        }
     }
     fn parse_order(&mut self, source: &[u8], order: u8) -> ParserResult<ParseOutcome> {
         use ParserDictionary as D;

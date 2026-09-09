@@ -166,3 +166,50 @@ fn aggregate_key_bytes_cannot_bypass_graph_budget() {
     let error = data.validate().unwrap_err().to_string();
     assert!(error.contains("aggregate text"), "{error}");
 }
+
+#[test]
+fn tag_precheck_policy_preserves_authored_lazy_patterns_with_bounded_text() {
+    let mut data = data();
+    assert_eq!(data.schema_version, 3);
+    assert_eq!(data.policy.tag_capture_numeric_pattern, "%d+");
+    for key in [
+        "prefix_factory_invocation",
+        "first_tag_factory_invocation",
+        "second_tag_factory_invocation",
+    ] {
+        let span = &data.source.construction_spans[key];
+        assert!(span.end_line > span.line);
+        assert_eq!(span.path, "src/Modules/ModParser.lua");
+    }
+    for pattern in [String::new(), "[".into(), "^%d+$".into(), "x".repeat(4096)] {
+        data.policy.tag_capture_numeric_pattern = pattern.clone();
+        let catalog = ModifierParserCatalog::new(data.clone()).unwrap();
+        assert_eq!(catalog.data().policy.tag_capture_numeric_pattern, pattern);
+    }
+    for pattern in ["x".repeat(4097), "\0".into()] {
+        data.policy.tag_capture_numeric_pattern = pattern;
+        assert!(data.validate().is_err());
+    }
+}
+
+#[test]
+fn tag_precheck_policy_is_required_and_has_a_closed_typed_shape() {
+    let policy = data().policy;
+    let original = serde_json::to_value(&policy).unwrap();
+    for case in 0..3 {
+        let mut value = original.clone();
+        let fields = value.as_object_mut().unwrap();
+        match case {
+            0 => {
+                fields.remove("tag_capture_numeric_pattern");
+            }
+            1 => {
+                fields.insert("tag_capture_numeric_pattern".into(), 17.into());
+            }
+            _ => {
+                fields.insert("unknown_precheck".into(), true.into());
+            }
+        }
+        assert!(serde_json::from_value::<ParserPolicy>(value).is_err());
+    }
+}

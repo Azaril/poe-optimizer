@@ -7,9 +7,9 @@ Recognizing a modifier does not certify that its mechanic can be evaluated nativ
 
 The end state is complete native parsing and calculation, with PoB loaded explicitly
 for update checks and differential tests. The current parser implements ordinary forms,
-static special rules, pure Special callback factories and their modifier/tag/wrapper
-construction. Unrepresented callback shapes, other callback call sites and the stateful
-`DOUBLED` operation remain explicit pending operations. The
+static special rules, pure Special/Prefix/ModTag callback factories and their
+modifier/tag/wrapper construction. Unrepresented callback shapes, jewel callback execution
+and the stateful `DOUBLED` operation remain explicit pending operations. The
 existing Spark/Mace evaluation pipelines and build-admission boundaries are unchanged.
 See [the implementation log](implementation.md) for current validation and remaining work.
 
@@ -63,7 +63,7 @@ does not normalize away that difference or claim complete closure-graph parity.
 
 A strict source verifier consumes the entire function and proves its referenced
 bindings. Unrepresented functions remain opaque. This boundary does not imply a general
-Lua runtime: branches, mutation, arbitrary helpers and other callback call sites require
+Lua runtime: branches, mutation, arbitrary helpers and additional callback call sites require
 separate source semantics and parity work. Structurally invalid recipes are package
 errors; unsupported source forms are per-callback dispositions. Optional captured values
 are inspected only when selected execution reaches them.
@@ -74,8 +74,18 @@ construction. A nil factory result differs from an empty modifier table. The gen
 constructor preserves name/type/value types and independently classifies its positional
 source, flags and keyword flags. Factories use per-request scratch budgets and the
 existing final public copy boundary; their constants and definitions can be shared
-across threads. Current delivery and validation status belongs in the
-[implementation checkpoint](implementation.md#pure-special-callback-factories-checkpoint).
+across threads. Prefix receives raw captures only. Both ModTag positions execute an
+injected pattern against cap1 before dispatch: a match prepends its numeric conversion,
+otherwise its raw value is prepended. All raw captures follow, including cap1 again.
+This is a source method call, so missing/non-string first captures fail before the body,
+even when that callback is otherwise unsupported. Pattern syntax failures are raised
+only when reached; empty matches and position captures are truthy. A truthy first result
+enables the second scan using fresh captures. Returned metadata enters the existing
+contribution/tag/wrapper pipeline without an extra whole-result copy. Borrowed argument
+views and shared immutable compiled patterns keep invocation state request-local.
+
+Current delivery and validation status belongs in the
+[implementation checkpoint](implementation.md#ordinary-factory-invocation-checkpoint).
 
 ## Execution boundary
 

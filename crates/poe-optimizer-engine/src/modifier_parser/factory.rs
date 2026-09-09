@@ -1,4 +1,4 @@
-//! Bounded execution of proven pure special-callback factories.
+//! Bounded execution of proven pure modifier callback factories.
 //!
 //! The catalog supplies expression structure, constants and captured definitions.
 //! This is deliberately not a Lua evaluator: unrepresented closures remain pending.
@@ -8,6 +8,28 @@ use poe_optimizer_data::modifier_parser::{
     ParserFactoryDisposition, ParserFactoryExpr, ParserFactoryField, ParserFactoryLiteral,
     ParserNonFinite,
 };
+
+/// Borrow captures in their original positions; no invocation argument vector
+/// or extra raw string copy is needed for Prefix or either tag call site.
+#[derive(Clone, Copy)]
+enum FactoryArguments<'a> {
+    Raw(&'a [V]),
+    Leading { first: &'a V, captures: &'a [V] },
+}
+impl<'a> FactoryArguments<'a> {
+    fn get(self, index: usize) -> &'a V {
+        match self {
+            Self::Raw(captures) => captures.get(index).unwrap_or(&V::Nil),
+            Self::Leading { first, captures } => {
+                if index == 0 {
+                    first
+                } else {
+                    captures.get(index - 1).unwrap_or(&V::Nil)
+                }
+            }
+        }
+    }
+}
 
 impl Run<'_> {
     pub(super) fn special_factory(
@@ -32,7 +54,15 @@ impl Run<'_> {
             .and_then(V::number)
             .map(V::Number)
             .unwrap_or(V::Nil);
-        let result = self.factory_expr(&factory.body, callback, captures, &first, 0)?;
+        let result = self.factory_expr(
+            &factory.body,
+            callback,
+            FactoryArguments::Leading {
+                first: &first,
+                captures,
+            },
+            0,
+        )?;
         let modifiers = match result {
             V::Nil => None,
             V::Table(table) => {
@@ -61,12 +91,79 @@ impl Run<'_> {
         })
     }
 
+    pub(super) fn prefix_factory(&mut self, selected: Selected) -> ParserResult<V> {
+        match selected.value {
+            V::Callback(callback) => self.factory_value(
+                callback,
+                FactoryArguments::Raw(&selected.captures),
+                "prefix callback",
+            ),
+            value => Ok(value),
+        }
+    }
+
+    pub(super) fn tag_factory(
+        &mut self,
+        selected: Selected,
+        stage: &'static str,
+    ) -> ParserResult<V> {
+        let V::Callback(callback) = selected.value else {
+            return Ok(selected.value);
+        };
+        let first = selected.captures.first().unwrap_or(&V::Nil);
+        // The original method lookup errors before matching or entering the body,
+        // even for an otherwise unsupported callback that ignores its arguments.
+        let bytes = first.as_bytes().ok_or_else(|| {
+            ParserError::SourceError("attempt to index a non-string tag capture".into())
+        })?;
+        // string:match always runs the pattern interpreter. A returned empty
+        // capture/position is still truthy, while no match keeps the raw value.
+        let numeric = self
+            .parser
+            .tag_capture_numeric
+            .match_captures(bytes, 1, self.budget)?
+            .is_some();
+        let converted;
+        let leading = if numeric {
+            self.budget.charge(bytes.len() as u64)?;
+            converted = first.number().map(V::Number).unwrap_or(V::Nil);
+            &converted
+        } else {
+            first
+        };
+        self.factory_value(
+            callback,
+            FactoryArguments::Leading {
+                first: leading,
+                captures: &selected.captures,
+            },
+            stage,
+        )
+    }
+
+    fn factory_value(
+        &mut self,
+        callback: ParserCallbackId,
+        arguments: FactoryArguments<'_>,
+        stage: &'static str,
+    ) -> ParserResult<V> {
+        let parser = self.parser;
+        let Some(ParserFactoryDisposition::Pure(factory)) = parser.catalog.factory(callback) else {
+            return Err(ParserError::Deferred {
+                stage,
+                callback: Some(callback),
+            });
+        };
+        // Ordinary callers consume the returned metadata directly, then apply
+        // their existing tag/wrapper copies and the final public result copy.
+        self.factory_expr(&factory.body, callback, arguments, 0)
+    }
+
     fn factory_expr(
         &mut self,
         expression: &ParserFactoryExpr,
         callback: ParserCallbackId,
-        captures: &[V],
-        first: &V,
+        arguments: FactoryArguments<'_>,
         depth: usize,
     ) -> ParserResult<V> {
         if depth > value::MAX_OUTPUT_DEPTH {
@@ -92,11 +189,7 @@ impl Run<'_> {
                 })
             }
             ParserFactoryExpr::Argument(index) => {
-                let value = if *index == 0 {
-                    first
-                } else {
-                    captures.get(*index as usize - 1).unwrap_or(&V::Nil)
-                };
+                let value = arguments.get(*index as usize);
                 self.output.charge(match value {
                     V::Bytes(bytes) => bytes.len(),
                     _ => 0,
@@ -127,7 +220,7 @@ impl Run<'_> {
                 self.copy(value)
             }
             ParserFactoryExpr::Negate(value) => {
-                let value = self.factory_expr(value, callback, captures, first, depth + 1)?;
+                let value = self.factory_expr(value, callback, arguments, depth + 1)?;
                 if let V::Bytes(bytes) = &value {
                     self.budget.charge(bytes.len() as u64)?;
                 }
@@ -143,13 +236,11 @@ impl Run<'_> {
                     match field {
                         ParserFactoryField::Named { key, value } => {
                             self.output.charge(key.len())?;
-                            let value =
-                                self.factory_expr(value, callback, captures, first, depth + 1)?;
+                            let value = self.factory_expr(value, callback, arguments, depth + 1)?;
                             table.set(key, value);
                         }
                         ParserFactoryField::List(value) => {
-                            let value =
-                                self.factory_expr(value, callback, captures, first, depth + 1)?;
+                            let value = self.factory_expr(value, callback, arguments, depth + 1)?;
                             if !matches!(value, V::Nil) {
                                 table.indexed.insert(index, value);
                             }
@@ -169,13 +260,7 @@ impl Run<'_> {
                 self.output.charge(bytes)?;
                 let mut values = Vec::with_capacity(args.len());
                 for expression in args {
-                    values.push(self.factory_expr(
-                        expression,
-                        callback,
-                        captures,
-                        first,
-                        depth + 1,
-                    )?);
+                    values.push(self.factory_expr(expression, callback, arguments, depth + 1)?);
                 }
                 Ok(V::Table(Arc::new(create_mod(values, &mut self.output)?)))
             }

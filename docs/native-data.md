@@ -210,13 +210,24 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Package schema **22**, semantics **`poe2-native-profiles-v22`**, advances the modifier
+parser section to schema **3**. It adds `tag_capture_numeric_pattern` and authenticated
+spans for Prefix, first-tag and second-tag invocation. The original pattern is extracted
+from both tag branches, whose complete call packing and truthiness gates must agree with
+the native protocol. Author-supplied empty or malformed patterns remain bounded data:
+source syntax errors are raised only when selected callback execution reaches them.
+All existing recipes, dictionaries, callback/table graphs and the 26 other sections
+remain exact. The runtime shares compiled patterns and borrows invocation captures.
+See the [invocation contract](modifier-parser.md#pure-factory-definitions) and
+[current checkpoint](implementation.md#ordinary-factory-invocation-checkpoint).
+
 Package schema **21**, semantics **`poe2-native-profiles-v21`**, advances the modifier
 parser section to schema **2**. It adds complete per-callback dispositions and bounded
 source-derived pure factory recipes. Original dictionaries, callback/upvalue and table
 graphs, declarations, policies and dynamic dependencies remain intact. All **26 other
 sections** retain their values and digests, including item loading and all completed
 unique requirement facts. Selected native execution is a separate engine capability;
-recipes for prefix/tag callbacks do not enable those call sites. See
+recipes for prefix/tag callbacks did not yet enable those call sites. See
 [pure factory definitions](modifier-parser.md#pure-factory-definitions) and the
 [current checkpoint](implementation.md#pure-special-callback-factories-checkpoint).
 

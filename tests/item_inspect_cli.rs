@@ -1231,3 +1231,262 @@ fn injected_special_factories_preserve_nil_results_and_generated_rune_origins() 
     assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
     assert_eq!(fs::read(&data_path).unwrap(), bytes);
 }
+
+#[test]
+fn injected_ordinary_factories_preserve_capture_types_and_conditional_error_stages() {
+    use poe_optimizer_data::modifier_parser::{
+        ParserCallbackKind, ParserDictionary as Dict, ParserFactoryDisposition,
+        ParserFactoryExpr as Expr, ParserFactoryField as Field, ParserFactoryLiteral as Literal,
+        ParserValue,
+    };
+
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller-ordinary.xml");
+    let data_path = temp.path().join("caller-ordinary-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    let base_name = package
+        .item_loading
+        .bases
+        .iter()
+        .find(|base| {
+            base.item_type
+                != package
+                    .item_loading
+                    .policy
+                    .affix_loading
+                    .reconcile
+                    .jewel_type
+                && base.field("flask").is_none()
+                && base.field("charm").is_none()
+                && !base.name.contains(['&', '<', '>'])
+        })
+        .unwrap()
+        .name
+        .clone();
+    let (prefix_id, tag_id) = {
+        let pure_in = |dictionary, excluded| {
+            let table = package.modifier_parser.dictionaries[&dictionary];
+            package.modifier_parser.tables[table.0 as usize - 1]
+                .fields
+                .values()
+                .find_map(|value| {
+                    let ParserValue::Callback(id) = value else {
+                        return None;
+                    };
+                    (excluded != Some(*id)
+                        && matches!(
+                            package.modifier_parser.factories.get(id),
+                            Some(ParserFactoryDisposition::Pure(_))
+                        ))
+                    .then_some(*id)
+                })
+                .unwrap()
+        };
+        let prefix = pure_in(Dict::PreFlag, None);
+        (prefix, pure_in(Dict::ModTag, Some(prefix)))
+    };
+    let unsupported_id = package
+        .modifier_parser
+        .factories
+        .iter()
+        .find_map(|(id, disposition)| {
+            (matches!(disposition, ParserFactoryDisposition::Unsupported { .. })
+                && matches!(
+                    package.modifier_parser.callbacks[id.0 as usize - 1].kind,
+                    ParserCallbackKind::Lua { .. }
+                ))
+            .then_some(*id)
+        })
+        .unwrap();
+    let text = |value: &str| Expr::Literal(Literal::Text(value.into()));
+    for (id, parameter_count, fields) in [
+        (
+            prefix_id,
+            1,
+            vec![
+                Field::Named {
+                    key: "type".into(),
+                    value: text("CallerPrefixTag"),
+                },
+                Field::Named {
+                    key: "capture".into(),
+                    value: Expr::Argument(0),
+                },
+            ],
+        ),
+        (
+            tag_id,
+            2,
+            vec![
+                Field::Named {
+                    key: "type".into(),
+                    value: text("CallerOrdinaryTag"),
+                },
+                Field::Named {
+                    key: "first".into(),
+                    value: Expr::Argument(0),
+                },
+                Field::Named {
+                    key: "raw".into(),
+                    value: Expr::Argument(1),
+                },
+            ],
+        ),
+    ] {
+        let ParserFactoryDisposition::Pure(factory) =
+            package.modifier_parser.factories.get_mut(&id).unwrap()
+        else {
+            unreachable!()
+        };
+        factory.parameter_count = parameter_count;
+        factory.provenance.constructor = None;
+        factory.body = Expr::Table(vec![Field::Named {
+            key: "tag".into(),
+            value: Expr::Table(fields),
+        }]);
+    }
+    package.modifier_parser.policy.tag_capture_numeric_pattern = "^%d+$".into();
+    for (dictionary, pattern, value) in [
+        (
+            Dict::PreFlag,
+            "^caller prefix (%d+) ",
+            ParserValue::Callback(prefix_id),
+        ),
+        (
+            Dict::PreFlag,
+            "^caller unknown ",
+            ParserValue::Callback(unsupported_id),
+        ),
+        (
+            Dict::ModTag,
+            "caller mark (%w+)",
+            ParserValue::Callback(tag_id),
+        ),
+        (
+            Dict::ModTag,
+            "caller amount (%d+)",
+            ParserValue::Callback(tag_id),
+        ),
+        (
+            Dict::ModTag,
+            "caller pending (%d+)",
+            ParserValue::Callback(unsupported_id),
+        ),
+        (
+            Dict::ModTag,
+            "caller empty",
+            ParserValue::Callback(unsupported_id),
+        ),
+        (
+            Dict::ModName,
+            "caller stat",
+            ParserValue::Text("CallerOrdinaryStat".into()),
+        ),
+    ] {
+        let table = package.modifier_parser.dictionaries[&dictionary];
+        assert!(
+            package.modifier_parser.tables[table.0 as usize - 1]
+                .fields
+                .insert(pattern.into(), value)
+                .is_none()
+        );
+    }
+    package.refresh_section_digests().unwrap();
+    let data_bytes = package.canonical_bytes().unwrap();
+    fs::write(&data_path, &data_bytes).unwrap();
+    let lines = [
+        "caller prefix 007 +2 to caller stat caller mark v13 caller amount 13",
+        "caller unknown +2 to caller stat",
+        "+2 to caller stat caller pending 7",
+        "+2 to caller stat caller amount 3 caller pending 7",
+        "+2 to caller stat caller empty",
+    ];
+    let items = lines
+        .iter()
+        .enumerate()
+        .map(|(index, line)| {
+            format!("<Item id='caller-{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
+        })
+        .collect::<String>();
+    let xml = format!("<PathOfBuilding2><Items>{items}</Items></PathOfBuilding2>");
+    fs::write(&input, &xml).unwrap();
+    let report = inspect_definitions(&input, temp.path(), Some(&data_path));
+    let loaded = &report["definition_lookup"]["items"]["report"];
+    let items = loaded["items"].as_array().unwrap();
+    assert_eq!(items.len(), lines.len());
+    let success = &items[0];
+    assert_eq!(success["status"], "pending", "{success:#}");
+    assert_eq!(success["pending"]["kind"], "assembly", "{success:#}");
+    let rows = success["state"]["explicit_mod_lines"].as_array().unwrap();
+    assert_eq!(rows.len(), 1);
+    assert_eq!(rows[0]["line"], lines[0]);
+    assert_eq!(rows[0]["source_line"], 3);
+    assert!(rows[0]["extra"].is_null());
+    assert_eq!(
+        rows[0]["modifiers"],
+        serde_json::json!([{
+            "fields": {"name":"CallerOrdinaryStat","type":"BASE","value":2.0,"flags":0.0,"keywordFlags":0.0},
+            "indexed": {
+                "1":{"fields":{"type":"CallerPrefixTag","capture":"007"},"indexed":{}},
+                "2":{"fields":{"type":"CallerOrdinaryTag","first":"v13","raw":"v13"},"indexed":{}},
+                "3":{"fields":{"type":"CallerOrdinaryTag","first":13.0,"raw":"13"},"indexed":{}}
+            }
+        }])
+    );
+    for (item, stage) in items[1..4].iter().zip([
+        "prefix callback",
+        "modifier tag callback",
+        "second modifier tag callback",
+    ]) {
+        assert_eq!(item["status"], "pending", "{item:#}");
+        assert_eq!(item["pending"]["kind"], "modifier_parser", "{item:#}");
+        assert!(
+            item["pending"]["message"].as_str().unwrap().contains(stage),
+            "{item:#}"
+        );
+    }
+    let error = &items[4];
+    assert_eq!(error["status"], "source_error", "{error:#}");
+    assert!(error["pending"].is_null());
+    assert!(
+        error["instructions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|instruction| instruction["error"].is_string())
+    );
+    assert_eq!(
+        error["instructions"].as_array().unwrap().last().unwrap()["status"],
+        "not_executed"
+    );
+    for (index, item) in items.iter().enumerate() {
+        assert_eq!(item["authored_id"], format!("caller-{index}"));
+        let calls = item["state"]["parser_calls"].as_array().unwrap();
+        assert_eq!(calls.len(), 1, "{item:#}");
+        assert_eq!(calls[0]["text"], lines[index]);
+        assert_eq!(calls[0]["line_index"], 3);
+        assert_eq!(calls[0]["combined"], false);
+        assert!(calls[0].get("origin").is_none());
+    }
+    assert_eq!(report["verification"]["item_loading"], "reported");
+    assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
+    assert_eq!(report["verification"]["native_admission"], "not_checked");
+    assert_eq!(report["verification"]["reference_calculation"], "not_run");
+    assert_eq!(
+        report["definition_lookup"]["data_trust"]["status"],
+        "custom_unreviewed"
+    );
+    assert_eq!(
+        loaded["data_identity"]["content_sha256"],
+        format!("{:x}", Sha256::digest(&data_bytes))
+    );
+    assert_eq!(
+        loaded["implementation_sha256"],
+        poe_optimizer_import::item_loading::implementation_fingerprint()
+    );
+    assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+    assert_eq!(fs::read(&data_path).unwrap(), data_bytes);
+}

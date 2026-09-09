@@ -118,7 +118,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 21 and `poe2-native-profiles-v21`, including source-keyed passive/actor effects,
+schema 22 and `poe2-native-profiles-v22`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -250,3 +250,11 @@ unsupported dispositions for other shapes. The recipe retains argument slots, co
 field keys and source provenance in the exported data. Actual native callback execution
 and numerical mechanic coverage remain separate validation gates; source-pattern
 recognition alone is insufficient. See [factory definitions](modifier-parser.md#pure-factory-definitions).
+
+Ordinary factory invocation policy is extracted from the complete original Prefix and
+both ModTag branches. The verifier checks raw versus duplicated-leading argument packing,
+method-call ordering and the first-result truthiness gate, and requires both decoded
+numeric-precheck patterns to agree. Their complete source spans accompany the configured
+pattern. This extends invocation support without translating additional function bodies
+or changing the preserved callback environment graph. See the
+[ordinary invocation checkpoint](implementation.md#ordinary-factory-invocation-checkpoint).

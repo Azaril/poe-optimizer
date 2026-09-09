@@ -7,17 +7,17 @@ impl Run<'_> {
         let mut line = source.to_vec();
         line.push(b' ');
         let pre = self.scan(&mut line, D::PreFlag, false)?;
-        let pre_flag = self.callback(pre.value, "prefix callback")?;
+        let pre_flag = self.prefix_factory(pre)?;
         let mut skill = self.scan(&mut line, D::PreSkillName, false)?.value;
         let form = self.scan(&mut line, D::Form, false)?;
         if !form.value.truthy() {
             return Ok(partial(None, line));
         }
         let tag = self.scan(&mut line, D::ModTag, false)?;
-        let tag = self.callback(tag.value, "modifier tag callback")?;
+        let tag = self.tag_factory(tag, "modifier tag callback")?;
         let tag2 = if tag.truthy() {
             let selected = self.scan(&mut line, D::ModTag, false)?;
-            self.callback(selected.value, "second modifier tag callback")?
+            self.tag_factory(selected, "second modifier tag callback")?
         } else {
             V::Nil
         };

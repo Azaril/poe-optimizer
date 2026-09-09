@@ -929,42 +929,12 @@ fn caller_captured_scalars_are_lazy_and_unrepresentable_selected_shapes_stay_def
 }
 
 #[test]
-fn pure_factories_do_not_enable_other_call_protocols_and_unsupported_source_stays_deferred() {
+fn pure_factories_do_not_enable_jewel_protocol_or_unsupported_source() {
     let snapshot = bundled_snapshot().unwrap();
     let mut data = snapshot.modifier_parser().data().clone();
     let source = FactorySource::new();
     let mut cases = vec![];
-    // Existing authentic callbacks are aliased only to their original call-site
-    // family; the native factory grammar does not grant these protocols support.
-    for (family, pattern, text, stage) in [
-        (
-            D::PreFlag,
-            "^__caller_prefix ",
-            "__caller_prefix 7% increased damage",
-            "prefix callback",
-        ),
-        (
-            D::ModTag,
-            " __caller_tag ",
-            "+7 to maximum Life __caller_tag",
-            "modifier tag callback",
-        ),
-    ] {
-        let id = data.tables[data.dictionaries[&family].0 as usize - 1]
-            .fields
-            .values()
-            .find_map(|v| match v {
-                P::Callback(id) if matches!(data.factories.get(id), Some(Disposition::Pure(_))) => {
-                    Some(*id)
-                }
-                _ => None,
-            })
-            .unwrap();
-        data.tables[data.dictionaries[&family].0 as usize - 1]
-            .fields
-            .insert(pattern.into(), P::Callback(id));
-        cases.push((text.as_bytes().to_vec(), stage, Some(id)));
-    }
+    // Ordinary Prefix/ModTag protocols have their own full source parity target.
     let unsupported = source
         .special
         .clone()

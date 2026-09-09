@@ -11,6 +11,7 @@ use std::{
     },
 };
 mod factories;
+mod ordinary;
 
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
 const PARSER: &str = "src/Modules/ModParser.lua";
@@ -506,6 +507,7 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
     if thorns_values[0] != thorns_values[1] {
         return Err(error("unequal base thorns pair needs extended policy"));
     }
+    let tag_capture_numeric_pattern = ordinary::extract(&lua, sources, &mut spans)?;
     factories::constructor(sources)?;
     factories::verify_environment(
         &lua,
@@ -549,6 +551,7 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
             immune_effect_blacklist: ordered(&blacklist)?.0.into_keys().collect(),
             cluster_prefix_pattern: between(parser, "local addToCluster = line:match(\"", "\")")?
                 .to_string(),
+            tag_capture_numeric_pattern,
             immune_max_single_words: word_limit(parser, "(numWords > ", ") then")?,
             immune_combined_min_words_exclusive: word_limit(parser, "if numWords > ", " then")?,
             immune_max_part_words: word_limit(parser, "if preWordNum > ", " or")?,
