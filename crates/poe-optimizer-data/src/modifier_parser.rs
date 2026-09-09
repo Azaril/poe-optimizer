@@ -5,7 +5,10 @@ use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::sync::Arc;
 
-pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 1;
+mod factories;
+pub use factories::*;
+
+pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 2;
 type Result<T> = std::result::Result<T, GameDataError>;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -182,6 +185,8 @@ pub struct ModifierParserData {
     pub tables: Vec<ParserTable>,
     pub callbacks: Vec<ParserCallback>,
     #[serde(deserialize_with = "unique_map")]
+    pub factories: BTreeMap<ParserCallbackId, ParserFactoryDisposition>,
+    #[serde(deserialize_with = "unique_map")]
     pub helpers: BTreeMap<String, ParserCallbackId>,
     pub declarations: Vec<ParserDeclaration>,
     pub dynamic_dependencies: ParserDependencies,
@@ -191,6 +196,9 @@ pub struct ModifierParserData {
 #[derive(Debug, Clone)]
 pub struct ModifierParserCatalog(Arc<ModifierParserData>);
 impl ModifierParserCatalog {
+    pub fn factory(&self, id: ParserCallbackId) -> Option<&ParserFactoryDisposition> {
+        self.0.factories.get(&id)
+    }
     pub fn new(data: ModifierParserData) -> Result<Self> {
         data.validate()?;
         Ok(Self(Arc::new(data)))
@@ -293,6 +301,7 @@ impl ModifierParserData {
         {
             return Err(catalog_error("invalid version or catalog bounds"));
         }
+        factories::validate(self)?;
         let bytes = std::cell::Cell::new(0usize);
         let charge = |amount: usize| -> Result<()> {
             let next = bytes

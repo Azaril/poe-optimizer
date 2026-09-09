@@ -4,6 +4,7 @@
 //! Selected callbacks and source state mutations are explicit pending operations.
 //! No Lua state, I/O, hidden fallback, or process-global cache is used.
 mod emit;
+mod factory;
 mod ordinary;
 mod value;
 use crate::lua_pattern::{LuaPattern, MatchBudget, PatternError};
@@ -316,8 +317,10 @@ impl Run<'_> {
         let mut special_line = source.to_vec();
         let selected = self.scan(&mut special_line, D::Special, false)?;
         if selected.value.truthy() && special_line.is_empty() {
-            let value = self.callback(selected.value, "special callback")?;
-            let value = deep_copy(&value, &mut self.output)?;
+            if let ModifierValue::Callback(callback) = selected.value {
+                return self.special_factory(callback, &selected.captures);
+            }
+            let value = deep_copy(&selected.value, &mut self.output)?;
             return Ok(ParseOutcome {
                 modifiers: Some(value.table()?.clone()),
                 extra: None,
@@ -382,12 +385,13 @@ fn make_mod(
 }
 
 /// Files entering adapter fingerprints; hosts normalize checkout newlines.
-pub fn implementation_sources() -> [&'static str; 8] {
+pub fn implementation_sources() -> [&'static str; 9] {
     [
         include_str!("modifier_parser.rs"),
         include_str!("modifier_parser/value.rs"),
         include_str!("modifier_parser/ordinary.rs"),
         include_str!("modifier_parser/emit.rs"),
+        include_str!("modifier_parser/factory.rs"),
         include_str!("modifier_scan.rs"),
         include_str!("lua_pattern.rs"),
         include_str!("lua_number.rs"),

@@ -210,6 +210,16 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Package schema **21**, semantics **`poe2-native-profiles-v21`**, advances the modifier
+parser section to schema **2**. It adds complete per-callback dispositions and bounded
+source-derived pure factory recipes. Original dictionaries, callback/upvalue and table
+graphs, declarations, policies and dynamic dependencies remain intact. All **26 other
+sections** retain their values and digests, including item loading and all completed
+unique requirement facts. Selected native execution is a separate engine capability;
+recipes for prefix/tag callbacks do not enable those call sites. See
+[pure factory definitions](modifier-parser.md#pure-factory-definitions) and the
+[current checkpoint](implementation.md#pure-special-callback-factories-checkpoint).
+
 Package schema **20**, semantics **`poe2-native-profiles-v20`**, advances
 `item_loading` to schema **4**. It adds extracted rune header/socket patterns, slot
 classification roles and rewrites, rebuilding/text-combination rules, vector comparison

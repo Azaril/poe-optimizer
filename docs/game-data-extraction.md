@@ -118,7 +118,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 20 and `poe2-native-profiles-v20`, including source-keyed passive/actor effects,
+schema 21 and `poe2-native-profiles-v21`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -242,3 +242,11 @@ orders, augment types and all-slot requirements. Changed-literal extraction test
 that policy values are read from source; divergent source structure is rejected. Primitive
 and full-method parity tests execute original Lua separately from the extractor. Native
 runtime consumes only the portable selected package.
+
+The modifier parser extractor also classifies every observed callback using a bounded
+pure-expression grammar. It proves the complete original constructor mechanism and
+captured/global bindings, consumes the whole source function, and records explicit
+unsupported dispositions for other shapes. The recipe retains argument slots, constants,
+field keys and source provenance in the exported data. Actual native callback execution
+and numerical mechanic coverage remain separate validation gates; source-pattern
+recognition alone is insufficient. See [factory definitions](modifier-parser.md#pure-factory-definitions).

@@ -10,6 +10,8 @@ use std::{
         atomic::{AtomicUsize, Ordering},
     },
 };
+mod factories;
+
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
 const PARSER: &str = "src/Modules/ModParser.lua";
 const COMMON: &str = "src/Modules/Common.lua";
@@ -288,6 +290,8 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
             LuaOptions::default(),
         )
     };
+    let original_type: Function = lua.globals().get("type")?;
+    let original_select: Function = lua.globals().get("select")?;
     lua.set_memory_limit(256 * 1024 * 1024)?;
     let get_upvalue: Function = lua.globals().get::<Table>("debug")?.get("getupvalue")?;
     lua.load("jit.off();jit.flush();jit=nil;debug=nil;io=nil;os=nil;ffi=nil;package=nil;require=nil;load=nil;loadstring=nil;loadfile=nil;dofile=nil;print=nil;collectgarbage=nil").exec()?;
@@ -502,7 +506,24 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
     if thorns_values[0] != thorns_values[1] {
         return Err(error("unequal base thorns pair needs extended policy"));
     }
-    let out = ModifierParserData {
+    factories::constructor(sources)?;
+    factories::verify_environment(
+        &lua,
+        &original_type,
+        &original_select,
+        &[
+            ("ModFlag", tid("ModFlag")?),
+            ("KeywordFlag", tid("KeywordFlag")?),
+            ("SkillType", tid("SkillType")?),
+        ],
+        &graph.seen_tables,
+    )?;
+    let actual_constructor: Function = lua.globals().get::<Table>("modLib")?.get("createMod")?;
+    let constructor = *graph
+        .seen_callbacks
+        .get(&(actual_constructor.to_pointer() as usize))
+        .ok_or_else(|| error("original createMod absent from callback graph"))?;
+    let mut out = ModifierParserData {
         schema_version: MODIFIER_PARSER_SCHEMA_VERSION,
         source: ItemLoadingSource {
             upstream_revision: crate::source::UPSTREAM_REVISION.into(),
@@ -538,10 +559,12 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
         },
         tables: graph.tables,
         callbacks: graph.callbacks,
+        factories: BTreeMap::new(),
         helpers,
         declarations,
         capability: ParserCapability::DefinitionsOnly,
     };
+    out.factories = factories::lower(&lua, sources, &out, constructor)?;
     out.validate().map_err(error)?;
     Ok(out)
 }

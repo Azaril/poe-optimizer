@@ -969,3 +969,265 @@ fn injected_rune_names_slots_and_numeric_grammar_rebuild_with_generated_origins(
     assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
     assert_eq!(fs::read(&data_path).unwrap(), bytes);
 }
+
+#[test]
+fn injected_special_factories_preserve_nil_results_and_generated_rune_origins() {
+    use poe_optimizer_data::item_loading::{ItemMetadataTable, ItemMetadataValue};
+    use poe_optimizer_data::modifier_parser::{
+        ParserDictionary, ParserFactoryDisposition, ParserFactoryExpr as Expr,
+        ParserFactoryField as Field, ParserFactoryLiteral as Literal, ParserValue,
+    };
+    use std::collections::BTreeMap;
+
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller-factories.xml");
+    let data_path = temp.path().join("caller-factory-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    let base_name = package
+        .item_loading
+        .bases
+        .iter()
+        .find(|base| {
+            base.field("weapon")
+                .is_some_and(|value| !matches!(value, ItemMetadataValue::Boolean(false)))
+                && !base.name.contains(['&', '<', '>'])
+        })
+        .unwrap()
+        .name
+        .clone();
+    let modifier_name = "CallerCallbackMagnitude";
+    let modifier_source = "Caller callback source";
+    let text = |value: &str| Expr::Literal(Literal::Text(value.into()));
+    // Select source-linked recipe slots by capability, never by a game callback
+    // identity. The custom package digest binds the caller-authored new bodies.
+    let table_id = package
+        .modifier_parser
+        .factories
+        .iter()
+        .find_map(|(id, disposition)| match disposition {
+            ParserFactoryDisposition::Pure(factory) if factory.provenance.constructor.is_some() => {
+                Some(*id)
+            }
+            _ => None,
+        })
+        .unwrap();
+    let nil_id = package
+        .modifier_parser
+        .factories
+        .iter()
+        .find_map(|(id, disposition)| {
+            (*id != table_id && matches!(disposition, ParserFactoryDisposition::Pure(_)))
+                .then_some(*id)
+        })
+        .unwrap();
+    let ParserFactoryDisposition::Pure(factory) = package
+        .modifier_parser
+        .factories
+        .get_mut(&table_id)
+        .unwrap()
+    else {
+        unreachable!()
+    };
+    factory.parameter_count = 2;
+    factory.body = Expr::Table(vec![Field::List(Expr::CreateMod {
+        args: vec![
+            text(modifier_name),
+            text("BASE"),
+            Expr::Argument(0),
+            text(modifier_source),
+            Expr::Literal(Literal::Number(0.0)),
+            Expr::Literal(Literal::Number(0.0)),
+            Expr::Table(vec![
+                Field::Named {
+                    key: "type".into(),
+                    value: text("CallerCallbackTag"),
+                },
+                Field::Named {
+                    key: "capture".into(),
+                    value: Expr::Argument(1),
+                },
+                Field::Named {
+                    key: "enabled".into(),
+                    value: Expr::Literal(Literal::Boolean(true)),
+                },
+            ]),
+        ],
+    })]);
+    let ParserFactoryDisposition::Pure(factory) =
+        package.modifier_parser.factories.get_mut(&nil_id).unwrap()
+    else {
+        unreachable!()
+    };
+    factory.parameter_count = 0;
+    factory.body = Expr::Literal(Literal::Nil);
+    factory.provenance.constructor = None;
+    let special = package.modifier_parser.dictionaries[&ParserDictionary::Special];
+    let fields = &mut package.modifier_parser.tables[special.0 as usize - 1].fields;
+    assert!(
+        fields
+            .insert(
+                "^(%d+%.?%d*) caller potency$".into(),
+                ParserValue::Callback(table_id),
+            )
+            .is_none()
+    );
+    assert!(
+        fields
+            .insert("^caller omitted$".into(), ParserValue::Callback(nil_id))
+            .is_none()
+    );
+
+    let family = "Caller Callback Rune Definitions";
+    let names = ["Caller Silver Shard", "Caller Copper Shard"];
+    let slot = "caller callback weapon slot";
+    let rune_header = "CallerFactoryRune";
+    let socket_header = "CallerFactorySockets";
+    package
+        .item_loading
+        .policy
+        .header_names
+        .extend([rune_header.into(), socket_header.into()]);
+    let policy = &mut package.item_loading.policy.rune_loading;
+    policy.rune_header = rune_header.into();
+    policy.socket_header = socket_header.into();
+    policy.rune_table = family.into();
+    policy.broad_weapon_type = slot.into();
+    policy.socket_character_pattern = "q".into();
+    policy.item_socket_pattern = "^q$".into();
+    policy.numeric_pattern = "(%d+%.?%d*)".into();
+    let augment_type = policy.rune_augment_type.clone();
+    let definitions = names
+        .into_iter()
+        .zip(["12.5 caller potency", "5.5 caller potency"])
+        .map(|(name, line)| {
+            (
+                name.into(),
+                ItemMetadataValue::Table(ItemMetadataTable {
+                    fields: BTreeMap::from([(
+                        slot.into(),
+                        ItemMetadataValue::Table(ItemMetadataTable {
+                            fields: BTreeMap::from([
+                                ("type".into(), ItemMetadataValue::Text(augment_type.clone())),
+                                ("levelReq".into(), ItemMetadataValue::Number(1.0)),
+                            ]),
+                            indexed: BTreeMap::from([(1, ItemMetadataValue::Text(line.into()))]),
+                        }),
+                    )]),
+                    indexed: BTreeMap::new(),
+                }),
+            )
+        })
+        .collect();
+    package.item_loading.modifier_tables.insert(
+        family.into(),
+        ItemMetadataTable {
+            fields: definitions,
+            indexed: BTreeMap::new(),
+        },
+    );
+    package.unique_requirements =
+        poe_optimizer_data::unique_requirements::UniqueRequirementData::unavailable(
+            "caller changes rune construction inputs",
+        );
+    package.refresh_section_digests().unwrap();
+    let bytes = package.canonical_bytes().unwrap();
+    fs::write(&data_path, &bytes).unwrap();
+    let xml = format!(
+        "<PathOfBuilding2><Items><Item id='caller-table'>Rarity: Normal\n{base_name}\n7 caller potency\n</Item><Item id='caller-nil'>Rarity: Normal\n{base_name}\ncaller omitted\n</Item><Item id='caller-generated'>Rarity: Normal\n{base_name}\n{socket_header}: qq\n{rune_header}: {}\n{rune_header}: {}\n</Item></Items></PathOfBuilding2>",
+        names[0], names[1]
+    );
+    fs::write(&input, &xml).unwrap();
+    let report = inspect_definitions(&input, temp.path(), Some(&data_path));
+    let loaded = &report["definition_lookup"]["items"]["report"];
+    let items = loaded["items"].as_array().unwrap();
+    assert_eq!(items.len(), 3);
+    let expected_modifiers = |value: f64, capture: &str| {
+        serde_json::json!([{
+            "fields": {
+                "name": modifier_name, "type": "BASE", "value": value,
+                "flags": 0.0, "keywordFlags": 0.0, "source": modifier_source
+            },
+            "indexed": {"1": {"fields": {
+                "type": "CallerCallbackTag", "capture": capture, "enabled": true
+            }, "indexed": {}}}
+        }])
+    };
+    let table_state = &items[0]["state"];
+    assert_eq!(items[0]["authored_id"], "caller-table");
+    let rows = table_state["explicit_mod_lines"].as_array().unwrap();
+    assert_eq!(rows.len(), 1);
+    assert_eq!(rows[0]["line"], "7 caller potency");
+    assert_eq!(rows[0]["source_line"], 3);
+    assert_eq!(rows[0]["modifiers"], expected_modifiers(7.0, "7"));
+    assert!(rows[0]["extra"].is_null());
+    assert_eq!(table_state["parser_calls"].as_array().unwrap().len(), 1);
+    assert_eq!(table_state["parser_calls"][0]["line_index"], 3);
+    assert_eq!(table_state["parser_calls"][0]["combined"], false);
+    assert!(table_state["parser_calls"][0].get("origin").is_none());
+
+    let nil_state = &items[1]["state"];
+    assert_eq!(items[1]["authored_id"], "caller-nil");
+    let rows = nil_state["explicit_mod_lines"].as_array().unwrap();
+    assert_eq!(rows.len(), 1);
+    assert_eq!(rows[0]["line"], "caller omitted");
+    assert_eq!(rows[0]["source_line"], 3);
+    assert_eq!(rows[0]["modifiers"], serde_json::json!([]));
+    assert_eq!(rows[0]["extra"], "caller omitted");
+    assert_eq!(nil_state["parser_calls"].as_array().unwrap().len(), 1);
+    assert_eq!(nil_state["parser_calls"][0]["text"], "caller omitted");
+    assert_eq!(nil_state["parser_calls"][0]["combined"], false);
+
+    let rune_state = &items[2]["state"];
+    assert_eq!(items[2]["authored_id"], "caller-generated");
+    assert_eq!(rune_state["runes"], serde_json::json!(names));
+    let rows = rune_state["rune_mod_lines"].as_array().unwrap();
+    assert_eq!(rows.len(), 1);
+    let row = &rows[0];
+    assert_eq!(row["line"], "18 caller potency");
+    assert_eq!(row["modifiers"], expected_modifiers(18.0, "18"));
+    assert!(row["extra"].is_null());
+    assert!(row["source_line"].is_null());
+    assert_eq!(
+        row["rune_origins"],
+        serde_json::json!([
+            {"socket_index":1,"slot_key":slot,"bonded":false,"definition_line_index":1,"combined":false},
+            {"socket_index":2,"slot_key":slot,"bonded":false,"definition_line_index":1,"combined":true}
+        ])
+    );
+    let calls = rune_state["parser_calls"].as_array().unwrap();
+    assert_eq!(calls.len(), 2);
+    for (index, text) in ["12.5 caller potency", "18 caller potency"]
+        .into_iter()
+        .enumerate()
+    {
+        assert_eq!(calls[index]["text"], text);
+        assert!(calls[index]["line_index"].is_null());
+        assert_eq!(calls[index]["origin"], row["rune_origins"][index]);
+        assert_eq!(calls[index]["combined"], false);
+    }
+    for item in items {
+        assert_eq!(item["status"], "pending", "{item:#}");
+        assert_eq!(item["pending"]["kind"], "assembly", "{item:#}");
+    }
+    assert_eq!(report["verification"]["item_loading"], "reported");
+    assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
+    assert_eq!(report["verification"]["native_admission"], "not_checked");
+    assert_eq!(report["verification"]["reference_calculation"], "not_run");
+    assert_eq!(
+        report["definition_lookup"]["data_trust"]["status"],
+        "custom_unreviewed"
+    );
+    assert_eq!(
+        loaded["data_identity"]["content_sha256"],
+        format!("{:x}", Sha256::digest(&bytes))
+    );
+    assert_eq!(
+        loaded["implementation_sha256"],
+        poe_optimizer_import::item_loading::implementation_fingerprint()
+    );
+    assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+    assert_eq!(fs::read(&data_path).unwrap(), bytes);
+}

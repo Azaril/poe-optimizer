@@ -7,8 +7,9 @@ Recognizing a modifier does not certify that its mechanic can be evaluated nativ
 
 The end state is complete native parsing and calculation, with PoB loaded explicitly
 for update checks and differential tests. The current parser implements ordinary forms,
-static special rules and their modifier/tag/wrapper construction. Selected Lua callback
-factories and the stateful `DOUBLED` operation remain explicit pending operations. The
+static special rules, pure Special callback factories and their modifier/tag/wrapper
+construction. Unrepresented callback shapes, other callback call sites and the stateful
+`DOUBLED` operation remain explicit pending operations. The
 existing Spark/Mace evaluation pipelines and build-admission boundaries are unchanged.
 See [the implementation log](implementation.md) for current validation and remaining work.
 
@@ -39,6 +40,42 @@ The package is limited to 32 MiB and two million JSON values; the supervised ext
 envelope allows one additional MiB for evidence. Graph, text, reference, source-span and
 policy validation remain bounded. These are implementation resource limits, not game
 rules. All 25 preceding package sections retain their values and digests.
+
+## Pure factory definitions
+
+Source-derived pure factory recipes extend the same immutable catalog. Each original
+closure retains its source span, captured graph and an explicit lowering disposition.
+An admitted recipe records fixed argument slots, scalar literals and captures, policy
+field references, negation, ordered table fields and constructor calls. All game values,
+modifier names and field keys are selected data. Byte offsets and a function digest
+identify the complete function within its authenticated source span; constructor
+provenance binds the observed original helper. Modified external packages have their
+own identities and do not inherit a claim of parity with the original source.
+
+Constructor operation parity is separate from opaque function-value graph parity. The
+preserved catalog descriptor was extracted from the unchanged standalone constructor
+body; the full original module captures its local `select` and `type` functions instead.
+Their operation identity is verified, but the two lexical closure graphs differ. A
+caller-injected recipe returning the constructor as a value remains an opaque callback,
+and both source and native results defer at the finite item-metadata adapter. Supporting
+function-valued modifiers requires a separate environment/identity migration; this phase
+does not normalize away that difference or claim complete closure-graph parity.
+
+A strict source verifier consumes the entire function and proves its referenced
+bindings. Unrepresented functions remain opaque. This boundary does not imply a general
+Lua runtime: branches, mutation, arbitrary helpers and other callback call sites require
+separate source semantics and parity work. Structurally invalid recipes are package
+errors; unsupported source forms are per-callback dispositions. Optional captured values
+are inspected only when selected execution reaches them.
+
+Special invocation preserves the original converted first argument followed by all raw
+captures. Arguments and sparse list positions retain explicit nil values until table
+construction. A nil factory result differs from an empty modifier table. The general
+constructor preserves name/type/value types and independently classifies its positional
+source, flags and keyword flags. Factories use per-request scratch budgets and the
+existing final public copy boundary; their constants and definitions can be shared
+across threads. Current delivery and validation status belongs in the
+[implementation checkpoint](implementation.md#pure-special-callback-factories-checkpoint).
 
 ## Execution boundary
 

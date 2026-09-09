@@ -2,60 +2,71 @@
 
 Last updated: 2026-09-09
 
-Current completed implementation checkpoint: **native socketed-augment loading and
-reconstruction**. Code and scoped local validation are complete in
-`runs/rune-loading-worktree`, branch `codex/rune-loading`, based on published
-`1d742b8d7c14ea2f9a76ce5bf70b4cc2640bfb00`. Code is published on `origin/main` as
-`db631fc91bf78be52002d096b0efc185c05f4d3e`; keep that worktree and its binaries frozen. See the
-[checkpoint evidence](#socketed-augment-loading-checkpoint) and
-[state contract](item-source-and-loading.md#socketed-augment-state).
+Current work: **pure Special modifier callback factories**, in
+`runs/callback-factories-worktree`, branch `codex/callback-factories`, based on
+`4396725679d18f61e521f9470eded11937fb1045`. Production source and binaries are frozen.
+Implementation and scoped local validation pass, including the broader data/source
+regressions, public CLI checks, reproducible exports and five-build comparison. Final
+preservation checks pass; publication remains pending. See [the checkpoint](#pure-special-callback-factories-checkpoint); collect the
+existing running gates instead of duplicating long package-validation tests.
 
-The loader uses injected rune definitions and policy for ordered authored rebuilding,
-number-text stacking, disabled-row restoration, contextual normal/Bonded annotation
-and all-slot level requirements. Generated text preserves socket/slot/definition
-provenance. Rust loading and numeric operations use no Lua or subprocesses. Source
-errors retain partial state; unproven ordering and exhausted resources remain explicit.
+Schema **21**, semantics `poe2-native-profiles-v21`, retains 27 sections and 129
+authenticated sources. Package SHA-256:
+`a043ddacb6ae232999e459cbb6ed677995969065e7449e7da9429efa1b0f4953`.
+The parser catalog has 1,035 source-derived Pure recipes and 616 explicit Unsupported
+dispositions. Native execution is enabled at 925 Special call sites; the 107 ModTag and
+three Prefix recipes still defer at their real call sites. Complete functions are
+verified by syntax and binding identity; no build-name or callback-ID whitelist selects
+production behavior. Definitions are injected, shared immutably and executed with
+per-request resource budgets, without Lua or subprocesses.
 
-Schema **20**, semantics `poe2-native-profiles-v20`, has 27 sections and 129 authenticated
-sources. Package SHA-256:
-`a3c7515db5afb650bb1d1618c8ca85a5db92f16eee0cfaf73d51f1ed67e5aea9`.
-All 25 unrelated sections, original raw rune records, existing affix data and all 443
-unique requirement facts remain unchanged. Two fresh public exports reproduce it exactly.
-Caller inputs, original goldens and PoB pin `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`
-remain intact.
-
-Local validation reconciles **129 data tests, 252 import tests, 14 rune numeric tests,
-13 engine injection tests, 81 source integration tests**, three extractor/source tests
-and 36 CLI observations. One direct-entry source worker is intentionally ignored and
-exercised through parent tests. Workspace/native strict lint, formatting, five WebAssembly
-library checks and the normal native dependency audit pass. These are scoped/reconciled
-gates; they are not a full current workspace test run. Original failed attempts and final
-replacement results are retained in `runs/rune-loading-validation-final.json` and the
-component ledgers it references.
+All 26 other package sections and the original parser graph/policy/declarations remain
+unchanged. Two fresh public exports reproduce the package exactly. Caller inputs,
+original goldens and PoB pin `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` remain intact.
+Scoped validation passes: 135 data tests, 252 import tests, 38 distinct engine checks,
+105 source integration tests and six extractor/authentication tests. One source worker
+is intentionally ignored as a direct entry and exercised by its parent. The 38 CLI
+observations span default and native-only configurations. Workspace/native strict lint,
+formatting, five WebAssembly library checks and the native dependency audit pass.
+These are scoped gates, not a full workspace test claim.
 
 All five corpus imports, inspections and reference evaluations pass. All **110 reference
-measurements**, **834 instructions** and five full-native rejection messages are exact;
-77 complete item reports are unchanged. The final source join covers all 116 native
-states, with **109 independently paired original-source full states**, 511 parser and
-424 formatter calls. Seven full-state boundaries remain explicitly unpaired. The next
-loading dependencies are **67 assembly, 45 modifier parser, three rune reconstruction
-and one advanced-copy ordering**. Every former rune stop executes further native work;
-these loading counts do not imply whole-build support.
+measurements**, **834 instructions** and five whole-native rejection messages are exact.
+Ninety-three complete item reports are unchanged; 23 former parser stops advance, 15 to
+assembly and eight to a later parser dependency. The final source join matches all 116
+native item states, with **109 independently paired original-source full states**,
+589 parser and 491 formatter prefixes. All 23 progressed items have full-state pairs.
+Seven prior full-state observation boundaries remain explicit. The current first stops
+are **82 assembly, 30 modifier parser, three rune reconstruction and one advanced-copy
+ordering**. Loading progress does not imply whole-build support.
 
-Exact-code [Windows/Linux CI run 34404829138](https://github.com/Azaril/poe-optimizer/actions/runs/34404829138)
-is in progress. At 2026-09-09 21:05:16 UTC Ubuntu was in lint and Windows was checking
-out; no failed steps were reported. Hosted success is not yet claimed. Publication
-and preservation evidence: `runs/rune-loading-publication.json`. Cross-worktree raw
-line endings differ for 14 protected files; their Git blobs and normalized content
-match, while all frozen raw hashes and both caller files remain exact.
+Cold source tests compare all 1,035 recipe bodies through labelled Special aliases:
+6,021 exact return graphs and 189 matching source errors. Actual Special-pattern
+witnesses select 923 distinct Pure callbacks; two witnesses reach other rows and remain
+unpaired. Separate warm controls force 768 direct factory calls across three authentic
+recipes covering all 12 expression operations observed in real Special factories.
+This does not claim a warmed enumeration of every closure. Original constructor values
+remain opaque: the preserved isolated descriptor differs from the full module's lexical
+closure graph, and both defer at item conversion. See the
+[explicit boundary](modifier-parser.md#pure-factory-definitions).
 
-Next: inspect exact-head hosted CI, then prepare the data-driven
-modifier callback and ordered item-assembly phase using
-`runs/rune-loading-next-native-plan.md/json`. The 45 parser stops select 14 special
-callbacks: 23 direct constructor cases, two uppercase/concatenation cases, nine gem
-property cases and 11 granted-skill cases. Cover complete admitted source shapes, not
-these IDs or a small build whitelist. Review the callback representation before
-implementation; preserve opaque unsupported callbacks and their source dependencies.
+Next routine phase: enable the three pure Prefix and 107 pure ModTag recipes through
+their original calling conventions, including the injected numeric-precheck pattern and
+the conditional second-tag scan. The read-only audit is
+`runs/callback-factories-next-native-plan.md/json`. This changes no recipe grammar and
+is expected to remove none of the current 30 first stops: those select seven Special
+callbacks requiring other helper shapes. Keep helper lowering, complete item assembly
+and B3 as separate work. Preserve the frozen callback/rune worktrees and final binaries.
+
+The preceding socketed-augment checkpoint is published as
+`db631fc91bf78be52002d096b0efc185c05f4d3e`, with resume update `4396725`.
+Its [code CI run](https://github.com/Azaril/poe-optimizer/actions/runs/34404829138) and
+[docs CI run](https://github.com/Azaril/poe-optimizer/actions/runs/34405104965) had passed
+formatting/lint and were testing on both platforms at 2026-09-09 21:39 UTC. Hosted
+success remains separate from local gates. Evidence is retained in
+`runs/rune-loading-publication.json`; all frozen raw source/caller hashes are exact.
+Cross-worktree line endings differ for 14 protected files, with matching Git blobs and
+normalized content. User authorization for CI logs and pushes to main remains in place.
 
 The complete native evaluator and broad joint optimizer remain unfinished. Native
 whole-build admission is still limited to Spark/Mace; the five breadth builds still
@@ -92,9 +103,8 @@ parent subprocess tests. All 360 final input fingerprints match. Original failur
 current-code replacements remain in `runs/parser-workspace-validation-final.json`.
 
 Exact repair-publication [Windows/Linux CI run 34381171078](https://github.com/Azaril/poe-optimizer/actions/runs/34381171078)
-is running; both platforms have passed formatting and strict lint. parser_data supervises
-it and preserves the preceding pre-repair run 34379251966 separately. Do not report pending
-hosted tests as passed. Full native build support remains limited to the admitted
+passed the complete workflow on Windows and Linux (confirmed 2026-09-09). Preserve
+the preceding pre-repair failed run 34379251966 separately. Full native build support remains limited to the admitted
 Spark/Mace pipelines. See the [parser checkpoint](#general-modifier-parser-active-checkpoint).
 
 The preceding **general item formatting** checkpoint is published as
@@ -790,6 +800,99 @@ full data-code fingerprint, including the new lookup implementation. A host usin
 the standalone item-loading report should additionally retain
 `poe_optimizer_data::implementation_fingerprint()`. The [library report contract](item-source-and-loading.md)
 now states that distinction; no numerical code or report schema change is involved.
+
+## Pure special callback factories checkpoint
+
+This phase continues the agreed native parser and injected-data seams. It does not
+implement the unapproved B3 actor/action/candidate proposal, general Lua execution,
+helper control flow, mutable callback environments or complete item assembly.
+Work is isolated at `runs/callback-factories-worktree`, based on `4396725`; the source
+clone remains pinned and clean. Baseline: `runs/callback-factories-baseline.json` and
+`runs/callback-factories-original-game-data.json`. The rune worktree and final binaries
+remain frozen.
+
+The admitted grammar has fixed parameters and one return expression: scalar literals,
+arguments, captured scalars, injected policy-table fields, negation, ordered table
+construction and the authenticated `createMod` constructor. Constants, record names and
+keys remain injected data. The schema21/parser2 migration adds one lowering disposition
+per closure while retaining the original graph, policy, declarations and dependencies.
+All 26 other package sections are exact. The package contains 22,969,307 bytes with
+SHA-256 `a043ddacb6ae232999e459cbb6ed677995969065e7449e7da9429efa1b0f4953`.
+There are 1,035 Pure recipes and 616 Unsupported dispositions. Only the Special call site
+executes recipes: 925 memberships. The 107 ModTag and three Prefix recipes retain explicit
+pending real call sites. Lowering proves complete source shapes and captured bindings,
+without selecting callback IDs or build names.
+
+Native Special invocation passes `tonumber(cap[1])` followed by all raw captures,
+preserving nil holes and numeric position captures. Nil is a successful absent modifier
+list, distinct from an empty table. The callback returns directly before the existing
+final public-parser copy. Constructor arguments retain their types, source/flags/keyword
+positions, sparse tags and shared tables. Work, output and recursion limits are charged
+before expanding allocations. Immutable catalogs are shareable between concurrent
+native requests; no runtime Lua, subprocess or external lookup is introduced.
+
+Current scoped gates include 38 distinct engine checks (11 library, 13 injection, nine
+existing parser contracts and five factory contracts), all 252 import tests, 38 CLI
+observations, native-only strict lint/dependency checks and five portable WebAssembly
+library checks. Two fresh public exports reproduce schema21 byte for byte. All 135 data
+tests, 105 source integration tests and six source extraction/authentication tests pass.
+One direct-entry source worker is ignored and parent-exercised. Final workspace strict
+lint and formatting pass; no current failure remains in the scoped gates.
+The engine logs are `runs/callback-factories-engine-regression1.log`,
+`runs/callback-factories-engine-contract1.log` (nine retained existing contracts) and
+`runs/callback-factories-engine-contract2.log` (five final factory contracts).
+Other completed gate evidence: `runs/callback-factories-import-suite1.log`,
+`runs/callback-factories-wasm-final.log` and
+`runs/callback-factories-cli-validation-final.json`.
+
+The cold source enumeration compares all 1,035 Pure bodies through labelled Special
+aliases: 6,021 exact return graphs and 189 matching source errors. This is a body proof,
+not admission of the 110 ordinary call sites. Real Special-pattern witnesses select and
+compare 923 distinct factories; two other selections are explicitly unpaired. Separate
+warm controls force 768 direct calls across three authentic recipes, covering all 12
+expression operations present in real Special recipes. Trace evidence includes live
+factory and original constructor lines. Original constructor, dispatcher, public-copy,
+source-error and injected-data controls remain separate observations.
+
+A deliberate opaque-value probe exposed a preexisting observation limitation: the
+catalog's unchanged standalone constructor descriptor has no Lua upvalues, while the
+full original module captures local `select` and `type`. Scalar/table operation parity
+remains exact and the functions' operation identity is proved, but returned constructor
+closure graphs differ. The original failed comparison is preserved. A dedicated control
+asserts the difference and proves that both function-valued outputs defer at the finite
+item-metadata adapter. No graph normalization, package rewrite or function-valued
+modifier support is claimed. Future support must address lexical environment identity.
+
+The fresh five-build corpus retains all 110 reference number bits, 834 instructions and
+five whole-native rejection messages. Ninety-three complete item reports are unchanged.
+Twenty-three parser stops progress: 15 to assembly, eight to later parser callbacks.
+Current first stops are 82 Assembly, 30 ModifierParser, three RuneReconstruction and one
+AdvancedCopyAffixes. All 116 final CLI-native states join to the immutable source ledger;
+109 original full states are paired (79 preassembly and 30 parser frontier), including
+all 23 progressed items. The join checks 112 affix states, 589 parser and 491 formatter
+prefixes. Seven prior observation gaps remain: three jewel-radius, three rune-ambiguity
+and one advanced-ordering state. The final records are
+`runs/callback-factories-corpus-final.json`,
+`runs/callback-factories-source-corpus-join.json` and
+`runs/callback-factories-final-source-corpus.json`.
+
+All 161 build inputs, 17 data/extractor files, frozen binary records, 44 protected files
+and both caller inputs retain their recorded raw hashes. The complete original source
+clone remains clean at the pinned revision. Final evidence is consolidated in
+`runs/callback-factories-validation-final.json`, referencing data, source and CLI ledgers;
+`runs/callback-factories-root-freeze-final.json` records the final file identities.
+Failed early fixtures, lint attempts, build preflight and the deliberate opaque-graph
+comparison remain preserved with their scoped replacements.
+
+Resume: commit and push this validated checkpoint, record exact code/docs CI separately,
+then create an isolated next worktree. Do not modify the frozen callback binaries or
+source after publication.
+The next audited slice is pure Prefix/ModTag invocation; see
+`runs/callback-factories-next-native-plan.md/json`. It changes no expression grammar,
+but requires an injected numeric-precheck pattern, exact argument conventions and
+source validation of both ordinary tag positions. It is expected to remove none of the
+current 30 Special first stops. No parser success implicitly certifies a numerical
+mechanic or broader whole-build support.
 
 ## Socketed-augment loading checkpoint
 
