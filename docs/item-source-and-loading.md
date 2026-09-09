@@ -142,6 +142,13 @@ provenance independently. The built-in provider, engine formatter and structural
 the loader implementation fingerprint; injected formatting and unique-requirement definitions
 are bound separately by the selected data identity.
 
+A library host retaining a standalone `ItemLoadingReport` should also retain
+`poe_optimizer_data::implementation_fingerprint()` for the catalog implementation.
+`inspect-build` already emits that value as `definition_implementation_sha256` beside the
+loading implementation identity, and the corpus runner preserves both. The standalone
+report's data identity binds package content; its loader fingerprint alone does not bind
+all code in the data crate.
+
 Defence display headers now populate first-class optional armour data before the source's
 later `hidden_specs` branch. Their keys and base rewrites come from the selected data
 package. The [state contract below](#defence-display-state) distinguishes these copied

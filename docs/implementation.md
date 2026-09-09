@@ -3,7 +3,8 @@
 Last updated: 2026-09-09
 
 Current checkpoint: **injected completed unique requirements and native lookup**,
-implemented and locally validated for publication on `main`. The schema-18 data catalog,
+published on `main` as `2d804a4b206dbb060ce06f6abc40a807c4bd84b2`, with
+a follow-up repair for two test-only CI lint errors. The schema-18 data catalog,
 optional source exporter and independent native/source comparisons cover all 443 unique
 entries. The native provider uses immutable selected data without Lua or subprocesses.
 All 12 prior unique-database stops advance in the 116-item corpus; all 110 reference
@@ -16,15 +17,23 @@ The implementation worktree is `runs/unique-requirements-worktree`, branch
 tests, 237 import tests, 13 engine injection tests, 31 original-source/parity tests and
 32 CLI test observations pass, with strict lint, formatting, five portable library checks
 and a fresh five-build comparison. Original failing migration-test attempts remain beside
-their passing repairs. No full workspace pass is inferred from these focused gates.
+their passing repairs. No full workspace test pass is inferred from these focused gates.
 
-Hosted validation is separate. At 2026-09-09 18:42 UTC, the preceding published main
-[Windows/Linux run 34385695246](https://github.com/Azaril/poe-optimizer/actions/runs/34385695246)
-and combined-branch [run 34383255010](https://github.com/Azaril/poe-optimizer/actions/runs/34383255010)
-have passed formatting/lint and remain in workspace tests, with no reported failed step.
-parser_number retains CI monitoring. Discover this checkpoint's exact published-head run
-and record its outcome separately; do not present pending hosted tests as passed.
-Publication identity and exact-head discovery are retained in `runs/unique-requirements-publication.json`.
+Hosted validation is separate. The exact checkpoint
+[Windows/Linux run 34391273364](https://github.com/Azaril/poe-optimizer/actions/runs/34391273364)
+failed lint on both platforms: two extractor library-test calls unnecessarily borrowed
+an already borrowed tree. The focused CLI/library checks had not included this dependency's
+library-test target. GitHub check annotations identify both lines; full-log download
+returned HTTP 403, but the annotations provide the needed compiler output. Both calls
+are repaired without changing calculation or extraction behavior. Full workspace all-target strict lint, all four source tests and all three public
+extraction tests pass. The two fresh exports reproduce the unchanged schema-18 package
+and all 27 sections with 129 source evidence entries. Preserve the original failed CI run separately.
+
+The preceding main/combined runs remain pending with no reported failed step as of
+2026-09-09 18:42 UTC. parser_number retains CI monitoring. Discover the repair's exact-head
+run and record its outcome separately; do not present pending hosted tests as passed.
+Publication identity and exact-head discovery are retained in
+`runs/unique-requirements-publication.json` and the following repair evidence.
 
 Next: follow hosted results and implement authored Prefix/Suffix loading/reconciliation
 through existing injected modifier definitions. See [the bounded next slice](#next-native-dependency-authored-affix-loading).
@@ -720,6 +729,32 @@ Resume: verify the publication identity and hosted CI outcome, then continue the
 affix slice below. Stateful modifier parsing, callbacks, crafted-stat generation, runes and
 complete item assembly remain separate native work. The full native-parity and broad
 optimizer goal remains incomplete.
+
+### CI repair and provenance follow-up
+
+The first published unique-requirements run failed `clippy::needless_borrow` at
+`unique_requirements_extract.rs` lines 572 and 603. Only those two test calls change from
+`&tree` to `tree`; the reviewed package and production operations remain exact. Retain
+`runs/unique-requirements-ci-job-102599887273-annotations.json` and
+`runs/unique-requirements-ci-job-102599887580-annotations.json` as the actual CI evidence.
+The final `cargo clippy --workspace --all-targets --locked -- -D warnings` gate passes,
+including library-test targets. All four original-source tests and all three public CLI
+extraction tests pass again. Formatting, Git whitespace and all 47 documents / 508 local
+links pass. Evidence is in `runs/unique-requirements-ci-workspace-clippy.log`,
+`runs/unique-requirements-ci-source-edit.json`, `runs/unique-requirements-ci-source-tests.log`,
+`runs/unique-requirements-ci-extraction-cli.log` and the repair publication ledger.
+The hosted repair run remains a separate gate.
+
+The exporter fingerprints its complete source file, including tests, so this repair
+changes its implementation identity even though generated package bytes are unchanged.
+Keep the original corpus/binaries frozen; fresh public extraction must still reproduce
+the reviewed package. Do not relabel the original binary evidence as a post-repair run.
+
+A separate provenance review confirmed that CLI/corpus envelopes already retain the
+full data-code fingerprint, including the new lookup implementation. A host using only
+the standalone item-loading report should additionally retain
+`poe_optimizer_data::implementation_fingerprint()`. The [library report contract](item-source-and-loading.md)
+now states that distinction; no numerical code or report schema change is involved.
 
 ### Next native dependency: authored affix loading
 

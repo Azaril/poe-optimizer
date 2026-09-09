@@ -569,7 +569,7 @@ mod tests {
         let sources = sources();
         let items = crate::item_loading_extract::extract(&sources).unwrap();
         let tree = poe_optimizer_data::bundled::class_tree().unwrap();
-        let actual = extract(&sources, &items, &tree).unwrap();
+        let actual = extract(&sources, &items, tree).unwrap();
         let bundled = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
         assert_eq!(&actual, bundled.unique_requirements().data());
         let complete = actual.complete().unwrap();
@@ -600,7 +600,7 @@ mod tests {
         );
         let tree = poe_optimizer_data::bundled::class_tree().unwrap();
         assert!(
-            extract(&sources, &items, &tree)
+            extract(&sources, &items, tree)
                 .unwrap_err()
                 .0
                 .contains("original unique loading not complete")
