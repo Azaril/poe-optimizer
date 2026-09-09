@@ -10,10 +10,13 @@ pub struct NativeItemLoadProvider<'a, P> {
     snapshot: &'a GameDataSnapshot,
     dependencies: P,
 }
-pub type BuiltinItemLoadProvider<'a> = NativeItemLoadProvider<'a, UnavailableItemLoadProvider>;
-impl<'a> NativeItemLoadProvider<'a, UnavailableItemLoadProvider> {
+pub type BuiltinItemLoadProvider<'a> = NativeItemLoadProvider<'a, NativeModifierParserProvider>;
+impl<'a> NativeItemLoadProvider<'a, NativeModifierParserProvider> {
     pub fn new(snapshot: &'a GameDataSnapshot) -> Self {
-        Self::with_dependencies(snapshot, UnavailableItemLoadProvider)
+        Self::with_dependencies(
+            snapshot,
+            NativeModifierParserProvider::new(snapshot.modifier_parser()),
+        )
     }
 }
 impl<'a, P> NativeItemLoadProvider<'a, P> {

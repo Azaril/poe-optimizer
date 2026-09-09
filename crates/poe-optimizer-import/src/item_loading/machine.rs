@@ -952,6 +952,16 @@ impl<'a> ItemLoadMachine<'a> {
                 *imported = number_option(syntax::spec_to_number(value));
                 return Ok(Header::Known);
             }
+            "Armour" | "Evasion Rating" | "Evasion" | "Energy Shield" | "Ward" | "Runic Ward" => {
+                // ParseRaw consumes these in its earlier armourData/base-rebinding
+                // branch. They must never reach the later hidden_specs branch.
+                self.stop(
+                    DependencyKind::BaseCompatibility,
+                    Some(line),
+                    "display defence headers require source armourData and base-compatibility rebinding",
+                )?;
+                return Ok(Header::Stop);
+            }
             "Prefix" | "Suffix" => {
                 self.stop(DependencyKind::CraftedAffixes,Some(line),"authored affix IDs and independent ranges require complete crafting dependencies")?;
                 return Ok(Header::Stop);

@@ -210,6 +210,20 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Package schema **16**, semantics **`poe2-native-profiles-v16`**, adds `modifier_parser`:
+all 28 constructed dictionaries, referenced table and callback graphs, helper identities,
+source declarations, generator dependencies and parser policy. `GameDataSnapshot::modifier_parser()`
+exposes an immutable catalog independently of numerical calculation. Source table sharing,
+sparse keys, nil upvalues and non-finite sentinels remain explicit. Named C builtins are
+primitive identities; their internal runtime closures are not serialized. Every raw gem
+base-name assignment candidate is retained, including three ambiguous mappings.
+
+The package now has 26 sections; all 25 preceding section values and digests remain exact.
+The portable package bound is 32 MiB and two million JSON values, accommodating the full
+construction graph without a build/profile whitelist. Regenerate older packages. Definition
+recognition and structural parsing do not grant numerical support or execute callbacks.
+See the [parser contract](modifier-parser.md) and [implementation log](implementation.md).
+
 Package schema **15**, semantics **`poe2-native-profiles-v15`**, adds `item_scalability`:
 complete exact-case keys, ordered per-capture scalability and raw labels, partial format
 assignments, fallback defaults, antonyms and catalyst scaling policy.
@@ -219,8 +233,8 @@ matching definitions remain in `item_loading`. Unknown labels preserve source no
 behavior. No absent label, key, precision or quality is silently supplied by Rust policy.
 The [general formatting contract](item-formatting.md) defines the parser feedback boundary.
 
-Migration preserves all preceding 24 section values and digests and retains the 16 MiB
-package bound. Regenerate older packages. Extraction and formatting do not grant additional
+That migration preserved all preceding 24 section values and digests and retained its 16 MiB
+package bound (raised in schema 16). Regenerate older packages. Extraction and formatting do not grant additional
 complete-build capability. Current migration and validation status are in the
 [implementation log](implementation.md).
 
@@ -233,7 +247,7 @@ prototypes do not supply the parsed `Main.uniqueDB` requirements pipeline. Named
 exceptions belong in this injected policy, while Rust implements loading operations.
 
 All preceding 23 section contents and digests remain unchanged; the package has 24 sections.
-The existing 16 MiB package bound remains. Only `item_loading.unique_groups` prototype
+That migration retained the then-current 16 MiB package bound. Only `item_loading.unique_groups` prototype
 values allow up to 64 KiB each, accommodating actual generated unique definitions; existing
 field/key limits remain unchanged. Regenerate older packages. Definitions and partial
 loading evidence grant no additional native numerical capability. See

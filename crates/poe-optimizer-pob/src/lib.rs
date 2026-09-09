@@ -4,6 +4,7 @@ pub mod game_data;
 pub mod game_data_worker;
 mod item_loading_extract;
 mod item_scalability_extract;
+mod modifier_parser_extract;
 pub mod mutation;
 mod skill_identity_extract;
 pub mod tree_data;

@@ -24,6 +24,11 @@ The item scalability section preserves original `src/Data/ModScalability.lua` re
 and formatting assignments/defaults from `src/Modules/ItemTools.lua`,
 `src/Modules/Data.lua` and `src/Classes/Item.lua`, with authenticated source provenance.
 
+The modifier parser catalog preserves complete constructed dictionaries and Lua
+closure captures from `Modules/ModParser.lua`, generator/grant dependencies from
+`Modules/Data.lua` and source gem/skill tables, and exact rule/policy source spans.
+Named runtime builtins are retained as primitive identities, not executable game data.
+
 Source: https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2
 
 Passive-tree/game data are (c) Grinding Gear Games. Complete source file hashes,

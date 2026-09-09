@@ -13,6 +13,7 @@ pub use crate::item_rules::{
     LocalWeaponStat,
 };
 pub use crate::item_scalability::*;
+pub use crate::modifier_parser::*;
 pub use crate::movement::MovementData;
 pub use crate::skill_identities::*;
 pub use poe_optimizer_core::data::DataIdentity;
@@ -21,8 +22,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 15;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v15";
+pub const SCHEMA_VERSION: u32 = 16;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v16";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -50,6 +51,7 @@ const SECTIONS: &[&str] = &[
     "skill_identities",
     "item_loading",
     "item_scalability",
+    "modifier_parser",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -87,9 +89,9 @@ pub struct LoadLimits {
 impl Default for LoadLimits {
     fn default() -> Self {
         Self {
-            max_bytes: 16 * 1024 * 1024,
+            max_bytes: 32 * 1024 * 1024,
             max_depth: 64,
-            max_values: 1_000_000,
+            max_values: 2_000_000,
             max_string_bytes: 4096,
             max_effects_per_passive: 32,
         }
@@ -438,6 +440,7 @@ pub struct GameDataPackage {
     pub skill_identities: SkillIdentityData,
     pub item_loading: ItemLoadingData,
     pub item_scalability: ItemScalabilityData,
+    pub modifier_parser: ModifierParserData,
 }
 impl GameDataPackage {
     pub fn armour_base(&self, id: &str) -> Option<&ArmourBaseData> {
@@ -518,6 +521,7 @@ pub struct GameDataSnapshot {
     skill_identities: SkillIdentityCatalog,
     item_loading: ItemLoadingCatalog,
     item_scalability: ItemScalabilityCatalog,
+    modifier_parser: ModifierParserCatalog,
 }
 impl GameDataSnapshot {
     pub fn identity(&self) -> &DataIdentity {
@@ -531,6 +535,9 @@ impl GameDataSnapshot {
     }
     pub fn configuration(&self) -> &ConfigDefinitionCatalog {
         &self.configuration
+    }
+    pub fn modifier_parser(&self) -> &ModifierParserCatalog {
+        &self.modifier_parser
     }
     pub fn item_scalability(&self) -> &ItemScalabilityCatalog {
         &self.item_scalability
@@ -599,6 +606,7 @@ impl GameDataLoader {
         let skill_identities = SkillIdentityCatalog::new(package.skill_identities.clone())?;
         let item_loading = ItemLoadingCatalog::new(package.item_loading.clone())?;
         let item_scalability = ItemScalabilityCatalog::new(package.item_scalability.clone())?;
+        let modifier_parser = ModifierParserCatalog::new(package.modifier_parser.clone())?;
         Ok(GameDataSnapshot {
             identity,
             trust,
@@ -607,6 +615,7 @@ impl GameDataLoader {
             skill_identities,
             item_loading,
             item_scalability,
+            modifier_parser,
         })
     }
 }
@@ -704,6 +713,7 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     package.skill_identities.validate()?;
     package.item_loading.validate()?;
     package.item_scalability.validate()?;
+    package.modifier_parser.validate()?;
     let m = &package.manifest;
     if m.schema_version != SCHEMA_VERSION {
         return Err(error("unsupported schema_version"));

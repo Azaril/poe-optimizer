@@ -14,8 +14,8 @@ use std::{
 };
 
 /// Private canonical package/evidence envelope. The contained portable package
-/// retains its independent 16 MiB loader limit; 1 MiB allows bounded source evidence.
-pub const MAX_GAME_DATA_ARTIFACT_BYTES: u64 = 17 * 1024 * 1024;
+/// retains its independent 32 MiB loader limit; 1 MiB allows bounded source evidence.
+pub const MAX_GAME_DATA_ARTIFACT_BYTES: u64 = 33 * 1024 * 1024;
 const MAX_ERROR_BYTES: u64 = 64 * 1024;
 
 #[derive(Debug, thiserror::Error)]

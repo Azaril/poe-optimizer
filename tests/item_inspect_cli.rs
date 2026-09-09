@@ -303,7 +303,7 @@ fn complete_corpus_inventory_receives_loading_evidence_without_changing_admissio
     assert_eq!(count, 116);
     assert!(
         pending > 0,
-        "missing native parser/assembly must remain observable"
+        "unimplemented parser callbacks and item assembly must remain observable"
     );
 }
 #[test]
@@ -332,7 +332,7 @@ fn item_loading_source_error_keeps_other_definition_sections_and_original_input(
 }
 
 #[test]
-fn caller_scalability_data_controls_formatting_before_explicit_parser_stop() {
+fn caller_scalability_data_controls_formatting_and_preserves_unknown_lines_before_assembly() {
     use poe_optimizer_data::item_scalability::{ItemFormatAssignments, ItemScalabilityValue};
     let temp = tempfile::tempdir().unwrap();
     let input = temp.path().join("caller.xml");
@@ -376,7 +376,14 @@ fn caller_scalability_data_controls_formatting_before_explicit_parser_stop() {
         let loaded = &report["definition_lookup"]["items"]["report"];
         let item = &loaded["items"][0];
         assert_eq!(item["status"], "pending", "{item}");
-        assert_eq!(item["pending"]["kind"], "modifier_parser", "{item}");
+        assert_eq!(item["pending"]["kind"], "assembly", "{item}");
+        let lines = item["state"]["explicit_mod_lines"].as_array().unwrap();
+        assert_eq!(lines.len(), 1);
+        // Item.lua retains the authored display line when parsing returns nil,
+        // even when the formatted parser request has a rounded number.
+        assert_eq!(lines[0]["line"], "Caller roll 10.049");
+        assert_eq!(lines[0]["extra"], "Caller roll 10.049");
+        assert!(lines[0]["modifiers"].as_array().unwrap().is_empty());
         let calls = item["state"]["parser_calls"].as_array().unwrap();
         assert_eq!(calls.len(), 1);
         assert_eq!(calls[0]["text"], expected);

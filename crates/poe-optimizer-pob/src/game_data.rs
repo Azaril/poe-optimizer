@@ -17,6 +17,17 @@ use std::{
 };
 
 const READ_PATHS: &[&str] = &[
+    "src/Data/Costs.lua",
+    "src/Data/Essence.lua",
+    "src/Data/FlavourText.lua",
+    "src/Data/InventorySlots.lua",
+    "src/Data/LiquidEmotions.lua",
+    "src/Data/Minions.lua",
+    "src/Data/ModMap.lua",
+    "src/Data/Rares.lua",
+    "src/Data/Spectres.lua",
+    "src/Data/WorldAreas.lua",
+    "src/Modules/StatDescriber.lua",
     "src/Modules/Common.lua",
     "src/Data/Global.lua",
     "src/Data/Misc.lua",
@@ -196,9 +207,11 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v15",
+        "poe-game-data-extractor-v16",
         include_str!("item_loading_extract.rs"),
         include_str!("item_scalability_extract.rs"),
+        include_str!("modifier_parser_extract.rs"),
+        include_str!("modifier_parser_inputs.lua"),
         include_str!("skill_identity_extract.rs"),
         include_str!("configuration_extract.rs"),
         include_str!("game_data.rs"),
@@ -457,6 +470,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         skill_identities: crate::skill_identity_extract::extract(&extractor.sources)?,
         item_loading: crate::item_loading_extract::extract(&extractor.sources)?,
         item_scalability: crate::item_scalability_extract::extract(&extractor.sources)?,
+        modifier_parser: crate::modifier_parser_extract::extract(&extractor.sources)?,
     };
     package.refresh_section_digests().map_err(error)?;
     let evidence = GameDataExtractionEvidence {

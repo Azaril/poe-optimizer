@@ -2,12 +2,20 @@
 
 Last updated: 2026-09-09
 
-Current checkpoint: **general item formatting**, implemented and locally validated. The
+Current work: **native structural modifier parsing**, implemented on main after
+`48983fa`, with final integration/workspace validation in progress. The complete schema-16
+catalog, Lua-compatible byte matcher, ordinary parser and import provider are integrated.
+Source comparisons and a fresh five-build regression pass; full native replacement remains
+unfinished. See the [active parser checkpoint](#general-modifier-parser--active-checkpoint).
+
+Latest published checkpoint: **general item formatting**, implemented and locally validated. The
 schema-15 catalog, pure Rust formatter, explicit parser continuation and CLI provider are
 integrated. Independent source, import/data, actor/build, package export, native-only,
 Clippy/WASM and fresh corpus checks pass. No additional complete native build is admitted.
-See the current checkpoint below for evidence, remaining scope and the publication resume
-point. Full native replacement remains unfinished.
+Published on main as `48983fa7f57ec66d26ab9e6525a01fd3b97e55f5`.
+[Exact-code CI run 34327347326](https://github.com/Azaril/poe-optimizer/actions/runs/34327347326)
+passed on Windows and Linux (confirmed 2026-09-09). See the checkpoint below for evidence and the next
+resume point. Full native replacement remains unfinished.
 
 The preceding item definitions/loading implementation is published as
 `43251c748ce735783bb0df6357f54f16d4134e35`. Its
@@ -16,7 +24,7 @@ failed on a new Rust/Clippy lint before tests. Published repair
 `1f1ad1f520db85045888f479edb6263481df5c95` pins Rust 1.98.1 and resolves that lint.
 All **941 local workspace tests pass** (nine intentional helper tests ignored by direct
 execution). [Repair CI run 34321961512](https://github.com/Azaril/poe-optimizer/actions/runs/34321961512)
-passes lint on Windows and Linux and is still running tests; no full hosted pass is claimed.
+passed the complete workflow on Windows and Linux (confirmed 2026-09-09).
 
 The preceding mixed ModList/ModDB query checkpoint is published as
 `5f8b70e220e2bd19ed79d0e3b6979a2347970ab2`, with resume update `316ad8c`.
@@ -237,8 +245,9 @@ reproduced `clippy::collapsible_match` at the new item's FindImplicit transition
 
 Repair code is published as `1f1ad1f520db85045888f479edb6263481df5c95` on main.
 [Exact repair CI run 34321961512](https://github.com/Azaril/poe-optimizer/actions/runs/34321961512)
-now passes Lint on both Windows and Linux and is running Test
-(`runs/ci-198-publication.json`); no complete hosted pass is claimed.
+passed the complete Windows and Linux workflow (confirmed 2026-09-09 in
+`runs/parser-prior-ci-34321961512.json`). The earlier observation is retained in
+`runs/ci-198-publication.json`.
 Local full-workspace session **51809 completed with exit 0**: 941 tests passed across 124
 target results, with nine intentional helper tests ignored by direct execution. Do not
 restart it. `runs/ci-198-workspace-tests-final.json` records the exact commit, command and
@@ -281,6 +290,138 @@ capture records; all 33 dispatcher assignments and 14 ignored labels are explici
 Its proposed catalog adds 77,073 JSON values and approximately 2.4–2.7 MB, within current
 package limits. Native runtime proofs are still required. No actor/action/candidate
 migration is included in this work.
+
+## General modifier parser - active checkpoint
+
+Started after `48983fa` on 2026-09-09. The implementation and source-validation work is
+progress toward reusable parsing for items, passives and skill effects. It does not yet
+provide complete native builds beyond the existing Spark/Mace pipelines. The B3 general
+actor/action/candidate model proposal remains unapproved; no migration is included here.
+A concrete decision request was sent to the user on 2026-09-09; keep dependent migration
+work pending until a reply arrives. Parser/item implementation can continue independently.
+The [parser contract](modifier-parser.md) describes the boundaries and end state.
+
+Work is on main in `C:/code/poe-optimizer`. The detached `runs/item-formatting-worktree`
+remains frozen at `48983fa`, retaining the preceding validated binaries. The protected
+baseline and original schema-15 package are in `runs/parser-baseline.json` and
+`runs/parser-original-game-data.json`. Caller input, source/tree manifest, Cargo files and
+independent goldens remain unchanged. All 25 preceding package section values/digests are
+exact; only the intended package migration changes its protected baseline bytes.
+
+### Implemented behavior
+
+- Schema 16 (`poe2-native-profiles-v16`) adds the complete `modifier_parser` catalog:
+  28 dictionaries / 10,027 rows, 19,634 table objects, 1,645 Lua closures, six named C
+  primitives, ordered upvalues, 4,390 lexical declarations and all final winners.
+  Complete generator dependencies retain all raw gem base-name assignment candidates,
+  including Lightning Bolt (2), Mace Strike (3) and Spear Stab (2). No build/profile
+  whitelist or arbitrary winner resolves these ambiguities.
+- Portable package limits are 32 MiB and two million JSON values; extraction allows a
+  33 MiB package/evidence envelope. The 26-section package contains 21,598,614 bytes,
+  SHA-256 `27a1ca4d66cfb02333ad8b5145afeb07fc999c5f33791a6d530fed9a8f3a32da`.
+  Fresh F/G extractions reproduce both package and evidence bytes, using 122 authenticated
+  sources. Evidence SHA-256 is `ada9428a29b233cfbaa99f875dd2c092743001746c5385cf7664513ed35147c5`.
+  C primitive identity does not serialize internal C closures or grant callback execution.
+- The pure byte matcher implements original LuaJIT pattern/capture behavior, including
+  lazy source errors, NUL/plain distinctions and source capture/depth limits. Matching
+  work, compiled memory and output expansion have separate bounds. Portable `tonumber`
+  and signed-low-word `OR64` preserve independently observed source behavior.
+- Compiled scan tables retain source selection priority. Exact ties require equal
+  captures and bounded exact-bit payload equivalence, including shared DAGs, NaN and
+  signed zero. False winning payloads and later pattern errors retain source order.
+- `CompiledModifierParser` implements ordinary forms, static rules, sparse contribution
+  merging, tags, positional wrappers and the public copy/retry behavior. All raw rows
+  precede wrapping. Compiled rules are immutable and shareable between workers; execution
+  has no Lua runtime, process, I/O, hidden fallback or shared mutable global cache.
+- `NativeModifierParserProvider` connects formatting and parsing to native item loading.
+  Nested dense numeric-only tables match the existing metadata array representation;
+  sparse/mixed/empty tables stay tables. Wrapper output expansion is charged before cloning,
+  including player-tag lists, standalone tags, aura transfers and enemy copies. Callback
+  payloads, non-finite values and non-UTF-8
+  output stop explicitly at the current metadata seam. The existing numerical profile
+  grammars remain unchanged. CLI inspection uses caller input and injected catalogs.
+
+### Validation and publication
+
+| Gate | Current result |
+| --- | --- |
+| Independent original parser/pattern/number tests | 23 tests pass; 8,789 structural comparisons, zero mismatches; 286 explicit deferrals |
+| Numeric primitives | 64,283 cold `tonumber`; 6,296 cold and 18,888 warmed OR64 comparisons |
+| Pattern/scan behavior | 100,920 adversarial finds; 11,264 byte classes; 54,064 dictionary finds; 7,200 capture checks; 512 scans |
+| Corpus parser coverage | 116 items / 727 source parser requests / 506 unique texts: 437 paired, 69 deferred |
+| Static callback descriptors | All 33 observed callback-bearing outputs compared; no observer skips; execution remains pending |
+| Original parser session semantics | Three independent tests pass: shared composite-name mutation, injected-error persistence without cache insertion, and returned jewel callback reachability/identity |
+| Native contracts | 17 primitive, six scan, nine parser contracts and six wrapper resource regressions pass; strict Clippy passes |
+| Data model/extraction | 105 tests across 16 targets pass after updating one stale schema assertion; source reproduction and strict Clippy pass |
+| Import/provider integration | Five import contracts, nine formatting contracts and seven independent provider tests pass. 1,597 broad provider outputs match with one explicit DOUBLED deferral; 24 combined LF/CRLF cases and all 116 corpus trace prefixes pass, including 28 genuine final preassembly states. |
+| Native-only inspection/config CLI | 24 tests and strict Clippy pass; stale parser-stop assertion updated to assembly, preserving authored text |
+| Portable/dependency gates | All five WASM libraries compile after the final wrapper/header fixes; native-only normal dependencies exclude PoB/Lua. Final strict workspace/native-only Clippy and formatting pass. |
+| Fresh caller corpus | Five imports/inspections/reference runs succeed; all 110 reference measurements and native rejection reasons unchanged |
+| Corpus tooling | 29 tests pass; bounded data copy now accepts the schema-16 package size |
+| Native-only complete CLI regression | Session 34129 completed with exit 0: all 115 tests across 45 target results pass, none failed or ignored. Final binary SHA-256 `cdf38223e457a83167a448517d4781c8142416f18c23b2511b6dbf7d62833665`. |
+| Full workspace/current import regression | Workspace session 37729 is supervised by parser_number. The old build has one stale 25-section CLI assertion; its corrected target must rerun. Final-code import all-target tests and changed-source reconciliation are in progress. Preserve successful results instead of restarting the suite. |
+| Publication | Local code checkpoint; push pending full regression completion. Previous formatter and repair exact-code CI both pass on Windows/Linux |
+
+Final item diagnostics preserve all 116 inventory items, 486 range instructions, 15 saved
+skill/equipment sets, 200 groups, 541 gem occurrences, 16 passive specs and 21 jewel
+assignments. All items remain pending: 31 assembly, 31 base compatibility, 18 parser,
+15 base buffs, ten crafted affixes, seven rune reconstruction and four unique database.
+The previous checkpoint had 51 parser and four assembly stops.
+
+An independent preassembly comparison exposed defence-header precedence: original
+`Item.lua:835–854` consumes Armour/Evasion/Energy Shield/Ward headers before the later
+`hidden_specs` branch. The loader cannot yet retain its full `armourData`/base-rebinding
+operation, so it now stops explicitly at `BaseCompatibility`, before falsely marking
+hidden specs. Six header spellings have independent source witnesses and a focused import
+regression. The first corpus run (`runs/parser-corpus-final`) predates this fix; the final
+reviewed run (`runs/parser-corpus-reviewed`) uses the frozen corrected binaries and reports
+the counts above. Its 110 reference measurements and all represented build/context/coverage/
+warnings remain bitwise unchanged. All five native builds still reject at the existing
+one-Skill/one-SkillSet boundaries. Runner exit 1 represents these expected native rejections;
+source inspections and PoB runs succeeded.
+
+Evidence: `runs/parser-data-final.json`, `runs/parser-data-tests-final.json`,
+`runs/parser-data-protected-files.json`, `runs/parser-oracle-final-summary.json`,
+`runs/parser-number-native-checks.json`, `runs/parser-ordinary-contracts-final.json`,
+`runs/parser-cli-validation.json`, `runs/parser-native-cli-test-ledger.json`,
+`runs/parser-wrapper-review-fix.json`,
+`runs/parser-import-final.log`, `runs/parser-provider-public-final.log`,
+`runs/parser-session-audit-final.log`,
+`runs/parser-corpus-reviewed-validation.json`, `runs/parser-final-preservation.json` and
+`runs/parser-corpus-reviewed/index.json`. These ignored local ledgers supplement reproducible
+committed tests; they are not independent game truth.
+
+### Resume point
+
+Independent provider/source integration and native-only validation pass. Finish the full
+workspace/current-import regression and repaired extraction target, then push this local
+checkpoint and inspect its exact-code Windows/Linux CI.
+Keep successful terminal results; do not restart old or still-running sessions.
+
+Next, implement selected callback operations and explicit source parser session state.
+`DOUBLED` mutates shared composite-name data: cached earlier text retains its old result,
+while fresh text sees the mutation. An explicit bounded session overlay/cache must preserve
+that behavior without mutating the injected catalog or sharing state between workers.
+Callback spans/upvalue graphs are definitions, not native implementations. Keep native
+pending, source errors, resources and ambiguity separate; never select a lower-priority
+rule merely because the winner is unsupported. Original-source state/copy/alias tests must
+remain independent of native code and extraction.
+
+The next defence-header slice is scoped by `runs/parser-defence-header-next-audit.md`.
+Inject the original header-to-armour-key mapping and reuse `base_aliases.armour_header_rewrites`;
+add optional nested armour data with the original reparse lifetime. Rebinding precedes
+numeric parsing and changes only base name/reference. All three authored Two-Toned base
+references are absent at the pin: preserve the resulting nil base instead of rejecting
+those definition references or keeping the prior base. Nil numeric assignment removes a
+key while retaining its table. Preserve the later explicit/implicit-line path after a
+known header; do not skip it. Independently test ordering, injected replacements and
+reparse behavior before removing the current pending dependency.
+
+Then complete required item dependencies (unique/rune/affix/base-buff and assembly
+operations), effective skill/grant/action resolution and numerical producers.
+Numerical support, item assembly and complete-build admission remain separate gates. The
+full native-parity and broad joint-search goal remains active; this checkpoint completes
+neither the B2 mechanism matrix nor the proposed B3 architecture migration.
 
 ## General item formatting - locally validated checkpoint
 
@@ -339,11 +480,19 @@ remain exact, all 139 captured implementation/data hashes are unchanged, and 45 
 files contain 477 resolving local links (`runs/formatter-final-preservation.json`,
 `runs/formatter-docs-audit.json`).
 
-Publication resume: preserve these results, publish the coherent checkpoint to main and
-track its exact hosted CI revision. The known preceding lint failure is fixed and validated
-by both hosted lint stages plus all 941 local workspace tests. The preceding hosted test
-run is still in progress; do not label it passed or restart it. Publication authorization
-already covers main. Keep exact new hosted run evidence with the next progress update.
+Publication: code `48983fa7f57ec66d26ab9e6525a01fd3b97e55f5` is pushed to main.
+[Exact-code CI run 34327347326](https://github.com/Azaril/poe-optimizer/actions/runs/34327347326)
+passed on both platforms, as did prior repair run 34321961512 (confirmed 2026-09-09).
+`runs/parser-prior-ci-34327347326.json` and `runs/parser-prior-ci-34321961512.json`
+record completion; `runs/formatter-publication.json` retains the earlier observation.
+There are no remaining local test/build sessions from this checkpoint. Preserve the frozen
+worktree because the recorded binaries were built there. Main integration preserves all
+24 nonexception protected files and the package bytes; remaining differences from captured
+worktree files are only checkout newlines (`runs/formatter-main-integration-preservation.json`).
+
+Resume by checking these exact hosted runs and any actionable failure annotations, then
+continue the parser slice below. This publication-only document update can accompany the
+next code checkpoint rather than dispatching a duplicate docs-only CI run now.
 
 Next implementation: the general modifier parser's matching/dispatch seam, using the
 read-only source audit in `runs/formatter-next-parser-audit.md` and `.json`. First capture

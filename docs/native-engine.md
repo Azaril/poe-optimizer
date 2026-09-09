@@ -36,7 +36,7 @@ budget. A browser runner supplies its own scheduling, progress, cancellation and
 loading while calling the same Rust calculations. Persistent mutable caches, when added,
 belong to one evaluation context and must demonstrate request-order independence.
 
-## Item formatting during preparation
+## Item formatting and parsing during preparation
 
 The pure [general item formatter](item-formatting.md) borrows an injected scalability
 catalog and actor precision definitions. It handles text/ranges and scaling separately from
@@ -45,6 +45,13 @@ continuation for explicit ordered feedback. The import provider retains that cal
 the engine neither starts a process nor falls back to Lua. A successfully formatted line
 is not a supported complete item or build. Prepared native evaluation can reuse resolved
 item components without repeating source text work for every candidate.
+
+The [native structural modifier parser](modifier-parser.md) compiles complete injected rule
+tables into immutable shared patterns. Ordinary forms and static records are available to
+item loading, while selected callback factories and stateful operations remain explicit
+pending dependencies. Parser output is separate from numerical mechanic admission. The
+source parser's stateful `DOUBLED` operation requires a future task-local session with its
+own overlay/cache; it does not belong in shared numerical evaluation state.
 
 ## Shared actor preparation
 
@@ -509,7 +516,9 @@ search must enforce its explicit progression and legality constraints separately
 
 The source oracle loads the full pinned `ModParser.lua`, checking its complete normalized
 hash, and proves the exact numeric names, flags and nested minion scope for all sixteen
-effective entrances. No general text parser is implemented in Rust. Both kernel oracles
+effective entrances. These numerical pipelines retain their narrow entrance grammars;
+the separate [general structural parser](modifier-parser.md) does not broaden their
+admission. Both kernel oracles
 execute the original `calcDamage`, resource/attribute and global defence branches, in
 interpreted and warmed LuaJIT. Class attributes and effective stat strings are read from
 the actual pinned tree. Cases cover every entrance across character levels and mitigation,

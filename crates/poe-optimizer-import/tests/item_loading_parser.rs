@@ -1,0 +1,131 @@
+use poe_optimizer_data::game_data::{GameDataSnapshot, bundled_snapshot};
+use poe_optimizer_import::item_loading::*;
+use std::sync::OnceLock;
+fn data() -> &'static GameDataSnapshot {
+    static DATA: OnceLock<GameDataSnapshot> = OnceLock::new();
+    DATA.get_or_init(|| bundled_snapshot().unwrap())
+}
+fn request(text: &str) -> ParseRequest {
+    ParseRequest {
+        sequence: 0,
+        line_index: 0,
+        text: text.into(),
+        combined: false,
+    }
+}
+#[test]
+fn native_structural_parser_preserves_nil_empty_extra_and_local_tag_shape() {
+    let mut parser = NativeModifierParserProvider::new(data().modifier_parser());
+    assert!(parser.compilation_error().is_none());
+    let DependencyResult::Available(unknown) =
+        parser.parse_modifier(&request("unrecognized wording"))
+    else {
+        panic!("source nil result must be available")
+    };
+    assert!(unknown.modifiers.is_none());
+    assert_eq!(unknown.extra.as_deref(), Some("unrecognized wording "));
+    let DependencyResult::Available(empty) =
+        parser.parse_modifier(&request("20% increased nonexistent"))
+    else {
+        panic!("source empty result must be available")
+    };
+    assert!(empty.modifiers.unwrap().is_empty());
+    assert!(empty.extra.is_some());
+    let DependencyResult::Available(local) =
+        parser.parse_modifier(&request("Grants 3 Life per Enemy Hit"))
+    else {
+        panic!("local form should parse")
+    };
+    let mods = local.modifiers.unwrap();
+    assert!(local.extra.is_none());
+    let tag = mods[0].indexed[&1].as_table().unwrap();
+    assert_eq!(tag.fields["type"].as_str(), Some("Condition"));
+    assert_eq!(tag.fields["var"].as_str(), Some("{Hand}Attack"));
+    assert!(!tag.fields.contains_key("tag"));
+}
+#[test]
+fn formatting_and_native_parsing_advance_to_assembly_with_exact_rounded_value() {
+    let data = data();
+    let parser = NativeModifierParserProvider::new(data.modifier_parser());
+    let mut provider = NativeItemLoadProvider::with_dependencies(data, parser);
+    let mut machine = ItemLoadMachine::new(data.item_loading());
+    machine
+        .apply_text(
+            "Rarity: NORMAL\nRusted Greathelm\nImplicits: 0\n+17.5 to Strength",
+            &mut provider,
+        )
+        .unwrap();
+    assert_eq!(machine.pending().unwrap().kind, DependencyKind::Assembly);
+    assert_eq!(machine.state().parser_calls[0].text, "+18 to Strength");
+    let modifier = &machine.state().explicit_mod_lines[0].modifiers[0];
+    assert_eq!(modifier.fields["name"].as_str(), Some("Str"));
+    assert_eq!(modifier.fields["value"].as_f64(), Some(18.0));
+}
+#[test]
+fn selected_callbacks_and_nonfinite_outputs_remain_explicit_dependencies() {
+    let mut parser = NativeModifierParserProvider::new(data().modifier_parser());
+    for (text, reason) in [
+        (
+            "1% increased Damage per 10 maximum Life",
+            "modifier tag callback",
+        ),
+        (
+            "Any number of Poisons from this Weapon can affect a target at the same time",
+            "non-finite",
+        ),
+        (
+            "Strength and Dexterity is doubled",
+            "shared dictionary mutation",
+        ),
+    ] {
+        let result = parser.parse_modifier(&request(text));
+        assert!(
+            matches!(&result, DependencyResult::Unavailable(message) if message.contains(reason)),
+            "{text}: {result:?}"
+        );
+    }
+}
+#[test]
+fn native_parser_input_bound_is_a_resource_error_not_missing_support() {
+    let mut parser = NativeModifierParserProvider::new(data().modifier_parser());
+    assert!(matches!(
+        parser.parse_modifier(&request(&"x".repeat(1024 * 1024))),
+        DependencyResult::ResourceError(_)
+    ));
+}
+
+#[test]
+fn defence_headers_stop_before_the_later_hidden_specs_branch() {
+    for header in [
+        "Armour",
+        "Evasion Rating",
+        "Evasion",
+        "Energy Shield",
+        "Ward",
+        "Runic Ward",
+    ] {
+        let snapshot = data();
+        let mut provider = BuiltinItemLoadProvider::new(snapshot);
+        let mut machine = ItemLoadMachine::new(snapshot.item_loading());
+        machine
+            .apply_text(
+                &format!(
+                    "Rarity: NORMAL\nRusted Greathelm\n{header}: 24\nImplicits: 0\n+17 to Strength"
+                ),
+                &mut provider,
+            )
+            .unwrap();
+        assert_eq!(
+            machine.pending().unwrap().kind,
+            DependencyKind::BaseCompatibility,
+            "{header}"
+        );
+        assert!(
+            !machine.state().retained_fields.contains_key("hidden_specs"),
+            "{header}"
+        );
+        assert!(machine.state().parser_calls.is_empty(), "{header}");
+        // The original empty constructor performs one no-base assembly call.
+        assert_eq!(machine.state().assembly_calls, 1, "{header}");
+    }
+}

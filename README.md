@@ -69,8 +69,9 @@ uses the five newly supplied full builds to guide general native admission and f
 pipelines. Caller-driven [`inspect-build`](docs/build-source-containers.md) preserves
 root/container, skill, configuration and [item-source evidence](docs/item-source-and-loading.md)
 within the shared bounded XML/lexical subset. With `--with-definitions` or `--data`, it also
-reports ordered native item loading and [data-driven formatting](docs/item-formatting.md)
-against the selected catalog, stopping at missing parser/assembly operations. Inspection does not calculate effects; native skill admission
+reports ordered native item loading, [data-driven formatting](docs/item-formatting.md)
+and [structural modifier parsing](docs/modifier-parser.md) against the selected catalog.
+Pending callbacks and assembly operations stop explicitly. Inspection does not calculate effects; native skill admission
 remains separate and currently bounded to Spark/Mace. On the legacy command, `--backend pob`
 selects the optional reference backend. Native search uses [typed candidate calculation](docs/native-candidate-evaluation.md)
 by default, with complete document evaluation available through `--native-evaluation document`.
@@ -172,8 +173,9 @@ passive-allocation checks remain separate. See
 
 Add `--with-definitions` or `--data PACKAGE` for source-bound skill/configuration identity
 lookup and ordered native item-loading diagnostics against the complete injected base catalog.
-Missing parser, formatting or assembly dependencies stop loading explicitly, preserving the
-state reached and later unexecuted instructions. A loading report does not certify complete
+Native formatting and ordinary modifier parsing are available; pending callback, conversion
+or assembly dependencies stop loading explicitly, preserving the state reached and later
+unexecuted instructions. A loading report does not certify complete
 item calculations or build support. Ambiguous identities and unprocessed names remain explicit. [Skill inspection](docs/skill-source-and-identities.md) works with the native-only CLI
 and does not claim numerical support for recognized skills. Local projection errors remain
 separate after the document passes the shared XML/lexical gate; a global failure prevents the

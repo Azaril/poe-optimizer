@@ -87,7 +87,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         ).as_bytes()))
     });
     if args.with_definitions || args.data.data.is_some() {
-        // Definitions and item formatting share a portable snapshot, without a build evaluator.
+        // Definitions, formatting and structural parsing share one portable snapshot.
         let snapshot = args.data.snapshot()?;
         report["definition_lookup"] = serde_json::json!({
             "data": snapshot.identity(),

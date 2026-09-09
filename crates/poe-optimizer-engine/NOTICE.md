@@ -25,6 +25,14 @@ The pure item formatter in `src/item_tools.rs` and `src/item_tools/` translates
 helpers from `src/Modules/Common.lua` and catalyst scaling from `src/Classes/Item.lua`.
 Its tables and precision/default policies come from the injected data package.
 
+The compiled scanner in `src/modifier_scan.rs` translates selection and capture
+semantics from `src/Modules/ModParser.lua:6592-6614` at the same pinned revision.
+Patterns and payloads remain caller-supplied data. The structural driver in
+`src/modifier_parser.rs` and `src/modifier_parser/` translates ordinary forms,
+merging, wrappers and public copy behavior from `ModParser.lua:6619-7035,7404-7424`,
+`ModTools.lua:57-91` and `Common.lua:495-506`. `src/lua_bits.rs` translates the
+pairwise OR operation in `Data/Global.lua:129-160`.
+
 Source: https://github.com/PathOfBuildingCommunity/PathOfBuilding-PoE2
 
 The upstream application's notice from `LICENSE.md` is retained below. It covers
@@ -54,3 +62,73 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+## Lua-compatible byte patterns
+
+`src/lua_pattern.rs` translates the string pattern semantics in LuaJIT's
+`src/lib_string.c`, with fixed ASCII character classes from `src/lj_char.c` and
+`src/lj_char.h`. `src/lua_number.rs` follows the number reader in `src/lj_strscan.c`;
+`src/lua_bits.rs` also uses LuaJIT's numeric bit-conversion semantics. The reference is the locked `luajit-src 210.7.3+1ee778a` source
+used by this project's optional PoB host. The Rust module executes independently
+of Lua; this attribution does not introduce a production runtime dependency.
+The original copyright notice is retained below.
+
+```text
+===============================================================================
+LuaJIT -- a Just-In-Time Compiler for Lua. https://luajit.org/
+
+Copyright (C) 2005-2026 Mike Pall. All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+[ MIT license: https://www.opensource.org/licenses/mit-license.php ]
+
+===============================================================================
+[ LuaJIT includes code from Lua 5.1/5.2, which has this license statement: ]
+
+Copyright (C) 1994-2012 Lua.org, PUC-Rio.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+===============================================================================
+[ LuaJIT includes code from dlmalloc, which has this license statement: ]
+
+This is a version (aka dlmalloc) of malloc/free/realloc written by
+Doug Lea and released to the public domain, as explained at
+https://creativecommons.org/licenses/publicdomain
+
+===============================================================================
+```

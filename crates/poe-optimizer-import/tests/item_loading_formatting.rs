@@ -18,7 +18,7 @@ impl ItemLoadProvider for Recognized {
     }
 }
 #[test]
-fn builtin_known_formatting_advances_to_explicit_modifier_parser_dependency() {
+fn builtin_known_formatting_and_parsing_advance_to_explicit_assembly_dependency() {
     let data = snapshot();
     let mut provider = BuiltinItemLoadProvider::new(data);
     let mut machine = ItemLoadMachine::new(data.item_loading());
@@ -28,13 +28,13 @@ fn builtin_known_formatting_advances_to_explicit_modifier_parser_dependency() {
             &mut provider,
         )
         .unwrap();
-    assert_eq!(
-        machine.pending().unwrap().kind,
-        DependencyKind::ModifierParser
-    );
+    assert_eq!(machine.pending().unwrap().kind, DependencyKind::Assembly);
     assert_eq!(machine.state().parser_calls[0].text, "+18 to Strength");
     assert!(machine.state().format_parser_calls.is_empty());
-    assert!(machine.state().explicit_mod_lines.is_empty());
+    assert_eq!(
+        machine.state().explicit_mod_lines[0].modifiers[0].fields["value"].as_f64(),
+        Some(18.0)
+    );
 }
 #[test]
 fn caller_scalability_changes_only_its_own_exact_key_and_data_identity() {
@@ -63,7 +63,8 @@ fn caller_scalability_changes_only_its_own_exact_key_and_data_identity() {
     )
     .unwrap();
     for (data, expected) in [(data, "Caller roll 10.049"), (&custom, "Caller roll 10.0")] {
-        let mut provider = BuiltinItemLoadProvider::new(data);
+        let mut provider =
+            NativeItemLoadProvider::with_dependencies(data, UnavailableItemLoadProvider);
         let mut machine = ItemLoadMachine::new(data.item_loading());
         machine
             .apply_text(
@@ -111,7 +112,7 @@ fn selected_range_is_retained_while_initial_parse_uses_maximum_range() {
 fn native_fallback_requests_and_direct_modifier_parse_have_distinct_ordered_evidence() {
     let data = snapshot();
     let raw = "Rarity: NORMAL\nRusted Greathelm\nCatalyst: Flesh\nCatalystQuality: 20\nImplicits: 0\n{tags:life}Caller 10.123 units";
-    let mut provider = BuiltinItemLoadProvider::new(data);
+    let mut provider = NativeItemLoadProvider::with_dependencies(data, UnavailableItemLoadProvider);
     let mut machine = ItemLoadMachine::new(data.item_loading());
     machine.apply_text(raw, &mut provider).unwrap();
     assert_eq!(
@@ -217,7 +218,8 @@ fn unscalable_suffixes_are_single_pass_source_order_and_unicode_exact() {
             "Line \u{fffd} Unscalable Value",
         ),
     ] {
-        let mut provider = BuiltinItemLoadProvider::new(data);
+        let mut provider =
+            NativeItemLoadProvider::with_dependencies(data, UnavailableItemLoadProvider);
         let mut machine = ItemLoadMachine::new(data.item_loading());
         machine
             .apply_text(
@@ -241,7 +243,8 @@ fn balanced_nested_enum_preprocessing_remains_explicitly_pending() {
         "Line (a(b(c-d)))",
         "12(10)",
     ] {
-        let mut provider = BuiltinItemLoadProvider::new(data);
+        let mut provider =
+            NativeItemLoadProvider::with_dependencies(data, UnavailableItemLoadProvider);
         let mut machine = ItemLoadMachine::new(data.item_loading());
         machine
             .apply_text(

@@ -86,12 +86,14 @@ hook checking every 10,000 instructions, rejecting after approximately 200 milli
 instructions. The separate configuration-construction VM has a 64 MiB limit and an
 approximately 100-million-instruction bound. The separate skill/gem construction VM has a
 256 MiB limit and an approximately one-billion-instruction bound, checked every 100,000
-instructions, with JIT disabled. These are per-VM bounds, not a total process memory limit.
+instructions, with JIT disabled. Complete modifier-parser construction uses a separate
+256 MiB VM with JIT disabled and an approximately 1.5-billion-instruction limit, checked
+every 100,000 instructions. These are per-VM bounds, not a total process memory limit.
 Direct consumed source text is limited to 64 MiB; full-inventory verification and tree
 extraction retain their separate read/record limits. This is offline extraction of reviewed source, not a general-purpose Lua sandbox.
-The parent bounds the private package/evidence envelope to 17 MiB and error output to
+The parent bounds the private package/evidence envelope to 33 MiB and error output to
 64 KiB, checks ordinary-file status and rejects noncanonical or malformed envelopes.
-The package retains its separate 16 MiB portable-loader limit and one-million-value bound. The deadline includes the
+The package has a separate 32 MiB portable-loader limit and two-million-value bound. The deadline includes the
 parent's decoding and evidence validation; Rust conversion and serialization are covered
 by process supervision.
 
@@ -112,7 +114,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 15 and `poe2-native-profiles-v15`, including source-keyed passive/actor effects,
+schema 16 and `poe2-native-profiles-v16`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -144,6 +146,15 @@ come from their original source definitions. Existing actor precision and cataly
 are reused. Extraction does not turn label names into behavior or admit unknown effects.
 Independent runtime comparisons validate the complete catalog and exercise original
 formatting separately from the exporter; see [general item formatting](item-formatting.md).
+
+The `modifier_parser` section executes complete authenticated ModParser construction,
+including every generated dictionary and referenced Lua closure/upvalue table. It preserves
+source declarations and final winners separately. Raw gem base-name assignments retain all
+candidates; Lightning Bolt, Mace Strike and Spear Stab remain explicitly ambiguous rather
+than inheriting process-dependent iteration order. Named C builtins are opaque primitive
+identities. Extraction does not grant callback execution or mechanic support. Independent
+original public-parser tests compare structural outputs, source errors, copies, cold/warm
+behavior and mutation sequences separately from this exporter; see [modifier parsing](modifier-parser.md).
 
 When intentionally changing the retained policy or package schema, maintainers can prepare
 new artifacts before changing the compiled reviewed digests:
