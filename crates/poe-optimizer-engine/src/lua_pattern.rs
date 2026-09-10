@@ -7,6 +7,9 @@
 //! position captures use Lua's one-based indices.
 use std::ops::Range;
 
+mod substitution;
+pub use substitution::{GsubLimits, GsubResult};
+
 pub const LUA_MAX_CAPTURES: usize = 32;
 pub const LUA_MAX_DEPTH: usize = 200;
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -43,6 +46,8 @@ pub enum ResourceKind {
     SubjectBytes,
     MatchSteps,
     BacktrackFrames,
+    ReplacementBytes,
+    OutputBytes,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum PatternError {
@@ -307,7 +312,8 @@ impl LuaPattern {
         let mut scratch = Vec::new();
         for candidate in start..=subject.len() {
             budget.charge(1)?;
-            if let Some(mut result) = self.run(subject, candidate, &mut scratch, budget)? {
+            if let Some(raw) = self.run(subject, candidate, &mut scratch, budget)? {
+                let mut result = raw.captures.result(raw.start, raw.end)?;
                 if whole_capture && result.count == 0 {
                     result.captures[0] = Capture::Bytes {
                         start: result.start,
@@ -493,6 +499,13 @@ struct Captures {
     items: [CaptureState; LUA_MAX_CAPTURES],
     count: usize,
 }
+/// Matching itself does not consume captures. In particular, gsub only rejects
+/// an unfinished capture if its replacement actually asks for that capture.
+struct RawMatch {
+    start: usize,
+    end: usize,
+    captures: Captures,
+}
 impl Default for Captures {
     fn default() -> Self {
         Self {
@@ -557,7 +570,7 @@ impl LuaPattern {
         start: usize,
         frames: &mut Vec<Frame>,
         budget: &mut MatchBudget,
-    ) -> Result<Option<PatternMatch>> {
+    ) -> Result<Option<RawMatch>> {
         frames.clear();
         let mut pc = 0;
         let mut at = start;
@@ -569,10 +582,20 @@ impl LuaPattern {
             }
             budget.charge(1)?;
             match self.instructions[pc] {
-                Instruction::End => return captures.result(start, at).map(Some),
+                Instruction::End => {
+                    return Ok(Some(RawMatch {
+                        start,
+                        end: at,
+                        captures,
+                    }));
+                }
                 Instruction::EndAnchor => {
                     if at == subject.len() {
-                        return captures.result(start, at).map(Some);
+                        return Ok(Some(RawMatch {
+                            start,
+                            end: at,
+                            captures,
+                        }));
                     }
                 }
                 Instruction::Trap(error) => return Err(PatternError::Source(error)),

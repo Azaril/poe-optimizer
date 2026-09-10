@@ -486,10 +486,11 @@ pub fn find_combination(
     Ok(best)
 }
 /// Files entering an adapter source fingerprint; normalized by the caller.
-pub fn implementation_sources() -> [&'static str; 4] {
+pub fn implementation_sources() -> [&'static str; 5] {
     [
         include_str!("item_runes.rs"),
         include_str!("lua_pattern.rs"),
+        include_str!("lua_pattern/substitution.rs"),
         include_str!("lua_number.rs"),
         include_str!("item_tools/numeric.rs"),
     ]

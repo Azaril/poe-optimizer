@@ -386,7 +386,7 @@ fn make_mod(
 }
 
 /// Files entering adapter fingerprints; hosts normalize checkout newlines.
-pub fn implementation_sources() -> [&'static str; 10] {
+pub fn implementation_sources() -> [&'static str; 11] {
     [
         include_str!("modifier_parser.rs"),
         include_str!("modifier_parser/value.rs"),
@@ -396,6 +396,7 @@ pub fn implementation_sources() -> [&'static str; 10] {
         include_str!("modifier_parser/strings.rs"),
         include_str!("modifier_scan.rs"),
         include_str!("lua_pattern.rs"),
+        include_str!("lua_pattern/substitution.rs"),
         include_str!("lua_number.rs"),
         include_str!("lua_bits.rs"),
     ]
