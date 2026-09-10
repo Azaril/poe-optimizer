@@ -84,10 +84,18 @@ measurement on broadly admitted builds.
 
 ## Validation scope
 
-Independent tests execute authenticated original ModStore/ModDB/ModList code and helpers. Warm
-claims require traces containing the original query functions. Paired tests cover raw
-returns, masks, source filters, parent/actor context, ordered predicates, thresholds and
-errors. Original corpus records ground selected query replays in the wider build set;
+Independent tests execute authenticated original ModStore/ModDB/ModList code and helpers.
+Compiled-source claims require live completed traces containing the original query
+functions. The observer resets attempts on start/abort, invalidates them on flush and
+keeps its own readout outside JIT compilation. Aborted attempts cannot contribute source
+provenance when their trace number is reused.
+
+Separate direct controls prove compiled GetCondition, plain Flag/FlagInternal and tagged
+EvalMod functions while those traces remain live. The tagged GetCondition chain also
+retains its result check, but these controls do not prove that the entire chain compiles
+together. A query run with JIT enabled may contain interpreted work. Paired tests cover
+raw returns, masks, source filters, parent/actor context, ordered predicates, thresholds
+and errors. Original corpus records ground selected query replays in the wider build set;
 frozen captured context is labeled separately from a complete native build calculation.
 
 Preserve whole-build differential fixtures, original exports, reviewed data and source

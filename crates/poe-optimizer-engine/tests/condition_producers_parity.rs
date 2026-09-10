@@ -145,27 +145,118 @@ fn original_dependency_cycles_fail_under_an_explicit_interpreted_budget() {
 
 #[test]
 fn warmed_source_claim_requires_completed_traces_containing_the_real_consumers() {
-    let oracle = Oracle::new(true);
     let mut input = fixture();
     input["stores"][0]["conditions"]["Gate"] = json!(true);
-    input["stores"][0]["mods"] = json!([flag(
+    let modifier = flag(
         "Condition:Enabled",
         json!(0),
-        json!([condition("Gate", false)])
-    )]);
+        json!([condition("Gate", false)]),
+    );
+    input["stores"][0]["mods"] = json!([modifier]);
+    // Preserve the actual GetCondition -> Flag -> FlagInternal -> EvalMod query.
+    let oracle = Oracle::new(true);
     assert_eq!(oracle.query(&input).unwrap(), Observed::Boolean(true));
-    let traced = oracle.completed_trace_functions();
-    for expected in [
-        "@src/Classes/ModStore.lua:281",
-        "@src/Classes/ModStore.lua:409",
-        "@src/Classes/ModStore.lua:490",
-        "@src/Classes/ModDB.lua:297",
+    for (query, expected_value, expected_functions) in [
+        (
+            json!({"kind":"condition","variable":"Enabled","no_mod":false}),
+            Observed::Boolean(true),
+            vec!["@src/Classes/ModStore.lua:409"],
+        ),
+        (
+            json!({"kind":"flag","names":["Condition:Enabled"]}),
+            Observed::Boolean(true),
+            vec![
+                "@src/Classes/ModStore.lua:281",
+                "@src/Classes/ModDB.lua:297",
+            ],
+        ),
+        (
+            json!({"kind":"eval","mod":modifier}),
+            Observed::Number(0.0),
+            vec!["@src/Classes/ModStore.lua:490"],
+        ),
     ] {
-        assert!(
-            traced.contains(expected),
-            "missing completed source trace {expected}; observed {traced:?}"
+        input["query"] = query;
+        if input["query"]["kind"] == "flag" {
+            input["stores"][0]["mods"][0]["tags"] = json!([]);
+        }
+        assert_eq!(oracle.warm_source(&input).unwrap(), expected_value);
+        // Inspect while the completed traces for this control are still live,
+        // before the following control flushes its independent warm-up state.
+        let traced = oracle.completed_trace_functions();
+        let state = oracle.trace_state();
+        eprintln!(
+            "source warm control {}: {state:?}; {traced:?}",
+            input["query"]["kind"]
         );
+        assert!(state.live > 0, "{state:?}");
+        for expected in expected_functions {
+            assert!(
+                traced.contains(expected),
+                "missing completed source trace {expected}; observed {traced:?}; {state:?}"
+            );
+        }
+        // Repeated readout itself must be invisible to JIT activity.
+        for _ in 0..32 {
+            assert_eq!(oracle.completed_trace_functions(), traced);
+            assert_eq!(oracle.trace_state(), state);
+        }
     }
+}
+
+#[test]
+fn trace_observer_drops_actual_aborts_and_flushed_completed_traces() {
+    let oracle = Oracle::new(true);
+    let mut input = fixture();
+    input["stores"][0]["conditions"]["Enabled"] = json!(true);
+    // Force real LuaJIT recording failures without modifying any source method.
+    oracle.record_limit(1);
+    assert_eq!(oracle.warm_source(&input).unwrap(), Observed::Boolean(true));
+    let aborted = oracle.trace_state();
+    eprintln!("bounded recording: {aborted:?}");
+    assert!(aborted.start > 0 && aborted.abort > 0, "{aborted:?}");
+    assert_eq!(aborted.pending, 0);
+    assert_eq!(aborted.live, 0);
+    assert!(oracle.completed_trace_functions().is_empty());
+    assert!(
+        aborted
+            .aborted_functions
+            .contains("@src/Classes/ModStore.lua:409")
+    );
+    oracle.record_limit(4000); // Original luajit-src lj_jit.h:110 default, not a larger budget.
+    input["query"] = json!({"kind":"flag","names":["Plain"]});
+    input["stores"][0]["mods"] = json!([flag("Plain", json!(true), json!([]))]);
+    // Reuse an actual aborted ID without a flush; the previous GetCondition
+    // recording must not be attributed to this completed plain Flag trace.
+    assert_eq!(
+        oracle.warm_source_with_flush(&input, false).unwrap(),
+        Observed::Boolean(true)
+    );
+    let completed = oracle.trace_state();
+    assert!(
+        completed.stop > aborted.stop && completed.live > 0,
+        "{completed:?}"
+    );
+    assert!(
+        completed.reused_after_abort > aborted.reused_after_abort,
+        "{completed:?}"
+    );
+    let traced = oracle.completed_trace_functions();
+    assert!(
+        traced.contains("@src/Classes/ModStore.lua:281"),
+        "{traced:?}"
+    );
+    assert!(
+        !traced.contains("@src/Classes/ModStore.lua:409"),
+        "{traced:?}"
+    );
+    eprintln!("completed reused trace: {completed:?}; {traced:?}");
+    oracle.flush_traces();
+    let flushed = oracle.trace_state();
+    assert_eq!(flushed.flush, completed.flush + 1);
+    assert_eq!(flushed.live, 0);
+    assert_eq!(flushed.pending, 0);
+    assert!(oracle.completed_trace_functions().is_empty());
 }
 
 fn parity(oracle: &Oracle, input: &Value) {

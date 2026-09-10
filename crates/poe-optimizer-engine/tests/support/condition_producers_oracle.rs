@@ -3,7 +3,7 @@ use mlua::{Function, HookTriggers, Lua, Table, Value as LuaValue, VmState};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::{
-    collections::BTreeSet,
+    collections::{BTreeMap, BTreeSet},
     path::PathBuf,
     sync::{
         Arc,
@@ -18,6 +18,19 @@ pub enum Observed {
     Number(f64),
     Text(String),
     Other(&'static str),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TraceState {
+    pub start: usize,
+    pub stop: usize,
+    pub abort: usize,
+    pub flush: usize,
+    pub pending: usize,
+    pub live: usize,
+    pub abort_reasons: BTreeMap<String, usize>,
+    pub aborted_functions: BTreeSet<String>,
+    pub reused_after_abort: usize,
 }
 
 pub struct Oracle {
@@ -147,6 +160,24 @@ impl Oracle {
             .globals()
             .get::<Function>("condition_oracle_run")?
             .call::<LuaValue>((query, if self.warm { 2048 } else { 1 }))?;
+        Self::observed(value)
+    }
+
+    pub fn warm_source(&self, fixture: &Value) -> mlua::Result<Observed> {
+        self.warm_source_with_flush(fixture, true)
+    }
+
+    pub fn warm_source_with_flush(&self, fixture: &Value, flush: bool) -> mlua::Result<Observed> {
+        assert!(self.warm);
+        let value = self
+            .lua
+            .globals()
+            .get::<Function>("condition_oracle_warm_source")?
+            .call::<LuaValue>((lua_value(&self.lua, fixture)?, 2048, flush))?;
+        Self::observed(value)
+    }
+
+    fn observed(value: LuaValue) -> mlua::Result<Observed> {
         Ok(match value {
             LuaValue::Nil => Observed::Nil,
             LuaValue::Boolean(value) => Observed::Boolean(value),
@@ -171,6 +202,55 @@ impl Oracle {
             .sequence_values::<String>()
             .map(Result::unwrap)
             .collect()
+    }
+
+    pub fn trace_state(&self) -> TraceState {
+        let table: Table = self
+            .lua
+            .globals()
+            .get::<Function>("condition_oracle_trace_state")
+            .unwrap()
+            .call(())
+            .unwrap();
+        TraceState {
+            start: table.get("start").unwrap(),
+            stop: table.get("stop").unwrap(),
+            abort: table.get("abort").unwrap(),
+            flush: table.get("flush").unwrap(),
+            pending: table.get("pending").unwrap(),
+            live: table.get("live").unwrap(),
+            abort_reasons: table
+                .get::<Table>("abort_reasons")
+                .unwrap()
+                .pairs::<String, usize>()
+                .map(Result::unwrap)
+                .collect(),
+            aborted_functions: table
+                .get::<Table>("aborted_functions")
+                .unwrap()
+                .sequence_values::<String>()
+                .map(Result::unwrap)
+                .collect(),
+            reused_after_abort: table.get("reused_after_abort").unwrap(),
+        }
+    }
+
+    pub fn flush_traces(&self) {
+        self.lua
+            .globals()
+            .get::<Function>("condition_oracle_flush")
+            .unwrap()
+            .call::<()>(())
+            .unwrap();
+    }
+
+    pub fn record_limit(&self, limit: usize) {
+        self.lua
+            .globals()
+            .get::<Function>("condition_oracle_record_limit")
+            .unwrap()
+            .call::<()>(limit)
+            .unwrap();
     }
 
     /// An instruction bound for deliberately cyclic/error cases. Those execute

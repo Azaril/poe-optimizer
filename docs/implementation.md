@@ -29,7 +29,7 @@ port ahead of the real-build integration gate.
 | Scenario breadth | Frozen originals cover Pinnacle/level82 only | R3: explicit mapping variants plus original bossing comparisons |
 | Independent whole-build holdouts | Not yet established | R5: new missing-mechanism families; retain first-run failures |
 
-Current completed local checkpoint: **native LuaJIT-compatible replacement strings**,
+Latest production implementation checkpoint: **native LuaJIT-compatible replacement strings**,
 code `4f46f61b0b2906524930cb617305af9b1acfa518`, in `runs/common-item-assembly-worktree`
 (`codex/common-item-assembly`), based on b9902d0. **All 204 scoped tests pass**, including
 native/default public item-inspection regressions. Strict workspace/native lint,
@@ -91,14 +91,44 @@ At 2026-09-10 00:31:56 UTC, its exact-head run34421312846 was linting on Windows
 testing on Ubuntu, with no failed steps; Flag/String runs were testing on both platforms.
 The independent consolidated observation is `runs/common-assembly-prior-ci.json`.
 
-A fresh hosted snapshot at 2026-09-10 01:15 UTC found an older String-checkpoint Linux
-failure in `warmed_source_claim_requires_completed_traces_containing_the_real_consumers`:
-its trace evidence omitted `ModStore.lua:281`. Twelve other tests in that target passed;
-this failure reports missing execution evidence, not a numerical mismatch. Diagnosis is
-in progress. Main/gsub/numeric/flag runs were still testing without failed steps in that
-snapshot. `runs/real-build-api-prior-ci.json` retains exact heads and public annotations;
-the full job-log endpoint returned HTTP403. Do not claim hosted success or weaken the
-source-execution requirement to silence this failure.
+The older String-checkpoint Linux trace-test failure is repaired locally. The
+[condition-trace checkpoint](#condition-trace-evidence-repair) keeps all required original
+source consumers and rejects stale/aborted trace evidence. Fourteen scoped tests and
+16 fresh repeat invocations pass; hosted Linux confirmation remains pending. This changes
+only parity test infrastructure, not runtime calculations, package data or build admission.
+
+## Condition-trace evidence repair
+
+Hosted String-checkpoint run34415712762 failed on Ubuntu because the warmed condition
+control did not report a completed `ModStore.lua:281` trace. The call path still executed
+Flag and returned the expected value. The test observer incorrectly accumulated historical
+record events across aborted attempts and trace-number reuse, so its earlier successes
+were insufficient evidence of which source functions compiled.
+
+The repaired observer accepts only live completed traces, resets each recording attempt,
+clears aborted/flush state and keeps observer readouts outside JIT compilation. Using
+that observer reproduced the missing-wrapper observation on Windows. Original tagged
+calls can reach LuaJIT's loop-unroll recording limit; an inner compiled consumer does not
+prove its outer vararg wrapper compiled.
+
+The control retains the original tagged GetCondition result and separately proves live
+compiled GetCondition, plain Flag/FlagInternal and tagged EvalMod. It does not claim the
+entire tagged chain compiles together. A new regression forces actual recording aborts,
+proves reuse of an aborted trace ID without inherited GetCondition provenance, then
+checks flush invalidation. Repeated readouts leave trace state unchanged.
+
+All **14 scoped source tests** pass, including the existing numerical/source cases. The
+two timing-sensitive controls also pass **eight fresh processes each**; strict target
+Clippy, formatting and whitespace checks pass. Existing source, data and numerical
+fixtures remain unchanged. Local evidence is in `runs/condition-warm-repair/`;
+independent review and final publication bind the three changed test files. No successful
+Linux rerun is claimed yet. The public failure annotation was sufficient to diagnose the
+issue; the full job-log endpoint returned HTTP403 despite the authorized access attempt.
+
+The same historical collector pattern was found in the separate mixed-store harness.
+That witness hazard remains a named follow-up, not a repaired or newly proven claim.
+Earlier query-pair numbers remain historical numerical observations; their compiled-source
+interpretation is limited by the observer used at that time.
 
 ## Concrete real-build API checkpoint
 
@@ -361,7 +391,8 @@ the design documents.
 2. Check git/worktree state and exact-head CI. Main contains the replacement checkpoint;
    `runs/common-item-assembly-worktree` is frozen. The separately owned
    `runs/common-assembly-data-worktree` has unfinished PolicyOnly data/extraction work.
-   The older Linux condition-producer trace failure above also needs diagnosis/repair.
+   Check hosted confirmation of the condition-trace repair; address the separately
+   identified mixed-store trace-collector hazard without weakening source evidence.
 3. Preserve the PoB pin, original caller imports, all saved sets, numerical goldens and
    frozen evidence. Keep native execution independent of Lua and subprocesses.
 4. After direction, implement R1a/R1b/R1c from the concrete API draft against all five
@@ -1738,7 +1769,7 @@ Resolved stat snapshots are explicit test inputs, not native stat-production cla
 | Gate | Current evidence |
 | --- | --- |
 | Core contracts | **6 pass**, including raw value kinds, context compatibility, explicit unsupported/cycle errors, immutable sharing and zero-allocation binding/FLAG/GetCondition/producer-aware SUM. Indexed lookup retains order with 4,096 irrelevant producers. `runs/condition-query-contract.log`. |
-| Original-source query parity | **13 pass / 1,020 paired query observations**, interpreted and proven warmed original LuaJIT functions. Includes 15 captured closures in both modes; four unresolved cases stay excluded. `runs/condition-source-corpus-test.log`. |
+| Original-source query parity | **13 pass / 1,020 paired query observations** at this historical checkpoint. The later [trace-evidence repair](#condition-trace-evidence-repair) qualifies the original compiled-source claim; numerical observations are retained. Includes 15 captured closures in both modes; four unresolved cases stay excluded. `runs/condition-source-corpus-test.log`. |
 | Existing modifier and actor regressions | **65 modifier parity tests** and **21 actor contract tests** pass, including varied compiled candidate allocation checks. `runs/condition-query-engine-regression.log`, `runs/native-conditions-actor-tests.log`. |
 | Complete-build differential checks | **8 pass** across actor, body-armour/movement and local-armour suites against original PoB. These are bounded existing profiles, not additional broader-build admissions. `runs/native-conditions-build-parity.log`. |
 | Native deployment | **69 native tests / 111 native-only CLI tests** pass. Strict native-only and workspace/all-target Clippy pass. Five portable libraries compile for WASM; normal native-only dependencies contain no PoB/Lua packages. `runs/native-conditions-deployment-checks.json`, `runs/native-conditions-workspace-clippy.log`. |
