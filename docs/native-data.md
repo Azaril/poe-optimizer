@@ -210,6 +210,14 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Package schema **25**, semantics **`poe2-native-profiles-v25`**, advances the modifier
+parser to schema **6**. It adds the closed `ToNumber` expression with one bounded child.
+Numeric scanning reuses the native primitive; no policy literal or helper/capture
+identity is invented. Existing table/nil factory result rules and explicit source
+provenance remain. The complete source classifier authenticates the original global
+C primitive and rejects shadowed, missing, base and extra-argument call forms.
+
+
 Package schema **24**, semantics **`poe2-native-profiles-v24`**, advances the modifier
 parser to schema **5**. It adds one closed `Flag` expression, the authored string/boolean
 constructor prefix and authenticated helper evidence. The helper's captured constructor

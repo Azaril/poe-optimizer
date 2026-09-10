@@ -106,6 +106,17 @@ callback is guessed or invoked through a hidden Lua fallback. Matching, replacem
 number rendering and output allocations consume cumulative request budgets. Compiled
 patterns remain immutable and included in each evaluator's injected data identity.
 
+`ToNumber` is the closed one-argument numeric conversion operation. Its child is
+evaluated first and contributes one value. Existing numbers retain their bits, byte
+strings use the shared native Lua-compatible scanner, and other represented kinds
+produce nil without stringification, metatable lookup or invocation. A missing argument
+reference supplies explicit nil; it is not the source call with no explicit argument.
+The extractor admits only the unshadowed original global name with exactly one argument.
+Zero-, base- and extra-argument calls remain separate unavailable forms. Conversion
+charges its child, input bytes and scalar output against the request budget, preserving
+child errors and source ordering. This operation adds no game-specific literal policy
+and does not permit a scalar factory root or arbitrary function execution.
+
 `Flag` records the owning callback's captured helper and the exact evaluated actual
 arguments. Its binding path is owner.flag to helper.mod to the authenticated original
 constructor. A flag-only owner retains no direct constructor provenance; the helper's

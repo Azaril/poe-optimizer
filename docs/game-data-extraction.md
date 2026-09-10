@@ -118,7 +118,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 24 and `poe2-native-profiles-v24`, including source-keyed passive/actor effects,
+schema 25 and `poe2-native-profiles-v25`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -275,3 +275,13 @@ inferred direct constructor capture on a flag-only owner and no dependency on fi
 graph IDs. The whole wrapper's variadic tail position is verified; source statements,
 computed callees and broader function execution remain outside the closed grammar.
 The injected type is literal metadata, so bounded empty/NUL/UTF-8 strings are retained.
+
+The closed one-argument numeric conversion retains the actual global `tonumber` C
+function before original source construction and proves its raw global slot, function
+pointer and kind afterward. Lua owner environments retain their existing original-global
+proof. The C function has no Lua environment exposed by mlua; that absence is not treated
+as an environment match. Complete lowering admits exactly one explicit argument and
+rejects shadowing or a captured function of the same name. No synthetic helper root or
+callback ID is added to represent the primitive. The generated recipe invokes the shared
+native numeric reader under the existing request bounds; original interpreted and
+warmed conversion-bearing callbacks remain independent validation requirements.
