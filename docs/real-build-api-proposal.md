@@ -189,6 +189,11 @@ relationship rebuilding, worker memory, calculation and complete search separate
 claiming throughput for broad builds. The portable core must remain usable without Rayon
 or an OS process model so a later WASM host can supply its own scheduling.
 
+Real-path acceptance also follows the rollout's versioned metric/availability manifests,
+changed-definition calculation control and fresh-versus-reused worker transition tests.
+Those tests establish that injected definitions and current candidate/view state actually
+control the result; representation checks and serial/Rayon agreement alone do not.
+
 ## Small migration slices and evidence
 
 | Slice | Deliverable | Acceptance |

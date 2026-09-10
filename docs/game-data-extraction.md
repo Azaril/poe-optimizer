@@ -118,7 +118,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 25 and `poe2-native-profiles-v25`, including source-keyed passive/actor effects,
+schema 26 and `poe2-native-profiles-v26`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -145,6 +145,16 @@ rewrites reuse the existing definition table; missing base references remain leg
 The independent runtime oracle checks state lifetime and rebind ordering rather than using
 extraction as its expected state. See [item loading](item-source-and-loading.md).
 
+
+The `item_assembly` section records common assembly policy with an explicit `PolicyOnly`
+capability. The extractor initializes the original item host and authenticates 31 complete
+method spans, helper captures, primitive identities and source environments. It extracts
+policy literals and verifies reused rune/precision/keyword definitions. The source ledger
+retains repeated module invocations. Complete-body authentication does not mean every
+branch has a native implementation; this section supplies no computed build or item state.
+Independent source gates reject altered bodies, helper aliases, environments and primitive
+lookup. Reproduction preserves all 27 previous section values and digests. See the
+[assembly contract](native-item-assembly.md).
 
 The `unique_requirements` section runs the original completed unique-database constructor
 loop separately from raw definition extraction. It authenticates the original item/parser

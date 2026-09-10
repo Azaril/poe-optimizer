@@ -84,6 +84,16 @@ observation to exact input, definitions, backend, scenario and selected outputs.
 Pass, Blocked or Not run, with the dependency and evidence behind each state. Never promote
 an inspected identity or source-only snapshot to native calculation coverage.
 
+Before native implementation of each numerical target, freeze a versioned expectation
+manifest for its complete original view and each explicit scenario. Declare required
+metric selectors, units, reference availability, comparison tolerances and feasibility
+outcomes. All required entries must agree for that build/scenario to pass R3 or R5;
+blocked, partial and not-run entries stay in the denominator. An unavailable reference
+output passes only as an explicit matching availability outcome, not as a numeric zero.
+Add newly required outputs by recording a manifest revision, never by deleting failures
+or narrowing the target after seeing native results. Publish completed/total builds and
+scenarios alongside the metric results.
+
 During R1/R2, a blocker report should include every independently discoverable active
 prerequisite and its dependency path, not just the first profile error. It must distinguish
 unimplemented semantics from unresolved source identities and reference limitations. It
@@ -94,6 +104,19 @@ values belong in tests. Rename labels, reorder unrelated saved sets, select alte
 add duplicate instances and inject equivalent definitions to expose incidental coupling.
 Do not add a third `NativeInput` profile for a new skill. Complete-build fixtures must
 exercise the shared instance/resolution/plan seam and cross-catalog ownership checks.
+
+At least one admitted real path must also run end to end with deliberately changed
+numerical definition data and its new data identity. Verify that the corresponding
+calculation changes as expected and that restoring the original definitions restores the
+baseline. Equivalent-data injection alone does not prove the evaluator consumes the
+injected values. Compare with an equivalent controlled reference change where supported;
+otherwise identify the test as a native data-consumption check, not PoB parity.
+
+R4 must compare reused worker state with fresh preparation for candidate A -> B -> A,
+provider removal/re-addition and switches between explicit views. Repeat those sequences
+in shuffled Rayon scheduling order. Shared stale state can make serial and parallel runs
+agree incorrectly, so agreement between those two runs alone is insufficient. Verify
+selected identities, metric availability and values after every transition.
 
 Maintain a small breadth dashboard at the top of the implementation record. Its headline
 is the number of complete real builds and interaction cases that pass, followed by blockers.

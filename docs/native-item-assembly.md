@@ -18,6 +18,9 @@ rune effects, grants, named compatibility, attribute requirements and slot selec
 Game names, patterns, labels, modifier selectors, masks and numeric defaults are data.
 Source field structure, arithmetic order, copy semantics and native operation kinds
 are code. The catalog is not a general instruction language or a build whitelist.
+Its current section schema1 declares `PolicyOnly`; loading and binding it supplies
+validated definitions, never an admitted executable item. Complete-method provenance
+also does not imply lowering of every specialized slot branch.
 
 Reuse the existing complete base records, rune definitions, scalability policy,
 precision map and keyword definitions. Verify shared source facts during extraction.

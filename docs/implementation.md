@@ -15,8 +15,9 @@ A focused question is pending: proceed with that staged model against the real c
 review the concrete API first. The [concrete API draft](real-build-api-proposal.md) is now
 reviewable against all five originals, including independent set selectors, repeated
 providers and shared item-record references. Do not interpret this draft or the breadth
-reprioritization as an answer. While awaiting direction, preserve completed work and finish
-the bounded item-policy extraction already in progress and repair verified regressions.
+reprioritization as an answer. The already-started bounded item-policy extraction is
+integrated as supporting data; it changes no build admission. Preserve completed work
+and repair verified regressions while awaiting direction.
 Do not start another standalone helper or local-family
 port ahead of the real-build integration gate.
 
@@ -29,39 +30,32 @@ port ahead of the real-build integration gate.
 | Scenario breadth | Frozen originals cover Pinnacle/level82 only | R3: explicit mapping variants plus original bossing comparisons |
 | Independent whole-build holdouts | Not yet established | R5: new missing-mechanism families; retain first-run failures |
 
-Latest production implementation checkpoint: **native LuaJIT-compatible replacement strings**,
-code `4f46f61b0b2906524930cb617305af9b1acfa518`, in `runs/common-item-assembly-worktree`
-(`codex/common-item-assembly`), based on b9902d0. **All 204 scoped tests pass**, including
-native/default public item-inspection regressions. Strict workspace/native lint,
-dependency isolation and five portable libraries pass. Final validation and publication
-are recorded in `runs/common-assembly-gsub-validation-final.json` and
-`runs/common-assembly-gsub-publication.json`.
-See [the checkpoint](#replacement-string-and-assembly-design-checkpoint).
+Latest supporting implementation checkpoint: **injected common item-assembly policy**,
+main commit `d428915`, from isolated code `5edf860c840232ae2940f7d3a51acf510aaa2ca1`.
+Schema26 has 28 sections. `ItemAssemblyData`/`ItemAssemblyCatalog` is explicitly
+**PolicyOnly**: it provides authenticated, injected policy for future native preparation,
+not completed item assembly. All 27 prior sections remain exact; parser6 stays at
+1,222 Pure recipes and 429 Unsupported dispositions. See
+[the checkpoint](#injected-common-item-assembly-policy-checkpoint).
 
-The reusable `LuaPattern::gsub` primitive preserves byte replacements, capture/percent
-semantics, lazy capture errors, signed substitution limits and empty-match progress.
-It shares immutable compiled patterns with per-request budgets and bounded output.
-Independent original LuaJIT tests pair **84,713 observations**, including 2,048 actual C
-calls from warmed Lua hosts. The C implementation itself is not claimed to be traced.
-The shared find/match/scan regressions also pass after the private raw-capture refactor.
+The frozen schema26 worktree passed 164 data, eight source/host, 69 native and three public
+extraction tests, including two identical fresh exports. Native-only dependency isolation
+and five portable-library WASM compilation checks pass. The combined main tree
+passes 36 default/native-only CLI item tests and strict workspace/native-only lint,
+recorded separately in `runs/common-assembly-integrated-validation.json`; the isolated
+export binary retains its original identity. No fresh whole-build corpus is claimed.
+Full native build admission remains Spark/Mace and complete supplied originals remain 0/5.
 
-This checkpoint changes no game data: schema25/parser6, 27 sections, 1,222 Pure recipes
-and 429 Unsupported dispositions remain current. It adds no full-item or full-build
-admission. The preceding corpus results remain the baseline, not a new execution claim:
-116 item reports, 110 reference numbers and five explicit native build rejections.
-Full native build admission remains Spark/Mace.
+Main also contains the reusable native replacement-string checkpoint
+`4f46f61b0b2906524930cb617305af9b1acfa518`, documented in `778ed4042400d38385137ba16cd463e37722fab5`.
+Its 204 scoped tests and 84,713 original-source observations remain supporting evidence;
+see [that checkpoint](#replacement-string-and-assembly-design-checkpoint). Its original
+schema25 package and frozen `runs/common-item-assembly-worktree` are preserved.
 
-The replacement checkpoint is published as docs `778ed4042400d38385137ba16cd463e37722fab5`.
-Its exact-head CI run34422889432 was installing Rust on Windows and linting on Ubuntu at
-2026-09-10 00:50:05 UTC, with no failed steps. Publication and 524-file preservation are
-recorded in `runs/common-assembly-gsub-publication.json`.
-
-The [native item-assembly design](native-item-assembly.md) remains supporting work.
-Its internal additive catalog and identity/progress contracts are reviewed. The data/extractor agent is implementing
-schema26 `ItemAssemblyData`/`ItemAssemblyCatalog` as **PolicyOnly** in the separate
-`runs/common-assembly-data-worktree` (`codex/common-assembly-data`), based on b9902d0.
-Do not merge/publish that work as completed assembly; review the data, two exports,
-prior-section preservation and consumer integration first.
+The [native item-assembly design](native-item-assembly.md) remains supporting work. Runtime
+assembly is a prerequisite to implement when reached by the real-build R2 paths, not a
+new standalone family-port campaign. The schema26 supporting worktree is now frozen and
+clean. No unimplemented assembly branch gains admission from its policy catalog.
 
 When R2 identifies item assembly as a reached prerequisite, runtime steps include the
 bounded identity-bearing preparation arena, exact local-query bit/keyword semantics, and
@@ -91,11 +85,18 @@ At 2026-09-10 00:31:56 UTC, its exact-head run34421312846 was linting on Windows
 testing on Ubuntu, with no failed steps; Flag/String runs were testing on both platforms.
 The independent consolidated observation is `runs/common-assembly-prior-ci.json`.
 
-The older String-checkpoint Linux trace-test failure is repaired locally. The
+The older String-checkpoint Linux trace-test failure has a published condition repair. The
 [condition-trace checkpoint](#condition-trace-evidence-repair) keeps all required original
 source consumers and rejects stale/aborted trace evidence. Fourteen scoped tests and
 16 fresh repeat invocations pass; hosted Linux confirmation remains pending. This changes
 only parity test infrastructure, not runtime calculations, package data or build admission.
+The corresponding mixed-store observer repair is locally validated and independently
+reviewed; its [checkpoint](#mixed-store-trace-evidence-repair) records the same scope limit.
+
+The breadth review adds three acceptance gates: freeze required metric/availability
+manifests before numerical implementation; prove a real calculation responds to changed
+injected definitions; and compare reused worker transitions with fresh preparation. These
+strengthen R3-R5 without changing the pending architecture direction.
 
 ## Condition-trace evidence repair
 
@@ -125,10 +126,85 @@ independent review and final publication bind the three changed test files. No s
 Linux rerun is claimed yet. The public failure annotation was sufficient to diagnose the
 issue; the full job-log endpoint returned HTTP403 despite the authorized access attempt.
 
-The same historical collector pattern was found in the separate mixed-store harness.
-That witness hazard remains a named follow-up, not a repaired or newly proven claim.
-Earlier query-pair numbers remain historical numerical observations; their compiled-source
-interpretation is limited by the observer used at that time.
+The same historical collector pattern was found and repaired in the separate mixed-store
+harness; see its checkpoint below. Earlier query-pair numbers remain historical numerical
+observations; their compiled-source interpretation is limited by the observer used then.
+
+## Injected common item-assembly policy checkpoint
+
+Main commit `d428915` integrates the isolated schema26 package, which adds
+`ItemAssemblyData` and its immutable catalog. The new section is explicitly `PolicyOnly`: it supplies source-owned policy for a later
+native item preparer, not an executable item or a complete build. Complete native
+coverage of the five supplied originals remains 0/5. The shared real-build migration
+and Twister/Sniper integration gates retain priority; do not start additional standalone
+item families while that design direction is pending.
+
+The catalog contains common row ordering/range rewriting, local and nil-config queries,
+rune/grant rules, named compatibility, ordered attribute requirements and common slot
+policy. Patterns, selectors, masks, names and numerical values are injected. It borrows
+existing rune definitions, scalability, precision and keyword data rather than copying
+those catalogs. Captured MatchAllMask and the live keyword table remain distinct. A
+precision-only validator is shared with actor validation so caller-supplied precision
+maps are bounded without imposing unrelated character quest assumptions.
+
+Extraction authenticates 31 complete original method spans and their relevant live
+bindings through the original item host. Provenance retains 113 source files and 114
+module invocations, including the repeated module load. Whole-method authentication
+is not complete branch lowering. Specialized weapon/armour/flask/charm/jewel slot
+branches, mutable assembly state, provider production and actor calculations remain
+unimplemented in this section. Neither constants nor source snapshots become computed
+production input.
+
+Independent review verifies that all 27 prior section values and digests are unchanged.
+The package has 28 sections; modifier parser schema6 remains 1,222 Pure/429 Unsupported.
+Package SHA256 is
+`7a509c7cffd6809154eb8e4ad8bfbedc8d3ae2707425e02b2f785264130ee3bf`.
+Two fresh public exports matched it exactly, with the existing preflight/preservation
+and native-load controls passing. The updated CLI assertion retains the complete source
+union, including the new section's provenance.
+
+Validation passes: **244 scoped tests** cover 164 data (151 prior and 13 new), eight
+source/host, 69 native and three public extraction tests. The merged tree also passes
+**36 CLI item-inspection tests**, 18 with default features and 18 native-only, strict
+workspace/all-target and native-only CLI lint, and formatting. Native-only dependency
+isolation and five portable-library WASM compilation checks bind the unchanged production
+sources after checkout newline normalization. These are scoped gates, not a fresh complete
+workspace test run or browser execution.
+
+The merged validation retains the exact identities of isolated source/export evidence;
+it does not relabel an earlier binary as the merged binary. All 44 protected main git
+blobs and both caller files are unchanged, and the original frozen worktree hashes match.
+The initial cross-checkout raw-hash comparison exposed only CRLF/LF differences and is
+retained with the corrected preservation audit. The PoB pin stays clean. No fresh
+whole-build corpus execution or additional build admission is claimed.
+
+Review and execution evidence: `runs/common-assembly-data-package-review.json`,
+`runs/common-assembly-data-source-freeze.json`,
+`runs/common-assembly-data-validation.json`,
+`runs/common-assembly-data-portable-root.json` and `runs/common-assembly-public-export-validation.json`. Merged gates and source/protected-input checks are recorded in
+`runs/common-assembly-integrated-validation.json`; final publication is recorded separately
+in `runs/common-assembly-integrated-publication.json`.
+
+## Mixed-store trace evidence repair
+
+The old mixed-store observer accumulated aborted/reused trace records, like the condition
+observer. Replacing only its collector reproduced missing required compiled functions on
+Windows while the original numerical comparisons continued to pass. An attempted shared-VM
+control then exposed inherited LuaJIT prototype blacklisting; both failed attempts remain
+in the evidence record.
+
+The repair uses six fresh, authenticated source VMs to prove live compilation of both
+ModDB/ModList SumInternal and MoreInternal, GetCondition and EvalMod for explicit control
+inputs. It keeps all **8,762 original paired observations**, including the 24 mixed-chain
+pairs, unchanged. It does not claim that the complete mixed tagged chain compiles together.
+The observer rejects aborted, reused and flushed provenance; readouts cannot create traces.
+
+All **10 scoped tests**, strict target Clippy and **16 fresh-process control invocations**
+pass. Independent review found no remaining issue. Evidence and exact three-file hashes
+are in `runs/mixed-store-warm-repair/final.json` and
+`runs/mixed-store-harness-independent-review.json`. Only test infrastructure changes;
+source Lua, native adapters, game data and numerical fixtures remain unchanged. Hosted
+Linux confirmation is still required; no local Linux pass is claimed.
 
 ## Concrete real-build API checkpoint
 
@@ -388,11 +464,11 @@ the design documents.
 1. Read the breadth dashboard at the top and [real-build rollout](real-build-rollout.md).
    Review the concrete [API draft](real-build-api-proposal.md) and resolve the pending
    shared-model design question before its architecture migration.
-2. Check git/worktree state and exact-head CI. Main contains the replacement checkpoint;
-   `runs/common-item-assembly-worktree` is frozen. The separately owned
-   `runs/common-assembly-data-worktree` has unfinished PolicyOnly data/extraction work.
-   Check hosted confirmation of the condition-trace repair; address the separately
-   identified mixed-store trace-collector hazard without weakening source evidence.
+2. Check git/worktree state and exact-head CI. Main contains the replacement-string and
+   schema26 PolicyOnly catalog checkpoints. Their worktrees are frozen; do not redo their
+   completed exports/suites. Both condition and mixed-store trace collectors have scoped
+   repairs with independent live-source controls. Verify hosted Windows/Linux outcomes
+   and fix actual failures without weakening source evidence.
 3. Preserve the PoB pin, original caller imports, all saved sets, numerical goldens and
    frozen evidence. Keep native execution independent of Lua and subprocesses.
 4. After direction, implement R1a/R1b/R1c from the concrete API draft against all five
@@ -1701,7 +1777,7 @@ B3 general-model proposal is unchanged. No additional complete build is admitted
 | Gate | Current evidence |
 | --- | --- |
 | Mixed contracts | **7 numeric / 4 condition tests pass**, covering constructor bounds, source rules, exact kind-chain binding, child-first evaluation, actual parent references and allocation-free SUM. `runs/mixed-store-contract-final.log`, `runs/mixed-store-root-final-contracts.log`. |
-| Original-source query parity | **9 tests / 8,762 paired observations pass**, plus **two separate direct error-order checks**. Both original store kinds execute interpreted and in proven completed LuaJIT traces. Negative cells require the exact source failure and native MissingSource location. `runs/mixed-store-oracle-final-tests.log`. |
+| Original-source query parity | **9 tests / 8,762 paired observations pass**, plus **two separate direct error-order checks**. Historical numerical observations are preserved; the old compiled-source claim is superseded by the live-trace repair checkpoint above. Negative cells require the exact source failure and native MissingSource location. `runs/mixed-store-oracle-final-tests.log`. |
 | Captured breadth | The new suite replays **15 represented condition closures and two isolated numeric rows** from the unchanged captured corpus. Four unresolved closures remain explicit. Frozen post-MAIN context is not complete native build preparation. Original source-only Tabulate/malformed-value controls are identified separately from native parity. |
 | Existing query/actor regression | **65 modifier parity tests**, **13 condition-source tests**, **6 condition contracts** and **21 actor contracts** pass. The final condition/actor runs include the compiled kind-chain optimization and preserve varied candidate allocation checks. `runs/mixed-store-existing-parity.log`, `runs/mixed-store-root-final-contracts.log`. |
 | Full-build regression | **2 actor build parity tests pass**, including fresh mapping/bossing Spark, composed Mace, condition passes, source removal and inherent flags. These remain the existing bounded profiles. `runs/mixed-store-actor-build-parity.log`. |

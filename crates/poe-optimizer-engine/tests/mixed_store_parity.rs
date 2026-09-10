@@ -504,18 +504,109 @@ fn warmed_claim_is_backed_by_completed_traces_in_both_original_store_kinds() {
             parity(&oracle, &input);
         }
     }
-    let traces = oracle.completed_trace_functions();
-    for source in [
-        "@src/Classes/ModDB.lua:137",
-        "@src/Classes/ModList.lua:125",
-        "@src/Classes/ModDB.lua:214",
-        "@src/Classes/ModList.lua:164",
-        "@src/Classes/ModStore.lua:409",
-        "@src/Classes/ModStore.lua:490",
+    // Retain all 24 mixed-chain operation pairs above. Independently compile
+    // the six required original prototypes for explicit source inputs below;
+    // this does not claim compilation of the entire mixed tagged chain. Fresh
+    // VMs also avoid inheriting prototype blacklisting from prior mixed calls.
+    for (kind, operation, source) in [
+        ("ModDB", "BASE", "@src/Classes/ModDB.lua:137"),
+        ("ModList", "BASE", "@src/Classes/ModList.lua:125"),
+        ("ModDB", "more", "@src/Classes/ModDB.lua:214"),
+        ("ModList", "more", "@src/Classes/ModList.lua:164"),
     ] {
-        assert!(
-            traces.contains(source),
-            "missing completed original trace {source}: {traces:?}"
-        );
+        let oracle = Oracle::new(true);
+        let mut input = fixture(&[kind]);
+        input["stores"][0]["mods"] =
+            json!([record("Target", operation_type(operation), json!(17.125))]);
+        set_query(&mut input, operation, json!(["Target"]));
+        let actual = oracle.warm_source(&input).unwrap();
+        same(&actual, &native::query(&input).unwrap());
+        require_live_source(&oracle, source);
     }
+    let oracle = Oracle::new(true);
+    let mut input = fixture(&["ModDB"]);
+    input["stores"][0]["conditions"]["Enabled"] = json!(true);
+    input["query"] = json!({"kind":"condition","variable":"Enabled","no_mod":false});
+    assert_eq!(oracle.warm_source(&input).unwrap(), Observed::Boolean(true));
+    same(&native::query(&input).unwrap(), &Observed::Boolean(true));
+    require_live_source(&oracle, "@src/Classes/ModStore.lua:409");
+    let oracle = Oracle::new(true);
+    let mut tagged = record("Target", "BASE", json!(17.125));
+    tagged["tags"] = json!([predicate("Enabled")]);
+    input["query"] = json!({"kind":"eval","mod":tagged});
+    assert_eq!(
+        oracle.warm_source(&input).unwrap(),
+        Observed::Number(17.125)
+    );
+    // The mixed native adapter's public queries do not expose raw EvalMod;
+    // its source result is explicit here and existing tagged matrices stay paired.
+    require_live_source(&oracle, "@src/Classes/ModStore.lua:490");
+}
+
+fn require_live_source(oracle: &Oracle, source: &str) {
+    let traces = oracle.completed_trace_functions();
+    let state = oracle.trace_state();
+    eprintln!("independent mixed-store source {source}: {state:?}; {traces:?}");
+    assert!(state.live > 0, "{state:?}");
+    assert!(
+        traces.contains(source),
+        "missing completed original trace {source}: {traces:?}; {state:?}"
+    );
+    for _ in 0..32 {
+        assert_eq!(oracle.completed_trace_functions(), traces);
+        assert_eq!(oracle.trace_state(), state);
+    }
+}
+
+#[test]
+fn mixed_store_trace_observer_rejects_aborted_reused_and_flushed_provenance() {
+    let oracle = Oracle::new(true);
+    let mut input = fixture(&["ModDB"]);
+    input["stores"][0]["conditions"]["Enabled"] = json!(true);
+    input["query"] = json!({"kind":"condition","variable":"Enabled","no_mod":false});
+    oracle.record_limit(1);
+    assert_eq!(oracle.warm_source(&input).unwrap(), Observed::Boolean(true));
+    let aborted = oracle.trace_state();
+    eprintln!("mixed bounded recording: {aborted:?}");
+    assert!(aborted.start > 0 && aborted.abort > 0, "{aborted:?}");
+    assert_eq!(aborted.pending, 0);
+    assert_eq!(aborted.live, 0);
+    assert!(oracle.completed_trace_functions().is_empty());
+    assert!(
+        aborted
+            .aborted_functions
+            .contains("@src/Classes/ModStore.lua:409")
+    );
+    oracle.record_limit(4000); // Original luajit-src lj_jit.h:110 default.
+    let mut input = fixture(&["ModList"]);
+    input["stores"][0]["mods"] = json!([record("Target", "BASE", json!(17.125))]);
+    assert_eq!(
+        oracle.warm_source_with_flush(&input, false).unwrap(),
+        Observed::Number(17.125)
+    );
+    let completed = oracle.trace_state();
+    let traces = oracle.completed_trace_functions();
+    eprintln!("mixed completed reused trace: {completed:?}; {traces:?}");
+    assert!(
+        completed.stop > aborted.stop && completed.live > 0,
+        "{completed:?}"
+    );
+    assert!(
+        completed.reused_after_abort > aborted.reused_after_abort,
+        "{completed:?}"
+    );
+    assert!(
+        traces.contains("@src/Classes/ModList.lua:125"),
+        "{traces:?}"
+    );
+    assert!(
+        !traces.contains("@src/Classes/ModStore.lua:409"),
+        "{traces:?}"
+    );
+    oracle.flush_traces();
+    let flushed = oracle.trace_state();
+    assert_eq!(flushed.flush, completed.flush + 1);
+    assert_eq!(flushed.pending, 0);
+    assert_eq!(flushed.live, 0);
+    assert!(oracle.completed_trace_functions().is_empty());
 }

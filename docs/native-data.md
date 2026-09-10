@@ -210,6 +210,20 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Package schema **26**, semantics **`poe2-native-profiles-v26`**, adds the 28th section,
+`item_assembly`, at section schema **1**. `ItemAssemblyCatalog` exposes immutable common
+collection/range/query/grant/requirement/slot policy with `PolicyOnly` capability. It
+borrows the existing item-loading rune policy, scalability, actor precision and parser
+keyword catalogs; the captured keyword mask remains a distinct definition. The borrowed
+precision map uses the same bounds validator as actor data without requiring unrelated
+character quests. All 27 prior section values and digests remain unchanged, including
+modifier parser schema6. See [native item assembly](native-item-assembly.md).
+
+This additive data does not execute assembly or admit new items/builds. Specialized slot
+branches and complete effective actor/action preparation still require native producers.
+Caller-authored policy remains bounded and content-bound; accepting it is not proof of
+original-source parity. Native library/runtime dependencies remain independent of PoB.
+
 Package schema **25**, semantics **`poe2-native-profiles-v25`**, advances the modifier
 parser to schema **6**. It adds the closed `ToNumber` expression with one bounded child.
 Numeric scanning reuses the native primitive; no policy literal or helper/capture
