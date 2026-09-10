@@ -30,6 +30,13 @@ port ahead of the real-build integration gate.
 | Scenario breadth | Frozen originals cover Pinnacle/level82 only | R3: explicit mapping variants plus original bossing comparisons |
 | Independent whole-build holdouts | Not yet established | R5: new missing-mechanism families; retain first-run failures |
 
+The new [fixed diagnostic expectations](../tests/fixtures/breadth-expectations/README.md)
+make the initial numerical denominator explicit: 22 existing public measurements per
+original, 110 total. Exact selections/context and finite/infinite/unavailable outcomes
+are preserved. The generic artifact checker runs no evaluator and cannot declare R3
+completion. Mapping, full preparation, resource semantics and interaction/worker tests
+remain gaps; the shared-model architecture question remains pending.
+
 Latest supporting implementation checkpoint: **injected common item-assembly policy**,
 main commit `d428915`, from isolated code `5edf860c840232ae2940f7d3a51acf510aaa2ca1`.
 Schema26 has 28 sections. `ItemAssemblyData`/`ItemAssemblyCatalog` is explicitly
@@ -97,6 +104,43 @@ The breadth review adds three acceptance gates: freeze required metric/availabil
 manifests before numerical implementation; prove a real calculation responds to changed
 injected definitions; and compare reused worker transitions with fresh preparation. These
 strengthen R3-R5 without changing the pending architecture direction.
+
+## Fixed diagnostic expectation checkpoint
+
+The new schema1 test manifest freezes the existing five original Pinnacle/level82 reports:
+**93 finite, one positive infinity and 16 unavailable measurements**. Each case retains
+original XML/report identities, backend/runtime evidence, the complete observed context,
+selected actor/action records and independently authored selector strings. Raw unreserved
+Life/Mana/Spirit observations remain outside the public metric set; Sniper Spirit=-67 is
+preserved without inferring complete feasibility. No original or held-out build was
+replaced, simplified or rerun to create this artifact.
+
+The caller-controlled `scripts/check-build-expectations.py` reads an existing corpus index
+and reports. It retains every required case and measurement, rejects missing/duplicate
+rows and changed source/context/selections, and distinguishes unavailable/nonfinite values
+from zero. Exact numbers are the default; an explicit diagnostic tolerance option uses
+the manifest policy without relaxing existing native goldens. Results disclose observed
+and reference backend/report identities. Different identity can match numeric observations,
+which is not a source-authentication or complete-build parity claim.
+
+Source-only resources are explicitly not compared by the public-metric checker. All
+comparisons report `whole_build_parity=not_established` and native completion `not_assessed`.
+The manifest therefore supplies a fixed starting reference contract, not a completed R3
+gate. Generation checked all 110 rows against frozen raw values/availability and retained
+34 source/calibration/caller hashes in `runs/breadth-expectations-generation.json`.
+The generic checker and its negative tests are isolated from the production Rust API.
+
+All **33 Python contract tests** pass: 32 synthetic cases and one tracked manifest/XML
+integrity check. The saved reference reports match all **110/110 required measurements**
+across 5/5 cases with exact numbers and report identities; the saved native reports remain
+**0/5 matched, five blocked**. Neither comparison launched an evaluator. Independent
+review found no remaining issue after typed schema/number and malformed-report fixes.
+Both CI platforms now run this test suite. No Rust calculation, data package or original
+fixture changes in this checkpoint, so prior numerical gates are not presented as rerun.
+
+Validation/publication details are recorded in `runs/breadth-expectations-validation.json`
+and `runs/breadth-expectations-publication.json`. Do not infer fresh native/reference
+execution from an artifact comparison or promote its matched-case count to native breadth.
 
 ## Condition-trace evidence repair
 
@@ -475,7 +519,10 @@ the design documents.
    originals, then advance paired R2/R3 real-build paths.
    Existing source projection, identity catalogs and shared kernels are reusable inputs;
    metadata observations are not native numeric capability. Do not add another closed profile.
-5. Update the dashboard and exact per-build blockers at each integration checkpoint.
+5. Preserve and extend the fixed diagnostic expectation manifest through explicit revisions.
+   Its saved-artifact comparisons do not rerun backends or establish native coverage. Add
+   explicit mapping cases and full required resource semantics before claiming R3/R5.
+6. Update the dashboard and exact per-build blockers at each integration checkpoint.
    Verify changed interactions and exported source before expanding search or making
    performance claims. Prior detailed checkpoints below are historical evidence, not
    instructions to repeat completed suites or postpone real-build integration.

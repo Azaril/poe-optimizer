@@ -18,6 +18,8 @@ jobs:
           python-version: '3.13'
       - name: Test corpus intake tooling
         run: python scripts/test_intake_build_corpus.py
+      - name: Test fixed build expectations
+        run: python scripts/test_build_expectations.py
       - name: Install Rust
         run: rustup show
       - name: Check formatting

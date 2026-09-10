@@ -94,6 +94,12 @@ Add newly required outputs by recording a manifest revision, never by deleting f
 or narrowing the target after seeing native results. Publish completed/total builds and
 scenarios alongside the metric results.
 
+The first [fixed diagnostic manifest](../tests/fixtures/breadth-expectations/README.md)
+preserves all 110 existing public measurements, selected identities and contexts from
+the five originals. Its artifact comparator keeps missing/failed entries in the denominator.
+This is a starting reference contract, not R3 completion: mapping cases, general native
+preparation, full resource semantics and fresh native comparisons remain explicit gaps.
+
 During R1/R2, a blocker report should include every independently discoverable active
 prerequisite and its dependency path, not just the first profile error. It must distinguish
 unimplemented semantics from unresolved source identities and reference limitations. It

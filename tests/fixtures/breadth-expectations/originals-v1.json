@@ -1,0 +1,2546 @@
+{
+  "schema_version": 1,
+  "scope": "diagnostic_reference_expectations",
+  "diagnostic_only": true,
+  "whole_build_parity": "not_established",
+  "completion_gaps": [
+    "mapping_scenarios_not_recorded",
+    "general_native_preparation_not_implemented",
+    "whole_build_and_game_mechanics_certification_not_established",
+    "mutation_and_parallel_reuse_parity_not_established"
+  ],
+  "source": {
+    "corpus": "number-factories-corpus",
+    "corpus_input_sha256": "3e763f109adb27d48f2cf63a8a95aaea649e5336dcaf37959931725c29f6c745",
+    "corpus_index_sha256": "dfc1b347f7db8b9350c3590a26df1945dd2f1985c7109f2675cd45a929afd0fe",
+    "corpus_index_schema_version": 5,
+    "reference_cli_sha256": "e75db0b1fab5cc35c3d7b82db24c7341d25c5ba131451f27bf548491f3a59769",
+    "native_baseline_data_sha256": "334b440b6a567bf75fd265322925d100a86161fa615f41cb0e4c5c70e3308321",
+    "native_baseline_data_role": "historical_native_attempt_input_not_reference_backend_data",
+    "method": "existing_pinned_original_MAIN_reports_no_new_evaluation"
+  },
+  "comparison": {
+    "absolute_tolerance": 1e-08,
+    "relative_tolerance": 1e-09,
+    "finite_rule": "abs(actual - expected) <= max(absolute_tolerance, abs(expected) * relative_tolerance)",
+    "tolerance_basis": "Existing Spark/Mace independent-host calibration policy; not yet broad-build validation.",
+    "availability_policy": "exact_status_and_nonfinite_kind",
+    "unavailable_reason_policy": "diagnostic_only",
+    "identity_and_binding_policy": "exact_recorded_evidence"
+  },
+  "cases": [
+    {
+      "id": "original-01-saved-pinnacle",
+      "source_line": 1,
+      "input": {
+        "xml_path": "../builds/breadth-20260908/build-01.xml",
+        "xml_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+      },
+      "reference": {
+        "report_sha256": "6c0e57013e3dd20e16efbab1df6f922d9e8195b73a525e1d33bc905964963992",
+        "report_schema_version": 3,
+        "report_status": "experimental_evaluation",
+        "backend": {
+          "adapter_fingerprint": "1bc14bae5097db2ac03e4a3ee97b3e81377b1df0bddbdd79ee77421a4d8372d1",
+          "id": "pob-poe2-mlua",
+          "implementation_version": "0.1.0",
+          "rules_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_fingerprint": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+        },
+        "runtime": {
+          "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+          "mlua_version": "0.12.1",
+          "lua_version": "LuaJIT 2.1.1787165859",
+          "lua_arch": "x64",
+          "operating_system": "windows",
+          "luajit_source": "210.7.3+1ee778a",
+          "utf8_version": "0.1.6",
+          "adapter_hash": "1bc14bae5097db2ac03e4a3ee97b3e81377b1df0bddbdd79ee77421a4d8372d1"
+        }
+      },
+      "binding": {
+        "context": {
+          "calculation_mode": "MAIN",
+          "config_inputs": {
+            "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+            "ConcPathBypassCD": true,
+            "DisableEHPGainOnBlock": true,
+            "FlickerStrikeBypassCD": true,
+            "GamblesprintMovementSpeed": 20.0,
+            "SecondsSinceInevitableCrit": 10.0,
+            "VigilantStrikeBypassCD": true,
+            "companionInPresence": true,
+            "conditionBeenHitRecently": true,
+            "conditionChampionIntimidate": true,
+            "conditionCritRecently": true,
+            "conditionEnemyBleeding": true,
+            "conditionEnemyChilled": true,
+            "conditionEnemyIgnited": true,
+            "doomBlastSource": "vixen",
+            "elementalConfluxElement": 1.0,
+            "enemyIsBoss": "Pinnacle",
+            "enemySizePreset": "Medium",
+            "inDemonForm": true,
+            "multiplierCurrentManaPercentage": 100.0,
+            "multiplierNearbyEnemies": 1.0,
+            "multiplierNearbyRareOrUniqueEnemies": 1.0,
+            "presetBossSkills": "None",
+            "purpleFlameStacks": 10.0,
+            "questAct 1ClearfellBeira": true,
+            "questAct 1FreythornKing In The Mists": true,
+            "questAct 1Ogham ManorCandlemass": true,
+            "questAct 2Spires of DesharSisters of Garukhan Shrine": true,
+            "questAct 2Valley of the TitansMedallion": "30% increased Charm Effect Duration\n\t+1 Charm Slot",
+            "questAct 3Azak BogIgnagduk": true,
+            "questAct 3Jiquani's MachinariumBlackjaw": true,
+            "questAct 3Venom CryptsVenom Draught": "25% increased Stun Threshold",
+            "questAct 4Abandoned PrisonGoddess of Justice": "30% increased Life Recovery from Flasks",
+            "questAct 4Eye of HinekoraSilent Hall": false,
+            "questAct 4Eye of HinekoraTribal Medicine": "30% increased Global Armour, Evasion and Energy Shield",
+            "questAct 4Halls Of The DeadNgamahu's Test": "+5% to Fire Resistance",
+            "questAct 4Halls Of The DeadTasalio's Test": "+5% to Cold Resistance",
+            "questAct 4Halls Of The DeadTawhoa's Test": "+5% to Lightning Resistance",
+            "questInterlude 2Khari CrossingMolten Shrine": true,
+            "questInterlude 2QimahSeven Pillars": "15% increased Global Armour, Evasion and Energy Shield",
+            "questInterlude 3Kriar VillageLythara": true,
+            "raiseSpectreEnableBuffs": true,
+            "raiseSpectreEnableCurses": true,
+            "repeatMode": "AVERAGE",
+            "resistancePenalty": -60.0,
+            "resourceGainMode": "AVERAGE",
+            "summonCompanionEnableBuffs": true,
+            "summonCompanionEnableCurses": true,
+            "summonElementalRelicEnableAngerAura": true,
+            "summonElementalRelicEnableHatredAura": true,
+            "summonElementalRelicEnableWrathAura": true,
+            "targetBrandedEnemy": true,
+            "touchedDebuffsCount": 10.0
+          },
+          "config_placeholders": {
+            "ChillStacks": 1.0,
+            "ScorchStacks": 1.0,
+            "ShockStacks": 1.0,
+            "conditionCorruptingCryStages": 10.0,
+            "configBossFaceBroken": 55.0,
+            "demonFormStacks": 10.0,
+            "enemyArmour": 8063.0,
+            "enemyChaosDamage": 386.0,
+            "enemyChaosResist": 0.0,
+            "enemyColdDamage": 965.0,
+            "enemyColdPen": 3.0,
+            "enemyColdResist": 50.0,
+            "enemyCritChance": 5.0,
+            "enemyCritDamage": 30.0,
+            "enemyCriticalWeaknessStacks": 20.0,
+            "enemyDamageRollRange": 70.0,
+            "enemyDistance": 20.0,
+            "enemyEvasion": 1175.0,
+            "enemyFireDamage": 965.0,
+            "enemyFirePen": 3.0,
+            "enemyFireResist": 50.0,
+            "enemyLevel": 82.0,
+            "enemyLightningDamage": 965.0,
+            "enemyLightningPen": 3.0,
+            "enemyLightningResist": 50.0,
+            "enemyPhysicalDamage": 965.0,
+            "enemySpeed": 700.0,
+            "multiplierCurrentEnergyShield": 100.0,
+            "multiplierDifferentAmmoFired": 1.0,
+            "multiplierDifferentGrenadeFired": 1.0,
+            "multiplierStunnedRecently": 1.0,
+            "multiplierWarcryUsedRecently": 1.0,
+            "multiplierWitheredStackCountSelf": 15.0,
+            "sigilOfPowerStages": 1.0
+          },
+          "enemy_conditions": {
+            "Buffed": true,
+            "Combat": true,
+            "Effective": true
+          },
+          "enemy_level": 82,
+          "player_conditions": {
+            "AffectedByArmourBreak": true,
+            "Buffed": true,
+            "Combat": true,
+            "DexHigherThanInt": false,
+            "DexHigherThanStr": false,
+            "DexHighestAttribute": false,
+            "DexSingleHighestAttribute": false,
+            "Effective": true,
+            "EnemyInPresence": true,
+            "FullLife": true,
+            "IntHigherThanDex": true,
+            "IntHigherThanStr": true,
+            "IntHighestAttribute": true,
+            "IntSingleHighestAttribute": true,
+            "LowSpirit": true,
+            "MajorityBlueSocketedSupports": true,
+            "MostNumerousBlueSocketedSupports": true,
+            "OnlyMinion": true,
+            "RareItemInAmulet": true,
+            "RareItemInBelt": true,
+            "RareItemInBody Armour": true,
+            "RareItemInBoots": true,
+            "RareItemInGloves": true,
+            "RareItemInHelmet": true,
+            "RareItemInRing 2": true,
+            "RareItemInWeapon 1": true,
+            "RareItemInWeapon 2": true,
+            "StrHigherThanDex": true,
+            "StrHigherThanInt": false,
+            "StrHighestAttribute": false,
+            "Surrounded": false,
+            "TwoHighestAttributesEqual": false,
+            "Unarmed": true,
+            "UniqueItemInRing 1": true,
+            "UsingBody Armour": true,
+            "UsingBoots": true,
+            "UsingCharm": true,
+            "UsingDousingCharm": true,
+            "UsingFlask": true,
+            "UsingFocus": true,
+            "UsingGloves": true,
+            "UsingGroundingCharm": true,
+            "UsingHelmet": true,
+            "UsingManaFlask": true,
+            "UsingUltimateManaFlask": true
+          },
+          "requested": {
+            "encounter": null,
+            "selection": null
+          }
+        },
+        "active_skill_set_id": 1,
+        "selected_player": {
+          "actor": "player",
+          "actor_skill_index": 1,
+          "gem_index": 1,
+          "group_index": 1,
+          "minion_id": null,
+          "part_index": null,
+          "part_name": "Kelari's Deception",
+          "show_average": false,
+          "skill_id": "SummonSandDjinnPlayer",
+          "skill_name": "Kelari, the Tainted Sands",
+          "stat_set_index": 1,
+          "stat_set_label": "Kelari, the Tainted Sands",
+          "synthesized_default_attack": false
+        },
+        "selected_minion": {
+          "actor": "minion",
+          "actor_skill_index": 2,
+          "gem_index": 1,
+          "group_index": 1,
+          "minion_id": "SandDjinn",
+          "part_index": null,
+          "part_name": null,
+          "show_average": false,
+          "skill_id": "ExplosiveTeleportSandDjinn",
+          "skill_name": "Kelari's Deception",
+          "stat_set_index": 1,
+          "stat_set_label": "Kelari's Deception",
+          "synthesized_default_attack": false
+        },
+        "authored_selectors": {
+          "Build": {
+            "mainSocketGroup": "1"
+          },
+          "Skills": {
+            "activeSkillSet": "1"
+          },
+          "Items": {
+            "activeItemSet": "1",
+            "useSecondWeaponSet": "false"
+          },
+          "Tree": {
+            "activeSpec": "1"
+          },
+          "Config": {
+            "activeConfigSet": "1"
+          }
+        }
+      },
+      "measurements": [
+        {
+          "query": {
+            "actor": "player",
+            "id": "life"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 1.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "mana"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 876.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "energy_shield"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 9403.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "fire_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 75.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "cold_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 75.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "lightning_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 71.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "chaos_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 0.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "pob_total_ehp"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 22562.9609905472
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "physical_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 9660.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "fire_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 34389.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "cold_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 34389.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "lightning_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 30091.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "chaos_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "kind": "positive_infinity",
+            "status": "non_finite"
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "selected_hit_dps"
+          },
+          "schema_version": 1,
+          "unit": "damage_per_second",
+          "value": {
+            "reason": "The selected actor/action does not produce hit damage",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "selected_minion",
+            "id": "selected_hit_dps"
+          },
+          "schema_version": 1,
+          "unit": "damage_per_second",
+          "value": {
+            "status": "finite",
+            "value": 60384.68419307677
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "selected_average_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "reason": "The selected actor/action does not produce hit damage",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "selected_minion",
+            "id": "selected_average_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 111001.25770786172
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "spirit"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 281.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "armour"
+          },
+          "schema_version": 1,
+          "unit": "rating_points",
+          "value": {
+            "status": "finite",
+            "value": 315.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "evasion"
+          },
+          "schema_version": 1,
+          "unit": "rating_points",
+          "value": {
+            "status": "finite",
+            "value": 10.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "movement_speed_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 129.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "action_speed_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 100.0
+          }
+        }
+      ],
+      "source_only_resources": {
+        "actor": "player",
+        "scope": "raw_attachment_observations_not_public_metrics_or_feasibility",
+        "values": {
+          "LifeUnreserved": 1.0,
+          "ManaUnreserved": 876.0,
+          "SpiritUnreserved": 75.0
+        }
+      },
+      "warnings": [
+        "Experimental raw MAIN outputs; metric semantics, build legality and mechanic coverage are not certified.",
+        "PoB may normalize imported data during export; this is not a lossless replacement for the source XML.",
+        "Unresolved skill in group 6, gem 1: Spectre: Powered Zealot",
+        "Unresolved skill in group 13, gem 1: Navira's Well",
+        "Unresolved skill in group 14, gem 1: Kelari's Deception",
+        "No skill groups are included in Full DPS; that roll-up is not a build damage objective.",
+        "14 passive-tree links reference node IDs missing from the pinned data; these are separate from valid ascendancy-tree components. Complete game-tree coverage is unverified"
+      ]
+    },
+    {
+      "id": "original-02-saved-pinnacle",
+      "source_line": 2,
+      "input": {
+        "xml_path": "../builds/breadth-20260908/build-02.xml",
+        "xml_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+      },
+      "reference": {
+        "report_sha256": "63d07aee76efb56e5c2a9f2352c748dd962ad21a77eb8e53e028e507fdfca7f2",
+        "report_schema_version": 3,
+        "report_status": "experimental_evaluation",
+        "backend": {
+          "adapter_fingerprint": "1bc14bae5097db2ac03e4a3ee97b3e81377b1df0bddbdd79ee77421a4d8372d1",
+          "id": "pob-poe2-mlua",
+          "implementation_version": "0.1.0",
+          "rules_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_fingerprint": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+        },
+        "runtime": {
+          "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+          "mlua_version": "0.12.1",
+          "lua_version": "LuaJIT 2.1.1787165859",
+          "lua_arch": "x64",
+          "operating_system": "windows",
+          "luajit_source": "210.7.3+1ee778a",
+          "utf8_version": "0.1.6",
+          "adapter_hash": "1bc14bae5097db2ac03e4a3ee97b3e81377b1df0bddbdd79ee77421a4d8372d1"
+        }
+      },
+      "binding": {
+        "context": {
+          "calculation_mode": "MAIN",
+          "config_inputs": {
+            "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+            "ConcPathBypassCD": true,
+            "FlickerStrikeBypassCD": true,
+            "GamblesprintMovementSpeed": 20.0,
+            "SecondsSinceInevitableCrit": 10.0,
+            "VigilantStrikeBypassCD": true,
+            "companionInPresence": true,
+            "conditionChampionIntimidate": true,
+            "conditionEnemyChilled": true,
+            "conditionEnemyShocked": true,
+            "conditionHitMeleeRecently": true,
+            "conditionUsingFlask": true,
+            "doomBlastSource": "vixen",
+            "elementalConfluxElement": 1.0,
+            "enemyIsBoss": "Pinnacle",
+            "enemySizePreset": "Medium",
+            "inDemonForm": true,
+            "multiplierCurrentManaPercentage": 100.0,
+            "multiplierRage": 15.0,
+            "presetBossSkills": "None",
+            "purpleFlameStacks": 10.0,
+            "questAct 1ClearfellBeira": true,
+            "questAct 1FreythornKing In The Mists": true,
+            "questAct 1Ogham ManorCandlemass": true,
+            "questAct 2Spires of DesharSisters of Garukhan Shrine": true,
+            "questAct 2Valley of the TitansMedallion": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+            "questAct 3Azak BogIgnagduk": true,
+            "questAct 3Jiquani's MachinariumBlackjaw": true,
+            "questAct 3Venom CryptsVenom Draught": "25% increased Mana Regeneration Rate",
+            "questAct 4Abandoned PrisonGoddess of Justice": "30% increased Life Recovery from Flasks",
+            "questAct 4Eye of HinekoraSilent Hall": true,
+            "questAct 4Eye of HinekoraTribal Medicine": "30% increased Global Armour, Evasion and Energy Shield",
+            "questAct 4Halls Of The DeadNgamahu's Test": "+5% to Fire Resistance",
+            "questAct 4Halls Of The DeadTasalio's Test": "+5% to Cold Resistance",
+            "questAct 4Halls Of The DeadTawhoa's Test": "+5% to Lightning Resistance",
+            "questInterlude 2Khari CrossingMolten Shrine": true,
+            "questInterlude 2QimahSeven Pillars": "+5% to all Elemental Resistances",
+            "questInterlude 3Kriar VillageLythara": true,
+            "raiseSpectreEnableBuffs": true,
+            "raiseSpectreEnableCurses": true,
+            "repeatMode": "AVERAGE",
+            "resistancePenalty": -60.0,
+            "resourceGainMode": "AVERAGE",
+            "summonCompanionEnableBuffs": true,
+            "summonCompanionEnableCurses": true,
+            "summonElementalRelicEnableAngerAura": true,
+            "summonElementalRelicEnableHatredAura": true,
+            "summonElementalRelicEnableWrathAura": true,
+            "targetBrandedEnemy": true,
+            "touchedDebuffsCount": 10.0,
+            "twisterCold": true,
+            "whirlwindStages": 3.0
+          },
+          "config_placeholders": {
+            "ChillStacks": 1.0,
+            "ScorchStacks": 1.0,
+            "ShockStacks": 1.0,
+            "conditionCorruptingCryStages": 10.0,
+            "configBossFaceBroken": 57.0,
+            "demonFormStacks": 10.0,
+            "enemyArmour": 8063.0,
+            "enemyChaosDamage": 386.0,
+            "enemyChaosResist": 0.0,
+            "enemyColdDamage": 965.0,
+            "enemyColdPen": 3.0,
+            "enemyColdResist": 50.0,
+            "enemyCritChance": 5.0,
+            "enemyCritDamage": 30.0,
+            "enemyCriticalWeaknessStacks": 20.0,
+            "enemyDamageRollRange": 70.0,
+            "enemyDistance": 20.0,
+            "enemyEvasion": 1175.0,
+            "enemyFireDamage": 965.0,
+            "enemyFirePen": 3.0,
+            "enemyFireResist": 50.0,
+            "enemyLevel": 82.0,
+            "enemyLightningDamage": 965.0,
+            "enemyLightningPen": 3.0,
+            "enemyLightningResist": 50.0,
+            "enemyPhysicalDamage": 965.0,
+            "enemySpeed": 700.0,
+            "multiplierCurrentEnergyShield": 100.0,
+            "multiplierDifferentAmmoFired": 1.0,
+            "multiplierDifferentGrenadeFired": 1.0,
+            "multiplierStunnedRecently": 1.0,
+            "multiplierWarcryUsedRecently": 1.0,
+            "multiplierWitheredStackCountSelf": 15.0,
+            "sigilOfPowerStages": 1.0
+          },
+          "enemy_conditions": {
+            "AffectedByWhirlingSlash": true,
+            "Buffed": true,
+            "Combat": true,
+            "Cursed": true,
+            "Effective": true,
+            "Marked": true
+          },
+          "enemy_level": 82,
+          "player_conditions": {
+            "AffectedByAura": true,
+            "AffectedByBarrage": true,
+            "AffectedByCombatFrenzy": true,
+            "AffectedByCoolHeaded": true,
+            "AffectedByFreezingMark": true,
+            "AffectedByPurityofLightning": true,
+            "AffectedByRage": true,
+            "AffectedByVirtuousBarrier": true,
+            "AffectedByWarBanner": true,
+            "AffectedByWhirlingSlash": true,
+            "AffectedByWindDancer": true,
+            "AttackedRecently": true,
+            "Buffed": true,
+            "Combat": true,
+            "DexHigherThanInt": true,
+            "DexHigherThanStr": true,
+            "DexHighestAttribute": true,
+            "DexSingleHighestAttribute": true,
+            "Effective": true,
+            "EnemyInPresence": true,
+            "HitRecently": true,
+            "IntHigherThanDex": false,
+            "IntHigherThanStr": true,
+            "IntHighestAttribute": false,
+            "IntSingleHighestAttribute": false,
+            "LowSpirit": true,
+            "MajorityBlueSocketedSupports": true,
+            "MostNumerousBlueSocketedSupports": true,
+            "OnlyMinion": true,
+            "RareItemInAmulet": true,
+            "RareItemInBelt": true,
+            "RareItemInBody Armour": true,
+            "RareItemInBoots": true,
+            "RareItemInGloves": true,
+            "RareItemInHelmet": true,
+            "RareItemInRing 1": true,
+            "RareItemInRing 2": true,
+            "RareItemInWeapon 1": true,
+            "SelfCastFreezingMark": true,
+            "StrHigherThanDex": false,
+            "StrHigherThanInt": false,
+            "StrHighestAttribute": false,
+            "Surrounded": false,
+            "TwoHighestAttributesEqual": false,
+            "UniqueItemInWeapon 2": true,
+            "UsingBody Armour": true,
+            "UsingBoots": true,
+            "UsingGloves": true,
+            "UsingHelmet": true,
+            "UsingMartialWeapon": true,
+            "UsingMeleeWeapon": true,
+            "UsingOneHandedWeapon": true,
+            "UsingSpear": true
+          },
+          "requested": {
+            "encounter": null,
+            "selection": null
+          }
+        },
+        "active_skill_set_id": 6,
+        "selected_player": {
+          "actor": "player",
+          "actor_skill_index": 9,
+          "gem_index": 1,
+          "group_index": 8,
+          "minion_id": null,
+          "part_index": null,
+          "part_name": null,
+          "show_average": false,
+          "skill_id": "TwisterPlayer",
+          "skill_name": "Twister",
+          "stat_set_index": 1,
+          "stat_set_label": "Twister",
+          "synthesized_default_attack": false
+        },
+        "selected_minion": null,
+        "authored_selectors": {
+          "Build": {
+            "mainSocketGroup": "8"
+          },
+          "Skills": {
+            "activeSkillSet": "6"
+          },
+          "Items": {
+            "activeItemSet": "6",
+            "useSecondWeaponSet": "true"
+          },
+          "Tree": {
+            "activeSpec": "6"
+          },
+          "Config": {
+            "activeConfigSet": "1"
+          }
+        }
+      },
+      "measurements": [
+        {
+          "query": {
+            "actor": "player",
+            "id": "life"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 1872.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "mana"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 630.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "energy_shield"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 149.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "fire_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 75.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "cold_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 75.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "lightning_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 75.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "chaos_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 75.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "pob_total_ehp"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 12008.590995238186
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "physical_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 2140.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "fire_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 7218.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "cold_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 7218.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "lightning_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 7218.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "chaos_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 7786.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "selected_hit_dps"
+          },
+          "schema_version": 1,
+          "unit": "damage_per_second",
+          "value": {
+            "status": "finite",
+            "value": 314936.9709008214
+          }
+        },
+        {
+          "query": {
+            "actor": "selected_minion",
+            "id": "selected_hit_dps"
+          },
+          "schema_version": 1,
+          "unit": "damage_per_second",
+          "value": {
+            "reason": "No selected minion actor exists",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "selected_average_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "reason": "The selected actor/action does not produce this measurement",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "selected_minion",
+            "id": "selected_average_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "reason": "No selected minion actor exists",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "spirit"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 200.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "armour"
+          },
+          "schema_version": 1,
+          "unit": "rating_points",
+          "value": {
+            "status": "finite",
+            "value": 428.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "evasion"
+          },
+          "schema_version": 1,
+          "unit": "rating_points",
+          "value": {
+            "status": "finite",
+            "value": 11049.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "movement_speed_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 118.30000000000001
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "action_speed_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 100.0
+          }
+        }
+      ],
+      "source_only_resources": {
+        "actor": "player",
+        "scope": "raw_attachment_observations_not_public_metrics_or_feasibility",
+        "values": {
+          "LifeUnreserved": 1872.0,
+          "ManaUnreserved": 630.0,
+          "SpiritUnreserved": 13.0
+        }
+      },
+      "warnings": [
+        "Experimental raw MAIN outputs; metric semantics, build legality and mechanic coverage are not certified.",
+        "PoB may normalize imported data during export; this is not a lossless replacement for the source XML.",
+        "No skill groups are included in Full DPS; that roll-up is not a build damage objective.",
+        "14 passive-tree links reference node IDs missing from the pinned data; these are separate from valid ascendancy-tree components. Complete game-tree coverage is unverified"
+      ]
+    },
+    {
+      "id": "original-03-saved-pinnacle",
+      "source_line": 3,
+      "input": {
+        "xml_path": "../builds/breadth-20260908/build-03.xml",
+        "xml_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+      },
+      "reference": {
+        "report_sha256": "a84a69a0f363db0b92c965bcfefc7694d7b3508ee9e41734eae2efc75240c423",
+        "report_schema_version": 3,
+        "report_status": "experimental_evaluation",
+        "backend": {
+          "adapter_fingerprint": "1bc14bae5097db2ac03e4a3ee97b3e81377b1df0bddbdd79ee77421a4d8372d1",
+          "id": "pob-poe2-mlua",
+          "implementation_version": "0.1.0",
+          "rules_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_fingerprint": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+        },
+        "runtime": {
+          "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+          "mlua_version": "0.12.1",
+          "lua_version": "LuaJIT 2.1.1787165859",
+          "lua_arch": "x64",
+          "operating_system": "windows",
+          "luajit_source": "210.7.3+1ee778a",
+          "utf8_version": "0.1.6",
+          "adapter_hash": "1bc14bae5097db2ac03e4a3ee97b3e81377b1df0bddbdd79ee77421a4d8372d1"
+        }
+      },
+      "binding": {
+        "context": {
+          "calculation_mode": "MAIN",
+          "config_inputs": {
+            "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+            "ConcPathBypassCD": true,
+            "FlickerStrikeBypassCD": true,
+            "GamblesprintMovementSpeed": 20.0,
+            "SecondsSinceInevitableCrit": 10.0,
+            "VigilantStrikeBypassCD": true,
+            "companionInPresence": true,
+            "conditionChampionIntimidate": true,
+            "conditionEnemyDazed": true,
+            "doomBlastSource": "vixen",
+            "elementalConfluxElement": 1.0,
+            "enemyIsBoss": "Pinnacle",
+            "enemySizePreset": "Medium",
+            "inDemonForm": true,
+            "multiplierCurrentManaPercentage": 100.0,
+            "presetBossSkills": "None",
+            "purpleFlameStacks": 10.0,
+            "questAct 1ClearfellBeira": true,
+            "questAct 1FreythornKing In The Mists": true,
+            "questAct 1Ogham ManorCandlemass": true,
+            "questAct 2Spires of DesharSisters of Garukhan Shrine": true,
+            "questAct 2Valley of the TitansMedallion": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+            "questAct 3Azak BogIgnagduk": true,
+            "questAct 3Jiquani's MachinariumBlackjaw": true,
+            "questAct 3Venom CryptsVenom Draught": "25% increased Stun Threshold",
+            "questAct 4Abandoned PrisonGoddess of Justice": "30% increased Mana Recovery from Flasks",
+            "questAct 4Eye of HinekoraSilent Hall": true,
+            "questAct 4Eye of HinekoraTribal Medicine": "30% increased Global Armour, Evasion and Energy Shield",
+            "questAct 4Halls Of The DeadNgamahu's Test": "+5% to Fire Resistance",
+            "questAct 4Halls Of The DeadTasalio's Test": "+5% to Cold Resistance",
+            "questAct 4Halls Of The DeadTawhoa's Test": "None",
+            "questInterlude 2Khari CrossingMolten Shrine": false,
+            "questInterlude 2QimahSeven Pillars": "15% increased Global Armour, Evasion and Energy Shield",
+            "questInterlude 3Kriar VillageLythara": true,
+            "raiseSpectreEnableBuffs": true,
+            "raiseSpectreEnableCurses": true,
+            "repeatMode": "AVERAGE",
+            "resistancePenalty": -60.0,
+            "resourceGainMode": "AVERAGE",
+            "summonCompanionEnableBuffs": true,
+            "summonCompanionEnableCurses": true,
+            "summonElementalRelicEnableAngerAura": true,
+            "summonElementalRelicEnableHatredAura": true,
+            "summonElementalRelicEnableWrathAura": true,
+            "targetBrandedEnemy": true,
+            "touchedDebuffsCount": 10.0
+          },
+          "config_placeholders": {
+            "ChillStacks": 1.0,
+            "ScorchStacks": 1.0,
+            "ShockStacks": 1.0,
+            "conditionCorruptingCryStages": 10.0,
+            "configBossFaceBroken": 57.0,
+            "demonFormStacks": 10.0,
+            "enemyArmour": 8063.0,
+            "enemyChaosDamage": 386.0,
+            "enemyChaosResist": 0.0,
+            "enemyColdDamage": 965.0,
+            "enemyColdPen": 3.0,
+            "enemyColdResist": 50.0,
+            "enemyCritChance": 5.0,
+            "enemyCritDamage": 30.0,
+            "enemyCriticalWeaknessStacks": 20.0,
+            "enemyDamageRollRange": 70.0,
+            "enemyDistance": 20.0,
+            "enemyEvasion": 1175.0,
+            "enemyFireDamage": 965.0,
+            "enemyFirePen": 3.0,
+            "enemyFireResist": 50.0,
+            "enemyLevel": 82.0,
+            "enemyLightningDamage": 965.0,
+            "enemyLightningPen": 3.0,
+            "enemyLightningResist": 50.0,
+            "enemyPhysicalDamage": 965.0,
+            "enemySpeed": 700.0,
+            "multiplierCurrentEnergyShield": 100.0,
+            "multiplierDifferentAmmoFired": 1.0,
+            "multiplierDifferentGrenadeFired": 1.0,
+            "multiplierStunnedRecently": 1.0,
+            "multiplierWarcryUsedRecently": 1.0,
+            "multiplierWitheredStackCountSelf": 15.0,
+            "sigilOfPowerStages": 1.0
+          },
+          "enemy_conditions": {
+            "AffectedByGaleForce": true,
+            "Buffed": true,
+            "Combat": true,
+            "Effective": true
+          },
+          "enemy_level": 82,
+          "player_conditions": {
+            "AffectedByArmourBreak": true,
+            "AffectedByBlazingCritical": true,
+            "AffectedByClarityI": true,
+            "AffectedByGaleForce": true,
+            "AffectedByHerald": true,
+            "AffectedByHeraldofThunder": true,
+            "AffectedByRage": true,
+            "AffectedByWindDancer": true,
+            "AttackedRecently": true,
+            "Buffed": true,
+            "Combat": true,
+            "DexHigherThanInt": true,
+            "DexHigherThanStr": true,
+            "DexHighestAttribute": true,
+            "DexSingleHighestAttribute": true,
+            "Effective": true,
+            "EnemyInPresence": true,
+            "HitRecently": true,
+            "IntHigherThanDex": false,
+            "IntHigherThanStr": true,
+            "IntHighestAttribute": false,
+            "IntSingleHighestAttribute": false,
+            "LowSpirit": true,
+            "MajorityGreenSocketedSupports": true,
+            "MostNumerousGreenSocketedSupports": true,
+            "OffHandIsEmpty": true,
+            "OnlyMinion": true,
+            "RareItemInAmulet": true,
+            "RareItemInBody Armour": true,
+            "RareItemInBoots": true,
+            "RareItemInGloves": true,
+            "RareItemInHelmet": true,
+            "RareItemInRing 1": true,
+            "RareItemInRing 2": true,
+            "RareItemInWeapon 1": true,
+            "StrHigherThanDex": false,
+            "StrHigherThanInt": false,
+            "StrHighestAttribute": false,
+            "Surrounded": false,
+            "TwoHighestAttributesEqual": false,
+            "UniqueItemInBelt": true,
+            "UsingBody Armour": true,
+            "UsingBoots": true,
+            "UsingGloves": true,
+            "UsingHelmet": true,
+            "UsingMartialWeapon": true,
+            "UsingMeleeWeapon": true,
+            "UsingStaff": true,
+            "UsingTwoHandedWeapon": true
+          },
+          "requested": {
+            "encounter": null,
+            "selection": null
+          }
+        },
+        "active_skill_set_id": 1,
+        "selected_player": {
+          "actor": "player",
+          "actor_skill_index": 7,
+          "gem_index": 1,
+          "group_index": 5,
+          "minion_id": null,
+          "part_index": null,
+          "part_name": null,
+          "show_average": true,
+          "skill_id": "WhirlingAssaultPlayer",
+          "skill_name": "Whirling Assault",
+          "stat_set_index": 1,
+          "stat_set_label": "Whirling Assault",
+          "synthesized_default_attack": false
+        },
+        "selected_minion": null,
+        "authored_selectors": {
+          "Build": {
+            "mainSocketGroup": "5"
+          },
+          "Skills": {
+            "activeSkillSet": "1"
+          },
+          "Items": {
+            "activeItemSet": "1",
+            "useSecondWeaponSet": "false"
+          },
+          "Tree": {
+            "activeSpec": "1"
+          },
+          "Config": {
+            "activeConfigSet": "1"
+          }
+        }
+      },
+      "measurements": [
+        {
+          "query": {
+            "actor": "player",
+            "id": "life"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 1366.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "mana"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 881.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "energy_shield"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 4855.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "fire_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 75.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "cold_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 67.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "lightning_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 68.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "chaos_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 35.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "pob_total_ehp"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 28395.52859669396
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "physical_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 6221.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "fire_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 22218.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "cold_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 17281.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "lightning_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 17774.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "chaos_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 5836.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "selected_hit_dps"
+          },
+          "schema_version": 1,
+          "unit": "damage_per_second",
+          "value": {
+            "reason": "Selected action uses average-damage mode; an explicit usage model is required for DPS",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "selected_minion",
+            "id": "selected_hit_dps"
+          },
+          "schema_version": 1,
+          "unit": "damage_per_second",
+          "value": {
+            "reason": "No selected minion actor exists",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "selected_average_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "reason": "The selected actor/action does not produce this measurement",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "selected_minion",
+            "id": "selected_average_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "reason": "No selected minion actor exists",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "spirit"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 100.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "armour"
+          },
+          "schema_version": 1,
+          "unit": "rating_points",
+          "value": {
+            "status": "finite",
+            "value": 0.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "evasion"
+          },
+          "schema_version": 1,
+          "unit": "rating_points",
+          "value": {
+            "status": "finite",
+            "value": 11386.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "movement_speed_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 126.1
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "action_speed_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 100.0
+          }
+        }
+      ],
+      "source_only_resources": {
+        "actor": "player",
+        "scope": "raw_attachment_observations_not_public_metrics_or_feasibility",
+        "values": {
+          "LifeUnreserved": 1366.0,
+          "ManaUnreserved": 881.0,
+          "SpiritUnreserved": 3.0
+        }
+      },
+      "warnings": [
+        "Experimental raw MAIN outputs; metric semantics, build legality and mechanic coverage are not certified.",
+        "PoB may normalize imported data during export; this is not a lossless replacement for the source XML.",
+        "No skill groups are included in Full DPS; that roll-up is not a build damage objective.",
+        "14 passive-tree links reference node IDs missing from the pinned data; these are separate from valid ascendancy-tree components. Complete game-tree coverage is unverified"
+      ]
+    },
+    {
+      "id": "original-04-saved-pinnacle",
+      "source_line": 4,
+      "input": {
+        "xml_path": "../builds/breadth-20260908/build-04.xml",
+        "xml_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+      },
+      "reference": {
+        "report_sha256": "e4252367d34da46bc2f0dd06a4a5083cdc32b56f3235797ddbbd9802ea595ae9",
+        "report_schema_version": 3,
+        "report_status": "experimental_evaluation",
+        "backend": {
+          "adapter_fingerprint": "1bc14bae5097db2ac03e4a3ee97b3e81377b1df0bddbdd79ee77421a4d8372d1",
+          "id": "pob-poe2-mlua",
+          "implementation_version": "0.1.0",
+          "rules_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_fingerprint": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+        },
+        "runtime": {
+          "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+          "mlua_version": "0.12.1",
+          "lua_version": "LuaJIT 2.1.1787165859",
+          "lua_arch": "x64",
+          "operating_system": "windows",
+          "luajit_source": "210.7.3+1ee778a",
+          "utf8_version": "0.1.6",
+          "adapter_hash": "1bc14bae5097db2ac03e4a3ee97b3e81377b1df0bddbdd79ee77421a4d8372d1"
+        }
+      },
+      "binding": {
+        "context": {
+          "calculation_mode": "MAIN",
+          "config_inputs": {
+            "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+            "ConcPathBypassCD": true,
+            "FlickerStrikeBypassCD": true,
+            "GamblesprintMovementSpeed": 20.0,
+            "SecondsSinceInevitableCrit": 10.0,
+            "VigilantStrikeBypassCD": true,
+            "companionInPresence": true,
+            "conditionChampionIntimidate": true,
+            "doomBlastSource": "vixen",
+            "elementalConfluxElement": 1.0,
+            "enemyIsBoss": "Pinnacle",
+            "enemySizePreset": "Medium",
+            "inDemonForm": true,
+            "multiplierCurrentManaPercentage": 100.0,
+            "presetBossSkills": "None",
+            "purpleFlameStacks": 10.0,
+            "questAct 1ClearfellBeira": true,
+            "questAct 1FreythornKing In The Mists": true,
+            "questAct 1Ogham ManorCandlemass": true,
+            "questAct 2Spires of DesharSisters of Garukhan Shrine": true,
+            "questAct 2Valley of the TitansMedallion": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+            "questAct 3Azak BogIgnagduk": true,
+            "questAct 3Jiquani's MachinariumBlackjaw": true,
+            "questAct 3Venom CryptsVenom Draught": "25% increased Stun Threshold",
+            "questAct 4Abandoned PrisonGoddess of Justice": "30% increased Life Recovery from Flasks",
+            "questAct 4Eye of HinekoraSilent Hall": false,
+            "questAct 4Eye of HinekoraTribal Medicine": "30% increased Global Armour, Evasion and Energy Shield",
+            "questAct 4Halls Of The DeadNgamahu's Test": "+5% to Fire Resistance",
+            "questAct 4Halls Of The DeadTasalio's Test": "+5% to Cold Resistance",
+            "questAct 4Halls Of The DeadTawhoa's Test": "+5% to Lightning Resistance",
+            "questInterlude 2Khari CrossingMolten Shrine": true,
+            "questInterlude 2QimahSeven Pillars": "3% increased Movement Speed",
+            "questInterlude 3Kriar VillageLythara": true,
+            "raiseSpectreEnableBuffs": true,
+            "raiseSpectreEnableCurses": true,
+            "repeatMode": "AVERAGE",
+            "resistancePenalty": -60.0,
+            "resourceGainMode": "AVERAGE",
+            "summonCompanionEnableBuffs": true,
+            "summonCompanionEnableCurses": true,
+            "summonElementalRelicEnableAngerAura": true,
+            "summonElementalRelicEnableHatredAura": true,
+            "summonElementalRelicEnableWrathAura": true,
+            "targetBrandedEnemy": true,
+            "touchedDebuffsCount": 10.0
+          },
+          "config_placeholders": {
+            "ChillStacks": 1.0,
+            "ScorchStacks": 1.0,
+            "ShockStacks": 1.0,
+            "conditionCorruptingCryStages": 10.0,
+            "configBossFaceBroken": 56.0,
+            "demonFormStacks": 10.0,
+            "enemyArmour": 8063.0,
+            "enemyChaosDamage": 386.0,
+            "enemyChaosResist": 0.0,
+            "enemyColdDamage": 965.0,
+            "enemyColdPen": 3.0,
+            "enemyColdResist": 50.0,
+            "enemyCritChance": 5.0,
+            "enemyCritDamage": 30.0,
+            "enemyCriticalWeaknessStacks": 20.0,
+            "enemyDamageRollRange": 70.0,
+            "enemyDistance": 20.0,
+            "enemyEvasion": 1175.0,
+            "enemyFireDamage": 965.0,
+            "enemyFirePen": 3.0,
+            "enemyFireResist": 50.0,
+            "enemyLevel": 82.0,
+            "enemyLightningDamage": 965.0,
+            "enemyLightningPen": 3.0,
+            "enemyLightningResist": 50.0,
+            "enemyPhysicalDamage": 965.0,
+            "enemySpeed": 700.0,
+            "multiplierCurrentEnergyShield": 100.0,
+            "multiplierDifferentAmmoFired": 1.0,
+            "multiplierDifferentGrenadeFired": 1.0,
+            "multiplierStunnedRecently": 1.0,
+            "multiplierWarcryUsedRecently": 1.0,
+            "multiplierWitheredStackCountSelf": 15.0,
+            "sigilOfPowerStages": 1.0
+          },
+          "enemy_conditions": {
+            "AffectedByFrostBomb": true,
+            "Buffed": true,
+            "Combat": true,
+            "Cursed": true,
+            "Effective": true
+          },
+          "enemy_level": 82,
+          "player_conditions": {
+            "AffectedByFrostBomb": true,
+            "AffectedByManaRemnants": true,
+            "AffectedByVirtuousBarrier": true,
+            "Buffed": true,
+            "Combat": true,
+            "DexHigherThanInt": false,
+            "DexHigherThanStr": false,
+            "DexHighestAttribute": false,
+            "DexSingleHighestAttribute": false,
+            "Effective": true,
+            "EnemyInPresence": true,
+            "IntHigherThanDex": true,
+            "IntHigherThanStr": true,
+            "IntHighestAttribute": true,
+            "IntSingleHighestAttribute": true,
+            "LowSpirit": true,
+            "MajorityBlueSocketedSupports": true,
+            "MostNumerousBlueSocketedSupports": true,
+            "OffHandIsEmpty": true,
+            "RareItemInAmulet": true,
+            "RareItemInBody Armour": true,
+            "RareItemInBoots": true,
+            "RareItemInGloves": true,
+            "RareItemInHelmet": true,
+            "RareItemInRing 1": true,
+            "RareItemInRing 2": true,
+            "RareItemInWeapon 1": true,
+            "SelfCastElementalWeakness": true,
+            "StrHigherThanDex": true,
+            "StrHigherThanInt": false,
+            "StrHighestAttribute": false,
+            "Surrounded": false,
+            "TwoHighestAttributesEqual": false,
+            "Unarmed": true,
+            "UniqueItemInBelt": true,
+            "UsingBody Armour": true,
+            "UsingBoots": true,
+            "UsingGloves": true,
+            "UsingHelmet": true
+          },
+          "requested": {
+            "encounter": null,
+            "selection": null
+          }
+        },
+        "active_skill_set_id": 1,
+        "selected_player": {
+          "actor": "player",
+          "actor_skill_index": 17,
+          "gem_index": 1,
+          "group_index": 14,
+          "minion_id": null,
+          "part_index": null,
+          "part_name": null,
+          "show_average": false,
+          "skill_id": "MeleeCrossbowPlayer",
+          "skill_name": "Crossbow Shot",
+          "stat_set_index": 1,
+          "stat_set_label": "Crossbow Shot",
+          "synthesized_default_attack": false
+        },
+        "selected_minion": null,
+        "authored_selectors": {
+          "Build": {
+            "mainSocketGroup": "14"
+          },
+          "Skills": {
+            "activeSkillSet": "1"
+          },
+          "Items": {
+            "activeItemSet": "1",
+            "useSecondWeaponSet": "nil"
+          },
+          "Tree": {
+            "activeSpec": "1"
+          },
+          "Config": {
+            "activeConfigSet": "1"
+          }
+        }
+      },
+      "measurements": [
+        {
+          "query": {
+            "actor": "player",
+            "id": "life"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 2724.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "mana"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 858.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "energy_shield"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 0.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "fire_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 75.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "cold_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 75.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "lightning_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 75.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "chaos_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 45.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "pob_total_ehp"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 21330.334007232548
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "physical_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 4611.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "fire_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 14838.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "cold_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 14360.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "lightning_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 14360.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "chaos_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 4953.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "selected_hit_dps"
+          },
+          "schema_version": 1,
+          "unit": "damage_per_second",
+          "value": {
+            "reason": "The selected actor/action does not produce hit damage",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "selected_minion",
+            "id": "selected_hit_dps"
+          },
+          "schema_version": 1,
+          "unit": "damage_per_second",
+          "value": {
+            "reason": "No selected minion actor exists",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "selected_average_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "reason": "The selected actor/action does not produce hit damage",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "selected_minion",
+            "id": "selected_average_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "reason": "No selected minion actor exists",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "spirit"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 148.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "armour"
+          },
+          "schema_version": 1,
+          "unit": "rating_points",
+          "value": {
+            "status": "finite",
+            "value": 31946.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "evasion"
+          },
+          "schema_version": 1,
+          "unit": "rating_points",
+          "value": {
+            "status": "finite",
+            "value": 0.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "movement_speed_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 151.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "action_speed_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 100.0
+          }
+        }
+      ],
+      "source_only_resources": {
+        "actor": "player",
+        "scope": "raw_attachment_observations_not_public_metrics_or_feasibility",
+        "values": {
+          "LifeUnreserved": 2724.0,
+          "ManaUnreserved": 858.0,
+          "SpiritUnreserved": 9.0
+        }
+      },
+      "warnings": [
+        "Experimental raw MAIN outputs; metric semantics, build legality and mechanic coverage are not certified.",
+        "PoB may normalize imported data during export; this is not a lossless replacement for the source XML.",
+        "No skill groups are included in Full DPS; that roll-up is not a build damage objective.",
+        "14 passive-tree links reference node IDs missing from the pinned data; these are separate from valid ascendancy-tree components. Complete game-tree coverage is unverified"
+      ]
+    },
+    {
+      "id": "original-05-saved-pinnacle",
+      "source_line": 5,
+      "input": {
+        "xml_path": "../builds/breadth-20260908/build-05.xml",
+        "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "reference": {
+        "report_sha256": "a0dbdd09e5b3cf65a92dc5058443734988dfe9c2fc95872931e8aee01c373d4e",
+        "report_schema_version": 3,
+        "report_status": "experimental_evaluation",
+        "backend": {
+          "adapter_fingerprint": "1bc14bae5097db2ac03e4a3ee97b3e81377b1df0bddbdd79ee77421a4d8372d1",
+          "id": "pob-poe2-mlua",
+          "implementation_version": "0.1.0",
+          "rules_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_fingerprint": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+        },
+        "runtime": {
+          "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+          "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+          "mlua_version": "0.12.1",
+          "lua_version": "LuaJIT 2.1.1787165859",
+          "lua_arch": "x64",
+          "operating_system": "windows",
+          "luajit_source": "210.7.3+1ee778a",
+          "utf8_version": "0.1.6",
+          "adapter_hash": "1bc14bae5097db2ac03e4a3ee97b3e81377b1df0bddbdd79ee77421a4d8372d1"
+        }
+      },
+      "binding": {
+        "context": {
+          "calculation_mode": "MAIN",
+          "config_inputs": {
+            "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+            "ConcPathBypassCD": true,
+            "FlickerStrikeBypassCD": true,
+            "GamblesprintMovementSpeed": 20.0,
+            "SecondsSinceInevitableCrit": 10.0,
+            "VigilantStrikeBypassCD": true,
+            "companionInPresence": true,
+            "conditionChampionIntimidate": true,
+            "doomBlastSource": "vixen",
+            "elementalConfluxElement": 1.0,
+            "enemyIsBoss": "Pinnacle",
+            "enemySizePreset": "Medium",
+            "inDemonForm": true,
+            "multiplierCurrentManaPercentage": 100.0,
+            "presetBossSkills": "None",
+            "purpleFlameStacks": 10.0,
+            "questAct 1ClearfellBeira": true,
+            "questAct 1FreythornKing In The Mists": true,
+            "questAct 1Ogham ManorCandlemass": true,
+            "questAct 2Spires of DesharSisters of Garukhan Shrine": true,
+            "questAct 2Valley of the TitansMedallion": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+            "questAct 3Azak BogIgnagduk": true,
+            "questAct 3Jiquani's MachinariumBlackjaw": true,
+            "questAct 3Venom CryptsVenom Draught": "30% increased Elemental Ailment Threshold",
+            "questAct 4Abandoned PrisonGoddess of Justice": "30% increased Life Recovery from Flasks",
+            "questAct 4Eye of HinekoraSilent Hall": true,
+            "questAct 4Eye of HinekoraTribal Medicine": "30% increased Global Armour, Evasion and Energy Shield",
+            "questAct 4Halls Of The DeadNgamahu's Test": "+5% to Fire Resistance",
+            "questAct 4Halls Of The DeadTasalio's Test": "+5% to Cold Resistance",
+            "questAct 4Halls Of The DeadTawhoa's Test": "+5% to Lightning Resistance",
+            "questInterlude 2Khari CrossingMolten Shrine": true,
+            "questInterlude 2QimahSeven Pillars": "15% increased Global Armour, Evasion and Energy Shield",
+            "questInterlude 3Kriar VillageLythara": true,
+            "raiseSpectreEnableBuffs": true,
+            "raiseSpectreEnableCurses": true,
+            "repeatMode": "AVERAGE",
+            "resistancePenalty": -60.0,
+            "resourceGainMode": "AVERAGE",
+            "summonCompanionEnableBuffs": true,
+            "summonCompanionEnableCurses": true,
+            "summonElementalRelicEnableAngerAura": true,
+            "summonElementalRelicEnableHatredAura": true,
+            "summonElementalRelicEnableWrathAura": true,
+            "targetBrandedEnemy": true,
+            "touchedDebuffsCount": 10.0
+          },
+          "config_placeholders": {
+            "ChillStacks": 1.0,
+            "ScorchStacks": 1.0,
+            "ShockStacks": 1.0,
+            "conditionCorruptingCryStages": 10.0,
+            "configBossFaceBroken": 56.0,
+            "demonFormStacks": 10.0,
+            "enemyArmour": 8063.0,
+            "enemyChaosDamage": 386.0,
+            "enemyChaosResist": 0.0,
+            "enemyColdDamage": 965.0,
+            "enemyColdPen": 3.0,
+            "enemyColdResist": 50.0,
+            "enemyCritChance": 5.0,
+            "enemyCritDamage": 30.0,
+            "enemyCriticalWeaknessStacks": 20.0,
+            "enemyDamageRollRange": 70.0,
+            "enemyDistance": 20.0,
+            "enemyEvasion": 1175.0,
+            "enemyFireDamage": 965.0,
+            "enemyFirePen": 3.0,
+            "enemyFireResist": 50.0,
+            "enemyLevel": 82.0,
+            "enemyLightningDamage": 965.0,
+            "enemyLightningPen": 3.0,
+            "enemyLightningResist": 50.0,
+            "enemyPhysicalDamage": 965.0,
+            "enemySpeed": 700.0,
+            "multiplierCurrentEnergyShield": 100.0,
+            "multiplierDifferentAmmoFired": 1.0,
+            "multiplierDifferentGrenadeFired": 1.0,
+            "multiplierStunnedRecently": 1.0,
+            "multiplierWarcryUsedRecently": 1.0,
+            "multiplierWitheredStackCountSelf": 15.0,
+            "sigilOfPowerStages": 1.0
+          },
+          "enemy_conditions": {
+            "AffectedByFrostBomb": true,
+            "Buffed": true,
+            "Combat": true,
+            "Effective": true
+          },
+          "enemy_level": 82,
+          "player_conditions": {
+            "AffectedByFrostBomb": true,
+            "Buffed": true,
+            "CastSpellRecently": true,
+            "Combat": true,
+            "DexHigherThanInt": false,
+            "DexHigherThanStr": false,
+            "DexHighestAttribute": false,
+            "DexSingleHighestAttribute": false,
+            "Effective": true,
+            "EnemyInPresence": true,
+            "IntHigherThanDex": true,
+            "IntHigherThanStr": true,
+            "IntHighestAttribute": true,
+            "IntSingleHighestAttribute": true,
+            "LowSpirit": true,
+            "MajorityBlueSocketedSupports": true,
+            "MostNumerousBlueSocketedSupports": true,
+            "OffHandIsEmpty": true,
+            "OnlyMinion": true,
+            "RareItemInAmulet": true,
+            "RareItemInBelt": true,
+            "RareItemInBody Armour": true,
+            "RareItemInBoots": true,
+            "RareItemInGloves": true,
+            "RareItemInHelmet": true,
+            "RareItemInRing 1": true,
+            "RareItemInRing 2": true,
+            "RareItemInWeapon 1": true,
+            "StrHigherThanDex": true,
+            "StrHigherThanInt": false,
+            "StrHighestAttribute": false,
+            "Surrounded": false,
+            "TwoHighestAttributesEqual": false,
+            "Unarmed": true,
+            "UsingBody Armour": true,
+            "UsingBoots": true,
+            "UsingGloves": true,
+            "UsingHelmet": true
+          },
+          "requested": {
+            "encounter": null,
+            "selection": null
+          }
+        },
+        "active_skill_set_id": 4,
+        "selected_player": {
+          "actor": "player",
+          "actor_skill_index": 4,
+          "gem_index": 1,
+          "group_index": 3,
+          "minion_id": null,
+          "part_index": null,
+          "part_name": "Basic Attack",
+          "show_average": false,
+          "skill_id": "SummonSkeletalSnipersPlayer",
+          "skill_name": "Skeletal Sniper Minion",
+          "stat_set_index": 1,
+          "stat_set_label": "Minion Info",
+          "synthesized_default_attack": false
+        },
+        "selected_minion": {
+          "actor": "minion",
+          "actor_skill_index": 1,
+          "gem_index": 1,
+          "group_index": 3,
+          "minion_id": "RaisedSkeletonSniper",
+          "part_index": null,
+          "part_name": null,
+          "show_average": false,
+          "skill_id": "MinionMeleeBow",
+          "skill_name": "Basic Attack",
+          "stat_set_index": 1,
+          "stat_set_label": "Basic Attack",
+          "synthesized_default_attack": false
+        },
+        "authored_selectors": {
+          "Build": {
+            "mainSocketGroup": "3"
+          },
+          "Skills": {
+            "activeSkillSet": "4"
+          },
+          "Items": {
+            "activeItemSet": "2",
+            "useSecondWeaponSet": "nil"
+          },
+          "Tree": {
+            "activeSpec": "3"
+          },
+          "Config": {
+            "activeConfigSet": "1"
+          }
+        }
+      },
+      "measurements": [
+        {
+          "query": {
+            "actor": "player",
+            "id": "life"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 1320.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "mana"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 638.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "energy_shield"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 146.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "fire_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": -45.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "cold_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 5.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "lightning_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": -45.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "chaos_resistance_capped_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 0.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "pob_total_ehp"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 1150.2134646962238
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "physical_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 1495.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "fire_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 1011.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "cold_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 1496.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "lightning_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 1011.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "chaos_max_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "status": "finite",
+            "value": 1393.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "selected_hit_dps"
+          },
+          "schema_version": 1,
+          "unit": "damage_per_second",
+          "value": {
+            "reason": "The selected actor/action does not produce hit damage",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "selected_minion",
+            "id": "selected_hit_dps"
+          },
+          "schema_version": 1,
+          "unit": "damage_per_second",
+          "value": {
+            "status": "finite",
+            "value": 388.7517825598493
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "selected_average_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "reason": "The selected actor/action does not produce hit damage",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "selected_minion",
+            "id": "selected_average_hit"
+          },
+          "schema_version": 1,
+          "unit": "damage",
+          "value": {
+            "reason": "The selected actor/action does not produce this measurement",
+            "status": "unavailable"
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "spirit"
+          },
+          "schema_version": 1,
+          "unit": "pool_points",
+          "value": {
+            "status": "finite",
+            "value": 113.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "armour"
+          },
+          "schema_version": 1,
+          "unit": "rating_points",
+          "value": {
+            "status": "finite",
+            "value": 302.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "evasion"
+          },
+          "schema_version": 1,
+          "unit": "rating_points",
+          "value": {
+            "status": "finite",
+            "value": 10.0
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "movement_speed_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 106.69999999999999
+          }
+        },
+        {
+          "query": {
+            "actor": "player",
+            "id": "action_speed_pct"
+          },
+          "schema_version": 1,
+          "unit": "percent",
+          "value": {
+            "status": "finite",
+            "value": 100.0
+          }
+        }
+      ],
+      "source_only_resources": {
+        "actor": "player",
+        "scope": "raw_attachment_observations_not_public_metrics_or_feasibility",
+        "values": {
+          "LifeUnreserved": 1320.0,
+          "ManaUnreserved": 638.0,
+          "SpiritUnreserved": -67.0
+        }
+      },
+      "warnings": [
+        "Experimental raw MAIN outputs; metric semantics, build legality and mechanic coverage are not certified.",
+        "PoB may normalize imported data during export; this is not a lossless replacement for the source XML.",
+        "No skill groups are included in Full DPS; that roll-up is not a build damage objective.",
+        "14 passive-tree links reference node IDs missing from the pinned data; these are separate from valid ascendancy-tree components. Complete game-tree coverage is unverified"
+      ]
+    }
+  ]
+}

@@ -213,6 +213,35 @@ checks now live only in integration-test support; the production library no long
 that fixture-specific API. Fixed test inputs remain appropriate. Broad native pipeline
 admission remains separate work.
 
+## Fixed diagnostic expectations
+
+The [versioned manifest](../tests/fixtures/breadth-expectations/README.md) freezes all 22
+current public measurements for each supplied original, with exact source, selected-action
+and context evidence. It preserves finite, infinite and unavailable states and keeps
+raw unreserved-resource observations separate. The corpus remains a development set.
+
+The generic [checker](../scripts/check-build-expectations.py) reads an existing corpus
+index and its recorded reports. It runs no evaluator, uses no default build and never
+reports full native/build completion. Missing or failed cases remain in the denominator;
+changed input, context, action selection, units or required measurements cannot pass.
+Unavailable reason wording is diagnostic; availability status and nonfinite kind are exact.
+Numbers compare exactly by default. `--finite-tolerance` explicitly opts into the manifest's
+proposed diagnostic replay tolerance, without changing any existing native golden tests.
+
+```powershell
+python scripts/check-build-expectations.py --expectations tests/fixtures/breadth-expectations/originals-v1.json --corpus runs/number-factories-corpus/index.json --backend pob --output runs/expectations-pob.json
+python scripts/check-build-expectations.py --expectations tests/fixtures/breadth-expectations/originals-v1.json --corpus runs/number-factories-corpus/index.json --backend native --output runs/expectations-native.json
+python scripts/test_build_expectations.py
+```
+
+Choose new output filenames; existing files are preserved. Exit 0 means the diagnostic
+expectations match, 1 means blocked/mismatched cases, and 2 means invalid input or an output
+error. The output retains reference/observed backend and report identities. Matching rows
+under different backend identities is observable, not a claim of certified parity. The
+current native corpus has no successful report for any of the five originals; its failures
+must remain visible. R3/R5 still require fresh complete native preparation and calculations,
+explicit mapping variants, mutation/reused-worker checks and independent holdouts.
+
 ## Reproduce corpus intake
 
 The reusable standard-library [runner](../scripts/intake-build-corpus.py) accepts the input
