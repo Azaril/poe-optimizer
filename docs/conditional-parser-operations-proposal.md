@@ -1,15 +1,15 @@
 # ADR-Parser-01: Conditional modifier parsing
 
-**Status:** Proposed — awaiting user direction before implementation
-**Date:** 2026-09-09
+**Status:** Accepted — expand the typed rule language
+**Date:** 2026-09-10
 **Decider:** Project owner
 
 ## Context
 
-The native modifier parser currently evaluates authenticated, bounded expressions over
-injected definitions. The closed Flag extension preserves that design. The next
-straightforward extension is one-argument `tonumber`, with 81 complete source candidates;
-it can proceed independently of this proposal.
+The native modifier parser evaluates authenticated, bounded expressions over injected
+definitions. Its existing string, Flag and one-argument numeric-conversion extensions
+are implemented. Schema26/parser6 currently preserves 1,222 Pure recipes and 429
+Unsupported dispositions. Those are preparation capabilities, not whole-build coverage.
 
 Some remaining callbacks are algorithms rather than single-return expressions. The
 complete GemProperty callback at pinned ModParser.lua:3526–3554 normalizes an empty skill
@@ -19,8 +19,9 @@ level property even when another property was requested. Fifteen current corpus 
 stops reach this callback, but the implementation must cover its full behavior, not
 special-case those builds.
 
-The smaller grantedExtraSkill helper at lines 2193–2200 strips a source-defined name suffix,
-looks up a skill, converts a level and returns nil on a miss. Both use an already injected
+The smaller grantedExtraSkill helper at lines 2193–2200 removes every occurrence of a
+source-defined substring, looks up a skill and converts a level only on a hit. A miss
+falls through with zero return values. Both use an already injected
 961-row lookup whose own source construction sorts gem identifiers before assignment.
 Its provenance must be proved independently of other lookup tables with different
 construction or ambiguity rules. Trigger helpers mutate option tables, and extraSupport
@@ -30,59 +31,67 @@ This decision concerns modifier preparation. The calculation backend remains nat
 Rust, data stays injectable, and PoB remains an explicit parity reference. Neither
 option introduces Lua subprocesses into native preparation or candidate evaluation.
 
-## Proposed decision
+## Decision
 
-Implement focused Rust operations for complete, read-only parser algorithms, beginning
-with GemProperty and subsequently reviewing grantedExtraSkill. Keep ordinary expression
-recipes for simple composition. Do not add general branching or loops to the expression
-language merely to translate these two functions.
+The project owner selected **"Expand the typed rule language now"** on 2026-09-10.
+This supersedes the earlier recommendation to implement complex callbacks as focused
+Rust algorithm families. Extend the existing expression approach with a versioned typed
+program representation for branches, bounded iteration, lexical locals, intermediate
+values, table operations and source-bound calls.
 
-Each operation would have:
+Store algorithm structure and game facts in injected definitions. A native Rust compiler
+validates and binds the program; an initial bounded Rust interpreter executes its compiled
+form. Keep that execution boundary replaceable by a later compiler without changing the
+serialized program or the calculation backend interface. Compilation here initially means
+validation and lowering to an immutable execution plan, not machine-code generation.
+No new `GemProperty` or `grantedExtraSkill` runtime opcode is introduced: both bodies must
+lower through shared instructions and existing proved primitives. Grant-line admission
+also requires their original forwarding callbacks and parser call conventions.
 
-- A versioned operation kind and complete source/function/captured-binding provenance.
-- An injected definition holding lookup identity, patterns, branch labels, field names,
-  literal values and required capabilities. Game data and build identities do not live
-  in the Rust implementation.
-- Exact ordered native value arguments, including nil, byte strings and non-finite
-  values, with source errors raised only when the corresponding operation is reached.
-- Immutable compiled definitions, per-request work/output budgets, and the existing
-  structural result/copy boundary. No hidden fallback or shared mutable state.
+The [typed parser-program contract](typed-parser-programs.md) specifies the ownership,
+call, effect, source-lowering and migration boundaries. The first complete source targets
+are GemProperty and grantedExtraSkill, exercising different branch, lookup, iteration and
+return-cardinality behavior. Broader language features are added under the same semantic
+contract as reached source consumers require them; unsupported behavior is explicit.
 
-The dispatch seam must distinguish a whole callback operation from a helper invoked
-inside an expression. Its exact enum/API/schema shape would be designed after this
-choice. Source recognition consumes the complete body and validates dependencies;
-callback IDs or example-build names are not admission whitelists. An upstream body,
-lookup construction or effect change requires renewed parity proof.
+This decision authorizes the language design and implementation work. It does not approve
+the separate B3 shared build-model migration, which still awaits its own answer. Real-build
+R1-R5 gates remain the integration priority; successful parser programs do not count as
+complete native builds.
 
 ## Options considered
 
-| Dimension | Focused Rust operations (recommended) | Extend the expression model |
+| Dimension | Focused Rust operations (earlier recommendation) | Extend the expression model (selected) |
 |---|---|---|
 | Representation | Explicit implementations for complete algorithm families | Add typed branch, loop, lookup and local-value instructions |
 | Initial complexity | One operation and its injected definition at a time | Define and validate a larger executable data language first |
 | Reuse | Share tested byte, number, lookup and constructor primitives | Reuse control-flow instructions across more source bodies |
-| Execution | Direct Rust control flow; compile immutable definitions once | Interpretation or further compilation would need its own design |
+| Execution | Direct Rust control flow; compile immutable definitions once | Compile immutable plans once; initially interpret them in Rust, with a later compilation seam |
 | Update burden | Review each changed source algorithm and its data extraction | Maintain lowering plus all new instruction semantics |
 | Main risk | Too many bespoke operations or literals creeping into code | Growing an incomplete Lua interpreter and losing error/alias fidelity |
 
 ## Trade-offs and consequences
 
-Focused operations follow the existing native-calculation approach and make full-function
-parity review manageable. They also require discipline: group behavior into coherent
-algorithms, inject all selected game facts, and extract shared primitives when there is
-actual reuse. This must not become one hard-coded handler per modifier line or build.
+The selected approach makes recurring control flow reusable and allows more future PoB
+changes to be represented by data when the required instructions already exist. It also
+provides a path toward more automated source lowering. Neither benefit removes the need
+to prove translation fidelity or to add Rust primitives for newly encountered semantics.
 
-A richer expression model could reduce handwritten ports, but branches, loops and
-lookups bring truthiness, evaluation order, temporary lifetimes, aliases and resource
-limits into the data-language contract. Mutation and arbitrary callable values would
-still require separate designs. Since parsing happens during preparation, neither
-option should be justified by an unmeasured candidate-throughput claim.
+We accept a larger initial implementation and debugging burden. The project must maintain
+instruction semantics, binding validation, source maps, runtime budgets and an original
+source oracle. Nil/false distinctions, lazy evaluation, return arity, number behavior,
+identity, mutation and copy boundaries are language requirements, not incidental details.
+A broad but incomplete Lua imitation is not sufficient evidence of PoB parity.
 
-For either choice, lookup outcomes must preserve the actual source table semantics.
-When an operation observes only existence/truthiness, equivalent alternatives should
-not cause an unnecessary failure. When it consumes an identity, unresolved alternatives
-must not become an incidental winner. Source errors, missing results and unavailable
-operations remain distinct.
+Focused Rust algorithms remain the considered alternative: easier direct debugging and
+less initial infrastructure, but more manually maintained ports and a risk of accumulating
+bespoke handlers. Existing proved native primitives remain reusable; the selected direction
+places newly supported conditional algorithm structure in the shared rule representation.
+
+Keep native execution portable, with immutable shared plans and invocation-local state.
+Both approaches could satisfy Rust/WASM and parallel execution goals. No candidate-search
+speedup is claimed from this parser decision without measurements of real preparation
+workloads and cache reuse.
 
 ## Required proof before admission
 
@@ -98,11 +107,16 @@ operations remain distinct.
 
 ## Action items
 
-1. [ ] Confirm focused Rust operations or the richer expression model with the user.
-2. [ ] Write the selected operation/definition and dispatch contract before coding it.
-3. [ ] Implement and validate the complete GemProperty algorithm under that contract.
-4. [ ] Review grantedExtraSkill separately; keep mutable trigger/support helpers pending.
+1. [x] Record the owner's choice of a broader typed rule language.
+2. [x] Write the initial program, value/heap, binding, execution and validation contract.
+3. [ ] Implement the versioned schema, structural verifier and immutable compiled plans.
+4. [ ] Implement native control flow, invocation-local heap and explicit call/result packs.
+5. [ ] Lower complete GemProperty and grantedExtraSkill source bodies through generic
+   instructions; authenticate their dependencies and verify all branches against PoB.
+6. [ ] Integrate callback dispatch, public parser/copy behavior and package export; prove
+   preservation of existing recipes and independent injected-data behavior.
+7. [ ] Extend effectful/table-iteration/callable capabilities as subsequent real-build
+   dependencies require them, retaining the same parity and resource-bound requirements.
 
-No implementation or B3 actor/action/candidate migration is authorized by this proposed
-record. The independently reviewed one-argument numeric conversion phase remains
-available while this choice is pending.
+These are implementation checkpoints, not additional architecture approval requests.
+Follow the current [implementation record](implementation.md) for execution status.

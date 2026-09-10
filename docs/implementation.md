@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-09 (EDT)
+Last updated: 2026-09-10 (EDT)
 
 **Current priority: real-build breadth.** The five supplied originals have **0/5 complete
 native evaluations**; all five import/inspect and evaluate in pinned PoB. Shared parser
@@ -17,9 +17,10 @@ reviewable against all five originals, including independent set selectors, repe
 providers and shared item-record references. Do not interpret this draft or the breadth
 reprioritization as an answer. The already-started bounded item-policy extraction is
 integrated as supporting data; it changes no build admission. Preserve completed work
-and repair verified regressions while awaiting direction.
-Do not start another standalone helper or local-family
-port ahead of the real-build integration gate.
+and repair verified regressions while awaiting that separate direction. The owner has
+approved the broader typed parser language; its G1-G4 stages below can proceed independently.
+Do not resume a standalone named-helper or local-family port campaign ahead of the
+real-build integration gate.
 
 | Breadth stage | Current state | Next evidence |
 | --- | --- | --- |
@@ -78,11 +79,12 @@ and `runs/number-factories-assembly-data-review.md`. Reuse existing VariantState
 handle injected alternate-count capacity explicitly. Nil-config queries need original
 AND64/MatchKeywordFlags, including distinct live and captured mask dependencies.
 
-The [conditional-parser proposal](conditional-parser-operations-proposal.md) and
-**B3 actor/action/candidate proposal remain awaiting user direction**. Neither is
-approved by this internal assembly design. Preserve all frozen worktrees, evidence,
-44 protected files and both caller inputs. The breadth gates above supersede the older
-standalone-item continuation order.
+The [conditional-parser decision](conditional-parser-operations-proposal.md) is now
+**accepted: expand the typed rule language**. The separate **B3 actor/action/candidate
+proposal remains awaiting user direction**; the parser answer does not approve it. Follow
+the [typed parser-program contract](typed-parser-programs.md) for authorized language work.
+Preserve all frozen worktrees, evidence, 44 protected files and both caller inputs. The
+breadth gates above supersede the older standalone-item continuation order.
 
 The preceding number-conversion checkpoint is published as code
 `8b679da344ce56519a605631ad9f0bb0ce7f255b` and docs
@@ -104,6 +106,50 @@ The breadth review adds three acceptance gates: freeze required metric/availabil
 manifests before numerical implementation; prove a real calculation responds to changed
 injected definitions; and compare reused worker transitions with fresh preparation. These
 strengthen R3-R5 without changing the pending architecture direction.
+
+## Typed parser-language decision checkpoint
+
+On 2026-09-10 the owner selected **"Expand the typed rule language now"**. The accepted
+[ADR](conditional-parser-operations-proposal.md) supersedes the focused Rust algorithm
+recommendation. The new [program contract](typed-parser-programs.md) defines injected,
+versioned control flow, lexical locals, explicit call/result packs, table ownership and
+effects, source binding, diagnostics and bounded execution. Rust validates and lowers
+programs to immutable plans; the initial executor interprets those plans in Rust. This
+is native preparation infrastructure, with no Lua or subprocess in its execution path.
+It does not prescribe a bytecode representation for every combat calculation.
+
+The first complete source targets are GemProperty and grantedExtraSkill, translated
+through reusable instructions rather than named runtime handlers. Their original behavior
+requires lazy branches/lookups, mutable local-table aliases, helper-owned captures and
+a distinction between zero return values and an explicit Nil result. Existing immutable
+public tables cannot stand in for the mutable invocation heap. Source-defined string
+substitution, property selection and requirement names belong in program data.
+
+This is a **design/documentation checkpoint**. No program schema, compiler, executor,
+export, callback admission or package-version change has been implemented. Schema26 /
+parser6 and the 1,222 Pure / 429 Unsupported dispositions remain unchanged, as do the
+five original builds' **0/5 complete native evaluations**. Existing validation evidence
+has not been rerun for this documentation change.
+
+| Language stage | Current state | Completion gate |
+| --- | --- | --- |
+| G1: schema and compiler | Contract written; implementation next | Validated source-bound programs, effects/scopes/result contracts and immutable plans; existing recipes preserved |
+| G2: execution | Not implemented | Locals, branches, bounded iteration, identity-preserving heap, explicit result packs, lazy source errors and worker/catalog isolation |
+| G3: complete source lowering | Two source bodies reviewed; no lowering implemented | Both complete original programs, raw-call/public-copy parity, alternate injected definitions and actual warmed-source controls |
+| G4: package/parser integration | Not implemented | Explicit dispatch and migration, reproducible authenticated exports, public/corpus regressions, native-only/WASM gates |
+| G5: subsequent real dependencies | Future reached work | Add required effects/iteration/callable semantics without named callback handlers or weakened source proof |
+
+**Resume point:** implement G1 against the accepted contract, keeping structural validation
+separate from reached source errors. Keep legacy recipes stable and reject overlapping
+Pure/program executable definitions. Bind helpers to their own environments; do not bake
+fixture names, callback names, numeric IDs or game literals into runtime dispatch. Prove
+each G2 semantic operation before G3 source lowering uses it. Proposed next package/parser
+versions are tentative until the G4 migration actually occurs.
+
+The G1-G5 stages execute the owner's accepted direction and need no additional design
+confirmation. Significant changes to that direction still require discussion. The separate
+B3 model question is pending; these parser stages do not complete R1-R5 or authorize that
+migration. Historical entries below retain their status at their original checkpoints.
 
 ## Fixed diagnostic expectation checkpoint
 
