@@ -4,6 +4,9 @@ This document defines the corpus workflow and records its first intake. The deli
 and unchecked work are in the [implementation plan](implementation.md#breadth-of-validation-and-data-driven-build-admission--next-phase).
 The [design](design.md#data-driven-builds-and-breadth-of-validation) requires caller-provided
 builds and injected game definitions throughout the production path.
+The [real-build rollout](real-build-rollout.md) now defines the integration order and
+exit gates: all-five model coverage, paired Twister/minion native paths, interactions
+and independent holdouts. Historical intake errors below are not current admission status.
 
 ## Supplied corpus, 2026-09-08
 

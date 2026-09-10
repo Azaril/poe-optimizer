@@ -2,6 +2,30 @@
 
 Last updated: 2026-09-09
 
+**Current priority: real-build breadth.** The five supplied originals have **0/5 complete
+native evaluations**; all five import/inspect and evaluate in pinned PoB. Shared parser
+progress has not changed that result. Follow the [real-build rollout](real-build-rollout.md)
+for the next integration gates, with Twister and Skeletal Sniper developed together and
+all five originals exercising the input model. Crossbow remains an API/trigger stress
+case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
+evidence, not breadth completion.
+
+The next architectural step is the [shared instance/resolution/plan migration](general-build-input-proposal.md).
+A focused question is pending: proceed with that staged model against the real cases, or
+review the concrete API first. Do not interpret the breadth reprioritization as an answer.
+While awaiting direction, preserve completed work and finish only the bounded item-policy
+extraction already in progress. Do not start another standalone helper or local-family
+port ahead of the real-build integration gate.
+
+| Breadth stage | Current state | Next evidence |
+| --- | --- | --- |
+| Source import/inspection | 5/5 supplied originals | Retain exact bytes, selections and unresolved entries |
+| General native instance/actor/action model | Not implemented; Spark/Mace profiles remain | R1: compare all five real views and ownership against source |
+| Complete native real builds | 0/5 | R2/R3: paired Twister and Skeletal Sniper preparation and full outputs |
+| Real-build mutation/parallel parity | Not run | R4: class/ascendancy/provider/support/item/tree changes and serial/Rayon agreement |
+| Scenario breadth | Frozen originals cover Pinnacle/level82 only | R3: explicit mapping variants plus original bossing comparisons |
+| Independent whole-build holdouts | Not yet established | R5: new missing-mechanism families; retain first-run failures |
+
 Current completed local checkpoint: **native LuaJIT-compatible replacement strings**,
 code `4f46f61b0b2906524930cb617305af9b1acfa518`, in `runs/common-item-assembly-worktree`
 (`codex/common-item-assembly`), based on b9902d0. **All 204 scoped tests pass**, including
@@ -24,16 +48,21 @@ admission. The preceding corpus results remain the baseline, not a new execution
 116 item reports, 110 reference numbers and five explicit native build rejections.
 Full native build admission remains Spark/Mace.
 
-Resume: finish exact-head publication/CI recording, then continue the
-[native item-assembly design](native-item-assembly.md). The internal additive catalog
-and identity/progress contracts are reviewed. The data/extractor agent is implementing
+The replacement checkpoint is published as docs `778ed4042400d38385137ba16cd463e37722fab5`.
+Its exact-head CI run34422889432 was installing Rust on Windows and linting on Ubuntu at
+2026-09-10 00:50:05 UTC, with no failed steps. Publication and 524-file preservation are
+recorded in `runs/common-assembly-gsub-publication.json`.
+
+The [native item-assembly design](native-item-assembly.md) remains supporting work.
+Its internal additive catalog and identity/progress contracts are reviewed. The data/extractor agent is implementing
 schema26 `ItemAssemblyData`/`ItemAssemblyCatalog` as **PolicyOnly** in the separate
 `runs/common-assembly-data-worktree` (`codex/common-assembly-data`), based on b9902d0.
 Do not merge/publish that work as completed assembly; review the data, two exports,
 prior-section preservation and consumer integration first.
 
-Next runtime steps are the bounded identity-bearing preparation arena, exact local-query
-bit/keyword semantics, and import-owned progress/provenance. Then implement the entire
+When R2 identifies item assembly as a reached prerequisite, runtime steps include the
+bounded identity-bearing preparation arena, exact local-query bit/keyword semantics, and
+import-owned progress/provenance. Implement the entire
 common `BuildModList` path through all reached slot calls and final cache clearing.
 The 19 candidate items/43 slot calls identified from source predicates are validation
 cases only. A collection prefix cannot report completed assembly. Add a lossless
@@ -48,8 +77,8 @@ AND64/MatchKeywordFlags, including distinct live and captured mask dependencies.
 The [conditional-parser proposal](conditional-parser-operations-proposal.md) and
 **B3 actor/action/candidate proposal remain awaiting user direction**. Neither is
 approved by this internal assembly design. Preserve all frozen worktrees, evidence,
-44 protected files and both caller inputs. No remaining answer blocks these independent
-item-preparation steps.
+44 protected files and both caller inputs. The breadth gates above supersede the older
+standalone-item continuation order.
 
 The preceding number-conversion checkpoint is published as code
 `8b679da344ce56519a605631ad9f0bb0ce7f255b` and docs
@@ -291,92 +320,21 @@ the design documents.
 
 ## Resume here
 
-1. Inspect `git status --short --branch` and the current validation/publication table below.
-   Read [native data packages](native-data.md), the [source-extraction guide](game-data-extraction.md),
-   and the [data-boundary decision](game-data-boundary.md).
-   Runtime injection, numeric configuration, pinned source extraction and dataset-bound
-   controlled search are implemented. Check publication status in the current table below.
-   Also read [native backend](native-backend.md),
-   [native calculations](native-engine.md), [live passive coverage](passive-coverage.md)
-   and [tree projection](tree-projection.md). The production target is a fully native
-   parallel evaluator; PoB is an optional explicit reference, never a hidden fallback.
-2. Keep PoB at `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and unmodified. Preserve supplied
-   original exports and independent Spark/Mace goldens. Maintain actual-source interpreted
-   and warmed parity, full-build differential cases and strict unsupported-mechanic errors.
-3. Inspect the current checkpoint validation/publication table below. Resolve any hosted
-   failures before expanding coverage. The lazy `search-build` API now combines connected
-   ordinary passives, explicit physical attribute choices, supported equipment and actor
-   modifiers. Legacy fixed/finite Mace problems remain supported. Never infer a point
-   entitlement from observed counts or character level.
-4. Read [passive/equipment assembly](passive-equipment-assembly.md) and [actor resources](actor-resources.md).
-   Preserve privately admitted handles, component-level compiled programs, compact search
-   identities, selected-data requirements, exact materialized source and fresh counted
-   finalist checks. Whole actor admission and repeated skill calculation have different
-   costs; record both. No Cartesian actor/result cache or implicit Lua fallback is allowed.
-5. Check publication/hosted CI for the [action-timing checkpoint](action-timing.md).
-   Schema 11 resolves action speed once for movement and both ordinary offence consumers;
-   problem 11/report 12 exposes player `action_speed_pct`. Preserve source MAX absence,
-   positive-row queries, minimum/maximum order and server-tick saturation. Direct authored
-   integer percentages and raw numerical operations are distinct admission seams.
-   JSON float transport must remain bit-preserving for realization/data identities.
-   Per-level/hidden/implicit armour and Ward remain later complete-pipeline work;
-   broader source compatibility is prioritized under breadth validation.
-6. Execute [breadth validation](#breadth-of-validation-and-data-driven-build-admission--next-phase)
-   before another individual-skill port. Inventory all five caller-provided imports and their
-   active/saved selections, capture fresh reference results, and report import, realization,
-   mechanic coverage and numeric parity independently. Audit build-specific runtime coupling;
-   review a concrete general build-model proposal before changing major architecture.
-   Source-preserving configuration projection is now implemented; read its current checkpoint
-   below and the [configuration-data proposal](configuration-data-proposal.md). The complete
-   injected catalog and definition lookup are now implemented and locally validated. Check
-   publication status below, then extend the
-   mechanism inventory beyond configuration. [Source containers](build-source-containers.md)
-   now preserve and narrowly admit inert Import/Party/Calcs/TreeView metadata. All five
-   originals next encounter the one-Skill/one-SkillSet profile limits. Complete the B2
-   capability classification using the [mechanism inventory](breadth-mechanism-inventory.md)
-   and the [skill source/catalog boundary](skill-source-and-identities.md). The latest audit
-   covers all 116 items, 16 passive specs and fresh MAIN actor/grant/dependency relationships;
-   the full native supported/unsupported/unresolved matrix is still open. Its source and
-   identity portion now preserves all 15 saved sets, 200 groups and 541 occurrences, with
-   independent original-source construction and lookup tests. Effective name/socket-group,
-   grant, actor and selected-action resolution remain open. Review
-   [the concrete general model proposal](general-build-input-proposal.md) before
-   changing that architecture; do not delete saved sets or supporting skills.
-   Then replace closed profiles with reusable complete native pipelines as coverage permits:
-   item/gem/passive modifiers, resolved actors/conditions and resources, offence/defence,
-   conversions, ailments, triggers and minions. PerStat/StatThreshold programs now support
-   ordered numeric dependencies; actor-target multipliers, recursive producers and special
-   GetStat names remain explicit gaps. The shared ConditionProgram now represents ordered
-   FLAG/GetCondition and ordinary stat-threshold predicates; complete condition-producing
-   pipelines and their dependency scheduling remain open. No profile count or shared trait establishes full
-   game replacement. Source/data upgrades require source identity and parity review.
-7. Specialize coordinated proposals with game-aware repair and diverse archives. Preserve
-   exhaustive tiny references, deterministic one/many-worker comparisons, locks and empty
-   sample retry bounds. Benchmark random, greedy and alternating baselines at 5, 15 and 30
-   minutes in mapping/bossing before making optimizer-quality claims. Current finite
-   Mace search is a diagnostic integration test, not that benchmark or the first product.
-8. Profile preparation/calculation/result costs on realistic supported native builds before
-   tuning. Reuse immutable prepared inputs, compiled modifiers and task-local scratch state;
-   retain the XML-free typed Spark/Mace path and extend equivalent preparation to broader
-   pipelines. Source admission, graph repair, owned metric conversion and whole-search costs remain.
-   Keep versioned result/provenance contracts and fresh native finalist recalculation.
-9. Add shared memory/CPU admission, CLI signal cancellation, progress events, checkpoints,
-   persisted cache and throughput scheduling. Optional PoB workers retain separate supervision;
-   their fresh-process/reset requirements do not apply to native execution. Every dispatched
-   calculation, preparation evaluation and finalist check remains in the shared budget ledger.
-10. Add offline comparison/HTML reports, then GUI and browser bindings. Portable compilation
-   does not prove browser execution, browser parallelism or performance. The browser host
-   supplies clocks/scheduling and uses the same calculation contracts.
-11. Update this resume point and checkpoint evidence before the next handoff.
+1. Read the breadth dashboard at the top and [real-build rollout](real-build-rollout.md).
+   Resolve the pending shared-model design question before its architecture migration.
+2. Check git/worktree state and exact-head CI. Main contains the replacement checkpoint;
+   `runs/common-item-assembly-worktree` is frozen. The separately owned
+   `runs/common-assembly-data-worktree` has unfinished PolicyOnly data/extraction work.
+3. Preserve the PoB pin, original caller imports, all saved sets, numerical goldens and
+   frozen evidence. Keep native execution independent of Lua and subprocesses.
+4. Implement R1 against all five originals, then advance paired R2/R3 real-build paths.
+   Existing source projection, identity catalogs and shared kernels are reusable inputs;
+   metadata observations are not native numeric capability. Do not add another closed profile.
+5. Update the dashboard and exact per-build blockers at each integration checkpoint.
+   Verify changed interactions and exported source before expanding search or making
+   performance claims. Prior detailed checkpoints below are historical evidence, not
+   instructions to repeat completed suites or postpone real-build integration.
 
-For targeted data questions, the user supplied PoE2DB/PoEDB; see the
-[lookup constraint](design.md#external-lookup-references). Do not scrape or bulk-extract either site.
-
-No product-scope answer blocks these tasks. Exact objective metrics, thresholds, scales,
-required skill/item subsets and encounter assumptions remain explicit per-run inputs.
-Assessment reports constraint evidence and primary availability; it does not certify build
-legality or turn diagnostic calculation output into a recommendation. All calibration cases
-compare independent hosts/extractors using shared PoB calculations, not independent game models.
 
 ## Toolchain lint repair - local validation complete
 
