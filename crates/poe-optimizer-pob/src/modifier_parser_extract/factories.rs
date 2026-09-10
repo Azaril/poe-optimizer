@@ -271,6 +271,25 @@ impl<'a> Lowerer<'a> {
         }
         let name = self.name()?;
         if self.peek() == "(" {
+            if name == "tonumber" {
+                if self.parameters.contains(&name)
+                    || self.callback.upvalues.iter().any(|u| u.name == name)
+                {
+                    return Err("tonumber is not the unshadowed original global".into());
+                }
+                self.at += 1;
+                if self.peek() == ")" {
+                    return Err("tonumber requires exactly one explicit argument".into());
+                }
+                let value = self.expr(depth + 1)?;
+                if self.peek() != ")" {
+                    return Err("tonumber requires exactly one explicit argument".into());
+                }
+                self.take(")")?;
+                return Ok(ParserFactoryExpr::ToNumber {
+                    value: Box::new(value),
+                });
+            }
             if name == "firstToUpper" {
                 let helper = self
                     .data
@@ -704,7 +723,7 @@ mod tests {
         for body in [
             "function(x) return {x + 1} end",
             "function(x) return {x / 2} end",
-            "function(x) return {tonumber(x)} end",
+            "function(x) return {tonumber(x, 16)} end",
             "function(x) return {combineToUpper(x)} end",
             "function(x) local a=x return {a} end",
             "function(x) return {} print(x) end",
@@ -889,6 +908,71 @@ mod tests {
                 .unwrap()
                 .value =
                 ParserValue::Nil)
+            .is_err()
+        );
+    }
+    #[test]
+    fn number_lowering_preserves_one_value_grouping_and_direct_constructor_semantics() {
+        let f = one(
+            "function(a) return {mod('N', 'BASE', -tonumber(a)), flag('F', nil, tonumber(a))} end",
+            ParserValue::Nil,
+        )
+        .unwrap();
+        assert!(f.provenance.constructor.is_some());
+        let ParserFactoryExpr::Table(fields) = f.body else {
+            panic!()
+        };
+        let ParserFactoryField::List(ParserFactoryExpr::CreateMod { args }) = &fields[0] else {
+            panic!()
+        };
+        assert!(
+            matches!(&args[2], ParserFactoryExpr::Negate(value) if matches!(**value, ParserFactoryExpr::ToNumber { .. }))
+        );
+        for child in ["nil", "false", "{}", "'12'", "-0", "tonumber(a)"] {
+            let f = one(
+                &format!("function(a) return {{tonumber({child})}} end"),
+                ParserValue::Nil,
+            )
+            .unwrap();
+            assert!(f.provenance.constructor.is_none());
+        }
+    }
+    #[test]
+    fn number_lowering_rejects_omitted_extra_base_shadow_and_scalar_root_forms() {
+        for body in [
+            "function() return {tonumber()} end",
+            "function(a) return {tonumber(a, 10)} end",
+            "function(a) return {tonumber(a, nil)} end",
+            "function(a) return {tonumber(a, firstToUpper(nil))} end",
+            "function(a) return {tonumber(a, nil, firstToUpper(nil))} end",
+            "function(tonumber) return {tonumber('1')} end",
+            "function(a) return tonumber(a) end",
+            "function(a) return {tonumber(a):method()} end",
+        ] {
+            assert!(one(body, ParserValue::Nil).is_err(), "{body}");
+        }
+        for captured in [ParserValue::Nil, ParserValue::Number(1.0)] {
+            assert!(
+                one_callback(
+                    "function(a) return {tonumber(a)} end",
+                    ParserValue::Nil,
+                    |c| c.upvalues.push(ParserUpvalue {
+                        name: "tonumber".into(),
+                        value: captured
+                    })
+                )
+                .is_err()
+            );
+        }
+    }
+    #[test]
+    fn number_lowering_bounds_deeply_nested_single_value_calls() {
+        let nested = format!("{}a{}", "tonumber(".repeat(100), ")".repeat(100));
+        assert!(
+            one(
+                &format!("function(a) return {{{nested}}} end"),
+                ParserValue::Nil
+            )
             .is_err()
         );
     }

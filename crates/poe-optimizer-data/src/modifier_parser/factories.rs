@@ -59,6 +59,10 @@ pub enum ParserFactoryExpr {
         key: String,
     },
     Negate(Box<ParserFactoryExpr>),
+    /// Exactly one value passed to the authenticated original global primitive.
+    ToNumber {
+        value: Box<ParserFactoryExpr>,
+    },
     /// Source grouping and operand order are retained, including right associativity.
     Concat {
         left: Box<ParserFactoryExpr>,
@@ -250,6 +254,24 @@ fn expression(
             depth + 1,
             uses_constructor,
         )?,
+        ParserFactoryExpr::ToNumber { value } => {
+            if callback.environment != ParserEnvironment::OriginalGlobals
+                || callback.upvalues.iter().any(|u| u.name == "tonumber")
+            {
+                return Err(catalog_error(
+                    "factory tonumber is not the unshadowed original global",
+                ));
+            }
+            expression(
+                value,
+                factory,
+                callback,
+                data,
+                bounds,
+                depth + 1,
+                uses_constructor,
+            )?;
+        }
         ParserFactoryExpr::Concat { left, right } => {
             expression(
                 left,

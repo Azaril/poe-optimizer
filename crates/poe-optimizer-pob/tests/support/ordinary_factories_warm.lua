@@ -13,8 +13,20 @@ local function trace(event,id)
  if event=='stop' then completed[id]=true elseif event=='abort' then recorded[id]=nil end
 end
 jit.attach(record,'record');jit.attach(trace,'trace')
+local live={}
+local function collect_live()
+ for id in pairs(completed)do
+  if util.traceinfo(id)then
+   for line in pairs(recorded[id]or{})do live[#live+1]={id=id,line=line}end
+  end
+ end
+end
+jit.off(collect_live,true)
 local results,executions={},0
 for i,case in ipairs(cases)do
+ -- Observe completed live traces before the next independent case flushes.
+ -- This avoids a growing dictionary exhausting one polymorphic hot call site.
+ jit.flush();completed,recorded={},{}
  local callback,args,result=case.callback,case.args
  -- The original nonvariadic bodies inspect fixed parameters only; explicit nil
  -- trailing arguments do not alter their values or evaluate synthetic expressions.
@@ -23,12 +35,7 @@ for i,case in ipairs(cases)do
   executions=executions+1
  end
  results[i]=copyTable(result)
+ collect_live()
 end
 jit.attach(record);jit.attach(trace)
-local live={}
-for id in pairs(completed)do
- if util.traceinfo(id)then
-  for line in pairs(recorded[id]or{})do live[#live+1]={id=id,line=line}end
- end
-end
 return {results=results,executions=executions,live=live}

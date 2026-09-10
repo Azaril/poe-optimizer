@@ -41,7 +41,7 @@ use std::collections::BTreeSet;
 fn has_flag(e: &E) -> bool {
     match e {
         E::Flag { .. } => true,
-        E::Negate(v) | E::FirstToUpper { value: v, .. } => has_flag(v),
+        E::Negate(v) | E::FirstToUpper { value: v, .. } | E::ToNumber { value: v } => has_flag(v),
         E::Concat { left, right } => has_flag(left) || has_flag(right),
         E::Table(fields) => fields.iter().any(|f| match f {
             F::Named { value, .. } | F::List(value) => has_flag(value),
@@ -117,7 +117,7 @@ fn uses_mod(e: &E) -> bool {
     match e {
         E::CreateMod { .. } => true,
         E::Flag { args, .. } => args.iter().any(uses_mod),
-        E::Negate(v) | E::FirstToUpper { value: v, .. } => uses_mod(v),
+        E::Negate(v) | E::FirstToUpper { value: v, .. } | E::ToNumber { value: v } => uses_mod(v),
         E::Concat { left, right } => uses_mod(left) || uses_mod(right),
         E::Table(fields) => fields.iter().any(|f| match f {
             F::Named { value, .. } | F::List(value) => uses_mod(value),
@@ -214,9 +214,9 @@ fn every_original_flag_body_is_selected_by_its_real_special_pattern() {
         );
         covered.insert(id);
     }
-    assert_eq!(covered.len(), 68);
+    assert_eq!(covered.len(), 71);
     eprintln!(
-        "All68 original Flag bodies selected at68 actual Special call sites; every complete public graph matches"
+        "All71 original Flag bodies selected at71 actual Special call sites; every complete public graph matches"
     );
 }
 #[test]
@@ -255,8 +255,8 @@ fn every_original_flag_body_preserves_broad_raw_alias_arguments() {
             }
         }
     }
-    assert_eq!(paired + errors, 408);
-    eprintln!("All68 original Flag aliases:{paired} exact full graphs,{errors} ordered errors");
+    assert_eq!(paired + errors, 426);
+    eprintln!("All71 original Flag aliases:{paired} exact full graphs,{errors} ordered errors");
 }
 #[test]
 fn original_flag_preserves_exact_zero_and_sparse_variadic_constructor_vectors() {
@@ -766,7 +766,7 @@ fn every_original_flag_body_helper_and_constructor_run_in_live_traces() {
         .set_name("@test-only-original-flag-warm")
         .call(cases)
         .unwrap();
-    assert_eq!(observed.get::<usize>("executions").unwrap(), 68 * 128);
+    assert_eq!(observed.get::<usize>("executions").unwrap(), 71 * 128);
     let live = observed
         .get::<Table>("live")
         .unwrap()
@@ -803,6 +803,6 @@ fn every_original_flag_body_helper_and_constructor_run_in_live_traces() {
         assert!(compare(&source, &native, input));
     }
     eprintln!(
-        "All68 original Flag bodies plus Flag/helper constructor observed in completed live traces;8704 direct calls and exact cold/warm/public native graphs"
+        "All71 original Flag bodies plus Flag/helper constructor observed in completed live traces;9088 direct calls and exact cold/warm/public native graphs"
     );
 }

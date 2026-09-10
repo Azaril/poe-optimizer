@@ -38,7 +38,7 @@ use string_source::StringSource;
 fn has_string(expr: &E) -> bool {
     match expr {
         E::Concat { .. } | E::FirstToUpper { .. } => true,
-        E::Negate(v) => has_string(v),
+        E::Negate(v) | E::ToNumber { value: v } => has_string(v),
         E::Table(fields) => fields.iter().any(|f| match f {
             Field::Named { value, .. } | Field::List(value) => has_string(value),
         }),
@@ -217,12 +217,12 @@ fn every_original_string_factory_matches_at_all_actual_public_call_positions() {
             }
         }
     }
-    assert_eq!(coverage[&(D::Special, false)].len(), 43);
+    assert_eq!(coverage[&(D::Special, false)].len(), 44);
     assert_eq!(coverage[&(D::ModTag, false)].len(), 10);
     assert_eq!(coverage[&(D::ModTag, true)].len(), 10);
-    assert_eq!(paired, 63);
+    assert_eq!(paired, 64);
     eprintln!(
-        "String factories: all53 original bodies,63 actual full public graphs (43Special,10firstTag,10secondTag)"
+        "String factories: all54 original bodies,64 actual full public graphs (44Special,10firstTag,10secondTag)"
     );
 }
 #[test]
@@ -282,9 +282,9 @@ fn all_original_string_bodies_preserve_raw_capture_aliases_and_ordered_errors() 
             }
         }
     }
-    assert_eq!(paired + errors, 265);
+    assert_eq!(paired + errors, 270);
     eprintln!(
-        "All53 original string closures via labelled aliases:{paired} exact full graphs,{errors} ordered source errors"
+        "All54 original string closures via labelled aliases:{paired} exact full graphs,{errors} ordered source errors"
     );
 }
 #[test]
@@ -703,7 +703,7 @@ fn every_original_string_factory_and_helper_execute_directly_in_observed_live_tr
         .set_name("@test-only-original-string-factory-warm")
         .call(cases)
         .unwrap();
-    assert_eq!(observed.get::<usize>("executions").unwrap(), 53 * 128);
+    assert_eq!(observed.get::<usize>("executions").unwrap(), 54 * 128);
     let live = observed
         .get::<Table>("live")
         .unwrap()
@@ -731,6 +731,6 @@ fn every_original_string_factory_and_helper_execute_directly_in_observed_live_tr
         assert!(compare(&source, &native, input));
     }
     eprintln!(
-        "Warm string source:53 original factories plus helper,6784 direct executions; exact cold/warm metadata and warmed full public native graphs"
+        "Warm string source:54 original factories plus helper,6912 direct executions; exact cold/warm metadata and warmed full public native graphs"
     );
 }

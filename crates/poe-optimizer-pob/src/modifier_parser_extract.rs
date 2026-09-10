@@ -12,6 +12,7 @@ use std::{
 };
 mod factories;
 mod flags;
+mod numbers;
 mod ordinary;
 mod strings;
 
@@ -294,6 +295,7 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
         )
     };
     let original_strings = strings::StringLibrary::capture(&lua)?;
+    let original_number = numbers::NumberPrimitive::capture(&lua)?;
     let original_type: Function = lua.globals().get("type")?;
     let original_select: Function = lua.globals().get("select")?;
     lua.set_memory_limit(256 * 1024 * 1024)?;
@@ -516,6 +518,7 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
     let first_to_upper_pattern = strings::source_policy(&lua, sources, &mut spans)?;
     let (flag_mod_type, flag_mod_value) = flags::source_policy(&lua, sources, &mut spans)?;
     original_strings.verify(&lua)?;
+    original_number.verify(&lua)?;
     let upper_id = helpers["firstToUpper"];
     strings::verify_helper(
         &lua,

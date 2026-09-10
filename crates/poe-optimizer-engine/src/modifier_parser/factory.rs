@@ -227,6 +227,16 @@ impl Run<'_> {
                 self.output.charge(0)?;
                 value.negated()
             }
+            ParserFactoryExpr::ToNumber { value } => {
+                // The closed, one-argument primitive preserves Number bits and
+                // returns nil for other non-string kinds; it never calls a value.
+                let value = self.factory_expr(value, callback, arguments, depth + 1)?;
+                if let V::Bytes(bytes) = &value {
+                    self.budget.charge(bytes.len() as u64)?;
+                }
+                self.output.charge(0)?;
+                Ok(value.number().map(V::Number).unwrap_or(V::Nil))
+            }
             ParserFactoryExpr::Concat { left, right } => {
                 // Evaluate operands in source order before reducing this node.
                 // Right association is represented by the injected expression tree.
@@ -627,6 +637,156 @@ mod tests {
         assert!(matches!(
             create_mod(args, &mut budget),
             Err(ParserError::ResourceBound(_))
+        ));
+    }
+}
+
+#[cfg(test)]
+mod number_tests {
+    use super::*;
+    use std::sync::OnceLock;
+
+    fn parser() -> &'static CompiledModifierParser {
+        static PARSER: OnceLock<CompiledModifierParser> = OnceLock::new();
+        PARSER.get_or_init(|| {
+            CompiledModifierParser::new(
+                poe_optimizer_data::game_data::bundled_snapshot()
+                    .unwrap()
+                    .modifier_parser(),
+            )
+            .unwrap()
+        })
+    }
+    fn evaluate(
+        expression: &ParserFactoryExpr,
+        arguments: &[V],
+        work: &mut MatchBudget,
+        output: OutputBudget,
+    ) -> ParserResult<V> {
+        Run {
+            parser: parser(),
+            budget: work,
+            output,
+            source_tables: BTreeMap::new(),
+        }
+        .factory_expr(
+            expression,
+            ParserCallbackId(0), // No captured data is used by these scalar expressions.
+            FactoryArguments::Raw(arguments),
+            0,
+        )
+    }
+    fn convert() -> ParserFactoryExpr {
+        ParserFactoryExpr::ToNumber {
+            value: Box::new(ParserFactoryExpr::Argument(0)),
+        }
+    }
+
+    #[test]
+    fn number_values_keep_their_bits_without_text_or_arithmetic_roundtrips() {
+        for number in [
+            0.0,
+            -0.0,
+            1e-300,
+            1e300,
+            f64::INFINITY,
+            f64::NEG_INFINITY,
+            f64::NAN,
+        ] {
+            let result = evaluate(
+                &convert(),
+                &[V::Number(number)],
+                &mut MatchBudget::default(),
+                OutputBudget::default(),
+            )
+            .unwrap();
+            let V::Number(actual) = result else {
+                panic!("number result")
+            };
+            assert_eq!(actual.to_bits(), number.to_bits());
+        }
+    }
+
+    #[test]
+    fn missing_and_nonconvertible_values_return_nil_without_invoking_them() {
+        let values = [
+            V::Nil,
+            V::Boolean(false),
+            V::Boolean(true),
+            V::Table(Arc::new(ModifierTable::default())),
+            V::Callback(ParserCallbackId(1)),
+            V::Bytes(b"12\0".to_vec()),
+            V::Bytes(vec![0xff]),
+        ];
+        for arguments in std::iter::once(&[][..]).chain(values.iter().map(std::slice::from_ref)) {
+            assert_eq!(
+                evaluate(
+                    &convert(),
+                    arguments,
+                    &mut MatchBudget::default(),
+                    OutputBudget::default()
+                )
+                .unwrap(),
+                V::Nil,
+            );
+        }
+    }
+
+    #[test]
+    fn conversion_charges_each_input_byte_and_its_result_value() {
+        let input = V::Bytes([vec![b' '; 191], vec![b'7']].concat());
+        let mut enough = MatchBudget::new(crate::lua_pattern::MatchLimits {
+            max_steps: 194,
+            ..Default::default()
+        });
+        assert_eq!(
+            evaluate(
+                &convert(),
+                std::slice::from_ref(&input),
+                &mut enough,
+                OutputBudget::default()
+            )
+            .unwrap(),
+            V::Number(7.0),
+        );
+        assert_eq!(enough.steps_used(), 194); // Two expression nodes plus192 bytes.
+        let mut short = MatchBudget::new(crate::lua_pattern::MatchLimits {
+            max_steps: 193,
+            ..Default::default()
+        });
+        assert!(matches!(
+            evaluate(&convert(), &[input], &mut short, OutputBudget::default()),
+            Err(ParserError::Scan(_)),
+        ));
+        let mut output = OutputBudget::default();
+        for _ in 0..value::MAX_OUTPUT_VALUES - 1 {
+            output.charge(0).unwrap();
+        }
+        assert!(matches!(
+            evaluate(
+                &convert(),
+                &[V::Number(1.0)],
+                &mut MatchBudget::default(),
+                output
+            ),
+            Err(ParserError::ResourceBound(_)),
+        ));
+    }
+
+    #[test]
+    fn conversion_keeps_child_errors_before_later_expression_work() {
+        let expression = ParserFactoryExpr::Concat {
+            left: Box::new(ParserFactoryExpr::ToNumber {
+                value: Box::new(ParserFactoryExpr::Negate(Box::new(
+                    ParserFactoryExpr::Literal(ParserFactoryLiteral::Nil),
+                ))),
+            }),
+            // This would be invalid if reached; the left source error must win.
+            right: Box::new(ParserFactoryExpr::CapturedScalar { upvalue: 0 }),
+        };
+        assert!(matches!(
+            evaluate(&expression, &[], &mut MatchBudget::default(), OutputBudget::default()),
+            Err(ParserError::SourceError(message)) if message == "arithmetic on a non-number",
         ));
     }
 }

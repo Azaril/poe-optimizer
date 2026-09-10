@@ -170,7 +170,7 @@ fn aggregate_key_bytes_cannot_bypass_graph_budget() {
 #[test]
 fn tag_precheck_policy_preserves_authored_lazy_patterns_with_bounded_text() {
     let mut data = data();
-    assert_eq!(data.schema_version, 5);
+    assert_eq!(data.schema_version, 6);
     assert_eq!(data.policy.tag_capture_numeric_pattern, "%d+");
     for key in [
         "prefix_factory_invocation",

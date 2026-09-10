@@ -35,7 +35,7 @@ fn complete_flag_breadth_preserves_the_indirect_constructor_path() {
     let data = data();
     data.validate().unwrap();
     let owners = flag_owners(&data);
-    assert_eq!(owners.len(), 68);
+    assert_eq!(owners.len(), 71);
     assert_eq!(owners.iter().filter(|id| matches!(&data.factories[id], ParserFactoryDisposition::Pure(f) if f.provenance.constructor.is_none())).count(), 23);
     for dict in [
         ParserDictionary::Special,

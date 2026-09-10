@@ -8,7 +8,7 @@ use std::sync::Arc;
 mod factories;
 pub use factories::*;
 
-pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 5;
+pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 6;
 type Result<T> = std::result::Result<T, GameDataError>;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(transparent)]

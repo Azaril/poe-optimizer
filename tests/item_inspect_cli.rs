@@ -2068,3 +2068,277 @@ fn injected_flag_factories_preserve_prefixes_and_variadic_slots() {
         "injected prefix has its own identity"
     );
 }
+#[test]
+fn injected_number_factories_preserve_raw_inputs_nil_and_error_order() {
+    use poe_optimizer_data::modifier_parser::{
+        ParserDictionary as Dict, ParserFactoryDisposition, ParserFactoryExpr as Expr,
+        ParserFactoryField as Field, ParserFactoryLiteral as Literal, ParserValue,
+    };
+
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller-numbers.xml");
+    let data_path = temp.path().join("caller-number-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    let base_name = package
+        .item_loading
+        .bases
+        .iter()
+        .find(|base| {
+            base.item_type
+                != package
+                    .item_loading
+                    .policy
+                    .affix_loading
+                    .reconcile
+                    .jewel_type
+                && base.field("flask").is_none()
+                && base.field("charm").is_none()
+                && !base.name.contains(['&', '<', '>'])
+        })
+        .unwrap()
+        .name
+        .clone();
+    let special = package.modifier_parser.dictionaries[&Dict::Special];
+    // Choose source-linked constructor owners by capability. Authored recipe
+    // changes receive a custom package identity, not an invented game identity.
+    let ids = package.modifier_parser.tables[special.0 as usize - 1]
+        .fields
+        .values()
+        .filter_map(|value| {
+            let ParserValue::Callback(id) = value else {
+                return None;
+            };
+            matches!(
+                package.modifier_parser.factories.get(id),
+                Some(ParserFactoryDisposition::Pure(factory))
+                    if factory.provenance.constructor.is_some()
+            )
+            .then_some(*id)
+        })
+        .collect::<std::collections::BTreeSet<_>>()
+        .into_iter()
+        .take(2)
+        .collect::<Vec<_>>();
+    assert_eq!(ids.len(), 2);
+    let ParserFactoryDisposition::Pure(error_factory) = &package.modifier_parser.factories[&ids[1]]
+    else {
+        unreachable!()
+    };
+    let constructor = error_factory.provenance.constructor.unwrap();
+    let opaque_upvalue = package.modifier_parser.callbacks[ids[1].0 as usize - 1]
+        .upvalues
+        .iter()
+        .position(|upvalue| upvalue.value == ParserValue::Callback(constructor))
+        .unwrap();
+    let constants = package.modifier_parser.policy.mod_flags;
+    assert!(
+        package.modifier_parser.tables[constants.0 as usize - 1]
+            .fields
+            .insert(
+                "CallerNumericOpaque".into(),
+                ParserValue::Callback(constructor)
+            )
+            .is_none()
+    );
+    let text = |value: &str| Expr::Literal(Literal::Text(value.into()));
+    let number = |value| Expr::Literal(Literal::Number(value));
+    let nil = || Expr::Literal(Literal::Nil);
+    let convert = |value| Expr::ToNumber {
+        value: Box::new(value),
+    };
+    let named = |key: &str, value| Field::Named {
+        key: key.into(),
+        value,
+    };
+    let ParserFactoryDisposition::Pure(error_factory) =
+        package.modifier_parser.factories.get_mut(&ids[1]).unwrap()
+    else {
+        unreachable!()
+    };
+    error_factory.parameter_count = 0;
+    error_factory.body = Expr::Table(vec![Field::List(Expr::CreateMod {
+        args: vec![
+            text("CallerNumericError"),
+            text("CALLER_NUMBER"),
+            convert(Expr::Negate(Box::new(Expr::Literal(Literal::Boolean(
+                false,
+            ))))),
+            // This later captured function would be deferred if evaluated.
+            // The earlier child arithmetic error must win before conversion.
+            Expr::CapturedScalar {
+                upvalue: u16::try_from(opaque_upvalue).unwrap(),
+            },
+        ],
+    })]);
+    for (pattern, id) in [
+        ("^caller number (.+)$", ids[0]),
+        ("^caller bad number$", ids[1]),
+    ] {
+        assert!(
+            package.modifier_parser.tables[special.0 as usize - 1]
+                .fields
+                .insert(pattern.into(), ParserValue::Callback(id))
+                .is_none()
+        );
+    }
+    let cases = [
+        ("007", Some(7.0)),
+        ("0x1.8p1", Some(3.0)),
+        ("0b101", Some(5.0)),
+        ("-2.5e1", Some(-25.0)),
+        ("not-a-number", None),
+    ];
+    let mut lines = cases
+        .iter()
+        .map(|(raw, _)| format!("caller number {raw}"))
+        .collect::<Vec<_>>();
+    lines.extend(["caller number 1e999".into(), "caller bad number".into()]);
+    let items = lines
+        .iter()
+        .enumerate()
+        .map(|(index, line)| {
+            format!("<Item id='caller-{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
+        })
+        .collect::<String>();
+    let xml = format!("<PathOfBuilding2><Items>{items}</Items></PathOfBuilding2>");
+    fs::write(&input, &xml).unwrap();
+    let mut digests = Vec::new();
+    for (literal, expected_literal) in [("0x1.8p1", 3.0), ("0b101", 5.0)] {
+        let ParserFactoryDisposition::Pure(factory) =
+            package.modifier_parser.factories.get_mut(&ids[0]).unwrap()
+        else {
+            unreachable!()
+        };
+        factory.parameter_count = 3;
+        factory.body = Expr::Table(vec![Field::List(Expr::CreateMod {
+            args: vec![
+                text("CallerNumericValue"),
+                text("CALLER_NUMBER"),
+                convert(Expr::Argument(1)),
+                text("Caller number source"),
+                number(0.0),
+                number(0.0),
+                Expr::Table(vec![
+                    named("type", text("CallerNumberTag")),
+                    named("raw", Expr::Argument(1)),
+                    named("convertedTwice", convert(convert(Expr::Argument(1)))),
+                    named("literalRaw", text(literal)),
+                    named("literalConverted", convert(text(literal))),
+                    named("nulRaw", text("12\0tail")),
+                    named("nulConverted", convert(text("12\0tail"))),
+                    named("utf8Raw", text("é")),
+                    named("utf8Converted", convert(text("é"))),
+                    named("nilConverted", convert(nil())),
+                    named(
+                        "falseConverted",
+                        convert(Expr::Literal(Literal::Boolean(false))),
+                    ),
+                    named("tableConverted", convert(Expr::Table(vec![]))),
+                    named(
+                        "functionConverted",
+                        convert(Expr::ConstantField {
+                            table: constants,
+                            key: "CallerNumericOpaque".into(),
+                        }),
+                    ),
+                    named("missingConverted", convert(Expr::Argument(2))),
+                    named("negativeZero", convert(number(-0.0))),
+                    Field::List(number(1.0)),
+                    Field::List(convert(nil())),
+                    Field::List(number(3.0)),
+                ]),
+            ],
+        })]);
+        package.refresh_section_digests().unwrap();
+        let data_bytes = package.canonical_bytes().unwrap();
+        let digest = format!("{:x}", Sha256::digest(&data_bytes));
+        fs::write(&data_path, &data_bytes).unwrap();
+        let report = inspect_definitions(&input, temp.path(), Some(&data_path));
+        let loaded = &report["definition_lookup"]["items"]["report"];
+        let items = loaded["items"].as_array().unwrap();
+        assert_eq!(items.len(), lines.len());
+        for (index, (raw, expected)) in cases.iter().enumerate() {
+            let item = &items[index];
+            assert_eq!(item["status"], "pending", "{item:#}");
+            assert_eq!(item["pending"]["kind"], "assembly", "{item:#}");
+            let rows = item["state"]["explicit_mod_lines"].as_array().unwrap();
+            assert_eq!(rows.len(), 1);
+            assert_eq!(rows[0]["line"], lines[index]);
+            assert_eq!(rows[0]["source_line"], 3);
+            assert!(rows[0]["extra"].is_null());
+            let mut modifier = serde_json::json!({
+                "fields":{"name":"CallerNumericValue","type":"CALLER_NUMBER","source":"Caller number source","flags":0.0,"keywordFlags":0.0},
+                "indexed":{"1":{
+                    "fields":{"type":"CallerNumberTag","raw":raw,"literalRaw":literal,"literalConverted":expected_literal,"nulRaw":"12\0tail","utf8Raw":"é","negativeZero":-0.0},
+                    "indexed":{"1":1.0,"3":3.0}
+                }}
+            });
+            if let Some(value) = expected {
+                modifier["fields"]["value"] = serde_json::json!(value);
+                modifier["indexed"]["1"]["fields"]["convertedTwice"] = serde_json::json!(value);
+            }
+            assert_eq!(rows[0]["modifiers"], serde_json::json!([modifier]));
+            assert_eq!(
+                rows[0]["modifiers"][0]["indexed"]["1"]["fields"]["negativeZero"]
+                    .as_f64()
+                    .unwrap()
+                    .to_bits(),
+                (-0.0_f64).to_bits()
+            );
+        }
+        let nonfinite = &items[cases.len()];
+        assert_eq!(nonfinite["status"], "pending", "{nonfinite:#}");
+        assert_eq!(nonfinite["pending"]["kind"], "modifier_parser");
+        assert!(
+            nonfinite["pending"]["message"]
+                .as_str()
+                .unwrap()
+                .contains("non-finite parser output requires a richer item assembly model")
+        );
+        let error = items.last().unwrap();
+        assert_eq!(error["status"], "source_error", "{error:#}");
+        assert!(error["pending"].is_null());
+        assert!(
+            error["instructions"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|instruction| instruction["error"]
+                    .as_str()
+                    .is_some_and(|message| message.contains("arithmetic on a non-number"))),
+            "{error:#}"
+        );
+        for (index, item) in items.iter().enumerate() {
+            assert_eq!(item["authored_id"], format!("caller-{index}"));
+            let calls = item["state"]["parser_calls"].as_array().unwrap();
+            assert_eq!(calls.len(), 1, "{item:#}");
+            assert_eq!(calls[0]["text"], lines[index]);
+            assert_eq!(calls[0]["line_index"], 3);
+            assert_eq!(calls[0]["combined"], false);
+            assert!(calls[0].get("origin").is_none());
+        }
+        assert_eq!(report["verification"]["item_loading"], "reported");
+        assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
+        assert_eq!(report["verification"]["native_admission"], "not_checked");
+        assert_eq!(report["verification"]["reference_calculation"], "not_run");
+        assert_eq!(
+            report["definition_lookup"]["data_trust"]["status"],
+            "custom_unreviewed"
+        );
+        assert_eq!(loaded["data_identity"]["content_sha256"], digest);
+        assert_eq!(
+            loaded["implementation_sha256"],
+            poe_optimizer_import::item_loading::implementation_fingerprint()
+        );
+        assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+        assert_eq!(fs::read(&data_path).unwrap(), data_bytes);
+        digests.push(digest);
+    }
+    assert_ne!(
+        digests[0], digests[1],
+        "injected numeric source has its own identity"
+    );
+}

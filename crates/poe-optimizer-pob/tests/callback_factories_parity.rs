@@ -1025,6 +1025,10 @@ fn recipe_operations(expr: &E, operations: &mut std::collections::BTreeSet<&'sta
             recipe_operations(left, operations);
             recipe_operations(right, operations);
         }
+        E::ToNumber { value } => {
+            operations.insert("tonumber");
+            recipe_operations(value, operations);
+        }
         E::FirstToUpper { value, .. } => {
             operations.insert("firstToUpper");
             recipe_operations(value, operations);
