@@ -6,6 +6,7 @@ pub use crate::action_speed::{
 pub use crate::actor::*;
 use crate::bundled::BundledClassTree;
 pub use crate::configuration::*;
+pub use crate::item_assembly::*;
 pub use crate::item_formatting::{ItemFormattingData, ItemFormattingRule, ItemNumberFormat};
 pub use crate::item_loading::*;
 pub use crate::item_rules::{
@@ -23,8 +24,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 25;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v25";
+pub const SCHEMA_VERSION: u32 = 26;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v26";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -54,6 +55,7 @@ const SECTIONS: &[&str] = &[
     "item_scalability",
     "modifier_parser",
     "unique_requirements",
+    "item_assembly",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -444,6 +446,7 @@ pub struct GameDataPackage {
     pub item_scalability: ItemScalabilityData,
     pub modifier_parser: ModifierParserData,
     pub unique_requirements: UniqueRequirementData,
+    pub item_assembly: ItemAssemblyData,
 }
 impl GameDataPackage {
     pub fn armour_base(&self, id: &str) -> Option<&ArmourBaseData> {
@@ -526,6 +529,7 @@ pub struct GameDataSnapshot {
     item_scalability: ItemScalabilityCatalog,
     modifier_parser: ModifierParserCatalog,
     unique_requirements: UniqueRequirementCatalog,
+    item_assembly: ItemAssemblyCatalog,
 }
 impl GameDataSnapshot {
     pub fn identity(&self) -> &DataIdentity {
@@ -545,6 +549,9 @@ impl GameDataSnapshot {
     }
     pub fn unique_requirements(&self) -> &UniqueRequirementCatalog {
         &self.unique_requirements
+    }
+    pub fn item_assembly(&self) -> &ItemAssemblyCatalog {
+        &self.item_assembly
     }
     pub fn item_scalability(&self) -> &ItemScalabilityCatalog {
         &self.item_scalability
@@ -614,6 +621,7 @@ impl GameDataLoader {
         let item_loading = ItemLoadingCatalog::new(package.item_loading.clone())?;
         let item_scalability = ItemScalabilityCatalog::new(package.item_scalability.clone())?;
         let modifier_parser = ModifierParserCatalog::new(package.modifier_parser.clone())?;
+        let item_assembly = ItemAssemblyCatalog::new(package.item_assembly.clone())?;
         let unique_requirements =
             UniqueRequirementCatalog::new(package.unique_requirements.clone())?;
         Ok(GameDataSnapshot {
@@ -626,6 +634,7 @@ impl GameDataLoader {
             item_scalability,
             modifier_parser,
             unique_requirements,
+            item_assembly,
         })
     }
 }
@@ -724,6 +733,12 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     package.item_loading.validate()?;
     package.item_scalability.validate()?;
     package.modifier_parser.validate()?;
+    package.item_assembly.validate()?;
+    package.item_assembly.validate_dependencies(
+        &package.item_loading,
+        &package.item_scalability,
+        &package.modifier_parser,
+    )?;
     package
         .unique_requirements
         .validate_inputs(&package.item_loading, &package.tree)?;

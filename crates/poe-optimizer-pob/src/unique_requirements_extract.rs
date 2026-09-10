@@ -127,6 +127,16 @@ fn load(
     lua.load(code).set_name(format!("@{path}")).call(args)
 }
 fn host(sources: &BTreeMap<String, String>) -> Result<(Lua, Arc<Mutex<Vec<String>>>)> {
+    let (lua, order, ()) = host_with_observer(sources, |_| Ok(()))?;
+    Ok((lua, order))
+}
+/// An observer may retain trusted primitive identities before original modules load.
+/// The original initialization and unique constructor lifecycle remain unchanged.
+pub(crate) type OriginalItemHost<T> = (Lua, Arc<Mutex<Vec<String>>>, T);
+pub(crate) fn host_with_observer<T>(
+    sources: &BTreeMap<String, String>,
+    observe: impl FnOnce(&Lua) -> Result<T>,
+) -> Result<OriginalItemHost<T>> {
     let lua = Lua::new();
     lua.set_memory_limit(768 * 1024 * 1024)?;
     let started = Instant::now();
@@ -142,6 +152,7 @@ fn host(sources: &BTreeMap<String, String>) -> Result<(Lua, Arc<Mutex<Vec<String
             }
         },
     )?;
+    let retained = observe(&lua)?;
     poe_optimizer_lua_utf8::register(&lua)?;
     let utf8: Value = lua.load("return require('lua-utf8')").eval()?;
     let bit: Value = lua.globals().get("bit")?;
@@ -222,7 +233,7 @@ fn host(sources: &BTreeMap<String, String>) -> Result<(Lua, Arc<Mutex<Vec<String
             .get::<Function>("LoadModule")?
             .call::<MultiValue>(module)?;
     }
-    Ok((lua, order))
+    Ok((lua, order, retained))
 }
 
 // These wrappers record the original iterator outputs and constructor calls;

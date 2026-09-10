@@ -1,0 +1,188 @@
+{
+  "add_mod": {
+    "end_line": 31,
+    "line": 29,
+    "path": "src/Classes/ModList.lua",
+    "sha256": "1c95b3d05cc79ceaaff55da09d9623830fc058d4bcafcdc8605fd122bf840aba"
+  },
+  "and64": {
+    "end_line": 185,
+    "line": 170,
+    "path": "src/Data/Global.lua",
+    "sha256": "ae12316ead192e6161039f146c6bf4f913b948ea9433aa79d84b23c39b12c424"
+  },
+  "and_pair": {
+    "end_line": 143,
+    "line": 137,
+    "path": "src/Data/Global.lua",
+    "sha256": "ce41d39447a4f764b83c482ff5a481ce4e9973e091d0e3523a30d87a561fb9f0"
+  },
+  "apply_range": {
+    "end_line": 338,
+    "line": 130,
+    "path": "src/Modules/ItemTools.lua",
+    "sha256": "0ca143263e3d4dad69c833fb21e8969617e23fd73a38843dd03354017bbf3a82"
+  },
+  "build_mod_list": {
+    "end_line": 2863,
+    "line": 2694,
+    "path": "src/Classes/Item.lua",
+    "sha256": "fcac3accea21ca7fd376a308261b7f3b69fbd8b7aba7b3b6c8fa473b871b7efe"
+  },
+  "build_slot": {
+    "end_line": 2669,
+    "line": 2414,
+    "path": "src/Classes/Item.lua",
+    "sha256": "27b559146e9c5f18bb255cbd048e5a94a3ecd8f4eaeb41d0e4a0bdecb07a528c"
+  },
+  "build_slots": {
+    "end_line": 2680,
+    "line": 2671,
+    "path": "src/Classes/Item.lua",
+    "sha256": "a9009224d758e545de368eec6ca461f2494afb173df00b3086c58f2f394968a5"
+  },
+  "calc_local": {
+    "end_line": 2411,
+    "line": 2384,
+    "path": "src/Classes/Item.lua",
+    "sha256": "1e4a5301fcc0842d09af682e34eb44d89689cbacd3da17b025e7e5aa0dfd35fb"
+  },
+  "copy_table": {
+    "end_line": 505,
+    "line": 495,
+    "path": "src/Modules/Common.lua",
+    "sha256": "2e013585437512f70fd90debc4037fc3d987a91ec1ad57e144336ce558f15ae6"
+  },
+  "create_mod": {
+    "end_line": 91,
+    "line": 57,
+    "path": "src/Modules/ModTools.lua",
+    "sha256": "d7f2dd60eac9f06c7418437c1f70441cb05374c796c561e51535f9fc9d128b5e"
+  },
+  "flag_internal": {
+    "end_line": 245,
+    "line": 229,
+    "path": "src/Classes/ModList.lua",
+    "sha256": "76eeed2a97b2482a0fa2be3af4e0c667ac1e43ad4ef30b6946f542189ae0a3f0"
+  },
+  "flag_query": {
+    "end_line": 296,
+    "line": 281,
+    "path": "src/Classes/ModStore.lua",
+    "sha256": "165d9fc000d516ea11e4f172f48920ba30083fa5143a51cbe095955c4200a5bc"
+  },
+  "independent_variants": {
+    "end_line": 364,
+    "line": 362,
+    "path": "src/Classes/Item.lua",
+    "sha256": "eb58083153e75a80dfa0dede97a06719dadd2c33ad0928f71f7da408bc40c1aa"
+  },
+  "keyword_match": {
+    "end_line": 331,
+    "line": 317,
+    "path": "src/Data/Global.lua",
+    "sha256": "a920a0d4020631cb0b8868736c217509eab0f3e6cf26528e23fa7222e07c338d"
+  },
+  "list_internal": {
+    "end_line": 326,
+    "line": 309,
+    "path": "src/Classes/ModList.lua",
+    "sha256": "03457c00081e442cc474b9c3a13baa5f5b8a62fd57b7fe49eaef7f044dd70135"
+  },
+  "list_query": {
+    "end_line": 339,
+    "line": 321,
+    "path": "src/Classes/ModStore.lua",
+    "sha256": "b8988c47a4371cc75c69255ade128bd0e2f7f5e4bd917ef706bdcb4adb9f4823"
+  },
+  "mod_list_constructor": {
+    "end_line": 27,
+    "line": 24,
+    "path": "src/Classes/ModList.lua",
+    "sha256": "152526ce7832a17d30883b72ce2ad2447e965e969fad9e1b2cb886a00baab54b"
+  },
+  "mod_store_constructor": {
+    "end_line": 71,
+    "line": 65,
+    "path": "src/Classes/ModStore.lua",
+    "sha256": "7598b8ede8016fad9d83e716cd13f3a78a5dbd63000fecf73ce467179d47ea9d"
+  },
+  "new_mod": {
+    "end_line": 144,
+    "line": 142,
+    "path": "src/Classes/ModStore.lua",
+    "sha256": "1fb9f0be659a3a3442c0c212b68027aa482c004336adf5a4fa17ada6b1764b76"
+  },
+  "not64": {
+    "end_line": 220,
+    "line": 204,
+    "path": "src/Data/Global.lua",
+    "sha256": "0555e82f3912403aef5b3ddb899056b274600803533c0bac780164db1884be55"
+  },
+  "primary_slot": {
+    "end_line": 2371,
+    "line": 2355,
+    "path": "src/Classes/Item.lua",
+    "sha256": "c3a95f2b1219a96febb4110a6660d763ac437847dd796c4b98959928a4ce7f7c"
+  },
+  "ranged_mods": {
+    "end_line": 2692,
+    "line": 2682,
+    "path": "src/Classes/Item.lua",
+    "sha256": "e37f800860b18e738e6e7c8b1391691a8ef28d10d1ecf4a9252b32fb7b600ea2"
+  },
+  "round": {
+    "end_line": 728,
+    "line": 722,
+    "path": "src/Modules/Common.lua",
+    "sha256": "90585272c160e302702e5071f1ad55c649b8da02e83ef2d776d89a449250e1f2"
+  },
+  "round_symmetric": {
+    "end_line": 759,
+    "line": 744,
+    "path": "src/Modules/Common.lua",
+    "sha256": "961888d319e63e656827bb0b3c676078932170459e63b819e8c4c9a030b195c6"
+  },
+  "rune_display": {
+    "end_line": 2194,
+    "line": 2180,
+    "path": "src/Classes/Item.lua",
+    "sha256": "98dbecadd1df8db8f13a66f660a0bc34b32beee151f37911dd7d79251dee94bb"
+  },
+  "scale_add_mod": {
+    "end_line": 119,
+    "line": 82,
+    "path": "src/Classes/ModStore.lua",
+    "sha256": "14e2560fd6a82516cec22ac53a4998e29194f7d481774676da3898ae9b9b0978"
+  },
+  "set_source": {
+    "end_line": 283,
+    "line": 277,
+    "path": "src/Modules/ModTools.lua",
+    "sha256": "7bb9a75ee0b7a1c4a3214ea705203399515ab74bd6961f681f7c98726f481feb"
+  },
+  "variant_check": {
+    "end_line": 2318,
+    "line": 2289,
+    "path": "src/Classes/Item.lua",
+    "sha256": "a5911212cba9afac02eb0cfc912ad3718de23043c343df1a2574576c8578576d"
+  },
+  "variant_count": {
+    "end_line": 2336,
+    "line": 2320,
+    "path": "src/Classes/Item.lua",
+    "sha256": "c4bbcdcdfeac7d5cf6a4f3cebf33debf7b3467a738ac30518c5c6866d7eebf89"
+  },
+  "variant_groups": {
+    "end_line": 368,
+    "line": 366,
+    "path": "src/Classes/Item.lua",
+    "sha256": "268f7ffd8ffbb99d751651f57f2581ac3902af710943e34ef8089103c29b1df4"
+  },
+  "zero_line": {
+    "end_line": 74,
+    "line": 72,
+    "path": "src/Modules/ItemTools.lua",
+    "sha256": "dd341f6585febdbd7831cf95dc48f843ee6f5d3e62b265382110ac4a81aaf8e6"
+  }
+}

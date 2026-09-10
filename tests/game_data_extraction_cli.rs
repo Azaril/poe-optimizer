@@ -15,7 +15,7 @@ use std::{
     process::{Command, Output},
 };
 
-const SECTIONS: [&str; 27] = [
+const SECTIONS: [&str; 28] = [
     "tree",
     "character",
     "actor",
@@ -43,6 +43,7 @@ const SECTIONS: [&str; 27] = [
     "item_scalability",
     "modifier_parser",
     "unique_requirements",
+    "item_assembly",
 ];
 fn repository() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -141,7 +142,7 @@ fn assert_no_outputs(path: &Path) {
 }
 
 #[test]
-fn fresh_cli_extractions_reproduce_all_twenty_seven_sections_and_stable_source_evidence() {
+fn fresh_cli_extractions_reproduce_all_twenty_eight_sections_and_stable_source_evidence() {
     let temp = tempfile::tempdir().unwrap();
     let first = temp.path().join("first extracted package.json");
     let second = temp.path().join("second extracted package.json");
@@ -244,6 +245,7 @@ fn fresh_cli_extractions_reproduce_all_twenty_seven_sections_and_stable_source_e
             &actual["skill_identities"]["source"]["files"],
         ),
         ("item_loading", &actual["item_loading"]["source"]["files"]),
+        ("item_assembly", &actual["item_assembly"]["source"]["files"]),
         (
             "modifier_parser",
             &actual["modifier_parser"]["source"]["files"],

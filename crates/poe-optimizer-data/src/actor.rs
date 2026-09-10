@@ -569,6 +569,29 @@ impl ActorModifierRule {
         Ok(literals)
     }
 }
+pub(crate) fn validate_high_precision_mods(
+    data: &BTreeMap<String, BTreeMap<ActorNumericOperation, u8>>,
+) -> Result<(), GameDataError> {
+    if data.len() > 256 {
+        return Err(invalid(
+            "actor precision table exceeds bounded source model",
+        ));
+    }
+    for (name, operations) in data {
+        if name.is_empty()
+            || name.len() > 128
+            || !name.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'_')
+            || operations.is_empty()
+            || operations.len() > 4
+            || operations.values().any(|places| *places > 15)
+        {
+            return Err(invalid(
+                "actor precision record has unsupported name, operation count or places",
+            ));
+        }
+    }
+    Ok(())
+}
 pub(crate) fn validate_actor(data: &ActorData) -> Result<(), GameDataError> {
     for value in [
         data.initial_spirit,
@@ -587,24 +610,7 @@ pub(crate) fn validate_actor(data: &ActorData) -> Result<(), GameDataError> {
             return Err(invalid("actor pool thresholds must be finite fractions"));
         }
     }
-    if data.high_precision_mods.len() > 256 {
-        return Err(invalid(
-            "actor precision table exceeds bounded source model",
-        ));
-    }
-    for (name, operations) in &data.high_precision_mods {
-        if name.is_empty()
-            || name.len() > 128
-            || !name.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'_')
-            || operations.is_empty()
-            || operations.len() > 4
-            || operations.values().any(|places| *places > 15)
-        {
-            return Err(invalid(
-                "actor precision record has unsupported name, operation count or places",
-            ));
-        }
-    }
+    validate_high_precision_mods(&data.high_precision_mods)?;
     let mut quest_keys = BTreeSet::new();
     if data.spirit_quests.len() != 3 {
         return Err(invalid(

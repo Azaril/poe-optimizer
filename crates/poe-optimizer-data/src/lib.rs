@@ -6,6 +6,7 @@ pub mod bundled;
 pub mod class_tree;
 pub mod configuration;
 pub mod game_data;
+pub mod item_assembly;
 mod item_formatting;
 pub mod item_loading;
 mod item_rules;
@@ -33,6 +34,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("bundled.rs"),
         include_str!("game_data.rs"),
         include_str!("item_rules.rs"),
+        include_str!("item_assembly.rs"),
         include_str!("item_formatting.rs"),
         include_str!("item_loading.rs"),
         include_str!("item_loading/runes.rs"),

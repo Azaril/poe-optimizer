@@ -214,9 +214,11 @@ fn normalized_hash(text: &str) -> String {
 fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v25",
+        "poe-game-data-extractor-v26",
         include_str!("item_loading_extract.rs"),
         include_str!("unique_requirements_extract.rs"),
+        include_str!("item_assembly_extract.rs"),
+        include_str!("item_assembly_extract/source-shapes.json"),
         include_str!("../../poe-optimizer-lua-utf8/src/lib.rs"),
         include_str!("../../poe-optimizer-lua-utf8/build.rs"),
         include_str!("../../poe-optimizer-lua-utf8/vendor/luautf8/lutf8lib.c"),
@@ -453,6 +455,17 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
     provenance.insert("tree_version".into(), tree.source.tree_version.clone());
     provenance.insert("tree_content_sha256".into(), tree.sha256().map_err(error)?);
     provenance.insert("source_role".into(), policy.source_role);
+    let actor = extractor.record(&records, "actor")?;
+    let item_loading = crate::item_loading_extract::extract(&extractor.sources)?;
+    let item_scalability = crate::item_scalability_extract::extract(&extractor.sources)?;
+    let modifier_parser = crate::modifier_parser_extract::extract(&extractor.sources)?;
+    let item_assembly = crate::item_assembly_extract::extract(
+        &extractor.sources,
+        &item_loading,
+        &item_scalability,
+        &actor,
+        &modifier_parser,
+    )?;
     let mut package = GameDataPackage {
         manifest: GameDataManifest {
             game: "poe2".into(),
@@ -465,7 +478,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         },
         tree,
         character: extractor.record(&records, "character")?,
-        actor: extractor.record(&records, "actor")?,
+        actor,
         receiving_defence: extractor.record(&records, "receiving_defence")?,
         quests: extractor.record(&records, "quests")?,
         spark: extractor.record(&records, "spark")?,
@@ -486,9 +499,10 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         direct_action_timing: extractor.record(&records, "direct_action_timing")?,
         configuration: crate::configuration_extract::extract(&extractor.sources)?,
         skill_identities: crate::skill_identity_extract::extract(&extractor.sources)?,
-        item_loading: crate::item_loading_extract::extract(&extractor.sources)?,
-        item_scalability: crate::item_scalability_extract::extract(&extractor.sources)?,
-        modifier_parser: crate::modifier_parser_extract::extract(&extractor.sources)?,
+        item_loading,
+        item_scalability,
+        modifier_parser,
+        item_assembly,
         unique_requirements: UniqueRequirementData::unavailable(
             "complete unique construction not yet exported",
         ),
