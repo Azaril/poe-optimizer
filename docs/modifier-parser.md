@@ -152,6 +152,14 @@ lazy syntax errors. Matching uses ASCII byte case conversion. It never applies U
 case folding or assumes that a capture is valid UTF-8. Numeric parsing and the source's
 signed-low-word `OR64` operation are separate portable primitives.
 
+`LuaPattern::gsub` supplies bounded LuaJIT 5.1 replacement-string semantics for
+preparation consumers. It accepts bytes and an already converted optional integer count,
+returns bytes plus substitution count, and shares the caller's matching work budget.
+Capture references are validated only when selected; percent escapes, position captures,
+trailing-percent NUL, anchors and empty-match advancement preserve the pinned runtime.
+Callable/table replacements and dynamic Lua argument coercion are separate operations.
+This primitive does not itself admit another parser recipe or complete item assembly.
+
 The scanner selects earliest start, greatest end and greatest pattern byte length. It
 exposes exact ties in caller-supplied iteration order. The parser accepts a tie only when
 its effective captures and payload contents agree. Content comparison uses exact number

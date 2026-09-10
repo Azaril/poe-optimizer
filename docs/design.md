@@ -5,6 +5,8 @@ Initial target: Path of Exile 2, multicore core libraries with a CLI, Windows de
 See the [living implementation record](implementation.md) for delivery sequence, current
 capabilities, validation evidence, unresolved work, and the next session's resume point.
 The [source investigation](pob-integration.md) records the inspected PoB baseline.
+The [native item-assembly design](native-item-assembly.md) defines injected policy,
+preparation identity and partial-state contracts below the build evaluator.
 
 ## Recommendation
 

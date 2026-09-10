@@ -2,51 +2,93 @@
 
 Last updated: 2026-09-09
 
-Current completed local checkpoint: **native number-conversion factory expressions**,
-code `8b679da344ce56519a605631ad9f0bb0ce7f255b`, in the frozen
-`runs/number-factories-worktree` (`codex/number-factories`), based on
-`c483db0d6547194019f7c683a143ebf1e447a502`. All scoped local gates pass:
-**447 test observations**, two exact public exports, complete corpus/source comparisons,
-strict lint and five portable libraries. Exact publication and hosted CI status are
-recorded in `runs/number-factories-publication.json`.
-See [the checkpoint](#one-argument-number-factory-checkpoint).
+Current completed local checkpoint: **native LuaJIT-compatible replacement strings**,
+code `4f46f61b0b2906524930cb617305af9b1acfa518`, in `runs/common-item-assembly-worktree`
+(`codex/common-item-assembly`), based on b9902d0. **All 204 scoped tests pass**, including
+native/default public item-inspection regressions. Strict workspace/native lint,
+dependency isolation and five portable libraries pass. Final validation and publication
+are recorded in `runs/common-assembly-gsub-validation-final.json` and
+`runs/common-assembly-gsub-publication.json`.
+See [the checkpoint](#replacement-string-and-assembly-design-checkpoint).
 
-Schema **25**, semantics `poe2-native-profiles-v25`, advances the parser to schema **6**.
-It adds 81 complete bodies: 58 Special, 22 ModTag and one Prefix. The catalog now has
-1,222 Pure recipes and 429 Unsupported dispositions. All 1,141 preceding Pure recipes,
-parser source/policy/graphs/dependencies and 26 other sections remain exact. Twenty
-unsupported reasons advance separately. The engine reuses the existing native numeric
-reader; there is no Lua or subprocess in this path.
+The reusable `LuaPattern::gsub` primitive preserves byte replacements, capture/percent
+semantics, lazy capture errors, signed substitution limits and empty-match progress.
+It shares immutable compiled patterns with per-request budgets and bounded output.
+Independent original LuaJIT tests pair **84,713 observations**, including 2,048 actual C
+calls from warmed Lua hosts. The C implementation itself is not claimed to be traced.
+The shared find/match/scan regressions also pass after the private raw-capture refactor.
 
-All 81 new bodies are independently paired at 103 natural call sites. The source suite
-also covers raw aliases, nested recipes, byte input, IEEE values, ordering, copies and
-actual warmed execution. Three broad-generator selection gaps are explicitly classified:
-two were already present; the newly exposed literal-plus witness defect is covered by
-the dedicated new suite. Those are separate from seven full-item source observation gaps.
-The prior opaque function-value/constructor closure-graph limit remains explicit.
+This checkpoint changes no game data: schema25/parser6, 27 sections, 1,222 Pure recipes
+and 429 Unsupported dispositions remain current. It adds no full-item or full-build
+admission. The preceding corpus results remain the baseline, not a new execution claim:
+116 item reports, 110 reference numbers and five explicit native build rejections.
+Full native build admission remains Spark/Mace.
 
-The five-build comparison preserves all 116 complete item reports, 110 reference number
-bits, 834 instructions and five native rejection messages. Current first stops remain
-85 Assembly, 27 ModifierParser, three RuneReconstruction and one AdvancedCopyAffixes.
-The strict join covers all 116 native states and 109 complete original states. Full
-native build admission remains Spark/Mace; the five breadth builds retain three one-Skill
-and two one-SkillSet limits. Parser coverage is not whole-build parity.
+Resume: finish exact-head publication/CI recording, then continue the
+[native item-assembly design](native-item-assembly.md). The internal additive catalog
+and identity/progress contracts are reviewed. The data/extractor agent is implementing
+schema26 `ItemAssemblyData`/`ItemAssemblyCatalog` as **PolicyOnly** in the separate
+`runs/common-assembly-data-worktree` (`codex/common-assembly-data`), based on b9902d0.
+Do not merge/publish that work as completed assembly; review the data, two exports,
+prior-section preservation and consumer integration first.
 
-Resume: verify publication and inspect the exact-head hosted CI, then prepare the complete
-common item-assembly phase in a fresh worktree. Read
-`runs/flag-factories-assembly-next-audit.md/json` and
-`runs/number-factories-assembly-data-review.md`. The source predicates identify 19 current
-candidate items and 43 slot calls that avoid local-family formulas. Implement every
-reached common operation and state/copy boundary; these counts are a validation set,
-never a production whitelist. A collection-only intermediate stage cannot report completed
-assembly. Agree the internal API and additive injected catalog first; keep engine
-primitives below import orchestration and preserve preparation-time aliases. The missing
-Lua replacement-string primitive is a reusable dependency of that work.
+Next runtime steps are the bounded identity-bearing preparation arena, exact local-query
+bit/keyword semantics, and import-owned progress/provenance. Then implement the entire
+common `BuildModList` path through all reached slot calls and final cache clearing.
+The 19 candidate items/43 slot calls identified from source predicates are validation
+cases only. A collection prefix cannot report completed assembly. Add a lossless
+original-source graph/lifecycle harness before admitting the completed common path.
 
-The proposed [conditional parser operations](conditional-parser-operations-proposal.md)
-design is awaiting user input. The **B3 actor/action/candidate proposal remains unapproved**.
-Neither is included in the reviewed common-assembly continuation. Preserve the frozen
-worktree, binary/evidence records, all 44 protected files and both caller inputs.
+Review inputs: `runs/common-assembly-data-api-review.md`,
+`runs/common-assembly-oracle-api-review.md`, `runs/flag-factories-assembly-next-audit.md`
+and `runs/number-factories-assembly-data-review.md`. Reuse existing VariantState counting;
+handle injected alternate-count capacity explicitly. Nil-config queries need original
+AND64/MatchKeywordFlags, including distinct live and captured mask dependencies.
+
+The [conditional-parser proposal](conditional-parser-operations-proposal.md) and
+**B3 actor/action/candidate proposal remain awaiting user direction**. Neither is
+approved by this internal assembly design. Preserve all frozen worktrees, evidence,
+44 protected files and both caller inputs. No remaining answer blocks these independent
+item-preparation steps.
+
+The preceding number-conversion checkpoint is published as code
+`8b679da344ce56519a605631ad9f0bb0ce7f255b` and docs
+`b9902d0028d9b438f70e7a433f922ad222d75d03`, with 447 scoped test observations.
+Publication/preservation records are complete in `runs/number-factories-publication.json`.
+At 2026-09-10 00:31:56 UTC, its exact-head run34421312846 was linting on Windows and
+testing on Ubuntu, with no failed steps; Flag/String runs were testing on both platforms.
+The independent consolidated observation is `runs/common-assembly-prior-ci.json`.
+
+## Replacement-string and assembly-design checkpoint
+
+`LuaPattern::gsub(subject, replacement, maximum, budget, limits)` returns exact byte
+output and a substitution count. The optional maximum is already converted to i32;
+Lua dynamic argument coercion and callable/table replacements remain separate operations.
+A trailing percent emits NUL, percent plus a non-digit emits that byte, `%1` with no
+captures means the whole match, and an unfinished capture errors only if requested.
+The private matcher now exposes raw capture state; find/match still finalize all captures
+at their original boundary. Pattern compilation remains immutable and source syntax
+errors remain lazy. Output limits are checked and work charged before allocation/copy.
+
+Validation includes 92 engine and 62 affected import tests, nine existing original
+matcher/scan tests, five new original-C tests and 36 native/default item CLI tests:
+**204 passing scoped tests** with no unresolved failure. The new matrix has 56,832
+syntax/count, 27,648 all-byte, 22 explicit-quirk, 195 growth/capture and 16 warm-final
+pairs. All eight warm cases show completed live host traces around real C calls.
+Independent code review found no actionable issue. Two initial test-only issues (safe
+Lua omitting debug, and a linted tuple type) are preserved with their passing repairs.
+There is no reported native mismatch. This is scoped validation, not a full-workspace
+or new corpus/full-build parity claim.
+
+The new [assembly design](native-item-assembly.md) separates immutable injected policy,
+engine mechanisms and import orchestration. It requires preparation-time aliases,
+source-specific recursive copies, partial-error state and ordered dependency provenance.
+Catalog extraction must preserve all 27 prior sections; metadata assembly must complete
+every reached operation before changing admission. Active Bonded calculation, general
+EvalMod, local-family formulas and the wider actor/action model remain separate work.
+
+Historical checkpoints below retain the observations made at those times. Use the newest
+resume point and evidence for current status.
 
 The preceding Flag checkpoint is published as code
 `e862651c0143ad1973b9cd50f1583d90059d47be` and docs
