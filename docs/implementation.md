@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-09
+Last updated: 2026-09-09 (EDT)
 
 **Current priority: real-build breadth.** The five supplied originals have **0/5 complete
 native evaluations**; all five import/inspect and evaluate in pinned PoB. Shared parser
@@ -12,15 +12,18 @@ evidence, not breadth completion.
 
 The next architectural step is the [shared instance/resolution/plan migration](general-build-input-proposal.md).
 A focused question is pending: proceed with that staged model against the real cases, or
-review the concrete API first. Do not interpret the breadth reprioritization as an answer.
-While awaiting direction, preserve completed work and finish only the bounded item-policy
-extraction already in progress. Do not start another standalone helper or local-family
+review the concrete API first. The [concrete API draft](real-build-api-proposal.md) is now
+reviewable against all five originals, including independent set selectors, repeated
+providers and shared item-record references. Do not interpret this draft or the breadth
+reprioritization as an answer. While awaiting direction, preserve completed work and finish
+the bounded item-policy extraction already in progress and repair verified regressions.
+Do not start another standalone helper or local-family
 port ahead of the real-build integration gate.
 
 | Breadth stage | Current state | Next evidence |
 | --- | --- | --- |
 | Source import/inspection | 5/5 supplied originals | Retain exact bytes, selections and unresolved entries |
-| General native instance/actor/action model | Not implemented; Spark/Mace profiles remain | R1: compare all five real views and ownership against source |
+| General native instance/actor/action model | Not implemented; concrete API proposed; Spark/Mace profiles remain | R1: source instances/selected views with explicit deferred producers; R2/R3: effective graphs |
 | Complete native real builds | 0/5 | R2/R3: paired Twister and Skeletal Sniper preparation and full outputs |
 | Real-build mutation/parallel parity | Not run | R4: class/ascendancy/provider/support/item/tree changes and serial/Rayon agreement |
 | Scenario breadth | Frozen originals cover Pinnacle/level82 only | R3: explicit mapping variants plus original bossing comparisons |
@@ -87,6 +90,38 @@ Publication/preservation records are complete in `runs/number-factories-publicat
 At 2026-09-10 00:31:56 UTC, its exact-head run34421312846 was linting on Windows and
 testing on Ubuntu, with no failed steps; Flag/String runs were testing on both platforms.
 The independent consolidated observation is `runs/common-assembly-prior-ci.json`.
+
+A fresh hosted snapshot at 2026-09-10 01:15 UTC found an older String-checkpoint Linux
+failure in `warmed_source_claim_requires_completed_traces_containing_the_real_consumers`:
+its trace evidence omitted `ModStore.lua:281`. Twelve other tests in that target passed;
+this failure reports missing execution evidence, not a numerical mismatch. Diagnosis is
+in progress. Main/gsub/numeric/flag runs were still testing without failed steps in that
+snapshot. `runs/real-build-api-prior-ci.json` retains exact heads and public annotations;
+the full job-log endpoint returned HTTP403. Do not claim hosted success or weaken the
+source-execution requirement to silence this failure.
+
+## Concrete real-build API checkpoint
+
+The [API proposal](real-build-api-proposal.md) specifies source occurrence, stable build
+instance and private compiled-handle identities; independently selected saved views;
+item-record versus slot-use identity; and partial native preparation diagnostics. It keeps
+existing backend/evaluation traits and defers the candidate wire migration until the
+ordered effect/provider search path needs it. The architecture question remains pending;
+no production boundary or native admission changed at this checkpoint.
+
+Independent review checked all five frozen XML/inspection/reference hashes and retained
+11 focused API cases with 20 exact selected damage records in
+`runs/real-build-r1-api-cases.json`. Sniper uses skill ID4/item ID2/tree position3/config ID1;
+its two ring slots reference the same saved item. Twister's selected action index differs
+from its group index. The cases also retain repeated grants, weapon context, unresolved
+labels, unavailable damage and negative Spirit. They are reused observations, not new
+source executions or numerical tests.
+
+R1's gate now explicitly separates imported instances/selected views from the effective
+actor/action graph. Unimplemented producers remain deferred; only implemented producers
+can create effective nodes. R2/R3 must prove those producers and whole-build outputs.
+This corrects an overbroad reading of the preceding R1 wording. The existing source
+projections and identity catalog are inputs to migration, not work to repeat.
 
 ## Replacement-string and assembly-design checkpoint
 
@@ -321,13 +356,16 @@ the design documents.
 ## Resume here
 
 1. Read the breadth dashboard at the top and [real-build rollout](real-build-rollout.md).
-   Resolve the pending shared-model design question before its architecture migration.
+   Review the concrete [API draft](real-build-api-proposal.md) and resolve the pending
+   shared-model design question before its architecture migration.
 2. Check git/worktree state and exact-head CI. Main contains the replacement checkpoint;
    `runs/common-item-assembly-worktree` is frozen. The separately owned
    `runs/common-assembly-data-worktree` has unfinished PolicyOnly data/extraction work.
+   The older Linux condition-producer trace failure above also needs diagnosis/repair.
 3. Preserve the PoB pin, original caller imports, all saved sets, numerical goldens and
    frozen evidence. Keep native execution independent of Lua and subprocesses.
-4. Implement R1 against all five originals, then advance paired R2/R3 real-build paths.
+4. After direction, implement R1a/R1b/R1c from the concrete API draft against all five
+   originals, then advance paired R2/R3 real-build paths.
    Existing source projection, identity catalogs and shared kernels are reusable inputs;
    metadata observations are not native numeric capability. Do not add another closed profile.
 5. Update the dashboard and exact per-build blockers at each integration checkpoint.

@@ -9,7 +9,10 @@ remains the authority for delivered capabilities and the next resume point.
 The subsequent [whole-corpus mechanism inventory](breadth-mechanism-inventory.md) adds
 item-range loading, allocation-provider, parent-actor and conditional receiver evidence to
 this proposal. It does not change the proposal's approval status or claim broader native
-calculation support.
+calculation support. The [concrete API proposal](real-build-api-proposal.md) now specifies
+identity layers, selected views, partial preparation and incremental migration using all
+five originals. Its R1 contract does not claim complete effective actor/action construction;
+those producers and numerical comparisons belong to R2/R3. Both proposals remain unapproved.
 
 ## Recommendation
 

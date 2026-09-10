@@ -4,7 +4,9 @@ The next integration priority is working real builds through one shared native p
 and evaluation path. Parser rules, data catalogs and helper parity remain prerequisites;
 their test counts are not the measure of breadth. This delivery plan uses the
 [general build-model proposal](general-build-input-proposal.md), whose architecture choice
-is awaiting user direction. The [implementation log](implementation.md) tracks execution.
+is awaiting user direction. The [concrete API proposal](real-build-api-proposal.md)
+uses all five originals to specify that boundary. The [implementation log](implementation.md)
+tracks execution.
 
 ## Starting position
 
@@ -53,7 +55,7 @@ feasible character, and a negative resource must not be clamped into an apparent
 
 | Gate | Work | Exit evidence |
 | --- | --- | --- |
-| R1: shared real-build contract | Resolve saved selections, ordered instances, actor ownership, actions and provider relationships from injected definitions. Exercise all five originals from the start. Route existing Spark/Mace through the same boundary. | Executable original-source comparisons for selected sets/actions, duplicate/granted instances and unresolved references; unchanged existing numerical goldens. General preparation reaches explicit mechanic dependencies instead of a profile-count rejection. This is model coverage, not numeric parity. |
+| R1: shared real-build contract | Map all five originals to source-bound instances and independently selected views. Preserve ordered entries, exact identity bindings and unresolved/deferred frontiers. Route existing Spark/Mace through the same outer boundary. | Executable original-source comparisons for selections, precedence/fallback and duplicate/reference cases; unchanged existing numerical goldens. Source controls establish that actor/action/provider relationships fit the contract; only implemented native producers yield effective nodes. General preparation reaches named dependencies instead of profile-count guards. Complete effective graph parity remains R2/R3. |
 | R2: native preparation along real paths | Advance both first targets through effective configuration, equipment/passives, actors, skills/supports and modifier state. Add only the complete mechanisms encountered on those paths, reusing shared operations. | Paired stage snapshots against unchanged complete source methods, including ordering, ownership and partial failures. A per-build dependency report identifies completed stages and exact next blockers. No frozen PoB state is injected as production input. |
 | R3: two complete native real-build evaluations | Evaluate the original Twister and Skeletal Sniper views through shared native plans, including all active dependencies affecting the requested outputs. | Fresh whole-document PoB/native comparisons for explicitly declared damage, resource and defence outputs in both bossing and separately identified mapping scenarios; exact actor/action/context binding and disclosed reference limitations. No dropped active effects, fixture-derived metrics, native subprocesses or per-build/per-skill profile dispatch. Partial metrics remain labelled partial. |
 | R4: interactions and search realization | Change classes/ascendancies, supports/supporting skills, items, passive allocations and providers through the same model; verify required 1..N skills/items and separate point budgets. | Fresh full-build comparisons after controlled changes, including provider removal and a non-additive interaction. Materialize and reimport results. Serial and Rayon runs agree on outcomes and selected identities. Baseline-only agreement does not pass. |
@@ -63,8 +65,9 @@ R1 must establish only the representation needed by these concrete cases; it mus
 become an attempt to design every future mechanic upfront. Add minimal data and API seams
 when a real input or an original source consumer demonstrates the need. Keep them versioned
 and revise them when a contrasting case disproves an assumption. The shared actor/action
-model must retain ownership from the outset: even the supplied weapon builds can create
-other actors or triggers.
+model must represent ownership from the outset: even the supplied weapon builds can
+create other actors or triggers. R1 does not infer a completed effective graph from source
+identity lookup. Its explicit deferred producer frontier is resolved during R2/R3.
 
 R2 may require several dependency commits. At each integration checkpoint, rerun the paired
 real paths and publish what moved. A helper is complete only for its own declared scope;
