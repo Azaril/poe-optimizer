@@ -1,4 +1,5 @@
 //! Shared native execution of compiled source programs and persistent build sessions.
+mod classes;
 mod execute;
 mod session;
 pub use session::{ProgramSession, SessionValue};

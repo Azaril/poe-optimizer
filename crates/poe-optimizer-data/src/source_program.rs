@@ -9,7 +9,9 @@ use std::{
     collections::{BTreeMap, BTreeSet},
     sync::Arc,
 };
+mod classes;
 pub(crate) mod graph;
+pub use classes::*;
 
 // Public neutral names deliberately re-export the same graph and IR types. Old
 // parser names and their wire formats remain valid, including tuple constructors.
@@ -150,14 +152,20 @@ impl SourceProgramDefinitions {
 #[derive(Debug, Clone)]
 enum OwnerStorage {
     Parser(ModifierParserCatalog),
-    Standalone(Arc<SourceProgramDefinitions>),
+    Standalone {
+        definitions: Arc<SourceProgramDefinitions>,
+        classes: Option<Arc<SourceClassDefinitions>>,
+    },
 }
 #[derive(Debug, Clone)]
 pub struct SourceProgramOwner(OwnerStorage);
 impl SourceProgramOwner {
     pub fn new(data: SourceProgramDefinitions) -> SourceProgramResult<Self> {
         data.validate()?;
-        Ok(Self(OwnerStorage::Standalone(Arc::new(data))))
+        Ok(Self(OwnerStorage::Standalone {
+            definitions: Arc::new(data),
+            classes: None,
+        }))
     }
     /// Deserializes bounded untrusted authoring data; no source authentication or
     /// execution admission is conferred by successful structural validation.
@@ -186,40 +194,55 @@ impl SourceProgramOwner {
     }
     pub fn definitions(&self) -> Option<&SourceProgramDefinitions> {
         match &self.0 {
-            OwnerStorage::Standalone(owner) => Some(owner),
+            OwnerStorage::Standalone {
+                definitions: owner, ..
+            } => Some(owner),
             _ => None,
         }
     }
     pub fn source(&self) -> &ItemLoadingSource {
         match &self.0 {
             OwnerStorage::Parser(owner) => &owner.data().source,
-            OwnerStorage::Standalone(owner) => &owner.source,
+            OwnerStorage::Standalone {
+                definitions: owner, ..
+            } => &owner.source,
         }
     }
     pub fn tables(&self) -> &[SourceTable] {
         match &self.0 {
             OwnerStorage::Parser(owner) => &owner.data().tables,
-            OwnerStorage::Standalone(owner) => &owner.tables,
+            OwnerStorage::Standalone {
+                definitions: owner, ..
+            } => &owner.tables,
         }
     }
     pub fn callbacks(&self) -> &[SourceCallback] {
         match &self.0 {
             OwnerStorage::Parser(owner) => &owner.data().callbacks,
-            OwnerStorage::Standalone(owner) => &owner.callbacks,
+            OwnerStorage::Standalone {
+                definitions: owner, ..
+            } => &owner.callbacks,
         }
     }
     pub fn roots(&self) -> &[SourceProgramRoot] {
         match &self.0 {
-            OwnerStorage::Standalone(owner) => &owner.roots,
+            OwnerStorage::Standalone {
+                definitions: owner, ..
+            } => &owner.roots,
             _ => &[],
         }
     }
     pub fn is_same_owner(&self, other: &Self) -> bool {
         match (&self.0, &other.0) {
             (OwnerStorage::Parser(left), OwnerStorage::Parser(right)) => left.is_same_owner(right),
-            (OwnerStorage::Standalone(left), OwnerStorage::Standalone(right)) => {
-                Arc::ptr_eq(left, right)
-            }
+            (
+                OwnerStorage::Standalone {
+                    definitions: left, ..
+                },
+                OwnerStorage::Standalone {
+                    definitions: right, ..
+                },
+            ) => Arc::ptr_eq(left, right),
             _ => false,
         }
     }
@@ -429,8 +452,14 @@ pub(crate) trait ProgramOwnerView {
     fn source(&self) -> &ItemLoadingSource;
     fn has_definition(&self, root: SourceProgramDefinitionRoot) -> bool;
     fn intrinsic(&self, id: SourceCallbackId) -> Option<SourceProgramIntrinsic>;
+    fn supports_dynamic_methods(&self) -> bool {
+        false
+    }
 }
 impl ProgramOwnerView for SourceProgramOwner {
+    fn supports_dynamic_methods(&self) -> bool {
+        self.parser().is_none()
+    }
     fn callback(&self, id: SourceCallbackId) -> Option<&SourceCallback> {
         self.callback(id)
     }

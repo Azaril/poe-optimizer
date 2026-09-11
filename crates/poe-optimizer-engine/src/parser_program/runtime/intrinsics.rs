@@ -69,6 +69,22 @@ pub(super) fn call(
 ) -> RuntimeResult<Vec<V>> {
     match operation {
         ParserProgramIntrinsic::ToNumber => tonumber(arguments, heap, patterns, limits),
+        ParserProgramIntrinsic::Type => {
+            let value = arguments
+                .first()
+                .ok_or_else(|| Error::source("type requires a value"))?;
+            let name: &[u8] = match value {
+                V::Nil => b"nil",
+                V::Boolean(_) => b"boolean",
+                V::Number(_) => b"number",
+                V::Bytes(_) => b"string",
+                V::Table(_) => b"table",
+                V::Callback(_) => b"function",
+            };
+            result_space(1, heap, limits)?;
+            Ok(vec![heap.bytes(name)?])
+        }
+        ParserProgramIntrinsic::Select => select(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::StringGsub => gsub(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::CreateMod => {
             let value = create_mod(arguments, heap)?;
@@ -91,6 +107,34 @@ pub(super) fn call(
             Err(Error::unsupported("escaped ipairs iterator"))
         }
     }
+}
+
+fn select(
+    arguments: &[V],
+    heap: &mut Heap,
+    patterns: &mut MatchBudget,
+    limits: &ProgramLimits,
+) -> RuntimeResult<Vec<V>> {
+    // LuaJIT recognizes any string beginning with '#', before numeric coercion.
+    if matches!(arguments.first(), Some(V::Bytes(value)) if value.first() == Some(&b'#')) {
+        result_space(1, heap, limits)?;
+        return Ok(vec![V::Number(arguments.len().saturating_sub(1) as f64)]);
+    }
+    let index = optional_integer(arguments.first(), patterns)?
+        .ok_or_else(|| Error::source("select requires an index"))?;
+    let count = i64::try_from(arguments.len()).map_err(|_| Error::resource("select arguments"))?;
+    let index = i64::from(index);
+    let index = if index < 0 {
+        count + index
+    } else {
+        index.min(count)
+    };
+    if index < 1 {
+        return Err(Error::source("select index out of range"));
+    }
+    let tail = &arguments[index as usize..];
+    result_space(tail.len(), heap, limits)?;
+    Ok(tail.to_vec())
 }
 
 fn result_space(count: usize, heap: &mut Heap, limits: &ProgramLimits) -> RuntimeResult<()> {
@@ -798,5 +842,122 @@ mod tests {
         .unwrap_err();
         assert_eq!(error.kind, ProgramRuntimeErrorKind::ResourceBound);
         assert!(heap.stats().bytes <= limits.max_bytes);
+    }
+    #[test]
+    fn type_and_select_preserve_nil_arity_aliases_and_luajit_index_rules() {
+        let (mut heap, mut patterns, limits) = fixture();
+        let table = heap.new_table().unwrap();
+        let cases = [
+            (V::Nil, "nil"),
+            (V::Boolean(false), "boolean"),
+            (V::Number(f64::NAN), "number"),
+            (bytes(b"a"), "string"),
+            (table.clone(), "table"),
+            (V::Callback(ParserCallbackId(1)), "function"),
+        ];
+        for (input, expected) in cases {
+            let result = call(
+                ParserProgramIntrinsic::Type,
+                &[input],
+                &mut heap,
+                &mut patterns,
+                &limits,
+            )
+            .unwrap();
+            assert_eq!(result[0].as_bytes(), Some(expected.as_bytes()));
+        }
+        assert_eq!(
+            call(
+                ParserProgramIntrinsic::Type,
+                &[],
+                &mut heap,
+                &mut patterns,
+                &limits
+            )
+            .unwrap_err()
+            .kind,
+            ProgramRuntimeErrorKind::Source
+        );
+        let result = call(
+            ParserProgramIntrinsic::Select,
+            &[bytes(b"#anything"), table.clone(), V::Nil],
+            &mut heap,
+            &mut patterns,
+            &limits,
+        )
+        .unwrap();
+        assert!(result[0].lua_equal(&V::Number(2.0)));
+        let result = call(
+            ParserProgramIntrinsic::Select,
+            &[V::Number(-2.9), table.clone(), V::Nil],
+            &mut heap,
+            &mut patterns,
+            &limits,
+        )
+        .unwrap();
+        assert_eq!(result.len(), 2);
+        assert!(result[0].lua_equal(&table));
+        assert!(matches!(result[1], V::Nil));
+        let result = call(
+            ParserProgramIntrinsic::Select,
+            &[bytes(b"2"), table.clone(), V::Number(-0.0)],
+            &mut heap,
+            &mut patterns,
+            &limits,
+        )
+        .unwrap();
+        assert!(matches!(result[0], V::Number(v) if v.to_bits() == (-0.0f64).to_bits()));
+        assert!(
+            call(
+                ParserProgramIntrinsic::Select,
+                &[V::Number(99.0), table],
+                &mut heap,
+                &mut patterns,
+                &limits
+            )
+            .unwrap()
+            .is_empty()
+        );
+        for index in [V::Number(0.0), V::Number(-3.0), V::Nil, V::Boolean(true)] {
+            assert_eq!(
+                call(
+                    ParserProgramIntrinsic::Select,
+                    &[index, V::Nil],
+                    &mut heap,
+                    &mut patterns,
+                    &limits
+                )
+                .unwrap_err()
+                .kind,
+                ProgramRuntimeErrorKind::Source
+            );
+        }
+        assert_eq!(
+            call(
+                ParserProgramIntrinsic::Select,
+                &[V::Number(f64::INFINITY)],
+                &mut heap,
+                &mut patterns,
+                &limits
+            )
+            .unwrap_err()
+            .kind,
+            ProgramRuntimeErrorKind::UnsupportedCapability
+        );
+        assert_eq!(
+            call(
+                ParserProgramIntrinsic::Select,
+                &[V::Number(1.0), V::Nil, V::Nil],
+                &mut heap,
+                &mut patterns,
+                &ProgramLimits {
+                    max_results: 1,
+                    ..limits
+                }
+            )
+            .unwrap_err()
+            .kind,
+            ProgramRuntimeErrorKind::ResourceBound
+        );
     }
 }

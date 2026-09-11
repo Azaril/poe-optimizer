@@ -40,6 +40,9 @@ type Result<T> = std::result::Result<T, ProgramCompileError>;
 /// callback/program IDs are never resolved against a separately supplied catalog.
 #[derive(Debug, Clone, PartialEq)]
 pub enum CompiledProgramBinding {
+    DynamicMethod {
+        key: String,
+    },
     Program {
         index: usize,
         callback: ParserCallbackId,
@@ -203,6 +206,9 @@ impl CompiledSourcePrograms {
                                     binding: index as u16,
                                 });
                             }
+                        }
+                        ParserProgramBinding::DynamicMethod { key } => {
+                            CompiledProgramBinding::DynamicMethod { key: key.clone() }
                         }
                         ParserProgramBinding::Intrinsic { operation, source } => {
                             CompiledProgramBinding::Intrinsic {

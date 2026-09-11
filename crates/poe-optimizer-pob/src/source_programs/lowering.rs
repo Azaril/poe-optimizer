@@ -15,6 +15,9 @@ pub(crate) struct LoweringBindings {
     pub(crate) roots: BTreeMap<String, SourceProgramDefinitionRoot>,
     pub(crate) intrinsics: BTreeMap<ParserCallbackId, ParserProgramIntrinsic>,
     pub(crate) implicit_self: bool,
+    /// Standalone owners may use receiver lookup and additional language primitives.
+    /// Parser extraction keeps its separately reviewed capability inventory unchanged.
+    pub(crate) standalone_calls: bool,
 }
 
 pub(crate) type LowerResult<T> = std::result::Result<T, String>;

@@ -207,6 +207,27 @@ impl Check<'_> {
         for binding in &self.program.bindings {
             self.budget.charge(0, self.id, None)?;
             match binding {
+                ParserProgramBinding::DynamicMethod { key } => {
+                    self.budget.text(key, self.id, None)?;
+                    if key.is_empty() || key.contains('\0') || key.len() > 256 {
+                        return Err(self.fail(
+                            ParserProgramErrorKind::InvalidData,
+                            None,
+                            "invalid dynamic method key",
+                        ));
+                    }
+                    if !self.owner.supports_dynamic_methods() {
+                        return Err(self.fail(
+                            ParserProgramErrorKind::UnsupportedCapability,
+                            None,
+                            "parser owner does not admit dynamic method dispatch",
+                        ));
+                    }
+                    self.required
+                        .insert(ParserProgramCapability::DynamicMethods);
+                    self.required
+                        .insert(ParserProgramCapability::RecursiveCalls);
+                }
                 ParserProgramBinding::CapturedCallback { upvalue, callback } => {
                     self.captured(*upvalue, *callback)?;
                     if !self.data.callbacks.contains_key(callback)
@@ -308,6 +329,15 @@ impl Check<'_> {
     ) -> ParserProgramResult<()> {
         let binding = self.binding(call.binding, Some(loc))?.clone();
         match &binding {
+            ParserProgramBinding::DynamicMethod { .. } => {
+                if call.receiver.is_none() {
+                    return Err(self.fail(
+                        ParserProgramErrorKind::Binding,
+                        Some(loc),
+                        "dynamic method requires an explicit receiver",
+                    ));
+                }
+            }
             ParserProgramBinding::CapturedCallback { callback, .. } => {
                 if call.receiver.is_some() {
                     return Err(self.fail(

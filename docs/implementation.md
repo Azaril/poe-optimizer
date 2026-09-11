@@ -18,7 +18,60 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-**Current checkpoint: R2c shared source-program ownership and per-build sessions.**
+**Current checkpoint: R2d source-bound class and modifier-store methods.**
+Standalone owners now retain separate injected class/proxy descriptors, actual method and
+constructor identities, closed helper captures and observed superclass membership/order.
+The shared engine adds receiver dispatch and bounded class allocation/constructor protocol;
+original method bodies run in the existing VM. Generic type/vararg/comparison operations
+let the complete original `createMod` run without a game-specific native helper. The
+optional closure observer authenticates pre-source primitives and captures actual bounded
+Lua closure graphs. Existing parser extraction keeps its separate capability policy.
+
+The full-runtime oracle compares original ModStore/ModList constructors and
+NewMod/AddMod/ReplaceMod/ReplaceModInternal consumers, including parent replacement,
+source-order modifiers, shared actor/tag references, false/raw method overrides, nil
+restoration, proxy forwarding, raw array operations and writes retained after source errors.
+The oracle observes explicit consumed state and identity projections; it does not claim a
+complete Lua class graph. Native snapshots reject behavior-bearing tables that the plain
+transport cannot represent. Common's constructor/proxy protocol is modeled from injected
+source policy; complete Common function lowering is not claimed. Allocation requires an
+observed initialized wrapper/class cache. First-use class-cache writes, alternate prototypes
+and instance mix-ins remain explicit frontiers for subsequent integration.
+
+Independent review tightened empty-parent truthiness, prototype/cache binding, superclass
+set observations, helper captures, raw projected-field lookup and mutable proxy metamethod
+boundaries. The reference test harness also now imports shared external tag graphs once and
+retains handles between calls, matching the source's cross-call aliases. Test-only probes
+observe state without replacing original game methods.
+
+The source oracle compiles seven original method/helper bodies plus nine test probes;
+it compares 16 state checkpoints, 12 successful method calls, two successful constructor
+calls and six source failures. Local validation passes 31 data checks, 37 engine checks,
+24 lowerer/observer checks, three complete-runtime integration tests, eight default CLI
+checks and sixteen native-only CLI checks. Fresh exports reproduce all 29 package sections.
+Strict workspace/native-only lint, formatting, portable-library WASM compilation and
+native dependency isolation pass. The default CLI run began before the final class/cache
+and fingerprint corrections; final source, native-only CLI and lint/WASM checks cover the
+corrected snapshot. The earlier broad engine/native suite is recorded under R2c, not rerun
+or counted as a new R2d full-suite result.
+
+The bundled schema-29 package, caller builds, pinned PoB checkout, original fixtures and
+lockfile remain unchanged. Detailed terminal checks, snapshots, corrected attempts and
+publication status are recorded in `runs/r2d-integration-validation.json` and
+`runs/r2d-publication.json`. Complete native supplied-build evaluations remain **0/5**;
+this checkpoint closes a preparation dependency, not the R3/R5 numerical gates.
+
+**Resume point:** execute initial default and saved configuration activation for Twister
+and Skeletal Sniper together through the shared engine. Preserve captured quest closures,
+explicit control/parser-service effects, injected boss/monster data and original callback
+order. Add a production class/callback extraction adapter and domain admission for the
+required consumers; the current class projection adapter is test-only. Retain all five
+structural originals. Then continue root/provider and actor/action preparation; preserve
+the original whole-build parity and joint-search scope. UI autocomplete uses a derived view
+of loaded definitions; DuckDB adoption remains deferred in the
+[storage assessment](definition-storage.md).
+
+**Previous checkpoint: R2c shared source-program ownership and per-build sessions.**
 The [shared engine](shared-source-programs.md) now accepts standalone immutable definition
 owners with named roots, captured closure graphs and source provenance. Parser facades use
 the same verifier, compiler, executor and heap, retaining the original catalog and packaged
@@ -57,17 +110,9 @@ The exact snapshots, source observations and corrected attempts are recorded in
 and exact-head hosted CI are recorded in `runs/r2c-publication.json`; local checks do not
 claim hosted completion. Complete native supplied-build evaluations remain **0/5**.
 
-**Resume point:** continue R2c with source-bound receiver method dispatch and class/proxy
-ownership. Preserve receiver lookup before argument evaluation, inherited methods, actual
-callback identity, parent initialization and parent-list replacement. Represent the required
-immutable class/method descriptors separately from writable per-build proxy state; the current
-immutable graph has string/exact-integer keys and must not pretend to cover arbitrary classes.
-Admit complete NewMod/AddMod/ReplaceMod/ReplaceModInternal consumers through the shared engine,
-including source-authenticated createMod/helper bindings. Then execute initial default and
-saved configuration activation for Twister and Skeletal Sniper together, retaining ordered
-captured quest closures, explicit control/parser-service effects, injected boss/monster data
-and all five structural inputs. Root/provider and actor/action preparation follow; the R3/R5
-whole-build numerical denominator and original joint-search scope remain unchanged.
+The former R2c class/receiver resume point is addressed by R2d above. Effective
+configuration activation, root/provider preparation and whole-build numerical parity
+remain pending.
 
 **Previous checkpoint: R2b authored configuration prefix paired with the original runtime.**
 The [configuration stage](configuration-preparation.md) executes constructor defaults,

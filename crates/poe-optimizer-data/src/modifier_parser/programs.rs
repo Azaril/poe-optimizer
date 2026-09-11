@@ -212,6 +212,8 @@ pub enum ParserProgramBinary {
     NotEqual,
     LessThan,
     LessEqual,
+    GreaterThan,
+    GreaterEqual,
     Add,
     Subtract,
     Multiply,
@@ -252,6 +254,8 @@ pub struct ParserProgramCall {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum ParserProgramBinding {
+    /// Resolve the source colon-call key on the actual receiver before arguments.
+    DynamicMethod { key: String },
     CapturedCallback {
         upvalue: u16,
         callback: ParserCallbackId,
@@ -264,6 +268,8 @@ pub enum ParserProgramBinding {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ParserProgramIntrinsic {
+    Type,
+    Select,
     ToNumber,
     StringGsub,
     StringGmatch,
@@ -275,6 +281,8 @@ impl ParserProgramIntrinsic {
     /// Language/runtime identities, never game-specific lookup names or values.
     pub fn global_path(self) -> Option<&'static [&'static str]> {
         match self {
+            Self::Type => Some(&["type"]),
+            Self::Select => Some(&["select"]),
             Self::ToNumber => Some(&["tonumber"]),
             Self::StringGsub => Some(&["string", "gsub"]),
             Self::StringGmatch => Some(&["string", "gmatch"]),
@@ -309,6 +317,7 @@ pub enum ParserProgramCapability {
     Varargs,
     LegacyPureCalls,
     RecursiveCalls,
+    DynamicMethods,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ParserProgramErrorKind {

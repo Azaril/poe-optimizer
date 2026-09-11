@@ -601,7 +601,9 @@ impl<'a, 'b> Lowerer<'a, 'b> {
         } else {
             self.postfix(depth + 1)?.value()?
         };
-        while let Some((priority, right_associative, operation)) = binary(self.peek()) {
+        while let Some((priority, right_associative, operation)) =
+            binary(self.peek(), self.authorization.standalone_calls)
+        {
             if priority < min {
                 break;
             }
@@ -819,16 +821,25 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                         self.at += 1;
                         let name = self.name()?;
                         let receiver = term.value()?;
-                        let operation = match name {
-                            "gsub" => ParserProgramIntrinsic::StringGsub,
-                            "gmatch" => ParserProgramIntrinsic::StringGmatch,
-                            _ => return Err(format!("unsupported method {name}")),
+                        let binding = if self.authorization.standalone_calls {
+                            if name.len() > 256 {
+                                return Err("source method name bound".into());
+                            }
+                            self.budget.bytes(name.len())?;
+                            // A colon call saves both the receiver and its looked-up
+                            // method before evaluating arguments. Do not lower this
+                            // as a captured helper or a function with prepended self:
+                            // argument effects may replace the method after lookup.
+                            self.bind(ParserProgramBinding::DynamicMethod { key: name.into() })?
+                        } else {
+                            let operation = match name {
+                                "gsub" => ParserProgramIntrinsic::StringGsub,
+                                "gmatch" => ParserProgramIntrinsic::StringGmatch,
+                                _ => return Err(format!("unsupported method {name}")),
+                            };
+                            self.global_binding(operation)?
                         };
-                        (
-                            self.global_binding(operation)?,
-                            Some(Box::new(receiver.value)),
-                            receiver.height,
-                        )
+                        (binding, Some(Box::new(receiver.value)), receiver.height)
                     } else {
                         match term {
                             Term::Value(ref value) => {
@@ -840,6 +851,12 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                             Term::Global { ref path, .. } => {
                                 let operation = match path.as_slice() {
                                     ["tonumber"] => ParserProgramIntrinsic::ToNumber,
+                                    ["type"] if self.authorization.standalone_calls => {
+                                        ParserProgramIntrinsic::Type
+                                    }
+                                    ["select"] if self.authorization.standalone_calls => {
+                                        ParserProgramIntrinsic::Select
+                                    }
                                     ["ipairs"] => ParserProgramIntrinsic::Ipairs,
                                     ["table", "insert"] => ParserProgramIntrinsic::TableInsert,
                                     ["string", "gsub"] => ParserProgramIntrinsic::StringGsub,
@@ -1024,7 +1041,7 @@ impl<'a, 'b> Lowerer<'a, 'b> {
         )
     }
 }
-fn binary(token: &str) -> Option<(u8, bool, ParserProgramBinary)> {
+fn binary(token: &str, standalone: bool) -> Option<(u8, bool, ParserProgramBinary)> {
     use ParserProgramBinary as B;
     Some(match token {
         "or" => (1, false, B::Or),
@@ -1033,6 +1050,8 @@ fn binary(token: &str) -> Option<(u8, bool, ParserProgramBinary)> {
         "~=" => (3, false, B::NotEqual),
         "<" => (3, false, B::LessThan),
         "<=" => (3, false, B::LessEqual),
+        ">" if standalone => (3, false, B::GreaterThan),
+        ">=" if standalone => (3, false, B::GreaterEqual),
         ".." => (4, true, B::Concat),
         "+" => (5, false, B::Add),
         "-" => (5, false, B::Subtract),

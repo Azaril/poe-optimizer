@@ -189,14 +189,26 @@ fn implicit_self_and_captured_intrinsic_use_declared_owner_bindings() {
     ));
     // No static dispatch shortcut is substituted for an actual receiver lookup.
     let method = "function List:NewMod(mod) self:AddMod(mod) end\n";
-    let rejected = lower_from_sources(
+    let lowered_method = lower_from_sources(
         &sources(method),
         &SourceProgramOwner::new(definitions(method, vec![callback(method, 1, 1, vec![])]))
             .unwrap(),
     )
     .unwrap();
-    assert!(rejected.catalog().data().programs.is_empty());
-    assert!(rejected.unsupported()[&ParserCallbackId(1)].contains("unsupported method AddMod"));
+    assert!(lowered_method.unsupported().is_empty());
+    let program = &lowered_method.catalog().data().programs[0];
+    assert!(matches!(
+        &program.bindings[0],
+        ParserProgramBinding::DynamicMethod { key } if key == "AddMod"
+    ));
+    let ParserProgramStatementKind::Call { call } = &program.body[0].operation else {
+        panic!("method call")
+    };
+    assert!(matches!(
+        call.receiver.as_deref().unwrap().operation,
+        ParserProgramExprKind::Local { local: 0 }
+    ));
+    assert_eq!(call.arguments.values.len(), 1);
 }
 
 #[test]
@@ -238,3 +250,112 @@ fn shadowed_globals_and_undeclared_game_roots_do_not_gain_authority() {
         assert_eq!(rejected.unsupported().len(), 1);
     }
 }
+
+#[test]
+fn dynamic_methods_preserve_receiver_expression_and_call_pack_boundaries() {
+    let text = "function(self, parent, value, ...) return parent.owner:AddMod(self:Make(value), ...) end\n";
+    let owner =
+        SourceProgramOwner::new(definitions(text, vec![callback(text, 1, 1, vec![])])).unwrap();
+    let lowered = lower_from_sources(&sources(text), &owner).unwrap();
+    assert!(lowered.unsupported().is_empty());
+    let program = &lowered.catalog().data().programs[0];
+    assert_eq!(
+        program.bindings,
+        vec![
+            ParserProgramBinding::DynamicMethod {
+                key: "AddMod".into()
+            },
+            ParserProgramBinding::DynamicMethod { key: "Make".into() },
+        ]
+    );
+    let ParserProgramStatementKind::Return { values } = &program.body[0].operation else {
+        panic!("return")
+    };
+    let ParserProgramPack::Call { call } = values.tail.as_deref().unwrap() else {
+        panic!("method call tail")
+    };
+    assert_eq!(call.binding, 0);
+    assert!(matches!(
+        call.receiver.as_deref().unwrap().operation,
+        ParserProgramExprKind::Get { .. }
+    ));
+    assert_eq!(call.arguments.values.len(), 1);
+    assert!(matches!(
+        call.arguments.values[0].operation,
+        ParserProgramExprKind::Call { .. }
+    ));
+    assert!(matches!(
+        call.arguments.tail.as_deref(),
+        Some(ParserProgramPack::Varargs)
+    ));
+}
+
+#[test]
+fn standalone_method_names_do_not_assume_original_string_primitive() {
+    for name in ["gsub", "gmatch", "NewMod", "ReplaceModInternal"] {
+        let text = format!("function(receiver) return receiver:{name}() end\n");
+        let owner =
+            SourceProgramOwner::new(definitions(&text, vec![callback(&text, 1, 1, vec![])]))
+                .unwrap();
+        let lowered = lower_from_sources(&sources(&text), &owner).unwrap();
+        assert!(lowered.unsupported().is_empty());
+        assert_eq!(
+            lowered.catalog().data().programs[0].bindings,
+            vec![ParserProgramBinding::DynamicMethod { key: name.into() }]
+        );
+    }
+}
+
+#[test]
+fn standalone_type_select_are_language_primitives_without_parser_expansion() {
+    let text = "function(...) return type(select(1, ...)), select('#', ...) end\n";
+    let owner =
+        SourceProgramOwner::new(definitions(text, vec![callback(text, 1, 1, vec![])])).unwrap();
+    let lowered = lower_from_sources(&sources(text), &owner).unwrap();
+    assert!(lowered.unsupported().is_empty());
+    assert_eq!(
+        lowered.catalog().data().programs[0].bindings,
+        vec![
+            ParserProgramBinding::Intrinsic {
+                operation: ParserProgramIntrinsic::Type,
+                source: ParserProgramIntrinsicSource::OriginalGlobal
+            },
+            ParserProgramBinding::Intrinsic {
+                operation: ParserProgramIntrinsic::Select,
+                source: ParserProgramIntrinsicSource::OriginalGlobal
+            },
+        ]
+    );
+    for text in [text, "function(self) return self:NewMod() end\n"] {
+        let lua = Lua::new();
+        let callback = callback(text, 1, 1, vec![]);
+        let mut budget = Budget::default();
+        let parser = LoweringBindings::default();
+        let unsupported = Lowerer::new(
+            &lua,
+            text,
+            ParserCallbackId(1),
+            &callback,
+            &parser,
+            &mut budget,
+        )
+        .unwrap()
+        .program(&span(text, 1, 1));
+        assert!(
+            unsupported.is_err(),
+            "parser capabilities changed for {text}"
+        );
+    }
+}
+
+#[test]
+fn unknown_later_branches_reject_the_whole_method() {
+    let text = "function List:AddMod(mod) table.insert(self, mod) if false then unmodeledConstructor() end end\n";
+    let owner =
+        SourceProgramOwner::new(definitions(text, vec![callback(text, 1, 1, vec![])])).unwrap();
+    let lowered = lower_from_sources(&sources(text), &owner).unwrap();
+    assert!(lowered.catalog().data().programs.is_empty());
+    assert!(lowered.unsupported()[&ParserCallbackId(1)].contains("unmodeledConstructor"));
+}
+
+mod methods;

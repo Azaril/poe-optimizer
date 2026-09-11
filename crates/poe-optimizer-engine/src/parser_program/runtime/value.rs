@@ -7,7 +7,7 @@ use poe_optimizer_data::modifier_parser::ModifierParserCatalog;
 use poe_optimizer_data::modifier_parser::{
     ParserCallbackId, ParserFactoryLiteral, ParserNonFinite, ParserTableId, ParserValue,
 };
-use poe_optimizer_data::source_program::SourceProgramOwner;
+use poe_optimizer_data::source_program::{SourceClassId, SourceProgramOwner};
 use std::{
     collections::{BTreeMap, BTreeSet},
     sync::Arc,
@@ -127,6 +127,12 @@ impl Key {
         }
     }
 }
+#[derive(Debug, Clone, Copy)]
+pub(super) enum TableBehavior {
+    Instance(SourceClassId),
+    ParentProxy,
+}
+
 #[derive(Default)]
 struct Table {
     entries: BTreeMap<Key, V>,
@@ -224,6 +230,7 @@ pub(super) struct Heap<'a> {
     catalog: SourceProgramOwner,
     arguments: Vec<Table>,
     tables: Vec<Table>,
+    behaviors: BTreeMap<TableRef, TableBehavior>,
     budget: Budget<'a>,
 }
 impl Heap<'static> {
@@ -232,6 +239,7 @@ impl Heap<'static> {
             catalog: catalog.clone(),
             arguments: Vec::new(),
             tables: Vec::new(),
+            behaviors: BTreeMap::new(),
             budget: Budget {
                 limits,
                 used: Usage::Owned(HeapStats::default()),
@@ -281,6 +289,7 @@ impl<'a> Heap<'a> {
             catalog: catalog.clone(),
             arguments: Vec::new(),
             tables: Vec::new(),
+            behaviors: BTreeMap::new(),
             budget,
         };
         let values = heap.import(input, false)?;
@@ -398,7 +407,7 @@ impl<'a> Heap<'a> {
             .ok_or_else(|| Error::input("missing callback capture"))?;
         definition_value(&source.value, &mut self.budget)
     }
-    pub(super) fn get(&mut self, table: &V, key: &V) -> Result<V> {
+    pub(super) fn raw_get(&mut self, table: &V, key: &V) -> Result<V> {
         if table.as_bytes().is_some() {
             return Err(Error::unsupported("generic string metatable lookup"));
         }
@@ -406,6 +415,16 @@ impl<'a> Heap<'a> {
         let Some(key) = Key::read(key) else {
             return Ok(V::Nil);
         };
+        if let Some(class) = self
+            .class_for_table(table)
+            .and_then(|id| self.owner().class(id))
+            && let Key::Bytes(key) = &key
+            && std::str::from_utf8(key)
+                .ok()
+                .is_some_and(|key| class.unsupported_fields.contains(key))
+        {
+            return Err(Error::unsupported("unrepresented source class field"));
+        }
         match reference {
             TableRef::Heap(id) => Ok(self
                 .tables
@@ -447,6 +466,21 @@ impl<'a> Heap<'a> {
             }
         }
     }
+    pub(super) fn owner(&self) -> &SourceProgramOwner {
+        &self.catalog
+    }
+    pub(super) fn behavior(&self, value: &V) -> Option<TableBehavior> {
+        let V::Table(reference) = value else {
+            return None;
+        };
+        self.behaviors.get(reference).copied()
+    }
+    pub(super) fn set_behavior(&mut self, value: &V, behavior: TableBehavior) -> Result<()> {
+        let reference = table_ref(value)?;
+        self.charge_values(2)?;
+        self.behaviors.insert(reference, behavior);
+        Ok(())
+    }
     pub(super) fn new_table(&mut self) -> Result<V> {
         self.budget.tables(1)?;
         let id =
@@ -454,9 +488,18 @@ impl<'a> Heap<'a> {
         self.tables.push(Table::default());
         Ok(V::Table(TableRef::Heap(id)))
     }
-    pub(super) fn set(&mut self, table: &V, key: V, value: V) -> Result<()> {
+    pub(super) fn raw_set(&mut self, table: &V, key: V, value: V) -> Result<()> {
         let reference = table_ref(table)?;
         let key = Key::write(&key)?;
+        if matches!(self.behavior(table), Some(TableBehavior::ParentProxy))
+            && let Key::Bytes(name) = &key
+            && super::classes::unsupported_metamethod(name)
+            && !matches!(value, V::Nil)
+        {
+            return Err(Error::unsupported(
+                "installing an unrepresented proxy metamethod",
+            ));
+        }
         let TableRef::Heap(id) = reference else {
             return Err(Error::unsupported("mutation of a borrowed table"));
         };
@@ -519,7 +562,8 @@ impl<'a> Heap<'a> {
             .checked_add(1)
             .filter(|n| *n as u64 <= 9_007_199_254_740_991)
             .ok_or_else(|| Error::resource("table append index"))?;
-        self.set(table, V::Number(next as f64), value)
+        // LuaJIT table.insert uses lj_tab_setint, bypassing __newindex.
+        self.raw_set(table, V::Number(next as f64), value)
     }
     pub(super) fn freeze(&mut self, values: &[V]) -> Result<ProgramValueGraph> {
         if values.len() > self.budget.limits.max_results {
@@ -534,6 +578,13 @@ impl<'a> Heap<'a> {
         let mut cursor = 0;
         while cursor < export.references.len() {
             let reference = export.references[cursor];
+            if self.behaviors.contains_key(&reference)
+                || self.class_for_table(&V::Table(reference)).is_some()
+            {
+                return Err(Error::unsupported(
+                    "snapshot would erase source class/proxy behavior; project ordinary values explicitly",
+                ));
+            }
             let entries = match reference {
                 TableRef::Heap(id) | TableRef::Argument(id) => {
                     let tables = if matches!(reference, TableRef::Heap(_)) {

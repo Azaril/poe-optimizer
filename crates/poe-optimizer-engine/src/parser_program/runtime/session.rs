@@ -8,7 +8,7 @@ use super::{
 use crate::{lua_pattern::MatchBudget, parser_program::CompiledSourcePrograms};
 use poe_optimizer_data::{
     modifier_parser::ParserCallbackId,
-    source_program::{SourceProgramOwner, SourceProgramRootHandle},
+    source_program::{SourceClassHandle, SourceProgramOwner, SourceProgramRootHandle},
 };
 use std::sync::Arc;
 
@@ -95,6 +95,19 @@ impl ProgramSession {
             value: self.heap.definition(id)?,
         })
     }
+    /// Allocate source-bound class state, including Object alias and callable
+    /// parent proxies. This does not execute or imply completion of its constructor.
+    pub fn allocate_instance(&mut self, class: &SourceClassHandle) -> Result<SessionValue> {
+        self.owner()
+            .resolve_class(class)
+            .map_err(|error| Error::input(error.to_string()))?;
+        let value = self.heap.allocate_instance(class.id())?;
+        self.heap.charge_values(1)?;
+        Ok(SessionValue {
+            identity: self.identity.clone(),
+            value,
+        })
+    }
     /// Execute another source callback on the same heap. Callback IDs resolve
     /// only in this session's compiled owner, never in a caller-supplied catalog.
     pub fn invoke(
@@ -118,6 +131,29 @@ impl ProgramSession {
             call_depth: 0,
         };
         let values = run.invoke(index, arguments, 0)?;
+        self.handles(values)
+    }
+    /// Invoke a source method with implicit self on an owner/session-bound value.
+    /// Lookup occurs before invocation; raw fields may override injected methods.
+    pub fn invoke_method(
+        &mut self,
+        receiver: &SessionValue,
+        name: &str,
+        input: &[SessionValue],
+    ) -> Result<Vec<SessionValue>> {
+        let receiver = self.values(std::slice::from_ref(receiver))?.remove(0);
+        let mut arguments = self.values(input)?;
+        let mut run = Run {
+            library: &self.library,
+            heap: &mut self.heap,
+            patterns: &mut self.patterns,
+            limits: self.limits,
+            steps: &mut self.steps,
+            call_depth: 0,
+        };
+        let target = run.lookup_method(&receiver, name.as_bytes())?;
+        run.prepend(&mut arguments, receiver)?;
+        let values = run.invoke_method_target(target, arguments, 0)?;
         self.handles(values)
     }
     /// Export selected reachable values without ending the session. The returned

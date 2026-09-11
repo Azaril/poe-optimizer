@@ -73,6 +73,12 @@ modifier-parser catalog before admitting configuration programs. The common boun
 - Bound work, strings, tables, call depth and pattern matching cumulatively across a
   preparation. Failures retain the reached prefix and identify the pending consumer.
 
+Class-backed modifier state follows the shared class/proxy protocol and uses opaque
+per-session values. A source-observed partial class projection must list unrepresented
+fields and preserve actual constructor/helper captures; plain result export cannot erase
+metatable behavior. Production extraction and configuration effect admission remain separate
+from the standalone method oracle.
+
 The initial real paths require modifier insertion, common arithmetic and scalar operations,
 control notifications and enemy/boss definitions. Broader source branches also require a
 parser-service call and iteration with a justified order policy. Add these when complete

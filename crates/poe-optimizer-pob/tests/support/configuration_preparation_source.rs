@@ -42,6 +42,31 @@ pub fn observe_with_hook(
     structural_case: bool,
     hook: Option<&ObservationHook<'_>>,
 ) -> Result<serde_json::Value, RuntimeError> {
+    observe_with_hooks(
+        pob_root,
+        scratch,
+        xml,
+        warm_xml,
+        structural_case,
+        None,
+        hook,
+    )
+}
+
+type BeforeSourceHook<'a> = dyn Fn(&Lua) -> Result<(), RuntimeError> + 'a;
+
+/// Capture primitive identities before source initialization, then observe the
+/// unchanged complete runtime. Neither hook replaces game-source functions.
+#[allow(clippy::too_many_arguments)]
+pub fn observe_with_hooks(
+    pob_root: &Path,
+    scratch: &Path,
+    xml: &str,
+    warm_xml: Option<&str>,
+    structural_case: bool,
+    before_source: Option<&BeforeSourceHook<'_>>,
+    hook: Option<&ObservationHook<'_>>,
+) -> Result<serde_json::Value, RuntimeError> {
     let start = Instant::now();
     poe_optimizer_pob::import::decode_build(xml.as_bytes())?;
     // Structural cases deliberately exercise original Lua coercion/diagnostics
@@ -65,6 +90,9 @@ pub fn observe_with_hook(
     // execute here. PoB requires debug facilities. Input XML is validated data,
     // never a Lua chunk. Dynamic native loading is disabled below.
     let lua = unsafe { Lua::unsafe_new() };
+    if let Some(hook) = before_source {
+        hook(&lua)?;
+    }
     poe_optimizer_lua_utf8::register(&lua)?;
     let globals = lua.globals();
     globals.set("arg", lua.create_table()?)?;

@@ -14,6 +14,7 @@ use poe_optimizer_data::source_program::{
 };
 use std::collections::BTreeMap;
 
+pub mod capture;
 pub(crate) mod lowering;
 mod syntax;
 pub(crate) mod tokens;
@@ -68,6 +69,7 @@ pub fn lower_from_sources(
     validate_sources(sources, owner)?;
     let mut bindings = LoweringBindings {
         implicit_self: true,
+        standalone_calls: true,
         ..LoweringBindings::default()
     };
     for root in owner.roots() {

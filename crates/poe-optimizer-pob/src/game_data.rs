@@ -236,6 +236,7 @@ pub(crate) fn extractor_sha256() -> String {
         include_str!("modifier_parser_extract/strings.rs"),
         include_str!("modifier_parser_extract/programs.rs"),
         include_str!("source_programs.rs"),
+        include_str!("source_programs/capture.rs"),
         include_str!("source_programs/lowering.rs"),
         include_str!("source_programs/syntax.rs"),
         include_str!("source_programs/tokens.rs"),

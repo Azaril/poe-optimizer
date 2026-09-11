@@ -492,3 +492,122 @@ fn definition_json_keeps_duplicate_intrinsic_keys_and_unknown_fields_invalid() {
     let unknown = json.replacen('{', "{\"unknown\":true,", 1);
     assert!(SourceProgramOwner::from_bytes(unknown.as_bytes()).is_err());
 }
+
+#[test]
+fn dynamic_method_binding_has_explicit_receiver_and_separate_execution_capabilities() {
+    let call = SourceProgramCall {
+        binding: 0,
+        receiver: Some(Box::new(expression(SourceProgramExprKind::Literal {
+            value: ParserFactoryLiteral::Nil,
+        }))),
+        arguments: SourceProgramValueList::default(),
+    };
+    let mut p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::Call {
+            call: Box::new(call.clone()),
+        },
+    );
+    p.bindings = vec![SourceProgramBinding::DynamicMethod {
+        key: "AddMod".into(),
+    }];
+    let owner = SourceProgramOwner::new(definitions()).unwrap();
+    let catalog = SourceProgramCatalog::new(programs(vec![p.clone()]), owner.clone()).unwrap();
+    assert!(
+        catalog
+            .required_capabilities()
+            .contains(&SourceProgramCapability::DynamicMethods)
+    );
+    assert!(
+        catalog
+            .required_capabilities()
+            .contains(&SourceProgramCapability::RecursiveCalls)
+    );
+    assert_eq!(
+        catalog
+            .check_capabilities(&BTreeSet::from([SourceProgramCapability::Core]))
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::UnsupportedCapability
+    );
+    for key in ["".into(), "a\0b".into(), "x".repeat(257)] {
+        let mut invalid = p.clone();
+        invalid.bindings[0] = SourceProgramBinding::DynamicMethod { key };
+        assert!(SourceProgramCatalog::new(programs(vec![invalid]), owner.clone()).is_err());
+    }
+    let mut no_receiver = call;
+    no_receiver.receiver = None;
+    p.body[0].operation = SourceProgramStatementKind::Return {
+        values: SourceProgramValueList {
+            values: vec![expression(SourceProgramExprKind::Call {
+                call: Box::new(no_receiver),
+            })],
+            tail: None,
+        },
+    };
+    assert_eq!(
+        SourceProgramCatalog::new(programs(vec![p]), owner)
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::Binding
+    );
+}
+#[test]
+fn parser_owner_cannot_admit_dynamic_method_ir() {
+    let snapshot = bundled_snapshot().unwrap();
+    let original = snapshot.modifier_parser();
+    let mut p = original.data().programs.data.programs[0].clone();
+    p.bindings = vec![SourceProgramBinding::DynamicMethod {
+        key: "AddMod".into(),
+    }];
+    let error = ParserProgramCatalog::new(programs(vec![p]), original.clone()).unwrap_err();
+    assert_eq!(error.kind, SourceProgramErrorKind::UnsupportedCapability);
+    assert!(error.message.contains("parser owner"));
+}
+#[test]
+fn type_and_select_keep_source_bound_builtin_identity() {
+    for (operation, symbol) in [
+        (SourceProgramIntrinsic::Type, "type"),
+        (SourceProgramIntrinsic::Select, "select"),
+    ] {
+        assert_eq!(operation.global_path(), Some([symbol].as_slice()));
+        let mut d = definitions();
+        d.callbacks.push(SourceCallback {
+            kind: SourceCallbackKind::Builtin {
+                symbol: symbol.into(),
+            },
+            upvalues: vec![],
+            environment: SourceEnvironment::OriginalGlobals,
+        });
+        d.callbacks[0].upvalues = vec![SourceUpvalue {
+            name: "primitive".into(),
+            value: SourceValue::Callback(SourceCallbackId(3)),
+        }];
+        d.intrinsics.insert(SourceCallbackId(3), operation);
+        let mut p = program(
+            SourceCallbackId(1),
+            SourceProgramExprKind::Literal {
+                value: ParserFactoryLiteral::Nil,
+            },
+        );
+        p.bindings = vec![SourceProgramBinding::Intrinsic {
+            operation,
+            source: SourceProgramIntrinsicSource::Captured {
+                upvalue: 0,
+                callback: SourceCallbackId(3),
+            },
+        }];
+        SourceProgramCatalog::new(
+            programs(vec![p.clone()]),
+            SourceProgramOwner::new(d.clone()).unwrap(),
+        )
+        .unwrap();
+        d.intrinsics.clear();
+        assert_eq!(
+            SourceProgramCatalog::new(programs(vec![p]), SourceProgramOwner::new(d).unwrap())
+                .unwrap_err()
+                .kind,
+            SourceProgramErrorKind::UnsupportedCapability
+        );
+    }
+}

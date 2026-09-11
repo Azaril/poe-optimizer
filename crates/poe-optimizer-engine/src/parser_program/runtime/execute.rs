@@ -5,7 +5,7 @@ use super::{
     ProgramAllocationUsage, ProgramLimits, ProgramOutput, ProgramRequestAccounting,
     ProgramRuntimeError as Error, ProgramValueGraph, RuntimeResult as Result, SourceProgramOutput,
     intrinsics,
-    value::{Heap, V},
+    value::{Heap, TableBehavior, V},
 };
 use crate::lua_pattern::MatchBudget;
 use poe_optimizer_data::modifier_parser::*;
@@ -114,6 +114,10 @@ pub(super) struct Run<'a, 'b, 'c> {
     pub(super) limits: ProgramLimits,
     pub(super) steps: &'b mut u64,
     pub(super) call_depth: usize,
+}
+pub(super) enum MethodTarget {
+    Value(V),
+    StringIntrinsic(ParserProgramIntrinsic),
 }
 struct Frame {
     program: usize,
@@ -365,7 +369,8 @@ impl Run<'_, '_, '_> {
                     .checked_add(1)
                     .ok_or_else(|| Error::resource("dense iterator index"))?;
                 let key = V::Number(*index as f64);
-                let value = self.heap.get(table, &key)?;
+                // LuaJIT ipairs reads the raw array/hash slot, bypassing __index.
+                let value = self.heap.raw_get(table, &key)?;
                 if matches!(value, V::Nil) {
                     Ok(None)
                 } else {
@@ -465,8 +470,20 @@ impl Run<'_, '_, '_> {
         depth: usize,
     ) -> Result<Vec<V>> {
         self.tick(depth)?;
-        let arguments = self.arguments(frame, call, depth + 1)?;
         let binding = &self.library.0.programs[frame.program].bindings[call.binding as usize];
+        if let CompiledProgramBinding::DynamicMethod { key } = binding {
+            let receiver = call
+                .receiver
+                .as_ref()
+                .ok_or_else(|| Error::input("method has no receiver"))?;
+            let receiver = self.expr(frame, receiver, depth + 1)?;
+            // Lua's SELF instruction resolves the function before argument effects.
+            let target = self.lookup_method(&receiver, key.as_bytes())?;
+            let mut arguments = self.values(frame, &call.arguments, depth + 1)?;
+            self.prepend(&mut arguments, receiver)?;
+            return self.invoke_method_target(target, arguments, depth + 1);
+        }
+        let arguments = self.arguments(frame, call, depth + 1)?;
         let values = match binding {
             CompiledProgramBinding::Program { index, .. } => {
                 self.invoke(*index, arguments, depth + 1)?
@@ -481,11 +498,220 @@ impl Run<'_, '_, '_> {
             CompiledProgramBinding::LegacyFactory { .. } => {
                 return Err(Error::unsupported("raw legacy-factory invocation bridge"));
             }
+            CompiledProgramBinding::DynamicMethod { .. } => {
+                unreachable!("handled before arguments")
+            }
         };
         if values.len() > self.limits.max_results {
             return Err(Error::resource("call result pack"));
         }
         Ok(values)
+    }
+    pub(super) fn lookup_method(&mut self, receiver: &V, key: &[u8]) -> Result<MethodTarget> {
+        if matches!(receiver, V::Bytes(_)) {
+            return match key {
+                b"gsub" => Ok(MethodTarget::StringIntrinsic(
+                    ParserProgramIntrinsic::StringGsub,
+                )),
+                b"gmatch" => Ok(MethodTarget::StringIntrinsic(
+                    ParserProgramIntrinsic::StringGmatch,
+                )),
+                _ => Err(Error::unsupported("unrepresented string method lookup")),
+            };
+        }
+        let key = self.heap.bytes(key)?;
+        Ok(MethodTarget::Value(self.heap.get(receiver, &key)?))
+    }
+    pub(super) fn invoke_method_target(
+        &mut self,
+        target: MethodTarget,
+        arguments: Vec<V>,
+        depth: usize,
+    ) -> Result<Vec<V>> {
+        match target {
+            MethodTarget::Value(value) => self.invoke_value(value, arguments, depth),
+            MethodTarget::StringIntrinsic(operation) => intrinsics::call(
+                operation,
+                &arguments,
+                self.heap,
+                self.patterns,
+                &self.limits,
+            ),
+        }
+    }
+    pub(super) fn prepend(&mut self, values: &mut Vec<V>, receiver: V) -> Result<()> {
+        if values.len() >= self.limits.max_results {
+            return Err(Error::resource("method argument pack"));
+        }
+        self.heap.charge_values(1)?;
+        values
+            .try_reserve_exact(1)
+            .map_err(|_| Error::resource("method argument allocation"))?;
+        values.insert(0, receiver);
+        Ok(())
+    }
+    pub(super) fn invoke_value(
+        &mut self,
+        target: V,
+        arguments: Vec<V>,
+        depth: usize,
+    ) -> Result<Vec<V>> {
+        self.tick(depth)?;
+        match target {
+            V::Callback(callback) => {
+                if let Some(classes) = self.library.catalog().owner().classes() {
+                    if callback == classes.source.parent_call_callback {
+                        return self.parent_call(arguments, depth + 1);
+                    }
+                    if callback == classes.source.parent_index_callback {
+                        let proxy = arguments.first().cloned().unwrap_or(V::Nil);
+                        let key = arguments.get(1).cloned().unwrap_or(V::Nil);
+                        let value = self.heap.parent_index(&proxy, &key, depth + 1)?;
+                        self.pack_space(1)?;
+                        return Ok(vec![value]);
+                    }
+                    if let Some(index) = classes.classes.iter().position(|class| {
+                        class
+                            .constructor
+                            .as_ref()
+                            .and_then(|constructor| constructor.wrapper.as_ref())
+                            .is_some_and(|wrapper| wrapper.callback == callback)
+                    }) {
+                        return self.wrapped_constructor(
+                            poe_optimizer_data::source_program::SourceClassId(index as u32 + 1),
+                            arguments,
+                            depth + 1,
+                        );
+                    }
+                }
+                if let Some(operation) = self.library.catalog().owner().intrinsic(callback) {
+                    return intrinsics::call(
+                        operation,
+                        &arguments,
+                        self.heap,
+                        self.patterns,
+                        &self.limits,
+                    );
+                }
+                let index = *self.library.0.callbacks.get(&callback).ok_or_else(|| {
+                    Error::unsupported(format!(
+                        "method callback {callback:?} has no compiled program"
+                    ))
+                })?;
+                self.invoke(index, arguments, depth + 1)
+            }
+            V::Table(_)
+                if matches!(
+                    self.heap.behavior(&target),
+                    Some(TableBehavior::ParentProxy)
+                ) =>
+            {
+                let callable = self.heap.raw_field(&target, "__call")?;
+                if !matches!(callable, V::Callback(_)) {
+                    return Err(Error::source("proxy call metamethod is not a function"));
+                }
+                let mut arguments = arguments;
+                self.prepend(&mut arguments, target)?;
+                self.invoke_value(callable, arguments, depth + 1)
+            }
+            V::Table(_)
+                if matches!(
+                    self.heap.behavior(&target),
+                    Some(TableBehavior::Instance(_))
+                ) =>
+            {
+                Err(Error::unsupported("class instance mix-in call"))
+            }
+            _ => Err(Error::source(
+                "attempt to call a non-function receiver method",
+            )),
+        }
+    }
+    fn parent_call(&mut self, arguments: Vec<V>, depth: usize) -> Result<Vec<V>> {
+        self.tick(depth)?;
+        if self.call_depth >= self.limits.max_call_depth {
+            return Err(Error::resource("program call depth"));
+        }
+        self.call_depth += 1;
+        let result = (|| {
+            let owner = self.library.catalog().owner().clone();
+            let policy = &owner.classes().expect("parent callback owner").source;
+            let proxy = arguments.first().cloned().unwrap_or(V::Nil);
+            let receiver = arguments.get(1).cloned().unwrap_or(V::Nil);
+            let parent = self.named_get(&proxy, &policy.proxy_parent)?;
+            let object = self.named_get(&proxy, &policy.proxy_object)?;
+            let _class_name = self.named_get(&proxy, &policy.proxy_class_name)?;
+            let name = self.named_get(&parent, &policy.class_name_field)?;
+            let constructor = self.heap.get(&parent, &name)?;
+            if !constructor.truthy() {
+                return Err(Error::source("parent class has no constructor"));
+            }
+            let initialized = self.named_get(&object, &policy.parent_init)?;
+            if self.heap.get(&initialized, &parent)?.truthy() {
+                return Err(Error::source("parent class already initialized"));
+            }
+            if !receiver.lua_equal(&object) {
+                return Err(Error::source(
+                    "parent constructor was not provided its object",
+                ));
+            }
+            let input = arguments.into_iter().skip(1).collect::<Vec<_>>();
+            self.pack_space(input.len())?;
+            self.invoke_value(constructor, input, depth + 1)?;
+            // The constructor may have replaced this table. Fetch it again.
+            let initialized = self.named_get(&object, &policy.parent_init)?;
+            self.heap.set(&initialized, parent, V::Boolean(true))?;
+            Ok(Vec::new())
+        })();
+        self.call_depth -= 1;
+        result
+    }
+    fn wrapped_constructor(
+        &mut self,
+        class_id: poe_optimizer_data::source_program::SourceClassId,
+        arguments: Vec<V>,
+        depth: usize,
+    ) -> Result<Vec<V>> {
+        self.tick(depth)?;
+        if self.call_depth >= self.limits.max_call_depth {
+            return Err(Error::resource("program call depth"));
+        }
+        self.call_depth += 1;
+        let result = (|| {
+            let owner = self.library.catalog().owner().clone();
+            let class = owner.class(class_id).expect("wrapper class");
+            let original = class.constructor.as_ref().expect("wrapper body").callback;
+            let receiver = arguments.first().cloned().unwrap_or(V::Nil);
+            let result = self.invoke_value(V::Callback(original), arguments, depth + 1)?;
+            let value = result.into_iter().next().unwrap_or(V::Nil);
+            let ancestors = self.heap.class_super_parents(class_id)?;
+            self.pack_space(ancestors.len())?;
+            for parent_id in ancestors {
+                self.tick(depth + 1)?;
+                let parent = owner.class(parent_id).expect("validated parent");
+                if parent.constructor.is_some() {
+                    let initialized = self.named_get(
+                        &receiver,
+                        &owner.classes().expect("wrapper policy").source.parent_init,
+                    )?;
+                    let key = self.heap.definition(parent.table)?;
+                    if !self.heap.get(&initialized, &key)?.truthy() {
+                        return Err(Error::source("parent class must be initialized"));
+                    }
+                }
+            }
+            if !value.truthy() {
+                return Err(Error::source("class constructor did not return a value"));
+            }
+            self.pack_space(1)?;
+            Ok(vec![value])
+        })();
+        self.call_depth -= 1;
+        result
+    }
+    fn named_get(&mut self, table: &V, name: &str) -> Result<V> {
+        let key = self.heap.bytes(name.as_bytes())?;
+        self.heap.get(table, &key)
     }
     fn expr(&mut self, frame: &mut Frame, expr: &ParserProgramExpr, depth: usize) -> Result<V> {
         let callback = self.library.0.programs[frame.program].callback;
@@ -574,7 +800,12 @@ impl Run<'_, '_, '_> {
         use ParserProgramBinary as Op;
         if matches!(
             operation,
-            Op::Equal | Op::NotEqual | Op::LessThan | Op::LessEqual
+            Op::Equal
+                | Op::NotEqual
+                | Op::LessThan
+                | Op::LessEqual
+                | Op::GreaterThan
+                | Op::GreaterEqual
         ) && let (V::Bytes(a), V::Bytes(b)) = (&left, &right)
         {
             self.patterns.charge(a.len().min(b.len()) as u64)?;
@@ -583,22 +814,22 @@ impl Run<'_, '_, '_> {
             Op::And | Op::Or => Ok(right),
             Op::Equal => Ok(V::Boolean(left.lua_equal(&right))),
             Op::NotEqual => Ok(V::Boolean(!left.lua_equal(&right))),
-            Op::LessThan | Op::LessEqual => {
+            Op::LessThan | Op::LessEqual | Op::GreaterThan | Op::GreaterEqual => {
                 let result = match (&left, &right) {
-                    (V::Number(a), V::Number(b)) => {
-                        if operation == Op::LessThan {
-                            a < b
-                        } else {
-                            a <= b
-                        }
-                    }
-                    (V::Bytes(a), V::Bytes(b)) => {
-                        if operation == Op::LessThan {
-                            a < b
-                        } else {
-                            a <= b
-                        }
-                    }
+                    (V::Number(a), V::Number(b)) => match operation {
+                        Op::LessThan => a < b,
+                        Op::LessEqual => a <= b,
+                        Op::GreaterThan => a > b,
+                        Op::GreaterEqual => a >= b,
+                        _ => unreachable!(),
+                    },
+                    (V::Bytes(a), V::Bytes(b)) => match operation {
+                        Op::LessThan => a < b,
+                        Op::LessEqual => a <= b,
+                        Op::GreaterThan => a > b,
+                        Op::GreaterEqual => a >= b,
+                        _ => unreachable!(),
+                    },
                     _ => return Err(Error::source("comparison of incompatible values")),
                 };
                 Ok(V::Boolean(result))
