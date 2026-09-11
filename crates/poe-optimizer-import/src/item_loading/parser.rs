@@ -85,6 +85,15 @@ impl ItemLoadProvider for NativeModifierParserProvider {
 fn classify<T>(error: &ParserError) -> DependencyResult<T> {
     let message = bounded_message(error.to_string());
     match error {
+        ParserError::Program(error) => match error.kind {
+            poe_optimizer_engine::parser_program::ProgramRuntimeErrorKind::Source => {
+                DependencyResult::SourceError(message)
+            }
+            poe_optimizer_engine::parser_program::ProgramRuntimeErrorKind::ResourceBound => {
+                DependencyResult::ResourceError(message)
+            }
+            _ => DependencyResult::Unavailable(message),
+        },
         ParserError::SourceError(_)
         | ParserError::Scan(ScanError::Pattern(PatternError::Source(_))) => {
             DependencyResult::SourceError(message)
@@ -217,4 +226,50 @@ fn convert(
             ));
         }
     })
+}
+
+#[cfg(test)]
+mod program_error_tests {
+    use super::*;
+    use poe_optimizer_engine::parser_program::{ProgramRuntimeError, ProgramRuntimeErrorKind};
+    #[test]
+    fn typed_program_errors_retain_provider_classification_and_source_context() {
+        for kind in [
+            ProgramRuntimeErrorKind::Source,
+            ProgramRuntimeErrorKind::ResourceBound,
+            ProgramRuntimeErrorKind::InvalidInput,
+            ProgramRuntimeErrorKind::UnsupportedCapability,
+        ] {
+            let error = ParserError::Program(ProgramRuntimeError {
+                kind,
+                callback: Some(poe_optimizer_data::modifier_parser::ParserCallbackId(15)),
+                location: Some(poe_optimizer_data::modifier_parser::ParserProgramLocation {
+                    start: 3,
+                    end: 7,
+                }),
+                message: "reached caller input".into(),
+            });
+            let result = classify::<()>(&error);
+            let message = match (kind, result) {
+                (ProgramRuntimeErrorKind::Source, DependencyResult::SourceError(message)) => {
+                    message
+                }
+                (
+                    ProgramRuntimeErrorKind::ResourceBound,
+                    DependencyResult::ResourceError(message),
+                ) => message,
+                (
+                    ProgramRuntimeErrorKind::InvalidInput
+                    | ProgramRuntimeErrorKind::UnsupportedCapability,
+                    DependencyResult::Unavailable(message),
+                ) => message,
+                _ => panic!("wrong provider classification"),
+            };
+            assert!(
+                message.contains("ParserCallbackId(15)")
+                    && message.contains("start: 3")
+                    && message.contains("reached caller input")
+            );
+        }
+    }
 }

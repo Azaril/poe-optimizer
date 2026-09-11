@@ -1,0 +1,70 @@
+{
+  "entries": [
+    {
+      "evidence": "typed-programs-g4-public-v1: complete original functions and public packing/copy/cache matrix; see docs/typed-parser-programs.md",
+      "program_sha256": "0195cdaf1745312faad88ae89bcf01b17da3998f2679c9ffd2b34bd33e4fe16c",
+      "role": "special",
+      "source": {
+        "function_end": 1263,
+        "function_sha256": "3678a21eb6f7c6485c0b9524327bc521e738e1cff96b95aac02c303ee3a6df11",
+        "function_start": 106,
+        "source": {
+          "end_line": 3554,
+          "line": 3526,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "44d60e64992869a80825e00adc3556bb2527834484f3aa0cc754b61bde100bd3"
+        }
+      }
+    },
+    {
+      "evidence": "typed-programs-g4-public-v1: complete original functions and public packing/copy/cache matrix; see docs/typed-parser-programs.md",
+      "program_sha256": "8892a99ae65a1e2d4f5f3eb753fd6e6c09eec9f188715eaa4049146924cd6213",
+      "role": "helper",
+      "source": {
+        "function_end": 251,
+        "function_sha256": "984da9d380a972f615ce9326e0cdc54f112f0ff433626c4236e012fe02ed1c98",
+        "function_start": 6,
+        "source": {
+          "end_line": 2200,
+          "line": 2193,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "f7d8145344750e3e761aa0ffa8809f5fc5423c0842e543cc2e84fb0d1efc5e8b"
+        }
+      }
+    },
+    {
+      "evidence": "typed-programs-g4-public-v1: complete original functions and public packing/copy/cache matrix; see docs/typed-parser-programs.md",
+      "program_sha256": "3e377b167f0d5785b639c12b9ec636186ccfe893583bb1c50a94e81e94e126ca",
+      "role": "special",
+      "source": {
+        "function_end": 84,
+        "function_sha256": "d5cb1aa1572261bccddeede66c5f0150aa352e9eacaa8c3241a5e66999f5a99d",
+        "function_start": 27,
+        "source": {
+          "end_line": 3589,
+          "line": 3589,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "8ea4425b6760c9d266c861a2f7555152eb6947122056fbbdfdef8a32d8546b6c"
+        }
+      }
+    },
+    {
+      "evidence": "typed-programs-g4-public-v1: complete original functions and public packing/copy/cache matrix; see docs/typed-parser-programs.md",
+      "program_sha256": "e4fcbe7bdc6a774085b5cbab61053c3a97919225429568988156f5ac4b34c84e",
+      "role": "special",
+      "source": {
+        "function_end": 102,
+        "function_sha256": "d0e6b410bc4b7e4a908c566a2f4d108883ce7ba95cacf7b40fe34069e3957e13",
+        "function_start": 38,
+        "source": {
+          "end_line": 3590,
+          "line": 3590,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "17a55ece9a8771421a56892b944e0b8dad135ee7ebe633d8e6c896dec81f4d33"
+        }
+      }
+    }
+  ],
+  "schema_version": 1,
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+}

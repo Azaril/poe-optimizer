@@ -384,7 +384,7 @@ mod tests {
     fn bytes(value: &[u8]) -> V {
         V::Bytes(Arc::from(value))
     }
-    fn fixture() -> (Heap, MatchBudget, ProgramLimits) {
+    fn fixture() -> (Heap<'static>, MatchBudget, ProgramLimits) {
         let limits = ProgramLimits::default();
         let (heap, _) = Heap::new(
             bundled_snapshot().unwrap().modifier_parser(),

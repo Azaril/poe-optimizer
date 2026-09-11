@@ -2,8 +2,13 @@ use poe_optimizer_data::{game_data::bundled_snapshot, modifier_parser::*};
 use std::{collections::BTreeSet, sync::OnceLock};
 fn data() -> ModifierParserData {
     static DATA: OnceLock<ModifierParserData> = OnceLock::new();
-    DATA.get_or_init(|| bundled_snapshot().unwrap().modifier_parser().data().clone())
-        .clone()
+    DATA.get_or_init(|| {
+        let mut data = bundled_snapshot().unwrap().modifier_parser().data().clone();
+        // This fixture edits legacy definitions, with no retained program admission.
+        data.programs.admissions.clear();
+        data
+    })
+    .clone()
 }
 fn flag_owners(data: &ModifierParserData) -> BTreeSet<ParserCallbackId> {
     data.factories
@@ -76,7 +81,7 @@ fn complete_flag_breadth_preserves_the_indirect_constructor_path() {
 #[test]
 fn injected_prefix_is_required_typed_bounded_literal_payload() {
     let mut data = data();
-    for text in [String::new(), "a\0é".into(), "x".repeat(4096)] {
+    for text in [String::new(), "a\0Ã©".into(), "x".repeat(4096)] {
         for value in [false, true] {
             data.policy.flag_mod_type = text.clone();
             data.policy.flag_mod_value = value;

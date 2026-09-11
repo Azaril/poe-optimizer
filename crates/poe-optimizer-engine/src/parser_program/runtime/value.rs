@@ -160,11 +160,32 @@ pub(super) struct HeapStats {
     pub(super) bytes: usize,
     pub(super) tables: usize,
 }
-struct Budget {
-    limits: ProgramLimits,
-    used: HeapStats,
+enum Usage<'a> {
+    #[cfg(test)]
+    Owned(HeapStats),
+    Shared(&'a mut HeapStats),
 }
-impl Budget {
+impl Usage<'_> {
+    fn get(&self) -> HeapStats {
+        match self {
+            #[cfg(test)]
+            Self::Owned(used) => *used,
+            Self::Shared(used) => **used,
+        }
+    }
+    fn get_mut(&mut self) -> &mut HeapStats {
+        match self {
+            #[cfg(test)]
+            Self::Owned(used) => used,
+            Self::Shared(used) => used,
+        }
+    }
+}
+struct Budget<'a> {
+    limits: ProgramLimits,
+    used: Usage<'a>,
+}
+impl Budget<'_> {
     fn add(used: &mut usize, amount: usize, max: usize, name: &'static str) -> Result<()> {
         let next = used
             .checked_add(amount)
@@ -175,7 +196,7 @@ impl Budget {
     }
     fn values(&mut self, amount: usize) -> Result<()> {
         Self::add(
-            &mut self.used.values,
+            &mut self.used.get_mut().values,
             amount,
             self.limits.max_values,
             "program heap values",
@@ -183,7 +204,7 @@ impl Budget {
     }
     fn bytes(&mut self, amount: usize) -> Result<()> {
         Self::add(
-            &mut self.used.bytes,
+            &mut self.used.get_mut().bytes,
             amount,
             self.limits.max_bytes,
             "program heap bytes",
@@ -191,7 +212,7 @@ impl Budget {
     }
     fn tables(&mut self, amount: usize) -> Result<()> {
         Self::add(
-            &mut self.used.tables,
+            &mut self.used.get_mut().tables,
             amount,
             self.limits.max_tables.min(u32::MAX as usize),
             "program heap tables",
@@ -199,22 +220,50 @@ impl Budget {
     }
 }
 
-pub(super) struct Heap {
+pub(super) struct Heap<'a> {
     catalog: ModifierParserCatalog,
     arguments: Vec<Table>,
     tables: Vec<Table>,
-    budget: Budget,
+    budget: Budget<'a>,
 }
-impl Heap {
+#[cfg(test)]
+impl Heap<'static> {
     pub(super) fn new(
         catalog: &ModifierParserCatalog,
         input: &ProgramValueGraph,
         limits: &ProgramLimits,
     ) -> Result<(Self, Vec<V>)> {
-        let mut budget = Budget {
-            limits: *limits,
-            used: HeapStats::default(),
-        };
+        Self::load(
+            catalog,
+            input,
+            Budget {
+                limits: *limits,
+                used: Usage::Owned(HeapStats::default()),
+            },
+        )
+    }
+}
+impl<'a> Heap<'a> {
+    pub(super) fn new_shared(
+        catalog: &ModifierParserCatalog,
+        input: &ProgramValueGraph,
+        limits: &ProgramLimits,
+        used: &'a mut HeapStats,
+    ) -> Result<(Self, Vec<V>)> {
+        Self::load(
+            catalog,
+            input,
+            Budget {
+                limits: *limits,
+                used: Usage::Shared(used),
+            },
+        )
+    }
+    fn load(
+        catalog: &ModifierParserCatalog,
+        input: &ProgramValueGraph,
+        mut budget: Budget<'a>,
+    ) -> Result<(Self, Vec<V>)> {
         // Validate every input node, including unreachable tables, before copying.
         budget.tables(input.tables.len())?;
         budget.values(input.values.len())?;
@@ -277,7 +326,7 @@ impl Heap {
         ))
     }
     pub(super) fn stats(&self) -> HeapStats {
-        self.budget.used
+        self.budget.used.get()
     }
     pub(super) fn remaining_bytes(&self) -> usize {
         self.budget.limits.max_bytes - self.stats().bytes

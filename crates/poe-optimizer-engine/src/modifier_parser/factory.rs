@@ -39,10 +39,7 @@ impl Run<'_> {
     ) -> ParserResult<ParseOutcome> {
         let parser = self.parser;
         let Some(ParserFactoryDisposition::Pure(factory)) = parser.catalog.factory(callback) else {
-            return Err(ParserError::Deferred {
-                stage: "special callback",
-                callback: Some(callback),
-            });
+            return self.special_program(callback, captures);
         };
         // The source passes tonumber(cap[1]) followed by every raw capture.
         // Conversion is performed even when the callback ignores its first parameter.
@@ -667,6 +664,7 @@ mod number_tests {
             parser: parser(),
             budget: work,
             output,
+            program_accounting: ProgramRequestAccounting::new(ProgramLimits::default()),
             source_tables: BTreeMap::new(),
         }
         .factory_expr(

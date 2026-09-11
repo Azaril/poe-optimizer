@@ -111,6 +111,11 @@ fn program_extraction_preserves_legacy_owner_and_inventories_every_other_callbac
 #[test]
 fn program_extraction_rejects_forged_lookup_owner_after_original_construction() {
     let (owner, sources) = fixture();
+    // This source-authentication test intentionally excludes package dispatch
+    // permissions, whose own stale-definition guard is tested separately.
+    let mut unadmitted = owner.data().clone();
+    unadmitted.programs.admissions.clear();
+    let owner = ModifierParserCatalog::new(unadmitted).unwrap();
     let mut data = owner.data().clone();
     let table = data.dictionaries[&ParserDictionary::GemIdLookup];
     data.tables[table.0 as usize - 1].fields.insert(
@@ -130,6 +135,11 @@ fn program_extraction_rejects_forged_lookup_owner_after_original_construction() 
 #[test]
 fn program_owner_authentication_retains_signed_zero_distinctions() {
     let (owner, sources) = fixture();
+    // This source-authentication test intentionally excludes package dispatch
+    // permissions, whose own stale-definition guard is tested separately.
+    let mut unadmitted = owner.data().clone();
+    unadmitted.programs.admissions.clear();
+    let owner = ModifierParserCatalog::new(unadmitted).unwrap();
     let mut data = owner.data().clone();
     let value = data
         .tables

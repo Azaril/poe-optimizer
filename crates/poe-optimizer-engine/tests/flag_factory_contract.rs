@@ -8,6 +8,8 @@ use std::sync::Arc;
 #[test]
 fn independently_injected_flag_prefixes_remain_isolated_across_workers() {
     let mut data = bundled_snapshot().unwrap().modifier_parser().data().clone();
+    // Authored legacy fixture changes do not retain original program admissions.
+    data.programs = Default::default();
     let helper = data.helpers["flag"];
     let owner = data
         .factories

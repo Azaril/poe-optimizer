@@ -16,6 +16,7 @@ mod numbers;
 mod ordinary;
 mod programs;
 mod programs_auth;
+mod programs_policy;
 mod strings;
 
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
@@ -281,20 +282,32 @@ fn pair(lua: &Lua, source: &str) -> Result<[f64; 2]> {
 fn between<'a>(text: &'a str, begin: &str, end: &str) -> Result<&'a str> {
     Ok(&section(text, begin, end)?[begin.len()..])
 }
+#[cfg(test)]
 pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierParserData> {
-    extract_inner(sources, None).map(|(data, _)| data)
+    extract_inner(sources, None, false).map(|(data, _)| data)
 }
 pub(crate) fn extract_programs(
     sources: &BTreeMap<String, String>,
     owner: &ModifierParserCatalog,
 ) -> Result<crate::parser_programs::ParserProgramExtraction> {
-    extract_inner(sources, Some(owner))?
+    extract_inner(sources, Some(owner), true)?
         .1
         .ok_or_else(|| error("program extraction result missing"))
+}
+/// Complete package extraction includes the full candidate inventory and the
+/// separate injected admission policy. The legacy-only helper remains available
+/// for isolated recipe/source regression tests without changing their scope.
+pub(crate) fn extract_package(sources: &BTreeMap<String, String>) -> Result<ModifierParserData> {
+    let (mut data, programs) = extract_inner(sources, None, true)?;
+    let programs = programs.ok_or_else(|| error("missing package parser programs"))?;
+    data.programs = programs_policy::bind(&data, programs.catalog().data().clone())?;
+    data.validate().map_err(error)?;
+    Ok(data)
 }
 fn extract_inner(
     sources: &BTreeMap<String, String>,
     program_owner: Option<&ModifierParserCatalog>,
+    collect_programs: bool,
 ) -> Result<(
     ModifierParserData,
     Option<crate::parser_programs::ParserProgramExtraction>,
@@ -313,8 +326,8 @@ fn extract_inner(
             LuaOptions::default(),
         )
     };
-    let program_primitives = program_owner
-        .map(|_| programs_auth::ProgramPrimitives::capture(&lua))
+    let program_primitives = collect_programs
+        .then(|| programs_auth::ProgramPrimitives::capture(&lua))
         .transpose()?;
     let original_strings = strings::StringLibrary::capture(&lua)?;
     let original_number = numbers::NumberPrimitive::capture(&lua)?;
@@ -616,20 +629,30 @@ fn extract_inner(
         tables: graph.tables,
         callbacks: graph.callbacks,
         factories: BTreeMap::new(),
+        programs: ParserProgramPayload::default(),
         helpers,
         declarations,
         capability: ParserCapability::DefinitionsOnly,
     };
     out.factories = factories::lower(&lua, sources, &out, constructor)?;
     out.validate().map_err(error)?;
-    let programs = if let Some(owner) = program_owner {
+    let programs = if collect_programs {
         program_primitives.as_ref().unwrap().verify(&lua)?;
         if actual_constructor.to_pointer() != original_constructor.to_pointer() {
             return Err(error("typed-program original createMod was rebound"));
         }
         // Numeric bits (including signed zero) and every legacy record remain
         // authenticated; PartialEq alone would equate positive/negative zero.
-        if serde_json::to_vec(&out)? != serde_json::to_vec(owner.data())? {
+        let fresh_owner;
+        let owner = if let Some(owner) = program_owner {
+            owner
+        } else {
+            fresh_owner = ModifierParserCatalog::new(out.clone()).map_err(error)?;
+            &fresh_owner
+        };
+        if out.definition_bytes().map_err(error)?
+            != owner.data().definition_bytes().map_err(error)?
+        {
             return Err(error(
                 "program owner differs from complete original parser extraction",
             ));
@@ -962,7 +985,10 @@ mod tests {
         let sources = sources();
         let actual = extract(&sources).unwrap();
         let bundled = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
-        assert_eq!(&actual, bundled.modifier_parser().data());
+        assert_eq!(
+            actual.definition_bytes().unwrap(),
+            bundled.modifier_parser().data().definition_bytes().unwrap()
+        );
         assert_eq!(actual.dictionaries.len(), 28);
         assert_eq!(
             actual

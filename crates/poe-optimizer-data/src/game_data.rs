@@ -24,8 +24,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 26;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v26";
+pub const SCHEMA_VERSION: u32 = 27;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v27";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -528,6 +528,7 @@ pub struct GameDataSnapshot {
     item_loading: ItemLoadingCatalog,
     item_scalability: ItemScalabilityCatalog,
     modifier_parser: ModifierParserCatalog,
+    parser_programs: ParserAdmittedProgramCatalog,
     unique_requirements: UniqueRequirementCatalog,
     item_assembly: ItemAssemblyCatalog,
 }
@@ -546,6 +547,9 @@ impl GameDataSnapshot {
     }
     pub fn modifier_parser(&self) -> &ModifierParserCatalog {
         &self.modifier_parser
+    }
+    pub fn parser_programs(&self) -> &ParserAdmittedProgramCatalog {
+        &self.parser_programs
     }
     pub fn unique_requirements(&self) -> &UniqueRequirementCatalog {
         &self.unique_requirements
@@ -621,6 +625,7 @@ impl GameDataLoader {
         let item_loading = ItemLoadingCatalog::new(package.item_loading.clone())?;
         let item_scalability = ItemScalabilityCatalog::new(package.item_scalability.clone())?;
         let modifier_parser = ModifierParserCatalog::new(package.modifier_parser.clone())?;
+        let parser_programs = ParserAdmittedProgramCatalog::new(&modifier_parser).map_err(error)?;
         let item_assembly = ItemAssemblyCatalog::new(package.item_assembly.clone())?;
         let unique_requirements =
             UniqueRequirementCatalog::new(package.unique_requirements.clone())?;
@@ -633,6 +638,7 @@ impl GameDataLoader {
             item_loading,
             item_scalability,
             modifier_parser,
+            parser_programs,
             unique_requirements,
             item_assembly,
         })

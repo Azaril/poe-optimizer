@@ -24,6 +24,8 @@ fn program(data: &mut ModifierParserData, id: ParserCallbackId) -> &mut ParserPu
 }
 fn fixture(pattern: &str) -> (ModifierParserData, ParserCallbackId) {
     let mut data = snapshot().modifier_parser().data().clone();
+    // Authored legacy fixture changes do not retain original program admissions.
+    data.programs = Default::default();
     for id in data.dictionaries.values() {
         data.tables[id.0 as usize - 1] = ParserTable::default();
     }

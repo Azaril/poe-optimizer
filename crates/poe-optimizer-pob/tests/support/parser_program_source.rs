@@ -238,6 +238,8 @@ pub fn plan() -> CompiledParserPrograms {
 pub fn injected(source: &Source, rows: &[(&str, ParserValue)]) -> CompiledParserPrograms {
     let extraction = extraction();
     let mut data = extraction.catalog().owner().data().clone();
+    // Raw injected-definition proof is independent of package dispatch permission.
+    data.programs.admissions.clear();
     let table_id = data.dictionaries[&ParserDictionary::GemIdLookup];
     let table = &mut data.tables[table_id.0 as usize - 1];
     for (key, value) in rows {

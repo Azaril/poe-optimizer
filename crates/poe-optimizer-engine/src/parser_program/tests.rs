@@ -292,6 +292,8 @@ pub(super) fn program_fixture(count: usize) -> (ModifierParserCatalog, ParserPro
     let mut owner = BASE
         .get_or_init(|| bundled_snapshot().unwrap().modifier_parser().data().clone())
         .clone();
+    // This compiler fixture supplies its own separate programs.
+    owner.programs = ParserProgramPayload::default();
     let originals: Vec<_> = owner
         .factories
         .iter()

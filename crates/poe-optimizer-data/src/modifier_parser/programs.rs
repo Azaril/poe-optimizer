@@ -3,7 +3,9 @@
 use super::*;
 use std::collections::BTreeSet;
 
+mod payload;
 mod validate;
+pub use payload::*;
 
 pub const PARSER_PROGRAM_SCHEMA_VERSION: u32 = 1;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
@@ -329,7 +331,7 @@ pub struct ParserProgramCatalog {
 }
 impl ParserProgramCatalog {
     pub fn new(data: ParserProgramData, owner: ModifierParserCatalog) -> ParserProgramResult<Self> {
-        let required = validate::validate(&data, &owner)?;
+        let required = validate::validate(&data, owner.data())?;
         Ok(Self {
             data: Arc::new(data),
             owner,

@@ -73,7 +73,7 @@ impl Budget {
 }
 struct Check<'a> {
     data: &'a ParserProgramData,
-    owner: &'a ModifierParserCatalog,
+    owner: &'a ModifierParserData,
     program: &'a ParserProgram,
     id: ParserProgramId,
     budget: &'a mut Budget,
@@ -258,7 +258,6 @@ impl Check<'_> {
                             let target = self.owner.callback(*callback).expect("validated capture");
                             let span = self
                                 .owner
-                                .data()
                                 .source
                                 .construction_spans
                                 .get("create_mod")
@@ -695,7 +694,7 @@ struct Frame<'a> {
 
 pub(super) fn validate(
     data: &ParserProgramData,
-    owner: &ModifierParserCatalog,
+    owner: &ModifierParserData,
 ) -> ParserProgramResult<BTreeSet<ParserProgramCapability>> {
     if data.schema_version != PARSER_PROGRAM_SCHEMA_VERSION {
         return Err(error(

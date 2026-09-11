@@ -10,7 +10,7 @@ pub use factories::*;
 mod programs;
 pub use programs::*;
 
-pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 6;
+pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 7;
 type Result<T> = std::result::Result<T, GameDataError>;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -201,6 +201,9 @@ pub struct ModifierParserData {
     pub dynamic_dependencies: ParserDependencies,
     pub policy: ParserPolicy,
     pub capability: ParserCapability,
+    /// Complete source programs and explicitly injected execution admissions.
+    /// An absent payload is invalid; an empty authored payload grants no permission.
+    pub programs: ParserProgramPayload,
 }
 #[derive(Debug, Clone)]
 pub struct ModifierParserCatalog(Arc<ModifierParserData>);
@@ -296,6 +299,19 @@ fn text(value: &str, limit: usize) -> bool {
 }
 impl ModifierParserData {
     pub fn validate(&self) -> Result<()> {
+        self.validate_definitions()?;
+        self.programs
+            .validate_owner(self)
+            .map_err(|error| GameDataError(error.to_string()))
+    }
+    fn callback(&self, id: ParserCallbackId) -> Option<&ParserCallback> {
+        id.0.checked_sub(1)
+            .and_then(|i| self.callbacks.get(i as usize))
+    }
+    fn factory(&self, id: ParserCallbackId) -> Option<&ParserFactoryDisposition> {
+        self.factories.get(&id)
+    }
+    fn validate_definitions(&self) -> Result<()> {
         if self.schema_version != MODIFIER_PARSER_SCHEMA_VERSION
             || !digest(&self.source.upstream_revision, 40)
             || self.tables.is_empty()

@@ -1,7 +1,7 @@
 use super::super::{CompiledParserPrograms, CompiledProgramBinding, ProgramOperation};
 use super::{
-    ProgramAllocationUsage, ProgramLimits, ProgramOutput, ProgramRuntimeError as Error,
-    ProgramValueGraph, RuntimeResult as Result, intrinsics,
+    ProgramAllocationUsage, ProgramLimits, ProgramOutput, ProgramRequestAccounting,
+    ProgramRuntimeError as Error, ProgramValueGraph, RuntimeResult as Result, intrinsics,
     value::{Heap, V},
 };
 use crate::lua_pattern::MatchBudget;
@@ -19,6 +19,23 @@ impl CompiledParserPrograms {
         input: &ProgramValueGraph,
         limits: ProgramLimits,
     ) -> Result<ProgramOutput> {
+        let mut accounting = ProgramRequestAccounting::new(limits);
+        let mut patterns = MatchBudget::new(limits.pattern);
+        self.execute_shared(callback, input, &mut accounting, &mut patterns)
+    }
+    /// Execute with the parser request's existing accounting and scan budget.
+    /// Counters are borrowed directly: an early error never discards prior work.
+    pub(crate) fn execute_shared(
+        &self,
+        callback: ParserCallbackId,
+        input: &ProgramValueGraph,
+        accounting: &mut ProgramRequestAccounting,
+        patterns: &mut MatchBudget,
+    ) -> Result<ProgramOutput> {
+        let limits = accounting.limits;
+        let initial_steps = accounting.steps();
+        let initial_pattern_steps = patterns.steps_used();
+        let initial_allocations = accounting.allocation_usage();
         let index = *self
             .0
             .callbacks
@@ -27,13 +44,18 @@ impl CompiledParserPrograms {
         if input.values.len() > limits.max_results {
             return Err(Error::resource("argument pack size"));
         }
-        let (heap, arguments) = Heap::new(self.catalog().owner(), input, &limits)?;
+        let (heap, arguments) = Heap::new_shared(
+            self.catalog().owner(),
+            input,
+            &limits,
+            &mut accounting.allocations,
+        )?;
         let mut run = Run {
             library: self,
             heap,
-            patterns: MatchBudget::new(limits.pattern),
+            patterns,
             limits,
-            steps: 0,
+            steps: &mut accounting.steps,
             call_depth: 0,
         };
         let values = run.invoke(index, arguments, 0)?;
@@ -42,22 +64,22 @@ impl CompiledParserPrograms {
         Ok(ProgramOutput {
             graph,
             owner: self.catalog().owner().clone(),
-            steps: run.steps,
-            pattern_steps: run.patterns.steps_used(),
+            steps: *run.steps - initial_steps,
+            pattern_steps: run.patterns.steps_used() - initial_pattern_steps,
             allocations: ProgramAllocationUsage {
-                values: used.values,
-                bytes: used.bytes,
-                tables: used.tables,
+                values: used.values - initial_allocations.values,
+                bytes: used.bytes - initial_allocations.bytes,
+                tables: used.tables - initial_allocations.tables,
             },
         })
     }
 }
-struct Run<'a> {
+struct Run<'a, 'b> {
     library: &'a CompiledParserPrograms,
-    heap: Heap,
-    patterns: MatchBudget,
+    heap: Heap<'b>,
+    patterns: &'b mut MatchBudget,
     limits: ProgramLimits,
-    steps: u64,
+    steps: &'b mut u64,
     call_depth: usize,
 }
 struct Frame {
@@ -71,12 +93,12 @@ enum Loop {
     Dense { table: V, index: u64 },
     Pattern(Box<intrinsics::Gmatch>),
 }
-impl Run<'_> {
+impl Run<'_, '_> {
     fn tick(&mut self, depth: usize) -> Result<()> {
         if depth > MAX_EVALUATOR_NESTING {
             return Err(Error::resource("combined expression/call nesting"));
         }
-        self.steps = self
+        *self.steps = self
             .steps
             .checked_add(1)
             .filter(|n| *n <= self.limits.max_steps)
@@ -170,7 +192,7 @@ impl Run<'_> {
                             ParserProgramIntrinsic::TableInsert,
                             &[table, value],
                             &mut self.heap,
-                            &mut self.patterns,
+                            self.patterns,
                             &self.limits,
                         )?;
                         pc += 1;
@@ -203,11 +225,11 @@ impl Run<'_> {
                         let start = self.expr(frame, start, depth + 1)?;
                         let limit = self.expr(frame, limit, depth + 1)?;
                         let step = self.expr(frame, step, depth + 1)?;
-                        let start = number(&start, &mut self.patterns)?
+                        let start = number(&start, self.patterns)?
                             .ok_or_else(|| Error::source("for initial value must be a number"))?;
-                        let limit = number(&limit, &mut self.patterns)?
+                        let limit = number(&limit, self.patterns)?
                             .ok_or_else(|| Error::source("for limit must be a number"))?;
-                        let step = number(&step, &mut self.patterns)?
+                        let step = number(&step, self.patterns)?
                             .ok_or_else(|| Error::source("for step must be a number"))?;
                         if numeric_admits(start, limit, step) {
                             frame.locals[*local as usize] = V::Number(start);
@@ -313,7 +335,7 @@ impl Run<'_> {
                     Ok(Some(vec![key, value]))
                 }
             }
-            Loop::Pattern(iterator) => iterator.next(&mut self.heap, &mut self.patterns),
+            Loop::Pattern(iterator) => iterator.next(&mut self.heap, self.patterns),
             Loop::Numeric { .. } => Err(Error::input("numeric state used as iterator")),
         }
     }
@@ -415,7 +437,7 @@ impl Run<'_> {
                 *operation,
                 &arguments,
                 &mut self.heap,
-                &mut self.patterns,
+                self.patterns,
                 &self.limits,
             )?,
             CompiledProgramBinding::LegacyFactory { .. } => {
@@ -468,7 +490,7 @@ impl Run<'_> {
                 let value = self.expr(frame, value, depth + 1)?;
                 match operation {
                     ParserProgramUnary::Not => Ok(V::Boolean(!value.truthy())),
-                    ParserProgramUnary::Negate => number(&value, &mut self.patterns)?
+                    ParserProgramUnary::Negate => number(&value, self.patterns)?
                         .map(|n| V::Number(-n))
                         .ok_or_else(|| Error::source("arithmetic on a non-number")),
                     ParserProgramUnary::Length => match &value {
@@ -548,9 +570,9 @@ impl Run<'_> {
                 self.heap.bytes(&bytes)
             }
             Op::Add | Op::Subtract | Op::Multiply | Op::Divide => {
-                let a = number(&left, &mut self.patterns)?
+                let a = number(&left, self.patterns)?
                     .ok_or_else(|| Error::source("arithmetic on a non-number"))?;
-                let b = number(&right, &mut self.patterns)?
+                let b = number(&right, self.patterns)?
                     .ok_or_else(|| Error::source("arithmetic on a non-number"))?;
                 Ok(V::Number(match operation {
                     Op::Add => a + b,

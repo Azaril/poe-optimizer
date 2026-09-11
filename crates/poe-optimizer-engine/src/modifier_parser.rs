@@ -6,12 +6,18 @@
 mod emit;
 mod factory;
 mod ordinary;
+mod programs;
 mod strings;
 mod value;
 use crate::lua_pattern::{LuaPattern, MatchBudget, PatternError};
 use crate::modifier_scan::{ScanCapture, ScanError, ScanTable};
+use crate::parser_program::{
+    CompiledParserPrograms, ProgramLimits, ProgramRequestAccounting, ProgramRuntimeError,
+    ProgramValue, ProgramValueGraph,
+};
 use poe_optimizer_data::modifier_parser::{
-    ModifierParserCatalog, ParserCallbackId, ParserDictionary, ParserTableId, ParserValue,
+    ModifierParserCatalog, ParserAdmittedProgramCatalog, ParserCallbackId, ParserDictionary,
+    ParserTableId, ParserValue,
 };
 use std::collections::BTreeMap;
 use std::sync::Arc;
@@ -25,6 +31,7 @@ pub type ParserResult<T> = Result<T, ParserError>;
 #[derive(Debug, Clone, PartialEq)]
 pub enum ParserError {
     Scan(ScanError),
+    Program(ProgramRuntimeError),
     SourceError(String),
     ResourceBound(&'static str),
     InvalidData(String),
@@ -51,6 +58,7 @@ impl std::fmt::Display for ParserError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Scan(e) => e.fmt(f),
+            Self::Program(e) => e.fmt(f),
             Self::SourceError(e) => write!(f, "ModParser source error: {e}"),
             Self::ResourceBound(e) => write!(f, "ModParser resource bound: {e}"),
             Self::InvalidData(e) => write!(f, "ModParser invalid data: {e}"),
@@ -90,9 +98,24 @@ pub struct CompiledModifierParser {
     cluster: LuaPattern,
     tag_capture_numeric: LuaPattern,
     first_to_upper: LuaPattern,
+    programs: Option<TypedPrograms>,
+}
+#[derive(Debug, Clone)]
+struct TypedPrograms {
+    admission: ParserAdmittedProgramCatalog,
+    plans: CompiledParserPrograms,
 }
 impl CompiledModifierParser {
     pub fn new(catalog: &ModifierParserCatalog) -> ParserResult<Self> {
+        let programs = if catalog.data().programs.admissions.is_empty() {
+            None
+        } else {
+            let admission = ParserAdmittedProgramCatalog::new(catalog)
+                .map_err(|e| ParserError::InvalidData(e.to_string()))?;
+            let plans = CompiledParserPrograms::new(admission.programs())
+                .map_err(|e| ParserError::InvalidData(e.to_string()))?;
+            Some(TypedPrograms { admission, plans })
+        };
         let mut dictionaries = BTreeMap::new();
         let mut rows = 0usize;
         let mut bytes = 0usize;
@@ -130,6 +153,7 @@ impl CompiledModifierParser {
             cluster,
             tag_capture_numeric,
             first_to_upper,
+            programs,
         })
     }
     pub fn catalog(&self) -> &ModifierParserCatalog {
@@ -145,6 +169,7 @@ impl CompiledModifierParser {
             parser: self,
             budget,
             output: OutputBudget::default(),
+            program_accounting: ProgramRequestAccounting::new(ProgramLimits::default()),
             source_tables: BTreeMap::new(),
         };
         let first = run.parse_order(line, 1)?;
@@ -176,9 +201,77 @@ struct Run<'a> {
     parser: &'a CompiledModifierParser,
     budget: &'a mut MatchBudget,
     output: OutputBudget,
+    program_accounting: ProgramRequestAccounting,
     source_tables: BTreeMap<ParserTableId, Arc<ModifierTable>>,
 }
 impl Run<'_> {
+    fn special_program(
+        &mut self,
+        callback: ParserCallbackId,
+        captures: &[ModifierValue],
+    ) -> ParserResult<ParseOutcome> {
+        let Some(programs) = self
+            .parser
+            .programs
+            .as_ref()
+            .filter(|p| p.admission.is_special(callback))
+        else {
+            return Err(ParserError::Deferred {
+                stage: "special callback",
+                callback: Some(callback),
+            });
+        };
+        // Source conversion occurs once at the Special call site, before the
+        // program's own raw parameter/result protocol begins.
+        if let Some(ModifierValue::Bytes(bytes)) = captures.first() {
+            self.budget.charge(bytes.len() as u64)?;
+        }
+        let first = captures
+            .first()
+            .and_then(ModifierValue::number)
+            .map(ProgramValue::Number)
+            .unwrap_or(ProgramValue::Nil);
+        self.output.charge(0)?;
+        for capture in captures {
+            let bytes = capture.as_bytes().map_or(0, |s| s.len());
+            self.budget.charge(1 + bytes as u64)?;
+            self.output.charge(bytes)?;
+        }
+        let mut values = Vec::with_capacity(captures.len() + 1);
+        values.push(first);
+        for capture in captures {
+            values.push(match capture {
+                ModifierValue::Nil => ProgramValue::Nil,
+                ModifierValue::Boolean(value) => ProgramValue::Boolean(*value),
+                ModifierValue::Number(value) => ProgramValue::Number(*value),
+                ModifierValue::Bytes(value) => ProgramValue::Bytes(value.clone()),
+                ModifierValue::Callback(value) => ProgramValue::Callback(*value),
+                ModifierValue::Table(_) => {
+                    return Err(ParserError::InvalidData(
+                        "scanner returned a table capture".into(),
+                    ));
+                }
+            });
+        }
+        let input = ProgramValueGraph {
+            values,
+            tables: Vec::new(),
+        };
+        let output = programs
+            .plans
+            .execute_shared(callback, &input, &mut self.program_accounting, self.budget)
+            .map_err(ParserError::Program)?;
+        programs::adapt(&output, &mut self.output, self.budget).map_err(|error| match error {
+            ParserError::Deferred {
+                stage,
+                callback: None,
+            } => ParserError::Deferred {
+                stage,
+                callback: Some(callback),
+            },
+            other => other,
+        })
+    }
     fn copy(&mut self, value: &ParserValue) -> ParserResult<ModifierValue> {
         copy_value(
             &self.parser.catalog,
@@ -386,7 +479,7 @@ fn make_mod(
 }
 
 /// Files entering adapter fingerprints; hosts normalize checkout newlines.
-pub fn implementation_sources() -> [&'static str; 16] {
+pub fn implementation_sources() -> [&'static str; 17] {
     [
         include_str!("modifier_parser.rs"),
         include_str!("parser_program.rs"),
@@ -398,6 +491,7 @@ pub fn implementation_sources() -> [&'static str; 16] {
         include_str!("modifier_parser/ordinary.rs"),
         include_str!("modifier_parser/emit.rs"),
         include_str!("modifier_parser/factory.rs"),
+        include_str!("modifier_parser/programs.rs"),
         include_str!("modifier_parser/strings.rs"),
         include_str!("modifier_scan.rs"),
         include_str!("lua_pattern.rs"),

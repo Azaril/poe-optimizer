@@ -63,7 +63,10 @@ fn numeric_loop(body: Vec<ParserProgramStatement>) -> ParserProgramStatement {
 }
 
 fn fixture() -> (ModifierParserCatalog, ParserProgramData) {
-    let owner = bundled_snapshot().unwrap().modifier_parser().clone();
+    let mut definitions = bundled_snapshot().unwrap().modifier_parser().data().clone();
+    // This is an independent authored G1 program, not packaged G4 dispatch.
+    definitions.programs = ParserProgramPayload::default();
+    let owner = ModifierParserCatalog::new(definitions).unwrap();
     let callback = owner
         .data()
         .factories

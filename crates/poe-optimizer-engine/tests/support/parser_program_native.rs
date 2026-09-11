@@ -24,6 +24,8 @@ fn fixture() -> &'static Fixture {
             .modifier_parser()
             .data()
             .clone();
+        // Authored raw-runtime fixtures do not inherit packaged public permission.
+        data.programs = ParserProgramPayload::default();
         let (callback, constructor, provenance) =
             data.factories
                 .iter()

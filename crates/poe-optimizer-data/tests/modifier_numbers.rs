@@ -2,8 +2,13 @@ use poe_optimizer_data::{game_data::bundled_snapshot, modifier_parser::*};
 use std::{collections::BTreeSet, sync::OnceLock};
 fn data() -> ModifierParserData {
     static DATA: OnceLock<ModifierParserData> = OnceLock::new();
-    DATA.get_or_init(|| bundled_snapshot().unwrap().modifier_parser().data().clone())
-        .clone()
+    DATA.get_or_init(|| {
+        let mut data = bundled_snapshot().unwrap().modifier_parser().data().clone();
+        // This fixture edits legacy definitions, with no retained program admission.
+        data.programs.admissions.clear();
+        data
+    })
+    .clone()
 }
 fn converts(e: &ParserFactoryExpr) -> bool {
     match e {
@@ -91,7 +96,7 @@ fn number_nodes_preserve_lazy_child_kinds_and_injected_literal_bytes() {
         ParserFactoryExpr::Literal(ParserFactoryLiteral::Boolean(false)),
         ParserFactoryExpr::Literal(ParserFactoryLiteral::Number(-0.0)),
         ParserFactoryExpr::Literal(ParserFactoryLiteral::NonFinite(ParserNonFinite::Nan)),
-        ParserFactoryExpr::Literal(ParserFactoryLiteral::Text("12\0é".into())),
+        ParserFactoryExpr::Literal(ParserFactoryLiteral::Text("12\0Ã©".into())),
         ParserFactoryExpr::Table(vec![]),
         ParserFactoryExpr::ConstantField {
             table: original.policy.mod_flags,

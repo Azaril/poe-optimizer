@@ -13,7 +13,7 @@ fn data() -> ItemAssemblyData {
 #[test]
 fn policy_only_catalog_binds_existing_definitions_without_copying() {
     let s = snapshot();
-    assert_eq!(s.identity().schema_version, 26);
+    assert_eq!(s.identity().schema_version, 27);
     let c = s.item_assembly();
     assert_eq!(c.data().capability, ItemAssemblyCapability::PolicyOnly);
     assert_eq!(
@@ -54,7 +54,7 @@ fn caller_patterns_payloads_and_divisors_remain_data_not_eager_runtime_checks() 
     let mut p = data();
     p.policy.collection.class_find_pattern = "[\0unfinished".into();
     p.policy.collection.class_capture_pattern.clear();
-    p.policy.range.newline_rewrite.replacement = "%0\0é".into();
+    p.policy.range.newline_rewrite.replacement = "%0\0Ã©".into();
     p.policy.slots.tag_replacements[0].pattern = "()%b".into();
     p.policy.local.more_divisor = 0.0;
     p.policy.nil_queries.flags = 9_007_199_254_740_991.0;

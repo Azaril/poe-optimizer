@@ -67,7 +67,9 @@ fn empty(data: &mut ModifierParserData) -> P {
     data.tables.push(ParserTable::default());
     P::Table(id)
 }
-fn compile(data: ModifierParserData) -> CompiledModifierParser {
+fn compile(mut data: ModifierParserData) -> CompiledModifierParser {
+    // These legacy-factory probes author their own dictionaries/recipes.
+    data.programs = Default::default();
     CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap()
 }
 fn compare(source: &StringSource, native: &CompiledModifierParser, text: &[u8]) -> bool {

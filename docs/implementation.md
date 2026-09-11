@@ -38,10 +38,12 @@ are preserved. The generic artifact checker runs no evaluator and cannot declare
 completion. Mapping, full preparation, resource semantics and interaction/worker tests
 remain gaps; the shared-model architecture question remains pending.
 
-Latest language work: **authenticated whole-source typed-program lowering**, detailed in
-the [language checkpoint](#typed-parser-language-decision-checkpoint). The independent native
-executor now has raw parity evidence for four complete original functions. The extractor
-emits 88 programs; 84 remain unproved. Package/public admission remains open.
+Latest language work: **packaged native typed-program execution**, detailed in
+the [language checkpoint](#typed-parser-language-decision-checkpoint). Schema27/parser7
+contains 88 generated programs with four explicit permissions: three public Special
+entries and their captured helper. The other 84 programs remain unadmitted. Public parser
+parity and fresh supplied-corpus regressions pass within the documented scope; complete
+native supplied builds remain **0/5**.
 
 Earlier supporting implementation checkpoint: **injected common item-assembly policy**,
 main commit `d428915`, from isolated code `5edf860c840232ae2940f7d3a51acf510aaa2ca1`.
@@ -120,7 +122,7 @@ kept alongside the main design. A bounded source read found PoB lookup data and 
 controls, but seed-based branches in the pinned PassiveSpec remain disabled pending data.
 No seed generator, native provider, search or trade feature has been implemented. Confirm
 game/version applicability and complete seed-data availability before implementation.
-The active G2/G3 parser work continues; J2-J5 depend on the general provider/preparation model
+The G4 parser checkpoint remains separate; J2-J5 depend on the general provider/preparation model
 and relevant R2-R4 real-build gates, rather than displacing them.
 
 - [ ] **J1 — Source, applicability and cost investigation.** Verify actual supported item
@@ -173,9 +175,9 @@ Both data and adapter implementation fingerprints include the new Rust sources.
 
 The G1 publication `ed660f6` contained no executor, source-program exporter, callback
 admission or package migration. G2 (`87d586f`) added the executor, and the G3 checkpoint
-below adds standalone authenticated source extraction. Package export and public admission
-remain unimplemented. Schema26/parser6 and the 1,222 Pure / 429 Unsupported dispositions remain
-unchanged; complete supplied native originals remain **0/5**. The G1 tests are structural
+below adds standalone authenticated source extraction. G4 adds schema27/parser7 package
+export and explicit public admission. The legacy 1,222 Pure / 429 Unsupported dispositions
+remain unchanged; complete supplied native originals remain **0/5**. The G1 tests are structural
 and integration contracts, not original-source program parity or performance evidence.
 
 Validation passes **51 scoped tests**: eight public program-schema tests, 11 independent
@@ -192,8 +194,8 @@ ledger; this is not a G2 execution test. No fresh whole-build corpus run has occ
 | --- | --- | --- |
 | G1: schema and compiler | Implemented; scoped tests and portability gates pass | Retain immutable owner binding, bounded validation and exact legacy package preservation |
 | G2: execution | Native core, semantic/isolation tests and local validation pass; explicit primitive gaps retained | Retain raw-call contracts and close reached gaps before complete G3 source admission |
-| G3: complete source lowering | Implemented standalone extraction; four complete original functions pass raw parity and seven live warm controls; 84 other emitted programs unproved | Preserve full inventory and raw/constructor proof; public-copy admission follows in G4 |
-| G4: package/parser integration | Not implemented | Explicit evidence-backed admission, public packing/copy/cache proof, migration, reproducible exports, public/corpus regressions and portability gates |
+| G3: complete source lowering | Implemented; four complete original functions pass raw parity and seven live warm controls; 84 other emitted programs unproved | Preserve full inventory and raw/constructor proof |
+| G4: package/parser integration | Implemented; final regression/publication checkpoint below | Preserve four explicit permissions, source/public proof, package identities, corpus limitations and portability |
 | G5: subsequent real dependencies | Future reached work | Add required effects/iteration/callable semantics without named callback handlers or weakened source proof |
 
 **G2 implementation:** `CompiledParserPrograms::execute` uses a fresh bounded heap and
@@ -214,6 +216,55 @@ cases are explicitly lowered in test data. This is not automatic complete source
 GemProperty/grantedExtraSkill parity, warmed-JIT evidence or throughput evidence. Runtime
 modulo/power, raw legacy-factory calls and further dynamic effects remain visible gaps in
 the [execution contract](typed-parser-programs.md#native-execution-boundary).
+
+**G4 checkpoint after `a23510d`:** the normal parser constructor now consumes injected,
+source/IR/definition-bound program admissions. Three public Special entries and their
+captured helper use generic native instructions; 84 generated programs stay outside
+public dispatch. The source/IR admission policy is separate from whole-function lowering.
+Admissions record authored permission/evidence claims under the existing package trust
+policy, not cryptographic proof of parity. Caller-authored programs can be deliberately
+rebound as custom/unreviewed data; the CLI test proves that their changes affect output.
+
+Failure-inclusive request accounting spans scans, native program calls, retry ordering and
+bounded public graph conversion. Raw aliases/return packs stay lossless until the normal
+wrapper applies first-two-result adjustment and public copy semantics; native parsing has
+no result cache. Unsupported DTO shapes remain deferred, while cyclic public copies and
+resource-limit failures retain ResourceError. Separate program/output/matching counters
+persist across retries. Program source/resource errors keep their import provider
+classification and source location; native-only consumers have no PoB/Lua host.
+
+The authenticated schema27/parser7/program1 export retains all 27 other data sections and
+all legacy parser definitions/dispositions. The complete generated catalog has 88 programs;
+only four carry permissions. Two fresh public CLI exports from distinct working directories
+are byte-identical to the installed package and have identical extraction evidence.
+Previous schema26 bytes remain under `runs/typed-program-g4-baseline`.
+
+| G4 evidence | Result / scope |
+| --- | --- |
+| Original public parser | Seven tests pass; 2,919 full output graphs (2,912 original-body pairs and seven explicitly authored-return wrapper controls), one paired source error, three DTO deferrals and one withheld-admission control. Includes four completed live warm controls; aborted trace attempts remain recorded. |
+| Natural selection matrix | 2,879 of 2,883 candidates select the intended actual source callback. Three special names remain wholly unparsed and plain Sorcery Ward selects a different exact static entry; all four gaps are recorded, not counted as target parity. |
+| Native runtime and integration | Full data suites pass 191 tests across 26 test-bearing targets (28 total, including zero-test library/example targets). 110 unique engine tests pass across runtime, source semantics and legacy contracts; 49 parser/extraction library tests and 50 existing source-regression tests pass. Full import/native suites pass 322 tests across 24 targets. Default/native-only item/data CLI suites each pass 23 tests; the source-inspection CLI target passes three. |
+| Fresh supplied originals | Five imports/inspections/reference evaluations pass; all 110 frozen reference measurements match. Native evaluation still rejects three one-Skill and two one-SkillSet restrictions, so the corpus process retains exit1 and **0/5** complete native builds. |
+| Controlled permission delta | On the same five inputs/package, disabling only admissions gives 598 reached parser calls and 27 parser stops. Enabled permissions reach 702 calls: 24 item records advance to assembly, one to rune reconstruction and one to a later parser stop. Final first stops are 109 assembly, four rune reconstruction, one affix-copy and two parser stops across 116 records. Native-only reviewed item output equals the default binary for the checked original. |
+| Native parser benchmark | All 235,170 checked calls agree with serial output. Median checked calls/s: 2,407 at one worker, 4,544 at two, 9,079 at four and 33,333 at 16. This shared-machine parser workload includes output hashing, uses 702 reached calls/486 texts, and is not complete-build throughput. |
+| Preparation/memory | Package read 6ms, load/validation 2.068s, immutable parser compilation 29.5ms. Windows working set after compile 221.9MiB, final 225.3MiB, process peak 665.9MiB during preparation. These are process measurements, not per-worker heap bounds. |
+| Portability | Strict workspace/native-only Clippy, native-only dependency isolation and all five portable-library WASM checks pass. Formatting, whitespace checks and all 546 checked Markdown file links pass. |
+
+Package SHA256: `875155eb794d8356a0c79cfd8b26cbe36f46f6dc2c01c408a2a0aa5eff7758d3`,
+previous `7a509c7cffd6809154eb8e4ad8bfbedc8d3ae2707425e02b2f785264130ee3bf`.
+The default release binary SHA is
+`b9625cccce19f555bf9932d58cbe2cd0f799ac14fdc6b3e1a4a1e9ede1bb0fd6`;
+173 release-source identities remain exact. The native-only control binary is separately
+identified in `runs/typed-program-g4-native-controls/index.json`.
+
+Evidence: `runs/typed-program-g4-validation.json`, `runs/typed-program-public-final.json`,
+`runs/typed-program-shared-final.json`, `runs/typed-program-g4-data-validation.json`,
+`runs/typed-program-g4-controlled-delta.json`, `runs/typed-program-g4-expectations.json`,
+`runs/typed-program-g4-bootstrap-migration.json`, `runs/typed-program-g4-release-freeze.json`
+and `runs/typed-program-g4-bench/validation.json`. Independent integration and CLI/source
+reviews found no unresolved blocker. Failed initial fixture/lint/compilation attempts stay
+in their original logs; exact-owner guards were retained and isolated legacy tests now
+explicitly clear program permissions before changing their parser definitions.
 
 **G3 checkpoint after `87d586f`:** the separate offline `parser_programs` API checks
 pinned source bytes, reconstructs the entire original legacy catalog, and binds programs
@@ -270,19 +321,15 @@ Hosted G2 run34550304082 was still executing Test on Windows and Ubuntu at this 
 no failed step was observed. This is a nonterminal observation, not a CI pass. The current
 G3 code has no hosted result yet.
 
-**Resume point:** implement G4's explicit program admission and package/public parser
-integration, following `runs/typed-program-g4-readiness.md`. Start with the nested program/
-admission data contract, exact-owner binding, raw argument/result adjustment and bounded
-graph ownership/copy conversion. Three proved functions are public Special entries; the
-fourth is their captured helper. Share failure-inclusive request budgets across scans,
-program execution, retries and conversion; successful-call counters alone are insufficient. Retain all 84 unproved programs outside public dispatch.
-Bind admissions to exact source/program identity and review the full generated inventory.
-Then migrate the actual next package/parser versions, prove two fresh reproducible exports,
-run public/copy/cache and fixed-corpus regressions, and measure compilation/preparation,
-execution and worker memory. Reuse existing factory conventions instead of introducing
-named callback handlers. Preserve original caller/package bytes until the explicit migration
-and record old/new data identities. The B3 shared-build-model direction remains separately
-pending; G4 does not grant complete-build numerical admission or close R1-R5.
+**Resume point:** publish the validated G4 checkpoint and inspect its exact-head CI, then
+return to the shared real-build R1-R5 rollout. The B3 shared actor/action/candidate
+model direction is separately pending; discuss the existing concrete proposal before that
+migration. Do not substitute another standalone named-helper campaign for real-build
+integration. G5 language extensions should follow dependencies actually reached by the
+paired Twister/Skeletal Sniper paths and the other supplied originals. Preserve the 84
+unadmitted programs, current package/source evidence and caller inputs. J1 seed-data
+investigation remains an optional opportunity; J2-J5 depend on the shared model and
+complete relevant build evaluation. G4 grants no complete-build numerical admission.
 
 G2 local validation passes **79 tests**: all 61 engine library tests (including 35 compiler/
 heap/intrinsic/runtime contracts) and 18 independent source tests. The source matrix contains
@@ -306,8 +353,8 @@ Evidence: `runs/typed-program-data-validation.json`, `runs/typed-program-g1-vali
 `runs/typed-program-adversarial-final-tests.log`, `runs/typed-program-final-clippy.log` and
 `runs/typed-program-portable-check.log`. Independent implementation-facing reads are retained
 in `runs/typed-program-source-plan.md` and `runs/typed-program-compiler-oracle-review.md`.
-Original source/caller/package bytes are preserved; proposed package27/parser7 versions
-remain tentative until G4 actually exports the new data.
+Original source/caller bytes and historical package snapshots are preserved. G4
+authenticated exports now establish package27/parser7; the G1 records remain historical.
 
 The G1-G5 stages execute the owner's accepted direction and need no additional design
 confirmation. Significant changes to that direction still require discussion. The separate

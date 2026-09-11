@@ -234,6 +234,8 @@ pub(crate) fn extractor_sha256() -> String {
         include_str!("modifier_parser_extract/programs.rs"),
         include_str!("modifier_parser_extract/programs/syntax.rs"),
         include_str!("modifier_parser_extract/programs_auth.rs"),
+        include_str!("modifier_parser_extract/programs_policy.rs"),
+        include_str!("modifier_parser_program_policy.json"),
         include_str!("parser_programs.rs"),
         include_str!("modifier_parser_inputs.lua"),
         include_str!("skill_identity_extract.rs"),
@@ -462,7 +464,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
     let actor = extractor.record(&records, "actor")?;
     let item_loading = crate::item_loading_extract::extract(&extractor.sources)?;
     let item_scalability = crate::item_scalability_extract::extract(&extractor.sources)?;
-    let modifier_parser = crate::modifier_parser_extract::extract(&extractor.sources)?;
+    let modifier_parser = crate::modifier_parser_extract::extract_package(&extractor.sources)?;
     let item_assembly = crate::item_assembly_extract::extract(
         &extractor.sources,
         &item_loading,

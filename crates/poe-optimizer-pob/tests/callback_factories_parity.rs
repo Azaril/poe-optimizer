@@ -261,7 +261,7 @@ fn original_public_factory_nil_empty_false_and_cache_copy_are_distinct() {
 
 use poe_optimizer_data::game_data::bundled_snapshot;
 use poe_optimizer_data::modifier_parser::{
-    ModifierParserCatalog, ModifierParserData, ParserCallbackId, ParserDictionary as D,
+    ModifierParserData, ParserCallbackId, ParserDictionary as D,
     ParserFactoryDisposition as Disposition, ParserFactoryExpr as E, ParserFactoryField as F,
     ParserFactoryLiteral as L, ParserTable, ParserTableId, ParserValue as P,
 };
@@ -360,7 +360,7 @@ fn every_pure_closure_matches_original_through_labelled_special_aliases() {
         alias(&mut data, &pattern, *id);
         source.add(&pattern, callback.clone());
     }
-    let native = CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap();
+    let native = CompiledModifierParser::new(&legacy_fixture_catalog(data)).unwrap();
     let captures = [
         b"12|34|56|78|90".as_slice(),
         b"-0|-0|0|0|0",
@@ -711,7 +711,7 @@ fn caller_recipe_matrix_matches_original_constructor_and_public_copy_without_nor
     // These explicitly edited recipes are caller-definition fixtures. Their Lua
     // expressions use the genuine original constructor and unchanged public call
     // protocol; they are not claimed to be extracted source recipes/build lines.
-    let native = CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap();
+    let native = CompiledModifierParser::new(&legacy_fixture_catalog(data)).unwrap();
     let mut successes = 0;
     let mut errors = 0;
     for (index, (label, _)) in cases.iter().enumerate() {
@@ -909,7 +909,7 @@ fn caller_captured_scalars_are_lazy_and_unrepresentable_selected_shapes_stay_def
             ));
         }
     }
-    let native = CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap();
+    let native = CompiledModifierParser::new(&legacy_fixture_catalog(data)).unwrap();
     for (case, deferred) in selected_cases {
         let line = input(case, b"bad\xff\0|a|b|c|d");
         if deferred {
@@ -974,7 +974,7 @@ fn pure_factories_do_not_enable_jewel_protocol_or_unsupported_source() {
         .fields
         .insert("^__jewel (.+)$".into(), P::Callback(pure));
     cases.push((b"__jewel captured".to_vec(), "jewel capture factory", None));
-    let native = CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap();
+    let native = CompiledModifierParser::new(&legacy_fixture_catalog(data)).unwrap();
     for (text, expected_stage, id) in cases {
         assert!(
             matches!(native.parse(&text,&mut MatchBudget::default()),Err(ParserError::Deferred{stage,callback}) if stage==expected_stage&&callback==id),
@@ -1117,7 +1117,7 @@ fn original_factory_operations_execute_in_live_jit_traces_without_public_cache_h
                 .unwrap(),
         );
     }
-    let native = CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap();
+    let native = CompiledModifierParser::new(&legacy_fixture_catalog(data)).unwrap();
     let observed: Table = source
         .public
         .source
@@ -1265,9 +1265,8 @@ fn native_special_capture_packing_and_factory_item_metadata_boundaries_match_sou
         alias(&mut data, &pattern, ids[i + 1]);
         source.add(&pattern, source.synthetic(&format!("return {lua}")));
     }
-    let native = std::sync::Arc::new(
-        CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap(),
-    );
+    let native =
+        std::sync::Arc::new(CompiledModifierParser::new(&legacy_fixture_catalog(data)).unwrap());
     for line in [
         b"__packed__".as_slice(),
         b"__packed 12",
@@ -1408,4 +1407,12 @@ fn native_special_capture_packing_and_factory_item_metadata_boundaries_match_sou
     eprintln!(
         "Opaque constructor observation: full ModTools captures select/type; preserved isolated descriptor has zero upvalues; both function-valued item results remain unavailable"
     );
+}
+
+// Isolated legacy-factory probes do not inherit typed-program permissions.
+fn legacy_fixture_catalog(
+    mut data: poe_optimizer_data::modifier_parser::ModifierParserData,
+) -> poe_optimizer_data::modifier_parser::ModifierParserCatalog {
+    data.programs = Default::default();
+    poe_optimizer_data::modifier_parser::ModifierParserCatalog::new(data).unwrap()
 }

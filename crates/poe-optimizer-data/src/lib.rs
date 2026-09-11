@@ -42,6 +42,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("modifier_parser.rs"),
         include_str!("modifier_parser/factories.rs"),
         include_str!("modifier_parser/programs.rs"),
+        include_str!("modifier_parser/programs/payload.rs"),
         include_str!("modifier_parser/programs/validate.rs"),
         include_str!("unique_requirements.rs"),
         include_str!("movement.rs"),

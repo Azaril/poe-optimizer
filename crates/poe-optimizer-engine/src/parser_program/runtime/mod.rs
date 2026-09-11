@@ -132,3 +132,32 @@ impl ProgramOutput {
         self.pattern_steps
     }
 }
+
+/// One request's cumulative program work and allocations. The public standalone
+/// executor creates a fresh instance; parser dispatch retains one across calls
+/// and retries. Failed input validation, execution and export keep their charges.
+#[derive(Debug)]
+pub(crate) struct ProgramRequestAccounting {
+    limits: ProgramLimits,
+    steps: u64,
+    allocations: value::HeapStats,
+}
+impl ProgramRequestAccounting {
+    pub(crate) fn new(limits: ProgramLimits) -> Self {
+        Self {
+            limits,
+            steps: 0,
+            allocations: value::HeapStats::default(),
+        }
+    }
+    pub(crate) fn steps(&self) -> u64 {
+        self.steps
+    }
+    pub(crate) fn allocation_usage(&self) -> ProgramAllocationUsage {
+        ProgramAllocationUsage {
+            values: self.allocations.values,
+            bytes: self.allocations.bytes,
+            tables: self.allocations.tables,
+        }
+    }
+}

@@ -366,3 +366,167 @@ fn runtime_byte_comparisons_consume_shared_scan_budget() {
         );
     }
 }
+
+#[test]
+fn shared_requests_accumulate_successes_without_changing_standalone_outputs() {
+    let (owner, mut data) = program_fixture(1);
+    data.programs[0].body = vec![ret(vec![expr(ParserProgramExprKind::Bytes {
+        value: b"value".to_vec(),
+    })])];
+    let plan = compile(owner, data);
+    let callback = plan.catalog().data().programs[0].callback;
+    let input = ProgramValueGraph::default();
+    let original = plan
+        .execute(callback, &input, ProgramLimits::default())
+        .unwrap();
+    let limits = ProgramLimits {
+        max_values: original.allocations().values * 2,
+        ..ProgramLimits::default()
+    };
+    let mut account = ProgramRequestAccounting::new(limits);
+    let mut patterns = crate::lua_pattern::MatchBudget::new(limits.pattern);
+    for _ in 0..2 {
+        let result = plan
+            .execute_shared(callback, &input, &mut account, &mut patterns)
+            .unwrap();
+        assert_eq!(result.graph(), original.graph());
+        assert_eq!(result.steps(), original.steps());
+        assert_eq!(result.allocations(), original.allocations());
+    }
+    assert_eq!(account.steps(), original.steps() * 2);
+    assert_eq!(
+        account.allocation_usage().values,
+        original.allocations().values * 2
+    );
+    assert_eq!(
+        plan.execute_shared(callback, &input, &mut account, &mut patterns)
+            .unwrap_err()
+            .kind,
+        ProgramRuntimeErrorKind::ResourceBound
+    );
+    assert!(account.steps() > original.steps() * 2);
+    assert_eq!(
+        plan.execute(callback, &input, limits).unwrap().graph(),
+        original.graph()
+    );
+}
+
+#[test]
+fn shared_requests_keep_input_execution_and_export_failure_charges() {
+    let (owner, mut data) = program_fixture(1);
+    data.programs[0].body = vec![ret(vec![expr(ParserProgramExprKind::Bytes {
+        value: b"abc".to_vec(),
+    })])];
+    let plan = compile(owner, data);
+    let callback = plan.catalog().data().programs[0].callback;
+    let limits = ProgramLimits {
+        max_bytes: 5,
+        ..ProgramLimits::default()
+    };
+    let mut patterns = crate::lua_pattern::MatchBudget::new(limits.pattern);
+    let mut account = ProgramRequestAccounting::new(limits);
+    let invalid = ProgramValueGraph {
+        values: vec![
+            ProgramValue::Bytes(b"abc".to_vec()),
+            ProgramValue::Table(ProgramTableId(1)),
+        ],
+        tables: vec![],
+    };
+    assert_eq!(
+        plan.execute_shared(callback, &invalid, &mut account, &mut patterns)
+            .unwrap_err()
+            .kind,
+        ProgramRuntimeErrorKind::InvalidInput
+    );
+    assert_eq!(account.allocation_usage().bytes, 3);
+    assert_eq!(account.allocation_usage().values, 2);
+    assert_eq!(account.steps(), 0);
+    let empty = ProgramValueGraph::default();
+    assert_eq!(
+        plan.execute_shared(callback, &empty, &mut account, &mut patterns)
+            .unwrap_err()
+            .kind,
+        ProgramRuntimeErrorKind::ResourceBound
+    );
+    assert!(account.steps() > 0);
+    assert_eq!(account.allocation_usage().bytes, 3);
+    // A fresh request reaches export, where the second payload copy exceeds five
+    // bytes. Both its executed work and the first allocation remain charged.
+    let mut fresh = ProgramRequestAccounting::new(limits);
+    let failure = plan
+        .execute_shared(callback, &empty, &mut fresh, &mut patterns)
+        .unwrap_err();
+    assert_eq!(failure.kind, ProgramRuntimeErrorKind::ResourceBound);
+    assert_eq!(fresh.allocation_usage().bytes, 3);
+    assert!(fresh.allocation_usage().values > 0 && fresh.steps() > 0);
+    let prior = fresh.steps();
+    assert!(
+        plan.execute_shared(callback, &empty, &mut fresh, &mut patterns)
+            .is_err()
+    );
+    assert!(fresh.steps() > prior);
+    assert_eq!(fresh.allocation_usage().bytes, 3);
+}
+
+#[test]
+fn shared_request_steps_and_pattern_work_survive_source_and_resource_errors() {
+    let (owner, mut data) = program_fixture(1);
+    data.programs[0].body = vec![ret(vec![expr(ParserProgramExprKind::Unary {
+        operation: ParserProgramUnary::Negate,
+        value: Box::new(local(0)),
+    })])];
+    let plan = compile(owner, data);
+    let callback = plan.catalog().data().programs[0].callback;
+    let limits = ProgramLimits::default();
+    let mut patterns = crate::lua_pattern::MatchBudget::new(MatchLimits {
+        max_steps: 8,
+        ..limits.pattern
+    });
+    patterns.charge(2).unwrap(); // Prior parser scan work.
+    let mut account = ProgramRequestAccounting::new(limits);
+    let bad = input(vec![ProgramValue::Bytes(b"bad".to_vec())]);
+    let error = plan
+        .execute_shared(callback, &bad, &mut account, &mut patterns)
+        .unwrap_err();
+    assert_eq!(error.kind, ProgramRuntimeErrorKind::Source);
+    assert_eq!(error.callback, Some(callback));
+    assert_eq!(patterns.steps_used(), 5);
+    let failed_steps = account.steps();
+    let good = input(vec![ProgramValue::Bytes(b"123".to_vec())]);
+    assert_eq!(
+        plan.execute_shared(callback, &good, &mut account, &mut patterns)
+            .unwrap()
+            .graph()
+            .values,
+        vec![ProgramValue::Number(-123.0)]
+    );
+    assert_eq!(patterns.steps_used(), 8);
+    assert!(account.steps() > failed_steps);
+    let used = account.allocation_usage();
+    assert_eq!(
+        plan.execute_shared(callback, &good, &mut account, &mut patterns)
+            .unwrap_err()
+            .kind,
+        ProgramRuntimeErrorKind::ResourceBound
+    );
+    assert!(account.allocation_usage().bytes > used.bytes);
+    let mut fresh_pattern = crate::lua_pattern::MatchBudget::new(limits.pattern);
+    let mut tiny = ProgramRequestAccounting::new(ProgramLimits {
+        max_steps: 2,
+        ..limits
+    });
+    assert_eq!(
+        plan.execute_shared(callback, &good, &mut tiny, &mut fresh_pattern)
+            .unwrap_err()
+            .kind,
+        ProgramRuntimeErrorKind::ResourceBound
+    );
+    assert_eq!(tiny.steps(), 2);
+    assert_eq!(
+        plan.execute_shared(callback, &good, &mut tiny, &mut fresh_pattern)
+            .unwrap_err()
+            .kind,
+        ProgramRuntimeErrorKind::ResourceBound
+    );
+    assert_eq!(tiny.steps(), 2);
+}

@@ -20,9 +20,9 @@ use ordinary_source::{OrdinarySource, clear};
 use poe_optimizer_data::{
     game_data::bundled_snapshot,
     modifier_parser::{
-        ModifierParserCatalog, ModifierParserData, ParserCallbackId, ParserDictionary as D,
-        ParserFactoryDisposition as F, ParserFactoryExpr as E, ParserFactoryField as Field,
-        ParserFactoryLiteral as L, ParserTable, ParserTableId, ParserValue as P,
+        ModifierParserData, ParserCallbackId, ParserDictionary as D, ParserFactoryDisposition as F,
+        ParserFactoryExpr as E, ParserFactoryField as Field, ParserFactoryLiteral as L,
+        ParserTable, ParserTableId, ParserValue as P,
     },
 };
 use poe_optimizer_engine::{
@@ -135,7 +135,7 @@ fn every_real_pure_prefix_and_both_tag_positions_match_the_unchanged_public_pars
             )
             .unwrap();
     }
-    let native = CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap();
+    let native = CompiledModifierParser::new(&legacy_fixture_catalog(data)).unwrap();
     let generate: Function = source
         .source
         .public
@@ -257,7 +257,7 @@ fn caller_metadata_recipes_preserve_raw_prefix_and_leading_tag_capture_slots() {
             source.source.public.source.lua.create_table().unwrap(),
         )
         .unwrap();
-    let native = CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap();
+    let native = CompiledModifierParser::new(&legacy_fixture_catalog(data)).unwrap();
     let mut paired = 0;
     let mut errors = 0;
     for second in [false, true] {
@@ -362,7 +362,7 @@ fn first_result_truthiness_fresh_second_captures_and_public_retries_match_source
             .set(pattern, source.fixture("second", METADATA_BODY))
             .unwrap();
     }
-    let native = CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap();
+    let native = CompiledModifierParser::new(&legacy_fixture_catalog(data)).unwrap();
     for name in ["nil", "empty"] {
         for suffix in [" __second 34", " __missing"] {
             let text = format!("+7 to maximum Life __{name} 12;{suffix}");
@@ -445,7 +445,7 @@ fn source_precheck_errors_precede_unsupported_body_and_missing_form_skips_tags()
             source.source.public.source.lua.create_table().unwrap(),
         )
         .unwrap();
-    let native = CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap();
+    let native = CompiledModifierParser::new(&legacy_fixture_catalog(data)).unwrap();
     for prefix in ["+7 to maximum Life", "+7 to maximum Life __first"] {
         for suffix in [" __unsupported", " __unsupported_position"] {
             let text = format!("{prefix}{suffix}");
@@ -519,8 +519,7 @@ fn configured_numeric_guard_uses_lazy_original_match_return_semantics() {
                 source.source.public.source.lua.create_table().unwrap(),
             )
             .unwrap();
-        let native =
-            CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap();
+        let native = CompiledModifierParser::new(&legacy_fixture_catalog(data)).unwrap();
         for prefix in [
             b"+7 to maximum Life".as_slice(),
             b"+7 to maximum Life __static",
@@ -723,4 +722,12 @@ fn ordinary_factory_metadata_combines_complete_enemy_wrappers_and_multiple_tag_o
     eprintln!(
         "Ordinary wrapper/form/two-tag combinations:{paired} exact complete public graphs, including Damage INC1 PerStat Life div10"
     );
+}
+
+// Isolated legacy-factory probes do not inherit typed-program permissions.
+fn legacy_fixture_catalog(
+    mut data: poe_optimizer_data::modifier_parser::ModifierParserData,
+) -> poe_optimizer_data::modifier_parser::ModifierParserCatalog {
+    data.programs = Default::default();
+    poe_optimizer_data::modifier_parser::ModifierParserCatalog::new(data).unwrap()
 }

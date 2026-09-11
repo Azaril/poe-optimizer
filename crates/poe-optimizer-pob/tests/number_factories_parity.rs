@@ -62,7 +62,9 @@ fn candidates(data: &ModifierParserData, family: D) -> Vec<(String, ParserCallba
         })
         .collect()
 }
-fn compile(data: ModifierParserData) -> CompiledModifierParser {
+fn compile(mut data: ModifierParserData) -> CompiledModifierParser {
+    // These legacy-factory probes author their own dictionaries/recipes.
+    data.programs = Default::default();
     CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap()
 }
 fn row(data: &mut ModifierParserData, family: D, key: &str, value: P) {

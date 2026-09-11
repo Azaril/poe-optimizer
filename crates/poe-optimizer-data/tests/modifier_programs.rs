@@ -6,7 +6,12 @@ use std::{
 fn owner() -> ModifierParserCatalog {
     static OWNER: OnceLock<ModifierParserCatalog> = OnceLock::new();
     OWNER
-        .get_or_init(|| bundled_snapshot().unwrap().modifier_parser().clone())
+        .get_or_init(|| {
+            let mut data = bundled_snapshot().unwrap().modifier_parser().data().clone();
+            // Standalone G1 authoring tests do not retain packaged programs/admissions.
+            data.programs = ParserProgramPayload::default();
+            ModifierParserCatalog::new(data).unwrap()
+        })
         .clone()
 }
 fn location() -> ParserProgramLocation {

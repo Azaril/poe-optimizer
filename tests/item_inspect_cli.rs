@@ -986,6 +986,8 @@ fn injected_special_factories_preserve_nil_results_and_generated_rune_origins() 
         .unwrap()
         .package()
         .clone();
+    // This test authors legacy recipes and does not inherit program permissions.
+    package.modifier_parser.programs = Default::default();
     let base_name = package
         .item_loading
         .bases
@@ -1247,6 +1249,8 @@ fn injected_ordinary_factories_preserve_capture_types_and_conditional_error_stag
         .unwrap()
         .package()
         .clone();
+    // This test authors legacy recipes and does not inherit program permissions.
+    package.modifier_parser.programs = Default::default();
     let base_name = package
         .item_loading
         .bases
@@ -1505,6 +1509,8 @@ fn injected_string_factories_preserve_bytes_and_distinguish_opaque_methods() {
         .unwrap()
         .package()
         .clone();
+    // This test authors legacy recipes and does not inherit program permissions.
+    package.modifier_parser.programs = Default::default();
     let base_name = package
         .item_loading
         .bases
@@ -1816,6 +1822,8 @@ fn injected_flag_factories_preserve_prefixes_and_variadic_slots() {
         .unwrap()
         .package()
         .clone();
+    // This test authors legacy recipes and does not inherit program permissions.
+    package.modifier_parser.programs = Default::default();
     let base_name = package
         .item_loading
         .bases
@@ -2082,6 +2090,8 @@ fn injected_number_factories_preserve_raw_inputs_nil_and_error_order() {
         .unwrap()
         .package()
         .clone();
+    // This test authors legacy recipes and does not inherit program permissions.
+    package.modifier_parser.programs = Default::default();
     let base_name = package
         .item_loading
         .bases
@@ -2341,4 +2351,156 @@ fn injected_number_factories_preserve_raw_inputs_nil_and_error_order() {
         digests[0], digests[1],
         "injected numeric source has its own identity"
     );
+}
+
+#[test]
+fn injected_typed_programs_change_cli_results_and_require_explicit_permission() {
+    use poe_optimizer_data::item_loading::ItemMetadataValue;
+    use poe_optimizer_data::modifier_parser::*;
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("caller-typed.xml");
+    let data_path = temp.path().join("caller-program-data.json");
+    let mut package = poe_optimizer_data::game_data::bundled_snapshot()
+        .unwrap()
+        .package()
+        .clone();
+    let base = package
+        .item_loading
+        .bases
+        .iter()
+        .find(|base| {
+            base.field("weapon")
+                .is_some_and(|v| !matches!(v, ItemMetadataValue::Boolean(false)))
+                && !base.name.contains(['&', '<', '>'])
+        })
+        .unwrap()
+        .name
+        .clone();
+    let xml = format!(
+        "<PathOfBuilding2><Items><Item id='caller-typed'>Rarity: Rare\nCaller Item\n{base}\n7 caller typed\n</Item></Items></PathOfBuilding2>"
+    );
+    fs::write(&input, &xml).unwrap();
+    let id = package
+        .modifier_parser
+        .programs
+        .admissions
+        .iter()
+        .find(|(_, a)| a.role == ParserProgramRole::Special)
+        .map(|(id, _)| *id)
+        .unwrap();
+    let dictionary = package.modifier_parser.dictionaries[&ParserDictionary::Special];
+    package.modifier_parser.tables[dictionary.0 as usize - 1]
+        .fields
+        .insert("^(%d+) caller typed$".into(), ParserValue::Callback(id));
+    let roles = package
+        .modifier_parser
+        .programs
+        .admissions
+        .iter()
+        .map(|(id, a)| (*id, a.role))
+        .collect::<Vec<_>>();
+    let mut identities = Vec::new();
+    for label in ["Caller First", "Caller Second"] {
+        let program = package
+            .modifier_parser
+            .programs
+            .data
+            .programs
+            .iter_mut()
+            .find(|p| p.callback == id)
+            .unwrap();
+        let location = ParserProgramLocation {
+            start: program.provenance.function_start,
+            end: program.provenance.function_start + 1,
+        };
+        let expression = |operation| ParserProgramExpr {
+            location,
+            operation,
+        };
+        let text = |value: &str| {
+            expression(ParserProgramExprKind::Bytes {
+                value: value.as_bytes().to_vec(),
+            })
+        };
+        program.bindings.clear();
+        program.body = vec![ParserProgramStatement {
+            location,
+            operation: ParserProgramStatementKind::Return {
+                values: ParserProgramValueList {
+                    values: vec![expression(ParserProgramExprKind::Table {
+                        fields: vec![ParserProgramField::List {
+                            value: expression(ParserProgramExprKind::Table {
+                                fields: vec![
+                                    ParserProgramField::Named {
+                                        key: "name".into(),
+                                        value: text(label),
+                                    },
+                                    ParserProgramField::Named {
+                                        key: "type".into(),
+                                        value: text("BASE"),
+                                    },
+                                    ParserProgramField::Named {
+                                        key: "value".into(),
+                                        value: expression(ParserProgramExprKind::Local {
+                                            local: 0,
+                                        }),
+                                    },
+                                ],
+                            }),
+                        }],
+                    })],
+                    tail: None,
+                },
+            },
+        }];
+        package.modifier_parser.programs.admissions = roles
+            .iter()
+            .map(|(id, role)| {
+                let program = package
+                    .modifier_parser
+                    .programs
+                    .data
+                    .programs
+                    .iter()
+                    .find(|p| p.callback == *id)
+                    .unwrap();
+                (
+                    *id,
+                    ParserProgramAdmission::bind(
+                        &package.modifier_parser,
+                        program,
+                        *role,
+                        "caller-authored CLI experiment",
+                    )
+                    .unwrap(),
+                )
+            })
+            .collect();
+        package.refresh_section_digests().unwrap();
+        fs::write(&data_path, package.canonical_bytes().unwrap()).unwrap();
+        let report = inspect_definitions(&input, temp.path(), Some(&data_path));
+        let item = &report["definition_lookup"]["items"]["report"]["items"][0];
+        assert_eq!(item["pending"]["kind"], "assembly", "{item:#}");
+        let fields = &item["state"]["explicit_mod_lines"][0]["modifiers"][0]["fields"];
+        assert_eq!(fields["name"], label);
+        assert_eq!(fields["value"].as_f64(), Some(7.0));
+        assert_eq!(
+            report["definition_lookup"]["data_trust"]["status"],
+            "custom_unreviewed"
+        );
+        identities.push(
+            report["definition_lookup"]["items"]["report"]["data_identity"]["content_sha256"]
+                .clone(),
+        );
+    }
+    assert_ne!(identities[0], identities[1]);
+    package.modifier_parser.programs.admissions.clear();
+    package.refresh_section_digests().unwrap();
+    fs::write(&data_path, package.canonical_bytes().unwrap()).unwrap();
+    let report = inspect_definitions(&input, temp.path(), Some(&data_path));
+    assert_eq!(
+        report["definition_lookup"]["items"]["report"]["items"][0]["pending"]["kind"],
+        "modifier_parser"
+    );
+    assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
 }

@@ -18,7 +18,7 @@ use public_source::Atom;
 use source::{Source, Target};
 
 #[test]
-fn four_complete_original_functions_are_source_bound_without_public_admission() {
+fn four_complete_original_functions_keep_source_binding_and_legacy_dispositions() {
     let plan = source::plan();
     let original = Source::new();
     for target in Target::ALL {
@@ -56,7 +56,7 @@ fn four_complete_original_functions_are_source_bound_without_public_admission() 
         );
         let artifact = serde_json::json!({
             "schema_version": 1,
-            "scope": "Complete source-lowering inventory; four callbacks receive independent raw source parity in this target. No public parser or build admission.",
+            "scope": "Complete source-lowering inventory; four callbacks receive independent raw source parity in this target. Raw comparisons do not establish public parser or whole-build parity.",
             "implementation_sha256": extraction.implementation_sha256(),
             "owner_serialized_sha256": owner_sha256,
             "source": extraction.catalog().owner().data().source,
@@ -189,6 +189,8 @@ fn property_exact_load_minion_lookup_truthiness_and_lazy_branches_match() {
     // numeric exact hits suppress both concatenations and string method lookup.
     // The validated injected catalog rejects this shape; do not hide that limit.
     let mut data = plan.catalog().owner().data().clone();
+    // These raw-definition probes do not carry reviewed package dispatch claims.
+    data.programs.admissions.clear();
     let lookup = data.dictionaries[&ParserDictionary::GemIdLookup];
     data.tables[lookup.0 as usize - 1]
         .indexed
@@ -341,6 +343,8 @@ fn malformed_receivers_error_and_definition_table_aliases_remain_visible() {
         );
     }
     let mut data = plan.catalog().owner().data().clone();
+    // These raw-definition probes do not carry reviewed package dispatch claims.
+    data.programs.admissions.clear();
     let lookup = data.dictionaries[&ParserDictionary::GemIdLookup];
     let table_id = ParserTableId(data.tables.len() as u32 + 1);
     data.tables.push(ParserTable {

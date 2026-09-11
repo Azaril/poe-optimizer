@@ -1,6 +1,9 @@
 use poe_optimizer_data::{game_data::bundled_snapshot, modifier_parser::*};
 fn data() -> ModifierParserData {
-    bundled_snapshot().unwrap().modifier_parser().data().clone()
+    let mut data = bundled_snapshot().unwrap().modifier_parser().data().clone();
+    // These definition injections do not retain an original program admission.
+    data.programs.admissions.clear();
+    data
 }
 #[test]
 fn complete_catalog_preserves_uninterpreted_graph_and_source_evidence() {
@@ -170,7 +173,7 @@ fn aggregate_key_bytes_cannot_bypass_graph_budget() {
 #[test]
 fn tag_precheck_policy_preserves_authored_lazy_patterns_with_bounded_text() {
     let mut data = data();
-    assert_eq!(data.schema_version, 6);
+    assert_eq!(data.schema_version, 7);
     assert_eq!(data.policy.tag_capture_numeric_pattern, "%d+");
     for key in [
         "prefix_factory_invocation",

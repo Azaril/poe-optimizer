@@ -2,8 +2,13 @@ use poe_optimizer_data::{game_data::bundled_snapshot, modifier_parser::*};
 use std::sync::OnceLock;
 fn data() -> ModifierParserData {
     static DATA: OnceLock<ModifierParserData> = OnceLock::new();
-    DATA.get_or_init(|| bundled_snapshot().unwrap().modifier_parser().data().clone())
-        .clone()
+    DATA.get_or_init(|| {
+        let mut data = bundled_snapshot().unwrap().modifier_parser().data().clone();
+        // This fixture edits legacy definitions, with no retained program admission.
+        data.programs.admissions.clear();
+        data
+    })
+    .clone()
 }
 fn pure_id(data: &ModifierParserData) -> ParserCallbackId {
     *data.factories.iter().find(|(_, f)| matches!(f, ParserFactoryDisposition::Pure(p) if p.provenance.constructor.is_some())).unwrap().0

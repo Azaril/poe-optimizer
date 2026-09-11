@@ -6,8 +6,9 @@ end-state responsibilities and the first delivery boundary. The [implementation 
 tracks completed work. G1 provides the standalone program schema, structural/binding
 verifier and immutable engine plans. G2 adds a native invocation executor and raw graph
 observation API. G3 adds authenticated whole-function lowering and independent raw
-source comparisons for the first four functions. Package dispatch and public-copy proof
-remain integration work; no public parser callback uses the typed runtime yet.
+source comparisons for the first four functions. G4 packages the generated inventory and
+explicit permissions, with native public dispatch, original public-copy parity and shared request
+accounting. Four programs are admitted; 84 generated programs remain unadmitted.
 
 ## Purpose and boundary
 
@@ -32,8 +33,9 @@ combat calculations and does not replace the separate shared-build-model decisio
 | Engine | Bind programs to their owning catalog, compile immutable plans, execute with per-invocation locals/heap/budgets, produce structured parser values |
 | Import/native consumers | Retain existing parser call conventions, copy boundaries, diagnostics and separate numerical admission |
 
-The initial serialized shape is an additive `ParserProgramCatalog` containing its own
-schema version, program definitions and an explicit callback-to-program map. Each program
+The serialized `ParserProgramData` contains its own schema version, program definitions
+and an explicit callback-to-program map. `ParserProgramCatalog` binds that data to its
+immutable parser owner; `ParserProgramPayload` adds package-level permissions. Each program
 has a parameter/result convention, local slots, structured body, dependency declarations
 and complete source provenance. IDs belong to the exact catalog instance; equal numeric
 IDs or matching labels in another catalog never establish valid ownership.
@@ -241,12 +243,14 @@ instructions with explicit branches, loop state and return/fallthrough. Calls ar
 to the retained library's program indices, existing recipes or declared intrinsics. It
 preserves bounded expression trees, including lazy operators, without evaluating values.
 Plans are immutable and shareable. The native executor below supplies runtime capability
-checks, invocation tables and error ordering; no public parser callback uses these plans yet.
+checks, invocation tables and error ordering. G4 integrates explicitly admitted programs
+with the ordinary public parser constructor.
 
-The standalone wire model has schema1. The existing schema26/parser6 package and its
-legacy recipes are unchanged. Program serialization, source export authentication, content
-fingerprints and dispatch integration enter the package together in G4. Implementation
-fingerprints already include the new Rust modules. Scope/ownership metadata must not be
+The standalone program wire model has schema1. Package27/parser7 adds the required program
+payload and permissions; legacy recipes retain their previous definitions and dispositions.
+Serialization, source export authentication, content fingerprints and public dispatch
+participate in the same package identity. Implementation fingerprints include the data,
+compiler, executor, public adapter and extraction-policy sources. Scope/ownership metadata must not be
 mistaken for a static proof that every dynamic table write is permissible: reached writes
 must check the invocation-owned heap, including aliases and values returned by helpers.
 
@@ -302,9 +306,11 @@ whole-build parity or performance measurements. G3/G4 retain those distinct gate
 The optional PoB adapter exposes `parser_programs::extract_pinned` and
 `extract_from_sources`. Both authenticate the pinned source inventory before executing
 source construction. The latter accepts only normalized, manifested source bytes. Fresh
-original construction must reproduce the entire caller-owned parser catalog byte-for-byte,
-including signed zero, captures, definitions and legacy dispositions. Program extraction
-then retains that exact owner. The existing legacy extraction entry point is preserved.
+original construction must reproduce the caller-owned parser definition projection
+byte-for-byte, including signed zero, captures, definitions and legacy dispositions. The
+projection excludes only the new program payload, avoiding self-referential identity.
+Program extraction retains that exact owner. Normal package extraction generates the full
+inventory, applies the explicit admission policy and validates the resulting package.
 
 Capture original primitive/library identities before construction and verify them afterward,
 including string method lookup, `gmatch`, `gsub`, `table.insert`, `ipairs`, `tonumber` and the
@@ -341,6 +347,59 @@ execution while retaining their inventory for follow-up. G4 owns public result a
 copy/cache behavior, authenticated package export, fresh corpus regressions and measured
 preparation/execution cost. The implementation record states the current proved/unproved
 counts and precise validation scope.
+
+## Packaged public execution boundary
+
+`ModifierParserData.programs` is a required `ParserProgramPayload`: a complete generated
+`ParserProgramData` inventory plus explicit admissions. An empty permission map executes
+none of its programs. The wire versions are package27/parser7/program1. Older packages
+fail version validation rather than acquiring guessed permissions. The normal
+`CompiledModifierParser::new` constructor validates and compiles the caller's payload;
+no build, skill or callback name selects a Rust implementation.
+
+Each admission binds exact parser definition bytes, serialized IR and source provenance,
+with a Special or Helper role and an evidence reference. Special permission requires a
+final Special-dictionary entry; every statically captured program dependency needs its
+own permission. Helpers cannot become public entries by acquiring a helper permission.
+Validate all generated programs, including unselected branches and unadmitted programs.
+The bound catalog retains immutable ownership without an Arc cycle. `GameDataSnapshot`
+exposes this same validated seam to native consumers.
+
+An admission is an authored capability/evidence claim under the package's existing trust
+policy. Its hashes detect changed definitions, source or instructions; they are not a
+cryptographic certificate of behavioral parity. A custom caller can deliberately author
+and rebind a different program, with the resulting package identified as custom/unreviewed.
+Reviewed exports use a separate source/IR policy file. The generic lowerer still inventories
+every function; the policy does not contain production callback-ID dispatch handlers.
+
+Public Special invocation applies its existing leading numeric-capture conversion once
+at the call site, retains the remaining raw captures and executes with a fresh invocation
+heap. The wrapper adjusts the raw return pack to its first two results, then uses a
+bounded graph adapter and the normal public deep-copy path. Native parsing retains no
+result cache; its returned copies reproduce the original parser's cache-boundary behavior.
+Aliases survive the raw program boundary. Trailing results are ignored by the wrapper.
+Unsupported public shapes, including false/scalar extra results, non-UTF-8 byte keys and
+noninteger keys, remain explicit deferred results rather than silently losing data. Cyclic
+public copies and exceeded traversal/depth bounds are resource failures, which the importer
+retains as ResourceError. Valid UTF-8 string keys are supported.
+
+A parse request retains three separate, failure-inclusive counters across both ordering
+passes and retries: ProgramRequestAccounting covers native execution, graph import and
+freeze; OutputBudget covers caller captures, raw-to-public adaptation and public copying;
+MatchBudget covers scans, primitive work and adapter traversal. Public adaptation does not
+debit the program counter itself. Charge input/result slots and byte payloads before
+allocation; retain charges after failed calls. Instruction, allocation and nesting limits
+remain separate bounds. Import-owned diagnostics preserve source error, resource error
+and unavailable-capability distinctions with callback and source location.
+
+G4 admits three public Special entries and their one helper after complete original-body
+raw and public-wrapper validation. The other 84 generated programs remain unadmitted.
+The evidence includes changed injected definitions/programs, cache isolation, alias copying,
+result adjustment, source failures, live warmed execution, identical fresh package exports
+and supplied-corpus regressions. Exact counts and identities belong in the implementation
+record. A separate native parser benchmark shares immutable plans among Rayon workers;
+its timings and memory are parser measurements, not whole-build or optimizer throughput.
+Full build breadth still depends on the separate R1-R5 integration gates.
 
 ## Delivery sequence
 

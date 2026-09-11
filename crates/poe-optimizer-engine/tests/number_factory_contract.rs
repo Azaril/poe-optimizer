@@ -8,6 +8,8 @@ use std::sync::Arc;
 #[test]
 fn parallel_parsers_use_selected_expressions_and_preserve_raw_captures() {
     let mut data = bundled_snapshot().unwrap().modifier_parser().data().clone();
+    // Authored legacy fixture changes do not retain original program admissions.
+    data.programs = Default::default();
     let owner = data
         .factories
         .iter()

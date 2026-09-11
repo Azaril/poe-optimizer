@@ -61,7 +61,9 @@ fn candidates(data: &ModifierParserData) -> Vec<(String, ParserCallbackId)> {
         })
         .collect()
 }
-fn compile(data: ModifierParserData) -> CompiledModifierParser {
+fn compile(mut data: ModifierParserData) -> CompiledModifierParser {
+    // These legacy-factory probes author their own dictionaries/recipes.
+    data.programs = Default::default();
     CompiledModifierParser::new(&ModifierParserCatalog::new(data).unwrap()).unwrap()
 }
 fn compare(source: &FlagSource, native: &CompiledModifierParser, line: &[u8]) -> bool {

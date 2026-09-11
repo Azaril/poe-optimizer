@@ -309,6 +309,7 @@ mod tests {
             parser: parser(),
             budget,
             output,
+            program_accounting: ProgramRequestAccounting::new(ProgramLimits::default()),
             source_tables: BTreeMap::new(),
         }
     }

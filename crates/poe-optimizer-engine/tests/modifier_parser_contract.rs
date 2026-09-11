@@ -19,6 +19,8 @@ fn snapshot() -> &'static GameDataSnapshot {
 }
 fn data() -> ModifierParserData {
     let mut data = snapshot().modifier_parser().data().clone();
+    // This isolated scanner/legacy-parser fixture replaces complete dictionaries.
+    data.programs = Default::default();
     for id in data.dictionaries.values() {
         data.tables[id.0 as usize - 1] = ParserTable::default();
     }

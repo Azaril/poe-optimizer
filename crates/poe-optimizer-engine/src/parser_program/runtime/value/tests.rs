@@ -9,7 +9,7 @@ fn owner() -> ModifierParserCatalog {
         .get_or_init(|| bundled_snapshot().unwrap().modifier_parser().clone())
         .clone()
 }
-fn heap() -> Heap {
+fn heap() -> Heap<'static> {
     Heap::new(
         &owner(),
         &ProgramValueGraph::default(),
@@ -355,6 +355,8 @@ fn deeply_nested_cyclic_graphs_import_and_export_iteratively() {
 #[test]
 fn capture_tables_stay_borrowed_and_definition_strings_are_charged_when_reached() {
     let mut data = owner().data().clone();
+    // This authored capture fixture has no original program admission claim.
+    data.programs = Default::default();
     let callback_index = data
         .callbacks
         .iter()
