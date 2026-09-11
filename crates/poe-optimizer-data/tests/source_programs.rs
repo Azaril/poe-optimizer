@@ -926,3 +926,65 @@ fn explicit_environment_forbids_unobserved_global_intrinsic_bypasses() {
     );
     assert!(ParserProgramCatalog::new(programs(vec![p]), original).is_err());
 }
+
+#[test]
+fn legacy_parser_rejects_live_markers_and_capture_writes_without_wire_change() {
+    let snapshot = bundled_snapshot().unwrap();
+    let original = snapshot.modifier_parser();
+    let wire = serde_json::to_vec(&original.data().programs).unwrap();
+    let mut data = original.data().clone();
+    let mut extra = data
+        .callbacks
+        .iter()
+        .find(|value| matches!(value.kind, SourceCallbackKind::Lua { .. }))
+        .unwrap()
+        .clone();
+    extra.upvalues = vec![SourceUpvalue {
+        name: "live".into(),
+        value: SourceValue::LiveCapture {},
+    }];
+    data.callbacks.push(extra);
+    data.factories.insert(
+        SourceCallbackId(data.callbacks.len() as u32),
+        poe_optimizer_data::modifier_parser::ParserFactoryDisposition::Unsupported {
+            reason: "test live capture".into(),
+        },
+    );
+    assert!(
+        data.validate()
+            .unwrap_err()
+            .to_string()
+            .contains("live capture marker")
+    );
+    let (index, callback) = original
+        .data()
+        .callbacks
+        .iter()
+        .enumerate()
+        .find(|(_, value)| matches!(value.kind, SourceCallbackKind::Lua { .. }))
+        .unwrap();
+    let mut p = program(
+        SourceCallbackId(index as u32 + 1),
+        SourceProgramExprKind::Literal {
+            value: ParserFactoryLiteral::Nil,
+        },
+    );
+    let SourceCallbackKind::Lua { source } = &callback.kind else {
+        unreachable!()
+    };
+    p.provenance.source = source.clone();
+    p.body[0].operation = SourceProgramStatementKind::CaptureSet {
+        upvalue: 0,
+        values: SourceProgramValueList::default(),
+    };
+    let error = ParserProgramCatalog::new(programs(vec![p]), original.clone()).unwrap_err();
+    assert_eq!(error.kind, SourceProgramErrorKind::UnsupportedCapability);
+    assert_eq!(serde_json::to_vec(&original.data().programs).unwrap(), wire);
+    let facade = SourceProgramOwner::from_parser(original.clone());
+    assert!(facade.closure_prototypes().is_none());
+    assert!(
+        facade
+            .bind_closure_prototype(SourceClosurePrototypeId(1))
+            .is_err()
+    );
+}

@@ -5,7 +5,7 @@ use super::{
     ProgramAllocationUsage, ProgramLimits, ProgramOutput, ProgramRequestAccounting,
     ProgramRuntimeError as Error, ProgramValueGraph, RuntimeResult as Result, SourceProgramOutput,
     intrinsics,
-    value::{Heap, TableBehavior, V},
+    value::{ClosureRef, Heap, TableBehavior, V},
 };
 use crate::lua_pattern::MatchBudget;
 use poe_optimizer_data::modifier_parser::*;
@@ -121,6 +121,7 @@ pub(super) enum MethodTarget {
 }
 struct Frame {
     program: usize,
+    closure: Option<ClosureRef>,
     locals: Vec<V>,
     extra: Vec<V>,
     loops: Vec<Option<Loop>>,
@@ -154,11 +155,32 @@ impl Run<'_, '_, '_> {
         arguments: Vec<V>,
         depth: usize,
     ) -> Result<Vec<V>> {
+        self.invoke_frame(index, arguments, depth, None)
+    }
+    fn invoke_frame(
+        &mut self,
+        index: usize,
+        arguments: Vec<V>,
+        depth: usize,
+        closure: Option<ClosureRef>,
+    ) -> Result<Vec<V>> {
         self.tick(depth)?;
         if self.call_depth >= self.limits.max_call_depth {
             return Err(Error::resource("program call depth"));
         }
         let plan = &self.library.0.programs[index];
+        if closure.is_none()
+            && self
+                .library
+                .catalog()
+                .owner()
+                .closure_prototype_id(plan.callback)
+                .is_some()
+        {
+            return Err(Error::unsupported(
+                "closure prototype execution requires a session instance",
+            ));
+        }
         self.heap
             .charge_values(usize::from(plan.local_count) + plan.loop_states)?;
         let mut locals = vec![V::Nil; usize::from(plan.local_count)];
@@ -183,6 +205,7 @@ impl Run<'_, '_, '_> {
         };
         let mut frame = Frame {
             program: index,
+            closure,
             locals,
             extra,
             loops: (0..plan.loop_states).map(|_| None).collect(),
@@ -218,6 +241,20 @@ impl Run<'_, '_, '_> {
                             frame.locals[*slot as usize] =
                                 values.get(index).cloned().unwrap_or(V::Nil);
                         }
+                        pc += 1;
+                    }
+                    Op::CaptureSet { upvalue, values } => {
+                        // Lua evaluates the full RHS pack before storing its
+                        // adjusted first result into the shared upvalue cell.
+                        let values = self.values(frame, values, depth + 1)?;
+                        let closure = frame.closure.ok_or_else(|| {
+                            Error::unsupported("capture assignment requires a session closure")
+                        })?;
+                        self.heap.set_closure_capture(
+                            closure,
+                            *upvalue,
+                            values.into_iter().next().unwrap_or(V::Nil),
+                        )?;
                         pc += 1;
                     }
                     Op::TableSet { table, key, value } => {
@@ -572,7 +609,26 @@ impl Run<'_, '_, '_> {
     ) -> Result<Vec<V>> {
         self.tick(depth)?;
         match target {
+            V::Closure(closure) => {
+                let callback = self.heap.closure_callback(closure)?;
+                let index =
+                    *self.library.0.callbacks.get(&callback).ok_or_else(|| {
+                        Error::unsupported("session closure has no compiled program")
+                    })?;
+                self.invoke_frame(index, arguments, depth + 1, Some(closure))
+            }
             V::Callback(callback) => {
+                if self
+                    .library
+                    .catalog()
+                    .owner()
+                    .closure_prototype_id(callback)
+                    .is_some()
+                {
+                    return Err(Error::unsupported(
+                        "closure prototype is not an instantiated function",
+                    ));
+                }
                 if let Some(classes) = self.library.catalog().owner().classes() {
                     if callback == classes.source.parent_call_callback {
                         return self.parent_call(arguments, depth + 1);
@@ -621,7 +677,7 @@ impl Run<'_, '_, '_> {
                 ) =>
             {
                 let callable = self.heap.raw_field(&target, "__call")?;
-                if !matches!(callable, V::Callback(_)) {
+                if !matches!(callable, V::Callback(_) | V::Closure(_)) {
                     return Err(Error::source("proxy call metamethod is not a function"));
                 }
                 let mut arguments = arguments;
@@ -746,9 +802,14 @@ impl Run<'_, '_, '_> {
             E::Literal { value } => self.heap.literal(value),
             E::Bytes { value } => self.heap.bytes(value),
             E::Local { local } => Ok(frame.locals[*local as usize].clone()),
-            E::Capture { upvalue } => self
-                .heap
-                .capture(self.library.0.programs[frame.program].callback, *upvalue),
+            E::Capture { upvalue } => {
+                if let Some(closure) = frame.closure {
+                    self.heap.closure_capture(closure, *upvalue)
+                } else {
+                    self.heap
+                        .capture(self.library.0.programs[frame.program].callback, *upvalue)
+                }
+            }
             E::Definition { root } => {
                 let id = self
                     .library

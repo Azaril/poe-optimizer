@@ -14,10 +14,13 @@ use std::collections::BTreeMap;
 
 mod classes;
 mod context;
+mod session;
+mod upvalues;
 pub use classes::{ObservedSourceClasses, SourceClassCaptureRequest, SourceClassSelection};
 pub use context::{
     ObservedSourceContext, SourceCaptureContext, SourceEnvironmentSelection, SourceTableSelection,
 };
+pub use session::{ObservedSourceSession, SourceSessionCaptureRequest};
 
 const MAX_VALUES: usize = 1_000_000;
 const MAX_TABLES: usize = 100_000;
@@ -203,6 +206,9 @@ impl SourceClosureObserver {
             intrinsics: BTreeMap::new(),
             values: 0,
             text_bytes: 0,
+            forbidden_tables: std::collections::BTreeSet::new(),
+            forbidden_callbacks: std::collections::BTreeSet::new(),
+            forbidden_cells: std::collections::BTreeSet::new(),
             source_names: &context.source_names,
             context: SourceProgramContext::default(),
         };
@@ -366,6 +372,9 @@ struct Graph<'a> {
     intrinsics: BTreeMap<SourceCallbackId, SourceProgramIntrinsic>,
     values: usize,
     text_bytes: usize,
+    forbidden_tables: std::collections::BTreeSet<usize>,
+    forbidden_callbacks: std::collections::BTreeSet<usize>,
+    forbidden_cells: std::collections::BTreeSet<usize>,
     context: SourceProgramContext,
 }
 impl Graph<'_> {
@@ -407,6 +416,9 @@ impl Graph<'_> {
     }
     fn table(&mut self, table: Table, depth: usize) -> Result<SourceValue> {
         let pointer = table.to_pointer() as usize;
+        if self.forbidden_tables.contains(&pointer) {
+            return Err(error("immutable definition reaches a live session table"));
+        }
         if let Some(id) = self.seen_tables.get(&pointer) {
             // Only preflighted projections/classes or already checked plain tables
             // enter this map; explicit raw __index snapshots retain their aliases.
@@ -454,26 +466,68 @@ impl Graph<'_> {
         Ok(SourceValue::Table(id))
     }
     fn upvalue(&self, function: &Function, index: i32) -> Result<(Option<String>, Value)> {
-        // SAFETY: mlua owns and locks the state, pushes the same-host function,
-        // protects allocation errors, and restores the stack. Only the bounded
-        // Lua upvalue API is used; no debug module/global/registry is installed.
-        Ok(unsafe {
-            self.observer.lua.exec_raw(function.clone(), |state| {
-                let name = mlua::ffi::lua_getupvalue(state, 1, index);
-                if name.is_null() {
-                    mlua::ffi::lua_settop(state, 0);
-                    mlua::ffi::lua_pushnil(state);
-                    mlua::ffi::lua_pushnil(state);
-                } else {
-                    mlua::ffi::lua_remove(state, 1);
-                    mlua::ffi::lua_pushstring(state, name);
-                    mlua::ffi::lua_insert(state, 1);
+        Ok(match upvalues::read(&self.observer.lua, function, index)? {
+            Some(observed) => {
+                if self.forbidden_cells.contains(&observed.identity) {
+                    return Err(error(
+                        "immutable definition shares a live session capture cell",
+                    ));
                 }
-            })?
+                (Some(observed.name), observed.value)
+            }
+            None => (None, Value::Nil),
+        })
+    }
+    fn lua_source(&self, function: &Function) -> Result<ItemSourceSpan> {
+        if function
+            .environment()
+            .is_none_or(|env| env.to_pointer() != self.observer.globals.to_pointer())
+        {
+            return Err(error(
+                "source closure uses a non-original global environment",
+            ));
+        }
+        let info = function.info();
+        let path = info
+            .source
+            .as_deref()
+            .and_then(|source| source.strip_prefix('@'))
+            .ok_or_else(|| error("source closure lacks an authenticated file name"))?;
+        let path = self
+            .source_names
+            .get(path)
+            .map(String::as_str)
+            .unwrap_or(path);
+        let text = self
+            .sources
+            .get(path)
+            .ok_or_else(|| error(format!("source closure dependency absent: {path}")))?;
+        let line = info
+            .line_defined
+            .ok_or_else(|| error("source closure missing first line"))?;
+        let end_line = info
+            .last_line_defined
+            .ok_or_else(|| error("source closure missing last line"))?;
+        if line == 0 || end_line < line || end_line > text.lines().count() {
+            return Err(error("source closure line span is outside source"));
+        }
+        let body = text
+            .split_inclusive('\n')
+            .skip(line - 1)
+            .take(end_line - line + 1)
+            .collect::<String>();
+        Ok(ItemSourceSpan {
+            path: path.into(),
+            line: line.try_into().map_err(error)?,
+            end_line: end_line.try_into().map_err(error)?,
+            sha256: hash(body.as_bytes()),
         })
     }
     fn function(&mut self, function: Function, depth: usize) -> Result<SourceValue> {
         let pointer = function.to_pointer() as usize;
+        if self.forbidden_callbacks.contains(&pointer) {
+            return Err(error("immutable definition reaches a live session closure"));
+        }
         if let Some(id) = self.seen_callbacks.get(&pointer) {
             return Ok(SourceValue::Callback(*id));
         }
@@ -511,49 +565,8 @@ impl Graph<'_> {
                 }
             }
         } else {
-            if function
-                .environment()
-                .is_none_or(|env| env.to_pointer() != self.observer.globals.to_pointer())
-            {
-                return Err(error(
-                    "source closure uses a non-original global environment",
-                ));
-            }
-            let path = info
-                .source
-                .as_deref()
-                .and_then(|source| source.strip_prefix('@'))
-                .ok_or_else(|| error("source closure lacks an authenticated file name"))?;
-            let path = self
-                .source_names
-                .get(path)
-                .map(String::as_str)
-                .unwrap_or(path);
-            let text = self
-                .sources
-                .get(path)
-                .ok_or_else(|| error(format!("source closure dependency absent: {path}")))?;
-            let line = info
-                .line_defined
-                .ok_or_else(|| error("source closure missing first line"))?;
-            let end_line = info
-                .last_line_defined
-                .ok_or_else(|| error("source closure missing last line"))?;
-            if line == 0 || end_line < line || end_line > text.lines().count() {
-                return Err(error("source closure line span is outside source"));
-            }
-            let body = text
-                .split_inclusive('\n')
-                .skip(line - 1)
-                .take(end_line - line + 1)
-                .collect::<String>();
             SourceCallbackKind::Lua {
-                source: ItemSourceSpan {
-                    path: path.into(),
-                    line: line.try_into().map_err(error)?,
-                    end_line: end_line.try_into().map_err(error)?,
-                    sha256: hash(body.as_bytes()),
-                },
+                source: self.lua_source(&function)?,
             }
         };
         self.callbacks.push(SourceCallback {

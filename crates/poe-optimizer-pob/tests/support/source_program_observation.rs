@@ -78,7 +78,9 @@ pub fn canonical(graph: &ProgramValueGraph) -> Json {
             ProgramValue::Boolean(v) => json!({"boolean":v}),
             ProgramValue::Number(v) => json!({"number_bits":format!("{:016x}",v.to_bits())}),
             ProgramValue::Bytes(v) => json!({"bytes":v}),
-            ProgramValue::Callback(_) => panic!("callback escaped observation"),
+            ProgramValue::Callback(_)
+            | ProgramValue::Closure(_)
+            | ProgramValue::DefinitionTable(_) => panic!("non-plain identity escaped observation"),
             ProgramValue::Table(id) => {
                 if let Some(index) = ids.get(id) {
                     return json!({"table":index});

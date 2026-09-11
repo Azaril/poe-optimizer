@@ -157,6 +157,11 @@ pub(super) fn copy_value(
             0
         })?;
         Ok(match value {
+            ParserValue::LiveCapture {} => {
+                return Err(ParserError::InvalidData(
+                    "live capture at parser copy boundary".into(),
+                ));
+            }
             ParserValue::Nil => ModifierValue::Nil,
             ParserValue::Boolean(v) => ModifierValue::Boolean(*v),
             ParserValue::Number(v) => ModifierValue::Number(*v),

@@ -138,11 +138,21 @@ the configuration/build cycle and source clamping order. Continuing writes, sour
 and branch-dependent missing producers also match or stop at the explicit unavailable
 boundary. The test-only producer does not complete earlier lifecycle stages in production.
 
-Next extend live control state: original `EditControl.SetPlaceholder` optionally invokes `changeFunc`, whose
-closure captures the mutable ConfigTab instance and immutable variable definition. Those
-captures cannot all be copied into a shared read-only definition snapshot. Session-bound
-closure construction/capture identity is a prerequisite, not a handwritten notification
-recipe. Test notifying and non-notifying writes together with later callback reads.
+The bounded live-control component now executes complete original `EditControl.SetPlaceholder`
+and its numeric `changeFunc` through shared Rust programs. The ConfigTab state, closure
+instances and shared capture cells belong to private sessions; immutable variable definitions
+remain shared references. Capture slots retain live cell identity even when their current
+value is immutable. Source observation authenticates this partition rather than baking a
+live ConfigTab snapshot into shared definitions.
+
+Pair notifying and non-notifying writes with later reads, selected-set changes, multiple
+controls sharing ConfigTab, unavailable short-circuits and failure-prefix effects. The
+five-build component oracle covers these cases and restores source state. This direct
+method gate does not admit inherited control dispatch, enclosing constructor execution or
+general native closure creation. Source fault probes compare the reached state prefix;
+an unavailable native dependency remains distinct from the deliberately induced source
+error. The non-placeholder branch retains its input write before unavailable `AddUndoState`;
+`BuildModList` is still unentered on that path.
 
 Custom-modifier and quest callbacks additionally require explicit parser-service result
 ownership. Returned modifiers must be writable where original `setSource` mutates them;

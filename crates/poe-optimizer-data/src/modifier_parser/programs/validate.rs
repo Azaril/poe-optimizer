@@ -630,6 +630,31 @@ impl Check<'_> {
                     }
                     self.values(values, &frame.visible, depth, loc)?;
                 }
+                ParserProgramStatementKind::CaptureSet { upvalue, values } => {
+                    if !self.owner.is_closure_prototype(self.program.callback) {
+                        return Err(self.fail(
+                            ParserProgramErrorKind::UnsupportedCapability,
+                            Some(loc),
+                            "capture assignment requires a declared session closure",
+                        ));
+                    }
+                    if !matches!(
+                        self.owner
+                            .callback(self.program.callback)
+                            .and_then(|callback| callback.upvalues.get(*upvalue as usize))
+                            .map(|capture| &capture.value),
+                        Some(ParserValue::LiveCapture {})
+                    ) {
+                        return Err(self.fail(
+                            ParserProgramErrorKind::Binding,
+                            Some(loc),
+                            "capture assignment slot is not a declared live capture",
+                        ));
+                    }
+                    self.required
+                        .insert(ParserProgramCapability::SessionClosures);
+                    self.values(values, &frame.visible, depth, loc)?;
+                }
                 ParserProgramStatementKind::If {
                     branches,
                     otherwise,
@@ -888,6 +913,9 @@ pub(crate) fn validate(
     }
     let mut graph = vec![BTreeSet::new(); data.programs.len()];
     for (index, program) in data.programs.iter().enumerate() {
+        if owner.is_closure_prototype(program.callback) {
+            required.insert(ParserProgramCapability::SessionClosures);
+        }
         let mut check = Check {
             data,
             owner,

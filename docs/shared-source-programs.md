@@ -143,7 +143,7 @@ complete build numerical parity is a later, unchanged requirement.
 ## Configuration dependency boundaries
 
 Environment/table coverage is implemented as a generic source-program facility. Live
-mutable capture instances and the source-authenticated parser-service bridge remain planned.
+Session-owned capture instances use the contract below; the source-authenticated parser-service bridge remains planned.
 Structural compilation and successful component execution do not admit a whole configuration
 activation or numerical build. Retain existing parser artifacts and admissions throughout.
 
@@ -218,20 +218,43 @@ its option descriptor; `SetPlaceholder` writes a string on the control, then opt
 invokes that closure to write a numeric configuration placeholder. Capturing the ConfigTab
 as an immutable definition table or copying it per call would lose writes and aliases.
 
-Plan source-declared session capture slots or closure instances, bound to authenticated
-construction occurrences. Retain immutable captured definitions in the owner and mutable
-object references in the session, including shared capture cells where source requires
-them. This is not permission to replace arbitrary authenticated upvalues. Preserve the
-build/ConfigTab cycle, selected-set input and placeholder aliases, control identity and
-repeated callback identity across calls. A handle from another owner or session must fail
-before its state can be used. The source bodies of control methods and notifications need
-their own admission; no-op controls or per-setting Rust handlers cannot establish it.
+Keep shared code and immutable definitions in `SourceProgramOwner`; carry live values in
+a separate, coherent `SourceSessionInput`. Its owner-bound closure prototypes have ordered
+capture layouts whose slots are explicit `LiveCapture` markers, including slots that will
+hold scalars or references to immutable definitions. The markers cannot appear in ordinary
+captured tables or legacy parser callbacks. `SourceClosurePrototypes` is a separate schema-1
+sidecar; `new_with_closures` creates a fresh owner rather than rebinding existing handles.
+
+`SourceSessionInput` carries a graph and its coverage, a cell arena, and distinct closure
+instances referencing prototype handles and ordered cell IDs. `DefinitionTable` references
+retain read-only owner data; state table IDs retain private writable state. Two closures
+may share a cell, and one cell may contain a table or another closure. Artifact-local
+table, closure and cell IDs are one-based. Named `ObservedSourceSession` root indices are
+zero-based positions in `state.values` and the returned session-root vector. Equal values
+never imply shared cells. The domain-neutral graph types live in the data crate; existing engine
+`ProgramValue`/graph/table names remain aliases. Plain graph imports reject artifact-only
+closure and definition references instead of silently inventing an owner.
+
+`session_from_input` creates a private session; `import_session_input` admits a new coherent
+artifact into an existing session. Validate owner identity, all references, layout lengths
+and resource bounds before publishing imported state. Failed imports retain their resource
+charges. Opaque values retain owner/session identity across calls. Bare prototype callbacks
+cannot substitute for closure instances, including zero-capture functions. Function keys,
+equality, dynamic calls and captured assignments operate on the live instances and cells.
+`CaptureSet` evaluates the whole right-hand value list before storing its first value (or
+nil), preserving prior effects on failure. Snapshots reject closures whose identity/cells
+cannot be represented by the plain result graph.
+
+Preserve the build/ConfigTab cycle, selected-set input and placeholder aliases, control
+identity and repeated callback identity across calls. A handle from another owner or session
+must fail before its state can be used. The source bodies of control methods and notifications
+need their own admission; no-op controls or per-setting Rust handlers cannot establish it.
 
 The first live-capture gate can execute already-constructed original functions without
-first lowering their enclosing constructors. `EditControl.lua:110–115` defines
+first lowering their enclosing constructors. `EditControl.lua:110..115` defines
 `SetPlaceholder(self, text, notify)`: write the string placeholder, then conditionally call
 `self.changeFunc(self.placeholder, true)` with two arguments and no implicit receiver.
-The numeric closure at `ConfigTab.lua:315–324` captures the ConfigTab instance and the
+The numeric closure at `ConfigTab.lua:315..324` captures the ConfigTab instance and the
 current option descriptor. Both complete bodies are individually lowerable; general native
 construction still needs nested-function creation and the preceding constructor lifecycle.
 
@@ -239,14 +262,28 @@ Represent a session closure as a distinct identity referencing shared compiled c
 ordered capture-cell references. Authenticate its complete source occurrence, actual function
 and environment identities, slot order and cell/table identities from one construction/state
 observation. Observe cell sharing; equal capture values do not prove shared cells. Do not
-expose an unchecked replacement of immutable upvalues by name. Preserve the captured
-ConfigTab object while resolving the currently active set at invocation time. A direct
+expose an unchecked replacement of immutable upvalues by name. The optional PoB
+`observe_session` boundary receives actual callback/state roots and explicitly classified
+immutable definitions, discovers the live graph and capture cells first, and then captures
+definitions while forbidding live tables, functions and shared cells from leaking into them.
+This includes an immutable helper that shares a scalar cell with a live closure. Its initial
+scalar value cannot be treated as a constant. Actual upvalue-cell identity is observed using
+a small pinned-LuaJIT shim inside the optional PoB adapter; native libraries contain no Lua
+runtime or pointers. Runtime transport supports table/function keys, but source observation
+currently captures the bounded text/integer projection key domain; broader raw source keys
+remain an observation frontier. The present observer creates a fresh owner for each observation and
+interns prototypes only within that observation. Native sessions can share an existing
+compiled owner, but reconciling a new source observation against that owner still needs an
+explicit authenticated binding protocol; it is not implied by matching names or source text.
+Preserve the captured ConfigTab object while resolving the currently
+active set at invocation time. A direct
 method test does not admit inherited dispatch: projected controls still have unavailable
 `__index`; copying inherited methods into fake raw fields would change source semantics.
 
 Acceptance should include multiple controls sharing ConfigTab state, repeated notifications
 after a set switch, false/nil notification avoiding an unavailable callback, Lua numeric
-conversion edge cases, foreign-session/cell rejection and staged failure effects. Failed
+conversion edge cases, foreign-session handles, foreign prototype owners, invalid artifact-local
+cell references and staged failure effects. Failed
 string conversion precedes the placeholder write; callback failure follows it. The original
 non-placeholder branch also writes input before `AddUndoState`/`BuildModList` and only sets
 `buildFlag` after those calls. Preserve the whole branch even while its later consumer is
@@ -273,8 +310,10 @@ authenticated environment projection and actual live entry-state graphs. All fiv
 exercise direct and boss-callback calls in both initial and saved passes (20 paired actual
 calls), followed by continuing writes/source failures and branch-dependent unavailable state.
 The test producer is bounded and explicit; it is not production configuration preparation.
-Establish live notification captures next, before
-running the complete ordered defaults/saved-activation lifecycle. Keep the five-build
+The bounded live-notification gate also compares complete original `SetPlaceholder` and
+numeric `changeFunc` bodies, including reused controls, unavailable short-circuits and
+failure-prefix effects. Full inherited dispatch, native closure construction and the complete
+ordered defaults/saved-activation lifecycle remain outstanding. Keep the five-build
 structural matrix and the Twister/Skeletal Sniper pairing as coverage, not runtime presets.
 The complete ConfigOptions callback inventory should determine later dependency work.
 

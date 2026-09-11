@@ -163,9 +163,15 @@ local function install(name)
 		end
 	elseif name == "EditControl" then
 		local original = class.SetPlaceholder
+		local function pack(...) return { n = select("#", ...), ... } end
 		class.SetPlaceholder = function(self, value, notify)
 			if activeCallback then trace.events[#trace.events+1] = {kind="control", name="EditControl.SetPlaceholder", callback=activeCallback, depth=depth, details={value=value,notify=notify}} end
-			return original(self, value, notify)
+			local observer = activeCallback and rawget(_G, "_configuration_source_placeholder_observer")
+			local eventId = observer and #trace.events
+			if observer then observer("enter", self, value, notify, activeCallback, eventId) end
+			local result = pack(original(self, value, notify))
+			if observer then observer("exit", self, value, notify, activeCallback, eventId) end
+			return unpack(result, 1, result.n)
 		end
 	else
 		wrap(class, name, false)

@@ -236,6 +236,9 @@ fn intern(
         ProgramValue::Callback(_) => {
             panic!("callback graph not part of this generic control matrix")
         }
+        ProgramValue::Closure(_) | ProgramValue::DefinitionTable(_) => {
+            panic!("live session reference escaped the plain graph snapshot boundary")
+        }
     }
 }
 fn key(v: &ProgramValue) -> Key {

@@ -1,7 +1,5 @@
 //! Proven raw table coverage on the same identity heap, separate from values.
-use super::{
-    Error, Heap, Key, ProgramTableId, ProgramValueGraph, Result, TableRef, V, index, table_ref,
-};
+use super::{Error, Heap, Key, ProgramValueGraph, Result, TableRef, V, index, table_ref};
 use poe_optimizer_data::source_program::{
     SourceTableCallFallback, SourceTableCoverage, SourceTableIndexFallback, SourceTableInventory,
     SourceTableKey,
@@ -13,7 +11,7 @@ use std::sync::Arc;
 /// records retain the existing complete plain-table transport contract. Metadata
 /// obeys the shared source-key bounds; total imported graph storage remains
 /// governed by ProgramLimits, including runtime key domains absent from source IR.
-pub type ProgramTableCoverage = BTreeMap<ProgramTableId, SourceTableCoverage>;
+pub use poe_optimizer_data::source_program::SourceSessionCoverage as ProgramTableCoverage;
 
 pub(super) struct Coverage {
     inventory: SourceTableInventory,

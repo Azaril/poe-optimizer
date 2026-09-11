@@ -13,6 +13,7 @@ pub(super) enum MethodTarget {
     StringPrimitive,
     NonCallable,
     OpaqueCallback(ParserCallbackId),
+    OpaqueClosure,
 }
 
 /// Resolve the method before argument expressions, but do not attempt to call
@@ -33,6 +34,7 @@ pub(super) fn precheck_method(
             let key = heap.bytes(key)?;
             Ok(match heap.get(receiver, &key)? {
                 V::Callback(callback) => MethodTarget::OpaqueCallback(callback),
+                V::Closure(_) => MethodTarget::OpaqueClosure,
                 // Every modeled table is plain: imported definition graphs
                 // reject metatables, and argument/owned graphs cannot add one.
                 _ => MethodTarget::NonCallable,
@@ -51,6 +53,9 @@ pub(super) fn finish_method(target: MethodTarget) -> RuntimeResult<()> {
         MethodTarget::StringPrimitive => Ok(()),
         MethodTarget::NonCallable => Err(Error::source(
             "attempt to call a non-function receiver method",
+        )),
+        MethodTarget::OpaqueClosure => Err(Error::unsupported(
+            "live receiver method requires dynamic dispatch",
         )),
         MethodTarget::OpaqueCallback(callback) => Err(Error::unsupported(format!(
             "opaque receiver method callback {callback:?}"
@@ -84,7 +89,7 @@ pub(super) fn call(
                 V::Number(_) => b"number",
                 V::Bytes(_) => b"string",
                 V::Table(_) => b"table",
-                V::Callback(_) => b"function",
+                V::Callback(_) | V::Closure(_) => b"function",
             };
             result_space(1, heap, limits)?;
             Ok(vec![heap.bytes(name)?])
@@ -125,7 +130,7 @@ fn tostring(arguments: &[V], heap: &mut Heap, limits: &ProgramLimits) -> Runtime
         V::Boolean(true) => heap.bytes(b"true")?,
         V::Number(_) => V::Bytes(string_argument(Some(value), heap)?),
         V::Bytes(_) => value.clone(),
-        V::Table(_) | V::Callback(_) => {
+        V::Table(_) | V::Callback(_) | V::Closure(_) => {
             return Err(Error::unsupported(
                 "identity-bearing tostring requires original metamethod/address semantics",
             ));
@@ -329,7 +334,7 @@ fn gsub(
     // before rejecting an invalid replacement. Do not reorder those failures.
     let maximum = optional_integer(arguments.get(3), patterns)?;
     let replacement = match arguments.get(2) {
-        Some(V::Table(_) | V::Callback(_)) => {
+        Some(V::Table(_) | V::Callback(_) | V::Closure(_)) => {
             return Err(Error::unsupported("dynamic string.gsub replacement"));
         }
         value => string_argument(value, heap)?,

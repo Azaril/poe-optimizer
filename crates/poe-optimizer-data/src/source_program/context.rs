@@ -230,6 +230,7 @@ impl SourceProgramOwner {
         context: SourceProgramContext,
     ) -> SourceProgramResult<Self> {
         data.validate()?;
+        closures::validate_declarations(&data, None)?;
         if let Some(classes) = &classes {
             classes.validate(&data)?;
         }
@@ -238,6 +239,7 @@ impl SourceProgramOwner {
             definitions: Arc::new(data),
             classes: classes.map(Arc::new),
             context: Some(Arc::new(context)),
+            closures: None,
         }))
     }
     pub fn context(&self) -> Option<&SourceProgramContext> {

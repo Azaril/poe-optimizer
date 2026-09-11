@@ -10,10 +10,14 @@ use std::{
     sync::Arc,
 };
 mod classes;
+mod closures;
 mod context;
 pub(crate) mod graph;
+pub mod session;
 pub use classes::*;
+pub use closures::*;
 pub use context::*;
+pub use session::*;
 
 // Public neutral names deliberately re-export the same graph and IR types. Old
 // parser names and their wire formats remain valid, including tuple constructors.
@@ -110,7 +114,7 @@ impl SourceProgramDefinitions {
                 "source root/intrinsic count bound",
             ));
         }
-        let graph = graph::GraphValidation::new(&self.source, &self.tables, &self.callbacks)
+        let graph = graph::GraphValidation::standalone(&self.source, &self.tables, &self.callbacks)
             .map_err(graph_error)?;
         let mut names = BTreeSet::new();
         for root in &self.roots {
@@ -158,6 +162,7 @@ enum OwnerStorage {
         definitions: Arc<SourceProgramDefinitions>,
         classes: Option<Arc<SourceClassDefinitions>>,
         context: Option<Arc<SourceProgramContext>>,
+        closures: Option<Arc<closures::ClosureStorage>>,
     },
 }
 #[derive(Debug, Clone)]
@@ -165,10 +170,12 @@ pub struct SourceProgramOwner(OwnerStorage);
 impl SourceProgramOwner {
     pub fn new(data: SourceProgramDefinitions) -> SourceProgramResult<Self> {
         data.validate()?;
+        closures::validate_declarations(&data, None)?;
         Ok(Self(OwnerStorage::Standalone {
             definitions: Arc::new(data),
             classes: None,
             context: None,
+            closures: None,
         }))
     }
     /// Deserializes bounded untrusted authoring data; no source authentication or
@@ -456,6 +463,9 @@ pub(crate) trait ProgramOwnerView {
     fn source(&self) -> &ItemLoadingSource;
     fn has_definition(&self, root: SourceProgramDefinitionRoot) -> bool;
     fn intrinsic(&self, id: SourceCallbackId) -> Option<SourceProgramIntrinsic>;
+    fn is_closure_prototype(&self, _callback: SourceCallbackId) -> bool {
+        false
+    }
     fn has_environment(&self) -> bool {
         false
     }
@@ -467,6 +477,9 @@ pub(crate) trait ProgramOwnerView {
     }
 }
 impl ProgramOwnerView for SourceProgramOwner {
+    fn is_closure_prototype(&self, callback: SourceCallbackId) -> bool {
+        self.closure_prototype_id(callback).is_some()
+    }
     fn has_environment(&self) -> bool {
         self.environment_root().is_some()
     }

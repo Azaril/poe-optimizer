@@ -16,36 +16,13 @@ use std::{
     sync::Arc,
 };
 
-/// One-based table reference in a single input/output graph.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub struct ProgramTableId(pub u32);
-
-/// Raw Lua values. Numbers retain their IEEE bits; strings need not be UTF-8.
-/// Callback IDs refer to the catalog retained by the compiled program/output.
-#[derive(Debug, Clone, PartialEq)]
-pub enum ProgramValue {
-    Nil,
-    Boolean(bool),
-    Number(f64),
-    Bytes(Vec<u8>),
-    Table(ProgramTableId),
-    Callback(ParserCallbackId),
-}
-
-/// Unordered Lua entries, including arbitrary scalar/table/function keys. Input
-/// rejects nil values, nil/NaN keys and duplicate keys after Lua normalization.
-#[derive(Debug, Clone, Default, PartialEq)]
-pub struct ProgramTable {
-    pub entries: Vec<(ProgramValue, ProgramValue)>,
-}
-
-/// A return/argument pack and identity graph, not the public parser copy boundary.
-/// Cycles and shared tables (including table keys) are represented without recursion.
-#[derive(Debug, Clone, Default, PartialEq)]
-pub struct ProgramValueGraph {
-    pub values: Vec<ProgramValue>,
-    pub tables: Vec<ProgramTable>,
-}
+pub use poe_optimizer_data::source_program::{
+    SourceSessionTable as ProgramTable, SourceSessionTableId as ProgramTableId,
+    SourceSessionValue as ProgramValue, SourceSessionValueGraph as ProgramValueGraph,
+};
+mod closures;
+pub(super) use closures::ClosureRef;
+use closures::{Closure, ImportClosures};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub(super) enum TableRef {
@@ -62,6 +39,7 @@ pub(super) enum V {
     Bytes(Arc<[u8]>),
     Table(TableRef),
     Callback(ParserCallbackId),
+    Closure(ClosureRef),
 }
 impl V {
     pub(super) fn truthy(&self) -> bool {
@@ -84,6 +62,7 @@ impl V {
             (Self::Bytes(a), Self::Bytes(b)) => a == b,
             (Self::Table(a), Self::Table(b)) => a == b,
             (Self::Callback(a), Self::Callback(b)) => a == b,
+            (Self::Closure(a), Self::Closure(b)) => a == b,
             _ => false,
         }
     }
@@ -96,6 +75,7 @@ enum Key {
     Bytes(Arc<[u8]>),
     Table(TableRef),
     Callback(ParserCallbackId),
+    Closure(ClosureRef),
 }
 impl Key {
     fn read(value: &V) -> Option<Self> {
@@ -107,6 +87,7 @@ impl Key {
             V::Bytes(v) => Some(Self::Bytes(v.clone())),
             V::Table(v) => Some(Self::Table(*v)),
             V::Callback(v) => Some(Self::Callback(*v)),
+            V::Closure(v) => Some(Self::Closure(*v)),
         }
     }
     fn write(value: &V) -> Result<Self> {
@@ -119,6 +100,7 @@ impl Key {
             Self::Bytes(v) => V::Bytes(v.clone()),
             Self::Table(v) => V::Table(*v),
             Self::Callback(v) => V::Callback(*v),
+            Self::Closure(v) => V::Closure(*v),
         }
     }
     fn positive_integer(&self) -> Option<f64> {
@@ -235,6 +217,8 @@ pub(super) struct Heap<'a> {
     tables: Vec<Table>,
     behaviors: BTreeMap<TableRef, TableBehavior>,
     coverage: BTreeMap<TableRef, Coverage>,
+    closures: Vec<Closure>,
+    cells: Vec<V>,
     budget: Budget<'a>,
 }
 impl Heap<'static> {
@@ -245,6 +229,8 @@ impl Heap<'static> {
             tables: Vec::new(),
             behaviors: BTreeMap::new(),
             coverage: BTreeMap::new(),
+            closures: Vec::new(),
+            cells: Vec::new(),
             budget: Budget {
                 limits,
                 used: Usage::Owned(HeapStats::default()),
@@ -296,6 +282,8 @@ impl<'a> Heap<'a> {
             tables: Vec::new(),
             behaviors: BTreeMap::new(),
             coverage: BTreeMap::new(),
+            closures: Vec::new(),
+            cells: Vec::new(),
             budget,
         };
         let values = heap.import(input, false)?;
@@ -311,11 +299,26 @@ impl<'a> Heap<'a> {
         coverage: &ProgramTableCoverage,
         writable: bool,
     ) -> Result<Vec<V>> {
+        self.import_graph(input, coverage, writable, None)
+    }
+    fn import_graph(
+        &mut self,
+        input: &ProgramValueGraph,
+        coverage: &ProgramTableCoverage,
+        writable: bool,
+        closures: Option<ImportClosures>,
+    ) -> Result<Vec<V>> {
         // Validate every input node, including unreachable tables, before copying.
         self.budget.tables(input.tables.len())?;
         self.budget.values(input.values.len())?;
         for value in &input.values {
-            validate_input(value, input.tables.len(), &self.catalog, &mut self.budget)?;
+            validate_input(
+                value,
+                input.tables.len(),
+                &self.catalog,
+                &mut self.budget,
+                closures,
+            )?;
         }
         for table in &input.tables {
             self.budget.values(
@@ -326,8 +329,20 @@ impl<'a> Heap<'a> {
                     .ok_or_else(|| Error::resource("input graph entries"))?,
             )?;
             for (key, value) in &table.entries {
-                validate_input(key, input.tables.len(), &self.catalog, &mut self.budget)?;
-                validate_input(value, input.tables.len(), &self.catalog, &mut self.budget)?;
+                validate_input(
+                    key,
+                    input.tables.len(),
+                    &self.catalog,
+                    &mut self.budget,
+                    closures,
+                )?;
+                validate_input(
+                    value,
+                    input.tables.len(),
+                    &self.catalog,
+                    &mut self.budget,
+                    closures,
+                )?;
                 if matches!(key, ProgramValue::Nil)
                     || matches!(key, ProgramValue::Number(n) if n.is_nan())
                 {
@@ -363,7 +378,7 @@ impl<'a> Heap<'a> {
             )
             .ok_or_else(|| Error::resource("import graph table identity"))?;
         let coverage = self.import_coverage(input, coverage, writable, offset)?;
-        let convert = |v: &ProgramValue| input_value(v, writable, offset);
+        let convert = |v: &ProgramValue| input_value(v, writable, offset, closures);
         let values = input.values.iter().map(convert).collect();
         let mut arguments = Vec::with_capacity(input.tables.len());
         for (i, source) in input.tables.iter().enumerate() {
@@ -435,7 +450,7 @@ impl<'a> Heap<'a> {
             .callback(callback)
             .and_then(|c| c.upvalues.get(upvalue as usize))
             .ok_or_else(|| Error::input("missing callback capture"))?;
-        definition_value(&source.value, &mut self.budget)
+        definition_value(&source.value, &mut self.budget, &self.catalog)
     }
     pub(super) fn raw_get(&mut self, table: &V, key: &V) -> Result<V> {
         if table.as_bytes().is_some() {
@@ -490,7 +505,7 @@ impl<'a> Heap<'a> {
                     _ => None,
                 };
                 match value {
-                    Some(v) => definition_value(v, &mut self.budget),
+                    Some(v) => definition_value(v, &mut self.budget, &self.catalog),
                     None => Ok(V::Nil),
                 }
             }
@@ -673,13 +688,13 @@ impl<'a> Heap<'a> {
                         self.budget.bytes(key.len())?;
                         entries.push((
                             ProgramValue::Bytes(key.as_bytes().to_vec()),
-                            export.definition_value(value, &mut self.budget)?,
+                            export.definition_value(value, &mut self.budget, &self.catalog)?,
                         ));
                     }
                     for (key, value) in &source.indexed {
                         entries.push((
                             ProgramValue::Number(*key as f64),
-                            export.definition_value(value, &mut self.budget)?,
+                            export.definition_value(value, &mut self.budget, &self.catalog)?,
                         ));
                     }
                     entries
@@ -713,7 +728,22 @@ fn nonfinite(value: ParserNonFinite) -> f64 {
         ParserNonFinite::Nan => f64::from_bits(0xfff8_0000_0000_0000),
     }
 }
-fn definition_value(value: &ParserValue, budget: &mut Budget) -> Result<V> {
+fn reject_prototype_value(value: &ParserValue, owner: &SourceProgramOwner) -> Result<()> {
+    if let ParserValue::Callback(callback) = value
+        && owner.closure_prototype_id(*callback).is_some()
+    {
+        return Err(Error::unsupported(
+            "closure prototype has no immutable function identity",
+        ));
+    }
+    Ok(())
+}
+fn definition_value(
+    value: &ParserValue,
+    budget: &mut Budget,
+    owner: &SourceProgramOwner,
+) -> Result<V> {
+    reject_prototype_value(value, owner)?;
     Ok(match value {
         ParserValue::Nil => V::Nil,
         ParserValue::Boolean(v) => V::Boolean(*v),
@@ -725,6 +755,11 @@ fn definition_value(value: &ParserValue, budget: &mut Budget) -> Result<V> {
         ParserValue::NonFinite(v) => V::Number(nonfinite(*v)),
         ParserValue::Table(id) => V::Table(TableRef::Definition(*id)),
         ParserValue::Callback(id) => V::Callback(*id),
+        ParserValue::LiveCapture {} => {
+            return Err(Error::unsupported(
+                "live capture requires a session closure frame",
+            ));
+        }
     })
 }
 fn validate_input(
@@ -732,6 +767,7 @@ fn validate_input(
     tables: usize,
     catalog: &SourceProgramOwner,
     budget: &mut Budget,
+    closures: Option<ImportClosures>,
 ) -> Result<()> {
     match value {
         ProgramValue::Bytes(bytes) => budget.bytes(bytes.len())?,
@@ -741,11 +777,39 @@ fn validate_input(
         ProgramValue::Callback(id) if catalog.callback(*id).is_none() => {
             return Err(Error::input("missing input callback reference"));
         }
+        ProgramValue::Callback(id) if catalog.closure_prototype_id(*id).is_some() => {
+            return Err(Error::input(
+                "closure prototype requires an instance reference",
+            ));
+        }
+        ProgramValue::Closure(id) => {
+            let space = closures.ok_or_else(|| {
+                Error::input("closure references require a coherent session input")
+            })?;
+            if index(id.0)? >= space.count {
+                return Err(Error::input("missing input closure reference"));
+            }
+        }
+        ProgramValue::DefinitionTable(id) => {
+            if closures.is_none() {
+                return Err(Error::input(
+                    "definition references require an owner-bound session input",
+                ));
+            }
+            if catalog.table(*id).is_none() {
+                return Err(Error::input("missing input definition table"));
+            }
+        }
         _ => (),
     }
     Ok(())
 }
-fn input_value(value: &ProgramValue, writable: bool, offset: u32) -> V {
+fn input_value(
+    value: &ProgramValue,
+    writable: bool,
+    offset: u32,
+    closures: Option<ImportClosures>,
+) -> V {
     match value {
         ProgramValue::Nil => V::Nil,
         ProgramValue::Boolean(v) => V::Boolean(*v),
@@ -757,6 +821,10 @@ fn input_value(value: &ProgramValue, writable: bool, offset: u32) -> V {
             TableRef::Argument(offset + id.0)
         }),
         ProgramValue::Callback(id) => V::Callback(*id),
+        ProgramValue::DefinitionTable(id) => V::Table(TableRef::Definition(*id)),
+        ProgramValue::Closure(id) => V::Closure(ClosureRef(
+            closures.expect("validated closure import").offset + id.0,
+        )),
     }
 }
 
@@ -792,13 +860,20 @@ impl Export {
             }
             V::Table(reference) => self.table(*reference, budget)?,
             V::Callback(id) => ProgramValue::Callback(*id),
+            V::Closure(_) => {
+                return Err(Error::unsupported(
+                    "snapshot would erase live closure identity and capture cells",
+                ));
+            }
         })
     }
     fn definition_value(
         &mut self,
         value: &ParserValue,
         budget: &mut Budget,
+        owner: &SourceProgramOwner,
     ) -> Result<ProgramValue> {
+        reject_prototype_value(value, owner)?;
         // Export definitions directly: no intermediate Arc/string copy.
         Ok(match value {
             ParserValue::Nil => ProgramValue::Nil,
@@ -811,6 +886,9 @@ impl Export {
             ParserValue::NonFinite(v) => ProgramValue::Number(nonfinite(*v)),
             ParserValue::Table(id) => self.table(TableRef::Definition(*id), budget)?,
             ParserValue::Callback(id) => ProgramValue::Callback(*id),
+            ParserValue::LiveCapture {} => {
+                return Err(Error::unsupported("live capture marker is not a Lua value"));
+            }
         })
     }
 }

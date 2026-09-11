@@ -75,6 +75,10 @@ pub enum ProgramOperation {
         locals: Vec<u16>,
         values: ParserProgramValueList,
     },
+    CaptureSet {
+        upvalue: u16,
+        values: ParserProgramValueList,
+    },
     TableSet {
         table: ParserProgramExpr,
         key: ParserProgramExpr,
@@ -374,6 +378,15 @@ impl Lowerer<'_> {
                         location,
                         ProgramOperation::Assign {
                             locals: locals.clone(),
+                            values: values.clone(),
+                        },
+                    )?;
+                }
+                S::CaptureSet { upvalue, values } => {
+                    self.emit(
+                        location,
+                        ProgramOperation::CaptureSet {
+                            upvalue: *upvalue,
                             values: values.clone(),
                         },
                     )?;

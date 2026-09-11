@@ -63,6 +63,9 @@ impl Capture<'_> {
             return Err("native observer graph bound".into());
         }
         Ok(match value {
+            ParserValue::LiveCapture {} => {
+                return Err("live capture marker is not a parser value".into());
+            }
             ParserValue::Nil => Atom::Nil,
             ParserValue::Boolean(value) => Atom::Boolean(*value),
             ParserValue::Number(value) => Atom::Number(value.to_bits()),

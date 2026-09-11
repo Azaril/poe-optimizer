@@ -500,6 +500,20 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                             .collect();
                         S::Assign { locals, values }
                     } else if targets.len() == 1
+                        && let ParserProgramExprKind::Capture { upvalue } = targets[0].operation
+                    {
+                        if !self.authorization.standalone_calls
+                            || !matches!(
+                                self.callback.upvalues[upvalue as usize].value,
+                                ParserValue::LiveCapture {}
+                            )
+                        {
+                            return Err(
+                                "capture assignment requires a declared live session cell".into()
+                            );
+                        }
+                        S::CaptureSet { upvalue, values }
+                    } else if targets.len() == 1
                         && values.values.len() == 1
                         && values.tail.is_none()
                     {

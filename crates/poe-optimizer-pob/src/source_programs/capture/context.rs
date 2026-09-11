@@ -129,7 +129,7 @@ impl Graph<'_> {
         }
         Ok(())
     }
-    fn projection_fallbacks(
+    pub(super) fn projection_fallbacks(
         &mut self,
         selection: &SourceTableSelection,
     ) -> Result<(SourceTableIndexFallback, SourceTableCallFallback)> {
@@ -184,14 +184,14 @@ impl Graph<'_> {
             },
         ))
     }
-    fn projection_row(&mut self) -> Result<()> {
+    pub(super) fn projection_row(&mut self) -> Result<()> {
         self.values += 1;
         if self.values > MAX_VALUES {
             return Err(error("source projection aggregate row bound"));
         }
         Ok(())
     }
-    fn projection_key(&mut self, key: Value) -> Result<SourceTableKey> {
+    pub(super) fn projection_key(&mut self, key: Value) -> Result<SourceTableKey> {
         match key {
             Value::String(key) => {
                 if key.as_bytes().len() > 4096 {

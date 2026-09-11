@@ -25,6 +25,21 @@ impl Primitives {
             getupvalue: lua.globals().get::<Table>("debug")?.get("getupvalue")?,
         })
     }
+    #[allow(dead_code)]
+    pub fn captured_value(&self, function: &Function, name: &str) -> Value {
+        for slot in 1..=256 {
+            let raw: MultiValue = self.getupvalue.call((function.clone(), slot)).unwrap();
+            if raw.is_empty() {
+                break;
+            }
+            if let Value::String(key) = &raw[0]
+                && key.to_str().unwrap() == name
+            {
+                return raw[1].clone();
+            }
+        }
+        panic!("original closure missing capture {name}")
+    }
     pub fn unwrap(&self, function: &Function, name: &str) -> Function {
         for slot in 1..=256 {
             let raw: MultiValue = self.getupvalue.call((function.clone(), slot)).unwrap();

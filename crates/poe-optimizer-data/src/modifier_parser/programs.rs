@@ -70,6 +70,13 @@ pub enum ParserProgramStatementKind {
         locals: Vec<u16>,
         values: ParserProgramValueList,
     },
+    /// Standalone single-upvalue store. Evaluate the entire RHS first, then
+    /// store its first result or Nil into the active instance's declared cell.
+    /// Mixed local/table/upvalue assignment remains an explicit frontier.
+    CaptureSet {
+        upvalue: u16,
+        values: ParserProgramValueList,
+    },
     If {
         branches: Vec<ParserProgramBranch>,
         otherwise: Vec<ParserProgramStatement>,
@@ -342,6 +349,7 @@ pub enum ParserProgramCapability {
     RecursiveCalls,
     DynamicMethods,
     DynamicCalls,
+    SessionClosures,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ParserProgramErrorKind {

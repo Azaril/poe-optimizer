@@ -19,13 +19,63 @@ choices need no repeated approval. Preserve numerical tests through explicit leg
 without letting their single-profile assumptions define the new model.
 
 **CI repair:** the hosted Linux/Windows failure was reproduced as an inconsistent
-custom-data test fixture. The quoted-identifier test updates legacy calculation identifiers
-but leaves the injected authored-skill catalogs unchanged. The adapter correctly stops
+custom-data test fixture. The quoted-identifier test previously updated legacy calculation identifiers
+but left the injected authored-skill catalogs unchanged. The adapter correctly stops
 before search with `preparation_failed`. The corrected fixture and mismatch regression pass
 in both CLI configurations; production checks and deadlines remain unchanged. See the
 [repair checkpoint](#ci-dataset-fixture-repair) for validation and publication status.
 
-**Current checkpoint: R2f explicit environments and live table coverage.**
+**Current checkpoint: R2g session closures and capture cells.** Shared source owners now
+separate code/prototypes and immutable definitions from coherent per-session state graphs,
+closure instances and mutable capture cells. Every prototype capture slot is explicit;
+ordered cell references preserve sharing, rebinding, closure equality and function keys.
+Runtime imports enforce owner, layout, identity and cumulative resource limits before
+publishing state. Private sessions reuse compiled owners. Legacy plain graph/parser paths
+reject the new artifact-only references and markers.
+
+The optional PoB observer authenticates actual function/environment/source occurrences and
+upvalue-cell sharing before capturing immutable definitions. Live tables, closures and
+shared scalar cells cannot leak into shared constants. A review caught that last case and
+added a rejecting regression. A small pinned-LuaJIT identity shim remains inside the optional
+adapter; native libraries contain no Lua runtime. The source observer creates a fresh owner
+per observation. Reconciling another source observation with an existing compiled owner is
+still a separate binding protocol, not an implemented cross-observation cache.
+
+Complete original `EditControl.SetPlaceholder` and numeric `changeFunc` bodies now execute
+through the Rust engine against actual state from all five originals. The oracle enforces
+**190 exact entry/exit calls**: each initial/saved pass has one non-notifying size preset and
+18 notifying boss calls. **75 continuing cases** cover conversion edges, repeated controls,
+actual shared ConfigTab cells/distinct option cells, selected-set aliases and false/nil
+notification bypassing an unavailable callback. **15 failure-prefix checks** preserve writes
+at the correct stage and restore original source state. Deliberately induced source errors
+remain distinct from native unavailable dependencies. The non-placeholder branch reaches its
+input write before unavailable `AddUndoState`; `BuildModList` remains unentered there.
+
+Validation passes **51 data, 64 engine and 52 lowerer/capture tests**, plus **8 source
+integration tests**, the full **134-test native-only CLI suite** and **8 default CLI checks**.
+Two fresh CLI exports reproduce all 29 package sections. Strict workspace/native-only lint,
+formatting, WebAssembly library compilation and native runtime dependency isolation pass.
+The final source regression preserves 46 fresh artifacts, including the earlier level and
+callback gates. Independent reviews checked the runtime, observer and control oracle.
+Broad native/engine library numerical suites were not rerun; earlier results remain historical.
+
+Evidence is bound by `runs/r2g-integration-validation.json`, the agent/static/source ledgers
+and `runs/r2g-root-checks.json`; publication is recorded in `runs/r2g-publication.json`.
+The source pin, original inputs/fixtures, lockfile and schema-29 package remain unchanged.
+Complete native original-build evaluations remain **0/5**. This is a source-consumer gate,
+not complete configuration activation, constructor execution or whole-build numerical parity.
+
+**Resume point:** connect original inherited control dispatch using source-authenticated
+class/state bindings, without copying inherited methods into raw fields. Reuse the
+[session capture contract](shared-source-programs.md#live-controls-and-captures); enclosing
+constructors and general native closure creation remain outstanding. Bind source-authenticated
+parser-service results as fresh writable session graphs, then execute complete default/saved
+activation on Twister and Skeletal Sniper together. Continue root/provider and actor/action
+preparation through the shared production path, retaining all five originals, mapping variants,
+whole-build parity and joint-search requirements. UI autocomplete remains a derived view of
+loaded definitions; DuckDB stays deferred under the [storage assessment](definition-storage.md).
+
+**Previous checkpoint: R2f explicit environments and live table coverage.**
 Standalone source owners now retain an immutable schema-1 context sidecar with an optional
 bound environment root and per-table coverage. Complete and selective inventories separate
 present values, known absence and unavailable values. The shared engine applies this to
@@ -69,20 +119,6 @@ Complete native original-build evaluations remain **0/5**. Production configurat
 preparation still reports its authored-prefix frontier; this component check does not
 complete effective activation or the R3/R5 numerical gates.
 
-**Resume point:** bind original control methods and notifications to mutable session capture
-cells/closure instances, beginning with `EditControl.SetPlaceholder` and its actual numeric
-`changeFunc`. Preserve selected-set aliases, notifying/non-notifying behavior, closure
-identity and earlier writes on failure. The complete already-constructed method and numeric
-closure can be the first gate; their enclosing constructors still need native closure creation.
-Use distinct session closure identities and ordered capture-cell references authenticated
-against one actual construction/state observation, not arbitrary replacement of named upvalues.
-Observe cell sharing and keep inherited control dispatch explicit. Use the now-proven environment/coverage contract
-instead of copying a live ConfigTab into immutable definitions. Then bind source-authenticated
-parser-service results as fresh writable session graphs and execute complete default/saved
-activation on Twister and Skeletal Sniper together. Continue root/provider and actor/action
-preparation through the shared production path; retain all five originals, mapping variants,
-whole-build parity and joint-search requirements. UI autocomplete remains a derived view of
-loaded definitions; DuckDB stays deferred under the [storage assessment](definition-storage.md).
 
 **Previous checkpoint: R2e constructed callback capture and configuration breadth.**
 The shared standalone engine now supports callable values and source-compatible
@@ -430,15 +466,17 @@ All **8 dataset tests pass with default features and all 8 pass native-only**, i
 the original failing case and the new rejection case. Scoped strict Clippy, formatting
 and diff checks pass; independent review found no remaining issue. Local validation used
 the working tree containing the separately pending R2g changes; hosted validation of the
-isolated two-file repair remains pending. Broader CLI regression is the next check.
+isolated two-file repair remains pending. The broader native-only CLI suite subsequently
+passed all 134 tests; its terminal record is in `runs/r2g-root-checks.json`.
 
 The original downloaded logs are retained at `runs/ci-103401082939.log` and
 `runs/ci-103389008355.log`; the reproduced full report is in
 `runs/dataset-ci-first-reproduction.log` and `.json` report artifact
 `runs/dataset-ci-first-reproduction-report.json`. Commands, terminal results and file hashes
 are in `runs/dataset-ci-repair-validation.json`. Publication is recorded separately in
-`runs/dataset-ci-repair-publication.json`. R2g closure/cell work remains a separate pending
-integration checkpoint; this repair does not change complete native build coverage.
+`runs/dataset-ci-repair-publication.json`. R2g closure/cell work is a separate
+integration checkpoint, documented above; this repair does not change complete native build
+coverage.
 
 ## G4 CI repair checkpoint
 

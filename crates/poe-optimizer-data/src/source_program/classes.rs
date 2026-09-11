@@ -117,7 +117,7 @@ impl SourceClassDefinitions {
                 "source class count bound",
             ));
         }
-        let graph = graph::GraphValidation::new(
+        let graph = graph::GraphValidation::standalone(
             &definitions.source,
             &definitions.tables,
             &definitions.callbacks,
@@ -573,11 +573,13 @@ impl SourceProgramOwner {
         classes: SourceClassDefinitions,
     ) -> SourceProgramResult<Self> {
         data.validate()?;
+        closures::validate_declarations(&data, None)?;
         classes.validate(&data)?;
         Ok(Self(OwnerStorage::Standalone {
             definitions: Arc::new(data),
             classes: Some(Arc::new(classes)),
             context: None,
+            closures: None,
         }))
     }
     pub fn classes(&self) -> Option<&SourceClassDefinitions> {

@@ -128,6 +128,9 @@ fn scalar(
         ProgramValue::Number(value) => ModifierValue::Number(*value),
         ProgramValue::Bytes(bytes) => ModifierValue::Bytes(bytes.clone()),
         ProgramValue::Callback(callback) => ModifierValue::Callback(*callback),
+        ProgramValue::Closure(_) | ProgramValue::DefinitionTable(_) => {
+            return Err(unsupported("live session value at parser copy boundary"));
+        }
         ProgramValue::Table(id) => {
             ModifierValue::Table(tables.get(id).ok_or_else(missing_table)?.clone())
         }

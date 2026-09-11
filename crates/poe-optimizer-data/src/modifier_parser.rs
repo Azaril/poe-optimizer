@@ -58,6 +58,9 @@ pub enum ParserNonFinite {
     deny_unknown_fields
 )]
 pub enum ParserValue {
+    /// Standalone prototype capture slot, not a Lua value. Only declared Lua
+    /// upvalues may contain it; legacy parser graphs reject the marker.
+    LiveCapture {},
     Nil,
     Boolean(bool),
     Number(f64),

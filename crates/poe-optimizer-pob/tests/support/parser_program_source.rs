@@ -305,7 +305,9 @@ impl Capture<'_> {
             ProgramValue::Boolean(v) => Atom::Boolean(*v),
             ProgramValue::Number(v) => Atom::Number(v.to_bits()),
             ProgramValue::Bytes(v) => Atom::Bytes(v.clone()),
-            ProgramValue::Callback(_) => {
+            ProgramValue::Callback(_)
+            | ProgramValue::Closure(_)
+            | ProgramValue::DefinitionTable(_) => {
                 panic!("opaque callback values are a separate boundary, not graph parity")
             }
             ProgramValue::Table(id) => {

@@ -113,6 +113,9 @@ impl SourceClosureObserver {
             intrinsics: BTreeMap::new(),
             values: 0,
             text_bytes: 0,
+            forbidden_tables: BTreeSet::new(),
+            forbidden_callbacks: BTreeSet::new(),
+            forbidden_cells: BTreeSet::new(),
             context: SourceProgramContext::default(),
         };
         graph.register_projections(&context)?;

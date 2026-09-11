@@ -8,7 +8,9 @@ use super::{
 use crate::{lua_pattern::MatchBudget, parser_program::CompiledSourcePrograms};
 use poe_optimizer_data::{
     modifier_parser::ParserCallbackId,
-    source_program::{SourceClassHandle, SourceProgramOwner, SourceProgramRootHandle},
+    source_program::{
+        SourceClassHandle, SourceProgramOwner, SourceProgramRootHandle, SourceSessionInput,
+    },
 };
 use std::sync::Arc;
 
@@ -34,6 +36,17 @@ pub struct ProgramSession {
     identity: Arc<()>,
 }
 impl CompiledSourcePrograms {
+    /// Instantiate a coherent owner-bound graph of state, closures and shared
+    /// capture cells. Only the importing domain authenticates its source origin.
+    pub fn session_from_input(
+        &self,
+        input: &SourceSessionInput,
+        limits: ProgramLimits,
+    ) -> Result<(ProgramSession, Vec<SessionValue>)> {
+        let (mut session, _) = self.session(&ProgramValueGraph::default(), limits)?;
+        let roots = session.import_session_input(input)?;
+        Ok((session, roots))
+    }
     /// Explicitly import a writable initial graph. This is separate from the
     /// standalone/parser executor, whose input tables are always borrowed.
     pub fn session(
@@ -112,6 +125,17 @@ impl ProgramSession {
     ) -> Result<Vec<SessionValue>> {
         self.check_pack(input.values.len())?;
         let values = self.heap.import_with_coverage(input, coverage, true)?;
+        self.handles(values)
+    }
+    /// Import a whole additional closure/state observation. All graph, closure
+    /// and capture-cell IDs are local to this artifact; returned opaque handles
+    /// preserve its identities across subsequent calls in this session.
+    pub fn import_session_input(
+        &mut self,
+        input: &SourceSessionInput,
+    ) -> Result<Vec<SessionValue>> {
+        self.check_pack(input.state.values.len())?;
+        let values = self.heap.import_session_input(input)?;
         self.handles(values)
     }
     /// Return an immutable definition root from this session's retained owner.

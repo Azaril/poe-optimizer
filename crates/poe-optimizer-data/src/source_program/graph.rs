@@ -42,6 +42,7 @@ pub(crate) struct GraphValidation<'a> {
     callbacks: &'a [ParserCallback],
     bytes: Cell<usize>,
     values: Cell<usize>,
+    standalone: bool,
 }
 impl<'a> GraphValidation<'a> {
     pub(crate) fn new(
@@ -49,12 +50,28 @@ impl<'a> GraphValidation<'a> {
         tables: &'a [ParserTable],
         callbacks: &'a [ParserCallback],
     ) -> Result<Self> {
+        Self::with_mode(source, tables, callbacks, false)
+    }
+    pub(crate) fn standalone(
+        source: &'a ItemLoadingSource,
+        tables: &'a [ParserTable],
+        callbacks: &'a [ParserCallback],
+    ) -> Result<Self> {
+        Self::with_mode(source, tables, callbacks, true)
+    }
+    fn with_mode(
+        source: &'a ItemLoadingSource,
+        tables: &'a [ParserTable],
+        callbacks: &'a [ParserCallback],
+        standalone: bool,
+    ) -> Result<Self> {
         let graph = Self {
             source,
             tables,
             callbacks,
             bytes: Cell::new(0),
             values: Cell::new(0),
+            standalone,
         };
         if tables.len() > 100_000
             || callbacks.len() > 20_000
@@ -188,6 +205,11 @@ impl<'a> GraphValidation<'a> {
         }
         self.values.set(count);
         match value {
+            ParserValue::LiveCapture {} if !allow_nil || !self.standalone => {
+                return Err(error(
+                    "live capture marker requires standalone Lua upvalue layout",
+                ));
+            }
             ParserValue::Nil if !allow_nil => return Err(error("nil Lua table entry")),
             ParserValue::Number(n) if !n.is_finite() => {
                 return Err(error("nonfinite number requires explicit sentinel"));
