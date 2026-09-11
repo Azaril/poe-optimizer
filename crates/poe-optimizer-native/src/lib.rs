@@ -4,6 +4,7 @@
 mod build_candidates;
 mod candidate_skill_admission;
 mod candidates;
+pub mod configuration;
 pub use build_candidates::{PreparedBuildCandidates, PreparedBuildFootprint};
 mod preparation;
 mod preparation_report;
@@ -68,8 +69,13 @@ pub struct PreparedEvaluation {
     source: poe_optimizer_import::build_instance::ImportedBuildInstance,
     selected_view: poe_optimizer_import::selected_view::SelectedViewReport,
     authored_skills: skills::PreparedSkills,
+    authored_configuration: configuration::PreparedConfiguration,
 }
 impl PreparedEvaluation {
+    /// Executed loader-local prefix, with activation/effective effects still explicit.
+    pub fn authored_configuration(&self) -> &configuration::PreparedConfiguration {
+        &self.authored_configuration
+    }
     pub fn authored_skills(&self) -> &skills::PreparedSkills {
         &self.authored_skills
     }

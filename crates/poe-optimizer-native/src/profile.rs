@@ -31,9 +31,80 @@ pub(crate) struct Profile {
     pub tree: crate::tree::NativeTree,
     pub enemy_level: u32,
     pub config: BTreeMap<String, Scalar>,
+    pub authored_config: BTreeMap<String, Scalar>,
     pub export_xml: String,
     pub group_label: Option<String>,
 }
+/// The legacy adapter consumes explicit source scalars. A valid injected loader
+/// policy may rewrite them; such a change needs the general effective pipeline,
+/// not a calculation from stale raw XML. Encounter overrides apply only later.
+pub(crate) fn validate_loaded_configuration_projection(
+    authored: &BTreeMap<String, Scalar>,
+    blocks: &[poe_optimizer_import::actor_modifiers::ActorModifierBlock],
+    prepared: &crate::configuration::PreparedConfiguration,
+) -> Result<(), EvaluationError> {
+    use crate::configuration::{
+        ConfigurationBlockText, ConfigurationPrefixStatus, ConfigurationValue,
+    };
+    let report = prepared.report();
+    if report.status != ConfigurationPrefixStatus::Prepared {
+        return Err(unsupported(
+            "Authored configuration prefix did not finish; the legacy adapter cannot bypass its source failure or unsupported boundary",
+        ));
+    }
+    let active = report.active_set.as_ref().ok_or_else(|| {
+        unsupported("Authored configuration has no selected set for the legacy adapter")
+    })?;
+    if Some(active) != report.view_selected_set.as_ref() {
+        return Err(unsupported(
+            "Authored configuration activation has not reached the requested set",
+        ));
+    }
+    let set = report
+        .sets
+        .iter()
+        .find(|set| set.winner && &set.origin == active)
+        .ok_or_else(|| unsupported("Authored configuration selected set is unavailable"))?;
+    // Raw actor parsing is a separate source consumer, including legacy customMods.
+    // Compare its post-migration block projection, not just scalar encounter keys.
+    // Both consumers trim outer ASCII whitespace before parsing modifier lines.
+    let same_blocks = if blocks.is_empty() {
+        set.blocks.len() == 1
+            && set.blocks[0].enabled
+            && matches!(&set.blocks[0].text,
+                ConfigurationBlockText::Value { value: ConfigurationValue::Text(text) }
+                    if text.trim_ascii().is_empty())
+    } else {
+        blocks.len() == set.blocks.len()
+            && blocks.iter().zip(&set.blocks).all(|(raw, loaded)| {
+                raw.title == loaded.title
+                    && raw.enabled == loaded.enabled
+                    && matches!(&loaded.text,
+                    ConfigurationBlockText::Value { value: ConfigurationValue::Text(text) }
+                        if text.trim_ascii() == raw.text.trim_ascii())
+            })
+    };
+    if !same_blocks {
+        return Err(unsupported(
+            "Processed configuration modifier blocks differ from the raw legacy adapter; effective configuration preparation is required",
+        ));
+    }
+    for (key, expected) in authored {
+        let same = match (expected, set.inputs.get(key)) {
+            (Scalar::Boolean(a), Some(ConfigurationValue::Boolean(b))) => a == b,
+            (Scalar::Number(a), Some(ConfigurationValue::Number(b))) => *a == b.value(),
+            (Scalar::Text(a), Some(ConfigurationValue::Text(b))) => a == b,
+            _ => false,
+        };
+        if !same {
+            return Err(unsupported(format!(
+                "Processed configuration input {key} differs from the raw legacy adapter; effective configuration preparation is required"
+            )));
+        }
+    }
+    Ok(())
+}
+
 fn unsupported(message: impl Into<String>) -> EvaluationError {
     EvaluationError::new(EvaluationErrorKind::UnsupportedCapability, message)
 }
@@ -397,6 +468,8 @@ fn escape(s: &str) -> String {
 pub(crate) struct ScenarioProfile {
     pub input: NativeInput,
     pub config: BTreeMap<String, Scalar>,
+    pub authored_config: BTreeMap<String, Scalar>,
+    pub authored_blocks: Vec<poe_optimizer_import::actor_modifiers::ActorModifierBlock>,
     pub actor_quests: poe_optimizer_engine::actor::ActorQuestSelection,
 }
 // This short-lived projection stays on the stack rather than adding a heap
@@ -999,6 +1072,8 @@ fn parse_projection(
         return Ok(ProfileProjection::Scenario(ScenarioProfile {
             input,
             config,
+            authored_config: original,
+            authored_blocks: actor_modifiers.blocks().to_vec(),
             actor_quests,
         }));
     }
@@ -1078,6 +1153,7 @@ fn parse_projection(
         tree: resolved_tree,
         enemy_level,
         config,
+        authored_config: original,
         export_xml,
         group_label: skill.attribute("label").map(str::to_owned),
     }))

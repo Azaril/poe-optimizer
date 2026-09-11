@@ -63,6 +63,8 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             output["status"] = "ready_for_supported_native_metrics".into();
             output["selected_view"] = serde_json::to_value(prepared.selected_view())?;
             output["authored_skills"] = serde_json::to_value(prepared.authored_skills().report())?;
+            output["authored_configuration"] =
+                serde_json::to_value(prepared.authored_configuration().report())?;
         }
         PreparationOutcome::Incomplete(report) => {
             output["status"] = "incomplete".into();

@@ -68,7 +68,11 @@ generated quest choices, using the original global/misc definitions and boss-dat
 producer. `Bosses.lua` and `BossSkills.lua` are authenticated construction dependencies.
 It preserves ordered duplicate keys, original typed values and recursive metadata; callback
 source locations/hashes are inert descriptors. It does not execute effect or UI callbacks.
-Independent original `ConfigTab` default-state oracles remain separate from the exporter.
+Configuration schema 2 also retains source-authenticated authored-load compatibility
+rewrites and default labels. Their extraction reads complete Load/CreateConfigSet/SetActive
+source and rejects unrepresented expression shapes; Rust executes the injected bounded
+operations. Independent full-runtime `ConfigTab` lifecycle and loader-prefix oracles remain
+separate from the exporter. Callback metadata still does not grant effective execution.
 
 The skill identity extractor executes the original skill/gem assembly in `Data.lua`, its
 nine actual skill modules, real level data and construction helpers. It preserves ordered
@@ -126,7 +130,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 28 and `poe2-native-profiles-v28`, including source-keyed passive/actor effects,
+schema 29 and `poe2-native-profiles-v29`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It

@@ -238,6 +238,12 @@ is deferred pending demonstrated catalog needs; SQL remains outside the native c
 loop. XML remains an input/output adapter where needed. Compatible data-only updates must
 still work without recompiling the evaluator.
 
+Configuration preparation preserves a lifecycle, not just a map of scalar inputs.
+Source-backed defaults, saved sets, control notifications and ordered callback effects
+produce per-build state without mutating shared definitions. Use the same typed-program
+engine for configuration and modifier logic, with explicit ownership and effect permissions.
+See [configuration preparation](configuration-preparation.md) for the execution boundary.
+
 ### Evaluator boundary
 
 The shared calculation and evaluation interfaces are in-process Rust traits with typed

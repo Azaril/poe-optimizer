@@ -20,7 +20,7 @@ package. XML is chiefly caller build interchange and exact source evidence. It c
 an input to a future definition importer, but it is not the only possible source format.
 Eliminating definition XML from a release does not require eliminating build XML import/export.
 
-The schema28 package is 26,285,617 bytes. This is artifact size, not resident memory
+The schema29 package is 26,286,752 bytes. This is artifact size, not resident memory
 or full-game numerical coverage. No project benchmark currently compares it with DuckDB,
 compressed JSON or a portable binary package. Complete native supplied builds remain 0/5.
 A storage change cannot supply the missing actor/action/calculation semantics.

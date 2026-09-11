@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 
-pub const CONFIGURATION_SCHEMA_VERSION: u32 = 1;
+pub const CONFIGURATION_SCHEMA_VERSION: u32 = 2;
 const MAX_DEFINITIONS: usize = 8192;
 const MAX_TABLE_ROWS: u32 = 100_000;
 const MAX_OPTIONS: usize = 4096;
@@ -151,11 +151,47 @@ pub struct ConfigDefinition {
     /// All other observed row fields, including apply and UI dependencies.
     pub metadata: BTreeMap<String, ConfigMetadataValue>,
 }
+/// Source-authenticated authored-input normalization. These operations do not
+/// execute configuration callbacks or produce effective modifiers.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ConfigStringRewrite {
+    /// Lua string.lower under the source runtime's ASCII character classes.
+    AsciiLower,
+    /// Source gsub("(%l)(%w*)", function(a,b) return string.upper(a)..b end).
+    /// Only ASCII letters/digits participate; underscore is not a word character.
+    AsciiTitleWords,
+    LuaGsub {
+        pattern: String,
+        replacement: String,
+    },
+}
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ConfigInputStringRewrite {
+    pub key: String,
+    pub source: ConfigSourceSpan,
+    /// Ordered source operations, applied only to authored Input string values.
+    pub operations: Vec<ConfigStringRewrite>,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ConfigAuthoredLoadPolicy {
+    /// Complete original Load method. CreateConfigSet provenance remains in
+    /// ConfigurationData.source.create_config_set.
+    pub source: ConfigSourceSpan,
+    pub set_active_source: ConfigSourceSpan,
+    pub default_set_title: String,
+    pub default_custom_block_title: String,
+    pub legacy_custom_mods_key: String,
+    pub input_string_rewrites: Vec<ConfigInputStringRewrite>,
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ConfigurationData {
     pub schema_version: u32,
     pub source: ConfigSourceIdentity,
+    pub authored_load: ConfigAuthoredLoadPolicy,
     /// Includes source presentation rows omitted from definitions.
     pub source_table_rows: u32,
     pub definitions: Vec<ConfigDefinition>,
@@ -267,6 +303,7 @@ impl ConfigurationData {
             ));
         }
         self.source.validate()?;
+        self.authored_load.validate(&self.source)?;
         let mut ids = BTreeSet::new();
         let mut table_index = 0;
         let mut total_options = 0usize;
@@ -384,6 +421,52 @@ impl ConfigurationData {
                 return Err(error("definition metadata repeats structural fields"));
             }
             validate_metadata_map(&row.metadata, &self.source, 0, &mut metadata_count)?;
+        }
+        Ok(())
+    }
+}
+impl ConfigAuthoredLoadPolicy {
+    fn validate(&self, source: &ConfigSourceIdentity) -> Result<()> {
+        validate_span(&self.source, source)?;
+        validate_span(&self.set_active_source, source)?;
+        text(&self.default_set_title)?;
+        text(&self.default_custom_block_title)?;
+        identifier(
+            &self.legacy_custom_mods_key,
+            "legacy custom-modifier key",
+            1024,
+        )?;
+        if self.input_string_rewrites.len() > 1024 {
+            return Err(error("too many authored string rewrites"));
+        }
+        let mut keys = BTreeSet::new();
+        for rewrite in &self.input_string_rewrites {
+            identifier(&rewrite.key, "authored string rewrite key", 1024)?;
+            if !keys.insert(&rewrite.key) {
+                return Err(error("duplicate authored string rewrite key"));
+            }
+            validate_span(&rewrite.source, source)?;
+            if rewrite.source.path != self.source.path
+                || rewrite.source.line < self.source.line
+                || rewrite.source.end_line > self.source.end_line
+            {
+                return Err(error("authored string rewrite span is outside Load"));
+            }
+            if rewrite.operations.is_empty() || rewrite.operations.len() > 64 {
+                return Err(error("authored string rewrite operation bound"));
+            }
+            for operation in &rewrite.operations {
+                if let ConfigStringRewrite::LuaGsub {
+                    pattern,
+                    replacement,
+                } = operation
+                {
+                    // Pattern compilation belongs to the bounded execution engine;
+                    // source syntax failures remain visible there, never ignored.
+                    text(pattern)?;
+                    text(replacement)?;
+                }
+            }
         }
         Ok(())
     }

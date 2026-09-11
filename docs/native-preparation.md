@@ -1,6 +1,6 @@
 # Shared native preparation boundary
 
-Status: R1c outer integration and R2 authored skill loading implemented. General real-build numerical producers remain
+Status: R1c outer integration, R2 authored skill loading and the R2b configuration loader prefix implemented. General real-build numerical producers remain
 unfinished; complete native supplied builds remain **0/5**.
 
 ## Public entry points
@@ -26,7 +26,10 @@ Core model, definition compilation and repeated calculation need no randomness o
 
 `PreparedEvaluation::source()` retains shared imported ownership and `selected_view()`
 exposes its immutable report. `authored_skills()` retains the independently executed,
-source/view/data-bound [authored skill stage](authored-skill-preparation.md). The compatibility request DTO still owns an XML string in
+source/view/data-bound [authored skill stage](authored-skill-preparation.md).
+`authored_configuration()` retains the [configuration loader prefix](configuration-preparation.md)
+and its explicit continuation before activation. These independent stages do not fabricate
+completed root setup or effective scenario state. The compatibility request DTO still owns an XML string in
 addition to the imported source; it is not copied per instance or per calculation. Removing
 that duplicate DTO storage can follow a measured API migration rather than compromising
 source ownership. Reports cannot manufacture a prepared plan.
@@ -43,7 +46,8 @@ IDs, one selected group/action, primary weapon state and supported mechanics. Th
 existing numerical/export/coverage contracts while general producers are built. Simply
 removing those checks would misreport inactive effects, action indices and export selectors.
 Processed gem identity, levels, quality, effects and support/provider role must agree with
-what the closed numerical adapter admitted. Valid injected loader data can alter those
+what the closed numerical adapter admitted. Loaded explicit configuration scalars and migrated modifier blocks must
+also agree with the raw adapter input before encounter overrides. Valid injected loader data can alter those
 results; an unsupported change returns Incomplete instead of calculating stale numbers.
 
 No third skill or build-specific profile was added. General inputs instead produce named,
@@ -56,8 +60,8 @@ frontiers are not falsely marked complete by a closed legacy calculation.
 
 ## Structured incomplete reports
 
-`PreparationReport` schema 2 contains the selected view, source/definition identity,
-the executed authored-skill report,
+`PreparationReport` schema 3 contains the selected view, source/definition identity,
+the executed authored-skill report and the configuration loader-prefix report,
 classified issues, requested options/metric queries and the legacy adapter's separate rejection.
 Request context records intent, not calculated output. Each issue names its stage
 and, where applicable, the concrete authored instance and source occurrence.
@@ -85,7 +89,9 @@ not a complete inventory of every future calculation dependency.
 
 Controlled candidate preparation executes the same authored skill stage and validates its
 projection into the selected-source adapter for its fixed
-scenario. `prepare_controlled_build_with_lineage` and
+scenario. Fixed-scenario setup also executes configuration loading and validates explicit
+scalar and migrated modifier-block agreement; a changed injected migration cannot bypass document admission through
+the candidate API. `prepare_controlled_build_with_lineage` and
 `prepare_controlled_mace_with_lineage` support portable host identity assignment; their
 existing convenience wrappers allocate it at native setup. Prepared candidate calculations
 still retain typed numerical components and private ownership bindings, not source XML or

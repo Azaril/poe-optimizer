@@ -1,0 +1,111 @@
+# Native configuration preparation and lifecycle
+
+Status: R2b authored loader prefix implemented and paired with the original runtime;
+activation callbacks and effective configuration are not complete. The
+[implementation record](implementation.md) tracks validation and the resume point.
+
+## Ownership and execution boundary
+
+Configuration is per-build executable state. Versioned definitions describe available
+settings, defaults, compatibility rewrites and source programs. Imported occurrences
+preserve what the caller authored. A selected view identifies the requested set. Native
+preparation combines these through a source/view/data-owned token; a serialized report
+cannot manufacture that token or an effective evaluation plan.
+
+The immutable definition snapshot is shared by workers. Each preparation owns its input,
+placeholder, control and modifier state, including table aliases and callback writes.
+A prepared calculation consumes bound, typed state without opening files, parsing XML,
+calling Lua or querying a database in the evaluation loop. UI autocomplete uses a separate
+rebuildable index over those definitions, as described in [definition storage](definition-storage.md).
+
+## Original lifecycle to preserve
+
+PoB constructs Config before Items, Skills and Calcs, and performs a configuration modifier
+pass before importing the build's sections. Later section loads follow the document's
+order, with passive-tree loading deferred. Configuration activation runs UpdateControls,
+BuildModList and loadout synchronization; it can write inputs and placeholders that later
+callbacks read. Constructor state, saved values and effective scenario are distinct stages.
+
+The native loader prepares the first reached configuration section through set creation,
+ordered authored writes, legacy migrations and selected-set binding. Its continuation is
+before UpdateControls. Later configuration sections remain unexecuted because an earlier
+activation can affect persistent controls and derived state. With no configuration section,
+the prefix exposes constructor defaults and the initial BuildModList continuation.
+
+The prefix does not synthesize the preceding root lifecycle. In particular, previously
+derived enemy level, modifier lists and control state are not reconstructed by copying the
+newly loaded maps. Independent original-runtime traces establish the context needed to
+resume the full lifecycle. Those observations are test evidence, never runtime input.
+
+Definitions supply defaults for every created set. Each creation starts fresh; it does
+not copy placeholders that an earlier callback pass modified. Preserve repeated definitions,
+set replacement, numeric-key behavior, order holes, malformed scalar precedence, ignored
+local error returns, and partial source failures. A strict authoring inspector may reject
+inputs that the source loader consumes; it is not the authoritative executable input model.
+Use the existing source-occurrence and XML-content seam rather than a second XML parser.
+
+## Effective settings and shared programs
+
+The completed stage must execute callbacks in source variable order. Check, count,
+zero-allowing count, integer, float, list and text widgets have different dispatch rules.
+Nil, false, zero and empty strings retain their source meanings. Placeholder fallback is
+part of dispatch, and enemy-level selection preserves source comparison and clamping order.
+Settings without an apply callback can still be read directly by later calculations.
+
+Controls need a portable state representation for selected list values, enabled state,
+text and placeholder notifications. A non-notifying UI update differs from a notifying
+placeholder write. Native evaluation does not need rendered widgets, but it must retain
+these observable data effects. Unknown control behavior remains an explicit dependency.
+
+Reuse the shared typed-program verifier and executor for branches, locals, arithmetic,
+loops, table construction and calls. Extend their source ownership beyond the current
+modifier-parser catalog before admitting configuration programs. The common boundary must:
+
+- Bind callback identities, captured values, definition roots and source spans to one
+  immutable owner; unrelated catalogs cannot exchange numeric callback or table IDs.
+- Separate structural program validity from permission to execute a domain effect. An
+  extracted callback span or successfully lowered body does not prove calculation parity.
+- Keep immutable definition/capture graphs read-only. Mutations require explicit per-build
+  state ownership, with aliases preserved across sequential callback invocations.
+- Resolve modifier-list, control and parser-service methods through typed, source-bound
+  operations. Avoid configuration-name dispatch recipes and a second interpreter.
+- Bound work, strings, tables, call depth and pattern matching cumulatively across a
+  preparation. Failures retain the reached prefix and identify the pending consumer.
+
+The initial real paths require modifier insertion, common arithmetic and scalar operations,
+control notifications and enemy/boss definitions. Broader source branches also require a
+parser-service call and iteration with a justified order policy. Add these when complete
+source consumers establish their semantics; do not enable a callback with missing branches.
+Existing parser APIs retain their stricter borrowed-argument behavior through an adapter.
+
+Custom modifier blocks use the same modifier parser and source attribution as other
+consumers. Preserve enabled flags, the first consumed XML content slot, legacy migration,
+blank blocks and parser leftovers. A child element in the source content array is not an
+invented text string. Unsupported parsing must not silently remove an active modifier.
+
+## Injected compatibility policy
+
+Game-specific legacy input rewrites and default labels are generated from authenticated
+ConfigTab source. Native code implements bounded rewrite operations; injected data supplies
+the keys, patterns, replacements and their order. XML structural names and source-language
+control flow belong to the reader. The configuration metadata catalog remains independently
+useful for inspection, but its callback metadata is not executable configuration capability.
+
+The existing narrow numerical adapters still consume explicit raw scenario inputs. When
+injected loading policy changes those values or the separately parsed modifier blocks,
+reject that adapter instead of calculating from stale XML. Apply the same guard during fixed-scenario candidate preparation. A passed
+prefix guard does not establish general callback, build-legality or complete PoB parity.
+
+## Verification and next integration
+
+Compare all five original builds at the same source-method boundary using observation
+wrappers around complete original methods. Preserve source bytes and original selections.
+Exercise cold and reused runtimes, defaults, malformed/duplicate cases and injected policy
+changes. Compare identities and state transitions as well as scalar values; sorting values
+cannot prove lifecycle or alias parity.
+
+After the loader-prefix checkpoint, advance the initial default modifier pass and saved
+set activation on Twister and Skeletal Sniper together. Retain all five originals as
+structural cases. Then continue root, item/passive/provider and actor/action preparation.
+Neither an authored-prefix comparison nor a callback count completes the R3/R5 whole-build
+numerical gates in the [real-build rollout](real-build-rollout.md).

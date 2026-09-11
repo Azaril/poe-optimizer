@@ -54,6 +54,14 @@ unique/ambiguous lookup candidates. Native authored loading consumes this inject
 for arbitrary caller skill groups; catalog presence does not establish effective support,
 actor/action or numerical coverage. See [authored skill preparation](authored-skill-preparation.md).
 
+## Authored configuration policy
+
+Schema 29 extends `configuration` to schema 2 with injected authored-input rewrites,
+legacy custom-modifier migration keys and default labels, retaining the previous metadata
+and defaults. The native [configuration loader prefix](configuration-preparation.md)
+consumes these rules for caller-owned builds. Dynamic callback execution and effective
+scenario preparation remain separate gates; metadata presence cannot admit them.
+
 ## Actor configuration and modifier records
 
 `ActorModifierRecord` represents numeric BASE/INC/MORE/OVERRIDE or boolean FLAG effects.

@@ -17,7 +17,7 @@ use poe_optimizer_import::{
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 
-pub const PREPARATION_REPORT_SCHEMA: u32 = 2;
+pub const PREPARATION_REPORT_SCHEMA: u32 = 3;
 const MAX_ISSUES: usize = 65_536;
 const MAX_MESSAGE_BYTES: usize = 4 * 1024 * 1024;
 
@@ -51,6 +51,9 @@ pub struct PreparationReport {
     pub requested: PreparationRequest,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authored_skills: Option<crate::skills::SkillPreparationReport>,
+    /// Loader-local state; this does not claim effective callbacks or root setup ran.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authored_configuration: Option<crate::configuration::ConfigurationPreparationReport>,
     /// Independent authored selections and identity evidence, not completed LoadDB.
     pub view: SelectedViewReport,
     pub issues: Vec<PreparationIssue>,
@@ -249,6 +252,51 @@ pub(crate) fn collect_with_skills(
             .ok_or_else(|| resource("message bytes"))?;
     }
     result.authored_skills = Some(stage.clone());
+    Ok(result)
+}
+
+/// Attach the independently prepared configuration prefix without retiring its
+/// pending activation or the root/provider prerequisites.
+pub(crate) fn collect_with_stages(
+    view: &SelectedView<'_>,
+    options: &EvaluationOptions,
+    metrics: &[MetricQuery],
+    skills: &crate::skills::PreparedSkills,
+    configuration: &crate::configuration::PreparedConfiguration,
+) -> Result<PreparationReport, EvaluationError> {
+    use crate::configuration::ConfigurationPrefixStatus;
+    let mut result = collect_with_skills(view, options, metrics, skills)?;
+    let stage = configuration.report();
+    if stage.status == ConfigurationPrefixStatus::Prepared {
+        for issue in &mut result.issues {
+            if issue.stage == "configuration_effects" {
+                issue.message = "The first configuration loader prefix has prepared defaults, authored writes and compatibility migrations. Activation controls, callbacks, effective enemy/scenario state and later configuration sections remain pending; this is not completed root setup or effective configuration.".into();
+            }
+        }
+    }
+    if let Some(failure) = &stage.failure {
+        result.issues.push(PreparationIssue {
+            kind: if stage.status == ConfigurationPrefixStatus::SourceFailure {
+                PreparationIssueKind::SourceError
+            } else {
+                PreparationIssueKind::Unsupported
+            },
+            stage: failure.stage,
+            instance: None,
+            source: failure.source,
+            message: failure.message.clone(),
+        });
+    }
+    if result.issues.len() > MAX_ISSUES {
+        return Err(resource("issue count"));
+    }
+    let mut bytes_left = MAX_MESSAGE_BYTES;
+    for issue in &result.issues {
+        bytes_left = bytes_left
+            .checked_sub(issue.message.len())
+            .ok_or_else(|| resource("message bytes"))?;
+    }
+    result.authored_configuration = Some(stage.clone());
     Ok(result)
 }
 
@@ -472,6 +520,7 @@ fn collect_with_limits(
             metric_queries: metrics.to_vec(),
         },
         authored_skills: None,
+        authored_configuration: None,
         view: report.clone(),
         issues: issues.values,
         legacy_adapter_error: None,

@@ -131,6 +131,14 @@ fn six_calibrations_retain_source_ownership_and_match_unchanged_reference_number
             .authored_skills()
             .validate_binding(&build, &view, backend.data())
             .unwrap();
+        prepared
+            .authored_configuration()
+            .validate_binding(&build, &view, backend.data())
+            .unwrap();
+        assert_eq!(
+            prepared.authored_configuration().report().source_sha256,
+            build.source_sha256()
+        );
         assert!(prepared.source().shares_storage_with(&build));
         assert_eq!(prepared.source().source_xml(), xml);
         assert_eq!(prepared.request().build.content, xml);
@@ -289,7 +297,7 @@ fn all_five_real_sources_reach_shared_preparation_with_explicit_remaining_produc
                 index + 1
             )
         };
-        assert_eq!(report.schema_version, 2);
+        assert_eq!(report.schema_version, 3);
         let skills = report
             .authored_skills
             .as_ref()

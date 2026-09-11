@@ -18,7 +18,56 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-**Current checkpoint: R2a authored skill loading validated locally.**
+**Current checkpoint: R2b authored configuration prefix paired with the original runtime.**
+The [configuration stage](configuration-preparation.md) executes constructor defaults,
+ordered authored inputs/placeholders, compatibility migrations and saved-set binding up to
+the first activation continuation. It runs through ordinary native preparation and the CLI;
+ready plans retain the source/view/data-owned token, and incomplete reports use schema 3.
+Later configuration sections, control notifications, callback modifiers and prior root
+setup remain explicit prerequisites. This does not complete effective configuration.
+
+Schema 29 extends configuration to schema 2 with injected, source-authenticated loading
+rules and labels. The package is 26,286,752 bytes, SHA-256
+`8dfadca7567d7761cf8b01a9763bec8f2662abec45c500e3e271ee58edf8f9f6`.
+All 28 other sections and all previous configuration metadata remain exact. A fresh normal
+CLI export reproduces it. Constructor defaults reserve request budgets before cloning;
+malformed local inputs preserve the original nonfatal diagnostics and later writes.
+
+The independent oracle runs complete original startup, callbacks and calculations: eleven
+source scenarios, ten paired native prefixes (all five originals plus five structural cases)
+and a reused-runtime control pass. It covers duplicate keys, fallback, order holes, malformed
+scalars, repeated/absent sections and nonfatal diagnostics. This is prefix parity; native
+callback execution and numerical parity are not claimed. Source traces show 62 default-pass
+callbacks before XML sections load, producing 52 player/21 enemy modifiers. Twister and
+Sniper activate after Skills.Load and before their items/calcs/tree loads. Non-notifying
+control placeholders are distinct from configuration placeholder writes.
+
+Closed numerical adapters now require loaded explicit scalar and modifier-block projections
+to match their raw source inputs before encounter overrides. This also guards fixed-scenario
+candidate setup. Review caught the separate legacy customMods text path; a regression now
+proves that injected text rewrites cannot bypass the adapter through either entry point.
+Existing typed candidate calculations keep their zero-allocation/no-XML contract.
+
+Native regression passed 112 tests; the run began before the final block-projection guard.
+After that guard, six focused configuration/receiving tests and all nine view tests pass,
+including unchanged numerical goldens. Eighteen configuration data tests, 23 package/skill
+checks and five extraction tests pass. Strict workspace/native-only lint and five portable
+library WASM checks pass. Seven default-feature CLI checks and fourteen native-only CLI
+checks pass, including two fresh extraction comparisons and operation without PoB. The
+integration ledger is `runs/r2b-integration-validation.json`; publication and exact-head CI
+are recorded separately in `runs/r2b-publication.json`. The complete native supplied-build
+denominator remains **0/5**.
+
+**Resume point:** continue R2b with one shared typed-program owner/root interface and explicit
+per-build writable state, then execute the initial default modifier pass and saved activation
+for Twister and Skeletal Sniper together. Preserve parser API compatibility through an
+adapter; do not create a fake parser catalog, second interpreter or per-setting Rust recipes.
+Retain ordered captured closures, source-bound modifier/control methods, cumulative budgets,
+separate UI/config placeholders and injected boss/monster definitions. The next useful gate
+is actual ordered callback/modifier parity, followed by root/provider and actor/action
+preparation. Keep all five originals and the unchanged R3/R5 whole-build denominator visible.
+
+**Previous checkpoint: R2a authored skill loading validated locally.**
 The [shared authored stage](authored-skill-preparation.md) runs through ordinary native
 preparation and returns source/view/data-bound state. It processes all five original builds:
 200 authored groups, 541 gem occurrences and 260 selected entries, including inactive saved
@@ -49,8 +98,8 @@ The full native supplied-build denominator remains **0/5**.
 
 R1a owned instances, R1b independently selected views and R1c native entry points remain
 in place. Six unchanged numerical goldens pass through owner/view and compatibility routes.
-Next advance R2b effective configuration and root/provider lifecycle along original Twister
-and Skeletal Sniper paths together; keep all five sources as structural regression cases.
+The R2b checkpoint above advances the next configuration dependency; continue effective
+callbacks and root/provider lifecycle along Twister and Skeletal Sniper together.
 
 The earlier G4 CI run finished with Windows search-budget failures and Linux implicit-line
 mismatches; G3 succeeded on both platforms. The Windows failure is reproduced as preparation
@@ -65,6 +114,7 @@ remains failed. Evidence: `runs/r1a-prior-ci.json`.
 | Source import/inspection | 5/5 supplied originals | Retain exact bytes, selections and unresolved entries |
 | General native instance/actor/action model | R1a/R1b source model and R1c native boundary implemented; general effective producers pending | R1: source instances/selected views with explicit deferred producers; R2/R3: effective graphs |
 | Authored native skill loading | 5/5 originals; 200 groups/541 entries, original-source paired | R2b: effective configuration, provider and actor/action stages |
+| Authored native configuration prefix | 5/5 originals plus five structural prefix comparisons; activation pending | R2b: ordered callback effects and root lifecycle |
 | Complete native real builds | 0/5 | R2/R3: paired Twister and Skeletal Sniper preparation and full outputs |
 | Real-build mutation/parallel parity | Not run | R4: class/ascendancy/provider/support/item/tree changes and serial/Rayon agreement |
 | Scenario breadth | Frozen originals cover Pinnacle/level82 only | R3: explicit mapping variants plus original bossing comparisons |

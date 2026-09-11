@@ -60,6 +60,15 @@ fn supported_native_fixture_prepares_from_an_unrelated_directory_without_calcula
     assert_eq!(report["status"], "ready_for_supported_native_metrics");
     assert!(report.get("preparation").is_none());
     assert_eq!(report["authored_skills"]["status"], "complete");
+    assert_eq!(report["authored_configuration"]["status"], "prepared");
+    assert_eq!(
+        report["authored_configuration"]["source_sha256"],
+        hash(&original)
+    );
+    assert_eq!(
+        report["authored_configuration"]["continuation"]["stage"],
+        "update_controls"
+    );
     assert_eq!(report["authored_skills"]["source_sha256"], hash(&original));
     assert_eq!(
         report["authored_skills"]["selected_groups"]
@@ -114,7 +123,24 @@ fn real_caller_share_code_returns_source_linked_prerequisites_and_no_fake_metric
     );
     assert_preparation_only(&report);
     assert_eq!(report["status"], "incomplete");
-    assert_eq!(report["preparation"]["schema_version"], 2);
+    assert_eq!(report["preparation"]["schema_version"], 3);
+    assert_eq!(
+        report["preparation"]["authored_configuration"]["status"],
+        "prepared"
+    );
+    assert_eq!(
+        report["preparation"]["authored_configuration"]["source_sha256"],
+        expected_hash
+    );
+    assert_eq!(
+        report["preparation"]["authored_configuration"]["continuation"]["stage"],
+        "update_controls"
+    );
+    assert!(
+        report["preparation"]["authored_configuration"]
+            .get("modifiers")
+            .is_none()
+    );
     assert_eq!(
         report["preparation"]["authored_skills"]["status"],
         "complete"

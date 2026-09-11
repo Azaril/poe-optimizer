@@ -230,6 +230,17 @@ impl<C: EvaluationClock> NativeBackend<C> {
         )?;
         let scenario = crate::profile::prepare_scenario(&request, &self.data, &view)?;
         crate::profile::validate_loaded_skill_projection(&source, &self.data, &skills)?;
+        let configuration = crate::configuration::prepare_authored_configuration(
+            &source,
+            &view,
+            &self.data,
+            crate::configuration::ConfigurationPreparationLimits::default(),
+        )?;
+        crate::profile::validate_loaded_configuration_projection(
+            &scenario.authored_config,
+            &scenario.authored_blocks,
+            &configuration,
+        )?;
         if scenario.config != *catalog.template().config()
             || scenario.actor_quests != catalog.quests()
         {

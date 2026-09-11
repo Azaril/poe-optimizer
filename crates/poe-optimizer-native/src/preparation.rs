@@ -190,6 +190,14 @@ impl<C: EvaluationClock> NativeBackend<C> {
             options: options.clone(),
             metrics: metrics.to_vec(),
         };
+        // These are independently executed loader stages, not a fabricated root
+        // lifecycle. Each retains its exact pending effects and source context.
+        let authored_configuration = crate::configuration::prepare_authored_configuration(
+            build,
+            view,
+            &self.data,
+            crate::configuration::ConfigurationPreparationLimits::default(),
+        )?;
         let authored_skills = crate::skills::prepare_authored_skills(
             build,
             view,
@@ -198,6 +206,11 @@ impl<C: EvaluationClock> NativeBackend<C> {
         )?;
         let profile_result = profile::parse(&request, &self.data, view).and_then(|profile| {
             profile::validate_loaded_skill_projection(build, &self.data, &authored_skills)?;
+            profile::validate_loaded_configuration_projection(
+                &profile.authored_config,
+                profile.actor_modifiers.blocks(),
+                &authored_configuration,
+            )?;
             Ok(profile)
         });
         match profile_result {
@@ -209,13 +222,15 @@ impl<C: EvaluationClock> NativeBackend<C> {
                 source: build.clone(),
                 selected_view: view.report().clone(),
                 authored_skills,
+                authored_configuration,
             }))),
             Err(error) if error.kind == EvaluationErrorKind::UnsupportedCapability => {
-                let mut report = preparation_report::collect_with_skills(
+                let mut report = preparation_report::collect_with_stages(
                     view,
                     options,
                     metrics,
                     &authored_skills,
+                    &authored_configuration,
                 )?;
                 report.legacy_adapter_error = Some(error.message);
                 Ok(PreparationOutcome::Incomplete(Box::new(report)))

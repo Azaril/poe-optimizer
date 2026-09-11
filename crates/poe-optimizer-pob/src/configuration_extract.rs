@@ -1,4 +1,5 @@
 //! Complete source configuration construction. Callbacks remain inert provenance.
+mod authored_load;
 use crate::game_data::{GameDataExtractionError, error, hash, section};
 use mlua::{Function, HookTriggers, Lua, LuaOptions, StdLib, Table, Value, VmState};
 use poe_optimizer_core::options::Scalar;
@@ -74,11 +75,15 @@ fn method_span(
     next: &str,
 ) -> Result<ConfigSourceSpan> {
     let text = source(sources, CONFIG_TAB)?;
-    let chunk = section(
-        text,
-        &format!("function ConfigTabClass:{name}("),
-        &format!("\nfunction ConfigTabClass:{next}("),
-    )?;
+    let begin = format!("function ConfigTabClass:{name}(");
+    let chunk = if next.is_empty() {
+        let start = text
+            .find(&begin)
+            .ok_or_else(|| error("configuration method absent"))?;
+        &text[start..]
+    } else {
+        section(text, &begin, &format!("\nfunction ConfigTabClass:{next}("))?
+    };
     let offset = chunk.as_ptr() as usize - text.as_ptr() as usize;
     let preceding_lines = text[..offset].bytes().filter(|b| *b == b'\n').count();
     let code = format!(
@@ -636,7 +641,8 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<Configuratio
         )));
     }
     let result = ConfigurationData {
-        schema_version: 1,
+        schema_version: CONFIGURATION_SCHEMA_VERSION,
+        authored_load: authored_load::extract(&lua, sources)?,
         source: ConfigSourceIdentity {
             upstream_revision: crate::source::UPSTREAM_REVISION.into(),
             files: FILES
@@ -658,7 +664,7 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<Configuratio
 mod tests {
     use super::*;
     use std::path::Path;
-    fn sources() -> BTreeMap<String, String> {
+    pub(super) fn sources() -> BTreeMap<String, String> {
         let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../vendor/path-of-building-poe2");
         FILES
             .iter()

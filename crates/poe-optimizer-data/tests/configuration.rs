@@ -46,6 +46,14 @@ fn data(definitions: Vec<ConfigDefinition>) -> ConfigurationData {
             create_config_set: span(),
             get_default_state: span(),
         },
+        authored_load: ConfigAuthoredLoadPolicy {
+            source: span(),
+            set_active_source: span(),
+            default_set_title: "Default".into(),
+            default_custom_block_title: "Default".into(),
+            legacy_custom_mods_key: "customMods".into(),
+            input_string_rewrites: vec![],
+        },
         source_table_rows: definitions.len() as u32 * 2 + 1,
         definitions,
         capability: ConfigCapability::MetadataOnly,
@@ -405,7 +413,7 @@ fn bundled_snapshot_exposes_complete_ordered_catalog_independently_of_an_evaluat
     use poe_optimizer_data::game_data::*;
     let snapshot = bundled_snapshot().unwrap();
     let catalog = snapshot.configuration();
-    assert_eq!(snapshot.identity().schema_version, 28);
+    assert_eq!(snapshot.identity().schema_version, 29);
     assert_eq!(catalog.data(), &snapshot.package().configuration);
     assert_eq!(catalog.definitions().len(), 564);
     assert_eq!(catalog.unique_key_count(), 563);
@@ -518,4 +526,70 @@ fn package_requires_configuration_and_validates_it_even_with_fresh_self_hashes()
         .to_string()
         .contains("defaultIndex")
     );
+}
+
+#[test]
+fn authored_load_policy_is_injected_bounded_and_strictly_serialized() {
+    let mut seed = data(vec![row(1, "x", ConfigWidgetKind::Check)]);
+    seed.authored_load.default_set_title = "caller title".into();
+    seed.authored_load.default_custom_block_title = String::new();
+    seed.authored_load.legacy_custom_mods_key = "caller_legacy".into();
+    seed.authored_load
+        .input_string_rewrites
+        .push(ConfigInputStringRewrite {
+            key: "caller_input".into(),
+            source: span(),
+            operations: vec![
+                ConfigStringRewrite::AsciiLower,
+                ConfigStringRewrite::AsciiTitleWords,
+                ConfigStringRewrite::LuaGsub {
+                    pattern: "^old ".into(),
+                    replacement: "new ".into(),
+                },
+            ],
+        });
+    let catalog = ConfigDefinitionCatalog::new(seed.clone()).unwrap();
+    assert_eq!(catalog.data().authored_load, seed.authored_load);
+    assert_eq!(catalog.data().capability, ConfigCapability::MetadataOnly);
+    let encoded = serde_json::to_value(&seed).unwrap();
+    assert_eq!(
+        serde_json::from_value::<ConfigurationData>(encoded.clone()).unwrap(),
+        seed
+    );
+    let mut missing = encoded.clone();
+    missing.as_object_mut().unwrap().remove("authored_load");
+    assert!(serde_json::from_value::<ConfigurationData>(missing).is_err());
+    let mut unknown = encoded;
+    unknown["authored_load"]["input_string_rewrites"][0]["operations"][0]["kind"] =
+        "arbitrary_code".into();
+    assert!(serde_json::from_value::<ConfigurationData>(unknown).is_err());
+    let cases: Vec<Mutation> = vec![
+        Box::new(|d| d.authored_load.source.sha256 = "unverified".into()),
+        Box::new(|d| d.authored_load.set_active_source.path = "../outside.lua".into()),
+        Box::new(|d| d.authored_load.input_string_rewrites[0].source.end_line = 10),
+        Box::new(|d| d.authored_load.input_string_rewrites[0].operations.clear()),
+        Box::new(|d| {
+            d.authored_load.input_string_rewrites[0].operations =
+                vec![ConfigStringRewrite::AsciiLower; 65]
+        }),
+        Box::new(|d| {
+            d.authored_load
+                .input_string_rewrites
+                .push(d.authored_load.input_string_rewrites[0].clone())
+        }),
+        Box::new(|d| d.authored_load.legacy_custom_mods_key.clear()),
+        Box::new(|d| d.authored_load.default_set_title = "x".repeat(4097)),
+        Box::new(|d| {
+            d.authored_load.input_string_rewrites[0].operations =
+                vec![ConfigStringRewrite::LuaGsub {
+                    pattern: "x".repeat(4097),
+                    replacement: String::new(),
+                }]
+        }),
+    ];
+    for mutate in cases {
+        let mut changed = seed.clone();
+        mutate(&mut changed);
+        assert!(changed.validate().is_err());
+    }
 }

@@ -25,8 +25,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 28;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v28";
+pub const SCHEMA_VERSION: u32 = 29;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v29";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",

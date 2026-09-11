@@ -244,6 +244,7 @@ pub(crate) fn extractor_sha256() -> String {
         include_str!("skill_identity_extract.rs"),
         include_str!("skill_preparation_extract.rs"),
         include_str!("configuration_extract.rs"),
+        include_str!("configuration_extract/authored_load.rs"),
         include_str!("game_data.rs"),
         CONVERSION,
         include_str!("source.rs"),
