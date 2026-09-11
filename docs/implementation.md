@@ -195,7 +195,7 @@ ledger; this is not a G2 execution test. No fresh whole-build corpus run has occ
 | G1: schema and compiler | Implemented; scoped tests and portability gates pass | Retain immutable owner binding, bounded validation and exact legacy package preservation |
 | G2: execution | Native core, semantic/isolation tests and local validation pass; explicit primitive gaps retained | Retain raw-call contracts and close reached gaps before complete G3 source admission |
 | G3: complete source lowering | Implemented; four complete original functions pass raw parity and seven live warm controls; 84 other emitted programs unproved | Preserve full inventory and raw/constructor proof |
-| G4: package/parser integration | Implemented; final regression/publication checkpoint below | Preserve four explicit permissions, source/public proof, package identities, corpus limitations and portability |
+| G4: package/parser integration | Published as `69db2cb`; local regression gates pass, hosted CI queued | Preserve four explicit permissions, source/public proof, package identities, corpus limitations and portability |
 | G5: subsequent real dependencies | Future reached work | Add required effects/iteration/callable semantics without named callback handlers or weakened source proof |
 
 **G2 implementation:** `CompiledParserPrograms::execute` uses a fresh bounded heap and
@@ -266,6 +266,13 @@ reviews found no unresolved blocker. Failed initial fixture/lint/compilation att
 in their original logs; exact-owner guards were retained and isolated legacy tests now
 explicitly clear program permissions before changing their parser definitions.
 
+G4 code is published on main as `69db2cb808804bfc1eebb3d5858bbf4e40bae7cc`.
+Its exact-head [Windows/Linux CI run34555917045](https://github.com/Azaril/poe-optimizer/actions/runs/34555917045)
+was queued at publication; this is not a hosted pass. Prior G3 run34552695729 was still
+in progress with no observed failed job in `runs/typed-program-g4-prior-ci.json`.
+The following update records publication only. The full native-parity goal remains active
+and incomplete; this goal turn made progress by publishing G4.
+
 **G3 checkpoint after `87d586f`:** the separate offline `parser_programs` API checks
 pinned source bytes, reconstructs the entire original legacy catalog, and binds programs
 only when it matches the caller's owner byte-for-byte, including signed zero. Primitive
@@ -321,10 +328,10 @@ Hosted G2 run34550304082 was still executing Test on Windows and Ubuntu at this 
 no failed step was observed. This is a nonterminal observation, not a CI pass. The current
 G3 code has no hosted result yet.
 
-**Resume point:** publish the validated G4 checkpoint and inspect its exact-head CI, then
-return to the shared real-build R1-R5 rollout. The B3 shared actor/action/candidate
-model direction is separately pending; discuss the existing concrete proposal before that
-migration. Do not substitute another standalone named-helper campaign for real-build
+**Resume point:** inspect G4 code run34555917045 and any observed failures, then return
+to the shared real-build R1-R5 rollout. The B3 shared actor/action/candidate
+model direction is separately pending and was re-presented at G4 publication; discuss
+the existing concrete proposal before that migration. Do not substitute another standalone named-helper campaign for real-build
 integration. G5 language extensions should follow dependencies actually reached by the
 paired Twister/Skeletal Sniper paths and the other supplied originals. Preserve the 84
 unadmitted programs, current package/source evidence and caller inputs. J1 seed-data
