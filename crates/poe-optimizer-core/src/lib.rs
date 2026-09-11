@@ -84,6 +84,7 @@ pub struct ActorOutput {
 }
 
 pub mod build_identity;
+pub mod build_view;
 pub mod candidate;
 
 pub mod coverage;

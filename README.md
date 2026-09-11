@@ -312,3 +312,7 @@ checks and review translated native stages, then commit the changed submodule po
 Upstream licensing and third-party notices remain in
 [its LICENSE.md](vendor/path-of-building-poe2/LICENSE.md). This scaffold does not
 choose a distribution license for the new project; select one before a public release.
+
+Selected saved alternatives can be inspected with `inspect-build <single-build-input> --with-view`.
+This reports independent set choices, instance/definition bindings and outstanding preparation
+stages. See [selected views](docs/selected-views.md); it does not calculate a complete build.

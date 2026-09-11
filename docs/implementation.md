@@ -18,14 +18,21 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-**Current work: R1b selected views.** R1a portable identities,
-owned source mapping and opt-in CLI inspection are implemented and validated; see
-[the R1a contract](build-instances.md). All 396 core/import/native tests pass on the frozen
-R1a source before the separate implicit-line repair; session56069 completed with exit0.
-Five CLI tests pass in each feature configuration, and ten original-source selection tests
-now establish R1b prerequisites. Implement independent selected-view resolution next, then
-route existing numerical paths through it in R1c. Effective actors/actions and complete
-outputs remain R2/R3; R1a is neither complete R1 nor additional whole-build parity.
+**Current work: R1b selected-source views implemented; integrate R1c next.**
+The [selected-view contract](selected-views.md) now connects owned instances to independent
+saved selections, typed overrides and injected skill identities. It preserves duplicate
+keys, Config holes, positional passive selection, source errors and explicit preparation
+frontiers. It is available through `inspect-build --with-view`. This is source-selection
+progress, not full loader/effective preparation or completed R1.
+
+R1a retains its 396-test frozen-source result before the separate CI repair. The new R1b
+source matrix pairs all five originals with original selection consumers, and five fresh
+complete PoB evaluations corroborate active keys. Native key-map tests cover 333,614 original
+LuaJIT observations. Final integration results are recorded in the checkpoint below.
+Next route existing Spark/Mace calculations through the shared owner/view boundary, and
+make real inputs reach named preparation frontiers instead of single-set/group guards.
+Remaining producer-aware reference and loader-lifecycle validation stays explicit as R1c
+reaches it; actors/actions and full real-build outputs remain R2/R3.
 
 The earlier G4 CI run finished with Windows search-budget failures and Linux implicit-line
 mismatches; G3 succeeded on both platforms. The Windows failure is reproduced as preparation
@@ -38,7 +45,7 @@ remains failed. Evidence: `runs/r1a-prior-ci.json`.
 | Breadth stage | Current state | Next evidence |
 | --- | --- | --- |
 | Source import/inspection | 5/5 supplied originals | Retain exact bytes, selections and unresolved entries |
-| General native instance/actor/action model | R1a source/identity/CLI validated; R1b resolver pending; Spark/Mace profiles remain | R1: source instances/selected views with explicit deferred producers; R2/R3: effective graphs |
+| General native instance/actor/action model | R1a validated; R1b selected-source views implemented; Spark/Mace preparation still uses old boundary | R1: source instances/selected views with explicit deferred producers; R2/R3: effective graphs |
 | Complete native real builds | 0/5 | R2/R3: paired Twister and Skeletal Sniper preparation and full outputs |
 | Real-build mutation/parallel parity | Not run | R4: class/ascendancy/provider/support/item/tree changes and serial/Rayon agreement |
 | Scenario breadth | Frozen originals cover Pinnacle/level82 only | R3: explicit mapping variants plus original bossing comparisons |
@@ -186,6 +193,40 @@ expectation and its correction are preserved in the earlier run.
 
 No complete native actor/action graph, selected-view resolver, editable candidate importer
 or new whole-build result is claimed. R1b and R1c remain required before R1 can complete.
+
+## R1b selected-source view checkpoint
+
+Implemented portable `ViewRequest`, source/data-owner-bound `SelectedView`, separate
+skill/item/config keys and passive positions, exact duplicate winners, explicit override
+validation, generated/default origins, selected skill identity provenance and the optional
+CLI report. Native `NumericSetKeys` preserves the original insert-only LuaJIT table layout
+semantics needed by skill/config generated IDs. See [the contract](selected-views.md).
+
+Review corrected costly missing-ID/spec scans, nested namespace diagnostics, text-budget
+composition and override behavior for an invalid saved passive position. No definition
+package, vendor pin or caller input changed. No database dependency was added.
+
+Source/native pairing: 38 XML documents across four domains (152 observations), including
+all five originals; eight source tests pass. This observes selection and registered-key
+prefixes with explicitly inert item/skill/numerical producers. Fresh full PoB runs confirm
+actual exported skill/item/spec/config selections: `1/1/1/1`, `6/6/6/1`, `1/1/1/1`,
+`1/1/1/1`, `4/2/3/1`. Reference executable identity and complete results are recorded in
+`runs/r1b-full-reference-selections/ledger.json`.
+
+Evidence: `runs/r1b-selection-keys-validation.json`,
+`runs/r1b-skills-config-validation.json`, `runs/r1b-shared-view-validation.json` and
+`runs/r1b-integration-validation.json`. Earlier per-agent results are scoped to their recorded source hashes;
+root integration results cover the final review corrections. Final local checks pass:
+21 view tests, eight source-pair tests, four native key tests, three key-oracle tests,
+six CLI tests in each feature configuration, strict affected-target Clippy, workspace
+formatting and import/engine WASM compilation. The final CLI syntax-only cleanup has
+an additional native-only selected-view test. Default CLI linking retains the earlier
+LNK4098 LIBCMT warning; linking and all tests succeed. Hosted CI for the preceding
+checkpoint remains in progress at the last observation; no hosted success is claimed.
+
+Tests of this component do
+not certify item registration, effective actors/actions, full LoadDB error ordering or
+complete native supplied builds. R1c and R2/R3 remain required.
 
 ## Definition storage and UI search
 

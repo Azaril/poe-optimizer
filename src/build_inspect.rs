@@ -21,6 +21,9 @@ pub(crate) struct Args {
     /// Include source-owned typed instances; does not resolve selection or evaluate effects.
     #[arg(long)]
     with_instances: bool,
+    /// Resolve saved alternatives and selected skill identities; calculation remains separate.
+    #[arg(long)]
+    with_view: bool,
     #[command(flatten)]
     data: crate::data_loading::DataArgs,
 }
@@ -42,7 +45,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let imported = poe_optimizer_import::decode_build(&source)?;
     let format = imported.format;
     let xml_sha256 = imported.sha256.clone();
-    let owner = if args.with_instances {
+    let owner = if args.with_instances || args.with_view {
         let mut lineage = [0_u8; 16];
         getrandom::fill(&mut lineage)?;
         InspectionSource::Instances(ImportedBuildInstance::from_decoded(
@@ -107,6 +110,12 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             include_str!("../crates/poe-optimizer-import/src/build_source.rs"),
             include_str!("../crates/poe-optimizer-import/src/build_instance.rs"),
             include_str!("../crates/poe-optimizer-core/src/build_identity.rs"),
+            include_str!("../crates/poe-optimizer-core/src/build_view.rs"),
+            include_str!("../crates/poe-optimizer-import/src/selected_view/mod.rs"),
+            include_str!("../crates/poe-optimizer-import/src/selected_view/skills_config.rs"),
+            include_str!("../crates/poe-optimizer-import/src/selected_view/items_passives.rs"),
+            include_str!("../crates/poe-optimizer-engine/src/selection_keys.rs"),
+            include_str!("../crates/poe-optimizer-engine/src/lua_number.rs"),
             include_str!("../crates/poe-optimizer-import/src/skill_source.rs"),
             include_str!("../crates/poe-optimizer-import/src/item_source.rs"),
             include_str!("../crates/poe-optimizer-import/src/skill_definitions.rs"),
@@ -123,9 +132,32 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     if let InspectionSource::Instances(instances) = &owner {
         report["instances"] = serde_json::to_value(instances.report())?;
     }
+    if args.with_view && !args.with_definitions && args.data.data.is_none() {
+        let snapshot = args.data.snapshot()?;
+        if let InspectionSource::Instances(instances) = &owner {
+            let view = poe_optimizer_import::selected_view::resolve_view(
+                instances,
+                &snapshot,
+                &Default::default(),
+                Default::default(),
+            )?;
+            report["selected_view"] = serde_json::to_value(view.report())?;
+        }
+    }
     if args.with_definitions || args.data.data.is_some() {
         // Definitions, formatting and structural parsing share one portable snapshot.
         let snapshot = args.data.snapshot()?;
+        if args.with_view
+            && let InspectionSource::Instances(instances) = &owner
+        {
+            let view = poe_optimizer_import::selected_view::resolve_view(
+                instances,
+                &snapshot,
+                &Default::default(),
+                Default::default(),
+            )?;
+            report["selected_view"] = serde_json::to_value(view.report())?;
+        }
         report["definition_lookup"] = serde_json::json!({
             "data": snapshot.identity(),
             "data_trust": snapshot.trust(),

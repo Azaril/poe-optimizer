@@ -33,6 +33,7 @@ pub mod movement;
 pub mod multipliers;
 mod offence;
 pub mod resistance;
+pub mod selection_keys;
 pub mod spark;
 pub mod stats;
 pub mod weapon;

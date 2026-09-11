@@ -327,3 +327,63 @@ fn instance_report_composes_with_explicit_definition_inspection() {
     );
     assert_eq!(fs::read(&input).unwrap(), INSTANCE_CALLER_XML.as_bytes());
 }
+
+#[test]
+fn selected_view_flag_uses_caller_sets_and_does_not_claim_calculation() {
+    let temp = tempfile::tempdir().unwrap();
+    let input = temp.path().join("selected.xml");
+    let xml = "<PathOfBuilding2><Skills activeSkillSet='4'><SkillSet id='2'/><SkillSet id='4'/></Skills><Items activeItemSet='8'><ItemSet id='8' useSecondWeaponSet='true'/></Items><Tree activeSpec='2'><Spec/><Spec/></Tree><Config><ConfigSet id='7'/></Config></PathOfBuilding2>";
+    fs::write(&input, xml).unwrap();
+    let output = cli()
+        .arg("inspect-build")
+        .arg(&input)
+        .arg("--with-view")
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let report: Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(report["selected_view"]["schema_version"], 1);
+    assert_eq!(
+        report["selected_view"]["skills"]["selected"]["key"],
+        "4010000000000000"
+    );
+    assert_eq!(
+        report["selected_view"]["items"]["selected"]["key"],
+        "4020000000000000"
+    );
+    assert_eq!(
+        report["selected_view"]["passives"]["selected"]["key"],
+        "4000000000000000"
+    );
+    assert_eq!(
+        report["selected_view"]["configuration"]["selected"]["key"],
+        "401c000000000000"
+    );
+    assert_eq!(
+        report["selected_view"]["weapon_state"]["use_second_weapon_set"],
+        true
+    );
+    assert_eq!(
+        report["instances"]["lineage"],
+        report["selected_view"]["lineage"]
+    );
+    assert_eq!(
+        report["input"]["xml_sha256"],
+        report["selected_view"]["source_sha256"]
+    );
+    assert!(
+        report["selected_view"]["frontiers"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|f| f["stage"] == "item_preparation")
+    );
+    assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
+    assert_eq!(report["verification"]["item_loading"], "not_run");
+    assert!(report.get("definition_lookup").is_none());
+    assert_eq!(fs::read(&input).unwrap(), xml.as_bytes());
+}
