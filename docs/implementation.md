@@ -18,6 +18,13 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+**CI repair:** the hosted Linux/Windows failure was reproduced as an inconsistent
+custom-data test fixture. The quoted-identifier test updates legacy calculation identifiers
+but leaves the injected authored-skill catalogs unchanged. The adapter correctly stops
+before search with `preparation_failed`. The corrected fixture and mismatch regression pass
+in both CLI configurations; production checks and deadlines remain unchanged. See the
+[repair checkpoint](#ci-dataset-fixture-repair) for validation and publication status.
+
 **Current checkpoint: R2f explicit environments and live table coverage.**
 Standalone source owners now retain an immutable schema-1 context sidecar with an optional
 bound environment root and per-table coverage. Complete and selective inventories separate
@@ -400,6 +407,38 @@ The breadth review adds three acceptance gates: freeze required metric/availabil
 manifests before numerical implementation; prove a real calculation responds to changed
 injected definitions; and compare reused worker transitions with fresh preparation. These
 strengthen R3-R5 within the now-accepted shared-model architecture.
+
+## CI dataset fixture repair
+
+The downloaded [Ubuntu job log](https://github.com/Azaril/poe-optimizer/actions/runs/34641228865/job/103401082939)
+and [Windows job log](https://github.com/Azaril/poe-optimizer/actions/runs/34637542513/job/103389008355)
+fail the same `dataset_search_cli` test: the quoted gem/quest identifier round-trip expects
+three evaluations and receives one. Local reproduction exposes the actual result:
+`preparation_failed`, with `Authored skill resolution differs from the closed numerical
+adapter`, after approximately eight seconds of a 30-second search budget.
+
+The test predates authored-skill loading. It renamed the legacy calculation records and
+XML, while the separately injected gem/effect identities and loader lookup data still
+resolved the original identifiers. The repaired custom package updates those related
+catalogs coherently, preserving provenance and rejecting renamed-key collisions. Original
+identifier/quest escaping, evaluation counts and fresh export verification remain asserted.
+A separate inconsistent-package case requires preparation failure and no search, winner,
+XML or sidecar. Failure assertions now include the complete search report. Production
+consistency checks and both production/test deadlines are unchanged.
+
+All **8 dataset tests pass with default features and all 8 pass native-only**, including
+the original failing case and the new rejection case. Scoped strict Clippy, formatting
+and diff checks pass; independent review found no remaining issue. Local validation used
+the working tree containing the separately pending R2g changes; hosted validation of the
+isolated two-file repair remains pending. Broader CLI regression is the next check.
+
+The original downloaded logs are retained at `runs/ci-103401082939.log` and
+`runs/ci-103389008355.log`; the reproduced full report is in
+`runs/dataset-ci-first-reproduction.log` and `.json` report artifact
+`runs/dataset-ci-first-reproduction-report.json`. Commands, terminal results and file hashes
+are in `runs/dataset-ci-repair-validation.json`. Publication is recorded separately in
+`runs/dataset-ci-repair-publication.json`. R2g closure/cell work remains a separate pending
+integration checkpoint; this repair does not change complete native build coverage.
 
 ## G4 CI repair checkpoint
 

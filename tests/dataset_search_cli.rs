@@ -5,6 +5,7 @@ use poe_optimizer_data::game_data::{
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use std::{
+    collections::BTreeMap,
     fs,
     path::{Path, PathBuf},
     process::{Command, Output},
@@ -111,7 +112,12 @@ fn assert_verified(report: &Value, total: u64) {
     assert_eq!(report["requested_backend"], "native-poe2");
     assert_eq!(report["execution_kind"], "rust_cpu");
     assert_eq!(report["preparation"]["attempts"], 1);
-    assert_eq!(report["total_evaluations"], total);
+    assert_eq!(
+        report["total_evaluations"],
+        total,
+        "search report: {}",
+        serde_json::to_string_pretty(report).unwrap()
+    );
     assert_eq!(
         report["search"]["statistics"]["verification_evaluations"],
         1
@@ -256,11 +262,41 @@ fn attribute(value: &str) -> String {
         .replace('>', "&gt;")
 }
 
+// Custom identity fixtures must rename references in both the legacy numerical
+// profile and the independently injected source loader. Exact string/key rewrites
+// keep declarations, constructed rows, effect references, and lookup maps aligned.
+// Provenance remains the original evidence; this is an unreviewed custom package.
+fn rename_identity_references(value: &mut Value, renames: &BTreeMap<String, String>) {
+    match value {
+        Value::String(text) => {
+            if let Some(replacement) = renames.get(text) {
+                *text = replacement.clone();
+            }
+        }
+        Value::Array(values) => {
+            for value in values {
+                rename_identity_references(value, renames);
+            }
+        }
+        Value::Object(values) => {
+            for (key, mut value) in std::mem::take(values) {
+                if key != "source" {
+                    rename_identity_references(&mut value, renames);
+                }
+                let key = renames.get(&key).cloned().unwrap_or(key);
+                assert!(values.insert(key, value).is_none(), "fixture key collision");
+            }
+        }
+        _ => {}
+    }
+}
+
 #[test]
 fn selected_dataset_gem_identifiers_names_and_quest_keys_round_trip_through_locked_export() {
     let temp = tempfile::tempdir().unwrap();
     let mut package = bundled_snapshot().unwrap().package().clone();
     let mut xml = TEMPLATE.to_string();
+    let mut renames = BTreeMap::new();
     for (field, xml_attribute) in [
         ("skill_id", "skillId"),
         ("game_id", "gemId"),
@@ -274,6 +310,7 @@ fn selected_dataset_gem_identifiers_names_and_quest_keys_round_trip_through_lock
             &format!("{xml_attribute}=\"{}\"", attribute(&old)),
             &format!("{xml_attribute}=\"{}\"", attribute(&replacement)),
         );
+        renames.insert(old, replacement.clone());
         data["mace"][field] = json!(replacement);
         let support = data["supports"]
             .as_array_mut()
@@ -281,10 +318,20 @@ fn selected_dataset_gem_identifiers_names_and_quest_keys_round_trip_through_lock
             .iter_mut()
             .find(|s| s["id"] == "brutality_i")
             .unwrap();
-        let old = support[field].as_str().unwrap();
-        support[field] = json!(format!("{old} &'\"<> caf\u{e9}"));
+        let old = support[field].as_str().unwrap().to_string();
+        let replacement = format!("{old} &'\"<> caf\u{e9}");
+        renames.insert(old, replacement.clone());
+        support[field] = json!(replacement);
         package = serde_json::from_value(data).unwrap();
     }
+    let mut identities = serde_json::to_value(&package.skill_identities).unwrap();
+    rename_identity_references(&mut identities, &renames);
+    package.skill_identities = serde_json::from_value(identities).unwrap();
+    let mut preparation = serde_json::to_value(&package.skill_preparation).unwrap();
+    rename_identity_references(&mut preparation, &renames);
+    // This ordered loader input is the one non-provenance field under `source`.
+    rename_identity_references(&mut preparation["source"]["canonical_gem_order"], &renames);
+    package.skill_preparation = serde_json::from_value(preparation).unwrap();
     for key in &mut package.quests.config_keys {
         key.push_str(" &'\"<> quest");
     }
@@ -343,6 +390,37 @@ fn selected_dataset_gem_identifiers_names_and_quest_keys_round_trip_through_lock
         result["evaluation"]["coverage"]["selected_player"]["skill_id"],
         selected_skill
     );
+}
+
+#[test]
+fn legacy_identity_changes_without_source_loader_changes_never_publish_results() {
+    let temp = tempfile::tempdir().unwrap();
+    let mut package = bundled_snapshot().unwrap().package().clone();
+    let original = package.mace.skill_id.clone();
+    package.mace.skill_id.push_str(" caller-only");
+    let xml = TEMPLATE.replace(&original, &package.mace.skill_id);
+    prepare(temp.path(), &problem(), &xml);
+    let (data, _) = write_package(temp.path(), "inconsistent.json", package);
+    let export = temp.path().join("inconsistent.xml");
+    let report = success(
+        search(temp.path(), Some(&data), 1, 6)
+            .arg("--export")
+            .arg(&export)
+            .output()
+            .unwrap(),
+    );
+    assert_eq!(report["termination"], "preparation_failed", "{report:#}");
+    assert_eq!(report["total_evaluations"], 1, "{report:#}");
+    assert_eq!(
+        report["preparation"]["error"],
+        "Authored skill resolution differs from the closed numerical adapter",
+        "{report:#}"
+    );
+    assert!(report["search"].is_null(), "{report:#}");
+    assert!(report["best_verified"].is_null(), "{report:#}");
+    assert_eq!(report["export"]["status"], "not_written", "{report:#}");
+    assert!(!export.exists());
+    assert!(!export.with_extension("xml.data.json").exists());
 }
 
 #[test]
