@@ -4,9 +4,15 @@
 mod build_candidates;
 mod candidates;
 pub use build_candidates::{PreparedBuildCandidates, PreparedBuildFootprint};
+mod preparation;
+mod preparation_report;
 mod profile;
 pub use candidates::{
     NativeMetricSnapshot, NativeMetricValue, PreparedMaceCandidates, PreparedMaceFootprint,
+};
+pub use preparation::PreparationOutcome;
+pub use preparation_report::{
+    PreparationIssue, PreparationIssueKind, PreparationReport, PreparationRequest,
 };
 mod tree;
 
@@ -57,8 +63,16 @@ pub struct PreparedEvaluation {
     identity: BackendIdentity,
     request: EvaluationRequest,
     profile: profile::Profile,
+    source: poe_optimizer_import::build_instance::ImportedBuildInstance,
+    selected_view: poe_optimizer_import::selected_view::SelectedViewReport,
 }
 impl PreparedEvaluation {
+    pub fn source(&self) -> &poe_optimizer_import::build_instance::ImportedBuildInstance {
+        &self.source
+    }
+    pub fn selected_view(&self) -> &poe_optimizer_import::selected_view::SelectedViewReport {
+        &self.selected_view
+    }
     pub fn data_identity(&self) -> &poe_optimizer_core::data::DataIdentity {
         self.data.identity()
     }
@@ -338,6 +352,19 @@ fn implementation_identity() -> BackendIdentity {
             for text in [
                 include_str!("lib.rs"),
                 include_str!("profile.rs"),
+                include_str!("preparation.rs"),
+                include_str!("preparation_report.rs"),
+                include_str!("../../poe-optimizer-core/src/build_identity.rs"),
+                include_str!("../../poe-optimizer-core/src/build_view.rs"),
+                include_str!("../../poe-optimizer-import/src/build_instance.rs"),
+                include_str!("../../poe-optimizer-import/src/selected_view/mod.rs"),
+                include_str!("../../poe-optimizer-import/src/selected_view/skills_config.rs"),
+                include_str!("../../poe-optimizer-import/src/selected_view/items_passives.rs"),
+                include_str!("../../poe-optimizer-import/src/skill_source.rs"),
+                include_str!("../../poe-optimizer-import/src/item_source.rs"),
+                include_str!("../../poe-optimizer-import/src/skill_definitions.rs"),
+                include_str!("../../poe-optimizer-engine/src/selection_keys.rs"),
+                include_str!("../../poe-optimizer-engine/src/lua_number.rs"),
                 include_str!("tree.rs"),
                 include_str!("candidates.rs"),
                 include_str!("build_candidates.rs"),
@@ -437,35 +464,9 @@ impl<C: EvaluationClock> NativeBackend<C> {
         &self,
         request: &EvaluationRequest,
     ) -> Result<PreparedEvaluation, EvaluationError> {
-        let known = metric_catalog();
-        let mut queries = std::collections::BTreeSet::new();
-        for query in &request.metrics {
-            if !queries.insert(query) {
-                return Err(EvaluationError::new(
-                    EvaluationErrorKind::InvalidRequest,
-                    "Duplicate metric query",
-                ));
-            }
-            if !known
-                .iter()
-                .any(|m| m.id == query.id && m.actors.contains(&query.actor))
-            {
-                return Err(EvaluationError::new(
-                    EvaluationErrorKind::UnsupportedCapability,
-                    format!(
-                        "Native backend does not implement {:?}.{}",
-                        query.actor, query.id
-                    ),
-                ));
-            }
-        }
-        Ok(PreparedEvaluation {
-            profile: profile::parse(request, &self.data)?,
-            data: Arc::clone(&self.data),
-            identity: self.identity.clone(),
-            request: request.clone(),
-        })
+        self.prepare_with_lineage(request, preparation::host_lineage()?)
     }
+
     fn elapsed(&self, start: Duration, budget: EvaluationBudget) -> Result<f64, EvaluationError> {
         let elapsed = self.clock.now().checked_sub(start).ok_or_else(|| {
             EvaluationError::new(

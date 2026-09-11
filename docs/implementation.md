@@ -18,21 +18,22 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-**Current work: R1b selected-source views implemented; integrate R1c next.**
-The [selected-view contract](selected-views.md) now connects owned instances to independent
-saved selections, typed overrides and injected skill identities. It preserves duplicate
-keys, Config holes, positional passive selection, source errors and explicit preparation
-frontiers. It is available through `inspect-build --with-view`. This is source-selection
-progress, not full loader/effective preparation or completed R1.
+**Current work: R1c native boundary validated; advance R2 real preparation.**
+The [shared native preparation path](native-preparation.md) now consumes the owned
+instance/view model in ordinary native evaluation and controlled candidate setup. Existing
+Spark/Mace calculations use selected source nodes through an explicit compatibility adapter.
+Broader inputs return source-linked `PreparationOutcome::Incomplete` reports, available
+from the library and `prepare-build`; no partial metrics are substituted.
 
-R1a retains its 396-test frozen-source result before the separate CI repair. The new R1b
-source matrix pairs all five originals with original selection consumers, and five fresh
-complete PoB evaluations corroborate active keys. Native key-map tests cover 333,614 original
-LuaJIT observations. Final integration results are recorded in the checkpoint below.
-Next route existing Spark/Mace calculations through the shared owner/view boundary, and
-make real inputs reach named preparation frontiers instead of single-set/group guards.
-Remaining producer-aware reference and loader-lifecycle validation stays explicit as R1c
-reaches it; actors/actions and full real-build outputs remain R2/R3.
+The [selected-view contract](selected-views.md) retains independent keys/positions, typed
+overrides, source errors and injected identity evidence. Six existing numerical goldens
+pass through the new owner/view and compatibility routes. All five real originals reach
+named producer frontiers with exact source bindings. All 90 native regression tests and
+18 CLI test executions pass, with strict lint and portable-library compilation. General actor/action,
+item registration, effective configuration and loader lifecycle remain unfinished.
+Next implement R2 authored skill loading/processing along Twister and Skeletal Sniper
+together; keep all five originals exercising the common model. R1's source/reference lifecycle evidence remains
+scoped to implemented stages, and full real-build outputs are still R2/R3 work.
 
 The earlier G4 CI run finished with Windows search-budget failures and Linux implicit-line
 mismatches; G3 succeeded on both platforms. The Windows failure is reproduced as preparation
@@ -45,7 +46,7 @@ remains failed. Evidence: `runs/r1a-prior-ci.json`.
 | Breadth stage | Current state | Next evidence |
 | --- | --- | --- |
 | Source import/inspection | 5/5 supplied originals | Retain exact bytes, selections and unresolved entries |
-| General native instance/actor/action model | R1a validated; R1b selected-source views implemented; Spark/Mace preparation still uses old boundary | R1: source instances/selected views with explicit deferred producers; R2/R3: effective graphs |
+| General native instance/actor/action model | R1a/R1b source model and R1c native boundary implemented; general effective producers pending | R1: source instances/selected views with explicit deferred producers; R2/R3: effective graphs |
 | Complete native real builds | 0/5 | R2/R3: paired Twister and Skeletal Sniper preparation and full outputs |
 | Real-build mutation/parallel parity | Not run | R4: class/ascendancy/provider/support/item/tree changes and serial/Rayon agreement |
 | Scenario breadth | Frozen originals cover Pinnacle/level82 only | R3: explicit mapping variants plus original bossing comparisons |
@@ -227,6 +228,65 @@ checkpoint remains in progress at the last observation; no hosted success is cla
 Tests of this component do
 not certify item registration, effective actors/actions, full LoadDB error ordering or
 complete native supplied builds. R1c and R2/R3 remain required.
+
+## R1c native preparation integration checkpoint
+
+`NativeBackend::prepare` and ordinary `evaluate` now import, resolve and lower through the
+shared owner/view path. Public `prepare_view`, detailed `prepare_request_with_lineage` and
+portable `prepare_with_lineage` distinguish prepared plans from structured incomplete
+reports. Existing Spark/Mace code consumes selected source nodes while preserving its
+numerical and export admission. Explicit secondary weapon requests and mismatched owners
+cannot silently use the original primary view.
+
+Controlled build/Mace scenario preparation follows that same boundary, with portable
+host-lineage variants. Native convenience import uses OS randomness outside calculation;
+WASM callers supply lineage. Candidate calculations retain no XML or selection reports.
+No new skill profile, definition package, fixture exception or database was introduced.
+
+The library and new `prepare-build` CLI expose source-linked identity/producer diagnostics,
+including the requested options and metric queries for override traceability.
+For the five originals, selected identity entries total 260 and preparation issues total 493
+(individual counts 62/46/62/62/28 and 111/94/106/115/67). These are source/preparation facts,
+not active-effect counts or complete dependency closures. All five remain incomplete.
+
+Validation ledgers: `runs/r1c-selected-profile-validation.json`,
+`runs/r1c-preparation-report-validation.json`, `runs/r1c-native-view-validation.json`,
+`runs/r1c-integration-validation.json` and `runs/r1c-native-regression-03.log`. New tests cover six
+unchanged numerical goldens, exact ownership, caller changes/cache poisoning, explicit
+view requests, injected catalog effects on diagnostics, resource bounds and concurrency.
+Final full native regression is terminal success: 90 tests across 13 test targets, plus
+an empty doc-test target, using four test threads to bound memory. The new preparation CLI
+passes four tests under each feature configuration; ten existing native-only CLI tests
+also pass. Strict workspace and native-only CLI Clippy, formatting, all five portable
+library compilation checks, and native dependency isolation pass. The 191 local document
+link targets checked are valid.
+
+Regression caught and fixed an error-message compatibility change: detailed preparation
+retains independent missing stages, while `into_ready` preserves the original adapter
+error so full-document and typed candidate errors still agree. A new test initially
+requested an unsupported metric and was corrected to an existing supported query; native
+metric admission was not broadened. Windows CLI feature-switch validation was serialized
+after a live executable blocked replacement. Earlier failed logs are preserved. The
+reviewed data package, caller inputs and PoB pin remain exact. No fresh full-PoB numerical
+run or additional whole-build parity is claimed. Hosted results for prior heads remain
+pending in `runs/r1c-prior-ci.json`; publication state is recorded separately.
+
+The next R2 slice is shared authored skill preparation for the original Twister and Sniper
+paths: complete reached `SkillsTab.LoadSkill`/`ProcessSocketGroup` behavior and their
+level/requirement helpers, using the existing full-data `skill_source_parity` harness.
+Extend injected data with the missing preparation semantics (level rows, requirements,
+flags and source construction winners) rather than adding another skill profile. Preserve
+loading order across all saved groups and expose completed stage artifacts through the
+public preparation path. Selected 46/28 entry comparisons are evidence of skill preparation,
+not completed support application, actors or numerical output.
+
+PoB's triggered-effect processing can clear a level cost through a shared definition
+reference. Use a per-build overlay preserving alias relationships; never mutate the
+immutable catalog shared by workers. Effective configuration, item/passive registration,
+provider grants and actor/action construction remain subsequent reached dependencies.
+`ItemAssemblyCatalog` is still PolicyOnly; actual registration needs completed assembly
+and lifecycle source comparisons. Neither this boundary nor an incomplete report passes
+any whole-build parity gate.
 
 ## Definition storage and UI search
 
@@ -945,27 +1005,29 @@ the design documents.
 
 ## Resume here
 
-1. Read the breadth dashboard at the top and [real-build rollout](real-build-rollout.md).
-   Review the concrete [API draft](real-build-api-proposal.md) and resolve the pending
-   shared-model design question before its architecture migration.
-2. Check git/worktree state and exact-head CI. Main contains the replacement-string and
-   schema26 PolicyOnly catalog checkpoints. Their worktrees are frozen; do not redo their
-   completed exports/suites. Both condition and mixed-store trace collectors have scoped
-   repairs with independent live-source controls. Verify hosted Windows/Linux outcomes
-   and fix actual failures without weakening source evidence.
+1. Read the breadth dashboard and [real-build rollout](real-build-rollout.md). The shared
+   model direction is accepted. R1a source ownership, R1b selected views and the
+   [R1c native entry point](native-preparation.md) are implemented; general effective
+   producers and all five complete native evaluations remain unfinished.
+2. Check the working tree and exact-head CI. Preserve frozen worktrees and terminal
+   validation records. Fix actual hosted failures without weakening source evidence;
+   local passes do not replace pending Windows/Linux results.
 3. Preserve the PoB pin, original caller imports, all saved sets, numerical goldens and
-   frozen evidence. Keep native execution independent of Lua and subprocesses.
-4. After direction, implement R1a/R1b/R1c from the concrete API draft against all five
-   originals, then advance paired R2/R3 real-build paths.
-   Existing source projection, identity catalogs and shared kernels are reusable inputs;
-   metadata observations are not native numeric capability. Do not add another closed profile.
+   frozen evidence. Keep native calculation independent of Lua and subprocesses. Host
+   lineage is assigned at import; portable callers use explicit lineage entry points.
+4. Advance R2 preparation on the original Twister and Skeletal Sniper views together.
+   Start with authored skill loading/processing, its injected preparation data and per-build
+   definition overlays. Keep reached configuration, item/passive, actor/action and provider
+   prerequisites explicit. Reuse shared catalogs and kernels, and compare
+   executable stages with complete original-source methods. Do not add another closed profile.
 5. Preserve and extend the fixed diagnostic expectation manifest through explicit revisions.
    Its saved-artifact comparisons do not rerun backends or establish native coverage. Add
    explicit mapping cases and full required resource semantics before claiming R3/R5.
-6. Update the dashboard and exact per-build blockers at each integration checkpoint.
+6. Update this dashboard and exact per-build blockers at each integration checkpoint.
    Verify changed interactions and exported source before expanding search or making
-   performance claims. Prior detailed checkpoints below are historical evidence, not
-   instructions to repeat completed suites or postpone real-build integration.
+   performance claims. UI autocomplete will use loaded definitions and a derived index;
+   DuckDB is deferred. Historical checkpoints below are evidence, not a request to repeat
+   completed suites or postpone real-build integration.
 
 
 ## Toolchain lint repair - local validation complete

@@ -18,8 +18,9 @@ immutable import boundary. The compatibility decoder DTO remains `ImportedBuild`
 `build_instance::ImportedBuildInstance` owns exact source plus authored instance mappings.
 The [selected-source view component](selected-views.md) now supplies independent choices,
 typed overrides and source/data binding. The broader signatures below remain the target
-contract: effective producers, complete loader lifecycle and native integration are not
-implied by that component.
+contract: effective producers and complete loader lifecycle are not implied by that component.
+The [native preparation integration](native-preparation.md) now routes numerical compatibility
+controls and incomplete real builds through this boundary; general producers remain R2/R3.
 
 ## Concrete counterexamples determine the boundary
 

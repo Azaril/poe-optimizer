@@ -164,22 +164,35 @@ impl<C: EvaluationClock> NativeBackend<C> {
         catalog: &ControlledBuildCatalog,
         queries: &[MetricQuery],
     ) -> Result<PreparedBuildCandidates, EvaluationError> {
+        self.prepare_controlled_build_with_lineage(
+            catalog,
+            queries,
+            crate::preparation::host_lineage()?,
+        )
+    }
+    /// Portable preparation: the host assigns this import's lineage once.
+    pub fn prepare_controlled_build_with_lineage(
+        &self,
+        catalog: &ControlledBuildCatalog,
+        queries: &[MetricQuery],
+        lineage: poe_optimizer_core::build_identity::BuildLineage,
+    ) -> Result<PreparedBuildCandidates, EvaluationError> {
         if !Arc::ptr_eq(&self.data, catalog.data()) {
             return Err(contract(
                 "Catalog requires the same compiled dataset instance",
             ));
         }
-        let scenario = crate::profile::prepare_scenario(
-            &EvaluationRequest {
-                build: BuildDocument {
-                    format: BuildFormat::PathOfBuilding2Xml,
-                    content: catalog.template().source().into(),
-                },
-                options: EvaluationOptions::default(),
-                metrics: queries.to_vec(),
+        let request = EvaluationRequest {
+            build: BuildDocument {
+                format: BuildFormat::PathOfBuilding2Xml,
+                content: catalog.template().source().into(),
             },
-            &self.data,
-        )?;
+            options: EvaluationOptions::default(),
+            metrics: queries.to_vec(),
+        };
+        let source = crate::preparation::import_request(&request, lineage)?;
+        let view = crate::preparation::saved_view(&source, &self.data)?;
+        let scenario = crate::profile::prepare_scenario(&request, &self.data, &view)?;
         if scenario.config != *catalog.template().config()
             || scenario.actor_quests != catalog.quests()
         {

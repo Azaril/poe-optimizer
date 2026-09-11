@@ -316,3 +316,7 @@ choose a distribution license for the new project; select one before a public re
 Selected saved alternatives can be inspected with `inspect-build <single-build-input> --with-view`.
 This reports independent set choices, instance/definition bindings and outstanding preparation
 stages. See [selected views](docs/selected-views.md); it does not calculate a complete build.
+
+Use `prepare-build <single-build-input>` for the native evaluator's structured preparation
+result and source-linked missing stages. It performs no calculation. See
+[the native preparation API](docs/native-preparation.md).

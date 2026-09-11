@@ -533,6 +533,7 @@ dependencies = [
 name = "poe-optimizer-native"
 version = "0.1.0"
 dependencies = [
+ "getrandom",
  "poe-optimizer-core",
  "poe-optimizer-data",
  "poe-optimizer-engine",

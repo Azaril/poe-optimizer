@@ -1,8 +1,9 @@
 # Selected build views
 
 Status: R1b source-selection component implemented. This does not admit a complete
-native build or execute the full PoB load/preparation lifecycle. The next integration
-step is R1c; complete effective producers and numerical breadth remain R2/R3.
+native build or execute the full PoB load/preparation lifecycle. The
+[R1c native integration](native-preparation.md) now consumes this boundary; complete
+effective producers and numerical breadth remain R2/R3.
 
 ## Caller and ownership boundary
 

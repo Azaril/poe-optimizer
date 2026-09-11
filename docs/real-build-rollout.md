@@ -11,8 +11,10 @@ tracks execution.
 ## Starting position
 
 All five supplied originals import and can be inspected with caller-driven definitions.
-Pinned PoB evaluates all five. Native whole-build evaluation admits **none of these five**:
-lines 1/3/4 stop at the one-Skill profile guard, and lines 2/5 at one-SkillSet. The current
+Pinned PoB evaluates all five. Native whole-build evaluation admits **none of these five**. The initial baseline stopped
+lines 1/3/4 at the one-Skill profile guard and lines 2/5 at one-SkillSet. The
+[shared native preparation boundary](native-preparation.md) now reports independent
+source-linked producer prerequisites for all five through the real evaluation path. The current
 native preparation enum contains Spark and Mace only. Adding more parsed modifiers does
 not remove that structural limitation or supply the missing calculations. The general
 item-loading pipeline currently feeds inspection; native profile preparation still uses

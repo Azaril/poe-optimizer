@@ -4,6 +4,10 @@ use poe_optimizer_engine::{
     mace::{MaceInput, MaceWeapon},
     spark::{SparkInput, SparkQuestRewards},
 };
+use poe_optimizer_import::{
+    build_instance::{AuthoredInstanceId, SourceOccurrenceId},
+    selected_view::{DomainSelection, SelectedView, SelectionDomain, SetOrigin},
+};
 use roxmltree::{Document, Node, ParsingOptions};
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -45,6 +49,154 @@ fn child<'a, 'input>(
     }
     Ok(values[0])
 }
+/// The closed profile consumes the shared view's selected source, while its
+/// existing cardinality and raw-value guards continue to limit native admission.
+/// Source ranges are resolved in one temporary document, never reserialized.
+fn selected_set<'a, 'input>(
+    parent: Node<'a, 'input>,
+    view: &SelectedView<'_>,
+    selection: &DomainSelection,
+    domain: SelectionDomain,
+    tag: &str,
+) -> Result<Node<'a, 'input>, EvaluationError> {
+    let record = selection
+        .selected
+        .as_ref()
+        .ok_or_else(|| unsupported(format!("Native profile requires a selected {tag}")))?;
+    let SetOrigin::Authored { instance, source } = record.origin else {
+        return Err(unsupported(format!(
+            "Native profile requires an authored {tag}; loader defaults need further preparation"
+        )));
+    };
+    let correct_domain = matches!(
+        (domain, instance),
+        (SelectionDomain::Skills, AuthoredInstanceId::SkillSet(_))
+            | (SelectionDomain::Items, AuthoredInstanceId::ItemSet(_))
+            | (
+                SelectionDomain::Passives,
+                AuthoredInstanceId::PassiveSpec(_)
+            )
+            | (
+                SelectionDomain::Configuration,
+                AuthoredInstanceId::ConfigSet(_)
+            )
+    );
+    if selection.domain != domain || !correct_domain {
+        return Err(binding_error("Selected set has a foreign domain"));
+    }
+    let binding = view
+        .build()
+        .binding(instance)
+        .map_err(|error| binding_error(error.to_string()))?;
+    if binding.source() != source {
+        return Err(binding_error(
+            "Selected set source differs from its owned instance",
+        ));
+    }
+    let selected = source_node(parent.document(), view, source, tag)?;
+    // Retain the prior exactly-one-set domain until inactive load effects and
+    // multi-set export/report semantics have their own source-backed admission.
+    if child(parent, tag)? != selected {
+        return Err(binding_error(
+            "Selected set is outside its source container",
+        ));
+    }
+    Ok(selected)
+}
+
+fn selected_group<'a, 'input>(
+    parent: Node<'a, 'input>,
+    view: &SelectedView<'_>,
+) -> Result<Node<'a, 'input>, EvaluationError> {
+    let members = &view
+        .report()
+        .skills
+        .selected
+        .as_ref()
+        .ok_or_else(|| unsupported("Native profile requires a selected skill set"))?
+        .members;
+    let [instance @ AuthoredInstanceId::SkillGroup(_)] = members.as_slice() else {
+        return Err(unsupported(
+            "Native profile requires exactly one selected authored skill group",
+        ));
+    };
+    let binding = view
+        .build()
+        .binding(*instance)
+        .map_err(|error| binding_error(error.to_string()))?;
+    let selected = source_node(parent.document(), view, binding.source(), "Skill")?;
+    if child(parent, "Skill")? != selected {
+        return Err(binding_error(
+            "Selected skill group is outside its source set",
+        ));
+    }
+    Ok(selected)
+}
+
+fn source_node<'a, 'input>(
+    document: &'a Document<'input>,
+    view: &SelectedView<'_>,
+    source: SourceOccurrenceId,
+    tag: &str,
+) -> Result<Node<'a, 'input>, EvaluationError> {
+    let range = view
+        .build()
+        .occurrence(source)
+        .map_err(|error| binding_error(error.to_string()))?
+        .range();
+    document
+        .descendants()
+        .find(|node| node.is_element() && node.range() == range && node.has_tag_name(tag))
+        .ok_or_else(|| {
+            binding_error("Selected source occurrence is absent from the parsed document")
+        })
+}
+
+fn binding_error(message: impl Into<String>) -> EvaluationError {
+    EvaluationError::new(EvaluationErrorKind::BackendContract, message)
+}
+
+fn validate_view(
+    request: &EvaluationRequest,
+    data: &crate::CompiledGameData,
+    view: &SelectedView<'_>,
+) -> Result<(), EvaluationError> {
+    view.validate_binding(view.build(), data.snapshot())
+        .map_err(|error| binding_error(error.to_string()))?;
+    if request.build.content != view.build().source_xml() {
+        return Err(binding_error(
+            "Native request XML differs from selected view source",
+        ));
+    }
+    let report = view.report();
+    if let Some(problem) = report.load_problems.first().or_else(|| {
+        [
+            &report.skills,
+            &report.items,
+            &report.passives,
+            &report.configuration,
+        ]
+        .into_iter()
+        .find_map(|selection| selection.problem.as_ref())
+    }) {
+        return Err(unsupported(format!(
+            "Native selected view requires source preparation: {}: {}",
+            problem.code, problem.message
+        )));
+    }
+    if let Some(problem) = &report.skill_identities.problem {
+        return Err(unsupported(format!(
+            "Native selected skill identity preparation: {problem}"
+        )));
+    }
+    if report.weapon_state.use_second_weapon_set != Some(false) {
+        return Err(unsupported(
+            "Native equipment requires the first selected weapon set",
+        ));
+    }
+    Ok(())
+}
+
 fn only(node: Node<'_, '_>, attrs: &[&str], children: &[&str]) -> Result<(), EvaluationError> {
     if node.tag_name().namespace().is_some()
         || node
@@ -184,8 +336,9 @@ enum ProfileProjection {
 pub(crate) fn parse(
     request: &EvaluationRequest,
     data: &crate::CompiledGameData,
+    view: &SelectedView<'_>,
 ) -> Result<Profile, EvaluationError> {
-    match parse_projection(request, data, true)? {
+    match parse_projection(request, data, view, true)? {
         ProfileProjection::Complete(profile) => Ok(profile),
         ProfileProjection::Scenario(_) => unreachable!("full projection requested"),
     }
@@ -193,6 +346,7 @@ pub(crate) fn parse(
 pub(crate) fn prepare_scenario(
     request: &EvaluationRequest,
     data: &crate::CompiledGameData,
+    view: &SelectedView<'_>,
 ) -> Result<ScenarioProfile, EvaluationError> {
     let known = crate::metric_catalog();
     let mut queries = BTreeSet::new();
@@ -216,7 +370,7 @@ pub(crate) fn prepare_scenario(
             ));
         }
     }
-    match parse_projection(request, data, false)? {
+    match parse_projection(request, data, view, false)? {
         ProfileProjection::Scenario(profile) => Ok(profile),
         ProfileProjection::Complete(_) => unreachable!("scenario projection requested"),
     }
@@ -224,8 +378,10 @@ pub(crate) fn prepare_scenario(
 fn parse_projection(
     request: &EvaluationRequest,
     data: &crate::CompiledGameData,
+    view: &SelectedView<'_>,
     prepare_numeric: bool,
 ) -> Result<ProfileProjection, EvaluationError> {
+    validate_view(request, data, view)?;
     request
         .options
         .validate()
@@ -234,7 +390,7 @@ fn parse_projection(
         return Err(unsupported("Native XML exceeds byte limit"));
     }
     let doc = Document::parse_with_options(
-        &request.build.content,
+        view.build().source_xml(),
         ParsingOptions {
             allow_dtd: false,
             nodes_limit: poe_optimizer_import::MAX_XML_NODES,
@@ -246,7 +402,15 @@ fn parse_projection(
         .map_err(|error| unsupported(format!("Native {error}")))?;
     let root = doc.root_element();
     let build = child(root, "Build")?;
-    let main_group = child(child(child(root, "Skills")?, "SkillSet")?, "Skill")?;
+    let skills = child(root, "Skills")?;
+    let skill_set = selected_set(
+        skills,
+        view,
+        &view.report().skills,
+        SelectionDomain::Skills,
+        "SkillSet",
+    )?;
+    let main_group = selected_group(skill_set, view)?;
     let main_gem = main_group
         .children()
         .find(|node| node.has_tag_name("Gem"))
@@ -292,7 +456,13 @@ fn parse_projection(
     let tree = child(root, "Tree")?;
     only(tree, &["activeSpec"], &["Spec"])?;
     fixed(tree, &[("activeSpec", "1")])?;
-    let spec = child(tree, "Spec")?;
+    let spec = selected_set(
+        tree,
+        view,
+        &view.report().passives,
+        SelectionDomain::Passives,
+        "Spec",
+    )?;
     only(
         spec,
         &[
@@ -328,7 +498,6 @@ fn parse_projection(
         .map_err(|error| unsupported(error.to_string()))?;
         None
     };
-    let skills = child(root, "Skills")?;
     only(
         skills,
         &["activeSkillSet", "defaultGemLevel", "defaultGemQuality"],
@@ -342,10 +511,9 @@ fn parse_projection(
             ("defaultGemQuality", "0"),
         ],
     )?;
-    let skill_set = child(skills, "SkillSet")?;
     only(skill_set, &["id", "title"], &["Skill"])?;
     fixed(skill_set, &[("id", "1")])?;
-    let skill = child(skill_set, "Skill")?;
+    let skill = main_group;
     only(
         skill,
         &[
@@ -424,7 +592,13 @@ fn parse_projection(
     let items = child(root, "Items")?;
     only(items, &["activeItemSet"], &["Item", "ItemSet"])?;
     fixed(items, &[("activeItemSet", "1")])?;
-    let item_set = child(items, "ItemSet")?;
+    let item_set = selected_set(
+        items,
+        view,
+        &view.report().items,
+        SelectionDomain::Items,
+        "ItemSet",
+    )?;
     only(item_set, &["id", "title", "useSecondWeaponSet"], &["Slot"])?;
     fixed(item_set, &[("id", "1")])?;
     if item_set
@@ -492,7 +666,13 @@ fn parse_projection(
     let config_node = child(root, "Config")?;
     only(config_node, &["activeConfigSet"], &["ConfigSet"])?;
     fixed(config_node, &[("activeConfigSet", "1")])?;
-    let config_set = child(config_node, "ConfigSet")?;
+    let config_set = selected_set(
+        config_node,
+        view,
+        &view.report().configuration,
+        SelectionDomain::Configuration,
+        "ConfigSet",
+    )?;
     only(
         config_set,
         &["id", "title"],
@@ -679,7 +859,7 @@ fn parse_projection(
             ));
         }
     }
-    let export_xml = apply_source_edits(&request.build.content, replacements)?;
+    let export_xml = apply_source_edits(view.build().source_xml(), replacements)?;
     let quest =
         |index: usize| match config.get(&data.snapshot().package().quests.config_keys[index]) {
             Some(Scalar::Boolean(v)) => *v,
@@ -920,6 +1100,56 @@ fn apply_source_edits(
 #[cfg(test)]
 mod scenario_tests {
     use super::*;
+    use poe_optimizer_core::{
+        build_identity::BuildLineage,
+        build_view::{SelectionRequest, ViewRequest, WeaponStateRequest},
+    };
+    use poe_optimizer_import::{
+        build_instance::{ImportedBuildInstance, InstanceImportLimits},
+        selected_view::resolve_view,
+    };
+
+    fn owner(request: &EvaluationRequest) -> Result<ImportedBuildInstance, EvaluationError> {
+        let decoded = poe_optimizer_import::decode_build(request.build.content.as_bytes())
+            .map_err(|error| {
+                EvaluationError::new(EvaluationErrorKind::InvalidRequest, error.to_string())
+            })?;
+        ImportedBuildInstance::from_decoded(
+            decoded,
+            BuildLineage::from_bytes([47; 16]),
+            InstanceImportLimits::default(),
+        )
+        .map_err(|error| {
+            EvaluationError::new(EvaluationErrorKind::InvalidRequest, error.to_string())
+        })
+    }
+    fn with_saved_view<T>(
+        request: &EvaluationRequest,
+        data: &crate::CompiledGameData,
+        operation: impl FnOnce(&SelectedView<'_>) -> Result<T, EvaluationError>,
+    ) -> Result<T, EvaluationError> {
+        let owner = owner(request)?;
+        let view = resolve_view(
+            &owner,
+            data.snapshot(),
+            &ViewRequest::default(),
+            Default::default(),
+        )
+        .map_err(|error| unsupported(error.to_string()))?;
+        operation(&view)
+    }
+    fn request(source: &str) -> EvaluationRequest {
+        EvaluationRequest {
+            build: BuildDocument {
+                format: BuildFormat::PathOfBuilding2Xml,
+                content: source.into(),
+            },
+            options: EvaluationOptions::default(),
+            metrics: vec![],
+        }
+    }
+
+    const SPARK: &str = include_str!("../../../tests/fixtures/builds/spark-passive-equipment.xml");
     const MACE: &str = include_str!("../../../tests/fixtures/builds/mace-passive-equipment.xml");
     #[test]
     fn fixed_scenario_accepts_same_inert_root_source_as_full_profile() {
@@ -933,8 +1163,14 @@ mod scenario_tests {
             options: EvaluationOptions::default(),
             metrics: vec![],
         };
-        let full = parse(&request, backend.data()).unwrap();
-        prepare_scenario(&request, backend.data()).unwrap();
+        let full = with_saved_view(&request, backend.data(), |view| {
+            parse(&request, backend.data(), view)
+        })
+        .unwrap();
+        with_saved_view(&request, backend.data(), |view| {
+            prepare_scenario(&request, backend.data(), view)
+        })
+        .unwrap();
         assert_eq!(full.export_xml, source);
     }
     #[test]
@@ -960,14 +1196,162 @@ mod scenario_tests {
                 options: EvaluationOptions::default(),
                 metrics: vec![],
             };
-            let full = parse(&request, data.data())
-                .err()
-                .expect("invalid full source");
-            let scenario = prepare_scenario(&request, data.data())
-                .err()
-                .expect("invalid scenario source");
+            let full = with_saved_view(&request, data.data(), |view| {
+                parse(&request, data.data(), view)
+            })
+            .err()
+            .expect("invalid full source");
+            let scenario = with_saved_view(&request, data.data(), |view| {
+                prepare_scenario(&request, data.data(), view)
+            })
+            .err()
+            .expect("invalid scenario source");
             assert_eq!(scenario.kind, full.kind);
             assert_eq!(scenario.message, full.message);
         }
+    }
+
+    #[test]
+    fn full_and_scenario_consume_the_same_selected_profile_inputs() {
+        let backend = crate::NativeBackend::new();
+        for source in [SPARK, MACE] {
+            let request = request(source);
+            let owner = owner(&request).unwrap();
+            let mut explicit = ViewRequest::default();
+            for binding in owner.instances() {
+                match binding.instance() {
+                    AuthoredInstanceId::SkillSet(id) => {
+                        explicit.skills = SelectionRequest::Instance(id)
+                    }
+                    AuthoredInstanceId::ItemSet(id) => {
+                        explicit.items = SelectionRequest::Instance(id)
+                    }
+                    AuthoredInstanceId::PassiveSpec(id) => {
+                        explicit.passives = SelectionRequest::Instance(id)
+                    }
+                    AuthoredInstanceId::ConfigSet(id) => {
+                        explicit.configuration = SelectionRequest::Instance(id)
+                    }
+                    _ => {}
+                }
+            }
+            let view = resolve_view(
+                &owner,
+                backend.data().snapshot(),
+                &explicit,
+                Default::default(),
+            )
+            .unwrap();
+            let full = parse(&request, backend.data(), &view).unwrap();
+            let scenario = prepare_scenario(&request, backend.data(), &view).unwrap();
+            match (full.input, scenario.input) {
+                (NativeInput::Spark(full), NativeInput::Spark(scenario)) => {
+                    assert_eq!(full, scenario)
+                }
+                (NativeInput::Mace(full), NativeInput::Mace(scenario)) => {
+                    assert_eq!(full, scenario)
+                }
+                _ => panic!("selected full/scenario profiles disagree"),
+            }
+            assert_eq!(full.config, scenario.config);
+            assert_eq!(full.actor_quests, scenario.actor_quests);
+            assert_eq!(full.export_xml, source);
+        }
+    }
+
+    #[test]
+    fn selected_profile_rejects_mismatched_source_and_definition_owner() {
+        let backend = crate::NativeBackend::new();
+        let mut request = request(MACE);
+        let owner = owner(&request).unwrap();
+        let view = resolve_view(
+            &owner,
+            backend.data().snapshot(),
+            &Default::default(),
+            Default::default(),
+        )
+        .unwrap();
+        request.build.content.push(' ');
+        let error = parse(&request, backend.data(), &view).err().unwrap();
+        assert_eq!(error.kind, EvaluationErrorKind::BackendContract);
+        assert!(error.message.contains("XML differs"));
+        request.build.content.pop();
+        let cloned_snapshot = backend.data().snapshot().clone();
+        let foreign = resolve_view(
+            &owner,
+            &cloned_snapshot,
+            &Default::default(),
+            Default::default(),
+        )
+        .unwrap();
+        let error = parse(&request, backend.data(), &foreign).err().unwrap();
+        assert_eq!(error.kind, EvaluationErrorKind::BackendContract);
+    }
+
+    #[test]
+    fn explicit_secondary_weapon_state_cannot_evaluate_primary_source() {
+        let backend = crate::NativeBackend::new();
+        let request = request(MACE);
+        let owner = owner(&request).unwrap();
+        let selection = ViewRequest {
+            weapon_state: WeaponStateRequest::Secondary,
+            ..Default::default()
+        };
+        let view = resolve_view(
+            &owner,
+            backend.data().snapshot(),
+            &selection,
+            Default::default(),
+        )
+        .unwrap();
+        for error in [
+            parse(&request, backend.data(), &view).err().unwrap(),
+            prepare_scenario(&request, backend.data(), &view)
+                .err()
+                .unwrap(),
+        ] {
+            assert_eq!(error.kind, EvaluationErrorKind::UnsupportedCapability);
+            assert!(error.message.contains("first selected weapon set"));
+        }
+    }
+
+    #[test]
+    fn selected_views_do_not_broaden_closed_source_admission() {
+        let backend = crate::NativeBackend::new();
+        let source = MACE.replace("</Skills>", "<SkillSet id=\"2\"/></Skills>");
+        let request = request(&source);
+        with_saved_view(&request, backend.data(), |view| {
+            assert!(view.report().skills.selected.is_some());
+            let error = parse(&request, backend.data(), view).err().unwrap();
+            assert_eq!(error.kind, EvaluationErrorKind::UnsupportedCapability);
+            assert!(error.message.contains("exactly one SkillSet"));
+            Ok(())
+        })
+        .unwrap();
+        let source = MACE.replace("activeSpec=\"1\"", "activeSpec=\"0\"");
+        let request = self::request(&source);
+        let owner = owner(&request).unwrap();
+        let spec = owner
+            .instances()
+            .iter()
+            .find_map(|binding| match binding.instance() {
+                AuthoredInstanceId::PassiveSpec(id) => Some(id),
+                _ => None,
+            })
+            .unwrap();
+        let selection = ViewRequest {
+            passives: SelectionRequest::Instance(spec),
+            ..Default::default()
+        };
+        let view = resolve_view(
+            &owner,
+            backend.data().snapshot(),
+            &selection,
+            Default::default(),
+        )
+        .unwrap();
+        assert!(view.report().passives.selected.is_some());
+        let error = parse(&request, backend.data(), &view).err().unwrap();
+        assert_eq!(error.kind, EvaluationErrorKind::UnsupportedCapability);
     }
 }

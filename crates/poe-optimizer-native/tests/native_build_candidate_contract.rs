@@ -260,6 +260,26 @@ fn failing_imported_scalar_composition_is_deferred_while_legal_roots_evaluate() 
             .calculate(&request(source.into()), BUDGET)
             .unwrap_err();
         assert_eq!(full_error.message, source_error);
+        // Detailed preparation keeps independent missing-stage evidence, while
+        // conversion to the compatibility evaluator preserves the exact source
+        // failure shared by full-document and candidate calculations.
+        let outcome = backend
+            .prepare_request_with_lineage(
+                &request(source.into()),
+                poe_optimizer_core::build_identity::BuildLineage::from_bytes([54; 16]),
+            )
+            .unwrap();
+        let poe_optimizer_native::PreparationOutcome::Incomplete(report) = &outcome else {
+            panic!("failing selected composition was admitted");
+        };
+        assert_eq!(
+            report.legacy_adapter_error.as_deref(),
+            Some(source_error.as_str())
+        );
+        assert!(!report.issues.is_empty());
+        let converted = outcome.into_ready().err().unwrap();
+        assert_eq!(converted.kind, full_error.kind);
+        assert_eq!(converted.message, source_error);
         let prepared = backend.prepare_controlled_build(catalog, &[]).unwrap();
         let typed_error = prepared.calculate(&source_handle).err().unwrap();
         assert_eq!(typed_error.kind, full_error.kind);

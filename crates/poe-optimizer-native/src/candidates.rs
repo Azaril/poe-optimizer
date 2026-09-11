@@ -310,6 +310,19 @@ impl<C: EvaluationClock> NativeBackend<C> {
         components: &NativeMaceComponents,
         queries: &[MetricQuery],
     ) -> Result<PreparedMaceCandidates, EvaluationError> {
+        self.prepare_controlled_mace_with_lineage(
+            components,
+            queries,
+            crate::preparation::host_lineage()?,
+        )
+    }
+    /// Portable preparation: calculation itself uses no source or host services.
+    pub fn prepare_controlled_mace_with_lineage(
+        &self,
+        components: &NativeMaceComponents,
+        queries: &[MetricQuery],
+        lineage: poe_optimizer_core::build_identity::BuildLineage,
+    ) -> Result<PreparedMaceCandidates, EvaluationError> {
         if components.backend_identity() != &self.identity
             || components.snapshot().identity() != self.data.identity()
         {
@@ -324,7 +337,7 @@ impl<C: EvaluationClock> NativeBackend<C> {
         };
         // Full prepare shares query validation and exact parser behavior with
         // baseline/finalist execution. It performs no build calculation here.
-        let baseline = self.prepare(&request)?;
+        let baseline = self.prepare_with_lineage(&request, lineage)?;
         let profile::NativeInput::Mace(scenario) = baseline.profile.input else {
             return Err(contract(
                 "Controlled Mace preparation requires the native Mace profile",

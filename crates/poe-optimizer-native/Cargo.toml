@@ -14,3 +14,7 @@ roxmltree = "0.21"
 serde = { version = "1", features = ["derive"] }
 serde_json = { workspace = true }
 sha2 = "0.10"
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+# Native convenience import only; portable hosts assign lineage explicitly.
+getrandom = "0.4"
