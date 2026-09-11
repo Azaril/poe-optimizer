@@ -8,6 +8,9 @@ use poe_optimizer_data::modifier_parser::{
     ParserCallbackId, ParserFactoryLiteral, ParserNonFinite, ParserTableId, ParserValue,
 };
 use poe_optimizer_data::source_program::{SourceClassId, SourceProgramOwner};
+mod coverage;
+use coverage::Coverage;
+pub use coverage::ProgramTableCoverage;
 use std::{
     collections::{BTreeMap, BTreeSet},
     sync::Arc,
@@ -231,6 +234,7 @@ pub(super) struct Heap<'a> {
     arguments: Vec<Table>,
     tables: Vec<Table>,
     behaviors: BTreeMap<TableRef, TableBehavior>,
+    coverage: BTreeMap<TableRef, Coverage>,
     budget: Budget<'a>,
 }
 impl Heap<'static> {
@@ -240,6 +244,7 @@ impl Heap<'static> {
             arguments: Vec::new(),
             tables: Vec::new(),
             behaviors: BTreeMap::new(),
+            coverage: BTreeMap::new(),
             budget: Budget {
                 limits,
                 used: Usage::Owned(HeapStats::default()),
@@ -290,6 +295,7 @@ impl<'a> Heap<'a> {
             arguments: Vec::new(),
             tables: Vec::new(),
             behaviors: BTreeMap::new(),
+            coverage: BTreeMap::new(),
             budget,
         };
         let values = heap.import(input, false)?;
@@ -297,6 +303,14 @@ impl<'a> Heap<'a> {
     }
     /// Explicitly imported state may be writable; ordinary parser arguments never are.
     pub(super) fn import(&mut self, input: &ProgramValueGraph, writable: bool) -> Result<Vec<V>> {
+        self.import_with_coverage(input, &ProgramTableCoverage::new(), writable)
+    }
+    pub(super) fn import_with_coverage(
+        &mut self,
+        input: &ProgramValueGraph,
+        coverage: &ProgramTableCoverage,
+        writable: bool,
+    ) -> Result<Vec<V>> {
         // Validate every input node, including unreachable tables, before copying.
         self.budget.tables(input.tables.len())?;
         self.budget.values(input.values.len())?;
@@ -348,13 +362,28 @@ impl<'a> Heap<'a> {
                     .map_err(|_| Error::resource("import graph tables"))?,
             )
             .ok_or_else(|| Error::resource("import graph table identity"))?;
+        let coverage = self.import_coverage(input, coverage, writable, offset)?;
         let convert = |v: &ProgramValue| input_value(v, writable, offset);
         let values = input.values.iter().map(convert).collect();
         let mut arguments = Vec::with_capacity(input.tables.len());
-        for source in &input.tables {
+        for (i, source) in input.tables.iter().enumerate() {
+            let id = offset + i as u32 + 1;
+            let reference = if writable {
+                TableRef::Heap(id)
+            } else {
+                TableRef::Argument(id)
+            };
             let mut table = Table::default();
             for (key, value) in &source.entries {
                 let key = Key::read(&convert(key)).expect("validated input key");
+                if coverage
+                    .get(&reference)
+                    .is_some_and(|coverage| coverage.conflicts(&key))
+                {
+                    return Err(Error::input(
+                        "coverage conflicts with a represented input entry",
+                    ));
+                }
                 if table.insert(key, convert(value)).is_some() {
                     return Err(Error::input("duplicate input table key under Lua equality"));
                 }
@@ -366,6 +395,7 @@ impl<'a> Heap<'a> {
         } else {
             self.arguments.extend(arguments);
         }
+        self.coverage.extend(coverage);
         Ok(values)
     }
     pub(super) fn stats(&self) -> HeapStats {
@@ -425,7 +455,7 @@ impl<'a> Heap<'a> {
         {
             return Err(Error::unsupported("unrepresented source class field"));
         }
-        match reference {
+        let value = match reference {
             TableRef::Heap(id) => Ok(self
                 .tables
                 .get(index(id)?)
@@ -464,7 +494,11 @@ impl<'a> Heap<'a> {
                     None => Ok(V::Nil),
                 }
             }
+        }?;
+        if matches!(value, V::Nil) {
+            self.ensure_raw_absence(reference, &key)?;
         }
+        Ok(value)
     }
     pub(super) fn owner(&self) -> &SourceProgramOwner {
         &self.catalog
@@ -503,6 +537,9 @@ impl<'a> Heap<'a> {
         let TableRef::Heap(id) = reference else {
             return Err(Error::unsupported("mutation of a borrowed table"));
         };
+        let deleted = matches!(value, V::Nil);
+        self.prepare_coverage_write(reference, &key, &value)?;
+        let coverage_key = self.coverage.contains_key(&reference).then(|| key.clone());
         let target = self
             .tables
             .get_mut(index(id)?)
@@ -516,6 +553,9 @@ impl<'a> Heap<'a> {
             }
             target.insert(key, value);
         }
+        if let Some(key) = coverage_key {
+            self.coverage_written(reference, key, deleted);
+        }
         Ok(())
     }
     /// Only a unique dense positive-integer boundary is supported. Hash fields,
@@ -523,6 +563,7 @@ impl<'a> Heap<'a> {
     /// positive-integer hole defers rather than assuming a Lua table layout.
     pub(super) fn dense_len(&mut self, table: &V) -> Result<usize> {
         let reference = table_ref(table)?;
+        self.ensure_integer_inventory(reference)?;
         let (count, max) = match reference {
             TableRef::Heap(id) | TableRef::Argument(id) => {
                 let table = if matches!(reference, TableRef::Heap(_)) {
@@ -578,6 +619,7 @@ impl<'a> Heap<'a> {
         let mut cursor = 0;
         while cursor < export.references.len() {
             let reference = export.references[cursor];
+            self.ensure_snapshot_coverage(reference)?;
             if self.behaviors.contains_key(&reference)
                 || self.class_for_table(&V::Table(reference)).is_some()
             {

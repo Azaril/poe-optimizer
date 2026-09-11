@@ -1,7 +1,7 @@
 //! One build's persistent state on the shared source VM.
 use super::{
-    ProgramAllocationUsage, ProgramLimits, ProgramRuntimeError as Error, ProgramValueGraph,
-    RuntimeResult as Result, SourceProgramOutput,
+    ProgramAllocationUsage, ProgramLimits, ProgramRuntimeError as Error, ProgramTableCoverage,
+    ProgramValueGraph, RuntimeResult as Result, SourceProgramOutput,
     execute::Run,
     value::{Heap, V},
 };
@@ -41,6 +41,16 @@ impl CompiledSourcePrograms {
         state: &ProgramValueGraph,
         limits: ProgramLimits,
     ) -> Result<(ProgramSession, Vec<SessionValue>)> {
+        self.session_with_coverage(state, &ProgramTableCoverage::new(), limits)
+    }
+    /// Import writable state with explicit table coverage. Unavailable fields
+    /// remain dependency errors; the plain graph must never imply their absence.
+    pub fn session_with_coverage(
+        &self,
+        state: &ProgramValueGraph,
+        coverage: &ProgramTableCoverage,
+        limits: ProgramLimits,
+    ) -> Result<(ProgramSession, Vec<SessionValue>)> {
         let mut session = ProgramSession {
             library: self.clone(),
             heap: Heap::owned(self.catalog().owner(), limits),
@@ -50,7 +60,7 @@ impl CompiledSourcePrograms {
             identity: Arc::new(()),
         };
         session.check_pack(state.values.len())?;
-        let values = session.heap.import(state, true)?;
+        let values = session.heap.import_with_coverage(state, coverage, true)?;
         let handles = session.handles(values)?;
         Ok((session, handles))
     }
@@ -79,8 +89,29 @@ impl ProgramSession {
     /// Import additional immutable argument tables. Existing session aliases and
     /// identities are retained; numerical graph IDs are local to this import.
     pub fn borrow(&mut self, input: &ProgramValueGraph) -> Result<Vec<SessionValue>> {
+        self.borrow_with_coverage(input, &ProgramTableCoverage::new())
+    }
+    /// Import an immutable graph with coverage scoped to this import's table IDs.
+    /// This never widens previously imported tables or changes their identities.
+    pub fn borrow_with_coverage(
+        &mut self,
+        input: &ProgramValueGraph,
+        coverage: &ProgramTableCoverage,
+    ) -> Result<Vec<SessionValue>> {
         self.check_pack(input.values.len())?;
-        let values = self.heap.import(input, false)?;
+        let values = self.heap.import_with_coverage(input, coverage, false)?;
+        self.handles(values)
+    }
+    /// Import additional writable state produced at an explicit lifecycle step.
+    /// All table IDs are local to the supplied graph. Reuse returned handles for
+    /// subsequent calls to retain aliases with the existing live session.
+    pub fn import_with_coverage(
+        &mut self,
+        input: &ProgramValueGraph,
+        coverage: &ProgramTableCoverage,
+    ) -> Result<Vec<SessionValue>> {
+        self.check_pack(input.values.len())?;
+        let values = self.heap.import_with_coverage(input, coverage, true)?;
         self.handles(values)
     }
     /// Return an immutable definition root from this session's retained owner.

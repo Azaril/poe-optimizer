@@ -109,13 +109,14 @@ matching numeric IDs.
 
 The optional `SourceClosureObserver` captures primitive identities before source loading,
 then reads actual Lua closure upvalues and plain captured graphs with bounds and source
-spans. It rejects unknown native callbacks, changed primitive environments and unrepresented
-metatables. Its constructed-class API takes explicit requested classes/methods, complete
+spans. It rejects unknown native callbacks and unrepresented metatables. Captured primitive
+identities and the original string-method environment remain authenticated; ordinary globals
+use the separately observed environment values. Its constructed-class API takes explicit requested classes/methods, complete
 named definition roots, original allocation helper and exact source aliases. It authenticates
 the closed Common protocol, records omitted class fields and captures original callback
 identities without invoking constructors. Callers still establish the source-loading order
 and construction/cache state; observation does not certify numerical effects. Generic
-partial global/build projections are a separate planned boundary below.
+partial global/build projections use the explicit coverage boundary below.
 
 ## Configuration integration
 
@@ -139,14 +140,12 @@ Control methods and parser-service calls need their own source-bound effects and
 The [configuration lifecycle](configuration-preparation.md) remains the integration contract;
 complete build numerical parity is a later, unchanged requirement.
 
-## Next configuration dependency gates (planned)
+## Configuration dependency boundaries
 
-The following contracts are planned dependencies of effective configuration preparation.
-They do not claim that general table coverage, live capture APIs or the corresponding
-numerical effects are implemented or admitted. Existing class-projection checks establish
-only their documented class boundary. Settle concrete API names and serialized forms after
-the source acceptance cases below; retain existing parser artifacts and admissions
-throughout.
+Environment/table coverage is implemented as a generic source-program facility. Live
+mutable capture instances and the source-authenticated parser-service bridge remain planned.
+Structural compilation and successful component execution do not admit a whole configuration
+activation or numerical build. Retain existing parser artifacts and admissions throughout.
 
 ### Environment and table coverage
 
@@ -156,8 +155,15 @@ Unavailable reads stop with an explicit dependency diagnostic; they cannot parti
 truthiness, `or` fallback, type inspection or argument coercion as a synthetic Lua value.
 Enforce this at the shared raw-read boundary so ordinary indexing and proxy helpers agree.
 
-Plan bounded coverage metadata attached to table identity, separately from the existing
-parser graph representation. A complete observed key inventory can prove that an unlisted
+`SourceProgramContext` is an immutable schema-1 sidecar attached to `SourceProgramOwner`,
+separate from `SourceProgramDefinitions` and the legacy parser graph. `new_with_context`
+creates a fresh owner identity; a context cannot be swapped under existing bound handles.
+`SourceTableCoverage` records the complete/selective inventory, known-absent and unavailable
+text/exact-integer keys, and independently unavailable `__index`/`__call` behavior. Bounded
+validation rejects overlap, dangling references and duplicate serialized keys. Generic
+coverage cannot overlap an existing constructed-class descriptor.
+
+Metadata remains attached to table identity. A complete observed key inventory can prove that an unlisted
 key is absent; a selective projection must treat an unlisted key as unavailable unless
 absence was independently established. Known omitted values remain unavailable even when
 the key inventory is complete. Unsupported key types and unknown metatable behavior must
@@ -173,7 +179,15 @@ that presence. Failed reads or writes retain earlier source writes and cumulativ
 A partial table snapshot must retain coverage metadata or reject export through the plain
 graph transport, which has no representation for unavailable values.
 
-Designate an explicit owner-bound root for a projection of the actual original global
+`SourceCaptureContext` selects actual table identities/raw fields and optionally an actual
+global environment. The observer registers all projections before recursion, preserving
+aliases and cycles; it enumerates the complete raw inventory and marks omitted values
+unavailable. Unsupported key domains are rejected. Index and call fallback require separate
+explicit opt-ins and remain unavailable; other unrepresented metamethods are rejected.
+This permits plain raw-field calculations on actual PoB class objects without pretending
+to implement their inherited methods or mix-ins.
+
+The context designates an explicit owner-bound root for the actual original global
 environment. A table root can expose scalar, callback and table values without changing
 legacy root kinds. Global reads can then use the existing indexed-read operations while
 preserving lexical shadowing, source evaluation order and owner identity. A root name alone
@@ -181,7 +195,20 @@ is not evidence that its contents were the original environment. The observer mu
 environment, table and function identities, including original primitive library fields
 and string-method lookup. Bind `new`, `round`, `StripEscapes` and parser helpers through
 observed source callbacks or separately admitted source protocols; their names cannot
-select substitutes. Unrepresented global writes or rebinding remain explicit frontiers.
+select substitutes. Ordinary globals may have been rebound at observation time; their actual
+captured values determine execution. Captured primitive function identity and the original
+string metatable/lookup are verified separately. Constructed-class capture still verifies
+the primitive globals required by its closed Common host protocol. Runtime global writes
+and dynamic environment iterator invocation remain explicit frontiers.
+
+`session_with_coverage` imports writable state, `borrow_with_coverage` imports immutable
+arguments, and `import_with_coverage` admits fresh writable producer results. Transport table
+IDs are local to each import; reuse opaque handles to retain cross-call identity. Private
+writes resolve unavailable values and deletions establish raw absence without mutating the
+shared owner. Missing ordinary reads with unknown `__index` fail; raw absence still yields
+nil. Unknown `__call` fails at invocation after argument effects. Safe snapshots require
+complete reachable coverage and no unavailable index/call behavior. Resource limits include
+coverage storage and failed imports.
 
 ### Live controls and captures
 
@@ -200,6 +227,31 @@ repeated callback identity across calls. A handle from another owner or session 
 before its state can be used. The source bodies of control methods and notifications need
 their own admission; no-op controls or per-setting Rust handlers cannot establish it.
 
+The first live-capture gate can execute already-constructed original functions without
+first lowering their enclosing constructors. `EditControl.lua:110–115` defines
+`SetPlaceholder(self, text, notify)`: write the string placeholder, then conditionally call
+`self.changeFunc(self.placeholder, true)` with two arguments and no implicit receiver.
+The numeric closure at `ConfigTab.lua:315–324` captures the ConfigTab instance and the
+current option descriptor. Both complete bodies are individually lowerable; general native
+construction still needs nested-function creation and the preceding constructor lifecycle.
+
+Represent a session closure as a distinct identity referencing shared compiled code and
+ordered capture-cell references. Authenticate its complete source occurrence, actual function
+and environment identities, slot order and cell/table identities from one construction/state
+observation. Observe cell sharing; equal capture values do not prove shared cells. Do not
+expose an unchecked replacement of immutable upvalues by name. Preserve the captured
+ConfigTab object while resolving the currently active set at invocation time. A direct
+method test does not admit inherited dispatch: projected controls still have unavailable
+`__index`; copying inherited methods into fake raw fields would change source semantics.
+
+Acceptance should include multiple controls sharing ConfigTab state, repeated notifications
+after a set switch, false/nil notification avoiding an unavailable callback, Lua numeric
+conversion edge cases, foreign-session/cell rejection and staged failure effects. Failed
+string conversion precedes the placeholder write; callback failure follows it. The original
+non-placeholder branch also writes input before `AddUndoState`/`BuildModList` and only sets
+`buildFlag` after those calls. Preserve the whole branch even while its later consumer is
+unsupported.
+
 ### Parser results and explicit effects
 
 The parser service requires an explicit source-bound bridge into the same preparation
@@ -216,8 +268,12 @@ failure behavior before admitting custom modifiers and generated quest callbacks
 
 ### Resume and acceptance cases
 
-Start with the complete original `ConfigTab.UpdateLevel` over an authenticated environment
-projection and one session state graph. Then establish live notification captures before
+The first consumer gate now compares complete original `ConfigTab.UpdateLevel` using an
+authenticated environment projection and actual live entry-state graphs. All five originals
+exercise direct and boss-callback calls in both initial and saved passes (20 paired actual
+calls), followed by continuing writes/source failures and branch-dependent unavailable state.
+The test producer is bounded and explicit; it is not production configuration preparation.
+Establish live notification captures next, before
 running the complete ordered defaults/saved-activation lifecycle. Keep the five-build
 structural matrix and the Twister/Skeletal Sniper pairing as coverage, not runtime presets.
 The complete ConfigOptions callback inventory should determine later dependency work.

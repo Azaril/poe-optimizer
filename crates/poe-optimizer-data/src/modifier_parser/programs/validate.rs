@@ -265,6 +265,13 @@ impl Check<'_> {
                     }
                     match source {
                         ParserProgramIntrinsicSource::OriginalGlobal => {
+                            if self.owner.has_environment() {
+                                return Err(self.fail(
+                                    ParserProgramErrorKind::Binding,
+                                    None,
+                                    "original-global binding bypasses explicit source environment",
+                                ));
+                            }
                             let Some(path) = operation.global_path() else {
                                 return Err(self.fail(
                                     ParserProgramErrorKind::Binding,

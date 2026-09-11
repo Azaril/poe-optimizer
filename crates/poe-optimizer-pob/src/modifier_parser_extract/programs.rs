@@ -107,6 +107,7 @@ fn parser_bindings(constructor: ParserCallbackId) -> LoweringBindings {
         .into(),
         intrinsics: [(constructor, ParserProgramIntrinsic::CreateMod)].into(),
         implicit_self: false,
+        environment: None,
         standalone_calls: false,
     }
 }

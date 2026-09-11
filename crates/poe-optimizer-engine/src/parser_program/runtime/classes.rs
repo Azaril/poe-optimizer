@@ -185,6 +185,7 @@ impl Heap<'_> {
                 }
             }
             None => {
+                self.ensure_index_fallback(table)?;
                 if let Some(id) = self.class_for_table(table) {
                     let class = self.owner().class(id).expect("known definition class");
                     if key

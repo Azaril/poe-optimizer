@@ -47,8 +47,10 @@ impl SourceProgramExtraction {
 /// IR as the modifier parser. The owner supplies explicit named definition roots
 /// and captured intrinsic identities. Familiar game names and C function labels
 /// cannot introduce bindings absent from that owner. Standard global primitives
-/// retain the language's declared `OriginalGlobals` environment contract; the
-/// source-construction adapter must authenticate that contract independently.
+/// retain the language's declared `OriginalGlobals` contract without an explicit
+/// environment. With an observed environment root, every ordinary global resolves
+/// through that root, including familiar primitive and named-definition names.
+/// The source-construction adapter authenticates the selected contract.
 ///
 /// Source files must exactly match the owner inventory. Unsupported functions are
 /// retained as diagnostics and removed transitively from executable call closures.
@@ -70,6 +72,7 @@ pub fn lower_from_sources(
     let mut bindings = LoweringBindings {
         implicit_self: true,
         standalone_calls: true,
+        environment: owner.environment_root(),
         ..LoweringBindings::default()
     };
     for root in owner.roots() {

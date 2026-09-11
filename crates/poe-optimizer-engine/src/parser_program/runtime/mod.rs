@@ -12,7 +12,9 @@ use poe_optimizer_data::modifier_parser::{
     ModifierParserCatalog, ParserCallbackId, ParserProgramLocation,
 };
 use poe_optimizer_data::source_program::SourceProgramOwner;
-pub use value::{ProgramTable, ProgramTableId, ProgramValue, ProgramValueGraph};
+pub use value::{
+    ProgramTable, ProgramTableCoverage, ProgramTableId, ProgramValue, ProgramValueGraph,
+};
 
 #[derive(Debug, Clone, Copy)]
 pub struct ProgramLimits {

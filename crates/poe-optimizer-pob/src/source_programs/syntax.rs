@@ -172,6 +172,9 @@ impl<'a, 'b> Lowerer<'a, 'b> {
         Ok((self.bindings.len() - 1) as u16)
     }
     fn global_binding(&mut self, operation: ParserProgramIntrinsic) -> LowerResult<u16> {
+        if self.authorization.environment.is_some() {
+            return Err("global intrinsic shortcut bypasses observed environment".into());
+        }
         let path = operation
             .global_path()
             .ok_or("intrinsic has no global source binding")?;
@@ -746,6 +749,31 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                             );
                         }
                         Term::Value(info)
+                    } else if let Some(root) = self.authorization.environment {
+                        self.budget.bytes(name.len())?;
+                        let table = self.node(
+                            ParserProgramExprKind::NamedDefinition { root },
+                            start,
+                            self.end(),
+                            1,
+                        )?;
+                        let key = self.node(
+                            ParserProgramExprKind::Literal {
+                                value: ParserFactoryLiteral::Text(name.into()),
+                            },
+                            start,
+                            self.end(),
+                            1,
+                        )?;
+                        Term::Value(self.node(
+                            ParserProgramExprKind::Get {
+                                table: Box::new(table.value),
+                                key: Box::new(key.value),
+                            },
+                            start,
+                            self.end(),
+                            2,
+                        )?)
                     } else {
                         let root = self.authorization.roots.get(name).copied();
                         if let Some(root) = root {

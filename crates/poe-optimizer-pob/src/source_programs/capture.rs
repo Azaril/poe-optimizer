@@ -13,12 +13,16 @@ use poe_optimizer_data::{
 use std::collections::BTreeMap;
 
 mod classes;
+mod context;
 pub use classes::{ObservedSourceClasses, SourceClassCaptureRequest, SourceClassSelection};
+pub use context::{
+    ObservedSourceContext, SourceCaptureContext, SourceEnvironmentSelection, SourceTableSelection,
+};
 
 const MAX_VALUES: usize = 1_000_000;
 const MAX_TABLES: usize = 100_000;
 const MAX_CALLBACKS: usize = 20_000;
-const MAX_TEXT_BYTES: usize = 64 * 1024 * 1024;
+const MAX_TEXT_BYTES: usize = 16 * 1024 * 1024;
 
 /// Original primitive identities retained before authenticated source runs.
 /// Fresh-host ownership is an adapter contract, not inferred from function names.
@@ -139,7 +143,36 @@ impl SourceClosureObserver {
         source: ItemLoadingSource,
         roots: &BTreeMap<String, Function>,
     ) -> Result<ObservedSourceClosures> {
-        self.verify(lua)?;
+        let observed = self.observe_with_context(
+            lua,
+            sources,
+            source,
+            roots,
+            SourceCaptureContext::default(),
+        )?;
+        Ok(ObservedSourceClosures {
+            definitions: observed
+                .owner
+                .definitions()
+                .expect("standalone observed owner")
+                .clone(),
+            callbacks: observed.callbacks,
+        })
+    }
+    /// Capture explicit projections and, optionally, the actual global environment.
+    /// Global values are then dispatched from their captured table, so names may
+    /// have changed since startup. Captured primitive identities and the original
+    /// string-method contract remain authenticated independently.
+    pub fn observe_with_context(
+        &self,
+        lua: &Lua,
+        sources: &BTreeMap<String, String>,
+        source: ItemLoadingSource,
+        roots: &BTreeMap<String, Function>,
+        context: SourceCaptureContext,
+    ) -> Result<ObservedSourceContext> {
+        self.verify_capture_context(lua, context.environment.is_some())?;
+        context::validate_source_aliases(sources, &context.source_names)?;
         if roots.len() > 4096
             || sources.len() > MAX_SOURCE_FILES
             || sources.len() != source.files.len()
@@ -170,8 +203,11 @@ impl SourceClosureObserver {
             intrinsics: BTreeMap::new(),
             values: 0,
             text_bytes: 0,
-            source_names: &BTreeMap::new(),
+            source_names: &context.source_names,
+            context: SourceProgramContext::default(),
         };
+        graph.register_projections(&context)?;
+        graph.capture_projections(&context)?;
         let mut callbacks = BTreeMap::new();
         for (name, function) in roots {
             graph.text(name.len())?;
@@ -186,21 +222,62 @@ impl SourceClosureObserver {
             };
             callbacks.insert(name.clone(), id);
         }
+        let mut definition_roots = Vec::new();
+        graph.capture_environment(&context, &mut definition_roots)?;
         let definitions = SourceProgramDefinitions {
             schema_version: SOURCE_PROGRAM_DEFINITIONS_SCHEMA_VERSION,
             source,
             tables: graph.tables,
             callbacks: graph.callbacks,
-            roots: vec![],
+            roots: definition_roots,
             intrinsics: graph.intrinsics,
         };
-        let owner = SourceProgramOwner::new(definitions.clone()).map_err(error)?;
+        let owner = SourceProgramOwner::new_with_context(definitions, None, graph.context)
+            .map_err(error)?;
         validate_sources(sources, &owner)?;
-        self.verify(lua)?;
-        Ok(ObservedSourceClosures {
-            definitions,
-            callbacks,
-        })
+        self.verify_capture_context(lua, context.environment.is_some())?;
+        Ok(ObservedSourceContext { owner, callbacks })
+    }
+    fn verify_capture_context(&self, lua: &Lua, explicit_environment: bool) -> Result<()> {
+        if !explicit_environment {
+            return self.verify(lua);
+        }
+        if lua.globals().to_pointer() != self.globals.to_pointer() {
+            return Err(error("source observer belongs to another Lua host"));
+        }
+        plain(&self.globals, "global environment")?;
+        let actual: Table = self.get_metatable.call("")?;
+        if actual.to_pointer() != self.string_metatable.to_pointer() {
+            return Err(error("source observer string metatable was rebound"));
+        }
+        plain(&actual, "string metatable")?;
+        let index: Table = actual.raw_get("__index")?;
+        if index.to_pointer() != self.libraries["string"].to_pointer() {
+            return Err(error("source observer string method index was rebound"));
+        }
+        for entry in actual.pairs::<Value, Value>() {
+            let (key, _) = entry?;
+            if !matches!(key, Value::String(key) if key.as_bytes().as_ref()==b"__index") {
+                return Err(error(
+                    "source observer string metatable has an unmodeled field",
+                ));
+            }
+        }
+        for (operation, original) in &self.primitives {
+            if matches!(
+                operation,
+                SourceProgramIntrinsic::StringGsub
+                    | SourceProgramIntrinsic::StringGmatch
+                    | SourceProgramIntrinsic::StringMatch
+            ) {
+                let path = operation.global_path().expect("string primitive");
+                let actual: Function = self.libraries["string"].raw_get(path[1])?;
+                if actual.to_pointer() != original.to_pointer() {
+                    return Err(error("source observer original string method was rebound"));
+                }
+            }
+        }
+        Ok(())
     }
     fn verify(&self, lua: &Lua) -> Result<()> {
         let globals = lua.globals();
@@ -289,6 +366,7 @@ struct Graph<'a> {
     intrinsics: BTreeMap<SourceCallbackId, SourceProgramIntrinsic>,
     values: usize,
     text_bytes: usize,
+    context: SourceProgramContext,
 }
 impl Graph<'_> {
     fn text(&mut self, count: usize) -> Result<()> {
@@ -328,11 +406,13 @@ impl Graph<'_> {
         })
     }
     fn table(&mut self, table: Table, depth: usize) -> Result<SourceValue> {
-        plain(&table, "captured table")?;
         let pointer = table.to_pointer() as usize;
         if let Some(id) = self.seen_tables.get(&pointer) {
+            // Only preflighted projections/classes or already checked plain tables
+            // enter this map; explicit raw __index snapshots retain their aliases.
             return Ok(SourceValue::Table(*id));
         }
+        plain(&table, "captured table")?;
         if self.tables.len() >= MAX_TABLES {
             return Err(error("source closure table count bound"));
         }

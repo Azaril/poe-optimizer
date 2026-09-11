@@ -4,6 +4,6 @@ pub use crate::parser_program::{
     CompiledParserProgram as CompiledSourceProgram, CompiledProgramBinding, CompiledSourcePrograms,
     ProgramAllocationUsage, ProgramCompileError, ProgramInstruction, ProgramLimits,
     ProgramOperation, ProgramRuntimeError, ProgramRuntimeErrorKind, ProgramSession, ProgramTable,
-    ProgramTableId, ProgramValue, ProgramValueGraph, RuntimeResult, SessionValue,
-    SourceProgramOutput,
+    ProgramTableCoverage, ProgramTableId, ProgramValue, ProgramValueGraph, RuntimeResult,
+    SessionValue, SourceProgramOutput,
 };

@@ -336,3 +336,79 @@ fn omitted_class_fields_and_requested_methods_are_bounded_before_graph_growth() 
             .contains("selected class method count bound")
     );
 }
+
+#[test]
+fn class_context_keeps_projected_aliases_and_the_closed_protocol_global_contract() {
+    let f = fixture(|text| text, COMMON);
+    let env = f.lua.globals();
+    let context = SourceCaptureContext {
+        projections: vec![SourceTableSelection {
+            table: env.clone(),
+            fields: ["Data".into(), "_G".into()].into(),
+            indexed: BTreeSet::new(),
+            allow_index_fallback: false,
+            allow_call_fallback: false,
+        }],
+        environment: Some(SourceEnvironmentSelection {
+            table: env.clone(),
+            root_name: "Globals".into(),
+        }),
+        ..SourceCaptureContext::default()
+    };
+    let observed = f
+        .observer
+        .observe_classes_with_context(
+            &f.lua,
+            &f.sources,
+            f.metadata.clone(),
+            f.request.clone(),
+            context.clone(),
+        )
+        .unwrap();
+    let owner = observed.owner();
+    let environment = owner.bind_environment().unwrap().unwrap();
+    let data = owner
+        .bind_root(SourceProgramDefinitionRoot::Named(
+            owner.root_id("Data").unwrap(),
+        ))
+        .unwrap();
+    assert_eq!(
+        environment.table().fields["Data"],
+        SourceValue::Table(data.table_id())
+    );
+    assert_eq!(
+        environment.table().fields["_G"],
+        SourceValue::Table(environment.table_id())
+    );
+    assert!(owner.classes().is_some());
+    let original: Function = env.raw_get("rawget").unwrap();
+    env.raw_set("rawget", env.raw_get::<Function>("type").unwrap())
+        .unwrap();
+    assert!(
+        f.observer
+            .observe_classes_with_context(
+                &f.lua,
+                &f.sources,
+                f.metadata.clone(),
+                f.request.clone(),
+                context.clone()
+            )
+            .is_err()
+    );
+    env.raw_set("rawget", original).unwrap();
+    let mut overlap = context;
+    overlap.projections.push(SourceTableSelection {
+        table: f.request.classes[0].table.clone(),
+        fields: BTreeSet::new(),
+        indexed: BTreeSet::new(),
+        allow_index_fallback: false,
+        allow_call_fallback: false,
+    });
+    assert!(
+        f.observer
+            .observe_classes_with_context(&f.lua, &f.sources, f.metadata, f.request, overlap)
+            .unwrap_err()
+            .to_string()
+            .contains("class table cannot also")
+    );
+}

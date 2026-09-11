@@ -636,6 +636,10 @@ impl Run<'_, '_, '_> {
             {
                 Err(Error::unsupported("class instance mix-in call"))
             }
+            V::Table(_) => {
+                self.heap.ensure_call_fallback(&target)?;
+                Err(Error::source("attempt to call a non-function value"))
+            }
             _ => Err(Error::source("attempt to call a non-function value")),
         }
     }

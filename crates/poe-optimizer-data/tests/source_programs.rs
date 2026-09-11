@@ -864,3 +864,65 @@ fn parser_owner_rejects_new_function_value_and_intrinsic_forms_without_changing_
         original
     );
 }
+
+#[test]
+fn explicit_environment_forbids_unobserved_global_intrinsic_bypasses() {
+    let mut p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::Literal {
+            value: ParserFactoryLiteral::Nil,
+        },
+    );
+    p.bindings.push(SourceProgramBinding::Intrinsic {
+        operation: SourceProgramIntrinsic::ToNumber,
+        source: SourceProgramIntrinsicSource::OriginalGlobal,
+    });
+    // Existing authored owners, with or without unrelated coverage, stay valid.
+    SourceProgramCatalog::new(
+        programs(vec![p.clone()]),
+        SourceProgramOwner::new(definitions()).unwrap(),
+    )
+    .unwrap();
+    SourceProgramCatalog::new(
+        programs(vec![p.clone()]),
+        SourceProgramOwner::new_with_context(definitions(), None, SourceProgramContext::default())
+            .unwrap(),
+    )
+    .unwrap();
+    let owner = SourceProgramOwner::new_with_context(
+        definitions(),
+        None,
+        SourceProgramContext {
+            environment: Some(SourceProgramRootId(1)),
+            ..SourceProgramContext::default()
+        },
+    )
+    .unwrap();
+    assert!(
+        SourceProgramCatalog::new(programs(vec![p]), owner.clone())
+            .unwrap_err()
+            .message
+            .contains("bypasses explicit")
+    );
+    let p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::NamedDefinition {
+            root: SourceProgramRootId(1),
+        },
+    );
+    SourceProgramCatalog::new(programs(vec![p]), owner).unwrap();
+
+    let original = bundled_snapshot().unwrap().modifier_parser().clone();
+    let parser = SourceProgramOwner::from_parser(original.clone());
+    assert!(parser.context().is_none());
+    assert!(parser.environment_root().is_none());
+    assert!(parser.bind_environment().unwrap().is_none());
+    assert!(parser.table_coverage(SourceTableId(1)).is_none());
+    let p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::NamedDefinition {
+            root: SourceProgramRootId(1),
+        },
+    );
+    assert!(ParserProgramCatalog::new(programs(vec![p]), original).is_err());
+}

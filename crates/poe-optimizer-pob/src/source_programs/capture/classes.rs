@@ -1,6 +1,6 @@
 //! Production observation of explicitly requested constructed Common classes.
 //! Class projections are intentional and enumerate all omitted string fields;
-//! ordinary captured tables and named definitions are always captured completely.
+//! ordinary tables are complete unless an explicit capture context selects them.
 use super::*;
 use std::collections::BTreeSet;
 mod protocol;
@@ -50,6 +50,24 @@ impl SourceClosureObserver {
         source: ItemLoadingSource,
         request: SourceClassCaptureRequest,
     ) -> Result<ObservedSourceClasses> {
+        self.observe_classes_with_context(
+            lua,
+            sources,
+            source,
+            request,
+            SourceCaptureContext::default(),
+        )
+    }
+    /// Observe classes plus explicit raw-table/environment projections. The closed
+    /// Common protocol still requires its original global primitive bindings.
+    pub fn observe_classes_with_context(
+        &self,
+        lua: &Lua,
+        sources: &BTreeMap<String, String>,
+        source: ItemLoadingSource,
+        mut request: SourceClassCaptureRequest,
+        context: SourceCaptureContext,
+    ) -> Result<ObservedSourceClasses> {
         self.verify(lua)?;
         if request.classes.len() > 512
             || request.callbacks.len() > 4096
@@ -58,16 +76,21 @@ impl SourceClosureObserver {
         {
             return Err(error("constructed source capture request count bound"));
         }
-        for (name, path) in &request.source_names {
-            if name.is_empty()
-                || name.len() > 4096
-                || name.contains('\0')
-                || !sources.contains_key(path)
-                || sources.contains_key(name) && name != path
+        context::validate_source_aliases(sources, &context.source_names)?;
+        for (name, path) in &context.source_names {
+            if request
+                .source_names
+                .get(name)
+                .is_some_and(|existing| existing != path)
             {
-                return Err(error("invalid or shadowing explicit source alias"));
+                return Err(error("conflicting explicit source aliases"));
             }
+            if !request.source_names.contains_key(name) && request.source_names.len() >= 4096 {
+                return Err(error("source alias count bound"));
+            }
+            request.source_names.insert(name.clone(), path.clone());
         }
+        context::validate_source_aliases(sources, &request.source_names)?;
         // Preflight bytes and declared construction spans before graph allocation.
         let empty = SourceProgramOwner::new(SourceProgramDefinitions {
             schema_version: SOURCE_PROGRAM_DEFINITIONS_SCHEMA_VERSION,
@@ -90,7 +113,9 @@ impl SourceClosureObserver {
             intrinsics: BTreeMap::new(),
             values: 0,
             text_bytes: 0,
+            context: SourceProgramContext::default(),
         };
+        graph.register_projections(&context)?;
         let policy = protocol::extract(&mut graph, &request.allocation)?;
         let common: Table = lua.globals().raw_get("common")?;
         plain(&common, "Common module")?;
@@ -128,6 +153,14 @@ impl SourceClosureObserver {
             {
                 return Err(error("duplicate requested class identity"));
             }
+            if graph
+                .seen_tables
+                .contains_key(&(selection.table.to_pointer() as usize))
+            {
+                return Err(error(
+                    "class table cannot also be a generic table projection",
+                ));
+            }
             let table_id = SourceTableId(graph.tables.len() as u32 + 1);
             graph
                 .seen_tables
@@ -147,6 +180,7 @@ impl SourceClosureObserver {
             names.push(name);
             selected.push(methods);
         }
+        graph.capture_projections(&context)?;
         let mut descriptors = Vec::new();
         for (index, selection) in request.classes.iter().enumerate() {
             let table = &selection.table;
@@ -330,6 +364,7 @@ impl SourceClosureObserver {
             };
             roots.push(SourceProgramRoot { name, table });
         }
+        graph.capture_environment(&context, &mut roots)?;
         let definitions = SourceProgramDefinitions {
             schema_version: SOURCE_PROGRAM_DEFINITIONS_SCHEMA_VERSION,
             source,
@@ -338,13 +373,14 @@ impl SourceClosureObserver {
             roots,
             intrinsics: graph.intrinsics,
         };
-        let owner = SourceProgramOwner::new_with_classes(
+        let owner = SourceProgramOwner::new_with_context(
             definitions,
-            SourceClassDefinitions {
+            Some(SourceClassDefinitions {
                 schema_version: SOURCE_CLASS_DEFINITIONS_SCHEMA_VERSION,
                 source: policy,
                 classes: descriptors,
-            },
+            }),
+            graph.context,
         )
         .map_err(error)?;
         validate_sources(sources, &owner)?;

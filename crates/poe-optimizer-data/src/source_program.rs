@@ -10,8 +10,10 @@ use std::{
     sync::Arc,
 };
 mod classes;
+mod context;
 pub(crate) mod graph;
 pub use classes::*;
+pub use context::*;
 
 // Public neutral names deliberately re-export the same graph and IR types. Old
 // parser names and their wire formats remain valid, including tuple constructors.
@@ -155,6 +157,7 @@ enum OwnerStorage {
     Standalone {
         definitions: Arc<SourceProgramDefinitions>,
         classes: Option<Arc<SourceClassDefinitions>>,
+        context: Option<Arc<SourceProgramContext>>,
     },
 }
 #[derive(Debug, Clone)]
@@ -165,6 +168,7 @@ impl SourceProgramOwner {
         Ok(Self(OwnerStorage::Standalone {
             definitions: Arc::new(data),
             classes: None,
+            context: None,
         }))
     }
     /// Deserializes bounded untrusted authoring data; no source authentication or
@@ -452,6 +456,9 @@ pub(crate) trait ProgramOwnerView {
     fn source(&self) -> &ItemLoadingSource;
     fn has_definition(&self, root: SourceProgramDefinitionRoot) -> bool;
     fn intrinsic(&self, id: SourceCallbackId) -> Option<SourceProgramIntrinsic>;
+    fn has_environment(&self) -> bool {
+        false
+    }
     fn supports_dynamic_methods(&self) -> bool {
         false
     }
@@ -460,6 +467,9 @@ pub(crate) trait ProgramOwnerView {
     }
 }
 impl ProgramOwnerView for SourceProgramOwner {
+    fn has_environment(&self) -> bool {
+        self.environment_root().is_some()
+    }
     fn supports_dynamic_calls(&self) -> bool {
         self.parser().is_none()
     }

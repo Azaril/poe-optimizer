@@ -18,7 +18,66 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-**Current checkpoint: R2e constructed callback capture and configuration breadth.**
+**Current checkpoint: R2f explicit environments and live table coverage.**
+Standalone source owners now retain an immutable schema-1 context sidecar with an optional
+bound environment root and per-table coverage. Complete and selective inventories separate
+present values, known absence and unavailable values. The shared engine applies this to
+read-only definitions/arguments and private writable session imports, preserving aliases,
+scoped identities, later writes/deletions and cumulative resource charges. Raw iteration
+and length require sufficient evidence; plain snapshots reject incomplete or behavior-bearing
+graphs. Legacy parser serialization, capability policy and the generated package are unchanged.
+
+Production PoB observation now captures explicit projections of actual tables and the actual
+global environment with verified source aliases. Omitted raw keys stay unavailable. Global
+lookup/calls use that environment, respecting lexical shadowing and observed function values;
+string methods retain their separately authenticated original metatable contract. Closed
+Common class protocols still require their original primitive bindings. Actual class instances
+exposed a needed boundary: `__call` mix-ins coexist with `__index`. Each has an explicit opt-in
+unavailable state; missing inherited reads and attempted mix-ins fail rather than inventing
+behavior. Other unrepresented metamethods remain rejected. Dynamic environment iterators and
+mutable session closure captures remain explicit frontiers.
+
+The complete original `ConfigTab.UpdateLevel` now runs through the shared Rust VM with
+injected `data.misc.MaxEnemyLevel` and actual entry-state projections from all five originals.
+The oracle binds every call to its observed lifecycle event: one direct `BuildModList` call
+and one `enemyIsBoss` callback call in each initial/saved pass, **20 paired actual calls**.
+It also compares **65 continuing cases** (including 15 source errors), selected-set aliases,
+the ConfigTab/build cycle and **10 branch-dependent missing-producer cases**. An unavailable
+character level does not block an explicit enemy-level override; consuming it fails without
+publishing an assignment. Original state is restored and checked after the test. These are
+source-consumer tests using an explicitly bounded test-only live-state producer, not a
+production adapter that injects frozen PoB state. Eight compiled programs comprise the one
+original calculation and seven test probes; the probes do not replace the calculation.
+
+Validation passes 44 focused data tests, 55 engine tests, 40 lowerer/capture tests, seven
+source integration tests, eight default CLI tests and sixteen native-only CLI tests. Fresh
+extraction reproduces all 29 package sections. Strict workspace/native-only lint, formatting,
+WASM library compilation and native runtime dependency isolation pass. Broad engine/native
+numerical suites were not rerun; their earlier results remain historical. Commands/results
+are recorded in `runs/r2f-terminal-checks.json`, the three agent ledgers and the final
+`runs/r2f-integration-validation.json` manifest. Publication is recorded separately in
+`runs/r2f-publication.json`. The source pin, original inputs/fixtures, lockfile and schema-29
+package remain unchanged.
+Complete native original-build evaluations remain **0/5**. Production configuration
+preparation still reports its authored-prefix frontier; this component check does not
+complete effective activation or the R3/R5 numerical gates.
+
+**Resume point:** bind original control methods and notifications to mutable session capture
+cells/closure instances, beginning with `EditControl.SetPlaceholder` and its actual numeric
+`changeFunc`. Preserve selected-set aliases, notifying/non-notifying behavior, closure
+identity and earlier writes on failure. The complete already-constructed method and numeric
+closure can be the first gate; their enclosing constructors still need native closure creation.
+Use distinct session closure identities and ordered capture-cell references authenticated
+against one actual construction/state observation, not arbitrary replacement of named upvalues.
+Observe cell sharing and keep inherited control dispatch explicit. Use the now-proven environment/coverage contract
+instead of copying a live ConfigTab into immutable definitions. Then bind source-authenticated
+parser-service results as fresh writable session graphs and execute complete default/saved
+activation on Twister and Skeletal Sniper together. Continue root/provider and actor/action
+preparation through the shared production path; retain all five originals, mapping variants,
+whole-build parity and joint-search requirements. UI autocomplete remains a derived view of
+loaded definitions; DuckDB stays deferred under the [storage assessment](definition-storage.md).
+
+**Previous checkpoint: R2e constructed callback capture and configuration breadth.**
 The shared standalone engine now supports callable values and source-compatible
 `math.min`, `math.max`, scalar `tostring` and bounded `string.match`. Call targets are
 retained before argument effects, and general calls do not prepend a receiver. Legacy
@@ -65,18 +124,6 @@ schema-29 package, its 29 sections, caller builds, original fixtures, lockfile a
 PoB source remain unchanged. Complete native supplied-build evaluations remain **0/5**;
 the production preparation path still reports the authored configuration prefix and its
 unresolved effective-activation dependencies.
-
-**Resume point:** add the planned owner/session-bound environment coverage seam and pair
-complete original `ConfigTab.UpdateLevel` with injected definitions and live shared state.
-Distinguish known absence from unavailable fields for lookup, iteration and writes; do not
-represent a missing producer as Lua nil. Then bind original control methods and their live
-captured callbacks, including notifying/non-notifying placeholder changes and selected-set
-aliases. Add source-bound parser-service result ownership before admitting quest/custom
-modifiers. Use the callback inventory and the Twister/Skeletal Sniper pair to execute
-complete default/saved activation, then continue root/provider and actor/action preparation.
-Keep the five originals, mapping variants, whole-build numerical parity and joint-search
-requirements in scope. UI autocomplete remains a derived view of loaded definitions;
-DuckDB is deferred under the [storage assessment](definition-storage.md).
 
 **Previous checkpoint: R2d source-bound class and modifier-store methods.**
 Standalone owners now retain separate injected class/proxy descriptors, actual method and

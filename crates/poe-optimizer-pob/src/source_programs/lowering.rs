@@ -5,7 +5,9 @@ pub(super) use crate::game_data::hash;
 pub(super) use mlua::Lua;
 pub(super) use poe_optimizer_data::item_loading::ItemSourceSpan;
 pub(super) use poe_optimizer_data::modifier_parser::*;
-pub(super) use poe_optimizer_data::source_program::SourceProgramDefinitionRoot;
+pub(super) use poe_optimizer_data::source_program::{
+    SourceProgramDefinitionRoot, SourceProgramRootId,
+};
 pub(super) use std::collections::{BTreeMap, BTreeSet};
 
 /// Bindings authenticated by the source-construction adapter. Names alone never
@@ -15,6 +17,8 @@ pub(crate) struct LoweringBindings {
     pub(crate) roots: BTreeMap<String, SourceProgramDefinitionRoot>,
     pub(crate) intrinsics: BTreeMap<ParserCallbackId, ParserProgramIntrinsic>,
     pub(crate) implicit_self: bool,
+    /// Actual source globals; when present all ordinary names resolve here.
+    pub(crate) environment: Option<SourceProgramRootId>,
     /// Standalone owners may use receiver lookup and additional language primitives.
     /// Parser extraction keeps its separately reviewed capability inventory unchanged.
     pub(crate) standalone_calls: bool,

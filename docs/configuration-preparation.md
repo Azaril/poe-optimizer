@@ -125,16 +125,20 @@ numerical gates in the [real-build rollout](real-build-rollout.md).
 The real configuration callbacks require an explicit distinction between a missing field
 and an unrepresented field. `BuildModList` branches on `varData.apply`; boss presets branch
 on optional definition fields. Projecting either graph by dropping unknown values would
-silently skip effects. The planned [environment and session binding seam](shared-source-programs.md)
+silently skip effects. The implemented [environment and session coverage seam](shared-source-programs.md)
 therefore makes known absence and unavailable state distinct at the access boundary,
 without adding an artificial Lua value. Complete ordinary tables continue to be captured
 as complete tables. A deliberately partial graph must carry explicit coverage, including
 iteration/length and mutable-write rules.
 
-First exercise original `UpdateLevel` against an authenticated read-only environment and
-one live configuration/build graph. Preserve selected-set/input aliases, placeholder
-precedence, the configuration/build cycle and source clamping order. Then extend live
-control state: original `EditControl.SetPlaceholder` optionally invokes `changeFunc`, whose
+The original `UpdateLevel` component now runs against an authenticated read-only environment
+and actual live configuration/build projections. All five originals exercise initial/saved
+direct and boss-callback calls, preserving selected-set/input aliases, placeholder precedence,
+the configuration/build cycle and source clamping order. Continuing writes, source errors
+and branch-dependent missing producers also match or stop at the explicit unavailable
+boundary. The test-only producer does not complete earlier lifecycle stages in production.
+
+Next extend live control state: original `EditControl.SetPlaceholder` optionally invokes `changeFunc`, whose
 closure captures the mutable ConfigTab instance and immutable variable definition. Those
 captures cannot all be copied into a shared read-only definition snapshot. Session-bound
 closure construction/capture identity is a prerequisite, not a handwritten notification

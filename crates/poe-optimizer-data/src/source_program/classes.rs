@@ -577,6 +577,7 @@ impl SourceProgramOwner {
         Ok(Self(OwnerStorage::Standalone {
             definitions: Arc::new(data),
             classes: Some(Arc::new(classes)),
+            context: None,
         }))
     }
     pub fn classes(&self) -> Option<&SourceClassDefinitions> {

@@ -655,3 +655,46 @@ fn modeled_parent_and_constructor_protocols_bind_the_complete_capture_shape() {
         );
     }
 }
+
+#[test]
+fn context_coexists_with_classes_but_cannot_replace_class_projection_semantics() {
+    let (data, classes) = definitions();
+    let context = SourceProgramContext {
+        schema_version: SOURCE_PROGRAM_CONTEXT_SCHEMA_VERSION,
+        environment: Some(SourceProgramRootId(1)),
+        tables: BTreeMap::from([(
+            SourceTableId(3),
+            SourceTableCoverage {
+                inventory: SourceTableInventory::Complete,
+                known_absent: BTreeSet::new(),
+                unavailable: BTreeSet::new(),
+                index_fallback: SourceTableIndexFallback::Nil,
+                call_fallback: SourceTableCallFallback::NonCallable,
+            },
+        )]),
+    };
+    let owner =
+        SourceProgramOwner::new_with_context(data.clone(), Some(classes.clone()), context.clone())
+            .unwrap();
+    assert_eq!(owner.classes(), Some(&classes));
+    assert_eq!(owner.context(), Some(&context));
+    let legacy = SourceProgramOwner::new_with_classes(data.clone(), classes.clone()).unwrap();
+    assert!(legacy.context().is_none());
+    assert!(!legacy.is_same_owner(&owner));
+    let handle = legacy.bind_class(SourceClassId(1)).unwrap();
+    assert_eq!(
+        owner.resolve_class(&handle).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+    for id in [SourceTableId(1), SourceTableId(2)] {
+        let mut bad = context.clone();
+        bad.tables
+            .insert(id, context.tables[&SourceTableId(3)].clone());
+        assert!(
+            SourceProgramOwner::new_with_context(data.clone(), Some(classes.clone()), bad)
+                .unwrap_err()
+                .message
+                .contains("overlaps a source class projection")
+        );
+    }
+}

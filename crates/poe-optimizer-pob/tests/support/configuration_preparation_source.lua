@@ -117,7 +117,11 @@ local function wrap(class, name, configMethod)
 		if name == "ConfigTab" then details = nil end
 		event("enter", class._className .. "." .. name, config, build, details)
 		depth = depth + 1
+		local levelObserver = name == "UpdateLevel" and rawget(_G, "_configuration_source_level_observer")
+		local levelEventId = levelObserver and #trace.events
+		if levelObserver then levelObserver("enter", self, levelEventId) end
 		local result = original(self, ...)
+		if levelObserver then levelObserver("exit", self, levelEventId) end
 		if name == class._className then lifecycle.constructed[name] = true end
 		if name == "Load" then lifecycle.loaded[class._className] = true end
 		build = self.build or build
