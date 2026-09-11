@@ -73,7 +73,7 @@ fn all_captures_are_observed_even_in_unexecuted_branches_and_unknown_values_fail
             "metatable/proxy",
         ),
         (
-            "local unknown=tostring\nreturn function() if false then return unknown(1) end end\n",
+            "local unknown=collectgarbage\nreturn function() if false then return unknown(1) end end\n",
             "builtin has no observed",
         ),
         (

@@ -611,3 +611,256 @@ fn type_and_select_keep_source_bound_builtin_identity() {
         );
     }
 }
+
+fn value_call_program(callee: SourceProgramExpr) -> SourceProgram {
+    let mut p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::Call {
+            call: Box::new(SourceProgramCall {
+                binding: 0,
+                receiver: Some(Box::new(callee)),
+                arguments: SourceProgramValueList::default(),
+            }),
+        },
+    );
+    p.bindings = vec![SourceProgramBinding::DynamicCall {}];
+    p
+}
+#[test]
+fn function_value_calls_retain_explicit_callee_and_separate_capability_without_wire_changes() {
+    let p = value_call_program(expression(SourceProgramExprKind::Get {
+        table: Box::new(expression(SourceProgramExprKind::Capture { upvalue: 0 })),
+        key: Box::new(expression(SourceProgramExprKind::Bytes {
+            value: b"second".to_vec(),
+        })),
+    }));
+    let owner = SourceProgramOwner::new(definitions()).unwrap();
+    let data = programs(vec![p]);
+    let catalog = SourceProgramCatalog::new(data.clone(), owner.clone()).unwrap();
+    assert!(
+        catalog
+            .required_capabilities()
+            .contains(&SourceProgramCapability::DynamicCalls)
+    );
+    assert!(
+        catalog
+            .required_capabilities()
+            .contains(&SourceProgramCapability::RecursiveCalls)
+    );
+    assert!(
+        !catalog
+            .required_capabilities()
+            .contains(&SourceProgramCapability::DynamicMethods)
+    );
+    let bytes = serde_json::to_vec(&data).unwrap();
+    assert_eq!(
+        SourceProgramCatalog::from_bytes(&bytes, owner.clone())
+            .unwrap()
+            .data(),
+        &data
+    );
+    assert!(!catalog.is_bound_to(&SourceProgramOwner::new(definitions()).unwrap()));
+    let mut supported = catalog.required_capabilities().clone();
+    supported.remove(&SourceProgramCapability::DynamicCalls);
+    assert_eq!(
+        catalog.check_capabilities(&supported).unwrap_err().kind,
+        SourceProgramErrorKind::UnsupportedCapability
+    );
+    assert_eq!(
+        serde_json::to_string(&SourceProgramBinding::DynamicCall {}).unwrap(),
+        "{\"kind\":\"dynamic_call\"}"
+    );
+    assert_eq!(
+        serde_json::to_string(&SourceProgramBinding::CapturedCallback {
+            upvalue: 0,
+            callback: SourceCallbackId(2)
+        })
+        .unwrap(),
+        "{\"kind\":\"captured_callback\",\"upvalue\":0,\"callback\":2}"
+    );
+    assert_eq!(
+        serde_json::to_string(&SourceProgramCall {
+            binding: 0,
+            receiver: None,
+            arguments: SourceProgramValueList::default()
+        })
+        .unwrap(),
+        "{\"binding\":0,\"receiver\":null,\"arguments\":{\"values\":[],\"tail\":null}}"
+    );
+    assert!(
+        serde_json::from_str::<SourceProgramBinding>(
+            "{\"kind\":\"dynamic_call\",\"ignored\":true}"
+        )
+        .is_err()
+    );
+    let mut missing = serde_json::to_value(data).unwrap();
+    missing["programs"][0]["body"][0]["operation"]["values"]["values"][0]["operation"]["call"]["receiver"] =
+        serde_json::Value::Null;
+    assert!(
+        SourceProgramCatalog::from_bytes(&serde_json::to_vec(&missing).unwrap(), owner).is_err()
+    );
+}
+#[test]
+fn function_value_callee_keeps_scope_capture_and_depth_validation() {
+    let owner = SourceProgramOwner::new(definitions()).unwrap();
+    for (callee, kind) in [
+        (
+            expression(SourceProgramExprKind::Local { local: 0 }),
+            SourceProgramErrorKind::InvalidData,
+        ),
+        (
+            expression(SourceProgramExprKind::Capture { upvalue: 99 }),
+            SourceProgramErrorKind::Binding,
+        ),
+        (
+            expression(SourceProgramExprKind::NamedDefinition {
+                root: SourceProgramRootId(99),
+            }),
+            SourceProgramErrorKind::Binding,
+        ),
+    ] {
+        assert_eq!(
+            SourceProgramCatalog::new(programs(vec![value_call_program(callee)]), owner.clone())
+                .unwrap_err()
+                .kind,
+            kind
+        );
+    }
+    let mut deep = expression(SourceProgramExprKind::Capture { upvalue: 0 });
+    for _ in 0..60 {
+        deep = expression(SourceProgramExprKind::Get {
+            table: Box::new(deep),
+            key: Box::new(expression(SourceProgramExprKind::Bytes {
+                value: b"callee".to_vec(),
+            })),
+        });
+    }
+    assert_eq!(
+        SourceProgramCatalog::new(programs(vec![value_call_program(deep)]), owner.clone())
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::ResourceLimit
+    );
+    let mut p = value_call_program(expression(SourceProgramExprKind::Capture { upvalue: 0 }));
+    if let SourceProgramStatementKind::Return { values } = &mut p.body[0].operation
+        && let SourceProgramExprKind::Call { call } = &mut values.values[0].operation
+    {
+        call.receiver = None;
+    }
+    assert_eq!(
+        SourceProgramCatalog::new(programs(vec![p]), owner)
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::Binding
+    );
+}
+#[test]
+fn standalone_numeric_text_and_pattern_primitives_bind_original_identity_and_shadowing() {
+    for (operation, path) in [
+        (SourceProgramIntrinsic::MathMin, vec!["math", "min"]),
+        (SourceProgramIntrinsic::MathMax, vec!["math", "max"]),
+        (SourceProgramIntrinsic::ToString, vec!["tostring"]),
+        (SourceProgramIntrinsic::StringMatch, vec!["string", "match"]),
+    ] {
+        assert!(operation.is_standalone_only());
+        assert_eq!(operation.global_path(), Some(path.as_slice()));
+        let mut p = program(
+            SourceCallbackId(1),
+            SourceProgramExprKind::Literal {
+                value: ParserFactoryLiteral::Nil,
+            },
+        );
+        p.bindings = vec![SourceProgramBinding::Intrinsic {
+            operation,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        }];
+        SourceProgramCatalog::new(
+            programs(vec![p.clone()]),
+            SourceProgramOwner::new(definitions()).unwrap(),
+        )
+        .unwrap();
+        let mut shadow = definitions();
+        shadow.callbacks[0].upvalues[0].name = path[0].into();
+        assert_eq!(
+            SourceProgramCatalog::new(
+                programs(vec![p.clone()]),
+                SourceProgramOwner::new(shadow).unwrap()
+            )
+            .unwrap_err()
+            .kind,
+            SourceProgramErrorKind::Binding
+        );
+        let mut captured = definitions();
+        captured.callbacks.push(SourceCallback {
+            kind: SourceCallbackKind::Builtin {
+                symbol: path.join("."),
+            },
+            upvalues: vec![],
+            environment: SourceEnvironment::OriginalGlobals,
+        });
+        captured.callbacks[0].upvalues[0].value = SourceValue::Callback(SourceCallbackId(3));
+        captured.intrinsics.insert(SourceCallbackId(3), operation);
+        p.bindings = vec![SourceProgramBinding::Intrinsic {
+            operation,
+            source: SourceProgramIntrinsicSource::Captured {
+                upvalue: 0,
+                callback: SourceCallbackId(3),
+            },
+        }];
+        SourceProgramCatalog::new(
+            programs(vec![p.clone()]),
+            SourceProgramOwner::new(captured.clone()).unwrap(),
+        )
+        .unwrap();
+        captured.intrinsics.clear();
+        assert_eq!(
+            SourceProgramCatalog::new(
+                programs(vec![p]),
+                SourceProgramOwner::new(captured).unwrap()
+            )
+            .unwrap_err()
+            .kind,
+            SourceProgramErrorKind::UnsupportedCapability
+        );
+    }
+    assert!(SourceProgramIntrinsic::StringMatch.is_string_method());
+    assert!(!SourceProgramIntrinsic::MathMin.is_string_method());
+    assert!(!SourceProgramIntrinsic::ToNumber.is_standalone_only());
+}
+#[test]
+fn parser_owner_rejects_new_function_value_and_intrinsic_forms_without_changing_admission() {
+    let snapshot = bundled_snapshot().unwrap();
+    let owner = snapshot.modifier_parser();
+    let base = &owner.data().programs.data.programs[0];
+    let bindings = [
+        SourceProgramBinding::DynamicCall {},
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::MathMin,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::MathMax,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::ToString,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::StringMatch,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
+    ];
+    let original = serde_json::to_vec(&owner.data().programs).unwrap();
+    for binding in bindings {
+        let mut p = base.clone();
+        p.bindings = vec![binding];
+        let error = ParserProgramCatalog::new(programs(vec![p]), owner.clone()).unwrap_err();
+        assert_eq!(error.kind, SourceProgramErrorKind::UnsupportedCapability);
+        assert!(error.message.contains("parser owner"));
+    }
+    assert_eq!(
+        serde_json::to_vec(&owner.data().programs).unwrap(),
+        original
+    );
+}

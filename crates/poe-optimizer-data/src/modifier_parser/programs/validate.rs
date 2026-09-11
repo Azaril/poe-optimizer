@@ -207,6 +207,18 @@ impl Check<'_> {
         for binding in &self.program.bindings {
             self.budget.charge(0, self.id, None)?;
             match binding {
+                ParserProgramBinding::DynamicCall {} => {
+                    if !self.owner.supports_dynamic_calls() {
+                        return Err(self.fail(
+                            ParserProgramErrorKind::UnsupportedCapability,
+                            None,
+                            "parser owner does not admit function-value calls",
+                        ));
+                    }
+                    self.required.insert(ParserProgramCapability::DynamicCalls);
+                    self.required
+                        .insert(ParserProgramCapability::RecursiveCalls);
+                }
                 ParserProgramBinding::DynamicMethod { key } => {
                     self.budget.text(key, self.id, None)?;
                     if key.is_empty() || key.contains('\0') || key.len() > 256 {
@@ -244,6 +256,13 @@ impl Check<'_> {
                     }
                 }
                 ParserProgramBinding::Intrinsic { operation, source } => {
+                    if operation.is_standalone_only() && !self.owner.supports_dynamic_calls() {
+                        return Err(self.fail(
+                            ParserProgramErrorKind::UnsupportedCapability,
+                            None,
+                            "parser owner does not admit standalone intrinsic extension",
+                        ));
+                    }
                     match source {
                         ParserProgramIntrinsicSource::OriginalGlobal => {
                             let Some(path) = operation.global_path() else {
@@ -329,6 +348,15 @@ impl Check<'_> {
     ) -> ParserProgramResult<()> {
         let binding = self.binding(call.binding, Some(loc))?.clone();
         match &binding {
+            ParserProgramBinding::DynamicCall {} => {
+                if call.receiver.is_none() {
+                    return Err(self.fail(
+                        ParserProgramErrorKind::Binding,
+                        Some(loc),
+                        "function-value call requires an explicit callee expression",
+                    ));
+                }
+            }
             ParserProgramBinding::DynamicMethod { .. } => {
                 if call.receiver.is_none() {
                     return Err(self.fail(

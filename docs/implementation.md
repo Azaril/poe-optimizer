@@ -18,7 +18,67 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-**Current checkpoint: R2d source-bound class and modifier-store methods.**
+**Current checkpoint: R2e constructed callback capture and configuration breadth.**
+The shared standalone engine now supports callable values and source-compatible
+`math.min`, `math.max`, scalar `tostring` and bounded `string.match`. Call targets are
+retained before argument effects, and general calls do not prepend a receiver. Legacy
+parser capability/admission policy stays unchanged. Address-dependent table/function
+string conversion remains an explicit unsupported operation.
+
+The optional PoB tooling now exposes a production constructed-class/closure observer;
+the original-runtime method oracle uses it instead of a test-specific class extractor.
+It receives actual requested classes, callbacks and complete definition roots, authenticates
+closed Common helper shapes/captures, preserves explicit omitted-field boundaries, and
+never executes a constructor during capture. Test bootstrap observes actual module-entry
+order and exact source aliases. Ordinary captured tables remain complete; a partial global
+or build graph is not silently accepted as a complete definition.
+
+All five original builds now exercise capture of **537 apply closures** with their actual
+captured values. Real table-inline functions exposed a lowerer gap: authenticated debug
+line spans include surrounding table syntax. Balanced token isolation now preserves the
+complete function extent and original offsets, rejects ambiguous same-line occurrences,
+and still rejects unsupported interior statements. Supplying the complete observed
+`SkillType` definition table through the existing root seam yields **502 compiled apply
+bodies**; the remaining 35 retain whole-function/dependency diagnostics. Compilation alone
+does not grant domain admission or establish caller-dependent execution readiness.
+
+The ordered modifier-callback prefix matches native execution in both initial/default and
+saved passes for all five originals: **22 callbacks per pass, except Twister's saved pass
+with 24** (222 paired calls/state checkpoints total). Each comparison uses original raw
+scalar inputs, unchanged constructors/callbacks, and modifier-row graphs independently
+frozen at the actual activation callback exit. Native, source replay and actual-pass rows
+agree while preserving order, aliases and scalar bits. This is not a comparison of all
+named class state or complete activation. A fixed minimum and expected frontier prevent
+silently shortening the validated prefix. All passes stop at `enemySizePreset`, whose
+live control/build state is not bound. Generated quest/parser helpers and boss/global-data
+consumers remain separate dependencies.
+
+Local validation passes 35 focused data checks, 44 engine checks, 28 lowerer/capture
+checks, six source integration tests, eight default CLI checks and sixteen native-only
+CLI checks. Fresh extraction reproduces every package section. Strict workspace/native-only
+lint, formatting, WASM library compilation and native runtime dependency isolation pass.
+Broader engine/native numerical suites were not rerun for this standalone preparation
+change; their earlier results remain historical. Validation and publication are recorded in
+`runs/r2e-integration-validation.json` and `runs/r2e-publication.json`, with individual
+data/engine/lowerer ledgers. The bundled
+schema-29 package, its 29 sections, caller builds, original fixtures, lockfile and pinned
+PoB source remain unchanged. Complete native supplied-build evaluations remain **0/5**;
+the production preparation path still reports the authored configuration prefix and its
+unresolved effective-activation dependencies.
+
+**Resume point:** add the planned owner/session-bound environment coverage seam and pair
+complete original `ConfigTab.UpdateLevel` with injected definitions and live shared state.
+Distinguish known absence from unavailable fields for lookup, iteration and writes; do not
+represent a missing producer as Lua nil. Then bind original control methods and their live
+captured callbacks, including notifying/non-notifying placeholder changes and selected-set
+aliases. Add source-bound parser-service result ownership before admitting quest/custom
+modifiers. Use the callback inventory and the Twister/Skeletal Sniper pair to execute
+complete default/saved activation, then continue root/provider and actor/action preparation.
+Keep the five originals, mapping variants, whole-build numerical parity and joint-search
+requirements in scope. UI autocomplete remains a derived view of loaded definitions;
+DuckDB is deferred under the [storage assessment](definition-storage.md).
+
+**Previous checkpoint: R2d source-bound class and modifier-store methods.**
 Standalone owners now retain separate injected class/proxy descriptors, actual method and
 constructor identities, closed helper captures and observed superclass membership/order.
 The shared engine adds receiver dispatch and bounded class allocation/constructor protocol;
@@ -61,7 +121,7 @@ publication status are recorded in `runs/r2d-integration-validation.json` and
 `runs/r2d-publication.json`. Complete native supplied-build evaluations remain **0/5**;
 this checkpoint closes a preparation dependency, not the R3/R5 numerical gates.
 
-**Resume point:** execute initial default and saved configuration activation for Twister
+**R2d historical resume point (advanced by R2e above):** execute initial default and saved configuration activation for Twister
 and Skeletal Sniper together through the shared engine. Preserve captured quest closures,
 explicit control/parser-service effects, injected boss/monster data and original callback
 order. Add a production class/callback extraction adapter and domain admission for the

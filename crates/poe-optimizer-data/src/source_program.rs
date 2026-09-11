@@ -455,8 +455,14 @@ pub(crate) trait ProgramOwnerView {
     fn supports_dynamic_methods(&self) -> bool {
         false
     }
+    fn supports_dynamic_calls(&self) -> bool {
+        false
+    }
 }
 impl ProgramOwnerView for SourceProgramOwner {
+    fn supports_dynamic_calls(&self) -> bool {
+        self.parser().is_none()
+    }
     fn supports_dynamic_methods(&self) -> bool {
         self.parser().is_none()
     }

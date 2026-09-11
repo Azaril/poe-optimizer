@@ -232,13 +232,6 @@ fn exact_source_inventory_and_spans_are_checked_before_lowering() {
 #[test]
 fn shadowed_globals_and_undeclared_game_roots_do_not_gain_authority() {
     for (text, upvalues) in [
-        (
-            "function(value) return tonumber(value) end\n",
-            vec![ParserUpvalue {
-                name: "tonumber".into(),
-                value: ParserValue::Number(7.0),
-            }],
-        ),
         ("function() return ModFlag.Attack end\n", vec![]),
         ("function(value) return os.execute(value) end\n", vec![]),
     ] {
@@ -358,4 +351,80 @@ fn unknown_later_branches_reject_the_whole_method() {
     assert!(lowered.unsupported()[&ParserCallbackId(1)].contains("unmodeledConstructor"));
 }
 
+mod inline;
 mod methods;
+
+#[test]
+fn standalone_callable_values_keep_actual_binding_and_no_implicit_self() {
+    let text = "function(functions, value) return functions.apply(value) end\n";
+    let owner =
+        SourceProgramOwner::new(definitions(text, vec![callback(text, 1, 1, vec![])])).unwrap();
+    let lowered = lower_from_sources(&sources(text), &owner).unwrap();
+    assert!(lowered.unsupported().is_empty());
+    assert_eq!(
+        lowered.catalog().data().programs[0].bindings,
+        vec![ParserProgramBinding::DynamicCall {}]
+    );
+    let ParserProgramStatementKind::Return { values } =
+        &lowered.catalog().data().programs[0].body[0].operation
+    else {
+        panic!("return")
+    };
+    let ParserProgramPack::Call { call } = values.tail.as_deref().unwrap() else {
+        panic!("call")
+    };
+    assert!(matches!(
+        call.receiver.as_deref().unwrap().operation,
+        ParserProgramExprKind::Get { .. }
+    ));
+    assert_eq!(call.arguments.values.len(), 1);
+    let text = "function(value) return tonumber(value) end\n";
+    let owner = SourceProgramOwner::new(definitions(
+        text,
+        vec![callback(
+            text,
+            1,
+            1,
+            vec![ParserUpvalue {
+                name: "tonumber".into(),
+                value: ParserValue::Number(7.0),
+            }],
+        )],
+    ))
+    .unwrap();
+    let lowered = lower_from_sources(&sources(text), &owner).unwrap();
+    assert_eq!(
+        lowered.catalog().data().programs[0].bindings,
+        vec![ParserProgramBinding::DynamicCall {}]
+    );
+}
+
+#[test]
+fn new_callable_and_scalar_operations_do_not_expand_parser_lowering() {
+    for text in [
+        "function(functions, value) return functions.apply(value) end\n",
+        "function(value) return math.min(value, 3) end\n",
+        "function(value) return math.max(value, 3) end\n",
+        "function(value) return tostring(value) end\n",
+        "function(value) return string.match(value, 'a') end\n",
+    ] {
+        let callback = callback(text, 1, 1, vec![]);
+        let lua = Lua::new();
+        let mut budget = Budget::default();
+        let bindings = LoweringBindings::default();
+        assert!(
+            Lowerer::new(
+                &lua,
+                text,
+                ParserCallbackId(1),
+                &callback,
+                &bindings,
+                &mut budget
+            )
+            .unwrap()
+            .program(&span(text, 1, 1))
+            .is_err(),
+            "parser capability expanded for {text}"
+        );
+    }
+}

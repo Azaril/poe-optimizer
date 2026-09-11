@@ -133,6 +133,26 @@ impl ProgramSession {
         let values = run.invoke(index, arguments, 0)?;
         self.handles(values)
     }
+    /// Invoke an already resolved source value without an implicit self argument.
+    /// Callable handles and arguments must belong to this live session.
+    pub fn invoke_callable(
+        &mut self,
+        callable: &SessionValue,
+        input: &[SessionValue],
+    ) -> Result<Vec<SessionValue>> {
+        let target = self.values(std::slice::from_ref(callable))?.remove(0);
+        let arguments = self.values(input)?;
+        let mut run = Run {
+            library: &self.library,
+            heap: &mut self.heap,
+            patterns: &mut self.patterns,
+            limits: self.limits,
+            steps: &mut self.steps,
+            call_depth: 0,
+        };
+        let values = run.invoke_value(target, arguments, 0)?;
+        self.handles(values)
+    }
     /// Invoke a source method with implicit self on an owner/session-bound value.
     /// Lookup occurs before invocation; raw fields may override injected methods.
     pub fn invoke_method(

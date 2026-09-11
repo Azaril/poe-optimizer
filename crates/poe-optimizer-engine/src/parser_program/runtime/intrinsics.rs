@@ -69,6 +69,11 @@ pub(super) fn call(
 ) -> RuntimeResult<Vec<V>> {
     match operation {
         ParserProgramIntrinsic::ToNumber => tonumber(arguments, heap, patterns, limits),
+        ParserProgramIntrinsic::ToString => tostring(arguments, heap, limits),
+        ParserProgramIntrinsic::MathMin | ParserProgramIntrinsic::MathMax => {
+            minmax(operation, arguments, heap, patterns, limits)
+        }
+        ParserProgramIntrinsic::StringMatch => string_match(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::Type => {
             let value = arguments
                 .first()
@@ -107,6 +112,85 @@ pub(super) fn call(
             Err(Error::unsupported("escaped ipairs iterator"))
         }
     }
+}
+
+fn tostring(arguments: &[V], heap: &mut Heap, limits: &ProgramLimits) -> RuntimeResult<Vec<V>> {
+    let value = arguments
+        .first()
+        .ok_or_else(|| Error::source("tostring requires a value"))?;
+    result_space(1, heap, limits)?;
+    let value = match value {
+        V::Nil => heap.bytes(b"nil")?,
+        V::Boolean(false) => heap.bytes(b"false")?,
+        V::Boolean(true) => heap.bytes(b"true")?,
+        V::Number(_) => V::Bytes(string_argument(Some(value), heap)?),
+        V::Bytes(_) => value.clone(),
+        V::Table(_) | V::Callback(_) => {
+            return Err(Error::unsupported(
+                "identity-bearing tostring requires original metamethod/address semantics",
+            ));
+        }
+    };
+    Ok(vec![value])
+}
+fn number_argument(value: Option<&V>, patterns: &mut MatchBudget) -> RuntimeResult<f64> {
+    match value {
+        Some(V::Number(value)) => Ok(*value),
+        Some(V::Bytes(value)) => {
+            patterns.charge(value.len() as u64)?;
+            parse_number(value).ok_or_else(|| Error::source("number argument expected"))
+        }
+        _ => Err(Error::source("number argument expected")),
+    }
+}
+fn minmax(
+    operation: ParserProgramIntrinsic,
+    arguments: &[V],
+    heap: &mut Heap,
+    patterns: &mut MatchBudget,
+    limits: &ProgramLimits,
+) -> RuntimeResult<Vec<V>> {
+    let mut result = number_argument(arguments.first(), patterns)?;
+    for value in &arguments[1..] {
+        let next = number_argument(Some(value), patterns)?;
+        // The source x64 LuaJIT MINSD/MAXSD path selects the second operand for
+        // unordered/equal doubles. Rust f64::min/max would change NaN/zero bits.
+        result = if operation == ParserProgramIntrinsic::MathMin {
+            if result < next { result } else { next }
+        } else if result > next {
+            result
+        } else {
+            next
+        };
+    }
+    result_space(1, heap, limits)?;
+    Ok(vec![V::Number(result)])
+}
+fn string_match(
+    arguments: &[V],
+    heap: &mut Heap,
+    patterns: &mut MatchBudget,
+    limits: &ProgramLimits,
+) -> RuntimeResult<Vec<V>> {
+    // Source validates both strings and optional init before interpreting any
+    // pattern instruction. Extra values have no role after argument effects.
+    let subject = string_argument(arguments.first(), heap)?;
+    let pattern = string_argument(arguments.get(1), heap)?;
+    let init = optional_integer(arguments.get(2), patterns)?.unwrap_or(1);
+    let pattern = compile(&pattern, heap)?;
+    let Some(found) = pattern.match_captures(&subject, init, patterns)? else {
+        result_space(1, heap, limits)?;
+        return Ok(vec![V::Nil]);
+    };
+    result_space(found.captures().len(), heap, limits)?;
+    let mut values = Vec::with_capacity(found.captures().len());
+    for capture in found.captures() {
+        values.push(match capture {
+            Capture::Bytes { start, end } => heap.bytes(&subject[*start..*end])?,
+            Capture::Position(position) => V::Number(*position as f64),
+        });
+    }
+    Ok(values)
 }
 
 fn select(

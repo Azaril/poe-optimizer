@@ -93,6 +93,9 @@ pub fn observe_with_hooks(
     if let Some(hook) = before_source {
         hook(&lua)?;
     }
+    lua.load(include_str!("source_module_observation.lua"))
+        .set_name("@source-module-observation.lua")
+        .exec()?;
     poe_optimizer_lua_utf8::register(&lua)?;
     let globals = lua.globals();
     globals.set("arg", lua.create_table()?)?;
@@ -167,6 +170,9 @@ pub fn observe_with_hooks(
         "dofile",
         lua.create_function(|lua, filename: String| {
             let source = fs::read_to_string(&filename).map_err(mlua::Error::external)?;
+            lua.globals()
+                .get::<Function>("_configuration_source_module_enter")?
+                .call::<()>(format!("@{filename}"))?;
             let values = lua
                 .load(&source)
                 .set_name(format!("@{filename}"))

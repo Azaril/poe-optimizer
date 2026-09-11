@@ -76,8 +76,11 @@ modifier-parser catalog before admitting configuration programs. The common boun
 Class-backed modifier state follows the shared class/proxy protocol and uses opaque
 per-session values. A source-observed partial class projection must list unrepresented
 fields and preserve actual constructor/helper captures; plain result export cannot erase
-metatable behavior. Production extraction and configuration effect admission remain separate
-from the standalone method oracle.
+metatable behavior. The optional PoB tooling now provides constructed-class/closure
+observation as a reusable API; configuration effect admission remains a separate step.
+Class capture receives explicit source aliases and requested methods, preserves complete
+ordinary captured tables, and never runs a constructor itself. Callers establish the actual
+source construction and cache state before observation.
 
 The initial real paths require modifier insertion, common arithmetic and scalar operations,
 control notifications and enemy/boss definitions. Broader source branches also require a
@@ -116,3 +119,30 @@ set activation on Twister and Skeletal Sniper together. Retain all five original
 structural cases. Then continue root, item/passive/provider and actor/action preparation.
 Neither an authored-prefix comparison nor a callback count completes the R3/R5 whole-build
 numerical gates in the [real-build rollout](real-build-rollout.md).
+
+## Next environment and notification dependency gates
+
+The real configuration callbacks require an explicit distinction between a missing field
+and an unrepresented field. `BuildModList` branches on `varData.apply`; boss presets branch
+on optional definition fields. Projecting either graph by dropping unknown values would
+silently skip effects. The planned [environment and session binding seam](shared-source-programs.md)
+therefore makes known absence and unavailable state distinct at the access boundary,
+without adding an artificial Lua value. Complete ordinary tables continue to be captured
+as complete tables. A deliberately partial graph must carry explicit coverage, including
+iteration/length and mutable-write rules.
+
+First exercise original `UpdateLevel` against an authenticated read-only environment and
+one live configuration/build graph. Preserve selected-set/input aliases, placeholder
+precedence, the configuration/build cycle and source clamping order. Then extend live
+control state: original `EditControl.SetPlaceholder` optionally invokes `changeFunc`, whose
+closure captures the mutable ConfigTab instance and immutable variable definition. Those
+captures cannot all be copied into a shared read-only definition snapshot. Session-bound
+closure construction/capture identity is a prerequisite, not a handwritten notification
+recipe. Test notifying and non-notifying writes together with later callback reads.
+
+Custom-modifier and quest callbacks additionally require explicit parser-service result
+ownership. Returned modifiers must be writable where original `setSource` mutates them;
+callback IDs from different owners cannot be passed through by number. Continue complete
+initial/default and saved activation only after these dependencies are bound. A compiled
+callback inventory or a compared prefix of independent modifier callbacks does not complete
+that activation stage.

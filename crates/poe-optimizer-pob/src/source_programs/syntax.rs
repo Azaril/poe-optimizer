@@ -195,6 +195,14 @@ impl<'a, 'b> Lowerer<'a, 'b> {
             return Err("source span must contain exactly one complete function".into());
         }
         let index = positions[0];
+        if self.authorization.standalone_calls {
+            // Lua debug spans cover full lines, so a table-inline callback often
+            // ends with `end },`. Isolate only the balanced function, retaining
+            // original byte offsets and rejecting ambiguous function occurrences.
+            // The parser adapter intentionally retains its reviewed span policy.
+            let end = complete_function_token_end(&self.tokens, index)?;
+            self.tokens.truncate(end);
+        }
         self.function_start = self.tokens[index].start;
         self.at = index + 1;
         if self.peek() != "(" {
@@ -843,10 +851,19 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                     } else {
                         match term {
                             Term::Value(ref value) => {
-                                let target = value.target.clone().ok_or(
-                                    "dynamic/local function call requires callable-value support",
-                                )?;
-                                (self.bind(target)?, None, value.height)
+                                if let Some(target) = value.target.clone() {
+                                    (self.bind(target)?, None, value.height)
+                                } else if self.authorization.standalone_calls {
+                                    // Save the actual callable value before argument effects.
+                                    // This is a dot/value call and never adds implicit self.
+                                    (
+                                        self.bind(ParserProgramBinding::DynamicCall {})?,
+                                        Some(Box::new(value.value.clone())),
+                                        value.height,
+                                    )
+                                } else {
+                                    return Err("dynamic/local function call requires callable-value support".into());
+                                }
                             }
                             Term::Global { ref path, .. } => {
                                 let operation = match path.as_slice() {
@@ -856,6 +873,18 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                                     }
                                     ["select"] if self.authorization.standalone_calls => {
                                         ParserProgramIntrinsic::Select
+                                    }
+                                    ["tostring"] if self.authorization.standalone_calls => {
+                                        ParserProgramIntrinsic::ToString
+                                    }
+                                    ["math", "min"] if self.authorization.standalone_calls => {
+                                        ParserProgramIntrinsic::MathMin
+                                    }
+                                    ["math", "max"] if self.authorization.standalone_calls => {
+                                        ParserProgramIntrinsic::MathMax
+                                    }
+                                    ["string", "match"] if self.authorization.standalone_calls => {
+                                        ParserProgramIntrinsic::StringMatch
                                     }
                                     ["ipairs"] => ParserProgramIntrinsic::Ipairs,
                                     ["table", "insert"] => ParserProgramIntrinsic::TableInsert,

@@ -245,8 +245,9 @@ pub enum ParserProgramField {
 #[serde(deny_unknown_fields)]
 pub struct ParserProgramCall {
     pub binding: u16,
-    /// A method receiver is evaluated and indexed before arguments. Only the
-    /// declared string-method primitive is currently admitted by this form.
+    /// Target expression evaluated before arguments. DynamicMethod and string
+    /// primitives use it as a method receiver and prepend self. DynamicCall
+    /// uses this legacy wire slot as the callee and never prepends self.
     #[serde(deserialize_with = "required_option")]
     pub receiver: Option<Box<ParserProgramExpr>>,
     pub arguments: ParserProgramValueList,
@@ -254,6 +255,9 @@ pub struct ParserProgramCall {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum ParserProgramBinding {
+    /// Invoke the value in call.receiver directly, after evaluating arguments.
+    /// The callee is evaluated first and retained across argument side effects.
+    DynamicCall {},
     /// Resolve the source colon-call key on the actual receiver before arguments.
     DynamicMethod { key: String },
     CapturedCallback {
@@ -268,6 +272,10 @@ pub enum ParserProgramBinding {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ParserProgramIntrinsic {
+    MathMin,
+    MathMax,
+    ToString,
+    StringMatch,
     Type,
     Select,
     ToNumber,
@@ -281,6 +289,10 @@ impl ParserProgramIntrinsic {
     /// Language/runtime identities, never game-specific lookup names or values.
     pub fn global_path(self) -> Option<&'static [&'static str]> {
         match self {
+            Self::MathMin => Some(&["math", "min"]),
+            Self::MathMax => Some(&["math", "max"]),
+            Self::ToString => Some(&["tostring"]),
+            Self::StringMatch => Some(&["string", "match"]),
             Self::Type => Some(&["type"]),
             Self::Select => Some(&["select"]),
             Self::ToNumber => Some(&["tonumber"]),
@@ -292,7 +304,18 @@ impl ParserProgramIntrinsic {
         }
     }
     pub fn is_string_method(self) -> bool {
-        matches!(self, Self::StringGsub | Self::StringGmatch)
+        matches!(
+            self,
+            Self::StringGsub | Self::StringGmatch | Self::StringMatch
+        )
+    }
+    /// These additions are admitted only by standalone source owners. The
+    /// packaged parser's existing language and extraction policy stay intact.
+    pub fn is_standalone_only(self) -> bool {
+        matches!(
+            self,
+            Self::MathMin | Self::MathMax | Self::ToString | Self::StringMatch
+        )
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -318,6 +341,7 @@ pub enum ParserProgramCapability {
     LegacyPureCalls,
     RecursiveCalls,
     DynamicMethods,
+    DynamicCalls,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ParserProgramErrorKind {

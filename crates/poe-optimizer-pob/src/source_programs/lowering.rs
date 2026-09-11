@@ -115,6 +115,41 @@ pub(super) fn lex<'a>(body: &'a str, budget: &mut Budget) -> LowerResult<Vec<Lex
     }
     Ok(out)
 }
+/// Find the closing token of one complete function in a line-based debug span.
+/// The shared scanner has already removed comments and marked string literals.
+/// This recognizes block boundaries only: the lowerer must still consume and
+/// validate every token inside the result, including currently unsupported blocks.
+/// `for`/`while` open their block at `do`; counting both would hide the outer end.
+pub(super) fn complete_function_token_end(tokens: &[Lex<'_>], start: usize) -> LowerResult<usize> {
+    let mut closes = vec!["end"];
+    for (index, token) in tokens.iter().enumerate().skip(start + 1) {
+        if token.quoted {
+            continue;
+        }
+        match token.text {
+            "function" | "if" | "do" | "repeat" => {
+                if closes.len() >= 64 {
+                    return Err("function extent block depth bound".into());
+                }
+                closes.push(if token.text == "repeat" {
+                    "until"
+                } else {
+                    "end"
+                });
+            }
+            "end" | "until" => {
+                if closes.pop() != Some(token.text) {
+                    return Err("mismatched function/control block delimiter".into());
+                }
+                if closes.is_empty() {
+                    return Ok(index + 1);
+                }
+            }
+            _ => {}
+        }
+    }
+    Err("unterminated function/control block".into())
+}
 pub(super) fn identifier(value: &str) -> bool {
     let mut chars = value.bytes();
     chars

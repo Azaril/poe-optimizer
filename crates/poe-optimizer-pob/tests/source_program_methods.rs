@@ -29,7 +29,7 @@ fn original_class_modifier_methods_match_native_persistent_sessions() {
         .join("../..")
         .canonicalize()
         .unwrap();
-    let destination = root.join("runs/r2d-method-source");
+    let destination = root.join("runs/r2e-method-source");
     fs::create_dir_all(&destination).unwrap();
     if std::env::var_os("POE_METHOD_SOURCE_CHILD").is_some() {
         let xml =
@@ -579,7 +579,7 @@ fn pair_original(lua: &Lua, primitives: &Primitives) -> Result<Json, RuntimeErro
         ProgramRuntimeErrorKind::InvalidInput
     );
     Ok(
-        json!({"source_revision":observed.owner.source().upstream_revision,"source_files":observed.owner.source().files,
+        json!({"source_revision":observed.owner.source().upstream_revision,"source_files":observed.owner.source().files,"source_module_order":observed.owner.source().module_order,
         "class_descriptors":observed.owner.classes(),"closure_graph":observed.owner.callbacks(),
         "program_count":extracted.catalog().data().programs.len(),"unsupported_programs":extracted.unsupported(),
         "paired_successful_method_calls":pair.successes,"paired_source_failures":pair.failures,"checkpoints":pair.checkpoints,

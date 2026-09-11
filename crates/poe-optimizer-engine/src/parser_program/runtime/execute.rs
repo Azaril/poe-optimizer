@@ -471,6 +471,17 @@ impl Run<'_, '_, '_> {
     ) -> Result<Vec<V>> {
         self.tick(depth)?;
         let binding = &self.library.0.programs[frame.program].bindings[call.binding as usize];
+        if matches!(binding, CompiledProgramBinding::DynamicCall) {
+            let callee = call
+                .receiver
+                .as_ref()
+                .ok_or_else(|| Error::input("value call has no callee"))?;
+            // Function-value resolution precedes argument expressions, but a
+            // non-callable value is rejected only after their effects complete.
+            let target = self.expr(frame, callee, depth + 1)?;
+            let arguments = self.values(frame, &call.arguments, depth + 1)?;
+            return self.invoke_value(target, arguments, depth + 1);
+        }
         if let CompiledProgramBinding::DynamicMethod { key } = binding {
             let receiver = call
                 .receiver
@@ -498,7 +509,7 @@ impl Run<'_, '_, '_> {
             CompiledProgramBinding::LegacyFactory { .. } => {
                 return Err(Error::unsupported("raw legacy-factory invocation bridge"));
             }
-            CompiledProgramBinding::DynamicMethod { .. } => {
+            CompiledProgramBinding::DynamicMethod { .. } | CompiledProgramBinding::DynamicCall => {
                 unreachable!("handled before arguments")
             }
         };
@@ -510,6 +521,9 @@ impl Run<'_, '_, '_> {
     pub(super) fn lookup_method(&mut self, receiver: &V, key: &[u8]) -> Result<MethodTarget> {
         if matches!(receiver, V::Bytes(_)) {
             return match key {
+                b"match" => Ok(MethodTarget::StringIntrinsic(
+                    ParserProgramIntrinsic::StringMatch,
+                )),
                 b"gsub" => Ok(MethodTarget::StringIntrinsic(
                     ParserProgramIntrinsic::StringGsub,
                 )),
@@ -622,9 +636,7 @@ impl Run<'_, '_, '_> {
             {
                 Err(Error::unsupported("class instance mix-in call"))
             }
-            _ => Err(Error::source(
-                "attempt to call a non-function receiver method",
-            )),
+            _ => Err(Error::source("attempt to call a non-function value")),
         }
     }
     fn parent_call(&mut self, arguments: Vec<V>, depth: usize) -> Result<Vec<V>> {

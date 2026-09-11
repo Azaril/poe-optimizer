@@ -6,6 +6,35 @@ launch.ShowErrMsg = function(self, fmt, ...)
     trace.diagnostics[#trace.diagnostics + 1] = string.format(fmt, ...)
     return originalError(self, fmt, ...)
 end
+-- Keep raw values separately from the JSON display trace for differential callers.
+-- Current callback replay accepts only scalars; no table/callback identity is erased.
+local applyInputs = {}
+_configuration_source_apply_inputs = applyInputs
+local function snapshotRows(player, enemy)
+    local seen, count = {}, 0
+    local function freeze(value, depth)
+        count = count + 1
+        assert(count <= 100000 and depth <= 32, "typed callback row snapshot bound")
+        local kind = type(value)
+        if kind ~= "table" then
+            assert(kind == "nil" or kind == "boolean" or kind == "number" or kind == "string", "unrepresented callback row value")
+            return value
+        end
+        assert(getmetatable(value) == nil, "behavior-bearing callback row value")
+        if seen[value] then return seen[value] end
+        local out = {}
+        seen[value] = out
+        for key, item in pairs(value) do
+            assert(type(key) == "string" or type(key) == "number", "unrepresented callback row key")
+            out[key] = freeze(item, depth + 1)
+        end
+        return out
+    end
+    local playerRows, enemyRows = {}, {}
+    for index, mod in ipairs(player) do playerRows[index] = freeze(mod, 0) end
+    for index, mod in ipairs(enemy) do enemyRows[index] = freeze(mod, 0) end
+    return {playerRows, enemyRows}
+end
 local activeCallback, depth = nil, 0
 local lifecycle = { constructed = {}, loaded = {} }
 local function copy(value, seen, level)
@@ -113,9 +142,14 @@ local function install(name)
 				var.apply = function(value, modList, enemyModList, build)
 					local previous = activeCallback
 					activeCallback = var.var
-					event("enter", "apply", build.configTab, build, {index=index, var=var.var, type=var.type, value=copy(value)})
+					assert(#applyInputs < 20000, "raw callback input observation bound")
+					local observation = { value = value }
+					applyInputs[#applyInputs + 1] = observation
+					event("enter", "apply", build.configTab, build, {index=index, var=var.var, type=var.type, value=copy(value), inputObservation=#applyInputs})
 					depth = depth + 1
 					local result = original(value, modList, enemyModList, build)
+					local ok, rows = pcall(snapshotRows, modList, enemyModList)
+					if ok then observation.rows = rows else observation.snapshotUnsupported = rows end
 					depth = depth - 1
 					event("exit", "apply", build.configTab, build, {index=index, var=var.var, type=var.type, value=copy(value)})
 					activeCallback = previous

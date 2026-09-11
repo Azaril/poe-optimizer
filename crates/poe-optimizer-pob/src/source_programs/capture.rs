@@ -12,6 +12,9 @@ use poe_optimizer_data::{
 };
 use std::collections::BTreeMap;
 
+mod classes;
+pub use classes::{ObservedSourceClasses, SourceClassCaptureRequest, SourceClassSelection};
+
 const MAX_VALUES: usize = 1_000_000;
 const MAX_TABLES: usize = 100_000;
 const MAX_CALLBACKS: usize = 20_000;
@@ -23,6 +26,7 @@ pub struct SourceClosureObserver {
     globals: Table,
     libraries: BTreeMap<String, Table>,
     primitives: Vec<(SourceProgramIntrinsic, Function)>,
+    opaque_primitives: Vec<(String, Function)>,
     lua: Lua,
     get_metatable: Function,
     string_metatable: Table,
@@ -60,6 +64,10 @@ impl SourceClosureObserver {
             SourceProgramIntrinsic::TableInsert,
             SourceProgramIntrinsic::StringGsub,
             SourceProgramIntrinsic::StringGmatch,
+            SourceProgramIntrinsic::ToString,
+            SourceProgramIntrinsic::MathMin,
+            SourceProgramIntrinsic::MathMax,
+            SourceProgramIntrinsic::StringMatch,
         ] {
             let path = operation.global_path().expect("language primitive");
             let table = if path.len() == 2 {
@@ -79,6 +87,29 @@ impl SourceClosureObserver {
             }
             primitives.push((operation, function));
         }
+        let mut opaque_primitives = Vec::new();
+        for symbol in [
+            "pairs",
+            "string.format",
+            "rawget",
+            "setmetatable",
+            "error",
+            "assert",
+        ] {
+            let path = symbol.split('.').collect::<Vec<_>>();
+            let table = if path.len() == 2 {
+                libraries.get(path[0]).expect("observed standard library")
+            } else {
+                &globals
+            };
+            let function: Function = table.raw_get(path[path.len() - 1])?;
+            if function.info().what != "C" {
+                return Err(error(format!(
+                    "source observer primitive {symbol} is not an original C function"
+                )));
+            }
+            opaque_primitives.push((symbol.into(), function));
+        }
         let get_metatable: Function = globals.raw_get("getmetatable")?;
         if get_metatable.info().what != "C" {
             return Err(error(
@@ -90,6 +121,7 @@ impl SourceClosureObserver {
             globals,
             libraries,
             primitives,
+            opaque_primitives,
             lua: lua.clone(),
             get_metatable,
             string_metatable,
@@ -138,6 +170,7 @@ impl SourceClosureObserver {
             intrinsics: BTreeMap::new(),
             values: 0,
             text_bytes: 0,
+            source_names: &BTreeMap::new(),
         };
         let mut callbacks = BTreeMap::new();
         for (name, function) in roots {
@@ -199,6 +232,20 @@ impl SourceClosureObserver {
                 )));
             }
         }
+        for (symbol, original) in &self.opaque_primitives {
+            let path = symbol.split('.').collect::<Vec<_>>();
+            let table = if path.len() == 2 {
+                &self.libraries[path[0]]
+            } else {
+                &self.globals
+            };
+            let actual: Function = table.raw_get(path[path.len() - 1])?;
+            if actual.to_pointer() != original.to_pointer() {
+                return Err(error(format!(
+                    "source observer original primitive {symbol} was rebound"
+                )));
+            }
+        }
         let original: Function = globals.raw_get("getmetatable")?;
         if original.to_pointer() != self.get_metatable.to_pointer() {
             return Err(error("source observer original getmetatable was rebound"));
@@ -234,6 +281,7 @@ fn plain(table: &Table, role: &str) -> Result<()> {
 struct Graph<'a> {
     observer: &'a SourceClosureObserver,
     sources: &'a BTreeMap<String, String>,
+    source_names: &'a BTreeMap<String, String>,
     tables: Vec<SourceTable>,
     callbacks: Vec<SourceCallback>,
     seen_tables: BTreeMap<usize, SourceTableId>,
@@ -356,20 +404,31 @@ impl Graph<'_> {
         self.seen_callbacks.insert(pointer, id);
         let info = function.info();
         let kind = if info.what == "C" {
-            let (operation, _) = self
+            if let Some((operation, _)) = self
                 .observer
                 .primitives
                 .iter()
                 .find(|(_, original)| original.to_pointer() == function.to_pointer())
-                .ok_or_else(|| {
-                    error("source closure builtin has no observed primitive identity")
-                })?;
-            self.intrinsics.insert(id, *operation);
-            SourceCallbackKind::Builtin {
-                symbol: operation
-                    .global_path()
-                    .expect("language primitive")
-                    .join("."),
+            {
+                self.intrinsics.insert(id, *operation);
+                SourceCallbackKind::Builtin {
+                    symbol: operation
+                        .global_path()
+                        .expect("language primitive")
+                        .join("."),
+                }
+            } else {
+                let (symbol, _) = self
+                    .observer
+                    .opaque_primitives
+                    .iter()
+                    .find(|(_, original)| original.to_pointer() == function.to_pointer())
+                    .ok_or_else(|| {
+                        error("source closure builtin has no observed primitive identity")
+                    })?;
+                SourceCallbackKind::Builtin {
+                    symbol: symbol.clone(),
+                }
             }
         } else {
             if function
@@ -385,6 +444,11 @@ impl Graph<'_> {
                 .as_deref()
                 .and_then(|source| source.strip_prefix('@'))
                 .ok_or_else(|| error("source closure lacks an authenticated file name"))?;
+            let path = self
+                .source_names
+                .get(path)
+                .map(String::as_str)
+                .unwrap_or(path);
             let text = self
                 .sources
                 .get(path)
