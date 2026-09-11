@@ -17,6 +17,9 @@ use std::{
 };
 
 const TEMPLATE: &str = include_str!("fixtures/calibration/mace-wooden.xml");
+// These tests verify completed search semantics, not startup throughput. Parallel
+// package/catalog preparation can exceed 30 seconds on a small CI worker.
+const COMPLETION_TIMEOUT_SECONDS: &str = "300";
 
 fn input() -> Value {
     let mut value: Value =
@@ -52,7 +55,7 @@ fn search(directory: &Path, strategy: &str, jobs: usize, max: usize) -> Command 
         "--seed",
         "17",
         "--timeout-seconds",
-        "30",
+        COMPLETION_TIMEOUT_SECONDS,
         "--pob",
         "absent-reference-checkout",
     ]);
@@ -76,7 +79,15 @@ fn verified(report: &Value, total: usize) {
     assert_eq!(report["schema_version"], 3);
     assert_eq!(report["requested_backend"], "native-poe2");
     assert_eq!(report["execution_kind"], "rust_cpu");
-    assert_eq!(report["total_evaluations"], total);
+    assert_eq!(
+        report["total_evaluations"],
+        total,
+        "termination={}, elapsed_ms={}, preparation_attempts={}, preparation_error={}",
+        report["termination"],
+        report["elapsed_ms"],
+        report["preparation"]["attempts"],
+        report["preparation"]["error"]
+    );
     assert_eq!(report["preparation"]["attempts"], 1);
     assert_eq!(
         report["search"]["statistics"]["verification_evaluations"],
@@ -94,7 +105,10 @@ fn best_alternative(report: &Value) -> &Value {
         .unwrap()
         .iter()
         .find(|alternative| alternative["id"] == report["best_verified"]["alternative_id"])
-        .unwrap()
+        .unwrap_or_else(|| panic!(
+            "no verified alternative: termination={}, total_evaluations={}, preparation_error={}",
+            report["termination"], report["total_evaluations"], report["preparation"]["error"]
+        ))
 }
 fn write_package(directory: &Path, mut package: GameDataPackage) -> Value {
     package.refresh_section_digests().unwrap();
@@ -496,7 +510,7 @@ fn optional_reference_backend_searches_joint_choices_and_checks_its_fresh_finali
                 "--max-evaluations",
                 "6",
                 "--timeout-seconds",
-                "90",
+                COMPLETION_TIMEOUT_SECONDS,
                 "--pob",
             ])
             .arg(Path::new(env!("CARGO_MANIFEST_DIR")).join("vendor/path-of-building-poe2"))

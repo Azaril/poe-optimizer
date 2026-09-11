@@ -6,7 +6,7 @@ use poe_optimizer_data::item_loading::{
     ItemAffixLookup, ItemAffixSide, ItemLoadingCatalog, ItemMetadataTable, ItemMetadataValue,
 };
 use poe_optimizer_data::item_scalability::CatalystScalingData;
-use poe_optimizer_engine::lua_pattern::{MatchBudget, PatternError};
+use poe_optimizer_engine::lua_pattern::{GsubLimits, LuaPattern, MatchBudget, PatternError};
 use runes::RunePrograms;
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
@@ -335,6 +335,7 @@ pub struct ItemLoadMachine<'a> {
     work_bytes: usize,
     affix_programs: Option<AffixPrograms>,
     affix_budget: MatchBudget,
+    implicit_budget: MatchBudget,
     rune_programs: Option<RunePrograms>,
 }
 #[derive(Clone, Copy, PartialEq)]
@@ -355,6 +356,7 @@ impl<'a> ItemLoadMachine<'a> {
             work_bytes: 0,
             affix_programs: None,
             affix_budget: MatchBudget::default(),
+            implicit_budget: MatchBudget::default(),
             rune_programs: None,
         };
         machine.reset("");
@@ -651,7 +653,7 @@ impl<'a> ItemLoadMachine<'a> {
                 index += 1;
                 continue;
             }
-            let base_implicit = self.base_implicit(&line, game);
+            let base_implicit = self.base_implicit(&line, game)?;
             if check_section {
                 match stage {
                     GameStage::Implicit => {
@@ -1266,12 +1268,26 @@ impl<'a> ItemLoadMachine<'a> {
         }
         Ok(Header::Unknown)
     }
-    fn base_implicit(&self, line: &str, game: bool) -> bool {
-        game && !self.flag("crafted")
-            && self.base().and_then(|b| b.implicit()).is_some_and(|s| {
-                s.lines()
-                    .any(|v| v.starts_with("Grants Skill:") && v == line)
-            })
+    fn base_implicit(&mut self, line: &str, game: bool) -> Result<bool, ItemLoadError> {
+        if !game || self.flag("crafted") || !self.state.base_present {
+            return Ok(false);
+        }
+        let Some(implicit) = self
+            .state
+            .base_name
+            .as_deref()
+            .and_then(|name| self.catalog.base(name))
+            .and_then(|base| base.implicit())
+        else {
+            return Ok(false);
+        };
+        match base_has_implicit_line(implicit, line, &mut self.implicit_budget) {
+            Ok(found) => Ok(found),
+            Err(error) => self.reject_dependency(
+                format!("base implicit matching: {error}"),
+                matches!(error, PatternError::Source(_)),
+            ),
+        }
     }
     fn base(&self) -> Option<&poe_optimizer_data::item_loading::ItemBaseDefinition> {
         if self.state.base_present {
@@ -2574,4 +2590,132 @@ fn has_advanced_copy_numeric_or_enum(line: &str) -> bool {
         }
     }
     false
+}
+
+// Item.lua baseHasImplicitLine: source text outside replaced ranges remains a
+// Lua pattern. Exact equality short-circuits even malformed pattern text.
+fn base_has_implicit_line(
+    implicit: &str,
+    line: &str,
+    budget: &mut MatchBudget,
+) -> Result<bool, PatternError> {
+    let mut range_pattern = None;
+    // gmatch("[^\n]+") skips empty spans but preserves carriage returns.
+    for original in implicit.split('\n') {
+        budget.charge(original.len() as u64 + 1)?;
+        if !original.starts_with("Grants Skill:") {
+            continue;
+        }
+        if original == line {
+            return Ok(true);
+        }
+        let ranges = match &range_pattern {
+            Some(pattern) => pattern,
+            None => range_pattern.insert(LuaPattern::compile(b"%(%d+%-%d+%)")?),
+        };
+        let transformed = ranges.gsub(
+            original.as_bytes(),
+            b"%%d+",
+            None,
+            budget,
+            GsubLimits {
+                max_replacement_bytes: 4,
+                max_output_bytes: 64 * 1024 - 2,
+            },
+        )?;
+        // Output and compilation are bounded before allocating their buffers.
+        let mut pattern = Vec::with_capacity(transformed.bytes.len() + 2);
+        pattern.push(b'^');
+        pattern.extend_from_slice(&transformed.bytes);
+        pattern.push(b'$');
+        let pattern = LuaPattern::compile(&pattern)?;
+        budget.charge(pattern.compiled_bytes() as u64)?;
+        if pattern
+            .match_captures(line.as_bytes(), 1, budget)?
+            .is_some()
+        {
+            return Ok(true);
+        }
+    }
+    Ok(false)
+}
+
+#[cfg(test)]
+mod base_implicit_tests {
+    use super::*;
+    #[test]
+    fn base_implicit_ranges_and_unescaped_source_patterns() {
+        for (definition, line, expected) in [
+            (
+                "Grants Skill: Level (1-20) A",
+                "Grants Skill: Level 18 A",
+                true,
+            ),
+            (
+                "Grants Skill: Level (1-20) A",
+                "Grants Skill: Level 999 A",
+                true,
+            ),
+            (
+                "Grants Skill: Level (1-20) A",
+                "Grants Skill: Level -1 A",
+                false,
+            ),
+            (
+                "Grants Skill: (1-20) and (3-7)",
+                "Grants Skill: 2 and 9",
+                true,
+            ),
+            ("Grants Skill: A.B", "Grants Skill: AxB", true),
+            ("Grants Skill: A%.B", "Grants Skill: A.B", true),
+            ("Grants Skill: (A)%1", "Grants Skill: AA", true),
+            ("Grants Skill: [AB]+", "Grants Skill: ABBA", true),
+            ("Grants Skill: A", "prefix Grants Skill: A", false),
+            ("Grants Skill: A", "Grants Skill: AB", false),
+            ("Other\n\nGrants Skill: (1-2)", "Grants Skill: 7", true),
+            ("Grants Skill: A\r\n", "Grants Skill: A", false),
+            ("Grants Skill: A\r\n", "Grants Skill: A\r", true),
+            ("Grants Skill: A\0ignored", "Grants Skill: A", true),
+            ("Grants Skill: [", "Grants Skill: [", true),
+            ("Grants Skill: A\nGrants Skill: [", "Grants Skill: A", true),
+            ("Grants Skill: [", "Other", false),
+            ("Other [", "Other", false),
+        ] {
+            assert_eq!(
+                base_has_implicit_line(definition, line, &mut MatchBudget::default()).unwrap(),
+                expected,
+                "{definition:?} versus {line:?}"
+            );
+        }
+        assert!(matches!(
+            base_has_implicit_line(
+                "Grants Skill: [",
+                "Grants Skill: A",
+                &mut MatchBudget::default()
+            ),
+            Err(PatternError::Source(_))
+        ));
+    }
+    #[test]
+    fn base_implicit_pattern_work_is_cumulative_and_bounded() {
+        let limits = poe_optimizer_engine::lua_pattern::MatchLimits {
+            max_steps: 256,
+            ..Default::default()
+        };
+        assert!(matches!(
+            base_has_implicit_line(&"\n".repeat(300), "unused", &mut MatchBudget::new(limits)),
+            Err(PatternError::Resource(_))
+        ));
+        let mut budget = MatchBudget::new(limits);
+        assert!(base_has_implicit_line("Grants Skill: A", "Grants Skill: A", &mut budget).unwrap());
+        for _ in 0..100 {
+            if let Err(error) =
+                base_has_implicit_line("Grants Skill: A", "Grants Skill: A", &mut budget)
+            {
+                assert!(matches!(error, PatternError::Resource(_)));
+                return;
+            }
+        }
+        panic!("repeated matching must consume the same invocation work budget");
+    }
 }

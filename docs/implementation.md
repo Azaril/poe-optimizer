@@ -18,7 +18,7 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-**Current work: R1b selected views and two prior CI repairs.** R1a portable identities,
+**Current work: R1b selected views.** R1a portable identities,
 owned source mapping and opt-in CLI inspection are implemented and validated; see
 [the R1a contract](build-instances.md). All 396 core/import/native tests pass on the frozen
 R1a source before the separate implicit-line repair; session56069 completed with exit0.
@@ -29,10 +29,11 @@ outputs remain R2/R3; R1a is neither complete R1 nor additional whole-build pari
 
 The earlier G4 CI run finished with Windows search-budget failures and Linux implicit-line
 mismatches; G3 succeeded on both platforms. The Windows failure is reproduced as preparation
-contention under the tests'30-second guard; test-only repair preserves all count assertions
+contention under the tests' 30-second guard; test-only repair preserves all count assertions
 and production deadlines. The Linux failure exposed a missing source range-pattern branch
-for granted-skill implicits. Both repairs are being validated separately; do not relabel
-the earlier failed G4 run as passing. Evidence: `runs/r1a-prior-ci.json`.
+for granted-skill implicits. Both [CI repairs](#g4-ci-repair-checkpoint) pass their local
+regressions; fresh hosted Windows/Linux confirmation is pending. The earlier failed G4 run
+remains failed. Evidence: `runs/r1a-prior-ci.json`.
 
 | Breadth stage | Current state | Next evidence |
 | --- | --- | --- |
@@ -125,6 +126,30 @@ The breadth review adds three acceptance gates: freeze required metric/availabil
 manifests before numerical implementation; prove a real calculation responds to changed
 injected definitions; and compare reused worker transitions with fresh preparation. These
 strengthen R3-R5 within the now-accepted shared-model architecture.
+
+## G4 CI repair checkpoint
+
+The GitHub REST observation confirms G3 run34552695729 succeeded on both platforms. G4
+run34555917045 (`69db2cb`) failed its Test step on both: Windows class-search completion
+assertions and Ubuntu three implicit granted-skill line-flag comparisons. Public job
+annotations preserve the failures; full log download returned 403. Those historical outcomes
+are not replaced by local results.
+
+| Repair | Evidence and limits |
+| --- | --- |
+| Windows search completion guard | The unchanged native binary reproduces six pre-search `time_budget`/zero-evaluation outcomes with seven 30-second searches sharing two cores. A bounded 300-second test guard makes all seven finish 506 evaluations with equal verified results. All 8 native and 9 default class-search tests pass; every count, domain, legality, seed, worker and fresh-verification assertion remains. Production deadlines are unchanged. |
+| Implicit granted-skill recognition | Native item loading now preserves the original exact-match short circuit, then substitutes positive integer ranges and performs anchored Lua-pattern matching against injected base text. It preserves pattern metacharacters, CR/NUL semantics, crafted/non-GAME guards, reached errors and cumulative work bounds, including empty spans. There are no item-name/fixture exceptions. |
+| Final implicit regression | All 49 targeted tests pass: 2 unit, 37 import contracts, 3 new original-source tests and 7 existing provider tests. The unchanged 116-item corpus has zero mismatches across 702 parser/565 formatter prefixes, 106 complete preassembly states and 2 parser-frontier states. The broader provider matrix retains 1,597 paired cases and 1 explicit deferral out of 1,598, with zero mismatches. This is preassembly/parser coverage, not complete item or build evaluation. |
+| Portability and review | Affected strict Clippy and workspace formatting pass; the final repaired import library compiles for wasm32-unknown-unknown. The full 396-test R1a baseline is separately bound to its pre-repair source. Reviewed data package and caller inputs remain exact. Hosted Linux/Windows validation must run on the published repair head. |
+
+Ledgers: `runs/r1a-class-search-validation.json`, `runs/r1a-implicit-validation.json`,
+`runs/r1a-implicit-source-freeze.json` and `runs/r1a-ci-repaired-import-wasm.log`.
+Original failed/partial search reports and earlier boundedness/test-harness iterations
+remain preserved. Final implicit machine source SHA is
+`0ea9ea0be145684d51eef0a3e151ab8c78c908761cd1f1c502c1c59f509ba9f7`.
+The reviewed package remains schema27/parser7 with SHA
+`875155eb794d8356a0c79cfd8b26cbe36f46f6dc2c01c408a2a0aa5eff7758d3`.
+Native complete supplied builds remain 0/5; resume R1b and retain the R2-R5 breadth gates.
 
 ## R1a source ownership and identity checkpoint
 
