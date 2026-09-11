@@ -147,12 +147,21 @@ live ConfigTab snapshot into shared definitions.
 
 Pair notifying and non-notifying writes with later reads, selected-set changes, multiple
 controls sharing ConfigTab, unavailable short-circuits and failure-prefix effects. The
-five-build component oracle covers these cases and restores source state. This direct
-method gate does not admit inherited control dispatch, enclosing constructor execution or
-general native closure creation. Source fault probes compare the reached state prefix;
+five-build component oracle covers these cases and restores source state. The subsequent
+inherited-method gate binds actual class instances and compares continuing native callback
+sequences at original source entries/exits. It does not admit enclosing constructor execution
+or general native closure creation. Source fault probes compare the reached state prefix;
 an unavailable native dependency remains distinct from the deliberately induced source
 error. The non-placeholder branch retains its input write before unavailable `AddUndoState`;
 `BuildModList` is still unentered on that path.
+
+The inherited callback sequence now advances past `enemySizePreset`, retaining control state,
+modifier rows and source function identities across later calls. Its current first frontier is
+`enemyIsBoss` calling the complete original `Common.round`; exponentiation and native floor
+execution need admission before the boss callback can complete. A partial-state comparison
+through the actual nested `UpdateLevel` exit preserves the already executed modifier/control
+writes without claiming rounding or later effects. Keep this distinction from whole activation:
+the current test observes the original enclosing loop and executes its individual callbacks.
 
 Custom-modifier and quest callbacks additionally require explicit parser-service result
 ownership. Returned modifiers must be writable where original `setSource` mutates them;

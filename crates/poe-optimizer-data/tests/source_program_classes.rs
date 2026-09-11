@@ -698,3 +698,253 @@ fn context_coexists_with_classes_but_cannot_replace_class_projection_semantics()
         );
     }
 }
+
+fn session_with_class() -> SourceSessionInput {
+    let (data, classes) = definitions();
+    let owner = SourceProgramOwner::new_with_classes(data, classes).unwrap();
+    let class = owner.bind_class(SourceClassId(2)).unwrap();
+    SourceSessionInput {
+        owner,
+        state: SourceSessionValueGraph {
+            values: vec![
+                SourceSessionValue::Table(SourceSessionTableId(1)),
+                SourceSessionValue::Table(SourceSessionTableId(1)),
+            ],
+            tables: vec![SourceSessionTable {
+                entries: vec![(
+                    SourceSessionValue::Bytes(b"Object".to_vec()),
+                    SourceSessionValue::Table(SourceSessionTableId(1)),
+                )],
+            }],
+        },
+        coverage: BTreeMap::from([(
+            SourceSessionTableId(1),
+            SourceTableCoverage {
+                inventory: SourceTableInventory::Complete,
+                known_absent: BTreeSet::new(),
+                unavailable: BTreeSet::from([SourceTableKey::Text("uncaptured".into())]),
+                index_fallback: SourceTableIndexFallback::ClassResolved,
+                call_fallback: SourceTableCallFallback::NonCallable,
+            },
+        )]),
+        class_bindings: BTreeMap::from([(SourceSessionTableId(1), class)]),
+        cells: vec![],
+        closures: vec![],
+    }
+}
+#[test]
+fn coherent_session_class_associations_preserve_raw_state_and_owner_definitions() {
+    let input = session_with_class();
+    let raw = input.state.clone();
+    let definitions = serde_json::to_vec(input.owner.definitions().unwrap()).unwrap();
+    input.validate_class_bindings(1).unwrap();
+    assert_eq!(input.state, raw);
+    assert_eq!(input.state.tables[0].entries.len(), 1);
+    assert_eq!(input.state.values[0], input.state.values[1]);
+    assert_eq!(
+        input.owner.class(SourceClassId(2)).unwrap().methods["method"].callback,
+        SourceCallbackId(3)
+    );
+    assert_eq!(
+        serde_json::to_vec(input.owner.definitions().unwrap()).unwrap(),
+        definitions
+    );
+}
+#[test]
+fn session_class_associations_require_local_tables_and_exact_owner_identity() {
+    for id in [SourceSessionTableId(0), SourceSessionTableId(2)] {
+        let mut input = session_with_class();
+        let class = input
+            .class_bindings
+            .remove(&SourceSessionTableId(1))
+            .unwrap();
+        input.class_bindings.insert(id, class);
+        assert_eq!(
+            input.validate_class_bindings(2).unwrap_err().kind,
+            SourceProgramErrorKind::Binding
+        );
+    }
+    let mut input = session_with_class();
+    let foreign = session_with_class();
+    input.class_bindings = foreign.class_bindings;
+    assert!(
+        input
+            .validate_class_bindings(1)
+            .unwrap_err()
+            .message
+            .contains("another owner")
+    );
+}
+#[test]
+fn resolved_class_coverage_and_binding_are_one_to_one() {
+    let mut input = session_with_class();
+    input.class_bindings.clear();
+    assert!(
+        input
+            .validate_class_bindings(1)
+            .unwrap_err()
+            .message
+            .contains("lacks a session class binding")
+    );
+    let mut input = session_with_class();
+    input.coverage.clear();
+    assert!(
+        input
+            .validate_class_bindings(1)
+            .unwrap_err()
+            .message
+            .contains("lacks resolved-class index coverage")
+    );
+    for fallback in [
+        SourceTableIndexFallback::Nil,
+        SourceTableIndexFallback::Unavailable,
+    ] {
+        let mut input = session_with_class();
+        input
+            .coverage
+            .get_mut(&SourceSessionTableId(1))
+            .unwrap()
+            .index_fallback = fallback;
+        assert_eq!(
+            input.validate_class_bindings(1).unwrap_err().kind,
+            SourceProgramErrorKind::Binding
+        );
+    }
+    let mut input = session_with_class();
+    let coverage = input.coverage.remove(&SourceSessionTableId(1)).unwrap();
+    input.class_bindings.clear();
+    input.coverage.insert(SourceSessionTableId(0), coverage);
+    assert_eq!(
+        input.validate_class_bindings(1).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+}
+#[test]
+fn class_association_limits_precede_metadata_walk_and_allow_ordinary_inputs() {
+    let input = session_with_class();
+    assert_eq!(
+        input.validate_class_bindings(0).unwrap_err().kind,
+        SourceProgramErrorKind::ResourceLimit
+    );
+    let mut ordinary = input.clone();
+    ordinary.class_bindings.clear();
+    ordinary
+        .coverage
+        .get_mut(&SourceSessionTableId(1))
+        .unwrap()
+        .index_fallback = SourceTableIndexFallback::Unavailable;
+    ordinary.validate_class_bindings(1).unwrap();
+    let mut oversized = input.clone();
+    oversized.coverage.insert(
+        SourceSessionTableId(2),
+        input.coverage[&SourceSessionTableId(1)].clone(),
+    );
+    assert_eq!(
+        oversized.validate_class_bindings(1).unwrap_err().kind,
+        SourceProgramErrorKind::ResourceLimit
+    );
+    let mut oversized = input.clone();
+    oversized.class_bindings.insert(
+        SourceSessionTableId(2),
+        input.class_bindings[&SourceSessionTableId(1)].clone(),
+    );
+    assert_eq!(
+        oversized.validate_class_bindings(1).unwrap_err().kind,
+        SourceProgramErrorKind::ResourceLimit
+    );
+}
+#[test]
+fn resolved_class_marker_cannot_enter_immutable_definition_context() {
+    let (data, classes) = definitions();
+    let coverage = session_with_class().coverage[&SourceSessionTableId(1)].clone();
+    coverage.validate_shape().unwrap();
+    assert_eq!(
+        serde_json::to_value(coverage.index_fallback).unwrap(),
+        "class_resolved"
+    );
+    let context = SourceProgramContext {
+        schema_version: SOURCE_PROGRAM_CONTEXT_SCHEMA_VERSION,
+        environment: None,
+        tables: BTreeMap::from([(SourceTableId(3), coverage)]),
+    };
+    assert_eq!(
+        SourceProgramOwner::new_with_context(data, Some(classes), context)
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::UnsupportedCapability
+    );
+}
+#[test]
+fn shared_class_graph_rejects_live_and_zero_capture_prototypes() {
+    // Ordinary method, original constructor and closed parent-index callback.
+    for id in [
+        SourceCallbackId(3),
+        SourceCallbackId(4),
+        SourceCallbackId(2),
+    ] {
+        let (data, classes) = definitions();
+        let prototypes = SourceClosurePrototypes {
+            schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
+            prototypes: vec![SourceClosurePrototype { callback: id }],
+        };
+        let error = SourceProgramOwner::new_with_closures(data, Some(classes), None, prototypes)
+            .unwrap_err();
+        assert_eq!(error.kind, SourceProgramErrorKind::UnsupportedCapability);
+        assert!(
+            error
+                .message
+                .contains("class graph reaches a session closure prototype")
+        );
+    }
+    let (mut data, classes) = definitions();
+    data.callbacks[2].upvalues.push(SourceUpvalue {
+        name: "live".into(),
+        value: SourceValue::LiveCapture {},
+    });
+    let prototypes = SourceClosurePrototypes {
+        schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
+        prototypes: vec![SourceClosurePrototype {
+            callback: SourceCallbackId(3),
+        }],
+    };
+    assert_eq!(
+        SourceProgramOwner::new_with_closures(data, Some(classes), None, prototypes)
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::UnsupportedCapability
+    );
+}
+#[test]
+fn class_capture_graph_cannot_hide_a_live_helper_but_unrelated_closures_remain_valid() {
+    let (mut data, classes) = definitions();
+    data.callbacks.push(callback(span(42, 44)));
+    let prototypes = SourceClosurePrototypes {
+        schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
+        prototypes: vec![SourceClosurePrototype {
+            callback: SourceCallbackId(8),
+        }],
+    };
+    SourceProgramOwner::new_with_closures(
+        data.clone(),
+        Some(classes.clone()),
+        None,
+        prototypes.clone(),
+    )
+    .unwrap();
+    data.tables.push(SourceTable {
+        fields: BTreeMap::from([("helper".into(), SourceValue::Callback(SourceCallbackId(8)))]),
+        indexed: BTreeMap::new(),
+    });
+    data.callbacks[2].upvalues.push(SourceUpvalue {
+        name: "helpers".into(),
+        value: SourceValue::Table(SourceTableId(4)),
+    });
+    let error =
+        SourceProgramOwner::new_with_closures(data, Some(classes), None, prototypes).unwrap_err();
+    assert_eq!(error.kind, SourceProgramErrorKind::UnsupportedCapability);
+    assert!(
+        error
+            .message
+            .contains("class graph reaches a session closure prototype")
+    );
+}

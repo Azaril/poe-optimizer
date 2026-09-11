@@ -418,6 +418,7 @@ fn session_artifact_keeps_live_values_and_aliases_out_of_shared_prototype_data()
             }],
         },
         coverage: SourceSessionCoverage::new(),
+        class_bindings: SourceSessionClassBindings::new(),
         cells: vec![
             SourceSessionValue::Table(SourceSessionTableId(1)),
             SourceSessionValue::DefinitionTable(SourceTableId(1)),

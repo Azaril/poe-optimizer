@@ -98,6 +98,7 @@ impl SourceClosureObserver {
         for symbol in [
             "pairs",
             "string.format",
+            "math.floor",
             "rawget",
             "setmetatable",
             "error",
@@ -209,6 +210,8 @@ impl SourceClosureObserver {
             forbidden_tables: std::collections::BTreeSet::new(),
             forbidden_callbacks: std::collections::BTreeSet::new(),
             forbidden_cells: std::collections::BTreeSet::new(),
+            immutable_capture_tables: None,
+            session_tables: 0,
             source_names: &context.source_names,
             context: SourceProgramContext::default(),
         };
@@ -376,8 +379,18 @@ struct Graph<'a> {
     forbidden_callbacks: std::collections::BTreeSet<usize>,
     forbidden_cells: std::collections::BTreeSet<usize>,
     context: SourceProgramContext,
+    // Only the class/session observer requires positive immutable ownership.
+    immutable_capture_tables: Option<std::collections::BTreeSet<usize>>,
+    // Live tables reserve their share before late definition graph expansion.
+    session_tables: usize,
 }
 impl Graph<'_> {
+    fn check_table_capacity(&self) -> Result<()> {
+        if self.tables.len() + self.session_tables >= MAX_TABLES {
+            return Err(error("source closure/session combined table count bound"));
+        }
+        Ok(())
+    }
     fn text(&mut self, count: usize) -> Result<()> {
         self.text_bytes = self
             .text_bytes
@@ -425,9 +438,7 @@ impl Graph<'_> {
             return Ok(SourceValue::Table(*id));
         }
         plain(&table, "captured table")?;
-        if self.tables.len() >= MAX_TABLES {
-            return Err(error("source closure table count bound"));
-        }
+        self.check_table_capacity()?;
         let id = SourceTableId(self.tables.len() as u32 + 1);
         self.seen_tables.insert(pointer, id);
         self.tables.push(SourceTable::default());
@@ -471,6 +482,22 @@ impl Graph<'_> {
                 if self.forbidden_cells.contains(&observed.identity) {
                     return Err(error(
                         "immutable definition shares a live session capture cell",
+                    ));
+                }
+                if let Value::Table(table) = &observed.value
+                    && self
+                        .immutable_capture_tables
+                        .as_ref()
+                        .is_some_and(|tables| !tables.contains(&(table.to_pointer() as usize)))
+                {
+                    if self
+                        .forbidden_tables
+                        .contains(&(table.to_pointer() as usize))
+                    {
+                        return Err(error("shared definition captures a live session table"));
+                    }
+                    return Err(error(
+                        "shared definition capture table is not explicitly classified immutable",
                     ));
                 }
                 (Some(observed.name), observed.value)

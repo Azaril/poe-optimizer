@@ -665,3 +665,74 @@ fn captured_builtin(
     matches!(&captured.kind, SourceCallbackKind::Builtin {symbol: actual} if actual == symbol)
         && captured.upvalues.is_empty()
 }
+
+/// Class projections retain shared immutable callable identities. A session
+/// prototype requires its own instance/cells, even when it has zero captures.
+/// This check follows class data and callback captures so an indirect helper
+/// cannot smuggle a session prototype into the shared class graph. Source proof
+/// of actual capture ownership remains the observing domain's responsibility.
+/// Call only after the bounded graph, classes and prototypes have validated.
+pub(super) fn validate_shared_callbacks(
+    definitions: &SourceProgramDefinitions,
+    classes: &SourceClassDefinitions,
+    prototypes: &SourceClosurePrototypes,
+) -> SourceProgramResult<()> {
+    #[derive(Clone, Copy)]
+    enum Node {
+        Table(SourceTableId),
+        Callback(SourceCallbackId),
+    }
+    fn append(value: &SourceValue, pending: &mut Vec<Node>) {
+        match value {
+            SourceValue::Table(id) => pending.push(Node::Table(*id)),
+            SourceValue::Callback(id) => pending.push(Node::Callback(*id)),
+            _ => {}
+        }
+    }
+    let prototypes = prototypes
+        .prototypes
+        .iter()
+        .map(|prototype| prototype.callback)
+        .collect::<BTreeSet<_>>();
+    if prototypes.is_empty() {
+        return Ok(());
+    }
+    let mut pending = vec![
+        Node::Callback(classes.source.parent_call_callback),
+        Node::Callback(classes.source.parent_index_callback),
+    ];
+    for class in &classes.classes {
+        pending.push(Node::Table(class.table));
+        if let Some(constructor) = &class.constructor {
+            pending.push(Node::Callback(constructor.callback));
+            if let Some(wrapper) = &constructor.wrapper {
+                pending.push(Node::Callback(wrapper.callback));
+            }
+        }
+    }
+    let mut tables = BTreeSet::new();
+    let mut callbacks = BTreeSet::new();
+    while let Some(node) = pending.pop() {
+        match node {
+            Node::Table(id) if tables.insert(id) => {
+                let table = &definitions.tables[id.0 as usize - 1];
+                for value in table.fields.values().chain(table.indexed.values()) {
+                    append(value, &mut pending);
+                }
+            }
+            Node::Callback(id) if callbacks.insert(id) => {
+                if prototypes.contains(&id) {
+                    return Err(failure(
+                        SourceProgramErrorKind::UnsupportedCapability,
+                        "shared source class graph reaches a session closure prototype",
+                    ));
+                }
+                for capture in &definitions.callbacks[id.0 as usize - 1].upvalues {
+                    append(&capture.value, &mut pending);
+                }
+            }
+            _ => {}
+        }
+    }
+    Ok(())
+}

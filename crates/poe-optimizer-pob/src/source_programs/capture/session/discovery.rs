@@ -19,11 +19,14 @@ pub(super) struct CapturedLive {
     closure_ids: BTreeMap<usize, SourceSessionClosureId>,
     cells: Vec<Value>,
     cell_identities: BTreeSet<usize>,
+    class_bindings: BTreeMap<SourceSessionTableId, SourceClassId>,
 }
 pub(super) struct LiveGraph<'a, 'b> {
     definitions: &'b mut Graph<'a>,
     immutable: &'b BTreeSet<usize>,
     selections: BTreeMap<usize, &'b SourceTableSelection>,
+    shared_functions: &'b BTreeMap<usize, Function>,
+    instance_classes: &'b BTreeMap<usize, classes::Instance>,
     cell_ids: BTreeMap<usize, SourceSessionCellId>,
     captured: CapturedLive,
 }
@@ -33,16 +36,21 @@ pub(super) struct Converted {
     pub(super) cells: Vec<SourceSessionValue>,
     pub(super) closures: Vec<(SourceCallbackId, Vec<SourceSessionCellId>)>,
     pub(super) prototypes: SourceClosurePrototypes,
+    pub(super) class_bindings: BTreeMap<SourceSessionTableId, SourceClassId>,
 }
 impl<'a, 'b> LiveGraph<'a, 'b> {
     pub(super) fn new(
         definitions: &'b mut Graph<'a>,
         immutable: &'b BTreeSet<usize>,
         projections: &'b [SourceTableSelection],
+        shared_functions: &'b BTreeMap<usize, Function>,
+        instance_classes: &'b BTreeMap<usize, classes::Instance>,
     ) -> Result<Self> {
         let mut result = Self {
             definitions,
             immutable,
+            shared_functions,
+            instance_classes,
             selections: BTreeMap::new(),
             cell_ids: BTreeMap::new(),
             captured: CapturedLive {
@@ -52,6 +60,7 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
                 closure_ids: BTreeMap::new(),
                 cells: vec![],
                 cell_identities: BTreeSet::new(),
+                class_bindings: BTreeMap::new(),
             },
         };
         let mut selected = 0usize;
@@ -85,6 +94,12 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
             }
             result.register_table(projection.table.clone())?;
         }
+        for instance in instance_classes.values() {
+            if immutable.contains(&(instance.table.to_pointer() as usize)) {
+                return Err(error("class instance is also classified immutable"));
+            }
+            result.register_table(instance.table.clone())?;
+        }
         Ok(result)
     }
     fn register_table(&mut self, table: Table) -> Result<SourceSessionTableId> {
@@ -103,9 +118,18 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
             allow_call_fallback: false,
         };
         let selection = self.selections.get(&pointer).copied().unwrap_or(&plain);
-        let (index_fallback, call_fallback) = self.definitions.projection_fallbacks(selection)?;
+        let instance = self.instance_classes.get(&pointer);
+        let (index_fallback, call_fallback) = if let Some(instance) = instance {
+            (SourceTableIndexFallback::ClassResolved, instance.call)
+        } else {
+            self.definitions.projection_fallbacks(selection)?
+        };
         let id = SourceSessionTableId(self.captured.tables.len() as u32 + 1);
         self.captured.table_ids.insert(pointer, id);
+        if let Some(instance) = instance {
+            self.captured.class_bindings.insert(id, instance.class);
+        }
+        self.definitions.session_tables = self.captured.tables.len() + 1;
         self.captured.tables.push(LiveTable {
             table,
             filled: false,
@@ -167,6 +191,12 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
                 Ok(())
             }
             Value::Function(function) => {
+                if self
+                    .shared_functions
+                    .contains_key(&(function.to_pointer() as usize))
+                {
+                    return Ok(());
+                }
                 if function.info().what == "C" {
                     self.definitions.value(Value::Function(function), depth)?;
                     return Ok(());
@@ -337,6 +367,7 @@ impl CapturedLive {
             cells,
             closures,
             prototypes,
+            class_bindings: self.class_bindings.clone(),
         })
     }
     fn value(&self, definitions: &mut Graph<'_>, value: &Value) -> Result<SourceSessionValue> {

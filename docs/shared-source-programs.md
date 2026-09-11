@@ -275,10 +275,9 @@ remain an observation frontier. The present observer creates a fresh owner for e
 interns prototypes only within that observation. Native sessions can share an existing
 compiled owner, but reconciling a new source observation against that owner still needs an
 explicit authenticated binding protocol; it is not implied by matching names or source text.
-Preserve the captured ConfigTab object while resolving the currently
-active set at invocation time. A direct
-method test does not admit inherited dispatch: projected controls still have unavailable
-`__index`; copying inherited methods into fake raw fields would change source semantics.
+Preserve the captured ConfigTab object while resolving the currently active set at invocation
+time. Inherited calls use the class/state binding below; copying inherited methods into raw
+fields would change source semantics.
 
 Acceptance should include multiple controls sharing ConfigTab state, repeated notifications
 after a set switch, false/nil notification avoiding an unavailable callback, Lua numeric
@@ -288,6 +287,43 @@ string conversion precedes the placeholder write; callback failure follows it. T
 non-placeholder branch also writes input before `AddUndoState`/`BuildModList` and only sets
 `buildFlag` after those calls. Preserve the whole branch even while its later consumer is
 unsupported.
+
+### Existing class instances and shared methods
+
+A coherent session input can associate an actual writable state table with an owner-bound
+`SourceClassHandle`. `SourceSessionClassBindings` and `ClassResolved` index coverage must
+match one-to-one. Plain graph imports and immutable table contexts cannot carry this marker.
+The native importer checks owner identity, local table bounds, the captured self-indexing
+class protocol and independent call behavior before publishing any state. It attaches lookup
+behavior to the captured table; it does not allocate a replacement instance, execute a
+constructor, or synthesize `Object`, `_parentInit` or parent proxies.
+
+Raw lookup still comes first. An omitted present raw method is unavailable, a known-absent
+method can resolve through the actual captured class table, and deleting a raw override
+reveals the inherited method. Common copies inherited fields into class tables during
+construction; native lookup uses that observed result rather than inventing another parent
+search. Preserve lookup-before-argument ordering and keep `__call` independent: Common's
+unmodeled mix-in call remains unavailable after argument effects. Other unmodeled
+metamethods reject observation/import. Iteration sees raw entries, and plain snapshots cannot
+silently flatten away class behavior.
+
+The optional `observe_session_with_classes` entry point composes class definitions and live
+state into one owner. Instance membership comes from the actual metatable identity and the
+selected registry class, not a class name supplied for the instance. Selected shared methods
+and their source helper functions retain one owner callback identity when referenced through
+class lookup, state or captures. An explicit session-closure request for that same function
+is contradictory and rejects. Constructors may be retained with unsupported bodies when
+they are unentered; observing an existing instance does not prove constructor execution.
+
+Shared class-method table captures require positive immutable ownership through explicitly
+declared definition roots/projections or authenticated class tables. A hidden per-instance
+table does not become a constant merely because no live root exposes it. Declared immutable
+table edges can extend that graph; function captures cannot bootstrap their own state into
+it. Known live tables, functions and shared capture cells reject across this boundary.
+Session prototypes, including zero-capture prototypes, cannot be called as shared class
+methods or their transitive helpers. Class members with live captures need an explicit future
+per-session member binding; the current observer reports that frontier rather than freezing
+those captures. Compiled owners remain reusable by private native sessions.
 
 ### Parser results and explicit effects
 
@@ -312,7 +348,8 @@ calls), followed by continuing writes/source failures and branch-dependent unava
 The test producer is bounded and explicit; it is not production configuration preparation.
 The bounded live-notification gate also compares complete original `SetPlaceholder` and
 numeric `changeFunc` bodies, including reused controls, unavailable short-circuits and
-failure-prefix effects. Full inherited dispatch, native closure construction and the complete
+failure-prefix effects. The inherited-method gate adds continuing actual callback sequences
+through source-authenticated class bindings. Native closure construction and the complete
 ordered defaults/saved-activation lifecycle remain outstanding. Keep the five-build
 structural matrix and the Twister/Skeletal Sniper pairing as coverage, not runtime presets.
 The complete ConfigOptions callback inventory should determine later dependency work.

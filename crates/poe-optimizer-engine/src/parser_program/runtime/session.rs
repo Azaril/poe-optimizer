@@ -36,8 +36,8 @@ pub struct ProgramSession {
     identity: Arc<()>,
 }
 impl CompiledSourcePrograms {
-    /// Instantiate a coherent owner-bound graph of state, closures and shared
-    /// capture cells. Only the importing domain authenticates its source origin.
+    /// Instantiate a coherent owner-bound graph of state, class associations,
+    /// closures and shared capture cells. Only the importing domain authenticates its source origin.
     pub fn session_from_input(
         &self,
         input: &SourceSessionInput,
@@ -127,7 +127,7 @@ impl ProgramSession {
         let values = self.heap.import_with_coverage(input, coverage, true)?;
         self.handles(values)
     }
-    /// Import a whole additional closure/state observation. All graph, closure
+    /// Import a whole additional class/closure/state observation. All graph, closure
     /// and capture-cell IDs are local to this artifact; returned opaque handles
     /// preserve its identities across subsequent calls in this session.
     pub fn import_session_input(

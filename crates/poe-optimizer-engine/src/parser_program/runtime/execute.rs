@@ -687,10 +687,19 @@ impl Run<'_, '_, '_> {
             V::Table(_)
                 if matches!(
                     self.heap.behavior(&target),
-                    Some(TableBehavior::Instance(_))
+                    Some(TableBehavior::Instance { .. })
                 ) =>
             {
-                Err(Error::unsupported("class instance mix-in call"))
+                match self.heap.behavior(&target) {
+                    Some(TableBehavior::Instance {
+                        call_fallback:
+                            poe_optimizer_data::source_program::SourceTableCallFallback::NonCallable,
+                        ..
+                    }) => Err(Error::source("attempt to call a non-function value")),
+                    _ => Err(Error::unsupported(
+                        "class instance call fallback is unavailable",
+                    )),
+                }
             }
             V::Table(_) => {
                 self.heap.ensure_call_fallback(&target)?;

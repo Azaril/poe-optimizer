@@ -25,7 +25,64 @@ before search with `preparation_failed`. The corrected fixture and mismatch regr
 in both CLI configurations; production checks and deadlines remain unchanged. See the
 [repair checkpoint](#ci-dataset-fixture-repair) for validation and publication status.
 
-**Current checkpoint: R2g session closures and capture cells.** Shared source owners now
+**Current checkpoint: R2h existing class instances and continuing configuration calls.**
+Coherent session inputs bind actual state tables to owner-bound class handles with explicit
+`ClassResolved` coverage. Native import attaches inherited lookup without replaying a
+constructor or synthesizing `Object`, parent proxies or initialization state. Raw overrides,
+deletions, unavailable raw fields, independent call behavior and lookup-before-argument
+ordering retain their source semantics. Metadata and graph publication remain atomic and
+resource-bounded; plain graph imports and snapshots reject behavior loss.
+
+The optional PoB observer composes class definitions, immutable definitions and live state
+in one owner, authenticating actual registry/metatable identity. Selected shared methods
+retain one callable identity through inherited lookup, state aliases and captures. An
+independent review found that an unclassified captured table could be mistaken for a
+constant. The new path now requires positive immutable ownership through explicit roots,
+projections or class tables; function captures cannot bootstrap their own hidden state into
+that graph. Known live cells/tables/functions and shared methods referring to session
+prototypes reject. Live-captured class members need a future explicit session binding.
+
+The new source oracle retains one native session per actual initial/saved callback sequence.
+It compares entry state, exact original function identity and exit state for **390 complete
+callbacks** across all five originals, including inherited `enemySizePreset` control calls,
+modifier rows and later consumption of earlier writes. It records all **637 actual callback
+entries/exits**. The first remaining frontier is `enemyIsBoss` calling the complete original
+`Common.round`: exponentiation syntax and native `math.floor` execution remain unsupported.
+Original floor identity is captured as an opaque builtin only; no execution permission is
+implied. **10 partial boss-state checks** compare the reached state through the nested
+`UpdateLevel` exit before rounding. Boss callbacks remain unpaired, and those checks do not
+validate rounding arguments/results or later writes.
+
+Validation passes **59 data, 70 engine and 60 observer/lowerer tests**, **9 source integration
+tests**, **16 default CLI tests** and **14 native-only CLI tests**. This includes the repaired
+CI fixture and its mismatch regression in both configurations. Two fresh CLI exports
+reproduce all 29 package sections. Strict workspace/native-only lint, formatting, WebAssembly
+library compilation and native dependency isolation pass. Independent reviews closed the
+observer ownership/capacity findings and checked runtime and oracle semantics. Broad native
+and engine numerical suites were not rerun; their earlier results remain historical.
+
+The final source regression preserves 56 fresh artifacts and verifies 68 source/helper hashes
+stayed unchanged during execution. Evidence is bound by `runs/r2h-integration-validation.json`,
+the agent/static/CLI ledgers and `runs/r2h-source-regression/validation.json`; publication is
+recorded separately in `runs/r2h-publication.json`.
+The source pin, original inputs/fixtures, lockfile and schema-29 package remain unchanged.
+Complete native original-build evaluations remain **0/5**. Enclosing activation loops,
+constructor execution and complete numerical parity are still outstanding.
+
+**Resume point:** admit the complete source rounding helper through bounded shared numeric
+operations, preserving exponentiation precedence/associativity, coercion, error ordering and
+unexecuted branches. Continue the actual boss callbacks and resulting placeholder consumers
+on all five originals; do not remove the present frontier assertion without replacing it with
+stronger continuing-state evidence. Bind source-authenticated parser-service results as fresh
+writable session graphs, then execute complete default/saved activation on Twister and
+Skeletal Sniper together. Continue root/provider and actor/action preparation through the
+shared production path, retaining all five originals, mapping variants, whole-build parity
+and joint-search requirements. Native closure creation and authenticated reconciliation of
+new observations with reusable compiled owners remain explicit later seams. UI autocomplete
+remains a derived view of loaded definitions; DuckDB stays deferred under the
+[storage assessment](definition-storage.md).
+
+**Previous checkpoint: R2g session closures and capture cells.** Shared source owners now
 separate code/prototypes and immutable definitions from coherent per-session state graphs,
 closure instances and mutable capture cells. Every prototype capture slot is explicit;
 ordered cell references preserve sharing, rebinding, closure equality and function keys.
@@ -64,16 +121,6 @@ and `runs/r2g-root-checks.json`; publication is recorded in `runs/r2g-publicatio
 The source pin, original inputs/fixtures, lockfile and schema-29 package remain unchanged.
 Complete native original-build evaluations remain **0/5**. This is a source-consumer gate,
 not complete configuration activation, constructor execution or whole-build numerical parity.
-
-**Resume point:** connect original inherited control dispatch using source-authenticated
-class/state bindings, without copying inherited methods into raw fields. Reuse the
-[session capture contract](shared-source-programs.md#live-controls-and-captures); enclosing
-constructors and general native closure creation remain outstanding. Bind source-authenticated
-parser-service results as fresh writable session graphs, then execute complete default/saved
-activation on Twister and Skeletal Sniper together. Continue root/provider and actor/action
-preparation through the shared production path, retaining all five originals, mapping variants,
-whole-build parity and joint-search requirements. UI autocomplete remains a derived view of
-loaded definitions; DuckDB stays deferred under the [storage assessment](definition-storage.md).
 
 **Previous checkpoint: R2f explicit environments and live table coverage.**
 Standalone source owners now retain an immutable schema-1 context sidecar with an optional

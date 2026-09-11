@@ -50,19 +50,14 @@ impl Heap<'_> {
         )?;
         Ok(parents.to_vec())
     }
-    pub(super) fn allocate_instance(&mut self, id: SourceClassId) -> Result<V> {
+    /// Admit an observed instance's lookup protocol independently of allocation
+    /// caches and constructor execution. No instance fields are synthesized here.
+    pub(super) fn validate_instance_protocol(&self, id: SourceClassId) -> Result<()> {
         let owner = self.owner().clone();
-        let classes = owner
-            .classes()
-            .ok_or_else(|| Error::input("owner has no class definitions"))?;
         let class = owner
             .class(id)
             .ok_or_else(|| Error::input("unknown source class"))?;
-        // These language behaviors are not modeled by the Common class policy.
-        // Refuse admission before operations could silently use plain-table
-        // arithmetic/equality/indexing on a behavior-bearing source instance.
         let table = owner.table(class.table).expect("validated class table");
-        let policy = &classes.source;
         if table.fields.get("__index")
             != Some(&poe_optimizer_data::source_program::SourceValue::Table(
                 class.table,
@@ -72,6 +67,56 @@ impl Heap<'_> {
                 "class instance prototype is not a captured self index",
             ));
         }
+        for name in UNMODELED_METAMETHODS {
+            if class.unsupported_fields.contains(*name)
+                || table.fields.get(*name).is_some_and(|value| {
+                    !matches!(value, poe_optimizer_data::source_program::SourceValue::Nil)
+                })
+            {
+                return Err(Error::unsupported(format!(
+                    "unrepresented class metamethod {name}"
+                )));
+            }
+        }
+        Ok(())
+    }
+    pub(super) fn class_call_fallback(
+        &self,
+        id: SourceClassId,
+    ) -> Result<poe_optimizer_data::source_program::SourceTableCallFallback> {
+        use poe_optimizer_data::source_program::{SourceTableCallFallback, SourceValue};
+        let class = self
+            .owner()
+            .class(id)
+            .ok_or_else(|| Error::input("unknown source class"))?;
+        let table = self
+            .owner()
+            .table(class.table)
+            .expect("validated class table");
+        Ok(
+            if class.unsupported_fields.contains("__call")
+                || table
+                    .fields
+                    .get("__call")
+                    .is_some_and(|value| !matches!(value, SourceValue::Nil))
+            {
+                SourceTableCallFallback::Unavailable
+            } else {
+                SourceTableCallFallback::NonCallable
+            },
+        )
+    }
+    pub(super) fn allocate_instance(&mut self, id: SourceClassId) -> Result<V> {
+        let owner = self.owner().clone();
+        let classes = owner
+            .classes()
+            .ok_or_else(|| Error::input("owner has no class definitions"))?;
+        let class = owner
+            .class(id)
+            .ok_or_else(|| Error::input("unknown source class"))?;
+        self.validate_instance_protocol(id)?;
+        let table = owner.table(class.table).expect("validated class table");
+        let policy = &classes.source;
         if class.constructor.is_some() {
             for name in [
                 &policy.unconstructed_meta_field,
@@ -103,17 +148,6 @@ impl Heap<'_> {
             }
         }
 
-        for name in UNMODELED_METAMETHODS {
-            if class.unsupported_fields.contains(*name)
-                || table.fields.get(*name).is_some_and(|value| {
-                    !matches!(value, poe_optimizer_data::source_program::SourceValue::Nil)
-                })
-            {
-                return Err(Error::unsupported(format!(
-                    "unrepresented class metamethod {name}"
-                )));
-            }
-        }
         if class
             .constructor
             .as_ref()
@@ -125,7 +159,13 @@ impl Heap<'_> {
         }
         let inherited = self.class_super_parents(id)?;
         let object = self.new_table()?;
-        self.set_behavior(&object, TableBehavior::Instance(id))?;
+        self.set_behavior(
+            &object,
+            TableBehavior::Instance {
+                class: id,
+                call_fallback: self.class_call_fallback(id)?,
+            },
+        )?;
         self.raw_field_set(&object, &policy.object_alias, object.clone())?;
         if table.fields.contains_key(&policy.parent_classes_field) {
             let initialized = self.new_table()?;
@@ -166,7 +206,7 @@ impl Heap<'_> {
             return Ok(value);
         }
         match self.behavior(table) {
-            Some(TableBehavior::Instance(id)) => {
+            Some(TableBehavior::Instance { class: id, .. }) => {
                 let id = self.owner().class(id).expect("retained class").table;
                 let class = self.definition(id)?;
                 self.get_depth(&class, key, depth + 1)

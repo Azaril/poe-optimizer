@@ -93,9 +93,7 @@ impl Graph<'_> {
             if selection.fields.len() + selection.indexed.len() > 50_000 {
                 return Err(error("source table projection selected key bound"));
             }
-            if self.tables.len() >= MAX_TABLES {
-                return Err(error("source closure table count bound"));
-            }
+            self.check_table_capacity()?;
             for field in &selection.fields {
                 if field.len() > 4096 || field.contains('\0') {
                     return Err(error("source table projection key text bound"));

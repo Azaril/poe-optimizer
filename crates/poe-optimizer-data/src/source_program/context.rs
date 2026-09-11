@@ -44,6 +44,10 @@ pub enum SourceTableIndexFallback {
     /// The raw view is known but its __index behavior is unrepresented.
     /// Ordinary absent reads are unavailable; raw absent reads still yield nil.
     Unavailable,
+    /// Ordinary absent reads use the exact owner-bound class association in one
+    /// coherent SourceSessionInput. This is not valid in a definition context or
+    /// a plain runtime graph; removing the binding must never manufacture Nil.
+    ClassResolved,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -196,6 +200,12 @@ impl SourceProgramContext {
         let mut count = 0usize;
         let mut bytes = 0usize;
         for (id, coverage) in &self.tables {
+            if coverage.index_fallback == SourceTableIndexFallback::ClassResolved {
+                return Err(failure(
+                    SourceProgramErrorKind::UnsupportedCapability,
+                    "resolved class index requires a coherent session class binding",
+                ));
+            }
             let table =
                 id.0.checked_sub(1)
                     .and_then(|index| definitions.tables.get(index as usize))

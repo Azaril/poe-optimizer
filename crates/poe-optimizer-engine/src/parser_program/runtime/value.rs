@@ -114,7 +114,10 @@ impl Key {
 }
 #[derive(Debug, Clone, Copy)]
 pub(super) enum TableBehavior {
-    Instance(SourceClassId),
+    Instance {
+        class: SourceClassId,
+        call_fallback: poe_optimizer_data::source_program::SourceTableCallFallback,
+    },
     ParentProxy,
 }
 
@@ -377,7 +380,8 @@ impl<'a> Heap<'a> {
                     .map_err(|_| Error::resource("import graph tables"))?,
             )
             .ok_or_else(|| Error::resource("import graph table identity"))?;
-        let coverage = self.import_coverage(input, coverage, writable, offset)?;
+        let coverage =
+            self.import_coverage(input, coverage, writable, offset, closures.is_some())?;
         let convert = |v: &ProgramValue| input_value(v, writable, offset, closures);
         let values = input.values.iter().map(convert).collect();
         let mut arguments = Vec::with_capacity(input.tables.len());

@@ -150,8 +150,12 @@ local function install(name)
 					local observation = { value = value }
 					applyInputs[#applyInputs + 1] = observation
 					event("enter", "apply", build.configTab, build, {index=index, var=var.var, type=var.type, value=copy(value), inputObservation=#applyInputs})
+					local applyObserver = rawget(_G, "_configuration_source_apply_observer")
+					local applyEventId = applyObserver and #trace.events
+					if applyObserver then applyObserver("enter", index, var.var, original, value, modList, enemyModList, build, applyEventId) end
 					depth = depth + 1
 					local result = original(value, modList, enemyModList, build)
+					if applyObserver then applyObserver("exit", index, var.var, original, value, modList, enemyModList, build, applyEventId) end
 					local ok, rows = pcall(snapshotRows, modList, enemyModList)
 					if ok then observation.rows = rows else observation.snapshotUnsupported = rows end
 					depth = depth - 1

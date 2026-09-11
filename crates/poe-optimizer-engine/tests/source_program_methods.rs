@@ -817,3 +817,6 @@ fn proxy_mutations_preserve_raw_omission_and_do_not_enable_unsupported_metabehav
         ProgramRuntimeErrorKind::UnsupportedCapability
     );
 }
+
+#[path = "support/source_program_instances.rs"]
+mod imported_instances;

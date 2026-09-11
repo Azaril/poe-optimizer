@@ -180,6 +180,7 @@ impl SourceProgramOwner {
         prototypes.validate(&data)?;
         if let Some(classes) = &classes {
             classes.validate(&data)?;
+            super::classes::validate_shared_callbacks(&data, classes, &prototypes)?;
         }
         if let Some(context) = &context {
             context.validate(&data, classes.as_ref())?;

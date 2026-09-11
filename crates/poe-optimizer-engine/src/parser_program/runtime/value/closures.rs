@@ -1,7 +1,8 @@
 //! Session-owned closure identities and shared capture cells on the existing heap.
-use super::{Error, Heap, Result, V, index, input_value, validate_input};
+use super::{Error, Heap, Result, TableBehavior, TableRef, V, index, input_value, validate_input};
 use poe_optimizer_data::modifier_parser::ParserCallbackId;
 use poe_optimizer_data::source_program::SourceSessionInput;
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub(in crate::parser_program::runtime) struct ClosureRef(pub u32);
@@ -37,6 +38,7 @@ impl Heap<'_> {
             .closures
             .len()
             .checked_add(input.cells.len())
+            .and_then(|value| value.checked_add(input.class_bindings.len()))
             .ok_or_else(|| Error::resource("session closure graph size"))?;
         if headers
             > self
@@ -68,6 +70,56 @@ impl Heap<'_> {
             input.state.tables.len(),
             "session table identity bound",
         )?;
+        // Stage all class associations before the graph is published. Coverage
+        // markers are accepted only in this coherent path, with exact one-to-one
+        // bindings; no raw methods, aliases or parent proxies are manufactured.
+        self.budget.values(
+            input
+                .class_bindings
+                .len()
+                .checked_mul(2)
+                .ok_or_else(|| Error::resource("session class association metadata"))?,
+        )?;
+        self.budget.values(input.coverage.len())?;
+        input
+            .validate_class_bindings(
+                self.budget
+                    .limits
+                    .max_tables
+                    .saturating_sub(self.stats().tables),
+            )
+            .map_err(|error| match error.kind {
+                poe_optimizer_data::source_program::SourceProgramErrorKind::ResourceLimit => {
+                    Error::resource(error.to_string())
+                }
+                _ => Error::input(error.to_string()),
+            })?;
+        let mut checked = BTreeSet::new();
+        let mut behaviors = BTreeMap::new();
+        for (table, class) in &input.class_bindings {
+            if !checked.contains(&class.id()) {
+                self.budget.values(1)?;
+                checked.insert(class.id());
+                self.validate_instance_protocol(class.id())?;
+            }
+            let call_fallback = input
+                .coverage
+                .get(table)
+                .expect("validated class coverage")
+                .call_fallback;
+            if call_fallback != self.class_call_fallback(class.id())? {
+                return Err(Error::input(
+                    "class call fallback conflicts with captured metatable",
+                ));
+            }
+            behaviors.insert(
+                TableRef::Heap(table_offset + table.0),
+                TableBehavior::Instance {
+                    class: class.id(),
+                    call_fallback,
+                },
+            );
+        }
         let space = Some(ImportClosures {
             count: input.closures.len(),
             offset: closure_offset,
@@ -113,6 +165,7 @@ impl Heap<'_> {
         let roots = self.import_graph(&input.state, &input.coverage, true, space)?;
         self.cells.extend(cells);
         self.closures.extend(closures);
+        self.behaviors.extend(behaviors);
         Ok(roots)
     }
     pub(in crate::parser_program::runtime) fn closure_callback(
