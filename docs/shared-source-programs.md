@@ -201,6 +201,24 @@ string metatable/lookup are verified separately. Constructed-class capture still
 the primitive globals required by its closed Common host protocol. Runtime global writes
 and dynamic environment iterator invocation remain explicit frontiers.
 
+Standalone arithmetic admits the existing `Power` opcode and authenticated `MathFloor`.
+Power has Lua precedence and right associativity, including unary exponents; both operands
+execute before numeric coercion. Floor converts its first argument, evaluates but ignores
+extra arguments, and returns exactly one value under the common resource accounting.
+Finite results and signed zero retain their bits; NaN payloads are normalized only by the
+parity comparator. Host `powf`/floor behavior needs platform-specific source evidence.
+Never replace a source helper such as `Common.round` with Rust's differently defined
+rounding operation or omit an unexecuted decimal branch. Legacy parser owners still reject
+power execution and standalone-only primitives; their serialized data remains unchanged.
+
+Generic-for over observed dynamic callables is the next iterator seam. Evaluate its value
+list once, retain iterator/state/hidden control separately from visible loop variables,
+and invoke through the same session and budgets until the first result is nil. Authenticate
+original iterator identities, including functions retained by primitives despite global
+rebinding. Exact traversal of immutable definition maps requires owner-bound observed order;
+currently sorted map storage is insufficient evidence. Mutation and incomplete coverage
+need explicit semantics before admission. This protocol is planned, not yet implemented.
+
 `session_with_coverage` imports writable state, `borrow_with_coverage` imports immutable
 arguments, and `import_with_coverage` admits fresh writable producer results. Transport table
 IDs are local to each import; reuse opaque handles to retain cross-call identity. Private

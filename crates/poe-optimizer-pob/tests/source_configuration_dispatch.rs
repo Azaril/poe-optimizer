@@ -8,9 +8,13 @@ mod capture;
 mod classes;
 #[path = "support/source_program_observation.rs"]
 mod observation;
+#[path = "support/source_program_round.rs"]
+mod rounding;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
+#[path = "support/source_program_warm.rs"]
+mod warm;
 use classes::Primitives;
 use mlua::{Function, Lua, LuaSerdeExt, MultiValue, Table, Value};
 use poe_optimizer_engine::source_program::*;
@@ -90,7 +94,6 @@ fn install(
     passes: Rc<RefCell<Vec<Pass>>>,
 ) -> Result<(), RuntimeError> {
     primitives.replace(Some(Primitives::before_source(lua)?));
-    let level_passes = passes.clone();
     let observer = lua.create_function(move |lua, (phase, index, var, original, value, player, enemy, build, event): (String, usize, String, Function, Value, Table, Table, Table, usize)| {
         assert!(matches!(value, Value::Nil | Value::Boolean(_) | Value::Integer(_) | Value::Number(_) | Value::String(_)), "identity-bearing apply arguments require coherent input binding");
         let mut passes = passes.borrow_mut();
@@ -112,10 +115,16 @@ fn install(
                 match pass.predict(index, &value) {
                     Ok(state) => { row["predicted"] = state; row["paired"] = json!(true); }
                     Err(error) => {
-                        assert_eq!(var, "enemyIsBoss", "review new source frontier: {error}");
-                        assert_eq!(error.kind, ProgramRuntimeErrorKind::UnsupportedCapability);
-                        assert_eq!(error.message, format!("method callback {:?} has no compiled program", pass.captured.round_id));
-                        let frontier = json!({"event":event,"index":index,"var":var,"reason":error.to_string(),"round_callback":pass.captured.round_id});
+                        assert_eq!(error.kind, ProgramRuntimeErrorKind::UnsupportedCapability, "review new source frontier {var}: {error}");
+                        assert_eq!(var, "presetBossSkills", "review new source frontier: {error}");
+                        assert_eq!(error.message, "session closure has no compiled program");
+                        let input = pass.captured.observed.input();
+                        let ProgramValue::Closure(closure) = input.state.values[pass.captured.observed.root_index(&format!("apply.{index}")).unwrap()] else { panic!("actual apply must be a session closure") };
+                        let callback = input.closures[closure.0 as usize - 1].prototype.definition().callback;
+                        let lowering_reason = pass.captured.unsupported[callback.0.to_string()].clone();
+                        assert_eq!(lowering_reason, "generic-for helper iterator is unsupported");
+                        assert_eq!(pass.native_state().unwrap(), pass.actual(), "uncompiled body must leave source-visible entry state unchanged");
+                        let frontier = json!({"event":event,"index":index,"var":var,"reason":error.to_string(),"callback":callback,"lowering_reason":lowering_reason,"argument":observation::canonical(&observation::capture(std::slice::from_ref(&value))),"entry_state_unchanged":true});
                         row["frontier"] = frontier.clone();
                         pass.frontier = Some(frontier);
                     }
@@ -143,28 +152,6 @@ fn install(
     })?;
     lua.globals()
         .set("_configuration_source_apply_observer", observer)?;
-    let level_observer = lua.create_function(move |lua, (phase, config, event): (String, Table, usize)| {
-        if phase != "exit" { return Ok(()); }
-        let mut passes = level_passes.borrow_mut();
-        let Some(pass) = passes.last_mut() else { return Ok(()); };
-        let Some(row) = pass.rows.last() else { return Ok(()); };
-        if row["var"] != "enemyIsBoss" || row["exited"] != false || pass.frontier.is_none() { return Ok(()); }
-        assert_eq!(config.to_pointer(), pass.build.raw_get::<Table>("configTab")?.to_pointer());
-        let trace: Json = lua.from_value(lua.globals().get("_configuration_source_trace")?)?;
-        let source_event = &trace["events"][event-1];
-        assert_eq!(source_event["kind"], "enter");
-        assert_eq!(source_event["name"], "ConfigTab.UpdateLevel");
-        assert_eq!(source_event["callback"], "enemyIsBoss");
-        let native = pass.native_state().unwrap();
-        let actual = pass.actual();
-        assert_eq!(native, actual, "boss partial state through UpdateLevel before uncompiled round");
-        let row = pass.rows.last_mut().unwrap();
-        assert!(row.get("partial_through_update_level").is_none());
-        row["partial_through_update_level"] = json!({"event":event,"state":actual,"round_arguments_or_later_effects_validated":false});
-        Ok(())
-    })?;
-    lua.globals()
-        .set("_configuration_source_level_observer", level_observer)?;
     Ok(())
 }
 fn summarize(
@@ -195,24 +182,19 @@ fn summarize(
             .take_while(|row| row["paired"] == true)
             .collect::<Vec<_>>();
         let expected_saved = match build {
-            "01" | "02" => 45,
-            "03" => 39,
-            "04" | "05" => 38,
+            "01" | "02" => 52,
+            "03" => 46,
+            "04" | "05" => 45,
             _ => unreachable!(),
         };
         assert_eq!(
             paired.len(),
-            if index == 0 { 37 } else { expected_saved },
-            "review source-prefix coverage: {:?}",
+            if index == 0 { 44 } else { expected_saved },
+            "review continuing coverage for build {build}, pass {index}: {:?}",
             pass.frontier
         );
-        assert_eq!(
-            pass.rows
-                .iter()
-                .filter(|row| row.get("partial_through_update_level").is_some())
-                .count(),
-            1
-        );
+        assert_eq!(pass.frontier.as_ref().unwrap()["var"], "presetBossSkills");
+        assert!(paired.iter().any(|row| row["var"] == "enemyIsBoss"));
         assert!(
             paired.iter().any(|row| row["var"] == "enemySizePreset"),
             "size preset remains blocked: {:?}",
@@ -230,8 +212,14 @@ fn summarize(
         observed_events, actual_events,
         "every actual apply entry has one matching exit record"
     );
+    let round_parity = rounding::compare(
+        lua,
+        &passes[0].captured.compiled,
+        &passes[0].captured.original_round,
+        passes[0].captured.round_id,
+    );
     Ok(
-        json!({"passes":reports,"scope":"Original callback bodies, actual continuing state and inherited methods, compared at each actual callback exit. The enclosing activation loop, parser services, constructors and full build evaluation are not admitted.","native_complete_builds":0,"whole_activation_admission":false}),
+        json!({"round_parity":round_parity,"passes":reports,"scope":"Original callback bodies, actual continuing state and inherited methods, compared at each actual callback exit. The enclosing activation loop, parser services, constructors and full build evaluation are not admitted.","native_complete_builds":0,"whole_activation_admission":false}),
     )
 }
 #[test]
@@ -240,7 +228,7 @@ fn original_configuration_callbacks_continue_through_inherited_control_dispatch(
         .join("../..")
         .canonicalize()
         .unwrap();
-    let destination = project.join("runs/r2h-configuration-dispatch");
+    let destination = project.join("runs/r2i-configuration-dispatch");
     fs::create_dir_all(&destination).unwrap();
     if let Ok(build) = std::env::var("POE_CONFIG_DISPATCH_CHILD") {
         assert!(["01", "02", "03", "04", "05"].contains(&build.as_str()));

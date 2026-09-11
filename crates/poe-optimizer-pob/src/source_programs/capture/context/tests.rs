@@ -486,3 +486,40 @@ fn explicit_environment_still_authenticates_the_string_method_contract() {
             .contains("string method")
     );
 }
+
+#[test]
+fn captured_floor_retains_original_identity_when_environment_floor_is_rebound() {
+    let f = fixture(
+        r#"local original = math.floor
+math.floor = function(value) return value + 100 end
+return function() return original(-1.25), math.floor(-1.25) end
+"#,
+        PATH,
+    );
+    let mut context = environment(&f, &["math"]);
+    context.projections.push(selection(
+        f.lua.globals().raw_get("math").unwrap(),
+        &["floor"],
+    ));
+    let observed = observe(&f, context).unwrap();
+    assert_eq!(
+        evaluate(&f, &observed),
+        vec![ProgramValue::Number(-2.0), ProgramValue::Number(98.75)]
+    );
+    let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
+    assert!(
+        lowered
+            .catalog()
+            .data()
+            .programs
+            .iter()
+            .flat_map(|program| &program.bindings)
+            .all(|binding| !matches!(
+                binding,
+                SourceProgramBinding::Intrinsic {
+                    source: SourceProgramIntrinsicSource::OriginalGlobal,
+                    ..
+                }
+            ))
+    );
+}

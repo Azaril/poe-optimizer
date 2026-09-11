@@ -64,6 +64,7 @@ pub struct Captured {
     pub names: Table,
     pub unsupported: Json,
     pub functions: BTreeMap<usize, Function>,
+    pub original_round: Function,
     pub round_id: poe_optimizer_data::source_program::SourceCallbackId,
 }
 pub fn capture(
@@ -232,6 +233,7 @@ pub fn capture(
     }
     let (source, source_names) = classes::inventory(lua, &root, &texts);
     let instrumentation = Instrumentation::suspend(&registry, primitives);
+    let original_round: Function = globals.raw_get("round").unwrap();
     let observed = primitives
         .observer
         .observe_session_with_classes(
@@ -266,7 +268,7 @@ pub fn capture(
                 classes,
                 callbacks: BTreeMap::from([
                     ("probe.state".into(), probe.clone()),
-                    ("original.round".into(), globals.raw_get("round").unwrap()),
+                    ("original.round".into(), original_round.clone()),
                 ]),
                 definition_roots: BTreeMap::new(),
                 allocation: primitives.unwrap(&globals.raw_get("new").unwrap(), "originalNew"),
@@ -292,5 +294,6 @@ pub fn capture(
         unsupported,
         functions,
         round_id,
+        original_round,
     }
 }

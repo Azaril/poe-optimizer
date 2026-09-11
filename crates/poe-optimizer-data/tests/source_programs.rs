@@ -757,6 +757,7 @@ fn function_value_callee_keeps_scope_capture_and_depth_validation() {
 #[test]
 fn standalone_numeric_text_and_pattern_primitives_bind_original_identity_and_shadowing() {
     for (operation, path) in [
+        (SourceProgramIntrinsic::MathFloor, vec!["math", "floor"]),
         (SourceProgramIntrinsic::MathMin, vec!["math", "min"]),
         (SourceProgramIntrinsic::MathMax, vec!["math", "max"]),
         (SourceProgramIntrinsic::ToString, vec!["tostring"]),
@@ -824,6 +825,7 @@ fn standalone_numeric_text_and_pattern_primitives_bind_original_identity_and_sha
         );
     }
     assert!(SourceProgramIntrinsic::StringMatch.is_string_method());
+    assert!(!SourceProgramIntrinsic::MathFloor.is_string_method());
     assert!(!SourceProgramIntrinsic::MathMin.is_string_method());
     assert!(!SourceProgramIntrinsic::ToNumber.is_standalone_only());
 }
@@ -834,6 +836,10 @@ fn parser_owner_rejects_new_function_value_and_intrinsic_forms_without_changing_
     let base = &owner.data().programs.data.programs[0];
     let bindings = [
         SourceProgramBinding::DynamicCall {},
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::MathFloor,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
         SourceProgramBinding::Intrinsic {
             operation: SourceProgramIntrinsic::MathMin,
             source: SourceProgramIntrinsicSource::OriginalGlobal,
@@ -986,5 +992,143 @@ fn legacy_parser_rejects_live_markers_and_capture_writes_without_wire_change() {
         facade
             .bind_closure_prototype(SourceClosurePrototypeId(1))
             .is_err()
+    );
+}
+
+#[test]
+fn floor_requires_the_exact_builtin_and_capture_slot_even_with_an_explicit_environment() {
+    let mut data = definitions();
+    data.callbacks.push(SourceCallback {
+        kind: SourceCallbackKind::Builtin {
+            symbol: "math.floor".into(),
+        },
+        upvalues: vec![],
+        environment: SourceEnvironment::OriginalGlobals,
+    });
+    data.callbacks[0].upvalues[0].value = SourceValue::Callback(SourceCallbackId(3));
+    data.intrinsics
+        .insert(SourceCallbackId(3), SourceProgramIntrinsic::MathFloor);
+    let mut p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::Call {
+            call: Box::new(SourceProgramCall {
+                binding: 0,
+                receiver: None,
+                arguments: SourceProgramValueList {
+                    values: vec![expression(SourceProgramExprKind::Literal {
+                        value: ParserFactoryLiteral::Number(1.25),
+                    })],
+                    tail: None,
+                },
+            }),
+        },
+    );
+    p.bindings = vec![SourceProgramBinding::Intrinsic {
+        operation: SourceProgramIntrinsic::MathFloor,
+        source: SourceProgramIntrinsicSource::Captured {
+            upvalue: 0,
+            callback: SourceCallbackId(3),
+        },
+    }];
+    let owner = SourceProgramOwner::new_with_context(
+        data.clone(),
+        None,
+        SourceProgramContext {
+            environment: Some(SourceProgramRootId(1)),
+            ..SourceProgramContext::default()
+        },
+    )
+    .unwrap();
+    SourceProgramCatalog::new(programs(vec![p.clone()]), owner.clone()).unwrap();
+    for source in [
+        SourceProgramIntrinsicSource::OriginalGlobal,
+        SourceProgramIntrinsicSource::Captured {
+            upvalue: 1,
+            callback: SourceCallbackId(3),
+        },
+        SourceProgramIntrinsicSource::Captured {
+            upvalue: 0,
+            callback: SourceCallbackId(2),
+        },
+    ] {
+        let mut invalid = p.clone();
+        invalid.bindings = vec![SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::MathFloor,
+            source,
+        }];
+        assert_eq!(
+            SourceProgramCatalog::new(programs(vec![invalid]), owner.clone())
+                .unwrap_err()
+                .kind,
+            SourceProgramErrorKind::Binding
+        );
+    }
+    let mut wrong_symbol = data.clone();
+    wrong_symbol.callbacks[2].kind = SourceCallbackKind::Builtin {
+        symbol: "math.ceil".into(),
+    };
+    assert_eq!(
+        SourceProgramOwner::new(wrong_symbol).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+    let mut wrong_kind = data.clone();
+    wrong_kind.callbacks[2].kind = SourceCallbackKind::Lua { source: span() };
+    assert_eq!(
+        SourceProgramOwner::new(wrong_kind).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+    data.callbacks[2].upvalues.push(SourceUpvalue {
+        name: "hidden".into(),
+        value: SourceValue::Number(1.0),
+    });
+    let error = SourceProgramOwner::new(data).unwrap_err();
+    assert_eq!(error.kind, SourceProgramErrorKind::InvalidData);
+    assert!(error.message.contains("invalid builtin"));
+}
+
+#[test]
+fn existing_power_wire_form_retains_parser_structural_acceptance() {
+    let snapshot = bundled_snapshot().unwrap();
+    let owner = snapshot.modifier_parser();
+    let original = serde_json::to_vec(&owner.data().programs).unwrap();
+    let mut p = owner.data().programs.data.programs[0].clone();
+    let location = p.body[0].location;
+    p.bindings.clear();
+    p.body = vec![SourceProgramStatement {
+        location,
+        operation: SourceProgramStatementKind::Return {
+            values: SourceProgramValueList {
+                values: vec![SourceProgramExpr {
+                    location,
+                    operation: SourceProgramExprKind::Binary {
+                        operation: SourceProgramBinary::Power,
+                        left: Box::new(SourceProgramExpr {
+                            location,
+                            operation: SourceProgramExprKind::Literal {
+                                value: ParserFactoryLiteral::Number(2.0),
+                            },
+                        }),
+                        right: Box::new(SourceProgramExpr {
+                            location,
+                            operation: SourceProgramExprKind::Literal {
+                                value: ParserFactoryLiteral::Number(3.0),
+                            },
+                        }),
+                    },
+                }],
+                tail: None,
+            },
+        },
+    }];
+    // The engine keeps parser Power unsupported at execution. Structural
+    // acceptance and serialized enum spelling predate standalone admission.
+    ParserProgramCatalog::new(programs(vec![p]), owner.clone()).unwrap();
+    assert_eq!(
+        serde_json::to_string(&SourceProgramBinary::Power).unwrap(),
+        "\"power\""
+    );
+    assert_eq!(
+        serde_json::to_vec(&owner.data().programs).unwrap(),
+        original
     );
 }

@@ -530,3 +530,24 @@ fn shared_request_steps_and_pattern_work_survive_source_and_resource_errors() {
     );
     assert_eq!(tiny.steps(), 2);
 }
+
+#[test]
+fn parser_power_and_modulo_remain_structurally_accepted_but_runtime_unavailable() {
+    for operation in [ParserProgramBinary::Power, ParserProgramBinary::Modulo] {
+        let (owner, mut data) = program_fixture(1);
+        data.programs[0].body = vec![ret(vec![expr(ParserProgramExprKind::Binary {
+            operation,
+            left: Box::new(local(0)),
+            right: Box::new(num(2.0)),
+        })])];
+        let plan = compile(owner, data);
+        for value in [ProgramValue::Number(3.0), ProgramValue::Boolean(false)] {
+            assert_eq!(
+                execute(&plan, &input(vec![value]), ProgramLimits::default())
+                    .unwrap_err()
+                    .kind,
+                ProgramRuntimeErrorKind::UnsupportedCapability
+            );
+        }
+    }
+}

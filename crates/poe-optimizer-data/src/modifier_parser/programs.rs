@@ -279,6 +279,7 @@ pub enum ParserProgramBinding {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ParserProgramIntrinsic {
+    MathFloor,
     MathMin,
     MathMax,
     ToString,
@@ -296,6 +297,7 @@ impl ParserProgramIntrinsic {
     /// Language/runtime identities, never game-specific lookup names or values.
     pub fn global_path(self) -> Option<&'static [&'static str]> {
         match self {
+            Self::MathFloor => Some(&["math", "floor"]),
             Self::MathMin => Some(&["math", "min"]),
             Self::MathMax => Some(&["math", "max"]),
             Self::ToString => Some(&["tostring"]),
@@ -321,7 +323,7 @@ impl ParserProgramIntrinsic {
     pub fn is_standalone_only(self) -> bool {
         matches!(
             self,
-            Self::MathMin | Self::MathMax | Self::ToString | Self::StringMatch
+            Self::MathFloor | Self::MathMin | Self::MathMax | Self::ToString | Self::StringMatch
         )
     }
 }

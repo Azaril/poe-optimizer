@@ -155,13 +155,24 @@ an unavailable native dependency remains distinct from the deliberately induced 
 error. The non-placeholder branch retains its input write before unavailable `AddUndoState`;
 `BuildModList` is still unentered on that path.
 
-The inherited callback sequence now advances past `enemySizePreset`, retaining control state,
-modifier rows and source function identities across later calls. Its current first frontier is
-`enemyIsBoss` calling the complete original `Common.round`; exponentiation and native floor
-execution need admission before the boss callback can complete. A partial-state comparison
-through the actual nested `UpdateLevel` exit preserves the already executed modifier/control
-writes without claiming rounding or later effects. Keep this distinction from whole activation:
-the current test observes the original enclosing loop and executes its individual callbacks.
+The inherited callback sequence advances through `enemySizePreset` and `enemyIsBoss`,
+retaining control state, modifier rows and source function identities across later calls.
+Complete source `Common.round` executes through authenticated floor and exponentiation;
+its decimal and non-decimal branches retain source rounding, coercion and failure behavior.
+The current first frontier is the complete `presetBossSkills` body: its global `pairs`
+iterator is not admitted. An unexecuted branch is still part of the required whole body,
+including when the actual argument is `None`. Native rejection leaves the compared entry
+state unchanged. The test observes the original enclosing loop and executes individual
+callbacks; it does not yet execute the complete native activation loop.
+
+The next gate needs the general iterator callable/state/control protocol, authenticated
+primitive identities and explicit traversal evidence for complete immutable definitions.
+Source-observed map order matters when a loop appends ordered modifiers or fails after
+prior writes. Sorted native map order is not an equivalent substitute. Mutable structural
+changes require their own iteration semantics. Capture actual dropdown state and
+`DropDownControl.SelByValue`, including selection/enabled state in probes, and cover actual
+non-None presets, Uber branches, additional stats and reset-to-None behavior. Preserve
+shared list ownership between definitions and live controls.
 
 Custom-modifier and quest callbacks additionally require explicit parser-service result
 ownership. Returned modifiers must be writable where original `setSource` mutates them;

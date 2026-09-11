@@ -78,6 +78,11 @@ pub(super) fn call(
         ParserProgramIntrinsic::MathMin | ParserProgramIntrinsic::MathMax => {
             minmax(operation, arguments, heap, patterns, limits)
         }
+        ParserProgramIntrinsic::MathFloor => {
+            let value = number_argument(arguments.first(), patterns)?;
+            result_space(1, heap, limits)?;
+            Ok(vec![V::Number(value.floor())])
+        }
         ParserProgramIntrinsic::StringMatch => string_match(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::Type => {
             let value = arguments

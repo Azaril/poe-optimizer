@@ -72,6 +72,7 @@ impl SourceClosureObserver {
             SourceProgramIntrinsic::StringGsub,
             SourceProgramIntrinsic::StringGmatch,
             SourceProgramIntrinsic::ToString,
+            SourceProgramIntrinsic::MathFloor,
             SourceProgramIntrinsic::MathMin,
             SourceProgramIntrinsic::MathMax,
             SourceProgramIntrinsic::StringMatch,
@@ -98,7 +99,6 @@ impl SourceClosureObserver {
         for symbol in [
             "pairs",
             "string.format",
-            "math.floor",
             "rawget",
             "setmetatable",
             "error",

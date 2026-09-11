@@ -363,7 +363,7 @@ return {object=object,use=use}
     );
 }
 #[test]
-fn floor_is_observed_opaque_without_native_execution_admission() {
+fn floor_is_observed_as_authenticated_intrinsic_with_native_admission() {
     let text = r#"local floor = math.floor
 local Class = newClass("Example")
 function Class:Example() return self end
@@ -373,21 +373,38 @@ return {object=object}
 "#;
     let f = fixture(text);
     let observed = observe(&f, f.request.clone()).unwrap();
-    let (index,_)=observed.owner().callbacks().iter().enumerate().find(|(_,callback)|matches!(&callback.kind,SourceCallbackKind::Builtin{symbol} if symbol=="math.floor")).unwrap();
-    assert!(
+    let (index, _) = observed
+        .owner()
+        .callbacks()
+        .iter()
+        .enumerate()
+        .find(|(_, callback)| {
+            matches!(&callback.kind,
+            SourceCallbackKind::Builtin { symbol } if symbol == "math.floor")
+        })
+        .unwrap();
+    assert_eq!(
         observed
             .owner()
-            .intrinsic(SourceCallbackId(index as u32 + 1))
-            .is_none()
+            .intrinsic(SourceCallbackId(index as u32 + 1)),
+        Some(SourceProgramIntrinsic::MathFloor)
     );
     let library = compile(&f, &observed);
     let (mut session, roots) = library
         .session_from_input(observed.input(), ProgramLimits::default())
         .unwrap();
-    assert!(
-        session
-            .invoke_method(&roots[observed.root_index("object").unwrap()], "Set", &[])
-            .is_err()
+    let args = session
+        .borrow(&ProgramValueGraph {
+            values: vec![ProgramValue::Number(-1.25)],
+            tables: vec![],
+        })
+        .unwrap();
+    let output = session
+        .invoke_method(&roots[observed.root_index("object").unwrap()], "Set", &args)
+        .unwrap();
+    assert_eq!(
+        session.snapshot(&output).unwrap().graph().values,
+        vec![ProgramValue::Number(-2.0)]
     );
     f.lua
         .globals()

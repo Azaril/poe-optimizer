@@ -934,7 +934,10 @@ impl Run<'_, '_, '_> {
                 bytes.extend_from_slice(&right);
                 self.heap.bytes(&bytes)
             }
-            Op::Add | Op::Subtract | Op::Multiply | Op::Divide => {
+            Op::Power if self.library.catalog().owner().parser().is_some() => Err(
+                Error::unsupported("power operation requires standalone source arithmetic proof"),
+            ),
+            Op::Add | Op::Subtract | Op::Multiply | Op::Divide | Op::Power => {
                 let a = number(&left, self.patterns)?
                     .ok_or_else(|| Error::source("arithmetic on a non-number"))?;
                 let b = number(&right, self.patterns)?
@@ -944,11 +947,14 @@ impl Run<'_, '_, '_> {
                     Op::Subtract => a - b,
                     Op::Multiply => a * b,
                     Op::Divide => a / b,
+                    // The pinned LuaJIT arithmetic path calls the host pow;
+                    // integer-power or exp/log rewrites change rounding.
+                    Op::Power => a.powf(b),
                     _ => unreachable!(),
                 }))
             }
-            Op::Modulo | Op::Power => Err(Error::unsupported(
-                "modulo/power operation requires source arithmetic proof",
+            Op::Modulo => Err(Error::unsupported(
+                "modulo operation requires source arithmetic proof",
             )),
         }
     }

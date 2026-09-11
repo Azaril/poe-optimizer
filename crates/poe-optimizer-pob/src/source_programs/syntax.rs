@@ -919,6 +919,9 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                                     ["tostring"] if self.authorization.standalone_calls => {
                                         ParserProgramIntrinsic::ToString
                                     }
+                                    ["math", "floor"] if self.authorization.standalone_calls => {
+                                        ParserProgramIntrinsic::MathFloor
+                                    }
                                     ["math", "min"] if self.authorization.standalone_calls => {
                                         ParserProgramIntrinsic::MathMin
                                     }
@@ -1128,6 +1131,9 @@ fn binary(token: &str, standalone: bool) -> Option<(u8, bool, ParserProgramBinar
         "-" => (5, false, B::Subtract),
         "*" => (6, false, B::Multiply),
         "/" => (6, false, B::Divide),
+        // Lua power binds more tightly than unary operands (priority 7),
+        // including a unary exponent, and associates from the right.
+        "^" if standalone => (8, true, B::Power),
         _ => return None,
     })
 }

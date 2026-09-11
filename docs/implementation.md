@@ -30,7 +30,81 @@ startup budget. The [completion-budget follow-up](#ci-completion-budget-follow-u
 production deadlines and correctness assertions while giving these semantic tests bounded
 completion allowances and fuller diagnostics.
 
-**Current checkpoint: R2h existing class instances and continuing configuration calls.**
+The later completed run `34649202599` (head `9fec5a9`) failed the same old extraction
+completion limit on both hosts: 121.05 seconds on Ubuntu and 138.55 seconds on Windows.
+All eight dataset tests passed on each. Those logs precede the `c69810d` fix and reveal
+no additional failure signature; later targets did not run. See
+`runs/ci-34649202599-review.json` for authenticated log hashes. The latest CI run remains
+separately tracked; local success must not be reported as hosted success.
+
+**Current checkpoint: R2i complete source rounding and continuing boss callbacks.**
+Standalone source programs now execute authenticated `MathFloor` and the existing `Power`
+opcode. Exponentiation preserves Lua precedence, right associativity and unary exponents;
+operands/arguments execute before numeric errors. Floor ignores extra evaluated arguments,
+returns one result and uses cumulative conversion/result budgets. Legacy parser owners
+still reject power execution and standalone-only floor. No package/schema change or
+build-specific arithmetic was introduced.
+
+The source lowerer admits both branches of the complete original `Common.round`, including
+its two decimal scaling operations. Native evaluation does not substitute Rust `round`,
+integer-power shortcuts or exp/log rewrites. Authored-IR tests cover coercion, signed zero,
+nonfinite results, side effects and resource limits; the original-function oracle covers
+398 rounding vectors in interpreter and warmed modes for each original. Another 354
+parameterized vectors exercise power, floor and precedence through observed source lowering.
+Finite/infinity/signed-zero bits match; only NaN payloads normalize. The oracle retains the
+exact captured function. Each warm vector makes 128 calls and requires that function in a
+completed, still-live trace with observation code tracing disabled. Expected-error vectors
+use an explicitly labeled valid seed; they do not claim invalid calls execute in a JIT trace.
+Both independent review findings are closed.
+
+All five original builds now compare **460 complete configuration callbacks**, including
+all ten `enemyIsBoss` invocations, against continuing actual entry/exit state. The previous
+390-callback prefix and ten partial boss checks are superseded by complete boss checks and
+later consumers of its writes. All **637 actual entries/exits** remain recorded. The next
+frontier is `presetBossSkills`: the whole body rejects its unsupported generic helper
+iterator, even though these saved passes supply `None`. Rejection preserves the compared
+entry state. The enclosing native activation loop is not yet admitted, and complete native
+original-build evaluation remains **0/5**.
+
+Validation passes **44 data, 41 engine and 64 observer/lowerer tests**, **10 source integration
+tests**, **16 default CLI tests** and **14 native-only CLI tests**: 189 focused test executions.
+Two fresh exports reproduce all 29 package sections. Strict workspace/native-only Clippy,
+formatting, portable-library compilation and native dependency isolation pass. Numerical
+execution evidence is local Windows x64; Linux and WebAssembly numerical parity must not
+be inferred from it. Broader numerical suites were not rerun, and hosted CI remains separate.
+
+The final source regression preserves **56 fresh artifacts** and verifies **77 source/helper
+hashes** stayed unchanged. It records 460/637 complete/observed callback entries, ten complete
+boss callbacks, 3,980 rounding vector comparisons across five originals/two modes, and 354
+additional arithmetic vectors in each mode. Evidence is bound by
+`runs/r2i-integration-validation.json`, the component/static/CLI ledgers and
+`runs/r2i-source-regression/validation.json`; publication is recorded separately in
+`runs/r2i-publication.json`. Original inputs/fixtures, source pin, lockfile and schema-29
+package remain unchanged.
+
+**Resume point: R2j dynamic iteration and boss presets.** Add a standalone generic-for
+initializer value-list and iterator/state/hidden-control protocol through existing callable
+dispatch and cumulative budgets. Keep parser iterator admission unchanged. Authenticate
+original `pairs` and its retained `next` identity; rebinding a familiar global cannot select
+a substitute. Current sorted table storage loses source traversal order. First admit
+complete immutable definition maps with owner-bound observed order; require each key once
+and reject missing coverage. Mutable structural changes remain explicit until their
+iteration behavior is modeled. Do not claim that sorted traversal preserves ordered
+modifier output or failure prefixes.
+
+Bind actual `DropDownControl.SelByValue`, its class parents and live list/selection/enabled
+state, preserving list ownership shared with definitions. Include injected `data.bossSkills`
+and actual global `pairs`/`type`. Validate real non-None presets, base/Uber variants,
+additional flag/numeric stats, earlier writes before errors and reset-to-None behavior;
+extending only the saved None prefix is insufficient. Then bind source-authenticated
+parser-service results as fresh writable session graphs and execute complete default/saved
+activation on Twister and Skeletal Sniper together. Continue root/provider and actor/action
+preparation through the shared production path with all five originals and mapping variants.
+Native closure creation and authenticated reconciliation of new observations with reusable
+compiled owners remain later seams. UI autocomplete remains a derived view of loaded
+definitions; DuckDB stays deferred under the [storage assessment](definition-storage.md).
+
+**Previous checkpoint: R2h existing class instances and continuing configuration calls.**
 Coherent session inputs bind actual state tables to owner-bound class handles with explicit
 `ClassResolved` coverage. Native import attaches inherited lookup without replaying a
 constructor or synthesizing `Object`, parent proxies or initialization state. Raw overrides,
@@ -74,21 +148,7 @@ The source pin, original inputs/fixtures, lockfile and schema-29 package remain 
 Complete native original-build evaluations remain **0/5**. Enclosing activation loops,
 constructor execution and complete numerical parity are still outstanding.
 
-**Resume point:** admit the complete source rounding helper through bounded shared numeric
-operations, preserving exponentiation precedence/associativity, coercion, error ordering and
-unexecuted branches. Reuse the existing `Power` opcode and add standalone-only `MathFloor`;
-retain the legacy parser runtime rejection of power. Compare complete source rounding,
-including negative half ties, numeric strings, signed zero and nonfinite outcomes, rather
-than substituting Rust's differently defined `round`. Continue the actual boss callbacks and resulting placeholder consumers
-on all five originals; do not remove the present frontier assertion without replacing it with
-stronger continuing-state evidence. Bind source-authenticated parser-service results as fresh
-writable session graphs, then execute complete default/saved activation on Twister and
-Skeletal Sniper together. Continue root/provider and actor/action preparation through the
-shared production path, retaining all five originals, mapping variants, whole-build parity
-and joint-search requirements. Native closure creation and authenticated reconciliation of
-new observations with reusable compiled owners remain explicit later seams. UI autocomplete
-remains a derived view of loaded definitions; DuckDB stays deferred under the
-[storage assessment](definition-storage.md).
+R2h was published as `074fb3e`; the following R2i checkpoint advances its rounding frontier.
 
 **Previous checkpoint: R2g session closures and capture cells.** Shared source owners now
 separate code/prototypes and immutable definitions from coherent per-session state graphs,

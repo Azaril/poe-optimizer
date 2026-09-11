@@ -634,3 +634,6 @@ fn string_match_method_uses_string_primitive_or_actual_table_override() {
         .unwrap();
     assert_values(&result.graph().values, &[text("literal pattern")]);
 }
+
+#[path = "support/source_program_arithmetic.rs"]
+mod arithmetic;

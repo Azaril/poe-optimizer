@@ -353,6 +353,7 @@ fn unknown_later_branches_reject_the_whole_method() {
 
 mod inline;
 mod methods;
+mod power;
 
 #[test]
 fn standalone_callable_values_keep_actual_binding_and_no_implicit_self() {
@@ -404,6 +405,8 @@ fn new_callable_and_scalar_operations_do_not_expand_parser_lowering() {
     for text in [
         "function(functions, value) return functions.apply(value) end\n",
         "function(value) return math.min(value, 3) end\n",
+        "function(value) return math.floor(value) end\n",
+        "function(value) return 10 ^ value end\n",
         "function(value) return math.max(value, 3) end\n",
         "function(value) return tostring(value) end\n",
         "function(value) return string.match(value, 'a') end\n",
