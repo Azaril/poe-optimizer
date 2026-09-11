@@ -93,6 +93,15 @@ include a PoB revision during migration; a production dataset must not require a
 checkout, runtime or even a PoB origin. PoE1 uses its own namespace and rules compatibility;
 loading PoE1 data does not make PoE2 calculation semantics valid for that game.
 
+### Storage adapters and release generation
+
+The [definition-storage investigation](definition-storage.md) considers DuckDB catalogs,
+ORM trade-offs and generated runtime artifacts. Storage may change independently of this
+accepted boundary: acquisition/reconciliation produces validated immutable definitions;
+calculation uses compiled Rust data. The current generated JSON format and exact byte-digest
+identity remain unchanged until an explicit, tested format/identity migration. A database
+or ORM must not become an implicit per-stat provider or a portable-engine dependency.
+
 ### Ownership and injection seam
 
 | Package | Owns / depends on |

@@ -1,8 +1,9 @@
 # Real-build API: concrete migration proposal
 
-Status: **proposed; architecture direction is awaiting user input**. This makes the
+Status: **architecture direction accepted on 2026-09-10**. The owner prioritizes correct
+structure over shortcuts that cause larger later refactors. This makes the
 [general build proposal](general-build-input-proposal.md) concrete enough to review. It
-changes no runtime API or native coverage. Follow the [rollout](real-build-rollout.md)
+defines the target boundary; delivered APIs and coverage remain in the implementation record. Follow the [rollout](real-build-rollout.md)
 for delivery and the [implementation log](implementation.md) for the current resume point.
 
 The immediate contract is an imported instance model and explicitly selected view shared
@@ -214,6 +215,8 @@ still calculate through the new outer boundary. It does **not** promise complete
 or action graphs for the five originals. R2/R3 must prove those producers and integrated
 numbers. Documentation, source inventories and catalog counts alone cannot pass any gate.
 
-The decision awaiting user input is whether to proceed with this staged shared-model migration.
-Rust type spelling, ownership details and bounded storage are implementation decisions within
-that direction; no further architecture approval is implied by this draft.
+The staged shared-model migration is accepted. Rust type spelling, ownership details and
+bounded storage are implementation decisions within that direction. Validate them against
+the contrasting supplied builds before freezing contracts; do not retain a narrow profile
+assumption merely to minimize the immediate diff. Significant new product/design direction
+changes still warrant discussion.

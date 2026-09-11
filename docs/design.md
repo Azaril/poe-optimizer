@@ -231,6 +231,13 @@ selected quest rewards and encounter choices remain separate problem inputs. The
 [data-boundary decision](game-data-boundary.md) defines the model, ownership, validation,
 compatibility and data-update contracts.
 
+Definition acquisition/storage and runtime layout are separate choices. The
+[storage assessment](definition-storage.md) recommends keeping generated packages and using
+a small derived index over the loaded model for UI search/autocomplete. DuckDB/ORM adoption
+is deferred pending demonstrated catalog needs; SQL remains outside the native calculation
+loop. XML remains an input/output adapter where needed. Compatible data-only updates must
+still work without recompiling the evaluator.
+
 ### Evaluator boundary
 
 The shared calculation and evaluation interfaces are in-process Rust traits with typed

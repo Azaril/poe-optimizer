@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-10 (EDT)
+Last updated: 2026-09-11 (EDT)
 
 **Current priority: real-build breadth.** The five supplied originals have **0/5 complete
 native evaluations**; all five import/inspect and evaluate in pinned PoB. Shared parser
@@ -10,22 +10,25 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-The next architectural step is the [shared instance/resolution/plan migration](general-build-input-proposal.md).
-A focused question is pending: proceed with that staged model against the real cases, or
-review the concrete API first. The [concrete API draft](real-build-api-proposal.md) is now
-reviewable against all five originals, including independent set selectors, repeated
-providers and shared item-record references. Do not interpret this draft or the breadth
-reprioritization as an answer. The already-started bounded item-policy extraction is
-integrated as supporting data; it changes no build admission. Preserve completed work
-and repair verified regressions while awaiting that separate direction. The owner has
-approved the broader typed parser language; its G1-G4 stages below can proceed independently.
-Do not resume a standalone named-helper or local-family port campaign ahead of the
-real-build integration gate.
+**Accepted direction:** proceed with the [shared instance/resolution/plan migration](general-build-input-proposal.md).
+The owner asks for the most correct structural design to avoid larger later refactors.
+The [concrete API design](real-build-api-proposal.md) is the working contract; the B3
+architecture question is answered. Prioritize source/instance/definition/plan separation,
+provider lifetime and contrasting cases from all five originals. Ordinary implementation
+choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
+without letting their single-profile assumptions define the new model.
+
+**Current work: R1a owned source and stable identities.** Add portable lineage/revision/
+instance identity contracts and an immutable source-owning import wrapper. Preserve all
+saved sets, ordered duplicates, separate item records/slot uses and failed/opaque projections.
+R1b then resolves independent selections against original source rules; R1c connects the
+existing numerical paths through that boundary. Effective actors/actions and complete
+outputs still belong to R2/R3. Do not equate this first foundation with full R1 or build parity.
 
 | Breadth stage | Current state | Next evidence |
 | --- | --- | --- |
 | Source import/inspection | 5/5 supplied originals | Retain exact bytes, selections and unresolved entries |
-| General native instance/actor/action model | Not implemented; concrete API proposed; Spark/Mace profiles remain | R1: source instances/selected views with explicit deferred producers; R2/R3: effective graphs |
+| General native instance/actor/action model | Direction accepted; R1a source/identity foundation in progress; Spark/Mace profiles remain | R1: source instances/selected views with explicit deferred producers; R2/R3: effective graphs |
 | Complete native real builds | 0/5 | R2/R3: paired Twister and Skeletal Sniper preparation and full outputs |
 | Real-build mutation/parallel parity | Not run | R4: class/ascendancy/provider/support/item/tree changes and serial/Rayon agreement |
 | Scenario breadth | Frozen originals cover Pinnacle/level82 only | R3: explicit mapping variants plus original bossing comparisons |
@@ -36,7 +39,7 @@ make the initial numerical denominator explicit: 22 existing public measurements
 original, 110 total. Exact selections/context and finite/infinite/unavailable outcomes
 are preserved. The generic artifact checker runs no evaluator and cannot declare R3
 completion. Mapping, full preparation, resource semantics and interaction/worker tests
-remain gaps; the shared-model architecture question remains pending.
+remain gaps; the shared-model migration is now accepted.
 
 Latest language work: **packaged native typed-program execution**, detailed in
 the [language checkpoint](#typed-parser-language-decision-checkpoint). Schema27/parser7
@@ -87,8 +90,8 @@ handle injected alternate-count capacity explicitly. Nil-config queries need ori
 AND64/MatchKeywordFlags, including distinct live and captured mask dependencies.
 
 The [conditional-parser decision](conditional-parser-operations-proposal.md) is now
-**accepted: expand the typed rule language**. The separate **B3 actor/action/candidate
-proposal remains awaiting user direction**; the parser answer does not approve it. Follow
+**accepted: expand the typed rule language**. The owner has now also accepted the separate
+**B3 actor/action/candidate migration**, prioritizing structural correctness. Follow
 the [typed parser-program contract](typed-parser-programs.md) for authorized language work.
 Preserve all frozen worktrees, evidence, 44 protected files and both caller inputs. The
 breadth gates above supersede the older standalone-item continuation order.
@@ -112,7 +115,36 @@ reviewed; its [checkpoint](#mixed-store-trace-evidence-repair) records the same 
 The breadth review adds three acceptance gates: freeze required metric/availability
 manifests before numerical implementation; prove a real calculation responds to changed
 injected definitions; and compare reused worker transitions with fresh preparation. These
-strengthen R3-R5 without changing the pending architecture direction.
+strengthen R3-R5 within the now-accepted shared-model architecture.
+
+## Definition storage and UI search
+
+On 2026-09-11 the owner raised DuckDB/ORM storage and pregenerated definitions, then asked
+whether autocomplete could use data already loaded and questioned the database complexity.
+The [storage assessment](definition-storage.md) recommends retaining generated packages and
+adding a small derived in-memory UI search index. No database, ORM, new encoding or production
+UI search is implemented. DuckDB is deferred; adopting it is not a required project phase.
+
+- [x] **Storage assessment.** Audit current package/acquisition/compile boundaries and official
+  DuckDB Rust/WASM/workload guidance. Definitions already ship as generated JSON; build XML is
+  separate interchange. Record artifact-versus-logical identity migration requirements and
+  conditional comparison criteria. No benchmark speedup or new numerical coverage is claimed.
+- [ ] **UI definition discovery, at the CLI/GUI discovery milestone.** Expose a bounded query
+  service over the selected snapshot, with stable definition references, display labels,
+  filters, coverage and a derived prefix/substring index. Preserve duplicate names and data
+  identity. Measure full-catalog latency/memory before adding fuzzy or specialized indexes.
+  Validate old-response handling after data updates and context-dependent selection separately.
+- **Conditional storage follow-up, deferred.** Reopen for measured load/memory bottlenecks,
+  substantial catalog/patch-diff queries or authoring requirements. If justified, prototype
+  DuckDB export to the existing canonical package, then compare JSON/compression, bulk database
+  loading and portable binary encoding with equal fidelity/validation. Review evidence before
+  adopting a format, migrating identities or adding a runtime dependency. These experiments
+  are not prerequisites to completing the current native build evaluator.
+
+Resume R1a source/instance implementation. Planned core/import/CLI code has not been delivered;
+this checkpoint updates design/implementation documents only. Frozen game data, imported
+builds and numerical coverage remain unchanged. Database storage cannot substitute for the
+missing actor/action producers needed by the five supplied builds.
 
 ## Seeded jewel opportunity: J1-J5 follow-up
 
@@ -363,10 +395,9 @@ Hosted G2 run34550304082 was still executing Test on Windows and Ubuntu at this 
 no failed step was observed. This is a nonterminal observation, not a CI pass. The current
 G3 code has no hosted result yet.
 
-**Resume point:** inspect G4 code run34555917045 and any observed failures, then return
-to the shared real-build R1-R5 rollout. The B3 shared actor/action/candidate
-model direction is separately pending and was re-presented at G4 publication; discuss
-the existing concrete proposal before that migration. Do not substitute another standalone named-helper campaign for real-build
+**Resume point:** inspect G4 code run34555917045 and any observed failures, and implement
+the accepted shared-model R1a foundation followed by R1b/R1c. The owner has answered the
+previous B3 question in favor of structural correctness. Do not substitute another standalone named-helper campaign for real-build
 integration. G5 language extensions should follow dependencies actually reached by the
 paired Twister/Skeletal Sniper paths and the other supplied originals. Preserve the 84
 unadmitted programs, current package/source evidence and caller inputs. J1 seed-data

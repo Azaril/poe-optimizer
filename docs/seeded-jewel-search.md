@@ -59,8 +59,8 @@ First investigate an injected lookup adapter and original-source parity. If a de
 native generator is available or worth implementing, place it behind the same provider
 boundary and prove it against the authoritative lookup/source behavior. All item-specific
 facts remain data; normal native runs must not acquire a PoB/Lua subprocess dependency.
-This proposal depends on the shared build/provider model and does not independently
-approve that still-pending architectural migration.
+This proposal depends on the now-accepted shared build/provider model. Seed-specific
+data/algorithm readiness remains a separate gate.
 
 ## Search, cost and reporting
 

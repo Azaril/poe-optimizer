@@ -3,8 +3,8 @@
 The next integration priority is working real builds through one shared native preparation
 and evaluation path. Parser rules, data catalogs and helper parity remain prerequisites;
 their test counts are not the measure of breadth. This delivery plan uses the
-[general build-model proposal](general-build-input-proposal.md), whose architecture choice
-is awaiting user direction. The [concrete API proposal](real-build-api-proposal.md)
+[general build-model proposal](general-build-input-proposal.md), whose architecture direction
+is now accepted, prioritizing structurally correct boundaries over narrow profile reuse. The [concrete API proposal](real-build-api-proposal.md)
 uses all five originals to specify that boundary. The [implementation log](implementation.md)
 tracks execution.
 

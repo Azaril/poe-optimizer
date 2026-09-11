@@ -1,6 +1,9 @@
 # General build input and native preparation: proposal for review
 
-Status: **proposed, not an accepted architecture change**. This B3 proposal follows the
+Status: **accepted on 2026-09-10**. The owner directed us to prioritize the most correct
+structural design and avoid larger later refactors. This accepts the shared instance,
+resolution and native-plan migration; ordinary API/storage choices proceed autonomously.
+This B3 design follows the
 [source-container work](build-source-containers.md), [breadth inventory](breadth-validation.md)
 and [configuration catalog](configuration-data-proposal.md). It does not add mechanic
 coverage or admit the five supplied originals. The [implementation record](implementation.md)
@@ -12,7 +15,7 @@ this proposal. It does not change the proposal's approval status or claim broade
 calculation support. The [concrete API proposal](real-build-api-proposal.md) now specifies
 identity layers, selected views, partial preparation and incremental migration using all
 five originals. Its R1 contract does not claim complete effective actor/action construction;
-those producers and numerical comparisons belong to R2/R3. Both proposals remain unapproved.
+those producers and numerical comparisons belong to R2/R3. Both documents now record the accepted direction; implementation gates remain separate.
 
 ## Recommendation
 
@@ -106,9 +109,10 @@ source range does not change every candidate identity. Equal copies of a physica
 gem remain separate instances. Generated identities include the provider instance, grant
 record and occurrence; their lifetime follows the provider. Names are labels only.
 
-## Proposed staged representation
+## Staged representation
 
-The names below illustrate responsibilities, not an approved Rust API or wire schema.
+The names below illustrate accepted responsibilities; concrete Rust APIs and wire schemas
+are versioned as implementation proceeds.
 
 ```mermaid
 flowchart LR
@@ -175,6 +179,11 @@ source-only inspection path compile game calculations. A new crate is not requir
 Keep game/ruleset identity explicit. A later PoE1 adapter and package can reuse proven operations,
 but must supply their own definitions and resolution semantics; PoE1 behavior is not an implicit
 fallback for missing PoE2 mechanics.
+
+The [definition-storage investigation](definition-storage.md) considers an optional database
+catalog and generated artifacts behind the data seam. Source occurrences, build instances,
+definitions and native handles remain independent of storage row IDs or ORM objects.
+This does not block the shared instance model or select a database implementation.
 
 The data migration replaces dedicated per-skill package fields with versioned skill/effect
 records and references as their operations become representable. Numeric values, level/quality
@@ -293,11 +302,12 @@ establishes general evaluator completeness.
 | Mirror PoB's runtime object graph in Rust first | Close correspondence for porting original consumers and normalization order | Risks exposing mutable UI/runtime state as public build identity and carrying runtime caches/cycles into search; a separate stable source/candidate boundary is still needed |
 | Replace all build/candidate contracts and mechanics in one migration | One final model without temporary compatibility adapters | Delays usable parity evidence and makes regressions difficult to localize; high risk of losing source semantics while numerical pipelines also change |
 
-The significant choice requiring user agreement is whether to adopt the recommended shared
-instance/resolution/plan migration before another standalone skill port. It prioritizes the
-architecture needed for interacting broad builds and temporarily spends effort on representation
-and parity rather than immediately increasing the number of evaluatable skill names. This is a
-technical ordering decision toward the existing full-native objective, not a reduction in scope.
+The accepted choice is the shared instance/resolution/plan migration. Structural correctness
+and contrasting real-build cases take priority over retaining the Spark/Mace profile shape.
+Temporary compatibility adapters may preserve existing behavior, but must not determine the
+new public model. Build, definition, source and compiled identities remain separate, and
+original-source semantics govern resolution and preparation. This is the route toward the
+existing full-native objective, not a reduction in build or search scope.
 
 A secondary product choice is how saved alternative sets should enter optimization. Recommend
 preserving all sets and optimizing one explicitly selected view per run initially, while allowing
