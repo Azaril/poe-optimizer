@@ -285,7 +285,7 @@ fn invalid_break_and_unpatched_targets_cannot_publish_a_plan() {
 
 /// Synthetic programs exercise the public compiler boundary. Their callback
 /// descriptors come from a cloned package; these tests do not prove Lua parity.
-fn program_fixture(count: usize) -> (ModifierParserCatalog, ParserProgramData) {
+pub(super) fn program_fixture(count: usize) -> (ModifierParserCatalog, ParserProgramData) {
     use poe_optimizer_data::game_data::bundled_snapshot;
     use std::sync::OnceLock;
     static BASE: OnceLock<ModifierParserData> = OnceLock::new();

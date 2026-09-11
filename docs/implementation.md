@@ -38,7 +38,11 @@ are preserved. The generic artifact checker runs no evaluator and cannot declare
 completion. Mapping, full preparation, resource semantics and interaction/worker tests
 remain gaps; the shared-model architecture question remains pending.
 
-Latest supporting implementation checkpoint: **injected common item-assembly policy**,
+Latest language work: **native typed-program execution**, detailed in the
+[language checkpoint](#typed-parser-language-decision-checkpoint). It provides an invocation-local
+Rust executor with raw graph observations; source lowering and public admission remain open.
+
+Earlier supporting implementation checkpoint: **injected common item-assembly policy**,
 main commit `d428915`, from isolated code `5edf860c840232ae2940f7d3a51acf510aaa2ca1`.
 Schema26 has 28 sections. `ItemAssemblyData`/`ItemAssemblyCatalog` is explicitly
 **PolicyOnly**: it provides authenticated, injected policy for future native preparation,
@@ -115,7 +119,7 @@ kept alongside the main design. A bounded source read found PoB lookup data and 
 controls, but seed-based branches in the pinned PassiveSpec remain disabled pending data.
 No seed generator, native provider, search or trade feature has been implemented. Confirm
 game/version applicability and complete seed-data availability before implementation.
-The active G1 parser work continues; J2-J5 depend on the general provider/preparation model
+The active G2/G3 parser work continues; J2-J5 depend on the general provider/preparation model
 and relevant R2-R4 real-build gates, rather than displacing them.
 
 - [ ] **J1 — Source, applicability and cost investigation.** Verify actual supported item
@@ -156,7 +160,7 @@ substitution, property selection and requirement names belong in program data.
 **G1 is implemented:** the standalone schema1 `ParserProgramCatalog` owns its injected
 parser catalog and validates all branches, scopes, source references, bindings, result
 packs and aggregate limits. Mutable parameters, raw byte literals, final-result expansion
-and declared intrinsic identities are explicit. Table append carries its authenticated
+and declared intrinsic identities are explicit. Table append carries its declared, structurally validated
 TableInsert binding, distinct from literal list positions. Runtime ownership checks remain
 necessary for dynamic writes; validation does not claim to solve general alias analysis.
 
@@ -166,8 +170,9 @@ explicit. It does not evaluate expressions during compilation or inline recursiv
 The compiled library retains its exact owning catalog and can be shared across threads.
 Both data and adapter implementation fingerprints include the new Rust sources.
 
-There is **no executor, source-program exporter, new callback admission or package migration**
-in this checkpoint. Schema26/parser6 and the 1,222 Pure / 429 Unsupported dispositions remain
+The G1 publication `ed660f6` contained no executor, source-program exporter, callback
+admission or package migration. G2 now adds the executor described below; export and
+public admission remain unimplemented. Schema26/parser6 and the 1,222 Pure / 429 Unsupported dispositions remain
 unchanged; complete supplied native originals remain **0/5**. The G1 tests are structural
 and integration contracts, not original-source program parity or performance evidence.
 
@@ -177,25 +182,65 @@ Strict all-target Clippy for data/engine and workspace formatting pass. All five
 libraries compile for WASM, and native-only CLI normal dependencies contain no PoB/Lua.
 The first broader data-suite compile caught a test fixture missing the newly required
 append binding; that fixture was corrected and its 11 tests/lint passed again. The broader
-full data regression run remains separately tracked until it terminates; do not count it
-as passed from these scoped results. No new PoB source/corpus run has occurred.
+full data regression subsequently completed with **183 passing tests across 26 targets**
+(exit0, original session32274). Its original G1 binary/source identity is retained in the
+ledger; this is not a G2 execution test. No fresh whole-build corpus run has occurred.
 
 | Language stage | Current state | Completion gate |
 | --- | --- | --- |
 | G1: schema and compiler | Implemented; scoped tests and portability gates pass | Retain immutable owner binding, bounded validation and exact legacy package preservation |
-| G2: execution | Next; not implemented | Locals, branches, bounded iteration, identity-preserving heap, explicit result packs, lazy source errors and worker/catalog isolation |
+| G2: execution | Native core, semantic/isolation tests and local validation pass; explicit primitive gaps retained | Retain raw-call contracts and close reached gaps before complete G3 source admission |
 | G3: complete source lowering | Whole-source lowerer/oracle approach inspected; not implemented | Both complete programs plus grant forwarding callbacks, raw-call/public-copy parity, alternate injected definitions and actual warmed-source controls |
 | G4: package/parser integration | Not implemented | Explicit dispatch and migration, reproducible authenticated exports, public/corpus regressions, native-only/WASM gates |
 | G5: subsequent real dependencies | Future reached work | Add required effects/iteration/callable semantics without named callback handlers or weakened source proof |
 
-**Resume point:** implement G2 over the G1 plans. Expose a raw result-pack/heap observation
-seam for the source oracle; preserve zero results, Nil holes, aliases, byte keys and method
-lookup/error ordering. Keep hidden numeric/iterator control state separate from writable
-loop locals, charge executed instructions/backedges, and reset per-invocation state on
-success or failure. Current breaks use jumps with bounded frame-owned state; add explicit
-cleanup metadata if earlier release is needed. Prove mixed table-constructor list-flush
-behavior before admitting overlapping explicit numeric keys. Keep source lowering additive
-and inventory every emitted program; first-target tests do not certify additional closures.
+**G2 implementation:** `CompiledParserPrograms::execute` uses a fresh bounded heap and
+locals per invocation. Raw graphs preserve aliases/cycles, byte strings, IEEE values and
+zero/Nil result cardinality. Helpers retain their own captures and share only invocation
+handles. Numeric/iterator control state is independent of writable visible locals. Plans
+and catalogs are immutable; input/definition writes remain explicit unsupported effects.
+
+The intrinsic bridge supports original `createMod`, default/explicit-base10 `tonumber`, string replacement,
+pattern iteration and dense append. Review repairs preserve method lookup before arguments
+but noncallable-target errors after arguments; result packs are charged before allocation,
+and byte comparisons consume shared scan work. Limits are cumulative logical allocation
+units and work counters, not measured RSS. Failures publish no partial successful graph.
+
+The paired oracle uses interpreted LuaJIT with JIT disabled. Authored IR covers source
+loop/pack/alias/method/pattern behavior and original `createMod`; constant-template table
+cases are explicitly lowered in test data. This is not automatic complete source lowering,
+GemProperty/grantedExtraSkill parity, warmed-JIT evidence or throughput evidence. Runtime
+modulo/power, raw legacy-factory calls and further dynamic effects remain visible gaps in
+the [execution contract](typed-parser-programs.md#native-execution-boundary).
+
+**Resume point:** implement G3's complete source lowering and raw-call proof for
+GemProperty, grantedExtraSkill and both public forwarding callbacks. The read-only
+`runs/typed-program-g3-readiness.md` identifies all four source owners and actual captures; lower them as injected programs or
+identity-preserving shared primitives. These bodies use the existing CreateMod intrinsic;
+no raw legacy-factory bridge is required for their ordinary paths. Extend actual original
+gmatch/table.insert identity authentication when emitting their source-bound bindings.
+Do not route by skill, build or callback name.
+Preserve source table-template initialization and later dynamic-write order. Inventory
+every emitted program and close its required capabilities before admission. G4 must add
+explicit dispatch/export migration and public-copy/corpus regression separately. The B3
+shared-build-model direction remains an independently pending question.
+
+G2 local validation passes **79 tests**: all 61 engine library tests (including 35 compiler/
+heap/intrinsic/runtime contracts) and 18 independent source tests. The source matrix contains
+58 complete raw graph pairs, ten source-error pairs and one explicit opaque-method gap;
+all observations are interpreted. Four concurrent native threads repeatedly exercise two
+catalogs with overlapping IDs and distinct captured values. Strict workspace all-target
+Clippy, native-only CLI all-target Clippy, formatting, five portable-library WASM checks and
+native dependency isolation pass. Full workspace tests and fresh real-build evaluations
+were not rerun for this standalone executor checkpoint. No throughput claim is made.
+
+Evidence for G2: `runs/typed-program-g2-validation.json`,
+`runs/typed-program-g2-engine-tests.log`, `runs/typed-program-g2-clippy.log`,
+`runs/typed-program-g2-native-clippy.log`, `runs/typed-program-g2-wasm.log`,
+`runs/typed-program-semantics-final.json` and `runs/typed-program-executor-data-review.md`.
+The original first test compilation failure (undeclared test-only Rayon import) was fixed
+by using standard scoped threads; no runtime dependency was added. Independent review
+findings and earlier fixture/lint attempts are retained in the ledgers.
 
 Evidence: `runs/typed-program-data-validation.json`, `runs/typed-program-g1-validation.json`,
 `runs/typed-program-engine-tests-final.log`, `runs/typed-program-legacy-parser-tests.log`,

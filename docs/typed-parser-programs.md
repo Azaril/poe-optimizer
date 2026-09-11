@@ -3,9 +3,10 @@
 Status: initial implementation contract for the accepted [parser language decision](conditional-parser-operations-proposal.md).
 The owner chose the broader typed rule language on 2026-09-10. This document specifies
 end-state responsibilities and the first delivery boundary. The [implementation record](implementation.md)
-tracks completed work. G1 now provides the standalone program schema, structural/binding
-verifier and immutable engine plans. No typed-program runtime or new callback admission
-exists yet; source lowering and package dispatch still require G2-G4.
+tracks completed work. G1 provides the standalone program schema, structural/binding
+verifier and immutable engine plans. G2 adds a native invocation executor and raw graph
+observation API. Whole-source lowering and package dispatch remain G3-G4 work; no public
+parser callback uses the typed runtime yet.
 
 ## Purpose and boundary
 
@@ -116,10 +117,15 @@ keys. Likewise, `ipairs` stops at the first Nil. Unproven `pairs` order, metatab
 dynamic callable behavior cannot be replaced by sorted iteration or a convenient default.
 A table literal advances its implicit list index even for Nil values. A source append
 operation instead uses the applicable current length; these operations cannot share a
-hidden insertion counter. Prove the dense invariant before using the dense shortcut. Mixed constructors with
-explicit numeric keys can also interact with Lua VM list-field flushing. Preserve the
-source overwrite behavior or explicitly defer those forms until proved; source order
-alone does not justify a naive sequence of immediate table writes.
+hidden insertion counter. Prove the dense invariant before using the dense shortcut.
+
+The runtime's table expression is an ordered IR construction, not a direct interpretation
+of Lua table syntax. LuaJIT can hoist constant fields into a table template before dynamic
+writes, including duplicate named keys as well as numeric/list keys. Source lowering must
+encode template initialization and subsequent dynamic expressions in their actual order,
+including error timing and alias observations. The G2 oracle pairs authored IR for these
+cases; it does not establish a complete Lua-to-program lowerer. Defer any source form
+whose overwrite/flush behavior has not been proved.
 
 Preserve source copy boundaries. Raw program calls share handles as the source does;
 constructor-specific copies and the public parser's recursive copy occur only at their
@@ -152,8 +158,9 @@ A program-to-helper call must not accidentally reapply those parser conventions.
 Intrinsic identities and capabilities are versioned and source-bound. Reuse the existing
 proved matcher, byte/string operations, conversion and constructor behavior. Pattern
 syntax errors retain their source evaluation point, even if pattern preparation is cached.
-Lower source method calls with their receiver lookup before invocation or argument
-coercion. For example, `name:gsub(...)` must not become an unconditional host
+Lower source method calls with receiver lookup before argument evaluation. Retain the
+resolved method value, then evaluate arguments before checking whether that value can be
+called; do not perform a second lookup after argument effects. For example, `name:gsub(...)` must not become an unconditional host
 `string.gsub(name, ...)`: a numeric receiver can fail during indexing even where the
 free function would coerce that number. Unsupported metatable/dynamic-method behavior
 stays explicit.
@@ -232,8 +239,8 @@ The engine's `CompiledParserPrograms` lowers structured statements to source-map
 instructions with explicit branches, loop state and return/fallthrough. Calls are prebound
 to the retained library's program indices, existing recipes or declared intrinsics. It
 preserves bounded expression trees, including lazy operators, without evaluating values.
-Plans are immutable and shareable. Runtime capability checks, invocation tables and error
-order remain G2 responsibilities; no public parser callback uses these plans yet.
+Plans are immutable and shareable. The native executor below supplies runtime capability
+checks, invocation tables and error ordering; no public parser callback uses these plans yet.
 
 The standalone wire model has schema1. The existing schema26/parser6 package and its
 legacy recipes are unchanged. Program serialization, source export authentication, content
@@ -241,6 +248,53 @@ fingerprints and dispatch integration enter the package together in G4. Implemen
 fingerprints already include the new Rust modules. Scope/ownership metadata must not be
 mistaken for a static proof that every dynamic table write is permissible: reached writes
 must check the invocation-owned heap, including aliases and values returned by helpers.
+
+## Native execution boundary
+
+`CompiledParserPrograms::execute(callback, &ProgramValueGraph, ProgramLimits)` runs one
+invocation with fresh mutable state. The returned `ProgramOutput` retains the owning
+parser catalog, raw return pack and reachable graph, instruction/primitive-work counters
+and allocation-accounting totals. Catalogs/plans can be shared by concurrent workers;
+invocation heaps, locals, loop controls and budgets cannot leak across calls or catalogs.
+Normal dependencies contain no Lua or process host. LuaJIT appears only in source tests.
+
+The graph distinguishes zero results, explicit Nil slots, raw bytes, IEEE numbers, table
+handles and opaque callback identities. Table aliases, cycles and identity-valued keys
+survive calls and export. Input and catalog tables are read-only; a reached write to one
+reports an unsupported effect, without cloning it into an apparently writable replacement.
+Fresh tables remain writable through aliases passed to helpers. Helpers select their own
+captures from the retained owner. Graph import/export are iterative and bounded.
+
+Implemented execution includes locals and simultaneous assignment, lazy value-returning
+operators, branches/breaks, numeric loops with hidden control state, live `ipairs`, pattern
+iteration, fixed and expanded result packs, table access/construction, basic IEEE arithmetic,
+byte comparisons/concatenation and source-bound primitive calls. Numeric-loop direction
+preserves signed-zero and signed-NaN step behavior observed in interpreted LuaJIT. String
+method resolution and call-time failures have distinct evaluation points. String `gsub`,
+default/explicit-base10 `tonumber`, append-only `table.insert` and raw `createMod` have identity-preserving
+bridges; passing arguments to raw helpers does not apply Special/Prefix/ModTag conversion.
+
+Failures distinguish invalid input, source error, resource exhaustion and unsupported
+capability. Source-mapped instruction/expression errors retain the innermost callback and
+location. Limits cover execution work, call/nesting depth, result-pack count, logical value
+storage, tables, byte payloads and pattern work. Primitive numeric scans and byte comparisons
+share the pattern work counter, so `pattern_steps` is broader than pattern matching alone.
+Allocation totals are cumulative charged units, including transient packs and export, not
+measured peak resident memory or allocator overhead. A bounded failure publishes no partial
+successful graph. Success or failure discards invocation state.
+
+Capability gaps remain explicit: the raw legacy-factory bridge, modulo/power arithmetic,
+nondecimal `tonumber` bases, unproved host-dependent integer conversions, positional table
+insertion, dynamic replacement functions/tables, escaping iterator closures, general
+metatable/callable behavior, borrowed-table mutation and arbitrary sparse-table length.
+Extend these where complete source programs require them; compilation alone does not
+certify every dynamically reachable operation. Complete source admission must inventory
+all branches and required capabilities, including paths absent from current fixtures.
+
+The initial tests compare authored IR against interpreted LuaJIT control functions and
+original `createMod`, plus separate runtime isolation/resource tests. They are not complete
+GemProperty/grantedExtraSkill translations, automatic source lowering, warmed-JIT evidence,
+whole-build parity or performance measurements. G3/G4 retain those distinct gates.
 
 ## Delivery sequence
 

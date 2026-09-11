@@ -1,8 +1,10 @@
 //! Immutable control-flow plans for validated, injected parser programs.
 //!
 //! Compilation is independent of callback admission and numerical capability. This
-//! module does not execute programs yet; the legacy parser/package remain unchanged.
+//! native executor remains separate from legacy parser/package admission.
+mod runtime;
 use poe_optimizer_data::modifier_parser::*;
+pub use runtime::*;
 use std::collections::BTreeMap;
 use std::sync::Arc;
 
