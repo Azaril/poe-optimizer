@@ -14,6 +14,8 @@ mod factories;
 mod flags;
 mod numbers;
 mod ordinary;
+mod programs;
+mod programs_auth;
 mod strings;
 
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
@@ -280,6 +282,23 @@ fn between<'a>(text: &'a str, begin: &str, end: &str) -> Result<&'a str> {
     Ok(&section(text, begin, end)?[begin.len()..])
 }
 pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierParserData> {
+    extract_inner(sources, None).map(|(data, _)| data)
+}
+pub(crate) fn extract_programs(
+    sources: &BTreeMap<String, String>,
+    owner: &ModifierParserCatalog,
+) -> Result<crate::parser_programs::ParserProgramExtraction> {
+    extract_inner(sources, Some(owner))?
+        .1
+        .ok_or_else(|| error("program extraction result missing"))
+}
+fn extract_inner(
+    sources: &BTreeMap<String, String>,
+    program_owner: Option<&ModifierParserCatalog>,
+) -> Result<(
+    ModifierParserData,
+    Option<crate::parser_programs::ParserProgramExtraction>,
+)> {
     // SAFETY: only the trusted host retains getupvalue. DEBUG and all loader/I/O
     // APIs are removed before any authenticated source executes. The worker also
     // applies its startup-inclusive deadline; this VM has memory/instruction caps.
@@ -294,6 +313,9 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
             LuaOptions::default(),
         )
     };
+    let program_primitives = program_owner
+        .map(|_| programs_auth::ProgramPrimitives::capture(&lua))
+        .transpose()?;
     let original_strings = strings::StringLibrary::capture(&lua)?;
     let original_number = numbers::NumberPrimitive::capture(&lua)?;
     let original_type: Function = lua.globals().get("type")?;
@@ -600,7 +622,28 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ModifierPars
     };
     out.factories = factories::lower(&lua, sources, &out, constructor)?;
     out.validate().map_err(error)?;
-    Ok(out)
+    let programs = if let Some(owner) = program_owner {
+        program_primitives.as_ref().unwrap().verify(&lua)?;
+        if actual_constructor.to_pointer() != original_constructor.to_pointer() {
+            return Err(error("typed-program original createMod was rebound"));
+        }
+        // Numeric bits (including signed zero) and every legacy record remain
+        // authenticated; PartialEq alone would equate positive/negative zero.
+        if serde_json::to_vec(&out)? != serde_json::to_vec(owner.data())? {
+            return Err(error(
+                "program owner differs from complete original parser extraction",
+            ));
+        }
+        let lowered = programs::lower(&lua, sources, &out, constructor)?;
+        let catalog = ParserProgramCatalog::new(lowered.data, owner.clone()).map_err(error)?;
+        Some(crate::parser_programs::ParserProgramExtraction::new(
+            catalog,
+            lowered.unsupported,
+        ))
+    } else {
+        None
+    };
+    Ok((out, programs))
 }
 #[derive(Debug)]
 struct Token<'a> {

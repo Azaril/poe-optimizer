@@ -62,6 +62,8 @@ pub enum ParserProgramStatementKind {
         locals: Vec<u16>,
         values: ParserProgramValueList,
     },
+    /// Evaluate the complete RHS before stores, then store right-to-left as Lua
+    /// does. Repeated target slots are observable and remain legal.
     Assign {
         locals: Vec<u16>,
         values: ParserProgramValueList,

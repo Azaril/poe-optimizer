@@ -38,9 +38,10 @@ are preserved. The generic artifact checker runs no evaluator and cannot declare
 completion. Mapping, full preparation, resource semantics and interaction/worker tests
 remain gaps; the shared-model architecture question remains pending.
 
-Latest language work: **native typed-program execution**, detailed in the
-[language checkpoint](#typed-parser-language-decision-checkpoint). It provides an invocation-local
-Rust executor with raw graph observations; source lowering and public admission remain open.
+Latest language work: **authenticated whole-source typed-program lowering**, detailed in
+the [language checkpoint](#typed-parser-language-decision-checkpoint). The independent native
+executor now has raw parity evidence for four complete original functions. The extractor
+emits 88 programs; 84 remain unproved. Package/public admission remains open.
 
 Earlier supporting implementation checkpoint: **injected common item-assembly policy**,
 main commit `d428915`, from isolated code `5edf860c840232ae2940f7d3a51acf510aaa2ca1`.
@@ -171,8 +172,9 @@ The compiled library retains its exact owning catalog and can be shared across t
 Both data and adapter implementation fingerprints include the new Rust sources.
 
 The G1 publication `ed660f6` contained no executor, source-program exporter, callback
-admission or package migration. G2 now adds the executor described below; export and
-public admission remain unimplemented. Schema26/parser6 and the 1,222 Pure / 429 Unsupported dispositions remain
+admission or package migration. G2 (`87d586f`) added the executor, and the G3 checkpoint
+below adds standalone authenticated source extraction. Package export and public admission
+remain unimplemented. Schema26/parser6 and the 1,222 Pure / 429 Unsupported dispositions remain
 unchanged; complete supplied native originals remain **0/5**. The G1 tests are structural
 and integration contracts, not original-source program parity or performance evidence.
 
@@ -190,8 +192,8 @@ ledger; this is not a G2 execution test. No fresh whole-build corpus run has occ
 | --- | --- | --- |
 | G1: schema and compiler | Implemented; scoped tests and portability gates pass | Retain immutable owner binding, bounded validation and exact legacy package preservation |
 | G2: execution | Native core, semantic/isolation tests and local validation pass; explicit primitive gaps retained | Retain raw-call contracts and close reached gaps before complete G3 source admission |
-| G3: complete source lowering | Whole-source lowerer/oracle approach inspected; not implemented | Both complete programs plus grant forwarding callbacks, raw-call/public-copy parity, alternate injected definitions and actual warmed-source controls |
-| G4: package/parser integration | Not implemented | Explicit dispatch and migration, reproducible authenticated exports, public/corpus regressions, native-only/WASM gates |
+| G3: complete source lowering | Implemented standalone extraction; four complete original functions pass raw parity and seven live warm controls; 84 other emitted programs unproved | Preserve full inventory and raw/constructor proof; public-copy admission follows in G4 |
+| G4: package/parser integration | Not implemented | Explicit evidence-backed admission, public packing/copy/cache proof, migration, reproducible exports, public/corpus regressions and portability gates |
 | G5: subsequent real dependencies | Future reached work | Add required effects/iteration/callable semantics without named callback handlers or weakened source proof |
 
 **G2 implementation:** `CompiledParserPrograms::execute` uses a fresh bounded heap and
@@ -213,17 +215,74 @@ GemProperty/grantedExtraSkill parity, warmed-JIT evidence or throughput evidence
 modulo/power, raw legacy-factory calls and further dynamic effects remain visible gaps in
 the [execution contract](typed-parser-programs.md#native-execution-boundary).
 
-**Resume point:** implement G3's complete source lowering and raw-call proof for
-GemProperty, grantedExtraSkill and both public forwarding callbacks. The read-only
-`runs/typed-program-g3-readiness.md` identifies all four source owners and actual captures; lower them as injected programs or
-identity-preserving shared primitives. These bodies use the existing CreateMod intrinsic;
-no raw legacy-factory bridge is required for their ordinary paths. Extend actual original
-gmatch/table.insert identity authentication when emitting their source-bound bindings.
-Do not route by skill, build or callback name.
-Preserve source table-template initialization and later dynamic-write order. Inventory
-every emitted program and close its required capabilities before admission. G4 must add
-explicit dispatch/export migration and public-copy/corpus regression separately. The B3
-shared-build-model direction remains an independently pending question.
+**G3 checkpoint after `87d586f`:** the separate offline `parser_programs` API checks
+pinned source bytes, reconstructs the entire original legacy catalog, and binds programs
+only when it matches the caller's owner byte-for-byte, including signed zero. Primitive
+and method-lookup identities are captured before construction and verified afterward.
+The legacy extraction entry point and bundled schema26/parser6 package are unchanged.
+
+Generic whole-function lowering inventories all 1,651 callbacks: **1,222 legacy Pure,
+88 generated programs and 341 unsupported**. Only four generated functions have the
+complete-original raw matrix below: GemProperty, grantedExtraSkill and both grant
+forwarders (pinned IDs 286, 15, 738 and 739). IDs identify test evidence, never production
+handlers. The other **84 programs are unproved**; no program gains public admission.
+Unsupported syntax in any branch rejects the whole body, and missing captured helper
+programs reject dependants. Lexical scopes, result expansion and permitted table writes
+are generic; constructor collision forms and other language/effect gaps remain explicit.
+
+The raw matrix passes **4,012 full-graph comparisons** (4,005 cold and seven warmed),
+including all **961 gem lookup entries across all four targets**, alternate injected
+lookups, alias/cycle/byte/nonfinite values, lazy paths and constructor shapes. Twelve paired
+source failures retain the actual error class, innermost callback and location. Seven
+warm controls require completed live original-body traces and reached constructor/callee
+traces; they do not infer compilation from cache hits. Numeric dictionary keys outside the
+validated catalog and opaque function observations have separate rejection/identity controls,
+not native graph parity claims. Public Special packing, copying and cache behavior remain
+an explicit G4 gate.
+
+Independent review exposed a G2 assignment-order bug: `a, a = 1, 2` must leave `a` as 1.
+The native executor now evaluates the full RHS pack and stores destinations right-to-left.
+An independent interpreted-source regression reproduced the failure before the repair and
+passes afterward, including repeated/missing/interleaved targets and an ordinary swap.
+Multiple indexed source assignments remain unsupported; their source-only witness is not
+counted as native parity.
+
+Final local validation passes **135 tests across affected targets**: 61 engine library,
+19 independent engine semantics, 45 PoB parser-related library and ten complete-source
+matrix tests. The PoB set includes all nine lowerer, five primitive-authentication and four
+public extraction API tests plus legacy parser/extraction regressions. Strict workspace
+all-target Clippy, native-only CLI Clippy, five portable-library WASM checks, dependency
+isolation, formatting and whitespace checks pass. Full workspace tests and fresh whole-build
+corpus measurements were not rerun. No throughput claim is made; full native originals
+remain **0/5**.
+
+Evidence: `runs/typed-program-g3-validation.json`, `runs/typed-program-g3-engine-tests.log`,
+`runs/typed-program-g3-pob-parser-tests.log`, `runs/typed-program-source-final2.log`,
+`runs/typed-program-source-inventory-final2.json`, `runs/typed-program-source-final.json`,
+`runs/typed-program-lowering-final.json`,
+`runs/typed-program-auth-validation.json` and `runs/typed-program-source-data-review.md`.
+The complete inventory retains every program, source dependency and unsupported reason.
+Failed attempts remain recorded, including the invalid numeric-key fixture and the red/green
+assignment regression. The first final source run predates root formatting; final2 binds
+the final source set without overwriting earlier evidence.
+
+Hosted G2 run34550304082 was still executing Test on Windows and Ubuntu at this checkpoint;
+no failed step was observed. This is a nonterminal observation, not a CI pass. The current
+G3 code has no hosted result yet.
+
+**Resume point:** implement G4's explicit program admission and package/public parser
+integration, following `runs/typed-program-g4-readiness.md`. Start with the nested program/
+admission data contract, exact-owner binding, raw argument/result adjustment and bounded
+graph ownership/copy conversion. Three proved functions are public Special entries; the
+fourth is their captured helper. Share failure-inclusive request budgets across scans,
+program execution, retries and conversion; successful-call counters alone are insufficient. Retain all 84 unproved programs outside public dispatch.
+Bind admissions to exact source/program identity and review the full generated inventory.
+Then migrate the actual next package/parser versions, prove two fresh reproducible exports,
+run public/copy/cache and fixed-corpus regressions, and measure compilation/preparation,
+execution and worker memory. Reuse existing factory conventions instead of introducing
+named callback handlers. Preserve original caller/package bytes until the explicit migration
+and record old/new data identities. The B3 shared-build-model direction remains separately
+pending; G4 does not grant complete-build numerical admission or close R1-R5.
 
 G2 local validation passes **79 tests**: all 61 engine library tests (including 35 compiler/
 heap/intrinsic/runtime contracts) and 18 independent source tests. The source matrix contains

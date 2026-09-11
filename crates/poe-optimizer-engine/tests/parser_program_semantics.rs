@@ -1208,3 +1208,36 @@ fn raw_positive_nan_step_is_observed_inside_lua_before_native_pairing() {
         assert_eq!(graph(native.graph()), original);
     }
 }
+
+#[test]
+fn raw_duplicate_local_assignment_matches_original_right_to_left_stores() {
+    use native::*;
+    use poe_optimizer_engine::parser_program::ProgramValue as V;
+    let lua = source();
+    for (targets, rhs, body) in [
+        (vec![0, 0], vec![n(1.0), n(2.0)], "a,a=1,2"),
+        (vec![0, 1, 0], vec![n(1.0), n(2.0), n(3.0)], "a,b,a=1,2,3"),
+        (vec![0, 0], vec![n(1.0)], "a,a=1"),
+        (vec![0, 1], vec![l(1), l(0)], "a,b=b,a"),
+    ] {
+        let plan = compile(
+            2,
+            false,
+            vec![],
+            vec![
+                s(S::Assign {
+                    locals: targets,
+                    values: values(rhs),
+                }),
+                ret(vec![l(0), l(1)]),
+            ],
+        );
+        let original: Function = lua
+            .load(format!("return function(a,b) {body}; return a,b end"))
+            .eval()
+            .unwrap();
+        let expected = capture(original.call((10.0, 20.0)).unwrap());
+        let actual = execute(&plan, &input(vec![V::Number(10.0), V::Number(20.0)])).unwrap();
+        assert_eq!(graph(actual.graph()), expected, "{body}");
+    }
+}

@@ -5,8 +5,9 @@ The owner chose the broader typed rule language on 2026-09-10. This document spe
 end-state responsibilities and the first delivery boundary. The [implementation record](implementation.md)
 tracks completed work. G1 provides the standalone program schema, structural/binding
 verifier and immutable engine plans. G2 adds a native invocation executor and raw graph
-observation API. Whole-source lowering and package dispatch remain G3-G4 work; no public
-parser callback uses the typed runtime yet.
+observation API. G3 adds authenticated whole-function lowering and independent raw
+source comparisons for the first four functions. Package dispatch and public-copy proof
+remain integration work; no public parser callback uses the typed runtime yet.
 
 ## Purpose and boundary
 
@@ -59,7 +60,7 @@ other compiler must satisfy the same observable behavior and budget contract.
 
 | Construct | Required semantics |
 | --- | --- |
-| Locals and assignment | Lexical slots, declaration scope and source order. Declared but uninitialized Lua locals start at Nil; missing fixed arguments also become Nil. Reassignment preserves value/table identity. |
+| Locals and assignment | Lexical slots, declaration scope and source order. Declared but uninitialized Lua locals start at Nil; missing fixed arguments also become Nil. Reassignment preserves value/table identity. Evaluate the complete RHS pack before storing local destinations right-to-left, including repeated destinations. |
 | Conditional blocks | Ordered `if`/`elseif`/`else`; only the selected body runs. Truthiness rejects only Nil and false. |
 | Short-circuit expressions | `and`/`or` preserve operand values and evaluation order; they are not eager Boolean reductions. |
 | Equality and scalar operations | Explicit Lua-compatible operations over tagged values, reusing proved numeric/string primitives and preserving selected source errors. |
@@ -296,6 +297,51 @@ original `createMod`, plus separate runtime isolation/resource tests. They are n
 GemProperty/grantedExtraSkill translations, automatic source lowering, warmed-JIT evidence,
 whole-build parity or performance measurements. G3/G4 retain those distinct gates.
 
+## Whole-source extraction boundary
+
+The optional PoB adapter exposes `parser_programs::extract_pinned` and
+`extract_from_sources`. Both authenticate the pinned source inventory before executing
+source construction. The latter accepts only normalized, manifested source bytes. Fresh
+original construction must reproduce the entire caller-owned parser catalog byte-for-byte,
+including signed zero, captures, definitions and legacy dispositions. Program extraction
+then retains that exact owner. The existing legacy extraction entry point is preserved.
+
+Capture original primitive/library identities before construction and verify them afterward,
+including string method lookup, `gmatch`, `gsub`, `table.insert`, `ipairs`, `tonumber` and the
+original `createMod` closure. Complete source spans, observed capture identities and the
+lowerer implementation participate in provenance. This adapter executes Lua offline;
+consuming and executing the resulting typed catalog remains native and independent of PoB.
+
+The generic lowerer translates complete function bodies, including lexical scopes,
+initializers, branches, loops, result expansion, helper calls and permitted table writes.
+Unsupported syntax anywhere in a body rejects the entire function, even in an unselected
+branch. A helper call is retained only when the captured helper's own complete program is
+available. Limits bound source bytes/tokens, expressions, blocks, locals and total program
+size. No callback, skill or build name selects a runtime algorithm.
+
+Source constructors currently require unique static string fields and disjoint implicit
+list indices. Computed/numeric/duplicate keys are rejected because original LuaJIT
+constant-template ordering needs further proof. Separate dynamic table writes remain
+expressible. Mixed or multiple indexed assignments, scalar vararg positions, missing
+operators, general iterators/callables, nested functions and other unsupported effects
+remain explicit failures. The lowering report inventories every non-legacy callback as a
+program or an unsupported reason; structural acceptance does not establish behavioral parity.
+
+The first source matrix covers complete GemProperty, grantedExtraSkill and both grant
+forwarding callbacks, including helper-owned captures and the original constructor. The
+matrix compares raw return graphs before public Special packing/copying. It includes all
+original gem lookup entries, alternate injected definitions, errors, byte/nonfinite/alias
+cases and live warmed controls. Opaque function identity and definitions outside the
+validated data model have separate controls; they are not promoted to graph parity claims.
+
+Package admission must be explicit and backed by the applicable complete-function and
+public-boundary evidence. It must not dispatch every program merely because extraction
+emitted structurally valid instructions. Keep unproved generated programs out of public
+execution while retaining their inventory for follow-up. G4 owns public result adjustment,
+copy/cache behavior, authenticated package export, fresh corpus regressions and measured
+preparation/execution cost. The implementation record states the current proved/unproved
+counts and precise validation scope.
+
 ## Delivery sequence
 
 1. **G1 — Schema and compiler:** versioned generic program model, source map, structural/
@@ -303,9 +349,11 @@ whole-build parity or performance measurements. G3/G4 retain those distinct gate
 2. **G2 — Execution:** locals, control flow, value/result packs, table heap and primitive
    binding with meaningful semantic and isolation tests. No callback admission by scaffold.
 3. **G3 — Complete source lowering:** lower and prove the two original algorithm bodies
-   through generic instructions, including raw-call and constructor/copy boundaries.
+   through generic instructions, including raw calls and the original constructor.
+   Retain public-copy/dispatch proof as the explicit G4 integration gate.
 4. **G4 — Package and parser integration:** explicit dispatch, authenticated export,
-   version/fingerprint updates, two reproducible exports, public/corpus regression and
+   version/fingerprint updates, explicit evidence-backed admission, public-copy/cache proof,
+   two reproducible exports, public/corpus regression and
    native-only/WASM dependency checks. Report exactly which callbacks gained capability.
 5. **G5 — Subsequent real dependencies:** extend iteration/effect/callable semantics where
    reached callbacks require them. Preserve prior real programs and avoid named handlers.

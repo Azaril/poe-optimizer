@@ -146,7 +146,11 @@ impl Run<'_> {
                 match &instruction.operation {
                     Op::Declare { locals, values } | Op::Assign { locals, values } => {
                         let values = self.values(frame, values, depth + 1)?;
-                        for (index, slot) in locals.iter().enumerate() {
+                        // Lua emits the final assignment store first, then
+                        // unwinds the earlier LHS stores. Duplicate slots make
+                        // that order observable. Declarations use distinct fresh
+                        // slots, for which the same order is immaterial.
+                        for (index, slot) in locals.iter().enumerate().rev() {
                             frame.locals[*slot as usize] =
                                 values.get(index).cloned().unwrap_or(V::Nil);
                         }

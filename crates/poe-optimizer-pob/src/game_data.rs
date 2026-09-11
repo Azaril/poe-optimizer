@@ -211,7 +211,7 @@ pub(crate) fn hash(bytes: &[u8]) -> String {
 fn normalized_hash(text: &str) -> String {
     hash(text.replace("\r\n", "\n").as_bytes())
 }
-fn extractor_sha256() -> String {
+pub(crate) fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
         "poe-game-data-extractor-v26",
@@ -231,6 +231,10 @@ fn extractor_sha256() -> String {
         include_str!("modifier_parser_extract/numbers.rs"),
         include_str!("modifier_parser_extract/ordinary.rs"),
         include_str!("modifier_parser_extract/strings.rs"),
+        include_str!("modifier_parser_extract/programs.rs"),
+        include_str!("modifier_parser_extract/programs/syntax.rs"),
+        include_str!("modifier_parser_extract/programs_auth.rs"),
+        include_str!("parser_programs.rs"),
         include_str!("modifier_parser_inputs.lua"),
         include_str!("skill_identity_extract.rs"),
         include_str!("configuration_extract.rs"),
