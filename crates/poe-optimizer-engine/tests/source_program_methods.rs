@@ -820,3 +820,45 @@ fn proxy_mutations_preserve_raw_omission_and_do_not_enable_unsupported_metabehav
 
 #[path = "support/source_program_instances.rs"]
 mod imported_instances;
+
+#[test]
+fn parent_proxy_accepts_native_iterator_functions_as_call_metamethods() {
+    let (owner, library) = fixture();
+    let (mut session, _) = library
+        .session(&ProgramValueGraph::default(), ProgramLimits::default())
+        .unwrap();
+    let object = allocate(&owner, &mut session);
+    let proxy = session
+        .invoke(ParserCallbackId(12), std::slice::from_ref(&object))
+        .unwrap()
+        .remove(0);
+    let values = args(
+        &mut session,
+        vec![
+            ProgramValue::Bytes(b"ab".to_vec()),
+            ProgramValue::Bytes(b".".to_vec()),
+            ProgramValue::Bytes(b"__call".to_vec()),
+        ],
+    );
+    let iterator = session
+        .invoke_method(&values[0], "gmatch", &values[1..2])
+        .unwrap()
+        .remove(0);
+    session
+        .invoke(
+            ParserCallbackId(16),
+            &[proxy.clone(), values[2].clone(), iterator.clone()],
+        )
+        .unwrap();
+    let first = session.invoke_callable(&proxy, &[]).unwrap();
+    assert_eq!(
+        session.snapshot(&first).unwrap().graph().values,
+        vec![ProgramValue::Bytes(b"a".to_vec())]
+    );
+    let second = session.invoke_callable(&iterator, &[]).unwrap();
+    assert_eq!(
+        session.snapshot(&second).unwrap().graph().values,
+        vec![ProgramValue::Bytes(b"b".to_vec())]
+    );
+    assert!(session.invoke_callable(&proxy, &[]).unwrap().is_empty());
+}

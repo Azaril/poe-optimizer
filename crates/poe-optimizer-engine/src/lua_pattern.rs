@@ -295,6 +295,26 @@ impl LuaPattern {
         whole_capture: bool,
         budget: &mut MatchBudget,
     ) -> Result<Option<PatternMatch>> {
+        let start = Self::search_start(subject, init, budget)?;
+        if plain {
+            return self.plain_find(subject, start, budget);
+        }
+        self.search_raw(subject, start, budget)?
+            .map(|raw| raw.into_captures(whole_capture))
+            .transpose()
+    }
+    /// Stateful gmatch commits its position after matching, before capture
+    /// export can report an unfinished capture. Keep those operations separate.
+    pub(crate) fn match_before_captures(
+        &self,
+        subject: &[u8],
+        init: i32,
+        budget: &mut MatchBudget,
+    ) -> Result<Option<RawMatch>> {
+        let start = Self::search_start(subject, init, budget)?;
+        self.search_raw(subject, start, budget)
+    }
+    fn search_start(subject: &[u8], init: i32, budget: &mut MatchBudget) -> Result<usize> {
         if subject.len() > budget.limits.max_subject_bytes {
             return Err(PatternError::Resource(ResourceKind::SubjectBytes));
         }
@@ -305,23 +325,19 @@ impl LuaPattern {
             i128::from(init) - 1
         };
         // This project uses LuaJIT 5.1, whose out-of-range positive init clamps.
-        let start = raw_start.clamp(0, subject.len() as i128) as usize;
-        if plain {
-            return self.plain_find(subject, start, budget);
-        }
+        Ok(raw_start.clamp(0, subject.len() as i128) as usize)
+    }
+    fn search_raw(
+        &self,
+        subject: &[u8],
+        start: usize,
+        budget: &mut MatchBudget,
+    ) -> Result<Option<RawMatch>> {
         let mut scratch = Vec::new();
         for candidate in start..=subject.len() {
             budget.charge(1)?;
             if let Some(raw) = self.run(subject, candidate, &mut scratch, budget)? {
-                let mut result = raw.captures.result(raw.start, raw.end)?;
-                if whole_capture && result.count == 0 {
-                    result.captures[0] = Capture::Bytes {
-                        start: result.start,
-                        end: result.end,
-                    };
-                    result.count = 1;
-                }
-                return Ok(Some(result));
+                return Ok(Some(raw));
             }
             if self.anchor {
                 break;
@@ -501,10 +517,26 @@ struct Captures {
 }
 /// Matching itself does not consume captures. In particular, gsub only rejects
 /// an unfinished capture if its replacement actually asks for that capture.
-struct RawMatch {
+pub(crate) struct RawMatch {
     start: usize,
     end: usize,
     captures: Captures,
+}
+impl RawMatch {
+    pub(crate) fn range(&self) -> Range<usize> {
+        self.start..self.end
+    }
+    pub(crate) fn into_captures(self, whole_capture: bool) -> Result<PatternMatch> {
+        let mut result = self.captures.result(self.start, self.end)?;
+        if whole_capture && result.count == 0 {
+            result.captures[0] = Capture::Bytes {
+                start: result.start,
+                end: result.end,
+            };
+            result.count = 1;
+        }
+        Ok(result)
+    }
 }
 impl Default for Captures {
     fn default() -> Self {

@@ -34,7 +34,7 @@ pub(super) fn precheck_method(
             let key = heap.bytes(key)?;
             Ok(match heap.get(receiver, &key)? {
                 V::Callback(callback) => MethodTarget::OpaqueCallback(callback),
-                V::Closure(_) => MethodTarget::OpaqueClosure,
+                V::Closure(_) | V::IntrinsicClosure(_) => MethodTarget::OpaqueClosure,
                 // Every modeled table is plain: imported definition graphs
                 // reject metatables, and argument/owned graphs cannot add one.
                 _ => MethodTarget::NonCallable,
@@ -133,7 +133,7 @@ pub(super) fn call(
                 V::Number(_) => b"number",
                 V::Bytes(_) => b"string",
                 V::Table(_) => b"table",
-                V::Callback(_) | V::Closure(_) => b"function",
+                V::Callback(_) | V::Closure(_) | V::IntrinsicClosure(_) => b"function",
             };
             result_space(1, heap, limits)?;
             Ok(vec![heap.bytes(name)?])
@@ -150,11 +150,15 @@ pub(super) fn call(
             Ok(Vec::new())
         }
         ParserProgramIntrinsic::StringGmatch => {
-            // Check arguments in the same order as creation, but do not invent a
-            // callback ID for a closure whose lifetime/identity is not modeled.
-            let _ = string_argument(arguments.first(), heap)?;
-            let _ = string_argument(arguments.get(1), heap)?;
-            Err(Error::unsupported("escaped string.gmatch iterator"))
+            if heap.owner().parser().is_some() {
+                // Preserve the legacy parser facade's escaping-value frontier.
+                let _ = string_argument(arguments.first(), heap)?;
+                let _ = string_argument(arguments.get(1), heap)?;
+                return Err(Error::unsupported("escaped string.gmatch iterator"));
+            }
+            let state = Gmatch::new(arguments, heap, limits)?;
+            result_space(1, heap, limits)?;
+            Ok(vec![heap.new_gmatch(state)?])
         }
         ParserProgramIntrinsic::Pairs => Err(Error::unsupported(
             "pairs dispatch requires its exact called callback identity",
@@ -180,7 +184,7 @@ fn tostring(arguments: &[V], heap: &mut Heap, limits: &ProgramLimits) -> Runtime
         V::Boolean(true) => heap.bytes(b"true")?,
         V::Number(_) => V::Bytes(string_argument(Some(value), heap)?),
         V::Bytes(_) => value.clone(),
-        V::Table(_) | V::Callback(_) | V::Closure(_) => {
+        V::Table(_) | V::Callback(_) | V::Closure(_) | V::IntrinsicClosure(_) => {
             return Err(Error::unsupported(
                 "identity-bearing tostring requires original metamethod/address semantics",
             ));
@@ -384,7 +388,7 @@ fn gsub(
     // before rejecting an invalid replacement. Do not reorder those failures.
     let maximum = optional_integer(arguments.get(3), patterns)?;
     let replacement = match arguments.get(2) {
-        Some(V::Table(_) | V::Callback(_) | V::Closure(_)) => {
+        Some(V::Table(_) | V::Callback(_) | V::Closure(_) | V::IntrinsicClosure(_)) => {
             return Err(Error::unsupported("dynamic string.gsub replacement"));
         }
         value => string_argument(value, heap)?,
@@ -476,7 +480,7 @@ fn create_mod(arguments: &[V], heap: &mut Heap) -> RuntimeResult<V> {
     Ok(table)
 }
 
-/// A native gmatch closure kept inside one invocation's generic-for state.
+/// Shared matcher state for direct Pattern loops and heap-resident functions.
 #[derive(Debug)]
 pub(super) struct Gmatch {
     subject: Arc<[u8]>,
@@ -530,7 +534,10 @@ impl Gmatch {
             .checked_add(1)
             .and_then(|n| i32::try_from(n).ok())
             .ok_or_else(|| Error::resource("gmatch position"))?;
-        let Some(found) = self.pattern.match_captures(&self.subject, init, patterns)? else {
+        let Some(found) = self
+            .pattern
+            .match_before_captures(&self.subject, init, patterns)?
+        else {
             self.exhausted = true;
             return Ok(None);
         };
@@ -540,6 +547,9 @@ impl Gmatch {
         } else {
             range.end
         };
+        // LuaJIT stores the new position before push_captures can reject an
+        // unfinished capture. Matching errors above leave the position alone.
+        let found = found.into_captures(true)?;
         if found.captures().len() > self.max_results {
             return Err(Error::resource("gmatch result pack"));
         }
@@ -579,6 +589,38 @@ mod tests {
     }
     fn field(heap: &mut Heap, table: &V, key: &[u8]) -> V {
         heap.get(table, &bytes(key)).unwrap()
+    }
+
+    #[test]
+    fn parser_escaped_gmatch_keeps_its_legacy_frontier_and_argument_errors() {
+        let (mut heap, mut patterns, limits) = fixture();
+        for (args, expected) in [
+            (
+                vec![bytes(b"ab"), bytes(b".")],
+                ProgramRuntimeErrorKind::UnsupportedCapability,
+            ),
+            (
+                vec![bytes(b"ab"), bytes(b"[")],
+                ProgramRuntimeErrorKind::UnsupportedCapability,
+            ),
+            (
+                vec![V::Boolean(false), bytes(b".")],
+                ProgramRuntimeErrorKind::Source,
+            ),
+        ] {
+            assert_eq!(
+                call(
+                    ParserProgramIntrinsic::StringGmatch,
+                    &args,
+                    &mut heap,
+                    &mut patterns,
+                    &limits
+                )
+                .unwrap_err()
+                .kind,
+                expected
+            );
+        }
     }
 
     #[test]

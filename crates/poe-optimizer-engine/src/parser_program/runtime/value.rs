@@ -23,6 +23,9 @@ pub use poe_optimizer_data::source_program::{
 mod closures;
 pub(super) use closures::ClosureRef;
 use closures::{Closure, ImportClosures};
+mod intrinsic_closures;
+use intrinsic_closures::IntrinsicClosure;
+pub(super) use intrinsic_closures::IntrinsicClosureRef;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub(super) enum TableRef {
@@ -40,6 +43,7 @@ pub(super) enum V {
     Table(TableRef),
     Callback(ParserCallbackId),
     Closure(ClosureRef),
+    IntrinsicClosure(IntrinsicClosureRef),
 }
 impl V {
     pub(super) fn truthy(&self) -> bool {
@@ -63,6 +67,7 @@ impl V {
             (Self::Table(a), Self::Table(b)) => a == b,
             (Self::Callback(a), Self::Callback(b)) => a == b,
             (Self::Closure(a), Self::Closure(b)) => a == b,
+            (Self::IntrinsicClosure(a), Self::IntrinsicClosure(b)) => a == b,
             _ => false,
         }
     }
@@ -76,6 +81,7 @@ enum Key {
     Table(TableRef),
     Callback(ParserCallbackId),
     Closure(ClosureRef),
+    IntrinsicClosure(IntrinsicClosureRef),
 }
 impl Key {
     fn read(value: &V) -> Option<Self> {
@@ -88,6 +94,7 @@ impl Key {
             V::Table(v) => Some(Self::Table(*v)),
             V::Callback(v) => Some(Self::Callback(*v)),
             V::Closure(v) => Some(Self::Closure(*v)),
+            V::IntrinsicClosure(v) => Some(Self::IntrinsicClosure(*v)),
         }
     }
     fn write(value: &V) -> Result<Self> {
@@ -101,6 +108,7 @@ impl Key {
             Self::Table(v) => V::Table(*v),
             Self::Callback(v) => V::Callback(*v),
             Self::Closure(v) => V::Closure(*v),
+            Self::IntrinsicClosure(v) => V::IntrinsicClosure(*v),
         }
     }
     fn positive_integer(&self) -> Option<f64> {
@@ -221,6 +229,7 @@ pub(super) struct Heap<'a> {
     behaviors: BTreeMap<TableRef, TableBehavior>,
     coverage: BTreeMap<TableRef, Coverage>,
     closures: Vec<Closure>,
+    intrinsic_closures: Vec<Option<IntrinsicClosure>>,
     cells: Vec<V>,
     budget: Budget<'a>,
 }
@@ -233,6 +242,7 @@ impl Heap<'static> {
             behaviors: BTreeMap::new(),
             coverage: BTreeMap::new(),
             closures: Vec::new(),
+            intrinsic_closures: Vec::new(),
             cells: Vec::new(),
             budget: Budget {
                 limits,
@@ -286,6 +296,7 @@ impl<'a> Heap<'a> {
             behaviors: BTreeMap::new(),
             coverage: BTreeMap::new(),
             closures: Vec::new(),
+            intrinsic_closures: Vec::new(),
             cells: Vec::new(),
             budget,
         };
@@ -951,6 +962,11 @@ impl Export {
             }
             V::Table(reference) => self.table(*reference, budget)?,
             V::Callback(id) => ProgramValue::Callback(*id),
+            V::IntrinsicClosure(_) => {
+                return Err(Error::unsupported(
+                    "snapshot would erase intrinsic closure identity and iterator state",
+                ));
+            }
             V::Closure(_) => {
                 return Err(Error::unsupported(
                     "snapshot would erase live closure identity and capture cells",

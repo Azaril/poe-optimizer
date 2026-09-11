@@ -3,6 +3,7 @@ use super::*;
 const PROBES: &str = include_str!("source_configuration_dispatch.lua");
 const SOURCE_PATHS: &[&str] = &[
     "src/Modules/Common.lua",
+    "src/_SimpleGraphic.def.lua",
     "src/Data/Global.lua",
     "src/Data/BossSkills.lua",
     "src/Modules/ModTools.lua",
@@ -70,6 +71,13 @@ pub struct Captured {
     pub dropdown_names: Table,
     pub unsupported: Json,
     pub functions: BTreeMap<usize, Function>,
+    pub helpers: BTreeMap<
+        String,
+        (
+            Function,
+            poe_optimizer_data::source_program::SourceCallbackId,
+        ),
+    >,
     pub original_round: Function,
     pub round_id: poe_optimizer_data::source_program::SourceCallbackId,
 }
@@ -132,10 +140,11 @@ pub fn capture(
                 "round",
                 "pairs",
                 "type",
+                "StripEscapes",
             ],
             false,
         ),
-        selection(mod_lib.clone(), &["createMod"], false),
+        selection(mod_lib.clone(), &["createMod", "setSource"], false),
         selection(
             data.clone(),
             &[
@@ -146,6 +155,7 @@ pub fn capture(
                 "monsterEvasionTable",
                 "bossStats",
                 "bossSkills",
+                "questRewards",
             ],
             false,
         ),
@@ -276,6 +286,30 @@ pub fn capture(
     let (source, source_names) = classes::inventory(lua, &root, &texts);
     let instrumentation = Instrumentation::suspend(&registry, primitives);
     let original_round: Function = globals.raw_get("round").unwrap();
+    let helper_functions = BTreeMap::from([
+        (
+            "original.strip_escapes".to_string(),
+            globals.raw_get::<Function>("StripEscapes").unwrap(),
+        ),
+        (
+            "original.set_source".to_string(),
+            mod_lib.raw_get::<Function>("setSource").unwrap(),
+        ),
+        (
+            "original.add_mod".to_string(),
+            registry
+                .raw_get::<Table>("ModList")
+                .unwrap()
+                .raw_get::<Function>("AddMod")
+                .unwrap(),
+        ),
+    ]);
+    let mut shared_callbacks = helper_functions.clone();
+    shared_callbacks.extend([
+        ("probe.state".into(), probe.clone()),
+        ("probe.select".into(), select.clone()),
+        ("original.round".into(), original_round.clone()),
+    ]);
     let observed = primitives
         .observer
         .observe_session_with_classes(
@@ -313,11 +347,7 @@ pub fn capture(
             },
             SourceClassCaptureRequest {
                 classes,
-                callbacks: BTreeMap::from([
-                    ("probe.state".into(), probe.clone()),
-                    ("probe.select".into(), select.clone()),
-                    ("original.round".into(), original_round.clone()),
-                ]),
+                callbacks: shared_callbacks,
                 definition_roots: BTreeMap::new(),
                 allocation: primitives.unwrap(&globals.raw_get("new").unwrap(), "originalNew"),
                 source_names,
@@ -331,6 +361,17 @@ pub fn capture(
     else {
         panic!("original round must retain shared callback identity")
     };
+    let helpers = helper_functions
+        .into_iter()
+        .map(|(name, function)| {
+            let poe_optimizer_data::source_program::SourceSessionValue::Callback(id) =
+                observed.input().state.values[observed.root_index(&name).unwrap()]
+            else {
+                panic!("original helper must retain shared callback identity");
+            };
+            (name, (function, id))
+        })
+        .collect();
     let lowered = lower_from_sources(&texts, observed.owner()).unwrap();
     let unsupported = json!(lowered.unsupported());
     let compiled = CompiledSourcePrograms::new(lowered.catalog()).unwrap();
@@ -346,5 +387,6 @@ pub fn capture(
         functions,
         round_id,
         original_round,
+        helpers,
     }
 }

@@ -646,6 +646,17 @@ impl Run<'_, '_, '_> {
     ) -> Result<Vec<V>> {
         self.tick(depth)?;
         match target {
+            V::IntrinsicClosure(closure) => {
+                // Arguments were evaluated in full by the ordinary call path;
+                // LuaJIT's gmatch iterator ignores their values.
+                if self.call_depth >= self.limits.max_call_depth {
+                    return Err(Error::resource("program call depth"));
+                }
+                self.call_depth += 1;
+                let result = self.heap.invoke_intrinsic_closure(closure, self.patterns);
+                self.call_depth -= 1;
+                result
+            }
             V::Closure(closure) => {
                 let callback = self.heap.closure_callback(closure)?;
                 let index =
@@ -716,7 +727,10 @@ impl Run<'_, '_, '_> {
                 ) =>
             {
                 let callable = self.heap.raw_field(&target, "__call")?;
-                if !matches!(callable, V::Callback(_) | V::Closure(_)) {
+                if !matches!(
+                    callable,
+                    V::Callback(_) | V::Closure(_) | V::IntrinsicClosure(_)
+                ) {
                     return Err(Error::source("proxy call metamethod is not a function"));
                 }
                 let mut arguments = arguments;

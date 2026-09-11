@@ -640,3 +640,6 @@ mod arithmetic;
 
 #[path = "support/source_program_traversal.rs"]
 mod traversal;
+
+#[path = "support/source_program_gmatch.rs"]
+mod gmatch;

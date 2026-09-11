@@ -6,6 +6,8 @@ mod capture;
 #[allow(dead_code)]
 #[path = "support/source_program_classes.rs"]
 mod classes;
+#[path = "support/source_configuration_helpers.rs"]
+mod helpers;
 #[path = "support/source_program_observation.rs"]
 mod observation;
 #[path = "support/source_configuration_presets.rs"]
@@ -121,11 +123,20 @@ fn install(
                     Err(error) => {
                         assert_eq!(error.kind, ProgramRuntimeErrorKind::UnsupportedCapability, "review new source frontier {var}: {error}");
                         assert_eq!(var, "questAct 1ClearfellBeira", "review new source frontier: {error}");
-                        assert_eq!(error.message, "escaped string.gmatch iterator");
-                        assert_eq!(pass.native_state().unwrap(), pass.actual(), "unavailable quest iterator must leave compared entry state unchanged");
+                        assert_eq!(error.message, "source table key/value is unavailable");
+                        assert_eq!(pass.native_state().unwrap(), pass.actual(), "unavailable quest dependency must leave compared entry state unchanged");
                         let callback = error.callback.unwrap();
                         let source = &pass.captured.observed.owner().callback(callback).unwrap().kind;
-                        let frontier = json!({"event":event,"index":index,"var":var,"reason":error.to_string(),"callback":callback,"source":source,"argument":observation::canonical(&observation::capture(std::slice::from_ref(&value))),"entry_state_unchanged":true});
+                        let poe_optimizer_data::source_program::SourceCallbackKind::Lua { source: span } = source else { panic!("quest frontier must retain original Lua source"); };
+                        assert_eq!((&*span.path, span.line, span.end_line), ("src/Modules/ConfigOptions.lua", 40, 54));
+                        let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../vendor/path-of-building-poe2");
+                        let text = poe_optimizer_pob::source::read_verified_text(&root, &span.path).unwrap();
+                        let body = text.split_inclusive('\n').skip(span.line as usize - 1).take((span.end_line - span.line + 1) as usize).collect::<String>();
+                        let start = body.find("function questModsRewards(").unwrap();
+                        let location = error.location.unwrap();
+                        let operation = &body[start + location.start as usize..start + location.end as usize];
+                        assert_eq!(operation, "modLib.parseMod", "exact unrepresented parser consumer");
+                        let frontier = json!({"operation":operation,"event":event,"index":index,"var":var,"reason":error.to_string(),"callback":callback,"source":source,"argument":observation::canonical(&observation::capture(std::slice::from_ref(&value))),"entry_state_unchanged":true});
                         row["frontier"] = frontier.clone();
                         pass.frontier = Some(frontier);
                     }
@@ -195,7 +206,7 @@ fn summarize(
             "pinned continuing callback prefix"
         );
         eprintln!(
-            "R2j build {build} pass {index}: {}/{} callbacks paired",
+            "R2k build {build} pass {index}: {}/{} callbacks paired",
             paired.len(),
             pass.rows.len()
         );
@@ -228,6 +239,15 @@ fn summarize(
         &passes[0].captured.original_round,
         passes[0].captured.round_id,
     );
+    let last = passes.last().unwrap();
+    let helper_captured = capture::capture(lua, primitives, &last.player, &last.enemy, &last.build);
+    let helper_parity = helpers::compare(
+        lua,
+        &helper_captured,
+        &last.player,
+        &last.enemy,
+        &last.build,
+    );
     let preset_parity = presets::run(
         lua,
         primitives,
@@ -236,7 +256,7 @@ fn summarize(
         &passes.last().unwrap().build,
     );
     Ok(
-        json!({"preset_parity":preset_parity,"round_parity":round_parity,"passes":reports,"scope":"Original callback bodies, actual continuing state and inherited methods, compared at each actual callback exit. The enclosing activation loop, parser services, constructors and full build evaluation are not admitted.","native_complete_builds":0,"whole_activation_admission":false}),
+        json!({"helper_parity":helper_parity,"preset_parity":preset_parity,"round_parity":round_parity,"passes":reports,"scope":"Original callback bodies, actual continuing state and inherited methods, compared at each actual callback exit. The enclosing activation loop, parser services, constructors and full build evaluation are not admitted.","native_complete_builds":0,"whole_activation_admission":false}),
     )
 }
 #[test]
@@ -245,7 +265,7 @@ fn original_configuration_callbacks_continue_through_inherited_control_dispatch(
         .join("../..")
         .canonicalize()
         .unwrap();
-    let destination = project.join("runs/r2j-configuration-dispatch");
+    let destination = project.join("runs/r2k-configuration-dispatch");
     fs::create_dir_all(&destination).unwrap();
     if let Ok(build) = std::env::var("POE_CONFIG_DISPATCH_CHILD") {
         assert!(["01", "02", "03", "04", "05"].contains(&build.as_str()));

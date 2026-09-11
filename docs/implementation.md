@@ -44,7 +44,77 @@ one reported zero preparation attempts. All three use the helper already fixed i
 `853ca8b` remain in Test with no failed steps in the recorded snapshot. Active logs are
 not yet available. See `runs/r2j-ci-review.json`; do not treat this as a CI pass.
 
-**Current checkpoint: R2j dynamic iteration and complete boss presets.**
+**Current checkpoint: R2k native iterator functions and original quest helpers.**
+Standalone `string.gmatch` now creates a private native function instance with persistent
+cursor and source-visible identity. Aliases, table keys, capture cells, dynamic methods and
+parent-proxy calls retain that same function. Separate sessions share compiled code without
+sharing cursor state. The factory and calls preserve coercion, argument effects, capture
+packs, zero-result exhaustion and cumulative budgets. Existing direct pattern loops and
+legacy parser admission remain compatible. No new data wire form or package change is needed.
+
+A source differential test found a subtle existing cursor-order issue: a successful match
+must commit position before exporting captures, even when an unfinished capture then causes
+a source error. The native matcher now separates those steps. Matching errors still retain
+the old cursor, and errors restore the private arena state. Snapshots reject intrinsic
+functions whose identity/state the public graph cannot represent; native creation does not
+admit importing arbitrary pre-created Lua C closures.
+
+All five originals now execute the quest's iterator and complete original headless
+`StripEscapes` before reaching the exact `modLib.parseMod` lookup in `questModsRewards`.
+The continuing prefix remains **470 complete callbacks out of 637 actual entries/exits**;
+its dependency boundary has moved inside the quest consumer. Parser lookup remains explicitly
+unavailable with unchanged entry state. Full activation and complete native original-build
+evaluations remain **0/5**.
+
+The same source gate compares **120 StripEscapes cases**, including colour escapes, binary
+strings and 25 source errors; **200 continuing setSource calls**, including nested/cyclic
+aliases and 80 source errors; and **10 insertion/retagging steps** using fresh writable
+fixture graphs and actual ModList.AddMod. Retagging remains visible through the inserted
+row's identity. Probes recapture actual final state and restore the appended row. These
+are helper/ownership checks, not real parser results. The 200 boss/preset cases and original
+rounding comparisons remain regression gates.
+
+Validation passes **90 engine tests**, **15 source integration tests** (including five new
+iterator tests), **16 default CLI tests** and **14 native-only CLI tests**: 135 focused test
+executions. Two fresh exports reproduce all 29 package sections. Strict workspace/native
+Clippy, formatting, WebAssembly library compilation and native dependency isolation pass.
+Independent engine, source-oracle and design reviews are closed. Numerical execution is
+local Windows x64; WebAssembly is compile-only and hosted Linux/Windows CI remains separate.
+Broader native numerical suites were not rerun.
+
+The final source run preserves **56 fresh artifacts** and verifies **93 source/helper hashes**
+stayed unchanged. It records the continuing callback, helper and preset counts above and
+repeats the original-round/arithmetic gates. Evidence is bound by
+`runs/r2k-integration-validation.json`; publication is tracked in `runs/r2k-publication.json`.
+Original inputs/fixtures, source pin, lockfile and schema-29 package remain unchanged.
+Run `34657665152` on `5b30564` and earlier fix-containing CI runs remained in Test without
+failed steps in the R2k snapshot; see `runs/r2k-ci-review.json`. This is not a hosted pass.
+
+**Resume point: R2l full public parser sessions and mutable state.**
+Follow the [parser session design](parser-sessions.md), which retains the original public
+wrapper over private cache/dictionary/capture state. Existing source audits prove that cached
+no-match results, exact case-sensitive keys, DOUBLED mutations, cache eviction and startup preloads
+can change later results. The current stateless parser facade is not an equivalent public
+callable. This follows the accepted full-parity/typed-language direction; no narrower public
+adapter should admit the real originals.
+
+First establish mutable traversal/length, source unpack and complete recursive copy behavior
+for the actual wrapper's consumers. Preserve source-required alias splitting, result packs,
+function identities and failure prefixes. Bind the wrapper's real capture cells/cache aliases
+and mutable dictionaries, including prior lifecycle history. An optimized inner kernel must
+consume that same explicit state and one cumulative preparation budget; parser-local IDs
+cannot be reinterpreted in another owner. Use the existing session/public parser audits as
+acceptance requirements. Detailed dependency evidence is in
+`runs/r2l-parser-service-readiness.md`.
+
+Then bind the complete inner parser and continue multiline quest/custom modifiers and full
+default/saved activation on Twister and Skeletal Sniper together. Keep all five originals and
+mapping variants through root/provider and actor/action preparation. Native source-closure
+creation and authenticated owner reconciliation remain explicit seams. A cached success or
+larger callback prefix alone does not complete the real-build gates. UI autocomplete remains
+a view of loaded definitions; DuckDB stays deferred.
+
+**Previous checkpoint: R2j dynamic iteration and complete boss presets.**
 Standalone generic-for programs now evaluate full initializer packs and use the shared
 callable/state/hidden-control protocol. Nil alone ends traversal; false/zero values,
 visible-local writes, extra results, break and failure prefixes preserve source semantics.
@@ -91,25 +161,6 @@ comparisons across five originals/two modes plus 354 arithmetic vectors per mode
 bound by `runs/r2j-integration-validation.json` and component ledgers; publication is tracked
 in `runs/r2j-publication.json`. Original inputs/fixtures, source pin, lockfile and schema-29
 package remain unchanged.
-
-**Resume point: R2k escaped iterators and quest parser-service ownership.**
-Add a session-owned native callable for `string.gmatch`, retaining identity, aliases and
-private mutable cursor state without putting it in shared definitions. Reuse the existing
-pattern matcher, source coercion/error timing and cumulative budgets. Cover direct calls,
-generic loops, retained aliases, empty/multiple captures and failures. The current direct
-pattern-loop optimization must remain compatible; do not special-case a quest's text.
-
-Next lower the actual headless `StripEscapes` and complete `modLib.setSource` bodies.
-Then admit source-authenticated parser calls with fresh writable result graphs so original
-`setSource` and ordered modifier insertion preserve aliases. The current parser facade
-resets output/program accounting per call; the bridge must instead share cumulative
-preparation budgets and reconcile parser-owned identities explicitly. Keep parser absence distinct
-from unsupported parsing and bind source/service owners explicitly. Execute complete default
-and saved activation on Twister and Skeletal Sniper together, retaining all five originals
-and mapping variants through root/provider and actor/action preparation. Native closure
-creation, mutable traversal and authenticated reconciliation of reusable owners remain
-separate seams. UI autocomplete stays a derived view of loaded definitions; DuckDB remains
-deferred under the [storage assessment](definition-storage.md).
 
 **Previous checkpoint: R2i complete source rounding and continuing boss callbacks.**
 Standalone source programs now execute authenticated `MathFloor` and the existing `Power`

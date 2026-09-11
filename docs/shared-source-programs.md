@@ -199,8 +199,8 @@ select substitutes. Ordinary globals may have been rebound at observation time; 
 captured values determine execution. Captured primitive function identity and the original
 string metatable/lookup are verified separately. Constructed-class capture still verifies
 the primitive globals required by its closed Common host protocol. Dynamic environment
-iterator calls use the generic protocol below; runtime global writes and escaping
-intrinsic iterator instances remain explicit frontiers.
+iterator calls use the generic protocol below; runtime global writes and unsupported
+intrinsic iterator families remain explicit frontiers.
 
 Standalone arithmetic admits the existing `Power` opcode and authenticated `MathFloor`.
 Power has Lua precedence and right associativity, including unary exponents; both operands
@@ -261,6 +261,32 @@ fresh Lua VM or a differently constructed table has the same internal order. Fut
 cross-observation reconciliation must authenticate that boundary; sorted native order
 cannot stand in for source order when modifier insertion or failure prefixes expose it.
 Native runtime execution consumes injected descriptors and has no PoB/Lua dependency.
+
+### Private intrinsic function instances
+
+A standalone `string.gmatch` factory creates a private heap function instance. Its handle
+retains identity and cursor through return values, aliases, table keys, captures and dynamic
+method/proxy calls. Separate creations remain distinct. Compiled definitions carry no
+mutable cursor, and two sessions sharing one library cannot advance each other's iterator.
+
+The factory converts/checks subject and pattern in source order, ignores already-evaluated
+extra arguments and returns one function. That function ignores its evaluated arguments,
+returns the complete capture pack and returns zero values at exhaustion. Generic-for pads
+its factory result and uses the same callable protocol. Existing direct pattern loops reuse
+the matcher but retain legacy parser admission; escaped functions remain standalone-only.
+
+Malformed pattern errors occur when reached during matching, not at factory creation.
+Matching errors retain cursor position. A successful match commits the cursor before capture
+export, including when exporting an unfinished capture then raises a source error. The raw
+match/capture-export split preserves that source ordering and restores the private arena
+state on either result. Calls and failures consume the same cumulative work/allocation
+budget; no per-call reset or shared mutable state is introduced.
+
+The public wire graph does not encode a partially consumed intrinsic function. Snapshots
+therefore reject these functions, including nested values and keys, rather than erasing their
+identity/state. Native creation does not imply observation/import of arbitrary existing Lua
+C closures. Foreign session handles remain invalid, and unsupported intrinsic families have
+explicit frontiers.
 
 ### Live controls and captures
 
@@ -384,12 +410,18 @@ request and resource budget. Keep dispatch permission separate from structural c
 A missing implementation must report an unavailable dependency, not imitate the parser's
 legitimate no-match result. The caller branches on that distinction.
 
-Returned modifier graphs need the ownership that their next source consumer requires.
-`modLib.setSource` mutates both a modifier and its nested modifier, and returns the same
-object. Plan fresh writable session results with preserved aliases, rather than importing
-those results through the existing read-only argument path. Immutable package definitions
-and caller-borrowed input remain shared and protected. Prove result identity, mutation and
-failure behavior before admitting custom modifiers and generated quest callbacks.
+The [parser session design](parser-sessions.md) retains the original public wrapper and its
+private cache/dictionary/capture state. Existing source audits prove that cache history and
+DOUBLED mutations affect later calls. The current stateless parser facade cannot substitute
+for that public callable. An optimized inner kernel must share state, owner binding and the
+preparation's cumulative accounting; it must not reset output/program budgets per line.
+
+Returned modifier graphs must follow the source wrapper's recursive-copy semantics, including
+aliases it deliberately splits. Then import fresh writable graphs and preserve their resulting
+identities through the complete original `modLib.setSource` and ordered `AddMod`. These methods
+now have component evidence for nested aliases, repeated writes and source-error prefixes.
+That evidence does not yet produce real parser results or admit quest activation. Immutable
+package definitions and caller-borrowed input remain shared and protected.
 
 ### Resume and acceptance cases
 
@@ -401,7 +433,7 @@ The test producer is bounded and explicit; it is not production configuration pr
 The bounded live-notification gate also compares complete original `SetPlaceholder` and
 numeric `changeFunc` bodies, including reused controls, unavailable short-circuits and
 failure-prefix effects. The inherited-method gate adds continuing actual callback sequences
-through source-authenticated class bindings. Native closure construction and the complete
+through source-authenticated class bindings. Native source-closure construction and the complete
 ordered defaults/saved-activation lifecycle remain outstanding. Keep the five-build
 structural matrix and the Twister/Skeletal Sniper pairing as coverage, not runtime presets.
 The complete ConfigOptions callback inventory should determine later dependency work.

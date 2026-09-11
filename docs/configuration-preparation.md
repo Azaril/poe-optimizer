@@ -172,18 +172,22 @@ placeholder aliases, ordered modifier rows and reached state before/after source
 They restore projected source state and aliases, without claiming to restore Lua's
 internal hash layout. UI selection callbacks and constructors are not admitted by this gate.
 
-The current first frontier is the quest callback's escaped `string.gmatch` iterator.
-Generic lowering succeeds, but the native intrinsic cannot yet return a callable iterator
-with private progress state. The continuing callback gate rejects it before state writes.
-Add bounded heap-resident iterator identity and progress through the shared call protocol;
-prove aliasing, repeated calls, deferred pattern errors and cumulative allocation/work
-before advancing quest processing. Existing direct pattern loops keep their behavior.
-The test still observes the original enclosing loop and executes individual callbacks;
-it does not yet execute complete native activation.
+The quest callback now creates and consumes a native `string.gmatch` function, then executes
+the complete original headless `StripEscapes`. Private iterator identity/cursor state and
+source error timing follow the shared [function-instance contract](shared-source-programs.md).
+The continuing gate now reaches the exact `modLib.parseMod` lookup in `questModsRewards`;
+that producer remains unavailable and entry state is unchanged. The gate observes the
+original enclosing loop and executes individual callbacks, not complete native activation.
 
-Custom-modifier and quest callbacks additionally require explicit parser-service result
-ownership. Returned modifiers must be writable where original `setSource` mutates them;
-callback IDs from different owners cannot be passed through by number. Continue complete
-initial/default and saved activation only after these dependencies are bound. A compiled
-callback inventory or a compared prefix of independent modifier callbacks does not complete
-that activation stage.
+Complete original `modLib.setSource` has separate component evidence for scalar/nested values,
+source tags, returned identity, repeated writes, cycles and errors after the outer write.
+Fresh writable fixture graphs pass through the actual `ModList.AddMod`; a later `setSource`
+write remains visible through the inserted row's alias. The probe uses a fresh final-state
+capture and restores the actual appended row. This validates result ownership, not parsing.
+
+The [parser session design](parser-sessions.md) preserves public cache/dictionary history,
+startup preloads, exact result packs, recursive-copy semantics and cumulative budgets.
+Source audits already show why the stateless parser facade is not an equivalent public
+producer. Bind the original wrapper and its private state before admitting quest/custom
+modifiers. Then continue complete initial/default and saved activation. A compiled callback
+inventory, cached success or compared prefix does not complete that activation stage.
