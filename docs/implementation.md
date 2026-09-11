@@ -18,17 +18,26 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-**Current work: R1a owned source and stable identities.** Add portable lineage/revision/
-instance identity contracts and an immutable source-owning import wrapper. Preserve all
-saved sets, ordered duplicates, separate item records/slot uses and failed/opaque projections.
-R1b then resolves independent selections against original source rules; R1c connects the
-existing numerical paths through that boundary. Effective actors/actions and complete
-outputs still belong to R2/R3. Do not equate this first foundation with full R1 or build parity.
+**Current work: R1b selected views and two prior CI repairs.** R1a portable identities,
+owned source mapping and opt-in CLI inspection are implemented and validated; see
+[the R1a contract](build-instances.md). All 396 core/import/native tests pass on the frozen
+R1a source before the separate implicit-line repair; session56069 completed with exit0.
+Five CLI tests pass in each feature configuration, and ten original-source selection tests
+now establish R1b prerequisites. Implement independent selected-view resolution next, then
+route existing numerical paths through it in R1c. Effective actors/actions and complete
+outputs remain R2/R3; R1a is neither complete R1 nor additional whole-build parity.
+
+The earlier G4 CI run finished with Windows search-budget failures and Linux implicit-line
+mismatches; G3 succeeded on both platforms. The Windows failure is reproduced as preparation
+contention under the tests'30-second guard; test-only repair preserves all count assertions
+and production deadlines. The Linux failure exposed a missing source range-pattern branch
+for granted-skill implicits. Both repairs are being validated separately; do not relabel
+the earlier failed G4 run as passing. Evidence: `runs/r1a-prior-ci.json`.
 
 | Breadth stage | Current state | Next evidence |
 | --- | --- | --- |
 | Source import/inspection | 5/5 supplied originals | Retain exact bytes, selections and unresolved entries |
-| General native instance/actor/action model | Direction accepted; R1a source/identity foundation in progress; Spark/Mace profiles remain | R1: source instances/selected views with explicit deferred producers; R2/R3: effective graphs |
+| General native instance/actor/action model | R1a source/identity/CLI validated; R1b resolver pending; Spark/Mace profiles remain | R1: source instances/selected views with explicit deferred producers; R2/R3: effective graphs |
 | Complete native real builds | 0/5 | R2/R3: paired Twister and Skeletal Sniper preparation and full outputs |
 | Real-build mutation/parallel parity | Not run | R4: class/ascendancy/provider/support/item/tree changes and serial/Rayon agreement |
 | Scenario breadth | Frozen originals cover Pinnacle/level82 only | R3: explicit mapping variants plus original bossing comparisons |
@@ -117,6 +126,42 @@ manifests before numerical implementation; prove a real calculation responds to 
 injected definitions; and compare reused worker transitions with fresh preparation. These
 strengthen R3-R5 within the now-accepted shared-model architecture.
 
+## R1a source ownership and identity checkpoint
+
+The new [owned import model](build-instances.md) preserves exact XML once and indexes every
+element occurrence, including unknown content and independently failed typed projections.
+It reuses existing skill/item consumer classifiers and bounded XML parsing. Stable typed
+IDs distinguish saved sets, groups/entries, item records/slot uses and passive/config sets;
+external source IDs remain raw data, with no guessed winner or default selection.
+
+`inspect-build --with-instances` exposes a schema1 subreport and obtains lineages from the
+host OS through CLI-only `getrandom` (the already-locked version0.4.3). Core/import have no
+randomness, database or filesystem dependency. The existing decoder DTO remains compatible.
+The identity allocator serializes a persistent watermark, preventing deleted-ID reuse when
+properly restored; actual membership and coordinated candidate allocation remain separate.
+
+Current verified scope: 10 core identity tests; 12 owned-import tests; five CLI tests with
+each of native-only/default features. The five-source mapping retains 15 skill sets, 200
+groups, 541 skill entries and 116 item records; this is structural evidence. Scoped core,
+import and native CLI lint passes. Core and import compile for wasm32-unknown-unknown;
+browser execution is not claimed. Broader regression passed all 396 tests across 36 target
+results, with zero failures/ignored tests, on the pre-CI-repair source frozen in
+`runs/r1a-root-regression-source.json`. Its original session56069 is terminal with exit0.
+
+Supporting ledgers: `runs/r1a-build-identity-validation.json`,
+`runs/shared-build-r1-cli-validation.json`, `runs/r1a-import-instance-tests.log` and
+`runs/r1a-import-wasm.log`. Root source tests now also cover local namespace/reset contexts.
+R1b preparation now includes ten independent original-source selector tests across 40 calls,
+including 11 expected throws, sparse config IDs, independent passive positions, partial error
+state and prior-spec jewel writeback. The full authenticated selection/load methods execute;
+UI and non-selection preparation remain documented test boundaries. Source controls are not
+a native resolver or full allocation parity. Evidence:
+`runs/shared-build-selection-source-final.json`; the initial incorrect mixed-config default
+expectation and its correction are preserved in the earlier run.
+
+No complete native actor/action graph, selected-view resolver, editable candidate importer
+or new whole-build result is claimed. R1b and R1c remain required before R1 can complete.
+
 ## Definition storage and UI search
 
 On 2026-09-11 the owner raised DuckDB/ORM storage and pregenerated definitions, then asked
@@ -141,9 +186,9 @@ UI search is implemented. DuckDB is deferred; adopting it is not a required proj
   adopting a format, migrating identities or adding a runtime dependency. These experiments
   are not prerequisites to completing the current native build evaluator.
 
-Resume R1a source/instance implementation. Planned core/import/CLI code has not been delivered;
-this checkpoint updates design/implementation documents only. Frozen game data, imported
-builds and numerical coverage remain unchanged. Database storage cannot substitute for the
+At the storage-assessment checkpoint only documents changed. R1a implementation has since
+advanced as recorded above; the database investigation remains deferred. Frozen game data,
+imported builds and numerical coverage remain unchanged. Storage cannot substitute for the
 missing actor/action producers needed by the five supplied builds.
 
 ## Seeded jewel opportunity: J1-J5 follow-up

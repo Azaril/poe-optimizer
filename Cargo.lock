@@ -460,6 +460,7 @@ name = "poe-optimizer-cli"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "getrandom",
  "poe-optimizer-core",
  "poe-optimizer-data",
  "poe-optimizer-import",

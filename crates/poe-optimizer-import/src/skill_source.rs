@@ -245,7 +245,7 @@ fn note(
     });
     Ok(())
 }
-fn classification(
+pub(crate) fn classification(
     parent: Option<SkillSourceUse>,
     name: &str,
     namespace: bool,

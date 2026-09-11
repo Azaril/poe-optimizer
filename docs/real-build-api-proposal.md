@@ -11,6 +11,14 @@ by all five originals. Effective actors, actions and modifier dependencies are p
 by native preparation stages as those stages become implemented. A source-only model must
 not manufacture a complete effective graph before those producers exist.
 
+## Delivered foundation
+
+[R1a source ownership and identities](build-instances.md) now implement the initial
+immutable import boundary. The compatibility decoder DTO remains `ImportedBuild`;
+`build_instance::ImportedBuildInstance` owns exact source plus authored instance mappings.
+The broader signatures below remain the target contract: independently selected views,
+effective producers and native integration are subsequent work, not implied by R1a.
+
 ## Concrete counterexamples determine the boundary
 
 | Observed input | Required representation |

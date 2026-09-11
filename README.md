@@ -174,6 +174,10 @@ Source-only inspection does not execute item loading. Equipment resolution and
 passive-allocation checks remain separate. See
 [item source and loading](docs/item-source-and-loading.md).
 
+Add [`--with-instances`](docs/build-instances.md) to retain an owned source-to-instance map
+with a fresh build lineage, distinct saved sets/entries/item uses and explicit projection
+failures. This is source identity, before active-set resolution or native evaluation.
+
 Add `--with-definitions` or `--data PACKAGE` for source-bound skill/configuration identity
 lookup and ordered native item-loading diagnostics against the complete injected base catalog.
 Native formatting, ordinary modifier parsing, defence-header state and base buff loading

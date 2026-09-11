@@ -24,6 +24,7 @@ pob = ["dep:poe-optimizer-pob"]
 
 [dependencies]
 clap = { version = "4", features = ["derive"] }
+getrandom = "0.4"
 poe-optimizer-core = { path = "crates/poe-optimizer-core" }
 poe-optimizer-data = { path = "crates/poe-optimizer-data" }
 poe-optimizer-pob = { path = "crates/poe-optimizer-pob", optional = true }

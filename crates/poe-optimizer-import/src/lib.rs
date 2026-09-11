@@ -5,6 +5,7 @@
 
 pub mod actor_assembly;
 pub mod actor_modifiers;
+pub mod build_instance;
 pub mod build_source;
 pub mod configuration;
 pub mod configuration_definitions;
@@ -162,6 +163,13 @@ fn inflate_bounded(compressed: &[u8]) -> Result<Vec<u8>, ImportError> {
 }
 
 fn validate_xml(xml: &str) -> Result<(), ImportError> {
+    parse_document(xml).map(|_| ())
+}
+
+pub(crate) fn parse_document(xml: &str) -> Result<Document<'_>, ImportError> {
+    if xml.len() > MAX_XML_BYTES {
+        return Err(ImportError::XmlTooLarge);
+    }
     let document = Document::parse_with_options(
         xml,
         ParsingOptions {
@@ -178,7 +186,7 @@ fn validate_xml(xml: &str) -> Result<(), ImportError> {
         };
         return Err(ImportError::WrongRoot { actual });
     }
-    Ok(())
+    Ok(document)
 }
 
 #[cfg(test)]

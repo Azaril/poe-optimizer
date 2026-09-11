@@ -240,7 +240,7 @@ fn note(
     });
     Ok(())
 }
-fn classify(
+pub(crate) fn classify(
     parent: Option<ItemSourceUse>,
     name: &str,
     namespace: bool,
