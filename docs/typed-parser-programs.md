@@ -3,7 +3,9 @@
 Status: initial implementation contract for the accepted [parser language decision](conditional-parser-operations-proposal.md).
 The owner chose the broader typed rule language on 2026-09-10. This document specifies
 end-state responsibilities and the first delivery boundary. The [implementation record](implementation.md)
-tracks completed work. No typed-program runtime or new callback admission exists yet.
+tracks completed work. G1 now provides the standalone program schema, structural/binding
+verifier and immutable engine plans. No typed-program runtime or new callback admission
+exists yet; source lowering and package dispatch still require G2-G4.
 
 ## Purpose and boundary
 
@@ -114,7 +116,10 @@ keys. Likewise, `ipairs` stops at the first Nil. Unproven `pairs` order, metatab
 dynamic callable behavior cannot be replaced by sorted iteration or a convenient default.
 A table literal advances its implicit list index even for Nil values. A source append
 operation instead uses the applicable current length; these operations cannot share a
-hidden insertion counter. Prove the dense invariant before using the dense shortcut.
+hidden insertion counter. Prove the dense invariant before using the dense shortcut. Mixed constructors with
+explicit numeric keys can also interact with Lua VM list-field flushing. Preserve the
+source overwrite behavior or explicitly defer those forms until proved; source order
+alone does not justify a naive sequence of immediate table writes.
 
 Preserve source copy boundaries. Raw program calls share handles as the source does;
 constructor-specific copies and the public parser's recursive copy occur only at their
@@ -213,6 +218,29 @@ and lookup definitions, concurrent catalogs with overlapping IDs, and reused exe
 against fresh state. Measure compile/preparation cost, execution and worker memory on the
 real programs. This establishes parser capability only: full native build coverage remains
 subject to the independent R1-R5 integration gates.
+
+## Delivered G1 boundary
+
+The data crate's `ParserProgramCatalog` retains its owning `ModifierParserCatalog`; it
+accepts authored typed data or bounded JSON through `from_bytes`. The iterative verifier
+checks every structural branch, lexical declarations and mutable parameter slots, source
+locations/provenance linkage, callback mappings, helper/intrinsic bindings, result packs
+and aggregate limits. Unknown instructions/fields and conflicting executable mappings
+are rejected. These checks establish structural validity, not original-source equivalence.
+
+The engine's `CompiledParserPrograms` lowers structured statements to source-mapped
+instructions with explicit branches, loop state and return/fallthrough. Calls are prebound
+to the retained library's program indices, existing recipes or declared intrinsics. It
+preserves bounded expression trees, including lazy operators, without evaluating values.
+Plans are immutable and shareable. Runtime capability checks, invocation tables and error
+order remain G2 responsibilities; no public parser callback uses these plans yet.
+
+The standalone wire model has schema1. The existing schema26/parser6 package and its
+legacy recipes are unchanged. Program serialization, source export authentication, content
+fingerprints and dispatch integration enter the package together in G4. Implementation
+fingerprints already include the new Rust modules. Scope/ownership metadata must not be
+mistaken for a static proof that every dynamic table write is permissible: reached writes
+must check the invocation-owned heap, including aliases and values returned by helpers.
 
 ## Delivery sequence
 

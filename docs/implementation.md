@@ -107,6 +107,34 @@ manifests before numerical implementation; prove a real calculation responds to 
 injected definitions; and compare reused worker transitions with fresh preparation. These
 strengthen R3-R5 without changing the pending architecture direction.
 
+## Seeded jewel opportunity: J1-J5 follow-up
+
+The owner requested investigation of seeded Legion/Timeless items on 2026-09-10. Track
+this as an optional joint-search extension, with the [design opportunity](seeded-jewel-search.md)
+kept alongside the main design. A bounded source read found PoB lookup data and item/search
+controls, but seed-based branches in the pinned PassiveSpec remain disabled pending data.
+No seed generator, native provider, search or trade feature has been implemented. Confirm
+game/version applicability and complete seed-data availability before implementation.
+The active G1 parser work continues; J2-J5 depend on the general provider/preparation model
+and relevant R2-R4 real-build gates, rather than displacing them.
+
+- [ ] **J1 — Source, applicability and cost investigation.** Verify actual supported item
+  families by game/revision; trace seed/node/variant generation or lookup and existing PoB
+  search. Establish data provenance/distribution requirements and measure lookup, memory
+  and evaluation costs. Decide whether to reuse tables, port a generator or combine both.
+- [ ] **J2 — Injected provider and transformation parity.** Model seed identity and passive
+  changes through the shared data/provider seam. Prove complete node transformations and
+  whole-build results, including radius, overlaps, exact item locks and removal/readdition.
+- [ ] **J3 — Opt-in joint search.** Add bounded seed/socket/path proposals, lazy catalogs,
+  revision-aware caches, parallel batches, cancellation and explicit search-domain reporting.
+  Evaluate interactions with every unlocked build dimension using the user's objective.
+- [ ] **J4 — Discovery and trade handoff.** Report reproducible exact item seeds, socket/tree
+  changes and metrics; distinguish theoretical candidates from supplied/available items.
+  Investigate searchable trade exports and a transformed-tree comparison visualization.
+- [ ] **J5 — Breadth and usefulness gate.** Use independent families/seeds/sockets and full
+  builds; prove serial/reused-worker/cache parity and compare search quality/cost with
+  fixed-tree seed ranking and ordinary joint search under equal budgets.
+
 ## Typed parser-language decision checkpoint
 
 On 2026-09-10 the owner selected **"Expand the typed rule language now"**. The accepted
@@ -125,26 +153,57 @@ a distinction between zero return values and an explicit Nil result. Existing im
 public tables cannot stand in for the mutable invocation heap. Source-defined string
 substitution, property selection and requirement names belong in program data.
 
-This is a **design/documentation checkpoint**. No program schema, compiler, executor,
-export, callback admission or package-version change has been implemented. Schema26 /
-parser6 and the 1,222 Pure / 429 Unsupported dispositions remain unchanged, as do the
-five original builds' **0/5 complete native evaluations**. Existing validation evidence
-has not been rerun for this documentation change.
+**G1 is implemented:** the standalone schema1 `ParserProgramCatalog` owns its injected
+parser catalog and validates all branches, scopes, source references, bindings, result
+packs and aggregate limits. Mutable parameters, raw byte literals, final-result expansion
+and declared intrinsic identities are explicit. Table append carries its authenticated
+TableInsert binding, distinct from literal list positions. Runtime ownership checks remain
+necessary for dynamic writes; validation does not claim to solve general alias analysis.
+
+`CompiledParserPrograms` prebinds calls and lowers structured control flow into immutable,
+source-mapped instructions. Nested breaks, empty-loop backedges and raw fallthrough remain
+explicit. It does not evaluate expressions during compilation or inline recursive helpers.
+The compiled library retains its exact owning catalog and can be shared across threads.
+Both data and adapter implementation fingerprints include the new Rust sources.
+
+There is **no executor, source-program exporter, new callback admission or package migration**
+in this checkpoint. Schema26/parser6 and the 1,222 Pure / 429 Unsupported dispositions remain
+unchanged; complete supplied native originals remain **0/5**. The G1 tests are structural
+and integration contracts, not original-source program parity or performance evidence.
+
+Validation passes **51 scoped tests**: eight public program-schema tests, 11 independent
+adversarial schema tests, nine compiler tests and 23 existing parser/factory contracts.
+Strict all-target Clippy for data/engine and workspace formatting pass. All five portable
+libraries compile for WASM, and native-only CLI normal dependencies contain no PoB/Lua.
+The first broader data-suite compile caught a test fixture missing the newly required
+append binding; that fixture was corrected and its 11 tests/lint passed again. The broader
+full data regression run remains separately tracked until it terminates; do not count it
+as passed from these scoped results. No new PoB source/corpus run has occurred.
 
 | Language stage | Current state | Completion gate |
 | --- | --- | --- |
-| G1: schema and compiler | Contract written; implementation next | Validated source-bound programs, effects/scopes/result contracts and immutable plans; existing recipes preserved |
-| G2: execution | Not implemented | Locals, branches, bounded iteration, identity-preserving heap, explicit result packs, lazy source errors and worker/catalog isolation |
-| G3: complete source lowering | Two source bodies reviewed; no lowering implemented | Both complete original programs, raw-call/public-copy parity, alternate injected definitions and actual warmed-source controls |
+| G1: schema and compiler | Implemented; scoped tests and portability gates pass | Retain immutable owner binding, bounded validation and exact legacy package preservation |
+| G2: execution | Next; not implemented | Locals, branches, bounded iteration, identity-preserving heap, explicit result packs, lazy source errors and worker/catalog isolation |
+| G3: complete source lowering | Whole-source lowerer/oracle approach inspected; not implemented | Both complete programs plus grant forwarding callbacks, raw-call/public-copy parity, alternate injected definitions and actual warmed-source controls |
 | G4: package/parser integration | Not implemented | Explicit dispatch and migration, reproducible authenticated exports, public/corpus regressions, native-only/WASM gates |
 | G5: subsequent real dependencies | Future reached work | Add required effects/iteration/callable semantics without named callback handlers or weakened source proof |
 
-**Resume point:** implement G1 against the accepted contract, keeping structural validation
-separate from reached source errors. Keep legacy recipes stable and reject overlapping
-Pure/program executable definitions. Bind helpers to their own environments; do not bake
-fixture names, callback names, numeric IDs or game literals into runtime dispatch. Prove
-each G2 semantic operation before G3 source lowering uses it. Proposed next package/parser
-versions are tentative until the G4 migration actually occurs.
+**Resume point:** implement G2 over the G1 plans. Expose a raw result-pack/heap observation
+seam for the source oracle; preserve zero results, Nil holes, aliases, byte keys and method
+lookup/error ordering. Keep hidden numeric/iterator control state separate from writable
+loop locals, charge executed instructions/backedges, and reset per-invocation state on
+success or failure. Current breaks use jumps with bounded frame-owned state; add explicit
+cleanup metadata if earlier release is needed. Prove mixed table-constructor list-flush
+behavior before admitting overlapping explicit numeric keys. Keep source lowering additive
+and inventory every emitted program; first-target tests do not certify additional closures.
+
+Evidence: `runs/typed-program-data-validation.json`, `runs/typed-program-g1-validation.json`,
+`runs/typed-program-engine-tests-final.log`, `runs/typed-program-legacy-parser-tests.log`,
+`runs/typed-program-adversarial-final-tests.log`, `runs/typed-program-final-clippy.log` and
+`runs/typed-program-portable-check.log`. Independent implementation-facing reads are retained
+in `runs/typed-program-source-plan.md` and `runs/typed-program-compiler-oracle-review.md`.
+Original source/caller/package bytes are preserved; proposed package27/parser7 versions
+remain tentative until G4 actually exports the new data.
 
 The G1-G5 stages execute the owner's accepted direction and need no additional design
 confirmation. Significant changes to that direction still require discussion. The separate

@@ -386,9 +386,10 @@ fn make_mod(
 }
 
 /// Files entering adapter fingerprints; hosts normalize checkout newlines.
-pub fn implementation_sources() -> [&'static str; 11] {
+pub fn implementation_sources() -> [&'static str; 12] {
     [
         include_str!("modifier_parser.rs"),
+        include_str!("parser_program.rs"),
         include_str!("modifier_parser/value.rs"),
         include_str!("modifier_parser/ordinary.rs"),
         include_str!("modifier_parser/emit.rs"),

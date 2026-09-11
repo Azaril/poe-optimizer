@@ -109,7 +109,7 @@ workloads and cache reuse.
 
 1. [x] Record the owner's choice of a broader typed rule language.
 2. [x] Write the initial program, value/heap, binding, execution and validation contract.
-3. [ ] Implement the versioned schema, structural verifier and immutable compiled plans.
+3. [x] Implement the standalone versioned schema, structural verifier and immutable compiled plans (G1; no callback admission).
 4. [ ] Implement native control flow, invocation-local heap and explicit call/result packs.
 5. [ ] Lower complete GemProperty and grantedExtraSkill source bodies through generic
    instructions; authenticate their dependencies and verify all branches against PoB.

@@ -507,6 +507,17 @@ other objective; disable incompatible hints. Preserve exploration by reserving
 random/diverse proposals. A locally harmful node or item can participate in a strong
 combination, so marginal scores are neither an additive objective nor a safe pruning bound.
 
+### Optional seeded passive-transformation exploration
+
+Investigate opt-in joint seed, socket and passive-allocation search for Timeless Jewels
+and applicable analogous items. A seeded item can change the value of whole paths and
+unlock combinations beyond ordinary local node scoring. Keep seed domains and transformation
+definitions injected; preserve exact item locks and validate complete candidate outcomes.
+The [seeded-jewel opportunity](seeded-jewel-search.md) records the PoB lookup-data lead,
+game/version applicability questions, bounded parallel search, cache identity, trade
+handoff and parity gates. Broad seed discovery is optional; evaluating an imported seeded
+item correctly belongs to the evaluator's declared mechanic coverage.
+
 ### Baseline algorithm
 
 Use multi-start local search with a small beam, variable-size mutations, and explicit budgets:

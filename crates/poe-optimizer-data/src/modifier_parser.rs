@@ -7,6 +7,8 @@ use std::sync::Arc;
 
 mod factories;
 pub use factories::*;
+mod programs;
+pub use programs::*;
 
 pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 6;
 type Result<T> = std::result::Result<T, GameDataError>;
