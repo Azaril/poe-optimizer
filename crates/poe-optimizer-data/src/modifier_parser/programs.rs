@@ -4,7 +4,7 @@ use super::*;
 use std::collections::BTreeSet;
 
 mod payload;
-mod validate;
+pub(crate) mod validate;
 pub use payload::*;
 
 pub const PARSER_PROGRAM_SCHEMA_VERSION: u32 = 1;
@@ -165,6 +165,10 @@ pub enum ParserProgramExprKind {
     Definition {
         root: ParserProgramDefinitionRoot,
     },
+    /// An explicit owner-local root for non-parser definition graphs.
+    NamedDefinition {
+        root: crate::source_program::SourceProgramRootId,
+    },
     Get {
         table: Box<ParserProgramExpr>,
         key: Box<ParserProgramExpr>,
@@ -323,94 +327,63 @@ pub struct ParserProgramError {
 }
 pub type ParserProgramResult<T> = std::result::Result<T, ParserProgramError>;
 
+/// Parser compatibility facade over the shared structurally validated library.
+/// Its stricter parser admission contract is independent of this structural owner.
 #[derive(Debug, Clone)]
 pub struct ParserProgramCatalog {
-    data: Arc<ParserProgramData>,
-    owner: ModifierParserCatalog,
-    required: BTreeSet<ParserProgramCapability>,
+    source: crate::source_program::SourceProgramCatalog,
 }
 impl ParserProgramCatalog {
     pub fn new(data: ParserProgramData, owner: ModifierParserCatalog) -> ParserProgramResult<Self> {
-        let required = validate::validate(&data, owner.data())?;
         Ok(Self {
-            data: Arc::new(data),
-            owner,
-            required,
+            source: crate::source_program::SourceProgramCatalog::new(
+                data,
+                crate::source_program::SourceProgramOwner::from_parser(owner),
+            )?,
         })
     }
-    /// Bounded untrusted authoring input. serde's recursion bound applies before
-    /// typed allocation; the structural verifier then applies language limits.
     pub fn from_bytes(bytes: &[u8], owner: ModifierParserCatalog) -> ParserProgramResult<Self> {
-        if bytes.len() > 16 * 1024 * 1024 {
-            return Err(validate::error(
-                ParserProgramErrorKind::ResourceLimit,
-                None,
-                None,
-                "program JSON byte bound",
-            ));
-        }
-        let data = serde_json::from_slice(bytes).map_err(|e| {
-            validate::error(
-                ParserProgramErrorKind::InvalidData,
-                None,
-                None,
-                format!("program JSON: {e}"),
-            )
-        })?;
-        Self::new(data, owner)
+        Ok(Self {
+            source: crate::source_program::SourceProgramCatalog::from_bytes(
+                bytes,
+                crate::source_program::SourceProgramOwner::from_parser(owner),
+            )?,
+        })
+    }
+    pub fn source_programs(&self) -> &crate::source_program::SourceProgramCatalog {
+        &self.source
     }
     pub fn data(&self) -> &ParserProgramData {
-        &self.data
+        self.source.data()
     }
     pub fn owner(&self) -> &ModifierParserCatalog {
-        &self.owner
+        self.source.owner().parser().expect("parser facade owner")
     }
     pub fn is_bound_to(&self, owner: &ModifierParserCatalog) -> bool {
-        Arc::ptr_eq(&self.owner.0, &owner.0)
+        self.owner().is_same_owner(owner)
     }
     pub fn program(&self, id: ParserProgramId) -> Option<&ParserProgram> {
-        id.0.checked_sub(1)
-            .and_then(|i| self.data.programs.get(i as usize))
+        self.source.program(id)
     }
     pub fn program_id(&self, callback: ParserCallbackId) -> Option<ParserProgramId> {
-        self.data.callbacks.get(&callback).copied()
+        self.source.program_id(callback)
     }
     pub fn for_callback(&self, callback: ParserCallbackId) -> Option<&ParserProgram> {
-        self.program(self.program_id(callback)?)
+        self.source.for_callback(callback)
     }
     pub fn required_capabilities(&self) -> &BTreeSet<ParserProgramCapability> {
-        &self.required
+        self.source.required_capabilities()
     }
     pub fn check_capabilities(
         &self,
         available: &BTreeSet<ParserProgramCapability>,
     ) -> ParserProgramResult<()> {
-        if let Some(missing) = self.required.difference(available).next() {
-            return Err(validate::error(
-                ParserProgramErrorKind::UnsupportedCapability,
-                None,
-                None,
-                format!("program capability unavailable: {missing:?}"),
-            ));
-        }
-        Ok(())
+        self.source.check_capabilities(available)
     }
     pub fn definition(&self, root: ParserProgramDefinitionRoot) -> &ParserTable {
-        match root {
-            ParserProgramDefinitionRoot::ModFlags => {
-                self.owner.table(self.owner.data().policy.mod_flags)
-            }
-            ParserProgramDefinitionRoot::KeywordFlags => {
-                self.owner.table(self.owner.data().policy.keyword_flags)
-            }
-            ParserProgramDefinitionRoot::SkillTypes => {
-                self.owner.table(self.owner.data().policy.skill_types)
-            }
-            ParserProgramDefinitionRoot::GemIdLookup => {
-                Some(self.owner.dictionary(ParserDictionary::GemIdLookup))
-            }
-        }
-        .expect("validated owner definition root")
+        self.source
+            .definition(root.into())
+            .expect("validated owner definition root")
     }
 }
 fn required_option<'de, D: serde::Deserializer<'de>, T: Deserialize<'de>>(

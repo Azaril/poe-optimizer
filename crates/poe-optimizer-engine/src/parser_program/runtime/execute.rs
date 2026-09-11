@@ -1,7 +1,10 @@
-use super::super::{CompiledParserPrograms, CompiledProgramBinding, ProgramOperation};
+use super::super::{
+    CompiledParserPrograms, CompiledProgramBinding, CompiledSourcePrograms, ProgramOperation,
+};
 use super::{
     ProgramAllocationUsage, ProgramLimits, ProgramOutput, ProgramRequestAccounting,
-    ProgramRuntimeError as Error, ProgramValueGraph, RuntimeResult as Result, intrinsics,
+    ProgramRuntimeError as Error, ProgramValueGraph, RuntimeResult as Result, SourceProgramOutput,
+    intrinsics,
     value::{Heap, V},
 };
 use crate::lua_pattern::MatchBudget;
@@ -10,7 +13,7 @@ use poe_optimizer_data::modifier_parser::*;
 // Bounds Rust interpreter recursion independently of caller-configured call limits.
 const MAX_EVALUATOR_NESTING: usize = 64;
 
-impl CompiledParserPrograms {
+impl CompiledSourcePrograms {
     /// Execute a raw source-bound program. This deliberately does not apply
     /// Special/Prefix/ModTag packing, parser caching or public recursive copying.
     pub fn execute(
@@ -18,7 +21,7 @@ impl CompiledParserPrograms {
         callback: ParserCallbackId,
         input: &ProgramValueGraph,
         limits: ProgramLimits,
-    ) -> Result<ProgramOutput> {
+    ) -> Result<SourceProgramOutput> {
         let mut accounting = ProgramRequestAccounting::new(limits);
         let mut patterns = MatchBudget::new(limits.pattern);
         self.execute_shared(callback, input, &mut accounting, &mut patterns)
@@ -31,7 +34,7 @@ impl CompiledParserPrograms {
         input: &ProgramValueGraph,
         accounting: &mut ProgramRequestAccounting,
         patterns: &mut MatchBudget,
-    ) -> Result<ProgramOutput> {
+    ) -> Result<SourceProgramOutput> {
         let limits = accounting.limits;
         let initial_steps = accounting.steps();
         let initial_pattern_steps = patterns.steps_used();
@@ -44,7 +47,7 @@ impl CompiledParserPrograms {
         if input.values.len() > limits.max_results {
             return Err(Error::resource("argument pack size"));
         }
-        let (heap, arguments) = Heap::new_shared(
+        let (mut heap, arguments) = Heap::new_shared(
             self.catalog().owner(),
             input,
             &limits,
@@ -52,7 +55,7 @@ impl CompiledParserPrograms {
         )?;
         let mut run = Run {
             library: self,
-            heap,
+            heap: &mut heap,
             patterns,
             limits,
             steps: &mut accounting.steps,
@@ -61,7 +64,7 @@ impl CompiledParserPrograms {
         let values = run.invoke(index, arguments, 0)?;
         let graph = run.heap.freeze(&values)?;
         let used = run.heap.stats();
-        Ok(ProgramOutput {
+        Ok(SourceProgramOutput {
             graph,
             owner: self.catalog().owner().clone(),
             steps: *run.steps - initial_steps,
@@ -74,13 +77,43 @@ impl CompiledParserPrograms {
         })
     }
 }
-struct Run<'a, 'b> {
-    library: &'a CompiledParserPrograms,
-    heap: Heap<'b>,
-    patterns: &'b mut MatchBudget,
-    limits: ProgramLimits,
-    steps: &'b mut u64,
-    call_depth: usize,
+impl CompiledParserPrograms {
+    pub fn execute(
+        &self,
+        callback: ParserCallbackId,
+        input: &ProgramValueGraph,
+        limits: ProgramLimits,
+    ) -> Result<ProgramOutput> {
+        let source = self.source.execute(callback, input, limits)?;
+        Ok(ProgramOutput {
+            source,
+            owner: self.catalog().owner().clone(),
+        })
+    }
+    pub(crate) fn execute_shared(
+        &self,
+        callback: ParserCallbackId,
+        input: &ProgramValueGraph,
+        accounting: &mut ProgramRequestAccounting,
+        patterns: &mut MatchBudget,
+    ) -> Result<ProgramOutput> {
+        let source = self
+            .source
+            .execute_shared(callback, input, accounting, patterns)?;
+        Ok(ProgramOutput {
+            source,
+            owner: self.catalog().owner().clone(),
+        })
+    }
+}
+
+pub(super) struct Run<'a, 'b, 'c> {
+    pub(super) library: &'a CompiledSourcePrograms,
+    pub(super) heap: &'b mut Heap<'c>,
+    pub(super) patterns: &'b mut MatchBudget,
+    pub(super) limits: ProgramLimits,
+    pub(super) steps: &'b mut u64,
+    pub(super) call_depth: usize,
 }
 struct Frame {
     program: usize,
@@ -93,7 +126,7 @@ enum Loop {
     Dense { table: V, index: u64 },
     Pattern(Box<intrinsics::Gmatch>),
 }
-impl Run<'_, '_> {
+impl Run<'_, '_, '_> {
     fn tick(&mut self, depth: usize) -> Result<()> {
         if depth > MAX_EVALUATOR_NESTING {
             return Err(Error::resource("combined expression/call nesting"));
@@ -111,7 +144,12 @@ impl Run<'_, '_> {
         }
         self.heap.charge_values(count)
     }
-    fn invoke(&mut self, index: usize, arguments: Vec<V>, depth: usize) -> Result<Vec<V>> {
+    pub(super) fn invoke(
+        &mut self,
+        index: usize,
+        arguments: Vec<V>,
+        depth: usize,
+    ) -> Result<Vec<V>> {
         self.tick(depth)?;
         if self.call_depth >= self.limits.max_call_depth {
             return Err(Error::resource("program call depth"));
@@ -191,7 +229,7 @@ impl Run<'_, '_> {
                         intrinsics::call(
                             ParserProgramIntrinsic::TableInsert,
                             &[table, value],
-                            &mut self.heap,
+                            self.heap,
                             self.patterns,
                             &self.limits,
                         )?;
@@ -281,7 +319,7 @@ impl Run<'_, '_> {
                                 let arguments = self.arguments(frame, call, depth + 1)?;
                                 Loop::Pattern(Box::new(intrinsics::Gmatch::new(
                                     &arguments,
-                                    &mut self.heap,
+                                    self.heap,
                                     &self.limits,
                                 )?))
                             }
@@ -335,7 +373,7 @@ impl Run<'_, '_> {
                     Ok(Some(vec![key, value]))
                 }
             }
-            Loop::Pattern(iterator) => iterator.next(&mut self.heap, self.patterns),
+            Loop::Pattern(iterator) => iterator.next(self.heap, self.patterns),
             Loop::Numeric { .. } => Err(Error::input("numeric state used as iterator")),
         }
     }
@@ -401,7 +439,7 @@ impl Run<'_, '_> {
             else {
                 return Err(Error::unsupported("dynamic method target"));
             };
-            let target = intrinsics::precheck_method(*operation, &value, &mut self.heap)?;
+            let target = intrinsics::precheck_method(*operation, &value, self.heap)?;
             Some((value, target))
         } else {
             None
@@ -436,7 +474,7 @@ impl Run<'_, '_> {
             CompiledProgramBinding::Intrinsic { operation, .. } => intrinsics::call(
                 *operation,
                 &arguments,
-                &mut self.heap,
+                self.heap,
                 self.patterns,
                 &self.limits,
             )?,
@@ -470,15 +508,25 @@ impl Run<'_, '_> {
                 .heap
                 .capture(self.library.0.programs[frame.program].callback, *upvalue),
             E::Definition { root } => {
-                let owner = self.library.catalog().owner();
-                let id = match root {
-                    ParserProgramDefinitionRoot::ModFlags => owner.data().policy.mod_flags,
-                    ParserProgramDefinitionRoot::KeywordFlags => owner.data().policy.keyword_flags,
-                    ParserProgramDefinitionRoot::SkillTypes => owner.data().policy.skill_types,
-                    ParserProgramDefinitionRoot::GemIdLookup => {
-                        owner.data().dictionaries[&ParserDictionary::GemIdLookup]
-                    }
-                };
+                let id = self
+                    .library
+                    .catalog()
+                    .owner()
+                    .definition_id((*root).into())
+                    .ok_or_else(|| Error::input("definition root does not belong to this owner"))?;
+                self.heap.definition(id)
+            }
+            E::NamedDefinition { root } => {
+                let id = self
+                    .library
+                    .catalog()
+                    .owner()
+                    .definition_id(
+                        poe_optimizer_data::source_program::SourceProgramDefinitionRoot::Named(
+                            *root,
+                        ),
+                    )
+                    .ok_or_else(|| Error::input("definition root does not belong to this owner"))?;
                 self.heap.definition(id)
             }
             E::Get { table, key } => {
@@ -556,8 +604,8 @@ impl Run<'_, '_> {
                 Ok(V::Boolean(result))
             }
             Op::Concat => {
-                let left = string(&left, &mut self.heap)?;
-                let right = string(&right, &mut self.heap)?;
+                let left = string(&left, self.heap)?;
+                let right = string(&right, self.heap)?;
                 let length = left
                     .len()
                     .checked_add(right.len())

@@ -1,5 +1,7 @@
-//! Invocation-local native execution of compiled parser programs.
+//! Shared native execution of compiled source programs and persistent build sessions.
 mod execute;
+mod session;
+pub use session::{ProgramSession, SessionValue};
 mod intrinsics;
 #[cfg(test)]
 mod tests;
@@ -8,6 +10,7 @@ use crate::lua_pattern::{MatchLimits, PatternError};
 use poe_optimizer_data::modifier_parser::{
     ModifierParserCatalog, ParserCallbackId, ParserProgramLocation,
 };
+use poe_optimizer_data::source_program::SourceProgramOwner;
 pub use value::{ProgramTable, ProgramTableId, ProgramValue, ProgramValueGraph};
 
 #[derive(Debug, Clone, Copy)]
@@ -108,21 +111,21 @@ pub struct ProgramAllocationUsage {
 /// A raw return pack plus reachable table graph, before parser call-site coercion
 /// or recursive copying. Callback identities are contextual to the retained owner.
 #[derive(Debug, Clone)]
-pub struct ProgramOutput {
+pub struct SourceProgramOutput {
     graph: ProgramValueGraph,
-    owner: ModifierParserCatalog,
+    owner: SourceProgramOwner,
     steps: u64,
     pattern_steps: u64,
     allocations: ProgramAllocationUsage,
 }
-impl ProgramOutput {
+impl SourceProgramOutput {
     pub fn graph(&self) -> &ProgramValueGraph {
         &self.graph
     }
     pub fn allocations(&self) -> ProgramAllocationUsage {
         self.allocations
     }
-    pub fn owner(&self) -> &ModifierParserCatalog {
+    pub fn owner(&self) -> &SourceProgramOwner {
         &self.owner
     }
     pub fn steps(&self) -> u64 {
@@ -130,6 +133,33 @@ impl ProgramOutput {
     }
     pub fn pattern_steps(&self) -> u64 {
         self.pattern_steps
+    }
+}
+
+/// Parser-compatible output retaining the original parser owner.
+#[derive(Debug, Clone)]
+pub struct ProgramOutput {
+    source: SourceProgramOutput,
+    owner: ModifierParserCatalog,
+}
+impl ProgramOutput {
+    pub fn graph(&self) -> &ProgramValueGraph {
+        self.source.graph()
+    }
+    pub fn owner(&self) -> &ModifierParserCatalog {
+        &self.owner
+    }
+    pub fn allocations(&self) -> ProgramAllocationUsage {
+        self.source.allocations()
+    }
+    pub fn steps(&self) -> u64 {
+        self.source.steps()
+    }
+    pub fn pattern_steps(&self) -> u64 {
+        self.source.pattern_steps()
+    }
+    pub fn source_output(&self) -> &SourceProgramOutput {
+        &self.source
     }
 }
 

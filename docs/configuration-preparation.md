@@ -57,6 +57,7 @@ text and placeholder notifications. A non-notifying UI update differs from a not
 placeholder write. Native evaluation does not need rendered widgets, but it must retain
 these observable data effects. Unknown control behavior remains an explicit dependency.
 
+Use the [shared program owner and session contract](shared-source-programs.md).
 Reuse the shared typed-program verifier and executor for branches, locals, arithmetic,
 loops, table construction and calls. Extend their source ownership beyond the current
 modifier-parser catalog before admitting configuration programs. The common boundary must:

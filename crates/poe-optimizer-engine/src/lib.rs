@@ -24,6 +24,7 @@ pub mod lua_pattern;
 pub mod modifier_parser;
 pub mod modifier_scan;
 pub mod parser_program;
+pub mod source_program;
 pub mod timing;
 pub use data::CompiledGameData;
 pub mod mace;

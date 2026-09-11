@@ -26,6 +26,9 @@ combat calculations and does not replace the separate shared-build-model decisio
 
 ## Data, binding and runtime ownership
 
+The [shared source-program contract](shared-source-programs.md) extends ownership and
+per-build state beyond the parser while retaining these parser admission and copy rules.
+
 | Layer | Responsibility |
 | --- | --- |
 | Data crate | Serializable program/operation types, immutable definitions, schemas, source provenance and structural validation |

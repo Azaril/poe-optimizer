@@ -7,7 +7,7 @@ use std::sync::Arc;
 
 mod factories;
 pub use factories::*;
-mod programs;
+pub(crate) mod programs;
 pub use programs::*;
 
 pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 7;
@@ -215,6 +215,9 @@ impl ModifierParserCatalog {
         data.validate()?;
         Ok(Self(Arc::new(data)))
     }
+    pub fn is_same_owner(&self, other: &Self) -> bool {
+        Arc::ptr_eq(&self.0, &other.0)
+    }
     pub fn data(&self) -> &ModifierParserData {
         &self.0
     }
@@ -304,13 +307,6 @@ impl ModifierParserData {
             .validate_owner(self)
             .map_err(|error| GameDataError(error.to_string()))
     }
-    fn callback(&self, id: ParserCallbackId) -> Option<&ParserCallback> {
-        id.0.checked_sub(1)
-            .and_then(|i| self.callbacks.get(i as usize))
-    }
-    fn factory(&self, id: ParserCallbackId) -> Option<&ParserFactoryDisposition> {
-        self.factories.get(&id)
-    }
     fn validate_definitions(&self) -> Result<()> {
         if self.schema_version != MODIFIER_PARSER_SCHEMA_VERSION
             || !digest(&self.source.upstream_revision, 40)
@@ -327,137 +323,24 @@ impl ModifierParserData {
             return Err(catalog_error("invalid version or catalog bounds"));
         }
         factories::validate(self)?;
-        let bytes = std::cell::Cell::new(0usize);
-        let charge = |amount: usize| -> Result<()> {
-            let next = bytes
-                .get()
-                .checked_add(amount)
-                .ok_or_else(|| catalog_error("text byte overflow"))?;
-            if next > 16 * 1024 * 1024 {
-                return Err(catalog_error("aggregate text exceeds resource bound"));
-            }
-            bytes.set(next);
-            Ok(())
-        };
-        charge(self.source.upstream_revision.len())?;
-        for (path, sha) in &self.source.files {
-            charge(path.len() + sha.len())?;
-            if !text(path, 512)
-                || !path.starts_with("src/")
-                || path.contains('\\')
-                || path
-                    .split('/')
-                    .any(|v| v.is_empty() || v == "." || v == "..")
-                || !digest(sha, 64)
-            {
-                return Err(catalog_error("invalid source identity"));
-            }
-        }
-        let span = |s: &ItemSourceSpan| -> Result<()> {
-            charge(s.path.len() + s.sha256.len())?;
-            if !self.source.files.contains_key(&s.path)
-                || s.line == 0
-                || s.end_line < s.line
-                || s.end_line > 1_000_000
-                || !digest(&s.sha256, 64)
-            {
-                return Err(catalog_error("invalid source span"));
-            }
-            Ok(())
-        };
-        for (key, s) in &self.source.construction_spans {
-            charge(key.len())?;
-            if key.is_empty() || !text(key, 256) {
-                return Err(catalog_error("invalid source span label"));
-            }
-            span(s)?;
-        }
         if self
             .source
-            .module_order
-            .iter()
-            .any(|p| !self.source.files.contains_key(p))
+            .files
+            .keys()
+            .any(|path| !path.starts_with("src/"))
         {
-            return Err(catalog_error("unknown construction module"));
+            return Err(catalog_error("invalid source identity"));
         }
-        let table = |id: ParserTableId| -> Result<()> {
-            if id.0 == 0 || id.0 as usize > self.tables.len() {
-                Err(catalog_error("dangling table reference"))
-            } else {
-                Ok(())
-            }
-        };
-        let callback = |id: ParserCallbackId| -> Result<()> {
-            if id.0 == 0 || id.0 as usize > self.callbacks.len() {
-                Err(catalog_error("dangling callback reference"))
-            } else {
-                Ok(())
-            }
-        };
-        let mut count = 0usize;
-        let mut value = |v: &ParserValue, allow_nil: bool| -> Result<()> {
-            count += 1;
-            if count > 1_000_000 {
-                return Err(catalog_error(
-                    "aggregate value count exceeds resource bound",
-                ));
-            }
-            match v {
-                ParserValue::Nil if !allow_nil => return Err(catalog_error("nil Lua table entry")),
-                ParserValue::Number(n) if !n.is_finite() => {
-                    return Err(catalog_error("nonfinite number requires explicit sentinel"));
-                }
-                ParserValue::Text(s) => {
-                    if !text(s, 4096) {
-                        return Err(catalog_error("invalid value text"));
-                    }
-                    charge(s.len())?;
-                }
-                ParserValue::Table(id) => table(*id)?,
-                ParserValue::Callback(id) => callback(*id)?,
-                _ => {}
-            }
-            Ok(())
-        };
-        for t in &self.tables {
-            if t.fields.len() + t.indexed.len() > 50_000 {
-                return Err(catalog_error("table exceeds row bound"));
-            }
-            for (key, v) in &t.fields {
-                charge(key.len())?;
-                if !text(key, 4096) {
-                    return Err(catalog_error("invalid string key"));
-                }
-                value(v, false)?;
-            }
-            for (key, v) in &t.indexed {
-                if key.unsigned_abs() > 9_007_199_254_740_991 {
-                    return Err(catalog_error("numeric key outside exact Lua integer range"));
-                }
-                value(v, false)?;
-            }
-        }
-        for c in &self.callbacks {
-            match &c.kind {
-                ParserCallbackKind::Lua { source } => span(source)?,
-                ParserCallbackKind::Builtin { symbol } => {
-                    charge(symbol.len())?;
-                    if symbol.is_empty() || !text(symbol, 128) || !c.upvalues.is_empty() {
-                        return Err(catalog_error("invalid builtin symbol"));
-                    }
-                }
-            }
-            if c.upvalues.len() > 128 {
-                return Err(catalog_error("too many captured upvalues"));
-            }
-            for up in &c.upvalues {
-                charge(up.name.len())?;
-                if up.name.is_empty() || !text(&up.name, 128) {
-                    return Err(catalog_error("invalid upvalue name"));
-                }
-                value(&up.value, true)?;
-            }
-        }
+        let graph = crate::source_program::graph::GraphValidation::new(
+            &self.source,
+            &self.tables,
+            &self.callbacks,
+        )?;
+        let charge = |amount| graph.charge(amount);
+        let span = |value| graph.span(value);
+        let table = |id| graph.table(id);
+        let callback = |id| graph.callback(id);
+        let value = |value, allow_nil| graph.value(value, allow_nil);
         let mut last_order = 0;
         for d in &self.declarations {
             charge(d.key.len() + d.phase.len())?;
@@ -494,9 +377,6 @@ impl ModifierParserData {
                 return Err(catalog_error("invalid helper name"));
             }
             callback(*id)?;
-        }
-        for path in &self.source.module_order {
-            charge(path.len())?;
         }
         let d = &self.dynamic_dependencies;
         for id in [
@@ -609,7 +489,7 @@ impl ModifierParserData {
     }
 }
 
-fn unique_map<'de, D, K, V>(d: D) -> std::result::Result<BTreeMap<K, V>, D::Error>
+pub(crate) fn unique_map<'de, D, K, V>(d: D) -> std::result::Result<BTreeMap<K, V>, D::Error>
 where
     D: serde::Deserializer<'de>,
     K: Deserialize<'de> + Ord,

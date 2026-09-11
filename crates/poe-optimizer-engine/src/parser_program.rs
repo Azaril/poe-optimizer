@@ -1,9 +1,10 @@
-//! Immutable control-flow plans for validated, injected parser programs.
+//! Immutable control-flow plans for validated, injected source programs.
 //!
 //! Compilation is independent of callback admission and numerical capability. This
 //! native executor remains separate from legacy parser/package admission.
 mod runtime;
 use poe_optimizer_data::modifier_parser::*;
+use poe_optimizer_data::source_program::SourceProgramCatalog;
 pub use runtime::*;
 use std::collections::BTreeMap;
 use std::sync::Arc;
@@ -159,7 +160,7 @@ impl CompiledParserProgram {
 
 #[derive(Debug)]
 struct Library {
-    catalog: ParserProgramCatalog,
+    catalog: SourceProgramCatalog,
     programs: Box<[CompiledParserProgram]>,
     callbacks: BTreeMap<ParserCallbackId, usize>,
     instruction_count: usize,
@@ -167,9 +168,9 @@ struct Library {
 /// Cheaply clone/share prepared immutable code. Future invocation state belongs
 /// to each evaluation; this library stores no locals, heap or mutable worker data.
 #[derive(Debug, Clone)]
-pub struct CompiledParserPrograms(Arc<Library>);
-impl CompiledParserPrograms {
-    pub fn new(catalog: &ParserProgramCatalog) -> Result<Self> {
+pub struct CompiledSourcePrograms(Arc<Library>);
+impl CompiledSourcePrograms {
+    pub fn new(catalog: &SourceProgramCatalog) -> Result<Self> {
         let mut callbacks = BTreeMap::new();
         for (index, program) in catalog.data().programs.iter().enumerate() {
             callbacks.insert(program.callback, index);
@@ -245,7 +246,7 @@ impl CompiledParserPrograms {
             instruction_count: MAX_PROGRAM_INSTRUCTIONS - remaining,
         })))
     }
-    pub fn catalog(&self) -> &ParserProgramCatalog {
+    pub fn catalog(&self) -> &SourceProgramCatalog {
         &self.0.catalog
     }
     pub fn program(&self, callback: ParserCallbackId) -> Option<&CompiledParserProgram> {
@@ -259,6 +260,37 @@ impl CompiledParserPrograms {
     }
     pub fn instruction_count(&self) -> usize {
         self.0.instruction_count
+    }
+}
+
+/// Parser compatibility facade over the shared source compiler and VM.
+/// The original parser catalog is retained, with its existing identity contract.
+#[derive(Debug, Clone)]
+pub struct CompiledParserPrograms {
+    catalog: ParserProgramCatalog,
+    source: CompiledSourcePrograms,
+}
+impl CompiledParserPrograms {
+    pub fn new(catalog: &ParserProgramCatalog) -> Result<Self> {
+        Ok(Self {
+            catalog: catalog.clone(),
+            source: CompiledSourcePrograms::new(catalog.source_programs())?,
+        })
+    }
+    pub fn catalog(&self) -> &ParserProgramCatalog {
+        &self.catalog
+    }
+    pub fn source_programs(&self) -> &CompiledSourcePrograms {
+        &self.source
+    }
+    pub fn program(&self, callback: ParserCallbackId) -> Option<&CompiledParserProgram> {
+        self.source.program(callback)
+    }
+    pub fn programs(&self) -> &[CompiledParserProgram] {
+        self.source.programs()
+    }
+    pub fn instruction_count(&self) -> usize {
+        self.source.instruction_count()
     }
 }
 

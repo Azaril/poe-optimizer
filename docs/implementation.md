@@ -18,7 +18,58 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-**Current checkpoint: R2b authored configuration prefix paired with the original runtime.**
+**Current checkpoint: R2c shared source-program ownership and per-build sessions.**
+The [shared engine](shared-source-programs.md) now accepts standalone immutable definition
+owners with named roots, captured closure graphs and source provenance. Parser facades use
+the same verifier, compiler, executor and heap, retaining the original catalog and packaged
+IR allocation. No parser-shaped placeholder catalog or second interpreter was introduced.
+The original parser root enum/API remains unchanged; a separate `NamedDefinition` operation
+serves other domains. Structural validity and source lowering still do not grant numerical
+admission or certify caller-authored capture claims.
+
+`ProgramSession` retains mutable state across ordered calls, with opaque session-owned
+handles and cumulative work/allocation limits. Definitions and separately borrowed arguments
+remain read-only. Snapshots preserve aliases and retain the actual owner. Independent review
+covered cross-session/root rejection, failed imports and shared immutable code; regression
+coverage includes a duplicate normalized-key failure followed by a valid import.
+
+The optional PoB tooling now shares one scanner and whole-function lowerer. Its standalone
+API uses explicit owner roots/intrinsic bindings and supports implicit method `self`.
+Complete original `ModList.AddMod` matches native execution for explicit plain-table receiver
+arguments: four insertion calls, one source error and six complete state/alias snapshots.
+The reference uses the original complete runtime and authenticates the captured primitive by
+function identity. A separate source-only observation establishes actual ModList constructor,
+parent-proxy, NewMod and ReplaceMod behavior; native class/method readiness is not claimed.
+`Common.new` creates raw parent-proxy records and class-table keys, so method dispatch cannot
+be reduced to inserting a `self` argument or ignoring metatables.
+
+The bundled schema-29 data package remains byte-identical, as do caller builds, fixture
+inputs and the pinned PoB checkout. Eight new session tests and eight neutral data tests
+pass. The broad engine suite passes 321 tests, native passes 112, and the CLI passes seven
+default-feature plus fourteen native-only checks. Two fresh exports reproduce all 29 sections.
+Nineteen source regression tests pass on the earlier integration snapshot; the final
+root/storage corrections have 38 parser, 16 data and two source integration checks, alongside
+the eight final session and eighteen lowerer/extraction checks. Strict workspace/native-only
+lint, portable-library WASM compilation, formatting and dependency isolation pass.
+
+The exact snapshots, source observations and corrected attempts are recorded in
+`runs/r2c-integration-validation.json`, with separate data/engine/lowerer ledgers. Publication
+and exact-head hosted CI are recorded in `runs/r2c-publication.json`; local checks do not
+claim hosted completion. Complete native supplied-build evaluations remain **0/5**.
+
+**Resume point:** continue R2c with source-bound receiver method dispatch and class/proxy
+ownership. Preserve receiver lookup before argument evaluation, inherited methods, actual
+callback identity, parent initialization and parent-list replacement. Represent the required
+immutable class/method descriptors separately from writable per-build proxy state; the current
+immutable graph has string/exact-integer keys and must not pretend to cover arbitrary classes.
+Admit complete NewMod/AddMod/ReplaceMod/ReplaceModInternal consumers through the shared engine,
+including source-authenticated createMod/helper bindings. Then execute initial default and
+saved configuration activation for Twister and Skeletal Sniper together, retaining ordered
+captured quest closures, explicit control/parser-service effects, injected boss/monster data
+and all five structural inputs. Root/provider and actor/action preparation follow; the R3/R5
+whole-build numerical denominator and original joint-search scope remain unchanged.
+
+**Previous checkpoint: R2b authored configuration prefix paired with the original runtime.**
 The [configuration stage](configuration-preparation.md) executes constructor defaults,
 ordered authored inputs/placeholders, compatibility migrations and saved-set binding up to
 the first activation continuation. It runs through ordinary native preparation and the CLI;
@@ -58,14 +109,9 @@ integration ledger is `runs/r2b-integration-validation.json`; publication and ex
 are recorded separately in `runs/r2b-publication.json`. The complete native supplied-build
 denominator remains **0/5**.
 
-**Resume point:** continue R2b with one shared typed-program owner/root interface and explicit
-per-build writable state, then execute the initial default modifier pass and saved activation
-for Twister and Skeletal Sniper together. Preserve parser API compatibility through an
-adapter; do not create a fake parser catalog, second interpreter or per-setting Rust recipes.
-Retain ordered captured closures, source-bound modifier/control methods, cumulative budgets,
-separate UI/config placeholders and injected boss/monster definitions. The next useful gate
-is actual ordered callback/modifier parity, followed by root/provider and actor/action
-preparation. Keep all five originals and the unchanged R3/R5 whole-build denominator visible.
+The former R2b resume point (shared owner/root interface and per-build writable state) is
+implemented in R2c above. Effective configuration callbacks remain pending; source/control
+ownership and lifecycle evidence from this checkpoint still constrain the next integration.
 
 **Previous checkpoint: R2a authored skill loading validated locally.**
 The [shared authored stage](authored-skill-preparation.md) runs through ordinary native

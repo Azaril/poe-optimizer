@@ -27,6 +27,21 @@ pub fn observe(
     warm_xml: Option<&str>,
     structural_case: bool,
 ) -> Result<serde_json::Value, RuntimeError> {
+    observe_with_hook(pob_root, scratch, xml, warm_xml, structural_case, None)
+}
+
+type ObservationHook<'a> = dyn Fn(&Lua) -> Result<serde_json::Value, RuntimeError> + 'a;
+
+/// Reuse the complete source bootstrap for additional independent parity consumers.
+/// The hook runs after the original build finishes and cannot replace source methods.
+pub fn observe_with_hook(
+    pob_root: &Path,
+    scratch: &Path,
+    xml: &str,
+    warm_xml: Option<&str>,
+    structural_case: bool,
+    hook: Option<&ObservationHook<'_>>,
+) -> Result<serde_json::Value, RuntimeError> {
     let start = Instant::now();
     poe_optimizer_pob::import::decode_build(xml.as_bytes())?;
     // Structural cases deliberately exercise original Lua coercion/diagnostics
@@ -175,6 +190,9 @@ pub fn observe(
     let value: Value = globals.get("_configuration_source_trace")?;
     let mut result: serde_json::Value = lua.from_value(value)?;
     result["source_hash"] = source_hash.into();
+    if let Some(hook) = hook {
+        result["additional_observation"] = hook(&lua)?;
+    }
     result["elapsed_ms"] = (start.elapsed().as_secs_f64() * 1000.0).into();
     Ok(result)
 }

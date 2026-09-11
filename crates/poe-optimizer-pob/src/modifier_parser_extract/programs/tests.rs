@@ -17,8 +17,7 @@ fn parse(body: &str) -> LowerResult<ParserProgram> {
         body,
         ParserCallbackId(1),
         &callback,
-        data,
-        constructor(data),
+        &parser_bindings(constructor(data)),
         &mut budget,
     )?
     .program(&span(body))
@@ -98,8 +97,7 @@ fn complete_original_targets_lower_with_exact_provenance_and_own_captures() {
             &body,
             ParserCallbackId(index as u32 + 1),
             callback,
-            data,
-            constructor(data),
+            &parser_bindings(constructor(data)),
             &mut budget,
         )
         .unwrap()

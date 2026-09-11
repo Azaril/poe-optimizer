@@ -1,0 +1,494 @@
+use poe_optimizer_data::{
+    game_data::bundled_snapshot,
+    item_loading::{ItemLoadingSource, ItemSourceSpan},
+    modifier_parser::{ParserFactoryLiteral, ParserProgramCatalog, ParserProgramDefinitionRoot},
+    source_program::*,
+};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    sync::OnceLock,
+};
+
+fn span() -> ItemSourceSpan {
+    ItemSourceSpan {
+        path: "fixtures/source.lua".into(),
+        line: 1,
+        end_line: 10,
+        sha256: "b".repeat(64),
+    }
+}
+fn callback(upvalues: Vec<SourceUpvalue>) -> SourceCallback {
+    SourceCallback {
+        kind: SourceCallbackKind::Lua { source: span() },
+        upvalues,
+        environment: SourceEnvironment::OriginalGlobals,
+    }
+}
+fn definitions() -> SourceProgramDefinitions {
+    SourceProgramDefinitions {
+        schema_version: SOURCE_PROGRAM_DEFINITIONS_SCHEMA_VERSION,
+        source: ItemLoadingSource {
+            upstream_revision: "a".repeat(40),
+            files: BTreeMap::from([("fixtures/source.lua".into(), "c".repeat(64))]),
+            construction_spans: BTreeMap::new(),
+            module_order: vec!["fixtures/source.lua".into()],
+        },
+        tables: vec![
+            SourceTable {
+                fields: BTreeMap::from([
+                    ("self".into(), SourceValue::Table(SourceTableId(1))),
+                    ("peer".into(), SourceValue::Table(SourceTableId(2))),
+                    ("first".into(), SourceValue::Callback(SourceCallbackId(1))),
+                    ("second".into(), SourceValue::Callback(SourceCallbackId(2))),
+                ]),
+                indexed: BTreeMap::new(),
+            },
+            SourceTable {
+                fields: BTreeMap::from([("parent".into(), SourceValue::Table(SourceTableId(1)))]),
+                indexed: BTreeMap::new(),
+            },
+        ],
+        callbacks: vec![
+            callback(vec![SourceUpvalue {
+                name: "state".into(),
+                value: SourceValue::Table(SourceTableId(1)),
+            }]),
+            callback(vec![SourceUpvalue {
+                name: "state".into(),
+                value: SourceValue::Table(SourceTableId(2)),
+            }]),
+        ],
+        roots: vec![
+            SourceProgramRoot {
+                name: "definitions".into(),
+                table: SourceTableId(1),
+            },
+            SourceProgramRoot {
+                name: "alias".into(),
+                table: SourceTableId(1),
+            },
+        ],
+        intrinsics: BTreeMap::new(),
+    }
+}
+fn expression(operation: SourceProgramExprKind) -> SourceProgramExpr {
+    SourceProgramExpr {
+        location: SourceProgramLocation { start: 0, end: 1 },
+        operation,
+    }
+}
+fn program(callback: SourceCallbackId, value: SourceProgramExprKind) -> SourceProgram {
+    SourceProgram {
+        callback,
+        parameter_count: 0,
+        variadic: false,
+        local_count: 0,
+        bindings: vec![],
+        body: vec![SourceProgramStatement {
+            location: SourceProgramLocation { start: 0, end: 1 },
+            operation: SourceProgramStatementKind::Return {
+                values: SourceProgramValueList {
+                    values: vec![expression(value)],
+                    tail: None,
+                },
+            },
+        }],
+        provenance: SourceProgramProvenance {
+            source: span(),
+            function_start: 0,
+            function_end: 100,
+            function_sha256: "d".repeat(64),
+        },
+    }
+}
+fn programs(programs: Vec<SourceProgram>) -> SourceProgramData {
+    SourceProgramData {
+        schema_version: SOURCE_PROGRAM_SCHEMA_VERSION,
+        callbacks: programs
+            .iter()
+            .enumerate()
+            .map(|(i, p)| (p.callback, SourceProgramId(i as u32 + 1)))
+            .collect(),
+        programs,
+    }
+}
+#[test]
+fn standalone_graph_retains_aliases_cycles_and_distinct_closures_without_parser_data() {
+    let data = definitions();
+    let owner = SourceProgramOwner::new(data.clone()).unwrap();
+    assert!(owner.parser().is_none());
+    assert_eq!(owner.definitions(), Some(&data));
+    let cloned = owner.clone();
+    assert!(cloned.is_same_owner(&owner));
+    assert!(std::ptr::eq(cloned.tables(), owner.tables()));
+    assert_eq!(
+        owner.table(SourceTableId(1)).unwrap().fields["self"],
+        SourceValue::Table(SourceTableId(1))
+    );
+    assert_eq!(
+        owner.table(SourceTableId(2)).unwrap().fields["parent"],
+        SourceValue::Table(SourceTableId(1))
+    );
+    assert_eq!(
+        owner.callback(SourceCallbackId(1)).unwrap().kind,
+        owner.callback(SourceCallbackId(2)).unwrap().kind
+    );
+    assert_ne!(
+        owner.callback(SourceCallbackId(1)).unwrap().upvalues,
+        owner.callback(SourceCallbackId(2)).unwrap().upvalues
+    );
+    let first = owner
+        .bind_root(SourceProgramDefinitionRoot::Named(
+            owner.root_id("definitions").unwrap(),
+        ))
+        .unwrap();
+    let alias = owner
+        .bind_root(SourceProgramDefinitionRoot::Named(
+            owner.root_id("alias").unwrap(),
+        ))
+        .unwrap();
+    assert_ne!(first.root(), alias.root());
+    assert!(std::ptr::eq(first.table(), alias.table()));
+    assert!(std::ptr::eq(
+        owner.resolve_root(&first).unwrap(),
+        cloned.resolve_root(&alias).unwrap()
+    ));
+    let independent = SourceProgramOwner::new(data).unwrap();
+    assert!(!independent.is_same_owner(&owner));
+    assert_eq!(
+        independent.resolve_root(&first).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+    assert!(
+        owner
+            .bind_root(SourceProgramDefinitionRoot::Named(SourceProgramRootId(0)))
+            .is_err()
+    );
+    assert!(
+        owner
+            .bind_root(SourceProgramDefinitionRoot::Named(SourceProgramRootId(3)))
+            .is_err()
+    );
+    assert!(owner.table(SourceTableId(0)).is_none());
+    assert!(owner.callback(SourceCallbackId(0)).is_none());
+}
+#[test]
+fn programs_validate_named_roots_against_their_actual_owner_and_keep_structural_admission_separate()
+{
+    let owner = SourceProgramOwner::new(definitions()).unwrap();
+    let p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::NamedDefinition {
+            root: SourceProgramRootId(1),
+        },
+    );
+    let data = programs(vec![p]);
+    let catalog = SourceProgramCatalog::new(data.clone(), owner.clone()).unwrap();
+    assert!(catalog.is_bound_to(&owner));
+    assert!(!catalog.is_bound_to(&SourceProgramOwner::new(definitions()).unwrap()));
+    assert!(std::ptr::eq(catalog.clone().data(), catalog.data()));
+    assert_eq!(
+        catalog.required_capabilities(),
+        &BTreeSet::from([SourceProgramCapability::Core])
+    );
+    assert_eq!(
+        catalog
+            .check_capabilities(&BTreeSet::new())
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::UnsupportedCapability
+    );
+    let encoded = serde_json::to_vec(&data).unwrap();
+    assert_eq!(
+        SourceProgramCatalog::from_bytes(&encoded, owner.clone())
+            .unwrap()
+            .data(),
+        &data
+    );
+    assert!(std::ptr::eq(
+        catalog
+            .definition(SourceProgramDefinitionRoot::Named(SourceProgramRootId(1)))
+            .unwrap(),
+        owner.table(SourceTableId(1)).unwrap()
+    ));
+    for root in [
+        SourceProgramDefinitionRoot::Named(SourceProgramRootId(3)),
+        SourceProgramDefinitionRoot::ModFlags,
+    ] {
+        let bad = programs(vec![program(
+            SourceCallbackId(1),
+            match root {
+                SourceProgramDefinitionRoot::Named(root) => {
+                    SourceProgramExprKind::NamedDefinition { root }
+                }
+                root => SourceProgramExprKind::Definition {
+                    root: root.legacy().unwrap(),
+                },
+            },
+        )]);
+        assert_eq!(
+            SourceProgramCatalog::new(bad, owner.clone())
+                .unwrap_err()
+                .kind,
+            SourceProgramErrorKind::Binding
+        );
+    }
+}
+#[test]
+fn common_graph_verifier_rejects_dangling_nil_invalid_source_and_duplicate_names() {
+    type Mutation = fn(&mut SourceProgramDefinitions);
+    let variants: Vec<Mutation> = vec![
+        |d| {
+            d.tables[0]
+                .fields
+                .insert("bad".into(), SourceValue::Table(SourceTableId(3)));
+        },
+        |d| {
+            d.callbacks[0].upvalues[0].value = SourceValue::Callback(SourceCallbackId(3));
+        },
+        |d| {
+            d.tables[0].fields.insert("bad".into(), SourceValue::Nil);
+        },
+        |d| {
+            d.tables[0]
+                .fields
+                .insert("bad".into(), SourceValue::Number(f64::NAN));
+        },
+        |d| {
+            d.roots[1].name = d.roots[0].name.clone();
+        },
+        |d| {
+            d.roots[1].table = SourceTableId(0);
+        },
+        |d| {
+            d.source.upstream_revision = "invalid".into();
+        },
+        |d| {
+            d.source.module_order.push("missing.lua".into());
+        },
+        |d| {
+            d.source.files = BTreeMap::from([("../escape.lua".into(), "c".repeat(64))]);
+        },
+    ];
+    for change in variants {
+        let mut data = definitions();
+        change(&mut data);
+        assert!(SourceProgramOwner::new(data).is_err());
+    }
+    let mut nullable = definitions();
+    nullable.callbacks[0].upvalues[0].value = SourceValue::Nil;
+    assert!(SourceProgramOwner::new(nullable).is_ok());
+}
+#[test]
+fn standalone_definition_limits_are_cumulative_and_checked_before_arc_construction() {
+    let mut data = definitions();
+    data.roots = (0..4097)
+        .map(|i| SourceProgramRoot {
+            name: format!("root{i}"),
+            table: SourceTableId(1),
+        })
+        .collect();
+    assert_eq!(
+        SourceProgramOwner::new(data).unwrap_err().kind,
+        SourceProgramErrorKind::ResourceLimit
+    );
+    let mut data = definitions();
+    data.tables[0].fields = (0..4200)
+        .map(|i| (format!("field{i}"), SourceValue::Text("x".repeat(4096))))
+        .collect();
+    let error = SourceProgramOwner::new(data).unwrap_err();
+    assert_eq!(error.kind, SourceProgramErrorKind::ResourceLimit);
+    assert!(error.message.contains("aggregate text"));
+    let mut data = definitions();
+    data.callbacks[0].upvalues = (0..129)
+        .map(|i| SourceUpvalue {
+            name: format!("v{i}"),
+            value: SourceValue::Nil,
+        })
+        .collect();
+    assert_eq!(
+        SourceProgramOwner::new(data).unwrap_err().kind,
+        SourceProgramErrorKind::ResourceLimit
+    );
+}
+#[test]
+fn explicit_builtin_bindings_match_captured_closure_identity_and_are_not_automatic_admission() {
+    let mut data = definitions();
+    data.callbacks.push(SourceCallback {
+        kind: SourceCallbackKind::Builtin {
+            symbol: "table.insert".into(),
+        },
+        upvalues: vec![],
+        environment: SourceEnvironment::OriginalGlobals,
+    });
+    data.callbacks[0].upvalues = vec![SourceUpvalue {
+        name: "insert".into(),
+        value: SourceValue::Callback(SourceCallbackId(3)),
+    }];
+    let mut p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::Literal {
+            value: ParserFactoryLiteral::Nil,
+        },
+    );
+    p.bindings.push(SourceProgramBinding::Intrinsic {
+        operation: SourceProgramIntrinsic::TableInsert,
+        source: SourceProgramIntrinsicSource::Captured {
+            upvalue: 0,
+            callback: SourceCallbackId(3),
+        },
+    });
+    assert_eq!(
+        SourceProgramCatalog::new(
+            programs(vec![p.clone()]),
+            SourceProgramOwner::new(data.clone()).unwrap()
+        )
+        .unwrap_err()
+        .kind,
+        SourceProgramErrorKind::UnsupportedCapability
+    );
+    data.intrinsics
+        .insert(SourceCallbackId(3), SourceProgramIntrinsic::TableInsert);
+    assert!(
+        SourceProgramCatalog::new(
+            programs(vec![p.clone()]),
+            SourceProgramOwner::new(data.clone()).unwrap()
+        )
+        .is_ok()
+    );
+    let mut wrong = data.clone();
+    wrong
+        .intrinsics
+        .insert(SourceCallbackId(3), SourceProgramIntrinsic::Ipairs);
+    assert_eq!(
+        SourceProgramOwner::new(wrong).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+    data.callbacks[0].upvalues[0].value = SourceValue::Callback(SourceCallbackId(2));
+    assert_eq!(
+        SourceProgramCatalog::new(programs(vec![p]), SourceProgramOwner::new(data).unwrap())
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::Binding
+    );
+}
+#[test]
+fn shared_verifier_retains_captured_helper_cycles_and_source_provenance_checks() {
+    let mut data = definitions();
+    for i in 0..2 {
+        data.callbacks[i].upvalues = vec![SourceUpvalue {
+            name: "helper".into(),
+            value: SourceValue::Callback(SourceCallbackId(2 - i as u32)),
+        }];
+    }
+    let body = (1..=2)
+        .map(|i| {
+            let mut p = program(
+                SourceCallbackId(i),
+                SourceProgramExprKind::Call {
+                    call: Box::new(SourceProgramCall {
+                        binding: 0,
+                        receiver: None,
+                        arguments: SourceProgramValueList::default(),
+                    }),
+                },
+            );
+            p.bindings = vec![SourceProgramBinding::CapturedCallback {
+                upvalue: 0,
+                callback: SourceCallbackId(3 - i),
+            }];
+            p
+        })
+        .collect();
+    let library = programs(body);
+    let owner = SourceProgramOwner::new(data).unwrap();
+    let catalog = SourceProgramCatalog::new(library.clone(), owner.clone()).unwrap();
+    assert!(
+        catalog
+            .required_capabilities()
+            .contains(&SourceProgramCapability::RecursiveCalls)
+    );
+    let mut wrong = library;
+    wrong.programs[0].provenance.source.line += 1;
+    assert_eq!(
+        SourceProgramCatalog::new(wrong, owner).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+}
+#[test]
+fn parser_adapter_retains_the_exact_graph_arc_and_legacy_wire_without_a_schema_change() {
+    static SNAPSHOT: OnceLock<poe_optimizer_data::game_data::GameDataSnapshot> = OnceLock::new();
+    let snapshot = SNAPSHOT.get_or_init(|| bundled_snapshot().unwrap());
+    let original = snapshot.modifier_parser();
+    assert!(std::ptr::eq(
+        snapshot.parser_programs().programs().data(),
+        &original.data().programs.data
+    ));
+
+    let generic = SourceProgramOwner::from_parser(original.clone());
+    assert!(generic.parser().unwrap().is_same_owner(original));
+    assert!(std::ptr::eq(
+        generic.tables(),
+        original.data().tables.as_slice()
+    ));
+    assert!(std::ptr::eq(
+        generic.callbacks(),
+        original.data().callbacks.as_slice()
+    ));
+    let catalog = ParserProgramCatalog::new(
+        SourceProgramData {
+            schema_version: SOURCE_PROGRAM_SCHEMA_VERSION,
+            programs: vec![],
+            callbacks: BTreeMap::new(),
+        },
+        original.clone(),
+    )
+    .unwrap();
+    assert!(catalog.is_bound_to(original));
+    assert!(catalog.source_programs().owner().is_same_owner(&generic));
+    for (root, wire) in [
+        (ParserProgramDefinitionRoot::ModFlags, "\"mod_flags\""),
+        (
+            ParserProgramDefinitionRoot::KeywordFlags,
+            "\"keyword_flags\"",
+        ),
+        (ParserProgramDefinitionRoot::SkillTypes, "\"skill_types\""),
+        (
+            ParserProgramDefinitionRoot::GemIdLookup,
+            "\"gem_id_lookup\"",
+        ),
+    ] {
+        assert_eq!(serde_json::to_string(&root).unwrap(), wire);
+        assert!(std::ptr::eq(
+            catalog.definition(root),
+            generic.definition(root.into()).unwrap()
+        ));
+    }
+    assert!(
+        generic
+            .bind_root(SourceProgramDefinitionRoot::Named(SourceProgramRootId(1)))
+            .is_err()
+    );
+}
+#[test]
+fn definition_json_keeps_duplicate_intrinsic_keys_and_unknown_fields_invalid() {
+    let json = serde_json::to_string(&definitions()).unwrap();
+    assert_eq!(
+        SourceProgramOwner::from_bytes(json.as_bytes())
+            .unwrap()
+            .definitions(),
+        Some(&definitions())
+    );
+    let duplicate = json.replace(
+        "\"intrinsics\":{}",
+        "\"intrinsics\":{\"1\":\"ipairs\",\"1\":\"ipairs\"}",
+    );
+    assert!(
+        SourceProgramOwner::from_bytes(duplicate.as_bytes())
+            .unwrap_err()
+            .message
+            .contains("duplicate")
+    );
+    let unknown = json.replacen('{', "{\"unknown\":true,", 1);
+    assert!(SourceProgramOwner::from_bytes(unknown.as_bytes()).is_err());
+}

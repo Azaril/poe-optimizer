@@ -74,11 +74,11 @@ pub struct ParserAdmittedProgramCatalog {
 impl ParserAdmittedProgramCatalog {
     pub fn new(owner: &ModifierParserCatalog) -> ParserProgramResult<Self> {
         let (required, owner_sha256) = check_payload(owner.data())?;
-        // Clone the recursive IR only after the iterative verifier bounded it.
         let programs = ParserProgramCatalog {
-            data: Arc::new(owner.data().programs.data.clone()),
-            owner: owner.clone(),
-            required,
+            source: crate::source_program::SourceProgramCatalog::from_verified_parser_payload(
+                owner.clone(),
+                required,
+            ),
         };
         Ok(Self {
             programs,

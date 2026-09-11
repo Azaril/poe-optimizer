@@ -1,4 +1,4 @@
-use super::*;
+use super::lowering::*;
 type Expr = ParserProgramExpr;
 type Statement = ParserProgramStatement;
 
@@ -30,14 +30,14 @@ impl Term<'_> {
         }
     }
 }
-pub(super) struct Lowerer<'a, 'b> {
+pub(crate) struct Lowerer<'a, 'b> {
     lua: &'a Lua,
     body: &'a str,
     tokens: Vec<Lex<'a>>,
     at: usize,
     callback_id: ParserCallbackId,
     callback: &'a ParserCallback,
-    constructor: ParserCallbackId,
+    authorization: &'a LoweringBindings,
     budget: &'b mut Budget,
     scopes: Vec<BTreeMap<&'a str, u16>>,
     bindings: Vec<ParserProgramBinding>,
@@ -49,13 +49,12 @@ pub(super) struct Lowerer<'a, 'b> {
     loop_depth: usize,
 }
 impl<'a, 'b> Lowerer<'a, 'b> {
-    pub(super) fn new(
+    pub(crate) fn new(
         lua: &'a Lua,
         body: &'a str,
         callback_id: ParserCallbackId,
         callback: &'a ParserCallback,
-        _data: &'a ModifierParserData,
-        constructor: ParserCallbackId,
+        authorization: &'a LoweringBindings,
         budget: &'b mut Budget,
     ) -> LowerResult<Self> {
         if callback.environment != ParserEnvironment::OriginalGlobals {
@@ -69,7 +68,7 @@ impl<'a, 'b> Lowerer<'a, 'b> {
             at: 0,
             callback_id,
             callback,
-            constructor,
+            authorization,
             budget,
             scopes: vec![BTreeMap::new()],
             bindings: vec![],
@@ -184,7 +183,7 @@ impl<'a, 'b> Lowerer<'a, 'b> {
             source: ParserProgramIntrinsicSource::OriginalGlobal,
         })
     }
-    pub(super) fn program(mut self, span: &ItemSourceSpan) -> LowerResult<ParserProgram> {
+    pub(crate) fn program(mut self, span: &ItemSourceSpan) -> LowerResult<ParserProgram> {
         let positions = self
             .tokens
             .iter()
@@ -205,7 +204,13 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                 self.name()?;
             }
             if self.peek() == ":" {
-                return Err("method function definitions require implicit-self lowering".into());
+                if !self.authorization.implicit_self {
+                    return Err("method function definitions require implicit-self lowering".into());
+                }
+                self.at += 1;
+                self.name()?;
+                self.declare("self")?;
+                self.parameters += 1;
             }
         }
         self.take("(")?;
@@ -711,36 +716,38 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                             1,
                         )?;
                         if let ParserValue::Callback(callback) = captured {
-                            info.target = Some(if callback == self.constructor {
-                                ParserProgramBinding::Intrinsic {
-                                    operation: ParserProgramIntrinsic::CreateMod,
-                                    source: ParserProgramIntrinsicSource::Captured {
+                            info.target = Some(
+                                if let Some(operation) =
+                                    self.authorization.intrinsics.get(&callback)
+                                {
+                                    ParserProgramBinding::Intrinsic {
+                                        operation: *operation,
+                                        source: ParserProgramIntrinsicSource::Captured {
+                                            upvalue: slot as u16,
+                                            callback,
+                                        },
+                                    }
+                                } else {
+                                    ParserProgramBinding::CapturedCallback {
                                         upvalue: slot as u16,
                                         callback,
-                                    },
-                                }
-                            } else {
-                                ParserProgramBinding::CapturedCallback {
-                                    upvalue: slot as u16,
-                                    callback,
-                                }
-                            });
+                                    }
+                                },
+                            );
                         }
                         Term::Value(info)
                     } else {
-                        let root = match name {
-                            "ModFlag" => Some(ParserProgramDefinitionRoot::ModFlags),
-                            "KeywordFlag" => Some(ParserProgramDefinitionRoot::KeywordFlags),
-                            "SkillType" => Some(ParserProgramDefinitionRoot::SkillTypes),
-                            _ => None,
-                        };
+                        let root = self.authorization.roots.get(name).copied();
                         if let Some(root) = root {
-                            Term::Value(self.node(
-                                ParserProgramExprKind::Definition { root },
-                                start,
-                                self.end(),
-                                1,
-                            )?)
+                            let operation = match root {
+                                SourceProgramDefinitionRoot::Named(root) => {
+                                    ParserProgramExprKind::NamedDefinition { root }
+                                }
+                                legacy => ParserProgramExprKind::Definition {
+                                    root: legacy.legacy().expect("legacy root branch"),
+                                },
+                            };
+                            Term::Value(self.node(operation, start, self.end(), 1)?)
                         } else {
                             Term::Global {
                                 path: vec![name],

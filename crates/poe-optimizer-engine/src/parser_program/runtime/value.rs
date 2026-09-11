@@ -1,10 +1,13 @@
-//! Invocation-local identity graph. Imported and definition tables stay read-only;
-//! only tables created by this invocation admit writes. No copy-on-write occurs.
+//! Invocation/session-local identity graph. Borrowed and definition tables stay
+//! read-only; explicitly owned state and tables created by the VM admit writes.
+//! No implicit copy-on-write occurs.
 use super::{ProgramLimits, ProgramRuntimeError as Error, RuntimeResult as Result};
+#[cfg(test)]
+use poe_optimizer_data::modifier_parser::ModifierParserCatalog;
 use poe_optimizer_data::modifier_parser::{
-    ModifierParserCatalog, ParserCallbackId, ParserFactoryLiteral, ParserNonFinite, ParserTableId,
-    ParserValue,
+    ParserCallbackId, ParserFactoryLiteral, ParserNonFinite, ParserTableId, ParserValue,
 };
+use poe_optimizer_data::source_program::SourceProgramOwner;
 use std::{
     collections::{BTreeMap, BTreeSet},
     sync::Arc,
@@ -161,21 +164,18 @@ pub(super) struct HeapStats {
     pub(super) tables: usize,
 }
 enum Usage<'a> {
-    #[cfg(test)]
     Owned(HeapStats),
     Shared(&'a mut HeapStats),
 }
 impl Usage<'_> {
     fn get(&self) -> HeapStats {
         match self {
-            #[cfg(test)]
             Self::Owned(used) => *used,
             Self::Shared(used) => **used,
         }
     }
     fn get_mut(&mut self) -> &mut HeapStats {
         match self {
-            #[cfg(test)]
             Self::Owned(used) => used,
             Self::Shared(used) => used,
         }
@@ -221,10 +221,23 @@ impl Budget<'_> {
 }
 
 pub(super) struct Heap<'a> {
-    catalog: ModifierParserCatalog,
+    catalog: SourceProgramOwner,
     arguments: Vec<Table>,
     tables: Vec<Table>,
     budget: Budget<'a>,
+}
+impl Heap<'static> {
+    pub(super) fn owned(catalog: &SourceProgramOwner, limits: ProgramLimits) -> Self {
+        Self {
+            catalog: catalog.clone(),
+            arguments: Vec::new(),
+            tables: Vec::new(),
+            budget: Budget {
+                limits,
+                used: Usage::Owned(HeapStats::default()),
+            },
+        }
+    }
 }
 #[cfg(test)]
 impl Heap<'static> {
@@ -234,7 +247,7 @@ impl Heap<'static> {
         limits: &ProgramLimits,
     ) -> Result<(Self, Vec<V>)> {
         Self::load(
-            catalog,
+            &SourceProgramOwner::from_parser(catalog.clone()),
             input,
             Budget {
                 limits: *limits,
@@ -245,7 +258,7 @@ impl Heap<'static> {
 }
 impl<'a> Heap<'a> {
     pub(super) fn new_shared(
-        catalog: &ModifierParserCatalog,
+        catalog: &SourceProgramOwner,
         input: &ProgramValueGraph,
         limits: &ProgramLimits,
         used: &'a mut HeapStats,
@@ -260,18 +273,29 @@ impl<'a> Heap<'a> {
         )
     }
     fn load(
-        catalog: &ModifierParserCatalog,
+        catalog: &SourceProgramOwner,
         input: &ProgramValueGraph,
-        mut budget: Budget<'a>,
+        budget: Budget<'a>,
     ) -> Result<(Self, Vec<V>)> {
+        let mut heap = Self {
+            catalog: catalog.clone(),
+            arguments: Vec::new(),
+            tables: Vec::new(),
+            budget,
+        };
+        let values = heap.import(input, false)?;
+        Ok((heap, values))
+    }
+    /// Explicitly imported state may be writable; ordinary parser arguments never are.
+    pub(super) fn import(&mut self, input: &ProgramValueGraph, writable: bool) -> Result<Vec<V>> {
         // Validate every input node, including unreachable tables, before copying.
-        budget.tables(input.tables.len())?;
-        budget.values(input.values.len())?;
+        self.budget.tables(input.tables.len())?;
+        self.budget.values(input.values.len())?;
         for value in &input.values {
-            validate_input(value, input.tables.len(), catalog, &mut budget)?;
+            validate_input(value, input.tables.len(), &self.catalog, &mut self.budget)?;
         }
         for table in &input.tables {
-            budget.values(
+            self.budget.values(
                 table
                     .entries
                     .len()
@@ -279,8 +303,8 @@ impl<'a> Heap<'a> {
                     .ok_or_else(|| Error::resource("input graph entries"))?,
             )?;
             for (key, value) in &table.entries {
-                validate_input(key, input.tables.len(), catalog, &mut budget)?;
-                validate_input(value, input.tables.len(), catalog, &mut budget)?;
+                validate_input(key, input.tables.len(), &self.catalog, &mut self.budget)?;
+                validate_input(value, input.tables.len(), &self.catalog, &mut self.budget)?;
                 if matches!(key, ProgramValue::Nil)
                     || matches!(key, ProgramValue::Number(n) if n.is_nan())
                 {
@@ -301,29 +325,39 @@ impl<'a> Heap<'a> {
                 ProgramValue::Number(n) if n.is_finite() && *n >= 1.0 && n.fract() == 0.0)
                 })
                 .count();
-            budget.values(count)?;
+            self.budget.values(count)?;
         }
-        let values = input.values.iter().map(input_value).collect();
+        let offset = u32::try_from(if writable {
+            self.tables.len()
+        } else {
+            self.arguments.len()
+        })
+        .map_err(|_| Error::resource("import graph table identity"))?;
+        offset
+            .checked_add(
+                u32::try_from(input.tables.len())
+                    .map_err(|_| Error::resource("import graph tables"))?,
+            )
+            .ok_or_else(|| Error::resource("import graph table identity"))?;
+        let convert = |v: &ProgramValue| input_value(v, writable, offset);
+        let values = input.values.iter().map(convert).collect();
         let mut arguments = Vec::with_capacity(input.tables.len());
         for source in &input.tables {
             let mut table = Table::default();
             for (key, value) in &source.entries {
-                let key = Key::read(&input_value(key)).expect("validated input key");
-                if table.insert(key, input_value(value)).is_some() {
+                let key = Key::read(&convert(key)).expect("validated input key");
+                if table.insert(key, convert(value)).is_some() {
                     return Err(Error::input("duplicate input table key under Lua equality"));
                 }
             }
             arguments.push(table);
         }
-        Ok((
-            Self {
-                catalog: catalog.clone(),
-                arguments,
-                tables: Vec::new(),
-                budget,
-            },
-            values,
-        ))
+        if writable {
+            self.tables.extend(arguments);
+        } else {
+            self.arguments.extend(arguments);
+        }
+        Ok(values)
     }
     pub(super) fn stats(&self) -> HeapStats {
         self.budget.used.get()
@@ -603,7 +637,7 @@ fn definition_value(value: &ParserValue, budget: &mut Budget) -> Result<V> {
 fn validate_input(
     value: &ProgramValue,
     tables: usize,
-    catalog: &ModifierParserCatalog,
+    catalog: &SourceProgramOwner,
     budget: &mut Budget,
 ) -> Result<()> {
     match value {
@@ -618,13 +652,17 @@ fn validate_input(
     }
     Ok(())
 }
-fn input_value(value: &ProgramValue) -> V {
+fn input_value(value: &ProgramValue, writable: bool, offset: u32) -> V {
     match value {
         ProgramValue::Nil => V::Nil,
         ProgramValue::Boolean(v) => V::Boolean(*v),
         ProgramValue::Number(v) => V::Number(*v),
         ProgramValue::Bytes(v) => V::Bytes(Arc::from(v.as_slice())),
-        ProgramValue::Table(id) => V::Table(TableRef::Argument(id.0)),
+        ProgramValue::Table(id) => V::Table(if writable {
+            TableRef::Heap(offset + id.0)
+        } else {
+            TableRef::Argument(offset + id.0)
+        }),
         ProgramValue::Callback(id) => V::Callback(*id),
     }
 }

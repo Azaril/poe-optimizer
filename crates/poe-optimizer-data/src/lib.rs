@@ -16,6 +16,7 @@ mod movement;
 pub mod passive_allocation;
 pub mod skill_identities;
 pub mod skill_preparation;
+pub mod source_program;
 pub mod tree_data;
 pub mod tree_projection;
 pub mod unique_requirements;
@@ -42,6 +43,8 @@ pub fn implementation_fingerprint() -> String {
         include_str!("item_loading/runes.rs"),
         include_str!("item_scalability.rs"),
         include_str!("modifier_parser.rs"),
+        include_str!("source_program.rs"),
+        include_str!("source_program/graph.rs"),
         include_str!("modifier_parser/factories.rs"),
         include_str!("modifier_parser/programs.rs"),
         include_str!("modifier_parser/programs/payload.rs"),

@@ -4,7 +4,7 @@ const MAX_LIST: usize = 4096;
 const MAX_NODES: usize = 500_000;
 const MAX_BYTES: usize = 8 * 1024 * 1024;
 
-pub(super) fn error(
+pub(crate) fn error(
     kind: ParserProgramErrorKind,
     program: Option<ParserProgramId>,
     location: Option<ParserProgramLocation>,
@@ -73,7 +73,7 @@ impl Budget {
 }
 struct Check<'a> {
     data: &'a ParserProgramData,
-    owner: &'a ModifierParserData,
+    owner: &'a dyn crate::source_program::ProgramOwnerView,
     program: &'a ParserProgram,
     id: ParserProgramId,
     budget: &'a mut Budget,
@@ -249,6 +249,9 @@ impl Check<'_> {
                         ParserProgramIntrinsicSource::Captured { upvalue, callback } => {
                             self.captured(*upvalue, *callback)?;
                             if *operation != ParserProgramIntrinsic::CreateMod {
+                                if self.owner.intrinsic(*callback) == Some(*operation) {
+                                    continue;
+                                }
                                 return Err(self.fail(
                                     ParserProgramErrorKind::UnsupportedCapability,
                                     None,
@@ -258,7 +261,7 @@ impl Check<'_> {
                             let target = self.owner.callback(*callback).expect("validated capture");
                             let span = self
                                 .owner
-                                .source
+                                .source()
                                 .construction_spans
                                 .get("create_mod")
                                 .ok_or_else(|| {
@@ -444,7 +447,26 @@ impl Check<'_> {
                             ));
                         }
                     }
-                    ParserProgramExprKind::Definition { .. } => {}
+                    ParserProgramExprKind::Definition { root } => {
+                        if !self.owner.has_definition((*root).into()) {
+                            return Err(self.fail(
+                                ParserProgramErrorKind::Binding,
+                                Some(loc),
+                                "definition root is not bound to this owner",
+                            ));
+                        }
+                    }
+                    ParserProgramExprKind::NamedDefinition { root } => {
+                        if !self.owner.has_definition(
+                            crate::source_program::SourceProgramDefinitionRoot::Named(*root),
+                        ) {
+                            return Err(self.fail(
+                                ParserProgramErrorKind::Binding,
+                                Some(loc),
+                                "named definition root is not bound to this owner",
+                            ));
+                        }
+                    }
                     ParserProgramExprKind::Get { table, key } => {
                         work.push(ValueWork::Expr(key, depth + 1));
                         work.push(ValueWork::Expr(table, depth + 1));
@@ -692,9 +714,9 @@ struct Frame<'a> {
     loops: usize,
 }
 
-pub(super) fn validate(
+pub(crate) fn validate(
     data: &ParserProgramData,
-    owner: &ModifierParserData,
+    owner: &dyn crate::source_program::ProgramOwnerView,
 ) -> ParserProgramResult<BTreeSet<ParserProgramCapability>> {
     if data.schema_version != PARSER_PROGRAM_SCHEMA_VERSION {
         return Err(error(
