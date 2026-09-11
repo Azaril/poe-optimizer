@@ -45,6 +45,15 @@ and exact source compatibility guard. Custom numerical/effect records can change
 topology or its provenance requires the remaining source/compatibility migration. The
 supplied minion build and unrestricted native evaluation remain unsupported.
 
+## General authored skill definitions
+
+Schema 28 adds `skill_preparation`, separate from identity evidence and the older narrow
+numerical capability records. It supplies all constructed gems/effects, exact level rows
+and aliases, requirement coefficients, visibility/color metadata, loading policy and
+unique/ambiguous lookup candidates. Native authored loading consumes this injected catalog
+for arbitrary caller skill groups; catalog presence does not establish effective support,
+actor/action or numerical coverage. See [authored skill preparation](authored-skill-preparation.md).
+
 ## Actor configuration and modifier records
 
 `ActorModifierRecord` represents numeric BASE/INC/MORE/OVERRIDE or boolean FLAG effects.

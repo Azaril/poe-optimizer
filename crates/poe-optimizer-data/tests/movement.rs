@@ -11,7 +11,7 @@ fn custom(mut p: GameDataPackage) -> Result<GameDataSnapshot, GameDataError> {
 fn body_penalties_preserve_absence_zero_and_injected_values_in_any_armour_slot() {
     let original = bundled_snapshot().unwrap();
     let p = original.package();
-    assert_eq!(p.manifest.schema_version, 27);
+    assert_eq!(p.manifest.schema_version, 28);
     assert_eq!(
         p.armour_bases
             .iter()

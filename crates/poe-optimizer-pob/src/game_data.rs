@@ -1,5 +1,8 @@
 //! Deterministic offline extraction of every current native package section.
 //! Run only under the isolated extraction worker's startup-inclusive deadline.
+pub use crate::skill_preparation_extract::{
+    ObservedGemVariants, SkillPreparationExtractionEvidence,
+};
 use crate::{source, tree_data};
 use mlua::{Function, HookTriggers, Lua, LuaOptions, LuaSerdeExt, StdLib, Table, Value, VmState};
 use poe_optimizer_data::{
@@ -239,6 +242,7 @@ pub(crate) fn extractor_sha256() -> String {
         include_str!("parser_programs.rs"),
         include_str!("modifier_parser_inputs.lua"),
         include_str!("skill_identity_extract.rs"),
+        include_str!("skill_preparation_extract.rs"),
         include_str!("configuration_extract.rs"),
         include_str!("game_data.rs"),
         CONVERSION,
@@ -259,6 +263,7 @@ pub(crate) fn expected_source_files() -> Result<BTreeMap<String, String>> {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct GameDataExtractionEvidence {
+    pub skill_preparation: SkillPreparationExtractionEvidence,
     pub schema_version: u32,
     pub upstream_revision: String,
     pub source_manifest_sha256: String,
@@ -290,8 +295,12 @@ impl ExtractedGameData {
             &LoadLimits::default(),
         )
         .map_err(error)?;
+        self.evidence
+            .skill_preparation
+            .validate(&self.package.skill_identities)?;
         let expected = GameDataExtractionEvidence {
-            schema_version: 1,
+            skill_preparation: self.evidence.skill_preparation.clone(),
+            schema_version: 2,
             upstream_revision: source::UPSTREAM_REVISION.into(),
             source_manifest_sha256: source::manifest_sha256(),
             source_files_sha256: expected_source_files()?,
@@ -472,6 +481,9 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         &actor,
         &modifier_parser,
     )?;
+    let skill_identities = crate::skill_identity_extract::extract(&extractor.sources)?;
+    let (skill_preparation, skill_preparation_evidence) =
+        crate::skill_preparation_extract::extract(&extractor.sources, &skill_identities)?;
     let mut package = GameDataPackage {
         manifest: GameDataManifest {
             game: "poe2".into(),
@@ -504,7 +516,8 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         action_speed: extractor.record(&records, "action_speed")?,
         direct_action_timing: extractor.record(&records, "direct_action_timing")?,
         configuration: crate::configuration_extract::extract(&extractor.sources)?,
-        skill_identities: crate::skill_identity_extract::extract(&extractor.sources)?,
+        skill_identities,
+        skill_preparation,
         item_loading,
         item_scalability,
         modifier_parser,
@@ -519,8 +532,15 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         &package.tree,
     )?;
     package.refresh_section_digests().map_err(error)?;
+    GameDataLoader::from_bytes(
+        &package.canonical_bytes().map_err(error)?,
+        &TrustPolicy::AllowCustom,
+        &LoadLimits::default(),
+    )
+    .map_err(error)?;
     let evidence = GameDataExtractionEvidence {
-        schema_version: 1,
+        skill_preparation: skill_preparation_evidence,
+        schema_version: 2,
         upstream_revision: source::UPSTREAM_REVISION.into(),
         source_manifest_sha256,
         source_files_sha256,

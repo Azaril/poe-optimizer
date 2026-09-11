@@ -9,6 +9,7 @@ mod modifier_parser_extract;
 pub mod mutation;
 pub mod parser_programs;
 mod skill_identity_extract;
+mod skill_preparation_extract;
 pub mod tree_data;
 pub mod tree_projection;
 pub mod tree_worker;

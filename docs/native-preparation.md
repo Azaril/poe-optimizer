@@ -1,6 +1,6 @@
 # Shared native preparation boundary
 
-Status: R1c outer integration implemented. General real-build numerical producers remain
+Status: R1c outer integration and R2 authored skill loading implemented. General real-build numerical producers remain
 unfinished; complete native supplied builds remain **0/5**.
 
 ## Public entry points
@@ -25,7 +25,8 @@ methods; raw convenience preparation returns guidance when no host identity is a
 Core model, definition compilation and repeated calculation need no randomness or host I/O.
 
 `PreparedEvaluation::source()` retains shared imported ownership and `selected_view()`
-exposes its immutable report. The compatibility request DTO still owns an XML string in
+exposes its immutable report. `authored_skills()` retains the independently executed,
+source/view/data-bound [authored skill stage](authored-skill-preparation.md). The compatibility request DTO still owns an XML string in
 addition to the imported source; it is not copied per instance or per calculation. Removing
 that duplicate DTO storage can follow a measured API migration rather than compromising
 source ownership. Reports cannot manufacture a prepared plan.
@@ -41,6 +42,10 @@ The adapter retains its prior closed-domain checks: one set per domain, canonica
 IDs, one selected group/action, primary weapon state and supported mechanics. This preserves
 existing numerical/export/coverage contracts while general producers are built. Simply
 removing those checks would misreport inactive effects, action indices and export selectors.
+Processed gem identity, levels, quality, effects and support/provider role must agree with
+what the closed numerical adapter admitted. Valid injected loader data can alter those
+results; an unsupported change returns Incomplete instead of calculating stale numbers.
+
 No third skill or build-specific profile was added. General inputs instead produce named,
 source-linked prerequisites through the same public preparation entry point.
 
@@ -51,15 +56,18 @@ frontiers are not falsely marked complete by a closed legacy calculation.
 
 ## Structured incomplete reports
 
-`PreparationReport` contains the selected view, schema version, source/definition identity,
+`PreparationReport` schema 2 contains the selected view, source/definition identity,
+the executed authored-skill report,
 classified issues, requested options/metric queries and the legacy adapter's separate rejection.
 Request context records intent, not calculated output. Each issue names its stage
 and, where applicable, the concrete authored instance and source occurrence.
 
 Kinds distinguish unresolved identity, ambiguous identity, source errors, unsupported
-boundaries and deferred producers. Name-only entries remain deferred until name matching
-runs. A known definition does not establish level/stat-set selection, enablement, support
-application, actor ownership or an effective action.
+boundaries and deferred producers. Authored name matching, identity resolution and level
+processing retire only the corresponding prerequisites for actually processed entries.
+Partial failures retain the unprocessed suffix and the original source-linked failure.
+Effective stat sets, support application, actor ownership and provider availability remain
+separate dependencies even after authored loading completes.
 
 Reports expand independently discoverable selected groups, entries, equipment/rune uses,
 passive specs and jewel assignments. Item inventory records are not labeled equipped solely
@@ -75,13 +83,17 @@ not a complete inventory of every future calculation dependency.
 
 ## Candidate and parallel paths
 
-Controlled candidate preparation uses the same selected-source adapter for its fixed
+Controlled candidate preparation executes the same authored skill stage and validates its
+projection into the selected-source adapter for its fixed
 scenario. `prepare_controlled_build_with_lineage` and
 `prepare_controlled_mace_with_lineage` support portable host identity assignment; their
 existing convenience wrappers allocate it at native setup. Prepared candidate calculations
 still retain typed numerical components and private ownership bindings, not source XML or
 selection reports. Source/view traversal occurs during preparation, outside repeated
-calculation and Rayon dispatch.
+calculation and Rayon dispatch. Introduced candidate supports receive the same loader
+validation during setup, using temporary support-only source variations from the import
+materializers. Per-axis failures affect only candidates selecting those supports; successful
+repeated calculations keep their allocation-free contract.
 
 ## CLI
 
@@ -110,8 +122,10 @@ selected alternatives and concrete source bindings. Custom injected catalogs cha
 identity diagnostics without source changes, demonstrating the data seam remains active.
 
 The [implementation record](implementation.md) records terminal native/CLI regression,
-Clippy and WASM checks. Next implement shared authored skill loading/processing for Twister
-and Skeletal Sniper together, retaining the other originals as structural stress cases.
+Clippy and WASM checks. Authored loading compares all five original sources, including
+inactive saved sets, against complete original skill methods. Next connect effective
+configuration and provider/actor/action preparation for Twister and Skeletal Sniper together,
+retaining the other originals as structural stress cases.
 Real item-reference winners and full loader/provider lifecycle require their own paired
 source evidence as those producers become executable. No source/helper test count replaces
 the R3/R5 full-build numerical gates.

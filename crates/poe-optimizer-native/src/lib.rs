@@ -2,11 +2,13 @@
 //! No PoB checkout, Lua state, subprocess, filesystem or network access is required.
 #![forbid(unsafe_code)]
 mod build_candidates;
+mod candidate_skill_admission;
 mod candidates;
 pub use build_candidates::{PreparedBuildCandidates, PreparedBuildFootprint};
 mod preparation;
 mod preparation_report;
 mod profile;
+pub mod skills;
 pub use candidates::{
     NativeMetricSnapshot, NativeMetricValue, PreparedMaceCandidates, PreparedMaceFootprint,
 };
@@ -65,8 +67,12 @@ pub struct PreparedEvaluation {
     profile: profile::Profile,
     source: poe_optimizer_import::build_instance::ImportedBuildInstance,
     selected_view: poe_optimizer_import::selected_view::SelectedViewReport,
+    authored_skills: skills::PreparedSkills,
 }
 impl PreparedEvaluation {
+    pub fn authored_skills(&self) -> &skills::PreparedSkills {
+        &self.authored_skills
+    }
     pub fn source(&self) -> &poe_optimizer_import::build_instance::ImportedBuildInstance {
         &self.source
     }
@@ -354,6 +360,9 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("profile.rs"),
                 include_str!("preparation.rs"),
                 include_str!("preparation_report.rs"),
+                include_str!("skills.rs"),
+                include_str!("../../poe-optimizer-data/src/skill_preparation.rs"),
+                include_str!("../../poe-optimizer-import/src/source_xml.rs"),
                 include_str!("../../poe-optimizer-core/src/build_identity.rs"),
                 include_str!("../../poe-optimizer-core/src/build_view.rs"),
                 include_str!("../../poe-optimizer-import/src/build_instance.rs"),
@@ -368,6 +377,7 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("tree.rs"),
                 include_str!("candidates.rs"),
                 include_str!("build_candidates.rs"),
+                include_str!("candidate_skill_admission.rs"),
                 include_str!("../../poe-optimizer-import/src/equipment.rs"),
                 include_str!("../../poe-optimizer-import/src/controlled_build.rs"),
                 include_str!("../../poe-optimizer-import/src/controlled_build_template.rs"),

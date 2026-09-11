@@ -497,6 +497,16 @@ impl ControlledBuildCatalog {
     pub fn support_instance(&self, key: &str) -> Option<&str> {
         self.supports.get(key).map(String::as_str)
     }
+    /// Temporary source for native support admission during setup. This is not a legal candidate or evaluation.
+    pub fn support_preparation_build(&self, key: &str) -> Result<BuildDocument> {
+        if !self.supports.contains_key(key) {
+            return Err(BuildCatalogError::Source(
+                "unknown candidate support axis".into(),
+            ));
+        }
+        self.source
+            .materialize_supports(&[key.to_owned()], self.compiled.snapshot().package())
+    }
     pub fn materialize(&self, handle: &AdmittedBuildSelection) -> Result<BuildDocument> {
         if !handle.bound_to(self) {
             return Err(BuildCatalogError::Ownership);

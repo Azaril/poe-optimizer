@@ -139,6 +139,8 @@ pub struct PreparedMaceFootprint {
     pub metric_selectors: usize,
     pub deferred_character_errors: usize,
     pub deferred_weapon_errors: usize,
+    /// Loadout axes rejected during cold skill loading or numeric preparation.
+    pub deferred_support_errors: usize,
     pub actor_components: usize,
     pub deferred_actor_errors: usize,
     pub owned_component_bytes: usize,
@@ -156,7 +158,7 @@ pub struct PreparedMaceCandidates {
     weapons: Vec<Result<poe_optimizer_engine::weapon::PreparedWeaponStats, EvaluationError>>,
     characters: Vec<Result<CharacterInput, EvaluationError>>,
     actors: Vec<Result<poe_optimizer_engine::actor::PreparedActorResources, EvaluationError>>,
-    supports: Vec<PreparedMaceSupports>,
+    supports: Vec<Result<PreparedMaceSupports, EvaluationError>>,
     metrics: Vec<SelectedMetric>,
 }
 impl PreparedMaceCandidates {
@@ -170,6 +172,7 @@ impl PreparedMaceCandidates {
         let support_keys = self
             .supports
             .iter()
+            .filter_map(|support| support.as_ref().ok())
             .map(|support| {
                 // keys() is a slice, so account retained elements rather than guessing
                 // the private Vec capacity. Compiled support cloning allocates exactly
@@ -185,6 +188,7 @@ impl PreparedMaceCandidates {
             actor_components: self.actors.len(),
             deferred_actor_errors: self.actors.iter().filter(|entry| entry.is_err()).count(),
             support_components: self.supports.len(),
+            deferred_support_errors: self.supports.iter().filter(|entry| entry.is_err()).count(),
             metric_selectors: self.metrics.len(),
             deferred_character_errors: self
                 .characters
@@ -222,7 +226,14 @@ impl PreparedMaceCandidates {
                     .filter_map(|entry| entry.as_ref().err())
                     .map(|error| error.message.capacity())
                     .sum::<usize>()
-                + self.supports.capacity() * size_of::<PreparedMaceSupports>()
+                + self.supports.capacity()
+                    * size_of::<Result<PreparedMaceSupports, EvaluationError>>()
+                + self
+                    .supports
+                    .iter()
+                    .filter_map(|entry| entry.as_ref().err())
+                    .map(|error| error.message.capacity())
+                    .sum::<usize>()
                 + self.metrics.capacity() * size_of::<SelectedMetric>()
                 + self
                     .metrics
@@ -265,7 +276,9 @@ impl PreparedMaceCandidates {
         let supports = self
             .supports
             .get(candidate.loadout_index())
-            .ok_or_else(|| contract("Invalid native support axis"))?;
+            .ok_or_else(|| contract("Invalid native support axis"))?
+            .as_ref()
+            .map_err(|error| EvaluationError::new(error.kind, error.message.clone()))?;
         let actor = self
             .actors
             .get(candidate.tree_index())
@@ -303,7 +316,8 @@ fn contract(message: &'static str) -> EvaluationError {
 }
 impl<C: EvaluationClock> NativeBackend<C> {
     /// Reuse the strict full native source/config parser exactly once, then retain
-    /// only immutable numerical axes. A bound baseline and import-private view
+    /// only immutable numerical axes and their deferred errors. Introduced skill
+    /// loadouts receive source-loader validation once per axis. A bound baseline and import-private view
     /// are required; arbitrary numerical fields cannot enter this admission seam.
     pub fn prepare_controlled_mace(
         &self,
@@ -435,7 +449,17 @@ impl<C: EvaluationClock> NativeBackend<C> {
         let supports = components
             .loadouts()
             .iter()
-            .map(|loadout| {
+            .enumerate()
+            .map(|(index, loadout)| {
+                let document = components
+                    .support_preparation_build(index)
+                    .map_err(|error| {
+                        EvaluationError::new(
+                            EvaluationErrorKind::BackendContract,
+                            error.to_string(),
+                        )
+                    })?;
+                crate::candidate_skill_admission::validate(document, &self.data, lineage)?;
                 self.data
                     .mace_support_loadout(loadout.keys())
                     .cloned()
@@ -446,7 +470,7 @@ impl<C: EvaluationClock> NativeBackend<C> {
                         )
                     })
             })
-            .collect::<Result<Vec<_>, _>>()?;
+            .collect();
         let requested: BTreeSet<_> = queries.iter().collect();
         let metrics = crate::metric_catalog()
             .into_iter()

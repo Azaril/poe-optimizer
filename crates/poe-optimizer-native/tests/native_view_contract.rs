@@ -113,6 +113,24 @@ fn six_calibrations_retain_source_ownership_and_match_unchanged_reference_number
     for (index, (xml, golden)) in calibrations().into_iter().enumerate() {
         let build = imported(xml, index as u8 + 1);
         let prepared = ready(&backend, &build);
+        let skills = prepared.authored_skills().report();
+        assert_eq!(
+            skills.status,
+            poe_optimizer_native::skills::SkillPreparationStatus::Complete
+        );
+        assert_eq!(skills.source_sha256, build.source_sha256());
+        assert_eq!(skills.data, *backend.data().identity());
+        let view = resolve_view(
+            &build,
+            backend.data().snapshot(),
+            &ViewRequest::default(),
+            ResolveLimits::default(),
+        )
+        .unwrap();
+        prepared
+            .authored_skills()
+            .validate_binding(&build, &view, backend.data())
+            .unwrap();
         assert!(prepared.source().shares_storage_with(&build));
         assert_eq!(prepared.source().source_xml(), xml);
         assert_eq!(prepared.request().build.content, xml);
@@ -271,6 +289,54 @@ fn all_five_real_sources_reach_shared_preparation_with_explicit_remaining_produc
                 index + 1
             )
         };
+        assert_eq!(report.schema_version, 2);
+        let skills = report
+            .authored_skills
+            .as_ref()
+            .expect("executed authored stage");
+        assert_eq!(
+            skills.status,
+            poe_optimizer_native::skills::SkillPreparationStatus::Complete
+        );
+        assert_eq!(skills.source_sha256, owner.source_sha256());
+        assert_eq!(skills.data, *backend.data().identity());
+        assert_eq!(skills.groups.len(), [19, 84, 14, 15, 68][index]);
+        assert_eq!(
+            skills
+                .groups
+                .iter()
+                .map(|group| group.gems.len())
+                .sum::<usize>(),
+            [62, 174, 62, 62, 181][index]
+        );
+        let selected: Vec<_> = skills
+            .groups
+            .iter()
+            .filter(|group| skills.selected_groups.contains(&group.instance))
+            .collect();
+        assert_eq!(
+            selected.iter().map(|group| group.gems.len()).sum::<usize>(),
+            [62, 46, 62, 62, 28][index]
+        );
+        for group in selected {
+            for gem in &group.gems {
+                assert!(gem.processed);
+                if matches!(
+                    gem.identity_status,
+                    poe_optimizer_native::skills::SkillIdentityStatus::ResolvedGem
+                        | poe_optimizer_native::skills::SkillIdentityStatus::ResolvedEffect
+                ) {
+                    let instance = Some(AuthoredInstanceId::SkillEntry(gem.instance));
+                    assert!(!report.issues.iter().any(|issue| issue.instance == instance
+                        && matches!(
+                            issue.stage,
+                            "skill_identity" | "skill_primary_gem_owner" | "skill_name_resolution"
+                        )));
+                    assert!(report.issues.iter().any(|issue| issue.instance == instance
+                        && issue.stage == "skill_effect_producers"));
+                }
+            }
+        }
         assert_eq!(report.view.source_sha256, owner.source_sha256());
         assert_eq!(report.view.lineage, owner.lineage());
         assert_eq!(report.view.data, *backend.data().identity());

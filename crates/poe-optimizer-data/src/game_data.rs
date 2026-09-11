@@ -17,6 +17,7 @@ pub use crate::item_scalability::*;
 pub use crate::modifier_parser::*;
 pub use crate::movement::MovementData;
 pub use crate::skill_identities::*;
+pub use crate::skill_preparation::*;
 pub use crate::unique_requirements::*;
 pub use poe_optimizer_core::data::DataIdentity;
 use serde::{Deserialize, Serialize};
@@ -24,8 +25,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 27;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v27";
+pub const SCHEMA_VERSION: u32 = 28;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v28";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -51,6 +52,7 @@ const SECTIONS: &[&str] = &[
     "direct_action_timing",
     "configuration",
     "skill_identities",
+    "skill_preparation",
     "item_loading",
     "item_scalability",
     "modifier_parser",
@@ -442,6 +444,7 @@ pub struct GameDataPackage {
     pub direct_action_timing: DirectActionTimingData,
     pub configuration: ConfigurationData,
     pub skill_identities: SkillIdentityData,
+    pub skill_preparation: SkillPreparationData,
     pub item_loading: ItemLoadingData,
     pub item_scalability: ItemScalabilityData,
     pub modifier_parser: ModifierParserData,
@@ -525,6 +528,7 @@ pub struct GameDataSnapshot {
     package: GameDataPackage,
     configuration: ConfigDefinitionCatalog,
     skill_identities: SkillIdentityCatalog,
+    skill_preparation: SkillPreparationCatalog,
     item_loading: ItemLoadingCatalog,
     item_scalability: ItemScalabilityCatalog,
     modifier_parser: ModifierParserCatalog,
@@ -562,6 +566,9 @@ impl GameDataSnapshot {
     }
     pub fn item_loading(&self) -> &ItemLoadingCatalog {
         &self.item_loading
+    }
+    pub fn skill_preparation(&self) -> &SkillPreparationCatalog {
+        &self.skill_preparation
     }
     pub fn skill_identities(&self) -> &SkillIdentityCatalog {
         &self.skill_identities
@@ -622,6 +629,10 @@ impl GameDataLoader {
         identity.validate().map_err(error)?;
         let configuration = ConfigDefinitionCatalog::new(package.configuration.clone())?;
         let skill_identities = SkillIdentityCatalog::new(package.skill_identities.clone())?;
+        let skill_preparation = SkillPreparationCatalog::new(
+            package.skill_preparation.clone(),
+            &package.skill_identities,
+        )?;
         let item_loading = ItemLoadingCatalog::new(package.item_loading.clone())?;
         let item_scalability = ItemScalabilityCatalog::new(package.item_scalability.clone())?;
         let modifier_parser = ModifierParserCatalog::new(package.modifier_parser.clone())?;
@@ -635,6 +646,7 @@ impl GameDataLoader {
             package,
             configuration,
             skill_identities,
+            skill_preparation,
             item_loading,
             item_scalability,
             modifier_parser,
@@ -736,6 +748,9 @@ fn number(name: &str, value: f64, minimum: f64, maximum: f64) -> Result<()> {
 }
 fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     package.skill_identities.validate()?;
+    package
+        .skill_preparation
+        .validate(&package.skill_identities)?;
     package.item_loading.validate()?;
     package.item_scalability.validate()?;
     package.modifier_parser.validate()?;

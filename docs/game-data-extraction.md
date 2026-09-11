@@ -8,6 +8,7 @@ The exporter covers the versioned sections of the
 [native data package](native-data.md): tree, character, actor, receiving defences, movement, action speed, direct timing, quests, Spark, Mace, supports, weapons,
 item modifier rules, item source formatting, jewellery and fixed armour bases, defence, monsters, encounters, typed owned passive
 effects, explicit passive exclusions, configuration metadata, constructed skill/gem identities,
+authored skill-preparation definitions,
 item definitions, general item scalability and completed unique requirements. Numerical mechanic coverage remains partial.
 Whole ordinary structure is separate from
 capability admission: 1,282 complete source views are supported, including the four
@@ -77,6 +78,13 @@ construction dependencies. Independent original-source tests compare every decla
 constructed row, source span and lookup behavior. Identity membership does not admit native
 mechanics; see [skill source and identities](skill-source-and-identities.md).
 
+The authored skill-preparation section executes complete original data construction and
+extracts level rows, aliases, requirements, control policy and typed lookup candidates.
+Its runtime rows are canonical and repeatable. Extraction evidence schema 2 additionally
+records actual Lua traversal order and lookup winners; this observation can differ across
+processes and is validated independently. All other evidence fields and the complete
+runtime package remain stable. See [authored preparation](authored-skill-preparation.md).
+
 ## Isolation and limits
 
 Extraction runs in a fresh supervised process with no inherited standard I/O and a hidden
@@ -107,8 +115,8 @@ package loading still accepts valid formatting choices and identifies the actual
 ## Reproduction and further updates
 
 For the current source, extracted package bytes should exactly reproduce the reviewed
-artifact. Repeated fresh processes must produce the same package and evidence on Windows
-and Linux. Existing independent source-oracle and full-build parity tests stay separate
+artifact. Repeated fresh processes must produce the same package and stable evidence
+fields on Windows and Linux; schema 2 validates actual traversal observations separately. Existing independent source-oracle and full-build parity tests stay separate
 from the exporter so that reproduction does not become its own only correctness check.
 
 ```powershell
@@ -118,7 +126,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 26 and `poe2-native-profiles-v26`, including source-keyed passive/actor effects,
+schema 28 and `poe2-native-profiles-v28`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It

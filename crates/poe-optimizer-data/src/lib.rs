@@ -15,6 +15,7 @@ pub mod modifier_parser;
 mod movement;
 pub mod passive_allocation;
 pub mod skill_identities;
+pub mod skill_preparation;
 pub mod tree_data;
 pub mod tree_projection;
 pub mod unique_requirements;
@@ -29,6 +30,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("class_tree.rs"),
         include_str!("configuration.rs"),
         include_str!("skill_identities.rs"),
+        include_str!("skill_preparation.rs"),
         include_str!("tree_data.rs"),
         include_str!("tree_projection.rs"),
         include_str!("bundled.rs"),

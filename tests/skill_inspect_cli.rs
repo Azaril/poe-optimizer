@@ -1,4 +1,6 @@
 //! Skill inspection is source/identity evidence, independent of native effect support.
+#[path = "support/skill_preparation_edits.rs"]
+mod preparation_edits;
 use serde_json::Value;
 use std::{fs, path::Path, process::Command};
 fn cli() -> Command {
@@ -105,6 +107,7 @@ fn selected_catalog_changes_reference_resolution_without_loading_a_build_evaluat
         &mut package.skill_identities.gem_declarations[gem.winning_declaration as usize - 1];
     declaration.identity.game_id = gem.game_id.clone();
     declaration.identity.variant_id = gem.variant_id.clone();
+    preparation_edits::refresh_lookups(&mut package);
     package.refresh_section_digests().unwrap();
     let bytes = package.canonical_bytes().unwrap();
     fs::write(&data_path, &bytes).unwrap();

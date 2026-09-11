@@ -18,22 +18,39 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-**Current work: R1c native boundary validated; advance R2 real preparation.**
-The [shared native preparation path](native-preparation.md) now consumes the owned
-instance/view model in ordinary native evaluation and controlled candidate setup. Existing
-Spark/Mace calculations use selected source nodes through an explicit compatibility adapter.
-Broader inputs return source-linked `PreparationOutcome::Incomplete` reports, available
-from the library and `prepare-build`; no partial metrics are substituted.
+**Current checkpoint: R2a authored skill loading validated locally.**
+The [shared authored stage](authored-skill-preparation.md) runs through ordinary native
+preparation and returns source/view/data-bound state. It processes all five original builds:
+200 authored groups, 541 gem occurrences and 260 selected entries, including inactive saved
+sets and source-order effects. Eight independent original-source parity tests pass. This
+completes authored loading only; effective supports, configuration, items/passives,
+providers, actors/actions and complete numerical evaluation remain unfinished.
 
-The [selected-view contract](selected-views.md) retains independent keys/positions, typed
-overrides, source errors and injected identity evidence. Six existing numerical goldens
-pass through the new owner/view and compatibility routes. All five real originals reach
-named producer frontiers with exact source bindings. All 90 native regression tests and
-18 CLI test executions pass, with strict lint and portable-library compilation. General actor/action,
-item registration, effective configuration and loader lifecycle remain unfinished.
-Next implement R2 authored skill loading/processing along Twister and Skeletal Sniper
-together; keep all five originals exercising the common model. R1's source/reference lifecycle evidence remains
-scoped to implemented stages, and full real-build outputs are still R2/R3 work.
+Schema 28 adds injected preparation definitions for 966 gems, 1,436 effects and 22,004
+numeric level rows. All 28 previous sections remain unchanged. Canonical runtime data keeps
+unique/ambiguous lookup candidates; extraction evidence schema 2 retains observed Lua
+traversal separately. Two fresh original constructions agree on the new runtime section.
+No XML build fixture or frozen PoB result supplies production definitions or metrics.
+
+`PreparedEvaluation::authored_skills()` retains executed state; `prepare-build` includes
+it in both ready and incomplete outcomes (nested preparation report schema 2). Existing
+Spark/Mace adapters reject processed states they cannot represent. Review also found and
+fixed a candidate support-axis bypass: cold setup now validates introduced supports through
+the same loader and retains per-axis failures. Valid repeated calculations retain no
+source XML and preserve zero-allocation checks.
+
+The native suite passed 100 tests before that final candidate fix; the two new regression
+tests pass for both candidate APIs, and all 18 affected existing tests pass after the fix,
+including zero-allocation and fresh-document comparisons. Twenty-nine CLI executions,
+eight paired original-source tests, 36 focused data/exporter/loader tests and 20 import
+regressions pass. Workspace/native-only strict lint, portable-library compilation and a
+fresh complete CLI export pass. Exact-head hosted CI remains a separate publication check.
+The full native supplied-build denominator remains **0/5**.
+
+R1a owned instances, R1b independently selected views and R1c native entry points remain
+in place. Six unchanged numerical goldens pass through owner/view and compatibility routes.
+Next advance R2b effective configuration and root/provider lifecycle along original Twister
+and Skeletal Sniper paths together; keep all five sources as structural regression cases.
 
 The earlier G4 CI run finished with Windows search-budget failures and Linux implicit-line
 mismatches; G3 succeeded on both platforms. The Windows failure is reproduced as preparation
@@ -47,6 +64,7 @@ remains failed. Evidence: `runs/r1a-prior-ci.json`.
 | --- | --- | --- |
 | Source import/inspection | 5/5 supplied originals | Retain exact bytes, selections and unresolved entries |
 | General native instance/actor/action model | R1a/R1b source model and R1c native boundary implemented; general effective producers pending | R1: source instances/selected views with explicit deferred producers; R2/R3: effective graphs |
+| Authored native skill loading | 5/5 originals; 200 groups/541 entries, original-source paired | R2b: effective configuration, provider and actor/action stages |
 | Complete native real builds | 0/5 | R2/R3: paired Twister and Skeletal Sniper preparation and full outputs |
 | Real-build mutation/parallel parity | Not run | R4: class/ascendancy/provider/support/item/tree changes and serial/Rayon agreement |
 | Scenario breadth | Frozen originals cover Pinnacle/level82 only | R3: explicit mapping variants plus original bossing comparisons |
@@ -1007,8 +1025,8 @@ the design documents.
 
 1. Read the breadth dashboard and [real-build rollout](real-build-rollout.md). The shared
    model direction is accepted. R1a source ownership, R1b selected views and the
-   [R1c native entry point](native-preparation.md) are implemented; general effective
-   producers and all five complete native evaluations remain unfinished.
+   [R1c native entry point](native-preparation.md) and [R2a authored skill loading](authored-skill-preparation.md)
+   are implemented; general effective producers and all five complete native evaluations remain unfinished.
 2. Check the working tree and exact-head CI. Preserve frozen worktrees and terminal
    validation records. Fix actual hosted failures without weakening source evidence;
    local passes do not replace pending Windows/Linux results.
@@ -1016,9 +1034,10 @@ the design documents.
    frozen evidence. Keep native calculation independent of Lua and subprocesses. Host
    lineage is assigned at import; portable callers use explicit lineage entry points.
 4. Advance R2 preparation on the original Twister and Skeletal Sniper views together.
-   Start with authored skill loading/processing, its injected preparation data and per-build
-   definition overlays. Keep reached configuration, item/passive, actor/action and provider
-   prerequisites explicit. Reuse shared catalogs and kernels, and compare
+   R2a authored loading and per-build definition overlays are implemented. Next map the original
+   root lifecycle and effective configuration producer, then connect reached item/passive,
+   actor/action and provider prerequisites in source order. Preserve configured callback
+   semantics through the accepted typed-program seam. Reuse shared catalogs and kernels, and compare
    executable stages with complete original-source methods. Do not add another closed profile.
 5. Preserve and extend the fixed diagnostic expectation manifest through explicit revisions.
    Its saved-artifact comparisons do not rerun backends or establish native coverage. Add
@@ -1029,6 +1048,56 @@ the design documents.
    DuckDB is deferred. Historical checkpoints below are evidence, not a request to repeat
    completed suites or postpone real-build integration.
 
+
+## R2a authored skill preparation checkpoint
+
+Implemented a shared, owned native stage for original authored Load/LoadSkill,
+ProcessSocketGroup/FindSkillGem and reached level/requirement helpers. Saved alternatives,
+duplicate set effects, table/string key distinction, source text-array behavior, partial
+failure prefixes, explicit overrides and unresolved/ambiguous identities remain observable.
+Completing this stage does not activate item/tree grants or construct effective actors/actions.
+Triggered cost replacement is representable through alias-preserving per-build overlays;
+its private unit test is not evidence that authored XML executes a triggered provider.
+
+The injected schema 28 package is 26,285,617 bytes, SHA-256
+`35f5577fb9377ea293729cf81f766b9ad09addd1945d823b72a55d5dab2c3231`.
+The new section digest is
+`a39dcaec184eda8c19d0ee5ccae3a7f5731e4a9bb312e0128a6298aff09a9357`.
+All prior sections are exact; original schema 27 is backed up under
+`runs/r2-skill-preparation-schema27-backup`. Original imports, golden fixtures and PoB pin
+`3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` remain unchanged.
+
+Source traversal order differs across independent Lua constructions. The runtime artifact
+therefore stores canonical semantic rows and explicit ambiguous candidates. Extraction
+sidecar schema 2 retains actual complete traversal and winner observations, validates their
+permutations and replay, and keeps all other evidence stable. Unknown metatable behavior
+rejects extraction instead of silently replacing source lookup semantics with raw fields.
+
+Candidate review reproduced a real discrepancy: a support introduced after baseline
+preparation could calculate in the fast path even when fresh document preparation rejected
+its injected hidden/level-clamped definition. The shared cold admission helper now consumes
+support-only variations produced by the existing import materializers. It caches per-support
+or per-loadout success/errors, preserving unrelated candidates. Temporary XML/stage ownership
+is discarded before repeated calculation; neither a Cartesian document cache nor a second
+loader algorithm was introduced. New tests compare both candidate APIs with fresh documents
+and confirm unaffected candidates still evaluate after a rejected support.
+
+Evidence: `runs/r2a-native-regression.log`, `runs/r2a-import-regression.log`,
+`runs/r2a-cli-default.log`, `runs/r2a-cli-native.log`,
+`runs/r2-skill-preparation-tests/validation.json`,
+`runs/r2-authored-skills-validation.json`, `runs/r2-skill-preparation-validation.json`.
+Final integration evidence is recorded in `runs/r2a-integration-validation.json`;
+`runs/r2a-publication.json` records the published head and its hosted CI observation.
+The optional broad data suite was deliberately interrupted after completed unchanged-mechanic
+targets; it is not claimed as a full passing run. Focused loader/catalog regressions are the
+required data checks for this checkpoint.
+
+**Next resume:** finish/check exact-head CI, then R2b effective configuration and root load
+ordering. Compare complete original producers on Twister and Skeletal Sniper together and
+preserve the other three original paths. Continue through item registration, passive/grant
+providers and actor/action construction before R3 full outputs. Keep the 22 × 5 diagnostic
+expectations, explicit mapping variants and source-selected unavailable measurements intact.
+No complete real-build numerical evaluation or whole-build parity has been added by R2a.
 
 ## Toolchain lint repair - local validation complete
 

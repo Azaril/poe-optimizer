@@ -471,6 +471,41 @@ impl SourceBuildTemplate {
     pub fn support_order(&self) -> &[String] {
         &self.support_order
     }
+    /// Build only the support-axis variation for native setup, without choosing a tree or equipment candidate.
+    pub(super) fn materialize_supports(
+        &self,
+        supports: &[String],
+        data: &GameDataPackage,
+    ) -> Result<BuildDocument> {
+        Ok(BuildDocument {
+            format: BuildFormat::PathOfBuilding2Xml,
+            content: apply(&self.source, self.support_edits(supports, data)?)?,
+        })
+    }
+    fn support_edits(
+        &self,
+        supports: &[String],
+        data: &GameDataPackage,
+    ) -> Result<Vec<(std::ops::Range<usize>, String)>> {
+        let mut edits = Vec::new();
+        if supports != self.support_order {
+            for range in &self.spans.support_ranges {
+                edits.push((range.clone(), String::new()));
+            }
+            let text = supports
+                .iter()
+                .map(|key| data.support(key).ok_or_else(|| fail("unknown support")))
+                .collect::<Result<Vec<_>>>()?
+                .iter()
+                .map(|s| gem_xml(&s.name, &s.skill_id, &s.game_id, &s.variant_id))
+                .collect::<Vec<_>>()
+                .join("");
+            if !text.is_empty() {
+                edits.push((self.spans.support_insert..self.spans.support_insert, text));
+            }
+        }
+        Ok(edits)
+    }
     pub(super) fn materialize(
         &self,
         tree: &ResolvedPassiveAllocation,
@@ -598,22 +633,7 @@ impl SourceBuildTemplate {
         if !new_slots.is_empty() {
             edits.push(self.spans.item_set.insert_children("ItemSet", new_slots));
         }
-        if supports != self.support_order {
-            for range in &self.spans.support_ranges {
-                edits.push((range.clone(), String::new()));
-            }
-            let text = supports
-                .iter()
-                .map(|key| data.support(key).ok_or_else(|| fail("unknown support")))
-                .collect::<Result<Vec<_>>>()?
-                .iter()
-                .map(|s| gem_xml(&s.name, &s.skill_id, &s.game_id, &s.variant_id))
-                .collect::<Vec<_>>()
-                .join("");
-            if !text.is_empty() {
-                edits.push((self.spans.support_insert..self.spans.support_insert, text));
-            }
-        }
+        edits.extend(self.support_edits(supports, data)?);
         Ok(BuildDocument {
             format: BuildFormat::PathOfBuilding2Xml,
             content: apply(&self.source, edits)?,

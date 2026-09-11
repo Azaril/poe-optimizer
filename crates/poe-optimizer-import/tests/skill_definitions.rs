@@ -1,3 +1,5 @@
+#[path = "../../../tests/support/skill_preparation_edits.rs"]
+mod preparation_edits;
 use poe_optimizer_data::{
     game_data::{
         GameDataLoader, GameDataPackage, GameDataSnapshot, LoadLimits, TrustPolicy,
@@ -19,6 +21,7 @@ use std::collections::BTreeSet;
 fn snapshot(mut package: GameDataPackage) -> GameDataSnapshot {
     package.skill_identities.missing_references =
         package.skill_identities.expected_missing_references();
+    preparation_edits::refresh_lookups(&mut package);
     package.refresh_section_digests().unwrap();
     GameDataLoader::from_bytes(
         &package.canonical_bytes().unwrap(),
@@ -31,6 +34,7 @@ fn edit_gem(package: &mut GameDataPackage, index: usize, edit: impl FnOnce(&mut 
     let old = package.skill_identities.gems[index].key.clone();
     edit(&mut package.skill_identities.gems[index]);
     let gem = package.skill_identities.gems[index].clone();
+    preparation_edits::rename_gem(package, &old, &gem.key);
     // Retain duplicate source declaration occurrences when changing a test key.
     for declaration in &mut package.skill_identities.gem_declarations {
         if declaration.key == old {

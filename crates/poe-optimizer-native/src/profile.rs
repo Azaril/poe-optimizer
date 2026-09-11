@@ -152,6 +152,79 @@ fn source_node<'a, 'input>(
         })
 }
 
+/// Closed numerical adapters may consume only the same skill state they admitted
+/// from source. Injected loader definitions can clamp levels or resolve another
+/// effect; those results belong to the general stage, not stale profile numbers.
+pub(crate) fn validate_loaded_skill_projection(
+    build: &poe_optimizer_import::build_instance::ImportedBuildInstance,
+    data: &crate::CompiledGameData,
+    skills: &crate::skills::PreparedSkills,
+) -> Result<(), EvaluationError> {
+    use crate::skills::{SkillIdentityStatus, SkillPreparationStatus};
+    let stage = skills.report();
+    if stage.status != SkillPreparationStatus::Complete {
+        return Err(unsupported(
+            "Native numerical adapter requires completed authored skill loading",
+        ));
+    }
+    let [selected] = stage.selected_groups.as_slice() else {
+        return Err(unsupported(
+            "Native numerical adapter requires one loaded skill group",
+        ));
+    };
+    let group = stage
+        .groups
+        .iter()
+        .find(|group| group.instance == *selected && group.attached)
+        .ok_or_else(|| binding_error("Loaded selected group is absent"))?;
+    for (index, gem) in group.gems.iter().enumerate() {
+        let expected_skill = build
+            .attribute(gem.source, "skillId")
+            .map_err(|e| binding_error(e.to_string()))?;
+        let expected_skill = expected_skill.as_ref().map(|value| value.decoded());
+        if !gem.processed
+            || gem.identity_status != SkillIdentityStatus::ResolvedGem
+            || gem.text("skillId") != expected_skill
+        {
+            return Err(unsupported(
+                "Authored skill resolution differs from the closed numerical adapter",
+            ));
+        }
+        for name in ["level", "quality"] {
+            let expected = build
+                .attribute(gem.source, name)
+                .map_err(|e| binding_error(e.to_string()))?
+                .and_then(|value| value.decoded().parse::<f64>().ok());
+            if gem.number(name) != expected {
+                return Err(unsupported(format!(
+                    "Processed skill {name} differs from the closed numerical adapter"
+                )));
+            }
+        }
+        let definition = gem
+            .gem_data
+            .as_ref()
+            .and_then(|key| data.snapshot().skill_identities().gem_by_key(key))
+            .ok_or_else(|| binding_error("Processed gem definition is absent"))?;
+        if definition.effect_list.len() != 1
+            || definition.effect_list.first().map(String::as_str) != expected_skill
+        {
+            return Err(unsupported(
+                "Additional processed gem effects require the general numerical evaluator",
+            ));
+        }
+        let effect = expected_skill
+            .and_then(|id| data.snapshot().skill_identities().skill_by_id(id))
+            .ok_or_else(|| binding_error("Processed effect definition is absent"))?;
+        if (effect.support == Some(true)) != (index > 0) || effect.from_tree == Some(true) {
+            return Err(unsupported(
+                "Processed support/provider role differs from the closed numerical adapter",
+            ));
+        }
+    }
+    Ok(())
+}
+
 fn binding_error(message: impl Into<String>) -> EvaluationError {
     EvaluationError::new(EvaluationErrorKind::BackendContract, message)
 }

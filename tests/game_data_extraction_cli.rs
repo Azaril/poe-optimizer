@@ -5,6 +5,7 @@ use poe_optimizer_data::game_data::{
     GameDataLoader, LoadLimits, TrustPolicy, bundled_package_bytes, bundled_package_sha256,
     bundled_snapshot,
 };
+use poe_optimizer_pob::game_data::{ExtractedGameData, GameDataExtractionEvidence};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::{
@@ -15,7 +16,7 @@ use std::{
     process::{Command, Output},
 };
 
-const SECTIONS: [&str; 28] = [
+const SECTIONS: [&str; 29] = [
     "tree",
     "character",
     "actor",
@@ -39,6 +40,7 @@ const SECTIONS: [&str; 28] = [
     "direct_action_timing",
     "configuration",
     "skill_identities",
+    "skill_preparation",
     "item_loading",
     "item_scalability",
     "modifier_parser",
@@ -142,7 +144,7 @@ fn assert_no_outputs(path: &Path) {
 }
 
 #[test]
-fn fresh_cli_extractions_reproduce_all_twenty_eight_sections_and_stable_source_evidence() {
+fn fresh_cli_extractions_reproduce_all_twenty_nine_sections_and_validate_source_observations() {
     let temp = tempfile::tempdir().unwrap();
     let first = temp.path().join("first extracted package.json");
     let second = temp.path().join("second extracted package.json");
@@ -191,14 +193,55 @@ fn fresh_cli_extractions_reproduce_all_twenty_eight_sections_and_stable_source_e
     .unwrap();
     let expected_identity = serde_json::to_value(snapshot.identity()).unwrap();
     assert_eq!(snapshot.identity(), bundled_snapshot().unwrap().identity());
-    let evidence_a = fs::read(evidence_path(&first)).unwrap();
-    let evidence_b = fs::read(evidence_path(&second)).unwrap();
+    let evidence_a: Value =
+        serde_json::from_slice(&fs::read(evidence_path(&first)).unwrap()).unwrap();
+    let evidence_b: Value =
+        serde_json::from_slice(&fs::read(evidence_path(&second)).unwrap()).unwrap();
+    // Each trace must be an exact complete permutation and its captured winner
+    // maps must replay from that observed setup order. A source runtime may vary
+    // its hash traversal, so only these validated observations are nonportable.
+    for evidence in [&evidence_a, &evidence_b] {
+        let typed: GameDataExtractionEvidence = serde_json::from_value(evidence.clone()).unwrap();
+        ExtractedGameData {
+            package: snapshot.package().clone(),
+            evidence: typed,
+        }
+        .validate()
+        .unwrap();
+        assert_eq!(evidence["schema_version"], 2);
+        let observed = &evidence["skill_preparation"];
+        assert_eq!(
+            observed["gem_setup_order"].as_array().unwrap().len(),
+            actual["skill_preparation"]["gems"]
+                .as_array()
+                .unwrap()
+                .len()
+        );
+        assert_eq!(
+            observed["gem_search_order"].as_array().unwrap().len(),
+            actual["skill_preparation"]["gems"]
+                .as_array()
+                .unwrap()
+                .len()
+        );
+    }
+    let stable = |evidence: &Value| {
+        let mut stable = evidence.clone();
+        assert!(
+            stable
+                .as_object_mut()
+                .unwrap()
+                .remove("skill_preparation")
+                .is_some()
+        );
+        stable
+    };
     assert_eq!(
-        evidence_a, evidence_b,
-        "Extraction evidence contains unstable process/path/timing state"
+        stable(&evidence_a),
+        stable(&evidence_b),
+        "Only validated original traversal observations may vary"
     );
-    let evidence: Value = serde_json::from_slice(&evidence_a).unwrap();
-    assert_eq!(evidence["schema_version"], 1);
+    let evidence = &evidence_a;
     assert_eq!(
         evidence["package_schema_version"],
         actual["manifest"]["schema_version"]
@@ -234,7 +277,7 @@ fn fresh_cli_extractions_reproduce_all_twenty_eight_sections_and_stable_source_e
             .all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase())
     );
     let source_files = evidence["source_files_sha256"].as_object().unwrap();
-    assert_eq!(source_files.len(), 129);
+    assert!(!source_files.is_empty()); // Typed evidence validation checks the exact authenticated inventory.
     assert!(source_files.contains_key("src/Classes/SkillsTab.lua"));
     assert!(source_files.contains_key("src/Data/Bosses.lua"));
     assert!(source_files.contains_key("src/Data/BossSkills.lua"));
@@ -243,6 +286,10 @@ fn fresh_cli_extractions_reproduce_all_twenty_eight_sections_and_stable_source_e
         (
             "skill_identities",
             &actual["skill_identities"]["source"]["files"],
+        ),
+        (
+            "skill_preparation",
+            &actual["skill_preparation"]["source"]["files"],
         ),
         ("item_loading", &actual["item_loading"]["source"]["files"]),
         ("item_assembly", &actual["item_assembly"]["source"]["files"]),
@@ -296,7 +343,10 @@ fn fresh_cli_extractions_reproduce_all_twenty_eight_sections_and_stable_source_e
             "Package provenance {path}"
         );
     }
-    for (report, path) in [(&report_a, &first), (&report_b, &second)] {
+    for (report, path, own_evidence) in [
+        (&report_a, &first, &evidence_a),
+        (&report_b, &second, &evidence_b),
+    ] {
         assert_eq!(report["schema_version"], 1);
         assert_eq!(report["status"], "extracted_game_data");
         assert_eq!(report["package_sha256"], digest);
@@ -306,7 +356,7 @@ fn fresh_cli_extractions_reproduce_all_twenty_eight_sections_and_stable_source_e
             report["section_sha256"],
             actual["manifest"]["section_sha256"]
         );
-        assert_eq!(report["evidence"], evidence);
+        assert_eq!(&report["evidence"], own_evidence);
         assert_eq!(Path::new(report["output"].as_str().unwrap()), path);
         assert_eq!(
             Path::new(report["evidence_output"].as_str().unwrap()),

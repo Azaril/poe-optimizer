@@ -27,7 +27,7 @@ impl PreparationOutcome {
         }
     }
 }
-fn incomplete_error(report: &PreparationReport) -> EvaluationError {
+pub(crate) fn incomplete_error(report: &PreparationReport) -> EvaluationError {
     // prepare_view records this field only for UnsupportedCapability failures.
     // The compatibility evaluator must preserve that original kind/message so
     // full-document and typed candidate paths report the same numeric failure.
@@ -190,7 +190,17 @@ impl<C: EvaluationClock> NativeBackend<C> {
             options: options.clone(),
             metrics: metrics.to_vec(),
         };
-        match profile::parse(&request, &self.data, view) {
+        let authored_skills = crate::skills::prepare_authored_skills(
+            build,
+            view,
+            &self.data,
+            crate::skills::SkillPreparationLimits::default(),
+        )?;
+        let profile_result = profile::parse(&request, &self.data, view).and_then(|profile| {
+            profile::validate_loaded_skill_projection(build, &self.data, &authored_skills)?;
+            Ok(profile)
+        });
+        match profile_result {
             Ok(profile) => Ok(PreparationOutcome::Ready(Box::new(PreparedEvaluation {
                 data: Arc::clone(&self.data),
                 identity: self.identity.clone(),
@@ -198,9 +208,15 @@ impl<C: EvaluationClock> NativeBackend<C> {
                 profile,
                 source: build.clone(),
                 selected_view: view.report().clone(),
+                authored_skills,
             }))),
             Err(error) if error.kind == EvaluationErrorKind::UnsupportedCapability => {
-                let mut report = preparation_report::collect(view, options, metrics)?;
+                let mut report = preparation_report::collect_with_skills(
+                    view,
+                    options,
+                    metrics,
+                    &authored_skills,
+                )?;
                 report.legacy_adapter_error = Some(error.message);
                 Ok(PreparationOutcome::Incomplete(Box::new(report)))
             }

@@ -554,6 +554,7 @@ dependencies = [
  "poe-optimizer-engine",
  "poe-optimizer-import",
  "poe-optimizer-lua-utf8",
+ "poe-optimizer-native",
  "roxmltree",
  "serde",
  "serde_json",

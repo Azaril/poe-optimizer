@@ -17,7 +17,7 @@ use poe_optimizer_import::{
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 
-pub const PREPARATION_REPORT_SCHEMA: u32 = 1;
+pub const PREPARATION_REPORT_SCHEMA: u32 = 2;
 const MAX_ISSUES: usize = 65_536;
 const MAX_MESSAGE_BYTES: usize = 4 * 1024 * 1024;
 
@@ -49,6 +49,8 @@ pub struct PreparationRequest {
 pub struct PreparationReport {
     pub schema_version: u32,
     pub requested: PreparationRequest,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authored_skills: Option<crate::skills::SkillPreparationReport>,
     /// Independent authored selections and identity evidence, not completed LoadDB.
     pub view: SelectedViewReport,
     pub issues: Vec<PreparationIssue>,
@@ -146,6 +148,110 @@ pub(crate) fn collect(
 ) -> Result<PreparationReport, EvaluationError> {
     collect_with_limits(view, options, metrics, MAX_ISSUES, MAX_MESSAGE_BYTES)
 }
+
+/// Incorporate only independently executed skill-loading facts. The privately
+/// constructed stage carries its own ownership proof; reports cannot admit it.
+pub(crate) fn collect_with_skills(
+    view: &SelectedView<'_>,
+    options: &EvaluationOptions,
+    metrics: &[MetricQuery],
+    skills: &crate::skills::PreparedSkills,
+) -> Result<PreparationReport, EvaluationError> {
+    use crate::skills::{SkillFailureKind, SkillIdentityStatus as S};
+    use PreparationIssueKind as K;
+    let mut result = collect(view, options, metrics)?;
+    let selected: BTreeSet<_> = view
+        .report()
+        .skills
+        .selected
+        .iter()
+        .flat_map(|set| &set.members)
+        .copied()
+        .collect();
+    let stage = skills.report();
+    for group in &stage.groups {
+        if !selected.contains(&AuthoredInstanceId::SkillGroup(group.instance)) {
+            continue;
+        }
+        for gem in &group.gems {
+            if !gem.processed {
+                continue;
+            }
+            let instance = AuthoredInstanceId::SkillEntry(gem.instance);
+            result.issues.retain(|issue| {
+                !(issue.instance == Some(instance)
+                    && matches!(
+                        issue.stage,
+                        "skill_identity"
+                            | "skill_primary_gem_owner"
+                            | "skill_name_resolution"
+                            | "skill_effect_producers"
+                            | "support_compatibility"
+                            | "tree_skill_provider"
+                    ))
+            });
+            let entry_issue = match gem.identity_status {
+                S::ResolvedGem | S::ResolvedEffect => Some((K::DeferredProducer, "skill_effect_producers",
+                    "Authored identity and level processing completed. Effective stat sets, support application, provider availability and actor/action ownership still require preparation.".to_owned())),
+                S::Empty => None,
+                S::UnresolvedName => Some((K::UnresolvedIdentity, "skill_name_resolution",
+                    gem.text("errMsg").unwrap_or("Source name lookup did not resolve a gem").to_owned())),
+                S::AmbiguousName => Some((K::AmbiguousIdentity, "skill_name_resolution",
+                    gem.text("errMsg").unwrap_or("Source name lookup has multiple matches").to_owned())),
+                S::AmbiguousDefinition => Some((K::AmbiguousIdentity, "skill_definition",
+                    "Definition construction has source-order-sensitive candidates without a portable unique owner.".to_owned())),
+                S::HiddenGem => Some((K::SourceError, "skill_visibility",
+                    gem.text("errMsg").unwrap_or("Source processing rejects this gem as an active skill").to_owned())),
+                S::UnresolvedDefinition => Some((K::UnresolvedIdentity, "skill_definition",
+                    "Source processing did not obtain an available gem/effect definition.".to_owned())),
+                S::NotProcessed => return Err(invariant()),
+            };
+            if let Some((kind, stage, message)) = entry_issue {
+                result.issues.push(PreparationIssue {
+                    kind,
+                    stage,
+                    instance: Some(instance),
+                    source: Some(gem.source),
+                    message,
+                });
+            }
+        }
+        if group.attached {
+            for issue in &mut result.issues {
+                if issue.instance == Some(AuthoredInstanceId::SkillGroup(group.instance))
+                    && issue.stage == "skill_group_producers"
+                {
+                    issue.message = "The authored group was processed and attached by skill loading. Effective support/global effects and actor/action ownership remain pending; loading does not prove activation.".into();
+                }
+            }
+        }
+    }
+    if let Some(failure) = &stage.failure {
+        result.issues.push(PreparationIssue {
+            kind: match failure.kind {
+                SkillFailureKind::SourceRuntime => K::SourceError,
+                SkillFailureKind::UnsupportedSource => K::Unsupported,
+                SkillFailureKind::AmbiguousDefinition => K::AmbiguousIdentity,
+            },
+            stage: failure.stage,
+            instance: failure.instance,
+            source: failure.source,
+            message: failure.message.clone(),
+        });
+    }
+    if result.issues.len() > MAX_ISSUES {
+        return Err(resource("issue count"));
+    }
+    let mut bytes_left = MAX_MESSAGE_BYTES;
+    for issue in &result.issues {
+        bytes_left = bytes_left
+            .checked_sub(issue.message.len())
+            .ok_or_else(|| resource("message bytes"))?;
+    }
+    result.authored_skills = Some(stage.clone());
+    Ok(result)
+}
+
 fn collect_with_limits(
     view: &SelectedView<'_>,
     options: &EvaluationOptions,
@@ -365,6 +471,7 @@ fn collect_with_limits(
             options: options.clone(),
             metric_queries: metrics.to_vec(),
         },
+        authored_skills: None,
         view: report.clone(),
         issues: issues.values,
         legacy_adapter_error: None,
@@ -373,6 +480,12 @@ fn collect_with_limits(
 
 #[cfg(test)]
 mod tests {
+    mod preparation_edits {
+        include!(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../tests/support/skill_preparation_edits.rs"
+        ));
+    }
     use super::*;
     use poe_optimizer_core::{build_identity::BuildLineage, build_view::ViewRequest};
     use poe_optimizer_data::game_data::{GameDataSnapshot, bundled_snapshot};
@@ -589,6 +702,7 @@ mod tests {
             declaration.identity.game_id = gem.game_id.clone();
             declaration.identity.variant_id = gem.variant_id.clone();
         }
+        preparation_edits::refresh_lookups(&mut package);
         package.refresh_section_digests().unwrap();
         let injected = GameDataLoader::from_bytes(
             &package.canonical_bytes().unwrap(),

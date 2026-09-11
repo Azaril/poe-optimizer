@@ -247,6 +247,29 @@ impl NativeMaceComponents {
             content: self.template.to_string(),
         }
     }
+    /// Temporary support-only source variation for cold native admission; other axes stay at the caller template.
+    pub fn support_preparation_build(&self, index: usize) -> Result<BuildDocument> {
+        let loadout = self
+            .axes
+            .loadouts
+            .get(index)
+            .ok_or_else(|| mismatch("invalid support axis"))?;
+        let data = self.snapshot.package();
+        let profile = profile(&self.template, data)?;
+        let xml = loadout
+            .keys()
+            .iter()
+            .map(|key| {
+                data.support(key)
+                    .map(|support| (key.clone(), support_xml(support)))
+                    .ok_or_else(|| mismatch("unknown candidate support"))
+            })
+            .collect::<Result<BTreeMap<_, _>>>()?;
+        Ok(BuildDocument {
+            format: BuildFormat::PathOfBuilding2Xml,
+            content: apply_patches(&self.template, support_patches(&profile, loadout, &xml)),
+        })
+    }
     pub fn weapons(&self) -> &[ValidatedMaceWeapon] {
         &self.axes.weapons
     }
@@ -2345,30 +2368,11 @@ fn patch(
     choice: &Choice,
     support_xml: &BTreeMap<String, String>,
 ) -> String {
-    let mut support = choice
-        .support
-        .keys()
-        .iter()
-        .map(|key| support_xml[key].as_str())
-        .collect::<Vec<_>>()
-        .join("\n        ");
-    if !support.is_empty() && profile.support.keys().is_empty() {
-        support.insert_str(0, "\n        ");
-    }
-    let mut patches = vec![
-        (
-            profile.item_range.clone(),
-            format!("<Item id=\"1\">{}</Item>", escape(&choice.weapon)),
-        ),
-        (profile.support_range.clone(), support),
-    ];
-    patches.extend(
-        profile
-            .extra_support_ranges
-            .iter()
-            .cloned()
-            .map(|range| (range, String::new())),
-    );
+    let mut patches = support_patches(profile, &choice.support, support_xml);
+    patches.push((
+        profile.item_range.clone(),
+        format!("<Item id=\"1\">{}</Item>", escape(&choice.weapon)),
+    ));
     if choice.patch_tree {
         let tree = &choice.tree;
         let fields = [
@@ -2422,6 +2426,33 @@ fn patch(
             }
         }
     }
+    apply_patches(template, patches)
+}
+fn support_patches(
+    profile: &Profile,
+    loadout: &MaceSupportLoadout,
+    xml: &BTreeMap<String, String>,
+) -> Vec<(Range<usize>, String)> {
+    let mut support = loadout
+        .keys()
+        .iter()
+        .map(|key| xml[key].as_str())
+        .collect::<Vec<_>>()
+        .join("\n        ");
+    if !support.is_empty() && profile.support.keys().is_empty() {
+        support.insert_str(0, "\n        ");
+    }
+    let mut patches = vec![(profile.support_range.clone(), support)];
+    patches.extend(
+        profile
+            .extra_support_ranges
+            .iter()
+            .cloned()
+            .map(|range| (range, String::new())),
+    );
+    patches
+}
+fn apply_patches(template: &str, mut patches: Vec<(Range<usize>, String)>) -> String {
     patches.sort_by_key(|(range, _)| std::cmp::Reverse(range.start));
     let mut output = template.to_owned();
     for (range, replacement) in patches {

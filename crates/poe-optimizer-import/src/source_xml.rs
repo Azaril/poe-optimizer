@@ -415,7 +415,7 @@ fn stripped_comments(
 }
 /// Preserve direct raw fragments and the original XML.lua array-entry semantics.
 /// Shared budgets bound allocation across every projected descendant.
-pub(crate) fn ordered_content<'input>(
+pub fn ordered_content<'input>(
     node: Node<'_, 'input>,
     fragments_left: &mut usize,
     text_bytes_left: &mut usize,
