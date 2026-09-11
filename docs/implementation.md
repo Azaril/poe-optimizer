@@ -120,15 +120,19 @@ The owner requested investigation of seeded Legion/Timeless items on 2026-09-10.
 this as an optional joint-search extension, with the [design opportunity](seeded-jewel-search.md)
 kept alongside the main design. A bounded source read found PoB lookup data and item/search
 controls, but seed-based branches in the pinned PassiveSpec remain disabled pending data.
-No seed generator, native provider, search or trade feature has been implemented. Confirm
-game/version applicability and complete seed-data availability before implementation.
+No seed generator, native provider, search or trade feature has been implemented. The
+[J1 feasibility investigation](seeded-jewel-feasibility.md) now records exact source/data
+incompatibilities, a bounded native reference-archive probe and missing corpus coverage.
+Confirm game/version applicability and complete seed-data compatibility before implementation.
 The G4 parser checkpoint remains separate; J2-J5 depend on the general provider/preparation model
 and relevant R2-R4 real-build gates, rather than displacing them.
 
 - [ ] **J1 — Source, applicability and cost investigation.** Verify actual supported item
   families by game/revision; trace seed/node/variant generation or lookup and existing PoB
-  search. Establish data provenance/distribution requirements and measure lookup, memory
-  and evaluation costs. Decide whether to reuse tables, port a generator or combine both.
+  search. Source/distribution inventory and a one-family native decode probe are complete.
+  Complete intended-game mapping/reference and provenance remain open; lookup/transform
+  costs still need compatible data. Measure full evaluation/search costs during J2/J5 once
+  those paths exist. Decide whether to reuse tables, port a generator or combine both.
 - [ ] **J2 — Injected provider and transformation parity.** Model seed identity and passive
   changes through the shared data/provider seam. Prove complete node transformations and
   whole-build results, including radius, overlaps, exact item locks and removal/readdition.
@@ -141,6 +145,37 @@ and relevant R2-R4 real-build gates, rather than displacing them.
 - [ ] **J5 — Breadth and usefulness gate.** Use independent families/seeds/sockets and full
   builds; prove serial/reused-worker/cache parity and compare search quality/cost with
   fixed-tree seed ranking and ordinary joint search under equal budgets.
+
+### J1 source/data feasibility checkpoint
+
+The previous goal turn made progress by publishing G4 code `69db2cb` and resume update
+`d349468`. This turn investigated the owner's seeded-item opportunity without changing
+production APIs, package data, the source pin or caller builds. The broader B3 model
+question remains pending; source research does not authorize that migration.
+
+| J1 subgate | Current evidence |
+| --- | --- |
+| Pinned PoB2 source path | Read-only audit records 29 excerpts/17 source hashes. Active radius/conquest and partial keystone/Tribute handling coexist with disabled seed-dependent branches and no initialized lookup globals. Legacy numeric family IDs mean different things in the unfinished PoB2 application. |
+| Reference data availability | Sixteen bounded official metadata/source requests locate 11 PoB1 families totaling 169.27 MiB compressed. Newer PoB1 node maps, local/global IDs, variants and formats differ from the pinned PoB2 inputs. A matching display name/seed range proves no compatibility. |
+| Single-archive native probe | One authenticated 2,181,337-byte PoB1 Heroic Tragedy zlib stream decodes to 3,587,054 bytes. Five fresh Rust decoder states match the independent checksum; median 22.39 ms decode, hashing separately 1.28 ms. A 1 KiB output-bound control rejects before oversized growth. No lookup, transformation, browser or full-build timing is claimed. |
+| Corpus coverage | All 116 items were inspected: 18 jewels, three radius items, zero seeded items. Five empty TimelessData UI defaults are not mechanic coverage. Existing selected-view reference reports have 613 passive observations, none conquered; inactive trees are outside that count. |
+| Remaining J1 evidence | Complete PoE2-compatible seed/node/variant reference, source-specific boundary behavior, dataset provenance/distribution terms and actual lookup/transformation costs remain unresolved. Project MIT and generated game-data copyright notices do not supply a per-pack provenance manifest. |
+| Integration | J2 should investigate optional content-identified packs; the existing eager JSON package is 23,431,124 bytes with a default 32 MiB limit. No packaging API is changed. Full seeded build fixtures and J2-J5 remain future work; complete supplied native builds remain **0/5**. |
+
+The [feasibility report](seeded-jewel-feasibility.md) records the source links, immutable
+external revision, asset hashes, measurement limits and follow-up requirements. Local
+ledgers are `runs/seeded-jewel-j1-source.json`, `runs/seeded-jewel-j1-data.json`,
+`runs/seeded-jewel-j1-corpus.json`, `runs/seeded-jewel-j1-reference-coverage.json`,
+`runs/seeded-jewel-j1-loading-seam.json` and
+`runs/seeded-jewel-j1-probe/native-bench/validation.json`. Independent source and data
+reviews found no factual blocker in the report; the corpus and decode probes retain their
+separate scopes. No new complete-family or build admission is claimed.
+
+G4 exact-code run34555917045 is still live on Windows/Linux with no observed failed step
+in `runs/seeded-jewel-j1-code-ci-final.json`; this is a verified nonterminal observation.
+Resume by handling any actual CI failure and the pending shared-model decision, then
+R1-R5. J1's missing reference is recorded for future follow-up rather than replaced with
+an invented PoE2 mapping or another isolated helper implementation.
 
 ## Typed parser-language decision checkpoint
 

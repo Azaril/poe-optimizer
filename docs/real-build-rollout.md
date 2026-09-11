@@ -21,8 +21,10 @@ not merely completing more inspector-side parsing.
 
 The existing inspection covers 15 saved skill sets, 200 groups, 541 gem occurrences,
 116 authored items and 16 passive specs. These are development cases, not holdouts.
-The current inventory-item frontier has 85 assembly, 27 parser, three rune and one affix stop;
-these are first stops, not a complete dependency inventory. See the
+The G4 inventory-item frontier has 109 assembly, two parser, four rune and one affix stop
+across 116 records. Explicit program permissions advance 26 records compared with the
+same package with permissions withheld; these are first stops, not complete item assembly
+or a complete dependency inventory. See the
 [breadth inventory](breadth-validation.md) and
 [observed mechanisms](breadth-mechanism-inventory.md) for source-backed details.
 

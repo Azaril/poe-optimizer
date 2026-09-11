@@ -1,6 +1,8 @@
 # Seeded jewel and passive-transformation search
 
 Status: investigation requested by the owner on 2026-09-10; not implemented.
+The [J1 feasibility findings](seeded-jewel-feasibility.md) record source/data availability,
+a bounded reference-archive probe and the current zero-seeded-build coverage.
 This is an optional extension to joint build search, with delivery tracked under J1-J5
 in the [implementation record](implementation.md). The target is to discover combinations
 of item seed, socket placement and passive allocation that ordinary incremental search
