@@ -12,6 +12,10 @@ use std::{
 };
 
 const TEMPLATE: &str = include_str!("fixtures/calibration/mace-wooden.xml");
+// These assertions cover dataset identity, ranking, budgets by evaluation count,
+// and verified export. Hosted debug preparation can consume the old 30s wall
+// limit before its first attempt; throughput is measured separately.
+const SEARCH_COMPLETION_TIMEOUT_SECONDS: &str = "300";
 
 fn cli(directory: &Path) -> Command {
     let mut command = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"));
@@ -71,7 +75,7 @@ fn search(directory: &Path, data: Option<&Path>, jobs: usize, max: usize) -> Com
         "--seed",
         "17",
         "--timeout-seconds",
-        "30",
+        SEARCH_COMPLETION_TIMEOUT_SECONDS,
         "--pob",
         "absent-reference-checkout",
     ]);
@@ -108,10 +112,15 @@ fn changed_damage() -> GameDataPackage {
 }
 
 fn assert_verified(report: &Value, total: u64) {
+    let diagnostic = serde_json::to_string_pretty(report).unwrap();
+    assert_ne!(
+        report["termination"], "time_budget",
+        "Completion test exhausted its {SEARCH_COMPLETION_TIMEOUT_SECONDS}s limit: {diagnostic}"
+    );
     assert_eq!(report["schema_version"], 2);
     assert_eq!(report["requested_backend"], "native-poe2");
     assert_eq!(report["execution_kind"], "rust_cpu");
-    assert_eq!(report["preparation"]["attempts"], 1);
+    assert_eq!(report["preparation"]["attempts"], 1, "{diagnostic}");
     assert_eq!(
         report["total_evaluations"],
         total,

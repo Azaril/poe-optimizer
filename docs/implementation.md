@@ -24,6 +24,11 @@ but left the injected authored-skill catalogs unchanged. The adapter correctly s
 before search with `preparation_failed`. The corrected fixture and mismatch regression pass
 in both CLI configurations; production checks and deadlines remain unchanged. See the
 [repair checkpoint](#ci-dataset-fixture-repair) for validation and publication status.
+A subsequent hosted run exposed separate completion-test limits: extraction exceeded 120
+seconds on Linux, and Windows returned a zero-attempt search consistent with an expired
+startup budget. The [completion-budget follow-up](#ci-completion-budget-follow-up) preserves
+production deadlines and correctness assertions while giving these semantic tests bounded
+completion allowances and fuller diagnostics.
 
 **Current checkpoint: R2h existing class instances and continuing configuration calls.**
 Coherent session inputs bind actual state tables to owner-bound class handles with explicit
@@ -71,7 +76,10 @@ constructor execution and complete numerical parity are still outstanding.
 
 **Resume point:** admit the complete source rounding helper through bounded shared numeric
 operations, preserving exponentiation precedence/associativity, coercion, error ordering and
-unexecuted branches. Continue the actual boss callbacks and resulting placeholder consumers
+unexecuted branches. Reuse the existing `Power` opcode and add standalone-only `MathFloor`;
+retain the legacy parser runtime rejection of power. Compare complete source rounding,
+including negative half ties, numeric strings, signed zero and nonfinite outcomes, rather
+than substituting Rust's differently defined `round`. Continue the actual boss callbacks and resulting placeholder consumers
 on all five originals; do not remove the present frontier assertion without replacing it with
 stronger continuing-state evidence. Bind source-authenticated parser-service results as fresh
 writable session graphs, then execute complete default/saved activation on Twister and
@@ -513,8 +521,9 @@ All **8 dataset tests pass with default features and all 8 pass native-only**, i
 the original failing case and the new rejection case. Scoped strict Clippy, formatting
 and diff checks pass; independent review found no remaining issue. Local validation used
 the working tree containing the separately pending R2g changes; hosted validation of the
-isolated two-file repair remains pending. The broader native-only CLI suite subsequently
-passed all 134 tests; its terminal record is in `runs/r2g-root-checks.json`.
+isolated two-file repair subsequently passed the repaired case but failed separate completion
+checks described below. The broader native-only CLI suite subsequently passed all 134 tests;
+its terminal record is in `runs/r2g-root-checks.json`.
 
 The original downloaded logs are retained at `runs/ci-103401082939.log` and
 `runs/ci-103389008355.log`; the reproduced full report is in
@@ -524,6 +533,45 @@ are in `runs/dataset-ci-repair-validation.json`. Publication is recorded separat
 `runs/dataset-ci-repair-publication.json`. R2g closure/cell work is a separate
 integration checkpoint, documented above; this repair does not change complete native build
 coverage.
+
+## CI completion-budget follow-up
+
+Hosted run **34647239742** completed with two different failures. The
+[Linux job](https://github.com/Azaril/poe-optimizer/actions/runs/34647239742/job/103420835818)
+passed all eight dataset tests, then failed fresh package extraction at 122.08 seconds with
+`game-data worker deadline exceeded`. The
+[Windows job](https://github.com/Azaril/poe-optimizer/actions/runs/34647239742/job/103420835927)
+passed the repaired identifier fixture and rejected-incoherent-package regression, but the
+ranking/export test expected one preparation attempt and received zero.
+
+Windows did not print the full report, so its historical termination reason is not proven.
+Code review narrows a successful zero-attempt result to an expired budget or an empty legal
+domain. This fixture retains legal choices; its damage-only mutation does not intentionally
+change that domain. A local one-second run of the valid fixture reproduces `time_budget`,
+zero preparation attempts and zero evaluations after about 7.6 seconds spent in startup.
+The search deadline includes loading and compiling injected data. Production behavior is
+correct for that deadline and remains unchanged.
+
+The semantic dataset tests now allow 300 seconds per search, and the fresh extraction helper
+allows 600 seconds per worker. They still require exact evaluation counts, verified ranking,
+parallel consistency, fresh export evaluation, complete package bytes and all 29 section/
+evidence checks. Expired completion tests fail explicitly with the entire search report;
+extraction errors include elapsed time, configured limit, command, status and both streams.
+Invalid-source, zero-deadline, no-output and worker deadline/reaping checks remain intact.
+These are completion allowances, not throughput targets; no production timeout or workflow
+limit changes are included.
+
+All **11 default CLI checks**, **8 native-only dataset checks** and the **worker deadline/
+reaping check** pass, along with strict CLI lint in both configurations, formatting and diff
+checks. Fresh extraction still reproduces all 29 sections exactly. Independent review found
+no weakened correctness checks. Validation is recorded in
+`runs/ci-completion-budget-validation.json`, with source logs, reproduction and file hashes
+bound by `runs/ci-completion-budget-evidence.json`. Publication and hosted status are recorded
+separately in `runs/ci-completion-budget-publication.json`. The source logs are retained in
+`runs/ci-103420835818.log` and `runs/ci-103420835927.log`; the forced short-budget report is in
+`runs/ci-dataset-deadline-probe/stdout.json`. This follow-up changes only test helpers and this
+implementation record. R2h and its unchanged **0/5** complete native-build coverage remain
+the latest implementation checkpoint.
 
 ## G4 CI repair checkpoint
 

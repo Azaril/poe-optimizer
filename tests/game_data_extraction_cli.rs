@@ -14,7 +14,11 @@ use std::{
     fs,
     path::{Path, PathBuf},
     process::{Command, Output},
+    time::Instant,
 };
+
+// A completion guard for reproducibility checks, not an extraction speed target.
+const EXTRACTION_COMPLETION_TIMEOUT_SECONDS: &str = "600";
 
 const SECTIONS: [&str; 29] = [
     "tree",
@@ -92,10 +96,15 @@ fn failure(output: Output) -> String {
 }
 fn extract(output: &Path, explicit_source: bool) -> Value {
     let mut command = cli();
-    // This checks complete catalog/evidence reproducibility, not extraction speed.
-    // Hosted debug builds have exceeded 30 seconds; deadline rejection is tested separately.
+    // Hosted debug workers have exceeded 120 seconds. Keep the completion
+    // allowance separate from the unchanged deadline/reaping regression tests.
     command
-        .args(["extract-game-data", "--timeout-seconds", "120", "--output"])
+        .args([
+            "extract-game-data",
+            "--timeout-seconds",
+            EXTRACTION_COMPLETION_TIMEOUT_SECONDS,
+            "--output",
+        ])
         .arg(output);
     if explicit_source {
         // An explicit source path must work independently of the working directory.
@@ -104,7 +113,20 @@ fn extract(output: &Path, explicit_source: bool) -> Value {
             .arg(source())
             .current_dir(output.parent().unwrap());
     }
-    success(command.output().unwrap())
+    let started = Instant::now();
+    let result = command
+        .output()
+        .unwrap_or_else(|error| panic!("Extraction could not start: {command:?}: {error}"));
+    assert!(
+        result.status.success(),
+        "Extraction failed after {:?} with a {}s completion limit; explicit_source={explicit_source}; command={command:?}; status={}; stderr: {}; stdout: {}",
+        started.elapsed(),
+        EXTRACTION_COMPLETION_TIMEOUT_SECONDS,
+        result.status,
+        String::from_utf8_lossy(&result.stderr),
+        String::from_utf8_lossy(&result.stdout)
+    );
+    success(result)
 }
 fn evaluate(package: Option<&Path>) -> Value {
     let mut command = cli();
