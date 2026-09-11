@@ -213,6 +213,7 @@ fn capture_with_fields(
                 state_roots,
                 definition_roots,
                 definitions: SourceCaptureContext {
+                    capture_iteration: false,
                     projections: definition_projections,
                     environment: Some(SourceEnvironmentSelection {
                         table: globals,

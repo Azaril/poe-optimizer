@@ -450,6 +450,7 @@ return {read=read, state=state}
     );
     let mut req = request(&f, &["read"], &["state"]);
     req.definitions = SourceCaptureContext {
+        capture_iteration: false,
         projections: vec![selection(f.lua.globals(), &["tostring", "_G"])],
         environment: Some(SourceEnvironmentSelection {
             table: f.lua.globals(),

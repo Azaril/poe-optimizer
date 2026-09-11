@@ -661,6 +661,7 @@ fn context_coexists_with_classes_but_cannot_replace_class_projection_semantics()
     let (data, classes) = definitions();
     let context = SourceProgramContext {
         schema_version: SOURCE_PROGRAM_CONTEXT_SCHEMA_VERSION,
+        iteration: None,
         environment: Some(SourceProgramRootId(1)),
         tables: BTreeMap::from([(
             SourceTableId(3),
@@ -864,6 +865,7 @@ fn resolved_class_marker_cannot_enter_immutable_definition_context() {
     );
     let context = SourceProgramContext {
         schema_version: SOURCE_PROGRAM_CONTEXT_SCHEMA_VERSION,
+        iteration: None,
         environment: None,
         tables: BTreeMap::from([(SourceTableId(3), coverage)]),
     };
@@ -947,4 +949,37 @@ fn class_capture_graph_cannot_hide_a_live_helper_but_unrelated_closures_remain_v
             .message
             .contains("class graph reaches a session closure prototype")
     );
+}
+
+#[test]
+fn class_owner_requires_pairs_links_and_omitted_class_fields_preclude_raw_order() {
+    let (mut data, classes) = definitions();
+    data.intrinsics
+        .insert(SourceCallbackId(6), SourceProgramIntrinsic::Pairs);
+    let error = SourceProgramOwner::new_with_classes(data, classes).unwrap_err();
+    assert_eq!(error.kind, SourceProgramErrorKind::Binding);
+    assert!(error.message.contains("retained next"));
+    let (data, mut classes) = definitions();
+    classes.classes[0]
+        .unsupported_fields
+        .insert("omitted".into());
+    let table = classes.classes[0].table;
+    let source = &data.tables[table.0 as usize - 1];
+    let order = source
+        .fields
+        .keys()
+        .cloned()
+        .map(SourceTableKey::Text)
+        .chain(source.indexed.keys().copied().map(SourceTableKey::Integer))
+        .collect();
+    let context = SourceProgramContext {
+        iteration: Some(SourceProgramIteration {
+            table_order: BTreeMap::from([(table, order)]),
+            ..SourceProgramIteration::default()
+        }),
+        ..SourceProgramContext::default()
+    };
+    let error = SourceProgramOwner::new_with_context(data, Some(classes), context).unwrap_err();
+    assert_eq!(error.kind, SourceProgramErrorKind::UnsupportedCapability);
+    assert!(error.message.contains("complete class raw inventory"));
 }

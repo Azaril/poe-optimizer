@@ -166,12 +166,40 @@ impl CompiledParserProgram {
     }
 }
 
+/// Sorted positions refer into owner-held traversal order, so compilation
+/// duplicates neither source table values nor text keys. Library clones share it.
+#[derive(Debug)]
+struct CompiledTableTraversal {
+    text: Box<[usize]>,
+    integers: Box<[usize]>,
+}
+impl CompiledTableTraversal {
+    fn new(order: &[poe_optimizer_data::source_program::SourceTableKey]) -> Self {
+        use poe_optimizer_data::source_program::SourceTableKey;
+        let mut text = Vec::new();
+        let mut integers = Vec::new();
+        for (index, key) in order.iter().enumerate() {
+            match key {
+                SourceTableKey::Text(_) => text.push(index),
+                SourceTableKey::Integer(_) => integers.push(index),
+            }
+        }
+        text.sort_unstable_by(|a, b| order[*a].cmp(&order[*b]));
+        integers.sort_unstable_by(|a, b| order[*a].cmp(&order[*b]));
+        Self {
+            text: text.into_boxed_slice(),
+            integers: integers.into_boxed_slice(),
+        }
+    }
+}
+
 #[derive(Debug)]
 struct Library {
     catalog: SourceProgramCatalog,
     programs: Box<[CompiledParserProgram]>,
     callbacks: BTreeMap<ParserCallbackId, usize>,
     instruction_count: usize,
+    traversal: BTreeMap<ParserTableId, CompiledTableTraversal>,
 }
 /// Cheaply clone/share prepared immutable code. Future invocation state belongs
 /// to each evaluation; this library stores no locals, heap or mutable worker data.
@@ -256,6 +284,13 @@ impl CompiledSourcePrograms {
             programs: programs.into_boxed_slice(),
             callbacks,
             instruction_count: MAX_PROGRAM_INSTRUCTIONS - remaining,
+            traversal: catalog
+                .owner()
+                .iteration()
+                .into_iter()
+                .flat_map(|iteration| &iteration.table_order)
+                .map(|(id, order)| (*id, CompiledTableTraversal::new(order)))
+                .collect(),
         })))
     }
     pub fn catalog(&self) -> &SourceProgramCatalog {

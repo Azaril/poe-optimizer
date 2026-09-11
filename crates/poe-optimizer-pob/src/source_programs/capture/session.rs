@@ -295,6 +295,7 @@ impl SourceClosureObserver {
         } else {
             self.verify_capture_context(lua, request.definitions.environment.is_some())?;
         }
+        self.verify_iteration(request.definitions.capture_iteration)?;
         Ok(ObservedSourceSession {
             input,
             roots: named_roots,

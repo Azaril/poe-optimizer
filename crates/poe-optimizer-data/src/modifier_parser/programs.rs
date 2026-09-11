@@ -123,6 +123,11 @@ pub struct ParserProgramBranch {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum ParserProgramIterator {
+    /// Evaluate once and adjust to iterator/state/control. Source invocation
+    /// updates hidden control independently of the visible loop locals.
+    Generic {
+        values: ParserProgramValueList,
+    },
     Dense {
         table: ParserProgramExpr,
         binding: u16,
@@ -279,6 +284,8 @@ pub enum ParserProgramBinding {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ParserProgramIntrinsic {
+    Pairs,
+    Next,
     MathFloor,
     MathMin,
     MathMax,
@@ -297,6 +304,8 @@ impl ParserProgramIntrinsic {
     /// Language/runtime identities, never game-specific lookup names or values.
     pub fn global_path(self) -> Option<&'static [&'static str]> {
         match self {
+            Self::Pairs => Some(&["pairs"]),
+            Self::Next => Some(&["next"]),
             Self::MathFloor => Some(&["math", "floor"]),
             Self::MathMin => Some(&["math", "min"]),
             Self::MathMax => Some(&["math", "max"]),
@@ -323,7 +332,13 @@ impl ParserProgramIntrinsic {
     pub fn is_standalone_only(self) -> bool {
         matches!(
             self,
-            Self::MathFloor | Self::MathMin | Self::MathMax | Self::ToString | Self::StringMatch
+            Self::Pairs
+                | Self::Next
+                | Self::MathFloor
+                | Self::MathMin
+                | Self::MathMax
+                | Self::ToString
+                | Self::StringMatch
         )
     }
 }
@@ -346,6 +361,7 @@ pub enum ParserProgramCapability {
     NumericFor,
     DenseFor,
     PatternFor,
+    GenericFor,
     Varargs,
     LegacyPureCalls,
     RecursiveCalls,

@@ -37,7 +37,81 @@ no additional failure signature; later targets did not run. See
 `runs/ci-34649202599-review.json` for authenticated log hashes. The latest CI run remains
 separately tracked; local success must not be reported as hosted success.
 
-**Current checkpoint: R2i complete source rounding and continuing boss callbacks.**
+The later-visible Windows job `103436964079` on older head `074fb3e` also failed three
+dataset tests using the old 30-second limit: two explicitly returned `time_budget`, and
+one reported zero preparation attempts. All three use the helper already fixed in
+`c69810d`. The R2j CI review finds no new confirmed current-head failure; both jobs on
+`853ca8b` remain in Test with no failed steps in the recorded snapshot. Active logs are
+not yet available. See `runs/r2j-ci-review.json`; do not treat this as a CI pass.
+
+**Current checkpoint: R2j dynamic iteration and complete boss presets.**
+Standalone generic-for programs now evaluate full initializer packs and use the shared
+callable/state/hidden-control protocol. Nil alone ends traversal; false/zero values,
+visible-local writes, extra results, break and failure prefixes preserve source semantics.
+Legacy parser iterator admission and serialization remain unchanged.
+
+The injected context has an optional, bounded iteration facet: exact immutable raw-key
+order and the original `pairs` callback's retained `next` identity. Complete plain maps
+and explicit empty maps can be traversed; partial, live or metatable-bearing tables do
+not gain permission. The observer opts in per capture and authenticates the retained
+C callback independently of current global `next`. Compiled libraries share indices of
+positions into owner-held keys, avoiding per-session map copies and per-step full scans.
+An independent review caught an important boundary: absent controls do not prove a Lua
+`next` error, because array capacity and deleted hash nodes may still accept them. Such
+unobserved controls now stop as unsupported. Normal nil/returned-key traversal remains exact.
+Order evidence belongs to one observed owner; cross-observation reconciliation is still open.
+
+The actual dropdown selection method and its ancestors now execute against observed
+selection/enabled state and lists shared with definitions. All five originals compare
+**470 complete callbacks out of 637 actual entries/exits**, including ten complete boss
+and ten complete preset callbacks. An additional **200 cases** cover all ten injected
+non-None presets across four boss choices in each original, followed by **200 None resets**.
+The 1,200 paired steps include both real apply callbacks and selection-helper calls.
+They cover multiple damage types, base/Uber and earlier-Uber behavior, extra flag/numeric
+stats and zero critical chance. Ten fault probes compare errors and reached state, including
+writes before a missing later control. Each positive case has a fresh private session over
+one compiled owner; probes restore projected source state and aliases.
+
+The continuing sequence now stops at quest `applyModsFromString` calling an escaped
+`string.gmatch` iterator. The complete callback lowers, but the intrinsic has no callable
+iterator result yet. Its rejection preserves entry state. Parser-service ownership and
+whole activation remain outstanding; complete native original-build evaluations stay **0/5**.
+The source observer is test/extraction tooling, not a production build-state provider.
+
+Validation passes **85 data, 71 engine and 72 observer/lowerer tests**, **10 source integration
+checks**, **16 default CLI tests** and **14 native-only CLI tests**: 268 focused test executions.
+Two fresh exports reproduce all 29 package sections. Strict workspace/native-only Clippy,
+formatting, WebAssembly library compilation and native dependency isolation pass. Numerical
+execution evidence is Windows x64; Linux and WebAssembly numerical parity are not inferred.
+Broader native numerical suites were not rerun, and hosted CI remains separately tracked.
+
+The final source run preserves **56 fresh artifacts** and verifies **87 source/helper hashes**
+stayed unchanged. It records the callback/preset matrix above and repeats 3,980 original-round
+comparisons across five originals/two modes plus 354 arithmetic vectors per mode. Evidence is
+bound by `runs/r2j-integration-validation.json` and component ledgers; publication is tracked
+in `runs/r2j-publication.json`. Original inputs/fixtures, source pin, lockfile and schema-29
+package remain unchanged.
+
+**Resume point: R2k escaped iterators and quest parser-service ownership.**
+Add a session-owned native callable for `string.gmatch`, retaining identity, aliases and
+private mutable cursor state without putting it in shared definitions. Reuse the existing
+pattern matcher, source coercion/error timing and cumulative budgets. Cover direct calls,
+generic loops, retained aliases, empty/multiple captures and failures. The current direct
+pattern-loop optimization must remain compatible; do not special-case a quest's text.
+
+Next lower the actual headless `StripEscapes` and complete `modLib.setSource` bodies.
+Then admit source-authenticated parser calls with fresh writable result graphs so original
+`setSource` and ordered modifier insertion preserve aliases. The current parser facade
+resets output/program accounting per call; the bridge must instead share cumulative
+preparation budgets and reconcile parser-owned identities explicitly. Keep parser absence distinct
+from unsupported parsing and bind source/service owners explicitly. Execute complete default
+and saved activation on Twister and Skeletal Sniper together, retaining all five originals
+and mapping variants through root/provider and actor/action preparation. Native closure
+creation, mutable traversal and authenticated reconciliation of reusable owners remain
+separate seams. UI autocomplete stays a derived view of loaded definitions; DuckDB remains
+deferred under the [storage assessment](definition-storage.md).
+
+**Previous checkpoint: R2i complete source rounding and continuing boss callbacks.**
 Standalone source programs now execute authenticated `MathFloor` and the existing `Power`
 opcode. Exponentiation preserves Lua precedence, right associativity and unary exponents;
 operands/arguments execute before numeric errors. Floor ignores extra evaluated arguments,
@@ -81,28 +155,6 @@ additional arithmetic vectors in each mode. Evidence is bound by
 `runs/r2i-source-regression/validation.json`; publication is recorded separately in
 `runs/r2i-publication.json`. Original inputs/fixtures, source pin, lockfile and schema-29
 package remain unchanged.
-
-**Resume point: R2j dynamic iteration and boss presets.** Add a standalone generic-for
-initializer value-list and iterator/state/hidden-control protocol through existing callable
-dispatch and cumulative budgets. Keep parser iterator admission unchanged. Authenticate
-original `pairs` and its retained `next` identity; rebinding a familiar global cannot select
-a substitute. Current sorted table storage loses source traversal order. First admit
-complete immutable definition maps with owner-bound observed order; require each key once
-and reject missing coverage. Mutable structural changes remain explicit until their
-iteration behavior is modeled. Do not claim that sorted traversal preserves ordered
-modifier output or failure prefixes.
-
-Bind actual `DropDownControl.SelByValue`, its class parents and live list/selection/enabled
-state, preserving list ownership shared with definitions. Include injected `data.bossSkills`
-and actual global `pairs`/`type`. Validate real non-None presets, base/Uber variants,
-additional flag/numeric stats, earlier writes before errors and reset-to-None behavior;
-extending only the saved None prefix is insufficient. Then bind source-authenticated
-parser-service results as fresh writable session graphs and execute complete default/saved
-activation on Twister and Skeletal Sniper together. Continue root/provider and actor/action
-preparation through the shared production path with all five originals and mapping variants.
-Native closure creation and authenticated reconciliation of new observations with reusable
-compiled owners remain later seams. UI autocomplete remains a derived view of loaded
-definitions; DuckDB stays deferred under the [storage assessment](definition-storage.md).
 
 **Previous checkpoint: R2h existing class instances and continuing configuration calls.**
 Coherent session inputs bind actual state tables to owner-bound class handles with explicit

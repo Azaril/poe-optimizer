@@ -198,8 +198,9 @@ observed source callbacks or separately admitted source protocols; their names c
 select substitutes. Ordinary globals may have been rebound at observation time; their actual
 captured values determine execution. Captured primitive function identity and the original
 string metatable/lookup are verified separately. Constructed-class capture still verifies
-the primitive globals required by its closed Common host protocol. Runtime global writes
-and dynamic environment iterator invocation remain explicit frontiers.
+the primitive globals required by its closed Common host protocol. Dynamic environment
+iterator calls use the generic protocol below; runtime global writes and escaping
+intrinsic iterator instances remain explicit frontiers.
 
 Standalone arithmetic admits the existing `Power` opcode and authenticated `MathFloor`.
 Power has Lua precedence and right associativity, including unary exponents; both operands
@@ -211,14 +212,6 @@ Never replace a source helper such as `Common.round` with Rust's differently def
 rounding operation or omit an unexecuted decimal branch. Legacy parser owners still reject
 power execution and standalone-only primitives; their serialized data remains unchanged.
 
-Generic-for over observed dynamic callables is the next iterator seam. Evaluate its value
-list once, retain iterator/state/hidden control separately from visible loop variables,
-and invoke through the same session and budgets until the first result is nil. Authenticate
-original iterator identities, including functions retained by primitives despite global
-rebinding. Exact traversal of immutable definition maps requires owner-bound observed order;
-currently sorted map storage is insufficient evidence. Mutation and incomplete coverage
-need explicit semantics before admission. This protocol is planned, not yet implemented.
-
 `session_with_coverage` imports writable state, `borrow_with_coverage` imports immutable
 arguments, and `import_with_coverage` admits fresh writable producer results. Transport table
 IDs are local to each import; reuse opaque handles to retain cross-call identity. Private
@@ -227,6 +220,47 @@ shared owner. Missing ordinary reads with unknown `__index` fail; raw absence st
 nil. Unknown `__call` fails at invocation after argument effects. Safe snapshots require
 complete reachable coverage and no unavailable index/call behavior. Resource limits include
 coverage storage and failed imports.
+
+### Generic iteration and immutable traversal
+
+Standalone generic-for programs evaluate the complete initializer expression list once,
+adjust it to iterator/state/control, then call the iterator through the existing callable
+protocol. Only a nil first result terminates. The hidden control is independent of visible
+loop locals; result adjustment, argument effects, break and failures use the same session
+and cumulative budgets. Existing dense and pattern forms keep their serialized parser
+representation and admission policy.
+
+An optional `SourceProgramIteration` facet belongs to the immutable context owner. It
+records each admitted definition table's exact observed raw-key order and the original
+`pairs` callback's retained `next` identity. Empty order explicitly proves an empty table;
+missing order is unsupported. Validation requires a complete permutation of present,
+non-nil text/exact-integer keys, full raw coverage and plain lookup/call behavior. Partial
+class projections, live tables and unrepresented key domains do not gain traversal rights.
+The facet is omitted when absent, preserving existing context wire output and packages.
+
+`SourceCaptureContext.capture_iteration` is opt-in and defaults false. The optional PoB
+observer authenticates the original `pairs` C capture before source loading and rechecks
+it when enabled; rebinding global `next` cannot replace the iterator retained by `pairs`.
+Raw inventory and order come from one bounded observation before deterministic field
+sorting. A metatable or incomplete projection prevents order admission. Builtin upvalues
+remain empty in the public callback descriptor; the retained identity edge has its own
+validated field. An implicit-global `pairs` instruction is rejected because it carries
+no exact callback identity. Captured and observed-environment calls retain that identity.
+
+Compiled libraries share position-only lookup indices into the owner-held order. Each
+`next` call performs bounded, charged lookup and emits the next observed key/value without
+copying the complete map or lookup index per session. Returned string keys still consume
+private value/byte budgets. Normal traversal starts with nil and
+continues from returned live keys. An unobserved non-nil control remains unsupported:
+LuaJIT can accept array holes and retained deleted hash keys, so absence from the live-key
+inventory does not prove a source error. NaN controls retain their proven source error.
+Mutable traversal needs a separate model.
+
+Order evidence applies to that exact observation and owner. It does not prove that a
+fresh Lua VM or a differently constructed table has the same internal order. Future
+cross-observation reconciliation must authenticate that boundary; sorted native order
+cannot stand in for source order when modifier insertion or failure prefixes expose it.
+Native runtime execution consumes injected descriptors and has no PoB/Lua dependency.
 
 ### Live controls and captures
 
@@ -372,7 +406,9 @@ ordered defaults/saved-activation lifecycle remain outstanding. Keep the five-bu
 structural matrix and the Twister/Skeletal Sniper pairing as coverage, not runtime presets.
 The complete ConfigOptions callback inventory should determine later dependency work.
 
-The next gates must establish these source-driven cases:
+Retain these source-driven acceptance cases as later gates extend coverage. UpdateLevel,
+placeholder notifications and boss presets have component evidence; full activation and
+parser-service integration remain pending:
 
 - `UpdateLevel` reads injected `data.misc.MaxEnemyLevel`, chooses explicit input,
   placeholder or character level in source order, and does not demand unavailable values

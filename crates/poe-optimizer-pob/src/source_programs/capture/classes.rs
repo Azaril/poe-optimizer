@@ -144,6 +144,7 @@ impl SourceClosureObserver {
         .map_err(error)?;
         validate_sources(sources, &owner)?;
         self.verify(lua)?;
+        self.verify_iteration(context.capture_iteration)?;
         Ok(ObservedSourceClasses {
             owner,
             callbacks: captured.callbacks,

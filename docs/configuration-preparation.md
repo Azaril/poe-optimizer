@@ -155,24 +155,31 @@ an unavailable native dependency remains distinct from the deliberately induced 
 error. The non-placeholder branch retains its input write before unavailable `AddUndoState`;
 `BuildModList` is still unentered on that path.
 
-The inherited callback sequence advances through `enemySizePreset` and `enemyIsBoss`,
-retaining control state, modifier rows and source function identities across later calls.
-Complete source `Common.round` executes through authenticated floor and exponentiation;
-its decimal and non-decimal branches retain source rounding, coercion and failure behavior.
-The current first frontier is the complete `presetBossSkills` body: its global `pairs`
-iterator is not admitted. An unexecuted branch is still part of the required whole body,
-including when the actual argument is `None`. Native rejection leaves the compared entry
-state unchanged. The test observes the original enclosing loop and executes individual
-callbacks; it does not yet execute the complete native activation loop.
+The inherited callback sequence advances through `enemySizePreset`, `enemyIsBoss` and
+`presetBossSkills`, retaining control state, modifier rows and source identities across
+later calls. Complete source `Common.round` executes through authenticated floor and
+exponentiation; its branches retain source rounding, coercion and failure behavior.
+Generic iteration now calls exact source-bound iterator/state/control values. Complete
+immutable boss definitions carry their actual observed traversal order; mutable and
+partial collections remain explicit dependencies.
 
-The next gate needs the general iterator callable/state/control protocol, authenticated
-primitive identities and explicit traversal evidence for complete immutable definitions.
-Source-observed map order matters when a loop appends ordered modifiers or fails after
-prior writes. Sorted native map order is not an equivalent substitute. Mutable structural
-changes require their own iteration semantics. Capture actual dropdown state and
-`DropDownControl.SelByValue`, including selection/enabled state in probes, and cover actual
-non-None presets, Uber branches, additional stats and reset-to-None behavior. Preserve
-shared list ownership between definitions and live controls.
+Actual `DropDownControl.SelByValue` executes with its class ancestry and shared list
+identity. The component gate covers every injected preset and boss selection, including
+non-None, base/Uber, earlier-Uber, multiple damage types, additional flag/numeric stats
+and reset-to-None behavior. Each positive case uses a private session over one shared
+compiled owner. Probes compare selection/enabled state, numeric notifications, input and
+placeholder aliases, ordered modifier rows and reached state before/after source errors.
+They restore projected source state and aliases, without claiming to restore Lua's
+internal hash layout. UI selection callbacks and constructors are not admitted by this gate.
+
+The current first frontier is the quest callback's escaped `string.gmatch` iterator.
+Generic lowering succeeds, but the native intrinsic cannot yet return a callable iterator
+with private progress state. The continuing callback gate rejects it before state writes.
+Add bounded heap-resident iterator identity and progress through the shared call protocol;
+prove aliasing, repeated calls, deferred pattern errors and cumulative allocation/work
+before advancing quest processing. Existing direct pattern loops keep their behavior.
+The test still observes the original enclosing loop and executes individual callbacks;
+it does not yet execute complete native activation.
 
 Custom-modifier and quest callbacks additionally require explicit parser-service result
 ownership. Returned modifiers must be writable where original `setSource` mutates them;

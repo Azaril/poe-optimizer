@@ -408,33 +408,38 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                         }
                     }
                     self.take("in")?;
-                    let iterator = self.expr(0, 0)?;
-                    let Some(ParserProgramPack::Call { call }) = iterator.expansion else {
-                        return Err("generic-for requires a direct bound iterator call".into());
-                    };
-                    let ParserProgramBinding::Intrinsic { operation, .. } =
-                        self.bindings[call.binding as usize]
-                    else {
-                        return Err("generic-for helper iterator is unsupported".into());
-                    };
-                    let iterator = match operation {
-                        ParserProgramIntrinsic::StringGmatch => {
-                            ParserProgramIterator::Pattern { call }
-                        }
-                        ParserProgramIntrinsic::Ipairs
-                            if call.receiver.is_none()
-                                && call.arguments.tail.is_none()
-                                && call.arguments.values.len() == 1 =>
-                        {
-                            ParserProgramIterator::Dense {
-                                table: call.arguments.values.into_iter().next().unwrap(),
-                                binding: call.binding,
+                    let iterator = if self.authorization.standalone_calls {
+                        self.generic_iterator()?
+                    } else {
+                        let iterator = self.expr(0, 0)?;
+                        let Some(ParserProgramPack::Call { call }) = iterator.expansion else {
+                            return Err("generic-for requires a direct bound iterator call".into());
+                        };
+                        let ParserProgramBinding::Intrinsic { operation, .. } =
+                            self.bindings[call.binding as usize]
+                        else {
+                            return Err("generic-for helper iterator is unsupported".into());
+                        };
+                        match operation {
+                            ParserProgramIntrinsic::StringGmatch => {
+                                ParserProgramIterator::Pattern { call }
                             }
-                        }
-                        _ => {
-                            return Err(
-                                "iterator operation or argument adjustment is unsupported".into()
-                            );
+                            ParserProgramIntrinsic::Ipairs
+                                if call.receiver.is_none()
+                                    && call.arguments.tail.is_none()
+                                    && call.arguments.values.len() == 1 =>
+                            {
+                                ParserProgramIterator::Dense {
+                                    table: call.arguments.values.into_iter().next().unwrap(),
+                                    binding: call.binding,
+                                }
+                            }
+                            _ => {
+                                return Err(
+                                    "iterator operation or argument adjustment is unsupported"
+                                        .into(),
+                                );
+                            }
                         }
                     };
                     self.take("do")?;
@@ -596,6 +601,41 @@ impl<'a, 'b> Lowerer<'a, 'b> {
             values.push(last.value);
         }
         Ok(ParserProgramValueList { values, tail })
+    }
+    fn generic_iterator(&mut self) -> LowerResult<ParserProgramIterator> {
+        let mut values = self.values(0)?;
+        // Retain the existing bound iterator forms only for their exact source
+        // initializer shape. Extra expressions and adjusted calls must still run.
+        if values.values.is_empty()
+            && let Some(tail) = values.tail.take()
+        {
+            if let ParserProgramPack::Call { call } = *tail {
+                match self.bindings[call.binding as usize] {
+                    ParserProgramBinding::Intrinsic {
+                        operation: ParserProgramIntrinsic::StringGmatch,
+                        ..
+                    } => {
+                        return Ok(ParserProgramIterator::Pattern { call });
+                    }
+                    ParserProgramBinding::Intrinsic {
+                        operation: ParserProgramIntrinsic::Ipairs,
+                        ..
+                    } if call.receiver.is_none()
+                        && call.arguments.tail.is_none()
+                        && call.arguments.values.len() == 1 =>
+                    {
+                        return Ok(ParserProgramIterator::Dense {
+                            table: call.arguments.values.into_iter().next().unwrap(),
+                            binding: call.binding,
+                        });
+                    }
+                    _ => values.tail = Some(Box::new(ParserProgramPack::Call { call })),
+                }
+            } else {
+                values.tail = Some(tail);
+            }
+        }
+        Ok(ParserProgramIterator::Generic { values })
     }
     fn expr(&mut self, min: u8, depth: usize) -> LowerResult<Info> {
         if depth > 32 {

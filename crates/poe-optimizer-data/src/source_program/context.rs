@@ -148,6 +148,9 @@ pub struct SourceProgramContext {
     pub environment: Option<SourceProgramRootId>,
     #[serde(deserialize_with = "bounded_tables")]
     pub tables: BTreeMap<SourceTableId, SourceTableCoverage>,
+    /// Absent on legacy wire; no order or hidden builtin identity is inferred.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub iteration: Option<SourceProgramIteration>,
 }
 impl Default for SourceProgramContext {
     fn default() -> Self {
@@ -155,6 +158,7 @@ impl Default for SourceProgramContext {
             schema_version: SOURCE_PROGRAM_CONTEXT_SCHEMA_VERSION,
             environment: None,
             tables: BTreeMap::new(),
+            iteration: None,
         }
     }
 }
@@ -197,8 +201,12 @@ impl SourceProgramContext {
                 "environment root is not bound to source definitions",
             ));
         }
-        let mut count = 0usize;
-        let mut bytes = 0usize;
+        let (mut count, mut bytes) = self
+            .iteration
+            .as_ref()
+            .map(SourceProgramIteration::shape_size)
+            .transpose()?
+            .unwrap_or_default();
         for (id, coverage) in &self.tables {
             if coverage.index_fallback == SourceTableIndexFallback::ClassResolved {
                 return Err(failure(
@@ -228,6 +236,7 @@ impl SourceProgramContext {
             }
             coverage.validate_table(table)?;
         }
+        iteration::validate(definitions, classes, Some(self))?;
         Ok(())
     }
 }

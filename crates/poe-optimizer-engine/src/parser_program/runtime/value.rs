@@ -519,6 +519,93 @@ impl<'a> Heap<'a> {
         }
         Ok(value)
     }
+    /// Raw traversal of an explicitly observed immutable source table. Borrow
+    /// its order from the owner; mutable tables never acquire a guessed order.
+    pub(super) fn definition_next(
+        &mut self,
+        table: &V,
+        control: &V,
+        indices: &BTreeMap<ParserTableId, super::super::CompiledTableTraversal>,
+        work: &mut crate::lua_pattern::MatchBudget,
+    ) -> Result<Option<(V, V)>> {
+        use poe_optimizer_data::source_program::SourceTableKey;
+        let TableRef::Definition(id) = table_ref(table)? else {
+            return Err(Error::unsupported(
+                "next requires immutable observed table order",
+            ));
+        };
+        let owner = self.catalog.clone();
+        let order = owner
+            .table_iteration_order(id)
+            .ok_or_else(|| Error::unsupported("source table traversal order is unavailable"))?;
+        let next = if matches!(control, V::Nil) {
+            0
+        } else {
+            let index = indices
+                .get(&id)
+                .ok_or_else(|| Error::input("compiled traversal index is missing"))?;
+            let positions = match control {
+                V::Bytes(_) => index.text.as_ref(),
+                V::Number(value)
+                    if value.is_finite()
+                        && value.fract() == 0.0
+                        && value.abs() <= 9_007_199_254_740_991.0 =>
+                {
+                    index.integers.as_ref()
+                }
+                // NaN cannot compare equal to a stored Lua key. Other missing
+                // controls may name a deleted hash key or an empty array slot;
+                // live-key order alone does not prove the source rejects them.
+                V::Number(value) if value.is_nan() => {
+                    return Err(Error::source("invalid key to next"));
+                }
+                _ => {
+                    return Err(Error::unsupported(
+                        "next control is outside the observed live-key inventory",
+                    ));
+                }
+            };
+            let mut low = 0;
+            let mut high = positions.len();
+            let mut found = None;
+            while low < high {
+                work.charge(1)?;
+                let middle = low + (high - low) / 2;
+                let position = positions[middle];
+                let comparison = match (&order[position], control) {
+                    (SourceTableKey::Text(key), V::Bytes(value)) => {
+                        work.charge(key.len().min(value.len()) as u64)?;
+                        key.as_bytes().cmp(value.as_ref())
+                    }
+                    (SourceTableKey::Integer(key), V::Number(value)) => key.cmp(&(*value as i64)),
+                    _ => return Err(Error::input("compiled traversal index kind differs")),
+                };
+                match comparison {
+                    std::cmp::Ordering::Less => low = middle + 1,
+                    std::cmp::Ordering::Greater => high = middle,
+                    std::cmp::Ordering::Equal => {
+                        found = Some(position + 1);
+                        break;
+                    }
+                }
+            }
+            found.ok_or_else(|| {
+                Error::unsupported("next control is outside the observed live-key inventory")
+            })?
+        };
+        let Some(key) = order.get(next) else {
+            return Ok(None);
+        };
+        let key = match key {
+            SourceTableKey::Text(key) => self.bytes(key.as_bytes())?,
+            SourceTableKey::Integer(key) => V::Number(*key as f64),
+        };
+        let value = self.raw_get(table, &key)?;
+        if matches!(value, V::Nil) {
+            return Err(Error::input("observed traversal key has no raw value"));
+        }
+        Ok(Some((key, value)))
+    }
     pub(super) fn owner(&self) -> &SourceProgramOwner {
         &self.catalog
     }

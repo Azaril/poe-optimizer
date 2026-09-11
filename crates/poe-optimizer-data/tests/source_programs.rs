@@ -1132,3 +1132,202 @@ fn existing_power_wire_form_retains_parser_structural_acceptance() {
         original
     );
 }
+
+#[test]
+fn generic_iterator_initializers_have_ordinary_scope_pack_and_resource_validation() {
+    let mut p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::Literal {
+            value: ParserFactoryLiteral::Nil,
+        },
+    );
+    p.local_count = 1;
+    p.body = vec![SourceProgramStatement {
+        location: SourceProgramLocation { start: 0, end: 1 },
+        operation: SourceProgramStatementKind::ForEach {
+            locals: vec![0],
+            iterator: SourceProgramIterator::Generic {
+                values: SourceProgramValueList {
+                    values: vec![expression(SourceProgramExprKind::Capture { upvalue: 0 })],
+                    tail: None,
+                },
+            },
+            body: vec![SourceProgramStatement {
+                location: SourceProgramLocation { start: 0, end: 1 },
+                operation: SourceProgramStatementKind::Break,
+            }],
+        },
+    }];
+    let owner = SourceProgramOwner::new(definitions()).unwrap();
+    let catalog = SourceProgramCatalog::new(programs(vec![p.clone()]), owner.clone()).unwrap();
+    assert!(
+        catalog
+            .required_capabilities()
+            .contains(&SourceProgramCapability::GenericFor)
+    );
+    assert!(
+        catalog
+            .required_capabilities()
+            .contains(&SourceProgramCapability::RecursiveCalls)
+    );
+    assert!(
+        catalog
+            .check_capabilities(&BTreeSet::from([
+                SourceProgramCapability::Core,
+                SourceProgramCapability::RecursiveCalls
+            ]))
+            .is_err()
+    );
+    for (value, expected) in [
+        (
+            expression(SourceProgramExprKind::Local { local: 0 }),
+            SourceProgramErrorKind::InvalidData,
+        ),
+        (
+            expression(SourceProgramExprKind::Capture { upvalue: 1 }),
+            SourceProgramErrorKind::Binding,
+        ),
+    ] {
+        let mut invalid = p.clone();
+        let SourceProgramStatementKind::ForEach {
+            iterator: SourceProgramIterator::Generic { values },
+            ..
+        } = &mut invalid.body[0].operation
+        else {
+            unreachable!()
+        };
+        values.values = vec![value];
+        assert_eq!(
+            SourceProgramCatalog::new(programs(vec![invalid]), owner.clone())
+                .unwrap_err()
+                .kind,
+            expected
+        );
+    }
+    let mut invalid = p.clone();
+    let SourceProgramStatementKind::ForEach {
+        iterator: SourceProgramIterator::Generic { values },
+        ..
+    } = &mut invalid.body[0].operation
+    else {
+        unreachable!()
+    };
+    values.tail = Some(Box::new(SourceProgramPack::Varargs));
+    assert_eq!(
+        SourceProgramCatalog::new(programs(vec![invalid]), owner.clone())
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::InvalidData
+    );
+    let mut deep = expression(SourceProgramExprKind::Capture { upvalue: 0 });
+    for _ in 0..60 {
+        deep = expression(SourceProgramExprKind::Unary {
+            operation: SourceProgramUnary::Not,
+            value: Box::new(deep),
+        });
+    }
+    let mut invalid = p.clone();
+    let SourceProgramStatementKind::ForEach {
+        iterator: SourceProgramIterator::Generic { values },
+        ..
+    } = &mut invalid.body[0].operation
+    else {
+        unreachable!()
+    };
+    values.values = vec![deep];
+    assert_eq!(
+        SourceProgramCatalog::new(programs(vec![invalid]), owner)
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::ResourceLimit
+    );
+    let snapshot = bundled_snapshot().unwrap();
+    let parser = snapshot.modifier_parser();
+    let wire = serde_json::to_vec(&parser.data().programs).unwrap();
+    let mut legacy = parser.data().programs.data.programs[0].clone();
+    legacy.body = p.body;
+    legacy.local_count = 1;
+    legacy.parameter_count = 0;
+    legacy.bindings.clear();
+    assert_eq!(
+        ParserProgramCatalog::new(programs(vec![legacy]), parser.clone())
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::UnsupportedCapability
+    );
+    assert_eq!(serde_json::to_vec(&parser.data().programs).unwrap(), wire);
+}
+#[test]
+fn pairs_requires_exact_capture_while_next_global_keeps_its_standalone_boundary() {
+    let mut data = definitions();
+    for (symbol, operation) in [
+        ("pairs", SourceProgramIntrinsic::Pairs),
+        ("next", SourceProgramIntrinsic::Next),
+    ] {
+        data.callbacks.push(SourceCallback {
+            kind: SourceCallbackKind::Builtin {
+                symbol: symbol.into(),
+            },
+            upvalues: vec![],
+            environment: SourceEnvironment::OriginalGlobals,
+        });
+        data.intrinsics
+            .insert(SourceCallbackId(data.callbacks.len() as u32), operation);
+    }
+    data.callbacks[0].upvalues[0].value = SourceValue::Callback(SourceCallbackId(3));
+    let owner = SourceProgramOwner::new_with_context(
+        data,
+        None,
+        SourceProgramContext {
+            iteration: Some(SourceProgramIteration {
+                pairs_next: BTreeMap::from([(SourceCallbackId(3), SourceCallbackId(4))]),
+                ..SourceProgramIteration::default()
+            }),
+            ..SourceProgramContext::default()
+        },
+    )
+    .unwrap();
+    let mut p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::Literal {
+            value: ParserFactoryLiteral::Nil,
+        },
+    );
+    p.bindings = vec![SourceProgramBinding::Intrinsic {
+        operation: SourceProgramIntrinsic::Pairs,
+        source: SourceProgramIntrinsicSource::Captured {
+            upvalue: 0,
+            callback: SourceCallbackId(3),
+        },
+    }];
+    SourceProgramCatalog::new(programs(vec![p.clone()]), owner.clone()).unwrap();
+    p.bindings = vec![SourceProgramBinding::Intrinsic {
+        operation: SourceProgramIntrinsic::Pairs,
+        source: SourceProgramIntrinsicSource::OriginalGlobal,
+    }];
+    let error = SourceProgramCatalog::new(programs(vec![p.clone()]), owner.clone()).unwrap_err();
+    assert_eq!(error.kind, SourceProgramErrorKind::Binding);
+    assert!(error.message.contains("exact captured"));
+    p.bindings = vec![SourceProgramBinding::Intrinsic {
+        operation: SourceProgramIntrinsic::Next,
+        source: SourceProgramIntrinsicSource::OriginalGlobal,
+    }];
+    SourceProgramCatalog::new(programs(vec![p]), owner).unwrap();
+    let snapshot = bundled_snapshot().unwrap();
+    let parser = snapshot.modifier_parser();
+    for operation in [SourceProgramIntrinsic::Pairs, SourceProgramIntrinsic::Next] {
+        assert!(operation.is_standalone_only());
+        assert!(!operation.is_string_method());
+        let mut p = parser.data().programs.data.programs[0].clone();
+        p.bindings = vec![SourceProgramBinding::Intrinsic {
+            operation,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        }];
+        assert_eq!(
+            ParserProgramCatalog::new(programs(vec![p]), parser.clone())
+                .unwrap_err()
+                .kind,
+            SourceProgramErrorKind::UnsupportedCapability
+        );
+    }
+}

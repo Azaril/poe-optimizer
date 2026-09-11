@@ -90,6 +90,12 @@ fn cl(id: u32) -> ProgramValue {
     ProgramValue::Closure(SourceSessionClosureId(id))
 }
 fn library(bodies: Vec<(usize, Vec<ParserProgramStatement>)>) -> CompiledSourcePrograms {
+    library_with_locals(bodies, 3)
+}
+fn library_with_locals(
+    bodies: Vec<(usize, Vec<ParserProgramStatement>)>,
+    local_count: u16,
+) -> CompiledSourcePrograms {
     let path = "src/Modules/ClosureFixture.lua".to_owned();
     let span = ItemSourceSpan {
         path: path.clone(),
@@ -155,7 +161,7 @@ fn library(bodies: Vec<(usize, Vec<ParserProgramStatement>)>) -> CompiledSourceP
         .map(|(i, (_, body))| ParserProgram {
             callback: ParserCallbackId(i as u32 + 1),
             parameter_count: 3,
-            local_count: 3,
+            local_count,
             variadic: false,
             bindings: vec![ParserProgramBinding::DynamicCall {}],
             body,
@@ -764,3 +770,6 @@ fn parallel_sessions_share_compiled_prototypes_without_sharing_capture_cells() {
         }
     });
 }
+
+#[path = "support/source_program_iterators.rs"]
+mod iterators;

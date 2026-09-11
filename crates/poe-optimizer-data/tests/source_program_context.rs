@@ -44,6 +44,7 @@ fn coverage() -> SourceTableCoverage {
 fn context() -> SourceProgramContext {
     SourceProgramContext {
         schema_version: SOURCE_PROGRAM_CONTEXT_SCHEMA_VERSION,
+        iteration: None,
         environment: Some(SourceProgramRootId(1)),
         tables: BTreeMap::from([(SourceTableId(1), coverage())]),
     }

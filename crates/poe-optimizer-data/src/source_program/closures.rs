@@ -184,6 +184,8 @@ impl SourceProgramOwner {
         }
         if let Some(context) = &context {
             context.validate(&data, classes.as_ref())?;
+        } else {
+            iteration::validate(&data, classes.as_ref(), None)?;
         }
         Ok(Self(OwnerStorage::Standalone {
             definitions: Arc::new(data),

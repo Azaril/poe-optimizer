@@ -342,6 +342,7 @@ fn class_context_keeps_projected_aliases_and_the_closed_protocol_global_contract
     let f = fixture(|text| text, COMMON);
     let env = f.lua.globals();
     let context = SourceCaptureContext {
+        capture_iteration: false,
         projections: vec![SourceTableSelection {
             table: env.clone(),
             fields: ["Data".into(), "_G".into()].into(),

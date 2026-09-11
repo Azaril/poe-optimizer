@@ -637,3 +637,6 @@ fn string_match_method_uses_string_primitive_or_actual_table_override() {
 
 #[path = "support/source_program_arithmetic.rs"]
 mod arithmetic;
+
+#[path = "support/source_program_traversal.rs"]
+mod traversal;

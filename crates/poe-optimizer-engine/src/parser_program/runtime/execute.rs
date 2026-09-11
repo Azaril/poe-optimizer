@@ -130,6 +130,7 @@ enum Loop {
     Numeric { value: f64, limit: f64, step: f64 },
     Dense { table: V, index: u64 },
     Pattern(Box<intrinsics::Gmatch>),
+    Generic { iterator: V, state: V, control: V },
 }
 impl Run<'_, '_, '_> {
     fn tick(&mut self, depth: usize) -> Result<()> {
@@ -349,6 +350,18 @@ impl Run<'_, '_, '_> {
                         exit,
                     } => {
                         let mut iterator = match iterator {
+                            ParserProgramIterator::Generic { values } => {
+                                // Evaluate the full initializer once, including values beyond
+                                // the hidden triple. Retain identities, not visible loop locals.
+                                let values = self.values(frame, values, depth + 1)?;
+                                self.heap.charge_values(3)?;
+                                let mut values = values.into_iter();
+                                Loop::Generic {
+                                    iterator: values.next().unwrap_or(V::Nil),
+                                    state: values.next().unwrap_or(V::Nil),
+                                    control: values.next().unwrap_or(V::Nil),
+                                }
+                            }
                             ParserProgramIterator::Dense { table, .. } => {
                                 let table = self.expr(frame, table, depth + 1)?;
                                 if !matches!(table, V::Table(_)) {
@@ -365,7 +378,7 @@ impl Run<'_, '_, '_> {
                                 )?))
                             }
                         };
-                        if let Some(values) = self.next(&mut iterator)? {
+                        if let Some(values) = self.next(&mut iterator, depth + 1)? {
                             self.assign_loop(frame, locals, values);
                             frame.loops[*state] = Some(iterator);
                             pc += 1;
@@ -383,7 +396,7 @@ impl Run<'_, '_, '_> {
                         let mut iterator = frame.loops[*state]
                             .take()
                             .ok_or_else(|| Error::input("iterator loop state missing"))?;
-                        if let Some(values) = self.next(&mut iterator)? {
+                        if let Some(values) = self.next(&mut iterator, depth + 1)? {
                             self.assign_loop(frame, locals, values);
                             frame.loops[*state] = Some(iterator);
                             pc = *body;
@@ -399,8 +412,27 @@ impl Run<'_, '_, '_> {
             }
         }
     }
-    fn next(&mut self, iterator: &mut Loop) -> Result<Option<Vec<V>>> {
+    fn next(&mut self, iterator: &mut Loop, depth: usize) -> Result<Option<Vec<V>>> {
         match iterator {
+            Loop::Generic {
+                iterator,
+                state,
+                control,
+            } => {
+                self.pack_space(2)?;
+                let values = self.invoke_value(
+                    iterator.clone(),
+                    vec![state.clone(), control.clone()],
+                    depth + 1,
+                )?;
+                let first = values.first().cloned().unwrap_or(V::Nil);
+                if matches!(first, V::Nil) {
+                    Ok(None)
+                } else {
+                    *control = first;
+                    Ok(Some(values))
+                }
+            }
             Loop::Dense { table, index } => {
                 *index = index
                     .checked_add(1)
@@ -536,8 +568,13 @@ impl Run<'_, '_, '_> {
             CompiledProgramBinding::Program { index, .. } => {
                 self.invoke(*index, arguments, depth + 1)?
             }
-            CompiledProgramBinding::Intrinsic { operation, .. } => intrinsics::call(
+            CompiledProgramBinding::Intrinsic { operation, source } => intrinsics::call_bound(
                 *operation,
+                match source {
+                    ParserProgramIntrinsicSource::Captured { callback, .. } => Some(*callback),
+                    ParserProgramIntrinsicSource::OriginalGlobal => None,
+                },
+                &self.library.0.traversal,
                 &arguments,
                 self.heap,
                 self.patterns,
@@ -655,8 +692,10 @@ impl Run<'_, '_, '_> {
                     }
                 }
                 if let Some(operation) = self.library.catalog().owner().intrinsic(callback) {
-                    return intrinsics::call(
+                    return intrinsics::call_bound(
                         operation,
+                        Some(callback),
+                        &self.library.0.traversal,
                         &arguments,
                         self.heap,
                         self.patterns,

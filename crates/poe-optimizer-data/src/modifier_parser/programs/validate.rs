@@ -265,6 +265,13 @@ impl Check<'_> {
                     }
                     match source {
                         ParserProgramIntrinsicSource::OriginalGlobal => {
+                            if *operation == ParserProgramIntrinsic::Pairs {
+                                return Err(self.fail(
+                                    ParserProgramErrorKind::Binding,
+                                    None,
+                                    "pairs requires an exact captured or dynamically resolved callback identity",
+                                ));
+                            }
                             if self.owner.has_environment() {
                                 return Err(self.fail(
                                     ParserProgramErrorKind::Binding,
@@ -712,6 +719,19 @@ impl Check<'_> {
                     body,
                 } => {
                     match iterator {
+                        ParserProgramIterator::Generic { values } => {
+                            if !self.owner.supports_dynamic_calls() {
+                                return Err(self.fail(
+                                    ParserProgramErrorKind::UnsupportedCapability,
+                                    Some(loc),
+                                    "parser owner does not admit generic iterator invocation",
+                                ));
+                            }
+                            self.required.insert(ParserProgramCapability::GenericFor);
+                            self.required
+                                .insert(ParserProgramCapability::RecursiveCalls);
+                            self.values(values, &frame.visible, depth, loc)?;
+                        }
                         ParserProgramIterator::Dense { table, binding } => {
                             if self.intrinsic(*binding, loc)? != ParserProgramIntrinsic::Ipairs {
                                 return Err(self.fail(

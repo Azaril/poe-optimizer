@@ -352,6 +352,7 @@ fn unknown_later_branches_reject_the_whole_method() {
 }
 
 mod inline;
+mod iterators;
 mod methods;
 mod power;
 

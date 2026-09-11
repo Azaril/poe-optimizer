@@ -203,6 +203,7 @@ fn observe(lua: &Lua, primitives: &Primitives, reached: &[Reached]) -> Result<Js
             source,
             &callbacks,
             SourceCaptureContext {
+                capture_iteration: false,
                 projections: vec![
                     selection(globals.clone(), &["data", "_G"]),
                     selection(data, &["misc"]),

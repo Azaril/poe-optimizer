@@ -8,6 +8,8 @@ mod capture;
 mod classes;
 #[path = "support/source_program_observation.rs"]
 mod observation;
+#[path = "support/source_configuration_presets.rs"]
+mod presets;
 #[path = "support/source_program_round.rs"]
 mod rounding;
 #[allow(dead_code)]
@@ -68,6 +70,7 @@ impl Pass {
                 self.root("enemy"),
                 self.root("build"),
                 self.root("names"),
+                self.root("dropdown_names"),
             ],
         )?;
         Ok(observation::canonical(
@@ -83,6 +86,7 @@ impl Pass {
                 self.enemy.clone(),
                 self.build.clone(),
                 self.captured.names.clone(),
+                self.captured.dropdown_names.clone(),
             ))
             .unwrap();
         observation::canonical(&observation::capture(&actual.into_vec()))
@@ -116,15 +120,12 @@ fn install(
                     Ok(state) => { row["predicted"] = state; row["paired"] = json!(true); }
                     Err(error) => {
                         assert_eq!(error.kind, ProgramRuntimeErrorKind::UnsupportedCapability, "review new source frontier {var}: {error}");
-                        assert_eq!(var, "presetBossSkills", "review new source frontier: {error}");
-                        assert_eq!(error.message, "session closure has no compiled program");
-                        let input = pass.captured.observed.input();
-                        let ProgramValue::Closure(closure) = input.state.values[pass.captured.observed.root_index(&format!("apply.{index}")).unwrap()] else { panic!("actual apply must be a session closure") };
-                        let callback = input.closures[closure.0 as usize - 1].prototype.definition().callback;
-                        let lowering_reason = pass.captured.unsupported[callback.0.to_string()].clone();
-                        assert_eq!(lowering_reason, "generic-for helper iterator is unsupported");
-                        assert_eq!(pass.native_state().unwrap(), pass.actual(), "uncompiled body must leave source-visible entry state unchanged");
-                        let frontier = json!({"event":event,"index":index,"var":var,"reason":error.to_string(),"callback":callback,"lowering_reason":lowering_reason,"argument":observation::canonical(&observation::capture(std::slice::from_ref(&value))),"entry_state_unchanged":true});
+                        assert_eq!(var, "questAct 1ClearfellBeira", "review new source frontier: {error}");
+                        assert_eq!(error.message, "escaped string.gmatch iterator");
+                        assert_eq!(pass.native_state().unwrap(), pass.actual(), "unavailable quest iterator must leave compared entry state unchanged");
+                        let callback = error.callback.unwrap();
+                        let source = &pass.captured.observed.owner().callback(callback).unwrap().kind;
+                        let frontier = json!({"event":event,"index":index,"var":var,"reason":error.to_string(),"callback":callback,"source":source,"argument":observation::canonical(&observation::capture(std::slice::from_ref(&value))),"entry_state_unchanged":true});
                         row["frontier"] = frontier.clone();
                         pass.frontier = Some(frontier);
                     }
@@ -158,6 +159,7 @@ fn summarize(
     lua: &Lua,
     passes: &Rc<RefCell<Vec<Pass>>>,
     build: &str,
+    primitives: &Primitives,
 ) -> Result<Json, RuntimeError> {
     let trace: Json = lua.from_value(lua.globals().get("_configuration_source_trace")?)?;
     let events = trace["events"].as_array().unwrap();
@@ -182,18 +184,26 @@ fn summarize(
             .take_while(|row| row["paired"] == true)
             .collect::<Vec<_>>();
         let expected_saved = match build {
-            "01" | "02" => 52,
-            "03" => 46,
-            "04" | "05" => 45,
+            "01" | "02" => 53,
+            "03" => 47,
+            "04" | "05" => 46,
             _ => unreachable!(),
         };
         assert_eq!(
             paired.len(),
-            if index == 0 { 44 } else { expected_saved },
-            "review continuing coverage for build {build}, pass {index}: {:?}",
-            pass.frontier
+            if index == 0 { 45 } else { expected_saved },
+            "pinned continuing callback prefix"
         );
-        assert_eq!(pass.frontier.as_ref().unwrap()["var"], "presetBossSkills");
+        eprintln!(
+            "R2j build {build} pass {index}: {}/{} callbacks paired",
+            paired.len(),
+            pass.rows.len()
+        );
+        assert_eq!(
+            pass.frontier.as_ref().unwrap()["var"],
+            "questAct 1ClearfellBeira"
+        );
+        assert!(paired.iter().any(|row| row["var"] == "presetBossSkills"));
         assert!(paired.iter().any(|row| row["var"] == "enemyIsBoss"));
         assert!(
             paired.iter().any(|row| row["var"] == "enemySizePreset"),
@@ -218,8 +228,15 @@ fn summarize(
         &passes[0].captured.original_round,
         passes[0].captured.round_id,
     );
+    let preset_parity = presets::run(
+        lua,
+        primitives,
+        &passes.last().unwrap().player,
+        &passes.last().unwrap().enemy,
+        &passes.last().unwrap().build,
+    );
     Ok(
-        json!({"round_parity":round_parity,"passes":reports,"scope":"Original callback bodies, actual continuing state and inherited methods, compared at each actual callback exit. The enclosing activation loop, parser services, constructors and full build evaluation are not admitted.","native_complete_builds":0,"whole_activation_admission":false}),
+        json!({"preset_parity":preset_parity,"round_parity":round_parity,"passes":reports,"scope":"Original callback bodies, actual continuing state and inherited methods, compared at each actual callback exit. The enclosing activation loop, parser services, constructors and full build evaluation are not admitted.","native_complete_builds":0,"whole_activation_admission":false}),
     )
 }
 #[test]
@@ -228,7 +245,7 @@ fn original_configuration_callbacks_continue_through_inherited_control_dispatch(
         .join("../..")
         .canonicalize()
         .unwrap();
-    let destination = project.join("runs/r2i-configuration-dispatch");
+    let destination = project.join("runs/r2j-configuration-dispatch");
     fs::create_dir_all(&destination).unwrap();
     if let Ok(build) = std::env::var("POE_CONFIG_DISPATCH_CHILD") {
         assert!(["01", "02", "03", "04", "05"].contains(&build.as_str()));
@@ -246,7 +263,7 @@ fn original_configuration_callbacks_continue_through_inherited_control_dispatch(
             None,
             false,
             Some(&|lua| install(lua, primitives.clone(), passes.clone())),
-            Some(&|lua| summarize(lua, &passes, &build)),
+            Some(&|lua| summarize(lua, &passes, &build, primitives.borrow().as_ref().unwrap())),
         )
         .unwrap();
         fs::write(

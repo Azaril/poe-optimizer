@@ -14,6 +14,7 @@ use std::collections::BTreeMap;
 
 mod classes;
 mod context;
+mod iteration;
 mod session;
 mod upvalues;
 pub use classes::{ObservedSourceClasses, SourceClassCaptureRequest, SourceClassSelection};
@@ -37,6 +38,7 @@ pub struct SourceClosureObserver {
     lua: Lua,
     get_metatable: Function,
     string_metatable: Table,
+    iterator_primitives: iteration::Primitives,
 }
 
 /// Complete observed dependency graph. Named callback roots are not executable
@@ -118,6 +120,8 @@ impl SourceClosureObserver {
             }
             opaque_primitives.push((symbol.into(), function));
         }
+        let iterator_primitives =
+            iteration::Primitives::capture(lua, &globals, &opaque_primitives)?;
         let get_metatable: Function = globals.raw_get("getmetatable")?;
         if get_metatable.info().what != "C" {
             return Err(error(
@@ -133,6 +137,7 @@ impl SourceClosureObserver {
             lua: lua.clone(),
             get_metatable,
             string_metatable,
+            iterator_primitives,
         };
         observer.verify(lua)?;
         Ok(observer)
@@ -245,6 +250,7 @@ impl SourceClosureObserver {
             .map_err(error)?;
         validate_sources(sources, &owner)?;
         self.verify_capture_context(lua, context.environment.is_some())?;
+        self.verify_iteration(context.capture_iteration)?;
         Ok(ObservedSourceContext { owner, callbacks })
     }
     fn verify_capture_context(&self, lua: &Lua, explicit_environment: bool) -> Result<()> {
@@ -443,8 +449,9 @@ impl Graph<'_> {
         self.seen_tables.insert(pointer, id);
         self.tables.push(SourceTable::default());
         let (mut indexed, mut fields) = (BTreeMap::new(), BTreeMap::new());
-        for entry in table.pairs::<Value, Value>() {
-            let (key, value) = entry?;
+        let entries = self.raw_table_entries(&table)?;
+        self.store_iteration_order(&table, id, &entries, true)?;
+        for (key, value) in entries {
             match key {
                 Value::String(key) => {
                     self.text(key.as_bytes().len())?;
@@ -578,6 +585,14 @@ impl Graph<'_> {
                         .expect("language primitive")
                         .join("."),
                 }
+            } else if let Some(operation) = self.iterator_intrinsic(&function) {
+                self.intrinsics.insert(id, operation);
+                SourceCallbackKind::Builtin {
+                    symbol: operation
+                        .global_path()
+                        .expect("iterator primitive")
+                        .join("."),
+                }
             } else {
                 let (symbol, _) = self
                     .observer
@@ -617,6 +632,7 @@ impl Graph<'_> {
             }
         }
         self.callbacks[id.0 as usize - 1].upvalues = upvalues;
+        self.capture_pairs_next(id, depth)?;
         Ok(SourceValue::Callback(id))
     }
 }

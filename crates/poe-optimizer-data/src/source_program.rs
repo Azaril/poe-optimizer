@@ -13,10 +13,12 @@ mod classes;
 mod closures;
 mod context;
 pub(crate) mod graph;
+mod iteration;
 pub mod session;
 pub use classes::*;
 pub use closures::*;
 pub use context::*;
+pub use iteration::*;
 pub use session::*;
 
 // Public neutral names deliberately re-export the same graph and IR types. Old
@@ -171,6 +173,7 @@ impl SourceProgramOwner {
     pub fn new(data: SourceProgramDefinitions) -> SourceProgramResult<Self> {
         data.validate()?;
         closures::validate_declarations(&data, None)?;
+        iteration::validate(&data, None, None)?;
         Ok(Self(OwnerStorage::Standalone {
             definitions: Arc::new(data),
             classes: None,

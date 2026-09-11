@@ -48,6 +48,7 @@ fn selection(table: Table, fields: &[&str]) -> SourceTableSelection {
 }
 fn environment(f: &Fixture, fields: &[&str]) -> SourceCaptureContext {
     SourceCaptureContext {
+        capture_iteration: false,
         projections: vec![selection(f.lua.globals(), fields)],
         environment: Some(SourceEnvironmentSelection {
             table: f.lua.globals(),
@@ -360,6 +361,7 @@ fn projection_counts_and_key_bounds_fail_before_unbounded_graph_growth() {
     let f = fixture("return function() return 1 end\n", PATH);
     let empty = f.lua.create_table().unwrap();
     let context = SourceCaptureContext {
+        capture_iteration: false,
         projections: (0..4097).map(|_| selection(empty.clone(), &[])).collect(),
         ..SourceCaptureContext::default()
     };
@@ -372,6 +374,7 @@ fn projection_counts_and_key_bounds_fail_before_unbounded_graph_growth() {
     let mut projection = selection(empty.clone(), &[]);
     projection.indexed = (0..50_001).collect();
     let context = SourceCaptureContext {
+        capture_iteration: false,
         projections: vec![projection],
         ..SourceCaptureContext::default()
     };
@@ -385,6 +388,7 @@ fn projection_counts_and_key_bounds_fail_before_unbounded_graph_growth() {
         empty.raw_set(i, true).unwrap();
     }
     let context = SourceCaptureContext {
+        capture_iteration: false,
         projections: vec![selection(empty, &[])],
         ..SourceCaptureContext::default()
     };
@@ -444,7 +448,7 @@ fn unknown_call_requires_opt_in_and_never_becomes_a_plain_noncallable_table() {
 }
 
 #[test]
-fn environment_lookup_happens_before_arguments_and_global_iterators_keep_their_frontier() {
+fn environment_lookup_precedes_arguments_and_escaped_ipairs_keeps_its_runtime_frontier() {
     let text = "return function() return tonumber(math.missing()) end\n";
     let f = fixture(text, PATH);
     let observed = observe(&f, environment(&f, &[])).unwrap();
@@ -468,8 +472,19 @@ fn environment_lookup_happens_before_arguments_and_global_iterators_keep_their_f
     );
     let observed = observe(&f, environment(&f, &["ipairs"])).unwrap();
     let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
-    assert!(lowered.catalog().data().programs.is_empty());
-    assert!(lowered.unsupported()[&observed.callbacks()["evaluate"]].contains("iterator"));
+    assert!(lowered.unsupported().is_empty());
+    let compiled = CompiledSourcePrograms::new(lowered.catalog()).unwrap();
+    let (mut session, _) = compiled
+        .session(&ProgramValueGraph::default(), ProgramLimits::default())
+        .unwrap();
+    let error = session
+        .invoke(observed.callbacks()["evaluate"], &[])
+        .unwrap_err();
+    assert_eq!(
+        error.kind,
+        poe_optimizer_engine::source_program::ProgramRuntimeErrorKind::UnsupportedCapability
+    );
+    assert!(error.message.contains("ipairs"));
 }
 
 #[test]

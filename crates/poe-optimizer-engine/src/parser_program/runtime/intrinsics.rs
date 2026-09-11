@@ -63,6 +63,45 @@ pub(super) fn finish_method(target: MethodTarget) -> RuntimeResult<()> {
     }
 }
 
+/// Preserve the actual called builtin identity when its result retains another
+/// function. An operation label alone cannot identify the pairs-to-next link.
+pub(super) fn call_bound(
+    operation: ParserProgramIntrinsic,
+    callback: Option<ParserCallbackId>,
+    traversal: &std::collections::BTreeMap<
+        poe_optimizer_data::modifier_parser::ParserTableId,
+        super::super::CompiledTableTraversal,
+    >,
+    arguments: &[V],
+    heap: &mut Heap,
+    patterns: &mut MatchBudget,
+    limits: &ProgramLimits,
+) -> RuntimeResult<Vec<V>> {
+    if operation == ParserProgramIntrinsic::Next {
+        let table = check_table(arguments.first())?;
+        let control = arguments.get(1).unwrap_or(&V::Nil);
+        return match heap.definition_next(table, control, traversal, patterns)? {
+            Some((key, value)) => {
+                result_space(2, heap, limits)?;
+                Ok(vec![key, value])
+            }
+            None => {
+                result_space(1, heap, limits)?;
+                Ok(vec![V::Nil])
+            }
+        };
+    }
+    if operation != ParserProgramIntrinsic::Pairs {
+        return call(operation, arguments, heap, patterns, limits);
+    }
+    let table = check_table(arguments.first())?;
+    let next = callback
+        .and_then(|callback| heap.owner().pairs_next_callback(callback))
+        .ok_or_else(|| Error::unsupported("pairs has no exact retained next callback identity"))?;
+    result_space(3, heap, limits)?;
+    Ok(vec![V::Callback(next), table.clone(), V::Nil])
+}
+
 /// The receiver, if any, has already been checked and prepended to arguments.
 /// Extra argument and raw result cardinalities remain source-visible.
 pub(super) fn call(
@@ -117,6 +156,12 @@ pub(super) fn call(
             let _ = string_argument(arguments.get(1), heap)?;
             Err(Error::unsupported("escaped string.gmatch iterator"))
         }
+        ParserProgramIntrinsic::Pairs => Err(Error::unsupported(
+            "pairs dispatch requires its exact called callback identity",
+        )),
+        ParserProgramIntrinsic::Next => Err(Error::unsupported(
+            "next dispatch requires a compiled observed traversal index",
+        )),
         ParserProgramIntrinsic::Ipairs => {
             check_table(arguments.first())?;
             Err(Error::unsupported("escaped ipairs iterator"))

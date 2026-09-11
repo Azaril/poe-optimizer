@@ -439,3 +439,69 @@ fn source_bound_recursive_helpers_compile_without_inlining_or_losing_owners() {
         );
     }
 }
+
+#[test]
+fn compiled_traversal_indices_share_positions_without_per_session_key_or_table_copies() {
+    use poe_optimizer_data::source_program::*;
+    let (parser, mut data) = program_fixture(1);
+    let mut callback = parser.data().callbacks[data.programs[0].callback.0 as usize - 1].clone();
+    callback.upvalues.clear();
+    data.programs.truncate(1);
+    data.programs[0].callback = ParserCallbackId(1);
+    data.programs[0].bindings.clear();
+    data.programs[0].body = vec![returned(1.0)];
+    data.callbacks = BTreeMap::from([(ParserCallbackId(1), ParserProgramId(1))]);
+    let order = vec![
+        SourceTableKey::Text("z".into()),
+        SourceTableKey::Integer(2),
+        SourceTableKey::Text("a".into()),
+        SourceTableKey::Integer(1),
+    ];
+    let owner = SourceProgramOwner::new_with_context(
+        SourceProgramDefinitions {
+            schema_version: SOURCE_PROGRAM_DEFINITIONS_SCHEMA_VERSION,
+            source: parser.data().source.clone(),
+            tables: vec![SourceTable {
+                fields: BTreeMap::from([
+                    ("z".into(), SourceValue::Number(1.0)),
+                    ("a".into(), SourceValue::Number(2.0)),
+                ]),
+                indexed: BTreeMap::from([
+                    (1, SourceValue::Number(3.0)),
+                    (2, SourceValue::Number(4.0)),
+                ]),
+            }],
+            callbacks: vec![callback],
+            roots: vec![],
+            intrinsics: BTreeMap::new(),
+        },
+        None,
+        SourceProgramContext {
+            iteration: Some(SourceProgramIteration {
+                table_order: BTreeMap::from([(SourceTableId(1), order)]),
+                pairs_next: BTreeMap::new(),
+            }),
+            ..SourceProgramContext::default()
+        },
+    )
+    .unwrap();
+    let plan =
+        CompiledSourcePrograms::new(&SourceProgramCatalog::new(data, owner).unwrap()).unwrap();
+    let cloned = plan.clone();
+    assert!(Arc::ptr_eq(&plan.0, &cloned.0));
+    let index = &plan.0.traversal[&ParserTableId(1)];
+    assert_eq!(index.text.as_ref(), &[2, 0]);
+    assert_eq!(index.integers.as_ref(), &[3, 1]);
+    assert_eq!(
+        index.text.as_ptr(),
+        cloned.0.traversal[&ParserTableId(1)].text.as_ptr()
+    );
+    for lib in [plan, cloned] {
+        let (session, _) = lib
+            .session(&ProgramValueGraph::default(), ProgramLimits::default())
+            .unwrap();
+        assert_eq!(session.allocations().tables, 0);
+        assert_eq!(session.allocations().bytes, 0);
+        assert_eq!(session.allocations().values, 0);
+    }
+}

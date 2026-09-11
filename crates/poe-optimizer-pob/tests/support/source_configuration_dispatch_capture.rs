@@ -4,10 +4,13 @@ const PROBES: &str = include_str!("source_configuration_dispatch.lua");
 const SOURCE_PATHS: &[&str] = &[
     "src/Modules/Common.lua",
     "src/Data/Global.lua",
+    "src/Data/BossSkills.lua",
     "src/Modules/ModTools.lua",
     "src/Modules/ConfigOptions.lua",
     "src/Classes/ConfigTab.lua",
     "src/Classes/EditControl.lua",
+    "src/Classes/DropDownControl.lua",
+    "src/Classes/SearchHost.lua",
     "src/Classes/ControlHost.lua",
     "src/Classes/Control.lua",
     "src/Classes/UndoHandler.lua",
@@ -61,7 +64,10 @@ pub struct Captured {
     pub observed: ObservedSourceSession,
     pub compiled: CompiledSourcePrograms,
     pub probe: Function,
+    pub select: Function,
+    pub apply_indices: BTreeMap<String, usize>,
     pub names: Table,
+    pub dropdown_names: Table,
     pub unsupported: Json,
     pub functions: BTreeMap<usize, Function>,
     pub original_round: Function,
@@ -92,6 +98,7 @@ pub fn capture(
         PROBES.into(),
     );
     let probe: Function = probes.raw_get("state").unwrap();
+    let select: Function = probes.raw_get("select").unwrap();
     let globals = lua.globals();
     let registry: Table = globals
         .raw_get::<Table>("common")
@@ -111,6 +118,7 @@ pub fn capture(
     let controls: Table = config.raw_get("varControls").unwrap();
     let mut callbacks = BTreeMap::new();
     let mut functions = BTreeMap::new();
+    let mut apply_indices = BTreeMap::new();
     let mut definitions = vec![
         selection(
             globals.clone(),
@@ -122,6 +130,8 @@ pub fn capture(
                 "tostring",
                 "tonumber",
                 "round",
+                "pairs",
+                "type",
             ],
             false,
         ),
@@ -135,6 +145,7 @@ pub fn capture(
                 "monsterArmourTable",
                 "monsterEvasionTable",
                 "bossStats",
+                "bossSkills",
             ],
             false,
         ),
@@ -163,16 +174,45 @@ pub fn capture(
     ];
     let mut instances = vec![player.clone(), enemy.clone(), config.clone()];
     let names = lua.create_table().unwrap();
+    let dropdown_names = lua.create_table().unwrap();
     for (i, row) in options.sequence_values::<Table>().enumerate() {
         let row = row.unwrap();
         option_selection.indexed.insert((i + 1) as i64);
-        definitions.push(selection(row.clone(), &["var"], false));
+        let name = row.raw_get::<String>("var").ok();
+        let dropdown = name.as_deref().is_some_and(|name| {
+            ["enemyIsBoss", "enemyDamageType", "presetBossSkills"].contains(&name)
+        });
+        definitions.push(selection(
+            row.clone(),
+            if dropdown { &["var", "list"] } else { &["var"] },
+            false,
+        ));
+        if dropdown {
+            let name = name.unwrap();
+            let control: Table = controls.raw_get(name.as_str()).unwrap();
+            let list: Table = control.raw_get("list").unwrap();
+            assert_eq!(
+                list.to_pointer(),
+                row.raw_get::<Table>("list").unwrap().to_pointer(),
+                "actual dropdown and option definition share one list"
+            );
+            dropdown_names.raw_push(name.clone()).unwrap();
+            dropdown_names.raw_set(name.as_str(), list).unwrap();
+            control_selection.fields.insert(name);
+            projections.push(selection(
+                control.clone(),
+                &["list", "selIndex", "enabled"],
+                true,
+            ));
+            instances.push(control);
+        }
         if let Value::Function(apply) = row.raw_get::<Value>("apply").unwrap() {
             assert_eq!(
                 apply.info().source.as_deref(),
                 Some("@configuration-source-observation.lua")
             );
             let original = primitives.unwrap(&apply, "original");
+            apply_indices.insert(row.raw_get("var").unwrap(), i + 1);
             functions.insert(i + 1, original.clone());
             callbacks.insert(format!("apply.{}", i + 1), original);
         }
@@ -220,6 +260,8 @@ pub fn capture(
             &["NewMod", "ReplaceMod", "AddMod", "ReplaceModInternal"][..],
         ),
         ("EditControl", &["SetPlaceholder"][..]),
+        ("DropDownControl", &["SelByValue"][..]),
+        ("SearchHost", &[][..]),
         ("ConfigTab", &["UpdateLevel"][..]),
         ("ControlHost", &[][..]),
         ("Control", &[][..]),
@@ -247,6 +289,10 @@ pub fn capture(
                     ("enemy".into(), Value::Table(enemy.clone())),
                     ("build".into(), Value::Table(build.clone())),
                     ("names".into(), Value::Table(names.clone())),
+                    (
+                        "dropdown_names".into(),
+                        Value::Table(dropdown_names.clone()),
+                    ),
                 ]),
                 definition_roots: BTreeMap::from([
                     ("options".into(), options),
@@ -255,6 +301,7 @@ pub fn capture(
                     ("SkillType".into(), globals.raw_get("SkillType").unwrap()),
                 ]),
                 definitions: SourceCaptureContext {
+                    capture_iteration: true,
                     projections: definitions,
                     environment: Some(SourceEnvironmentSelection {
                         table: globals.clone(),
@@ -268,6 +315,7 @@ pub fn capture(
                 classes,
                 callbacks: BTreeMap::from([
                     ("probe.state".into(), probe.clone()),
+                    ("probe.select".into(), select.clone()),
                     ("original.round".into(), original_round.clone()),
                 ]),
                 definition_roots: BTreeMap::new(),
@@ -290,7 +338,10 @@ pub fn capture(
         observed,
         compiled,
         probe,
+        select,
+        apply_indices,
         names,
+        dropdown_names,
         unsupported,
         functions,
         round_id,

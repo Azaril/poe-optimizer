@@ -575,6 +575,7 @@ impl SourceProgramOwner {
         data.validate()?;
         closures::validate_declarations(&data, None)?;
         classes.validate(&data)?;
+        iteration::validate(&data, Some(&classes), None)?;
         Ok(Self(OwnerStorage::Standalone {
             definitions: Arc::new(data),
             classes: Some(Arc::new(classes)),

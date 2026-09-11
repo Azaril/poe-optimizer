@@ -25,6 +25,9 @@ pub struct SourceEnvironmentSelection {
 }
 #[derive(Clone, Default)]
 pub struct SourceCaptureContext {
+    /// Capture original Pairs/Next linkage and raw traversal order for complete
+    /// plain immutable definition tables. Disabled captures keep prior outputs.
+    pub capture_iteration: bool,
     pub projections: Vec<SourceTableSelection>,
     pub environment: Option<SourceEnvironmentSelection>,
     /// Exact Lua debug name (without @) to authenticated inventory path.
@@ -64,6 +67,10 @@ pub(super) fn validate_source_aliases(
 }
 impl Graph<'_> {
     pub(super) fn register_projections(&mut self, request: &SourceCaptureContext) -> Result<()> {
+        self.observer.verify_iteration(request.capture_iteration)?;
+        if request.capture_iteration {
+            self.context.iteration = Some(SourceProgramIteration::default());
+        }
         if request.projections.len() > 4096 {
             return Err(error("source table projection count bound"));
         }
@@ -224,23 +231,24 @@ impl Graph<'_> {
             let mut unavailable = BTreeSet::new();
             // Enumerate the complete raw inventory, even values not selected.
             // Deterministic sorting happens only after each row has been charged.
-            for entry in selection.table.clone().pairs::<Value, Value>() {
+            let entries = self.raw_table_entries(&selection.table)?;
+            for (key, value) in &entries {
                 self.projection_row()?;
                 if selected.len() + unavailable.len() >= 50_000 {
                     return Err(error("source table projection row bound"));
                 }
-                let (key, value) = entry?;
-                let key = self.projection_key(key)?;
+                let key = self.projection_key(key.clone())?;
                 let wanted = match &key {
                     SourceTableKey::Text(key) => selection.fields.contains(key),
                     SourceTableKey::Integer(key) => selection.indexed.contains(key),
                 };
                 if wanted {
-                    selected.insert(key, value);
+                    selected.insert(key, value.clone());
                 } else {
                     unavailable.insert(key);
                 }
             }
+            self.store_iteration_order(&selection.table, id, &entries, unavailable.is_empty())?;
             let mut out = SourceTable::default();
             for (key, value) in selected {
                 let value = self.value(value, 1)?;
