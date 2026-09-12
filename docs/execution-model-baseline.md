@@ -231,6 +231,64 @@ executable hashes. The same CLI as the preceding assembly replay applies, with
 three fresh processes. Peak working set remains a whole-process observation, not retained
 or allocated heap attributed to a stage.
 
+## Original modifier observations for the comparison
+
+A bounded source-only test now imports each of the five unchanged complete XML builds into
+pinned PoB, then observes selected item modifiers and controlled query histories. It reuses
+the existing complete-build bootstrap. It implements no alternative evaluator or new data
+schema, and does not resolve the pending choice of prototype boundary.
+
+Windows and Linux (WSL Ubuntu 24.04) each pass all five child cases with 17 selected
+cold-resistance line occurrences
+(4/4/3/4/2 by build). These are source observations, not 17 distinct effect families. Each
+saved item set has 22 explicit slots; PoB expands it to 94 runtime slots. The test verifies
+all saved bindings and the empty defaults instead of equating the two counts. Build 5 keeps
+the same ranged ring in both equipped slots, including their distinct source-slot attribution.
+Its two range replays call the original formatter and parser; the test supplies no numeric
+roll result. All other observed lines are explicitly labelled retained-line component replays,
+not historical parser calls from the import.
+
+The observer captures the private `getRangedModList` function from the original
+`Item.BuildModList` upvalue and verifies that binding after the probes. An exact-function
+call hook records its parser inputs; hooked and unhooked helper results agree. Original
+`setSource`, `ModList.Sum` and `EvalMod` process copied fragments in isolated contexts.
+A resolved false/tie/true condition produces 0/0/7. Updating a live per-stat dependency through
+9/10/19/20/9 produces 0/7/7/14/0 on the same modifier record. These derived probes do not edit
+the originals or rerun PoB's attribute-resolution stage. Stat names, conditions and amounts
+are test inputs, not production build handlers.
+
+Cache probes retain return arity and distinguish nil/no-match from a truthy empty modifier
+list with a remainder. Positive, no-match and empty-result histories cover miss, hit, return
+copy independence, return edits and eviction. Invalid nil/false parser calls are also observed.
+The test checks source-function identities, saved/live selections, raw cache bindings and
+touched scalar contents after restoration. It does not claim restoration of physical cache
+layout, arbitrary nested graphs or allocator history. Each source host is discarded afterward.
+
+Raw slot records and isolated sums are not final actor contributions: later assembly may
+scale or transform them. This test establishes neither an alternative model's parity nor
+full build equivalence, callback/general interaction coverage or throughput. Native coverage
+remains **0/5**. Source observations can support either a domain boundary or the public-parser
+comparison; choosing a model still requires A2 experiments and the A3 discussion.
+
+Reproduce from the repository root, using a fresh absolute report directory:
+
+```powershell
+$env:POE_DOMAIN_MODIFIER_OUTPUT = Join-Path (Get-Location) 'runs/domain-modifiers-new'
+cargo test --locked -p poe-optimizer-pob --test domain_modifier_oracle -- --exact original_domain_modifiers_are_observed_on_all_five_builds --nocapture
+```
+
+`POE_DOMAIN_MODIFIER_TIMEOUT_SECONDS` optionally changes the per-build limit (default 300,
+allowed 1–1800 seconds). Each child runs sequentially in a fresh test process. These processes
+isolate the PoB reference host; they are not part of native candidate evaluation. Reports bind
+the exact source manifest, observer and original XML hashes. Local Windows evidence is
+`runs/a2-domain-oracle/attempt-03/` with `windows-summary.json` in the parent directory.
+Linux evidence is `runs/a2-domain-oracle/linux-01/` and `linux-result.json`; both platforms
+use the same observer and driver bytes. The bounded `additional_observation` payloads match
+exactly for all five platform pairs; this excludes the full bootstrap report and build outputs.
+The comparison is retained in `cross-platform-summary.json`. The two earlier attempts preserve
+harness failures: a mistaken global helper lookup and an
+incorrect equality between saved and runtime slot counts. Neither required production changes.
+
 ## What this tells us, and what remains
 
 The current general source/session machinery is not wired into full native configuration

@@ -16,6 +16,10 @@ The initial [baseline](execution-model-baseline.md),
 [performance inventory](execution-model-performance-inventory.md) are recorded. A1 remains
 open for attribution, general candidate invalidation, source-state and update-effort measurements;
 restricted-profile throughput is not full-build parity or an architecture comparison.
+Bounded [original modifier observations](execution-model-baseline.md#original-modifier-observations-for-the-comparison)
+now make one comparison input executable across all five originals. They preserve the
+separation between source facts, isolated queries and final actor/build behavior. They
+neither select a model nor complete A2.
 
 ## Separate the decisions
 

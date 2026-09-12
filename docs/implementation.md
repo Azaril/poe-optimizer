@@ -144,17 +144,26 @@ The semantic inventory also corrects the Item.lua retry description: after a fai
 combined parse, the fallback reuses the current combined/ranged text. The native loader
 and its existing combined-fallback contract already do that; this was a documentation error.
 
+**A1 source-observation checkpoint:** a bounded reference test now imports all five original
+builds and observes 17 selected item-line occurrences, including both ranged-ring slots in
+build 5. It preserves source attribution, saved/live bindings, positive/no-match/empty parser
+results, cache/copy/error histories and controlled conditional/per-stat queries. Windows and
+Linux (WSL Ubuntu 24.04) each pass all five child cases; the independent source/test review,
+strict target Clippy, formatting and diff checks pass. No production evaluator, schema, dataset or original build changes. See the
+[protocol and limits](execution-model-baseline.md#original-modifier-observations-for-the-comparison).
+These are source facts for the investigation, not an implemented alternative or full native
+build parity; coverage remains **0/5**.
+
 **Resume A1:** profile snapshot internals, allocation/retained state and supported session
 costs, and record update/migration/debugging effort. A prototype-boundary question is
 pending with the owner: typed domain equivalence, complete public-parser compatibility,
 or both as experiments. This is not migration approval. Use the all-five interaction map
-to choose comparable A2 slices; no option has been selected. A read-only candidate is retained
-in `runs/a2-domain-slice-proposal-by-engine.md`: injected stat/condition rules through an
-attributed actor contribution, grounded in selected items from all five originals, with
-live `PerStat` dependencies as an escalation gate. Its proposed probes have not run;
-a scalar contribution is not full defence or build parity. A1 remains incomplete. The unresolved
-modifier-record allocation/copy work is a concrete comparison case, not evidence that an
-alternative already preserves its contract.
+and the now-executable source observations to choose comparable A2 slices; no option has
+been selected. A read-only candidate remains in `runs/a2-domain-slice-proposal-by-engine.md`.
+The new test reaches isolated modifier queries, not the proposed full actor contribution;
+actor scaling/transforms and attribute resolution still need comparable coverage. A1 remains
+incomplete. The unresolved modifier-record allocation/copy work is another concrete comparison
+case, not evidence that an alternative already preserves its contract.
 
 **Historical R2s checkpoint:** source modulo and complete flag-helper execution.
 The neutral source model now admits exact retained `bit.band`, `bit.bor`, `bit.bxor`
