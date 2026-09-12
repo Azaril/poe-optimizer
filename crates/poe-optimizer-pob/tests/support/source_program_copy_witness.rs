@@ -1,8 +1,12 @@
 //! Test-only, bounded inspection of the exact original copyTable activations.
 //! Does not replace functions, modify source state or provide traversal evidence
 //! to native execution. Hooked calls make no JIT/warm-path claim.
+#[allow(dead_code)]
+#[path = "source_program_producer_witness.rs"]
+pub mod producer;
 use mlua::debug::DebugEvent;
 use mlua::{Function, HookTriggers, Lua, MultiValue, Table, Value, VmState};
+use producer::{ProducerBinding, ProducerProbe, ProducerState};
 use std::{cell::RefCell, rc::Rc};
 const MAX_EVENTS: usize = 256;
 const MAX_DEPTH: usize = 32;
@@ -37,10 +41,12 @@ pub struct SourceCopyWitness {
     globals: Table,
     gethook: Function,
     inspect: Function,
+    producer: ProducerProbe,
 }
 #[derive(Debug)]
 pub struct CopyActivation {
     pub ordinal: usize,
+    pub observed_event: usize,
     pub parent: Option<usize>,
     pub depth: usize,
     pub table: Value,
@@ -64,6 +70,8 @@ pub struct CopyWitness {
     pub result: mlua::Result<MultiValue>,
     pub activations: Vec<CopyActivation>,
     pub loops: Vec<CopyLoopWitness>,
+    pub producer: ProducerState,
+    pub producer_binding: Option<ProducerBinding>,
 }
 #[derive(Default)]
 struct State {
@@ -71,6 +79,7 @@ struct State {
     loops: Vec<CopyLoopWitness>,
     active: Vec<usize>,
     error: Option<String>,
+    producer: ProducerState,
 }
 struct HookGuard<'a>(&'a Lua);
 impl Drop for HookGuard<'_> {
@@ -103,13 +112,43 @@ impl SourceCopyWitness {
             globals,
             gethook: original[2].clone(),
             inspect,
+            producer: ProducerProbe::before_source(lua)?,
         })
     }
+    pub fn bind_producer(
+        &self,
+        parser: &Function,
+        target: &Function,
+        source_line: usize,
+    ) -> mlua::Result<ProducerBinding> {
+        self.producer.bind(parser, target, source_line)
+    }
+    #[allow(dead_code)]
     pub fn call(
         &self,
         lua: &Lua,
         parser: &Function,
         actual_copy_table: &Function,
+        args: MultiValue,
+    ) -> mlua::Result<CopyWitness> {
+        self.call_inner(lua, parser, actual_copy_table, None, args)
+    }
+    pub fn call_with_producer(
+        &self,
+        lua: &Lua,
+        parser: &Function,
+        actual_copy_table: &Function,
+        producer_binding: &ProducerBinding,
+        args: MultiValue,
+    ) -> mlua::Result<CopyWitness> {
+        self.call_inner(lua, parser, actual_copy_table, Some(producer_binding), args)
+    }
+    fn call_inner(
+        &self,
+        lua: &Lua,
+        parser: &Function,
+        actual_copy_table: &Function,
+        producer_binding: Option<&ProducerBinding>,
         args: MultiValue,
     ) -> mlua::Result<CopyWitness> {
         if lua.globals().to_pointer() != self.globals.to_pointer() {
@@ -126,14 +165,26 @@ impl SourceCopyWitness {
             .info()
             .line_defined
             .ok_or_else(|| failure("copy witness target has no source lines"))?;
+        if let Some(binding) = producer_binding {
+            if !binding.is_parser(parser) {
+                return Err(failure(
+                    "producer witness belongs to a different parser wrapper",
+                ));
+            }
+            self.producer.verify(binding)?;
+        }
         let state = Rc::new(RefCell::new(State::default()));
         let target = actual_copy_table.clone();
         let inspect = self.inspect.clone();
+        let producer = self.producer.clone();
+        let producer_binding_for_hook = producer_binding.cloned();
         let shared = state.clone();
         lua.set_hook(
             HookTriggers::new().on_calls().on_returns().every_line(),
             move |_, debug| {
-                if debug.function().to_pointer() != target.to_pointer() {
+                let is_copy = debug.function().to_pointer() == target.to_pointer();
+                let is_producer = producer_binding_for_hook.as_ref().is_some_and(|binding| debug.function().to_pointer() == binding.target.to_pointer());
+                if !is_copy && !is_producer {
                     return Ok(VmState::Continue);
                 }
                 if let Some(error) = shared.borrow().error.clone() {
@@ -141,6 +192,11 @@ impl SourceCopyWitness {
                 }
                 let result = (|| -> mlua::Result<()> {
                     let mut state = shared.borrow_mut();
+                    if is_producer {
+                        let count = state.activations.len() + state.loops.len() + state.producer.event_count();
+                        return producer.observe(&mut state.producer, producer_binding_for_hook.as_ref().expect("matched producer target"),
+                            debug.event(), debug.current_line(), MAX_EVENTS.saturating_sub(count), count);
+                    }
                     match debug.event() {
                         DebugEvent::Call | DebugEvent::Line => {
                             let line = debug.current_line();
@@ -151,7 +207,7 @@ impl SourceCopyWitness {
                             {
                                 return Ok(());
                             }
-                            if state.activations.len() + state.loops.len() >= MAX_EVENTS {
+                            if state.activations.len() + state.loops.len() + state.producer.event_count() >= MAX_EVENTS {
                                 return Err(failure("copy witness event bound"));
                             }
                             let frames: Table = inspect.call(target.clone())?;
@@ -197,8 +253,10 @@ impl SourceCopyWitness {
                                     None
                                 };
                                 let ordinal = state.activations.len();
+                                let observed_event = state.activations.len() + state.loops.len() + state.producer.event_count();
                                 state.activations.push(CopyActivation {
                                     ordinal,
+                                    observed_event,
                                     parent,
                                     depth,
                                     table,
@@ -269,10 +327,166 @@ impl SourceCopyWitness {
         if let Some(error) = state.error.take() {
             return Err(failure(error));
         }
+        if let Some(binding) = producer_binding {
+            self.producer.verify(binding)?;
+        }
         Ok(CopyWitness {
             result,
             activations: std::mem::take(&mut state.activations),
             loops: std::mem::take(&mut state.loops),
+            producer: std::mem::take(&mut state.producer),
+            producer_binding: producer_binding.cloned(),
         })
+    }
+}
+
+#[cfg(test)]
+mod producer_tests {
+    use super::*;
+    const COPY: &str = r#"function copyTable(tbl, noRecurse)
+    local out = {}
+    for k, v in pairs(tbl) do
+        if not noRecurse and type(v) == "table" then
+            out[k] = copyTable(v)
+        else
+            out[k] = v
+        end
+    end
+    return out
+end"#;
+    const PARSER: &str = r#"local function parseMod(replace)
+    local modList = {}
+    for i,name in ipairs({'same','same'}) do
+        modList[i] = { name=name }
+        if replace then modList[i].extra=1 end
+    end
+    if replace then modList[1] = { child=modList[1] } end
+    return modList
+end
+return function(replace)
+    local unused = parseMod(false)
+    return copyTable(parseMod(replace))
+end, parseMod"#;
+
+    #[test]
+    fn actual_producer_events_keep_equal_distinct_repeated_and_replaced_rows() {
+        let lua = unsafe { Lua::unsafe_new() };
+        let witness = SourceCopyWitness::before_source(&lua).unwrap();
+        lua.load(COPY).exec().unwrap();
+        let copy: Function = lua.globals().raw_get("copyTable").unwrap();
+        let (parser, inner): (Function, Function) = lua.load(PARSER).eval().unwrap();
+        let binding = witness.bind_producer(&parser, &inner, 5).unwrap();
+        let observed = witness
+            .call_with_producer(
+                &lua,
+                &parser,
+                &copy,
+                &binding,
+                MultiValue::from_vec(vec![Value::Boolean(true)]),
+            )
+            .unwrap();
+        assert!(observed.result.is_ok());
+        assert!(
+            observed
+                .producer_binding
+                .as_ref()
+                .unwrap()
+                .is_parser(&parser)
+        );
+        assert_eq!(observed.producer.activations.len(), 2);
+        assert_eq!(observed.producer.stores.len(), 4);
+        let stores = &observed.producer.stores;
+        assert_eq!(stores[0].name, stores[1].name);
+        assert_ne!(
+            stores[0].table, stores[1].table,
+            "equal rows are distinct source objects"
+        );
+        for (index, store) in stores.iter().enumerate() {
+            assert_eq!(store.activation, index / 2);
+            assert_eq!(store.index, Value::Integer((index % 2 + 1) as i64));
+            let copies = observed
+                .activations
+                .iter()
+                .filter(|a| a.table == Value::Table(store.table.clone()))
+                .collect::<Vec<_>>();
+            if index < 2 {
+                assert!(copies.is_empty(), "first parse attempt is discarded");
+            } else {
+                assert_eq!(copies.len(), 1);
+                assert!(store.observed_event < copies[0].observed_event);
+            }
+        }
+        assert_ne!(
+            stores[2].list.raw_get::<Table>(1).unwrap(),
+            stores[2].table,
+            "a later wrapper replacement cannot erase the observed old identity"
+        );
+        assert_eq!(stores[3].list.raw_get::<Table>(2).unwrap(), stores[3].table);
+        assert!(
+            witness
+                .gethook
+                .call::<MultiValue>(())
+                .unwrap()
+                .front()
+                .is_some_and(|v| matches!(v, Value::Nil))
+        );
+    }
+
+    #[test]
+    fn producer_binding_rejects_an_equal_distinct_function_and_hook_cleans_up() {
+        let lua = unsafe { Lua::unsafe_new() };
+        let witness = SourceCopyWitness::before_source(&lua).unwrap();
+        lua.load(COPY).exec().unwrap();
+        let copy: Function = lua.globals().raw_get("copyTable").unwrap();
+        let (parser, inner): (Function, Function) = lua.load(PARSER).eval().unwrap();
+        let (_, other): (Function, Function) = lua.load(PARSER).eval().unwrap();
+        assert!(witness.bind_producer(&parser, &other, 5).is_err());
+        let distinct_wrapper: Function = lua
+            .load("local parseMod=...; return function(v) return parseMod(v) end")
+            .call(inner.clone())
+            .unwrap();
+        let exact = witness.bind_producer(&parser, &inner, 5).unwrap();
+        assert!(
+            witness
+                .call_with_producer(&lua, &distinct_wrapper, &copy, &exact, MultiValue::new())
+                .is_err(),
+            "an equal inner function cannot bind a different outer wrapper"
+        );
+        let binding = witness.bind_producer(&parser, &inner, 4).unwrap();
+        // Before the store, local modList[i] is absent. This collection failure
+        // must remain visible and still remove the shared hook.
+        assert!(
+            witness
+                .call_with_producer(
+                    &lua,
+                    &parser,
+                    &copy,
+                    &binding,
+                    MultiValue::from_vec(vec![Value::Boolean(false)])
+                )
+                .is_err()
+        );
+        assert!(
+            witness
+                .gethook
+                .call::<MultiValue>(())
+                .unwrap()
+                .front()
+                .is_some_and(|v| matches!(v, Value::Nil))
+        );
+        let good = witness.bind_producer(&parser, &inner, 5).unwrap();
+        assert!(
+            witness
+                .call_with_producer(
+                    &lua,
+                    &parser,
+                    &copy,
+                    &good,
+                    MultiValue::from_vec(vec![Value::Boolean(false)])
+                )
+                .unwrap()
+                .result
+                .is_ok()
+        );
     }
 }

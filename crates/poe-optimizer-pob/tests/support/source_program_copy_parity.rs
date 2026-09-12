@@ -2,6 +2,7 @@
 use super::*;
 use sha2::{Digest, Sha256};
 
+#[allow(clippy::too_many_arguments)]
 pub(super) fn compare(
     pair: &mut Pair,
     source: &copy_witness::CopyWitness,
@@ -10,7 +11,14 @@ pub(super) fn compare(
     witness: &TraversalFailureWitness,
     error: &ProgramRuntimeError,
     allocation_origin: &TableAllocationOrigin,
+    original_constructor: &ConstructorDiagnosticWitness,
 ) -> Json {
+    let producer_binding = source
+        .producer_binding
+        .as_ref()
+        .expect("enabled producer observation");
+    original_constructor.verify_unchanged().unwrap();
+    assert_eq!(original_constructor.function(), &producer_binding.target);
     let native_origin = describe_origin(pair, allocation_origin);
     let TableAllocationOrigin::Expression(origin) = allocation_origin else {
         unreachable!("validated native expression origin");
@@ -102,15 +110,58 @@ pub(super) fn compare(
             "no_recurse":observation::canonical(&observation::capture(std::slice::from_ref(&activation.no_recurse))),
             "loop_observations":loops})
     }).collect::<Vec<_>>();
+    let producer_stores = source.producer.stores.iter().map(|store| {
+        let post_store_proof = producer_proof::post_store(original_constructor.report(), store)
+            .expect("exact original post-store continuation and register binding");
+        let actual = Value::Table(store.table.clone());
+        let matches = matching.iter().filter(|activation| activation.table == actual).map(|activation| {
+            assert!(store.observed_event < activation.observed_event, "producer row must predate its copy input");
+            activation.ordinal
+        }).collect::<Vec<_>>();
+        let current: Value = store.list.raw_get(store.index.clone()).unwrap();
+        let joint = observation::canonical(&observation::capture(&[
+            source_row.clone(), Value::Table(store.list.clone()), actual.clone(), current.clone()]));
+        json!({"ordinal":store.ordinal,"observed_event":store.observed_event,"activation":store.activation,
+            "source_line":store.source_line,"index":observation::canonical(&observation::capture(std::slice::from_ref(&store.index))),
+            "name":observation::canonical(&observation::capture(std::slice::from_ref(&store.name))),
+            "local_slots":{"modList":store.list_slot,"i":store.index_slot,"name":store.name_slot},
+            "matching_copy_activations":matches,"current_list_slot_is_observed_table":current==actual,
+            "post_call_joint_graph":joint,"post_store_proof":post_store_proof})
+    }).collect::<Vec<_>>();
+    assert!(
+        producer_stores
+            .iter()
+            .any(|store| !store["matching_copy_activations"]
+                .as_array()
+                .unwrap()
+                .is_empty()),
+        "an actual retained producer row must join directly to the failed source copy input"
+    );
+    let producer_activations = source
+        .producer
+        .activations
+        .iter()
+        .map(|activation| {
+            json!({
+        "ordinal":activation.ordinal,"observed_event":activation.observed_event,
+        "parent":activation.parent,"depth":activation.depth})
+        })
+        .collect::<Vec<_>>();
+    let producer_observation = json!({"capture_slot":producer_binding.capture_slot,
+        "source_line":producer_binding.source_line,"activations":producer_activations,"stores":producer_stores,
+        "actual_wrapper_capture_checked_before_and_after":true,"direct_source_table_identity_join":true,
+        "contents_timing":"post-call final state of retained source identities; not constructor-completion snapshots",
+        "original_post_store_line_region_verified":true,"layout_admitted":false,
+        "constructor_diagnostic":original_constructor.report(),"original_template_unchanged_across_call":true});
     let frames = witness.frames.iter().map(|frame| json!({"activation":frame.activation,
         "parent_activation":frame.parent_activation,"callback":frame.callback,"location":frame.location,
         "declaration":pair.observed.owner().callback(frame.callback).map(|callback|&callback.kind)})).collect::<Vec<_>>();
     json!({"joint_native_graph":graph,"paths":paths,"joint_input_identity_compared":true,
         "native_frames":frames,"copy_depth":copy_depth,"matching_source_activations":activations,
         "total_source_copy_activations":source.activations.len(),"total_source_loop_observations":source.loops.len(),
-        "source_function_identity_checked":true,"native_callback_bound_to_source_function":true,"allocation_origin_proven":false,
-        "native_expression_origin":native_origin,"allocation_handle_identity_compared":true,"original_lua_producer_observed":false,
-        "scope":"native Next input/control, source copy input identity/alias/depth, and exact native Table-expression origin; original Lua allocation remains unobserved; line-local controls are not intercepted Next arguments; no source order supplied to native; no warm-path claim"})
+        "source_function_identity_checked":true,"native_callback_bound_to_source_function":true,"allocation_origin_proven":true,
+        "original_producer_observation":producer_observation,"native_expression_origin":native_origin,"allocation_handle_identity_compared":true,"original_lua_producer_observed":true,
+        "scope":"native allocation and actual original producer/store/copy identity with authenticated constructor instruction/template; no physical layout admission; line-local controls are not intercepted Next arguments; no source order supplied to native; no warm-path claim"})
 }
 
 fn describe_origin(pair: &Pair, origin: &TableAllocationOrigin) -> Json {
@@ -229,6 +280,71 @@ fn describe_origin(pair: &Pair, origin: &TableAllocationOrigin) -> Json {
         "seed_status":seed_status,"constructor_site":sites.first(),
         "same_compiled_catalog":true,"exact_table_expression":true,
         "source_function_digest_checked":true,
-        "scope":"native allocation identity and retained compiled expression; source text is authenticated but original Lua allocation/store event is not observed; seed presence is not current traversal proof"
+        "scope":"native allocation identity and retained compiled expression; this native witness alone does not observe the original Lua allocation/store event; seed presence is not current traversal proof"
     })
+}
+
+pub(super) fn inspect_original_constructor(
+    pair: &Pair,
+    origin: &TableAllocationOrigin,
+) -> ConstructorDiagnosticWitness {
+    let TableAllocationOrigin::Expression(origin) = origin else {
+        panic!("actual native origin is required")
+    };
+    let vendor =
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../vendor/path-of-building-poe2");
+    let sources = pair
+        .observed
+        .owner()
+        .source()
+        .files
+        .keys()
+        .map(|path| {
+            let text = if path == PATH {
+                TEXT.to_owned()
+            } else {
+                poe_optimizer_pob::source::read_verified_text(&vendor, path).unwrap()
+            };
+            (path.clone(), text)
+        })
+        .collect();
+    let target = pair
+        .constructor_target
+        .as_ref()
+        .expect("pre-observation exact original producer target");
+    let observed = target
+        .inspect(
+            &sources,
+            pair.observed.constructor_observations().unwrap(),
+            pair.compiled.catalog(),
+            ConstructorDiagnosticRequest {
+                callback: origin.callback,
+                expression: origin.location,
+                continuation_line: Some(6974),
+            },
+            ConstructorDiagnosticLimits::default(),
+        )
+        .unwrap();
+    let witness = match observed {
+        ConstructorDiagnostic::Observed(witness) => *witness,
+        ConstructorDiagnostic::Unavailable(reason) => {
+            panic!("exact original constructor unavailable: {reason}")
+        }
+    };
+    assert_eq!(witness.report().callback, origin.callback);
+    assert_eq!(witness.report().expression, origin.location);
+    assert_eq!(
+        witness.report().provenance,
+        origin
+            .catalog()
+            .for_callback(origin.callback)
+            .unwrap()
+            .provenance
+    );
+    assert!(std::ptr::eq(
+        witness.catalog().data(),
+        origin.catalog().data()
+    ));
+    witness.verify_unchanged().unwrap();
+    witness
 }

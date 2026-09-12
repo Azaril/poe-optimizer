@@ -18,10 +18,10 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-The A1 investigation below is the current resume point. Source-session lifecycle and dataset
-ownership are measured separately. R2u now identifies the native Table expression behind the
-remaining copy failure; it adds diagnostics, not traversal capability. Historical sections
-retain their original validation scope.
+The A1 investigation below is the current resume point. Source-session timing and requested
+allocation layouts are measured separately from dataset ownership. R2v now authenticates the
+original template/producer behind the remaining copy failure; it adds source evidence, not
+traversal capability. Historical sections retain their original validation scope.
 
 **Architecture review in progress:** [A1-A4 execution-model investigation](#execution-model-investigation-a1-a4)
 compares the current interpreter with a domain DSL, data-driven rules, native Rust
@@ -34,7 +34,32 @@ Continue measuring costs before extending general Lua compatibility into further
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
 
-**R2u checkpoint: native allocation provenance.** A bounded opt-in arena now binds actual
+**R2v checkpoint: original constructor and producer identity.** An opt-in pre-observation
+Function ticket now binds the actual source function to its observed owner/callback. A bounded
+query authenticates the exact TDUP instruction and template, even though keyed constructor
+layout remains unsupported. All 30 real positive-miss cases join that source allocation/store
+to the failed copy input through actual table identity. The 35 retained row-store observations
+preserve the two added-fire records; synthetic tests also cover equal distinct records, two
+parser attempts, row replacement and wrong-wrapper rejection.
+
+The original site is TDUP PC 1111, register 34, constant -93 with five self-marker named keys.
+TSETV PC 1147 and the complete line-6974 region (PCs 1148–1158) bind to the observed local slots.
+The hook's exact PC is not claimed. Template contents are checked before/after the parse;
+retained row contents are post-call. Physical layout and native traversal remain unsupported.
+See [source evidence and next dependency](execution-model-baseline.md#original-constructor-and-producer-checkpoint).
+
+**Validation:** 127 source-program unit tests, eight scanner tests (ten original bootstraps),
+six copy-witness tests, and all five allocation-lifecycle children pass. Strict workspace/native
+lint, portable libraries and formatting pass. Report-only repairs and final producing binaries
+are retained in `runs/a1-producer-01/`. Data, schema, dependencies, supplied inputs and PoB pin
+are unchanged. Full native original-build coverage remains **0/5**.
+
+**Next R2v step:** evaluate a generic reserved-key mutation/traversal contract with actual
+tail-result evidence and explicit invalidation, keeping the interpreter compatibility cost
+visible in A1/A2. Five matching final keys cannot substitute for tail cardinality or physical
+capacity evidence. Complete uncached parsing and full build activation remain required.
+
+**Earlier R2u checkpoint: native allocation provenance.** A bounded opt-in arena now binds actual
 allocated tables to the exact compiled catalog, callback and Table-expression range before
 field evaluation. Records survive calls until disabled/restarted; missing evidence remains
 explicit. Returned origins preserve catalog and table identity after diagnostic teardown.
@@ -55,7 +80,7 @@ also pass all five children as described below. Data, dependencies, supplied inp
 pin are unchanged. [Evidence and exact scope](execution-model-baseline.md#native-allocation-origin-checkpoint)
 are retained in `runs/a1-sessions-01/`.
 
-**Next R2u step:** observe the original producer/store at this now-known expression and
+**R2u follow-up (advanced by R2v above):** observe the original producer/store at this now-known expression and
 join its actual table to the later copy input; authenticate the original opcode/template
 rather than inferring it from absent metadata. Then model the required generic layout and
 continue complete public-parser returns and whole-build activation. Keep this dependency
@@ -259,12 +284,20 @@ not repeated throughput samples. [Protocol and phase table](execution-model-base
 record all limits. Attempt 01 passed but omitted workload identifiers; final attempt 02 is
 the published measurement, with earlier evidence preserved.
 
-**Resume A1:** extend the measured private-state lifecycle with actual allocation accounting,
-general candidate invalidation/reuse and a real effect-family or reviewed upstream update.
+**A1 private-session allocation checkpoint:** the lifecycle harness now measures requested
+Rust allocation traffic, live-byte changes and peaks outside reporting work. Across five
+originals, median first import requests 104,461,684 bytes and retains 59,218,964; deep input
+clone retains 21,688,656. Shared library/handle aliases allocate zero in these runs. The isolated
+allocator self-check and all source-derived histories pass. These are process-wide requested
+layouts, not RSS, candidate throughput or an architecture winner. [Protocol and table](execution-model-baseline.md#requested-allocation-layouts-for-private-sessions)
+retain differences in source acquisitions and distinguish instrumented timings from the prior run.
+
+**Resume A1:** extend the measured private-state lifecycle with source/loader allocation
+attribution, general candidate invalidation/reuse and a real effect-family or reviewed upstream update.
 There is no session clone/reset API; importing additional state is not reset. All five inputs
 selected the same initialized cache-hit key in this run, so broader interaction coverage
-remains essential. Per-stage loader allocation also remains open. The R2u original-producer
-observation is the next concrete parser dependency; no additional effect family or complete
+remains essential. Per-stage loader allocation also remains open. The R2v reserved-key/tail
+mutation contract is the next concrete parser dependency; no additional effect family or complete
 original build has been admitted. A1 remains incomplete.
 
 A prototype-boundary question is pending with the owner: typed domain equivalence, complete public-parser compatibility,
@@ -1766,8 +1799,9 @@ defines the alternatives, constraints and evidence required for a decision.
   trusted-key decode preserves loaded data and reduces measured first-load time. Dataset
   allocation/ownership now distinguishes owned snapshot copies, shared handles and catalog
   teardown. Source-session compilation/import/clone/restart/drop and finite public-call
-  histories are now measured after source-host destruction. Allocation by loader stage/private
-  session, general invalidation and real upstream/effect-family update costs remain open.
+  histories and private-session requested layouts are now measured after source-host destruction.
+  Per-stage loader/source allocations, general invalidation and real upstream/effect-family
+  update costs remain open.
   Supported balance/identity repair and unchanged-pin extraction have retained
   successful replays, including source-edit rejection; they do not complete A1.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,

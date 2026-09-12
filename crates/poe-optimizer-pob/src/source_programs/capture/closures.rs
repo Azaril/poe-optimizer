@@ -11,7 +11,7 @@ pub(super) struct Reflection {
     profile: SourceTableRuntimeProfile,
     info: Function,
     bytecode: Function,
-    constant: Function,
+    pub(super) constant: Function,
     uvname: Function,
 }
 #[derive(Default)]

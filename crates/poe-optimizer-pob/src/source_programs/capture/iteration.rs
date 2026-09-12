@@ -4,7 +4,7 @@ use mlua::MultiValue;
 
 pub(super) struct Primitives {
     pairs: Function,
-    next: Function,
+    pub(super) next: Function,
     ipairs: Function,
     ipairs_aux: Function,
 }

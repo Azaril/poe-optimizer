@@ -612,6 +612,52 @@ remain in attempt 01. Only the final attempt is counted here. Two earlier lint f
 limited to an unused extraction import and a constant release-mode assertion. The targeted
 Clippy/release rebuild and final all-five replay pass. No additional full native build is admitted.
 
+### Requested allocation layouts for private sessions
+
+The lifecycle harness now wraps the test executable's Rust `System` allocator. Every measured
+phase records successful/failed allocation calls, full requested/released traffic, signed
+live-byte change and interval peak. Counting starts at process startup; dropping an allocation
+from an earlier phase therefore produces a valid negative delta. Report strings and vector
+growth occur after the interval closes. The same forwarding implementation passes an isolated
+alloc/zeroed/grow/shrink/free self-check: 152 bytes requested and released, 96-byte peak, zero
+final live storage, plus a separate pre-interval free with a -32-byte delta.
+
+Five fresh original-build processes pass the existing histories after verified Lua-host
+teardown. Across these distinct inputs, the median requested byte counts are:
+
+| Phase | Requested traffic | Live-byte change | Peak growth above phase start |
+| --- | ---: | ---: | ---: |
+| Compile source programs | 3,167,532 | 1,920,700 | 1,942,148 |
+| Deep-clone coherent input | 21,688,656 | 21,688,656 | 21,688,656 |
+| First private import | 104,461,684 | 59,218,964 | 66,980,572 |
+| Restart by fresh import | 104,461,684 | 59,218,964 | 66,980,572 |
+| Drop final compiled library/definitions | 0 | -4,841,800 | 0 |
+
+Compiled-library and session-handle alias cloning/dropping record zero allocator calls and
+zero byte changes in all five runs. This distinguishes shared handles from private state;
+it does not require fresh import before each candidate or establish parallel throughput.
+The private-session representation and reuse strategy remain important A2 comparison inputs.
+First initialized cache hits request 15,527,288–15,560,024 bytes, while the repeat hit requests
+11,128 bytes in every run. Positive misses still ending in Unsupported request
+12,254,890–12,936,745 bytes. These call intervals expose preparation/reuse costs in the captured
+parser histories; unsupported misses do not represent successful evaluation throughput.
+
+These are requested Rust layouts, not allocator usable sizes, Lua/C allocations, physical
+memory or RSS. The counters are process-wide; no native workers run during these serial
+measurements, and snapshots assume quiescent boundaries. Atomic accounting also changes the
+elapsed timings. The retained scalar inputs, expected-result histories and phase sequences
+match the prior timing corpus, but owner/program hashes and some late cumulative VM charges
+differ between source acquisitions. This is not an instrumentation-only timing comparison.
+Budget charges still have their separate meaning; they are not live storage.
+
+Evidence is `runs/a1-session-allocations-01/` and `runs/a1-producer-01/lifecycle-01/`, executable
+SHA-256 `8d7b3f94c31ee642b3b063913e1ddaf9c6b212c05a6f41f272d71a098c0c011e`.
+The same ignored lifecycle command above reproduces the allocation protocol with a fresh
+output directory. Outcomes remain 55 native public successes, 10 matched source errors and
+30 positive source parses that are still native Unsupported. Full native original coverage
+remains **0/5**. Per-stage loader/observation allocations and general candidate invalidation
+are not measured by these private-session intervals.
+
 ## Native allocation-origin checkpoint
 
 An independent, opt-in native diagnostic now records each executed Table expression against
@@ -639,10 +685,53 @@ workspace/native lint and portable library compilation pass. Evidence is
 `runs/a1-sessions-01/{engine-validation/,scanner-01/,origin-summary.json}`. The scanner binary
 SHA-256 is `9303504dff5861203484043d93281280ac3a5b81752fe26570db5836778c67a7`.
 
-The next source evidence must observe the actual original producer/store and join its table
-identity to the later copy input, then authenticate the original opcode/template metadata.
-A native source-expression witness alone cannot establish original Lua allocation or traversal
-layout. Successful uncached public parsing and full native build coverage remain open: **0/5**.
+That checkpoint left the original producer/store and opcode/template unobserved. The next
+checkpoint closes that identity gap. A native source-expression witness alone still cannot
+establish original Lua allocation or traversal layout.
+
+## Original constructor and producer checkpoint
+
+An explicit pre-observation diagnostic ticket now retains the exact actual Lua Function.
+The source observer binds that ticket to its owner/callback during normal graph observation;
+a later same-name, same-span or equivalent function cannot substitute for it. A bounded query
+maps the complete lexical constructor inventory to original instructions, including rejected
+keyed sites. The optional template witness retains its actual host identity, original raw
+key order and scalar/self-marker rows. Normal captures retain no extra diagnostic Lua handles.
+The diagnostic is separate from shared constructor admission and grants no native layout.
+
+All 30 positive-miss cases now bind the native expression to the original TDUP at PC 1111
+(word 6038069, destination register 34, constant index -93). Its actual template contains five
+reserved named keys: name, type, value, flags and keywordFlags, each with an exact self-marker.
+The query occurs before the hooked parse and verifies unchanged identity/content afterward.
+Raw template order varies across fresh hosts; every matched source copy in this corpus uses
+that host's observed five-key sequence. This is observed behavior, not a general traversal rule.
+
+The same scoped hook observes the exact inner parser's visible modList/i/name locals, retains
+all source row identities, and joins them directly to later copy inputs. Original TSETV at
+PC 1147 stores the constructor register through list/index registers 28/32, matching debug-local
+slots 29/33. A separate conservative check authenticates the complete contiguous source-line
+6974 region, PCs 1148–1158: no alternate entry bypasses allocation/store and no intervening
+operation overwrites the constructor register. The hook reveals a line, not an exact PC;
+retained row contents are serialized after the call, not at constructor completion.
+
+There are 30 producer activations and 35 row-store observations: added-fire damage creates
+two records per build. Only 30 records join the particular failed copy input. Synthetic cases
+also preserve equal distinct records, repeated parser calls and later row replacements.
+Combined event/depth/text limits, sticky errors, exact wrapper identity and scoped hook cleanup
+remain enforced. Source execution is interpreted after jit.off/flush, with no warm-path claim.
+
+The 127 source-program unit tests include five new diagnostic tests. Eight scanner tests
+cover both observation modes on all five originals; six standalone copy-witness tests pass.
+Workspace/native strict lint, portable libraries and formatting pass. The final scanner
+report corrects a stale prior `allocation_origin_proven` flag; attempt 01 remains retained,
+with final evidence under `runs/a1-producer-01/scanner-02/`. No dataset/schema/dependency or
+supplied-build change is made, and full native original coverage remains **0/5**.
+
+The next semantic dependency is reserved-key template traversal and mutation history. Before
+admitting a generic family, prove the variable tail's actual result count and writes, define
+invalidation for new/deleted keys and array growth, and compare this compatibility cost in
+A1/A2. Final absence of numeric keys does not prove an empty TSETM tail or physical capacity.
+No source order is supplied as a runtime fallback, and no physical table layout is admitted.
 
 ## Original modifier observations for the comparison
 
@@ -719,8 +808,8 @@ A1 remains open for these measurements and decisions:
 2. Extend the measured restricted admission/reuse boundary to representative interaction
    histories and complete builds as supported. Scoring, search quality, arbitrary text edits
    and general incremental invalidation still lack equivalent workload measurements.
-3. Extend the finite cache-hit/no-match/miss/failure lifecycle measurements with actual
-   allocation accounting and representative invalidation/reuse histories. An unsupported
+3. Extend the measured cache-hit/no-match/miss/failure lifecycle and requested allocations
+   with representative invalidation/reuse histories and source-observation attribution. An unsupported
    positive parse still has no successful native throughput to report.
 4. Extend the completed balance/identity-repair and unchanged-pin extraction replays to a
    real upstream or effect-family update. Record code/data changes, migration/debugging effort

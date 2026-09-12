@@ -119,6 +119,16 @@ pub(super) fn run(
     pair: &mut Pair,
 ) -> Json {
     let copy_table = pair.copy_table.clone();
+    let original_inner = primitives
+        .captured_value(parser, "parseMod")
+        .as_function()
+        .unwrap()
+        .clone();
+    // This is a pinned-source oracle seam. The exact original instruction mapping
+    // is checked separately before a producer/store claim is published.
+    let producer_binding = copy_witness
+        .bind_producer(parser, &original_inner, 6974)
+        .unwrap();
     assert_eq!(
         lua.globals().raw_get::<Function>("copyTable").unwrap(),
         copy_table
@@ -333,11 +343,41 @@ pub(super) fn run(
         );
         cache.raw_set(key.clone(), Value::Nil).unwrap();
         replace(pair, &key, &Value::Nil);
+        let args = pair.args(&[key.clone(), Value::Boolean(false)]);
+        pair.session
+            .enable_traversal_diagnostics(TraversalDiagnosticLimits {
+                max_frames: 128,
+                max_activations: 1_000_000,
+            })
+            .unwrap();
+        pair.session
+            .enable_allocation_diagnostics(AllocationDiagnosticLimits { max_records: 4096 })
+            .unwrap();
+        let result = pair.call("original.parser", &args);
+        let traversal_witness = pair.session.take_traversal_failure();
+        // Query the actual failed table while allocation records are enabled.
+        // The returned witness retains its exact compiled catalog after teardown.
+        let allocation_origin = traversal_witness.as_ref().map(|witness| {
+            pair.session
+                .table_allocation_origin(&witness.table)
+                .expect("same-session failure table origin")
+        });
+        pair.session.disable_allocation_diagnostics();
+        pair.session.disable_traversal_diagnostics();
+        let original_constructor = copy_parity::inspect_original_constructor(
+            pair,
+            allocation_origin
+                .as_ref()
+                .expect("native allocating expression"),
+        );
+        assert_eq!(original_constructor.function(), &producer_binding.target);
+        original_constructor.verify_unchanged().unwrap();
         let observed_copy = copy_witness
-            .call(
+            .call_with_producer(
                 lua,
                 parser,
                 &copy_table,
+                &producer_binding,
                 MultiValue::from_vec(vec![key.clone(), Value::Boolean(false)]),
             )
             .unwrap();
@@ -370,27 +410,6 @@ pub(super) fn run(
         let original_result = observation::canonical(&observation::capture(&source));
         let original_cache_row =
             observation::canonical(&observation::capture(std::slice::from_ref(&source_row)));
-        let args = pair.args(&[key.clone(), Value::Boolean(false)]);
-        pair.session
-            .enable_traversal_diagnostics(TraversalDiagnosticLimits {
-                max_frames: 128,
-                max_activations: 1_000_000,
-            })
-            .unwrap();
-        pair.session
-            .enable_allocation_diagnostics(AllocationDiagnosticLimits { max_records: 4096 })
-            .unwrap();
-        let result = pair.call("original.parser", &args);
-        let traversal_witness = pair.session.take_traversal_failure();
-        // Query the actual failed table while allocation records are enabled.
-        // The returned witness retains its exact compiled catalog after teardown.
-        let allocation_origin = traversal_witness.as_ref().map(|witness| {
-            pair.session
-                .table_allocation_origin(&witness.table)
-                .expect("same-session failure table origin")
-        });
-        pair.session.disable_allocation_diagnostics();
-        pair.session.disable_traversal_diagnostics();
         let native_row = lookup(pair, &key);
         let prefix = pair.plain(std::slice::from_ref(&native_row));
         let absent = observation::canonical(&observation::capture(&[Value::Nil]));
@@ -454,6 +473,7 @@ pub(super) fn run(
                     allocation_origin
                         .as_ref()
                         .expect("queried allocation origin"),
+                    &original_constructor,
                 );
                 (None, Some(frontier(pair, &error)))
             }

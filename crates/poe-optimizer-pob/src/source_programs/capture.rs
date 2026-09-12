@@ -14,9 +14,9 @@ use std::collections::BTreeMap;
 
 mod classes;
 pub(crate) mod closures;
-mod constructors;
+pub(crate) mod constructors;
 pub use closures::ObservedSourceClosureCreations;
-pub use constructors::ObservedSourceConstructors;
+pub use constructors::{ObservedSourceConstructors, diagnostic::*};
 mod context;
 mod iteration;
 mod session;
@@ -45,6 +45,8 @@ pub struct SourceClosureObserver {
     iterator_primitives: iteration::Primitives,
     constructor_reflection: Option<constructors::Reflection>,
     closure_reflection: Option<closures::Reflection>,
+    constructor_diagnostic_targets:
+        std::cell::RefCell<Vec<std::rc::Weak<constructors::diagnostic::Target>>>,
 }
 
 /// Complete observed dependency graph. Named callback roots are not executable
@@ -157,6 +159,7 @@ impl SourceClosureObserver {
             iterator_primitives,
             constructor_reflection: None,
             closure_reflection: None,
+            constructor_diagnostic_targets: Default::default(),
         };
         observer.verify(lua)?;
         Ok(observer)

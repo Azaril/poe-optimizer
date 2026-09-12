@@ -1,7 +1,9 @@
 //! Map actual bytecode evidence to exact complete lowered source expressions.
 use super::*;
+mod diagnostic;
 mod lexical;
 use capture::ObservedSourceConstructors;
+pub(super) use diagnostic::diagnostic_site;
 use poe_optimizer_data::source_program::{
     SOURCE_PROGRAM_CONSTRUCTORS_MAX_SITES, SOURCE_PROGRAM_CONSTRUCTORS_MAX_TEXT_BYTES,
     SOURCE_PROGRAM_CONSTRUCTORS_SCHEMA_VERSION, SourceProgramConstructor,

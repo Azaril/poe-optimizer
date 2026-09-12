@@ -117,6 +117,19 @@ original producer observation to the actual source object separately. An absent 
 site is not a zero-capacity seed, proof of TDUP, or evidence that a previous layout was lost.
 Present constructor metadata still does not prove that later writes retained traversal facts.
 
+The optional PoB constructor diagnostic uses a pre-observation ticket for the exact actual
+Function. The observer binds it to its owner/callback; a later equivalent function is rejected.
+The bounded query retains the original opcode/line window, complete continuation-line PCs,
+branch inventory and optional template identity with raw scalar/self-marker rows. Its report
+is data only; `verify_unchanged` uses retained host handles. Normal captures do not retain
+extra diagnostic Lua handles, and this seam does not change native constructor admission.
+
+A source producer claim additionally requires actual table identity and a control-flow/register
+check for the observed event. The current paired oracle proves the store dominates the whole
+continuation line, not the hook's exact PC. Template reads occur before the call and are
+rechecked afterward; producer contents are the final state of retained objects. Physical
+capacity, variable-tail cardinality and arbitrary insertion/deletion history remain separate.
+
 ## Observing complete initialized state
 
 The reference adapter must capture the complete admitted initialization graph, including

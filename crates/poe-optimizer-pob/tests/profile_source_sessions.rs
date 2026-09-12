@@ -1,6 +1,8 @@
-//! Opt-in elapsed lifecycle investigation on actual initialized original parser state.
-//! No successful uncached-parser, full-build native, or allocator/RSS claim.
+//! Opt-in instrumented lifecycle timings and requested Rust allocation layouts.
+//! No successful uncached-parser, full-build native, Lua-allocator or RSS claim.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/requested_layout_allocator.rs"]
+mod allocations;
 #[allow(dead_code)]
 #[path = "support/source_program_classes.rs"]
 mod classes;
@@ -64,14 +66,19 @@ fn limits() -> ProgramLimits {
 struct Phase {
     name: String,
     elapsed_ms: f64,
+    requested_layout: allocations::Usage,
 }
 fn timed<T>(phases: &mut Vec<Phase>, name: &str, f: impl FnOnce() -> T) -> T {
+    let interval = allocations::begin();
     let start = Instant::now();
     let result = black_box(f());
     let elapsed_ms = start.elapsed().as_secs_f64() * 1000.0;
+    let requested_layout = interval.finish();
+    // Name allocation, Vec growth and reporting happen after the interval closes.
     phases.push(Phase {
         name: name.into(),
         elapsed_ms,
+        requested_layout,
     });
     result
 }
@@ -205,6 +212,7 @@ fn acquire(lua: &Lua, primitives: &Primitives) -> Corpus {
 fn child(project: &Path, destination: &Path, build: &str) {
     fn owned_only<T: Send + Sync>() {}
     owned_only::<Corpus>(); // Supplement the explicit source-host destruction witness.
+    let allocator_self_check = allocations::self_check();
     let xml = fs::read_to_string(project.join(format!(
         "tests/fixtures/builds/breadth-20260908/build-{build}.xml"
     )))
@@ -247,6 +255,8 @@ fn child(project: &Path, destination: &Path, build: &str) {
     let engine_sources = poe_optimizer_engine::modifier_parser::implementation_sources()
         .map(|text| text.replace("\r\n", "\n"));
     let report = json!({"schema_version":1,"status":"passed","build":build,
+        "measurement_kind":"requested_rust_layouts_and_instrumented_elapsed_lifecycle",
+        "allocator_self_check":allocator_self_check,
         "xml_sha256":hash(xml.as_bytes()),"source":source_report,"native":native,
         "host_destroyed_before_native_timing":true,"marker_live_at_end_of_source_hook":true,
         "binary_links_lua":true,"source_history_mode":"interpreter; jit.off and jit.flush before capture/history",
@@ -256,6 +266,7 @@ fn child(project: &Path, destination: &Path, build: &str) {
         "capture_helper_sha256":hash(include_bytes!("support/source_program_parser_capture.rs")),
         "history_helper_sha256":hash(include_bytes!("support/profile_source_session_history.rs")),
         "native_helper_sha256":hash(include_bytes!("support/profile_source_session_native.rs")),
+        "allocator_helper_sha256":hash(include_bytes!("support/requested_layout_allocator.rs")),
         "os":std::env::consts::OS,"arch":std::env::consts::ARCH,"debug_assertions":cfg!(debug_assertions)});
     fs::write(
         destination.join(format!("build-{build}.json")),

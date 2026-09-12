@@ -17,6 +17,8 @@ mod observation;
 #[path = "support/source_program_parser_capture.rs"]
 mod parser_capture;
 use parser_capture::{DICTIONARIES, PATH, TEXT};
+#[path = "support/source_program_producer_proof.rs"]
+mod producer_proof;
 #[path = "support/source_program_public_cache.rs"]
 mod public_cache;
 #[allow(dead_code)]
@@ -53,6 +55,7 @@ fn limits() -> ProgramLimits {
 }
 struct Pair {
     copy_table: Function,
+    constructor_target: Option<Rc<ConstructorDiagnosticTarget>>,
     observed: ObservedSourceSession,
     compiled: CompiledSourcePrograms,
     session: ProgramSession,
@@ -106,6 +109,19 @@ fn observe(
     } else {
         BTreeMap::new()
     };
+    let constructor_target = with_closures.then(|| {
+        let inner = primitives
+            .captured_value(parser, "parseMod")
+            .as_function()
+            .unwrap()
+            .clone();
+        Rc::new(
+            primitives
+                .observer
+                .retain_constructor_diagnostic_target(lua, &inner)
+                .unwrap(),
+        )
+    });
     let parser_capture::CapturedParser {
         observed,
         lowered,
@@ -138,6 +154,7 @@ fn observe(
     (
         Pair {
             copy_table,
+            constructor_target,
             observed,
             compiled,
             session,
@@ -472,6 +489,7 @@ fn run(
         .unwrap();
     let mut independent = Pair {
         copy_table: pair.copy_table.clone(),
+        constructor_target: pair.constructor_target.clone(),
         observed: pair.observed.clone(),
         compiled: pair.compiled.clone(),
         session: isolated,

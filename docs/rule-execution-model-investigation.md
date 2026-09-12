@@ -36,8 +36,12 @@ now distinguish owned snapshot copies from shared handles and catalog retention.
 separate compilation, private import, clone/restart/drop and finite invocation histories
 after source-host destruction. [Native allocation provenance](execution-model-baseline.md#native-allocation-origin-checkpoint)
 also identifies the actual expression behind the remaining copy failure without admitting
-its layout. Private-session allocation, per-stage loader allocation, general invalidation,
-new effect-family work and actual upstream update effort remain open. No model is selected.
+its layout. [Requested private-session layouts](execution-model-baseline.md#requested-allocation-layouts-for-private-sessions)
+now quantify copy/import/teardown storage separately from shared handles. The
+[original constructor/producer join](execution-model-baseline.md#original-constructor-and-producer-checkpoint)
+also closes the missing source identity; reserved-key mutation and tail behavior remain open
+compatibility costs. Per-stage loader/source allocation, general invalidation, new effect-family
+work and actual upstream update effort remain open. No model is selected.
 
 ## Separate the decisions
 

@@ -7,6 +7,8 @@ use super::*;
 use mlua::MultiValue;
 use sha2::{Digest, Sha256};
 
+pub(super) mod diagnostic;
+
 const MAX_BYTECODES: u32 = 65_536;
 const TNEW: u32 = 52;
 const TDUP: u32 = 53;
@@ -32,6 +34,7 @@ pub(crate) struct CallbackObservation {
 #[derive(Default)]
 pub(super) struct Pending {
     pub(super) callbacks: BTreeMap<SourceCallbackId, CallbackObservation>,
+    diagnostic_bindings: Vec<diagnostic::Binding>,
 }
 /// Owner-bound evidence produced only while observing actual original functions.
 /// Source locations are mapped to lowered expressions separately. This is not
@@ -41,6 +44,7 @@ pub struct ObservedSourceConstructors {
     owner: SourceProgramOwner,
     pub(crate) profile: SourceTableRuntimeProfile,
     pub(crate) callbacks: BTreeMap<SourceCallbackId, CallbackObservation>,
+    diagnostic_bindings: Vec<diagnostic::Binding>,
 }
 impl ObservedSourceConstructors {
     pub(crate) fn validate_owner(&self, owner: &SourceProgramOwner) -> Result<()> {
@@ -205,6 +209,7 @@ impl SourceClosureObserver {
                 owner: owner.clone(),
                 profile: reflection.profile.clone(),
                 callbacks: pending.callbacks,
+                diagnostic_bindings: pending.diagnostic_bindings,
             })
     }
 }
@@ -236,6 +241,7 @@ impl Graph<'_> {
             self.observer.closure_reflection.is_some(),
         )?;
         self.values += count;
+        self.bind_constructor_diagnostic_targets(id, function)?;
         if let Some(previous) = self.constructor_observations.callbacks.get(&id) {
             if previous != &observation {
                 return Err(error(

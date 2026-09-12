@@ -72,6 +72,7 @@ fn snapshot(
 }
 
 pub fn run(corpus: Corpus) -> Json {
+    let requested_before_native = allocations::snapshot();
     let mut phases = Vec::new();
     let compiled = timed(&mut phases, "compile_after_source_host_destruction", || {
         CompiledSourcePrograms::new(corpus.capture.lowered.catalog()).unwrap()
@@ -384,6 +385,7 @@ pub fn run(corpus: Corpus) -> Json {
         "drop_final_compiled_library_and_owned_definitions",
         || drop(compiled),
     );
+    let requested_after_native_intervals = allocations::snapshot();
     // Retained workload identification is built only after every timed phase.
     // Result references count calls, whereas step positions also include checks.
     let scalar_inputs = observation::canonical(&corpus.history.inputs);
@@ -432,6 +434,8 @@ pub fn run(corpus: Corpus) -> Json {
     });
     let session_limits = limits();
     json!({"identity":identity,"inventory":inventory,"phases":phases,"calls":calls,
+        "requested_layout_process_totals":{"before_native":requested_before_native,
+            "after_native_intervals_before_history_report":requested_after_native_intervals},
         "history_evidence":history_evidence,
     "successful_public_calls":successes,"source_error_calls":source_errors,
     "unsupported_positive_misses":unsupported,"imported_usage":imported_usage,
@@ -449,10 +453,16 @@ pub fn run(corpus: Corpus) -> Json {
         "Scalar arguments are imported once. Argument vectors, validation, report construction and isolated setup are outside invocation timers.",
         "Checks/snapshots still change allocator reuse and cumulative budgets; timed phases are lifecycle observations, not uninstrumented throughput.",
         "Handles/results are retained for alias checks until explicit teardown; one initial raw snapshot survives until output lifecycle measurements.",
-        "Allocation fields are cumulative resource charges, not actual allocations, live bytes, RSS, or peak memory.",
+        "VM Usage/allocation fields remain cumulative resource charges. Phase requested_layout fields count successful Rust GlobalAlloc requested layouts forwarded to System; these are different quantities.",
+        "Requested-layout accounting is process-wide from startup, not thread-filtered. No native workers are spawned; multi-field snapshots/interval peak resets assume quiescent boundaries, and any concurrent libtest/runtime allocations are included.",
+        "Requested layouts exclude RSS, usable allocator sizes, fragmentation, headers, stacks, static data, and Lua/native allocations that bypass Rust GlobalAlloc. This is not a Lua allocator measurement.",
+        "A successful realloc counts full new requested bytes and full released old bytes; logical live/peak use their size difference. System's internal temporary storage/copies are unobserved. Null alloc/zeroed/realloc only increment their failed-call counters, never storage traffic or ownership.",
+        "Live ownership counters are never reset: releasing earlier allocations gives a negative phase live delta. Absolute phase peaks include the starting process baseline; growth is above that baseline, not an isolated object's peak size.",
+        "Interval counts close before Phase name/Vec/report construction. Before/after-native totals include intervening checks, argument construction and existing report storage, and process peak also includes earlier source acquisition.",
+        "Atomic allocator hooks and timing/accounting reads add overhead. elapsed_ms is instrumented time, not directly comparable to the previous elapsed-only harness as an uninstrumented throughput measurement.",
         "Compiled library clones share ownership; input/output clones copy raw graphs. ProgramSession has no clone/reset API.",
         "Raw reimport carries no traversal/class/closure checkpoint guarantee; restarts use the original coherent input.",
         "Eleven supported calls and six positive Unsupported misses do not prove a complete native parser or any full native build.",
-        "One sequential lifecycle per original; no warmed throughput, parallel speed, allocator or numerical winner claim."
+        "One sequential lifecycle per original; no warmed throughput, parallel speed or numerical winner claim."
     ]})
 }
