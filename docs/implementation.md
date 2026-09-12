@@ -18,8 +18,9 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-The A1 investigation below is the current resume point. R2t and its CI repair remain the
-last production-code checkpoint; later sections retain their original validation scope.
+The A1 investigation below is the current resume point. The trusted passive-key loader
+simplification is the latest production checkpoint; R2t and its CI repair remain the last
+source-runtime checkpoint. Historical sections retain their original validation scope.
 
 **Architecture review in progress:** [A1-A4 execution-model investigation](#execution-model-investigation-a1-a4)
 compares the current interpreter with a domain DSL, data-driven rules, native Rust
@@ -166,13 +167,37 @@ Four loader regression cases pass in both variants; strict example Clippy and fo
 The scripts leave an isolated worktree and source/executable/report hashes for review.
 No production data, evaluator, admission or source-pin changes; native breadth remains **0/5**.
 
+**A1 loader simplification:** the trusted compiled package now decodes only passive capability
+keys when initializing the existing cache, avoiding a temporary full JSON tree. External
+packages still use the unchanged bounded decoder and full validation. The exact reviewed
+key set, capability expansion/removal rejection and all twelve loaded package/catalog/owner
+witnesses are preserved. In a separate uninstrumented comparison with three fresh processes
+per version, median first-load time falls from 1,994.655 to 1,707.719 ms (14.4%) on this host.
+Later-load ranges overlap; no candidate-throughput or memory saving is established. See the
+[measurement and boundary](execution-model-baseline.md#trusted-passive-key-loader-simplification).
+Ten focused release tests, strict DATA all-target Clippy, DATA WebAssembly compilation,
+workspace formatting and native-only release builds pass. The profiling script supports both
+loader versions with exact statement restoration. Independent code/measurement review passes;
+evidence is `runs/passive-key-projection/`. This preserves the current architecture, data and
+0/5 complete native build coverage.
+
+**A1 supported data-update replay:** a scratch package changes the existing Wooden Club
+numeric damage range from 6-10 to 60-100 and refreshes its weapons digest through the real
+package authoring helper. One fixed native-only release executable processes embedded and
+external baselines, custom-data search at 1/4 workers, and export/reimport. Baseline winner
+`smith/none` becomes `wood/brutality_i`; serial/Rayon feasible results and verified winners
+agree, and the exported winner reevaluates to exactly 130.0621 selected-hit DPS under the
+custom identity. All seven commands pass. The first attempt's pretty-printed scratch package
+exceeded the existing 32 MiB limit; compact serialization fixes the replay without changing
+validation. Evidence is `runs/a1-update-measured-02/`, with the failed attempt preserved in
+`runs/a1-update-measured/`. See the [protocol and limits](execution-model-baseline.md#supported-data-update-replay).
+
 **Resume A1:** measure allocation/retained state and supported session costs, and record
-update/migration/debugging effort. The read-only update exercise proposal is retained in
-`runs/a1-update-exercise-proposal.json`: replay a supported injected balance edit, an inconsistent
-cross-catalog identity failure and its repair, then measure acquisition separately. None of
-those proposed update runs has been executed in this checkpoint. A real upstream release
-refresh still requires source-pin/compatibility review; an existing data-only balance edit
-cannot prove otherwise.
+update/migration/debugging effort. The supported balance replay is complete; the inconsistent
+cross-catalog identity failure/repair and separate acquisition exercise in
+`runs/a1-update-exercise-proposal.json` remain unexecuted. A real upstream release refresh
+still requires source-pin/compatibility review. This one closed numeric projection does not
+establish new effect-family support, coherent all-catalog updates or upstream migration cost.
 
 A prototype-boundary question is pending with the owner: typed domain equivalence, complete public-parser compatibility,
 or both as experiments. This is not migration approval. Use the all-five interaction map
@@ -1669,9 +1694,10 @@ defines the alternatives, constraints and evidence required for a decision.
   [consumer contracts](execution-model-semantics-inventory.md) and
   [historical measurement audit](execution-model-performance-inventory.md) are recorded.
   Restricted changing-candidate admission/reuse is also remeasured against schema 29.
-  Snapshot/compile/backend setup timings are now separated. Snapshot-internal allocation
-  and validation, general invalidation, source-session and update-effort measurements
-  remain open; these restricted matrices do not complete A1.
+  Snapshot/compile/backend setup and 34 loader statement intervals are measured. A selective
+  trusted-key decode preserves loaded data and reduces measured first-load time. Allocation
+  ownership, general invalidation, source-session and update-effort measurements remain open;
+  these restricted matrices do not complete A1.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.

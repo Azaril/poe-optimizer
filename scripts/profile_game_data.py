@@ -51,6 +51,8 @@ def instrument(original):
             first, last = 'fn decode_value(', 'fn reject_discarded_fields('
         elif label.startswith('validate.'):
             first, last = 'fn validate(package:', 'fn validate_requirement('
+        elif label == 'cache.reviewed_passive_projection':
+            first, last = 'fn parse_reviewed_passive_capability_keys(', 'fn reviewed_passive_capability_keys()'
         else:
             first, last = 'fn reviewed_passive_capability_keys()', 'fn validate_armour('
         start, end = original.index(first), original.index(last)
@@ -113,7 +115,10 @@ def instrument(original):
     span('validate.profile_references_and_supports', 'load.validate_and_scope_drop', '    for class in [\n', '    package.receiving_defence.validate()?;\n')
     span('validate.receiving_action', 'load.validate_and_scope_drop', '    package.receiving_defence.validate()?;\n', '    let c = &package.character;\n')
     span('validate.remaining_records', 'load.validate_and_scope_drop', '    let c = &package.character;\n', '    validate_passive_catalog(package, limits)?;\n')
-    statement('cache.reviewed_passive_json', 'validate.passive_catalog', '        let value: serde_json::Value =\n            serde_json::from_slice(PACKAGE_BYTES).map_err(|e| e.to_string())?;\n')
+    if 'fn parse_reviewed_passive_capability_keys(' in original:
+        statement('cache.reviewed_passive_projection', 'validate.passive_catalog', '    let package: PackageKeys = serde_json::from_slice(bytes).map_err(|e| e.to_string())?;\n')
+    else:
+        statement('cache.reviewed_passive_json', 'validate.passive_catalog', '        let value: serde_json::Value =\n            serde_json::from_slice(PACKAGE_BYTES).map_err(|e| e.to_string())?;\n')
     ordered = sorted(ranges)
     assert all(a[1] <= b[0] for a, b in zip(ordered, ordered[1:])), 'Overlapping source spans'
     stages, chunks, cursor = [], [], 0

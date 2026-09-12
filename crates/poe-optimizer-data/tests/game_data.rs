@@ -486,6 +486,21 @@ fn passive_effect_records_require_complete_exact_class_and_ascendancy_ownership(
 }
 
 #[test]
+fn custom_package_cannot_change_reviewed_capability_set_even_with_complete_partition() {
+    let mut package = reviewed().package().clone();
+    let removed = package.passive_effects.pop().unwrap();
+    package.passive_exclusions.push(
+        poe_optimizer_data::passive_allocation::ExcludedPassiveView {
+            key: removed.key,
+            reason: "custom capability removal".into(),
+        },
+    );
+    assert!(custom(package).unwrap_err().to_string().contains(
+        "custom package cannot expand or replace the source-reviewed passive capability set"
+    ));
+}
+
+#[test]
 fn resistance_schema_requires_explicit_regeneration_of_old_packages() {
     let snapshot = reviewed();
     for edit in 0..3 {

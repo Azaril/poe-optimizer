@@ -22,7 +22,12 @@ separation between source facts, isolated queries and final actor/build behavior
 neither select a model nor complete A2.
 The [loader phase measurements](execution-model-baseline.md#attribution-inside-dataset-loading)
 also separate bulk representation/proof costs from catalog construction, without adding
-instrumentation to the shipping loader. Allocation ownership and update effort remain open.
+instrumentation to the shipping loader. A subsequent
+[trusted-key simplification](execution-model-baseline.md#trusted-passive-key-loader-simplification)
+reduces measured first-load time while preserving loaded data and validation. This is a bounded
+optimization of the current model. A [supported balance-data replay](execution-model-baseline.md#supported-data-update-replay)
+also preserves search/export behavior with a fixed native executable. Allocation ownership,
+new effect-family work and actual upstream update effort remain open.
 
 ## Separate the decisions
 

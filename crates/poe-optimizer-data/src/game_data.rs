@@ -1471,34 +1471,37 @@ fn validate_jewellery(package: &GameDataPackage) -> Result<()> {
     Ok(())
 }
 
-/// Read source capability keys directly, without recursive package validation.
+/// Project only keys from the trusted compiled package, without recursive validation.
+/// Unrelated fields are deliberately skipped here; this is not an input-validation
+/// path. Public package loading still performs bounded decoding and full validation.
+fn parse_reviewed_passive_capability_keys(
+    bytes: &[u8],
+) -> std::result::Result<BTreeSet<crate::passive_allocation::PassiveViewKey>, String> {
+    #[derive(Deserialize)]
+    struct PackageKeys {
+        passive_effects: Vec<RecordKey>,
+    }
+    #[derive(Deserialize)]
+    struct RecordKey {
+        key: crate::passive_allocation::PassiveViewKey,
+    }
+    let package: PackageKeys = serde_json::from_slice(bytes).map_err(|e| e.to_string())?;
+    Ok(package
+        .passive_effects
+        .into_iter()
+        .map(|record| record.key)
+        .collect())
+}
+
+/// Cache the same complete reviewed capability set independently of caller data.
 fn reviewed_passive_capability_keys()
 -> Result<&'static BTreeSet<crate::passive_allocation::PassiveViewKey>> {
     use crate::passive_allocation::PassiveViewKey;
     static KEYS: std::sync::OnceLock<std::result::Result<BTreeSet<PassiveViewKey>, String>> =
         std::sync::OnceLock::new();
-    KEYS.get_or_init(|| {
-        let value: serde_json::Value =
-            serde_json::from_slice(PACKAGE_BYTES).map_err(|e| e.to_string())?;
-        let records = value
-            .get("passive_effects")
-            .and_then(serde_json::Value::as_array)
-            .ok_or("reviewed passive capability records absent")?;
-        records
-            .iter()
-            .map(|record| {
-                serde_json::from_value(
-                    record
-                        .get("key")
-                        .ok_or("reviewed passive capability key absent")?
-                        .clone(),
-                )
-                .map_err(|e| e.to_string())
-            })
-            .collect()
-    })
-    .as_ref()
-    .map_err(error)
+    KEYS.get_or_init(|| parse_reviewed_passive_capability_keys(PACKAGE_BYTES))
+        .as_ref()
+        .map_err(error)
 }
 
 fn validate_armour(package: &GameDataPackage) -> Result<()> {
@@ -1550,4 +1553,70 @@ fn validate_armour(package: &GameDataPackage) -> Result<()> {
         }
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod reviewed_passive_key_tests {
+    use super::*;
+    use crate::passive_allocation::PassiveViewKey;
+    use serde_json::json;
+
+    #[test]
+    fn trusted_key_projection_matches_complete_value_key_set() {
+        // Preserve the former full-Value derivation as an independent reference
+        // over the exact compiled bytes, with no hand-maintained capability list.
+        let value: serde_json::Value = serde_json::from_slice(PACKAGE_BYTES).unwrap();
+        let expected: BTreeSet<PassiveViewKey> = value
+            .get("passive_effects")
+            .and_then(serde_json::Value::as_array)
+            .unwrap()
+            .iter()
+            .map(|record| serde_json::from_value(record.get("key").unwrap().clone()).unwrap())
+            .collect();
+        assert_eq!(
+            parse_reviewed_passive_capability_keys(PACKAGE_BYTES).unwrap(),
+            expected
+        );
+        assert_eq!(reviewed_passive_capability_keys().unwrap(), &expected);
+    }
+
+    #[test]
+    fn trusted_key_projection_retains_set_semantics_and_skips_unrelated_fields() {
+        let reviewed = reviewed_passive_capability_keys().unwrap();
+        let first = reviewed.first().unwrap();
+        let last = reviewed.last().unwrap();
+        let bytes = serde_json::to_vec(&json!({
+            "unrelated": {"nested": [null, "ignored", {"key": "not a capability"}]},
+            "passive_effects": [
+                {"key": last, "effects": "not decoded by this private projection"},
+                {"key": first},
+                {"key": last}
+            ]
+        }))
+        .unwrap();
+        let expected = [first.clone(), last.clone()].into_iter().collect();
+        assert_eq!(
+            parse_reviewed_passive_capability_keys(&bytes).unwrap(),
+            expected
+        );
+    }
+
+    #[test]
+    fn trusted_key_projection_rejects_missing_or_invalid_key_payloads() {
+        for value in [
+            json!({}),
+            json!({"passive_effects": null}),
+            json!({"passive_effects": [{}]}),
+            json!({"passive_effects": [{"key": null}]}),
+            json!({"passive_effects": [{"key": {"physical_node_id": "invalid"}}]}),
+        ] {
+            assert!(
+                parse_reviewed_passive_capability_keys(&serde_json::to_vec(&value).unwrap())
+                    .is_err()
+            );
+        }
+        assert!(
+            parse_reviewed_passive_capability_keys(br#"{"passive_effects":[]} trailing"#).is_err()
+        );
+    }
 }

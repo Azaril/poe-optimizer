@@ -206,7 +206,28 @@ fn passive_custom_values_bind_identity_but_unknown_capabilities_and_order_sensit
         }
     );
     let mut p = original.package().clone();
-    let exclusion = p.passive_exclusions.remove(0);
+    // Keep the source partition and ordinary structural eligibility valid so
+    // this attempt reaches the reviewed capability-set guard itself.
+    let excluded_index = p
+        .passive_exclusions
+        .iter()
+        .position(|entry| {
+            p.tree
+                .allocation_nodes
+                .get(&entry.key.physical_node_id)
+                .is_some_and(|node| {
+                    matches!(node.kind, TreeNodeKind::Normal | TreeNodeKind::Notable)
+                        && node.source_default_point_cost == Some(1)
+                        && node
+                            .unsupported_mechanics
+                            .iter()
+                            .all(|name| name == "attribute_choice")
+                        && (!matches!(entry.key.selector, PassiveViewSelector::Attribute { .. })
+                            || !node.attribute_options.is_empty())
+                })
+        })
+        .expect("an excluded ordinary source view with eligible structure");
+    let exclusion = p.passive_exclusions.remove(excluded_index);
     let source = p
         .tree
         .allocation_views
@@ -224,7 +245,9 @@ fn passive_custom_values_bind_identity_but_unknown_capabilities_and_order_sensit
             .actor_modifiers
             .clone(),
     });
-    assert!(custom(p).is_err());
+    assert!(custom(p).unwrap_err().to_string().contains(
+        "custom package cannot expand or replace the source-reviewed passive capability set"
+    ));
     for op in [ActorNumericOperation::More, ActorNumericOperation::Override] {
         let mut p = original.package().clone();
         p.passive_effects

@@ -313,6 +313,96 @@ the two release binaries and build/check logs. `prepared.json` binds each interv
 original source lines and statement digest; the result binds both executable hashes and
 producer sources. Memory attribution and executable-size comparisons are outside this run.
 
+## Trusted passive-key loader simplification
+
+The phase measurements identified an avoidable full JSON tree used once per process to
+obtain the trusted package's passive capability keys. The production cache now uses a private
+Serde projection over those same compiled bytes and retains the same `BTreeSet`. It does not
+load caller-supplied data through this projection. The public bounded decoder, duplicate and
+unknown-field checks, digests, tree authentication and capability-set validation are unchanged.
+No source pin, schema, package, dependency or evaluator admission changes.
+
+A separate comparison reruns the preserved original executable alongside the optimized loader
+using the identical developer harness, counter module and data. Neither loader contains timing
+instrumentation; all counter readings remain zero. Three fresh processes per version each load
+two snapshots, alternating version order, without concurrent project builds/tests/benchmarks.
+The same Windows host/toolchain is used; OS cache and scheduler placement remain uncontrolled.
+
+| Version | First load median (range), ms | Later load median (range), ms |
+| --- | ---: | ---: |
+| Original | 1,994.655 (1,989.415-1,995.042) | 1,737.306 (1,730.488-1,744.541) |
+| Selective keys | 1,707.719 (1,707.327-1,710.532) | 1,718.174 (1,712.835-1,754.116) |
+
+First-load median falls by **286.937 ms (14.4%)** for this host/package. Later-load ranges
+overlap, so no reused-load improvement is established. Every one of the twelve snapshots
+preserves exact canonical package bytes, identity/trust, all eight catalog equalities and
+parser owner binding/digest. Verification and destruction precede the later load as in the
+original protocol. This does not measure allocations or candidate/build calculation speed.
+
+Three private projection tests compare the exact bundled key set with the former full-JSON
+algorithm, exercise set semantics and reject invalid keys. Seven focused loader integration
+cases pass, including both capability removal and structurally valid expansion rejected by
+the exact capability guard. Existing accepted custom values remain accepted. Strict DATA
+all-target Clippy, DATA WebAssembly compilation, workspace formatting and native-only release
+builds pass. The profiler accepts both loader versions and restores their exact statements;
+its new `cache.reviewed_passive_projection` interval measures deserialization, while final
+set collection remains in the parent interval. These are local checks, not a hosted CI result.
+
+Evidence is retained in `runs/passive-key-projection/`: `benchmark-inputs.json`, raw reports,
+`benchmark-results.json`, `benchmark-summary.json`, test/build logs and `validation.json`.
+The isolated worktree starts at `12d02a4`; the original executable is the preserved control
+from `runs/a1-loader-phases-02/`, rerun for this comparison. Independent reviews are
+`runs/a1-passive-projection-review-by-lowerer.json` and
+`runs/a1-passive-projection-benchmark-review-by-lowerer.json`. This is a measured simplification
+within the current architecture, not an A2 model selection or additional complete native build.
+
+## Supported data-update replay
+
+The existing `tests/dataset_search_cli.rs` diagnostic problem supplies two weapons and two
+support choices. A retained release replay copies its literal problem and Mace fixture into
+a fresh scratch directory, edits only Wooden Club's `physical_minimum`/`physical_maximum`
+from 6/10 to 60/100, and uses the real `seal_package` authoring helper to refresh section
+digests and validate the result. Only the weapons section digest changes. The shipped data,
+fixtures, source pin and native algorithms remain unchanged.
+
+One fixed native-only executable then runs five exhaustive searches: embedded baseline at
+1/4 workers, identical external baseline at one worker, and custom data at 1/4 workers. Each
+finishes with six evaluations including one fresh verification, no evaluation failures and
+a consistent winner. Embedded/external baseline identities, feasible results and winners
+agree. For each dataset the serial/Rayon feasible results and verified winners agree:
+
+| Dataset | Verified alternative | Selected-hit DPS |
+| --- | --- | ---: |
+| Reviewed baseline | `smith/none` | 18.208693999999998 |
+| Custom numeric data | `wood/brutality_i` | 130.0621 |
+
+The custom result retains `custom_unreviewed` trust and its new package/catalog identities.
+A sixth CLI invocation reevaluates the exported winner with that same dataset and obtains
+exactly 130.0621 DPS. Export metadata, backend/data identity and XML hash agree. The executable
+and all supplied inputs retain their hashes across all commands; PoB is not a native runtime
+dependency. Fixture-specific edits belong to this developer replay, not the production input path.
+
+All seven commands, including sealing, pass. Recorded single-run wall times are 3.235 s for
+sealing and 1.814-2.041 s per CLI invocation. These include startup and reporting; they are
+reproduction observations, not isolated evaluator rates or engineering-effort estimates.
+The initial pretty-printed raw package was 53,150,688 bytes and correctly exceeded the
+32 MiB authoring limit. Compact JSON reduces it to 26,286,755 bytes with identical decoded
+content. No loader limit or production code changed to make the replay pass.
+
+Evidence is `runs/a1-update-measured-02/report.json`, raw/sealed packages, exact argv, logs,
+problem, XML and metadata. The failed attempt and its original driver are retained in
+`runs/a1-update-measured/`; the corrected local driver is `runs/a1-update-replay.py`.
+The same supported contract is covered by the committed regression
+`custom_data_changes_ranking_consistently_across_workers_and_survives_export` in
+`tests/dataset_search_cli.rs`. Reproduce with a native-only release CLI and release
+`poe-optimizer-data` example `seal_package`, preserving one binary across data variants.
+Custom package SHA-256 is `6cc0744c82a96c21bf17a2e5ef838f55941cd356427ec9e528fda3cb4023a3a2`.
+
+This proves a supported balance change in the closed weapons projection. The wider source
+item catalog remains unchanged. It does not establish a coherent upstream release refresh,
+new effect-family implementation, migration/review hours or full-original native parity.
+The proposed inconsistent-identity failure/repair and source-acquisition exercises remain open.
+
 ## Original modifier observations for the comparison
 
 A bounded source-only test now imports each of the five unchanged complete XML builds into
@@ -391,8 +481,9 @@ A1 remains open for these measurements and decisions:
 3. Measure cache-hit/no-match/miss/failure histories, reset/import/export and diagnostics
    at an equivalent supported boundary. An unsupported successful parse has no successful
    native throughput to report.
-4. Record an upstream or effect-family update exercise, data-only versus code changes,
-   migration/debugging effort and provenance quality. Code size cannot substitute for it.
+4. Extend the completed supported numeric balance replay to inconsistent cross-catalog
+   identity/repair and a real upstream or effect-family update. Record code/data changes,
+   migration/debugging effort and provenance quality; code size cannot substitute for it.
 5. Select representative A2 slices with the owner using the
    [all-five interaction map](execution-model-semantics-inventory.md), including mechanisms
    those five do not cover. No model or migration has been selected.
