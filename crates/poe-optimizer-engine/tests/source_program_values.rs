@@ -655,3 +655,6 @@ mod ipairs;
 
 #[path = "support/source_program_bits.rs"]
 mod bits;
+
+#[path = "support/source_program_diagnostics.rs"]
+mod diagnostics;

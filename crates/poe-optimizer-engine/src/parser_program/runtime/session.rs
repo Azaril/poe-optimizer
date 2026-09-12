@@ -1,7 +1,9 @@
 //! One build's persistent state on the shared source VM.
 use super::{
     ProgramAllocationUsage, ProgramLimits, ProgramRuntimeError as Error, ProgramTableCoverage,
-    ProgramValueGraph, RuntimeResult as Result, SourceProgramOutput,
+    ProgramValueGraph, RuntimeResult as Result, SourceProgramOutput, TraversalDiagnosticLimits,
+    TraversalFailureWitness,
+    diagnostics::TraversalDiagnostics,
     execute::Run,
     value::{Heap, V},
 };
@@ -21,6 +23,11 @@ pub struct SessionValue {
     identity: Arc<()>,
     value: V,
 }
+impl SessionValue {
+    pub(super) fn retained(identity: Arc<()>, value: V) -> Self {
+        Self { identity, value }
+    }
+}
 
 /// Persistent writable state for one build, with cumulative work and allocation
 /// limits across every callback, borrowed import and snapshot (including errors).
@@ -34,6 +41,7 @@ pub struct ProgramSession {
     limits: ProgramLimits,
     steps: u64,
     identity: Arc<()>,
+    diagnostics: Option<TraversalDiagnostics>,
 }
 impl CompiledSourcePrograms {
     /// Instantiate a coherent owner-bound graph of state, class associations,
@@ -71,6 +79,7 @@ impl CompiledSourcePrograms {
             limits,
             steps: 0,
             identity: Arc::new(()),
+            diagnostics: None,
         };
         session.check_pack(state.values.len())?;
         let values = session.heap.import_with_coverage(state, coverage, true)?;
@@ -79,6 +88,34 @@ impl CompiledSourcePrograms {
     }
 }
 impl ProgramSession {
+    /// Enable bounded failure evidence. Storage/work uses existing cumulative
+    /// session budgets; admission failure leaves the previous setting unchanged.
+    pub fn enable_traversal_diagnostics(
+        &mut self,
+        limits: TraversalDiagnosticLimits,
+    ) -> Result<()> {
+        let diagnostics = TraversalDiagnostics::new(limits, &mut self.heap, self.identity.clone())?;
+        self.diagnostics = Some(diagnostics);
+        Ok(())
+    }
+    /// Drop internal diagnostic records; previously taken handles remain valid.
+    pub fn disable_traversal_diagnostics(&mut self) {
+        self.diagnostics = None;
+    }
+    /// Borrow the current invocation's first unsupported Next witness.
+    pub fn traversal_failure(&self) -> Option<&TraversalFailureWitness> {
+        self.diagnostics.as_ref().and_then(|d| d.witness.as_ref())
+    }
+    /// Move out the witness without allocation. The next public invocation clears
+    /// any untaken witness, including if it fails argument/handle validation.
+    pub fn take_traversal_failure(&mut self) -> Option<TraversalFailureWitness> {
+        self.diagnostics.as_mut().and_then(|d| d.witness.take())
+    }
+    fn begin_invocation(&mut self) {
+        if let Some(d) = self.diagnostics.as_mut() {
+            d.begin();
+        }
+    }
     pub fn owner(&self) -> &SourceProgramOwner {
         self.library.catalog().owner()
     }
@@ -172,6 +209,7 @@ impl ProgramSession {
         callback: ParserCallbackId,
         input: &[SessionValue],
     ) -> Result<Vec<SessionValue>> {
+        self.begin_invocation();
         let index = *self
             .library
             .0
@@ -186,6 +224,7 @@ impl ProgramSession {
             limits: self.limits,
             steps: &mut self.steps,
             call_depth: 0,
+            diagnostics: self.diagnostics.as_mut(),
         };
         let values = run.invoke(index, arguments, 0)?;
         self.handles(values)
@@ -197,6 +236,7 @@ impl ProgramSession {
         callable: &SessionValue,
         input: &[SessionValue],
     ) -> Result<Vec<SessionValue>> {
+        self.begin_invocation();
         let target = self.values(std::slice::from_ref(callable))?.remove(0);
         let arguments = self.values(input)?;
         let mut run = Run {
@@ -206,6 +246,7 @@ impl ProgramSession {
             limits: self.limits,
             steps: &mut self.steps,
             call_depth: 0,
+            diagnostics: self.diagnostics.as_mut(),
         };
         let values = run.invoke_value(target, arguments, 0)?;
         self.handles(values)
@@ -218,6 +259,7 @@ impl ProgramSession {
         name: &str,
         input: &[SessionValue],
     ) -> Result<Vec<SessionValue>> {
+        self.begin_invocation();
         let receiver = self.values(std::slice::from_ref(receiver))?.remove(0);
         let mut arguments = self.values(input)?;
         let mut run = Run {
@@ -227,6 +269,7 @@ impl ProgramSession {
             limits: self.limits,
             steps: &mut self.steps,
             call_depth: 0,
+            diagnostics: self.diagnostics.as_mut(),
         };
         let target = run.lookup_method(&receiver, name.as_bytes())?;
         run.prepend(&mut arguments, receiver)?;

@@ -207,6 +207,7 @@ pub(super) fn run(lua: &Lua, parent: &Pair) -> Json {
         .session_from_input(parent.observed.input(), limits())
         .unwrap();
     let mut pair = Pair {
+        copy_table: parent.copy_table.clone(),
         observed: parent.observed.clone(),
         compiled: parent.compiled.clone(),
         session,

@@ -75,6 +75,30 @@ bit-operation outputs exactly and distinguish this from the existing class-only 
 of floating NaN payload/sign. Keep complete original-helper comparisons on real initialized
 build graphs alongside scalar cold/warmed tests and portable-library checks.
 
+## Failure identity diagnostics
+
+Optional diagnostics retain the actual failing traversal table and control as opaque
+session values, together with the source owner and bounded active call context. Collect
+before unwinding. Clearing or disabling diagnostics must not invalidate values already
+taken by the caller; ordinary foreign-session rejection still applies. Bound diagnostic
+work and storage explicitly, clear stale observations at invocation entry, and leave the
+disabled execution path free of trace collection. Evidence collection cannot grant missing
+capability or silently suppress its original error.
+
+Compare source and native identities through joint snapshots containing the relevant state
+root and failing object. Separate snapshots of equal-looking objects cannot prove aliases.
+Use bounded root-relative paths and incoming alias edges for diagnostics; sorted display
+paths never define game traversal order. Source instrumentation must authenticate the exact
+function, retain original inspection primitives and restore hooks on every exit. A visible
+internal loop cursor is not necessarily a `next` argument. Keep absent observations and
+repeated visits explicit, and compare hooked/unhooked behavior without a warmed-path claim.
+
+Prove allocation origin separately from identity: associate the observed object with an
+actual producer expression/instruction and any later layout-invalidating write before
+choosing a constructor model. Constant-template slots, fresh hash allocation and invalidated
+imported evidence require different treatment. Raw graph numbering or matching field names
+cannot select among them.
+
 ## Observing complete initialized state
 
 The reference adapter must capture the complete admitted initialization graph, including
@@ -122,6 +146,12 @@ costs additional allocation unless ownership can transfer without copying. Cache
 lookup and copy work; misses and retries charge the inner operations they actually execute.
 
 ## Alternatives and consequences
+
+The [execution-model investigation](rule-execution-model-investigation.md) reopens the
+cost/benefit assessment of this representation across preparation and calculation. It will
+compare specialized rules, native algorithms, the current interpreter and hybrids without
+presuming a winner. The session contract below describes the current strategy; any change
+to its externally observable guarantees requires evidence and an explicit design decision.
 
 A handwritten native public adapter could reduce interpreter overhead, but matching the
 source requires the same cache/dictionary state, exposed aliases, startup history, error

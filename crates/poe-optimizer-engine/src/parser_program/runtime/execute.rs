@@ -6,7 +6,9 @@ use super::super::{
 };
 use super::{
     ProgramAllocationUsage, ProgramLimits, ProgramOutput, ProgramRequestAccounting,
-    ProgramRuntimeError as Error, ProgramValueGraph, RuntimeResult as Result, SourceProgramOutput,
+    ProgramRuntimeError as Error, ProgramRuntimeErrorKind, ProgramValueGraph,
+    RuntimeResult as Result, SourceProgramOutput,
+    diagnostics::TraversalDiagnostics,
     intrinsics,
     value::{ClosureRef, Heap, LocalSlot, TableBehavior, V},
 };
@@ -63,6 +65,7 @@ impl CompiledSourcePrograms {
             limits,
             steps: &mut accounting.steps,
             call_depth: 0,
+            diagnostics: None,
         };
         let values = run.invoke(index, arguments, 0)?;
         let graph = run.heap.freeze(&values)?;
@@ -117,6 +120,7 @@ pub(super) struct Run<'a, 'b, 'c> {
     pub(super) limits: ProgramLimits,
     pub(super) steps: &'b mut u64,
     pub(super) call_depth: usize,
+    pub(super) diagnostics: Option<&'b mut TraversalDiagnostics>,
 }
 pub(super) enum MethodTarget {
     Value(V),
@@ -214,9 +218,15 @@ impl Run<'_, '_, '_> {
             extra,
             loops: (0..plan.loop_states).map(|_| None).collect(),
         };
+        if let Some(d) = self.diagnostics.as_mut() {
+            d.enter(plan.callback, self.patterns)?;
+        }
         self.call_depth += 1;
         let result = self.frame(&mut frame, depth + 1);
         self.call_depth -= 1;
+        if let Some(d) = self.diagnostics.as_mut() {
+            d.exit();
+        }
         result
     }
     fn frame(&mut self, frame: &mut Frame, depth: usize) -> Result<Vec<V>> {
@@ -231,6 +241,9 @@ impl Run<'_, '_, '_> {
                 .get(pc)
                 .ok_or_else(|| Error::input("compiled instruction target out of range"))?;
             let location = instruction.location;
+            if let Some(d) = self.diagnostics.as_mut() {
+                d.location(Some(location));
+            }
             let step = (|| -> Result<Option<Vec<V>>> {
                 self.tick(depth)?;
                 use ProgramOperation as Op;
@@ -584,17 +597,13 @@ impl Run<'_, '_, '_> {
             CompiledProgramBinding::Program { index, .. } => {
                 self.invoke(*index, arguments, depth + 1)?
             }
-            CompiledProgramBinding::Intrinsic { operation, source } => intrinsics::call_bound(
+            CompiledProgramBinding::Intrinsic { operation, source } => self.intrinsic(
                 *operation,
                 match source {
                     ParserProgramIntrinsicSource::Captured { callback, .. } => Some(*callback),
                     ParserProgramIntrinsicSource::OriginalGlobal => None,
                 },
-                &self.library.0.traversal,
                 &arguments,
-                self.heap,
-                self.patterns,
-                &self.limits,
             )?,
             CompiledProgramBinding::LegacyFactory { .. } => {
                 return Err(Error::unsupported("raw legacy-factory invocation bridge"));
@@ -607,6 +616,36 @@ impl Run<'_, '_, '_> {
             return Err(Error::resource("call result pack"));
         }
         Ok(values)
+    }
+    fn intrinsic(
+        &mut self,
+        operation: ParserProgramIntrinsic,
+        callback: Option<ParserCallbackId>,
+        arguments: &[V],
+    ) -> Result<Vec<V>> {
+        let result = intrinsics::call_bound(
+            operation,
+            callback,
+            &self.library.0.traversal,
+            arguments,
+            self.heap,
+            self.patterns,
+            &self.limits,
+        );
+        if operation == ParserProgramIntrinsic::Next
+            && result
+                .as_ref()
+                .is_err_and(|e| e.kind == ProgramRuntimeErrorKind::UnsupportedCapability)
+            && let Some(d) = self.diagnostics.as_mut()
+        {
+            d.capture(
+                arguments.first().unwrap_or(&V::Nil),
+                arguments.get(1).unwrap_or(&V::Nil),
+                self.heap,
+                self.patterns,
+            )?;
+        }
+        result
     }
     pub(super) fn lookup_method(&mut self, receiver: &V, key: &[u8]) -> Result<MethodTarget> {
         if matches!(receiver, V::Bytes(_)) {
@@ -728,15 +767,7 @@ impl Run<'_, '_, '_> {
                     }
                 }
                 if let Some(operation) = self.library.catalog().owner().intrinsic(callback) {
-                    return intrinsics::call_bound(
-                        operation,
-                        Some(callback),
-                        &self.library.0.traversal,
-                        &arguments,
-                        self.heap,
-                        self.patterns,
-                        &self.limits,
-                    );
+                    return self.intrinsic(operation, Some(callback), &arguments);
                 }
                 let index = *self.library.0.callbacks.get(&callback).ok_or_else(|| {
                     Error::unsupported(format!(
@@ -875,8 +906,17 @@ impl Run<'_, '_, '_> {
     }
     fn expr(&mut self, frame: &mut Frame, expr: &ParserProgramExpr, depth: usize) -> Result<V> {
         let callback = self.library.0.programs[frame.program].callback;
-        self.expr_inner(frame, expr, depth)
-            .map_err(|error| error.at(callback, expr.location))
+        let previous = self
+            .diagnostics
+            .as_mut()
+            .and_then(|d| d.location(Some(expr.location)));
+        let result = self
+            .expr_inner(frame, expr, depth)
+            .map_err(|error| error.at(callback, expr.location));
+        if let Some(d) = self.diagnostics.as_mut() {
+            d.location(previous);
+        }
+        result
     }
     fn expr_inner(
         &mut self,

@@ -244,6 +244,17 @@ produce per-build state without mutating shared definitions. Use the same typed-
 engine for configuration and modifier logic, with explicit ownership and effect permissions.
 See [configuration preparation](configuration-preparation.md) for the execution boundary.
 
+The shared source interpreter is the current implementation strategy; its language-level
+compatibility is not itself the end-state product contract. A planned
+[execution-model investigation](rule-execution-model-investigation.md) compares retaining
+it with a focused DSL, declarative rules, native Rust algorithm families and hybrids.
+Choose the representation using evidence of complete observable build/calculation parity,
+upstream-update effort, total complexity and preparation/search performance. Preserve the
+injected data model, explicit effects and diagnostics, optional PoB reference, and portable
+in-process parallel evaluator regardless of that choice. An alternative may omit internal
+Lua details only when their irrelevance to the supported external contract is demonstrated;
+matching a small fixture set cannot establish that. No replacement is selected yet.
+
 ### Evaluator boundary
 
 The shared calculation and evaluation interfaces are in-process Rust traits with typed

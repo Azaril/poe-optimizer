@@ -5,5 +5,6 @@ pub use crate::parser_program::{
     ProgramAllocationUsage, ProgramCompileError, ProgramInstruction, ProgramLimits,
     ProgramOperation, ProgramRuntimeError, ProgramRuntimeErrorKind, ProgramSession, ProgramTable,
     ProgramTableCoverage, ProgramTableId, ProgramValue, ProgramValueGraph, RuntimeResult,
-    SessionValue, SourceProgramOutput,
+    SessionValue, SourceProgramOutput, TraversalActivation, TraversalDiagnosticLimits,
+    TraversalFailureWitness,
 };

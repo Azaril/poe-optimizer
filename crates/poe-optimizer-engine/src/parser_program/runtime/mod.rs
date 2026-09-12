@@ -1,5 +1,7 @@
 //! Shared native execution of compiled source programs and persistent build sessions.
 mod classes;
+mod diagnostics;
+pub use diagnostics::{TraversalActivation, TraversalDiagnosticLimits, TraversalFailureWitness};
 mod execute;
 mod session;
 pub use session::{ProgramSession, SessionValue};

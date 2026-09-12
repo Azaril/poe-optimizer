@@ -18,10 +18,83 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-The R2s checkpoint below is the current resume point; later sections retain historical
+The R2t checkpoint below is the current resume point; later sections retain historical
 checkpoints and their original validation scope.
 
-**R2s checkpoint: source modulo and complete flag-helper execution.**
+**Planned architecture review:** [A1-A4 execution-model investigation](#execution-model-investigation-a1-a4)
+will compare the current interpreter with a domain DSL, data-driven rules, native Rust
+algorithm families and hybrids. The owner requested this review because the loader,
+parser and runtime introduce substantial complexity. No replacement is selected. Record
+the present checkpoint, then inventory the cost before extending general Lua compatibility
+into further domains; prototype selection and any significant migration require discussion.
+The full parity and real-build breadth goals remain unchanged.
+
+**R2t checkpoint: exact copy-failure identity.** The native source session now
+has an opt-in traversal-failure witness that retains its actual table/control handles,
+owner and bounded call context before unwinding. Taken handles stay tied to that session;
+diagnostics do not supply traversal order or turn an unsupported operation into success.
+The disabled path collects no trace records. Work/storage limits and stale-witness cleanup
+are explicit.
+
+A test-only source hook observes the exact original `copyTable` function and records its
+input identities, recursion and visible loop locals. Hooked source calls are compared with
+unhooked calls; instrumented native calls retain the uninstrumented error and cache prefix.
+The paired investigation identifies the first modifier record at `cache[line][1][1]` in
+all 30 cases: three copy activations deep, one matching source input identity/alias graph,
+and a native `nil` traversal control. Internal LuaJIT loop cursors are not ordinary `next`
+keys; unavailable source control evidence remains explicit. The passing guarded regression
+requires the native callback to resolve to the exact observed immutable copy-function binding.
+No constructor or layout origin is inferred from equal contents or graph-local table
+numbers. Complete native build coverage remains **0/5**. Original successful returns and
+whole-build activation remain open.
+
+The additional diagnostic-off/on replays double the six positive parses in the same
+cumulative test session. The closure-aware test allowance is explicitly 512 MiB; production
+limits and the legacy scan allowance are unchanged. The first two integration attempts
+remain recorded: the test recorder initially encountered the internal cursor, then the
+expanded workload exhausted its earlier 256 MiB allowance. Neither fix admits unknown
+traversal. A later test guard incorrectly added the immutable copy function as live session
+state; the observer rejected that ownership conflict. The guard now uses the existing
+immutable binding. Production admission checks remain intact.
+
+**Validation passed:** 239 ENGINE cases, 122 PoB source-program unit cases, 65 source
+integration tests and 30 CLI configuration cases: **456 fresh focused cases**, plus the
+104 unchanged DATA cases whose prior source/input/dependency hashes still match (**560
+focused cases** total). The initial integration run passed 60 unaffected tests and exposed
+the guard failure; after repairing the two scanner-only test files, all five scanner tests
+passed. The combined result retains 90 artifacts (75 unaffected and 15 freshly produced
+scanner files), rechecks every semantic gate and verifies 171 selected source files stayed
+unchanged within each producing run. Initial failures and their artifacts remain preserved.
+A separate result-aggregation error omitted the scanner logs from its expected count; the
+corrected audit uses the complete existing manifest without repeating successful tests.
+
+Both CLI configurations, strict workspace/native Clippy, WebAssembly library compilation,
+native runtime dependency isolation, formatting and diff checks pass. The native runtime
+has no PoB/Lua dependency; WebAssembly coverage remains compile-only. Protected input
+builds, bundled data, dependency lock and PoB pin are unchanged. No full-build parity or
+speedup is claimed. Evidence is retained in `runs/r2t-checkpoint.json`; publication and
+exact-head CI are recorded separately in `runs/r2t-publication.json`.
+
+**Next checkpoint:** associate that actual failed modifier record with its native source
+expression and any admitted constructor seed or lost traversal evidence. Then authenticate
+the original producer/template and implement the required generic layout. Preserve the
+unseeded/imported/proof-invalidated distinctions, keep copy destinations independent from
+input order, and retain the existing growing-list interpreter/tracer counterexample. This
+leads to complete public-parser returns/cache transitions and whole-build activation.
+The detailed proposal is retained locally in `runs/r2t-constructor-provenance-plan.md`.
+
+**R2t CI review:** the refreshed 16:01 UTC results for published `1a72d6e`,
+[run `34675346456`](https://github.com/Azaril/poe-optimizer/actions/runs/34675346456),
+show Windows passed and Ubuntu stopped after a hosted runner shutdown. The older schema
+assertion is already repaired. Two intervening Linux runs exposed an unchanged constructor
+warm-test failure: its exact target had no completed live JIT trace. A local Linux build of
+the pinned LuaJIT reproduces the dense 128-value case with `SPILLOV` (too many spill slots).
+The input values remain correct; JIT execution for that case is not established. Keep the
+strict trace gate for compiled-path claims, record this source compiler limitation explicitly,
+and validate the targeted portability repair next. Logs: `runs/r2t-ci-final-review.json`;
+local probe: `runs/r2t-linux-repro/probe.log`. These results do not establish Linux CI success.
+
+**Historical R2s checkpoint:** source modulo and complete flag-helper execution.
 The neutral source model now admits exact retained `bit.band`, `bit.bor`, `bit.bxor`
 and `bit.bnot` primitives. Standalone `%` preserves source precedence and operand timing.
 Native modulo uses the source's separate division/floor/multiplication/subtraction steps;
@@ -1487,6 +1560,43 @@ provider grants and actor/action construction remain subsequent reached dependen
 `ItemAssemblyCatalog` is still PolicyOnly; actual registration needs completed assembly
 and lifecycle source comparisons. Neither this boundary nor an incomplete report passes
 any whole-build parity gate.
+
+## Execution-model investigation: A1-A4
+
+Requested on 2026-09-12. **Status: planned; no architecture change selected.** The current
+loader, source parser, typed IR and interpreter have accumulated substantial support code.
+Evaluate whether their full cost is justified before continuing that model into additional
+domains. This does not presume the current approach is wrong, or treat code already written
+as a reason to retain it. The [investigation brief](rule-execution-model-investigation.md)
+defines the alternatives, constraints and evidence required for a decision.
+
+- [ ] **A1 — inventory and baseline.** After the current checkpoint, map each layer and
+  consumer, distinguish acquisition/parity tooling from shipping preparation and calculation,
+  and record implementation, generated code, tests, update effort and actual runtime costs.
+  Include open runtime dependencies and the five-original **0/5** full native result.
+  State which externally observable semantics need exact parity, and which internal details
+  might be removed only after proving they cannot change results, legality or ordering.
+- [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
+  native Rust algorithm families with injected definitions, the existing interpreter and a
+  hybrid or offline-lowering approach on the same representative mechanisms and corpus.
+  Use all five originals and contrasting interactions; do not optimize the decision for
+  Spark/Mace or a single easy parser case. Measure cold preparation separately from repeated
+  candidate evaluation and multicore throughput; preserve a portable native/WASM route.
+- [ ] **A3 — evidence and architecture decision.** Publish the parity gaps, performance,
+  total maintenance cost, upstream-update experiment and migration risks. Discuss a proposed
+  ADR with the owner before selecting a significant change. Retaining the interpreter is a
+  valid outcome if supported by the comparison; choosing a prototype is not full parity.
+- [ ] **A4 — approved migration or simplification.** Apply the agreed model behind the
+  existing data/evaluator boundaries, migrate versioned definitions and diagnostics, and
+  remove superseded paths after differential and breadth gates pass. If retained, address
+  the measured complexity hotspots and document why replacement offered no net benefit.
+
+**Scheduling/resume:** A1 can begin with the present evidence; full native build completion
+is not a prerequisite. Before a further general-purpose runtime expansion, use the inventory
+to decide whether it should remain a shared interpreter capability or enter A2 as an
+alternative-model experiment. Existing correctness fixes and breadth validation continue.
+Close this milestone only with the recorded decision and its agreed follow-through, while
+keeping the full implementation plan and PoB parity goal intact.
 
 ## Definition storage and UI search
 
@@ -6103,6 +6213,7 @@ is concrete; real-build recommendations depend on both.
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
 | M5: richer objective policies | Not started | Unit-checked expressions, composite and ordered priorities, soft preferences, Pareto selection, and explicit robust aggregation. Test policy-specific selection and preserve hard constraints. |
 | Desktop GUI | Deferred until CLI/report contracts stabilize | Choose frontend; Tauri is a candidate. Reuse core jobs, results and comparison models. Verify CLI/GUI parity, responsive cancellation and native evaluator packaging; package optional reference workers separately. Does not depend on finishing every M4/M5 feature. |
+| A: execution-model investigation and follow-through | Planned; alternatives unselected | A1 inventory and costs, A2 comparable DSL/data/native/interpreter/hybrid prototypes, A3 evidence-backed ADR and owner discussion, A4 agreed migration or simplification. Preserve injected data, optional PoB parity, full real-build semantics and native parallelism; see [A1-A4](#execution-model-investigation-a1-a4). |
 | Native Rust calculation replacement | Active; connected admitted ordinary passives/attribute choices, all class/ascendancy identities, four resistance ascendancy passives and supplied weapon/amulet actor modifiers supported by restricted Spark/Mace pipelines; injected data and lazy native graph search implemented | Class/entrance materialization and explicit finite search rules are implemented; retain reviewed source compatibility, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Typed mixed-candidate preparation and API/whole-search measurements are implemented for the bounded Mace catalog; realistic broader performance, optimizer quality and browser execution still need evidence. |
 | PoE1 adapter | Later, separate track | Add a distinct versioned rules/data/evaluator adapter after PoE2 interfaces are proven; do not mix game identities or reuse PoE2 parity claims. |
 

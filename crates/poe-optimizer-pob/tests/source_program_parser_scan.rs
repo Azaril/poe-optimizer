@@ -4,6 +4,12 @@
 #[allow(dead_code)]
 #[path = "support/source_program_classes.rs"]
 mod classes;
+#[path = "support/source_program_copy_parity.rs"]
+mod copy_parity;
+#[path = "support/source_program_copy_paths.rs"]
+mod copy_paths;
+#[path = "support/source_program_copy_witness.rs"]
+mod copy_witness;
 #[path = "support/source_program_flag_helpers.rs"]
 mod flag_helpers;
 #[path = "support/source_program_observation.rs"]
@@ -64,6 +70,7 @@ fn limits() -> ProgramLimits {
     }
 }
 struct Pair {
+    copy_table: Function,
     observed: ObservedSourceSession,
     compiled: CompiledSourcePrograms,
     session: ProgramSession,
@@ -127,6 +134,7 @@ fn observe(
         callbacks.insert(format!("probe.{name}"), probes.raw_get(*name).unwrap());
     }
     let globals = lua.globals();
+    let copy_table: Function = globals.raw_get("copyTable").unwrap();
     if with_closures {
         for name in flag_helpers::NAMES {
             callbacks.insert(format!("flag.{name}"), globals.raw_get(*name).unwrap());
@@ -264,17 +272,28 @@ fn observe(
             "capture_count":site.captures.len()})
         })
         .collect();
-    let report = json!({"closure_creation_observation":with_closures,"compiled_programs":lowered.catalog().data().programs.len(),"creation_sources":creation_sources,"creation_sites":lowered.catalog().closure_creations().map(|c|c.sites.len()).unwrap_or(0),"unsupported_bodies":lowered.unsupported(),
+    let mut report = json!({"closure_creation_observation":with_closures,"compiled_programs":lowered.catalog().data().programs.len(),"creation_sources":creation_sources,"creation_sites":lowered.catalog().closure_creations().map(|c|c.sites.len()).unwrap_or(0),"unsupported_bodies":lowered.unsupported(),
         "unsupported_sources":unsupported_sources,
         "constructor_frontiers":lowered.constructor_unsupported(),
         "published_cache_alias_retained":true,"state_tables":observed.input().state.tables.len(), "closures":observed.input().closures.len(),
         "capture_cells":observed.input().cells.len(), "source":observed.owner().source()});
     let compiled = CompiledSourcePrograms::new(lowered.catalog()).unwrap();
+    let mut session_limits = limits();
+    if with_closures {
+        // R2t replays every positive miss with diagnostics off/on in this same
+        // cumulative session. Double the test byte allowance for twice the work;
+        // production limits and the legacy scan oracle stay unchanged.
+        session_limits.max_bytes = 512 * 1024 * 1024;
+    }
+    report["session_limits"] = json!({"max_bytes":session_limits.max_bytes,
+        "max_values":session_limits.max_values,"max_steps":session_limits.max_steps,
+        "pattern_max_steps":session_limits.pattern.max_steps});
     let (session, roots) = compiled
-        .session_from_input(observed.input(), limits())
+        .session_from_input(observed.input(), session_limits)
         .unwrap();
     (
         Pair {
+            copy_table,
             observed,
             compiled,
             session,
@@ -372,7 +391,13 @@ fn lines(xml: &str) -> Vec<Vec<u8>> {
         .map(|i| all[i * (all.len() - 1) / 11].clone())
         .collect()
 }
-fn run(lua: &Lua, primitives: &Primitives, xml: &str, with_closures: bool) -> Json {
+fn run(
+    lua: &Lua,
+    primitives: &Primitives,
+    copy_witness: &copy_witness::SourceCopyWitness,
+    xml: &str,
+    with_closures: bool,
+) -> Json {
     let jit: Table = lua.globals().raw_get("jit").unwrap();
     jit.raw_get::<Function>("off")
         .unwrap()
@@ -602,6 +627,7 @@ fn run(lua: &Lua, primitives: &Primitives, xml: &str, with_closures: bool) -> Js
         .session_from_input(pair.observed.input(), limits())
         .unwrap();
     let mut independent = Pair {
+        copy_table: pair.copy_table.clone(),
         observed: pair.observed.clone(),
         compiled: pair.compiled.clone(),
         session: isolated,
@@ -707,7 +733,7 @@ fn run(lua: &Lua, primitives: &Primitives, xml: &str, with_closures: bool) -> Js
     // The genuine public wrapper/captures/cache are in this same owner/session.
     // Its uncached call must expose the next real dependency; it is not replaced.
     let public_cache = if with_closures {
-        public_cache::run(lua, primitives, &parser, &mut pair)
+        public_cache::run(lua, primitives, copy_witness, &parser, &mut pair)
     } else {
         let args = pair.args(&[Value::String(
             lua.create_string("native parser readiness sentinel never matches")
@@ -762,6 +788,7 @@ fn check_all_builds(with_closures: bool) {
         )))
         .unwrap();
         let primitives = Rc::new(RefCell::new(None));
+        let copy_witness = Rc::new(RefCell::new(None));
         let scratch = tempfile::tempdir().unwrap();
         let result = source::observe_with_hooks(
             &project.join("vendor/path-of-building-poe2"),
@@ -770,6 +797,7 @@ fn check_all_builds(with_closures: bool) {
             None,
             false,
             Some(&|lua| {
+                copy_witness.replace(Some(copy_witness::SourceCopyWitness::before_source(lua)?));
                 primitives.replace(Some(if with_closures {
                     Primitives::before_source_with_closures(lua)?
                 } else {
@@ -781,6 +809,7 @@ fn check_all_builds(with_closures: bool) {
                 Ok(run(
                     lua,
                     primitives.borrow().as_ref().unwrap(),
+                    copy_witness.borrow().as_ref().unwrap(),
                     &xml,
                     with_closures,
                 ))

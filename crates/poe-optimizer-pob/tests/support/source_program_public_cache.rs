@@ -111,7 +111,18 @@ fn cache_row(
     );
     (source, native, graph)
 }
-pub(super) fn run(lua: &Lua, primitives: &Primitives, parser: &Function, pair: &mut Pair) -> Json {
+pub(super) fn run(
+    lua: &Lua,
+    primitives: &Primitives,
+    copy_witness: &copy_witness::SourceCopyWitness,
+    parser: &Function,
+    pair: &mut Pair,
+) -> Json {
+    let copy_table = pair.copy_table.clone();
+    assert_eq!(
+        lua.globals().raw_get::<Function>("copyTable").unwrap(),
+        copy_table
+    );
     let cache: Table = lua
         .globals()
         .raw_get::<Table>("modLib")
@@ -300,10 +311,50 @@ pub(super) fn run(lua: &Lua, primitives: &Primitives, parser: &Function, pair: &
             &[initial_native_row],
             &format!("positive fixture must begin as a native cache miss: {text}"),
         );
-        let source = parser
+        let baseline_source = parser
             .call::<MultiValue>((key.clone(), false))
             .unwrap_or_else(|error| panic!("original positive miss {text}: {error}"))
             .into_vec();
+        let baseline_row = cache.raw_get::<Value>(key.clone()).unwrap();
+        let mut baseline_joint = vec![baseline_row.clone()];
+        baseline_joint.extend(baseline_source);
+        let baseline_joint = observation::canonical(&observation::capture(&baseline_joint));
+        let args = pair.args(&[key.clone(), Value::Boolean(false)]);
+        let baseline_error = pair
+            .call("original.parser", &args)
+            .expect_err("current uninstrumented copy frontier");
+        let baseline_frontier = frontier(pair, &baseline_error);
+        let baseline_native_row = lookup(pair, &key);
+        compare(
+            pair,
+            &[baseline_row],
+            &[baseline_native_row],
+            "uninstrumented positive cache prefix",
+        );
+        cache.raw_set(key.clone(), Value::Nil).unwrap();
+        replace(pair, &key, &Value::Nil);
+        let observed_copy = copy_witness
+            .call(
+                lua,
+                parser,
+                &copy_table,
+                MultiValue::from_vec(vec![key.clone(), Value::Boolean(false)]),
+            )
+            .unwrap();
+        let source = observed_copy
+            .result
+            .as_ref()
+            .unwrap_or_else(|error| panic!("hooked positive miss {text}: {error}"))
+            .iter()
+            .cloned()
+            .collect::<Vec<_>>();
+        let mut observed_joint = vec![cache.raw_get::<Value>(key.clone()).unwrap()];
+        observed_joint.extend(source.clone());
+        assert_eq!(
+            observation::canonical(&observation::capture(&observed_joint)),
+            baseline_joint,
+            "hooked/unhooked original cache/result aliases and full packs"
+        );
         assert!(
             source
                 .first()
@@ -320,7 +371,15 @@ pub(super) fn run(lua: &Lua, primitives: &Primitives, parser: &Function, pair: &
         let original_cache_row =
             observation::canonical(&observation::capture(std::slice::from_ref(&source_row)));
         let args = pair.args(&[key.clone(), Value::Boolean(false)]);
+        pair.session
+            .enable_traversal_diagnostics(TraversalDiagnosticLimits {
+                max_frames: 128,
+                max_activations: 1_000_000,
+            })
+            .unwrap();
         let result = pair.call("original.parser", &args);
+        let traversal_witness = pair.session.take_traversal_failure();
+        pair.session.disable_traversal_diagnostics();
         let native_row = lookup(pair, &key);
         let prefix = pair.plain(std::slice::from_ref(&native_row));
         let absent = observation::canonical(&observation::capture(&[Value::Nil]));
@@ -333,6 +392,7 @@ pub(super) fn run(lua: &Lua, primitives: &Primitives, parser: &Function, pair: &
                 &format!("positive miss committed cache prefix: {text}"),
             );
         }
+        let mut copy_failure = Json::Null;
         let (matched_result, dependency) = match result {
             Ok(native) => {
                 assert!(
@@ -365,6 +425,22 @@ pub(super) fn run(lua: &Lua, primitives: &Primitives, parser: &Function, pair: &
                     ProgramRuntimeErrorKind::UnsupportedCapability,
                     "positive miss {text}: {error}"
                 );
+                assert_eq!(
+                    frontier(pair, &error),
+                    baseline_frontier,
+                    "diagnostics preserve the original failure"
+                );
+                let witness = traversal_witness
+                    .as_ref()
+                    .expect("retained native Next failure");
+                copy_failure = copy_parity::compare(
+                    pair,
+                    &observed_copy,
+                    &source_row,
+                    &native_row,
+                    witness,
+                    &error,
+                );
                 (None, Some(frontier(pair, &error)))
             }
         };
@@ -377,6 +453,9 @@ pub(super) fn run(lua: &Lua, primitives: &Primitives, parser: &Function, pair: &
             "complete":matched_result.is_some(),
             "matched_result":matched_result,
             "frontier":dependency,
+            "copy_failure":copy_failure,
+            "hooked_and_unhooked_source_compared":true,
+            "diagnostic_and_uninstrumented_native_compared":true,
         }));
         success_keys.push(key);
     }
