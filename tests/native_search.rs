@@ -7,6 +7,9 @@ use poe_optimizer_native::NativeBackend;
 use serde_json::{Value, json};
 use std::{collections::BTreeMap, fs, path::Path, process::Command};
 
+// These searches check results and evaluation counts, not debug-build throughput.
+const SEARCH_COMPLETION_TIMEOUT_SECONDS: &str = "300";
+
 const TEMPLATE: &str = include_str!("fixtures/calibration/mace-wooden.xml");
 fn weapons() -> Vec<NormalMaceAlternative> {
     [("wood", "Wooden Club"), ("smith", "Smithing Hammer")]
@@ -55,7 +58,7 @@ fn run(
             "--max-evaluations",
             &max.to_string(),
             "--timeout-seconds",
-            "30",
+            SEARCH_COMPLETION_TIMEOUT_SECONDS,
             "--seed",
             "17",
             "--pob",
@@ -73,6 +76,12 @@ fn run(
     serde_json::from_slice(&result.stdout).unwrap()
 }
 fn assert_ledger(report: &Value, expected: usize) {
+    assert_ne!(
+        report["termination"],
+        "time_budget",
+        "search completion limit={SEARCH_COMPLETION_TIMEOUT_SECONDS}s, expected evaluations={expected}:\n{}",
+        serde_json::to_string_pretty(report).unwrap()
+    );
     assert_eq!(report["requested_backend"], "native-poe2");
     assert_eq!(report["execution_kind"], "rust_cpu");
     assert_eq!(report["preparation"]["attempts"], 1);

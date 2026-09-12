@@ -5,6 +5,9 @@ use std::{
     path::{Path, PathBuf},
     process::{Command, Output},
 };
+// This checks complete results across workers, not debug-build throughput.
+const BENCHMARK_COMPLETION_TIMEOUT_SECONDS: &str = "300";
+
 fn cli() -> Command {
     Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
 }
@@ -188,10 +191,17 @@ fn external_package_benchmark_keeps_one_dataset_across_worker_counts() {
                 .arg(fixture())
                 .arg("--data")
                 .arg(&data)
+                .args(["--timeout-seconds", BENCHMARK_COMPLETION_TIMEOUT_SECONDS])
                 .args(["--evaluations", "32", "--jobs"])
                 .arg(jobs.to_string())
                 .output()
                 .unwrap(),
+        );
+        assert_eq!(
+            report["status"],
+            "completed",
+            "benchmark completion limit={BENCHMARK_COMPLETION_TIMEOUT_SECONDS}s, jobs={jobs}:\n{}",
+            serde_json::to_string_pretty(&report).unwrap()
         );
         assert_eq!(report["schema_version"], 2);
         assert_eq!(report["data_trust"]["status"], "custom_unreviewed");

@@ -1,6 +1,11 @@
 //! Native throughput accounting works without a PoB checkout or worker process.
 use serde_json::Value;
-use std::{fs, path::Path, process::Command};
+use std::{fs, path::Path, process::Command, time::Instant};
+
+// These cases verify complete accounting/results across modes and worker counts,
+// not a debug-build speed target. Hosted runs have exhausted the 30-second
+// shared preparation/evaluation budget.
+const BENCHMARK_COMPLETION_TIMEOUT_SECONDS: &str = "300";
 
 const FIXTURE: &str = include_str!("fixtures/calibration/spark-mapping.xml");
 
@@ -10,6 +15,7 @@ fn cli() -> Command {
 
 fn run(temp: &Path, input: &Path, mode: &str, jobs: usize, evaluations: usize) -> Value {
     let output = temp.join(format!("{mode}-{jobs}.json"));
+    let started = Instant::now();
     let result = cli()
         .current_dir(temp)
         .arg("benchmark-native")
@@ -22,7 +28,7 @@ fn run(temp: &Path, input: &Path, mode: &str, jobs: usize, evaluations: usize) -
             "--evaluations",
             &evaluations.to_string(),
             "--timeout-seconds",
-            "30",
+            BENCHMARK_COMPLETION_TIMEOUT_SECONDS,
             "--output",
         ])
         .arg(&output)
@@ -34,7 +40,16 @@ fn run(temp: &Path, input: &Path, mode: &str, jobs: usize, evaluations: usize) -
         String::from_utf8_lossy(&result.stderr)
     );
     assert!(result.stdout.is_empty());
-    serde_json::from_slice(&fs::read(output).unwrap()).unwrap()
+    let report: Value = serde_json::from_slice(&fs::read(output).unwrap()).unwrap();
+    assert_eq!(
+        report["status"],
+        "completed",
+        "Benchmark completion case failed after {:?} with a {}s limit; mode={mode}; jobs={jobs}; evaluations={evaluations}; report: {}",
+        started.elapsed(),
+        BENCHMARK_COMPLETION_TIMEOUT_SECONDS,
+        serde_json::to_string_pretty(&report).unwrap()
+    );
+    report
 }
 
 #[test]

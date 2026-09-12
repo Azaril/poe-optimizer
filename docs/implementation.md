@@ -44,6 +44,40 @@ one reported zero preparation attempts. All three use the helper already fixed i
 `853ca8b` remain in Test with no failed steps in the recorded snapshot. Active logs are
 not yet available. See `runs/r2j-ci-review.json`; do not treat this as a CI pass.
 
+**CI benchmark and search completion follow-up: local validation complete.**
+[Windows job `103445878596`](https://github.com/Azaril/poe-optimizer/actions/runs/34655171901/job/103445878596)
+on `853ca8b` completed with two failures in `native_benchmark_cli`: both expected
+`completed` but received `partial` from the shared 30-second budget. The suite finished
+in 35.35 seconds; its one-second partial-work/deadline test passed. Earlier extraction
+passed in 456.24 seconds with the previous 600-second completion allowance. The logs do
+not isolate time spent in preparation versus iterations. The affected benchmark helper
+was unchanged at published `a1a5bc3`; see `runs/r2l-ci-new-failure-review.json`.
+
+The positive benchmark helper now uses a bounded 300-second completion allowance and
+prints the full report with mode, worker count, evaluation count and elapsed time on
+failure. A source audit found the same 30-second completion assumptions in
+`native_data_cli`, `native_search` and `resistance_search_cli`; their affected native
+completion paths also receive explicit 300-second allowances and full-report diagnostics.
+These three additional paths are preventive repairs, not separately observed hosted
+failures. All existing numerical, checksum, accounting, dataset, worker-count and
+verification assertions remain. The intentional one-second deadline case, small
+evaluation-count budgets, optional PoB search timeouts and production defaults are unchanged.
+
+All four affected test targets passed with default features and without PoB support:
+**44 test/configuration cases**, including intentional deadline and evaluation-budget
+coverage. Strict Clippy for the affected targets in both configurations, workspace
+formatting and diff checks passed. Source/data packages, original builds, reference
+fixtures, dependencies and the PoB pin are unchanged. Review and validation evidence is
+recorded in `runs/r2l-ci-completion-checkpoint.json`; detailed test logs are listed in
+`runs/r2l-ci-benchmark-validation.json` and `runs/r2l-ci-completion-validation.json`.
+
+Hosted success is still pending: the last pre-publication snapshot at 00:25 UTC on
+September 12 shows nine jobs in Test and only the already-reviewed older benchmark
+failure. See `runs/r2l-ci-followup-status.json`. After publishing this repair, check the
+new exact-head run; do not mistake older failures or local passes for its result. Resume
+R2m below after handling any newly observed current-code CI failure. This repair does
+not change the five-original **0/5** complete native-evaluation result.
+
 **Current checkpoint: R2l mutable traversal and original copy/unpack consumers.**
 An optional owner-bound `SourceSessionTraversal` records complete raw-key order and observed
 raw length separately from unordered values and coverage. Native sessions privately remap

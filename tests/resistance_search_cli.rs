@@ -6,6 +6,9 @@ use std::{
     path::Path,
     process::{Command, Output},
 };
+// These searches check results and evaluation counts, not debug-build throughput.
+const SEARCH_COMPLETION_TIMEOUT_SECONDS: &str = "300";
+
 const TEMPLATE: &str = include_str!("fixtures/calibration/mace-wooden.xml");
 fn input() -> Value {
     let mut problem: Value =
@@ -37,7 +40,7 @@ fn search(path: &Path, jobs: usize, max: usize) -> Command {
         "--problem",
         "problem.json",
         "--timeout-seconds",
-        "30",
+        SEARCH_COMPLETION_TIMEOUT_SECONDS,
         "--pob",
         "absent-reference-checkout",
     ])
@@ -57,6 +60,12 @@ fn success(output: Output) -> Value {
     serde_json::from_slice(&output.stdout).unwrap()
 }
 fn verified(report: &Value, total: usize) {
+    assert_ne!(
+        report["termination"],
+        "time_budget",
+        "search completion limit={SEARCH_COMPLETION_TIMEOUT_SECONDS}s, expected evaluations={total}:\n{}",
+        serde_json::to_string_pretty(report).unwrap()
+    );
     assert_eq!(report["schema_version"], 4);
     assert_eq!(report["execution_kind"], "rust_cpu");
     assert_eq!(report["total_evaluations"], total);
