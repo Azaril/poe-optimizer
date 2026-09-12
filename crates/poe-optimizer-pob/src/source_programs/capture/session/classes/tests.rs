@@ -483,6 +483,7 @@ fn late_definition_expansion_respects_reserved_live_table_capacity() {
         forbidden_cells: BTreeSet::new(),
         context: SourceProgramContext::default(),
         constructor_observations: constructors::Pending::default(),
+        closure_observations: closures::Pending::default(),
         immutable_capture_tables: None,
         session_tables: MAX_TABLES - 1,
     };

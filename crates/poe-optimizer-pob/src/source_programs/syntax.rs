@@ -1,5 +1,6 @@
 use super::lowering::*;
 mod assignments;
+mod closures;
 type Expr = ParserProgramExpr;
 type Statement = ParserProgramStatement;
 
@@ -48,6 +49,9 @@ pub(crate) struct Lowerer<'a, 'b> {
     function_start: usize,
     block_depth: usize,
     loop_depth: usize,
+    declarations: Vec<closures::Declaration>,
+    creations: Vec<closures::Creation>,
+    prefix_statements: Vec<Statement>,
 }
 impl<'a, 'b> Lowerer<'a, 'b> {
     pub(crate) fn new(
@@ -79,6 +83,9 @@ impl<'a, 'b> Lowerer<'a, 'b> {
             function_start: 0,
             block_depth: 0,
             loop_depth: 0,
+            declarations: vec![],
+            creations: vec![],
+            prefix_statements: vec![],
         })
     }
     fn peek(&self) -> &str {
@@ -157,6 +164,7 @@ impl<'a, 'b> Lowerer<'a, 'b> {
         let slot = self.slots;
         self.slots += 1;
         self.scopes.last_mut().unwrap().insert(name, slot);
+        self.declare_observed(name, slot)?;
         Ok(slot)
     }
     fn local(&self, name: &str) -> Option<u16> {
@@ -187,7 +195,17 @@ impl<'a, 'b> Lowerer<'a, 'b> {
             source: ParserProgramIntrinsicSource::OriginalGlobal,
         })
     }
-    pub(crate) fn program(mut self, span: &ItemSourceSpan) -> LowerResult<ParserProgram> {
+    pub(crate) fn program(self, span: &ItemSourceSpan) -> LowerResult<ParserProgram> {
+        self.program_with_creations(span)
+            .map(|(program, _)| program)
+    }
+    pub(crate) fn program_with_creations(
+        mut self,
+        span: &ItemSourceSpan,
+    ) -> LowerResult<(
+        ParserProgram,
+        Vec<poe_optimizer_data::source_program::SourceProgramClosureCreation>,
+    )> {
         let positions = self
             .tokens
             .iter()
@@ -195,10 +213,19 @@ impl<'a, 'b> Lowerer<'a, 'b> {
             .filter(|(_, t)| !t.quoted && t.text == "function")
             .map(|(i, _)| i)
             .collect::<Vec<_>>();
-        if positions.len() != 1 {
-            return Err("source span must contain exactly one complete function".into());
-        }
-        let index = positions[0];
+        let index = if let Some(bound) = self.authorization.closure_functions.get(&self.callback_id)
+        {
+            positions
+                .iter()
+                .copied()
+                .find(|index| self.tokens[*index].start == bound.provenance.function_start as usize)
+                .ok_or("observed function start token mismatch")?
+        } else {
+            if positions.len() != 1 {
+                return Err("source span must contain exactly one complete function".into());
+            }
+            positions[0]
+        };
         if self.authorization.standalone_calls {
             // Lua debug spans cover full lines, so a table-inline callback often
             // ends with `end },`. Isolate only the balanced function, retaining
@@ -220,8 +247,14 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                     return Err("method function definitions require implicit-self lowering".into());
                 }
                 self.at += 1;
+                let method_start = self.offset();
                 self.name()?;
-                self.declare("self")?;
+                let local = self.declare("self")?;
+                self.mark_declarations(
+                    &[local],
+                    self.location(method_start, self.end()),
+                    poe_optimizer_data::source_program::SourceProgramClosureLocalKind::Parameter,
+                );
                 self.parameters += 1;
             }
         }
@@ -236,8 +269,14 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                 if self.parameters >= 128 {
                     return Err("program parameter bound".into());
                 }
+                let start = self.offset();
                 let name = self.name()?;
-                self.declare(name)?;
+                let local = self.declare(name)?;
+                self.mark_declarations(
+                    &[local],
+                    self.location(start, self.end()),
+                    poe_optimizer_data::source_program::SourceProgramClosureLocalKind::Parameter,
+                );
                 self.parameters += 1;
                 if self.peek() != "," {
                     break;
@@ -255,20 +294,25 @@ impl<'a, 'b> Lowerer<'a, 'b> {
         if self.at != self.tokens.len() {
             return Err("unconsumed source after complete function".into());
         }
-        Ok(ParserProgram {
-            callback: self.callback_id,
-            parameter_count: self.parameters,
-            variadic: self.variadic,
-            local_count: self.slots,
-            bindings: self.bindings,
-            body,
-            provenance: ParserProgramProvenance {
-                source: span.clone(),
-                function_start: self.function_start as u32,
-                function_end: function_end as u32,
-                function_sha256: hash(&self.body.as_bytes()[self.function_start..function_end]),
+        let provenance = ParserProgramProvenance {
+            source: span.clone(),
+            function_start: self.function_start as u32,
+            function_end: function_end as u32,
+            function_sha256: hash(&self.body.as_bytes()[self.function_start..function_end]),
+        };
+        let creations = self.finish_creations(&provenance)?;
+        Ok((
+            ParserProgram {
+                callback: self.callback_id,
+                parameter_count: self.parameters,
+                variadic: self.variadic,
+                local_count: self.slots,
+                bindings: self.bindings,
+                body,
+                provenance,
             },
-        })
+            creations,
+        ))
     }
     fn block(&mut self, stops: &[&str], scoped: bool) -> LowerResult<Vec<Statement>> {
         self.block_depth += 1;
@@ -291,7 +335,9 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                 return Err("program block length bound".into());
             }
             let terminal = matches!(self.peek(), "return" | "break");
-            body.push(self.stmt()?);
+            let statement = self.stmt()?;
+            body.append(&mut self.prefix_statements);
+            body.push(statement);
             if self.peek() == ";" {
                 self.at += 1;
             }
@@ -312,7 +358,38 @@ impl<'a, 'b> Lowerer<'a, 'b> {
             "local" => {
                 self.at += 1;
                 if self.peek() == "function" {
-                    return Err("nested local function is unsupported".into());
+                    let function_index = self.at;
+                    self.at += 1;
+                    let name = self.name()?;
+                    let local = self.declare(name)?;
+                    if let Some(declaration) = self.declarations.get_mut(local as usize) {
+                        declaration.recursive = true;
+                    }
+                    self.at = function_index;
+                    let value = self.closure_expr(0)?.value;
+                    let location = self.location(start, self.end());
+                    self.mark_declarations(
+                        &[local],
+                        location,
+                        poe_optimizer_data::source_program::SourceProgramClosureLocalKind::Declare,
+                    );
+                    self.prefix_statements.push(Statement {
+                        location,
+                        operation: S::Declare {
+                            locals: vec![local],
+                            values: ParserProgramValueList::default(),
+                        },
+                    });
+                    return self.statement(
+                        S::Assign {
+                            locals: vec![local],
+                            values: ParserProgramValueList {
+                                values: vec![value],
+                                tail: None,
+                            },
+                        },
+                        start,
+                    );
                 }
                 let mut names = vec![self.name()?];
                 while self.peek() == "," {
@@ -580,6 +657,16 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                 }
             }
         };
+        let location = self.location(start, self.end());
+        use poe_optimizer_data::source_program::SourceProgramClosureLocalKind as Kind;
+        match &operation {
+            S::Declare { locals, .. } => self.mark_declarations(locals, location, Kind::Declare),
+            S::ForNumeric { local, .. } => {
+                self.mark_declarations(&[*local], location, Kind::NumericFor)
+            }
+            S::ForEach { locals, .. } => self.mark_declarations(locals, location, Kind::GenericFor),
+            _ => {}
+        }
         self.statement(operation, start)
     }
     fn values(&mut self, depth: usize) -> LowerResult<ParserProgramValueList> {
@@ -690,16 +777,26 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                 return Err("scalar vararg adjustment is not represented".into());
             }
             let height = left.height.max(right.height) + 1;
-            left = self.node(
+            let expression = if self.authorization.standalone_calls
+                && !matches!(
+                    operation,
+                    ParserProgramBinary::And
+                        | ParserProgramBinary::Or
+                        | ParserProgramBinary::Concat
+                ) {
+                ParserProgramExprKind::SourceBinary {
+                    operation,
+                    left: Box::new(self.assignment_operand(left.value)?),
+                    right: Box::new(right.value),
+                }
+            } else {
                 ParserProgramExprKind::Binary {
                     operation,
                     left: Box::new(left.value),
                     right: Box::new(right.value),
-                },
-                start,
-                self.end(),
-                height,
-            )?;
+                }
+            };
+            left = self.node(expression, start, self.end(), height)?;
         }
         Ok(left)
     }
@@ -760,6 +857,7 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                     Term::Value(info)
                 }
                 "{" => Term::Value(self.table(depth + 1)?),
+                "function" => Term::Value(self.closure_expr(depth + 1)?),
                 _ => {
                     let name = self.name()?;
                     if let Some(local) = self.local(name) {
@@ -1210,7 +1308,12 @@ fn expr_height(expr: &Expr) -> usize {
     use ParserProgramExprKind as E;
     match &expr.operation {
         E::Get { table, key } => expr_height(table).max(expr_height(key)) + 1,
-        E::IndexedRead { table, key } => {
+        E::IndexedRead { table, key }
+        | E::SourceBinary {
+            left: table,
+            right: key,
+            ..
+        } => {
             let table = match table.as_ref() {
                 ParserProgramAssignmentOperand::LocalRegister { .. } => 1,
                 ParserProgramAssignmentOperand::Evaluated { value } => expr_height(value) + 1,

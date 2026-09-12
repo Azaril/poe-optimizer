@@ -15,7 +15,16 @@ pub fn lower_observed_from_sources(
     observations: &ObservedSourceConstructors,
 ) -> Result<SourceProgramExtraction> {
     observations.validate_owner(owner)?;
-    let mut lowered = lower_from_sources(sources, owner)?;
+    let lowered = lower_from_sources(sources, owner)?;
+    attach(sources, owner, observations, lowered)
+}
+pub(super) fn attach(
+    sources: &BTreeMap<String, String>,
+    owner: &SourceProgramOwner,
+    observations: &ObservedSourceConstructors,
+    mut lowered: SourceProgramExtraction,
+) -> Result<SourceProgramExtraction> {
+    observations.validate_owner(owner)?;
     let mut sites = Vec::new();
     let mut budget = Budget::default();
     for program in &lowered.catalog.data().programs {
@@ -94,15 +103,28 @@ pub fn lower_observed_from_sources(
                 .insert(program.callback, reason);
         }
     }
-    lowered.catalog = SourceProgramCatalog::new_with_constructors(
-        lowered.catalog.data().clone(),
-        owner.clone(),
-        SourceProgramConstructors {
-            schema_version: SOURCE_PROGRAM_CONSTRUCTORS_SCHEMA_VERSION,
-            profile: observations.profile.clone(),
-            sites,
-        },
-    )
+    let constructors = SourceProgramConstructors {
+        schema_version: SOURCE_PROGRAM_CONSTRUCTORS_SCHEMA_VERSION,
+        profile: observations.profile.clone(),
+        sites,
+    };
+    lowered.catalog = if let Some(creations) = lowered.catalog.closure_creations() {
+        if creations.profile != constructors.profile {
+            return Err(error("closure/table constructor profile mismatch"));
+        }
+        SourceProgramCatalog::new_with_closure_creations(
+            lowered.catalog.data().clone(),
+            owner.clone(),
+            Some(constructors),
+            creations.clone(),
+        )
+    } else {
+        SourceProgramCatalog::new_with_constructors(
+            lowered.catalog.data().clone(),
+            owner.clone(),
+            constructors,
+        )
+    }
     .map_err(error)?;
     Ok(lowered)
 }

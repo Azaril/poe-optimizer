@@ -14,7 +14,9 @@ mod warm;
 use classes::Primitives;
 use mlua::{Function, Lua, MultiValue, Table, Value};
 use poe_optimizer_engine::{lua_pattern::MatchLimits, source_program::*};
-use poe_optimizer_pob::source_programs::{capture::*, lower_observed_from_sources};
+use poe_optimizer_pob::source_programs::{
+    capture::*, lower_observed_closures_and_constructors_from_sources, lower_observed_from_sources,
+};
 use serde_json::{Value as Json, json};
 use std::{
     cell::RefCell,
@@ -96,6 +98,7 @@ fn observe(
     parser: &Function,
     probes: &Table,
     dictionaries: &BTreeMap<String, Table>,
+    with_closures: bool,
 ) -> (Pair, Json) {
     let vendor =
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../vendor/path-of-building-poe2");
@@ -151,7 +154,15 @@ fn observe(
                     }),
                     projections: vec![SourceTableSelection {
                         table: globals,
-                        fields: ["copyTable", "foo"].map(str::to_owned).into(),
+                        // The complete parser and wrapper read these original globals.
+                        // Keep the preceding scanner-only observation unchanged.
+                        fields: if with_closures {
+                            ["copyTable", "foo", "type", "unpack"]
+                                .map(str::to_owned)
+                                .into()
+                        } else {
+                            ["copyTable", "foo"].map(str::to_owned).into()
+                        },
                         indexed: BTreeSet::new(),
                         allow_index_fallback: false,
                         allow_call_fallback: false,
@@ -184,11 +195,20 @@ fn observe(
         input.state.values[observed.root_index("public.cache").unwrap()],
         "published cache and closure cell preserve the same identity"
     );
-    let lowered = lower_observed_from_sources(
-        &texts,
-        observed.owner(),
-        observed.constructor_observations().unwrap(),
-    )
+    let lowered = if with_closures {
+        lower_observed_closures_and_constructors_from_sources(
+            &texts,
+            observed.owner(),
+            observed.closure_observations().unwrap(),
+            observed.constructor_observations().unwrap(),
+        )
+    } else {
+        lower_observed_from_sources(
+            &texts,
+            observed.owner(),
+            observed.constructor_observations().unwrap(),
+        )
+    }
     .unwrap();
     // Preserve the exact declarations behind each frontier so the next source
     // dependency is reviewable without guessing from owner-local callback IDs.
@@ -201,7 +221,19 @@ fn observe(
                 "reason":reason})
         })
         .collect();
-    let report = json!({"unsupported_bodies":lowered.unsupported(),
+    let creation_sources: Vec<_> = lowered
+        .catalog()
+        .closure_creations()
+        .into_iter()
+        .flat_map(|facet| &facet.sites)
+        .map(|site| {
+            json!({"callback":site.callback,
+            "declaration":observed.owner().callback(site.callback).unwrap().kind,
+            "expression":site.expression,"child":site.child_provenance,
+            "capture_count":site.captures.len()})
+        })
+        .collect();
+    let report = json!({"closure_creation_observation":with_closures,"compiled_programs":lowered.catalog().data().programs.len(),"creation_sources":creation_sources,"creation_sites":lowered.catalog().closure_creations().map(|c|c.sites.len()).unwrap_or(0),"unsupported_bodies":lowered.unsupported(),
         "unsupported_sources":unsupported_sources,
         "constructor_frontiers":lowered.constructor_unsupported(),
         "published_cache_alias_retained":true,"state_tables":observed.input().state.tables.len(), "closures":observed.input().closures.len(),
@@ -309,7 +341,7 @@ fn lines(xml: &str) -> Vec<Vec<u8>> {
         .map(|i| all[i * (all.len() - 1) / 11].clone())
         .collect()
 }
-fn run(lua: &Lua, primitives: &Primitives, xml: &str) -> Json {
+fn run(lua: &Lua, primitives: &Primitives, xml: &str, with_closures: bool) -> Json {
     let jit: Table = lua.globals().raw_get("jit").unwrap();
     jit.raw_get::<Function>("off")
         .unwrap()
@@ -374,7 +406,15 @@ fn run(lua: &Lua, primitives: &Primitives, xml: &str) -> Json {
     malformed.raw_set("[", true).unwrap();
     dictionaries.insert("malformed".into(), malformed);
 
-    let (mut pair, inventory) = observe(lua, primitives, &scan, &parser, &probes, &dictionaries);
+    let (mut pair, inventory) = observe(
+        lua,
+        primitives,
+        &scan,
+        &parser,
+        &probes,
+        &dictionaries,
+        with_closures,
+    );
     let mut rows = Vec::new();
     for name in DICTIONARIES {
         let table = &dictionaries[*name];
@@ -643,20 +683,40 @@ fn run(lua: &Lua, primitives: &Primitives, xml: &str) -> Json {
         .call("original.parser", &args)
         .expect_err("full parser milestone not complete yet; extend acceptance before admission");
     assert_eq!(error.kind, ProgramRuntimeErrorKind::UnsupportedCapability);
+    let frontier_declaration = error
+        .callback
+        .and_then(|callback| pair.observed.owner().callback(callback))
+        .map(|callback| &callback.kind);
     json!({"inventory":inventory,"real_dictionary_cases":rows,"fixture_cases":fixture_rows,
         "dictionary_mutation":{"baseline":baseline,"changed":changed,"restored":restored},
         "source_errors":source_errors,"plain_malformed_pattern":plain_malformed,"captures_writable_and_independent":true,"session_isolation":true,"warmed":warmed,
-        "public_parser_frontier":{"kind":format!("{:?}",error.kind),"message":error.message,"callback":error.callback,"location":error.location},
+        "public_parser_frontier":{"declaration":frontier_declaration,"kind":format!("{:?}",error.kind),"message":error.message,"callback":error.callback,"location":error.location},
         "steps":pair.session.steps(),"pattern_steps":pair.session.pattern_steps(),
         "native_complete_builds":0,"complete_public_parser":false})
 }
 #[test]
 fn complete_original_scan_uses_initialized_parser_dictionaries_on_all_five_builds() {
+    check_all_builds(false);
+}
+#[test]
+fn original_parser_factory_graph_preserves_all_five_scan_contracts() {
+    check_all_builds(true);
+}
+fn check_all_builds(with_closures: bool) {
+    let test_name = if with_closures {
+        "original_parser_factory_graph_preserves_all_five_scan_contracts"
+    } else {
+        "complete_original_scan_uses_initialized_parser_dictionaries_on_all_five_builds"
+    };
     let project = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../..")
         .canonicalize()
         .unwrap();
-    let destination = project.join("runs/r2n-parser-scan");
+    let destination = project.join(if with_closures {
+        "runs/r2p-parser-factories"
+    } else {
+        "runs/r2n-parser-scan"
+    });
     fs::create_dir_all(&destination).unwrap();
     if let Ok(build) = std::env::var("POE_PARSER_SCAN_CHILD") {
         assert!(["01", "02", "03", "04", "05"].contains(&build.as_str()));
@@ -673,10 +733,21 @@ fn complete_original_scan_uses_initialized_parser_dictionaries_on_all_five_build
             None,
             false,
             Some(&|lua| {
-                primitives.replace(Some(Primitives::before_source_with_constructors(lua)?));
+                primitives.replace(Some(if with_closures {
+                    Primitives::before_source_with_closures(lua)?
+                } else {
+                    Primitives::before_source_with_constructors(lua)?
+                }));
                 Ok(())
             }),
-            Some(&|lua| Ok(run(lua, primitives.borrow().as_ref().unwrap(), &xml))),
+            Some(&|lua| {
+                Ok(run(
+                    lua,
+                    primitives.borrow().as_ref().unwrap(),
+                    &xml,
+                    with_closures,
+                ))
+            }),
         )
         .unwrap();
         fs::write(
@@ -689,11 +760,7 @@ fn complete_original_scan_uses_initialized_parser_dictionaries_on_all_five_build
     for build in ["01", "02", "03", "04", "05"] {
         let log = fs::File::create(destination.join(format!("build-{build}.log"))).unwrap();
         let mut child = Command::new(std::env::current_exe().unwrap())
-            .args([
-                "--exact",
-                "complete_original_scan_uses_initialized_parser_dictionaries_on_all_five_builds",
-                "--nocapture",
-            ])
+            .args(["--exact", test_name, "--nocapture"])
             .env("POE_PARSER_SCAN_CHILD", build)
             .current_dir(project.join("vendor/path-of-building-poe2/src"))
             .stdout(Stdio::from(log.try_clone().unwrap()))

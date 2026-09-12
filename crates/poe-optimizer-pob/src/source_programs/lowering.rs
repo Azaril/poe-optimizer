@@ -22,6 +22,9 @@ pub(crate) struct LoweringBindings {
     /// Standalone owners may use receiver lookup and additional language primitives.
     /// Parser extraction keeps its separately reviewed capability inventory unchanged.
     pub(crate) standalone_calls: bool,
+    pub(crate) closure_functions: BTreeMap<ParserCallbackId, super::closures::BoundFunction>,
+    pub(crate) closure_prototypes:
+        BTreeMap<ParserCallbackId, poe_optimizer_data::source_program::SourceClosurePrototypeId>,
 }
 
 pub(crate) type LowerResult<T> = std::result::Result<T, String>;

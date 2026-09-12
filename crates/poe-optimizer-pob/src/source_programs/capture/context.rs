@@ -39,8 +39,12 @@ pub struct ObservedSourceContext {
     pub(super) owner: SourceProgramOwner,
     pub(super) callbacks: BTreeMap<String, SourceCallbackId>,
     pub(super) constructor_observations: Option<ObservedSourceConstructors>,
+    pub(super) closure_observations: Option<ObservedSourceClosureCreations>,
 }
 impl ObservedSourceContext {
+    pub fn closure_observations(&self) -> Option<&ObservedSourceClosureCreations> {
+        self.closure_observations.as_ref()
+    }
     pub fn constructor_observations(&self) -> Option<&ObservedSourceConstructors> {
         self.constructor_observations.as_ref()
     }

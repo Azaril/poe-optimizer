@@ -69,7 +69,7 @@ fn named_definition_roots_are_explicit_and_exact_owner_bound() {
     let ParserProgramStatementKind::Return { values } = &program.body[0].operation else {
         panic!("return")
     };
-    let ParserProgramExprKind::Binary { right, .. } = &values.values[0].operation else {
+    let ParserProgramExprKind::SourceBinary { right, .. } = &values.values[0].operation else {
         panic!("multiply")
     };
     let ParserProgramExprKind::IndexedRead { table, .. } = &right.operation else {

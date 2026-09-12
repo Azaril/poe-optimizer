@@ -109,6 +109,8 @@ fn parser_bindings(constructor: ParserCallbackId) -> LoweringBindings {
         implicit_self: false,
         environment: None,
         standalone_calls: false,
+        closure_functions: BTreeMap::new(),
+        closure_prototypes: BTreeMap::new(),
     }
 }
 

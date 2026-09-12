@@ -363,7 +363,15 @@ impl CapturedLive {
         let mut closures = Vec::new();
         for closure in &self.closures {
             let source = &closure.source;
+            let function = self.arena.function(closure.function)?;
+            let actual_proto = definitions
+                .observer
+                .closure_reflection
+                .as_ref()
+                .map(|r| r.identity(&function))
+                .transpose()?;
             let key = (
+                actual_proto,
                 source.path.clone(),
                 source.line,
                 source.end_line,

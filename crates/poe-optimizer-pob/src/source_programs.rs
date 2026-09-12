@@ -15,7 +15,11 @@ use poe_optimizer_data::source_program::{
 use std::collections::BTreeMap;
 
 pub mod capture;
+mod closures;
 mod constructors;
+pub use closures::{
+    lower_observed_closures_and_constructors_from_sources, lower_observed_closures_from_sources,
+};
 pub use constructors::lower_observed_from_sources;
 pub(crate) mod lowering;
 mod syntax;
@@ -70,6 +74,16 @@ pub fn lower_from_sources(
     sources: &BTreeMap<String, String>,
     owner: &SourceProgramOwner,
 ) -> Result<SourceProgramExtraction> {
+    lower_inner(sources, owner, None)
+}
+fn lower_inner(
+    sources: &BTreeMap<String, String>,
+    owner: &SourceProgramOwner,
+    closures: Option<(
+        &BTreeMap<ParserCallbackId, closures::BoundFunction>,
+        &poe_optimizer_data::source_program::SourceTableRuntimeProfile,
+    )>,
+) -> Result<SourceProgramExtraction> {
     if owner.parser().is_some() {
         return Err(error(
             "parser source owners require the parser extraction adapter",
@@ -82,6 +96,14 @@ pub fn lower_from_sources(
         environment: owner.environment_root(),
         ..LoweringBindings::default()
     };
+    if let Some((functions, _)) = closures {
+        bindings.closure_functions = functions.clone();
+        for id in functions.keys() {
+            if let Some(prototype) = owner.closure_prototype_id(*id) {
+                bindings.closure_prototypes.insert(*id, prototype);
+            }
+        }
+    }
     for root in owner.roots() {
         let id = owner.root_id(&root.name).expect("validated owner root");
         bindings
@@ -100,6 +122,7 @@ pub fn lower_from_sources(
     let mut budget = Budget::default();
     let mut programs = BTreeMap::new();
     let mut unsupported = BTreeMap::new();
+    let mut creation_sites = BTreeMap::new();
     for (index, callback) in owner.callbacks().iter().enumerate() {
         let id = ParserCallbackId(index as u32 + 1);
         if bindings.intrinsics.contains_key(&id) {
@@ -130,10 +153,11 @@ pub fn lower_from_sources(
             return Err(error("program source span mismatch"));
         }
         match Lowerer::new(&lua, &body, id, callback, &bindings, &mut budget)
-            .and_then(|lowerer| lowerer.program(span))
+            .and_then(|lowerer| lowerer.program_with_creations(span))
         {
-            Ok(program) => {
+            Ok((program, sites)) => {
                 programs.insert(id, program);
+                creation_sites.insert(id, sites);
             }
             Err(reason) => {
                 unsupported.insert(id, reason);
@@ -144,15 +168,41 @@ pub fn lower_from_sources(
         let rejected = programs
             .iter()
             .filter_map(|(id, program)| {
-                program.bindings.iter().find_map(|binding| {
-                    let ParserProgramBinding::CapturedCallback { callback, .. } = binding else {
-                        return None;
-                    };
-                    (!programs.contains_key(callback)).then(|| {
-                        (
-                            *id,
-                            format!("captured helper {callback:?} has no complete lowered program"),
-                        )
+                let child_failure = creation_sites
+                    .get(id)
+                    .into_iter()
+                    .flatten()
+                    .find_map(|site| {
+                        let child = owner
+                            .closure_prototype(site.prototype)
+                            .expect("observed child prototype")
+                            .callback;
+                        (!programs.contains_key(&child)).then(|| {
+                            (
+                                *id,
+                                format!(
+                                    "created child {child:?} has no complete lowered program: {}",
+                                    unsupported
+                                        .get(&child)
+                                        .map_or("unknown body frontier", String::as_str)
+                                ),
+                            )
+                        })
+                    });
+                child_failure.or_else(|| {
+                    program.bindings.iter().find_map(|binding| {
+                        let ParserProgramBinding::CapturedCallback { callback, .. } = binding
+                        else {
+                            return None;
+                        };
+                        (!programs.contains_key(callback)).then(|| {
+                            (
+                                *id,
+                                format!(
+                                    "captured helper {callback:?} has no complete lowered program"
+                                ),
+                            )
+                        })
                     })
                 })
             })
@@ -170,14 +220,37 @@ pub fn lower_from_sources(
         .enumerate()
         .map(|(index, callback)| (*callback, ParserProgramId(index as u32 + 1)))
         .collect();
-    let catalog = SourceProgramCatalog::new(
-        ParserProgramData {
-            schema_version: PARSER_PROGRAM_SCHEMA_VERSION,
-            programs: programs.into_values().collect(),
-            callbacks,
-        },
-        owner.clone(),
-    )
+    let data = ParserProgramData {
+        schema_version: PARSER_PROGRAM_SCHEMA_VERSION,
+        programs: programs.into_values().collect(),
+        callbacks,
+    };
+    let catalog = if let Some((_, profile)) = closures {
+        use poe_optimizer_data::source_program::{
+            SOURCE_PROGRAM_CLOSURE_CREATIONS_SCHEMA_VERSION, SourceProgramClosureCreations,
+        };
+        let retained = data
+            .callbacks
+            .keys()
+            .collect::<std::collections::BTreeSet<_>>();
+        let sites = creation_sites
+            .into_iter()
+            .filter(|(id, _)| retained.contains(id))
+            .flat_map(|(_, sites)| sites)
+            .collect();
+        SourceProgramCatalog::new_with_closure_creations(
+            data,
+            owner.clone(),
+            None,
+            SourceProgramClosureCreations {
+                schema_version: SOURCE_PROGRAM_CLOSURE_CREATIONS_SCHEMA_VERSION,
+                profile: profile.clone(),
+                sites,
+            },
+        )
+    } else {
+        SourceProgramCatalog::new(data, owner.clone())
+    }
     .map_err(error)?;
     Ok(SourceProgramExtraction {
         catalog,

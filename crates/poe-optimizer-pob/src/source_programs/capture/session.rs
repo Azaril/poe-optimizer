@@ -19,8 +19,12 @@ pub struct ObservedSourceSession {
     input: SourceSessionInput,
     roots: BTreeMap<String, usize>,
     pub(super) constructor_observations: Option<ObservedSourceConstructors>,
+    pub(super) closure_observations: Option<ObservedSourceClosureCreations>,
 }
 impl ObservedSourceSession {
+    pub fn closure_observations(&self) -> Option<&ObservedSourceClosureCreations> {
+        self.closure_observations.as_ref()
+    }
     pub fn constructor_observations(&self) -> Option<&ObservedSourceConstructors> {
         self.constructor_observations.as_ref()
     }
@@ -137,6 +141,7 @@ impl SourceClosureObserver {
             session_tables: 0,
             context: SourceProgramContext::default(),
             constructor_observations: constructors::Pending::default(),
+            closure_observations: closures::Pending::default(),
         };
         definitions.register_projections(&request.definitions)?;
         let prepared = class_request
@@ -252,7 +257,8 @@ impl SourceClosureObserver {
         definitions.capture_environment(&request.definitions, &mut definition_roots)?;
         // Every explicitly immutable identity must have its actual captured table;
         // session values refer to these graph IDs without copying their data.
-        let conversion = live.convert(&mut definitions, roots.into_values().collect())?;
+        let mut conversion = live.convert(&mut definitions, roots.into_values().collect())?;
+        definitions.finish_closure_creations(&mut conversion.prototypes)?;
         let context = definitions.context;
         let owner = SourceProgramOwner::new_with_closures(
             SourceProgramDefinitions {
@@ -289,6 +295,8 @@ impl SourceClosureObserver {
             .collect::<Result<_>>()?;
         let constructor_observations =
             self.bind_constructors(&owner, definitions.constructor_observations);
+        let closure_observations =
+            self.bind_closure_creations(&owner, definitions.closure_observations);
         let input = SourceSessionInput {
             owner,
             class_bindings,
@@ -308,6 +316,7 @@ impl SourceClosureObserver {
         }
         self.verify_iteration(request.definitions.capture_iteration)?;
         Ok(ObservedSourceSession {
+            closure_observations,
             constructor_observations,
             input,
             roots: named_roots,

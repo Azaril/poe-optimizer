@@ -1,13 +1,21 @@
 //! Session-owned closure identities and shared capture cells on the existing heap.
 use super::{Error, Heap, Result, TableBehavior, TableRef, V, index, input_value, validate_input};
-use poe_optimizer_data::modifier_parser::ParserCallbackId;
-use poe_optimizer_data::source_program::SourceSessionInput;
+use poe_optimizer_data::modifier_parser::{ParserCallbackId, ParserProgramCaptureOrigin};
+use poe_optimizer_data::source_program::{SourceClosurePrototypeId, SourceSessionInput};
 use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub(in crate::parser_program::runtime) struct ClosureRef(pub u32);
 #[derive(Debug, Clone, Copy)]
-struct CellRef(u32);
+pub(in crate::parser_program::runtime) struct CellRef(u32);
+
+/// One lexical binding generation. Promoted values live in the session arena,
+/// never behind a pointer into a running Rust frame.
+#[derive(Clone)]
+pub(in crate::parser_program::runtime) enum LocalSlot {
+    Value(V),
+    Cell(CellRef),
+}
 pub(super) struct Closure {
     callback: ParserCallbackId,
     captures: Vec<CellRef>,
@@ -25,6 +33,140 @@ fn offset(existing: usize, additional: usize, name: &'static str) -> Result<u32>
     Ok(first)
 }
 impl Heap<'_> {
+    /// Instantiate validated source code on this same session arena. No pointer
+    /// targets a Rust frame: promotion gives the live binding a stable heap cell.
+    pub(in crate::parser_program::runtime) fn create_closure(
+        &mut self,
+        prototype: SourceClosurePrototypeId,
+        parent: Option<ClosureRef>,
+        locals: &mut [LocalSlot],
+        origins: &[ParserProgramCaptureOrigin],
+        work: &mut crate::lua_pattern::MatchBudget,
+    ) -> Result<V> {
+        let definition = self
+            .owner()
+            .closure_prototype(prototype)
+            .ok_or_else(|| Error::input("missing created closure prototype"))?;
+        let callback = definition.callback;
+        let expected = self
+            .owner()
+            .callback(callback)
+            .ok_or_else(|| Error::input("missing created closure source"))?
+            .upvalues
+            .len();
+        if expected != origins.len() || origins.len() > 128 || locals.len() > 1024 {
+            return Err(Error::input("created closure capture layout mismatch"));
+        }
+        let closure_offset = offset(self.closures.len(), 1, "created closure identity bound")?;
+        // Fixed bounded scratch storage does not allocate or retain build state.
+        // Zero marks a local needing promotion; existing positive IDs are reused.
+        let mut local_cells = [None; 1024];
+        let mut promotion_slots = [0u16; 128];
+        let mut new_count = 0usize;
+        for origin in origins {
+            work.charge(1)?;
+            match *origin {
+                ParserProgramCaptureOrigin::Local { local } => {
+                    let slot = locals
+                        .get(usize::from(local))
+                        .ok_or_else(|| Error::input("created closure local is missing"))?;
+                    if local_cells[usize::from(local)].is_none() {
+                        local_cells[usize::from(local)] = Some(match slot {
+                            LocalSlot::Value(_) => {
+                                promotion_slots[new_count] = local;
+                                new_count += 1;
+                                CellRef(0)
+                            }
+                            LocalSlot::Cell(cell) => *cell,
+                        });
+                    }
+                }
+                ParserProgramCaptureOrigin::ParentCapture { upvalue } => {
+                    let parent = parent.ok_or_else(|| {
+                        Error::unsupported("inherited capture creation requires a session closure")
+                    })?;
+                    self.capture_cell(parent, upvalue)?;
+                }
+            }
+        }
+        let cell_offset = offset(
+            self.cells.len(),
+            new_count,
+            "created capture cell identity bound",
+        )?;
+        self.budget.values(1 + origins.len() + new_count)?;
+        self.budget.bytes(
+            std::mem::size_of::<Closure>()
+                + origins.len() * std::mem::size_of::<CellRef>()
+                + new_count * std::mem::size_of::<V>(),
+        )?;
+        // Reserve every arena/instance allocation before publishing identities or
+        // changing any frame binding. Capacity changes alone have no Lua identity.
+        self.closures
+            .try_reserve_exact(1)
+            .map_err(|_| Error::resource("created closure arena allocation"))?;
+        self.cells
+            .try_reserve_exact(new_count)
+            .map_err(|_| Error::resource("created capture cell allocation"))?;
+        let mut captures = Vec::new();
+        captures
+            .try_reserve_exact(origins.len())
+            .map_err(|_| Error::resource("created capture layout allocation"))?;
+        for (index, local) in promotion_slots.iter().take(new_count).enumerate() {
+            work.charge(1)?;
+            local_cells[usize::from(*local)] = Some(CellRef(cell_offset + index as u32 + 1));
+        }
+        for origin in origins {
+            work.charge(1)?;
+            captures.push(match *origin {
+                ParserProgramCaptureOrigin::Local { local } => {
+                    local_cells[usize::from(local)].expect("validated local capture")
+                }
+                ParserProgramCaptureOrigin::ParentCapture { upvalue } => {
+                    self.capture_cell(parent.expect("validated live parent"), upvalue)?
+                }
+            });
+        }
+        // No fallible work after this point. Publish cells in their staged
+        // first-capture order without scanning unrelated lexical slots.
+        for local in promotion_slots.into_iter().take(new_count) {
+            let cell = local_cells[usize::from(local)].expect("staged promotion");
+            let slot = &mut locals[usize::from(local)];
+            let LocalSlot::Value(value) = slot else {
+                unreachable!("new promotion")
+            };
+            self.cells.push(value.clone());
+            *slot = LocalSlot::Cell(cell);
+        }
+        self.closures.push(Closure { callback, captures });
+        Ok(V::Closure(ClosureRef(closure_offset + 1)))
+    }
+    pub(in crate::parser_program::runtime) fn read_local(&self, local: &LocalSlot) -> Result<V> {
+        match local {
+            LocalSlot::Value(value) => Ok(value.clone()),
+            LocalSlot::Cell(cell) => self
+                .cells
+                .get(index(cell.0)?)
+                .cloned()
+                .ok_or_else(|| Error::input("missing promoted local cell")),
+        }
+    }
+    pub(in crate::parser_program::runtime) fn write_local(
+        &mut self,
+        local: &mut LocalSlot,
+        value: V,
+    ) -> Result<()> {
+        match local {
+            LocalSlot::Value(target) => *target = value,
+            LocalSlot::Cell(cell) => {
+                *self
+                    .cells
+                    .get_mut(index(cell.0)?)
+                    .ok_or_else(|| Error::input("missing promoted local cell"))? = value
+            }
+        }
+        Ok(())
+    }
     pub(in crate::parser_program::runtime) fn import_session_input(
         &mut self,
         input: &SourceSessionInput,
@@ -210,5 +352,213 @@ impl Heap<'_> {
             .ok_or_else(|| Error::input("missing live capture cell"))?;
         *target = value;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::lua_pattern::{MatchBudget, MatchLimits};
+    use crate::parser_program::runtime::{ProgramLimits, ProgramRuntimeErrorKind};
+    use poe_optimizer_data::item_loading::{ItemLoadingSource, ItemSourceSpan};
+    use poe_optimizer_data::source_program::*;
+    fn owner() -> SourceProgramOwner {
+        let path = "src/Factory.lua".to_owned();
+        SourceProgramOwner::new_with_closures(
+            SourceProgramDefinitions {
+                schema_version: SOURCE_PROGRAM_DEFINITIONS_SCHEMA_VERSION,
+                source: ItemLoadingSource {
+                    upstream_revision: "a".repeat(40),
+                    files: BTreeMap::from([(path.clone(), "b".repeat(64))]),
+                    construction_spans: BTreeMap::new(),
+                    module_order: vec![path.clone()],
+                },
+                tables: vec![],
+                roots: vec![],
+                intrinsics: BTreeMap::new(),
+                callbacks: vec![SourceCallback {
+                    kind: SourceCallbackKind::Lua {
+                        source: ItemSourceSpan {
+                            path,
+                            line: 1,
+                            end_line: 2,
+                            sha256: "b".repeat(64),
+                        },
+                    },
+                    environment: SourceEnvironment::OriginalGlobals,
+                    upvalues: (0..2)
+                        .map(|i| SourceUpvalue {
+                            name: format!("c{i}"),
+                            value: SourceValue::LiveCapture {},
+                        })
+                        .collect(),
+                }],
+            },
+            None,
+            None,
+            SourceClosurePrototypes {
+                schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
+                prototypes: vec![SourceClosurePrototype {
+                    callback: SourceCallbackId(1),
+                }],
+            },
+        )
+        .unwrap()
+    }
+    fn locals() -> Vec<LocalSlot> {
+        vec![LocalSlot::Value(V::Number(7.0))]
+    }
+    fn origins() -> [ParserProgramCaptureOrigin; 2] {
+        [ParserProgramCaptureOrigin::Local { local: 0 }; 2]
+    }
+    #[test]
+    fn failed_creation_keeps_work_charges_without_publishing_cells_or_identity() {
+        let owner = owner();
+        for bound in 0..5 {
+            let mut heap = Heap::owned(&owner, ProgramLimits::default());
+            let mut locals = locals();
+            let mut work = MatchBudget::new(MatchLimits {
+                max_steps: bound,
+                ..MatchLimits::default()
+            });
+            let error = heap
+                .create_closure(
+                    SourceClosurePrototypeId(1),
+                    None,
+                    &mut locals,
+                    &origins(),
+                    &mut work,
+                )
+                .unwrap_err();
+            assert_eq!(error.kind, ProgramRuntimeErrorKind::ResourceBound);
+            assert!(heap.cells.is_empty() && heap.closures.is_empty());
+            assert!(matches!(locals[0], LocalSlot::Value(V::Number(7.0))));
+            assert_eq!(work.steps_used(), bound + 1);
+            let charged = heap.stats();
+            if bound >= 2 {
+                assert_eq!(charged.values, 4);
+                assert!(charged.bytes > 0);
+            }
+            // A second failure retains the same exhausted shared work counter.
+            assert!(
+                heap.create_closure(
+                    SourceClosurePrototypeId(1),
+                    None,
+                    &mut locals,
+                    &origins(),
+                    &mut work
+                )
+                .is_err()
+            );
+            assert_eq!(heap.stats().values, charged.values);
+            assert_eq!(heap.stats().bytes, charged.bytes);
+            let mut available = MatchBudget::new(MatchLimits::default());
+            let value = heap
+                .create_closure(
+                    SourceClosurePrototypeId(1),
+                    None,
+                    &mut locals,
+                    &origins(),
+                    &mut available,
+                )
+                .unwrap();
+            assert!(matches!(value, V::Closure(ClosureRef(1))));
+            assert_eq!(heap.cells.len(), 1);
+            assert_eq!(
+                heap.closures[0].captures[0].0,
+                heap.closures[0].captures[1].0
+            );
+        }
+    }
+    #[test]
+    fn failed_allocation_admission_never_promotes_a_local_or_publishes_a_closure() {
+        let owner = owner();
+        for limits in [
+            ProgramLimits {
+                max_values: 3,
+                ..ProgramLimits::default()
+            },
+            ProgramLimits {
+                max_bytes: 0,
+                ..ProgramLimits::default()
+            },
+        ] {
+            let mut heap = Heap::owned(&owner, limits);
+            let mut locals = locals();
+            let mut work = MatchBudget::new(MatchLimits::default());
+            let err = heap
+                .create_closure(
+                    SourceClosurePrototypeId(1),
+                    None,
+                    &mut locals,
+                    &origins(),
+                    &mut work,
+                )
+                .unwrap_err();
+            assert_eq!(err.kind, ProgramRuntimeErrorKind::ResourceBound);
+            assert!(heap.cells.is_empty() && heap.closures.is_empty());
+            assert!(matches!(locals[0], LocalSlot::Value(V::Number(7.0))));
+            assert_eq!(work.steps_used(), 2);
+            if limits.max_bytes == 0 {
+                assert_eq!(heap.stats().values, 4);
+            }
+        }
+    }
+    #[test]
+    fn duplicate_and_sibling_captures_reuse_cells_while_new_binding_gets_a_new_cell() {
+        let owner = owner();
+        let mut heap = Heap::owned(&owner, ProgramLimits::default());
+        let mut locals = locals();
+        let mut work = MatchBudget::new(MatchLimits::default());
+        let V::Closure(first) = heap
+            .create_closure(
+                SourceClosurePrototypeId(1),
+                None,
+                &mut locals,
+                &origins(),
+                &mut work,
+            )
+            .unwrap()
+        else {
+            panic!()
+        };
+        let V::Closure(second) = heap
+            .create_closure(
+                SourceClosurePrototypeId(1),
+                None,
+                &mut locals,
+                &origins(),
+                &mut work,
+            )
+            .unwrap()
+        else {
+            panic!()
+        };
+        assert_ne!(first, second);
+        assert_eq!(heap.cells.len(), 1);
+        heap.write_local(&mut locals[0], V::Number(8.0)).unwrap();
+        assert!(matches!(
+            heap.closure_capture(first, 1).unwrap(),
+            V::Number(8.0)
+        ));
+        heap.set_closure_capture(second, 0, V::Number(9.0)).unwrap();
+        assert!(matches!(
+            heap.read_local(&locals[0]).unwrap(),
+            V::Number(9.0)
+        ));
+        locals[0] = LocalSlot::Value(V::Number(20.0));
+        heap.create_closure(
+            SourceClosurePrototypeId(1),
+            None,
+            &mut locals,
+            &origins(),
+            &mut work,
+        )
+        .unwrap();
+        assert_eq!(heap.cells.len(), 2);
+        assert!(matches!(
+            heap.closure_capture(first, 0).unwrap(),
+            V::Number(9.0)
+        ));
     }
 }

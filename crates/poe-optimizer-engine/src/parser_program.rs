@@ -252,6 +252,7 @@ struct Library {
     instruction_count: usize,
     traversal: BTreeMap<ParserTableId, CompiledTableTraversal>,
     constructors: BTreeMap<(ParserCallbackId, u32, u32), CompiledTableConstructor>,
+    closure_creation_supported: bool,
 }
 /// Cheaply clone/share prepared immutable code. Future invocation state belongs
 /// to each evaluation; this library stores no locals, heap or mutable worker data.
@@ -332,6 +333,9 @@ impl CompiledSourcePrograms {
             });
         }
         Ok(Self(Arc::new(Library {
+            closure_creation_supported: catalog
+                .closure_creations()
+                .is_some_and(|claims| claims.profile.is_supported_array_profile()),
             constructors: catalog
                 .constructors()
                 .into_iter()

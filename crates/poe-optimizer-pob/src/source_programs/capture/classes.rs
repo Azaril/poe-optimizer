@@ -30,8 +30,12 @@ pub struct ObservedSourceClasses {
     callbacks: BTreeMap<String, SourceCallbackId>,
     classes: BTreeMap<String, SourceClassId>,
     pub(super) constructor_observations: Option<ObservedSourceConstructors>,
+    pub(super) closure_observations: Option<ObservedSourceClosureCreations>,
 }
 impl ObservedSourceClasses {
+    pub fn closure_observations(&self) -> Option<&ObservedSourceClosureCreations> {
+        self.closure_observations.as_ref()
+    }
     pub fn constructor_observations(&self) -> Option<&ObservedSourceConstructors> {
         self.constructor_observations.as_ref()
     }
@@ -126,6 +130,7 @@ impl SourceClosureObserver {
             session_tables: 0,
             context: SourceProgramContext::default(),
             constructor_observations: constructors::Pending::default(),
+            closure_observations: closures::Pending::default(),
         };
         graph.register_projections(&context)?;
         let prepared = PreparedClasses::prepare(&mut graph, lua, &request)?;
@@ -133,6 +138,11 @@ impl SourceClosureObserver {
         let captured = prepared.capture(&mut graph, &request)?;
         let mut roots = captured.roots;
         graph.capture_environment(&context, &mut roots)?;
+        let mut prototypes = SourceClosurePrototypes {
+            schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
+            prototypes: vec![],
+        };
+        graph.finish_closure_creations(&mut prototypes)?;
         let definitions = SourceProgramDefinitions {
             schema_version: SOURCE_PROGRAM_DEFINITIONS_SCHEMA_VERSION,
             source,
@@ -141,18 +151,29 @@ impl SourceClosureObserver {
             roots,
             intrinsics: graph.intrinsics,
         };
-        let owner = SourceProgramOwner::new_with_context(
-            definitions,
-            Some(captured.definitions),
-            graph.context,
-        )
+        let owner = if self.closure_reflection.is_some() {
+            SourceProgramOwner::new_with_closures(
+                definitions,
+                Some(captured.definitions),
+                Some(graph.context),
+                prototypes,
+            )
+        } else {
+            SourceProgramOwner::new_with_context(
+                definitions,
+                Some(captured.definitions),
+                graph.context,
+            )
+        }
         .map_err(error)?;
         validate_sources(sources, &owner)?;
         self.verify(lua)?;
         self.verify_iteration(context.capture_iteration)?;
         let constructor_observations =
             self.bind_constructors(&owner, graph.constructor_observations);
+        let closure_observations = self.bind_closure_creations(&owner, graph.closure_observations);
         Ok(ObservedSourceClasses {
+            closure_observations,
             constructor_observations,
             owner,
             callbacks: captured.callbacks,

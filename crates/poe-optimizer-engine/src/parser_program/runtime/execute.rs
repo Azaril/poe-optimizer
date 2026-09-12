@@ -8,7 +8,7 @@ use super::{
     ProgramAllocationUsage, ProgramLimits, ProgramOutput, ProgramRequestAccounting,
     ProgramRuntimeError as Error, ProgramValueGraph, RuntimeResult as Result, SourceProgramOutput,
     intrinsics,
-    value::{ClosureRef, Heap, TableBehavior, V},
+    value::{ClosureRef, Heap, LocalSlot, TableBehavior, V},
 };
 use crate::lua_pattern::MatchBudget;
 use poe_optimizer_data::modifier_parser::*;
@@ -125,7 +125,7 @@ pub(super) enum MethodTarget {
 struct Frame {
     program: usize,
     closure: Option<ClosureRef>,
-    locals: Vec<V>,
+    locals: Vec<LocalSlot>,
     extra: Vec<V>,
     loops: Vec<Option<Loop>>,
 }
@@ -187,13 +187,13 @@ impl Run<'_, '_, '_> {
         }
         self.heap
             .charge_values(usize::from(plan.local_count) + plan.loop_states)?;
-        let mut locals = vec![V::Nil; usize::from(plan.local_count)];
+        let mut locals = vec![LocalSlot::Value(V::Nil); usize::from(plan.local_count)];
         for (slot, value) in arguments
             .iter()
             .take(usize::from(plan.parameter_count))
             .enumerate()
         {
-            locals[slot] = value.clone();
+            locals[slot] = LocalSlot::Value(value.clone());
         }
         let extra = if plan.variadic {
             let count = arguments
@@ -235,15 +235,23 @@ impl Run<'_, '_, '_> {
                 self.tick(depth)?;
                 use ProgramOperation as Op;
                 match &instruction.operation {
-                    Op::Declare { locals, values } | Op::Assign { locals, values } => {
+                    Op::Declare { locals, values } => {
                         let values = self.values(frame, values, depth + 1)?;
-                        // Lua emits the final assignment store first, then
-                        // unwinds the earlier LHS stores. Duplicate slots make
-                        // that order observable. Declarations use distinct fresh
-                        // slots, for which the same order is immaterial.
+                        // A declaration executed again creates a new binding generation.
+                        // Escaped closures retain any previous promoted cell.
                         for (index, slot) in locals.iter().enumerate().rev() {
-                            frame.locals[*slot as usize] =
-                                values.get(index).cloned().unwrap_or(V::Nil);
+                            frame.locals[usize::from(*slot)] =
+                                LocalSlot::Value(values.get(index).cloned().unwrap_or(V::Nil));
+                        }
+                        pc += 1;
+                    }
+                    Op::Assign { locals, values } => {
+                        let values = self.values(frame, values, depth + 1)?;
+                        for (index, slot) in locals.iter().enumerate().rev() {
+                            self.heap.write_local(
+                                &mut frame.locals[usize::from(*slot)],
+                                values.get(index).cloned().unwrap_or(V::Nil),
+                            )?;
                         }
                         pc += 1;
                     }
@@ -319,7 +327,7 @@ impl Run<'_, '_, '_> {
                         let step = number(&step, self.patterns)?
                             .ok_or_else(|| Error::source("for step must be a number"))?;
                         if numeric_admits(start, limit, step) {
-                            frame.locals[*local as usize] = V::Number(start);
+                            frame.locals[*local as usize] = LocalSlot::Value(V::Number(start));
                             frame.loops[*state] = Some(Loop::Numeric {
                                 value: start,
                                 limit,
@@ -343,7 +351,7 @@ impl Run<'_, '_, '_> {
                         };
                         *value += *step;
                         if numeric_admits(*value, *limit, *step) {
-                            frame.locals[*local as usize] = V::Number(*value);
+                            frame.locals[*local as usize] = LocalSlot::Value(V::Number(*value));
                             pc = *body;
                         } else {
                             frame.loops[*state] = None;
@@ -460,7 +468,8 @@ impl Run<'_, '_, '_> {
     }
     fn assign_loop(&self, frame: &mut Frame, locals: &[u16], values: Vec<V>) {
         for (index, slot) in locals.iter().enumerate() {
-            frame.locals[*slot as usize] = values.get(index).cloned().unwrap_or(V::Nil);
+            frame.locals[*slot as usize] =
+                LocalSlot::Value(values.get(index).cloned().unwrap_or(V::Nil));
         }
     }
     fn values(
@@ -880,7 +889,24 @@ impl Run<'_, '_, '_> {
         match &expr.operation {
             E::Literal { value } => self.heap.literal(value),
             E::Bytes { value } => self.heap.bytes(value),
-            E::Local { local } => Ok(frame.locals[*local as usize].clone()),
+            E::Local { local } => self.heap.read_local(&frame.locals[*local as usize]),
+            E::CreateClosure {
+                prototype,
+                captures,
+            } => {
+                if !self.library.0.closure_creation_supported {
+                    return Err(Error::unsupported(
+                        "source closure creation runtime profile",
+                    ));
+                }
+                self.heap.create_closure(
+                    *prototype,
+                    frame.closure,
+                    &mut frame.locals,
+                    captures,
+                    self.patterns,
+                )
+            }
             E::Capture { upvalue } => {
                 if let Some(closure) = frame.closure {
                     self.heap.closure_capture(closure, *upvalue)
@@ -933,6 +959,11 @@ impl Run<'_, '_, '_> {
                     },
                 }
             }
+            E::SourceBinary {
+                operation,
+                left,
+                right,
+            } => self.source_binary(frame, *operation, left, right, depth + 1),
             E::Binary {
                 operation,
                 left,

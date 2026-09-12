@@ -31,7 +31,7 @@ pub(crate) struct CallbackObservation {
 }
 #[derive(Default)]
 pub(super) struct Pending {
-    callbacks: BTreeMap<SourceCallbackId, CallbackObservation>,
+    pub(super) callbacks: BTreeMap<SourceCallbackId, CallbackObservation>,
 }
 /// Owner-bound evidence produced only while observing actual original functions.
 /// Source locations are mapped to lowered expressions separately. This is not
@@ -206,6 +206,7 @@ impl Graph<'_> {
         function: &Function,
         source: &ItemSourceSpan,
     ) -> Result<()> {
+        self.observe_closure_creation(id, function, source)?;
         if self.observer.constructor_reflection.is_none() {
             return Ok(());
         }

@@ -92,6 +92,74 @@ failure logs and the audit are recorded in `runs/r2m-ci-final-review.json` and
 `runs/r2m-schema-expectation-review.json`; the final exact-head hosted run remains a
 separate publication check.
 
+**R2p checkpoint: native source-created closures and lexical capture cells.**
+Actual parent/child prototypes, FNEW sites, ordered capture origins and lexical declaration
+ranges now enter through an immutable source-program facet. The optional PoB observer
+uses bounded original prototype reflection/dumps without running factories. The lowerer
+reconciles complete child bodies and preserves constructor evidence; unsupported child
+code remains an explicit enclosing-factory dependency. Serialized metadata establishes
+structural consistency, while the original observer establishes source identity.
+
+Native sessions create fresh closure identities, promote locals into shared cells and
+retain escaped cells through returns and failures. Declaration/visible-loop generations
+remain separate; sibling and forwarded captures share their original cell. Creation
+reserves resources before publishing any identity. Compiled code can be shared while
+parallel sessions retain private cells. Source-binary operands also preserve active-local
+arithmetic/comparison timing across right-hand effects, alongside the earlier assignment
+and indexed-read rules. Concatenation and prior call/result operands retain eager values.
+
+Original-callable factory tests cover 17 roots, all 42 complete bodies and 25 creation
+sites with only 17 initial instances and no initial capture cells. They compare returned
+functions, complete packs, recursion, loop bindings, sharing, errors and assignment
+interactions. Separate source-only probes retain 19 lifetime, 27 operand and six failure
+cases. Independent reviews closed source-register alias/layout inconsistencies and
+observer aggregate-allocation accounting gaps, including temporary dump reservations
+and retained metadata copies. Legitimate LuaJIT template nil markers and warmed prototype
+flags are handled under the pinned profile; unsupported source families remain explicit.
+
+Both original scanner modes pass across all five builds. The closure-aware graph contains
+1,297 compiled programs and 14 actual creation sites, including the inner status helper
+and returned jewel functions. Compilation does not establish execution of those branches.
+After adding the original `type` and `unpack` to this test's explicit environment, the
+uncached no-match invocation reaches original `Common.copyTable` (495-505) from the public
+wrapper. All five stop at **current session table traversal order is unavailable** for
+the newly constructed cache row. This is the next reached dependency; the state-prefix
+interpretation follows complete source control flow, not a new paired cache-state proof.
+Five compilation dependencies also remain: bit primitives and three modulo-using global
+helpers. The complete public parser remains open, and complete native originals remain **0/5**.
+
+**Validation passed:** 94 DATA cases, 201 ENGINE cases, 103 POB source-program unit
+cases, 41 source integration tests and 30 CLI test/configuration cases: **469 focused
+cases**, counting repeated agent runs once. The final source run retained 79 fresh
+artifacts and verified its 140-file source manifest unchanged. It preserves the preceding
+configuration/copy gates and, in each scanner mode, 780 real dictionary cases, 90 adversarial
+cases, 25 source errors and 15 warmed vectors. Two fresh CLI exports reproduce all 29
+package sections. Strict workspace/native-only Clippy, WebAssembly library compilation,
+runtime dependency isolation, formatting and diff checks pass. Numerical execution was
+validated on Windows x64; WebAssembly was compile-checked only. No speed-up is claimed.
+Original inputs, bundled schema-29 data, references, dependency lock and PoB pin are unchanged.
+
+The consolidated evidence is `runs/r2p-checkpoint.json`, with the frozen-source
+`runs/r2p-source-verified/validation.json`, component/CLI/static ledgers and independent
+reviews. The 03:24 UTC September 12 CI review still shows published `8f1516b` running on
+both hosts. Newly completed older schema failures are covered by ancestor `718b716`;
+see `runs/r2p-ci-prepublication-review.json`. Verify the next exact-head run after this
+checkpoint is pushed; local validation does not establish hosted success.
+
+**Resume the same complete-public-parser milestone:** first authenticate nonempty list
+TNEW allocation/sites and model reserved nil slots for the wrapper's `{modList, extra}`
+row. Preserve its actual cache writes, traversal, recursive copies and default-unpack
+cardinality, with paired source state/failure prefixes. Successful misses additionally
+require fresh mixed-map/template allocation and traversal; a no-match-only pass cannot
+close the milestone. In parallel, enable source-preserving modulo and bit primitives for
+the original `OR64`/`AND64`/`NOT64` bodies, including the hidden `bit.bnot` dependency and
+exact numeric conversion/order. Keep game algorithms and constants in injected programs.
+Concrete plans are `runs/r2p-next-parser-cache.md` and `runs/r2p-next-bit-modulo.md`; the
+[closure contract](parser-sessions.md#source-created-closures) records the durable design.
+Then complete real quest/custom activation and paired Twister/Skeletal Sniper evaluation
+with all-five breadth coverage. Do not substitute a stateless parser or partial inner
+result callback for the complete public callable.
+
 **R2o checkpoint: native mixed assignments and source-indexed reads.**
 The milestone remains the complete original public parser. This dependency implements
 source-order assignment operands, full RHS packs, conflicting-local preservation and

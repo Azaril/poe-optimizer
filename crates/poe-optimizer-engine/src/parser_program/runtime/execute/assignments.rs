@@ -1,28 +1,29 @@
 //! LuaJIT lvalue preparation, conflict preservation and reverse stores.
-use super::{Error, Frame, Result, Run, V};
+use super::{Error, Frame, Heap, Result, Run, V};
 use crate::parser_program::CompiledAssignmentTarget;
 use poe_optimizer_data::modifier_parser::{
     ParserProgramAssignmentOperand as Operand, ParserProgramAssignmentTargetKind as TargetKind,
-    ParserProgramExpr, ParserProgramLocation, ParserProgramValueList,
+    ParserProgramBinary, ParserProgramExpr, ParserProgramLocation, ParserProgramValueList,
 };
 
 // Keep live lexical slots distinct from values evaluated into temporary source
-// registers. Future lexical-cell promotion must preserve this distinction.
+// registers. Promoted lexical cells preserve this same distinction.
 enum PreparedOperand {
     LocalRegister(u16),
     Value(V),
 }
 impl PreparedOperand {
-    fn resolve(&self, frame: &Frame) -> V {
+    fn resolve(&self, frame: &Frame, heap: &Heap<'_>) -> Result<V> {
         match self {
-            Self::LocalRegister(local) => frame.locals[usize::from(*local)].clone(),
-            Self::Value(value) => value.clone(),
+            Self::LocalRegister(local) => heap.read_local(&frame.locals[usize::from(*local)]),
+            Self::Value(value) => Ok(value.clone()),
         }
     }
-    fn preserve(&mut self, local: u16, frame: &Frame) {
+    fn preserve(&mut self, local: u16, frame: &Frame, heap: &Heap<'_>) -> Result<()> {
         if matches!(self, Self::LocalRegister(slot) if *slot == local) {
-            *self = Self::Value(frame.locals[usize::from(local)].clone());
+            *self = Self::Value(heap.read_local(&frame.locals[usize::from(local)])?);
         }
+        Ok(())
     }
 }
 enum PreparedTarget {
@@ -34,14 +35,28 @@ enum PreparedTarget {
     },
 }
 impl PreparedTarget {
-    fn preserve(&mut self, local: u16, frame: &Frame) {
+    fn preserve(&mut self, local: u16, frame: &Frame, heap: &Heap<'_>) -> Result<()> {
         if let Self::Indexed { table, key } = self {
-            table.preserve(local, frame);
-            key.preserve(local, frame);
+            table.preserve(local, frame, heap)?;
+            key.preserve(local, frame, heap)?;
         }
+        Ok(())
     }
 }
 impl Run<'_, '_, '_> {
+    pub(super) fn source_binary(
+        &mut self,
+        frame: &mut Frame,
+        operation: ParserProgramBinary,
+        left: &Operand,
+        right: &ParserProgramExpr,
+        depth: usize,
+    ) -> Result<V> {
+        let left = self.assignment_operand(frame, left, depth + 1)?;
+        let right = self.expr(frame, right, depth + 1)?;
+        let left = left.resolve(frame, self.heap)?;
+        self.binary(operation, left, right)
+    }
     pub(super) fn indexed_read(
         &mut self,
         frame: &mut Frame,
@@ -53,7 +68,7 @@ impl Run<'_, '_, '_> {
         let key = self.expr(frame, key, depth + 1)?;
         // A direct local base stays in its source register during key effects.
         // Computed bases and captured upvalues were already evaluated above.
-        self.heap.get(&table.resolve(frame), &key)
+        self.heap.get(&table.resolve(frame, self.heap)?, &key)
     }
     pub(super) fn mixed_assign(
         &mut self,
@@ -85,7 +100,12 @@ impl Run<'_, '_, '_> {
                         // after earlier address effects and before later ones.
                         for previous in &target.preserves {
                             self.tick(depth)?;
-                            PreparedTarget::preserve(&mut prepared[*previous], *local, frame);
+                            PreparedTarget::preserve(
+                                &mut prepared[*previous],
+                                *local,
+                                frame,
+                                self.heap,
+                            )?;
                         }
                         Ok(PreparedTarget::Local(*local))
                     }
@@ -139,7 +159,9 @@ impl Run<'_, '_, '_> {
         (|| {
             self.tick(depth)?;
             match target {
-                PreparedTarget::Local(local) => frame.locals[usize::from(*local)] = value,
+                PreparedTarget::Local(local) => self
+                    .heap
+                    .write_local(&mut frame.locals[usize::from(*local)], value)?,
                 PreparedTarget::Capture(upvalue) => {
                     let closure = frame.closure.ok_or_else(|| {
                         Error::unsupported("capture assignment requires a session closure")
@@ -147,8 +169,8 @@ impl Run<'_, '_, '_> {
                     self.heap.set_closure_capture(closure, *upvalue, value)?;
                 }
                 PreparedTarget::Indexed { table, key } => {
-                    let table = table.resolve(frame);
-                    let key = key.resolve(frame);
+                    let table = table.resolve(frame, self.heap)?;
+                    let key = key.resolve(frame, self.heap)?;
                     self.heap.set(&table, key, value, self.patterns)?;
                 }
             }
@@ -198,12 +220,23 @@ mod tests {
 
     #[test]
     fn live_registers_and_hazard_copies_remain_distinct() {
-        // This is a structural slot test. Source-created closures that mutate an
-        // active frame's locals are not yet admitted by the native factory seam.
+        // This structural slot test complements created-closure tests that
+        // mutate promoted active-frame locals through the public session API.
+        let (owner, data) = crate::parser_program::tests::program_fixture(1);
+        let catalog =
+            poe_optimizer_data::modifier_parser::ParserProgramCatalog::new(data, owner).unwrap();
+        let heap = Heap::owned(
+            catalog.source_programs().owner(),
+            super::super::super::ProgramLimits::default(),
+        );
+        use super::super::LocalSlot;
         let mut frame = Frame {
             program: 0,
             closure: None,
-            locals: vec![V::Number(1.0), V::Number(2.0)],
+            locals: vec![
+                LocalSlot::Value(V::Number(1.0)),
+                LocalSlot::Value(V::Number(2.0)),
+            ],
             extra: Vec::new(),
             loops: Vec::new(),
         };
@@ -211,16 +244,25 @@ mod tests {
             table: PreparedOperand::LocalRegister(0),
             key: PreparedOperand::LocalRegister(1),
         };
-        frame.locals[0] = V::Number(3.0);
-        frame.locals[1] = V::Number(4.0);
-        target.preserve(0, &frame);
-        frame.locals[0] = V::Number(5.0);
-        frame.locals[1] = V::Number(6.0);
-        target.preserve(0, &frame); // A later duplicate target cannot recopy it.
+        frame.locals[0] = LocalSlot::Value(V::Number(3.0));
+        frame.locals[1] = LocalSlot::Value(V::Number(4.0));
+        target.preserve(0, &frame, &heap).unwrap();
+        frame.locals[0] = LocalSlot::Value(V::Number(5.0));
+        frame.locals[1] = LocalSlot::Value(V::Number(6.0));
+        target.preserve(0, &frame, &heap).unwrap(); // A later duplicate target cannot recopy it.
         let PreparedTarget::Indexed { table, key } = target else {
             unreachable!()
         };
-        assert!(table.resolve(&frame).lua_equal(&V::Number(3.0)));
-        assert!(key.resolve(&frame).lua_equal(&V::Number(6.0)));
+        assert!(
+            table
+                .resolve(&frame, &heap)
+                .unwrap()
+                .lua_equal(&V::Number(3.0))
+        );
+        assert!(
+            key.resolve(&frame, &heap)
+                .unwrap()
+                .lua_equal(&V::Number(6.0))
+        );
     }
 }

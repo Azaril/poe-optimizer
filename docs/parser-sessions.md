@@ -238,3 +238,29 @@ constructor fields must preserve when the original compiler retains a local regi
 copies its value. Do not admit factory-created closures on the assumption that earlier
 expression evaluation was always eager. Differential factory tests must cover these
 interactions before whole-parser admission.
+
+The typed creation facet must match every admitted creation expression in both directions.
+The same child prototype cannot change its ordered capture layout between sites, and
+simultaneously visible lexical declarations cannot claim the same source register. Keep
+structural package validation separate from authentication against the actual source VM.
+If a child body cannot be represented completely, report its dependency for each enclosing
+factory; do not remove its branch or publish a parent that references missing code.
+
+Native frames may represent an uncaptured local directly and promote it to a session-owned
+cell when a factory first captures it. Declaration and visible-loop binding re-entry create
+new generations; assignment changes the existing generation. This permits immutable
+compiled code to be shared across workers while each session retains private mutable state.
+Reserve identities, memory and work before publishing a new closure or promoting any local.
+An allocation failure may consume budget but must not expose half-created closure state.
+
+Operand timing is part of the source program contract. Arithmetic and comparison can
+retain an active local as a live left operand until the right expression completes, whereas
+computed operands and inherited captures are read earlier. Concatenation, call targets,
+receivers and preceding arguments/results retain their established timing. Represent these
+choices explicitly in the lowered program rather than rediscovering compiler behavior in
+the evaluator. Computed constructor-key timing is a separate admission requirement.
+
+The optional oracle observer needs cumulative bounds as well as a per-dump cap. Charge
+retained metadata and preflight temporary source-VM/dump/decoder allocations against the
+remaining observation budget. Reflection, prototype dumps and lexical source mapping must
+agree; a copied or serialized metadata record alone is not proof of its source identity.

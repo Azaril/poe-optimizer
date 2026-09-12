@@ -96,6 +96,13 @@ fn library_with_locals(
     bodies: Vec<(usize, Vec<ParserProgramStatement>)>,
     local_count: u16,
 ) -> CompiledSourcePrograms {
+    let (data, owner) = fixture_parts(bodies, local_count);
+    CompiledSourcePrograms::new(&SourceProgramCatalog::new(data, owner).unwrap()).unwrap()
+}
+fn fixture_parts(
+    bodies: Vec<(usize, Vec<ParserProgramStatement>)>,
+    local_count: u16,
+) -> (ParserProgramData, SourceProgramOwner) {
     let path = "src/Modules/ClosureFixture.lua".to_owned();
     let span = ItemSourceSpan {
         path: path.clone(),
@@ -178,19 +185,16 @@ fn library_with_locals(
         .enumerate()
         .map(|(i, p)| (p.callback, ParserProgramId(i as u32 + 1)))
         .collect();
-    CompiledSourcePrograms::new(
-        &SourceProgramCatalog::new(
-            ParserProgramData {
-                schema_version: PARSER_PROGRAM_SCHEMA_VERSION,
-                programs,
-                callbacks,
-            },
-            owner,
-        )
-        .unwrap(),
+    (
+        ParserProgramData {
+            schema_version: PARSER_PROGRAM_SCHEMA_VERSION,
+            programs,
+            callbacks,
+        },
+        owner,
     )
-    .unwrap()
 }
+
 fn input(
     library: &CompiledSourcePrograms,
     instances: &[(u32, Vec<u32>)],
@@ -777,3 +781,6 @@ mod iterators;
 
 #[path = "support/source_program_assignments.rs"]
 mod assignments;
+
+#[path = "support/source_program_factories.rs"]
+mod factories;

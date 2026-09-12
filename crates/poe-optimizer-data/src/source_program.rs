@@ -10,6 +10,7 @@ use std::{
     sync::Arc,
 };
 mod classes;
+mod closure_creations;
 mod closures;
 mod constructors;
 mod context;
@@ -17,6 +18,7 @@ pub(crate) mod graph;
 mod iteration;
 pub mod session;
 pub use classes::*;
+pub use closure_creations::*;
 pub use closures::*;
 pub use constructors::*;
 pub use context::*;
@@ -30,15 +32,17 @@ pub use crate::modifier_parser::{
     ParserCallbackKind as SourceCallbackKind, ParserEnvironment as SourceEnvironment,
     ParserNonFinite as SourceNonFinite, ParserProgram as SourceProgram,
     ParserProgramAssignmentOperand as SourceProgramAssignmentOperand,
+    ParserProgramAssignmentOperand as SourceProgramOperand,
     ParserProgramAssignmentTarget as SourceProgramAssignmentTarget,
     ParserProgramAssignmentTargetKind as SourceProgramAssignmentTargetKind,
     ParserProgramBinary as SourceProgramBinary, ParserProgramBinding as SourceProgramBinding,
     ParserProgramBranch as SourceProgramBranch, ParserProgramCall as SourceProgramCall,
-    ParserProgramCapability as SourceProgramCapability, ParserProgramData as SourceProgramData,
-    ParserProgramError as SourceProgramError, ParserProgramErrorKind as SourceProgramErrorKind,
-    ParserProgramExpr as SourceProgramExpr, ParserProgramExprKind as SourceProgramExprKind,
-    ParserProgramField as SourceProgramField, ParserProgramId as SourceProgramId,
-    ParserProgramIntrinsic as SourceProgramIntrinsic,
+    ParserProgramCapability as SourceProgramCapability,
+    ParserProgramCaptureOrigin as SourceProgramCaptureOrigin,
+    ParserProgramData as SourceProgramData, ParserProgramError as SourceProgramError,
+    ParserProgramErrorKind as SourceProgramErrorKind, ParserProgramExpr as SourceProgramExpr,
+    ParserProgramExprKind as SourceProgramExprKind, ParserProgramField as SourceProgramField,
+    ParserProgramId as SourceProgramId, ParserProgramIntrinsic as SourceProgramIntrinsic,
     ParserProgramIntrinsicSource as SourceProgramIntrinsicSource,
     ParserProgramIterator as SourceProgramIterator, ParserProgramLocation as SourceProgramLocation,
     ParserProgramPack as SourceProgramPack, ParserProgramProvenance as SourceProgramProvenance,
@@ -366,18 +370,13 @@ enum ProgramStorage {
 pub struct SourceProgramCatalog {
     data: ProgramStorage,
     constructors: Option<Arc<SourceProgramConstructors>>,
+    closure_creations: Option<Arc<SourceProgramClosureCreations>>,
     owner: SourceProgramOwner,
     required: BTreeSet<SourceProgramCapability>,
 }
 impl SourceProgramCatalog {
     pub fn new(data: SourceProgramData, owner: SourceProgramOwner) -> SourceProgramResult<Self> {
-        let required = crate::modifier_parser::programs::validate::validate(&data, &owner)?;
-        Ok(Self {
-            data: ProgramStorage::Authored(Arc::new(data)),
-            constructors: None,
-            owner,
-            required,
-        })
+        Self::new_with_facets(data, owner, None, None)
     }
     /// Called only after the parser payload verifier has checked the same owner.
     /// The immutable owner retains the IR; this view neither clones its recursive
@@ -389,6 +388,7 @@ impl SourceProgramCatalog {
         Self {
             data: ProgramStorage::ParserPayload(owner.clone()),
             constructors: None,
+            closure_creations: None,
             owner: SourceProgramOwner::from_parser(owner),
             required,
         }
@@ -492,8 +492,20 @@ pub(crate) trait ProgramOwnerView {
     fn supports_register_operands(&self) -> bool {
         false
     }
+    fn closure_prototype_callback(
+        &self,
+        _prototype: SourceClosurePrototypeId,
+    ) -> Option<SourceCallbackId> {
+        None
+    }
 }
 impl ProgramOwnerView for SourceProgramOwner {
+    fn closure_prototype_callback(
+        &self,
+        prototype: SourceClosurePrototypeId,
+    ) -> Option<SourceCallbackId> {
+        self.closure_prototype(prototype).map(|p| p.callback)
+    }
     fn supports_register_operands(&self) -> bool {
         self.parser().is_none()
     }

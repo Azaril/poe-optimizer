@@ -110,7 +110,10 @@ impl Lowerer<'_, '_> {
         };
         self.node(operation, start, end, height)
     }
-    fn assignment_operand(&self, value: Expr) -> LowerResult<ParserProgramAssignmentOperand> {
+    pub(super) fn assignment_operand(
+        &self,
+        value: Expr,
+    ) -> LowerResult<ParserProgramAssignmentOperand> {
         let shape = self.expression_shape(&value)?;
         if let Kind::Local(local) = shape.kind
             && !shape.branched()
@@ -164,6 +167,27 @@ impl Lowerer<'_, '_> {
                     }
                     U::Length => Shape::temporary(),
                 }
+            }
+            E::SourceBinary {
+                operation,
+                left,
+                right,
+            } => {
+                let left = match &**left {
+                    ParserProgramAssignmentOperand::LocalRegister { local } => Expr {
+                        location: expression.location,
+                        operation: E::Local { local: *local },
+                    },
+                    ParserProgramAssignmentOperand::Evaluated { value } => value.clone(),
+                };
+                self.expression_shape(&Expr {
+                    location: expression.location,
+                    operation: E::Binary {
+                        operation: *operation,
+                        left: Box::new(left),
+                        right: right.clone(),
+                    },
+                })?
             }
             E::Binary {
                 operation,

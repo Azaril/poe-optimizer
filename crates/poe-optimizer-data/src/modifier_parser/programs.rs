@@ -151,6 +151,15 @@ pub enum ParserProgramAssignmentOperand {
     LocalRegister { local: u16 },
     Evaluated { value: ParserProgramExpr },
 }
+/// A local ID denotes one lexical declaration (including a parameter), not a
+/// source VM register or a by-name override. Parent captures retain cell identity.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ParserProgramCaptureOrigin {
+    Local { local: u16 },
+    ParentCapture { upvalue: u16 },
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ParserProgramBranch {
@@ -206,6 +215,13 @@ pub enum ParserProgramExprKind {
     Local {
         local: u16,
     },
+    /// Creates one new session closure, selecting existing lexical cells rather
+    /// than copying values. The catalog must bind this expression to an observed
+    /// child-prototype creation site; legacy parser owners cannot use it.
+    CreateClosure {
+        prototype: crate::source_program::SourceClosurePrototypeId,
+        captures: Vec<ParserProgramCaptureOrigin>,
+    },
     /// Captured value kinds stay dynamic; a selected operation performs its own
     /// source type/ownership check. This is not a scalar-only projection.
     Capture {
@@ -228,6 +244,13 @@ pub enum ParserProgramExprKind {
     IndexedRead {
         table: Box<ParserProgramAssignmentOperand>,
         key: Box<ParserProgramExpr>,
+    },
+    /// Standalone arithmetic/comparison retaining an active left local through
+    /// right evaluation. Logical operators and concatenation use Binary.
+    SourceBinary {
+        operation: ParserProgramBinary,
+        left: Box<ParserProgramAssignmentOperand>,
+        right: Box<ParserProgramExpr>,
     },
     Unary {
         operation: ParserProgramUnary,
@@ -429,6 +452,7 @@ pub enum ParserProgramCapability {
     DynamicMethods,
     DynamicCalls,
     SessionClosures,
+    ClosureCreation,
     MixedAssignment,
     RegisterOperands,
 }

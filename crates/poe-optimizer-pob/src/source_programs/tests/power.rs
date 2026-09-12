@@ -16,6 +16,17 @@ fn shape(expression: &ParserProgramExpr) -> String {
             left,
             right,
         } => format!("{operation:?}({},{})", shape(left), shape(right)),
+        ParserProgramExprKind::SourceBinary {
+            operation,
+            left,
+            right,
+        } => {
+            let left = match &**left {
+                ParserProgramAssignmentOperand::LocalRegister { local } => format!("v{local}"),
+                ParserProgramAssignmentOperand::Evaluated { value } => shape(value),
+            };
+            format!("{operation:?}({left},{})", shape(right))
+        }
         ParserProgramExprKind::Call { call } => call_shape(call),
         other => panic!("unexpected expression: {other:?}"),
     }

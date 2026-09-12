@@ -503,6 +503,54 @@ impl Check<'_> {
                         self.budget.charge(value.len(), self.id, Some(loc))?;
                     }
                     ParserProgramExprKind::Local { local } => self.visible(scope, *local, loc)?,
+                    ParserProgramExprKind::CreateClosure {
+                        prototype,
+                        captures,
+                    } => {
+                        if !self.owner.supports_register_operands() {
+                            return Err(self.fail(
+                                ParserProgramErrorKind::UnsupportedCapability,
+                                Some(loc),
+                                "parser owner does not admit source closure creation",
+                            ));
+                        }
+                        self.bound(captures.len(), 128, Some(loc), "closure capture count")?;
+                        let callback = self
+                            .owner
+                            .closure_prototype_callback(*prototype)
+                            .ok_or_else(|| {
+                                self.fail(
+                                    ParserProgramErrorKind::Binding,
+                                    Some(loc),
+                                    "created closure prototype is not declared by this owner",
+                                )
+                            })?;
+                        let child = self
+                            .owner
+                            .callback(callback)
+                            .expect("declared prototype callback");
+                        if child.upvalues.len() != captures.len()
+                            || !self.data.callbacks.contains_key(&callback)
+                        {
+                            return Err(self.fail(ParserProgramErrorKind::Binding, Some(loc),
+                                "created closure needs its complete child program and exact capture layout"));
+                        }
+                        self.required
+                            .insert(ParserProgramCapability::ClosureCreation);
+                        self.required
+                            .insert(ParserProgramCapability::SessionClosures);
+                        for origin in captures {
+                            self.budget.charge(0, self.id, Some(loc))?;
+                            match origin {
+                                ParserProgramCaptureOrigin::Local { local } => {
+                                    self.visible(scope, *local, loc)?
+                                }
+                                ParserProgramCaptureOrigin::ParentCapture { upvalue } => {
+                                    self.writable_capture(*upvalue, loc)?
+                                }
+                            }
+                        }
+                    }
                     ParserProgramExprKind::Capture { upvalue } => {
                         if *upvalue as usize
                             >= self
@@ -561,6 +609,40 @@ impl Check<'_> {
                             }
                             ParserProgramAssignmentOperand::Evaluated { value } => {
                                 work.push(ValueWork::Expr(value, depth + 1));
+                            }
+                        }
+                    }
+                    ParserProgramExprKind::SourceBinary {
+                        operation,
+                        left,
+                        right,
+                    } => {
+                        if !self.owner.supports_register_operands() {
+                            return Err(self.fail(
+                                ParserProgramErrorKind::UnsupportedCapability,
+                                Some(loc),
+                                "parser owner does not admit source binary register operands",
+                            ));
+                        }
+                        if matches!(
+                            operation,
+                            ParserProgramBinary::And
+                                | ParserProgramBinary::Or
+                                | ParserProgramBinary::Concat
+                        ) {
+                            return Err(self.fail(ParserProgramErrorKind::InvalidData, Some(loc),
+                                "source binary register operands exclude logical and concatenation operations"));
+                        }
+                        self.required
+                            .insert(ParserProgramCapability::RegisterOperands);
+                        self.budget.charge(0, self.id, Some(loc))?;
+                        work.push(ValueWork::Expr(right, depth + 1));
+                        match left.as_ref() {
+                            ParserProgramAssignmentOperand::LocalRegister { local } => {
+                                self.visible(scope, *local, loc)?
+                            }
+                            ParserProgramAssignmentOperand::Evaluated { value } => {
+                                work.push(ValueWork::Expr(value, depth + 1))
                             }
                         }
                     }

@@ -13,7 +13,9 @@ use poe_optimizer_data::{
 use std::collections::BTreeMap;
 
 mod classes;
+pub(crate) mod closures;
 mod constructors;
+pub use closures::ObservedSourceClosureCreations;
 pub use constructors::ObservedSourceConstructors;
 mod context;
 mod iteration;
@@ -42,6 +44,7 @@ pub struct SourceClosureObserver {
     string_metatable: Table,
     iterator_primitives: iteration::Primitives,
     constructor_reflection: Option<constructors::Reflection>,
+    closure_reflection: Option<closures::Reflection>,
 }
 
 /// Complete observed dependency graph. Named callback roots are not executable
@@ -152,6 +155,7 @@ impl SourceClosureObserver {
             string_metatable,
             iterator_primitives,
             constructor_reflection: None,
+            closure_reflection: None,
         };
         observer.verify(lua)?;
         Ok(observer)
@@ -234,6 +238,7 @@ impl SourceClosureObserver {
             source_names: &context.source_names,
             context: SourceProgramContext::default(),
             constructor_observations: constructors::Pending::default(),
+            closure_observations: closures::Pending::default(),
         };
         graph.register_projections(&context)?;
         graph.capture_projections(&context)?;
@@ -253,6 +258,11 @@ impl SourceClosureObserver {
         }
         let mut definition_roots = Vec::new();
         graph.capture_environment(&context, &mut definition_roots)?;
+        let mut prototypes = SourceClosurePrototypes {
+            schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
+            prototypes: vec![],
+        };
+        graph.finish_closure_creations(&mut prototypes)?;
         let definitions = SourceProgramDefinitions {
             schema_version: SOURCE_PROGRAM_DEFINITIONS_SCHEMA_VERSION,
             source,
@@ -261,14 +271,25 @@ impl SourceClosureObserver {
             roots: definition_roots,
             intrinsics: graph.intrinsics,
         };
-        let owner = SourceProgramOwner::new_with_context(definitions, None, graph.context)
-            .map_err(error)?;
+        let owner = if self.closure_reflection.is_some() {
+            SourceProgramOwner::new_with_closures(
+                definitions,
+                None,
+                Some(graph.context),
+                prototypes,
+            )
+        } else {
+            SourceProgramOwner::new_with_context(definitions, None, graph.context)
+        }
+        .map_err(error)?;
         validate_sources(sources, &owner)?;
         self.verify_capture_context(lua, context.environment.is_some())?;
         self.verify_iteration(context.capture_iteration)?;
         let constructor_observations =
             self.bind_constructors(&owner, graph.constructor_observations);
+        let closure_observations = self.bind_closure_creations(&owner, graph.closure_observations);
         Ok(ObservedSourceContext {
+            closure_observations,
             owner,
             callbacks,
             constructor_observations,
@@ -402,6 +423,7 @@ struct Graph<'a> {
     forbidden_cells: std::collections::BTreeSet<usize>,
     context: SourceProgramContext,
     constructor_observations: constructors::Pending,
+    closure_observations: closures::Pending,
     // Only the class/session observer requires positive immutable ownership.
     immutable_capture_tables: Option<std::collections::BTreeSet<usize>>,
     // Live tables reserve their share before late definition graph expansion.

@@ -47,6 +47,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("source_program/graph.rs"),
         include_str!("source_program/classes.rs"),
         include_str!("source_program/closures.rs"),
+        include_str!("source_program/closure_creations.rs"),
         include_str!("source_program/constructors.rs"),
         include_str!("source_program/constructors/walk.rs"),
         include_str!("source_program/context.rs"),

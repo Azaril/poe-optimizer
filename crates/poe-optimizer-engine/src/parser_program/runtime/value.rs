@@ -23,8 +23,8 @@ pub use poe_optimizer_data::source_program::{
     SourceSessionValue as ProgramValue, SourceSessionValueGraph as ProgramValueGraph,
 };
 mod closures;
-pub(super) use closures::ClosureRef;
 use closures::{Closure, ImportClosures};
+pub(super) use closures::{ClosureRef, LocalSlot};
 mod intrinsic_closures;
 use intrinsic_closures::IntrinsicClosure;
 mod table_observations;

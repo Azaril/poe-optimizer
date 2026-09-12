@@ -2,7 +2,7 @@
 use super::*;
 use serde::de::{SeqAccess, Visitor};
 use std::fmt;
-mod walk;
+pub(super) mod walk;
 pub const SOURCE_PROGRAM_CONSTRUCTORS_SCHEMA_VERSION: u32 = 1;
 pub const SOURCE_TABLE_RUNTIME_REVISION: &str = "luajit-src@210.7.3+1ee778a";
 const MAX_SITES: usize = 100_000;
@@ -80,7 +80,7 @@ impl SourceTableRuntimeProfile {
             && self.bytecode_version == 2
             && !self.lua52_compat
     }
-    fn validate_shape(&self) -> SourceProgramResult<()> {
+    pub(super) fn validate_shape(&self) -> SourceProgramResult<()> {
         if self.source_revision.is_empty()
             || self.source_revision.len() > 128
             || !self.source_revision.is_ascii()
@@ -205,7 +205,7 @@ impl SourceProgramConstructors {
         }
         Ok(())
     }
-    fn validate_catalog(
+    pub(super) fn validate_catalog(
         &self,
         data: &SourceProgramData,
         owner: &SourceProgramOwner,
@@ -281,14 +281,7 @@ impl SourceProgramCatalog {
         owner: SourceProgramOwner,
         constructors: SourceProgramConstructors,
     ) -> SourceProgramResult<Self> {
-        let required = crate::modifier_parser::programs::validate::validate(&data, &owner)?;
-        constructors.validate_catalog(&data, &owner)?;
-        Ok(Self {
-            data: ProgramStorage::Authored(Arc::new(data)),
-            owner,
-            required,
-            constructors: Some(Arc::new(constructors)),
-        })
+        Self::new_with_facets(data, owner, Some(constructors), None)
     }
     pub fn constructors(&self) -> Option<&SourceProgramConstructors> {
         self.constructors.as_deref()

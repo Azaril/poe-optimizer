@@ -684,3 +684,25 @@ fn constructor_matching_follows_live_register_indexed_read_operands() {
         bind(data, metadata()).unwrap();
     }
 }
+#[test]
+fn constructor_matching_follows_source_binary_register_and_evaluated_operands() {
+    for (left, right) in [
+        (SourceProgramOperand::Evaluated { value: table() }, nil()),
+        (SourceProgramOperand::LocalRegister { local: 0 }, table()),
+    ] {
+        let binary = e(
+            SourceProgramExprKind::SourceBinary {
+                operation: SourceProgramBinary::Equal,
+                left: Box::new(left),
+                right: Box::new(right),
+            },
+            0,
+            90,
+        );
+        let mut data = program(vec![statement(SourceProgramStatementKind::Return {
+            values: values(binary),
+        })]);
+        data.programs[0].parameter_count = 1;
+        bind(data, metadata()).unwrap();
+    }
+}
