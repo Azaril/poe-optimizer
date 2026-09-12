@@ -20,10 +20,10 @@ without letting their single-profile assumptions define the new model.
 
 The A1 investigation below is the current resume point. Source-session timing and requested
 allocation layouts are measured separately from dataset ownership; staged-container transfer
-now reduces import allocation traffic. R2w now admits source-bound reserved-key traversal
-and completes six positive parser miss/hit cases on each original initialized graph. Full
-public-parser coverage and complete native builds remain open. Historical sections retain
-their original validation scope.
+now reduces import allocation traffic. R2x now records actual import parser calls across all
+five originals: 558 of 760 build-local distinct inputs match misses and hits; 202 remain
+explicitly unsupported. Complete public-parser coverage and complete native builds remain open.
+Historical sections retain their original validation scope.
 
 **Architecture review in progress:** [A1-A4 execution-model investigation](#execution-model-investigation-a1-a4)
 compares the current interpreter with a domain DSL, data-driven rules, native Rust
@@ -35,6 +35,38 @@ acquisition/parity, preparation, source execution and the restricted typed candi
 Continue measuring costs before extending general Lua compatibility into further domains;
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
+
+**R2x checkpoint: actual import parser corpus.** The [corpus protocol and results](parser-input-corpus.md)
+now cover all five original XML imports and all 116 saved Item identities. The observer records
+1,375 ordered attempts, including duplicates/non-item calls, raw declared parameter values and
+actual Item-to-set/slot joins. Temporary items remain represented. Original argument arity and
+parser returns during import are not intercepted.
+
+Across 760 distinct parameter pairs counted within each build, **558 match complete supported
+miss/hit return and cache graphs; 202 stop explicitly unsupported**. There are no other outcome
+statuses. First stops are current-session traversal order (125), source table key/value access
+(51) and positive reserved-template constructor tails (26). These are component dependencies,
+not whole-build results or automatic justification for more general Lua compatibility.
+
+The source state guard restores cache bindings and requires coherent owner/input/catalog
+recapture after other changes; it does not claim physical cache-history restoration. Each
+original used one unchanged capture generation in this run. Six observer, seven guard and five
+graph/parameter tests pass, as does the existing complete configuration lifecycle regression.
+Strict workspace Clippy, formatting and whitespace checks pass. Final evidence is
+`runs/r2x-breadth-01/corpus-01/`; protected source/input/data/dependencies remain unchanged.
+The 2,477 new test/support lines plus 51 net shared-hook lines are reference tooling cost to
+include in A1. No production evaluator or alternative model is introduced; full native breadth
+remains **0/5**.
+
+**Next production integration:** complete Item modifier assembly and source-ordered registration
+at the existing provider seam, retain an owned assembled item, and wire it into `prepare_view`.
+Current inspection `assembly_evidence` cannot stand in for base/per-slot modifier lists, local
+item data or skill grants. This dependency feeds both Twister equipment/grants and Skeletal
+Sniper receiving-slot/provider state; effective configuration and actor/action/support/minion
+preparation remain required. The current production evaluator still reaches Spark/Mace profile
+preparation after authored skills/configuration. Parser improvements alone cannot remove that
+structural restriction. Keep this work alongside the A1/A2 comparison; no model migration is
+selected and full native original coverage remains **0/5**.
 
 **R2w checkpoint: reserved-template native traversal.** All six canonical positive parser
 cases now complete both misses and hits on each of the five original initialized graphs:
@@ -1867,6 +1899,10 @@ defines the alternatives, constraints and evidence required for a decision.
   now records the metadata, source authentication, runtime and oracle work needed to complete
   30 positive misses and 30 hits. Include this compatibility cost and its remaining unsupported
   histories in the model comparison; it does not establish whole-build parity.
+  The [actual-import corpus](parser-input-corpus.md) now supplies 760 build-local distinct inputs,
+  with 558 complete miss/hit matches and 202 unsupported first stops. Include its reference-only
+  observation, state-guard and replay complexity in the comparison; no production breadth gate
+  or execution-model decision is closed by these results.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.

@@ -50,6 +50,9 @@ comparison or a complete build evaluator. A bounded
 reduces measured allocation traffic while preserving the same source histories and logical
 import budgets; retained session storage is unchanged. Per-stage loader/source allocation,
 general invalidation, new effect-family work and actual upstream update effort remain open.
+The [real-build parser corpus](parser-input-corpus.md) extends the comparison inputs beyond the
+earlier selected modifier family. Its reference-only observer, state guard and replay code are
+part of the total compatibility cost to measure; their addition does not select the interpreter.
 No model is selected.
 
 ## Separate the decisions
@@ -74,6 +77,7 @@ and identity requirements are evidence for this investigation, not a predetermin
 | --- | --- | --- |
 | Retained interpreter | Validated source programs and injected definitions on the current native runtime. | Can a narrower supported language, clearer boundaries or simpler acquisition remove enough complexity? What ongoing VM compatibility remains necessary? |
 | Domain DSL or rule graph | Explicit domain operations, conditions, dependencies and effects represented as validated rules. | Can the model express actual interaction families without hidden callbacks or an expanding escape language? How are evaluation order and explanations represented? |
+| Declarative definitions | Typed conditions, modifiers and dependencies interpreted by a fixed domain engine. | Which interaction families fit without procedural escape hatches, and how are ordering, state and new mechanics represented? |
 | Native Rust algorithm families | Generic compiled algorithms consume injected game definitions and build instances. | Which changes remain data-only, which require new code, and how are new effect families added without per-skill, per-item or per-build handlers? |
 | Hybrid or offline lowering | Source or domain rules become a smaller runtime representation, possibly combined with native kernels. | Is complexity removed or merely moved into generators, adapters and duplicated representations? Can generated behavior retain provenance and useful failures? |
 

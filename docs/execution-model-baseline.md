@@ -996,3 +996,28 @@ Provenance anchors:
 
 Protected inputs, the package, lock file and executable hashes were unchanged across the
 matrix. These figures establish neither a PoB speedup nor a preferred execution model.
+
+## Actual-import parser corpus checkpoint
+
+R2x replaces selected-family-only input selection for this component with actual parser calls
+from all five complete original imports. The [protocol and results](parser-input-corpus.md)
+record 1,375 attempts, all 116 saved items, and 760 build-local distinct parameter pairs:
+558 match complete supported miss/hit graphs and 202 retain explicit unsupported first stops.
+All observed source imports preserve control scalar outputs; no original build becomes fully
+native. The reference host remains optional tooling, and no production evaluator/data/schema
+changes are made in this checkpoint.
+
+Count the observer, coherent-state guard and bounded graph/replay machinery as compatibility
+cost in A1: six new test/support files contain 2,477 physical lines, with 51 net shared-hook lines.
+This count includes fixtures/comments and does not estimate maintenance effort. The complete
+single Windows release validation took 336.8 seconds, including reference import/capture,
+per-probe state checks, fresh native session preparation and report serialization; it is not a
+hot-path throughput benchmark. Separate these costs from candidate evaluation when comparing A2.
+
+The main reached parser categories are unavailable traversal order, unavailable source entries,
+and positive constructor tails. Their downstream observable requirements must be examined in
+complete item assembly and registration before choosing broader interpreter work or another
+representation. The next production seam is the existing ItemLoadProvider/prepare_view integration,
+with complete owned item outputs, rather than treating diagnostic assembly evidence as a ready
+item or adding another skill profile. A1/A2 remain open and complete native original coverage is
+still **0/5**.

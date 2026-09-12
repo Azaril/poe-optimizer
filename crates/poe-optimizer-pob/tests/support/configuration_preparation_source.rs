@@ -67,6 +67,51 @@ pub fn observe_with_hooks(
     before_source: Option<&BeforeSourceHook<'_>>,
     hook: Option<&ObservationHook<'_>>,
 ) -> Result<serde_json::Value, RuntimeError> {
+    observe_with_build_hook(
+        pob_root,
+        scratch,
+        xml,
+        warm_xml,
+        structural_case,
+        before_source,
+        None,
+        hook,
+    )
+}
+
+/// Install an optional scoped observer after source initialization and immediately
+/// before the unchanged input XML is loaded. The returned cleanup function runs
+/// after that load on success or error; an unwind also attempts hook cleanup.
+pub type BeforeBuildHook<'a> = dyn Fn(&Lua) -> Result<Function, RuntimeError> + 'a;
+
+struct BuildHookGuard(Option<Function>);
+impl BuildHookGuard {
+    fn finish(&mut self) -> mlua::Result<()> {
+        if let Some(finish) = self.0.take() {
+            finish.call::<()>(())?;
+        }
+        Ok(())
+    }
+}
+impl Drop for BuildHookGuard {
+    fn drop(&mut self) {
+        // Lua errors use the explicit finish path below. This fallback exists
+        // only for Rust unwinding and cannot replace the original panic.
+        let _ = self.finish();
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn observe_with_build_hook(
+    pob_root: &Path,
+    scratch: &Path,
+    xml: &str,
+    warm_xml: Option<&str>,
+    structural_case: bool,
+    before_source: Option<&BeforeSourceHook<'_>>,
+    before_build: Option<&BeforeBuildHook<'_>>,
+    hook: Option<&ObservationHook<'_>>,
+) -> Result<serde_json::Value, RuntimeError> {
     let start = Instant::now();
     poe_optimizer_pob::import::decode_build(xml.as_bytes())?;
     // Structural cases deliberately exercise original Lua coercion/diagnostics
@@ -204,7 +249,13 @@ pub fn observe_with_hooks(
         .set_name("@configuration-source-observation.lua")
         .exec()?;
     let load: Function = globals.get("loadBuildFromXML")?;
-    load.call::<()>((xml, "configuration-source-input"))?;
+    let mut build_hook = BuildHookGuard(before_build.map(|hook| hook(&lua)).transpose()?);
+    let loaded = load.call::<()>((xml, "configuration-source-input"));
+    // Remove the observer even when a source error interrupted the load. Prefer
+    // a sticky capture/cleanup failure over claiming a complete input corpus.
+    let finished = build_hook.finish();
+    finished?;
+    loaded?;
     if !structural_case {
         check_prompt(&lua)?;
     }
