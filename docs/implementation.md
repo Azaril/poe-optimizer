@@ -192,12 +192,28 @@ exceeded the existing 32 MiB limit; compact serialization fixes the replay witho
 validation. Evidence is `runs/a1-update-measured-02/`, with the failed attempt preserved in
 `runs/a1-update-measured/`. See the [protocol and limits](execution-model-baseline.md#supported-data-update-replay).
 
-**Resume A1:** measure allocation/retained state and supported session costs, and record
-update/migration/debugging effort. The supported balance replay is complete; the inconsistent
-cross-catalog identity failure/repair and separate acquisition exercise in
-`runs/a1-update-exercise-proposal.json` remain unexecuted. A real upstream release refresh
-still requires source-pin/compatibility review. This one closed numeric projection does not
-establish new effect-family support, coherent all-catalog updates or upstream migration cost.
+**A1 reconciliation/acquisition checkpoint:** the caller-only skill-ID edit fails preparation
+with no search result or export. Repairing that exact package requires six reference values
+and one lookup key across skill identities/preparation, leaving its XML and numerical profile
+unchanged. Serial/Rayon search and exported reimport then agree. A cumulative quoted/Unicode
+identity and quest-key edit also passes locked search/export. All ten replay commands pass;
+no calculation code or loader guard changes. See [identity reconciliation](execution-model-baseline.md#identity-reconciliation-replay).
+
+Two fresh PoB-enabled release extractions reproduce the identical reviewed 29-section package
+in 17.804/17.336 seconds. Both preserve provenance and valid original traversal observations;
+only permitted traversal order varies. These are whole-command times. Static inspection finds
+five full loader validations across worker/parent, without attributing their individual costs.
+An isolated copy of all 1,082 manifested files rejects the changed Wooden Club source at the
+exact file and publishes neither package nor evidence. The pinned submodule remains unchanged.
+See [acquisition scope and evidence](execution-model-baseline.md#pinned-source-acquisition-and-rejection).
+All artifacts and binary identities are retained in `runs/a1-reconciliation-01/`.
+
+**Resume A1:** the proposed supported balance, identity failure/repair, unchanged-pin extraction
+and isolated source-rejection replays are now complete. Measure allocation/retained state,
+supported source-session histories and invalidation next, then a real effect-family or reviewed
+upstream update. The observed catalog coordination and repeated validation are comparison
+inputs; neither proves an interpreter replacement is preferable. A real release refresh still
+requires source compatibility review. No new effect family or complete original build is admitted.
 
 A prototype-boundary question is pending with the owner: typed domain equivalence, complete public-parser compatibility,
 or both as experiments. This is not migration approval. Use the all-five interaction map
@@ -1696,8 +1712,9 @@ defines the alternatives, constraints and evidence required for a decision.
   Restricted changing-candidate admission/reuse is also remeasured against schema 29.
   Snapshot/compile/backend setup and 34 loader statement intervals are measured. A selective
   trusted-key decode preserves loaded data and reduces measured first-load time. Allocation
-  ownership, general invalidation, source-session and update-effort measurements remain open;
-  these restricted matrices do not complete A1.
+  ownership, general invalidation, source-session and real upstream/effect-family update costs
+  remain open. Supported balance/identity repair and unchanged-pin extraction now have retained
+  successful replays, including source-edit rejection; they do not complete A1.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.

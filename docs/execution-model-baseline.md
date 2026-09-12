@@ -401,7 +401,87 @@ Custom package SHA-256 is `6cc0744c82a96c21bf17a2e5ef838f55941cd356427ec9e528fda
 This proves a supported balance change in the closed weapons projection. The wider source
 item catalog remains unchanged. It does not establish a coherent upstream release refresh,
 new effect-family implementation, migration/review hours or full-original native parity.
-The proposed inconsistent-identity failure/repair and source-acquisition exercises remain open.
+The following checkpoint executes the inconsistent-identity repair and unchanged-pin acquisition exercises.
+
+## Identity reconciliation replay
+
+The next replay changes only the numerical Mace profile's skill ID and the corresponding
+attribute in the existing test XML. The unchanged native executable rejects preparation with
+`Authored skill resolution differs from the closed numerical adapter`: one preparation
+attempt, no search/winner, and neither XML nor metadata export. Package sealing succeeds;
+the inconsistency is detected when authored and numerical skill resolution meet.
+
+Repair operates on that exact specimen, preserving its edited profile and XML bytes. It
+updates six reference values and one lookup key across `skill_identities` and
+`skill_preparation`, including the declared canonical gem order. Source provenance remains
+unchanged; reference renames reject collisions. Only those two payload sections and their
+digests change relative to the failed specimen. Searches at one/four workers both complete
+six evaluations with four legal alternatives, one consistent fresh verification and no
+failures. Their feasible results and verified winner agree. The exported `smith/none` winner
+reimports at the same 18.208693999999998 selected-hit DPS.
+
+The same repaired object then receives the existing quoted/Unicode identity recipe and
+renamed quest keys. This additional reference transformation touches 56 values and four
+lookup keys. Locked `wood/brutality_i` searches at one/four workers each complete three
+evaluations with one legal alternative and consistent verification. Escaped identities and
+quest keys survive XML export; reimport obtains the same 13.656520499999997 selected-hit DPS.
+These values come from the original numeric fixture, not the earlier tenfold damage edit.
+
+All ten commands pass: three seals, the expected preparation rejection, and search/search/
+reimport for each repaired case. Each custom package retains its own identity and
+`custom_unreviewed` status; supplied inputs and executables remain unchanged. Evidence is
+`runs/a1-reconciliation-01/identity/`, including the producing driver, raw/sealed packages,
+XML, exact commands, complete reports and edit counts. The driver derives its input from
+`tests/dataset_search_cli.rs`; no fixture-specific behavior enters production code.
+
+This demonstrates data-only identity reconciliation in the admitted diagnostic model. The
+coordination spans a legacy numerical profile and independently loaded source definitions;
+it is not evidence that the interpreter caused the duplication. Counts describe this edit,
+not engineering hours, minimum general update effort or a completed upstream migration.
+
+## Pinned-source acquisition and rejection
+
+Two fresh processes use one PoB-enabled release executable at `cfbde4e` and explicit
+600-second completion limits. The first uses the default source path from the repository;
+the second uses an absolute source path from the output directory. Both emit the identical
+26,286,752-byte reviewed package, all 29 section digests and matching stable evidence.
+Whole-command elapsed times are **17.804 s and 17.336 s**, including verification, process
+startup, extraction, validation, serialization and publication. They are two reproduction
+observations on the same Windows host, not stage timings or a performance comparison.
+
+Independent checks authenticate the exact 129 consumed-source entries, all 1,082 files in
+the source manifest and the extractor digest derived from 56 implementation/configuration
+inputs. Each 966-entry gem setup/search order is a complete permutation. The two processes
+have different orders, but their recorded owner/variant maps are equal and correctly replay
+from the respective order. Only these validated traversal observations vary; they are kept
+out of reproducible package semantics.
+
+Static inspection identifies five full `GameDataLoader::from_bytes` calls along successful
+public extraction: review generation, pinned-output validation, worker validation, parent
+artifact validation and CLI loading. Three execute in the worker and two in the parent.
+Existing reports expose no timing for these calls. Their separate costs and the necessity
+of each check at its trust boundary must be established before proposing consolidation.
+The isolated loader benchmark cannot be multiplied by five to attribute acquisition time.
+
+A separate control copies only the complete manifested runtime source, verifies every copied
+file, then changes Wooden Club's physical range from 6/10 to 60/100 in that copy. Extraction
+rejects `src/Data/Bases/mace.lua` for its changed normalized byte length before publication;
+stdout is empty and neither package nor evidence is written. Only that copied file differs.
+The real submodule, manifest, data and executables remain unchanged. This validates the
+source-pin boundary; it does not approve or implement a new upstream revision.
+
+Evidence is `runs/a1-reconciliation-01/{build.json,acquisition/,source-control/}` and the
+independent `runs/a1-acquisition-review-by-lowerer.json`. The exact producing acquisition
+driver is retained beside its outputs. Review found that its unreached outer observer timeout
+needed process-tree cleanup; the future driver adds that cleanup and lock-file recording,
+separately from the completed runs. No timeout occurred and that new cleanup branch was not
+exercised. The lock hash matches the prior checkpoint throughout this work.
+
+These replays require no production changes. Sealing custom data remains separate from
+acquiring authenticated source; normal CLI extraction also enforces the reviewed output
+digest. A maintainer regeneration path still requires source compatibility review. Actual
+upstream migration, new effect-family work, allocation ownership and source-session costs
+remain open for A1/A2. Complete supplied-original native coverage remains **0/5**.
 
 ## Original modifier observations for the comparison
 
@@ -481,9 +561,9 @@ A1 remains open for these measurements and decisions:
 3. Measure cache-hit/no-match/miss/failure histories, reset/import/export and diagnostics
    at an equivalent supported boundary. An unsupported successful parse has no successful
    native throughput to report.
-4. Extend the completed supported numeric balance replay to inconsistent cross-catalog
-   identity/repair and a real upstream or effect-family update. Record code/data changes,
-   migration/debugging effort and provenance quality; code size cannot substitute for it.
+4. Extend the completed balance/identity-repair and unchanged-pin extraction replays to a
+   real upstream or effect-family update. Record code/data changes, migration/debugging effort
+   and provenance quality; synthetic edits and code size cannot substitute for that work.
 5. Select representative A2 slices with the owner using the
    [all-five interaction map](execution-model-semantics-inventory.md), including mechanisms
    those five do not cover. No model or migration has been selected.

@@ -26,8 +26,12 @@ instrumentation to the shipping loader. A subsequent
 [trusted-key simplification](execution-model-baseline.md#trusted-passive-key-loader-simplification)
 reduces measured first-load time while preserving loaded data and validation. This is a bounded
 optimization of the current model. A [supported balance-data replay](execution-model-baseline.md#supported-data-update-replay)
-also preserves search/export behavior with a fixed native executable. Allocation ownership,
-new effect-family work and actual upstream update effort remain open.
+also preserves search/export behavior with a fixed native executable.
+[Identity reconciliation](execution-model-baseline.md#identity-reconciliation-replay) and
+[pinned-source acquisition](execution-model-baseline.md#pinned-source-acquisition-and-rejection)
+now record coordinated reference edits, reproducible output, allowed traversal variation and
+source-edit rejection. Allocation ownership, source-session costs, new effect-family work
+and actual upstream update effort remain open.
 
 ## Separate the decisions
 
