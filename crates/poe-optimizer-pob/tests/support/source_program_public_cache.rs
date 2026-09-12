@@ -369,7 +369,28 @@ pub(super) fn run(
             allocation_origin
                 .as_ref()
                 .expect("native allocating expression"),
+            6974,
         );
+        let original_tail = copy_parity::inspect_original_constructor(
+            pair,
+            allocation_origin
+                .as_ref()
+                .expect("native allocating expression"),
+            6972,
+        );
+        let producer_binding = copy_witness
+            .bind_producer_tail(
+                &producer_binding,
+                copy_witness::producer::tail::ProducerTailConfig {
+                    source_line: 6972,
+                    argument_local: "tagList".into(),
+                    constructor_slot: ((original_constructor.report().instruction.word >> 8) & 255)
+                        as usize
+                        + 1,
+                    limits: copy_witness::producer::tail::ProducerTailLimits::default(),
+                },
+            )
+            .unwrap();
         assert_eq!(original_constructor.function(), &producer_binding.target);
         original_constructor.verify_unchanged().unwrap();
         let observed_copy = copy_witness
@@ -474,6 +495,7 @@ pub(super) fn run(
                         .as_ref()
                         .expect("queried allocation origin"),
                     &original_constructor,
+                    &original_tail,
                 );
                 (None, Some(frontier(pair, &error)))
             }

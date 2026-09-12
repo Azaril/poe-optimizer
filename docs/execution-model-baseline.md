@@ -658,6 +658,44 @@ output directory. Outcomes remain 55 native public successes, 10 matched source 
 remains **0/5**. Per-stage loader/observation allocations and general candidate invalidation
 are not measured by these private-session intervals.
 
+### Transferring staged private import storage
+
+The native importer now moves validated staged containers into empty destination arenas/maps,
+while populated destinations retain the existing append behavior. Validation, identity offsets,
+coverage/traversal metadata, class/closure associations and cumulative logical charges are
+unchanged. This is a bounded optimization of the existing implementation, not a different
+execution model or a copy-on-write state representation.
+
+The same five original inputs and 359 lifecycle phases per input pass after the change.
+All five recorded source histories, scalar inputs, phase-name sequences and initial logical
+import usage match the prior requested-layout run. Freshly acquired owner/program/creation
+identities differ, as do some late cumulative VM charges (final byte deltas within ±2,352 and
+step deltas within ±294). The original input/reference/result/checkpoint histories and
+non-cost native outcomes match. This is not a frozen-artifact timing comparison.
+
+Median requested bytes across the five distinct inputs:
+
+| First private import | Prior run | Staged-container transfer |
+| --- | ---: | ---: |
+| Allocation traffic | 104,461,684 | 85,196,548 |
+| Released traffic | 45,242,720 | 25,977,584 |
+| Retained live-byte increase | 59,218,964 | 59,218,964 |
+| Peak growth above phase start | 66,980,572 | 59,219,468 |
+
+The independently created session and fresh-import restart have the same medians. This is
+about 18% less requested allocation traffic during these imports, with lower temporary peak
+growth and unchanged retained storage. It does not establish faster candidate evaluation,
+RSS savings or full-build throughput. The explicit input-clone exercise remains unchanged
+at median 21,688,656 requested/retained bytes; ordinary session creation already borrows the
+input and does not require that deep clone. Shared handles still avoid payload copies.
+
+Evidence is `runs/r2w-tail-01/lifecycle-01/` and `runs/a1-session-import-move-01/`, compared
+with `runs/a1-session-allocations-01/`. No build or other source test ran alongside the
+measurement. Sixty-eight engine unit tests and 162 source-runtime integration tests pass,
+including staged storage, alias/offset, equal-charge and failed-import regressions. These
+checks supplement the original-source lifecycle comparisons; full native build parity is
+still incomplete.
+
 ## Native allocation-origin checkpoint
 
 An independent, opt-in native diagnostic now records each executed Table expression against
@@ -732,6 +770,51 @@ admitting a generic family, prove the variable tail's actual result count and wr
 invalidation for new/deleted keys and array growth, and compare this compatibility cost in
 A1/A2. Final absence of numeric keys does not prove an empty TSETM tail or physical capacity.
 No source order is supplied as a runtime fallback, and no physical table layout is admitted.
+The [R2w follow-up](#original-parser-tail-call-checkpoint) below now establishes the actual empty tail for these observed records.
+
+## Original parser tail-call checkpoint
+
+The R2w source observer now authenticates the result-producing `unpack(tagList)` call for
+all 35 generated modifier records in the 30 canonical positive-miss cases. Each record has
+one original line-entry token, one exact primitive call and one later row store, joined by
+actual constructor identity and activation. Added-fire damage retains both records. Every
+observed pack has zero results; this comes from the actual caller table's raw length at the
+call, not the absence of integer keys in a final row.
+
+Two diagnostics retain the same original Function, template and catalog. The complete
+line-6972 inventory is GGET 1143, MOV 1144, CALL 1145, TSETM 1146. The opt-in `global_name`
+query reads the original GGET constant through privately retained reflection; it is `unpack`.
+Before lookup, the line-entry guard checks the actual environment is plain and its raw
+binding is the original primitive. This excludes a metamethod or loaded wrapper delegating
+to that primitive with different arguments. The fresh token is consumed once at the actual
+C call; leaving the region or unwinding abandons pending evidence. A post-return same-line
+event cannot rearm it.
+
+The bytecode binds the single argument from source register 24 (debug slot 25), through
+register 37 with the pinned two-slot frame convention, and the allocated table in register
+34 (slot 35). The existing constructor/store proof joins TSETV 1147 and the subsequent
+line-6974 region. Inspection uses the Lua caller, avoiding C-frame slots that mlua may shift
+while preparing hook-error storage. Full source result packs, cache aliases and native failure
+prefixes still match the prior contract.
+
+The returned pack is **derived** from authenticated original `unpack` semantics and captured
+raw length/slots. It is not an intercepted return. Synthetic cases retain nil slots among
+multiple results, and cover zero/one/multiple values, repeated activations, another function
+with the same source, changed bindings, bounds, protected errors and a self-removing
+metamethod. Zero-result TSETM performs no entry writes or array resize; a GC barrier is not
+excluded. Positive-tail start indices, capacity, resizing and warm/JIT history are unproved.
+
+Final validation passes 128 source-program unit tests, 11 standalone copy/producer/tail
+witness tests, and 14 scanner tests covering ten original-build bootstraps. The final scanner
+is `runs/r2w-tail-01/scanner-02/`; the passing earlier scan is retained but lacks the final
+pre-GGET attribution guard. No layout is admitted and all 30 native positive returns still
+stop at the same copy traversal dependency. Complete native original coverage remains **0/5**.
+
+The next bounded candidate is an authenticated reserved-string-key traversal certificate,
+with live values and explicit invalidation for positive tails or unreserved writes. It must
+also preserve deleted-key controls, key rooting, aliases, resource errors and source/JIT
+histories. This is a proposed compatibility contract, not a chosen A2 model or an implemented
+native feature. Keep its implementation/validation cost in the execution-model comparison.
 
 ## Original modifier observations for the comparison
 

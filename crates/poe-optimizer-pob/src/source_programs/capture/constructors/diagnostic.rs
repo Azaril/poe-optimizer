@@ -334,6 +334,40 @@ impl ConstructorDiagnosticWitness {
     pub fn catalog(&self) -> &SourceProgramCatalog {
         &self.catalog
     }
+    /// Read the exact string constant referenced by a retained GGET instruction.
+    /// This is a bounded query against the original Function, not a lookup in its
+    /// mutable environment. Each returned name is owned by the diagnostic caller.
+    pub fn global_name(&self, pc: u32, maximum_bytes: usize) -> Result<Vec<u8>> {
+        if maximum_bytes > self.limits.max_text_bytes {
+            return Err(error("constructor diagnostic global-name byte bound"));
+        }
+        let instruction = self
+            .report
+            .instruction_window
+            .iter()
+            .find(|i| i.pc == pc)
+            .ok_or_else(|| error("global-name query is outside the retained instruction window"))?;
+        if instruction.word & 255 != 54 {
+            return Err(error(
+                "global-name query requires an original GGET instruction",
+            ));
+        }
+        self.verify_unchanged()?;
+        let constant_index = -1 - (instruction.word >> 16) as i32;
+        let value: Value = self
+            .target
+            .0
+            .constant
+            .call((self.function().clone(), constant_index))?;
+        let Value::String(name) = value else {
+            return Err(error("original GGET constant is not a string"));
+        };
+        let bytes = name.as_bytes();
+        if bytes.len() > maximum_bytes {
+            return Err(error("constructor diagnostic global-name byte bound"));
+        }
+        Ok(bytes.to_vec())
+    }
     pub fn verify_unchanged(&self) -> Result<()> {
         self.target.0.verify_identity()?;
         let instructions = self.target.0.instructions()?;

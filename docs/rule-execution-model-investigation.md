@@ -40,8 +40,13 @@ its layout. [Requested private-session layouts](execution-model-baseline.md#requ
 now quantify copy/import/teardown storage separately from shared handles. The
 [original constructor/producer join](execution-model-baseline.md#original-constructor-and-producer-checkpoint)
 also closes the missing source identity; reserved-key mutation and tail behavior remain open
-compatibility costs. Per-stage loader/source allocation, general invalidation, new effect-family
-work and actual upstream update effort remain open. No model is selected.
+compatibility costs. The [R2w tail-call evidence](execution-model-baseline.md#original-parser-tail-call-checkpoint)
+now establishes actual empty packs for those records, without admitting traversal. A bounded
+[staged-import optimization](execution-model-baseline.md#transferring-staged-private-import-storage)
+reduces measured allocation traffic while preserving the same source histories and logical
+import budgets; retained session storage is unchanged. Per-stage loader/source allocation,
+general invalidation, new effect-family work and actual upstream update effort remain open.
+No model is selected.
 
 ## Separate the decisions
 

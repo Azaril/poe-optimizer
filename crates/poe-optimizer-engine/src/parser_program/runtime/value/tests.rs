@@ -419,3 +419,133 @@ fn capture_tables_stay_borrowed_and_definition_strings_are_charged_when_reached(
     assert_eq!(heap.stats().bytes, 3);
     assert_kind(heap.capture(callback, offset + 1), Kind::ResourceBound);
 }
+
+#[test]
+fn empty_commit_adopts_vector_storage_and_populated_commit_preserves_identity() {
+    let bytes: Arc<[u8]> = Arc::from([0xff, 0, b'a'].as_slice());
+    let mut staged = Vec::with_capacity(8);
+    staged.push(V::Table(TableRef::Heap(7)));
+    staged.push(V::Bytes(bytes.clone()));
+    let allocation = staged.as_ptr();
+    let capacity = staged.capacity();
+    let mut target = Vec::new();
+    append_staged(&mut target, staged);
+    assert_eq!(
+        target.as_ptr(),
+        allocation,
+        "the staged buffer is transferred"
+    );
+    assert_eq!(target.capacity(), capacity);
+    let V::Bytes(retained) = &target[1] else {
+        panic!()
+    };
+    assert!(Arc::ptr_eq(retained, &bytes));
+
+    append_staged(
+        &mut target,
+        vec![V::Table(TableRef::Heap(8)), V::Table(TableRef::Heap(7))],
+    );
+    assert_eq!(
+        target.as_ptr(),
+        allocation,
+        "existing spare capacity is reused"
+    );
+    assert!(target[0].lua_equal(&target[3]));
+    assert!(!target[0].lua_equal(&target[2]));
+    assert!(matches!(&target[1], V::Bytes(value) if Arc::ptr_eq(value, &bytes)));
+}
+
+#[test]
+fn empty_commit_adopts_map_nodes_and_populated_commit_retains_extend_semantics() {
+    let mut staged = BTreeMap::from([(1, V::Boolean(false)), (2, V::Table(TableRef::Heap(7)))]);
+    let node = staged.get_mut(&1).unwrap() as *mut V;
+    let mut target = BTreeMap::new();
+    extend_staged_map(&mut target, staged);
+    assert!(
+        std::ptr::eq(target.get(&1).unwrap(), node.cast_const()),
+        "staged map nodes must not be rebuilt"
+    );
+    extend_staged_map(
+        &mut target,
+        BTreeMap::from([
+            (2, V::Table(TableRef::Heap(8))),
+            (3, V::Table(TableRef::Heap(7))),
+        ]),
+    );
+    assert_eq!(target.len(), 3);
+    assert!(matches!(target.get(&1), Some(V::Boolean(false))));
+    assert!(target[&2].lua_equal(&V::Table(TableRef::Heap(8))));
+    assert!(target[&3].lua_equal(&V::Table(TableRef::Heap(7))));
+}
+
+#[test]
+fn empty_and_append_imports_keep_equal_logical_charges_and_failure_atomicity() {
+    let input = ProgramValueGraph {
+        values: vec![table(1), table(1)],
+        tables: vec![ProgramTable {
+            entries: vec![
+                (ProgramValue::Bytes(b"self".to_vec()), table(1)),
+                (num(1.0), ProgramValue::Boolean(false)),
+            ],
+        }],
+    };
+    let mut fresh = heap();
+    let mut populated = heap();
+    let sentinel = populated.new_table().unwrap();
+    let before_fresh = fresh.stats();
+    let before_populated = populated.stats();
+    let first = fresh.import(&input, true).unwrap();
+    let second = populated.import(&input, true).unwrap();
+    assert_eq!(
+        charges(fresh.stats(), before_fresh),
+        charges(populated.stats(), before_populated)
+    );
+    assert!(first[0].lua_equal(&first[1]));
+    assert!(second[0].lua_equal(&second[1]));
+    assert!(!second[0].lua_equal(&sentinel));
+    assert_eq!(
+        fresh.freeze(&first).unwrap(),
+        populated.freeze(&second).unwrap()
+    );
+
+    let mut invalid = input.clone();
+    invalid.tables[0].entries.extend([
+        (num(0.0), ProgramValue::Boolean(true)),
+        (num(-0.0), ProgramValue::Boolean(false)),
+    ]);
+    let before_fresh = fresh.stats();
+    let before_populated = populated.stats();
+    assert_kind(fresh.import(&invalid, true), Kind::InvalidInput);
+    assert_kind(populated.import(&invalid, true), Kind::InvalidInput);
+    assert_eq!(
+        charges(fresh.stats(), before_fresh),
+        charges(populated.stats(), before_populated)
+    );
+    assert!(fresh.stats().values > before_fresh.values);
+    assert_eq!(fresh.tables.len(), 1);
+    assert_eq!(populated.tables.len(), 2);
+    assert!(
+        fresh
+            .get(&first[0], &text(b"self"))
+            .unwrap()
+            .lua_equal(&first[0])
+    );
+    assert!(
+        populated
+            .get(&second[0], &text(b"self"))
+            .unwrap()
+            .lua_equal(&second[0])
+    );
+    let next_fresh = fresh.import(&input, true).unwrap();
+    let next_populated = populated.import(&input, true).unwrap();
+    assert!(matches!(next_fresh[0], V::Table(TableRef::Heap(2))));
+    assert!(matches!(next_populated[0], V::Table(TableRef::Heap(3))));
+
+    fn charges(after: HeapStats, before: HeapStats) -> (usize, usize, usize) {
+        (
+            after.values - before.values,
+            after.bytes - before.bytes,
+            after.tables - before.tables,
+        )
+    }
+}

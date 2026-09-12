@@ -19,9 +19,10 @@ choices need no repeated approval. Preserve numerical tests through explicit leg
 without letting their single-profile assumptions define the new model.
 
 The A1 investigation below is the current resume point. Source-session timing and requested
-allocation layouts are measured separately from dataset ownership. R2v now authenticates the
-original template/producer behind the remaining copy failure; it adds source evidence, not
-traversal capability. Historical sections retain their original validation scope.
+allocation layouts are measured separately from dataset ownership; staged-container transfer
+now reduces import allocation traffic. R2w authenticates the original empty tail behind the
+remaining copy failure, without granting traversal capability. Historical sections retain
+their original validation scope.
 
 **Architecture review in progress:** [A1-A4 execution-model investigation](#execution-model-investigation-a1-a4)
 compares the current interpreter with a domain DSL, data-driven rules, native Rust
@@ -34,7 +35,38 @@ Continue measuring costs before extending general Lua compatibility into further
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
 
-**R2v checkpoint: original constructor and producer identity.** An opt-in pre-observation
+**R2w checkpoint: exact original tail call.** All 35 modifier records from the 30 canonical
+positive misses now join a pre-GGET line-entry token, actual original `unpack` call and later
+store through their constructor identity. All observed packs have zero results. The original
+GGET string constant, plain environment/raw primitive binding, complete four-PC line region,
+caller argument register and fresh activation token exclude metamethod/wrapper attribution.
+C-frame slots are not used. The result count is derived from pinned primitive semantics,
+not intercepted returns. [Evidence and limits](execution-model-baseline.md#original-parser-tail-call-checkpoint)
+retain the empty/positive-tail distinction and the earlier scan without the final guard.
+
+**A1 import optimization checkpoint:** validated staged vectors/maps now move into empty
+native destinations instead of rebuilding them. Existing nonempty imports still append;
+validation, aliases, offsets and logical charges stay unchanged. Across all five source
+histories, median first-import allocation traffic falls from 104,461,684 to 85,196,548 bytes;
+peak growth falls from 66,980,572 to 59,219,468. Retained storage stays 59,218,964 bytes.
+Independent-session and fresh-restart phases have the same medians. This is requested Rust
+storage, not RSS or candidate throughput; the explicit input clone is a separate unchanged
+exercise. [Protocol and comparison](execution-model-baseline.md#transferring-staged-private-import-storage)
+record the fresh-capture boundary.
+
+**Validation:** 68 engine unit tests, 162 source-runtime integration tests, 128 source-program
+unit tests, 11 standalone witness tests, 14 scanner tests (ten original bootstraps) and all
+five lifecycle children pass. Final evidence is `runs/r2w-tail-01/`; supplied inputs, data,
+schema, dependencies and PoB pin are unchanged. Complete native original coverage remains
+**0/5**, and the 30 native positive parser returns still stop at the same traversal boundary.
+
+**Next R2w step:** evaluate the bounded reserved-string-key certificate now that these
+original tails are known empty. Retain source ownership/key rooting, live values, deleted-key
+controls, resource/error behavior, and explicit invalidation for positive tails or unreserved
+writes. Neither capacity nor arbitrary hash/JIT histories are admitted. This compatibility
+cost remains part of A1/A2; no execution-model migration has been selected.
+
+**Earlier R2v checkpoint: original constructor and producer identity.** An opt-in pre-observation
 Function ticket now binds the actual source function to its observed owner/callback. A bounded
 query authenticates the exact TDUP instruction and template, even though keyed constructor
 layout remains unsupported. All 30 real positive-miss cases join that source allocation/store
@@ -54,7 +86,7 @@ lint, portable libraries and formatting pass. Report-only repairs and final prod
 are retained in `runs/a1-producer-01/`. Data, schema, dependencies, supplied inputs and PoB pin
 are unchanged. Full native original-build coverage remains **0/5**.
 
-**Next R2v step:** evaluate a generic reserved-key mutation/traversal contract with actual
+**R2v follow-up (advanced by R2w above):** evaluate a generic reserved-key mutation/traversal contract with actual
 tail-result evidence and explicit invalidation, keeping the interpreter compatibility cost
 visible in A1/A2. Five matching final keys cannot substitute for tail cardinality or physical
 capacity evidence. Complete uncached parsing and full build activation remain required.
@@ -296,8 +328,8 @@ retain differences in source acquisitions and distinguish instrumented timings f
 attribution, general candidate invalidation/reuse and a real effect-family or reviewed upstream update.
 There is no session clone/reset API; importing additional state is not reset. All five inputs
 selected the same initialized cache-hit key in this run, so broader interaction coverage
-remains essential. Per-stage loader allocation also remains open. The R2v reserved-key/tail
-mutation contract is the next concrete parser dependency; no additional effect family or complete
+remains essential. Per-stage loader allocation also remains open. The R2w reserved-key mutation/traversal
+contract is the next concrete parser dependency; no additional effect family or complete
 original build has been admitted. A1 remains incomplete.
 
 A prototype-boundary question is pending with the owner: typed domain equivalence, complete public-parser compatibility,

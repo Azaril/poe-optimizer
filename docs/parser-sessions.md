@@ -51,6 +51,14 @@ Never reinterpret parser-local callback/table IDs as receiving-session IDs. A re
 function that captures mutable parser data must retain the same session cells. Unsupported
 function-bearing results must remain visible until that identity path is implemented.
 
+Private import validates and charges its complete staged graph before publishing any
+identities. An empty destination can adopt the staged containers directly; a populated
+session appends them with the existing identity offsets. This avoids rebuilding temporary
+storage while retaining aliases, class associations, traversal evidence and cumulative
+logical budgets. The input artifact is borrowed and reusable across independent sessions;
+an explicit deep clone of that artifact is a separate operation, not a prerequisite for
+creating each worker's private state.
+
 ## Numerical helpers and injected flag logic
 
 Keep language-level numeric primitives separate from game-level flag helpers. The native
@@ -129,6 +137,24 @@ check for the observed event. The current paired oracle proves the store dominat
 continuation line, not the hook's exact PC. Template reads occur before the call and are
 rechecked afterward; producer contents are the final state of retained objects. Physical
 capacity, variable-tail cardinality and arbitrary insertion/deletion history remain separate.
+
+The optional tail observer must distinguish the actual result-producing call from a
+metamethod or wrapper that delegates to the same primitive. Authenticate the original
+GGET string constant through the retained Function and private reflection primitive. A
+fresh line-entry token checks the actual caller environment is plain and its raw global
+binding is that original primitive before lookup. The complete original line/branch
+inventory must then prove lookup, argument move, call and full-result store have no
+alternate entry. Consume the token only at the exact primitive call, tied to the same
+activation and allocated table; leaving the region or unwinding abandons pending evidence.
+
+For the current single-argument `unpack` seam, use the caller's authenticated local register,
+raw table length and every integer slot, including nil. These observations derive the
+expected result pack from the pinned primitive's semantics; they do not intercept its
+returns. Avoid C-frame argument slots because the hosting library may temporarily insert
+hook-error storage there. A successful source return and later actual table-store/copy
+joins are additional checks. Zero results establish no entry writes or array resize at
+TSETM; positive packs still require separate start-index, capacity and history evidence.
+This observer remains an opt-in parity diagnostic, outside native candidate execution.
 
 ## Observing complete initialized state
 

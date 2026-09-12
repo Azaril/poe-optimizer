@@ -1,6 +1,10 @@
 //! Bounded, test-only observation of an exact original parser closure's row store.
 //! Retained tables are live identities. No constructor-completion snapshot or layout.
+#[path = "source_program_producer_tail.rs"]
+pub mod tail;
 use mlua::{Function, Lua, MultiValue, Table, Value, debug::DebugEvent};
+use tail::ProducerTailProbe;
+pub use tail::{ProducerTailBinding, ProducerTailCall, ProducerTailConfig, ProducerTailLineEntry};
 const MAX_DEPTH: usize = 32;
 const MAX_TEXT: usize = 65_536;
 const INSPECT: &str = r#"local getinfo,getlocal = ...
@@ -35,6 +39,7 @@ fn error(message: &str) -> mlua::Error {
 pub struct ProducerProbe {
     getupvalue: Function,
     inspect: Function,
+    tail: ProducerTailProbe,
 }
 #[derive(Debug, Clone)]
 pub struct ProducerBinding {
@@ -42,6 +47,7 @@ pub struct ProducerBinding {
     pub target: Function,
     pub capture_slot: usize,
     pub source_line: usize,
+    pub tail: Option<ProducerTailBinding>,
 }
 #[derive(Debug)]
 pub struct ProducerActivation {
@@ -68,6 +74,11 @@ pub struct ProducerStore {
 pub struct ProducerState {
     pub activations: Vec<ProducerActivation>,
     pub stores: Vec<ProducerStore>,
+    pub tails: Vec<ProducerTailCall>,
+    pub tail_entries: Vec<ProducerTailLineEntry>,
+    tail_pending: Option<usize>,
+    tail_values: usize,
+    tail_text: usize,
     active: Vec<usize>,
     retained_text: usize,
 }
@@ -82,8 +93,10 @@ impl ProducerProbe {
                 return Err(error("producer witness requires original C inspection"));
             }
         }
+        let tail = ProducerTailProbe::before_source(lua, &getinfo, &getlocal)?;
         Ok(Self {
             getupvalue,
+            tail,
             inspect: lua
                 .load(INSPECT)
                 .set_name("@tests/support/source_program_producer_witness.rs#inspection")
@@ -133,6 +146,7 @@ impl ProducerProbe {
             capture_slot: capture_slot
                 .ok_or_else(|| error("producer witness missing parseMod capture"))?,
             source_line,
+            tail: None,
         })
     }
     pub fn verify(&self, binding: &ProducerBinding) -> mlua::Result<()> {
@@ -140,7 +154,49 @@ impl ProducerProbe {
         if current.capture_slot != binding.capture_slot {
             return Err(error("producer witness capture slot changed"));
         }
+        if let Some(tail) = &binding.tail {
+            self.tail.verify(tail)?;
+            if !matches!((binding.target.info().line_defined, binding.target.info().last_line_defined),
+                (Some(first), Some(last)) if first < tail.config.source_line && tail.config.source_line <= last)
+            {
+                return Err(error("producer tail line outside actual function"));
+            }
+        }
         Ok(())
+    }
+    pub fn bind_tail(
+        &self,
+        binding: &ProducerBinding,
+        config: ProducerTailConfig,
+    ) -> mlua::Result<ProducerBinding> {
+        self.verify(binding)?;
+        if !matches!((binding.target.info().line_defined, binding.target.info().last_line_defined),
+            (Some(first), Some(last)) if first < config.source_line && config.source_line <= last)
+        {
+            return Err(error("producer tail line outside actual function"));
+        }
+        let mut result = binding.clone();
+        result.tail = Some(self.tail.bind(config)?);
+        Ok(result)
+    }
+    pub fn observe_tail(
+        &self,
+        state: &mut ProducerState,
+        binding: &ProducerBinding,
+        available_events: usize,
+        observed_event: usize,
+    ) -> mlua::Result<()> {
+        let tail = binding
+            .tail
+            .as_ref()
+            .ok_or_else(|| error("producer tail is not enabled"))?;
+        self.tail.observe(
+            state,
+            &binding.target,
+            tail,
+            available_events,
+            observed_event,
+        )
     }
     pub fn observe(
         &self,
@@ -151,6 +207,23 @@ impl ProducerProbe {
         available_events: usize,
         observed_event: usize,
     ) -> mlua::Result<()> {
+        if let Some(tail) = &binding.tail {
+            if event == DebugEvent::Line && line == Some(tail.config.source_line) {
+                return self.tail.observe_entry(
+                    state,
+                    &binding.target,
+                    tail,
+                    available_events,
+                    observed_event,
+                );
+            }
+            if matches!(
+                event,
+                DebugEvent::Call | DebugEvent::Ret | DebugEvent::TailCall | DebugEvent::Line
+            ) {
+                ProducerTailProbe::abandon_pending(state);
+            }
+        }
         match event {
             DebugEvent::Call | DebugEvent::Line => {
                 let at_store = event == DebugEvent::Line;
@@ -243,7 +316,7 @@ impl ProducerProbe {
 }
 impl ProducerState {
     pub fn event_count(&self) -> usize {
-        self.activations.len() + self.stores.len()
+        self.activations.len() + self.stores.len() + self.tails.len() + self.tail_entries.len()
     }
 }
 

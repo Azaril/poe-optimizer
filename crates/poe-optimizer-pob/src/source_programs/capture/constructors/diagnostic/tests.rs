@@ -398,3 +398,40 @@ fn diagnostic_uses_retained_primitives_and_excludes_nested_function_tables() {
         ConstructorDiagnostic::Unavailable(_)
     ));
 }
+
+#[test]
+fn global_name_query_uses_original_constant_not_environment_or_rebound_reflection() {
+    let lua = Lua::new();
+    let observer = observer(&lua);
+    let text = "return function(value)\n local row = { name = value }\n return type(row)\nend\n";
+    let function: Function = lua.load(text).set_name(format!("@{PATH}")).eval().unwrap();
+    let target = observer
+        .retain_constructor_diagnostic_target(&lua, &function)
+        .unwrap();
+    let (sources, observed, lowered) = capture(&lua, &observer, &function, text);
+    let witness = query(
+        &target,
+        &sources,
+        &observed,
+        &lowered,
+        request(text, &observed, "{ name = value }", Some(3)),
+    );
+    let get = witness
+        .report()
+        .instruction_window
+        .iter()
+        .find(|i| i.word & 255 == 54)
+        .unwrap();
+    assert_eq!(witness.global_name(get.pc, 4).unwrap(), b"type");
+    assert!(witness.global_name(get.pc, 3).is_err());
+    assert!(witness.global_name(get.pc, usize::MAX).is_err());
+    assert!(
+        witness
+            .global_name(witness.report().instruction.pc, 256)
+            .is_err()
+    );
+    assert!(witness.global_name(0, 256).is_err());
+    lua.load("type=function() error('not executed') end; require('jit.util').funck=function() error('not used') end").exec().unwrap();
+    assert_eq!(witness.global_name(get.pc, 4).unwrap(), b"type");
+    witness.verify_unchanged().unwrap();
+}

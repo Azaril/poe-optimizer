@@ -12,13 +12,17 @@ pub(super) fn compare(
     error: &ProgramRuntimeError,
     allocation_origin: &TableAllocationOrigin,
     original_constructor: &ConstructorDiagnosticWitness,
+    original_tail: &ConstructorDiagnosticWitness,
 ) -> Json {
     let producer_binding = source
         .producer_binding
         .as_ref()
         .expect("enabled producer observation");
     original_constructor.verify_unchanged().unwrap();
+    original_tail.verify_unchanged().unwrap();
     assert_eq!(original_constructor.function(), &producer_binding.target);
+    assert_eq!(original_tail.function(), original_constructor.function());
+    assert_eq!(original_tail.template(), original_constructor.template());
     let native_origin = describe_origin(pair, allocation_origin);
     let TableAllocationOrigin::Expression(origin) = allocation_origin else {
         unreachable!("validated native expression origin");
@@ -147,8 +151,83 @@ pub(super) fn compare(
         "parent":activation.parent,"depth":activation.depth})
         })
         .collect::<Vec<_>>();
+    assert!(
+        pair.observed
+            .constructor_observations()
+            .unwrap()
+            .profile()
+            .is_supported_array_profile()
+    );
+    let tail_binding = producer_binding
+        .tail
+        .as_ref()
+        .expect("enabled original tail observation");
+    let global_name = original_tail
+        .global_name(original_tail.report().continuation_pcs[0], 256)
+        .unwrap();
+    let tail_observations = source.producer.tails.iter().map(|tail| {
+        assert_eq!(tail.caller, producer_binding.target);
+        assert_eq!(tail.callee, tail_binding.original_unpack);
+        assert_eq!(tail.raw_length, tail.values.len());
+        let entry = &source.producer.tail_entries[tail.line_entry_ordinal];
+        assert_eq!(entry.ordinal, tail.line_entry_ordinal);
+        assert_eq!(entry.activation, tail.activation);
+        assert_eq!(entry.caller_depth, tail.caller_depth);
+        assert_eq!(entry.source_line, tail.source_line);
+        assert_eq!(entry.constructor_slot, tail.constructor_slot);
+        assert_eq!(entry.constructor, tail.constructor);
+        assert_eq!(entry.original_unpack, tail.callee);
+        assert_eq!(entry.consumed_by_tail, Some(tail.ordinal));
+        assert!(!entry.abandoned);
+        assert!(entry.observed_event < tail.observed_event);
+
+        let proof = producer_proof::tail_call_site(
+            original_constructor.report(), original_tail.report(), &global_name, tail.source_line,
+            tail.argument_slot, tail.constructor_slot,
+        ).expect("exact original single-argument unpack and TSETM dataflow");
+        let stores = source.producer.stores.iter().filter(|store|
+            store.activation == tail.activation && store.table == tail.constructor
+        ).collect::<Vec<_>>();
+        assert_eq!(stores.len(), 1, "exact tail constructor must join one observed row store");
+        assert!(tail.observed_event < stores[0].observed_event);
+        json!({"ordinal":tail.ordinal,"observed_event":tail.observed_event,"activation":tail.activation,
+            "caller_depth":tail.caller_depth,"source_line":tail.source_line,
+            "argument_local":tail.argument_local,"argument_slot":tail.argument_slot,
+            "constructor_slot":tail.constructor_slot,"constructor_local_name":tail.constructor_name,
+            "line_entry":{"ordinal":entry.ordinal,"observed_event":entry.observed_event,
+                "consumed_by_tail":entry.consumed_by_tail,"abandoned":entry.abandoned,
+                "post_call_same_line_events":entry.post_call_same_line_events,
+                "plain_environment_and_raw_original_unpack_checked":true,
+                "same_environment_checked_at_call":true,"fresh_activation_constructor_token":true},
+            "derived_result_count":tail.raw_length,
+            "derived_pack":observation::canonical(&observation::capture(&tail.values)),
+            "argument_and_constructor_post_call_graph":observation::canonical(&observation::capture(&[
+                Value::Table(tail.argument.clone()), Value::Table(tail.constructor.clone())])),
+            "matching_store_ordinal":stores[0].ordinal,"actual_caller_and_original_primitive_bound":true,
+            "zero_result_tsetm_performs_no_entry_writes_or_array_resize":tail.values.is_empty(),
+            "positive_tail_layout_or_start_index_proven":false,"bytecode_dataflow":proof,
+            "scope":"raw length and ordered values captured at original unpack call entry; return count/values derived from pinned primitive semantics, not intercepted returns; referenced table contents are post-call"})
+    }).collect::<Vec<_>>();
+    assert_eq!(tail_observations.len(), source.producer.stores.len());
+    assert_eq!(tail_observations.len(), source.producer.tail_entries.len());
+    for store in &source.producer.stores {
+        assert_eq!(
+            source
+                .producer
+                .tails
+                .iter()
+                .filter(
+                    |tail| tail.activation == store.activation && tail.constructor == store.table
+                )
+                .count(),
+            1,
+            "every actual stored constructor has one bound original tail call"
+        );
+    }
     let producer_observation = json!({"capture_slot":producer_binding.capture_slot,
         "source_line":producer_binding.source_line,"activations":producer_activations,"stores":producer_stores,
+        "tail_calls":tail_observations,"tail_line_diagnostic":original_tail.report(),
+        "source_runtime_profile":pair.observed.constructor_observations().unwrap().profile(),
         "actual_wrapper_capture_checked_before_and_after":true,"direct_source_table_identity_join":true,
         "contents_timing":"post-call final state of retained source identities; not constructor-completion snapshots",
         "original_post_store_line_region_verified":true,"layout_admitted":false,
@@ -287,6 +366,7 @@ fn describe_origin(pair: &Pair, origin: &TableAllocationOrigin) -> Json {
 pub(super) fn inspect_original_constructor(
     pair: &Pair,
     origin: &TableAllocationOrigin,
+    observation_line: u32,
 ) -> ConstructorDiagnosticWitness {
     let TableAllocationOrigin::Expression(origin) = origin else {
         panic!("actual native origin is required")
@@ -320,7 +400,7 @@ pub(super) fn inspect_original_constructor(
             ConstructorDiagnosticRequest {
                 callback: origin.callback,
                 expression: origin.location,
-                continuation_line: Some(6974),
+                continuation_line: Some(observation_line),
             },
             ConstructorDiagnosticLimits::default(),
         )

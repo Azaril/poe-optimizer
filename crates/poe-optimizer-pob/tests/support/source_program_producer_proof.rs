@@ -152,6 +152,120 @@ pub fn post_store(
     )
 }
 
+/// Bind an observed original unpack call to one complete, source-authenticated
+/// GGET/MOV/CALL/TSETM line. The caller's live local supplies the argument; C-frame
+/// slots are deliberately not inspected because mlua can insert hook error storage.
+pub fn tail_call_site(
+    constructor: &ConstructorDiagnosticReport,
+    tail: &ConstructorDiagnosticReport,
+    global_name: &[u8],
+    source_line: usize,
+    argument_slot: usize,
+    constructor_slot: usize,
+) -> Result<Json, String> {
+    if global_name != b"unpack" {
+        return Err("tail GGET does not reference the guarded original unpack binding".into());
+    }
+    if constructor.callback != tail.callback
+        || constructor.provenance != tail.provenance
+        || constructor.expression != tail.expression
+        || constructor.bytecode_sha256 != tail.bytecode_sha256
+        || constructor.instruction != tail.instruction
+        || constructor.control_flow_instructions != tail.control_flow_instructions
+    {
+        return Err(
+            "tail and producer diagnostics do not describe the same original function/site".into(),
+        );
+    }
+    let binding = check_tail(
+        &tail.instruction_window,
+        &tail.control_flow_instructions,
+        &tail.continuation_pcs,
+        source_line,
+        argument_slot,
+        constructor_slot,
+    )?;
+    if constructor_slot != ((constructor.instruction.word >> 8) & 255) as usize + 1 {
+        return Err(
+            "observed tail table slot does not bind the original constructor register".into(),
+        );
+    }
+    let store = constructor
+        .continuation_pc
+        .ok_or("missing post-store continuation")?
+        - 1;
+    if binding[3] + 1 != store {
+        return Err("tail is not immediately before the authenticated row store".into());
+    }
+    Ok(
+        json!({"line_pcs":binding,"call_pc":binding[2],"tail_pc":binding[3],
+        "source_line":source_line,"argument_local_slot":argument_slot,"constructor_local_slot":constructor_slot,
+        "global_name":global_name,"single_argument_from_live_caller_local":true,"all_call_results_consumed_by_immediate_tsetm":true,
+        "alternate_entry_to_argument_call_or_tail_rejected":true,"exact_hook_pc_observed":false,
+        "scope":"caller local and actual primitive identity plus pinned bytecode dataflow; return count is derived from original unpack semantics; no C-frame slot or physical layout claim"}),
+    )
+}
+fn check_tail(
+    window: &[Instruction],
+    control: &[Instruction],
+    line_pcs: &[u32],
+    source_line: usize,
+    argument_slot: usize,
+    constructor_slot: usize,
+) -> Result<[u32; 4], String> {
+    let pcs: [u32; 4] = line_pcs
+        .try_into()
+        .map_err(|_| "tail line must contain exactly four original instructions")?;
+    if pcs.into_iter().ne(pcs[0]..pcs[0] + 4) {
+        return Err("tail line is not a contiguous complete instruction region".into());
+    }
+    let instructions = pcs.map(|pc| window.iter().find(|i| i.pc == pc));
+    let [Some(get), Some(mov), Some(call), Some(tail)] = instructions else {
+        return Err("missing tail instruction".into());
+    };
+    if [get, mov, call, tail].iter().any(|i| i.line as usize != source_line)
+        || get.word & 255 != 54 // GGET
+        || mov.word & 255 != 18 // MOV
+        || call.word & 255 != 66 // CALL
+        || tail.word & 255 != 63
+    // TSETM
+    {
+        return Err("tail line is not the admitted GGET/MOV/CALL/TSETM sequence".into());
+    }
+    let register = (get.word >> 8) & 255;
+    if (mov.word >> 8) & 255 != register + 2 // pinned FR2 argument slot
+        || (call.word >> 8) & 255 != register
+        || call.word >> 24 != 0 // all results
+        || (call.word >> 16) & 255 != 2 // exactly one argument
+        || (tail.word >> 8) & 255 != register
+        || (mov.word >> 16) as usize + 1 != argument_slot
+        || register as usize != constructor_slot
+    // TSETM table is A-1
+    {
+        return Err("tail operands do not bind the observed caller argument/table slots".into());
+    }
+    for instruction in control {
+        if matches!(instruction.word & 255, 78 | 81 | 84 | 87) {
+            return Err("trace-patched control flow cannot authenticate a tail call".into());
+        }
+        let mut destinations = Vec::with_capacity(2);
+        if (instruction.mode >> 7) & 15 == 13 {
+            destinations
+                .push(i64::from(instruction.pc) + 1 + i64::from(instruction.word >> 16) - 0x8000);
+        }
+        if instruction.word & 255 <= 17 {
+            destinations.push(i64::from(instruction.pc) + 2);
+        }
+        if destinations
+            .iter()
+            .any(|pc| *pc >= i64::from(pcs[1]) && *pc <= i64::from(pcs[3]))
+        {
+            return Err("alternate edge can bypass the exact argument/call/tail sequence".into());
+        }
+    }
+    Ok(pcs)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -171,6 +285,44 @@ mod tests {
             instruction(13, 14, 0),
         ]
     }
+    #[test]
+    fn tail_proof_rejects_extra_calls_wrong_operands_and_bypassed_argument_or_return_pack() {
+        let mut window = vec![
+            instruction(20, 54 | (35 << 8) | (9 << 16), 1),
+            instruction(21, 18 | (37 << 8) | (24 << 16), 1),
+            instruction(22, 66 | (35 << 8) | (2 << 16), 2),
+            instruction(23, 63 | (35 << 8), 2),
+        ];
+        for i in &mut window {
+            i.line = 90;
+        }
+        let pcs = [20, 21, 22, 23];
+        assert_eq!(check_tail(&window, &[], &pcs, 90, 25, 35).unwrap(), pcs);
+        assert!(check_tail(&window, &[], &[20, 21, 22, 23, 24], 90, 25, 35).is_err());
+        assert!(check_tail(&window, &[], &pcs, 90, 24, 35).is_err());
+        assert!(check_tail(&window, &[], &pcs, 90, 25, 34).is_err());
+        for target in 21..=23 {
+            let jump = instruction(2, 88 | (((target - 3 + 0x8000) as u32) << 16), 13 << 7);
+            assert!(check_tail(&window, &[jump], &pcs, 90, 25, 35).is_err());
+        }
+        for word in [
+            66 | (35 << 8) | (3 << 16),
+            66 | (35 << 8) | (2 << 16) | (2 << 24),
+            66 | (34 << 8) | (2 << 16),
+        ] {
+            let mut changed = window.clone();
+            changed[2].word = word;
+            assert!(check_tail(&changed, &[], &pcs, 90, 25, 35).is_err());
+        }
+        let mut changed = window.clone();
+        changed[1].word = 18 | (38 << 8) | (24 << 16);
+        assert!(check_tail(&changed, &[], &pcs, 90, 25, 35).is_err());
+        let mut changed = window.clone();
+        changed[3].word = 63 | (36 << 8);
+        assert!(check_tail(&changed, &[], &pcs, 90, 25, 35).is_err());
+        assert!(check_tail(&window, &[instruction(19, 14, 0)], &pcs, 90, 25, 35).is_err());
+    }
+
     #[test]
     fn rejects_bypassed_store_allocation_and_overwritten_constructor_register() {
         let window = sample();

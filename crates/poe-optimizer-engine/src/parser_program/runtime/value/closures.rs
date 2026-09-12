@@ -1,5 +1,8 @@
 //! Session-owned closure identities and shared capture cells on the existing heap.
-use super::{Error, Heap, Result, TableBehavior, TableRef, V, index, input_value, validate_input};
+use super::{
+    Error, Heap, Result, TableBehavior, TableRef, V, append_staged, extend_staged_map, index,
+    input_value, validate_input,
+};
 use poe_optimizer_data::modifier_parser::{ParserCallbackId, ParserProgramCaptureOrigin};
 use poe_optimizer_data::source_program::{SourceClosurePrototypeId, SourceSessionInput};
 use std::collections::{BTreeMap, BTreeSet};
@@ -305,9 +308,9 @@ impl Heap<'_> {
             .map(|value| input_value(value, true, table_offset, space))
             .collect();
         let roots = self.import_graph(&input.state, &input.coverage, true, space, Some(input))?;
-        self.cells.extend(cells);
-        self.closures.extend(closures);
-        self.behaviors.extend(behaviors);
+        append_staged(&mut self.cells, cells);
+        append_staged(&mut self.closures, closures);
+        extend_staged_map(&mut self.behaviors, behaviors);
         Ok(roots)
     }
     pub(in crate::parser_program::runtime) fn closure_callback(

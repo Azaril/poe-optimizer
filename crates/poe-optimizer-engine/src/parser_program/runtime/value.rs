@@ -162,6 +162,25 @@ impl Table {
     }
 }
 
+// Staging keeps all fallible validation before publication. At commit, an empty
+// arena can own the already allocated buffer; populated arenas retain their IDs
+// and append behavior. Capacity is private and does not change logical charges.
+fn append_staged<T>(target: &mut Vec<T>, staged: Vec<T>) {
+    if target.is_empty() {
+        *target = staged;
+    } else {
+        target.extend(staged);
+    }
+}
+
+fn extend_staged_map<K: Ord, V>(target: &mut BTreeMap<K, V>, staged: BTreeMap<K, V>) {
+    if target.is_empty() {
+        *target = staged;
+    } else {
+        target.extend(staged);
+    }
+}
+
 /// Conservative cumulative units across graph import, new heap storage and graph
 /// export. Shared Arc clones do not copy/charge their string payload again.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
@@ -435,12 +454,12 @@ impl<'a> Heap<'a> {
             BTreeMap::new()
         };
         if writable {
-            self.tables.extend(arguments);
+            append_staged(&mut self.tables, arguments);
         } else {
-            self.arguments.extend(arguments);
+            append_staged(&mut self.arguments, arguments);
         }
-        self.coverage.extend(coverage);
-        self.table_observations.extend(observations);
+        extend_staged_map(&mut self.coverage, coverage);
+        extend_staged_map(&mut self.table_observations, observations);
         Ok(values)
     }
     pub(super) fn stats(&self) -> HeapStats {

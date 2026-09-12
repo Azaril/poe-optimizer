@@ -123,6 +123,13 @@ impl SourceCopyWitness {
     ) -> mlua::Result<ProducerBinding> {
         self.producer.bind(parser, target, source_line)
     }
+    pub fn bind_producer_tail(
+        &self,
+        binding: &ProducerBinding,
+        config: producer::ProducerTailConfig,
+    ) -> mlua::Result<ProducerBinding> {
+        self.producer.bind_tail(binding, config)
+    }
     #[allow(dead_code)]
     pub fn call(
         &self,
@@ -184,7 +191,10 @@ impl SourceCopyWitness {
             move |_, debug| {
                 let is_copy = debug.function().to_pointer() == target.to_pointer();
                 let is_producer = producer_binding_for_hook.as_ref().is_some_and(|binding| debug.function().to_pointer() == binding.target.to_pointer());
-                if !is_copy && !is_producer {
+                let is_tail = debug.event() == DebugEvent::Call && producer_binding_for_hook.as_ref()
+                    .and_then(|binding| binding.tail.as_ref())
+                    .is_some_and(|tail| debug.function().to_pointer() == tail.original_unpack.to_pointer());
+                if !is_copy && !is_producer && !is_tail {
                     return Ok(VmState::Continue);
                 }
                 if let Some(error) = shared.borrow().error.clone() {
@@ -192,6 +202,11 @@ impl SourceCopyWitness {
                 }
                 let result = (|| -> mlua::Result<()> {
                     let mut state = shared.borrow_mut();
+                    if is_tail {
+                        let count = state.activations.len() + state.loops.len() + state.producer.event_count();
+                        return producer.observe_tail(&mut state.producer, producer_binding_for_hook.as_ref().expect("matched tail target"),
+                            MAX_EVENTS.saturating_sub(count), count);
+                    }
                     if is_producer {
                         let count = state.activations.len() + state.loops.len() + state.producer.event_count();
                         return producer.observe(&mut state.producer, producer_binding_for_hook.as_ref().expect("matched producer target"),
