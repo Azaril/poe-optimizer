@@ -548,23 +548,101 @@ self-check, raw measurements and audited aggregate. Executable SHA-256 is
 Strict example Clippy and the release build pass. The data library, schema-29 package,
 dependency lock, supplied inputs and PoB pin are unchanged. Full-original coverage is **0/5**.
 
-### Next source-session measurement
+### Source-session lifecycle measurements
 
-Source inspection distinguishes another ownership boundary: `CompiledSourcePrograms` shares
-its immutable library through `Arc`, while `SourceSessionInput::clone()` copies mutable graph
-data. `ProgramSession` has no clone or reset API. A fresh session imports private state;
-`import_session_input` appends another graph rather than resetting existing state. Exporting
-selected raw values cannot round-trip closures, class behavior, iterator state or traversal
-provenance. Session budget charges are cumulative limits, not allocator measurements.
+The opt-in [lifecycle test](../crates/poe-optimizer-pob/tests/profile_source_sessions.rs) now
+captures the actual initialized parser state from all five unchanged original builds. It
+shares observation/lowering setup with the existing scanner regression through one
+[test helper](../crates/poe-optimizer-pob/tests/support/source_program_parser_capture.rs).
+The scanner retains its existing fixture dictionaries and legacy/closure modes; the lifecycle
+corpus includes only the actual dictionaries and initialized cache.
 
-The next harness should acquire the actual initialized parser state for all five originals,
-complete source observations, and drop Lua handles/hosts before native measurement. Measure
-compilation, shared-library handles, input cloning, fresh import, supported invocation histories,
-selected output snapshots and teardown separately. Validate cache aliases, copy independence,
-fresh-session isolation and foreign-handle rejection. Existing successful cache hits and
-no-match histories are usable workloads; the six positive uncached modifier families still
-fail native traversal and must remain labelled failures. No source-session measurement or
-new runtime capability is implemented by this checkpoint.
+Each child verifies a source-host lifetime marker is still rooted after acquisition, then
+drops every retained Lua handle and verifies host destruction before native timing. The owned
+carrier is also required to be Send + Sync under the current non-send mlua configuration.
+The executable still links Lua for acquisition. Source histories explicitly use the pinned
+interpreter after JIT disable/flush; no warmed-source equivalence is claimed.
+
+Each original contributes 11 successful native public calls, two matching source-error
+cases and six positive source parses that still fail native traversal. Thus PoB succeeds
+17 times per original, while native succeeds 11 times. Seventy-three additional probe calls
+and 35 checkpoints validate cache aliases, return-copy independence, miss/hit/eviction
+histories and failure prefixes. Fresh private sessions preserve the original cache while
+another session is mutated, and foreign handles reject. Raw output reimport is checked only
+for selected plain graphs, not closure/class/iterator/traversal checkpoint restoration.
+
+One fresh process per original produced these elapsed times in milliseconds:
+
+| Original | Compile programs | Deep-clone input | First private import | Restart after drop | Drop first session |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 01 | 2.230 | 21.703 | 84.834 | 90.833 | 19.410 |
+| 02 | 2.195 | 22.307 | 88.217 | 88.368 | 19.234 |
+| 03 | 2.429 | 22.056 | 88.245 | 88.965 | 19.716 |
+| 04 | 2.300 | 22.401 | 86.637 | 87.294 | 19.461 |
+| 05 | 2.368 | 23.605 | 90.363 | 91.509 | 20.116 |
+
+These are five distinct input observations, not repeated samples of one workload. The inputs
+contain 44,080–44,173 tables and 1,697–1,705 closures. The initialized successful cache key is
+selected from actual source data; all five selected the same key in this run. That is one
+cache case, not five distinct interaction families. The retained transcript records the
+actual scalar inputs, selected key index, operation/reference order and source expected-result,
+checkpoint and error digests, with their encoding. It is not a serialization of the full session.
+
+The shared compiled-library clone is separate from deep input cloning. There is no
+`ProgramSession` clone/reset API: restart means fresh import and old-session teardown.
+`import_session_input` appends state. These measurements establish that private import costs
+more than sharing compiled definitions in this corpus; they do not establish candidate
+throughput, an architecture winner or a need to reimport before every candidate. Argument
+construction, oracle checks and report work are outside invocation timers but affect allocator
+reuse. The 359 recorded phases per build include snapshot/drop work separately. Resource
+usage fields are cumulative budget charges, not measured live allocations or RSS.
+
+Reproduce using a fresh direct child of `runs`:
+
+```powershell
+$env:POE_A1_SESSION_OUTPUT = Join-Path (Get-Location) 'runs/session-lifecycle-new'
+cargo test --release --locked -p poe-optimizer-pob --test profile_source_sessions -- --ignored --exact profile_original_source_session_lifecycles --nocapture --test-threads=1
+```
+
+The supervisor runs five sequential children with a 300-second limit each. Final evidence is
+`runs/a1-session-measurement-02/` and `runs/a1-sessions-01/lifecycle-02/`, produced by executable
+SHA-256 `433553c986455c9901d3e676beb1223dd69ae8ee3545a66e6418c11bb4778719`.
+The first run passed semantic checks but omitted retained workload identifiers; its artifacts
+remain in attempt 01. Only the final attempt is counted here. Two earlier lint findings were
+limited to an unused extraction import and a constant release-mode assertion. The targeted
+Clippy/release rebuild and final all-five replay pass. No additional full native build is admitted.
+
+## Native allocation-origin checkpoint
+
+An independent, opt-in native diagnostic now records each executed Table expression against
+the actual allocated session table. The bounded record arena is charged/reserved when enabled;
+records persist across invocations until disabled or restarted. Returned witnesses retain the
+exact compiled library, its catalog/facets and the table handle. Missing evidence remains
+`NotObserved`; foreign handles and non-tables reject. The diagnostic admits no new layout.
+
+All 30 canonical positive-miss cases from the scanner regression now tie the failed
+`cache[line][1][1]` table to `ModParser.lua:6966–6973`: the 259-byte modifier-record expression
+with fields name/type/value/flags/keywordFlags and `unpack(tagList)`. Its function-relative range
+is 11592..11851. The original function source span is 6619–7036, with function offsets
+6..14115 inside that span. The test verifies both span/function hashes and exactly one
+matching Table node in the retained catalog; it does not apply those offsets to the whole file.
+
+Each actual allocation has no admitted constructor site. That is missing metadata, not proof
+of a particular Lua opcode or a lost traversal observation. Diagnostic ordinals vary from
+7 to 10 and remain session/window-local. The earlier cache/result graphs, failure paths,
+native call frames and matched source copy identities remain unchanged. The legacy
+`success_miss` field mirrors the first of six `success_misses`; it is not a seventh case.
+
+Validation passes 92 focused ENGINE tests, including seven new origin/bounds/identity cases,
+and all five scanner tests covering both observation modes on all five originals. Strict
+workspace/native lint and portable library compilation pass. Evidence is
+`runs/a1-sessions-01/{engine-validation/,scanner-01/,origin-summary.json}`. The scanner binary
+SHA-256 is `9303504dff5861203484043d93281280ac3a5b81752fe26570db5836778c67a7`.
+
+The next source evidence must observe the actual original producer/store and join its table
+identity to the later copy input, then authenticate the original opcode/template metadata.
+A native source-expression witness alone cannot establish original Lua allocation or traversal
+layout. Successful uncached public parsing and full native build coverage remain open: **0/5**.
 
 ## Original modifier observations for the comparison
 
@@ -637,13 +715,13 @@ A1 remains open for these measurements and decisions:
 
 1. Extend the measured dataset allocation/ownership lifecycle with per-statement allocation
    attribution and temporary JSON lifetimes. Measure source observation/lowering and private
-   session costs separately using the lifecycle boundaries above.
+   session costs separately using the measured lifecycle boundaries above.
 2. Extend the measured restricted admission/reuse boundary to representative interaction
    histories and complete builds as supported. Scoring, search quality, arbitrary text edits
    and general incremental invalidation still lack equivalent workload measurements.
-3. Measure cache-hit/no-match/miss/failure histories, reset/import/export and diagnostics
-   at an equivalent supported boundary. An unsupported successful parse has no successful
-   native throughput to report.
+3. Extend the finite cache-hit/no-match/miss/failure lifecycle measurements with actual
+   allocation accounting and representative invalidation/reuse histories. An unsupported
+   positive parse still has no successful native throughput to report.
 4. Extend the completed balance/identity-repair and unchanged-pin extraction replays to a
    real upstream or effect-family update. Record code/data changes, migration/debugging effort
    and provenance quality; synthetic edits and code size cannot substitute for that work.

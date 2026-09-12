@@ -2,14 +2,149 @@
 use super::{
     ProgramRuntimeError as Error, RuntimeResult as Result,
     session::SessionValue,
-    value::{Heap, V},
+    value::{Heap, TableRef, V},
 };
-use crate::lua_pattern::MatchBudget;
+use crate::{lua_pattern::MatchBudget, parser_program::CompiledSourcePrograms};
 use poe_optimizer_data::{
     modifier_parser::{ParserCallbackId, ParserProgramLocation},
-    source_program::SourceProgramOwner,
+    source_program::{SourceProgramCatalog, SourceProgramOwner},
 };
 use std::sync::Arc;
+
+/// Bounds retained native table-allocation records across invocations while enabled.
+/// Capacity is charged and reserved at enable time, independently of traversal evidence.
+#[derive(Debug, Clone, Copy)]
+pub struct AllocationDiagnosticLimits {
+    pub max_records: usize,
+}
+impl Default for AllocationDiagnosticLimits {
+    fn default() -> Self {
+        Self { max_records: 4096 }
+    }
+}
+
+/// Diagnostic origin of one same-session table. Missing evidence never implies an
+/// imported table, a particular constructor opcode, or a lost traversal proof.
+#[derive(Debug, Clone)]
+pub enum TableAllocationOrigin {
+    /// Diagnostics were disabled, restarted, or did not observe this allocation.
+    NotObserved,
+    Expression(TableExpressionOrigin),
+}
+
+/// An executed native Table expression, bound to its exact compiled library and
+/// allocated session table. This is not an original Lua allocation/producer witness
+/// and grants no table-layout or traversal capability.
+#[derive(Debug, Clone)]
+pub struct TableExpressionOrigin {
+    /// Allocation order within this enabled diagnostic interval. Not a source
+    /// pointer, global identifier, or identity shared by other sessions/intervals.
+    pub ordinal: u64,
+    pub callback: ParserCallbackId,
+    pub location: ParserProgramLocation,
+    library: CompiledSourcePrograms,
+    table: SessionValue,
+}
+impl TableExpressionOrigin {
+    /// Exact catalog used by the native allocation, including its optional facets.
+    pub fn catalog(&self) -> &SourceProgramCatalog {
+        self.library.catalog()
+    }
+    /// Check the retained compiled library, not merely its definition owner.
+    pub fn is_bound_to(&self, library: &CompiledSourcePrograms) -> bool {
+        Arc::ptr_eq(&self.library.0, &library.0)
+    }
+    /// Retains the actual allocated table identity after diagnostics are disabled.
+    pub fn table(&self) -> &SessionValue {
+        &self.table
+    }
+}
+
+#[derive(Clone, Copy)]
+struct AllocationRecord {
+    table: TableRef,
+    callback: ParserCallbackId,
+    location: ParserProgramLocation,
+}
+
+pub(super) struct AllocationDiagnostics {
+    records: Vec<AllocationRecord>,
+    limit: usize,
+    library: CompiledSourcePrograms,
+    identity: Arc<()>,
+}
+impl AllocationDiagnostics {
+    pub(super) fn new(
+        limits: AllocationDiagnosticLimits,
+        library: &CompiledSourcePrograms,
+        heap: &mut Heap,
+        identity: Arc<()>,
+    ) -> Result<Self> {
+        if limits.max_records == 0 || limits.max_records > 1_000_000 {
+            return Err(Error::input(
+                "allocation diagnostic limits require 1..1000000 records",
+            ));
+        }
+        let bytes = limits
+            .max_records
+            .checked_mul(std::mem::size_of::<AllocationRecord>())
+            .ok_or_else(|| Error::resource("allocation diagnostic record storage"))?;
+        heap.charge_values(limits.max_records)?;
+        heap.charge_bytes(bytes)?;
+        let mut records = Vec::new();
+        records
+            .try_reserve_exact(limits.max_records)
+            .map_err(|_| Error::resource("allocation diagnostic record storage"))?;
+        Ok(Self {
+            records,
+            limit: limits.max_records,
+            library: library.clone(),
+            identity,
+        })
+    }
+    /// Runs before allocating the table, so a full diagnostic arena cannot allow
+    /// field effects or publish an allocation without its promised origin record.
+    pub(super) fn prepare(&self, work: &mut MatchBudget) -> Result<()> {
+        if self.records.len() == self.limit {
+            return Err(Error::resource("allocation diagnostic record bound"));
+        }
+        work.charge(1)?;
+        Ok(())
+    }
+    /// Allocation succeeded; no allocation or fallible work remains before fields.
+    pub(super) fn record(
+        &mut self,
+        table: &V,
+        callback: ParserCallbackId,
+        location: ParserProgramLocation,
+    ) {
+        let V::Table(table @ TableRef::Heap(_)) = table else {
+            unreachable!("a Table expression allocated a heap table")
+        };
+        // Heap IDs are never reused. Imports may introduce gaps, and an outer
+        // constructor is recorded before nested field expressions allocate.
+        debug_assert!(self.records.last().is_none_or(|last| last.table < *table));
+        debug_assert!(self.records.len() < self.limit);
+        self.records.push(AllocationRecord {
+            table: *table,
+            callback,
+            location,
+        });
+    }
+    pub(super) fn origin(&self, table: TableRef) -> TableAllocationOrigin {
+        let Ok(index) = self.records.binary_search_by_key(&table, |row| row.table) else {
+            return TableAllocationOrigin::NotObserved;
+        };
+        let row = self.records[index];
+        TableAllocationOrigin::Expression(TableExpressionOrigin {
+            ordinal: index as u64 + 1,
+            callback: row.callback,
+            location: row.location,
+            library: self.library.clone(),
+            table: SessionValue::retained(self.identity.clone(), V::Table(table)),
+        })
+    }
+}
 
 /// Bounds enabled diagnostic storage and observed program activations per public
 /// invocation. No completed-activation history is retained.

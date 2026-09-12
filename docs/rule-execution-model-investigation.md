@@ -31,9 +31,13 @@ also preserves search/export behavior with a fixed native executable.
 [pinned-source acquisition](execution-model-baseline.md#pinned-source-acquisition-and-rejection)
 now record coordinated reference edits, reproducible output, allowed traversal variation and
 source-edit rejection. [Dataset allocation measurements](execution-model-baseline.md#dataset-allocation-and-ownership)
-now distinguish owned snapshot copies from shared handles and catalog retention. Private
-source-session costs, allocation by loader stage, new effect-family work and actual upstream
-update effort remain open. These measurements do not choose a replacement.
+now distinguish owned snapshot copies from shared handles and catalog retention.
+[Source-session lifecycle measurements](execution-model-baseline.md#source-session-lifecycle-measurements)
+separate compilation, private import, clone/restart/drop and finite invocation histories
+after source-host destruction. [Native allocation provenance](execution-model-baseline.md#native-allocation-origin-checkpoint)
+also identifies the actual expression behind the remaining copy failure without admitting
+its layout. Private-session allocation, per-stage loader allocation, general invalidation,
+new effect-family work and actual upstream update effort remain open. No model is selected.
 
 ## Separate the decisions
 

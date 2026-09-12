@@ -99,6 +99,24 @@ choosing a constructor model. Constant-template slots, fresh hash allocation and
 imported evidence require different treatment. Raw graph numbering or matching field names
 cannot select among them.
 
+The implemented allocation diagnostic is independent of invocation-local traversal failure
+records. Enable it before the workload with `AllocationDiagnosticLimits`; capacity is charged
+and reserved up front. Record the exact Table-expression callback/range immediately after
+allocation, before evaluating fields. Origin records persist across calls until disabled or
+successfully enabled again. A failed enable preserves earlier evidence while consumed
+resource charges remain cumulative.
+
+`table_allocation_origin` accepts only a same-session table handle and returns `NotObserved`
+or a witness retaining the actual table and exact compiled library/catalog, including optional
+facets. Lookup and shared-handle copies add no storage or budget charges. Returned witnesses
+remain usable after diagnostics are disabled; their ordinals belong only to that diagnostic
+window. Unobserved imports or earlier allocations must not receive guessed origins.
+
+This proves a native execution location, not an original Lua allocation event. Join any
+original producer observation to the actual source object separately. An absent constructor
+site is not a zero-capacity seed, proof of TDUP, or evidence that a previous layout was lost.
+Present constructor metadata still does not prove that later writes retained traversal facts.
+
 ## Observing complete initialized state
 
 The reference adapter must capture the complete admitted initialization graph, including

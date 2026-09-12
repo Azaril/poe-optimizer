@@ -8,7 +8,7 @@ use super::{
     ProgramAllocationUsage, ProgramLimits, ProgramOutput, ProgramRequestAccounting,
     ProgramRuntimeError as Error, ProgramRuntimeErrorKind, ProgramValueGraph,
     RuntimeResult as Result, SourceProgramOutput,
-    diagnostics::TraversalDiagnostics,
+    diagnostics::{AllocationDiagnostics, TraversalDiagnostics},
     intrinsics,
     value::{ClosureRef, Heap, LocalSlot, TableBehavior, V},
 };
@@ -66,6 +66,7 @@ impl CompiledSourcePrograms {
             steps: &mut accounting.steps,
             call_depth: 0,
             diagnostics: None,
+            allocation_diagnostics: None,
         };
         let values = run.invoke(index, arguments, 0)?;
         let graph = run.heap.freeze(&values)?;
@@ -121,6 +122,7 @@ pub(super) struct Run<'a, 'b, 'c> {
     pub(super) steps: &'b mut u64,
     pub(super) call_depth: usize,
     pub(super) diagnostics: Option<&'b mut TraversalDiagnostics>,
+    pub(super) allocation_diagnostics: Option<&'b mut AllocationDiagnostics>,
 }
 pub(super) enum MethodTarget {
     Value(V),
@@ -1031,7 +1033,7 @@ impl Run<'_, '_, '_> {
                     .constructors
                     .get(&(callback, expr.location.start, expr.location.end))
                     .copied();
-                self.table(frame, fields, depth + 1, seed)
+                self.table(frame, fields, depth + 1, seed, expr.location)
             }
         }
     }
@@ -1121,18 +1123,29 @@ impl Run<'_, '_, '_> {
         fields: &[ParserProgramField],
         depth: usize,
         seed: Option<CompiledTableConstructor>,
+        location: ParserProgramLocation,
     ) -> Result<V> {
+        // Preserve the original unsupported-profile frontier before any allocation
+        // or diagnostic publication, even when the diagnostic arena is full.
+        if matches!(seed, Some(CompiledTableConstructor::UnsupportedProfile)) {
+            return Err(Error::unsupported(
+                "source table runtime profile is not admitted",
+            ));
+        }
+        if let Some(d) = self.allocation_diagnostics.as_ref() {
+            d.prepare(self.patterns)?;
+        }
         let table = match seed {
             Some(CompiledTableConstructor::Array { slots }) => {
                 self.heap.native_array_table(slots, self.patterns)?
             }
-            Some(CompiledTableConstructor::UnsupportedProfile) => {
-                return Err(Error::unsupported(
-                    "source table runtime profile is not admitted",
-                ));
-            }
+            Some(CompiledTableConstructor::UnsupportedProfile) => unreachable!(),
             None => self.heap.new_table()?,
         };
+        if let Some(d) = self.allocation_diagnostics.as_mut() {
+            let callback = self.library.0.programs[frame.program].callback;
+            d.record(&table, callback, location);
+        }
         let mut index = 1usize;
         for field in fields {
             self.tick(depth)?;

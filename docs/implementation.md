@@ -18,10 +18,10 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-The A1 investigation below is the current resume point. Dataset allocation/ownership is
-the latest measurement checkpoint; the trusted passive-key simplification remains the latest
-production loader change. R2t and its CI repair remain the last source-runtime checkpoint.
-Historical sections retain their original validation scope.
+The A1 investigation below is the current resume point. Source-session lifecycle and dataset
+ownership are measured separately. R2u now identifies the native Table expression behind the
+remaining copy failure; it adds diagnostics, not traversal capability. Historical sections
+retain their original validation scope.
 
 **Architecture review in progress:** [A1-A4 execution-model investigation](#execution-model-investigation-a1-a4)
 compares the current interpreter with a domain DSL, data-driven rules, native Rust
@@ -34,7 +34,34 @@ Continue measuring costs before extending general Lua compatibility into further
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
 
-**R2t checkpoint: exact copy-failure identity.** The native source session now
+**R2u checkpoint: native allocation provenance.** A bounded opt-in arena now binds actual
+allocated tables to the exact compiled catalog, callback and Table-expression range before
+field evaluation. Records survive calls until disabled/restarted; missing evidence remains
+explicit. Returned origins preserve catalog and table identity after diagnostic teardown.
+Foreign/non-table handles reject, limits fail before unrecorded field effects, and the
+disabled path adds no records. This diagnostic grants no constructor/traversal capability.
+
+All 30 canonical positive misses on the five original graphs identify the modifier-record
+expression at `ModParser.lua:6966–6973`, function-relative 11592..11851. The test joins the
+actual failed handle, exact Table AST node and authenticated source span/function bytes.
+Every site lacks admitted constructor metadata. Prior cache/result graphs, copy path/depth,
+native frames and source copy identities remain unchanged. Original Lua allocation/layout
+is still unobserved; full native build coverage remains **0/5**.
+
+**Validation:** 92 focused ENGINE tests, including seven new diagnostic cases, and five
+scanner tests covering ten original-build bootstraps pass. Workspace/native Clippy, portable
+library compilation, formatting and whitespace checks pass. Final lifecycle measurements
+also pass all five children as described below. Data, dependencies, supplied inputs and PoB
+pin are unchanged. [Evidence and exact scope](execution-model-baseline.md#native-allocation-origin-checkpoint)
+are retained in `runs/a1-sessions-01/`.
+
+**Next R2u step:** observe the original producer/store at this now-known expression and
+join its actual table to the later copy input; authenticate the original opcode/template
+rather than inferring it from absent metadata. Then model the required generic layout and
+continue complete public-parser returns and whole-build activation. Keep this dependency
+visible in the A1/A2 comparison before a broader runtime expansion.
+
+**Earlier R2t checkpoint: exact copy-failure identity.** The native source session now
 has an opt-in traversal-failure witness that retains its actual table/control handles,
 owner and bounded call context before unwinding. Taken handles stay tied to that session;
 diagnostics do not supply traversal order or turn an unsupported operation into success.
@@ -80,7 +107,7 @@ builds, bundled data, dependency lock and PoB pin are unchanged. No full-build p
 speedup is claimed. Evidence is retained in `runs/r2t-checkpoint.json`; publication and
 exact-head CI are recorded separately in `runs/r2t-publication.json`.
 
-**Next checkpoint:** associate that actual failed modifier record with its native source
+**R2t follow-up (advanced by R2u above):** associate that actual failed modifier record with its native source
 expression and any admitted constructor seed or lost traversal evidence. Then authenticate
 the original producer/template and implement the required generic layout. Preserve the
 unseeded/imported/proof-invalidated distinctions, keep copy destinations independent from
@@ -220,24 +247,25 @@ parallel scaling. Strict example Clippy and release build pass; production code/
 unchanged. See [protocol, ownership results and limits](execution-model-baseline.md#dataset-allocation-and-ownership)
 and `runs/a1-ownership-01/` for the retained measurements.
 
-**Resume A1:** measure supported source-session histories and private-state lifecycle next,
-then general invalidation and a real effect-family or reviewed upstream update. Acquire all
-five original parser inputs, finish source observations and drop Lua before timing native
-work. Measure shared program handles separately from deep input clone, fresh session import,
-invocation, selected output export and teardown. There is no session clone/reset API; importing
-additional state is not reset. Keep successful cache/no-match histories separate from the
-six still-unsupported positive modifier families. The read-only plan is retained locally in
-`runs/a1-source-session-lifecycle-plan.md`; [the durable summary](execution-model-baseline.md#next-source-session-measurement)
-records the scope. Dataset allocation by loader stage also remains open. No new effect family
-or complete original build is admitted.
+**A1 source-session lifecycle checkpoint:** a shared capture helper now feeds both the
+existing scanner and an opt-in lifecycle test. All five actual initialized parser inputs
+replay after verified source-host destruction. Per original: 11 native public successes,
+two matched source errors and six positive source successes that remain native Unsupported.
+Actual scalar inputs, selected cache key, step references and source expected-result/checkpoint
+digests are retained after timing. Private-session isolation, foreign-handle rejection and
+fresh-import restart pass. The final five-run measurements put first import at 84.834–90.363 ms
+and deep input clone at 21.703–23.605 ms; these are elapsed observations on distinct inputs,
+not repeated throughput samples. [Protocol and phase table](execution-model-baseline.md#source-session-lifecycle-measurements)
+record all limits. Attempt 01 passed but omitted workload identifiers; final attempt 02 is
+the published measurement, with earlier evidence preserved.
 
-A bounded R2t review confirms the existing failed-table identity still lacks allocation-site
-provenance: producer calls have already returned. Its next evidence seam is an opt-in bounded
-record linking the actual allocated table to its catalog/callback/Table-expression location,
-queried through the same session handle. This is a diagnostic proposal, not implemented here;
-it must preserve unsupported traversal and all 30 existing failure/cache prefixes. A claim
-about the original Lua producer additionally needs an observed source allocation/store event
-joined to that same later copy input. See `runs/a1-parser-copy-provenance-review-by-lowerer.json`.
+**Resume A1:** extend the measured private-state lifecycle with actual allocation accounting,
+general candidate invalidation/reuse and a real effect-family or reviewed upstream update.
+There is no session clone/reset API; importing additional state is not reset. All five inputs
+selected the same initialized cache-hit key in this run, so broader interaction coverage
+remains essential. Per-stage loader allocation also remains open. The R2u original-producer
+observation is the next concrete parser dependency; no additional effect family or complete
+original build has been admitted. A1 remains incomplete.
 
 A prototype-boundary question is pending with the owner: typed domain equivalence, complete public-parser compatibility,
 or both as experiments. This is not migration approval. Use the all-five interaction map
@@ -1737,8 +1765,10 @@ defines the alternatives, constraints and evidence required for a decision.
   Snapshot/compile/backend setup and 34 loader statement intervals are measured. A selective
   trusted-key decode preserves loaded data and reduces measured first-load time. Dataset
   allocation/ownership now distinguishes owned snapshot copies, shared handles and catalog
-  teardown. Allocation by loader stage, general invalidation, source-session and real
-  upstream/effect-family update costs remain open. Supported balance/identity repair and unchanged-pin extraction have retained
+  teardown. Source-session compilation/import/clone/restart/drop and finite public-call
+  histories are now measured after source-host destruction. Allocation by loader stage/private
+  session, general invalidation and real upstream/effect-family update costs remain open.
+  Supported balance/identity repair and unchanged-pin extraction have retained
   successful replays, including source-edit rejection; they do not complete A1.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a

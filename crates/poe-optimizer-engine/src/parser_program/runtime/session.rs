@@ -1,9 +1,9 @@
 //! One build's persistent state on the shared source VM.
 use super::{
-    ProgramAllocationUsage, ProgramLimits, ProgramRuntimeError as Error, ProgramTableCoverage,
-    ProgramValueGraph, RuntimeResult as Result, SourceProgramOutput, TraversalDiagnosticLimits,
-    TraversalFailureWitness,
-    diagnostics::TraversalDiagnostics,
+    AllocationDiagnosticLimits, ProgramAllocationUsage, ProgramLimits,
+    ProgramRuntimeError as Error, ProgramTableCoverage, ProgramValueGraph, RuntimeResult as Result,
+    SourceProgramOutput, TableAllocationOrigin, TraversalDiagnosticLimits, TraversalFailureWitness,
+    diagnostics::{AllocationDiagnostics, TraversalDiagnostics},
     execute::Run,
     value::{Heap, V},
 };
@@ -42,6 +42,7 @@ pub struct ProgramSession {
     steps: u64,
     identity: Arc<()>,
     diagnostics: Option<TraversalDiagnostics>,
+    allocation_diagnostics: Option<AllocationDiagnostics>,
 }
 impl CompiledSourcePrograms {
     /// Instantiate a coherent owner-bound graph of state, class associations,
@@ -80,6 +81,7 @@ impl CompiledSourcePrograms {
             steps: 0,
             identity: Arc::new(()),
             diagnostics: None,
+            allocation_diagnostics: None,
         };
         session.check_pack(state.values.len())?;
         let values = session.heap.import_with_coverage(state, coverage, true)?;
@@ -88,6 +90,44 @@ impl CompiledSourcePrograms {
     }
 }
 impl ProgramSession {
+    /// Start bounded native Table-expression evidence. Records persist across
+    /// invocations until disabled or successfully enabled again. Capacity is
+    /// charged/reserved up front; a failed enable preserves existing records.
+    /// Existing tables are not assigned a guessed origin. No layout is admitted.
+    pub fn enable_allocation_diagnostics(
+        &mut self,
+        limits: AllocationDiagnosticLimits,
+    ) -> Result<()> {
+        let diagnostics = AllocationDiagnostics::new(
+            limits,
+            &self.library,
+            &mut self.heap,
+            self.identity.clone(),
+        )?;
+        self.allocation_diagnostics = Some(diagnostics);
+        Ok(())
+    }
+    /// Drop retained records. Previously returned origins keep their catalog and
+    /// session table handles; querying again returns NotObserved while disabled.
+    pub fn disable_allocation_diagnostics(&mut self) {
+        self.allocation_diagnostics = None;
+    }
+    /// Read the recorded native origin for this exact table, without running Lua
+    /// or assigning meaning to an exported graph ID. Non-tables and foreign-session
+    /// handles are errors even while diagnostics are disabled. Lookup and copying
+    /// the returned shared handles allocate no storage or change session budgets.
+    pub fn table_allocation_origin(&self, value: &SessionValue) -> Result<TableAllocationOrigin> {
+        if !Arc::ptr_eq(&self.identity, &value.identity) {
+            return Err(Error::input("value handle belongs to another session"));
+        }
+        let V::Table(table) = &value.value else {
+            return Err(Error::input("allocation origin requires a table handle"));
+        };
+        Ok(self
+            .allocation_diagnostics
+            .as_ref()
+            .map_or(TableAllocationOrigin::NotObserved, |d| d.origin(*table)))
+    }
     /// Enable bounded failure evidence. Storage/work uses existing cumulative
     /// session budgets; admission failure leaves the previous setting unchanged.
     pub fn enable_traversal_diagnostics(
@@ -225,6 +265,7 @@ impl ProgramSession {
             steps: &mut self.steps,
             call_depth: 0,
             diagnostics: self.diagnostics.as_mut(),
+            allocation_diagnostics: self.allocation_diagnostics.as_mut(),
         };
         let values = run.invoke(index, arguments, 0)?;
         self.handles(values)
@@ -247,6 +288,7 @@ impl ProgramSession {
             steps: &mut self.steps,
             call_depth: 0,
             diagnostics: self.diagnostics.as_mut(),
+            allocation_diagnostics: self.allocation_diagnostics.as_mut(),
         };
         let values = run.invoke_value(target, arguments, 0)?;
         self.handles(values)
@@ -270,6 +312,7 @@ impl ProgramSession {
             steps: &mut self.steps,
             call_depth: 0,
             diagnostics: self.diagnostics.as_mut(),
+            allocation_diagnostics: self.allocation_diagnostics.as_mut(),
         };
         let target = run.lookup_method(&receiver, name.as_bytes())?;
         run.prepend(&mut arguments, receiver)?;

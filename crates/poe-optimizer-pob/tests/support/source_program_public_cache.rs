@@ -377,8 +377,19 @@ pub(super) fn run(
                 max_activations: 1_000_000,
             })
             .unwrap();
+        pair.session
+            .enable_allocation_diagnostics(AllocationDiagnosticLimits { max_records: 4096 })
+            .unwrap();
         let result = pair.call("original.parser", &args);
         let traversal_witness = pair.session.take_traversal_failure();
+        // Query the actual failed table while allocation records are enabled.
+        // The returned witness retains its exact compiled catalog after teardown.
+        let allocation_origin = traversal_witness.as_ref().map(|witness| {
+            pair.session
+                .table_allocation_origin(&witness.table)
+                .expect("same-session failure table origin")
+        });
+        pair.session.disable_allocation_diagnostics();
         pair.session.disable_traversal_diagnostics();
         let native_row = lookup(pair, &key);
         let prefix = pair.plain(std::slice::from_ref(&native_row));
@@ -440,6 +451,9 @@ pub(super) fn run(
                     &native_row,
                     witness,
                     &error,
+                    allocation_origin
+                        .as_ref()
+                        .expect("queried allocation origin"),
                 );
                 (None, Some(frontier(pair, &error)))
             }
