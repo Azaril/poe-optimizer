@@ -83,16 +83,33 @@ input order, and retain the existing growing-list interpreter/tracer counterexam
 leads to complete public-parser returns/cache transitions and whole-build activation.
 The detailed proposal is retained locally in `runs/r2t-constructor-provenance-plan.md`.
 
-**R2t CI review:** the refreshed 16:01 UTC results for published `1a72d6e`,
+**CI constructor trace repair:** the 16:01 UTC results for published `1a72d6e`,
 [run `34675346456`](https://github.com/Azaril/poe-optimizer/actions/runs/34675346456),
-show Windows passed and Ubuntu stopped after a hosted runner shutdown. The older schema
-assertion is already repaired. Two intervening Linux runs exposed an unchanged constructor
-warm-test failure: its exact target had no completed live JIT trace. A local Linux build of
-the pinned LuaJIT reproduces the dense 128-value case with `SPILLOV` (too many spill slots).
-The input values remain correct; JIT execution for that case is not established. Keep the
-strict trace gate for compiled-path claims, record this source compiler limitation explicitly,
-and validate the targeted portability repair next. Logs: `runs/r2t-ci-final-review.json`;
-local probe: `runs/r2t-linux-repro/probe.log`. These results do not establish Linux CI success.
+show Windows passed and Ubuntu stopped after a hosted runner shutdown. Two intervening
+Linux runs exposed a separate constructor test failure. The pinned Linux LuaJIT exhausts
+its spill slots on four dense 128-value expanding constructors; fresh, reused and reversed
+runs reproduce the same limit. This is a source compiler limitation, not a native arithmetic
+failure.
+
+The source-only observation test retains all 25 inputs and comparisons. It labels those
+four Linux/x64 cases only when complete bounded diagnostics show `SPILLOV` in an aborted
+trace that recorded the exact target. They make no compiled-parity claim. Other missing
+traces still fail, and the shared strict warm APIs always require a completed live target
+trace. No JIT options, source algorithms, seeds or native admission rules change. The sparse
+constructor's cold/warm length and default-unpack counterexample remains asserted.
+
+The actual workspace constructor/oracle tests pass on Linux (six tests): 21 vectors retain
+exact target traces and four report the compiler limit. Windows retains all 25 target
+traces and passes the five constructor tests. All 32 tests in the other ten shared-helper
+consumer targets also pass on Windows: **37 Windows and six Linux test cases**. Strict PoB
+Clippy across all targets, formatting and diff checks pass. Evidence is recorded in
+`runs/ci-jit-spill-checkpoint.json`; publication is recorded separately.
+The earlier R2t validation remains a separate local checkpoint. Hosted results for the new
+commit must be checked independently; Linux CI success is not established by this repair.
+
+**Resume after CI:** begin A1's cost and semantic-boundary inventory before extending the
+runtime into further domains. The unresolved modifier-record allocation/copy work above
+is a concrete case for that review, not evidence that an alternative model already works.
 
 **Historical R2s checkpoint:** source modulo and complete flag-helper execution.
 The neutral source model now admits exact retained `bit.band`, `bit.bor`, `bit.bxor`

@@ -201,10 +201,40 @@ fn original_constructor_target_traces_record_tail_allocation_differences() {
             lua.load("jit.off();jit.flush()").exec().unwrap();
             let function: Function = api.raw_get(name).unwrap();
             let cold: Table = function.call(MultiValue::from_vec(args.clone())).unwrap();
-            let result = driver.run(&lua, &function, &args, None).unwrap();
-            assert!(result.success);
+            let result = driver
+                .observe_with_target(&lua, &function, &function, &args, None)
+                .unwrap_or_else(|error| panic!("warm constructor {name}/{n}/{pattern}: {error}"));
+            assert!(result.success, "warm constructor {name}/{n}/{pattern}");
             assert_eq!(result.calls, 128);
             assert_eq!(result.seed_calls, 0);
+            let compiler_limit = if result.target_live_traces > 0 {
+                Json::Null
+            } else {
+                // The pinned Linux/x64 assembler can exhaust its spill slots
+                // with 128 numeric unpack results live across constructor calls.
+                // This is a warm attempt, never a claim that this vector compiled.
+                assert!(
+                    cfg!(all(target_os = "linux", target_arch = "x86_64"))
+                        && matches!(name, "tail" | "prefix" | "prefix_two" | "separator")
+                        && n == 128
+                        && pattern == 0
+                        && result.trace_aborts_complete
+                        && result.target_trace_aborts.contains(&30)
+                        && result
+                            .trace_aborts
+                            .iter()
+                            .all(|code| matches!(code, 16 | 30)),
+                    "actual constructor target did not trace: {name}/{n}/{pattern}; live={}, target={}, aborts={:?}, target_aborts={:?}, complete={}",
+                    result.live_traces,
+                    result.target_live_traces,
+                    result.trace_aborts,
+                    result.target_trace_aborts,
+                    result.trace_aborts_complete,
+                );
+                json!({"kind":"source_jit_spill_slots","source_abort_code":30,
+                    "source_abort_name":"SPILLOV","platform":"linux/x86_64",
+                    "compiled_parity_claimed":false})
+            };
             let Value::Table(table) = result.value else {
                 panic!("returned table")
             };
@@ -240,13 +270,13 @@ fn original_constructor_target_traces_record_tail_allocation_differences() {
                 assert_eq!(cold_pack.len(), 1);
                 assert_eq!(warm_pack.len(), 4);
             }
-            cases.push(json!({"constructor":name,"tail_results":n,"pattern":pattern,"cold":cold_state,"warm":warm_state,"next_controls":controls,"cold_unpack":cold_pack.into_vec().into_iter().map(scalar).collect::<Vec<_>>(),"warm_unpack":warm_pack.into_vec().into_iter().map(scalar).collect::<Vec<_>>(),"target_traces":result.target_live_traces,"calls":result.calls}));
+            cases.push(json!({"constructor":name,"tail_results":n,"pattern":pattern,"cold":cold_state,"warm":warm_state,"next_controls":controls,"cold_unpack":cold_pack.into_vec().into_iter().map(scalar).collect::<Vec<_>>(),"warm_unpack":warm_pack.into_vec().into_iter().map(scalar).collect::<Vec<_>>(),"target_traces":result.target_live_traces,"calls":result.calls,"seed_calls":result.seed_calls,"live_traces":result.live_traces,"trace_aborts":result.trace_aborts,"target_trace_aborts":result.target_trace_aborts,"trace_aborts_complete":result.trace_aborts_complete,"compiled_target_observed":result.target_live_traces>0,"compiler_limit":compiler_limit}));
         }
     }
     assert_eq!(cases.len(), 25);
     save(
         "r2q-source-constructor-warm.json",
-        json!({"mode":"pinned LuaJIT exact original constructor; source-only, no native admission","cases":cases}),
+        json!({"mode":"pinned LuaJIT exact original constructor warm attempts; compiled claims require a live exact-target trace; source-only, no native admission","cases":cases}),
     );
 }
 
@@ -304,5 +334,40 @@ fn original_fixed_list_mutations_record_warmed_layout_uncertainty() {
     save(
         "r2q-source-constructor-mutations.json",
         json!({"mode":"pinned LuaJIT original fixed-list constructor and subsequent store; source-only, no native admission","cases":cases}),
+    );
+}
+
+#[test]
+fn optional_warm_observation_never_relaxes_strict_target_proof() {
+    let lua = unsafe { Lua::unsafe_new() };
+    let target: Function = lua
+        .load("local function target(x) return x + 1 end; jit.off(target); return target")
+        .eval()
+        .unwrap();
+    let driver = warm::SourceWarmDriver::new(&lua).unwrap();
+    let args = [Value::Integer(7)];
+    let observed = driver
+        .observe_with_target(&lua, &target, &target, &args, None)
+        .unwrap();
+    assert!(observed.success);
+    assert_eq!(observed.value, Value::Integer(8));
+    assert_eq!(observed.calls, 128);
+    assert_eq!(observed.seed_calls, 0);
+    assert_eq!(observed.target_live_traces, 0);
+    assert!(observed.trace_aborts.len() <= 128);
+    let unrelated: Function = lua
+        .load("return function(x) return x + 1 end")
+        .eval()
+        .unwrap();
+    let unrelated_observation = driver
+        .observe_with_target(&lua, &target, &unrelated, &args, None)
+        .unwrap();
+    assert_eq!(unrelated_observation.target_live_traces, 0);
+    assert!(unrelated_observation.target_trace_aborts.is_empty());
+    assert!(driver.run(&lua, &target, &args, None).is_err());
+    assert!(
+        driver
+            .run_with_target(&lua, &target, &target, &args, None)
+            .is_err()
     );
 }
