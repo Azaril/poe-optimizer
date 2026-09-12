@@ -63,6 +63,29 @@ fn builtin_upvalue(lua: &Lua, function: &Function, slot: i32) -> Result<Option<V
     Ok(present.then_some(value))
 }
 impl SourceClosureObserver {
+    /// Stream one original raw step without retaining omitted projection values.
+    pub(super) fn raw_next(
+        &self,
+        table: &Table,
+        previous: Value,
+    ) -> Result<Option<(Value, Value)>> {
+        let mut values: MultiValue = self
+            .iterator_primitives
+            .next
+            .call((table.clone(), previous))?;
+        if values.len() == 1 && matches!(values.front(), Some(Value::Nil)) {
+            return Ok(None);
+        }
+        if values.len() != 2 || matches!(values.front(), Some(Value::Nil)) {
+            return Err(error(
+                "original next returned an invalid raw traversal result",
+            ));
+        }
+        Ok(Some((
+            values.pop_front().expect("next key"),
+            values.pop_front().expect("next value"),
+        )))
+    }
     pub(super) fn verify_iteration(&self, enabled: bool) -> Result<()> {
         if enabled {
             self.iterator_primitives.verify(&self.lua)?;

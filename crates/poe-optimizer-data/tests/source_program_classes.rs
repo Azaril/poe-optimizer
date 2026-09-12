@@ -706,6 +706,7 @@ fn session_with_class() -> SourceSessionInput {
     let class = owner.bind_class(SourceClassId(2)).unwrap();
     SourceSessionInput {
         owner,
+        traversal: None,
         state: SourceSessionValueGraph {
             values: vec![
                 SourceSessionValue::Table(SourceSessionTableId(1)),

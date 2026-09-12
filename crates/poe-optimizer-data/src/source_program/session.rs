@@ -8,6 +8,8 @@ use super::{
     SourceTableIndexFallback, failure,
 };
 use std::collections::BTreeMap;
+mod traversal;
+pub use traversal::*;
 
 /// One-based table reference in a single input/output graph.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
@@ -70,6 +72,8 @@ pub struct SourceSessionInput {
     pub owner: SourceProgramOwner,
     pub state: SourceSessionValueGraph,
     pub coverage: SourceSessionCoverage,
+    /// Optional source-observed raw layout facts, private to this input.
+    pub traversal: Option<SourceSessionTraversal>,
     pub class_bindings: SourceSessionClassBindings,
     pub cells: Vec<SourceSessionValue>,
     pub closures: Vec<SourceSessionClosure>,

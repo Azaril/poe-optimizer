@@ -26,7 +26,8 @@ pub struct SourceEnvironmentSelection {
 #[derive(Clone, Default)]
 pub struct SourceCaptureContext {
     /// Capture original Pairs/Next linkage and raw traversal order for complete
-    /// plain immutable definition tables. Disabled captures keep prior outputs.
+    /// plain immutable definitions, plus complete mutable session raw order and
+    /// raw length observations. Disabled captures keep prior outputs.
     pub capture_iteration: bool,
     pub projections: Vec<SourceTableSelection>,
     pub environment: Option<SourceEnvironmentSelection>,

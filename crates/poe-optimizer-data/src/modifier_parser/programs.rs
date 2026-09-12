@@ -284,6 +284,7 @@ pub enum ParserProgramBinding {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ParserProgramIntrinsic {
+    Unpack,
     Pairs,
     Next,
     MathFloor,
@@ -304,6 +305,7 @@ impl ParserProgramIntrinsic {
     /// Language/runtime identities, never game-specific lookup names or values.
     pub fn global_path(self) -> Option<&'static [&'static str]> {
         match self {
+            Self::Unpack => Some(&["unpack"]),
             Self::Pairs => Some(&["pairs"]),
             Self::Next => Some(&["next"]),
             Self::MathFloor => Some(&["math", "floor"]),
@@ -332,7 +334,8 @@ impl ParserProgramIntrinsic {
     pub fn is_standalone_only(self) -> bool {
         matches!(
             self,
-            Self::Pairs
+            Self::Unpack
+                | Self::Pairs
                 | Self::Next
                 | Self::MathFloor
                 | Self::MathMin

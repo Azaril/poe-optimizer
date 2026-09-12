@@ -112,6 +112,7 @@ pub(super) fn call(
     limits: &ProgramLimits,
 ) -> RuntimeResult<Vec<V>> {
     match operation {
+        ParserProgramIntrinsic::Unpack => unpack(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::ToNumber => tonumber(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::ToString => tostring(arguments, heap, limits),
         ParserProgramIntrinsic::MathMin | ParserProgramIntrinsic::MathMax => {
@@ -171,6 +172,45 @@ pub(super) fn call(
             Err(Error::unsupported("escaped ipairs iterator"))
         }
     }
+}
+
+fn unpack(
+    arguments: &[V],
+    heap: &mut Heap,
+    patterns: &mut MatchBudget,
+    limits: &ProgramLimits,
+) -> RuntimeResult<Vec<V>> {
+    // lib_base.c checks the table, optional start, then explicit end/default raw
+    // length, in that order. A supplied end never asks for table length.
+    let table = check_table(arguments.first())?;
+    let start = optional_integer(arguments.get(1), patterns)?.unwrap_or(1);
+    let end = match optional_integer(arguments.get(2), patterns)? {
+        Some(end) => end,
+        None => i32::try_from(heap.raw_len(table)?)
+            .map_err(|_| Error::unsupported("raw length outside source int32 range"))?,
+    };
+    if start > end {
+        return Ok(Vec::new());
+    }
+    let count = i64::from(end) - i64::from(start) + 1;
+    // The pinned LuaJIT primitive also reserves stack space before raw reads.
+    // Existing argument slots count toward LUAI_MAXCSTACK (luaconf.h:92).
+    const SOURCE_MAX_C_STACK: usize = 8_000;
+    if count > SOURCE_MAX_C_STACK as i64 {
+        return Err(Error::source("too many results to unpack"));
+    }
+    let count = count as usize;
+    if arguments.len() > SOURCE_MAX_C_STACK - count {
+        return Err(Error::source("too many results to unpack"));
+    }
+    result_space(count, heap, limits)?;
+    patterns.charge(count as u64)?;
+    let mut values = Vec::with_capacity(count);
+    for offset in 0..count {
+        let key = V::Number((i64::from(start) + offset as i64) as f64);
+        values.push(heap.raw_get(table, &key)?);
+    }
+    Ok(values)
 }
 
 fn tostring(arguments: &[V], heap: &mut Heap, limits: &ProgramLimits) -> RuntimeResult<Vec<V>> {

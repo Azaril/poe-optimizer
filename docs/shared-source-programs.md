@@ -403,6 +403,45 @@ methods or their transitive helpers. Class members with live captures need an ex
 per-session member binding; the current observer reports that frontier rather than freezing
 those captures. Compiled owners remain reusable by private native sessions.
 
+### Mutable raw traversal and copying
+
+A coherent `SourceSessionInput` may carry a `SourceSessionTraversal` facet separate from
+its unordered value graph, class bindings and coverage. Each selected state table records
+an explicit complete raw-key permutation and optionally an observed raw length. Keys retain
+scalar, table and callable identities in that same owner-bound input. The current production
+observer captures text and exact-integer keys; other key domains remain an observer frontier
+even though authored input graphs can represent them. Validation checks
+bounds, normalized key uniqueness, complete available inventory and a possible raw boundary;
+the source observer separately authenticates the actual order and length. The same raw map
+can admit several physical layouts, so structural validation cannot infer which occurred.
+
+Import maps these facts to private table identities and charges metadata against the same
+cumulative session budget. Ordinary imports and raw snapshots do not manufacture behavioral
+evidence. A snapshot/reimport preserves represented values and aliases, but does not restore
+traversal or an ambiguous length. Shared compiled definitions retain their separate immutable
+iteration records.
+
+An existing non-nil value replaced by another non-nil value preserves observed layout;
+traversal reads the current value at each step. Other writes invalidate both facts unless
+an exact native layout transition has been established. This includes assigning nil to an
+absent key and adding a text key: source hash allocation/rehashing can affect physical state.
+The write remains legal; only a later operation that needs an unavailable fact stops. An
+unobserved non-nil `next` control is still unavailable, since array holes and deleted hash
+keys can have source-defined successors outside the live-key permutation.
+
+The original `unpack` reads raw integer slots, preserving nil holes and exact result packs.
+An explicit end does not require a table-length fact; an omitted/nil end uses a valid observed
+raw length or a layout-independent dense boundary. Result counts and work are bounded before
+allocating output. The existing cross-platform numeric-conversion frontier remains explicit
+for indices outside the admitted signed-32-bit conversion domain.
+
+Execute the original `Common.copyTable` through ordinary source programs. Its recursive
+value copies split repeated nested aliases; shallow copies and function/table keys preserve
+source identities. A freshly copied table cannot inherit its input's traversal/length facts.
+Sparse constructors and copy outputs, structural-write layout transitions, and private parser
+cache history remain required follow-up work. These facilities serve the full public parser;
+a copy component gate does not admit parsing or complete build evaluation.
+
 ### Parser results and explicit effects
 
 The parser service requires an explicit source-bound bridge into the same preparation

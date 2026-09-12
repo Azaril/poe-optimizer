@@ -757,6 +757,7 @@ fn function_value_callee_keeps_scope_capture_and_depth_validation() {
 #[test]
 fn standalone_numeric_text_and_pattern_primitives_bind_original_identity_and_shadowing() {
     for (operation, path) in [
+        (SourceProgramIntrinsic::Unpack, vec!["unpack"]),
         (SourceProgramIntrinsic::MathFloor, vec!["math", "floor"]),
         (SourceProgramIntrinsic::MathMin, vec!["math", "min"]),
         (SourceProgramIntrinsic::MathMax, vec!["math", "max"]),
@@ -836,6 +837,10 @@ fn parser_owner_rejects_new_function_value_and_intrinsic_forms_without_changing_
     let base = &owner.data().programs.data.programs[0];
     let bindings = [
         SourceProgramBinding::DynamicCall {},
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::Unpack,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
         SourceProgramBinding::Intrinsic {
             operation: SourceProgramIntrinsic::MathFloor,
             source: SourceProgramIntrinsicSource::OriginalGlobal,

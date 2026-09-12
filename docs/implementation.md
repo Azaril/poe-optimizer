@@ -44,7 +44,67 @@ one reported zero preparation attempts. All three use the helper already fixed i
 `853ca8b` remain in Test with no failed steps in the recorded snapshot. Active logs are
 not yet available. See `runs/r2j-ci-review.json`; do not treat this as a CI pass.
 
-**Current checkpoint: R2k native iterator functions and original quest helpers.**
+**Current checkpoint: R2l mutable traversal and original copy/unpack consumers.**
+An optional owner-bound `SourceSessionTraversal` records complete raw-key order and observed
+raw length separately from unordered values and coverage. Native sessions privately remap
+scalar/table/function keys, validate and budget staged imports before publication, and read
+current values in retained order. Replacing a present non-nil value with another non-nil value
+preserves those facts; other writes invalidate them. Raw snapshots retain values and aliases
+but do not recreate behavioral metadata. The production observer currently captures text and
+exact-integer keys; broader authored key domains are covered by data/runtime tests.
+
+Standalone original `unpack` preserves table/start/end checks, raw integer lookup, exact packs,
+argument effects and cumulative count/work/allocation bounds. Explicit end ranges bypass default
+length; omitted/nil end uses an observed current length or a proved dense boundary. Nonfinite
+and out-of-int32 conversions remain an explicit portability frontier, with pinned x64 outcomes
+recorded separately. No parser-specific copy kernel or guessed sparse length was introduced.
+
+The complete actual `Common.copyTable` body passes **170 deep/shallow copies**, including
+**40 selected actual cache rows**, across all five originals. Probes preserve writable results,
+source-required splitting of repeated nested aliases, shallow aliases and function identity.
+They pair **25 observed-input default-unpack cases**, **15 dense copied default-unpack cases**,
+**25 explicit copied ranges**, **20 source-error cases**, and continuing value replacement.
+The **10 copied sparse default-length cases** and **five post-structural-write traversals**
+remain required unsupported boundaries, even if a guessed result happens to match one sample.
+The original callback sequence remains **470/637**, ending at `modLib.parseMod`; complete
+native original-build evaluation remains **0/5**.
+
+The first full-source run caught excessive temporary Lua references while filtering a large
+partial table. Streaming retained original `next` releases omitted values at each step; a
+12,000-row partial-projection regression and the full five-build rerun pass. Original source,
+user inputs/fixtures, lockfile and schema-29 package remain unchanged.
+
+Validation passes **55 data**, **76 observer**, **79 engine**, **19 source integration**,
+**16 default CLI** and **14 native-only CLI** tests: **259 focused test/configuration cases**. Repeated
+agent checks are not counted twice. Two fresh exports reproduce all 29 sections. Strict
+workspace/native Clippy, formatting, WebAssembly library compilation and native dependency
+isolation pass. Final source evidence contains **57 fresh artifacts** and binds
+**103 source/helper hashes**. Numerical execution is local Windows x64; WebAssembly is
+compile-only, and these component gates do not establish full native build parity.
+
+Evidence is bound by `runs/r2l-integration-validation.json`; publication is tracked separately
+in `runs/r2l-publication.json`. CI snapshot `runs/r2l-ci-snapshot.json` records all eight jobs on
+`b0746f6`, `5b30564`, `853ca8b` and `c69810d` in Test without failed steps. This is not hosted
+pass evidence; previously confirmed fixture/deadline fixes remain on main.
+
+**Resume point: R2m native constructor/layout and full public parser sessions.**
+Use the generic source-bound creation/layout boundary described in
+[parser sessions](parser-sessions.md) and `runs/r2m-constructor-layout-readiness.md`. Exact
+empty/array-only creation and LuaJIT integer rehash transitions can explain sparse copied
+rows without a cache-row special case. Bind constructor allocation/template evidence to the
+source owner; nil slots and insertion/deletion history matter. Observed order/length alone
+cannot be promoted into an initial physical layout. Mixed hashes also require explicit
+string/identity hash provenance and deleted-node behavior.
+
+Then retain the actual public parser wrapper's cache, exposed aliases, dictionaries, capture
+cells and startup history. Bind the full inner parser through source programs or an exact
+state-aware kernel with one cumulative preparation budget. Resolve produced closures and
+cross-owner identities, then continue original multiline quest/custom callbacks and complete
+default/saved activation on Twister and Skeletal Sniper together, retaining all five originals.
+The existing parser session/public parity audits are requirements, not optional comparisons.
+A cached success or larger callback prefix does not complete the real-build gates.
+
+**Previous checkpoint: R2k native iterator functions and original quest helpers.**
 Standalone `string.gmatch` now creates a private native function instance with persistent
 cursor and source-visible identity. Aliases, table keys, capture cells, dynamic methods and
 parent-proxy calls retain that same function. Separate sessions share compiled code without

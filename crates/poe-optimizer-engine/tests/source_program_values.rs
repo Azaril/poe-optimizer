@@ -643,3 +643,6 @@ mod traversal;
 
 #[path = "support/source_program_gmatch.rs"]
 mod gmatch;
+
+#[path = "support/source_program_unpack.rs"]
+mod unpack;

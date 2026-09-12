@@ -160,8 +160,8 @@ The inherited callback sequence advances through `enemySizePreset`, `enemyIsBoss
 later calls. Complete source `Common.round` executes through authenticated floor and
 exponentiation; its branches retain source rounding, coercion and failure behavior.
 Generic iteration now calls exact source-bound iterator/state/control values. Complete
-immutable boss definitions carry their actual observed traversal order; mutable and
-partial collections remain explicit dependencies.
+immutable boss definitions carry their actual observed traversal order. Mutable tables need
+private current-layout facts; partially captured raw inventories remain unavailable.
 
 Actual `DropDownControl.SelByValue` executes with its class ancestry and shared list
 identity. The component gate covers every injected preset and boss selection, including
@@ -184,6 +184,16 @@ source tags, returned identity, repeated writes, cycles and errors after the out
 Fresh writable fixture graphs pass through the actual `ModList.AddMod`; a later `setSource`
 write remains visible through the inserted row's alias. The probe uses a fresh final-state
 capture and restores the actual appended row. This validates result ownership, not parsing.
+
+The actual `Common.copyTable` body now has component evidence over source-observed writable
+fixtures and selected existing cache rows from all five originals. Deep copies split nested
+aliases; shallow copies and function values retain identity. The session input carries raw
+order and optional raw length separately from unordered values. Replacing a present non-nil
+value with another non-nil value preserves the observation; other writes invalidate it.
+Original `unpack` can read explicit raw ranges or a supported current default length.
+Copied sparse result tables still need a generic native constructor/layout model; observed
+input length cannot be attached to the fresh copy. These tests do not execute the parser
+wrapper, change its return shape or admit quest activation.
 
 The [parser session design](parser-sessions.md) preserves public cache/dictionary history,
 startup preloads, exact result packs, recursive-copy semantics and cumulative budgets.

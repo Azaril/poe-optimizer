@@ -25,7 +25,9 @@ pub(super) use closures::ClosureRef;
 use closures::{Closure, ImportClosures};
 mod intrinsic_closures;
 use intrinsic_closures::IntrinsicClosure;
+mod table_observations;
 pub(super) use intrinsic_closures::IntrinsicClosureRef;
+use table_observations::TableObservation;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub(super) enum TableRef {
@@ -230,6 +232,7 @@ pub(super) struct Heap<'a> {
     coverage: BTreeMap<TableRef, Coverage>,
     closures: Vec<Closure>,
     intrinsic_closures: Vec<Option<IntrinsicClosure>>,
+    table_observations: BTreeMap<TableRef, TableObservation>,
     cells: Vec<V>,
     budget: Budget<'a>,
 }
@@ -243,6 +246,7 @@ impl Heap<'static> {
             coverage: BTreeMap::new(),
             closures: Vec::new(),
             intrinsic_closures: Vec::new(),
+            table_observations: BTreeMap::new(),
             cells: Vec::new(),
             budget: Budget {
                 limits,
@@ -297,6 +301,7 @@ impl<'a> Heap<'a> {
             coverage: BTreeMap::new(),
             closures: Vec::new(),
             intrinsic_closures: Vec::new(),
+            table_observations: BTreeMap::new(),
             cells: Vec::new(),
             budget,
         };
@@ -313,7 +318,7 @@ impl<'a> Heap<'a> {
         coverage: &ProgramTableCoverage,
         writable: bool,
     ) -> Result<Vec<V>> {
-        self.import_graph(input, coverage, writable, None)
+        self.import_graph(input, coverage, writable, None, None)
     }
     fn import_graph(
         &mut self,
@@ -321,6 +326,7 @@ impl<'a> Heap<'a> {
         coverage: &ProgramTableCoverage,
         writable: bool,
         closures: Option<ImportClosures>,
+        session_input: Option<&poe_optimizer_data::source_program::SourceSessionInput>,
     ) -> Result<Vec<V>> {
         // Validate every input node, including unreachable tables, before copying.
         self.budget.tables(input.tables.len())?;
@@ -420,12 +426,18 @@ impl<'a> Heap<'a> {
             }
             arguments.push(table);
         }
+        let observations = if let Some(source) = session_input {
+            self.import_table_traversal(source, &arguments, offset, closures)?
+        } else {
+            BTreeMap::new()
+        };
         if writable {
             self.tables.extend(arguments);
         } else {
             self.arguments.extend(arguments);
         }
         self.coverage.extend(coverage);
+        self.table_observations.extend(observations);
         Ok(values)
     }
     pub(super) fn stats(&self) -> HeapStats {
@@ -530,8 +542,8 @@ impl<'a> Heap<'a> {
         }
         Ok(value)
     }
-    /// Raw traversal of an explicitly observed immutable source table. Borrow
-    /// its order from the owner; mutable tables never acquire a guessed order.
+    /// Raw traversal uses explicitly observed immutable order or a still-valid
+    /// private session observation. Unordered storage never implies an order.
     pub(super) fn definition_next(
         &mut self,
         table: &V,
@@ -541,9 +553,7 @@ impl<'a> Heap<'a> {
     ) -> Result<Option<(V, V)>> {
         use poe_optimizer_data::source_program::SourceTableKey;
         let TableRef::Definition(id) = table_ref(table)? else {
-            return Err(Error::unsupported(
-                "next requires immutable observed table order",
-            ));
+            return self.observed_next(table, control, work);
         };
         let owner = self.catalog.clone();
         let order = owner
@@ -661,6 +671,7 @@ impl<'a> Heap<'a> {
             .tables
             .get_mut(index(id)?)
             .ok_or_else(|| Error::input("missing heap table"))?;
+        let preserves_observation = !deleted && target.entries.contains_key(&key);
         if matches!(value, V::Nil) {
             target.remove(&key);
         } else {
@@ -670,15 +681,37 @@ impl<'a> Heap<'a> {
             }
             target.insert(key, value);
         }
+        if !preserves_observation {
+            // Even an absent-key nil write can allocate/rehash in LuaJIT.
+            // Invalidate only after the write succeeds; failed writes retain facts.
+            self.table_observations.remove(&reference);
+        }
         if let Some(key) = coverage_key {
             self.coverage_written(reference, key, deleted);
         }
         Ok(())
     }
+    /// Raw length uses an authenticated current observation when available.
+    /// Otherwise only a layout-independent dense boundary is supported.
+    pub(super) fn raw_len(&mut self, table: &V) -> Result<usize> {
+        let reference = table_ref(table)?;
+        if let Some(length) = self
+            .table_observations
+            .get(&reference)
+            .and_then(|value| value.raw_length)
+        {
+            return Ok(length);
+        }
+        self.proven_dense_len(table)
+    }
+    // Existing # and table.insert callers share the same raw-length semantics.
+    pub(super) fn dense_len(&mut self, table: &V) -> Result<usize> {
+        self.raw_len(table)
+    }
     /// Only a unique dense positive-integer boundary is supported. Hash fields,
     /// negative and fractional numeric keys do not change that boundary. Any
     /// positive-integer hole defers rather than assuming a Lua table layout.
-    pub(super) fn dense_len(&mut self, table: &V) -> Result<usize> {
+    fn proven_dense_len(&mut self, table: &V) -> Result<usize> {
         let reference = table_ref(table)?;
         self.ensure_integer_inventory(reference)?;
         let (count, max) = match reference {

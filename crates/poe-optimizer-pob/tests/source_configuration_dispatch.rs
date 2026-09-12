@@ -6,6 +6,8 @@ mod capture;
 #[allow(dead_code)]
 #[path = "support/source_program_classes.rs"]
 mod classes;
+#[path = "support/source_configuration_copy.rs"]
+mod copying;
 #[path = "support/source_configuration_helpers.rs"]
 mod helpers;
 #[path = "support/source_program_observation.rs"]
@@ -206,7 +208,7 @@ fn summarize(
             "pinned continuing callback prefix"
         );
         eprintln!(
-            "R2k build {build} pass {index}: {}/{} callbacks paired",
+            "R2l build {build} pass {index}: {}/{} callbacks paired",
             paired.len(),
             pass.rows.len()
         );
@@ -248,6 +250,7 @@ fn summarize(
         &last.enemy,
         &last.build,
     );
+    let copy_parity = copying::run(lua, primitives);
     let preset_parity = presets::run(
         lua,
         primitives,
@@ -256,7 +259,7 @@ fn summarize(
         &passes.last().unwrap().build,
     );
     Ok(
-        json!({"helper_parity":helper_parity,"preset_parity":preset_parity,"round_parity":round_parity,"passes":reports,"scope":"Original callback bodies, actual continuing state and inherited methods, compared at each actual callback exit. The enclosing activation loop, parser services, constructors and full build evaluation are not admitted.","native_complete_builds":0,"whole_activation_admission":false}),
+        json!({"copy_parity":copy_parity,"helper_parity":helper_parity,"preset_parity":preset_parity,"round_parity":round_parity,"passes":reports,"scope":"Original callback bodies, actual continuing state and inherited methods, compared at each actual callback exit. The enclosing activation loop, parser services, constructors and full build evaluation are not admitted.","native_complete_builds":0,"whole_activation_admission":false}),
     )
 }
 #[test]
@@ -265,7 +268,7 @@ fn original_configuration_callbacks_continue_through_inherited_control_dispatch(
         .join("../..")
         .canonicalize()
         .unwrap();
-    let destination = project.join("runs/r2k-configuration-dispatch");
+    let destination = project.join("runs/r2l-configuration-dispatch");
     fs::create_dir_all(&destination).unwrap();
     if let Ok(build) = std::env::var("POE_CONFIG_DISPATCH_CHILD") {
         assert!(["01", "02", "03", "04", "05"].contains(&build.as_str()));

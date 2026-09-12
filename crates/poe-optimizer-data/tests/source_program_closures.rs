@@ -398,6 +398,7 @@ fn session_artifact_keeps_live_values_and_aliases_out_of_shared_prototype_data()
         .unwrap();
     let mut input = SourceSessionInput {
         owner: owner.clone(),
+        traversal: None,
         state: SourceSessionValueGraph {
             values: vec![SourceSessionValue::Table(SourceSessionTableId(1))],
             tables: vec![SourceSessionTable {

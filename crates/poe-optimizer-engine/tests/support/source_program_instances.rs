@@ -79,6 +79,7 @@ fn bytes(value: &str) -> ProgramValue {
 }
 fn input(owner: &SourceProgramOwner) -> SourceSessionInput {
     SourceSessionInput {
+        traversal: None,
         owner: owner.clone(),
         state: ProgramValueGraph {
             values: vec![

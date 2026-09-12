@@ -536,3 +536,6 @@ return {increment=increment, definitions={shared_read=shared_read, separate_read
     assert_eq!(independent.upvalues[0].value, SourceValue::Number(0.0));
     compile(&f, &observed);
 }
+
+#[path = "tests/traversal.rs"]
+mod traversal;

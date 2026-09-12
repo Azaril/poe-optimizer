@@ -66,6 +66,7 @@ impl SourceClosureObserver {
         let mut libraries = BTreeMap::new();
         let mut primitives = Vec::new();
         for operation in [
+            SourceProgramIntrinsic::Unpack,
             SourceProgramIntrinsic::Type,
             SourceProgramIntrinsic::Select,
             SourceProgramIntrinsic::ToNumber,

@@ -100,6 +100,26 @@ calculation preparation, avoiding an isolated quest-only parser bridge. It does 
 source interpretation belongs in the per-candidate calculation hot path; prepared native
 plans retain their separate performance contract.
 
+## Table evidence and the constructor boundary
+
+Observed mutable tables carry private raw traversal/length facts through the shared session
+input, separately from unordered entries. Replacing an existing non-nil value with another non-nil value can preserve that
+layout; structural writes invalidate it until a native transition model proves the new state.
+Original source `copyTable` must read live values in that observed order and construct fresh
+writable tables through normal source operations. The input's length is not the copy's length.
+
+This distinction matters for `{nil, extra}`: a two-element source constructor can reserve
+array slots absent from its raw inventory, while copying starts from an empty table and
+inserts the present entries. Track native constructor allocation/layout and insertion history
+generically before admitting default `unpack` for sparse results. An explicit numeric range
+can proceed without default-length evidence, but changing the original wrapper to supply one
+would change its semantics. Do not special-case cache rows or substitute maximum integer key.
+
+Preserve the pinned runtime's numeric-conversion profile as an explicit requirement when
+extending `unpack` beyond currently admitted signed-32-bit indices. Host-dependent casts must
+not silently change native/WebAssembly behavior. Source-authenticated observations, raw data
+transport, native layout simulation and source-domain admission remain separate concerns.
+
 ## Integration gates
 
 1. Establish mutable traversal/length behavior for actual wrapper and `copyTable` consumers,

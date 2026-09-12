@@ -5,6 +5,7 @@ struct LiveTable {
     filled: bool,
     entries: Vec<(SourceTableKey, Value)>,
     coverage: SourceTableCoverage,
+    traversal: Option<(Vec<SourceTableKey>, u32)>,
 }
 struct LiveClosure {
     function: Function,
@@ -33,6 +34,7 @@ pub(super) struct LiveGraph<'a, 'b> {
 pub(super) struct Converted {
     pub(super) state: SourceSessionValueGraph,
     pub(super) coverage: SourceSessionCoverage,
+    pub(super) traversal: Option<SourceSessionTraversal>,
     pub(super) cells: Vec<SourceSessionValue>,
     pub(super) closures: Vec<(SourceCallbackId, Vec<SourceSessionCellId>)>,
     pub(super) prototypes: SourceClosurePrototypes,
@@ -134,6 +136,7 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
             table,
             filled: false,
             entries: vec![],
+            traversal: None,
             coverage: SourceTableCoverage {
                 inventory: SourceTableInventory::Complete,
                 known_absent: BTreeSet::new(),
@@ -166,13 +169,44 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
                 let selection = self.selections.get(&pointer).copied();
                 let mut entries = BTreeMap::new();
                 let mut unavailable = BTreeSet::new();
-                for entry in table.pairs::<Value, Value>() {
+                let observing = self.definitions.context.iteration.is_some();
+                let raw_length = if observing {
+                    Some(
+                        u32::try_from(table.raw_len())
+                            .map_err(|_| error("session observed raw length bound"))?,
+                    )
+                } else {
+                    None
+                };
+                let mut order = Vec::new();
+                // The graph transport stays unordered. Preserve actual retained
+                // next order separately, before canonicalizing entries.
+                let mut previous = Value::Nil;
+                let mut legacy = (!observing).then(|| table.pairs::<Value, Value>());
+                loop {
+                    let entry = if observing {
+                        self.definitions.observer.raw_next(&table, previous)?
+                    } else {
+                        legacy
+                            .as_mut()
+                            .expect("legacy raw iterator")
+                            .next()
+                            .transpose()?
+                    };
+                    let Some((key, value)) = entry else { break };
+                    previous = key.clone();
                     self.definitions.projection_row()?;
                     if entries.len() + unavailable.len() >= 50_000 {
                         return Err(error("session table raw row bound"));
                     }
-                    let (key, value) = entry?;
                     let key = self.definitions.projection_key(key)?;
+                    if observing {
+                        self.definitions.projection_row()?;
+                        if let SourceTableKey::Text(text) = &key {
+                            self.definitions.text(text.len())?;
+                        }
+                        order.push(key.clone());
+                    }
                     let selected = selection.is_none_or(|selection| match &key {
                         SourceTableKey::Text(key) => selection.fields.contains(key),
                         SourceTableKey::Integer(key) => selection.indexed.contains(key),
@@ -185,6 +219,11 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
                 }
                 for value in entries.values() {
                     self.discover(value.clone(), depth + 1)?;
+                }
+                if unavailable.is_empty()
+                    && let Some(length) = raw_length
+                {
+                    self.captured.tables[index].traversal = Some((order, length));
                 }
                 self.captured.tables[index].entries = entries.into_iter().collect();
                 self.captured.tables[index].coverage.unavailable = unavailable;
@@ -341,6 +380,11 @@ impl CapturedLive {
             .collect::<Result<Vec<_>>>()?;
         let mut tables = Vec::new();
         let mut coverage = BTreeMap::new();
+        let mut traversal = definitions
+            .context
+            .iteration
+            .as_ref()
+            .map(|_| SourceSessionTraversal::default());
         for (index, table) in self.tables.iter().enumerate() {
             let mut entries = Vec::new();
             for (key, value) in &table.entries {
@@ -349,6 +393,34 @@ impl CapturedLive {
                     SourceTableKey::Integer(key) => SourceSessionValue::Number(*key as f64),
                 };
                 entries.push((key, self.value(definitions, value)?));
+            }
+            if let Some((order, raw_length)) = &table.traversal {
+                let order = order
+                    .iter()
+                    .map(|key| {
+                        definitions.projection_row()?;
+                        Ok(match key {
+                            SourceTableKey::Text(text) => {
+                                definitions.text(text.len())?;
+                                SourceSessionValue::Bytes(text.as_bytes().to_vec())
+                            }
+                            SourceTableKey::Integer(value) => {
+                                SourceSessionValue::Number(*value as f64)
+                            }
+                        })
+                    })
+                    .collect::<Result<Vec<_>>>()?;
+                traversal
+                    .as_mut()
+                    .expect("enabled session traversal")
+                    .tables
+                    .insert(
+                        SourceSessionTableId(index as u32 + 1),
+                        SourceSessionTableTraversal {
+                            order,
+                            raw_length: Some(*raw_length),
+                        },
+                    );
             }
             tables.push(SourceSessionTable { entries });
             coverage.insert(
@@ -364,6 +436,7 @@ impl CapturedLive {
         Ok(Converted {
             state: SourceSessionValueGraph { values, tables },
             coverage,
+            traversal,
             cells,
             closures,
             prototypes,

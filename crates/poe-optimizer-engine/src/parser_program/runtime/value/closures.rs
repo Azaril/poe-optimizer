@@ -162,7 +162,7 @@ impl Heap<'_> {
             .iter()
             .map(|value| input_value(value, true, table_offset, space))
             .collect();
-        let roots = self.import_graph(&input.state, &input.coverage, true, space)?;
+        let roots = self.import_graph(&input.state, &input.coverage, true, space, Some(input))?;
         self.cells.extend(cells);
         self.closures.extend(closures);
         self.behaviors.extend(behaviors);

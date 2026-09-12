@@ -287,9 +287,13 @@ impl SourceClosureObserver {
             class_bindings,
             state: conversion.state,
             coverage: conversion.coverage,
+            traversal: conversion.traversal,
             cells: conversion.cells,
             closures,
         };
+        input
+            .validate_traversal(MAX_TABLES, MAX_VALUES, MAX_TEXT_BYTES)
+            .map_err(error)?;
         if class_request.is_some() {
             self.verify(lua)?;
         } else {

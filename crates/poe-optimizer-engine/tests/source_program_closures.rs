@@ -208,6 +208,7 @@ fn input(
         })
         .collect();
     SourceSessionInput {
+        traversal: None,
         class_bindings: BTreeMap::new(),
         owner,
         state,

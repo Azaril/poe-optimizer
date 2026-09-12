@@ -949,6 +949,9 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                             }
                             Term::Global { ref path, .. } => {
                                 let operation = match path.as_slice() {
+                                    ["unpack"] if self.authorization.standalone_calls => {
+                                        ParserProgramIntrinsic::Unpack
+                                    }
                                     ["tonumber"] => ParserProgramIntrinsic::ToNumber,
                                     ["type"] if self.authorization.standalone_calls => {
                                         ParserProgramIntrinsic::Type
