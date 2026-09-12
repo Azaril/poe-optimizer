@@ -354,9 +354,11 @@ fn unknown_later_branches_reject_the_whole_method() {
     assert!(lowered.unsupported()[&ParserCallbackId(1)].contains("unmodeledConstructor"));
 }
 
+mod bit_helpers;
 mod inline;
 mod iterators;
 mod methods;
+mod modulo;
 mod power;
 
 #[test]

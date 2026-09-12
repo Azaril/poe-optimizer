@@ -1050,7 +1050,10 @@ impl Run<'_, '_, '_> {
             Op::Power if self.library.catalog().owner().parser().is_some() => Err(
                 Error::unsupported("power operation requires standalone source arithmetic proof"),
             ),
-            Op::Add | Op::Subtract | Op::Multiply | Op::Divide | Op::Power => {
+            Op::Modulo if self.library.catalog().owner().parser().is_some() => Err(
+                Error::unsupported("modulo operation requires source arithmetic proof"),
+            ),
+            Op::Add | Op::Subtract | Op::Multiply | Op::Divide | Op::Power | Op::Modulo => {
                 let a = number(&left, self.patterns)?
                     .ok_or_else(|| Error::source("arithmetic on a non-number"))?;
                 let b = number(&right, self.patterns)?
@@ -1063,12 +1066,13 @@ impl Run<'_, '_, '_> {
                     // The pinned LuaJIT arithmetic path calls the host pow;
                     // integer-power or exp/log rewrites change rounding.
                     Op::Power => a.powf(b),
+                    // Pinned vm_mod and foldarith compute this operation in
+                    // separate IEEE steps. Remainder, rem_euclid or fused
+                    // multiply-add would change negatives and cancellation.
+                    Op::Modulo => a - (a / b).floor() * b,
                     _ => unreachable!(),
                 }))
             }
-            Op::Modulo => Err(Error::unsupported(
-                "modulo operation requires source arithmetic proof",
-            )),
         }
     }
     fn table(

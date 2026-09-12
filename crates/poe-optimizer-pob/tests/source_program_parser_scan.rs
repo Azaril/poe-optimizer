@@ -4,6 +4,8 @@
 #[allow(dead_code)]
 #[path = "support/source_program_classes.rs"]
 mod classes;
+#[path = "support/source_program_flag_helpers.rs"]
+mod flag_helpers;
 #[path = "support/source_program_observation.rs"]
 mod observation;
 #[path = "support/source_program_public_cache.rs"]
@@ -125,6 +127,47 @@ fn observe(
         callbacks.insert(format!("probe.{name}"), probes.raw_get(*name).unwrap());
     }
     let globals = lua.globals();
+    if with_closures {
+        for name in flag_helpers::NAMES {
+            callbacks.insert(format!("flag.{name}"), globals.raw_get(*name).unwrap());
+        }
+    }
+    let mut projections = vec![SourceTableSelection {
+        table: globals.clone(),
+        // Exact original global dependencies; legacy observation stays unchanged.
+        fields: if with_closures {
+            [
+                "copyTable",
+                "foo",
+                "type",
+                "unpack",
+                "tonumber",
+                "math",
+                "bit",
+            ]
+            .map(str::to_owned)
+            .into()
+        } else {
+            ["copyTable", "foo"].map(str::to_owned).into()
+        },
+        indexed: BTreeSet::new(),
+        allow_index_fallback: false,
+        allow_call_fallback: false,
+    }];
+    if with_closures {
+        for (name, fields) in [
+            ("math", vec!["floor"]),
+            ("bit", vec!["band", "bor", "bxor", "bnot"]),
+        ] {
+            projections.push(SourceTableSelection {
+                table: globals.raw_get(name).unwrap(),
+                fields: fields.into_iter().map(str::to_owned).collect(),
+                indexed: BTreeSet::new(),
+                allow_index_fallback: false,
+                allow_call_fallback: false,
+            });
+        }
+    }
     let cache: Table = globals
         .raw_get::<Table>("modLib")
         .unwrap()
@@ -154,21 +197,7 @@ fn observe(
                         table: globals.clone(),
                         root_name: "Environment".into(),
                     }),
-                    projections: vec![SourceTableSelection {
-                        table: globals,
-                        // The complete parser and wrapper read these original globals.
-                        // Keep the preceding scanner-only observation unchanged.
-                        fields: if with_closures {
-                            ["copyTable", "foo", "type", "unpack", "tonumber"]
-                                .map(str::to_owned)
-                                .into()
-                        } else {
-                            ["copyTable", "foo"].map(str::to_owned).into()
-                        },
-                        indexed: BTreeSet::new(),
-                        allow_index_fallback: false,
-                        allow_call_fallback: false,
-                    }],
+                    projections,
                     source_names,
                 },
                 ..SourceSessionCaptureRequest::default()
@@ -690,12 +719,17 @@ fn run(lua: &Lua, primitives: &Primitives, xml: &str, with_closures: bool) -> Js
         assert_eq!(error.kind, ProgramRuntimeErrorKind::UnsupportedCapability);
         json!({"frontier":public_cache::frontier(&pair, &error), "complete_public_parser":false})
     };
-    json!({"inventory":inventory,"real_dictionary_cases":rows,"fixture_cases":fixture_rows,
+    let flags = with_closures.then(|| flag_helpers::run(lua, &pair));
+    let mut report = json!({"inventory":inventory,"real_dictionary_cases":rows,"fixture_cases":fixture_rows,
         "dictionary_mutation":{"baseline":baseline,"changed":changed,"restored":restored},
         "source_errors":source_errors,"plain_malformed_pattern":plain_malformed,"captures_writable_and_independent":true,"session_isolation":true,"warmed":warmed,
         "public_parser_frontier":public_cache["frontier"], "public_cache":public_cache,
         "steps":pair.session.steps(),"pattern_steps":pair.session.pattern_steps(),
-        "native_complete_builds":0,"complete_public_parser":false})
+        "native_complete_builds":0,"complete_public_parser":false});
+    if let Some(flags) = flags {
+        report["flag_helpers"] = flags;
+    }
+    report
 }
 #[test]
 fn complete_original_scan_uses_initialized_parser_dictionaries_on_all_five_builds() {

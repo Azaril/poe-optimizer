@@ -352,7 +352,7 @@ fn floor_and_power_keep_cumulative_conversion_and_result_budgets() {
 }
 
 #[test]
-fn plain_table_numeric_arguments_fail_and_standalone_modulo_remains_unavailable() {
+fn plain_table_numeric_arguments_fail_for_floor_power_and_modulo() {
     let lua = Lua::new();
     let floor: mlua::Function = lua
         .load("return function(a) return math.floor(a) end")
@@ -375,6 +375,7 @@ fn plain_table_numeric_arguments_fail_and_standalone_modulo_remains_unavailable(
     for native in [
         primitive(ParserProgramIntrinsic::MathFloor),
         arithmetic(ParserProgramBinary::Power),
+        arithmetic(ParserProgramBinary::Modulo),
     ] {
         assert_eq!(
             native
@@ -384,15 +385,4 @@ fn plain_table_numeric_arguments_fail_and_standalone_modulo_remains_unavailable(
             ProgramRuntimeErrorKind::Source
         );
     }
-    assert_eq!(
-        arithmetic(ParserProgramBinary::Modulo)
-            .execute(
-                ParserCallbackId(1),
-                &graph(vec![ProgramValue::Number(5.0), ProgramValue::Number(2.0)]),
-                ProgramLimits::default()
-            )
-            .unwrap_err()
-            .kind,
-        ProgramRuntimeErrorKind::UnsupportedCapability
-    );
 }

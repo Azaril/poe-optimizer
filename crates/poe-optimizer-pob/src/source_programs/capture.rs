@@ -88,6 +88,10 @@ impl SourceClosureObserver {
             SourceProgramIntrinsic::StringLower,
             SourceProgramIntrinsic::StringFind,
             SourceProgramIntrinsic::StringSub,
+            SourceProgramIntrinsic::BitBand,
+            SourceProgramIntrinsic::BitBor,
+            SourceProgramIntrinsic::BitBxor,
+            SourceProgramIntrinsic::BitBnot,
         ] {
             let path = operation.global_path().expect("language primitive");
             let table = if path.len() == 2 {
@@ -115,9 +119,6 @@ impl SourceClosureObserver {
             "setmetatable",
             "error",
             "assert",
-            "bit.band",
-            "bit.bor",
-            "bit.bxor",
         ] {
             let path = symbol.split('.').collect::<Vec<_>>();
             let table = if path.len() == 2 {

@@ -48,7 +48,7 @@ fn call_shape(call: &ParserProgramCall) -> String {
             .join(",")
     )
 }
-fn returned_shape(statement: &ParserProgramStatement) -> String {
+pub(super) fn returned_shape(statement: &ParserProgramStatement) -> String {
     let ParserProgramStatementKind::Return { values } = &statement.operation else {
         panic!("return")
     };
@@ -166,7 +166,7 @@ fn original_common_round_retains_both_decimal_powers_and_actual_floor_capture() 
 }
 #[test]
 fn an_unexecuted_unsupported_decimal_branch_still_rejects_the_entire_function() {
-    let text = "function(value, dec) if dec then return value % 10 else return math.floor(value) end end\n";
+    let text = "function(value, dec) if dec then while true do end else return math.floor(value) end end\n";
     let owner =
         SourceProgramOwner::new(definitions(text, vec![callback(text, 1, 1, vec![])])).unwrap();
     let lowered = lower_from_sources(&sources(text), &owner).unwrap();

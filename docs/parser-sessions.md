@@ -51,6 +51,30 @@ Never reinterpret parser-local callback/table IDs as receiving-session IDs. A re
 function that captures mutable parser data must retain the same session cells. Unsupported
 function-bearing results must remain visible until that identity path is implemented.
 
+## Numerical helpers and injected flag logic
+
+Keep language-level numeric primitives separate from game-level flag helpers. The native
+engine can implement the admitted source VM's modulo and scalar bit operations, while
+`OR64`, `AND64`, `XOR64`, `NOT64`, their capture cells and mask values remain in the
+source/data catalog. Combining signed low words and high masks must follow the complete
+source helper, including its arity, coercion and early-return behavior; a conventional
+unsigned integer operation is not automatically equivalent.
+
+Numerical admission includes operation order and conversion rules. The pinned modulo
+path uses separate division, floor, multiplication and subtraction, with observable
+negative, signed-zero and exceptional-value behavior. Bit conversion uses the VM's
+rounding rule, independently from integer-index conversion. Evaluate ordinary argument
+expressions before primitive conversion, preserve ignored-argument effects, and charge
+all work and results through the session budget. Source operand timing and constant-fold
+admission remain distinct from runtime arithmetic.
+
+Parity inputs are values admitted to the selected source numeric profile. A transport
+adapter must reproduce any source API NaN canonicalization when comparing foreign raw
+numbers; the neutral graph does not silently rewrite supplied bits. Tests compare finite
+bit-operation outputs exactly and distinguish this from the existing class-only treatment
+of floating NaN payload/sign. Keep complete original-helper comparisons on real initialized
+build graphs alongside scalar cold/warmed tests and portable-library checks.
+
 ## Observing complete initialized state
 
 The reference adapter must capture the complete admitted initialization graph, including

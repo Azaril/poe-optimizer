@@ -652,3 +652,6 @@ mod strings;
 
 #[path = "support/source_program_ipairs.rs"]
 mod ipairs;
+
+#[path = "support/source_program_bits.rs"]
+mod bits;

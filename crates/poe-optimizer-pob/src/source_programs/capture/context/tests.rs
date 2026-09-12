@@ -603,12 +603,20 @@ fn explicit_environment_rejects_changed_original_string_methods() {
     }
 }
 
+fn bit_operations() -> [(&'static str, SourceProgramIntrinsic, f64); 4] {
+    [
+        ("band", SourceProgramIntrinsic::BitBand, 3.0),
+        ("bor", SourceProgramIntrinsic::BitBor, 7.0),
+        ("bxor", SourceProgramIntrinsic::BitBxor, 4.0),
+        ("bnot", SourceProgramIntrinsic::BitBnot, -8.0),
+    ]
+}
+
 #[test]
-fn original_bit_captures_are_opaque_and_rebinding_never_grants_intrinsic_identity() {
-    for name in ["band", "bor", "bxor"] {
-        let text = format!(
-            "local original = bit.{name}\nreturn function() if false then return original(7,3) end return original end\n"
-        );
+fn original_bit_captures_keep_exact_intrinsic_identity_across_global_rebinding() {
+    for (name, operation, expected) in bit_operations() {
+        let text =
+            format!("local original = bit.{name}\nreturn function() return original(7,3) end\n");
         let f = fixture(&text, PATH);
         let observed = observe(&f, SourceCaptureContext::default()).unwrap();
         let callback = observed
@@ -624,20 +632,29 @@ fn original_bit_captures_are_opaque_and_rebinding_never_grants_intrinsic_identit
                 symbol: format!("bit.{name}")
             }
         );
-        assert!(
-            !observed
+        assert_eq!(
+            observed
                 .owner()
                 .definitions()
                 .unwrap()
                 .intrinsics
-                .contains_key(&original)
+                .get(&original),
+            Some(&operation)
         );
         let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
         assert!(
-            lowered
-                .unsupported()
-                .contains_key(&observed.callbacks()["evaluate"]),
-            "even an unexecuted static call to opaque bit must stay unsupported"
+            lowered.unsupported().is_empty(),
+            "{name}: {:?}",
+            lowered.unsupported()
+        );
+        assert!(matches!(lowered.catalog().data().programs[0].bindings[0],
+            SourceProgramBinding::Intrinsic {
+                operation: actual,
+                source: SourceProgramIntrinsicSource::Captured { callback: id, upvalue: 0 },
+            } if actual == operation && id == original));
+        assert_eq!(
+            evaluate(&f, &observed),
+            vec![ProgramValue::Number(expected)]
         );
         f.lua.load(format!("bit.{name} = math.min")).exec().unwrap();
         assert!(
@@ -646,7 +663,7 @@ fn original_bit_captures_are_opaque_and_rebinding_never_grants_intrinsic_identit
         );
 
         let text = format!(
-            "local original = bit.{name}\nlocal function replacement(a,b) return a+b end\nbit = {{ {name} = replacement }}\nreturn function() return original == bit.{name}, bit.{name}(7,3) end\n"
+            "local original = bit.{name}\nlocal function replacement(a,b) return a+b end\nbit = {{ {name} = replacement }}\nreturn function() return original == bit.{name}, original(7,3), bit.{name}(7,3) end\n"
         );
         let f = fixture(&text, PATH);
         assert!(
@@ -658,102 +675,143 @@ fn original_bit_captures_are_opaque_and_rebinding_never_grants_intrinsic_identit
             .projections
             .push(selection(f.lua.globals().raw_get("bit").unwrap(), &[name]));
         let observed = observe(&f, context).unwrap();
-        let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
-        assert_eq!(
-            lowered.unsupported().len(),
-            1,
-            "only the opaque builtin body"
-        );
-        assert!(
-            !lowered
-                .unsupported()
-                .contains_key(&observed.callbacks()["evaluate"])
-        );
-        let compiled = CompiledSourcePrograms::new(lowered.catalog()).unwrap();
-        let output = compiled
-            .execute(
-                observed.callbacks()["evaluate"],
-                &ProgramValueGraph::default(),
-                ProgramLimits::default(),
-            )
-            .unwrap();
-        assert_eq!(
-            output.graph().values,
-            vec![ProgramValue::Boolean(false), ProgramValue::Number(10.0)]
-        );
         let callback = observed
             .owner()
             .callback(observed.callbacks()["evaluate"])
             .unwrap();
         let SourceValue::Callback(original) = callback.upvalues[0].value else {
-            panic!("original bit capture")
+            panic!("capture")
         };
         assert_eq!(
-            observed.owner().callback(original).unwrap().kind,
-            SourceCallbackKind::Builtin {
-                symbol: format!("bit.{name}")
-            }
+            observed
+                .owner()
+                .definitions()
+                .unwrap()
+                .intrinsics
+                .get(&original),
+            Some(&operation)
         );
+        assert_eq!(
+            evaluate(&f, &observed),
+            vec![
+                ProgramValue::Boolean(false),
+                ProgramValue::Number(expected),
+                ProgramValue::Number(10.0)
+            ]
+        );
+        let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
+        assert!(lowered.catalog().data().programs.iter().all(|program| {
+            program.bindings.iter().all(|binding| {
+                !matches!(
+                    binding,
+                    SourceProgramBinding::Intrinsic {
+                        source: SourceProgramIntrinsicSource::OriginalGlobal,
+                        ..
+                    }
+                )
+            })
+        }));
     }
 }
 
 #[test]
-fn reached_opaque_bit_call_rejects_after_original_argument_effects() {
+fn reached_bit_call_preserves_original_argument_effects_and_source_error_stage() {
     use poe_optimizer_engine::source_program::{
         ProgramRuntimeErrorKind, ProgramTable, ProgramTableId,
     };
-    for name in ["band", "bor", "bxor"] {
-        let text = format!(
-            "local function effect(side) side.count=side.count+1; return 7 end\nreturn function(side) return bit.{name}(effect(side),3) end\n"
-        );
-        let f = fixture(&text, PATH);
-        let mut context = environment(&f, &["bit"]);
-        context
-            .projections
-            .push(selection(f.lua.globals().raw_get("bit").unwrap(), &[name]));
-        let observed = observe(&f, context).unwrap();
-        let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
-        assert_eq!(
-            lowered.unsupported().len(),
-            1,
-            "opaque builtin stays explicit"
-        );
-        assert!(
-            !lowered
-                .unsupported()
-                .contains_key(&observed.callbacks()["evaluate"]),
-            "dynamic value call stays structurally represented"
-        );
-        let compiled = CompiledSourcePrograms::new(lowered.catalog()).unwrap();
-        let input = ProgramValueGraph {
-            values: vec![ProgramValue::Table(ProgramTableId(1))],
-            tables: vec![ProgramTable {
-                entries: vec![(
+    for (name, _, expected) in bit_operations() {
+        for invalid in [false, true] {
+            let result = if invalid { "nil" } else { "7" };
+            let text = format!(
+                "local function effect(side) side.count=side.count+1; return {result} end\nreturn function(side) return bit.{name}(effect(side),3) end\n"
+            );
+            let f = fixture(&text, PATH);
+            let mut context = environment(&f, &["bit"]);
+            context
+                .projections
+                .push(selection(f.lua.globals().raw_get("bit").unwrap(), &[name]));
+            let observed = observe(&f, context).unwrap();
+            let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
+            assert!(
+                lowered.unsupported().is_empty(),
+                "{name}: {:?}",
+                lowered.unsupported()
+            );
+            let compiled = CompiledSourcePrograms::new(lowered.catalog()).unwrap();
+            let input = ProgramValueGraph {
+                values: vec![ProgramValue::Table(ProgramTableId(1))],
+                tables: vec![ProgramTable {
+                    entries: vec![(
+                        ProgramValue::Bytes(b"count".to_vec()),
+                        ProgramValue::Number(0.0),
+                    )],
+                }],
+            };
+            let (mut session, args) = compiled.session(&input, ProgramLimits::default()).unwrap();
+            let native = session.invoke(observed.callbacks()["evaluate"], &args);
+            let source = f.lua.create_table().unwrap();
+            source.raw_set("count", 0).unwrap();
+            let original = f.roots["evaluate"].call::<f64>(source.clone());
+            if invalid {
+                assert_eq!(native.unwrap_err().kind, ProgramRuntimeErrorKind::Source);
+                assert!(original.is_err());
+            } else {
+                assert_eq!(
+                    session.snapshot(&native.unwrap()).unwrap().graph().values,
+                    vec![ProgramValue::Number(expected)]
+                );
+                assert_eq!(original.unwrap(), expected);
+            }
+            assert_eq!(
+                session.snapshot(&args).unwrap().graph().tables[0].entries,
+                vec![(
                     ProgramValue::Bytes(b"count".to_vec()),
-                    ProgramValue::Number(0.0),
-                )],
-            }],
-        };
-        let (mut session, args) = compiled.session(&input, ProgramLimits::default()).unwrap();
-        let error = session
-            .invoke(observed.callbacks()["evaluate"], &args)
+                    ProgramValue::Number(1.0)
+                )]
+            );
+            assert_eq!(source.raw_get::<i32>("count").unwrap(), 1);
+        }
+    }
+}
+
+#[test]
+fn bit_environment_omissions_and_hostile_library_shapes_do_not_use_original_global_fallback() {
+    use poe_optimizer_engine::source_program::ProgramRuntimeErrorKind;
+    for (name, _, _) in bit_operations() {
+        let text = format!("return function() return bit.{name}(7,3) end\n");
+        let f = fixture(&text, PATH);
+        let observed = observe(&f, environment(&f, &[])).unwrap();
+        let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
+        assert!(lowered.unsupported().is_empty());
+        let compiled = CompiledSourcePrograms::new(lowered.catalog()).unwrap();
+        let error = compiled
+            .execute(
+                observed.callbacks()["evaluate"],
+                &ProgramValueGraph::default(),
+                ProgramLimits::default(),
+            )
             .unwrap_err();
         assert_eq!(
             error.kind,
             ProgramRuntimeErrorKind::UnsupportedCapability,
-            "opaque bit has no kernel"
+            "omitted bit library {name}"
         );
-        let output = session.snapshot(&args).unwrap();
-        assert_eq!(
-            output.graph().tables[0].entries,
-            vec![(
-                ProgramValue::Bytes(b"count".to_vec()),
-                ProgramValue::Number(1.0)
-            )]
+        f.lua
+            .load(format!("bit.{name} = function() return 0 end"))
+            .exec()
+            .unwrap();
+        assert!(observe(&f, SourceCaptureContext::default()).is_err());
+        assert!(
+            SourceClosureObserver::capture_before_source(&f.lua)
+                .err()
+                .expect("replaced C function")
+                .to_string()
+                .contains("original C function")
         );
-        let source = f.lua.create_table().unwrap();
-        source.raw_set("count", 0).unwrap();
-        let _: f64 = f.roots["evaluate"].call(source.clone()).unwrap();
-        assert_eq!(source.raw_get::<i32>("count").unwrap(), 1);
     }
+    let lua = Lua::new();
+    lua.load("setmetatable(bit,{__index=function() return 0 end})")
+        .exec()
+        .unwrap();
+    assert!(SourceClosureObserver::capture_before_source(&lua).is_err());
 }

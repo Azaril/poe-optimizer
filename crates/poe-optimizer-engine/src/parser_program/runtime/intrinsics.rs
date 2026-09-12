@@ -131,6 +131,10 @@ pub(super) fn call(
     limits: &ProgramLimits,
 ) -> RuntimeResult<Vec<V>> {
     match operation {
+        ParserProgramIntrinsic::BitBand
+        | ParserProgramIntrinsic::BitBor
+        | ParserProgramIntrinsic::BitBxor
+        | ParserProgramIntrinsic::BitBnot => bit(operation, arguments, heap, patterns, limits),
         ParserProgramIntrinsic::IpairsAux => ipairs_aux(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::Unpack => unpack(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::ToNumber => tonumber(arguments, heap, patterns, limits),
@@ -289,6 +293,39 @@ fn number_argument(value: Option<&V>, patterns: &mut MatchBudget) -> RuntimeResu
         }
         _ => Err(Error::source("number argument expected")),
     }
+}
+/// Pinned single-number LuaJIT bit conversion rounds by adding 2^52+2^51,
+/// then takes the low IEEE word. Integer index coercion truncates and therefore
+/// cannot be reused here. No source-level 53-bit helper is substituted.
+fn bit(
+    operation: ParserProgramIntrinsic,
+    arguments: &[V],
+    heap: &mut Heap,
+    patterns: &mut MatchBudget,
+    limits: &ProgramLimits,
+) -> RuntimeResult<Vec<V>> {
+    let first = number_argument(arguments.first(), patterns)?;
+    patterns.charge(1)?;
+    let mut result = crate::lua_bits::to_bit(first);
+    if operation == ParserProgramIntrinsic::BitBnot {
+        // All argument expressions already ran, but the original unary fast
+        // function only converts its first value.
+        result = !result;
+    } else {
+        for value in &arguments[1..] {
+            let value = number_argument(Some(value), patterns)?;
+            patterns.charge(1)?;
+            let value = crate::lua_bits::to_bit(value);
+            result = match operation {
+                ParserProgramIntrinsic::BitBand => result & value,
+                ParserProgramIntrinsic::BitBor => result | value,
+                ParserProgramIntrinsic::BitBxor => result ^ value,
+                _ => unreachable!(),
+            };
+        }
+    }
+    result_space(1, heap, limits)?;
+    Ok(vec![V::Number(f64::from(result))])
 }
 fn minmax(
     operation: ParserProgramIntrinsic,

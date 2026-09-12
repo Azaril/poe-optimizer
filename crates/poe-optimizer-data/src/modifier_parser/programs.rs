@@ -357,6 +357,10 @@ pub enum ParserProgramIntrinsic {
     MathFloor,
     MathMin,
     MathMax,
+    BitBand,
+    BitBor,
+    BitBxor,
+    BitBnot,
     ToString,
     StringMatch,
     StringLower,
@@ -382,6 +386,10 @@ impl ParserProgramIntrinsic {
             Self::MathFloor => Some(&["math", "floor"]),
             Self::MathMin => Some(&["math", "min"]),
             Self::MathMax => Some(&["math", "max"]),
+            Self::BitBand => Some(&["bit", "band"]),
+            Self::BitBor => Some(&["bit", "bor"]),
+            Self::BitBxor => Some(&["bit", "bxor"]),
+            Self::BitBnot => Some(&["bit", "bnot"]),
             Self::ToString => Some(&["tostring"]),
             Self::StringMatch => Some(&["string", "match"]),
             Self::StringLower => Some(&["string", "lower"]),
@@ -429,6 +437,10 @@ impl ParserProgramIntrinsic {
                 | Self::MathFloor
                 | Self::MathMin
                 | Self::MathMax
+                | Self::BitBand
+                | Self::BitBor
+                | Self::BitBxor
+                | Self::BitBnot
                 | Self::ToString
                 | Self::StringMatch
                 | Self::StringLower

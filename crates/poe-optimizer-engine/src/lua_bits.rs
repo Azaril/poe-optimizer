@@ -23,7 +23,7 @@ pub fn or53(a: f64, b: f64) -> f64 {
     f64::from(high & 0x1f_ffff) * TWO32 + f64::from(low)
 }
 
-fn to_bit(value: f64) -> i32 {
+pub(crate) fn to_bit(value: f64) -> i32 {
     // LuaJIT lj_vm_tobit adds 2^52+2^51 and returns the low 32 IEEE bits.
     (value + TOBIT_BIAS).to_bits() as i32
 }

@@ -761,6 +761,10 @@ fn standalone_numeric_text_and_pattern_primitives_bind_original_identity_and_sha
         (SourceProgramIntrinsic::MathFloor, vec!["math", "floor"]),
         (SourceProgramIntrinsic::MathMin, vec!["math", "min"]),
         (SourceProgramIntrinsic::MathMax, vec!["math", "max"]),
+        (SourceProgramIntrinsic::BitBand, vec!["bit", "band"]),
+        (SourceProgramIntrinsic::BitBor, vec!["bit", "bor"]),
+        (SourceProgramIntrinsic::BitBxor, vec!["bit", "bxor"]),
+        (SourceProgramIntrinsic::BitBnot, vec!["bit", "bnot"]),
         (SourceProgramIntrinsic::ToString, vec!["tostring"]),
         (SourceProgramIntrinsic::StringMatch, vec!["string", "match"]),
         (SourceProgramIntrinsic::StringLower, vec!["string", "lower"]),
@@ -840,6 +844,22 @@ fn parser_owner_rejects_new_function_value_and_intrinsic_forms_without_changing_
     let base = &owner.data().programs.data.programs[0];
     let bindings = [
         SourceProgramBinding::DynamicCall {},
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::BitBand,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::BitBor,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::BitBxor,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::BitBnot,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
         SourceProgramBinding::Intrinsic {
             operation: SourceProgramIntrinsic::IpairsAux,
             source: SourceProgramIntrinsicSource::OriginalGlobal,
@@ -1555,4 +1575,238 @@ fn nonglobal_ipairs_auxiliary_requires_exact_capture_without_global_or_parser_by
             .message
             .contains("explicit source environment")
     );
+}
+
+fn bit_operations() -> [SourceProgramIntrinsic; 4] {
+    [
+        SourceProgramIntrinsic::BitBand,
+        SourceProgramIntrinsic::BitBor,
+        SourceProgramIntrinsic::BitBxor,
+        SourceProgramIntrinsic::BitBnot,
+    ]
+}
+fn bit_definitions(operation: SourceProgramIntrinsic) -> SourceProgramDefinitions {
+    let mut data = definitions();
+    for _ in 0..2 {
+        let id = SourceCallbackId(data.callbacks.len() as u32 + 1);
+        data.callbacks.push(SourceCallback {
+            kind: SourceCallbackKind::Builtin {
+                symbol: operation.builtin_symbol().unwrap(),
+            },
+            upvalues: vec![],
+            environment: SourceEnvironment::OriginalGlobals,
+        });
+        data.intrinsics.insert(id, operation);
+    }
+    data.callbacks[0].upvalues[0].value = SourceValue::Callback(SourceCallbackId(3));
+    data
+}
+fn bit_program(operation: SourceProgramIntrinsic, count: usize) -> SourceProgram {
+    let mut p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::Call {
+            call: Box::new(SourceProgramCall {
+                binding: 0,
+                receiver: None,
+                arguments: SourceProgramValueList {
+                    values: (0..count)
+                        .map(|_| {
+                            expression(SourceProgramExprKind::Literal {
+                                value: ParserFactoryLiteral::Number(1.0),
+                            })
+                        })
+                        .collect(),
+                    tail: None,
+                },
+            }),
+        },
+    );
+    p.bindings = vec![SourceProgramBinding::Intrinsic {
+        operation,
+        source: SourceProgramIntrinsicSource::Captured {
+            upvalue: 0,
+            callback: SourceCallbackId(3),
+        },
+    }];
+    p
+}
+#[test]
+fn bit_intrinsics_retain_exact_capture_identity_and_explicit_environment_boundary() {
+    for operation in bit_operations() {
+        assert!(!operation.is_string_method());
+        assert_eq!(
+            operation.builtin_symbol(),
+            operation.global_path().map(|path| path.join("."))
+        );
+        let data = bit_definitions(operation);
+        let before = serde_json::to_vec(&data).unwrap();
+        let context = SourceProgramContext {
+            environment: Some(SourceProgramRootId(1)),
+            ..Default::default()
+        };
+        let owner = SourceProgramOwner::new_with_context(data.clone(), None, context).unwrap();
+        let p = bit_program(operation, 2);
+        SourceProgramCatalog::new(programs(vec![p.clone()]), owner.clone()).unwrap();
+        assert_eq!(
+            serde_json::to_vec(owner.definitions().unwrap()).unwrap(),
+            before
+        );
+        // Equal operation labels do not authorize a different captured function.
+        for (upvalue, callback) in [(0, SourceCallbackId(4)), (1, SourceCallbackId(3))] {
+            let mut wrong = p.clone();
+            wrong.bindings[0] = SourceProgramBinding::Intrinsic {
+                operation,
+                source: SourceProgramIntrinsicSource::Captured { upvalue, callback },
+            };
+            assert_eq!(
+                SourceProgramCatalog::new(programs(vec![wrong]), owner.clone())
+                    .unwrap_err()
+                    .kind,
+                SourceProgramErrorKind::Binding
+            );
+        }
+        let mut bypass = p.clone();
+        bypass.bindings[0] = SourceProgramBinding::Intrinsic {
+            operation,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        };
+        assert!(
+            SourceProgramCatalog::new(programs(vec![bypass]), owner)
+                .unwrap_err()
+                .message
+                .contains("explicit source environment")
+        );
+        for edit in 0..4 {
+            let mut wrong = data.clone();
+            match edit {
+                0 => {
+                    wrong.callbacks[2].kind = SourceCallbackKind::Builtin {
+                        symbol: "bit.unobserved".into(),
+                    }
+                }
+                1 => wrong.callbacks[2].kind = SourceCallbackKind::Lua { source: span() },
+                2 => wrong.callbacks[2].upvalues.push(SourceUpvalue {
+                    name: "hidden".into(),
+                    value: SourceValue::Number(1.0),
+                }),
+                _ => {
+                    wrong
+                        .intrinsics
+                        .insert(SourceCallbackId(3), SourceProgramIntrinsic::MathFloor);
+                }
+            }
+            assert!(
+                SourceProgramOwner::new(wrong).is_err(),
+                "{operation:?} descriptor edit{edit}"
+            );
+        }
+        let mut opaque = data;
+        opaque.intrinsics.remove(&SourceCallbackId(3));
+        assert_eq!(
+            SourceProgramCatalog::new(programs(vec![p]), SourceProgramOwner::new(opaque).unwrap())
+                .unwrap_err()
+                .kind,
+            SourceProgramErrorKind::UnsupportedCapability
+        );
+    }
+}
+#[test]
+fn bit_call_shapes_keep_shared_pack_bounds_and_do_not_invent_runtime_arity_rules() {
+    for operation in bit_operations() {
+        let owner = SourceProgramOwner::new(bit_definitions(operation)).unwrap();
+        for count in [0, 1, 3, 4096] {
+            SourceProgramCatalog::new(programs(vec![bit_program(operation, count)]), owner.clone())
+                .unwrap();
+        }
+        assert_eq!(
+            SourceProgramCatalog::new(programs(vec![bit_program(operation, 4097)]), owner.clone())
+                .unwrap_err()
+                .kind,
+            SourceProgramErrorKind::ResourceLimit
+        );
+        let mut p = bit_program(operation, 2);
+        let SourceProgramStatementKind::Return { values } = &mut p.body[0].operation else {
+            unreachable!()
+        };
+        let SourceProgramExprKind::Call { call } = &mut values.values[0].operation else {
+            unreachable!()
+        };
+        call.receiver = Some(Box::new(expression(SourceProgramExprKind::Literal {
+            value: ParserFactoryLiteral::Nil,
+        })));
+        assert_eq!(
+            SourceProgramCatalog::new(programs(vec![p]), owner)
+                .unwrap_err()
+                .kind,
+            SourceProgramErrorKind::Binding
+        );
+    }
+}
+#[test]
+fn modulo_retains_generic_source_register_operands_and_legacy_structural_wire() {
+    let snapshot = bundled_snapshot().unwrap();
+    let parser = snapshot.modifier_parser();
+    let before = serde_json::to_vec(&parser.data().programs).unwrap();
+    let literal = || {
+        expression(SourceProgramExprKind::Literal {
+            value: ParserFactoryLiteral::Number(3.0),
+        })
+    };
+    let mut legacy = parser.data().programs.data.programs[0].clone();
+    legacy.bindings.clear();
+    legacy.body = vec![SourceProgramStatement {
+        location: SourceProgramLocation { start: 0, end: 1 },
+        operation: SourceProgramStatementKind::Return {
+            values: SourceProgramValueList {
+                values: vec![expression(SourceProgramExprKind::Binary {
+                    operation: SourceProgramBinary::Modulo,
+                    left: Box::new(literal()),
+                    right: Box::new(literal()),
+                })],
+                tail: None,
+            },
+        },
+    }];
+    ParserProgramCatalog::new(programs(vec![legacy.clone()]), parser.clone()).unwrap();
+    for left in [
+        SourceProgramOperand::LocalRegister { local: 0 },
+        SourceProgramOperand::Evaluated { value: literal() },
+    ] {
+        let value = SourceProgramExprKind::SourceBinary {
+            operation: SourceProgramBinary::Modulo,
+            left: Box::new(left),
+            right: Box::new(literal()),
+        };
+        let mut p = program(SourceCallbackId(1), value.clone());
+        p.parameter_count = 1;
+        p.local_count = 1;
+        let catalog = SourceProgramCatalog::new(
+            programs(vec![p]),
+            SourceProgramOwner::new(definitions()).unwrap(),
+        )
+        .unwrap();
+        assert!(
+            catalog
+                .required_capabilities()
+                .contains(&SourceProgramCapability::RegisterOperands)
+        );
+        let mut p = legacy.clone();
+        p.parameter_count = 1;
+        p.local_count = 1;
+        let SourceProgramStatementKind::Return { values } = &mut p.body[0].operation else {
+            unreachable!()
+        };
+        values.values[0] = expression(value);
+        assert_eq!(
+            ParserProgramCatalog::new(programs(vec![p]), parser.clone())
+                .unwrap_err()
+                .kind,
+            SourceProgramErrorKind::UnsupportedCapability
+        );
+    }
+    assert_eq!(
+        serde_json::to_string(&SourceProgramBinary::Modulo).unwrap(),
+        "\"modulo\""
+    );
+    assert_eq!(serde_json::to_vec(&parser.data().programs).unwrap(), before);
 }

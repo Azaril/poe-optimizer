@@ -18,10 +18,71 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-The R2r checkpoint below is the current resume point; later sections retain historical
+The R2s checkpoint below is the current resume point; later sections retain historical
 checkpoints and their original validation scope.
 
-**R2r checkpoint: retained original iterator protocol and positive parser breadth.** The shared
+**R2s checkpoint: source modulo and complete flag-helper execution.**
+The neutral source model now admits exact retained `bit.band`, `bit.bor`, `bit.bxor`
+and `bit.bnot` primitives. Standalone `%` preserves source precedence and operand timing.
+Native modulo uses the source's separate division/floor/multiplication/subtraction steps;
+bit conversion uses the pinned numeric conversion rather than integer-index truncation.
+Original PoB high-level helpers and masks remain source programs and injected data.
+Legacy packaged-parser admission and bundled data are unchanged.
+
+The four new source integration tests pass: 900 numeric modulo pairs, conversion and
+precedence cases, 460 bit cases, argument effects before errors, captured identity after
+global rebinding, and 85 exact-target warmed vectors. Numeric comparisons preserve every
+non-NaN bit, including signed zero; float NaN payload/sign follows the existing class-only
+policy. Finite bit-operation results are always exact. Neutral input graphs still represent
+already-admitted source values; foreign raw NaN transport canonicalization remains the
+adapter's responsibility. A projected immutable library is rebound before observation,
+not mutated through a falsely writable session alias.
+
+The all-five integration passes for the actual initialized `OR64`, `AND64`, `XOR64`
+and `NOT64` functions with their real captures, data and projected environment. Each build
+uses 63 actual flag values and compares 724 cold cases (703 successes and 21 source errors).
+Across all five builds, 120 warmed vectors compare every return pack from 15,360 calls,
+with no seed calls and a live trace containing the exact original helper. Table passthrough
+checks identity as well as contents. The original parser/cache regression gates remain.
+
+All six positive modifier families now write source-equivalent cache entries: **30 matching
+rows**, followed by **30 traversal dependencies in original `Common.copyTable`**. Added
+fire damage and attack speed no longer stop in `OR64` calling the missing `or2` program.
+The failing fresh table still needs identity and path evidence before selecting a layout
+model. Full original public parsing and the five-original **0/5** native build completion
+result remain open; source-created map traversal/copy and later activation are required.
+**Validation passed:** 104 DATA cases, 231 ENGINE cases, 122 PoB source-program unit
+cases, 58 source integration tests and 30 CLI test/configuration cases: **545 focused
+cases**, counting reruns once. The final source run retains 90 fresh artifacts and verifies
+163 selected source files unchanged. Default and native-only CLI tests pass; fresh exports
+reproduce all 29 data sections. Strict workspace/native Clippy, WebAssembly library
+compilation, native runtime dependency isolation, formatting and diff checks pass. The
+native runtime dependency tree contains no PoB/Lua dependency. WebAssembly remains
+compile-only coverage; no runtime speedup is claimed. Original build inputs, bundled data,
+dependency lock and PoB pin are unchanged. Evidence is retained in `runs/r2s-checkpoint.json`,
+with publication and exact-head CI recorded separately in `runs/r2s-publication.json`.
+
+**Next checkpoint:** instrument the original copy operation and native traversal failure
+with bounded, opt-in identity observations. Jointly snapshot the cache row, failed table
+and traversal control to preserve aliases; record recursive activation and root-relative
+paths. Canonical graph table numbers are not runtime identities. Establish the actual
+producer separately before adding constant-template (TDUP) slots or other layout history.
+Source order must remain unknown until that generic model is proven; a copy cannot simply
+inherit its input's order. Keep all six positive families across all five originals as the
+acceptance set, plus equal-but-distinct and shared-child cases. The detailed investigation
+is retained locally in `runs/r2s-next-map-gate.md` and the prior `runs/r2r-next-map-copy.md`.
+Then complete the public parser's successful returns and DOUBLED/cache transitions, integrate
+whole-build activation, and resume the contrasting real-build rollout. These dependencies
+remain within the full native evaluator goal.
+
+**R2s CI review:** exact published `366df5f`, run `34673907354`, is in Test on Linux
+and Windows with no failed steps in the 05:14 UTC snapshot. The preceding published
+revision is also active. The older Linux schema assertion is already fixed by `718b716`;
+the older Windows runner connection loss has no newly available test diagnosis. This
+is a live-run observation, not a hosted pass. Evidence: `runs/r2s-ci-diagnosis.json` and
+`runs/r2s-ci-prepublication-review.json`.
+
+**Historical R2r checkpoint: retained original iterator protocol and positive parser breadth.** The shared
 catalog now represents the exact original `ipairs` factory/auxiliary relation. Native
 sessions execute stored and escaped iterators with live table reads, full result packs
 and preserved identities. The PoB adapter verifies the original private C capture;
