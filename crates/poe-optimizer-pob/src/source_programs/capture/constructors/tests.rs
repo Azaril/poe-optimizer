@@ -129,11 +129,10 @@ fn actual_transitive_helpers_are_observed_and_zero_opt_in_keeps_legacy_behavior(
     );
 }
 #[test]
-fn templates_multiple_occurrences_and_nonempty_tnew_are_explicit_frontiers() {
+fn templates_and_unsupported_whole_bodies_remain_explicit_frontiers() {
     for text in [
-        "return function() local a,b={},{} return a,b end",
         "return function() return {x=1} end",
-        "return function(...) return {...} end",
+        "return function(x) return {0,x} end",
     ] {
         let lua = Lua::new();
         let observer = observer(&lua);
@@ -263,7 +262,7 @@ fn evidence_mismatch_and_instruction_budget_fail_closed() {
             .constructor_reflection
             .as_ref()
             .unwrap()
-            .observe(&function, &record.source, 0)
+            .observe(&function, &record.source, 0, false)
             .is_err()
     );
     let mut evidence = observed.constructor_observations().unwrap().clone();
@@ -301,3 +300,5 @@ fn different_actual_bytecode_cannot_merge_under_one_declared_session_prototype()
             .contains("differing actual constructor bytecode")
     );
 }
+
+mod lists;

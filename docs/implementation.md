@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-11 (EDT)
+Last updated: 2026-09-12 (EDT)
 
 **Current priority: real-build breadth.** The five supplied originals have **0/5 complete
 native evaluations**; all five import/inspect and evaluate in pinned PoB. Shared parser
@@ -91,6 +91,80 @@ pass. Neither the package nor production code changes for this repair. Authentic
 failure logs and the audit are recorded in `runs/r2m-ci-final-review.json` and
 `runs/r2m-schema-expectation-review.json`; the final exact-head hosted run remains a
 separate publication check.
+
+**R2q CI review: latest reported failures predate the published repair.** The seven
+newly reviewed completed jobs on `7a9c40a`, `a1a5bc3`, `b0746f6` and `5b30564`
+all fail the same skill-identity assertion (`29` versus `28`). Their public failure
+annotations identify the exact test; no new failure signature appears. The repair
+`718b716` is already an ancestor of `main`, and all 11 skill-identity tests pass again
+locally. The current `12ba179` Linux/Windows jobs in run `34670477744` are still in
+Test. This is verification of an existing fix, not hosted success. Evidence:
+`runs/r2q-ci-diagnosis.json` and `runs/r2q-ci-workflow-review-by-data.json`.
+
+**R2q checkpoint: source-bound list constructors and original public cache behavior.**
+DATA, ENGINE and the PoB adapter support multiple exact empty/list allocation sites,
+including nested factory bodies. Original bytecode allocation claims are injected as
+metadata; sessions own reserved array storage and subsequent values. The mapper decodes
+the source's reserved capacity sentinel, retains exact parenthesized allocation ranges,
+and preflights aggregate metadata bounds before copying per-site provenance. Keyed and
+template constructors remain explicit dependencies.
+
+Native/source tests compare 400 list/result-pack cases, including nil holes, nested sites,
+side effects and error prefixes. Of those, 125 have retained traversal evidence and 275
+reach the explicit growing-layout dependency. Another 64 exact-constructor warmed
+vectors compare raw values and iteration controls; 61 also compare default unpack, while
+three preserve the existing ambiguous-boundary rejection. Source-only probes retain
+25 warmed tail vectors and 18 fixed-list mutation vectors. The latter show no differences
+for their tested histories; they do not establish every possible subsequent mutation.
+
+A retained source counterexample is `{91, nil, unpack(input, 1, 2)}` with only
+`input[2] = false`: interpreter and compiled trace have the same entries but return
+length/default-unpack cardinalities 1 and 4. Valid `next` controls also differ. Native
+growing constructors preserve raw values but invalidate physical layout evidence.
+This is an unfinished parity dependency, not complete support for the family.
+
+The original public parser now passes **55 paired calls and 10 source-error cases**
+across all five builds: initialized successful cache hits, copy/alias isolation, exact-case
+no-match keys, misses/hits/eviction, and the truthy-empty retry path. Original inner-call
+counts are `[0,0]`, `[1,0,1]`, `[1,0,1]` and `[2,0,2]`; no inner parser is substituted.
+Source/native cache rows are compared and oracle-created entries are restored. The
+actual `tonumber` global is included in the closure-aware environment observation.
+
+Fresh successful parsing of `+987654 to Strength` now reaches **escaped ipairs iterator**
+in the original inner parser (6619-7036, relative range 11496-11943), before its cache
+write, on every build. Full success, fresh map traversal, DOUBLED mutation and whole-build
+activation remain open. The same full-public-parser milestone continues; original-build
+completion remains **0/5**.
+
+**Validation passed:** 101 DATA cases, 214 ENGINE cases, 111 POB source-program unit
+cases, 49 source integration tests and 30 CLI test/configuration cases: **505 focused
+cases**, counting reruns once. The final source run retained 85 fresh artifacts and
+verified its selected 152-file source manifest unchanged. All earlier configuration,
+copy, assignment and factory gates remain; each scanner mode retains 780 real dictionary
+cases, 90 adversarial cases, 25 source errors and 15 warmed vectors. Both fresh CLI exports
+reproduce all 29 package sections. Strict workspace/native Clippy, WebAssembly library
+compilation, native runtime dependency isolation, formatting and diff checks pass.
+WebAssembly was compile-checked only; no performance improvement is claimed. Original
+inputs, bundled data, reference fixtures, dependency lock and PoB pin are unchanged.
+
+Consolidated evidence: `runs/r2q-checkpoint.json`, `runs/r2q-source-verified/validation.json`,
+component/review/CLI/static ledgers and `runs/r2q-public-cache-validation.json`. The final
+pre-publication CI review still shows `12ba179` running on Linux and Windows. Reviewed
+completed failures are covered by the published schema and test-completion repairs;
+see `runs/r2q-ci-prepublication-review.json`. Verify the new exact-head run after pushing;
+local validation does not establish hosted success.
+
+**Resume the complete-public-parser milestone:** retain the exact original `ipairs`
+factory/auxiliary identity and `(function, table, control)` protocol through native calls
+and generic loops. Existing generic-loop execution can consume that protocol. Add source
+parity for complete result packs, conversion/errors, live mutations, function identity,
+source rebinding and independent sessions, then re-run genuine successful misses on all
+five builds. `runs/r2q-next-public-parser.md` records the exact call path and validation.
+Next map/copy and bit/modulo dependencies remain hypotheses or prior compilation findings,
+not substituted results. Keep the unresolved growing-layout work, then continue full
+quest/custom activation and paired Twister/Skeletal Sniper evaluations with all-five
+coverage. The durable [allocation contract](parser-sessions.md#list-allocation-and-source-execution-history)
+keeps source metadata injected and layout uncertainty explicit.
 
 **R2p checkpoint: native source-created closures and lexical capture cells.**
 Actual parent/child prototypes, FNEW sites, ordered capture origins and lexical declaration

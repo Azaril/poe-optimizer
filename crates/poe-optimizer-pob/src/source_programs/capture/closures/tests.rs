@@ -200,8 +200,9 @@ fn combined_facets_preserve_original_empty_constructor_proof() {
         1
     );
     assert!(lowered.catalog().constructors().is_some());
-    // The earlier TNEW proof deliberately does not claim nested-parent layouts.
-    assert_eq!(lowered.constructor_unsupported().len(), 1);
+    // The parent allocation is distinct from its complete nested function body.
+    assert!(lowered.constructor_unsupported().is_empty());
+    assert_eq!(lowered.catalog().constructors().unwrap().sites.len(), 1);
     let text = "return function() return function() return {} end end";
     let (_, sources, observed) = observe(text);
     let lowered = crate::source_programs::lower_observed_closures_and_constructors_from_sources(

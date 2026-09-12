@@ -1079,13 +1079,8 @@ impl Run<'_, '_, '_> {
         seed: Option<CompiledTableConstructor>,
     ) -> Result<V> {
         let table = match seed {
-            Some(CompiledTableConstructor::EmptyArray) if fields.is_empty() => {
-                self.heap.native_empty_table(self.patterns)?
-            }
-            Some(CompiledTableConstructor::EmptyArray) => {
-                return Err(Error::input(
-                    "source constructor seed requires an empty expression",
-                ));
+            Some(CompiledTableConstructor::Array { slots }) => {
+                self.heap.native_array_table(slots, self.patterns)?
             }
             Some(CompiledTableConstructor::UnsupportedProfile) => {
                 return Err(Error::unsupported(
@@ -1110,12 +1105,25 @@ impl Run<'_, '_, '_> {
                 }
                 ParserProgramField::List { value } => {
                     let value = self.expr(frame, value, depth + 1)?;
-                    self.heap
-                        .set(&table, V::Number(index as f64), value, self.patterns)?;
+                    if matches!(seed, Some(CompiledTableConstructor::Array { .. })) {
+                        self.heap
+                            .native_array_list(&table, index, value, self.patterns)?;
+                    } else {
+                        self.heap
+                            .set(&table, V::Number(index as f64), value, self.patterns)?;
+                    }
                     index += 1;
                 }
                 ParserProgramField::Tail { values } => {
-                    for value in self.pack(frame, values, depth + 1)? {
+                    let values = self.pack(frame, values, depth + 1)?;
+                    if matches!(seed, Some(CompiledTableConstructor::Array { .. })) {
+                        // TSETM grows once for the complete result pack, including
+                        // nil slots. Ordinary setters rehash differently.
+                        self.heap
+                            .native_array_tail(&table, index, values, self.patterns)?;
+                        continue;
+                    }
+                    for value in values {
                         self.heap
                             .set(&table, V::Number(index as f64), value, self.patterns)?;
                         index = index

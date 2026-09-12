@@ -335,3 +335,217 @@ fn append_rejects_ambiguous_jit_hint_before_writing_or_changing_layout() {
         V::Boolean(true)
     ));
 }
+
+#[test]
+fn nonempty_seed_reserves_nil_slots_and_zero_before_any_write() {
+    for slots in [3, 4, 2049] {
+        let (mut heap, mut work) = fixture();
+        let before = heap.stats();
+        let table = heap.native_array_table(slots, &mut work).unwrap();
+        assert_eq!(
+            heap.stats().values - before.values,
+            METADATA_VALUES + slots as usize
+        );
+        assert_eq!(work.steps_used(), 1 + u64::from(slots));
+        assert_eq!(layout(&heap, &table).unwrap().slots, slots);
+        assert_eq!(heap.raw_len(&table, &mut work).unwrap(), 0);
+        assert!(
+            next(
+                &mut heap,
+                &table,
+                V::Number(f64::from(slots - 1)),
+                &mut work
+            )
+            .unwrap()
+            .is_none()
+        );
+        set(
+            &mut heap,
+            &table,
+            f64::from(slots - 1),
+            V::Boolean(false),
+            &mut work,
+        );
+        assert_eq!(
+            heap.raw_len(&table, &mut work).unwrap(),
+            (slots - 1) as usize
+        );
+        assert_eq!(layout(&heap, &table).unwrap().slots, slots);
+        assert!(
+            next(&mut heap, &table, V::Number(0.0), &mut work)
+                .unwrap()
+                .is_some()
+        );
+    }
+}
+#[test]
+fn growing_tail_keeps_raw_values_without_claiming_one_cold_and_warm_capacity() {
+    let (mut heap, mut work) = fixture();
+    let table = heap.native_array_table(3, &mut work).unwrap();
+    set(&mut heap, &table, 1.0, V::Boolean(true), &mut work);
+    heap.native_array_tail(
+        &table,
+        2,
+        vec![V::Nil, V::Nil, V::Boolean(false)],
+        &mut work,
+    )
+    .unwrap();
+    assert!(layout(&heap, &table).is_none());
+    assert!(matches!(
+        heap.raw_get(&table, &V::Number(4.0)).unwrap(),
+        V::Boolean(false)
+    ));
+    for key in [0.0, 2.0, 4.0, 5.0] {
+        assert_kind(
+            next(&mut heap, &table, V::Number(key), &mut work),
+            Kind::UnsupportedCapability,
+        );
+    }
+    assert_kind(
+        heap.hint_safe_len(&table, &mut work),
+        Kind::UnsupportedCapability,
+    );
+    // Further packs remain writable; unknown layout is never inferred back
+    // from the raw entries, even if a dense boundary becomes provable.
+    heap.native_array_tail(&table, 2, vec![V::Boolean(false); 3], &mut work)
+        .unwrap();
+    assert!(layout(&heap, &table).is_none());
+    assert_eq!(heap.raw_len(&table, &mut work).unwrap(), 4);
+}
+#[test]
+fn list_tail_zero_results_and_exact_fit_do_not_add_an_extra_slot() {
+    let (mut heap, mut work) = fixture();
+    let table = heap.native_array_table(3, &mut work).unwrap();
+    heap.native_array_tail(&table, 1, vec![], &mut work)
+        .unwrap();
+    assert_eq!(layout(&heap, &table).unwrap().slots, 3);
+    heap.native_array_tail(&table, 1, vec![V::Nil, V::Boolean(false)], &mut work)
+        .unwrap();
+    assert_eq!(layout(&heap, &table).unwrap().slots, 3);
+    assert_eq!(heap.hint_safe_len(&table, &mut work).unwrap(), 2);
+    heap.native_array_tail(&table, 3, vec![V::Nil], &mut work)
+        .unwrap();
+    assert!(layout(&heap, &table).is_none());
+    assert_kind(
+        next(&mut heap, &table, V::Number(4.0), &mut work),
+        Kind::UnsupportedCapability,
+    );
+    set(&mut heap, &table, 4.0, V::Boolean(false), &mut work);
+    assert!(layout(&heap, &table).is_none());
+}
+#[test]
+fn bulk_tail_replacements_update_occupancy_before_later_generic_writes() {
+    let (mut heap, mut work) = fixture();
+    let table = heap.native_array_table(4, &mut work).unwrap();
+    heap.native_array_tail(&table, 1, vec![V::Boolean(true); 3], &mut work)
+        .unwrap();
+    heap.native_array_tail(
+        &table,
+        1,
+        vec![V::Nil, V::Boolean(false), V::Nil],
+        &mut work,
+    )
+    .unwrap();
+    let facts = layout(&heap, &table).unwrap();
+    assert_eq!(
+        (facts.slots, facts.live, facts.bins[0], facts.bins[1]),
+        (4, 1, 1, 0)
+    );
+    set(&mut heap, &table, 3.0, V::Boolean(false), &mut work);
+    set(&mut heap, &table, 4.0, V::Boolean(false), &mut work);
+    assert_eq!(layout(&heap, &table).unwrap().slots, 5);
+    assert_eq!(heap.hint_safe_len(&table, &mut work).unwrap(), 4);
+}
+#[test]
+fn list_seed_failure_charges_capacity_without_publishing_a_table() {
+    let (mut heap, mut work) = fixture();
+    heap.budget.limits.max_values = METADATA_VALUES + 2;
+    assert_kind(heap.native_array_table(3, &mut work), Kind::ResourceBound);
+    assert_eq!(heap.stats().tables, 0);
+    assert!(heap.tables.is_empty());
+    assert_eq!(work.steps_used(), 4);
+    let (mut heap, _) = fixture();
+    let mut limits = ProgramLimits::default().pattern;
+    limits.max_steps = 3;
+    let mut work = MatchBudget::new(limits);
+    assert_kind(heap.native_array_table(3, &mut work), Kind::ResourceBound);
+    assert_eq!(heap.stats().tables, 0);
+    assert!(heap.tables.is_empty());
+}
+#[test]
+fn bulk_tail_work_and_storage_failures_leave_layout_and_rows_unchanged() {
+    for max_steps in 0..7 {
+        let (mut heap, mut work) = fixture();
+        let table = heap.native_array_table(3, &mut work).unwrap();
+        set(&mut heap, &table, 1.0, V::Boolean(true), &mut work);
+        let mut limits = ProgramLimits::default().pattern;
+        limits.max_steps = max_steps;
+        let mut bounded = MatchBudget::new(limits);
+        assert_kind(
+            heap.native_array_tail(
+                &table,
+                2,
+                vec![V::Nil, V::Nil, V::Boolean(false)],
+                &mut bounded,
+            ),
+            Kind::ResourceBound,
+        );
+        assert_eq!(
+            (
+                layout(&heap, &table).unwrap().slots,
+                layout(&heap, &table).unwrap().live
+            ),
+            (3, 1)
+        );
+        assert!(matches!(
+            heap.raw_get(&table, &V::Number(4.0)).unwrap(),
+            V::Nil
+        ));
+        assert!(bounded.steps_used() > max_steps);
+    }
+    let (mut heap, mut work) = fixture();
+    let table = heap.native_array_table(3, &mut work).unwrap();
+    heap.budget.limits.max_values = heap.stats().values + 5;
+    assert_kind(
+        heap.native_array_tail(
+            &table,
+            2,
+            vec![V::Nil, V::Nil, V::Boolean(false)],
+            &mut work,
+        ),
+        Kind::ResourceBound,
+    );
+    assert_eq!(
+        (
+            layout(&heap, &table).unwrap().slots,
+            layout(&heap, &table).unwrap().live
+        ),
+        (3, 0)
+    );
+    assert!(matches!(
+        heap.raw_get(&table, &V::Number(4.0)).unwrap(),
+        V::Nil
+    ));
+}
+
+#[test]
+fn constructor_list_writes_outside_initial_capacity_lose_proof_even_for_nil() {
+    let (mut heap, mut work) = fixture();
+    let table = heap.native_array_table(3, &mut work).unwrap();
+    heap.native_array_list(&table, 2, V::Nil, &mut work)
+        .unwrap();
+    assert_eq!(layout(&heap, &table).unwrap().slots, 3);
+    heap.native_array_list(&table, 3, V::Nil, &mut work)
+        .unwrap();
+    assert!(layout(&heap, &table).is_none());
+    heap.native_array_list(&table, 4, V::Boolean(false), &mut work)
+        .unwrap();
+    assert!(matches!(
+        heap.raw_get(&table, &V::Number(4.0)).unwrap(),
+        V::Boolean(false)
+    ));
+    assert_kind(
+        next(&mut heap, &table, V::Number(2.0), &mut work),
+        Kind::UnsupportedCapability,
+    );
+}

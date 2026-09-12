@@ -706,3 +706,288 @@ fn constructor_matching_follows_source_binary_register_and_evaluated_operands() 
         bind(data, metadata()).unwrap();
     }
 }
+
+// Authored structural claims: these tests do not authenticate Lua bytecode or
+// infer constant folding. The PoB observer supplies that independent proof.
+fn list_fixture(fields: Vec<SourceProgramField>) -> (SourceProgramData, SourceProgramConstructors) {
+    let count = fields.len();
+    let expression = SourceProgramLocation {
+        start: 5,
+        end: 19_990,
+    };
+    let mut d = program(vec![SourceProgramStatement {
+        location: SourceProgramLocation {
+            start: 0,
+            end: 19_999,
+        },
+        operation: SourceProgramStatementKind::Return {
+            values: values(SourceProgramExpr {
+                location: expression,
+                operation: SourceProgramExprKind::Table { fields },
+            }),
+        },
+    }]);
+    d.programs[0].parameter_count = 1;
+    d.programs[0].provenance.function_end = 20_000;
+    let hint = if count == 0 {
+        0
+    } else {
+        (count as u32 + 1).clamp(3, 0x7ff)
+    };
+    let mut m = metadata();
+    m.sites[0].provenance = d.programs[0].provenance.clone();
+    m.sites[0].expression = expression;
+    m.sites[0].instruction = 52 | (hint << 16);
+    m.sites[0].allocation = SourceTableAllocation::New {
+        array_slots: if hint == 0x7ff { 0x801 } else { hint },
+        hash_bits: 0,
+    };
+    (d, m)
+}
+fn local_list(count: usize) -> Vec<SourceProgramField> {
+    (0..count)
+        .map(|index| SourceProgramField::List {
+            value: e(
+                SourceProgramExprKind::Local { local: 0 },
+                10 + index as u32 * 2,
+                11 + index as u32 * 2,
+            ),
+        })
+        .collect()
+}
+#[test]
+fn tnew_decoder_preserves_physical_capacity_and_ignores_destination_register() {
+    for (hint, expected) in [(0, 0), (1, 1), (2, 2), (3, 3), (2046, 2046), (2047, 2049)] {
+        for register in [0, 1, 127, 255] {
+            for hash_bits in [0, 1, 17, 31] {
+                let instruction = 52 | (register << 8) | (hint << 16) | (hash_bits << 27);
+                assert_eq!(
+                    SourceTableAllocation::from_tnew_instruction(instruction).unwrap(),
+                    SourceTableAllocation::New {
+                        array_slots: expected,
+                        hash_bits: hash_bits as u8
+                    }
+                );
+            }
+        }
+    }
+    for opcode in [0, 51, 53, 255] {
+        assert_eq!(
+            SourceTableAllocation::from_tnew_instruction(opcode)
+                .unwrap_err()
+                .kind,
+            SourceProgramErrorKind::Binding
+        );
+    }
+}
+#[test]
+fn list_constructor_capacity_counts_syntax_fields_including_sentinel_boundaries() {
+    for (count, expected) in [
+        (0, 0),
+        (1, 3),
+        (2, 3),
+        (3, 4),
+        (2045, 2046),
+        (2046, 2049),
+        (2047, 2049),
+        (2048, 2049),
+        (4096, 2049),
+    ] {
+        let (d, m) = list_fixture(local_list(count));
+        assert_eq!(
+            m.sites[0].allocation,
+            SourceTableAllocation::New {
+                array_slots: expected,
+                hash_bits: 0
+            }
+        );
+        let wire = serde_json::to_vec(&m).unwrap();
+        assert_eq!(SourceProgramConstructors::from_bytes(&wire).unwrap(), m);
+        let before = serde_json::to_vec(&d).unwrap();
+        let bound = bind(d, m).unwrap();
+        assert_eq!(serde_json::to_vec(bound.data()).unwrap(), before);
+    }
+}
+#[test]
+fn list_constructor_rejects_encoded_hint_used_as_capacity_or_wrong_field_count() {
+    let (d, mut m) = list_fixture(local_list(2046));
+    m.sites[0].allocation = SourceTableAllocation::New {
+        array_slots: 2047,
+        hash_bits: 0,
+    };
+    assert_eq!(
+        bind(d, m).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+    for (count, hint) in [(0, 3), (1, 0), (2, 4), (3, 3), (2045, 2047), (2046, 2046)] {
+        let (d, mut m) = list_fixture(local_list(count));
+        m.sites[0].instruction = 52 | (hint << 16);
+        m.sites[0].allocation =
+            SourceTableAllocation::from_tnew_instruction(m.sites[0].instruction).unwrap();
+        assert_eq!(
+            bind(d, m).unwrap_err().kind,
+            SourceProgramErrorKind::Binding
+        );
+    }
+}
+#[test]
+fn list_nil_false_and_scalar_calls_preserve_syntactic_slot_count() {
+    let fields = vec![
+        SourceProgramField::List { value: nil() },
+        SourceProgramField::List {
+            value: e(
+                SourceProgramExprKind::Literal {
+                    value: ParserFactoryLiteral::Boolean(false),
+                },
+                12,
+                17,
+            ),
+        },
+        // An adjusted/parenthesized call remains one List slot even if its
+        // runtime result pack is empty or contains many values.
+        SourceProgramField::List {
+            value: e(
+                SourceProgramExprKind::Call {
+                    call: Box::new(call(e(SourceProgramExprKind::Local { local: 0 }, 20, 21))),
+                },
+                20,
+                25,
+            ),
+        },
+    ];
+    let (d, m) = list_fixture(fields);
+    assert_eq!(
+        m.sites[0].allocation,
+        SourceTableAllocation::New {
+            array_slots: 4,
+            hash_bits: 0
+        }
+    );
+    bind(d, m).unwrap();
+}
+#[test]
+fn final_constructor_call_and_varargs_are_one_syntax_field_before_bulk_expansion() {
+    for tail in [
+        SourceProgramPack::Varargs,
+        SourceProgramPack::Call {
+            call: call(e(SourceProgramExprKind::Local { local: 0 }, 20, 21)),
+        },
+    ] {
+        for prefix in [0, 1, 3] {
+            let mut fields = local_list(prefix);
+            fields.push(SourceProgramField::Tail {
+                values: tail.clone(),
+            });
+            let (d, m) = list_fixture(fields);
+            assert_eq!(
+                m.sites[0].allocation,
+                SourceTableAllocation::New {
+                    array_slots: (prefix as u32 + 2).max(3),
+                    hash_bits: 0
+                }
+            );
+            bind(d, m).unwrap();
+        }
+        let fields = vec![
+            SourceProgramField::Tail { values: tail },
+            SourceProgramField::List { value: nil() },
+        ];
+        let (d, m) = list_fixture(fields);
+        assert_eq!(
+            bind(d, m).unwrap_err().kind,
+            SourceProgramErrorKind::InvalidData
+        );
+    }
+}
+#[test]
+fn list_constructor_rejects_keyed_named_hash_and_tdup_families() {
+    for field in [
+        SourceProgramField::Named {
+            key: "field".into(),
+            value: nil(),
+        },
+        SourceProgramField::Keyed {
+            key: nil(),
+            value: nil(),
+        },
+    ] {
+        let (d, m) = list_fixture(vec![field]);
+        assert_eq!(
+            bind(d, m).unwrap_err().kind,
+            SourceProgramErrorKind::Binding
+        );
+    }
+    let (d, mut m) = list_fixture(local_list(1));
+    m.sites[0].instruction |= 1 << 27;
+    m.sites[0].allocation =
+        SourceTableAllocation::from_tnew_instruction(m.sites[0].instruction).unwrap();
+    assert_eq!(
+        bind(d, m).unwrap_err().kind,
+        SourceProgramErrorKind::UnsupportedCapability
+    );
+    let (d, mut m) = list_fixture(local_list(1));
+    m.sites[0].instruction = (m.sites[0].instruction & !255) | 53;
+    assert_eq!(
+        bind(d, m).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+}
+#[test]
+fn independent_list_sites_share_program_identity_without_sharing_allocation_claims() {
+    let (mut d, mut m) = list_fixture(local_list(1));
+    let first = SourceProgramExpr {
+        location: SourceProgramLocation { start: 5, end: 30 },
+        operation: SourceProgramExprKind::Table {
+            fields: local_list(1),
+        },
+    };
+    let second = SourceProgramExpr {
+        location: SourceProgramLocation { start: 40, end: 80 },
+        operation: SourceProgramExprKind::Table {
+            fields: local_list(3),
+        },
+    };
+    d.programs[0].body[0].operation = SourceProgramStatementKind::Return {
+        values: SourceProgramValueList {
+            values: vec![first.clone(), second.clone()],
+            tail: None,
+        },
+    };
+    m.sites[0].expression = first.location;
+    let mut other = m.sites[0].clone();
+    other.expression = second.location;
+    other.bytecode_pc = 4;
+    other.instruction = 52 | (4 << 16);
+    other.allocation = SourceTableAllocation::New {
+        array_slots: 4,
+        hash_bits: 0,
+    };
+    m.sites.push(other);
+    let bound = bind(d.clone(), m.clone()).unwrap();
+    assert_eq!(bound.constructors().unwrap().sites.len(), 2);
+    let mut reversed = m.clone();
+    reversed.sites.reverse();
+    bind(d.clone(), reversed).unwrap();
+    let mut bad = m.clone();
+    bad.sites[1].bytecode_pc = bad.sites[0].bytecode_pc;
+    assert_eq!(
+        bind(d.clone(), bad).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+    let mut bad = m.clone();
+    bad.sites[1].expression = bad.sites[0].expression;
+    assert_eq!(
+        bind(d.clone(), bad).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+    let mut bad = m.clone();
+    bad.sites[1].bytecode_sha256 = "f".repeat(64);
+    assert_eq!(
+        bind(d.clone(), bad).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+    // Evidence is optional per site. An unbound table remains without layout;
+    // the existence of one good site never grants it to every table in a body.
+    m.sites.pop();
+    assert_eq!(bind(d, m).unwrap().constructors().unwrap().sites.len(), 1);
+}

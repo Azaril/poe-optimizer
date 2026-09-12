@@ -6,6 +6,8 @@
 mod classes;
 #[path = "support/source_program_observation.rs"]
 mod observation;
+#[path = "support/source_program_public_cache.rs"]
+mod public_cache;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
@@ -157,7 +159,7 @@ fn observe(
                         // The complete parser and wrapper read these original globals.
                         // Keep the preceding scanner-only observation unchanged.
                         fields: if with_closures {
-                            ["copyTable", "foo", "type", "unpack"]
+                            ["copyTable", "foo", "type", "unpack", "tonumber"]
                                 .map(str::to_owned)
                                 .into()
                         } else {
@@ -675,22 +677,23 @@ fn run(lua: &Lua, primitives: &Primitives, xml: &str, with_closures: bool) -> Js
     }
     // The genuine public wrapper/captures/cache are in this same owner/session.
     // Its uncached call must expose the next real dependency; it is not replaced.
-    let args = pair.args(&[Value::String(
-        lua.create_string("native parser readiness sentinel never matches")
-            .unwrap(),
-    )]);
-    let error = pair
-        .call("original.parser", &args)
-        .expect_err("full parser milestone not complete yet; extend acceptance before admission");
-    assert_eq!(error.kind, ProgramRuntimeErrorKind::UnsupportedCapability);
-    let frontier_declaration = error
-        .callback
-        .and_then(|callback| pair.observed.owner().callback(callback))
-        .map(|callback| &callback.kind);
+    let public_cache = if with_closures {
+        public_cache::run(lua, primitives, &parser, &mut pair)
+    } else {
+        let args = pair.args(&[Value::String(
+            lua.create_string("native parser readiness sentinel never matches")
+                .unwrap(),
+        )]);
+        let error = pair
+            .call("original.parser", &args)
+            .expect_err("legacy observation still lacks full parser closure creation");
+        assert_eq!(error.kind, ProgramRuntimeErrorKind::UnsupportedCapability);
+        json!({"frontier":public_cache::frontier(&pair, &error), "complete_public_parser":false})
+    };
     json!({"inventory":inventory,"real_dictionary_cases":rows,"fixture_cases":fixture_rows,
         "dictionary_mutation":{"baseline":baseline,"changed":changed,"restored":restored},
         "source_errors":source_errors,"plain_malformed_pattern":plain_malformed,"captures_writable_and_independent":true,"session_isolation":true,"warmed":warmed,
-        "public_parser_frontier":{"declaration":frontier_declaration,"kind":format!("{:?}",error.kind),"message":error.message,"callback":error.callback,"location":error.location},
+        "public_parser_frontier":public_cache["frontier"], "public_cache":public_cache,
         "steps":pair.session.steps(),"pattern_steps":pair.session.pattern_steps(),
         "native_complete_builds":0,"complete_public_parser":false})
 }

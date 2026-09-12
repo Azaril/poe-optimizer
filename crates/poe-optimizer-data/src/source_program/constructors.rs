@@ -5,8 +5,10 @@ use std::fmt;
 pub(super) mod walk;
 pub const SOURCE_PROGRAM_CONSTRUCTORS_SCHEMA_VERSION: u32 = 1;
 pub const SOURCE_TABLE_RUNTIME_REVISION: &str = "luajit-src@210.7.3+1ee778a";
-const MAX_SITES: usize = 100_000;
-const MAX_BYTES: usize = 8 * 1024 * 1024;
+/// Maximum retained constructor site records in one catalog.
+pub const SOURCE_PROGRAM_CONSTRUCTORS_MAX_SITES: usize = 100_000;
+/// Maximum aggregate retained profile/provenance/digest text in one catalog.
+pub const SOURCE_PROGRAM_CONSTRUCTORS_MAX_TEXT_BYTES: usize = 8 * 1024 * 1024;
 const TNEW: u32 = 52;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -99,7 +101,27 @@ impl SourceTableRuntimeProfile {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum SourceTableAllocation {
+    /// Decoded interpreter TNEW capacity, including slot zero. In the pinned
+    /// TNEW encoding the lower eleven-bit hint 0x7ff means 0x801 slots;
+    /// it must never be stored here as an apparent capacity of 0x7ff. This does
+    /// not assert subsequent allocation history or a traced JIT specialization.
     New { array_slots: u32, hash_bits: u8 },
+}
+impl SourceTableAllocation {
+    /// Decode a pinned LuaJIT TNEW allocation instruction. This is a structural
+    /// claim only: source observation, expression binding and runtime-profile
+    /// admission remain separate. Hash allocations decode but are not admitted
+    /// by the currently supported constructor family.
+    pub fn from_tnew_instruction(instruction: u32) -> SourceProgramResult<Self> {
+        if instruction & 255 != TNEW {
+            return Err(binding("constructor instruction is not TNEW"));
+        }
+        let hint = (instruction >> 16) & 0x7ff;
+        Ok(Self::New {
+            array_slots: if hint == 0x7ff { 0x801 } else { hint },
+            hash_bits: (instruction >> 27) as u8,
+        })
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -159,7 +181,7 @@ impl SourceProgramConstructors {
             return Err(invalid("unsupported source constructor schema"));
         }
         self.profile.validate_shape()?;
-        if self.sites.len() > MAX_SITES {
+        if self.sites.len() > SOURCE_PROGRAM_CONSTRUCTORS_MAX_SITES {
             return Err(resource());
         }
         let mut bytes = self.profile.source_revision.len();
@@ -171,7 +193,7 @@ impl SourceProgramConstructors {
                 &site.bytecode_sha256,
             ] {
                 bytes = bytes.checked_add(value.len()).ok_or_else(resource)?;
-                if value.len() > 4096 || bytes > MAX_BYTES {
+                if value.len() > 4096 || bytes > SOURCE_PROGRAM_CONSTRUCTORS_MAX_TEXT_BYTES {
                     return Err(resource());
                 }
             }
@@ -188,18 +210,15 @@ impl SourceProgramConstructors {
                 array_slots,
                 hash_bits,
             } = site.allocation;
-            if site.instruction & 255 != TNEW
-                || (site.instruction >> 16) & 2047 != array_slots
-                || (site.instruction >> 27) != u32::from(hash_bits)
-            {
+            if SourceTableAllocation::from_tnew_instruction(site.instruction)? != site.allocation {
                 return Err(binding(
                     "constructor allocation differs from TNEW instruction",
                 ));
             }
-            if array_slots != 0 || hash_bits != 0 {
+            if hash_bits != 0 || matches!(array_slots, 1 | 2) {
                 return Err(failure(
                     SourceProgramErrorKind::UnsupportedCapability,
-                    "only no-template empty TNEW allocation is represented",
+                    "only empty or list-only no-hash TNEW allocation is represented",
                 ));
             }
         }
@@ -254,23 +273,46 @@ impl SourceProgramConstructors {
             walk::tables(program, |expr, fields| {
                 let key = (callback, expr.location.start, expr.location.end);
                 if sites.contains(&key) {
-                    let value = matched.entry(key).or_insert((0usize, true));
+                    let value = matched.entry(key).or_insert((0usize, None));
                     value.0 += 1;
-                    value.1 &= fields.is_empty();
+                    value.1 = list_allocation(fields);
                 }
             });
         }
         for site in &self.sites {
             if matched.get(&(site.callback, site.expression.start, site.expression.end))
-                != Some(&(1, true))
+                != Some(&(1, Some(site.allocation)))
             {
                 return Err(binding(
-                    "constructor site does not identify one empty Table expression",
+                    "constructor site does not identify one list-only Table expression with matching allocation",
                 ));
             }
         }
         Ok(())
     }
+}
+/// The compiler counts syntactic list fields, including the one final expanded
+/// call/varargs field even when it later returns no values. Parenthesized calls
+/// remain scalar List fields. Trailing separators do not add fields. The prior
+/// complete IR validator has already bounded fields and made Tail final.
+fn list_allocation(fields: &[SourceProgramField]) -> Option<SourceTableAllocation> {
+    if fields.iter().enumerate().any(|(index, field)| match field {
+        SourceProgramField::List { .. } => false,
+        SourceProgramField::Tail { .. } => index + 1 != fields.len(),
+        SourceProgramField::Named { .. } | SourceProgramField::Keyed { .. } => true,
+    }) {
+        return None;
+    }
+    let hint = if fields.is_empty() {
+        0
+    } else {
+        // Bounded IR field count makes this addition and cast exact.
+        (fields.len() as u32 + 1).clamp(3, 0x7ff)
+    };
+    Some(SourceTableAllocation::New {
+        array_slots: if hint == 0x7ff { 0x801 } else { hint },
+        hash_bits: 0,
+    })
 }
 impl SourceProgramCatalog {
     /// Fresh program identity binds source claims to owned, fully verified IR.
@@ -299,7 +341,7 @@ fn bounded_sites<'de, D: serde::Deserializer<'de>>(
         fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Self::Value, A::Error> {
             let mut out = Vec::new();
             while let Some(value) = seq.next_element()? {
-                if out.len() >= MAX_SITES {
+                if out.len() >= SOURCE_PROGRAM_CONSTRUCTORS_MAX_SITES {
                     return Err(serde::de::Error::custom("source constructor count bound"));
                 }
                 out.push(value);

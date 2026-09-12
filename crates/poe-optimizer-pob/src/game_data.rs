@@ -242,6 +242,7 @@ pub(crate) fn extractor_sha256() -> String {
         include_str!("source_programs/capture/closures/dump.rs"),
         include_str!("source_programs/closures.rs"),
         include_str!("source_programs/constructors.rs"),
+        include_str!("source_programs/constructors/lexical.rs"),
         include_str!("source_programs/capture/context.rs"),
         include_str!("source_programs/capture/iteration.rs"),
         include_str!("source_programs/capture/upvalues.rs"),

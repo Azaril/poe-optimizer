@@ -102,6 +102,7 @@ impl Reflection {
         function: &Function,
         source: &ItemSourceSpan,
         remaining: usize,
+        authenticated_children: bool,
     ) -> Result<(CallbackObservation, usize)> {
         let info: Table = self.info.call(function.clone())?;
         let count: u32 = info.raw_get("bytecodes")?;
@@ -116,12 +117,16 @@ impl Reflection {
             ));
         }
         let children: bool = info.raw_get("children")?;
+        let frame: u32 = info.raw_get("stackslots")?;
+        if frame > 255 {
+            return Err(error("constructor observed frame bound"));
+        }
         let mut digest = Sha256::new();
         digest.update(b"poe-source-bytecode-v1\0");
         digest.update(count.to_le_bytes());
         let mut constructors = Vec::new();
-        let mut unsupported =
-            children.then(|| "nested function bytecode is not a constructor proof".into());
+        let mut unsupported = (children && !authenticated_children)
+            .then(|| "nested function bytecode requires authenticated child inventory".into());
         // Header PC0 can change with JIT execution mode; source instructions are
         // PCs1..count. We hash their actual current words, never a recompiled body.
         for pc in 1..count {
@@ -145,6 +150,10 @@ impl Reflection {
             if matches!(word & 255, TNEW | TDUP) {
                 let info: Table = self.info.call((function.clone(), pc))?;
                 let line: u32 = info.raw_get("currentline")?;
+                if (word >> 8) & 255 >= frame {
+                    unsupported =
+                        Some("constructor destination is outside actual prototype frame".into());
+                }
                 if line < source.line || line > source.end_line {
                     unsupported =
                         Some("constructor instruction lacks a matching source line".into());
@@ -220,8 +229,12 @@ impl Graph<'_> {
             .constructor_reflection
             .as_ref()
             .expect("enabled");
-        let (observation, count) =
-            reflection.observe(function, source, MAX_VALUES.saturating_sub(self.values))?;
+        let (observation, count) = reflection.observe(
+            function,
+            source,
+            MAX_VALUES.saturating_sub(self.values),
+            self.observer.closure_reflection.is_some(),
+        )?;
         self.values += count;
         if let Some(previous) = self.constructor_observations.callbacks.get(&id) {
             if previous != &observation {

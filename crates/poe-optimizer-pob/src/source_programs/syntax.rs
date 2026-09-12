@@ -853,7 +853,18 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                         );
                     }
                     info.expansion = None;
-                    info.value.location = self.location(start, self.end());
+                    // Allocation sidecars bind the actual function/table syntax,
+                    // while parentheses adjust only the result pack. The legacy
+                    // parser keeps its previously reviewed location encoding.
+                    if !self.authorization.standalone_calls
+                        || !matches!(
+                            info.value.operation,
+                            ParserProgramExprKind::Table { .. }
+                                | ParserProgramExprKind::CreateClosure { .. }
+                        )
+                    {
+                        info.value.location = self.location(start, self.end());
+                    }
                     Term::Value(info)
                 }
                 "{" => Term::Value(self.table(depth + 1)?),

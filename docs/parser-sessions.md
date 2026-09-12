@@ -264,3 +264,34 @@ The optional oracle observer needs cumulative bounds as well as a per-dump cap. 
 retained metadata and preflight temporary source-VM/dump/decoder allocations against the
 remaining observation budget. Reflection, prototype dumps and lexical source mapping must
 agree; a copied or serialized metadata record alone is not proof of its source identity.
+
+
+## List allocation and source execution history
+
+An allocation facet must bind every admitted list occurrence to its actual prototype,
+bytecode position, instruction and exact expression range. Multiple sites in one body
+and sites within child factories retain separate inventories. Keyed/template allocations
+must not shift the correspondence for otherwise supported list sites. Parenthesized
+expressions preserve both scalar-result adjustment and the inner allocation range.
+Allocation metadata is injected with the source package; the native engine must not
+infer VM storage from a particular skill, cache key or build.
+
+The source allocation hint describes initial physical capacity. Decode reserved hints
+according to the identified runtime profile and charge native reserved storage before
+publishing the table. Evaluate list fields in source order, preserve nil slots and expand
+only the final unparenthesized call/varargs result pack. Runtime expansion must preserve
+side effects and failure prefixes, with bounded storage allocation.
+
+Initial capacity is not proof of every later table history. The pinned interpreter can
+resize a bulk final-result store differently from a compiled trace that emits individual
+stores. Equal entries can consequently have different lengths, unpack results and valid
+iteration controls. Retain original cold/warm counterexamples. A path that exceeds its
+established storage history must invalidate layout evidence until the implementation
+can model the possible histories and prove the requested observable independent of them.
+Do not choose the interpreter layout silently or grant history by raw-value equality.
+This uncertainty is a remaining dependency for full parity, not a reduced end-state goal.
+
+List traversal, boundary selection and ordinary later writes require separate validation.
+A retained initial capacity can justify numeric traversal while a holey default-unpack
+boundary remains ambiguous. Original cache hits, misses, copies, errors and subsequent
+mutations must exercise these distinctions through the complete public parser.

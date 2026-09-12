@@ -240,7 +240,7 @@ impl CompiledTableTraversal {
 
 #[derive(Debug, Clone, Copy)]
 enum CompiledTableConstructor {
-    EmptyArray,
+    Array { slots: u32 },
     UnsupportedProfile,
 }
 
@@ -340,12 +340,19 @@ impl CompiledSourcePrograms {
                 .constructors()
                 .into_iter()
                 .flat_map(|constructors| {
-                    let supported = if constructors.profile.is_supported_array_profile() {
-                        CompiledTableConstructor::EmptyArray
-                    } else {
-                        CompiledTableConstructor::UnsupportedProfile
-                    };
                     constructors.sites.iter().map(move |site| {
+                        let supported = if constructors.profile.is_supported_array_profile() {
+                            let poe_optimizer_data::source_program::SourceTableAllocation::New {
+                                array_slots,
+                                hash_bits: 0,
+                            } = site.allocation
+                            else {
+                                unreachable!("validated array-only constructor")
+                            };
+                            CompiledTableConstructor::Array { slots: array_slots }
+                        } else {
+                            CompiledTableConstructor::UnsupportedProfile
+                        };
                         (
                             (site.callback, site.expression.start, site.expression.end),
                             supported,

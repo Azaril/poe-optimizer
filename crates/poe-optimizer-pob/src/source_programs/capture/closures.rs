@@ -537,8 +537,7 @@ impl Graph<'_> {
                             line: node.metadata.lines[pc],
                         })
                         .collect(),
-                    unsupported: (!node.children.is_empty())
-                        .then(|| "nested function bytecode is not a constructor proof".into()),
+                    unsupported: None,
                 },
             );
         }
