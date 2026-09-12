@@ -543,6 +543,27 @@ impl Check<'_> {
                         work.push(ValueWork::Expr(key, depth + 1));
                         work.push(ValueWork::Expr(table, depth + 1));
                     }
+                    ParserProgramExprKind::IndexedRead { table, key } => {
+                        if !self.owner.supports_register_operands() {
+                            return Err(self.fail(
+                                ParserProgramErrorKind::UnsupportedCapability,
+                                Some(loc),
+                                "parser owner does not admit live-register indexed reads",
+                            ));
+                        }
+                        self.required
+                            .insert(ParserProgramCapability::RegisterOperands);
+                        self.budget.charge(0, self.id, Some(loc))?;
+                        work.push(ValueWork::Expr(key, depth + 1));
+                        match table.as_ref() {
+                            ParserProgramAssignmentOperand::LocalRegister { local } => {
+                                self.visible(scope, *local, loc)?;
+                            }
+                            ParserProgramAssignmentOperand::Evaluated { value } => {
+                                work.push(ValueWork::Expr(value, depth + 1));
+                            }
+                        }
+                    }
                     ParserProgramExprKind::Unary { value, .. } => {
                         work.push(ValueWork::Expr(value, depth + 1))
                     }
@@ -585,6 +606,35 @@ impl Check<'_> {
                 },
             }
         }
+        Ok(())
+    }
+    fn writable_capture(
+        &mut self,
+        upvalue: u16,
+        loc: ParserProgramLocation,
+    ) -> ParserProgramResult<()> {
+        if !self.owner.is_closure_prototype(self.program.callback) {
+            return Err(self.fail(
+                ParserProgramErrorKind::UnsupportedCapability,
+                Some(loc),
+                "capture assignment requires a declared session closure",
+            ));
+        }
+        if !matches!(
+            self.owner
+                .callback(self.program.callback)
+                .and_then(|callback| callback.upvalues.get(upvalue as usize))
+                .map(|capture| &capture.value),
+            Some(ParserValue::LiveCapture {})
+        ) {
+            return Err(self.fail(
+                ParserProgramErrorKind::Binding,
+                Some(loc),
+                "capture assignment slot is not a declared live capture",
+            ));
+        }
+        self.required
+            .insert(ParserProgramCapability::SessionClosures);
         Ok(())
     }
     fn body(&mut self) -> ParserProgramResult<()> {
@@ -638,28 +688,52 @@ impl Check<'_> {
                     self.values(values, &frame.visible, depth, loc)?;
                 }
                 ParserProgramStatementKind::CaptureSet { upvalue, values } => {
-                    if !self.owner.is_closure_prototype(self.program.callback) {
+                    self.writable_capture(*upvalue, loc)?;
+                    self.values(values, &frame.visible, depth, loc)?;
+                }
+                ParserProgramStatementKind::MixedAssign { targets, values } => {
+                    if !self.owner.supports_mixed_assignment() {
                         return Err(self.fail(
                             ParserProgramErrorKind::UnsupportedCapability,
                             Some(loc),
-                            "capture assignment requires a declared session closure",
+                            "parser owner does not admit mixed assignment",
                         ));
                     }
-                    if !matches!(
-                        self.owner
-                            .callback(self.program.callback)
-                            .and_then(|callback| callback.upvalues.get(*upvalue as usize))
-                            .map(|capture| &capture.value),
-                        Some(ParserValue::LiveCapture {})
-                    ) {
+                    self.bound(targets.len(), 128, Some(loc), "assignment count")?;
+                    if targets.is_empty() {
                         return Err(self.fail(
-                            ParserProgramErrorKind::Binding,
+                            ParserProgramErrorKind::InvalidData,
                             Some(loc),
-                            "capture assignment slot is not a declared live capture",
+                            "empty mixed assignment",
                         ));
                     }
                     self.required
-                        .insert(ParserProgramCapability::SessionClosures);
+                        .insert(ParserProgramCapability::MixedAssignment);
+                    for target in targets {
+                        self.location(target.location)?;
+                        self.budget.charge(0, self.id, Some(target.location))?;
+                        match &target.operation {
+                            ParserProgramAssignmentTargetKind::Local { local } => {
+                                self.visible(&frame.visible, *local, target.location)?;
+                            }
+                            ParserProgramAssignmentTargetKind::Capture { upvalue } => {
+                                self.writable_capture(*upvalue, target.location)?;
+                            }
+                            ParserProgramAssignmentTargetKind::Indexed { table, key } => {
+                                for operand in [table, key] {
+                                    self.budget.charge(0, self.id, Some(target.location))?;
+                                    match operand {
+                                        ParserProgramAssignmentOperand::LocalRegister { local } => {
+                                            self.visible(&frame.visible, *local, target.location)?;
+                                        }
+                                        ParserProgramAssignmentOperand::Evaluated { value } => {
+                                            self.expression(value, &frame.visible, depth)?;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                     self.values(values, &frame.visible, depth, loc)?;
                 }
                 ParserProgramStatementKind::If {

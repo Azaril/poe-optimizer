@@ -29,6 +29,9 @@ pub use crate::modifier_parser::{
     ParserCallback as SourceCallback, ParserCallbackId as SourceCallbackId,
     ParserCallbackKind as SourceCallbackKind, ParserEnvironment as SourceEnvironment,
     ParserNonFinite as SourceNonFinite, ParserProgram as SourceProgram,
+    ParserProgramAssignmentOperand as SourceProgramAssignmentOperand,
+    ParserProgramAssignmentTarget as SourceProgramAssignmentTarget,
+    ParserProgramAssignmentTargetKind as SourceProgramAssignmentTargetKind,
     ParserProgramBinary as SourceProgramBinary, ParserProgramBinding as SourceProgramBinding,
     ParserProgramBranch as SourceProgramBranch, ParserProgramCall as SourceProgramCall,
     ParserProgramCapability as SourceProgramCapability, ParserProgramData as SourceProgramData,
@@ -483,8 +486,20 @@ pub(crate) trait ProgramOwnerView {
     fn supports_dynamic_calls(&self) -> bool {
         false
     }
+    fn supports_mixed_assignment(&self) -> bool {
+        false
+    }
+    fn supports_register_operands(&self) -> bool {
+        false
+    }
 }
 impl ProgramOwnerView for SourceProgramOwner {
+    fn supports_register_operands(&self) -> bool {
+        self.parser().is_none()
+    }
+    fn supports_mixed_assignment(&self) -> bool {
+        self.parser().is_none()
+    }
     fn is_closure_prototype(&self, callback: SourceCallbackId) -> bool {
         self.closure_prototype_id(callback).is_some()
     }

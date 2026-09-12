@@ -1475,3 +1475,6 @@ fn string_primitives_require_exact_captured_identity_and_preserve_method_form() 
         assert!(error.message.contains("invalid builtin"));
     }
 }
+
+#[path = "support/source_program_assignments.rs"]
+mod assignments;

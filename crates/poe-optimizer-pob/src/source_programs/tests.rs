@@ -72,8 +72,11 @@ fn named_definition_roots_are_explicit_and_exact_owner_bound() {
     let ParserProgramExprKind::Binary { right, .. } = &values.values[0].operation else {
         panic!("multiply")
     };
-    let ParserProgramExprKind::Get { table, .. } = &right.operation else {
+    let ParserProgramExprKind::IndexedRead { table, .. } = &right.operation else {
         panic!("lookup")
+    };
+    let ParserProgramAssignmentOperand::Evaluated { value: table } = table.as_ref() else {
+        panic!("definition lookup has an evaluated table operand")
     };
     assert!(matches!(
         table.operation,
@@ -270,7 +273,7 @@ fn dynamic_methods_preserve_receiver_expression_and_call_pack_boundaries() {
     assert_eq!(call.binding, 0);
     assert!(matches!(
         call.receiver.as_deref().unwrap().operation,
-        ParserProgramExprKind::Get { .. }
+        ParserProgramExprKind::IndexedRead { .. }
     ));
     assert_eq!(call.arguments.values.len(), 1);
     assert!(matches!(
@@ -377,7 +380,7 @@ fn standalone_callable_values_keep_actual_binding_and_no_implicit_self() {
     };
     assert!(matches!(
         call.receiver.as_deref().unwrap().operation,
-        ParserProgramExprKind::Get { .. }
+        ParserProgramExprKind::IndexedRead { .. }
     ));
     assert_eq!(call.arguments.values.len(), 1);
     let text = "function(value) return tonumber(value) end\n";
@@ -437,4 +440,66 @@ fn new_callable_and_scalar_operations_do_not_expand_parser_lowering() {
             "parser capability expanded for {text}"
         );
     }
+}
+
+#[test]
+fn standalone_assignments_preserve_binary_string_registers_and_legacy_wire() {
+    let text =
+        "function(t,k) (('\\255' and t))[('\\255' and k)] = 1; return ('\\255' and t)[k] end\n";
+    let owner =
+        SourceProgramOwner::new(definitions(text, vec![callback(text, 1, 1, vec![])])).unwrap();
+    let lowered = lower_from_sources(&sources(text), &owner).unwrap();
+    assert!(
+        lowered.unsupported().is_empty(),
+        "{:?}",
+        lowered.unsupported()
+    );
+    let program = &lowered.catalog().data().programs[0];
+    let ParserProgramStatementKind::MixedAssign { targets, .. } = &program.body[0].operation else {
+        panic!("standalone mixed assignment")
+    };
+    assert!(matches!(
+        targets[0].operation,
+        ParserProgramAssignmentTargetKind::Indexed {
+            table: ParserProgramAssignmentOperand::LocalRegister { local: 0 },
+            key: ParserProgramAssignmentOperand::LocalRegister { local: 1 }
+        }
+    ));
+    let ParserProgramStatementKind::Return { values } = &program.body[1].operation else {
+        panic!("return")
+    };
+    let ParserProgramExprKind::IndexedRead { table, .. } = &values.values[0].operation else {
+        panic!("register read")
+    };
+    assert!(matches!(
+        table.as_ref(),
+        ParserProgramAssignmentOperand::LocalRegister { local: 0 }
+    ));
+    let text = "function(t,k) t[k]=1; return t[k] end\n";
+    let callback = callback(text, 1, 1, vec![]);
+    let lua = Lua::new();
+    let mut budget = Budget::default();
+    let bindings = LoweringBindings::default();
+    let legacy = Lowerer::new(
+        &lua,
+        text,
+        ParserCallbackId(1),
+        &callback,
+        &bindings,
+        &mut budget,
+    )
+    .unwrap()
+    .program(&span(text, 1, 1))
+    .unwrap();
+    assert!(matches!(
+        legacy.body[0].operation,
+        ParserProgramStatementKind::TableSet { .. }
+    ));
+    let ParserProgramStatementKind::Return { values } = &legacy.body[1].operation else {
+        panic!("return")
+    };
+    assert!(matches!(
+        values.values[0].operation,
+        ParserProgramExprKind::Get { .. }
+    ));
 }

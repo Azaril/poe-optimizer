@@ -191,3 +191,50 @@ The pinned behavior is in `ModParser.lua`'s public wrapper and DOUBLED branch, `
 `copyTable`, `Main.lua`'s cache preload, and `ConfigOptions.lua`'s quest consumer. Exact source
 references and dependency findings are recorded in `runs/r2l-parser-service-readiness.md`;
 future admissions must bind the actual source/data revision rather than these prose names.
+
+## Source-created closures
+
+Observed closure instances establish initial state. Native execution must also create
+closures at the original lexical function occurrence. A factory site binds its parent
+callback and exact expression range to an immutable child prototype, with ordered capture
+origins: a visible parent-local cell or an existing parent-upvalue cell. Source metadata
+must establish the child beneath that actual parent; neither matching capture names nor
+executing a replacement factory authenticates the relationship. Construction creates a
+fresh closure identity on each execution while reusing the compiled child program.
+
+Captured locals require shared cells with lexical activation lifetimes. Reads and writes
+through the enclosing frame and every capturing closure observe the same cell. Leaving a
+scope, returning, or failing closes the frame's attachment without losing an escaped
+closure's value or identity. Re-entered declarations and loop iterations must follow the
+source's cell-opening/closing boundaries, rather than accidentally reusing a previous
+iteration's cell. Recursive local functions allocate the cell before binding the new
+closure into it. Nested captures retain their original cell through intermediate functions.
+
+Factory metadata and compiled prototypes remain immutable, injectable data. Worker
+sessions own created closures, cells and mutable tables, and charge their creation against
+the same cumulative preparation budget. Raw snapshots must preserve aliases without
+turning a produced closure into a static callback or granting another owner's prototype.
+An unsupported factory or source layout is an explicit dependency, not an empty result.
+
+Acceptance includes sibling closures sharing a mutable local, equal-code closures with
+distinct identities, recursive capture, nested capture forwarding, closures escaping loop
+iterations and error exits, and no cell sharing across independent sessions. Original
+parser cases must exercise `getEffectFromStatus` and returned jewel functions against
+PoB, including subsequent dictionary mutations; simple factory fixtures supplement these
+real consumers. Mixed assignments must preserve source-local operand timing after locals
+are promoted to cells, so adding factories cannot change earlier assignment semantics.
+
+Creation-site evidence must include capture origins, not just ordered names. The PoB
+adapter can inspect real child prototypes without executing their factory. Its reflection
+and bounded bytecode-dump metadata must agree on each parent/child creation edge, local
+register or inherited upvalue, and lexical declaration lifetime. Handle the source VM's
+warmed-instruction normalization and recursive-local debug-range convention explicitly;
+missing or ambiguous metadata remains unsupported. Dump limits also need to cover the
+VM's temporary prototype buffer, rather than only the host writer's output.
+
+Adding mutable active-frame captures also requires an operand-timing audit beyond indexed
+reads and assignments. Arithmetic, comparisons, concatenation, calls and computed
+constructor fields must preserve when the original compiler retains a local register or
+copies its value. Do not admit factory-created closures on the assumption that earlier
+expression evaluation was always eager. Differential factory tests must cover these
+interactions before whole-parser admission.

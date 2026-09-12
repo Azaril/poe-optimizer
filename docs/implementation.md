@@ -92,6 +92,71 @@ failure logs and the audit are recorded in `runs/r2m-ci-final-review.json` and
 `runs/r2m-schema-expectation-review.json`; the final exact-head hosted run remains a
 separate publication check.
 
+**R2o checkpoint: native mixed assignments and source-indexed reads.**
+The milestone remains the complete original public parser. This dependency implements
+source-order assignment operands, full RHS packs, conflicting-local preservation and
+right-to-left stores, including partial effects on failure. Current-function locals may
+remain live registers across effects; computed expressions and captures are read when
+the source compiler materializes them. Indexed reads preserve the same distinction for
+the table operand while evaluating the key. Static conflict plans avoid repeated scans
+and AST copies during execution. Scratch allocations and failed work use the existing
+session budget. Legacy parser forms, schema 29 and bundled game data remain unchanged.
+
+The source adapter models the pinned compiler's constants, pending logical branches,
+parentheses and arithmetic-fold refusals. An independent review caught and fixed the
+binary-string constant case. Native-callable comparisons cover 15 original roots / 19
+complete programs, continuing capture rebinding and table aliases, adjusted packs,
+address/RHS/store failure prefixes, independent sessions and three warmed vectors.
+Separate source-only probes cover 26 explicit cases, 1,383 indexed-key expressions and
+24 indexed-read bases with zero descriptor mismatches. These instrumented/factory probes
+are not evidence of native closure creation. Complete native originals remain **0/5**.
+
+The implementation fingerprint now includes eight previously omitted neutral source-model
+files and the new runtime/lowerer modules; a completeness regression covers the data seam.
+The exact public-parser frontier is unchanged: the wrapper reaches the inner parser,
+whose complete body is still rejected by the nested-function boundary. The all-five
+inventory now records original source locations for unsupported callbacks, so the next
+step follows actual source dependencies rather than guessed callback IDs.
+
+**Validation passed:** 80 DATA cases, 183 ENGINE cases, 93 POB source-program unit
+cases, 34 source integration tests and 30 CLI test/configuration cases: **420 focused
+cases**, counting repeated agent runs once. The final source suite retained 71 fresh
+artifacts with all 132 source files unchanged. Earlier all-five configuration, copy and
+scanner gates remain passing: 470 complete callback comparisons among 637 entries/exits,
+220 copies including 40 actual cache rows, and 780 real dictionary cases plus 90 adversarial
+cases, 25 source errors and 15 warmed scan vectors. Both CLI configurations pass; two
+fresh exports reproduce all 29 package sections. Strict workspace/native-only Clippy,
+WebAssembly library compilation, runtime dependency isolation, formatting and diff checks
+pass. Numerical validation is local Windows x64; WebAssembly was compile-checked only.
+Original builds, bundled data, reference fixtures, dependencies and the PoB pin are unchanged.
+
+The consolidated evidence is `runs/r2o-checkpoint.json`, backed by the frozen-source
+`runs/r2o-source-verified/validation.json`, CLI/static validation and independent reviews.
+The earlier `runs/r2o-source-final/validation.json` remains unsealed: all 34 tests passed,
+but a final assignment-test edit occurred during its hash window. The entire source suite
+was rerun after the files were frozen; the checkpoint uses only the successful rerun.
+
+**CI follow-up:** the September 12 02:22 UTC review found five newly visible older-job
+failures, all repeating expected schema 28 versus actual 29. The existing `718b716` fix
+is already an ancestor of published `f487d7a`; no additional repair is warranted by those
+logs. Both exact-head jobs in [run 34666026529](https://github.com/Azaril/poe-optimizer/actions/runs/34666026529)
+remain in Test, with no failed steps in that snapshot. See
+`runs/r2o-ci-current-review.json`; hosted success remains unconfirmed.
+
+**Resume the same complete-public-parser milestone:** add source-authenticated child
+prototype/creation-site metadata and ordered capture origins, then native lexical cell
+promotion, declaration/loop lifetimes, escaped closures and failure unwinding. Child
+prototypes must be observable without running factories; capture names alone cannot prove
+origins. Account for warmed-bytecode normalization, recursive-local debug ranges and
+bounded dump scratch memory. Audit active-local timing in other expressions before
+admitting factory-created closures. The [closure contract](parser-sessions.md#source-created-closures)
+and `runs/r2o-closure-metadata-next.md`, `runs/r2o-closure-runtime-next.md` and
+`runs/r2o-parser-resume.md` retain the concrete source/runtime plan. Then resolve actual
+bit operations, constructed-table traversal and public cache/copy history under the same
+budget. Resume complete quest/custom activation and paired Twister/Skeletal Sniper with
+all-five coverage after the public-call gate. Assignment/scanner success does not replace
+that exit criterion.
+
 **R2n checkpoint: native original scanner and complete parser-state observation.**
 The milestone remains the real public parser from cache miss through returned writable
 modifiers. This checkpoint supplies its string operations and complete initialized input

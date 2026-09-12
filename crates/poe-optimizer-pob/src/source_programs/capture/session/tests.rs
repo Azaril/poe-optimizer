@@ -354,7 +354,7 @@ return {read=read, definitions=definitions, state=state}
     );
 }
 #[test]
-fn captured_assignment_frontier_keeps_mixed_targets_and_immutable_captures_rejected() {
+fn mixed_live_capture_assignments_compile_while_immutable_captures_stay_rejected() {
     let f = fixture(
         r#"local value = 0
 local function mixed(x) value, x = 1, 2; return value end
@@ -364,7 +364,8 @@ return {mixed=mixed, single=single}
     );
     let observed = observe(&f, request(&f, &["mixed", "single"], &[])).unwrap();
     let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
-    assert_eq!(lowered.unsupported().len(), 1);
+    assert!(lowered.unsupported().is_empty());
+    assert_eq!(lowered.catalog().data().programs.len(), 2);
     let callbacks = [(
         "single".into(),
         f.exports.raw_get::<Function>("single").unwrap(),

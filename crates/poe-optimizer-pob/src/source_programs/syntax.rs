@@ -1,4 +1,5 @@
 use super::lowering::*;
+mod assignments;
 type Expr = ParserProgramExpr;
 type Statement = ParserProgramStatement;
 
@@ -492,7 +493,9 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                     }
                     self.take("=")?;
                     let values = self.values(0)?;
-                    if targets
+                    if self.authorization.standalone_calls {
+                        self.mixed_assignment(targets, values)?
+                    } else if targets
                         .iter()
                         .all(|e| matches!(e.operation, ParserProgramExprKind::Local { .. }))
                     {
@@ -819,11 +822,9 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                             self.end(),
                             1,
                         )?;
-                        Term::Value(self.node(
-                            ParserProgramExprKind::Get {
-                                table: Box::new(table.value),
-                                key: Box::new(key.value),
-                            },
+                        Term::Value(self.indexed_read(
+                            table.value,
+                            key.value,
                             start,
                             self.end(),
                             2,
@@ -875,11 +876,9 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                                 self.end(),
                                 1,
                             )?;
-                            Term::Value(self.node(
-                                ParserProgramExprKind::Get {
-                                    table: Box::new(table.value),
-                                    key: Box::new(key.value),
-                                },
+                            Term::Value(self.indexed_read(
+                                table.value,
+                                key.value,
                                 start,
                                 self.end(),
                                 table.height + 1,
@@ -896,11 +895,9 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                     }
                     self.take("]")?;
                     let height = table.height.max(key.height) + 1;
-                    Term::Value(self.node(
-                        ParserProgramExprKind::Get {
-                            table: Box::new(table.value),
-                            key: Box::new(key.value),
-                        },
+                    Term::Value(self.indexed_read(
+                        table.value,
+                        key.value,
                         start,
                         self.end(),
                         height,
@@ -1213,6 +1210,13 @@ fn expr_height(expr: &Expr) -> usize {
     use ParserProgramExprKind as E;
     match &expr.operation {
         E::Get { table, key } => expr_height(table).max(expr_height(key)) + 1,
+        E::IndexedRead { table, key } => {
+            let table = match table.as_ref() {
+                ParserProgramAssignmentOperand::LocalRegister { .. } => 1,
+                ParserProgramAssignmentOperand::Evaluated { value } => expr_height(value) + 1,
+            };
+            table.max(expr_height(key)) + 1
+        }
         E::Unary { value, .. } => expr_height(value) + 1,
         E::Binary { left, right, .. } => expr_height(left).max(expr_height(right)) + 1,
         E::Call { call } => call_height(call) + 1,

@@ -253,6 +253,7 @@ pub(crate) fn extractor_sha256() -> String {
         include_str!("source_programs/capture/classes/source-shapes.json"),
         include_str!("source_programs/lowering.rs"),
         include_str!("source_programs/syntax.rs"),
+        include_str!("source_programs/syntax/assignments.rs"),
         include_str!("source_programs/tokens.rs"),
         include_str!("modifier_parser_extract/programs_auth.rs"),
         include_str!("modifier_parser_extract/programs_policy.rs"),

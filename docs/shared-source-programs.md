@@ -62,6 +62,34 @@ inputs and private scratch without XML parsing, file/database access or VM setup
 candidate. Any move of source-program execution into a repeated calculation path requires
 its own throughput/allocation measurements and explicit planning.
 
+## Assignment operands and failure order
+
+Mixed assignments use one ordered target list and one complete RHS value list. Targets
+refer to visible locals, declared live capture cells, or indexed operands. The target
+model distinguishes a live current-function local from an expression evaluated into a
+retained value. This distinction survives later promotion of a local into a closure cell.
+The source adapter must establish the operand form; names or a superficially similar
+expression are insufficient evidence. Source-indexed reads reuse this distinction:
+prepare a computed table operand before evaluating the key, but read a live table local
+after key evaluation. Transparent source constant-folding must preserve its original
+operand classification. Legacy eager `Get` remains a separate compatibility operation.
+
+Prepare targets in source order. A later local target can require preserving that local's
+value for earlier indexed operands at that exact point. Other live operands are read when
+the corresponding store executes. Then evaluate/adjust the complete RHS pack and perform
+the source's right-to-left stores. Missing results become nil, surplus results retain their
+evaluation effects, duplicate targets remain legal, and an error preserves only writes
+that have already executed. Do not validate all table/key writes early or roll them back.
+These detailed timing rules follow the pinned LuaJIT compiler and differential probes;
+the [Lua assignment specification](https://www.lua.org/manual/5.1/manual.html#2.4.3)
+describes the surrounding expression and result-adjustment model.
+
+Compilation can precompute static operand-preservation dependencies. Runtime scratch and
+stores still share the session's cumulative limits. The standalone source language owns
+this capability; extending it does not automatically admit new legacy parser payloads.
+When an expression's source register behavior is not represented, retain an explicit
+source-lowering dependency rather than silently choosing eager or delayed evaluation.
+
 ## Source class and method protocol
 
 A standalone owner can retain a separate `SourceClassDefinitions` catalog. Class IDs,

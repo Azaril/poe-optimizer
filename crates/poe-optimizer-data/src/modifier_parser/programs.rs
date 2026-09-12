@@ -72,9 +72,16 @@ pub enum ParserProgramStatementKind {
     },
     /// Standalone single-upvalue store. Evaluate the entire RHS first, then
     /// store its first result or Nil into the active instance's declared cell.
-    /// Mixed local/table/upvalue assignment remains an explicit frontier.
     CaptureSet {
         upvalue: u16,
+        values: ParserProgramValueList,
+    },
+    /// Standalone assignment with source-ordered lvalue preparation, complete
+    /// RHS adjustment and right-to-left stores. Encountering a Local target
+    /// preserves matching live-register operands of earlier indexed targets at
+    /// that point; other LocalRegister operands remain live until their store.
+    MixedAssign {
+        targets: Vec<ParserProgramAssignmentTarget>,
         values: ParserProgramValueList,
     },
     If {
@@ -113,6 +120,36 @@ pub enum ParserProgramStatementKind {
         values: ParserProgramValueList,
     },
     Break,
+}
+/// An original assignment lvalue, with its own function-relative source range.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ParserProgramAssignmentTarget {
+    pub location: ParserProgramLocation,
+    pub operation: ParserProgramAssignmentTargetKind,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ParserProgramAssignmentTargetKind {
+    Local {
+        local: u16,
+    },
+    Capture {
+        upvalue: u16,
+    },
+    Indexed {
+        table: ParserProgramAssignmentOperand,
+        key: ParserProgramAssignmentOperand,
+    },
+}
+/// The source compiler retains plain local registers but evaluates other
+/// indexed-lvalue expressions before the RHS. A register denotes its live
+/// lexical slot, including a future promoted capture cell, not a copied value.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ParserProgramAssignmentOperand {
+    LocalRegister { local: u16 },
+    Evaluated { value: ParserProgramExpr },
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -183,6 +220,13 @@ pub enum ParserProgramExprKind {
     },
     Get {
         table: Box<ParserProgramExpr>,
+        key: Box<ParserProgramExpr>,
+    },
+    /// Standalone indexed read retaining a live local table operand through
+    /// key evaluation. Evaluated table operands are materialized first; a
+    /// LocalRegister is read after the key. Legacy Get remains unchanged.
+    IndexedRead {
+        table: Box<ParserProgramAssignmentOperand>,
         key: Box<ParserProgramExpr>,
     },
     Unary {
@@ -385,6 +429,8 @@ pub enum ParserProgramCapability {
     DynamicMethods,
     DynamicCalls,
     SessionClosures,
+    MixedAssignment,
+    RegisterOperands,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ParserProgramErrorKind {

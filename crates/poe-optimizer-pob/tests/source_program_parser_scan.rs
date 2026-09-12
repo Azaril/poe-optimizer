@@ -190,7 +190,19 @@ fn observe(
         observed.constructor_observations().unwrap(),
     )
     .unwrap();
+    // Preserve the exact declarations behind each frontier so the next source
+    // dependency is reviewable without guessing from owner-local callback IDs.
+    let unsupported_sources: Vec<_> = lowered
+        .unsupported()
+        .iter()
+        .map(|(callback, reason)| {
+            json!({"callback":callback,
+                "declaration":observed.owner().callback(*callback).unwrap().kind,
+                "reason":reason})
+        })
+        .collect();
     let report = json!({"unsupported_bodies":lowered.unsupported(),
+        "unsupported_sources":unsupported_sources,
         "constructor_frontiers":lowered.constructor_unsupported(),
         "published_cache_alias_retained":true,"state_tables":observed.input().state.tables.len(), "closures":observed.input().closures.len(),
         "capture_cells":observed.input().cells.len(), "source":observed.owner().source()});

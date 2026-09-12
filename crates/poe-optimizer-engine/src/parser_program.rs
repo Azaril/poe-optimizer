@@ -57,6 +57,47 @@ pub enum CompiledProgramBinding {
     },
 }
 
+/// Source lvalue plus compile-time conflict copies to perform when it is reached.
+/// Positions refer only to earlier targets in the same immutable assignment plan.
+#[derive(Debug, Clone, PartialEq)]
+pub struct CompiledAssignmentTarget {
+    pub source: ParserProgramAssignmentTarget,
+    pub preserves: Box<[usize]>,
+}
+impl CompiledAssignmentTarget {
+    fn compile(targets: &[ParserProgramAssignmentTarget]) -> Vec<Self> {
+        let mut pending: BTreeMap<u16, Vec<usize>> = BTreeMap::new();
+        targets
+            .iter()
+            .enumerate()
+            .map(|(index, source)| {
+                let preserves = match &source.operation {
+                    ParserProgramAssignmentTargetKind::Local { local } => {
+                        pending.remove(local).unwrap_or_default().into_boxed_slice()
+                    }
+                    ParserProgramAssignmentTargetKind::Indexed { table, key } => {
+                        for operand in [table, key] {
+                            if let ParserProgramAssignmentOperand::LocalRegister { local } = operand
+                            {
+                                let previous = pending.entry(*local).or_default();
+                                if previous.last() != Some(&index) {
+                                    previous.push(index);
+                                }
+                            }
+                        }
+                        Box::default()
+                    }
+                    ParserProgramAssignmentTargetKind::Capture { .. } => Box::default(),
+                };
+                Self {
+                    source: source.clone(),
+                    preserves,
+                }
+            })
+            .collect()
+    }
+}
+
 /// A source-mapped instruction. Expression trees preserve their lazy operators,
 /// argument/result adjustment and source evaluation order; compilation does not
 /// evaluate, coerce or constant-fold source values.
@@ -77,6 +118,10 @@ pub enum ProgramOperation {
     },
     CaptureSet {
         upvalue: u16,
+        values: ParserProgramValueList,
+    },
+    MixedAssign {
+        targets: Vec<CompiledAssignmentTarget>,
         values: ParserProgramValueList,
     },
     TableSet {
@@ -446,6 +491,15 @@ impl Lowerer<'_> {
                         location,
                         ProgramOperation::CaptureSet {
                             upvalue: *upvalue,
+                            values: values.clone(),
+                        },
+                    )?;
+                }
+                S::MixedAssign { targets, values } => {
+                    self.emit(
+                        location,
+                        ProgramOperation::MixedAssign {
+                            targets: CompiledAssignmentTarget::compile(targets),
                             values: values.clone(),
                         },
                     )?;

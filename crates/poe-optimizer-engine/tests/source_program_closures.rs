@@ -774,3 +774,6 @@ fn parallel_sessions_share_compiled_prototypes_without_sharing_capture_cells() {
 
 #[path = "support/source_program_iterators.rs"]
 mod iterators;
+
+#[path = "support/source_program_assignments.rs"]
+mod assignments;

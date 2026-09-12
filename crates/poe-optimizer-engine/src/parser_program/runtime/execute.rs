@@ -1,3 +1,5 @@
+mod assignments;
+
 use super::super::{
     CompiledParserPrograms, CompiledProgramBinding, CompiledSourcePrograms,
     CompiledTableConstructor, ProgramOperation,
@@ -257,6 +259,10 @@ impl Run<'_, '_, '_> {
                             *upvalue,
                             values.into_iter().next().unwrap_or(V::Nil),
                         )?;
+                        pc += 1;
+                    }
+                    Op::MixedAssign { targets, values } => {
+                        self.mixed_assign(frame, targets, values, depth + 1)?;
                         pc += 1;
                     }
                     Op::TableSet { table, key, value } => {
@@ -910,6 +916,7 @@ impl Run<'_, '_, '_> {
                 let key = self.expr(frame, key, depth + 1)?;
                 self.heap.get(&table, &key)
             }
+            E::IndexedRead { table, key } => self.indexed_read(frame, table, key, depth + 1),
             E::Unary { operation, value } => {
                 let value = self.expr(frame, value, depth + 1)?;
                 match operation {

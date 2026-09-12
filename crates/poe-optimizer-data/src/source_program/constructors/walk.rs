@@ -17,6 +17,20 @@ fn body(
             | S::Assign { values, .. }
             | S::CaptureSet { values, .. }
             | S::Return { values } => values_list(values, visit),
+            S::MixedAssign { targets, values } => {
+                for target in targets {
+                    if let SourceProgramAssignmentTargetKind::Indexed { table, key } =
+                        &target.operation
+                    {
+                        for operand in [table, key] {
+                            if let SourceProgramAssignmentOperand::Evaluated { value } = operand {
+                                expr(value, visit);
+                            }
+                        }
+                    }
+                }
+                values_list(values, visit);
+            }
             S::If {
                 branches,
                 otherwise,
@@ -100,6 +114,12 @@ fn expr(e: &SourceProgramExpr, visit: &mut impl FnMut(&SourceProgramExpr, &[Sour
         E::Get { table, key } => {
             expr(table, visit);
             expr(key, visit)
+        }
+        E::IndexedRead { table, key } => {
+            if let SourceProgramAssignmentOperand::Evaluated { value } = table.as_ref() {
+                expr(value, visit);
+            }
+            expr(key, visit);
         }
         E::Unary { value, .. } => expr(value, visit),
         E::Binary { left, right, .. } => {

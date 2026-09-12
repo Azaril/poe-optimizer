@@ -527,6 +527,36 @@ fn constructor_matching_follows_control_flow_and_write_operands() {
             },
             body: vec![],
         },
+        S::MixedAssign {
+            targets: vec![SourceProgramAssignmentTarget {
+                location: SourceProgramLocation { start: 0, end: 90 },
+                operation: SourceProgramAssignmentTargetKind::Indexed {
+                    table: SourceProgramAssignmentOperand::Evaluated { value: table() },
+                    key: SourceProgramAssignmentOperand::Evaluated { value: nil() },
+                },
+            }],
+            values: values(nil()),
+        },
+        S::MixedAssign {
+            targets: vec![SourceProgramAssignmentTarget {
+                location: SourceProgramLocation { start: 0, end: 90 },
+                operation: SourceProgramAssignmentTargetKind::Indexed {
+                    table: SourceProgramAssignmentOperand::Evaluated { value: nil() },
+                    key: SourceProgramAssignmentOperand::Evaluated { value: table() },
+                },
+            }],
+            values: values(nil()),
+        },
+        S::MixedAssign {
+            targets: vec![SourceProgramAssignmentTarget {
+                location: SourceProgramLocation { start: 0, end: 90 },
+                operation: SourceProgramAssignmentTargetKind::Indexed {
+                    table: SourceProgramAssignmentOperand::Evaluated { value: nil() },
+                    key: SourceProgramAssignmentOperand::Evaluated { value: nil() },
+                },
+            }],
+            values: values(table()),
+        },
         S::TableSet {
             table: table(),
             key: nil(),
@@ -625,4 +655,32 @@ fn constructor_count_and_aggregate_text_preflight_precede_binding_indices() {
         bind(data(), m).unwrap_err().kind,
         SourceProgramErrorKind::ResourceLimit
     );
+}
+
+#[test]
+fn constructor_matching_follows_live_register_indexed_read_operands() {
+    for (operand, key) in [
+        (
+            SourceProgramAssignmentOperand::Evaluated { value: table() },
+            nil(),
+        ),
+        (
+            SourceProgramAssignmentOperand::LocalRegister { local: 0 },
+            table(),
+        ),
+    ] {
+        let read = e(
+            SourceProgramExprKind::IndexedRead {
+                table: Box::new(operand),
+                key: Box::new(key),
+            },
+            0,
+            90,
+        );
+        let mut data = program(vec![statement(SourceProgramStatementKind::Return {
+            values: values(read),
+        })]);
+        data.programs[0].parameter_count = 1;
+        bind(data, metadata()).unwrap();
+    }
 }
