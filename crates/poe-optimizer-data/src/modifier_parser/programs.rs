@@ -369,6 +369,7 @@ pub enum ParserProgramIntrinsic {
     StringGmatch,
     TableInsert,
     Ipairs,
+    IpairsAux,
     CreateMod,
 }
 impl ParserProgramIntrinsic {
@@ -393,7 +394,16 @@ impl ParserProgramIntrinsic {
             Self::StringGmatch => Some(&["string", "gmatch"]),
             Self::TableInsert => Some(&["table", "insert"]),
             Self::Ipairs => Some(&["ipairs"]),
-            Self::CreateMod => None,
+            Self::IpairsAux | Self::CreateMod => None,
+        }
+    }
+    /// Original builtin descriptor identity, independent of global accessibility.
+    /// Nonglobal auxiliaries still require their exact retained source relation.
+    pub fn builtin_symbol(self) -> Option<String> {
+        if self == Self::IpairsAux {
+            Some("ipairs_aux".into())
+        } else {
+            self.global_path().map(|path| path.join("."))
         }
     }
     pub fn is_string_method(self) -> bool {
@@ -413,6 +423,7 @@ impl ParserProgramIntrinsic {
         matches!(
             self,
             Self::Unpack
+                | Self::IpairsAux
                 | Self::Pairs
                 | Self::Next
                 | Self::MathFloor

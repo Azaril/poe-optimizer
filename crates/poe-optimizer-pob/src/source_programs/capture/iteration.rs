@@ -5,6 +5,8 @@ use mlua::MultiValue;
 pub(super) struct Primitives {
     pairs: Function,
     next: Function,
+    ipairs: Function,
+    ipairs_aux: Function,
 }
 impl Primitives {
     pub(super) fn capture(
@@ -22,7 +24,23 @@ impl Primitives {
         if next.info().what != "C" {
             return Err(error("source observer next is not an original C function"));
         }
-        let result = Self { pairs, next };
+        let ipairs: Function = globals.raw_get("ipairs")?;
+        if ipairs.info().what != "C" {
+            return Err(error(
+                "source observer ipairs is not an original C function",
+            ));
+        }
+        let Some(Value::Function(ipairs_aux)) = builtin_upvalue(lua, &ipairs, 1)? else {
+            return Err(error(
+                "source observer ipairs has no retained auxiliary function",
+            ));
+        };
+        let result = Self {
+            pairs,
+            next,
+            ipairs,
+            ipairs_aux,
+        };
         result.verify(lua)?;
         Ok(result)
     }
@@ -33,6 +51,18 @@ impl Primitives {
             || builtin_upvalue(lua, &self.pairs, 2)?.is_some()
         {
             return Err(error("source observer pairs retained next capture changed"));
+        }
+        // ipairs retains its non-global auxiliary in the same source protocol.
+        // The returned auxiliary is one stable function, not a fresh cursor.
+        if self.ipairs.info().what != "C"
+            || self.ipairs_aux.info().what != "C"
+            || !matches!(builtin_upvalue(lua,&self.ipairs,1)?,Some(Value::Function(ref auxiliary)) if auxiliary.to_pointer()==self.ipairs_aux.to_pointer())
+            || builtin_upvalue(lua, &self.ipairs, 2)?.is_some()
+            || builtin_upvalue(lua, &self.ipairs_aux, 1)?.is_some()
+        {
+            return Err(error(
+                "source observer ipairs retained auxiliary capture changed",
+            ));
         }
         Ok(())
     }
@@ -100,31 +130,52 @@ impl Graph<'_> {
             Some(SourceProgramIntrinsic::Pairs)
         } else if function.to_pointer() == self.observer.iterator_primitives.next.to_pointer() {
             Some(SourceProgramIntrinsic::Next)
+        } else if function.to_pointer() == self.observer.iterator_primitives.ipairs_aux.to_pointer()
+        {
+            Some(SourceProgramIntrinsic::IpairsAux)
         } else {
             None
         }
     }
-    pub(super) fn capture_pairs_next(
+    pub(super) fn capture_iterator_auxiliary(
         &mut self,
         callback: SourceCallbackId,
         depth: usize,
     ) -> Result<()> {
-        if self.intrinsics.get(&callback) != Some(&SourceProgramIntrinsic::Pairs) {
+        if self.context.iteration.is_none() {
             return Ok(());
         }
-        let SourceValue::Callback(next) = self.value(
-            Value::Function(self.observer.iterator_primitives.next.clone()),
-            depth + 1,
-        )?
+        let operation = self.intrinsics.get(&callback).copied();
+        if operation == Some(SourceProgramIntrinsic::IpairsAux) {
+            // The auxiliary can be captured directly, before its factory is
+            // otherwise reached. Retain its actual original factory as proof.
+            self.value(
+                Value::Function(self.observer.iterator_primitives.ipairs.clone()),
+                depth + 1,
+            )?;
+            return Ok(());
+        }
+        let original = match operation {
+            Some(SourceProgramIntrinsic::Pairs) => self.observer.iterator_primitives.next.clone(),
+            Some(SourceProgramIntrinsic::Ipairs) => {
+                self.observer.iterator_primitives.ipairs_aux.clone()
+            }
+            _ => return Ok(()),
+        };
+        let SourceValue::Callback(auxiliary) = self.value(Value::Function(original), depth + 1)?
         else {
             unreachable!()
         };
-        self.context
-            .iteration
-            .as_mut()
-            .expect("enabled iteration")
-            .pairs_next
-            .insert(callback, next);
+        let iteration = self.context.iteration.as_mut().expect("enabled iteration");
+        match operation {
+            Some(SourceProgramIntrinsic::Pairs) => {
+                iteration.pairs_next.insert(callback, auxiliary);
+            }
+            Some(SourceProgramIntrinsic::Ipairs) => {
+                iteration.ipairs_aux.insert(callback, auxiliary);
+            }
+            _ => unreachable!(),
+        }
         Ok(())
     }
     pub(super) fn raw_table_entries(&mut self, table: &Table) -> Result<Vec<(Value, Value)>> {

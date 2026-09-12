@@ -649,3 +649,6 @@ mod unpack;
 
 #[path = "support/source_program_strings.rs"]
 mod strings;
+
+#[path = "support/source_program_ipairs.rs"]
+mod ipairs;

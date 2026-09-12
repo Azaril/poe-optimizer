@@ -111,6 +111,38 @@ calculation preparation, avoiding an isolated quest-only parser bridge. It does 
 source interpretation belongs in the per-candidate calculation hot path; prepared native
 plans retain their separate performance contract.
 
+## Retained builtin iterator identities
+
+Source code may capture `ipairs`, store the function/state/control tuple it returns,
+pass its auxiliary to another function, or call that auxiliary directly. The native
+contract preserves those functions as owner-bound identities. A factory call returns
+the same retained auxiliary, the original table and control zero; it does not allocate
+a cursor or infer a builtin from the current global name. Rebinding a global changes
+later global lookups without changing an earlier captured function.
+
+The reference adapter captures the original factory before source loading and verifies
+its private C capture to establish the auxiliary relation. That auxiliary is not a Lua
+global or a fabricated Lua upvalue. The shared catalog carries the authenticated relation;
+the native engine uses it without a Lua runtime. Old catalogs without the optional relation
+retain their existing admission limits. Structural deserialization alone cannot authenticate
+claims from an untrusted catalog.
+
+The auxiliary consumes its explicit control on each call, increments within the admitted
+source integer profile and performs a raw lookup against the current table. Nil ends the
+protocol with zero return values; false is a real value. Metatable fallback, physical
+traversal order and a saved snapshot are irrelevant to this raw lookup. Stored or interleaved
+iterators therefore observe intervening writes. Generic loops and explicit calls share the
+same function/state/control protocol and cumulative resource accounting. Numeric inputs
+outside the supported portable conversion domain remain explicit dependencies.
+
+Acceptance compares complete result packs, identity, rebinding, mutations, independent
+sessions and argument effects before failure. Warmed evidence must identify the exact
+original wrapper in a completed live trace. The pinned LuaJIT cannot trace every legal
+interpreter path: a dynamic negative hash lookup on a table with both array and hash storage
+can stop recording with `NYITMIX`. Such cases retain interpreter parity and an explicit
+trace limitation; a separate pure-hash case can establish the negative-control trace path.
+Neither case establishes general warmed-table layout semantics.
+
 ## Table evidence and the constructor boundary
 
 Observed mutable tables carry private raw traversal/length facts through the shared session
@@ -167,6 +199,28 @@ a match against the interpreter's raw-length helper alone does not establish all
 Keep exact-function interpreter and warmed result/failure comparisons in the acceptance
 suite, including equal raw maps reached through different construction and mutation paths.
 The current implementation/admission limits are tracked in [implementation](implementation.md).
+
+## Template slots and fresh map traversal
+
+A constant template can reserve a string-key slot even when the initial value is nil.
+A source-bound template descriptor must distinguish that slot from an absent key and
+retain its observed order separately from the raw value map. When the source duplication
+algorithm preserves the slots, native allocation can preserve their order through writes,
+deletion and reinsertion into those same slots. New keys and layout-changing numeric
+packs require separate transition evidence. This proof belongs to constructor metadata;
+it must not weaken the narrower contract for imported snapshots of live keys.
+
+A copied table has its own allocation and insertion history. Matching its input's raw
+entries does not establish matching traversal order. Likewise, sorted Rust keys or source
+literal order cannot replace observed source order. General hash transitions must account
+for the source's string and object identities: the pinned runtime uses string IDs affected
+by interning history to place string keys. The eventual injected representation needs
+sufficient identity and layout facts, or a separately validated proof that order cannot
+affect the entire operation, its failure prefixes or downstream consumers.
+
+The bounded template-slot phase and its remaining acceptance gates live in
+[implementation](implementation.md). It must first identify the actual constructor and
+fresh table reached by the original parser; a matching fixture alone is insufficient.
 
 ## Integration gates
 

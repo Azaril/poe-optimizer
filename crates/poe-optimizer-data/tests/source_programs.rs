@@ -841,6 +841,10 @@ fn parser_owner_rejects_new_function_value_and_intrinsic_forms_without_changing_
     let bindings = [
         SourceProgramBinding::DynamicCall {},
         SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::IpairsAux,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
+        SourceProgramBinding::Intrinsic {
             operation: SourceProgramIntrinsic::Unpack,
             source: SourceProgramIntrinsicSource::OriginalGlobal,
         },
@@ -1478,3 +1482,77 @@ fn string_primitives_require_exact_captured_identity_and_preserve_method_form() 
 
 #[path = "support/source_program_assignments.rs"]
 mod assignments;
+
+#[test]
+fn nonglobal_ipairs_auxiliary_requires_exact_capture_without_global_or_parser_bypass() {
+    let mut data = definitions();
+    for operation in [
+        SourceProgramIntrinsic::Ipairs,
+        SourceProgramIntrinsic::IpairsAux,
+    ] {
+        data.callbacks.push(SourceCallback {
+            kind: SourceCallbackKind::Builtin {
+                symbol: operation.builtin_symbol().unwrap(),
+            },
+            upvalues: vec![],
+            environment: SourceEnvironment::OriginalGlobals,
+        });
+        data.intrinsics
+            .insert(SourceCallbackId(data.callbacks.len() as u32), operation);
+    }
+    data.callbacks[0].upvalues[0].value = SourceValue::Callback(SourceCallbackId(4));
+    let context = SourceProgramContext {
+        iteration: Some(SourceProgramIteration {
+            ipairs_aux: BTreeMap::from([(SourceCallbackId(3), SourceCallbackId(4))]),
+            ..SourceProgramIteration::default()
+        }),
+        ..SourceProgramContext::default()
+    };
+    let owner = SourceProgramOwner::new_with_context(data.clone(), None, context.clone()).unwrap();
+    let mut p = program(
+        SourceCallbackId(1),
+        SourceProgramExprKind::Literal {
+            value: ParserFactoryLiteral::Nil,
+        },
+    );
+    p.bindings = vec![SourceProgramBinding::Intrinsic {
+        operation: SourceProgramIntrinsic::IpairsAux,
+        source: SourceProgramIntrinsicSource::Captured {
+            upvalue: 0,
+            callback: SourceCallbackId(4),
+        },
+    }];
+    SourceProgramCatalog::new(programs(vec![p.clone()]), owner.clone()).unwrap();
+    p.bindings[0] = SourceProgramBinding::Intrinsic {
+        operation: SourceProgramIntrinsic::IpairsAux,
+        source: SourceProgramIntrinsicSource::Captured {
+            upvalue: 0,
+            callback: SourceCallbackId(3),
+        },
+    };
+    assert_eq!(
+        SourceProgramCatalog::new(programs(vec![p.clone()]), owner.clone())
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::Binding
+    );
+    p.bindings[0] = SourceProgramBinding::Intrinsic {
+        operation: SourceProgramIntrinsic::IpairsAux,
+        source: SourceProgramIntrinsicSource::OriginalGlobal,
+    };
+    assert_eq!(
+        SourceProgramCatalog::new(programs(vec![p.clone()]), owner)
+            .unwrap_err()
+            .kind,
+        SourceProgramErrorKind::Binding
+    );
+    let mut explicit = context;
+    explicit.environment = Some(SourceProgramRootId(1));
+    let owner = SourceProgramOwner::new_with_context(data, None, explicit).unwrap();
+    assert!(
+        SourceProgramCatalog::new(programs(vec![p]), owner)
+            .unwrap_err()
+            .message
+            .contains("explicit source environment")
+    );
+}

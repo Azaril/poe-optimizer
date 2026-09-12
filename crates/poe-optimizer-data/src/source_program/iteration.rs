@@ -21,13 +21,24 @@ pub struct SourceProgramIteration {
     /// function. This semantic relation does not fabricate Lua upvalue records.
     #[serde(deserialize_with = "callback_links")]
     pub pairs_next: BTreeMap<SourceCallbackId, SourceCallbackId>,
+    /// Exact original ipairs factory to its retained nonglobal auxiliary. Old
+    /// static/Dense ipairs definitions need no link; escaping it requires one.
+    #[serde(
+        default,
+        skip_serializing_if = "BTreeMap::is_empty",
+        deserialize_with = "callback_links"
+    )]
+    pub ipairs_aux: BTreeMap<SourceCallbackId, SourceCallbackId>,
 }
 impl SourceProgramIteration {
     pub fn validate_shape(&self) -> SourceProgramResult<()> {
         self.shape_size().map(|_| ())
     }
     pub(super) fn shape_size(&self) -> SourceProgramResult<(usize, usize)> {
-        if self.table_order.len() > MAX_TABLES || self.pairs_next.len() > MAX_LINKS {
+        if self.table_order.len() > MAX_TABLES
+            || self.pairs_next.len() > MAX_LINKS
+            || self.ipairs_aux.len() > MAX_LINKS
+        {
             return Err(resource("iteration table/link count bound"));
         }
         let mut budget = Budget::default();
@@ -56,10 +67,29 @@ pub(super) fn validate(
     let iteration = context.and_then(|context| context.iteration.as_ref());
     if let Some(iteration) = iteration {
         iteration.validate_shape()?;
-        for (pairs, next) in &iteration.pairs_next {
+        for (factory, auxiliary, factory_operation, auxiliary_operation) in iteration
+            .pairs_next
+            .iter()
+            .map(|(factory, auxiliary)| {
+                (
+                    factory,
+                    auxiliary,
+                    SourceProgramIntrinsic::Pairs,
+                    SourceProgramIntrinsic::Next,
+                )
+            })
+            .chain(iteration.ipairs_aux.iter().map(|(factory, auxiliary)| {
+                (
+                    factory,
+                    auxiliary,
+                    SourceProgramIntrinsic::Ipairs,
+                    SourceProgramIntrinsic::IpairsAux,
+                )
+            }))
+        {
             for (id, operation) in [
-                (*pairs, SourceProgramIntrinsic::Pairs),
-                (*next, SourceProgramIntrinsic::Next),
+                (*factory, factory_operation),
+                (*auxiliary, auxiliary_operation),
             ] {
                 let callback =
                     id.0.checked_sub(1)
@@ -68,7 +98,7 @@ pub(super) fn validate(
                 if definitions.intrinsics.get(&id) != Some(&operation)
                     || callback.kind
                         != (SourceCallbackKind::Builtin {
-                            symbol: operation.global_path().expect("builtin path").join("."),
+                            symbol: operation.builtin_symbol().expect("builtin identity"),
                         })
                     || !callback.upvalues.is_empty()
                 {
@@ -140,6 +170,14 @@ pub(super) fn validate(
                 "pairs intrinsic has no exact retained next callback link",
             ));
         }
+        if *operation == SourceProgramIntrinsic::IpairsAux
+            && !iteration
+                .is_some_and(|iteration| iteration.ipairs_aux.values().any(|aux| aux == id))
+        {
+            return Err(binding(
+                "ipairs auxiliary has no exact retaining factory callback link",
+            ));
+        }
     }
     Ok(())
 }
@@ -154,6 +192,11 @@ impl SourceProgramOwner {
     /// Retained callback identity belongs to this owner, not a global name lookup.
     pub fn pairs_next_callback(&self, pairs: SourceCallbackId) -> Option<SourceCallbackId> {
         self.iteration()?.pairs_next.get(&pairs).copied()
+    }
+    /// The auxiliary is a shared function identity, not a new iterator closure.
+    /// Missing linkage preserves the old escaped-ipairs capability frontier.
+    pub fn ipairs_aux_callback(&self, ipairs: SourceCallbackId) -> Option<SourceCallbackId> {
+        self.iteration()?.ipairs_aux.get(&ipairs).copied()
     }
 }
 fn invalid(message: impl Into<String>) -> SourceProgramError {
@@ -275,7 +318,7 @@ fn callback_links<'de, D: serde::Deserializer<'de>>(
     impl<'de> Visitor<'de> for Links {
         type Value = BTreeMap<SourceCallbackId, SourceCallbackId>;
         fn expecting(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-            f.write_str("bounded exact pairs-to-next callback links")
+            f.write_str("bounded exact retained builtin callback links")
         }
         fn visit_map<A: MapAccess<'de>>(self, mut map: A) -> Result<Self::Value, A::Error> {
             let mut result = BTreeMap::new();
@@ -287,7 +330,7 @@ fn callback_links<'de, D: serde::Deserializer<'de>>(
                 }
                 if result.contains_key(&id) {
                     return Err(serde::de::Error::custom(
-                        "duplicate normalized pairs callback ID",
+                        "duplicate normalized factory callback ID",
                     ));
                 }
                 result.insert(id, map.next_value()?);

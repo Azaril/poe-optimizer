@@ -337,3 +337,5 @@ fn mutated_original_pairs_c_capture_is_rejected_before_graph_capture() {
     }
     assert!(error.contains("retained next capture changed"), "{error}");
 }
+
+mod ipairs;

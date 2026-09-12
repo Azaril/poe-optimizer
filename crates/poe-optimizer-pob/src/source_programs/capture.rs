@@ -627,10 +627,7 @@ impl Graph<'_> {
             } else if let Some(operation) = self.iterator_intrinsic(&function) {
                 self.intrinsics.insert(id, operation);
                 SourceCallbackKind::Builtin {
-                    symbol: operation
-                        .global_path()
-                        .expect("iterator primitive")
-                        .join("."),
+                    symbol: operation.builtin_symbol().expect("iterator primitive"),
                 }
             } else {
                 let (symbol, _) = self
@@ -674,7 +671,7 @@ impl Graph<'_> {
             }
         }
         self.callbacks[id.0 as usize - 1].upvalues = upvalues;
-        self.capture_pairs_next(id, depth)?;
+        self.capture_iterator_auxiliary(id, depth)?;
         Ok(SourceValue::Callback(id))
     }
 }

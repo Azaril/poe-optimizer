@@ -478,6 +478,7 @@ fn compiled_traversal_indices_share_positions_without_per_session_key_or_table_c
         None,
         SourceProgramContext {
             iteration: Some(SourceProgramIteration {
+                ipairs_aux: BTreeMap::new(),
                 table_order: BTreeMap::from([(SourceTableId(1), order)]),
                 pairs_next: BTreeMap::new(),
             }),

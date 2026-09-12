@@ -145,16 +145,13 @@ impl SourceProgramDefinitions {
         for (id, intrinsic) in &self.intrinsics {
             graph.callback(*id).map_err(graph_error)?;
             let callback = &self.callbacks[id.0 as usize - 1];
-            let Some(path) = intrinsic.global_path() else {
+            let Some(symbol) = intrinsic.builtin_symbol() else {
                 return Err(failure(
                     SourceProgramErrorKind::Binding,
                     "captured source helper is not a builtin intrinsic",
                 ));
             };
-            if callback.kind
-                != (SourceCallbackKind::Builtin {
-                    symbol: path.join("."),
-                })
+            if callback.kind != (SourceCallbackKind::Builtin { symbol })
                 || !callback.upvalues.is_empty()
             {
                 return Err(failure(

@@ -57,6 +57,7 @@ fn fixture(order: Vec<SourceTableKey>) -> CompiledSourcePrograms {
         None,
         SourceProgramContext {
             iteration: Some(SourceProgramIteration {
+                ipairs_aux: BTreeMap::new(),
                 table_order: BTreeMap::from([
                     (SourceTableId(1), order),
                     (SourceTableId(2), vec![]),

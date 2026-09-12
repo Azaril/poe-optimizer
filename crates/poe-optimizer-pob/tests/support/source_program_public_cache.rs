@@ -273,45 +273,151 @@ pub(super) fn run(lua: &Lua, primitives: &Primitives, parser: &Function, pair: &
         }
         errors.push(json!({"input":format!("{value:?}"),"source":source.to_string(),"native":native.message,"cache_prefix_unchanged":true,"cumulative_charges_retained":true}));
     }
-    // Full successful misses are still tested through the genuine public
-    // callable. Keep the exact reached native dependency instead of declaring
-    // the public milestone complete from cache-hit/no-match success alone.
-    let key = Value::String(lua.create_string("+987654 to Strength").unwrap());
-    assert_eq!(cache.raw_get::<Value>(key.clone()).unwrap(), Value::Nil);
-    let source = parser
-        .call::<MultiValue>((key.clone(), false))
-        .unwrap()
-        .into_vec();
-    assert!(source[0].as_table().is_some_and(|mods| !mods.is_empty()));
-    let args = pair.args(&[key.clone(), Value::Boolean(false)]);
-    let error = pair
-        .call("original.parser", &args)
-        .expect_err("extend full-success acceptance before declaring public parser complete");
-    assert_eq!(error.kind, ProgramRuntimeErrorKind::UnsupportedCapability);
-    let native_row = lookup(pair, &key);
-    let prefix = pair.plain(std::slice::from_ref(&native_row));
-    let source_row = cache.raw_get::<Value>(key.clone()).unwrap();
-    let absent = observation::canonical(&observation::capture(&[Value::Nil]));
-    let committed = prefix != absent;
-    if committed {
+    // Exercise distinct positive families through the actual public parser.
+    // These strings are oracle fixtures only; production still consumes data.
+    // Keep each reached dependency instead of assuming successful misses fail
+    // or declaring the public milestone complete from these finite cases.
+    let mut success_misses = Vec::new();
+    let mut success_keys = Vec::new();
+    for text in [
+        "+987654 to Strength",
+        "123% increased maximum Life",
+        "+76% to Fire Resistance",
+        "37% increased Damage",
+        "Adds 13 to 17 Fire Damage",
+        "987653% increased Attack Speed",
+    ] {
+        let key = Value::String(lua.create_string(text).unwrap());
+        assert_eq!(
+            cache.raw_get::<Value>(key.clone()).unwrap(),
+            Value::Nil,
+            "positive fixture must begin as an original cache miss: {text}"
+        );
+        let initial_native_row = lookup(pair, &key);
         compare(
             pair,
-            &[source_row],
-            &[native_row],
-            "successful-miss committed cache prefix",
+            &[Value::Nil],
+            &[initial_native_row],
+            &format!("positive fixture must begin as a native cache miss: {text}"),
         );
+        let source = parser
+            .call::<MultiValue>((key.clone(), false))
+            .unwrap_or_else(|error| panic!("original positive miss {text}: {error}"))
+            .into_vec();
+        assert!(
+            source
+                .first()
+                .and_then(Value::as_table)
+                .is_some_and(|mods| !mods.is_empty()),
+            "original fixture must produce nonempty modifiers: {text}"
+        );
+        let source_row = cache.raw_get::<Value>(key.clone()).unwrap();
+        assert!(
+            source_row.as_table().is_some(),
+            "original cache write: {text}"
+        );
+        let original_result = observation::canonical(&observation::capture(&source));
+        let original_cache_row =
+            observation::canonical(&observation::capture(std::slice::from_ref(&source_row)));
+        let args = pair.args(&[key.clone(), Value::Boolean(false)]);
+        let result = pair.call("original.parser", &args);
+        let native_row = lookup(pair, &key);
+        let prefix = pair.plain(std::slice::from_ref(&native_row));
+        let absent = observation::canonical(&observation::capture(&[Value::Nil]));
+        let committed = prefix != absent;
+        if committed {
+            compare(
+                pair,
+                std::slice::from_ref(&source_row),
+                std::slice::from_ref(&native_row),
+                &format!("positive miss committed cache prefix: {text}"),
+            );
+        }
+        let (matched_result, dependency) = match result {
+            Ok(native) => {
+                assert!(
+                    committed,
+                    "completed positive miss must commit its cache row: {text}"
+                );
+                let matched = compare(
+                    pair,
+                    &source,
+                    &native,
+                    &format!("complete positive miss: {text}"),
+                );
+                // Compare the cache and return together to retain nested alias
+                // observations, including the source's independently copied result.
+                let mut source_graph = vec![source_row];
+                source_graph.extend(source);
+                let mut native_graph = vec![native_row];
+                native_graph.extend(native);
+                compare(
+                    pair,
+                    &source_graph,
+                    &native_graph,
+                    &format!("positive cache and returned copy: {text}"),
+                );
+                (Some(matched), None)
+            }
+            Err(error) => {
+                assert_eq!(
+                    error.kind,
+                    ProgramRuntimeErrorKind::UnsupportedCapability,
+                    "positive miss {text}: {error}"
+                );
+                (None, Some(frontier(pair, &error)))
+            }
+        };
+        success_misses.push(json!({
+            "key":text,
+            "original_result":original_result,
+            "original_cache_row":original_cache_row,
+            "native_cache_row":prefix,
+            "cache_write_reached":committed,
+            "complete":matched_result.is_some(),
+            "matched_result":matched_result,
+            "frontier":dependency,
+        }));
+        success_keys.push(key);
     }
-    let dependency = frontier(pair, &error);
-    let source_result = observation::canonical(&observation::capture(&source));
-    // Restore only the entries introduced by this oracle in both heaps. Keep
-    // source and native state paired even when the frontier preceded the write.
-    for (key, _, _) in saved {
+    // Restore only entries introduced by this oracle in both heaps. Keep the
+    // state paired even when a native frontier preceded the cache write.
+    for key in saved.into_iter().map(|(key, _, _)| key).chain(success_keys) {
         cache.raw_set(key.clone(), Value::Nil).unwrap();
         replace(pair, &key, &Value::Nil);
+        cache_row(
+            &cache,
+            pair,
+            &key,
+            "introduced cache entry restored to absent",
+        );
+        assert_eq!(cache.raw_get::<Value>(key).unwrap(), Value::Nil);
     }
-    cache.raw_set(key.clone(), Value::Nil).unwrap();
-    replace(pair, &key, &Value::Nil);
+    assert_eq!(
+        cache.raw_get::<Value>(hit_key.clone()).unwrap(),
+        Value::Table(hit_row)
+    );
+    let current = lookup(pair, &hit_key);
+    assert!(same(pair, &native_row, &current));
+    assert_eq!(
+        cache_row(&cache, pair, &hit_key, "initialized row after restoration").2,
+        before_graph
+    );
+    assert_eq!(
+        primitives.captured_value(parser, "cache"),
+        Value::Table(cache.clone())
+    );
+    assert_eq!(
+        lua.globals()
+            .raw_get::<Table>("modLib")
+            .unwrap()
+            .raw_get::<Value>("parseModCache")
+            .unwrap(),
+        Value::Table(cache)
+    );
+    let success_miss = success_misses[0].clone();
+    let dependency = success_miss["frontier"].clone();
     json!({"cases":cases,"source_errors":errors,"paired_public_calls":11,"frontier":dependency,
-        "success_miss":{"key":"+987654 to Strength","original_result":source_result,"native_cache_row":prefix,"cache_write_reached":committed},
+        "success_miss":success_miss,"success_misses":success_misses,
         "introduced_cache_entries_restored":true,"published_cache_alias_retained":true,"complete_public_parser":false})
 }

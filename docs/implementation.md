@@ -18,6 +18,75 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+The R2r checkpoint below is the current resume point; later sections retain historical
+checkpoints and their original validation scope.
+
+**R2r checkpoint: retained original iterator protocol and positive parser breadth.** The shared
+catalog now represents the exact original `ipairs` factory/auxiliary relation. Native
+sessions execute stored and escaped iterators with live table reads, full result packs
+and preserved identities. The PoB adapter verifies the original private C capture;
+production lookup never treats a global name as proof of builtin identity. The normal
+native dependency path remains independent of Lua.
+
+Five new source/native tests pass for control conversion, nil versus false, wrapping,
+mutations, argument effects before source errors, raw lookup without metatable fallback,
+rebound globals, stored generic protocols and independent sessions. Seven warmed vectors
+each execute the exact wrapper 128 times with no seed and retain a live target trace.
+Each wrapper calls the original primitive twice to capture cardinality and contents.
+The negative-control warm case uses a pure-hash table: the mixed sparse/dense case is
+interpreter-tested because the source JIT rejects that recording with `NYITMIX`.
+
+The original public-parser regressions preserve **55 complete paired calls and 10
+source-error cases**. Six fresh positive modifier families now run on every build:
+Strength, maximum life, fire resistance, generic damage, added fire damage and attack
+speed. The first four families produce **20 source-equivalent cache rows** and stop in
+original recursive `Common.copyTable` (495-505), where a fresh table lacks proven traversal
+order. Its precise table identity still needs recording before attributing it to a
+constructor. Added fire damage and attack speed produce **10 earlier dependencies**:
+original `OR64` (`Data/Global.lua`, 153-168) calls `or2` (129-135), whose body cannot
+lower `%`, before cache write. Closure dispatch succeeds; the missing program is the
+callee. Native modulo and authenticated bit operations are subsequent requirements.
+All introduced cache entries are restored; initialized rows and aliases stay intact.
+
+The complete public parser remains unimplemented and native build completion remains
+**0/5**. Growing-list allocation history, fresh map layout, source flag helpers, DOUBLED
+state transitions and whole-build activation remain open within the same milestone.
+The 54-test final source run passed, retained 87 fresh artifacts and verified a selected
+156-file source manifest unchanged. Its first audit incorrectly expected all six positive
+families to reach copying. The corrected audit preserves the same successful test run,
+rechecks every prior semantic gate and verifies the exact 20/10 dependency split; both
+audit records remain in `runs/r2r-source-verified/`.
+
+**Validation passed:** 101 DATA cases, 223 ENGINE cases, 117 PoB source-program unit
+cases, 54 source integration tests and 30 CLI test/configuration cases: **525 focused
+cases**, counting reruns once. Both CLI configurations pass; fresh exports reproduce all
+29 data sections. Strict workspace/native Clippy, WebAssembly library compilation, native
+runtime dependency isolation, formatting and diff checks pass. WebAssembly is compile-only
+coverage; no runtime speedup is claimed. Original input builds, bundled data, dependency
+lock and PoB pin are unchanged. The checkpoint and retained validation/review ledgers are
+recorded in `runs/r2r-checkpoint.json`.
+
+**Resume after this checkpoint:** advance both observed dependencies: source modulo/bit-helper
+execution for added-damage/attack-speed modifiers, and the precise fresh table that stops the
+original copy operation on all five builds. Then add source-authenticated constant-template
+(TDUP) reserved-string-slot evidence through DATA, the PoB observer/lowerer and ENGINE.
+Keep it distinct from imported live-key snapshots. Compare deletion/reinsertion, nil slots,
+zero/nonzero final packs, exact warmed constructors and complete public return graphs.
+Preserve explicit limits for new-key rehash and copied destinations; neither may inherit
+input order. The read-only source investigation found differing template orders across
+fresh states and a copy with equal raw values but different iteration order. General
+string-key placement also depends on source string identity/history, which must be injected
+or proven irrelevant at a whole-operation boundary. Evidence and the staged acceptance
+plan are in `runs/r2r-next-map-copy.md` and `runs/r2r-next-bit-gate.md`. This continues
+the accepted data/model seam.
+
+**Current CI review:** published `0245d6a` in run `34672316644` is still in Test on
+Linux and Windows in the latest checked snapshot. The newly terminal older Windows
+`7a9c40a` job reports lost runner communication, without a test assertion or a proven
+resource-exhaustion cause. Reviewed schema failures precede the published `718b716`
+repair. Keep hosted status separate from local validation; evidence is recorded in
+`runs/r2r-ci-diagnosis.json`.
+
 **CI repair:** the hosted Linux/Windows failure was reproduced as an inconsistent
 custom-data test fixture. The quoted-identifier test previously updated legacy calculation identifiers
 but left the injected authored-skill catalogs unchanged. The adapter correctly stops
@@ -101,7 +170,7 @@ locally. The current `12ba179` Linux/Windows jobs in run `34670477744` are still
 Test. This is verification of an existing fix, not hosted success. Evidence:
 `runs/r2q-ci-diagnosis.json` and `runs/r2q-ci-workflow-review-by-data.json`.
 
-**R2q checkpoint: source-bound list constructors and original public cache behavior.**
+**Historical R2q checkpoint: source-bound list constructors and original public cache behavior.**
 DATA, ENGINE and the PoB adapter support multiple exact empty/list allocation sites,
 including nested factory bodies. Original bytecode allocation claims are injected as
 metadata; sessions own reserved array storage and subsequent values. The mapper decodes
@@ -154,7 +223,7 @@ completed failures are covered by the published schema and test-completion repai
 see `runs/r2q-ci-prepublication-review.json`. Verify the new exact-head run after pushing;
 local validation does not establish hosted success.
 
-**Resume the complete-public-parser milestone:** retain the exact original `ipairs`
+**Historical R2q resume (superseded by R2r above):** retain the exact original `ipairs`
 factory/auxiliary identity and `(function, table, control)` protocol through native calls
 and generic loops. Existing generic-loop execution can consume that protocol. Add source
 parity for complete result packs, conversion/errors, live mutations, function identity,

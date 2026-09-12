@@ -73,7 +73,7 @@ pub(super) fn finish_method(target: MethodTarget) -> RuntimeResult<()> {
 }
 
 /// Preserve the actual called builtin identity when its result retains another
-/// function. An operation label alone cannot identify the pairs-to-next link.
+/// function. An operation label alone cannot identify a retained iterator link.
 pub(super) fn call_bound(
     operation: ParserProgramIntrinsic,
     callback: Option<ParserCallbackId>,
@@ -100,6 +100,16 @@ pub(super) fn call_bound(
             }
         };
     }
+    if operation == ParserProgramIntrinsic::Ipairs
+        && heap.owner().parser().is_none()
+        && let Some(auxiliary) =
+            callback.and_then(|callback| heap.owner().ipairs_aux_callback(callback))
+    {
+        let table = check_table(arguments.first())?;
+        patterns.charge(1)?;
+        result_space(3, heap, limits)?;
+        return Ok(vec![V::Callback(auxiliary), table.clone(), V::Number(0.0)]);
+    }
     if operation != ParserProgramIntrinsic::Pairs {
         return call(operation, arguments, heap, patterns, limits);
     }
@@ -121,6 +131,7 @@ pub(super) fn call(
     limits: &ProgramLimits,
 ) -> RuntimeResult<Vec<V>> {
     match operation {
+        ParserProgramIntrinsic::IpairsAux => ipairs_aux(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::Unpack => unpack(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::ToNumber => tonumber(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::ToString => tostring(arguments, heap, limits),
@@ -184,6 +195,31 @@ pub(super) fn call(
             Err(Error::unsupported("escaped ipairs iterator"))
         }
     }
+}
+
+/// The original non-global C auxiliary has no cursor of its own. Its second
+/// argument controls a signed int32 increment, then a raw lookup; __index and
+/// source iteration/layout metadata are deliberately not consulted.
+fn ipairs_aux(
+    arguments: &[V],
+    heap: &mut Heap,
+    patterns: &mut MatchBudget,
+    limits: &ProgramLimits,
+) -> RuntimeResult<Vec<V>> {
+    let table = check_table(arguments.first())?;
+    let control = optional_integer(arguments.get(1), patterns)?
+        .ok_or_else(|| Error::source("number argument expected"))?;
+    patterns.charge(1)?;
+    // Pinned single-number vm_x64 increments a 32-bit register before signed
+    // conversion back to double, including MAX -> MIN. Out-of-range input
+    // conversion remains the explicit portable-integer frontier above.
+    let key = V::Number(f64::from(control.wrapping_add(1)));
+    let value = heap.raw_get(table, &key)?;
+    if matches!(value, V::Nil) {
+        return Ok(Vec::new());
+    }
+    result_space(2, heap, limits)?;
+    Ok(vec![key, value])
 }
 
 fn unpack(

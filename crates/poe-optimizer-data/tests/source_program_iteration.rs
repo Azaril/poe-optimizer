@@ -70,6 +70,7 @@ fn context() -> SourceProgramContext {
                 (SourceCallbackId(1), SourceCallbackId(4)),
                 (SourceCallbackId(3), SourceCallbackId(2)),
             ]),
+            ipairs_aux: BTreeMap::new(),
         }),
         ..SourceProgramContext::default()
     }
@@ -314,6 +315,251 @@ fn iteration_shape_and_decoder_bound_counts_text_and_exact_key_domain() {
             (0..50_000).map(SourceTableKey::Integer).collect(),
         );
     }
+    assert_eq!(
+        metadata.validate_shape().unwrap_err().kind,
+        SourceProgramErrorKind::ResourceLimit
+    );
+    assert!(
+        serde_json::from_slice::<SourceProgramIteration>(&serde_json::to_vec(&metadata).unwrap())
+            .is_err()
+    );
+}
+
+fn ipairs_definitions() -> SourceProgramDefinitions {
+    let mut data = definitions();
+    for (index, callback) in data.callbacks.iter_mut().enumerate() {
+        let operation = if index % 2 == 0 {
+            SourceProgramIntrinsic::Ipairs
+        } else {
+            SourceProgramIntrinsic::IpairsAux
+        };
+        callback.kind = SourceCallbackKind::Builtin {
+            symbol: operation.builtin_symbol().unwrap(),
+        };
+        data.intrinsics
+            .insert(SourceCallbackId(index as u32 + 1), operation);
+    }
+    data
+}
+fn ipairs_context() -> SourceProgramContext {
+    let mut c = context();
+    let iteration = c.iteration.as_mut().unwrap();
+    iteration.ipairs_aux = std::mem::take(&mut iteration.pairs_next);
+    c
+}
+#[test]
+fn retained_ipairs_auxiliary_is_nonglobal_and_exact_to_each_owner_factory() {
+    let data = ipairs_definitions();
+    let before = serde_json::to_vec(&data).unwrap();
+    let c = ipairs_context();
+    let owner = SourceProgramOwner::new_with_context(data.clone(), None, c.clone()).unwrap();
+    assert_eq!(
+        owner.ipairs_aux_callback(SourceCallbackId(1)),
+        Some(SourceCallbackId(4))
+    );
+    assert_eq!(
+        owner.ipairs_aux_callback(SourceCallbackId(3)),
+        Some(SourceCallbackId(2))
+    );
+    assert_eq!(owner.ipairs_aux_callback(SourceCallbackId(2)), None);
+    assert_eq!(owner.ipairs_aux_callback(SourceCallbackId(0)), None);
+    assert_eq!(owner.pairs_next_callback(SourceCallbackId(1)), None);
+    let second = SourceProgramOwner::new_with_context(data.clone(), None, c).unwrap();
+    assert!(!owner.is_same_owner(&second));
+    let root = owner
+        .bind_root(SourceProgramDefinitionRoot::Named(SourceProgramRootId(1)))
+        .unwrap();
+    assert_eq!(
+        second.resolve_root(&root).unwrap_err().kind,
+        SourceProgramErrorKind::Binding
+    );
+    assert_eq!(
+        serde_json::to_vec(owner.definitions().unwrap()).unwrap(),
+        before
+    );
+    assert!(
+        owner
+            .callbacks()
+            .iter()
+            .all(|callback| callback.upvalues.is_empty())
+    );
+    assert_eq!(SourceProgramIntrinsic::IpairsAux.global_path(), None);
+    assert_eq!(
+        SourceProgramIntrinsic::IpairsAux
+            .builtin_symbol()
+            .as_deref(),
+        Some("ipairs_aux")
+    );
+    assert_eq!(SourceProgramIntrinsic::CreateMod.builtin_symbol(), None);
+    assert!(SourceProgramIntrinsic::IpairsAux.is_standalone_only());
+    assert!(!SourceProgramIntrinsic::IpairsAux.is_string_method());
+    let parser =
+        SourceProgramOwner::from_parser(bundled_snapshot().unwrap().modifier_parser().clone());
+    assert_eq!(parser.ipairs_aux_callback(SourceCallbackId(1)), None);
+}
+#[test]
+fn auxiliary_requires_context_link_but_old_ipairs_owners_remain_valid() {
+    let data = ipairs_definitions();
+    data.validate().unwrap(); // Graph consistency alone does not admit a retained relation.
+    let prototypes = SourceClosurePrototypes {
+        schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
+        prototypes: vec![],
+    };
+    for result in [
+        SourceProgramOwner::new(data.clone()),
+        SourceProgramOwner::new_with_context(data.clone(), None, SourceProgramContext::default()),
+        SourceProgramOwner::new_with_closures(data.clone(), None, None, prototypes.clone()),
+        SourceProgramOwner::new_with_closures(
+            data.clone(),
+            None,
+            Some(SourceProgramContext::default()),
+            prototypes.clone(),
+        ),
+    ] {
+        let error = result.unwrap_err();
+        assert_eq!(error.kind, SourceProgramErrorKind::Binding);
+        assert!(error.message.contains("retaining factory"));
+    }
+    SourceProgramOwner::new_with_closures(
+        data.clone(),
+        None,
+        Some(ipairs_context()),
+        prototypes.clone(),
+    )
+    .unwrap();
+    let mut old = data;
+    old.callbacks.truncate(1);
+    old.intrinsics.retain(|id, _| id.0 == 1);
+    let wire = serde_json::to_vec(&old).unwrap();
+    let owner = SourceProgramOwner::new(old.clone()).unwrap();
+    assert_eq!(owner.ipairs_aux_callback(SourceCallbackId(1)), None);
+    SourceProgramOwner::from_bytes(&wire).unwrap();
+    SourceProgramOwner::new_with_context(old.clone(), None, SourceProgramContext::default())
+        .unwrap();
+    SourceProgramOwner::new_with_closures(old, None, None, prototypes).unwrap();
+}
+#[test]
+fn ipairs_links_reject_missing_wrong_and_fabricated_identity_descriptors() {
+    for edit in 0..14 {
+        let mut data = ipairs_definitions();
+        let mut c = ipairs_context();
+        let links = &mut c.iteration.as_mut().unwrap().ipairs_aux;
+        match edit {
+            0 => {
+                links.remove(&SourceCallbackId(1));
+            }
+            1 => {
+                links.insert(SourceCallbackId(2), SourceCallbackId(4));
+            }
+            2 => {
+                links.insert(SourceCallbackId(1), SourceCallbackId(3));
+            }
+            3 => {
+                links.insert(SourceCallbackId(1), SourceCallbackId(99));
+            }
+            4 => {
+                links.insert(SourceCallbackId(99), SourceCallbackId(2));
+            }
+            5 => {
+                links.insert(SourceCallbackId(0), SourceCallbackId(2));
+            }
+            6 => {
+                links.insert(SourceCallbackId(1), SourceCallbackId(0));
+            }
+            7 => {
+                data.intrinsics.remove(&SourceCallbackId(4));
+            }
+            8 => {
+                data.callbacks[3].kind = SourceCallbackKind::Builtin {
+                    symbol: "not_ipairs_aux".into(),
+                };
+            }
+            9 => {
+                data.callbacks[3].kind = SourceCallbackKind::Lua {
+                    source: poe_optimizer_data::item_loading::ItemSourceSpan {
+                        path: "fixture.lua".into(),
+                        line: 1,
+                        end_line: 1,
+                        sha256: "b".repeat(64),
+                    },
+                };
+            }
+            10 => {
+                data.intrinsics.remove(&SourceCallbackId(1));
+            }
+            11 => {
+                data.intrinsics
+                    .insert(SourceCallbackId(1), SourceProgramIntrinsic::Next);
+            }
+            12 => {
+                data.intrinsics
+                    .insert(SourceCallbackId(4), SourceProgramIntrinsic::Ipairs);
+            }
+            _ => {
+                data.callbacks[3].upvalues.push(SourceUpvalue {
+                    name: "fake".into(),
+                    value: SourceValue::Callback(SourceCallbackId(1)),
+                });
+            }
+        }
+        assert!(
+            SourceProgramOwner::new_with_context(data, None, c).is_err(),
+            "edit {edit}"
+        );
+    }
+    // The same exact auxiliary may be retained by more than one original factory.
+    let mut c = ipairs_context();
+    c.iteration
+        .as_mut()
+        .unwrap()
+        .ipairs_aux
+        .insert(SourceCallbackId(3), SourceCallbackId(4));
+    let mut data = ipairs_definitions();
+    data.intrinsics.remove(&SourceCallbackId(2));
+    SourceProgramOwner::new_with_context(data, None, c).unwrap();
+}
+#[test]
+fn optional_ipairs_links_preserve_old_iteration_wire_and_bound_untrusted_maps() {
+    let old = br#"{"table_order":{},"pairs_next":{}}"#;
+    let decoded: SourceProgramIteration = serde_json::from_slice(old).unwrap();
+    assert!(decoded.ipairs_aux.is_empty());
+    assert_eq!(serde_json::to_vec(&decoded).unwrap(), old);
+    let explicit_empty: SourceProgramIteration =
+        serde_json::from_str(r#"{"table_order":{},"pairs_next":{},"ipairs_aux":{}}"#).unwrap();
+    assert_eq!(serde_json::to_vec(&explicit_empty).unwrap(), old);
+    let c = ipairs_context();
+    let wire = serde_json::to_vec(&c).unwrap();
+    assert_eq!(
+        SourceProgramContext::from_bytes(&wire, &ipairs_definitions(), None).unwrap(),
+        c
+    );
+    for wire in [
+        r#"{"table_order":{},"pairs_next":{},"ipairs_aux":{"1":2,"01":4}}"#,
+        r#"{"table_order":{},"pairs_next":{},"ipairs_aux":{"1":2,"1":4}}"#,
+        r#"{"table_order":{},"pairs_next":{},"ipairs_aux":null}"#,
+        r#"{"table_order":{},"pairs_next":{},"ipairs_aux":{},"unknown":true}"#,
+        r#"{"table_order":{},"ipairs_aux":{}}"#,
+    ] {
+        assert!(
+            serde_json::from_str::<SourceProgramIteration>(wire).is_err(),
+            "{wire}"
+        );
+    }
+    let mut metadata = SourceProgramIteration {
+        ipairs_aux: (1..=256)
+            .map(|id| (SourceCallbackId(id), SourceCallbackId(2)))
+            .collect(),
+        ..SourceProgramIteration::default()
+    };
+    metadata.validate_shape().unwrap();
+    assert_eq!(
+        serde_json::from_slice::<SourceProgramIteration>(&serde_json::to_vec(&metadata).unwrap())
+            .unwrap(),
+        metadata
+    );
+    metadata
+        .ipairs_aux
+        .insert(SourceCallbackId(257), SourceCallbackId(2));
     assert_eq!(
         metadata.validate_shape().unwrap_err().kind,
         SourceProgramErrorKind::ResourceLimit
