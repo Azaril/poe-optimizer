@@ -15,6 +15,8 @@ use poe_optimizer_data::source_program::{
 use std::collections::BTreeMap;
 
 pub mod capture;
+mod constructors;
+pub use constructors::lower_observed_from_sources;
 pub(crate) mod lowering;
 mod syntax;
 pub(crate) mod tokens;
@@ -29,8 +31,13 @@ pub struct SourceProgramExtraction {
     catalog: SourceProgramCatalog,
     unsupported: BTreeMap<ParserCallbackId, String>,
     implementation_sha256: String,
+    constructor_unsupported: BTreeMap<ParserCallbackId, String>,
 }
 impl SourceProgramExtraction {
+    /// Logical programs remain available when no exact constructor layout proof exists.
+    pub fn constructor_unsupported(&self) -> &BTreeMap<ParserCallbackId, String> {
+        &self.constructor_unsupported
+    }
     pub fn catalog(&self) -> &SourceProgramCatalog {
         &self.catalog
     }
@@ -176,6 +183,7 @@ pub fn lower_from_sources(
         catalog,
         unsupported,
         implementation_sha256: crate::game_data::extractor_sha256(),
+        constructor_unsupported: BTreeMap::new(),
     })
 }
 

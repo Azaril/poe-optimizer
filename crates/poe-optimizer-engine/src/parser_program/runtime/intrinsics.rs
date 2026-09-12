@@ -142,7 +142,7 @@ pub(super) fn call(
         ParserProgramIntrinsic::Select => select(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::StringGsub => gsub(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::CreateMod => {
-            let value = create_mod(arguments, heap)?;
+            let value = create_mod(arguments, heap, patterns)?;
             result_space(1, heap, limits)?;
             Ok(vec![value])
         }
@@ -186,7 +186,7 @@ fn unpack(
     let start = optional_integer(arguments.get(1), patterns)?.unwrap_or(1);
     let end = match optional_integer(arguments.get(2), patterns)? {
         Some(end) => end,
-        None => i32::try_from(heap.raw_len(table)?)
+        None => i32::try_from(heap.hint_safe_len(table, patterns)?)
             .map_err(|_| Error::unsupported("raw length outside source int32 range"))?,
     };
     if start > end {
@@ -462,7 +462,7 @@ fn check_table(value: Option<&V>) -> RuntimeResult<&V> {
 fn table_insert(arguments: &[V], heap: &mut Heap, patterns: &mut MatchBudget) -> RuntimeResult<()> {
     let table = check_table(arguments.first())?;
     match arguments.len() {
-        2 => heap.append(table, arguments[1].clone()),
+        2 => heap.append(table, arguments[1].clone(), patterns),
         3 => {
             if optional_integer(arguments.get(1), patterns)?.is_none() {
                 return Err(Error::source("table.insert position requires a number"));
@@ -475,7 +475,7 @@ fn table_insert(arguments: &[V], heap: &mut Heap, patterns: &mut MatchBudget) ->
 
 /// Original ModTools.createMod: raw first-three values plus a type-sensitive
 /// vararg prefix. The source constructor never clones tag/value table objects.
-fn create_mod(arguments: &[V], heap: &mut Heap) -> RuntimeResult<V> {
+fn create_mod(arguments: &[V], heap: &mut Heap, patterns: &mut MatchBudget) -> RuntimeResult<V> {
     let mut source = V::Nil;
     let mut flags = V::Number(0.0);
     let mut keywords = V::Number(0.0);
@@ -511,11 +511,16 @@ fn create_mod(arguments: &[V], heap: &mut Heap) -> RuntimeResult<V> {
         (b"keywordFlags".as_slice(), keywords),
     ] {
         let key = heap.bytes(key)?;
-        heap.set(&table, key, value)?;
+        heap.set(&table, key, value, patterns)?;
     }
     for (index, value) in arguments.iter().skip(tag_start).enumerate() {
         // Nil consumes an index just as select(...) does in a table constructor.
-        heap.set(&table, V::Number((index + 1) as f64), value.clone())?;
+        heap.set(
+            &table,
+            V::Number((index + 1) as f64),
+            value.clone(),
+            patterns,
+        )?;
     }
     Ok(table)
 }
@@ -759,7 +764,7 @@ mod tests {
 
     #[test]
     fn method_lookup_retains_target_and_defers_call_errors_until_arguments_finish() {
-        let (mut heap, _, _) = fixture();
+        let (mut heap, mut patterns, _) = fixture();
         let receiver = heap.new_table().unwrap();
         let callback = *bundled_snapshot()
             .unwrap()
@@ -777,13 +782,19 @@ mod tests {
             bytes(b"text"),
             table_target,
         ] {
-            heap.set(&receiver, bytes(b"gsub"), value).unwrap();
+            heap.set(&receiver, bytes(b"gsub"), value, &mut patterns)
+                .unwrap();
             let target =
                 precheck_method(ParserProgramIntrinsic::StringGsub, &receiver, &mut heap).unwrap();
             // A later argument can mutate the receiver, but not the target
             // that lookup already returned. No call occurs during lookup.
-            heap.set(&receiver, bytes(b"gsub"), V::Callback(callback))
-                .unwrap();
+            heap.set(
+                &receiver,
+                bytes(b"gsub"),
+                V::Callback(callback),
+                &mut patterns,
+            )
+            .unwrap();
             assert_eq!(
                 finish_method(target).unwrap_err().kind,
                 ProgramRuntimeErrorKind::Source
@@ -791,7 +802,8 @@ mod tests {
         }
         let target =
             precheck_method(ParserProgramIntrinsic::StringGsub, &receiver, &mut heap).unwrap();
-        heap.set(&receiver, bytes(b"gsub"), V::Nil).unwrap();
+        heap.set(&receiver, bytes(b"gsub"), V::Nil, &mut patterns)
+            .unwrap();
         assert_eq!(
             finish_method(target).unwrap_err().kind,
             ProgramRuntimeErrorKind::UnsupportedCapability

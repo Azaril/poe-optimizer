@@ -54,6 +54,11 @@ fn fixtures(lua: &Lua) -> BTreeMap<String, Table> {
         ("one", "{7}"),
         ("dense", "{false, 3, 'a' .. string.char(0, 255)}"),
         ("second", "{nil, 'unparsed'}"),
+        ("second_false", "{nil, false}"),
+        ("second_empty", "{nil, ''}"),
+        ("third", "{[3]='third'}"),
+        ("zero_second", "{[0]=false, [2]='second'}"),
+        ("sparse_runs", "{[1]='first', [3]='third'}"),
         (
             "holes",
             "{[1]='first', [3]='third', [-2]='negative', [0]=false, text=9}",
@@ -161,7 +166,32 @@ fn observe<'a>(
             },
         )
         .unwrap();
-    let lowered = lower_from_sources(&texts, observed.owner()).unwrap();
+    let without_constructors = lower_from_sources(&texts, observed.owner()).unwrap();
+    let unproven = CompiledSourcePrograms::new(without_constructors.catalog()).unwrap();
+    let (mut unproven_session, unproven_roots) = unproven
+        .session_from_input(observed.input(), ProgramLimits::default())
+        .unwrap();
+    let copied = unproven_session
+        .invoke_callable(
+            &unproven_roots[observed.root_index("probe.copy").unwrap()],
+            &[unproven_roots[observed.root_index("fixture.second").unwrap()].clone()],
+        )
+        .unwrap();
+    let error = unproven_session
+        .invoke_callable(
+            &unproven_roots[observed.root_index("probe.unpack").unwrap()],
+            &copied,
+        )
+        .unwrap_err();
+    assert_eq!(error.kind, ProgramRuntimeErrorKind::UnsupportedCapability);
+    let lowered = poe_optimizer_pob::source_programs::lower_observed_from_sources(
+        &texts,
+        observed.owner(),
+        observed
+            .constructor_observations()
+            .expect("opted-in constructor observation"),
+    )
+    .unwrap();
     assert!(
         lowered.unsupported().is_empty(),
         "copy source lowering: {:?}",
@@ -327,6 +357,11 @@ pub fn run(lua: &Lua, primitives: &Primitives) -> Json {
         "fixture.one",
         "fixture.dense",
         "fixture.second",
+        "fixture.second_false",
+        "fixture.second_empty",
+        "fixture.third",
+        "fixture.zero_second",
+        "fixture.sparse_runs",
         "fixture.holes",
     ] {
         let table = Value::Table(tables[name].clone());
@@ -350,15 +385,24 @@ pub fn run(lua: &Lua, primitives: &Primitives) -> Json {
                 assert_eq!(
                     error.kind,
                     ProgramRuntimeErrorKind::UnsupportedCapability,
-                    "unproved copied sparse layout is explicit"
+                    "unproved copied hash layout or JIT-sensitive length is explicit"
                 );
-                assert!(matches!(name, "fixture.second" | "fixture.holes"));
+                assert!(matches!(
+                    name,
+                    "fixture.holes"
+                        | "fixture.third"
+                        | "fixture.zero_second"
+                        | "fixture.sparse_runs"
+                ));
                 false
             }
         };
         assert_eq!(
             admitted,
-            !matches!(name, "fixture.second" | "fixture.holes"),
+            !matches!(
+                name,
+                "fixture.holes" | "fixture.third" | "fixture.zero_second" | "fixture.sparse_runs"
+            ),
             "a coincidentally matching source sample cannot establish copied-table layout"
         );
         let range = pair.args(&[Value::Integer(1), Value::Integer(3)]);
@@ -368,6 +412,60 @@ pub fn run(lua: &Lua, primitives: &Primitives) -> Json {
             &[native_copy.clone(), range[0].clone(), range[1].clone()],
         );
         lengths.push(json!({"name":name,"observed_input_default_unpack":true,"source_copy_result_count":actual.len(),"native_copy_default_unpack":admitted,"explicit_copy_range":true}));
+    }
+    // Warm the actual Common.copyTable callback, not a replacement copy kernel.
+    // Each resulting graph retains the source's deep-copy alias behavior. The
+    // packed-unpack probe preserves every result and explicit cardinality.
+    let driver = warm::SourceWarmDriver::new(lua).unwrap();
+    let mut warmed = Vec::new();
+    for name in [
+        "fixture.empty",
+        "fixture.one",
+        "fixture.dense",
+        "fixture.second",
+        "fixture.second_false",
+        "fixture.second_empty",
+        "fixture.third",
+        "fixture.aliases",
+    ] {
+        let input = Value::Table(tables[name].clone());
+        let actual = driver
+            .run(lua, &original, std::slice::from_ref(&input), None)
+            .unwrap_or_else(|error| panic!("warm original copy {name}: {error}"));
+        assert!(actual.success);
+        let result = pair.native("copy", &[pair.root(name)]).unwrap();
+        assert_eq!(result.len(), 1);
+        assert_eq!(
+            observation::canonical(
+                pair.session
+                    .snapshot(&[pair.root(name), result[0].clone()])
+                    .unwrap()
+                    .graph()
+            ),
+            observation::canonical(&observation::capture(&[input, actual.value.clone()])),
+            "warmed original copy {name}"
+        );
+        let mut row = json!({"name":name,"copy_calls":actual.calls,"copy_target_live_traces":actual.target_live_traces});
+        if !matches!(name, "fixture.third" | "fixture.aliases") {
+            let unpacked = driver
+                .run(
+                    lua,
+                    &pair.probes.raw_get::<Function>("packed_unpack").unwrap(),
+                    &[actual.value],
+                    None,
+                )
+                .unwrap_or_else(|error| panic!("warm packed unpack {name}: {error}"));
+            assert!(unpacked.success);
+            let native = pair.native("packed_unpack", &result).unwrap();
+            assert_eq!(
+                observation::canonical(pair.session.snapshot(&native).unwrap().graph()),
+                observation::canonical(&observation::capture(&[unpacked.value])),
+                "warmed default unpack {name}"
+            );
+            row["unpack_calls"] = json!(unpacked.calls);
+            row["unpack_target_live_traces"] = json!(unpacked.target_live_traces);
+        }
+        warmed.push(row);
     }
     for args in [
         vec![],
@@ -403,5 +501,5 @@ pub fn run(lua: &Lua, primitives: &Primitives) -> Json {
         .unwrap()
         .call::<()>(())
         .unwrap();
-    json!({"source":"src/Modules/Common.lua","source_first_line":495,"source_last_line":505,"copies":rows,"actual_cache_keys":selected.iter().map(|(key,_)|key).collect::<Vec<_>>(),"lengths":lengths,"source_error_cases":4,"live_value_replacement":true,"structural_write_invalidates_traversal":true,"parser_service_admission":false,"scope":"Actual original copyTable over observed writable fixture and selected existing cache rows. Copies split repeated nested aliases; shallow copies/functions preserve identity. Copied sparse layout and structural-write traversal remain explicit frontiers."})
+    json!({"source":"src/Modules/Common.lua","source_first_line":495,"source_last_line":505,"copies":rows,"warm_cases":warmed,"constructor_evidence_required":true,"actual_cache_keys":selected.iter().map(|(key,_)|key).collect::<Vec<_>>(),"lengths":lengths,"source_error_cases":4,"live_value_replacement":true,"structural_write_invalidates_traversal":true,"parser_service_admission":false,"scope":"Actual original copyTable over observed writable fixture and selected existing cache rows. Copies split repeated nested aliases; shallow copies/functions preserve identity. Actual empty constructor allocation admits copied second-slot rows; mixed-hash layout, JIT-sensitive multiple length boundaries and structural writes to observed input remain explicit frontiers."})
 }

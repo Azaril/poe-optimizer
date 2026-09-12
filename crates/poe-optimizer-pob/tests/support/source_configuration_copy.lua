@@ -1,6 +1,8 @@
 local original_type = type
 local original_next = next
 local original_unpack = unpack
+local original_select = select
+local function pack(...) return {n = original_select("#", ...), ...} end
 return {
     copy = function(tbl, noRecurse) return copyTable(tbl, noRecurse) end,
     replace = function(tbl, key, value) tbl[key] = value; return tbl[key] end,
@@ -11,4 +13,9 @@ return {
     length = function(tbl) return #tbl end,
     unpack = function(tbl, first, last) return original_unpack(tbl, first, last) end,
     first = function(tbl) return original_next(tbl) end,
+    packed_unpack = function(tbl)
+        local result = pack(original_unpack(tbl))
+        result.verified = true
+        return result
+    end,
 }

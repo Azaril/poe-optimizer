@@ -29,8 +29,12 @@ pub struct ObservedSourceClasses {
     owner: SourceProgramOwner,
     callbacks: BTreeMap<String, SourceCallbackId>,
     classes: BTreeMap<String, SourceClassId>,
+    pub(super) constructor_observations: Option<ObservedSourceConstructors>,
 }
 impl ObservedSourceClasses {
+    pub fn constructor_observations(&self) -> Option<&ObservedSourceConstructors> {
+        self.constructor_observations.as_ref()
+    }
     pub fn owner(&self) -> &SourceProgramOwner {
         &self.owner
     }
@@ -121,6 +125,7 @@ impl SourceClosureObserver {
             immutable_capture_tables: None,
             session_tables: 0,
             context: SourceProgramContext::default(),
+            constructor_observations: constructors::Pending::default(),
         };
         graph.register_projections(&context)?;
         let prepared = PreparedClasses::prepare(&mut graph, lua, &request)?;
@@ -145,7 +150,10 @@ impl SourceClosureObserver {
         validate_sources(sources, &owner)?;
         self.verify(lua)?;
         self.verify_iteration(context.capture_iteration)?;
+        let constructor_observations =
+            self.bind_constructors(&owner, graph.constructor_observations);
         Ok(ObservedSourceClasses {
+            constructor_observations,
             owner,
             callbacks: captured.callbacks,
             classes: captured.classes,

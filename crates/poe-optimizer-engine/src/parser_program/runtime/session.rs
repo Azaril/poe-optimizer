@@ -156,7 +156,9 @@ impl ProgramSession {
         self.owner()
             .resolve_class(class)
             .map_err(|error| Error::input(error.to_string()))?;
-        let value = self.heap.allocate_instance(class.id())?;
+        let value = self
+            .heap
+            .allocate_instance(class.id(), &mut self.patterns)?;
         self.heap.charge_values(1)?;
         Ok(SessionValue {
             identity: self.identity.clone(),

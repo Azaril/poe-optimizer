@@ -101,7 +101,7 @@ fn install(
     primitives: Rc<RefCell<Option<Primitives>>>,
     passes: Rc<RefCell<Vec<Pass>>>,
 ) -> Result<(), RuntimeError> {
-    primitives.replace(Some(Primitives::before_source(lua)?));
+    primitives.replace(Some(Primitives::before_source_with_constructors(lua)?));
     let observer = lua.create_function(move |lua, (phase, index, var, original, value, player, enemy, build, event): (String, usize, String, Function, Value, Table, Table, Table, usize)| {
         assert!(matches!(value, Value::Nil | Value::Boolean(_) | Value::Integer(_) | Value::Number(_) | Value::String(_)), "identity-bearing apply arguments require coherent input binding");
         let mut passes = passes.borrow_mut();
@@ -208,7 +208,7 @@ fn summarize(
             "pinned continuing callback prefix"
         );
         eprintln!(
-            "R2l build {build} pass {index}: {}/{} callbacks paired",
+            "R2m build {build} pass {index}: {}/{} callbacks paired",
             paired.len(),
             pass.rows.len()
         );
@@ -268,7 +268,7 @@ fn original_configuration_callbacks_continue_through_inherited_control_dispatch(
         .join("../..")
         .canonicalize()
         .unwrap();
-    let destination = project.join("runs/r2l-configuration-dispatch");
+    let destination = project.join("runs/r2m-configuration-dispatch");
     fs::create_dir_all(&destination).unwrap();
     if let Ok(build) = std::env::var("POE_CONFIG_DISPATCH_CHILD") {
         assert!(["01", "02", "03", "04", "05"].contains(&build.as_str()));

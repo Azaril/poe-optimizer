@@ -191,8 +191,12 @@ aliases; shallow copies and function values retain identity. The session input c
 order and optional raw length separately from unordered values. Replacing a present non-nil
 value with another non-nil value preserves the observation; other writes invalidate it.
 Original `unpack` can read explicit raw ranges or a supported current default length.
-Copied sparse result tables still need a generic native constructor/layout model; observed
-input length cannot be attached to the fresh copy. These tests do not execute the parser
+The actual empty copy constructor now has an optional source-bound allocation descriptor.
+Its private native array layout follows the pinned integer-growth rules, so copied
+second-slot-only results can preserve nil/false/empty-string packs without borrowing their
+input's length. Warmed original copy/unpack comparisons remain separate from interpreter
+checks. Mixed-hash copies and layouts with ambiguous JIT length hints retain explicit
+boundaries; indexed unpack ranges can still proceed. These tests do not execute the parser
 wrapper, change its return shape or admit quest activation.
 
 The [parser session design](parser-sessions.md) preserves public cache/dictionary history,

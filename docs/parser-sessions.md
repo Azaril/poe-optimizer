@@ -120,6 +120,43 @@ extending `unpack` beyond currently admitted signed-32-bit indices. Host-depende
 not silently change native/WebAssembly behavior. Source-authenticated observations, raw data
 transport, native layout simulation and source-domain admission remain separate concerns.
 
+## Source constructor allocation
+
+Constructor allocation belongs to the immutable program catalog, separate from the
+input graph and mutable table observations. Each descriptor identifies its callback,
+complete program provenance, exact expression range, original instruction location and
+bytecode digest. The optional constructor metadata includes a required typed runtime
+profile recording the source VM revision, numeric mode, architecture/endianness, GC/frame
+convention and relevant build flags.
+These describe the source being emulated; they do not require Rust to run on that same
+architecture. A WebAssembly evaluator can execute an admitted source profile.
+
+The PoB adapter observes the actual function identities before lowering. Its opaque
+observation retains the original owner binding; matching names, source lines or newly
+compiled snippets cannot replace it. Source lowering reconciles observations with whole
+programs and constructs a fresh catalog. Ordinary lowering has no constructor evidence.
+Serialized descriptors remain structural claims whose importing domain must authenticate;
+valid JSON does not prove a source runtime observation. Compile-only flags such as
+LuaJIT's table-allocation bump option require explicit trusted build attestation.
+
+The native session owns simulated allocation state only for constructors whose semantics
+are represented. All writes, including nil-to-absent stores and table.insert, update or
+invalidate that state through one mutation boundary and the same cumulative budgets.
+An explicit-key write outside the modeled layout remains a legal value update, but later
+operations requiring unknown layout must report unsupported. Append must first establish
+its index from a supported length; an ambiguous length stops it before any write.
+Raw snapshots preserve values and aliases without
+reconstructing allocation history. Imported observations cannot become simulated layouts
+merely because their raw entries equal a freshly constructed table's entries.
+
+The end state must represent new-table allocation, constant-template duplication, reserved
+nil slots, numeric growth, mixed-key hash layout and deleted-slot history. Sparse raw
+length, the length operator, and warmed JIT length hints require separate source evidence;
+a match against the interpreter's raw-length helper alone does not establish all three.
+Keep exact-function interpreter and warmed result/failure comparisons in the acceptance
+suite, including equal raw maps reached through different construction and mutation paths.
+The current implementation/admission limits are tracked in [implementation](implementation.md).
+
 ## Integration gates
 
 1. Establish mutable traversal/length behavior for actual wrapper and `copyTable` consumers,

@@ -193,6 +193,12 @@ impl CompiledTableTraversal {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
+enum CompiledTableConstructor {
+    EmptyArray,
+    UnsupportedProfile,
+}
+
 #[derive(Debug)]
 struct Library {
     catalog: SourceProgramCatalog,
@@ -200,6 +206,7 @@ struct Library {
     callbacks: BTreeMap<ParserCallbackId, usize>,
     instruction_count: usize,
     traversal: BTreeMap<ParserTableId, CompiledTableTraversal>,
+    constructors: BTreeMap<(ParserCallbackId, u32, u32), CompiledTableConstructor>,
 }
 /// Cheaply clone/share prepared immutable code. Future invocation state belongs
 /// to each evaluation; this library stores no locals, heap or mutable worker data.
@@ -280,6 +287,23 @@ impl CompiledSourcePrograms {
             });
         }
         Ok(Self(Arc::new(Library {
+            constructors: catalog
+                .constructors()
+                .into_iter()
+                .flat_map(|constructors| {
+                    let supported = if constructors.profile.is_supported_array_profile() {
+                        CompiledTableConstructor::EmptyArray
+                    } else {
+                        CompiledTableConstructor::UnsupportedProfile
+                    };
+                    constructors.sites.iter().map(move |site| {
+                        (
+                            (site.callback, site.expression.start, site.expression.end),
+                            supported,
+                        )
+                    })
+                })
+                .collect(),
             catalog: catalog.clone(),
             programs: programs.into_boxed_slice(),
             callbacks,

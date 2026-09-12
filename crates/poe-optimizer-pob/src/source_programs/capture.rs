@@ -13,6 +13,8 @@ use poe_optimizer_data::{
 use std::collections::BTreeMap;
 
 mod classes;
+mod constructors;
+pub use constructors::ObservedSourceConstructors;
 mod context;
 mod iteration;
 mod session;
@@ -39,6 +41,7 @@ pub struct SourceClosureObserver {
     get_metatable: Function,
     string_metatable: Table,
     iterator_primitives: iteration::Primitives,
+    constructor_reflection: Option<constructors::Reflection>,
 }
 
 /// Complete observed dependency graph. Named callback roots are not executable
@@ -139,6 +142,7 @@ impl SourceClosureObserver {
             get_metatable,
             string_metatable,
             iterator_primitives,
+            constructor_reflection: None,
         };
         observer.verify(lua)?;
         Ok(observer)
@@ -220,6 +224,7 @@ impl SourceClosureObserver {
             session_tables: 0,
             source_names: &context.source_names,
             context: SourceProgramContext::default(),
+            constructor_observations: constructors::Pending::default(),
         };
         graph.register_projections(&context)?;
         graph.capture_projections(&context)?;
@@ -252,7 +257,13 @@ impl SourceClosureObserver {
         validate_sources(sources, &owner)?;
         self.verify_capture_context(lua, context.environment.is_some())?;
         self.verify_iteration(context.capture_iteration)?;
-        Ok(ObservedSourceContext { owner, callbacks })
+        let constructor_observations =
+            self.bind_constructors(&owner, graph.constructor_observations);
+        Ok(ObservedSourceContext {
+            owner,
+            callbacks,
+            constructor_observations,
+        })
     }
     fn verify_capture_context(&self, lua: &Lua, explicit_environment: bool) -> Result<()> {
         if !explicit_environment {
@@ -386,6 +397,7 @@ struct Graph<'a> {
     forbidden_callbacks: std::collections::BTreeSet<usize>,
     forbidden_cells: std::collections::BTreeSet<usize>,
     context: SourceProgramContext,
+    constructor_observations: constructors::Pending,
     // Only the class/session observer requires positive immutable ownership.
     immutable_capture_tables: Option<std::collections::BTreeSet<usize>>,
     // Live tables reserve their share before late definition graph expansion.
@@ -612,6 +624,9 @@ impl Graph<'_> {
                 source: self.lua_source(&function)?,
             }
         };
+        if let SourceCallbackKind::Lua { source } = &kind {
+            self.observe_constructors(id, &function, source)?;
+        }
         self.callbacks.push(SourceCallback {
             kind: kind.clone(),
             upvalues: vec![],

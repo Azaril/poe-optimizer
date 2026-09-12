@@ -426,21 +426,43 @@ traversal reads the current value at each step. Other writes invalidate both fac
 an exact native layout transition has been established. This includes assigning nil to an
 absent key and adding a text key: source hash allocation/rehashing can affect physical state.
 The write remains legal; only a later operation that needs an unavailable fact stops. An
-unobserved non-nil `next` control is still unavailable, since array holes and deleted hash
-keys can have source-defined successors outside the live-key permutation.
+unobserved non-nil `next` control remains unavailable for point observations, since array
+holes and deleted hash keys can have successors outside the live-key permutation. A
+source-simulated array can instead resolve controls within its known physical capacity,
+including holes and deleted values.
 
 The original `unpack` reads raw integer slots, preserving nil holes and exact result packs.
 An explicit end does not require a table-length fact; an omitted/nil end uses a valid observed
-raw length or a layout-independent dense boundary. Result counts and work are bounded before
-allocating output. The existing cross-platform numeric-conversion frontier remains explicit
+raw length, a layout-independent dense boundary, or an admitted native allocation history.
+Default unpack and table.insert must also account for JIT-hinted length: a simulated
+layout is unavailable if its physical raw length disagrees with any possible hinted
+length, even when only one non-nil hint exists. Supporting these cases requires the
+execution history. An explicit unpack end bypasses that length requirement. Result counts
+and work are bounded before allocating output. The existing cross-platform numeric-conversion frontier remains explicit
 for indices outside the admitted signed-32-bit conversion domain.
 
 Execute the original `Common.copyTable` through ordinary source programs. Its recursive
 value copies split repeated nested aliases; shallow copies and function/table keys preserve
 source identities. A freshly copied table cannot inherit its input's traversal/length facts.
-Sparse constructors and copy outputs, structural-write layout transitions, and private parser
-cache history remain required follow-up work. These facilities serve the full public parser;
-a copy component gate does not admit parsing or complete build evaluation.
+Standalone catalogs may carry optional `SourceProgramConstructors` metadata bound to the
+complete program provenance, exact expression range and observed instruction. The PoB
+observer retains opaque owner-bound evidence from the actual callbacks, and
+`lower_observed_from_sources` reconciles it with the whole-function IR. Existing lowering
+and parser serialization do not gain these facts. The source runtime profile includes an
+explicit build attestation; Rust execution may emulate it on a different host architecture.
+
+Private native layout starts only at an admitted constructor. A fixed occupancy histogram
+implements the pinned integer rehash rules without scanning a large array. Structural
+writes update capacity and occupancy or invalidate the simulation when an unrepresented
+hash layout is required. Allocation and transition/traversal work share the same cumulative
+session budgets. Compiler metadata is immutable and shared; each session owns its layout.
+
+The initial source gate covers an unambiguous zero-allocation empty constructor and
+array-only transitions. Multiple/nonempty constructors, constant templates, mixed hash
+layout and private parser history remain integration work. See the
+[parser-session constructor contract](parser-sessions.md#source-constructor-allocation).
+These facilities serve the full public parser; a copy component gate does not admit parsing
+or complete build evaluation.
 
 ### Parser results and explicit effects
 

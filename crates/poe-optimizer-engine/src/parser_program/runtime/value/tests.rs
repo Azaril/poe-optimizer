@@ -9,7 +9,7 @@ fn owner() -> ModifierParserCatalog {
         .get_or_init(|| bundled_snapshot().unwrap().modifier_parser().clone())
         .clone()
 }
-fn heap() -> Heap<'static> {
+pub(super) fn heap() -> Heap<'static> {
     Heap::new(
         &owner(),
         &ProgramValueGraph::default(),
@@ -17,6 +17,9 @@ fn heap() -> Heap<'static> {
     )
     .unwrap()
     .0
+}
+fn work() -> crate::lua_pattern::MatchBudget {
+    crate::lua_pattern::MatchBudget::new(ProgramLimits::default().pattern)
 }
 fn text(bytes: &[u8]) -> V {
     V::Bytes(Arc::from(bytes))
@@ -87,10 +90,14 @@ fn fresh_alias_writes_remain_shared_until_the_explicit_graph_boundary() {
     let root = heap.new_table().unwrap();
     let alias = root.clone();
     let child = heap.new_table().unwrap();
-    heap.set(&root, text(b"left"), child.clone()).unwrap();
-    heap.set(&root, text(b"right"), child.clone()).unwrap();
-    heap.set(&alias, V::Number(1.0), V::Boolean(true)).unwrap();
-    heap.set(&child, text(b"parent"), root.clone()).unwrap();
+    heap.set(&root, text(b"left"), child.clone(), &mut work())
+        .unwrap();
+    heap.set(&root, text(b"right"), child.clone(), &mut work())
+        .unwrap();
+    heap.set(&alias, V::Number(1.0), V::Boolean(true), &mut work())
+        .unwrap();
+    heap.set(&child, text(b"parent"), root.clone(), &mut work())
+        .unwrap();
     assert!(matches!(
         heap.get(&root, &V::Number(1.0)).unwrap(),
         V::Boolean(true)
@@ -120,20 +127,21 @@ fn heap_argument_and_definition_id_domains_are_distinct_and_borrowed_writes_defe
     assert!(!fresh.lua_equal(&definition));
     assert!(!definition.lua_equal(&values[0]));
     assert_kind(
-        heap.set(&values[0], text(b"new"), V::Boolean(true)),
+        heap.set(&values[0], text(b"new"), V::Boolean(true), &mut work()),
         Kind::UnsupportedCapability,
     );
     assert_kind(
-        heap.set(&definition, text(b"new"), V::Boolean(true)),
+        heap.set(&definition, text(b"new"), V::Boolean(true), &mut work()),
         Kind::UnsupportedCapability,
     );
     assert!(matches!(
         heap.get(&values[0], &text(b"new")).unwrap(),
         V::Nil
     ));
-    heap.set(&fresh, values[0].clone(), V::Boolean(false))
+    heap.set(&fresh, values[0].clone(), V::Boolean(false), &mut work())
         .unwrap();
-    heap.set(&fresh, definition, V::Boolean(true)).unwrap();
+    heap.set(&fresh, definition, V::Boolean(true), &mut work())
+        .unwrap();
     assert!(matches!(
         heap.get(&fresh, &values[0]).unwrap(),
         V::Boolean(false)
@@ -144,10 +152,13 @@ fn heap_argument_and_definition_id_domains_are_distinct_and_borrowed_writes_defe
 fn lua_key_rules_normalize_zero_preserve_identity_and_distinguish_read_write_errors() {
     let mut heap = heap();
     let root = heap.new_table().unwrap();
-    heap.set(&root, V::Number(-0.0), V::Number(1.0)).unwrap();
-    heap.set(&root, V::Number(0.0), V::Number(2.0)).unwrap();
-    heap.set(&root, V::Boolean(false), V::Number(3.0)).unwrap();
-    heap.set(&root, V::Number(f64::INFINITY), V::Number(4.0))
+    heap.set(&root, V::Number(-0.0), V::Number(1.0), &mut work())
+        .unwrap();
+    heap.set(&root, V::Number(0.0), V::Number(2.0), &mut work())
+        .unwrap();
+    heap.set(&root, V::Boolean(false), V::Number(3.0), &mut work())
+        .unwrap();
+    heap.set(&root, V::Number(f64::INFINITY), V::Number(4.0), &mut work())
         .unwrap();
     assert!(matches!(
         heap.get(&root, &V::Number(-0.0)).unwrap(),
@@ -163,7 +174,10 @@ fn lua_key_rules_normalize_zero_preserve_identity_and_distinguish_read_write_err
     ));
     for key in [V::Nil, V::Number(f64::NAN)] {
         assert!(matches!(heap.get(&root, &key).unwrap(), V::Nil));
-        assert_kind(heap.set(&root, key, V::Boolean(true)), Kind::Source);
+        assert_kind(
+            heap.set(&root, key, V::Boolean(true), &mut work()),
+            Kind::Source,
+        );
     }
     for scalar in [
         V::Nil,
@@ -172,17 +186,18 @@ fn lua_key_rules_normalize_zero_preserve_identity_and_distinguish_read_write_err
         V::Callback(ParserCallbackId(1)),
     ] {
         assert_kind(heap.get(&scalar, &V::Nil), Kind::Source);
-        assert_kind(heap.set(&scalar, V::Nil, V::Nil), Kind::Source);
+        assert_kind(heap.set(&scalar, V::Nil, V::Nil, &mut work()), Kind::Source);
     }
     assert_kind(
         heap.get(&text(b"str"), &text(b"sub")),
         Kind::UnsupportedCapability,
     );
     assert_kind(
-        heap.set(&text(b"str"), V::Number(1.0), V::Nil),
+        heap.set(&text(b"str"), V::Number(1.0), V::Nil, &mut work()),
         Kind::Source,
     );
-    heap.set(&root, V::Number(-0.0), V::Nil).unwrap();
+    heap.set(&root, V::Number(-0.0), V::Nil, &mut work())
+        .unwrap();
     assert!(matches!(heap.get(&root, &V::Number(0.0)).unwrap(), V::Nil));
 }
 
@@ -254,26 +269,36 @@ fn complete_input_validation_rejects_dead_invalid_nodes_and_normalized_duplicate
 fn dense_length_rejects_holes_and_append_nil_does_not_advance_the_boundary() {
     let mut heap = heap();
     let root = heap.new_table().unwrap();
-    heap.set(&root, text(b"name"), V::Boolean(true)).unwrap();
-    heap.set(&root, V::Number(-1.0), V::Boolean(true)).unwrap();
-    heap.set(&root, V::Number(1.5), V::Boolean(true)).unwrap();
-    assert_eq!(heap.dense_len(&root).unwrap(), 0);
-    heap.append(&root, V::Nil).unwrap();
-    assert_eq!(heap.dense_len(&root).unwrap(), 0);
-    heap.append(&root, V::Number(10.0)).unwrap();
-    heap.set(&root, V::Number(3.0), V::Boolean(true)).unwrap();
-    assert_kind(heap.dense_len(&root), Kind::UnsupportedCapability);
+    heap.set(&root, text(b"name"), V::Boolean(true), &mut work())
+        .unwrap();
+    heap.set(&root, V::Number(-1.0), V::Boolean(true), &mut work())
+        .unwrap();
+    heap.set(&root, V::Number(1.5), V::Boolean(true), &mut work())
+        .unwrap();
+    assert_eq!(heap.raw_len(&root, &mut work()).unwrap(), 0);
+    heap.append(&root, V::Nil, &mut work()).unwrap();
+    assert_eq!(heap.raw_len(&root, &mut work()).unwrap(), 0);
+    heap.append(&root, V::Number(10.0), &mut work()).unwrap();
+    heap.set(&root, V::Number(3.0), V::Boolean(true), &mut work())
+        .unwrap();
     assert_kind(
-        heap.append(&root, V::Number(20.0)),
+        heap.raw_len(&root, &mut work()),
         Kind::UnsupportedCapability,
     );
-    heap.set(&root, V::Number(2.0), V::Boolean(true)).unwrap();
-    assert_eq!(heap.dense_len(&root).unwrap(), 3);
-    heap.set(&root, V::Number(3.0), V::Nil).unwrap();
-    assert_eq!(heap.dense_len(&root).unwrap(), 2);
-    heap.set(&root, V::Number(2.0), V::Nil).unwrap();
-    heap.append(&root, V::Number(30.0)).unwrap();
-    assert_eq!(heap.dense_len(&root).unwrap(), 2);
+    assert_kind(
+        heap.append(&root, V::Number(20.0), &mut work()),
+        Kind::UnsupportedCapability,
+    );
+    heap.set(&root, V::Number(2.0), V::Boolean(true), &mut work())
+        .unwrap();
+    assert_eq!(heap.raw_len(&root, &mut work()).unwrap(), 3);
+    heap.set(&root, V::Number(3.0), V::Nil, &mut work())
+        .unwrap();
+    assert_eq!(heap.raw_len(&root, &mut work()).unwrap(), 2);
+    heap.set(&root, V::Number(2.0), V::Nil, &mut work())
+        .unwrap();
+    heap.append(&root, V::Number(30.0), &mut work()).unwrap();
+    assert_eq!(heap.raw_len(&root, &mut work()).unwrap(), 2);
     assert!(matches!(
         heap.get(&root, &V::Number(2.0)).unwrap(),
         V::Number(30.0)
@@ -299,12 +324,12 @@ fn allocation_bounds_reject_before_adding_heap_entries_or_string_payload() {
     assert_eq!(heap.remaining_bytes(), 0);
     // A numeric entry needs key+value and the cached integer-boundary index.
     assert_kind(
-        heap.set(&root, V::Number(1.0), V::Boolean(true)),
+        heap.set(&root, V::Number(1.0), V::Boolean(true), &mut work()),
         Kind::ResourceBound,
     );
     assert!(matches!(heap.get(&root, &V::Number(1.0)).unwrap(), V::Nil));
     assert_eq!(heap.stats().values, 0);
-    assert_eq!(heap.dense_len(&root).unwrap(), 0);
+    assert_eq!(heap.raw_len(&root, &mut work()).unwrap(), 0);
 }
 
 #[test]
@@ -384,7 +409,7 @@ fn capture_tables_stay_borrowed_and_definition_strings_are_charged_when_reached(
     let captured = heap.capture(callback, offset).unwrap();
     assert!(captured.lua_equal(&heap.definition(id).unwrap()));
     assert_kind(
-        heap.set(&captured, text(b"test"), V::Nil),
+        heap.set(&captured, text(b"test"), V::Nil, &mut work()),
         Kind::UnsupportedCapability,
     );
     assert_eq!(

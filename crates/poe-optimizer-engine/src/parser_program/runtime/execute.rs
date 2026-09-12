@@ -1,5 +1,6 @@
 use super::super::{
-    CompiledParserPrograms, CompiledProgramBinding, CompiledSourcePrograms, ProgramOperation,
+    CompiledParserPrograms, CompiledProgramBinding, CompiledSourcePrograms,
+    CompiledTableConstructor, ProgramOperation,
 };
 use super::{
     ProgramAllocationUsage, ProgramLimits, ProgramOutput, ProgramRequestAccounting,
@@ -262,7 +263,7 @@ impl Run<'_, '_, '_> {
                         let table = self.expr(frame, table, depth + 1)?;
                         let key = self.expr(frame, key, depth + 1)?;
                         let value = self.expr(frame, value, depth + 1)?;
-                        self.heap.set(&table, key, value)?;
+                        self.heap.set(&table, key, value, self.patterns)?;
                         pc += 1;
                     }
                     Op::TableAppend { table, value, .. } => {
@@ -794,7 +795,8 @@ impl Run<'_, '_, '_> {
             self.invoke_value(constructor, input, depth + 1)?;
             // The constructor may have replaced this table. Fetch it again.
             let initialized = self.named_get(&object, &policy.parent_init)?;
-            self.heap.set(&initialized, parent, V::Boolean(true))?;
+            self.heap
+                .set(&initialized, parent, V::Boolean(true), self.patterns)?;
             Ok(Vec::new())
         })();
         self.call_depth -= 1;
@@ -908,7 +910,9 @@ impl Run<'_, '_, '_> {
                         .ok_or_else(|| Error::source("arithmetic on a non-number")),
                     ParserProgramUnary::Length => match &value {
                         V::Bytes(bytes) => Ok(V::Number(bytes.len() as f64)),
-                        V::Table(_) => Ok(V::Number(self.heap.dense_len(&value)? as f64)),
+                        V::Table(_) => Ok(V::Number(
+                            self.heap.operator_len(&value, self.patterns)? as f64,
+                        )),
                         _ => Err(Error::source("attempt to get length of unsupported value")),
                     },
                 }
@@ -932,7 +936,16 @@ impl Run<'_, '_, '_> {
                 .into_iter()
                 .next()
                 .unwrap_or(V::Nil)),
-            E::Table { fields } => self.table(frame, fields, depth + 1),
+            E::Table { fields } => {
+                let callback = self.library.0.programs[frame.program].callback;
+                let seed = self
+                    .library
+                    .0
+                    .constructors
+                    .get(&(callback, expr.location.start, expr.location.end))
+                    .copied();
+                self.table(frame, fields, depth + 1, seed)
+            }
         }
     }
     fn binary(&mut self, operation: ParserProgramBinary, left: V, right: V) -> Result<V> {
@@ -1016,8 +1029,24 @@ impl Run<'_, '_, '_> {
         frame: &mut Frame,
         fields: &[ParserProgramField],
         depth: usize,
+        seed: Option<CompiledTableConstructor>,
     ) -> Result<V> {
-        let table = self.heap.new_table()?;
+        let table = match seed {
+            Some(CompiledTableConstructor::EmptyArray) if fields.is_empty() => {
+                self.heap.native_empty_table(self.patterns)?
+            }
+            Some(CompiledTableConstructor::EmptyArray) => {
+                return Err(Error::input(
+                    "source constructor seed requires an empty expression",
+                ));
+            }
+            Some(CompiledTableConstructor::UnsupportedProfile) => {
+                return Err(Error::unsupported(
+                    "source table runtime profile is not admitted",
+                ));
+            }
+            None => self.heap.new_table()?,
+        };
         let mut index = 1usize;
         for field in fields {
             self.tick(depth)?;
@@ -1025,21 +1054,23 @@ impl Run<'_, '_, '_> {
                 ParserProgramField::Named { key, value } => {
                     let key = self.heap.bytes(key.as_bytes())?;
                     let value = self.expr(frame, value, depth + 1)?;
-                    self.heap.set(&table, key, value)?;
+                    self.heap.set(&table, key, value, self.patterns)?;
                 }
                 ParserProgramField::Keyed { key, value } => {
                     let key = self.expr(frame, key, depth + 1)?;
                     let value = self.expr(frame, value, depth + 1)?;
-                    self.heap.set(&table, key, value)?;
+                    self.heap.set(&table, key, value, self.patterns)?;
                 }
                 ParserProgramField::List { value } => {
                     let value = self.expr(frame, value, depth + 1)?;
-                    self.heap.set(&table, V::Number(index as f64), value)?;
+                    self.heap
+                        .set(&table, V::Number(index as f64), value, self.patterns)?;
                     index += 1;
                 }
                 ParserProgramField::Tail { values } => {
                     for value in self.pack(frame, values, depth + 1)? {
-                        self.heap.set(&table, V::Number(index as f64), value)?;
+                        self.heap
+                            .set(&table, V::Number(index as f64), value, self.patterns)?;
                         index = index
                             .checked_add(1)
                             .ok_or_else(|| Error::resource("table literal index"))?;

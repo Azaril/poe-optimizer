@@ -19,9 +19,26 @@ pub struct Primitives {
 }
 impl Primitives {
     pub fn before_source(lua: &Lua) -> Result<Self, RuntimeError> {
+        Self::before_source_inner(lua, false)
+    }
+    #[allow(dead_code)]
+    pub fn before_source_with_constructors(lua: &Lua) -> Result<Self, RuntimeError> {
+        Self::before_source_inner(lua, true)
+    }
+    fn before_source_inner(lua: &Lua, constructors: bool) -> Result<Self, RuntimeError> {
+        // This host uses the locked vendored LuaJIT build. Non-reflectable build
+        // flags are an explicit adapter attestation; source names prove none.
+        let observer = if constructors {
+            SourceClosureObserver::capture_before_source_with_constructors(
+                lua,
+                SourceTableRuntimeProfile::luajit21_x64_single(),
+            )
+        } else {
+            SourceClosureObserver::capture_before_source(lua)
+        }
+        .map_err(|e| RuntimeError::Setup(e.to_string()))?;
         Ok(Self {
-            observer: SourceClosureObserver::capture_before_source(lua)
-                .map_err(|e| RuntimeError::Setup(e.to_string()))?,
+            observer,
             getupvalue: lua.globals().get::<Table>("debug")?.get("getupvalue")?,
         })
     }

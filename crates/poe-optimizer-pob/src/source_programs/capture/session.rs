@@ -18,8 +18,12 @@ pub struct SourceSessionCaptureRequest {
 pub struct ObservedSourceSession {
     input: SourceSessionInput,
     roots: BTreeMap<String, usize>,
+    pub(super) constructor_observations: Option<ObservedSourceConstructors>,
 }
 impl ObservedSourceSession {
+    pub fn constructor_observations(&self) -> Option<&ObservedSourceConstructors> {
+        self.constructor_observations.as_ref()
+    }
     pub fn owner(&self) -> &SourceProgramOwner {
         &self.input.owner
     }
@@ -132,6 +136,7 @@ impl SourceClosureObserver {
             immutable_capture_tables: None,
             session_tables: 0,
             context: SourceProgramContext::default(),
+            constructor_observations: constructors::Pending::default(),
         };
         definitions.register_projections(&request.definitions)?;
         let prepared = class_request
@@ -282,6 +287,8 @@ impl SourceClosureObserver {
             .into_iter()
             .map(|(table, class)| Ok((table, owner.bind_class(class).map_err(error)?)))
             .collect::<Result<_>>()?;
+        let constructor_observations =
+            self.bind_constructors(&owner, definitions.constructor_observations);
         let input = SourceSessionInput {
             owner,
             class_bindings,
@@ -301,6 +308,7 @@ impl SourceClosureObserver {
         }
         self.verify_iteration(request.definitions.capture_iteration)?;
         Ok(ObservedSourceSession {
+            constructor_observations,
             input,
             roots: named_roots,
         })

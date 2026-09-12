@@ -38,8 +38,12 @@ pub struct SourceCaptureContext {
 pub struct ObservedSourceContext {
     pub(super) owner: SourceProgramOwner,
     pub(super) callbacks: BTreeMap<String, SourceCallbackId>,
+    pub(super) constructor_observations: Option<ObservedSourceConstructors>,
 }
 impl ObservedSourceContext {
+    pub fn constructor_observations(&self) -> Option<&ObservedSourceConstructors> {
+        self.constructor_observations.as_ref()
+    }
     pub fn owner(&self) -> &SourceProgramOwner {
         &self.owner
     }

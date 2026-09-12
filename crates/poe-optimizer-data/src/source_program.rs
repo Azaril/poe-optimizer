@@ -11,12 +11,14 @@ use std::{
 };
 mod classes;
 mod closures;
+mod constructors;
 mod context;
 pub(crate) mod graph;
 mod iteration;
 pub mod session;
 pub use classes::*;
 pub use closures::*;
+pub use constructors::*;
 pub use context::*;
 pub use iteration::*;
 pub use session::*;
@@ -360,6 +362,7 @@ enum ProgramStorage {
 #[derive(Debug, Clone)]
 pub struct SourceProgramCatalog {
     data: ProgramStorage,
+    constructors: Option<Arc<SourceProgramConstructors>>,
     owner: SourceProgramOwner,
     required: BTreeSet<SourceProgramCapability>,
 }
@@ -368,6 +371,7 @@ impl SourceProgramCatalog {
         let required = crate::modifier_parser::programs::validate::validate(&data, &owner)?;
         Ok(Self {
             data: ProgramStorage::Authored(Arc::new(data)),
+            constructors: None,
             owner,
             required,
         })
@@ -381,6 +385,7 @@ impl SourceProgramCatalog {
     ) -> Self {
         Self {
             data: ProgramStorage::ParserPayload(owner.clone()),
+            constructors: None,
             owner: SourceProgramOwner::from_parser(owner),
             required,
         }

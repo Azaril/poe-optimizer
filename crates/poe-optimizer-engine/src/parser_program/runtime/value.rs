@@ -8,6 +8,8 @@ use poe_optimizer_data::modifier_parser::{
     ParserCallbackId, ParserFactoryLiteral, ParserNonFinite, ParserTableId, ParserValue,
 };
 use poe_optimizer_data::source_program::{SourceClassId, SourceProgramOwner};
+mod array_layout;
+use array_layout::ArrayLayout;
 mod coverage;
 use coverage::Coverage;
 pub use coverage::ProgramTableCoverage;
@@ -133,6 +135,7 @@ pub(super) enum TableBehavior {
 
 #[derive(Default)]
 struct Table {
+    array_layout: Option<ArrayLayout>,
     entries: BTreeMap<Key, V>,
     // Positive finite integer keys have monotonically ordered IEEE bits. This
     // index keeps append/length logarithmic rather than rescanning growing lists.
@@ -553,6 +556,9 @@ impl<'a> Heap<'a> {
     ) -> Result<Option<(V, V)>> {
         use poe_optimizer_data::source_program::SourceTableKey;
         let TableRef::Definition(id) = table_ref(table)? else {
+            if let Some(result) = self.native_array_next(table, control, work)? {
+                return Ok(result);
+            }
             return self.observed_next(table, control, work);
         };
         let owner = self.catalog.clone();
@@ -649,7 +655,13 @@ impl<'a> Heap<'a> {
         self.tables.push(Table::default());
         Ok(V::Table(TableRef::Heap(id)))
     }
-    pub(super) fn raw_set(&mut self, table: &V, key: V, value: V) -> Result<()> {
+    pub(super) fn raw_set(
+        &mut self,
+        table: &V,
+        key: V,
+        value: V,
+        work: &mut crate::lua_pattern::MatchBudget,
+    ) -> Result<()> {
         let reference = table_ref(table)?;
         let key = Key::write(&key)?;
         if matches!(self.behavior(table), Some(TableBehavior::ParentProxy))
@@ -669,18 +681,31 @@ impl<'a> Heap<'a> {
         let coverage_key = self.coverage.contains_key(&reference).then(|| key.clone());
         let target = self
             .tables
-            .get_mut(index(id)?)
+            .get(index(id)?)
             .ok_or_else(|| Error::input("missing heap table"))?;
-        let preserves_observation = !deleted && target.entries.contains_key(&key);
-        if matches!(value, V::Nil) {
+        let present = target.entries.contains_key(&key);
+        let preserves_observation = !deleted && present;
+        let layout = match target.array_layout {
+            Some(previous) => {
+                let next = previous.transition(&key, present, !deleted, work)?;
+                if let Some(next) = next {
+                    self.budget.values(next.growth(previous))?;
+                }
+                next
+            }
+            None => None,
+        };
+        if !deleted && !present {
+            self.budget
+                .values(2 + usize::from(key.positive_integer().is_some()))?;
+        }
+        let target = &mut self.tables[index(id)?];
+        if deleted {
             target.remove(&key);
         } else {
-            if !target.entries.contains_key(&key) {
-                self.budget
-                    .values(2 + usize::from(key.positive_integer().is_some()))?;
-            }
             target.insert(key, value);
         }
+        target.array_layout = layout;
         if !preserves_observation {
             // Even an absent-key nil write can allocate/rehash in LuaJIT.
             // Invalidate only after the write succeeds; failed writes retain facts.
@@ -693,7 +718,11 @@ impl<'a> Heap<'a> {
     }
     /// Raw length uses an authenticated current observation when available.
     /// Otherwise only a layout-independent dense boundary is supported.
-    pub(super) fn raw_len(&mut self, table: &V) -> Result<usize> {
+    pub(super) fn raw_len(
+        &mut self,
+        table: &V,
+        work: &mut crate::lua_pattern::MatchBudget,
+    ) -> Result<usize> {
         let reference = table_ref(table)?;
         if let Some(length) = self
             .table_observations
@@ -702,11 +731,28 @@ impl<'a> Heap<'a> {
         {
             return Ok(length);
         }
+        if let Some(length) = self.native_array_len(table, work)? {
+            return Ok(length);
+        }
         self.proven_dense_len(table)
     }
-    // Existing # and table.insert callers share the same raw-length semantics.
-    pub(super) fn dense_len(&mut self, table: &V) -> Result<usize> {
-        self.raw_len(table)
+    /// A sparse native array has a precise raw length, but JIT length hints can
+    /// select another valid boundary. Do not broaden # from raw-length evidence.
+    pub(super) fn operator_len(
+        &mut self,
+        table: &V,
+        work: &mut crate::lua_pattern::MatchBudget,
+    ) -> Result<usize> {
+        if let TableRef::Heap(id) = table_ref(table)?
+            && self
+                .tables
+                .get(index(id)?)
+                .is_some_and(|value| value.array_layout.is_some())
+        {
+            work.charge(1)?;
+            return self.proven_dense_len(table);
+        }
+        self.raw_len(table, work)
     }
     /// Only a unique dense positive-integer boundary is supported. Hash fields,
     /// negative and fractional numeric keys do not change that boundary. Any
@@ -747,14 +793,19 @@ impl<'a> Heap<'a> {
         }
         Ok(count)
     }
-    pub(super) fn append(&mut self, table: &V, value: V) -> Result<()> {
-        let length = self.dense_len(table)?;
+    pub(super) fn append(
+        &mut self,
+        table: &V,
+        value: V,
+        work: &mut crate::lua_pattern::MatchBudget,
+    ) -> Result<()> {
+        let length = self.hint_safe_len(table, work)?;
         let next = length
             .checked_add(1)
             .filter(|n| *n as u64 <= 9_007_199_254_740_991)
             .ok_or_else(|| Error::resource("table append index"))?;
         // LuaJIT table.insert uses lj_tab_setint, bypassing __newindex.
-        self.raw_set(table, V::Number(next as f64), value)
+        self.raw_set(table, V::Number(next as f64), value, work)
     }
     pub(super) fn freeze(&mut self, values: &[V]) -> Result<ProgramValueGraph> {
         if values.len() > self.budget.limits.max_results {

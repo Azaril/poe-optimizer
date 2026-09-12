@@ -369,6 +369,7 @@ impl CapturedLive {
                 interned.insert(key, id);
                 id
             };
+            definitions.observe_constructors(callback, &closure.function, source)?;
             // Retaining the actual Function keeps its observed cells rooted until
             // conversion ends; it never escapes in the pure-Rust result.
             let _keep_alive = &closure.function;
