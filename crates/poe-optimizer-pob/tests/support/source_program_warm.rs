@@ -8,7 +8,7 @@ local function run(f, args)
     end
     return ok, value
 end
-local function warm(f, args, error_seed)
+local function warm(f, args, error_seed, target)
     jit.off()
     jit.flush()
     jit.opt.start('hotloop=2', 'hotexit=2')
@@ -49,7 +49,7 @@ local function warm(f, args, error_seed)
     for id, callbacks in pairs(completed) do
         if util.traceinfo(id) then
             live = live + 1
-            if callbacks[f] then target_live = target_live + 1 end
+            if callbacks[target] then target_live = target_live + 1 end
         end
     end
     return {ok=ok, value=value, calls=128, seed_calls=seed_calls,
@@ -89,6 +89,21 @@ impl SourceWarmDriver {
         arguments: &[Value],
         error_seed: Option<&[Value]>,
     ) -> mlua::Result<SourceWarmResult> {
+        self.run_with_target(lua, function, function, arguments, error_seed)
+    }
+    /// Invoke `function` while requiring the separately supplied exact `target`
+    /// to occur in a completed, still-live trace from this run. This supports
+    /// wrappers that preserve full result packs while their nested source target
+    /// is traced. It does not imply the wrapper or every target branch compiled.
+    /// An error seed still invokes the same wrapper and checks the same target.
+    pub fn run_with_target(
+        &self,
+        lua: &Lua,
+        function: &Function,
+        target: &Function,
+        arguments: &[Value],
+        error_seed: Option<&[Value]>,
+    ) -> mlua::Result<SourceWarmResult> {
         fn args(lua: &Lua, values: &[Value]) -> mlua::Result<Table> {
             let table = lua.create_table()?;
             table.raw_set("n", values.len())?;
@@ -98,9 +113,12 @@ impl SourceWarmDriver {
             Ok(table)
         }
         let seed = error_seed.map(|values| args(lua, values)).transpose()?;
-        let output: Table = self
-            .run
-            .call((function.clone(), args(lua, arguments)?, seed))?;
+        let output: Table = self.run.call((
+            function.clone(),
+            args(lua, arguments)?,
+            seed,
+            target.clone(),
+        ))?;
         let result = SourceWarmResult {
             success: output.raw_get("ok")?,
             value: output.raw_get("value")?,

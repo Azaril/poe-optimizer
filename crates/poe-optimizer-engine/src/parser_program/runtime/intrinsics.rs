@@ -14,6 +14,7 @@ pub(super) enum MethodTarget {
     NonCallable,
     OpaqueCallback(ParserCallbackId),
     OpaqueClosure,
+    OpaqueTable,
 }
 
 /// Resolve the method before argument expressions, but do not attempt to call
@@ -24,6 +25,9 @@ pub(super) fn precheck_method(
     heap: &mut Heap,
 ) -> RuntimeResult<MethodTarget> {
     let key: &[u8] = match operation {
+        ParserProgramIntrinsic::StringLower => b"lower",
+        ParserProgramIntrinsic::StringFind => b"find",
+        ParserProgramIntrinsic::StringSub => b"sub",
         ParserProgramIntrinsic::StringGsub => b"gsub",
         ParserProgramIntrinsic::StringGmatch => b"gmatch",
         _ => return Err(Error::unsupported("intrinsic has no string method form")),
@@ -35,8 +39,10 @@ pub(super) fn precheck_method(
             Ok(match heap.get(receiver, &key)? {
                 V::Callback(callback) => MethodTarget::OpaqueCallback(callback),
                 V::Closure(_) | V::IntrinsicClosure(_) => MethodTarget::OpaqueClosure,
-                // Every modeled table is plain: imported definition graphs
-                // reject metatables, and argument/owned graphs cannot add one.
+                // Newly admitted standalone static method forms may encounter
+                // a callable table or an unrepresented call fallback. The
+                // legacy parser facade keeps its original plain-table contract.
+                V::Table(_) if operation.is_standalone_only() => MethodTarget::OpaqueTable,
                 _ => MethodTarget::NonCallable,
             })
         }
@@ -53,6 +59,9 @@ pub(super) fn finish_method(target: MethodTarget) -> RuntimeResult<()> {
         MethodTarget::StringPrimitive => Ok(()),
         MethodTarget::NonCallable => Err(Error::source(
             "attempt to call a non-function receiver method",
+        )),
+        MethodTarget::OpaqueTable => Err(Error::unsupported(
+            "table receiver method requires dynamic dispatch",
         )),
         MethodTarget::OpaqueClosure => Err(Error::unsupported(
             "live receiver method requires dynamic dispatch",
@@ -123,6 +132,9 @@ pub(super) fn call(
             result_space(1, heap, limits)?;
             Ok(vec![V::Number(value.floor())])
         }
+        ParserProgramIntrinsic::StringLower => string_lower(arguments, heap, patterns, limits),
+        ParserProgramIntrinsic::StringFind => string_find(arguments, heap, patterns, limits),
+        ParserProgramIntrinsic::StringSub => string_sub(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::StringMatch => string_match(arguments, heap, patterns, limits),
         ParserProgramIntrinsic::Type => {
             let value = arguments
@@ -265,6 +277,92 @@ fn minmax(
     result_space(1, heap, limits)?;
     Ok(vec![V::Number(result)])
 }
+fn string_lower(
+    arguments: &[V],
+    heap: &mut Heap,
+    patterns: &mut MatchBudget,
+    limits: &ProgramLimits,
+) -> RuntimeResult<Vec<V>> {
+    let subject = string_argument(arguments.first(), heap)?;
+    result_space(1, heap, limits)?;
+    // lj_buf_putstr_lower maps A-Z only, independently of locale or UTF-8.
+    // Account for both this temporary buffer and Heap's retained byte value.
+    heap.charge_bytes(subject.len())?;
+    patterns.charge(subject.len() as u64)?;
+    let output = subject.to_ascii_lowercase();
+    Ok(vec![heap.bytes(&output)?])
+}
+
+fn string_sub(
+    arguments: &[V],
+    heap: &mut Heap,
+    patterns: &mut MatchBudget,
+    limits: &ProgramLimits,
+) -> RuntimeResult<Vec<V>> {
+    let subject = string_argument(arguments.first(), heap)?;
+    let start = optional_integer(arguments.get(1), patterns)?
+        .ok_or_else(|| Error::source("number argument expected"))?;
+    let end = optional_integer(arguments.get(2), patterns)?.unwrap_or(-1);
+    let length = i32::try_from(subject.len())
+        .map_err(|_| Error::unsupported("string length outside source int32 range"))?;
+    // Use wider arithmetic for negative indices while retaining the source's
+    // int32 input conversion and one-based inclusive clipping.
+    let relative = |index: i32| {
+        if index < 0 {
+            i64::from(length) + 1 + i64::from(index)
+        } else {
+            i64::from(index)
+        }
+    };
+    let start = relative(start).max(1);
+    let end = relative(end).min(i64::from(length));
+    let output = if start > end {
+        &[][..]
+    } else {
+        &subject[(start - 1) as usize..end as usize]
+    };
+    result_space(1, heap, limits)?;
+    patterns.charge(output.len() as u64)?;
+    Ok(vec![heap.bytes(output)?])
+}
+
+fn string_find(
+    arguments: &[V],
+    heap: &mut Heap,
+    patterns: &mut MatchBudget,
+    limits: &ProgramLimits,
+) -> RuntimeResult<Vec<V>> {
+    // The plain flag is tested for Lua truth, never converted to a boolean.
+    // Both strings and init are checked before inspecting any pattern syntax.
+    let subject = string_argument(arguments.first(), heap)?;
+    let pattern = string_argument(arguments.get(1), heap)?;
+    let init = optional_integer(arguments.get(2), patterns)?.unwrap_or(1);
+    let plain = arguments.get(3).is_some_and(V::truthy);
+    let found = if plain || !LuaPattern::has_pattern_bytes(&pattern, patterns)? {
+        LuaPattern::find_literal(&subject, &pattern, init, patterns)?
+    } else {
+        // Compilation is bounded before allocation and its input work belongs
+        // to the same cumulative matcher budget as the subsequent search.
+        patterns.charge(pattern.len() as u64)?;
+        compile(&pattern, heap)?.find(&subject, init, false, patterns)?
+    };
+    let Some(found) = found else {
+        result_space(1, heap, limits)?;
+        return Ok(vec![V::Nil]);
+    };
+    result_space(2 + found.captures().len(), heap, limits)?;
+    let mut values = Vec::with_capacity(2 + found.captures().len());
+    let (start, end) = found.lua_indices();
+    values.extend([V::Number(start as f64), V::Number(end as f64)]);
+    for capture in found.captures() {
+        values.push(match capture {
+            Capture::Bytes { start, end } => heap.bytes(&subject[*start..*end])?,
+            Capture::Position(position) => V::Number(*position as f64),
+        });
+    }
+    Ok(values)
+}
+
 fn string_match(
     arguments: &[V],
     heap: &mut Heap,

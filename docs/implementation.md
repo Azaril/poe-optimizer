@@ -92,7 +92,72 @@ failure logs and the audit are recorded in `runs/r2m-ci-final-review.json` and
 `runs/r2m-schema-expectation-review.json`; the final exact-head hosted run remains a
 separate publication check.
 
-**Current checkpoint: R2m source-bound native table construction.** Optional catalog-owned
+**R2n checkpoint: native original scanner and complete parser-state observation.**
+The milestone remains the real public parser from cache miss through returned writable
+modifiers. This checkpoint supplies its string operations and complete initialized input
+graph; it does not finish public parsing or change the five-original **0/5** result.
+
+Native standalone source programs now implement byte-oriented `lower`, `find` and `sub`,
+including literal/pattern lookup, source positions and capture packs, argument/error order,
+and shared work/allocation limits. Exact original global, captured and method identities
+remain bound to the source owner. Legacy parser admission and the bundled package remain
+unchanged. Pattern compilation now preflights instruction allocation before reserving its
+buffer. Out-of-domain source integer conversions remain explicit unsupported cases.
+
+The full live parser graph exposed an observer scaling defect: retained Lua handles
+exhausted mlua's auxiliary reference stack at 7,996 entries. The adapter now retains values
+in one private Lua arena with transient host handles. Original identities, shared capture
+cells, cycles, traversal observations and cleanup on success/error are preserved within
+the existing graph limits. Regressions exceed 9,000 closures and 9,000 tables. Original
+`bit.band`, `bit.bor` and `bit.bxor` can be retained as opaque identities so their surrounding
+real source graph is observable; native bit execution is still unsupported.
+
+The new [original scan gate](../crates/poe-optimizer-pob/tests/source_program_parser_scan.rs)
+observes the actual public wrapper, initialized cache, published cache alias, inner closure
+and all 13 dictionaries in one owner/session. Build 01 retains 44,113 tables, 1,703 closures
+and 613 capture cells without dropping cache rows. It executes the complete original
+`ModParser.scan`, using item text from each original plus binary/pattern cases. Comparisons
+cover selected dictionary-value identity, full remainder/capture packs, live row mutation,
+independent writable captures, separate sessions and source failures. No Rust scan recipe
+or fabricated public-parser callback replaces the original body.
+
+Literal warm vectors require completed still-live traces containing the exact original
+scan, both for direct calls and calls through a full-result-pack wrapper. A separate test
+rejects an unrelated same-shaped target and stale prior traces. Pattern-mode `string.find`
+is not recordable by this LuaJIT configuration, so pattern parity remains interpreter
+coverage; this is not a pattern-JIT or evaluator throughput claim.
+
+**Validation passed:** 56 DATA tests, 117 ENGINE tests, 92 POB source-program unit
+tests, 28 source integration tests and 30 CLI test/configuration cases (**323 focused
+cases**; the same test rerun by multiple agents is counted once). The source suite retains
+68 fresh artifacts across 124 unchanged source files. The scanner comparisons cover all
+five originals: 780 actual-dictionary cases, 90 adversarial cases, 25 source failures and
+15 literal warm vectors (1,920 direct plus 1,920 packed calls). Earlier configuration,
+constructor/copy, helper and dispatch gates remain passing, including 470 completed
+callback comparisons among 637 actual entries/exits. Strict workspace/native-only Clippy,
+WebAssembly library compilation, native-only dependency isolation, formatting and diff
+checks pass. Two fresh CLI exports reproduce all 29 sections. Source data, original inputs,
+reference fixtures, dependencies and the PoB pin are unchanged.
+
+The consolidated evidence is `runs/r2n-checkpoint.json`, backed by
+`runs/r2n-source-final/validation.json`, `runs/r2n-final-cli-validation.json`,
+`runs/r2n-final-static-validation.json` and the focused agent validation/review records.
+These are local Windows x64 results; WebAssembly was compile-checked, not numerically
+validated. Hosted success remains separate: the 01:49 UTC snapshot on September 12 shows
+both jobs on published `3484fff` still in Test, with no newly completed failure. See
+`runs/r2n-ci-refresh.json`; verify the new exact-head run after publication.
+
+**Resume the same public-parser milestone:** whole-body lowering next needs generic
+mixed-target assignment and source-bound nested closure creation. Then resolve actual
+bit operations, newly constructed table traversal/layout and public cache-row copying
+under the same cumulative session budget. Preserve uncached/cached results, retry order,
+DOUBLED dictionary history, produced closures, writable copy semantics and failure prefixes
+from the [parser-session contract](parser-sessions.md). See `runs/r2n-parser-resume.md` for
+source locations. Resume actual quest/custom activation and paired Twister/Skeletal Sniper
+with all-five coverage after this complete public-call gate; scanner success is not its
+replacement exit criterion.
+
+**Previous checkpoint: R2m source-bound native table construction.** Optional catalog-owned
 constructor metadata now binds an actual LuaJIT instruction to its original callback,
 complete function provenance and exact expression range. The source observer retains
 opaque owner-bound evidence; ordinary lowering, serialized structural claims and raw

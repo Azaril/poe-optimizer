@@ -411,6 +411,12 @@ fn new_callable_and_scalar_operations_do_not_expand_parser_lowering() {
         "function(value) return math.max(value, 3) end\n",
         "function(value) return tostring(value) end\n",
         "function(value) return string.match(value, 'a') end\n",
+        "function(value) return string.lower(value) end\n",
+        "function(value) return string.find(value, 'a') end\n",
+        "function(value) return string.sub(value, 1) end\n",
+        "function(value) return value:lower() end\n",
+        "function(value) return value:find('a') end\n",
+        "function(value) return value:sub(1) end\n",
     ] {
         let callback = callback(text, 1, 1, vec![]);
         let lua = Lua::new();

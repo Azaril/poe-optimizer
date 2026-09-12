@@ -596,6 +596,15 @@ impl Run<'_, '_, '_> {
     pub(super) fn lookup_method(&mut self, receiver: &V, key: &[u8]) -> Result<MethodTarget> {
         if matches!(receiver, V::Bytes(_)) {
             return match key {
+                b"lower" => Ok(MethodTarget::StringIntrinsic(
+                    ParserProgramIntrinsic::StringLower,
+                )),
+                b"find" => Ok(MethodTarget::StringIntrinsic(
+                    ParserProgramIntrinsic::StringFind,
+                )),
+                b"sub" => Ok(MethodTarget::StringIntrinsic(
+                    ParserProgramIntrinsic::StringSub,
+                )),
                 b"match" => Ok(MethodTarget::StringIntrinsic(
                     ParserProgramIntrinsic::StringMatch,
                 )),

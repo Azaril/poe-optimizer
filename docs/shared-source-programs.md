@@ -262,6 +262,25 @@ cross-observation reconciliation must authenticate that boundary; sorted native 
 cannot stand in for source order when modifier insertion or failure prefixes expose it.
 Native runtime execution consumes injected descriptors and has no PoB/Lua dependency.
 
+### Byte-oriented string operations
+
+The source runtime implements string lower/find/sub beneath complete source callbacks.
+They preserve byte strings, nil/default argument rules, result cardinality, source check
+order and argument effects. Lowercase conversion follows the source's ASCII mapping;
+substring positions and search offsets use the supported source integer-conversion domain.
+Find distinguishes literal/plain search from patterns before compiling, retains capture
+packs and one-based byte positions, and charges search and compilation work to the same
+session budget. Compilation size is checked before temporary instruction storage is
+allocated. Host string/regex conventions cannot substitute for these source rules.
+
+Captured, global and method calls retain their observed original callable identities.
+Method lookup precedes arguments; a later rebind cannot replace the saved target.
+A known opaque builtin can be retained in a graph without execution admission. This is
+needed for complete state containing helpers whose native operations are still pending;
+reaching such a callable must remain distinguishable from a source error or valid no-match.
+Numeric conversion and JIT recorder limits are explicit parity dimensions, not permission
+to discard unsupported inputs or claim that a sampled trace compiled the whole callback.
+
 ### Private intrinsic function instances
 
 A standalone `string.gmatch` factory creates a private heap function instance. Its handle

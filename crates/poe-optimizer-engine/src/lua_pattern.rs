@@ -215,21 +215,31 @@ impl LuaPattern {
         if fixed_bytes > limits.max_compiled_bytes {
             return Err(PatternError::Resource(ResourceKind::CompiledBytes));
         }
-        let capacity = ((limits.max_compiled_bytes - fixed_bytes)
-            / std::mem::size_of::<Instruction>())
-        .min(pattern.len() + 1);
-        let mut instructions = Vec::with_capacity(capacity);
         let anchor = pattern.first() == Some(&b'^');
+        // Determine the full retained allocation before allocating any buffer.
+        // A resource failure must not discard unaccounted temporary storage in
+        // a caller that shares one cumulative allocation budget across calls.
         let mut at = usize::from(anchor);
+        let mut count = 0usize;
         loop {
             let (instruction, next) = compile_item(pattern, at);
-            let bytes = (instructions.len() + 1)
+            count += 1;
+            let bytes = count
                 .checked_mul(std::mem::size_of::<Instruction>())
                 .and_then(|n| n.checked_add(fixed_bytes))
                 .ok_or(PatternError::Resource(ResourceKind::CompiledBytes))?;
             if bytes > limits.max_compiled_bytes {
                 return Err(PatternError::Resource(ResourceKind::CompiledBytes));
             }
+            if matches!(instruction, Instruction::End | Instruction::Trap(_)) {
+                break;
+            }
+            at = next;
+        }
+        let mut instructions = Vec::with_capacity(count);
+        at = usize::from(anchor);
+        loop {
+            let (instruction, next) = compile_item(pattern, at);
             instructions.push(instruction);
             if matches!(instruction, Instruction::End | Instruction::Trap(_)) {
                 break;
@@ -247,7 +257,6 @@ impl LuaPattern {
             }
             prefix[i] = matched;
         }
-        instructions.shrink_to_fit();
         Ok(Self {
             source: pattern.to_vec(),
             instructions,
@@ -263,6 +272,49 @@ impl LuaPattern {
         self.source.capacity()
             + self.prefix.capacity() * std::mem::size_of::<usize>()
             + self.instructions.capacity() * std::mem::size_of::<Instruction>()
+    }
+    /// The source's complete byte-string magic scan, including bytes after NUL.
+    pub(crate) fn has_pattern_bytes(pattern: &[u8], budget: &mut MatchBudget) -> Result<bool> {
+        for byte in pattern {
+            budget.charge(1)?;
+            if b"^$*+?.([%-".contains(byte) {
+                return Ok(true);
+            }
+        }
+        Ok(false)
+    }
+    /// Fixed-string search over borrowed bytes, without compiling a pattern.
+    /// Mirrors lj_str_find's first-byte scan and suffix comparison; every
+    /// comparison is charged, including failed candidates on repetitive input.
+    pub(crate) fn find_literal(
+        subject: &[u8],
+        needle: &[u8],
+        init: i32,
+        budget: &mut MatchBudget,
+    ) -> Result<Option<PatternMatch>> {
+        let start = Self::search_start(subject, init, budget)?;
+        if needle.len() > subject.len() - start {
+            return Ok(None);
+        }
+        for candidate in start..=subject.len() - needle.len() {
+            let mut matches = true;
+            for (offset, byte) in needle.iter().enumerate() {
+                budget.charge(1)?;
+                if subject[candidate + offset] != *byte {
+                    matches = false;
+                    break;
+                }
+            }
+            if matches {
+                return Ok(Some(PatternMatch {
+                    start: candidate,
+                    end: candidate + needle.len(),
+                    captures: [EMPTY_CAPTURE; LUA_MAX_CAPTURES],
+                    count: 0,
+                }));
+            }
+        }
+        Ok(None)
     }
     /// LuaJIT 5.1 string.find semantics, including its automatic plain fast path.
     /// `init` is a one-based signed Lua index; negative indices are relative to

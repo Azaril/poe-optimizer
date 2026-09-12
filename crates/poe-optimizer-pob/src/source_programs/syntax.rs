@@ -971,6 +971,15 @@ impl<'a, 'b> Lowerer<'a, 'b> {
                                     ["math", "max"] if self.authorization.standalone_calls => {
                                         ParserProgramIntrinsic::MathMax
                                     }
+                                    ["string", "lower"] if self.authorization.standalone_calls => {
+                                        ParserProgramIntrinsic::StringLower
+                                    }
+                                    ["string", "find"] if self.authorization.standalone_calls => {
+                                        ParserProgramIntrinsic::StringFind
+                                    }
+                                    ["string", "sub"] if self.authorization.standalone_calls => {
+                                        ParserProgramIntrinsic::StringSub
+                                    }
                                     ["string", "match"] if self.authorization.standalone_calls => {
                                         ParserProgramIntrinsic::StringMatch
                                     }

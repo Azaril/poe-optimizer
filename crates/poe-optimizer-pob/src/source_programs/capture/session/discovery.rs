@@ -1,24 +1,27 @@
 //! Bounded identity discovery precedes immutable-definition capture.
 use super::*;
+mod arena;
+use arena::{StoredValue, ValueArena};
 struct LiveTable {
-    table: Table,
+    table: StoredValue,
     filled: bool,
-    entries: Vec<(SourceTableKey, Value)>,
+    entries: Vec<(SourceTableKey, StoredValue)>,
     coverage: SourceTableCoverage,
     traversal: Option<(Vec<SourceTableKey>, u32)>,
 }
 struct LiveClosure {
-    function: Function,
+    function: StoredValue,
     source: ItemSourceSpan,
     names: Vec<String>,
     captures: Vec<SourceSessionCellId>,
 }
 pub(super) struct CapturedLive {
+    arena: ValueArena,
     tables: Vec<LiveTable>,
     table_ids: BTreeMap<usize, SourceSessionTableId>,
     closures: Vec<LiveClosure>,
     closure_ids: BTreeMap<usize, SourceSessionClosureId>,
-    cells: Vec<Value>,
+    cells: Vec<StoredValue>,
     cell_identities: BTreeSet<usize>,
     class_bindings: BTreeMap<SourceSessionTableId, SourceClassId>,
 }
@@ -48,6 +51,7 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
         shared_functions: &'b BTreeMap<usize, Function>,
         instance_classes: &'b BTreeMap<usize, classes::Instance>,
     ) -> Result<Self> {
+        let arena = ValueArena::new(&definitions.observer.lua)?;
         let mut result = Self {
             definitions,
             immutable,
@@ -56,6 +60,7 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
             selections: BTreeMap::new(),
             cell_ids: BTreeMap::new(),
             captured: CapturedLive {
+                arena,
                 tables: vec![],
                 table_ids: BTreeMap::new(),
                 closures: vec![],
@@ -132,6 +137,7 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
             self.captured.class_bindings.insert(id, instance.class);
         }
         self.definitions.session_tables = self.captured.tables.len() + 1;
+        let table = self.captured.arena.store(Value::Table(table))?;
         self.captured.tables.push(LiveTable {
             table,
             filled: false,
@@ -212,13 +218,13 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
                         SourceTableKey::Integer(key) => selection.indexed.contains(key),
                     });
                     if selected {
-                        entries.insert(key, value);
+                        entries.insert(key, self.captured.arena.store(value)?);
                     } else {
                         unavailable.insert(key);
                     }
                 }
                 for value in entries.values() {
-                    self.discover(value.clone(), depth + 1)?;
+                    self.discover(self.captured.arena.value(*value)?, depth + 1)?;
                 }
                 if unavailable.is_empty()
                     && let Some(length) = raw_length
@@ -251,11 +257,15 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
                 let id = SourceSessionClosureId(self.captured.closures.len() as u32 + 1);
                 self.captured.closure_ids.insert(pointer, id);
                 self.captured.closures.push(LiveClosure {
-                    function: function.clone(),
+                    function: self
+                        .captured
+                        .arena
+                        .store(Value::Function(function.clone()))?,
                     source,
                     names: vec![],
                     captures: vec![],
                 });
+                let closure_index = id.0 as usize - 1;
                 let mut names = Vec::new();
                 let mut captures = Vec::new();
                 for slot in 1..=129 {
@@ -271,7 +281,13 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
                     self.definitions.projection_row()?;
                     names.push(observed.name);
                     let cell = if let Some(id) = self.cell_ids.get(&observed.identity) {
-                        if !same_value(&self.captured.cells[id.0 as usize - 1], &observed.value) {
+                        if !same_value(
+                            &self
+                                .captured
+                                .arena
+                                .value(self.captured.cells[id.0 as usize - 1])?,
+                            &observed.value,
+                        ) {
                             return Err(error("shared source cell changed during observation"));
                         }
                         *id
@@ -282,8 +298,20 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
                         let id = SourceSessionCellId(self.captured.cells.len() as u32 + 1);
                         self.cell_ids.insert(observed.identity, id);
                         self.captured.cell_identities.insert(observed.identity);
-                        self.captured.cells.push(observed.value.clone());
-                        self.discover(observed.value, depth + 1)?;
+                        self.captured
+                            .cells
+                            .push(self.captured.arena.store(observed.value.clone())?);
+                        self.discover(observed.value, depth + 1)
+                            .map_err(|failure| {
+                                let source = &self.captured.closures[closure_index].source;
+                                error(format!(
+                                    "source session closure {}:{}-{} capture {}: {failure}",
+                                    source.path,
+                                    source.line,
+                                    source.end_line,
+                                    names.last().expect("observed capture name")
+                                ))
+                            })?;
                         id
                     };
                     captures.push(cell);
@@ -301,10 +329,10 @@ impl<'a, 'b> LiveGraph<'a, 'b> {
             .tables
             .iter()
             .filter(|table| !table.filled)
-            .map(|table| table.table.clone())
+            .map(|table| table.table)
             .collect::<Vec<_>>();
         for table in pending {
-            self.discover(Value::Table(table), 0)?;
+            self.discover(self.captured.arena.value(table)?, 0)?;
         }
         Ok(())
     }
@@ -369,10 +397,8 @@ impl CapturedLive {
                 interned.insert(key, id);
                 id
             };
-            definitions.observe_constructors(callback, &closure.function, source)?;
-            // Retaining the actual Function keeps its observed cells rooted until
-            // conversion ends; it never escapes in the pure-Rust result.
-            let _keep_alive = &closure.function;
+            let function = self.arena.function(closure.function)?;
+            definitions.observe_constructors(callback, &function, source)?;
             closures.push((callback, closure.captures.clone()));
         }
         let values = roots
@@ -393,7 +419,7 @@ impl CapturedLive {
                     SourceTableKey::Text(key) => SourceSessionValue::Bytes(key.as_bytes().to_vec()),
                     SourceTableKey::Integer(key) => SourceSessionValue::Number(*key as f64),
                 };
-                entries.push((key, self.value(definitions, value)?));
+                entries.push((key, self.value(definitions, &self.arena.value(*value)?)?));
             }
             if let Some((order, raw_length)) = &table.traversal {
                 let order = order
@@ -432,7 +458,7 @@ impl CapturedLive {
         let cells = self
             .cells
             .iter()
-            .map(|value| self.value(definitions, value))
+            .map(|value| self.value(definitions, &self.arena.value(*value)?))
             .collect::<Result<Vec<_>>>()?;
         Ok(Converted {
             state: SourceSessionValueGraph { values, tables },

@@ -51,6 +51,17 @@ Never reinterpret parser-local callback/table IDs as receiving-session IDs. A re
 function that captures mutable parser data must retain the same session cells. Unsupported
 function-bearing results must remain visible until that identity path is implemented.
 
+## Observing complete initialized state
+
+The reference adapter must capture the complete admitted initialization graph, including
+large caches, without one host-language Lua handle per retained value. Use a private
+runtime-owned arena or equivalent bounded retention mechanism; retrieve only transient
+handles during discovery and conversion. Preserve original table/function identities,
+shared capture cells, traversal observations and source numeric/string values. The arena
+must not mutate the source tables or global environment, and both successful and failed
+capture must release its roots. Existing value, text, table and callback limits remain
+explicit; an incidental bridge-library reference-stack limit must not define build breadth.
+
 ## Return graphs and failures
 
 The wrapper returns `unpack(copyTable(cache[line]))`, not an unconditional two-value tuple.

@@ -538,3 +538,222 @@ return function() return original(-1.25), math.floor(-1.25) end
             ))
     );
 }
+
+#[test]
+fn string_primitives_keep_captured_and_method_identity_when_environment_library_rebinds() {
+    for (name, expression, method_args, expected) in [
+        ("lower", "'AbC'", "", ProgramValue::Bytes(b"abc".to_vec())),
+        ("find", "'AbC', 'b'", "'b'", ProgramValue::Number(2.0)),
+        ("sub", "'AbC', 2", "2", ProgramValue::Bytes(b"bC".to_vec())),
+    ] {
+        let text = format!(
+            "local original = string.{name}\nlocal function replacement(...) return 'rebound' end\nstring = {{ {name} = replacement }}\nreturn function()\n    return original({expression}), ('AbC'):{name}({method_args}), string.{name}({expression})\nend\n"
+        );
+        let f = fixture(&text, PATH);
+        assert!(observe(&f, SourceCaptureContext::default()).is_err());
+        let mut context = environment(&f, &["string"]);
+        context.projections.push(selection(
+            f.lua.globals().raw_get("string").unwrap(),
+            &[name],
+        ));
+        let observed = observe(&f, context).unwrap();
+        let values = evaluate(&f, &observed);
+        assert_eq!(
+            values,
+            vec![
+                expected.clone(),
+                expected,
+                ProgramValue::Bytes(b"rebound".to_vec())
+            ]
+        );
+        let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
+        assert!(
+            lowered
+                .catalog()
+                .data()
+                .programs
+                .iter()
+                .flat_map(|program| &program.bindings)
+                .all(|binding| !matches!(
+                    binding,
+                    SourceProgramBinding::Intrinsic {
+                        source: SourceProgramIntrinsicSource::OriginalGlobal,
+                        ..
+                    }
+                ))
+        );
+    }
+}
+
+#[test]
+fn explicit_environment_rejects_changed_original_string_methods() {
+    for name in ["lower", "find", "sub"] {
+        let f = fixture("return function() return true end\n", PATH);
+        f.lua
+            .load(format!("string.{name} = math.min"))
+            .exec()
+            .unwrap();
+        assert!(
+            observe(&f, environment(&f, &[]))
+                .unwrap_err()
+                .to_string()
+                .contains("string method"),
+            "{name}"
+        );
+    }
+}
+
+#[test]
+fn original_bit_captures_are_opaque_and_rebinding_never_grants_intrinsic_identity() {
+    for name in ["band", "bor", "bxor"] {
+        let text = format!(
+            "local original = bit.{name}\nreturn function() if false then return original(7,3) end return original end\n"
+        );
+        let f = fixture(&text, PATH);
+        let observed = observe(&f, SourceCaptureContext::default()).unwrap();
+        let callback = observed
+            .owner()
+            .callback(observed.callbacks()["evaluate"])
+            .unwrap();
+        let SourceValue::Callback(original) = callback.upvalues[0].value else {
+            panic!("original bit capture")
+        };
+        assert_eq!(
+            observed.owner().callback(original).unwrap().kind,
+            SourceCallbackKind::Builtin {
+                symbol: format!("bit.{name}")
+            }
+        );
+        assert!(
+            !observed
+                .owner()
+                .definitions()
+                .unwrap()
+                .intrinsics
+                .contains_key(&original)
+        );
+        let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
+        assert!(
+            lowered
+                .unsupported()
+                .contains_key(&observed.callbacks()["evaluate"]),
+            "even an unexecuted static call to opaque bit must stay unsupported"
+        );
+        f.lua.load(format!("bit.{name} = math.min")).exec().unwrap();
+        assert!(
+            observe(&f, SourceCaptureContext::default()).is_err(),
+            "field identity {name}"
+        );
+
+        let text = format!(
+            "local original = bit.{name}\nlocal function replacement(a,b) return a+b end\nbit = {{ {name} = replacement }}\nreturn function() return original == bit.{name}, bit.{name}(7,3) end\n"
+        );
+        let f = fixture(&text, PATH);
+        assert!(
+            observe(&f, SourceCaptureContext::default()).is_err(),
+            "library identity {name}"
+        );
+        let mut context = environment(&f, &["bit"]);
+        context
+            .projections
+            .push(selection(f.lua.globals().raw_get("bit").unwrap(), &[name]));
+        let observed = observe(&f, context).unwrap();
+        let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
+        assert_eq!(
+            lowered.unsupported().len(),
+            1,
+            "only the opaque builtin body"
+        );
+        assert!(
+            !lowered
+                .unsupported()
+                .contains_key(&observed.callbacks()["evaluate"])
+        );
+        let compiled = CompiledSourcePrograms::new(lowered.catalog()).unwrap();
+        let output = compiled
+            .execute(
+                observed.callbacks()["evaluate"],
+                &ProgramValueGraph::default(),
+                ProgramLimits::default(),
+            )
+            .unwrap();
+        assert_eq!(
+            output.graph().values,
+            vec![ProgramValue::Boolean(false), ProgramValue::Number(10.0)]
+        );
+        let callback = observed
+            .owner()
+            .callback(observed.callbacks()["evaluate"])
+            .unwrap();
+        let SourceValue::Callback(original) = callback.upvalues[0].value else {
+            panic!("original bit capture")
+        };
+        assert_eq!(
+            observed.owner().callback(original).unwrap().kind,
+            SourceCallbackKind::Builtin {
+                symbol: format!("bit.{name}")
+            }
+        );
+    }
+}
+
+#[test]
+fn reached_opaque_bit_call_rejects_after_original_argument_effects() {
+    use poe_optimizer_engine::source_program::{
+        ProgramRuntimeErrorKind, ProgramTable, ProgramTableId,
+    };
+    for name in ["band", "bor", "bxor"] {
+        let text = format!(
+            "local function effect(side) side.count=side.count+1; return 7 end\nreturn function(side) return bit.{name}(effect(side),3) end\n"
+        );
+        let f = fixture(&text, PATH);
+        let mut context = environment(&f, &["bit"]);
+        context
+            .projections
+            .push(selection(f.lua.globals().raw_get("bit").unwrap(), &[name]));
+        let observed = observe(&f, context).unwrap();
+        let lowered = lower_from_sources(&f.sources, observed.owner()).unwrap();
+        assert_eq!(
+            lowered.unsupported().len(),
+            1,
+            "opaque builtin stays explicit"
+        );
+        assert!(
+            !lowered
+                .unsupported()
+                .contains_key(&observed.callbacks()["evaluate"]),
+            "dynamic value call stays structurally represented"
+        );
+        let compiled = CompiledSourcePrograms::new(lowered.catalog()).unwrap();
+        let input = ProgramValueGraph {
+            values: vec![ProgramValue::Table(ProgramTableId(1))],
+            tables: vec![ProgramTable {
+                entries: vec![(
+                    ProgramValue::Bytes(b"count".to_vec()),
+                    ProgramValue::Number(0.0),
+                )],
+            }],
+        };
+        let (mut session, args) = compiled.session(&input, ProgramLimits::default()).unwrap();
+        let error = session
+            .invoke(observed.callbacks()["evaluate"], &args)
+            .unwrap_err();
+        assert_eq!(
+            error.kind,
+            ProgramRuntimeErrorKind::UnsupportedCapability,
+            "opaque bit has no kernel"
+        );
+        let output = session.snapshot(&args).unwrap();
+        assert_eq!(
+            output.graph().tables[0].entries,
+            vec![(
+                ProgramValue::Bytes(b"count".to_vec()),
+                ProgramValue::Number(1.0)
+            )]
+        );
+        let source = f.lua.create_table().unwrap();
+        source.raw_set("count", 0).unwrap();
+        let _: f64 = f.roots["evaluate"].call(source.clone()).unwrap();
+        assert_eq!(source.raw_get::<i32>("count").unwrap(), 1);
+    }
+}

@@ -292,6 +292,9 @@ pub enum ParserProgramIntrinsic {
     MathMax,
     ToString,
     StringMatch,
+    StringLower,
+    StringFind,
+    StringSub,
     Type,
     Select,
     ToNumber,
@@ -313,6 +316,9 @@ impl ParserProgramIntrinsic {
             Self::MathMax => Some(&["math", "max"]),
             Self::ToString => Some(&["tostring"]),
             Self::StringMatch => Some(&["string", "match"]),
+            Self::StringLower => Some(&["string", "lower"]),
+            Self::StringFind => Some(&["string", "find"]),
+            Self::StringSub => Some(&["string", "sub"]),
             Self::Type => Some(&["type"]),
             Self::Select => Some(&["select"]),
             Self::ToNumber => Some(&["tonumber"]),
@@ -326,7 +332,12 @@ impl ParserProgramIntrinsic {
     pub fn is_string_method(self) -> bool {
         matches!(
             self,
-            Self::StringGsub | Self::StringGmatch | Self::StringMatch
+            Self::StringGsub
+                | Self::StringGmatch
+                | Self::StringMatch
+                | Self::StringLower
+                | Self::StringFind
+                | Self::StringSub
         )
     }
     /// These additions are admitted only by standalone source owners. The
@@ -342,6 +353,9 @@ impl ParserProgramIntrinsic {
                 | Self::MathMax
                 | Self::ToString
                 | Self::StringMatch
+                | Self::StringLower
+                | Self::StringFind
+                | Self::StringSub
         )
     }
 }

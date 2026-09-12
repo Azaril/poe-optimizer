@@ -646,3 +646,6 @@ mod gmatch;
 
 #[path = "support/source_program_unpack.rs"]
 mod unpack;
+
+#[path = "support/source_program_strings.rs"]
+mod strings;

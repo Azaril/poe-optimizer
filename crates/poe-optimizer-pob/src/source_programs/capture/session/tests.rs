@@ -539,3 +539,6 @@ return {increment=increment, definitions={shared_read=shared_read, separate_read
 
 #[path = "tests/traversal.rs"]
 mod traversal;
+
+#[path = "tests/arena.rs"]
+mod arena;

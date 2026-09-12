@@ -82,6 +82,9 @@ impl SourceClosureObserver {
             SourceProgramIntrinsic::MathMin,
             SourceProgramIntrinsic::MathMax,
             SourceProgramIntrinsic::StringMatch,
+            SourceProgramIntrinsic::StringLower,
+            SourceProgramIntrinsic::StringFind,
+            SourceProgramIntrinsic::StringSub,
         ] {
             let path = operation.global_path().expect("language primitive");
             let table = if path.len() == 2 {
@@ -109,12 +112,18 @@ impl SourceClosureObserver {
             "setmetatable",
             "error",
             "assert",
+            "bit.band",
+            "bit.bor",
+            "bit.bxor",
         ] {
             let path = symbol.split('.').collect::<Vec<_>>();
             let table = if path.len() == 2 {
-                libraries.get(path[0]).expect("observed standard library")
+                let library: Table = globals.raw_get(path[0])?;
+                plain(&library, "primitive library")?;
+                libraries.insert(path[0].into(), library.clone());
+                library
             } else {
-                &globals
+                globals.clone()
             };
             let function: Function = table.raw_get(path[path.len() - 1])?;
             if function.info().what != "C" {
@@ -291,12 +300,7 @@ impl SourceClosureObserver {
             }
         }
         for (operation, original) in &self.primitives {
-            if matches!(
-                operation,
-                SourceProgramIntrinsic::StringGsub
-                    | SourceProgramIntrinsic::StringGmatch
-                    | SourceProgramIntrinsic::StringMatch
-            ) {
+            if operation.is_string_method() {
                 let path = operation.global_path().expect("string primitive");
                 let actual: Function = self.libraries["string"].raw_get(path[1])?;
                 if actual.to_pointer() != original.to_pointer() {

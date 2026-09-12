@@ -763,6 +763,9 @@ fn standalone_numeric_text_and_pattern_primitives_bind_original_identity_and_sha
         (SourceProgramIntrinsic::MathMax, vec!["math", "max"]),
         (SourceProgramIntrinsic::ToString, vec!["tostring"]),
         (SourceProgramIntrinsic::StringMatch, vec!["string", "match"]),
+        (SourceProgramIntrinsic::StringLower, vec!["string", "lower"]),
+        (SourceProgramIntrinsic::StringFind, vec!["string", "find"]),
+        (SourceProgramIntrinsic::StringSub, vec!["string", "sub"]),
     ] {
         assert!(operation.is_standalone_only());
         assert_eq!(operation.global_path(), Some(path.as_slice()));
@@ -859,6 +862,18 @@ fn parser_owner_rejects_new_function_value_and_intrinsic_forms_without_changing_
         },
         SourceProgramBinding::Intrinsic {
             operation: SourceProgramIntrinsic::StringMatch,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::StringLower,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::StringFind,
+            source: SourceProgramIntrinsicSource::OriginalGlobal,
+        },
+        SourceProgramBinding::Intrinsic {
+            operation: SourceProgramIntrinsic::StringSub,
             source: SourceProgramIntrinsicSource::OriginalGlobal,
         },
     ];
@@ -1334,5 +1349,129 @@ fn pairs_requires_exact_capture_while_next_global_keeps_its_standalone_boundary(
                 .kind,
             SourceProgramErrorKind::UnsupportedCapability
         );
+    }
+}
+
+#[test]
+fn string_primitives_require_exact_captured_identity_and_preserve_method_form() {
+    for (operation, name) in [
+        (SourceProgramIntrinsic::StringLower, "lower"),
+        (SourceProgramIntrinsic::StringFind, "find"),
+        (SourceProgramIntrinsic::StringSub, "sub"),
+    ] {
+        assert!(operation.is_string_method());
+        assert_eq!(
+            serde_json::to_string(&operation).unwrap(),
+            format!("\"string_{name}\"")
+        );
+        let mut data = definitions();
+        data.callbacks.push(SourceCallback {
+            kind: SourceCallbackKind::Builtin {
+                symbol: format!("string.{name}"),
+            },
+            upvalues: vec![],
+            environment: SourceEnvironment::OriginalGlobals,
+        });
+        data.callbacks[0].upvalues[0].value = SourceValue::Callback(SourceCallbackId(3));
+        data.intrinsics.insert(SourceCallbackId(3), operation);
+        let mut p = program(
+            SourceCallbackId(1),
+            SourceProgramExprKind::Call {
+                call: Box::new(SourceProgramCall {
+                    binding: 0,
+                    receiver: Some(Box::new(expression(SourceProgramExprKind::Bytes {
+                        value: vec![0, 255, b'A'],
+                    }))),
+                    arguments: SourceProgramValueList::default(),
+                }),
+            },
+        );
+        p.bindings = vec![SourceProgramBinding::Intrinsic {
+            operation,
+            source: SourceProgramIntrinsicSource::Captured {
+                upvalue: 0,
+                callback: SourceCallbackId(3),
+            },
+        }];
+        let owner = SourceProgramOwner::new_with_context(
+            data.clone(),
+            None,
+            SourceProgramContext {
+                environment: Some(SourceProgramRootId(1)),
+                ..SourceProgramContext::default()
+            },
+        )
+        .unwrap();
+        let payload = programs(vec![p.clone()]);
+        let catalog = SourceProgramCatalog::new(payload.clone(), owner.clone()).unwrap();
+        let wire = serde_json::to_vec(&payload).unwrap();
+        assert_eq!(
+            SourceProgramCatalog::from_bytes(&wire, owner.clone())
+                .unwrap()
+                .data(),
+            &payload
+        );
+        assert!(catalog.is_bound_to(&owner));
+        assert!(!catalog.is_bound_to(&SourceProgramOwner::new(data.clone()).unwrap()));
+        for source in [
+            SourceProgramIntrinsicSource::OriginalGlobal,
+            SourceProgramIntrinsicSource::Captured {
+                upvalue: 1,
+                callback: SourceCallbackId(3),
+            },
+            SourceProgramIntrinsicSource::Captured {
+                upvalue: 0,
+                callback: SourceCallbackId(2),
+            },
+        ] {
+            let mut invalid = p.clone();
+            invalid.bindings[0] = SourceProgramBinding::Intrinsic { operation, source };
+            assert_eq!(
+                SourceProgramCatalog::new(programs(vec![invalid]), owner.clone())
+                    .unwrap_err()
+                    .kind,
+                SourceProgramErrorKind::Binding
+            );
+        }
+        let other = if operation == SourceProgramIntrinsic::StringFind {
+            SourceProgramIntrinsic::StringLower
+        } else {
+            SourceProgramIntrinsic::StringFind
+        };
+        let mut invalid = p.clone();
+        invalid.bindings[0] = SourceProgramBinding::Intrinsic {
+            operation: other,
+            source: SourceProgramIntrinsicSource::Captured {
+                upvalue: 0,
+                callback: SourceCallbackId(3),
+            },
+        };
+        assert_eq!(
+            SourceProgramCatalog::new(programs(vec![invalid]), owner)
+                .unwrap_err()
+                .kind,
+            SourceProgramErrorKind::UnsupportedCapability
+        );
+        let mut wrong_symbol = data.clone();
+        wrong_symbol.callbacks[2].kind = SourceCallbackKind::Builtin {
+            symbol: "string.upper".into(),
+        };
+        assert_eq!(
+            SourceProgramOwner::new(wrong_symbol).unwrap_err().kind,
+            SourceProgramErrorKind::Binding
+        );
+        let mut wrong_kind = data.clone();
+        wrong_kind.callbacks[2].kind = SourceCallbackKind::Lua { source: span() };
+        assert_eq!(
+            SourceProgramOwner::new(wrong_kind).unwrap_err().kind,
+            SourceProgramErrorKind::Binding
+        );
+        data.callbacks[2].upvalues.push(SourceUpvalue {
+            name: "hidden".into(),
+            value: SourceValue::Number(1.0),
+        });
+        let error = SourceProgramOwner::new(data).unwrap_err();
+        assert_eq!(error.kind, SourceProgramErrorKind::InvalidData);
+        assert!(error.message.contains("invalid builtin"));
     }
 }
