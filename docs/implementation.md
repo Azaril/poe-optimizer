@@ -154,9 +154,27 @@ strict target Clippy, formatting and diff checks pass. No production evaluator, 
 These are source facts for the investigation, not an implemented alternative or full native
 build parity; coverage remains **0/5**.
 
-**Resume A1:** profile snapshot internals, allocation/retained state and supported session
-costs, and record update/migration/debugging effort. A prototype-boundary question is
-pending with the owner: typed domain equivalence, complete public-parser compatibility,
+**A1 loader phases:** isolated instrumentation now measures 34 intact statement intervals
+without changing the production loader. Three fresh processes per variant, two loads each,
+retain twelve equal complete package/catalog/owner witnesses. Original first/later load medians
+are 2,006.157/1,707.374 ms; instrumented medians are 1,996.795/1,694.872 ms, with no speedup claim.
+The expensive intervals include round-trip/unknown-field proof (468.686 ms), section digest
+proof (337.762 ms), numeric JSON construction (165.107 ms), and first-use passive capability
+validation (291.582 ms; 1.012 ms on the later load). Nested intervals are inclusive and must
+not be summed across parents. See the [protocol, attribution and limits](execution-model-baseline.md#attribution-inside-dataset-loading).
+Four loader regression cases pass in both variants; strict example Clippy and formatting pass.
+The scripts leave an isolated worktree and source/executable/report hashes for review.
+No production data, evaluator, admission or source-pin changes; native breadth remains **0/5**.
+
+**Resume A1:** measure allocation/retained state and supported session costs, and record
+update/migration/debugging effort. The read-only update exercise proposal is retained in
+`runs/a1-update-exercise-proposal.json`: replay a supported injected balance edit, an inconsistent
+cross-catalog identity failure and its repair, then measure acquisition separately. None of
+those proposed update runs has been executed in this checkpoint. A real upstream release
+refresh still requires source-pin/compatibility review; an existing data-only balance edit
+cannot prove otherwise.
+
+A prototype-boundary question is pending with the owner: typed domain equivalence, complete public-parser compatibility,
 or both as experiments. This is not migration approval. Use the all-five interaction map
 and the now-executable source observations to choose comparable A2 slices; no option has
 been selected. A read-only candidate remains in `runs/a2-domain-slice-proposal-by-engine.md`.

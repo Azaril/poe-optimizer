@@ -231,6 +231,88 @@ executable hashes. The same CLI as the preceding assembly replay applies, with
 three fresh processes. Peak working set remains a whole-process observation, not retained
 or allocated heap attributed to a stage.
 
+## Attribution inside dataset loading
+
+The next A1 experiment measures the original `a6670c7` loader in an isolated Git worktree.
+The committed developer script, `scripts/profile_game_data.py`, inserts 34 pairs of timing
+statements around intact source statements. Removing the inserted lines must recover the
+original loader exactly. It changes no original scopes, validation calls, clone expressions
+or error paths. A fixed thread-local counter array is initialized before the load; reporting
+occurs afterward. The main project's loader, schema and package remain unchanged.
+
+Three fresh Windows release processes per variant each perform two direct `bundled_snapshot`
+loads. The control uses the original loader without timing calls. Both variants use the same
+developer harness and unchanged schema-29 package. Run order alternates between control and
+instrumented variants; there is no overlapping project build/test/benchmark workload during
+the measurement matrix. This repeats the host/toolchain described above. OS cache state and
+scheduler placement remain uncontrolled.
+
+| Inclusive interval | First load median, ms | Later load median, ms |
+| --- | ---: | ---: |
+| Original control: full load | 2,006.157 | 1,707.374 |
+| Instrumented: full load | 1,996.795 | 1,694.872 |
+| Bounded JSON representation | 189.685 | 190.292 |
+| Typed decode, discarded-field proof and scope cleanup | 744.000 | 742.832 |
+| Package validation and scope cleanup | 957.423 | 665.806 |
+| All catalog clone/construction calls combined | 88.660 | 86.521 |
+
+The two full-load rows are separate variants. The following rows subdivide the instrumented
+load and exclude its roughly 17 ms byte/trust phase, identity work and small parent residual.
+Medians of separate intervals need not sum to the median total. The modest control/instrumented
+differences are not evidence of a speedup: instrumentation changes code generation and binary
+layout, and three samples do not isolate those effects from noise.
+
+Inside typed decoding, creating a round-trip JSON value, checking discarded fields and
+dropping that temporary takes 468.686 ms on the first load. Typed deserialization takes
+176.681 ms; the parent residual is 98.578 ms, including cleanup of the supplied JSON value
+and instrumentation overhead. These intervals do not independently measure allocation counts
+or attribute every residual instruction to destruction.
+
+Inside validation, manifest/section digest checks take 337.762 ms, including another whole
+package JSON representation and its temporary cleanup. Creating the JSON representation for
+numeric checks takes 165.107 ms, while the numeric walk itself takes 0.044 ms. That representation
+remains alive until validation returns; validation's 97.467 ms residual includes its cleanup
+and unmeasured/observer work. Catalog calls retain their original clone-plus-constructor scope;
+the experiment does not separately measure clone, index or repeated-validation shares.
+
+First-use passive capability validation takes 291.582 ms, including a 190.726 ms parse of the
+trusted compiled package to obtain its capability keys. The inner parse runs exactly once in
+each fresh instrumented process and zero times on its second load. Later passive validation
+takes 1.012 ms. Its cold residual includes key extraction and temporary cleanup; the measured
+whole-load difference is not exclusively attributable to the cache because allocator state
+also changes. This identifies a bounded candidate for a more selective trusted-data decode.
+
+All twelve snapshots retain exact canonical input bytes, identities, reviewed trust, all eight
+catalog/package equalities and parser owner binding/digest. The checks run outside the load
+timer, followed by explicit snapshot destruction (roughly 59–61 ms). A later load therefore
+follows both verification and destruction of its predecessor; it is not an isolated hot-cache
+microbenchmark. The four existing loader regression cases run in both variants and pass:
+embedded/external equivalence, recursive duplicate/resource limits, unknown nested/ambiguous
+fields, and snapshot ownership. Strict isolated-example Clippy and Rust 2024 formatting pass.
+These checks cover the modified execution path, not every dataset or full native build parity.
+
+The evidence points to bulk JSON construction, proof passes and lifetime costs as major setup
+work. It does not measure candidate calculation or show that removing the source interpreter
+would remove those costs. A1 still needs allocation/retained-owner measurements and a recorded
+update exercise before it can compare total architecture cost. No storage or execution model
+is selected, and complete native coverage remains **0/5**.
+
+Reproduce with a new directory under `runs/`, reviewing the generated diff before measurement:
+
+```powershell
+python scripts/profile_game_data.py prepare --revision a6670c730195c6d38d2d090b8a61507be44ead96 --output runs/loader-profile-new
+python scripts/profile_game_data.py measure --output runs/loader-profile-new --repeats 3 --loads 2
+```
+
+The tool leaves its detached worktree and results for review and never removes or modifies
+the main checkout's loader. Source anchors are scoped to their actual functions and fail
+before worktree creation if they are absent or ambiguous. An initial setup attempt exposed
+a shared statement in the authoring path; no measurements used that attempt.
+Evidence is `runs/a1-loader-phases-02/{prepared,results,summary}.json`, `instrumentation.diff`,
+the two release binaries and build/check logs. `prepared.json` binds each interval to its
+original source lines and statement digest; the result binds both executable hashes and
+producer sources. Memory attribution and executable-size comparisons are outside this run.
+
 ## Original modifier observations for the comparison
 
 A bounded source-only test now imports each of the five unchanged complete XML builds into
@@ -300,9 +382,9 @@ work belong in the comparison alongside calculation throughput.
 
 A1 remains open for these measurements and decisions:
 
-1. Refine the measured snapshot/compile/backend split: attribute decoding, validation,
-   allocation traffic and peak/retained memory to actual owners. Separately measure source
-   observation/lowering and session costs.
+1. Extend the measured loader statement intervals with allocation traffic and peak/retained
+   memory by actual owner, including catalog clones and temporary JSON lifetimes. Separately
+   measure source observation/lowering and session costs.
 2. Extend the measured restricted admission/reuse boundary to representative interaction
    histories and complete builds as supported. Scoring, search quality, arbitrary text edits
    and general incremental invalidation still lack equivalent workload measurements.

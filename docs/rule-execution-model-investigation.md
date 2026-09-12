@@ -20,6 +20,9 @@ Bounded [original modifier observations](execution-model-baseline.md#original-mo
 now make one comparison input executable across all five originals. They preserve the
 separation between source facts, isolated queries and final actor/build behavior. They
 neither select a model nor complete A2.
+The [loader phase measurements](execution-model-baseline.md#attribution-inside-dataset-loading)
+also separate bulk representation/proof costs from catalog construction, without adding
+instrumentation to the shipping loader. Allocation ownership and update effort remain open.
 
 ## Separate the decisions
 
