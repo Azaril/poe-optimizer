@@ -472,8 +472,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     let input_load_ms = milliseconds(start);
     let start = Instant::now();
     let snapshot = Arc::new(bundled_snapshot()?);
+    let snapshot_load_validate_ms = milliseconds(start);
+    let stage_start = Instant::now();
     let compiled = Arc::new(CompiledGameData::compile(snapshot.clone())?);
+    let game_data_compile_ms = milliseconds(stage_start);
+    let stage_start = Instant::now();
     let backend = Arc::new(NativeBackend::with_data(compiled.clone(), HostClock)?);
+    let backend_with_data_ms = milliseconds(stage_start);
     let dataset_ms = milliseconds(start);
     let start = Instant::now();
     let equipment = input.equipment;
@@ -696,6 +701,8 @@ fn main() -> Result<(), Box<dyn Error>> {
                 "distinct_equipment_selections":equipment.len(),"distinct_support_loadouts":supports.len(),
                 "attribute_options":attributes,"distinct_output_checksums":distinct_output_checksums},
             "setup":{"input_load_ms":input_load_ms,"dataset_ms":dataset_ms,"catalog_ms":catalog_ms,"domain_ms":domain_ms,
+                "snapshot_load_validate_ms":snapshot_load_validate_ms,"game_data_compile_ms":game_data_compile_ms,
+                "backend_with_data_ms":backend_with_data_ms,
                 "prepared_components_ms":prepared_ms,"proposal_generation_ms":proposal_ms,
                 "admission_ms":admission_setup_ms,"admission_attempts":structural_candidates,
                 "initial_measure_ms":initial_measure_ms,"initial_measure_calculations":handles.len(),
@@ -713,6 +720,10 @@ fn main() -> Result<(), Box<dyn Error>> {
             "target_sample_ms":args.sample_ms,"worker_setups":worker_setups,"samples":samples,
             "checksums_match_preflight_for_every_calibration_and_sample":true,
             "limitations":[
+                "dataset_ms remains total dataset setup, including Arc wrappers and stage-timing overhead; the three stage durations need not sum exactly to it. These are elapsed times, not allocated or retained heap measurements.",
+                "snapshot_load_validate_ms includes bundled-byte hashing, bounded decoding, schema/semantic validation, section checks and owned snapshot/catalog construction, not pure validation or disk reading. Its first call also initializes the process-wide reviewed passive capability keys.",
+                "game_data_compile_ms covers CompiledGameData numeric/profile/passive/support preparation, not general source-program or modifier-parser compilation. backend_with_data_ms binds the compiled data and backend identity, including the first-use implementation fingerprint cache.",
+                "Explicit bundled_snapshot plus compile avoids the cached CompiledGameData::bundled convenience path, but other process-wide caches remain. These stage observations do not reset caches or OS state; first-process and reused-process timings must remain distinct.",
                 "Admission mode includes candidate cloning, structural validation/resolution, actor program execution, requirements, owned handle allocation/destruction and fresh skill metrics; it allocates.",
                 "Measure mode reuses already-admitted handles containing prepared actor resources, receiving defences, movement and action speed. It excludes actor assembly/admission and is not whole-evaluator or optimizer throughput.",
                 "Both timed modes omit XML, JSON, diagnostics, exports, deadline checks, owned measurement conversion, objective scoring and search proposal generation. Neither uses an evaluation-result cache.",

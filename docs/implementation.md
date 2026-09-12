@@ -131,9 +131,28 @@ measurement; neither includes full API/search work. This is still a restricted d
 corpus, with unchanged 0/5 original coverage. Protocol, rates and checksum limitations are
 in the same baseline; evidence is `runs/a1-baseline/assembly/`.
 
-**Resume A1:** separate load/validation/compilation, allocation/retained-state and supported
-session costs. Record update/migration/debugging effort and use the all-five interaction map to
-choose comparable A2 slices with the owner. A1 remains incomplete. The unresolved
+**A1 setup attribution:** the developer assembly example now separates snapshot loading,
+numeric data compilation and backend construction while keeping the original total timer.
+Three fresh release processes preserve the previous data/backend/corpus identities,
+checksums and 16 document comparisons each. Median setup is 1,982.852 ms: snapshot work
+1,977.758 ms, numeric/profile compilation 0.255 ms, backend/first identity 4.356 ms. Snapshot
+work takes 99.74–99.77% of setup; its internal allocation/validation shares remain unknown.
+The [baseline](execution-model-baseline.md#attribution-of-dataset-setup) records the
+protocol and limits. Production calculation and admission behavior are unchanged.
+
+The semantic inventory also corrects the Item.lua retry description: after a failed
+combined parse, the fallback reuses the current combined/ranged text. The native loader
+and its existing combined-fallback contract already do that; this was a documentation error.
+
+**Resume A1:** profile snapshot internals, allocation/retained state and supported session
+costs, and record update/migration/debugging effort. A prototype-boundary question is
+pending with the owner: typed domain equivalence, complete public-parser compatibility,
+or both as experiments. This is not migration approval. Use the all-five interaction map
+to choose comparable A2 slices; no option has been selected. A read-only candidate is retained
+in `runs/a2-domain-slice-proposal-by-engine.md`: injected stat/condition rules through an
+attributed actor contribution, grounded in selected items from all five originals, with
+live `PerStat` dependencies as an escalation gate. Its proposed probes have not run;
+a scalar contribution is not full defence or build parity. A1 remains incomplete. The unresolved
 modifier-record allocation/copy work is a concrete comparison case, not evidence that an
 alternative already preserves its contract.
 
@@ -1623,8 +1642,9 @@ defines the alternatives, constraints and evidence required for a decision.
   [consumer contracts](execution-model-semantics-inventory.md) and
   [historical measurement audit](execution-model-performance-inventory.md) are recorded.
   Restricted changing-candidate admission/reuse is also remeasured against schema 29.
-  Per-layer allocation/time, general invalidation, source-session and update-effort
-  measurements remain open; these restricted matrices do not complete A1.
+  Snapshot/compile/backend setup timings are now separated. Snapshot-internal allocation
+  and validation, general invalidation, source-session and update-effort measurements
+  remain open; these restricted matrices do not complete A1.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.

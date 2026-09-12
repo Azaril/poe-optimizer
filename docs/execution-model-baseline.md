@@ -118,7 +118,8 @@ observations, not stable machine-capacity or long-run regression thresholds.
 Across those 36 processes, backend/data initialization had a median of **1,989.3 ms**
 (range 1,963.9–2,031.0). It is already included in the preparation timer, not an additional
 cost. Median peak working sets for the profile/mode/worker groups were 716.2–716.4 MiB.
-These aggregate costs do not identify which loader, validation or compilation step dominates.
+The later stage split below attributes this aggregate at public API boundaries; finer
+loader/validation and memory costs remain unmeasured.
 
 Canonical sample measurements agree within each profile across every mode, worker count
 and repetition. Spark additionally has a finite metric digest for **every completed result**;
@@ -184,6 +185,52 @@ per-process stderr logs and `runs/a1-baseline/measure_assembly.py`. The report r
 source/problem/template/package/corpus hashes, calibration counts and exact commands.
 Executable SHA-256: `a852f29d2efdaeeb2f793f679636a8c05762df804a0a31665c4e5ae65e74c082`.
 
+## Attribution of dataset setup
+
+Follow-up measurements use `be06c7f` plus the recorded timer-only example diff. Production
+Rust/Lua, injected data, corpus generation, samples and checksums are unchanged. The
+original `dataset_ms` still surrounds the whole setup; new fields partition snapshot
+loading/construction, numeric data compilation and backend binding. Their small timing
+and `Arc` overhead remains in the outer total. Each row is aggregated separately, so its
+median need not sum with the other stage medians to the median outer total.
+
+Three fresh native-only release processes on the same host retain the earlier data,
+backend, problem, template and 1,806-selection corpus identities. Each performs the same
+16 native document comparisons and one 100-ms-target, one-worker reuse sample, including
+recorded calibration. Those short samples are successful harness checks; they establish
+no new throughput claim.
+
+| Setup stage | Median ms | Min–max ms |
+| --- | ---: | ---: |
+| Snapshot load, validation and catalog construction | 1,977.758 | 1,970.643–1,990.826 |
+| Numeric/profile data compilation | 0.255 | 0.254–0.290 |
+| Backend construction and first identity initialization | 4.356 | 4.348–4.840 |
+| Outer dataset setup | 1,982.852 | 1,975.289–1,995.429 |
+
+Snapshot work accounts for **99.74–99.77%** of the outer dataset setup in these runs.
+It includes byte hashing, bounded JSON decoding, schema/semantic validation, section
+checks, first-use reviewed passive capability keys and owned snapshot/catalog construction.
+It is neither pure validation nor disk I/O. Compilation prepares the current numeric,
+profile, passive and support data; it is not general source-program/parser compilation.
+Backend construction includes first-use implementation identity hashing. No process caches
+were reset. These first-use costs must not be mixed with reused-process measurements.
+
+The source review identifies narrower profiling targets inside snapshot work: owned JSON
+and typed-package representations during discarded-field checks; repeated serialization
+and validation passes; canonical tree authentication; the first-use capability-key parse;
+and section clones plus indexes retained beside the original package. Some repeated parser
+validation streams borrowed data rather than allocating another whole JSON representation.
+These are candidate explanations to test, not measured cost or memory shares. No validation
+has been removed, and this checkpoint does not select a storage format or execution model.
+
+Evidence is `runs/a1-baseline/stages/{summary,run-1,run-2,run-3}.json`, stderr logs,
+`instrumentation.diff` and `runs/a1-baseline/measure_stages.py`; the hypothesis map is
+`runs/a1-loader-attribution-review.json`. The reports bind the changed example source and
+executable hashes. The same CLI as the preceding assembly replay applies, with
+`--sample-ms 100 --repeats 1 --jobs 1 --modes measure`. Build the example first, then run
+three fresh processes. Peak working set remains a whole-process observation, not retained
+or allocated heap attributed to a stage.
+
 ## What this tells us, and what remains
 
 The current general source/session machinery is not wired into full native configuration
@@ -195,8 +242,9 @@ work belong in the comparison alongside calculation throughput.
 
 A1 remains open for these measurements and decisions:
 
-1. Attribute load/validation/compilation time, allocation traffic and peak/retained memory
-   to actual owners. Separately measure source observation/lowering and session costs.
+1. Refine the measured snapshot/compile/backend split: attribute decoding, validation,
+   allocation traffic and peak/retained memory to actual owners. Separately measure source
+   observation/lowering and session costs.
 2. Extend the measured restricted admission/reuse boundary to representative interaction
    histories and complete builds as supported. Scoring, search quality, arbitrary text edits
    and general incremental invalidation still lack equivalent workload measurements.
