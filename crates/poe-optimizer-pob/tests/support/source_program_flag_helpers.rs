@@ -211,6 +211,7 @@ pub(super) fn run(lua: &Lua, parent: &Pair) -> Json {
         constructor_target: parent.constructor_target.clone(),
         observed: parent.observed.clone(),
         compiled: parent.compiled.clone(),
+        lowered: parent.lowered.clone(),
         session,
         roots,
     };

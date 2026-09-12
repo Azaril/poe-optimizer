@@ -299,6 +299,7 @@ pub(super) fn run(
     // Keep each reached dependency instead of assuming successful misses fail
     // or declaring the public milestone complete from these finite cases.
     let mut success_misses = Vec::new();
+    let mut reserved_replay = None;
     let mut success_keys = Vec::new();
     for text in [
         "+987654 to Strength",
@@ -443,6 +444,15 @@ pub(super) fn run(
                 &format!("positive miss committed cache prefix: {text}"),
             );
         }
+        let reserved = reserved_replay
+            .get_or_insert_with(|| reserved_replay::Replay::new(pair, &original_constructor))
+            .positive(
+                (parser, &cache),
+                &key,
+                &source_row,
+                &source,
+                &original_constructor,
+            );
         let mut copy_failure = Json::Null;
         let (matched_result, dependency) = match result {
             Ok(native) => {
@@ -510,6 +520,7 @@ pub(super) fn run(
             "matched_result":matched_result,
             "frontier":dependency,
             "copy_failure":copy_failure,
+            "reserved_template_replay":reserved,
             "hooked_and_unhooked_source_compared":true,
             "diagnostic_and_uninstrumented_native_compared":true,
         }));

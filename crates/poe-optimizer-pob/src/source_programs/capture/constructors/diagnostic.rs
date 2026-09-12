@@ -1,4 +1,5 @@
-//! Opt-in, same-host diagnostic witnesses. Never constructor execution admission.
+//! Opt-in, same-host diagnostic witnesses. Queries do not grant execution admission;
+//! the separate reserved-template adapter validates and attaches its closed family.
 use super::*;
 use serde::Serialize;
 use std::{rc::Rc, sync::Arc};
@@ -333,6 +334,9 @@ impl ConstructorDiagnosticWitness {
     }
     pub fn catalog(&self) -> &SourceProgramCatalog {
         &self.catalog
+    }
+    pub(crate) fn source_profile(&self) -> &SourceTableRuntimeProfile {
+        &self.target.0.reflection.profile
     }
     /// Read the exact string constant referenced by a retained GGET instruction.
     /// This is a bounded query against the original Function, not a lookup in its

@@ -39,9 +39,13 @@ also identifies the actual expression behind the remaining copy failure without 
 its layout. [Requested private-session layouts](execution-model-baseline.md#requested-allocation-layouts-for-private-sessions)
 now quantify copy/import/teardown storage separately from shared handles. The
 [original constructor/producer join](execution-model-baseline.md#original-constructor-and-producer-checkpoint)
-also closes the missing source identity; reserved-key mutation and tail behavior remain open
-compatibility costs. The [R2w tail-call evidence](execution-model-baseline.md#original-parser-tail-call-checkpoint)
-now establishes actual empty packs for those records, without admitting traversal. A bounded
+also closes the missing source identity. The [R2w tail-call evidence](execution-model-baseline.md#original-parser-tail-call-checkpoint)
+establishes actual empty packs for those records. The subsequent
+[reserved-template checkpoint](execution-model-baseline.md#reserved-template-native-traversal-checkpoint)
+now admits that closed traversal family and completes 30 positive misses and 30 hits on the
+five original graphs. Its metadata, authentication, state and test costs belong in A1; positive
+tails and wider histories remain open. This is bounded work in the current model, not an A2
+comparison or a complete build evaluator. A bounded
 [staged-import optimization](execution-model-baseline.md#transferring-staged-private-import-storage)
 reduces measured allocation traffic while preserving the same source histories and logical
 import budgets; retained session storage is unchanged. Per-stage loader/source allocation,

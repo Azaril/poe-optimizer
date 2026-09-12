@@ -20,8 +20,9 @@ without letting their single-profile assumptions define the new model.
 
 The A1 investigation below is the current resume point. Source-session timing and requested
 allocation layouts are measured separately from dataset ownership; staged-container transfer
-now reduces import allocation traffic. R2w authenticates the original empty tail behind the
-remaining copy failure, without granting traversal capability. Historical sections retain
+now reduces import allocation traffic. R2w now admits source-bound reserved-key traversal
+and completes six positive parser miss/hit cases on each original initialized graph. Full
+public-parser coverage and complete native builds remain open. Historical sections retain
 their original validation scope.
 
 **Architecture review in progress:** [A1-A4 execution-model investigation](#execution-model-investigation-a1-a4)
@@ -35,7 +36,31 @@ Continue measuring costs before extending general Lua compatibility into further
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
 
-**R2w checkpoint: exact original tail call.** All 35 modifier records from the 30 canonical
+**R2w checkpoint: reserved-template native traversal.** All six canonical positive parser
+cases now complete both misses and hits on each of the five original initialized graphs:
+**30 complete misses and 30 complete hits**. Comparisons include complete return packs,
+actual cache rows, aliases across miss/hit history and independent returned copies. This is
+an explicitly admitted parser subset; complete native original-build coverage remains **0/5**.
+
+The additive constructor claim carries an exact source-bound ordered set of reserved
+byte-string keys. Live PoB evidence can attach it to a fresh catalog; native libraries compile
+and share immutable keys without retaining Lua handles. Private tables preserve that evidence
+through reserved updates/deletion/reinsertion and invalidate it on other successful writes or
+behavior changes. Positive constructor-tail packs stop explicitly after complete RHS evaluation;
+empty packs remain admitted. The [session contract](parser-sessions.md#reserved-template-keys)
+records rooting, snapshot, mutation and resource boundaries. No new schema, bundled definitions,
+dependencies, supplied input or PoB pin is required.
+
+**Validation:** 28 DATA constructor tests, 75 ENGINE unit tests, 162 ENGINE integration tests,
+129 PoB source-program unit tests, four new source/native differential tests, 11 copy-witness
+regressions, four existing native-constructor regressions and 14 scanner tests (ten original
+bootstraps) pass. The final work-accounting refinement also passes the seven affected ENGINE
+tests. Strict workspace/native-only Clippy, five portable WASM libraries, formatting and
+whitespace checks pass. The final source scanner in `runs/r2w-reserved-01/scanner-01/` binds
+unchanged source/input and executable hashes. [Evidence and limitations](execution-model-baseline.md#reserved-template-native-traversal-checkpoint)
+keep this bounded current-model capability separate from the still-open A1/A2 comparison.
+
+**Earlier R2w checkpoint: exact original tail call.** All 35 modifier records from the 30 canonical
 positive misses now join a pre-GGET line-entry token, actual original `unpack` call and later
 store through their constructor identity. All observed packs have zero results. The original
 GGET string constant, plain environment/raw primitive binding, complete four-PC line region,
@@ -54,17 +79,19 @@ storage, not RSS or candidate throughput; the explicit input clone is a separate
 exercise. [Protocol and comparison](execution-model-baseline.md#transferring-staged-private-import-storage)
 record the fresh-capture boundary.
 
-**Validation:** 68 engine unit tests, 162 source-runtime integration tests, 128 source-program
+**Earlier tail/import validation:** 68 engine unit tests, 162 source-runtime integration tests, 128 source-program
 unit tests, 11 standalone witness tests, 14 scanner tests (ten original bootstraps) and all
 five lifecycle children pass. Final evidence is `runs/r2w-tail-01/`; supplied inputs, data,
 schema, dependencies and PoB pin are unchanged. Complete native original coverage remains
-**0/5**, and the 30 native positive parser returns still stop at the same traversal boundary.
+**0/5** at that checkpoint; its 30 unsupported positive returns are retained as a separate
+unadmitted control alongside the newly admitted replay above.
 
-**Next R2w step:** evaluate the bounded reserved-string-key certificate now that these
-original tails are known empty. Retain source ownership/key rooting, live values, deleted-key
-controls, resource/error behavior, and explicit invalidation for positive tails or unreserved
-writes. Neither capacity nor arbitrary hash/JIT histories are admitted. This compatibility
-cost remains part of A1/A2; no execution-model migration has been selected.
+**Next parser/breadth step:** extend real modifier coverage beyond the six positive families,
+including tagged/conditional records with positive constructor tails, while continuing complete
+actor/action preparation and the contrasting real-build rollout. Unreserved mutation, general
+hash histories and positive-tail layout remain unsupported by this certificate. Use these
+remaining dependencies and the measured cost of the new closed-domain support in A1/A2 before
+a broader compatibility expansion; no execution-model migration has been selected.
 
 **Earlier R2v checkpoint: original constructor and producer identity.** An opt-in pre-observation
 Function ticket now binds the actual source function to its observed owner/callback. A bounded
@@ -328,9 +355,9 @@ retain differences in source acquisitions and distinguish instrumented timings f
 attribution, general candidate invalidation/reuse and a real effect-family or reviewed upstream update.
 There is no session clone/reset API; importing additional state is not reset. All five inputs
 selected the same initialized cache-hit key in this run, so broader interaction coverage
-remains essential. Per-stage loader allocation also remains open. The R2w reserved-key mutation/traversal
-contract is the next concrete parser dependency; no additional effect family or complete
-original build has been admitted. A1 remains incomplete.
+remains essential. Per-stage loader allocation also remains open. R2w reserved-key traversal
+now completes the six positive parser families on all five graphs; tagged/conditional records
+with positive tails and complete actor/build integration remain open. A1 remains incomplete.
 
 A prototype-boundary question is pending with the owner: typed domain equivalence, complete public-parser compatibility,
 or both as experiments. This is not migration approval. Use the all-five interaction map
@@ -338,8 +365,8 @@ and the now-executable source observations to choose comparable A2 slices; no op
 been selected. A read-only candidate remains in `runs/a2-domain-slice-proposal-by-engine.md`.
 The new test reaches isolated modifier queries, not the proposed full actor contribution;
 actor scaling/transforms and attribute resolution still need comparable coverage. A1 remains
-incomplete. The unresolved modifier-record allocation/copy work is another concrete comparison
-case, not evidence that an alternative already preserves its contract.
+incomplete. The now-admitted reserved-key allocation/copy subset and its still-unsupported
+histories form another concrete comparison case; no alternative has yet proved that contract.
 
 **Historical R2s checkpoint:** source modulo and complete flag-helper execution.
 The neutral source model now admits exact retained `bit.band`, `bit.bor`, `bit.bxor`
@@ -1836,6 +1863,10 @@ defines the alternatives, constraints and evidence required for a decision.
   update costs remain open.
   Supported balance/identity repair and unchanged-pin extraction have retained
   successful replays, including source-edit rejection; they do not complete A1.
+  The [reserved-template checkpoint](execution-model-baseline.md#reserved-template-native-traversal-checkpoint)
+  now records the metadata, source authentication, runtime and oracle work needed to complete
+  30 positive misses and 30 hits. Include this compatibility cost and its remaining unsupported
+  histories in the model comparison; it does not establish whole-build parity.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.

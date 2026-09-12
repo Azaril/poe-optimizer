@@ -59,6 +59,38 @@ logical budgets. The input artifact is borrowed and reusable across independent 
 an explicit deep clone of that artifact is a separate operation, not a prerequisite for
 creating each worker's private state.
 
+## Reserved template keys
+
+A source template can carry a narrower fact than a complete physical table layout:
+its original ordered string-key reservations. The optional constructor metadata keeps
+this separate from imported live-entry traversal and TNEW array capacity. Acquisition
+uses a live witness for the exact original function, prototype, instruction and template;
+serialized diagnostic reports alone cannot authenticate it. The typed claim permits
+only distinct static string fields matching the complete self-marker template, with an
+optional final expanded call or varargs pack.
+
+The compiled library owns immutable ordered key bytes and a lookup index. Each certified
+private table retains a shared reference; ordinary imported tables receive no reserved-key
+certificate.
+Traversal reads current raw values and skips nil reservations. Updating, deleting and
+reinserting a reserved key preserves its position. A successful unreserved write, even
+an absent-key nil write, or behavior installation loses the certificate. Restoring equal
+contents cannot recover it. Failed writes preserve the prior table and certificate while
+resource charges remain cumulative. Raw snapshots do not carry this history.
+
+Evaluate the entire final pack before deciding whether the constructor can complete.
+An empty pack preserves the fact; any positive result count, including only nil values,
+remains unsupported at that operation because its capacity/resize history is unproved.
+Do not partially publish guessed list writes. Length and unknown-control semantics retain
+their existing independent admission rules.
+
+Source comparisons must retain the original function/template roots across GC: nil-valued
+instance keys alone do not root their strings. The native library owns its bytes without
+retaining Lua handles. This bounded contract makes no claim about original instances after
+those source roots disappear. Compare interpreted and exact-function warmed behavior
+separately, and retain unsupported positive tails and arbitrary mutation histories as
+explicit gaps. The implementation record identifies the actually validated scope.
+
 ## Numerical helpers and injected flag logic
 
 Keep language-level numeric primitives separate from game-level flag helpers. The native

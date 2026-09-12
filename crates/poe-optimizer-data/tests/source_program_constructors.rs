@@ -991,3 +991,6 @@ fn independent_list_sites_share_program_identity_without_sharing_allocation_clai
     m.sites.pop();
     assert_eq!(bind(d, m).unwrap().constructors().unwrap().sites.len(), 1);
 }
+
+#[path = "support/source_program_reserved_constructors.rs"]
+mod reserved;

@@ -134,6 +134,17 @@ fn exact_registered_function_template_self_markers_and_raw_order_are_diagnostic_
     assert!(witness.report().continuation_pc.is_some());
     assert!(!witness.report().post_store_proof_unavailable.is_empty());
     witness.verify_unchanged().unwrap();
+    assert!(
+        crate::source_programs::attach_reserved_string_templates(
+            &sources,
+            lowered.clone(),
+            &[&witness]
+        )
+        .unwrap_err()
+        .to_string()
+        .contains("exact self markers"),
+        "a real TDUP with a constant false row is outside the self-marker family"
+    );
     assert_eq!(lowered.catalog().data(), &before);
     assert!(lowered.constructor_unsupported()[&observed.callbacks()["root"]].contains("keyed"));
     assert!(

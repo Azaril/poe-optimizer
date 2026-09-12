@@ -363,18 +363,10 @@ fn describe_origin(pair: &Pair, origin: &TableAllocationOrigin) -> Json {
     })
 }
 
-pub(super) fn inspect_original_constructor(
-    pair: &Pair,
-    origin: &TableAllocationOrigin,
-    observation_line: u32,
-) -> ConstructorDiagnosticWitness {
-    let TableAllocationOrigin::Expression(origin) = origin else {
-        panic!("actual native origin is required")
-    };
+pub(super) fn original_sources(pair: &Pair) -> BTreeMap<String, String> {
     let vendor =
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../vendor/path-of-building-poe2");
-    let sources = pair
-        .observed
+    pair.observed
         .owner()
         .source()
         .files
@@ -387,7 +379,18 @@ pub(super) fn inspect_original_constructor(
             };
             (path.clone(), text)
         })
-        .collect();
+        .collect()
+}
+
+pub(super) fn inspect_original_constructor(
+    pair: &Pair,
+    origin: &TableAllocationOrigin,
+    observation_line: u32,
+) -> ConstructorDiagnosticWitness {
+    let TableAllocationOrigin::Expression(origin) = origin else {
+        panic!("actual native origin is required")
+    };
+    let sources = original_sources(pair);
     let target = pair
         .constructor_target
         .as_ref()

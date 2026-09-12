@@ -21,6 +21,8 @@ use parser_capture::{DICTIONARIES, PATH, TEXT};
 mod producer_proof;
 #[path = "support/source_program_public_cache.rs"]
 mod public_cache;
+#[path = "support/source_program_reserved_replay.rs"]
+mod reserved_replay;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
@@ -58,6 +60,7 @@ struct Pair {
     constructor_target: Option<Rc<ConstructorDiagnosticTarget>>,
     observed: ObservedSourceSession,
     compiled: CompiledSourcePrograms,
+    lowered: poe_optimizer_pob::source_programs::SourceProgramExtraction,
     session: ProgramSession,
     roots: Vec<SessionValue>,
 }
@@ -157,6 +160,7 @@ fn observe(
             constructor_target,
             observed,
             compiled,
+            lowered,
             session,
             roots,
         },
@@ -492,6 +496,7 @@ fn run(
         constructor_target: pair.constructor_target.clone(),
         observed: pair.observed.clone(),
         compiled: pair.compiled.clone(),
+        lowered: pair.lowered.clone(),
         session: isolated,
         roots,
     };

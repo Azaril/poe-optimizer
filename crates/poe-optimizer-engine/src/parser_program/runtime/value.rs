@@ -2,6 +2,7 @@
 //! read-only; explicitly owned state and tables created by the VM admit writes.
 //! No implicit copy-on-write occurs.
 use super::{ProgramLimits, ProgramRuntimeError as Error, RuntimeResult as Result};
+use crate::parser_program::reserved_keys::CompiledReservedKeys;
 #[cfg(test)]
 use poe_optimizer_data::modifier_parser::ModifierParserCatalog;
 use poe_optimizer_data::modifier_parser::{
@@ -27,6 +28,7 @@ use closures::{Closure, ImportClosures};
 pub(super) use closures::{ClosureRef, LocalSlot};
 mod intrinsic_closures;
 use intrinsic_closures::IntrinsicClosure;
+mod reserved_keys;
 mod table_observations;
 pub(super) use intrinsic_closures::IntrinsicClosureRef;
 use table_observations::TableObservation;
@@ -255,6 +257,7 @@ pub(super) struct Heap<'a> {
     closures: Vec<Closure>,
     intrinsic_closures: Vec<Option<IntrinsicClosure>>,
     table_observations: BTreeMap<TableRef, TableObservation>,
+    reserved_keys: BTreeMap<TableRef, Arc<CompiledReservedKeys>>,
     cells: Vec<V>,
     budget: Budget<'a>,
 }
@@ -269,6 +272,7 @@ impl Heap<'static> {
             closures: Vec::new(),
             intrinsic_closures: Vec::new(),
             table_observations: BTreeMap::new(),
+            reserved_keys: BTreeMap::new(),
             cells: Vec::new(),
             budget: Budget {
                 limits,
@@ -324,6 +328,7 @@ impl<'a> Heap<'a> {
             closures: Vec::new(),
             intrinsic_closures: Vec::new(),
             table_observations: BTreeMap::new(),
+            reserved_keys: BTreeMap::new(),
             cells: Vec::new(),
             budget,
         };
@@ -575,6 +580,9 @@ impl<'a> Heap<'a> {
     ) -> Result<Option<(V, V)>> {
         use poe_optimizer_data::source_program::SourceTableKey;
         let TableRef::Definition(id) = table_ref(table)? else {
+            if let Some(result) = self.reserved_next(table, control, work)? {
+                return Ok(result);
+            }
             if let Some(result) = self.native_array_next(table, control, work)? {
                 return Ok(result);
             }
@@ -665,6 +673,7 @@ impl<'a> Heap<'a> {
         let reference = table_ref(value)?;
         self.charge_values(2)?;
         self.behaviors.insert(reference, behavior);
+        self.reserved_keys.remove(&reference);
         Ok(())
     }
     pub(super) fn new_table(&mut self) -> Result<V> {
@@ -696,6 +705,16 @@ impl<'a> Heap<'a> {
             return Err(Error::unsupported("mutation of a borrowed table"));
         };
         let deleted = matches!(value, V::Nil);
+        let preserves_reserved = match self.reserved_keys.get(&reference) {
+            Some(keys) => match &key {
+                Key::Bytes(bytes) => keys.find(bytes, work)?.is_some(),
+                _ => {
+                    work.charge(1)?;
+                    false
+                }
+            },
+            None => true,
+        };
         self.prepare_coverage_write(reference, &key, &value)?;
         let coverage_key = self.coverage.contains_key(&reference).then(|| key.clone());
         let target = self
@@ -725,6 +744,11 @@ impl<'a> Heap<'a> {
             target.insert(key, value);
         }
         target.array_layout = layout;
+        if !preserves_reserved {
+            // Unknown writes may rehash even when assigning nil to an absent key.
+            // Failure before this commit leaves the existing certificate intact.
+            self.reserved_keys.remove(&reference);
+        }
         if !preserves_observation {
             // Even an absent-key nil write can allocate/rehash in LuaJIT.
             // Invalidate only after the write succeeds; failed writes retain facts.

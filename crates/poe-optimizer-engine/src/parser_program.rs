@@ -2,6 +2,7 @@
 //!
 //! Compilation is independent of callback admission and numerical capability. This
 //! native executor remains separate from legacy parser/package admission.
+mod reserved_keys;
 mod runtime;
 use poe_optimizer_data::modifier_parser::*;
 use poe_optimizer_data::source_program::SourceProgramCatalog;
@@ -241,6 +242,7 @@ impl CompiledTableTraversal {
 #[derive(Debug, Clone, Copy)]
 enum CompiledTableConstructor {
     Array { slots: u32 },
+    ReservedKeys { index: usize },
     UnsupportedProfile,
 }
 
@@ -252,6 +254,7 @@ struct Library {
     instruction_count: usize,
     traversal: BTreeMap<ParserTableId, CompiledTableTraversal>,
     constructors: BTreeMap<(ParserCallbackId, u32, u32), CompiledTableConstructor>,
+    reserved_constructors: Vec<Arc<reserved_keys::CompiledReservedKeys>>,
     closure_creation_supported: bool,
 }
 /// Cheaply clone/share prepared immutable code. Future invocation state belongs
@@ -332,34 +335,44 @@ impl CompiledSourcePrograms {
                 loop_states: lowerer.loop_states,
             });
         }
+        let mut constructors = BTreeMap::new();
+        let mut reserved_constructors = Vec::new();
+        if let Some(facet) = catalog.constructors() {
+            for site in &facet.sites {
+                let seed = if facet.profile.is_supported_array_profile() {
+                    use poe_optimizer_data::source_program::SourceTableAllocation;
+                    match &site.allocation {
+                        SourceTableAllocation::New {
+                            array_slots,
+                            hash_bits: 0,
+                        } => CompiledTableConstructor::Array {
+                            slots: *array_slots,
+                        },
+                        SourceTableAllocation::DuplicateReservedStrings { keys } => {
+                            // The catalog bounds the complete key payload and validates
+                            // exact source-field membership before any compilation copy.
+                            let index = reserved_constructors.len();
+                            reserved_constructors
+                                .push(Arc::new(reserved_keys::CompiledReservedKeys::new(keys)));
+                            CompiledTableConstructor::ReservedKeys { index }
+                        }
+                        _ => unreachable!("validated constructor family"),
+                    }
+                } else {
+                    CompiledTableConstructor::UnsupportedProfile
+                };
+                constructors.insert(
+                    (site.callback, site.expression.start, site.expression.end),
+                    seed,
+                );
+            }
+        }
         Ok(Self(Arc::new(Library {
             closure_creation_supported: catalog
                 .closure_creations()
                 .is_some_and(|claims| claims.profile.is_supported_array_profile()),
-            constructors: catalog
-                .constructors()
-                .into_iter()
-                .flat_map(|constructors| {
-                    constructors.sites.iter().map(move |site| {
-                        let supported = if constructors.profile.is_supported_array_profile() {
-                            let poe_optimizer_data::source_program::SourceTableAllocation::New {
-                                array_slots,
-                                hash_bits: 0,
-                            } = site.allocation
-                            else {
-                                unreachable!("validated array-only constructor")
-                            };
-                            CompiledTableConstructor::Array { slots: array_slots }
-                        } else {
-                            CompiledTableConstructor::UnsupportedProfile
-                        };
-                        (
-                            (site.callback, site.expression.start, site.expression.end),
-                            supported,
-                        )
-                    })
-                })
-                .collect(),
+            constructors,
+            reserved_constructors,
             catalog: catalog.clone(),
             programs: programs.into_boxed_slice(),
             callbacks,

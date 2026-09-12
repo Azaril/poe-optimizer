@@ -810,11 +810,77 @@ is `runs/r2w-tail-01/scanner-02/`; the passing earlier scan is retained but lack
 pre-GGET attribution guard. No layout is admitted and all 30 native positive returns still
 stop at the same copy traversal dependency. Complete native original coverage remains **0/5**.
 
-The next bounded candidate is an authenticated reserved-string-key traversal certificate,
-with live values and explicit invalidation for positive tails or unreserved writes. It must
-also preserve deleted-key controls, key rooting, aliases, resource errors and source/JIT
-histories. This is a proposed compatibility contract, not a chosen A2 model or an implemented
-native feature. Keep its implementation/validation cost in the execution-model comparison.
+That checkpoint left an authenticated reserved-string-key traversal certificate as the next
+bounded candidate. The following checkpoint implements its closed domain, while retaining
+positive tails and arbitrary mutation/layout histories as explicit unsupported boundaries.
+Keep its implementation/validation cost in the execution-model comparison.
+
+## Reserved-template native traversal checkpoint
+
+An explicit source-acquisition API now admits the closed reserved-string-key constructor
+family. It joins a live original Function/template witness to the exact lowered catalog,
+callback, expression, bytecode instruction and supported source profile. The entire TDUP
+template must contain distinct byte-string keys whose values are exact self markers, and
+static constructor fields must match that set. Imported snapshots and serialized diagnostic
+reports cannot supply this proof. Existing constructor and closure-creation facets survive
+attachment to the new catalog; other uncovered sites remain explicit.
+
+The DATA facet carries ordered byte keys, bounded and validated before retention. The native
+ENGINE compiles immutable shared keys once and gives each certified private table a shared
+reference in a sparse side map; ordinary imported tables get no such certificate. Traversal
+reads live raw values in the reserved order and skips nils. Reserved deletion/reinsertion and
+deleted reserved controls remain valid. A successful unreserved write, even an absent-key nil
+write, or behavior installation invalidates the certificate. Failed mutations preserve prior
+state. Work and metadata storage are charged; no capacity or raw-length rule is inferred.
+
+All RHS packs and effects execute before checking the final constructor tail. Zero results
+are admitted; any positive count, including all-nil packs, returns `UnsupportedCapability`
+before guessing array writes or returning a table. Source errors retain their own error class
+and already-completed effects. Source oracle runs retain the original Function/template roots
+through GC; native libraries retain only key bytes. The contract does not claim source
+instances whose template roots have died, arbitrary hash histories or positive-tail layouts.
+See the [session contract](parser-sessions.md#reserved-template-keys) for the exact domain.
+
+The final five-original scanner creates a second, explicitly admitted native session from each
+original coherent input graph. One actual source constructor witness attaches the facet to its
+exact original extraction; each later witness must retain the same Function/template, site,
+bytecode and ordered rows. All six canonical positive families complete both misses and hits
+on each graph: **30 complete misses and 30 complete hits**. Joint comparisons cover entire
+return packs, fresh actual source/native cache lookups, miss/hit row aliases and independent
+returned copies. The existing unadmitted failure oracle and its 35 empty-tail records remain
+separate controls; the legacy duplicate `success_miss` report is not counted again. No source
+results are injected into the native session. The fixed strings belong to oracle fixtures,
+not the production build path.
+
+Four focused source/native tests cover witness/catalog tampering, binary/static keys, live
+aliases, GC, deletion/reinsertion, invalidation, tail cardinality and source-error effects.
+Warm tests execute two standalone and four seeded vectors, each using 128 calls per phase:
+**1,280 source calls** (768 final-vector calls plus 512 seed calls). Six final complete packs
+are compared, with the exact original target required in a completed live trace. This does
+not assert that every intermediate result is compared or every changed branch stays compiled;
+changed vectors may exit or materialize source state.
+
+Validation passes 28 DATA constructor tests, 75 ENGINE unit tests, 162 ENGINE integration
+tests, 129 PoB source-program units, four focused source/native tests, 11 copy-witness tests,
+four existing native-constructor tests and 14 scanner tests covering ten original bootstraps.
+A final work-charge refinement additionally reruns its seven affected ENGINE tests. Strict
+workspace/native-only Clippy, formatting, whitespace and five portable WASM library checks
+pass. These are scoped commands, not a claim that the entire workspace test suite ran.
+
+Final evidence is `runs/r2w-reserved-01/`: `source-tests-01/`, `pob-build-03/`,
+`final-validation-01/` and `scanner-01/run.json`. The final scanner takes 132.738 seconds and
+binds 574 unchanged source/input files to executable SHA-256
+`55c1e969881ea21821dcb1ba6853c2e397148cc09104021ed5ecb4bce351532c`.
+That elapsed time includes source bootstraps, diagnostics and validation; it is not a candidate
+throughput, allocation or speedup measurement. Supplied inputs, schema 29 bundled data,
+dependencies and pinned PoB are unchanged.
+
+Complete native original-build coverage remains **0/5**. This closes one parser dependency
+within the current model; it does not complete the public parser, actor/action preparation,
+full build parity or A1/A2. The source authentication, metadata, native state and validation
+needed for this family are concrete compatibility costs to compare with a domain DSL, native
+algorithms, retained interpreter and hybrid alternatives. Broader tagged/conditional cases
+with positive tails are a next dependency, not a reason to select a model without discussion.
 
 ## Original modifier observations for the comparison
 

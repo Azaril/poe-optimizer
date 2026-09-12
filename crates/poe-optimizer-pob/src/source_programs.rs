@@ -20,7 +20,7 @@ mod constructors;
 pub use closures::{
     lower_observed_closures_and_constructors_from_sources, lower_observed_closures_from_sources,
 };
-pub use constructors::lower_observed_from_sources;
+pub use constructors::{attach_reserved_string_templates, lower_observed_from_sources};
 pub(crate) mod lowering;
 mod syntax;
 pub(crate) mod tokens;

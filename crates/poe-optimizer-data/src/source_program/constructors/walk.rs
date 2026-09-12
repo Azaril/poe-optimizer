@@ -1,8 +1,8 @@
 //! Visits expression nodes only after the ordinary bounded IR verifier.
 use super::*;
-pub(super) fn tables(
-    program: &SourceProgram,
-    mut visitor: impl FnMut(&SourceProgramExpr, &[SourceProgramField]),
+pub(super) fn tables<'a>(
+    program: &'a SourceProgram,
+    mut visitor: impl FnMut(&'a SourceProgramExpr, &'a [SourceProgramField]),
 ) {
     expressions(program, |expr| {
         if let SourceProgramExprKind::Table { fields } = &expr.operation {
@@ -10,13 +10,13 @@ pub(super) fn tables(
         }
     })
 }
-pub(in crate::source_program) fn expressions(
-    program: &SourceProgram,
-    mut visitor: impl FnMut(&SourceProgramExpr),
+pub(in crate::source_program) fn expressions<'a>(
+    program: &'a SourceProgram,
+    mut visitor: impl FnMut(&'a SourceProgramExpr),
 ) {
     body(&program.body, &mut visitor)
 }
-fn body(stmts: &[SourceProgramStatement], visit: &mut impl FnMut(&SourceProgramExpr)) {
+fn body<'a>(stmts: &'a [SourceProgramStatement], visit: &mut impl FnMut(&'a SourceProgramExpr)) {
     use SourceProgramStatementKind as S;
     for stmt in stmts {
         match &stmt.operation {
@@ -86,7 +86,10 @@ fn body(stmts: &[SourceProgramStatement], visit: &mut impl FnMut(&SourceProgramE
         }
     }
 }
-fn values_list(values: &SourceProgramValueList, visit: &mut impl FnMut(&SourceProgramExpr)) {
+fn values_list<'a>(
+    values: &'a SourceProgramValueList,
+    visit: &mut impl FnMut(&'a SourceProgramExpr),
+) {
     for e in &values.values {
         expr(e, visit)
     }
@@ -94,19 +97,19 @@ fn values_list(values: &SourceProgramValueList, visit: &mut impl FnMut(&SourcePr
         pack(tail, visit)
     }
 }
-fn pack(pack: &SourceProgramPack, visit: &mut impl FnMut(&SourceProgramExpr)) {
+fn pack<'a>(pack: &'a SourceProgramPack, visit: &mut impl FnMut(&'a SourceProgramExpr)) {
     match pack {
         SourceProgramPack::Call { call: c } => call(c, visit),
         SourceProgramPack::Varargs => {}
     }
 }
-fn call(call: &SourceProgramCall, visit: &mut impl FnMut(&SourceProgramExpr)) {
+fn call<'a>(call: &'a SourceProgramCall, visit: &mut impl FnMut(&'a SourceProgramExpr)) {
     if let Some(receiver) = &call.receiver {
         expr(receiver, visit)
     }
     values_list(&call.arguments, visit)
 }
-fn expr(e: &SourceProgramExpr, visit: &mut impl FnMut(&SourceProgramExpr)) {
+fn expr<'a>(e: &'a SourceProgramExpr, visit: &mut impl FnMut(&'a SourceProgramExpr)) {
     visit(e);
     use SourceProgramExprKind as E;
     match &e.operation {

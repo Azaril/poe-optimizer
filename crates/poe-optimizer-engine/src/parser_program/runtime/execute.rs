@@ -1139,6 +1139,10 @@ impl Run<'_, '_, '_> {
             Some(CompiledTableConstructor::Array { slots }) => {
                 self.heap.native_array_table(slots, self.patterns)?
             }
+            Some(CompiledTableConstructor::ReservedKeys { index }) => self.heap.reserved_table(
+                self.library.0.reserved_constructors[index].clone(),
+                self.patterns,
+            )?,
             Some(CompiledTableConstructor::UnsupportedProfile) => unreachable!(),
             None => self.heap.new_table()?,
         };
@@ -1173,6 +1177,18 @@ impl Run<'_, '_, '_> {
                 }
                 ParserProgramField::Tail { values } => {
                     let values = self.pack(frame, values, depth + 1)?;
+                    if matches!(seed, Some(CompiledTableConstructor::ReservedKeys { .. })) {
+                        // Preserve the complete RHS and its effects, including nil
+                        // result slots. Positive TSETM packs can resize/reorder TDUP
+                        // storage; this capacity-free certificate cannot model that
+                        // operation. Reject before any guessed bulk write or result.
+                        if !values.is_empty() {
+                            return Err(Error::unsupported(
+                                "positive tail for reserved-string template constructor",
+                            ));
+                        }
+                        continue;
+                    }
                     if matches!(seed, Some(CompiledTableConstructor::Array { .. })) {
                         // TSETM grows once for the complete result pack, including
                         // nil slots. Ordinary setters rehash differently.

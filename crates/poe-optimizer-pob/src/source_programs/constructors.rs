@@ -2,6 +2,7 @@
 use super::*;
 mod diagnostic;
 mod lexical;
+mod reserved;
 use capture::ObservedSourceConstructors;
 pub(super) use diagnostic::diagnostic_site;
 use poe_optimizer_data::source_program::{
@@ -9,6 +10,7 @@ use poe_optimizer_data::source_program::{
     SOURCE_PROGRAM_CONSTRUCTORS_SCHEMA_VERSION, SourceProgramConstructor,
     SourceProgramConstructors, SourceTableAllocation,
 };
+pub use reserved::attach_reserved_string_templates;
 
 /// Add layout evidence from the exact observer owner after ordinary complete
 /// source lowering. Missing/ambiguous constructor proofs remain diagnostics and
