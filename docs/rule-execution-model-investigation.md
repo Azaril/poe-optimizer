@@ -30,8 +30,10 @@ also preserves search/export behavior with a fixed native executable.
 [Identity reconciliation](execution-model-baseline.md#identity-reconciliation-replay) and
 [pinned-source acquisition](execution-model-baseline.md#pinned-source-acquisition-and-rejection)
 now record coordinated reference edits, reproducible output, allowed traversal variation and
-source-edit rejection. Allocation ownership, source-session costs, new effect-family work
-and actual upstream update effort remain open.
+source-edit rejection. [Dataset allocation measurements](execution-model-baseline.md#dataset-allocation-and-ownership)
+now distinguish owned snapshot copies from shared handles and catalog retention. Private
+source-session costs, allocation by loader stage, new effect-family work and actual upstream
+update effort remain open. These measurements do not choose a replacement.
 
 ## Separate the decisions
 

@@ -18,9 +18,10 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-The A1 investigation below is the current resume point. The trusted passive-key loader
-simplification is the latest production checkpoint; R2t and its CI repair remain the last
-source-runtime checkpoint. Historical sections retain their original validation scope.
+The A1 investigation below is the current resume point. Dataset allocation/ownership is
+the latest measurement checkpoint; the trusted passive-key simplification remains the latest
+production loader change. R2t and its CI repair remain the last source-runtime checkpoint.
+Historical sections retain their original validation scope.
 
 **Architecture review in progress:** [A1-A4 execution-model investigation](#execution-model-investigation-a1-a4)
 compares the current interpreter with a domain DSL, data-driven rules, native Rust
@@ -208,12 +209,35 @@ exact file and publishes neither package nor evidence. The pinned submodule rema
 See [acquisition scope and evidence](execution-model-baseline.md#pinned-source-acquisition-and-rejection).
 All artifacts and binary identities are retained in `runs/a1-reconciliation-01/`.
 
-**Resume A1:** the proposed supported balance, identity failure/repair, unchanged-pin extraction
-and isolated source-rejection replays are now complete. Measure allocation/retained state,
-supported source-session histories and invalidation next, then a real effect-family or reviewed
-upstream update. The observed catalog coordination and repeated validation are comparison
-inputs; neither proves an interpreter replacement is preferable. A real release refresh still
-requires source compatibility review. No new effect family or complete original build is admitted.
+**A1 allocation/ownership checkpoint:** a developer-only counting allocator passes its separate
+self-check and three fresh release measurements with identical allocation counts. First load
+retains 150,497,847 requested bytes and peaks 647,813,440 bytes above its starting point.
+An owned snapshot clone adds 77,584,683 bytes; an extra shared `Arc` handle allocates nothing.
+Eight catalog clones plus the parser-program view add 88 bytes and preserve shared owners.
+Snapshot/catalog teardown releases their measured storage, leaving a 44,016-byte process
+remainder. Requested bytes are not RSS, and this does not measure private worker state or
+parallel scaling. Strict example Clippy and release build pass; production code/data are
+unchanged. See [protocol, ownership results and limits](execution-model-baseline.md#dataset-allocation-and-ownership)
+and `runs/a1-ownership-01/` for the retained measurements.
+
+**Resume A1:** measure supported source-session histories and private-state lifecycle next,
+then general invalidation and a real effect-family or reviewed upstream update. Acquire all
+five original parser inputs, finish source observations and drop Lua before timing native
+work. Measure shared program handles separately from deep input clone, fresh session import,
+invocation, selected output export and teardown. There is no session clone/reset API; importing
+additional state is not reset. Keep successful cache/no-match histories separate from the
+six still-unsupported positive modifier families. The read-only plan is retained locally in
+`runs/a1-source-session-lifecycle-plan.md`; [the durable summary](execution-model-baseline.md#next-source-session-measurement)
+records the scope. Dataset allocation by loader stage also remains open. No new effect family
+or complete original build is admitted.
+
+A bounded R2t review confirms the existing failed-table identity still lacks allocation-site
+provenance: producer calls have already returned. Its next evidence seam is an opt-in bounded
+record linking the actual allocated table to its catalog/callback/Table-expression location,
+queried through the same session handle. This is a diagnostic proposal, not implemented here;
+it must preserve unsupported traversal and all 30 existing failure/cache prefixes. A claim
+about the original Lua producer additionally needs an observed source allocation/store event
+joined to that same later copy input. See `runs/a1-parser-copy-provenance-review-by-lowerer.json`.
 
 A prototype-boundary question is pending with the owner: typed domain equivalence, complete public-parser compatibility,
 or both as experiments. This is not migration approval. Use the all-five interaction map
@@ -1711,9 +1735,10 @@ defines the alternatives, constraints and evidence required for a decision.
   [historical measurement audit](execution-model-performance-inventory.md) are recorded.
   Restricted changing-candidate admission/reuse is also remeasured against schema 29.
   Snapshot/compile/backend setup and 34 loader statement intervals are measured. A selective
-  trusted-key decode preserves loaded data and reduces measured first-load time. Allocation
-  ownership, general invalidation, source-session and real upstream/effect-family update costs
-  remain open. Supported balance/identity repair and unchanged-pin extraction now have retained
+  trusted-key decode preserves loaded data and reduces measured first-load time. Dataset
+  allocation/ownership now distinguishes owned snapshot copies, shared handles and catalog
+  teardown. Allocation by loader stage, general invalidation, source-session and real
+  upstream/effect-family update costs remain open. Supported balance/identity repair and unchanged-pin extraction have retained
   successful replays, including source-edit rejection; they do not complete A1.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a

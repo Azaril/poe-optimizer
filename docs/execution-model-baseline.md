@@ -1,8 +1,9 @@
 # Execution-model baseline
 
-A1 is **in progress**. This checkpoint records the implementation footprint, consumer
-boundaries and fresh measurements at `9c756224f7c0063b71e277e4ef2ffe33a4c91d19`
-(2026-09-12). It does not choose a replacement or establish full native build parity:
+A1 is **in progress**. The initial footprint and runtime matrix use
+`9c756224f7c0063b71e277e4ef2ffe33a4c91d19` (2026-09-12). Subsequent measurements below
+record their own source and executable identities. These checkpoints do not choose a
+replacement or establish full native build parity:
 **0/5 supplied originals complete native evaluation**.
 
 The [investigation brief](rule-execution-model-investigation.md) defines A1–A4;
@@ -480,8 +481,90 @@ exercised. The lock hash matches the prior checkpoint throughout this work.
 These replays require no production changes. Sealing custom data remains separate from
 acquiring authenticated source; normal CLI extraction also enforces the reviewed output
 digest. A maintainer regeneration path still requires source compatibility review. Actual
-upstream migration, new effect-family work, allocation ownership and source-session costs
-remain open for A1/A2. Complete supplied-original native coverage remains **0/5**.
+upstream migration and new effect-family work remain open for A1/A2. The following checkpoint
+measures dataset ownership separately. Complete supplied-original native coverage remains **0/5**.
+
+## Dataset allocation and ownership
+
+The developer-only [allocation example](../crates/poe-optimizer-data/examples/profile_allocations.rs)
+measures the unchanged loader at `c9c3711c2b7fa1fa484bb71ba4f0c6dae5bb2931` with a counting
+wrapper around Rust's `System` allocator. It adds no production instrumentation or dependencies.
+One release executable passes its counter self-check in a separate process, followed by three
+fresh sequential measurement processes on the Windows host described above. No build or test
+overlaps those measurements. All 11 lifecycle phases have identical allocation counts and byte
+totals across the three runs; elapsed times vary.
+
+These are **requested Rust heap bytes**, not RSS or allocator-reserved memory. Reallocation
+traffic counts the full old and new requested sizes, while live/peak accounting uses their
+size difference; temporary copies inside the allocator are invisible. Cold means the first
+dataset load in that process, not cold OS caches.
+
+| Operation | Change in live requested bytes | Interpretation |
+| --- | ---: | --- |
+| First bundled snapshot load | +150,497,847 | Snapshot plus process state retained after loading. |
+| Direct owned `GameDataSnapshot::clone()` | +77,584,683 | Copies package data; catalogs still share owners. |
+| Drop that owned clone | -77,584,683 | All allocations made by this clone are released. |
+| Move snapshot into `Arc` | +8,568 | One allocation for the shared snapshot. |
+| Clone/drop an additional `Arc` handle | 0 / 0 | No new heap allocation; both handles reference the same snapshot. |
+| Clone eight catalogs and the parser-program view | +88 | Two small metadata allocations; catalog/program data pointers remain shared. |
+| Drop final snapshot `Arc`, retaining those owners | -77,729,659 | Releases snapshot-owned storage; retained catalogs remain usable. |
+| Drop all retained catalog/parser owners | -72,732,828 | Releases the storage those owners kept alive. |
+| Later load, then drop without extra owners | +150,453,831 / -150,453,831 | Returns to the same 44,016-byte process remainder. |
+
+The first load requests 1,773,873,107 bytes of cumulative allocation/reallocation traffic
+(about 1.65 GiB), with a peak growth of 647,813,440 requested bytes (617.80 MiB). Its
+instrumented median is 1,912.696 ms; the later load's is 1,897.079 ms. These timings include
+atomic counter overhead and do not establish a speedup. The 44,016 bytes remaining after
+teardown are not attributed to a particular cache or called a leak. Per-statement allocation
+attribution and allocator fragmentation remain unmeasured.
+
+The production loading path returns `Arc<GameDataSnapshot>` and compiled engine data retains
+that shared owner. The direct owned clone is an API contrast, not a measured worker operation.
+Consequently these results support cheap definition sharing but say nothing yet about per-build
+mutable state or parallel scaling. Snapshot/package duplication and transient loading storage
+are comparison inputs; they do not establish interpreter overhead or a preferred replacement.
+
+Every loaded/owned-copy snapshot is checked against the exact canonical package, identity,
+reviewed trust, all eight catalog contents and parser owner digest/binding. Retained owners
+preserve their original data pointers after snapshot teardown. Witness serialization/hashing
+buffers are dropped before subsequent measured phases, although allocator/cache effects remain.
+The counter self-check exercises successful allocation, zeroing, reallocation growth/shrink
+and deallocation: 152 bytes requested and released, 96-byte peak growth, zero residual growth.
+Failure injection and concurrent counter snapshots are outside this protocol.
+
+Reproduce after building once, preserving the same executable for every invocation:
+
+```powershell
+cargo build --release --locked -p poe-optimizer-data --example profile_allocations
+.\target\release\examples\profile_allocations.exe --self-check
+.\target\release\examples\profile_allocations.exe
+```
+
+Run the last command in three fresh processes and retain each JSON output separately. Local
+evidence is `runs/a1-ownership-01/`, including the producing driver, executable, build logs,
+self-check, raw measurements and audited aggregate. Executable SHA-256 is
+`28fff7c7870bc07eb0dfb088a1c4daefe3b33d81eb0a7e38b7b5d34ab803bcf2`; example SHA-256 is
+`0eff5b7f8087008f14face45b59538b8d4cc0bc34e3050ac822c03eb85338a0a`.
+Strict example Clippy and the release build pass. The data library, schema-29 package,
+dependency lock, supplied inputs and PoB pin are unchanged. Full-original coverage is **0/5**.
+
+### Next source-session measurement
+
+Source inspection distinguishes another ownership boundary: `CompiledSourcePrograms` shares
+its immutable library through `Arc`, while `SourceSessionInput::clone()` copies mutable graph
+data. `ProgramSession` has no clone or reset API. A fresh session imports private state;
+`import_session_input` appends another graph rather than resetting existing state. Exporting
+selected raw values cannot round-trip closures, class behavior, iterator state or traversal
+provenance. Session budget charges are cumulative limits, not allocator measurements.
+
+The next harness should acquire the actual initialized parser state for all five originals,
+complete source observations, and drop Lua handles/hosts before native measurement. Measure
+compilation, shared-library handles, input cloning, fresh import, supported invocation histories,
+selected output snapshots and teardown separately. Validate cache aliases, copy independence,
+fresh-session isolation and foreign-handle rejection. Existing successful cache hits and
+no-match histories are usable workloads; the six positive uncached modifier families still
+fail native traversal and must remain labelled failures. No source-session measurement or
+new runtime capability is implemented by this checkpoint.
 
 ## Original modifier observations for the comparison
 
@@ -552,9 +635,9 @@ work belong in the comparison alongside calculation throughput.
 
 A1 remains open for these measurements and decisions:
 
-1. Extend the measured loader statement intervals with allocation traffic and peak/retained
-   memory by actual owner, including catalog clones and temporary JSON lifetimes. Separately
-   measure source observation/lowering and session costs.
+1. Extend the measured dataset allocation/ownership lifecycle with per-statement allocation
+   attribution and temporary JSON lifetimes. Measure source observation/lowering and private
+   session costs separately using the lifecycle boundaries above.
 2. Extend the measured restricted admission/reuse boundary to representative interaction
    histories and complete builds as supported. Scoring, search quality, arbitrary text edits
    and general incremental invalidation still lack equivalent workload measurements.
