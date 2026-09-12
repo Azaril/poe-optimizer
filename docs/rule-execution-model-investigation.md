@@ -1,16 +1,21 @@
 # Rule execution model investigation
 
-Status: **proposed investigation; no replacement or migration selected.**
+Status: **A1 in progress; no replacement or migration selected.**
 
 The loader, parser and source interpreter now carry substantial complexity. Investigate
 whether a more focused execution model can reduce the total cost of achieving and maintaining
 full PoB parity. This is an architecture decision to investigate, not authorization to replace
 the current evaluator or reduce its correctness objective.
 
-Start A1 now, before generalizing further unrelated Lua features. The investigation does not
+Continue A1 before generalizing further unrelated Lua features. The investigation does not
 require completion of the current evaluator first. Preserve the current measured checkpoint
 and bounded correctness work while choosing representative prototypes with the owner.
 The [implementation record](implementation.md) tracks that checkpoint and active work.
+The initial [baseline](execution-model-baseline.md),
+[semantic inventory](execution-model-semantics-inventory.md) and
+[performance inventory](execution-model-performance-inventory.md) are recorded. A1 remains
+open for attribution, general candidate invalidation, source-state and update-effort measurements;
+restricted-profile throughput is not full-build parity or an architecture comparison.
 
 ## Separate the decisions
 

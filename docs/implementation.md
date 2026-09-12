@@ -18,15 +18,18 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-The R2t checkpoint below is the current resume point; later sections retain historical
-checkpoints and their original validation scope.
+The A1 investigation below is the current resume point. R2t and its CI repair remain the
+last production-code checkpoint; later sections retain their original validation scope.
 
-**Planned architecture review:** [A1-A4 execution-model investigation](#execution-model-investigation-a1-a4)
-will compare the current interpreter with a domain DSL, data-driven rules, native Rust
+**Architecture review in progress:** [A1-A4 execution-model investigation](#execution-model-investigation-a1-a4)
+compares the current interpreter with a domain DSL, data-driven rules, native Rust
 algorithm families and hybrids. The owner requested this review because the loader,
-parser and runtime introduce substantial complexity. No replacement is selected. Record
-the present checkpoint, then inventory the cost before extending general Lua compatibility
-into further domains; prototype selection and any significant migration require discussion.
+parser and runtime introduce substantial complexity. No replacement is selected. The
+[initial A1 baseline](execution-model-baseline.md), [consumer map](execution-model-semantics-inventory.md)
+and [performance inventory](execution-model-performance-inventory.md) now separate
+acquisition/parity, preparation, source execution and the restricted typed candidate path.
+Continue measuring costs before extending general Lua compatibility into further domains;
+prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
 
 **R2t checkpoint: exact copy-failure identity.** The native source session now
@@ -107,9 +110,32 @@ Clippy across all targets, formatting and diff checks pass. Evidence is recorded
 The earlier R2t validation remains a separate local checkpoint. Hosted results for the new
 commit must be checked independently; Linux CI success is not established by this repair.
 
-**Resume after CI:** begin A1's cost and semantic-boundary inventory before extending the
-runtime into further domains. The unresolved modifier-record allocation/copy work above
-is a concrete case for that review, not evidence that an alternative model already works.
+**A1 inventory checkpoint:** baseline `9c75622` now has a reproducible committed-file
+inventory (770 entries, 713 included, 57 excluded, none unclassified), eight mapped
+consumer boundaries and fresh native-only release measurements. Fifty-one fresh processes
+cover the five original preparation reports and 198,000 restricted Mace/Spark typed API
+calls at 1/4/32 workers. All original reports remain incomplete; complete native coverage
+is still **0/5**. Spark has agreeing finite per-result checksums, while Mace's unavailable
+metrics allow only cross-run sample comparison. No full-build throughput is claimed.
+
+The observed roughly 1.99-second backend/data initialization and roughly 717 MiB process
+peak require layer-specific profiling; they are not attributed to the source interpreter,
+which is not yet wired into general native configuration activation. Code counts include
+mixed roles and inline tests, and do not measure maintenance complexity. The
+[baseline](execution-model-baseline.md) records the full scope, protocol and limitations.
+
+A separate current-data assembly replay covers 1,806 varied admitted selections in three
+fresh processes and 18 samples. All calibration/sample checksums and 16 native document
+comparisons per process pass. It separates fresh admission from already-admitted numeric
+measurement; neither includes full API/search work. This is still a restricted diagnostic
+corpus, with unchanged 0/5 original coverage. Protocol, rates and checksum limitations are
+in the same baseline; evidence is `runs/a1-baseline/assembly/`.
+
+**Resume A1:** separate load/validation/compilation, allocation/retained-state and supported
+session costs. Record update/migration/debugging effort and use the all-five interaction map to
+choose comparable A2 slices with the owner. A1 remains incomplete. The unresolved
+modifier-record allocation/copy work is a concrete comparison case, not evidence that an
+alternative already preserves its contract.
 
 **Historical R2s checkpoint:** source modulo and complete flag-helper execution.
 The neutral source model now admits exact retained `bit.band`, `bit.bor`, `bit.bxor`
@@ -1580,19 +1606,25 @@ any whole-build parity gate.
 
 ## Execution-model investigation: A1-A4
 
-Requested on 2026-09-12. **Status: planned; no architecture change selected.** The current
+Requested on 2026-09-12. **Status: A1 in progress; no architecture change selected.** The current
 loader, source parser, typed IR and interpreter have accumulated substantial support code.
 Evaluate whether their full cost is justified before continuing that model into additional
 domains. This does not presume the current approach is wrong, or treat code already written
 as a reason to retain it. The [investigation brief](rule-execution-model-investigation.md)
 defines the alternatives, constraints and evidence required for a decision.
 
-- [ ] **A1 — inventory and baseline.** After the current checkpoint, map each layer and
+- [ ] **A1 — inventory and baseline (in progress).** Map each layer and
   consumer, distinguish acquisition/parity tooling from shipping preparation and calculation,
   and record implementation, generated code, tests, update effort and actual runtime costs.
   Include open runtime dependencies and the five-original **0/5** full native result.
   State which externally observable semantics need exact parity, and which internal details
   might be removed only after proving they cannot change results, legality or ordering.
+  Initial [code/runtime baseline](execution-model-baseline.md),
+  [consumer contracts](execution-model-semantics-inventory.md) and
+  [historical measurement audit](execution-model-performance-inventory.md) are recorded.
+  Restricted changing-candidate admission/reuse is also remeasured against schema 29.
+  Per-layer allocation/time, general invalidation, source-session and update-effort
+  measurements remain open; these restricted matrices do not complete A1.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.
@@ -1608,7 +1640,7 @@ defines the alternatives, constraints and evidence required for a decision.
   remove superseded paths after differential and breadth gates pass. If retained, address
   the measured complexity hotspots and document why replacement offered no net benefit.
 
-**Scheduling/resume:** A1 can begin with the present evidence; full native build completion
+**Scheduling/resume:** continue A1 from the measured baseline; full native build completion
 is not a prerequisite. Before a further general-purpose runtime expansion, use the inventory
 to decide whether it should remain a shared interpreter capability or enter A2 as an
 alternative-model experiment. Existing correctness fixes and breadth validation continue.
@@ -6230,7 +6262,7 @@ is concrete; real-build recommendations depend on both.
 | M4: broader catalogs and upgrade workflows | Not started | Extend mechanic/equipment/skill coverage and conditional upgrade/bundle ranking with explicit inventory, cost, and comparison semantics. Retain parity and lock guarantees. |
 | M5: richer objective policies | Not started | Unit-checked expressions, composite and ordered priorities, soft preferences, Pareto selection, and explicit robust aggregation. Test policy-specific selection and preserve hard constraints. |
 | Desktop GUI | Deferred until CLI/report contracts stabilize | Choose frontend; Tauri is a candidate. Reuse core jobs, results and comparison models. Verify CLI/GUI parity, responsive cancellation and native evaluator packaging; package optional reference workers separately. Does not depend on finishing every M4/M5 feature. |
-| A: execution-model investigation and follow-through | Planned; alternatives unselected | A1 inventory and costs, A2 comparable DSL/data/native/interpreter/hybrid prototypes, A3 evidence-backed ADR and owner discussion, A4 agreed migration or simplification. Preserve injected data, optional PoB parity, full real-build semantics and native parallelism; see [A1-A4](#execution-model-investigation-a1-a4). |
+| A: execution-model investigation and follow-through | A1 in progress; alternatives unselected | A1 inventory and costs, A2 comparable DSL/data/native/interpreter/hybrid prototypes, A3 evidence-backed ADR and owner discussion, A4 agreed migration or simplification. Preserve injected data, optional PoB parity, full real-build semantics and native parallelism; see [A1-A4](#execution-model-investigation-a1-a4). |
 | Native Rust calculation replacement | Active; connected admitted ordinary passives/attribute choices, all class/ascendancy identities, four resistance ascendancy passives and supplied weapon/amulet actor modifiers supported by restricted Spark/Mace pipelines; injected data and lazy native graph search implemented | Class/entrance materialization and explicit finite search rules are implemented; retain reviewed source compatibility, then broaden passive/modifier extraction, actor/skill coverage and full offence/defence while preserving differential parity and strict admission. Typed mixed-candidate preparation and API/whole-search measurements are implemented for the bounded Mace catalog; realistic broader performance, optimizer quality and browser execution still need evidence. |
 | PoE1 adapter | Later, separate track | Add a distinct versioned rules/data/evaluator adapter after PoE2 interfaces are proven; do not mix game identities or reuse PoE2 parity claims. |
 
