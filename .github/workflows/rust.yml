@@ -9,6 +9,12 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      # Exhaustive parity suites and fixed-deadline CLI checks need optimized
+      # runtime code. Keep the test profile's debug and overflow checks enabled.
+      CARGO_PROFILE_TEST_OPT_LEVEL: '2'
+      CARGO_PROFILE_TEST_DEBUG_ASSERTIONS: 'true'
+      CARGO_PROFILE_TEST_OVERFLOW_CHECKS: 'true'
     steps:
       - uses: actions/checkout@v4
         with:
