@@ -39,16 +39,25 @@ use poe_optimizer_engine::{
 };
 use public_source::Observation;
 use std::collections::{BTreeMap, BTreeSet};
+// Exact bundled inventory: all earlier numeric bodies plus two Special and
+// one ModTag body whose complete recipes became representable with Gsub.
+const NUMBER_SPECIAL: usize = 60;
+const NUMBER_PRE_FLAG: usize = 1;
+const NUMBER_MOD_TAG: usize = 23;
+const NUMBER_BODIES: usize = NUMBER_SPECIAL + NUMBER_PRE_FLAG + NUMBER_MOD_TAG;
+const NUMBER_PUBLIC_POSITIONS: usize = NUMBER_SPECIAL + NUMBER_PRE_FLAG + 2 * NUMBER_MOD_TAG;
 fn has_number(e: &E) -> bool {
     match e {
         E::ToNumber { .. } => true,
-        E::Negate(v) | E::FirstToUpper { value: v, .. } => has_number(v),
+        E::Negate(v) | E::FirstToUpper { value: v, .. } | E::Gsub { value: v, .. } => has_number(v),
         E::Concat { left, right } => has_number(left) || has_number(right),
         E::Table(fields) => fields.iter().any(|f| match f {
             Field::Named { value, .. } | Field::List(value) => has_number(value),
         }),
         E::CreateMod { args } | E::Flag { args, .. } => args.iter().any(has_number),
-        _ => false,
+        E::Literal(_) | E::Argument(_) | E::CapturedScalar { .. } | E::ConstantField { .. } => {
+            false
+        }
     }
 }
 fn candidates(data: &ModifierParserData, family: D) -> Vec<(String, ParserCallbackId)> {
@@ -122,13 +131,18 @@ fn list(value: E) -> E {
 fn uses_mod(e: &E) -> bool {
     match e {
         E::CreateMod { .. } => true,
-        E::Negate(v) | E::FirstToUpper { value: v, .. } | E::ToNumber { value: v } => uses_mod(v),
+        E::Negate(v)
+        | E::FirstToUpper { value: v, .. }
+        | E::Gsub { value: v, .. }
+        | E::ToNumber { value: v } => uses_mod(v),
         E::Flag { args, .. } => args.iter().any(uses_mod),
         E::Concat { left, right } => uses_mod(left) || uses_mod(right),
         E::Table(fields) => fields.iter().any(|f| match f {
             Field::Named { value, .. } | Field::List(value) => uses_mod(value),
         }),
-        _ => false,
+        E::Literal(_) | E::Argument(_) | E::CapturedScalar { .. } | E::ConstantField { .. } => {
+            false
+        }
     }
 }
 fn fixture(source: &Source, body: &str) -> Function {
@@ -281,14 +295,14 @@ fn every_original_number_factory_matches_all_actual_public_call_positions() {
             }
         }
     }
-    assert_eq!(covered[&(D::Special, false)].len(), 58);
-    assert_eq!(covered[&(D::PreFlag, false)].len(), 1);
+    assert_eq!(covered[&(D::Special, false)].len(), NUMBER_SPECIAL);
+    assert_eq!(covered[&(D::PreFlag, false)].len(), NUMBER_PRE_FLAG);
     for second in [false, true] {
-        assert_eq!(covered[&(D::ModTag, second)].len(), 22);
+        assert_eq!(covered[&(D::ModTag, second)].len(), NUMBER_MOD_TAG);
     }
-    assert_eq!(paired, 103);
+    assert_eq!(paired, NUMBER_PUBLIC_POSITIONS);
     eprintln!(
-        "All81 original ToNumber bodies selected through103 actual source call sites:58Special,1Prefix,22firstTag,22secondTag; complete public graphs equal"
+        "All {NUMBER_BODIES} original ToNumber bodies selected through {NUMBER_PUBLIC_POSITIONS} actual source call-position cases: {NUMBER_SPECIAL} Special, {NUMBER_PRE_FLAG} PreFlag, {NUMBER_MOD_TAG} firstTag, {NUMBER_MOD_TAG} secondTag; complete public graphs equal"
     );
 }
 #[test]
@@ -365,9 +379,9 @@ fn every_original_number_factory_preserves_raw_aliases_in_its_actual_protocol() 
             }
         }
     }
-    assert_eq!(paired + errors, 103 * 7);
+    assert_eq!(paired + errors, NUMBER_PUBLIC_POSITIONS * 7);
     eprintln!(
-        "All81 ToNumber aliases in real protocols: {paired} exact graphs,{errors} ordered source errors"
+        "All {NUMBER_BODIES} ToNumber aliases in real protocols: {paired} exact graphs, {errors} ordered source errors"
     );
 }
 
@@ -834,7 +848,11 @@ fn every_original_number_body_and_real_primitive_execute_in_completed_live_trace
         .set_name("@test-only-number-factories-warm")
         .call(cases)
         .unwrap();
-    assert_eq!(observed.get::<usize>("executions").unwrap(), 81 * 128);
+    assert_eq!(cold.len(), NUMBER_BODIES);
+    assert_eq!(
+        observed.get::<usize>("executions").unwrap(),
+        NUMBER_BODIES * 128
+    );
     assert!(
         observed.get::<usize>("tonumber_live").unwrap() > 0,
         "No original tonumber C-function event in a completed live trace"
@@ -856,7 +874,8 @@ fn every_original_number_body_and_real_primitive_execute_in_completed_live_trace
         assert!(compare(&source, &native, input));
     }
     eprintln!(
-        "81 retained original ToNumber bodies:10368 uncached calls; every prototype plus actual original tonumber C-function pointer observed in completed live traces; exact cold/warm/public graphs"
+        "{NUMBER_BODIES} retained original ToNumber bodies: {} uncached calls; every prototype for its captured input plus actual original tonumber C-function pointer observed in completed live traces; exact cold/warm/public graphs, no every-branch trace claim",
+        NUMBER_BODIES * 128
     );
 }
 #[test]

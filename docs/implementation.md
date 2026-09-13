@@ -18,6 +18,31 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+**CI correction validated locally: numeric-factory coverage after substitution support.**
+The older `80b1801` CI run failed on both platforms in `modifier_numbers`: 84 discovered
+factories versus an expectation of 81. Public failure annotations expose the exact assertion;
+full log download returned 403. The same failure reproduced locally on the current package.
+The source/provenance audit confirms that all earlier 81 definitions remain and three already
+present source callbacks became representable: two Special bodies and one ModTag body.
+Current counts are 60 Special (also PreAnchorSpecial), one PreFlag and 23 ModTag.
+
+The inventory and source-parity test walkers now explicitly traverse every expression kind,
+including Gsub receivers, and expectations cover 84 bodies / 107 public call positions.
+Production code, definitions and admission are unchanged by this CI correction. All five
+DATA and nine complete source-parity tests pass, preserving source frames, exact public and
+raw alias graphs, ordered errors, cache/copy behavior and warmed execution. The source tests
+cover 84 bodies, 107 public call-position cases, 749 alias cases and 10,752 warmed calls.
+Strict workspace Clippy and formatting pass. Receipts are under
+`runs/r2am-base-name-01/ci-followup-01/`, `ci-numeric-01/` and `ci-lint-01/`.
+
+**Immediate validation resume:** run the full workspace/all-target test suite before further
+SyncLoadouts implementation, using CI's test optimization level 2 with debug assertions and
+overflow checks enabled. Its command/source/PID/result ledger is
+`runs/r2am-base-name-01/workspace-01/01.json` once started; inspect the existing live process
+rather than launch a duplicate. This broader run may expose other stale expectations and
+must not be reported complete until terminal success. The previously published item checkpoint
+below remains scoped to its selected tests; hosted CI is separate and not yet green.
+
 **R2am validated checkpoint: preserve item base names through owned assembly.**
 A bounded native failure probe identified the actual life-flask checks blocking original
 builds 2/4/5: authored item IDs 12/7/7, `Flask 1`, active item sets 6/1/2. Their owned item

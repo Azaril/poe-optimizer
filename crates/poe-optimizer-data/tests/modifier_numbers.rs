@@ -13,9 +13,9 @@ fn data() -> ModifierParserData {
 fn converts(e: &ParserFactoryExpr) -> bool {
     match e {
         ParserFactoryExpr::ToNumber { .. } => true,
-        ParserFactoryExpr::Negate(v) | ParserFactoryExpr::FirstToUpper { value: v, .. } => {
-            converts(v)
-        }
+        ParserFactoryExpr::Negate(v)
+        | ParserFactoryExpr::FirstToUpper { value: v, .. }
+        | ParserFactoryExpr::Gsub { value: v, .. } => converts(v),
         ParserFactoryExpr::Concat { left, right } => converts(left) || converts(right),
         ParserFactoryExpr::Table(fields) => fields.iter().any(|f| match f {
             ParserFactoryField::Named { value, .. } | ParserFactoryField::List(value) => {
@@ -25,7 +25,10 @@ fn converts(e: &ParserFactoryExpr) -> bool {
         ParserFactoryExpr::CreateMod { args } | ParserFactoryExpr::Flag { args, .. } => {
             args.iter().any(converts)
         }
-        _ => false,
+        ParserFactoryExpr::Literal(_)
+        | ParserFactoryExpr::Argument(_)
+        | ParserFactoryExpr::CapturedScalar { .. }
+        | ParserFactoryExpr::ConstantField { .. } => false,
     }
 }
 fn id(data: &ModifierParserData) -> ParserCallbackId {
@@ -61,11 +64,13 @@ fn number_factories_cover_all_three_existing_caller_dictionaries_without_helper_
             _ => None,
         })
         .collect();
-    assert_eq!(ids.len(), 81);
+    // Closed substitutions admit two further Special factories and one ModTag
+    // factory containing numeric conversion; the original 81 remain represented.
+    assert_eq!(ids.len(), 84);
     for (dict, expected) in [
-        (ParserDictionary::Special, 58),
-        (ParserDictionary::PreAnchorSpecial, 58),
-        (ParserDictionary::ModTag, 22),
+        (ParserDictionary::Special, 60),
+        (ParserDictionary::PreAnchorSpecial, 60),
+        (ParserDictionary::ModTag, 23),
         (ParserDictionary::PreFlag, 1),
     ] {
         let found: BTreeSet<_> = data.tables[data.dictionaries[&dict].0 as usize - 1]
