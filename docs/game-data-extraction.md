@@ -130,7 +130,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 30 and `poe2-native-profiles-v30`, including source-keyed passive/actor effects,
+schema 36 and `poe2-native-profiles-v36`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -158,9 +158,38 @@ The independent runtime oracle checks state lifetime and rebind ordering rather 
 extraction as its expected state. See [item loading](item-source-and-loading.md).
 
 
-The `item_assembly` section schema 2 records common and armour/flask/charm local assembly policy with an explicit `PolicyOnly`
-capability. The extractor initializes the original item host and authenticates 31 complete
-method spans, helper captures, primitive identities and source environments. It extracts
+The current `item_assembly` policy schema 7 adds authenticated activation/rune-choice
+operands and a complete finite startup-node validity projection. It reuses raw rune
+definitions; parsed effects remain a runtime producer dependency. New complete source spans
+cover activation, population, dropdown selection and rune-row construction, while the tree
+projection includes the original charm-socket derivation. Literal-only upstream edits still
+require source-pin review.
+
+The current modifier-parser schema 8 adds closed scalar `Gsub` factories, including the
+chained source substitutions used during rune preparation. The generated R2ah candidate is
+26,529,363 bytes, SHA-256
+`5d9335f89cb3caecdb749a0611cc463417059f3c9bb7fbbbd5a9853f651ff740`.
+Relative to the schema-35 HEAD package, only the manifest, `item_assembly` and
+`modifier_parser` sections change; the other 27 sections, original inputs, tree, lock and
+source pin are unchanged. The parser has 1,255 Pure factories and 396 Unsupported dispositions;
+all 1,222 previously Pure factories are retained unchanged. Five remaining Unsupported reasons
+become more precise and four admitted-program owner digests are refreshed. These are package
+contents, not new runtime parity counts.
+
+Read and compare package JSON explicitly as UTF-8. Windows default text decoding can corrupt
+non-ASCII item names during an audit and report false section changes. Generation and the
+scoped public preparation regressions succeeded. The declared source-fed activation comparison
+and all 17 lifecycle/materialization regression tests also pass. Normal CLI extraction is
+byte-identical to the package hash above. Strict workspace/native-only Clippy and five WASM
+library checks pass. The final activation rerun passes 13 tests after helper deduplication;
+final materialization rerun status is tracked in the implementation record.
+The five public native-only reports are still incomplete. Generation alone
+does not establish equipment or full-build parity. See the
+[current equipment contract](native-equipment-integration.md#r2ah-current-implementation-boundary).
+
+At the schema-30 checkpoint, `item_assembly` schema 2 introduced common and armour/flask/charm
+local assembly policy with an explicit `PolicyOnly` capability. That extractor initialized the original
+item host and authenticated 31 complete method spans, helper captures, primitive identities and source environments. It extracts
 policy literals and verifies reused rune/precision/keyword definitions. The source ledger
 retains repeated module invocations. Complete-body authentication does not mean every
 branch has a native implementation; this section supplies no computed build or item state.

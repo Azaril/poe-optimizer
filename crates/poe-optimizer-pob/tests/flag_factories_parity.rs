@@ -41,7 +41,10 @@ use std::collections::BTreeSet;
 fn has_flag(e: &E) -> bool {
     match e {
         E::Flag { .. } => true,
-        E::Negate(v) | E::FirstToUpper { value: v, .. } | E::ToNumber { value: v } => has_flag(v),
+        E::Negate(v)
+        | E::FirstToUpper { value: v, .. }
+        | E::ToNumber { value: v }
+        | E::Gsub { value: v, .. } => has_flag(v),
         E::Concat { left, right } => has_flag(left) || has_flag(right),
         E::Table(fields) => fields.iter().any(|f| match f {
             F::Named { value, .. } | F::List(value) => has_flag(value),
@@ -119,7 +122,10 @@ fn uses_mod(e: &E) -> bool {
     match e {
         E::CreateMod { .. } => true,
         E::Flag { args, .. } => args.iter().any(uses_mod),
-        E::Negate(v) | E::FirstToUpper { value: v, .. } | E::ToNumber { value: v } => uses_mod(v),
+        E::Negate(v)
+        | E::FirstToUpper { value: v, .. }
+        | E::ToNumber { value: v }
+        | E::Gsub { value: v, .. } => uses_mod(v),
         E::Concat { left, right } => uses_mod(left) || uses_mod(right),
         E::Table(fields) => fields.iter().any(|f| match f {
             F::Named { value, .. } | F::List(value) => uses_mod(value),
@@ -216,9 +222,9 @@ fn every_original_flag_body_is_selected_by_its_real_special_pattern() {
         );
         covered.insert(id);
     }
-    assert_eq!(covered.len(), 71);
+    assert_eq!(covered.len(), 81);
     eprintln!(
-        "All71 original Flag bodies selected at71 actual Special call sites; every complete public graph matches"
+        "All81 original Flag bodies selected at81 actual Special call sites; every complete public graph matches"
     );
 }
 #[test]
@@ -237,6 +243,8 @@ fn every_original_flag_body_preserves_broad_raw_alias_arguments() {
         source.source.add(&pattern, callback);
         rows.push(id);
     }
+    assert_eq!(rows.len(), 81);
+    assert_eq!(rows.iter().copied().collect::<BTreeSet<_>>().len(), 81);
     let native = compile(data);
     let mut paired = 0;
     let mut errors = 0;
@@ -257,8 +265,8 @@ fn every_original_flag_body_preserves_broad_raw_alias_arguments() {
             }
         }
     }
-    assert_eq!(paired + errors, 426);
-    eprintln!("All71 original Flag aliases:{paired} exact full graphs,{errors} ordered errors");
+    assert_eq!(paired + errors, 486);
+    eprintln!("All81 original Flag aliases:{paired} exact full graphs,{errors} ordered errors");
 }
 #[test]
 fn original_flag_preserves_exact_zero_and_sparse_variadic_constructor_vectors() {
@@ -763,12 +771,13 @@ fn every_original_flag_body_helper_and_constructor_run_in_live_traces() {
         cases.set(cold.len() + 1, row).unwrap();
         cold.push((original.info().line_defined.unwrap(), graph, input));
     }
+    assert_eq!(cold.len(), 81);
     let observed: Table = lua
         .load(include_str!("support/flag_factories_warm.lua"))
         .set_name("@test-only-original-flag-warm")
         .call(cases)
         .unwrap();
-    assert_eq!(observed.get::<usize>("executions").unwrap(), 71 * 128);
+    assert_eq!(observed.get::<usize>("executions").unwrap(), 81 * 128);
     let live = observed
         .get::<Table>("live")
         .unwrap()
@@ -805,6 +814,6 @@ fn every_original_flag_body_helper_and_constructor_run_in_live_traces() {
         assert!(compare(&source, &native, input));
     }
     eprintln!(
-        "All71 original Flag bodies plus Flag/helper constructor observed in completed live traces;9088 direct calls and exact cold/warm/public native graphs"
+        "All81 original Flag bodies plus Flag/helper constructor observed in completed live traces;10368 direct calls and exact cold/warm/public native graphs"
     );
 }

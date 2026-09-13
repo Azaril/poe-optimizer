@@ -98,6 +98,7 @@ pub struct CompiledModifierParser {
     cluster: LuaPattern,
     tag_capture_numeric: LuaPattern,
     first_to_upper: LuaPattern,
+    factory_gsubs: BTreeMap<String, LuaPattern>,
     programs: Option<TypedPrograms>,
 }
 #[derive(Debug, Clone)]
@@ -139,20 +140,20 @@ impl CompiledModifierParser {
             LuaPattern::compile(catalog.data().policy.tag_capture_numeric_pattern.as_bytes())?;
         let first_to_upper =
             LuaPattern::compile(catalog.data().policy.first_to_upper_pattern.as_bytes())?;
-        if bytes
+        bytes = bytes
             .checked_add(cluster.compiled_bytes())
             .and_then(|bytes| bytes.checked_add(tag_capture_numeric.compiled_bytes()))
             .and_then(|bytes| bytes.checked_add(first_to_upper.compiled_bytes()))
-            .is_none_or(|n| n > MAX_PARSER_COMPILED_BYTES)
-        {
-            return Err(ParserError::ResourceBound("compiled dictionary bytes"));
-        }
+            .filter(|n| *n <= MAX_PARSER_COMPILED_BYTES)
+            .ok_or(ParserError::ResourceBound("compiled dictionary bytes"))?;
+        let factory_gsubs = factory::compile_gsubs(catalog, &mut bytes)?;
         Ok(Self {
             catalog: catalog.clone(),
             dictionaries,
             cluster,
             tag_capture_numeric,
             first_to_upper,
+            factory_gsubs,
             programs,
         })
     }

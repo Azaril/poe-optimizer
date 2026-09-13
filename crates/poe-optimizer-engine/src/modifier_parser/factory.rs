@@ -9,6 +9,79 @@ use poe_optimizer_data::modifier_parser::{
     ParserNonFinite,
 };
 
+/// Prepare each injected substitution once under this parser's catalog owner.
+/// Invalid pattern syntax remains lazy in LuaPattern; only storage is checked here.
+pub(super) fn compile_gsubs(
+    catalog: &ModifierParserCatalog,
+    bytes: &mut usize,
+) -> ParserResult<BTreeMap<String, LuaPattern>> {
+    fn visit(
+        expression: &ParserFactoryExpr,
+        out: &mut BTreeMap<String, LuaPattern>,
+        bytes: &mut usize,
+    ) -> ParserResult<()> {
+        match expression {
+            ParserFactoryExpr::Gsub { value, pattern, .. } => {
+                if !out.contains_key(pattern) {
+                    let metadata = pattern
+                        .len()
+                        .checked_add(std::mem::size_of::<(String, LuaPattern)>())
+                        .ok_or(ParserError::ResourceBound("factory pattern storage"))?;
+                    let remaining = MAX_PARSER_COMPILED_BYTES
+                        .checked_sub(*bytes)
+                        .and_then(|n| n.checked_sub(metadata))
+                        .ok_or(ParserError::ResourceBound("compiled dictionary bytes"))?;
+                    let compiled = LuaPattern::compile_with_limits(
+                        pattern.as_bytes(),
+                        crate::lua_pattern::CompileLimits {
+                            max_compiled_bytes: remaining,
+                            ..Default::default()
+                        },
+                    )?;
+                    *bytes = bytes
+                        .checked_add(metadata)
+                        .and_then(|n| n.checked_add(compiled.compiled_bytes()))
+                        .filter(|n| *n <= MAX_PARSER_COMPILED_BYTES)
+                        .ok_or(ParserError::ResourceBound("compiled dictionary bytes"))?;
+                    out.insert(pattern.clone(), compiled);
+                }
+                visit(value, out, bytes)?;
+            }
+            ParserFactoryExpr::Negate(value)
+            | ParserFactoryExpr::ToNumber { value }
+            | ParserFactoryExpr::FirstToUpper { value, .. } => visit(value, out, bytes)?,
+            ParserFactoryExpr::Concat { left, right } => {
+                visit(left, out, bytes)?;
+                visit(right, out, bytes)?;
+            }
+            ParserFactoryExpr::Flag { args, .. } | ParserFactoryExpr::CreateMod { args } => {
+                for value in args {
+                    visit(value, out, bytes)?;
+                }
+            }
+            ParserFactoryExpr::Table(fields) => {
+                for field in fields {
+                    let (ParserFactoryField::Named { value, .. } | ParserFactoryField::List(value)) =
+                        field;
+                    visit(value, out, bytes)?;
+                }
+            }
+            ParserFactoryExpr::Literal(_)
+            | ParserFactoryExpr::Argument(_)
+            | ParserFactoryExpr::CapturedScalar { .. }
+            | ParserFactoryExpr::ConstantField { .. } => {}
+        }
+        Ok(())
+    }
+    let mut patterns = BTreeMap::new();
+    for disposition in catalog.data().factories.values() {
+        if let ParserFactoryDisposition::Pure(factory) = disposition {
+            visit(&factory.body, &mut patterns, bytes)?;
+        }
+    }
+    Ok(patterns)
+}
+
 /// Borrow captures in their original positions; no invocation argument vector
 /// or extra raw string copy is needed for Prefix or either tag call site.
 #[derive(Clone, Copy)]
@@ -250,6 +323,21 @@ impl Run<'_> {
                     self.budget,
                     &mut self.output,
                 )
+            }
+            ParserFactoryExpr::Gsub {
+                value,
+                pattern,
+                replacement,
+            } => {
+                let value = self.factory_expr(value, callback, arguments, depth + 1)?;
+                let parser = self.parser;
+                self.budget.charge(
+                    (pattern.len() as u64 + 1).saturating_mul(parser.factory_gsubs.len() as u64),
+                )?;
+                let compiled = parser.factory_gsubs.get(pattern).ok_or_else(|| {
+                    ParserError::InvalidData("missing compiled factory gsub pattern".into())
+                })?;
+                strings::gsub(&value, compiled, replacement, self.budget, &mut self.output)
             }
             ParserFactoryExpr::Table(fields) => {
                 self.output.charge(0)?;
@@ -786,5 +874,33 @@ mod number_tests {
             evaluate(&expression, &[], &mut MatchBudget::default(), OutputBudget::default()),
             Err(ParserError::SourceError(message)) if message == "arithmetic on a non-number",
         ));
+    }
+}
+
+#[cfg(test)]
+mod gsub_compile_tests {
+    use super::*;
+    #[test]
+    fn gsub_preparation_deduplicates_patterns_and_enforces_remaining_compiled_bytes() {
+        let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+        let catalog = snapshot.modifier_parser();
+        let mut bytes = 0usize;
+        let patterns = compile_gsubs(catalog, &mut bytes).unwrap();
+        assert!(patterns.contains_key("^%l"));
+        assert!(patterns.contains_key(" %l"));
+        assert!(patterns.contains_key(" "));
+        let exact = patterns
+            .iter()
+            .map(|(text, pattern)| {
+                text.len() + std::mem::size_of::<(String, LuaPattern)>() + pattern.compiled_bytes()
+            })
+            .sum::<usize>();
+        assert_eq!(bytes, exact);
+        let mut exhausted = MAX_PARSER_COMPILED_BYTES;
+        assert!(matches!(
+            compile_gsubs(catalog, &mut exhausted),
+            Err(ParserError::ResourceBound(_))
+        ));
+        assert_eq!(exhausted, MAX_PARSER_COMPILED_BYTES);
     }
 }

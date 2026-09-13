@@ -119,6 +119,9 @@ pub(super) struct OutputBudget {
     bytes: usize,
 }
 impl OutputBudget {
+    pub(super) fn remaining_bytes(&self) -> usize {
+        MAX_OUTPUT_BYTES.saturating_sub(self.bytes)
+    }
     pub(super) fn charge(&mut self, bytes: usize) -> ParserResult<()> {
         self.values = self
             .values

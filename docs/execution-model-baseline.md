@@ -1368,3 +1368,106 @@ Count session ownership/clone limitations, typed-effect adapters, deferred parse
 actual cache/scaling consumer in the alternatives. No production model is selected. Receipts
 are under `runs/r2ag-unique-order-01/`, including `code-footprint.json` and the [implementation
 checkpoint](implementation.md) validation records.
+
+## Equipment activation investigation in progress
+
+R2ah adds a concrete comparison case for A1/A2: source rune initialization parses the
+entire ordinary rune family before filtering to equipped choices. The first observed
+component run made 629 parser dependency calls, then stopped at the native global
+strict-order proof. The real source comparator is cyclic, so preserving required
+headless selection behavior needs a more precise contract than a conventional sorted list.
+These are partial preparation observations, not candidate throughput or full parity.
+
+The later `source-output-04` component attempt for build02 reached a Resource failure under
+the 5,000,000-step limit, reporting **4,995,525 charged steps / 2,458,237 logical bytes**.
+The receipt is `source-output-04/build-02.xml/original/comparison.json`. The next comparison
+configures only its component fixture to **50,000,000 steps** for the full source-fed
+tree/item/slot matrix. All other fixture limits and the public production defaults remain
+unchanged, including the production 5,000,000-step ceiling. This is preparation and
+compatibility-proof work, not allocator/RSS, candidate throughput or whole-build parity.
+With that allowance, the earlier `activation-05` target passed 15 tests. Five original and three
+derived component cases reach `AwaitingSyncLoadouts` with matching declared headless graphs
+and node writes; two derived cases retain explicit population-order dependencies. Build02
+completes at **5,646,764 reported steps**, exceeding the earlier fixture ceiling. Source-fed
+context and the substituted original parser remain component dependencies, not a completed
+production inventory, full Load or actor calculation. Ten startup observations check 595 rows,
+5,377–6,117 comparator calls and the exact module continuation at line2286, without requiring
+the optional C-return hook. All nine lifecycle and eight materialization regression tests
+also pass. Reconciliation is in `activation-source-review-05.json`. Subsequent whole-item
+regressions pass eight tests, retaining all 226 previously completed declared graph hashes
+and six frontier records; omitted-field discovery order is outside that comparison. Normal
+CLI extraction remains byte-identical. Strict workspace/native-only Clippy and the five WASM
+library checks pass. The final activation rerun passes 13 tests after removing two duplicate
+helper test registrations. Its five-original and derived-case comparison outcomes are unchanged
+in `source-output-06`; the 15-test count above belongs to the earlier activation-05 execution.
+Final materialization rerun status is tracked separately in the implementation record.
+
+Compare preparing immutable static rune definitions once, retaining a native producer,
+and an acquired/compiled domain representation. Include source/update reconciliation,
+record ownership, aliases that affect downstream consumers, diagnostics, and the cost of
+proving sorter behavior. Moving work into acquisition is not by itself a reduction in
+overall complexity. The current public path for builds2/4/5 stops during rune preparation
+at `rune_initial_order` with `ModParser pending shared dictionary mutation in doubled form: None`;
+the earlier callback333 dependency is resolved. This is a broad unsupported `DOUBLED` guard,
+not evidence of shared mutation on the failing invocation. The reports do not retain the actual
+parser input; the [catalog audit](../runs/r2ah-equipment-activation-01/frontier-analysis-by-engine.md)
+finds four ordinary rune lines with scalar names. The source scalar-name path allocates fresh
+tables. Admitting that path is potential bounded follow-up work requiring parity evidence.
+Builds1/3 retain their captured-jewel stops.
+The five reports remain incomplete, with 96 registrations (13, 34, 0, 21, 28) across 116 records.
+No alternative is selected; the A2/A3 comparison and owner discussion remain required.
+
+The following physical inventory is against HEAD `30c3497891fc6372797e9842ee8c5739a9c1f941`,
+including the new, untracked files at the review snapshot. It covers 57 changed or new Rust/Lua
+files, of which 18 are new. Source-file roles include colocated unit tests; dedicated tests are
+listed separately, so these are not counts of code executed in production.
+
+| Changed-file role | Files | Added lines | Removed lines | Net physical lines | Net bytes |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Production data model, including colocated tests | 8 | 341 | 4 | 337 | 12,036 |
+| Production runtime/adapters, including colocated tests | 12 | 2,765 | 27 | 2,738 | 111,991 |
+| Acquisition source, including colocated tests | 6 | 695 | 14 | 681 | 25,224 |
+| Dedicated native/data tests | 18 | 788 | 28 | 760 | 27,577 |
+| Reference tests and observation | 13 | 2,379 | 78 | 2,301 | 103,431 |
+| **Total** | **57** | **6,968** | **151** | **6,817** | **280,259** |
+
+The method uses `git diff --numstat HEAD` for tracked `.rs`/`.lua` files under `crates`
+and `git ls-files --others --exclude-standard -- crates` for new files, which count in full.
+Net bytes compare the current files with HEAD after normalizing CRLF to LF; comments and blank
+lines count. Generated package files, vendor files, ignored run receipts and documentation are
+excluded from the table. Per-file hashes and membership are retained in
+`runs/r2ah-equipment-activation-01/cost-inventory-03-by-data.json`. Formatting or further edits
+require a fresh inventory; physical line counts are not semantic complexity or maintainability
+scores. The ordered code-file SHA-256 map has digest
+`b8f99d53f6fccb63bf0869fa491112a6ecde28e1c7d8cc56b2e0dcfda42d6629`
+at the final-checks-03 formatted snapshot after helper deduplication; the receipt separately hashes the proof document and source
+Resource observation.
+
+This includes the closed factory `Gsub` addition across DATA validation, acquisition, compiled
+pattern preparation, byte-string execution and tests. Its literal operands and authenticated
+`string.upper` replacement remain injected, with scalar use checked separately from expanding
+final arguments/list fields. These changes are counted in their respective roles rather than
+reported as a parser fix alone.
+
+The rune producer now uses the [headless selection proof](rune-headless-selection.md):
+bounded comparison safety for the locked sort, a unique first record, and unambiguous
+name-to-record selection. It does not reconstruct the rest of the source array order. That
+new proof document adds a further **112 physical lines / 6,968 LF bytes**, outside the table.
+The startup sort-observation helpers alone contribute **462 lines / 25,951 bytes** across two
+new files, already included in the reference-test row. They retain the actual module-local
+`runeModLines` table at the C-sort call, require the exact original module continuation for
+completion, and join the table identity to the retained consumer upvalue. Shared lifecycle-hook
+changes and the other activation observations are also included.
+
+These are implementation/support costs, not candidate-throughput measurements or whole-build
+validation. They make the native producer, acquisition and parity-tooling costs visible for
+the existing A1–A4 comparison; they do not select an A2 model. Validation state belongs in the
+[implementation record](implementation.md). Current component evidence is retained in
+[source-output-06](../runs/r2ah-equipment-activation-01/source-output-06/summary.json).
+The earlier [source-output-05](../runs/r2ah-equipment-activation-01/source-output-05/) and its
+[reconciliation](../runs/r2ah-equipment-activation-01/activation-source-review-05.json) remain
+historical evidence.
+The [public-frontier summary](../runs/r2ah-equipment-activation-01/public-frontiers-02.json)
+and [runtime-02 command ledgers](../runs/r2ah-equipment-activation-01/runtime-02/) retain the
+separate public observations. Failed source-output-01 through source-output-04 attempts remain
+historical evidence. Full native originals remain **0/5**.

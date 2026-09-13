@@ -263,7 +263,8 @@ use poe_optimizer_data::game_data::bundled_snapshot;
 use poe_optimizer_data::modifier_parser::{
     ModifierParserData, ParserCallbackId, ParserDictionary as D,
     ParserFactoryDisposition as Disposition, ParserFactoryExpr as E, ParserFactoryField as F,
-    ParserFactoryLiteral as L, ParserTable, ParserTableId, ParserValue as P,
+    ParserFactoryLiteral as L, ParserFactoryReplacement, ParserTable, ParserTableId,
+    ParserValue as P,
 };
 use poe_optimizer_engine::lua_pattern::MatchBudget;
 use poe_optimizer_engine::modifier_parser::{CompiledModifierParser, ParserError};
@@ -1031,6 +1032,16 @@ fn recipe_operations(expr: &E, operations: &mut std::collections::BTreeSet<&'sta
         }
         E::FirstToUpper { value, .. } => {
             operations.insert("firstToUpper");
+            recipe_operations(value, operations);
+        }
+        E::Gsub {
+            value, replacement, ..
+        } => {
+            operations.insert("gsub");
+            operations.insert(match replacement {
+                ParserFactoryReplacement::Text(_) => "gsub text replacement",
+                ParserFactoryReplacement::StringUpper => "gsub string.upper replacement",
+            });
             recipe_operations(value, operations);
         }
         E::Table(fields) => {

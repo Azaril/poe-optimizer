@@ -1,6 +1,7 @@
 //! Ordered native inventory preparation, before item-set activation and actor use.
 //! Diagnostic loader completion never authorizes registration without an owned
 //! assembly result. This independent prefix is not the complete ItemsTab lifecycle.
+mod activation;
 mod sets;
 mod slot_validity;
 pub use sets::ItemSetPreparationReport;
@@ -84,6 +85,7 @@ pub struct ItemPreparationReport {
     pub jewel_radius_context: Option<JewelRadiusEvidence>,
     pub records: Vec<PreparedItemRecord>,
     pub item_sets: Option<ItemSetPreparationReport>,
+    pub activation: Option<poe_optimizer_import::item_sets::ItemActivationProgress>,
     /// Successful insertions in original order, including repeated numeric IDs.
     pub registration_order: Vec<ItemRecordId>,
     pub failure: Option<ItemPreparationFailure>,
@@ -96,6 +98,7 @@ pub struct PreparedItems {
     report: ItemPreparationReport,
     assembled: BTreeMap<ItemRecordId, AssembledItem>,
     item_sets: Option<ItemSetState>,
+    activation: Option<activation::NativeActivation>,
     /// Numeric equality lookup only. This does not claim original Lua hash order.
     winners: BTreeMap<u64, ItemRecordId>,
 }
@@ -110,6 +113,12 @@ impl PreparedItems {
     }
     pub fn item(&self, id: ItemRecordId) -> Option<&AssembledItem> {
         self.assembled.get(&id)
+    }
+    /// Reached startup tree writes, kept separate from saved passive allocations.
+    pub fn activation_startup_jewels(&self) -> Option<&BTreeMap<u32, f64>> {
+        self.activation
+            .as_ref()
+            .map(activation::NativeActivation::startup_jewels)
     }
     pub fn registered_id(&self, source_id: f64) -> Option<ItemRecordId> {
         if source_id.is_nan() {
@@ -166,13 +175,14 @@ pub fn prepare_authored_items(
     view.validate_binding(build, data.snapshot())
         .map_err(|e| contract(e.to_string()))?;
     let mut report = ItemPreparationReport {
-        schema_version: 4,
+        schema_version: 5,
         source_sha256: build.source_sha256().into(),
         view_sha256: view_digest(view)?,
         data_identity: data.identity().clone(),
         jewel_radius_context: None,
         records: Vec::new(),
         item_sets: None,
+        activation: None,
         registration_order: Vec::new(),
         failure: None,
         frontiers: vec![
@@ -196,6 +206,7 @@ pub fn prepare_authored_items(
         .collect::<BTreeMap<_, _>>();
     let mut assembled = BTreeMap::new();
     let mut item_sets = None;
+    let mut activation = None;
     let mut winners = BTreeMap::new();
     let projection = match build.project_items() {
         Ok(p) => Some(p),
@@ -523,6 +534,39 @@ pub fn prepare_authored_items(
             }
         }
     }
+    if report.failure.is_none()
+        && let Some(state) = item_sets.as_mut().filter(|s| {
+            s.phase() == poe_optimizer_import::item_sets::ItemSetPhase::AwaitingActivation
+        })
+    {
+        let limits = poe_optimizer_import::item_sets::ItemSetLimits {
+            max_bytes: state
+                .limits()
+                .max_bytes
+                .checked_sub(state.usage().bytes)
+                .ok_or_else(|| resource("activation shared state bytes"))?,
+            ..state.limits()
+        };
+        match activation::NativeActivation::new(data, &winners, limits) {
+            Ok(owner) => {
+                let owner = activation.insert(owner);
+                let result = state.continue_activation(&mut owner.bind(&assembled, &winners));
+                match result {
+                    Ok(progress) => report.activation = Some(progress),
+                    Err(error) => {
+                        report.failure = sets::result(Err(error), None, "item_set_activation")?
+                    }
+                }
+            }
+            // Source/Unsupported preparation failures preserve the already
+            // produced inventory and set prefix. Resource retains the
+            // enclosing InvalidRequest contract through sets::result.
+            Err(error) => {
+                report.failure =
+                    sets::result(Err(error), None, "item_set_activation_initialization")?
+            }
+        }
+    }
     report.item_sets = item_sets.as_ref().map(ItemSetPreparationReport::from_state);
     Ok(PreparedItems {
         owner: build.clone(),
@@ -530,6 +574,7 @@ pub fn prepare_authored_items(
         report,
         assembled,
         item_sets,
+        activation,
         winners,
     })
 }

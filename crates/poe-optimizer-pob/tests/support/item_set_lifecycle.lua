@@ -15,7 +15,12 @@ local function primitives()
     check(rawequal(rawget(globals,'jit'),jit_lib) and rawequal(rawget(jit_lib,'status'),status) and
         rawequal(rawget(jit_lib,'off'),off) and rawequal(rawget(jit_lib,'on'),on) and rawequal(rawget(jit_lib,'flush'),flush),'JIT identity changed')
 end
-local function start(observed)
+local function start(observed,options)
+    check(options==nil or (type(options)=='table' and getmetatable(options)==nil),'options')
+    local after_populate=options and rawget(options,'after_populate') or false
+    local activation_context=options and rawget(options,'activation_context')
+    check(type(after_populate)=='boolean','after_populate option')
+    check(activation_context==nil or type(activation_context)=='function','activation context observer')
     check(type(observed)=='boolean','observation flag');primitives();check(gethook()==nil,'pre-existing hook')
     local common,build=rawget(globals,'common'),rawget(globals,'build')
     check(type(common)=='table' and type(build)=='table','initialized source owners')
@@ -157,6 +162,11 @@ local function start(observed)
         out.loadoutDropdown=fields(loadouts,{'selIndex','list'})
         out.activeLoadout=finite(rawget(build,'activeLoadout'))
         out.buildFlag=finite(rawget(build,'buildFlag'))
+        if after_populate then
+            local spec=rawget(build,'spec')
+            check(spec==nil or type(spec)=='table','population spec owner')
+            out.nodeJewels=spec and clone(rawget(spec,'jewels'),0) or nil
+        end
         local importer=rawget(build,'importTab')
         if importer~=nil then
             check(type(importer)=='table' and rawequal(rawget(importer,'build'),build),'export owner')
@@ -174,6 +184,7 @@ local function start(observed)
         return out
     end
     local events,states,active={}, {}, {}
+    local input_contexts={}
     local failed,finished,hook=nil,false,nil
     local capture={}
     local function parameter(frame,index,wanted)
@@ -214,6 +225,20 @@ local function start(observed)
             if b.name=='activate_set' then
                 check(rawequal(receiver,entry.load.receiver),'activation receiver');entry.prior=rawget(receiver,'activeItemSet')
                 record.requested_set=scalar(values[2]);record.defer_sync=scalar(values[3]);snapshot(entry,'before',record.ordinal)
+                if activation_context then
+                    check(#input_contexts<8,'activation input capture count')
+                    local value=activation_context(receiver,record)
+                    check(type(value)=='table' and getmetatable(value)==nil,'activation input projection')
+                    input_contexts[#input_contexts+1]={call_ordinal=record.ordinal,receiver_token=record.receiver_token,value=value}
+                end
+            elseif b.name=='populate_slots' and after_populate then
+                local caller=getinfo(frame+1,'f')
+                record.direct_activation_caller=caller and rawequal(caller.func,bindings[3].fn) or false
+                if record.direct_activation_caller then
+                    local parent=active[#active]
+                    check(parent and parent.binding.name=='activate_set' and rawequal(parent.receiver,receiver),'population activation parent')
+                    entry.activation_parent=parent
+                end
             elseif b.name=='create_set' then record.requested_set=scalar(values[2]);record.title=scalar(values[3])
             elseif b.name=='validity' then
                 check(rawequal(receiver,entry.load.receiver),'validity receiver');check(type(values[2])=='table','validity item')
@@ -238,6 +263,10 @@ local function start(observed)
             local entry=active[#active];check(entry and rawequal(entry.binding.fn,b.fn),'complete call return pairing')
             record.call_ordinal=entry.ordinal;record.load_call_ordinal=entry.load.ordinal;record.receiver_token=token(entry.receiver)
             if b.name=='items_load' or b.name=='activate_set' then snapshot(entry,'after',record.ordinal)
+            elseif b.name=='populate_slots' and entry.activation_parent then
+                check(rawequal(active[#active-1],entry.activation_parent),'population return activation identity')
+                record.activation_call_ordinal=entry.activation_parent.ordinal
+                snapshot(entry.activation_parent,'after_populate',record.ordinal)
             elseif b.name=='populate_slot' or b.name=='set_slot' then record.slot=finite(rawget(entry.receiver,'slotName'));record.slot_state=slot_summary(entry.receiver) end
             active[#active]=nil
         else error('item-set lifecycle: unknown hook event',0) end
@@ -261,6 +290,7 @@ local function start(observed)
         local ok,message=pcall(function()
             verify();local incomplete={};for i,entry in ipairs(active) do incomplete[i]={name=entry.binding.name,call_ordinal=entry.ordinal} end
             capture.report={events=events,states=states,functions=functions,incomplete_calls=incomplete,
+                activation_input_contexts=activation_context and input_contexts or nil,
                 finite_post_import=state(rawget(build,'itemsTab'),nil),
                 scope={observed=observed,complete_original_load_boundary=true,whole_original_object_graph=false,
                     source_methods_unchanged=true,original_iterators_unchanged=true,jit_disabled=true,warm_claim=false,

@@ -24,7 +24,8 @@ use poe_optimizer_data::{
     modifier_parser::{
         ModifierParserCatalog, ModifierParserData, ParserCallbackId, ParserDictionary as D,
         ParserFactoryDisposition as F, ParserFactoryExpr as E, ParserFactoryField as Field,
-        ParserFactoryLiteral as L, ParserTable, ParserTableId, ParserValue as P,
+        ParserFactoryLiteral as L, ParserFactoryReplacement as Replacement, ParserTable,
+        ParserTableId, ParserValue as P,
     },
 };
 use poe_optimizer_engine::{
@@ -37,7 +38,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use string_source::StringSource;
 fn has_string(expr: &E) -> bool {
     match expr {
-        E::Concat { .. } | E::FirstToUpper { .. } => true,
+        E::Concat { .. } | E::FirstToUpper { .. } | E::Gsub { .. } => true,
         E::Negate(v) | E::ToNumber { value: v } => has_string(v),
         E::Table(fields) => fields.iter().any(|f| match f {
             Field::Named { value, .. } | Field::List(value) => has_string(value),
@@ -56,6 +57,51 @@ fn candidates(data: &ModifierParserData, family: D) -> Vec<(String, ParserCallba
                 .then_some((key.clone(), *id))
         })
         .collect()
+}
+// Exact current-package breadth gates; source call coverage is checked against
+// every retained callback identity below, including all earlier string bodies.
+const STRING_FAMILIES: [(D, usize); 3] = [(D::Special, 71), (D::ModTag, 11), (D::PreFlag, 5)];
+fn string_breadth(data: &ModifierParserData) -> usize {
+    let mut total = 0;
+    for (family, expected) in STRING_FAMILIES {
+        let entries = candidates(data, family);
+        let ids = entries.iter().map(|(_, id)| *id).collect::<BTreeSet<_>>();
+        assert_eq!(entries.len(), expected, "{family:?} string entries");
+        assert_eq!(ids.len(), expected, "{family:?} distinct string bodies");
+        total += ids.len();
+    }
+    assert_eq!(total, 87);
+    total
+}
+fn public_input(family: D, witness: &[u8], second_tag: bool) -> Vec<u8> {
+    match family {
+        D::Special => {
+            assert!(!second_tag);
+            witness.to_vec()
+        }
+        D::PreFlag => {
+            assert!(!second_tag);
+            [witness, b"7% increased damage"].concat()
+        }
+        D::ModTag if second_tag => [b"+7 to maximum Life __string_first__ ", witness].concat(),
+        D::ModTag => [b"+7 to maximum Life ", witness].concat(),
+        _ => panic!("not a string factory public position"),
+    }
+}
+fn public_frames(family: D, second_tag: bool) -> &'static [usize] {
+    match family {
+        D::Special => {
+            assert!(!second_tag);
+            &[7406, 7408]
+        }
+        D::PreFlag => {
+            assert!(!second_tag);
+            &[6656]
+        }
+        D::ModTag if second_tag => &[6684, 6686],
+        D::ModTag => &[6675, 6677],
+        _ => panic!("not a string factory public position"),
+    }
 }
 fn row(data: &mut ModifierParserData, family: D, key: &str, value: P) {
     data.tables[data.dictionaries[&family].0 as usize - 1]
@@ -146,6 +192,7 @@ fn injected(
 fn every_original_string_factory_matches_at_all_actual_public_call_positions() {
     let snapshot = bundled_snapshot().unwrap();
     let catalog = snapshot.modifier_parser();
+    let bodies = string_breadth(catalog.data());
     let source = StringSource::new(None);
     let control = StringSource::new(None);
     let mut data = catalog.data().clone();
@@ -171,7 +218,7 @@ fn every_original_string_factory_matches_at_all_actual_public_call_positions() {
         .unwrap();
     let mut coverage = BTreeMap::<(D, bool), BTreeSet<ParserCallbackId>>::new();
     let mut paired = 0;
-    for family in [D::Special, D::ModTag] {
+    for (family, _) in STRING_FAMILIES {
         for (pattern, id) in candidates(catalog.data(), family) {
             let table = source.source.dictionary(family.source_name());
             let original = table.get::<Function>(pattern.as_str()).unwrap();
@@ -182,27 +229,15 @@ fn every_original_string_factory_matches_at_all_actual_public_call_positions() {
             let witness: mlua::LuaString = generate.call(pattern.as_str()).unwrap();
             let witness = witness.as_bytes();
             for second in [false, true] {
-                if second && family == D::Special {
+                if second && family != D::ModTag {
                     continue;
                 }
-                let input = if family == D::Special {
-                    witness.to_vec()
-                } else if second {
-                    [b"+7 to maximum Life __string_first__ ", witness.as_ref()].concat()
-                } else {
-                    [b"+7 to maximum Life ", witness.as_ref()].concat()
-                };
+                let input = public_input(family, witness.as_ref(), second);
                 assert!(
                     compare(&source, &native, &input),
                     "actual source callback{id:?}"
                 );
-                let frames = if family == D::Special {
-                    vec![7406, 7408]
-                } else if second {
-                    vec![6684, 6686]
-                } else {
-                    vec![6675, 6677]
-                };
+                let frames = public_frames(family, second);
                 assert!(
                     source.calls().iter().any(|call| call.label == label
                         && call.frames.iter().any(|line| frames.contains(line))),
@@ -219,22 +254,31 @@ fn every_original_string_factory_matches_at_all_actual_public_call_positions() {
             }
         }
     }
-    assert_eq!(coverage[&(D::Special, false)].len(), 44);
-    assert_eq!(coverage[&(D::ModTag, false)].len(), 10);
-    assert_eq!(coverage[&(D::ModTag, true)].len(), 10);
-    assert_eq!(paired, 64);
+    for (family, _) in STRING_FAMILIES {
+        let expected = candidates(catalog.data(), family)
+            .into_iter()
+            .map(|(_, id)| id)
+            .collect::<BTreeSet<_>>();
+        assert_eq!(coverage[&(family, false)], expected);
+        if family == D::ModTag {
+            assert_eq!(coverage[&(family, true)], expected);
+        }
+    }
+    assert_eq!(paired, bodies + candidates(catalog.data(), D::ModTag).len());
+    assert_eq!(paired, 98);
     eprintln!(
-        "String factories: all54 original bodies,64 actual full public graphs (44Special,10firstTag,10secondTag)"
+        "String factories: all{bodies} original bodies,{paired} actual full public graphs (71Special,11firstTag,11secondTag,5PreFlag); exact reached source call positions and unwrapped controls"
     );
 }
 #[test]
 fn all_original_string_bodies_preserve_raw_capture_aliases_and_ordered_errors() {
     let snapshot = bundled_snapshot().unwrap();
     let original = snapshot.modifier_parser().data();
+    let bodies = string_breadth(original);
     let source = StringSource::new(None);
     let mut data = original.clone();
     let mut cases = vec![];
-    for family in [D::Special, D::ModTag] {
+    for (family, _) in STRING_FAMILIES {
         for (key, id) in candidates(original, family) {
             let f = source
                 .source
@@ -242,24 +286,29 @@ fn all_original_string_bodies_preserve_raw_capture_aliases_and_ordered_errors() 
                 .get::<Function>(key.as_str())
                 .unwrap();
             let alias = format!("__string_{} (.*)|(.*)|(.*)|(.*)|(.*)", id.0);
-            let pattern = if family == D::Special {
-                format!("^{alias}$")
-            } else {
-                format!(" {alias}$")
+            let pattern = match family {
+                D::Special => format!("^{alias}$"),
+                // A literal terminator prevents the final greedy capture from
+                // consuming the real modifier form that follows this prefix.
+                D::PreFlag => format!("^{alias} __string_end__ "),
+                D::ModTag => format!(" {alias}$"),
+                _ => unreachable!(),
             };
+            let label = format!("alias:{}:{}", family.source_name(), id.0);
             row(&mut data, family, &pattern, P::Callback(id));
             source
                 .source
                 .dictionary(family.source_name())
-                .set(pattern.as_str(), f)
+                .set(pattern.as_str(), source.wrap(f, &label))
                 .unwrap();
-            cases.push((family, id));
+            cases.push((family, id, label));
         }
     }
     let native = compile(data);
+    assert_eq!(cases.len(), bodies);
     let mut paired = 0;
     let mut errors = 0;
-    for (family, id) in cases {
+    for (family, id, label) in cases {
         for captures in [
             b"12|cold|fire|mana|blue".as_slice(),
             b"abc|lightning|life|red|green",
@@ -268,13 +317,18 @@ fn all_original_string_bodies_preserve_raw_capture_aliases_and_ordered_errors() 
             b"||||",
         ] {
             let input = [
-                if family == D::Special {
-                    b"".as_slice()
+                if family == D::ModTag {
+                    b"+7 to maximum Life ".as_slice()
                 } else {
-                    b"+7 to maximum Life "
+                    b""
                 },
                 format!("__string_{} ", id.0).as_bytes(),
                 captures,
+                if family == D::PreFlag {
+                    b" __string_end__ 7% increased damage".as_slice()
+                } else {
+                    b""
+                },
             ]
             .concat();
             if compare(&source, &native, &input) {
@@ -282,11 +336,28 @@ fn all_original_string_bodies_preserve_raw_capture_aliases_and_ordered_errors() 
             } else {
                 errors += 1
             }
+            let calls = source.calls();
+            let call = calls.iter().find(|call| call.label == label
+                && call.frames.iter().any(|line| public_frames(family, false).contains(line)))
+                .unwrap_or_else(|| panic!("aliased original callback {label} not reached at its actual public position"));
+            assert_eq!(call.count, if family == D::PreFlag { 5 } else { 6 });
+            if family == D::PreFlag {
+                assert_eq!(
+                    call.arguments.roots,
+                    captures
+                        .split(|byte| *byte == b'|')
+                        .map(|bytes| public_source::Atom::Bytes(bytes.to_vec()))
+                        .collect::<Vec<_>>(),
+                    "PreFlag must receive the raw capture pack without an inserted numeric argument"
+                );
+            }
         }
     }
-    assert_eq!(paired + errors, 270);
+    assert_eq!(paired + errors, bodies * 5);
+    assert_eq!(paired + errors, 435);
+    assert!(paired > 0 && errors > 0);
     eprintln!(
-        "All54 original string closures via labelled aliases:{paired} exact full graphs,{errors} ordered source errors"
+        "All{bodies} original string closures via labelled aliases at Special/firstTag/PreFlag positions:{paired} exact full graphs,{errors} ordered source errors; all435 probes reached the selected original callback"
     );
 }
 #[test]
@@ -543,21 +614,53 @@ fn callable_table_methods_remain_deferred_without_claiming_opaque_function_execu
     let snapshot = bundled_snapshot().unwrap();
     let source = StringSource::new(None);
     let mut data = snapshot.modifier_parser().data().clone();
-    let (pattern, id) = data.tables[data.dictionaries[&D::PreFlag].0 as usize - 1]
-        .fields
-        .iter()
-        .find_map(|(key, v)| match v {
-            P::Callback(id) if matches!(data.factories.get(id), Some(F::Pure(_))) => {
-                Some((key.clone(), *id))
-            }
-            _ => None,
-        })
-        .unwrap();
+    // This exact original ignores its declared cond parameter. The table-method
+    // receiver is therefore a valid source input even as new argument-consuming
+    // factories become admitted earlier in the dictionary's ordering.
+    let pattern = "^enemies you've hit recently have ";
+    let P::Callback(id) =
+        &data.tables[data.dictionaries[&D::PreFlag].0 as usize - 1].fields[pattern]
+    else {
+        panic!("pinned argument-ignoring original callback")
+    };
+    let id = *id;
+    let F::Pure(factory) = data.factories.get(&id).unwrap() else {
+        panic!("pinned pure fixture")
+    };
+    assert_eq!(factory.parameter_count, 1);
+    assert_eq!(
+        factory.body,
+        E::Table(vec![
+            Field::Named {
+                key: "playerTag".into(),
+                value: E::Table(vec![
+                    Field::Named {
+                        key: "type".into(),
+                        value: text("Condition")
+                    },
+                    Field::Named {
+                        key: "var".into(),
+                        value: text("HitRecently")
+                    },
+                ])
+            },
+            Field::Named {
+                key: "applyToEnemy".into(),
+                value: E::Literal(L::Boolean(true))
+            },
+        ])
+    );
     let actual = source
         .source
         .dictionary("preFlagList")
-        .get::<Function>(pattern.as_str())
+        .get::<Function>(pattern)
         .unwrap();
+    assert_eq!(
+        actual.info().source.as_deref(),
+        Some("@src/Modules/ModParser.lua")
+    );
+    assert_eq!(actual.info().line_defined, Some(1385));
+    assert_eq!(actual.info().last_line_defined, Some(1387));
     let table = data.policy.mod_flags;
     data.tables[table.0 as usize - 1]
         .fields
@@ -590,6 +693,17 @@ fn callable_table_methods_remain_deferred_without_claiming_opaque_function_execu
         source.observe(b"__string x"),
         Observation::Returned(_)
     ));
+    let calls = source.calls();
+    let method = calls
+        .iter()
+        .find(|call| call.label == "opaque_method")
+        .unwrap();
+    assert_eq!(method.count, 3);
+    assert!(matches!(
+        method.arguments.roots[0],
+        public_source::Atom::Table(_)
+    ));
+
     assert!(
         matches!(
             native.parse(b"__string x", &mut MatchBudget::default()),
@@ -648,6 +762,7 @@ fn callable_table_methods_remain_deferred_without_claiming_opaque_function_execu
 fn every_original_string_factory_and_helper_execute_directly_in_observed_live_traces() {
     let snapshot = bundled_snapshot().unwrap();
     let catalog = snapshot.modifier_parser();
+    let bodies = string_breadth(catalog.data());
     let source = StringSource::new(None);
     let lua = &source.source.public.source.lua;
     let generate: Function = lua
@@ -657,7 +772,7 @@ fn every_original_string_factory_and_helper_execute_directly_in_observed_live_tr
     let copy: Function = lua.globals().get("copyTable").unwrap();
     let cases = lua.create_table().unwrap();
     let mut cold = vec![];
-    for family in [D::Special, D::ModTag] {
+    for (family, _) in STRING_FAMILIES {
         for (pattern, id) in candidates(catalog.data(), family) {
             let dictionary = source.source.dictionary(family.source_name());
             let original: Function = dictionary.get(pattern.as_str()).unwrap();
@@ -667,12 +782,16 @@ fn every_original_string_factory_and_helper_execute_directly_in_observed_live_tr
                 .unwrap();
             let witness: mlua::LuaString = generate.call(pattern.as_str()).unwrap();
             let witness = witness.as_bytes();
-            let input = if family == D::Special {
-                witness.to_vec()
-            } else {
-                [b"+7 to maximum Life ", witness.as_ref()].concat()
-            };
+            let input = public_input(family, witness.as_ref(), false);
             assert!(matches!(source.observe(&input), Observation::Returned(_)));
+            assert!(
+                source.calls().iter().any(|call| call.label == label
+                    && call
+                        .frames
+                        .iter()
+                        .any(|line| public_frames(family, false).contains(line))),
+                "warm input callback {label} not reached at its genuine public call position"
+            );
             let events: Table = lua.globals().get("ordinary_events").unwrap();
             let event = events
                 .sequence_values::<Table>()
@@ -705,7 +824,8 @@ fn every_original_string_factory_and_helper_execute_directly_in_observed_live_tr
         .set_name("@test-only-original-string-factory-warm")
         .call(cases)
         .unwrap();
-    assert_eq!(observed.get::<usize>("executions").unwrap(), 54 * 128);
+    assert_eq!(cold.len(), bodies);
+    assert_eq!(observed.get::<usize>("executions").unwrap(), bodies * 128);
     let live = observed
         .get::<Table>("live")
         .unwrap()
@@ -733,6 +853,145 @@ fn every_original_string_factory_and_helper_execute_directly_in_observed_live_tr
         assert!(compare(&source, &native, input));
     }
     eprintln!(
-        "Warm string source:54 original factories plus helper,6912 direct executions; exact cold/warm metadata and warmed full public native graphs"
+        "Warm string source:{bodies} original factories at Special/firstTag/PreFlag positions plus retained firstToUpper helper,{} direct executions; exact cold/warm metadata and warmed full public native graphs. Live-trace evidence covers each original function for its captured input; it does not claim every Gsub branch or string.upper replacement invocation, including digit-only inputs.",
+        bodies * 128
+    );
+}
+
+#[test]
+fn original_weapon_ailment_flag_uses_the_complete_public_parser() {
+    let snapshot = bundled_snapshot().unwrap();
+    let source = StringSource::new(None);
+    let control = StringSource::new(None);
+    // These are unchanged real input lines. Caller-defined dictionaries and
+    // test recipes are not used in this production parser comparison.
+    let native = CompiledModifierParser::new(snapshot.modifier_parser()).unwrap();
+    for (input, expected_name) in [
+        (
+            b"All damage with this Weapon causes Electrocution buildup".as_slice(),
+            b"CanElectrocution".as_slice(),
+        ),
+        (
+            b"All damage with this Weapon causes Freeze buildup".as_slice(),
+            b"CanFreeze".as_slice(),
+        ),
+    ] {
+        assert!(compare(&source, &native, input));
+        assert_eq!(source.observe(input), control.observe(input));
+        let parsed = native.parse(input, &mut MatchBudget::default()).unwrap();
+        let modifiers = parsed.modifiers.expect("positive original modifier result");
+        assert_eq!(modifiers.indexed.len(), 1);
+        let modifier = modifiers.indexed_value(1).as_table().unwrap();
+        assert_eq!(modifier.field("name").as_bytes(), Some(expected_name));
+        assert_eq!(modifier.field("type").as_bytes(), Some(b"FLAG".as_slice()));
+        let condition = modifier.indexed_value(1).as_table().unwrap();
+        assert_eq!(
+            condition.field("type").as_bytes(),
+            Some(b"Condition".as_slice())
+        );
+        assert_eq!(
+            condition.field("var").as_bytes(),
+            Some(b"{Hand}Attack".as_slice())
+        );
+    }
+}
+fn gsub(value: E, pattern: &str, replacement: Replacement) -> E {
+    E::Gsub {
+        value: Box::new(value),
+        pattern: pattern.into(),
+        replacement,
+    }
+}
+#[test]
+fn configured_gsub_chains_match_complete_graphs_and_reached_source_errors() {
+    let snapshot = bundled_snapshot().unwrap();
+    let cases = [
+        ("", Replacement::Text("-".into())),
+        ("a*", Replacement::Text("%0".into())),
+        ("(.)", Replacement::Text("<%1>%%".into())),
+        ("()", Replacement::Text("%1".into())),
+        ("(.)", Replacement::Text("%2".into())),
+        ("[", Replacement::Text("x".into())),
+        ("^z[", Replacement::Text("x".into())),
+        ("^%l", Replacement::StringUpper),
+        (" %l", Replacement::StringUpper),
+        ("()", Replacement::StringUpper),
+        ("(%l*)", Replacement::StringUpper),
+        ("%f[%a]", Replacement::StringUpper),
+    ];
+    let mut returned = 0;
+    let mut errors = 0;
+    for (pattern, replacement) in cases {
+        let source = StringSource::new(None);
+        let replacement_text = match &replacement {
+            Replacement::Text(text) => format!("[==[{text}]==]"),
+            Replacement::StringUpper => "string.upper".into(),
+        };
+        let expr = gsub(E::Argument(1), pattern, replacement);
+        // A named field is an explicit scalar consumer. The native Gsub node
+        // does not claim the count return at a variadic/list-tail boundary.
+        let body = format!("a:gsub([==[{pattern}]==], {replacement_text})");
+        let native = injected(
+            &source,
+            snapshot.modifier_parser().data().clone(),
+            expr,
+            &body,
+        );
+        for value in [
+            b"ab".as_slice(),
+            b"",
+            b" abc",
+            b"12",
+            b"\xffa\0b",
+            b"aaaa",
+            b"z",
+        ] {
+            if compare(&source, &native, &[b"__string ", value].concat()) {
+                returned += 1;
+            } else {
+                errors += 1;
+            }
+        }
+        for input in [b"__missing".as_slice(), b"__position "] {
+            assert!(!compare(&source, &native, input));
+            errors += 1;
+        }
+        assert!(compare(&source, &native, b"+7 to maximum Life"));
+    }
+    let source = StringSource::new(None);
+    let expr = concat(
+        text("Can"),
+        gsub(
+            gsub(
+                gsub(E::Argument(1), "^%l", Replacement::StringUpper),
+                " %l",
+                Replacement::StringUpper,
+            ),
+            " ",
+            Replacement::Text(String::new()),
+        ),
+    );
+    let native = injected(
+        &source,
+        snapshot.modifier_parser().data().clone(),
+        expr,
+        "'Can'..a:gsub('^%l', string.upper):gsub(' %l', string.upper):gsub(' ', '')",
+    );
+    for input in [
+        b"__string electrocution".as_slice(),
+        b"__string energy shield",
+        b"__string a\0b",
+        b"__string ",
+        b"__missing",
+    ] {
+        if compare(&source, &native, input) {
+            returned += 1;
+        } else {
+            errors += 1;
+        }
+    }
+    assert!(returned > 0 && errors > 0);
+    eprintln!(
+        "Configured scalar substitutions/chains: {returned} exact graphs, {errors} matching source errors; unused malformed rules remain unexecuted"
     );
 }

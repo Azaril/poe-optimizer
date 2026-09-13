@@ -18,14 +18,28 @@ rune effects, grants, named compatibility, attribute requirements and slot selec
 Game names, patterns, labels, modifier selectors, masks and numeric defaults are data.
 Source field structure, arithmetic order, copy semantics and native operation kinds
 are code. The catalog is not a general instruction language or a build whitelist.
-Its current section schema 6 declares `PolicyOnly`; loading and binding it supplies
+Its current section schema 7 declares `PolicyOnly`; loading and binding it supplies
 validated definitions, never an admitted executable item. Complete-method provenance
 also does not imply lowering of every specialized slot branch.
 
 The separate [equipment integration design](native-equipment-integration.md) specifies
 whole-item slot validity, ordered item-set activation and actor-effective participation.
-Its reusable validity program borrows prepared item owners and explicit tree/flag context;
-a validity result alone does not activate equipment or complete a build.
+Its reusable validity program borrows prepared item owners and explicit tree/flag context.
+R2ah adds an owned activation transition and rune-choice records through the pre-SyncLoadouts
+boundary. Scoped public preparation regressions and the declared source-fed activation
+comparison and all 17 lifecycle/materialization regression tests pass. Strict lint and portable
+library checks pass. The final activation rerun passes 13 tests after helper deduplication;
+final materialization rerun status is tracked in the implementation record. This uses the
+existing raw rune catalog and finite parser dependency, with explicit ordering, mutation and callback frontiers. Item assembly, selected slot state
+and actor-effective participation remain distinct; a validity result alone completes none
+of the later stages. See the [current equipment boundary](native-equipment-integration.md#r2ah-current-implementation-boundary)
+for ownership and source-comparison scope.
+
+The R2ah whole-item regression target passes eight tests. All 116 original records remain
+represented: 114 complete the declared original-parser/native-assembly lane and 112 complete
+the built-in lane. All 226 previously completed declared graph hashes and six frontier records
+are unchanged. This comparison excludes raw omitted-field discovery order and establishes no
+full inventory or build result; see the [regression receipt](../runs/r2ah-equipment-activation-01/whole-items-r2ag-regression-01.json).
 
 Reuse the existing complete base records, rune definitions, scalability policy,
 precision map and keyword definitions. Verify shared source facts during extraction.

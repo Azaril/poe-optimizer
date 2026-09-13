@@ -2,7 +2,8 @@
 //! No generic method execution, metatables, Unicode casing or shared mutable state.
 use super::{ModifierValue as V, ParserError, ParserResult, value::OutputBudget};
 use crate::item_tools::lua_number_text;
-use crate::lua_pattern::{Capture, LuaPattern, MatchBudget};
+use crate::lua_pattern::{Capture, GsubLimits, LuaPattern, MatchBudget};
+use poe_optimizer_data::modifier_parser::ParserFactoryReplacement;
 use std::borrow::Cow;
 
 fn number_text(
@@ -74,29 +75,70 @@ fn append(
     }
     Ok(())
 }
+fn method_subject<'a>(value: &'a V, stage: &'static str) -> ParserResult<&'a [u8]> {
+    match value {
+        V::Bytes(line) => Ok(line),
+        V::Table(table) => Err(match table.field("gsub") {
+            V::Callback(id) => ParserError::Deferred {
+                stage,
+                callback: Some(*id),
+            },
+            _ => ParserError::SourceError("attempt to call a non-function gsub method".into()),
+        }),
+        _ => Err(ParserError::SourceError(
+            if stage == "firstToUpper receiver method" {
+                "attempt to index a non-string firstToUpper receiver"
+            } else {
+                "attempt to index a non-string gsub receiver"
+            }
+            .into(),
+        )),
+    }
+}
 pub(super) fn first_to_upper(
     value: &V,
     pattern: &LuaPattern,
     budget: &mut MatchBudget,
     output: &mut OutputBudget,
 ) -> ParserResult<V> {
-    let line = match value {
-        V::Bytes(line) => line,
-        V::Table(table) => {
-            return Err(match table.field("gsub") {
-                V::Callback(id) => ParserError::Deferred {
-                    stage: "firstToUpper receiver method",
-                    callback: Some(*id),
+    let line = method_subject(value, "firstToUpper receiver method")?;
+    replace_upper(line, pattern, budget, output)
+}
+/// Only the first return is represented. The source lowerer proves scalar use.
+pub(super) fn gsub(
+    value: &V,
+    pattern: &LuaPattern,
+    replacement: &ParserFactoryReplacement,
+    budget: &mut MatchBudget,
+    output: &mut OutputBudget,
+) -> ParserResult<V> {
+    // Colon lookup occurs before pattern matching and replacement processing.
+    let line = method_subject(value, "factory gsub receiver method")?;
+    match replacement {
+        ParserFactoryReplacement::StringUpper => replace_upper(line, pattern, budget, output),
+        ParserFactoryReplacement::Text(replacement) => {
+            output.charge(0)?;
+            let result = pattern.gsub(
+                line,
+                replacement.as_bytes(),
+                None,
+                budget,
+                GsubLimits {
+                    max_replacement_bytes: 4096,
+                    max_output_bytes: output.remaining_bytes(),
                 },
-                _ => ParserError::SourceError("attempt to call a non-function gsub method".into()),
-            });
+            )?;
+            output.charge(result.bytes.len())?;
+            Ok(V::Bytes(result.bytes))
         }
-        _ => {
-            return Err(ParserError::SourceError(
-                "attempt to index a non-string firstToUpper receiver".into(),
-            ));
-        }
-    };
+    }
+}
+fn replace_upper(
+    line: &[u8],
+    pattern: &LuaPattern,
+    budget: &mut MatchBudget,
+    output: &mut OutputBudget,
+) -> ParserResult<V> {
     output.charge(0)?;
     let mut result = Vec::new();
     let mut copied = 0usize;
@@ -349,5 +391,116 @@ mod tests {
                 });
             }
         });
+    }
+    #[test]
+    fn gsub_replacements_preserve_lua_captures_and_empty_matches() {
+        for (pattern, replacement, input, expected) in [
+            ("(.)", "%1%0", b"a\0".as_slice(), b"aa\0\0".as_slice()),
+            ("()(.)", "%2%1", b"ab".as_slice(), b"a1b2".as_slice()),
+            ("", "_", b"ab".as_slice(), b"_a_b_".as_slice()),
+            (" ", "", b"a  b\tc".as_slice(), b"ab\tc".as_slice()),
+        ] {
+            let actual = gsub(
+                &V::Bytes(input.to_vec()),
+                &LuaPattern::compile(pattern.as_bytes()).unwrap(),
+                &ParserFactoryReplacement::Text(replacement.into()),
+                &mut MatchBudget::default(),
+                &mut OutputBudget::default(),
+            )
+            .unwrap();
+            assert_eq!(actual, V::Bytes(expected.to_vec()), "{pattern}");
+        }
+        let actual = gsub(
+            &V::Bytes(b"a b\tc".to_vec()),
+            &LuaPattern::compile(b" %l").unwrap(),
+            &ParserFactoryReplacement::StringUpper,
+            &mut MatchBudget::default(),
+            &mut OutputBudget::default(),
+        )
+        .unwrap();
+        assert_eq!(actual, V::Bytes(b"a B\tc".to_vec()));
+    }
+    #[test]
+    fn gsub_method_errors_precede_lazy_pattern_and_replacement_errors() {
+        let pattern = LuaPattern::compile(b"[").unwrap();
+        for value in [
+            V::Nil,
+            V::Boolean(false),
+            V::Number(3.0),
+            V::Callback(ParserCallbackId(7)),
+        ] {
+            assert!(matches!(
+                gsub(
+                    &value,
+                    &pattern,
+                    &ParserFactoryReplacement::Text("%2".into()),
+                    &mut MatchBudget::default(),
+                    &mut OutputBudget::default()
+                ),
+                Err(ParserError::SourceError(_))
+            ));
+        }
+        let mut table = ModifierTable::default();
+        table
+            .fields
+            .insert("gsub".into(), V::Callback(ParserCallbackId(7)));
+        assert!(matches!(
+            gsub(
+                &V::Table(Arc::new(table)),
+                &pattern,
+                &ParserFactoryReplacement::StringUpper,
+                &mut MatchBudget::default(),
+                &mut OutputBudget::default()
+            ),
+            Err(ParserError::Deferred {
+                stage: "factory gsub receiver method",
+                callback: Some(ParserCallbackId(7))
+            })
+        ));
+        for (pattern, replacement, input, succeeds) in [
+            ("^z[", "%2", "abc", true),
+            ("[", "", "abc", false),
+            ("z", "%2", "abc", true),
+            ("a", "%2", "abc", false),
+        ] {
+            let result = gsub(
+                &V::Bytes(input.as_bytes().to_vec()),
+                &LuaPattern::compile(pattern.as_bytes()).unwrap(),
+                &ParserFactoryReplacement::Text(replacement.into()),
+                &mut MatchBudget::default(),
+                &mut OutputBudget::default(),
+            );
+            assert_eq!(result.is_ok(), succeeds, "{pattern}/{replacement}");
+        }
+    }
+    #[test]
+    fn gsub_output_allocation_and_work_share_cumulative_request_limits() {
+        let mut output = OutputBudget::default();
+        output.charge(MAX_OUTPUT_BYTES - 2).unwrap();
+        let pattern = LuaPattern::compile(b".").unwrap();
+        assert!(matches!(
+            gsub(
+                &V::Bytes(b"a".to_vec()),
+                &pattern,
+                &ParserFactoryReplacement::Text("xxx".into()),
+                &mut MatchBudget::default(),
+                &mut output
+            ),
+            Err(ParserError::Scan(_))
+        ));
+        let mut budget = MatchBudget::new(MatchLimits {
+            max_steps: 2,
+            ..Default::default()
+        });
+        assert!(matches!(
+            gsub(
+                &V::Bytes(b"abc".to_vec()),
+                &pattern,
+                &ParserFactoryReplacement::StringUpper,
+                &mut budget,
+                &mut OutputBudget::default()
+            ),
+            Err(ParserError::Scan(_))
+        ));
     }
 }

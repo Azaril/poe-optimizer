@@ -306,7 +306,7 @@ fn production_inventory_registers_local_family_items_before_item_set_activation(
     );
     let stage = prepare(&source);
     let report = stage.report();
-    assert_eq!(report.schema_version, 4);
+    assert_eq!(report.schema_version, 5);
     assert_eq!(report.registration_order.len(), 3, "{:#?}", report.failure);
     assert!(report.failure.is_none(), "{:#?}", report.failure);
     assert_eq!(
@@ -543,7 +543,7 @@ fn items_and_sets_share_one_cumulative_byte_budget() {
 }
 
 #[test]
-fn interleaved_production_loading_preserves_saved_choices_without_activating_them() {
+fn interleaved_production_loading_retains_slot_copy_prefix_before_activation_dependency() {
     use poe_optimizer_engine::source_program::{
         ProgramTableId as Id, ProgramValue as V, ProgramValueGraph,
     };
@@ -572,24 +572,43 @@ fn interleaved_production_loading_preserves_saved_choices_without_activating_the
         ring("2")
     );
     let prepared = prepare(&xml);
-    assert!(prepared.report().failure.is_none());
-    assert_eq!(prepared.report().registration_order.len(), 2);
+    let report = prepared.report();
+    assert!(report.failure.is_none(), "{:#?}", report.failure);
+    assert_eq!(report.registration_order.len(), 2);
+    assert!(
+        matches!(
+            report.activation,
+            Some(
+                poe_optimizer_import::item_sets::ItemActivationProgress::AwaitingDependency { .. }
+            )
+        ),
+        "unexpected activation progress: {:#?}",
+        report.activation
+    );
+    assert!(report.frontiers.contains(&"equipment_participation"));
+    assert!(report.frontiers.contains(&"actor_item_effects"));
     let state = prepared.item_sets().unwrap();
+    assert_eq!(
+        state.phase(),
+        poe_optimizer_import::item_sets::ItemSetPhase::AwaitingActivation
+    );
+    assert!(state.failure().is_none());
+    assert!(prepared.activation_startup_jewels().unwrap().is_empty());
     let pending = state.continuation().unwrap();
     assert_eq!(pending.requested_set.value(), Some(2.0));
     assert_eq!(pending.show_stat_differences, Some(false));
     let graph = state.snapshot().unwrap();
     let root = table(&graph.values[0]);
-    assert_eq!(get(&graph, root, key("activeItemSetId")), &V::Number(0.0));
+    assert_eq!(get(&graph, root, key("activeItemSetId")), &V::Number(2.0));
     assert_eq!(
         get(&graph, root, key("showStatDifferences")),
         &V::Boolean(policy.defaults.show_stat_differences)
     );
     let previous = table(get(&graph, root, key("previousActiveItemSet")));
-    assert_eq!(get(&graph, root, key("activeItemSet")), &V::Table(previous));
     let sets = table(get(&graph, root, key("itemSets")));
     let selected = table(get(&graph, sets, V::Number(2.0)));
     assert_ne!(selected, previous);
+    assert_eq!(get(&graph, root, key("activeItemSet")), &V::Table(selected));
     assert_eq!(get(&graph, selected, key("title")), &key("Last"));
     assert_eq!(
         get(&graph, selected, key("useSecondWeaponSet")),
@@ -609,12 +628,28 @@ fn interleaved_production_loading_preserves_saved_choices_without_activating_the
     let ring = table(get(&graph, slots, key("Ring 1")));
     assert_eq!(
         get(&graph, ring, key("selItemId")),
-        &V::Number(0.0),
-        "saved choices must not leak into live controls before activation"
+        &V::Number(2.0),
+        "the reached activation copy publishes the incoming selection"
+    );
+    assert_eq!(get(&graph, ring, key("note")), &key("chosen"));
+    // The old live row is saved before the incoming set overwrites it. That
+    // source prefix survives the later dependency; it is not full activation.
+    let previous_charm = table(get(&graph, previous, key("Charm 1")));
+    assert_eq!(
+        get(&graph, previous_charm, key("selItemId")),
+        &V::Number(4.0)
+    );
+    assert_eq!(
+        get(&graph, previous_charm, key("active")),
+        &V::Boolean(true)
     );
     let charm = table(get(&graph, slots, key("Charm 1")));
-    assert_eq!(get(&graph, charm, key("selItemId")), &V::Number(4.0));
-    assert_eq!(get(&graph, charm, key("active")), &V::Boolean(true));
+    assert_eq!(get(&graph, charm, key("selItemId")), &V::Number(0.0));
+    assert_eq!(get(&graph, charm, key("active")), &V::Nil);
+    let activate = table(get(&graph, charm, key("activate")));
+    assert_eq!(get(&graph, activate, key("state")), &V::Nil);
+    assert_eq!(get(&graph, ring, key("items")), &V::Nil);
+    assert_eq!(get(&graph, ring, key("list")), &V::Nil);
 }
 
 #[test]

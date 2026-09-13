@@ -82,6 +82,11 @@ fn unsupported(reason: &str) -> ParserFactoryDisposition {
     }
 }
 type LowerResult<T> = std::result::Result<T, String>;
+struct ParsedExpr {
+    value: ParserFactoryExpr,
+    expands: bool,
+}
+
 struct Lowerer<'a> {
     lua: &'a Lua,
     body: &'a str,
@@ -152,7 +157,7 @@ impl<'a> Lowerer<'a> {
         let expr = if self.peek() == "end" {
             ParserFactoryExpr::Literal(ParserFactoryLiteral::Nil)
         } else {
-            self.expr(0)?
+            self.expr(0)?.value
         };
         if !matches!(
             expr,
@@ -186,7 +191,7 @@ impl<'a> Lowerer<'a> {
             },
         })
     }
-    fn expr(&mut self, depth: usize) -> LowerResult<ParserFactoryExpr> {
+    fn expr(&mut self, depth: usize) -> LowerResult<ParsedExpr> {
         let left = self.unary(depth)?;
         if self.peek() == "."
             && self.at_text(1) == "."
@@ -196,27 +201,83 @@ impl<'a> Lowerer<'a> {
             self.at += 2;
             self.nodes += 1;
             let right = self.expr(depth + 1)?;
-            return Ok(ParserFactoryExpr::Concat {
-                left: Box::new(left),
-                right: Box::new(right),
+            return Ok(ParsedExpr {
+                value: ParserFactoryExpr::Concat {
+                    left: Box::new(left.value),
+                    right: Box::new(right.value),
+                },
+                expands: false,
             });
         }
         Ok(left)
     }
-    fn unary(&mut self, depth: usize) -> LowerResult<ParserFactoryExpr> {
+    fn unary(&mut self, depth: usize) -> LowerResult<ParsedExpr> {
+        let mut value = self.atom(depth)?;
+        let mut expands = false;
+        let mut methods = 0usize;
+        while self.peek() == ":" {
+            self.nodes += 1;
+            methods += 1;
+            if self.nodes >= 4096 || depth + methods > 32 {
+                return Err("factory expression resource bound".into());
+            }
+            self.at += 1;
+            self.take("gsub")?;
+            self.take("(")?;
+            let pattern = self.string_literal()?;
+            self.take(",")?;
+            let replacement = if self.tokens.get(self.at).is_some_and(|t| t.quoted) {
+                ParserFactoryReplacement::Text(self.string_literal()?)
+            } else {
+                if self.callback.environment != ParserEnvironment::OriginalGlobals
+                    || self.parameters.contains(&"string")
+                    || self.callback.upvalues.iter().any(|u| u.name == "string")
+                {
+                    return Err("string.upper is not the unshadowed original global".into());
+                }
+                self.take("string")?;
+                self.take(".")?;
+                self.take("upper")?;
+                ParserFactoryReplacement::StringUpper
+            };
+            self.take(")")?;
+            value = ParserFactoryExpr::Gsub {
+                value: Box::new(value),
+                pattern,
+                replacement,
+            };
+            expands = true;
+        }
+        Ok(ParsedExpr { value, expands })
+    }
+    fn string_literal(&mut self) -> LowerResult<String> {
+        let token = self
+            .tokens
+            .get(self.at)
+            .filter(|t| t.quoted)
+            .ok_or("gsub requires literal pattern and replacement operands")?;
+        self.at += 1;
+        self.lua
+            .load(format!("return {}", token.text))
+            .eval::<String>()
+            .map_err(|e| e.to_string())
+    }
+    fn atom(&mut self, depth: usize) -> LowerResult<ParserFactoryExpr> {
         if depth > 32 || self.nodes >= 4096 {
             return Err("factory expression resource bound".into());
         }
         self.nodes += 1;
         if self.peek() == "-" {
             self.at += 1;
-            return Ok(ParserFactoryExpr::Negate(Box::new(self.unary(depth + 1)?)));
+            return Ok(ParserFactoryExpr::Negate(Box::new(
+                self.unary(depth + 1)?.value,
+            )));
         }
         if self.peek() == "(" {
             self.at += 1;
             let expr = self.expr(depth + 1)?;
             self.take(")")?;
-            return Ok(expr);
+            return Ok(expr.value);
         }
         if self.peek() == "{" {
             return self.table(depth + 1);
@@ -285,9 +346,12 @@ impl<'a> Lowerer<'a> {
                 if self.peek() != ")" {
                     return Err("tonumber requires exactly one explicit argument".into());
                 }
+                if value.expands {
+                    return Err("final gsub argument expands to multiple values".into());
+                }
                 self.take(")")?;
                 return Ok(ParserFactoryExpr::ToNumber {
-                    value: Box::new(value),
+                    value: Box::new(value.value),
                 });
             }
             if name == "firstToUpper" {
@@ -314,10 +378,13 @@ impl<'a> Lowerer<'a> {
                 if self.peek() != ")" {
                     return Err("firstToUpper requires exactly one argument".into());
                 }
+                if value.expands {
+                    return Err("final gsub argument expands to multiple values".into());
+                }
                 self.take(")")?;
                 return Ok(ParserFactoryExpr::FirstToUpper {
                     helper,
-                    value: Box::new(value),
+                    value: Box::new(value.value),
                 });
             }
             if name == "flag" {
@@ -343,7 +410,11 @@ impl<'a> Lowerer<'a> {
                         if args.len() >= 4096 {
                             return Err("flag argument bound".into());
                         }
-                        args.push(self.expr(depth + 1)?);
+                        let argument = self.expr(depth + 1)?;
+                        if argument.expands && self.peek() == ")" {
+                            return Err("final gsub argument expands to multiple values".into());
+                        }
+                        args.push(argument.value);
                         if self.peek() != "," {
                             break;
                         }
@@ -373,7 +444,11 @@ impl<'a> Lowerer<'a> {
                     if args.len() >= 4096 {
                         return Err("constructor argument bound".into());
                     }
-                    args.push(self.expr(depth + 1)?);
+                    let argument = self.expr(depth + 1)?;
+                    if argument.expands && self.peek() == ")" {
+                        return Err("final gsub argument expands to multiple values".into());
+                    }
+                    args.push(argument.value);
                     if self.peek() != "," {
                         break;
                     }
@@ -442,7 +517,15 @@ impl<'a> Lowerer<'a> {
             } else {
                 None
             };
-            let value = self.expr(depth)?;
+            let parsed = self.expr(depth)?;
+            if key.is_none()
+                && parsed.expands
+                && (self.peek() == "}"
+                    || (matches!(self.peek(), "," | ";") && self.at_text(1) == "}"))
+            {
+                return Err("final gsub list field expands to multiple values".into());
+            }
+            let value = parsed.value;
             fields.push(if let Some(key) = key {
                 if !keys.insert(key.clone()) {
                     return Err("duplicate named table key".into());
@@ -973,6 +1056,107 @@ mod tests {
                 &format!("function(a) return {{{nested}}} end"),
                 ParserValue::Nil
             )
+            .is_err()
+        );
+    }
+    #[test]
+    fn chained_gsub_is_lowered_with_literal_policy_and_scalar_concat() {
+        let factory = one(
+            r#"function(_, ailment) return {
+            flag("Can" .. ailment:gsub("^%l", string.upper):gsub(" %l", string.upper):gsub(" ", ""),
+                {type="Condition", var="{Hand}Attack"})
+        } end"#,
+            ParserValue::Nil,
+        )
+        .unwrap();
+        let ParserFactoryExpr::Table(rows) = factory.body else {
+            panic!()
+        };
+        let ParserFactoryField::List(ParserFactoryExpr::Flag { args, .. }) = &rows[0] else {
+            panic!()
+        };
+        let ParserFactoryExpr::Concat { right, .. } = &args[0] else {
+            panic!()
+        };
+        let ParserFactoryExpr::Gsub {
+            value,
+            pattern,
+            replacement,
+        } = &**right
+        else {
+            panic!()
+        };
+        assert_eq!(pattern, " ");
+        assert_eq!(replacement, &ParserFactoryReplacement::Text(String::new()));
+        let ParserFactoryExpr::Gsub {
+            value,
+            pattern,
+            replacement,
+        } = &**value
+        else {
+            panic!()
+        };
+        assert_eq!(pattern, " %l");
+        assert_eq!(replacement, &ParserFactoryReplacement::StringUpper);
+        assert!(
+            matches!(&**value, ParserFactoryExpr::Gsub { value, pattern, .. }
+            if pattern == "^%l" && matches!(**value, ParserFactoryExpr::Argument(1)))
+        );
+    }
+    #[test]
+    fn gsub_result_arity_is_not_silently_discarded_at_expanding_boundaries() {
+        for body in [
+            r#"function(a) return {a:gsub("a", "b")} end"#,
+            r#"function(a) return {a:gsub("a", "b"),} end"#,
+            r#"function(a) return {flag(a:gsub("a", "b"))} end"#,
+            r#"function(a) return {mod("x", "BASE", a:gsub("a", "b"))} end"#,
+            r#"function(a) return {tonumber(a:gsub("a", "b"))} end"#,
+        ] {
+            assert!(
+                one(body, ParserValue::Nil)
+                    .unwrap_err()
+                    .contains("multiple values"),
+                "{body}"
+            );
+        }
+        for body in [
+            r#"function(a) return {(a:gsub("a", "b"))} end"#,
+            r#"function(a) return {a:gsub("a", "b"), nil} end"#,
+            r#"function(a) return {value=a:gsub("a", "b")} end"#,
+            r#"function(a) return {flag(a:gsub("a", "b"), nil)} end"#,
+            r#"function(a) return {flag((a:gsub("a", "b")))} end"#,
+            r#"function(a) return {"" .. a:gsub("a", "b")} end"#,
+        ] {
+            assert!(one(body, ParserValue::Nil).is_ok(), "{body}");
+        }
+    }
+    #[test]
+    fn gsub_accepts_injected_literals_but_not_dynamic_or_rebound_calls() {
+        assert!(
+            one(
+                r#"function(a) return {value=a:gsub("()(.)", "%2%1")} end"#,
+                ParserValue::Nil
+            )
+            .is_ok()
+        );
+        for body in [
+            r#"function(a, string) return {value=a:gsub(".", string.upper)} end"#,
+            r#"function(a, p) return {value=a:gsub(p, "")} end"#,
+            r#"function(a) return {value=a:gsub(".", firstToUpper)} end"#,
+            r#"function(a) return {value=a:gsub(".", string.lower)} end"#,
+            r#"function(a) return {value=a:gsub(".", "", 1)} end"#,
+            r#"function(a) return {value=a:other(".", "")} end"#,
+        ] {
+            assert!(one(body, ParserValue::Nil).is_err(), "{body}");
+        }
+        let body = r#"function(a) return {value=a:gsub(".", string.upper)} end"#;
+        assert!(
+            one_callback(body, ParserValue::Nil, |callback| {
+                callback.upvalues.push(ParserUpvalue {
+                    name: "string".into(),
+                    value: ParserValue::Nil,
+                });
+            })
             .is_err()
         );
     }

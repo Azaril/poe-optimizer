@@ -30,14 +30,14 @@ fn complete_factory_inventory_and_generated_capture_identity_are_preserved() {
             .values()
             .filter(|f| matches!(f, ParserFactoryDisposition::Pure(_)))
             .count(),
-        1222
+        1255
     );
     assert_eq!(
         data.factories
             .values()
             .filter(|f| matches!(f, ParserFactoryDisposition::Unsupported { .. }))
             .count(),
-        429
+        396
     );
     let generated = data
         .factories

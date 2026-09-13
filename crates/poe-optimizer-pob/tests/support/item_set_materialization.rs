@@ -1,10 +1,10 @@
 //! Ordered item-set component oracle inside unchanged complete original Load.
 //! Native inventory and activation completion are separate admission claims.
 #[path = "item_assembly_graph.rs"]
-mod graph;
+pub(super) mod graph;
 #[allow(dead_code)]
 #[path = "configuration_preparation_source.rs"]
-mod source;
+pub(super) mod source;
 use mlua::{Function, Lua, LuaSerdeExt, Table, Value};
 use poe_optimizer_data::item_assembly::ItemInventoryPolicy;
 use poe_optimizer_engine::source_program::{
@@ -362,21 +362,30 @@ fn source_error(error: &RuntimeError) -> bool {
 fn attr<'a>(node: &'a ItemSourceNode<'_>, name: &str) -> Option<&'a str> {
     node.element().attribute(name).map(|v| v.decoded())
 }
-struct NativeObservation {
-    state: ItemSetState,
-    constructor: Graph,
-    trace: Vec<Json>,
-    result: Result<(), AssemblyError>,
-    omitted_item_occurrences: usize,
-    remaining_containers: usize,
+pub struct NativeObservation {
+    pub state: ItemSetState,
+    pub constructor: Graph,
+    pub trace: Vec<Json>,
+    pub result: Result<(), AssemblyError>,
+    pub omitted_item_occurrences: usize,
+    pub remaining_containers: usize,
 }
 /// XML strings are inputs. The original output graph is never supplied here.
 /// Item children are deliberately outside this component lane; the independently
 /// produced inventory lane is a separate root-owned integration test.
-fn native(policy: &ItemInventoryPolicy, xml: &str) -> NativeObservation {
+pub fn native(policy: &ItemInventoryPolicy, xml: &str) -> NativeObservation {
+    native_with_limits(policy, xml, ItemSetLimits::default())
+}
+/// Explicit component-fixture limits; no reference output is accepted as input.
+/// The default wrapper remains unchanged for the materialization regression lane.
+pub fn native_with_limits(
+    policy: &ItemInventoryPolicy,
+    xml: &str,
+    limits: ItemSetLimits,
+) -> NativeObservation {
     let projection = item_source::project_xml(xml).unwrap();
     let container = projection.containers().first().expect("Items container");
-    let mut state = ItemSetState::new(policy, ItemSetLimits::default()).unwrap();
+    let mut state = ItemSetState::new(policy, limits).unwrap();
     let constructor = state.snapshot().unwrap();
     let mut trace = Vec::new();
     let mut omitted = 0;
@@ -493,7 +502,7 @@ fn native(policy: &ItemInventoryPolicy, xml: &str) -> NativeObservation {
         remaining_containers: projection.containers().len() - 1,
     }
 }
-fn receipt(observation: &SourceObservation) -> Json {
+pub fn receipt(observation: &SourceObservation) -> Json {
     let mut report = serde_json::Map::new();
     for key in [
         "events",
@@ -557,7 +566,7 @@ fn receipt(observation: &SourceObservation) -> Json {
     );
     Json::Object(report)
 }
-fn states(observation: &SourceObservation, name: &str, phase: &str) -> Vec<Table> {
+pub fn states(observation: &SourceObservation, name: &str, phase: &str) -> Vec<Table> {
     observation
         .report
         .raw_get::<Table>("states")

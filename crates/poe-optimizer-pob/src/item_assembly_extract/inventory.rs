@@ -1,6 +1,7 @@
 //! Source-authenticated inventory definitions, without loading the ItemsTab UI.
 //! Transform bodies are described, never invoked. Complete passive socket IDs
 //! come from the authenticated full tree, not the partial bundled class tree.
+mod node_validity;
 use super::*;
 use poe_optimizer_data::{
     tree_data::{SourceValue, TreeNodeKind},
@@ -9,6 +10,13 @@ use poe_optimizer_data::{
 
 pub(super) fn spans() -> BTreeMap<String, ItemSourceSpan> {
     [
+        (
+            "inventory_tree_socket_flags",
+            "src/Classes/PassiveTree.lua",
+            350,
+            393,
+            "924439bd404148c5f817a3a0d0eccfcf33ad7b9c75354fa6f2cad154d224b486",
+        ),
         (
             "inventory_declarations",
             "src/Classes/ItemsTab.lua",
@@ -211,6 +219,8 @@ fn passive_nodes(
     tree: &AuthenticatedTreeSnapshot,
     node_type: &str,
     contained_field: &str,
+    validity: &ItemSlotValidityPolicy,
+    socket_flags: &str,
 ) -> Result<ItemInventoryPassiveNodes> {
     let type_rows = rows(types, "node.type = ")?;
     if type_rows.len() != 7 {
@@ -243,6 +253,7 @@ fn passive_nodes(
     Ok(ItemInventoryPassiveNodes {
         tree_version: snapshot.identity.tree_version.clone(),
         full_snapshot_sha256: tree.content_sha256().into(),
+        validity_nodes: node_validity::project(lua, tree, validity, socket_flags)?,
         ids,
     })
 }
@@ -351,6 +362,7 @@ pub(super) fn extract(
     lua: &Lua,
     bodies: &BTreeMap<String, &str>,
     tree: &AuthenticatedTreeSnapshot,
+    validity: &ItemSlotValidityPolicy,
 ) -> Result<ItemInventoryPolicy> {
     authenticated(bodies)?;
     let declarations = body(bodies, "inventory_declarations")?;
@@ -442,6 +454,7 @@ pub(super) fn extract(
         return Err(error("inventory shared source defaults differ"));
     }
     let result = ItemInventoryPolicy {
+        activation: super::inventory_activation::policy(lua, bodies)?,
         layout: ItemInventoryLayout {
             base_slots,
             swap: ItemInventorySwap {
@@ -463,6 +476,8 @@ pub(super) fn extract(
                     tree,
                     &node_type,
                     &contained_socket_field,
+                    validity,
+                    body(bodies, "inventory_tree_socket_flags")?,
                 )?,
                 node_type,
                 contained_socket_field,

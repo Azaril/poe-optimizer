@@ -11,6 +11,7 @@ use poe_optimizer_data::{
 use std::collections::BTreeMap;
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
 mod inventory;
+mod inventory_activation;
 mod jewel;
 mod local;
 mod slot_validity;
@@ -166,6 +167,7 @@ fn authenticate<'a>(
     // The full original method is exercised independently by the parity host.
     spans.insert("slot_validity".into(), slot_validity::span());
     spans.extend(inventory::spans());
+    spans.extend(inventory_activation::spans());
     let mut bodies = BTreeMap::new();
     for (role, span) in &spans {
         bodies.insert(role.clone(), source_body(sources, span)?);
@@ -520,7 +522,7 @@ fn policy(
     let jewel_item_type = text_after(lua, build, "elseif self.type == ")?;
     let jewel = jewel::extract(lua, build, slot, &jewel_item_type)?;
     let slot_validity = slot_validity::extract(lua, body("slot_validity")?)?;
-    let inventory = inventory::extract(lua, &auth.bodies, tree)?;
+    let inventory = inventory::extract(lua, &auth.bodies, tree, &slot_validity)?;
     let quality = query(lua, after(slot, "local craftedQuality = ")?)?;
     let soul = query(lua, after(build, "self.socketedSoulCoreEffectModifier = ")?)?;
     let rune = query(lua, after(build, "self.socketedRuneEffectModifier = ")?)?;

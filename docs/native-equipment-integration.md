@@ -1,12 +1,89 @@
 # Native equipment and item-set integration
 
-Status: R2ae wires constructor and ordered inventory/set loading through the existing
-injected-data/native-preparation seams, up to an explicit activation continuation. Scoped
-source validation, affected regressions, CLI checks, strict lint and portable compilation pass.
-R2ac validates the complete slot-validity component with source-fed contexts; ordered set
-activation and full build integration remain open.
-No execution-model alternative is selected by this work. The
-[implementation record](implementation.md) owns progress and evidence.
+Status: R2ah implements bounded equipment activation through slot population, ending
+before `SyncLoadouts`. Compilation, package generation and the scoped public preparation
+regressions have completed. The declared source-fed activation comparison and all 17
+lifecycle/materialization regression tests pass. Strict workspace/native-only Clippy and the
+five WASM library checks pass. The final activation rerun passes 13 tests after helper
+deduplication; final materialization rerun status is tracked in the implementation record.
+Full native build
+parity remains **0/5**.
+No execution-model alternative is selected. The [implementation record](implementation.md)
+owns current progress and evidence; the R2ae checkpoint below retains its earlier scope.
+
+## R2ah current implementation boundary
+
+The public `runtime-02` check passed 46 test executions: 19 native, 4 default-feature and
+23 native-only. All five native-only CLI inspections succeeded with incomplete preparation
+reports, retaining 116 records and 96 registrations across the original inputs
+(13, 34, 0, 21, 28). Builds 1 and 3 still stop at captured jewel factories. Builds 2, 4 and 5
+now reach `rune_initial_order` with
+`ModParser pending shared dictionary mutation in doubled form: None`. The earlier callback333
+dependency is resolved; these reports do not establish successful public activation.
+The diagnostic comes from an unconditional guard for the `DOUBLED` form, so it does not
+establish shared mutation on the failing invocation. The reports do not retain its actual
+parser input. A [file-only catalog audit](../runs/r2ah-equipment-activation-01/frontier-analysis-by-engine.md)
+finds four ordinary rune lines with scalar names; the source scalar-name path allocates
+fresh tables. Admitting that path is a potential bounded follow-up requiring parity evidence,
+not an execution-model decision.
+
+The [activation transition](../crates/poe-optimizer-import/src/item_sets/activation.rs)
+preserves the previous active-set object, copies live slot fields in source operation order,
+resolves rune selections and populates slots only after a bounded dependency proof. Reached
+dependencies remain explicit; successful population returns `AwaitingSyncLoadouts`.
+Cross-domain loadout callbacks, trailing Load flags, ResetUndo and actor-effective equipment
+are still separate work. Changed cluster selections and observable traversal dependencies
+cannot be bypassed by choosing a native iteration order.
+
+The [native context](../crates/poe-optimizer-native/src/items/activation.rs) retains the exact
+compiled-data owner and uses an injected read projection of every node in the authenticated
+startup tree, including the source-derived charm-socket flag. Dynamic effective-node changes
+remain outside this startup context. The item inventory report uses schema 5 and retains
+activation progress or the reached failure; diagnostic snapshots cannot construct live state.
+
+[Rune-choice preparation](../crates/poe-optimizer-import/src/item_sets/rune_choices.rs)
+parses ordinary rune lines through the supplied finite parser and applies source attribution
+before slot filtering. Bonded lines contribute display text and grouping. Private handles
+retain the selected record and its modifier values; unknown names preserve the previous
+handle. A [bounded proof of the pinned sort](rune-headless-selection.md) certifies completion
+and the unique first record without requiring a global strict weak order. Remaining native storage
+order is private; ambiguous first records, duplicate eligible names and unproved comparison
+safety remain explicit frontiers. Failed preparation is retained across resumes. Finite metadata
+ingress does not reconstruct arbitrary source aliases or admit callbacks as effects. The current
+modifier-parser schema 8 adds closed scalar `Gsub` expressions with literal patterns and
+text or original `string.upper` replacements; this alone does not establish complete rune preparation.
+
+The source comparison is deliberately scoped: exact source arrays remain evidence, while
+the headless comparison uses retained set aliases, selected item IDs, choice-label
+multiplicities, notes and child inactivity. Rune comparison covers selected names; it does not
+establish source effect-record identity or array order. A substituted original parser used
+after import is component evidence, not proof of original initialization/cache history or a
+production dependency. The startup witness retains the module-local `runeModLines` table
+and requires continuation of the exact original module after sorting; a C-return hook is only
+optional diagnostic evidence.
+
+The final activation target passes 13 tests after removing two duplicate helper test
+registrations; `activation-05` retains the earlier 15-test execution. The final
+[source-output-06 receipts](../runs/r2ah-equipment-activation-01/source-output-06/summary.json)
+retain unchanged comparison outcomes. The ten component cases retain all five original
+inputs plus five derived cases: the five originals and three derived cases reach
+`AwaitingSyncLoadouts` with matching declared headless graphs and node writes. The other two
+derived cases retain explicit population-order dependencies; they are not graph matches.
+The component uses source-fed context and an explicitly substituted original parser, with
+629 ordinary rune parser calls per preparation. It supplies no source traversal to native code
+and establishes neither public inventory completion nor the complete Load/Sync/actor lifecycle.
+
+The ten `activation-05` startup observations retain 595 rows and 5,377–6,117 actual comparator calls.
+Completion is observed at the exact original module continuation at ItemsTab.lua:2286;
+the optional C-return diagnostic is false. The component fixture alone permits 50,000,000
+steps: build02 completes at 5,646,764 reported steps, above the previous 5,000,000-step
+component limit. Production defaults remain unchanged. Reconciliation is retained in
+`runs/r2ah-equipment-activation-01/activation-source-review-05.json`.
+
+Construction and query charges are cumulative logical bytes/work, including failed
+preparation and selection queries. They are not allocator/RSS or execution-time measurements;
+parser internals retain their separate limits. Include policy, acquisition, adapters and
+reference tooling in the existing [A1–A4 investigation](rule-execution-model-investigation.md).
 
 ## R2ae implementation boundary and scoped source validation
 
@@ -24,7 +101,8 @@ defaults and the complete passive-socket predicate projection. The latter is acq
 the authenticated full tree, before the partial bundled class-tree projection, and its tree
 version and full snapshot digest must match the package tree. Its requested startup version
 must also match radius preparation; older resolved radius fallback data remains allowed. The
-projection is not a list inferred from the five observed builds. The package is now schema 34 with item-assembly policy schema 6:
+projection is not a list inferred from the five observed builds. At the R2ae checkpoint,
+the package was schema 34 with item-assembly policy schema 6:
 26,314,825 bytes, SHA-256
 `2a6b63b64c237a0f31dcc65f7a301b7e18bbbd78cd09518a07a8bd12418384a6`.
 Only the manifest and item-assembly section changed; the other 28 sections are unchanged.

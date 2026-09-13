@@ -753,3 +753,38 @@ fn empty_array_identity_uses_the_owner_not_the_shared_dangling_storage_pointer()
     assert_eq!(array.entries().unwrap().count(), 0);
     assert!(matches!(a.index(Value::Number(1.0)).unwrap(), Value::Nil));
 }
+
+#[test]
+fn selection_dependency_proof_uses_injected_links_and_parent_rewrite() {
+    let mut p = policy();
+    p.weapon.offhand_slots[0].offhand = "Secondary Custom".into();
+    p.weapon.offhand_slots[0].primary = "Primary Custom".into();
+    p.embedded.slot_pattern = "^Child:".into();
+    p.embedded.parent_rewrite.pattern = "^Child:(.*)$".into();
+    p.embedded.parent_rewrite.replacement = "%1".into();
+    let program = SlotValidityProgram::new(&p, SlotValidityLimits::default()).unwrap();
+    assert_eq!(
+        program.selection_dependencies("Secondary Custom").unwrap(),
+        vec!["Primary Custom"]
+    );
+    assert_eq!(
+        program.selection_dependencies("Child:Socket Host").unwrap(),
+        vec!["Socket Host"]
+    );
+    assert!(
+        program
+            .selection_dependencies("Unrelated")
+            .unwrap()
+            .is_empty()
+    );
+    // A proof-only speculative read cannot be reported as an actual source error.
+    p.embedded.slot_pattern = "[".into();
+    let program = SlotValidityProgram::new(&p, SlotValidityLimits::default()).unwrap();
+    assert_eq!(
+        program
+            .selection_dependencies("Unrelated")
+            .unwrap_err()
+            .kind,
+        AssemblyErrorKind::Unsupported
+    );
+}

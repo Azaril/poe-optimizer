@@ -13,7 +13,7 @@ fn data() -> ItemAssemblyData {
 #[test]
 fn policy_only_catalog_binds_existing_definitions_without_copying() {
     let s = snapshot();
-    assert_eq!(s.identity().schema_version, 35);
+    assert_eq!(s.identity().schema_version, 36);
     let c = s.item_assembly();
     assert_eq!(c.data().capability, ItemAssemblyCapability::PolicyOnly);
     assert_eq!(
@@ -54,7 +54,7 @@ fn caller_patterns_payloads_and_divisors_remain_data_not_eager_runtime_checks() 
     let mut p = data();
     p.policy.collection.class_find_pattern = "[\0unfinished".into();
     p.policy.collection.class_capture_pattern.clear();
-    p.policy.range.newline_rewrite.replacement = "%0\0Ã©".into();
+    p.policy.range.newline_rewrite.replacement = "%0\0ÃƒÂ©".into();
     p.policy.slots.tag_replacements[0].pattern = "()%b".into();
     p.policy.local.more_divisor = 0.0;
     p.policy.nil_queries.flags = 9_007_199_254_740_991.0;
@@ -284,7 +284,7 @@ fn immutable_catalog_is_send_sync_and_parallel_datasets_do_not_share_policy() {
 #[test]
 fn local_families_retain_complete_orders_and_query_targets() {
     let d = data();
-    assert_eq!(d.schema_version, 6);
+    assert_eq!(d.schema_version, 7);
     let a = &d.policy.armour;
     assert_eq!(a.queries.len(), 18);
     assert_eq!(a.queries[0].role, ItemAssemblyArmourRole::ArmourBase);

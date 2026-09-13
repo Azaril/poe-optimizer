@@ -26,6 +26,20 @@ fn policy() -> ItemInventoryPolicy {
                     tree_version: "caller-tree".into(),
                     full_snapshot_sha256: "0".repeat(64),
                     ids: vec![7, 11],
+                    validity_nodes: poe_optimizer_data::item_loading::ItemMetadataTable {
+                        indexed: [7, 11]
+                            .into_iter()
+                            .map(|id| {
+                                (
+                                    id,
+                                    poe_optimizer_data::item_loading::ItemMetadataValue::Table(
+                                        Default::default(),
+                                    ),
+                                )
+                            })
+                            .collect(),
+                        ..Default::default()
+                    },
                 },
             },
             rune_slots: vec![
@@ -55,6 +69,25 @@ fn policy() -> ItemInventoryPolicy {
             true_token: "true".into(),
             empty_item_label: "None".into(),
             show_stat_differences: true,
+        },
+        activation: ItemInventoryActivationPolicy {
+            rarity_colors: [("Caller".into(), "colour:".into())].into(),
+            rune_choices: ItemInventoryRuneChoicePolicy {
+                empty: ItemInventoryEmptyRuneChoice {
+                    name: "None".into(),
+                    label: "Caller empty".into(),
+                    line: String::new(),
+                    slot_type: "caller empty".into(),
+                    required_level: 0.0,
+                    order: 0.0,
+                    group: 0.0,
+                    is_socket_bound: false,
+                },
+                order_default: 1.0,
+                broad_slot_type: "caller broad".into(),
+                bonded_display_prefix: "Caller bonded: ".into(),
+                modifier_source_prefix: "Caller:".into(),
+            },
         },
         power_stats: ItemInventoryPowerStats {
             rows: vec![

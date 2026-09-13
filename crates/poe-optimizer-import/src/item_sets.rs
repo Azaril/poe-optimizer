@@ -1,6 +1,10 @@
-//! Ordered item-set loading up to the original SetActiveItemSet call entry.
-//! This state never certifies activation, PopulateSlots, loadout callbacks, or
-//! actor participation. Diagnostic graphs cannot be imported as state.
+//! Ordered item-set loading and guarded activation through slot population.
+//! SyncLoadouts, later Load callbacks and actor participation remain explicit
+//! dependencies. Diagnostic graphs cannot be imported as state.
+mod activation;
+mod rune_choices;
+pub use activation::{ItemActivationContext, ItemActivationProgress};
+pub use rune_choices::{ItemActivationRune, RuneChoiceCatalog, RuneChoicePreparation};
 mod graph;
 mod layout;
 #[cfg(test)]
@@ -57,6 +61,7 @@ pub enum ItemSetPhase {
     Loading,
     ItemSetOpen,
     AwaitingActivation,
+    AwaitingSyncLoadouts,
     Failed,
 }
 #[derive(Debug, Default, Clone, Copy)]
@@ -141,6 +146,8 @@ pub struct ItemSetState {
     pending: Option<ItemSetContinuation>,
     failure: Option<AssemblyError>,
     transforms: Vec<Option<u16>>,
+    activation: Option<activation::ActivationFrame>,
+    rune_selections: std::collections::BTreeMap<String, ItemActivationRune>,
 }
 impl ItemSetState {
     /// Ordinary fresh constructor state from injected, validated definitions.
@@ -205,6 +212,8 @@ impl ItemSetState {
             pending: None,
             failure: None,
             transforms: Vec::new(),
+            activation: None,
+            rune_selections: std::collections::BTreeMap::new(),
         };
         state.construct_layout()?;
         let policy = Arc::clone(&state.policy);
@@ -318,6 +327,7 @@ impl ItemSetState {
         self.failure = None;
         self.pending = None;
         self.open = None;
+        self.activation = None;
         self.run(ItemSetPhase::Loading, |s| {
             let active = s.graph.field(s.root, "activeItemSet")?;
             s.graph.set_field(s.root, "previousActiveItemSet", active)?;
@@ -545,10 +555,12 @@ fn parsed(text: Option<&str>) -> Option<f64> {
 fn number(text: Option<&str>) -> V {
     parsed(text).map(V::Number).unwrap_or(V::Nil)
 }
-pub fn implementation_sources() -> [&'static str; 3] {
+pub fn implementation_sources() -> [&'static str; 5] {
     [
         include_str!("item_sets.rs"),
         include_str!("item_sets/graph.rs"),
+        include_str!("item_sets/activation.rs"),
+        include_str!("item_sets/rune_choices.rs"),
         include_str!("item_sets/layout.rs"),
     ]
 }

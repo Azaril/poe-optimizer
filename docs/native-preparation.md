@@ -1,8 +1,16 @@
 # Shared native preparation boundary
 
-Status: R1c outer integration, R2 authored skills, configuration loading and the R2y
-finite item assembly/inventory prefix are implemented. General real-build numerical producers remain
-unfinished; complete native supplied builds remain **0/5**.
+Status: shared authored-skill, configuration and item-loading stages are implemented.
+R2ah adds bounded equipment activation through population, with an explicit stop before
+`SyncLoadouts`. Scoped public preparation regressions and the declared source-fed activation
+comparison pass, as do all 17 lifecycle/materialization regression tests. Strict workspace/
+native-only Clippy and five WASM library checks pass. The final activation rerun passes
+13 tests after helper deduplication; final materialization rerun status is tracked separately
+in the implementation record.
+The five native-only CLI reports remain incomplete,
+with 96 registrations across 116 records; the [equipment status](native-equipment-integration.md#r2ah-current-implementation-boundary)
+records their first dependencies. General real-build numerical producers remain unfinished;
+complete native supplied builds remain **0/5**.
 
 ## Public entry points
 
@@ -32,8 +40,11 @@ source/view/data-bound [authored skill stage](authored-skill-preparation.md).
 and its explicit continuation before activation. `authored_items()` retains the
 [owned item assembly and inventory prefix](native-item-assembly.md): all authored item
 occurrences, the executed registration prefix, duplicate-ID lookup winners and explicit
-source continuation. These independent stages do not fabricate
-completed root setup or effective scenario state. The compatibility request DTO still owns an XML string in
+source continuation. R2ah also retains private item-set activation state and reached startup
+jewel writes, separately from saved passive allocations. The
+[equipment contract](native-equipment-integration.md#r2ah-current-implementation-boundary)
+defines the pre-SyncLoadouts endpoint and unresolved dependencies. These independent stages
+do not fabricate completed root setup or effective scenario state. The compatibility request DTO still owns an XML string in
 addition to the imported source; it is not copied per instance or per calculation. Removing
 that duplicate DTO storage can follow a measured API migration rather than compromising
 source ownership. Reports cannot manufacture a prepared plan.
@@ -64,10 +75,12 @@ frontiers are not falsely marked complete by a closed legacy calculation.
 
 ## Structured incomplete reports
 
-The nested item inventory report uses schema 2. Its numeric armour diagnostic map explicitly
-marks incomplete projections; the owned item graph remains authoritative.
+The nested item inventory report uses schema 5, including activation progress or failure.
+`AwaitingSyncLoadouts` means population reached its represented endpoint, not complete Load
+or actor-effective equipment. Its numeric armour diagnostic map explicitly marks incomplete
+projections; the owned item graph remains authoritative.
 
-`PreparationReport` schema 5 contains the selected view, source/definition identity,
+`PreparationReport` schema 6 contains the selected view, source/definition identity,
 the executed authored-skill, configuration loader-prefix and ordered item inventory reports,
 classified issues, requested options/metric queries and the legacy adapter's separate rejection.
 Request context records intent, not calculated output. Each issue names its stage

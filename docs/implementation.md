@@ -18,6 +18,75 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+**R2ah checkpoint: owned equipment activation and native string substitutions.** This adds an
+owned activation transition, rune-choice preparation, a full latest-tree validity read set
+and a native inventory context. The final source activation target passes 13 tests after
+consolidating duplicated helper imports; all assertions are retained. The declared
+source-fed component reaches the original pre-Sync population boundary on all five originals
+and three derived cases, matching its headless graph and node writes. Two derived cases retain
+explicit population-order dependencies. Existing lifecycle (9) and materialization (8) tests pass.
+This does not establish complete native inventory, rune-effect aliasing, SyncLoadouts or whole Load.
+
+Actual startup observations retain the original comparator and C sorter over 595 rows, verify
+the same module-local table at the next original instruction (line 2286), and join it to the
+retained consumer upvalue. A cyclic comparator is admitted only under the bounded headless
+selection proof. C-return hooks are optional diagnostics. The component fixture uses an explicit
+50-million-step ceiling after build 2 exhausted its old five-million-step limit; production
+budgets and low-budget failure assertions are unchanged. Build 2 completes this component in
+5,646,764 logical steps. This is preparation evidence, not candidate throughput.
+
+The reviewed package is schema **36 / assembly 7 / modifier parser 8**, **26,529,363 bytes**,
+SHA-256 `5d9335f89cb3caecdb749a0611cc463417059f3c9bb7fbbbd5a9853f651ff740`.
+Exactly three sections change: manifest, item assembly and modifier parser; the other 27,
+class-tree artifact, original inputs, lockfile and PoB pin are unchanged. The parser admits
+33 additional scalar string-substitution factories, retaining all 1,222 prior Pure definitions.
+There are now 1,255 Pure and 396 Unsupported factories. Focused engine, data and extraction
+checks pass. Source factory comparisons cover all admitted definitions, 87 string bodies,
+98 actual string call positions, 435 string alias probes and 81 Flag bodies, with warm and
+ordered-error checks. All nine string tests pass after replacing an iteration-dependent
+opaque-method test selector with an explicit original callback. Whole-item regressions pass:
+**114/116** source-parser/native assemblies and **112/116** built-in assemblies, unchanged
+from R2ag. All 226 previously completed declared graph digests and six remaining lane-frontier
+records are unchanged; raw omitted-field discovery order is outside that digest comparison.
+Normal CLI extraction and maintainer generation reproduce the installed package byte for byte.
+
+**Validation:** 307 passing test executions across selected data, extraction, engine, import,
+native, CLI and source-parity targets. This is not a full workspace test run. Strict workspace
+and native-only Clippy, formatting, native-only PoB/Lua dependency exclusion and compilation
+of the five portable core crates for WASM pass. The final native and materialization regressions
+also pass after lint cleanup and helper consolidation. Failed exploratory attempts remain in
+the receipts: context ingress, the assumed C-return hook, the component work ceiling and the
+iteration-dependent callback fixture were corrected without relaxing their parity assertions.
+
+Native inventory and CLI regression targets pass 46 tests (19 native, 4 default CLI, 23
+native-only). All five native-only public runs retain **116 records and 96 registrations**
+(13, 34, 0, 21, 28). Builds 2, 4 and 5 advance past callback 333 and stop at
+`shared dictionary mutation in doubled form` during rune preparation. Builds 1 and 3 still
+stop at captured jewel effects. Every report remains incomplete, calculation not run,
+whole-build parity not established. Full native original evaluations remain **0/5**.
+The DOUBLED diagnostic comes from an unconditional guard; it does not prove the actual input
+mutates shared storage. A file-only follow-up found four ordinary rune lines whose modifier
+names are scalar. Admit their fresh name/type/value/tag construction only with complete source
+comparisons; shared table-name mutation and cache/alias histories remain a separate ownership
+requirement. The public report does not yet retain the exact failing parser text.
+
+CI for published `cbd114b` failed: Windows lost one expected search evaluation near its
+120-second budget; deadline exhaustion is an inference because the full CLI report was
+not retained. Ubuntu hit its six-hour job limit during native candidate contract tests.
+The CI-only fix is pushed as `30c3497`: test optimization level 2 with debug assertions,
+overflow checks and every existing command/assertion retained. All eleven tests in the
+two affected Windows CLI targets pass locally in an isolated pinned checkout. The first
+optional-PoB test attempt lacked that checkout's submodule; the full target passed after
+supplying the unchanged pin. Hosted run `34764360721` is in progress; no hosted green is claimed.
+
+R2ah is the latest validated evaluator checkpoint. Evidence is in
+`runs/r2ah-equipment-activation-01/`, including `final-validation.json`, exact package and
+whole-item reconciliations, final `source-output-06` comparisons and the public `runtime-02`
+reports. Every command retains its source/input bindings. The [A1 cost inventory](execution-model-baseline.md#equipment-activation-investigation-in-progress)
+separates data/runtime, acquisition and parity tooling: 6,817 net physical Rust/Lua lines across
+57 changed/new files, with the proof document counted separately. This is evidence for the
+A1–A4 model comparison, not a decision to retain or replace the interpreter.
+
 R2ag advances native unique-item stat ordering and has passed its scoped source checks,
 affected regressions, CLI checks, strict lint and portable compilation. R2ae supplies
 ordered item-set materialization; R2ad supplies reference-lifecycle evidence and R2ac
@@ -92,11 +161,24 @@ record](execution-model-baseline.md#unique-item-ordering-checkpoint) includes ac
 production and parity-tooling code. Existing hosted CI runs for `1b5169b` and `4e802a3` were
 still running Test on both platforms at the 06:43 UTC observation; no hosted green is claimed.
 
-**Current resume:** implement the admitted equipment activation lifecycle through
-SetActiveItemSet, previous/live state copying, rune lookup, order-sensitive PopulateSlots,
-loadout callback re-entry and export selection under the [equipment contract](native-equipment-integration.md).
-Then connect effective equipment to actor preparation and changing candidates. Do not assume
-sorted slot traversal or bypass AwaitingActivation on a repeated successful load.
+**Current resume:** first add complete scalar DOUBLED-form parsing using the existing
+injected numeric policy and authenticated text operands. Compare all four real rune lines,
+condition tags, the second OVERRIDE modifier, limit tags, changed caller definitions, error
+ordering and repeated/cache-copy histories. Keep the shared-table branch explicitly unsupported
+until its lifetime and mutation contract is represented. Capture the actual native parser input
+before claiming the public frontier is removed.
+
+Then finish equipment activation: measure the full rune/slot preparation work against public
+budgets, resolve order-sensitive clearing and cluster changes, and implement cross-domain
+SyncLoadouts/re-entry, export selection and trailing Load state. Connect effective equipment to
+actor preparation and changing candidates under the [equipment contract](native-equipment-integration.md).
+Continue paired Twister/Skeletal Sniper work and all-five breadth checks. Source-fed component
+success must not bypass a production dependency or imply complete native build support.
+
+Continue the [A1–A4 investigation](#execution-model-investigation-a1-a4) alongside bounded
+correctness work. Compare narrower domain representations and native operations with the
+interpreter before choosing further general runtime expansion. Include source acquisition,
+parser dictionary/cache ownership, candidate reuse and update effort in the total cost.
 
 The [captured jewel ownership proposal](jewel-effect-ownership-proposal.md) is awaiting owner
 input: compare session-owned executable values and typed captured effects on the same vertical

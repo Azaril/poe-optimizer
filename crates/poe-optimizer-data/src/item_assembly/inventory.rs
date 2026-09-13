@@ -41,6 +41,9 @@ pub struct ItemInventoryPassiveNodes {
     pub tree_version: String,
     pub full_snapshot_sha256: String,
     pub ids: Vec<u32>,
+    /// Complete latest-tree finite read set used by slot validity. Every tree
+    /// node is keyed numerically, including nodes with no retained fields.
+    pub validity_nodes: crate::item_loading::ItemMetadataTable,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -117,6 +120,7 @@ pub struct ItemInventoryPowerStats {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemInventoryPolicy {
+    pub activation: super::ItemInventoryActivationPolicy,
     pub layout: ItemInventoryLayout,
     pub defaults: ItemInventoryDefaults,
     pub power_stats: ItemInventoryPowerStats,
@@ -131,6 +135,7 @@ impl ItemInventoryPolicy {
 }
 
 pub(super) fn validate(b: &mut Budget, p: &ItemInventoryPolicy) -> Result<()> {
+    super::inventory_activation::validate(b, &p.activation)?;
     let l = &p.layout;
     b.count(l.base_slots.len(), 128)?;
     b.count(l.embedded.parent_slots.len(), 128)?;
@@ -172,6 +177,7 @@ pub(super) fn validate(b: &mut Budget, p: &ItemInventoryPolicy) -> Result<()> {
         return Err(error("inventory passive tree provenance shape"));
     }
     b.count(l.passive.nodes.ids.len(), 65_536)?;
+    super::inventory_nodes::validate(b, &l.passive.nodes)?;
     if l.passive
         .nodes
         .ids
@@ -248,6 +254,7 @@ mod tests {
 
     fn policy() -> ItemInventoryPolicy {
         ItemInventoryPolicy {
+            activation: super::super::inventory_activation::tests::caller(),
             layout: ItemInventoryLayout {
                 base_slots: vec!["Caller slot".into()],
                 swap: ItemInventorySwap {
@@ -268,6 +275,20 @@ mod tests {
                     slot_prefix: "Node ".into(),
                     label: "Tree slot".into(),
                     nodes: ItemInventoryPassiveNodes {
+                        validity_nodes: crate::item_loading::ItemMetadataTable {
+                            indexed: [7, 31]
+                                .into_iter()
+                                .map(|id| {
+                                    (
+                                        i64::from(id),
+                                        crate::item_loading::ItemMetadataValue::Table(
+                                            Default::default(),
+                                        ),
+                                    )
+                                })
+                                .collect(),
+                            ..Default::default()
+                        },
                         tree_version: "caller".into(),
                         full_snapshot_sha256: "a".repeat(64),
                         ids: vec![7, 31],

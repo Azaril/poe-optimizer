@@ -84,6 +84,7 @@ impl Default for SlotValidityLimits {
 #[derive(Debug)]
 struct Compiled {
     policy: ItemSlotValidityPolicy,
+    compiled_bytes: usize,
     slot: LuaPattern,
     flask: [(LuaPattern, LuaPattern); 2],
     embedded: LuaPattern,
@@ -130,6 +131,7 @@ impl SlotValidityProgram {
         let parent = compile(&policy.embedded.parent_rewrite.pattern)?;
         Ok(Self(Arc::new(Compiled {
             policy: policy.clone(),
+            compiled_bytes: limits.max_compiled_bytes - remaining,
             slot,
             flask,
             embedded,
@@ -137,8 +139,80 @@ impl SlotValidityProgram {
             limits,
         })))
     }
+    pub fn compiled_bytes(&self) -> usize {
+        self.0.compiled_bytes
+    }
     pub fn policy(&self) -> &ItemSlotValidityPolicy {
         &self.0.policy
+    }
+    /// Conservative active-set selection reads for population order analysis.
+    /// These names come from the same compiled policy as `check`; they do not
+    /// authorize reordering if a referenced selection can change. This proof
+    /// query does not reproduce the lazy failure prefix of an item predicate.
+    pub fn selection_dependencies(&self, slot_name: &str) -> Result<Vec<String>> {
+        self.selection_dependencies_with_usage(slot_name).0
+    }
+    /// Actual cumulative proof work, including a failing pattern operation.
+    pub fn selection_dependencies_with_usage(&self, slot_name: &str) -> (Result<Vec<String>>, u64) {
+        let mut budget = MatchBudget::new(MatchLimits {
+            max_subject_bytes: self.0.limits.max_text_bytes,
+            max_steps: self.0.limits.max_steps,
+            max_backtrack_frames: self.0.limits.max_backtrack_frames,
+        });
+        let proof_error = |error: PatternError| {
+            let error = pattern_error(error);
+            if error.kind == crate::item_loading::assembly::AssemblyErrorKind::Source {
+                AssemblyError::unsupported(format!(
+                    "cannot prove slot selection dependencies: {error}"
+                ))
+            } else {
+                error
+            }
+        };
+        let result = (|| {
+            let mut result = Vec::new();
+            for link in &self.0.policy.weapon.offhand_slots {
+                budget
+                    .charge(slot_name.len() as u64 + 1)
+                    .map_err(pattern_error)?;
+                if link.offhand == slot_name && !result.contains(&link.primary) {
+                    result.push(link.primary.clone());
+                }
+            }
+            if self
+                .0
+                .embedded
+                .match_captures(slot_name.as_bytes(), 1, &mut budget)
+                .map_err(proof_error)?
+                .is_some()
+            {
+                let parent = self
+                    .0
+                    .parent
+                    .gsub(
+                        slot_name.as_bytes(),
+                        self.0.policy.embedded.parent_rewrite.replacement.as_bytes(),
+                        None,
+                        &mut budget,
+                        GsubLimits {
+                            max_replacement_bytes: self.0.limits.max_text_bytes,
+                            max_output_bytes: self.0.limits.max_text_bytes,
+                        },
+                    )
+                    .map_err(proof_error)?
+                    .bytes;
+                let parent = String::from_utf8(parent).map_err(|_| {
+                    AssemblyError::unsupported(
+                        "slot selection dependency rewrite produced non-UTF8 text",
+                    )
+                })?;
+                if !result.contains(&parent) {
+                    result.push(parent);
+                }
+            }
+            Ok(result)
+        })();
+        (result, budget.steps_used())
     }
     pub fn shares_storage_with(&self, other: &Self) -> bool {
         Arc::ptr_eq(&self.0, &other.0)
@@ -148,6 +222,15 @@ impl SlotValidityProgram {
         request: SlotValidityRequest<'a>,
         context: &mut C,
     ) -> Result<SlotValidityResult<'a>> {
+        self.check_with_usage(request, context).0
+    }
+    /// Return actual charged work even when a lazy dependency or pattern fails.
+    /// Callers composing many checks can enforce a shared enclosing work bound.
+    pub fn check_with_usage<'a, C: SlotValidityContext<'a> + ?Sized>(
+        &self,
+        request: SlotValidityRequest<'a>,
+        context: &mut C,
+    ) -> (Result<SlotValidityResult<'a>>, u64) {
         let mut kernel = Kernel {
             compiled: &self.0,
             context,
@@ -157,7 +240,8 @@ impl SlotValidityProgram {
                 max_backtrack_frames: self.0.limits.max_backtrack_frames,
             }),
         };
-        kernel.run(request)
+        let result = kernel.run(request);
+        (result, kernel.budget.steps_used())
     }
 }
 pub fn is_item_valid_for_slot<'a, C: SlotValidityContext<'a> + ?Sized>(

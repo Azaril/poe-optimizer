@@ -73,6 +73,14 @@ pub enum ParserFactoryExpr {
         helper: ParserCallbackId,
         value: Box<ParserFactoryExpr>,
     },
+    /// The first return of an authenticated string-method substitution. The
+    /// source lowerer admits only scalar consumers; the substitution count does
+    /// not silently disappear at a variadic call or final list-field boundary.
+    Gsub {
+        value: Box<ParserFactoryExpr>,
+        pattern: String,
+        replacement: ParserFactoryReplacement,
+    },
     /// Exact actual arguments to the authenticated variadic constructor wrapper.
     Flag {
         helper: ParserCallbackId,
@@ -83,6 +91,18 @@ pub enum ParserFactoryExpr {
     CreateMod {
         args: Vec<ParserFactoryExpr>,
     },
+}
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum ParserFactoryReplacement {
+    Text(String),
+    /// Exact original string.upper, not an arbitrary replacement callback.
+    StringUpper,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(
@@ -309,6 +329,33 @@ fn expression(
                 return Err(catalog_error(
                     "factory firstToUpper is not its captured helper binding",
                 ));
+            }
+            expression(
+                value,
+                factory,
+                callback,
+                data,
+                bounds,
+                depth + 1,
+                uses_constructor,
+            )?;
+        }
+        ParserFactoryExpr::Gsub {
+            value,
+            pattern,
+            replacement,
+        } => {
+            if callback.environment != ParserEnvironment::OriginalGlobals
+                || (matches!(replacement, ParserFactoryReplacement::StringUpper)
+                    && callback.upvalues.iter().any(|u| u.name == "string"))
+            {
+                return Err(catalog_error(
+                    "factory gsub does not use the original string environment",
+                ));
+            }
+            bounds.string(pattern)?;
+            if let ParserFactoryReplacement::Text(text) = replacement {
+                bounds.string(text)?;
             }
             expression(
                 value,
