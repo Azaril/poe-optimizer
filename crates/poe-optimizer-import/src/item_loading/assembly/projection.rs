@@ -99,9 +99,7 @@ pub fn loading_updates(item: &AssembledItem, before: &ItemState) -> Result<Assem
     let armour_data = match root.fields.get("armourData") {
         None | Some(AssemblyValue::Nil) if !item.is_complete() => ArmourDataUpdate::Preserve,
         None | Some(AssemblyValue::Nil) => ArmourDataUpdate::Clear,
-        Some(AssemblyValue::Table(id)) => {
-            ArmourDataUpdate::Replace(numeric_table(item, *id, &mut budget)?)
-        }
+        Some(AssemblyValue::Table(id)) => armour_table(item, *id, &mut budget)?,
         _ => {
             return Err(AssemblyError::unsupported(
                 "item armour data is not a numeric table",
@@ -137,6 +135,36 @@ fn number(n: f64) -> Result<ItemNumber> {
             "nonfinite item loading projection",
         ))
     }
+}
+/// Only this compatibility field has an explicitly marked numeric subset.
+/// The owned graph retains every skipped value, key and alias.
+fn armour_table(
+    item: &AssembledItem,
+    id: AssemblyTableId,
+    budget: &mut Budget,
+) -> Result<ArmourDataUpdate> {
+    let table = item
+        .table(id)
+        .ok_or_else(|| AssemblyError::source("item armour table reference is missing"))?;
+    budget.charge(64)?;
+    let mut complete = table.indexed.is_empty();
+    let mut out = BTreeMap::new();
+    for (key, value) in &table.fields {
+        budget.key(key)?;
+        if let AssemblyValue::Number(n) = value {
+            out.insert(key.clone(), number(*n)?);
+        } else {
+            complete = false;
+        }
+    }
+    for _ in &table.indexed {
+        budget.charge(std::mem::size_of::<i64>())?;
+    }
+    Ok(if complete {
+        ArmourDataUpdate::Replace(out)
+    } else {
+        ArmourDataUpdate::NumericSubset(out)
+    })
 }
 fn numeric_table(
     item: &AssembledItem,

@@ -2,6 +2,7 @@
 //! Unsupported local-data or callback operations retain the reached mutation prefix.
 mod collect;
 mod hydrate;
+mod local;
 mod projection;
 mod query;
 mod slots;
@@ -31,6 +32,7 @@ pub fn implementation_sources() -> &'static [&'static str] {
         include_str!("mod.rs"),
         include_str!("collect.rs"),
         include_str!("hydrate.rs"),
+        include_str!("local.rs"),
         include_str!("projection.rs"),
         include_str!("query.rs"),
         include_str!("slots.rs"),

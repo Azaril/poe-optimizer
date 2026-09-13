@@ -113,7 +113,7 @@ fn native_parser_input_bound_is_a_resource_error_not_missing_support() {
 }
 
 #[test]
-fn defence_headers_preserve_data_before_the_later_hidden_specs_branch() {
+fn defence_headers_preserve_loaded_values_before_assembly() {
     for header in [
         "Armour",
         "Evasion Rating",
@@ -123,7 +123,9 @@ fn defence_headers_preserve_data_before_the_later_hidden_specs_branch() {
         "Runic Ward",
     ] {
         let snapshot = data();
-        let mut provider = BuiltinItemLoadProvider::new(snapshot);
+        // Inspect authored headers before local assembly replaces display values.
+        let parser = NativeModifierParserProvider::new(snapshot.modifier_parser());
+        let mut provider = NativeItemLoadProvider::with_dependencies(snapshot, parser);
         let mut machine = ItemLoadMachine::new(snapshot.item_loading());
         machine
             .apply_text(

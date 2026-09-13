@@ -148,7 +148,7 @@ pub fn prepare_authored_items(
     view.validate_binding(build, data.snapshot())
         .map_err(|e| contract(e.to_string()))?;
     let mut report = ItemPreparationReport {
-        schema_version: 1,
+        schema_version: 2,
         source_sha256: build.source_sha256().into(),
         view_sha256: view_digest(view)?,
         data_identity: data.identity().clone(),

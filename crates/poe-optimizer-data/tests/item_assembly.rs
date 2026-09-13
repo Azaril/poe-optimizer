@@ -13,7 +13,7 @@ fn data() -> ItemAssemblyData {
 #[test]
 fn policy_only_catalog_binds_existing_definitions_without_copying() {
     let s = snapshot();
-    assert_eq!(s.identity().schema_version, 29);
+    assert_eq!(s.identity().schema_version, 30);
     let c = s.item_assembly();
     assert_eq!(c.data().capability, ItemAssemblyCapability::PolicyOnly);
     assert_eq!(
@@ -279,4 +279,119 @@ fn immutable_catalog_is_send_sync_and_parallel_datasets_do_not_share_policy() {
     for h in handles {
         h.join().unwrap();
     }
+}
+
+#[test]
+fn local_families_retain_complete_orders_and_query_targets() {
+    let d = data();
+    assert_eq!(d.schema_version, 2);
+    let a = &d.policy.armour;
+    assert_eq!(a.queries.len(), 18);
+    assert_eq!(a.queries[0].role, ItemAssemblyArmourRole::ArmourBase);
+    assert_eq!(
+        a.queries[17].role,
+        ItemAssemblyArmourRole::DefencesIncreased
+    );
+    assert_eq!(
+        a.defences[2].increased_roles,
+        [
+            ItemAssemblyArmourRole::EnergyShieldIncreased,
+            ItemAssemblyArmourRole::ArmourEnergyShieldIncreased,
+            ItemAssemblyArmourRole::EvasionEnergyShieldIncreased,
+            ItemAssemblyArmourRole::DefencesIncreased,
+        ]
+    );
+    assert_eq!(
+        a.per_level[1].increased_roles,
+        a.defences[2].increased_roles
+    );
+    assert_eq!(a.movement.condition, "IgnoreMovementPenalties");
+    assert!(a.movement.negated);
+    let f = &d.policy.flask;
+    assert_eq!(f.recovery.channels[0].role, ItemAssemblyRecoveryRole::Life);
+    assert_eq!(f.recovery.channels[1].role, ItemAssemblyRecoveryRole::Mana);
+    assert!(f.recovery.channels[0].additional.is_some());
+    assert!(f.recovery.channels[1].additional.is_none());
+    for channel in &f.recovery.channels {
+        assert_eq!(channel.effect_not_removed.list, ItemAssemblyQueryList::Base);
+    }
+    assert_eq!(f.charges.maximum_output, "chargesMax");
+    assert_eq!(f.charges.used_output, "chargesUsed");
+    assert_eq!(d.policy.charm.charges.effect_queries[0].name, "CharmEffect");
+}
+
+#[test]
+fn local_family_parameters_are_injected_without_eager_arithmetic_admission() {
+    let mut d = data();
+    d.policy.armour.queries.swap(0, 1);
+    d.policy.armour.queries[1].query.name = "Custom local base".into();
+    d.policy.armour.queries[1].base.as_mut().unwrap().field = "customBase".into();
+    d.policy.armour.defences[0].output = "customDefence".into();
+    d.policy.armour.defences[0].increased_roles.swap(0, 1);
+    d.policy.armour.percent_divisor = 0.0;
+    d.policy.armour.movement.condition = "CustomCondition".into();
+    d.policy.flask.recovery.channels.swap(0, 1);
+    d.policy.flask.recovery.channels[0].effect_not_removed.list = ItemAssemblyQueryList::Slot;
+    d.policy.flask.fraction_base = -3.0;
+    d.policy.flask.percent_divisor = 0.0;
+    d.policy.charm.overrides.key_field = "customKey".into();
+    d.policy.charm.charges.effect_queries.swap(0, 1);
+    ItemAssemblyCatalog::new(d).unwrap();
+}
+
+#[test]
+fn local_family_closed_roles_and_references_are_checked() {
+    let mut d = data();
+    d.policy.armour.queries[1].role = d.policy.armour.queries[0].role;
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.armour.queries[0].base = None;
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.armour.defences[1].role = d.policy.armour.defences[0].role;
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.armour.defences[0].base_roles = vec![ItemAssemblyArmourRole::ArmourIncreased];
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.armour.per_level[0].base_role = ItemAssemblyArmourRole::ArmourBase;
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.flask.recovery.channels[1].role = d.policy.flask.recovery.channels[0].role;
+    assert!(d.validate().is_err());
+}
+
+#[test]
+fn local_family_bounds_and_unknown_or_omitted_fields_are_checked() {
+    let mut d = data();
+    d.policy.armour.defences[0].increased_roles = vec![];
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.armour.defences[0].base_roles = vec![ItemAssemblyArmourRole::ArmourBase; 19];
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.flask.duration.round_places = 16;
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.charm.percent_divisor = f64::INFINITY;
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.armour.overrides.query_name = "x".repeat(4097);
+    assert!(d.validate().is_err());
+    let original = serde_json::to_value(data()).unwrap();
+    let mut omitted = original.clone();
+    omitted["policy"]["armour"]["queries"][0]
+        .as_object_mut()
+        .unwrap()
+        .remove("base");
+    assert!(serde_json::from_value::<ItemAssemblyData>(omitted).is_err());
+    let mut omitted = original.clone();
+    omitted["policy"]["flask"]["recovery"]["channels"][1]
+        .as_object_mut()
+        .unwrap()
+        .remove("additional");
+    assert!(serde_json::from_value::<ItemAssemblyData>(omitted).is_err());
+    let mut unknown = original;
+    unknown["policy"]["charm"]["execute"] = serde_json::json!(true);
+    assert!(serde_json::from_value::<ItemAssemblyData>(unknown).is_err());
 }

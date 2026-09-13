@@ -64,7 +64,10 @@ frontiers are not falsely marked complete by a closed legacy calculation.
 
 ## Structured incomplete reports
 
-`PreparationReport` schema 4 contains the selected view, source/definition identity,
+The nested item inventory report uses schema 2. Its numeric armour diagnostic map explicitly
+marks incomplete projections; the owned item graph remains authoritative.
+
+`PreparationReport` schema 5 contains the selected view, source/definition identity,
 the executed authored-skill, configuration loader-prefix and ordered item inventory reports,
 classified issues, requested options/metric queries and the legacy adapter's separate rejection.
 Request context records intent, not calculated output. Each issue names its stage

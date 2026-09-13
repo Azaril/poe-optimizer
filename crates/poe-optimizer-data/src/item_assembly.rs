@@ -11,12 +11,15 @@ use std::{
     sync::Arc,
 };
 
+mod local;
+pub use local::*;
+
 type Result<T> = std::result::Result<T, GameDataError>;
 fn error(message: impl std::fmt::Display) -> GameDataError {
     GameDataError(format!("item assembly policy: {message}"))
 }
 
-pub const ITEM_ASSEMBLY_SCHEMA_VERSION: u32 = 1;
+pub const ITEM_ASSEMBLY_SCHEMA_VERSION: u32 = 2;
 pub const ITEM_ASSEMBLY_SOURCE_ROLES: &[&str] = &[
     "add_mod",
     "and64",
@@ -80,6 +83,9 @@ pub struct ItemAssemblyPolicy {
     pub named_compatibility: Vec<ItemAssemblyNamedRule>,
     pub requirements: ItemAssemblyRequirementPolicy,
     pub slots: ItemAssemblySlotPolicy,
+    pub armour: ItemAssemblyArmourPolicy,
+    pub flask: ItemAssemblyFlaskPolicy,
+    pub charm: ItemAssemblyCharmPolicy,
     pub scale: ItemAssemblyScalePolicy,
     pub jewel_item_type: String,
 }
@@ -689,6 +695,7 @@ impl ItemAssemblyData {
         }
         b.number(s.spirit_percent_divisor)?;
         b.number(s.socketed_jewel_percent_divisor)?;
+        local::validate(&mut b, &p.armour, &p.flask, &p.charm)?;
         b.text(&p.scale.integer_scaled_key)?;
         b.count(p.scale.keyed_value_decimal_places.into(), 15)?;
         b.count(p.scale.truncation_round_decimal_places.into(), 15)?;

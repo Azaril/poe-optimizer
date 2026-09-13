@@ -18,15 +18,15 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
         let base_list = self.mod_list()?;
         if self.base_field("weapon")?.truthy() {
             self.fresh_field("weaponData")?;
-        } else if self.base_field("armour")?.truthy() {
-            if !self.get("armourData")?.truthy() {
-                self.fresh_field("armourData")?;
+        } else if self.base_field(&policy.armour.base_field)?.truthy() {
+            if !self.get(&policy.armour.output_field)?.truthy() {
+                self.fresh_field(&policy.armour.output_field)?;
             }
-        } else if self.base_field("flask")?.truthy() {
-            self.fresh_field("flaskData")?;
+        } else if self.base_field(&policy.flask.base_field)?.truthy() {
+            self.fresh_field(&policy.flask.output_field)?;
             self.fresh_field("buffModList")?;
-        } else if self.base_field("charm")?.truthy() {
-            self.fresh_field("charmData")?;
+        } else if self.base_field(&policy.charm.base_field)?.truthy() {
+            self.fresh_field(&policy.charm.output_field)?;
             self.fresh_field("buffModList")?;
         } else if self.get("type")?.as_str() == Some(&policy.jewel_item_type) {
             self.fresh_field("jewelData")?;

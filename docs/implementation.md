@@ -18,7 +18,7 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-The R2y item-assembly integration and A1 investigation below are the current resume point. Source-session timing and requested
+The R2z local-item checkpoint and A1 investigation below are the current resume point. Source-session timing and requested
 allocation layouts are measured separately from dataset ownership; staged-container transfer
 now reduces import allocation traffic. R2x now records actual import parser calls across all
 five originals: 558 of 760 build-local distinct inputs match misses and hits; 202 remain
@@ -35,6 +35,63 @@ acquisition/parity, preparation, source execution and the restricted typed candi
 Continue measuring costs before extending general Lua compatibility into further domains;
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
+
+**R2z checkpoint: injected armour/flask/charm local data.** The native owned item producer
+now computes these local families through explicit typed data policies, preserving query/write
+order, quality/block/movement/recovery/charges and late overrides. Nested armour overrides stay
+in the authoritative owned graph; the numeric diagnostic map marks subset completeness.
+Actual header writes survive no-base reparses and are consumed after successful assembly so
+final assembly cannot replay stale headers. Preparation report schema is 5; item inventory is 2.
+
+The source-generated package advances to schema 30 / item-assembly schema 2, SHA-256
+`0c36d1c8dc7b42f829715a36724452fde5b29622ce3e75e165eff36c0957168f`.
+All 28 other sections and the previous assembly policy are unchanged. Normal isolated CLI
+extraction reproduces the reviewed bytes exactly; protected builds, lock file and PoB pin
+are unchanged. No new instruction language or architecture migration is selected.
+
+All 116 original saved items remain in the comparison: 91 belong to implemented local families,
+**87 match with the original parser dependency and 85 through the native parser**. Three
+armour records stop at ambiguous rune reconstruction; one flask stops at advanced-copy affix
+ordering. Native parsing additionally stops at build-03 callbacks 168 and 569. The other 25
+items (seven weapons and 18 jewels) are excluded by this lane's family predicate, not counted
+as executed assembly failures. See [family counts and exact scope](native-item-assembly.md#r2z-local-item-checkpoint).
+Five fresh observed/control import pairs agree; directed tests add 30 fresh local cases,
+35 cross-family reparse steps, five no-base histories and 60 separately labelled modifier
+inputs (40 complete results, 15 source-error prefixes, five explicit nonfinite frontiers).
+The original variant/range/reparse/failure cases remain.
+
+The native-only public CLI retains all 116 records and now registers **20 items** in ordered
+inventory prefixes (previously zero):
+
+| Original | Registered / saved items | First remaining inventory stop |
+| --- | ---: | --- |
+| 01 | 2 / 16 | Ambiguous rune reconstruction |
+| 02 | 3 / 34 | Local weapon data |
+| 03 | 0 / 17 | Jewel radius needs selected-tree context and assembled jewel data |
+| 04 | 0 / 21 | Local jewel data |
+| 05 | 15 / 28 | Local jewel data |
+
+These prefixes do not activate equipment or complete item-set/root loading. All five public
+reports remain Incomplete, calculation not run; full native original evaluations remain **0/5**.
+Public reports and exact source/data/command receipts are in `runs/r2z-item-local-01/`.
+
+Validation passes: 17 item-policy tests, six extractor tests, 29 item-loading unit tests,
+69 focused import tests, ten authored-item integration tests, 59 schema regressions, 33 native
+regressions, ten native-only CLI tests, three package-extraction CLI tests and eight assembly
+source/observer/graph tests. Five portable WASM libraries and native-only dependency isolation
+pass. The source target took 43.86 seconds on this Windows release run, including ten reference
+hosts; this is validation cost, not candidate throughput. Formatting, strict workspace and
+native-only Clippy pass. Hosted Windows/Linux CI has not completed for this checkpoint;
+local passes do not assert a hosted result.
+
+**Resume:** implement weapon and jewel local producers at the existing injected seam, with an
+explicit selected-tree/radius context; resolve observed rune/affix/parser frontiers, then
+item-set activation, equipment and actor consumers. Retain all originals and source-order
+inventory denominators. Complete dependency events/argument packs and lossless parser graph
+acquisition remain gates before a whole assembly-contract claim. Continue the bounded A1-to-A2
+readiness review in parallel: the [local-item cost/consumer evidence](execution-model-baseline.md#native-local-item-assembly-checkpoint)
+is now recorded; completing every remaining item family or the full evaluator is not required
+to discuss comparative prototypes. A3 remains the discussion before a significant migration.
 
 **R2y checkpoint: finite native item assembly and inventory prefix.** The existing injected
 `ItemAssemblyCatalog` now feeds a native common/accessory producer. Its owned immutable graph
@@ -72,7 +129,7 @@ on this Windows release run, including ten reference hosts, not a throughput mea
 Protected builds, schema-29 definitions, lock file and PoB pin remain unchanged. Complete native
 original builds remain **0/5**. See [assembly scope and remaining gates](native-item-assembly.md).
 
-**Resume:** implement specialized item-local algorithms and remaining parser dependencies at
+**R2y handoff (historical):** implement specialized item-local algorithms and remaining parser dependencies at
 the injected seam, then item-set activation/equipment and actor consumers. Complete ordered
 dependency events/argument packs and lossless parser graph acquisition before claiming the full
 assembly contract. Compare the producer, graph/adapters and parity tooling costs in A1/A2;
@@ -1945,6 +2002,9 @@ defines the alternatives, constraints and evidence required for a decision.
   with 558 complete miss/hit matches and 202 unsupported first stops. Include its reference-only
   observation, state-guard and replay complexity in the comparison; no production breadth gate
   or execution-model decision is closed by these results.
+  The [R2z local-item checkpoint](execution-model-baseline.md#native-local-item-assembly-checkpoint)
+  now adds measured policy/kernel/test code size, complete-method validation cost and re-entry
+  consumer requirements. Count that work without treating its graph representation as mandatory.
   Use the brief's bounded A1-to-A2 readiness checkpoint: an executable reference slice,
   relevant cost baseline, explicit domain-consumer contract and known gaps are sufficient
   to discuss prototypes; remaining fine-grained measurements need not all finish first.

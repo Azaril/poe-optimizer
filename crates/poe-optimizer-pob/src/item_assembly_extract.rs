@@ -10,6 +10,8 @@ use poe_optimizer_data::{
 };
 use std::collections::BTreeMap;
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
+mod local;
+
 const SHAPES: &str = include_str!("item_assembly_extract/source-shapes.json");
 
 struct Primitives {
@@ -481,6 +483,7 @@ fn policy(
     let slot = body("build_slot")?;
     let local = body("calc_local")?;
     let ranged = body("ranged_mods")?;
+    let (armour, flask, charm) = local::extract(lua, slot)?;
     let quality = query(lua, after(slot, "local craftedQuality = ")?)?;
     let soul = query(lua, after(build, "self.socketedSoulCoreEffectModifier = ")?)?;
     let rune = query(lua, after(build, "self.socketedRuneEffectModifier = ")?)?;
@@ -870,6 +873,9 @@ fn policy(
         named_compatibility: named,
         requirements: req,
         slots,
+        armour,
+        flask,
+        charm,
         scale: ItemAssemblyScalePolicy {
             integer_scaled_key: text_after(lua, scale, "scaledMod.value.key == ")?,
             keyed_value_decimal_places: precision(after(
@@ -1132,6 +1138,75 @@ mod tests {
                 .unwrap()
                 .to_string()
                 .contains("method lookup")
+        );
+    }
+    #[test]
+    fn local_policies_preserve_source_operand_orders_and_base_list_queries() {
+        let shape: BTreeMap<String, ItemSourceSpan> = serde_json::from_str(SHAPES).unwrap();
+        let slot = source_body(sources(), &shape["build_slot"]).unwrap();
+        let lua = Lua::new();
+        let (a, f, c) = local::extract(&lua, slot).unwrap();
+        assert_eq!(a.queries.len(), 18);
+        assert_eq!(a.queries[0].query.name, "Armour");
+        assert_eq!(a.queries[0].base.as_ref().unwrap().field, "Armour");
+        assert_eq!(
+            a.queries[5].role,
+            ItemAssemblyArmourRole::ArmourEnergyShieldBase
+        );
+        assert_eq!(
+            a.defences[2].increased_roles,
+            [
+                ItemAssemblyArmourRole::EnergyShieldIncreased,
+                ItemAssemblyArmourRole::ArmourEnergyShieldIncreased,
+                ItemAssemblyArmourRole::EvasionEnergyShieldIncreased,
+                ItemAssemblyArmourRole::DefencesIncreased,
+            ]
+        );
+        assert_eq!(
+            a.per_level[1].increased_roles,
+            a.defences[2].increased_roles
+        );
+        assert_eq!(a.block.base.name, "BlockChance");
+        assert_eq!(a.block.increased.mod_type, "INC");
+        assert_eq!(a.movement.multiplier, -1.0);
+        assert_eq!(a.overrides.query_name, "ArmourData");
+        assert_eq!(f.duration.round_places, 1);
+        assert_eq!(f.recovery.channels[0].role, ItemAssemblyRecoveryRole::Life);
+        assert_eq!(f.recovery.channels[1].role, ItemAssemblyRecoveryRole::Mana);
+        for channel in &f.recovery.channels {
+            assert_eq!(channel.effect_not_removed.list, ItemAssemblyQueryList::Base);
+        }
+        assert_eq!(
+            f.recovery.channels[0]
+                .additional
+                .as_ref()
+                .unwrap()
+                .query
+                .name,
+            "FlaskAdditionalLifeRecovery"
+        );
+        assert_eq!(f.charges.maximum_base.name, "FlaskCharges");
+        assert_eq!(f.charges.maximum_increased.mod_type, "INC");
+        assert_eq!(f.charges.effect_queries[0].name, "FlaskEffect");
+        assert_eq!(c.charges.effect_queries[0].name, "CharmEffect");
+        assert_eq!(c.overrides.key_field, "key");
+        assert_eq!(c.overrides.value_field, "value");
+    }
+    #[test]
+    fn changed_local_source_is_rejected_before_policy_extraction() {
+        let mut altered = sources().clone();
+        let item = altered.get_mut("src/Classes/Item.lua").unwrap();
+        assert!(item.contains("calcLocal(baseList, \"LifeFlaskEffectNotRemoved\""));
+        *item = item.replace(
+            "calcLocal(baseList, \"LifeFlaskEffectNotRemoved\"",
+            "calcLocal(modList, \"LifeFlaskEffectNotRemoved\"",
+        );
+        let shape: BTreeMap<String, ItemSourceSpan> = serde_json::from_str(SHAPES).unwrap();
+        assert!(
+            source_body(&altered, &shape["build_slot"])
+                .unwrap_err()
+                .to_string()
+                .contains("changed complete")
         );
     }
 }

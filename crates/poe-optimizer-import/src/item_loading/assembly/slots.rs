@@ -153,16 +153,17 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
             let added = number(&self.local(list, &policy.slots.charm_limit)?)?;
             self.set("charmLimit", finite(base + added)?)?;
         }
-        // These producers require separately injected local-data algorithms.
-        // Do not discard the collection, requirements or slot-prefix mutations.
-        for kind in ["weapon", "armour", "flask", "charm"] {
-            if self.base_field(kind)?.truthy() {
-                return Err(AssemblyError::unsupported(format!(
-                    "item local {kind} data assembly is unavailable"
-                )));
-            }
-        }
-        if self.get("type")?.as_str() == Some(&policy.jewel_item_type) {
+        if self.base_field("weapon")?.truthy() {
+            return Err(AssemblyError::unsupported(
+                "item local weapon data assembly is unavailable",
+            ));
+        } else if self.base_field(&policy.armour.base_field)?.truthy() {
+            self.local_armour(list)?;
+        } else if self.base_field(&policy.flask.base_field)?.truthy() {
+            self.local_flask(list, base_list)?;
+        } else if self.base_field(&policy.charm.base_field)?.truthy() {
+            self.local_charm(list)?;
+        } else if self.get("type")?.as_str() == Some(&policy.jewel_item_type) {
             return Err(AssemblyError::unsupported(
                 "item local jewel data assembly is unavailable",
             ));

@@ -72,15 +72,20 @@ Comparing a reported sample across runs is weaker than observing every result.
 
 ## Historical measurements and whether their identities still apply
 
-The selected current package is schema **29**, **26,286,752 bytes**, SHA-256
+The recorded A1 checkpoint package is schema **29**, **26,286,752 bytes**, SHA-256
 `8dfadca7567d7761cf8b01a9763bec8f2662abec45c500e3e271ee58edf8f9f6`.
 The PoB revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`.
 An unchanged upstream revision does not imply an unchanged extracted model, compiler,
 native backend or benchmark executable.
 
+R2z advances the package to schema **30**, **26,294,538 bytes**, SHA-256
+`0c36d1c8dc7b42f829715a36724452fde5b29622ce3e75e165eff36c0957168f`.
+This changes item assembly definitions; it does not rebase any measurement below onto the
+new data or executable identity.
+
 | Existing evidence | Actual recorded measurement | Applicability at this checkpoint |
 | --- | --- | --- |
-| `runs/action-speed-benchmark-{release,summary}.json` | Windows x64, 1,806 admitted diagnostic selections, three samples per 1/2/4/32 workers. One-worker medians: **38,868 fresh admissions + measurements/s**, **4.81 million already-admitted measurements/s**. Samples were about 661–752 ms. | Historical schema **11**, package `b7943c63…`, not current schema 29. The benchmark source, problem and Mace template hashes still match; that does not preserve the old backend/data identity. |
+| `runs/action-speed-benchmark-{release,summary}.json` | Windows x64, 1,806 admitted diagnostic selections, three samples per 1/2/4/32 workers. One-worker medians: **38,868 fresh admissions + measurements/s**, **4.81 million already-admitted measurements/s**. Samples were about 661–752 ms. | Historical schema **11**, package `b7943c63…`, not the recorded schema-29 checkpoint. The benchmark source, problem and Mace template hashes still match; that does not preserve the old backend/data identity. |
 | Same action-timing evidence | Dataset/backend setup **289.81 ms**; candidate admission **60.94 ms for 1,806 attempts**; prepared-component setup **1.75 ms**. Setup also records input loading, proposals, catalog and document-equivalence checks separately. | A useful example of separating costs. These are measurements of that older package/process, not estimates for current preparation. No peak-memory measurement accompanies them. |
 | `runs/action-speed-release-search/summary.json`, summarized in `runs/action-speed-benchmark-summary.json` | Three repeats of typed/document search at 1/2/4/32 workers; **1,000 total attempts** each. One-worker report medians: **376.51 ms typed**, **3,260.87 ms document**; corresponding external process medians **408.59 / 3,277.62 ms**. | Same old schema-11 diagnostic domain. Current search source differs from its recorded implementation hash. This does not establish full-original search speed or useful build quality. |
 | `runs/actor-benchmark-isolated-summary.json` | Schema-6, 3,675 legal Mace candidates; one-worker medians **4,485 document calls/s** and **20,221 prepared-result calls/s**, three 20,000-call samples. | Earlier profile/data/backend. The contrast includes result/document work and must not be compared directly with a pure kernel rate. |

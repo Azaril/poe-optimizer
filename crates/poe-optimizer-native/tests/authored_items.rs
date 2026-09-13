@@ -264,7 +264,7 @@ fn public_preparation_retains_inventory_stage_for_ready_and_incomplete_results()
             }
             PreparationOutcome::Incomplete(report) => {
                 assert!(!ready);
-                assert_eq!(report.schema_version, 4);
+                assert_eq!(report.schema_version, 5);
                 let items = report.authored_items.as_ref().unwrap();
                 assert_eq!(items.records[0].status, ItemRecordStatus::Registered);
                 assert_eq!(items.source_sha256, report.view.source_sha256);
@@ -272,4 +272,35 @@ fn public_preparation_retains_inventory_stage_for_ready_and_incomplete_results()
             }
         }
     }
+}
+
+#[test]
+fn production_inventory_registers_local_family_items_before_item_set_activation() {
+    let source = doc(
+        "<Item id='1'>Rarity: NORMAL\nRusted Cuirass</Item><Item id='2'>Rarity: NORMAL\nUltimate Life Flask</Item><Item id='3'>Rarity: NORMAL\nRuby Charm</Item><ItemSet id='1'/>",
+    );
+    let stage = prepare(&source);
+    let report = stage.report();
+    assert_eq!(report.schema_version, 2);
+    assert_eq!(report.registration_order.len(), 3, "{:#?}", report.failure);
+    assert_eq!(
+        report.failure.as_ref().unwrap().stage,
+        "item_container_continuation"
+    );
+    for (id, field) in [(1.0, "armourData"), (2.0, "flaskData"), (3.0, "charmData")] {
+        let item = stage.item(stage.registered_id(id).unwrap()).unwrap();
+        let local = item
+            .field(item.root(), field)
+            .and_then(AssemblyValue::as_table)
+            .unwrap();
+        assert!(!item.table(local).unwrap().fields.is_empty());
+        assert!(item.is_complete());
+    }
+    assert!(
+        report
+            .records
+            .iter()
+            .all(|r| r.status == ItemRecordStatus::Registered)
+    );
+    assert!(report.frontiers.contains(&"actor_item_effects"));
 }

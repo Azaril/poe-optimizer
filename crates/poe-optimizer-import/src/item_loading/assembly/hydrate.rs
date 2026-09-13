@@ -30,6 +30,11 @@ pub(super) fn numeric(n: ItemNumber) -> Result<Value> {
 impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
     pub(super) fn hydrate(&mut self, previous: bool) -> Result<()> {
         let state = &self.request.state;
+        if !previous && !state.armour_data_complete {
+            return Err(AssemblyError::unsupported(
+                "partial armour diagnostic data requires its owned item graph",
+            ));
+        }
         if previous {
             // Scalar loading updates explicitly represent removals. Structural
             // graph fields retain identity until the corresponding source write.
@@ -135,13 +140,28 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
                 }
             }
         }
-        if !previous {
-            if let Some(fields) = &state.armour_data {
-                let armour = self.fresh_field("armourData")?;
-                for (key, value) in fields {
+        if previous {
+            // Only real ParseRaw header writes update the persistent table. The
+            // numeric diagnostic subset is not a replayable copy of this graph.
+            let headers = self.request.armour_header_updates();
+            if !headers.is_empty() {
+                let existing = self.get("armourData")?;
+                let armour = if existing.truthy() {
+                    super::table(existing)?
+                } else {
+                    self.fresh_field("armourData")?
+                };
+                for (key, value) in headers {
                     self.arena.set_field(armour, key, numeric(*value)?)?;
                 }
             }
+        } else if let Some(fields) = &state.armour_data {
+            let armour = self.fresh_field("armourData")?;
+            for (key, value) in fields {
+                self.arena.set_field(armour, key, numeric(*value)?)?;
+            }
+        }
+        if !previous {
             let types = self.fresh_field("socketedSoulCoreTypes")?;
             for name in &state.socketed_soul_core_types {
                 self.arena.set_field(types, name, Value::Boolean(true))?;

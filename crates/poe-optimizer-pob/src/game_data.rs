@@ -221,6 +221,7 @@ pub(crate) fn extractor_sha256() -> String {
         include_str!("item_loading_extract.rs"),
         include_str!("unique_requirements_extract.rs"),
         include_str!("item_assembly_extract.rs"),
+        include_str!("item_assembly_extract/local.rs"),
         include_str!("item_assembly_extract/source-shapes.json"),
         include_str!("../../poe-optimizer-lua-utf8/src/lib.rs"),
         include_str!("../../poe-optimizer-lua-utf8/build.rs"),

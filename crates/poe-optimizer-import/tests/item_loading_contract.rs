@@ -1766,3 +1766,89 @@ fn malformed_header_reservation_is_a_definition_boundary_not_an_item_source_erro
     );
     assert!(machine.state().prefixes.entries.is_empty());
 }
+
+#[derive(Default)]
+struct HeaderWriteCapture(Vec<BTreeMap<String, ItemNumber>>);
+impl ItemLoadProvider for HeaderWriteCapture {
+    fn assemble(&mut self, request: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
+        self.0.push(request.armour_header_updates().clone());
+        DependencyResult::Available(AssemblyOutcome {
+            assembled: None,
+            armour_data: ArmourDataUpdate::Preserve,
+            modifier_payloads: None,
+            requirements: None,
+            state_updates: BTreeMap::new(),
+            evidence: ItemMetadataTable::default(),
+        })
+    }
+}
+#[test]
+fn armour_header_evidence_records_deletions_and_is_not_replayed_on_final_assembly() {
+    let catalog = defence_catalog(None, false);
+    let mut loader = ItemLoadMachine::new(&catalog);
+    loader.set_xml_attributes(&[("id".into(), "1".into())].into());
+    let mut provider = HeaderWriteCapture::default();
+    loader
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nCaller Guard: 9\nImplicits: 0",
+            &mut provider,
+        )
+        .unwrap();
+    assert_eq!(
+        provider.0.last().unwrap(),
+        &[("ChosenGuard".into(), ItemNumber::new(9.0))].into()
+    );
+    loader.finish_load(&mut provider).unwrap();
+    assert!(provider.0.last().unwrap().is_empty());
+    loader
+        .apply_text("Rarity: NORMAL\nCaller Base\nImplicits: 0", &mut provider)
+        .unwrap();
+    assert!(provider.0.last().unwrap().is_empty());
+    assert_eq!(
+        loader.state().armour_data.as_ref().unwrap()["ChosenGuard"],
+        ItemNumber::new(9.0)
+    );
+    loader
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nCaller Guard: invalid\nImplicits: 0",
+            &mut provider,
+        )
+        .unwrap();
+    assert_eq!(
+        provider.0.last().unwrap(),
+        &[("ChosenGuard".into(), ItemNumber::Nil)].into()
+    );
+    assert!(loader.state().armour_data.as_ref().unwrap().is_empty());
+    loader.finish_load(&mut provider).unwrap();
+    assert!(provider.0.last().unwrap().is_empty());
+}
+#[test]
+fn partial_numeric_armour_diagnostics_require_owned_graph_before_any_state_write() {
+    let catalog = defence_catalog(None, false);
+    let mut loader = ItemLoadMachine::new(&catalog);
+    let mut provider = ArmourUpdates(
+        [ArmourDataUpdate::NumericSubset(
+            [("Invented".into(), ItemNumber::new(100.0))].into(),
+        )]
+        .into(),
+    );
+    let error = loader
+        .apply_text(
+            "Rarity: NORMAL\nCaller Base\nCaller Guard: 9\nImplicits: 0",
+            &mut provider,
+        )
+        .unwrap_err();
+    assert!(
+        error
+            .to_string()
+            .contains("requires an owned assembly graph")
+    );
+    assert_eq!(loader.status(), ItemLoadStatus::Pending);
+    assert_eq!(loader.pending().unwrap().kind, DependencyKind::Assembly);
+    assert!(loader.assembled().is_none());
+    assert!(loader.state().armour_data_complete);
+    assert_eq!(
+        loader.state().armour_data.as_ref().unwrap(),
+        &[("ChosenGuard".into(), ItemNumber::new(9.0))].into()
+    );
+}

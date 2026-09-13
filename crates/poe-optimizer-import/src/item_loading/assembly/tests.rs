@@ -295,3 +295,6 @@ fn nil_queries_retain_high_keyword_bits_and_match_all_semantics() {
         }
     }
 }
+
+#[path = "local_tests.rs"]
+mod local_tests;

@@ -1,4 +1,4 @@
-//! Complete finite accessory assembly on actual original inputs, with separate
+//! Complete finite accessory/armour/flask/charm assembly on actual original inputs, with separate
 //! source-observer mechanics tests. No complete native-build claim.
 #![cfg(not(target_arch = "wasm32"))]
 use mlua::{Function, Lua, Table, Value};
@@ -230,7 +230,7 @@ fn source_observer_rejects_existing_hook_without_removing_it() {
 #[path = "support/item_assembly_corpus.rs"]
 mod corpus;
 #[test]
-fn all_five_actual_accessories_match_owned_native_assembly() {
+fn all_five_actual_finite_items_match_owned_native_assembly() {
     corpus::run();
 }
 

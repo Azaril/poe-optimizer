@@ -18,7 +18,7 @@ impl ItemLoadProvider for Recognized {
     }
 }
 #[test]
-fn builtin_known_formatting_and_parsing_advance_to_explicit_assembly_dependency() {
+fn builtin_known_formatting_and_parsing_feed_owned_native_assembly() {
     let data = snapshot();
     let mut provider = BuiltinItemLoadProvider::new(data);
     let mut machine = ItemLoadMachine::new(data.item_loading());
@@ -28,7 +28,13 @@ fn builtin_known_formatting_and_parsing_advance_to_explicit_assembly_dependency(
             &mut provider,
         )
         .unwrap();
-    assert_eq!(machine.pending().unwrap().kind, DependencyKind::Assembly);
+    assert_eq!(machine.status(), ItemLoadStatus::Complete);
+    assert!(machine.pending().is_none());
+    assert!(machine.assembly_progress().unwrap().is_complete());
+    assert!(
+        machine.assembled().is_none(),
+        "registration still needs final load"
+    );
     assert_eq!(machine.state().parser_calls[0].text, "+18 to Strength");
     assert!(machine.state().format_parser_calls.is_empty());
     assert_eq!(

@@ -214,7 +214,7 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
             )),
         }
     }
-    fn set_raw_key(&mut self, id: TableId, key: &Value, value: Value) -> Result<()> {
+    pub(super) fn set_raw_key(&mut self, id: TableId, key: &Value, value: Value) -> Result<()> {
         match key {
             Value::Text(k) => self.arena.set_field(id, k, value),
             Value::Number(k) if k.fract() == 0.0 && k.abs() <= 9_007_199_254_740_991.0 => {

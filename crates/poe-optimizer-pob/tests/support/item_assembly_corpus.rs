@@ -29,7 +29,7 @@ use std::{
     rc::Rc,
     time::{Duration, Instant},
 };
-const TEST: &str = "all_five_actual_accessories_match_owned_native_assembly";
+const TEST: &str = "all_five_actual_finite_items_match_owned_native_assembly";
 const CHILD: &str = "POE_ITEM_ASSEMBLY_CHILD";
 const OUTPUT: &str = "POE_ITEM_ASSEMBLY_OUTPUT";
 const OBSERVER: &str = include_str!("item_assembly_source.lua");
@@ -47,6 +47,11 @@ pub(super) const FIELDS: &[&str] = &[
     "canSocketJewelBase",
     "requirements",
     "sockets",
+    // Whole local-data graphs are part of the contract, including arbitrary
+    // finite LIST override values; no nested fields are selected after a run.
+    "armourData",
+    "flaskData",
+    "charmData",
     "buffModLines",
     "enchantModLines",
     "runeModLines",
@@ -261,17 +266,22 @@ fn replay_error(machine: &ItemLoadMachine<'_>, stage: &str, error: &ItemLoadErro
     };
     json!({"stage":stage,"classification":classification,"message":error.to_string(),"status":format!("{:?}",machine.status()),"pending":machine.pending()})
 }
-fn eligible(item: &Table) -> bool {
+fn family(item: &Table) -> &'static str {
     let base: Table = item.raw_get("base").unwrap();
+    // Same branch precedence as original BuildModListForSlotNum.
     for field in ["weapon", "armour", "flask", "charm"] {
         if !matches!(
             base.raw_get::<Value>(field).unwrap(),
             Value::Nil | Value::Boolean(false)
         ) {
-            return false;
+            return field;
         }
     }
-    item.raw_get::<String>("type").unwrap() != "Jewel"
+    if item.raw_get::<String>("type").unwrap() == "Jewel" {
+        "jewel"
+    } else {
+        "accessory"
+    }
 }
 fn compare(machine: &ItemLoadMachine<'_>, event: &Table, label: &str) -> Json {
     if let Some(assembled) = machine.assembled() {
@@ -497,6 +507,9 @@ fn child(repo: &Path, output: &Path, entry: &Json) {
         let mut rows = Vec::new();
         let mut source_complete = 0;
         let mut builtin_complete = 0;
+        let mut family_counts = BTreeMap::<&str, usize>::new();
+        let mut family_source_complete = BTreeMap::<&str, usize>::new();
+        let mut family_builtin_complete = BTreeMap::<&str, usize>::new();
         for container in projected.containers() {
             for node in container
                 .children()
@@ -511,9 +524,10 @@ fn child(repo: &Path, output: &Path, entry: &Json) {
                 let item: Table = capture
                     .raw_get::<Function>("item")?
                     .call(event.raw_get::<u32>("item_token")?)?;
-                let source_eligible = eligible(&item);
-                if !source_eligible {
-                    rows.push(json!({"id":id,"source_range":node.element().source_range(),"scope":"local_item_family_dependency"}));
+                let item_family = family(&item);
+                *family_counts.entry(item_family).or_default() += 1;
+                if matches!(item_family, "weapon" | "jewel") {
+                    rows.push(json!({"id":id,"source_range":node.element().source_range(),"family":item_family,"scope":"local_item_family_dependency"}));
                     continue;
                 }
                 let dependencies = dependencies::OriginalParser {
@@ -533,6 +547,7 @@ fn child(repo: &Path, output: &Path, entry: &Json) {
                 );
                 if machine.assembled().is_some() {
                     source_complete += 1;
+                    *family_source_complete.entry(item_family).or_default() += 1;
                 }
                 let mut builtin = BuiltinItemLoadProvider::new(&snapshot);
                 let (machine, builtin_errors) = replay(node, &snapshot, &mut builtin);
@@ -543,8 +558,9 @@ fn child(repo: &Path, output: &Path, entry: &Json) {
                 );
                 if machine.assembled().is_some() {
                     builtin_complete += 1;
+                    *family_builtin_complete.entry(item_family).or_default() += 1;
                 }
-                rows.push(json!({"id":id,"source_range":node.element().source_range(),"scope":"eligible_accessory","original_parser_native_assembly":isolated_result,"builtin_native_pipeline":builtin_result,"source_dependency_calls":isolated.dependencies().calls,"source_parser_lane_errors":isolated_errors,"builtin_lane_errors":builtin_errors}));
+                rows.push(json!({"id":id,"source_range":node.element().source_range(),"family":item_family,"scope":"eligible_finite_item","original_parser_native_assembly":isolated_result,"builtin_native_pipeline":builtin_result,"source_dependency_calls":isolated.dependencies().calls,"source_parser_lane_errors":isolated_errors,"builtin_lane_errors":builtin_errors}));
             }
         }
         assert_eq!(
@@ -554,18 +570,34 @@ fn child(repo: &Path, output: &Path, entry: &Json) {
         );
         assert!(
             source_complete > 0,
-            "no native accessory assembly completed on this original"
+            "no native finite item assembly completed on this original"
         );
         assert!(
             builtin_complete > 0,
-            "no built-in native accessory completed on this original"
+            "no built-in native finite item completed on this original"
+        );
+        assert!(
+            family_source_complete
+                .get("accessory")
+                .copied()
+                .unwrap_or(0)
+                > 0,
+            "existing accessory source-parser coverage regressed"
+        );
+        assert!(
+            family_builtin_complete
+                .get("accessory")
+                .copied()
+                .unwrap_or(0)
+                > 0,
+            "existing accessory built-in coverage regressed"
         );
         let history_report =
             histories::run(lua, module.borrow().as_ref().unwrap(), &parser, &snapshot);
         assert_eq!(parser_library.raw_get::<Function>("parseMod")?, parser);
         Ok(
-            json!({"observer_control_equal":control_equal,"observer_control_scope":"declared finite post-import witness; separate fresh Lua hosts; no hook in control","post_import":post_import,"directed_histories":history_report,"items":rows,"item_count":seen.len(),"source_parser_lane_complete":source_complete,"builtin_lane_complete":builtin_complete,
-            "scope":{"complete_native_build":false,"finite_accessory_only":true,"source_assembly_results_used_as_dependency":false,"arbitrary_input_alias_recovery":false,"registered_inventory_execution":false,"actual_dependency_arity_observed":false,"dependency_order_parity":false,"comparison":"declared assembly-field/row-field graph contract","root_fields":FIELDS,"row_fields":ROW_FIELDS}}),
+            json!({"observer_control_equal":control_equal,"observer_control_scope":"declared finite post-import witness; separate fresh Lua hosts; no hook in control","post_import":post_import,"directed_histories":history_report,"items":rows,"item_count":seen.len(),"source_parser_lane_complete":source_complete,"builtin_lane_complete":builtin_complete,"family_counts":family_counts,"family_source_complete":family_source_complete,"family_builtin_complete":family_builtin_complete,
+            "scope":{"complete_native_build":false,"finite_families":["accessory","armour","flask","charm"],"excluded_families":["weapon","jewel"],"source_assembly_results_used_as_dependency":false,"arbitrary_input_alias_recovery":false,"registered_inventory_execution":false,"actual_dependency_arity_observed":false,"dependency_order_parity":false,"comparison":"declared assembly-field/row-field graph contract","root_fields":FIELDS,"row_fields":ROW_FIELDS}}),
         )
     };
     let report = source::observe_with_build_hook_unwrapped(

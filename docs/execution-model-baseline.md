@@ -1044,3 +1044,31 @@ finite observable contract; callback-bearing graphs, actual dependency arity/ord
 item locals and wider state histories remain separate gates. Count reference harness complexity
 as well as shipping representation costs when comparing models, and distinguish both from hot
 candidate evaluation. The A1-to-A2 readiness review need not wait for every missing item family.
+
+## Native local-item assembly checkpoint
+
+R2z extends the existing injected policy/native algorithm seam to armour, flasks and charms.
+It is not an A2 model comparison. Its schema-30 package preserves all 28 other sections and
+the previous assembly policy; only the three new policy families and version/hash metadata
+change. The data identity is recorded in the [performance inventory](execution-model-performance-inventory.md).
+
+The five new modules add 780 physical lines of policy/extraction, 357 lines of native
+algorithms and 1,102 lines of focused/reference tests. Existing adapter, loader and inventory
+integration edits are additional. Counts include comments and fixtures and are not estimates
+of runtime or maintenance cost. `runs/r2z-item-local-01/new-module-costs.json` records this
+scope. The [implementation record](implementation.md) retains validation and remaining gates.
+
+This extension also exposed an adapter requirement: a numeric diagnostic projection cannot
+replace an owned graph containing nested override values, and pending header writes must
+survive a no-base reparse. Those are observable consumer requirements for any A2 alternative.
+Their current graph/patch implementation is one representation to compare, not a requirement
+to reproduce its internal machinery. Source-host and differential-fixture complexity belong
+in the comparison alongside production runtime code. A1-to-A2 readiness does not require
+finishing weapon/jewel locals or the complete native evaluator.
+
+The eight-test R2z source target passes in 43.86 seconds on one Windows release run,
+including ten reference hosts and the extended directed histories. Of 91 eligible original
+items, 87 match with an explicit original-parser dependency and 85 with the native parser;
+25 weapon/jewel records remain excluded in this lane. See the [scope and frontiers](native-item-assembly.md#r2z-local-item-checkpoint).
+These component results and validation time establish neither full-build parity nor candidate
+throughput, and select no execution model.

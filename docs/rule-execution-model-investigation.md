@@ -56,6 +56,9 @@ part of the total compatibility cost to measure; their addition does not select 
 The [native accessory assembly checkpoint](execution-model-baseline.md#native-accessory-assembly-checkpoint)
 adds producer, graph, inventory and differential-tooling costs at an existing domain seam.
 Its finite component matches do not complete original inventories or select a model.
+The subsequent [local-item extension](execution-model-baseline.md#native-local-item-assembly-checkpoint)
+records policy, native-kernel and parity-fixture costs, plus consumer requirements exposed by
+re-entry and nested overrides. Include these in A1/A2 without prescribing their current representation.
 
 ## Separate the decisions
 

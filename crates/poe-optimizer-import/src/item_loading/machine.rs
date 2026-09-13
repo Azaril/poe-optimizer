@@ -144,10 +144,18 @@ pub struct AssemblyRequest {
     #[serde(skip)]
     pub previous: Option<super::assembly::AssembledItem>,
     pub state: ItemState,
+    /// Actual ParseRaw writes since the last assembly; absence is not a deletion.
+    #[serde(skip)]
+    armour_header_updates: BTreeMap<String, ItemNumber>,
 }
 impl AssemblyRequest {
     pub fn binding(&self) -> &AssemblyBinding {
         &self.binding
+    }
+    /// Only authored defence-header writes, including explicit nil deletion.
+    /// Re-entry never reconstructs these from a diagnostic numeric projection.
+    pub fn armour_header_updates(&self) -> &BTreeMap<String, ItemNumber> {
+        &self.armour_header_updates
     }
 }
 /// Post-assembly modifier payloads, retaining source row counts and order.
@@ -168,6 +176,9 @@ pub enum ArmourDataUpdate {
     Preserve,
     Clear,
     Replace(BTreeMap<String, ItemNumber>),
+    /// Diagnostic numeric named entries only; a matching owned graph is required.
+    /// Non-numeric and indexed values remain in that graph.
+    NumericSubset(BTreeMap<String, ItemNumber>),
 }
 #[derive(Debug, Clone, Serialize)]
 pub struct AssemblyOutcome {
@@ -312,9 +323,11 @@ pub struct ItemState {
     pub base_present: bool,
     pub item_type: Option<String>,
     pub retained_fields: BTreeMap<String, ItemScalar>,
-    /// Original optional armourData table, retained across reparses. Display
-    /// values are loading evidence, not assembled defensive calculation inputs.
+    /// Numeric named armourData entries, retained across reparses. This is a
+    /// diagnostic projection, not assembled defensive calculation input.
     pub armour_data: Option<BTreeMap<String, ItemNumber>>,
+    /// False when the owned graph contains values absent from this projection.
+    pub armour_data_complete: bool,
     pub variants: VariantState,
     pub requirements: BTreeMap<String, ItemNumber>,
     pub prefixes: ItemAffixList,
@@ -352,6 +365,7 @@ impl Default for ItemState {
             item_type: None,
             retained_fields: BTreeMap::new(),
             armour_data: None,
+            armour_data_complete: true,
             variants: VariantState::default(),
             requirements: BTreeMap::new(),
             prefixes: ItemAffixList::default(),
@@ -392,6 +406,7 @@ pub struct ItemLoadMachine<'a> {
     assembly_final: bool,
     assembly_reparsed: bool,
     assembly_item: Arc<()>,
+    armour_header_updates: BTreeMap<String, ItemNumber>,
 }
 #[derive(Clone, Copy, PartialEq)]
 enum GameStage {
@@ -417,6 +432,7 @@ impl<'a> ItemLoadMachine<'a> {
             assembly_final: false,
             assembly_reparsed: true,
             assembly_item: Arc::new(()),
+            armour_header_updates: BTreeMap::new(),
         };
         machine.reset("");
         machine.number(
@@ -569,6 +585,8 @@ impl<'a> ItemLoadMachine<'a> {
     fn reset(&mut self, raw: &str) {
         self.assembly_final = false;
         self.assembly_reparsed = true;
+        // A no-base parse can write defence headers without reaching assembly.
+        // Keep those pending writes until a later assembly applies them to the graph.
         self.state.raw = raw.into();
         self.state.raw_lines = syntax::raw_lines(raw);
         self.state.name = "?".into();
@@ -1140,6 +1158,13 @@ impl<'a> ItemLoadMachine<'a> {
                 self.state.base_name = Some(target);
             }
             let number = syntax::spec_to_number(value);
+            if self.armour_header_updates.len() >= 256
+                && !self.armour_header_updates.contains_key(&key)
+            {
+                return Err(ItemLoadError("armour header update count bound".into()));
+            }
+            self.charge(key.len() + 64)?;
+            self.armour_header_updates.insert(key.clone(), number);
             let data = self.state.armour_data.get_or_insert_with(BTreeMap::new);
             if number == ItemNumber::Nil {
                 data.remove(&key);
@@ -2205,6 +2230,7 @@ impl<'a> ItemLoadMachine<'a> {
             reparsed: self.assembly_reparsed,
             previous: self.assembly.clone(),
             state: self.state.clone(),
+            armour_header_updates: self.armour_header_updates.clone(),
         };
         self.assembly_final = false;
         let attempt = provider.assemble_with_trace(&request);
@@ -2247,6 +2273,7 @@ impl<'a> ItemLoadMachine<'a> {
                 self.status = ItemLoadStatus::Complete;
                 self.assembly_final = final_load;
                 self.assembly_reparsed = false;
+                self.armour_header_updates.clear();
             }
         }
         Ok(())
@@ -2295,7 +2322,16 @@ impl<'a> ItemLoadMachine<'a> {
                 self.charge(key.len() + 32)?;
             }
         }
-        if let ArmourDataUpdate::Replace(data) = &result.armour_data {
+        if matches!(result.armour_data, ArmourDataUpdate::NumericSubset(_))
+            && result.assembled.is_none()
+        {
+            let message = "partial armour projection requires an owned assembly graph";
+            self.stop(DependencyKind::Assembly, None, message)?;
+            return Err(ItemLoadError(message.into()));
+        }
+        if let ArmourDataUpdate::Replace(data) | ArmourDataUpdate::NumericSubset(data) =
+            &result.armour_data
+        {
             if data.len() > 256 {
                 return Err(ItemLoadError("assembly armour data count bound".into()));
             }
@@ -2329,8 +2365,18 @@ impl<'a> ItemLoadMachine<'a> {
         }
         match result.armour_data {
             ArmourDataUpdate::Preserve => {}
-            ArmourDataUpdate::Clear => self.state.armour_data = None,
-            ArmourDataUpdate::Replace(data) => self.state.armour_data = Some(data),
+            ArmourDataUpdate::Clear => {
+                self.state.armour_data = None;
+                self.state.armour_data_complete = true;
+            }
+            ArmourDataUpdate::Replace(data) => {
+                self.state.armour_data = Some(data);
+                self.state.armour_data_complete = true;
+            }
+            ArmourDataUpdate::NumericSubset(data) => {
+                self.state.armour_data = Some(data);
+                self.state.armour_data_complete = false;
+            }
         }
         if let Some(requirements) = result.requirements {
             self.state.requirements = requirements;

@@ -227,6 +227,13 @@ trust. Existing source-only imports still preserve input bytes.
 
 ## Schema migration
 
+Schema 30 / `poe2-native-profiles-v30` adds injected armour, flask and charm local policies
+in item-assembly section schema 2. The migration preserves all 28 other sections and the
+previous common assembly policy. Native preparation consumes these policies through the
+owned item-assembly seam; catalog availability is not full-build numerical coverage.
+
+The earlier migration notes below retain their original scope.
+
 Package schema **26**, semantics **`poe2-native-profiles-v26`**, adds the 28th section,
 `item_assembly`, at section schema **1**. `ItemAssemblyCatalog` exposes immutable common
 collection/range/query/grant/requirement/slot policy with `PolicyOnly` capability. It

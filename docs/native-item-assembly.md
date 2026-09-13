@@ -18,7 +18,7 @@ rune effects, grants, named compatibility, attribute requirements and slot selec
 Game names, patterns, labels, modifier selectors, masks and numeric defaults are data.
 Source field structure, arithmetic order, copy semantics and native operation kinds
 are code. The catalog is not a general instruction language or a build whitelist.
-Its current section schema1 declares `PolicyOnly`; loading and binding it supplies
+Its current section schema 2 declares `PolicyOnly`; loading and binding it supplies
 validated definitions, never an admitted executable item. Complete-method provenance
 also does not imply lowering of every specialized slot branch.
 
@@ -49,6 +49,14 @@ class identities require their own explicit representation. Charge nodes, refere
 bytes, copies and work before allocation. Unsupported cycles or values remain explicit.
 Freeze completed reachable state into immutable storage for worker sharing. Mutable
 scratch is local to a preparation task and needs no shared lock.
+
+Armour state survives item re-entry. Preserve its complete owned graph, including nested
+values, indexed entries and aliases introduced by late overrides. The numeric `armour_data`
+map is a diagnostic projection; `armour_data_complete` distinguishes a complete numeric map
+from a subset. A subset cannot seed a new assembly graph or authorize registration. Actual
+parser header writes, including nil deletions, form a separate ordered-load patch applied to
+the retained graph. Retain pending writes across no-base parses that never reach assembly. Consume them after
+successful assembly so final assembly cannot replay old headers over newer override values. Flask and charm outputs reset at assembly entry.
 
 Input adapter limits remain distinct from runtime values: current finite UTF-8 metadata
 admission is not permission to discard non-finite arithmetic, opaque functions, sparse
@@ -98,6 +106,15 @@ Preserve source naming quirks, every reached slot and each copy/filter boundary.
 scaling, requirements, sockets, crafted quality, Spirit and charm limits complete in
 source order or report their exact frontier. Assembled grants are metadata until a
 separate actor evaluator supports their effects.
+
+Armour, flask and charm local algorithms consume explicit typed policies for ordered queries,
+base/output fields, constants, operand roles and late overrides. Armour includes quality,
+block, movement penalties and per-level defences. Flask recovery and charm duration remain
+separate formulas; effect-not-removed flags can consume the base modifier list while the slot
+copy retains its earlier contents. Fractional charge capacity and floored charge use are distinct.
+Preserve query removals, output writes and conversion timing when later arithmetic fails.
+Weapon and jewel local branches remain separate implementation gates; radius jewels also need
+selected-tree context. This domain seam adds no general instruction language.
 
 ## Completion and proof
 
@@ -162,3 +179,47 @@ Count the producer, graph/adapters and differential tooling in the
 architecture. Specialized locals, item-set activation, equipment/actor integration, lossless
 acquisition and dependency events are the next integration gates; A3 remains the discussion
 before a significant model migration.
+
+## R2z local-item checkpoint
+
+The owned producer now includes armour, flask and charm local data through injected section
+schema 2. Preparation report schema 5 and item inventory report schema 2 expose numeric
+projection completeness. Re-entry retains nested armour values and aliases, including header
+writes across an intermediate no-base parse; late overrides cannot be overwritten by replayed
+headers at final assembly. Weapon and jewel branches remain explicit dependencies.
+
+The actual-item comparison retains all 116 original records. Of 91 eligible items, 87 match
+using the original parser and 85 match through the built-in native parser:
+
+| Family | Original records | Original parser + native assembly matches | Built-in native matches |
+| --- | ---: | ---: | ---: |
+| Accessories | 32 | 32 | 31 |
+| Armour | 32 | 29 | 28 |
+| Flasks | 12 | 11 | 11 |
+| Charms | 15 | 15 | 15 |
+| Weapons, excluded in this lane | 7 | — | — |
+| Jewels, excluded in this lane | 18 | — | — |
+
+Three eligible armour items stop at ambiguous rune reconstruction and one flask stops at
+advanced-copy affix ordering in both lanes. The native parser additionally stops at callbacks
+168 and 569 on two build-03 items. Exclusions and unsupported records remain in the denominator;
+matching items are component evidence, not completed original inventories or full builds.
+Five fresh observed/control import pairs preserve selected views, scalar output bits, inventory
+order and available declared item graphs. No callback-bearing graph is silently simplified.
+
+Directed validation adds 30 fresh local-item cases, 35 cross-family reparse steps and five
+no-base re-entry histories. Sixty explicitly derived pre-call modifier inputs cover 40 complete
+results, 15 source-error prefixes and five reached nonfinite frontiers; those last five do not
+claim final graph parity. The previous variant/range/reparse/failure cases remain. These inputs
+are labelled separately from actual originals and parser-produced modifiers.
+
+The eight-test source target passes in 43.86 seconds on this Windows release run, including ten
+reference hosts. This is validation cost, not candidate throughput. Source receipts are in
+`runs/r2z-item-local-01/source-parity-01/`; the living implementation record tracks the public
+CLI and remaining release checks. Full native original build evaluation remains **0/5**.
+
+The public native-only CLI retains all 116 items and registers source-order prefixes of
+2, 3, 0, 0 and 15 items across originals 01–05 (20 total, previously zero). The next stops
+are rune reconstruction, weapon locals and jewel/radius handling. These registrations do
+not activate equipment or imply completed item-set/root loading; every public report remains
+Incomplete with calculation not run. Reports are in `runs/r2z-item-local-01/native-originals-01/`.
