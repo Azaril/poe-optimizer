@@ -34,6 +34,8 @@ pub struct ItemPreparationLimits {
     pub max_items: usize,
     /// Shared XML/loader operation count; kernels also enforce their own work bounds.
     pub max_instructions: usize,
+    /// Cumulative logical work for item-set construction, rune preparation and activation.
+    pub max_set_steps: u64,
     /// Combined serialized item-state diagnostics and logical item/set construction bytes.
     /// This is not RSS; caller-requested diagnostic snapshots are separate allocations.
     pub max_state_bytes: usize,
@@ -43,6 +45,7 @@ impl Default for ItemPreparationLimits {
         Self {
             max_items: 4096,
             max_instructions: 131072,
+            max_set_steps: 20_000_000,
             max_state_bytes: 64 * 1024 * 1024,
         }
     }
@@ -287,6 +290,7 @@ pub fn prepare_authored_items(
                 &data.snapshot().item_assembly().policy().inventory,
                 ItemSetLimits {
                     max_bytes: limits.max_state_bytes,
+                    max_steps: limits.max_set_steps,
                     ..Default::default()
                 },
             ) {

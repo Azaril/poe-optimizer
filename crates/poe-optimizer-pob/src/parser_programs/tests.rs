@@ -75,6 +75,20 @@ fn program_extraction_preserves_legacy_owner_and_inventories_every_other_callbac
     let before = serde_json::to_vec(owner.data()).unwrap();
     let result = extract_from_sources(sources, owner).unwrap();
     assert!(result.catalog().is_bound_to(owner));
+    assert_eq!(owner.data().program_intrinsics.len(), 1);
+    let (&insert, &operation) = owner.data().program_intrinsics.iter().next().unwrap();
+    assert_eq!(operation, ParserProgramIntrinsic::TableInsert);
+    assert!(
+        matches!(&owner.data().callbacks[insert.0 as usize - 1].kind,
+            ParserCallbackKind::Builtin { symbol } if symbol == "table.insert"
+        )
+    );
+    assert_eq!(
+        result.unsupported().get(&insert).map(String::as_str),
+        Some("builtin callback is not a source program")
+    );
+    let trigger = owner.data().helpers["triggerExtraSkill"];
+    assert!(result.catalog().data().callbacks.contains_key(&trigger));
     assert_eq!(serde_json::to_vec(owner.data()).unwrap(), before);
     assert_eq!(result.implementation_sha256().len(), 64);
     assert_eq!(
@@ -159,6 +173,28 @@ fn program_owner_authentication_retains_signed_zero_distinctions() {
         serde_json::to_vec(altered.data()).unwrap()
     );
     let error = extract_from_sources(sources, &altered)
+        .unwrap_err()
+        .to_string();
+    assert!(
+        error.contains("owner differs from complete original parser extraction"),
+        "{error}"
+    );
+}
+
+#[test]
+fn program_owner_authentication_includes_captured_primitive_authority() {
+    let (owner, sources) = fixture();
+    let mut data = owner.data().clone();
+    // An explicitly authority-free legacy owner is valid, but cannot receive
+    // programs extracted against the fresh original primitive authorization.
+    data.programs = ParserProgramPayload::default();
+    data.program_intrinsics.clear();
+    let legacy_owner = ModifierParserCatalog::new(data).unwrap();
+    assert_ne!(
+        legacy_owner.data().definition_bytes().unwrap(),
+        owner.data().definition_bytes().unwrap()
+    );
+    let error = extract_from_sources(sources, &legacy_owner)
         .unwrap_err()
         .to_string();
     assert!(

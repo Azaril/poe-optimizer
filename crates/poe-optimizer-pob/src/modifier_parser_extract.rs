@@ -585,6 +585,13 @@ fn extract_inner(
         &graph,
         &spans,
     )?;
+    // Legacy recipes carry no captured primitive authority. Program extraction
+    // joins the pre-source original Function to the completed observed graph.
+    let program_intrinsics = program_primitives
+        .as_ref()
+        .map(|original| original.observed_intrinsics(&lua, &graph.seen_callbacks, &graph.callbacks))
+        .transpose()?
+        .unwrap_or_default();
     let mut out = ModifierParserData {
         schema_version: MODIFIER_PARSER_SCHEMA_VERSION,
         source: ItemLoadingSource {
@@ -630,6 +637,7 @@ fn extract_inner(
         callbacks: graph.callbacks,
         factories: BTreeMap::new(),
         programs: ParserProgramPayload::default(),
+        program_intrinsics,
         helpers,
         declarations,
         capability: ParserCapability::DefinitionsOnly,
@@ -878,9 +886,15 @@ mod tests {
         let sources = sources();
         let actual = extract(&sources).unwrap();
         let bundled = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+        assert!(actual.program_intrinsics.is_empty());
+        // The legacy-only extractor deliberately grants no captured primitive
+        // authority. All other definition bytes must still match the package.
+        let mut legacy = bundled.modifier_parser().data().clone();
+        assert_eq!(legacy.program_intrinsics.len(), 1);
+        legacy.program_intrinsics.clear();
         assert_eq!(
             actual.definition_bytes().unwrap(),
-            bundled.modifier_parser().data().definition_bytes().unwrap()
+            legacy.definition_bytes().unwrap()
         );
         assert_eq!(actual.dictionaries.len(), 28);
         assert_eq!(

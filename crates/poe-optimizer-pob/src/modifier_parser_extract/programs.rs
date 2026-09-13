@@ -123,6 +123,22 @@ fn parser_bindings(
             "program firstToUpper is not the authenticated closed helper",
         ));
     }
+    // Only the explicit, live-acquired map authorizes captured C primitives.
+    // Recheck its closed descriptor shape without deriving authority by name.
+    if data.program_intrinsics.len() > 1 {
+        return Err(error("program captured primitive authority exceeds bounds"));
+    }
+    for (id, operation) in &data.program_intrinsics {
+        if *operation != ParserProgramIntrinsic::TableInsert || *id == constructor || *id == upper {
+            return Err(error(
+                "program captured primitive authority is not table.insert",
+            ));
+        }
+        programs_auth::table_insert_descriptor(&data.callbacks, *id)?;
+    }
+    let mut intrinsics = data.program_intrinsics.clone();
+    intrinsics.insert(constructor, ParserProgramIntrinsic::CreateMod);
+    intrinsics.insert(upper, ParserProgramIntrinsic::FirstToUpper);
     Ok(LoweringBindings {
         roots: [
             (
@@ -139,11 +155,7 @@ fn parser_bindings(
             ),
         ]
         .into(),
-        intrinsics: [
-            (constructor, ParserProgramIntrinsic::CreateMod),
-            (upper, ParserProgramIntrinsic::FirstToUpper),
-        ]
-        .into(),
+        intrinsics,
         implicit_self: false,
         environment: None,
         standalone_calls: false,

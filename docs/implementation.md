@@ -18,6 +18,76 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+**R2al validated checkpoint: explicit captured insertion and triggered-skill programs.**
+The native insertion operation is unchanged. A required injected parser authority map binds
+only the actual original `table.insert` Function to its native operation, with exact captured
+slots, source authentication and definition fingerprints. Legacy-only extraction grants no
+such authority. The complete trigger helper and all 50 callers now lower into the package.
+
+The local reviewed package is schema 39 / parser 11, **26,700,676 bytes**, SHA256
+`29f64f9663120af3bee2909a2179e00ea1ca58982558eea0ad982ca7fd1f7343`.
+All 124 prior programs and other 28 sections are preserved. The library contains 175 programs,
+80 permissions (76 Special / four Helper) and 95 unadmitted programs. Only the proved trigger
+family gains permission. Source/IR/policy and protected-input audits pass.
+
+Five complete trigger tests pass: helper metadata and conversions; original source errors;
+150 raw wrapper cases; 50 natural public inputs reaching 49 original callbacks plus one
+labelled alias for a shadowed callback, including nested copy histories; and an explicit
+borrowed-option mutation frontier. Existing explosion, public-parser and raw-program source
+regressions pass. DATA authority and ENGINE insertion tests pass. Initial fixture failures
+(statement-span granularity, enum naming and overlapping source patterns) are retained;
+production behavior was not changed to satisfy them.
+
+Direct helper calls that mutate borrowed `options.sourceSkill` remain unsupported. Public
+wrappers create owned option tables and exercise normalization successfully. Parser metadata
+parity is not triggered-actor integration or full-build parity; the latest validated complete
+native original count remains **0/5**, confirmed by fresh native-only public runs.
+
+The broader native tests exposed a real work-budget limit after rune preparation advanced.
+At the old 5,000,000-step cap, build 2 reached 5,001,131 charged steps while using 2,416,129
+logical bytes against 64,340,855 available. Accounting review found no double draining.
+`ItemPreparationLimits.max_set_steps` now exposes this caller policy, with a native default
+of 20,000,000; generic import defaults and byte ceilings remain unchanged. All five measured
+runs fit, with 5,855,466–7,578,398 steps for the three larger inventories. A regression retains
+the old cap failure and verifies the higher cap without treating it as complete evaluation.
+
+Small fixtures now stop at `AwaitingSyncLoadouts`; real builds 2, 4 and 5 reach an explicit
+`population_order` dependency about a non-string method receiver. Builds 1 and 3 retain their
+captured-jewel item stops. Record/registration counts are preserved. This distinction is
+asserted in 20 native inventory tests; 30 item-set unit tests and 13 source-backed activation
+checks also pass. A static next-step audit points to `baseName` retained separately in loader
+state, but an actual item/slot paired diagnostic is still required before claiming the cause.
+
+**Validation:** selected data, engine, extraction, source-parity, import, native and CLI targets
+pass; this is not a full local workspace test run. Strict workspace/native-only Clippy,
+formatting and all five portable crates' WASM checks pass. The native-only CLI dependency
+graph excludes PoB and Lua. Normal CLI extraction reproduces the reviewed package byte for byte.
+The whole-item target passes eight tests: all 116 ordered records, 227 previously completed
+lane hashes, 765 directed hashes and five source/control witnesses are unchanged. Completion
+remains 114 source-parser/native-assembly and 113 built-in lanes, with the same five frontiers.
+Raw omission/class-projection receipt arrays differ and are not claimed equivalent.
+
+All five native-only public reports retain 116 records and 96 registrations (13, 34, 0, 21, 28).
+Builds 2, 4 and 5 now pass triggered-skill rune preparation and reach the `population_order`
+dependency above; builds 1 and 3 retain captured-jewel item stops. Every report is incomplete,
+calculation not run and whole-build parity not established. Protected inputs, lock and PoB pin
+are unchanged. Source-bound validation and independent reviews are recorded under
+`runs/r2al-trigger-skill-01/`, including `final-validation-root.json`; failed attempts remain.
+
+**Resume:** capture the actual offending item/slot and loader-versus-owned-graph `baseName`
+values at the bounded population failure, then compare the unchanged original `ValidForSlot`
+call with matching source context. The static audit identifies a likely missing hydration
+field, not a confirmed original-source outcome. If verified, preserve the field through the
+existing assembly ownership boundary. Do not silently read diagnostic loader state or relax
+the source-order guard. Then repeat activation and all-five public checks. Continue the
+separate pending jewel-ownership discussion and A1–A4 comparison; SyncLoadouts, triggered-actor
+integration and complete native build evaluation remain open.
+
+The [A1 cost record](execution-model-baseline.md#captured-insertion-and-triggered-skill-family)
+separates the binding-only +100 production/acquisition Rust lines from +1,855 test lines
+and zero engine production changes; the follow-up budget plumbing is recorded separately.
+The [A1–A4 investigation](#execution-model-investigation-a1-a4) remains open; this bounded current-model binding does not select a replacement architecture.
+
 **R2ak validated checkpoint: native capitalization and explosion-family programs.**
 The current-model implementation binds `FirstToUpper` only to the actual authenticated
 captured helper and borrows its injected pattern. A native byte-substitution kernel is shared
@@ -2696,6 +2766,12 @@ candidate, and A3 remains the discussion point before any significant design cha
   adds 213 non-test Rust lines and 1,685 test/reference lines while reusing the existing native
   replacement kernel. Include per-call pattern compilation and the difference between generated
   programs and reviewed permissions; this bounded extension does not choose an A2 model.
+  The [R2al trigger consumer audit](execution-model-baseline.md#captured-insertion-and-triggered-skill-family)
+  adds a concrete comparison slice: grant ownership and group lifecycle, support eligibility,
+  scoped modifiers, curse/trigger dependencies and shared level-cost history. Item/tree
+  projections discard the optional parser source-skill string. Preserve actual consumer
+  effects without prescribing the existing table/closure model; these static findings still
+  need executable consumer evidence.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.

@@ -220,6 +220,7 @@ struct Definitions<'a> {
     dictionaries: &'a BTreeMap<ParserDictionary, ParserTableId>,
     tables: &'a [ParserTable],
     callbacks: &'a [ParserCallback],
+    program_intrinsics: &'a BTreeMap<ParserCallbackId, ParserProgramIntrinsic>,
     factories: &'a BTreeMap<ParserCallbackId, ParserFactoryDisposition>,
     helpers: &'a BTreeMap<String, ParserCallbackId>,
     declarations: &'a [ParserDeclaration],
@@ -235,6 +236,7 @@ impl ModifierParserData {
             dictionaries: &self.dictionaries,
             tables: &self.tables,
             callbacks: &self.callbacks,
+            program_intrinsics: &self.program_intrinsics,
             factories: &self.factories,
             helpers: &self.helpers,
             declarations: &self.declarations,
@@ -243,7 +245,8 @@ impl ModifierParserData {
             capability: self.capability,
         }
     }
-    /// Exact legacy definition serialization, excluding only program payload.
+    /// Exact definition serialization, including captured-primitive authority
+    /// and excluding only the program/admission payload.
     pub fn definition_bytes(&self) -> std::result::Result<Vec<u8>, GameDataError> {
         serde_json::to_vec(&self.definition_view()).map_err(|e| GameDataError(e.to_string()))
     }

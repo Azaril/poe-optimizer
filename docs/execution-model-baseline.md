@@ -1648,3 +1648,61 @@ records 248 selected passing test executions, lint/portable checks and the next 
 charges its work and allocations cumulatively. No candidate speedup or prepared-pattern-cache
 measurement is claimed. This current-model extension does not select the DSL, declarative,
 native-family, interpreter or hybrid option; the A1–A4 investigation remains open.
+
+## Captured insertion and triggered-skill family
+
+R2al adds no engine runtime operation. It exposes an existing native append operation through
+an explicit injected authority map, authenticated against the retained original C Function
+and exact captured slot. The parser schema/owner hash and optional PoB extraction carry this
+contract; complete helper/caller control flow remains in generated programs. The
+[implementation checkpoint](implementation.md) owns test, package and real-build status.
+
+The source-bound review against `e6cd1af` records **100 net production/acquisition Rust
+lines**: 40 in DATA for authority, validation and owner access, and 60 in optional PoB
+acquisition/lowering. Tests add **1,855 lines**, including source-authentication, authored-IR,
+complete helper/public comparisons and shadowed-pattern fixtures. Engine production changes
+are zero. Generated package/policy bytes are recorded separately in
+`runs/r2al-trigger-skill-01/reviewed-01-review-by-lowerer.json`. These are physical footprint
+counts, not evidence of improved candidate throughput or full-build parity.
+
+This case illustrates why the comparison must count the maintenance of acquisition and
+parity tooling alongside runtime code. Natural parsing reaches 49 of the 50 related callbacks;
+one needs a labelled alias to prove its public packing while preserving the original selection
+rules. Direct mutation of caller-borrowed option tables remains a separate explicit frontier;
+wrapper-owned option tables execute successfully. Alternative models may use a different
+representation, but must preserve observable metadata, conditional ordering, grant ownership and later consumer behavior. The A1–A4 comparison remains open.
+
+A bounded static consumer audit supplies a concrete A2 comparison slice:
+
+- Item assembly copies the grant fields but replaces the optional parser `source` with item
+  provenance; tree grants use node provenance and force no-supports. Do not invent a
+  trigger-source edge from a string those projections discard ([Item.lua:2800](../vendor/path-of-building-poe2/src/Classes/Item.lua#L2800),
+  [CalcSetup.lua:321](../vendor/path-of-building-poe2/src/Modules/CalcSetup.lua#L321)).
+- Grant ownership, normalized level and slot govern generated-group reuse, ordering and
+  removal, and therefore later support gathering and saved builds
+  ([CalcSetup.lua:1694](../vendor/path-of-building-poe2/src/Modules/CalcSetup.lua#L1694)).
+- Triggered nongem setup can clear a retained definition level's cost table. An immutable
+  alternative needs an explicit state/history contract for that effect
+  ([SkillsTab.lua:1263](../vendor/path-of-building-poe2/src/Classes/SkillsTab.lua#L1263)).
+- Scoped/nested modifiers, Hexproof eligibility, configured chance and missing-source
+  fallbacks affect later targeting, curse effects and trigger rates. A parsed flag alone
+  cannot prove those consumers ([CalcActiveSkill.lua:838](../vendor/path-of-building-poe2/src/Modules/CalcActiveSkill.lua#L838),
+  [CalcPerform.lua:2465](../vendor/path-of-building-poe2/src/Modules/CalcPerform.lua#L2465),
+  [CalcTriggers.lua:389](../vendor/path-of-building-poe2/src/Modules/CalcTriggers.lua#L389)).
+
+The 12 inspected files match the pinned manifest; the source-bound receipt is
+`runs/r2al-trigger-skill-01/trigger-consumer-audit-by-data.json`. These are static requirements
+and open proof obligations, not evidence of native actor/trigger parity. Compare alternatives
+on those joins and histories, without automatically requiring temporary parser tables or
+closure machinery in their runtime representation.
+
+The subsequent native integration check exposed a work-budget limit after rune parsing
+advanced. The binding-only footprint above precedes this follow-up: native preparation now
+accepts a caller-supplied `max_set_steps` (default 20 million), and construction failures report
+actual bytes/steps and their limits. At the old 5-million cap, build 2 failed at 5,001,131
+steps while logical bytes were well within the shared limit. Completed bounded preparations
+for builds 2/4/5 use 7,578,398 / 5,855,466 / 6,807,664 steps and then reach `population_order`;
+small fixtures reach the separate SyncLoadouts dependency. These are logical operation/storage
+charges, not CPU instructions, RSS, throughput measurements or full-build parity. Preserve
+finite low-budget failures in comparisons; changing a resource cap does not prove a faster
+execution model.

@@ -8,9 +8,11 @@ verifier and immutable engine plans. G2 adds a native invocation executor and ra
 observation API. G3 adds authenticated whole-function lowering and independent raw
 source comparisons for the first four functions. G4 packages the generated inventory and
 explicit permissions, with native public dispatch, original public-copy parity and shared request
-accounting. The current package contains 124 generated programs: 29 are admitted and 95
-remain unadmitted. The explosion-family extension adds 23 Special callbacks and two helpers;
-this is parser coverage, not complete native build evaluation.
+accounting. The current package contains 175 generated programs: 80 are admitted
+(76 Special callbacks and four helpers), and 95 remain unadmitted. The explosion and triggered-skill
+families extend parser coverage; they do not establish complete native build evaluation.
+The [execution-model investigation](rule-execution-model-investigation.md) compares this
+implementation with domain rules, native algorithm families and other execution models.
 
 ## Purpose and boundary
 
@@ -440,3 +442,28 @@ Full build breadth still depends on the separate R1-R5 integration gates.
 These stages execute the accepted architecture; implementation details need no separate
 owner approval. A change to the chosen direction or product behavior would still be
 brought back for discussion.
+
+## Captured parser primitive authority
+
+Parser schema 11 / package schema 39 makes `program_intrinsics` a required definition facet.
+An empty map grants no captured primitive authority. Initially the only permitted entry is
+one unique original `table.insert` descriptor with its exact environment and empty captures.
+The offline extractor retains the actual C Function before source loading and checks its
+identity afterward, joining that Function to the observed callback graph. Matching a builtin
+name alone grants nothing. Definition fingerprints include this facet, and program bindings
+still identify the exact captured slot. Intrinsic permission is separate from permission to
+dispatch a generated source program; existing standalone owner rules remain separate.
+
+The triggered-skill helper and all 50 complete callers lower through this seam. Native
+execution reuses the existing two-argument append operation; no new engine operation or
+process is introduced. Injected lookup data and programs retain level/chance conversion,
+source-skill normalization, no-support flags, Hexproof metadata, nested critical-hit modifiers,
+unknown-name empty lists, and original conditional ordering. Public fixtures use real lookup
+names and verify successful effects, original callback selection, return packs and nested copy
+isolation. Fifty natural inputs reach 49 callbacks; one explicitly labelled pattern alias
+exercises a shadowed callback without changing the original function or capture grammar. Legacy patterns in the source inventory do not establish current item availability.
+
+Direct helper calls with a truthy `options.sourceSkill` mutate their input table in PoB.
+The raw execution API imports caller tables as borrowed, so this remains an explicit unsupported
+mutation. Public wrappers construct owned option tables and exercise that branch successfully.
+This parser-metadata evidence does not establish triggered actor integration or full-build parity.

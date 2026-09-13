@@ -1,0 +1,202 @@
+[
+  {
+    "pattern": "^(%d+)%% chance to [ct][ar][si][tg]g?e?r? level (%d+) (.+) on %a+$",
+    "line": "17% chance to cast level 17 enfeeble on block"
+  },
+  {
+    "pattern": "^(%d+)%% chance to attack with level (%d+) (.+) on melee hit$",
+    "line": "17% chance to attack with level 17 enfeeble on melee hit"
+  },
+  {
+    "pattern": "^(%d+)%% chance to trigger level (%d+) (.+) [ow][nh]e?n? ?y?o?u? kill ?a?n? ?e?n?e?m?y?$",
+    "line": "17% chance to trigger level 17 enfeeble when you kill an enemy"
+  },
+  {
+    "pattern": "^(%d+)%% chance to trigger level (%d+) (.+) on critical hit with this weapon$",
+    "line": "17% chance to trigger level 17 enfeeble on critical hit with this weapon"
+  },
+  {
+    "pattern": "^(%d+)%% chance to trigger level (%d+) (.+) on melee hit$",
+    "line": "17% chance to trigger level 17 enfeeble on melee hit"
+  },
+  {
+    "pattern": "^(%d+)%% chance to trigger level (%d+) (.+) when animated weapon kills an enemy$",
+    "line": "17% chance to trigger level 17 enfeeble when animated weapon kills an enemy"
+  },
+  {
+    "pattern": "^(%d+)%% chance to trigger level (%d+) (.+) when you gain avian's might or avian's flight$",
+    "line": "17% chance to trigger level 17 enfeeble when you gain avian's might or avian's flight"
+  },
+  {
+    "pattern": "^(%d+)%% chance to trigger level (%d+) (.+) when you or a nearby ally kill an enemy, or hit a rare or unique enemy$",
+    "line": "17% chance to trigger level 17 enfeeble when you or a nearby ally kill an enemy, or hit a rare or unique enemy"
+  },
+  {
+    "pattern": "^(%d+)%% chance to trigger level (%d+) (.+) when you use a socketed skill$",
+    "line": "17% chance to trigger level 17 enfeeble when you use a socketed skill"
+  },
+  {
+    "pattern": "^(.+) can trigger level (%d+) (.+)$",
+    "line": "enfeeble can trigger level 17 enfeeble"
+  },
+  {
+    "pattern": "^[ct][ar][si][tg]g?e?r?s? level (%d+) (.+) on %a+$",
+    "line": "cast level 17 enfeeble on block"
+  },
+  {
+    "pattern": "^[ct][ar][si][tg]g?e?r?s? level (%d+) (.+) when equipped$",
+    "line": "cast level 17 enfeeble when equipped"
+  },
+  {
+    "pattern": "^[ct][ar][si][tg]g?e?r?s? level (%d+) (.+) when hit$",
+    "line": "cast level 17 enfeeble when hit"
+  },
+  {
+    "pattern": "^[ct][ar][si][tg]g?e?r?s? level (%d+) (.+) when you attack$",
+    "line": "cast level 17 enfeeble when you attack"
+  },
+  {
+    "pattern": "^[ct][ar][si][tg]g?e?r?s? level (%d+) (.+) when you deal a critical hit$",
+    "line": "cast level 17 enfeeble when you deal a critical hit"
+  },
+  {
+    "pattern": "^[ct][ar][si][tg]g?e?r?s? level (%d+) (.+) when you kill an enemy$",
+    "line": "cast level 17 enfeeble when you kill an enemy"
+  },
+  {
+    "pattern": "^[ct][ar][si][tg]g?e?r?s? level (%d+) (.+) when you use a skill$",
+    "line": "cast level 17 enfeeble when you use a skill"
+  },
+  {
+    "pattern": "^attack with level (%d+) (.+) when you kill a bleeding enemy$",
+    "line": "attack with level 17 enfeeble when you kill a bleeding enemy"
+  },
+  {
+    "pattern": "^consumes a void charge to trigger level (%d+) (.+) when you fire arrows with a non%-triggered skill$",
+    "line": "consumes a void charge to trigger level 17 enfeeble when you fire arrows with a non-triggered skill"
+  },
+  {
+    "pattern": "^consumes a void charge to trigger level (%d+) (.+) when you fire arrows$",
+    "line": "consumes a void charge to trigger level 17 enfeeble when you fire arrows"
+  },
+  {
+    "pattern": "^curse enemies with (%D+) on %a+$",
+    "line": "curse enemies with enfeeble on block"
+  },
+  {
+    "pattern": "^curse enemies with level (%d+) (%D+) on %a+, which can apply to hexproof enemies$",
+    "line": "curse enemies with level 17 enfeeble on block, which can apply to hexproof enemies"
+  },
+  {
+    "pattern": "^curse enemies with level (%d+) (.+) on %a+$",
+    "line": "curse enemies with level 17 enfeeble on block"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) after spending a total of (%d+) mana$",
+    "line": "trigger level 17 enfeeble after spending a total of 17 mana"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) every (%d+) seconds$",
+    "line": "trigger level 17 enfeeble every 17 seconds"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) every [%d%.]+ seconds while phasing$",
+    "line": "trigger level 17 enfeeble every 2 seconds while phasing"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) on critical hit with cleave or reave$",
+    "line": "trigger level 17 enfeeble on critical hit with cleave or reave"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) on hit with this weapon$",
+    "line": "trigger level 17 enfeeble on hit with this weapon"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) on melee hit if you have at least (%d+) strength$",
+    "line": "trigger level 17 enfeeble on melee hit if you have at least 17 strength"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) on melee hit while cursed$",
+    "line": "trigger level 17 enfeeble on melee hit while cursed"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) on melee hit with this weapon$",
+    "line": "trigger level 17 enfeeble on melee hit with this weapon"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when animated guardian kills an enemy$",
+    "line": "trigger level 17 enfeeble when animated guardian kills an enemy"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you attack with a bow$",
+    "line": "trigger level 17 enfeeble when you attack with a bow"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you attack with a non%-vaal slam or strike skill near an enemy$",
+    "line": "trigger level 17 enfeeble when you attack with a non-vaal slam or strike skill near an enemy"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you block$",
+    "line": "trigger level 17 enfeeble when you block"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you consume a corpse$",
+    "line": "trigger level 17 enfeeble when you consume a corpse"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you gain avian's might or avian's flight$",
+    "line": "trigger level 17 enfeeble when you gain avian's might or avian's flight"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you hit a bleeding enemy$",
+    "line": "trigger level 17 enfeeble when you hit a bleeding enemy"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you hit a frozen enemy$",
+    "line": "trigger level 17 enfeeble when you hit a frozen enemy"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you hit a rare or unique enemy and have no mark$",
+    "line": "trigger level 17 enfeeble when you hit a rare or unique enemy and have no mark"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you hit a rare or unique enemy$",
+    "line": "trigger level 17 enfeeble when you hit a rare or unique enemy"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you hit an enemy while cursed$",
+    "line": "trigger level 17 enfeeble when you hit an enemy while cursed"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you kill a frozen enemy$",
+    "line": "trigger level 17 enfeeble when you kill a frozen enemy"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you lose cat's stealth$",
+    "line": "trigger level 17 enfeeble when you lose cat's stealth"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when you use a skill while you have a spirit charge$",
+    "line": "trigger level 17 enfeeble when you use a skill while you have a spirit charge"
+  },
+  {
+    "pattern": "^trigger level (%d+) (.+) when your trap is triggered$",
+    "line": "trigger level 17 enfeeble when your trap is triggered"
+  },
+  {
+    "pattern": "^triggers level (%d+) (.+) when allocated$",
+    "line": "triggers level 17 enfeeble when allocated"
+  },
+  {
+    "pattern": "^triggers level (%d+) (.+) when equipped$",
+    "line": "triggers level 17 enfeeble when equipped"
+  },
+  {
+    "pattern": "^triggers? level (%d+) (.+) when you kill a bleeding enemy$",
+    "line": "triggers level 17 enfeeble when you kill a bleeding enemy"
+  },
+  {
+    "pattern": "^use level (%d+) (.+) on %a+$",
+    "line": "use level 17 enfeeble on block"
+  }
+]

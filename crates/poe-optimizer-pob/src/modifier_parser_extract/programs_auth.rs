@@ -43,6 +43,22 @@ impl ProgramPrimitives {
         Ok(this)
     }
 
+    /// Publish authority from a retained original Function, never from a symbol
+    /// search. The descriptor check only authenticates the exact observed join.
+    pub(super) fn observed_intrinsics(
+        &self,
+        lua: &Lua,
+        seen_callbacks: &BTreeMap<usize, ParserCallbackId>,
+        callbacks: &[ParserCallback],
+    ) -> Result<BTreeMap<ParserCallbackId, ParserProgramIntrinsic>> {
+        self.verify(lua)?;
+        let id = *seen_callbacks
+            .get(&(self.table_insert.to_pointer() as usize))
+            .ok_or_else(|| error("program original table.insert absent from callback graph"))?;
+        table_insert_descriptor(callbacks, id)?;
+        Ok(BTreeMap::from([(id, ParserProgramIntrinsic::TableInsert)]))
+    }
+
     pub(super) fn verify(&self, lua: &Lua) -> Result<()> {
         let globals = lua.globals();
         same_table(&globals, &self.globals, "global environment")?;
@@ -80,6 +96,30 @@ impl ProgramPrimitives {
         }
         Ok(())
     }
+}
+
+pub(super) fn table_insert_descriptor(
+    callbacks: &[ParserCallback],
+    id: ParserCallbackId,
+) -> Result<()> {
+    let target =
+        id.0.checked_sub(1)
+            .and_then(|i| callbacks.get(i as usize))
+            .ok_or_else(|| error("program table.insert callback missing"))?;
+    if !matches!(&target.kind, ParserCallbackKind::Builtin { symbol } if symbol == "table.insert")
+        || target.environment != ParserEnvironment::OriginalGlobals
+        || !target.upvalues.is_empty()
+        || callbacks
+            .iter()
+            .filter(|callback| callback.kind == target.kind)
+            .count()
+            != 1
+    {
+        return Err(error(
+            "program table.insert is not the unique original descriptor",
+        ));
+    }
+    Ok(())
 }
 
 fn plain(table: &Table, role: &str) -> Result<()> {
@@ -202,6 +242,101 @@ mod tests {
             lua.load(code).exec().unwrap();
             assert!(original.verify(&lua).is_err(), "{code}");
         }
+    }
+
+    fn insert_descriptor() -> ParserCallback {
+        ParserCallback {
+            kind: ParserCallbackKind::Builtin {
+                symbol: "table.insert".into(),
+            },
+            environment: ParserEnvironment::OriginalGlobals,
+            upvalues: vec![],
+        }
+    }
+
+    #[test]
+    fn captured_primitive_authority_requires_the_retained_function_graph_join() {
+        let lua = Lua::new();
+        let original = ProgramPrimitives::capture(&lua).unwrap();
+        let callbacks = vec![insert_descriptor()];
+        let id = ParserCallbackId(1);
+        let observed = BTreeMap::from([(original.table_insert.to_pointer() as usize, id)]);
+        assert_eq!(
+            original
+                .observed_intrinsics(&lua, &observed, &callbacks)
+                .unwrap(),
+            BTreeMap::from([(id, ParserProgramIntrinsic::TableInsert)])
+        );
+        // A same-named descriptor without that actual Function is no authority.
+        assert!(
+            original
+                .observed_intrinsics(&lua, &BTreeMap::new(), &callbacks)
+                .is_err()
+        );
+        let other = raw_c_function(&lua.globals(), "tostring").unwrap();
+        assert!(
+            original
+                .observed_intrinsics(
+                    &lua,
+                    &BTreeMap::from([(other.to_pointer() as usize, id)]),
+                    &callbacks
+                )
+                .is_err()
+        );
+        for invalid in [
+            ParserCallbackId(0),
+            ParserCallbackId(2),
+            ParserCallbackId(u32::MAX),
+        ] {
+            assert!(
+                original
+                    .observed_intrinsics(
+                        &lua,
+                        &BTreeMap::from([(original.table_insert.to_pointer() as usize, invalid)]),
+                        &callbacks
+                    )
+                    .is_err()
+            );
+        }
+        for case in 0..4 {
+            let mut changed = callbacks.clone();
+            match case {
+                0 => {
+                    changed[0].kind = ParserCallbackKind::Builtin {
+                        symbol: "table.remove".into(),
+                    }
+                }
+                1 => changed[0].upvalues.push(ParserUpvalue {
+                    name: "hidden".into(),
+                    value: ParserValue::Nil,
+                }),
+                2 => changed.push(insert_descriptor()),
+                3 => {
+                    changed[0].kind = ParserCallbackKind::Lua {
+                        source: ItemSourceSpan {
+                            path: PARSER.into(),
+                            line: 1,
+                            end_line: 1,
+                            sha256: hash(b"function() end"),
+                        },
+                    }
+                }
+                _ => unreachable!(),
+            }
+            assert!(
+                original
+                    .observed_intrinsics(&lua, &observed, &changed)
+                    .is_err(),
+                "case {case}"
+            );
+        }
+        // A graph captured earlier cannot authorize a replaced live primitive.
+        original.tables.raw_set("insert", other).unwrap();
+        assert!(
+            original
+                .observed_intrinsics(&lua, &observed, &callbacks)
+                .is_err()
+        );
     }
 
     #[test]

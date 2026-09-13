@@ -679,3 +679,269 @@ fn acquisition_first_to_upper_live_function_and_environment_stay_guarded() {
         .unwrap();
     assert!(strings::verify_helper(&lua, &function, upper, descriptor, &observed, origin).is_err());
 }
+
+fn table_insert(data: &ModifierParserData) -> ParserCallbackId {
+    let candidates = data.callbacks.iter().enumerate().filter(|(_, callback)|
+        matches!(&callback.kind, ParserCallbackKind::Builtin { symbol } if symbol == "table.insert")
+    ).map(|(index, _)| ParserCallbackId(index as u32 + 1)).collect::<Vec<_>>();
+    assert_eq!(candidates.len(), 1);
+    candidates[0]
+}
+
+#[test]
+fn captured_table_insert_uses_explicit_authority_and_exact_lexical_slot() {
+    let owner = bundled_snapshot().unwrap();
+    let data = owner.modifier_parser().data();
+    let insert = table_insert(data);
+    let authorization = parser_bindings(data, constructor(data)).unwrap();
+    assert_eq!(
+        data.program_intrinsics.get(&insert),
+        Some(&ParserProgramIntrinsic::TableInsert)
+    );
+    let mut legacy = data.clone();
+    legacy.program_intrinsics.clear();
+    let unauthorized = parser_bindings(&legacy, constructor(data)).unwrap();
+    for name in ["t_insert", "captured_alias"] {
+        let body = format!("function(out, value) {name}(out, value); return out end");
+        let captures = vec![
+            ParserUpvalue {
+                name: "other".into(),
+                value: ParserValue::Nil,
+            },
+            ParserUpvalue {
+                name: name.into(),
+                value: ParserValue::Callback(insert),
+            },
+        ];
+        let program = with_captures(&body, captures.clone(), &authorization).unwrap();
+        assert_eq!(
+            program.bindings,
+            vec![ParserProgramBinding::Intrinsic {
+                operation: ParserProgramIntrinsic::TableInsert,
+                source: ParserProgramIntrinsicSource::Captured {
+                    upvalue: 1,
+                    callback: insert
+                },
+            }]
+        );
+        let old = with_captures(&body, captures, &unauthorized).unwrap();
+        assert_eq!(
+            old.bindings,
+            vec![ParserProgramBinding::CapturedCallback {
+                upvalue: 1,
+                callback: insert,
+            }]
+        );
+    }
+    let other = data.helpers["triggerExtraSkill"];
+    let wrong = with_captures(
+        "function(out, value) t_insert(out, value); return out end",
+        vec![ParserUpvalue {
+            name: "t_insert".into(),
+            value: ParserValue::Callback(other),
+        }],
+        &authorization,
+    )
+    .unwrap();
+    assert_eq!(
+        wrong.bindings,
+        vec![ParserProgramBinding::CapturedCallback {
+            upvalue: 0,
+            callback: other
+        }]
+    );
+    for (body, captures) in [
+        ("function(out) t_insert(out, 1) end", vec![]),
+        (
+            "function(t_insert, out) t_insert(out, 1) end",
+            vec![ParserUpvalue {
+                name: "t_insert".into(),
+                value: ParserValue::Callback(insert),
+            }],
+        ),
+        (
+            "function(out) t_insert(out, 1) end",
+            vec![ParserUpvalue {
+                name: "t_insert".into(),
+                value: ParserValue::Nil,
+            }],
+        ),
+    ] {
+        assert!(with_captures(body, captures, &authorization).is_err());
+    }
+}
+
+#[test]
+fn captured_table_insert_authority_cannot_target_a_different_or_open_descriptor() {
+    let owner = bundled_snapshot().unwrap();
+    let data = owner.modifier_parser().data();
+    let insert = table_insert(data);
+    for case in 0..7 {
+        let mut changed = data.clone();
+        match case {
+            0 => {
+                changed.program_intrinsics =
+                    BTreeMap::from([(ParserCallbackId(0), ParserProgramIntrinsic::TableInsert)]);
+            }
+            1 => {
+                changed.program_intrinsics =
+                    BTreeMap::from([(data.helpers["flag"], ParserProgramIntrinsic::TableInsert)]);
+            }
+            2 => {
+                changed
+                    .program_intrinsics
+                    .insert(insert, ParserProgramIntrinsic::FirstToUpper);
+            }
+            3 => {
+                changed.callbacks[insert.0 as usize - 1].kind = ParserCallbackKind::Builtin {
+                    symbol: "table.remove".into(),
+                }
+            }
+            4 => changed.callbacks[insert.0 as usize - 1]
+                .upvalues
+                .push(ParserUpvalue {
+                    name: "hidden".into(),
+                    value: ParserValue::Nil,
+                }),
+            5 => changed
+                .callbacks
+                .push(changed.callbacks[insert.0 as usize - 1].clone()),
+            6 => {
+                changed
+                    .program_intrinsics
+                    .insert(data.helpers["flag"], ParserProgramIntrinsic::TableInsert);
+            }
+            _ => unreachable!(),
+        }
+        assert!(
+            parser_bindings(&changed, constructor(data)).is_err(),
+            "case {case}"
+        );
+    }
+}
+
+#[test]
+fn original_trigger_and_caller_lower_completely_with_captured_table_insert() {
+    let owner = bundled_snapshot().unwrap();
+    let catalog = owner.modifier_parser();
+    let data = catalog.data();
+    let insert = table_insert(data);
+    let trigger = data.helpers["triggerExtraSkill"];
+    // Original source location is a fixture selector, never acquisition dispatch.
+    let caller = ParserCallbackId(data.callbacks.iter().position(|callback|
+        matches!(&callback.kind, ParserCallbackKind::Lua { source } if source.path == PARSER && source.line == 3633)
+    ).unwrap() as u32 + 1);
+    let text =
+        include_str!("../../../../../vendor/path-of-building-poe2/src/Modules/ModParser.lua")
+            .replace("\r\n", "\n");
+    let authorization = parser_bindings(data, constructor(data)).unwrap();
+    let mut previous = parser_bindings(data, constructor(data)).unwrap();
+    previous.intrinsics.remove(&insert);
+    let mut programs = Vec::new();
+    let mut insert_slot = None;
+    for id in [trigger, caller] {
+        let callback = &data.callbacks[id.0 as usize - 1];
+        let ParserCallbackKind::Lua { source: origin } = &callback.kind else {
+            panic!()
+        };
+        let body = text
+            .split_inclusive('\n')
+            .skip(origin.line as usize - 1)
+            .take((origin.end_line - origin.line + 1) as usize)
+            .collect::<String>();
+        assert_eq!(hash(body.as_bytes()), origin.sha256);
+        let lua = Lua::new();
+        let lower = |bindings| {
+            Lowerer::new(&lua, &body, id, callback, bindings, &mut Budget::default())
+                .and_then(|lowerer| lowerer.program(origin))
+        };
+        let program = lower(&authorization).unwrap();
+        let old = lower(&previous).unwrap();
+        if id == trigger {
+            let slot = callback
+                .upvalues
+                .iter()
+                .position(|upvalue| upvalue.value == ParserValue::Callback(insert))
+                .unwrap() as u16;
+            insert_slot = Some(slot);
+            assert!(program.bindings.contains(&ParserProgramBinding::Intrinsic {
+                operation: ParserProgramIntrinsic::TableInsert,
+                source: ParserProgramIntrinsicSource::Captured {
+                    upvalue: slot,
+                    callback: insert
+                },
+            }));
+            assert!(
+                old.bindings
+                    .contains(&ParserProgramBinding::CapturedCallback {
+                        upvalue: slot,
+                        callback: insert
+                    })
+            );
+            assert!(program.bindings.iter().any(|binding| matches!(
+                binding,
+                ParserProgramBinding::Intrinsic {
+                    operation: ParserProgramIntrinsic::CreateMod,
+                    ..
+                }
+            )));
+        } else {
+            assert_eq!(program, old);
+            assert!(program.bindings.iter().any(|binding| matches!(binding,
+                ParserProgramBinding::CapturedCallback { callback, .. } if *callback == trigger
+            )));
+        }
+        programs.push(program);
+    }
+    let callbacks = programs
+        .iter()
+        .enumerate()
+        .map(|(index, program)| (program.callback, ParserProgramId(index as u32 + 1)))
+        .collect();
+    let payload = ParserProgramData {
+        schema_version: PARSER_PROGRAM_SCHEMA_VERSION,
+        programs,
+        callbacks,
+    };
+    let typed = ParserProgramCatalog::new(payload.clone(), catalog.clone()).unwrap();
+    assert_eq!(typed.data().programs.len(), 2);
+    assert!(
+        !typed
+            .required_capabilities()
+            .contains(&ParserProgramCapability::LegacyPureCalls)
+    );
+    for wrong_callback in [false, true] {
+        let mut changed = payload.clone();
+        let program = changed
+            .programs
+            .iter_mut()
+            .find(|program| program.callback == trigger)
+            .unwrap();
+        let binding = program
+            .bindings
+            .iter_mut()
+            .find(|binding| {
+                matches!(
+                    binding,
+                    ParserProgramBinding::Intrinsic {
+                        operation: ParserProgramIntrinsic::TableInsert,
+                        ..
+                    }
+                )
+            })
+            .unwrap();
+        let ParserProgramBinding::Intrinsic {
+            source: ParserProgramIntrinsicSource::Captured { upvalue, callback },
+            ..
+        } = binding
+        else {
+            panic!()
+        };
+        if wrong_callback {
+            *callback = data.helpers["flag"];
+        } else {
+            *upvalue = insert_slot.unwrap() + 1;
+        }
+        assert!(ParserProgramCatalog::new(changed, catalog.clone()).is_err());
+    }
+}

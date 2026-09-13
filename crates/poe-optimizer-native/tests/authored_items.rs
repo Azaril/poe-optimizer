@@ -33,6 +33,60 @@ fn prepare(xml: &str) -> PreparedItems {
     .unwrap();
     prepare_authored_items(&build, &view, data(), ItemPreparationLimits::default()).unwrap()
 }
+fn assert_awaiting_sync(stage: &PreparedItems) {
+    use poe_optimizer_import::item_sets::{ItemActivationProgress, ItemSetPhase};
+    assert!(
+        matches!(
+            stage.report().activation,
+            Some(ItemActivationProgress::AwaitingSyncLoadouts)
+        ),
+        "{:#?}",
+        stage.report().activation
+    );
+    let state = stage.item_sets().unwrap();
+    assert_eq!(state.phase(), ItemSetPhase::AwaitingSyncLoadouts);
+    assert!(state.failure().is_none());
+    assert_eq!(
+        state.continuation().unwrap().required_stage,
+        "SyncLoadouts, trailing flags/ResetUndo"
+    );
+    assert!(
+        stage
+            .report()
+            .frontiers
+            .contains(&"equipment_participation")
+    );
+    assert!(stage.report().frontiers.contains(&"actor_item_effects"));
+}
+fn assert_population_order_frontier(stage: &PreparedItems) {
+    use poe_optimizer_import::item_sets::{ItemActivationProgress, ItemSetPhase};
+    assert!(
+        stage.report().failure.is_none(),
+        "{:#?}",
+        stage.report().failure
+    );
+    match stage.report().activation.as_ref().unwrap() {
+        ItemActivationProgress::AwaitingDependency { stage, message } => {
+            assert_eq!(*stage, "population_order");
+            assert_eq!(
+                message,
+                "unrepresented pairs/error-order: slot validity attempted a string method on a non-string value"
+            );
+        }
+        other => panic!("unexpected real-build activation progress: {other:?}"),
+    }
+    let state = stage.item_sets().unwrap();
+    assert_eq!(state.phase(), ItemSetPhase::AwaitingActivation);
+    assert!(state.failure().is_none());
+    assert!(state.continuation().is_some());
+    assert!(
+        stage
+            .report()
+            .frontiers
+            .contains(&"equipment_participation")
+    );
+    assert!(stage.report().frontiers.contains(&"actor_item_effects"));
+}
 fn doc(items: &str) -> String {
     format!("<PathOfBuilding2><Items>{items}</Items></PathOfBuilding2>")
 }
@@ -101,10 +155,7 @@ fn valid_sets_allow_later_items_and_namespace_guards_still_stop_loading() {
     assert_eq!(r.registration_order.len(), 2);
     assert_eq!(r.records[1].status, ItemRecordStatus::Registered);
     assert!(r.failure.is_none(), "{:#?}", r.failure);
-    assert_eq!(
-        stage.item_sets().unwrap().phase(),
-        poe_optimizer_import::item_sets::ItemSetPhase::AwaitingActivation
-    );
+    assert_awaiting_sync(&stage);
     let ns = prepare(
         "<PathOfBuilding2><Items xmlns='urn:unhandled'><Item id='1'>Rarity: NORMAL\nGold Ring</Item></Items></PathOfBuilding2>",
     );
@@ -240,10 +291,7 @@ fn all_original_items_stay_in_report_even_when_the_first_dependency_stops() {
             assert!(report.failure.is_some());
         } else {
             assert!(report.failure.is_none(), "{:#?}", report.failure);
-            assert_eq!(
-                stage.item_sets().unwrap().phase(),
-                poe_optimizer_import::item_sets::ItemSetPhase::AwaitingActivation
-            );
+            assert_population_order_frontier(&stage);
         }
         assert_eq!(
             report
@@ -340,10 +388,7 @@ fn production_inventory_registers_weapon_slot_graphs_before_activation() {
     let report = stage.report();
     assert_eq!(report.registration_order.len(), 3, "{:#?}", report.failure);
     assert!(report.failure.is_none(), "{:#?}", report.failure);
-    assert_eq!(
-        stage.item_sets().unwrap().phase(),
-        poe_optimizer_import::item_sets::ItemSetPhase::AwaitingActivation
-    );
+    assert_awaiting_sync(&stage);
     for id in [1.0, 2.0, 3.0] {
         let item = stage.item(stage.registered_id(id).unwrap()).unwrap();
         assert!(item.is_complete());
@@ -462,10 +507,7 @@ fn item_failure_prevents_later_set_operations_and_ignored_source_is_not_recursiv
     ));
     assert!(stage.report().failure.is_none());
     assert_eq!(stage.report().registration_order.len(), 1);
-    assert_eq!(
-        stage.item_sets().unwrap().phase(),
-        ItemSetPhase::AwaitingActivation
-    );
+    assert_awaiting_sync(&stage);
 }
 #[test]
 fn trade_children_use_attributes_independent_of_name_but_text_is_a_source_error() {
@@ -543,7 +585,7 @@ fn items_and_sets_share_one_cumulative_byte_budget() {
 }
 
 #[test]
-fn interleaved_production_loading_retains_slot_copy_prefix_before_activation_dependency() {
+fn interleaved_production_loading_populates_choices_before_sync_dependency() {
     use poe_optimizer_engine::source_program::{
         ProgramTableId as Id, ProgramValue as V, ProgramValueGraph,
     };
@@ -575,25 +617,14 @@ fn interleaved_production_loading_retains_slot_copy_prefix_before_activation_dep
     let report = prepared.report();
     assert!(report.failure.is_none(), "{:#?}", report.failure);
     assert_eq!(report.registration_order.len(), 2);
-    assert!(
-        matches!(
-            report.activation,
-            Some(
-                poe_optimizer_import::item_sets::ItemActivationProgress::AwaitingDependency { .. }
-            )
-        ),
-        "unexpected activation progress: {:#?}",
-        report.activation
-    );
-    assert!(report.frontiers.contains(&"equipment_participation"));
-    assert!(report.frontiers.contains(&"actor_item_effects"));
+    assert_awaiting_sync(&prepared);
     let state = prepared.item_sets().unwrap();
+    let startup = prepared.activation_startup_jewels().unwrap();
     assert_eq!(
-        state.phase(),
-        poe_optimizer_import::item_sets::ItemSetPhase::AwaitingActivation
+        startup.keys().copied().collect::<Vec<_>>(),
+        policy.layout.passive.nodes.ids
     );
-    assert!(state.failure().is_none());
-    assert!(prepared.activation_startup_jewels().unwrap().is_empty());
+    assert!(startup.values().all(|value| *value == 0.0));
     let pending = state.continuation().unwrap();
     assert_eq!(pending.requested_set.value(), Some(2.0));
     assert_eq!(pending.show_stat_differences, Some(false));
@@ -648,8 +679,42 @@ fn interleaved_production_loading_retains_slot_copy_prefix_before_activation_dep
     assert_eq!(get(&graph, charm, key("active")), &V::Nil);
     let activate = table(get(&graph, charm, key("activate")));
     assert_eq!(get(&graph, activate, key("state")), &V::Nil);
-    assert_eq!(get(&graph, ring, key("items")), &V::Nil);
-    assert_eq!(get(&graph, ring, key("list")), &V::Nil);
+    // Native choices have a declared canonical diagnostic order, not source
+    // pairs/UI order. Population retains both registered rings and the selection.
+    let choices = table(get(&graph, ring, key("items")));
+    assert_eq!(
+        graph.tables[choices.0 as usize - 1].entries,
+        vec![
+            (V::Number(1.0), V::Number(policy.defaults.empty_item_id)),
+            (V::Number(2.0), V::Number(1.0)),
+            (V::Number(3.0), V::Number(2.0)),
+        ]
+    );
+    let labels = table(get(&graph, ring, key("list")));
+    assert_eq!(graph.tables[labels.0 as usize - 1].entries.len(), 3);
+    assert_eq!(
+        get(&graph, labels, V::Number(1.0)),
+        &key(&policy.defaults.empty_item_label)
+    );
+    for (index, id) in [(2.0, 1.0), (3.0, 2.0)] {
+        let item = prepared.item(prepared.registered_id(id).unwrap()).unwrap();
+        let rarity = item.field(item.root(), "rarity").unwrap().as_str().unwrap();
+        let name = item.field(item.root(), "name").unwrap().as_str().unwrap();
+        let label = format!("{}{name}", policy.activation.rarity_colors[rarity]);
+        assert_eq!(get(&graph, labels, V::Number(index)), &key(&label));
+    }
+    assert_eq!(get(&graph, ring, key("selIndex")), &V::Number(3.0));
+    assert_eq!(
+        state.selected_rune(rune).unwrap().name(),
+        policy.defaults.empty_rune_name
+    );
+    let runes = table(get(&graph, root, key("runeSlots")));
+    let live_rune = table(get(&graph, runes, key(rune)));
+    assert_eq!(
+        get(&graph, live_rune, key("selected_name")),
+        &key(&policy.defaults.empty_rune_name)
+    );
+    assert_eq!(get(&graph, root, key("buildFlag")), &V::Boolean(true));
 }
 
 #[test]
@@ -664,6 +729,10 @@ fn strict_rune_order_advances_original_items_without_rewriting_saved_runes() {
         let xml =
             std::fs::read_to_string(root.join(format!("build-{build_number:02}.xml"))).unwrap();
         let stage = prepare(&xml);
+        if build_number == 2 {
+            assert_population_order_frontier(&stage);
+            assert_eq!(stage.report().registration_order.len(), 34);
+        }
         let record = stage
             .report()
             .records
@@ -703,6 +772,8 @@ fn original_advanced_unique_flask_registers_with_its_single_line_order() {
     // One explicit line still requires the source lookup/order mutation.
     let xml = std::fs::read_to_string(path).unwrap();
     let prepared = prepare(&xml);
+    assert_population_order_frontier(&prepared);
+    assert_eq!(prepared.report().registration_order.len(), 34);
     let record = prepared
         .report()
         .records
@@ -741,4 +812,82 @@ fn original_advanced_unique_flask_registers_with_its_single_line_order() {
             .frontiers
             .contains(&"equipment_participation")
     );
+}
+
+#[test]
+fn original_item_set_work_limit_is_explicit_and_cumulative() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures/builds/breadth-20260908");
+    for number in 1..=5 {
+        let xml = std::fs::read_to_string(root.join(format!("build-{number:02}.xml"))).unwrap();
+        let build = import(&xml);
+        let view = resolve_view(
+            &build,
+            data().snapshot(),
+            &ViewRequest::default(),
+            ResolveLimits::default(),
+        )
+        .unwrap();
+        if number == 2 {
+            let failure = match prepare_authored_items(
+                &build,
+                &view,
+                data(),
+                ItemPreparationLimits {
+                    max_set_steps: 5_000_000,
+                    ..Default::default()
+                },
+            ) {
+                Ok(_) => {
+                    panic!("the measured five-million-step limit must reject this full inventory")
+                }
+                Err(error) => error,
+            };
+            assert_eq!(failure.kind, EvaluationErrorKind::InvalidRequest);
+            let counts = failure
+                .message
+                .strip_prefix("item-set construction byte/work bound: bytes ")
+                .unwrap();
+            let (bytes, steps) = counts.split_once("; steps ").unwrap();
+            let (used_bytes, max_bytes) = bytes.split_once('/').unwrap();
+            let (used_steps, max_steps) = steps.split_once('/').unwrap();
+            assert!(used_bytes.parse::<usize>().unwrap() <= max_bytes.parse::<usize>().unwrap());
+            assert_eq!(max_steps.parse::<u64>().unwrap(), 5_000_000);
+            assert!(used_steps.parse::<u64>().unwrap() > 5_000_000);
+        }
+        let limits = ItemPreparationLimits {
+            max_set_steps: 20_000_000,
+            ..Default::default()
+        };
+        let prepared = prepare_authored_items(&build, &view, data(), limits).unwrap();
+        let report = prepared.report();
+        let state = prepared.item_sets().unwrap();
+        assert_eq!(state.limits().max_steps, limits.max_set_steps);
+        assert!(state.usage().steps <= limits.max_set_steps);
+        assert_eq!(report.records.len(), [16, 34, 17, 21, 28][number - 1]);
+        assert_eq!(
+            report.registration_order.len(),
+            [13, 34, 0, 21, 28][number - 1]
+        );
+        if matches!(number, 2 | 4 | 5) {
+            assert!(state.usage().steps > 5_000_000);
+            assert_population_order_frontier(&prepared);
+        }
+        // A bounded prefix is not completed SyncLoadouts, equipment or calculation.
+        assert!(report.frontiers.contains(&"equipment_participation"));
+        assert!(report.frontiers.contains(&"actor_item_effects"));
+        eprintln!(
+            "item-set work measurement {}",
+            serde_json::json!({
+                "build": number,
+                "records": report.records.len(),
+                "registered": report.registration_order.len(),
+                "phase": state.phase(),
+                "activation": report.activation,
+                "usage": state.usage(),
+                "max_set_steps": limits.max_set_steps,
+                "complete_native_build": false,
+            })
+        );
+    }
 }

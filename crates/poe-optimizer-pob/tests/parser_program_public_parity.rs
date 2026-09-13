@@ -39,7 +39,7 @@ fn packaged_and_explicit_program_admissions_use_the_same_public_constructor() {
         );
         assert_eq!(admitted.is_special(id), !matches!(target, Target::Grant));
     }
-    assert_eq!(owner.data().programs.admissions.len(), 29);
+    assert_eq!(owner.data().programs.admissions.len(), 80);
     let packaged = CompiledModifierParser::new(owner).unwrap();
     let explicit = source::parser(source::bare_data());
     let source = Original::new(owner);

@@ -69,15 +69,15 @@
       "program_sha256": "df963de02782bcafa0a054fb066d7c4a49d334ee483b0b173dd0d2009a66ff1b",
       "role": "helper",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2255,
-          "end_line": 2266,
-          "sha256": "598f1418a49d804c775b07d7fc2550d955065d2016169be0614add46684cae59"
-        },
-        "function_start": 20,
         "function_end": 414,
-        "function_sha256": "aaa76789c35b153365d2fd06e9abf2ef89100f09221d2dea423cef2a96fc9c6d"
+        "function_sha256": "aaa76789c35b153365d2fd06e9abf2ef89100f09221d2dea423cef2a96fc9c6d",
+        "function_start": 20,
+        "source": {
+          "end_line": 2266,
+          "line": 2255,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "598f1418a49d804c775b07d7fc2550d955065d2016169be0614add46684cae59"
+        }
       }
     },
     {
@@ -85,15 +85,15 @@
       "program_sha256": "64578f2cc6149d3e5d5bffde89eee7a57185c3dd40f5f85317bec8b339fbc930",
       "role": "helper",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2177,
-          "end_line": 2179,
-          "sha256": "3b10ade732d4ce8a9daede05dcbebcff81c635e317b016688a375de902499de6"
-        },
-        "function_start": 6,
         "function_end": 71,
-        "function_sha256": "50f7d026606f1714c6071b5c04ecdd883f0833f88980eda033cb351c62fcd063"
+        "function_sha256": "50f7d026606f1714c6071b5c04ecdd883f0833f88980eda033cb351c62fcd063",
+        "function_start": 6,
+        "source": {
+          "end_line": 2179,
+          "line": 2177,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "3b10ade732d4ce8a9daede05dcbebcff81c635e317b016688a375de902499de6"
+        }
       }
     },
     {
@@ -101,15 +101,15 @@
       "program_sha256": "4b376eee4ca67b4f2ea99e2693a271d413f60005325a8594d85f22d838cfb4fc",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2345,
-          "end_line": 2347,
-          "sha256": "5555116c9f1a2adb24c019d95b61949428331558df4a45e5ae311850a592185e"
-        },
-        "function_start": 108,
         "function_end": 237,
-        "function_sha256": "e12dec518c05fe5d4a0b2525f7f30e1723fa33ffc9e4d35cb9312749e532a6bf"
+        "function_sha256": "e12dec518c05fe5d4a0b2525f7f30e1723fa33ffc9e4d35cb9312749e532a6bf",
+        "function_start": 108,
+        "source": {
+          "end_line": 2347,
+          "line": 2345,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "5555116c9f1a2adb24c019d95b61949428331558df4a45e5ae311850a592185e"
+        }
       }
     },
     {
@@ -117,15 +117,15 @@
       "program_sha256": "3625775479c83c5df4a163ba80cdace593b526e6e1dc9c7af8a174c2ab962054",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2322,
-          "end_line": 2324,
-          "sha256": "cfe44aa2929b330978196e327a87d1f45bb80df823d6d29c8eacd26e77dbc17c"
-        },
-        "function_start": 95,
         "function_end": 244,
-        "function_sha256": "06e6ef20af13ebb0cee37c86a03b5cb10827ccfa777ea957a2eb04744d56e679"
+        "function_sha256": "06e6ef20af13ebb0cee37c86a03b5cb10827ccfa777ea957a2eb04744d56e679",
+        "function_start": 95,
+        "source": {
+          "end_line": 2324,
+          "line": 2322,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "cfe44aa2929b330978196e327a87d1f45bb80df823d6d29c8eacd26e77dbc17c"
+        }
       }
     },
     {
@@ -133,15 +133,15 @@
       "program_sha256": "2db144433ef652733c6ae2a38a4884eba610ee7316c369c0999f05343ca4f30c",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2325,
-          "end_line": 2327,
-          "sha256": "b8135aa35cf69ab69107de532087046fe01ed792c05900a2f921e6b7f8011b0d"
-        },
-        "function_start": 118,
         "function_end": 282,
-        "function_sha256": "38b61c5ee79c8f425ea1cbdde9eb69843ae864c5455992afdd96db7b8dc0f882"
+        "function_sha256": "38b61c5ee79c8f425ea1cbdde9eb69843ae864c5455992afdd96db7b8dc0f882",
+        "function_start": 118,
+        "source": {
+          "end_line": 2327,
+          "line": 2325,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "b8135aa35cf69ab69107de532087046fe01ed792c05900a2f921e6b7f8011b0d"
+        }
       }
     },
     {
@@ -149,15 +149,15 @@
       "program_sha256": "b5a586368ee1640be9ccc2d64ca71142d57e4f064c23f063296eb5b9564fde41",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2310,
-          "end_line": 2312,
-          "sha256": "2c77a6ec03fe845c1b26dbbad379f2d69380afb29e008389fc42efbdf5fe1cc6"
-        },
-        "function_start": 92,
         "function_end": 189,
-        "function_sha256": "2803118af758aa58ac5c3b9fa2e93acc084146dc214356e5e3afce423532fc58"
+        "function_sha256": "2803118af758aa58ac5c3b9fa2e93acc084146dc214356e5e3afce423532fc58",
+        "function_start": 92,
+        "source": {
+          "end_line": 2312,
+          "line": 2310,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "2c77a6ec03fe845c1b26dbbad379f2d69380afb29e008389fc42efbdf5fe1cc6"
+        }
       }
     },
     {
@@ -165,15 +165,15 @@
       "program_sha256": "5fa6e72dc075ab2daff6422c96a8f7f79279dd17f957af1a918d92c6a2925ca1",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2304,
-          "end_line": 2306,
-          "sha256": "b5d8d624fd4ce866e56f78ffbbe984f78f083f7bd962473d14cc57df38afe215"
-        },
-        "function_start": 154,
         "function_end": 335,
-        "function_sha256": "2cafa0faee48bd2ac896445f0e125be98c6d4704ac2ab1791a224c2e53bdb1dd"
+        "function_sha256": "2cafa0faee48bd2ac896445f0e125be98c6d4704ac2ab1791a224c2e53bdb1dd",
+        "function_start": 154,
+        "source": {
+          "end_line": 2306,
+          "line": 2304,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "b5d8d624fd4ce866e56f78ffbbe984f78f083f7bd962473d14cc57df38afe215"
+        }
       }
     },
     {
@@ -181,15 +181,15 @@
       "program_sha256": "d8fbc916a082453d63caa49be0b4c3a6fc28fffd40cca8b387e0bfce8b54cf46",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2301,
-          "end_line": 2303,
-          "sha256": "7d2c82fb033ecdc1d3ec246b3605ef5ca27da65be127ae41114a329278eba17a"
-        },
-        "function_start": 133,
         "function_end": 293,
-        "function_sha256": "953de895f38b3becbc709d5a81c5802d06d0394df686f782bb28898ca2ad1093"
+        "function_sha256": "953de895f38b3becbc709d5a81c5802d06d0394df686f782bb28898ca2ad1093",
+        "function_start": 133,
+        "source": {
+          "end_line": 2303,
+          "line": 2301,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "7d2c82fb033ecdc1d3ec246b3605ef5ca27da65be127ae41114a329278eba17a"
+        }
       }
     },
     {
@@ -197,15 +197,15 @@
       "program_sha256": "e459db7f04a8984434c6dafcee67f4867f3104cebcef18c77fb23e2a59e1433e",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2330,
-          "end_line": 2332,
-          "sha256": "be515ad1ed587e40a3ee4e28313e638935c7372d1765238c9e5821f4dd0cfa7a"
-        },
-        "function_start": 113,
         "function_end": 342,
-        "function_sha256": "25e3c0acc10a8ccc8f4f36642d7906ee7d1c5fedfb5d83e805c5b509e96ae81d"
+        "function_sha256": "25e3c0acc10a8ccc8f4f36642d7906ee7d1c5fedfb5d83e805c5b509e96ae81d",
+        "function_start": 113,
+        "source": {
+          "end_line": 2332,
+          "line": 2330,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "be515ad1ed587e40a3ee4e28313e638935c7372d1765238c9e5821f4dd0cfa7a"
+        }
       }
     },
     {
@@ -213,15 +213,15 @@
       "program_sha256": "9c66754e671797e214416ab2bd2981eab97cbccb5cd279079ebe5bae6bd41602",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2316,
-          "end_line": 2318,
-          "sha256": "c44aa880fe08928bf9de58261bb67520e17449b1176a666028880616cd96ecf9"
-        },
-        "function_start": 102,
         "function_end": 194,
-        "function_sha256": "5343faa0cdfaf525aee3158bb5349eb349d6a592de58bc9ae244dd73ba50c0d3"
+        "function_sha256": "5343faa0cdfaf525aee3158bb5349eb349d6a592de58bc9ae244dd73ba50c0d3",
+        "function_start": 102,
+        "source": {
+          "end_line": 2318,
+          "line": 2316,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "c44aa880fe08928bf9de58261bb67520e17449b1176a666028880616cd96ecf9"
+        }
       }
     },
     {
@@ -229,15 +229,15 @@
       "program_sha256": "e0b4207731eb693fe7355b0b171a95f32185c9ba6c5b78b8c25de940f0ed794b",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2298,
-          "end_line": 2300,
-          "sha256": "ac45a5ec77d396b38bb4e3027cdd970bbdec13b471ba564066ec05f6b8bcecd1"
-        },
-        "function_start": 115,
         "function_end": 274,
-        "function_sha256": "02b2a76f05b74c64b1d35a47d3d6ff309474bb0f9964d86190741a80187b0f9d"
+        "function_sha256": "02b2a76f05b74c64b1d35a47d3d6ff309474bb0f9964d86190741a80187b0f9d",
+        "function_start": 115,
+        "source": {
+          "end_line": 2300,
+          "line": 2298,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "ac45a5ec77d396b38bb4e3027cdd970bbdec13b471ba564066ec05f6b8bcecd1"
+        }
       }
     },
     {
@@ -245,15 +245,15 @@
       "program_sha256": "3eb2d2db3504d0c4dc28453a768802b0666540c9c685a7a1c7304c993acd3e92",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2313,
-          "end_line": 2315,
-          "sha256": "4416d1528c10ab4822937028a3fd96d0ea21451ba214a337c45281af6539f03e"
-        },
-        "function_start": 95,
         "function_end": 249,
-        "function_sha256": "f01d3afd9da8ea3574fccde0a1577957830430198e9b5cf6777d35ec262ac3bf"
+        "function_sha256": "f01d3afd9da8ea3574fccde0a1577957830430198e9b5cf6777d35ec262ac3bf",
+        "function_start": 95,
+        "source": {
+          "end_line": 2315,
+          "line": 2313,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "4416d1528c10ab4822937028a3fd96d0ea21451ba214a337c45281af6539f03e"
+        }
       }
     },
     {
@@ -261,15 +261,15 @@
       "program_sha256": "0c46f7a33dce91ee8e892e629493edaff65ce779449fa6f3c24bc5ba0d397e4e",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2333,
-          "end_line": 2335,
-          "sha256": "130a486207ebc19e39120ad4843208c40fe1ac1dc99dd1df7235800b207122ae"
-        },
-        "function_start": 111,
         "function_end": 307,
-        "function_sha256": "c7a2627b58a4a4650fb99fa8d993cf1f2b90f564496b7345928973b1f82aecd2"
+        "function_sha256": "c7a2627b58a4a4650fb99fa8d993cf1f2b90f564496b7345928973b1f82aecd2",
+        "function_start": 111,
+        "source": {
+          "end_line": 2335,
+          "line": 2333,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "130a486207ebc19e39120ad4843208c40fe1ac1dc99dd1df7235800b207122ae"
+        }
       }
     },
     {
@@ -277,15 +277,15 @@
       "program_sha256": "d868b276d4bf11ac69c0bd2aff14d9ff7dce359378c383bfc35d71ef50f1397a",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2289,
-          "end_line": 2291,
-          "sha256": "f4ac17c760f2442b9fbdf41caf43db7da851fa9ad66d7bfad51f2b0935deba29"
-        },
-        "function_start": 139,
         "function_end": 285,
-        "function_sha256": "44259337baeb2ef17b775c02c1e81a4a1f9526af13161ad4d8b9267f26acbe4f"
+        "function_sha256": "44259337baeb2ef17b775c02c1e81a4a1f9526af13161ad4d8b9267f26acbe4f",
+        "function_start": 139,
+        "source": {
+          "end_line": 2291,
+          "line": 2289,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "f4ac17c760f2442b9fbdf41caf43db7da851fa9ad66d7bfad51f2b0935deba29"
+        }
       }
     },
     {
@@ -293,15 +293,15 @@
       "program_sha256": "e1857ea7f5c04384f6210b4c7cc819f44aaf44f35492c8f7c16300bcab8f1099",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2307,
-          "end_line": 2309,
-          "sha256": "4291b72e77fdd8b12e7754b6256b56f7c4222c367e3acc2713ae6aad60a2f13f"
-        },
-        "function_start": 78,
         "function_end": 181,
-        "function_sha256": "fa8419e09640dd4f3eca18d04a5b21bb1aabb407852bf92fd9e39f01ce73d36c"
+        "function_sha256": "fa8419e09640dd4f3eca18d04a5b21bb1aabb407852bf92fd9e39f01ce73d36c",
+        "function_start": 78,
+        "source": {
+          "end_line": 2309,
+          "line": 2307,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "4291b72e77fdd8b12e7754b6256b56f7c4222c367e3acc2713ae6aad60a2f13f"
+        }
       }
     },
     {
@@ -309,15 +309,15 @@
       "program_sha256": "dcfa64677d54b8bd841897d7f16ed7379bcd655503a1fefbd6361564864fbd0e",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2277,
-          "end_line": 2279,
-          "sha256": "59ef04ff16f072a1ee3abc9548fef111ed4547841daefb7a58d663ade155e74c"
-        },
-        "function_start": 114,
         "function_end": 226,
-        "function_sha256": "3768193bc1ddff3c1b3a30a0a7b8c5c239057f5eb9c4db9ede315621f2c91188"
+        "function_sha256": "3768193bc1ddff3c1b3a30a0a7b8c5c239057f5eb9c4db9ede315621f2c91188",
+        "function_start": 114,
+        "source": {
+          "end_line": 2279,
+          "line": 2277,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "59ef04ff16f072a1ee3abc9548fef111ed4547841daefb7a58d663ade155e74c"
+        }
       }
     },
     {
@@ -325,15 +325,15 @@
       "program_sha256": "2343a8b43d737492b37301bea80af4d3334c53555a8034f5e7bdf98a305a9a04",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2274,
-          "end_line": 2276,
-          "sha256": "e76e75df99aa891ce35fd34c1069bc0080311136a5dfc2ff50156e64475482cc"
-        },
-        "function_start": 110,
         "function_end": 315,
-        "function_sha256": "371b4c06e7004c950927403c41e12807dc71d67dcd753259541367fbc63c8a85"
+        "function_sha256": "371b4c06e7004c950927403c41e12807dc71d67dcd753259541367fbc63c8a85",
+        "function_start": 110,
+        "source": {
+          "end_line": 2276,
+          "line": 2274,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "e76e75df99aa891ce35fd34c1069bc0080311136a5dfc2ff50156e64475482cc"
+        }
       }
     },
     {
@@ -341,15 +341,15 @@
       "program_sha256": "f64c0e491dd9ae2e1e7c3201a5a72f554b33dd5e4ad0307ae9a35259d4742c2c",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2295,
-          "end_line": 2297,
-          "sha256": "c9842adadbf76e46f24f8df6043d17731b01b92eda66d673aa7ece46280cf859"
-        },
-        "function_start": 137,
         "function_end": 298,
-        "function_sha256": "6fced89dc130b356501f8327406af5ff1a68ccd225bc65cb9ecd108181bb3613"
+        "function_sha256": "6fced89dc130b356501f8327406af5ff1a68ccd225bc65cb9ecd108181bb3613",
+        "function_start": 137,
+        "source": {
+          "end_line": 2297,
+          "line": 2295,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "c9842adadbf76e46f24f8df6043d17731b01b92eda66d673aa7ece46280cf859"
+        }
       }
     },
     {
@@ -357,15 +357,15 @@
       "program_sha256": "4228c98e66838643e1708f028ab512e01fcda24dfbdec7802ca126a26cf555c5",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2286,
-          "end_line": 2288,
-          "sha256": "e8919a4eb5d38c4a07057c386882b7b642213284d1dcfd9c55ed4bc590e7c260"
-        },
-        "function_start": 126,
         "function_end": 274,
-        "function_sha256": "9796646acc2ec198869a9c2bcf9904d06fa21045df6c6b737dc8ee59d8f49c6c"
+        "function_sha256": "9796646acc2ec198869a9c2bcf9904d06fa21045df6c6b737dc8ee59d8f49c6c",
+        "function_start": 126,
+        "source": {
+          "end_line": 2288,
+          "line": 2286,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "e8919a4eb5d38c4a07057c386882b7b642213284d1dcfd9c55ed4bc590e7c260"
+        }
       }
     },
     {
@@ -373,15 +373,15 @@
       "program_sha256": "925875d4a90ddc96460260cc1dd4691f24959441726d04069d43a8fd47609fb9",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2283,
-          "end_line": 2285,
-          "sha256": "3185d7bccb37f133698fda39c0d131cdbd164bb17bed0aaf9fcdd5b3bd8b583b"
-        },
-        "function_start": 133,
         "function_end": 338,
-        "function_sha256": "371b4c06e7004c950927403c41e12807dc71d67dcd753259541367fbc63c8a85"
+        "function_sha256": "371b4c06e7004c950927403c41e12807dc71d67dcd753259541367fbc63c8a85",
+        "function_start": 133,
+        "source": {
+          "end_line": 2285,
+          "line": 2283,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "3185d7bccb37f133698fda39c0d131cdbd164bb17bed0aaf9fcdd5b3bd8b583b"
+        }
       }
     },
     {
@@ -389,15 +389,15 @@
       "program_sha256": "73b16c7605f0c5bdca9499c200812ac2a720a4be5cbd33bfac7c7fe3a6d47a69",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2280,
-          "end_line": 2282,
-          "sha256": "e41e42dd33301dfc269c646af9be8a4f73df0c7024b2a00b9acf8284fe51bb27"
-        },
-        "function_start": 124,
         "function_end": 236,
-        "function_sha256": "8b94153de285a69e3b893cfec27345de8704ca3782b42944a912f6254b1c5018"
+        "function_sha256": "8b94153de285a69e3b893cfec27345de8704ca3782b42944a912f6254b1c5018",
+        "function_start": 124,
+        "source": {
+          "end_line": 2282,
+          "line": 2280,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "e41e42dd33301dfc269c646af9be8a4f73df0c7024b2a00b9acf8284fe51bb27"
+        }
       }
     },
     {
@@ -405,15 +405,15 @@
       "program_sha256": "34a1eb4bea9955fae298143d12d8dd75a8eca16a104919eefeea867e9679a401",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2342,
-          "end_line": 2344,
-          "sha256": "e3cef52133e643c55fc9a858dd127c43b70b7fd17861ef27920daca1a23c413f"
-        },
-        "function_start": 92,
         "function_end": 189,
-        "function_sha256": "a9cf6c4b96a047a73a3976f5f7c528a588598a0b2884381c164b3ece09c7e6b6"
+        "function_sha256": "a9cf6c4b96a047a73a3976f5f7c528a588598a0b2884381c164b3ece09c7e6b6",
+        "function_start": 92,
+        "source": {
+          "end_line": 2344,
+          "line": 2342,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "e3cef52133e643c55fc9a858dd127c43b70b7fd17861ef27920daca1a23c413f"
+        }
       }
     },
     {
@@ -421,15 +421,15 @@
       "program_sha256": "58a72a7e9100f0102c78bfb0b36aa6049a23d7482fc8d990d97bbf01eec7a981",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2319,
-          "end_line": 2321,
-          "sha256": "c74e695ebdd1fb9120b6509f5d911f8decd7b010051922b0b0ef775a875585ce"
-        },
-        "function_start": 105,
         "function_end": 264,
-        "function_sha256": "d924769cafc74a16cf82fad4b0e143e25e5217b286d2c652e5e4dcbfee349568"
+        "function_sha256": "d924769cafc74a16cf82fad4b0e143e25e5217b286d2c652e5e4dcbfee349568",
+        "function_start": 105,
+        "source": {
+          "end_line": 2321,
+          "line": 2319,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "c74e695ebdd1fb9120b6509f5d911f8decd7b010051922b0b0ef775a875585ce"
+        }
       }
     },
     {
@@ -437,15 +437,15 @@
       "program_sha256": "46b0bbd41301b3b1a24623de6249683bed46c197e2858d8ae47629061da8bfcb",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2339,
-          "end_line": 2341,
-          "sha256": "c5036315e3c99a2f70103cad33214016ea768a89fc65dbe73cd1c5ef1e279368"
-        },
-        "function_start": 77,
         "function_end": 170,
-        "function_sha256": "9b30f80a554a7a3920f22123d2c1f49a02fe2ba3475a264f4fea400d3bdc211e"
+        "function_sha256": "9b30f80a554a7a3920f22123d2c1f49a02fe2ba3475a264f4fea400d3bdc211e",
+        "function_start": 77,
+        "source": {
+          "end_line": 2341,
+          "line": 2339,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "c5036315e3c99a2f70103cad33214016ea768a89fc65dbe73cd1c5ef1e279368"
+        }
       }
     },
     {
@@ -453,15 +453,831 @@
       "program_sha256": "066f0937896b4bb05fa2c4c26dcffd8974c2d010f2fcf5636ee821130e1a4d15",
       "role": "special",
       "source": {
-        "source": {
-          "path": "src/Modules/ModParser.lua",
-          "line": 2336,
-          "end_line": 2338,
-          "sha256": "6aa3f9a29a1357645a86c58097699f73822a8cc728830925d3cdc62affbba3bb"
-        },
-        "function_start": 77,
         "function_end": 169,
-        "function_sha256": "c358ef93308ce8493bc74146fe776254ac55509e41955b2a3b2cf42f0aa0ce9c"
+        "function_sha256": "c358ef93308ce8493bc74146fe776254ac55509e41955b2a3b2cf42f0aa0ce9c",
+        "function_start": 77,
+        "source": {
+          "end_line": 2338,
+          "line": 2336,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "6aa3f9a29a1357645a86c58097699f73822a8cc728830925d3cdc62affbba3bb"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "12a4672248ba36b2afd3fd49cbd9426a4a9af3a5a00cdd37d454289b7c968447",
+      "role": "special",
+      "source": {
+        "function_end": 175,
+        "function_sha256": "dd5ab1521238e1d96e47c8df34c3c93ab26a3ddfe9a14f6be5159f3462888a66",
+        "function_start": 72,
+        "source": {
+          "end_line": 3630,
+          "line": 3630,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "944e3a1442be14c64c9a91f5f0d729bbe2d8a3a7498037dde837824d82160df6"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "804da8289890d5751bac72a3b0db1cb096bc7a29426a51f67329cd0c8a21fb34",
+      "role": "helper",
+      "source": {
+        "function_end": 886,
+        "function_sha256": "9913e35b109b0958246d4f9b49949a3f6c5063b87bc09bb0d244942bddb905c2",
+        "function_start": 6,
+        "source": {
+          "end_line": 2218,
+          "line": 2201,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "354d9d84c78bac460e20eeb9c6da96649be0850e4566f2ef3981b4eafb824914"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "db087926784ac74f853b65bbf738b095ef563cb0d981eced081ed306bb7e36fb",
+      "role": "special",
+      "source": {
+        "function_end": 170,
+        "function_sha256": "b9dfcdfb08412c3ad2d2e8966b8369963d044410377ad46b6e55618ddd519abf",
+        "function_start": 67,
+        "source": {
+          "end_line": 3622,
+          "line": 3622,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "302fa19260e6528fd17a9c2b4102f14484ff270386ace95ac8f073ae75be0038"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "42183ece3d04463d887caf2d2d3f95d11568ab4cbf75b3ef28a2f8d6c0adea85",
+      "role": "special",
+      "source": {
+        "function_end": 197,
+        "function_sha256": "dd5ab1521238e1d96e47c8df34c3c93ab26a3ddfe9a14f6be5159f3462888a66",
+        "function_start": 94,
+        "source": {
+          "end_line": 3625,
+          "line": 3625,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "cf7344154d9d44348a388936586d0cb9362259ff59563636fbb274b6e6506d9a"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "cf2117ebc7d21d330bdc76e0dd8ad78c9381a683bcc06c5dcb5fd4676c731bb0",
+      "role": "special",
+      "source": {
+        "function_end": 201,
+        "function_sha256": "b116bcf91e8d73e5e5f86cedc922412a0eedee3f1832cb9c8fdf638a80f6c4c1",
+        "function_start": 83,
+        "source": {
+          "end_line": 3628,
+          "line": 3628,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "5caaa779a0b32ab2818ea4e87264ff36c25f53d5941e0ee0c5d7f748015d2801"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "944094cb6a88c076f360a50a86daa7d00a996704f19a4d89c2eb44611e7e095a",
+      "role": "special",
+      "source": {
+        "function_end": 166,
+        "function_sha256": "b9dfcdfb08412c3ad2d2e8966b8369963d044410377ad46b6e55618ddd519abf",
+        "function_start": 63,
+        "source": {
+          "end_line": 3624,
+          "line": 3624,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "7860cb191f7cb5edf5446b18a51765743e5ac64e77ba7be3d5900703cd454538"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "b23d7f216d0e68733513f92942200a44ac858f1f3f63f6ddbf0473a306f4996e",
+      "role": "special",
+      "source": {
+        "function_end": 189,
+        "function_sha256": "dd5ab1521238e1d96e47c8df34c3c93ab26a3ddfe9a14f6be5159f3462888a66",
+        "function_start": 86,
+        "source": {
+          "end_line": 3623,
+          "line": 3623,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "b4d27a667fbc2993f2bc1a619449631ecd91f62be9a3a1e974e21353d2b5b1e6"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "9c2d8d108b02075ffa0afbd3ba94227666627806b19ed066e38dc93f4563974c",
+      "role": "special",
+      "source": {
+        "function_end": 198,
+        "function_sha256": "c242ddf6b83900fdcdd07c08d9ee8ad4d53fe36cb0d9309c9b5d65f5ed016d33",
+        "function_start": 96,
+        "source": {
+          "end_line": 3627,
+          "line": 3627,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "b8f860b37b4bf89844080e72f9fb8e2e3e90e5d02dd49175118cd84da216adc2"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "858a43f1e9a35f4fa6a352110dad49b82d2232cc147029183a1b5fc46282d600",
+      "role": "special",
+      "source": {
+        "function_end": 224,
+        "function_sha256": "dd5ab1521238e1d96e47c8df34c3c93ab26a3ddfe9a14f6be5159f3462888a66",
+        "function_start": 121,
+        "source": {
+          "end_line": 3629,
+          "line": 3629,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "92899a6dbbbaefe35b7c6c786fd051c128a4e7ff5959f38b3ac348cc3c0a8235"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "a11a238e829aa17af59c2bc3ef48ab066024baf59e5f309179c2b902c7ff78cd",
+      "role": "special",
+      "source": {
+        "function_end": 183,
+        "function_sha256": "dd5ab1521238e1d96e47c8df34c3c93ab26a3ddfe9a14f6be5159f3462888a66",
+        "function_start": 80,
+        "source": {
+          "end_line": 3626,
+          "line": 3626,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "578ce0153d1fc2c6567e936feb303867db9de40fdae22c2a27a449703cf349de"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "aab5fa3540feea76a9fea427fd09a4816052fc9f7f2e101059e36302b6627dda",
+      "role": "special",
+      "source": {
+        "function_end": 157,
+        "function_sha256": "44a616e93f8bbc2850e6b7c59bd9a01e6b3f5c0c2c5cde0472c11be146b503f8",
+        "function_start": 41,
+        "source": {
+          "end_line": 3599,
+          "line": 3599,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "6c965eef5d15ebbc122bf7afd7683bde805d1e6f3da604c25d1f5b418264abdd"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "9292e789f0ce94db26e80aad73bb264ace59e23437732736f2780d24f4d8f032",
+      "role": "special",
+      "source": {
+        "function_end": 120,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 56,
+        "source": {
+          "end_line": 3592,
+          "line": 3592,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "7cc7e2edd5a2cb53f7b44f9135a6451092b37b7924f775fb2592e24c6cd80b23"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "94a62d7df60dbb9f71e8f635d38718be1170efbe29956e7b528b897b8065cd45",
+      "role": "special",
+      "source": {
+        "function_end": 127,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 63,
+        "source": {
+          "end_line": 3591,
+          "line": 3591,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "4b1e9b78c76a15def54a8085e384bd8e4f2468e0ed2688cd9808c60833401342"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "5a37b2cfc516b4add00f39ec2faa9b03e4dfb9c237255b22602b8b04a10e86cf",
+      "role": "special",
+      "source": {
+        "function_end": 122,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 58,
+        "source": {
+          "end_line": 3596,
+          "line": 3596,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "a00313e5d50925e78614103e1b0ac9fd7535913949d35876894873bded235f26"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "d95bdd1c8a661a823ac0421b190029666bffe73b7bb25ba89ca690bfafa3e3c6",
+      "role": "special",
+      "source": {
+        "function_end": 129,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 65,
+        "source": {
+          "end_line": 3594,
+          "line": 3594,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "e46bf920c3f64df37253009c4f3a61ca534b98ce1b590f6bb7cff2b9a8c4d10b"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "20c014e0d5e623a4f53340cb99f2da49508bd124339f4a9c0cee39960ac1af17",
+      "role": "special",
+      "source": {
+        "function_end": 142,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 78,
+        "source": {
+          "end_line": 3595,
+          "line": 3595,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "827ea91299aede9d145124b7fd0567d867c3f28744cbb97710f9ddf942fc2e13"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "46a6dab2eceb65708e0a374f18afb45d8f011f80354d690de8c318f9d33725f5",
+      "role": "special",
+      "source": {
+        "function_end": 136,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 72,
+        "source": {
+          "end_line": 3597,
+          "line": 3597,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "250d6f13d92e21a8628a248b3c739313d3c4b6a9be1645b84d940ff33feac615"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "db3b5886b49493b0b16e96ac076b8c67f0af8f6b94533a7403b97c50c6eea8b2",
+      "role": "special",
+      "source": {
+        "function_end": 134,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 70,
+        "source": {
+          "end_line": 3598,
+          "line": 3598,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "6d389aa55cc820e8711a91864066c2835d6cf9a734732384b40daa6da8b64bc7"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "6f913e43085006d136ec65da9e113fbe9d4160bbfdb59148f3df34dc70f91e36",
+      "role": "special",
+      "source": {
+        "function_end": 131,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 67,
+        "source": {
+          "end_line": 3631,
+          "line": 3631,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "1551f77c8d588d8a14148f39e8128d9f6b24e8b5e6965ea2f9a3581435293d11"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "7c7cdc7433c4f524caec7ee53ebd157d76dff270c38bcf5081ef98c590a2d95d",
+      "role": "special",
+      "source": {
+        "function_end": 171,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 107,
+        "source": {
+          "end_line": 3679,
+          "line": 3679,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "86b2a7877cd15f71a775ff3bb3e8a6a1115acdf80b116c18d85e8b8ecc928ea7"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "e4834d6d22d7f9714e66bfdebbbfd8cc83f73b1035c265772bd8ffb5a18937f9",
+      "role": "special",
+      "source": {
+        "function_end": 143,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 79,
+        "source": {
+          "end_line": 3678,
+          "line": 3678,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "a2f1c0a1023ac9ee98e1c589b836af119e3e61ada3051925fa96b05b6918958a"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "94dd9e7011d849bde03d9258718e5f507adb24e1e24df38a884d92c5650cacec",
+      "role": "special",
+      "source": {
+        "function_end": 117,
+        "function_sha256": "df0dae83005822495019b016da627c19e1c29c31b4a347b9a894ef6d2a0b919d",
+        "function_start": 39,
+        "source": {
+          "end_line": 3633,
+          "line": 3633,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "ee2d79d053316906aa1e5ff98e5bd1069be58f7367df9ca6f7df3690c95ed9d1"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "996563ac0fcb9037d546cc191600434b05d25abec4abcd133b6047a42237bc25",
+      "role": "special",
+      "source": {
+        "function_end": 196,
+        "function_sha256": "0431df29f3e5fb5f6c36fe9a5448f86cc732d1a6f6baab5b754fb11e60894d17",
+        "function_start": 88,
+        "source": {
+          "end_line": 3649,
+          "line": 3649,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "271a5df9bed70f33b5c7fa68a645e31fe55ce61af02654ce757bdbeef8625acf"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "9fbbbc79a304706bd0c6185beb3c7019dd4c17c75ecacc24fdeb0fa52afd2b0b",
+      "role": "special",
+      "source": {
+        "function_end": 135,
+        "function_sha256": "9b9d4724d69f6ddcfe94516de566680ec1f45982b87849da8a2d404cf7e4ad00",
+        "function_start": 50,
+        "source": {
+          "end_line": 3650,
+          "line": 3650,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "44221a6c6e5d52999a9b24b910b6aca9901b37dc1d407966b435e905ddb8910a"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "26f77ab82510f10bb9395249b6359e3493c874439ae7f6fd11b8b71c0c06121f",
+      "role": "special",
+      "source": {
+        "function_end": 133,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 69,
+        "source": {
+          "end_line": 3677,
+          "line": 3677,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "61021447e32f6c6855e4be3f8aa113ccf8f37c9d2ab6f5276ee83785e59a6396"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "3f4052cb2de8229da075323d5700613ad67c407669d7024d2f5a026e7304ab52",
+      "role": "special",
+      "source": {
+        "function_end": 116,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 52,
+        "source": {
+          "end_line": 3664,
+          "line": 3664,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "03ce33c3211d7c8051799c0fa6379da8fc7b58344dd9aee20b9d60f6579dce9e"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "58d54be646ea07b2478c35a11384b18e3fc2522a8c323e2334f9b268ffbb7e44",
+      "role": "special",
+      "source": {
+        "function_end": 132,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 68,
+        "source": {
+          "end_line": 3616,
+          "line": 3616,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "5874176454577e5410aadf43521580685ecb949d3d6154c56394c12c2e790417"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "a678a7319cb25c82567b1d06d40cc84fe84f97ee32ae7e040983d970c0922157",
+      "role": "special",
+      "source": {
+        "function_end": 150,
+        "function_sha256": "c5afc1390340993401eab5d3bd231239a7089ff9f8767fa54899308ba0d8df2a",
+        "function_start": 69,
+        "source": {
+          "end_line": 3619,
+          "line": 3619,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "310c9142cdda0cfa2c8361c3b830df2ef17e33b7317acdb94308df25183e6c1e"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "5b14373962ba8f3bcb182518957c12f1da8bc53f5d567520af17c44d6bd1b8e8",
+      "role": "special",
+      "source": {
+        "function_end": 120,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 56,
+        "source": {
+          "end_line": 3613,
+          "line": 3613,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "3fc050c70b8ff987cf9424127fd80688db26cbb9f0f8ec9c5b90205e723ec92a"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "02afe71dae09960e0ad1114d09efe5309248823b656b5c0a14759459af862259",
+      "role": "special",
+      "source": {
+        "function_end": 145,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 81,
+        "source": {
+          "end_line": 3618,
+          "line": 3618,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "2ed14319bce3ccd4e811975ee718a16b67864440950900a5375e52aa44c96efa"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "3cea4ed53fa9417c94ad067a1f2ec6c76fe9e2a9760e9477733b72a67471af39",
+      "role": "special",
+      "source": {
+        "function_end": 122,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 58,
+        "source": {
+          "end_line": 3614,
+          "line": 3614,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "c970273af0e84c960f7bb389aaef9ce98e0f9304d93a802d86346c980642bb80"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "dbede84b45b2a98a00947a79f86e23ebe6b7c989749f143a7b9ea5d765b48f8a",
+      "role": "special",
+      "source": {
+        "function_end": 126,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 62,
+        "source": {
+          "end_line": 3615,
+          "line": 3615,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "771ff610bf23a48614470c6c7c2f97e063ae51165bef6accbe37e9847c506aa2"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "d4f1dc75eebc8bb696b6caa45daf5095bb1e1a84051cc67321063f6c6cbb0584",
+      "role": "special",
+      "source": {
+        "function_end": 134,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 70,
+        "source": {
+          "end_line": 3610,
+          "line": 3610,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "f382d94ed632c36bca6be592294e179e31ae11c4b1cab6ee6e17ab7e4729033b"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "6ef6366b62f965fffb6b9d30420e5ad5babbde5f3518a42292e4d7531b2a9756",
+      "role": "special",
+      "source": {
+        "function_end": 123,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 59,
+        "source": {
+          "end_line": 3608,
+          "line": 3608,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "84fc3100c6c5580ac25e893d8be9db4dbca62c61fcc60fb7083d140351296106"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "017afdea1c0f5b0eab6668186b481e316cefdc55d21a1d77f14c707cc0ca5155",
+      "role": "special",
+      "source": {
+        "function_end": 164,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 100,
+        "source": {
+          "end_line": 2896,
+          "line": 2896,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "198cee58eb88011a4603bb50fd0c59d5494622122b55acba3e96cb3f79c555fc"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "76074aa8e56594022a7bd5fae4c803b2f2e14825f861cb981ab575a209493cff",
+      "role": "special",
+      "source": {
+        "function_end": 111,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 47,
+        "source": {
+          "end_line": 3609,
+          "line": 3609,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "aa292e5a98d6b273b9cd9683ca45e04e6970e6c3ed1d9502dabbe0c2b223f7e6"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "bd9c6bc36ad907bbb2a2520ea8034de49080077f4a31a556072120e8d60c2650",
+      "role": "special",
+      "source": {
+        "function_end": 220,
+        "function_sha256": "f06506fcb6ece32659a93e0f84230f847b6c5b384ee531d097d6defe5ffac3a9",
+        "function_start": 58,
+        "source": {
+          "end_line": 3607,
+          "line": 3607,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "f02fffceb4951c1c92c2eb147ef26ccefcda4946075d63b6e60778b034bcef94"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "8f30d8f118b98eab5128d93aeeb4b47f7d073deba046084d520261799efa4d35",
+      "role": "special",
+      "source": {
+        "function_end": 142,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 78,
+        "source": {
+          "end_line": 3617,
+          "line": 3617,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "20f5c2e2e53cb0a242bfc0995998db8779cd5dc95a204d56f357f6227ea53400"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "60c38de1ff9aaf9719a830b326119691f0cc74e794dcfe9b469b5763833fc1fb",
+      "role": "special",
+      "source": {
+        "function_end": 126,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 62,
+        "source": {
+          "end_line": 3602,
+          "line": 3602,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "a3bc885e63fe389ed1dfcd88876045cf27d15e6d05313a71123b0bb00a8c02a7"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "d71c13b6d589c79840953c6a60517f0a9e0ecce1424980c797c92b5c5a5d4bba",
+      "role": "special",
+      "source": {
+        "function_end": 124,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 60,
+        "source": {
+          "end_line": 3605,
+          "line": 3605,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "601e04efac8a47e258135b7dc128e4c1e07c43b35641947f734e97ae682a9a70"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "4fee21c9aabc11162523605424179119f2f41ab8d3bb94aea5259b35016f872f",
+      "role": "special",
+      "source": {
+        "function_end": 149,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 85,
+        "source": {
+          "end_line": 3604,
+          "line": 3604,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "d5f5486e3a3fde5936821af1726f95199812c7eb6d93f627686fe1954160de2e"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "6b9e9073a9e8486f9b9896cf20791f9c3bb169a58f00883e82960e0248fcf09a",
+      "role": "special",
+      "source": {
+        "function_end": 132,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 68,
+        "source": {
+          "end_line": 3603,
+          "line": 3603,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "65a89bbb3f652beb0f4c0f4b1233fb72450198968fa0374df7f1cb64ba5459da"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "fbbca52f8464eb0caf570832a78684573d5af9fafcc74d4c3fbe175be638db71",
+      "role": "special",
+      "source": {
+        "function_end": 131,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 67,
+        "source": {
+          "end_line": 3601,
+          "line": 3601,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "58992d556c85a8d8855a70686cba3910d5f429a166788926213490d6f19d900d"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "9136e9869cadf48ce90250cadd94892ce61026292f7368fa826eac2f3244164d",
+      "role": "special",
+      "source": {
+        "function_end": 125,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 61,
+        "source": {
+          "end_line": 3606,
+          "line": 3606,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "8101a4c3219e9bedaf34d9e652d6502d9882b520724c07a4c5048ba65ca1d35f"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "8448c5fa99916511d849a25769115ab4a6edf8a3aac1e4d7ad3ac1fc01d45512",
+      "role": "special",
+      "source": {
+        "function_end": 124,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 60,
+        "source": {
+          "end_line": 3611,
+          "line": 3611,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "944fab0106ff4b1688c22ec45b8efdb85f7a6e330a0377ecef2a4c6da4a02057"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "27d6d4d3d12cd30798d8a7f816d7328a94cbbcf49796bb68c6fa87406dd0263c",
+      "role": "special",
+      "source": {
+        "function_end": 148,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 84,
+        "source": {
+          "end_line": 3600,
+          "line": 3600,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "4c7139139cb394531342cabf751750c0abfb0e5eb1af93ad306b32a389bd1018"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "76729a6da785284eaad1d7f1ade0161b29e2226b2582c56bae8e5dfa80823c53",
+      "role": "special",
+      "source": {
+        "function_end": 124,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 60,
+        "source": {
+          "end_line": 3612,
+          "line": 3612,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "c042de73c81aaf0528004cf7401b55098ae8d731a4a225bab5e0ff3987b2578d"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "3fa69d00ab9cea3b8db2ba8fc1ef296be9d8e0020029383409e472ef684c4138",
+      "role": "special",
+      "source": {
+        "function_end": 112,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 48,
+        "source": {
+          "end_line": 3621,
+          "line": 3621,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "e9918ce430400c469419cb7ed8e003bd26d757f5e862aabe0d945e5e288bf43c"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "b84ba4478fa2dcee7715e6e5ffaaf5753f5894e48bb83884ad11523ae9ee3c45",
+      "role": "special",
+      "source": {
+        "function_end": 111,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 47,
+        "source": {
+          "end_line": 3620,
+          "line": 3620,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "01f5c27fa9404744cb7f2f1325469e3b72e0d0baa261710ae4bfae359b136c96"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "44a45d9ef41c2e357cd32e621b35dc3be9b5154ab2c1e8b91f0dec07de2442c1",
+      "role": "special",
+      "source": {
+        "function_end": 129,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 65,
+        "source": {
+          "end_line": 3632,
+          "line": 3632,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "e1064a3bb8e2c9f569518bbd2e9d4374633de85dc140371d2caab03f437495b9"
+        }
+      }
+    },
+    {
+      "evidence": "trigger-skill-public-v1: complete original helper and 50 callers, raw metadata/errors and successful public parser/copy histories; direct borrowed-option mutation remains unsupported; see docs/typed-parser-programs.md",
+      "program_sha256": "36da09d13d8435fb4dfbc53b6c3186c88d5c37258f4539dc92888bda0bf552d9",
+      "role": "special",
+      "source": {
+        "function_end": 99,
+        "function_sha256": "ad73d93361da99e5ebbe24a2cbd147308b6cb5d254b67db461ef303b0ca33aa9",
+        "function_start": 35,
+        "source": {
+          "end_line": 3593,
+          "line": 3593,
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "51933b44df3f964a392b1fc4a42b8b10849316df2d57831c82ae60225a3ea921"
+        }
       }
     }
   ],

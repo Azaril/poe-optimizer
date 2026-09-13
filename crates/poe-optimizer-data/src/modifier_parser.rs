@@ -10,7 +10,7 @@ pub use factories::*;
 pub(crate) mod programs;
 pub use programs::*;
 
-pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 10;
+pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 11;
 type Result<T> = std::result::Result<T, GameDataError>;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -200,6 +200,10 @@ pub struct ModifierParserData {
     pub dictionaries: BTreeMap<ParserDictionary, ParserTableId>,
     pub tables: Vec<ParserTable>,
     pub callbacks: Vec<ParserCallback>,
+    /// Explicit captured-primitive authority; descriptors alone grant none.
+    /// Structural validation does not authenticate acquisition or admit programs.
+    #[serde(deserialize_with = "unique_map")]
+    pub program_intrinsics: BTreeMap<ParserCallbackId, ParserProgramIntrinsic>,
     #[serde(deserialize_with = "unique_map")]
     pub factories: BTreeMap<ParserCallbackId, ParserFactoryDisposition>,
     #[serde(deserialize_with = "unique_map")]
@@ -320,6 +324,7 @@ impl ModifierParserData {
             || self.tables.is_empty()
             || self.tables.len() > 100_000
             || self.callbacks.len() > 20_000
+            || self.program_intrinsics.len() > 1
             || self.declarations.len() > 100_000
             || self.helpers.len() > 128
             || self.source.files.is_empty()
@@ -343,6 +348,30 @@ impl ModifierParserData {
             &self.tables,
             &self.callbacks,
         )?;
+        // The closed parser map currently admits only one unique table.insert.
+        // Check the complete descriptor inventory once, before program validation.
+        for (id, operation) in &self.program_intrinsics {
+            graph.callback(*id)?;
+            let target = &self.callbacks[id.0 as usize - 1];
+            if *operation != ParserProgramIntrinsic::TableInsert
+                || !matches!(
+                    &target.kind,
+                    ParserCallbackKind::Builtin { symbol } if symbol == "table.insert"
+                )
+                || target.environment != ParserEnvironment::OriginalGlobals
+                || !target.upvalues.is_empty()
+                || self
+                    .callbacks
+                    .iter()
+                    .filter(|callback| callback.kind == target.kind)
+                    .count()
+                    != 1
+            {
+                return Err(catalog_error(
+                    "program intrinsic is not the unique original table.insert descriptor",
+                ));
+            }
+        }
         let charge = |amount| graph.charge(amount);
         let span = |value| graph.span(value);
         let table = |id| graph.table(id);

@@ -279,8 +279,15 @@ impl SourceProgramOwner {
     pub fn factory(&self, id: SourceCallbackId) -> Option<&ParserFactoryDisposition> {
         self.parser()?.factory(id)
     }
+    /// Read explicit primitive authority from validated owner storage.
+    /// This never infers authority from a builtin symbol or helper name.
     pub fn intrinsic(&self, id: SourceCallbackId) -> Option<SourceProgramIntrinsic> {
-        self.definitions()?.intrinsics.get(&id).copied()
+        match &self.0 {
+            OwnerStorage::Parser(owner) => owner.data().program_intrinsics.get(&id).copied(),
+            OwnerStorage::Standalone { definitions, .. } => {
+                definitions.intrinsics.get(&id).copied()
+            }
+        }
     }
     /// Borrow the injected pattern only for the exact closed parser helper.
     /// This structural relation does not itself authenticate source acquisition
@@ -586,8 +593,9 @@ impl ProgramOwnerView for ModifierParserData {
     fn has_definition(&self, root: SourceProgramDefinitionRoot) -> bool {
         parser_definition_id(self, root).is_some()
     }
-    fn intrinsic(&self, _id: SourceCallbackId) -> Option<SourceProgramIntrinsic> {
-        None
+    fn intrinsic(&self, id: SourceCallbackId) -> Option<SourceProgramIntrinsic> {
+        // validate_definitions checks the map before the borrowed payload view.
+        self.program_intrinsics.get(&id).copied()
     }
     fn first_to_upper_pattern(&self, id: SourceCallbackId) -> Option<&str> {
         parser_first_to_upper_pattern(self, id)

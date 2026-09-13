@@ -31,9 +31,10 @@ impl Graph {
             .checked_add(steps)
             .ok_or_else(|| AssemblyError::resource("item-set work overflow"))?;
         if next_bytes > self.limits.max_bytes || next_steps > self.limits.max_steps {
-            return Err(AssemblyError::resource(
-                "item-set construction byte/work bound",
-            ));
+            return Err(AssemblyError::resource(format!(
+                "item-set construction byte/work bound: bytes {next_bytes}/{}; steps {next_steps}/{}",
+                self.limits.max_bytes, self.limits.max_steps
+            )));
         }
         self.usage.bytes = next_bytes;
         self.usage.steps = next_steps;
