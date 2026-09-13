@@ -56,14 +56,22 @@ to be proved before removing the corresponding lower-level behavior.
 | **Modifier storage and actor assembly.** Original [ModList](../vendor/path-of-building-poe2/src/Classes/ModList.lua) appends, searches, replaces and merges ordered records. The admitted native [actor program](../crates/poe-optimizer-engine/src/actor_program.rs) compiles bounded typed records. | Same conditions/flags, source selection, first-match replacement, parent/layer semantics, numeric order and per-layer rounding. Effects must belong to the correct actor and action. | List order; parent fallback; aliases during replacement/copy; MORE rounding and override precedence. A map/set of equal-looking modifiers need not be equivalent. | Define typed ordered layers and precedence, then prove the retained vocabulary covers each active producer. The current typed implementation is a useful precedent, not proof that the full modifier/tag language or actor graph fits it already. |
 | **Candidate admission, calculation and verification.** [ControlledBuildDomain::prepare/admit](../crates/poe-optimizer-import/src/controlled_build.rs), [PreparedBuildCandidates::calculate](../crates/poe-optimizer-native/src/build_candidates.rs), and [build_search](../src/build_search.rs). | Same legal/illegal selection, resulting actor resources, requested metrics and availability; owner-bound inputs; correct document materialization and fresh verification after mutation. | Current admitted calculation uses typed numeric components rather than Lua tables. Candidate preparation still orders and combines fragments, computes actor resources and assesses requirements; finalist verification reconstructs and prepares a document. | Preserve a dependency/invalidation boundary that recomputes everything changed by a candidate. Moving interpretation out of repeated calculation is useful only if its setup and repeated invalidation costs are included, and stale prepared state cannot survive a relevant change. |
 
-The current all-five successful-public-parse frontier is concrete: six positive families
-per build write their source-equivalent cache row, then native execution stops in
-`Common.copyTable` because traversal of the first modifier record is unavailable.
-R2t matched the actual failed table at `cache[line][1][1]` and the exact copy callback;
-it did **not** establish the record's allocation origin or complete the returned copy.
-See the current [implementation checkpoint](implementation.md). This is a useful
-comparison case for alternatives: a domain result could avoid reproducing hash layout,
-but must first preserve the consumer-visible copying, ordering and state behavior above.
+The initial baseline stopped six positive families per build in `Common.copyTable`.
+That is historical evidence, not the current frontier: R2w subsequently completed 30
+positive misses and 30 hits on the five original graphs. R2x broadened the actual-import
+corpus to 760 build-local distinct inputs, of which 558 match complete misses and hits
+and 202 retain unsupported stops. The latest [implementation checkpoint](implementation.md)
+records subsequent item assembly and slot-validity work; complete native builds remain
+**0/5**. A domain result may avoid reproducing hash layout, but must preserve the required
+consumer-visible copying, ordering and state behavior above.
+
+The [equipment loading audit](native-equipment-integration.md#consumer-boundary-for-the-execution-model-investigation)
+adds a concrete consumer distinction for A2: loadout callbacks can reselect all four domains,
+while the audited undo buffers are consumed by GUI Undo/Redo rather than calculation/export.
+A native transition model must preserve the former; omitting the latter requires an explicit
+admitted-domain success/effect argument. Observer-retained state is evidence, not automatically
+a public native API requirement. Neither this audit nor source-fed component tests complete
+ordered native equipment activation.
 
 ## What is actually in the repeated candidate path
 

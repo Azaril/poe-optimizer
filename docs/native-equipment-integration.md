@@ -71,6 +71,47 @@ loadout synchronization and undo effects require a consumer audit: preserve
 all behavior observed by build/export consumers, and document any presentation-only boundary
 with source evidence rather than assuming UI methods have no semantic effects.
 
+## Consumer boundary for the execution-model investigation
+
+An original method observation and a shipping native API have different purposes. Observe
+`ItemsTab:Load` through its actual return, including the final `ResetUndo`, to establish source
+outcomes and failure ordering. The native calculation/export contract need not expose every
+object that the observer retains. The current source audit identifies these distinctions;
+they are proof obligations for the next implementation, not completed native integration.
+
+| Source mechanism | Required consumer behavior | Boundary to investigate |
+| --- | --- | --- |
+| `SyncLoadouts` and dropdown `SetSel` callback | Preserve selected tree, item, skill and configuration sets, linked-set resolution, re-entry and reached failures. | Model the ordered domain transitions explicitly; do not classify the whole callback as presentation. Initial selection depends on previously loaded sections and dropdown state, even before saved Tree data loads. |
+| `PopulateSlots` and item choices | Preserve selection clearing, child-jewel inactivity, notes and any later validity affected by earlier mutations. | Compare exact traversal separately from selected equipment results. Display order is not automatically a valid replacement for the source's `pairs` traversal; demonstrate independence or represent the dependency. |
+| `RefreshBuildPlannerSets` | Preserve the exported spec/skill/item selection behavior when the caller uses these controls. | Synchronization resets the three export dropdown selections to their first entries. An explicit native export selection API can replace the controls only with a documented mapping; rendering does not justify dropping the selection effects. |
+| `ResetUndo` / `CreateUndoState` | Preserve successful source completion and any relevant load failure. | The audited calculation and export consumers do not read undo buffers. A headless evaluator may omit GUI history storage once the admitted input domain proves these copies have no further effects; this does not promise arbitrary mutated Lua-object compatibility or native Undo/Redo. |
+| Constructor slot and rune controls | Preserve slot relationships, selected rune identity, unknown-name retention and any ordering used by later selection. | Inject semantic definitions and ordered choices without constructing drawing, tooltip or layout objects. Reuse the existing rune catalog; derive passive sockets from the injected latest-tree definitions, never a fixed observed count. |
+
+The source anchors are [ItemsTab](../vendor/path-of-building-poe2/src/Classes/ItemsTab.lua)
+(`CreateUndoState`, 4477–4491; `RestoreUndoState`, 4494–4513),
+[UndoHandler](../vendor/path-of-building-poe2/src/Classes/UndoHandler.lua) (`ResetUndo`, 23–27),
+and [Build](../vendor/path-of-building-poe2/src/Modules/Build.lua) (`SyncLoadouts`, 637 onward;
+`SetActiveLoadout`, 956–980) at the pinned reference revision. Restore/Undo/Redo are the identified
+consumers of the history snapshot. [ImportTab](../vendor/path-of-building-poe2/src/Classes/ImportTab.lua)
+(`RefreshBuildPlannerSets`, 494–531) supplies the export-control reset.
+[BuildExportPoE2](../vendor/path-of-building-poe2/src/Modules/BuildExportPoE2.lua) (`GetLoadouts`, 264 onward)
+suppresses that refresh when calling `SyncLoadouts(true)`, but still permits activation callbacks.
+This audit does not establish that all UI-originated state
+is irrelevant, nor does a source-only trace establish native equivalence.
+
+Use this slice in A1/A2 to distinguish game-domain complexity, source-runtime compatibility and
+reference-harness complexity. Count adapters and observation code in the total cost, while
+keeping them outside production dependencies. No source-fed context or observed traversal may
+become a required PoB runtime service for native candidate evaluation.
+
+Rune choice ordering also needs a measured contract. The first fresh-host comparison retained
+a swap between `Legacy of Wings of Caelyn` and `Legacy of Horns of Bynden`. Their source rune
+sort keys tie (order 6868, requirement 65, group 3), with no name tie-break in `ItemsTab` 2240–2247.
+This is consistent with the observed permutation, not proof of its cause or interchangeable
+behavior: the two definitions have different modifiers. Preserve exact arrays as evidence and
+compare selected names and duplicate-name counts separately; that narrower comparison cannot
+establish effect equivalence or universal observation noninterference.
+
 ## Validation and completion gates
 
 1. Authenticate and extract the complete validity policy; prove missing, malformed and changed

@@ -65,6 +65,13 @@ adds a further measured example: a small package extension requires substantiall
 context, ownership and parity-tooling code. Its import ordering and retained-value behavior are
 consumer requirements to compare; the current graph representation is not prescribed for A2.
 
+The [equipment consumer audit](native-equipment-integration.md#consumer-boundary-for-the-execution-model-investigation)
+provides a concrete boundary exercise: loadout callbacks can change all four selected domains,
+whereas the audited undo buffers serve GUI history. Compare alternatives against those consumer
+effects, including ordering and failures, instead of requiring them to reproduce every object
+retained by the reference observer. The omission argument still needs executable evidence for
+the admitted input domain; the audit alone does not establish native equivalence.
+
 ## Separate the decisions
 
 Rust is an implementation language, not a semantic model. A DSL interpreter, generated rule
@@ -121,6 +128,20 @@ Every candidate must preserve these constraints:
   upstream updates and regression diagnosis, without making PoB a native runtime dependency.
 - Dataset formats, provenance, ownership and validation have explicit compatibility and
   migration paths. Unknown or unsupported behavior cannot silently become a default result.
+
+## Decision record and completion
+
+Keep one comparison record per prototype: supported domain contract and known gaps; injected
+definitions versus compiled algorithms; production code versus acquisition/parity tooling;
+cold, invalidated and reused execution costs; worker-private memory; and the two update
+exercises below. Include deleted, retained and newly introduced components in the proposed
+migration, so moving complexity into generators or a second representation remains visible.
+Code volume is a useful inventory measure, not a substitute for maintainability or correctness.
+
+The milestone ends with an evidence-backed decision **and its agreed follow-through**, including
+retaining and simplifying the current interpreter if that wins. A baseline report, a fast
+isolated prototype or a recommendation without a migration/simplification plan does not close
+it. Keep the decision pending until the owner has discussed any significant design change.
 
 ## Evidence gates
 

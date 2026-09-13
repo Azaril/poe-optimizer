@@ -18,7 +18,8 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-R2ac is the latest validated component checkpoint: injected, reusable native slot validity.
+R2ad is the latest reference-lifecycle and consumer-audit checkpoint; R2ac remains the
+latest native component checkpoint (injected, reusable slot validity).
 The A1 investigation remains open alongside this work.
 Source-session timing and requested allocation layouts are measured separately from dataset
 ownership; staged-container transfer now reduces import allocation traffic. R2x now records actual import parser calls across all
@@ -36,6 +37,36 @@ acquisition/parity, preparation, source execution and the restricted typed candi
 Continue measuring costs before extending general Lua compatibility into further domains;
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
+
+**R2ad checkpoint: original loading lifecycle and execution-model decision gates.** The
+A1–A4 plan now makes the comparison deliverable and decision follow-through explicit. The
+[equipment consumer audit](native-equipment-integration.md#consumer-boundary-for-the-execution-model-investigation)
+identifies required loadout/export selection effects and the conditions for omitting GUI undo
+storage. It does not prescribe a native representation or establish equivalence by inspection.
+
+A bounded reference-only fixture completes ten observed original `ItemsTab:Load` calls and
+five fresh controls across all supplied builds. All **26,350** reached validity calls observe
+`calcsTab` present and `mainEnv` absent. Exact declared post-import graphs match in **5/10**
+comparisons; the separately declared selected-field projection matches **10/10**. Actual slot
+traversal differs in all **five** paired observed hosts. Raw mismatches and orders remain in the
+receipts. Tied rune sort keys explain a permitted source-order ambiguity, not effect equivalence
+or a proof of the observed cause. No native integration or universal noninterference is claimed.
+See the [protocol, footprint and limits](execution-model-baseline.md#original-item-set-loading-lifecycle-checkpoint).
+
+**Validation:** nine focused tests, strict Clippy for the affected reference target and workspace
+formatting pass. The new code is test-only: **1,061 lines / 51,071 bytes** across three files.
+The first failed comparison remains recorded; a comparator test now rejects changed rune
+selections and duplicate counts. The package, supplied inputs, Cargo.lock and PoB pin are unchanged.
+Receipts: `runs/r2ad-item-set-lifecycle-01/`. Hosted CI is tracked separately.
+
+**Resume:** implement the bounded inventory/set coordinator over the existing injected data,
+owned inventory and slot-validity seams, using the complete Load lifecycle as reference evidence.
+Resolve the effect of traversal on changing/history cases before adopting a replacement order;
+cover legacy/repeated loads, duplicate IDs, unknown rune selection, actual callback re-entry,
+export defaults and explicit overrides. Keep selected intent, normalized equipment and actor
+participation distinct. Native original builds remain **0/5**. In parallel, take the measured
+consumer slice into the bounded A1-to-A2 discussion before extending general Lua compatibility;
+no execution-model migration has been selected.
 
 **R2ac component checkpoint: injected, reusable native slot validity.** An authenticated policy
 and bounded native kernel now implement the complete `IsItemValidForSlot` method. The immutable
@@ -2213,6 +2244,13 @@ defines the alternatives, constraints and evidence required for a decision.
   Use the brief's bounded A1-to-A2 readiness checkpoint: an executable reference slice,
   relevant cost baseline, explicit domain-consumer contract and known gaps are sufficient
   to discuss prototypes; remaining fine-grained measurements need not all finish first.
+  The [equipment consumer audit](native-equipment-integration.md#consumer-boundary-for-the-execution-model-investigation)
+  distinguishes cross-domain loadout/export selection effects from GUI undo storage. Use
+  that distinction to test a smaller semantic boundary; source observation alone is not
+  native equivalence, and observer-retained objects do not automatically define its API.
+  The [R2ad lifecycle evidence](execution-model-baseline.md#original-item-set-loading-lifecycle-checkpoint)
+  now records complete original Load returns, actual startup context, observed order variation
+  and separate exact/selected-field comparisons, with reference-tooling costs included.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.
@@ -2221,6 +2259,8 @@ defines the alternatives, constraints and evidence required for a decision.
   and re-preparation, and steady candidate evaluation separately. Compare their combined cost
   across candidate/worker counts and private memory, and apply the same balance edit and new
   conditional-family exercise to each model. Preserve a portable native/WASM route.
+  Use the brief's [comparison record](rule-execution-model-investigation.md#decision-record-and-completion)
+  to identify components added, retained and deleted, including generators and parity tooling.
 - [ ] **A3 — evidence and architecture decision.** Publish the parity gaps, performance,
   total maintenance cost, upstream-update experiment and migration risks. Discuss a proposed
   ADR with the owner before selecting a significant change. Retaining the interpreter is a

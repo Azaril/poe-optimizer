@@ -1206,3 +1206,42 @@ excluding compilation; this is validation cost, not native evaluation throughput
 `complexity-inventory-final.json` records the final module footprint, including the
 two-line test-only lint annotation. No
 production code or test behavior changed after the passing source comparison.
+## Original item-set loading lifecycle checkpoint
+
+R2ad adds a reference-only observation of the complete original `ItemsTab:Load` boundary,
+including activation, slot population, loadout synchronization, export-selection refresh
+and the final undo reset. It extends the A1 consumer evidence without adding production
+interpreter features, selecting an A2 model or completing native equipment activation.
+The [consumer audit](native-equipment-integration.md#consumer-boundary-for-the-execution-model-investigation)
+separates calculation/export effects from GUI history and observer-only state.
+
+All five unchanged originals run in three fresh hosts each: one unhooked control and two
+hosts with bounded call/return observation and JIT disabled. The original methods and
+iterators remain unchanged; the harness verifies retained bindings and source provenance.
+Ten complete original Load returns contain 40 before/after Load/activation snapshots and
+26,350 reached validity calls. Every observed validity call has a present `calcsTab` and
+absent `mainEnv`. Final post-import flags cannot replace that startup context. No loadout
+activation callback is reached inside these ten Load calls; the source audit and mechanics
+fixture establish why prior state and later histories must still account for re-entry.
+
+| Measurement | Result and limit |
+| --- | --- |
+| Exact declared finite post-import graph against control | 5/10 equal. Raw arrays and aliases are retained even when the comparison differs; the projection is not the entire original object graph. |
+| Separate selected-field comparison | 10/10 equal. It compares fixed state, selected slot fields, item ID/label choices, child names/inactivity and rune selected names/name-occurrence counts. It excludes slot/rune aliases, dropdown order/indices and rune effect data. |
+| Observed slot traversal order between paired hosts | 0/5 pairs equal. Matching final selected fields does not prove that arbitrary traversal orders commute for later builds or failure/history cases. |
+| Focused test target | 9 tests pass in 54.78 seconds, excluding 1.74 seconds compilation. This is reference-validation cost, not candidate throughput. |
+| New reference code | Three files, 1,061 physical lines / 51,071 bytes, including comments and blank lines. Existing shared graph/bootstrap helpers are reused and excluded from this incremental footprint. No production code or package data changes. |
+
+The first run stopped on a rune-list permutation. Its retained evidence identifies two
+different-effect runes with tied sort keys; the next run keeps exact mismatch results and
+adds the explicitly narrower name/count comparison. A mechanics test checks that this
+comparison rejects changed selections and duplicate counts. This is a correction to the
+observation contract, not proof that ordering or rune effects are irrelevant. The source
+audits, failed attempt, final receipts and code inventory are retained under
+`runs/r2ad-item-set-lifecycle-01/`.
+
+For A2, compare a domain transition representation against the behavior actually required
+by calculation, save and export consumers. Do not turn source observations into runtime
+services required by the native evaluator. Legacy/repeated loads, duplicate IDs, unknown
+rune names, loadout re-entry, order-sensitive errors and native-produced state remain
+integration work. Full native original evaluations remain **0/5**.
