@@ -246,7 +246,10 @@ fn parity_matrix(data: Arc<GameDataSnapshot>, xml: &str) -> (usize, usize) {
                 .unwrap()
                 .content,
         );
-        let full = backend.calculate(&full_request, BUDGET).unwrap();
+        // Full-document preparation remains independent of typed candidate components.
+        // This matrix checks parity; separate wrapper tests cover preparation deadlines.
+        let document = backend.prepare(&full_request).unwrap();
+        let full = backend.evaluate_prepared(&document, BUDGET).unwrap();
         registry
             .validate_native_realization(&alternative.candidate, &full, &scenario)
             .unwrap();
@@ -256,7 +259,7 @@ fn parity_matrix(data: Arc<GameDataSnapshot>, xml: &str) -> (usize, usize) {
         assert!(typed.diagnostic_only());
         assert!(typed.elapsed_ms() >= 0.0);
         assert_measurements(&prepared.snapshot_measurements(&typed), &full.measurements);
-        let pure_full = backend.prepare(&full_request).unwrap().calculate().unwrap();
+        let pure_full = document.calculate().unwrap();
         let poe_optimizer_native::NativeCalculation::Mace(expected) = pure_full else {
             panic!("Mace input")
         };
@@ -676,7 +679,10 @@ fn local_weapon_matrix(data: Arc<GameDataSnapshot>, xml: &str) -> usize {
                 .unwrap()
                 .content,
         );
-        let result = backend.calculate(&req, BUDGET).unwrap();
+        // Full-document preparation remains independent of typed candidate components.
+        // This matrix checks parity; separate wrapper tests cover preparation deadlines.
+        let document = backend.prepare(&req).unwrap();
+        let result = backend.evaluate_prepared(&document, BUDGET).unwrap();
         registry
             .validate_native_realization(&alternative.candidate, &result, &scenario)
             .unwrap();
@@ -688,8 +694,7 @@ fn local_weapon_matrix(data: Arc<GameDataSnapshot>, xml: &str) -> usize {
             &prepared.snapshot_measurements(&snapshot),
             &result.measurements,
         );
-        let poe_optimizer_native::NativeCalculation::Mace(full) =
-            backend.prepare(&req).unwrap().calculate().unwrap()
+        let poe_optimizer_native::NativeCalculation::Mace(full) = document.calculate().unwrap()
         else {
             panic!("Mace profile")
         };
