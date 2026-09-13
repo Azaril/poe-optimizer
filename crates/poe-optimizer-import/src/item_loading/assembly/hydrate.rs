@@ -169,6 +169,13 @@ impl Hydration<'_> {
             None => Value::Nil,
         };
         self.set("type", item_type)?;
+        // ParseRaw preserves baseName when it clears base. The dedicated loader
+        // field also supersedes any older scalar projection during a reparse.
+        let base_name = match &state.base_name {
+            Some(name) => self.arena.text(name)?,
+            None => Value::Nil,
+        };
+        self.set("baseName", base_name)?;
         if !previous || self.request.reparsed {
             let base = if state.base_present {
                 let name = state.base_name.as_deref().ok_or_else(|| {
@@ -335,3 +342,7 @@ impl Hydration<'_> {
         Ok(())
     }
 }
+
+#[cfg(test)]
+#[path = "hydrate_tests.rs"]
+mod tests;

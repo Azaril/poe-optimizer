@@ -58,35 +58,6 @@ fn assert_awaiting_sync(stage: &PreparedItems) {
     );
     assert!(stage.report().frontiers.contains(&"actor_item_effects"));
 }
-fn assert_population_order_frontier(stage: &PreparedItems) {
-    use poe_optimizer_import::item_sets::{ItemActivationProgress, ItemSetPhase};
-    assert!(
-        stage.report().failure.is_none(),
-        "{:#?}",
-        stage.report().failure
-    );
-    match stage.report().activation.as_ref().unwrap() {
-        ItemActivationProgress::AwaitingDependency { stage, message } => {
-            assert_eq!(*stage, "population_order");
-            assert_eq!(
-                message,
-                "unrepresented pairs/error-order: slot validity attempted a string method on a non-string value"
-            );
-        }
-        other => panic!("unexpected real-build activation progress: {other:?}"),
-    }
-    let state = stage.item_sets().unwrap();
-    assert_eq!(state.phase(), ItemSetPhase::AwaitingActivation);
-    assert!(state.failure().is_none());
-    assert!(state.continuation().is_some());
-    assert!(
-        stage
-            .report()
-            .frontiers
-            .contains(&"equipment_participation")
-    );
-    assert!(stage.report().frontiers.contains(&"actor_item_effects"));
-}
 fn doc(items: &str) -> String {
     format!("<PathOfBuilding2><Items>{items}</Items></PathOfBuilding2>")
 }
@@ -291,7 +262,7 @@ fn all_original_items_stay_in_report_even_when_the_first_dependency_stops() {
             assert!(report.failure.is_some());
         } else {
             assert!(report.failure.is_none(), "{:#?}", report.failure);
-            assert_population_order_frontier(&stage);
+            assert_awaiting_sync(&stage);
         }
         assert_eq!(
             report
@@ -357,10 +328,7 @@ fn production_inventory_registers_local_family_items_before_item_set_activation(
     assert_eq!(report.schema_version, 5);
     assert_eq!(report.registration_order.len(), 3, "{:#?}", report.failure);
     assert!(report.failure.is_none(), "{:#?}", report.failure);
-    assert_eq!(
-        stage.item_sets().unwrap().phase(),
-        poe_optimizer_import::item_sets::ItemSetPhase::AwaitingActivation
-    );
+    assert_awaiting_sync(&stage);
     for (id, field) in [(1.0, "armourData"), (2.0, "flaskData"), (3.0, "charmData")] {
         let item = stage.item(stage.registered_id(id).unwrap()).unwrap();
         let local = item
@@ -377,6 +345,99 @@ fn production_inventory_registers_local_family_items_before_item_set_activation(
             .all(|r| r.status == ItemRecordStatus::Registered)
     );
     assert!(report.frontiers.contains(&"actor_item_effects"));
+}
+
+#[test]
+fn owned_flask_base_names_drive_validity_independently_of_display_names() {
+    use poe_optimizer_data::item_loading::ItemMetadataTable;
+    use poe_optimizer_import::item_slot_validity::{
+        SlotValidityContext, SlotValidityLimits, SlotValidityResult, Value,
+    };
+    struct NoExternalContext;
+    impl<'a> SlotValidityContext<'a> for NoExternalContext {}
+
+    let source = doc(
+        "<Item id='1'>Rarity: NORMAL\nUltimate Life Flask</Item><Item id='2'>Rarity: NORMAL\nUltimate Mana Flask</Item><Item id='3'>Rarity: UNIQUE\nLavianga&apos;s Spirits\nGargantuan Mana Flask</Item><ItemSet id='1'/>",
+    );
+    let prepared = prepare(&source);
+    assert!(
+        prepared.report().failure.is_none(),
+        "{:#?}",
+        prepared.report().failure
+    );
+    assert_eq!(prepared.report().registration_order.len(), 3);
+    assert_awaiting_sync(&prepared);
+    let evaluator = prepared
+        .slot_evaluator(SlotValidityLimits::default())
+        .unwrap();
+    let set = ItemMetadataTable::default();
+    for (id, expected_base, accepted, rejected) in [
+        (1.0, "Ultimate Life Flask", "Flask 1", "Flask 2"),
+        (2.0, "Ultimate Mana Flask", "Flask 2", "Flask 1"),
+        (3.0, "Gargantuan Mana Flask", "Flask 2", "Flask 1"),
+    ] {
+        let record_id = prepared.registered_id(id).unwrap();
+        let item = prepared.item(record_id).unwrap();
+        let record = prepared
+            .report()
+            .records
+            .iter()
+            .find(|r| r.instance == record_id)
+            .unwrap();
+        assert_eq!(
+            record.loading_state.as_ref().unwrap().base_name.as_deref(),
+            Some(expected_base)
+        );
+        assert_eq!(
+            item.field(item.root(), "baseName")
+                .and_then(AssemblyValue::as_str),
+            Some(expected_base)
+        );
+        if id == 3.0 {
+            assert!(
+                item.field(item.root(), "name")
+                    .and_then(AssemblyValue::as_str)
+                    .unwrap()
+                    .contains("Lavianga's Spirits")
+            );
+            assert_ne!(
+                item.field(item.root(), "name"),
+                item.field(item.root(), "baseName")
+            );
+        }
+        let before = item.snapshot().unwrap();
+        // Inputs come from the registered owned item, with no source-fed metadata
+        // or external context available to fill a missing producer field.
+        for (slot_name, valid) in [(accepted, true), (rejected, false)] {
+            let result = evaluator
+                .check(
+                    PreparedItemSlotRequest {
+                        item: record_id,
+                        slot_name,
+                        item_set: Value::table(&set),
+                        flag_state: Value::Nil,
+                    },
+                    &mut NoExternalContext,
+                )
+                .unwrap();
+            if valid {
+                assert!(matches!(
+                    result,
+                    SlotValidityResult::Value(Value::Boolean(true))
+                ));
+            } else {
+                assert!(matches!(result, SlotValidityResult::NoValues));
+            }
+        }
+        assert_eq!(item.snapshot().unwrap(), before);
+    }
+    assert!(
+        prepared
+            .report()
+            .frontiers
+            .contains(&"equipment_participation")
+    );
+    assert!(prepared.report().frontiers.contains(&"actor_item_effects"));
 }
 
 #[test]
@@ -730,7 +791,7 @@ fn strict_rune_order_advances_original_items_without_rewriting_saved_runes() {
             std::fs::read_to_string(root.join(format!("build-{build_number:02}.xml"))).unwrap();
         let stage = prepare(&xml);
         if build_number == 2 {
-            assert_population_order_frontier(&stage);
+            assert_awaiting_sync(&stage);
             assert_eq!(stage.report().registration_order.len(), 34);
         }
         let record = stage
@@ -772,7 +833,7 @@ fn original_advanced_unique_flask_registers_with_its_single_line_order() {
     // One explicit line still requires the source lookup/order mutation.
     let xml = std::fs::read_to_string(path).unwrap();
     let prepared = prepare(&xml);
-    assert_population_order_frontier(&prepared);
+    assert_awaiting_sync(&prepared);
     assert_eq!(prepared.report().registration_order.len(), 34);
     let record = prepared
         .report()
@@ -871,7 +932,7 @@ fn original_item_set_work_limit_is_explicit_and_cumulative() {
         );
         if matches!(number, 2 | 4 | 5) {
             assert!(state.usage().steps > 5_000_000);
-            assert_population_order_frontier(&prepared);
+            assert_awaiting_sync(&prepared);
         }
         // A bounded prefix is not completed SyncLoadouts, equipment or calculation.
         assert!(report.frontiers.contains(&"equipment_participation"));

@@ -1,6 +1,8 @@
 //! Source-fed read-only slot component oracle; not original Load/native preparation parity.
 #[path = "item_slot_validity_directed.rs"]
 mod directed;
+#[path = "item_slot_validity_flasks.rs"]
+mod flasks;
 #[path = "item_assembly_graph.rs"]
 mod graph;
 #[allow(dead_code)]
@@ -288,7 +290,7 @@ fn compare<'a>(
         (source, native) => panic!("{label}: original {source:?}; native {native:?}"),
     }
 }
-fn run_host(lua: &Lua, module: &Table, execute: bool) -> Json {
+fn bind_original(module: &Table) -> Table {
     let bound: Table = module
         .raw_get::<Function>("bind")
         .unwrap()
@@ -304,6 +306,10 @@ fn run_host(lua: &Lua, module: &Table, execute: bool) -> Json {
             .replace('\\', "/")
             .ends_with("Classes/ItemsTab.lua")
     );
+    bound
+}
+fn run_host(lua: &Lua, module: &Table, _case: &str, _xml: &str, execute: bool) -> Json {
+    let bound = bind_original(module);
     let project: Function = bound.raw_get("projection").unwrap();
     let before: Table = project.call(()).unwrap();
     let before_graph = source_graph(&[LuaValue::Table(before.clone())]);
@@ -426,7 +432,15 @@ fn run_host(lua: &Lua, module: &Table, execute: bool) -> Json {
     let derived = directed::run(lua, &program, &method);
     json!({"initial_read_set":before_graph,"item_count":ids.len(),"set_count":set_ids.len(),"slot_count":slots.len(),"calls":results.len(),"counts":counts,"results":results,"directed":derived,"scope":{"complete_method":true,"source_fed_context":true,"native_preparation":false,"whole_load":false,"all_original_items_retained":true,"raw_return_pack":true,"post_import_context":true,"enumeration_order":"sorted identifiers and slot labels; no activation replay","initial_load_flag_context_proven":false,"native_flag_order_observed_source":false,"read_set_unchanged":true,"arbitrary_alias_recovery":false}})
 }
-fn host(repo: &Path, directory: &Path, xml: &str, execute: bool) -> Json {
+type HostProbe = fn(&Lua, &Table, &str, &str, bool) -> Json;
+fn host(
+    repo: &Path,
+    directory: &Path,
+    case: &str,
+    xml: &str,
+    execute: bool,
+    probe: HostProbe,
+) -> Json {
     fs::create_dir_all(directory).unwrap();
     let module = Rc::new(RefCell::new(None::<Table>));
     let before = |lua: &Lua| {
@@ -437,7 +451,15 @@ fn host(repo: &Path, directory: &Path, xml: &str, execute: bool) -> Json {
         );
         Ok(())
     };
-    let after = |lua: &Lua| Ok(run_host(lua, module.borrow().as_ref().unwrap(), execute));
+    let after = |lua: &Lua| {
+        Ok(probe(
+            lua,
+            module.borrow().as_ref().unwrap(),
+            case,
+            xml,
+            execute,
+        ))
+    };
     source::observe_with_build_hook_unwrapped(
         &repo.join("vendor/path-of-building-poe2"),
         directory,
@@ -450,7 +472,7 @@ fn host(repo: &Path, directory: &Path, xml: &str, execute: bool) -> Json {
     )
     .unwrap()
 }
-fn child(repo: &Path, output: &Path, entry: &Json) {
+fn child(repo: &Path, output: &Path, entry: &Json, probe: HostProbe) {
     let name = entry["xml"].as_str().unwrap();
     let xml = fs::read_to_string(
         repo.join("tests/fixtures/builds/breadth-20260908")
@@ -460,8 +482,22 @@ fn child(repo: &Path, output: &Path, entry: &Json) {
     assert_eq!(hash(xml.as_bytes()), entry["xml_sha256"].as_str().unwrap());
     let directory = output.join(name);
     fs::create_dir_all(&directory).unwrap();
-    let control = host(repo, &directory.join("control-host"), &xml, false);
-    let report = host(repo, &directory.join("observed-host"), &xml, true);
+    let control = host(
+        repo,
+        &directory.join("control-host"),
+        name,
+        &xml,
+        false,
+        probe,
+    );
+    let report = host(
+        repo,
+        &directory.join("observed-host"),
+        name,
+        &xml,
+        true,
+        probe,
+    );
     assert_eq!(
         control["additional_observation"]["initial_read_set"],
         report["additional_observation"]["initial_read_set"]
@@ -490,6 +526,17 @@ fn child(repo: &Path, output: &Path, entry: &Json) {
     .unwrap();
 }
 pub fn run() {
+    run_probe(TEST, OUTPUT, "runs/r2ac-slot-validity-01/source", run_host);
+}
+pub fn run_flask_probe() {
+    run_probe(
+        "all_five_original_flasks_retain_post_import_slot_results",
+        "POE_ITEM_FLASK_SLOT_OUTPUT",
+        "runs/r2am-base-name-01/source-probe",
+        flasks::observe,
+    );
+}
+fn run_probe(test: &str, output_env: &str, default_output: &str, probe: HostProbe) {
     let repo = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../..")
         .canonicalize()
@@ -498,9 +545,9 @@ pub fn run() {
         &fs::read(repo.join("tests/fixtures/builds/breadth-20260908/index.json")).unwrap(),
     )
     .unwrap();
-    let output = std::env::var_os(OUTPUT)
+    let output = std::env::var_os(output_env)
         .map(PathBuf::from)
-        .unwrap_or_else(|| repo.join("runs/r2ac-slot-validity-01/source"));
+        .unwrap_or_else(|| repo.join(default_output));
     fs::create_dir_all(&output).unwrap();
     if let Ok(name) = std::env::var(CHILD) {
         child(
@@ -512,6 +559,7 @@ pub fn run() {
                 .iter()
                 .find(|x| x["xml"] == name)
                 .unwrap(),
+            probe,
         );
         return;
     }
@@ -519,9 +567,9 @@ pub fn run() {
     for entry in index["builds"].as_array().unwrap() {
         let name = entry["xml"].as_str().unwrap();
         let mut p = Command::new(std::env::current_exe().unwrap())
-            .args(["--exact", TEST, "--nocapture"])
+            .args(["--exact", test, "--nocapture"])
             .env(CHILD, name)
-            .env(OUTPUT, &output)
+            .env(output_env, &output)
             .current_dir(repo.join("vendor/path-of-building-poe2/src"))
             .stdout(Stdio::from(
                 fs::File::create(output.join(format!("{name}.stdout.log"))).unwrap(),

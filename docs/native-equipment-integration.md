@@ -1,17 +1,29 @@
 # Native equipment and item-set integration
 
-Status: R2ai adds scalar doubled parsing and precise rune dependency diagnostics. R2ah implements bounded equipment activation through slot population, ending
-before `SyncLoadouts`. Compilation, package generation and the scoped public preparation
-regressions have completed. The declared source-fed activation comparison and all 17
-lifecycle/materialization regression tests pass. Strict workspace/native-only Clippy and the
-five WASM library checks pass. The final activation rerun passes 13 tests after helper
-deduplication; final materialization rerun status is tracked in the implementation record.
-Full native build
-parity remains **0/5**.
-No execution-model alternative is selected. The [implementation record](implementation.md)
-owns current progress and evidence; the R2ae checkpoint below retains its earlier scope.
+Status: R2am preserves loader base names in owned item assembly. Public native preparation
+now reaches `AwaitingSyncLoadouts` on original builds 2, 4 and 5; builds 1 and 3 still stop at
+captured jewel dependencies. The [implementation record](implementation.md) owns current
+validation and resume status. Full native build parity remains **0/5**. No alternative
+execution model is selected; earlier checkpoints below retain their historical scope.
 
-## R2ai current implementation boundary
+## Current ownership and continuation boundary
+
+Slot validity borrows the registered `AssembledItem`, including its canonical `baseName`.
+Hydration copies this dedicated loader field after replaying scalar projections on every
+pass. Reparsing can replace it; a failed base lookup preserves the loader's previous base
+name while clearing `base`. The adapter must not substitute the display name or read a
+separate diagnostic state to fill a missing runtime field. Whole-item parity explicitly
+observes this consumer field, and activation regressions require the owned production
+inventory to reach the pre-Sync comparison on the three unblocked originals.
+
+`AwaitingSyncLoadouts` is still a continuation, not completed equipment or build evaluation.
+Synchronization joins tree, item, skill and configuration sets, resolves linked loadouts,
+and can reenter selection callbacks. Its ordered effects, trailing loading flags and final
+undo initialization must be accounted for before completing the Items lifecycle. The
+[consumer audit](#consumer-boundary-for-the-execution-model-investigation) distinguishes
+those domain effects from presentation-only storage without choosing a replacement model.
+
+## R2ai preceding implementation boundary
 
 Scalar doubled modifiers now use injected operands and fresh native result graphs, retaining
 shared-table mutation as an explicit dependency. The four real rune strings have full-public-

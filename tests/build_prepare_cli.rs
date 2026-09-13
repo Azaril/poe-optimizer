@@ -126,16 +126,20 @@ fn real_caller_share_code_returns_source_linked_prerequisites_and_no_fake_metric
     assert_eq!(report["preparation"]["schema_version"], 6);
     let inventory = &report["preparation"]["authored_items"];
     assert_eq!(inventory["source_sha256"], expected_hash);
-    // All original items now register; activation/actor work still prevents
-    // a complete evaluation. Keep that later boundary distinct from item failure.
+    // All original items register and populate; synchronization/actor work still
+    // prevents evaluation. Keep that continuation distinct from item failure.
     assert_eq!(inventory["records"].as_array().unwrap().len(), 34);
     assert_eq!(
         inventory["registration_order"].as_array().unwrap().len(),
         34
     );
     assert!(inventory["failure"].is_null());
-    assert_eq!(inventory["item_sets"]["phase"], "awaiting_activation");
-    assert!(inventory["item_sets"]["continuation"].is_object());
+    assert_eq!(inventory["item_sets"]["phase"], "awaiting_sync_loadouts");
+    assert_eq!(inventory["activation"]["status"], "awaiting_sync_loadouts");
+    assert_eq!(
+        inventory["item_sets"]["continuation"]["required_stage"],
+        "SyncLoadouts, trailing flags/ResetUndo"
+    );
     assert!(
         inventory["frontiers"]
             .as_array()

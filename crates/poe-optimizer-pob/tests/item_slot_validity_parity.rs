@@ -302,3 +302,8 @@ fn source_error_classification_accepts_only_runtime_callback_chains() {
 fn all_five_original_item_slot_validity_matches_native_component() {
     original::run();
 }
+
+#[test]
+fn all_five_original_flasks_retain_post_import_slot_results() {
+    original::run_flask_probe();
+}

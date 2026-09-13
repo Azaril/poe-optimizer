@@ -141,6 +141,7 @@ fn compare(
     directory: &Path,
     data: &Arc<CompiledGameData>,
     case: &material::Case,
+    require_public_population: bool,
 ) -> Json {
     fs::create_dir_all(directory).unwrap();
     fs::write(directory.join("input.xml"), &case.xml).unwrap();
@@ -319,7 +320,7 @@ fn compare(
   "boundary":{"activation_call":call,"population_call":pop_call,"population_return":pop_return,"direct_original_parent_verified":true,"before_sync":true,"actual_parameter_projection_not_arity":true},
   "actual_source_population_order":actual_order,"source_constructor_equal":constructor_equal,"source_materialization_equal":material_equal,
   "component":{"scope":"source-fed pre-call inventory/tree/colors context; independently native-produced set state, native validity/rune/population; original parser dependency separately labelled; explicit component-only work allowance for the full tree/item/slot matrix","item_set_limits":component_limits,"limits_scope":"component fixture only; other ItemSetLimits fields and the separate public production defaults are unchanged","source_order_passed_to_native":false,"native_inventory_claim":false,"native_whole_load_claim":false,"progress":progress_json,"comparison":comparison,"native_graph":exact(&graph),"native_raw_slot_arrays":raw_choices_if_complete(&graph,complete),"native_usage":native.state.usage(),"rune_preparation":context.rune_preparation,"original_parser_dependency_calls":context.parser_calls,"native_probe_calls":context.validity_calls,"node_jewels":context.node_jewels},
-  "source_raw_slot_arrays":raw_choices(&source_after),"public_native_original":public,"repeat":repeat,"control":control});
+  "source_raw_slot_arrays":raw_choices(&source_after),"public_native_original":public,"public_population_required":require_public_population,"repeat":repeat,"control":control});
     save(&directory.join("comparison.json"), &summary);
     assert!(
         constructor_equal && material_equal,
@@ -346,6 +347,24 @@ fn compare(
             "node write mismatch: {}",
             directory.display()
         );
+    }
+    if require_public_population {
+        assert!(!case.structural);
+        assert_eq!(
+            summary["public_native_original"]["comparison"]["available"],
+            true,
+            "required owned-inventory population did not reach pre-Sync: {}",
+            directory.display()
+        );
+        assert_eq!(
+            summary["public_native_original"]["report"]["activation"]["status"],
+            "awaiting_sync_loadouts"
+        );
+        assert_eq!(
+            summary["public_native_original"]["report"]["item_sets"]["phase"],
+            "awaiting_sync_loadouts"
+        );
+        assert!(summary["public_native_original"]["report"]["failure"].is_null());
     }
     if !case.structural {
         assert_eq!(
@@ -399,7 +418,19 @@ pub fn run() {
         fs::create_dir_all(&directory).unwrap();
         let mut cases = Vec::new();
         for case in selected_cases(&xml, name == index["builds"][0]["xml"].as_str().unwrap()) {
-            cases.push(compare(&repo, &directory.join(case.label), &data, &case));
+            // Explicit original-fixture regression denominator, not a producer whitelist.
+            let require_public_population = case.label == "original"
+                && matches!(
+                    name.as_str(),
+                    "build-02.xml" | "build-04.xml" | "build-05.xml"
+                );
+            cases.push(compare(
+                &repo,
+                &directory.join(case.label),
+                &data,
+                &case,
+                require_public_population,
+            ));
         }
         let report = json!({"xml":name,"xml_sha256":entry["xml_sha256"],"package_sha256":poe_optimizer_data::game_data::bundled_package_sha256(),"source_files":source_hashes(&repo),"observer_sha256":hash(source::OBSERVER.as_bytes()),"cases":cases,"scope":SCOPE});
         save(&output.join(format!("{name}.json")), &report);
@@ -407,6 +438,8 @@ pub fn run() {
     }
     let mut children = Vec::new();
     let mut complete = 0;
+    let mut public_complete = 0;
+    let mut public_required = 0;
     let mut cases = 0;
     for entry in index["builds"].as_array().unwrap() {
         let name = entry["xml"].as_str().unwrap();
@@ -449,12 +482,22 @@ pub fn run() {
             .iter()
             .filter(|r| r["component"]["comparison"]["available"] == true)
             .count();
+        public_complete += rows
+            .iter()
+            .filter(|r| r["public_native_original"]["comparison"]["available"] == true)
+            .count();
+        public_required += rows
+            .iter()
+            .filter(|r| r["public_population_required"] == true)
+            .count();
         children.push(json!({"xml":name,"exit":status.code()}));
     }
     save(
         &output.join("summary.json"),
-        &json!({"children":children,"cases":cases,"component_population_completions":complete,"originals":5,"scope":SCOPE,"unavailable_is_not_graph_parity":true,"source_methods_replaced":false,"source_traversal_imported":false}),
+        &json!({"children":children,"cases":cases,"component_population_completions":complete,"public_population_completions":public_complete,"required_public_population_comparisons":public_required,"originals":5,"scope":SCOPE,"unavailable_is_not_graph_parity":true,"source_methods_replaced":false,"source_traversal_imported":false}),
     );
+    assert_eq!(public_required, 3);
+    assert!(public_complete >= public_required);
     assert!(
         complete > 0,
         "no available source/native population comparison; cannot certify a fixture made entirely of frontiers"

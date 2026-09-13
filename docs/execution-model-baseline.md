@@ -1706,3 +1706,30 @@ small fixtures reach the separate SyncLoadouts dependency. These are logical ope
 charges, not CPU instructions, RSS, throughput measurements or full-build parity. Preserve
 finite low-budget failures in comparisons; changing a resource cap does not prove a faster
 execution model.
+
+## Owned base-name integration checkpoint
+
+R2am exposes a producer/consumer gap that source-fed component tests did not cover: the
+loader retained `base_name`, but assembly omitted the source-named scalar `baseName` that
+flask slot validity reads. Original direct post-import checks accepted the three diagnosed
+life flasks; the native preflight had reached a nil receiver. The seven-line production
+change transfers the existing field during hydration, after older scalar projections, with
+no new interpreter operation, acquisition rule, data schema or alternative execution model.
+The source-bound `runs/r2am-base-name-01/cost-inventory-root.json` counts those seven net
+production lines and 553 net test/reference lines (including test-only module wiring)
+against `a620e6c`. Temporary failure logging and the developer example are retained only in
+ignored diagnostic receipts and do not ship. Counts include comments/blanks and are not
+performance measurements.
+
+The expanded whole-item observation contract now includes `baseName`, and public activation
+comparisons require the production-owned inventory path for three originals. Count this
+integration testing alongside isolated operation parity in A1/A2. A model can preserve all
+isolated calculation outputs and still fail at a missing field between owners. Alternatives
+must either preserve the actual consumer field or replace that join with an explicit semantic
+contract; shared source representation alone does not establish integration correctness.
+
+The [implementation checkpoint](implementation.md) records measured build progression and
+validation. New full graph hashes include the added field and are not directly comparable
+to the previous smaller projection. Source-order guarantees and the separate SyncLoadouts
+continuation remain required. This fix does not establish full native build parity or a
+candidate throughput improvement.

@@ -36,6 +36,7 @@ const OBSERVER: &str = include_str!("item_assembly_source.lua");
 // Explicit consumer contract agreed before comparisons; not selected from native output.
 pub(super) const FIELDS: &[&str] = &[
     "name",
+    "baseName",
     "type",
     "id",
     "baseModList",

@@ -18,6 +18,58 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+**R2am validated checkpoint: preserve item base names through owned assembly.**
+A bounded native failure probe identified the actual life-flask checks blocking original
+builds 2/4/5: authored item IDs 12/7/7, `Flask 1`, active item sets 6/1/2. Their owned item
+graphs had nil `baseName`, while the matching loader records retained Greater Life Flask or
+Ultimate Life Flask. The complete unchanged original method, called directly after import,
+returns one true value for all three pairs with the same base names and active-set IDs.
+These observations identify the adapter omission; the post-import probes do not claim the
+original population traversal or mutation prefix.
+
+Hydration now copies the dedicated loader field into the owned graph on every pass, after
+scalar replay. This preserves ParseRaw's retained base name on NoBase and supersedes stale
+projections on a later reparse. Slot validity continues to borrow the owned item; no runtime
+fallback to diagnostic state or new package/schema is added. `baseName` joins the explicit
+whole-item parity field contract. A fresh production preparation now reaches
+`AwaitingSyncLoadouts` for all three previously blocked originals. Complete native build
+evaluation remains **0/5**.
+
+**Validation:** 124 passing test executions across selected import, native, source-parity
+and CLI targets, including three lifetime tests repeated by the broader assembly target.
+This is not a full local workspace test run. Strict workspace/native-only Clippy, formatting,
+all five portable crates' WASM checks and native-only PoB/Lua dependency exclusion pass.
+The expanded whole-item target passes eight tests. All three required public native pre-Sync
+comparisons match the original declared headless graph and node writes; eight of ten
+source-fed component cases complete, with the same two explicit component dependencies.
+The original direct-call fixture covers 12 flasks and 24 calls across the five originals:
+12 one-true returns and 12 zero-value returns, with unchanged declared read sets.
+
+Fresh native-only CLI runs retain 116 records and 96 registrations (13, 34, 0, 21, 28).
+Builds 2/4/5 now reach `AwaitingSyncLoadouts` using 8,961,786 / 7,152,624 / 8,111,493 logical
+steps; builds 1/3 retain the captured-jewel stop. Every report is incomplete, calculation not
+run and whole-build parity not established. Inputs, lock, package and PoB pin are unchanged.
+The new full graph hashes include `baseName` and cannot be compared directly with the older
+smaller projection. No old-field hash equivalence is claimed.
+
+Receipts, independent reviews and `final-validation-root.json` are under
+`runs/r2am-base-name-01/`. An initial lifecycle fixture named a base absent from the injected
+PoE2 catalog; it now asserts and uses actual Gold/Iron Ring definitions. The CLI's old
+awaiting-activation expectation now requires the observed exact SyncLoadouts continuation.
+Failed attempts remain recorded. The temporary failure hook and developer example are removed.
+
+**Resume:** establish complete original SyncLoadouts/GetLoadoutByName behavior at the
+source-time pre-call state, reusing the existing lifecycle witness. The
+[static continuation audit](../runs/r2am-base-name-01/sync-loadouts-resume-audit-by-data.md)
+identifies a build-owned continuation joining the live tree/item/skill/configuration owners.
+Independent final preparation reports cannot stand in for the mixture of defaults and
+previously loaded sections visible during Items.Load. Preserve dropdown index changes and
+callback re-entry, tree-to-item-to-skill-to-config activation order, export-selection resets,
+and deferred trailing flags/undo initialization. Missing reached domain transitions stay
+explicit dependencies. Then implement the bound transition behind the accepted shared
+instance/definition/plan interfaces; no generic interpreter expansion or replacement model
+is selected here. Preserve the separate pending jewel-ownership discussion and A1–A4 comparison.
+
 **R2al validated checkpoint: explicit captured insertion and triggered-skill programs.**
 The native insertion operation is unchanged. A required injected parser authority map binds
 only the actual original `table.insert` Function to its native operation, with exact captured
