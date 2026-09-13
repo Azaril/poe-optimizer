@@ -9,6 +9,7 @@ use std::sync::{
 };
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
 mod radius;
+mod stat_ordering;
 const DATA: &str = "src/Modules/Data.lua";
 const ITEM: &str = "src/Classes/Item.lua";
 const COMMON: &str = "src/Modules/Common.lua";
@@ -500,6 +501,7 @@ fn policy(
     lua: &Lua,
     sources: &BTreeMap<String, String>,
     jewel_radius: JewelRadiusPolicy,
+    stat_ordering: ItemStatOrderingPolicy,
 ) -> Result<ItemLoadingPolicy> {
     let constants: Table = named_eval(
         lua,
@@ -859,6 +861,7 @@ fn policy(
         metadata(Value::Table(fallback), sources, 0, &mut budget)?,
     );
     Ok(ItemLoadingPolicy {
+        stat_ordering,
         jewel_radius,
         affix_loading: affix_loading_policy(lua, sources)?,
         rune_loading: rune_loading_policy(lua, sources)?,
@@ -1059,7 +1062,9 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ItemLoadingD
         files.insert(source_span.path.clone());
     }
     construction_spans.extend(radius_spans);
-    let policy = policy(&lua, sources, jewel_radius)?;
+    let (stat_ordering, ordering_spans) = stat_ordering::extract(sources)?;
+    construction_spans.extend(ordering_spans);
+    let policy = policy(&lua, sources, jewel_radius, stat_ordering)?;
     for (name, path, begin, end) in [
         (
             "item_parser",
@@ -1407,7 +1412,7 @@ mod tests {
             serde_json::from_slice(poe_optimizer_data::game_data::bundled_package_bytes()).unwrap();
         let new = serde_json::to_value(loaded.package()).unwrap();
         for (name, value) in old.as_object().unwrap() {
-            if name != "manifest" && name != "item_loading" && name != "item_assembly" {
+            if name != "manifest" && name != "item_loading" && name != "unique_requirements" {
                 assert_eq!(value, &new[name], "existing section changed: {name}");
             }
         }
@@ -1438,48 +1443,27 @@ mod tests {
             item["policy"]
                 .as_object_mut()
                 .unwrap()
-                .remove("defence_header_keys");
+                .remove("stat_ordering");
             item["source"]["construction_spans"]
                 .as_object_mut()
                 .unwrap()
-                .remove("defence_headers");
-            item["policy"]
+                .retain(|name, _| !name.starts_with("stat_ordering_"));
+        }
+        assert_eq!(old_item, new_item, "unrelated item-loading data changed");
+        let mut old_unique = old["unique_requirements"].clone();
+        let mut new_unique = new["unique_requirements"].clone();
+        for unique in [&mut old_unique, &mut new_unique] {
+            unique["state"]["inputs"]
                 .as_object_mut()
                 .unwrap()
-                .remove("jewel_radius");
-            item["source"]["construction_spans"]
-                .as_object_mut()
-                .unwrap()
-                .retain(|name, _| !name.starts_with("jewel_radius_"));
-            item["source"]["files"]
-                .as_object_mut()
-                .unwrap()
-                .remove("src/Modules/Build.lua");
-            item["source"]["files"]
-                .as_object_mut()
-                .unwrap()
-                .remove("src/Data/Misc.lua");
-            item["source"]["module_order"]
-                .as_array_mut()
-                .unwrap()
-                .retain(|path| path.as_str() != Some("src/Data/Misc.lua"));
+                .remove("item_loading_sha256");
         }
         assert_eq!(
-            old_item, new_item,
-            "unrelated item-loading definitions changed"
-        );
-        let mut old_assembly = old["item_assembly"].clone();
-        let mut new_assembly = new["item_assembly"].clone();
-        for item in [&mut old_assembly, &mut new_assembly] {
-            item.as_object_mut().unwrap().remove("schema_version");
-            item["policy"].as_object_mut().unwrap().remove("jewel");
-        }
-        assert_eq!(
-            old_assembly, new_assembly,
-            "legacy item assembly policy changed"
+            old_unique, new_unique,
+            "unique requirements changed beyond dependency digest"
         );
         for (name, digest) in old["manifest"]["section_sha256"].as_object().unwrap() {
-            if name != "item_loading" && name != "item_assembly" {
+            if name != "item_loading" && name != "unique_requirements" {
                 assert_eq!(
                     digest, &new["manifest"]["section_sha256"][name],
                     "section digest changed: {name}"

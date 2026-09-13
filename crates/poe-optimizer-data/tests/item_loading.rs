@@ -117,6 +117,32 @@ fn radius_policy() -> JewelRadiusPolicy {
         override_field: "callerRadiusOverride".into(),
     }
 }
+fn stat_ordering_policy() -> ItemStatOrderingPolicy {
+    ItemStatOrderingPolicy {
+        modifier_table: "Caller Order Rows".into(),
+        stat_order_field: "callerOrder".into(),
+        unique_rarity: "Caller Unique".into(),
+        relic_rarity: "Caller Relic".into(),
+        normalize_numbers: ItemStatOrderingSubstitution {
+            pattern: "%d+".into(),
+            replacement: "?".into(),
+        },
+        normalize_ranges: ItemStatOrderingSubstitution {
+            pattern: "<%?%-?%?>".into(),
+            replacement: "?".into(),
+        },
+        flatten_newlines: ItemStatOrderingSubstitution {
+            pattern: "\n".into(),
+            replacement: "_".into(),
+        },
+        groups: ItemStatOrderingGroups {
+            crafted_custom: -2.5,
+            fractured: 6.0,
+            ordinary: 6.0,
+            compare_order_below: 0.0,
+        },
+    }
+}
 fn catalog() -> ItemLoadingData {
     let path = "src/Data/Bases/caller.lua".to_owned();
     ItemLoadingData {
@@ -137,6 +163,7 @@ fn catalog() -> ItemLoadingData {
             module_order: vec![path.clone()],
         },
         policy: ItemLoadingPolicy {
+            stat_ordering: stat_ordering_policy(),
             rune_loading: rune_policy(),
             jewel_radius: radius_policy(),
             affix_loading: ItemAffixLoadingPolicy {
@@ -717,4 +744,103 @@ fn radius_policy_bounds_do_not_narrow_finite_custom_operands() {
     let mut data = catalog();
     data.policy.jewel_radius.override_field = "x".repeat(4097);
     assert!(data.validate().is_err());
+}
+
+#[test]
+fn stat_ordering_policy_roundtrips_custom_values_without_source_defaults() {
+    let data = catalog();
+    data.validate().unwrap();
+    let bytes = serde_json::to_vec(&data).unwrap();
+    let decoded: ItemLoadingData = serde_json::from_slice(&bytes).unwrap();
+    assert_eq!(decoded, data);
+    assert_eq!(decoded.policy.stat_ordering, stat_ordering_policy());
+    // Domain group ordering and substitutions are caller operands, not a pin whitelist.
+    let mut changed = stat_ordering_policy();
+    changed.normalize_numbers.pattern.clear();
+    changed.normalize_ranges.replacement.clear();
+    changed.groups.ordinary = -0.0;
+    changed.validate().unwrap();
+}
+
+#[test]
+fn stat_ordering_policy_is_required_and_rejects_unknown_fields() {
+    let value = serde_json::to_value(catalog()).unwrap();
+    let mut missing = value.clone();
+    missing["policy"]
+        .as_object_mut()
+        .unwrap()
+        .remove("stat_ordering");
+    assert!(serde_json::from_value::<ItemLoadingData>(missing).is_err());
+    let mut unknown = value;
+    unknown["policy"]["stat_ordering"]["unreviewed_operation"] = serde_json::json!(true);
+    assert!(serde_json::from_value::<ItemLoadingData>(unknown).is_err());
+}
+
+#[test]
+fn stat_ordering_direct_construction_is_bounded_before_use() {
+    let mut policy = stat_ordering_policy();
+    policy.modifier_table.clear();
+    assert!(policy.validate().is_err());
+    let mut policy = stat_ordering_policy();
+    policy.normalize_numbers.pattern = "x".repeat(4097);
+    assert!(policy.validate().is_err());
+    let mut policy = stat_ordering_policy();
+    policy.flatten_newlines.replacement = "\0".into();
+    assert!(policy.validate().is_err());
+    let mut policy = stat_ordering_policy();
+    policy.groups.ordinary = f64::INFINITY;
+    assert!(policy.validate().is_err());
+    let mut policy = stat_ordering_policy();
+    for field in [
+        &mut policy.modifier_table,
+        &mut policy.stat_order_field,
+        &mut policy.unique_rarity,
+        &mut policy.relic_rarity,
+        &mut policy.normalize_numbers.pattern,
+        &mut policy.normalize_numbers.replacement,
+        &mut policy.normalize_ranges.pattern,
+        &mut policy.normalize_ranges.replacement,
+        &mut policy.flatten_newlines.pattern,
+    ] {
+        *field = "x".repeat(4096);
+    }
+    assert!(
+        policy.validate().is_err(),
+        "fixed-field aggregate bound must apply"
+    );
+}
+
+#[test]
+fn finite_malformed_order_rows_remain_reached_consumer_dependencies() {
+    let mut data = catalog();
+    let name = data.policy.stat_ordering.modifier_table.clone();
+    let key = data.policy.stat_ordering.stat_order_field.clone();
+    data.modifier_tables.insert(
+        name.clone(),
+        table([
+            ("non_table_row", ItemMetadataValue::Boolean(false)),
+            (
+                "nonnumeric_line",
+                ItemMetadataValue::Array(vec![ItemMetadataValue::Number(7.0)]),
+            ),
+            (
+                "missing_order",
+                ItemMetadataValue::Array(vec![ItemMetadataValue::Text("line".into())]),
+            ),
+            (
+                "wrong_order",
+                ItemMetadataValue::Table(ItemMetadataTable {
+                    fields: BTreeMap::from([(key, ItemMetadataValue::Boolean(true))]),
+                    indexed: BTreeMap::from([(1, ItemMetadataValue::Text("line".into()))]),
+                }),
+            ),
+        ]),
+    );
+    let compiled = ItemLoadingCatalog::new(data.clone()).unwrap();
+    assert_eq!(
+        compiled.modifier_table(&name),
+        data.modifier_tables.get(&name)
+    );
+    data.modifier_tables.remove(&name);
+    data.validate().unwrap(); // An unresolved family is not silently an empty family.
 }

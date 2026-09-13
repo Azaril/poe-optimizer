@@ -1,5 +1,7 @@
 #[path = "runes.rs"]
 mod runes;
+#[path = "stat_ordering.rs"]
+mod stat_ordering;
 use super::affixes::{AffixError, AffixPrograms};
 use super::{ItemNumber, LineSelection, VariantState, syntax};
 use poe_optimizer_data::item_loading::{
@@ -9,6 +11,7 @@ use poe_optimizer_data::item_scalability::CatalystScalingData;
 use poe_optimizer_engine::lua_pattern::{GsubLimits, LuaPattern, MatchBudget, PatternError};
 use runes::RunePrograms;
 use serde::Serialize;
+use stat_ordering::StatOrderingPrograms;
 use std::{
     collections::{BTreeMap, BTreeSet},
     sync::Arc,
@@ -409,6 +412,8 @@ pub struct ItemLoadMachine<'a> {
     affix_budget: MatchBudget,
     implicit_budget: MatchBudget,
     rune_programs: Option<RunePrograms>,
+    stat_order_programs: Option<StatOrderingPrograms>,
+    stat_order_budget: MatchBudget,
     jewel_radius_context: Option<super::JewelRadiusContext>,
     defer_jewel_radius: bool,
     assembly: Option<super::assembly::AssembledItem>,
@@ -440,6 +445,8 @@ impl<'a> ItemLoadMachine<'a> {
             affix_budget: MatchBudget::default(),
             implicit_budget: MatchBudget::default(),
             rune_programs: None,
+            stat_order_programs: None,
+            stat_order_budget: stat_ordering::budget(),
             jewel_radius_context: None,
             defer_jewel_radius: false,
             assembly: None,
@@ -2088,15 +2095,7 @@ impl<'a> ItemLoadMachine<'a> {
         if !self.finish_runes(game, provider)? {
             return Ok(());
         }
-        if self.flag("advancedCopy")
-            && (self.state.rarity == self.role("unique") || self.state.rarity == self.role("relic"))
-            && !self.state.variants.uses_versioned_or_grouped()
-        {
-            self.stop(
-                DependencyKind::AdvancedCopyAffixes,
-                None,
-                "advanced-copy unique stat reordering requires represented source ordering",
-            )?;
+        if !self.finish_stat_ordering()? {
             return Ok(());
         }
         if !self.apply_rune_requirements()? {

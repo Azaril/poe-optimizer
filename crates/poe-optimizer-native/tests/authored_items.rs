@@ -659,3 +659,51 @@ fn strict_rune_order_advances_original_items_without_rewriting_saved_runes() {
         );
     }
 }
+
+#[test]
+fn original_advanced_unique_flask_registers_with_its_single_line_order() {
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures/builds/breadth-20260908/build-02.xml");
+    // Read the unchanged complete original through the production coordinator.
+    // One explicit line still requires the source lookup/order mutation.
+    let xml = std::fs::read_to_string(path).unwrap();
+    let prepared = prepare(&xml);
+    let record = prepared
+        .report()
+        .records
+        .iter()
+        .find(|row| row.authored_id.as_deref() == Some("34"))
+        .unwrap();
+    assert_eq!(
+        record.status,
+        ItemRecordStatus::Registered,
+        "{:?}",
+        prepared.report().failure
+    );
+    let state = record.loading_state.as_ref().unwrap();
+    assert_eq!(state.explicit_mod_lines.len(), 1);
+    let line = &state.explicit_mod_lines[0];
+    assert_eq!(line.line, "(70-80)% reduced Amount Recovered");
+    assert_eq!(line.order.and_then(|number| number.value()), Some(930.0));
+    assert_eq!(prepared.registered_id(34.0), Some(record.instance));
+    let item = prepared.item(record.instance).unwrap();
+    assert!(item.is_complete());
+    let rows = item
+        .field(item.root(), "explicitModLines")
+        .and_then(AssemblyValue::as_table)
+        .unwrap();
+    let row = item
+        .index(rows, 1)
+        .and_then(AssemblyValue::as_table)
+        .unwrap();
+    assert_eq!(
+        item.field(row, "order").and_then(AssemblyValue::as_number),
+        Some(930.0)
+    );
+    assert!(
+        prepared
+            .report()
+            .frontiers
+            .contains(&"equipment_participation")
+    );
+}

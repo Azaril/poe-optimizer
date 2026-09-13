@@ -39,6 +39,30 @@ matching and output operate on bytes. Unused malformed patterns remain lazy sour
 errors. Catalog availability describes definitions, not completed item assembly or
 numerical support for their effects.
 
+## Advanced-copy unique line ordering
+
+Unique advanced copies derive line order from the injected modifier family. Exact lowercased,
+newline-flattened keys take precedence over normalized keys. Numeric and range substitutions,
+modifier-family/field names, rarity roles and group operands belong to the item-loading policy.
+Duplicate lookup keys use the source minimum. A successful finite reduction may be independent
+of source table traversal; malformed inputs, ambiguous signed-zero minima and failure prefixes
+need their own proof or an explicit unsupported boundary.
+
+Assign or remove each explicit line's order even when the item has only one line. Sorting is
+a separate advanced-copy operation: crafted/custom, fractured and ordinary groups follow the
+injected group comparison, eligible groups compare order with missing values as infinity, and
+remaining ties use original row position. Move the actual line records with their metadata;
+never reconstruct their meaning from sorted text. Versioned/grouped unique variants bypass the
+lookup as in the source. Earlier rare-affix matching and later magnitude transformations remain
+separate operations and cannot be bypassed by supporting this one.
+
+A successful lookup cache belongs to its immutable injected catalog and preparation lifetime.
+Do not reuse it after a data-owner change or invent the source's partially constructed cache
+on an ambiguous error. The initial native implementation caches within one item machine across
+reparses; sharing prepared lookup storage across different item machines remains a performance
+follow-up, with explicit owner and resource accounting. That limitation is not shared catalog
+compilation or candidate throughput evidence.
+
 ## Rune reconstruction order
 
 Rune inference consumes injected definitions and the original numeric/text policy. Preserve

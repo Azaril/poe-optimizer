@@ -222,6 +222,7 @@ pub(crate) fn extractor_sha256() -> String {
         "poe-game-data-extractor-v26",
         include_str!("item_loading_extract.rs"),
         include_str!("item_loading_extract/radius.rs"),
+        include_str!("item_loading_extract/stat_ordering.rs"),
         include_str!("unique_requirements_extract.rs"),
         include_str!("item_assembly_extract.rs"),
         include_str!("item_assembly_extract/local.rs"),

@@ -1331,3 +1331,40 @@ endings, rather than complete layer sizes or maintainability scores. The observe
 existing source bootstrap and state comparison code. No candidate throughput claim follows
 from test timings. Receipts are under `runs/r2af-rune-order-01/`: `code-footprint.json`,
 `assembly-reconciliation.json`, `public-reconciliation.json` and the raw source observations.
+
+## Unique-item ordering checkpoint
+
+R2ag adds a fixed native operation for advanced-copy unique stat lookup and line ordering.
+Raw Exclusive definitions are reused; the package grows by 862 bytes for the policy,
+authenticated source spans and dependent identity. Normal extraction reproduces the reviewed
+schema-35 package. No generic source-interpreter operation is added.
+
+The native implementation shares no lookup between different item machines yet. Its successful
+cache survives reparses within a machine; malformed cache construction and ambiguous signed-zero
+minima remain explicit unsupported boundaries. An explicit prepared owner is a possible next
+performance improvement, requiring catalog lifetime and resource accounting. Test execution
+and partial preparation timings are not full candidate throughput measurements.
+
+| Changed-file role | Files | Net physical lines | Net bytes |
+| --- | ---: | ---: | ---: |
+| Data model | 4 | 93 | 3,483 |
+| Native runtime | 3 | 406 | 14,756 |
+| Acquisition, including colocated tests | 3 | 235 | 8,541 |
+| Native/data regression tests | 13 | 735 | 25,171 |
+| Reference tests and observation | 2 | 814 | 32,221 |
+
+Counts are net changes relative to R2af, with normalized LF endings and comments/blanks included.
+They are an implementation inventory, not a maintainability score. The acquisition change also
+tightens an older package-extension test while preserving its source module-order assertions.
+
+One more original item completes both declared assembly lanes: 114/116 with the original parser
+and 112/116 with the built-in parser. Public ordered registrations advance from 92 to 96, because
+later records in the second build become reachable. Full native builds remain 0/5. Reference
+controls now replay the same item history: a retained fractured flag showed why fresh and reused
+source states cannot be compared as though their histories were equivalent.
+
+The [jewel ownership proposal](jewel-effect-ownership-proposal.md) supplies a concrete A2 choice.
+Count session ownership/clone limitations, typed-effect adapters, deferred parser state and the
+actual cache/scaling consumer in the alternatives. No production model is selected. Receipts
+are under `runs/r2ag-unique-order-01/`, including `code-footprint.json` and the [implementation
+checkpoint](implementation.md) validation records.

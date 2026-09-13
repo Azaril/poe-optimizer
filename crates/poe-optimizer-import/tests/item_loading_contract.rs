@@ -54,6 +54,30 @@ fn catalog() -> ItemLoadingCatalog {
     rune_loading.other_header_patterns.clear();
     let policy = ItemLoadingPolicy {
         rune_loading,
+        stat_ordering: ItemStatOrderingPolicy {
+            modifier_table: "CallerExclusive".into(),
+            stat_order_field: "callerOrder".into(),
+            unique_rarity: "UNIQUE".into(),
+            relic_rarity: "RELIC".into(),
+            normalize_numbers: ItemStatOrderingSubstitution {
+                pattern: "%d+".into(),
+                replacement: "#".into(),
+            },
+            normalize_ranges: ItemStatOrderingSubstitution {
+                pattern: "%(%-?#%-#%)".into(),
+                replacement: "#".into(),
+            },
+            flatten_newlines: ItemStatOrderingSubstitution {
+                pattern: "\n".into(),
+                replacement: " ".into(),
+            },
+            groups: ItemStatOrderingGroups {
+                crafted_custom: 9.0,
+                fractured: 2.0,
+                ordinary: 4.0,
+                compare_order_below: 9.0,
+            },
+        },
         jewel_radius: radius_policy(),
         affix_loading: ItemAffixLoadingPolicy {
             headers: [
@@ -240,6 +264,7 @@ fn catalog() -> ItemLoadingCatalog {
         }],
         modifier_tables: [
             ("Item".into(), ItemMetadataTable::default()),
+            ("CallerExclusive".into(), ItemMetadataTable::default()),
             ("Runes".into(), ItemMetadataTable::default()),
         ]
         .into_iter()

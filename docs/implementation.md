@@ -18,7 +18,7 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-R2af advances native rune reconstruction and has passed its scoped source checks,
+R2ag advances native unique-item stat ordering and has passed its scoped source checks,
 affected regressions, CLI checks, strict lint and portable compilation. R2ae supplies
 ordered item-set materialization; R2ad supplies reference-lifecycle evidence and R2ac
 supplies reusable slot validity.
@@ -39,6 +39,74 @@ acquisition/parity, preparation, source execution and the restricted typed candi
 Continue measuring costs before extending general Lua compatibility into further domains;
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
+
+**R2ag checkpoint: injected native unique-item stat ordering.** Advanced-copy unique
+and relic items now derive exact and normalized order from injected modifier definitions.
+The native operation preserves minimum-order duplicates, exact-key precedence, one-line
+order writes/removal, fractured/crafted/custom grouping, original-position ties and moved
+row payloads. Successful preparation is cached within the same item machine across reparses.
+This adds a fixed domain operation; no generic interpreter capability or A2 model is selected.
+
+The package is schema **35 / item-loading 6 / item-assembly 6**, **26,315,687 bytes** (+862),
+SHA-256 `e866287500d8379e9a28d3495ae963f537edcc5986bfdb70b16552f1cf955802`.
+All 27 unrelated top-level sections are byte-identical. The only changes are the manifest,
+loading policy/schema/three source spans and the unique-requirements input dependency digest.
+The class-tree artifact, PoB pin, original inputs and lock file are unchanged. Maintainer
+preparation and the normal CLI extraction reproduce the installed package exactly.
+
+**Validation:** 39 data tests, 14 extraction tests, ten ordering tests, 62 affected import
+tests, 19 native inventory tests, seven new source tests and eight whole-item source tests
+pass. Default CLI preparation (four tests) and native-only preparation/inspection (23 tests)
+also pass. These are 186 passing test executions across selected targets, not a full workspace
+test run. Strict workspace/native-only lint, formatting, WASM compilation and native-only
+PoB/Lua dependency exclusion pass.
+
+Whole-item comparison now completes **114/116** source-parser/native assemblies and
+**112/116** built-in native assemblies. The only added item is original build 02/item 34,
+Lavianga's Spirits. All prior completed graph hashes and the six remaining lane-frontier
+records are unchanged. The separate new source target checks unchanged complete ParseRaw
+and retained helper functions, custom definitions, numeric-string orders, groups, duplicates,
+variant bypasses, malformed-data stops and source cache/reparse histories. Source controls
+follow matching item histories. Its native lane compares the declared fresh-machine
+preassembly projection and ordered parser parameters; it does not claim native reparse,
+actual call-arity or complete alias-graph parity. The whole-item lane independently checks
+owned assembly within its existing declared graph scope.
+
+All five original native-only public runs retain **116 records**, with **96 registrations**
+(13, 34, 0, 21, 28), up from 92. Builds 2, 4 and 5 reach AwaitingActivation. Builds 1 and 3
+still stop at captured jewel effects. Every report remains incomplete with calculation not
+run and whole-build parity not established. Complete native original evaluations remain **0/5**.
+
+The initial failed tests remain in the receipts: an unfinished-capture fixture incorrectly
+expected an error despite existing Lua parity evidence; a fresh source control lacked the
+fractured flag retained by the reused source item; and an old CLI assertion still required
+an item failure after all 34 items became registrable. Corrections preserve actual source
+semantics, matching histories and the later activation boundary. Static review also replaced
+a provisional comparator that could change behavior after budget exhaustion with a fallible
+index merge that leaves rows unmoved on failure.
+
+Receipts: `runs/r2ag-unique-order-01/`, including package and normal-extraction comparisons,
+assembly/source/public reconciliations, final validation and command ledgers. Source input
+and production-code bindings are recorded separately from test-only edits. The [A1 cost
+record](execution-model-baseline.md#unique-item-ordering-checkpoint) includes acquisition,
+production and parity-tooling code. Existing hosted CI runs for `1b5169b` and `4e802a3` were
+still running Test on both platforms at the 06:43 UTC observation; no hosted green is claimed.
+
+**Current resume:** implement the admitted equipment activation lifecycle through
+SetActiveItemSet, previous/live state copying, rune lookup, order-sensitive PopulateSlots,
+loadout callback re-entry and export selection under the [equipment contract](native-equipment-integration.md).
+Then connect effective equipment to actor preparation and changing candidates. Do not assume
+sorted slot traversal or bypass AwaitingActivation on a repeated successful load.
+
+The [captured jewel ownership proposal](jewel-effect-ownership-proposal.md) is awaiting owner
+input: compare session-owned executable values and typed captured effects on the same vertical
+slice before selecting the production boundary, or prioritize one. It records actual session
+handle/snapshot limits, deferred parsing, scaling, cache lifetime and stale-cache-reference
+behavior. This remains an A2/A3 discussion, not an approved replacement model. Equipment work
+can continue independently. Cross-item sharing of the successful stat-order lookup is a
+performance follow-up; the current cache is per machine. Failed source-global cache histories,
+ambiguous signed-zero minima, earlier rare-affix matching and later magnitude effects retain
+explicit support boundaries. The full parity objective remains open.
 
 **R2af checkpoint: source-determined rune reconstruction.** PoB retains its first
 minimum-count combination. Alternative minima now work when strict finite comparison
@@ -88,14 +156,15 @@ and source-bound command ledgers. The [A1 cost record](execution-model-baseline.
 separates production changes from native regression and reference-observation code. Local
 validation is not a hosted CI result; publication observations are recorded separately.
 
-**Current resume:** implement advanced-copy unique-line ordering from injected Exclusive
+**Resume recorded at R2af (superseded by R2ag above):** implement advanced-copy unique-line ordering from injected Exclusive
 modifier definitions and authenticated normalization/sort policy. Preserve the one-line
 order mutation, duplicate minima, exact/normalized lookup precedence, fractured/crafted groups
 and source line identity; do not bypass earlier rare-affix or later magnitude frontiers.
 The static scope is recorded in `next-frontiers-audit.md` beside the receipts.
 
 Before implementing executable jewel captures across parser/item ownership, discuss the
-bounded choice between session-owned closures and typed captured effects. Both failing jewels
+[bounded ownership proposal](jewel-effect-ownership-proposal.md) comparing session-owned
+closures and typed captured effects. Both failing jewels
 use the same captured family, but deferred parsing and the later Time-Lost cache consumer need
 explicit lifetime and ordering contracts. Successful item registration alone will not establish
 radius-effect execution. This is an input to A2, not approval for a general runtime expansion.
