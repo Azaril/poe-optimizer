@@ -12,6 +12,7 @@ use std::collections::BTreeMap;
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
 mod jewel;
 mod local;
+mod slot_validity;
 mod weapon;
 
 const SHAPES: &str = include_str!("item_assembly_extract/source-shapes.json");
@@ -37,6 +38,7 @@ impl Primitives {
             ("ipairs", "", "ipairs"),
             ("pairs", "", "pairs"),
             ("type", "", "type"),
+            ("tonumber", "", "tonumber"),
             ("getmetatable", "", "getmetatable"),
             ("select", "", "select"),
             ("t_insert", "table", "insert"),
@@ -158,7 +160,10 @@ fn authenticate<'a>(
     primitives: &Primitives,
     sources: &'a BTreeMap<String, String>,
 ) -> Result<Auth<'a>> {
-    let spans: BTreeMap<String, ItemSourceSpan> = serde_json::from_str(SHAPES)?;
+    let mut spans: BTreeMap<String, ItemSourceSpan> = serde_json::from_str(SHAPES)?;
+    // Source-only role: loading ItemsTab would execute unrelated UI/rune setup.
+    // The full original method is exercised independently by the parity host.
+    spans.insert("slot_validity".into(), slot_validity::span());
     let mut bodies = BTreeMap::new();
     for (role, span) in &spans {
         bodies.insert(role.clone(), source_body(sources, span)?);
@@ -286,7 +291,14 @@ fn authenticate<'a>(
             return Err(error("assembly primitive table rebound"));
         }
     }
-    for name in ["type", "select", "pairs", "ipairs", "getmetatable"] {
+    for name in [
+        "type",
+        "tonumber",
+        "select",
+        "pairs",
+        "ipairs",
+        "getmetatable",
+    ] {
         let actual: Function = lua.globals().raw_get(name)?;
         if !same(&actual, &primitives.functions[name]) {
             return Err(error("assembly global primitive rebound"));
@@ -504,6 +516,7 @@ fn policy(
     let weapon = weapon::extract(lua, slot, &auth.weapon, parser)?;
     let jewel_item_type = text_after(lua, build, "elseif self.type == ")?;
     let jewel = jewel::extract(lua, build, slot, &jewel_item_type)?;
+    let slot_validity = slot_validity::extract(lua, body("slot_validity")?)?;
     let quality = query(lua, after(slot, "local craftedQuality = ")?)?;
     let soul = query(lua, after(build, "self.socketedSoulCoreEffectModifier = ")?)?;
     let rune = query(lua, after(build, "self.socketedRuneEffectModifier = ")?)?;
@@ -893,6 +906,7 @@ fn policy(
         named_compatibility: named,
         requirements: req,
         slots,
+        slot_validity,
         weapon,
         jewel,
         armour,
@@ -1000,7 +1014,7 @@ pub(crate) fn extract(
 mod tests {
     use super::*;
     use std::sync::OnceLock;
-    fn sources() -> &'static BTreeMap<String, String> {
+    pub(super) fn sources() -> &'static BTreeMap<String, String> {
         static SOURCES: OnceLock<BTreeMap<String, String>> = OnceLock::new();
         SOURCES.get_or_init(|| {
             let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -1028,7 +1042,10 @@ mod tests {
         )
         .unwrap();
         assert_eq!(data.capability, ItemAssemblyCapability::PolicyOnly);
-        assert_eq!(data.source.construction_spans.len(), 31);
+        assert_eq!(
+            data.source.construction_spans.len(),
+            ITEM_ASSEMBLY_SOURCE_ROLES.len()
+        );
         assert_eq!(data.policy.collection.duplicate_alternate_count, 5);
         assert_eq!(data.policy.slots.primary.len(), 6);
         assert_eq!(data.policy.slots.default_multislot_count, 2);
@@ -1134,6 +1151,22 @@ mod tests {
                 .unwrap()
                 .to_string()
                 .contains("primitive")
+        );
+    }
+    #[test]
+    fn slot_numeric_lookup_retains_original_tonumber_binding() {
+        let (lua, _, primitives) =
+            crate::unique_requirements_extract::host_with_observer(sources(), Primitives::capture)
+                .unwrap();
+        lua.globals()
+            .set("tonumber", primitives.functions["type"].clone())
+            .unwrap();
+        assert!(
+            authenticate(&lua, &primitives, sources())
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("global primitive rebound")
         );
     }
     #[test]

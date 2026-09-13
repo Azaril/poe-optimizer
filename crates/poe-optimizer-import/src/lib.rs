@@ -14,6 +14,7 @@ pub mod controlled_mace;
 pub mod equipment;
 mod item_formatting;
 pub mod item_loading;
+pub mod item_slot_validity;
 pub mod item_source;
 pub mod mace_item;
 mod modifier_syntax;

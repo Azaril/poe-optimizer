@@ -1,6 +1,9 @@
 //! Ordered native inventory preparation, before item-set activation and actor use.
 //! Diagnostic loader completion never authorizes registration without an owned
 //! assembly result. This independent prefix is not the complete ItemsTab lifecycle.
+mod slot_validity;
+pub use slot_validity::{PreparedItemSlotEvaluator, PreparedItemSlotRequest};
+
 use crate::CompiledGameData;
 use poe_optimizer_core::{
     build_identity::ItemRecordId,

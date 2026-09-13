@@ -176,8 +176,19 @@ fn inspect_definitions(path: &Path, cwd: &Path, data: Option<&Path>) -> Value {
     );
     serde_json::from_slice(&output.stdout).unwrap()
 }
+fn assert_completed_item(item: &Value) {
+    assert_eq!(item["status"], "complete", "{item:#}");
+    assert!(item["pending"].is_null(), "{item:#}");
+    let instructions = item["instructions"].as_array().unwrap();
+    assert_eq!(instructions.last().unwrap()["kind"], "final_assembly");
+    for instruction in instructions {
+        assert_eq!(instruction["status"], "executed", "{item:#}");
+        assert!(instruction["error"].is_null(), "{item:#}");
+    }
+}
+
 #[test]
-fn caller_catalog_changes_item_resolution_and_keeps_unavailable_operations_explicit() {
+fn caller_catalog_completes_supported_assembly_and_preserves_invalid_id_errors() {
     let temp = tempfile::tempdir().unwrap();
     let input = temp.path().join("caller.xml");
     let data_path = temp.path().join("caller-data.json");
@@ -201,7 +212,7 @@ fn caller_catalog_changes_item_resolution_and_keeps_unavailable_operations_expli
     package.refresh_section_digests().unwrap();
     let data_bytes = package.canonical_bytes().unwrap();
     fs::write(&data_path, &data_bytes).unwrap();
-    let xml = "<PathOfBuilding2><Items><Item id='007'>Rarity: Normal\nCaller Supplied Helmet Base\nItem Level: 1\nQuality: 0\n</Item></Items></PathOfBuilding2>";
+    let xml = "<PathOfBuilding2><Items><Item id='007'>Rarity: Normal\nCaller Supplied Helmet Base\nItem Level: 1\nQuality: 0\n</Item><Item id='caller'>Rarity: Normal\nCaller Supplied Helmet Base\nItem Level: 1\nQuality: 0\n</Item></Items></PathOfBuilding2>";
     fs::write(&input, xml).unwrap();
     let bundled = inspect_definitions(&input, temp.path(), None);
     assert_eq!(
@@ -218,11 +229,21 @@ fn caller_catalog_changes_item_resolution_and_keeps_unavailable_operations_expli
     );
     assert_eq!(item["state"]["base_present"], true);
     assert_eq!(item["state"]["base_name"], "Caller Supplied Helmet Base");
-    assert_eq!(item["status"], "pending");
-    assert!(
-        item["pending"]["message"]
-            .as_str()
-            .is_some_and(|value| !value.is_empty())
+    assert_completed_item(item);
+    let invalid = &loaded["items"][1];
+    assert_eq!(invalid["authored_id"], "caller");
+    assert_eq!(invalid["status"], "source_error");
+    assert!(invalid["pending"].is_null());
+    let final_step = invalid["instructions"].as_array().unwrap().last().unwrap();
+    assert_eq!(final_step["kind"], "final_assembly");
+    assert_eq!(final_step["status"], "executed");
+    assert_eq!(
+        final_step["error"],
+        "native item loading: source inventory insertion has nil or NaN item id"
+    );
+    assert_eq!(
+        invalid["state"]["retained_fields"]["modSource"]["value"],
+        "Item:-1:Caller Supplied Helmet Base"
     );
     assert_eq!(item["instructions"][0]["kind"], "constructor");
     assert_eq!(item["instructions"][0]["status"], "executed");
@@ -369,7 +390,7 @@ fn caller_scalability_data_controls_formatting_and_preserves_unknown_lines_befor
     package.refresh_section_digests().unwrap();
     let data_bytes = package.canonical_bytes().unwrap();
     fs::write(&data_path, &data_bytes).unwrap();
-    let xml = "<PathOfBuilding2><Items><Item id='caller'>Rarity: Normal\nRusted Greathelm\nItem Level: 1\nQuality: 0\nCaller roll 10.049\n</Item></Items></PathOfBuilding2>";
+    let xml = "<PathOfBuilding2><Items><Item id='1'>Rarity: Normal\nRusted Greathelm\nItem Level: 1\nQuality: 0\nCaller roll 10.049\n</Item></Items></PathOfBuilding2>";
     fs::write(&input, xml).unwrap();
     let bundled = inspect_definitions(&input, temp.path(), None);
     let selected = inspect_definitions(&input, temp.path(), Some(&data_path));
@@ -379,8 +400,7 @@ fn caller_scalability_data_controls_formatting_and_preserves_unknown_lines_befor
     ] {
         let loaded = &report["definition_lookup"]["items"]["report"];
         let item = &loaded["items"][0];
-        assert_eq!(item["status"], "pending", "{item}");
-        assert_eq!(item["pending"]["kind"], "assembly", "{item}");
+        assert_completed_item(item);
         let lines = item["state"]["explicit_mod_lines"].as_array().unwrap();
         assert_eq!(lines.len(), 1);
         // Item.lua retains the authored display line when parsing returns nil,
@@ -414,7 +434,7 @@ fn caller_scalability_data_controls_formatting_and_preserves_unknown_lines_befor
 }
 
 #[test]
-fn injected_defence_headers_reach_cli_state_without_granting_assembly_or_admission() {
+fn injected_defence_headers_survive_complete_assembly_without_numerical_admission() {
     let temp = tempfile::tempdir().unwrap();
     let input = temp.path().join("caller-defence.xml");
     let data_path = temp.path().join("caller-data.json");
@@ -439,17 +459,37 @@ fn injected_defence_headers_reach_cli_state_without_granting_assembly_or_admissi
     package.refresh_section_digests().unwrap();
     let data_bytes = package.canonical_bytes().unwrap();
     fs::write(&data_path, &data_bytes).unwrap();
-    let xml = "<PathOfBuilding2><Items><Item id='header'>Rarity: Normal\nRusted Greathelm\nArmour: 42\nArmour: invalid\nCaller Guard: -3.5\n</Item></Items></PathOfBuilding2>";
+    let xml = "<PathOfBuilding2><Items><Item id='1'>Rarity: Normal\nRusted Greathelm\nArmour: 42\nArmour: invalid\nCaller Guard: -3.5\n</Item></Items></PathOfBuilding2>";
     fs::write(&input, xml).unwrap();
     let bundled = inspect_definitions(&input, temp.path(), None);
     let selected = inspect_definitions(&input, temp.path(), Some(&data_path));
-    for (report, expected) in [
-        (&bundled, serde_json::json!({})),
-        (
-            &selected,
-            serde_json::json!({"CallerGuardValue":{"kind":"finite","value":-3.5}}),
-        ),
-    ] {
+    let base_armour = package
+        .item_loading
+        .bases
+        .iter()
+        .find(|base| base.name == "Rusted Greathelm")
+        .unwrap()
+        .field("armour")
+        .unwrap()
+        .as_table()
+        .unwrap()
+        .fields["Armour"]
+        .as_f64()
+        .unwrap();
+    // BuildModList overwrites the removed authored Armour value from the base.
+    // It retains arbitrary other armourData fields, including this injected key.
+    let finite = |value| serde_json::json!({"kind":"finite","value":value});
+    let assembled = serde_json::json!({
+        "Armour":finite(base_armour),"ArmourBase":finite(base_armour),
+        "Evasion":finite(0.0),"EvasionBase":finite(0.0),"EvasionPerLevel":finite(0.0),
+        "EnergyShield":finite(0.0),"EnergyShieldBase":finite(0.0),"EnergyShieldPerLevel":finite(0.0),
+        "Ward":finite(0.0),"WardBase":finite(0.0),"WardPerLevel":finite(0.0)
+    });
+    for (report, custom) in [(&bundled, false), (&selected, true)] {
+        let mut expected = assembled.clone();
+        if custom {
+            expected["CallerGuardValue"] = finite(-3.5);
+        }
         let item = &report["definition_lookup"]["items"]["report"]["items"][0];
         assert_eq!(item["state"]["armour_data"], expected);
         assert!(
@@ -457,8 +497,7 @@ fn injected_defence_headers_reach_cli_state_without_granting_assembly_or_admissi
                 .get("hidden_specs")
                 .is_none()
         );
-        assert_eq!(item["status"], "pending");
-        assert_eq!(item["pending"]["kind"], "assembly");
+        assert_completed_item(item);
         assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
         assert_eq!(report["verification"]["native_admission"], "not_checked");
         assert_eq!(report["verification"]["reference_calculation"], "not_run");
@@ -513,7 +552,7 @@ fn injected_base_buffs_reach_cli_loading_state_without_numerical_admission() {
     let bytes = package.canonical_bytes().unwrap();
     fs::write(&data_path, &bytes).unwrap();
     let xml = format!(
-        "<PathOfBuilding2><Items><Item id='caller-buff'>Rarity: Normal\nAmethyst Charm\n{text}\n{text}\n</Item></Items></PathOfBuilding2>"
+        "<PathOfBuilding2><Items><Item id='1'>Rarity: Normal\nAmethyst Charm\n{text}\n{text}\n</Item></Items></PathOfBuilding2>"
     );
     fs::write(&input, &xml).unwrap();
     let report = inspect_definitions(&input, temp.path(), Some(&data_path));
@@ -529,10 +568,7 @@ fn injected_base_buffs_reach_cli_loading_state_without_numerical_admission() {
     assert_eq!(state["explicit_mod_lines"][0]["line"], text);
     assert_eq!(state["parser_calls"].as_array().unwrap().len(), 4);
     assert_eq!(state["format_calls"].as_array().unwrap().len(), 1);
-    assert_eq!(
-        report["definition_lookup"]["items"]["report"]["items"][0]["pending"]["kind"],
-        "assembly"
-    );
+    assert_completed_item(&report["definition_lookup"]["items"]["report"]["items"][0]);
     assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
     assert_eq!(report["verification"]["native_admission"], "not_checked");
     assert_eq!(report["verification"]["reference_calculation"], "not_run");
@@ -596,7 +632,7 @@ fn injected_unique_requirements_distinguish_hit_miss_unavailable_and_stale_input
             .all(|entry| entry.canonical_key != missing_key)
     );
     let xml = format!(
-        "<PathOfBuilding2><Items><Item id='hit'><![CDATA[Rarity: UNIQUE\n{title}\n{base_name}\nImplicits: 0]]></Item><Item id='miss'><![CDATA[Rarity: UNIQUE\n{missing_title}\n{base_name}\nImplicits: 0]]></Item></Items></PathOfBuilding2>"
+        "<PathOfBuilding2><Items><Item id='1'><![CDATA[Rarity: UNIQUE\n{title}\n{base_name}\nImplicits: 0]]></Item><Item id='2'><![CDATA[Rarity: UNIQUE\n{missing_title}\n{base_name}\nImplicits: 0]]></Item></Items></PathOfBuilding2>"
     );
     fs::write(&input, &xml).unwrap();
     let natural = base_level + 13.5;
@@ -624,8 +660,7 @@ fn injected_unique_requirements_distinguish_hit_miss_unavailable_and_stale_input
         (&items[1], &missing_key, base_level),
     ] {
         assert_eq!(item["state"]["name"], *name);
-        assert_eq!(item["status"], "pending");
-        assert_eq!(item["pending"]["kind"], "assembly", "{item}");
+        assert_completed_item(item);
         for requirement in ["naturalLevel", "level"] {
             assert_eq!(
                 item["state"]["requirements"][requirement],
@@ -774,7 +809,7 @@ fn injected_affix_records_limits_and_legacy_names_reach_cli_without_admission() 
     let bytes = package.canonical_bytes().unwrap();
     fs::write(&data_path, &bytes).unwrap();
     let xml = format!(
-        "<PathOfBuilding2><Items><Item id='caller-affixes'>Rarity: Magic\n{base_name}\nCrafted: true\nPrefix: {{fractured}}{{range:0.25,invalid,0.75}}{mod_id}\nPrefix: {legacy}\nPrefix: {none}\nSuffix: CallerMissingAffix\nSuffix: {{range:,}}{none}\n+1 prefix modifier allowed\n-1 suffix modifier allowed\n</Item></Items></PathOfBuilding2>"
+        "<PathOfBuilding2><Items><Item id='1'>Rarity: Magic\n{base_name}\nCrafted: true\nPrefix: {{fractured}}{{range:0.25,invalid,0.75}}{mod_id}\nPrefix: {legacy}\nPrefix: {none}\nSuffix: CallerMissingAffix\nSuffix: {{range:,}}{none}\n+1 prefix modifier allowed\n-1 suffix modifier allowed\n</Item></Items></PathOfBuilding2>"
     );
     fs::write(&input, &xml).unwrap();
     let report = inspect_definitions(&input, temp.path(), Some(&data_path));
@@ -805,8 +840,7 @@ fn injected_affix_records_limits_and_legacy_names_reach_cli_without_admission() 
         ]),
         "authored rows beyond the active limit remain diagnostic state"
     );
-    assert_eq!(item["status"], "pending");
-    assert_eq!(item["pending"]["kind"], "assembly");
+    assert_completed_item(item);
     assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
     assert_eq!(report["verification"]["native_admission"], "not_checked");
     assert_eq!(report["verification"]["reference_calculation"], "not_run");
@@ -906,7 +940,7 @@ fn injected_rune_names_slots_and_numeric_grammar_rebuild_with_generated_origins(
     let bytes = package.canonical_bytes().unwrap();
     fs::write(&data_path, &bytes).unwrap();
     let xml = format!(
-        "<PathOfBuilding2><Items><Item id='caller-runes'>Rarity: Normal\n{base_name}\n{socket_header}: qq\n{rune_header}: {}\n{rune_header}: {}\n</Item></Items></PathOfBuilding2>",
+        "<PathOfBuilding2><Items><Item id='1'>Rarity: Normal\n{base_name}\n{socket_header}: qq\n{rune_header}: {}\n{rune_header}: {}\n</Item></Items></PathOfBuilding2>",
         names[0], names[1]
     );
     fs::write(&input, &xml).unwrap();
@@ -948,8 +982,7 @@ fn injected_rune_names_slots_and_numeric_grammar_rebuild_with_generated_origins(
             "parser argument differs from contribution provenance"
         );
     }
-    assert_eq!(item["status"], "pending", "{item:#}");
-    assert_eq!(item["pending"]["kind"], "assembly", "{item:#}");
+    assert_completed_item(item);
     assert_eq!(
         line["rune_count"],
         serde_json::json!({"kind":"finite","value":2.0})
@@ -1138,7 +1171,7 @@ fn injected_special_factories_preserve_nil_results_and_generated_rune_origins() 
     let bytes = package.canonical_bytes().unwrap();
     fs::write(&data_path, &bytes).unwrap();
     let xml = format!(
-        "<PathOfBuilding2><Items><Item id='caller-table'>Rarity: Normal\n{base_name}\n7 caller potency\n</Item><Item id='caller-nil'>Rarity: Normal\n{base_name}\ncaller omitted\n</Item><Item id='caller-generated'>Rarity: Normal\n{base_name}\n{socket_header}: qq\n{rune_header}: {}\n{rune_header}: {}\n</Item></Items></PathOfBuilding2>",
+        "<PathOfBuilding2><Items><Item id='1'>Rarity: Normal\n{base_name}\n7 caller potency\n</Item><Item id='2'>Rarity: Normal\n{base_name}\ncaller omitted\n</Item><Item id='3'>Rarity: Normal\n{base_name}\n{socket_header}: qq\n{rune_header}: {}\n{rune_header}: {}\n</Item></Items></PathOfBuilding2>",
         names[0], names[1]
     );
     fs::write(&input, &xml).unwrap();
@@ -1146,11 +1179,11 @@ fn injected_special_factories_preserve_nil_results_and_generated_rune_origins() 
     let loaded = &report["definition_lookup"]["items"]["report"];
     let items = loaded["items"].as_array().unwrap();
     assert_eq!(items.len(), 3);
-    let expected_modifiers = |value: f64, capture: &str| {
+    let expected_modifiers = |value: f64, capture: &str, id: u32| {
         serde_json::json!([{
             "fields": {
                 "name": modifier_name, "type": "BASE", "value": value,
-                "flags": 0.0, "keywordFlags": 0.0, "source": modifier_source
+                "flags": 0.0, "keywordFlags": 0.0, "source": format!("Item:{id}:{base_name}")
             },
             "indexed": {"1": {"fields": {
                 "type": "CallerCallbackTag", "capture": capture, "enabled": true
@@ -1158,12 +1191,12 @@ fn injected_special_factories_preserve_nil_results_and_generated_rune_origins() 
         }])
     };
     let table_state = &items[0]["state"];
-    assert_eq!(items[0]["authored_id"], "caller-table");
+    assert_eq!(items[0]["authored_id"], "1");
     let rows = table_state["explicit_mod_lines"].as_array().unwrap();
     assert_eq!(rows.len(), 1);
     assert_eq!(rows[0]["line"], "7 caller potency");
     assert_eq!(rows[0]["source_line"], 3);
-    assert_eq!(rows[0]["modifiers"], expected_modifiers(7.0, "7"));
+    assert_eq!(rows[0]["modifiers"], expected_modifiers(7.0, "7", 1));
     assert!(rows[0]["extra"].is_null());
     assert_eq!(table_state["parser_calls"].as_array().unwrap().len(), 1);
     assert_eq!(table_state["parser_calls"][0]["line_index"], 3);
@@ -1171,7 +1204,7 @@ fn injected_special_factories_preserve_nil_results_and_generated_rune_origins() 
     assert!(table_state["parser_calls"][0].get("origin").is_none());
 
     let nil_state = &items[1]["state"];
-    assert_eq!(items[1]["authored_id"], "caller-nil");
+    assert_eq!(items[1]["authored_id"], "2");
     let rows = nil_state["explicit_mod_lines"].as_array().unwrap();
     assert_eq!(rows.len(), 1);
     assert_eq!(rows[0]["line"], "caller omitted");
@@ -1183,13 +1216,13 @@ fn injected_special_factories_preserve_nil_results_and_generated_rune_origins() 
     assert_eq!(nil_state["parser_calls"][0]["combined"], false);
 
     let rune_state = &items[2]["state"];
-    assert_eq!(items[2]["authored_id"], "caller-generated");
+    assert_eq!(items[2]["authored_id"], "3");
     assert_eq!(rune_state["runes"], serde_json::json!(names));
     let rows = rune_state["rune_mod_lines"].as_array().unwrap();
     assert_eq!(rows.len(), 1);
     let row = &rows[0];
     assert_eq!(row["line"], "18 caller potency");
-    assert_eq!(row["modifiers"], expected_modifiers(18.0, "18"));
+    assert_eq!(row["modifiers"], expected_modifiers(18.0, "18", 3));
     assert!(row["extra"].is_null());
     assert!(row["source_line"].is_null());
     assert_eq!(
@@ -1211,8 +1244,7 @@ fn injected_special_factories_preserve_nil_results_and_generated_rune_origins() 
         assert_eq!(calls[index]["combined"], false);
     }
     for item in items {
-        assert_eq!(item["status"], "pending", "{item:#}");
-        assert_eq!(item["pending"]["kind"], "assembly", "{item:#}");
+        assert_completed_item(item);
     }
     assert_eq!(report["verification"]["item_loading"], "reported");
     assert_eq!(report["verification"]["game_mechanics"], "not_evaluated");
@@ -1412,7 +1444,7 @@ fn injected_ordinary_factories_preserve_capture_types_and_conditional_error_stag
         .iter()
         .enumerate()
         .map(|(index, line)| {
-            format!("<Item id='caller-{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
+            format!("<Item id='{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
         })
         .collect::<String>();
     let xml = format!("<PathOfBuilding2><Items>{items}</Items></PathOfBuilding2>");
@@ -1422,8 +1454,7 @@ fn injected_ordinary_factories_preserve_capture_types_and_conditional_error_stag
     let items = loaded["items"].as_array().unwrap();
     assert_eq!(items.len(), lines.len());
     let success = &items[0];
-    assert_eq!(success["status"], "pending", "{success:#}");
-    assert_eq!(success["pending"]["kind"], "assembly", "{success:#}");
+    assert_completed_item(success);
     let rows = success["state"]["explicit_mod_lines"].as_array().unwrap();
     assert_eq!(rows.len(), 1);
     assert_eq!(rows[0]["line"], lines[0]);
@@ -1432,7 +1463,7 @@ fn injected_ordinary_factories_preserve_capture_types_and_conditional_error_stag
     assert_eq!(
         rows[0]["modifiers"],
         serde_json::json!([{
-            "fields": {"name":"CallerOrdinaryStat","type":"BASE","value":2.0,"flags":0.0,"keywordFlags":0.0},
+            "fields": {"name":"CallerOrdinaryStat","type":"BASE","value":2.0,"flags":0.0,"keywordFlags":0.0,"source":format!("Item:0:{base_name}")},
             "indexed": {
                 "1":{"fields":{"type":"CallerPrefixTag","capture":"007"},"indexed":{}},
                 "2":{"fields":{"type":"CallerOrdinaryTag","first":"v13","raw":"v13"},"indexed":{}},
@@ -1467,7 +1498,7 @@ fn injected_ordinary_factories_preserve_capture_types_and_conditional_error_stag
         "not_executed"
     );
     for (index, item) in items.iter().enumerate() {
-        assert_eq!(item["authored_id"], format!("caller-{index}"));
+        assert_eq!(item["authored_id"], index.to_string());
         let calls = item["state"]["parser_calls"].as_array().unwrap();
         assert_eq!(calls.len(), 1, "{item:#}");
         assert_eq!(calls[0]["text"], lines[index]);
@@ -1707,7 +1738,7 @@ fn injected_string_factories_preserve_bytes_and_distinguish_opaque_methods() {
         .iter()
         .enumerate()
         .map(|(index, line)| {
-            format!("<Item id='caller-{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
+            format!("<Item id='{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
         })
         .collect::<String>();
     let xml = format!("<PathOfBuilding2><Items>{items}</Items></PathOfBuilding2>");
@@ -1731,7 +1762,7 @@ fn injected_string_factories_preserve_bytes_and_distinguish_opaque_methods() {
         assert_eq!(
             special_rows[0]["modifiers"],
             serde_json::json!([{
-                "fields": {"name":expected_name,"type":"BASE","value":7.0,"flags":0.0,"keywordFlags":0.0,"source":"Caller string source"},
+                "fields": {"name":expected_name,"type":"BASE","value":7.0,"flags":0.0,"keywordFlags":0.0,"source":format!("Item:0:{base_name}")},
                 "indexed": {"1":{"fields":{"type":"CallerStringBytes","raw":"nul\0é/007","numeric":"n=7","byte_positions":expected_bytes},"indexed":{}}}
             }]),
             "configured pattern {pattern}"
@@ -1741,13 +1772,12 @@ fn injected_string_factories_preserve_bytes_and_distinguish_opaque_methods() {
         assert_eq!(
             tag_rows[0]["modifiers"],
             serde_json::json!([{
-                "fields": {"name":"CallerStringAmount","type":"BASE","value":2.0,"flags":0.0,"keywordFlags":0.0},
+                "fields": {"name":"CallerStringAmount","type":"BASE","value":2.0,"flags":0.0,"keywordFlags":0.0,"source":format!("Item:1:{base_name}")},
                 "indexed": {"1":{"fields":{"type":"CallerStringTag","label":expected_tag,"raw":"raw:ab"},"indexed":{}}}
             }])
         );
         for (index, rows) in [special_rows, tag_rows].into_iter().enumerate() {
-            assert_eq!(items[index]["status"], "pending", "{}", items[index]);
-            assert_eq!(items[index]["pending"]["kind"], "assembly");
+            assert_completed_item(&items[index]);
             assert_eq!(rows[0]["line"], lines[index]);
             assert_eq!(rows[0]["source_line"], 3);
             assert!(rows[0]["extra"].is_null());
@@ -1777,7 +1807,7 @@ fn injected_string_factories_preserve_bytes_and_distinguish_opaque_methods() {
             "{opaque:#}"
         );
         for (index, item) in items.iter().enumerate() {
-            assert_eq!(item["authored_id"], format!("caller-{index}"));
+            assert_eq!(item["authored_id"], index.to_string());
             let calls = item["state"]["parser_calls"].as_array().unwrap();
             assert_eq!(calls.len(), 1, "{item:#}");
             assert_eq!(calls[0]["text"], lines[index]);
@@ -1970,7 +2000,7 @@ fn injected_flag_factories_preserve_prefixes_and_variadic_slots() {
         .iter()
         .enumerate()
         .map(|(index, line)| {
-            format!("<Item id='caller-{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
+            format!("<Item id='{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
         })
         .collect::<String>();
     let xml = format!("<PathOfBuilding2><Items>{items}</Items></PathOfBuilding2>");
@@ -1993,14 +2023,14 @@ fn injected_flag_factories_preserve_prefixes_and_variadic_slots() {
             rows[0]["modifiers"],
             serde_json::json!([
                 {
-                    "fields":{"name":"Caller/alpha","type":mod_type,"value":mod_value,"flags":16.0,"keywordFlags":32.0},
+                    "fields":{"name":"Caller/alpha","type":mod_type,"value":mod_value,"flags":16.0,"keywordFlags":32.0,"source":format!("Item:0:{base_name}")},
                     "indexed":{
                         "1":{"fields":{"type":"CallerFlagTag","raw":"007","numeric":7.0},"indexed":{}},
                         "3":{"fields":{"type":"CallerAfterHoleTag"},"indexed":{}}
                     }
                 },
                 {
-                    "fields":{"name":"Caller/TextFlags","type":mod_type,"value":mod_value,"source":"Caller flag source","flags":0.0,"keywordFlags":128.0},
+                    "fields":{"name":"Caller/TextFlags","type":mod_type,"value":mod_value,"source":format!("Item:0:{base_name}"),"flags":0.0,"keywordFlags":128.0},
                     "indexed":{"1":{"fields":{"type":"CallerTextFlagTag"},"indexed":{}}}
                 }
             ])
@@ -2010,13 +2040,34 @@ fn injected_flag_factories_preserve_prefixes_and_variadic_slots() {
         assert_eq!(
             empty_rows[0]["modifiers"],
             serde_json::json!([{
-                "fields":{"type":mod_type,"value":mod_value,"flags":0.0,"keywordFlags":0.0},
+                "fields":{"type":mod_type,"value":mod_value,"flags":0.0,"keywordFlags":0.0,"source":format!("Item:1:{base_name}")},
                 "indexed":{}
             }])
         );
+        // The deliberate [1], [3] tag hole survives parsing and source stamping.
+        // Slot copying still requires dense lists, so only this item stops here.
+        let sparse = &items[0];
+        assert_eq!(sparse["status"], "pending", "{sparse:#}");
+        assert_eq!(
+            sparse["pending"],
+            serde_json::json!({
+                "kind":"assembly", "line_index":null,
+                "message":"slots: item assembly list has sparse or nonpositive indices"
+            })
+        );
+        let instructions = sparse["instructions"].as_array().unwrap();
+        assert_eq!(instructions.len(), 3);
+        for (instruction, (kind, status)) in instructions.iter().zip([
+            ("constructor", "executed"),
+            ("text", "pending"),
+            ("final_assembly", "not_executed"),
+        ]) {
+            assert_eq!(instruction["kind"], kind);
+            assert_eq!(instruction["status"], status);
+            assert!(instruction["error"].is_null());
+        }
+        assert_completed_item(&items[1]);
         for (index, rows) in [rows, empty_rows].into_iter().enumerate() {
-            assert_eq!(items[index]["status"], "pending", "{}", items[index]);
-            assert_eq!(items[index]["pending"]["kind"], "assembly");
             assert_eq!(rows[0]["line"], lines[index]);
             assert_eq!(rows[0]["source_line"], 3);
             assert!(rows[0]["extra"].is_null());
@@ -2046,7 +2097,7 @@ fn injected_flag_factories_preserve_prefixes_and_variadic_slots() {
             "not_executed"
         );
         for (index, item) in items.iter().enumerate() {
-            assert_eq!(item["authored_id"], format!("caller-{index}"));
+            assert_eq!(item["authored_id"], index.to_string());
             let calls = item["state"]["parser_calls"].as_array().unwrap();
             assert_eq!(calls.len(), 1, "{item:#}");
             assert_eq!(calls[0]["text"], lines[index]);
@@ -2210,7 +2261,7 @@ fn injected_number_factories_preserve_raw_inputs_nil_and_error_order() {
         .iter()
         .enumerate()
         .map(|(index, line)| {
-            format!("<Item id='caller-{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
+            format!("<Item id='{index}'>Rarity: Normal\n{base_name}\n{line}\n</Item>")
         })
         .collect::<String>();
     let xml = format!("<PathOfBuilding2><Items>{items}</Items></PathOfBuilding2>");
@@ -2272,15 +2323,14 @@ fn injected_number_factories_preserve_raw_inputs_nil_and_error_order() {
         assert_eq!(items.len(), lines.len());
         for (index, (raw, expected)) in cases.iter().enumerate() {
             let item = &items[index];
-            assert_eq!(item["status"], "pending", "{item:#}");
-            assert_eq!(item["pending"]["kind"], "assembly", "{item:#}");
+            assert_completed_item(item);
             let rows = item["state"]["explicit_mod_lines"].as_array().unwrap();
             assert_eq!(rows.len(), 1);
             assert_eq!(rows[0]["line"], lines[index]);
             assert_eq!(rows[0]["source_line"], 3);
             assert!(rows[0]["extra"].is_null());
             let mut modifier = serde_json::json!({
-                "fields":{"name":"CallerNumericValue","type":"CALLER_NUMBER","source":"Caller number source","flags":0.0,"keywordFlags":0.0},
+                "fields":{"name":"CallerNumericValue","type":"CALLER_NUMBER","source":format!("Item:{index}:{base_name}"),"flags":0.0,"keywordFlags":0.0},
                 "indexed":{"1":{
                     "fields":{"type":"CallerNumberTag","raw":raw,"literalRaw":literal,"literalConverted":expected_literal,"nulRaw":"12\0tail","utf8Raw":"é","negativeZero":-0.0},
                     "indexed":{"1":1.0,"3":3.0}
@@ -2322,7 +2372,7 @@ fn injected_number_factories_preserve_raw_inputs_nil_and_error_order() {
             "{error:#}"
         );
         for (index, item) in items.iter().enumerate() {
-            assert_eq!(item["authored_id"], format!("caller-{index}"));
+            assert_eq!(item["authored_id"], index.to_string());
             let calls = item["state"]["parser_calls"].as_array().unwrap();
             assert_eq!(calls.len(), 1, "{item:#}");
             assert_eq!(calls[0]["text"], lines[index]);
@@ -2377,7 +2427,7 @@ fn injected_typed_programs_change_cli_results_and_require_explicit_permission() 
         .name
         .clone();
     let xml = format!(
-        "<PathOfBuilding2><Items><Item id='caller-typed'>Rarity: Rare\nCaller Item\n{base}\n7 caller typed\n</Item></Items></PathOfBuilding2>"
+        "<PathOfBuilding2><Items><Item id='1'>Rarity: Rare\nCaller Item\n{base}\n7 caller typed\n</Item></Items></PathOfBuilding2>"
     );
     fs::write(&input, &xml).unwrap();
     let id = package
@@ -2480,10 +2530,11 @@ fn injected_typed_programs_change_cli_results_and_require_explicit_permission() 
         fs::write(&data_path, package.canonical_bytes().unwrap()).unwrap();
         let report = inspect_definitions(&input, temp.path(), Some(&data_path));
         let item = &report["definition_lookup"]["items"]["report"]["items"][0];
-        assert_eq!(item["pending"]["kind"], "assembly", "{item:#}");
+        assert_completed_item(item);
         let fields = &item["state"]["explicit_mod_lines"][0]["modifiers"][0]["fields"];
         assert_eq!(fields["name"], label);
         assert_eq!(fields["value"].as_f64(), Some(7.0));
+        assert_eq!(fields["source"], format!("Item:1:Caller Item, {base}"));
         assert_eq!(
             report["definition_lookup"]["data_trust"]["status"],
             "custom_unreviewed"

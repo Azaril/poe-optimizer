@@ -1158,3 +1158,51 @@ frames; it does not identify the exact crashing function. The stack-reserve fix 
 configuration change, not an execution-model selection or proof that all resource bounds are
 optimal. Include peak stack as well as heap in A2 preparation comparisons and eventual actual
 WASM runtime tests; portable compilation alone does not establish those runtime limits.
+
+
+## Native slot-validity checkpoint
+
+R2ac adds a complete equipment-validity predicate at the existing injected-data/native
+algorithm seam. It is a comparison input for A1, not an A2 alternative-model prototype.
+The [equipment integration design](native-equipment-integration.md) distinguishes prepared
+inventory, saved assignments, live slot state and actor-effective equipment. Completing the
+predicate does not complete ordered activation, actor preparation or a whole native build.
+
+The generated package grows by **2,146 bytes** to schema 33 / item-assembly 5; item-loading 5
+and all other data sections are unchanged. Acquisition authenticates the complete source
+method before extracting its operands. Even a literal-only upstream edit requires review of
+that body pin; separately injected custom definitions do not. Count this review, extraction,
+regeneration and differential validation in the update-cost comparison. A small package
+change alone does not show that a model is inexpensive to maintain.
+The policy parameterizes this fixed algorithm family; a new branch or interaction family can
+require both schema and Rust changes. Compare that separately from editing existing operands.
+
+The immutable native program validates its policy and compiles seven patterns once. Queries
+borrow their input owners; cloned programs share compiled storage and keep query budgets and
+context private. The prepared-inventory adapter supplies its own registered lookup winners,
+while tree, active-set and actor-flag dependencies stay explicit. Unknown context cannot become
+an ordinary invalid-slot result. These are current implementation choices, not required
+representations for an alternative model. No throughput or allocation-free claim follows
+from this reuse design or a passing concurrency test.
+
+Required consumer behavior includes lazy context lookup, main-hand/off-hand relationships,
+node inheritance, conditional flags and source errors. Raw return arity and table ownership
+are checked at the component boundary; actual equipment consumers use truthiness. A2 may
+propose a simpler boundary if it identifies the consumers and proves their behavior. In
+particular, separate source-harness projection/authentication machinery from production
+requirements instead of requiring every alternative to reproduce the same tooling.
+
+Evidence belongs under `runs/r2ac-slot-validity-01/`. The complexity inventory separates
+production policy/acquisition/runtime, prepared adapters, test/reference tooling and existing
+wiring changes. Physical line and byte counts are reproducible footprint measures, not a
+measurement of semantic complexity. Final validation and the current resume point belong in
+[the implementation record](implementation.md). Full native original evaluations remain **0/5**.
+
+The final new-module inventory contains **1,346 production lines / 50,921 bytes** and
+**2,643 test/reference lines / 91,674 bytes**, with blank lines and comments included.
+The existing CLI fixture repair and shared-file wiring are separate deltas. The final
+source comparison runs 48,138 corpus queries plus 860 directed cases in 28.03 seconds,
+excluding compilation; this is validation cost, not native evaluation throughput.
+`complexity-inventory-final.json` records the final module footprint, including the
+two-line test-only lint annotation. No
+production code or test behavior changed after the passing source comparison.

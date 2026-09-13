@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-12 (EDT)
+Last updated: 2026-09-13 (EDT)
 
 **Current priority: real-build breadth.** The five supplied originals have **0/5 complete
 native evaluations**; all five import/inspect and evaluate in pinned PoB. Shared parser
@@ -18,7 +18,7 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-R2ab is the latest validated component checkpoint: finite jewel data and explicit radius context.
+R2ac is the latest validated component checkpoint: injected, reusable native slot validity.
 The A1 investigation remains open alongside this work.
 Source-session timing and requested allocation layouts are measured separately from dataset
 ownership; staged-container transfer now reduces import allocation traffic. R2x now records actual import parser calls across all
@@ -36,6 +36,58 @@ acquisition/parity, preparation, source execution and the restricted typed candi
 Continue measuring costs before extending general Lua compatibility into further domains;
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
+
+**R2ac component checkpoint: injected, reusable native slot validity.** An authenticated policy
+and bounded native kernel now implement the complete `IsItemValidForSlot` method. The immutable
+program compiles its seven patterns once; queries borrow item owners and use private context/work
+budgets. The prepared adapter binds the program to its own inventory and numeric-ID lookup winners.
+Cloned programs share storage; concurrent read-only queries and custom injected rules are tested.
+Missing context stays explicit. This extends the existing domain-algorithm seam, without selecting
+an alternative execution model or activating equipment.
+
+The package is schema **33 / item-loading 5 / item-assembly 5**, **26,304,950 bytes**, SHA-256
+`3864c28df256d9825c2f8da48ed9c30b268378039c6a03635b21e14958a524d0`.
+Normal CLI extraction reproduces those bytes exactly. Only the manifest and item-assembly section
+change. Implementation fingerprints now cover the new modules and previously omitted assembly
+submodules/radius policy; this corrects cache identity coverage, not game behavior.
+
+The unchanged original method matches **48,138** complete component queries: all **116** items,
+**15** retained sets and **113** actual slot names per original build. A further **172** directed
+cases per build produce **815** matching returns and **45** matching source errors across five
+hosts; **20** cases explicitly substitute the Flag dependency to check ordered calls/failures.
+Ten fresh observed/control hosts compare retained read sets. Finite raw values, return arity,
+returned input aliases, exact effective-node inheritance and lazy context errors are checked.
+These are source-fed post-import contexts: native item-set loading, startup actor flags and whole
+build parity are not established by the matrix. The source target's ten tests take **28.03 s**
+excluding **52.76 s** compilation; those are validation costs, not candidate throughput.
+
+The native-only public CLI retains all **116** records and registers **68** in source order:
+`[2, 17, 0, 21, 28]`. Rune reconstruction, jewel callback/capture and ItemSet continuation remain
+explicit first stops. All five reports remain incomplete, with calculation not run and whole-build
+parity not established. Complete native original evaluations remain **0/5**.
+
+Validation also exposed old CLI assertions that still expected assembly to be unavailable.
+Positive fixtures now use numeric IDs and check completed state, source stamping and assembled
+defences; an explicit nonnumeric-ID registration failure remains covered. Deliberately sparse
+variadic tag lists retain their exact assembly frontier. Parser, conditional and data-injection
+assertions remain. Source-harness repairs preserve authenticated node inheritance and distinguish
+runtime source errors from host/memory/conversion failures. Failed attempts remain in the evidence
+ledger rather than being relabelled as passing runs.
+
+**Resume:** follow the [equipment integration design](native-equipment-integration.md) through
+constructor/slot definitions, ordered ItemSet/container loading, activation, previous-set aliasing,
+legacy/repeated histories, rune selections and loadout callback re-entry. Then connect effective
+equipment/tree state to actor preparation and changing candidates; preserve every original and
+existing parser/assembly stop. In parallel, use the [slot-validity cost evidence](execution-model-baseline.md#native-slot-validity-checkpoint)
+for the bounded A1-to-A2 prototype discussion. The current source-shaped schema and interpreter are
+comparison candidates, not mandatory representations. A significant migration still requires A3.
+Receipts: `runs/r2ac-slot-validity-01/`.
+
+**Validation passes:** 178 tests across the focused and affected regression targets; strict
+workspace/native-only Clippy, formatting, five portable WASM libraries, native-only runtime
+dependency isolation and byte-identical normal extraction also pass. The supplied inputs,
+Cargo.lock and clean PoB pin are unchanged. Hosted CI remains separate: the preceding R2ab run
+`34734315878` was still executing Test on both platforms at the last observation.
 
 **R2ab component checkpoint: injected jewel data and explicit radius context.** Native item
 preparation now produces finite jewel lists/overrides, shared modifiers, alternate class starts,
@@ -2154,6 +2206,10 @@ defines the alternatives, constraints and evidence required for a decision.
   The [R2ab jewel/radius evidence](execution-model-baseline.md#native-jewel-and-radius-checkpoint)
   adds context/ownership, source-lifecycle tooling and Windows startup stack costs. Include
   those costs and consumer-visible ordering in A2 without prescribing the current representation.
+  The [R2ac slot-validity evidence](execution-model-baseline.md#native-slot-validity-checkpoint)
+  adds a small data delta alongside a larger native policy/kernel and source-harness footprint.
+  Account for whole-body pin review even for upstream literal changes; custom injected data,
+  source acquisition and production evaluation have different update contracts.
   Use the brief's bounded A1-to-A2 readiness checkpoint: an executable reference slice,
   relevant cost baseline, explicit domain-consumer contract and known gaps are sufficient
   to discuss prototypes; remaining fine-grained measurements need not all finish first.

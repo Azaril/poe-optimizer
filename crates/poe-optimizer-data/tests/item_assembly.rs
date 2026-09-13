@@ -13,7 +13,7 @@ fn data() -> ItemAssemblyData {
 #[test]
 fn policy_only_catalog_binds_existing_definitions_without_copying() {
     let s = snapshot();
-    assert_eq!(s.identity().schema_version, 32);
+    assert_eq!(s.identity().schema_version, 33);
     let c = s.item_assembly();
     assert_eq!(c.data().capability, ItemAssemblyCapability::PolicyOnly);
     assert_eq!(
@@ -284,7 +284,7 @@ fn immutable_catalog_is_send_sync_and_parallel_datasets_do_not_share_policy() {
 #[test]
 fn local_families_retain_complete_orders_and_query_targets() {
     let d = data();
-    assert_eq!(d.schema_version, 4);
+    assert_eq!(d.schema_version, 5);
     let a = &d.policy.armour;
     assert_eq!(a.queries.len(), 18);
     assert_eq!(a.queries[0].role, ItemAssemblyArmourRole::ArmourBase);
@@ -615,4 +615,137 @@ fn jewel_bounds_and_required_closed_fields_are_checked() {
     let mut unknown = original;
     unknown["policy"]["jewel"]["execute"] = true.into();
     assert!(serde_json::from_value::<ItemAssemblyData>(unknown).is_err());
+}
+
+#[test]
+fn slot_validity_catalog_retains_complete_source_policy_and_span() {
+    let d = data();
+    let p = &d.policy.slot_validity;
+    let span = &d.source.construction_spans["slot_validity"];
+    assert_eq!(span.path, "src/Classes/ItemsTab.lua");
+    assert_eq!((span.line, span.end_line), (2603, 2687));
+    assert_eq!(p.jewel.slot_type, "Jewel");
+    assert_eq!(p.jewel.unique_rarities, ["UNIQUE", "RELIC"]);
+    assert_eq!(p.jewel.contained_socket_field, "containJewelSocket");
+    assert_eq!(p.jewel.expansion_size_field, "size");
+    assert_eq!(p.jewel.cluster_size_field, "sizeIndex");
+    assert_eq!(p.jewel.outer_size, 2.0);
+    assert_eq!(p.flask.routes[0].base_name_pattern, "Life Flask");
+    assert_eq!(p.flask.routes[1].slot_name_pattern, "Flask 2");
+    assert_eq!(p.subtypes[0].base_subtype, "Transcendent Arm");
+    assert_eq!(p.embedded.restriction_field, "canSocketJewelBase");
+    assert_eq!(
+        p.weapon.primary_slots,
+        ["Weapon 1", "Weapon 1 Swap", "Weapon"]
+    );
+    assert_eq!(p.weapon.offhand_slots[1].primary, "Weapon 1 Swap");
+    assert_eq!(p.weapon.empty_selection, 0.0);
+    assert_eq!(p.weapon.giants_blood.query_name, "GiantsBlood");
+    assert!(p.weapon.instruments_of_power.default);
+    assert_eq!(
+        p.weapon.ordinary_offhand_types,
+        ["Shield", "Focus", "Sceptre"]
+    );
+    assert_eq!(p.weapon.giant_tags, ["axe", "mace", "sword"]);
+}
+
+#[test]
+fn slot_validity_custom_game_operands_are_bounded_data_not_pinned_source() {
+    let mut d = data();
+    let p = &mut d.policy.slot_validity;
+    p.slot_pattern = "[unfinished\0".into();
+    p.jewel.slot_type = "Caller socket".into();
+    p.jewel.outer_size = -0.25;
+    p.jewel.expansion_field = "callerExpansion".into();
+    p.flask.routes.swap(0, 1);
+    p.subtypes[0].slot_type = "Caller arm".into();
+    p.embedded.parent_rewrite.replacement = "%0\0".into();
+    p.weapon.primary_slots = vec!["Caller primary".into()];
+    p.weapon.offhand_slots[0].offhand = "Caller offhand".into();
+    p.weapon.empty_selection = -0.0;
+    p.weapon.giants_blood.state_field = "callerFlag".into();
+    p.weapon.giants_blood.query_name = "CallerFlag".into();
+    p.weapon.giants_blood.default = false;
+    p.weapon.giant_tags.reverse();
+    d.validate().unwrap();
+    assert_eq!(
+        serde_json::from_slice::<ItemAssemblyData>(&serde_json::to_vec(&d).unwrap()).unwrap(),
+        d
+    );
+    ItemAssemblyCatalog::new(d).unwrap();
+}
+
+#[test]
+fn slot_validity_shape_and_storage_bounds_are_enforced() {
+    for nonfinite in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+        let mut d = data();
+        d.policy.slot_validity.jewel.outer_size = nonfinite;
+        assert!(d.validate().is_err());
+        let mut d = data();
+        d.policy.slot_validity.weapon.empty_selection = nonfinite;
+        assert!(d.validate().is_err());
+    }
+    let mut d = data();
+    d.policy.slot_validity.weapon.primary_slots.clear();
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.slot_validity.weapon.giant_tags = vec!["tag".into(); 65];
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.slot_validity.weapon.offhand_slots[1].offhand =
+        d.policy.slot_validity.weapon.offhand_slots[0]
+            .offhand
+            .clone();
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.slot_validity.embedded.restriction_field = "x".repeat(4097);
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.slot_validity.weapon.primary_slots = vec!["x".repeat(4096); 64];
+    assert!(d.validate().is_err()); // The rest of the policy also consumes aggregate bytes.
+}
+
+#[test]
+fn slot_validity_required_closed_schema_and_source_role_are_checked() {
+    let original = serde_json::to_value(data()).unwrap();
+    let mut omitted = original.clone();
+    omitted["policy"]
+        .as_object_mut()
+        .unwrap()
+        .remove("slot_validity");
+    assert!(serde_json::from_value::<ItemAssemblyData>(omitted).is_err());
+    let mut omitted = original.clone();
+    omitted["policy"]["slot_validity"]["weapon"]["giants_blood"]
+        .as_object_mut()
+        .unwrap()
+        .remove("default");
+    assert!(serde_json::from_value::<ItemAssemblyData>(omitted).is_err());
+    let mut unknown = original.clone();
+    unknown["policy"]["slot_validity"]["jewel"]["execute"] = true.into();
+    assert!(serde_json::from_value::<ItemAssemblyData>(unknown).is_err());
+    let mut wrong_arity = original;
+    wrong_arity["policy"]["slot_validity"]["flask"]["routes"]
+        .as_array_mut()
+        .unwrap()
+        .pop();
+    assert!(serde_json::from_value::<ItemAssemblyData>(wrong_arity).is_err());
+    let mut d = data();
+    d.source.construction_spans.remove("slot_validity");
+    assert!(d.validate().is_err());
+}
+
+#[test]
+fn directly_constructed_slot_policy_uses_the_catalogs_shape_and_storage_guards() {
+    let mut p = data().policy.slot_validity;
+    p.jewel.outer_size = -2.5;
+    p.slot_pattern = "[unfinished".into();
+    p.validate().unwrap();
+    p.weapon.giant_tags = vec!["tag".into(); 65];
+    assert!(p.validate().is_err());
+    p.weapon.giant_tags = vec!["tag".into()];
+    p.weapon.giants_blood.query_name = "x".repeat(4097);
+    assert!(p.validate().is_err());
+    p.weapon.giants_blood.query_name = "Caller".into();
+    p.weapon.primary_slots = vec!["x".repeat(4096); 64];
+    assert!(p.validate().is_err());
 }

@@ -17,13 +17,15 @@ mod jewel;
 pub use jewel::*;
 mod weapon;
 pub use weapon::*;
+mod slot_validity;
+pub use slot_validity::*;
 
 type Result<T> = std::result::Result<T, GameDataError>;
 fn error(message: impl std::fmt::Display) -> GameDataError {
     GameDataError(format!("item assembly policy: {message}"))
 }
 
-pub const ITEM_ASSEMBLY_SCHEMA_VERSION: u32 = 4;
+pub const ITEM_ASSEMBLY_SCHEMA_VERSION: u32 = 5;
 pub const ITEM_ASSEMBLY_SOURCE_ROLES: &[&str] = &[
     "add_mod",
     "and64",
@@ -52,6 +54,7 @@ pub const ITEM_ASSEMBLY_SOURCE_ROLES: &[&str] = &[
     "rune_display",
     "scale_add_mod",
     "set_source",
+    "slot_validity",
     "variant_check",
     "variant_count",
     "variant_groups",
@@ -87,6 +90,7 @@ pub struct ItemAssemblyPolicy {
     pub named_compatibility: Vec<ItemAssemblyNamedRule>,
     pub requirements: ItemAssemblyRequirementPolicy,
     pub slots: ItemAssemblySlotPolicy,
+    pub slot_validity: ItemSlotValidityPolicy,
     pub weapon: ItemAssemblyWeaponPolicy,
     pub jewel: ItemAssemblyJewelPolicy,
     pub armour: ItemAssemblyArmourPolicy,
@@ -704,6 +708,7 @@ impl ItemAssemblyData {
         local::validate(&mut b, &p.armour, &p.flask, &p.charm)?;
         weapon::validate(&mut b, &p.weapon)?;
         jewel::validate(&mut b, &p.jewel)?;
+        slot_validity::validate(&mut b, &p.slot_validity)?;
         b.text(&p.scale.integer_scaled_key)?;
         b.count(p.scale.keyed_value_decimal_places.into(), 15)?;
         b.count(p.scale.truncation_round_decimal_places.into(), 15)?;
