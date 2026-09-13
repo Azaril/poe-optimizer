@@ -88,7 +88,7 @@ fn action_operation_domains_and_global_effect_metadata_remain_fail_closed() {
 fn action_and_timing_data_are_injected_with_semantic_capability_guards() {
     let snapshot = bundled_snapshot().unwrap();
     let package = snapshot.package();
-    assert_eq!(package.manifest.schema_version, 33);
+    assert_eq!(package.manifest.schema_version, 34);
     assert_eq!(package.action_speed.query_stats.len(), 5);
     let mut p = package.clone();
     p.action_speed.base_multiplier = 1.125;

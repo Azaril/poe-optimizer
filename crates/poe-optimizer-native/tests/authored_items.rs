@@ -95,14 +95,15 @@ fn absent_base_is_skipped_and_invalid_registration_retains_prior_prefix() {
     assert!(stage.registered_id(3.0).is_none());
 }
 #[test]
-fn nonitem_source_continuation_stops_before_later_items() {
+fn valid_sets_allow_later_items_and_namespace_guards_still_stop_loading() {
     let stage = prepare(&doc(&(ring("1") + "<ItemSet id='1'/>" + &ring("2"))));
     let r = stage.report();
-    assert_eq!(r.registration_order.len(), 1);
-    assert_eq!(r.records[1].status, ItemRecordStatus::NotProcessed);
+    assert_eq!(r.registration_order.len(), 2);
+    assert_eq!(r.records[1].status, ItemRecordStatus::Registered);
+    assert!(r.failure.is_none(), "{:#?}", r.failure);
     assert_eq!(
-        r.failure.as_ref().unwrap().stage,
-        "item_container_continuation"
+        stage.item_sets().unwrap().phase(),
+        poe_optimizer_import::item_sets::ItemSetPhase::AwaitingActivation
     );
     let ns = prepare(
         "<PathOfBuilding2><Items xmlns='urn:unhandled'><Item id='1'>Rarity: NORMAL\nGold Ring</Item></Items></PathOfBuilding2>",
@@ -221,9 +222,8 @@ fn all_original_items_stay_in_report_even_when_the_first_dependency_stops() {
         let report = stage.report();
         assert_eq!(report.records.len(), expected);
         total += expected;
-        assert!(report.failure.is_some());
-        // A completed inventory may stop at its following ItemSet instruction.
         // If an item itself stops, no later record may have been processed.
+        // These supplied sets are valid: completed inventories now reach activation.
         let mut stopped = false;
         for record in &report.records {
             if stopped {
@@ -234,6 +234,15 @@ fn all_original_items_stay_in_report_even_when_the_first_dependency_stops() {
                 ItemRecordStatus::Pending
                     | ItemRecordStatus::SourceFailure
                     | ItemRecordStatus::NotProcessed
+            );
+        }
+        if stopped {
+            assert!(report.failure.is_some());
+        } else {
+            assert!(report.failure.is_none(), "{:#?}", report.failure);
+            assert_eq!(
+                stage.item_sets().unwrap().phase(),
+                poe_optimizer_import::item_sets::ItemSetPhase::AwaitingActivation
             );
         }
         assert_eq!(
@@ -297,11 +306,12 @@ fn production_inventory_registers_local_family_items_before_item_set_activation(
     );
     let stage = prepare(&source);
     let report = stage.report();
-    assert_eq!(report.schema_version, 3);
+    assert_eq!(report.schema_version, 4);
     assert_eq!(report.registration_order.len(), 3, "{:#?}", report.failure);
+    assert!(report.failure.is_none(), "{:#?}", report.failure);
     assert_eq!(
-        report.failure.as_ref().unwrap().stage,
-        "item_container_continuation"
+        stage.item_sets().unwrap().phase(),
+        poe_optimizer_import::item_sets::ItemSetPhase::AwaitingActivation
     );
     for (id, field) in [(1.0, "armourData"), (2.0, "flaskData"), (3.0, "charmData")] {
         let item = stage.item(stage.registered_id(id).unwrap()).unwrap();
@@ -329,9 +339,10 @@ fn production_inventory_registers_weapon_slot_graphs_before_activation() {
     let stage = prepare(&source);
     let report = stage.report();
     assert_eq!(report.registration_order.len(), 3, "{:#?}", report.failure);
+    assert!(report.failure.is_none(), "{:#?}", report.failure);
     assert_eq!(
-        report.failure.as_ref().unwrap().stage,
-        "item_container_continuation"
+        stage.item_sets().unwrap().phase(),
+        poe_optimizer_import::item_sets::ItemSetPhase::AwaitingActivation
     );
     for id in [1.0, 2.0, 3.0] {
         let item = stage.item(stage.registered_id(id).unwrap()).unwrap();
@@ -404,4 +415,204 @@ fn production_jewel_radius_uses_startup_context_before_saved_tree_selection() {
             );
         }
     }
+}
+
+#[test]
+fn malformed_set_preserves_registered_prefix_and_stops_later_items() {
+    use poe_optimizer_import::item_sets::ItemSetPhase;
+    for child in [
+        "<SocketIdURL/>",
+        "<Slot name='id' itemId='1'/>",
+        "<RuneSlot slotName='title' runeName='x'/>",
+    ] {
+        let stage = prepare(&doc(&(ring("1")
+            + "<ItemSet id='2'>"
+            + child
+            + "</ItemSet>"
+            + &ring("3"))));
+        let report = stage.report();
+        assert_eq!(report.registration_order.len(), 1);
+        assert_eq!(report.records[1].status, ItemRecordStatus::NotProcessed);
+        let failure = report.failure.as_ref().unwrap();
+        assert!(failure.source_error, "{failure:?}");
+        assert!(failure.source.is_some());
+        assert!(failure.instance.is_none());
+        assert_eq!(failure.stage, "item_set_loading");
+        assert_eq!(stage.item_sets().unwrap().phase(), ItemSetPhase::Failed);
+    }
+}
+#[test]
+fn item_failure_prevents_later_set_operations_and_ignored_source_is_not_recursive() {
+    use poe_optimizer_import::item_sets::ItemSetPhase;
+    let stage = prepare(&doc(
+        &(ring("bad") + "<ItemSet id='2'><SocketIdURL/></ItemSet>")
+    ));
+    assert_eq!(
+        stage.report().failure.as_ref().unwrap().stage,
+        "item_loading"
+    );
+    let state = stage.item_sets().unwrap();
+    assert_eq!(state.phase(), ItemSetPhase::Loading);
+    assert!(
+        state.failure().is_none(),
+        "unreached malformed set must not execute"
+    );
+    let stage = prepare(&doc(
+        &("<Unconsumed><ItemSet><SocketIdURL/></ItemSet></Unconsumed>text".to_owned() + &ring("1")),
+    ));
+    assert!(stage.report().failure.is_none());
+    assert_eq!(stage.report().registration_order.len(), 1);
+    assert_eq!(
+        stage.item_sets().unwrap().phase(),
+        ItemSetPhase::AwaitingActivation
+    );
+}
+#[test]
+fn trade_children_use_attributes_independent_of_name_but_text_is_a_source_error() {
+    let stat = data()
+        .snapshot()
+        .item_assembly()
+        .policy()
+        .inventory
+        .power_stats
+        .rows
+        .iter()
+        .find_map(|row| row.stat.as_deref())
+        .unwrap();
+    let stage = prepare(&doc(&format!(
+        "<TradeSearchWeights><AnyName stat='{stat}' weightMult='2'/></TradeSearchWeights>{}",
+        ring("1")
+    )));
+    assert!(stage.report().failure.is_none());
+    assert_eq!(stage.report().registration_order.len(), 1);
+    for text in ["text", "<![CDATA[text]]>"] {
+        let stage = prepare(&doc(&format!(
+            "{}<TradeSearchWeights><AnyName stat='{stat}'/>{text}</TradeSearchWeights>{}",
+            ring("1"),
+            ring("2")
+        )));
+        let failure = stage.report().failure.as_ref().unwrap();
+        assert!(failure.source_error);
+        assert_eq!(failure.stage, "item_set_loading");
+        assert_eq!(
+            stage.report().records[1].status,
+            ItemRecordStatus::NotProcessed
+        );
+    }
+}
+#[test]
+fn items_and_sets_share_one_cumulative_byte_budget() {
+    let xml = doc(&(ring("1") + "<ItemSet id='1'><Slot name='Ring 1' itemId='1'/></ItemSet>"));
+    let full = prepare(&xml);
+    let state_bytes = full.item_sets().unwrap().usage().bytes;
+    let item_bytes: usize = full
+        .report()
+        .records
+        .iter()
+        .map(|r| {
+            serde_json::to_vec(r.loading_state.as_ref().unwrap())
+                .unwrap()
+                .len()
+                + full.item(r.instance).unwrap().usage().bytes
+        })
+        .sum();
+    assert!(state_bytes > 0 && item_bytes > 0);
+    let build = import(&xml);
+    let view = resolve_view(
+        &build,
+        data().snapshot(),
+        &ViewRequest::default(),
+        ResolveLimits::default(),
+    )
+    .unwrap();
+    let total = state_bytes + item_bytes;
+    let exact = prepare_authored_items(
+        &build,
+        &view,
+        data(),
+        ItemPreparationLimits {
+            max_state_bytes: total,
+            ..Default::default()
+        },
+    )
+    .unwrap();
+    assert!(exact.report().failure.is_none());
+    assert!(
+        matches!(prepare_authored_items(&build,&view,data(),ItemPreparationLimits{max_state_bytes:total-1,..Default::default()}),Err(e) if e.kind==EvaluationErrorKind::InvalidRequest)
+    );
+}
+
+#[test]
+fn interleaved_production_loading_preserves_saved_choices_without_activating_them() {
+    use poe_optimizer_engine::source_program::{
+        ProgramTableId as Id, ProgramValue as V, ProgramValueGraph,
+    };
+    fn table(value: &V) -> Id {
+        match value {
+            V::Table(id) => *id,
+            other => panic!("expected table: {other:?}"),
+        }
+    }
+    fn get(graph: &ProgramValueGraph, id: Id, key: V) -> &V {
+        graph.tables[id.0 as usize - 1]
+            .entries
+            .iter()
+            .find_map(|(k, v)| (k == &key).then_some(v))
+            .unwrap_or(&V::Nil)
+    }
+    fn key(value: &str) -> V {
+        V::Bytes(value.as_bytes().to_vec())
+    }
+    let policy = &data().snapshot().item_assembly().policy().inventory;
+    let rune = &policy.layout.rune_slots[0].name;
+    let socket = policy.layout.passive.nodes.ids[0];
+    let xml = format!(
+        "<PathOfBuilding2><Items activeItemSet='0x2' showStatDifferences='false'><Slot name='Charm 1' itemId='4' active='true'/>{}<ItemSet id='2' title='First'/>{}<ItemSet id='0x2' title='Last' useSecondWeaponSet='true'><Slot name='Ring 1' itemId='2' note='chosen'/><RuneSlot slotName='{rune}' runeName='caller rune'/><SocketIdURL nodeId='{socket}' itemPbURL='caller url'/></ItemSet></Items></PathOfBuilding2>",
+        ring("1"),
+        ring("2")
+    );
+    let prepared = prepare(&xml);
+    assert!(prepared.report().failure.is_none());
+    assert_eq!(prepared.report().registration_order.len(), 2);
+    let state = prepared.item_sets().unwrap();
+    let pending = state.continuation().unwrap();
+    assert_eq!(pending.requested_set.value(), Some(2.0));
+    assert_eq!(pending.show_stat_differences, Some(false));
+    let graph = state.snapshot().unwrap();
+    let root = table(&graph.values[0]);
+    assert_eq!(get(&graph, root, key("activeItemSetId")), &V::Number(0.0));
+    assert_eq!(
+        get(&graph, root, key("showStatDifferences")),
+        &V::Boolean(policy.defaults.show_stat_differences)
+    );
+    let previous = table(get(&graph, root, key("previousActiveItemSet")));
+    assert_eq!(get(&graph, root, key("activeItemSet")), &V::Table(previous));
+    let sets = table(get(&graph, root, key("itemSets")));
+    let selected = table(get(&graph, sets, V::Number(2.0)));
+    assert_ne!(selected, previous);
+    assert_eq!(get(&graph, selected, key("title")), &key("Last"));
+    assert_eq!(
+        get(&graph, selected, key("useSecondWeaponSet")),
+        &V::Boolean(true)
+    );
+    let order = table(get(&graph, root, key("itemSetOrderList")));
+    assert_eq!(get(&graph, order, V::Number(1.0)), &V::Number(2.0));
+    assert_eq!(get(&graph, order, V::Number(2.0)), &V::Number(2.0));
+    let row = table(get(&graph, selected, key("Ring 1")));
+    assert_eq!(get(&graph, row, key("selItemId")), &V::Number(2.0));
+    assert_eq!(get(&graph, row, key("note")), &key("chosen"));
+    let row = table(get(&graph, selected, key(rune)));
+    assert_eq!(get(&graph, row, key("runeName")), &key("caller rune"));
+    let row = table(get(&graph, selected, V::Number(f64::from(socket))));
+    assert_eq!(get(&graph, row, key("pbURL")), &key("caller url"));
+    let slots = table(get(&graph, root, key("slots")));
+    let ring = table(get(&graph, slots, key("Ring 1")));
+    assert_eq!(
+        get(&graph, ring, key("selItemId")),
+        &V::Number(0.0),
+        "saved choices must not leak into live controls before activation"
+    );
+    let charm = table(get(&graph, slots, key("Charm 1")));
+    assert_eq!(get(&graph, charm, key("selItemId")), &V::Number(4.0));
+    assert_eq!(get(&graph, charm, key("active")), &V::Boolean(true));
 }

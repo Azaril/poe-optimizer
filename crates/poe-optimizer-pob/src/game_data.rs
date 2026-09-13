@@ -141,6 +141,7 @@ const READ_PATHS: &[&str] = &[
     "src/GameVersions.lua",
     "src/Modules/Main.lua",
     "src/Classes/ItemsTab.lua",
+    "src/Classes/ItemSlotControl.lua",
     "src/Data/ModItem.lua",
     "src/Data/ModFlask.lua",
     "src/Data/ModCharm.lua",
@@ -227,6 +228,7 @@ pub(crate) fn extractor_sha256() -> String {
         include_str!("item_assembly_extract/weapon.rs"),
         include_str!("item_assembly_extract/jewel.rs"),
         include_str!("item_assembly_extract/slot_validity.rs"),
+        include_str!("item_assembly_extract/inventory.rs"),
         include_str!("item_assembly_extract/source-shapes.json"),
         include_str!("../../poe-optimizer-lua-utf8/src/lib.rs"),
         include_str!("../../poe-optimizer-lua-utf8/build.rs"),
@@ -514,6 +516,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         &item_scalability,
         &actor,
         &modifier_parser,
+        &authenticated,
     )?;
     let skill_identities = crate::skill_identity_extract::extract(&extractor.sources)?;
     let (skill_preparation, skill_preparation_evidence) =

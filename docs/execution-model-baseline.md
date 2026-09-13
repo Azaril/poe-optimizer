@@ -1245,3 +1245,48 @@ by calculation, save and export consumers. Do not turn source observations into 
 services required by the native evaluator. Legacy/repeated loads, duplicate IDs, unknown
 rune names, loadout re-entry, order-sensitive errors and native-produced state remain
 integration work. Full native original evaluations remain **0/5**.
+
+## Native item-set materialization checkpoint
+
+R2ae adds a fixed constructor/ordered-loading state machine at the existing injected-data
+and native-item seams. It does not expand the generic source interpreter. The
+[equipment integration contract](native-equipment-integration.md) separates saved rows,
+previous active references, live selections and the still-unimplemented activation consumers.
+This is another current-model comparison input; it does not choose an A2 representation.
+
+The package grows by **9,875 bytes** to **26,314,825 bytes** (schema 34 / item-assembly 6).
+Only the manifest and item-assembly section change. Slot relationships, defaults, 19 complete
+passive socket IDs and 87 ordered trade-stat rows come from authenticated source. Full-tree
+version/digest binding prevents using the projection with a different package tree; startup
+version binding also keeps constructor slots consistent with radius preparation. Resolved
+radius fallback data may still come from an older supported version.
+
+The new-file inventory records physical lines, including comments and blanks; existing-file
+integration changes and reused code are excluded. These are footprint measurements, not
+maintainability scores or a complete tally of compatibility costs.
+
+| New-file role | Files | Physical lines | Bytes |
+| --- | ---: | ---: | ---: |
+| Production module locations | 5 | 1,562 | 58,414 |
+| Acquisition module (includes colocated tests) | 1 | 584 | 21,610 |
+| Dedicated native/data unit tests | 2 | 712 | 23,424 |
+| Reference-test files | 2 | 1,040 | 42,629 |
+
+Sixteen fresh reference hosts cover all five originals plus eleven derived cases. All sixteen
+fresh constructor comparisons and declared materialization comparisons match; six cases retain
+expected original Source failures. The successful comparison ends at the first original
+SetActiveItemSet entry and checks its parent Load and exact requested-set value. The graph
+projection retains set/child aliases and duplicate order but compares rune selected names only;
+raw graphs remain in the receipts. Error snapshots omit the unavailable prior argument, and
+constructor snapshots omit uninitialized source trade storage. Exact trade-function identity,
+activation, slot population, loadout callbacks and complete inventories are outside this component
+comparison. The production coordinator separately preserves earlier native item failures.
+
+These source results are correctness evidence, not candidate throughput measurements. General
+candidate invalidation and effective equipment/actor participation remain required; complete
+native original builds remain **0/5**. Compare alternatives against the actual downstream
+consumer effects, rather than requiring them to retain this particular graph representation.
+
+Receipts: `runs/r2ae-item-set-loading-01/package-review.json`, `new-code-inventory-final.json`,
+`source-reconciliation.json`, and the raw `source-01/` observations. Broader validation and
+publication state belong in the [implementation record](implementation.md).

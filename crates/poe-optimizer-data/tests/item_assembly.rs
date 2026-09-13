@@ -13,7 +13,7 @@ fn data() -> ItemAssemblyData {
 #[test]
 fn policy_only_catalog_binds_existing_definitions_without_copying() {
     let s = snapshot();
-    assert_eq!(s.identity().schema_version, 33);
+    assert_eq!(s.identity().schema_version, 34);
     let c = s.item_assembly();
     assert_eq!(c.data().capability, ItemAssemblyCapability::PolicyOnly);
     assert_eq!(
@@ -284,7 +284,7 @@ fn immutable_catalog_is_send_sync_and_parallel_datasets_do_not_share_policy() {
 #[test]
 fn local_families_retain_complete_orders_and_query_targets() {
     let d = data();
-    assert_eq!(d.schema_version, 5);
+    assert_eq!(d.schema_version, 6);
     let a = &d.policy.armour;
     assert_eq!(a.queries.len(), 18);
     assert_eq!(a.queries[0].role, ItemAssemblyArmourRole::ArmourBase);

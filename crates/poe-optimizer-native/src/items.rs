@@ -1,7 +1,9 @@
 //! Ordered native inventory preparation, before item-set activation and actor use.
 //! Diagnostic loader completion never authorizes registration without an owned
 //! assembly result. This independent prefix is not the complete ItemsTab lifecycle.
+mod sets;
 mod slot_validity;
+pub use sets::ItemSetPreparationReport;
 pub use slot_validity::{PreparedItemSlotEvaluator, PreparedItemSlotRequest};
 
 use crate::CompiledGameData;
@@ -17,6 +19,7 @@ use poe_optimizer_import::{
         ItemState, JewelRadiusContext, JewelRadiusErrorKind, JewelRadiusEvidence,
         JewelRadiusProvenance, assembly::AssembledItem,
     },
+    item_sets::{ItemSetLimits, ItemSetState},
     item_source::{ItemSourceKind, ItemSourceUse},
     selected_view::SelectedView,
     source_xml::PobContentEntry,
@@ -28,8 +31,10 @@ use std::{collections::BTreeMap, sync::Arc};
 #[derive(Debug, Clone, Copy)]
 pub struct ItemPreparationLimits {
     pub max_items: usize,
+    /// Shared XML/loader operation count; kernels also enforce their own work bounds.
     pub max_instructions: usize,
-    /// Combined serialized diagnostics and logical owned assembly construction bytes.
+    /// Combined serialized item-state diagnostics and logical item/set construction bytes.
+    /// This is not RSS; caller-requested diagnostic snapshots are separate allocations.
     pub max_state_bytes: usize,
 }
 impl Default for ItemPreparationLimits {
@@ -78,6 +83,7 @@ pub struct ItemPreparationReport {
     /// Context selected before Items load; saved Tree/Spec loading happens later.
     pub jewel_radius_context: Option<JewelRadiusEvidence>,
     pub records: Vec<PreparedItemRecord>,
+    pub item_sets: Option<ItemSetPreparationReport>,
     /// Successful insertions in original order, including repeated numeric IDs.
     pub registration_order: Vec<ItemRecordId>,
     pub failure: Option<ItemPreparationFailure>,
@@ -89,12 +95,18 @@ pub struct PreparedItems {
     data: Arc<CompiledGameData>,
     report: ItemPreparationReport,
     assembled: BTreeMap<ItemRecordId, AssembledItem>,
+    item_sets: Option<ItemSetState>,
     /// Numeric equality lookup only. This does not claim original Lua hash order.
     winners: BTreeMap<u64, ItemRecordId>,
 }
 impl PreparedItems {
     pub fn report(&self) -> &ItemPreparationReport {
         &self.report
+    }
+    /// Owned loading state, not activated equipment. Snapshots are diagnostic only
+    /// and allocate separately on request; the report retains only phase and usage.
+    pub fn item_sets(&self) -> Option<&ItemSetState> {
+        self.item_sets.as_ref()
     }
     pub fn item(&self, id: ItemRecordId) -> Option<&AssembledItem> {
         self.assembled.get(&id)
@@ -154,12 +166,13 @@ pub fn prepare_authored_items(
     view.validate_binding(build, data.snapshot())
         .map_err(|e| contract(e.to_string()))?;
     let mut report = ItemPreparationReport {
-        schema_version: 3,
+        schema_version: 4,
         source_sha256: build.source_sha256().into(),
         view_sha256: view_digest(view)?,
         data_identity: data.identity().clone(),
         jewel_radius_context: None,
         records: Vec::new(),
+        item_sets: None,
         registration_order: Vec::new(),
         failure: None,
         frontiers: vec![
@@ -182,6 +195,7 @@ pub fn prepare_authored_items(
         })
         .collect::<BTreeMap<_, _>>();
     let mut assembled = BTreeMap::new();
+    let mut item_sets = None;
     let mut winners = BTreeMap::new();
     let projection = match build.project_items() {
         Ok(p) => Some(p),
@@ -257,9 +271,26 @@ pub fn prepare_authored_items(
         let mut provider = None;
         let mut instructions_left = limits.max_instructions;
         let mut state_bytes_left = limits.max_state_bytes;
+        if report.failure.is_none() {
+            match ItemSetState::new(
+                &data.snapshot().item_assembly().policy().inventory,
+                ItemSetLimits {
+                    max_bytes: limits.max_state_bytes,
+                    ..Default::default()
+                },
+            ) {
+                Ok(state) => item_sets = Some(state),
+                Err(error) => {
+                    report.failure = sets::result(Err(error), None, "item_set_initialization")?
+                }
+            }
+        }
         'containers: for (container_index, container) in projection.containers().iter().enumerate()
         {
             let Some(radius) = &radius else { break };
+            let Some(set_state) = item_sets.as_mut() else {
+                break;
+            };
             if container.source_use() == ItemSourceUse::NamespaceUnknown {
                 report.failure = Some(ItemPreparationFailure {
                     source: source_by_start
@@ -284,24 +315,40 @@ pub fn prepare_authored_items(
                 });
                 break;
             }
-            for node in container.children() {
+            sets::charge(&mut instructions_left)?;
+            if let Some(failure) = sets::result(
+                set_state.begin_load(),
+                source_by_start
+                    .get(&container.element().source_range().start)
+                    .copied(),
+                "item_set_loading",
+            )? {
+                report.failure = Some(failure);
+                break;
+            }
+            for entry in container.ordered_content().consumed() {
+                sets::charge(&mut instructions_left)?;
+                let PobContentEntry::Element { child_index } = entry else {
+                    continue;
+                };
+                let node = container
+                    .children()
+                    .get(*child_index)
+                    .ok_or_else(|| contract("item-stream child missing"))?;
                 let source = *source_by_start
                     .get(&node.element().source_range().start)
                     .ok_or_else(|| contract("item-stream occurrence missing"))?;
-                // No later item may pass an unexecuted source instruction that
-                // could fail or change the surrounding ItemsTab state.
-                if node.kind() != ItemSourceKind::Item {
-                    report.failure = Some(ItemPreparationFailure {
-                        source: Some(source),
-                        instance: None,
-                        source_error: false,
-                        stage: "item_container_continuation",
-                        message: format!(
-                            "Inventory prefix stops before {:?}; complete item-set/slot/trade loading remains pending",
-                            node.kind()
-                        ),
-                    });
-                    break 'containers;
+                sets::tighten(set_state, state_bytes_left)?;
+                if node.source_use() == ItemSourceUse::NamespaceUnknown
+                    || node.kind() != ItemSourceKind::Item
+                {
+                    if let Some(failure) =
+                        sets::apply(set_state, node, &source_by_start, &mut instructions_left)?
+                    {
+                        report.failure = Some(failure);
+                        break 'containers;
+                    }
+                    continue;
                 }
                 let row = &mut report.records[*record_by_source
                     .get(&source)
@@ -395,6 +442,7 @@ pub fn prepare_authored_items(
                         .checked_sub(item.usage().bytes)
                         .ok_or_else(|| resource("retained assembly bytes"))?;
                 }
+                sets::tighten(set_state, state_bytes_left)?;
                 row.loading_state = Some(machine.state().clone());
                 if failure.is_some() || machine.status() == ItemLoadStatus::SourceError {
                     let source_error = machine.status() == ItemLoadStatus::SourceError;
@@ -462,13 +510,26 @@ pub fn prepare_authored_items(
                 row.registration_id = Some(ItemNumber::new(id));
                 row.status = ItemRecordStatus::Registered;
             }
+            if let Some(failure) = sets::finish(
+                set_state,
+                container,
+                source_by_start
+                    .get(&container.element().source_range().start)
+                    .copied(),
+                &mut instructions_left,
+            )? {
+                report.failure = Some(failure);
+                break;
+            }
         }
     }
+    report.item_sets = item_sets.as_ref().map(ItemSetPreparationReport::from_state);
     Ok(PreparedItems {
         owner: build.clone(),
         data: Arc::clone(data),
         report,
         assembled,
+        item_sets,
         winners,
     })
 }

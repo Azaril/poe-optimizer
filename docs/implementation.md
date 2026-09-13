@@ -18,8 +18,9 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-R2ad is the latest reference-lifecycle and consumer-audit checkpoint; R2ac remains the
-latest native component checkpoint (injected, reusable slot validity).
+R2ae implements native item-set materialization and has passed its scoped source checks,
+affected data/native regressions, CLI checks, strict lint and portable compilation. R2ad
+supplies reference-lifecycle evidence; R2ac supplies reusable slot validity.
 The A1 investigation remains open alongside this work.
 Source-session timing and requested allocation layouts are measured separately from dataset
 ownership; staged-container transfer now reduces import allocation traffic. R2x now records actual import parser calls across all
@@ -38,14 +39,74 @@ Continue measuring costs before extending general Lua compatibility into further
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
 
-**Local R2ae working-tree resume (unvalidated):** inventory policy/extraction, the native set-state
-machine and reference fixtures are under construction. Finish the native coordinator,
-aggregate resource accounting and report wiring before validation; the native fingerprint
-currently references a helper that has not yet been added. Code edits target package schema
-34 / item-assembly 6, but the bundled package remains schema 33 / item-assembly 5 and has not
-been regenerated. No R2ae build, test, extraction or parity run has completed. Resume from
-`runs/r2ae-item-set-loading-01/`, regenerate the package after integration, then run the focused
-and affected regression checks. This working tree is not a validated checkpoint.
+**R2ae checkpoint: injected, ordered native item-set loading.** The constructor,
+legacy slots, saved sets/runes/socket URLs and trade rows now run in the same ordered stream
+as owned item production. Earlier item/set failures stop later work; duplicate numeric IDs,
+previous active references and mixed row fields retain source behavior. Item diagnostics,
+assembly and set construction share one byte allowance. The XML instruction count and
+separate set graph/pattern limits are explicit; diagnostic snapshots allocate separately.
+The [equipment integration contract](native-equipment-integration.md) records the boundary.
+
+The package is schema **34 / item-loading 5 / item-assembly 6**, **26,314,825 bytes**, SHA-256
+`2a6b63b64c237a0f31dcc65f7a301b7e18bbbd78cd09518a07a8bd12418384a6`.
+Maintainer generation passes. Only the manifest and item-assembly section change; prior
+policies, the class-tree artifact and 28 other sections are unchanged. The complete-tree
+socket projection is bound to its full-tree version/digest and the requested startup tree
+version shared with radius preparation. Older resolved radius fallback data remains valid.
+Normal reviewed extraction reproduces the package exactly; its first old-digest rejection
+remains recorded. Inventory reports are now schema 4 and expose the activation continuation.
+
+**Component validation:** ten set-state tests, two inventory-policy tests, 33 item-assembly/
+binding tests, 17 native inventory tests, 18 extraction tests and eight source-target tests pass.
+The source target covers **16 fresh hosts** (five originals and 11 derived cases): all 16
+constructor and declared materialization comparisons match, including six expected Source
+failures. Successful cases check the exact first activation call and requested set. Graph
+projection omissions and repeated-load limits remain explicit; this is not full Load or
+native inventory-production parity. An older all-originals assertion expecting an ItemSet
+stop was corrected while retaining first-failure and all-record retention checks.
+
+**Regression validation:** all 133 native tests across 20 targets and 59 affected data tests
+pass, as do 16 item-loading tests and strict workspace and native-only lint. The final startup-tree guard was added after the full native suite had
+compiled; its four binding tests and the 17 native inventory tests pass on the final code.
+The signed-zero key regression also passes after lint cleanup. All four CLI preparation tests
+pass in both default and native-only configurations. WASM compilation, formatting and the
+native-only dependency check pass; that dependency graph excludes PoB and Lua.
+
+All five originals also run through the native-only public `prepare-build` command: 116 authored
+item records are retained, with 68 registrations across the five inventories (2, 17, 0, 21, 28).
+The first three retain earlier item-production failures; the last two reach AwaitingActivation.
+Every public report still says incomplete preparation, calculation not run and whole-build
+parity not established. These are preparation results, not successful full evaluations.
+
+Evidence: `runs/r2ae-item-set-loading-01/`, including `source-reconciliation.json`,
+`package-review.json`, `normal-extraction-reconciliation.json`, `final-reconciliation.json`
+and source-bound command ledgers.
+Earlier stale-assertion and lint failures remain recorded. The
+[A1 cost record](execution-model-baseline.md#native-item-set-materialization-checkpoint)
+accounts separately for the new production, acquisition and parity-tooling footprint.
+
+**Hosted CI:** identified deadline, stack-overflow and frontier failures in older runs
+`34730851343` and `34734315878` map to fixes already present: the search-test deadline/diagnostics and Windows stack reserve in `3dec38c`,
+and updated item-inspection frontier expectations in `a886aa1`. One additional Windows
+schema-message failure lacks enough stderr to establish its cause, although all five actor
+search tests passed locally after the stack change. Public check annotations
+retain the failures; full job logs returned HTTP 403. The later runs for `a886aa1`, `94c3cf3`
+and `c1197c4` were still running at the 05:40 UTC observation. Local validation is not a
+hosted green result; receipts are under `ci-triage-by-data/` and `prior-ci-02.json`.
+
+**Resume:** continue through SetActiveItemSet, previous/live state copying, rune lookup,
+order-sensitive PopulateSlots, loadout callback re-entry and export selection. Source traversal is not interchangeable with
+sorted slot order without a proof: earlier clearing may affect main-hand or child-slot validity.
+AwaitingActivation cannot be bypassed by a repeated successful Load. Connect effective equipment
+to actor preparation and changing candidates after these consumers are implemented.
+
+Two earlier original item-production stops may be removable by proving the original rune
+candidate order: distinct comparison vectors can determine a first DFS minimum even when
+multiple combinations have the same size. This is an investigated next step, not admitted
+behavior; retain ambiguous tied orders and validate complete original execution before changing
+the guard. The source audits are `activation-next-audit.md` and `rune-next-audit.md` in the
+checkpoint receipts. Three original item-production stops remain; two originals now reach
+activation. Full native originals remain **0/5**. No A2 model is selected.
 
 **R2ad checkpoint: original loading lifecycle and execution-model decision gates.** The
 A1–A4 plan now makes the comparison deliverable and decision follow-through explicit. The

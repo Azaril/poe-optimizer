@@ -25,8 +25,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 33;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v33";
+pub const SCHEMA_VERSION: u32 = 34;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v34";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -760,6 +760,21 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
         &package.item_scalability,
         &package.modifier_parser,
     )?;
+    let inventory_tree = &package.item_assembly.policy.inventory.layout.passive.nodes;
+    if inventory_tree.tree_version != package.tree.source.tree_version
+        || inventory_tree.full_snapshot_sha256 != package.tree.full_snapshot_sha256
+    {
+        return Err(error(
+            "inventory socket projection belongs to a different full tree",
+        ));
+    }
+    // Original Build initialization shares one requested tree version between
+    // radius setup and the ItemsTab constructor. Resolved radius data may be older.
+    if inventory_tree.tree_version != package.item_loading.policy.jewel_radius.latest_tree_version {
+        return Err(error(
+            "inventory socket projection belongs to a different startup tree",
+        ));
+    }
     package
         .unique_requirements
         .validate_inputs(&package.item_loading, &package.tree)?;

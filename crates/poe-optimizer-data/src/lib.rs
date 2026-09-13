@@ -42,6 +42,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("item_assembly/weapon.rs"),
         include_str!("item_assembly/jewel.rs"),
         include_str!("item_assembly/slot_validity.rs"),
+        include_str!("item_assembly/inventory.rs"),
         include_str!("item_formatting.rs"),
         include_str!("item_loading.rs"),
         include_str!("item_loading/runes.rs"),

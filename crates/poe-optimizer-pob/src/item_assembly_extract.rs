@@ -10,6 +10,7 @@ use poe_optimizer_data::{
 };
 use std::collections::BTreeMap;
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
+mod inventory;
 mod jewel;
 mod local;
 mod slot_validity;
@@ -164,6 +165,7 @@ fn authenticate<'a>(
     // Source-only role: loading ItemsTab would execute unrelated UI/rune setup.
     // The full original method is exercised independently by the parity host.
     spans.insert("slot_validity".into(), slot_validity::span());
+    spans.extend(inventory::spans());
     let mut bodies = BTreeMap::new();
     for (role, span) in &spans {
         bodies.insert(role.clone(), source_body(sources, span)?);
@@ -501,6 +503,7 @@ fn policy(
     auth: &Auth<'_>,
     items: &ItemLoadingData,
     parser: &ModifierParserData,
+    tree: &poe_optimizer_data::tree_projection::AuthenticatedTreeSnapshot,
 ) -> Result<ItemAssemblyPolicy> {
     let body = |name: &str| {
         auth.bodies
@@ -517,6 +520,7 @@ fn policy(
     let jewel_item_type = text_after(lua, build, "elseif self.type == ")?;
     let jewel = jewel::extract(lua, build, slot, &jewel_item_type)?;
     let slot_validity = slot_validity::extract(lua, body("slot_validity")?)?;
+    let inventory = inventory::extract(lua, &auth.bodies, tree)?;
     let quality = query(lua, after(slot, "local craftedQuality = ")?)?;
     let soul = query(lua, after(build, "self.socketedSoulCoreEffectModifier = ")?)?;
     let rune = query(lua, after(build, "self.socketedRuneEffectModifier = ")?)?;
@@ -907,6 +911,7 @@ fn policy(
         requirements: req,
         slots,
         slot_validity,
+        inventory,
         weapon,
         jewel,
         armour,
@@ -936,11 +941,12 @@ pub(crate) fn extract(
     scalability: &ItemScalabilityData,
     actor: &ActorData,
     parser: &ModifierParserData,
+    tree: &poe_optimizer_data::tree_projection::AuthenticatedTreeSnapshot,
 ) -> Result<ItemAssemblyData> {
     let (lua, order, primitives) =
         crate::unique_requirements_extract::host_with_observer(sources, Primitives::capture)?;
     let auth = authenticate(&lua, &primitives, sources)?;
-    let policy = policy(&lua, &auth, items, parser)?;
+    let policy = policy(&lua, &auth, items, parser, tree)?;
     // Reused precision data is checked against the original complete constructed map.
     let original: Table = lua
         .globals()
@@ -1029,6 +1035,21 @@ mod tests {
                 .collect()
         })
     }
+    pub(super) fn tree() -> &'static poe_optimizer_data::tree_projection::AuthenticatedTreeSnapshot
+    {
+        static TREE: OnceLock<poe_optimizer_data::tree_projection::AuthenticatedTreeSnapshot> =
+            OnceLock::new();
+        TREE.get_or_init(|| {
+            let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../../vendor/path-of-building-poe2");
+            let snapshot = crate::tree_data::extract_pinned_tree(&root, "0_5").unwrap();
+            let digest = snapshot.sha256().unwrap();
+            poe_optimizer_data::tree_projection::AuthenticatedTreeSnapshot::from_trusted_extraction(
+                snapshot, &digest,
+            )
+            .unwrap()
+        })
+    }
     #[test]
     fn complete_original_methods_export_policy_without_assembly_capability() {
         let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
@@ -1039,6 +1060,7 @@ mod tests {
             &p.item_scalability,
             &p.actor,
             &p.modifier_parser,
+            tree(),
         )
         .unwrap();
         assert_eq!(data.capability, ItemAssemblyCapability::PolicyOnly);

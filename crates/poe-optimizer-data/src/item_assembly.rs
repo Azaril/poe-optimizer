@@ -19,13 +19,15 @@ mod weapon;
 pub use weapon::*;
 mod slot_validity;
 pub use slot_validity::*;
+mod inventory;
+pub use inventory::*;
 
 type Result<T> = std::result::Result<T, GameDataError>;
 fn error(message: impl std::fmt::Display) -> GameDataError {
     GameDataError(format!("item assembly policy: {message}"))
 }
 
-pub const ITEM_ASSEMBLY_SCHEMA_VERSION: u32 = 5;
+pub const ITEM_ASSEMBLY_SCHEMA_VERSION: u32 = 6;
 pub const ITEM_ASSEMBLY_SOURCE_ROLES: &[&str] = &[
     "add_mod",
     "and64",
@@ -40,6 +42,17 @@ pub const ITEM_ASSEMBLY_SOURCE_ROLES: &[&str] = &[
     "flag_internal",
     "flag_query",
     "independent_variants",
+    "inventory_create_set",
+    "inventory_declarations",
+    "inventory_initial_fields",
+    "inventory_initial_set",
+    "inventory_load",
+    "inventory_passive_layout",
+    "inventory_power_minions",
+    "inventory_power_rows",
+    "inventory_slot_control",
+    "inventory_slot_layout",
+    "inventory_tree_types",
     "keyword_match",
     "list_internal",
     "list_query",
@@ -91,6 +104,7 @@ pub struct ItemAssemblyPolicy {
     pub requirements: ItemAssemblyRequirementPolicy,
     pub slots: ItemAssemblySlotPolicy,
     pub slot_validity: ItemSlotValidityPolicy,
+    pub inventory: ItemInventoryPolicy,
     pub weapon: ItemAssemblyWeaponPolicy,
     pub jewel: ItemAssemblyJewelPolicy,
     pub armour: ItemAssemblyArmourPolicy,
@@ -709,6 +723,7 @@ impl ItemAssemblyData {
         weapon::validate(&mut b, &p.weapon)?;
         jewel::validate(&mut b, &p.jewel)?;
         slot_validity::validate(&mut b, &p.slot_validity)?;
+        inventory::validate(&mut b, &p.inventory)?;
         b.text(&p.scale.integer_scaled_key)?;
         b.count(p.scale.keyed_value_decimal_places.into(), 15)?;
         b.count(p.scale.truncation_round_decimal_places.into(), 15)?;

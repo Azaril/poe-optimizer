@@ -1,9 +1,74 @@
 # Native equipment and item-set integration
 
-Status: design for the existing injected-data/native-preparation seams. R2ac validates the
-complete slot-validity component with source-fed contexts; ordered set activation and full build integration remain
-open. No execution-model alternative is selected by this work. The
+Status: R2ae wires constructor and ordered inventory/set loading through the existing
+injected-data/native-preparation seams, up to an explicit activation continuation. Scoped
+source validation, affected regressions, CLI checks, strict lint and portable compilation pass.
+R2ac validates the complete slot-validity component with source-fed contexts; ordered set
+activation and full build integration remain open.
+No execution-model alternative is selected by this work. The
 [implementation record](implementation.md) owns progress and evidence.
+
+## R2ae implementation boundary and scoped source validation
+
+The [native item coordinator](../crates/poe-optimizer-native/src/items.rs) and its
+[set adapter](../crates/poe-optimizer-native/src/items/sets.rs) now consume the first Items
+container in source order. Item text and ModRange operations use the existing owned item
+loader; legacy Slot rows, ItemSet bodies, RuneSlot rows, SocketIdURL rows and
+TradeSearchWeights use the new [item-set state](../crates/poe-optimizer-import/src/item_sets.rs).
+A reached item failure or unavailable dependency stops later records; a valid later set cannot
+bypass that producer. Unknown namespaces and repeated Items containers remain explicit
+frontiers.
+
+The constructor consumes injected base/swap/embedded slot relationships, rune-slot identities,
+defaults and the complete passive-socket predicate projection. The latter is acquired from
+the authenticated full tree, before the partial bundled class-tree projection, and its tree
+version and full snapshot digest must match the package tree. Its requested startup version
+must also match radius preparation; older resolved radius fallback data remains allowed. The
+projection is not a list inferred from the five observed builds. The package is now schema 34 with item-assembly policy schema 6:
+26,314,825 bytes, SHA-256
+`2a6b63b64c237a0f31dcc65f7a301b7e18bbbd78cd09518a07a8bd12418384a6`.
+Only the manifest and item-assembly section changed; the other 28 sections are unchanged.
+
+The owned graph keeps the previous active-set object when Load replaces its lookup maps.
+Missing set IDs allocate the next unused numeric key; duplicate numeric IDs replace lookup
+winners while preserving distinct occurrences and order entries. The legacy fallback assigns
+the new default as the active object before the pending switch. Numeric socket keys remain
+distinct from string fields, and updates retain internal aliases. Trade weights use ordered,
+first-match power-stat definitions, including absent keys and shared or distinct transform
+identities. Owner-bound transform descriptors are retained without executing them; the graph's
+transform-presence marker is only diagnostic. Rune names are stored without claiming dropdown
+selection, choice ordering or rune-effect execution.
+
+Finishing the represented prefix produces `AwaitingActivation` with the requested set and
+deferred trailing flags. It does not execute SetActiveItemSet, PopulateSlots, SyncLoadouts or
+ResetUndo, and it does not establish effective equipment. Diagnostic graph snapshots cannot
+be imported as producer state. Item diagnostics, owned assembly and set construction share the
+enclosing byte allowance; set graph operations also have a separate cumulative logical step
+budget alongside the coordinator's instruction limit. These are work/construction charges,
+not allocator or RSS measurements, and diagnostic snapshot copying is outside producer charges.
+
+The [set-materialization target](../crates/poe-optimizer-pob/tests/item_set_materialization_parity.rs)
+passed all eight tests. Across 16 fresh source hosts (five originals and 11 derived cases),
+all 16 constructor comparisons and all 16 declared materialization comparisons matched.
+Six cases reached the expected Source failure and matched the declared failure prefix.
+The repeated-Items case records two successful original Load calls, but native comparison
+ends at the first activation entry; the second successful Load is source-only evidence.
+
+These are source-fed component comparisons, not native inventory-production or complete Load
+parity. The declared graph excludes dropdown arrays/indices/effect data, slot parent/number/
+weapon fields omitted by the observer, and exact trade-transform Function identity; rune
+comparison covers selected names. Constructor comparison omits uninitialized source trade
+storage, and error snapshots omit the previous-set root unavailable to that source witness.
+Activation, PopulateSlots, SyncLoadouts, trailing flags and ResetUndo remain outside native
+comparison. All 133 native regression tests and 59 affected data tests pass. Final binding/
+item tests cover the last startup-tree guard; native-only CLI and WASM checks pass. The five
+original public preparation reports retain all 116 items and 68 successful registrations;
+three stop in item production and two await activation. No report claims complete evaluation.
+
+Full native build parity remains 0/5. Its policy, acquisition, runtime and validation costs belong
+in the existing [A1–A4 investigation](rule-execution-model-investigation.md); a future alternative
+may use different representations while preserving injected definitions and required consumer
+behavior. No architecture decision follows from wiring this prefix.
 
 ## Required behavior
 
