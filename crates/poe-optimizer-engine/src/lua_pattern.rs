@@ -8,6 +8,7 @@
 use std::ops::Range;
 
 mod substitution;
+pub(crate) mod uppercase;
 pub use substitution::{GsubLimits, GsubResult};
 
 pub const LUA_MAX_CAPTURES: usize = 32;

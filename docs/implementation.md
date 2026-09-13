@@ -18,6 +18,61 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+**R2ak validated checkpoint: native capitalization and explosion-family programs.**
+The current-model implementation binds `FirstToUpper` only to the actual authenticated
+captured helper and borrows its injected pattern. A native byte-substitution kernel is shared
+with the earlier factory path. Complete explosion and wrapper control flow remains in injected
+programs, including zero-return branches, the dead local-key write and vararg aliases.
+
+The complete-source/native suite passes: helper amounts/errors/aliases, all 23 raw wrappers,
+all 23 successful public cases and copy histories, and 56 configured-pattern cases. Public
+dispatch uses actual reviewed package permissions. Earlier parser, factory-string, source
+observation, native inventory and CLI regressions pass. Initial fixture corrections preserve
+exact outputs: source ingress canonicalizes host NaN before native-input capture; malformed
+patterns use a labelled isolated configured helper; direct packs follow original parameter
+names, and public-success/error-site assertions are explicit. Failed attempts remain recorded.
+
+The reviewed package is **schema 38 / parser 10**, **26,611,210 bytes**, SHA256
+`259892408127c5c9c7e49d493548fba7709911d23617679c0a39c86cae44c439`.
+Only manifest/parser change. All 88 old programs, the other 28 sections, class-tree bytes,
+original build inputs, lock and PoB pin are preserved. The library has 124 programs; 29 have
+permissions (26 Special / 3 Helper) and 95 remain unadmitted. Only the 23 proved explosion
+wrappers and their two helpers gain permission. Twelve unrelated newly lowered candidates stay
+disabled. Independent source/IR/policy and package audits pass; normal CLI extraction is
+byte-identical to the installed package.
+
+**Validation:** 248 passing test executions across selected data, engine, source-parity,
+native and CLI targets; this is not a full local workspace test run. Strict workspace and
+native-only Clippy, formatting, native-only PoB/Lua dependency exclusion and all five portable
+crates' WASM checks pass. The whole-item target passes eight tests: all 116 ordered records,
+all 226 previously complete lane digests and 765 prior directed output hashes are preserved.
+Build 3/item 12 now also completes built-in assembly and agrees with the original/control
+witnesses. Totals are **114 source-parser/native-assembly and 113 built-in completions**;
+the five remaining lane frontiers are unchanged. Metadata discovery-order differences are
+reported separately; no graph/output arrays are normalized to make a comparison pass.
+
+All five native-only public runs retain 116 records and 96 registrations (13, 34, 0, 21, 28),
+with source-linked loading/selection relations preserved. Builds 2, 4 and 5 pass Deidbell and
+now reach **Legacy of Rondel de Ezo**, buckler ordinary row 1,
+`Curse Enemies with Enfeeble on Block`, callback 479, during rune preparation. Builds 1 and 3
+retain their earlier captured-jewel stop. Every report remains incomplete, calculation not run
+and whole-build parity not established. Full native original evaluations remain **0/5**.
+
+The [A1 footprint record](execution-model-baseline.md#closed-capitalization-and-explosion-family-checkpoint)
+counts 213 net non-test Rust lines and 1,685 test/reference lines. Patterns compile on each
+reached call; no throughput gain is claimed. This is a bounded current-model extension, not
+selection of an A2 replacement architecture. Source-bound receipts, independent reconciliations,
+failed attempts and `final-validation-root.json` are under `runs/r2ak-first-to-upper-01/`.
+
+**Resume:** the measured extraction chain for the next public dependency is **479 → 126 → 4**:
+`triggerExtraSkill` needs the captured `table.insert` builtin, which cannot be lowered as a
+source body. CreateMod's standalone `select` rejection remains separate from its existing
+intrinsic binding. Start with the complete helper/caller contract, source-capture authority,
+option-table ownership, lookup/trigger metadata and existing native insertion semantics.
+Do not grant arbitrary C callbacks execution or admit an unproved helper family. Continue the
+separate open jewel ownership discussion and A1–A4 comparison; source/parser progress is not
+actor integration, rune/activation completion or full-build parity.
+
 **R2aj validated checkpoint: explosion-helper reference contract and model comparison.**
 The offline extractor now reports the actual rejection chain: callback 1291 depends on
 `explodeFunc` (8), which depends on `firstToUpper` (6); the direct rejection is
@@ -2637,6 +2692,10 @@ candidate, and A3 remains the discussion point before any significant design cha
   adds a measured extraction frontier and six passing consumer-boundary source tests.
   Compare bounded helper bindings before general callable machinery; count developer and
   reference tooling separately, including the rejected internal-frame observer attempt.
+  The [R2ak closed-helper cost](execution-model-baseline.md#closed-capitalization-and-explosion-family-checkpoint)
+  adds 213 non-test Rust lines and 1,685 test/reference lines while reusing the existing native
+  replacement kernel. Include per-call pattern compilation and the difference between generated
+  programs and reviewed permissions; this bounded extension does not choose an A2 model.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.

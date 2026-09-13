@@ -375,6 +375,8 @@ pub enum ParserProgramIntrinsic {
     Ipairs,
     IpairsAux,
     CreateMod,
+    /// Closed parser-owned helper; requires its exact captured source relation.
+    FirstToUpper,
 }
 impl ParserProgramIntrinsic {
     /// Language/runtime identities, never game-specific lookup names or values.
@@ -402,7 +404,7 @@ impl ParserProgramIntrinsic {
             Self::StringGmatch => Some(&["string", "gmatch"]),
             Self::TableInsert => Some(&["table", "insert"]),
             Self::Ipairs => Some(&["ipairs"]),
-            Self::IpairsAux | Self::CreateMod => None,
+            Self::IpairsAux | Self::CreateMod | Self::FirstToUpper => None,
         }
     }
     /// Original builtin descriptor identity, independent of global accessibility.

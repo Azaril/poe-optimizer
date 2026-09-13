@@ -1599,3 +1599,52 @@ is a comparison of two test-tooling implementations, not deletion of 377 shipped
 lines or proof that less code establishes wider parity. No production source changed. The
 experiment illustrates why A1/A2 should count required evidence tooling and question its
 observation boundary before extending it.
+
+
+## Closed capitalization and explosion-family checkpoint
+
+R2ak implements the closed captured-intrinsic alternative from the preceding reference
+contract. The data owner lends its injected pattern; the engine shares one native
+uppercase-replacement traversal with the earlier factory path. Complete explosion and
+wrapper control flow stays in generated programs. No general callable replacement bridge,
+per-item handler or production Lua dependency is added. The optional source adapter retains
+actual helper/capture/environment/library authentication.
+
+The [file-only inventory](../runs/r2ak-first-to-upper-01/cost-inventory-final-snapshot-20260913T174451995133Z-by-lowerer.md)
+compares the Rust snapshot against `80b1801`, including tracked and untracked files,
+comments/blanks, and explicit inline-test splits. It records hashes and distinguishes
+acquisition from shipping data/runtime code. Later documentation is outside these Rust totals.
+
+| Layer | Net physical Rust lines | Net LF bytes |
+| --- | ---: | ---: |
+| Data model and validation | 52 | 2,275 |
+| Native runtime | 123 | 5,199 |
+| Optional source acquisition | 38 | 1,424 |
+| Data tests | 294 | 10,898 |
+| Engine tests | 406 | 13,759 |
+| PoB tests and reference tooling | 985 | 37,173 |
+
+The totals are **213 non-test lines / 8,898 bytes** and **1,685 test/reference lines /
+61,830 bytes**. The shared kernel's 70 lines replace an existing local traversal; the
+net counts already deduct that deletion. Original-function fixture setup also moves into
+a shared test module. Neither move is wholly new behavior or a second claimed saving.
+The reviewed package grows by 81,579 bytes. Generated inventory rises from 88 to 124 programs;
+all 88 previous bodies remain exact. Only 25 additional permissions are granted: 23 tested
+Special wrappers, the explosion helper, and the previously generated flag helper. The other
+12 new candidates remain disabled; 95 total generated programs are unadmitted.
+
+This is a small runtime extension with a much larger proof footprint. Its initial differential
+attempt exposed host NaN ingress before LuaJIT canonicalization and malformed-pattern failure
+during full module initialization. The final test materializes input packs through the source
+host and labels isolated configured-helper evidence separately; exact output comparisons remain.
+The public test uses the reviewed package directly, removing its temporary authored-admission
+builder. Count these boundary and maintenance costs in A2 alongside the source guards.
+
+Complete helper/raw-wrapper/public comparisons and the existing factory string regressions
+pass. The reviewed package reproduces through the normal CLI; prior item outputs remain exact
+and one additional item completes built-in assembly. Builds 2/4/5 reach a later curse-trigger
+dependency, while full native originals remain 0/5. [The implementation record](implementation.md)
+records 248 selected passing test executions, lint/portable checks and the next source contract. The intrinsic compiles a pattern on each reached call and
+charges its work and allocations cumulatively. No candidate speedup or prepared-pattern-cache
+measurement is claimed. This current-model extension does not select the DSL, declarative,
+native-family, interpreter or hybrid option; the A1–A4 investigation remains open.

@@ -282,6 +282,12 @@ impl SourceProgramOwner {
     pub fn intrinsic(&self, id: SourceCallbackId) -> Option<SourceProgramIntrinsic> {
         self.definitions()?.intrinsics.get(&id).copied()
     }
+    /// Borrow the injected pattern only for the exact closed parser helper.
+    /// This structural relation does not itself authenticate source acquisition
+    /// or admit a program; standalone owners cannot supply the parser proof.
+    pub fn first_to_upper_pattern(&self, id: SourceCallbackId) -> Option<&str> {
+        parser_first_to_upper_pattern(self.parser()?.data(), id)
+    }
     pub fn root_id(&self, name: &str) -> Option<SourceProgramRootId> {
         self.roots()
             .iter()
@@ -463,6 +469,29 @@ fn parser_definition_id(
         SourceProgramDefinitionRoot::Named(_) => None,
     }
 }
+fn parser_first_to_upper_pattern(owner: &ModifierParserData, id: SourceCallbackId) -> Option<&str> {
+    if owner.helpers.get("firstToUpper") != Some(&id) {
+        return None;
+    }
+    let target =
+        id.0.checked_sub(1)
+            .and_then(|i| owner.callbacks.get(i as usize))?;
+    let ParserCallbackKind::Lua { source } = &target.kind else {
+        return None;
+    };
+    if owner
+        .source
+        .construction_spans
+        .get("first_to_upper_primitive")
+        != Some(source)
+        || target.environment != ParserEnvironment::OriginalGlobals
+        || !target.upvalues.is_empty()
+    {
+        return None;
+    }
+    Some(&owner.policy.first_to_upper_pattern)
+}
+
 // Private borrowed view allows the validator to share the existing parser data
 // before its Arc is constructed; it avoids cloning either graph or program IR.
 pub(crate) trait ProgramOwnerView {
@@ -471,6 +500,9 @@ pub(crate) trait ProgramOwnerView {
     fn source(&self) -> &ItemLoadingSource;
     fn has_definition(&self, root: SourceProgramDefinitionRoot) -> bool;
     fn intrinsic(&self, id: SourceCallbackId) -> Option<SourceProgramIntrinsic>;
+    fn first_to_upper_pattern(&self, _id: SourceCallbackId) -> Option<&str> {
+        None
+    }
     fn is_closure_prototype(&self, _callback: SourceCallbackId) -> bool {
         false
     }
@@ -536,6 +568,9 @@ impl ProgramOwnerView for SourceProgramOwner {
     fn intrinsic(&self, id: SourceCallbackId) -> Option<SourceProgramIntrinsic> {
         self.intrinsic(id)
     }
+    fn first_to_upper_pattern(&self, id: SourceCallbackId) -> Option<&str> {
+        self.first_to_upper_pattern(id)
+    }
 }
 impl ProgramOwnerView for ModifierParserData {
     fn callback(&self, id: SourceCallbackId) -> Option<&SourceCallback> {
@@ -553,6 +588,9 @@ impl ProgramOwnerView for ModifierParserData {
     }
     fn intrinsic(&self, _id: SourceCallbackId) -> Option<SourceProgramIntrinsic> {
         None
+    }
+    fn first_to_upper_pattern(&self, id: SourceCallbackId) -> Option<&str> {
+        parser_first_to_upper_pattern(self, id)
     }
 }
 fn failure(kind: SourceProgramErrorKind, message: impl Into<String>) -> SourceProgramError {

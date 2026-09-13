@@ -173,7 +173,7 @@ fn aggregate_key_bytes_cannot_bypass_graph_budget() {
 #[test]
 fn tag_precheck_policy_preserves_authored_lazy_patterns_with_bounded_text() {
     let mut data = data();
-    assert_eq!(data.schema_version, 9);
+    assert_eq!(data.schema_version, 10);
     assert_eq!(data.policy.tag_capture_numeric_pattern, "%d+");
     for key in [
         "prefix_factory_invocation",
@@ -220,7 +220,7 @@ fn tag_precheck_policy_is_required_and_has_a_closed_typed_shape() {
 #[test]
 fn doubled_scalar_policy_is_source_bound_and_accepts_injected_literal_bytes() {
     let mut data = data();
-    assert_eq!(data.schema_version, 9);
+    assert_eq!(data.schema_version, 10);
     assert_eq!(data.policy.doubled_multiplier_prefix, "Multiplier:");
     assert_eq!(data.policy.doubled_name_suffix, "Doubled");
     assert_eq!(data.policy.doubled_limit_suffix, "DoubledLimit");

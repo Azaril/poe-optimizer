@@ -86,8 +86,11 @@ closed captured intrinsic, a complete helper with a closed replacement operation
 callable replacements before increasing the runtime surface. This case also distinguishes
 consumer-visible results, aliases, errors and cache histories from internal debug frames.
 Reference tooling should prove the former; reproducing the latter is not itself a parity goal.
-The [implementation checkpoint](implementation.md) records validation status. No execution
-model or production extension is selected by this investigation case.
+The [implementation checkpoint](implementation.md) records the bounded follow-up: a closed
+captured intrinsic reuses the native replacement kernel while surrounding control flow stays
+in injected programs. This is a current-model extension, not an A2 execution-model selection.
+Count its production code, acquisition guards, generated inventory and parity fixtures in the
+comparison, including per-call pattern compilation. Full native build parity remains open.
 
 ## Separate the decisions
 

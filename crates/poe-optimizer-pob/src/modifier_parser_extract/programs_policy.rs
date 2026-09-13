@@ -84,14 +84,14 @@ mod tests {
         let owner = owner();
         let payload = bind(owner, owner.programs.data.clone()).unwrap();
         assert_eq!(payload, owner.programs);
-        assert_eq!(payload.admissions.len(), 4);
+        assert_eq!(payload.admissions.len(), 29);
         assert_eq!(
             payload
                 .admissions
                 .values()
                 .filter(|a| a.role == ParserProgramRole::Special)
                 .count(),
-            3
+            26
         );
     }
     #[test]

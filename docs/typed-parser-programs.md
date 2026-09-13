@@ -8,7 +8,9 @@ verifier and immutable engine plans. G2 adds a native invocation executor and ra
 observation API. G3 adds authenticated whole-function lowering and independent raw
 source comparisons for the first four functions. G4 packages the generated inventory and
 explicit permissions, with native public dispatch, original public-copy parity and shared request
-accounting. Four programs are admitted; 84 generated programs remain unadmitted.
+accounting. The current package contains 124 generated programs: 29 are admitted and 95
+remain unadmitted. The explosion-family extension adds 23 Special callbacks and two helpers;
+this is parser coverage, not complete native build evaluation.
 
 ## Purpose and boundary
 
@@ -170,6 +172,21 @@ called; do not perform a second lookup after argument effects. For example, `nam
 `string.gsub(name, ...)`: a numeric receiver can fail during indexing even where the
 free function would coerce that number. Unsupported metatable/dynamic-method behavior
 stays explicit.
+
+The closed `FirstToUpper` intrinsic binds only to the authenticated captured helper:
+its source role, actual capture slot, original environment and absence of captures must
+match the owning parser. A global name, copied source span or standalone owner cannot
+supply that authority. The owner exposes the borrowed injected pattern; Rust supplies the
+shared byte-pattern replacement operation. This does not authorize arbitrary callable
+`gsub` replacements. Native execution preserves receiver lookup, first-capture/full-match
+replacement, empty matches and exactly one result. The complete explosion helper remains
+in injected IR, including its unused local-key write, amount alternatives and varargs.
+
+The current intrinsic compiles its pattern on each reached call and charges that work and
+requested allocations cumulatively. It does not yet cache a prepared pattern or establish
+candidate-throughput improvement. Error locations identify the actual calling program and
+call site; no fictional helper frame is inserted. Public dispatch uses source-bound package
+permissions separately from the generated program inventory.
 
 A read-only value lookup and an identity-consuming lookup may have different ambiguity
 requirements; preserve the relevant catalog construction rules.

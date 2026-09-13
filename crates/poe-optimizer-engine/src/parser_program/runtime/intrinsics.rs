@@ -3,7 +3,10 @@ use super::value::{Heap, V};
 use super::{ProgramLimits, ProgramRuntimeError as Error, RuntimeResult};
 use crate::item_tools::lua_number_text;
 use crate::lua_number::parse_number;
-use crate::lua_pattern::{Capture, CompileLimits, GsubLimits, LuaPattern, MatchBudget};
+use crate::lua_pattern::{
+    Capture, CompileLimits, GsubLimits, LuaPattern, MatchBudget,
+    uppercase::{self, UppercaseOutput},
+};
 use poe_optimizer_data::modifier_parser::{ParserCallbackId, ParserProgramIntrinsic};
 use std::sync::Arc;
 
@@ -86,6 +89,9 @@ pub(super) fn call_bound(
     patterns: &mut MatchBudget,
     limits: &ProgramLimits,
 ) -> RuntimeResult<Vec<V>> {
+    if operation == ParserProgramIntrinsic::FirstToUpper {
+        return first_to_upper(callback, arguments, heap, patterns, limits);
+    }
     if operation == ParserProgramIntrinsic::Next {
         let table = check_table(arguments.first())?;
         let control = arguments.get(1).unwrap_or(&V::Nil);
@@ -131,6 +137,9 @@ pub(super) fn call(
     limits: &ProgramLimits,
 ) -> RuntimeResult<Vec<V>> {
     match operation {
+        ParserProgramIntrinsic::FirstToUpper => Err(Error::unsupported(
+            "firstToUpper requires its exact captured parser helper",
+        )),
         ParserProgramIntrinsic::BitBand
         | ParserProgramIntrinsic::BitBor
         | ParserProgramIntrinsic::BitBxor
@@ -585,6 +594,85 @@ fn compile(pattern: &[u8], heap: &mut Heap) -> RuntimeResult<LuaPattern> {
     )?;
     heap.charge_bytes(pattern.compiled_bytes())?;
     Ok(pattern)
+}
+
+/// The proven original helper is a fixed-parameter function, not a string
+/// primitive call: surplus arguments are ignored and parentheses return one value.
+fn first_to_upper(
+    callback: Option<ParserCallbackId>,
+    arguments: &[V],
+    heap: &mut Heap,
+    patterns: &mut MatchBudget,
+    limits: &ProgramLimits,
+) -> RuntimeResult<Vec<V>> {
+    let owner = heap.owner().clone();
+    let source_pattern = callback
+        .and_then(|id| owner.first_to_upper_pattern(id))
+        .ok_or_else(|| {
+            Error::unsupported("firstToUpper requires its exact captured parser helper")
+        })?;
+    let receiver = arguments.first().unwrap_or(&V::Nil);
+    // Original SELF resolves gsub before matching. Do not convert numeric
+    // receivers as a direct C string function would, or execute opaque methods.
+    let target = precheck_method(ParserProgramIntrinsic::StringGsub, receiver, heap)?;
+    finish_method(target)?;
+    let V::Bytes(subject) = receiver else {
+        return Err(Error::unsupported(
+            "firstToUpper receiver method is not represented",
+        ));
+    };
+    // Reached calls compile under the remaining invocation heap allowance, as
+    // existing program gsub does. This is per-call work, not a prepared cache.
+    patterns.charge(source_pattern.len() as u64)?;
+    let pattern = compile(source_pattern.as_bytes(), heap)?;
+    struct Buffer<'a, 'owner> {
+        bytes: Vec<u8>,
+        heap: &'a mut Heap<'owner>,
+    }
+    impl UppercaseOutput for Buffer<'_, '_> {
+        type Error = Error;
+        fn append(&mut self, bytes: &[u8], upper: bool) -> RuntimeResult<()> {
+            let required = self
+                .bytes
+                .len()
+                .checked_add(bytes.len())
+                .ok_or_else(|| Error::resource("uppercase output size"))?;
+            if required > self.bytes.capacity() {
+                let target = required.max(self.bytes.capacity().saturating_mul(2));
+                // Charge each complete requested buffer before growth. This
+                // conservatively retains prior temporary allocations too, and
+                // avoids uncharged geometric spare capacity. The final Arc is
+                // separately charged while this Vec is still alive.
+                self.heap.charge_bytes(target)?;
+                self.bytes
+                    .try_reserve_exact(target - self.bytes.len())
+                    .map_err(|_| Error::resource("uppercase output allocation"))?;
+            }
+            if upper {
+                self.bytes.extend(bytes.iter().map(u8::to_ascii_uppercase));
+            } else {
+                self.bytes.extend_from_slice(bytes);
+            }
+            Ok(())
+        }
+        fn scratch(&mut self, bytes: usize) -> RuntimeResult<()> {
+            self.heap.charge_bytes(bytes)
+        }
+        fn resource(message: &'static str) -> Error {
+            Error::resource(message)
+        }
+        fn invalid(message: &'static str) -> Error {
+            Error::input(message)
+        }
+    }
+    let mut buffer = Buffer {
+        bytes: Vec::new(),
+        heap,
+    };
+    uppercase::replace_upper(subject, &pattern, patterns, &mut buffer)?;
+    let result = buffer.heap.bytes(&buffer.bytes)?;
+    result_space(1, buffer.heap, limits)?;
+    Ok(vec![result])
 }
 
 fn gsub(
@@ -1365,3 +1453,6 @@ mod tests {
         );
     }
 }
+
+#[cfg(test)]
+mod first_to_upper_tests;

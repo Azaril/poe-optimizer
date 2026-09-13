@@ -5,120 +5,20 @@
 mod factory_source;
 #[path = "support/explosion_helper_observer.rs"]
 mod observer;
+#[path = "support/explosion_source.rs"]
+mod original;
 #[allow(dead_code)]
 #[path = "support/mod_parser_public_source.rs"]
 mod public_source;
 #[allow(dead_code)]
 #[path = "support/item_loading_runtime.rs"]
 mod runtime;
-use factory_source::{FactorySource, upvalue};
-use mlua::{Function, MultiValue, Table, Value};
+use mlua::{MultiValue, Table, Value};
+use original::{LINE, Original};
 use serde_json::json;
 use sha2::{Digest, Sha256};
 use std::path::PathBuf;
 
-const LINE: &[u8] = b"Warcries Explode Corpses dealing 10% of their Life as Physical Damage";
-const PATTERN: &str = "^warcries explode corpses dealing (%d+)%% of their life as (.+) damage$";
-struct Original {
-    source: FactorySource,
-    callback: Function,
-    helper: Function,
-    upper: Function,
-    flag: Function,
-}
-fn declaration(f: &Function, first: usize, last: usize) {
-    let info = f.info();
-    assert_eq!(info.source.as_deref(), Some("@src/Modules/ModParser.lua"));
-    assert_eq!(info.line_defined, Some(first));
-    assert_eq!(info.last_line_defined, Some(last));
-}
-impl Original {
-    fn new() -> Self {
-        let source = FactorySource::new();
-        let callback: Function = source.special.raw_get(PATTERN).unwrap();
-        let helper = upvalue(&source.public.source.lua, &callback, "explodeFunc")
-            .as_function()
-            .unwrap()
-            .clone();
-        let upper = upvalue(&source.public.source.lua, &helper, "firstToUpper")
-            .as_function()
-            .unwrap()
-            .clone();
-        let flag = upvalue(&source.public.source.lua, &helper, "flag")
-            .as_function()
-            .unwrap()
-            .clone();
-        declaration(&callback, 2336, 2338);
-        declaration(&helper, 2255, 2266);
-        declaration(&upper, 13, 15);
-        declaration(&flag, 2177, 2179);
-        assert_eq!(
-            upvalue(&source.public.source.lua, &helper, "mod").as_function(),
-            Some(&source.create_mod)
-        );
-        assert_eq!(
-            upvalue(&source.public.source.lua, &flag, "mod").as_function(),
-            Some(&source.create_mod)
-        );
-        Self {
-            source,
-            callback,
-            helper,
-            upper,
-            flag,
-        }
-    }
-    fn verify(&self) {
-        let lua = &self.source.public.source.lua;
-        assert_eq!(
-            self.source.special.raw_get::<Function>(PATTERN).unwrap(),
-            self.callback
-        );
-        for (f, n, wanted) in [
-            (&self.callback, "explodeFunc", &self.helper),
-            (&self.helper, "firstToUpper", &self.upper),
-            (&self.helper, "flag", &self.flag),
-            (&self.helper, "mod", &self.source.create_mod),
-            (&self.flag, "mod", &self.source.create_mod),
-        ] {
-            assert_eq!(upvalue(lua, f, n).as_function(), Some(wanted));
-        }
-        declaration(&self.callback, 2336, 2338);
-        declaration(&self.helper, 2255, 2266);
-    }
-    fn text(&self, v: impl AsRef<[u8]>) -> Value {
-        self.source.text(v)
-    }
-    fn run(
-        &self,
-        entry: &Function,
-        args: Vec<Value>,
-    ) -> (serde_json::Value, mlua::Result<MultiValue>) {
-        self.verify();
-        let args = MultiValue::from_vec(args);
-        let supplied = observer::graph(&self.source, args.clone());
-        let info = entry.info();
-        let input = json!({
-            "entry_source": info.source,
-            "entry_first_line": info.line_defined,
-            "entry_last_line": info.last_line_defined,
-            "supplied_inputs": supplied,
-            "internal_call_frames_observed": false
-        });
-        let output = entry.call::<MultiValue>(args);
-        self.verify();
-        (input, output)
-    }
-    fn public(&self, line: &[u8]) -> (serde_json::Value, mlua::Result<MultiValue>) {
-        self.run(
-            &self.source.public.parse,
-            vec![self.text(line), Value::Boolean(false)],
-        )
-    }
-    fn direct(&self, args: Vec<Value>) -> (serde_json::Value, mlua::Result<MultiValue>) {
-        self.run(&self.helper, args)
-    }
-}
 fn write(name: &str, body: serde_json::Value) {
     let directory = std::env::var_os("POE_EXPLOSION_OUTPUT")
         .map(PathBuf::from)

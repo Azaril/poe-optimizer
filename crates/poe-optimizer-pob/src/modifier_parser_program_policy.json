@@ -63,6 +63,406 @@
           "sha256": "17a55ece9a8771421a56892b944e0b8dad135ee7ebe633d8e6c896dec81f4d33"
         }
       }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "df963de02782bcafa0a054fb066d7c4a49d334ee483b0b173dd0d2009a66ff1b",
+      "role": "helper",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2255,
+          "end_line": 2266,
+          "sha256": "598f1418a49d804c775b07d7fc2550d955065d2016169be0614add46684cae59"
+        },
+        "function_start": 20,
+        "function_end": 414,
+        "function_sha256": "aaa76789c35b153365d2fd06e9abf2ef89100f09221d2dea423cef2a96fc9c6d"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "64578f2cc6149d3e5d5bffde89eee7a57185c3dd40f5f85317bec8b339fbc930",
+      "role": "helper",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2177,
+          "end_line": 2179,
+          "sha256": "3b10ade732d4ce8a9daede05dcbebcff81c635e317b016688a375de902499de6"
+        },
+        "function_start": 6,
+        "function_end": 71,
+        "function_sha256": "50f7d026606f1714c6071b5c04ecdd883f0833f88980eda033cb351c62fcd063"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "4b376eee4ca67b4f2ea99e2693a271d413f60005325a8594d85f22d838cfb4fc",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2345,
+          "end_line": 2347,
+          "sha256": "5555116c9f1a2adb24c019d95b61949428331558df4a45e5ae311850a592185e"
+        },
+        "function_start": 108,
+        "function_end": 237,
+        "function_sha256": "e12dec518c05fe5d4a0b2525f7f30e1723fa33ffc9e4d35cb9312749e532a6bf"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "3625775479c83c5df4a163ba80cdace593b526e6e1dc9c7af8a174c2ab962054",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2322,
+          "end_line": 2324,
+          "sha256": "cfe44aa2929b330978196e327a87d1f45bb80df823d6d29c8eacd26e77dbc17c"
+        },
+        "function_start": 95,
+        "function_end": 244,
+        "function_sha256": "06e6ef20af13ebb0cee37c86a03b5cb10827ccfa777ea957a2eb04744d56e679"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "2db144433ef652733c6ae2a38a4884eba610ee7316c369c0999f05343ca4f30c",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2325,
+          "end_line": 2327,
+          "sha256": "b8135aa35cf69ab69107de532087046fe01ed792c05900a2f921e6b7f8011b0d"
+        },
+        "function_start": 118,
+        "function_end": 282,
+        "function_sha256": "38b61c5ee79c8f425ea1cbdde9eb69843ae864c5455992afdd96db7b8dc0f882"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "b5a586368ee1640be9ccc2d64ca71142d57e4f064c23f063296eb5b9564fde41",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2310,
+          "end_line": 2312,
+          "sha256": "2c77a6ec03fe845c1b26dbbad379f2d69380afb29e008389fc42efbdf5fe1cc6"
+        },
+        "function_start": 92,
+        "function_end": 189,
+        "function_sha256": "2803118af758aa58ac5c3b9fa2e93acc084146dc214356e5e3afce423532fc58"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "5fa6e72dc075ab2daff6422c96a8f7f79279dd17f957af1a918d92c6a2925ca1",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2304,
+          "end_line": 2306,
+          "sha256": "b5d8d624fd4ce866e56f78ffbbe984f78f083f7bd962473d14cc57df38afe215"
+        },
+        "function_start": 154,
+        "function_end": 335,
+        "function_sha256": "2cafa0faee48bd2ac896445f0e125be98c6d4704ac2ab1791a224c2e53bdb1dd"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "d8fbc916a082453d63caa49be0b4c3a6fc28fffd40cca8b387e0bfce8b54cf46",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2301,
+          "end_line": 2303,
+          "sha256": "7d2c82fb033ecdc1d3ec246b3605ef5ca27da65be127ae41114a329278eba17a"
+        },
+        "function_start": 133,
+        "function_end": 293,
+        "function_sha256": "953de895f38b3becbc709d5a81c5802d06d0394df686f782bb28898ca2ad1093"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "e459db7f04a8984434c6dafcee67f4867f3104cebcef18c77fb23e2a59e1433e",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2330,
+          "end_line": 2332,
+          "sha256": "be515ad1ed587e40a3ee4e28313e638935c7372d1765238c9e5821f4dd0cfa7a"
+        },
+        "function_start": 113,
+        "function_end": 342,
+        "function_sha256": "25e3c0acc10a8ccc8f4f36642d7906ee7d1c5fedfb5d83e805c5b509e96ae81d"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "9c66754e671797e214416ab2bd2981eab97cbccb5cd279079ebe5bae6bd41602",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2316,
+          "end_line": 2318,
+          "sha256": "c44aa880fe08928bf9de58261bb67520e17449b1176a666028880616cd96ecf9"
+        },
+        "function_start": 102,
+        "function_end": 194,
+        "function_sha256": "5343faa0cdfaf525aee3158bb5349eb349d6a592de58bc9ae244dd73ba50c0d3"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "e0b4207731eb693fe7355b0b171a95f32185c9ba6c5b78b8c25de940f0ed794b",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2298,
+          "end_line": 2300,
+          "sha256": "ac45a5ec77d396b38bb4e3027cdd970bbdec13b471ba564066ec05f6b8bcecd1"
+        },
+        "function_start": 115,
+        "function_end": 274,
+        "function_sha256": "02b2a76f05b74c64b1d35a47d3d6ff309474bb0f9964d86190741a80187b0f9d"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "3eb2d2db3504d0c4dc28453a768802b0666540c9c685a7a1c7304c993acd3e92",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2313,
+          "end_line": 2315,
+          "sha256": "4416d1528c10ab4822937028a3fd96d0ea21451ba214a337c45281af6539f03e"
+        },
+        "function_start": 95,
+        "function_end": 249,
+        "function_sha256": "f01d3afd9da8ea3574fccde0a1577957830430198e9b5cf6777d35ec262ac3bf"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "0c46f7a33dce91ee8e892e629493edaff65ce779449fa6f3c24bc5ba0d397e4e",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2333,
+          "end_line": 2335,
+          "sha256": "130a486207ebc19e39120ad4843208c40fe1ac1dc99dd1df7235800b207122ae"
+        },
+        "function_start": 111,
+        "function_end": 307,
+        "function_sha256": "c7a2627b58a4a4650fb99fa8d993cf1f2b90f564496b7345928973b1f82aecd2"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "d868b276d4bf11ac69c0bd2aff14d9ff7dce359378c383bfc35d71ef50f1397a",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2289,
+          "end_line": 2291,
+          "sha256": "f4ac17c760f2442b9fbdf41caf43db7da851fa9ad66d7bfad51f2b0935deba29"
+        },
+        "function_start": 139,
+        "function_end": 285,
+        "function_sha256": "44259337baeb2ef17b775c02c1e81a4a1f9526af13161ad4d8b9267f26acbe4f"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "e1857ea7f5c04384f6210b4c7cc819f44aaf44f35492c8f7c16300bcab8f1099",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2307,
+          "end_line": 2309,
+          "sha256": "4291b72e77fdd8b12e7754b6256b56f7c4222c367e3acc2713ae6aad60a2f13f"
+        },
+        "function_start": 78,
+        "function_end": 181,
+        "function_sha256": "fa8419e09640dd4f3eca18d04a5b21bb1aabb407852bf92fd9e39f01ce73d36c"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "dcfa64677d54b8bd841897d7f16ed7379bcd655503a1fefbd6361564864fbd0e",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2277,
+          "end_line": 2279,
+          "sha256": "59ef04ff16f072a1ee3abc9548fef111ed4547841daefb7a58d663ade155e74c"
+        },
+        "function_start": 114,
+        "function_end": 226,
+        "function_sha256": "3768193bc1ddff3c1b3a30a0a7b8c5c239057f5eb9c4db9ede315621f2c91188"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "2343a8b43d737492b37301bea80af4d3334c53555a8034f5e7bdf98a305a9a04",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2274,
+          "end_line": 2276,
+          "sha256": "e76e75df99aa891ce35fd34c1069bc0080311136a5dfc2ff50156e64475482cc"
+        },
+        "function_start": 110,
+        "function_end": 315,
+        "function_sha256": "371b4c06e7004c950927403c41e12807dc71d67dcd753259541367fbc63c8a85"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "f64c0e491dd9ae2e1e7c3201a5a72f554b33dd5e4ad0307ae9a35259d4742c2c",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2295,
+          "end_line": 2297,
+          "sha256": "c9842adadbf76e46f24f8df6043d17731b01b92eda66d673aa7ece46280cf859"
+        },
+        "function_start": 137,
+        "function_end": 298,
+        "function_sha256": "6fced89dc130b356501f8327406af5ff1a68ccd225bc65cb9ecd108181bb3613"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "4228c98e66838643e1708f028ab512e01fcda24dfbdec7802ca126a26cf555c5",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2286,
+          "end_line": 2288,
+          "sha256": "e8919a4eb5d38c4a07057c386882b7b642213284d1dcfd9c55ed4bc590e7c260"
+        },
+        "function_start": 126,
+        "function_end": 274,
+        "function_sha256": "9796646acc2ec198869a9c2bcf9904d06fa21045df6c6b737dc8ee59d8f49c6c"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "925875d4a90ddc96460260cc1dd4691f24959441726d04069d43a8fd47609fb9",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2283,
+          "end_line": 2285,
+          "sha256": "3185d7bccb37f133698fda39c0d131cdbd164bb17bed0aaf9fcdd5b3bd8b583b"
+        },
+        "function_start": 133,
+        "function_end": 338,
+        "function_sha256": "371b4c06e7004c950927403c41e12807dc71d67dcd753259541367fbc63c8a85"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "73b16c7605f0c5bdca9499c200812ac2a720a4be5cbd33bfac7c7fe3a6d47a69",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2280,
+          "end_line": 2282,
+          "sha256": "e41e42dd33301dfc269c646af9be8a4f73df0c7024b2a00b9acf8284fe51bb27"
+        },
+        "function_start": 124,
+        "function_end": 236,
+        "function_sha256": "8b94153de285a69e3b893cfec27345de8704ca3782b42944a912f6254b1c5018"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "34a1eb4bea9955fae298143d12d8dd75a8eca16a104919eefeea867e9679a401",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2342,
+          "end_line": 2344,
+          "sha256": "e3cef52133e643c55fc9a858dd127c43b70b7fd17861ef27920daca1a23c413f"
+        },
+        "function_start": 92,
+        "function_end": 189,
+        "function_sha256": "a9cf6c4b96a047a73a3976f5f7c528a588598a0b2884381c164b3ece09c7e6b6"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "58a72a7e9100f0102c78bfb0b36aa6049a23d7482fc8d990d97bbf01eec7a981",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2319,
+          "end_line": 2321,
+          "sha256": "c74e695ebdd1fb9120b6509f5d911f8decd7b010051922b0b0ef775a875585ce"
+        },
+        "function_start": 105,
+        "function_end": 264,
+        "function_sha256": "d924769cafc74a16cf82fad4b0e143e25e5217b286d2c652e5e4dcbfee349568"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "46b0bbd41301b3b1a24623de6249683bed46c197e2858d8ae47629061da8bfcb",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2339,
+          "end_line": 2341,
+          "sha256": "c5036315e3c99a2f70103cad33214016ea768a89fc65dbe73cd1c5ef1e279368"
+        },
+        "function_start": 77,
+        "function_end": 170,
+        "function_sha256": "9b30f80a554a7a3920f22123d2c1f49a02fe2ba3475a264f4fea400d3bdc211e"
+      }
+    },
+    {
+      "evidence": "explosion-family-r2ak-v1: complete original helper and all 23 public wrappers, exact graphs/arity/aliases, ordered errors, injected pattern and copy histories; see docs/typed-parser-programs.md",
+      "program_sha256": "066f0937896b4bb05fa2c4c26dcffd8974c2d010f2fcf5636ee821130e1a4d15",
+      "role": "special",
+      "source": {
+        "source": {
+          "path": "src/Modules/ModParser.lua",
+          "line": 2336,
+          "end_line": 2338,
+          "sha256": "6aa3f9a29a1357645a86c58097699f73822a8cc728830925d3cdc62affbba3bb"
+        },
+        "function_start": 77,
+        "function_end": 169,
+        "function_sha256": "c358ef93308ce8493bc74146fe776254ac55509e41955b2a3b2cf42f0aa0ce9c"
+      }
     }
   ],
   "schema_version": 1,

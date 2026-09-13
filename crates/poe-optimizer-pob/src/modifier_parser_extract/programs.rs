@@ -14,7 +14,7 @@ pub(super) fn lower(
     data: &ModifierParserData,
     constructor: ParserCallbackId,
 ) -> Result<LoweredPrograms> {
-    let authorization = parser_bindings(constructor);
+    let authorization = parser_bindings(data, constructor)?;
     let mut programs = BTreeMap::new();
     let mut unsupported = BTreeMap::new();
     let mut budget = Budget::default();
@@ -88,8 +88,42 @@ pub(super) fn lower(
     })
 }
 
-fn parser_bindings(constructor: ParserCallbackId) -> LoweringBindings {
-    LoweringBindings {
+fn parser_bindings(
+    data: &ModifierParserData,
+    constructor: ParserCallbackId,
+) -> Result<LoweringBindings> {
+    // extract_inner has already authenticated the complete helper syntax and
+    // injected pattern, the actual observed Function and its environment, and
+    // the original string library/gsub/upper identities. Keep that authorization
+    // tied to the captured callback record; names or equal source shape alone
+    // cannot authorize a different closure here.
+    let upper = *data
+        .helpers
+        .get("firstToUpper")
+        .ok_or_else(|| error("program firstToUpper helper identity missing"))?;
+    let span = data
+        .source
+        .construction_spans
+        .get("first_to_upper_primitive")
+        .ok_or_else(|| error("program firstToUpper source role missing"))?;
+    let callback = upper
+        .0
+        .checked_sub(1)
+        .and_then(|index| data.callbacks.get(index as usize))
+        .ok_or_else(|| error("program firstToUpper callback missing"))?;
+    if upper == constructor
+        || callback.kind
+            != (ParserCallbackKind::Lua {
+                source: span.clone(),
+            })
+        || callback.environment != ParserEnvironment::OriginalGlobals
+        || !callback.upvalues.is_empty()
+    {
+        return Err(error(
+            "program firstToUpper is not the authenticated closed helper",
+        ));
+    }
+    Ok(LoweringBindings {
         roots: [
             (
                 "ModFlag".into(),
@@ -105,13 +139,17 @@ fn parser_bindings(constructor: ParserCallbackId) -> LoweringBindings {
             ),
         ]
         .into(),
-        intrinsics: [(constructor, ParserProgramIntrinsic::CreateMod)].into(),
+        intrinsics: [
+            (constructor, ParserProgramIntrinsic::CreateMod),
+            (upper, ParserProgramIntrinsic::FirstToUpper),
+        ]
+        .into(),
         implicit_self: false,
         environment: None,
         standalone_calls: false,
         closure_functions: BTreeMap::new(),
         closure_prototypes: BTreeMap::new(),
-    }
+    })
 }
 
 #[cfg(test)]

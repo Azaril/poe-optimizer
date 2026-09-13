@@ -2,7 +2,10 @@
 //! No generic method execution, metatables, Unicode casing or shared mutable state.
 use super::{ModifierValue as V, ParserError, ParserResult, value::OutputBudget};
 use crate::item_tools::lua_number_text;
-use crate::lua_pattern::{Capture, GsubLimits, LuaPattern, MatchBudget};
+use crate::lua_pattern::{
+    GsubLimits, LuaPattern, MatchBudget,
+    uppercase::{self, UppercaseOutput},
+};
 use poe_optimizer_data::modifier_parser::ParserFactoryReplacement;
 use std::borrow::Cow;
 
@@ -51,29 +54,6 @@ pub(super) fn concat(
     result.extend_from_slice(&left);
     result.extend_from_slice(&right);
     Ok(V::Bytes(result))
-}
-fn append(
-    result: &mut Vec<u8>,
-    bytes: &[u8],
-    uppercase: bool,
-    budget: &mut MatchBudget,
-    output: &mut OutputBudget,
-) -> ParserResult<()> {
-    if bytes.is_empty() {
-        return Ok(());
-    }
-    budget.charge(bytes.len() as u64)?;
-    output.charge(bytes.len())?;
-    // Amortized growth keeps per-byte replacement patterns linear in output size.
-    result
-        .try_reserve(bytes.len())
-        .map_err(|_| ParserError::ResourceBound("factory string allocation"))?;
-    if uppercase {
-        result.extend(bytes.iter().map(u8::to_ascii_uppercase));
-    } else {
-        result.extend_from_slice(bytes);
-    }
-    Ok(())
 }
 fn method_subject<'a>(value: &'a V, stage: &'static str) -> ParserResult<&'a [u8]> {
     match value {
@@ -139,59 +119,42 @@ fn replace_upper(
     budget: &mut MatchBudget,
     output: &mut OutputBudget,
 ) -> ParserResult<V> {
-    output.charge(0)?;
-    let mut result = Vec::new();
-    let mut copied = 0usize;
-    loop {
-        let init = copied
-            .checked_add(1)
-            .and_then(|n| i32::try_from(n).ok())
-            .ok_or(ParserError::ResourceBound("factory string index"))?;
-        let Some(found) = pattern.match_captures(line, init, budget)? else {
-            break;
-        };
-        let range = found.range();
-        append(
-            &mut result,
-            &line[copied..range.start],
-            false,
-            budget,
-            output,
-        )?;
-        budget.charge(1)?;
-        // string.upper consumes the first capture; without explicit captures the
-        // pattern engine supplies the whole match. Position captures are numbers.
-        match found.captures().first() {
-            Some(Capture::Bytes { start, end }) => {
-                append(&mut result, &line[*start..*end], true, budget, output)?
+    struct Buffer<'a> {
+        bytes: Vec<u8>,
+        output: &'a mut OutputBudget,
+    }
+    impl UppercaseOutput for Buffer<'_> {
+        type Error = ParserError;
+        fn append(&mut self, bytes: &[u8], uppercase: bool) -> ParserResult<()> {
+            self.output.charge(bytes.len())?;
+            // Retain this facade's existing logical output charging and growth.
+            self.bytes
+                .try_reserve(bytes.len())
+                .map_err(|_| ParserError::ResourceBound("factory string allocation"))?;
+            if uppercase {
+                self.bytes.extend(bytes.iter().map(u8::to_ascii_uppercase));
+            } else {
+                self.bytes.extend_from_slice(bytes);
             }
-            Some(Capture::Position(position)) => {
-                let text = number_text(*position as f64, budget, output)?;
-                append(&mut result, &text, true, budget, output)?;
-            }
-            None => return Err(ParserError::InvalidData("gsub replacement capture".into())),
+            Ok(())
         }
-        copied = range.end;
-        // Lua 5.1 consumes one unchanged byte after an empty replacement match.
-        if range.is_empty() {
-            if copied == line.len() {
-                break;
-            }
-            append(
-                &mut result,
-                &line[copied..copied + 1],
-                false,
-                budget,
-                output,
-            )?;
-            copied += 1;
+        fn scratch(&mut self, bytes: usize) -> ParserResult<()> {
+            self.output.charge(bytes)
         }
-        if pattern.source().first() == Some(&b'^') {
-            break;
+        fn resource(message: &'static str) -> ParserError {
+            ParserError::ResourceBound(message)
+        }
+        fn invalid(message: &'static str) -> ParserError {
+            ParserError::InvalidData(message.into())
         }
     }
-    append(&mut result, &line[copied..], false, budget, output)?;
-    Ok(V::Bytes(result))
+    output.charge(0)?;
+    let mut buffer = Buffer {
+        bytes: Vec::new(),
+        output,
+    };
+    uppercase::replace_upper(line, pattern, budget, &mut buffer)?;
+    Ok(V::Bytes(buffer.bytes))
 }
 
 #[cfg(test)]

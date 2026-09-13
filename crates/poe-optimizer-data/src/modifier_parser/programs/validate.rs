@@ -302,6 +302,18 @@ impl Check<'_> {
                         }
                         ParserProgramIntrinsicSource::Captured { upvalue, callback } => {
                             self.captured(*upvalue, *callback)?;
+                            if *operation == ParserProgramIntrinsic::FirstToUpper {
+                                let Some(pattern) = self.owner.first_to_upper_pattern(*callback)
+                                else {
+                                    return Err(self.fail(
+                                        ParserProgramErrorKind::Binding,
+                                        None,
+                                        "firstToUpper is not the closed parser-owned source helper",
+                                    ));
+                                };
+                                self.budget.text(pattern, self.id, None)?;
+                                continue;
+                            }
                             if *operation != ParserProgramIntrinsic::CreateMod {
                                 if self.owner.intrinsic(*callback) == Some(*operation) {
                                     continue;

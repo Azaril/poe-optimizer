@@ -17,7 +17,7 @@ fn parse(body: &str) -> LowerResult<ParserProgram> {
         body,
         ParserCallbackId(1),
         &callback,
-        &parser_bindings(constructor(data)),
+        &parser_bindings(data, constructor(data)).map_err(|e| e.to_string())?,
         &mut budget,
     )?
     .program(&span(body))
@@ -97,7 +97,7 @@ fn complete_original_targets_lower_with_exact_provenance_and_own_captures() {
             &body,
             ParserCallbackId(index as u32 + 1),
             callback,
-            &parser_bindings(constructor(data)),
+            &parser_bindings(data, constructor(data)).unwrap(),
             &mut budget,
         )
         .unwrap()
@@ -314,4 +314,368 @@ fn bounded_source_and_expression_depth_fail_without_running_a_body() {
     assert!(parse(&large).is_err());
     let large = format!("function() --{}\nend", "x".repeat(65536));
     assert!(parse(&large).is_err());
+}
+
+fn with_captures(
+    body: &str,
+    captures: Vec<ParserUpvalue>,
+    authorization: &LoweringBindings,
+) -> LowerResult<ParserProgram> {
+    let callback = ParserCallback {
+        kind: ParserCallbackKind::Lua { source: span(body) },
+        upvalues: captures,
+        environment: ParserEnvironment::OriginalGlobals,
+    };
+    Lowerer::new(
+        &Lua::new(),
+        body,
+        ParserCallbackId(1),
+        &callback,
+        authorization,
+        &mut Budget::default(),
+    )?
+    .program(&span(body))
+}
+
+#[test]
+fn first_to_upper_requires_captured_identity_but_allows_lexical_aliases() {
+    let owner = bundled_snapshot().unwrap();
+    let data = owner.modifier_parser().data();
+    let upper = data.helpers["firstToUpper"];
+    let authorization = parser_bindings(data, constructor(data)).unwrap();
+    for name in ["firstToUpper", "captured_alias"] {
+        let body = format!("function(value) return {name}(value) end");
+        let program = with_captures(
+            &body,
+            vec![
+                ParserUpvalue {
+                    name: "unrelated".into(),
+                    value: ParserValue::Nil,
+                },
+                ParserUpvalue {
+                    name: name.into(),
+                    value: ParserValue::Callback(upper),
+                },
+            ],
+            &authorization,
+        )
+        .unwrap();
+        assert_eq!(
+            program.bindings,
+            vec![ParserProgramBinding::Intrinsic {
+                operation: ParserProgramIntrinsic::FirstToUpper,
+                source: ParserProgramIntrinsicSource::Captured {
+                    upvalue: 1,
+                    callback: upper
+                },
+            }]
+        );
+    }
+    assert!(
+        with_captures(
+            "function(v) return firstToUpper(v) end",
+            vec![],
+            &authorization
+        )
+        .is_err()
+    );
+    assert!(
+        with_captures(
+            "function(v) return string.upper(v) end",
+            vec![],
+            &authorization
+        )
+        .is_err()
+    );
+    assert!(
+        with_captures(
+            "function(v) return string.upper end",
+            vec![],
+            &authorization
+        )
+        .is_err()
+    );
+    assert!(
+        with_captures(
+            "function(firstToUpper) return firstToUpper('a') end",
+            vec![ParserUpvalue {
+                name: "firstToUpper".into(),
+                value: ParserValue::Callback(upper)
+            },],
+            &authorization
+        )
+        .is_err()
+    );
+    assert!(
+        with_captures(
+            "function(v) return firstToUpper(v) end",
+            vec![ParserUpvalue {
+                name: "firstToUpper".into(),
+                value: ParserValue::Nil
+            },],
+            &authorization
+        )
+        .is_err()
+    );
+    let other = data.helpers["flag"];
+    let program = with_captures(
+        "function(v) return firstToUpper(v) end",
+        vec![ParserUpvalue {
+            name: "firstToUpper".into(),
+            value: ParserValue::Callback(other),
+        }],
+        &authorization,
+    )
+    .unwrap();
+    assert_eq!(
+        program.bindings,
+        vec![ParserProgramBinding::CapturedCallback {
+            upvalue: 0,
+            callback: other,
+        }]
+    );
+}
+
+#[test]
+fn first_to_upper_binding_rejects_missing_or_unclosed_helper_records() {
+    let owner = bundled_snapshot().unwrap();
+    let data = owner.modifier_parser().data();
+    let ctor = constructor(data);
+    let upper = data.helpers["firstToUpper"];
+    for case in 0..7 {
+        let mut changed = data.clone();
+        match case {
+            0 => {
+                changed.helpers.remove("firstToUpper");
+            }
+            1 => {
+                changed
+                    .helpers
+                    .insert("firstToUpper".into(), ParserCallbackId(u32::MAX));
+            }
+            2 => {
+                changed
+                    .source
+                    .construction_spans
+                    .remove("first_to_upper_primitive");
+            }
+            3 => {
+                changed
+                    .source
+                    .construction_spans
+                    .get_mut("first_to_upper_primitive")
+                    .unwrap()
+                    .end_line += 1;
+            }
+            4 => {
+                changed.callbacks[upper.0 as usize - 1].kind = ParserCallbackKind::Builtin {
+                    symbol: "string.upper".into(),
+                };
+            }
+            5 => {
+                changed.callbacks[upper.0 as usize - 1]
+                    .upvalues
+                    .push(ParserUpvalue {
+                        name: "string".into(),
+                        value: ParserValue::Nil,
+                    });
+            }
+            6 => {
+                changed.helpers.insert("firstToUpper".into(), ctor);
+            }
+            _ => unreachable!(),
+        }
+        assert!(parser_bindings(&changed, ctor).is_err(), "case {case}");
+    }
+    assert!(parser_bindings(data, upper).is_err());
+}
+
+#[test]
+fn original_explosion_and_caller_lower_without_changing_flag_or_constructor() {
+    let owner = bundled_snapshot().unwrap();
+    let catalog = owner.modifier_parser();
+    let data = catalog.data();
+    let upper = data.helpers["firstToUpper"];
+    let authorization = parser_bindings(data, constructor(data)).unwrap();
+    let mut previous = parser_bindings(data, constructor(data)).unwrap();
+    previous.intrinsics.remove(&upper);
+    assert_eq!(
+        authorization.intrinsics.get(&constructor(data)),
+        Some(&ParserProgramIntrinsic::CreateMod)
+    );
+    assert_eq!(
+        authorization.intrinsics.get(&constructor(data)),
+        previous.intrinsics.get(&constructor(data))
+    );
+    let sources: BTreeMap<String, String> = BTreeMap::from([
+        (
+            PARSER.into(),
+            include_str!("../../../../../vendor/path-of-building-poe2/src/Modules/ModParser.lua")
+                .replace("\r\n", "\n"),
+        ),
+        (
+            TOOLS.into(),
+            include_str!("../../../../../vendor/path-of-building-poe2/src/Modules/ModTools.lua")
+                .replace("\r\n", "\n"),
+        ),
+    ]);
+    let by_line = |line| {
+        ParserCallbackId(data.callbacks.iter().position(|c|
+        matches!(&c.kind, ParserCallbackKind::Lua { source } if source.path == PARSER && source.line == line)
+    ).unwrap() as u32 + 1)
+    };
+    let explosion = by_line(2255);
+    let caller = by_line(2336);
+    let mut programs = vec![];
+    for id in [constructor(data), data.helpers["flag"], explosion, caller] {
+        let callback = &data.callbacks[id.0 as usize - 1];
+        let ParserCallbackKind::Lua { source: origin } = &callback.kind else {
+            panic!()
+        };
+        let body = sources[&origin.path]
+            .split_inclusive('\n')
+            .skip(origin.line as usize - 1)
+            .take((origin.end_line - origin.line + 1) as usize)
+            .collect::<String>();
+        assert_eq!(hash(body.as_bytes()), origin.sha256);
+        let lua = Lua::new();
+        let lower = |bindings| {
+            Lowerer::new(&lua, &body, id, callback, bindings, &mut Budget::default())
+                .and_then(|lowerer| lowerer.program(origin))
+        };
+        if id == constructor(data) {
+            // CreateMod is an existing authenticated captured intrinsic, not a
+            // standalone source program. Adding FirstToUpper must not admit its
+            // ordinary global select call or change that constructor contract.
+            assert_eq!(
+                lower(&authorization).unwrap_err(),
+                "unsupported global call select"
+            );
+            assert_eq!(lower(&authorization), lower(&previous));
+            continue;
+        }
+        let program = lower(&authorization).unwrap();
+        let old = lower(&previous).unwrap();
+        if id == data.helpers["flag"] || id == explosion {
+            assert!(program.bindings.iter().any(|binding| matches!(binding,
+                ParserProgramBinding::Intrinsic {
+                    operation: ParserProgramIntrinsic::CreateMod,
+                    source: ParserProgramIntrinsicSource::Captured { callback, .. },
+                } if *callback == constructor(data)
+            )));
+        }
+        if id == explosion {
+            assert!(program.bindings.iter().any(|b| matches!(b,
+                ParserProgramBinding::Intrinsic { operation: ParserProgramIntrinsic::FirstToUpper,
+                    source: ParserProgramIntrinsicSource::Captured { callback, .. } } if *callback == upper
+            )));
+            assert!(old.bindings.iter().any(|b| matches!(b,
+                ParserProgramBinding::CapturedCallback { callback, .. } if *callback == upper
+            )));
+        } else {
+            assert_eq!(program, old, "unrelated original program changed: {id:?}");
+        }
+        programs.push(program);
+    }
+    let callbacks = programs
+        .iter()
+        .enumerate()
+        .map(|(i, p)| (p.callback, ParserProgramId(i as u32 + 1)))
+        .collect();
+    let typed = ParserProgramCatalog::new(
+        ParserProgramData {
+            schema_version: PARSER_PROGRAM_SCHEMA_VERSION,
+            programs,
+            callbacks,
+        },
+        catalog.clone(),
+    )
+    .unwrap();
+    assert_eq!(typed.data().programs.len(), 3);
+    assert!(
+        !typed
+            .required_capabilities()
+            .contains(&ParserProgramCapability::LegacyPureCalls)
+    );
+}
+
+#[test]
+fn acquisition_first_to_upper_source_and_original_primitives_stay_guarded() {
+    let text =
+        include_str!("../../../../../vendor/path-of-building-poe2/src/Modules/ModParser.lua")
+            .replace("\r\n", "\n");
+    for (from, to) in [
+        (
+            r#"return (str:gsub("^%l", string.upper))"#,
+            r#"return str:gsub("^%l", string.upper)"#,
+        ),
+        ("string.upper))", "string.lower))"),
+        ("firstToUpper(str)", "firstToUpper(str, extra)"),
+    ] {
+        let changed = text.replacen(from, to, 1);
+        assert_ne!(changed, text);
+        assert!(
+            strings::source_policy(
+                &Lua::new(),
+                &BTreeMap::from([(PARSER.into(), changed)]),
+                &mut BTreeMap::new()
+            )
+            .is_err()
+        );
+    }
+    for code in [
+        "string = {}",
+        "string.upper = string.lower",
+        "string.gsub = string.upper",
+        "getmetatable('').__index = {}",
+    ] {
+        let lua = Lua::new();
+        let original = strings::StringLibrary::capture(&lua).unwrap();
+        lua.load(code).exec().unwrap();
+        assert!(original.verify(&lua).is_err(), "{code}");
+    }
+}
+
+#[test]
+fn acquisition_first_to_upper_live_function_and_environment_stay_guarded() {
+    let owner = bundled_snapshot().unwrap();
+    let data = owner.modifier_parser().data();
+    let upper = data.helpers["firstToUpper"];
+    let descriptor = &data.callbacks[upper.0 as usize - 1];
+    let origin = &data.source.construction_spans["first_to_upper_primitive"];
+    let source =
+        include_str!("../../../../../vendor/path-of-building-poe2/src/Modules/ModParser.lua")
+            .replace("\r\n", "\n");
+    let body = source
+        .split_inclusive('\n')
+        .skip(origin.line as usize - 1)
+        .take((origin.end_line - origin.line + 1) as usize)
+        .collect::<String>();
+    assert_eq!(hash(body.as_bytes()), origin.sha256);
+    let lua = Lua::new();
+    let chunk = format!(
+        "{}{}\nreturn firstToUpper",
+        "\n".repeat(origin.line as usize - 1),
+        body
+    );
+    // Only constructs the fixture's function; its body is not invoked.
+    let function: Function = lua
+        .load(&chunk)
+        .set_name(format!("@{PARSER}"))
+        .eval()
+        .unwrap();
+    let observed = BTreeMap::from([(function.to_pointer() as usize, upper)]);
+    strings::verify_helper(&lua, &function, upper, descriptor, &observed, origin).unwrap();
+    assert!(parser_bindings(data, constructor(data)).is_ok());
+    let other: Function = lua
+        .load(&chunk)
+        .set_name(format!("@{PARSER}"))
+        .eval()
+        .unwrap();
+    assert_ne!(function, other);
+    assert!(strings::verify_helper(&lua, &other, upper, descriptor, &observed, origin).is_err());
+    function
+        .set_environment(lua.create_table().unwrap())
+        .unwrap();
+    assert!(strings::verify_helper(&lua, &function, upper, descriptor, &observed, origin).is_err());
 }
