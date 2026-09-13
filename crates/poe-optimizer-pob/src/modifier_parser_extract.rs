@@ -11,6 +11,7 @@ use std::{
         atomic::{AtomicUsize, Ordering},
     },
 };
+mod doubled;
 mod factories;
 mod flags;
 mod numbers;
@@ -540,12 +541,7 @@ fn extract_inner(
         "elseif modForm == \"DMGTHORNSBASE\" then",
         "elseif modForm == \"DMGBOTH\" then",
     )?;
-    let doubled = section(
-        parser,
-        "elseif modForm == \"DOUBLED\" then",
-        "\n\tif not modName then",
-    )?;
-    let doubled_values = pair(&lua, between(doubled, "modValue = ", "\n")?)?;
+    let doubled = doubled::extract(&lua, sources, &mut spans)?;
     let thorns_values = pair(&lua, between(thorns, "modValue = ", "\n")?)?;
     if thorns_values[0] != thorns_values[1] {
         return Err(error("unequal base thorns pair needs extended policy"));
@@ -623,9 +619,12 @@ fn extract_inner(
             immune_combined_min_words_exclusive: word_limit(parser, "if numWords > ", " then")?,
             immune_max_part_words: word_limit(parser, "if preWordNum > ", " or")?,
             thorns_base_damage: thorns_values[0],
-            doubled_more: doubled_values[0],
-            doubled_override: doubled_values[1],
-            doubled_global_limit: number(doubled, "globalLimit = ", ",")?,
+            doubled_more: doubled.more,
+            doubled_override: doubled.override_value,
+            doubled_global_limit: doubled.global_limit,
+            doubled_multiplier_prefix: doubled.multiplier_prefix,
+            doubled_name_suffix: doubled.name_suffix,
+            doubled_limit_suffix: doubled.limit_suffix,
         },
         tables: graph.tables,
         callbacks: graph.callbacks,

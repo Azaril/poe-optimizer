@@ -241,6 +241,7 @@ pub(crate) fn extractor_sha256() -> String {
         include_str!("../../poe-optimizer-lua-utf8/vendor/provenance.json"),
         include_str!("item_scalability_extract.rs"),
         include_str!("modifier_parser_extract.rs"),
+        include_str!("modifier_parser_extract/doubled.rs"),
         include_str!("modifier_parser_extract/factories.rs"),
         include_str!("modifier_parser_extract/flags.rs"),
         include_str!("modifier_parser_extract/numbers.rs"),

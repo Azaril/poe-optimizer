@@ -130,7 +130,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 36 and `poe2-native-profiles-v36`, including source-keyed passive/actor effects,
+schema 37 and `poe2-native-profiles-v37`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It
@@ -165,27 +165,28 @@ cover activation, population, dropdown selection and rune-row construction, whil
 projection includes the original charm-socket derivation. Literal-only upstream edits still
 require source-pin review.
 
-The current modifier-parser schema 8 adds closed scalar `Gsub` factories, including the
-chained source substitutions used during rune preparation. The generated R2ah candidate is
-26,529,363 bytes, SHA-256
-`5d9335f89cb3caecdb749a0611cc463417059f3c9bb7fbbbd5a9853f651ff740`.
-Relative to the schema-35 HEAD package, only the manifest, `item_assembly` and
-`modifier_parser` sections change; the other 27 sections, original inputs, tree, lock and
-source pin are unchanged. The parser has 1,255 Pure factories and 396 Unsupported dispositions;
-all 1,222 previously Pure factories are retained unchanged. Five remaining Unsupported reasons
-become more precise and four admitted-program owner digests are refreshed. These are package
-contents, not new runtime parity counts.
+Modifier-parser schema 9 adds three required text operands for scalar doubled modifiers,
+retaining schema 8's closed scalar `Gsub` factories. Acquisition authenticates the entire
+original DOUBLED branch, including its scalar allocation/shared mutation distinction, and
+extracts all six numeric/text operands with repeated-literal agreement. The branch has a
+retained source span; changed operations reject independently of the injected values.
+
+The reviewed R2ai package is **26,529,631 bytes**, SHA-256
+`af61c280bae73da267149288b12aaf220eaa0d36e6fce903b0c517c35c946b28`.
+Relative to R2ah/schema 36, only the manifest and modifier-parser section change. The other
+28 sections and class-tree bytes are identical. The parser retains 1,255 Pure factories and
+396 Unsupported dispositions. All tables, callbacks, helper identities and program IR remain
+unchanged; four program admission-owner digests necessarily refresh for the changed definition
+owner. These are package contents, not additional numerical effect or full-build coverage.
+
 
 Read and compare package JSON explicitly as UTF-8. Windows default text decoding can corrupt
-non-ASCII item names during an audit and report false section changes. Generation and the
-scoped public preparation regressions succeeded. The declared source-fed activation comparison
-and all 17 lifecycle/materialization regression tests also pass. Normal CLI extraction is
-byte-identical to the package hash above. Strict workspace/native-only Clippy and five WASM
-library checks pass. The final activation rerun passes 13 tests after helper deduplication;
-final materialization rerun status is tracked in the implementation record.
-The five public native-only reports are still incomplete. Generation alone
-does not establish equipment or full-build parity. See the
-[current equipment contract](native-equipment-integration.md#r2ah-current-implementation-boundary).
+non-ASCII item names during an audit and report false section changes. Maintainer generation,
+independent package-delta review, the extraction guards and full-original scalar parser tests
+pass. Normal CLI extraction is byte-identical; the selected regressions, strict lint and five
+WASM library checks pass. The [implementation record](implementation.md) records exact scope
+and receipts. Generation alone does not establish equipment or full-build
+parity. See the [current equipment contract](native-equipment-integration.md#r2ai-current-implementation-boundary).
 
 At the schema-30 checkpoint, `item_assembly` schema 2 introduced common and armour/flask/charm
 local assembly policy with an explicit `PolicyOnly` capability. That extractor initialized the original

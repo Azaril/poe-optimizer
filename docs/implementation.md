@@ -18,6 +18,56 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+**R2ai validated checkpoint: scalar doubled modifiers and reached rune diagnostics.**
+The scalar DOUBLED path now creates fresh native name/type/value/tag graphs with all six
+operands supplied by the data package. Shared dictionary mutation remains explicitly deferred.
+Extraction guards, data/parser policy tests, ten engine regressions, four complete-original
+public-parser comparisons and the rune diagnostic tests pass. Original cache/returned-copy
+behavior, scalar coercion/errors, condition tags and the raised-shield remainder are preserved.
+The source fixture rejects host/observer failures as evidence of expected parser errors.
+
+The reviewed package uses package schema 37 and parser schema 9: **26,529,631 bytes**, SHA256
+`af61c280bae73da267149288b12aaf220eaa0d36e6fce903b0c517c35c946b28`.
+Only manifest/parser change: three required text operands, complete DOUBLED source span and
+four required program-owner digest updates. All other 28 sections, tree bytes and program IR
+are unchanged. The pin, lock and original inputs are unchanged.
+
+All five native-only public reports retain **116 records / 96 registrations** (13, 34, 0, 21, 28).
+Builds 1 and 3 retain the captured-jewel stop. Builds 2, 4 and 5 now report the actual next request:
+Legacy of Deidbell, helmet, ordinary row 1,
+`Warcries Explode Corpses dealing 10% of their Life as Physical Damage`, callback 1291.
+Every report is incomplete, calculation not run and whole-build parity not established.
+Full native original evaluations remain **0/5**. Extra diagnostic context is escaped, bounded
+and charged; insufficient diagnostic budget preserves the underlying dependency kind.
+
+**Validation:** 207 passing test executions across selected data, extraction, engine, import,
+source-parity, native and CLI targets, including 14 repeated after the equivalent Clippy
+match-guard change. This is not a full workspace test run. Strict workspace/native-only Clippy,
+formatting, five portable-crate WASM checks and native-only PoB/Lua dependency exclusion pass.
+Normal CLI extraction is byte-identical to the reviewed package. The whole-item target passes
+8 tests: all 116 records, 226 completed item-lane graph hashes and six remaining frontiers
+match R2ah; lane completion stays 114 source-parser/native-assembly and 112 builtin.
+These component results do not complete a build evaluation.
+
+Receipts are under `runs/r2ai-doubled-forms-01/`, including `final-validation.json`, package
+reviews, source-bound command records, whole-item reconciliation and final public reports.
+Failed exploratory attempts are retained. An invalid NUL dictionary-name fixture was corrected
+to valid injected text; the source-error comparison was tightened against host failures.
+Neither correction relaxed production validation or parity assertions.
+
+**Resume:** compare the complete captured
+`explodeFunc` helper behind callback 1291 against the original public parser. The
+[file-only next-frontier audit](../runs/r2ai-doubled-forms-01/deidbell-next-frontier.md) identifies
+original ModParser 2336–2338 calling helper 2255–2266 and its zero-result, local-key-error,
+casing and modifier-order obligations. This is a bounded parity contract, not a chosen new
+runtime model. Continue the open jewel ownership discussion separately. Rune/activation
+completion, SyncLoadouts, actor integration and complete build breadth remain open.
+
+The [A1 cost record](execution-model-baseline.md#scalar-doubled-form-and-diagnostic-checkpoint)
+counts 359 net non-test source lines and 1,119 test lines across 18 Rust files, including
+acquisition and diagnostics. The [A1–A4 investigation](#execution-model-investigation-a1-a4)
+continues to compare total costs; no replacement or retention decision is selected.
+
 **R2ah checkpoint: owned equipment activation and native string substitutions.** This adds an
 owned activation transition, rune-choice preparation, a full latest-tree validity read set
 and a native inventory context. The final source activation target passes 13 tests after
@@ -79,7 +129,7 @@ two affected Windows CLI targets pass locally in an isolated pinned checkout. Th
 optional-PoB test attempt lacked that checkout's submodule; the full target passed after
 supplying the unchanged pin. Hosted run `34764360721` is in progress; no hosted green is claimed.
 
-R2ah is the latest validated evaluator checkpoint. Evidence is in
+R2ah is the preceding validated evaluator checkpoint. Its evidence is in
 `runs/r2ah-equipment-activation-01/`, including `final-validation.json`, exact package and
 whole-item reconciliations, final `source-output-06` comparisons and the public `runtime-02`
 reports. Every command retains its source/input bindings. The [A1 cost inventory](execution-model-baseline.md#equipment-activation-investigation-in-progress)

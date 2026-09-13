@@ -32,7 +32,7 @@ library checks pass. The final activation rerun passes 13 tests after helper ded
 final materialization rerun status is tracked in the implementation record. This uses the
 existing raw rune catalog and finite parser dependency, with explicit ordering, mutation and callback frontiers. Item assembly, selected slot state
 and actor-effective participation remain distinct; a validity result alone completes none
-of the later stages. See the [current equipment boundary](native-equipment-integration.md#r2ah-current-implementation-boundary)
+of the later stages. See the [current equipment boundary](native-equipment-integration.md#r2ai-current-implementation-boundary)
 for ownership and source-comparison scope.
 
 The R2ah whole-item regression target passes eight tests. All 116 original records remain

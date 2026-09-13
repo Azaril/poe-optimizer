@@ -201,11 +201,15 @@ impl Run<'_> {
                 line.clear();
             }
             b"OVERRIDE" => kind = V::text("OVERRIDE"),
-            b"DOUBLED" => {
-                return Err(ParserError::Deferred {
-                    stage: "shared dictionary mutation in doubled form",
-                    callback: None,
-                });
+            // The scalar branch allocates fresh tables. A table-valued
+            // dictionary entry instead mutates shared parser state.
+            b"DOUBLED" if name.truthy() => {
+                [name, kind, value, extra] = scalar_doubled(
+                    name,
+                    &self.parser.catalog.data().policy,
+                    self.budget,
+                    &mut self.output,
+                )?;
             }
             _ => {}
         }
@@ -313,6 +317,79 @@ impl Run<'_> {
         Ok(Some(names))
     }
 }
+/// Closed scalar arm of the original DOUBLED form. No source table is mutated.
+/// In particular, do not convert a table-valued name into a copied scalar arm:
+/// its second entry is a persistent shared-dictionary write in the source.
+fn scalar_doubled(
+    name: V,
+    policy: &poe_optimizer_data::modifier_parser::ParserPolicy,
+    budget: &mut MatchBudget,
+    output: &mut OutputBudget,
+) -> ParserResult<[V; 4]> {
+    if matches!(name, V::Table(_)) {
+        return Err(ParserError::Deferred {
+            stage: "shared dictionary mutation in doubled form",
+            callback: None,
+        });
+    }
+    fn text(bytes: &[u8], output: &mut OutputBudget) -> ParserResult<V> {
+        output.charge(bytes.len())?;
+        Ok(V::text(bytes))
+    }
+    fn pair(values: [V; 2], output: &mut OutputBudget) -> ParserResult<V> {
+        output.charge(0)?;
+        output.charge(0)?;
+        output.charge(0)?;
+        Ok(array(values))
+    }
+    fn fields<const N: usize>(
+        values: [(&str, V); N],
+        output: &mut OutputBudget,
+    ) -> ParserResult<V> {
+        output.charge(0)?;
+        for (key, _) in &values {
+            output.charge(key.len())?;
+        }
+        Ok(record(values))
+    }
+    // Lua concatenation is right-associative and admits numbers, but does not
+    // stringify booleans/functions. Preserve the scalar's original type in [1].
+    let prefix = text(policy.doubled_multiplier_prefix.as_bytes(), output)?;
+    let suffix = text(policy.doubled_name_suffix.as_bytes(), output)?;
+    let tail = super::strings::concat(&name, &suffix, budget, output)?;
+    let multiplier = super::strings::concat(&prefix, &tail, budget, output)?;
+    let original = deep_copy(&name, output)?;
+    let names = pair([original, multiplier], output)?;
+    let kind = pair([text(b"MORE", output)?, text(b"OVERRIDE", output)?], output)?;
+    let value = pair(
+        [
+            V::Number(policy.doubled_more),
+            V::Number(policy.doubled_override),
+        ],
+        output,
+    )?;
+    output.charge(0)?;
+    output.charge("tag".len())?;
+    let mut extra = ModifierTable::default();
+    extra.set("tag", V::Boolean(true));
+    let tag_type = text(b"Multiplier", output)?;
+    let var = super::strings::concat(&name, &suffix, budget, output)?;
+    let limit_suffix = text(policy.doubled_limit_suffix.as_bytes(), output)?;
+    let key = super::strings::concat(&name, &limit_suffix, budget, output)?;
+    let tag = fields(
+        [
+            ("type", tag_type),
+            ("var", var),
+            ("globalLimit", V::Number(policy.doubled_global_limit)),
+            ("globalLimitKey", key),
+        ],
+        output,
+    )?;
+    let row = fields([("tag", tag)], output)?;
+    output.charge(0)?;
+    extra.indexed.insert(1, row);
+    Ok([names, kind, value, V::Table(Arc::new(extra))])
+}
 fn partial(modifiers: Option<ModifierTable>, line: Vec<u8>) -> ParseOutcome {
     ParseOutcome {
         modifiers,
@@ -359,4 +436,141 @@ pub(super) fn or_flags(left: &V, right: &V) -> ParserResult<f64> {
         .number()
         .ok_or_else(|| ParserError::SourceError("non-number flag operand".into()))?;
     Ok(crate::lua_bits::or53(a, b))
+}
+
+#[cfg(test)]
+mod doubled_tests {
+    use super::*;
+    use crate::lua_pattern::{MatchLimits, PatternError, ResourceKind};
+    use crate::modifier_scan::ScanError;
+    use poe_optimizer_data::{game_data::bundled_snapshot, modifier_parser::ParserPolicy};
+
+    fn policy() -> ParserPolicy {
+        bundled_snapshot()
+            .unwrap()
+            .modifier_parser()
+            .data()
+            .policy
+            .clone()
+    }
+    #[test]
+    fn doubled_preserves_numeric_name_bits_before_emitter_concatenation() {
+        let policy = policy();
+        for name in [-0.0, 42.5, f64::INFINITY, f64::NEG_INFINITY] {
+            let [names, _, _, extra] = scalar_doubled(
+                V::Number(name),
+                &policy,
+                &mut MatchBudget::default(),
+                &mut OutputBudget::default(),
+            )
+            .unwrap();
+            let V::Number(retained) = names.as_table().unwrap().indexed_value(1) else {
+                panic!()
+            };
+            assert_eq!(retained.to_bits(), name.to_bits());
+            let rendered = crate::item_tools::lua_number_text(name);
+            assert_eq!(
+                names
+                    .as_table()
+                    .unwrap()
+                    .indexed_value(2)
+                    .as_bytes()
+                    .unwrap(),
+                format!(
+                    "{}{rendered}{}",
+                    policy.doubled_multiplier_prefix, policy.doubled_name_suffix
+                )
+                .as_bytes()
+            );
+            let first_tag = extra
+                .as_table()
+                .unwrap()
+                .indexed_value(1)
+                .as_table()
+                .unwrap()
+                .field("tag")
+                .as_table()
+                .unwrap();
+            assert_eq!(
+                first_tag.field("var").as_bytes().unwrap(),
+                format!("{rendered}{}", policy.doubled_name_suffix).as_bytes()
+            );
+        }
+    }
+    #[test]
+    fn doubled_concat_failure_precedes_later_output_and_match_charges() {
+        let policy = policy();
+        let literals = policy.doubled_multiplier_prefix.len() + policy.doubled_name_suffix.len();
+        let mut output = OutputBudget::default();
+        output
+            .charge(super::super::value::MAX_OUTPUT_BYTES - literals)
+            .unwrap();
+        let mut work = MatchBudget::new(MatchLimits {
+            max_steps: 0,
+            ..Default::default()
+        });
+        assert_eq!(
+            scalar_doubled(V::Boolean(true), &policy, &mut work, &mut output),
+            Err(ParserError::SourceError(
+                "concatenation of a non-string value".into()
+            ))
+        );
+        assert_eq!(work.steps_used(), 0);
+        let mut work = MatchBudget::new(MatchLimits {
+            max_steps: 0,
+            ..Default::default()
+        });
+        assert!(matches!(
+            scalar_doubled(
+                V::text("Caller"),
+                &policy,
+                &mut work,
+                &mut OutputBudget::default()
+            ),
+            Err(ParserError::Scan(ScanError::Pattern(
+                PatternError::Resource(ResourceKind::MatchSteps)
+            )))
+        ));
+        let mut output = OutputBudget::default();
+        output
+            .charge(super::super::value::MAX_OUTPUT_BYTES - literals)
+            .unwrap();
+        assert!(matches!(
+            scalar_doubled(
+                V::text("Caller"),
+                &policy,
+                &mut MatchBudget::default(),
+                &mut output
+            ),
+            Err(ParserError::ResourceBound("output values/bytes"))
+        ));
+    }
+    #[test]
+    fn doubled_table_frontier_precedes_all_scalar_allocations_and_keeps_aliases() {
+        let table = Arc::new(ModifierTable::from_values([
+            V::text("A"),
+            V::text("B"),
+            V::text("C"),
+        ]));
+        let original = table.clone();
+        let mut output = OutputBudget::default();
+        output
+            .charge(super::super::value::MAX_OUTPUT_BYTES)
+            .unwrap();
+        let mut work = MatchBudget::new(MatchLimits {
+            max_steps: 0,
+            ..Default::default()
+        });
+        assert_eq!(
+            scalar_doubled(V::Table(table.clone()), &policy(), &mut work, &mut output),
+            Err(ParserError::Deferred {
+                stage: "shared dictionary mutation in doubled form",
+                callback: None
+            })
+        );
+        assert_eq!(work.steps_used(), 0);
+        assert!(Arc::ptr_eq(&table, &original));
+        assert_eq!(table.indexed_value(2), &V::text("B"));
+        assert_eq!(table.indexed_value(3), &V::text("C"));
+    }
 }

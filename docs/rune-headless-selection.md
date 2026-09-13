@@ -100,7 +100,7 @@ cover display indices/order, first-match duplicates, ordered `GetValidRunesForIt
 arbitrary source aliases, callback effects, or later consumers of the full sorted array.
 Those consumers require their own evidence.
 
-The [equipment comparison](native-equipment-integration.md#r2ah-current-implementation-boundary)
+The [equipment comparison](native-equipment-integration.md#r2ai-current-implementation-boundary)
 has a narrower source observation scope: rune selection is compared by name, not by
 source effect-record identity. Successful component preparation does not establish that
 the public parser completed every dependency. Full native build parity remains 0/5.

@@ -1406,14 +1406,14 @@ Compare preparing immutable static rune definitions once, retaining a native pro
 and an acquired/compiled domain representation. Include source/update reconciliation,
 record ownership, aliases that affect downstream consumers, diagnostics, and the cost of
 proving sorter behavior. Moving work into acquisition is not by itself a reduction in
-overall complexity. The current public path for builds2/4/5 stops during rune preparation
+overall complexity. The current public path for builds 2, 4 and 5 stops during rune preparation
 at `rune_initial_order` with `ModParser pending shared dictionary mutation in doubled form: None`;
 the earlier callback333 dependency is resolved. This is a broad unsupported `DOUBLED` guard,
 not evidence of shared mutation on the failing invocation. The reports do not retain the actual
 parser input; the [catalog audit](../runs/r2ah-equipment-activation-01/frontier-analysis-by-engine.md)
 finds four ordinary rune lines with scalar names. The source scalar-name path allocates fresh
 tables. Admitting that path is potential bounded follow-up work requiring parity evidence.
-Builds1/3 retain their captured-jewel stops.
+Builds 1 and 3 retain their captured-jewel stops.
 The five reports remain incomplete, with 96 registrations (13, 34, 0, 21, 28) across 116 records.
 No alternative is selected; the A2/A3 comparison and owner discussion remain required.
 
@@ -1471,3 +1471,57 @@ The [public-frontier summary](../runs/r2ah-equipment-activation-01/public-fronti
 and [runtime-02 command ledgers](../runs/r2ah-equipment-activation-01/runtime-02/) retain the
 separate public observations. Failed source-output-01 through source-output-04 attempts remain
 historical evidence. Full native originals remain **0/5**.
+
+## Scalar doubled-form and diagnostic checkpoint
+
+R2ai separates a fresh-result scalar branch from a shared-dictionary mutation branch in the
+original parser. The former now uses injected text/numeric operands and the existing native
+emitter; the latter remains deferred. Complete original public-parser tests compare all four
+ordinary rune lines, caller-defined scalar names, all six configurable operands, coercion,
+source errors, common condition tags, cache hits and returned-copy isolation. One source case
+explicitly observes the shared table mutation and requires native refusal. These are bounded
+parser results, not actor/effect calculation or warmed-JIT/candidate-throughput evidence.
+The raised-shield rune line retains the same unparsed remainder as the original.
+
+The definition package grows **268 bytes**, to **26,529,631 bytes**. Only its manifest and
+modifier-parser section change: package package schema 37 and parser schema 9, three required text operands, the
+complete DOUBLED source span and four necessary admission-owner digest rebindings. All other
+28 sections, the class tree, and program IR/roles/evidence remain unchanged. The source pin is
+unchanged. Missing fields and older packages reject rather than acquiring silent defaults.
+
+The cost inventory compares `98ba2b4` with the formatted R2ai source snapshot. It counts
+physical Rust lines (including comments/blanks), normalizes CRLF to LF for byte deltas, and
+includes three new files in full. Generated data, docs, vendor files and ignored receipts are
+excluded. Colocated `cfg(test)` suffixes are split explicitly below.
+
+| Layer | Net physical lines | Net LF bytes |
+| --- | ---: | ---: |
+| Data model | 10 | 510 |
+| Runtime and adapters | 208 | 8,001 |
+| Acquisition | 141 | 5,383 |
+| Colocated runtime tests | 312 | 11,277 |
+| Colocated acquisition tests | 148 | 5,076 |
+| Dedicated native/data tests | 365 | 13,972 |
+| Reference test tooling | 294 | 10,801 |
+| Total across 18 Rust files | 1,478 | 55,020 |
+
+Non-test source is **359 lines / 13,894 bytes**; tests account for **1,119 lines / 41,126 bytes**.
+The ordered source-map digest is
+`01127bac8a5efc7313cacacf7b3530b2b964b10b4b1ccb208e8d8c1739beec10`;
+`runs/r2ai-doubled-forms-01/cost-inventory-03-by-data.json` contains the per-file split.
+Code counts are comparison inputs, not a maintainability score. This example makes the
+source authentication, schema migration, error classification and diagnostic/test cost
+visible alongside the small native operation. A2 should include these costs for every model,
+without requiring its implementation to retain the current source-shaped representation.
+
+All five native-only preparation reports still retain 116 records and 96 registrations.
+Builds 2, 4 and 5 now identify the actual next input: Legacy of Deidbell, helmet, ordinary row 1,
+`Warcries Explode Corpses dealing 10% of their Life as Physical Damage`, callback 1291.
+Builds 1 and 3 still stop at captured jewel factories. Every report remains incomplete, calculation
+not run and whole-build parity not established; full native originals remain **0/5**.
+The bounded diagnostic includes the actual requested family, slot, row and escaped input,
+with explicit truncation/omission and charged retained context. It preserves the original
+dependency kind even if the optional diagnostic does not fit the remaining budget.
+
+See the [implementation record](implementation.md) for final validation and the next resume
+point. The A1–A4 investigation remains open; no alternative execution model is selected.

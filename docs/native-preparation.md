@@ -7,8 +7,9 @@ comparison pass, as do all 17 lifecycle/materialization regression tests. Strict
 native-only Clippy and five WASM library checks pass. The final activation rerun passes
 13 tests after helper deduplication; final materialization rerun status is tracked separately
 in the implementation record.
-The five native-only CLI reports remain incomplete,
-with 96 registrations across 116 records; the [equipment status](native-equipment-integration.md#r2ah-current-implementation-boundary)
+R2ai advances scalar doubled parsing and records the actual next rune input; builds 2, 4 and 5
+now reach Legacy of Deidbell callback 1291. The five native-only CLI reports remain incomplete,
+with 96 registrations across 116 records; the [equipment status](native-equipment-integration.md#r2ai-current-implementation-boundary)
 records their first dependencies. General real-build numerical producers remain unfinished;
 complete native supplied builds remain **0/5**.
 
@@ -42,7 +43,7 @@ and its explicit continuation before activation. `authored_items()` retains the
 occurrences, the executed registration prefix, duplicate-ID lookup winners and explicit
 source continuation. R2ah also retains private item-set activation state and reached startup
 jewel writes, separately from saved passive allocations. The
-[equipment contract](native-equipment-integration.md#r2ah-current-implementation-boundary)
+[equipment contract](native-equipment-integration.md#r2ai-current-implementation-boundary)
 defines the pre-SyncLoadouts endpoint and unresolved dependencies. These independent stages
 do not fabricate completed root setup or effective scenario state. The compatibility request DTO still owns an XML string in
 addition to the imported source; it is not copied per instance or per calculation. Removing

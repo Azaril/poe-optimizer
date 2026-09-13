@@ -173,7 +173,7 @@ fn aggregate_key_bytes_cannot_bypass_graph_budget() {
 #[test]
 fn tag_precheck_policy_preserves_authored_lazy_patterns_with_bounded_text() {
     let mut data = data();
-    assert_eq!(data.schema_version, 8);
+    assert_eq!(data.schema_version, 9);
     assert_eq!(data.policy.tag_capture_numeric_pattern, "%d+");
     for key in [
         "prefix_factory_invocation",
@@ -215,4 +215,67 @@ fn tag_precheck_policy_is_required_and_has_a_closed_typed_shape() {
         }
         assert!(serde_json::from_value::<ParserPolicy>(value).is_err());
     }
+}
+
+#[test]
+fn doubled_scalar_policy_is_source_bound_and_accepts_injected_literal_bytes() {
+    let mut data = data();
+    assert_eq!(data.schema_version, 9);
+    assert_eq!(data.policy.doubled_multiplier_prefix, "Multiplier:");
+    assert_eq!(data.policy.doubled_name_suffix, "Doubled");
+    assert_eq!(data.policy.doubled_limit_suffix, "DoubledLimit");
+    let span = &data.source.construction_spans["doubled_form"];
+    assert_eq!(span.path, "src/Modules/ModParser.lua");
+    assert_eq!((span.line, span.end_line), (6900, 6916));
+    for (prefix, suffix, limit) in [
+        (String::new(), String::new(), String::new()),
+        ("Own:".into(), "Variant".into(), "Ceiling".into()),
+        ("a\0b".into(), "é".into(), "x".repeat(4096)),
+    ] {
+        data.policy.doubled_multiplier_prefix = prefix;
+        data.policy.doubled_name_suffix = suffix;
+        data.policy.doubled_limit_suffix = limit;
+        data.policy.doubled_more = -2.5;
+        data.policy.doubled_override = 0.0;
+        data.policy.doubled_global_limit = 7.25;
+        data.validate().unwrap();
+        let encoded = serde_json::to_vec(&data.policy).unwrap();
+        let decoded: ParserPolicy = serde_json::from_slice(&encoded).unwrap();
+        assert_eq!(decoded, data.policy);
+    }
+}
+
+#[test]
+fn doubled_text_operands_are_required_typed_bounded_and_versioned() {
+    let original = data();
+    let policy = serde_json::to_value(&original.policy).unwrap();
+    for field in [
+        "doubled_multiplier_prefix",
+        "doubled_name_suffix",
+        "doubled_limit_suffix",
+    ] {
+        let mut missing = policy.clone();
+        missing.as_object_mut().unwrap().remove(field);
+        assert!(
+            serde_json::from_value::<ParserPolicy>(missing).is_err(),
+            "{field}"
+        );
+        let mut wrong_type = policy.clone();
+        wrong_type[field] = 7.into();
+        assert!(
+            serde_json::from_value::<ParserPolicy>(wrong_type).is_err(),
+            "{field}"
+        );
+        let mut oversized = policy.clone();
+        oversized[field] = "x".repeat(4097).into();
+        let mut data = original.clone();
+        data.policy = serde_json::from_value(oversized).unwrap();
+        assert!(data.validate().is_err(), "{field}");
+    }
+    let mut extended = policy;
+    extended["doubled_extra_operation"] = true.into();
+    assert!(serde_json::from_value::<ParserPolicy>(extended).is_err());
+    let mut old = original;
+    old.schema_version = 8;
+    assert!(old.validate().is_err());
 }

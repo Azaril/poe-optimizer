@@ -1,6 +1,6 @@
 # Native equipment and item-set integration
 
-Status: R2ah implements bounded equipment activation through slot population, ending
+Status: R2ai adds scalar doubled parsing and precise rune dependency diagnostics. R2ah implements bounded equipment activation through slot population, ending
 before `SyncLoadouts`. Compilation, package generation and the scoped public preparation
 regressions have completed. The declared source-fed activation comparison and all 17
 lifecycle/materialization regression tests pass. Strict workspace/native-only Clippy and the
@@ -11,7 +11,27 @@ parity remains **0/5**.
 No execution-model alternative is selected. The [implementation record](implementation.md)
 owns current progress and evidence; the R2ae checkpoint below retains its earlier scope.
 
-## R2ah current implementation boundary
+## R2ai current implementation boundary
+
+Scalar doubled modifiers now use injected operands and fresh native result graphs, retaining
+shared-table mutation as an explicit dependency. The four real rune strings have full-public-
+parser graph comparisons, including the original raised-shield line's unparsed remainder.
+Parser success here does not certify that the resulting effect can be calculated numerically.
+
+All five public native-only inspections retain 116 records and 96 registrations (13, 34, 0, 21, 28).
+Builds 1 and 3 stop at captured jewel factories. Builds 2, 4 and 5 advance to `rune_initial_order` with
+special callback 1291: Legacy of Deidbell, helmet, ordinary row 1,
+`Warcries Explode Corpses dealing 10% of their Life as Physical Damage`.
+The report now records the actual provider request using escaped, bounded context, including
+explicit truncation flags. Extra retained context is charged; diagnostic exhaustion preserves
+the original dependency kind and emits an omission marker. No shared parser API was expanded.
+
+These results do not complete rune preparation, public activation or a build evaluation.
+Full native originals remain **0/5**. [Command receipts and frontiers](../runs/r2ai-doubled-forms-01/public-frontiers-02.json)
+separate this current result from the R2ah component evidence below. The
+[implementation record](implementation.md) owns validation and continuation status.
+
+## R2ah preceding implementation boundary
 
 The public `runtime-02` check passed 46 test executions: 19 native, 4 default-feature and
 23 native-only. All five native-only CLI inspections succeeded with incomplete preparation
@@ -49,8 +69,8 @@ handle. A [bounded proof of the pinned sort](rune-headless-selection.md) certifi
 and the unique first record without requiring a global strict weak order. Remaining native storage
 order is private; ambiguous first records, duplicate eligible names and unproved comparison
 safety remain explicit frontiers. Failed preparation is retained across resumes. Finite metadata
-ingress does not reconstruct arbitrary source aliases or admit callbacks as effects. The current
-modifier-parser schema 8 adds closed scalar `Gsub` expressions with literal patterns and
+ingress does not reconstruct arbitrary source aliases or admit callbacks as effects. The R2ah
+modifier-parser schema 8 added closed scalar `Gsub` expressions with literal patterns and
 text or original `string.upper` replacements; this alone does not establish complete rune preparation.
 
 The source comparison is deliberately scoped: exact source arrays remain evidence, while

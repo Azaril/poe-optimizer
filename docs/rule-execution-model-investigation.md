@@ -72,6 +72,13 @@ effects, including ordering and failures, instead of requiring them to reproduce
 retained by the reference observer. The omission argument still needs executable evidence for
 the admitted input domain; the audit alone does not establish native equivalence.
 
+The [scalar doubled-form checkpoint](execution-model-baseline.md#scalar-doubled-form-and-diagnostic-checkpoint)
+provides a further measured example: 268 additional package bytes require acquisition,
+native behavior, diagnostics and independent parity tests. Its source/runtime and test costs
+are recorded separately. A fresh-result scalar branch and a history-sensitive table branch
+also give the prototypes a concrete semantic distinction to preserve without prescribing
+PoB's internal representation.
+
 ## Separate the decisions
 
 Rust is an implementation language, not a semantic model. A DSL interpreter, generated rule

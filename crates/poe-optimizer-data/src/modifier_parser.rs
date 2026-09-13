@@ -10,7 +10,7 @@ pub use factories::*;
 pub(crate) mod programs;
 pub use programs::*;
 
-pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 8;
+pub const MODIFIER_PARSER_SCHEMA_VERSION: u32 = 9;
 type Result<T> = std::result::Result<T, GameDataError>;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -181,6 +181,10 @@ pub struct ParserPolicy {
     pub doubled_more: f64,
     pub doubled_override: f64,
     pub doubled_global_limit: f64,
+    /// Source text operands for fresh scalar DOUBLED names and the first-only limit tag.
+    pub doubled_multiplier_prefix: String,
+    pub doubled_name_suffix: String,
+    pub doubled_limit_suffix: String,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -459,6 +463,9 @@ impl ModifierParserData {
         charge(p.tag_capture_numeric_pattern.len())?;
         charge(p.first_to_upper_pattern.len())?;
         charge(p.flag_mod_type.len())?;
+        charge(p.doubled_multiplier_prefix.len())?;
+        charge(p.doubled_name_suffix.len())?;
+        charge(p.doubled_limit_suffix.len())?;
         for text in &p.immune_effect_blacklist {
             charge(text.len())?;
         }
@@ -470,6 +477,9 @@ impl ModifierParserData {
             || !text(&p.tag_capture_numeric_pattern, 4096)
             || !text(&p.first_to_upper_pattern, 4096)
             || p.flag_mod_type.len() > 4096
+            || p.doubled_multiplier_prefix.len() > 4096
+            || p.doubled_name_suffix.len() > 4096
+            || p.doubled_limit_suffix.len() > 4096
             || [
                 p.immune_max_single_words,
                 p.immune_combined_min_words_exclusive,

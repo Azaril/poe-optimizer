@@ -14,7 +14,12 @@ use poe_optimizer_data::item_assembly::ItemInventoryPolicy;
 use poe_optimizer_data::item_loading::{
     ItemLoadingCatalog, ItemMetadataTable as Table, ItemMetadataValue as M, ItemRuneRecord,
 };
-use std::{collections::BTreeMap, mem::size_of, sync::Arc};
+use std::{
+    collections::BTreeMap,
+    fmt::{self, Write},
+    mem::size_of,
+    sync::Arc,
+};
 
 type Result<T> = std::result::Result<T, AssemblyError>;
 #[derive(Debug)]
@@ -420,7 +425,7 @@ fn build<P: ItemLoadProvider + ?Sized>(
                 }
             }
             let mut mods = Vec::new();
-            for line in raw.dense_prefix() {
+            for (ordinary_index, line) in raw.dense_prefix().enumerate() {
                 let M::Text(text) = line else {
                     unreachable!("checked ordinary lines")
                 };
@@ -441,22 +446,46 @@ fn build<P: ItemLoadProvider + ?Sized>(
                 let parsed = match provider.parse_modifier(&request) {
                     DependencyResult::Available(value) => value,
                     DependencyResult::Unavailable(message) => {
-                        return Err(unsupported(format!(
-                            "rune choice parser dependency: {}",
-                            bounded(&message)
-                        )));
+                        return Err(parser_failure(
+                            AssemblyErrorKind::Unsupported,
+                            "rune choice parser dependency: ",
+                            &message,
+                            ParserInput {
+                                family: name,
+                                slot,
+                                ordinary_row: ordinary_index + 1,
+                                text: &request.text,
+                            },
+                            budget,
+                        ));
                     }
                     DependencyResult::SourceError(message) => {
-                        return Err(unsupported(format!(
-                            "rune choice parser Source failure; original initialization prefix unrepresented: {}",
-                            bounded(&message)
-                        )));
+                        return Err(parser_failure(
+                            AssemblyErrorKind::Unsupported,
+                            "rune choice parser Source failure; original initialization prefix unrepresented: ",
+                            &message,
+                            ParserInput {
+                                family: name,
+                                slot,
+                                ordinary_row: ordinary_index + 1,
+                                text: &request.text,
+                            },
+                            budget,
+                        ));
                     }
                     DependencyResult::ResourceError(message) => {
-                        return Err(AssemblyError::resource(format!(
-                            "rune choice parser resource failure: {}",
-                            bounded(&message)
-                        )));
+                        return Err(parser_failure(
+                            AssemblyErrorKind::Resource,
+                            "rune choice parser resource failure: ",
+                            &message,
+                            ParserInput {
+                                family: name,
+                                slot,
+                                ordinary_row: ordinary_index + 1,
+                                text: &request.text,
+                            },
+                            budget,
+                        ));
                     }
                 };
                 for mut modifier in parsed.modifiers.unwrap_or_default() {
@@ -568,13 +597,114 @@ fn build<P: ItemLoadProvider + ?Sized>(
         }),
     })
 }
-fn bounded(message: &str) -> &str {
-    let mut end = message.len().min(4096);
+// This context names the actual provider request, not a reconstruction of Lua
+// pairs order or a claim about an original source initialization failure prefix.
+struct ParserInput<'a> {
+    family: &'a str,
+    slot: &'a str,
+    ordinary_row: usize,
+    text: &'a str,
+}
+const PARSER_REASON_BYTES: usize = 4096;
+const PARSER_CONTEXT_BYTES: usize = 4096;
+struct ParserContext {
+    bytes: [u8; PARSER_CONTEXT_BYTES],
+    len: usize,
+}
+impl Write for ParserContext {
+    fn write_str(&mut self, value: &str) -> fmt::Result {
+        let end = self.len.checked_add(value.len()).ok_or(fmt::Error)?;
+        let target = self.bytes.get_mut(self.len..end).ok_or(fmt::Error)?;
+        target.copy_from_slice(value.as_bytes());
+        self.len = end;
+        Ok(())
+    }
+}
+impl ParserContext {
+    fn quoted(&mut self, text: &str, limit: usize) -> std::result::Result<bool, fmt::Error> {
+        self.write_char('"')?;
+        let mut written = 0;
+        let mut truncated = false;
+        // At most `limit` escaped bytes are copied, with one character of
+        // lookahead. A giant key cannot cause unbounded Debug formatting or
+        // allocation before a bound.
+        for character in text.chars() {
+            let count = character.escape_default().count();
+            if count > limit - written {
+                truncated = true;
+                break;
+            }
+            for escaped in character.escape_default() {
+                self.write_char(escaped)?;
+            }
+            written += count;
+        }
+        self.write_char('"')?;
+        Ok(truncated)
+    }
+    fn input(input: ParserInput<'_>) -> std::result::Result<Self, fmt::Error> {
+        let mut context = Self {
+            bytes: [0; PARSER_CONTEXT_BYTES],
+            len: 0,
+        };
+        context.write_str("family=")?;
+        let family_truncated = context.quoted(input.family, 512)?;
+        context.write_str("; slot=")?;
+        let slot_truncated = context.quoted(input.slot, 512)?;
+        write!(context, "; ordinary_row={}; input=", input.ordinary_row)?;
+        let input_truncated = context.quoted(input.text, 2048)?;
+        write!(
+            context,
+            "; family_bytes={}; family_truncated={family_truncated}; slot_bytes={}; slot_truncated={slot_truncated}; input_bytes={}; input_truncated={input_truncated}",
+            input.family.len(),
+            input.slot.len(),
+            input.text.len()
+        )?;
+        Ok(context)
+    }
+    fn as_str(&self) -> &str {
+        std::str::from_utf8(&self.bytes[..self.len]).expect("only UTF-8 formatter writes")
+    }
+}
+fn parser_failure(
+    kind: AssemblyErrorKind,
+    prefix: &'static str,
+    reason: &str,
+    input: ParserInput<'_>,
+    budget: &mut Budget,
+) -> AssemblyError {
+    // The pre-existing bounded error reason remains the diagnostic allowance.
+    // Charge every extra retained context byte (including delimiters) and one
+    // formatting step before allocating the final message. If that cannot fit,
+    // retain the original dependency kind and explicitly omit context within the
+    // old reason allowance instead of turning a diagnostic into a new failure.
+    let context = (budget.usage.steps < budget.limits.max_steps)
+        .then(|| ParserContext::input(input).ok())
+        .flatten()
+        .filter(|context| budget.charge(context.len + 3, 1).is_ok());
+    let message = if let Some(context) = context {
+        format!(
+            "{prefix}[{}] {}",
+            context.as_str(),
+            bounded(reason, PARSER_REASON_BYTES)
+        )
+    } else {
+        const OMITTED: &str = "[input context omitted: diagnostic byte/work bound] ";
+        format!(
+            "{prefix}{OMITTED}{}",
+            bounded(reason, PARSER_REASON_BYTES - OMITTED.len())
+        )
+    };
+    AssemblyError { kind, message }
+}
+fn bounded(message: &str, limit: usize) -> &str {
+    let mut end = message.len().min(limit);
     while !message.is_char_boundary(end) {
         end -= 1;
     }
     &message[..end]
 }
+
 fn set_source(modifier: &mut Table, source: &str, budget: &mut Budget) -> Result<()> {
     let text = M::Text(budget.text(source)?);
     budget.put(modifier, "source", text)?;
@@ -1056,6 +1186,182 @@ mod tests {
                 .same_identity(&rune)
         );
     }
+    #[test]
+    fn failed_parser_request_reports_actual_family_slot_and_ordinary_row() {
+        struct FailingParser {
+            kind: AssemblyErrorKind,
+            calls: Vec<(usize, String)>,
+        }
+        impl ItemLoadProvider for FailingParser {
+            fn parse_modifier(&mut self, request: &ParseRequest) -> DependencyResult<ParseOutcome> {
+                self.calls.push((request.sequence, request.text.clone()));
+                if self.calls.len() == 3 {
+                    let reason = "actual caller failure".into();
+                    return match self.kind {
+                        AssemblyErrorKind::Unsupported => DependencyResult::Unavailable(reason),
+                        AssemblyErrorKind::Source => DependencyResult::SourceError(reason),
+                        AssemblyErrorKind::Resource => DependencyResult::ResourceError(reason),
+                    };
+                }
+                DependencyResult::Available(ParseOutcome {
+                    modifiers: None,
+                    extra: None,
+                })
+            }
+        }
+        let (data, policy) = fixture(vec![
+            ("A earlier", "unselected type", row(1.0, 1.0, &["earlier"])),
+            (
+                "Z actual",
+                "caller boots",
+                row(2.0, 1.0, &["prior", "failed input", "not reached"]),
+            ),
+        ]);
+        for kind in [
+            AssemblyErrorKind::Unsupported,
+            AssemblyErrorKind::Source,
+            AssemblyErrorKind::Resource,
+        ] {
+            let mut parser = FailingParser {
+                kind,
+                calls: Vec::new(),
+            };
+            let attempt =
+                RuneChoiceCatalog::prepare(&data, &policy, &mut parser, ItemSetLimits::default());
+            let message = match (kind, attempt.result) {
+                (
+                    AssemblyErrorKind::Unsupported | AssemblyErrorKind::Source,
+                    DependencyResult::Unavailable(message),
+                ) => message,
+                (AssemblyErrorKind::Resource, DependencyResult::ResourceError(message)) => message,
+                (_, other) => panic!("changed parser failure kind: {other:?}"),
+            };
+            assert_eq!(
+                parser.calls,
+                [
+                    (0, "earlier".into()),
+                    (1, "prior".into()),
+                    (2, "failed input".into())
+                ]
+            );
+            assert_eq!(attempt.usage.operations, 3);
+            for expected in [
+                "family=\"Z actual\"",
+                "slot=\"caller boots\"",
+                "ordinary_row=2",
+                "input=\"failed input\"",
+                "input_truncated=false",
+                "actual caller failure",
+            ] {
+                assert!(message.contains(expected), "{message}");
+            }
+            assert!(!message.contains("not reached"));
+            if kind == AssemblyErrorKind::Source {
+                assert!(message.contains("original initialization prefix unrepresented"));
+            }
+        }
+    }
+
+    #[test]
+    fn parser_context_escapes_and_bounds_before_charging_retained_bytes() {
+        let family = format!("quoted\"family\n{}", "é".repeat(2000));
+        let slot = "slot\\\t\0";
+        let input = format!("actual\ninput\"{}", "雪".repeat(4000));
+        let reason = "é".repeat(3000);
+        let mut budget = Budget {
+            limits: ItemSetLimits::default(),
+            usage: ItemSetUsage {
+                bytes: 17,
+                steps: 9,
+                ..ItemSetUsage::default()
+            },
+        };
+        let prefix = "parser failure: ";
+        let error = parser_failure(
+            AssemblyErrorKind::Unsupported,
+            prefix,
+            &reason,
+            ParserInput {
+                family: &family,
+                slot,
+                ordinary_row: 2,
+                text: &input,
+            },
+            &mut budget,
+        );
+        assert_eq!(error.kind, AssemblyErrorKind::Unsupported);
+        for expected in [
+            r#"family="quoted\"family\n"#,
+            r#"slot="slot\\\t\u{0}""#,
+            r#"input="actual\ninput\""#,
+            "family_truncated=true",
+            "slot_truncated=false",
+            "input_truncated=true",
+        ] {
+            assert!(
+                error.message.contains(expected),
+                "{expected}: {}",
+                error.message
+            );
+        }
+        assert!(
+            error.message.len() <= prefix.len() + PARSER_CONTEXT_BYTES + 3 + PARSER_REASON_BYTES
+        );
+        let extra =
+            error.message.len() - prefix.len() - bounded(&reason, PARSER_REASON_BYTES).len();
+        assert_eq!(budget.usage.bytes, 17 + extra);
+        assert_eq!(budget.usage.steps, 10);
+        assert!(error.message.is_char_boundary(error.message.len()));
+    }
+
+    #[test]
+    fn diagnostic_budget_exhaustion_preserves_failure_kind_and_usage() {
+        for limits in [
+            ItemSetLimits {
+                max_bytes: 0,
+                ..ItemSetLimits::default()
+            },
+            ItemSetLimits {
+                max_steps: 0,
+                ..ItemSetLimits::default()
+            },
+        ] {
+            for kind in [
+                AssemblyErrorKind::Unsupported,
+                AssemblyErrorKind::Source,
+                AssemblyErrorKind::Resource,
+            ] {
+                let mut budget = Budget {
+                    limits,
+                    usage: ItemSetUsage::default(),
+                };
+                let reason = "é".repeat(3000);
+                let error = parser_failure(
+                    kind,
+                    "parser failure: ",
+                    &reason,
+                    ParserInput {
+                        family: "Family",
+                        slot: "Slot",
+                        ordinary_row: 1,
+                        text: "actual input",
+                    },
+                    &mut budget,
+                );
+                assert_eq!(error.kind, kind);
+                assert!(
+                    error
+                        .message
+                        .contains("input context omitted: diagnostic byte/work bound")
+                );
+                assert!(error.message.len() <= "parser failure: ".len() + PARSER_REASON_BYTES);
+                assert_eq!(budget.usage.bytes, 0);
+                assert_eq!(budget.usage.steps, 0);
+                assert_eq!(budget.usage.operations, 0);
+            }
+        }
+    }
+
     #[test]
     fn raw_ipairs_holes_and_parser_failure_remain_explicit() {
         let mut raw = row(1.0, 1.0, &["first"]);
