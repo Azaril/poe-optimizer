@@ -10,6 +10,7 @@ const MAX_NAME_BYTES: usize = 262144;
 const MAX_INPUT_BYTES: usize = 4 * 1024 * 1024;
 const MAX_JSON_BYTES: usize = 128 * 1024 * 1024;
 const MAX_RETURNS: usize = 64;
+const MAX_ACTIVATION_TARGETS: usize = 4;
 
 fn failure(message: impl Into<String>) -> mlua::Error {
     mlua::Error::RuntimeError(format!("loadout direct harness: {}", message.into()))
@@ -127,6 +128,7 @@ fn call(
     origin: Json,
     argument: Json,
     first: Option<&Table>,
+    argument_pack: Option<&Table>,
     budget: &mut Budget,
 ) -> mlua::Result<Completed> {
     if budget.cases >= MAX_CASES {
@@ -145,6 +147,11 @@ fn call(
         let snapshot: Function = capture.raw_get("loadout_snapshot")?;
         let before: Table = snapshot.call(None::<Table>)?;
         let before_snapshot = super::loadout_snapshot_json(lua, before)?;
+        let argument_before = argument_pack
+            .map(|pack| snapshot.call::<Table>(pack.clone()))
+            .transpose()?
+            .map(|state| super::loadout_snapshot_json(lua, state))
+            .transpose()?;
         let invoked = function.call::<MultiValue>(args);
         let result = match &invoked {
             Ok(values) => Some(pack(lua, values)?),
@@ -156,6 +163,11 @@ fn call(
             "before_snapshot":before_snapshot,
             "snapshot":super::loadout_snapshot_json(lua,state)?,
         });
+        if let Some(before) = argument_before {
+            row["argument_before_snapshot"] = before;
+            let state: Table = snapshot.call(argument_pack.expect("retained argument").clone())?;
+            row["argument_after_snapshot"] = super::loadout_snapshot_json(lua, state)?;
+        }
         if let Some(first) = first {
             let state: Table = snapshot.call(first.clone())?;
             row["retained_first_result_snapshot"] = super::loadout_snapshot_json(lua, state)?;
@@ -285,6 +297,228 @@ fn known_titles(
     Ok(())
 }
 
+const ID_FIELDS: [&str; 4] = ["specId", "itemSetId", "skillSetId", "configSetId"];
+const DOMAINS: [&str; 4] = ["tree", "items", "skills", "config"];
+
+fn id_value(value: Value) -> mlua::Result<Json> {
+    Ok(match value {
+        Value::Nil => json!({"kind":"nil"}),
+        Value::Boolean(value) => json!({"kind":"boolean","value":value}),
+        Value::Integer(value) => json!({"kind":"number","value":value as f64}),
+        Value::Number(value) if value.is_finite() => json!({"kind":"number","value":value}),
+        Value::String(value) if value.as_bytes().len() <= MAX_NAME_BYTES => {
+            json!({"kind":"string","value":value.to_str()?.to_owned()})
+        }
+        _ => return Err(failure("unrepresented activation ID value")),
+    })
+}
+fn truthy_id(value: &Json) -> bool {
+    value["kind"] != "nil" && !(value["kind"] == "boolean" && value["value"] == false)
+}
+fn ids(table: &Table) -> mlua::Result<Vec<Json>> {
+    ID_FIELDS
+        .into_iter()
+        .map(|field| id_value(table.raw_get(field)?))
+        .collect()
+}
+fn active_ids(build: &Table) -> mlua::Result<Vec<Json>> {
+    [
+        ("treeTab", "activeSpec"),
+        ("itemsTab", "activeItemSetId"),
+        ("skillsTab", "activeSkillSetId"),
+        ("configTab", "activeConfigSetId"),
+    ]
+    .into_iter()
+    .map(|(owner, field)| id_value(build.raw_get::<Table>(owner)?.raw_get(field)?))
+    .collect()
+}
+fn named_ids(values: &[Json]) -> Json {
+    Json::Object(
+        ID_FIELDS
+            .into_iter()
+            .zip(values.iter().cloned())
+            .map(|(key, value)| (key.into(), value))
+            .collect(),
+    )
+}
+fn changed_domains(requested: &[Json], active: &[Json]) -> Vec<&'static str> {
+    DOMAINS
+        .into_iter()
+        .enumerate()
+        .filter_map(|(i, name)| (requested[i] != active[i]).then_some(name))
+        .collect()
+}
+struct RetainedLookup {
+    label: String,
+    pack: Table,
+    ids: Vec<Json>,
+}
+fn retained_lookup(done: &Completed) -> mlua::Result<Option<RetainedLookup>> {
+    let Some(pack) = &done.result else {
+        return Ok(None);
+    };
+    if pack.raw_get::<usize>("n")? != 1 {
+        return Err(failure(
+            "lookup activation input is not one original return",
+        ));
+    }
+    match pack.raw_get::<Value>(1)? {
+        Value::Nil => Ok(None),
+        Value::Table(table) => Ok(Some(RetainedLookup {
+            label: done.case["label"]
+                .as_str()
+                .ok_or_else(|| failure("lookup label"))?
+                .into(),
+            pack: pack.clone(),
+            ids: ids(&table)?,
+        })),
+        _ => Err(failure("lookup activation input is not a table or nil")),
+    }
+}
+
+fn activation_history(
+    lua: &Lua,
+    module: &Table,
+    observed: bool,
+    build: &Table,
+    lookups: &[RetainedLookup],
+    budget: &mut Budget,
+) -> mlua::Result<Json> {
+    let function: Function = build.raw_get("SetActiveLoadout")?;
+    let initial = active_ids(build)?;
+    let mut complete = Vec::<&RetainedLookup>::new();
+    let mut complete_occurrences = 0;
+    for lookup in lookups {
+        if lookup.ids.iter().all(truthy_id) {
+            complete_occurrences += 1;
+            if !complete.iter().any(|old| old.ids == lookup.ids) {
+                complete.push(lookup);
+            }
+        }
+    }
+    let current = complete.iter().position(|lookup| lookup.ids == initial);
+    let mut selected = Vec::new();
+    if let Some(index) = current {
+        selected.push(complete[index]);
+    }
+    for lookup in &complete {
+        if lookup.ids != initial && selected.len() < MAX_ACTIVATION_TARGETS {
+            selected.push(*lookup);
+        }
+    }
+    let partial = lookups.iter().find(|lookup| !truthy_id(&lookup.ids[0]));
+    let available_domains: BTreeSet<_> = complete
+        .iter()
+        .flat_map(|lookup| changed_domains(&lookup.ids, &initial))
+        .collect();
+    let mut gaps = Vec::new();
+    for domain in DOMAINS {
+        if !available_domains.contains(domain) {
+            gaps.push(format!(
+                "No complete natural lookup changes {domain} from the initial active ID."
+            ));
+        }
+    }
+    if current.is_none() {
+        gaps.push("No complete natural lookup matches all initial active IDs.".into());
+    }
+    if partial.is_none() {
+        gaps.push("No natural returned table lacks a truthy specId.".into());
+    }
+    if complete.len() > selected.len() {
+        gaps.push("Additional complete lookup tuples are retained but not activated by the bounded selection.".into());
+    }
+    let selection = json!({
+        "complete_lookup_occurrences":complete_occurrences,"distinct_complete_tuples":complete.len(),
+        "current_match_available":current.is_some(),"initial_active_ids":named_ids(&initial),
+        "available_changed_domains":available_domains,"max_complete_targets":MAX_ACTIVATION_TARGETS,
+        "selected_lookup_labels":selected.iter().map(|lookup| &lookup.label).collect::<Vec<_>>(),
+        "selected_partial_lookup":partial.map(|lookup| &lookup.label),"gaps":gaps,
+    });
+    budget.retain(&selection)?;
+    let mut cases = Vec::new();
+    let mut observations = Vec::new();
+    let nil = call(
+        lua,
+        module,
+        observed,
+        &function,
+        MultiValue::from_vec(vec![Value::Table(build.clone()), Value::Nil]),
+        "activate_nil",
+        "SetActiveLoadout",
+        json!({"kind":"direct_supplied_nil"}),
+        json!({"kind":"nil","active_ids_before":named_ids(&active_ids(build)?)}),
+        None,
+        None,
+        budget,
+    )?;
+    cases.push(nil.case);
+    observations.push(nil.observation);
+    let mut plans: Vec<_> = selected
+        .iter()
+        .enumerate()
+        .map(|(index, lookup)| {
+            (
+                format!("activate_lookup_{}", index + 1),
+                *lookup,
+                "selected_complete_lookup",
+            )
+        })
+        .collect();
+    if let Some(last) = selected.last() {
+        plans.push((
+            "activate_repeat_last_lookup".into(),
+            *last,
+            "repeat_retained_lookup",
+        ));
+    }
+    if let Some(partial) = partial {
+        plans.push((
+            "activate_partial_lookup".into(),
+            partial,
+            "natural_no_spec_lookup",
+        ));
+    }
+    for (label, lookup, kind) in plans {
+        let before = active_ids(build)?;
+        // Invoke the exact retained source result table; no IDs or table are rebuilt.
+        let value: Table = lookup.pack.raw_get(1)?;
+        if ids(&value)? != lookup.ids {
+            return Err(failure(
+                "retained lookup request was mutated before activation",
+            ));
+        }
+        let done = call(
+            lua,
+            module,
+            observed,
+            &function,
+            MultiValue::from_vec(vec![Value::Table(build.clone()), Value::Table(value)]),
+            &label,
+            "SetActiveLoadout",
+            json!({"kind":kind,"lookup_label":lookup.label}),
+            json!({"kind":"retained_lookup_result","lookup_label":lookup.label,
+                "requested_ids":named_ids(&lookup.ids),"active_ids_before":named_ids(&before),
+                "changed_domains_before":changed_domains(&lookup.ids,&before)}),
+            None,
+            Some(&lookup.pack),
+            budget,
+        )?;
+        cases.push(done.case);
+        observations.push(done.observation);
+    }
+    let last = &observations
+        .last()
+        .ok_or_else(|| failure("no activation capture"))?["finite_post_loadouts"];
+    budget.retain(last)?;
+    let final_snapshot = last.clone();
+    Ok(
+        json!({"activation_cases":cases,"activation_observations":observations,
+        "activation_selection":selection,"post_activation_exact_graph":final_snapshot["graph"],
+        "post_activation_identity":final_snapshot["identity"]}),
+    )
+}
+
 pub(super) fn run(lua: &Lua, module: &Table, observed: bool) -> mlua::Result<Json> {
     let build: Table = lua.globals().raw_get("build")?;
     let sync: Function = build.raw_get("SyncLoadouts")?;
@@ -322,6 +556,7 @@ pub(super) fn run(lua: &Lua, module: &Table, observed: bool) -> mlua::Result<Jso
             json!({"kind":"direct","sequence":index+1}),
             argument,
             first.as_ref(),
+            None,
             &mut budget,
         )?;
         if index == 0 {
@@ -340,6 +575,7 @@ pub(super) fn run(lua: &Lua, module: &Table, observed: bool) -> mlua::Result<Jso
         "GetSpecList",
         json!({"kind":"direct"}),
         json!({"kind":"no_argument"}),
+        None,
         None,
         &mut budget,
     )?;
@@ -402,6 +638,7 @@ pub(super) fn run(lua: &Lua, module: &Table, observed: bool) -> mlua::Result<Jso
         let text = budget.name(&value)?;
         requests.push(Name { value,text,origin:json!({"kind":kind,"title_and_display_absent":true,"all_four_link_keys_absent":true}) });
     }
+    let mut retained = Vec::new();
     for (index, request) in requests.into_iter().enumerate() {
         let done = call(
             lua,
@@ -417,8 +654,12 @@ pub(super) fn run(lua: &Lua, module: &Table, observed: bool) -> mlua::Result<Jso
             request.origin,
             json!({"kind":"string","value":request.text}),
             None,
+            None,
             &mut budget,
         )?;
+        if let Some(lookup) = retained_lookup(&done)? {
+            retained.push(lookup);
+        }
         cases.push(done.case);
         observations.push(done.observation);
     }
@@ -427,7 +668,9 @@ pub(super) fn run(lua: &Lua, module: &Table, observed: bool) -> mlua::Result<Jso
         .ok_or_else(|| failure("no completed capture"))?;
     budget.retain(&last["finite_post_loadouts"])?;
     let final_snapshot = last["finite_post_loadouts"].clone();
-    let result = json!({
+    // Keep the validated lookup poststate before directed activations mutate selections.
+    let activation = activation_history(lua, module, observed, &build, &retained, &mut budget)?;
+    let mut result = json!({
         "cases":cases,"observations":observations,
         "post_loadouts_exact_graph":final_snapshot["graph"],
         "post_loadouts_identity":final_snapshot["identity"],
@@ -437,11 +680,67 @@ pub(super) fn run(lua: &Lua, module: &Table, observed: bool) -> mlua::Result<Jso
             "dropdown_commands_also_queried":true,"first_sync_return_handles_retained":first.is_some(),
             "spec_display_list_available":spec_list_available,
             "token_ids_not_cross_host_semantics":true,"native_parity":false},
-        "gaps":["No authored titles, missing owners, duplicate links, sparse orders, version changes, or selection mutations are introduced by this runner.",
+        "gaps":["No authored titles, missing owners, duplicate links, sparse orders, or version changes are introduced; directed activations use retained natural lookup results.",
             "Post-import direct calls do not establish initialization-time or full native build parity."],
         "bounds":{"calls":MAX_CASES,"display_occurrences":MAX_NAMES,"lookup_calls":MAX_NAMES+2,"name_bytes":MAX_NAME_BYTES,
             "aggregate_input_bytes":MAX_INPUT_BYTES,"retained_json_bytes":MAX_JSON_BYTES,"actual_returns":MAX_RETURNS},
         "usage":{"calls":budget.cases,"input_bytes":budget.input_bytes,"retained_case_and_observation_json_bytes":budget.json_bytes},
     });
+    let Json::Object(activation) = activation else {
+        unreachable!("activation history is an object")
+    };
+    result
+        .as_object_mut()
+        .expect("direct history")
+        .extend(activation);
     Ok(result)
+}
+
+#[cfg(test)]
+mod activation_mechanics {
+    use super::*;
+
+    #[test]
+    fn activation_input_keeps_exact_lookup_table_and_nil_fields() {
+        let lua = Lua::new();
+        let original = lua.create_table().unwrap();
+        original.raw_set("specId", 2).unwrap();
+        original.raw_set("itemSetId", 7).unwrap();
+        let result = pack(
+            &lua,
+            &MultiValue::from_vec(vec![Value::Table(original.clone())]),
+        )
+        .unwrap();
+        let done = Completed {
+            case: json!({"label":"supplied_lookup"}),
+            observation: Json::Null,
+            result: Some(result),
+        };
+        let retained = retained_lookup(&done).unwrap().unwrap();
+        let actual: Table = retained.pack.raw_get(1).unwrap();
+        assert_eq!(actual.to_pointer(), original.to_pointer());
+        assert!(!retained.ids.iter().all(truthy_id));
+        assert!(truthy_id(&retained.ids[0]));
+        assert_eq!(retained.ids[2], json!({"kind":"nil"}));
+        original.raw_set("itemSetId", 8).unwrap();
+        assert_ne!(ids(&actual).unwrap(), retained.ids);
+    }
+
+    #[test]
+    fn activation_id_comparison_keeps_scalar_types_and_source_truthiness() {
+        assert_eq!(
+            id_value(Value::Integer(2)).unwrap(),
+            id_value(Value::Number(2.0)).unwrap()
+        );
+        assert!(!truthy_id(&id_value(Value::Nil).unwrap()));
+        assert!(!truthy_id(&id_value(Value::Boolean(false)).unwrap()));
+        assert!(truthy_id(&id_value(Value::Number(0.0)).unwrap()));
+        assert!(id_value(Value::Number(f64::INFINITY)).is_err());
+        let lua = Lua::new();
+        assert_ne!(
+            id_value(Value::Integer(2)).unwrap(),
+            id_value(Value::String(lua.create_string("2").unwrap())).unwrap()
+        );
+        assert!(id_value(Value::Table(lua.create_table().unwrap())).is_err());
+    }
 }

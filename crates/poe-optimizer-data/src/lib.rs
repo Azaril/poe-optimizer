@@ -11,6 +11,7 @@ mod item_formatting;
 pub mod item_loading;
 mod item_rules;
 pub mod item_scalability;
+pub mod loadouts;
 pub mod modifier_parser;
 mod movement;
 pub mod passive_allocation;
@@ -30,6 +31,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("action_speed.rs"),
         include_str!("class_tree.rs"),
         include_str!("configuration.rs"),
+        include_str!("loadouts.rs"),
         include_str!("skill_identities.rs"),
         include_str!("skill_preparation.rs"),
         include_str!("tree_data.rs"),

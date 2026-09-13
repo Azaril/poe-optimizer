@@ -574,7 +574,10 @@ fn authenticate_loadout_functions(functions: &Json) {
 // Inspect every observed call/return and retain both root and optional Load
 // ancestry. Hook parameters and state projections do not claim raw return packs.
 fn inspect_loadout_import(report: &Json) -> Json {
-    let o = &report["additional_observation"];
+    inspect_returned_loadout_history(&report["additional_observation"], true)
+}
+
+fn inspect_returned_loadout_history(o: &Json, require_sync: bool) -> Json {
     let events = o["events"].as_array().unwrap();
     authenticate_loadout_functions(&o["functions"]);
     let states = o["loadout_states"].as_array().unwrap();
@@ -655,7 +658,9 @@ fn inspect_loadout_import(report: &Json) -> Json {
         let ordinal = state["call_ordinal"].as_u64().unwrap();
         assert!(calls.contains_key(&ordinal));
     }
-    assert!(counts.get("sync_loadouts").copied().unwrap_or(0) > 0);
+    if require_sync {
+        assert!(counts.get("sync_loadouts").copied().unwrap_or(0) > 0);
+    }
     json!({"call_counts":counts,"roots":roots,"complete_observed_calls":calls.len(),"loadout_state_graphs":states.len(),"hook_result_pack_claim":false})
 }
 
@@ -677,6 +682,10 @@ pub(super) fn direct_loadout_key(direct: &Json) -> Json {
     let cases = direct["cases"].as_array().unwrap();
     assert!(!cases.is_empty() && cases.len() <= 4096);
     assert!(direct["post_loadouts_exact_graph"].is_object());
+    case_graph_keys(cases)
+}
+
+fn case_graph_keys(cases: &[Json]) -> Json {
     Json::Array(
         cases
             .iter()
@@ -694,6 +703,12 @@ pub(super) fn direct_loadout_key(direct: &Json) -> Json {
                 );
                 assert!(case["snapshot"]["graph"].is_object());
                 key.insert("graph".into(), case["snapshot"]["graph"].clone());
+                for field in ["argument_before_snapshot", "argument_after_snapshot"] {
+                    if let Some(snapshot) = object.get(field) {
+                        assert!(snapshot["graph"].is_object());
+                        key.insert(field.into(), snapshot["graph"].clone());
+                    }
+                }
                 if let Some(retained) = object.get("retained_first_result_snapshot") {
                     assert!(retained["graph"].is_object());
                     key.insert(
@@ -712,6 +727,74 @@ pub(super) fn direct_loadout_key(direct: &Json) -> Json {
             })
             .collect(),
     )
+}
+
+fn activation_key(direct: &Json) -> Json {
+    let cases = direct["activation_cases"].as_array().unwrap();
+    assert!(!cases.is_empty() && cases.len() <= 7);
+    assert!(direct["activation_selection"].is_object());
+    assert!(direct["post_activation_exact_graph"].is_object());
+    json!({"cases":case_graph_keys(cases),"selection":direct["activation_selection"],
+        "final_graph":direct["post_activation_exact_graph"]})
+}
+
+fn inspect_activations(direct: &Json) -> Json {
+    let cases = direct["activation_cases"].as_array().unwrap();
+    let observations = direct["activation_observations"].as_array().unwrap();
+    assert_eq!(cases.len(), observations.len());
+    assert!(!cases.is_empty() && cases.len() <= 7);
+    let mut statuses = BTreeMap::<String, usize>::new();
+    let mut reached = BTreeMap::<String, usize>::new();
+    let mut histories = Vec::new();
+    for (case, observation) in cases.iter().zip(observations) {
+        assert_eq!(case["operation"], "SetActiveLoadout");
+        authenticate_loadout_functions(&observation["functions"]);
+        let status = case["status"]["kind"].as_str().unwrap();
+        assert!(matches!(status, "returned" | "source_error"));
+        *statuses.entry(status.into()).or_default() += 1;
+        if status == "returned" {
+            assert_eq!(case["status"]["actual_return_count"], 0);
+        }
+        if case["argument"]["kind"] == "retained_lookup_result" {
+            assert!(case["argument_before_snapshot"]["graph"].is_object());
+            assert!(case["argument_after_snapshot"]["graph"].is_object());
+        } else {
+            assert_eq!(case["argument"]["kind"], "nil");
+        }
+        let observed = observation["scope"]["observed"].as_bool().unwrap();
+        let events = match &observation["events"] {
+            Json::Array(events) => events.as_slice(),
+            Json::Object(events) if !observed && events.is_empty() => &[],
+            _ => panic!("invalid activation event array"),
+        };
+        if observed {
+            let roots = events
+                .iter()
+                .filter(|e| e["event"] == "call" && e["parent_call_ordinal"].is_null())
+                .collect::<Vec<_>>();
+            assert_eq!(roots.len(), 1, "standalone activation must be observed");
+            assert_eq!(roots[0]["name"], "activate_loadout");
+            assert!(roots[0]["load_call_ordinal"].is_null());
+        } else {
+            assert!(
+                events.is_empty(),
+                "control host must not contain hook events"
+            );
+        }
+        for event in events.iter().filter(|e| e["event"] == "call") {
+            *reached
+                .entry(event["name"].as_str().unwrap().into())
+                .or_default() += 1;
+        }
+        if observed && status == "returned" {
+            histories.push(inspect_returned_loadout_history(observation, false));
+        }
+        // Failed calls retain their raw event prefix; they are not certified as
+        // complete returned histories by the successful-call ancestry checker.
+    }
+    json!({"cases":cases.len(),"status_counts":statuses,"reached_call_counts":reached,
+        "returned_observed_histories":histories,"selection":direct["activation_selection"],
+        "failure_histories_diagnostic_only":true,"native_parity":false})
 }
 
 fn inspect_direct_loadouts(direct: &Json) -> Json {
@@ -817,7 +900,8 @@ fn child_loadouts(repo: &Path, output: &Path, entry: &Json) {
             "import_declared_control_equal":c["post_import_control_key"] == o["post_import_control_key"],
             "import_loadout_graph_equal":c["post_import_loadouts"]["graph"] == o["post_import_loadouts"]["graph"],
             "direct_cases_equal":direct_loadout_key(&c["direct_loadouts"]) == direct_loadout_key(&o["direct_loadouts"]),
-            "direct_final_graph_equal":c["direct_loadouts"]["post_loadouts_exact_graph"] == o["direct_loadouts"]["post_loadouts_exact_graph"]
+            "direct_final_graph_equal":c["direct_loadouts"]["post_loadouts_exact_graph"] == o["direct_loadouts"]["post_loadouts_exact_graph"],
+            "activation_cases_equal":activation_key(&c["direct_loadouts"]) == activation_key(&o["direct_loadouts"])
         }));
     }
     let history_equal = loadout_history_key(&reports[1]) == loadout_history_key(&reports[2]);
@@ -834,6 +918,7 @@ fn child_loadouts(repo: &Path, output: &Path, entry: &Json) {
             "import_loadout_graph_equal",
             "direct_cases_equal",
             "direct_final_graph_equal",
+            "activation_cases_equal",
         ] {
             assert_eq!(
                 row[key], true,
@@ -867,6 +952,12 @@ fn child_loadouts(repo: &Path, output: &Path, entry: &Json) {
             })
             .collect(),
     );
+    summary["activation_hosts"] = Json::Array(
+        reports
+            .iter()
+            .map(|report| inspect_activations(&report["additional_observation"]["direct_loadouts"]))
+            .collect(),
+    );
     fs::write(result_path, serde_json::to_vec_pretty(&summary).unwrap()).unwrap();
 }
 
@@ -895,6 +986,8 @@ pub fn run_loadouts() {
     }
     let mut children = Vec::new();
     let mut total_cases = 0usize;
+    let mut total_activation_cases = 0u64;
+    let mut reached_activation_calls = BTreeMap::<String, u64>::new();
     for entry in builds {
         let name = entry["xml"].as_str().unwrap();
         let mut process = Command::new(std::env::current_exe().unwrap())
@@ -937,6 +1030,13 @@ pub fn run_loadouts() {
             serde_json::from_slice(&fs::read(output.join(format!("{name}.json"))).unwrap())
                 .unwrap();
         total_cases += summary["direct_case_count"].as_u64().unwrap() as usize;
+        let hosts = summary["activation_hosts"].as_array().unwrap();
+        assert_eq!(hosts.len(), 3);
+        total_activation_cases += hosts[0]["cases"].as_u64().unwrap();
+        // One observed lane per original avoids double-counting repeat witnesses.
+        for (name, count) in hosts[1]["reached_call_counts"].as_object().unwrap() {
+            *reached_activation_calls.entry(name.clone()).or_default() += count.as_u64().unwrap();
+        }
     }
-    fs::write(output.join("summary.json"), serde_json::to_vec_pretty(&json!({"children":children,"original_inputs":5,"fresh_hosts":15,"direct_cases_per_control_lane":total_cases,"source_only":true,"native_parity":false,"scope":"all original import loadout roots plus separately supplied direct post-import calls; post-import and direct pre/post joint graphs compared; import intermediate histories retained diagnostically with per-host ancestry checks; raw direct result arity and alias ownership"})).unwrap()).unwrap();
+    fs::write(output.join("summary.json"), serde_json::to_vec_pretty(&json!({"children":children,"original_inputs":5,"fresh_hosts":15,"direct_cases_per_control_lane":total_cases,"activation_cases_per_control_lane":total_activation_cases,"activation_calls_per_observed_lane":reached_activation_calls,"source_only":true,"native_parity":false,"scope":"all original import loadout roots plus separately supplied direct post-import calls; post-import and direct pre/post joint graphs compared; import intermediate histories retained diagnostically with per-host ancestry checks; raw direct result arity and alias ownership; separate retained-lookup activations with original changed-domain callbacks, exact argument/pre/post graphs and successful-call ancestry"})).unwrap()).unwrap();
 }

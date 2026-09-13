@@ -17,6 +17,7 @@ pub mod item_loading;
 pub mod item_sets;
 pub mod item_slot_validity;
 pub mod item_source;
+pub mod loadouts;
 pub mod mace_item;
 mod modifier_syntax;
 pub mod preflight;

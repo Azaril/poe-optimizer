@@ -508,7 +508,7 @@ local function start(observed,options)
                 snapshot(entry,'before',record.ordinal)
             elseif not loadouts then check(entry.load~=nil,'nested call outside complete Load')
             elseif #active==0 then
-                check(b.name=='sync_loadouts' or b.name=='lookup_loadout','unadmitted loadout root')
+                check(b.name=='sync_loadouts' or b.name=='lookup_loadout' or b.name=='activate_loadout','unadmitted loadout root')
                 check(rawequal(receiver,build),'actual loadout root receiver')
             end
             entry.root=entry.root or entry
@@ -623,7 +623,7 @@ local function start(observed,options)
     hook=function(event)
         if event~='call' and event~='return' then return end
         local info=getinfo(2,'f');local b=info and targets[info.func]
-        if b and (b.name=='items_load' or #active>0 or (loadouts and (b.name=='sync_loadouts' or b.name=='lookup_loadout'))) then
+        if b and (b.name=='items_load' or #active>0 or (loadouts and (b.name=='sync_loadouts' or b.name=='lookup_loadout' or b.name=='activate_loadout'))) then
             if failed then error(failed,0) end
             local ok,message=pcall(collect,event,b);if not ok then failed=message;error(message,0) end
         end

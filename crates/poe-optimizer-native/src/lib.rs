@@ -394,6 +394,7 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("../../poe-optimizer-import/src/selected_view/items_passives.rs"),
                 include_str!("../../poe-optimizer-import/src/skill_source.rs"),
                 include_str!("../../poe-optimizer-import/src/item_source.rs"),
+                include_str!("../../poe-optimizer-import/src/loadouts.rs"),
                 include_str!("../../poe-optimizer-import/src/skill_definitions.rs"),
                 include_str!("../../poe-optimizer-engine/src/selection_keys.rs"),
                 include_str!("../../poe-optimizer-engine/src/lua_number.rs"),
