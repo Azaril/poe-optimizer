@@ -38,6 +38,15 @@ Continue measuring costs before extending general Lua compatibility into further
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
 
+**Local R2ae working-tree resume (unvalidated):** inventory policy/extraction, the native set-state
+machine and reference fixtures are under construction. Finish the native coordinator,
+aggregate resource accounting and report wiring before validation; the native fingerprint
+currently references a helper that has not yet been added. Code edits target package schema
+34 / item-assembly 6, but the bundled package remains schema 33 / item-assembly 5 and has not
+been regenerated. No R2ae build, test, extraction or parity run has completed. Resume from
+`runs/r2ae-item-set-loading-01/`, regenerate the package after integration, then run the focused
+and affected regression checks. This working tree is not a validated checkpoint.
+
 **R2ad checkpoint: original loading lifecycle and execution-model decision gates.** The
 A1–A4 plan now makes the comparison deliverable and decision follow-through explicit. The
 [equipment consumer audit](native-equipment-integration.md#consumer-boundary-for-the-execution-model-investigation)
@@ -2203,6 +2212,12 @@ Evaluate whether their full cost is justified before continuing that model into 
 domains. This does not presume the current approach is wrong, or treat code already written
 as a reason to retain it. The [investigation brief](rule-execution-model-investigation.md)
 defines the alternatives, constraints and evidence required for a decision.
+
+The follow-up explicitly includes whether matching PoB's data representation is worth its
+loader/parser/interpreter cost. Preserve the injected-data contract and observable parity;
+allow alternative schemas with measured conversion and reconciliation costs. A2 prototypes
+do not require a complete native evaluator first. The current interpreter remains a valid
+candidate, and A3 remains the discussion point before any significant design change.
 
 - [ ] **A1 — inventory and baseline (in progress).** Map each layer and
   consumer, distinguish acquisition/parity tooling from shipping preparation and calculation,

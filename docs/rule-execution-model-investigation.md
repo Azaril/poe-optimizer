@@ -84,6 +84,13 @@ parity evidence during offline preparation or upstream updates without being a p
 runtime dependency. Keeping a switchable PoB reference backend does not require invoking it
 inside native candidate evaluation. Account for both paths when comparing complexity.
 
+Also separate shared game meaning from shared representation. Evaluate whether keeping the
+production data model close to PoB actually lowers update and parity-maintenance costs, or
+whether a domain model plus explicit source adapters is simpler overall. Preserving injected
+definitions is required; preserving today's schema, loader or interpreter is not. Include
+the adapters and duplicated validation in the comparison rather than counting their removal
+from the runtime as a saving by itself.
+
 The existing [shared programs](shared-source-programs.md) and
 [parser session design](parser-sessions.md) describe the current approach. Their known state
 and identity requirements are evidence for this investigation, not a predetermined winner.

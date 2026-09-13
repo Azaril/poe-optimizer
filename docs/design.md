@@ -240,20 +240,25 @@ still work without recompiling the evaluator.
 
 Configuration preparation preserves a lifecycle, not just a map of scalar inputs.
 Source-backed defaults, saved sets, control notifications and ordered callback effects
-produce per-build state without mutating shared definitions. Use the same typed-program
-engine for configuration and modifier logic, with explicit ownership and effect permissions.
+produce per-build state without mutating shared definitions. The current implementation uses
+the shared typed-program engine for configuration and modifier logic, with explicit ownership
+and effect permissions; the investigation below may replace that representation.
 See [configuration preparation](configuration-preparation.md) for the execution boundary.
 
 The shared source interpreter is the current implementation strategy; its language-level
 compatibility is not itself the end-state product contract. A planned
 [execution-model investigation](rule-execution-model-investigation.md) compares retaining
 it with a focused DSL, declarative rules, native Rust algorithm families and hybrids.
-Choose the representation using evidence of complete observable build/calculation parity,
-upstream-update effort, total complexity and preparation/search performance. Preserve the
-injected data model, explicit effects and diagnostics, optional PoB reference, and portable
-in-process parallel evaluator regardless of that choice. An alternative may omit internal
-Lua details only when their irrelevance to the supported external contract is demonstrated;
+Compare representations using representative parity evidence, remaining full-parity risks,
+upstream-update effort, total complexity and preparation/search performance. Full observable
+build/calculation parity remains the acceptance goal; completing the evaluator is not a
+prerequisite for investigating alternatives. Preserve the injected-data contract, explicit
+effects and diagnostics, optional PoB reference, and portable in-process parallel evaluation
+regardless of that choice. An alternative may omit internal Lua details only when their irrelevance to the supported external contract is demonstrated;
 matching a small fixture set cannot establish that. No replacement is selected yet.
+The production schema need not mirror PoB's tables or conditional-language representation.
+Evaluate any conversion, reconciliation and reference adapters as part of the total cost,
+with versioned migration and unchanged observable parity requirements.
 
 ### Evaluator boundary
 
