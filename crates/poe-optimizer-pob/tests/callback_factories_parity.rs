@@ -434,13 +434,20 @@ fn list(value: Operand) -> Operand {
 fn uses_constructor(expr: &E) -> bool {
     match expr {
         E::CreateMod { .. } => true,
-        E::Negate(v) => uses_constructor(v),
+        E::Negate(v)
+        | E::ToNumber { value: v }
+        | E::FirstToUpper { value: v, .. }
+        | E::Gsub { value: v, .. } => uses_constructor(v),
+        E::Concat { left, right } => uses_constructor(left) || uses_constructor(right),
+        E::Flag { args, .. } => args.iter().any(uses_constructor),
         E::Table(fields) => fields.iter().any(|v| {
             uses_constructor(match v {
                 F::List(v) | F::Named { value: v, .. } => v,
             })
         }),
-        _ => false,
+        E::Literal(_) | E::Argument(_) | E::CapturedScalar { .. } | E::ConstantField { .. } => {
+            false
+        }
     }
 }
 fn install_fixture(data: &mut ModifierParserData, id: ParserCallbackId, body: E) {

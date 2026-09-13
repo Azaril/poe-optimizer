@@ -325,3 +325,493 @@ fn rune_key_compares_selected_names_and_duplicate_counts_without_order() {
 fn all_five_complete_original_item_set_load_lifecycles() {
     original::run();
 }
+
+#[test]
+fn default_mode_keeps_sync_calls_outside_load_unobserved() {
+    let f = Fixture::new();
+    let options = f.lua.create_table().unwrap();
+    options.raw_set("loadouts", false).unwrap();
+    let capture: Table = f
+        .module
+        .raw_get::<Function>("start")
+        .unwrap()
+        .call((true, options))
+        .unwrap();
+    f.lua.load("build:SyncLoadouts(true)").exec().unwrap();
+    let report = f.finish(&capture).unwrap();
+    f.no_hook();
+    assert_eq!(report.raw_get::<Table>("events").unwrap().raw_len(), 0);
+    assert!(matches!(
+        report.raw_get::<Value>("loadout_states").unwrap(),
+        Value::Nil
+    ));
+    assert!(matches!(
+        report.raw_get::<Value>("finite_post_loadouts").unwrap(),
+        Value::Nil
+    ));
+}
+
+#[test]
+fn malformed_loadout_observation_options_do_not_install_a_hook() {
+    for use_number in [true, false] {
+        let f = Fixture::new();
+        let options = f.lua.create_table().unwrap();
+        let value = if use_number {
+            Value::Integer(1)
+        } else {
+            Value::String(f.lua.create_string("yes").unwrap())
+        };
+        options.raw_set("loadouts", value).unwrap();
+        let error = f
+            .module
+            .raw_get::<Function>("start")
+            .unwrap()
+            .call::<Table>((true, options))
+            .unwrap_err();
+        assert!(error.to_string().contains("loadouts"));
+        f.no_hook();
+    }
+}
+
+#[test]
+fn all_five_original_loadout_sync_and_lookup_histories() {
+    original::run_loadouts();
+}
+
+// Synthetic mechanics fixture only. Complete game behavior is checked through
+// retained original Functions in the separate all-five source lane.
+const LOADOUT_FIXTURE: &str = r#"
+local Import=common.classes.ImportTab
+Import.__index=Import;setmetatable(build.importTab,Import)
+local Tree,Skills,Config={},{},{}
+Tree.__index=Tree;Skills.__index=Skills;Config.__index=Config
+common.classes.TreeTab=Tree;common.classes.SkillsTab=Skills;common.classes.ConfigTab=Config
+function Tree:GetSpecList()
+    local out={};for i,spec in ipairs(self.specList) do out[i]=spec.title end;return out
+end
+function Tree:SetActiveSpec(specId,deferSync)
+    self.activeSpec=specId;self.build.spec=self.specList[specId]
+end
+function Skills:SetActiveSkillSet(skillSetId,deferSync)
+    self.activeSkillSetId=skillSetId;self.socketGroupList=self.skillSets[skillSetId].socketGroupList
+end
+function Config:SetActiveConfigSet(configSetId,init,deferSync)
+    self.activeConfigSetId=configSetId;self.input=self.configSets[configSetId].input;self.placeholder=self.configSets[configSetId].placeholder
+end
+latestTreeVersion='fixture'
+treeVersions={fixture={display='Fixture'}}
+local spec={title='Default',treeVersion='fixture',jewels={}}
+build.treeTab=setmetatable({build=build,activeSpec=1,specList={spec}},Tree)
+build.spec=spec
+local groups={}
+build.skillsTab=setmetatable({build=build,activeSkillSetId=1,skillSetOrderList={1},skillSets={[1]={title='Default',socketGroupList=groups}},socketGroupList=groups},Skills)
+local input,placeholder={},{}
+build.configTab=setmetatable({build=build,activeConfigSetId=1,configSetOrderList={1},configSets={[1]={title='Default',input=input,placeholder=placeholder}},input=input,placeholder=placeholder},Config)
+build.itemsTab.itemSets[1].title='Default'
+build.loadoutsList={spec};build.treeListSpecialLinks={};build.itemListSpecialLinks={};build.skillListSpecialLinks={};build.configListSpecialLinks={}
+build.controls.buildLoadouts.list={'Header','Default'}
+build.controls.buildLoadouts.searchTerm=''
+function build:GetLoadoutByName(loadoutName)
+    self.treeTab:GetSpecList()
+    if loadoutName=='failure' then error('synthetic loadout source failure') end
+    if loadoutName=='missing' then return nil end
+    return {specId=1,itemSetId=1,skillSetId=1,configSetId=1}
+end
+function build:SetActiveLoadout(loadout)
+    if not loadout or not loadout.specId then return end
+    self.treeTab:SetActiveSpec(loadout.specId,true)
+    self.skillsTab:SetActiveSkillSet(loadout.skillSetId,true)
+    self.configTab:SetActiveConfigSet(loadout.configSetId,false,true)
+    self:SyncLoadouts(true)
+end
+function build:SyncLoadouts(skipBuildPlannerSync)
+    self.loadoutsList={self.treeTab.specList[1]}
+    self.treeListSpecialLinks={};self.itemListSpecialLinks={};self.skillListSpecialLinks={};self.configListSpecialLinks={}
+    if not skipBuildPlannerSync then self.importTab:RefreshBuildPlannerSets() end
+    self.controls.buildLoadouts:SetSel(2)
+    self.activeLoadout=1
+    return {'Default'},{Default=true},{Default=true},{Default=true}
+end
+local self=build
+build.controls.buildLoadouts.selFunc=function(index,value)
+    self:SetActiveLoadout(self:GetLoadoutByName('Default'))
+end
+"#;
+
+impl Fixture {
+    fn loadouts() -> Self {
+        let fixture = Self::new();
+        fixture
+            .lua
+            .load(LOADOUT_FIXTURE)
+            .set_name("@loadout-mechanics.lua")
+            .exec()
+            .unwrap();
+        fixture
+    }
+    fn start_loadouts(&self, observed: bool) -> Table {
+        let options = self.lua.create_table().unwrap();
+        options.raw_set("loadouts", true).unwrap();
+        self.module
+            .raw_get::<Function>("start")
+            .unwrap()
+            .call((observed, options))
+            .unwrap()
+    }
+}
+
+#[test]
+fn opt_in_records_sync_and_lookup_roots_without_inventing_a_load_parent() {
+    let f = Fixture::loadouts();
+    let capture = f.start_loadouts(true);
+    f.lua
+        .load("build:SyncLoadouts(true);build:GetLoadoutByName('missing')")
+        .exec()
+        .unwrap();
+    let report = f.finish(&capture).unwrap();
+    f.no_hook();
+    assert_eq!(
+        report
+            .raw_get::<Table>("incomplete_calls")
+            .unwrap()
+            .raw_len(),
+        0
+    );
+    let events = report
+        .raw_get::<Table>("events")
+        .unwrap()
+        .sequence_values::<Table>()
+        .collect::<mlua::Result<Vec<_>>>()
+        .unwrap();
+    let mut roots = Vec::new();
+    let mut saw_activation = false;
+    for event in events {
+        assert!(matches!(
+            event.raw_get::<Value>("load_call_ordinal").unwrap(),
+            Value::Nil
+        ));
+        if event.raw_get::<String>("event").unwrap() != "call" {
+            continue;
+        }
+        let name = event.raw_get::<String>("name").unwrap();
+        saw_activation |= name == "activate_loadout";
+        if matches!(
+            event.raw_get::<Value>("parent_call_ordinal").unwrap(),
+            Value::Nil
+        ) {
+            roots.push(name);
+        }
+    }
+    assert_eq!(roots, vec!["sync_loadouts", "lookup_loadout"]);
+    assert!(
+        saw_activation,
+        "changed-index callback must remain a nested source call"
+    );
+    assert!(report.raw_get::<Table>("loadout_states").unwrap().raw_len() >= 4);
+}
+
+#[test]
+fn loadout_source_failure_retains_incomplete_root_and_cleans_up() {
+    let f = Fixture::loadouts();
+    let capture = f.start_loadouts(true);
+    let error = f
+        .lua
+        .load("build:GetLoadoutByName('failure')")
+        .exec()
+        .unwrap_err();
+    assert!(
+        error
+            .to_string()
+            .contains("synthetic loadout source failure")
+    );
+    let report = f.finish(&capture).unwrap();
+    f.no_hook();
+    let incomplete = report.raw_get::<Table>("incomplete_calls").unwrap();
+    assert_eq!(incomplete.raw_len(), 1);
+    assert_eq!(
+        incomplete
+            .raw_get::<Table>(1)
+            .unwrap()
+            .raw_get::<String>("name")
+            .unwrap(),
+        "lookup_loadout"
+    );
+}
+
+#[test]
+fn direct_snapshot_preserves_nil_pack_arity_and_shared_spec_aliases() {
+    let f = Fixture::loadouts();
+    let capture = f.start_loadouts(false);
+    let values: mlua::MultiValue = f
+        .lua
+        .load("return build:GetLoadoutByName('missing')")
+        .eval()
+        .unwrap();
+    assert_eq!(values.len(), 1);
+    let pack = f.lua.create_table().unwrap();
+    pack.raw_set("n", values.len()).unwrap();
+    for (index, value) in values.into_iter().enumerate() {
+        pack.raw_set(index + 1, value).unwrap();
+    }
+    let snapshot: Table = capture
+        .raw_get::<Function>("loadout_snapshot")
+        .unwrap()
+        .call(pack)
+        .unwrap();
+    let result: Table = snapshot.raw_get("result_pack").unwrap();
+    assert_eq!(result.raw_get::<usize>("n").unwrap(), 1);
+    assert!(matches!(result.raw_get::<Value>(1).unwrap(), Value::Nil));
+
+    let pack: Table = f
+        .lua
+        .load("return {n=3,[1]=build.spec,[2]=build.spec}")
+        .eval()
+        .unwrap();
+    let snapshot: Table = capture
+        .raw_get::<Function>("loadout_snapshot")
+        .unwrap()
+        .call(pack)
+        .unwrap();
+    let result: Table = snapshot.raw_get("result_pack").unwrap();
+    assert_eq!(result.raw_get::<usize>("n").unwrap(), 3);
+    let first: Table = result.raw_get(1).unwrap();
+    assert_eq!(first, result.raw_get::<Table>(2).unwrap());
+    assert_eq!(
+        first,
+        snapshot
+            .raw_get::<Table>("tree")
+            .unwrap()
+            .raw_get::<Table>("specList")
+            .unwrap()
+            .raw_get::<Table>(1)
+            .unwrap()
+    );
+    assert_eq!(
+        first,
+        snapshot
+            .raw_get::<Table>("build")
+            .unwrap()
+            .raw_get::<Table>("loadoutsList")
+            .unwrap()
+            .raw_get::<Table>(1)
+            .unwrap()
+    );
+    f.finish(&capture).unwrap();
+    f.no_hook();
+}
+
+#[test]
+fn loadout_control_replacement_between_completed_roots_is_allowed() {
+    let f = Fixture::loadouts();
+    f.lua.load(r#"
+        function fixtureNewLoadoutControl()
+            local self=build
+            local control=setmetatable({selIndex=1,list={'Header','Default'},searchTerm=''},common.classes.DropDownControl)
+            control.selFunc=function(index,value)self:SetActiveLoadout(self:GetLoadoutByName('Default'))end
+            return control
+        end
+        build.controls.buildLoadouts=fixtureNewLoadoutControl()
+    "#).exec().unwrap();
+    let capture = f.start_loadouts(true);
+    f.lua.load("build:SyncLoadouts(true)").exec().unwrap();
+    f.lua
+        .load("build.controls.buildLoadouts=fixtureNewLoadoutControl()")
+        .exec()
+        .unwrap();
+    f.lua.load("build:SyncLoadouts(true)").exec().unwrap();
+    let report = f.finish(&capture).unwrap();
+    f.no_hook();
+    assert_eq!(
+        report
+            .raw_get::<Table>("incomplete_calls")
+            .unwrap()
+            .raw_len(),
+        0
+    );
+    let root_count = report
+        .raw_get::<Table>("events")
+        .unwrap()
+        .sequence_values::<Table>()
+        .map(Result::unwrap)
+        .filter(|row| {
+            row.raw_get::<String>("event").unwrap() == "call"
+                && row.raw_get::<String>("name").unwrap() == "sync_loadouts"
+                && matches!(
+                    row.raw_get::<Value>("parent_call_ordinal").unwrap(),
+                    Value::Nil
+                )
+        })
+        .count();
+    assert_eq!(root_count, 2);
+}
+
+#[test]
+fn loadout_callback_replacement_during_a_root_is_rejected_and_cleaned_up() {
+    let f = Fixture::loadouts();
+    f.lua
+        .load(
+            r#"
+        local self=build
+        self.controls.buildLoadouts.selFunc=function(index,value)
+            self.controls.buildLoadouts.selFunc=function()end
+        end
+    "#,
+        )
+        .exec()
+        .unwrap();
+    let capture = f.start_loadouts(true);
+    let called = f.lua.load("build:SyncLoadouts(true)").exec();
+    let finished = f.finish(&capture);
+    f.no_hook();
+    assert!(called.is_err() || finished.is_err());
+    let error = finished.err().or_else(|| called.err()).unwrap();
+    assert!(
+        error.to_string().contains("callback"),
+        "unexpected observer failure: {error}"
+    );
+}
+
+#[test]
+fn missing_startup_domains_are_explicit_without_a_fabricated_item_snapshot() {
+    let f = Fixture::loadouts();
+    f.lua.load("build.treeTab=nil;build.itemsTab=nil;build.skillsTab=nil;build.configTab=nil;build.importTab=nil;build.spec=nil;build.loadoutsList={}")
+        .exec().unwrap();
+    let capture = f.start_loadouts(false);
+    let snapshot: Table = capture
+        .raw_get::<Function>("loadout_snapshot")
+        .unwrap()
+        .call(())
+        .unwrap();
+    let presence: Table = snapshot
+        .raw_get::<Table>("identity")
+        .unwrap()
+        .raw_get("domain_presence")
+        .unwrap();
+    for key in ["tree", "items", "skills", "config", "export"] {
+        assert!(!presence.raw_get::<bool>(key).unwrap());
+        assert!(matches!(
+            snapshot.raw_get::<Value>(key).unwrap(),
+            Value::Nil
+        ));
+    }
+    let report = f.finish(&capture).unwrap();
+    f.no_hook();
+    assert!(
+        !report
+            .raw_get::<Table>("scope")
+            .unwrap()
+            .raw_get::<bool>("finite_post_import_available")
+            .unwrap()
+    );
+    assert!(matches!(
+        report.raw_get::<Value>("finite_post_import").unwrap(),
+        Value::Nil
+    ));
+}
+
+#[test]
+fn loadout_build_preserves_the_original_control_host_class_boundary() {
+    for (mutation, expected) in [
+        (
+            "setmetatable(build,{__index=common.classes.ControlHost})",
+            "loadout projected class lookup for loadoutsList",
+        ),
+        (
+            "common.classes.ControlHost={}",
+            "original loadout classes changed",
+        ),
+        (
+            "common.classes.ControlHost.loadoutsList={};build.loadoutsList=nil",
+            "inherited loadout data field",
+        ),
+    ] {
+        let f = Fixture::loadouts();
+        f.lua.load("local class={};class.__index=class;common.classes.ControlHost=class;setmetatable(build,class)").exec().unwrap();
+        let capture = f.start_loadouts(true);
+        let snapshot = capture.raw_get::<Function>("loadout_snapshot").unwrap();
+        let before: Table = snapshot.call(()).unwrap();
+        assert_eq!(
+            before
+                .raw_get::<Table>("build")
+                .unwrap()
+                .raw_get::<Table>("loadoutsList")
+                .unwrap()
+                .raw_len(),
+            1
+        );
+        f.lua.load(mutation).exec().unwrap();
+        let error = snapshot.call::<Table>(()).unwrap_err();
+        assert!(error.to_string().contains(expected), "{error}");
+        assert!(f.finish(&capture).is_err());
+        f.no_hook();
+    }
+}
+
+#[test]
+fn loadout_snapshot_preserves_replaced_specs_and_rejects_foreign_owners() {
+    for mutation in [
+        "setmetatable(build.loadoutsList[1],{__index=common.classes.PassiveSpec})",
+        "build.loadoutsList[1].build={}",
+    ] {
+        let f = Fixture::loadouts();
+        f.lua.load(r#"
+local class={_className='PassiveSpec'};class.__index=class
+common.classes.PassiveSpec=class
+local old=build.spec;old.build=build;setmetatable(old,class)
+local current=setmetatable({build=build,title=old.title,treeVersion=old.treeVersion,jewels={}},class)
+build.spec=current;build.treeTab.specList={current};build.loadoutsList={old,old,current}
+"#).exec().unwrap();
+        let capture = f.start_loadouts(true);
+        let snapshot = capture.raw_get::<Function>("loadout_snapshot").unwrap();
+        let before: Table = snapshot.call(()).unwrap();
+        let projected_build: Table = before.raw_get("build").unwrap();
+        let rows: Table = projected_build.raw_get("loadoutsList").unwrap();
+        let old: Table = rows.raw_get(1).unwrap();
+        let current: Table = rows.raw_get(3).unwrap();
+        assert_eq!(old, rows.raw_get::<Table>(2).unwrap());
+        assert_ne!(
+            old, current,
+            "equal-valued old and current specs stay distinct"
+        );
+        assert_eq!(current, projected_build.raw_get::<Table>("spec").unwrap());
+        assert_eq!(
+            current,
+            before
+                .raw_get::<Table>("tree")
+                .unwrap()
+                .raw_get::<Table>("specList")
+                .unwrap()
+                .raw_get::<Table>(1)
+                .unwrap()
+        );
+        let title: String = old.raw_get("title").unwrap();
+        f.lua
+            .load("build.loadoutsList[1].title='Retained old spec'")
+            .exec()
+            .unwrap();
+        let after: Table = snapshot.call(()).unwrap();
+        assert_eq!(old.raw_get::<String>("title").unwrap(), title);
+        assert_eq!(
+            after
+                .raw_get::<Table>("build")
+                .unwrap()
+                .raw_get::<Table>("loadoutsList")
+                .unwrap()
+                .raw_get::<Table>(1)
+                .unwrap()
+                .raw_get::<String>("title")
+                .unwrap(),
+            "Retained old spec"
+        );
+        f.lua.load(mutation).exec().unwrap();
+        let error = snapshot.call::<Table>(()).unwrap_err();
+        assert!(
+            error
+                .to_string()
+                .contains("actual PassiveSpec class and owner"),
+            "{error}"
+        );
+        assert!(f.finish(&capture).is_err());
+        f.no_hook();
+    }
+}

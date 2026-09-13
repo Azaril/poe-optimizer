@@ -1,6 +1,8 @@
 //! Complete original Load observation; no native/equipment parity is inferred.
 #[path = "item_assembly_graph.rs"]
 mod graph;
+#[path = "item_set_loadout_cases.rs"]
+mod loadout_cases;
 #[allow(dead_code)]
 #[path = "configuration_preparation_source.rs"]
 mod source;
@@ -21,6 +23,9 @@ const OBSERVER: &str = include_str!("item_set_lifecycle.lua");
 const TEST: &str = "all_five_complete_original_item_set_load_lifecycles";
 const CHILD: &str = "POE_ITEM_SET_LIFECYCLE_CHILD";
 const OUTPUT: &str = "POE_ITEM_SET_LIFECYCLE_OUTPUT";
+const LOADOUT_TEST: &str = "all_five_original_loadout_sync_and_lookup_histories";
+const LOADOUT_CHILD: &str = "POE_ITEM_SET_LOADOUT_CHILD";
+const LOADOUT_OUTPUT: &str = "POE_ITEM_SET_LOADOUT_OUTPUT";
 fn hash(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
@@ -147,7 +152,58 @@ fn control_key(lua: &Lua, state: &Table) -> Json {
     }
     json!({"fixed_graph":canonical(fixed),"slot_semantics":slot_rows,"rune_name_semantics":rune_control_key(&state.raw_get::<Table>("runeSlots").unwrap())})
 }
+// Token values are observer-lifetime diagnostics. Only the top-level identity
+// envelope is separated; the remaining joint graph retains spec/loadouts/result
+// aliases and exact arrays. This is not a projection of each field independently.
+pub(super) fn loadout_snapshot_json(lua: &Lua, snapshot: Table) -> mlua::Result<Json> {
+    let joint = lua.create_table()?;
+    let mut identity = Json::Null;
+    for row in snapshot.pairs::<Value, Value>() {
+        let (key, value) = row?;
+        if matches!(&key, Value::String(s) if s.as_bytes().as_ref() == b"identity") {
+            identity = lua.from_value(value)?;
+        } else {
+            joint.raw_set(key, value)?;
+        }
+    }
+    Ok(json!({"graph":canonical(joint),"identity":identity}))
+}
+
+pub(super) fn loadout_states_json(lua: &Lua, report: &Table) -> mlua::Result<Json> {
+    let mut states = Vec::new();
+    for row in report
+        .raw_get::<Table>("loadout_states")?
+        .sequence_values::<Table>()
+    {
+        let state = row?;
+        let mut entry = serde_json::Map::new();
+        for row in state.pairs::<String, Value>() {
+            let (key, value) = row?;
+            if key == "value" {
+                let Value::Table(snapshot) = value else {
+                    return Err(mlua::Error::RuntimeError(
+                        "loadout snapshot is not a table".into(),
+                    ));
+                };
+                entry.insert("snapshot".into(), loadout_snapshot_json(lua, snapshot)?);
+            } else {
+                // Missing Load ancestry is absent rather than an invented root;
+                // root_call_ordinal belongs to this one observer lifetime.
+                entry.insert(key, lua.from_value(value)?);
+            }
+        }
+        states.push(Json::Object(entry));
+    }
+    Ok(states.into())
+}
+
 fn host(repo: &Path, directory: &Path, xml: &str, observed: bool) -> Json {
+    host_mode(repo, directory, xml, observed, false)
+}
+
+// The opt-in shares the original bootstrap and import finish boundary. Direct
+// post-import calls get a separate observer lifetime in loadout_cases::run.
+fn host_mode(repo: &Path, directory: &Path, xml: &str, observed: bool, loadouts: bool) -> Json {
     fs::create_dir_all(directory).unwrap();
     let module = Rc::new(RefCell::new(None::<Table>));
     let capture = Rc::new(RefCell::new(None::<Table>));
@@ -159,13 +215,15 @@ fn host(repo: &Path, directory: &Path, xml: &str, observed: bool) -> Json {
         );
         Ok(())
     };
-    let before_build = |_lua: &Lua| -> Result<Function, RuntimeError> {
-        let active: Table = module
-            .borrow()
-            .as_ref()
-            .unwrap()
-            .raw_get::<Function>("start")?
-            .call(observed)?;
+    let before_build = |lua: &Lua| -> Result<Function, RuntimeError> {
+        let start: Function = module.borrow().as_ref().unwrap().raw_get("start")?;
+        let active: Table = if loadouts {
+            let options = lua.create_table()?;
+            options.raw_set("loadouts", true)?;
+            start.call((observed, options))?
+        } else {
+            start.call(observed)?
+        };
         let finish = active.raw_get("finish")?;
         *capture.borrow_mut() = Some(active);
         Ok(finish)
@@ -219,6 +277,18 @@ fn host(repo: &Path, directory: &Path, xml: &str, observed: bool) -> Json {
             "post_import_control_key".into(),
             control_key(lua, &final_state),
         );
+        if loadouts {
+            out.insert("loadout_states".into(), loadout_states_json(lua, &report)?);
+            out.insert(
+                "post_import_loadouts".into(),
+                loadout_snapshot_json(lua, report.raw_get("finite_post_loadouts")?)?,
+            );
+            // Import observation has already finished and removed its hook.
+            // These are explicit direct calls against the resulting original
+            // owners, not observations of their earlier import-time execution.
+            let direct = loadout_cases::run(lua, module.borrow().as_ref().unwrap(), observed)?;
+            out.insert("direct_loadouts".into(), direct);
+        }
         Ok(Json::Object(out))
     };
     source::observe_with_build_hook_unwrapped(
@@ -451,4 +521,422 @@ pub fn run() {
         children.push(json!({"xml":name,"exit":status.code()}));
     }
     fs::write(output.join("summary.json"),serde_json::to_vec_pretty(&json!({"children":children,"fresh_hosts":15,"original_inputs":5,"source_only":true,"complete_load_boundary":true,"native_parity":false,"scope":"fixed finite Load state, reached context and actual call/traversal ordering; exact arrays preserved"})).unwrap()).unwrap();
+}
+
+// These checks apply to both import and direct-call captures, including a
+// direct GetSpecList call which is deliberately not a hook root. Dynamic
+// callbacks may have multiple owner generations; each must be the original
+// declaration and retain the actual named self capture.
+fn authenticate_loadout_functions(functions: &Json) {
+    let functions = functions.as_array().unwrap();
+    for (name, source, first, last) in [
+        ("sync_loadouts", "Modules/Build.lua", 637, 777),
+        ("activate_loadout", "Modules/Build.lua", 956, 980),
+        ("lookup_loadout", "Modules/Build.lua", 899, 954),
+        ("get_spec_list", "Classes/TreeTab.lua", 484, 490),
+        ("activate_spec", "Classes/TreeTab.lua", 540, 578),
+        ("activate_skill_set", "Classes/SkillsTab.lua", 1548, 1573),
+        ("activate_config_set", "Classes/ConfigTab.lua", 1407, 1434),
+        ("loadout_selection", "Modules/Build.lua", 279, 302),
+        ("export_spec_selection", "Classes/ImportTab.lua", 375, 378),
+        ("export_skill_selection", "Classes/ImportTab.lua", 379, 381),
+        ("export_item_selection", "Classes/ImportTab.lua", 382, 384),
+    ] {
+        let rows = functions
+            .iter()
+            .filter(|f| f["name"] == name)
+            .collect::<Vec<_>>();
+        assert!(!rows.is_empty(), "missing original binding {name}");
+        for f in rows {
+            assert_eq!(f["first_line"], first, "original {name} start");
+            assert_eq!(f["last_line"], last, "original {name} end");
+            assert_eq!(
+                f["source"].as_str().unwrap().replace('\\', "/"),
+                format!("@{source}")
+            );
+            if name.ends_with("_selection") {
+                assert_eq!(f["dynamic_callback"], true);
+                assert_eq!(f["owner_capture_observed"], true);
+                let own = f["captures"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .filter(|v| v["name"] == "self")
+                    .collect::<Vec<_>>();
+                assert_eq!(own.len(), 1);
+                assert_eq!(own[0]["kind"], "table");
+                assert_eq!(own[0]["owner_identity"], true);
+            }
+        }
+    }
+}
+
+// Inspect every observed call/return and retain both root and optional Load
+// ancestry. Hook parameters and state projections do not claim raw return packs.
+fn inspect_loadout_import(report: &Json) -> Json {
+    let o = &report["additional_observation"];
+    let events = o["events"].as_array().unwrap();
+    authenticate_loadout_functions(&o["functions"]);
+    let states = o["loadout_states"].as_array().unwrap();
+    assert!(!states.is_empty(), "loadout import states are required");
+    let mut calls = BTreeMap::new();
+    let mut returns = BTreeMap::new();
+    let mut counts = BTreeMap::<String, usize>::new();
+    let mut roots = Vec::new();
+    for e in events {
+        if e["event"] == "call" {
+            let ordinal = e["ordinal"].as_u64().unwrap();
+            assert!(calls.insert(ordinal, e).is_none());
+            *counts
+                .entry(e["name"].as_str().unwrap().into())
+                .or_default() += 1;
+            if e["parent_call_ordinal"].is_null() {
+                roots.push(json!({"ordinal":ordinal,"name":e["name"],"load_call_ordinal":e["load_call_ordinal"],"root_call_ordinal":e["root_call_ordinal"]}));
+            }
+        } else {
+            assert_eq!(e["event"], "return", "unknown observed event kind");
+            let call = e["call_ordinal"].as_u64().unwrap();
+            assert!(
+                calls.contains_key(&call),
+                "return must refer to an earlier observed call"
+            );
+            assert!(
+                returns.insert(call, e).is_none(),
+                "duplicate observed return"
+            );
+        }
+    }
+    assert_eq!(
+        calls.len(),
+        returns.len(),
+        "every observed import call must return"
+    );
+    for (&ordinal, call) in &calls {
+        let returned = returns.get(&ordinal).expect("missing observed return");
+        assert_eq!(returned["name"], call["name"]);
+        assert!(returned["ordinal"].as_u64().unwrap() > ordinal);
+        if let Some(parent) = call["parent_call_ordinal"].as_u64() {
+            assert!(parent < ordinal && calls.contains_key(&parent));
+            let parent_end = returns.get(&parent).expect("missing parent return");
+            assert!(
+                returned["ordinal"].as_u64().unwrap() < parent_end["ordinal"].as_u64().unwrap()
+            );
+        }
+        let root = call["root_call_ordinal"].as_u64().unwrap();
+        assert!(root <= ordinal && calls.contains_key(&root));
+        assert!(calls[&root]["parent_call_ordinal"].is_null());
+        let mut ancestor = ordinal;
+        let mut load_seen = call["load_call_ordinal"].is_null();
+        for depth in 0..=128 {
+            assert!(depth < 128, "source parent chain bound");
+            let current = calls[&ancestor];
+            assert_eq!(current["root_call_ordinal"], root);
+            if call["load_call_ordinal"] == ancestor {
+                assert_eq!(current["name"], "items_load");
+                load_seen = true;
+            }
+            if let Some(parent) = current["parent_call_ordinal"].as_u64() {
+                ancestor = parent;
+            } else {
+                assert_eq!(ancestor, root);
+                break;
+            }
+        }
+        assert!(
+            load_seen,
+            "optional Load ancestry must refer to an actual ancestor"
+        );
+    }
+    for state in states {
+        assert!(
+            state["snapshot"]["graph"].is_object(),
+            "every loadout state needs a graph"
+        );
+        let ordinal = state["call_ordinal"].as_u64().unwrap();
+        assert!(calls.contains_key(&ordinal));
+    }
+    assert!(counts.get("sync_loadouts").copied().unwrap_or(0) > 0);
+    json!({"call_counts":counts,"roots":roots,"complete_observed_calls":calls.len(),"loadout_state_graphs":states.len(),"hook_result_pack_claim":false})
+}
+
+fn loadout_history_key(report: &Json) -> Json {
+    let states = report["additional_observation"]["loadout_states"]
+        .as_array()
+        .unwrap();
+    Json::Array(states.iter().map(|s| json!({
+        "event_ordinal":s["event_ordinal"],"call_ordinal":s["call_ordinal"],
+        "root_call_ordinal":s["root_call_ordinal"],"load_call_ordinal":s["load_call_ordinal"],
+        "name":s["name"],"phase":s["phase"],"graph":s["snapshot"]["graph"]
+    })).collect())
+}
+
+// The direct-call producer keeps hook diagnostics and process-local identities
+// outside this key. Every supplied case, including a source error, must retain
+// its declared joint graph; absence never compares as successful parity.
+pub(super) fn direct_loadout_key(direct: &Json) -> Json {
+    let cases = direct["cases"].as_array().unwrap();
+    assert!(!cases.is_empty() && cases.len() <= 4096);
+    assert!(direct["post_loadouts_exact_graph"].is_object());
+    Json::Array(
+        cases
+            .iter()
+            .map(|case| {
+                let object = case.as_object().unwrap();
+                let mut key = serde_json::Map::new();
+                for field in ["label", "operation", "origin", "argument", "status"] {
+                    assert!(object.contains_key(field), "direct case field {field}");
+                    key.insert(field.into(), case[field].clone());
+                }
+                assert!(case["before_snapshot"]["graph"].is_object());
+                key.insert(
+                    "before_graph".into(),
+                    case["before_snapshot"]["graph"].clone(),
+                );
+                assert!(case["snapshot"]["graph"].is_object());
+                key.insert("graph".into(), case["snapshot"]["graph"].clone());
+                if let Some(retained) = object.get("retained_first_result_snapshot") {
+                    assert!(retained["graph"].is_object());
+                    key.insert(
+                        "retained_first_result_graph".into(),
+                        retained["graph"].clone(),
+                    );
+                }
+                // These are actual equality booleans, not process-local token IDs.
+                if let Some(identity) = object.get("first_result_identity") {
+                    key.insert("first_result_identity".into(), identity.clone());
+                }
+                if let Some(error) = object.get("error") {
+                    key.insert("error".into(), error.clone());
+                }
+                Json::Object(key)
+            })
+            .collect(),
+    )
+}
+
+fn inspect_direct_loadouts(direct: &Json) -> Json {
+    let cases = direct["cases"].as_array().unwrap();
+    let observations = direct["observations"].as_array().unwrap();
+    assert_eq!(observations.len(), cases.len());
+    for observation in observations {
+        authenticate_loadout_functions(&observation["functions"]);
+    }
+    let syncs = cases
+        .iter()
+        .filter(|c| c["operation"] == "SyncLoadouts")
+        .collect::<Vec<_>>();
+    assert_eq!(syncs.len(), 4);
+    for (index, case) in syncs.iter().enumerate() {
+        assert_eq!(case["status"]["kind"], "returned");
+        assert_eq!(case["status"]["actual_return_count"], 4);
+        if index > 0 {
+            let identity = &case["first_result_identity"];
+            assert_eq!(identity["first_n"], 4);
+            assert_eq!(identity["current_n"], 4);
+            let positions = identity["positions"].as_array().unwrap();
+            assert_eq!(positions.len(), 4);
+            for position in positions {
+                assert_eq!(position["first_is_table"], true);
+                assert_eq!(position["current_is_table"], true);
+                assert_eq!(
+                    position["same_table"], false,
+                    "source Sync allocates fresh return tables"
+                );
+            }
+            assert!(case["retained_first_result_snapshot"]["graph"].is_object());
+        }
+    }
+    let specs = cases
+        .iter()
+        .filter(|c| c["operation"] == "GetSpecList")
+        .collect::<Vec<_>>();
+    assert_eq!(specs.len(), 1);
+    assert_eq!(specs[0]["status"]["kind"], "returned");
+    assert_eq!(specs[0]["status"]["actual_return_count"], 1);
+    let counts = &direct["lookup_occurrences"];
+    let dropdown = counts["dropdown"].as_u64().unwrap();
+    let spec = counts["spec_display"].as_u64().unwrap();
+    assert!(dropdown > 0 && spec > 0);
+    assert_eq!(counts["absent"], 2);
+    let lookups = cases
+        .iter()
+        .filter(|c| c["operation"] == "GetLoadoutByName")
+        .count();
+    assert_eq!(lookups as u64, dropdown + spec + 2);
+    assert_eq!(cases.len(), lookups + 5);
+    let mut statuses = BTreeMap::<String, usize>::new();
+    for case in cases {
+        let kind = case["status"]["kind"].as_str().unwrap();
+        assert!(matches!(kind, "returned" | "source_error"));
+        *statuses.entry(kind.into()).or_default() += 1;
+    }
+    json!({"cases":cases.len(),"status_counts":statuses,"sync_return_packs":4,"fresh_return_tables_against_first":12,"lookup_occurrences":counts,"all_cases_have_joint_graphs":true})
+}
+
+fn child_loadouts(repo: &Path, output: &Path, entry: &Json) {
+    let name = entry["xml"].as_str().unwrap();
+    let xml = fs::read_to_string(
+        repo.join("tests/fixtures/builds/breadth-20260908")
+            .join(name),
+    )
+    .unwrap();
+    assert_eq!(hash(xml.as_bytes()), entry["xml_sha256"]);
+    let directory = output.join(name);
+    fs::create_dir_all(&directory).unwrap();
+    let mut reports = Vec::new();
+    for (label, observed) in [
+        ("control", false),
+        ("observed-a", true),
+        ("observed-b", true),
+    ] {
+        let report = host_mode(
+            repo,
+            &directory.join(format!("{label}-host")),
+            &xml,
+            observed,
+            true,
+        );
+        fs::write(
+            directory.join(format!("{label}.json")),
+            serde_json::to_vec_pretty(&report).unwrap(),
+        )
+        .unwrap();
+        reports.push(report);
+    }
+    let control = &reports[0];
+    let mut comparisons = Vec::new();
+    for (i, label) in [(1, "observed-a"), (2, "observed-b")] {
+        let report = &reports[i];
+        let c = &control["additional_observation"];
+        let o = &report["additional_observation"];
+        comparisons.push(json!({
+            "host":label,
+            "source_hash_equal":control["source_hash"] == report["source_hash"],
+            "selected_equal":control["selected"] == report["selected"],
+            "import_exact_graph_equal":c["post_import_exact_graph"] == o["post_import_exact_graph"],
+            "import_declared_control_equal":c["post_import_control_key"] == o["post_import_control_key"],
+            "import_loadout_graph_equal":c["post_import_loadouts"]["graph"] == o["post_import_loadouts"]["graph"],
+            "direct_cases_equal":direct_loadout_key(&c["direct_loadouts"]) == direct_loadout_key(&o["direct_loadouts"]),
+            "direct_final_graph_equal":c["direct_loadouts"]["post_loadouts_exact_graph"] == o["direct_loadouts"]["post_loadouts_exact_graph"]
+        }));
+    }
+    let history_equal = loadout_history_key(&reports[1]) == loadout_history_key(&reports[2]);
+    // Preserve both raw reports and these booleans before any equality assertion.
+    let mut summary = json!({"xml":name,"xml_sha256":entry["xml_sha256"],"comparisons":comparisons,"observed_loadout_histories_equal":history_equal,
+        "scope":{"source_only":true,"native_parity":false,"original_import_roots_separate_from_direct_calls":true,"identity_tokens_compared_between_hosts":false,"joint_spec_result_aliases_retained":true,"exact_arrays_retained":true,"import_intermediate_history_equality_is_diagnostic":true}});
+    let result_path = output.join(format!("{name}.json"));
+    fs::write(&result_path, serde_json::to_vec_pretty(&summary).unwrap()).unwrap();
+    for row in summary["comparisons"].as_array().unwrap() {
+        for key in [
+            "source_hash_equal",
+            "selected_equal",
+            "import_declared_control_equal",
+            "import_loadout_graph_equal",
+            "direct_cases_equal",
+            "direct_final_graph_equal",
+        ] {
+            assert_eq!(
+                row[key], true,
+                "{name}: {key}; inspect retained control/observed reports"
+            );
+        }
+    }
+    // Debug ordinals and source traversal may differ between fresh hosts.
+    // Keep this exact-history comparison diagnostic and prove each host's
+    // call/return/parent contract independently below.
+    let proofs = [
+        inspect_loadout_import(&reports[1]),
+        inspect_loadout_import(&reports[2]),
+    ];
+    let direct_cases = reports[0]["additional_observation"]["direct_loadouts"]["cases"]
+        .as_array()
+        .unwrap();
+    assert!(
+        !direct_cases.is_empty(),
+        "direct source cases must be represented"
+    );
+    summary["observed_import"] = json!(proofs);
+    summary["complete_items_loads"] =
+        json!([inspect(&reports[1], &xml), inspect(&reports[2], &xml)]);
+    summary["direct_case_count"] = direct_cases.len().into();
+    summary["direct_hosts"] = Json::Array(
+        reports
+            .iter()
+            .map(|report| {
+                inspect_direct_loadouts(&report["additional_observation"]["direct_loadouts"])
+            })
+            .collect(),
+    );
+    fs::write(result_path, serde_json::to_vec_pretty(&summary).unwrap()).unwrap();
+}
+
+pub fn run_loadouts() {
+    let repo = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .canonicalize()
+        .unwrap();
+    let index: Json = serde_json::from_slice(
+        &fs::read(repo.join("tests/fixtures/builds/breadth-20260908/index.json")).unwrap(),
+    )
+    .unwrap();
+    let builds = index["builds"].as_array().unwrap();
+    assert_eq!(builds.len(), 5);
+    let output = std::env::var_os(LOADOUT_OUTPUT)
+        .map(PathBuf::from)
+        .unwrap_or_else(|| repo.join("runs/r2an-loadout-sync-01/source"));
+    fs::create_dir_all(&output).unwrap();
+    if let Ok(name) = std::env::var(LOADOUT_CHILD) {
+        child_loadouts(
+            &repo,
+            &output,
+            builds.iter().find(|v| v["xml"] == name).unwrap(),
+        );
+        return;
+    }
+    let mut children = Vec::new();
+    let mut total_cases = 0usize;
+    for entry in builds {
+        let name = entry["xml"].as_str().unwrap();
+        let mut process = Command::new(std::env::current_exe().unwrap())
+            .args(["--exact", LOADOUT_TEST, "--nocapture"])
+            .env(LOADOUT_CHILD, name)
+            .env(LOADOUT_OUTPUT, &output)
+            .current_dir(repo.join("vendor/path-of-building-poe2/src"))
+            .stdout(Stdio::from(
+                fs::File::create(output.join(format!("{name}.stdout.log"))).unwrap(),
+            ))
+            .stderr(Stdio::from(
+                fs::File::create(output.join(format!("{name}.stderr.log"))).unwrap(),
+            ))
+            .spawn()
+            .unwrap();
+        let start = Instant::now();
+        let status = loop {
+            if let Some(status) = process.try_wait().unwrap() {
+                break status;
+            }
+            if start.elapsed() > Duration::from_secs(300) {
+                process.kill().unwrap();
+                let _ = process.wait();
+                panic!("loadout lifecycle child timeout: {name}");
+            }
+            std::thread::sleep(Duration::from_millis(50));
+        };
+        children.push(json!({"xml":name,"exit":status.code()}));
+        fs::write(
+            output.join("children.json"),
+            serde_json::to_vec_pretty(&children).unwrap(),
+        )
+        .unwrap();
+        assert!(
+            status.success(),
+            "loadout lifecycle child failed {name}; inspect {}",
+            output.display()
+        );
+        let summary: Json =
+            serde_json::from_slice(&fs::read(output.join(format!("{name}.json"))).unwrap())
+                .unwrap();
+        total_cases += summary["direct_case_count"].as_u64().unwrap() as usize;
+    }
+    fs::write(output.join("summary.json"), serde_json::to_vec_pretty(&json!({"children":children,"original_inputs":5,"fresh_hosts":15,"direct_cases_per_control_lane":total_cases,"source_only":true,"native_parity":false,"scope":"all original import loadout roots plus separately supplied direct post-import calls; post-import and direct pre/post joint graphs compared; import intermediate histories retained diagnostically with per-host ancestry checks; raw direct result arity and alias ownership"})).unwrap()).unwrap();
 }
