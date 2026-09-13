@@ -28,6 +28,14 @@ jobs:
         run: python scripts/test_build_expectations.py
       - name: Install Rust
         run: rustup show
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        with:
+          cache-bin: 'false'
+          cache-on-failure: 'true'
+          save-if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      - name: Verify cache setup preserved Cargo.lock
+        run: git diff --exit-code -- Cargo.lock
       - name: Check formatting
         run: cargo fmt --all -- --check
       - name: Lint
