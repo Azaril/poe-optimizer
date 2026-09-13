@@ -4,8 +4,10 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 use std::sync::Arc;
 
-pub const ITEM_LOADING_SCHEMA_VERSION: u32 = 4;
+pub const ITEM_LOADING_SCHEMA_VERSION: u32 = 5;
+mod radius;
 mod runes;
+pub use radius::*;
 pub use runes::*;
 type Result<T> = std::result::Result<T, GameDataError>;
 fn error(message: impl std::fmt::Display) -> GameDataError {
@@ -260,6 +262,7 @@ pub enum ItemAffixLookup<'a> {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemLoadingPolicy {
+    pub jewel_radius: JewelRadiusPolicy,
     pub affix_loading: ItemAffixLoadingPolicy,
     pub rune_loading: ItemRuneLoadingPolicy,
     pub default_affix_quality: f64,
@@ -494,6 +497,7 @@ fn path(s: &str) -> bool {
 }
 impl ItemLoadingPolicy {
     fn validate_tables(&self) -> Result<()> {
+        self.jewel_radius.validate()?;
         let get = |key: &str| {
             self.compatibility
                 .get(key)

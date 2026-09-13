@@ -29,7 +29,7 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
             self.fresh_field(&policy.charm.output_field)?;
             self.fresh_field("buffModList")?;
         } else if self.get("type")?.as_str() == Some(&policy.jewel_item_type) {
-            self.fresh_field("jewelData")?;
+            self.fresh_field(&policy.jewel.output_field)?;
         }
         self.set("baseModList", Value::Table(base_list))?;
         self.fresh_field("rangeLineList")?;

@@ -167,9 +167,7 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
         } else if self.base_field(&policy.charm.base_field)?.truthy() {
             self.local_charm(list)?;
         } else if self.get("type")?.as_str() == Some(&policy.jewel_item_type) {
-            return Err(AssemblyError::unsupported(
-                "item local jewel data assembly is unavailable",
-            ));
+            self.local_jewel(list)?;
         }
         let output = self.arena.new_table()?;
         for i in 1..=self.arena.dense_len(list)? {

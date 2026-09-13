@@ -20,6 +20,7 @@ use std::{
 };
 
 const READ_PATHS: &[&str] = &[
+    "src/Modules/Build.lua",
     "src/Modules/CalcFormat.lua",
     "src/Data/ModCache.lua",
     "runtime/lua/xml.lua",
@@ -219,10 +220,12 @@ pub(crate) fn extractor_sha256() -> String {
     for text in [
         "poe-game-data-extractor-v26",
         include_str!("item_loading_extract.rs"),
+        include_str!("item_loading_extract/radius.rs"),
         include_str!("unique_requirements_extract.rs"),
         include_str!("item_assembly_extract.rs"),
         include_str!("item_assembly_extract/local.rs"),
         include_str!("item_assembly_extract/weapon.rs"),
+        include_str!("item_assembly_extract/jewel.rs"),
         include_str!("item_assembly_extract/source-shapes.json"),
         include_str!("../../poe-optimizer-lua-utf8/src/lib.rs"),
         include_str!("../../poe-optimizer-lua-utf8/build.rs"),

@@ -18,7 +18,8 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-The R2aa weapon-local checkpoint and A1 investigation below are the current resume point.
+R2ab is the latest validated component checkpoint: finite jewel data and explicit radius context.
+The A1 investigation remains open alongside this work.
 Source-session timing and requested allocation layouts are measured separately from dataset
 ownership; staged-container transfer now reduces import allocation traffic. R2x now records actual import parser calls across all
 five originals: 558 of 760 build-local distinct inputs match misses and hits; 202 remain
@@ -35,6 +36,78 @@ acquisition/parity, preparation, source execution and the restricted typed candi
 Continue measuring costs before extending general Lua compatibility into further domains;
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
+
+**R2ab component checkpoint: injected jewel data and explicit radius context.** Native item
+preparation now produces finite jewel lists/overrides, shared modifiers, alternate class starts,
+From Nothing maps and caller-supplied cluster metadata. An immutable catalog-owned radius context
+preserves numeric version selection, source arithmetic, header order and the post-ParseRaw tail.
+No-base reparses retain earlier jewel aliases and still execute that tail; their current owned
+graph remains incomplete and cannot register. Opaque callbacks and present-cluster header mutation
+remain explicit dependencies. This extends the existing injected domain-algorithm seam and does
+not select a different execution model.
+
+The package is schema **32 / item-loading 5 / item-assembly 4**, **26,302,804 bytes**, SHA-256
+`feeda51dd84a5a86246d9b84fc8db658dd374317c15e7306456ccebc081b4643`.
+Normal isolated CLI extraction reproduces those bytes exactly. The prior loading data and
+assembly policies plus 26 other sections are unchanged; unique-requirement evidence changes
+only its item-loading dependency digest. Source extraction authenticates the original Misc import,
+Build startup and radius setter. Preparation report schema is 6; inventory schema is 3.
+
+All **116** saved items now participate in the family comparison: **109** match using the
+original parser plus native assembly and **107** through the native parser plus assembly.
+Jewels contribute **16/18** in both lanes. Seven shared stops remain: four rune reconstructions,
+one advanced-copy affix ordering and two jewel callback/capture dependencies; native parser
+callbacks 168/569 add two stops. Controls compare 114 available finite graphs and retain two
+explicitly unavailable callback graphs. See the [complete contract and family counts](native-item-assembly.md#r2ab-jewel-and-radius-checkpoint).
+
+Ten original lifecycle cases across 20 observed/control hosts establish that startup requested
+version `0_5` precedes Items and deferred saved Tree loading, including reordered/repeated sections
+and reused hosts. All 116 component records use that explicit BuildInitialization context,
+resolved to radius version `0_1`; the final selected view is not substituted. Sixty directed radius
+steps and five three-step no-base histories compare retained values and ordered finalization.
+Finite local producer results do not establish spatial, cluster-topology, callback or actor parity.
+
+The native-only public CLI retains every item and registers **68** source-ordered items:
+
+| Original | Registered / saved | First remaining stop |
+| --- | ---: | --- |
+| 01 | 2 / 16 | Ambiguous rune reconstruction |
+| 02 | 17 / 34 | Ambiguous rune reconstruction |
+| 03 | 0 / 17 | Jewel capture factory |
+| 04 | 21 / 21 | ItemSet/container continuation |
+| 05 | 28 / 28 | ItemSet/container continuation |
+
+All five reports remain Incomplete, with calculation not run and whole-build parity not established.
+Full native original evaluations remain **0/5**. Equipment activation and actor effects remain open.
+
+**Validation passes:** 347 distinct focused/regression tests: 99 data, 24 extraction-unit,
+47 import-unit, 82 import-integration, 45 native, 36 CLI and 14 source/lifecycle tests. The final
+eight-test source target passes in 45.68 seconds excluding 42.85 seconds of compilation; this is
+validation cost, not search throughput. Strict workspace/native-only Clippy, formatting, the five
+portable WASM libraries and native-only runtime dependency isolation pass. Final normal extraction
+is byte-identical. Supplied inputs, Cargo.lock and the clean PoB pin remain unchanged. Receipts and
+resolved validation failures are retained in `runs/r2ab-jewel-local-01/`; hosted CI remains separate.
+
+**Resume:** continue item-set/container loading and equipment participation, retaining all five
+originals and explicit rune/affix/callback stops. Integrate selected-tree geometry and actor
+consumers behind the existing data/evaluator seams. In parallel, use the
+[jewel/radius cost and consumer evidence](execution-model-baseline.md#native-jewel-and-radius-checkpoint)
+for the bounded A1-to-A2 readiness review. Compare candidate models before expanding general Lua
+compatibility into new domains; current table/graph representations are not prescribed for A2.
+Discuss a significant migration at A3, while preserving the full parity and breadth objective.
+
+R2ab also follows up CI run `34729320759` (R2z): both platforms failed the
+functional search fixture's `discarded_late == 0` assertion after its 60-second deadline.
+The preceding `evaluation_failures == 0` assertion passed. A test-only 300-second allowance
+and detailed ledger diagnostics are implemented; exact search/parity assertions and production
+timeouts are unchanged. The responsible slow phase is not established by those logs.
+Both affected CLI targets now pass locally: 23 tests in debug mode with four test threads. Public
+annotation receipts are retained under the R2ab evidence directory. R2aa run `34730851343`
+subsequently failed: Ubuntu has the same late-result assertion; Windows actor-search processes
+instead overflow their main stack. Local reproduction confirms `--help` succeeds but native
+`metrics` overflows a 1 MiB executable reserve. An explicit Windows/MSVC 8 MiB main-stack reserve
+now passes both probes and all five actor-search tests. Worker stacks and other targets are
+unchanged. This host correction adds no subprocess or runtime dependency.
 
 **R2aa component checkpoint: injected weapon-local data.** Native item preparation now
 computes both weapon slots, reload/range, ordered damage channels, quality and critical
@@ -98,7 +171,7 @@ Receipts, source/data/command identities, exact counts, the resolved lint failur
 source-artifact relocation record are under `runs/r2aa-weapon-local-01/`. This is a completed
 component checkpoint; it does not close the full-native or broad game-parity milestones.
 
-**Resume:** implement explicit item-call radius context and complete jewel local production,
+**R2aa resume (superseded by R2ab above):** implement explicit item-call radius context and complete jewel local production,
 with original startup/deferred-tree/reparse evidence and whole owned output comparisons.
 Then resolve observed rune/affix/parser stops, item-set activation and actor consumers. Retain
 all five originals and all 116 items without production ID whitelists. Continue the bounded
@@ -2078,6 +2151,9 @@ defines the alternatives, constraints and evidence required for a decision.
   The [R2z local-item checkpoint](execution-model-baseline.md#native-local-item-assembly-checkpoint)
   now adds measured policy/kernel/test code size, complete-method validation cost and re-entry
   consumer requirements. Count that work without treating its graph representation as mandatory.
+  The [R2ab jewel/radius evidence](execution-model-baseline.md#native-jewel-and-radius-checkpoint)
+  adds context/ownership, source-lifecycle tooling and Windows startup stack costs. Include
+  those costs and consumer-visible ordering in A2 without prescribing the current representation.
   Use the brief's bounded A1-to-A2 readiness checkpoint: an executable reference slice,
   relevant cost baseline, explicit domain-consumer contract and known gaps are sufficient
   to discuss prototypes; remaining fine-grained measurements need not all finish first.

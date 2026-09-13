@@ -18,7 +18,7 @@ rune effects, grants, named compatibility, attribute requirements and slot selec
 Game names, patterns, labels, modifier selectors, masks and numeric defaults are data.
 Source field structure, arithmetic order, copy semantics and native operation kinds
 are code. The catalog is not a general instruction language or a build whitelist.
-Its current section schema 3 declares `PolicyOnly`; loading and binding it supplies
+Its current section schema 4 declares `PolicyOnly`; loading and binding it supplies
 validated definitions, never an admitted executable item. Complete-method provenance
 also does not imply lowering of every specialized slot branch.
 
@@ -56,7 +56,9 @@ map is a diagnostic projection; `armour_data_complete` distinguishes a complete 
 from a subset. A subset cannot seed a new assembly graph or authorize registration. Actual
 parser header writes, including nil deletions, form a separate ordered-load patch applied to
 the retained graph. Retain pending writes across no-base parses that never reach assembly. Consume them after
-successful assembly so final assembly cannot replay old headers over newer override values. Flask and charm outputs reset at assembly entry.
+successful assembly or a successful no-base ParseRaw continuation so final assembly cannot
+replay old headers over newer override values. A no-base continuation remains incomplete and
+cannot register an item. Flask and charm outputs reset at assembly entry.
 
 Input adapter limits remain distinct from runtime values: current finite UTF-8 metadata
 admission is not permission to discard non-finite arithmetic, opaque functions, sparse
@@ -120,10 +122,13 @@ bounds, late arbitrary overrides, hand-specific tagging, and the final DPS sum a
 Both slot outputs remain whole owned graphs. The native producer dispatches generic channel
 kinds; injected names do not select hardcoded skill or item behavior.
 
-Jewel local production remains the next family gate. The
-[jewel integration design](native-jewel-integration.md) separates versioned radius definitions
-and local item production from selected-tree geometry and actor application. These domain
-algorithms add no general instruction language and remain inputs to the execution-model review.
+Jewel locals preserve Grand Spectrum sharing, ordered list values and overrides, repeated
+FromNothing queries, and cluster corrections and value-valued validity. Versioned radius
+resolution and ParseRaw's header/deferred/override order use injected loading policy and an
+explicit item-call context. Actual callback values still require an executable captured-state
+owner. The [jewel integration design](native-jewel-integration.md) separates this local
+production from selected-tree geometry and actor application. These domain algorithms add no
+general instruction language and remain inputs to the execution-model review.
 
 ## Completion and proof
 
@@ -279,3 +284,54 @@ Receipts are under `runs/r2aa-weapon-local-01/`. The source output override was 
 resolved against two process working directories; after successful completion the artifacts
 were moved into `source-parity-01` and their original locations recorded in
 `source-artifact-relocation.json`. The pinned submodule is unchanged.
+
+
+## R2ab jewel and radius checkpoint
+
+Package schema 32 adds item-assembly policy schema 4 and item-loading policy schema 5.
+The native producer now covers all six local families through injected policies, including
+jewel lists, overrides and cluster operations. Radius loading retains original version
+selection, scaling and header/finalization order. Its source constants come from the original
+Misc import; extraction records that dependency without running the radius setter.
+
+All 116 saved items are represented in the component comparison, with no family exclusions:
+
+| Family | Saved | Original parser + native assembly | Built-in native parser + assembly |
+| --- | ---: | ---: | ---: |
+| Accessories | 32 | 32 | 31 |
+| Armour | 32 | 29 | 28 |
+| Flasks | 12 | 11 | 11 |
+| Charms | 15 | 15 | 15 |
+| Weapons | 7 | 6 | 6 |
+| Jewels | 18 | 16 | 16 |
+| Total | 116 | 109 | 107 |
+
+The two jewel stops are build-01 Item 14 and build-03 Item 1. The original-parser lane
+refuses callback-bearing output outside its finite metadata contract; the built-in lane
+reports a pending jewel capture factory. Four rune-reconstruction stops and one advanced-copy
+affix-ordering stop remain in both lanes. Native parser callbacks 168 and 569 account for
+the two additional built-in stops. All 21 build-04 items and all 28 build-05 items match in
+both lanes; these are local-item results, not complete inventory lifecycle or build results.
+
+Five observed/control import pairs agree within the declared finite graph contract.
+The comparison now includes whole `jewelData`, represented `clusterJewel` and radius fields.
+Existing omissions and dependency-order/argument-arity limits remain explicit. Directed jewel
+coverage adds 20 fresh parser-driven items, 25 cross-family reparse steps and 80 separately
+labelled finite pre-call modifier cases: 60 complete results and 20 matching source-error
+prefixes. Cluster metadata is caller-supplied in these cases; the original pin does not
+initialize it. Five actual callback-ingress probes retain the original source function and
+refuse its opaque descriptor natively, with no native callback execution or graph-parity claim.
+
+Sixty further radius-history steps use actual original setter calls and matching explicit
+native contexts. They cover static, unmatched and absent labels, deferred Variable selection,
+nil removal, repeated headers, time-lost overrides and cross-family persistence. Five no-base
+histories retain the old jewel graph through ParseRaw's post-assembly tail and remain
+unregistered and incomplete; five missing-context cases remain explicit dependencies.
+These post-import histories do not establish initial Build lifecycle parity; that observation
+is recorded separately in the [jewel integration record](native-jewel-integration.md).
+
+Counts and source receipts are in `runs/r2ab-jewel-local-01/corpus-counts.json` and
+`runs/r2ab-jewel-local-01/source-parity-02/`. They measure validation breadth, not candidate
+throughput. Full native original build evaluation remains **0/5**. Selected-tree application,
+actor effects and the remaining input dependencies stay open; no replacement execution model
+has been selected.

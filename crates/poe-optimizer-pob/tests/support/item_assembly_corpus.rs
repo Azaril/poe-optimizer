@@ -53,6 +53,10 @@ pub(super) const FIELDS: &[&str] = &[
     "armourData",
     "flaskData",
     "charmData",
+    "jewelData",
+    "clusterJewel",
+    "jewelRadiusLabel",
+    "jewelRadiusIndex",
     "buffModLines",
     "enchantModLines",
     "runeModLines",
@@ -203,6 +207,20 @@ fn replay<'a>(
 ) -> (ItemLoadMachine<'a>, Vec<Json>) {
     let mut errors = Vec::new();
     let mut machine = ItemLoadMachine::new(snapshot.item_loading());
+    // Original Build installs startup radii before Items and defers saved Tree/Spec.
+    // The separate exact-function lifecycle test verifies that ordering across
+    // all originals, reordered/repeated sections and a reused source host.
+    let context = JewelRadiusContext::resolve(
+        snapshot.item_loading(),
+        &snapshot
+            .item_loading()
+            .policy()
+            .jewel_radius
+            .latest_tree_version,
+        JewelRadiusProvenance::BuildInitialization,
+    )
+    .unwrap();
+    machine.set_jewel_radius_context(context).unwrap();
     machine.set_xml_attributes(
         &node
             .element()
@@ -527,10 +545,6 @@ fn child(repo: &Path, output: &Path, entry: &Json) {
                     .call(event.raw_get::<u32>("item_token")?)?;
                 let item_family = family(&item);
                 *family_counts.entry(item_family).or_default() += 1;
-                if item_family == "jewel" {
-                    rows.push(json!({"id":id,"source_range":node.element().source_range(),"family":item_family,"scope":"local_item_family_dependency"}));
-                    continue;
-                }
                 let dependencies = dependencies::OriginalParser {
                     function: parser.clone(),
                     calls: 0,
@@ -561,7 +575,7 @@ fn child(repo: &Path, output: &Path, entry: &Json) {
                     builtin_complete += 1;
                     *family_builtin_complete.entry(item_family).or_default() += 1;
                 }
-                rows.push(json!({"id":id,"source_range":node.element().source_range(),"family":item_family,"scope":"eligible_finite_item","original_parser_native_assembly":isolated_result,"builtin_native_pipeline":builtin_result,"source_dependency_calls":isolated.dependencies().calls,"source_parser_lane_errors":isolated_errors,"builtin_lane_errors":builtin_errors}));
+                rows.push(json!({"id":id,"source_range":node.element().source_range(),"family":item_family,"scope":"eligible_finite_item","radius_context":machine.jewel_radius_context().map(JewelRadiusContext::evidence),"original_parser_native_assembly":isolated_result,"builtin_native_pipeline":builtin_result,"source_dependency_calls":isolated.dependencies().calls,"source_parser_lane_errors":isolated_errors,"builtin_lane_errors":builtin_errors}));
             }
         }
         assert_eq!(
@@ -598,7 +612,7 @@ fn child(repo: &Path, output: &Path, entry: &Json) {
         assert_eq!(parser_library.raw_get::<Function>("parseMod")?, parser);
         Ok(
             json!({"observer_control_equal":control_equal,"observer_control_scope":"declared finite post-import witness; separate fresh Lua hosts; no hook in control","post_import":post_import,"directed_histories":history_report,"items":rows,"item_count":seen.len(),"source_parser_lane_complete":source_complete,"builtin_lane_complete":builtin_complete,"family_counts":family_counts,"family_source_complete":family_source_complete,"family_builtin_complete":family_builtin_complete,
-            "scope":{"complete_native_build":false,"finite_families":["accessory","armour","flask","charm","weapon"],"excluded_families":["jewel"],"source_assembly_results_used_as_dependency":false,"arbitrary_input_alias_recovery":false,"registered_inventory_execution":false,"actual_dependency_arity_observed":false,"dependency_order_parity":false,"comparison":"declared assembly-field/row-field graph contract","root_fields":FIELDS,"row_fields":ROW_FIELDS}}),
+            "scope":{"complete_native_build":false,"finite_families":["accessory","armour","flask","charm","weapon","jewel"],"excluded_families":[],"source_assembly_results_used_as_dependency":false,"arbitrary_input_alias_recovery":false,"registered_inventory_execution":false,"actual_dependency_arity_observed":false,"dependency_order_parity":false,"comparison":"declared assembly-field/row-field graph contract","root_fields":FIELDS,"row_fields":ROW_FIELDS}}),
         )
     };
     let report = source::observe_with_build_hook_unwrapped(

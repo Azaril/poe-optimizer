@@ -17,7 +17,7 @@ use poe_optimizer_import::{
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 
-pub const PREPARATION_REPORT_SCHEMA: u32 = 5;
+pub const PREPARATION_REPORT_SCHEMA: u32 = 6;
 const MAX_ISSUES: usize = 65_536;
 const MAX_MESSAGE_BYTES: usize = 4 * 1024 * 1024;
 

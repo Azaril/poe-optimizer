@@ -8,6 +8,7 @@ use std::sync::{
     atomic::{AtomicUsize, Ordering},
 };
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
+mod radius;
 const DATA: &str = "src/Modules/Data.lua";
 const ITEM: &str = "src/Classes/Item.lua";
 const COMMON: &str = "src/Modules/Common.lua";
@@ -495,7 +496,11 @@ fn rune_loading_policy(
     let value: Value = scan.call((all, headers, update, classify, reconstruct, display))?;
     lua.from_value(value).map_err(error)
 }
-fn policy(lua: &Lua, sources: &BTreeMap<String, String>) -> Result<ItemLoadingPolicy> {
+fn policy(
+    lua: &Lua,
+    sources: &BTreeMap<String, String>,
+    jewel_radius: JewelRadiusPolicy,
+) -> Result<ItemLoadingPolicy> {
     let constants: Table = named_eval(
         lua,
         sources,
@@ -854,6 +859,7 @@ fn policy(lua: &Lua, sources: &BTreeMap<String, String>) -> Result<ItemLoadingPo
         metadata(Value::Table(fallback), sources, 0, &mut budget)?,
     );
     Ok(ItemLoadingPolicy {
+        jewel_radius,
         affix_loading: affix_loading_policy(lua, sources)?,
         rune_loading: rune_loading_policy(lua, sources)?,
         default_affix_quality: number("self.defaultItemAffixQuality = ")?,
@@ -970,6 +976,11 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ItemLoadingD
             "LoadModule(\"Data/Global\")",
             "-----------------\n-- Common Data",
         ),
+        (
+            "jewel_radius_misc_import",
+            "local miscData = LoadModule(\"Data/Misc\")",
+            "---@class PowerStat",
+        ),
         ("keystones", "data.keystones =", "data.ailmentTypeList ="),
         (
             "jewel_radii",
@@ -1042,7 +1053,13 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<ItemLoadingD
         unique_groups.insert(k, strings(t)?);
     }
     let jewel_radii = table(data.get("jewelRadii")?, sources, 0, &mut budget)?;
-    let policy = policy(&lua, sources)?;
+    let (jewel_radius, radius_spans) = radius::extract(&lua, sources)
+        .map_err(|cause| error(format!("item-loading jewel radius extraction: {cause}")))?;
+    for source_span in radius_spans.values() {
+        files.insert(source_span.path.clone());
+    }
+    construction_spans.extend(radius_spans);
+    let policy = policy(&lua, sources, jewel_radius)?;
     for (name, path, begin, end) in [
         (
             "item_parser",
@@ -1390,10 +1407,30 @@ mod tests {
             serde_json::from_slice(poe_optimizer_data::game_data::bundled_package_bytes()).unwrap();
         let new = serde_json::to_value(loaded.package()).unwrap();
         for (name, value) in old.as_object().unwrap() {
-            if name != "manifest" && name != "item_loading" {
+            if name != "manifest" && name != "item_loading" && name != "item_assembly" {
                 assert_eq!(value, &new[name], "existing section changed: {name}");
             }
         }
+        let module_order = new["item_loading"]["source"]["module_order"]
+            .as_array()
+            .unwrap();
+        assert_eq!(
+            &module_order[..3],
+            &[
+                serde_json::json!("src/GameVersions.lua"),
+                serde_json::json!("src/Data/Global.lua"),
+                serde_json::json!("src/Data/Misc.lua"),
+            ],
+            "radius constants must use the original Misc import order"
+        );
+        assert_eq!(
+            module_order
+                .iter()
+                .filter(|path| path.as_str() == Some("src/Data/Misc.lua"))
+                .count(),
+            1,
+            "the original Misc module is constructed exactly once"
+        );
         let mut old_item = old["item_loading"].clone();
         let mut new_item = new["item_loading"].clone();
         for item in [&mut old_item, &mut new_item] {
@@ -1406,13 +1443,43 @@ mod tests {
                 .as_object_mut()
                 .unwrap()
                 .remove("defence_headers");
+            item["policy"]
+                .as_object_mut()
+                .unwrap()
+                .remove("jewel_radius");
+            item["source"]["construction_spans"]
+                .as_object_mut()
+                .unwrap()
+                .retain(|name, _| !name.starts_with("jewel_radius_"));
+            item["source"]["files"]
+                .as_object_mut()
+                .unwrap()
+                .remove("src/Modules/Build.lua");
+            item["source"]["files"]
+                .as_object_mut()
+                .unwrap()
+                .remove("src/Data/Misc.lua");
+            item["source"]["module_order"]
+                .as_array_mut()
+                .unwrap()
+                .retain(|path| path.as_str() != Some("src/Data/Misc.lua"));
         }
         assert_eq!(
             old_item, new_item,
             "unrelated item-loading definitions changed"
         );
+        let mut old_assembly = old["item_assembly"].clone();
+        let mut new_assembly = new["item_assembly"].clone();
+        for item in [&mut old_assembly, &mut new_assembly] {
+            item.as_object_mut().unwrap().remove("schema_version");
+            item["policy"].as_object_mut().unwrap().remove("jewel");
+        }
+        assert_eq!(
+            old_assembly, new_assembly,
+            "legacy item assembly policy changed"
+        );
         for (name, digest) in old["manifest"]["section_sha256"].as_object().unwrap() {
-            if name != "item_loading" {
+            if name != "item_loading" && name != "item_assembly" {
                 assert_eq!(
                     digest, &new["manifest"]["section_sha256"][name],
                     "section digest changed: {name}"

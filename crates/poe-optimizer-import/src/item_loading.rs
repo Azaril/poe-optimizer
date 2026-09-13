@@ -8,6 +8,8 @@ pub mod assembly;
 mod machine;
 mod parser;
 mod provider;
+mod radius;
+pub use radius::*;
 mod report;
 mod syntax;
 mod variants;
@@ -31,6 +33,7 @@ pub fn implementation_fingerprint() -> String {
         include_str!("item_loading/machine.rs"),
         include_str!("item_loading/report.rs"),
         include_str!("item_loading/provider.rs"),
+        include_str!("item_loading/radius.rs"),
         include_str!("item_loading/parser.rs"),
     ] {
         hash.update(source.replace("\r\n", "\n").as_bytes());

@@ -60,6 +60,11 @@ The subsequent [local-item extension](execution-model-baseline.md#native-local-i
 records policy, native-kernel and parity-fixture costs, plus consumer requirements exposed by
 re-entry and nested overrides. Include these in A1/A2 without prescribing their current representation.
 
+The [jewel/radius checkpoint](execution-model-baseline.md#native-jewel-and-radius-checkpoint)
+adds a further measured example: a small package extension requires substantially more producer,
+context, ownership and parity-tooling code. Its import ordering and retained-value behavior are
+consumer requirements to compare; the current graph representation is not prescribed for A2.
+
 ## Separate the decisions
 
 Rust is an implementation language, not a semantic model. A DSL interpreter, generated rule

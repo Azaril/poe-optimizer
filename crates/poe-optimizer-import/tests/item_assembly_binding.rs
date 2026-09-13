@@ -140,11 +140,36 @@ fn foreign_success_and_failure_prefix_are_rejected_before_state_writes() {
 #[test]
 fn incomplete_native_artifact_cannot_be_replayed_as_success() {
     let mut source = machine();
-    let mut provider = BuiltinItemLoadProvider::new(data());
+    // Malformed finite LIST input exercises a real partial producer independently
+    // of which item families happen to be implemented.
+    struct InvalidOverride;
+    impl ItemLoadProvider for InvalidOverride {
+        fn parse_modifier(&mut self, _: &ParseRequest) -> DependencyResult<ParseOutcome> {
+            use poe_optimizer_data::item_loading::{ItemMetadataTable, ItemMetadataValue as V};
+            DependencyResult::Available(ParseOutcome {
+                modifiers: Some(vec![ItemMetadataTable {
+                    fields: [
+                        ("name".into(), V::Text("JewelData".into())),
+                        ("type".into(), V::Text("LIST".into())),
+                        ("flags".into(), V::Number(0.)),
+                        ("keywordFlags".into(), V::Number(0.)),
+                        ("value".into(), V::Number(1.)),
+                    ]
+                    .into(),
+                    indexed: Default::default(),
+                }]),
+                extra: None,
+            })
+        }
+    }
+    let mut provider = NativeItemLoadProvider::with_native_assembly(data(), InvalidOverride);
     source
-        .apply_text("Rarity: NORMAL\nSapphire", &mut provider)
-        .unwrap();
-    assert_eq!(source.status(), ItemLoadStatus::Pending);
+        .apply_text(
+            "Rarity: NORMAL\nRuby\nImplicits: 0\ncontrolled invalid override",
+            &mut provider,
+        )
+        .unwrap_err();
+    assert_eq!(source.status(), ItemLoadStatus::SourceError);
     let item = source.assembly_progress().unwrap().clone();
     assert!(!item.is_complete());
     let mut target = machine();

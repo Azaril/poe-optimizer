@@ -13,7 +13,7 @@ fn data() -> ItemAssemblyData {
 #[test]
 fn policy_only_catalog_binds_existing_definitions_without_copying() {
     let s = snapshot();
-    assert_eq!(s.identity().schema_version, 31);
+    assert_eq!(s.identity().schema_version, 32);
     let c = s.item_assembly();
     assert_eq!(c.data().capability, ItemAssemblyCapability::PolicyOnly);
     assert_eq!(
@@ -284,7 +284,7 @@ fn immutable_catalog_is_send_sync_and_parallel_datasets_do_not_share_policy() {
 #[test]
 fn local_families_retain_complete_orders_and_query_targets() {
     let d = data();
-    assert_eq!(d.schema_version, 3);
+    assert_eq!(d.schema_version, 4);
     let a = &d.policy.armour;
     assert_eq!(a.queries.len(), 18);
     assert_eq!(a.queries[0].role, ItemAssemblyArmourRole::ArmourBase);
@@ -517,5 +517,102 @@ fn weapon_required_nullable_field_and_closed_schema_are_checked() {
     assert!(serde_json::from_value::<ItemAssemblyData>(omitted).is_err());
     let mut unknown = original;
     unknown["policy"]["weapon"]["residual"]["execute"] = true.into();
+    assert!(serde_json::from_value::<ItemAssemblyData>(unknown).is_err());
+}
+
+#[test]
+fn jewel_policy_preserves_queries_alias_fields_and_cluster_operands() {
+    let d = data();
+    let p = &d.policy.jewel;
+    assert_eq!(p.output_field, "jewelData");
+    assert_eq!(p.grand_spectrum.name_item_field, "name");
+    assert_eq!(p.grand_spectrum.name_pattern, "Grand Spectrum");
+    assert_eq!(p.grand_spectrum.modifier_name, "Multiplier:GrandSpectrum");
+    assert_eq!(p.grand_spectrum.modifier_type, "BASE");
+    assert_eq!(p.grand_spectrum.modifier_value, 1.0);
+    assert_eq!(p.grand_spectrum.minion_name, "MinionModifier");
+    assert_eq!(p.grand_spectrum.minion_type, "LIST");
+    assert_eq!(p.grand_spectrum.nested_mod_field, "mod");
+    assert_eq!(p.functions.query_name, "JewelFunc");
+    assert_eq!(p.functions.output_field, "funcList");
+    assert_eq!(p.overrides.query_name, "JewelData");
+    assert_eq!(p.alternate_class_start.query_name, "AlternateClassStart");
+    assert_eq!(p.from_nothing.guard_query_name, "FromNothingKeystones");
+    assert_eq!(
+        p.from_nothing.entries.query_name,
+        p.from_nothing.guard_query_name
+    );
+    assert_eq!(p.from_nothing.output_field, "fromNothingKeystones");
+    let c = &p.cluster;
+    assert_eq!(c.item_field, "clusterJewel");
+    assert_eq!(c.notables.query_name, "ClusterJewelNotable");
+    assert_eq!(c.added_mods.query_name, "AddToClusterJewelNode");
+    assert_eq!(c.correction.matching_skill, "affliction_curse_effect");
+    assert_eq!(
+        c.correction.replacement_skill,
+        "affliction_curse_effect_small"
+    );
+    assert_eq!(c.correction.node_count_below, 4.0);
+    assert_eq!(c.min_nodes_field, "minNodes");
+    assert_eq!(c.max_nodes_field, "maxNodes");
+    assert_eq!(c.validity.output_field, "clusterJewelValid");
+    assert_eq!(
+        c.validity.nothingness_count_field,
+        "clusterJewelNothingnessCount"
+    );
+}
+
+#[test]
+fn jewel_custom_operands_are_not_eagerly_evaluated_or_source_authenticated() {
+    let mut d = data();
+    let p = &mut d.policy.jewel;
+    p.output_field = "callerJewel".into();
+    p.grand_spectrum.name_pattern = "[%unfinished\0".into();
+    p.grand_spectrum.modifier_name = "Caller multiplier".into();
+    p.grand_spectrum.modifier_value = -0.25;
+    p.grand_spectrum.minion_type = "FLAG".into();
+    p.functions.query_name = "Caller opaque values".into();
+    p.from_nothing.guard_query_name = "Guard query".into();
+    p.from_nothing.entries.query_name = "Separate entries query".into();
+    p.from_nothing.entries.key_field = "callerKey".into();
+    p.cluster.node_count_field = "callerCount".into();
+    p.cluster.min_nodes_field = "callerMinimum".into();
+    p.cluster.correction.node_count_below = -1.5;
+    p.cluster.validity.output_field = "callerValidity".into();
+    p.cluster.validity.keystone_field = "callerValue".into();
+    d.validate().unwrap();
+    assert_eq!(
+        serde_json::from_slice::<ItemAssemblyData>(&serde_json::to_vec(&d).unwrap()).unwrap(),
+        d
+    );
+    ItemAssemblyCatalog::new(d).unwrap();
+}
+
+#[test]
+fn jewel_bounds_and_required_closed_fields_are_checked() {
+    let mut d = data();
+    d.policy.jewel.grand_spectrum.name_pattern = "x".repeat(4097);
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.jewel.cluster.correction.node_count_below = f64::INFINITY;
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.jewel.grand_spectrum.modifier_value = f64::NAN;
+    assert!(d.validate().is_err());
+    let original = serde_json::to_value(data()).unwrap();
+    let mut omitted = original.clone();
+    omitted["policy"]["jewel"]["from_nothing"]
+        .as_object_mut()
+        .unwrap()
+        .remove("guard_query_name");
+    assert!(serde_json::from_value::<ItemAssemblyData>(omitted).is_err());
+    let mut omitted = original.clone();
+    omitted["policy"]["jewel"]["cluster"]["validity"]
+        .as_object_mut()
+        .unwrap()
+        .remove("keystone_field");
+    assert!(serde_json::from_value::<ItemAssemblyData>(omitted).is_err());
+    let mut unknown = original;
+    unknown["policy"]["jewel"]["execute"] = true.into();
     assert!(serde_json::from_value::<ItemAssemblyData>(unknown).is_err());
 }

@@ -222,11 +222,27 @@ fn all_original_items_stay_in_report_even_when_the_first_dependency_stops() {
         assert_eq!(report.records.len(), expected);
         total += expected;
         assert!(report.failure.is_some());
-        assert!(
+        // A completed inventory may stop at its following ItemSet instruction.
+        // If an item itself stops, no later record may have been processed.
+        let mut stopped = false;
+        for record in &report.records {
+            if stopped {
+                assert_eq!(record.status, ItemRecordStatus::NotProcessed);
+            }
+            stopped |= matches!(
+                record.status,
+                ItemRecordStatus::Pending
+                    | ItemRecordStatus::SourceFailure
+                    | ItemRecordStatus::NotProcessed
+            );
+        }
+        assert_eq!(
             report
                 .records
                 .iter()
-                .any(|r| r.status == ItemRecordStatus::NotProcessed)
+                .filter(|r| r.status == ItemRecordStatus::Registered)
+                .count(),
+            report.registration_order.len()
         );
         assert!(report.frontiers.contains(&"actor_item_effects"));
     }
@@ -264,7 +280,7 @@ fn public_preparation_retains_inventory_stage_for_ready_and_incomplete_results()
             }
             PreparationOutcome::Incomplete(report) => {
                 assert!(!ready);
-                assert_eq!(report.schema_version, 5);
+                assert_eq!(report.schema_version, 6);
                 let items = report.authored_items.as_ref().unwrap();
                 assert_eq!(items.records[0].status, ItemRecordStatus::Registered);
                 assert_eq!(items.source_sha256, report.view.source_sha256);
@@ -281,7 +297,7 @@ fn production_inventory_registers_local_family_items_before_item_set_activation(
     );
     let stage = prepare(&source);
     let report = stage.report();
-    assert_eq!(report.schema_version, 2);
+    assert_eq!(report.schema_version, 3);
     assert_eq!(report.registration_order.len(), 3, "{:#?}", report.failure);
     assert_eq!(
         report.failure.as_ref().unwrap().stage,
@@ -340,4 +356,52 @@ fn production_inventory_registers_weapon_slot_graphs_before_activation() {
         }
     }
     assert!(report.frontiers.contains(&"actor_item_effects"));
+}
+
+#[test]
+fn production_jewel_radius_uses_startup_context_before_saved_tree_selection() {
+    use poe_optimizer_import::item_loading::JewelRadiusProvenance;
+    let items = "<Items><Item id='1'>Rarity: NORMAL\nRuby\nRadius: Small</Item></Items>";
+    // Both root orders load Items before the saved Tree in original Build loading.
+    for tree in [
+        "<Tree activeSpec='1'><Spec treeVersion='0_1'/></Tree>",
+        "<Spec/>",
+    ] {
+        for xml in [
+            format!("<PathOfBuilding2>{tree}{items}</PathOfBuilding2>"),
+            format!("<PathOfBuilding2>{items}{tree}</PathOfBuilding2>"),
+        ] {
+            let stage = prepare(&xml);
+            let report = stage.report();
+            assert!(report.failure.is_none(), "{:?}", report.failure);
+            let context = report.jewel_radius_context.as_ref().unwrap();
+            assert_eq!(
+                context.provenance,
+                JewelRadiusProvenance::BuildInitialization
+            );
+            assert_eq!(
+                context.requested_tree_version,
+                data()
+                    .snapshot()
+                    .item_loading()
+                    .policy()
+                    .jewel_radius
+                    .latest_tree_version
+            );
+            let item = stage.item(stage.registered_id(1.).unwrap()).unwrap();
+            assert_eq!(
+                item.field(item.root(), "jewelRadiusIndex")
+                    .unwrap()
+                    .as_number(),
+                Some(1.)
+            );
+            assert_ne!(context.requested_tree_version, "0_1");
+            assert!(
+                item.field(item.root(), "jewelData")
+                    .unwrap()
+                    .as_table()
+                    .is_some()
+            );
+        }
+    }
 }

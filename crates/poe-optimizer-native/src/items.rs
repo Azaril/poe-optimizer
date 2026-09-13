@@ -11,7 +11,8 @@ use poe_optimizer_import::{
     build_instance::{AuthoredInstanceId, ImportedBuildInstance, SourceOccurrenceId},
     item_loading::{
         BuiltinItemLoadProvider, ItemLoadMachine, ItemLoadStatus, ItemNumber, ItemScalar,
-        ItemState, assembly::AssembledItem,
+        ItemState, JewelRadiusContext, JewelRadiusErrorKind, JewelRadiusEvidence,
+        JewelRadiusProvenance, assembly::AssembledItem,
     },
     item_source::{ItemSourceKind, ItemSourceUse},
     selected_view::SelectedView,
@@ -71,6 +72,8 @@ pub struct ItemPreparationReport {
     pub source_sha256: String,
     pub view_sha256: String,
     pub data_identity: DataIdentity,
+    /// Context selected before Items load; saved Tree/Spec loading happens later.
+    pub jewel_radius_context: Option<JewelRadiusEvidence>,
     pub records: Vec<PreparedItemRecord>,
     /// Successful insertions in original order, including repeated numeric IDs.
     pub registration_order: Vec<ItemRecordId>,
@@ -148,10 +151,11 @@ pub fn prepare_authored_items(
     view.validate_binding(build, data.snapshot())
         .map_err(|e| contract(e.to_string()))?;
     let mut report = ItemPreparationReport {
-        schema_version: 2,
+        schema_version: 3,
         source_sha256: build.source_sha256().into(),
         view_sha256: view_digest(view)?,
         data_identity: data.identity().clone(),
+        jewel_radius_context: None,
         records: Vec::new(),
         registration_order: Vec::new(),
         failure: None,
@@ -223,11 +227,36 @@ pub fn prepare_authored_items(
             .enumerate()
             .map(|(i, r)| (r.source, i))
             .collect::<BTreeMap<_, _>>();
+        // Original Build initialization installs the injected startup version;
+        // all saved Tree/Spec sections are deferred until after Items loading.
+        // Final selected-view tree metadata therefore cannot supply this context.
+        let catalog = data.snapshot().item_loading();
+        let radius = match JewelRadiusContext::resolve(
+            catalog,
+            &catalog.policy().jewel_radius.latest_tree_version,
+            JewelRadiusProvenance::BuildInitialization,
+        ) {
+            Ok(context) => {
+                report.jewel_radius_context = Some(context.evidence().clone());
+                Some(context)
+            }
+            Err(error) => {
+                report.failure = Some(ItemPreparationFailure {
+                    source: None,
+                    instance: None,
+                    source_error: error.kind == JewelRadiusErrorKind::Source,
+                    stage: "item_radius_initialization",
+                    message: error.to_string(),
+                });
+                None
+            }
+        };
         let mut provider = None;
         let mut instructions_left = limits.max_instructions;
         let mut state_bytes_left = limits.max_state_bytes;
         'containers: for (container_index, container) in projection.containers().iter().enumerate()
         {
+            let Some(radius) = &radius else { break };
             if container.source_use() == ItemSourceUse::NamespaceUnknown {
                 report.failure = Some(ItemPreparationFailure {
                     source: source_by_start
@@ -277,6 +306,9 @@ pub fn prepare_authored_items(
                 let provider =
                     provider.get_or_insert_with(|| BuiltinItemLoadProvider::new(data.snapshot()));
                 let mut machine = ItemLoadMachine::new(data.snapshot().item_loading());
+                machine
+                    .set_jewel_radius_context(radius.clone())
+                    .map_err(|e| contract(e.to_string()))?;
                 let attributes = node
                     .element()
                     .attributes()

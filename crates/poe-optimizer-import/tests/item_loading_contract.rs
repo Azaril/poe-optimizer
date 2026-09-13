@@ -10,6 +10,30 @@ fn table(fields: impl IntoIterator<Item = (&'static str, ItemMetadataValue)>) ->
 fn text(s: &str) -> ItemMetadataValue {
     ItemMetadataValue::Text(s.into())
 }
+fn radius_policy() -> JewelRadiusPolicy {
+    JewelRadiusPolicy {
+        version_pattern: "(%d+)%-(%d+)".into(),
+        canonical_separator: "-".into(),
+        latest_tree_version: "7-3".into(),
+        distance_multiplier: 2.5,
+        initial_maximum: -1.0,
+        outer_field: "callerOuter".into(),
+        inner_field: "callerInner".into(),
+        outer_squared_field: "callerOuterSquared".into(),
+        inner_squared_field: "callerInnerSquared".into(),
+        label_field: "callerLabel".into(),
+        header: "Caller Radius".into(),
+        jewel_type: "Caller Jewel".into(),
+        label_pattern: "^[%a ]+".into(),
+        variable_pattern: "^%a+".into(),
+        variable_label: "Caller Variable".into(),
+        item_label_field: "callerRadiusLabel".into(),
+        item_index_field: "callerRadiusIndex".into(),
+        item_data_field: "callerJewelData".into(),
+        deferred_index_field: "callerDeferredRadius".into(),
+        override_field: "callerRadiusOverride".into(),
+    }
+}
 fn catalog() -> ItemLoadingCatalog {
     let source_file = "src/Item.lua".to_owned();
     let assignment = |field, kind| {
@@ -30,6 +54,7 @@ fn catalog() -> ItemLoadingCatalog {
     rune_loading.other_header_patterns.clear();
     let policy = ItemLoadingPolicy {
         rune_loading,
+        jewel_radius: radius_policy(),
         affix_loading: ItemAffixLoadingPolicy {
             headers: [
                 ("Prefix".into(), ItemAffixSide::Prefix),
@@ -1850,5 +1875,16 @@ fn partial_numeric_armour_diagnostics_require_owned_graph_before_any_state_write
     assert_eq!(
         loader.state().armour_data.as_ref().unwrap(),
         &[("ChosenGuard".into(), ItemNumber::new(9.0))].into()
+    );
+}
+
+#[test]
+fn loading_contract_keeps_caller_defined_radius_policy() {
+    let catalog = catalog();
+    assert_eq!(catalog.policy().jewel_radius, radius_policy());
+    assert_eq!(catalog.policy().jewel_radius.header, "Caller Radius");
+    assert_eq!(
+        catalog.policy().jewel_radius.item_data_field,
+        "callerJewelData"
     );
 }

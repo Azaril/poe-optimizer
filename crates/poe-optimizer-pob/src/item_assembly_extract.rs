@@ -10,6 +10,7 @@ use poe_optimizer_data::{
 };
 use std::collections::BTreeMap;
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
+mod jewel;
 mod local;
 mod weapon;
 
@@ -41,6 +42,8 @@ impl Primitives {
             ("t_insert", "table", "insert"),
             ("t_remove", "table", "remove"),
             ("m_floor", "math", "floor"),
+            ("m_min", "math", "min"),
+            ("m_max", "math", "max"),
             ("m_modf", "math", "modf"),
             ("m_ceil", "math", "ceil"),
             ("bit_band", "bit", "band"),
@@ -246,6 +249,7 @@ fn authenticate<'a>(
     }
     for (owner, name, target) in [
         ("build_slot", "calcLocal", "calc_local"),
+        ("new_mod", "mod_createMod", "create_mod"),
         ("and64", "and2", "and_pair"),
         ("flag_internal", "band", "and64"),
         ("list_internal", "band", "and64"),
@@ -265,6 +269,8 @@ fn authenticate<'a>(
         ("bit", "band", "bit_band"),
         ("bit", "bnot", "bit_bnot"),
         ("math", "floor", "m_floor"),
+        ("math", "min", "m_min"),
+        ("math", "max", "m_max"),
         ("math", "modf", "m_modf"),
     ] {
         if !same(
@@ -496,6 +502,8 @@ fn policy(
     let ranged = body("ranged_mods")?;
     let (armour, flask, charm) = local::extract(lua, slot)?;
     let weapon = weapon::extract(lua, slot, &auth.weapon, parser)?;
+    let jewel_item_type = text_after(lua, build, "elseif self.type == ")?;
+    let jewel = jewel::extract(lua, build, slot, &jewel_item_type)?;
     let quality = query(lua, after(slot, "local craftedQuality = ")?)?;
     let soul = query(lua, after(build, "self.socketedSoulCoreEffectModifier = ")?)?;
     let rune = query(lua, after(build, "self.socketedRuneEffectModifier = ")?)?;
@@ -886,6 +894,7 @@ fn policy(
         requirements: req,
         slots,
         weapon,
+        jewel,
         armour,
         flask,
         charm,
@@ -903,7 +912,7 @@ fn policy(
                 "round(subMod.value * scale, ",
             )?)?,
         },
-        jewel_item_type: text_after(lua, build, "elseif self.type == ")?,
+        jewel_item_type,
     })
 }
 
@@ -1319,5 +1328,116 @@ mod tests {
         );
         assert_ne!(altered, *source);
         assert!(weapon::authenticate(&lua, &primitives, &f, &altered).is_err());
+    }
+    #[test]
+    fn jewel_extraction_preserves_two_queries_and_value_valued_cluster_formula() {
+        let shapes: BTreeMap<String, ItemSourceSpan> = serde_json::from_str(SHAPES).unwrap();
+        let build = source_body(sources(), &shapes["build_mod_list"]).unwrap();
+        let slot = source_body(sources(), &shapes["build_slot"]).unwrap();
+        let lua = Lua::new();
+        let p = jewel::extract(&lua, build, slot, "Jewel").unwrap();
+        assert_eq!(p.output_field, "jewelData");
+        assert_eq!(p.grand_spectrum.name_pattern, "Grand Spectrum");
+        assert_eq!(p.grand_spectrum.modifier_name, "Multiplier:GrandSpectrum");
+        assert_eq!(p.grand_spectrum.modifier_value, 1.0);
+        assert_eq!(p.grand_spectrum.minion_name, "MinionModifier");
+        assert_eq!(p.grand_spectrum.nested_mod_field, "mod");
+        assert_eq!(p.functions.query_name, "JewelFunc");
+        assert_eq!(p.overrides.query_name, "JewelData");
+        assert_eq!(p.alternate_class_start.query_name, "AlternateClassStart");
+        assert_eq!(p.from_nothing.guard_query_name, "FromNothingKeystones");
+        assert_eq!(p.from_nothing.entries.query_name, "FromNothingKeystones");
+        let c = &p.cluster;
+        assert_eq!(c.notables.output_field, "clusterJewelNotables");
+        assert_eq!(c.added_mods.output_field, "clusterJewelAddedMods");
+        assert_eq!(c.skill_field, "clusterJewelSkill");
+        assert_eq!(c.node_count_field, "clusterJewelNodeCount");
+        assert_eq!(c.correction.node_count_below, 4.0);
+        assert_eq!(
+            c.correction.replacement_skill,
+            "affliction_curse_effect_small"
+        );
+        assert_eq!(c.min_nodes_field, "minNodes");
+        assert_eq!(c.max_nodes_field, "maxNodes");
+        assert_eq!(c.skills_field, "skills");
+        assert_eq!(c.validity.keystone_field, "clusterJewelKeystone");
+        assert_eq!(
+            c.validity.smalls_are_nothingness_field,
+            "clusterJewelSmallsAreNothingness"
+        );
+        assert_eq!(
+            c.validity.socket_count_override_field,
+            "clusterJewelSocketCountOverride"
+        );
+        assert_eq!(
+            c.validity.nothingness_count_field,
+            "clusterJewelNothingnessCount"
+        );
+        assert!(jewel::extract(&lua, build, slot, "Other item type").is_err());
+    }
+
+    #[test]
+    fn jewel_complete_body_guard_rejects_deduplicated_queries_or_changed_validity() {
+        let shapes: BTreeMap<String, ItemSourceSpan> = serde_json::from_str(SHAPES).unwrap();
+        for (old, new) in [
+            (
+                "if modList:List(nil, \"FromNothingKeystones\") then",
+                "if true then",
+            ),
+            (
+                "or (jewelData.clusterJewelSocketCountOverride and jewelData.clusterJewelNothingnessCount)",
+                "or jewelData.clusterJewelSocketCountOverride",
+            ),
+        ] {
+            let mut altered = sources().clone();
+            let source = altered.get_mut("src/Classes/Item.lua").unwrap();
+            assert!(source.contains(old));
+            *source = source.replace(old, new);
+            assert!(
+                source_body(&altered, &shapes["build_slot"])
+                    .unwrap_err()
+                    .to_string()
+                    .contains("changed complete")
+            );
+        }
+    }
+
+    #[test]
+    fn jewel_clamp_authenticates_original_captured_minimum_and_maximum() {
+        let mut altered = sources().clone();
+        let source = altered.get_mut("src/Classes/Item.lua").unwrap();
+        assert!(source.contains("local m_min = math.min"));
+        *source = source.replace("local m_min = math.min", "local m_min = math.max");
+        let (lua, _, primitives) =
+            crate::unique_requirements_extract::host_with_observer(&altered, Primitives::capture)
+                .unwrap();
+        assert!(
+            authenticate(&lua, &primitives, &altered)
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("primitive capture")
+        );
+    }
+
+    #[test]
+    fn jewel_new_mod_capture_must_match_direct_create_mod() {
+        let mut altered = sources().clone();
+        let source = altered.get_mut("src/Classes/ModStore.lua").unwrap();
+        assert!(source.contains("local mod_createMod = modLib.createMod"));
+        *source = source.replace(
+            "local mod_createMod = modLib.createMod",
+            "local mod_createMod = modLib.setSource",
+        );
+        let (lua, _, primitives) =
+            crate::unique_requirements_extract::host_with_observer(&altered, Primitives::capture)
+                .unwrap();
+        assert!(
+            authenticate(&lua, &primitives, &altered)
+                .err()
+                .unwrap()
+                .to_string()
+                .contains("helper binding new_mod.mod_createMod")
+        );
     }
 }

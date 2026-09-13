@@ -123,7 +123,7 @@ fn real_caller_share_code_returns_source_linked_prerequisites_and_no_fake_metric
     );
     assert_preparation_only(&report);
     assert_eq!(report["status"], "incomplete");
-    assert_eq!(report["preparation"]["schema_version"], 5);
+    assert_eq!(report["preparation"]["schema_version"], 6);
     let inventory = &report["preparation"]["authored_items"];
     assert_eq!(inventory["source_sha256"], expected_hash);
     assert!(!inventory["records"].as_array().unwrap().is_empty());

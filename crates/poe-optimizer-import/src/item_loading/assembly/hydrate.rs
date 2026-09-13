@@ -1,5 +1,8 @@
+use super::value::Arena;
 use super::{AssemblyError, Context, ItemLoadProvider, Result, TableId, Value};
+use crate::item_loading::AssemblyRequest;
 use crate::item_loading::{ItemNumber, ItemScalar, ItemState, LoadedModLine};
+use poe_optimizer_data::item_loading::ItemLoadingCatalog;
 
 pub(super) const GROUPS: [&str; 6] = [
     "buffModLines",
@@ -29,6 +32,59 @@ pub(super) fn numeric(n: ItemNumber) -> Result<Value> {
 }
 impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
     pub(super) fn hydrate(&mut self, previous: bool) -> Result<()> {
+        hydrate(
+            &mut self.arena,
+            self.root,
+            self.request,
+            self.definitions.items(),
+            Some(&self.definitions.policy().jewel.cluster.item_field),
+            previous,
+        )
+    }
+}
+
+// ParseRaw hydration is shared with its NoBase continuation. No assembly queries
+// execute here, and existing structural fields retain their graph identities.
+pub(super) fn hydrate(
+    arena: &mut Arena,
+    root: TableId,
+    request: &AssemblyRequest,
+    catalog: &ItemLoadingCatalog,
+    cluster_field: Option<&str>,
+    previous: bool,
+) -> Result<()> {
+    Hydration {
+        arena,
+        root,
+        request,
+        catalog,
+        cluster_field,
+    }
+    .run(previous)
+}
+struct Hydration<'a> {
+    arena: &'a mut Arena,
+    root: TableId,
+    request: &'a AssemblyRequest,
+    catalog: &'a ItemLoadingCatalog,
+    cluster_field: Option<&'a str>,
+}
+impl Hydration<'_> {
+    fn get(&mut self, key: &str) -> Result<Value> {
+        self.arena.get_field(self.root, key)
+    }
+    fn set(&mut self, key: &str, value: Value) -> Result<()> {
+        self.arena.set_field(self.root, key, value)
+    }
+    fn root_table(&mut self, key: &str) -> Result<TableId> {
+        super::table(self.get(key)?)
+    }
+    fn fresh_field(&mut self, key: &str) -> Result<TableId> {
+        let id = self.arena.new_table()?;
+        self.set(key, Value::Table(id))?;
+        Ok(id)
+    }
+    fn run(&mut self, previous: bool) -> Result<()> {
         let state = &self.request.state;
         if !previous && !state.armour_data_complete {
             return Err(AssemblyError::unsupported(
@@ -69,6 +125,27 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
             };
             self.set(key, value)?;
         }
+        for (key, scalar) in self.request.root_header_updates() {
+            let value = match scalar {
+                ItemScalar::Boolean(b) => Value::Boolean(*b),
+                ItemScalar::Number(n) => numeric(*n)?,
+                ItemScalar::Text(s) => self.arena.text(s)?,
+            };
+            self.set(key, value)?;
+        }
+        if !previous {
+            if let Some(field) = self.cluster_field {
+                let cluster = match &state.cluster_jewel {
+                    Some(t) => Value::Table(self.arena.import_metadata(t)?),
+                    None => Value::Nil,
+                };
+                self.set(field, cluster)?;
+            } else if state.cluster_jewel.is_some() {
+                return Err(AssemblyError::unsupported(
+                    "fresh NoBase cluster metadata requires its assembly field policy",
+                ));
+            }
+        }
         let name = self.arena.text(&state.name)?;
         self.set("name", name)?;
         for (key, value) in [
@@ -97,7 +174,7 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
                 let name = state.base_name.as_deref().ok_or_else(|| {
                     AssemblyError::unsupported("present item base has no definition identity")
                 })?;
-                let definition = self.definitions.items().base(name).ok_or_else(|| {
+                let definition = self.catalog.base(name).ok_or_else(|| {
                     AssemblyError::unsupported("item base definition is unavailable")
                 })?;
                 Value::Table(self.arena.import_metadata(&definition.fields)?)

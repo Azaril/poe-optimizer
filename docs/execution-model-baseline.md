@@ -1117,3 +1117,44 @@ when this component result was recorded.
 Retained evidence is `runs/r2aa-weapon-local-01/source-parity-counts.json`,
 `remaining-item-stops.json`, `new-module-costs-final.json`, `package-reconciliation.json` and
 `source-01/`. The implementation record owns subsequent validation and production status.
+
+
+## Native jewel and radius checkpoint
+
+R2ab continues the existing injected-policy/native-algorithm seam. It adds finite local jewel
+production, an immutable radius context, ordered header/post-ParseRaw behavior and startup-context
+integration. The implementation record owns validation status; no alternative execution model is
+selected and complete original native builds remain 0/5.
+
+The additional standalone modules make the compatibility cost concrete. The measured files contain 189 lines of data policy, 793 lines of extraction, 789 lines in native
+producer/context/continuation modules, 1,228 lines in separate native test files and 1,773 lines in
+source-history/lifecycle test files. These are physical lines, including embedded tests/comments;
+they are not disjoint production-versus-test totals and exclude edits to existing integration
+files. Exact paths/counts are retained in `runs/r2ab-jewel-local-01/module-line-counts-final.json`.
+The generated package grows by 3,894 bytes. The original Item data, prior assembly policies and
+26 other sections remain unchanged; unique-requirement evidence updates only its item-loading
+dependency digest.
+
+The consumer requirements exposed here are lifetime and order: import uses the startup radius
+context before saved tree selection; a later tree switch does not replay item headers; an unknown
+base skips assembly but still reaches the radius tail; and arbitrary finite override values can
+retain aliases across reparses. No candidate model must use the present table arena or loader
+classes, but an alternative must preserve behavior that these later consumers observe.
+Shared ParseRaw hydration is reused for the NoBase continuation instead of duplicating it.
+
+Include local producer work, context preparation, graph adaptation, source authentication,
+observer/control tooling and failure diagnosis in A1/A2 comparisons. Test/extraction elapsed
+times are validation costs, not native candidate throughput. Spatial application, opaque callbacks,
+cluster topology and actor integration remain separate gaps; this checkpoint does not establish
+whole-build performance or a reason to retain the interpreter.
+
+
+The same checkpoint exposed a Windows debug startup cost. The current CLI's `--help` succeeded,
+but `metrics --backend native` overflowed its 1 MiB main-stack reserve before backend creation
+completed. A Windows/MSVC executable reserve of 8 MiB admits both commands. PE headers and binary
+hashes are retained in `windows-stack-before.json` and `windows-stack-after.json` under the R2ab
+evidence directory. Static frame inspection shows large generated Clap and typed-deserializer
+frames; it does not identify the exact crashing function. The stack-reserve fix is a host
+configuration change, not an execution-model selection or proof that all resource bounds are
+optimal. Include peak stack as well as heap in A2 preparation comparisons and eventual actual
+WASM runtime tests; portable compilation alone does not establish those runtime limits.

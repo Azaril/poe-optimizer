@@ -82,7 +82,9 @@ pub fn loading_updates(item: &AssembledItem, before: &ItemState) -> Result<Assem
         }
     }
     for key in before.retained_fields.keys() {
-        if !root.fields.contains_key(key) {
+        if !root.fields.contains_key(key)
+            || matches!(root.fields.get(key), Some(AssemblyValue::Table(_)))
+        {
             budget.key(key)?;
             updates.insert(key.clone(), ItemScalar::Number(ItemNumber::Nil));
         }

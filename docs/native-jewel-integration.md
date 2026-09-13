@@ -1,8 +1,11 @@
 # Native jewel and selected-tree integration
 
-Status: planned next integration at the existing injected-data/item/tree seams. This is a
-source-informed design, not implemented capability or parity evidence. It does not select an
-execution model in the [A1-A4 investigation](rule-execution-model-investigation.md).
+Status: finite local jewel production, explicit radius contexts and ordered inventory integration
+are validated in R2ab within the declared contracts. Spatial tree application and actor effects
+remain future work. This uses
+the existing injected-data/item/tree seams and does not select an execution model in the
+[A1-A4 investigation](rule-execution-model-investigation.md). The living implementation record
+owns measured completion and remaining parity limits.
 
 ## Separate item data from tree application
 
@@ -10,8 +13,10 @@ Pinned `Item.lua` has three distinct operations. `ParseRaw` (816–830) records 
 and either looks it up in the current radius definitions or defers a Variable label. The local
 jewel branch (2616–2667) builds jewel modifier data without reading a passive tree. After
 assembly, `ParseRaw` (1797–1802) applies a deferred radius index and then a time-lost override.
-The native loader currently stops all jewel radius headers before these operations. Replacing
-that stop should not require an already calculated actor or complete spatial tree.
+These operations do not require an already calculated actor or complete spatial tree.
+`BuildModList` returns immediately when no base is recognized, but the enclosing `ParseRaw`
+still executes its radius tail. A reparse must retain earlier jewel data, refresh current parsed
+fields, apply the tail in order and remain ineligible for registration without a base.
 
 The radius definitions are version dependent. `Data.lua:638–668` selects the greatest available
 major/minor radius version no later than the requested tree version, derives squared radii using
@@ -27,15 +32,14 @@ item sets and actor state. Completing local jewel data alone cannot retire these
 
 ## Context and ownership
 
-Introduce an immutable resolved radius context derived from injected definitions and an
-explicit tree-version selection. Its evidence records requested tree version, selected radius
-version, distance multiplier, data identity and the source/selection provenance that chose it.
-Keep these concepts separate from a passive-spec selection and from a fully prepared tree.
-An implementation name such as `ResolvedJewelRadiusContext` is provisional; this document
-specifies responsibilities, not a new public API already available to callers.
+The immutable `JewelRadiusContext` derives from injected definitions and an explicit tree-version
+request. Its evidence records requested tree version, selected radius version, distance multiplier,
+maximum radius and the provenance that chose it. The context retains its exact catalog owner;
+the enclosing native inventory report carries the complete data identity beside this evidence.
+Keep these concepts separate from passive-spec selection and a fully prepared tree.
 
-The native build coordinator should construct the context once for a validated build/view/data
-owner and pass it to item loading. Reuse shared definitions across workers, while retaining
+The native build coordinator constructs the startup context once for a validated build/view/data
+owner and passes it to item loading. Reuse shared definitions across workers, while retaining
 item-local scratch. Do not read process globals or choose the package's latest tree silently.
 An explicit standalone item API can accept a validated context without inventing an authored
 passive spec. A missing required context remains a named preparation dependency.
@@ -55,7 +59,12 @@ ordering. Before import-parity claims, record exact original function events/arg
 item/XML occurrence identities for fresh/reused imports, reordered/repeated ordinary and
 Tree/Spec sections, and failures. Compare observed and uninstrumented controls. A separate
 injected multi-version fixture tests the native seam but does not replace source lifecycle proof.
-The source review is retained in `runs/r2aa-weapon-local-01/jewel-context-lifecycle-review.md`.
+The source review is retained in `runs/r2aa-weapon-local-01/jewel-context-lifecycle-review.md`. R2ab now
+adds executable evidence under `runs/r2ab-jewel-local-01/lifecycle-evidence-01/`: ten cases,
+20 observed/control hosts and explicit original startup/deferred-tree events. All 116 component
+records bind BuildInitialization request `0_5`, resolved to `0_1`. The public native-only CLI
+registers 68 items across the five originals; two inventories reach ItemSet after every local
+item registers. This validates startup context, not the complete root/container lifecycle.
 
 A later tree switch may invalidate spatial/actor caches without replaying Item headers. Retain
 previously parsed radius fields unless the source actually reparses the item; a subsequent
@@ -110,5 +119,8 @@ of ordinary jewel preparation.
    boundary/eligibility, overlapping jewels, changed tree/radii and complete build comparisons.
    Keep the five-original full-native count explicit until their complete calculations pass.
 
-The current weapon checkpoint can proceed independently of these gates. The
-[living implementation record](implementation.md) owns sequencing and measured completion.
+The [living implementation record](implementation.md) owns sequencing and measured completion.
+Finite local producer completion does not admit opaque callbacks, present-cluster header
+mutation, cluster-generated topology, spatial effects or actor calculations. In pinned PoE2,
+ordinary Items do not initialize cluster metadata; directed producer fixtures inject that
+metadata explicitly rather than treating it as an observed production input.

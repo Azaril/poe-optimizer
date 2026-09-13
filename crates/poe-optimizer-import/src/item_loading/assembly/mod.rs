@@ -2,8 +2,13 @@
 //! Unsupported local-data or callback operations retain the reached mutation prefix.
 mod collect;
 mod hydrate;
+mod jewel;
+#[cfg(test)]
+mod jewel_tests;
 mod local;
 mod projection;
+mod radius;
+pub(crate) use radius::{finish_jewel_radius, finish_no_base_jewel_radius};
 mod query;
 mod slots;
 #[cfg(test)]
@@ -35,8 +40,10 @@ pub fn implementation_sources() -> &'static [&'static str] {
         include_str!("mod.rs"),
         include_str!("collect.rs"),
         include_str!("hydrate.rs"),
+        include_str!("jewel.rs"),
         include_str!("local.rs"),
         include_str!("projection.rs"),
+        include_str!("radius.rs"),
         include_str!("query.rs"),
         include_str!("slots.rs"),
         include_str!("text.rs"),

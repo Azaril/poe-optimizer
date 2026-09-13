@@ -1,6 +1,8 @@
 //! Directed original-method histories after a complete original build import.
 //! These specimens are declared inputs, not replacements for the five saved builds.
 use super::{FIELDS, compare_graph, dependencies};
+#[path = "item_assembly_jewel_histories.rs"]
+mod jewel;
 #[path = "item_assembly_local_histories.rs"]
 mod local;
 #[path = "item_assembly_weapon_histories.rs"]
@@ -232,9 +234,10 @@ pub(super) fn run(
     let malformed = malformed(lua, module, &class, &parse, &build, parser, snapshot);
     let local_families = local::run(lua, module, &class, &parse, &build, parser, snapshot);
     let weapons = weapon::run(lua, module, &class, &parse, &build, parser, snapshot);
+    let jewels = jewel::run(lua, module, &class, &parse, &build, parser, snapshot);
     assert_eq!(class.raw_get::<Function>("ParseRaw").unwrap(), parse);
     assert_eq!(class.raw_get::<Function>("BuildModList").unwrap(), build);
-    json!({"variants":variants,"reuse":reuse,"malformed_finite_input":malformed,"local_families":local_families,"weapons":weapons,
+    json!({"variants":variants,"reuse":reuse,"malformed_finite_input":malformed,"local_families":local_families,"weapons":weapons,"jewels":jewels,
         "scope":{"declared_assembly_field_row_field_graph_contract":true,"original_saved_build_mutated":false,"source_outputs_injected_as_native_results":false,"actual_dependency_arity_observed":false,"dependency_order_parity":false,"owned_result_survives_machine_provider_drop":true}})
 }
 fn malformed(

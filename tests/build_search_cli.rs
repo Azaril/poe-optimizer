@@ -22,6 +22,10 @@ fn write_problem(dir: &Path, value: &Value) {
     .unwrap();
 }
 fn command(dir: &Path, mode: &str, jobs: usize, evaluations: usize) -> Command {
+    // These fixtures compare functional results, not throughput. Concurrent debug
+    // CI searches exceeded the former 60-second whole-command deadline. Keep a
+    // finite allowance for cold preparation and fresh evaluations; deadline and
+    // cancellation behavior has dedicated search-crate contract tests.
     let mut command = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"));
     command.current_dir(dir).args([
         "search-build",
@@ -38,7 +42,7 @@ fn command(dir: &Path, mode: &str, jobs: usize, evaluations: usize) -> Command {
         "--max-rounds",
         "3",
         "--timeout-seconds",
-        "60",
+        "300",
     ]);
     command
 }
@@ -73,17 +77,44 @@ fn same_search(a: &Value, b: &Value) {
     }
 }
 fn assert_ledger(report: &Value, maximum: u64) {
+    let diagnostics = || {
+        json!({
+            "native_evaluation": report["native_evaluation"],
+            "elapsed_ms": report["elapsed_ms"],
+            "search_elapsed_ms": report["search"]["elapsed_ms"],
+            "termination": report["search"]["termination"],
+            "statistics": report["search"]["statistics"],
+            "errors": report["search"]["errors"],
+            "verifications": report["search"]["verifications"],
+            "total_evaluations": report["total_evaluations"],
+            "maximum_evaluations": maximum,
+            "baseline_attempts": report["baseline_attempts"],
+            "baseline_error": report["baseline_error"],
+        })
+    };
     let total = report["total_evaluations"].as_u64().unwrap();
     let search = report["search"]["statistics"]["evaluations"]
         .as_u64()
         .unwrap();
-    assert!(total <= maximum);
+    assert!(total <= maximum, "search ledger: {}", diagnostics());
     assert_eq!(
         total,
-        search + report["baseline_attempts"].as_u64().unwrap()
+        search + report["baseline_attempts"].as_u64().unwrap(),
+        "search ledger: {}",
+        diagnostics()
     );
-    assert_eq!(report["search"]["statistics"]["evaluation_failures"], 0);
-    assert_eq!(report["search"]["statistics"]["discarded_late"], 0);
+    assert_eq!(
+        report["search"]["statistics"]["evaluation_failures"],
+        0,
+        "search ledger: {}",
+        diagnostics()
+    );
+    assert_eq!(
+        report["search"]["statistics"]["discarded_late"],
+        0,
+        "search ledger: {}",
+        diagnostics()
+    );
 }
 fn assert_export(dir: &Path, name: &str, report: &Value) -> (Vec<u8>, Value) {
     assert_eq!(report["export"]["status"], "written");

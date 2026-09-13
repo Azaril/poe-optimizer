@@ -147,6 +147,7 @@ pub struct AssemblyRequest {
     /// Actual ParseRaw writes since the last assembly; absence is not a deletion.
     #[serde(skip)]
     armour_header_updates: BTreeMap<String, ItemNumber>,
+    root_header_updates: BTreeMap<String, ItemScalar>,
 }
 impl AssemblyRequest {
     pub fn binding(&self) -> &AssemblyBinding {
@@ -154,6 +155,9 @@ impl AssemblyRequest {
     }
     /// Only authored defence-header writes, including explicit nil deletion.
     /// Re-entry never reconstructs these from a diagnostic numeric projection.
+    pub fn root_header_updates(&self) -> &BTreeMap<String, ItemScalar> {
+        &self.root_header_updates
+    }
     pub fn armour_header_updates(&self) -> &BTreeMap<String, ItemNumber> {
         &self.armour_header_updates
     }
@@ -323,6 +327,8 @@ pub struct ItemState {
     pub base_present: bool,
     pub item_type: Option<String>,
     pub retained_fields: BTreeMap<String, ItemScalar>,
+    /// Explicit finite pre-existing cluster input; ordinary pinned PoE2 imports leave this absent.
+    pub cluster_jewel: Option<ItemMetadataTable>,
     /// Numeric named armourData entries, retained across reparses. This is a
     /// diagnostic projection, not assembled defensive calculation input.
     pub armour_data: Option<BTreeMap<String, ItemNumber>>,
@@ -364,6 +370,7 @@ impl Default for ItemState {
             base_present: false,
             item_type: None,
             retained_fields: BTreeMap::new(),
+            cluster_jewel: None,
             armour_data: None,
             armour_data_complete: true,
             variants: VariantState::default(),
@@ -402,11 +409,16 @@ pub struct ItemLoadMachine<'a> {
     affix_budget: MatchBudget,
     implicit_budget: MatchBudget,
     rune_programs: Option<RunePrograms>,
+    jewel_radius_context: Option<super::JewelRadiusContext>,
+    defer_jewel_radius: bool,
     assembly: Option<super::assembly::AssembledItem>,
     assembly_final: bool,
+    // False after an opaque legacy assembly: absence of a graph is not known nil.
+    assembly_graph_known: bool,
     assembly_reparsed: bool,
     assembly_item: Arc<()>,
     armour_header_updates: BTreeMap<String, ItemNumber>,
+    root_header_updates: BTreeMap<String, ItemScalar>,
 }
 #[derive(Clone, Copy, PartialEq)]
 enum GameStage {
@@ -428,11 +440,15 @@ impl<'a> ItemLoadMachine<'a> {
             affix_budget: MatchBudget::default(),
             implicit_budget: MatchBudget::default(),
             rune_programs: None,
+            jewel_radius_context: None,
+            defer_jewel_radius: false,
             assembly: None,
             assembly_final: false,
+            assembly_graph_known: true,
             assembly_reparsed: true,
             assembly_item: Arc::new(()),
             armour_header_updates: BTreeMap::new(),
+            root_header_updates: BTreeMap::new(),
         };
         machine.reset("");
         machine.number(
@@ -441,6 +457,22 @@ impl<'a> ItemLoadMachine<'a> {
         );
         machine.state.assembly_calls = 1;
         machine
+    }
+    /// Context changes affect future ParseRaw calls; they do not rewrite an already parsed item.
+    pub fn set_jewel_radius_context(
+        &mut self,
+        context: super::JewelRadiusContext,
+    ) -> Result<(), ItemLoadError> {
+        if !context.matches_definitions(self.catalog) {
+            return Err(ItemLoadError(
+                "jewel radius context belongs to another definition owner".into(),
+            ));
+        }
+        self.jewel_radius_context = Some(context);
+        Ok(())
+    }
+    pub fn jewel_radius_context(&self) -> Option<&super::JewelRadiusContext> {
+        self.jewel_radius_context.as_ref()
     }
     /// Only a successful final assembly can authorize production registration.
     pub fn assembled(&self) -> Option<&super::assembly::AssembledItem> {
@@ -583,6 +615,7 @@ impl<'a> ItemLoadMachine<'a> {
         Ok(())
     }
     fn reset(&mut self, raw: &str) {
+        self.defer_jewel_radius = false;
         self.assembly_final = false;
         self.assembly_reparsed = true;
         // A no-base parse can write defence headers without reaching assembly.
@@ -1130,6 +1163,181 @@ impl<'a> ItemLoadMachine<'a> {
             .get(key)
             .and_then(ItemMetadataValue::as_table)
     }
+    fn radius_error(
+        &mut self,
+        error: super::JewelRadiusError,
+        line: Option<usize>,
+    ) -> Result<(), ItemLoadError> {
+        match error.kind {
+            super::JewelRadiusErrorKind::Unsupported => {
+                self.stop(DependencyKind::Assembly, line, error.to_string())
+            }
+            super::JewelRadiusErrorKind::Source => self.reject_dependency(error.to_string(), true),
+            super::JewelRadiusErrorKind::Resource => {
+                self.stop(DependencyKind::Assembly, line, error.to_string())?;
+                Err(ItemLoadError(error.to_string()))
+            }
+        }
+    }
+    fn radius_header_write(
+        &mut self,
+        key: &str,
+        value: Option<ItemScalar>,
+    ) -> Result<(), ItemLoadError> {
+        let value = value.unwrap_or(ItemScalar::Number(ItemNumber::Nil));
+        if self.root_header_updates.len() >= 64 && !self.root_header_updates.contains_key(key) {
+            return Err(ItemLoadError("item root header patch bound".into()));
+        }
+        if let ItemScalar::Text(s) = &value {
+            self.charge(s.len() + key.len())?;
+        }
+        match &value {
+            ItemScalar::Number(ItemNumber::Nil) => {
+                self.state.retained_fields.remove(key);
+            }
+            _ => {
+                self.state.retained_fields.insert(key.into(), value.clone());
+            }
+        }
+        self.root_header_updates.insert(key.into(), value);
+        Ok(())
+    }
+    fn apply_radius_header(&mut self, value: &str, line: usize) -> Result<Header, ItemLoadError> {
+        let p = self.catalog.policy().jewel_radius.clone();
+        let label = match super::radius::header_capture(&p.label_pattern, value) {
+            Ok(v) => v,
+            Err(e) => {
+                self.radius_error(e, Some(line))?;
+                return Ok(Header::Stop);
+            }
+        };
+        self.radius_header_write(&p.item_label_field, label.clone())?;
+        let variable = match super::radius::header_capture(&p.variable_pattern, value) {
+            Ok(v) => v,
+            Err(e) => {
+                self.radius_error(e, Some(line))?;
+                return Ok(Header::Stop);
+            }
+        };
+        if matches!(variable,Some(ItemScalar::Text(v)) if v==p.variable_label) {
+            self.defer_jewel_radius = true;
+        } else {
+            let Some(context) = &self.jewel_radius_context else {
+                self.stop(
+                    DependencyKind::Assembly,
+                    Some(line),
+                    "jewel radius requires explicit item-call context",
+                )?;
+                return Ok(Header::Stop);
+            };
+            match context.lookup_label(label.as_ref()) {
+                Ok(Some(index)) => self.radius_header_write(&p.item_index_field, Some(index))?,
+                Ok(None) => {}
+                Err(e) => {
+                    self.radius_error(e, Some(line))?;
+                    return Ok(Header::Stop);
+                }
+            }
+        }
+        Ok(Header::Known)
+    }
+    fn radius_projection(
+        &mut self,
+        item: super::assembly::AssembledItem,
+    ) -> Result<(), ItemLoadError> {
+        self.assembly = Some(item.clone());
+        let updates = match super::assembly::loading_updates(&item, &self.state) {
+            Ok(v) => v,
+            Err(e) => {
+                self.stop(DependencyKind::Assembly, None, e.to_string())?;
+                return Err(ItemLoadError(e.to_string()));
+            }
+        };
+        if let Err(error) = self.apply_assembly_outcome(updates) {
+            self.stop(DependencyKind::Assembly, None, error.to_string())?;
+            return Err(error);
+        }
+        Ok(())
+    }
+    fn finish_radius(&mut self) -> Result<(), ItemLoadError> {
+        let no_base = self.status == ItemLoadStatus::NoBase;
+        if !no_base && self.status != ItemLoadStatus::Complete {
+            return Ok(());
+        }
+        let attempt = if no_base {
+            if !self.assembly_graph_known {
+                if self.defer_jewel_radius {
+                    return self.stop(
+                        DependencyKind::Assembly,
+                        None,
+                        "NoBase radius continuation requires the prior assembly's owned state",
+                    );
+                }
+                // Legacy providers expose diagnostic state only. As on the
+                // Complete path, preserve that interface without fabricating a
+                // radius result or an owned artifact eligible for registration.
+                return Ok(());
+            }
+            if self.assembly.is_none() && !self.defer_jewel_radius {
+                return Ok(()); // Fresh instance: jewelData is known absent.
+            }
+            let request = self.assembly_request(false);
+            super::assembly::finish_no_base_jewel_radius(
+                self.catalog,
+                &request,
+                self.defer_jewel_radius,
+            )
+        } else {
+            let Some(item) = &self.assembly else {
+                if self.defer_jewel_radius {
+                    self.stop(
+                        DependencyKind::Assembly,
+                        None,
+                        "deferred jewel radius requires an owned assembly result",
+                    )?;
+                }
+                return Ok(());
+            };
+            let p = &self.catalog.policy().jewel_radius;
+            if !self.defer_jewel_radius
+                && item
+                    .field(item.root(), &p.item_data_field)
+                    .is_none_or(|v| !v.truthy())
+            {
+                return Ok(());
+            }
+            super::assembly::finish_jewel_radius(item, p, self.defer_jewel_radius)
+        };
+        if let Some(prefix) = attempt.partial {
+            self.radius_projection(prefix)?;
+        }
+        match attempt.result {
+            Ok(item) => {
+                self.radius_projection(item)?;
+                if no_base {
+                    // These headers are now committed to the refreshed graph,
+                    // including radius-tail overrides. Replaying them later
+                    // would overwrite the tail with an obsolete header value.
+                    self.armour_header_updates.clear();
+                    self.root_header_updates.clear();
+                    self.assembly_reparsed = false;
+                }
+                Ok(())
+            }
+            Err(e) => match e.kind {
+                super::assembly::AssemblyErrorKind::Source => {
+                    self.reject_dependency(e.to_string(), true)
+                }
+                super::assembly::AssemblyErrorKind::Unsupported => {
+                    self.stop(DependencyKind::Assembly, None, e.to_string())
+                }
+                super::assembly::AssemblyErrorKind::Resource => {
+                    self.stop(DependencyKind::Assembly, None, e.to_string())?;
+                    Err(ItemLoadError(e.to_string()))
+                }
+            },
+        }
+    }
     fn apply_header(
         &mut self,
         name: &str,
@@ -1137,6 +1345,13 @@ impl<'a> ItemLoadMachine<'a> {
         line: usize,
         imported: &mut Option<ItemNumber>,
     ) -> Result<Header, ItemLoadError> {
+        if name == self.catalog.policy().jewel_radius.header
+            && self.state.item_type.as_deref()
+                == Some(&self.catalog.policy().jewel_radius.jewel_type)
+        {
+            return self.apply_radius_header(value, line);
+        }
+
         if self
             .compat("selection_headers")
             .is_some_and(|t| t.fields.contains_key(name))
@@ -1237,22 +1452,15 @@ impl<'a> ItemLoadMachine<'a> {
                 return Ok(Header::Known);
             }
             "Cluster Jewel Skill" | "Cluster Jewel Node Count" => {
+                if self.state.cluster_jewel.is_none() {
+                    return Ok(Header::Known);
+                }
                 self.stop(
                     DependencyKind::ClusterJewel,
                     Some(line),
-                    "cluster-jewel initialization and selected tree data are unavailable",
+                    "cluster-jewel header mutation requires represented cluster input semantics",
                 )?;
                 return Ok(Header::Stop);
-            }
-            "Radius" => {
-                if self.state.item_type.as_deref() == Some("Jewel") {
-                    self.stop(
-                        DependencyKind::Assembly,
-                        Some(line),
-                        "jewel radius requires selected tree version and assembled jewel data",
-                    )?;
-                    return Ok(Header::Stop);
-                }
             }
             "Catalyst" => {
                 if let Some(i) = self
@@ -2000,7 +2208,8 @@ impl<'a> ItemLoadMachine<'a> {
         if self.num("quality").is_none() && self.base().is_some_and(|b| b.quality().is_some()) {
             self.number("quality", ItemNumber::new(0.0));
         }
-        self.assemble(false, provider)
+        self.assemble(false, provider)?;
+        self.finish_radius()
     }
     fn affix_list_mut(&mut self, side: ItemAffixSide) -> &mut ItemAffixList {
         match side {
@@ -2209,6 +2418,21 @@ impl<'a> ItemLoadMachine<'a> {
         }
         Ok(true)
     }
+    fn assembly_request(&self, final_load: bool) -> AssemblyRequest {
+        AssemblyRequest {
+            binding: AssemblyBinding {
+                item: Arc::clone(&self.assembly_item),
+                attempt: Arc::new(()),
+                catalog: self.catalog.clone(),
+            },
+            final_load,
+            reparsed: self.assembly_reparsed,
+            previous: self.assembly.clone(),
+            state: self.state.clone(),
+            armour_header_updates: self.armour_header_updates.clone(),
+            root_header_updates: self.root_header_updates.clone(),
+        }
+    }
     fn assemble(
         &mut self,
         final_load: bool,
@@ -2220,18 +2444,7 @@ impl<'a> ItemLoadMachine<'a> {
             self.status = ItemLoadStatus::NoBase;
             return Ok(());
         }
-        let request = AssemblyRequest {
-            binding: AssemblyBinding {
-                item: Arc::clone(&self.assembly_item),
-                attempt: Arc::new(()),
-                catalog: self.catalog.clone(),
-            },
-            final_load,
-            reparsed: self.assembly_reparsed,
-            previous: self.assembly.clone(),
-            state: self.state.clone(),
-            armour_header_updates: self.armour_header_updates.clone(),
-        };
+        let request = self.assembly_request(final_load);
         self.assembly_final = false;
         let attempt = provider.assemble_with_trace(&request);
         if let Some(prefix) = attempt.prefix {
@@ -2269,11 +2482,14 @@ impl<'a> ItemLoadMachine<'a> {
                         false,
                     );
                 }
+                let graph_known = result.assembled.is_some();
                 self.apply_assembly_outcome(result)?;
+                self.assembly_graph_known = graph_known;
                 self.status = ItemLoadStatus::Complete;
                 self.assembly_final = final_load;
                 self.assembly_reparsed = false;
                 self.armour_header_updates.clear();
+                self.root_header_updates.clear();
             }
         }
         Ok(())

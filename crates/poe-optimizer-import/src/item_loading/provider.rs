@@ -304,8 +304,19 @@ mod projection_failure_tests {
     }
     impl ItemLoadProvider for RefuseProjection {
         fn parse_modifier(&mut self, _: &ParseRequest) -> DependencyResult<ParseOutcome> {
+            use poe_optimizer_data::item_loading::{ItemMetadataTable, ItemMetadataValue as V};
             DependencyResult::Available(ParseOutcome {
-                modifiers: Some(Vec::new()),
+                modifiers: Some(vec![ItemMetadataTable {
+                    fields: [
+                        ("name".into(), V::Text("JewelData".into())),
+                        ("type".into(), V::Text("LIST".into())),
+                        ("flags".into(), V::Number(0.)),
+                        ("keywordFlags".into(), V::Number(0.)),
+                        ("value".into(), V::Number(1.)),
+                    ]
+                    .into(),
+                    indexed: Default::default(),
+                }]),
                 extra: None,
             })
         }
@@ -382,16 +393,19 @@ mod projection_failure_tests {
     fn partial_projection_refusal_retains_graph_and_original_failure() {
         let mut machine = ItemLoadMachine::new(data().item_loading());
         let mut provider = RefuseProjection::default();
-        machine
-            .apply_text("Rarity: NORMAL\nSapphire", &mut provider)
-            .unwrap();
+        let error = machine
+            .apply_text(
+                "Rarity: NORMAL\nRuby\nImplicits: 0\ncontrolled invalid override",
+                &mut provider,
+            )
+            .unwrap_err();
         let graph = machine.assembly_progress().unwrap();
         assert!(!graph.is_complete());
         assert!(graph.shares_storage_with(provider.last.as_ref().unwrap()));
         assert!(machine.assembled().is_none());
-        assert_eq!(machine.status(), ItemLoadStatus::Pending);
-        let message = &machine.pending().unwrap().message;
-        assert!(message.contains("item local jewel data assembly is unavailable"));
+        assert_eq!(machine.status(), ItemLoadStatus::SourceError);
+        let message = error.to_string();
+        assert!(message.contains("attempt to index a non-table item value"));
         assert!(!message.contains("controlled projection refusal"));
         assert!(
             !machine

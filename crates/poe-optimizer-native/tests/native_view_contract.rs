@@ -297,7 +297,7 @@ fn all_five_real_sources_reach_shared_preparation_with_explicit_remaining_produc
                 index + 1
             )
         };
-        assert_eq!(report.schema_version, 5);
+        assert_eq!(report.schema_version, 6);
         let skills = report
             .authored_skills
             .as_ref()

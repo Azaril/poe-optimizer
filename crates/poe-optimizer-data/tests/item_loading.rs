@@ -93,6 +93,30 @@ fn rune_policy() -> ItemRuneLoadingPolicy {
         scalar_base: 0.0,
     }
 }
+fn radius_policy() -> JewelRadiusPolicy {
+    JewelRadiusPolicy {
+        version_pattern: "(%d+)%-(%d+)".into(),
+        canonical_separator: "-".into(),
+        latest_tree_version: "7-3".into(),
+        distance_multiplier: 2.5,
+        initial_maximum: -1.0,
+        outer_field: "callerOuter".into(),
+        inner_field: "callerInner".into(),
+        outer_squared_field: "callerOuterSquared".into(),
+        inner_squared_field: "callerInnerSquared".into(),
+        label_field: "callerLabel".into(),
+        header: "Caller Radius".into(),
+        jewel_type: "Caller Jewel".into(),
+        label_pattern: "^[%a ]+".into(),
+        variable_pattern: "^%a+".into(),
+        variable_label: "Caller Variable".into(),
+        item_label_field: "callerRadiusLabel".into(),
+        item_index_field: "callerRadiusIndex".into(),
+        item_data_field: "callerJewelData".into(),
+        deferred_index_field: "callerDeferredRadius".into(),
+        override_field: "callerRadiusOverride".into(),
+    }
+}
 fn catalog() -> ItemLoadingData {
     let path = "src/Data/Bases/caller.lua".to_owned();
     ItemLoadingData {
@@ -114,6 +138,7 @@ fn catalog() -> ItemLoadingData {
         },
         policy: ItemLoadingPolicy {
             rune_loading: rune_policy(),
+            jewel_radius: radius_policy(),
             affix_loading: ItemAffixLoadingPolicy {
                 headers: BTreeMap::new(),
                 other_headers: BTreeSet::new(),
@@ -632,5 +657,64 @@ fn defence_headers_allow_later_hidden_overlap_but_reject_other_declared_operatio
             ])),
         )])),
     );
+    assert!(data.validate().is_err());
+}
+
+#[test]
+fn caller_radius_policy_roundtrips_with_independent_catalog() {
+    let original = catalog();
+    original.validate().unwrap();
+    let restored: ItemLoadingData =
+        serde_json::from_slice(&serde_json::to_vec(&original).unwrap()).unwrap();
+    restored.validate().unwrap();
+    assert_eq!(restored.policy.jewel_radius, radius_policy());
+    let retained = ItemLoadingCatalog::new(restored).unwrap();
+    assert_eq!(retained.policy().jewel_radius.distance_multiplier, 2.5);
+    assert_eq!(retained.policy().jewel_radius.latest_tree_version, "7-3");
+    assert!(retained.data().jewel_radii.fields.is_empty());
+}
+
+#[test]
+fn radius_policy_is_required_and_rejects_unknown_or_missing_operands() {
+    let original = serde_json::to_value(catalog()).unwrap();
+    let mut missing_policy = original.clone();
+    missing_policy["policy"]
+        .as_object_mut()
+        .unwrap()
+        .remove("jewel_radius");
+    assert!(serde_json::from_value::<ItemLoadingData>(missing_policy).is_err());
+    let mut missing_operand = original.clone();
+    missing_operand["policy"]["jewel_radius"]
+        .as_object_mut()
+        .unwrap()
+        .remove("distance_multiplier");
+    assert!(serde_json::from_value::<ItemLoadingData>(missing_operand).is_err());
+    let mut unknown_operand = original;
+    unknown_operand["policy"]["jewel_radius"]["unexpected"] = serde_json::json!(true);
+    assert!(serde_json::from_value::<ItemLoadingData>(unknown_operand).is_err());
+}
+
+#[test]
+fn radius_policy_bounds_do_not_narrow_finite_custom_operands() {
+    let mut data = catalog();
+    data.policy.jewel_radius.distance_multiplier = 0.0;
+    data.policy.jewel_radius.initial_maximum = -17.0;
+    data.validate().unwrap();
+    data.policy.jewel_radius.distance_multiplier = -2.5;
+    data.validate().unwrap();
+
+    for invalid in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+        let mut data = catalog();
+        data.policy.jewel_radius.distance_multiplier = invalid;
+        assert!(data.validate().is_err());
+        let mut data = catalog();
+        data.policy.jewel_radius.initial_maximum = invalid;
+        assert!(data.validate().is_err());
+    }
+    let mut data = catalog();
+    data.policy.jewel_radius.outer_field.clear();
+    assert!(data.validate().is_err());
+    let mut data = catalog();
+    data.policy.jewel_radius.override_field = "x".repeat(4097);
     assert!(data.validate().is_err());
 }
