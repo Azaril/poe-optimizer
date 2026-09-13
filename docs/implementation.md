@@ -18,6 +18,128 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+**R2ap integrated: CI diagnosis and preparation reuse.** Authenticated completed
+Windows/Linux CI logs confirm the sole reported failure was the stale 84-versus-81 factory
+count, already corrected by `69d9f5a`. No newer failure is visible in the 22:50 UTC snapshot;
+all four jobs for `69d9f5a`/`98fcf52` are still in Test. Live signed log downloads returned 404.
+See `runs/r2an-ci-investigation-01/followup-05/` for complete failed-job logs and
+`followup-06/` for the current status. Hosted CI is not yet green.
+
+The exhaustive candidate target now prepares each full document once while retaining all
+candidate counts, legality, realization, export, full-result and pure-output assertions.
+All **12** tests pass in 3,106.38 seconds, with independent public-wrapper/deadline checks.
+The isolated commit is `6f8846e` (the separately validated original is `3282e4b`).
+
+A separate measured fix shares immutable parser compilation through the exact injected
+CompiledGameData owner. It caches success or compilation failure lazily; parsing still owns
+fresh work budgets, heaps, source state and result graphs. Item and rune providers retain
+independent runtime state, and no rune results or game-data defaults are cached. Five new
+regressions cover parallel first use, dataset isolation, owner lifetime, real compilation
+failure, lazy pattern failure and output/budget isolation. All **61** affected test executions
+pass, along with three targeted lint commands, whole-workspace/all-target strict Clippy and
+engine/import/native WASM compilation. The producing ledgers are
+`runs/r2an-loadout-sync-01/r2ap-validation-01/`, `r2ap-final-lint-01/`, and
+`runs/r2ap-parser-sharing-01/validated-checkpoint-root.json`.
+
+The identical three-sample diagnostic probe preserves all nine authored component-report
+hashes and the 14-metric checksum. Warm full-preparation median is 300.972 ms, versus 417.256 ms
+before the change. Each full-prepare sample follows authored-items preparation, so the shared
+owner is already warm; first item preparation is reported separately. This small Mace probe
+ran alongside older tests and does not measure whole-CI speedup or general build throughput.
+The [performance inventory](execution-model-performance-inventory.md#ci-preparation-cost-investigation-r2ap)
+retains the scope and residual rune-initialization workload. The diagnostic example is archived
+under `runs/r2ap-ci-profile-01/`, not added to production or the shipped examples.
+
+The parser fix is committed as `7baad65`. Commit `b96fbd9` adds a pinned dependency-only Rust
+CI cache, main-push-only saving, and an immediate Cargo.lock preservation guard because the
+cache action uses unlocked metadata discovery. Every previous workflow matrix, environment,
+check and command is retained exactly; cache behavior still needs hosted execution. Source
+review and the workflow-preservation receipt are in
+`runs/r2an-ci-investigation-01/cache-review-01/`. No schema or injected package changed.
+
+The validated chain through `b96fbd9` is now integrated into main. The older full suite
+`90370` was intentionally stopped after the combined fix was validated, preserving its log
+and terminal exit 1 as **superseded/incomplete**, not a test failure or full-suite success.
+It passed 1,650 tests in completed targets and 11/12 candidate tests; the remaining normal/rare
+weapon sweep had not finished. All 747 source/input guards matched before integration.
+`runs/r2ap-parser-sharing-01/superseded-baseline-root.json` records the reason and exact scope.
+
+**Active full validation: session `71368`.** It runs the complete workspace/all-target suite
+against combined code `b96fbd9` in the clean isolated checkout, with CI's optimization 2 and
+debug/overflow checks, eight compile jobs and six test threads. Its command/source/process
+ledger is `runs/r2an-loadout-sync-01/r2ap-workspace-01/01.json`. Keep this checkout's Rust,
+Lua and input files frozen while it runs. Only this full-suite session remains live; all
+focused and profiler sessions are terminal success. Check its actual result and the new
+hosted CI run after publication; do not infer green from the focused checks. Continue the
+source-backed loadout-policy/live-context integration separately; parser compilation reuse
+does not implement the pending Build lifecycle.
+
+The following checkpoint notes retain earlier validation history; their then-current
+session and integration instructions are superseded by the resume point above.
+
+**R2ao validated in isolation: native loadout display/lookup and directed activation.**
+The isolated checkout based on validated `c4e3625` now contains a standalone injected
+`BuildLoadoutPolicy` and native IMPORT `LoadoutProgram` for complete GetSpecList /
+GetLoadoutByName semantics. Its live read interface keeps proved singleton status separate
+from raw order positions and lookup winners. Returned numeric requests borrow the exact
+context and program; activation must still resolve them to the existing authored identities.
+No diagnostic graph or final SelectedView is used to reconstruct runtime domain owners.
+
+The component preserves Skills/Items/Config singleton-probe order, eager complete spec
+formatting, Tree/Items/Skills/Config lookup order, immediate link fallback after each failed
+exact match, singleton bypass, partial IDs and one-nil results. Default titles, version
+displays/decorations and link syntax are injected. Shared bounded Rust byte patterns retain
+lazy source errors; this does not expand the generic rule interpreter. The policy is standalone;
+the bundled package/schema and production preparation continuation are unchanged. Fingerprints
+include the new source files. There is no complete native build or SyncLoadouts claim.
+
+All **17** focused DATA/IMPORT tests pass (4 policy, 13 lookup), as do strict Clippy checks
+for the affected libraries/test target. A library compile also passes. Review found and fixed
+missing text/work charges for current-version equality, with a focused regression. Evidence:
+`runs/r2an-loadout-sync-01/r2ao-native-01/`. The complete unchanged original methods now
+match the native component on **29 directed cases** (26 with original version data, three
+with injected version globals), including one-nil results, partial IDs, lazy source failures
+and fresh source result identity. These use supplied plain component state, not original
+import closures or native-produced build state. Both source target tests pass. An initial
+JSON-macro compile error was fixed before execution; the successful ledger is
+`runs/r2an-loadout-sync-01/r2ao-lookup-source-02/`. DATA/IMPORT WASM library checks pass.
+
+The separate reference runner now adds bounded SetActiveLoadout calls using retained actual
+lookup-result tables from each original. Nil, natural current selection, alternatives, repeat
+and natural no-spec partial results have separate argument/pre/post histories. Existing lookup
+cases/denominators remain intact. Inputs are chosen from loaded data, with missing paths explicit;
+all supplied originals have one configuration set, so these cases cannot alone prove changed
+configuration activation. The optional observer admits the original activation as a standalone
+root without relaxing owner/function/class guards. Static review fixed a surplus call argument
+and the empty-control-event representation; observed cases require an actual activation root.
+
+Reference validation passed all **22** lifecycle/mechanics tests and affected-target Clippy;
+ledgers: `runs/r2an-loadout-sync-01/r2ao-activation-01/`. The new activation cases total **26
+per control lane across five originals**, or 78 direct calls in 15 hosts; all returned zero
+values. Builds 2/5 execute seven actual Tree -> Items -> Skills transitions per observed lane,
+followed by dropdown/lookup/activation reentry and a second Sync, without repeated domain
+changes. There are 23 Sync and 14 PopulateSlots calls per lane. Nil/no-spec calls do nothing;
+repeats Sync without changing domains. Every declared activation graph comparison passes.
+Broader import exact graphs differ in 8/10 and remain diagnostic, not a successful whole-graph
+claim. Configuration switching and partial requests retaining spec remain directed-source gaps.
+
+All R2ao validation sessions (`1184`, `92256`, `59832`, `92989`) are terminal success.
+The checkpoint totals **41 test executions**, 29 native/original component cases, targeted
+strict Clippy and portable-library checks. It is committed as `3bbf148` on top of `c4e3625`
+in the isolated checkout, which is clean. It is not integrated or pushed to main. The receipt
+`runs/r2ao-loadout-activation-01/validated-checkpoint-root.json` binds all 11 files to their
+relevant producing commands and confirms 747 main source/input files remain unchanged.
+
+The main full suite remains `90370`; preserve its source snapshot. The separate CI
+optimization suite `59807` is now terminal success. Its one-file change is committed as
+`3282e4b` in the CI checkout and cherry-picked as `6f8846e` above `3bbf148` in the integration
+checkout. The follow-on parser-sharing candidate below is still under review/validation.
+Once required validation is terminal and actual failures are addressed, integrate the
+validated chain (or reconcile if main advanced), update these documents, and push once.
+Next native work is source-backed policy acquisition/package integration, live domain readers,
+and the actual shared Build lifecycle coordinator. Complete Sync/export/activation remains
+unimplemented, and full native original evaluations remain **0/5**.
+
 **CI correction validated locally: numeric-factory coverage after substitution support.**
 The older `80b1801` CI run failed on both platforms in `modifier_numbers`: 84 discovered
 factories versus an expectation of 81. Public failure annotations expose the exact assertion;
@@ -32,33 +154,152 @@ Production code, definitions and admission are unchanged by this CI correction. 
 DATA and nine complete source-parity tests pass, preserving source frames, exact public and
 raw alias graphs, ordered errors, cache/copy behavior and warmed execution. The source tests
 cover 84 bodies, 107 public call-position cases, 749 alias cases and 10,752 warmed calls.
+The parallel CI review requested by the owner rechecked the latest completed failure
+(`f204147`, run34777990155) and seven failed-job annotations: all show that same pre-fix
+84-versus-81 assertion. Both `69d9f5a` and current `98fcf52` runs still have both platforms
+in Test, with no failed current step at the latest review. Their formatting/lint steps passed.
+The CI checkout is clean; no additional code or workflow change was justified. Evidence is
+under `runs/r2an-ci-investigation-01/assessment.json`. CI is not yet claimed green.
+The follow-ups at 21:36 and 22:11 UTC still found both fixed-revision runs in Test, with no current
+failure or timeout. Public job metadata does not expose the active subtest. The workflow
+already uses optimized tests and preserves debug/overflow checks; the review found no
+configuration fault. The 22:24 UTC review likewise found all four jobs still in Test without
+failure annotations (`runs/r2an-ci-investigation-01/followup-03/`). Normal noninteractive Git
+credential-helper authentication subsequently succeeded for log access; each current-job
+API returned a signed download, but the four downloads returned 404. Live REST logs remain
+unavailable, rather than access requiring new owner permission. Credentials and signed URLs
+were not retained. Sanitized evidence: `runs/r2an-ci-investigation-01/followup-04/`.
+Authenticated downloads of the completed failure logs now confirm the same sole 84-versus-81
+assertion on both platforms, after 72 prior successful target-result records each. No newer
+completed failure was found. Cargo stopped at that assertion, so those logs establish nothing
+about later targets. Full logs and excerpts are retained in `followup-05/`.
+
+A separate test-cost review found two full-document preparations per legal candidate in
+both `native_candidate_contract` matrices. The isolated CI checkout now prepares each
+materialized document once and uses it for full result and pure calculation comparisons.
+Typed candidate preparation remains independent; candidate counts, legality, realization,
+exports and numerical assertions remain unchanged. Baseline `calculate(request)` calls and
+separate wrapper/deadline tests preserve public-entry coverage. This is a test-harness cost
+reduction, not an additional CI assertion fix or a production evaluator change.
+
+The one-file candidate is frozen in `runs/r2an-ci-fix-worktree`; affected-target strict
+Clippy and both selected public wrapper/deadline tests pass (each one test, 3.48 and 2.76
+seconds excluding compilation). Isolated session `59807` has passed the complete
+12-test candidate target with six test threads, CI profile flags and a separate target
+directory: 3,106.38 seconds in the target, 3,113.21 including compilation. All four validation
+commands are terminal success; ledgers are `runs/r2an-loadout-sync-01/ci-preparation-01/` and
+`runs/r2an-ci-investigation-01/prepare-once-validated-root.json`. The source hash matches the
+validated command. No comparable before/after CI speedup is claimed. The last remaining actor-resource test covers two finite
+4,410-alternative sweeps, each with 3,675 legal full-document preparations. Static review
+found no nonterminating loop or remaining duplicate preparation in the changed helper.
+Both actor sweeps and all 11 other tests have now passed. A separate three-sample preparation profile now passes with stable 14-metric checksums,
+input exports and binding checks (`runs/r2an-loadout-sync-01/r2ap-profile-before-01/`).
+The diagnostic Mace fixture takes roughly 400 ms for full preparation and 0.1 ms for prepared
+evaluation; each fresh item-parser constructor takes roughly 50 ms. This demonstrates repeated
+compilation cost but does not make it the majority of item/rune preparation. Component times
+overlap full preparation; the old suites were concurrent. Source/binary bindings are in
+`runs/r2ap-ci-profile-01/before-root-receipt.json`. This is not original-build or CI throughput.
+A compile-once candidate is being staged on the existing injected CompiledGameData owner,
+with fresh request/session state and unchanged lazy error reporting; it is not yet validated. Keep the main full-suite sources frozen while it runs.
+The validated test-only change is already combined with the loadout checkpoint in isolated
+commit `6f8846e`; the subsequent parser-sharing candidate remains a separate validation gate. No CI workflow checks were weakened.
+
 Strict workspace Clippy and formatting pass. Receipts are under
 `runs/r2am-base-name-01/ci-followup-01/`, `ci-numeric-01/` and `ci-lint-01/`.
 
 **Immediate validation resume:** the full workspace/all-target test suite is running against
 the code at `69d9f5a`, using CI's test optimization level 2 with debug assertions and overflow
-checks enabled. Compilation completed and tests have started. Its command/source/PID/result
-ledger is `runs/r2am-base-name-01/workspace-01/01.json`; the active tool session is `90370`.
+checks enabled. Compilation completed; the run has passed all DATA and engine targets and entered native tests.
+The large `native_candidate_contract` matrices are still running; its custom-data matrix has
+passed. Long-running test notices are not terminal failures.
+The previously failing `modifier_numbers` target passed all five tests in this broader run
+(2.41 seconds); source/input hashes still match its recorded code. This clears the known
+failure point, not the full suite. The bounded receipt is
+`runs/r2an-loadout-sync-01/numeric-target-in-full-suite-root.json`.
+Its command/source/PID/result ledger is `runs/r2am-base-name-01/workspace-01/01.json`;
+the active tool session is `90370`.
 Inspect that existing process rather than launch a duplicate; keep production/test changes
 out of this run until it is terminal. This broader run may expose other stale expectations and
 must not be reported complete until terminal success. The previously published item checkpoint
 below remains scoped to its selected tests; hosted CI is separate and not yet green.
 
-**R2an planning checkpoint:** independent file-only source, policy and receipt reviews now
-define the [next synchronization gate](native-equipment-integration.md#synchronization-source-contract-and-next-integration-gate).
+**R2an validation checkpoint:** independent source, policy and receipt reviews define the
+[next synchronization gate](native-equipment-integration.md#synchronization-source-contract-and-next-integration-gate).
 All five previously observed Items.Load calls return from SyncLoadouts without loadout
-activation in that scope; callback reentry and later tree-loaded calls remain unobserved.
-Builds 2/5 still have the default tree at the pending call, unlike their final imported view.
-Keep caller intent, imported instance identities and live effective selections separate.
-The next executable work is a bounded extension of the existing source lifecycle fixture,
-followed by the native domain continuation; no source/test implementation has been added here.
-Review artifacts are retained under `runs/r2an-loadout-sync-01/`.
+activation in that scope. Builds 2/5 still have the default tree at the pending call, unlike
+their final imported view. Keep caller intent, imported instance identities and live effective
+selections separate.
+
+The source-test extension is applied and formatted in the isolated checkout
+`runs/r2an-loadout-sync-01/validation-worktree` at base `98fcf52`. It adds an optional observer
+mode, a reused three-host runner, direct pre/post result histories and eight mechanics tests
+plus the all-five entry. Static review corrected callback-owner lifetime checks, a fixture
+class mismatch, a missing pre-call snapshot and quadratic event validation. Exact source
+methods/callbacks are authenticated; debug token IDs and absolute history equality remain
+diagnostics rather than game-semantic equality requirements. The first isolated run passed 16 mechanics/helper tests and the unchanged all-five lifecycle
+source regression (15 fresh hosts, 62.03 seconds for that source test). The new loadout lane
+then exposed two real observer defects. Build is an exact ControlHost instance, and before
+Sync clears loadoutsList it can still reference prior PassiveSpec objects after TreeTab has
+replaced its current list. The isolated fix retains/rechecks those exact classes and old
+spec owners, projects the actual retained list with the same alias memo, and keeps generic
+class cloning rejected. Two added regressions cover class substitution/inherited fields and
+equal-valued old/current specs, repeated aliases and snapshot lifetime. All **18** mechanics
+and helper tests now pass. This is reference-tooling validation, not native build parity.
+
+The main full-suite session `90370` remains live with its original sources and inputs.
+To make progress during the large candidate matrices, validation now uses the separate
+checkout, its own pinned PoB clone, `runs/r2an-isolated-target`, fresh absolute output paths,
+four compile jobs and one test thread. The host has 32 logical CPUs and more than 43 GiB free
+memory at setup; the existing target was using approximately two cores. This replaces the
+previous one-runtime-at-a-time convention only for this isolated run. Root still owns all
+runtime launches. A read-only path audit found no hardcoded main-checkout route; clear both
+child-selector variables before normal source-test dispatch and keep output paths absolute.
+
+Final isolated validation is complete in `isolated-final-01/`: strict workspace/all-target
+Clippy passes, followed by **30 passing tests** (10 callback-factory and 20 lifecycle tests).
+The latter include both all-five source lanes. Final loadout outputs are under
+`runs/r2an-isolated-loadouts-05/`; the original lifecycle outputs are under
+`runs/r2an-isolated-lifecycle-05/`. The 15 loadout hosts execute 273 direct cases, with 258
+returned packs, 15 original source errors and 180 retained-first/current table identity checks.
+All required declared graph comparisons pass. Broader item/UI graph equality differs in 7/10
+comparisons and remains diagnostic; intermediate histories are also diagnostic. Real-source
+successful arities are 1 or 4; zero-return and one-nil behavior remains unexercised here.
+The final diagnostic class label now uses the existing text budget. Earlier failed attempts
+remain preserved. `final-validation-root.json` binds the five corrected test files, passed
+commands, declared scope and unchanged main source/input hashes.
+
+The validated test-only patch is committed in the isolated checkout as `c4e3625`
+(`Observe loadout synchronization across original builds`), not yet integrated or pushed to main.
+No isolated runtime remains active. The broader main suite is still session `90370`; do not
+restart it or infer completion from the isolated tests. Fast-forward main to the isolated test commit only after that suite is terminal (or apply its
+five-file patch if main has advanced), preserving the living-document edits and rechecking the original-file
+guards and addressing any actual failure. No native/data/schema behavior changed. Directed
+changed-domain activation, overrides, links/collisions, duplicate/sparse/version histories
+and native continuation remain open. The synchronization design records the new source facts.
+
+`isolation-checkpoint.json` records the checkout and source checks. The initial byte guard
+found 67 main files with CRLF-only differences from committed LF bytes; the main snapshot
+remains untouched and unmodified isolated files now use committed bytes. All PoB clone bytes
+matched directly. Workspace-wide formatting exceeded Windows' command-line limit in the
+longer path; package-scoped formatting succeeded. The original static drafts and base hashes remain
+in `staging-checkpoint-root.json`, `staged/base-sources.json` and `walker-fix/manifest.json`.
+The isolated worktree now holds the corrected candidate patch; do not reapply the older
+static draft over it.
+
+The fifth file fixes a latent test-fixture issue: `callback_factories_parity::uses_constructor`
+skipped newer expression children, so future nested-constructor fixtures could lose required
+provenance. The isolated helper now uses an exhaustive match. Current callers do not use those
+shapes, and the expression-walker audit found no production omission. Full native originals
+remain **0/5**. Review and validation artifacts are under `runs/r2an-loadout-sync-01/`.
 
 The [A1-A4 investigation](#execution-model-investigation-a1-a4) remains the requested future
 model comparison. The synchronization review adds a concrete distinction between game
 definitions and PoB's import/UI protocol: preserve observable selection and export effects,
 but justify each source-shaped field against a consumer before adding shipping complexity.
 No new schema or replacement model is selected, and full native originals remain **0/5**.
+An A2 priority question is pending with the owner: prototype domain-specific rules plus native
+operations first, or continue current evaluator coverage before that comparison. Continue
+independent correctness/validation work while awaiting that design direction.
 
 **R2am validated checkpoint: preserve item base names through owned assembly.**
 A bounded native failure probe identified the actual life-flask checks blocking original

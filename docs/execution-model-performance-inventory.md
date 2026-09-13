@@ -212,3 +212,50 @@ machine/runtime/profile, sample lengths, seeds and checksums, admitted/excluded 
 warmup/calibration work, worker counts, failures/late results and timing endpoints. Keep all
 resource limits visible. Do not claim an architectural speedup from unequal workloads or
 an unmeasured baseline.
+
+## CI preparation-cost investigation (R2ap)
+
+A bounded probe at `3bbf148` uses the existing `mace-actor-resources.xml` diagnostic fixture
+through public import, preparation and evaluation APIs. It records three samples under the
+CI test profile (optimization 2, debug/overflow checks enabled), with two older validation
+runs active concurrently. It is not a full-original benchmark or an isolated scaling study.
+The input is 3,223 bytes in this checkout; its SHA-256 is
+`4e796d4a66c398f517b4f1ab2fb4cd0f0bd2da6b36b51ba700280adfc7bc8d32`.
+
+| Measured operation | Median ms | Range ms |
+| --- | ---: | ---: |
+| Fresh built-in item-provider construction | 48.816 | 48.791–51.146 |
+| Authored item preparation | 411.187 | 404.044–419.937 |
+| Full document preparation | 417.256 | 413.399–422.545 |
+| Complete prepared evaluation/result | 0.1189 | 0.1159–0.1398 |
+
+Component timings overlap full preparation and must not be added to it. Timers exclude
+receipt hashing/printing and explicit object drops. Each sample preserves one registered
+item, the declared AwaitingSyncLoadouts frontier, 14 identical measurement hashes, input
+export equality and owner-binding checks. The legacy diagnostic calculation is ready within
+its existing scope; none of this establishes completion of the general Build lifecycle.
+Source, binary, command, environment and input bindings are retained in
+`runs/r2ap-ci-profile-01/baseline-summary.json` and `before-root-receipt.json`; the producing
+command is `runs/r2an-loadout-sync-01/r2ap-profile-before-01/01.json`.
+
+Static follow-up finds that the native item and rune provider sites rebuild the immutable
+structural parser. The validated fix in `7baad65` shares that compilation through the existing
+injected owner while retaining fresh request budgets, heaps, source-table state, modifier
+outputs and lazy source errors. All 61 affected tests, strict workspace lint and portable
+library checks pass. This does not select an A2 replacement or share parsed rune results.
+
+The same probe after the change has warm full-preparation median **300.9716 ms** (range
+299.4302–306.2286). Every full-prepare call follows authored-item preparation, so it reuses
+an initialized compiled owner. First authored-item preparation takes 374.8078 ms; later
+samples take 323.9133 and 327.1564 ms. All 18 deterministic component receipts, including
+nine authored report hashes and explicit usage/count/frontier values, match exactly across
+runs. All 14 metrics also match. The concurrency changed from two older suites to one;
+these observations are not a guaranteed speedup or an isolated CPU comparison. Complete
+source, input, executable and result bindings are in
+`runs/r2ap-ci-profile-01/before-after-comparison.json`.
+
+Residual rune initialization also warrants later measurement: the current injected catalog
+contains 287 families and 594 rune/slot rows, with 629 ordinary parser lines and 354,025
+pair/diagonal comparator calls across 595 rows including the sentinel in a complete pass.
+Those are static workload counts, not exclusive elapsed-time attribution. No rune-result
+cache, larger lifecycle change, peak-memory measurement or hosted-CI speedup is claimed.

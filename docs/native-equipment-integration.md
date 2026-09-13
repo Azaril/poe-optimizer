@@ -1,7 +1,8 @@
 # Native equipment and item-set integration
 
-Status: R2am preserves loader base names in owned item assembly. Public native preparation
-now reaches `AwaitingSyncLoadouts` on original builds 2, 4 and 5; builds 1 and 3 still stop at
+Status: R2ao adds native injected loadout display/lookup and directed original activation
+observations; R2ap shares immutable parser compilation across native preparations. Loader
+base names remain preserved in owned item assembly. Public native preparation reaches `AwaitingSyncLoadouts` on original builds 2, 4 and 5; builds 1 and 3 still stop at
 captured jewel dependencies. The [implementation record](implementation.md) owns current
 validation and resume status. Full native build parity remains **0/5**. No alternative
 execution model is selected; earlier checkpoints below retain their historical scope.
@@ -25,12 +26,12 @@ those domain effects from presentation-only storage without choosing a replaceme
 
 ## Synchronization source contract and next integration gate
 
-The R2an review is file-only planning against the pinned source and existing R2am/R2ad
-receipts. It adds no native behavior or newly executed source cases. Each of the five
-observed first Items.Load calls reaches one returning SyncLoadouts with export refresh;
-none enters SetActiveLoadout within that observed scope. Earlier and later synchronization
-calls are outside the old hook's scope. In particular, final imported selections cannot
-stand in for the live owners at the pending call:
+R2an now has executable reference observations across all five originals. The optional
+observer preserves the old Items.Load protocol and adds complete import-time Sync/lookup
+roots plus separate direct post-import calls. Each observed first Items.Load still reaches
+one returning SyncLoadouts with export refresh and no SetActiveLoadout in that scope. The
+wider import history does reenter Sync through SetActiveLoadout; the scopes must remain
+distinct. Final imported selections cannot stand in for the live pending-call owners:
 
 | Original | Pre-Sync tree / item / skill / config | After-import selections | Existing dropdown index |
 | --- | --- | --- | --- |
@@ -50,14 +51,42 @@ An explicit selected instance must not silently retarget to another instance wit
 title. Resolve the application of caller overrides against executable duplicate/link cases
 before choosing the continuation API. Missing reached domain operations remain dependencies.
 
-The next source gate reuses the current lifecycle fixture, with an optional mode for original
-SyncLoadouts/GetLoadoutByName calls outside Items.Load. Direct post-import calls can capture
-exact result packs without observing VM return slots. Retain their distinction from original
-import-time events. Bind the current dropdown callback after Build:Init replaces its owner.
-Use all five originals and separately labelled cases for links, duplicate titles, singleton
-domains, stale link maps, missing values, errors and changed-index callback reentry. The
-source lookup can return a partial loadout without a tree ID, or resolve a link before a
-later exact title; a normalized name join cannot be assumed equivalent.
+The validated direct corpus contains 91 cases per control lane: 20 Sync calls, five
+GetSpecList calls and 66 lookups across five originals. Three fresh hosts per original
+produce 273 direct invocations: 258 returned packs and 15 source errors. Exact declared
+pre/post graphs, return arity and aliases agree between control and observed hosts. Import
+intermediate debug-history equality remains diagnostic, with per-host call/return ancestry
+checks. Broader item/UI graph equality differs in 7/10 comparisons and is also diagnostic;
+only the declared selection projection is required there. Real-source successful arities
+are 1 or 4, so zero-return and one-nil outcomes remain unexercised. These observations are
+not complete cross-domain state or native parity.
+
+Observed consumer distinctions:
+
+- All five imports initially reenter Sync through a Default SetActiveLoadout. Build 2 also
+  reenters for Budget Endgame, ending at spec/item/skill 6 and dropdown 7; build 5 ends at
+  spec 3/item 2/skill 4 with dropdown 1. No observed activation changes a domain through its
+  SetActive* callback, so that transition family still needs directed cases.
+- Direct post-import Sync(true), repeated true, nil and false do not reenter activation in
+  these builds. Nil/false refresh exports, invoke all three export callbacks and ResetUndo;
+  unchanged scalar selection IDs do not mean the call has no effects.
+- Of 66 control-lane lookups, 61 return tables and five missing-link lookups raise the source
+  error at Build.lua:925. Missing plain names retain singleton-derived IDs; no nil-result
+  path is exercised. Build 5 has a partial result with only spec/config IDs, and build 2's
+  Act 3 name resolves spec 3/item 4/skill 2/config 1. Do not zip domains by position.
+
+Initialization also exposes retained old specs: TreeTab replaces specList and build.spec
+before Sync clears loadoutsList. The reference observer now projects the old reached
+PassiveSpec objects with their exact class/owner and shared alias memo, separately from
+current equal-valued objects. This is a reference snapshot requirement, not a prescription
+to retain every obsolete GUI object in production. A native omission needs its consumer
+argument and evidence.
+
+The next directed source gate must exercise changed-domain activation, caller overrides,
+authored links and collisions, duplicate titles, sparse orders, stale link maps and version
+changes. Preserve ordered failures and actual callback reentry. The source can resolve a link
+before a later exact title; a normalized name join cannot be assumed equivalent. Current
+source successes do not close those cases or the pending native continuation.
 
 After that gate, implement the required ordered domain transitions behind the accepted
 source/instance/definition/plan interfaces. Tree, item, skill and configuration activation
@@ -73,9 +102,52 @@ not automatically require a shipping field for every literal. The current packag
 complete tree-version display map. Extracting that projection would not imply support for
 older passive trees. Compare adapter cost and the consumer contract before extending schemas.
 
-Review artifacts are under `runs/r2an-loadout-sync-01/`: the source-test extension plan,
-five-build entry evidence, policy/consumer table and A1-A4 boundary recommendation. Runtime
-validation remains a separate gate in the [implementation record](implementation.md).
+Review and command ledgers are under `runs/r2an-loadout-sync-01/`; final source reports are
+in `runs/r2an-isolated-loadouts-05/` and the unchanged lifecycle regression reports in
+`runs/r2an-isolated-lifecycle-05/`. The [implementation record](implementation.md) owns current
+validation and integration status. These tests run only in the optional reference harness;
+production definitions, native calculations and the package schema are unchanged.
+
+## Native lookup component and directed activation checkpoint
+
+R2ao supplies a native read-only component for GetSpecList and GetLoadoutByName. Its
+standalone DATA policy injects fallback titles, latest/version-display data, decoration and
+single-link syntax. IMPORT reads a borrowed live context with independent source singleton
+proofs, one-based order reads, numeric winners and stale link maps. It never reconstructs
+live owners from the final SelectedView or diagnostic snapshots. Returned IDs remain numeric
+requests bound to the exact context/program; the later activation must resolve them through
+the existing instance and owner rules. No second authored-instance identity system is added.
+
+The source evaluation order is explicit: Skills/Items/Config singleton probes, complete
+spec formatting, then Tree/Items/Skills/Config resolution. Each failed exact row comparison
+tries link fallback immediately, even before a later exact name. Singleton fallbacks bypass
+row/link access; absent results, partial tables and reached failures stay distinct. Shared
+bounded Rust byte patterns provide lazy source-pattern behavior. This adds no generic
+interpreter feature and no PoB/Lua dependency to the native component.
+
+Four policy and 13 native tests pass; the complete unchanged original method bodies match
+29 supplied-state cases, including three injected-version-global cases. These are component
+differentials, not original import-closure or native full-build parity. The new modules pass
+strict Clippy and WASM library checks. The standalone policy has not yet entered the bundled
+package or native build coordinator. Source-backed acquisition must reconcile its latest
+version with the existing authenticated radius/version data, and add the missing display map.
+
+Directed post-import SetActiveLoadout evidence now covers 26 cases across the five originals
+per control lane (78 calls across 15 hosts). All return zero values. Seven changes, in builds
+2/5, execute Tree -> Items -> Skills with deferred synchronization, then Sync; dropdown
+selection, lookup and nested SetActiveLoadout cause a second Sync without further domain
+changes. Tree and Items both populate slots. Nil and no-spec partial requests call no domain
+activation or Sync; repeated requests call Sync but no domain activation. Declared argument,
+pre/post and final activation graphs match all ten control/observed comparisons. Broader
+import exact graph equality differs in 8/10 and remains diagnostic.
+
+This evidence closes the previously missing ordinary tree/item/skill transition examples.
+It does not close changed configuration activation (the corpus has only singleton config
+sets), partial requests retaining a spec ID, authored link/collision histories, caller
+instance overrides, source-time state production or the complete native Sync/export/Load
+tail. Those remain required before marking the pending Items lifecycle complete. Preserve
+these effects in the shared Build coordinator; simply updating the four selected IDs is
+insufficient. Validation and integration status belong to the living implementation record.
 
 ## R2ai preceding implementation boundary
 
