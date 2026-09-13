@@ -17,7 +17,7 @@ use poe_optimizer_import::{
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 
-pub const PREPARATION_REPORT_SCHEMA: u32 = 3;
+pub const PREPARATION_REPORT_SCHEMA: u32 = 4;
 const MAX_ISSUES: usize = 65_536;
 const MAX_MESSAGE_BYTES: usize = 4 * 1024 * 1024;
 
@@ -54,6 +54,9 @@ pub struct PreparationReport {
     /// Loader-local state; this does not claim effective callbacks or root setup ran.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authored_configuration: Option<crate::configuration::ConfigurationPreparationReport>,
+    /// Independently executed inventory prefix, before equipment activation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authored_items: Option<crate::items::ItemPreparationReport>,
     /// Independent authored selections and identity evidence, not completed LoadDB.
     pub view: SelectedViewReport,
     pub issues: Vec<PreparationIssue>,
@@ -263,6 +266,7 @@ pub(crate) fn collect_with_stages(
     metrics: &[MetricQuery],
     skills: &crate::skills::PreparedSkills,
     configuration: &crate::configuration::PreparedConfiguration,
+    items: &crate::items::PreparedItems,
 ) -> Result<PreparationReport, EvaluationError> {
     use crate::configuration::ConfigurationPrefixStatus;
     let mut result = collect_with_skills(view, options, metrics, skills)?;
@@ -297,6 +301,39 @@ pub(crate) fn collect_with_stages(
             .ok_or_else(|| resource("message bytes"))?;
     }
     result.authored_configuration = Some(stage.clone());
+    let inventory = items.report();
+    for issue in &mut result.issues {
+        if issue.stage == "item_registration" {
+            issue.message = format!(
+                "The ordered native inventory prefix registered {} of {} authored item occurrences. Source-order continuation, equipment activation and actor effects remain separate pending stages.",
+                inventory.registration_order.len(),
+                inventory.records.len()
+            );
+        }
+    }
+    if let Some(failure) = &inventory.failure {
+        result.issues.push(PreparationIssue {
+            kind: if failure.source_error {
+                PreparationIssueKind::SourceError
+            } else {
+                PreparationIssueKind::Unsupported
+            },
+            stage: failure.stage,
+            instance: failure.instance.map(AuthoredInstanceId::ItemRecord),
+            source: failure.source,
+            message: failure.message.clone(),
+        });
+    }
+    if result.issues.len() > MAX_ISSUES {
+        return Err(resource("issue count"));
+    }
+    let mut bytes_left = MAX_MESSAGE_BYTES;
+    for issue in &result.issues {
+        bytes_left = bytes_left
+            .checked_sub(issue.message.len())
+            .ok_or_else(|| resource("message bytes"))?;
+    }
+    result.authored_items = Some(inventory.clone());
     Ok(result)
 }
 
@@ -521,6 +558,7 @@ fn collect_with_limits(
         },
         authored_skills: None,
         authored_configuration: None,
+        authored_items: None,
         view: report.clone(),
         issues: issues.values,
         legacy_adapter_error: None,

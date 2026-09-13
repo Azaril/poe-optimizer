@@ -241,6 +241,7 @@ impl ItemLoadProvider for CompleteProvider {
     }
     fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
         DependencyResult::Available(AssemblyOutcome {
+            assembled: None,
             armour_data: Default::default(),
             modifier_payloads: None,
             requirements: None,
@@ -313,6 +314,7 @@ fn parser_feedback_preserves_combined_fallback_text_and_unconsumed_next_line() {
         }
         fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
             DependencyResult::Available(AssemblyOutcome {
+                assembled: None,
                 armour_data: Default::default(),
                 modifier_payloads: None,
                 requirements: None,
@@ -628,6 +630,7 @@ fn assembly_requirement_replacement_is_explicit_and_validated() {
                 },
             );
             DependencyResult::Available(AssemblyOutcome {
+                assembled: None,
                 armour_data: Default::default(),
                 modifier_payloads: None,
                 requirements: Some(requirements),
@@ -668,6 +671,7 @@ fn explicit_assembly_nil_update_removes_retained_field() {
     impl ItemLoadProvider for Clear {
         fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
             DependencyResult::Available(AssemblyOutcome {
+                assembled: None,
                 armour_data: Default::default(),
                 modifier_payloads: None,
                 requirements: None,
@@ -710,6 +714,7 @@ fn assembly_modifier_payloads_preserve_row_identity_and_reject_count_mismatch() 
                 )])]);
             }
             DependencyResult::Available(AssemblyOutcome {
+                assembled: None,
                 armour_data: Default::default(),
                 modifier_payloads: Some(payloads),
                 requirements: None,
@@ -974,6 +979,7 @@ fn assembly_state_bytes_are_bounded_before_any_update_is_applied() {
     impl ItemLoadProvider for Large {
         fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
             DependencyResult::Available(AssemblyOutcome {
+                assembled: None,
                 armour_data: Default::default(),
                 modifier_payloads: None,
                 requirements: None,
@@ -1016,6 +1022,7 @@ fn empty_assembly_modifier_tables_count_towards_the_metadata_bound() {
         }
         fn assemble(&mut self, r: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
             DependencyResult::Available(AssemblyOutcome {
+                assembled: None,
                 armour_data: Default::default(),
                 modifier_payloads: Some(AssemblyModifierPayloads {
                     explicit_mod_lines: r
@@ -1176,6 +1183,7 @@ struct ArmourUpdates(std::collections::VecDeque<ArmourDataUpdate>);
 impl ItemLoadProvider for ArmourUpdates {
     fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
         DependencyResult::Available(AssemblyOutcome {
+            assembled: None,
             armour_data: self.0.pop_front().unwrap_or_default(),
             modifier_payloads: None,
             requirements: None,

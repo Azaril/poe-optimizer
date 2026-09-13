@@ -112,6 +112,59 @@ pub fn observe_with_build_hook(
     before_build: Option<&BeforeBuildHook<'_>>,
     hook: Option<&ObservationHook<'_>>,
 ) -> Result<serde_json::Value, RuntimeError> {
+    observe_build(
+        pob_root,
+        scratch,
+        xml,
+        warm_xml,
+        structural_case,
+        before_source,
+        before_build,
+        hook,
+        true,
+    )
+}
+
+/// The same complete original bootstrap without configuration method wrappers.
+/// Module entry/host adapters remain; game constructors, Load and callbacks are
+/// not replaced. The caller's scoped hook must retain and verify exact methods.
+#[allow(clippy::too_many_arguments)]
+#[allow(dead_code)] // Shared helper: not every integration target uses this lane.
+pub fn observe_with_build_hook_unwrapped(
+    pob_root: &Path,
+    scratch: &Path,
+    xml: &str,
+    warm_xml: Option<&str>,
+    structural_case: bool,
+    before_source: Option<&BeforeSourceHook<'_>>,
+    before_build: Option<&BeforeBuildHook<'_>>,
+    hook: Option<&ObservationHook<'_>>,
+) -> Result<serde_json::Value, RuntimeError> {
+    observe_build(
+        pob_root,
+        scratch,
+        xml,
+        warm_xml,
+        structural_case,
+        before_source,
+        before_build,
+        hook,
+        false,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn observe_build(
+    pob_root: &Path,
+    scratch: &Path,
+    xml: &str,
+    warm_xml: Option<&str>,
+    structural_case: bool,
+    before_source: Option<&BeforeSourceHook<'_>>,
+    before_build: Option<&BeforeBuildHook<'_>>,
+    hook: Option<&ObservationHook<'_>>,
+    configuration_wrappers: bool,
+) -> Result<serde_json::Value, RuntimeError> {
     let start = Instant::now();
     poe_optimizer_pob::import::decode_build(xml.as_bytes())?;
     // Structural cases deliberately exercise original Lua coercion/diagnostics
@@ -245,9 +298,11 @@ pub fn observe_with_build_hook(
             .call::<()>((warm_xml, "configuration-source-warmup"))?;
         check_prompt(&lua)?;
     }
-    lua.load(include_str!("configuration_preparation_source.lua"))
-        .set_name("@configuration-source-observation.lua")
-        .exec()?;
+    if configuration_wrappers {
+        lua.load(include_str!("configuration_preparation_source.lua"))
+            .set_name("@configuration-source-observation.lua")
+            .exec()?;
+    }
     let load: Function = globals.get("loadBuildFromXML")?;
     let mut build_hook = BuildHookGuard(before_build.map(|hook| hook(&lua)).transpose()?);
     let loaded = load.call::<()>((xml, "configuration-source-input"));
@@ -259,8 +314,9 @@ pub fn observe_with_build_hook(
     if !structural_case {
         check_prompt(&lua)?;
     }
-    lua.load(
-        r#"
+    let mut result: serde_json::Value = if configuration_wrappers {
+        lua.load(
+            r#"
         assert(main.mode == "BUILD" and not main.newMode)
         assert(not build.abortSave and #main.popups == 0)
         assert(build.calcsTab.mainEnv and build.calcsTab.mainOutput)
@@ -270,10 +326,31 @@ pub fn observe_with_build_hook(
             skills=build.skillsTab.activeSkillSetId, items=build.itemsTab.activeItemSetId,
             config=build.configTab.activeConfigSetId, passives=build.treeTab.activeSpec}
     "#,
-    )
-    .exec()?;
-    let value: Value = globals.get("_configuration_source_trace")?;
-    let mut result: serde_json::Value = lua.from_value(value)?;
+        )
+        .exec()?;
+        let value: Value = globals.get("_configuration_source_trace")?;
+        lua.from_value(value)?
+    } else {
+        let value: Value = lua
+            .load(
+                r#"
+            assert(main.mode == "BUILD" and not main.newMode)
+            assert(not build.abortSave and #main.popups == 0)
+            assert(build.calcsTab.mainEnv and build.calcsTab.mainOutput)
+            return {
+                configuration_method_wrappers = false,
+                original_build_output_available = true,
+                modules = _configuration_source_modules,
+                selected = { skills = build.skillsTab.activeSkillSetId,
+                    items = build.itemsTab.activeItemSetId,
+                    config = build.configTab.activeConfigSetId,
+                    passives = build.treeTab.activeSpec }
+            }
+        "#,
+            )
+            .eval()?;
+        lua.from_value(value)?
+    };
     result["source_hash"] = source_hash.into();
     if let Some(hook) = hook {
         result["additional_observation"] = hook(&lua)?;

@@ -9,7 +9,10 @@ use poe_optimizer_data::item_scalability::CatalystScalingData;
 use poe_optimizer_engine::lua_pattern::{GsubLimits, LuaPattern, MatchBudget, PatternError};
 use runes::RunePrograms;
 use serde::Serialize;
-use std::collections::{BTreeMap, BTreeSet};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    sync::Arc,
+};
 pub const MAX_ITEM_LOADING_TEXT: usize = 1024 * 1024;
 pub const MAX_ITEM_LOADING_LINES: usize = 8192;
 pub const MAX_ITEM_LOADING_CALLS: usize = 32768;
@@ -82,7 +85,8 @@ pub struct ParseOutcome {
 #[derive(Debug, Clone, Serialize)]
 pub struct FormatRequest {
     pub sequence: usize,
-    pub line_index: usize,
+    /// None for generated rows without an authored line index.
+    pub line_index: Option<usize>,
     pub text: String,
     pub range: ItemNumber,
     pub scalar: ItemNumber,
@@ -111,10 +115,40 @@ pub struct UniqueOutcome {
     pub natural_level: Option<ItemNumber>,
     pub level: Option<ItemNumber>,
 }
+/// Opaque lifetime/attempt authority. Equal serialized item content cannot mint it.
+#[derive(Debug, Clone)]
+pub struct AssemblyBinding {
+    item: Arc<()>,
+    attempt: Arc<()>,
+    catalog: ItemLoadingCatalog,
+}
+impl AssemblyBinding {
+    pub fn same_item(&self, other: &Self) -> bool {
+        Arc::ptr_eq(&self.item, &other.item) && self.catalog.shares_storage_with(&other.catalog)
+    }
+    pub fn matches_attempt(&self, other: &Self) -> bool {
+        self.same_item(other) && Arc::ptr_eq(&self.attempt, &other.attempt)
+    }
+    pub fn matches_definitions(&self, catalog: &ItemLoadingCatalog) -> bool {
+        self.catalog.shares_storage_with(catalog)
+    }
+}
 #[derive(Debug, Clone, Serialize)]
 pub struct AssemblyRequest {
+    #[serde(skip)]
+    binding: AssemblyBinding,
     pub final_load: bool,
+    /// ParseRaw replaced line/requirement/socket tables since the previous assembly.
+    pub reparsed: bool,
+    /// Private native history, never reconstructed from serialized diagnostics.
+    #[serde(skip)]
+    pub previous: Option<super::assembly::AssembledItem>,
     pub state: ItemState,
+}
+impl AssemblyRequest {
+    pub fn binding(&self) -> &AssemblyBinding {
+        &self.binding
+    }
 }
 /// Post-assembly modifier payloads, retaining source row counts and order.
 #[derive(Debug, Clone, Default, Serialize)]
@@ -137,6 +171,10 @@ pub enum ArmourDataUpdate {
 }
 #[derive(Debug, Clone, Serialize)]
 pub struct AssemblyOutcome {
+    /// An owned producer result, separate from diagnostic evidence. Legacy test
+    /// providers may omit it; production registration requires a complete value.
+    #[serde(skip)]
+    pub assembled: Option<super::assembly::AssembledItem>,
     pub armour_data: ArmourDataUpdate,
     pub modifier_payloads: Option<AssemblyModifierPayloads>,
     /// Exact post-assembly requirement table supplied by the dependency. None
@@ -145,6 +183,13 @@ pub struct AssemblyOutcome {
     /// Number(Nil) removes a field, matching assignment of nil in Lua.
     pub state_updates: BTreeMap<String, ItemScalar>,
     pub evidence: ItemMetadataTable,
+}
+/// Assembly failure can follow visible writes. Retain that prefix explicitly
+/// instead of making a failing source operation appear to have rolled back.
+#[derive(Debug, Clone)]
+pub struct AssemblyExecution {
+    pub outcome: DependencyResult<AssemblyOutcome>,
+    pub prefix: Option<AssemblyOutcome>,
 }
 /// Explicit dependencies are supplied by a caller; the library has no Lua fallback.
 /// Available empty modifier lists mean a successful empty parse, distinct from nil.
@@ -172,6 +217,12 @@ pub trait ItemLoadProvider {
     }
     fn assemble(&mut self, _request: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
         DependencyResult::Unavailable("complete item modifier assembly is unavailable".into())
+    }
+    fn assemble_with_trace(&mut self, request: &AssemblyRequest) -> AssemblyExecution {
+        AssemblyExecution {
+            outcome: self.assemble(request),
+            prefix: None,
+        }
     }
 }
 #[derive(Debug, Default)]
@@ -337,6 +388,10 @@ pub struct ItemLoadMachine<'a> {
     affix_budget: MatchBudget,
     implicit_budget: MatchBudget,
     rune_programs: Option<RunePrograms>,
+    assembly: Option<super::assembly::AssembledItem>,
+    assembly_final: bool,
+    assembly_reparsed: bool,
+    assembly_item: Arc<()>,
 }
 #[derive(Clone, Copy, PartialEq)]
 enum GameStage {
@@ -358,6 +413,10 @@ impl<'a> ItemLoadMachine<'a> {
             affix_budget: MatchBudget::default(),
             implicit_budget: MatchBudget::default(),
             rune_programs: None,
+            assembly: None,
+            assembly_final: false,
+            assembly_reparsed: true,
+            assembly_item: Arc::new(()),
         };
         machine.reset("");
         machine.number(
@@ -366,6 +425,16 @@ impl<'a> ItemLoadMachine<'a> {
         );
         machine.state.assembly_calls = 1;
         machine
+    }
+    /// Only a successful final assembly can authorize production registration.
+    pub fn assembled(&self) -> Option<&super::assembly::AssembledItem> {
+        self.assembly.as_ref().filter(|item| {
+            self.assembly_final && self.status == ItemLoadStatus::Complete && item.is_complete()
+        })
+    }
+    /// Retained source-visible assembly state; may be an incomplete failure prefix.
+    pub fn assembly_progress(&self) -> Option<&super::assembly::AssembledItem> {
+        self.assembly.as_ref()
     }
     pub fn evidence_bytes(&self) -> usize {
         self.work_bytes
@@ -393,6 +462,7 @@ impl<'a> ItemLoadMachine<'a> {
         self.state
     }
     pub fn set_xml_attributes(&mut self, attributes: &BTreeMap<String, String>) {
+        self.assembly_final = false;
         for key in ["id", "variant"] {
             let value = attributes
                 .get(key)
@@ -497,6 +567,8 @@ impl<'a> ItemLoadMachine<'a> {
         Ok(())
     }
     fn reset(&mut self, raw: &str) {
+        self.assembly_final = false;
+        self.assembly_reparsed = true;
         self.state.raw = raw.into();
         self.state.raw_lines = syntax::raw_lines(raw);
         self.state.name = "?".into();
@@ -1629,7 +1701,7 @@ impl<'a> ItemLoadMachine<'a> {
             sequence: self.state.format_calls.len()
                 + self.state.parser_calls.len()
                 + self.state.format_parser_calls.len(),
-            line_index: line,
+            line_index: Some(line),
             text: text.into(),
             range: ItemNumber::new(1.0),
             scalar: ItemNumber::new(scalar),
@@ -2117,144 +2189,187 @@ impl<'a> ItemLoadMachine<'a> {
         final_load: bool,
         provider: &mut impl ItemLoadProvider,
     ) -> Result<(), ItemLoadError> {
+        self.assembly_final = false;
         self.state.assembly_calls += 1;
         if !self.state.base_present {
             self.status = ItemLoadStatus::NoBase;
             return Ok(());
         }
         let request = AssemblyRequest {
+            binding: AssemblyBinding {
+                item: Arc::clone(&self.assembly_item),
+                attempt: Arc::new(()),
+                catalog: self.catalog.clone(),
+            },
             final_load,
+            reparsed: self.assembly_reparsed,
+            previous: self.assembly.clone(),
             state: self.state.clone(),
         };
-        match provider.assemble(&request) {
+        self.assembly_final = false;
+        let attempt = provider.assemble_with_trace(&request);
+        if let Some(prefix) = attempt.prefix {
+            if prefix.assembled.as_ref().is_some_and(|item| {
+                item.binding()
+                    .is_none_or(|b| !b.matches_attempt(request.binding()))
+            }) {
+                return self.reject_dependency(
+                    "assembly returned a foreign owned result as failure prefix".into(),
+                    false,
+                );
+            }
+            self.apply_assembly_outcome(prefix)?;
+        }
+        match attempt.outcome {
             DependencyResult::SourceError(message) => return self.reject_dependency(message, true),
             DependencyResult::ResourceError(message) => {
-                return self.reject_dependency(message, false);
+                // A retained graph may be newer than its diagnostic projection.
+                // Stop this machine; retry requires a fresh coherent load.
+                self.stop(DependencyKind::Assembly, None, message.clone())?;
+                return Err(ItemLoadError(message));
             }
             DependencyResult::Unavailable(message) => {
                 self.stop(DependencyKind::Assembly, None, message)?
             }
             DependencyResult::Available(result) => {
-                self.charge(validate_metadata(&result.evidence)?)?;
-                if result.state_updates.len() > 4096 {
-                    return Err(ItemLoadError("assembly state update bound".into()));
+                if result.assembled.as_ref().is_some_and(|item| {
+                    !item.is_complete()
+                        || item
+                            .binding()
+                            .is_none_or(|b| !b.matches_attempt(request.binding()))
+                }) {
+                    return self.reject_dependency(
+                        "assembly returned an incomplete or foreign owned result as success".into(),
+                        false,
+                    );
                 }
-                if let Some(payloads) = &result.modifier_payloads {
-                    let lists = [
-                        (&payloads.buff_mod_lines, &self.state.buff_mod_lines),
-                        (&payloads.enchant_mod_lines, &self.state.enchant_mod_lines),
-                        (&payloads.rune_mod_lines, &self.state.rune_mod_lines),
-                        (
-                            &payloads.class_requirement_mod_lines,
-                            &self.state.class_requirement_mod_lines,
-                        ),
-                        (&payloads.implicit_mod_lines, &self.state.implicit_mod_lines),
-                        (&payloads.explicit_mod_lines, &self.state.explicit_mod_lines),
-                    ];
-                    if lists.iter().any(|(payloads, rows)| {
-                        payloads.len() != rows.len() || payloads.iter().any(|row| row.len() > 4096)
-                    }) {
-                        return Err(ItemLoadError(
-                            "assembly modifier payload row count mismatch or bound".into(),
-                        ));
-                    }
-                    self.charge(validate_metadata_tables(lists.iter().flat_map(
-                        |(payloads, _)| payloads.iter().flat_map(|row| row.iter()),
-                    ))?)?;
-                }
-                if let Some(requirements) = &result.requirements {
-                    if requirements.len() > 256 {
-                        return Err(ItemLoadError("assembly requirement count bound".into()));
-                    }
-                    for (key, value) in requirements {
-                        if key.is_empty()
-                            || key.len() > 128
-                            || key.contains('\0')
-                            || *value == ItemNumber::Nil
-                            || !value.canonical()
-                        {
-                            return Err(ItemLoadError("invalid assembly requirement entry".into()));
-                        }
-                        self.charge(key.len() + 32)?;
-                    }
-                }
-                if let ArmourDataUpdate::Replace(data) = &result.armour_data {
-                    if data.len() > 256 {
-                        return Err(ItemLoadError("assembly armour data count bound".into()));
-                    }
-                    for (key, value) in data {
-                        if key.is_empty()
-                            || key.len() > 4096
-                            || key.contains('\0')
-                            || *value == ItemNumber::Nil
-                            || !value.canonical()
-                        {
-                            return Err(ItemLoadError("invalid assembly armour data entry".into()));
-                        }
-                        self.charge(key.len() + 64)?;
-                    }
-                    self.charge(64)?;
-                }
-                for (key, value) in &result.state_updates {
-                    if key.len() > 4096
-                        || matches!(value,ItemScalar::Text(t)if t.len()>MAX_ITEM_LOADING_TEXT)
-                        || matches!(value,ItemScalar::Number(n)if !n.canonical())
-                    {
-                        return Err(ItemLoadError("assembly state text bound".into()));
-                    }
-                    self.charge(
-                        key.len()
-                            + match value {
-                                ItemScalar::Text(t) => t.len(),
-                                _ => 32,
-                            },
-                    )?;
-                }
-                match result.armour_data {
-                    ArmourDataUpdate::Preserve => {}
-                    ArmourDataUpdate::Clear => self.state.armour_data = None,
-                    ArmourDataUpdate::Replace(data) => self.state.armour_data = Some(data),
-                }
-                if let Some(requirements) = result.requirements {
-                    self.state.requirements = requirements;
-                }
-                for (key, value) in result.state_updates {
-                    if matches!(value, ItemScalar::Number(ItemNumber::Nil)) {
-                        self.state.retained_fields.remove(&key);
-                    } else {
-                        self.state.retained_fields.insert(key, value);
-                    }
-                }
-                if let Some(payloads) = result.modifier_payloads {
-                    for (payloads, rows) in [
-                        (payloads.buff_mod_lines, &mut self.state.buff_mod_lines),
-                        (
-                            payloads.enchant_mod_lines,
-                            &mut self.state.enchant_mod_lines,
-                        ),
-                        (payloads.rune_mod_lines, &mut self.state.rune_mod_lines),
-                        (
-                            payloads.class_requirement_mod_lines,
-                            &mut self.state.class_requirement_mod_lines,
-                        ),
-                        (
-                            payloads.implicit_mod_lines,
-                            &mut self.state.implicit_mod_lines,
-                        ),
-                        (
-                            payloads.explicit_mod_lines,
-                            &mut self.state.explicit_mod_lines,
-                        ),
-                    ] {
-                        for (payload, row) in payloads.into_iter().zip(rows) {
-                            row.modifiers = payload;
-                        }
-                    }
-                }
-                self.state.assembly_evidence = Some(result.evidence);
+                self.apply_assembly_outcome(result)?;
                 self.status = ItemLoadStatus::Complete;
+                self.assembly_final = final_load;
+                self.assembly_reparsed = false;
             }
         }
+        Ok(())
+    }
+    fn apply_assembly_outcome(&mut self, result: AssemblyOutcome) -> Result<(), ItemLoadError> {
+        self.charge(validate_metadata(&result.evidence)?)?;
+        if result.state_updates.len() > 4096 {
+            return Err(ItemLoadError("assembly state update bound".into()));
+        }
+        if let Some(payloads) = &result.modifier_payloads {
+            let lists = [
+                (&payloads.buff_mod_lines, &self.state.buff_mod_lines),
+                (&payloads.enchant_mod_lines, &self.state.enchant_mod_lines),
+                (&payloads.rune_mod_lines, &self.state.rune_mod_lines),
+                (
+                    &payloads.class_requirement_mod_lines,
+                    &self.state.class_requirement_mod_lines,
+                ),
+                (&payloads.implicit_mod_lines, &self.state.implicit_mod_lines),
+                (&payloads.explicit_mod_lines, &self.state.explicit_mod_lines),
+            ];
+            if lists.iter().any(|(payloads, rows)| {
+                payloads.len() != rows.len() || payloads.iter().any(|row| row.len() > 4096)
+            }) {
+                return Err(ItemLoadError(
+                    "assembly modifier payload row count mismatch or bound".into(),
+                ));
+            }
+            self.charge(validate_metadata_tables(lists.iter().flat_map(
+                |(payloads, _)| payloads.iter().flat_map(|row| row.iter()),
+            ))?)?;
+        }
+        if let Some(requirements) = &result.requirements {
+            if requirements.len() > 256 {
+                return Err(ItemLoadError("assembly requirement count bound".into()));
+            }
+            for (key, value) in requirements {
+                if key.is_empty()
+                    || key.len() > 128
+                    || key.contains('\0')
+                    || *value == ItemNumber::Nil
+                    || !value.canonical()
+                {
+                    return Err(ItemLoadError("invalid assembly requirement entry".into()));
+                }
+                self.charge(key.len() + 32)?;
+            }
+        }
+        if let ArmourDataUpdate::Replace(data) = &result.armour_data {
+            if data.len() > 256 {
+                return Err(ItemLoadError("assembly armour data count bound".into()));
+            }
+            for (key, value) in data {
+                if key.is_empty()
+                    || key.len() > 4096
+                    || key.contains('\0')
+                    || *value == ItemNumber::Nil
+                    || !value.canonical()
+                {
+                    return Err(ItemLoadError("invalid assembly armour data entry".into()));
+                }
+                self.charge(key.len() + 64)?;
+            }
+            self.charge(64)?;
+        }
+        for (key, value) in &result.state_updates {
+            if key.len() > 4096
+                || matches!(value,ItemScalar::Text(t)if t.len()>MAX_ITEM_LOADING_TEXT)
+                || matches!(value,ItemScalar::Number(n)if !n.canonical())
+            {
+                return Err(ItemLoadError("assembly state text bound".into()));
+            }
+            self.charge(
+                key.len()
+                    + match value {
+                        ItemScalar::Text(t) => t.len(),
+                        _ => 32,
+                    },
+            )?;
+        }
+        match result.armour_data {
+            ArmourDataUpdate::Preserve => {}
+            ArmourDataUpdate::Clear => self.state.armour_data = None,
+            ArmourDataUpdate::Replace(data) => self.state.armour_data = Some(data),
+        }
+        if let Some(requirements) = result.requirements {
+            self.state.requirements = requirements;
+        }
+        for (key, value) in result.state_updates {
+            if matches!(value, ItemScalar::Number(ItemNumber::Nil)) {
+                self.state.retained_fields.remove(&key);
+            } else {
+                self.state.retained_fields.insert(key, value);
+            }
+        }
+        if let Some(payloads) = result.modifier_payloads {
+            for (payloads, rows) in [
+                (payloads.buff_mod_lines, &mut self.state.buff_mod_lines),
+                (
+                    payloads.enchant_mod_lines,
+                    &mut self.state.enchant_mod_lines,
+                ),
+                (payloads.rune_mod_lines, &mut self.state.rune_mod_lines),
+                (
+                    payloads.class_requirement_mod_lines,
+                    &mut self.state.class_requirement_mod_lines,
+                ),
+                (
+                    payloads.implicit_mod_lines,
+                    &mut self.state.implicit_mod_lines,
+                ),
+                (
+                    payloads.explicit_mod_lines,
+                    &mut self.state.explicit_mod_lines,
+                ),
+            ] {
+                for (payload, row) in payloads.into_iter().zip(rows) {
+                    row.modifiers = payload;
+                }
+            }
+        }
+        self.state.assembly_evidence = Some(result.evidence);
+        self.assembly = result.assembled;
         Ok(())
     }
     pub fn apply_mod_range(
@@ -2268,6 +2383,7 @@ impl<'a> ItemLoadMachine<'a> {
         ) {
             return Ok(());
         }
+        self.assembly_final = false;
         let mut id = id
             .map_or(ItemNumber::Nil, syntax::lua_number)
             .value()
@@ -2308,6 +2424,7 @@ impl<'a> ItemLoadMachine<'a> {
         ) {
             return Ok(());
         }
+        self.assembly_final = false;
         if self.state.base_present
             && self.state.jewel_socket_count == 0
             && let Some(n) = self

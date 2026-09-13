@@ -30,6 +30,7 @@ impl ItemLoadProvider for Complete {
     }
     fn assemble(&mut self, _: &AssemblyRequest) -> DependencyResult<AssemblyOutcome> {
         DependencyResult::Available(AssemblyOutcome {
+            assembled: None,
             armour_data: Default::default(),
             modifier_payloads: None,
             requirements: None,

@@ -669,6 +669,7 @@ impl ItemLoadProvider for FrozenAssembly<'_> {
             Sha256::digest(super::canonical(Value::Table(after)).to_string().as_bytes())
         );
         DependencyResult::Available(AssemblyOutcome {
+            assembled: None,
             armour_data,
             state_updates,
             requirements: Some(requirements),

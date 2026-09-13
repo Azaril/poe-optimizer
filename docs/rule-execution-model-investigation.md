@@ -53,7 +53,9 @@ general invalidation, new effect-family work and actual upstream update effort r
 The [real-build parser corpus](parser-input-corpus.md) extends the comparison inputs beyond the
 earlier selected modifier family. Its reference-only observer, state guard and replay code are
 part of the total compatibility cost to measure; their addition does not select the interpreter.
-No model is selected.
+The [native accessory assembly checkpoint](execution-model-baseline.md#native-accessory-assembly-checkpoint)
+adds producer, graph, inventory and differential-tooling costs at an existing domain seam.
+Its finite component matches do not complete original inventories or select a model.
 
 ## Separate the decisions
 
@@ -132,7 +134,23 @@ throughput and scaling with candidate count and worker count, memory and state-c
 Also record upstream update effort, data-only update capability, failure localization,
 explainability and dataset migration work. Establish measurements before proposing targets.
 
+Hold a bounded A1-to-A2 readiness review once a representative slice has an executable
+reference, relevant cost baselines and explicit known gaps. Record remaining measurements as
+open work and choose a comparable prototype without waiting for exhaustive attribution or
+full evaluator completion. Discuss significant prototype choices and semantic boundaries
+with the owner; routine implementation continues under the existing authorization.
+
 ### A2 — Comparable prototypes
+
+Define an explicit domain result boundary and the consumers each prototype must serve.
+Record their required inputs, outputs, state transitions, failures and observable aliases or
+ordering. Existing parser-cache APIs, closure identities and VM accounting are requirements
+only where those consumers observe their effects. Justify omitted mechanisms against the
+full game/build parity objective, and retain unresolved behavior as an explicit gap.
+Separate production consumers from reference-harness implementation details; internal APIs
+may change with an explicit migration. Equivalent injected game facts do not require the
+current source-shaped schema: include conversion and reconciliation costs for alternative
+data models in the comparison.
 
 Prototype selected models against the same injected definitions, input states, lifecycle and
 observable outputs. Include parser/preparation state and a downstream interaction slice, not

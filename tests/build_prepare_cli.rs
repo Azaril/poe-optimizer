@@ -123,7 +123,18 @@ fn real_caller_share_code_returns_source_linked_prerequisites_and_no_fake_metric
     );
     assert_preparation_only(&report);
     assert_eq!(report["status"], "incomplete");
-    assert_eq!(report["preparation"]["schema_version"], 3);
+    assert_eq!(report["preparation"]["schema_version"], 4);
+    let inventory = &report["preparation"]["authored_items"];
+    assert_eq!(inventory["source_sha256"], expected_hash);
+    assert!(!inventory["records"].as_array().unwrap().is_empty());
+    assert!(!inventory["failure"].is_null());
+    assert!(
+        inventory["frontiers"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|f| f == "actor_item_effects")
+    );
     assert_eq!(
         report["preparation"]["authored_configuration"]["status"],
         "prepared"
@@ -190,7 +201,10 @@ fn real_caller_share_code_returns_source_linked_prerequisites_and_no_fake_metric
     for issue in located {
         assert_eq!(issue["source"]["source_sha256"], expected_hash);
         assert!(issue["source"]["ordinal"].as_u64().is_some());
-        assert_ne!(issue["instance"]["kind"], "item_record");
+        if issue["instance"]["kind"] == "item_record" {
+            assert_eq!(issue["source"], inventory["failure"]["source"]);
+            assert_eq!(issue["stage"], inventory["failure"]["stage"]);
+        }
     }
     assert_eq!(fs::read_to_string(&input).unwrap(), code);
     assert_eq!(fs::read(corpus.join("imports.txt")).unwrap(), imports);

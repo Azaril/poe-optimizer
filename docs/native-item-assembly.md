@@ -117,3 +117,48 @@ General actor/action modeling and conditional-parser operations remain separate 
 decisions. This item-preparation contract does not approve them or claim full native
 build parity. The delivery sequence and measured breadth belong in the
 [living implementation record](implementation.md).
+
+## R2y implementation checkpoint
+
+The producer and ordered inventory prefix use the existing injected catalog. Common assembly
+and accessory slots are implemented; specialized local data and reached unsupported callback/tag
+evaluation remain explicit. Owned assembly graphs, opaque item/catalog/attempt bindings,
+preparation report schema 4 and CLI exposure are implemented. All supplied native builds remain
+**0/5** complete.
+
+`prepare_authored_items` retains authored occurrences and the source-order registration prefix.
+Duplicate numeric IDs update only the lookup winner while retaining both instances and insertion
+order. The stage stops before unimplemented item-set/slot/trade instructions or repeated root
+sections. Equipment activation, actor effects and completed root loading remain open. Diagnostic
+loader completion cannot authorize production registration. All five original public CLI runs
+retain their 116 records but stop before the first registration: two at armour, two at
+jewel/radius and one at charm dependencies. Accessory component matches below therefore do
+not represent completed original inventory prefixes.
+
+Source validation retains all 116 original records: 32 eligible accessories match using an
+explicit original-parser dependency and 31 also match through the built-in native parser. The
+remaining native case reaches unsupported parser callback 168. The other 84 records are excluded
+by the local-family predicate and retained in the denominator; this lane does not execute them. Comparisons cover the declared assembly-field/row-field graph,
+including aliases within it; they do not close the whole-object contract above. Five separate
+control imports preserve selected views, output scalar bits, inventory order and 114 available
+item graphs; two callback-bearing graphs remain unavailable. Directed coverage adds 30 variant
+vectors, 15 range/reparse/reassembly steps and five malformed-requirement failure prefixes.
+
+Binding/isolation, graph bounds and retained failure state, all-five inventory denominators,
+native-only CLI and five portable WASM libraries pass. The source target's eight tests pass in
+41.36 seconds on this Windows release run, including ten reference hosts. This is validation
+cost, not hot candidate throughput. Final receipts are in
+`runs/r2y-item-assembly-01/source-parity-04/`; the living implementation record lists other checks.
+
+The metadata-tree adapter cannot recover original aliases or executable callbacks. Reference
+parser conversion refuses these rather than stripping them. The full dependency event contract
+above remains a completion gate: current sequence metadata is local to an assembly attempt after
+its retained loader prefix, not a globally monotonic history or proof of actual argument arity.
+Diagnostic projection refusal retains the owned graph without final exposure and stops the
+machine before stale projected state can be reused; a fresh coherent load is required.
+
+Count the producer, graph/adapters and differential tooling in the
+[execution-model investigation](rule-execution-model-investigation.md). It selects no winning
+architecture. Specialized locals, item-set activation, equipment/actor integration, lossless
+acquisition and dependency events are the next integration gates; A3 remains the discussion
+before a significant model migration.

@@ -171,7 +171,7 @@ fn formatter_errors_are_not_unavailable_and_trace_messages_remain_bounded() {
                 precision_parser_calls: vec![FormatParserCall {
                     request: ParseRequest {
                         sequence: r.sequence + 1,
-                        line_index: Some(r.line_index),
+                        line_index: r.line_index,
                         origin: None,
                         text: "Line".into(),
                         combined: false,
@@ -275,7 +275,7 @@ fn native_precision_provider_diagnostic_is_bounded_before_trace_duplication() {
     let mut provider = NativeItemLoadProvider::with_dependencies(data, Oversized);
     let result = provider.format_with_trace(&FormatRequest {
         sequence: 0,
-        line_index: 1,
+        line_index: Some(1),
         text: "Caller 10.123 units".into(),
         range: ItemNumber::Finite(1.0),
         scalar: ItemNumber::Finite(1.2),
@@ -301,7 +301,7 @@ fn custom_formatter_cannot_resume_after_failed_precision_dependency() {
             let mut calls = vec![FormatParserCall {
                 request: ParseRequest {
                     sequence: r.sequence + 1,
-                    line_index: Some(r.line_index),
+                    line_index: r.line_index,
                     origin: None,
                     text: r.text.clone(),
                     combined: false,
@@ -312,7 +312,7 @@ fn custom_formatter_cannot_resume_after_failed_precision_dependency() {
                 calls.push(FormatParserCall {
                     request: ParseRequest {
                         sequence: r.sequence + 2,
-                        line_index: Some(r.line_index),
+                        line_index: r.line_index,
                         origin: None,
                         text: r.text.clone(),
                         combined: false,

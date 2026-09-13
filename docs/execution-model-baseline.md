@@ -1021,3 +1021,26 @@ representation. The next production seam is the existing ItemLoadProvider/prepar
 with complete owned item outputs, rather than treating diagnostic assembly evidence as a ready
 item or adding another skill profile. A1/A2 remain open and complete native original coverage is
 still **0/5**.
+
+## Native accessory assembly checkpoint
+
+R2y adds a finite native algorithm behind the existing injected assembly policy, an owned
+assembly graph and source-ordered inventory integration. It is bounded work within the current
+seams, not an A2 comparative prototype or an approved migration. The
+[assembly checkpoint](native-item-assembly.md#r2y-implementation-checkpoint) records 32 accessory
+matches using the original parser and 31 using the native parser, from all 116 original items;
+full native build coverage remains 0/5.
+
+New files contain 3,181 physical lines in the assembly module (including its unit tests), 455
+in native inventory preparation and 2,466 in eight test/support files. Changed shared provider,
+loader, preparation and observation code is additional cost. Counts include comments/fixtures
+and do not estimate maintenance effort. The final code inventory and command/source hashes are
+in `runs/r2y-item-assembly-01/code-footprint-final.json` and its validation receipts.
+
+The eight-test source target took 41.36 seconds on one Windows release run, including ten fresh
+reference hosts, original/control graph checks, native replay and directed histories. It is not
+a throughput benchmark or evidence of a native speedup. The control imports agree on their
+finite observable contract; callback-bearing graphs, actual dependency arity/order, specialized
+item locals and wider state histories remain separate gates. Count reference harness complexity
+as well as shipping representation costs when comparing models, and distinguish both from hot
+candidate evaluation. The A1-to-A2 readiness review need not wait for every missing item family.

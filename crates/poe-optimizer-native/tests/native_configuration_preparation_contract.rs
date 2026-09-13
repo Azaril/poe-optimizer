@@ -86,7 +86,7 @@ fn all_five_originals_report_loaded_configuration_prefix_and_pending_effects() {
                 .any(|issue| issue.stage == "configuration_effects")
         );
         let serialized = serde_json::to_value(report.as_ref()).unwrap();
-        assert_eq!(serialized["schema_version"], 3);
+        assert_eq!(serialized["schema_version"], 4);
         for key in [
             "metrics",
             "measurements",

@@ -18,7 +18,7 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-The A1 investigation below is the current resume point. Source-session timing and requested
+The R2y item-assembly integration and A1 investigation below are the current resume point. Source-session timing and requested
 allocation layouts are measured separately from dataset ownership; staged-container transfer
 now reduces import allocation traffic. R2x now records actual import parser calls across all
 five originals: 558 of 760 build-local distinct inputs match misses and hits; 202 remain
@@ -35,6 +35,48 @@ acquisition/parity, preparation, source execution and the restricted typed candi
 Continue measuring costs before extending general Lua compatibility into further domains;
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
+
+**R2y checkpoint: finite native item assembly and inventory prefix.** The existing injected
+`ItemAssemblyCatalog` now feeds a native common/accessory producer. Its owned immutable graph
+retains aliases and re-entry state; opaque item/catalog/attempt bindings require a successful
+final assembly before registration. Diagnostic metadata cannot authorize a completed item.
+Projection failures retain the graph and stop the machine before stale state can be reused.
+
+Across all 116 original saved items, 32 accessories are eligible for this assembly slice:
+**32/32 match with the original parser as an explicit isolation dependency; 31/32 match with
+the built-in native parser**. The remaining native case stops at special parser callback 168
+(build 03, Item 3, line 13). The other 84 are excluded by the local-family predicate and
+retained in the denominator; they are not executed in this assembly comparison.
+This is declared assembly-field/row-field graph parity, not complete Item/runtime parity.
+Five observed/control imports agree on selected views, scalar output bits, inventory order
+and the declared available item graphs (114 compared, two callback-bearing graphs unavailable).
+Thirty variant cases, 15 range/reparse/reassembly steps and five malformed-requirement failure
+prefixes also agree; these are directed tests, not additional original-build coverage.
+
+`prepare_view` retains the independent ordered inventory stage in report schema 4. It keeps
+all authored records, registers only complete owned items in source order, preserves duplicate
+ID occurrences and lookup winners, and stops before unimplemented item-set/slot/trade loading.
+Equipment activation, actor effects and completed root loading remain subsequent work.
+The native-only public CLI was also run on all five originals: it retains all 116 records but
+registers none because each ordered stream stops at its first unsupported item (armour in two,
+jewel/radius in two, charm in one). The 31 accessory matches above are isolated component
+comparisons, not registrations from a completed original inventory. Public reports are in
+`runs/r2y-item-assembly-01/native-originals-01/`; all report Incomplete and no calculation.
+
+Validation passes: 20 item-loading unit tests, 67 focused import tests, nine authored-item tests,
+33 native regressions, ten native-only CLI tests, eight assembly source/observer/graph tests,
+and the existing complete configuration lifecycle regression. Strict workspace and native-only
+Clippy, formatting, five portable WASM libraries and native-only dependency isolation pass.
+Source evidence is `runs/r2y-item-assembly-01/source-parity-04/`; test time was 41.36 seconds
+on this Windows release run, including ten reference hosts, not a throughput measurement.
+Protected builds, schema-29 definitions, lock file and PoB pin remain unchanged. Complete native
+original builds remain **0/5**. See [assembly scope and remaining gates](native-item-assembly.md).
+
+**Resume:** implement specialized item-local algorithms and remaining parser dependencies at
+the injected seam, then item-set activation/equipment and actor consumers. Complete ordered
+dependency events/argument packs and lossless parser graph acquisition before claiming the full
+assembly contract. Compare the producer, graph/adapters and parity tooling costs in A1/A2;
+this checkpoint neither selects a new execution model nor authorizes wider Lua emulation.
 
 **R2x checkpoint: actual import parser corpus.** The [corpus protocol and results](parser-input-corpus.md)
 now cover all five original XML imports and all 116 saved Item identities. The observer records
@@ -58,10 +100,10 @@ The 2,477 new test/support lines plus 51 net shared-hook lines are reference too
 include in A1. No production evaluator or alternative model is introduced; full native breadth
 remains **0/5**.
 
-**Next production integration:** complete Item modifier assembly and source-ordered registration
-at the existing provider seam, retain an owned assembled item, and wire it into `prepare_view`.
-Current inspection `assembly_evidence` cannot stand in for base/per-slot modifier lists, local
-item data or skill grants. This dependency feeds both Twister equipment/grants and Skeletal
+**Next production integration:** extend the R2y producer through specialized local item data
+and remaining parser dependencies, then complete item-set activation and equipment consumers.
+The owned artifact is integrated into `prepare_view`; inspection `assembly_evidence` cannot
+stand in for unavailable modifier lists, local item data or skill grants. This dependency feeds both Twister equipment/grants and Skeletal
 Sniper receiving-slot/provider state; effective configuration and actor/action/support/minion
 preparation remain required. The current production evaluator still reaches Spark/Mace profile
 preparation after authored skills/configuration. Parser improvements alone cannot remove that
@@ -1903,6 +1945,9 @@ defines the alternatives, constraints and evidence required for a decision.
   with 558 complete miss/hit matches and 202 unsupported first stops. Include its reference-only
   observation, state-guard and replay complexity in the comparison; no production breadth gate
   or execution-model decision is closed by these results.
+  Use the brief's bounded A1-to-A2 readiness checkpoint: an executable reference slice,
+  relevant cost baseline, explicit domain-consumer contract and known gaps are sufficient
+  to discuss prototypes; remaining fine-grained measurements need not all finish first.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.

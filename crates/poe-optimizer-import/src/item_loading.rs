@@ -4,6 +4,7 @@
 //! admission, or an equipment-selection certificate. Missing dependencies stop
 //! execution before any dependent state is invented.
 mod affixes;
+pub mod assembly;
 mod machine;
 mod parser;
 mod provider;
@@ -32,6 +33,9 @@ pub fn implementation_fingerprint() -> String {
         include_str!("item_loading/provider.rs"),
         include_str!("item_loading/parser.rs"),
     ] {
+        hash.update(source.replace("\r\n", "\n").as_bytes());
+    }
+    for source in assembly::implementation_sources() {
         hash.update(source.replace("\r\n", "\n").as_bytes());
     }
     for source in poe_optimizer_engine::item_tools::implementation_sources() {

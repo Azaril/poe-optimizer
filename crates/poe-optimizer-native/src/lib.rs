@@ -5,6 +5,7 @@ mod build_candidates;
 mod candidate_skill_admission;
 mod candidates;
 pub mod configuration;
+pub mod items;
 pub use build_candidates::{PreparedBuildCandidates, PreparedBuildFootprint};
 mod preparation;
 mod preparation_report;
@@ -70,8 +71,13 @@ pub struct PreparedEvaluation {
     selected_view: poe_optimizer_import::selected_view::SelectedViewReport,
     authored_skills: skills::PreparedSkills,
     authored_configuration: configuration::PreparedConfiguration,
+    authored_items: items::PreparedItems,
 }
 impl PreparedEvaluation {
+    /// Ordered inventory prefix; equipment activation and actor effects remain separate.
+    pub fn authored_items(&self) -> &items::PreparedItems {
+        &self.authored_items
+    }
     /// Executed loader-local prefix, with activation/effective effects still explicit.
     pub fn authored_configuration(&self) -> &configuration::PreparedConfiguration {
         &self.authored_configuration
@@ -367,6 +373,7 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("preparation.rs"),
                 include_str!("preparation_report.rs"),
                 include_str!("skills.rs"),
+                include_str!("items.rs"),
                 include_str!("../../poe-optimizer-data/src/skill_preparation.rs"),
                 include_str!("../../poe-optimizer-import/src/source_xml.rs"),
                 include_str!("../../poe-optimizer-core/src/build_identity.rs"),
@@ -438,6 +445,7 @@ fn implementation_identity() -> BackendIdentity {
                 adapter.update(text.replace("\r\n", "\n"));
             }
             adapter.update(poe_optimizer_data::implementation_fingerprint());
+            adapter.update(poe_optimizer_import::item_loading::implementation_fingerprint());
             BackendIdentity {
                 data: None,
                 id: "native-poe2".into(),

@@ -204,6 +204,12 @@ impl<C: EvaluationClock> NativeBackend<C> {
             &self.data,
             crate::skills::SkillPreparationLimits::default(),
         )?;
+        let authored_items = crate::items::prepare_authored_items(
+            build,
+            view,
+            &self.data,
+            crate::items::ItemPreparationLimits::default(),
+        )?;
         let profile_result = profile::parse(&request, &self.data, view).and_then(|profile| {
             profile::validate_loaded_skill_projection(build, &self.data, &authored_skills)?;
             profile::validate_loaded_configuration_projection(
@@ -223,6 +229,7 @@ impl<C: EvaluationClock> NativeBackend<C> {
                 selected_view: view.report().clone(),
                 authored_skills,
                 authored_configuration,
+                authored_items,
             }))),
             Err(error) if error.kind == EvaluationErrorKind::UnsupportedCapability => {
                 let mut report = preparation_report::collect_with_stages(
@@ -231,6 +238,7 @@ impl<C: EvaluationClock> NativeBackend<C> {
                     metrics,
                     &authored_skills,
                     &authored_configuration,
+                    &authored_items,
                 )?;
                 report.legacy_adapter_error = Some(error.message);
                 Ok(PreparationOutcome::Incomplete(Box::new(report)))

@@ -391,6 +391,10 @@ impl ItemLoadingCatalog {
     pub fn data(&self) -> &ItemLoadingData {
         &self.0.data
     }
+    /// Exact immutable catalog ownership; equal serialized data is not a binding.
+    pub fn shares_storage_with(&self, other: &Self) -> bool {
+        Arc::ptr_eq(&self.0, &other.0)
+    }
     pub fn bases(&self) -> &[ItemBaseDefinition] {
         &self.0.data.bases
     }

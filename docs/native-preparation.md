@@ -1,6 +1,7 @@
 # Shared native preparation boundary
 
-Status: R1c outer integration, R2 authored skill loading and the R2b configuration loader prefix implemented. General real-build numerical producers remain
+Status: R1c outer integration, R2 authored skills, configuration loading and the R2y
+finite item assembly/inventory prefix are implemented. General real-build numerical producers remain
 unfinished; complete native supplied builds remain **0/5**.
 
 ## Public entry points
@@ -28,7 +29,10 @@ Core model, definition compilation and repeated calculation need no randomness o
 exposes its immutable report. `authored_skills()` retains the independently executed,
 source/view/data-bound [authored skill stage](authored-skill-preparation.md).
 `authored_configuration()` retains the [configuration loader prefix](configuration-preparation.md)
-and its explicit continuation before activation. These independent stages do not fabricate
+and its explicit continuation before activation. `authored_items()` retains the
+[owned item assembly and inventory prefix](native-item-assembly.md): all authored item
+occurrences, the executed registration prefix, duplicate-ID lookup winners and explicit
+source continuation. These independent stages do not fabricate
 completed root setup or effective scenario state. The compatibility request DTO still owns an XML string in
 addition to the imported source; it is not copied per instance or per calculation. Removing
 that duplicate DTO storage can follow a measured API migration rather than compromising
@@ -60,8 +64,8 @@ frontiers are not falsely marked complete by a closed legacy calculation.
 
 ## Structured incomplete reports
 
-`PreparationReport` schema 3 contains the selected view, source/definition identity,
-the executed authored-skill report and the configuration loader-prefix report,
+`PreparationReport` schema 4 contains the selected view, source/definition identity,
+the executed authored-skill, configuration loader-prefix and ordered item inventory reports,
 classified issues, requested options/metric queries and the legacy adapter's separate rejection.
 Request context records intent, not calculated output. Each issue names its stage
 and, where applicable, the concrete authored instance and source occurrence.
@@ -75,8 +79,10 @@ separate dependencies even after authored loading completes.
 
 Reports expand independently discoverable selected groups, entries, equipment/rune uses,
 passive specs and jewel assignments. Item inventory records are not labeled equipped solely
-because their raw numeric IDs match slot references. Actual registration still requires
-parsing, base validation and assembly. Configuration effects, passive allocation/version
+because their raw numeric IDs match slot references. The new item prefix registers only
+actually executed items with a base and a complete final owned assembly. It retains later
+unprocessed occurrences and stops before unavailable container instructions. Registration
+alone does not establish selected equipment or actor effects. Configuration effects, passive allocation/version
 rules, item/provider lifecycle and root load ordering stay explicit. Dependencies hidden
 behind unexecuted producers are not invented.
 
