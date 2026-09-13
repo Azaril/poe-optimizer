@@ -79,6 +79,16 @@ are recorded separately. A fresh-result scalar branch and a history-sensitive ta
 also give the prototypes a concrete semantic distinction to preserve without prescribing
 PoB's internal representation.
 
+The [explosion-helper dependency case](execution-model-baseline.md#explosion-helper-reference-contract)
+adds an executable-comparison candidate: source extraction isolates a missing capitalization
+binding while the surrounding conditional/table/variadic logic already lowers. Compare a
+closed captured intrinsic, a complete helper with a closed replacement operation, and broader
+callable replacements before increasing the runtime surface. This case also distinguishes
+consumer-visible results, aliases, errors and cache histories from internal debug frames.
+Reference tooling should prove the former; reproducing the latter is not itself a parity goal.
+The [implementation checkpoint](implementation.md) records validation status. No execution
+model or production extension is selected by this investigation case.
+
 ## Separate the decisions
 
 Rust is an implementation language, not a semantic model. A DSL interpreter, generated rule

@@ -18,6 +18,45 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+**R2aj validated checkpoint: explosion-helper reference contract and model comparison.**
+The offline extractor now reports the actual rejection chain: callback 1291 depends on
+`explodeFunc` (8), which depends on `firstToUpper` (6); the direct rejection is
+`unsupported global value string.upper`. The flag helper (10) already lowers through the
+existing captured CreateMod intrinsic (9). Neither a general legacy-factory bridge nor
+lowering CreateMod's source body is required by this observed chain.
+
+Six focused original-source tests pass: complete Deidbell public output and cache/copy
+history; six public pattern variants; ten successful amount forms plus four zero-return
+cases; four source failures at their original lines; seven casing cases and a shared-tag
+nil-hole case; and observer guards. These use retained unchanged original Functions and
+raw return packs. Supplied direct inputs are recorded explicitly. No internal call-frame,
+JIT-warmth or native parity is claimed. A failed frame-observer attempt is retained in local
+receipts; its extra hook/JIT machinery was removed from the final fixture because the
+consumer contract can be observed without it.
+
+Workspace strict Clippy, formatting and patch checks pass. The diagnostic example also
+passes focused lint and an actual pinned extraction run. Receipts are under
+`runs/r2aj-explosion-helper-01/`, including `parser-rejections-01.json`, `source-output-03/`,
+`source-output-review-01.json` and the source-bound command records. This is focused source
+validation, not a full workspace test run. No production code, package, schema, admission,
+lockfile, PoB pin or original build input changes. The existing validated native result
+remains **0/5 complete original builds**; no new native preparation result is claimed.
+
+The [A1 cost record](execution-model-baseline.md#explosion-helper-reference-contract) counts
+162 new developer-tool lines and 617 reference-test/utility lines, with zero production changes.
+The abandoned observer is counted separately; its removal is not a shipping-code reduction.
+
+**Resume:** use the [reference contract and binding comparison](execution-model-baseline.md#explosion-helper-reference-contract)
+to implement the smallest justified capitalization seam within the existing data/engine
+boundaries, with injected patterns, exact source/capture identity, method/error ordering,
+return packs and resource limits. Compare a closed captured intrinsic with a complete helper
+using a closed uppercase replacement; a general callable replacement is a wider capability,
+not an assumed requirement. No production option or A2 model is selected. The static
+23-wrapper inventory supplies contrasting plain/chance/word/conditional/two-tag follow-up
+cases; it does not prove item availability or native admission. Then require extraction,
+complete helper/public parity, reproducible admission/package review and all-five public
+checks. Continue the separate open jewel ownership and broader A1–A4 model discussions.
+
 **R2ai validated checkpoint: scalar doubled modifiers and reached rune diagnostics.**
 The scalar DOUBLED path now creates fresh native name/type/value/tag graphs with all six
 operands supplied by the data package. Shared dictionary mutation remains explicitly deferred.
@@ -2594,6 +2633,10 @@ candidate, and A3 remains the discussion point before any significant design cha
   The [R2af rune-order evidence](execution-model-baseline.md#strict-rune-order-checkpoint)
   adds a small native proof and its larger source-observation cost. Include the mixed-stage
   diagnostic API and deferred jewel-capture ownership as concrete A2 comparison cases.
+  The [R2aj helper reference contract](execution-model-baseline.md#explosion-helper-reference-contract)
+  adds a measured extraction frontier and six passing consumer-boundary source tests.
+  Compare bounded helper bindings before general callable machinery; count developer and
+  reference tooling separately, including the rejected internal-frame observer attempt.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.

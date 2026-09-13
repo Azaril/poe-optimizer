@@ -1525,3 +1525,77 @@ dependency kind even if the optional diagnostic does not fit the remaining budge
 
 See the [implementation record](implementation.md) for final validation and the next resume
 point. The A1–A4 investigation remains open; no alternative execution model is selected.
+
+## Explosion-helper reference contract
+
+R2aj investigates the actual parser dependency reached during rune preparation in builds 2,
+4 and 5. The new offline `inspect_parser_programs` developer example reuses the existing
+source-bound extraction API to expose final rejection reasons, distinct from packaged
+admission and legacy factory status. The observed chain is callback 1291 to `explodeFunc`
+(8) to `firstToUpper` (6), whose body rejects `unsupported global value string.upper`.
+The flag helper (10) already lowers with the existing captured CreateMod intrinsic (9).
+The separate attempt to lower CreateMod's body rejects `select`; that diagnostic traversal
+is not a required dependency of its intrinsic-backed calls. All five inspected legacy factory
+dispositions are Unsupported; a skipped Pure-helper bridge is not this observed blocker.
+
+A static owner inventory also finds 23 callbacks capturing this same helper: plain/chance
+forms, textual amount fallback, self/enemy conditions and two distinct ordered two-tag forms.
+This defines follow-up parser breadth beyond Deidbell, not evidence that every legacy pattern
+corresponds to an obtainable PoE2 item. Only the reached wrapper's final rejection chain has
+been measured; the remaining callbacks need their own extraction and parity evidence before
+admission. See the [family inventory](../runs/r2aj-explosion-helper-01/explosion-family-inventory.md).
+
+The [extraction audit](../runs/r2aj-explosion-helper-01/extraction-findings.md) records exact
+owner/source/extractor hashes. The [binding comparison](../runs/r2aj-explosion-helper-01/helper-binding-options.md)
+identifies three options within or adjacent to the current abstractions:
+
+| Option | Main trade-off |
+| --- | --- |
+| Closed captured capitalization intrinsic | Smallest binding surface; authenticate the entire helper and retain its injected pattern, method failures and single-result adjustment. |
+| Complete helper program with closed uppercase replacement | Retains helper control flow in the IR; adds a bounded replacement operand and its arity/validation rules. |
+| General builtin values and callable replacements | Broader reuse, but also new function identity, dispatch, reentry, lifetime and failure obligations. |
+
+These are bounded binding alternatives, not the A2 DSL/data/native/interpreter model
+comparison or a selected architecture. Any executable follow-up still needs source parity,
+owner and capability validation, explicit admissions, reproducible package review and all-five
+public preparation checks. Game values and patterns remain injected. Unknown receivers or
+callbacks cannot silently acquire an implementation.
+
+The retained reference contract passes six focused tests at original public/direct function
+boundaries: full results, exact return packs, source errors, live tag identity, nil holes and
+cache/returned-copy histories. An attempted internal Call-frame observer failed its own
+strict graph preflight and is preserved under `runs/r2aj-explosion-helper-01/failed-hook-observer/`.
+It is not evidence of successful call-frame observations. The replacement fixture removes
+new hook/JIT/frame machinery because those internal details are not required to observe the
+chosen consumer boundary. Source error locations still distinguish the dead local-key write
+from later capitalization failures; no internal call prefix is claimed. Existing shared
+source verification, deadline and graph helpers remain part of total parity-tooling cost.
+
+The [source reports](../runs/r2aj-explosion-helper-01/source-output-review-01.json) retain five
+JSON results: Deidbell/cache history, six public variants, fourteen amount cases, four exact
+source failures, and seven casing cases plus the tag-identity case. The sixth test checks
+observer guards. Workspace strict Clippy, formatting and patch checks pass. These are focused
+source tests, not a full workspace suite or native differential result. Final validation and
+source cost are recorded at the implementation checkpoint. No native
+calculation, package schema, admission or production evaluator changes in this case. Full
+native originals remain **0/5**; source-only observations cannot advance that result.
+
+The [R2aj cost inventory](../runs/r2aj-explosion-helper-01/cost-inventory-by-root.json) counts
+new Rust sources relative to `d0289a4`, with comments/blanks included and bytes normalized
+to LF. Shared existing helpers, documentation and ignored reports are excluded from these
+incremental counts; they remain part of the total architecture cost.
+
+| Retained layer | Physical lines | LF bytes |
+| --- | ---: | ---: |
+| Offline extraction diagnostic | 162 | 6,268 |
+| Reference test fixture | 515 | 19,105 |
+| Reference graph/error utility | 102 | 3,909 |
+| Total new source | 779 | 29,282 |
+
+The abandoned, never-successful frame-observer pair is separately preserved at 994 lines /
+36,644 LF bytes, including a final unexecuted diagnostic patch. The retained direct-call
+pair is 617 lines / 23,014 bytes, 377 lines / 13,630 bytes smaller than that attempt. This
+is a comparison of two test-tooling implementations, not deletion of 377 shipped production
+lines or proof that less code establishes wider parity. No production source changed. The
+experiment illustrates why A1/A2 should count required evidence tooling and question its
+observation boundary before extending it.
