@@ -1,7 +1,9 @@
 # Native equipment and item-set integration
 
 Status: R2ao adds native injected loadout display/lookup and directed original activation
-observations; R2ap shares immutable parser compilation across native preparations. Loader
+observations; R2ap shares immutable parser compilation across native preparations. R2aq
+integrates source-derived loadout metadata into the injected package; acquisition,
+lookup, package, native-only CLI, lint and portable checks pass. Loader
 base names remain preserved in owned item assembly. Public native preparation reaches `AwaitingSyncLoadouts` on original builds 2, 4 and 5; builds 1 and 3 still stop at
 captured jewel dependencies. The [implementation record](implementation.md) owns current
 validation and resume status. Full native build parity remains **0/5**. No alternative
@@ -23,6 +25,24 @@ and can reenter selection callbacks. Its ordered effects, trailing loading flags
 undo initialization must be accounted for before completing the Items lifecycle. The
 [consumer audit](#consumer-boundary-for-the-execution-model-investigation) distinguishes
 those domain effects from presentation-only storage without choosing a replacement model.
+
+## Live owner integration after policy acquisition
+
+The R2aq package supplies the lookup program with injected, source-derived metadata. Its
+policy can be held directly in the program's immutable Arc; no new global default or
+compiled owner is required for those operands. Complete production lookup still needs the
+live domain readers. The existing private ItemSetState is the first usable owner: expose
+bounded borrowed order/title reads and bind each materialized set to its creation-time
+SetOrigin. Numeric IDs alone do not identify duplicate saved occurrences.
+
+The shared Build preparation context must retain those private domain owners and its
+source-order cursor across incomplete results. Current independent preparation reports
+finish at different points; Skills does not retain its live set map, NativeTree represents
+one selected allocation, and Config still has pending effects. The source constructs all
+owners before loading non-tree XML sections and delays saved-tree loading. Reconstructing
+a context from final projections would substitute future or unreached state. Build-owned
+special-link maps must also come from synchronization, not diagnostic graphs. These are
+implementation gates within the accepted shared instance/resolution/plan design.
 
 ## Synchronization source contract and next integration gate
 

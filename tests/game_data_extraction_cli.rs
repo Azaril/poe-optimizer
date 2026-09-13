@@ -20,7 +20,7 @@ use std::{
 // A completion guard for reproducibility checks, not an extraction speed target.
 const EXTRACTION_COMPLETION_TIMEOUT_SECONDS: &str = "600";
 
-const SECTIONS: [&str; 29] = [
+const SECTIONS: [&str; 30] = [
     "tree",
     "character",
     "actor",
@@ -50,6 +50,7 @@ const SECTIONS: [&str; 29] = [
     "modifier_parser",
     "unique_requirements",
     "item_assembly",
+    "build_loadouts",
 ];
 fn repository() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -166,7 +167,7 @@ fn assert_no_outputs(path: &Path) {
 }
 
 #[test]
-fn fresh_cli_extractions_reproduce_all_twenty_nine_sections_and_validate_source_observations() {
+fn fresh_cli_extractions_reproduce_all_thirty_sections_and_validate_source_observations() {
     let temp = tempfile::tempdir().unwrap();
     let first = temp.path().join("first extracted package.json");
     let second = temp.path().join("second extracted package.json");

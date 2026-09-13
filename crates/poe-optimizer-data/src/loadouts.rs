@@ -1,8 +1,9 @@
 //! Caller-injected operands for the fixed GetSpecList/GetLoadoutByName algorithms.
 //!
-//! This standalone policy is not part of the bundled game-data schema. Validation
-//! bounds metadata only; it neither authenticates source nor evaluates patterns
-//! or requires every possibly reached tree version to have a display entry.
+//! This policy can be supplied independently or through a game-data package.
+//! Its validation bounds metadata only; it neither authenticates source nor
+//! evaluates patterns or requires every reached tree version to have a display
+//! entry. Package validation additionally binds its latest version to startup.
 use serde::{Deserialize, Deserializer, Serialize, de};
 use std::{collections::BTreeMap, fmt};
 

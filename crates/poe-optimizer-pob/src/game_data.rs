@@ -21,6 +21,7 @@ use std::{
 
 const READ_PATHS: &[&str] = &[
     "src/Modules/Build.lua",
+    "src/Classes/TreeTab.lua",
     "src/Modules/CalcFormat.lua",
     "src/Data/ModCache.lua",
     "runtime/lua/xml.lua",
@@ -154,6 +155,9 @@ const READ_PATHS: &[&str] = &[
     "src/Data/ModVeiled.lua",
 ];
 const PROVENANCE_PATHS: &[&str] = &[
+    "src/Modules/Build.lua",
+    "src/Classes/TreeTab.lua",
+    "src/GameVersions.lua",
     "src/Modules/ModParser.lua",
     "src/Data/Misc.lua",
     "src/Data/QuestRewards.lua",
@@ -220,7 +224,8 @@ fn normalized_hash(text: &str) -> String {
 pub(crate) fn extractor_sha256() -> String {
     let mut digest = Sha256::new();
     for text in [
-        "poe-game-data-extractor-v26",
+        "poe-game-data-extractor-v27",
+        include_str!("loadouts_extract.rs"),
         include_str!("item_loading_extract.rs"),
         include_str!("item_loading_extract/radius.rs"),
         include_str!("item_loading_extract/stat_ordering.rs"),
@@ -564,6 +569,7 @@ pub fn extract_pinned_game_data_for_review(root: &Path) -> Result<ExtractedGameD
         item_scalability,
         modifier_parser,
         item_assembly,
+        build_loadouts: crate::loadouts_extract::from_sources(&extractor.sources)?,
         unique_requirements: UniqueRequirementData::unavailable(
             "complete unique construction not yet exported",
         ),

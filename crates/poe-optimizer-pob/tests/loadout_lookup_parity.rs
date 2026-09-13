@@ -384,6 +384,13 @@ fn cases(latest: &str, old: &str) -> Vec<(Case, Expected)> {
 fn complete_original_methods_match_native_for_directed_live_state() {
     let mut original = Original::new();
     let source = original.evidence();
+    let acquired_policy = poe_optimizer_pob::loadouts_extract::extract(
+        &PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../vendor/path-of-building-poe2"),
+    )
+    .unwrap();
+    // The reference independently derives operands while retaining the original
+    // functions. Native lookup uses the production acquisition result.
+    assert_eq!(acquired_policy, original.policy);
     let latest = original.policy.latest_tree_version.clone();
     let old = original
         .policy
@@ -404,7 +411,7 @@ fn complete_original_methods_match_native_for_directed_live_state() {
         original.policy.version_suffix
     );
     let program =
-        LoadoutProgram::new(Arc::new(original.policy.clone()), LoadoutLimits::default()).unwrap();
+        LoadoutProgram::new(Arc::new(acquired_policy.clone()), LoadoutLimits::default()).unwrap();
     let mut reports = Vec::new();
     for (case, expected) in &cases {
         reports.push(run_case(&original, &program, case, expected));
@@ -415,8 +422,11 @@ fn complete_original_methods_match_native_for_directed_live_state() {
         "caller-current",
         BTreeMap::from([("caller-old".into(), "Earlier Ω".into())]),
     );
+    let mut injected_policy = acquired_policy.clone();
+    injected_policy.latest_tree_version = original.policy.latest_tree_version.clone();
+    injected_policy.tree_version_display = original.policy.tree_version_display.clone();
     let injected_program =
-        LoadoutProgram::new(Arc::new(original.policy.clone()), LoadoutLimits::default()).unwrap();
+        LoadoutProgram::new(Arc::new(injected_policy), LoadoutLimits::default()).unwrap();
     let mut c = Case::empty("injected_version_display_and_latest", "[Earlier Ω] ");
     c.spec(Some(""), Some("caller-old"));
     reports.push(run_case(
@@ -445,10 +455,10 @@ fn complete_original_methods_match_native_for_directed_live_state() {
             getter: true,
         },
     ));
-    let report = json!({"source":source,"injected_policy":original.policy,"cases":reports,
+    let report = json!({"source":source,"acquired_policy":acquired_policy,"injected_policy":original.policy,"cases":reports,
         "count":reports.len(),"limits":{"lua_memory_bytes":32*1024*1024,"case_rows":128,"graph_rows":4096,"graph_bytes":256*1024},
         "scope":"source component parity over identical supplied finite text/numeric state; no imported closure, source access trace, full synchronization, activation or public native producer claim",
-        "policy_variants":"Only version map/latest globals injected. Arbitrary fallback/format/link-pattern policy tests are native-only elsewhere; these original bodies are never edited."});
+        "policy_variants":"26 cases use the production source-acquired policy, independently compared to original operands. Three cases clone that acquired policy and inject only version map/latest globals. Arbitrary fallback/format/link-pattern policy tests are native-only elsewhere; these original bodies are never edited."});
     if let Some(output) = std::env::var_os("POE_LOADOUT_LOOKUP_OUTPUT") {
         let output = PathBuf::from(output);
         std::fs::create_dir_all(&output).unwrap();

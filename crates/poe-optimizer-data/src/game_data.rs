@@ -14,6 +14,7 @@ pub use crate::item_rules::{
     LocalWeaponStat,
 };
 pub use crate::item_scalability::*;
+pub use crate::loadouts::*;
 pub use crate::modifier_parser::*;
 pub use crate::movement::MovementData;
 pub use crate::skill_identities::*;
@@ -25,8 +26,8 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use thiserror::Error;
 
-pub const SCHEMA_VERSION: u32 = 39;
-pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v39";
+pub const SCHEMA_VERSION: u32 = 40;
+pub const SEMANTICS_VERSION: &str = "poe2-native-profiles-v40";
 const PACKAGE_BYTES: &[u8] = include_bytes!("../data/game-data.json");
 const SECTIONS: &[&str] = &[
     "tree",
@@ -58,6 +59,7 @@ const SECTIONS: &[&str] = &[
     "modifier_parser",
     "unique_requirements",
     "item_assembly",
+    "build_loadouts",
 ];
 
 #[derive(Debug, Clone, Error, PartialEq, Eq)]
@@ -450,6 +452,7 @@ pub struct GameDataPackage {
     pub modifier_parser: ModifierParserData,
     pub unique_requirements: UniqueRequirementData,
     pub item_assembly: ItemAssemblyData,
+    pub build_loadouts: BuildLoadoutPolicy,
 }
 impl GameDataPackage {
     pub fn armour_base(&self, id: &str) -> Option<&ArmourBaseData> {
@@ -557,6 +560,10 @@ impl GameDataSnapshot {
     }
     pub fn unique_requirements(&self) -> &UniqueRequirementCatalog {
         &self.unique_requirements
+    }
+    /// Immutable operands for the complete loadout display and lookup algorithms.
+    pub fn build_loadouts(&self) -> &BuildLoadoutPolicy {
+        &self.package.build_loadouts
     }
     pub fn item_assembly(&self) -> &ItemAssemblyCatalog {
         &self.item_assembly
@@ -752,6 +759,7 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
         .skill_preparation
         .validate(&package.skill_identities)?;
     package.item_loading.validate()?;
+    package.build_loadouts.validate().map_err(error)?;
     package.item_scalability.validate()?;
     package.modifier_parser.validate()?;
     package.item_assembly.validate()?;
@@ -773,6 +781,15 @@ fn validate(package: &GameDataPackage, limits: &LoadLimits) -> Result<()> {
     if inventory_tree.tree_version != package.item_loading.policy.jewel_radius.latest_tree_version {
         return Err(error(
             "inventory socket projection belongs to a different startup tree",
+        ));
+    }
+    // Build and TreeTab use the same latest-version global as startup radius
+    // selection. Historical display entries remain a lazy lookup dependency.
+    if package.build_loadouts.latest_tree_version
+        != package.item_loading.policy.jewel_radius.latest_tree_version
+    {
+        return Err(error(
+            "build loadout policy belongs to a different startup tree",
         ));
     }
     package

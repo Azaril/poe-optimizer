@@ -13,7 +13,10 @@ fn data() -> ItemAssemblyData {
 #[test]
 fn policy_only_catalog_binds_existing_definitions_without_copying() {
     let s = snapshot();
-    assert_eq!(s.identity().schema_version, 39);
+    assert_eq!(
+        s.identity().schema_version,
+        poe_optimizer_data::game_data::SCHEMA_VERSION
+    );
     let c = s.item_assembly();
     assert_eq!(c.data().capability, ItemAssemblyCapability::PolicyOnly);
     assert_eq!(

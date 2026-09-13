@@ -1,5 +1,16 @@
 # Native game-data packages
 
+Package schema **40**, semantics **`poe2-native-profiles-v40`**, adds the required
+`build_loadouts` section at policy schema **1**. The selected immutable snapshot supplies
+the native loadout program with default labels, tree version displays and decorations,
+and link syntax. Definitions are acquired offline from pinned source; native lookup needs
+no Lua host. A custom package may supply different bounded metadata under the existing
+trust policy. Its latest tree version must agree with the other startup tree consumers.
+Missing display rows and malformed patterns preserve reached-call errors rather than
+becoming eager loader errors. This supplies data for display/lookup; complete Build
+synchronization and activation retain their separate implementation and parity gates.
+See the [implementation checkpoint](implementation.md) for migration validation status.
+
 The native evaluator loads a versioned JSON package into `GameDataSnapshot`, compiles it
 once into `CompiledGameData`, and shares immutable data across prepared builds and Rayon
 workers. The native calculation path uses injected records; it performs no configuration

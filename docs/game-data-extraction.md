@@ -9,7 +9,8 @@ The exporter covers the versioned sections of the
 item modifier rules, item source formatting, jewellery and fixed armour bases, defence, monsters, encounters, typed owned passive
 effects, explicit passive exclusions, configuration metadata, constructed skill/gem identities,
 authored skill-preparation definitions,
-item definitions, general item scalability and completed unique requirements. Numerical mechanic coverage remains partial.
+item definitions, general item scalability, completed unique requirements, and build-loadout
+display/lookup policy. Numerical mechanic coverage remains partial.
 Whole ordinary structure is separate from
 capability admission: 1,282 complete source views are supported, including the four
 admitted ascendancy resistance nodes; 3,476 source views are explicitly excluded. It does not infer arbitrary build mechanics
@@ -89,6 +90,20 @@ records actual Lua traversal order and lookup winners; this observation can diff
 processes and is validated independently. All other evidence fields and the complete
 runtime package remain stable. See [authored preparation](authored-skill-preparation.md).
 
+The `build_loadouts` section derives the complete loadout display/lookup operands from
+`Build.GetLoadoutByName`, `TreeTab.GetSpecList` and `GameVersions.lua`. Complete pinned
+file hashes authenticate lexical scope; reviewed method and primitive-binding checks
+reject changed operations. The extractor reads literal defaults, decorations and link
+syntax and constructs all version displays in a separate 4 MiB VM with an empty environment.
+Only the authenticated fixed GameVersions body executes there; it contains no loops or
+callbacks. Full Build/TreeTab methods remain independently executed parity oracles.
+
+The package binds the selected latest version to the existing startup tree policy. The
+standalone policy keeps lazy lookup errors: arbitrary bounded custom display maps and
+patterns are not executed by the loader. Evidence remains schema 2 and includes all
+three consumed files plus the acquisition implementation in its extractor fingerprint.
+No new general interpreter operation or runtime PoB dependency is introduced.
+
 ## Isolation and limits
 
 Extraction runs in a fresh supervised process with no inherited standard I/O and a hidden
@@ -130,7 +145,7 @@ cargo test -p poe-optimizer-cli --test game_data_extraction_cli --locked
 ```
 
 The source revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. The exporter now emits
-schema 37 and `poe2-native-profiles-v37`, including source-keyed passive/actor effects,
+schema 40 and `poe2-native-profiles-v40`, including source-keyed passive/actor effects,
 structural attribute/replacement metadata, jewellery and four fixed armour slots, movement
 formula/penalty data, shared action-speed/direct-timing parameters and explicit excluded views. Item penalty absence and zero remain
 distinct; actual parser checks exclude unsupported conditional special phrases. It

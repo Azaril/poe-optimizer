@@ -18,12 +18,70 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+**R2aq validated: source-derived loadout policy in the injected package.** The required `build_loadouts` section
+connects the existing native display/lookup program to selected GameDataSnapshot metadata.
+Package schema 40 / semantics v40 retains policy schema 1 and requires its latest tree
+version to agree with the existing startup radius policy. Empty historical display maps
+and malformed patterns remain valid metadata until a consumer reaches them.
+
+The extractor authenticates complete Build.GetLoadoutByName, TreeTab.GetSpecList, their
+lexical primitive bindings, and GameVersions before deriving defaults, decorations, link
+syntax and all five version displays. Existing evidence schema 2 binds those consumed
+files, the extractor and the package. No new runtime authority or generic interpreter
+extension is needed. Independent review found no further ownership seam necessary for
+this read-only component: its program owns immutable policy and returned selections bind
+to the exact program and borrowed live context.
+
+The reviewed bundle is **26,701,288 bytes**, SHA-256
+`a90217d9bab6c0469917a2ba75ed9517205d2ac2b3d59f8d68580604f26df07f`.
+All 29 previous section values and digests, tree bytes, source pin, original builds and
+Cargo.lock are unchanged. The only new manifest provenance entries are Build, TreeTab
+and GameVersions. Review/adoption receipts are in `runs/r2aq-loadout-package-01/`.
+All four acquisition tests and two independent source-target tests pass, retaining 29
+lookup cases (26 acquired-policy and three injected-version cases). The first guard-test
+attempt mutated a matching line in earlier SyncLoadouts; the corrected fixture targets
+the complete lookup method. Both attempts remain recorded in
+`runs/r2an-loadout-sync-01/r2aq-acquisition-01/` and `r2aq-acquisition-02/`.
+
+All **130 test executions** pass: four acquisition tests, two independent source-target
+tests, four policy unit tests, 97 DATA tests across ten affected targets, 13 native lookup
+tests, three exporter CLI tests and seven native-only data/CLI tests. The 29 directed source
+cases are contained within those two source-target tests, not an additional test count.
+Two fresh CLI exports reproduce all 30 sections exactly and validate evidence schema 2.
+Whole-workspace/all-target strict Clippy, formatting and DATA/ENGINE/IMPORT/NATIVE WebAssembly
+compilation pass. Source/input guards match the producing commands; the source oracle used
+the acquired policy before package adoption, independently of bundled data.
+
+Validation session `30796` is terminal success. Producing ledgers are
+`runs/r2an-loadout-sync-01/r2aq-package-validation-01/`; the checkpoint receipt is
+`runs/r2aq-loadout-package-01/validated-checkpoint-root.json`. The older full-suite session
+`71368` continues against its separate frozen `b96fbd9` checkout. Keep that checkout frozen;
+main is available for the next implementation slice after publication. Neither the running
+full suite nor hosted CI is claimed as green. SyncLoadouts, activation and complete native
+build evaluation remain unimplemented; the complete original-build count stays **0/5**.
+
+**Next implementation gate:** add bounded borrowed reads and creation-time SetOrigin
+binding to the actual ItemSetState owner, then retain a shared root preparation state and
+source-order cursor. The source constructs all domain owners before loading non-tree
+sections in XML order and defers the saved tree load. Existing independent completed
+Tree/Skills/Config reports cannot be joined into the live state at Items.Load's Sync call.
+The current incomplete-result path also drops private prepared owners after cloning reports;
+resumption must retain those owners explicitly. Follow
+`runs/r2aq-loadout-package-01/next-live-context-by-data.md` for the exact types/source anchors.
+Bring live tree, skill and config readers and Build-owned special-link maps into that owner
+before completing synchronization, callback reentry, activation and trailing export/undo
+work. Preserve exact authored-instance identity and explicit unavailable dependencies.
+
 **R2ap integrated: CI diagnosis and preparation reuse.** Authenticated completed
 Windows/Linux CI logs confirm the sole reported failure was the stale 84-versus-81 factory
-count, already corrected by `69d9f5a`. No newer failure is visible in the 22:50 UTC snapshot;
-all four jobs for `69d9f5a`/`98fcf52` are still in Test. Live signed log downloads returned 404.
-See `runs/r2an-ci-investigation-01/followup-05/` for complete failed-job logs and
-`followup-06/` for the current status. Hosted CI is not yet green.
+count, already corrected by `69d9f5a`. The latest published run is
+[34788302779](https://github.com/Azaril/poe-optimizer/actions/runs/34788302779), exact `36dfb3d`.
+At 23:24:34 UTC both OS jobs remain in Test after passing cache setup, Cargo.lock
+preservation, formatting and lint. Later gates remain pending; hosted CI is not yet green.
+No new failed step, annotation or completed failure is visible.
+`runs/r2an-ci-investigation-01/followup-05/` retains the completed failed-job logs;
+`followup-09/` records the latest exact-HEAD status. Running
+signed log downloads previously returned 404, so the status check does not retry them.
 
 The exhaustive candidate target now prepares each full document once while retaining all
 candidate counts, legality, realization, export, full-result and pure-output assertions.
@@ -53,7 +111,8 @@ under `runs/r2ap-ci-profile-01/`, not added to production or the shipped example
 The parser fix is committed as `7baad65`. Commit `b96fbd9` adds a pinned dependency-only Rust
 CI cache, main-push-only saving, and an immediate Cargo.lock preservation guard because the
 cache action uses unlocked metadata discovery. Every previous workflow matrix, environment,
-check and command is retained exactly; cache behavior still needs hosted execution. Source
+check and command is retained exactly; cache setup passes on both hosted OS jobs, while
+cache hits, saved artifacts and elapsed-time improvement remain unproved. Source
 review and the workflow-preservation receipt are in
 `runs/r2an-ci-investigation-01/cache-review-01/`. No schema or injected package changed.
 

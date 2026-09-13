@@ -9,7 +9,10 @@ fn complete_preparation_definitions_preserve_source_semantics_and_identity_seam(
     let snapshot = bundled_snapshot().unwrap();
     let catalog = snapshot.skill_preparation();
     let data = catalog.data();
-    assert_eq!(snapshot.identity().schema_version, 39);
+    assert_eq!(
+        snapshot.identity().schema_version,
+        poe_optimizer_data::game_data::SCHEMA_VERSION
+    );
     assert_eq!(data.schema_version, SKILL_PREPARATION_SCHEMA_VERSION);
     assert_eq!(data.gems.len(), 966);
     assert_eq!(data.effects.len(), 1436);
