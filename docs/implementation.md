@@ -35,13 +35,30 @@ cover 84 bodies, 107 public call-position cases, 749 alias cases and 10,752 warm
 Strict workspace Clippy and formatting pass. Receipts are under
 `runs/r2am-base-name-01/ci-followup-01/`, `ci-numeric-01/` and `ci-lint-01/`.
 
-**Immediate validation resume:** run the full workspace/all-target test suite before further
-SyncLoadouts implementation, using CI's test optimization level 2 with debug assertions and
-overflow checks enabled. Its command/source/PID/result ledger is
-`runs/r2am-base-name-01/workspace-01/01.json` once started; inspect the existing live process
-rather than launch a duplicate. This broader run may expose other stale expectations and
+**Immediate validation resume:** the full workspace/all-target test suite is running against
+the code at `69d9f5a`, using CI's test optimization level 2 with debug assertions and overflow
+checks enabled. Compilation completed and tests have started. Its command/source/PID/result
+ledger is `runs/r2am-base-name-01/workspace-01/01.json`; the active tool session is `90370`.
+Inspect that existing process rather than launch a duplicate; keep production/test changes
+out of this run until it is terminal. This broader run may expose other stale expectations and
 must not be reported complete until terminal success. The previously published item checkpoint
 below remains scoped to its selected tests; hosted CI is separate and not yet green.
+
+**R2an planning checkpoint:** independent file-only source, policy and receipt reviews now
+define the [next synchronization gate](native-equipment-integration.md#synchronization-source-contract-and-next-integration-gate).
+All five previously observed Items.Load calls return from SyncLoadouts without loadout
+activation in that scope; callback reentry and later tree-loaded calls remain unobserved.
+Builds 2/5 still have the default tree at the pending call, unlike their final imported view.
+Keep caller intent, imported instance identities and live effective selections separate.
+The next executable work is a bounded extension of the existing source lifecycle fixture,
+followed by the native domain continuation; no source/test implementation has been added here.
+Review artifacts are retained under `runs/r2an-loadout-sync-01/`.
+
+The [A1-A4 investigation](#execution-model-investigation-a1-a4) remains the requested future
+model comparison. The synchronization review adds a concrete distinction between game
+definitions and PoB's import/UI protocol: preserve observable selection and export effects,
+but justify each source-shaped field against a consumer before adding shipping complexity.
+No new schema or replacement model is selected, and full native originals remain **0/5**.
 
 **R2am validated checkpoint: preserve item base names through owned assembly.**
 A bounded native failure probe identified the actual life-flask checks blocking original

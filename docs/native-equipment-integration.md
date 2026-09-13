@@ -23,6 +23,60 @@ undo initialization must be accounted for before completing the Items lifecycle.
 [consumer audit](#consumer-boundary-for-the-execution-model-investigation) distinguishes
 those domain effects from presentation-only storage without choosing a replacement model.
 
+## Synchronization source contract and next integration gate
+
+The R2an review is file-only planning against the pinned source and existing R2am/R2ad
+receipts. It adds no native behavior or newly executed source cases. Each of the five
+observed first Items.Load calls reaches one returning SyncLoadouts with export refresh;
+none enters SetActiveLoadout within that observed scope. Earlier and later synchronization
+calls are outside the old hook's scope. In particular, final imported selections cannot
+stand in for the live owners at the pending call:
+
+| Original | Pre-Sync tree / item / skill / config | After-import selections | Existing dropdown index |
+| --- | --- | --- | --- |
+| 1, 3, 4 | 1 / 1 / 1 / 1 | 1 / 1 / 1 / 1 | 2: Default |
+| 2 | 1 / 6 / 6 / 1 | 6 / 6 / 6 / 1 | 1: header |
+| 5 | 1 / 2 / 4 / 1 | 3 / 2 / 4 / 1 | 1: header |
+
+All five have activeLoadout=1 at this boundary, despite selecting different kinds of
+dropdown row. Build 2 also has different item and skill IDs for matching titles. Build 5's
+export item selection resets to the first saved ID, 2, independently of its skill selection.
+These are observed source facts, not additional native coverage.
+
+Keep imported occurrence identity, caller selection intent and live effective selections
+separate. The shared preparation boundary must advance actual domain owners in source order;
+combining independently completed diagnostic reports does not reconstruct that state.
+An explicit selected instance must not silently retarget to another instance with the same
+title. Resolve the application of caller overrides against executable duplicate/link cases
+before choosing the continuation API. Missing reached domain operations remain dependencies.
+
+The next source gate reuses the current lifecycle fixture, with an optional mode for original
+SyncLoadouts/GetLoadoutByName calls outside Items.Load. Direct post-import calls can capture
+exact result packs without observing VM return slots. Retain their distinction from original
+import-time events. Bind the current dropdown callback after Build:Init replaces its owner.
+Use all five originals and separately labelled cases for links, duplicate titles, singleton
+domains, stale link maps, missing values, errors and changed-index callback reentry. The
+source lookup can return a partial loadout without a tree ID, or resolve a link before a
+later exact title; a normalized name join cannot be assumed equivalent.
+
+After that gate, implement the required ordered domain transitions behind the accepted
+source/instance/definition/plan interfaces. Tree, item, skill and configuration activation
+can change effective data and invoke further synchronization. Export refresh and the pending
+Items.Load tail must also reach an accounted-for outcome. A proposed private continuation
+must preserve these effects without imposing the reference observer's entire GUI graph on
+the production API. No continuation representation or alternative execution model is selected.
+
+For [A1-A4](rule-execution-model-investigation.md), distinguish actual game definitions from
+PoB import grammar and presentation protocol. Link patterns, fallback titles and menu/version
+labels are source-adapter operands; their downstream selection effects matter, but that does
+not automatically require a shipping field for every literal. The current package lacks the
+complete tree-version display map. Extracting that projection would not imply support for
+older passive trees. Compare adapter cost and the consumer contract before extending schemas.
+
+Review artifacts are under `runs/r2an-loadout-sync-01/`: the source-test extension plan,
+five-build entry evidence, policy/consumer table and A1-A4 boundary recommendation. Runtime
+validation remains a separate gate in the [implementation record](implementation.md).
+
 ## R2ai preceding implementation boundary
 
 Scalar doubled modifiers now use injected operands and fresh native result graphs, retaining

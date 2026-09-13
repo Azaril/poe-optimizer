@@ -92,6 +92,15 @@ in injected programs. This is a current-model extension, not an A2 execution-mod
 Count its production code, acquisition guards, generated inventory and parity fixtures in the
 comparison, including per-call pattern compilation. Full native build parity remains open.
 
+The [loadout synchronization review](native-equipment-integration.md#synchronization-source-contract-and-next-integration-gate)
+adds a boundary case for the comparison. PoB's import grammar and dropdown protocol can
+affect effective tree, item, skill and configuration selections; preserving those effects
+does not automatically require the evaluator to expose every source label or GUI table.
+Compare a source adapter plus domain operations with the current representation on the same
+observable histories. Count all adapter, acquisition and parity tooling, including a source
+grammar/presentation edit and a semantic join change as separate update exercises. This is
+an A1/A2 input, not a selected model or permission to omit unproved behavior.
+
 ## Separate the decisions
 
 Rust is an implementation language, not a semantic model. A DSL interpreter, generated rule
