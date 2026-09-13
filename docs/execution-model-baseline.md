@@ -1072,3 +1072,48 @@ items, 87 match with an explicit original-parser dependency and 85 with the nati
 25 weapon/jewel records remain excluded in this lane. See the [scope and frontiers](native-item-assembly.md#r2z-local-item-checkpoint).
 These component results and validation time establish neither full-build parity nor candidate
 throughput, and select no execution model.
+
+## Native weapon-local assembly checkpoint
+
+R2aa extends the same injected item policy and native assembly producer to weapons. It is
+component progress within the existing model, not an A2 comparison or a migration decision.
+The schema-31 / item-assembly-schema-3 package is 26,298,910 bytes, SHA-256
+`01f484bc3f30ca595735c7c4b2fc29b4c2e7682fee2863f4ab55c4c0059e365f`.
+All 28 other sections and the previous assembly policy are unchanged. Historical measurements
+above keep their own earlier package and executable identities.
+
+The [weapon checkpoint](native-item-assembly.md#r2aa-weapon-local-checkpoint) retains all
+116 saved items: 98 are eligible for the implemented families, with 93 original-parser plus
+native-assembly matches and 91 built-in-native-parser plus assembly matches. Weapons contribute
+six of seven matches in both lanes. Build 03 Item 17 stops at ambiguous rune reconstruction;
+18 jewels remain excluded from this family lane, not counted as executed assembly failures.
+The other stops remain rune reconstruction, advanced-copy affix ordering and native parser
+callbacks. These component counts leave full native original evaluation at **0/5**.
+
+The consumer contract now includes whole per-slot `weaponData`, its publication before later
+queries can fail, and aliases retained through generic late overrides. Overrides precede
+residual hand-condition tag changes and the final ordered DPS reset/sum. A substitute model
+must preserve those observable outputs and reached failure prefixes; matching a final damage
+number alone would not establish equivalent item preparation. It need not reproduce the
+current arena implementation. Dependency-call arity/order and arbitrary callback behavior
+remain separate gates.
+
+| New module role | Physical lines |
+| --- | ---: |
+| Typed weapon policy and validation | 271 |
+| Source extraction/authentication | 530 |
+| Native weapon algorithm | 287 |
+| Focused native tests | 524 |
+| Original-source fixture/history support | 655 |
+
+Existing module, provider, inventory and test wiring edits are additional. These counts include
+comments and fixtures; they are neither runtime costs nor maintenance-effort estimates.
+The eight-test source target passed in 45.02 seconds on one Windows release run with ten fresh
+reference hosts, excluding 37.66 seconds of compilation. This includes import, control/graph
+comparisons and directed histories; it is validation cost, not candidate throughput or a
+speedup comparison with earlier targets. Broader checkpoint validation was still in progress
+when this component result was recorded.
+
+Retained evidence is `runs/r2aa-weapon-local-01/source-parity-counts.json`,
+`remaining-item-stops.json`, `new-module-costs-final.json`, `package-reconciliation.json` and
+`source-01/`. The implementation record owns subsequent validation and production status.

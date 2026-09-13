@@ -36,7 +36,9 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
     }
     fn slot_predicate(&mut self, predicate: &ItemAssemblySlotPredicate) -> Result<bool> {
         Ok(match predicate {
-            ItemAssemblySlotPredicate::BaseWeaponTruthy => self.base_field("weapon")?.truthy(),
+            ItemAssemblySlotPredicate::BaseWeaponTruthy => self
+                .base_field(&self.definitions.policy().weapon.base_field)?
+                .truthy(),
             ItemAssemblySlotPredicate::BaseTypeEquals { value } => {
                 self.base_field("type")?.as_str() == Some(value)
             }
@@ -153,10 +155,11 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
             let added = number(&self.local(list, &policy.slots.charm_limit)?)?;
             self.set("charmLimit", finite(base + added)?)?;
         }
-        if self.base_field("weapon")?.truthy() {
-            return Err(AssemblyError::unsupported(
-                "item local weapon data assembly is unavailable",
-            ));
+        if self
+            .base_field(&self.definitions.policy().weapon.base_field)?
+            .truthy()
+        {
+            self.local_weapon(list, number_slot)?;
         } else if self.base_field(&policy.armour.base_field)?.truthy() {
             self.local_armour(list)?;
         } else if self.base_field(&policy.flask.base_field)?.truthy() {

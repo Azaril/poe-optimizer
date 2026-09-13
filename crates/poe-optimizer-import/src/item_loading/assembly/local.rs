@@ -301,7 +301,7 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
         self.arena.set_field(local_table(output)?, key, value)
     }
 
-    fn local_overrides(
+    pub(super) fn local_overrides(
         &mut self,
         list: TableId,
         output: &Value,

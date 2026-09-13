@@ -13,13 +13,15 @@ use std::{
 
 mod local;
 pub use local::*;
+mod weapon;
+pub use weapon::*;
 
 type Result<T> = std::result::Result<T, GameDataError>;
 fn error(message: impl std::fmt::Display) -> GameDataError {
     GameDataError(format!("item assembly policy: {message}"))
 }
 
-pub const ITEM_ASSEMBLY_SCHEMA_VERSION: u32 = 2;
+pub const ITEM_ASSEMBLY_SCHEMA_VERSION: u32 = 3;
 pub const ITEM_ASSEMBLY_SOURCE_ROLES: &[&str] = &[
     "add_mod",
     "and64",
@@ -83,6 +85,7 @@ pub struct ItemAssemblyPolicy {
     pub named_compatibility: Vec<ItemAssemblyNamedRule>,
     pub requirements: ItemAssemblyRequirementPolicy,
     pub slots: ItemAssemblySlotPolicy,
+    pub weapon: ItemAssemblyWeaponPolicy,
     pub armour: ItemAssemblyArmourPolicy,
     pub flask: ItemAssemblyFlaskPolicy,
     pub charm: ItemAssemblyCharmPolicy,
@@ -696,6 +699,7 @@ impl ItemAssemblyData {
         b.number(s.spirit_percent_divisor)?;
         b.number(s.socketed_jewel_percent_divisor)?;
         local::validate(&mut b, &p.armour, &p.flask, &p.charm)?;
+        weapon::validate(&mut b, &p.weapon)?;
         b.text(&p.scale.integer_scaled_key)?;
         b.count(p.scale.keyed_value_decimal_places.into(), 15)?;
         b.count(p.scale.truncation_round_decimal_places.into(), 15)?;

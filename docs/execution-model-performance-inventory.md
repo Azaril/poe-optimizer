@@ -1,7 +1,8 @@
 # Execution-model performance evidence inventory
 
-This is A1's read-only inventory at `9c756224f7c0063b71e277e4ef2ffe33a4c91d19`
-(2026-09-12). It identifies reusable measurement paths and gaps; it selects no replacement
+The initial A1 read-only inventory uses `9c756224f7c0063b71e277e4ef2ffe33a4c91d19`
+(2026-09-12). Later component checkpoints below retain separate evidence and identities.
+This inventory identifies reusable measurement paths and gaps; it selects no replacement
 execution model. The [investigation](rule-execution-model-investigation.md) defines the
 decision gates and the [implementation record](implementation.md) owns the current status.
 
@@ -12,7 +13,8 @@ a prepared profile, a public parser call and a complete optimizer run are differ
 
 The read-only identity/measurement inventory is retained in
 `runs/a1-performance-inventory.json`. No benchmark, test, compilation or extractor was run
-to produce this document. Fresh A1 measurements must retain their own command, binary, input
+to produce that initial inventory; later results below cite their separate producing runs.
+Fresh A1 measurements must retain their own command, binary, input
 and dataset identities rather than reuse the historical rates below.
 The [fresh A1 baseline](execution-model-baseline.md) records the separately executed
 preparation and fixed-profile measurements; its scope and checksum qualifications apply.
@@ -35,6 +37,31 @@ The source interpreter and direct native calculation paths are both implemented 
 Comparing them requires equivalent behavior, inputs and lifecycle; their implementation
 language alone does not make the old kernel numbers a prediction for the source interpreter.
 See [shared source programs](shared-source-programs.md) and [parser sessions](parser-sessions.md).
+
+## Weapon-component validation evidence
+
+R2aa's [item-assembly source target](../crates/poe-optimizer-pob/tests/item_assembly_parity.rs)
+compares the finite owned item graph with original source behavior. Its eight tests passed
+in 45.02 seconds on one Windows release run, excluding 37.66 seconds of compilation and
+including ten fresh reference hosts. This measures validation work across bootstrap/import,
+control comparisons, native replay and directed histories; it isolates neither weapon
+assembly time nor candidate evaluation throughput. Broader validation remained in progress
+when this result was recorded.
+
+Of all 116 saved items, 98 belong to implemented families: 93 match with the original-parser
+dependency and 91 with the built-in native parser. Weapons contribute six of seven in each
+lane; the remaining weapon stops at rune-reconstruction ambiguity. Eighteen jewels are
+excluded from this family lane. Full native original evaluation remains **0/5**. Exact stops
+and denominators are retained in `runs/r2aa-weapon-local-01/source-parity-counts.json` and
+`remaining-item-stops.json`.
+
+The [baseline's module inventory](execution-model-baseline.md#native-weapon-local-assembly-checkpoint)
+separates 271 policy, 530 extraction, 287 runtime, 524 unit-test and 655 source-fixture lines;
+shared edits are additional. Those physical sizes and the validation elapsed time are costs
+to retain in A1, not an A2 model ranking. Whole per-slot `weaponData`, early slot publication,
+late override aliases, residual hand conditions and the final sum after overrides are consumer
+requirements for an equivalent preparation comparison. No hot-path speedup follows from this
+component's completion.
 
 ## Replayable commands
 
@@ -78,10 +105,14 @@ The PoB revision remains `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`.
 An unchanged upstream revision does not imply an unchanged extracted model, compiler,
 native backend or benchmark executable.
 
-R2z advances the package to schema **30**, **26,294,538 bytes**, SHA-256
+R2z advanced the package to schema **30**, **26,294,538 bytes**, SHA-256
 `0c36d1c8dc7b42f829715a36724452fde5b29622ce3e75e165eff36c0957168f`.
-This changes item assembly definitions; it does not rebase any measurement below onto the
-new data or executable identity.
+R2aa adds the weapon policy at package schema **31** / item-assembly schema **3**,
+**26,298,910 bytes**, SHA-256
+`01f484bc3f30ca595735c7c4b2fc29b4c2e7682fee2863f4ab55c4c0059e365f`.
+Its 28 other sections and previous assembly policy are unchanged, as recorded in
+`runs/r2aa-weapon-local-01/package-reconciliation.json`. Neither package change rebases any
+historical measurement below onto the newer data or executable identity.
 
 | Existing evidence | Actual recorded measurement | Applicability at this checkpoint |
 | --- | --- | --- |

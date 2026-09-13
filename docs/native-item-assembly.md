@@ -18,7 +18,7 @@ rune effects, grants, named compatibility, attribute requirements and slot selec
 Game names, patterns, labels, modifier selectors, masks and numeric defaults are data.
 Source field structure, arithmetic order, copy semantics and native operation kinds
 are code. The catalog is not a general instruction language or a build whitelist.
-Its current section schema 2 declares `PolicyOnly`; loading and binding it supplies
+Its current section schema 3 declares `PolicyOnly`; loading and binding it supplies
 validated definitions, never an admitted executable item. Complete-method provenance
 also does not imply lowering of every specialized slot branch.
 
@@ -113,8 +113,17 @@ block, movement penalties and per-level defences. Flask recovery and charm durat
 separate formulas; effect-not-removed flags can consume the base modifier list while the slot
 copy retains its earlier contents. Fractional charge capacity and floored charge use are distinct.
 Preserve query removals, output writes and conversion timing when later arithmetic fails.
-Weapon and jewel local branches remain separate implementation gates; radius jewels also need
-selected-tree context. This domain seam adds no general instruction language.
+Weapon locals use the authenticated captured damage order, explicit channel classifications,
+queries, base/output fields, quality divisors, rounding and residual tag predicates. Preserve
+publication of each slot's output before its calculations, conditional reload fields, positive
+bounds, late arbitrary overrides, hand-specific tagging, and the final DPS sum after overrides.
+Both slot outputs remain whole owned graphs. The native producer dispatches generic channel
+kinds; injected names do not select hardcoded skill or item behavior.
+
+Jewel local production remains the next family gate. The
+[jewel integration design](native-jewel-integration.md) separates versioned radius definitions
+and local item production from selected-tree geometry and actor application. These domain
+algorithms add no general instruction language and remain inputs to the execution-model review.
 
 ## Completion and proof
 
@@ -223,3 +232,50 @@ The public native-only CLI retains all 116 items and registers source-order pref
 are rune reconstruction, weapon locals and jewel/radius handling. These registrations do
 not activate equipment or imply completed item-set/root loading; every public report remains
 Incomplete with calculation not run. Reports are in `runs/r2z-item-local-01/native-originals-01/`.
+
+## R2aa weapon-local checkpoint
+
+Schema 31 / item-assembly schema 3 adds the injected weapon policy. All 28 other data
+sections and the previous assembly policy are unchanged. The original captured damage list
+and live flag bindings are authenticated against source and the injected parser definitions;
+an unrelated global list is not a substitute for the actual closure capture.
+
+The comparison retains every saved item from all five originals:
+
+| Family | Saved | Original parser + native assembly | Built-in native parser + assembly |
+| --- | ---: | ---: | ---: |
+| Accessories | 32 | 32 | 31 |
+| Armour | 32 | 29 | 28 |
+| Flasks | 12 | 11 | 11 |
+| Charms | 15 | 15 | 15 |
+| Weapons | 7 | 6 | 6 |
+| Jewels | 18 | Not executed in this family lane | Not executed in this family lane |
+| Implemented families | 98 | 93 | 91 |
+
+The additional weapon stop is build-03 Item 17, whose rune annotation has ambiguous minimum
+count vectors under unavailable source traversal order. It joins the three existing armour
+rune stops. Advanced-copy flask affix ordering and native parser callbacks 168/569 retain their
+previous stops. The 18 excluded jewels remain in the 116-item denominator; they are not
+counted as executed assembly failures. Production support uses injected data and source
+predicates, never original build/item identifiers.
+
+Whole `weaponData` joins the predeclared comparison fields. Five observed/control import
+pairs agree. Across those hosts, new directed coverage includes 20 fresh parser-driven weapons,
+30 cross-family reparse steps, and 60 separately labelled derived modifier inputs: 35 complete
+results, 20 source-error prefixes, and five explicit nonfinite reload frontiers. One derived
+case per host includes 122 residual modifier records across exact flag, keyword and tag
+combinations. Existing accessory/local-family and re-entry cases remain. Source failures compare
+reachable owned prefix state; unreturned slot-local frames are not observed. Nonfinite cases
+make no final-graph parity claim.
+
+The eight source/observer/graph tests pass in 45.02 seconds on one Windows release run, excluding
+37.66 seconds of compilation. This includes ten reference hosts and is validation cost, not
+candidate throughput. Actual dependency argument-count/order parity, arbitrary callbacks,
+metatables and the omitted source fields remain outside this finite declared graph contract.
+Full native original evaluations remain **0/5**. Public inventory counts and final validation
+are maintained in the [implementation record](implementation.md).
+
+Receipts are under `runs/r2aa-weapon-local-01/`. The source output override was relative and
+resolved against two process working directories; after successful completion the artifacts
+were moved into `source-parity-01` and their original locations recorded in
+`source-artifact-relocation.json`. The pinned submodule is unchanged.

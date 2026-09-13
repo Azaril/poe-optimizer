@@ -16,8 +16,8 @@ impl<P: ItemLoadProvider + ?Sized> Context<'_, '_, P> {
         }
         let policy = self.definitions.policy();
         let base_list = self.mod_list()?;
-        if self.base_field("weapon")?.truthy() {
-            self.fresh_field("weaponData")?;
+        if self.base_field(&policy.weapon.base_field)?.truthy() {
+            self.fresh_field(&policy.weapon.output_field)?;
         } else if self.base_field(&policy.armour.base_field)?.truthy() {
             if !self.get(&policy.armour.output_field)?.truthy() {
                 self.fresh_field(&policy.armour.output_field)?;

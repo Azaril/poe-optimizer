@@ -1,4 +1,4 @@
-//! Complete finite accessory/armour/flask/charm assembly on actual original inputs, with separate
+//! Complete finite accessory/armour/flask/charm/weapon assembly on actual original inputs, with separate
 //! source-observer mechanics tests. No complete native-build claim.
 #![cfg(not(target_arch = "wasm32"))]
 use mlua::{Function, Lua, Table, Value};

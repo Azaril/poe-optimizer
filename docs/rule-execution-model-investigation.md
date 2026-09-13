@@ -132,8 +132,11 @@ support relationships, equipment and unique effects, triggers, minions, damage c
 resource behavior and combinations across these families. Choose meaningful vertical slices;
 five successful builds alone would not establish the full interaction contract.
 
-Measure cold acquisition/preparation separately from hot candidate evaluation. Record reuse,
-throughput and scaling with candidate count and worker count, memory and state-copy costs.
+Measure cold acquisition/preparation, edit-triggered invalidation and re-preparation, and
+steady candidate evaluation separately. Compare the total work for preparation plus invalidated
+work plus N evaluations, with candidate/worker counts and worker-private peak memory. Moving
+work outside a hot-path timer must not hide the cost of changing skills, supports, equipment,
+passives or conditions. Record reuse, throughput, scaling and state-copy costs.
 Also record upstream update effort, data-only update capability, failure localization,
 explainability and dataset migration work. Establish measurements before proposing targets.
 
@@ -160,8 +163,10 @@ observable outputs. Include parser/preparation state and a downstream interactio
 only a numeric kernel. Exercise positive, no-match, failure and repeated/history-sensitive
 cases against the original reference, with cold and reused preparation measured separately.
 
-Keep prototypes bounded but expose missing mechanisms and all fallback costs. Include source
-acquisition, generated artifacts, validation, test maintenance and debugging in the comparison.
+Keep prototypes bounded but expose missing mechanisms and all fallback costs. Apply the same
+balance-data edit and new conditional-family exercise to each prototype, recording data,
+algorithm, schema, acquisition and validation changes required. Include source acquisition,
+generated artifacts, validation, test maintenance and debugging in the comparison.
 Do not require full evaluator completion as a prerequisite, or treat a prototype's limited
 coverage as permission to shrink the full parity goal.
 

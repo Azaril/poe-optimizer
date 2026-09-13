@@ -11,6 +11,7 @@ use poe_optimizer_data::{
 use std::collections::BTreeMap;
 type Result<T> = std::result::Result<T, GameDataExtractionError>;
 mod local;
+mod weapon;
 
 const SHAPES: &str = include_str!("item_assembly_extract/source-shapes.json");
 
@@ -147,6 +148,7 @@ struct Auth<'a> {
     bodies: BTreeMap<String, &'a str>,
     spans: BTreeMap<String, ItemSourceSpan>,
     mask: f64,
+    weapon: weapon::Bindings,
 }
 fn authenticate<'a>(
     lua: &Lua,
@@ -297,7 +299,16 @@ fn authenticate<'a>(
         Some(Value::Integer(v)) => v as f64,
         _ => return Err(error("missing original MatchAllMask capture")),
     };
+    let weapon = weapon::authenticate(
+        lua,
+        primitives,
+        &functions["build_slot"],
+        sources
+            .get("src/Classes/Item.lua")
+            .ok_or_else(|| error("missing weapon declaration source"))?,
+    )?;
     Ok(Auth {
+        weapon,
         bodies,
         spans,
         mask,
@@ -484,6 +495,7 @@ fn policy(
     let local = body("calc_local")?;
     let ranged = body("ranged_mods")?;
     let (armour, flask, charm) = local::extract(lua, slot)?;
+    let weapon = weapon::extract(lua, slot, &auth.weapon, parser)?;
     let quality = query(lua, after(slot, "local craftedQuality = ")?)?;
     let soul = query(lua, after(build, "self.socketedSoulCoreEffectModifier = ")?)?;
     let rune = query(lua, after(build, "self.socketedRuneEffectModifier = ")?)?;
@@ -873,6 +885,7 @@ fn policy(
         named_compatibility: named,
         requirements: req,
         slots,
+        weapon,
         armour,
         flask,
         charm,
@@ -1208,5 +1221,103 @@ mod tests {
                 .to_string()
                 .contains("changed complete")
         );
+    }
+    #[test]
+    fn weapon_extraction_uses_actual_capture_order_and_parser_flag_definitions() {
+        let (lua, _, primitives) =
+            crate::unique_requirements_extract::host_with_observer(sources(), Primitives::capture)
+                .unwrap();
+        let auth = authenticate(&lua, &primitives, sources()).unwrap();
+        let snapshot = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
+        let parser = &snapshot.package().modifier_parser;
+        let p = weapon::extract(&lua, auth.bodies["build_slot"], &auth.weapon, parser).unwrap();
+        assert_eq!(p.base_field, "weapon");
+        assert_eq!(p.output_field, "weaponData");
+        assert_eq!(
+            p.damage
+                .channels
+                .iter()
+                .map(|c| c.name.as_str())
+                .collect::<Vec<_>>(),
+            ["Physical", "Lightning", "Cold", "Fire", "Chaos"]
+        );
+        assert_eq!(
+            p.damage.channels[0].kind,
+            ItemAssemblyWeaponDamageKind::Physical
+        );
+        assert_eq!(
+            p.damage.channels[4].kind,
+            ItemAssemblyWeaponDamageKind::Unscaled
+        );
+        assert_eq!(
+            p.damage.channels[1].increased.as_ref().unwrap().name,
+            "LocalLightningDamage"
+        );
+        let flags: Table = lua.globals().raw_get("ModFlag").unwrap();
+        let keywords: Table = lua.globals().raw_get("KeywordFlag").unwrap();
+        assert_eq!(
+            p.attack_speed.query.flags,
+            flags.raw_get::<f64>("Attack").unwrap()
+        );
+        assert_eq!(p.reload.query.flags, p.attack_speed.query.flags);
+        assert_eq!(
+            p.residual.keyword_flags,
+            [0.0, keywords.raw_get("Attack").unwrap()]
+        );
+        assert_eq!(
+            p.residual.critical.flags.value,
+            flags.raw_get::<f64>("Spell").unwrap()
+        );
+        assert_eq!(p.residual.untagged.len(), 5);
+        assert_eq!(p.residual.critical.names, ["PoisonChance", "BleedChance"]);
+        assert_eq!(p.damage.average_divisor, 2.0);
+        assert_eq!(p.attack_speed.quality_divisor, 8.0);
+        assert_eq!(p.range.quality_divisor, 10.0);
+        assert_eq!(p.critical.quality_divisor, 4.0);
+        assert_eq!(p.overrides.query_name, "WeaponData");
+        assert_eq!(p.total_output, "TotalDPS");
+
+        let attack: f64 = flags.raw_get("Attack").unwrap();
+        flags.raw_set("Attack", attack + 1.0).unwrap();
+        assert!(
+            weapon::extract(&lua, auth.bodies["build_slot"], &auth.weapon, parser)
+                .unwrap_err()
+                .to_string()
+                .contains("injected parser definition")
+        );
+    }
+
+    #[test]
+    fn weapon_damage_capture_and_declaration_changes_are_not_global_aliases() {
+        let (lua, _, primitives) =
+            crate::unique_requirements_extract::host_with_observer(sources(), Primitives::capture)
+                .unwrap();
+        let f = class_function(&lua, "Item", "BuildModListForSlotNum").unwrap();
+        let source = &sources()["src/Classes/Item.lua"];
+        weapon::authenticate(&lua, &primitives, &f, source).unwrap();
+        let captures = primitives.upvalues(&f).unwrap();
+        let Value::Table(types) = &captures["dmgTypeList"] else {
+            panic!("original damage list table")
+        };
+        let first: Value = types.raw_get(1).unwrap();
+        let second: Value = types.raw_get(2).unwrap();
+        types.raw_set(1, second.clone()).unwrap();
+        assert!(weapon::authenticate(&lua, &primitives, &f, source).is_err());
+        types.raw_set(1, first).unwrap();
+        types.raw_set("extra", true).unwrap();
+        assert!(weapon::authenticate(&lua, &primitives, &f, source).is_err());
+        types.raw_set("extra", Value::Nil).unwrap();
+        // A global with the same spelling is unrelated to the actual local capture.
+        lua.globals()
+            .raw_set("dmgTypeList", lua.create_table().unwrap())
+            .unwrap();
+        weapon::authenticate(&lua, &primitives, &f, source).unwrap();
+        let altered = source.replacen(
+            r#"local dmgTypeList = {"Physical", "Lightning", "Cold", "Fire", "Chaos"}"#,
+            r#"local dmgTypeList = {"Lightning", "Physical", "Cold", "Fire", "Chaos"}"#,
+            1,
+        );
+        assert_ne!(altered, *source);
+        assert!(weapon::authenticate(&lua, &primitives, &f, &altered).is_err());
     }
 }

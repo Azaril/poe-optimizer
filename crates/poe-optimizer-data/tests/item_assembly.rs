@@ -13,7 +13,7 @@ fn data() -> ItemAssemblyData {
 #[test]
 fn policy_only_catalog_binds_existing_definitions_without_copying() {
     let s = snapshot();
-    assert_eq!(s.identity().schema_version, 30);
+    assert_eq!(s.identity().schema_version, 31);
     let c = s.item_assembly();
     assert_eq!(c.data().capability, ItemAssemblyCapability::PolicyOnly);
     assert_eq!(
@@ -284,7 +284,7 @@ fn immutable_catalog_is_send_sync_and_parallel_datasets_do_not_share_policy() {
 #[test]
 fn local_families_retain_complete_orders_and_query_targets() {
     let d = data();
-    assert_eq!(d.schema_version, 2);
+    assert_eq!(d.schema_version, 3);
     let a = &d.policy.armour;
     assert_eq!(a.queries.len(), 18);
     assert_eq!(a.queries[0].role, ItemAssemblyArmourRole::ArmourBase);
@@ -393,5 +393,129 @@ fn local_family_bounds_and_unknown_or_omitted_fields_are_checked() {
     assert!(serde_json::from_value::<ItemAssemblyData>(omitted).is_err());
     let mut unknown = original;
     unknown["policy"]["charm"]["execute"] = serde_json::json!(true);
+    assert!(serde_json::from_value::<ItemAssemblyData>(unknown).is_err());
+}
+
+#[test]
+fn weapon_policy_retains_captured_order_and_distinct_residual_branches() {
+    let d = data();
+    let p = &d.policy.weapon;
+    assert_eq!(p.base_field, "weapon");
+    assert_eq!(p.output_field, "weaponData");
+    assert_eq!(
+        p.damage
+            .channels
+            .iter()
+            .map(|c| c.name.as_str())
+            .collect::<Vec<_>>(),
+        ["Physical", "Lightning", "Cold", "Fire", "Chaos"]
+    );
+    assert_eq!(
+        p.damage.channels[0].kind,
+        ItemAssemblyWeaponDamageKind::Physical
+    );
+    assert_eq!(
+        p.damage.channels[4].kind,
+        ItemAssemblyWeaponDamageKind::Unscaled
+    );
+    for c in &p.damage.channels[1..4] {
+        assert_eq!(c.kind, ItemAssemblyWeaponDamageKind::Elemental);
+        assert_eq!(
+            c.increased.as_ref().unwrap().name,
+            format!("Local{}Damage", c.name)
+        );
+    }
+    assert_eq!(p.attack_speed.quality_divisor, 8.0);
+    assert_eq!(p.range.metre_multiplier, 10.0);
+    assert_eq!(p.critical.quality_divisor, 4.0);
+    assert_eq!(p.overrides.query_name, "WeaponData");
+    assert_eq!(p.total_output, "TotalDPS");
+    assert_eq!(p.residual.untagged.len(), 5);
+    assert_eq!(p.residual.critical.names, ["PoisonChance", "BleedChance"]);
+    assert_eq!(
+        p.residual.critical.flags.operation,
+        ItemAssemblyWeaponFlagComparison::NotEqual
+    );
+    assert_eq!(p.residual.critical_condition, "CriticalStrike");
+    assert_eq!(p.residual.primary_condition, "MainHandAttack");
+    assert_eq!(p.residual.other_condition, "OffHandAttack");
+}
+
+#[test]
+fn weapon_parameters_are_injected_and_do_not_eagerly_validate_runtime_arithmetic() {
+    let mut d = data();
+    let p = &mut d.policy.weapon;
+    p.damage.channels.swap(0, 4);
+    p.damage.channels[0].name = "Custom unscaled channel".into();
+    p.damage.channels[0].minimum.base_field = "callerMinimum".into();
+    p.damage.channels[0].minimum.output = "callerOutput".into();
+    p.damage.channels[0].minimum.query.name = "Caller query".into();
+    p.damage.channels[0].minimum.query.mod_type = "FLAG".into();
+    p.attack_speed.query.flags = 9_007_199_254_740_991.0;
+    p.attack_speed.quality_divisor = 0.0;
+    p.percent_divisor = 0.0;
+    p.damage.average_divisor = -2.0;
+    p.residual.untagged[0].names = vec!["Caller residual".into()];
+    p.residual.untagged[0].flags.value = 0.25;
+    p.residual.primary_condition = "CallerCondition".into();
+    p.overrides.value_field = "callerValue".into();
+    p.total_output = "callerTotal".into();
+    d.validate().unwrap();
+    assert_eq!(
+        serde_json::from_slice::<ItemAssemblyData>(&serde_json::to_vec(&d).unwrap()).unwrap(),
+        d
+    );
+    ItemAssemblyCatalog::new(d).unwrap();
+}
+
+#[test]
+fn weapon_shape_limits_and_channel_classification_are_checked() {
+    let mut d = data();
+    d.policy.weapon.damage.channels.clear();
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.weapon.damage.channels[1].name = d.policy.weapon.damage.channels[0].name.clone();
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.weapon.damage.channels[1].increased = None;
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.weapon.damage.channels[0].increased =
+        Some(d.policy.weapon.damage.physical_increased.clone());
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.weapon.damage.channels = vec![d.policy.weapon.damage.channels[0].clone(); 33];
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.weapon.residual.untagged = vec![d.policy.weapon.residual.untagged[0].clone(); 65];
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.weapon.residual.critical.names.clear();
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.weapon.attack_rate.round_places = 16;
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.weapon.residual.keyword_flags[1] = f64::NAN;
+    assert!(d.validate().is_err());
+    let mut d = data();
+    d.policy.weapon.damage.channels[0].dps_output = "x".repeat(4097);
+    assert!(d.validate().is_err());
+}
+
+#[test]
+fn weapon_required_nullable_field_and_closed_schema_are_checked() {
+    let original = serde_json::to_value(data()).unwrap();
+    let mut omitted = original.clone();
+    omitted["policy"]["weapon"]["damage"]["channels"][0]
+        .as_object_mut()
+        .unwrap()
+        .remove("increased");
+    assert!(serde_json::from_value::<ItemAssemblyData>(omitted).is_err());
+    let mut omitted = original.clone();
+    omitted["policy"].as_object_mut().unwrap().remove("weapon");
+    assert!(serde_json::from_value::<ItemAssemblyData>(omitted).is_err());
+    let mut unknown = original;
+    unknown["policy"]["weapon"]["residual"]["execute"] = true.into();
     assert!(serde_json::from_value::<ItemAssemblyData>(unknown).is_err());
 }

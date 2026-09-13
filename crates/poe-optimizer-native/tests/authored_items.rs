@@ -304,3 +304,40 @@ fn production_inventory_registers_local_family_items_before_item_set_activation(
     );
     assert!(report.frontiers.contains(&"actor_item_effects"));
 }
+
+#[test]
+fn production_inventory_registers_weapon_slot_graphs_before_activation() {
+    let source = doc(
+        "<Item id='1'>Rarity: NORMAL\nWooden Club</Item><Item id='2'>Rarity: NORMAL\nCrude Bow</Item><Item id='3'>Rarity: NORMAL\nMakeshift Crossbow</Item><ItemSet id='1'/>",
+    );
+    let stage = prepare(&source);
+    let report = stage.report();
+    assert_eq!(report.registration_order.len(), 3, "{:#?}", report.failure);
+    assert_eq!(
+        report.failure.as_ref().unwrap().stage,
+        "item_container_continuation"
+    );
+    for id in [1.0, 2.0, 3.0] {
+        let item = stage.item(stage.registered_id(id).unwrap()).unwrap();
+        assert!(item.is_complete());
+        let weapons = item
+            .field(item.root(), "weaponData")
+            .unwrap()
+            .as_table()
+            .unwrap();
+        let slots = &item.table(weapons).unwrap().indexed;
+        let main = slots[&1].as_table().unwrap();
+        let off = slots[&2].as_table().unwrap();
+        assert_ne!(main, off, "weapon slot outputs are distinct owned tables");
+        for slot in [main, off] {
+            assert!(
+                matches!(item.field(slot, "AttackRate"), Some(AssemblyValue::Number(n)) if *n > 0.0)
+            );
+            assert!(
+                matches!(item.field(slot, "TotalDPS"), Some(AssemblyValue::Number(n)) if *n > 0.0)
+            );
+            assert_eq!(item.field(slot, "ReloadTime").is_some(), id == 3.0);
+        }
+    }
+    assert!(report.frontiers.contains(&"actor_item_effects"));
+}

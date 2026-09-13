@@ -383,7 +383,7 @@ mod projection_failure_tests {
         let mut machine = ItemLoadMachine::new(data().item_loading());
         let mut provider = RefuseProjection::default();
         machine
-            .apply_text("Rarity: NORMAL\nWooden Club", &mut provider)
+            .apply_text("Rarity: NORMAL\nSapphire", &mut provider)
             .unwrap();
         let graph = machine.assembly_progress().unwrap();
         assert!(!graph.is_complete());
@@ -391,7 +391,7 @@ mod projection_failure_tests {
         assert!(machine.assembled().is_none());
         assert_eq!(machine.status(), ItemLoadStatus::Pending);
         let message = &machine.pending().unwrap().message;
-        assert!(message.contains("item local weapon data assembly is unavailable"));
+        assert!(message.contains("item local jewel data assembly is unavailable"));
         assert!(!message.contains("controlled projection refusal"));
         assert!(
             !machine

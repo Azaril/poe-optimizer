@@ -142,7 +142,7 @@ fn incomplete_native_artifact_cannot_be_replayed_as_success() {
     let mut source = machine();
     let mut provider = BuiltinItemLoadProvider::new(data());
     source
-        .apply_text("Rarity: NORMAL\nWooden Club", &mut provider)
+        .apply_text("Rarity: NORMAL\nSapphire", &mut provider)
         .unwrap();
     assert_eq!(source.status(), ItemLoadStatus::Pending);
     let item = source.assembly_progress().unwrap().clone();

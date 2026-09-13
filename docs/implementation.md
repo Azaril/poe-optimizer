@@ -18,9 +18,9 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-The R2z local-item checkpoint and A1 investigation below are the current resume point. Source-session timing and requested
-allocation layouts are measured separately from dataset ownership; staged-container transfer
-now reduces import allocation traffic. R2x now records actual import parser calls across all
+The R2aa weapon-local checkpoint and A1 investigation below are the current resume point.
+Source-session timing and requested allocation layouts are measured separately from dataset
+ownership; staged-container transfer now reduces import allocation traffic. R2x now records actual import parser calls across all
 five originals: 558 of 760 build-local distinct inputs match misses and hits; 202 remain
 explicitly unsupported. Complete public-parser coverage and complete native builds remain open.
 Historical sections retain their original validation scope.
@@ -35,6 +35,79 @@ acquisition/parity, preparation, source execution and the restricted typed candi
 Continue measuring costs before extending general Lua compatibility into further domains;
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
+
+**R2aa component checkpoint: injected weapon-local data.** Native item preparation now
+computes both weapon slots, reload/range, ordered damage channels, quality and critical
+calculations, late overrides, hand-local modifier tags and final DPS sums. Policy names,
+operands, fields, channel classes/order and thresholds are injected. This remains the existing
+domain-algorithm seam; no new execution model or broader general language is selected.
+
+The package advances to schema 31 / item-assembly schema 3, **26,298,910 bytes**, SHA-256
+`01f484bc3f30ca595735c7c4b2fc29b4c2e7682fee2863f4ab55c4c0059e365f`.
+All 28 other sections and the previous assembly policy are unchanged. Actual captured damage
+order and live flag definitions are authenticated. Normal isolated CLI extraction reproduces
+the reviewed bytes exactly; supplied builds, Cargo.lock and the pinned PoB checkout are unchanged. Preparation report schema 5 and inventory schema 2 remain unchanged.
+
+All 116 saved originals remain visible: 98 are in implemented item families. **93 match using
+the original parser dependency and 91 using the native parser**, including six of seven
+weapons in both lanes. Build-03 Item 17 stops at ambiguous rune reconstruction, joining three
+existing armour rune stops. Advanced-copy flask affix ordering and native parser callbacks
+168/569 retain their earlier stops. All 18 jewels remain excluded from this family comparison,
+not counted as executed assembly failures. Full native original evaluations remain **0/5**.
+See [exact family counts and contract limits](native-item-assembly.md#r2aa-weapon-local-checkpoint).
+
+Five fresh observed/control import pairs agree. New weapon histories cover 20 parser-driven
+fresh cases, 30 cross-family reparse steps and 60 derived modifier inputs: 35 complete results,
+20 source-error prefixes and five explicit nonfinite frontiers. Existing positive and failure
+histories remain. The eight source/observer/graph tests pass in 45.02 seconds excluding
+37.66 seconds of compilation; this is validation cost, not candidate throughput. Actual
+argument-count/order and arbitrary callback/metatable parity remain separate gates.
+
+The [jewel integration design](native-jewel-integration.md) separates item-call radius context,
+local data, selected-tree geometry and actor effects. Source review establishes that original
+Build loading resets to latest and defers every saved Tree/Spec until after Items. Final selected
+spec evidence cannot substitute for earlier context. Current singleton radius-version data
+masks this distinction, so next-phase evidence must retain requested versions and ordered
+lifecycle events. Tree switches also must not retroactively replay parsed Item headers.
+
+The native-only public CLI now registers **34 items** in source-ordered inventory prefixes,
+up from 20 at R2z. All 116 records remain in the reports:
+
+| Original | Registered / saved | First remaining stop |
+| --- | ---: | --- |
+| 01 | 2 / 16 | Ambiguous rune reconstruction |
+| 02 | 17 / 34 | Ambiguous rune reconstruction |
+| 03 | 0 / 17 | Jewel radius context and local data |
+| 04 | 0 / 21 | Local jewel data |
+| 05 | 15 / 28 | Local jewel data |
+
+These counts describe the actual source order, not numeric Item-ID sorting. They do not
+activate equipment or complete root loading. All five reports remain Incomplete with
+calculation not run and whole-build parity not established.
+
+**Validation passes:** 258 focused/regression tests: 21 item-policy, eight extractor,
+36 item-loading unit, 69 import integration, 11 authored-item integration, 59 schema,
+33 native, ten native-only CLI, three extraction CLI and eight source/observer/graph tests.
+The eight extractor tests also pass again after an equivalent Clippy-requested guard
+simplification. Strict workspace and native-only Clippy, formatting, five portable WASM
+libraries and native-only runtime dependency isolation pass. Normal extraction after the
+final code change again reproduces the exact reviewed bytes. All original inputs and the
+PoB pin are unchanged. Hosted Windows/Linux results are not yet confirmed for this checkpoint.
+
+Receipts, source/data/command identities, exact counts, the resolved lint failure and the
+source-artifact relocation record are under `runs/r2aa-weapon-local-01/`. This is a completed
+component checkpoint; it does not close the full-native or broad game-parity milestones.
+
+**Resume:** implement explicit item-call radius context and complete jewel local production,
+with original startup/deferred-tree/reparse evidence and whole owned output comparisons.
+Then resolve observed rune/affix/parser stops, item-set activation and actor consumers. Retain
+all five originals and all 116 items without production ID whitelists. Continue the bounded
+A1-to-A2 readiness review: the [weapon cost/consumer evidence](execution-model-baseline.md#native-weapon-local-assembly-checkpoint)
+records the added policy, extraction, native algorithm and validation costs. Compare cold
+preparation, edit-triggered invalidation/re-preparation and steady evaluation together; apply
+the same balance and new conditional-family edits to alternatives. No full evaluator or
+exhaustive measurement prerequisite is added before discussing prototypes. A3 remains the
+owner discussion before significant migration.
 
 **R2z checkpoint: injected armour/flask/charm local data.** The native owned item producer
 now computes these local families through explicit typed data policies, preserving query/write
@@ -2012,8 +2085,10 @@ defines the alternatives, constraints and evidence required for a decision.
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.
   Use all five originals and contrasting interactions; do not optimize the decision for
-  Spark/Mace or a single easy parser case. Measure cold preparation separately from repeated
-  candidate evaluation and multicore throughput; preserve a portable native/WASM route.
+  Spark/Mace or a single easy parser case. Measure cold preparation, edit-triggered invalidation
+  and re-preparation, and steady candidate evaluation separately. Compare their combined cost
+  across candidate/worker counts and private memory, and apply the same balance edit and new
+  conditional-family exercise to each model. Preserve a portable native/WASM route.
 - [ ] **A3 — evidence and architecture decision.** Publish the parity gaps, performance,
   total maintenance cost, upstream-update experiment and migration risks. Discuss a proposed
   ADR with the owner before selecting a significant change. Retaining the interpreter is a

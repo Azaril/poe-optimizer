@@ -10,6 +10,9 @@ mod slots;
 mod tests;
 mod text;
 mod value;
+mod weapon;
+#[cfg(test)]
+mod weapon_tests;
 
 use super::{AssemblyRequest, DependencyResult, ItemLoadProvider};
 use poe_optimizer_data::item_assembly::ItemAssemblyDefinitions;
@@ -38,6 +41,7 @@ pub fn implementation_sources() -> &'static [&'static str] {
         include_str!("slots.rs"),
         include_str!("text.rs"),
         include_str!("value.rs"),
+        include_str!("weapon.rs"),
     ]
 }
 
