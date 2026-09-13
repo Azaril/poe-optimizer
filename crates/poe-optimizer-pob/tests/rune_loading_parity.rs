@@ -1,5 +1,7 @@
 //! Complete original rune loading methods remain the independent oracle.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/rune_order_witness.rs"]
+mod order_witness;
 #[allow(dead_code)]
 #[path = "support/item_loading_native.rs"]
 mod reference;
@@ -858,18 +860,44 @@ fn builtin_native_backends_rebuild_non_none_runes_through_original_annotations()
         ("Stocky Mitts", "Greater Desert Rune"),
     ] {
         let raw = raw(base, "S", &[rune], "+10 to maximum Life");
-        let (_, error) = source.try_parse(&raw);
+        let (original_item, error) = source.try_parse(&raw);
         assert!(error.is_none(), "{raw}: {error:?}");
+        let before = source.source.before();
+        let mut original_parser = reference::OriginalDependencies::new(&source.source.oracle);
+        let mut preassembly = ItemLoadMachine::new(snapshot.item_loading());
+        preassembly.apply_text(&raw, &mut original_parser).unwrap();
+        assert_eq!(
+            preassembly.pending().map(|p| p.kind),
+            Some(DependencyKind::Assembly)
+        );
+        reference::compare_state(preassembly.state(), &before);
+        assert_eq!(original_parser.calls, source.calls());
         let mut provider = BuiltinItemLoadProvider::new(&snapshot);
         let mut machine = ItemLoadMachine::new(snapshot.item_loading());
         machine.apply_text(&raw, &mut provider).unwrap();
         assert_eq!(
-            machine.pending().map(|p| p.kind),
-            Some(DependencyKind::Assembly),
+            machine.status(),
+            ItemLoadStatus::Complete,
             "{raw}: {:?}",
             machine.pending()
         );
-        reference::compare_state(machine.state(), &source.source.before());
+        assert!(machine.pending().is_none());
+        assert!(
+            machine
+                .assembly_progress()
+                .is_some_and(|item| item.is_complete())
+        );
+        assert!(
+            machine.assembled().is_none(),
+            "ParseRaw assembly is not final Load registration"
+        );
+        compare_completed_parse_projection(
+            &source,
+            &machine,
+            &before,
+            &source.source.snapshot(&original_item),
+            &original_item,
+        );
         assert_eq!(
             machine
                 .state()
@@ -939,4 +967,438 @@ fn string_slot_selection_preserves_original_success_and_error_frontiers() {
     assert_eq!(machine.status(), ItemLoadStatus::SourceError);
     reference::compare_state(machine.state(), &source.source.snapshot(&item));
     assert_eq!(provider.calls, source.calls());
+}
+
+/// ItemState retains parsed header socket groups; BuildModList's rewritten
+/// sockets live in the authoritative owned graph. Compare those two explicitly
+/// declared stages without changing the existing exact compare_state contract.
+fn compare_completed_parse_projection(
+    source: &RuneSource,
+    machine: &ItemLoadMachine<'_>,
+    before: &Table,
+    after: &Table,
+    original_item: &Table,
+) -> serde_json::Value {
+    use poe_optimizer_import::item_loading::assembly::AssemblyValue;
+    let graph = machine
+        .assembly_progress()
+        .expect("owned ParseRaw assembly progress");
+    assert!(graph.is_complete());
+    let source_sockets: Table = original_item.raw_get("sockets").unwrap();
+    assert!(source_sockets.metatable().is_none());
+    let n = source_sockets.raw_len();
+    assert!(n <= 128);
+    let native_id = graph
+        .field(graph.root(), "sockets")
+        .and_then(AssemblyValue::as_table)
+        .expect("owned sockets table");
+    let native_sockets = graph.table(native_id).unwrap();
+    assert!(native_sockets.fields.is_empty());
+    assert_eq!(native_sockets.indexed.len(), n);
+    let mut source_ids = Vec::new();
+    let mut native_ids = Vec::new();
+    let mut groups = Vec::new();
+    let mut visited = 0;
+    for entry in source_sockets.pairs::<Value, Value>() {
+        let (key, _) = entry.unwrap();
+        visited += 1;
+        assert!(visited <= 128);
+        let index = match key {
+            Value::Integer(i) => i as f64,
+            Value::Number(v) => v,
+            other => panic!("unexpected source socket key {other:?}"),
+        };
+        assert!(index.is_finite() && index.fract() == 0.0 && index >= 1.0 && index <= n as f64);
+    }
+    assert_eq!(visited, n);
+    for i in 1..=n {
+        let source_row: Table = source_sockets.raw_get(i).unwrap();
+        assert!(source_row.metatable().is_none());
+        assert_eq!(
+            source_row.clone().pairs::<Value, Value>().take(2).count(),
+            1
+        );
+        let source_group: f64 = source_row.raw_get("group").unwrap();
+        assert!(source_group.is_finite());
+        let row_id = graph
+            .index(native_id, i as i64)
+            .and_then(AssemblyValue::as_table)
+            .expect("owned socket row");
+        let row = graph.table(row_id).unwrap();
+        assert!(row.indexed.is_empty());
+        assert_eq!(row.fields.len(), 1);
+        let native_group = graph
+            .field(row_id, "group")
+            .and_then(AssemblyValue::as_number)
+            .expect("owned group");
+        assert_eq!(
+            native_group.to_bits(),
+            source_group.to_bits(),
+            "postassembly socket group"
+        );
+        source_ids.push(source_row.to_pointer());
+        native_ids.push(row_id);
+        groups.push(source_group);
+    }
+    for i in 0..n {
+        for j in 0..n {
+            assert_eq!(
+                source_ids[i] == source_ids[j],
+                native_ids[i] == native_ids[j],
+                "whole socket row aliases"
+            );
+        }
+    }
+    // This is a fresh observation root, not a source Item or native dependency.
+    // All fields except the documented retained header sockets use the actual
+    // after-ParseRaw snapshot. Keep both original raw snapshots in the receipt.
+    let projection = source.source.oracle.lua.create_table().unwrap();
+    for entry in after.pairs::<Value, Value>() {
+        let (key, value) = entry.unwrap();
+        projection.raw_set(key, value).unwrap();
+    }
+    projection
+        .raw_set("sockets", before.raw_get::<Table>("sockets").unwrap())
+        .unwrap();
+    reference::compare_state(machine.state(), &projection);
+    serde_json::json!({
+        "scope":"ItemState parsed-header sockets + other post-ParseRaw loading fields; separate complete owned sockets graph compared against live original sockets",
+        "parsed_header_socket_groups":machine.state().sockets,
+        "source_postassembly_socket_groups":groups,
+        "owned_socket_values_keys_and_row_aliases_equal":true,
+        "whole_item_alias_parity_claim":false
+    })
+}
+
+fn strict_order_case(
+    source: &RuneSource,
+    catalog: &ItemLoadingCatalog,
+    raw: &str,
+    expected_runes: &[&str],
+    expected_level: f64,
+    builtin: bool,
+) -> serde_json::Value {
+    use poe_optimizer_engine::item_runes::{
+        RuneBudget, VectorPolicy, find_combination, has_strict_vector_order,
+    };
+    let lua = &source.source.oracle.lua;
+    let class: Table = lua
+        .globals()
+        .get::<Table>("common")
+        .unwrap()
+        .get::<Table>("classes")
+        .unwrap()
+        .get("Item")
+        .unwrap();
+    let entry: Function = class.get("ParseRaw").unwrap();
+    let target = order_witness::original_parse(lua, &entry);
+    let update_entry: Function = class.get("UpdateRunes").unwrap();
+    let update: Function = lua
+        .globals()
+        .get::<Table>("rune_original_functions")
+        .unwrap()
+        .get("update")
+        .unwrap();
+    assert_eq!(
+        update.info().source.as_deref(),
+        Some("@src/Classes/Item.lua")
+    );
+    assert_eq!(
+        (update.info().line_defined, update.info().last_line_defined),
+        (Some(2106), Some(2178))
+    );
+    let item = source.source.oracle.parse("");
+    source.clear();
+    lua.globals().set("rune_enabled", true).unwrap();
+    let captured = order_witness::capture(lua, &entry, &target, &update, &item, raw);
+    lua.globals().set("rune_enabled", false).unwrap();
+    let (witness, source_error) = captured.unwrap();
+    assert!(
+        source_error.is_none(),
+        "complete original ParseRaw failed: {source_error:?}"
+    );
+    assert!(
+        witness.calls_complete && witness.exact_function_rechecked && witness.prior_hook_restored
+    );
+    assert_eq!(class.get::<Function>("ParseRaw").unwrap(), entry);
+    assert_eq!(class.get::<Function>("UpdateRunes").unwrap(), update_entry);
+    assert_eq!(
+        witness.update_calls, 1,
+        "full actual UpdateRunes call count"
+    );
+    let calls = source.calls();
+    let before = source.source.before();
+    let after = source.source.snapshot(&item);
+    let regular = witness
+        .searches
+        .iter()
+        .filter(|r| r.source_line == 1551)
+        .collect::<Vec<_>>();
+    assert_eq!(regular.len(), 1, "one regular combined rune line");
+    let first = regular[0];
+    let vectors = first
+        .candidates
+        .iter()
+        .map(|r| r.values.as_slice())
+        .collect::<Vec<_>>();
+    let policy = VectorPolicy {
+        missing_value: catalog.policy().rune_loading.vector_default,
+        epsilon: catalog.policy().rune_loading.vector_tolerance,
+    };
+    assert!(has_strict_vector_order(&vectors, policy, &mut RuneBudget::default()).unwrap());
+    let result = find_combination(
+        &vectors,
+        &first.target,
+        2.0,
+        None,
+        policy,
+        &mut RuneBudget::default(),
+    )
+    .unwrap()
+    .unwrap();
+    assert!(
+        result.ambiguous_minimum,
+        "this case needs the unique-order admission proof"
+    );
+    assert_eq!(
+        Some(&result.counts),
+        first.counts.as_ref(),
+        "actual first DFS touched counts, including zero entries"
+    );
+    assert_eq!(Some(result.count), first.count);
+    assert_eq!(first.count, Some(2));
+    let selected = first
+        .candidates
+        .iter()
+        .enumerate()
+        .filter_map(|(i, r)| {
+            first
+                .counts
+                .as_ref()
+                .unwrap()
+                .get(&(i + 1))
+                .filter(|&&n| n > 0)
+                .map(|&n| (r.name.clone(), n))
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(selected.iter().map(|(_, n)| n).sum::<usize>(), 2);
+    assert_eq!(
+        first
+            .candidates
+            .iter()
+            .map(|r| r.values.clone())
+            .collect::<Vec<_>>(),
+        vec![vec![20.0], vec![18.0], vec![16.0], vec![14.0]]
+    );
+    let saved = item
+        .get::<Table>("runes")
+        .unwrap()
+        .sequence_values::<String>()
+        .map(Result::unwrap)
+        .collect::<Vec<_>>();
+    assert_eq!(saved, expected_runes);
+    assert_eq!(
+        item.get::<Table>("requirements")
+            .unwrap()
+            .get::<f64>("runeLevel")
+            .unwrap(),
+        expected_level
+    );
+    if first.should_fix {
+        assert!(first.saved_runes_at_search.is_empty());
+    } else {
+        assert_eq!(first.saved_runes_at_search, expected_runes);
+    }
+    let mut provider = reference::OriginalDependencies::new(&source.source.oracle);
+    let mut machine = ItemLoadMachine::new(catalog);
+    machine.apply_text(raw, &mut provider).unwrap();
+    assert_eq!(
+        machine.pending().map(|p| p.kind),
+        Some(DependencyKind::Assembly),
+        "{:?}",
+        machine.pending()
+    );
+    reference::compare_state(machine.state(), &before);
+    assert_eq!(
+        provider.calls, calls,
+        "ordered parser text/combined parameter projection"
+    );
+    let mut completed_projection = serde_json::Value::Null;
+    if builtin {
+        let snapshot = bundled_snapshot().unwrap();
+        let mut provider = BuiltinItemLoadProvider::new(&snapshot);
+        let mut machine = ItemLoadMachine::new(snapshot.item_loading());
+        machine.apply_text(raw, &mut provider).unwrap();
+        assert_eq!(
+            machine.status(),
+            ItemLoadStatus::Complete,
+            "{:?}",
+            machine.pending()
+        );
+        assert!(machine.pending().is_none());
+        assert!(
+            machine
+                .assembly_progress()
+                .is_some_and(|item| item.is_complete())
+        );
+        assert!(
+            machine.assembled().is_none(),
+            "ParseRaw assembly is not final Load registration"
+        );
+        completed_projection =
+            compare_completed_parse_projection(source, &machine, &before, &after, &item);
+        assert_eq!(
+            machine
+                .state()
+                .parser_calls
+                .iter()
+                .map(|r| (r.text.clone(), r.combined))
+                .collect::<Vec<_>>(),
+            calls
+        );
+    }
+    // Both controls execute complete original methods, with the scoped local hook
+    // absent. This finite projection has the historical harness's alias limits.
+    let control = source.source.oracle.parse(raw);
+    assert_eq!(
+        canonical(Value::Table(after.clone())),
+        canonical(Value::Table(source.source.snapshot(&control)))
+    );
+    let updates = source.rows("rune_updates");
+    assert_eq!(updates.len(), 1);
+    assert!(updates[0].get::<bool>("ok").unwrap());
+    use sha2::{Digest, Sha256};
+    let source_text = runtime::verified("src/Classes/Item.lua").unwrap();
+    serde_json::json!({
+        "source":{"path":"src/Classes/Item.lua","sha256":format!("{:x}",Sha256::digest(source_text.as_bytes())),"parse_span":[468,1803],"update_span":[2106,2178],"identity":"actual retained original Functions via delegating capture chain"},
+        "scope":"complete original ParseRaw/UpdateRunes; source-parser lane compares pre-assembly loading state; built-in lane compares completed ParseRaw loading projection and requires complete owned assembly progress; no final Load registration",
+        "observer":"bounded exact-function coroutine hook; interpreted, no warm claim",
+        "parser_calls_scope":"ordered text and combined boolean parameters; not actual call arity",
+        "finite_projection_alias_equivalence":false,
+        "owned_assembly_parity_in_separate_item_assembly_target":true,
+        "raw":raw,"witness":witness,"selected_first_counts":selected,
+        "saved_runes":saved,"rune_level":expected_level,"parser_calls":calls,
+        "source_before_assembly":canonical(Value::Table(before)),
+        "source_after_parse":canonical(Value::Table(after)),
+        "update_before":canonical(updates[0].get("before").unwrap()),
+        "update_after":canonical(updates[0].get("after").unwrap()),
+        "unhooked_control_finite_projection_equal":true,
+        "original_parser_lane_preassembly_equal":true,
+        "builtin_lane_complete_parse_loading_projection_equal":builtin,
+        "builtin_lane_final_registration_claim":false,
+        "completed_loading_projection":completed_projection
+    })
+}
+fn write_order_report(name: &str, value: &serde_json::Value) {
+    let output = std::env::var_os("POE_RUNE_ORDER_OUTPUT")
+        .map(std::path::PathBuf::from)
+        .unwrap_or_else(|| runtime::repository().join("runs/r2af-rune-order-01/source-order"));
+    std::fs::create_dir_all(&output).unwrap();
+    std::fs::write(
+        output.join(format!("{name}.json")),
+        serde_json::to_vec_pretty(value).unwrap(),
+    )
+    .unwrap();
+}
+#[test]
+fn original_saved_item_runes_keep_headers_despite_multiple_ordered_minima() {
+    use sha2::{Digest, Sha256};
+    let snapshot = bundled_snapshot().unwrap();
+    let source = RuneSource::new();
+    for (build, id) in [("build-01", "3"), ("build-02", "6")] {
+        let relative = format!("tests/fixtures/builds/breadth-20260908/{build}.xml");
+        let bytes = std::fs::read(runtime::repository().join(&relative)).unwrap();
+        let xml = std::str::from_utf8(&bytes).unwrap();
+        let document = roxmltree::Document::parse(xml).unwrap();
+        let items = document
+            .descendants()
+            .filter(|n| n.has_tag_name("Item") && n.attribute("id") == Some(id))
+            .collect::<Vec<_>>();
+        assert_eq!(items.len(), 1);
+        let item = items[0];
+        let raw = item
+            .children()
+            .filter(|n| n.is_text())
+            .filter_map(|n| n.text())
+            .collect::<String>();
+        assert_eq!(
+            raw.lines().filter(|line| line.starts_with("Rune:")).count(),
+            2
+        );
+        let mut report = strict_order_case(
+            &source,
+            snapshot.item_loading(),
+            &raw,
+            &["Greater Iron Rune", "Greater Iron Rune"],
+            30.0,
+            true,
+        );
+        report["input"] = serde_json::json!({"kind":"unaltered actual XML item text","path":relative,"file_sha256":format!("{:x}",Sha256::digest(&bytes)),"item_id":id,"item_range":[item.range().start,item.range().end],"raw_sha256":format!("{:x}",Sha256::digest(raw.as_bytes()))});
+        assert_eq!(
+            report["selected_first_counts"],
+            serde_json::json!([["Perfect Iron Rune", 1], ["Iron Rune", 1]])
+        );
+        write_order_report(&format!("{build}-item-{id}-saved"), &report);
+        let derived = raw
+            .split_inclusive('\n')
+            .filter(|line| !line.starts_with("Rune:"))
+            .collect::<String>();
+        let mut report = strict_order_case(
+            &source,
+            snapshot.item_loading(),
+            &derived,
+            &["Perfect Iron Rune", "Iron Rune"],
+            50.0,
+            true,
+        );
+        report["input"] = serde_json::json!({"kind":"derived by removing only saved Rune header lines","source_path":relative,"source_item_id":id,"source_raw_sha256":format!("{:x}",Sha256::digest(raw.as_bytes())),"raw_sha256":format!("{:x}",Sha256::digest(derived.as_bytes()))});
+        write_order_report(&format!("{build}-item-{id}-headerless"), &report);
+    }
+}
+#[test]
+fn unique_vector_order_is_independent_of_custom_name_and_insertion_order() {
+    for (index, names) in [
+        "{'Alpha','Zulu','Middle','Lower'}",
+        "{'Lower','Middle','Zulu','Alpha'}",
+    ]
+    .iter()
+    .enumerate()
+    {
+        let source = RuneSource::new();
+        let catalog = custom_catalog(
+            &source,
+            &format!(
+                r#"
+          local out={{}}; local amounts={{Alpha=18,Zulu=20,Middle=16,Lower=14}}
+          for _,name in ipairs({names}) do
+            out[name]={{armour={{'+'..amounts[name]..' to maximum Life',type='Rune',levelReq=name=='Zulu' and 50 or 30,statOrder={{1}}}}}}
+          end
+          return {{runes=out}}
+        "#
+            ),
+        );
+        for (label, runes, expected, level) in [
+            (
+                "saved",
+                vec!["Alpha", "Alpha"],
+                vec!["Alpha", "Alpha"],
+                30.0,
+            ),
+            ("headerless", vec![], vec!["Zulu", "Middle"], 50.0),
+        ] {
+            let raw = raw(
+                "Rusted Greathelm",
+                "S S",
+                &runes,
+                "Implicits: 1\n{enchant}{rune}+36 to maximum Life",
+            );
+            let mut report = strict_order_case(&source, &catalog, &raw, &expected, level, false);
+            assert_eq!(
+                report["selected_first_counts"],
+                serde_json::json!([["Zulu", 1], ["Middle", 1]])
+            );
+            report["input"] = serde_json::json!({"kind":"test-supplied source-shaped rune catalog and raw text; complete original methods","insertion_recipe":names,"header_kind":label});
+            write_order_report(&format!("custom-order-{index}-{label}"), &report);
+        }
+    }
 }

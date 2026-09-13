@@ -873,7 +873,17 @@ impl ItemLoadMachine<'_> {
                             "rune group floating sum order is not represented",
                         ));
                     }
+                    // Guard before addition: a rounded 2^53 + 1 can still
+                    // equal 2^53, hiding a traversal-dependent integer sum.
+                    let components = sum.values.len().max(next.values.len());
                     let p = self.rune_programs.as_mut().expect("prepared rune programs");
+                    p.matching.charge(components.max(1) as u64)?;
+                    if (0..components).any(|i| {
+                        next.values.get(i).copied().unwrap_or(0.0)
+                            > 9_007_199_254_740_992.0 - sum.values.get(i).copied().unwrap_or(0.0)
+                    }) {
+                        return Err(unsupported("rune group sum exceeds exact integer range"));
+                    }
                     sum.values = item_runes::add_vectors(
                         &sum.values,
                         &next.values,
@@ -887,8 +897,8 @@ impl ItemLoadMachine<'_> {
                 groups.entry(key).or_default().push(sum);
             }
         }
-        // Canonical proof-search order is accepted only when the minimum count
-        // vector is unique, not presented as the source's unstable tie order.
+        // Strict finite vector order is source-determined. Name tie-breaks
+        // remain proof-search bookkeeping, never evidence of source tie order.
         let p = self.rune_programs.as_mut().expect("prepared rune programs");
         for rows in groups.values_mut() {
             // Fallible insertion sorting keeps a consistent comparator and
@@ -958,7 +968,19 @@ impl ItemLoadMachine<'_> {
                     &mut p.budget,
                 )?;
                 let Some(result) = result else { continue };
-                if result.ambiguous_minimum {
+                // Source DFS keeps its first minimum. An ambiguous minimum
+                // is still determined when exact vector comparisons uniquely
+                // order the entire group; the name tie-break alone proves nothing.
+                if result.ambiguous_minimum
+                    && !item_runes::has_strict_vector_order(
+                        &vectors,
+                        VectorPolicy {
+                            missing_value: policy.vector_default,
+                            epsilon: policy.vector_tolerance,
+                        },
+                        &mut p.budget,
+                    )?
+                {
                     return Err(unsupported(
                         "rune annotation has multiple minimum count vectors under unrepresented Lua traversal order",
                     ));

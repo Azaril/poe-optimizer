@@ -1290,3 +1290,44 @@ consumer effects, rather than requiring them to retain this particular graph rep
 Receipts: `runs/r2ae-item-set-loading-01/package-review.json`, `new-code-inventory-final.json`,
 `source-reconciliation.json`, and the raw `source-01/` observations. Broader validation and
 publication state belong in the [implementation record](implementation.md).
+
+## Strict rune-order checkpoint
+
+R2af removes an over-broad rejection at the existing native algorithm seam. Distinct finite
+vectors force the original comparator's candidate order even when multiple minimum-count
+combinations exist. The native engine retains the original first DFS result and its ambiguity
+bit; exact padding comparisons and search tolerance remain separate. A pre-add integer bound
+also closes a grouping-order flaw that a rounded post-add comparison could miss. Definitions
+and the schema-34 package remain unchanged; no generic interpreter capability is added.
+
+The existing whole-item comparison gains four original items: built-in native assembly rises
+from 107 to 111 of 116, and the lane with an explicit original-parser dependency rises from
+109 to 113. All prior completed graph hashes and remaining frontiers are unchanged. The
+ordered public preparation path advances from 68 to 92 registrations because later records
+become reachable. Complete native build evaluations remain **0/5**.
+
+The new scoped witness observes retained original ParseRaw/UpdateRunes functions across eight
+cases, including explicit and header-free real item texts and custom insertion orders. It
+checks the actual first DFS result and saved rune names, declared loading projections and
+parser parameter order. The source's numeric candidate array also retains named aliases;
+the witness validates those aliases separately. This is bounded component evidence, not
+actual parser-call arity, universal observer noninterference or full object-graph parity.
+
+Validation exposed a useful model boundary: ItemState retains parsed socket groups alongside
+assembly projections, whereas the owned arena has the final groups rewritten by assembly.
+The test now compares each against its actual source stage, retaining raw snapshots and
+checking owned socket contents and row aliases independently. The [assembly contract](native-item-assembly.md)
+records why that transport cannot stand in for a complete post-assembly object. Include the
+cost of clarifying or separating these diagnostic stages in A2 alternatives.
+
+| Changed-file role | Files | Net physical lines | Net bytes |
+| --- | ---: | ---: | ---: |
+| Production | 2 | 57 | 2,466 |
+| Native regression tests | 3 | 371 | 12,949 |
+| Reference tests and observation | 2 | 1,035 | 38,760 |
+
+These are net changes relative to R2ae, including comments and blanks with normalized LF
+endings, rather than complete layer sizes or maintainability scores. The observer reuses
+existing source bootstrap and state comparison code. No candidate throughput claim follows
+from test timings. Receipts are under `runs/r2af-rune-order-01/`: `code-footprint.json`,
+`assembly-reconciliation.json`, `public-reconciliation.json` and the raw source observations.

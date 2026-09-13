@@ -236,3 +236,128 @@ fn ambiguity_is_proven_against_independent_bounded_integer_count_products() {
         }
     }
 }
+
+#[test]
+fn strict_vector_order_keeps_first_source_dfs_minimum_despite_ambiguity() {
+    let vectors: [&[f64]; 4] = [&[20.0], &[18.0], &[16.0], &[14.0]];
+    let mut budget = RuneBudget::default();
+    assert!(has_strict_vector_order(&vectors, policy(), &mut budget).unwrap());
+    let first = find_combination(&vectors, &[36.0], 2.0, None, policy(), &mut budget)
+        .unwrap()
+        .unwrap();
+    assert_eq!(first.count, 2);
+    assert!(
+        first.ambiguous_minimum,
+        "20+16 and 18+18 are different minima"
+    );
+    assert_eq!(
+        first.counts.into_iter().collect::<Vec<_>>(),
+        [(1, 1), (3, 1)]
+    );
+    let capped = find_combination(
+        &vectors,
+        &[36.0],
+        2.0,
+        Some(&[0.0, 2.0, 0.0, 0.0]),
+        policy(),
+        &mut budget,
+    )
+    .unwrap()
+    .unwrap();
+    assert_eq!(capped.counts.into_iter().collect::<Vec<_>>(), [(2, 2)]);
+    assert!(!capped.ambiguous_minimum);
+}
+
+#[test]
+fn later_fewer_count_solution_replaces_earlier_strict_order_dfs_result() {
+    let vectors: [&[f64]; 3] = [&[8.0], &[6.0], &[2.0]];
+    let mut budget = RuneBudget::default();
+    assert!(has_strict_vector_order(&vectors, policy(), &mut budget).unwrap());
+    let best = find_combination(&vectors, &[12.0], 3.0, None, policy(), &mut budget)
+        .unwrap()
+        .unwrap();
+    assert_eq!(best.count, 2, "later 6+6 beats first 8+2+2");
+    assert_eq!(
+        best.counts.into_iter().collect::<Vec<_>>(),
+        [(1, 0), (2, 2), (3, 0)]
+    );
+    assert!(!best.ambiguous_minimum);
+}
+
+#[test]
+fn strict_order_uses_exact_padding_comparison_not_search_epsilon_or_zero_bits() {
+    let mut budget = RuneBudget::default();
+    for vectors in [
+        vec![&[1.0][..], &[1.0, 0.0][..]],
+        vec![&[-0.0][..], &[0.0][..]],
+        vec![&[][..], &[0.0][..]],
+    ] {
+        assert!(!has_strict_vector_order(&vectors, policy(), &mut budget).unwrap());
+    }
+    assert!(
+        has_strict_vector_order(&[&[1.0, 1.0], &[1.0], &[0.0]], policy(), &mut budget).unwrap()
+    );
+    assert!(
+        !has_strict_vector_order(&[&[1.0], &[2.0]], policy(), &mut budget).unwrap(),
+        "unsorted input is not a proof"
+    );
+    let near = [&[1.0 + 0.5e-9][..], &[1.0][..]];
+    assert!(equal_vectors(near[0], near[1], policy(), &mut budget).unwrap());
+    assert!(has_strict_vector_order(&near, policy(), &mut budget).unwrap());
+    let best = find_combination(&near, &[1.0], 1.0, None, policy(), &mut budget)
+        .unwrap()
+        .unwrap();
+    assert!(best.ambiguous_minimum);
+    assert_eq!(best.counts.into_iter().collect::<Vec<_>>(), [(1, 1)]);
+    let custom = VectorPolicy {
+        missing_value: 4.0,
+        epsilon: 100.0,
+    };
+    assert!(!has_strict_vector_order(&[&[1.0], &[1.0, 4.0]], custom, &mut budget).unwrap());
+    assert!(has_strict_vector_order(&[&[1.0], &[1.0, 3.0]], custom, &mut budget).unwrap());
+}
+
+#[test]
+fn strict_order_proof_rejects_nonfinite_inputs_and_obeys_shared_work_bounds() {
+    for value in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+        assert!(
+            !has_strict_vector_order(&[&[value]], policy(), &mut RuneBudget::default()).unwrap()
+        );
+        assert!(
+            !has_strict_vector_order(
+                &[&[1.0]],
+                VectorPolicy {
+                    missing_value: value,
+                    ..policy()
+                },
+                &mut RuneBudget::default()
+            )
+            .unwrap()
+        );
+    }
+    let mut budget = RuneBudget::new(RuneLimits {
+        max_vector_work: 1,
+        ..RuneLimits::default()
+    });
+    assert!(has_strict_vector_order(&[&[]], policy(), &mut budget).unwrap());
+    assert!(matches!(
+        has_strict_vector_order(&[&[]], policy(), &mut budget),
+        Err(RuneError::Resource("vector work"))
+    ));
+    let mut candidates = RuneBudget::new(RuneLimits {
+        max_candidates: 1,
+        ..RuneLimits::default()
+    });
+    assert!(matches!(
+        has_strict_vector_order(&[&[], &[]], policy(), &mut candidates),
+        Err(RuneError::Resource("candidates"))
+    ));
+    let mut components = RuneBudget::new(RuneLimits {
+        max_vector_components: 1,
+        ..RuneLimits::default()
+    });
+    assert!(matches!(
+        has_strict_vector_order(&[&[2.0, 1.0]], policy(), &mut components),
+        Err(RuneError::Resource("vector components"))
+    ));
+}

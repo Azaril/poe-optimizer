@@ -282,3 +282,206 @@ fn configured_copy_mode_selects_the_ranged_effect_dependency() {
             .contains("ranged augment-effect")
     );
 }
+
+fn ordered_value_catalog(names: [&str; 4]) -> ItemLoadingCatalog {
+    catalog(|d| {
+        let definitions = names
+            .into_iter()
+            .zip([20, 18, 16, 14])
+            .enumerate()
+            .map(|(rank, (name, value))| {
+                let mut record = match slot([format!("Caller stat {value}")]) {
+                    ItemMetadataValue::Table(table) => table,
+                    _ => unreachable!(),
+                };
+                record.fields.insert(
+                    "levelReq".into(),
+                    ItemMetadataValue::Number(((rank + 1) * 10) as f64),
+                );
+                record.fields.insert(
+                    "bonded".into(),
+                    ItemMetadataValue::Table(ItemMetadataTable {
+                        fields: BTreeMap::new(),
+                        indexed: [(1, ItemMetadataValue::Text("Caller bond 20".into()))].into(),
+                    }),
+                );
+                (name.to_owned(), rune(ItemMetadataValue::Table(record)))
+            })
+            .collect();
+        d.modifier_tables
+            .get_mut(&d.policy.rune_loading.rune_table)
+            .unwrap()
+            .fields = definitions;
+    })
+}
+
+#[test]
+fn strict_group_order_admits_ambiguous_counts_without_rewriting_saved_headers() {
+    for names in [
+        ["A", "B", "C", "D"],
+        ["Z", "Y", "X", "W"],
+        ["R", "A", "Z", "B"],
+    ] {
+        let catalog = ordered_value_catalog(names);
+        let mut machine = ItemLoadMachine::new(&catalog);
+        let raw = format!(
+            "Rarity: NORMAL\nCrude Bow\nSockets: S S\nRune: {}\nRune: {}",
+            names[1], names[1]
+        );
+        machine.apply_text(&raw, &mut Complete).unwrap();
+        assert_eq!(
+            machine.status(),
+            ItemLoadStatus::Complete,
+            "{:?}",
+            machine.pending()
+        );
+        assert_eq!(
+            machine.state().runes,
+            [names[1], names[1]],
+            "inferred 20+16 must not replace saved 18+18"
+        );
+        let normal = machine
+            .state()
+            .rune_mod_lines
+            .iter()
+            .find(|r| !r.flags.contains("bonded"))
+            .unwrap();
+        assert_eq!(normal.line, "Caller stat 36");
+        assert_eq!(normal.rune_count, Some(ItemNumber::Finite(2.0)));
+        assert_eq!(normal.augment_type.as_deref(), Some("Rune"));
+        assert!(
+            machine
+                .state()
+                .rune_mod_lines
+                .iter()
+                .any(|r| r.flags.contains("bonded")
+                    && r.line == "Bonded: Caller bond 40"
+                    && r.augment_type.as_deref() == Some("Rune"))
+        );
+    }
+}
+
+#[test]
+fn header_free_inference_uses_strict_vector_order_not_catalog_name_order() {
+    for names in [["A", "B", "C", "D"], ["Z", "Y", "X", "W"]] {
+        let catalog = ordered_value_catalog(names);
+        let mut machine = ItemLoadMachine::new(&catalog);
+        machine.apply_text("Rarity: NORMAL\nCrude Bow\nSockets: S S\n{rune}Caller stat 36\n{rune}Bonded: Caller bond 40", &mut Complete).unwrap();
+        assert_eq!(
+            machine.status(),
+            ItemLoadStatus::Complete,
+            "{:?}",
+            machine.pending()
+        );
+        assert_eq!(
+            machine.state().runes,
+            [names[0], names[2]],
+            "source first minimum is 20+16"
+        );
+        assert!(
+            machine
+                .state()
+                .rune_mod_lines
+                .iter()
+                .any(|r| r.line == "Caller stat 36")
+        );
+        assert!(
+            machine
+                .state()
+                .rune_mod_lines
+                .iter()
+                .any(|r| r.line == "Bonded: Caller bond 40")
+        );
+    }
+}
+
+#[test]
+fn exact_tied_vectors_still_stop_before_annotation_despite_distinct_names() {
+    let catalog = catalog(|d| {
+        let definitions = ["Z", "A"]
+            .into_iter()
+            .map(|name| {
+                let mut record = match slot(["Caller stat 10".into()]) {
+                    ItemMetadataValue::Table(t) => t,
+                    _ => unreachable!(),
+                };
+                record
+                    .fields
+                    .insert("levelReq".into(), ItemMetadataValue::Number(5.0));
+                (name.to_owned(), rune(ItemMetadataValue::Table(record)))
+            })
+            .collect();
+        d.modifier_tables
+            .get_mut(&d.policy.rune_loading.rune_table)
+            .unwrap()
+            .fields = definitions;
+    });
+    let mut machine = ItemLoadMachine::new(&catalog);
+    machine
+        .apply_text(
+            "Rarity: NORMAL\nCrude Bow\nSockets: S\nRune: Z",
+            &mut Complete,
+        )
+        .unwrap();
+    assert_eq!(machine.status(), ItemLoadStatus::Pending);
+    assert_eq!(
+        machine.pending().unwrap().kind,
+        DependencyKind::RuneReconstruction
+    );
+    assert!(
+        machine
+            .pending()
+            .unwrap()
+            .message
+            .contains("multiple minimum count vectors")
+    );
+    assert_eq!(machine.state().runes, ["Z"]);
+    assert_eq!(machine.state().rune_mod_lines[0].rune_count, None);
+}
+
+#[test]
+fn grouping_checks_exact_sum_before_floating_point_rounding_can_hide_overflow() {
+    for (values, accepted) in [
+        ([9_007_199_254_740_992u64, 1, 1], false),
+        ([1, 1, 9_007_199_254_740_992], false),
+        ([9_007_199_254_740_990, 1, 1], true),
+    ] {
+        let catalog = catalog(|d| {
+            d.modifier_tables
+                .get_mut(&d.policy.rune_loading.rune_table)
+                .unwrap()
+                .fields = [(
+                "Caller".into(),
+                rune(slot(values.map(|v| format!("Caller stat {v}")))),
+            )]
+            .into();
+        });
+        let mut machine = ItemLoadMachine::new(&catalog);
+        machine
+            .apply_text("Rarity: NORMAL\nCrude Bow", &mut Complete)
+            .unwrap();
+        if accepted {
+            assert_eq!(
+                machine.status(),
+                ItemLoadStatus::Complete,
+                "{:?}",
+                machine.pending()
+            );
+        } else {
+            assert_eq!(machine.status(), ItemLoadStatus::Pending);
+            assert_eq!(
+                machine.pending().unwrap().kind,
+                DependencyKind::RuneReconstruction
+            );
+            assert!(
+                machine
+                    .pending()
+                    .unwrap()
+                    .message
+                    .contains("sum exceeds exact integer range")
+            );
+        }
+        assert!(machine.state().runes.is_empty());
+        assert!(machine.state().rune_mod_lines.is_empty());
+    }
+}

@@ -18,7 +18,7 @@ rune effects, grants, named compatibility, attribute requirements and slot selec
 Game names, patterns, labels, modifier selectors, masks and numeric defaults are data.
 Source field structure, arithmetic order, copy semantics and native operation kinds
 are code. The catalog is not a general instruction language or a build whitelist.
-Its current section schema 5 declares `PolicyOnly`; loading and binding it supplies
+Its current section schema 6 declares `PolicyOnly`; loading and binding it supplies
 validated definitions, never an admitted executable item. Complete-method provenance
 also does not imply lowering of every specialized slot branch.
 
@@ -39,6 +39,27 @@ matching and output operate on bytes. Unused malformed patterns remain lazy sour
 errors. Catalog availability describes definitions, not completed item assembly or
 numerical support for their effects.
 
+## Rune reconstruction order
+
+Rune inference consumes injected definitions and the original numeric/text policy. Preserve
+PoB's first minimum-count combination in its candidate order; an alternative equally small
+combination does not by itself make the result indeterminate. A finite group with strictly
+descending vectors has one order under the original exact lexicographic comparator. Missing
+components use the injected default, while search tolerance is a separate predicate. Names
+and storage iteration are not evidence of source order.
+
+The native proof is bounded and only needed when search finds alternative minima. Comparator
+ties remain unresolved unless the existing unique-result path proves the required consumer
+behavior. Grouping must also be order independent: check nonnegative integral contributions
+before adding them, because rounding an out-of-range sum back to 2^53 does not prove exactness.
+Keep all independent range, type, effect and source-error boundaries.
+
+Explicit saved rune names remain authored input even when reconstruction chooses different
+internal counts. Those counts constrain later bonded inference; only the header-free repair
+path appends inferred names and rebuilds rune lines. Validation must cover both paths and the
+resulting requirements and owned assembly. The [implementation record](implementation.md)
+tracks the current evidence; these rules do not establish complete build parity.
+
 ## Mutable preparation, immutable results
 
 Preparation needs object identity. A duplicate variant can append the same modifier
@@ -54,6 +75,15 @@ class identities require their own explicit representation. Charge nodes, refere
 bytes, copies and work before allocation. Unsupported cycles or values remain explicit.
 Freeze completed reachable state into immutable storage for worker sharing. Mutable
 scratch is local to a preparation task and needs no shared lock.
+
+The current `ItemState` transport combines parsed header values with bounded assembly
+projections. Its socket groups remain the values parsed from the header; original assembly
+rewrites socket groups in the authoritative owned arena. Compare the header groups with the
+pre-assembly source witness and owned groups with the post-assembly source graph. Never use
+that mixed diagnostic transport as a complete post-assembly object or an equipment admission
+token. Keep both witnesses in parity receipts. Separating these stages more clearly in the
+transport API belongs in the execution-model investigation, without weakening final output
+parity or changing the authoritative arena boundary.
 
 Armour state survives item re-entry. Preserve its complete owned graph, including nested
 values, indexed entries and aliases introduced by late overrides. The numeric `armour_data`

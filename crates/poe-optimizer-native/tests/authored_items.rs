@@ -616,3 +616,46 @@ fn interleaved_production_loading_preserves_saved_choices_without_activating_the
     assert_eq!(get(&graph, charm, key("selItemId")), &V::Number(4.0));
     assert_eq!(get(&graph, charm, key("active")), &V::Boolean(true));
 }
+
+#[test]
+fn strict_rune_order_advances_original_items_without_rewriting_saved_runes() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures/builds/breadth-20260908");
+    // Actual previously blocked records, not alternate builds in the production path.
+    // Their regular inference has two minimum combinations, but exact descending
+    // candidate vectors determine the source's first one. Explicit saved runes
+    // must survive even when the inferred names differ from those saved names.
+    for (build_number, authored_id) in [(1, "3"), (2, "6")] {
+        let xml =
+            std::fs::read_to_string(root.join(format!("build-{build_number:02}.xml"))).unwrap();
+        let stage = prepare(&xml);
+        let record = stage
+            .report()
+            .records
+            .iter()
+            .find(|row| row.authored_id.as_deref() == Some(authored_id))
+            .unwrap();
+        assert_eq!(
+            record.status,
+            ItemRecordStatus::Registered,
+            "build {build_number} item {authored_id}: {:?}",
+            stage.report().failure
+        );
+        let state = record.loading_state.as_ref().unwrap();
+        assert_eq!(state.runes, ["Greater Iron Rune", "Greater Iron Rune"]);
+        let regular = state
+            .rune_mod_lines
+            .iter()
+            .find(|row| row.line == "36% increased Armour, Evasion and Energy Shield")
+            .unwrap();
+        assert_eq!(regular.rune_count.and_then(|n| n.value()), Some(2.0));
+        assert_eq!(regular.augment_type.as_deref(), Some("Rune"));
+        assert!(stage.item(record.instance).unwrap().is_complete());
+        assert!(
+            stage
+                .report()
+                .frontiers
+                .contains(&"equipment_participation")
+        );
+    }
+}

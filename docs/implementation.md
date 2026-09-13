@@ -18,9 +18,10 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
-R2ae implements native item-set materialization and has passed its scoped source checks,
-affected data/native regressions, CLI checks, strict lint and portable compilation. R2ad
-supplies reference-lifecycle evidence; R2ac supplies reusable slot validity.
+R2af advances native rune reconstruction and has passed its scoped source checks,
+affected regressions, CLI checks, strict lint and portable compilation. R2ae supplies
+ordered item-set materialization; R2ad supplies reference-lifecycle evidence and R2ac
+supplies reusable slot validity.
 The A1 investigation remains open alongside this work.
 Source-session timing and requested allocation layouts are measured separately from dataset
 ownership; staged-container transfer now reduces import allocation traffic. R2x now records actual import parser calls across all
@@ -38,6 +39,68 @@ acquisition/parity, preparation, source execution and the restricted typed candi
 Continue measuring costs before extending general Lua compatibility into further domains;
 prototype selection and any significant migration require discussion.
 The full parity and real-build breadth goals remain unchanged.
+
+**R2af checkpoint: source-determined rune reconstruction.** PoB retains its first
+minimum-count combination. Alternative minima now work when strict finite comparison
+vectors prove the original candidate order. Tied orders, unsupported types, nonfinite
+values and resource limits remain explicit. Saved rune names and bonded caps retain their
+source behavior. A prerequisite grouping fix checks the exact integer limit before addition,
+preventing floating-point rounding from concealing an out-of-range sum. These changes use
+the existing native algorithm seam; the injected package and execution model are unchanged.
+
+All **56 focused engine/import/native tests** pass, including registration of original
+build 01/item 3 and build 02/item 6 with their saved rune names preserved. The **eight
+whole-item comparison tests** pass across ten fresh source hosts: all 116 original items
+remain represented, with source-parser/native-assembly matches rising **109 to 113** and
+built-in matches rising **107 to 111**. Every previously completed graph and remaining
+frontier is unchanged. Four added matches cover three armour items and one weapon across
+builds 1–3. This declared graph comparison excludes saved runes/internal solver counts;
+it does not establish complete native inventories or builds.
+
+All **18 rune-loading source tests** pass. Eight observed cases across three reused source
+hosts retain original ParseRaw and UpdateRunes functions. The live-local witness checks
+actual candidate order and first DFS results. For the two supplied saved items, the internal
+choice is Perfect Iron plus Iron, while saved Greater Iron plus Greater Iron remains intact;
+header-free derivatives infer the internal choice. Numeric candidate arrays retain their
+named row aliases. Header-free cases do not observe a bonded search before final UpdateRunes.
+Parser parameter order is observed; actual call arity and universal observer noninterference
+are outside this fixture's claim.
+
+Validation also exposed a diagnostic-stage distinction: ItemState keeps parsed header socket
+groups, while the owned assembly arena has rewritten groups. Tests retain the actual source
+snapshots, compare the diagnostic projection at its declared stage, and independently compare
+owned post-assembly socket contents and row aliases. See the [assembly contract](native-item-assembly.md).
+Earlier failed fixture attempts remain recorded; no original source or owned graph is normalized
+to make a comparison pass. Include this API complexity in the A2 alternatives.
+
+The public native-only CLI retains all **116 records** and now registers **92** in source
+order (13, 30, 0, 21, 28), up from 68. Remaining first stops are build 01/item 14 and
+build 03/item 1 at jewel capture factories, and build 02/item 34 at advanced-copy unique
+ordering. Builds 4–5 still await activation. Default CLI preparation (four tests), native-only
+preparation/item inspection (23 tests), native-only dependency exclusion, WASM compilation,
+formatting and strict workspace/native-only lint pass. No full workspace test run is claimed.
+Every public report remains incomplete with calculation not run and whole-build parity not
+established. Complete native build evaluations remain **0/5**.
+
+Receipts: `runs/r2af-rune-order-01/`, including `final-reconciliation.json`,
+`source-reconciliation.json`, `assembly-reconciliation.json`, `public-reconciliation.json`
+and source-bound command ledgers. The [A1 cost record](execution-model-baseline.md#strict-rune-order-checkpoint)
+separates production changes from native regression and reference-observation code. Local
+validation is not a hosted CI result; publication observations are recorded separately.
+
+**Current resume:** implement advanced-copy unique-line ordering from injected Exclusive
+modifier definitions and authenticated normalization/sort policy. Preserve the one-line
+order mutation, duplicate minima, exact/normalized lookup precedence, fractured/crafted groups
+and source line identity; do not bypass earlier rare-affix or later magnitude frontiers.
+The static scope is recorded in `next-frontiers-audit.md` beside the receipts.
+
+Before implementing executable jewel captures across parser/item ownership, discuss the
+bounded choice between session-owned closures and typed captured effects. Both failing jewels
+use the same captured family, but deferred parsing and the later Time-Lost cache consumer need
+explicit lifetime and ordering contracts. Successful item registration alone will not establish
+radius-effect execution. This is an input to A2, not approval for a general runtime expansion.
+Continue afterward through activation, order-sensitive slot population, loadout callback
+re-entry and effective equipment/actor preparation. The full parity goal remains open.
 
 **R2ae checkpoint: injected, ordered native item-set loading.** The constructor,
 legacy slots, saved sets/runes/socket URLs and trade rows now run in the same ordered stream
@@ -66,8 +129,8 @@ native inventory-production parity. An older all-originals assertion expecting a
 stop was corrected while retaining first-failure and all-record retention checks.
 
 **Regression validation:** all 133 native tests across 20 targets and 59 affected data tests
-pass, as do 16 item-loading tests and strict workspace and native-only lint. The final startup-tree guard was added after the full native suite had
-compiled; its four binding tests and the 17 native inventory tests pass on the final code.
+pass, as do 16 item-loading tests and strict workspace and native-only lint. The final
+startup-tree guard was added after the full native suite had compiled; its four binding tests and the 17 native inventory tests pass on the final code.
 The signed-zero key regression also passes after lint cleanup. All four CLI preparation tests
 pass in both default and native-only configurations. WASM compilation, formatting and the
 native-only dependency check pass; that dependency graph excludes PoB and Lua.
@@ -94,7 +157,7 @@ retain the failures; full job logs returned HTTP 403. The later runs for `a886aa
 and `c1197c4` were still running at the 05:40 UTC observation. Local validation is not a
 hosted green result; receipts are under `ci-triage-by-data/` and `prior-ci-02.json`.
 
-**Resume:** continue through SetActiveItemSet, previous/live state copying, rune lookup,
+**Resume recorded at R2ae (superseded by R2af above):** continue through SetActiveItemSet, previous/live state copying, rune lookup,
 order-sensitive PopulateSlots, loadout callback re-entry and export selection. Source traversal is not interchangeable with
 sorted slot order without a proof: earlier clearing may affect main-hand or child-slot validity.
 AwaitingActivation cannot be bypassed by a repeated successful Load. Connect effective equipment
@@ -2327,6 +2390,9 @@ candidate, and A3 remains the discussion point before any significant design cha
   The [R2ad lifecycle evidence](execution-model-baseline.md#original-item-set-loading-lifecycle-checkpoint)
   now records complete original Load returns, actual startup context, observed order variation
   and separate exact/selected-field comparisons, with reference-tooling costs included.
+  The [R2af rune-order evidence](execution-model-baseline.md#strict-rune-order-checkpoint)
+  adds a small native proof and its larger source-observation cost. Include the mixed-stage
+  diagnostic API and deferred jewel-capture ownership as concrete A2 comparison cases.
 - [ ] **A2 — comparable prototypes.** Compare a focused DSL, declarative rule/data model,
   native Rust algorithm families with injected definitions, the existing interpreter and a
   hybrid or offline-lowering approach on the same representative mechanisms and corpus.

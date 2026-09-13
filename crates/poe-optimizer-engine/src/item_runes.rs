@@ -313,6 +313,41 @@ pub fn compare_vectors(
     }
     Ok(false)
 }
+/// Proves the supplied candidate order is the unique strict descending source
+/// comparator order. Finite vectors form a total preorder after missing-value
+/// padding, so strict adjacent pairs exclude every tie. Search epsilon, names,
+/// and canonical tie-breaks do not participate in this proof. False does not
+/// authorize choosing a different order. Work shares the caller's rune budget.
+pub fn has_strict_vector_order(
+    candidates: &[&[f64]],
+    policy: VectorPolicy,
+    budget: &mut RuneBudget,
+) -> Result<bool> {
+    if candidates.len() > budget.limits.max_candidates {
+        return Err(RuneError::Resource("candidates"));
+    }
+    charge(
+        &mut budget.vector_work,
+        candidates.len() as u64,
+        budget.limits.max_vector_work,
+        "vector work",
+    )?;
+    if !policy.missing_value.is_finite() {
+        return Ok(false);
+    }
+    for values in candidates {
+        budget.vectors(values.len())?;
+        if values.iter().any(|value| !value.is_finite()) {
+            return Ok(false);
+        }
+    }
+    for pair in candidates.windows(2) {
+        if !compare_vectors(pair[0], pair[1], policy, budget)? {
+            return Ok(false);
+        }
+    }
+    Ok(true)
+}
 pub fn equal_vectors(
     a: &[f64],
     b: &[f64],
