@@ -1,6 +1,8 @@
 use poe_optimizer_data::game_data::{GameDataSnapshot, bundled_snapshot};
+use poe_optimizer_data::item_loading::ItemMetadataValue;
+use poe_optimizer_engine::modifier_parser::{CompiledModifierParser, ParserError};
 use poe_optimizer_import::item_loading::*;
-use std::sync::OnceLock;
+use std::sync::{Arc, OnceLock};
 fn data() -> &'static GameDataSnapshot {
     static DATA: OnceLock<GameDataSnapshot> = OnceLock::new();
     DATA.get_or_init(|| bundled_snapshot().unwrap())
@@ -152,4 +154,69 @@ fn defence_headers_preserve_loaded_values_before_assembly() {
         assert_eq!(machine.state().parser_calls.len(), 1, "{header}");
         assert_eq!(machine.state().assembly_calls, 2, "{header}");
     }
+}
+
+#[test]
+fn providers_share_compilation_without_sharing_owned_request_outputs() {
+    let compiled = Arc::new(CompiledModifierParser::new(data().modifier_parser()).unwrap());
+    let mut left = NativeModifierParserProvider::from_compilation_result(Ok(Arc::clone(&compiled)));
+    let mut right = NativeModifierParserProvider::from_compiled(Arc::clone(&compiled));
+    let mut fresh = NativeModifierParserProvider::new(data().modifier_parser());
+    drop(compiled);
+    let input = request("+18 to Strength");
+    let DependencyResult::Available(mut first) = left.parse_modifier(&input) else {
+        panic!("shared parser must remain usable after its caller's Arc is dropped")
+    };
+    let expected = serde_json::to_value(fresh.parse_modifier(&input)).unwrap();
+    first.modifiers.as_mut().unwrap()[0].fields.insert(
+        "name".into(),
+        ItemMetadataValue::Text("caller mutation".into()),
+    );
+    // A failed request and a caller mutation affect neither another provider nor
+    // the next request's conversion/output budgets and tables.
+    assert!(matches!(
+        left.parse_modifier(&request(&"x".repeat(1024 * 1024))),
+        DependencyResult::ResourceError(_)
+    ));
+    assert_eq!(
+        serde_json::to_value(right.parse_modifier(&input)).unwrap(),
+        expected
+    );
+    assert_eq!(
+        serde_json::to_value(left.parse_modifier(&input)).unwrap(),
+        expected
+    );
+    assert_eq!(
+        first.modifiers.unwrap()[0].fields["name"].as_str(),
+        Some("caller mutation")
+    );
+}
+
+#[test]
+fn retained_compilation_error_is_reported_only_by_reached_parser_requests() {
+    // Constructor transport/classification contract. The engine data-injection
+    // test separately constructs a real catalog that produces this compile error.
+    let failure = ParserError::ResourceBound("compiled dictionary rows");
+    let parser = NativeModifierParserProvider::from_compilation_result(Err(failure.clone()));
+    assert_eq!(parser.compilation_error(), Some(&failure));
+    let mut provider = NativeItemLoadProvider::with_dependencies(data(), parser);
+    let formatted = provider.format_with_trace(&FormatRequest {
+        sequence: 0,
+        line_index: None,
+        text: "plain unchanged line".into(),
+        range: ItemNumber::Nil,
+        scalar: ItemNumber::Nil,
+        corrupted_range: ItemNumber::Nil,
+    });
+    assert!(
+        matches!(formatted.result, DependencyResult::Available(ref text) if text == "plain unchanged line")
+    );
+    assert!(formatted.precision_parser_calls.is_empty());
+    for _ in 0..2 {
+        assert!(matches!(
+            provider.parse_modifier(&request("+18 to Strength")),
+            DependencyResult::ResourceError(ref message) if message.contains("compiled dictionary rows")
+        ));
+    }
+    assert_eq!(provider.dependencies().compilation_error(), Some(&failure));
 }

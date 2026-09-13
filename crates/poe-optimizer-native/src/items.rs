@@ -18,7 +18,7 @@ use poe_optimizer_import::{
     item_loading::{
         BuiltinItemLoadProvider, ItemLoadMachine, ItemLoadStatus, ItemNumber, ItemScalar,
         ItemState, JewelRadiusContext, JewelRadiusErrorKind, JewelRadiusEvidence,
-        JewelRadiusProvenance, assembly::AssembledItem,
+        JewelRadiusProvenance, NativeModifierParserProvider, assembly::AssembledItem,
     },
     item_sets::{ItemSetLimits, ItemSetState},
     item_source::{ItemSourceKind, ItemSourceUse},
@@ -28,6 +28,15 @@ use poe_optimizer_import::{
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, sync::Arc};
+
+fn builtin_item_provider(data: &CompiledGameData) -> BuiltinItemLoadProvider<'_> {
+    BuiltinItemLoadProvider::with_native_assembly(
+        data.snapshot(),
+        NativeModifierParserProvider::from_compilation_result(
+            data.compiled_modifier_parser().clone(),
+        ),
+    )
+}
 
 #[derive(Debug, Clone, Copy)]
 pub struct ItemPreparationLimits {
@@ -368,8 +377,7 @@ pub fn prepare_authored_items(
                 let row = &mut report.records[*record_by_source
                     .get(&source)
                     .ok_or_else(|| contract("item record missing"))?];
-                let provider =
-                    provider.get_or_insert_with(|| BuiltinItemLoadProvider::new(data.snapshot()));
+                let provider = provider.get_or_insert_with(|| builtin_item_provider(data));
                 let mut machine = ItemLoadMachine::new(data.snapshot().item_loading());
                 machine
                     .set_jewel_radius_context(radius.clone())

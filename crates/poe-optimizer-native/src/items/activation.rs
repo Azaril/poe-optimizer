@@ -1,10 +1,10 @@
 //! Native activation context over this inventory and its exact injected data owner.
 //! Startup tree writes stay owned until the shared root/tree lifecycle adopts them.
-use super::{ItemRecordId, numeric_key};
+use super::{ItemRecordId, builtin_item_provider, numeric_key};
 use crate::CompiledGameData;
 use poe_optimizer_import::{
     item_loading::{
-        BuiltinItemLoadProvider, DependencyResult, ItemNumber,
+        DependencyResult, ItemNumber,
         assembly::{AssembledItem, AssemblyError},
     },
     item_sets::{ItemActivationContext, ItemActivationRune, ItemSetLimits, RuneChoiceCatalog},
@@ -134,9 +134,10 @@ impl NativeActivation {
         if self.runes.is_some() {
             return;
         }
-        // Source rune initialization precedes authored item parsing. Use a fresh
-        // stable finite parser dependency; no post-item cache is injected here.
-        let mut provider = BuiltinItemLoadProvider::new(self.data.snapshot());
+        // Source rune initialization precedes authored item parsing. This fresh
+        // dependency shares only immutable compiled definitions; parse requests
+        // and rune construction retain their independent state and budgets.
+        let mut provider = builtin_item_provider(&self.data);
         let prepared = RuneChoiceCatalog::prepare(
             self.data.snapshot().item_loading(),
             &self.data.snapshot().item_assembly().policy().inventory,

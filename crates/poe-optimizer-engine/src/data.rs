@@ -8,6 +8,7 @@ use crate::{
     defence::DefenceConstants,
     mace::{MaceData, MaceError, MaceWeapon, MaceWeaponData},
     mace_supports::{MaceSupportCatalog, PreparedMaceSupports},
+    modifier_parser::{CompiledModifierParser, ParserError},
     spark::SparkData,
 };
 use poe_optimizer_data::{
@@ -35,6 +36,7 @@ impl Error for GameDataError {}
 #[derive(Debug)]
 pub struct CompiledGameData {
     snapshot: Arc<GameDataSnapshot>,
+    modifier_parser: OnceLock<Result<Arc<CompiledModifierParser>, ParserError>>,
     spark: SparkData,
     mace: MaceData,
     weapon_indices: [usize; 2],
@@ -184,6 +186,7 @@ impl CompiledGameData {
         Ok(Self {
             supports,
             snapshot: snapshot.clone(),
+            modifier_parser: OnceLock::new(),
             spark,
             mace,
             weapon_indices,
@@ -214,6 +217,14 @@ impl CompiledGameData {
     }
     pub fn snapshot(&self) -> &GameDataSnapshot {
         &self.snapshot
+    }
+    /// Compile immutable parser definitions once for this exact dataset. Failed
+    /// compilation is retained; callers defer reporting it until parsing is
+    /// actually requested. Request budgets, output tables and VM heaps are not cached.
+    pub fn compiled_modifier_parser(&self) -> &Result<Arc<CompiledModifierParser>, ParserError> {
+        self.modifier_parser.get_or_init(|| {
+            CompiledModifierParser::new(self.snapshot.modifier_parser()).map(Arc::new)
+        })
     }
     pub fn identity(&self) -> &DataIdentity {
         self.snapshot.identity()

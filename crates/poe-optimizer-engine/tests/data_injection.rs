@@ -4,6 +4,14 @@
 use poe_optimizer_data::game_data::{
     self, GameDataLoader, GameDataPackage, LoadLimits, TrustPolicy,
 };
+use poe_optimizer_data::modifier_parser::{
+    ModifierParserData, ParserDictionary as D, ParserTable, ParserValue as P,
+};
+use poe_optimizer_engine::lua_pattern::{MatchBudget, MatchLimits, PatternError};
+use poe_optimizer_engine::modifier_parser::{
+    CompiledModifierParser, ModifierValue as V, ParseOutcome, ParserError,
+};
+use poe_optimizer_engine::modifier_scan::ScanError;
 use poe_optimizer_engine::{
     CompiledGameData, defence,
     mace::{self, MaceInput, MaceWeapon},
@@ -665,4 +673,167 @@ fn shared_allocation_character_helpers_validate_views_and_defer_unrelated_scalar
             .is_err(),
         "selected numerical source views cannot cross injected datasets"
     );
+}
+
+fn isolated_parser(package: &mut GameDataPackage, name: &str, more: f64) {
+    let data = &mut package.modifier_parser;
+    // This caller-owned fixture exercises legacy rules, not source admission.
+    data.programs = Default::default();
+    for id in data.dictionaries.values() {
+        data.tables[id.0 as usize - 1] = ParserTable::default();
+    }
+    parser_row(data, D::Form, "(%d+) ", P::Text("BASE".into()));
+    parser_row(data, D::Form, "echo", P::Text("DOUBLED".into()));
+    parser_row(data, D::ModName, "caller", P::Text(name.into()));
+    data.policy.doubled_more = more;
+}
+fn parser_row(data: &mut ModifierParserData, dictionary: D, pattern: &str, value: P) {
+    let id = data.dictionaries[&dictionary];
+    data.tables[id.0 as usize - 1]
+        .fields
+        .insert(pattern.into(), value);
+}
+fn parsed_first(outcome: &ParseOutcome) -> &poe_optimizer_engine::modifier_parser::ModifierTable {
+    outcome
+        .modifiers
+        .as_ref()
+        .unwrap()
+        .indexed_value(1)
+        .as_table()
+        .unwrap()
+}
+
+#[test]
+fn parser_compilation_is_shared_in_parallel_but_owned_by_exact_injected_data() {
+    let owner = Arc::new(custom(|package| isolated_parser(package, "CallerA", 17.0)));
+    let barrier = Arc::new(std::sync::Barrier::new(8));
+    let workers: Vec<_> = (1..=8)
+        .map(|number| {
+            let owner = Arc::clone(&owner);
+            let barrier = Arc::clone(&barrier);
+            std::thread::spawn(move || {
+                // Race the first access, not just clones of an initialized Arc.
+                barrier.wait();
+                let parser = owner.compiled_modifier_parser().as_ref().unwrap().clone();
+                let result = parser
+                    .parse(
+                        format!("{number} caller").as_bytes(),
+                        &mut MatchBudget::default(),
+                    )
+                    .unwrap();
+                assert_eq!(
+                    parsed_first(&result).field("name").as_bytes(),
+                    Some(b"CallerA".as_slice())
+                );
+                assert_eq!(
+                    parsed_first(&result).field("value"),
+                    &V::Number(f64::from(number))
+                );
+                parser
+            })
+        })
+        .collect();
+    let parsers: Vec<_> = workers
+        .into_iter()
+        .map(|worker| worker.join().unwrap())
+        .collect();
+    let parser = owner.compiled_modifier_parser().as_ref().unwrap().clone();
+    assert!(parsers.iter().all(|other| Arc::ptr_eq(&parser, other)));
+    assert!(
+        parser
+            .catalog()
+            .is_same_owner(owner.snapshot().modifier_parser())
+    );
+
+    let other_owner = custom(|package| isolated_parser(package, "CallerB", 29.0));
+    let other = other_owner.compiled_modifier_parser().as_ref().unwrap();
+    assert!(!Arc::ptr_eq(&parser, other));
+    assert!(!parser.catalog().is_same_owner(other.catalog()));
+    for (compiled, name, more) in [
+        (&parser, b"CallerA".as_slice(), 17.0),
+        (other, b"CallerB".as_slice(), 29.0),
+    ] {
+        let result = compiled
+            .parse(b"caller echo", &mut MatchBudget::default())
+            .unwrap();
+        assert_eq!(parsed_first(&result).field("name").as_bytes(), Some(name));
+        assert_eq!(parsed_first(&result).field("value"), &V::Number(more));
+    }
+    drop(parsers);
+    drop(owner);
+    // The compiled Arc retains its catalog after its CompiledGameData is gone.
+    let result = parser
+        .parse(b"9 caller", &mut MatchBudget::default())
+        .unwrap();
+    assert_eq!(
+        parsed_first(&result).field("name").as_bytes(),
+        Some(b"CallerA".as_slice())
+    );
+}
+
+#[test]
+fn real_compilation_failure_is_cached_without_disabling_numeric_data() {
+    let owner = custom(|package| {
+        isolated_parser(package, "Caller", 17.0);
+        // Valid injected data exceeds the compiler's aggregate dictionary-row
+        // budget. This is an actual compilation error, not a manufactured Result.
+        for dictionary in [D::Conqueror, D::Form] {
+            let id = package.modifier_parser.dictionaries[&dictionary];
+            package.modifier_parser.tables[id.0 as usize - 1].fields = (0..32_769)
+                .map(|i| (format!("key{i:05}"), P::Boolean(true)))
+                .collect();
+        }
+    });
+    let before =
+        spark::evaluate_with_data(&spark_input(), &owner.default_spark_character(), &owner)
+            .unwrap();
+    let first = owner.compiled_modifier_parser();
+    assert!(matches!(
+        first,
+        Err(ParserError::ResourceBound("compiled dictionary rows"))
+    ));
+    let second = owner.compiled_modifier_parser();
+    assert!(std::ptr::eq(first, second));
+    assert_eq!(
+        before,
+        spark::evaluate_with_data(&spark_input(), &owner.default_spark_character(), &owner)
+            .unwrap()
+    );
+}
+
+#[test]
+fn cached_parser_keeps_pattern_errors_lazy_and_request_budgets_independent() {
+    let owner = custom(|package| {
+        isolated_parser(package, "Caller", 17.0);
+        parser_row(
+            &mut package.modifier_parser,
+            D::Special,
+            "^broken[",
+            P::Boolean(true),
+        );
+    });
+    // Malformed syntax is a reached pattern trap, not a compilation failure.
+    let parser = owner.compiled_modifier_parser().as_ref().unwrap();
+    assert!(matches!(
+        parser.parse(b"broken", &mut MatchBudget::default()),
+        Err(ParserError::Scan(ScanError::Pattern(PatternError::Source(
+            _
+        ))))
+    ));
+    let mut exhausted = MatchBudget::new(MatchLimits {
+        max_steps: 1,
+        ..MatchLimits::default()
+    });
+    assert!(matches!(
+        parser.parse(b"5 caller", &mut exhausted),
+        Err(ParserError::Scan(_))
+    ));
+    let fresh = CompiledModifierParser::new(owner.snapshot().modifier_parser()).unwrap();
+    let mut shared_budget = MatchBudget::default();
+    let mut fresh_budget = MatchBudget::default();
+    let actual = parser.parse(b"5 caller", &mut shared_budget).unwrap();
+    let expected = fresh.parse(b"5 caller", &mut fresh_budget).unwrap();
+    assert_eq!(actual, expected);
+    assert_eq!(shared_budget.steps_used(), fresh_budget.steps_used());
+    assert_eq!(parsed_first(&actual).field("value"), &V::Number(5.0));
 }

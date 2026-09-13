@@ -17,13 +17,18 @@ pub struct NativeModifierParserProvider {
 }
 impl NativeModifierParserProvider {
     pub fn new(catalog: &ModifierParserCatalog) -> Self {
-        Self {
-            parser: CompiledModifierParser::new(catalog).map(Arc::new),
-        }
+        Self::from_compilation_result(CompiledModifierParser::new(catalog).map(Arc::new))
     }
     /// Share immutable compiled rules across imports or parallel preparation workers.
     pub fn from_compiled(parser: Arc<CompiledModifierParser>) -> Self {
-        Self { parser: Ok(parser) }
+        Self::from_compilation_result(Ok(parser))
+    }
+    /// Reuse an owner's compilation result without turning a deferred parser
+    /// failure into a failure of unrelated formatting or item preparation.
+    pub fn from_compilation_result(
+        parser: Result<Arc<CompiledModifierParser>, ParserError>,
+    ) -> Self {
+        Self { parser }
     }
     pub fn compilation_error(&self) -> Option<&ParserError> {
         self.parser.as_ref().err()
