@@ -20,6 +20,8 @@ use poe_optimizer_import::{
     decode_build,
     owned_mapping::*,
     owned_normalize::*,
+    owned_reference_projection::*,
+    owned_reward_policy::*,
     owned_skill_catalog::*,
     owned_source::*,
     owned_value::*,
@@ -28,6 +30,11 @@ use poe_optimizer_import::{
 use serde::Deserialize;
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeSet, fs::File, io::Read, path::Path};
+
+#[path = "support/owned_reference_fixture.rs"]
+mod reference_fixture;
+#[path = "support/owned_reward_fixture.rs"]
+mod reward_fixture;
 
 const CATALOG_SHA256: &str = "a90217d9bab6c0469917a2ba75ed9517205d2ac2b3d59f8d68580604f26df07f";
 
@@ -95,6 +102,7 @@ struct Artifacts {
     definitions: OwnedDefinitionSchemaPackage,
     mappings: OwnedMappingIndex,
     roles: OwnedSkillRoleIndex,
+    rewards: OwnedRewardPolicy,
 }
 fn artifacts(root: &Path) -> Artifacts {
     let bytes = read_bounded(
@@ -107,7 +115,7 @@ fn artifacts(root: &Path) -> Artifacts {
     let catalog = SkillIdentityCatalog::new(projection.skill_identities).unwrap();
     assert_eq!(catalog.data().gems.len(), 966);
     assert_eq!(catalog.data().skills.len(), 1_436);
-    let source = SourcePin {
+    let mut source = SourcePin {
         system: ExternalSourceSystem::PathOfBuilding2,
         revision: catalog.data().source.upstream_revision.clone(),
         files: catalog
@@ -121,6 +129,15 @@ fn artifacts(root: &Path) -> Artifacts {
             })
             .collect(),
     };
+    let reward_source = reward_fixture::source_pin();
+    assert_eq!(source.revision, reward_source.revision);
+    for file in reward_source.files {
+        if let Some(existing) = source.files.iter().find(|f| f.path == file.path) {
+            assert_eq!(existing.sha256, file.sha256);
+        } else {
+            source.files.push(file);
+        }
+    }
     let limits = SkillCatalogLimits::default();
     let base = OwnedIdRegistry::empty(namespace(), limits.mapping).unwrap();
     let base_digest = base.identity().unwrap();
@@ -155,13 +172,20 @@ fn artifacts(root: &Path) -> Artifacts {
             other => panic!("unexpected identity definition: {other:?}"),
         }
     }
+    let rewards_staged = reward_fixture::stage_rewards(&compiled.registry);
+    assert_eq!(rewards_staged.source.revision, source.revision);
+    let registry = rewards_staged.registry.clone();
+    let mut owned_definitions = compiled.definitions;
+    owned_definitions.extend(rewards_staged.definitions.clone());
+    let mut owned_mappings = compiled.mappings;
+    owned_mappings.extend(rewards_staged.mappings.clone());
     let definitions = OwnedDefinitionSchemaPackage::new(
         SchemaPackageInput {
             schema_version: OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: namespace(),
             release: key("reviewed-breadth-identities-v1"),
             semantics_version: key("identity-only-unmapped-input-schema-v1"),
-            definitions: compiled.definitions,
+            definitions: owned_definitions,
             slots: vec![],
         },
         OwnedSchemaLimits::default(),
@@ -171,13 +195,13 @@ fn artifacts(root: &Path) -> Artifacts {
         MappingPackageInput {
             schema_version: OWNED_MAPPING_PACKAGE_VERSION,
             namespace: namespace(),
-            registry: compiled.registry.identity().unwrap(),
+            registry: registry.identity().unwrap(),
             definitions: definitions.identity().clone(),
             source,
             policy_version: compiled.receipt.policy.version.clone(),
-            entries: compiled.mappings,
+            entries: owned_mappings,
         },
-        &compiled.registry,
+        &registry,
         &definitions,
         limits.mapping,
     )
@@ -196,12 +220,20 @@ fn artifacts(root: &Path) -> Artifacts {
         limits,
     )
     .unwrap();
+    let rewards = OwnedRewardPolicy::new(
+        rewards_staged.policy_input(&definitions, &mappings),
+        &mappings,
+        &definitions,
+        RewardPolicyLimits::default(),
+    )
+    .unwrap();
     Artifacts {
         catalog,
-        registry: compiled.registry,
+        registry,
         definitions,
         mappings,
         roles,
+        rewards,
     }
 }
 
@@ -524,6 +556,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
                 registry: &artifacts.registry,
                 definitions: &artifacts.definitions,
                 roles: &artifacts.roles,
+                rewards: &artifacts.rewards,
             },
             &policy,
             &caller_queries,
@@ -539,7 +572,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         );
         let issue_ids: BTreeSet<_> = validation.issues.iter().map(|issue| issue.id).collect();
         assert_eq!(sidecar.origins.len(), evidence.rows().len());
-        assert_eq!(sidecar.schema_version, 2);
+        assert_eq!(sidecar.schema_version, 3);
         let socket_counts: &[usize] = match index {
             0 => &[3],
             1 => &[0, 0, 0, 0, 0, 3],
@@ -721,7 +754,9 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         assert_eq!(draft.equipment_presets.members.len(), item_sets);
         assert_eq!(draft.choice_presets.members.len(), 1);
         let choices = &draft.choice_presets.members[0];
-        assert!(choices.rewards.members.is_empty());
+        assert_eq!(choices.rewards.members.len(), [16, 17, 15, 16, 17][index]);
+        assert_eq!(draft.rewards.members.len(), choices.rewards.members.len());
+        assert_eq!(sidecar.reward_policy, *artifacts.rewards.identity());
         let DraftListCompletion::Pending { code, .. } = &choices.rewards.completion else {
             panic!("unconverted configuration rewards must remain pending");
         };
@@ -890,6 +925,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
             registry: &artifacts.registry,
             definitions: &artifacts.definitions,
             roles: &artifacts.roles,
+            rewards: &artifacts.rewards,
         },
         &policy,
         &queries(&manifest.cases[0]),
@@ -954,4 +990,155 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
     println!(
         "owned normalization breadth: catalog=966_gems/1436_skills physical_gems=478 skill_uses=140 supports=338 generated_pending=42 manual_provider_only_pending=18 name_only_pending=3 ordered_queries=110; definitions=identity_only legality=not_checked calculation=not_run native_completion=not_claimed"
     );
+}
+
+#[test]
+fn original_reference_projection_binds_fresh_owned_drafts_without_losing_rows() {
+    use poe_optimizer_core::metrics::{ActorScope, MetricQuery};
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let reference_dir = root.join("tests/fixtures/breadth-expectations");
+    let manifest: ReferenceManifest = serde_json::from_slice(&read_bounded(
+        &reference_dir.join("originals-v1.json"),
+        1024 * 1024,
+    ))
+    .unwrap();
+    let artifacts = artifacts(&root);
+    let limits = NormalizationLimits::default();
+    let projection_limits = ProjectionLimits::default();
+    let mut totals = [0usize; 2];
+    for fixture in reference_fixture::load_references() {
+        let case = &manifest.cases[fixture.source_line - 1];
+        assert_eq!(fixture.source_xml_sha256, case.input.xml_sha256);
+        let bytes = read_bounded(
+            &reference_dir.join(&case.input.xml_path),
+            poe_optimizer_import::MAX_XML_BYTES,
+        );
+        assert_eq!(
+            format!("{:x}", Sha256::digest(&bytes)),
+            case.input.xml_sha256
+        );
+        let source = ImportedBuildInstance::from_decoded(
+            decode_build(&bytes).unwrap(),
+            BuildLineage::from_bytes([fixture.source_line as u8 + 20; 16]),
+            InstanceImportLimits::default(),
+        )
+        .unwrap();
+        let evidence =
+            SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
+        let reference = RecordedReference::from_cli_report(
+            &fixture.bytes,
+            case.input.xml_sha256.parse().unwrap(),
+            projection_limits,
+        )
+        .unwrap();
+        let templates = queries(case);
+        let reference_queries: Vec<_> = case
+            .measurements
+            .iter()
+            .map(|m| MetricQuery {
+                actor: match m.query.actor.as_str() {
+                    "player" => ActorScope::Player,
+                    "selected_minion" => ActorScope::SelectedMinion,
+                    _ => panic!("unreviewed actor"),
+                },
+                id: m.query.id.clone(),
+            })
+            .collect();
+        // Filter templates before fresh normalization. Do not revise a normalized
+        // draft behind its digest/allocator boundary to remove unavailable rows.
+        let selected: Vec<_> = templates
+            .iter()
+            .zip(&reference_queries)
+            .filter_map(|(t, q)| {
+                reference
+                    .requires_evaluation(q)
+                    .unwrap()
+                    .then_some(t.clone())
+            })
+            .collect();
+        let normalized = normalize_fresh(
+            &evidence,
+            *source.allocator_state(),
+            NormalizationArtifacts {
+                mappings: &artifacts.mappings,
+                registry: &artifacts.registry,
+                definitions: &artifacts.definitions,
+                roles: &artifacts.roles,
+                rewards: &artifacts.rewards,
+            },
+            &policy(),
+            &selected,
+            limits,
+        )
+        .unwrap();
+        let preset = &normalized.draft().input().query_presets.members[0];
+        let sidecar = normalized.sidecar();
+        let policy_binding = ProjectionPolicyBinding {
+            version: key("reviewed-original-query-routing-v1"),
+            game_version: namespace(),
+            normalization_policy: sidecar.policy,
+            reward_policy: sidecar.reward_policy,
+            mapping: sidecar.mapping,
+            mapping_source: sidecar.mapping_source,
+            registry: sidecar.registry,
+            definitions: sidecar.definitions.clone(),
+            skill_roles: sidecar.skill_roles,
+        };
+        let rows = templates
+            .iter()
+            .zip(reference_queries)
+            .map(|(t, reference)| ProjectionRowInput {
+                id: t.id.clone(),
+                reference,
+                request: preset
+                    .queries
+                    .requests
+                    .members
+                    .iter()
+                    .find(|r| r.id == t.id)
+                    .cloned(),
+            })
+            .collect();
+        let plan =
+            ProjectionPlan::new(&reference, policy_binding, rows, projection_limits).unwrap();
+        let binding = plan
+            .validate_normalized(&normalized, preset.id, projection_limits)
+            .unwrap();
+        assert_eq!(binding.draft, sidecar.draft);
+        assert_eq!(plan.query_draft(), preset.queries);
+        let mut ids: Vec<_> = preset
+            .queries
+            .requests
+            .members
+            .iter()
+            .map(|r| r.id.clone())
+            .collect();
+        ids.reverse(); // Join by identity, never assume evaluator order.
+        let joined = plan.join_ids(&ids, projection_limits).unwrap();
+        assert_eq!(joined.rows.len(), 22);
+        for (row, t) in joined.rows.iter().zip(&templates) {
+            assert_eq!(row.id, t.id);
+            match row.association {
+                JoinedAssociation::Evaluate { result_index } => {
+                    assert_eq!(ids[result_index], row.id);
+                    totals[0] += 1;
+                }
+                JoinedAssociation::ReferenceKnownUnavailable { .. } => {
+                    assert!(!ids.contains(&row.id));
+                    totals[1] += 1;
+                }
+            }
+        }
+        // This is structural routing. Definitions, selected loadout and other
+        // mechanics remain pending; no native measurement or parity is certified.
+        assert!(
+            !normalized
+                .draft()
+                .validate_limits(limits.draft)
+                .unwrap()
+                .issues
+                .is_empty()
+        );
+    }
+    assert_eq!(totals, [104, 6]);
 }

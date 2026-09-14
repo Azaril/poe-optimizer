@@ -11,12 +11,60 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
+**Owned reward and reference routing checkpoint (after `ff4c07d`):** finite
+`OwnedRewardPolicy` artifacts now bind owned schema/mapping identities, apply existing
+Boolean/Option recipes and select fixed reward definitions/parameters. No new interpreter,
+source callback or UI lifecycle is introduced. `normalize-owned` requires `--rewards`;
+its schema-3 sidecar binds that artifact. The normalizer reads each ConfigSet independently,
+preserves explicit false/None, blocks malformed/unknown presence from activating defaults,
+and permits same-name typed lane alternatives under declared precedence. Every selected
+reward is a fresh occurrence; global and per-configuration reward lists stay pending.
+
+The offline fixture/compiler exercises all 17 quest-control families in existing schema40
+configuration metadata across all five originals. Nine Boolean and eight Option families
+produce 81 known selections (16/17/15/16/17), with four explicit/default None outcomes.
+These are authored input facts, not reward effect compilation. The old narrow quest
+projection omitted option families; the configuration metadata already contained them.
+The separate 12 progression-point records are not inferred from these controls.
+
+`RecordedReference` and `ProjectionPlan` preserve all 110 original reference rows with
+104 Evaluate routes and six structurally confirmed absent-selected-minion routes. The
+breadth consumer filters templates before fresh normalization and binds actual produced
+drafts/queries; it does not mutate a draft behind its digest or fabricate a selected
+loadout. ID joining rejects missing, duplicate and extra rows and preserves caller order.
+Raw routing is not numerical evaluation or independent availability parity. Present
+minions with unavailable outputs still require evaluation. Five exact compressed reports
+and bounded loaders make this contract testable offline without starting PoB.
+
+Final guarded validation passes **391 selected test executions**: Core 209, owned schema
+11, owned Import 115, and CLI 28 with default features plus 28 without PoB. Strict workspace
+and native-only Clippy, Core/Data/Engine/Import/Native WASM compilation, formatting and the
+native-only runtime dependency check pass. Both offline fixture exporters reproduce their
+outputs. Receipts are `runs/owned-projection-rewards-01/validation-01/ledger.json` and
+`validated-checkpoint.json`. This is affected-scope local evidence, not a whole-workspace
+test run or hosted CI success. The exact parent `ff4c07d` CI snapshot at 12:02 UTC still
+had six jobs running and no observed failures; Ubuntu lint/native jobs had passed.
+Initial development tests found a fixture alias marked Exact instead of ReviewedAlias
+and a synthetic role receipt with an inconsistent policy version; fixes preserve the
+validators. Review also found and fixed same-name typed-lane matching in the normalizer.
+No protected build, expectation value, schema40 package or PoB pin has changed. Current
+coverage remains **0/5 complete native evaluations**; this is D1/D2 adapter progress.
+
+**Resume after this checkpoint:** complete domain-owned config/scenario/usage conversion,
+loadout and provider/target correspondence, then selected request finalization. Implement
+D2 semantic effects (local item, conditional, support, grant) and shared player/minion
+resolution together using all five inputs; source kinds must allow zero/one/many owned
+declarations. Do not resume the paused Lua/UI frontier or extend named skill profiles.
+Move useful numerical tests and delete each replaced legacy consumer in that same slice.
+The projection ledger must retain the full fixed denominator throughout this work.
+
 **Independent preset contributions checkpoint (after `17bdeac`):** Core allocation presets
 now contribute explicit equipment-use memberships. Composition unions these with the selected
 ordinary equipment preset, and draft finalization follows both lists and their backing records.
 Choice presets similarly contribute reward selections alongside character rewards. The pinned
 source audit separates 17 config-controlled quest outcomes from 12 quest-point accounting rows;
-config outcomes therefore have a choice-preset owner, with actual outcome conversion still pending.
+config outcomes therefore have a choice-preset owner; finite outcome conversion follows in
+the checkpoint above.
 Duplicate use IDs within a list reject; shared IDs across contributors deduplicate while
 separate uses of one item remain separate. No record cloning, automatic provider selection,
 inventory adoption or stock claim is introduced. Complete and draft envelopes move to version
@@ -42,9 +90,9 @@ The exact-source reward audit and independent static Core review are in
 `runs/owned-composition-02/reference-reward-review.md`. The next reference ledger must keep
 all 110 rows, distinguish the six structurally absent selected-minion projections, and
 avoid treating copied reference absence as independently computed availability parity.
-Then compile finite injected quest outcome/default mappings, including the eight option
-families absent from the old structured quest data. No source callback or new Core actor
-category is needed for either step.
+Those adapter steps are implemented in the checkpoint above. The eight option families
+were absent only from the narrow quest projection, not the existing configuration metadata.
+No source callback or new Core actor category was needed for either step.
 
 **Owned source-normalization checkpoint (after `a49a0b6`):** the new Import path now
 separates borrowed source evidence, offline owned skill identity/role compilation, explicit

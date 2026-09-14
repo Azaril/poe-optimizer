@@ -153,3 +153,13 @@ uses into that ownership model; no selected-view replay or evaluator callback is
 Version-1 owned project/draft persistence is rejected explicitly rather than maintained as a
 second implicit path. No numerical profile consumer is removed by this structural change;
 shared rule resolution and all-five selected semantic conversion remain the next dependency.
+
+## Owned reward and reference routing checkpoint
+
+Finite reward policies and the recorded projection ledger are Import adapters with named
+CLI/breadth consumers. They do not extend the paused source VM or UI-construction path.
+The offline quest metadata exporter uses existing structured configuration data and source
+hashes; it adds no evaluator/interpreter. Reference reports live only in compressed tests.
+No numerical profile is replaced by this checkpoint, so no additional Spark/Mace deletion
+is claimed. The next deletion unit remains legacy numerical request/profile consumers
+as shared effect resolution lands; the removed experimental catalog stays removed.

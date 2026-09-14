@@ -273,6 +273,12 @@ impl OwnedValueCodec {
     }
 }
 
+impl OwnedValueLimits {
+    /// Validate tighten-only lexical bounds, including for empty policy packages.
+    pub fn validate(self) -> Result<(), ValueCodecError> {
+        validate_limits(self)
+    }
+}
 fn validate_limits(limits: OwnedValueLimits) -> Result<(), ValueCodecError> {
     for (resource, value, maximum) in [
         (

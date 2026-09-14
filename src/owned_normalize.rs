@@ -10,6 +10,7 @@ use poe_optimizer_import::{
         ImportQueryTemplate, NormalizationArtifacts, NormalizationLimits, NormalizationPolicy,
         normalize_fresh,
     },
+    owned_reward_policy::{RewardPolicyLimits, decode_reward_policy},
     owned_skill_catalog::{OwnedSkillRoleIndex, OwnedSkillRolePackageInput, SkillCatalogLimits},
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
 };
@@ -40,6 +41,9 @@ pub(crate) struct Args {
     /// Bound owned skill role package JSON.
     #[arg(long)]
     roles: PathBuf,
+    /// Bound finite reward policy JSON (an empty partial policy is allowed).
+    #[arg(long)]
+    rewards: PathBuf,
     /// Ordered JSON array of explicit import query templates.
     #[arg(long)]
     queries: PathBuf,
@@ -90,6 +94,13 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             mapping: limits.mapping,
         },
     )?;
+    let reward_limits = RewardPolicyLimits::default();
+    let rewards = decode_reward_policy(
+        &read_bounded(&args.rewards, reward_limits.max_wire_bytes)?,
+        &mappings,
+        &definitions,
+        reward_limits,
+    )?;
     let policy: NormalizationPolicy =
         serde_json::from_slice(&read_bounded(&args.policy, limits.max_policy_bytes)?)?;
     let queries: Vec<ImportQueryTemplate> =
@@ -111,6 +122,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             registry: &registry,
             definitions: &definitions,
             roles: &roles,
+            rewards: &rewards,
         },
         &policy,
         &queries,
@@ -142,6 +154,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         "allocator_after": normalized.allocator_after(),
         "counts": {
             "items": input.items.members.len(),
+            "rewards": input.rewards.members.len(),
             "equipment": input.equipment.members.len(),
             "gems": input.gems.members.len(),
             "skills": input.skills.members.len(),

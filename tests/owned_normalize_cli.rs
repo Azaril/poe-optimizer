@@ -14,6 +14,7 @@ use poe_optimizer_import::{
     decode_build,
     owned_mapping::*,
     owned_normalize::{ImportQueryTarget, ImportQueryTemplate, NormalizationPolicy},
+    owned_reward_policy::*,
     owned_skill_catalog::*,
     owned_value::*,
     owned_value_policy::*,
@@ -162,6 +163,20 @@ fn save(directory: &Path) {
         SkillCatalogLimits { mapping: limits },
     )
     .unwrap();
+    let rewards = OwnedRewardPolicy::new(
+        RewardPolicyInput {
+            schema_version: OWNED_REWARD_POLICY_VERSION,
+            namespace: namespace(),
+            version: key("caller-rewards"),
+            definitions: definitions.identity().clone(),
+            mapping: *mappings.identity(),
+            rules: vec![],
+        },
+        &mappings,
+        &definitions,
+        RewardPolicyLimits::default(),
+    )
+    .unwrap();
     let metric = ExternalSelector::Catalog {
         kind: ExternalCatalogKind::Metric,
         key: SourceComponent::Text("caller-metric".into()),
@@ -193,6 +208,10 @@ fn save(directory: &Path) {
             encode_mapping_package(&mappings, limits).unwrap(),
         ),
         ("roles.json", serde_json::to_vec(roles.input()).unwrap()),
+        (
+            "rewards.json",
+            encode_reward_policy(&rewards, RewardPolicyLimits::default()).unwrap(),
+        ),
         ("queries.json", serde_json::to_vec(&queries).unwrap()),
     ] {
         fs::write(directory.join(name), bytes).unwrap();
@@ -212,6 +231,8 @@ fn arguments(output: &str) -> Vec<&str> {
         "mapping.json",
         "--roles",
         "roles.json",
+        "--rewards",
+        "rewards.json",
         "--queries",
         "queries.json",
         "--output",
@@ -253,6 +274,7 @@ fn help_and_missing_required_artifacts_do_not_need_runtime_data() {
         "--definitions",
         "--mapping",
         "--roles",
+        "--rewards",
         "--queries",
         "--output",
     ] {
@@ -307,7 +329,7 @@ fn explicit_artifacts_produce_a_checked_pending_draft_sidecar_and_summary() {
     assert_eq!(queries[1].id, QueryId::new("a-second").unwrap());
     let sidecar: Value =
         serde_json::from_slice(&fs::read(directory.join("sidecar.json")).unwrap()).unwrap();
-    assert_eq!(sidecar["schema_version"], 2);
+    assert_eq!(sidecar["schema_version"], 3);
     assert_eq!(sidecar["draft"], report["draft_digest"]);
     assert_eq!(sidecar["allocator_after"], report["allocator_after"]);
     assert_eq!(sidecar["source_sha256"], report["source"]["sha256"]);
@@ -442,7 +464,7 @@ fn malformed_missing_or_oversized_policy_never_publishes_a_directory() {
 
 #[test]
 fn strict_roles_queries_and_wrong_bindings_fail_before_publication() {
-    for file in ["roles.json", "queries.json", "mapping.json"] {
+    for file in ["roles.json", "queries.json", "mapping.json", "rewards.json"] {
         let temp = tempfile::tempdir().unwrap();
         save(temp.path());
         let path = temp.path().join(file);
@@ -456,4 +478,19 @@ fn strict_roles_queries_and_wrong_bindings_fail_before_publication() {
         assert!(!run(temp.path(), &arguments("result")).status.success());
         assert!(!temp.path().join("result").exists());
     }
+}
+
+#[test]
+fn missing_or_stale_reward_policy_rejects_before_output_publication() {
+    let temp = tempfile::tempdir().unwrap();
+    save(temp.path());
+    let path = temp.path().join("rewards.json");
+    let mut input: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    input["mapping"] = json!("cd".repeat(32));
+    fs::write(&path, serde_json::to_vec(&input).unwrap()).unwrap();
+    assert!(!run(temp.path(), &arguments("stale")).status.success());
+    assert!(!temp.path().join("stale").exists());
+    fs::remove_file(path).unwrap();
+    assert!(!run(temp.path(), &arguments("missing")).status.success());
+    assert!(!temp.path().join("missing").exists());
 }

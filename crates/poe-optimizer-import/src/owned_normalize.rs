@@ -7,6 +7,7 @@
 use crate::{
     build_instance::{AuthoredInstanceId, SourceOccurrenceId},
     owned_mapping::*,
+    owned_reward_policy::*,
     owned_skill_catalog::*,
     owned_source::*,
     owned_value::ValueCodecKind,
@@ -109,6 +110,8 @@ pub enum NormalizationError {
     #[error(transparent)]
     Value(#[from] ValuePolicyError),
     #[error(transparent)]
+    Reward(#[from] RewardPolicyError),
+    #[error(transparent)]
     Identity(#[from] BuildIdentityError),
     #[error(transparent)]
     Structure(#[from] StructuralError),
@@ -122,6 +125,7 @@ pub enum OwnedOriginTarget {
     Item(ItemRecordId),
     ItemReference(ItemRecordId),
     Equipment(ItemSlotUseId),
+    Reward(RewardSelectionId),
     Gem(GemInstanceId),
     Skill(SkillUseId),
     Support(SupportAssignmentId),
@@ -163,6 +167,7 @@ pub struct FreshNormalizationSidecar {
     pub registry: OwnedContentDigest,
     pub definitions: DataIdentity,
     pub skill_roles: OwnedContentDigest,
+    pub reward_policy: OwnedContentDigest,
     pub draft: OwnedContentDigest,
     pub origins: Vec<SourceOwnedOrigin>,
 }
@@ -180,6 +185,7 @@ pub struct NormalizationArtifacts<'a, I> {
     pub registry: &'a OwnedIdRegistry,
     pub definitions: &'a I,
     pub roles: &'a OwnedSkillRoleIndex,
+    pub rewards: &'a OwnedRewardPolicy,
 }
 impl NormalizedImport {
     pub fn draft(&self) -> &DraftSession {
@@ -232,6 +238,7 @@ struct Builder<'e, 's> {
     evidence: &'e SourceProjectEvidence<'s>,
     mappings: &'e OwnedMappingIndex,
     roles: &'e OwnedSkillRoleIndex,
+    rewards: &'e OwnedRewardPolicy,
     allocator: InstanceAllocator,
     limits: NormalizationLimits,
     work: usize,
@@ -519,8 +526,10 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         registry,
         definitions,
         roles,
+        rewards,
     } = artifacts;
     let recipes = validate_policy(policy, limits)?;
+    rewards.verify_bindings(mappings, definitions)?;
     let policy_digest = digest_owned(
         "owned-normalization-policy-v1",
         &(policy, queries),
@@ -567,6 +576,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         evidence,
         mappings,
         roles,
+        rewards,
         allocator: InstanceAllocator::from_state(allocator_before),
         limits,
         work: 0,
@@ -1112,7 +1122,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: 2,
+        schema_version: 3,
         source_sha256: identity.source_sha256.into(),
         source_bytes: identity.source_bytes,
         source_schema: identity.instance_import_schema,
@@ -1126,12 +1136,13 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         registry: registry.identity()?,
         definitions: definitions.identity().clone(),
         skill_roles: *roles.identity(),
+        reward_policy: *rewards.identity(),
         draft: draft.digest(limits.draft.input.max_wire_bytes)?,
         origins: b.origins,
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        "owned-normalization-sidecar-v2",
+        "owned-normalization-sidecar-v3",
         &sidecar,
         limits.draft.input.max_wire_bytes,
     )?;
@@ -1149,10 +1160,12 @@ fn add_config(
     if let DraftListCompletion::Pending { id, .. } = choices.completion {
         fallback.push(id);
     }
+    let mut rewards = b.closure(s, "configuration-rewards-not-converted", vec![])?;
+    add_rewards(b, draft, s, &mut rewards)?;
     draft.choice_presets.members.push(ChoicePresetDraft {
         id,
         choices,
-        rewards: b.closure(s, "configuration-rewards-not-converted", vec![])?,
+        rewards,
     });
     let id = b.id()?;
     b.link(s, OwnedOriginTarget::ScenarioPreset(id))?;
@@ -1168,5 +1181,166 @@ fn add_config(
             usage: b.closure(s, "usage-not-converted", vec![])?,
         },
     });
+    Ok(())
+}
+
+/// Read only one exact saved configuration. Finite injected recipes supply game
+/// keys, defaults and outcomes; this adapter only recognizes source syntax.
+/// The policy contributes known rewards but never closes the reward catalog.
+fn add_rewards(
+    b: &mut Builder<'_, '_>,
+    draft: &mut DraftSessionInput,
+    source: SourceOccurrenceId,
+    output: &mut DraftList<RewardSelectionId>,
+) -> Result<()> {
+    let DraftListCompletion::Pending { id: obligation, .. } = output.completion else {
+        return Err(NormalizationError::Policy(
+            "reward catalog must remain partial",
+        ));
+    };
+    if b.rewards.rules().len() == 0 {
+        return Ok(());
+    }
+    let evidence = b.evidence;
+    let row = &evidence.rows()[source.ordinal() as usize];
+    let scope = if row.occurrence().name() == "ConfigSet" {
+        Some(row)
+    } else {
+        // Legacy direct Config can be read only if it is the unique root scope.
+        let configs = row
+            .children()
+            .iter()
+            .filter_map(|id| {
+                let child = &evidence.rows()[id.ordinal() as usize];
+                (child.occurrence().name() == "Config"
+                    && !child.occurrence().has_namespace_context())
+                .then_some(child)
+            })
+            .collect::<Vec<_>>();
+        b.charge(row.children().len())?;
+        if configs.len() == 1 {
+            Some(configs[0])
+        } else {
+            None
+        }
+    };
+    let Some(scope) = scope else {
+        return Ok(());
+    };
+    let mut unknown_scope = false;
+    let mut inputs: BTreeMap<&str, Vec<&SourceEvidenceRow<'_>>> = BTreeMap::new();
+    for id in scope.children() {
+        b.charge(1)?;
+        let child = &evidence.rows()[id.ordinal() as usize];
+        b.link(*id, OwnedOriginTarget::Issue(obligation))?;
+        if child.occurrence().has_namespace_context() {
+            unknown_scope = true;
+            continue;
+        }
+        match child.occurrence().name() {
+            "Input" | "Placeholder" => {
+                match child.attribute("name").and_then(|v| v.decoded().ok()) {
+                    Some(name) if !name.is_empty() => inputs.entry(name).or_default().push(child),
+                    _ => unknown_scope = true,
+                }
+            }
+            // These source records declare modifiers, never scalar inputs.
+            "CustomModifierBlock" => {}
+            _ => unknown_scope = true,
+        }
+    }
+    if unknown_scope {
+        return Ok(());
+    }
+    let policy = b.rewards;
+    for rule in policy.rules() {
+        b.charge(1)?;
+        let mut candidates = vec![];
+        let mut shape_pending = false;
+        let admitted: BTreeSet<_> = rule
+            .recipe
+            .tiers
+            .iter()
+            .flat_map(|t| &t.selectors)
+            .map(|s| (s.name.as_str(), s.lane))
+            .collect();
+        b.charge(admitted.len())?;
+        for selector in rule.recipe.tiers.iter().flat_map(|tier| &tier.selectors) {
+            b.charge(1)?;
+            let attribute = match selector.lane {
+                ValueLane::InputBoolean => "boolean",
+                ValueLane::InputString => "string",
+                _ => return Err(NormalizationError::Policy("unsupported reward value lane")),
+            };
+            if let Some(rows) = inputs.get(selector.name.as_str()) {
+                for row in rows {
+                    b.charge(1)?;
+                    let attrs = &b.attributes[row.occurrence().id().ordinal() as usize];
+                    // A present wrong-shaped value must not be mistaken for
+                    // absence and activate a missing-value default. Placeholder
+                    // writes/precedence are deliberately not inferred here.
+                    let actual_lane = if attrs.contains_key("boolean") {
+                        Some(ValueLane::InputBoolean)
+                    } else if attrs.contains_key("string") {
+                        Some(ValueLane::InputString)
+                    } else {
+                        None
+                    };
+                    if row.occurrence().name() != "Input"
+                        || !row.children().is_empty()
+                        || row.attributes().len() != 2
+                        || attrs.len() != 2
+                        || !actual_lane
+                            .is_some_and(|lane| admitted.contains(&(selector.name.as_str(), lane)))
+                    {
+                        shape_pending = true;
+                        continue;
+                    }
+                    // Multiple admitted typed lanes for one name remain distinct
+                    // candidates. Another tier's lane does not invalidate this row.
+                    if actual_lane != Some(selector.lane) {
+                        continue;
+                    }
+                    if candidates.len() >= b.limits.value.max_candidates {
+                        return Err(NormalizationError::Limit("reward candidates"));
+                    }
+                    let (index, value) = attrs[attribute];
+                    candidates.push(ValueCandidate {
+                        selector,
+                        origin: SourceAttributeRef {
+                            occurrence: row.occurrence().id(),
+                            index,
+                        },
+                        value: match value.decoded() {
+                            Ok(v) => CandidateValue::Decoded(v),
+                            Err(error) => CandidateValue::Unavailable(error),
+                        },
+                    });
+                }
+            }
+        }
+        if shape_pending {
+            continue;
+        }
+        let decision = policy.decide(&rule.recipe.id, &candidates)?;
+        if let RewardOutcome::Reward {
+            definition,
+            parameters,
+        } = decision.outcome
+        {
+            b.charge(parameters.len())?;
+            let id = b.id()?;
+            b.link(source, OwnedOriginTarget::Reward(id))?;
+            if let ValueOutcome::Selected { origin, .. } = decision.value.outcome {
+                b.link(origin.occurrence, OwnedOriginTarget::Reward(id))?;
+            }
+            output.members.push(id);
+            draft.rewards.members.push(RewardDraft {
+                id,
+                definition: DraftField::from(definition),
+                parameters: complete(parameters.into_iter().map(Into::into).collect()),
+            });
+        }
+    }
     Ok(())
 }

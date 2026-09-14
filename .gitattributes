@@ -20,3 +20,7 @@ Cargo.lock text eol=lf
 /tests/fixtures/builds/breadth-20260908/*.xml -text -whitespace
 /tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt -text -whitespace
 /tests/fixtures/builds/breadth-20260908/*.txt -text -whitespace
+
+# Exact owned adapter fixtures and their recorded reference manifest.
+/crates/poe-optimizer-import/tests/fixtures/owned-quest-rewards-v1.json -text
+/crates/poe-optimizer-import/tests/fixtures/owned-reference/** -text

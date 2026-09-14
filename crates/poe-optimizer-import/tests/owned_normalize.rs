@@ -8,6 +8,7 @@ use poe_optimizer_import::{
     decode_build,
     owned_mapping::*,
     owned_normalize::*,
+    owned_reward_policy::*,
     owned_skill_catalog::*,
     owned_source::*,
     owned_value::*,
@@ -66,6 +67,7 @@ struct Artifacts {
     schema: OwnedDefinitionSchemaPackage,
     mapping: OwnedMappingIndex,
     roles: OwnedSkillRoleIndex,
+    rewards: OwnedRewardPolicy,
 }
 fn artifacts(mapped: bool) -> Artifacts {
     let limits = OwnedMappingLimits::default();
@@ -160,11 +162,13 @@ fn artifacts(mapped: bool) -> Artifacts {
         SkillCatalogLimits::default(),
     )
     .unwrap();
+    let rewards = empty_rewards(&mapping, &schema);
     Artifacts {
         registry,
         schema,
         mapping,
         roles,
+        rewards,
     }
 }
 fn replace_materialization(
@@ -252,6 +256,7 @@ fn add_active_sibling(artifacts: &mut Artifacts, materialization: OwnedGemMateri
     artifacts.schema = schema;
     artifacts.mapping = mapping;
     artifacts.roles = roles;
+    artifacts.rewards = empty_rewards(&artifacts.mapping, &artifacts.schema);
 }
 
 fn value_recipe(id: &str, attribute: &str, boolean: bool) -> ValueRecipeInput {
@@ -343,6 +348,7 @@ fn run(
             registry: &artifacts.registry,
             definitions: &artifacts.schema,
             roles: &artifacts.roles,
+            rewards: &artifacts.rewards,
         },
         &policy(),
         queries,
@@ -360,6 +366,7 @@ fn group(gems: &str) -> String {
 fn ids(target: &OwnedOriginTarget) -> InstanceId {
     match target {
         OwnedOriginTarget::Item(v) | OwnedOriginTarget::ItemReference(v) => v.instance_id(),
+        OwnedOriginTarget::Reward(v) => v.instance_id(),
         OwnedOriginTarget::Equipment(v) => v.instance_id(),
         OwnedOriginTarget::Gem(v) => v.instance_id(),
         OwnedOriginTarget::Skill(v) => v.instance_id(),
@@ -453,6 +460,7 @@ fn fresh_normalization_is_deterministic_above_source_watermark_and_keeps_input_i
             registry: &artifacts.registry,
             definitions: &artifacts.schema,
             roles: &artifacts.roles,
+            rewards: &artifacts.rewards,
         },
         &policy(),
         &queries(),
@@ -500,6 +508,7 @@ fn failure_and_overflow_do_not_advance_caller_allocator_or_mutate_artifacts() {
                 registry: &artifacts.registry,
                 definitions: &artifacts.schema,
                 roles: &artifacts.roles,
+                rewards: &artifacts.rewards,
             },
             &policy(),
             &queries(),
@@ -1112,6 +1121,7 @@ fn ambiguous_gem_mapping_retains_bound_candidates_without_inventing_a_physical_o
     artifacts.schema = schema;
     artifacts.mapping = mapping;
     artifacts.roles = roles;
+    artifacts.rewards = empty_rewards(&artifacts.mapping, &artifacts.schema);
     let source = source(&group(&format!("{ACTIVE}{SUPPORT}")), 0x31);
     let result = run(&source, &artifacts, &[]);
     let input = result.draft().input();
@@ -1170,7 +1180,8 @@ fn duplicate_requested_query_ids_reject_instead_of_dropping_rows() {
                 mappings: &artifacts.mapping,
                 registry: &artifacts.registry,
                 definitions: &artifacts.schema,
-                roles: &artifacts.roles
+                roles: &artifacts.roles,
+                rewards: &artifacts.rewards,
             },
             &policy(),
             &requested,
@@ -1337,5 +1348,261 @@ fn provider_only_or_unmapped_sibling_cannot_make_a_support_target_falsely_unique
             DraftSkillTarget::Pending(_)
         ));
         origin_integrity(&source, &result);
+    }
+}
+
+fn empty_rewards(
+    mapping: &OwnedMappingIndex,
+    schema: &OwnedDefinitionSchemaPackage,
+) -> OwnedRewardPolicy {
+    OwnedRewardPolicy::new(
+        RewardPolicyInput {
+            schema_version: OWNED_REWARD_POLICY_VERSION,
+            namespace: schema.input().namespace.clone(),
+            version: key("fixture-empty-rewards"),
+            definitions: schema.identity().clone(),
+            mapping: *mapping.identity(),
+            rules: vec![],
+        },
+        mapping,
+        schema,
+        RewardPolicyLimits::default(),
+    )
+    .unwrap()
+}
+
+// Synthetic content names deliberately differ from every game fixture. The same
+// normalizer must accept injected reward data without knowing any quest identity.
+fn with_reward_policy() -> Artifacts {
+    let mut a = artifacts(false);
+    let reward = a
+        .registry
+        .allocate_definition::<RewardDefinition>()
+        .unwrap();
+    let empty = DeclaredSlots {
+        parameters: DeclaredSet::complete(vec![]),
+        choices: DeclaredSet::complete(vec![]),
+        grants: DeclaredSet::complete(vec![]),
+        actors: DeclaredSet::complete(vec![]),
+        skill_grants: DeclaredSet::complete(vec![]),
+        outputs: DeclaredSet::complete(vec![]),
+        sockets: DeclaredSet::complete(vec![]),
+    };
+    let mut schema = a.schema.input().clone();
+    schema
+        .definitions
+        .push(DefinitionDescriptor::Reward(DefinitionEntry {
+            id: reward.clone(),
+            schema: SchemaState::Known(RewardSchema {
+                declarations: empty,
+            }),
+        }));
+    a.schema = OwnedDefinitionSchemaPackage::new(schema, OwnedSchemaLimits::default()).unwrap();
+    let selector = ExternalSelector::Definition(ExternalOwnerSelector::Reward {
+        key: SourceComponent::Text("caller-award".into()),
+    });
+    let mut mapping = a.mapping.input().clone();
+    mapping.registry = a.registry.identity().unwrap();
+    mapping.definitions = a.schema.identity().clone();
+    mapping.entries.push(MappingEntry {
+        source: selector.clone(),
+        outcome: MappingOutcome::Mapped {
+            target: subject(&reward),
+            basis: MappingBasis::Exact,
+        },
+    });
+    a.mapping = OwnedMappingIndex::new(
+        mapping,
+        &a.registry,
+        &a.schema,
+        OwnedMappingLimits::default(),
+    )
+    .unwrap();
+    let mut roles = a.roles.input().clone();
+    roles.mapping = *a.mapping.identity();
+    roles.definitions = a.schema.identity().clone();
+    a.roles = OwnedSkillRoleIndex::new(roles, &a.mapping, &a.schema, SkillCatalogLimits::default())
+        .unwrap();
+    let mut recipe = value_recipe("caller-reward-rule", "caller-toggle", true);
+    recipe.tiers[0].selectors[0].lane = ValueLane::InputBoolean;
+    recipe.missing = MissingValuePolicy::Explicit {
+        value: ParameterValue::Boolean(true),
+    };
+    a.rewards = OwnedRewardPolicy::new(
+        RewardPolicyInput {
+            schema_version: OWNED_REWARD_POLICY_VERSION,
+            namespace: ns(),
+            version: key("caller-policy"),
+            definitions: a.schema.identity().clone(),
+            mapping: *a.mapping.identity(),
+            rules: vec![RewardRuleInput {
+                recipe,
+                outcomes: vec![
+                    RewardOutcomeCase {
+                        when: RewardValue::Boolean(false),
+                        outcome: RewardTemplate::None,
+                    },
+                    RewardOutcomeCase {
+                        when: RewardValue::Boolean(true),
+                        outcome: RewardTemplate::Reward {
+                            selector,
+                            parameters: vec![],
+                        },
+                    },
+                ],
+            }],
+        },
+        &a.mapping,
+        &a.schema,
+        RewardPolicyLimits::default(),
+    )
+    .unwrap();
+    a
+}
+
+#[test]
+fn rewards_are_injected_independent_config_contributions_and_never_close_catalogs() {
+    let a = with_reward_policy();
+    let source = source(
+        r#"<PathOfBuilding2><Config activeConfigSet="2"><ConfigSet id="1"><Input name="caller-toggle" boolean="true"/></ConfigSet><ConfigSet id="2"><Input name="caller-toggle" boolean="false"/></ConfigSet><ConfigSet id="3"/></Config></PathOfBuilding2>"#,
+        99,
+    );
+    let normalized = run(&source, &a, &[]);
+    let d = normalized.draft().input();
+    assert_eq!(d.rewards.members.len(), 2);
+    assert_eq!(
+        d.choice_presets
+            .members
+            .iter()
+            .map(|p| p.rewards.members.len())
+            .collect::<Vec<_>>(),
+        vec![1, 0, 1]
+    );
+    assert_ne!(d.rewards.members[0].id, d.rewards.members[1].id);
+    assert_eq!(
+        d.rewards.members[0].definition,
+        d.rewards.members[1].definition
+    );
+    assert!(matches!(
+        d.rewards.completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    assert!(
+        d.choice_presets
+            .members
+            .iter()
+            .all(|p| matches!(p.rewards.completion, DraftListCompletion::Pending { .. }))
+    );
+    assert_eq!(normalized.sidecar().reward_policy, *a.rewards.identity());
+    let validation = normalized
+        .draft()
+        .validate_limits(DraftLimits::default())
+        .unwrap();
+    let issues: BTreeSet<_> = validation.issues.iter().map(|i| i.id).collect();
+    for origin in &normalized.sidecar().origins {
+        for link in &origin.links {
+            if let OwnedOriginTarget::Issue(id) = link {
+                assert!(issues.contains(id));
+            }
+        }
+    }
+}
+
+#[test]
+fn malformed_or_unknown_config_presence_never_activates_reward_defaults() {
+    let a = with_reward_policy();
+    for body in [
+        r#"<Input name="caller-toggle" boolean="invalid"/>"#,
+        r#"<Input name="caller-toggle" string="true"/>"#,
+        r#"<Input name="caller-toggle"/>"#,
+        r#"<Input name="caller-toggle" boolean="true" number="1"/>"#,
+        r#"<Input name="caller-toggle" boolean="true"><Future/></Input>"#,
+        r#"<Input boolean="true"/>"#,
+        r#"<Input name="" boolean="true"/>"#,
+        r#"<Placeholder name="caller-toggle" boolean="true"/>"#,
+        r#"<Future/>"#,
+        r#"<x:Input xmlns:x="future" name="caller-toggle" boolean="true"/>"#,
+    ] {
+        let source = source(
+            &format!(
+                r#"<PathOfBuilding2><Config><ConfigSet id="1">{body}</ConfigSet></Config></PathOfBuilding2>"#
+            ),
+            98,
+        );
+        let normalized = run(&source, &a, &[]);
+        assert!(
+            normalized.draft().input().rewards.members.is_empty(),
+            "{body}"
+        );
+        assert!(matches!(
+            normalized.draft().input().choice_presets.members[0]
+                .rewards
+                .completion,
+            DraftListCompletion::Pending { .. }
+        ));
+    }
+    // A separately named placeholder cannot overwrite this recipe's input.
+    let source = source(
+        r#"<PathOfBuilding2><Config><Input name="caller-toggle" boolean="true"/><Placeholder name="unrelated" number="1"/></Config></PathOfBuilding2>"#,
+        97,
+    );
+    assert_eq!(
+        run(&source, &a, &[]).draft().input().rewards.members.len(),
+        1
+    );
+}
+
+#[test]
+fn reward_binding_rejects_stale_policy_before_any_normalization_is_returned() {
+    let mut a = with_reward_policy();
+    a.rewards = artifacts(false).rewards;
+    let source = source("<PathOfBuilding2/>", 96);
+    let evidence =
+        SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
+    assert!(matches!(
+        normalize_fresh(
+            &evidence,
+            *source.allocator_state(),
+            NormalizationArtifacts {
+                mappings: &a.mapping,
+                registry: &a.registry,
+                definitions: &a.schema,
+                roles: &a.roles,
+                rewards: &a.rewards,
+            },
+            &policy(),
+            &[],
+            NormalizationLimits::default()
+        ),
+        Err(NormalizationError::Reward(RewardPolicyError::Binding))
+    ));
+}
+
+#[test]
+fn reward_recipes_can_select_same_name_across_admitted_typed_lanes() {
+    let mut a = with_reward_policy();
+    let mut input = a.rewards.input().clone();
+    let boolean = input.rules[0].recipe.tiers[0].clone();
+    let mut string = boolean.clone();
+    string.selectors[0].lane = ValueLane::InputString;
+    input.rules[0].recipe.tiers = vec![string, boolean];
+    a.rewards = OwnedRewardPolicy::new(input, &a.mapping, &a.schema, RewardPolicyLimits::default())
+        .unwrap();
+    for body in [
+        r#"<Input name="caller-toggle" string="true"/>"#,
+        r#"<Input name="caller-toggle" boolean="true"/>"#,
+        r#"<Input name="caller-toggle" string="true"/><Input name="caller-toggle" boolean="false"/>"#,
+    ] {
+        let source = source(
+            &format!(
+                r#"<PathOfBuilding2><Config><ConfigSet id="1">{body}</ConfigSet></Config></PathOfBuilding2>"#
+            ),
+            94,
+        );
+        assert_eq!(
+            run(&source, &a, &[]).draft().input().rewards.members.len(),
+            1,
+            "{body}"
+        );
     }
 }

@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "scope": "exact_recorded_reference_reports",
+  "whole_build_parity": "not_established",
+  "expectations_digest_format": "sha256_lf_normalized_bytes",
+  "expectations_sha256": "f0c10e148523d1d1f9969a844b266e07ca1c1bdbe7d3814aba73b55181840a25",
+  "cases": [
+    {
+      "id": "original-01-saved-pinnacle",
+      "source_line": 1,
+      "file": "original-01-saved-pinnacle.report.json.gz",
+      "source_xml_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+      "report_sha256": "6c0e57013e3dd20e16efbab1df6f922d9e8195b73a525e1d33bc905964963992",
+      "report_bytes": 439653,
+      "gzip_sha256": "c2efcc7df6c9257d07d293b389a575b1fc69c1d081de421469d25c18ca1f256b",
+      "gzip_bytes": 42913,
+      "report_schema_version": 3,
+      "measurement_rows": 22
+    },
+    {
+      "id": "original-02-saved-pinnacle",
+      "source_line": 2,
+      "file": "original-02-saved-pinnacle.report.json.gz",
+      "source_xml_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+      "report_sha256": "63d07aee76efb56e5c2a9f2352c748dd962ad21a77eb8e53e028e507fdfca7f2",
+      "report_bytes": 577688,
+      "gzip_sha256": "0eb9e8e48f2336589eb80f37a1a9eab4f12e585cdd55ec936a5b8a9da34a3a16",
+      "gzip_bytes": 52152,
+      "report_schema_version": 3,
+      "measurement_rows": 22
+    },
+    {
+      "id": "original-03-saved-pinnacle",
+      "source_line": 3,
+      "file": "original-03-saved-pinnacle.report.json.gz",
+      "source_xml_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490",
+      "report_sha256": "a84a69a0f363db0b92c965bcfefc7694d7b3508ee9e41734eae2efc75240c423",
+      "report_bytes": 403566,
+      "gzip_sha256": "c1e148ffc89c3b7e29f3a430f875aea07137c24236aeb34fbe7087dc19432ada",
+      "gzip_bytes": 42061,
+      "report_schema_version": 3,
+      "measurement_rows": 22
+    },
+    {
+      "id": "original-04-saved-pinnacle",
+      "source_line": 4,
+      "file": "original-04-saved-pinnacle.report.json.gz",
+      "source_xml_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711",
+      "report_sha256": "e4252367d34da46bc2f0dd06a4a5083cdc32b56f3235797ddbbd9802ea595ae9",
+      "report_bytes": 425783,
+      "gzip_sha256": "17665355fae2a9f83242f21223f42240621837ae35d4597cbd7f679c877c0801",
+      "gzip_bytes": 43035,
+      "report_schema_version": 3,
+      "measurement_rows": 22
+    },
+    {
+      "id": "original-05-saved-pinnacle",
+      "source_line": 5,
+      "file": "original-05-saved-pinnacle.report.json.gz",
+      "source_xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "report_sha256": "a0dbdd09e5b3cf65a92dc5058443734988dfe9c2fc95872931e8aee01c373d4e",
+      "report_bytes": 460303,
+      "gzip_sha256": "a78239021f17163de85c86b3f8141f381989556d1a4218b0cc13d6885f684630",
+      "gzip_bytes": 43309,
+      "report_schema_version": 3,
+      "measurement_rows": 22
+    }
+  ]
+}

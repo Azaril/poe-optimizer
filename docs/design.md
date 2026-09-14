@@ -13,6 +13,10 @@ before extending native behavior. Earlier source-program and loader designs docu
 or historical implementation, not requirements to reproduce PoB internals in the target.
 The [owned composition and binding contract](owned-binding.md) defines the concrete input,
 provider, schema and offline-identity seams used by that architecture.
+External format conversion is an offline tooling concern, including finite default/outcome
+policies. The runtime package must express game-domain effects and dependencies without
+embedding PoB callbacks or its UI state. Reference projection metadata stays in a separate
+comparison ledger; it cannot become objective data or invent native actor availability.
 The [owned draft boundary](owned-drafts.md) keeps partial authoring/import state outside
 complete evaluation and gives CLI, GUI and web hosts the same explicit finalization API.
 

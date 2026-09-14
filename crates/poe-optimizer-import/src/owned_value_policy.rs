@@ -151,7 +151,8 @@ fn charge(
     Ok(())
 }
 impl ValuePolicyLimits {
-    fn validate(self) -> Result<(), ValuePolicyError> {
+    pub fn validate(self) -> Result<(), ValuePolicyError> {
+        self.value.validate()?;
         let hard = Self::default();
         for (resource, actual, maximum) in [
             (ValuePolicyResource::Tiers, self.max_tiers, hard.max_tiers),
