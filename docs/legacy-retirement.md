@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-09-14 for the owned input/schema/inventory checkpoint after `da218cd`. This is a living companion to
+Updated 2026-09-14 for the owned composition/binding/mapping checkpoint after `9aff988`. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -48,6 +48,19 @@ retirement dependency is explicit: definition binding, five-case owned normaliza
 general effect resolution must preserve the current useful numerical tests before legacy
 request/profile/package consumers can be removed. New numerical work must use those owned
 contracts; the legacy UI/source VM frontier remains paused.
+
+## Composition/binding/mapping checkpoint
+
+Owned projects now compose independently selected presets, and the binder consumes only an
+injected schema index plus owned request. Offline registry/mapping lives in Import and reuses
+Core typed addresses. Its external selectors never become Core runtime IDs. The thin
+`bind-owned-input` CLI uses the same library boundary intended for GUI/web/search clients.
+These are replacement prerequisites; they do not yet migrate a legacy numerical caller.
+Removed the unused `ValidatedMaceWeapon::is_legacy_normal_payload` method and only its
+classification-specific assertions. The tests still check exact header spelling/rejection,
+quality values, modifier capture and equip-level behavior. No production caller used it.
+The next retirement dependency remains all-five normalization plus shared effect resolution.
+Do not delete unique numerical goldens or add another named-skill profile to bridge that gap.
 
 ## Finite-catalog retirement checkpoint
 

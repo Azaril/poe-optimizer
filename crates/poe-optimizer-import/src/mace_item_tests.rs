@@ -58,7 +58,6 @@ fn parses_reviewed_local_families_and_retains_exact_ordered_roll_evidence() {
         assert_eq!(line.source, MODS[index]);
     }
     assert_eq!(weapon.diagnostic()["affix_legality_verified"], false);
-    assert!(!weapon.is_legacy_normal_payload());
 }
 #[test]
 fn line_edge_whitespace_and_blank_lines_preserve_bytes_hashes_and_locations() {
@@ -199,12 +198,10 @@ fn authored_equip_level_overrides_base_level_without_using_item_level() {
     assert_eq!(base.item_level(), 100);
     assert_eq!(base.explicit_level_requirement(), None);
     assert_eq!(base.effective_level_requirement(), 27);
-    assert!(base.is_legacy_normal_payload());
     for level in [0, 1, 26, 27, 60, 100] {
         let text = NORMAL.replace("Implicits: 0", &format!("LevelReq: {level}\nImplicits: 0"));
         let item = parse_mace_item(&text, &data).unwrap();
         assert_eq!(item.effective_level_requirement(), level);
-        assert!(!item.is_legacy_normal_payload());
     }
 }
 #[test]
@@ -296,14 +293,12 @@ fn xml_item_source_helper_retains_crlf_and_decodes_only_compatible_complete_text
 }
 
 #[test]
-fn canonical_metadata_headers_preserve_legacy_scope_without_restricting_modifier_capture_spelling()
-{
+fn canonical_metadata_headers_do_not_restrict_modifier_capture_spelling() {
     let data = data();
-    assert!(
-        parse_mace_item(NORMAL, &data)
-            .unwrap()
-            .is_legacy_normal_payload()
-    );
+    let normal = parse_mace_item(NORMAL, &data).unwrap();
+    assert_eq!(normal.rarity(), MaceItemRarity::Normal);
+    assert_eq!(normal.item_level(), 1);
+    assert_eq!(normal.quality(), 0);
     for source in [
         NORMAL.replace("Item Level: 1", "Item Level: 01"),
         NORMAL.replace("Item Level: 1", "Item Level: 001"),
@@ -319,11 +314,7 @@ fn canonical_metadata_headers_preserve_legacy_scope_without_restricting_modifier
     }
     for quality in [0, 1, 20] {
         let source = NORMAL.replace("Quality: 0", &format!("Quality: {quality}"));
-        assert!(
-            parse_mace_item(&source, &data)
-                .unwrap()
-                .is_legacy_normal_payload()
-        );
+        assert_eq!(parse_mace_item(&source, &data).unwrap().quality(), quality);
     }
     let source = format!("{RARE}\n020% increased Attack Speed");
     let item = parse_mace_item(&source, &data).unwrap();

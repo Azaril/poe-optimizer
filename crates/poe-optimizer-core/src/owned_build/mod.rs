@@ -11,7 +11,11 @@ pub use codec::{CodecError, OwnedDocument, decode_owned, encode_owned};
 pub use records::*;
 use serde::Serialize;
 pub use structure::{OccurrenceKind, OwnedInputLimits, StructuralError, StructuralErrorKind};
-pub(crate) use structure::{build_occurrences, canonicalize_item_records, validate_item_records};
+pub(crate) use structure::{
+    RecordTables, RecordTablesMut, build_occurrences, canonical_choice_owner, canonicalize_choices,
+    canonicalize_item_records, canonicalize_record_tables, validate_item_records,
+    validate_record_tables,
+};
 
 pub const OWNED_INPUT_SCHEMA_VERSION: u32 = 1;
 
@@ -93,6 +97,14 @@ impl OwnedEvaluationRequest {
             scenario,
             queries,
         })
+    }
+    pub fn validate_limits(&self, limits: OwnedInputLimits) -> Result<(), StructuralError> {
+        structure::validate_request(
+            self.build.input(),
+            self.scenario.input(),
+            self.queries.input(),
+            limits,
+        )
     }
     pub fn build(&self) -> &BuildSpec {
         &self.build

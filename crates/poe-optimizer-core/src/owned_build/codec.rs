@@ -1,5 +1,6 @@
 use super::*;
 use crate::owned_inventory::{InventoryError, InventoryInput, InventorySnapshot};
+use crate::owned_project::{BuildProject, ProjectError, ProjectInput};
 use serde::{Deserialize, Serialize};
 use std::{fmt, io};
 
@@ -9,6 +10,7 @@ use std::{fmt, io};
 pub enum OwnedDocument {
     Build(Box<BuildSpec>),
     Inventory(Box<InventorySnapshot>),
+    Project(Box<BuildProject>),
     Scenario(ScenarioSpec),
     Query(QuerySpec),
     Request(Box<OwnedEvaluationRequest>),
@@ -18,6 +20,7 @@ pub enum OwnedDocument {
 pub enum CodecError {
     Structure(StructuralError),
     Inventory(InventoryError),
+    Project(ProjectError),
     Json(serde_json::Error),
     UnsupportedVersion(u32),
     TooLarge { maximum: usize },
@@ -27,6 +30,7 @@ impl fmt::Display for CodecError {
         match self {
             Self::Structure(error) => error.fmt(f),
             Self::Inventory(error) => error.fmt(f),
+            Self::Project(error) => error.fmt(f),
             Self::Json(error) => error.fmt(f),
             Self::UnsupportedVersion(version) => {
                 write!(f, "unsupported owned input schema version {version}")
@@ -40,6 +44,7 @@ impl std::error::Error for CodecError {
         match self {
             Self::Structure(e) => Some(e),
             Self::Inventory(e) => Some(e),
+            Self::Project(e) => Some(e),
             Self::Json(e) => Some(e),
             _ => None,
         }
@@ -48,6 +53,11 @@ impl std::error::Error for CodecError {
 impl From<StructuralError> for CodecError {
     fn from(value: StructuralError) -> Self {
         Self::Structure(value)
+    }
+}
+impl From<ProjectError> for CodecError {
+    fn from(value: ProjectError) -> Self {
+        Self::Project(value)
     }
 }
 impl From<InventoryError> for CodecError {
@@ -77,6 +87,7 @@ struct WireInput {
 enum DocumentInput {
     Build(Box<BuildInput>),
     Inventory(Box<InventoryInput>),
+    Project(Box<ProjectInput>),
     Scenario(ScenarioInput),
     Query(QueryInput),
     Request(Box<OwnedRequestInput>),
@@ -104,6 +115,9 @@ pub fn decode_owned(bytes: &[u8], limits: OwnedInputLimits) -> Result<OwnedDocum
     Ok(match wire.document {
         DocumentInput::Build(input) => {
             OwnedDocument::Build(Box::new(BuildSpec::new(*input, limits)?))
+        }
+        DocumentInput::Project(input) => {
+            OwnedDocument::Project(Box::new(BuildProject::new(*input, limits)?))
         }
         DocumentInput::Inventory(input) => {
             OwnedDocument::Inventory(Box::new(InventorySnapshot::new(*input, limits)?))
@@ -133,6 +147,7 @@ pub fn encode_owned(
     match document {
         OwnedDocument::Build(input) => structure::validate_build(input.input(), limits)?,
         OwnedDocument::Inventory(input) => input.validate_limits(limits)?,
+        OwnedDocument::Project(input) => input.validate_limits(limits)?,
         OwnedDocument::Scenario(input) => {
             structure::validate_scenario(input.input(), limits, None)?
         }

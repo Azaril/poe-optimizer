@@ -61,6 +61,12 @@ pub enum OccurrenceKind {
     SkillUse,
     SupportAssignment,
     PayloadLink,
+    CharacterPreset,
+    EquipmentPreset,
+    AllocationPreset,
+    SkillPreset,
+    ChoicePreset,
+    SavedVariant,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -101,6 +107,88 @@ fn error(path: &str, kind: StructuralErrorKind) -> StructuralError {
     }
 }
 type Result<T = ()> = std::result::Result<T, StructuralError>;
+
+/// Borrowed occurrence registries, without a selected character or preset/default.
+#[derive(Clone, Copy)]
+pub(crate) struct RecordTables<'a> {
+    pub weapon_loadouts: &'a [WeaponLoadoutId],
+    pub rewards: &'a [RewardSelection],
+    pub items: &'a [ItemRecord],
+    pub gems: &'a [GemInstance],
+    pub equipment: &'a [EquipmentUse],
+    pub allocations: &'a [Allocation],
+    pub skills: &'a [SkillUse],
+    pub supports: &'a [SupportAssignment],
+    pub payload_links: &'a [PayloadLink],
+}
+impl<'a> RecordTables<'a> {
+    fn from_build(build: &'a BuildInput) -> Self {
+        Self {
+            weapon_loadouts: &build.weapon_loadouts,
+            rewards: &build.character.rewards,
+            items: &build.items,
+            gems: &build.gems,
+            equipment: &build.equipment,
+            allocations: &build.allocations,
+            skills: &build.skills,
+            supports: &build.supports,
+            payload_links: &build.payload_links,
+        }
+    }
+}
+pub(crate) struct RecordTablesMut<'a> {
+    pub weapon_loadouts: &'a mut [WeaponLoadoutId],
+    pub rewards: &'a mut [RewardSelection],
+    pub items: &'a mut [ItemRecord],
+    pub gems: &'a mut [GemInstance],
+    pub equipment: &'a mut [EquipmentUse],
+    pub allocations: &'a mut [Allocation],
+    pub skills: &'a mut [SkillUse],
+    pub supports: &'a mut [SupportAssignment],
+    pub payload_links: &'a mut [PayloadLink],
+}
+pub(crate) struct RecordTableValidation {
+    pub entries: usize,
+    pub occurrences: Vec<(InstanceId, OccurrenceKind)>,
+}
+
+/// Validate every occurrence and choice group once against one shared membership map.
+/// Choice groups are alternatives: duplicates are rejected within each group, while
+/// allocation/group cross-selection conflicts are checked by the final BuildSpec.
+pub(crate) fn validate_record_tables(
+    namespace: &GameVersionNamespace,
+    allocator: InstanceAllocatorState,
+    tables: RecordTables<'_>,
+    choice_groups: &[&[MechanicChoice]],
+    additional_occurrences: &[(InstanceId, OccurrenceKind)],
+    limits: OwnedInputLimits,
+) -> Result<RecordTableValidation> {
+    let mut check = Check::new(namespace, limits, Some(allocator))?;
+    check.register_tables(tables)?;
+    // Extra occurrences are metadata across actual bounded project collections.
+    if additional_occurrences.len() > check.remaining {
+        return Err(error(
+            "additional_occurrences",
+            StructuralErrorKind::LimitExceeded,
+        ));
+    }
+    check.remaining -= additional_occurrences.len();
+    for (i, (id, kind)) in additional_occurrences.iter().enumerate() {
+        check.register(&format!("additional_occurrences[{i}]"), *id, *kind)?;
+    }
+    check.record_values(tables)?;
+    for choices in choice_groups {
+        check.mechanic_choices(choices, BTreeSet::new())?;
+    }
+    Ok(RecordTableValidation {
+        entries: limits.max_entries - check.remaining,
+        occurrences: check
+            .members
+            .expect("registered record occurrences")
+            .into_iter()
+            .collect(),
+    })
+}
 
 struct Check<'a> {
     namespace: &'a GameVersionNamespace,
@@ -361,7 +449,7 @@ impl<'a> Check<'a> {
         }
         Ok(())
     }
-    fn build(&mut self, build: &BuildInput) -> Result {
+    fn register_tables(&mut self, tables: RecordTables<'_>) -> Result {
         self.members = Some(BTreeMap::new());
         // Register all definitions of occurrences before checking references, so
         // forward references work but domain-confused or dangling values do not.
@@ -378,45 +466,45 @@ impl<'a> Check<'a> {
             }};
         }
         register!(
-            &build.weapon_loadouts,
+            tables.weapon_loadouts,
             "build.weapon_loadouts",
             Loadout,
             |v: &WeaponLoadoutId| *v
         );
         register!(
-            &build.character.rewards,
+            tables.rewards,
             "build.character.rewards",
             Reward,
             |v: &RewardSelection| v.id
         );
-        self.register_item_records("build.items", &build.items)?;
-        register!(&build.gems, "build.gems", Gem, |v: &GemInstance| v.id);
+        self.register_item_records("build.items", tables.items)?;
+        register!(tables.gems, "build.gems", Gem, |v: &GemInstance| v.id);
         register!(
-            &build.equipment,
+            tables.equipment,
             "build.equipment",
             EquipmentUse,
             |v: &EquipmentUse| v.id
         );
         register!(
-            &build.allocations,
+            tables.allocations,
             "build.allocations",
             Allocation,
             |v: &Allocation| v.id
         );
-        register!(&build.skills, "build.skills", SkillUse, |v: &SkillUse| v.id);
+        register!(tables.skills, "build.skills", SkillUse, |v: &SkillUse| v.id);
         register!(
-            &build.supports,
+            tables.supports,
             "build.supports",
             SupportAssignment,
             |v: &SupportAssignment| v.id
         );
         register!(
-            &build.payload_links,
+            tables.payload_links,
             "build.payload_links",
             PayloadLink,
             |v: &PayloadLink| v.id
         );
-        self.modifier_items = build
+        self.modifier_items = tables
             .items
             .iter()
             .flat_map(|item| {
@@ -425,21 +513,15 @@ impl<'a> Check<'a> {
                     .map(move |modifier| (modifier.id, item.id))
             })
             .collect();
-        self.equipment_items = build
+        self.equipment_items = tables
             .equipment
             .iter()
             .map(|equipment| (equipment.id, equipment.item))
             .collect();
-        self.reference(
-            "build.active_weapon_loadout",
-            build.active_weapon_loadout,
-            OccurrenceKind::Loadout,
-        )?;
-        self.definition("build.character.class", &build.character.class)?;
-        if let Some(ascendancy) = &build.character.ascendancy {
-            self.definition("build.character.ascendancy", ascendancy)?;
-        }
-        for (i, reward) in build.character.rewards.iter().enumerate() {
+        Ok(())
+    }
+    fn record_values(&mut self, tables: RecordTables<'_>) -> Result {
+        for (i, reward) in tables.rewards.iter().enumerate() {
             let path = format!("build.character.rewards[{i}]");
             self.definition(&path, &reward.definition)?;
             self.parameters(
@@ -448,8 +530,8 @@ impl<'a> Check<'a> {
                 &SlotOwnerDefId::Reward(reward.definition.clone()),
             )?;
         }
-        self.item_record_values("build.items", &build.items)?;
-        for (i, gem) in build.gems.iter().enumerate() {
+        self.item_record_values("build.items", tables.items)?;
+        for (i, gem) in tables.gems.iter().enumerate() {
             let path = format!("build.gems[{i}]");
             self.definition(&path, &gem.definition)?;
             self.parameters(
@@ -459,7 +541,7 @@ impl<'a> Check<'a> {
             )?;
             self.quality(&path, &gem.quality)?;
         }
-        for (i, equipment) in build.equipment.iter().enumerate() {
+        for (i, equipment) in tables.equipment.iter().enumerate() {
             let path = format!("build.equipment[{i}]");
             self.reference(&path, equipment.item, OccurrenceKind::Item)?;
             self.scope(&path, &equipment.scope)?;
@@ -475,9 +557,8 @@ impl<'a> Check<'a> {
                 }
             }
         }
-        check_containment(&build.equipment)?;
-        let mut assigned_choices = BTreeSet::new();
-        for (i, allocation) in build.allocations.iter().enumerate() {
+        check_containment(tables.equipment)?;
+        for (i, allocation) in tables.allocations.iter().enumerate() {
             let path = format!("build.allocations[{i}]");
             self.definition(&path, &allocation.node)?;
             self.definition(&path, &allocation.pool)?;
@@ -486,15 +567,15 @@ impl<'a> Check<'a> {
                 self.provider(&path, provider)?;
             }
             self.collection(&path, allocation.choices.len())?;
+            let mut assigned_choices = BTreeSet::new();
             for choice in &allocation.choices {
                 self.choice(&path, choice)?;
-                if !assigned_choices.insert((ChoiceOwner::Allocation(allocation.id), &choice.slot))
-                {
+                if !assigned_choices.insert(&choice.slot) {
                     return Err(error(&path, StructuralErrorKind::DuplicateAssignment));
                 }
             }
         }
-        for (i, skill) in build.skills.iter().enumerate() {
+        for (i, skill) in tables.skills.iter().enumerate() {
             let path = format!("build.skills[{i}]");
             self.scope(&path, &skill.scope)?;
             match &skill.source {
@@ -502,28 +583,62 @@ impl<'a> Check<'a> {
                 AuthoredSkillSource::Direct(id) => self.definition(&path, id)?,
             }
         }
-        for (i, support) in build.supports.iter().enumerate() {
+        for (i, support) in tables.supports.iter().enumerate() {
             let path = format!("build.supports[{i}]");
             self.reference(&path, support.support, OccurrenceKind::Gem)?;
             self.skill(&path, &support.target)?;
         }
-        for (i, link) in build.payload_links.iter().enumerate() {
+        for (i, link) in tables.payload_links.iter().enumerate() {
             let path = format!("build.payload_links[{i}]");
             self.reference(&path, link.container, OccurrenceKind::SkillUse)?;
             self.reference(&path, link.payload, OccurrenceKind::SkillUse)?;
             self.definition(&path, &link.role)?;
             // Whether a role is containment or a trigger is definition semantics.
         }
-        self.collection("build.choices", build.choices.len())?;
-        for (i, choice) in build.choices.iter().enumerate() {
+        Ok(())
+    }
+    fn mechanic_choices(
+        &mut self,
+        choices: &[MechanicChoice],
+        mut assigned_choices: BTreeSet<(ChoiceOwner, DeclaredSlot<ChoiceSlotDefId>)>,
+    ) -> Result {
+        self.collection("build.choices", choices.len())?;
+        for (i, choice) in choices.iter().enumerate() {
             let path = format!("build.choices[{i}]");
             self.choice_owner(&path, &choice.owner)?;
             self.choice(&path, &choice.choice)?;
-            if !assigned_choices.insert((choice.owner.clone(), &choice.choice.slot)) {
+            if !assigned_choices.insert((
+                canonical_choice_owner(&choice.owner),
+                choice.choice.slot.clone(),
+            )) {
                 return Err(error(&path, StructuralErrorKind::DuplicateAssignment));
             }
         }
         Ok(())
+    }
+    fn build(&mut self, build: &BuildInput) -> Result {
+        let tables = RecordTables::from_build(build);
+        self.register_tables(tables)?;
+        self.reference(
+            "build.active_weapon_loadout",
+            build.active_weapon_loadout,
+            OccurrenceKind::Loadout,
+        )?;
+        self.definition("build.character.class", &build.character.class)?;
+        if let Some(ascendancy) = &build.character.ascendancy {
+            self.definition("build.character.ascendancy", ascendancy)?;
+        }
+        self.record_values(tables)?;
+        let assigned_choices = build
+            .allocations
+            .iter()
+            .flat_map(|allocation| {
+                allocation.choices.iter().map(move |choice| {
+                    (ChoiceOwner::Allocation(allocation.id), choice.slot.clone())
+                })
+            })
+            .collect();
+        self.mechanic_choices(&build.choices, assigned_choices)
     }
     fn scenario(&mut self, scenario: &ScenarioInput) -> Result {
         self.namespace("scenario.game_version", &scenario.game_version)?;
@@ -693,35 +808,66 @@ fn canonicalize_scope(scope: &mut LoadoutScope) {
 fn canonicalize_parameters(parameters: &mut [ParameterAssignment]) {
     parameters.sort_by(|a, b| a.slot.cmp(&b.slot));
 }
-pub(crate) fn canonicalize_build(build: &mut BuildInput) {
-    build.weapon_loadouts.sort();
-    build.character.rewards.sort_by_key(|v| v.id);
-    for reward in &mut build.character.rewards {
+pub(crate) fn canonicalize_record_tables(tables: RecordTablesMut<'_>) {
+    tables.weapon_loadouts.sort();
+    tables.rewards.sort_by_key(|v| v.id);
+    for reward in tables.rewards {
         canonicalize_parameters(&mut reward.parameters);
     }
-    canonicalize_item_records(&mut build.items);
-    build.gems.sort_by_key(|v| v.id);
-    for gem in &mut build.gems {
+    canonicalize_item_records(tables.items);
+    tables.gems.sort_by_key(|v| v.id);
+    for gem in tables.gems {
         canonicalize_parameters(&mut gem.parameters);
     }
-    build.equipment.sort_by_key(|v| v.id);
-    for item in &mut build.equipment {
+    tables.equipment.sort_by_key(|v| v.id);
+    for item in tables.equipment {
         canonicalize_scope(&mut item.scope);
     }
-    build.allocations.sort_by_key(|v| v.id);
-    for allocation in &mut build.allocations {
+    tables.allocations.sort_by_key(|v| v.id);
+    for allocation in tables.allocations {
         canonicalize_scope(&mut allocation.scope);
         allocation.choices.sort_by(|a, b| a.slot.cmp(&b.slot));
     }
-    build.skills.sort_by_key(|v| v.id);
-    for skill in &mut build.skills {
+    tables.skills.sort_by_key(|v| v.id);
+    for skill in tables.skills {
         canonicalize_scope(&mut skill.scope);
     }
-    build.supports.sort_by_key(|v| v.id);
-    build.payload_links.sort_by_key(|v| v.id);
-    build
-        .choices
-        .sort_by(|a, b| (&a.owner, &a.choice.slot).cmp(&(&b.owner, &b.choice.slot)));
+    tables.supports.sort_by_key(|v| v.id);
+    tables.payload_links.sort_by_key(|v| v.id);
+}
+/// Logical choice identity only. Preserve the authored owner in serialized input.
+/// Empty direct-provider aliases denote one port; paths/actions/generated selectors
+/// and all other provider roots remain distinct semantic addresses.
+pub(crate) fn canonical_choice_owner(owner: &ChoiceOwner) -> ChoiceOwner {
+    if let ChoiceOwner::Provider(provider) = owner
+        && provider.grant_path.is_empty()
+    {
+        match provider.root {
+            ProviderRoot::Character => return ChoiceOwner::Character,
+            ProviderRoot::EquipmentUse(id) => return ChoiceOwner::EquipmentUse(id),
+            ProviderRoot::Allocation(id) => return ChoiceOwner::Allocation(id),
+            ProviderRoot::SkillUse(id) => return ChoiceOwner::Skill(SkillTarget::Authored(id)),
+            _ => {}
+        }
+    }
+    owner.clone()
+}
+pub(crate) fn canonicalize_choices(choices: &mut [MechanicChoice]) {
+    choices.sort_by(|a, b| (&a.owner, &a.choice.slot).cmp(&(&b.owner, &b.choice.slot)));
+}
+pub(crate) fn canonicalize_build(build: &mut BuildInput) {
+    canonicalize_record_tables(RecordTablesMut {
+        weapon_loadouts: &mut build.weapon_loadouts,
+        rewards: &mut build.character.rewards,
+        items: &mut build.items,
+        gems: &mut build.gems,
+        equipment: &mut build.equipment,
+        allocations: &mut build.allocations,
+        skills: &mut build.skills,
+        supports: &mut build.supports,
+        payload_links: &mut build.payload_links,
+    });
+    canonicalize_choices(&mut build.choices);
 }
 pub(crate) fn canonicalize_scenario(scenario: &mut ScenarioInput) {
     scenario

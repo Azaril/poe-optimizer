@@ -12,7 +12,7 @@ The source audit is in `runs/owned-build-contract-01/source-audit.md`.
 `core::owned_build` implements raw `BuildInput`, `ScenarioInput`, `QueryInput` records,
 private immutable `BuildSpec`, `ScenarioSpec`, `QuerySpec` wrappers and an
 `OwnedEvaluationRequest`. Constructors validate structure; the version-1 JSON codec
-roundtrips standalone documents (including inventory) and combined requests. `check-owned-input` is the first
+roundtrips standalone documents (including inventory and projects) and combined requests. `check-owned-input` is the first
 CLI consumer and can write canonical owned JSON without XML, PoB or a game package.
 
 `core::owned_inventory` adds immutable, self-contained stock, canonical build/inventory
@@ -20,14 +20,15 @@ record unions and exact candidate-bound availability assignments. It reuses the 
 item-record validation as BuildSpec. `core::owned_content` provides bounded, domain-separated
 snapshot digests; content claims gain authority only when binding recomputes them.
 
-Definition binding, legality, computability, project/preset/draft composition, revisioned
-editing and the five-case adapter remain open. The inventory union is a composition
-primitive, not a delivered project composer or candidate editor. Numerical evaluation
-still uses legacy inputs. [D2](owned-definition-package.md) now supplies an injectable
-schema package/index; build-to-schema binding remains the next integration step.
+`core::owned_project` now composes independent typed presets through the shared record
+validator. `core::owned_binding` checks a combined request against an injected schema index.
+The [composition/binding contract](owned-binding.md) details exact occurrence selection,
+choice aliases, concrete required values and schema-versus-resolution status. Draft repair,
+revisioned editing, legality, computability and the five-case adapter remain open. Numerical
+evaluation still uses legacy inputs; these additions do not establish native rule coverage.
 
 The envelope is `{ schema_version: 1, document: { kind, value } }`, where kind is `build`,
-`inventory`, `scenario`, `query` or `request`. Required optional fields use explicit null; omission
+`project`, `inventory`, `scenario`, `query` or `request`. Required optional fields use explicit null; omission
 infers no semantic default. Unknown/duplicate fields reject. Defaults bound wire bytes to
 8 MiB, collection entries to 16,384, total entries to 100,000 and provider paths to 64 steps;
 callers can tighten these resource limits. These are not game-level caps. Unordered

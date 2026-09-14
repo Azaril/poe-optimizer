@@ -11,7 +11,7 @@ use std::{
 
 #[derive(clap::Args)]
 pub(crate) struct Args {
-    /// An owned build, inventory, scenario, query or request JSON document.
+    /// An owned project, build, inventory, scenario, query or request JSON document.
     input: PathBuf,
     /// Save deterministic owned JSON to a new file; existing files are preserved.
     #[arg(long)]
@@ -32,6 +32,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let kind = match &document {
         OwnedDocument::Build(_) => "build",
         OwnedDocument::Inventory(_) => "inventory",
+        OwnedDocument::Project(_) => "project",
         OwnedDocument::Scenario(_) => "scenario",
         OwnedDocument::Query(_) => "query",
         OwnedDocument::Request(_) => "request",

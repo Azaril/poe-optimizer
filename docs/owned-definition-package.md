@@ -226,8 +226,7 @@ enum DeclaredActorRole {
 Allocation and Reward. `DeclaredActorRole` states whether the output belongs to the player,
 its provider's actor, or a declared owned-actor slot. It is relative to the concrete provider
 path, never a runtime actor number. An actor slot describes a calculation actor/population,
-not one object per simulated summon. The pending binder must support both player and owned
-actor queries through these declarations.
+not one object per simulated summon. The binder supports both player and owned actor queries through these declarations.
 
 A slot's identity is its exact declaring owned definition plus typed slot ID. The loader
 indexes that pair, rejects duplicates and checks referenced entries exist. Direct
@@ -243,7 +242,7 @@ Declaration membership is a registry fact, not proof of contextual reachability.
 
 The reviewed grant-path contract retains the parent provider identity when entering a target:
 
-- Let `P` be the provider before grant `G`. Traversing `G -> Actor(A)` enters `A`'s skill/output
+- Let `P` be the provider before grant `G`. Traversing `G -> Actor(A)` enters `A`'s explicit output
   context while retaining `OwnedActorKey { provider: P, slot: A }` as the current actor key.
   The traversed provider path `P.G` is a context address; an actor key with provider `P.G`
   and slot `A` would identify a different child slot. It must not alias the current actor.
@@ -254,7 +253,7 @@ The reviewed grant-path contract retains the parent provider identity when enter
 
 A binder must not re-expose sibling actor/grant slots by looking up all declarations on a
 traversed target's owner. It must preserve the current provider/actor/skill context and follow
-only links exposed there. These are binding requirements, not behavior implemented by the
+only links exposed there. These are implemented binding requirements, not behavior performed by the
 loader. Generated activation and existence remain D3 responsibilities.
 
 An item-use or support-assignment root owns its generated descendants. Changing the supplied
@@ -396,8 +395,8 @@ Conversion evidence will pair an external/owned subject and semantic facet with 
 issue code and optional source location. Neither artifact nor its compiler is implemented by
 the schema loader.
 
-`OwnedDefinitionRef` is the proposed closed tooling union of the agreed typed IDs; it is
-not an erased core key or new native lookup path. External selectors are tagged by source record kind:
+`SchemaSubject` is the shared closed union of typed definition and declared-slot addresses;
+the implemented offline mapping uses it without adding another erased native lookup path. External selectors are tagged by source record kind:
 gem `(gameId, variantId)`, explicit effect key, item base/prototype, tree version/node plus
 view discriminator, configuration key and value role. The pin includes revision and relevant
 file digests. A missing selector component is distinct from an empty string or an unknown
@@ -435,15 +434,15 @@ fallback inside the package.
 
 ## Remaining implementation and acceptance gates
 
-The core DTOs/index interface and bounded data loader are implemented in source. The next
-work is request binding against that index and the offline ID-registry/mapping compiler for
-representative record kinds. Directly authored and imported D1 inputs must use the same
+The core DTOs/index, bounded data loader, request binder and durable offline ID-registry/mapping
+artifacts are implemented. See [composition and binding](owned-binding.md) for the delivered APIs.
+The next work is source conversion for representative record kinds and all-five normalization. Directly authored and imported D1 inputs must use the same
 binding boundary. Search, simulation and numerical rule conversion remain separate work.
 
-The next binder must check every concrete authored parameter, choice and quality selection
-against indexed kind, unit, range, membership and owner/action context. Its report must bind
+The binder checks every concrete authored parameter, choice and quality selection
+against indexed kind, unit, range, membership and owner/action context. Its report binds
 to the exact request content and `DataIdentity`, retaining every query in its original order.
-It must distinguish invalid input, unresolved schema, saved-query selector unavailability and
+It distinguishes invalid input, unresolved schema, saved-query selector unavailability and
 generated targets pending resolution. `RequiredOnce` applies to concrete authored sites and
 selected outputs, not all inactive potential definitions. Missing, Unmapped and inconsistent
 index results remain distinct; none authorizes a fallback to a different definition or slot.

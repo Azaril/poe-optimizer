@@ -102,29 +102,6 @@ impl ValidatedMaceWeapon {
     pub fn actor_modifiers(&self) -> &[ActorModifierRecord] {
         &self.actor_modifiers
     }
-    /// Historical schemas require the former exact five-line normal-item grammar.
-    pub fn is_legacy_normal_payload(&self) -> bool {
-        if self.rarity != MaceItemRarity::Normal
-            || self.explicit_level_requirement.is_some()
-            || !self.local_modifiers.is_empty()
-            || !self.actor_modifiers.is_empty()
-            || self.source_text.len() > 1024
-        {
-            return false;
-        }
-        let text = self.source_text.replace("\r\n", "\n");
-        let lines: Vec<_> = text.trim().lines().collect();
-        lines.len() == 5
-            && lines[0] == "Rarity: NORMAL"
-            && lines[1] == self.base_name
-            && lines[2]
-                .strip_prefix("Item Level: ")
-                .is_some_and(|n| n == self.item_level.to_string())
-            && lines[3]
-                .strip_prefix("Quality: ")
-                .is_some_and(|n| n == self.quality.to_string())
-            && lines[4] == "Implicits: 0"
-    }
     pub fn diagnostic(&self) -> serde_json::Value {
         serde_json::json!({
             "schema_version":1,"source_sha256":self.source_sha256,

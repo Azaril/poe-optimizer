@@ -11,6 +11,8 @@ evaluation consumes our build/scenario model. PoB formats, source programs and a
 lifecycles remain adapter/reference concerns. Follow the [migration and retirement plan](architecture-migration.md)
 before extending native behavior. Earlier source-program and loader designs document current
 or historical implementation, not requirements to reproduce PoB internals in the target.
+The [owned composition and binding contract](owned-binding.md) defines the concrete input,
+provider, schema and offline-identity seams used by that architecture.
 
 ## Recommendation
 

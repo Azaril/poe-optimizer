@@ -205,6 +205,12 @@ instance_domains! {
     ModifierInstanceId => "One rolled modifier occurrence on an item record.",
     PayloadLinkId => "One authored skill container/payload relationship.",
     RewardSelectionId => "One earned progression reward occurrence.",
+    CharacterPresetId => "One independent owned character preset.",
+    EquipmentPresetId => "One independent owned equipment preset.",
+    AllocationPresetId => "One independent owned allocation preset.",
+    SkillPresetId => "One independent owned skill preset.",
+    ChoicePresetId => "One independent owned mechanic-choice preset.",
+    SavedVariantId => "One explicit saved combination of owned presets.",
 }
 
 /// Serializable watermark, including IDs of deleted instances.

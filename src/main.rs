@@ -8,6 +8,7 @@ mod data_loading;
 #[cfg(feature = "pob")]
 mod game_data_extract;
 mod native_benchmark;
+mod owned_binding;
 mod owned_input;
 mod owned_schema;
 
@@ -53,6 +54,8 @@ enum Action {
     CheckOwnedInput(owned_input::Args),
     /// Check a caller-supplied owned definition schema package without evaluating a build.
     CheckOwnedSchema(owned_schema::Args),
+    /// Bind an owned request to injected schemas without calculating.
+    BindOwnedInput(owned_binding::Args),
     /// Inspect authored build containers without calculating or admitting mechanics.
     InspectBuild(build_inspect::Args),
     /// Prepare a native build or report source-linked missing stages without calculating.
@@ -216,6 +219,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
         Some(Action::CheckOwnedInput(args)) => owned_input::run(args)?,
         Some(Action::CheckOwnedSchema(args)) => owned_schema::run(args)?,
+        Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,
         Some(Action::SearchBuild(args)) => build_search::run(args)?,
         #[cfg(feature = "pob")]

@@ -58,11 +58,12 @@ See the [concrete retirement inventory](legacy-retirement.md) for file/type depe
 completed finite-catalog deletion and remaining shared-type catches. The
 [owned build contract](owned-build-contract.md) proposes concrete D1 records and validation
 seams. Its record/codec/request API, standalone inventory, coherent record unions and exact
-availability bindings are implemented. Project/preset/draft composition, revisioned edits,
-definition binding and five-build normalization remain open. The
+availability bindings are implemented. Independent project/preset composition and schema binding are implemented; see the
+[composition/binding contract](owned-binding.md). Draft repair, revisioned edits and five-build
+normalization remain open. The
 [owned package contract](owned-definition-package.md) now has typed descriptors and a
-validated injectable schema package/index. Offline owned-ID mapping, rule compilation and
-the complete D2 exit evidence remain open; schema validity is not numerical coverage.
+validated injectable schema package/index. Durable owned-ID allocation and exact offline mapping artifacts are implemented. Catalog
+conversion, rule compilation and the complete D2 exit evidence remain open; schema validity is not numerical coverage.
 
 ## Retirement ownership
 
