@@ -86,10 +86,10 @@ modifier grants use the exact equipment-use/modifier pair. Historical selectors 
 removed providers, while live wrong-domain or wrong-owner references reject. Ordinary,
 ascendancy and weapon point-pool IDs remain separate; D1 invents no connectivity/budget rule.
 
-**D1 is not complete.** BuildProject/presets/drafts, inventory composition/availability,
-revisioned edit operations, definition binding and all-five owned normalization remain open.
-The [D2 package proposal](owned-definition-package.md) defines a typed schema index, durable
-owned-ID registry and separate offline mappings. No new package or rule compiler is claimed.
+**At the D1a checkpoint, D1 was not complete.** Project/preset/draft composition,
+inventory, revisioned edits, definition binding and all-five normalization were open.
+The subsequent checkpoint below implements inventory and the D2 schema package/index;
+offline owned-ID allocation/mapping and numerical rule compilation still remain open.
 The adapter audit at `runs/owned-input-implementation-01/adapter-mapping.md` identifies
 five-case mappings/default policy and explicit missing-target drafts. It checks all protected
 XML hashes and 541 source gem occurrences; it is not an input package or native evaluation.
@@ -110,10 +110,62 @@ runtimes are terminal. Existing CI automatically includes the new test targets o
 and Linux. For preceding commit `5d17fbd`, run 34815018020 had four passed jobs and four running
 at the 07:23 UTC observation; that is not a full-run or next-commit CI result.
 
-**Next:** implement the D2 schema index/mapping boundary alongside D1 project/inventory/draft composition. Normalize all five
-originals with explicit unresolved facts before shared player/minion numerical resolution.
-No third profile and no extension of native PoB UI/class machinery. Complete native coverage
-remains **0/5**; legacy `search-build` still uses the closed profiles.
+**D1b/D2a checkpoint validated locally:**
+
+Portable core now owns typed definition/slot descriptors, an immutable lookup contract,
+self-contained inventory, coherent item-record unions and exact availability bindings.
+Data owns the bounded versioned schema artifact, reference/declaration validation,
+canonical SHA-256 identity and indexed storage. Neither new path imports a PoB source
+program, callback, UI state or legacy package section. The CLI delegates to these libraries:
+`check-owned-input` accepts inventory, and `check-owned-schema` checks a caller-supplied
+schema artifact and can save canonical JSON. Both explicitly report that no build binding,
+legality check or calculation has run.
+
+Schema facts distinguish Known, explicitly Unmapped, closed-empty and Partial membership.
+All explicit references close to owned entries, including gaps; uncertainty survives rather
+than becoming empty effects. Full slot addresses retain declaration ownership. Schema
+membership is potential topology, not proof of active actors/actions or numerical effects.
+Package limits are separate from input-document limits, configurable within explicit ceilings.
+Independent review caught and removed a quadratic declaration-membership scan.
+
+Inventory separates rolled specifications, physical copies and receiving equipment uses.
+Binding recomputes full canonical snapshot identities (including revision/watermark), checks
+exact copy-to-record claims and covers every use. Same-ID record conflicts reject before
+selection; distinct IDs never merge. Potential copy overlaps remain a bounded authored-scope
+advisory, not full legality. Shared item validation is reused instead of constructing a dummy
+character or duplicating the build validator. `sha2` is now a direct portable Core dependency.
+
+Final local validation passes **144 selected test executions, zero failures**: all Core
+targets (113), the Data schema package target (11), and both owned CLI targets under default
+features (10) and native-only features (10). Strict workspace/all-target and native-only
+Clippy, formatting, CORE/DATA/ENGINE/IMPORT/NATIVE WASM compilation and the native-only normal
+dependency check pass. No PoB/Lua runtime dependency appears in that tree. All 266 checked
+local documentation links resolve. The original builds, schema-40 legacy package and clean
+PoB pin are unchanged; Cargo.lock changes only to make the existing sha2 dependency direct
+for Core. No whole-build numerical/parity result is inferred from these contract tests.
+
+`runs/owned-schema-implementation-01/validated-checkpoint.json` joins the nine final commands,
+stable source/input guards, independent review and link checks. `validation-03` is the final
+sequence. The first attempt passed all tests then found three collapsible loader conditionals;
+the second found one equivalent test-fixture conditional. Both earlier attempts are retained.
+No lint allowance, dropped test, changed numerical expectation or additional profile was used.
+Transient approval-service capacity failures recovered; all local validation runtimes are
+terminal. Existing Windows/Linux CI automatically includes these new test targets.
+
+The preceding D1a main commit `da218cd` had four successful jobs and four still running in
+[CI run 34818451461](https://github.com/Azaril/poe-optimizer/actions/runs/34818451461) at
+08:03:48 UTC, with no failed steps. That snapshot is not a final or later-commit CI result.
+
+**Next:** complete schema binding with typed input locations and exact request/package
+identities, preserving every ordered query and distinguishing invalid inputs, incomplete
+schema facts, unavailable saved selectors and generated targets awaiting resolution.
+Required values apply at concrete input sites, not every potential inactive declaration.
+In parallel, implement BuildProject/presets/drafts and revisioned edits plus the durable
+offline owned-ID registry/mapping. Normalize all five originals with explicit unresolved
+facts, then compile representative owned effects and develop shared player/minion resolution.
+No rule compiler, full D1/D2 gate, five-case owned normalization or new complete native build
+is claimed. Native coverage remains **0/5**; legacy `search-build` still uses closed profiles.
+Do not add a third profile or extend native PoB UI/class machinery.
 
 **Historical implementation checkpoints follow.** Their tests describe producing revisions;
 old future-work instructions are superseded by this header and [Resume here](#resume-here).
@@ -4279,29 +4331,33 @@ the design documents.
 
 ## Resume here
 
-1. Read [domain architecture](domain-architecture.md), [architecture migration](architecture-migration.md)
-   and the reviewed [owned build contract](owned-build-contract.md). The owner's correction
-   supersedes native PoB UI/loader/VM replication gates.
-2. Finite-catalog retirement and D1a validation are complete; all local runtimes are terminal.
-   Their separate 126- and 93-execution receipts and static/portability checks pass. Preserve those receipts and
-   inspect the latest published commit's CI separately; do not treat prior CI as its result.
-3. D1a owned record/codec/request APIs and `check-owned-input` are validated (93 selected
-   tests plus lint/portability checks). Implement the D2 schema/index and separate offline
-   mapping contracts in [owned package](owned-definition-package.md).
-   In parallel, add D1 BuildProject/presets, intrinsic inventory records/claims, typed drafts
-   and revisioned edits. Normalize all five originals with explicit gaps using the adapter
-   audit. No source formats enter the new request, no game IDs come from source-name fallbacks,
-   and no D2 package/rule compiler or five-case owned normalization is complete yet.
-4. Preserve generic kernels/objectives/search and independent numerical/reference fixtures.
-   Migrate or delete profile dispatch and source-shaped consumers by named dependency
-   closure. The finite command/catalog is removed; do not expand remaining Spark/Mace or
-   add another profile. [Retirement inventory](legacy-retirement.md) names what remains.
-5. Keep all five original imports, fixed expectation manifests and PoB pin. Compare semantic
-   selections, actions, metrics, availability and mutations; UI/table/callback identity is
-   diagnostic only. Add mapping scenarios and holdouts without changing original selections.
-6. Develop shared player/minion resolution/evaluation, then joint semantic candidate search.
-   Keep complete native coverage at 0/5 until whole-build gates actually pass. Update this
-   document and the retirement inventory at every implementation checkpoint.
+1. Read [domain architecture](domain-architecture.md), [architecture migration](architecture-migration.md),
+   [owned build contract](owned-build-contract.md) and [owned definition package](owned-definition-package.md).
+   The owner's architecture correction supersedes native PoB UI/loader/VM replication gates.
+2. Preserve the finite-catalog retirement, D1a and D1b/D2a receipts. The latest checkpoint
+   passes 144 selected tests plus strict lint, WASM, format and dependency checks under
+   `runs/owned-schema-implementation-01/validation-03`; its joined receipt records stable
+   source/input guards. All local runtimes are terminal. Inspect latest published commit
+   CI separately; preceding green jobs are not a later checkpoint's result.
+3. Implement the owned definition binder over the delivered immutable schema index. Check
+   value types/units/ranges, exact owner/slot membership, quality, roles and provider path
+   continuity. Retain parent actor/skill identity while traversing a grant; do not expose an
+   entire definition registry as reachable output context. Binding does not resolve activation.
+   Reports bind exact input/package identities and preserve ordered missing/unavailable queries.
+4. In parallel, implement project/preset/draft composition and revisioned edit operations,
+   using the delivered self-contained inventory union and exact availability bindings.
+   Implement the durable offline owned-ID registry and separate PoB-to-owned mappings;
+   normalize all five originals using the prior adapter audit. Unmapped required facts stay
+   explicit. No source-name fallback keys or fixture values enter production inputs.
+5. Compile representative local-item, conditional, support and grant effects into owned rules,
+   then develop general player/minion resolution together. Preserve numerical kernels,
+   objectives/search and independent numerical/reference fixtures. Retire profile dispatch
+   and source-shaped consumers by named dependency closure; never add a third profile.
+   [Retirement inventory](legacy-retirement.md) names the remaining temporary consumers.
+6. Preserve all five original selections, fixed expectation manifests and the clean PoB pin.
+   Keep complete native coverage at **0/5** until whole-build gates pass. Add mapping scenarios
+   and holdouts without changing original selections. Continue to joint semantic search;
+   update this document and the retirement inventory at each implementation checkpoint.
 
 The R2at configuration source probe and allocation bridge are paused. Their unresolved
 probe fixes and source-method frontier are not prerequisites for the architecture migration.

@@ -279,3 +279,73 @@ fn existing_canonical_destination_and_input_file_are_never_overwritten() {
         assert_eq!(fs::read(temp.path().join("input.json")).unwrap(), original);
     }
 }
+
+#[test]
+fn standalone_inventory_checks_and_roundtrips_without_a_character_or_data_package() {
+    use poe_optimizer_core::owned_inventory::*;
+    let temp = tempfile::tempdir().unwrap();
+    let build = build_input();
+    let input = InventoryInput {
+        allocator: build.allocator,
+        revision: build.revision,
+        game_version: build.game_version,
+        items: build.items,
+        copies: vec![
+            InventoryItem {
+                id: id(21),
+                item: id(3),
+            },
+            InventoryItem {
+                id: id(20),
+                item: id(3),
+            },
+        ],
+        completeness: InventoryCompleteness::Partial,
+    };
+    let expected = InventorySnapshot::new(input.clone(), limits()).unwrap();
+    let original = serde_json::to_vec_pretty(
+        &json!({"schema_version":1,"document":{"kind":"inventory","value":input}}),
+    )
+    .unwrap();
+    fs::write(temp.path().join("stock.json"), &original).unwrap();
+    successful(
+        run(temp.path(), "stock.json", Some("canonical.json")),
+        "inventory",
+    );
+    let canonical = fs::read(temp.path().join("canonical.json")).unwrap();
+    assert_eq!(
+        decode_owned(&canonical, limits()).unwrap(),
+        OwnedDocument::Inventory(Box::new(expected))
+    );
+    assert_eq!(fs::read(temp.path().join("stock.json")).unwrap(), original);
+}
+
+#[test]
+fn invalid_inventory_copy_is_rejected_before_any_output_file_is_created() {
+    use poe_optimizer_core::owned_inventory::*;
+    let temp = tempfile::tempdir().unwrap();
+    let build = build_input();
+    let input = InventoryInput {
+        allocator: build.allocator,
+        revision: build.revision,
+        game_version: build.game_version,
+        items: build.items,
+        copies: vec![InventoryItem {
+            id: id(20),
+            item: id(25),
+        }],
+        completeness: InventoryCompleteness::Complete,
+    };
+    fs::write(
+        temp.path().join("stock.json"),
+        serde_json::to_vec(
+            &json!({"schema_version":1,"document":{"kind":"inventory","value":input}}),
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    let result = run(temp.path(), "stock.json", Some("canonical.json"));
+    assert!(!result.status.success());
+    assert!(!result.stderr.is_empty());
+    assert!(!temp.path().join("canonical.json").exists());
+}

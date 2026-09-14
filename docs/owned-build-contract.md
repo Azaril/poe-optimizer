@@ -1,6 +1,6 @@
 # D1: owned build and scenario contract
 
-**Status: D1a record/codec implementation validated, 2026-09-14; full D1 remains open.**
+**Status: owned records, inventory and codec implemented, 2026-09-14; full D1 remains open.**
 [Domain architecture](domain-architecture.md) controls the boundary and
 [migration D1](architecture-migration.md) controls delivery. D1 establishes inputs,
 identity, a codec and adapter normalization; it does not establish numerical coverage.
@@ -12,21 +12,28 @@ The source audit is in `runs/owned-build-contract-01/source-audit.md`.
 `core::owned_build` implements raw `BuildInput`, `ScenarioInput`, `QueryInput` records,
 private immutable `BuildSpec`, `ScenarioSpec`, `QuerySpec` wrappers and an
 `OwnedEvaluationRequest`. Constructors validate structure; the version-1 JSON codec
-roundtrips standalone documents and combined requests. `check-owned-input` is the first
+roundtrips standalone documents (including inventory) and combined requests. `check-owned-input` is the first
 CLI consumer and can write canonical owned JSON without XML, PoB or a game package.
 
-Definition binding, legality, computability, project/draft/inventory composition, editing
-and the five-case adapter are not implemented by this checkpoint. Their contracts below
-remain the D1/D2 delivery target. Numerical evaluation still uses legacy inputs.
+`core::owned_inventory` adds immutable, self-contained stock, canonical build/inventory
+record unions and exact candidate-bound availability assignments. It reuses the same
+item-record validation as BuildSpec. `core::owned_content` provides bounded, domain-separated
+snapshot digests; content claims gain authority only when binding recomputes them.
+
+Definition binding, legality, computability, project/preset/draft composition, revisioned
+editing and the five-case adapter remain open. The inventory union is a composition
+primitive, not a delivered project composer or candidate editor. Numerical evaluation
+still uses legacy inputs. [D2](owned-definition-package.md) now supplies an injectable
+schema package/index; build-to-schema binding remains the next integration step.
 
 The envelope is `{ schema_version: 1, document: { kind, value } }`, where kind is `build`,
-`scenario`, `query` or `request`. Required optional fields use explicit null; omission
+`inventory`, `scenario`, `query` or `request`. Required optional fields use explicit null; omission
 infers no semantic default. Unknown/duplicate fields reject. Defaults bound wire bytes to
 8 MiB, collection entries to 16,384, total entries to 100,000 and provider paths to 64 steps;
 callers can tighten these resource limits. These are not game-level caps. Unordered
 occurrence/assignment collections canonicalize; ordered queries and grant paths retain
-order. Effect order belongs in rules, not record serialization order. This codec establishes
-no content digest or prepared-plan reuse authority.
+order. Effect order belongs in rules, not record serialization order. Decoding alone
+establishes no prepared-plan reuse or stock-availability authority.
 
 ## Separate values and ownership
 
@@ -142,7 +149,7 @@ An `ItemRecord` is a concrete rolled specification occurrence, not proof of phys
 Several equipment uses can reference it and receive separate local effects/grants.
 
 ```rust
-InventorySnapshot { lineage, revision, game_version, items: Vec<ItemRecord>,
+InventoryInput { allocator: InstanceAllocatorState, revision, game_version, items: Vec<ItemRecord>,
                     copies: Vec<InventoryItem>, completeness: Complete | Partial }
 InventoryItem { id: InventoryItemId, item: ItemRecordId }
 AvailabilityAssignments { build: BuildContentBinding, inventory: InventoryContentBinding,
@@ -181,6 +188,27 @@ for the same supplying occurrence is not replacement; switching known copies is.
 one known physical copy in simultaneously active uses is a separate legality issue,
 not a reason to erase computable
 hypothetical measurements.
+
+Implemented inventory operations are:
+
+- `InventorySnapshot::new(input, limits)`, with borrowed `input`, `item`, `copy` and
+  `validate_limits` accessors; construction canonicalizes unordered stock records.
+- `union_build_inventory(build, inventory, limits) -> Result<ItemRecordUnion, InventoryError>`.
+  The union carries the maximum input allocator watermark, and accepts unequal revisions.
+- `build_content_binding` and `inventory_content_binding`, followed by
+  `bind_availability(build, inventory, assignments, limits) -> Result<BoundAvailability, InventoryError>`.
+  `BoundAvailability` is immutable; its accessor exposes the checked assignments.
+- `BoundAvailability::authored_copy_overlaps(build, limits)` reports potential shared-copy
+  use under the authored loadout scopes. This bounded advisory does not resolve nested
+  socket/allocation/parent activation, establish full game legality or reject hypothetical
+  bindings. A work-limit failure in that report does not invalidate structural binding.
+
+Entry limits apply separately to each supplied document, the union item/occurrence table
+and the availability assignments, rather than a cumulative budget across all nested
+collections. Overlap analysis has a separate bounded work count. Snapshot digests include
+all canonical input, revision and watermark, using `owned-build-v1` and
+`owned-inventory-v1` domains. They are exact snapshot identities, not future numerical
+plan digests: D3 must exclude unrelated stock and presentation from numerical cache keys.
 
 An edit reads a coherent input union and emits the next self-contained build. If it changes
 a shared stock record's rolls/level, rebinding claims requires coherently updated inventory
@@ -289,17 +317,17 @@ Pinnacle scenario; this is adapter evidence, never a default for other builds.
 
 ## Import, validation and codec
 
-Proposed responsibility signatures:
+Implemented codec/availability signatures and planned remaining responsibilities:
 
 ```rust
 decode_owned(bytes, limits) -> Result<OwnedDocument, CodecError>;
-encode_owned(document) -> Result<Bytes, CodecError>;
+encode_owned(document, limits) -> Result<Bytes, CodecError>;
 validate_structure(build, scenario, queries, limits) -> StructuralReport;
 bind_definitions(index, build, scenario, queries) -> DefinitionReport;
 import_pob(document, mapping_index, limits) -> ImportOutcome;
 compose(project, typed_selection, inventory?) -> Result<BuildSpec, CompositionIssues>;
 apply_build_edit(build, inventory?, edit) -> Result<BuildSpec, EditIssues>;
-bind_availability(build, inventory, assignments) -> InventoryBindingReport;
+bind_availability(build, inventory, assignments, limits) -> Result<BoundAvailability, InventoryError>;
 // D3, not part of D1 numerical completion:
 resolve(rules, build, scenario, queries) -> ResolutionOutcome;
 ```
@@ -378,6 +406,7 @@ Required tests are contract tests, not evidence of whole-build calculation:
 | Injected definitions | Same input against a changed package rebinds; wrong kinds/units/owners reject; missing definitions remain explicit; no fixture IDs are built into code. |
 | Five originals | Frozen selection manifest is preserved; every required unresolved mapping has a typed location; importing all five is not reported as five complete native evaluations. |
 
-The direct construction/codec slice is implemented and validated. Full D1
-still needs project/inventory/draft composition, editing and the five-case adapter. An XML wrapper renamed
+Direct construction, the owned codec, inventory unions and availability bindings are
+implemented. Full D1 still needs project/preset/draft composition, definition binding,
+revisioned editing and the five-case adapter. An XML wrapper renamed
 `BuildSpec` or a catalog-only facade does not meet that gate.

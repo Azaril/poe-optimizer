@@ -36,8 +36,11 @@ current experimental implementation, not the target architecture.
 **Status:** experimental import and evaluation CLI with switchable native and optional PoB
 backends. Numerical evaluation still uses PoB documents. A new
 `check-owned-input INPUT --canonical-output OUTPUT` command checks directly authored owned
-build/scenario/query/request structure through portable core APIs, without XML or a data
-package. Definition binding, game legality and calculation are not established by that check. It accepts PoB share codes/XML, explicit skill/action and encounter options,
+build/inventory/scenario/query/request structure through portable core APIs, without XML or
+a data package. `check-owned-schema INPUT --canonical-output OUTPUT` validates a supplied
+owned definition schema package and reports its canonical content identity. Both commands
+work in a native-only build; neither claims build binding, legality or numerical coverage.
+The existing numerical CLI accepts PoB share codes/XML, explicit skill/action and encounter options,
 and returns typed metrics with units, availability and structured coverage. Configurable scalar
 objectives can be assessed during evaluation or against saved results without recalculation.
 Each PoB request

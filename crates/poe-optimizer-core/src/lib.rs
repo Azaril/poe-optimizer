@@ -84,7 +84,10 @@ pub struct ActorOutput {
 }
 
 pub mod owned_build;
+pub mod owned_content;
 pub mod owned_definitions;
+pub mod owned_inventory;
+pub mod owned_schema;
 
 pub mod build_identity;
 pub mod build_view;

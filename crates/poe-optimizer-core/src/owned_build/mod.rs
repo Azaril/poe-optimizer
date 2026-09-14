@@ -11,6 +11,7 @@ pub use codec::{CodecError, OwnedDocument, decode_owned, encode_owned};
 pub use records::*;
 use serde::Serialize;
 pub use structure::{OccurrenceKind, OwnedInputLimits, StructuralError, StructuralErrorKind};
+pub(crate) use structure::{build_occurrences, canonicalize_item_records, validate_item_records};
 
 pub const OWNED_INPUT_SCHEMA_VERSION: u32 = 1;
 

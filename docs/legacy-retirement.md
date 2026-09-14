@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-09-14 during the finite-catalog retirement checkpoint after `0a64ee3`. This is a living companion to
+Updated 2026-09-14 for the owned input/schema/inventory checkpoint after `da218cd`. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -15,7 +15,7 @@ and public entry points, not a filename pattern.
 
 | Code/type | Current dependency | Retirement action |
 | --- | --- | --- |
-| `core/src/evaluation.rs`: BuildFormat, EvaluationRequest | Ordinary requests mandate PoB XML; options use source action/group indexes | D1 semantic build/scenario/query request; external document selector stays in import/oracle adapter. |
+| `core/src/evaluation.rs`: BuildFormat, EvaluationRequest | Legacy numerical requests still mandate PoB XML; options use source action/group indexes | The owned_build request and codec now accept independent semantic inputs. Replace numerical callers after definition binding/general resolution lands; external selectors remain adapter-only. |
 | `src/mutation_search.rs`: SearchExperimental, NativeEvaluation | Removed | Enum moved to its only consumer, build_search. Command/module and six obsolete problem examples deleted; no silent compatibility route. |
 | `import/src/controlled_mace.rs`: ControlledMaceCatalog and related types | Removed | Implementation, exclusive tests and all callers deleted. Useful invariants moved to the retained candidate/import APIs. |
 | `native/src/candidates.rs`: PreparedMaceCandidates | Removed | Shared NativeMetricSnapshot/Value extracted to metric_snapshot.rs; finite preparation/evaluation APIs and benchmark deleted. |
@@ -24,7 +24,7 @@ and public entry points, not a filename pattern.
 | `native/src/build_candidates.rs`: PreparedBuildCandidates | Newer lazy candidate path still dispatches Spark/Mace | Migrate semantic candidate realization; generic search algorithm can remain. |
 | `import/src/controlled_build*.rs`: TemplateProfile | Search-build template guards and XML rewriting | Replace production domain adapter; retain useful explicit locks, inventory and allocation contracts. |
 | `engine/src/spark.rs`, `mace.rs`, `mace_supports.rs` | Closed pipelines also own shared reward/error/weapon types | Extract real numerical kernels and data-selected rewards/definitions, then delete profile pipelines. |
-| `data/src/game_data.rs`, `engine/src/data.rs` | Mandatory spark/mace sections, two-weapon positional lookup and cached profile inputs | D2 independent semantic schema/compiled data; remove legacy fields with their last consumer. |
+| `data/src/game_data.rs`, `engine/src/data.rs` | Legacy numerical consumers require Spark/Mace sections and positional/cached profile inputs | Owned_schema now loads an independent schema artifact with none of those sections. Offline effect conversion and native consumption are still needed before deleting legacy package fields. |
 | `import/src/mace_item.rs` | Broader equipment also consumes rarity/payload parsing here | Extract general item envelope/rarity decoding before deleting the Mace-only parser. |
 | `pob/src/mutation.rs` | Removed in prior D0 checkpoint | Its sole test target retired with the finite catalog in this checkpoint. No compatibility re-export remains. |
 
@@ -32,6 +32,22 @@ Source/typed-Lua program families and configuration UI/loader contracts require 
 D1–D3 consumer migration. Move only tools that still serve offline acquisition or the oracle
 into optional tooling. Do not preserve a generic source VM in every generated package under
 a new name. Source-specific diagnostics remain optional evidence, not semantic identity.
+
+## Owned input/schema/inventory checkpoint
+
+The new `core::owned_build`, `owned_inventory`, `owned_definitions` and `owned_schema`
+contracts have named portable consumers: structural document checking, inventory union and
+availability binding, and Data's immutable owned schema package/index. `check-owned-input`
+and `check-owned-schema` are thin host adapters. None requires legacy package sections,
+source programs or UI callbacks. Item validation/canonicalization is shared instead of
+adding a parallel implementation or constructing a fake character for inventory checks.
+
+This checkpoint introduces the replacement input/data seams but does not yet replace a
+legacy numerical consumer. No additional profile/kernel deletion is claimed. The remaining
+retirement dependency is explicit: definition binding, five-case owned normalization and
+general effect resolution must preserve the current useful numerical tests before legacy
+request/profile/package consumers can be removed. New numerical work must use those owned
+contracts; the legacy UI/source VM frontier remains paused.
 
 ## Finite-catalog retirement checkpoint
 

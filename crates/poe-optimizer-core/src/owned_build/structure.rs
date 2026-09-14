@@ -53,6 +53,7 @@ pub enum OccurrenceKind {
     Loadout,
     Reward,
     Item,
+    InventoryCopy,
     Modifier,
     Gem,
     EquipmentUse,
@@ -320,6 +321,46 @@ impl<'a> Check<'a> {
         }
         Ok(())
     }
+    fn register_item_records(&mut self, path: &str, items: &[ItemRecord]) -> Result {
+        self.collection(path, items.len())?;
+        for (i, item) in items.iter().enumerate() {
+            self.register(&format!("{path}[{i}].id"), item.id, OccurrenceKind::Item)?;
+        }
+        for (i, item) in items.iter().enumerate() {
+            let path = format!("{path}[{i}].modifiers");
+            self.collection(&path, item.modifiers.len())?;
+            for (j, modifier) in item.modifiers.iter().enumerate() {
+                self.register(
+                    &format!("{path}[{j}].id"),
+                    modifier.id,
+                    OccurrenceKind::Modifier,
+                )?;
+            }
+        }
+        Ok(())
+    }
+    fn item_record_values(&mut self, path: &str, items: &[ItemRecord]) -> Result {
+        for (i, item) in items.iter().enumerate() {
+            let path = format!("{path}[{i}]");
+            self.definition(&path, &item.template)?;
+            self.parameters(
+                &format!("{path}.parameters"),
+                &item.parameters,
+                &SlotOwnerDefId::ItemTemplate(item.template.clone()),
+            )?;
+            self.quality(&path, &item.quality)?;
+            for (j, modifier) in item.modifiers.iter().enumerate() {
+                let path = format!("{path}.modifiers[{j}]");
+                self.definition(&path, &modifier.definition)?;
+                self.parameters(
+                    &format!("{path}.rolls"),
+                    &modifier.rolls,
+                    &SlotOwnerDefId::Modifier(modifier.definition.clone()),
+                )?;
+            }
+        }
+        Ok(())
+    }
     fn build(&mut self, build: &BuildInput) -> Result {
         self.members = Some(BTreeMap::new());
         // Register all definitions of occurrences before checking references, so
@@ -348,18 +389,7 @@ impl<'a> Check<'a> {
             Reward,
             |v: &RewardSelection| v.id
         );
-        register!(&build.items, "build.items", Item, |v: &ItemRecord| v.id);
-        for (i, item) in build.items.iter().enumerate() {
-            let path = format!("build.items[{i}].modifiers");
-            self.collection(&path, item.modifiers.len())?;
-            for (j, modifier) in item.modifiers.iter().enumerate() {
-                self.register(
-                    &format!("{path}[{j}].id"),
-                    modifier.id,
-                    OccurrenceKind::Modifier,
-                )?;
-            }
-        }
+        self.register_item_records("build.items", &build.items)?;
         register!(&build.gems, "build.gems", Gem, |v: &GemInstance| v.id);
         register!(
             &build.equipment,
@@ -418,25 +448,7 @@ impl<'a> Check<'a> {
                 &SlotOwnerDefId::Reward(reward.definition.clone()),
             )?;
         }
-        for (i, item) in build.items.iter().enumerate() {
-            let path = format!("build.items[{i}]");
-            self.definition(&path, &item.template)?;
-            self.parameters(
-                &format!("{path}.parameters"),
-                &item.parameters,
-                &SlotOwnerDefId::ItemTemplate(item.template.clone()),
-            )?;
-            self.quality(&path, &item.quality)?;
-            for (j, modifier) in item.modifiers.iter().enumerate() {
-                let path = format!("{path}.modifiers[{j}]");
-                self.definition(&path, &modifier.definition)?;
-                self.parameters(
-                    &format!("{path}.rolls"),
-                    &modifier.rolls,
-                    &SlotOwnerDefId::Modifier(modifier.definition.clone()),
-                )?;
-            }
-        }
+        self.item_record_values("build.items", &build.items)?;
         for (i, gem) in build.gems.iter().enumerate() {
             let path = format!("build.gems[{i}]");
             self.definition(&path, &gem.definition)?;
@@ -600,6 +612,47 @@ fn check_containment(equipment: &[EquipmentUse]) -> Result {
     Ok(())
 }
 
+/// Shared structural checks for self-contained stock/project record tables.
+/// Returns consumed collection entries so enclosing documents can preserve one budget.
+pub(crate) fn validate_item_records(
+    namespace: &GameVersionNamespace,
+    allocator: InstanceAllocatorState,
+    items: &[ItemRecord],
+    additional_occurrences: &[(InstanceId, OccurrenceKind)],
+    limits: OwnedInputLimits,
+) -> Result<usize> {
+    let mut check = Check::new(namespace, limits, Some(allocator))?;
+    check.members = Some(BTreeMap::new());
+    check.register_item_records("items", items)?;
+    // Metadata combines real collections; each caller bounds its own collection.
+    if additional_occurrences.len() > check.remaining {
+        return Err(error(
+            "additional_occurrences",
+            StructuralErrorKind::LimitExceeded,
+        ));
+    }
+    check.remaining -= additional_occurrences.len();
+    for (i, (id, kind)) in additional_occurrences.iter().enumerate() {
+        check.register(&format!("additional_occurrences[{i}]"), *id, *kind)?;
+    }
+    check.item_record_values("items", items)?;
+    Ok(limits.max_entries - check.remaining)
+}
+
+pub(crate) fn build_occurrences(
+    build: &super::BuildSpec,
+    limits: OwnedInputLimits,
+) -> Result<Vec<(InstanceId, OccurrenceKind)>> {
+    let input = build.input();
+    let mut check = Check::new(&input.game_version, limits, Some(input.allocator))?;
+    check.build(input)?;
+    Ok(check
+        .members
+        .expect("registered build occurrences")
+        .into_iter()
+        .collect())
+}
+
 pub(crate) fn validate_build(build: &BuildInput, limits: OwnedInputLimits) -> Result {
     Check::new(&build.game_version, limits, Some(build.allocator))?.build(build)
 }
@@ -646,14 +699,7 @@ pub(crate) fn canonicalize_build(build: &mut BuildInput) {
     for reward in &mut build.character.rewards {
         canonicalize_parameters(&mut reward.parameters);
     }
-    build.items.sort_by_key(|v| v.id);
-    for item in &mut build.items {
-        canonicalize_parameters(&mut item.parameters);
-        item.modifiers.sort_by_key(|v| v.id);
-        for modifier in &mut item.modifiers {
-            canonicalize_parameters(&mut modifier.rolls);
-        }
-    }
+    canonicalize_item_records(&mut build.items);
     build.gems.sort_by_key(|v| v.id);
     for gem in &mut build.gems {
         canonicalize_parameters(&mut gem.parameters);
@@ -686,5 +732,16 @@ pub(crate) fn canonicalize_scenario(scenario: &mut ScenarioInput) {
         .sort_by(|a, b| (&a.target, &a.policy).cmp(&(&b.target, &b.policy)));
     for usage in &mut scenario.usage {
         canonicalize_parameters(&mut usage.parameters);
+    }
+}
+
+pub(crate) fn canonicalize_item_records(items: &mut [ItemRecord]) {
+    items.sort_by_key(|v| v.id);
+    for item in items {
+        canonicalize_parameters(&mut item.parameters);
+        item.modifiers.sort_by_key(|v| v.id);
+        for modifier in &mut item.modifiers {
+            canonicalize_parameters(&mut modifier.rolls);
+        }
     }
 }

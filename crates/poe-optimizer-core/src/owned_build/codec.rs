@@ -1,4 +1,5 @@
 use super::*;
+use crate::owned_inventory::{InventoryError, InventoryInput, InventorySnapshot};
 use serde::{Deserialize, Serialize};
 use std::{fmt, io};
 
@@ -7,6 +8,7 @@ use std::{fmt, io};
 #[serde(tag = "kind", content = "value", rename_all = "snake_case")]
 pub enum OwnedDocument {
     Build(Box<BuildSpec>),
+    Inventory(Box<InventorySnapshot>),
     Scenario(ScenarioSpec),
     Query(QuerySpec),
     Request(Box<OwnedEvaluationRequest>),
@@ -15,6 +17,7 @@ pub enum OwnedDocument {
 #[derive(Debug)]
 pub enum CodecError {
     Structure(StructuralError),
+    Inventory(InventoryError),
     Json(serde_json::Error),
     UnsupportedVersion(u32),
     TooLarge { maximum: usize },
@@ -23,6 +26,7 @@ impl fmt::Display for CodecError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Structure(error) => error.fmt(f),
+            Self::Inventory(error) => error.fmt(f),
             Self::Json(error) => error.fmt(f),
             Self::UnsupportedVersion(version) => {
                 write!(f, "unsupported owned input schema version {version}")
@@ -35,6 +39,7 @@ impl std::error::Error for CodecError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Self::Structure(e) => Some(e),
+            Self::Inventory(e) => Some(e),
             Self::Json(e) => Some(e),
             _ => None,
         }
@@ -43,6 +48,11 @@ impl std::error::Error for CodecError {
 impl From<StructuralError> for CodecError {
     fn from(value: StructuralError) -> Self {
         Self::Structure(value)
+    }
+}
+impl From<InventoryError> for CodecError {
+    fn from(value: InventoryError) -> Self {
+        Self::Inventory(value)
     }
 }
 impl From<serde_json::Error> for CodecError {
@@ -66,6 +76,7 @@ struct WireInput {
 )]
 enum DocumentInput {
     Build(Box<BuildInput>),
+    Inventory(Box<InventoryInput>),
     Scenario(ScenarioInput),
     Query(QueryInput),
     Request(Box<OwnedRequestInput>),
@@ -94,6 +105,9 @@ pub fn decode_owned(bytes: &[u8], limits: OwnedInputLimits) -> Result<OwnedDocum
         DocumentInput::Build(input) => {
             OwnedDocument::Build(Box::new(BuildSpec::new(*input, limits)?))
         }
+        DocumentInput::Inventory(input) => {
+            OwnedDocument::Inventory(Box::new(InventorySnapshot::new(*input, limits)?))
+        }
         DocumentInput::Scenario(input) => {
             OwnedDocument::Scenario(ScenarioSpec::new(input, limits)?)
         }
@@ -118,6 +132,7 @@ pub fn encode_owned(
 ) -> Result<Vec<u8>, CodecError> {
     match document {
         OwnedDocument::Build(input) => structure::validate_build(input.input(), limits)?,
+        OwnedDocument::Inventory(input) => input.validate_limits(limits)?,
         OwnedDocument::Scenario(input) => {
             structure::validate_scenario(input.input(), limits, None)?
         }

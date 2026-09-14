@@ -9,3 +9,5 @@ publish = false
 serde = { version = "1", features = ["derive"] }
 
 serde_json = { workspace = true }
+
+sha2 = "0.10"

@@ -1,15 +1,17 @@
 # D2: owned definition schema and offline mapping
 
-**Status: implementation proposal, 2026-09-14.** The shared ID/value shapes below were
-coordinated with the core input and `owned_definitions` implementers. The package, schema
-index and compiler described here are proposed, not delivered. This specifies the smallest
-D2 boundary needed to bind [owned D1 inputs](owned-build-contract.md), under the accepted
-[domain architecture](domain-architecture.md) and [migration plan](architecture-migration.md).
+**Status: schema DTOs, typed index interface and data loader implemented in source,
+2026-09-14.** The core [schema contracts](../crates/poe-optimizer-core/src/owned_schema.rs)
+and data [package loader/index](../crates/poe-optimizer-data/src/owned_schema.rs) are present.
+Request binding, the offline compiler, the durable ID registry and external mapping artifacts
+remain planned in this document. No validation receipts are asserted here.
 
-A schema index establishes definition identity, input types and declared relationships.
-It does not calculate effects, prove a generated actor exists, or establish complete D1/D2
-delivery. Root-owned record/codec work is one D1 checkpoint; project/inventory composition,
-five-build normalization and numerical rule conversion have separate completion gates.
+This boundary supports [owned D1 inputs](owned-build-contract.md) under the accepted
+[domain architecture](domain-architecture.md) and [migration plan](architecture-migration.md).
+It establishes definition identity, input schemas and declared relationships. It does not
+calculate effects, prove generated actors exist, or establish complete D1/D2 delivery.
+Five-build normalization, representative numerical rule conversion and D3 resolution retain
+separate completion gates.
 
 ## Shared types and ownership
 
@@ -28,11 +30,11 @@ Use the core input records' `DeclaredSlot<S> { declaration: SlotOwnerDefId, slot
 Ascendancy, Reward, ItemTemplate, Modifier, Gem, Skill, PassiveNode and UsagePolicy.
 The last variant lets an independent usage policy declare its own parameters.
 
-Core owns these portable value/schema contracts and the binding-facing trait. Data owns
-package decoding, validated immutable descriptor storage and its index implementation.
-Offline tools own upstream readers, owned-ID allocation/mapping and conversion reports.
-The import adapter consumes a separate external-to-owned map. No source program, raw
-PoB callback/control field or source lookup is a dependency of the native schema index.
+Core implements these portable value/schema contracts and the binding-facing trait. Data
+implements package decoding, validated immutable descriptor storage and its index.
+Planned offline tools will own upstream readers, owned-ID allocation/mapping and conversion
+reports; a future import adapter will consume the separate external-to-owned map. No source
+program, raw PoB callback/control field or source lookup is a dependency of the native index.
 
 `BuildInput`, `ScenarioInput` and `QueryInput` are raw DTOs; their `BuildSpec`, `ScenarioSpec`
 and `QuerySpec` wrappers establish structural validity. `QueryInput` carries its own
@@ -43,10 +45,11 @@ Well-formed saved queries can name missing/disabled providers; neither decoding 
 index silently retargets them. Support assignments are provider roots too: a support gem
 can declare an owned actor/action, independently of the supported action's provider.
 
-## Durable owned IDs and package identity
+## Durable owned IDs and package identity (registry planned)
 
-Maintain a version-controlled owned-ID registry in offline tooling. It allocates symbols
-once and records aliases to external identities separately. An owned key is not a PoB key,
+The offline compiler must maintain a version-controlled owned-ID registry; that registry
+and allocation workflow are not implemented yet. That registry will allocate symbols once
+and record aliases to external identities separately. An owned key is not a PoB key,
 a slug of the current display name, a source-path/index, or a content hash. New keys may
 be allocated deterministically from the registry's persisted counter; subsequent builds
 read the registry rather than regenerate IDs from source order. Never reuse retired keys.
@@ -59,14 +62,14 @@ Aliases are mapping facts, not native lookup fallbacks. Labels may be localized 
 
 The owned namespace identifies a compatible game/rules family. A balance package has its
 own release and exact content/semantics identity; a balance change need not rename every
-definition. Reuse `DataIdentity` for the validated package digest, schema and semantic
-version. Its shape alone proves neither trust nor source equivalence. Exact package identity
+definition. The loader uses `DataIdentity` for the validated package digest, schema and
+semantics version. Its shape alone proves neither trust nor source equivalence. Exact package identity
 binds reports and later private plans; public definition IDs survive compatible updates.
 
 ## Minimal descriptor vocabulary
 
-Use a closed `DefinitionDescriptor` enum with typed payloads, not a string-to-JSON map.
-Every ID alias below already belongs to the agreed leaf. Each reference names a typed ID;
+Core implements closed `DefinitionDescriptor` and `SlotDescriptor` enums with typed payloads.
+Every ID alias below belongs to `owned_definitions`. Each reference names a typed ID;
 all displayed labels and original text live in optional presentation/debug sidecars.
 
 | Descriptor family | Minimum binding facts |
@@ -81,7 +84,8 @@ all displayed labels and original text live in optional presentation/debug sidec
 | UsagePolicy, SkillLinkRole | Permitted actor/action/skill target kinds and parameter slots; permitted authored container/payload roles. This declares input structure, not actual trigger rates or support applicability. |
 | Option, ActionPart, ActionMode, ActionStatSet | Typed alternatives and membership in their declaring choice/output context. A stat set is not another generated action. |
 
-Membership lists must distinguish known empty from incomplete. Suggested DTOs:
+The implemented DTOs distinguish known empty membership from incomplete coverage. These
+excerpts omit visibility and derives; field and variant shapes match the core API:
 
 ```rust
 enum SchemaState<T> { Known(T), Unmapped { gaps: Vec<SchemaGap> } }
@@ -89,47 +93,71 @@ struct DeclaredSet<T> { members: Vec<T>, closure: SchemaClosure }
 enum SchemaClosure { Complete, Partial { gaps: Vec<SchemaGap> } }
 struct DefinitionEntry<I, D> { id: I, schema: SchemaState<D> }
 
+struct IntegerRange { minimum: BoundedInteger, maximum: BoundedInteger }
+struct QuantityRange { minimum: FiniteQuantity, maximum: FiniteQuantity }
 enum ValueSchema {
     Boolean,
-    Integer { minimum: BoundedInteger, maximum: BoundedInteger },
-    Quantity { minimum: FiniteQuantity, maximum: FiniteQuantity },
-    Option { allowed: Vec<OptionDefId> },
+    Integer(IntegerRange),
+    Quantity(QuantityRange),
+    Option { allowed: DeclaredSet<OptionDefId> },
 }
+enum QualityPresence { Forbidden, Optional, Required }
 struct QualityUseSchema {
-    presence: Forbidden | Optional | Required,
+    presence: QualityPresence,
     allowed_kinds: DeclaredSet<QualityDefId>,
 }
-struct QualitySchema { id: QualityDefId, minimum: FiniteQuantity, maximum: FiniteQuantity }
+struct QualitySchema { amount: QuantityRange }
+enum SlotPresence { RequiredOnce, OptionalOnce }
 enum ParameterSite {
     ItemParameter, GemParameter, ModifierRoll, RewardParameter, UsagePolicyParameter,
 }
 struct ParameterSlotSchema {
-    key: DeclaredSlot<ParameterSlotDefId>, value: ValueSchema,
-    presence: RequiredOnce | OptionalOnce, sites: Vec<ParameterSite>,
+    value: ValueSchema, presence: SlotPresence, sites: Vec<ParameterSite>,
 }
 struct ChoiceSlotSchema {
-    key: DeclaredSlot<ChoiceSlotDefId>, value: ValueSchema,
-    presence: RequiredOnce | OptionalOnce, owners: Vec<ChoiceOwnerScope>,
+    value: ValueSchema, presence: SlotPresence, owners: Vec<ChoiceOwnerScope>,
 }
 struct ExternalInputSchema {
-    id: ExternalInputDefId, value: ValueSchema, targets: Vec<AssumptionTargetKind>,
+    value: ValueSchema, targets: Vec<AssumptionTargetKind>,
 }
 struct UsagePolicySchema {
-    id: UsagePolicyDefId, targets: Vec<UsageTargetKind>,
+    targets: Vec<UsageTargetKind>, declarations: DeclaredSlots,
+}
+struct DeclaredSlots {
     parameters: DeclaredSet<DeclaredSlot<ParameterSlotDefId>>,
+    choices: DeclaredSet<DeclaredSlot<ChoiceSlotDefId>>,
+    grants: DeclaredSet<DeclaredSlot<GrantSlotDefId>>,
+    actors: DeclaredSet<DeclaredSlot<ActorSlotDefId>>,
+    skill_grants: DeclaredSet<DeclaredSlot<SkillGrantSlotDefId>>,
+    outputs: DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
+    sockets: DeclaredSet<SocketSlotDefId>,
 }
 ```
 
-`SchemaGap` contains an owned definition/declared-slot subject, semantic facet and stable
-issue code. Source spans and explanatory source text attach in conversion evidence, not in
-the native descriptor. Partial collections never gain completion through an empty list.
+Entries carry identity; payload schemas do not duplicate it. For example,
+`DefinitionDescriptor::Quality` contains `DefinitionEntry<QualityDefId, QualitySchema>`;
+`SlotDescriptor::Parameter` contains
+`DefinitionEntry<DeclaredSlot<ParameterSlotDefId>, ParameterSlotSchema>`. There are 22
+standalone descriptor families and six declared-slot families. SocketSlot is standalone,
+with an explicit `owner`, `kind` and `scope`. Option/ActionPart/ActionMode/ActionStatSet have
+empty typed payloads; their contextual membership is declared by the relevant slot/output.
 
-These are proposed Rust-shaped records, not checked-in implementations. Range endpoints
-must be ordered, finite and use the same exact unit. Closed `UnitDimension` categories cover
-dimensionless factor, percentage points, count, time, rate, distance, damage, damage/time,
-resource points and rating; distinct unit IDs can share a dimension without becoming
-interchangeable. No value carries arbitrary text or an expression. Bounds describe accepted
-input values; candidate-dependent caps/requirements remain domain rules, not schema defaults.
+`SchemaGap { subject, facet, code }` uses
+`SchemaSubject::Definition(DefinitionAddress)` or `SchemaSubject::Slot(SlotAddress)`,
+`SchemaFacet::{Identity, InputSchema, StaticLinks, GameRules}` and a bounded
+`OwnedDefinitionKey` issue code. Source spans and explanatory text belong to future
+conversion evidence. Partial collections and unmapped entries require nonempty gap evidence
+in the loader. Empty closed role/site vectors mean known none, never unrestricted use.
+
+Core DTO construction/deserialization alone does not establish a valid package. The data
+loader checks ordered range endpoints and exact quantity-unit agreement. Closed
+`UnitDimension` variants are DimensionlessFactor, PercentagePoints, Count, Time, Rate,
+Distance, Damage, DamagePerTime, ResourcePoints and Rating. Distinct unit IDs can share a
+dimension without becoming interchangeable. Candidate-dependent caps and requirements remain
+rules, not schema defaults.
+
+The following input-binding behavior is the pending binder contract; the package loader
+validates schema declarations, not the values or availability in a concrete request.
 
 Both item and gem quality are `Option<QualitySelection>`; the wire field is required even
 when its value is null. Their template/gem descriptor supplies `QualityUseSchema`. A present
@@ -162,46 +190,72 @@ conditions or other candidate-computed nodes by sharing a name.
 
 ## Declared grants and output links
 
-The index describes **potential topology**, before conditional rules produce a plan:
+The index stores **potential topology**, before conditional rules produce a plan. Identity
+is held by each `DefinitionEntry<DeclaredSlot<...>, ...>` outside these slot payloads:
 
 ```rust
 struct GrantSlotSchema {
-    key: DeclaredSlot<GrantSlotDefId>, provider_roles: Vec<ProviderRole>,
-    target: Skill(DeclaredSlot<SkillGrantSlotDefId>)
-          | Actor(DeclaredSlot<ActorSlotDefId>)
-          | AllocationAccess { pools: Vec<PointPoolDefId> },
+    provider_roles: Vec<ProviderRole>, target: GrantTarget,
+}
+enum GrantTarget {
+    Skill(DeclaredSlot<SkillGrantSlotDefId>),
+    Actor(DeclaredSlot<ActorSlotDefId>),
+    AllocationAccess { pools: DeclaredSet<PointPoolDefId> },
 }
 struct SkillGrantSlotSchema {
-    key: DeclaredSlot<SkillGrantSlotDefId>, skill: SkillDefId,
-    outputs: DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
+    skill: SkillDefId, outputs: DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
 }
 struct ActorSlotSchema {
-    key: DeclaredSlot<ActorSlotDefId>,
     skills: DeclaredSet<SkillDefId>,
     outputs: DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
 }
 struct ActionOutputSchema {
-    key: DeclaredSlot<ActionOutputDefId>, actor_role: DeclaredActorRole,
+    actor_role: DeclaredActorRole,
     parts: DeclaredSet<ActionPartDefId>, modes: DeclaredSet<ActionModeDefId>,
     stat_sets: DeclaredSet<ActionStatSetDefId>,
     choices: DeclaredSet<DeclaredSlot<ChoiceSlotDefId>>,
+}
+enum DeclaredActorRole {
+    Player,
+    ProviderActor,
+    OwnedSlot(DeclaredSlot<ActorSlotDefId>),
 }
 ```
 
 `ProviderRole` covers Character, EquipmentUse, ItemModifier, SkillUse, SupportAssignment,
 Allocation and Reward. `DeclaredActorRole` states whether the output belongs to the player,
 its provider's actor, or a declared owned-actor slot. It is relative to the concrete provider
-path, never a runtime actor number. An actor slot describes a calculation actor/population, not one object
-per simulated summon. These links can bind player and minion queries from the first slice.
+path, never a runtime actor number. An actor slot describes a calculation actor/population,
+not one object per simulated summon. The pending binder must support both player and owned
+actor queries through these declarations.
 
-A slot's identity is its exact declaring owned definition plus typed slot ID. Store and
-look it up by that pair; never use a bare slot ordinal. Duplicate pairs reject. The index
-checks that each link reaches the declared target definition/output and that each action's
-part/mode/stat-set and selected choice slot belong to that output. Narrower choice
-applicability within a part/mode/stat-set requires an explicit rule constraint. Definitions
-provide durable discriminators for multiple emitted slots. Where repetition is driven by
-distinct authored providers, the instance/provider key supplies that distinction; unknown
-repetition semantics remain a gap.
+A slot's identity is its exact declaring owned definition plus typed slot ID. The loader
+indexes that pair, rejects duplicates and checks referenced entries exist. Direct
+`DeclaredSlots` lists must name their enclosing owner. Cross-links in grant, skill and actor
+payloads remain explicit typed references and may cross declarations; their contextual
+compatibility belongs to binding. A registered slot omitted from its known, complete owner's
+list rejects; a partial or unmapped owner leaves that relationship unresolved.
+
+Request binding must check that the selected part/mode/stat-set and choice belong to the
+selected output. Narrower applicability needs an explicit rule constraint. Required choices
+apply only to the concrete authored/bound context, not every potential output in the package.
+Declaration membership is a registry fact, not proof of contextual reachability.
+
+The reviewed grant-path contract retains the parent provider identity when entering a target:
+
+- Let `P` be the provider before grant `G`. Traversing `G -> Actor(A)` enters `A`'s skill/output
+  context while retaining `OwnedActorKey { provider: P, slot: A }` as the current actor key.
+  The traversed provider path `P.G` is a context address; an actor key with provider `P.G`
+  and slot `A` would identify a different child slot. It must not alias the current actor.
+  `ActorSlotSchema` currently exposes no child-actor collection.
+- Traversing `G -> Skill(S)` enters the referenced `SkillDefId` context with `S.outputs` as
+  an explicit output constraint. The supplied skill keeps
+  `GeneratedSkillKey { provider: P, slot: S }`; extending the path does not rebase its identity.
+
+A binder must not re-expose sibling actor/grant slots by looking up all declarations on a
+traversed target's owner. It must preserve the current provider/actor/skill context and follow
+only links exposed there. These are binding requirements, not behavior implemented by the
+loader. Generated activation and existence remain D3 responsibilities.
 
 An item-use or support-assignment root owns its generated descendants. Changing the supplied
 occurrence allocates a new root under the D1 edit contract. A class/ascendancy change cannot
@@ -225,13 +279,27 @@ graph from this index or accept an empty rule list as the meaning of an unconver
 
 ## Lookup and validation contract
 
-Suggested typed trait; generic lookup is intentional, so D1 consumers use a type parameter
-rather than requiring a trait object:
+The implemented interface uses sealed associations and immutable address lookup hooks.
+Generic methods have default bodies; signatures are shown here with bodies omitted:
 
 ```rust
+trait SchemaDefinitionId {
+    type Descriptor;
+    fn address(&self) -> DefinitionAddress;
+    fn project(descriptor: &DefinitionDescriptor)
+        -> Option<&SchemaState<Self::Descriptor>>;
+}
+trait SchemaSlotId: Sized {
+    type Descriptor;
+    fn address(key: &DeclaredSlot<Self>) -> SlotAddress;
+    fn project(descriptor: &SlotDescriptor)
+        -> Option<&SchemaState<Self::Descriptor>>;
+}
 trait DefinitionSchemaIndex {
     fn identity(&self) -> &DataIdentity;
     fn namespace(&self) -> &GameVersionNamespace;
+    fn lookup_definition(&self, address: &DefinitionAddress) -> Option<&DefinitionDescriptor>;
+    fn lookup_slot(&self, address: &SlotAddress) -> Option<&SlotDescriptor>;
     fn definition<I: SchemaDefinitionId>(&self, id: &I)
         -> SchemaLookup<'_, I::Descriptor>;
     fn slot<S: SchemaSlotId>(&self, key: &DeclaredSlot<S>)
@@ -242,20 +310,28 @@ enum SchemaLookup<'a, T> {
     Missing,
     Unmapped(&'a [SchemaGap]),
     NamespaceMismatch,
+    InconsistentIndex,
 }
 ```
 
-Sealed `SchemaDefinitionId`/`SchemaSlotId` traits associate existing typed aliases with their
-closed descriptor records; they introduce no new wire ID representation. Slot families use
-the declared-pair method. Missing is not proof of absence when the enclosing declared set
-has partial closure. Data's validated immutable index is the production implementation;
-caller-authored package bytes use the same loader to create independent test indexes.
-Lookup has no filesystem, process, VM, mutation, hidden defaults or numerical callback.
+The omitted private sealing bounds prevent callers from adding ID families. `DefinitionAddress`
+contains the 22 standalone typed IDs; `SlotAddress` contains the six exact declared pairs.
+Both are ordered owned keys. Their `namespace()`, `key()` and `kind()` helpers and each
+descriptor's `address()` avoid repeated enum dispatch in consumers. `SlotAddress::declaration()`
+returns the owner; its `namespace()` returns the slot ID namespace, checked separately.
 
-Keep outcomes separate:
+The defaults reject namespace mismatches before lookup. Otherwise they call one hook,
+check the full returned address and project the immutable typed payload. A wrong hook result returns `InconsistentIndex` rather
+than silently selecting another entry. The data implementation stores BTreeMap address-to-index
+maps into canonical descriptor vectors; lookup does not scan the package or compute effects.
+Missing is not proof of absence when enclosing membership is partial. No lookup traverses
+links, loads source, mutates state, supplies defaults or invokes a numerical callback.
+
+The following request-binding outcomes remain requirements for the pending binder:
 
 | Situation | Binding outcome |
 | --- | --- |
+| Lookup hook returns an inconsistent address or descriptor | Explicit index-implementation failure; no lookup fallback or input blame. |
 | Malformed ID/value/wire kind, or a record-local parameter declaration differing from its enclosing definition | Structural/codec error before definition lookup. |
 | Unavailable package, missing definition, unconverted schema or partial required relationship set | Explicit unresolved schema/coverage issue. No invented ID, value or empty effects. |
 | Known authored parameter/choice slot with wrong value kind/unit/option, absent declared membership or incompatible semantic owner context | Definition binding violation at the semantic input location. |
@@ -270,36 +346,58 @@ required operation versions, plan ownership and complete dependency coverage.
 
 ## Package and offline mapping artifacts
 
-The first artifact can be a separately versioned, bounded `OwnedDefinitionSchemaPackage`:
-namespace, owned release/schema-semantics version, typed descriptor entries, declared slots
-and semantic coverage gaps. The loader rejects duplicate standalone typed IDs and duplicate
-declared-slot pairs, namespace disagreement, invalid reference kinds, required-value shapes,
-range/unit conflicts and resource-limit violations. Every emitted resolved link reaches a
-package entry/declared slot. An unconverted link stays a gap; it is not a dangling reference
-presented as resolved. An identity-only target entry still reports its unmapped schema.
-Canonical bytes determine its `DataIdentity`. Source filenames, declaration winners,
-Lua flags/tables and raw source text are absent. Do not reuse the legacy package schema or
-require Spark/Mace sections. A schema-only package is explicitly insufficient for evaluation;
-this milestone does not satisfy D2's required representative rule-conversion gate.
-
-Keep two associated tooling artifacts outside the native schema package:
+The data loader implements version 1 with this raw artifact shape:
 
 ```rust
-struct ExternalMappingEntry {
-    source: PinnedExternalSelector,
-    outcome: Mapped(OwnedDefinitionRef)
-           | Ambiguous(Vec<OwnedDefinitionRef>) | Unmapped(MappingIssueCode),
+struct SchemaPackageInput {
+    schema_version: u32,
+    namespace: GameVersionNamespace,
+    release: OwnedDefinitionKey,
+    semantics_version: OwnedDefinitionKey,
+    definitions: Vec<DefinitionDescriptor>,
+    slots: Vec<SlotDescriptor>,
 }
-struct ConversionGap {
-    subject: ExternalSubject | OwnedSemanticSubject,
-    facet: Identity | InputSchema | StaticLinks | GameRules,
-    code: ConversionIssueCode,
-    evidence: OptionalSourceLocation,
+struct OwnedSchemaLimits {
+    max_entries: usize,
+    max_collection_entries: usize,
+    max_wire_bytes: usize,
 }
 ```
 
-`OwnedDefinitionRef` here is a closed tooling union of the agreed typed IDs, not an erased
-core key or new native lookup path. External selectors are tagged by source record kind:
+`OwnedDefinitionSchemaPackage::new(input, limits)` validates and canonicalizes raw DTOs.
+`decode_schema_package(bytes, limits)` bounds input bytes, decodes the strict wire shape and
+uses that constructor. `encode_schema_package(&package, limits)` checks retained resource
+counts and returns canonical bytes. These return `SchemaPackageError` on failure. The
+private package exposes `input()` and `identity()` and implements `DefinitionSchemaIndex`;
+deserializing a raw DTO cannot construct validated package authority.
+
+Implemented loader checks include schema version, namespaces and typed reference closure,
+duplicate addresses/members, direct declaration ownership, reverse membership for complete
+owners, parameter-site/owner compatibility, socket owner/kind compatibility, ordered exact-unit
+ranges, nonempty gap evidence and resource bounds. Gap subjects must also resolve to package
+entries. All descriptor vectors and membership collections are canonicalized as unordered
+sets; this schema has no implicit sequence order. Partial/unmapped coverage remains explicit,
+including when a referenced entry has identity but lacks its schema.
+
+Default limits are 1,000,000 aggregate collection entries, 100,000 entries per collection and
+64 MiB of wire bytes. Callers may adjust them up to hard caps of 4,000,000, 1,000,000 and
+256 MiB respectively. These are implementation bounds, not measured full-game capacity.
+
+`DataIdentity.content_sha256` hashes the canonical package JSON bytes; game, release, schema
+version and semantics version derive from the validated artifact. Its namespace is included
+in those bytes. Source filenames, declaration winners, source programs and raw text are
+absent. This source implementation is independent of legacy package schemas and named skill
+profiles. It contains no rules and cannot supply evaluation authority or satisfy D2's
+representative rule-conversion gate. No test, CI or numerical receipts are claimed here.
+
+Two associated tooling artifacts remain planned outside the native package. An external
+mapping entry will pair a pinned source selector with Mapped, Ambiguous or Unmapped outcomes.
+Conversion evidence will pair an external/owned subject and semantic facet with a stable
+issue code and optional source location. Neither artifact nor its compiler is implemented by
+the schema loader.
+
+`OwnedDefinitionRef` is the proposed closed tooling union of the agreed typed IDs; it is
+not an erased core key or new native lookup path. External selectors are tagged by source record kind:
 gem `(gameId, variantId)`, explicit effect key, item base/prototype, tree version/node plus
 view discriminator, configuration key and value role. The pin includes revision and relevant
 file digests. A missing selector component is distinct from an empty string or an unknown
@@ -308,7 +406,7 @@ pin. Multiple aliases may map to one owned ID only through explicit reviewed con
 equivalence; equal labels alone do not merge definitions. Mapping tables are data; runtime
 Rust must not switch on a named build/skill.
 
-The offline pipeline is:
+The planned offline pipeline is:
 
 1. Read the pinned upstream sources or reusable extracted factual catalogs. Optional Lua
    execution stays in acquisition tooling. Do not require constructing the entire legacy
@@ -335,12 +433,25 @@ dependencies stay explicit. Compatible coefficient changes update data; new oper
 require versioned Rust semantics and tests. There is no source VM or generic text-expression
 fallback inside the package.
 
-## Smallest implementation and acceptance slice
+## Remaining implementation and acceptance gates
 
-Implement descriptor DTOs, the portable schema trait, one bounded loader/index and an
-offline identity-registry/mapping compiler for representative record kinds. Bind directly
-authored D1 inputs through the same index used by imported inputs. Do not implement search,
-simulation or a new profile to demonstrate lookup.
+The core DTOs/index interface and bounded data loader are implemented in source. The next
+work is request binding against that index and the offline ID-registry/mapping compiler for
+representative record kinds. Directly authored and imported D1 inputs must use the same
+binding boundary. Search, simulation and numerical rule conversion remain separate work.
+
+The next binder must check every concrete authored parameter, choice and quality selection
+against indexed kind, unit, range, membership and owner/action context. Its report must bind
+to the exact request content and `DataIdentity`, retaining every query in its original order.
+It must distinguish invalid input, unresolved schema, saved-query selector unavailability and
+generated targets pending resolution. `RequiredOnce` applies to concrete authored sites and
+selected outputs, not all inactive potential definitions. Missing, Unmapped and inconsistent
+index results remain distinct; none authorizes a fallback to a different definition or slot.
+
+Core [schema tests](../crates/poe-optimizer-core/tests/owned_schema.rs) and data
+[loader tests](../crates/poe-optimizer-data/tests/owned_schema.rs) exist in source; their presence
+is not a validation receipt. The following acceptance requirements remain distinct from
+implemented API inventory and must be tied to receipts before claiming completion.
 
 Required contrasting evidence:
 
@@ -357,7 +468,8 @@ Required contrasting evidence:
 - Duplicate skill/item/support instances keep different provider roots. Repeated
   equal-definition item modifiers and separate equipment-use/modifier pairs also remain
   distinct. Item-, modifier- and support-granted actors retain their provider identity;
-  replacing a provider cannot retarget a query.
+  replacing a provider cannot retarget a query. Traversing an actor/skill grant must retain
+  the parent-provider target identity and must not re-expose sibling slots.
 - Partial slot topology differs from a known empty set. Missing/disabled query roots remain
   serializable; binding reports unavailable or pending as appropriate. Standalone query
   namespaces are checked before common-namespace request binding.
@@ -365,6 +477,6 @@ Required contrasting evidence:
   ownership, primary/additional outputs and separate stat sets. Report mapping coverage,
   schema binding and rule coverage separately; none is a count of completed evaluations.
 
-Static source findings and the shared-type coordination record are in
-`runs/owned-package-01/source-audit.md`. No runtime or numerical result was produced for
-this proposal.
+Earlier source findings and type coordination are recorded in
+`runs/owned-package-01/source-audit.md`. Current API facts above come from the linked source
+files. Validation receipts, mapping coverage and numerical results are separate evidence.

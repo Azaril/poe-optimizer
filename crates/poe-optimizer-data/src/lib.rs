@@ -14,6 +14,7 @@ pub mod item_scalability;
 pub mod loadouts;
 pub mod modifier_parser;
 mod movement;
+pub mod owned_schema;
 pub mod passive_allocation;
 pub mod skill_identities;
 pub mod skill_preparation;
