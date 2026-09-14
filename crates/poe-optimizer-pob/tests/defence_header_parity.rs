@@ -40,7 +40,13 @@ fn canonical(value: Value) -> serde_json::Value {
 fn check_before(snapshot: &GameDataSnapshot, source: &source::Source, raw: &str) -> ItemState {
     source.parse(raw);
     let before = source.before();
-    let mut provider = BuiltinItemLoadProvider::new(snapshot);
+    // This oracle compares the original BuildModList-entry state. Compose the
+    // native parser, formatter and unique lookup with the parser provider's
+    // intentionally unavailable assembly dependency; Builtin now continues.
+    let mut provider = NativeItemLoadProvider::with_native_unique_lookup(
+        snapshot,
+        NativeModifierParserProvider::new(snapshot.modifier_parser()),
+    );
     let mut machine = ItemLoadMachine::new(snapshot.item_loading());
     machine.apply_text(raw, &mut provider).unwrap();
     assert!(
@@ -59,6 +65,10 @@ fn check_before(snapshot: &GameDataSnapshot, source: &source::Source, raw: &str)
             machine.pending()
         );
     }
+    assert!(
+        machine.assembly_progress().is_none(),
+        "the declared preassembly comparison must not include assembly writes"
+    );
     reference::compare_state(machine.state(), &before);
     let calls = machine
         .state()

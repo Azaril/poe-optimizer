@@ -93,7 +93,13 @@ fn paired(
     raw: &str,
 ) -> ItemState {
     source.parse(raw);
-    let mut provider = BuiltinItemLoadProvider::new(snapshot);
+    // This oracle compares the original BuildModList-entry state. Compose the
+    // native parser, formatter and unique lookup with the parser provider's
+    // intentionally unavailable assembly dependency; Builtin now continues.
+    let mut provider = NativeItemLoadProvider::with_native_unique_lookup(
+        snapshot,
+        NativeModifierParserProvider::new(snapshot.modifier_parser()),
+    );
     let mut machine = ItemLoadMachine::new(catalog);
     machine.apply_text(raw, &mut provider).unwrap();
     assert_eq!(
@@ -101,6 +107,10 @@ fn paired(
         Some(DependencyKind::Assembly),
         "{raw}\n{:?}",
         machine.pending()
+    );
+    assert!(
+        machine.assembly_progress().is_none(),
+        "the declared preassembly comparison must not include assembly writes"
     );
     reference::compare_state(machine.state(), &source.before());
     assert_eq!(

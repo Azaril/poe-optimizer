@@ -332,7 +332,7 @@ fn canonical_inner(value: Value, depth: usize) -> serde_json::Value {
 }
 
 struct TracedNative<'a> {
-    inner: BuiltinItemLoadProvider<'a>,
+    inner: NativeItemLoadProvider<'a, NativeModifierParserProvider>,
     parser: Vec<(ParseRequest, DependencyResult<ParseOutcome>)>,
     formats: Vec<(FormatRequest, FormatOutcome)>,
     assembly: Vec<AssemblyRequest>,
@@ -341,7 +341,12 @@ struct TracedNative<'a> {
 impl<'a> TracedNative<'a> {
     fn new(snapshot: &'a poe_optimizer_data::game_data::GameDataSnapshot) -> Self {
         Self {
-            inner: BuiltinItemLoadProvider::new(snapshot),
+            // This component compares original BuildModList-entry state and
+            // parser traces, so keep its assembly dependency explicitly absent.
+            inner: NativeItemLoadProvider::with_native_unique_lookup(
+                snapshot,
+                NativeModifierParserProvider::new(snapshot.modifier_parser()),
+            ),
             parser: vec![],
             formats: vec![],
             assembly: vec![],
@@ -600,6 +605,7 @@ fn combined_native_parser_formatter_preserve_complete_preassembly_state_and_call
             let mut machine = ItemLoadMachine::new(snapshot.item_loading());
             machine.set_xml_attributes(&source_attributes(&parse));
             machine.apply_text(&consumed, &mut provider).unwrap();
+            assert!(machine.assembly_progress().is_none());
             assert_eq!(
                 machine.pending().map(|p| p.kind),
                 Some(DependencyKind::Assembly),
@@ -652,10 +658,11 @@ fn all_116_corpus_items_preserve_native_formatter_parser_progress_prefixes() {
             let mut machine = ItemLoadMachine::new(snapshot.item_loading());
             machine.set_xml_attributes(&source_attributes(&parse));
             machine.apply_text(&raw, &mut provider).unwrap();
+            assert!(machine.assembly_progress().is_none());
             assert_eq!(
                 machine.status(),
                 ItemLoadStatus::Pending,
-                "corpus item must explicitly stop before unavailable assembly"
+                "corpus item must stop at the test-owned preassembly boundary or an earlier dependency"
             );
             let kind = machine.pending().unwrap().kind;
             *pending.entry(format!("{kind:?}")).or_default() += 1;
@@ -865,6 +872,7 @@ fn original_defence_header_precedence_preserves_armour_data_before_pending_assem
         let mut machine = ItemLoadMachine::new(snapshot.item_loading());
         machine.set_xml_attributes(&source_attributes(&parse));
         machine.apply_text(&raw, &mut provider).unwrap();
+        assert!(machine.assembly_progress().is_none());
         assert_eq!(
             machine.pending().map(|pending| pending.kind),
             Some(DependencyKind::Assembly)

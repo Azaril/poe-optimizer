@@ -11,6 +11,11 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
+**Immediate validation gate:** restore completed CI on both operating systems before the
+next feature checkpoint. The current work repairs stale item-parity boundaries and runs the
+whole PoB package with failure aggregation, so an early failing target cannot hide the
+remaining suite. Keep the five original builds as the native implementation priority.
+
 **Accepted direction:** proceed with the [shared instance/resolution/plan migration](general-build-input-proposal.md).
 The owner asks for the most correct structural design to avoid larger later refactors.
 The [concrete API design](real-build-api-proposal.md) is the working contract; the B3
@@ -54,8 +59,26 @@ lint attempts and the assertion failure remain available.
 The broader frozen `b96fbd9` suite has now terminated with **2,076 passes, two failures and
 three ignored tests** across 177 completed targets. Its two failures are in PoB
 `base_buff_parity`; later targets were not run. All 749 source and four input guards match.
-This is not a full-suite pass or a latest-main result. Reproduction/fix work is active in
-`runs/r2an-loadout-sync-01/r2as-charm-repro-01/`; the terminal frozen result is recorded in
+This is not a full-suite pass or a latest-main result. Current-main reproductions found
+**nine failing tests across four targets**:
+`base_buff_parity`, `base_implicit_parity`, `defence_header_parity` and
+`mod_parser_provider_parity`. Their old assertions expected incomplete assembly even after
+Builtin gained assembly, and one supported scalar fixture lacked now-consumed charm data.
+The test repairs retain explicit native preassembly comparisons, add completed charm state
+comparisons, and keep real source-error/parser deferrals. Production calculations and corpus
+inputs are unchanged. Reproductions are retained in `r2as-charm-repro-01/`,
+`r2as-prefix-repro-01/` and `r2as-parser-provider-repro-01/`, all beneath
+`runs/r2an-loadout-sync-01/`. All **24 tests across the four repaired targets now pass**
+with CI's optimized test profile plus debug and overflow checks. Strict workspace/all-target
+Clippy, formatting and mutual static review pass. Producing commands and matching source/
+input guards are in `r2as-ci-repair-01/`; the final receipt is
+`runs/r2as-ci-review-01/repaired-checkpoint-root.json`.
+
+The complete PoB follow-up is running with `--all-targets --no-fail-fast` and the same CI
+profile in `runs/r2an-loadout-sync-01/r2as-pob-broad-01/`. It includes all 81 integration
+targets, the library and examples, rather than stopping at the formerly failing target.
+Until this run and hosted CI finish, neither is a success claim. The terminal frozen result
+is recorded in
 `runs/r2as-live-root-01/full-suite-terminal-root.json`. Session 71368 is terminal, and its
 checkout remains an unchanged baseline.
 
@@ -193,8 +216,8 @@ No YAML parser is installed, and hosted runtime/completion is not claimed. Evide
 credential-helper read for one older log; public annotations and already-retained logs
 supplied that timeout evidence without reading credentials.
 
-**CI completion gate:** fix and rerun the newly exposed charm-buff failures, then obtain a
-completed latest-revision result for every suite and both OSes. Splitting jobs addresses the
+**CI completion gate:** finish the complete PoB follow-up after the validated nine-test
+repair, then obtain a completed latest-revision result for every suite and both OSes. Splitting jobs addresses the
 historical accumulated timeout; it does not itself prove the remaining test suite succeeds
 or completes within the limit. Never trim exhaustive candidates or fresh-host comparisons
 to obtain a green result.

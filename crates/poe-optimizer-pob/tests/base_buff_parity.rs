@@ -130,18 +130,52 @@ fn all_shipped_charm_buffs_match_original_with_native_parser_and_exact_empty_row
             format!("\n{text}\n{text}\nImplicits: 0\n+7 to Strength"),
         ] {
             let raw = format!("Rarity: NORMAL\n{}{}", base.name, suffix);
-            source.parse(&raw);
+            let original_item = source.parse(&raw);
+            let mut preassembly_provider = NativeItemLoadProvider::with_native_unique_lookup(
+                &snapshot,
+                NativeModifierParserProvider::new(snapshot.modifier_parser()),
+            );
+            let mut preassembly = ItemLoadMachine::new(snapshot.item_loading());
+            preassembly
+                .apply_text(&raw, &mut preassembly_provider)
+                .unwrap();
+            assert_eq!(
+                preassembly.pending().map(|p| p.kind),
+                Some(DependencyKind::Assembly)
+            );
+            assert!(preassembly.assembly_progress().is_none());
+            reference::compare_state(preassembly.state(), &source.before());
+            assert_eq!(
+                preassembly
+                    .state()
+                    .parser_calls
+                    .iter()
+                    .map(|r| (r.text.clone(), r.combined))
+                    .collect::<Vec<_>>(),
+                source.calls()
+            );
+
             let mut provider = BuiltinItemLoadProvider::new(&snapshot);
             let mut machine = ItemLoadMachine::new(snapshot.item_loading());
             machine.apply_text(&raw, &mut provider).unwrap();
             assert_eq!(
-                machine.pending().map(|p| p.kind),
-                Some(DependencyKind::Assembly),
+                machine.status(),
+                ItemLoadStatus::Complete,
                 "{}: {:?}",
                 base.name,
                 machine.pending()
             );
-            reference::compare_state(machine.state(), &source.before());
+            assert!(machine.pending().is_none());
+            assert!(
+                machine
+                    .assembly_progress()
+                    .is_some_and(|item| item.is_complete())
+            );
+            assert!(
+                machine.assembled().is_none(),
+                "ParseRaw assembly is not final Load registration"
+            );
+            reference::compare_state(machine.state(), &source.snapshot(&original_item));
             assert_eq!(
                 machine
                     .state()
@@ -171,7 +205,9 @@ fn all_shipped_charm_buffs_match_original_with_native_parser_and_exact_empty_row
         }
     }
     assert_eq!(count, 26);
-    eprintln!("Shipped charm native parser/source parity: {count} complete preassembly states");
+    eprintln!(
+        "Shipped charm native parser/source parity: {count} exact preassembly and completed ParseRaw states"
+    );
 }
 
 #[test]
@@ -381,44 +417,81 @@ fn malformed_metadata_errors_preserve_original_partial_state_without_fake_string
 
 #[test]
 fn native_parser_errors_and_explicit_deferrals_preserve_original_buff_call_prefix() {
+    enum Expected {
+        SourceError,
+        Complete,
+        Deferred(&'static str),
+    }
     let snapshot = bundled_snapshot().unwrap();
-    for (text, source_error) in [
-        ("Lose 1..5 maximum Life".to_owned(), true),
-        ("Strength is doubled".to_owned(), false),
+    for (text, expected) in [
+        ("Lose 1..5 maximum Life", Expected::SourceError),
+        ("Strength is doubled", Expected::Complete),
         (
-            "Any number of poisons from this weapon can affect a target at the same time"
-                .to_owned(),
-            false,
+            "Any number of poisons from this weapon can affect a target at the same time",
+            Expected::Deferred("non-finite"),
         ),
         (
-            "Dexterity from Passives in Radius is Transformed to Intelligence".to_owned(),
-            false,
+            "Dexterity from Passives in Radius is Transformed to Intelligence",
+            Expected::Deferred("captured-state"),
         ),
     ] {
         let source = source::Source::new();
+        // Both original and native now reach assembly for supported scalar
+        // DOUBLED. Supply its consumed charm operands in the shared definition.
         let definition = format!(
-            "return {{['Ruby Charm']={{charm={{buff={{'+10 to Strength','{text}','+11 to Dexterity'}}}}}}}}"
+            "return {{['Ruby Charm']={{charm={{buff={{'+10 to Strength','{text}','+11 to Dexterity'}},duration=1,chargesUsed=1,chargesMax=1}}}}}}"
         );
         let injected = custom(&snapshot, &source, &definition);
         let raw = "Rarity: NORMAL\nRuby Charm\n+12 to Intelligence";
-        let (_, original_error) = source.try_parse(raw);
+        let (original_item, original_error) = source.try_parse(raw);
         let calls = source.attempts();
         assert!(calls.len() >= 2);
         assert_eq!(calls[1].get::<String>("text").unwrap(), text);
         let mut provider = BuiltinItemLoadProvider::new(&injected);
         let mut machine = ItemLoadMachine::new(injected.item_loading());
         let result = machine.apply_text(raw, &mut provider);
-        if source_error {
-            assert!(original_error.is_some());
-            assert_eq!(calls.len(), 2);
-            assert!(result.is_err());
-            assert_eq!(machine.status(), ItemLoadStatus::SourceError);
-        } else {
-            result.unwrap();
-            assert_eq!(
-                machine.pending().map(|p| p.kind),
-                Some(DependencyKind::ModifierParser)
-            );
+        match expected {
+            Expected::SourceError => {
+                assert!(original_error.is_some());
+                assert_eq!(calls.len(), 2);
+                assert!(result.is_err());
+                assert_eq!(machine.status(), ItemLoadStatus::SourceError);
+            }
+            Expected::Complete => {
+                assert!(original_error.is_none(), "{text}: {original_error:?}");
+                result.unwrap();
+                assert_eq!(machine.status(), ItemLoadStatus::Complete);
+                assert!(machine.pending().is_none());
+                assert!(
+                    machine
+                        .assembly_progress()
+                        .is_some_and(|item| item.is_complete())
+                );
+                assert!(machine.assembled().is_none());
+                reference::compare_state(machine.state(), &source.snapshot(&original_item));
+                assert_eq!(
+                    machine
+                        .state()
+                        .parser_calls
+                        .iter()
+                        .map(|r| (r.text.clone(), r.combined))
+                        .collect::<Vec<_>>(),
+                    source.calls()
+                );
+                assert_eq!(calls.len(), 4);
+                assert_eq!(machine.state().parser_calls.len(), 4);
+                assert_eq!(machine.state().buff_mod_lines.len(), 3);
+                assert_eq!(machine.state().buff_mod_lines[1].line, text);
+                assert_eq!(machine.state().explicit_mod_lines.len(), 1);
+                continue;
+            }
+            Expected::Deferred(fragment) => {
+                assert!(original_error.is_none(), "{text}: {original_error:?}");
+                result.unwrap();
+                let pending = machine.pending().expect("unrepresented parser output");
+                assert_eq!(pending.kind, DependencyKind::ModifierParser);
+                assert!(pending.message.contains(fragment), "{pending:?}");
+            }
         }
         reference::compare_state(machine.state(), &calls[1].get::<Table>("before").unwrap());
         assert_eq!(machine.state().parser_calls.len(), 2);
