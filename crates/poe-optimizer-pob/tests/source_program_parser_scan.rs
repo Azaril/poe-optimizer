@@ -37,7 +37,8 @@ use std::{
     cell::RefCell,
     collections::{BTreeMap, BTreeSet},
     fs,
-    path::PathBuf,
+    io::{Read, Seek, SeekFrom},
+    path::{Path, PathBuf},
     process::{Command, Stdio},
     rc::Rc,
     time::{Duration, Instant},
@@ -632,6 +633,47 @@ fn complete_original_scan_uses_initialized_parser_dictionaries_on_all_five_build
 fn original_parser_factory_graph_preserves_all_five_scan_contracts() {
     check_all_builds(true);
 }
+// Preserve the exact child log on disk; surface only a bounded failure tail
+// so hosted CI reports the child cause instead of only the parent assertion.
+fn child_failure_log_tail(destination: &Path, build: &str) -> String {
+    const MAX_BYTES: u64 = 4096;
+    let path = destination.join(format!("build-{build}.log"));
+    let tail = (|| -> std::io::Result<Vec<u8>> {
+        let mut file = fs::File::open(&path)?;
+        let length = file.metadata()?.len();
+        file.seek(SeekFrom::Start(length.saturating_sub(MAX_BYTES)))?;
+        let mut bytes = Vec::with_capacity(MAX_BYTES as usize);
+        file.take(MAX_BYTES).read_to_end(&mut bytes)?;
+        Ok(bytes)
+    })();
+    let mut diagnostic = format!("\n--- {} (last {MAX_BYTES} bytes) ---\n", path.display());
+    match tail {
+        Ok(bytes) => diagnostic.push_str(&String::from_utf8_lossy(&bytes)),
+        Err(error) => diagnostic.push_str(&format!("could not read child log: {error}")),
+    }
+    diagnostic
+}
+
+#[test]
+fn parser_scan_child_failure_tail_preserves_missing_short_and_bounded_logs() {
+    let directory = tempfile::tempdir().unwrap();
+    assert!(child_failure_log_tail(directory.path(), "05").contains("could not read child log:"));
+    let path = directory.path().join("build-05.log");
+    fs::write(&path, b"reached parser child error\n").unwrap();
+    assert!(
+        child_failure_log_tail(directory.path(), "05").ends_with("reached parser child error\n")
+    );
+    let suffix = b"\nlast parser child record\n";
+    let mut oversized = vec![b'x'; 8192];
+    oversized.extend_from_slice(suffix);
+    fs::write(path, oversized).unwrap();
+    let diagnostic = child_failure_log_tail(directory.path(), "05");
+    assert!(diagnostic.ends_with(std::str::from_utf8(suffix).unwrap()));
+    assert!(diagnostic.contains(&"x".repeat(4096 - suffix.len())));
+    assert!(!diagnostic.contains(&"x".repeat(4097)));
+    assert!(!diagnostic.contains("could not read child log:"));
+}
+
 fn check_all_builds(with_closures: bool) {
     let test_name = if with_closures {
         "original_parser_factory_graph_preserves_all_five_scan_contracts"
@@ -705,14 +747,18 @@ fn check_all_builds(with_closures: bool) {
             if let Some(status) = child.try_wait().unwrap() {
                 assert!(
                     status.success(),
-                    "parser scan build {build}; see {destination:?}"
+                    "parser scan build {build} ({status}); see {destination:?}{}",
+                    child_failure_log_tail(&destination, build)
                 );
                 break;
             }
             if start.elapsed() > Duration::from_secs(300) {
                 child.kill().unwrap();
                 child.wait().unwrap();
-                panic!("parser scan child timeout {build}");
+                panic!(
+                    "parser scan child timeout {build}{}",
+                    child_failure_log_tail(&destination, build)
+                );
             }
             std::thread::sleep(Duration::from_millis(100));
         }

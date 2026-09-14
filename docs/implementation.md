@@ -12,9 +12,11 @@ case: its saved reference selection has no hit-damage output. Unit/source test c
 evidence, not breadth completion.
 
 **Immediate validation gate:** restore completed CI on both operating systems before the
-next feature checkpoint. The current work repairs stale item-parity boundaries and runs the
-whole PoB package with failure aggregation, so an early failing target cannot hide the
-remaining suite. Keep the five original builds as the native implementation priority.
+next feature checkpoint. The complete local PoB and native package suites now pass. The
+Linux lifecycle failure and the reproduced parser warm-trace failure now have fixes
+validated on both operating systems; hosted confirmation remains pending. Failure
+aggregation and retained child logs will make subsequent CI failures diagnosable. Keep
+the five original builds as the native implementation priority.
 
 **Accepted direction:** proceed with the [shared instance/resolution/plan migration](general-build-input-proposal.md).
 The owner asks for the most correct structural design to avoid larger later refactors.
@@ -74,11 +76,26 @@ Clippy, formatting and mutual static review pass. Producing commands and matchin
 input guards are in `r2as-ci-repair-01/`; the final receipt is
 `runs/r2as-ci-review-01/repaired-checkpoint-root.json`.
 
-The complete PoB follow-up is running with `--all-targets --no-fail-fast` and the same CI
-profile in `runs/r2an-loadout-sync-01/r2as-pob-broad-01/`. It includes all 81 integration
-targets, the library and examples, rather than stopping at the formerly failing target.
-Until this run and hosted CI finish, neither is a success claim. The terminal frozen result
-is recorded in
+The complete PoB follow-up has **passed** with `--all-targets --no-fail-fast` and the
+same CI profile: **809 passed, zero failed, 12 pre-existing ignored tests across 86 target
+results** (81 integration targets, the library and four examples). It took 1,951.62 seconds
+including compilation. All 761 source and four input guards match exact published `deb5694`,
+and the PoB submodule remains clean at its pinned revision. Producing ledger/log:
+`runs/r2an-loadout-sync-01/r2as-pob-broad-01/`; terminal receipt:
+`runs/r2as-ci-review-01/pob-broad-terminal-root.json`. Session 97014 is terminal success,
+and its existing parser-scan binary was subsequently reused for the isolated CI
+reproductions below without recompilation.
+
+The complete native package has also **passed**: **161 passed, zero failed, zero ignored
+across all 21 package targets**, in 3,243.63 seconds including compilation. The exhaustive
+12-test candidate target passed in 2,816.03 seconds. All 761 source and four input guards
+match exact `deb5694`; its source/input/pin and Cargo target inventory are retained in
+`runs/r2as-ci-review-01/native-broad-terminal-root.json`. Producing ledger/log:
+`runs/r2an-loadout-sync-01/r2as-native-broad-01/`. Runtime 80429 is terminal success and
+`target` is free. Main's broad-suite source freeze is lifted. Neither package pass implies
+hosted-CI success, a full-workspace result or complete original-five native build parity.
+
+The earlier frozen full-workspace failure is recorded in
 `runs/r2as-live-root-01/full-suite-terminal-root.json`. Session 71368 is terminal, and its
 checkout remains an unchanged baseline.
 
@@ -181,7 +198,31 @@ The source-order audit is retained in
 must run the complete BuildModList boundary and its reached callbacks, constructors, parser
 service and dynamic Build context through the existing shared program machinery. Successful
 individual callbacks or a static dispatch list do not establish whole-method parity. A
-focused investigation is staged under `runs/r2at-config-effects-01/`. Follow the existing
+focused investigation is staged under `runs/r2at-config-effects-01/`. Its frozen revision 02
+adds a cumulative retained-report budget and synthetic observer-mechanics tests. The six
+manifest-verified files are adopted only into the detached `deb5694` checkout at
+`runs/r2at-config-validation-01/worktree`, with the exact pinned local PoB submodule and
+unchanged original inputs. A separate target (`runs/r2at-config-native-target`, two build
+jobs) has compiled both targets and passed all 12 synthetic mechanics/budget tests.
+Receipts are `runs/r2at-config-validation-01/compile-01/receipt.json` and
+`mechanics-01/receipt.json`. The amended public-output/selected-set control also compiles
+cleanly (`compile-02/receipt.json`), with unchanged mechanics binary. Its first build-01
+original-source child failed in 5.843 seconds with `config-effects probe: return pairing apply`;
+no result JSON, complete control comparison or native parity was produced. The exact failure
+is retained in `source-child-01/receipt.json` and `stderr.log`. Diagnostic rerun `source-child-02` identifies the original public parseMod wrapper's
+`return unpack(copyTable(cache[line]))` as the missing return event, reached from quest
+option 647. The synthetic tail-to-original-C-unpack experiment passes in
+`tail-mechanics-root-01/receipt.json`: LuaJIT emits the wrapper call and C unpack call but
+no wrapper return hook, whereas the non-tail form has that return hook. Existing paired
+internal-return assumptions therefore do not cover this actual source path. An explicit v2 dependency-entry-only trace is being implemented only in the isolated
+checkout, following `dependency-trace-proposal-01.md`. It retains strict complete-method
+entry/return and unchanged graph/public-output controls; dependency returns and depth must
+be removed from the declared scope, not inferred. Mechanics must pass before one further
+original child. No new tail interpreter or production change has been adopted. This keeps the published
+CI revision and both broad local suites unchanged. Static review also requires the probe's
+control to compare actual public scalar outputs and selected sets, alongside its declared
+configuration graph. Compile or synthetic-hook success will not establish native parity.
+Follow the existing
 acquisition seam for missing source/data operands; preserve exact authored-instance identity
 and explicitly unavailable dependencies without adding fixture-specific execution paths.
 
@@ -193,11 +234,93 @@ local target timing and a public annotation establish that failure; it predates 
 test execution and the later prepare-once/parser-sharing changes. Those fixes are not yet
 proof that current hosted jobs complete within the limit.
 
-The latest inspected run is [34791390458](https://github.com/Azaril/poe-optimizer/actions/runs/34791390458),
-exact `990aab7`. At 00:29:33 UTC on September 14 both OS jobs remained in Test with no new
-failed step or annotation. Older ungrouped runs were still testing after roughly 272-288
-minutes. Workflow-level branch/PR concurrency keeps only the newest grouped run per ref;
-it cannot retroactively cancel those older ungrouped runs.
+Remote main remains `deb5694`, including the CI partition, retained-state native
+checkpoint and validated parity repairs. Its [run 34794136034](https://github.com/Azaril/poe-optimizer/actions/runs/34794136034)
+has two distinct PoB failures. At 02:53 UTC on September 14, both validation jobs and the
+Linux workspace lane passed; Windows workspace and both native lanes were still running.
+The two final gates await those jobs.
+The current local package passes do not clear the hosted failures.
+
+**Linux lifecycle repair validated on both operating systems.** Hosted Ubuntu reports
+20 passes and two failing build-01 child parents in `item_set_lifecycle_parity`. Exact
+unpatched Linux reproductions fail after all three PoB hosts complete (35.85 and 36.75
+seconds). The sole differing control field is `export.path.buf`: pinned
+`BuildExportPoE2.lua:32` uses USERPROFILE, falling back to each host's distinct scratch
+GetScriptPath when absent on Linux. Each parent now supplies one explicit test-owned
+USERPROFILE to its children. Separate host scratch directories, original methods and every
+path/graph/alias comparison remain intact. No production calculation changes are needed.
+
+The corrected complete lifecycle target passes **23 tests on Linux and 23 on Windows**,
+including both five-build parent cases with USERPROFILE removed from the test parent.
+Linux validation uses an isolated WSL clone and pinned Rust 1.98.1 under
+`runs/r2as-linux-ci-01/`; it does not alter the user's toolchain or profile. Scoped Linux
+Clippy and formatting pass; Windows whole-workspace/all-target strict Clippy and formatting
+pass. Linux's 64 source byte differences from the Windows checkout are exclusively CRLF/LF,
+verified against its clean base plus the intended patch; raw cross-platform hashes are not
+claimed equal. Original inputs match on both platforms. Receipts:
+`runs/r2as-ci-review-01/linux-lifecycle-validated-root.json` and
+`runs/r2as-ci-review-01/windows-lifecycle-01/summary.json`.
+
+**Parser warm repair validated locally; hosted confirmation pending.** Hosted Windows reports 13 passes and
+one failing fifth-build child in `original_parser_factory_graph_preserves_all_five_scan_contracts`.
+Three standalone build-05 reproductions pass, but the full five-build parent reproduces
+the failure: builds 01-04 pass; build 05 fails because the actual XOR64 helper is absent
+from completed still-live warm traces. Every build uses a fresh process, so this does not
+establish shared cross-build JIT state. This is a trace-evidence gate, before any reported
+native/source graph mismatch. Hosted child stderr was not retained, so matching the local
+cause to the hosted failure remains a confirmation gate. Baseline commands, binary/input
+hashes and child logs are retained under `runs/r2as-ci-parser-scan-01/`; all previous fixed
+output files were restored byte-for-byte. Diagnose the warming harness without dropping
+the compiled-function evidence or numerical/graph comparisons. The flag helper now uses
+its existing bounded abort observation API while still requiring the exact original target
+in a completed live trace and comparing all 128 result packs per vector. The complete
+15-test parser target passes with those diagnostics (46.43 seconds excluding compilation);
+this successful intermittent reproduction is not a cause fix. Producing evidence is
+`runs/r2as-ci-parser-scan-01/diagnostic-full-01/receipt.json`. Three additional fresh
+build-05 children passed; a further bounded sample stopped on its third trial with
+AND64/two-zero-operands failing the same gate. All 128 calls succeeded, but all three
+traces containing the actual helper aborted with LuaJIT code 16 (NYIRETL, return to lower
+frame); the sole completed live trace omitted it. This rules out an eight-operand-only
+assumption. The exact failed run is retained in `diagnostic-sample-01/trial-03/`; the
+summary is `warm-failure-diagnosis-01.json`.
+
+The correction uses an explicit success-only direct warm loop protected once outside the
+loop. Each vector still requires exactly 128 successful actual calls, no seed calls, full
+result-pack comparisons and a completed live trace containing the exact original helper.
+Unexpected source errors stop immediately, detach observers and disable JIT before returning
+failure. Existing per-call protected/error-seed APIs, the packing wrapper, original helpers
+and JIT options remain unchanged. The two new mechanics tests preserve nil holes, shared
+aliases, distinct packs, refusal of an uncalled equal-shaped target, error cleanup and reuse.
+
+All **18 affected tests pass on Windows and Linux** (three warm mechanics plus 15 parser
+cases, including both complete five-build parents). A bounded **20 additional fresh Windows
+build-05 children all pass**, with no retries or setting adjustments. The five complete
+factory reports plus those 20 children retain **76,800 full source/native result packs**,
+positive exact-target traces for all 600 vectors and **zero aborts**. The prior protected
+loop recorded NYIRETL aborts; the packing wrapper and call counts are unchanged. This
+validates the local harness correction; the old hosted child stderr was not available.
+Windows whole-workspace/all-target strict Clippy, Linux scoped Clippy, formatting and diff
+hygiene pass. Producing receipts: `runs/r2as-ci-parser-scan-01/success-loop-02/`,
+`success-loop-reconciliation-01.json` and `runs/r2as-linux-ci-01/warm-fixed-01/summary.json`.
+All guarded candidate files match; both Linux and Windows runtimes are terminal. The initial
+mechanics fixture's unavailable debug-library lookup was corrected to use mlua's registry
+API; that failed attempt remains recorded separately.
+
+The CI repair also preserves bounded child-log tails on failures/timeouts and
+uploads lifecycle/parser-factory logs and JSON from failed PoB jobs. All three test suites
+use --no-fail-fast, retaining complete target coverage and a failing exit status. Original
+child deadlines, kill/reap behavior and assertions are unchanged. The new parser-log test
+passes after a formatting correction; the lifecycle diagnostic test is included in each
+23-test result above. Independent workflow/helper review found no coverage or failure-
+propagation regression. Earlier failed formatting and source reproductions remain recorded.
+
+Publish this reviewed repair on `codex/ci-repair-r2as` for hosted validation while the three
+remaining main jobs provide useful evidence. The separate branch avoids cancelling that
+run through main's concurrency group. Advance main to the same validated commit after the
+remaining results are available; no hosted success is claimed yet.
+The previous grouped `990aab7` run was cancelled on both OSes, confirming concurrency
+works. Older ungrouped runs are not retroactively cancelled. Public snapshots and evidence
+are under `runs/r2as-ci-review-01/public-05/`, `public-root-01/` through `public-root-04/` and `public-08/`.
 
 Commit `259d7f7` now splits workspace tests into three disjoint package suites on each OS:
 native, PoB, and remaining workspace packages. Their union is all nine workspace packages;
@@ -216,8 +339,9 @@ No YAML parser is installed, and hosted runtime/completion is not claimed. Evide
 credential-helper read for one older log; public annotations and already-retained logs
 supplied that timeout evidence without reading credentials.
 
-**CI completion gate:** finish the complete PoB follow-up after the validated nine-test
-repair, then obtain a completed latest-revision result for every suite and both OSes. Splitting jobs addresses the
+**CI completion gate:** obtain completed results for the repair revision on every suite
+and both OSes, resolve any further observed failures, and publish the validated commit
+to main. Splitting jobs addresses the
 historical accumulated timeout; it does not itself prove the remaining test suite succeeds
 or completes within the limit. Never trim exhaustive candidates or fresh-host comparisons
 to obtain a green result.

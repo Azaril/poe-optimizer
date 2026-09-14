@@ -14,6 +14,7 @@ use std::{
     cell::RefCell,
     collections::BTreeMap,
     fs,
+    io::{Read, Seek, SeekFrom},
     path::{Path, PathBuf},
     process::{Command, Stdio},
     rc::Rc,
@@ -459,6 +460,33 @@ fn child(repo: &Path, output: &Path, entry: &Json) {
     )
     .unwrap();
 }
+// Child streams remain on disk as exact evidence. Print bounded diagnostic
+// tails only when a child fails so CI annotations include its actual error.
+fn child_failure_logs(output: &Path, name: &str) -> String {
+    const MAX_BYTES: u64 = 4096;
+    let mut diagnostics = String::new();
+    for stream in ["stderr", "stdout"] {
+        let path = output.join(format!("{name}.{stream}.log"));
+        let tail = (|| -> std::io::Result<Vec<u8>> {
+            let mut file = fs::File::open(&path)?;
+            let length = file.metadata()?.len();
+            file.seek(SeekFrom::Start(length.saturating_sub(MAX_BYTES)))?;
+            let mut bytes = Vec::with_capacity(MAX_BYTES as usize);
+            file.take(MAX_BYTES).read_to_end(&mut bytes)?;
+            Ok(bytes)
+        })();
+        diagnostics.push_str(&format!(
+            "\n--- {} (last {MAX_BYTES} bytes) ---\n",
+            path.display()
+        ));
+        match tail {
+            Ok(bytes) => diagnostics.push_str(&String::from_utf8_lossy(&bytes)),
+            Err(error) => diagnostics.push_str(&format!("could not read child log: {error}")),
+        }
+    }
+    diagnostics
+}
+
 pub fn run() {
     let repo = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../..")
@@ -472,6 +500,9 @@ pub fn run() {
         .map(PathBuf::from)
         .unwrap_or_else(|| repo.join("runs/r2ad-item-sets-01/source"));
     fs::create_dir_all(&output).unwrap();
+    // Export paths read USERPROFILE before the per-host scratch fallback. Give
+    // every fresh host in a child the same explicit, test-owned process input.
+    let user_profile = output.canonicalize().unwrap();
     if let Ok(name) = std::env::var(CHILD) {
         child(
             &repo,
@@ -492,6 +523,7 @@ pub fn run() {
             .args(["--exact", TEST, "--nocapture"])
             .env(CHILD, name)
             .env(OUTPUT, &output)
+            .env("USERPROFILE", &user_profile)
             .current_dir(repo.join("vendor/path-of-building-poe2/src"))
             .stdout(Stdio::from(
                 fs::File::create(output.join(format!("{name}.stdout.log"))).unwrap(),
@@ -509,14 +541,18 @@ pub fn run() {
             if start.elapsed() > Duration::from_secs(300) {
                 process.kill().unwrap();
                 let _ = process.wait();
-                panic!("item-set lifecycle child timeout: {name}")
+                panic!(
+                    "item-set lifecycle child timeout: {name}{}",
+                    child_failure_logs(&output, name)
+                )
             }
             std::thread::sleep(Duration::from_millis(50));
         };
         assert!(
             status.success(),
-            "item-set lifecycle child failed {name}; inspect {}",
-            output.display()
+            "item-set lifecycle child failed {name} ({status}); inspect {}{}",
+            output.display(),
+            child_failure_logs(&output, name)
         );
         children.push(json!({"xml":name,"exit":status.code()}));
     }
@@ -976,6 +1012,9 @@ pub fn run_loadouts() {
         .map(PathBuf::from)
         .unwrap_or_else(|| repo.join("runs/r2an-loadout-sync-01/source"));
     fs::create_dir_all(&output).unwrap();
+    // Export paths read USERPROFILE before the per-host scratch fallback. Give
+    // every fresh host in a child the same explicit, test-owned process input.
+    let user_profile = output.canonicalize().unwrap();
     if let Ok(name) = std::env::var(LOADOUT_CHILD) {
         child_loadouts(
             &repo,
@@ -994,6 +1033,7 @@ pub fn run_loadouts() {
             .args(["--exact", LOADOUT_TEST, "--nocapture"])
             .env(LOADOUT_CHILD, name)
             .env(LOADOUT_OUTPUT, &output)
+            .env("USERPROFILE", &user_profile)
             .current_dir(repo.join("vendor/path-of-building-poe2/src"))
             .stdout(Stdio::from(
                 fs::File::create(output.join(format!("{name}.stdout.log"))).unwrap(),
@@ -1011,7 +1051,10 @@ pub fn run_loadouts() {
             if start.elapsed() > Duration::from_secs(300) {
                 process.kill().unwrap();
                 let _ = process.wait();
-                panic!("loadout lifecycle child timeout: {name}");
+                panic!(
+                    "loadout lifecycle child timeout: {name}{}",
+                    child_failure_logs(&output, name)
+                );
             }
             std::thread::sleep(Duration::from_millis(50));
         };
@@ -1023,8 +1066,9 @@ pub fn run_loadouts() {
         .unwrap();
         assert!(
             status.success(),
-            "loadout lifecycle child failed {name}; inspect {}",
-            output.display()
+            "loadout lifecycle child failed {name} ({status}); inspect {}{}",
+            output.display(),
+            child_failure_logs(&output, name)
         );
         let summary: Json =
             serde_json::from_slice(&fs::read(output.join(format!("{name}.json"))).unwrap())
@@ -1039,4 +1083,27 @@ pub fn run_loadouts() {
         }
     }
     fs::write(output.join("summary.json"), serde_json::to_vec_pretty(&json!({"children":children,"original_inputs":5,"fresh_hosts":15,"direct_cases_per_control_lane":total_cases,"activation_cases_per_control_lane":total_activation_cases,"activation_calls_per_observed_lane":reached_activation_calls,"source_only":true,"native_parity":false,"scope":"all original import loadout roots plus separately supplied direct post-import calls; post-import and direct pre/post joint graphs compared; import intermediate histories retained diagnostically with per-host ancestry checks; raw direct result arity and alias ownership; separate retained-lookup activations with original changed-domain callbacks, exact argument/pre/post graphs and successful-call ancestry"})).unwrap()).unwrap();
+}
+
+#[test]
+fn child_failure_log_diagnostics_preserve_missing_short_and_bounded_tails() {
+    let directory = tempfile::tempdir().unwrap();
+    let missing = child_failure_logs(directory.path(), "probe");
+    assert_eq!(missing.matches("could not read child log:").count(), 2);
+
+    fs::write(
+        directory.path().join("probe.stderr.log"),
+        b"reached child error\n",
+    )
+    .unwrap();
+    let suffix = b"\nlast child stdout record\n";
+    let mut oversized = vec![b'x'; 8192];
+    oversized.extend_from_slice(suffix);
+    fs::write(directory.path().join("probe.stdout.log"), oversized).unwrap();
+    let diagnostics = child_failure_logs(directory.path(), "probe");
+    assert!(diagnostics.contains("reached child error\n"));
+    assert!(diagnostics.ends_with(std::str::from_utf8(suffix).unwrap()));
+    assert!(diagnostics.contains(&"x".repeat(4096 - suffix.len())));
+    assert!(!diagnostics.contains(&"x".repeat(4097)));
+    assert!(!diagnostics.contains("could not read child log:"));
 }

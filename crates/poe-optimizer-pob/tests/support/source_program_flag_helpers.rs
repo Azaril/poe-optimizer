@@ -305,12 +305,26 @@ pub(super) fn run(lua: &Lua, parent: &Pair) -> Json {
             ];
             source_args.extend(arguments.clone());
             let evidence = driver
-                .run_with_target(lua, &wrapper, function, &source_args, None)
+                .run_success_with_target(lua, &wrapper, function, &source_args)
                 .unwrap_or_else(|error| panic!("actual helper warm {name}/{index}: {error}"));
             assert!(evidence.success);
             assert_eq!(evidence.calls, 128);
             assert_eq!(evidence.seed_calls, 0);
-            assert!(evidence.target_live_traces > 0);
+            assert!(
+                evidence.target_live_traces > 0,
+                "actual helper warm {name}/{index}: exact source target absent; arguments={:?}; calls={}, seed_calls={}, live={}, target={}, aborts={:?}, target_aborts={:?}, aborts_complete={}",
+                vector
+                    .iter()
+                    .map(|value| format!("{:016x}", value.to_bits()))
+                    .collect::<Vec<_>>(),
+                evidence.calls,
+                evidence.seed_calls,
+                evidence.live_traces,
+                evidence.target_live_traces,
+                evidence.trace_aborts,
+                evidence.target_trace_aborts,
+                evidence.trace_aborts_complete,
+            );
             assert_eq!(rows.raw_get::<usize>("calls").unwrap(), 128);
             assert_eq!(evidence.value, rows.raw_get::<Value>(128).unwrap());
             let mut results = Vec::new();
@@ -334,7 +348,7 @@ pub(super) fn run(lua: &Lua, parent: &Pair) -> Json {
                 ));
             }
             warmed.push(json!({"helper":name,"vector":index,"arguments":source_pack(&arguments),"calls":128,"seed_calls":0,
-                "actual_helper_target_traces":evidence.target_live_traces,"live_traces":evidence.live_traces,"result_packs":results}));
+                "actual_helper_target_traces":evidence.target_live_traces,"live_traces":evidence.live_traces,"trace_aborts":evidence.trace_aborts,"target_trace_aborts":evidence.target_trace_aborts,"trace_aborts_complete":evidence.trace_aborts_complete,"result_packs":results}));
         }
     }
     for (name, function) in functions {

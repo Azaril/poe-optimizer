@@ -8,7 +8,15 @@ local function run(f, args)
     end
     return ok, value
 end
-local function warm(f, args, error_seed, target, observe_aborts)
+local function run_success(f, args, progress)
+    local value
+    for iteration = 1, 128 do
+        progress.calls = progress.calls + 1
+        value = f(unpack(args, 1, args.n))
+    end
+    return value
+end
+local function warm(f, args, error_seed, target, observe_aborts, success_only)
     jit.off()
     jit.flush()
     jit.opt.start('hotloop=2', 'hotexit=2')
@@ -54,7 +62,15 @@ local function warm(f, args, error_seed, target, observe_aborts)
         assert(ok)
         seed_calls = 128
     end
-    local ok, value = run(f, args)
+    local ok, value, progress
+    if success_only then
+        progress = { calls = 0 }
+        -- One protected boundary around the complete success-only loop. An
+        -- unexpected error stops the loop, then detaches the observer below.
+        ok, value = pcall(run_success, f, args, progress)
+    else
+        ok, value = run(f, args)
+    end
     jit.off()
     jit.attach(record)
     jit.attach(lifecycle)
@@ -65,13 +81,19 @@ local function warm(f, args, error_seed, target, observe_aborts)
             if callbacks[target] then target_live = target_live + 1 end
         end
     end
-    return {ok=ok, value=value, calls=128, seed_calls=seed_calls,
+    return {ok=ok, value=value, calls=progress and progress.calls or 128, seed_calls=seed_calls,
         live=live, target_live=target_live, aborts=aborts, target_aborts=target_aborts,
         aborts_complete=aborts_complete}
 end
 jit.off(warm)
 return warm
 "#;
+
+enum CallMode {
+    Protected,
+    ObserveProtected,
+    SuccessOnly,
+}
 
 pub struct SourceWarmDriver {
     run: Function,
@@ -124,7 +146,14 @@ impl SourceWarmDriver {
         arguments: &[Value],
         error_seed: Option<&[Value]>,
     ) -> mlua::Result<SourceWarmResult> {
-        let result = self.invoke(lua, function, target, arguments, error_seed, false)?;
+        let result = self.invoke(
+            lua,
+            function,
+            target,
+            arguments,
+            error_seed,
+            CallMode::Protected,
+        )?;
         if result.target_live_traces == 0 {
             return Err(mlua::Error::RuntimeError(
                 "actual source function absent from completed still-live warm traces".into(),
@@ -144,7 +173,55 @@ impl SourceWarmDriver {
         arguments: &[Value],
         error_seed: Option<&[Value]>,
     ) -> mlua::Result<SourceWarmResult> {
-        self.invoke(lua, function, target, arguments, error_seed, true)
+        self.invoke(
+            lua,
+            function,
+            target,
+            arguments,
+            error_seed,
+            CallMode::ObserveProtected,
+        )
+    }
+    /// Invoke 128 successful calls directly inside one outer protected loop.
+    /// Unexpected errors stop immediately; hooks are detached and JIT is off
+    /// before an error is returned. This leaves the existing per-call protected
+    /// API unchanged for expected-error cases and optional valid error seeds.
+    /// Full result packs remain the supplied wrapper's responsibility.
+    #[allow(dead_code)] // The success-only lane is opt-in for selected targets.
+    pub fn run_success_with_target(
+        &self,
+        lua: &Lua,
+        function: &Function,
+        target: &Function,
+        arguments: &[Value],
+    ) -> mlua::Result<SourceWarmResult> {
+        let result = self.invoke(
+            lua,
+            function,
+            target,
+            arguments,
+            None,
+            CallMode::SuccessOnly,
+        )?;
+        if !result.success {
+            return Err(mlua::Error::RuntimeError(format!(
+                "success-only source warm failed after {} actual calls: {:?}",
+                result.calls, result.value
+            )));
+        }
+        if result.calls != 128 || result.seed_calls != 0 || result.target_live_traces == 0 {
+            return Err(mlua::Error::RuntimeError(format!(
+                "success-only exact source target absent or invalid call count: calls={}, seed_calls={}, live={}, target={}, aborts={:?}, target_aborts={:?}, aborts_complete={}",
+                result.calls,
+                result.seed_calls,
+                result.live_traces,
+                result.target_live_traces,
+                result.trace_aborts,
+                result.target_trace_aborts,
+                result.trace_aborts_complete
+            )));
+        }
+        Ok(result)
     }
     fn invoke(
         &self,
@@ -153,7 +230,7 @@ impl SourceWarmDriver {
         target: &Function,
         arguments: &[Value],
         error_seed: Option<&[Value]>,
-        observe_aborts: bool,
+        mode: CallMode,
     ) -> mlua::Result<SourceWarmResult> {
         fn args(lua: &Lua, values: &[Value]) -> mlua::Result<Table> {
             let table = lua.create_table()?;
@@ -169,7 +246,8 @@ impl SourceWarmDriver {
             args(lua, arguments)?,
             seed,
             target.clone(),
-            observe_aborts,
+            !matches!(mode, CallMode::Protected),
+            matches!(mode, CallMode::SuccessOnly),
         ))?;
         let trace_aborts = output
             .raw_get::<Option<Table>>("aborts")?

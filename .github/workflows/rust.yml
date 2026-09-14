@@ -99,15 +99,30 @@ jobs:
       - name: Test remaining workspace packages
         if: matrix.suite == 'workspace'
         shell: pwsh
-        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--exclude', 'poe-optimizer-native', '--exclude', 'poe-optimizer-pob', '--all-targets', '--locked')
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--exclude', 'poe-optimizer-native', '--exclude', 'poe-optimizer-pob', '--all-targets', '--locked', '--no-fail-fast')
       - name: Test native package
         if: matrix.suite == 'native'
         shell: pwsh
-        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-native', '--all-targets', '--locked')
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-native', '--all-targets', '--locked', '--no-fail-fast')
       - name: Test PoB package
         if: matrix.suite == 'pob'
         shell: pwsh
-        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-pob', '--all-targets', '--locked')
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-pob', '--all-targets', '--locked', '--no-fail-fast')
+
+      - name: Retain failed PoB source evidence
+        if: ${{ failure() && matrix.suite == 'pob' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: pob-source-${{ runner.os }}-${{ github.run_attempt }}
+          path: |
+            runs/r2ad-item-sets-01/source/**/*.log
+            runs/r2ad-item-sets-01/source/**/*.json
+            runs/r2an-loadout-sync-01/source/**/*.log
+            runs/r2an-loadout-sync-01/source/**/*.json
+            runs/r2p-parser-factories/**/*.log
+            runs/r2p-parser-factories/**/*.json
+          if-no-files-found: warn
+          retention-days: 7
 
   # Preserve the required check names and fail them if any OS or suite failed.
   check:
