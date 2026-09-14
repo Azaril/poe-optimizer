@@ -2,10 +2,14 @@
 //! SyncLoadouts, later Load callbacks and actor participation remain explicit
 //! dependencies. Diagnostic graphs cannot be imported as state.
 mod activation;
+mod read;
+pub use read::{ItemSetReadLimits, ItemSetReadUsage, ItemSetReadView, ItemSetRow};
 mod rune_choices;
 pub use activation::{ItemActivationContext, ItemActivationProgress};
 pub use rune_choices::{ItemActivationRune, RuneChoiceCatalog, RuneChoicePreparation};
 mod graph;
+mod identity;
+pub use identity::ItemSetIdentity;
 mod layout;
 #[cfg(test)]
 mod tests;
@@ -133,6 +137,9 @@ impl ItemSetTransform {
 }
 pub struct ItemSetState {
     graph: Graph,
+    identity_owner: Arc<()>,
+    creation_count: u64,
+    last_created_set: Option<ItemSetIdentity>,
     policy: Arc<ItemInventoryPolicy>,
     root: Id,
     sets: Id,
@@ -176,6 +183,13 @@ impl ItemSetState {
             .map_err(|e| AssemblyError::resource(e.to_string()))?;
         let mut graph = Graph::new(limits);
         graph.charge(count.0, 1)?;
+        // Logical native ownership metadata, separate from source graph values.
+        graph.charge(
+            std::mem::size_of::<Arc<()>>()
+                + std::mem::size_of::<u64>()
+                + std::mem::size_of::<Option<ItemSetIdentity>>(),
+            1,
+        )?;
         let policy = Arc::new(policy.clone());
         let root = graph.table()?;
         let sets = graph.table()?;
@@ -199,6 +213,9 @@ impl ItemSetState {
         )?;
         let mut state = Self {
             graph,
+            identity_owner: Arc::new(()),
+            creation_count: 0,
+            last_created_set: None,
             policy,
             root,
             sets,
@@ -545,7 +562,17 @@ impl ItemSetState {
             self.graph.set(set, key, V::Table(row))?;
         }
         let id = self.graph.field(set, "id")?;
+        let next_creation = self
+            .creation_count
+            .checked_add(1)
+            .ok_or_else(|| AssemblyError::resource("item-set creation count overflow"))?;
+        // Reserve identity metadata before publication. Once the source map
+        // store succeeds, recording its token cannot fail or allocate.
+        self.graph
+            .charge(std::mem::size_of::<ItemSetIdentity>(), 1)?;
         self.graph.set(self.sets, id, V::Table(set))?;
+        self.last_created_set = Some(ItemSetIdentity::for_row(self, set));
+        self.creation_count = next_creation;
         Ok(set)
     }
 }
@@ -555,10 +582,12 @@ fn parsed(text: Option<&str>) -> Option<f64> {
 fn number(text: Option<&str>) -> V {
     parsed(text).map(V::Number).unwrap_or(V::Nil)
 }
-pub fn implementation_sources() -> [&'static str; 5] {
+pub fn implementation_sources() -> [&'static str; 7] {
     [
         include_str!("item_sets.rs"),
         include_str!("item_sets/graph.rs"),
+        include_str!("item_sets/read.rs"),
+        include_str!("item_sets/identity.rs"),
         include_str!("item_sets/activation.rs"),
         include_str!("item_sets/rune_choices.rs"),
         include_str!("item_sets/layout.rs"),

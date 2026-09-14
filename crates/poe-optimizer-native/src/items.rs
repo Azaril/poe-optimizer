@@ -22,7 +22,7 @@ use poe_optimizer_import::{
     },
     item_sets::{ItemSetLimits, ItemSetState},
     item_source::{ItemSourceKind, ItemSourceUse},
-    selected_view::SelectedView,
+    selected_view::{SelectedView, SelectionDomain, SetOrigin},
     source_xml::PobContentEntry,
 };
 use serde::Serialize;
@@ -45,7 +45,7 @@ pub struct ItemPreparationLimits {
     pub max_instructions: usize,
     /// Cumulative logical work for item-set construction, rune preparation and activation.
     pub max_set_steps: u64,
-    /// Combined serialized item-state diagnostics and logical item/set construction bytes.
+    /// Combined serialized item diagnostics, logical item/set construction and lineage metadata bytes.
     /// This is not RSS; caller-requested diagnostic snapshots are separate allocations.
     pub max_state_bytes: usize,
 }
@@ -110,6 +110,7 @@ pub struct PreparedItems {
     report: ItemPreparationReport,
     assembled: BTreeMap<ItemRecordId, AssembledItem>,
     item_sets: Option<ItemSetState>,
+    set_lineage: sets::ItemSetLineage,
     activation: Option<activation::NativeActivation>,
     /// Numeric equality lookup only. This does not claim original Lua hash order.
     winners: BTreeMap<u64, ItemRecordId>,
@@ -122,6 +123,18 @@ impl PreparedItems {
     /// and allocate separately on request; the report retains only phase and usage.
     pub fn item_sets(&self) -> Option<&ItemSetState> {
         self.item_sets.as_ref()
+    }
+    /// Exact creation lineage in this private build/data-owned preparation.
+    /// This identifies a produced row; it does not admit full Load or activation.
+    pub fn item_set_origin(
+        &self,
+        row: &poe_optimizer_import::item_sets::ItemSetRow<'_>,
+    ) -> Result<SetOrigin, EvaluationError> {
+        let state = self
+            .item_sets
+            .as_ref()
+            .ok_or_else(|| contract("item-set origin requested without produced state"))?;
+        self.set_lineage.origin(state, row)
     }
     pub fn item(&self, id: ItemRecordId) -> Option<&AssembledItem> {
         self.assembled.get(&id)
@@ -218,6 +231,7 @@ pub fn prepare_authored_items(
         .collect::<BTreeMap<_, _>>();
     let mut assembled = BTreeMap::new();
     let mut item_sets = None;
+    let mut set_lineage = sets::ItemSetLineage::default();
     let mut activation = None;
     let mut winners = BTreeMap::new();
     let projection = match build.project_items() {
@@ -295,15 +309,29 @@ pub fn prepare_authored_items(
         let mut instructions_left = limits.max_instructions;
         let mut state_bytes_left = limits.max_state_bytes;
         if report.failure.is_none() {
+            set_lineage.reserve(&mut state_bytes_left, &mut instructions_left)?;
             match ItemSetState::new(
                 &data.snapshot().item_assembly().policy().inventory,
                 ItemSetLimits {
-                    max_bytes: limits.max_state_bytes,
+                    max_bytes: state_bytes_left,
                     max_steps: limits.max_set_steps,
                     ..Default::default()
                 },
             ) {
-                Ok(state) => item_sets = Some(state),
+                Ok(state) => {
+                    if state.creation_count() != 1 {
+                        return Err(contract("fresh item-set constructor publication count"));
+                    }
+                    set_lineage.capture(
+                        &state,
+                        0,
+                        SetOrigin::Default {
+                            domain: SelectionDomain::Items,
+                            container: None,
+                        },
+                    )?;
+                    item_sets = Some(state);
+                }
                 Err(error) => {
                     report.failure = sets::result(Err(error), None, "item_set_initialization")?
                 }
@@ -366,9 +394,17 @@ pub fn prepare_authored_items(
                 if node.source_use() == ItemSourceUse::NamespaceUnknown
                     || node.kind() != ItemSourceKind::Item
                 {
-                    if let Some(failure) =
-                        sets::apply(set_state, node, &source_by_start, &mut instructions_left)?
-                    {
+                    if let Some(failure) = sets::apply(
+                        set_state,
+                        node,
+                        &mut sets::ItemSetLoadContext {
+                            build,
+                            sources: &source_by_start,
+                            lineage: &mut set_lineage,
+                            instructions_left: &mut instructions_left,
+                            bytes_left: &mut state_bytes_left,
+                        },
+                    )? {
                         report.failure = Some(failure);
                         break 'containers;
                     }
@@ -536,10 +572,13 @@ pub fn prepare_authored_items(
             if let Some(failure) = sets::finish(
                 set_state,
                 container,
-                source_by_start
-                    .get(&container.element().source_range().start)
-                    .copied(),
-                &mut instructions_left,
+                &mut sets::ItemSetLoadContext {
+                    build,
+                    sources: &source_by_start,
+                    lineage: &mut set_lineage,
+                    instructions_left: &mut instructions_left,
+                    bytes_left: &mut state_bytes_left,
+                },
             )? {
                 report.failure = Some(failure);
                 break;
@@ -586,6 +625,7 @@ pub fn prepare_authored_items(
         report,
         assembled,
         item_sets,
+        set_lineage,
         activation,
         winners,
     })

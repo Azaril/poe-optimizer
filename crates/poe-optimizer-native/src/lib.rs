@@ -377,11 +377,6 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("items/activation.rs"),
                 include_str!("items/slot_validity.rs"),
                 include_str!("items/sets.rs"),
-                include_str!("../../poe-optimizer-import/src/item_sets.rs"),
-                include_str!("../../poe-optimizer-import/src/item_sets/graph.rs"),
-                include_str!("../../poe-optimizer-import/src/item_sets/layout.rs"),
-                include_str!("../../poe-optimizer-import/src/item_sets/activation.rs"),
-                include_str!("../../poe-optimizer-import/src/item_sets/rune_choices.rs"),
                 include_str!("../../poe-optimizer-import/src/item_slot_validity.rs"),
                 include_str!("../../poe-optimizer-import/src/item_slot_validity/value.rs"),
                 include_str!("../../poe-optimizer-data/src/skill_preparation.rs"),
@@ -452,7 +447,10 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("../../poe-optimizer-core/src/metrics.rs"),
                 include_str!("../../poe-optimizer-core/Cargo.toml"),
                 include_str!("../../../Cargo.lock"),
-            ] {
+            ]
+            .into_iter()
+            .chain(poe_optimizer_import::item_sets::implementation_sources())
+            {
                 adapter.update(text.replace("\r\n", "\n"));
             }
             adapter.update(poe_optimizer_data::implementation_fingerprint());

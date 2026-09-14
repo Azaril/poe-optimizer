@@ -2,18 +2,168 @@
 use super::{ItemPreparationFailure, contract, resource};
 use poe_optimizer_core::evaluation::{EvaluationError, EvaluationErrorKind};
 use poe_optimizer_import::{
-    build_instance::SourceOccurrenceId,
+    build_instance::{AuthoredInstanceId, ImportedBuildInstance, SourceOccurrenceId},
     item_loading::assembly::{AssemblyError, AssemblyErrorKind},
     item_sets::{
-        FinishLoadInput, ItemSetContinuation, ItemSetInput, ItemSetPhase, ItemSetState,
-        ItemSetUsage, LegacySlotInput, SetRuneInput, SetSlotInput, SocketUrlInput,
-        TradeWeightInput,
+        FinishLoadInput, ItemSetContinuation, ItemSetIdentity, ItemSetInput, ItemSetPhase,
+        ItemSetRow, ItemSetState, ItemSetUsage, LegacySlotInput, SetRuneInput, SetSlotInput,
+        SocketUrlInput, TradeWeightInput,
     },
     item_source::{ItemSourceKind, ItemSourceNode, ItemSourceUse},
+    selected_view::{SelectionDomain, SetOrigin},
     source_xml::PobContentEntry,
 };
 use serde::Serialize;
-use std::collections::BTreeMap;
+use std::{
+    collections::{BTreeMap, HashMap},
+    mem::size_of,
+};
+
+/// Exact publication identities, retained independently of current numeric winners.
+/// This private map has no traversal semantics and cannot be imported from reports.
+#[derive(Default)]
+pub(super) struct ItemSetLineage {
+    origins: HashMap<ItemSetIdentity, SetOrigin>,
+    owner: Option<ItemSetIdentity>,
+    published: u64,
+    reserved: bool,
+}
+impl ItemSetLineage {
+    // Logical metadata allowance, matching the enclosing producer budget rather
+    // than allocator/RSS bytes. Capacity is reserved before source-state mutation.
+    const ENTRY_BYTES: usize = size_of::<(ItemSetIdentity, SetOrigin)>() + 2 * size_of::<usize>();
+    pub(super) fn reserve(
+        &mut self,
+        bytes_left: &mut usize,
+        instructions_left: &mut usize,
+    ) -> Result<(), EvaluationError> {
+        if self.reserved {
+            return Err(contract("item-set lineage reservation already active"));
+        }
+        let next = bytes_left
+            .checked_sub(Self::ENTRY_BYTES)
+            .ok_or_else(|| resource("item-set lineage metadata"))?;
+        charge(instructions_left)?;
+        self.origins
+            .try_reserve(1)
+            .map_err(|_| resource("item-set lineage capacity"))?;
+        *bytes_left = next;
+        self.reserved = true;
+        Ok(())
+    }
+    pub(super) fn capture(
+        &mut self,
+        state: &ItemSetState,
+        before: u64,
+        origin: SetOrigin,
+    ) -> Result<(), EvaluationError> {
+        if self
+            .owner
+            .as_ref()
+            .is_some_and(|owner| !owner.belongs_to(state))
+        {
+            return Err(contract("item-set lineage belongs to another producer"));
+        }
+        if !self.reserved || before != self.published {
+            return Err(contract("item-set lineage creation boundary mismatch"));
+        }
+        self.reserved = false;
+        let after = state.creation_count();
+        if after == before {
+            return Ok(());
+        }
+        if before.checked_add(1) != Some(after) {
+            return Err(contract(
+                "item-set operation published an unobserved number of rows",
+            ));
+        }
+        let identity = state
+            .last_created_set()
+            .ok_or_else(|| contract("item-set publication identity missing"))?;
+        if !identity.belongs_to(state) || self.origins.contains_key(identity) {
+            return Err(contract(
+                "item-set publication identity is foreign or repeated",
+            ));
+        }
+        // reserve() provided capacity before the call; cloning this opaque token
+        // only retains its existing Arc. Even an enclosing Source failure keeps it.
+        if self.owner.is_none() {
+            self.owner = Some(identity.clone());
+        }
+        self.origins.insert(identity.clone(), origin);
+        self.published = after;
+        Ok(())
+    }
+    pub(super) fn origin(
+        &self,
+        state: &ItemSetState,
+        row: &ItemSetRow<'_>,
+    ) -> Result<SetOrigin, EvaluationError> {
+        if !row.belongs_to(state) {
+            return Err(contract("item-set origin requested for a foreign row"));
+        }
+        self.origins
+            .get(&row.identity())
+            .copied()
+            .ok_or_else(|| contract("item-set row has no observed creation origin"))
+    }
+}
+
+pub(super) struct ItemSetLoadContext<'a> {
+    pub build: &'a ImportedBuildInstance,
+    pub sources: &'a BTreeMap<usize, SourceOccurrenceId>,
+    pub lineage: &'a mut ItemSetLineage,
+    pub instructions_left: &'a mut usize,
+    pub bytes_left: &'a mut usize,
+}
+impl ItemSetLoadContext<'_> {
+    fn authored_origin(
+        &mut self,
+        source: SourceOccurrenceId,
+    ) -> Result<SetOrigin, EvaluationError> {
+        // Join the reached XML occurrence to this exact imported owner. Numeric
+        // authored IDs and the final SelectedView never enter this association.
+        for binding in self.build.instances() {
+            charge(self.instructions_left)?;
+            if binding.source() == source {
+                if !matches!(binding.instance(), AuthoredInstanceId::ItemSet(_)) {
+                    return Err(contract(
+                        "item-set source is bound to another instance kind",
+                    ));
+                }
+                return Ok(SetOrigin::Authored {
+                    instance: binding.instance(),
+                    source,
+                });
+            }
+        }
+        Err(contract("authored item-set instance binding missing"))
+    }
+    fn creating(
+        &mut self,
+        state: &mut ItemSetState,
+        origin: SetOrigin,
+        operation: impl FnOnce(&mut ItemSetState) -> Result<(), AssemblyError>,
+    ) -> Result<Result<(), AssemblyError>, EvaluationError> {
+        if self
+            .lineage
+            .owner
+            .as_ref()
+            .is_some_and(|owner| !owner.belongs_to(state))
+        {
+            return Err(contract("item-set lineage belongs to another producer"));
+        }
+        let before = state.creation_count();
+        self.lineage
+            .reserve(self.bytes_left, self.instructions_left)?;
+        tighten(state, *self.bytes_left)?;
+        let outcome = operation(state);
+        self.lineage.capture(state, before, origin)?;
+        // Source/Unsupported is preserved when no row was published, and after
+        // recording a row published before a later failure in the same operation.
+        Ok(outcome)
+    }
+}
 
 #[derive(Debug, Clone, Serialize)]
 pub struct ItemSetPreparationReport {
@@ -85,10 +235,10 @@ fn namespace(
 pub(super) fn apply(
     state: &mut ItemSetState,
     node: &ItemSourceNode<'_>,
-    sources: &BTreeMap<usize, SourceOccurrenceId>,
-    instructions_left: &mut usize,
+    context: &mut ItemSetLoadContext<'_>,
 ) -> Result<Option<ItemPreparationFailure>, EvaluationError> {
-    let source = *sources
+    let source = *context
+        .sources
         .get(&node.element().source_range().start)
         .ok_or_else(|| contract("item-set source occurrence missing"))?;
     if let Some(failure) = namespace(node, source) {
@@ -100,11 +250,16 @@ pub(super) fn apply(
             item_id: attr(node, "itemId"),
             active: attr(node, "active"),
         }),
-        ItemSourceKind::ItemSet => state.begin_item_set(ItemSetInput {
-            id: attr(node, "id"),
-            title: attr(node, "title"),
-            use_second_weapon_set: attr(node, "useSecondWeaponSet"),
-        }),
+        ItemSourceKind::ItemSet => {
+            let origin = context.authored_origin(source)?;
+            context.creating(state, origin, |state| {
+                state.begin_item_set(ItemSetInput {
+                    id: attr(node, "id"),
+                    title: attr(node, "title"),
+                    use_second_weapon_set: attr(node, "useSecondWeaponSet"),
+                })
+            })?
+        }
         _ => Ok(()),
     };
     if let Some(failure) = result(operation, Some(source), "item_set_loading")? {
@@ -117,7 +272,7 @@ pub(super) fn apply(
         return Ok(None);
     }
     for entry in node.ordered_content().consumed() {
-        charge(instructions_left)?;
+        charge(context.instructions_left)?;
         let PobContentEntry::Element { child_index } = entry else {
             // String.elem is nil in the reference; String.attrib.label throws.
             if node.kind() == ItemSourceKind::TradeSearchWeights {
@@ -129,7 +284,8 @@ pub(super) fn apply(
             .children()
             .get(*child_index)
             .ok_or_else(|| contract("item-set child missing"))?;
-        let child_source = *sources
+        let child_source = *context
+            .sources
             .get(&child.element().source_range().start)
             .ok_or_else(|| contract("item-set child source occurrence missing"))?;
         if let Some(failure) = namespace(child, child_source) {
@@ -167,7 +323,7 @@ pub(super) fn apply(
         }
     }
     if node.kind() == ItemSourceKind::ItemSet {
-        charge(instructions_left)?;
+        charge(context.instructions_left)?;
         return result(state.finish_item_set(), Some(source), "item_set_loading");
     }
     Ok(None)
@@ -175,17 +331,30 @@ pub(super) fn apply(
 pub(super) fn finish(
     state: &mut ItemSetState,
     container: &ItemSourceNode<'_>,
-    source: Option<SourceOccurrenceId>,
-    instructions_left: &mut usize,
+    context: &mut ItemSetLoadContext<'_>,
 ) -> Result<Option<ItemPreparationFailure>, EvaluationError> {
-    charge(instructions_left)?;
-    result(
-        state.finish_load(FinishLoadInput {
-            active_item_set: attr(container, "activeItemSet"),
-            use_second_weapon_set: attr(container, "useSecondWeaponSet"),
-            show_stat_differences: attr(container, "showStatDifferences"),
-        }),
-        source,
-        "item_set_loading",
-    )
+    charge(context.instructions_left)?;
+    let source = *context
+        .sources
+        .get(&container.element().source_range().start)
+        .ok_or_else(|| contract("item-set fallback container occurrence missing"))?;
+    let operation = context.creating(
+        state,
+        SetOrigin::Default {
+            domain: SelectionDomain::Items,
+            container: Some(source),
+        },
+        |state| {
+            state.finish_load(FinishLoadInput {
+                active_item_set: attr(container, "activeItemSet"),
+                use_second_weapon_set: attr(container, "useSecondWeaponSet"),
+                show_stat_differences: attr(container, "showStatDifferences"),
+            })
+        },
+    )?;
+    result(operation, Some(source), "item_set_loading")
 }
+
+#[cfg(test)]
+#[path = "sets/lineage_tests.rs"]
+mod lineage_tests;

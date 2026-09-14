@@ -628,7 +628,16 @@ fn items_and_sets_share_one_cumulative_byte_budget() {
         ResolveLimits::default(),
     )
     .unwrap();
-    let total = state_bytes + item_bytes;
+    // The producer tightens this ceiling for every retained item/diagnostic and
+    // native lineage reservation. Include those opaque metadata charges without
+    // copying their internal representation or assuming a fixed allocation size.
+    let other_bytes = ItemPreparationLimits::default().max_state_bytes
+        - full.item_sets().unwrap().limits().max_bytes;
+    assert!(
+        other_bytes > item_bytes,
+        "lineage metadata must share the budget"
+    );
+    let total = state_bytes + other_bytes;
     let exact = prepare_authored_items(
         &build,
         &view,

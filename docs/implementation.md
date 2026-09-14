@@ -18,6 +18,39 @@ provider lifetime and contrasting cases from all five originals. Ordinary implem
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
 
+**R2ar validated: live item-set reads and creation lineage.** Bounded borrowed
+reads now follow the actual published item-set roots. Persistent opaque row identities
+bind native SetOrigin at creation, independently of replaceable numeric set keys. Borrowed
+rows prevent mutation; retained identity tokens survive producer moves and allowed failed-
+state restarts without exposing graph IDs or becoming serialized authority. Constructor
+and fallback origins are explicit; authored origins join the exact source occurrence.
+
+Static review corrected missing module wiring and reads from a cached map that can diverge
+from its published root after allocation failure. Creation identities publish only after
+the successful map store; metadata capacity is reserved before mutation, and native lineage
+captures a published row even when later work in the same operation fails. The native
+fingerprint now consumes IMPORT's complete implementation-source list, including both new
+modules. No data-package or report-schema change is needed.
+
+The IMPORT lint, **39 component tests** and one compile-fail borrowing test pass in
+`runs/r2an-loadout-sync-01/r2ar-read-02/`. An earlier private-ID Hash compile failure is
+retained in `r2ar-read-01/`. Native integration's first run passed workspace lint and six
+lineage tests, then caught the old cumulative-budget fixture omitting new native metadata.
+The fixture now derives all non-set reservations from the tightened producer ceiling and
+retains exact-budget success and one-byte-under failure. The corrected integrated run
+`runs/r2an-loadout-sync-01/r2ar-native-02/` is terminal success: six lineage tests, 38 native
+preparation/backend regressions, 43 PoB item-set/activation/lifecycle tests and four native-
+only CLI preparation tests pass. Together with the IMPORT tests, this is **130 selected
+test executions plus one compile-fail doctest**. Whole-workspace/all-target strict Clippy,
+DATA/ENGINE/IMPORT/NATIVE WebAssembly compilation and formatting pass. Producing source and
+input guards match; independent final integration review found no additional defects.
+
+Staging/review receipts are under `runs/r2ar-item-set-read-01/` and
+`runs/r2ar-item-set-lineage-01/`. Complete Build source-order ownership, synchronization,
+activation and native evaluation remain the next gates; full original-build parity is
+still **0/5**. The separately running full suite (`71368`) uses the frozen `b96fbd9`
+checkout and is not a validation claim for R2ar.
+
 **R2aq validated: source-derived loadout policy in the injected package.** The required `build_loadouts` section
 connects the existing native display/lookup program to selected GameDataSnapshot metadata.
 Package schema 40 / semantics v40 retains policy schema 1 and requires its latest tree
@@ -60,9 +93,9 @@ main is available for the next implementation slice after publication. Neither t
 full suite nor hosted CI is claimed as green. SyncLoadouts, activation and complete native
 build evaluation remain unimplemented; the complete original-build count stays **0/5**.
 
-**Next implementation gate:** add bounded borrowed reads and creation-time SetOrigin
-binding to the actual ItemSetState owner, then retain a shared root preparation state and
-source-order cursor. The source constructs all domain owners before loading non-tree
+**Next implementation gate:** retain a shared root preparation state and source-order
+cursor, using the validated live item-set reader and creation lineage. The source constructs
+all domain owners before loading non-tree
 sections in XML order and defers the saved tree load. Existing independent completed
 Tree/Skills/Config reports cannot be joined into the live state at Items.Load's Sync call.
 The current incomplete-result path also drops private prepared owners after cloning reports;
@@ -72,17 +105,37 @@ Bring live tree, skill and config readers and Build-owned special-link maps into
 before completing synchronization, callback reentry, activation and trailing export/undo
 work. Preserve exact authored-instance identity and explicit unavailable dependencies.
 
-**R2ap integrated: CI diagnosis and preparation reuse.** Authenticated completed
-Windows/Linux CI logs confirm the sole reported failure was the stale 84-versus-81 factory
-count, already corrected by `69d9f5a`. The latest published run is
-[34788302779](https://github.com/Azaril/poe-optimizer/actions/runs/34788302779), exact `36dfb3d`.
-At 23:24:34 UTC both OS jobs remain in Test after passing cache setup, Cargo.lock
-preservation, formatting and lint. Later gates remain pending; hosted CI is not yet green.
-No new failed step, annotation or completed failure is visible.
-`runs/r2an-ci-investigation-01/followup-05/` retains the completed failed-job logs;
-`followup-09/` records the latest exact-HEAD status. Running
-signed log downloads previously returned 404, so the status check does not retry them.
+**CI follow-up: historical failures, runtime and superseded runs.** Completed authenticated
+Windows/Linux logs identify the stale 84-versus-81 factory assertion, already corrected by
+`69d9f5a`. An earlier [Ubuntu job](https://github.com/Azaril/poe-optimizer/actions/runs/34744566224/job/103689969289)
+also hit the six-hour limit while `native_candidate_contract` was still running. Retained
+local target timing and a public annotation establish that failure; it predates optimized
+test execution and the later prepare-once/parser-sharing changes. Those fixes are not yet
+proof that current hosted jobs complete within the limit.
 
+The latest inspected run is [34789807104](https://github.com/Azaril/poe-optimizer/actions/runs/34789807104),
+exact `fba860c`. At 23:52:13 UTC its OS jobs were testing after passing cache setup,
+Cargo.lock preservation, formatting and lint; no new failed step or annotation was found.
+Four revisions had eight concurrent OS jobs, with the oldest jobs at 250.2 minutes.
+Workflow-level branch/PR concurrency now keeps only the newest run per ref. Both OSes,
+all test targets, native-only/WASM checks and enabled debug/overflow checks remain unchanged.
+Previously started ungrouped runs are not retroactively cancelled by this change.
+
+The concurrency patch passes diff hygiene and an exact comparison proving the existing
+workflow is unchanged after removing the new block. No YAML parser/actionlint is installed;
+no parser-run or hosted completion claim is made. CI receipts are in
+`runs/r2an-ci-investigation-01/active-followup-01/`, `runtime-scheduling-01/` and
+`concurrency-fix-01/`. Automatic approval review rejected a fresh authenticated download of
+the older timeout log because it flagged local credential access; no credential was read.
+Public annotations and previously retained logs supplied the required timeout evidence.
+
+**CI completion gate:** obtain a completed latest-revision result on both OSes. If runtime
+remains excessive, split native and PoB package jobs from the remaining workspace, proving
+the same all-target/feature/case union before adoption; never trim exhaustive candidate or
+fresh-host parity checks to fit the time limit. The static audit is retained in
+`runs/r2ar-item-set-read-01/ci-runtime-static-by-data.json`.
+
+**R2ap integrated: preparation reuse.**
 The exhaustive candidate target now prepares each full document once while retaining all
 candidate counts, legality, realization, export, full-result and pure-output assertions.
 All **12** tests pass in 3,106.38 seconds, with independent public-wrapper/deadline checks.
