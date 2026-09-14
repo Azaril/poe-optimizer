@@ -148,7 +148,7 @@ fn successful(output: Output, kind: &str) -> Value {
 }
 fn build_wire() -> Vec<u8> {
     serde_json::to_vec_pretty(
-        &json!({"schema_version":1,"document":{"kind":"build","value":build_input()}}),
+        &json!({"schema_version":OWNED_INPUT_SCHEMA_VERSION,"document":{"kind":"build","value":build_input()}}),
     )
     .unwrap()
 }
@@ -179,7 +179,7 @@ fn custom_request_canonical_output_keeps_exact_selectors_and_query_order() {
     .unwrap();
     // Write the public DTO with intentionally unsorted build records, not an already canonical wrapper.
     let original = serde_json::to_vec_pretty(
-        &json!({"schema_version":1,"document":{"kind":"request","value":input}}),
+        &json!({"schema_version":OWNED_INPUT_SCHEMA_VERSION,"document":{"kind":"request","value":input}}),
     )
     .unwrap();
     fs::write(temp.path().join("request.json"), &original).unwrap();
@@ -304,7 +304,7 @@ fn standalone_inventory_checks_and_roundtrips_without_a_character_or_data_packag
     };
     let expected = InventorySnapshot::new(input.clone(), limits()).unwrap();
     let original = serde_json::to_vec_pretty(
-        &json!({"schema_version":1,"document":{"kind":"inventory","value":input}}),
+        &json!({"schema_version":OWNED_INPUT_SCHEMA_VERSION,"document":{"kind":"inventory","value":input}}),
     )
     .unwrap();
     fs::write(temp.path().join("stock.json"), &original).unwrap();
@@ -339,7 +339,7 @@ fn invalid_inventory_copy_is_rejected_before_any_output_file_is_created() {
     fs::write(
         temp.path().join("stock.json"),
         serde_json::to_vec(
-            &json!({"schema_version":1,"document":{"kind":"inventory","value":input}}),
+            &json!({"schema_version":OWNED_INPUT_SCHEMA_VERSION,"document":{"kind":"inventory","value":input}}),
         )
         .unwrap(),
     )

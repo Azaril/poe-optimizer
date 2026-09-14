@@ -261,8 +261,8 @@ requires changing the domain contract; the implementation log records progress i
 ## Import breadth obligations
 
 Import evidence is separate from semantic membership. The first all-five normalizer exposes
-two composition obligations: selected passive-socket equipment must contribute independently
-of the item preset, and known-unavailable oracle projections must retain comparison rows
+independent passive-socket equipment contributions, now represented by typed allocation
+preset membership composed with the item preset. Known-unavailable oracle projections must retain comparison rows
 without fabricating concrete actor targets. These belong in project composition and the
 parity adapter respectively, never PoB UI replay inside native evaluation. See the
 [owned normalization contract](owned-normalization.md) for the delivered conservative seam

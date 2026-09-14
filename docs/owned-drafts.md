@@ -66,6 +66,13 @@ Finalization validates explicit preset IDs and follows the selected rows plus th
 item/gem records. It does not automatically select an omitted skill, support, reward,
 allocation or equipment provider from another preset. Selected disabled and off-loadout
 rows remain required authored input; activation is not used to hide unresolved fields.
+Allocation presets contribute an independent equipment member list. Finalization follows the
+union with the selected ordinary equipment list and then its backing records. A selected
+contribution's pending membership blocks even when its known list is empty or overlaps the
+other contributor. Pending equipment from an inactive allocation preset does not block it.
+Choice presets also contribute reward memberships alongside character rewards. The same
+selected-closure and backing-row rules apply: unresolved reward parameters block only when
+that reward is selected, and composition does not resolve conflicting authored outcomes.
 
 A pending global registry closure or unselected alternative does not block selecting known
 records. A pending member list within a selected preset does block completion. The pending
@@ -84,8 +91,11 @@ and advancing the shared revision/watermark also changes the complete request di
 
 ## Persistence and hosts
 
-Owned drafts have a separate version-1 JSON envelope, `{schema_version, draft}`, with
+Owned drafts have a separate version-2 JSON envelope, `{schema_version, draft}`, with
 bounded UTF-8 input and output. Unknown/duplicate fields and unsupported versions reject.
+Version 1 is explicitly unsupported; no missing allocation equipment list is treated as empty.
+The draft digest domain is `owned-draft-v2`; unchanged concrete request digests keep their
+existing domain. A later migration must be explicit and preserve unresolved membership facts.
 Encoding preserves the ordered authoring state; only the existing complete constructors
 canonicalize the finalized request. Deserialization cannot bypass validation or confer
 prepared-plan authority.
@@ -105,9 +115,10 @@ Quantities use finite floating-point values with explicit units and scale. Malfo
 values return errors; codec construction/decode does not choose precedence tiers or defaults.
 No game-specific configuration key, skill name or source UI callback appears in this layer.
 
-The next normalization slice must collect every source occurrence even when a convenience
-projection rejects duplicate/noncanonical fields. Bind exact occurrences through durable
-owned-ID mappings, then apply explicit versioned precedence/duplicate/role policies. The
+The conservative normalizer collects every source occurrence even when a convenience
+projection rejects duplicate/noncanonical fields. It binds exact occurrences through durable
+owned-ID mappings and applies explicit versioned precedence/duplicate/role policies; full
+semantic mapping and selected completeness are still pending. The
 original-five audit defines the test cases; it must not become hardcoded runtime builds.
 Compile gameplay effects to a separately versioned owned package at acquisition/build time.
 PoB source schema and Lua are confined to conversion tooling and the optional parity oracle.

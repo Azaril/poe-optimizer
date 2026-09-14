@@ -22,6 +22,7 @@ pub struct EquipmentPresetDraft {
 pub struct AllocationPresetDraft {
     pub id: AllocationPresetId,
     pub allocations: DraftList<AllocationId>,
+    pub equipment: DraftList<ItemSlotUseId>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -36,6 +37,7 @@ pub struct SkillPresetDraft {
 pub struct ChoicePresetDraft {
     pub id: ChoicePresetId,
     pub choices: DraftList<ChoiceDraft>,
+    pub rewards: DraftList<RewardSelectionId>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -169,6 +171,6 @@ macro_rules! preset_conversion {
 }
 preset_conversion!(CharacterPresetDraft=>CharacterPreset{class,ascendancy,level,rewards});
 preset_conversion!(EquipmentPresetDraft=>EquipmentPreset{equipment});
-preset_conversion!(AllocationPresetDraft=>AllocationPreset{allocations});
+preset_conversion!(AllocationPresetDraft=>AllocationPreset{allocations,equipment});
 preset_conversion!(SkillPresetDraft=>SkillPreset{skills,supports,payload_links});
-preset_conversion!(ChoicePresetDraft=>ChoicePreset{choices});
+preset_conversion!(ChoicePresetDraft=>ChoicePreset{choices,rewards});

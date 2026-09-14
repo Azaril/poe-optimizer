@@ -66,6 +66,7 @@ fn input() -> ProjectInput {
         allocation_presets: vec![AllocationPreset {
             id: id(6),
             allocations: vec![],
+            equipment: vec![],
         }],
         skill_presets: vec![SkillPreset {
             id: id(7),
@@ -75,6 +76,7 @@ fn input() -> ProjectInput {
         }],
         choice_presets: vec![ChoicePreset {
             id: id(8),
+            rewards: vec![],
             choices: vec![],
         }],
         saved_variants: vec![
@@ -103,7 +105,7 @@ fn unpack(document: OwnedDocument) -> BuildProject {
     }
 }
 fn wire(raw: ProjectInput) -> Value {
-    json!({"schema_version":1,"document":{"kind":"project","value":raw}})
+    json!({"schema_version":2,"document":{"kind":"project","value":raw}})
 }
 fn entries(value: &Value) -> usize {
     match value {
@@ -118,7 +120,7 @@ fn project_envelope_roundtrip_retains_explicit_saved_selections_and_composes_sta
     let original = document(input());
     let bytes = encode_owned(&original, limits()).unwrap();
     let value: Value = serde_json::from_slice(&bytes).unwrap();
-    assert_eq!(value["schema_version"], 1);
+    assert_eq!(value["schema_version"], 2);
     assert_eq!(value["document"]["kind"], "project");
     let decoded = decode_owned(&bytes, limits()).unwrap();
     assert_eq!(decoded, original);
@@ -250,4 +252,40 @@ fn unordered_project_wire_canonicalizes_without_changing_selected_content_identi
         build_content_binding(&first_build, limits()).unwrap(),
         build_content_binding(&changed_build, limits()).unwrap()
     );
+}
+
+#[test]
+fn v2_requires_explicit_contribution_and_rejects_v1_before_parsing_the_old_payload_shape() {
+    let mut value = wire(input());
+    value["document"]["value"]["allocation_presets"][0]
+        .as_object_mut()
+        .unwrap()
+        .remove("equipment");
+    assert!(matches!(
+        decode_owned(&serde_json::to_vec(&value).unwrap(), limits()),
+        Err(CodecError::Json(_))
+    ));
+    value["schema_version"] = json!(1);
+    assert!(matches!(
+        decode_owned(&serde_json::to_vec(&value).unwrap(), limits()),
+        Err(CodecError::UnsupportedVersion(1))
+    ));
+    value["schema_version"] = json!(OWNED_INPUT_SCHEMA_VERSION + 1);
+    assert!(matches!(
+        decode_owned(&serde_json::to_vec(&value).unwrap(), limits()),
+        Err(CodecError::UnsupportedVersion(3))
+    ));
+}
+
+#[test]
+fn complete_choice_reward_membership_is_required_in_v2() {
+    let mut value = wire(input());
+    value["document"]["value"]["choice_presets"][0]
+        .as_object_mut()
+        .unwrap()
+        .remove("rewards");
+    assert!(matches!(
+        decode_owned(&serde_json::to_vec(&value).unwrap(), limits()),
+        Err(CodecError::Json(_))
+    ));
 }

@@ -45,6 +45,9 @@ owned authoring state and finalizes explicit independent presets through the sam
 APIs. Pending selections retain all query rows and cannot write a complete request;
 see [owned drafts](docs/owned-drafts.md). This command also works without PoB and does
 not calculate, bind definitions or certify legality.
+Owned project/draft persistence now uses version 2. Allocation presets can contribute
+socket equipment and choice presets can contribute rewards independently; older envelopes
+are rejected explicitly. Concrete build/request payloads remain unchanged.
 `normalize-owned` converts caller-supplied XML/share codes through injected owned schema,
 mapping, role and policy artifacts into partial owned drafts. It preserves independent
 alternatives and unresolved semantics; it does not yet produce a complete original build

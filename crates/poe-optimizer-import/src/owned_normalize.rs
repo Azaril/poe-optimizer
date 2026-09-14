@@ -691,6 +691,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     .push(AllocationPresetDraft {
                         id,
                         allocations: b.closure(s, "allocation-membership-not-converted", vec![])?,
+                        equipment: b.closure(
+                            s,
+                            "allocation-equipment-membership-not-converted",
+                            vec![],
+                        )?,
                     });
                 let id = b.id()?;
                 b.link(s, OwnedOriginTarget::CharacterPreset(id))?;
@@ -748,8 +753,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     if draft.choice_presets.members.is_empty() {
         add_config(&mut b, &mut draft, root, &mut fallback_issues)?;
     }
-    // Receiving occurrences stay distinct, including tree sockets whose membership
-    // still needs selected tree/equipment composition. No stock/copy claim is made.
+    // Receiving occurrences stay distinct and follow their owning independent
+    // preset. Composition selects the union; no stock/copy claim is made.
     for row in evidence.rows() {
         let s = row.occurrence().id();
         b.charge(1)?;
@@ -834,6 +839,13 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             && let Some(index) = equipment_sets.get(&parent)
         {
             draft.equipment_presets.members[*index]
+                .equipment
+                .members
+                .push(id);
+        } else if let Some(parent) = b.ancestor(s, "Spec")?
+            && let Some(index) = spec_sets.get(&parent)
+        {
+            draft.allocation_presets.members[*index]
                 .equipment
                 .members
                 .push(id);
@@ -1100,7 +1112,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: 1,
+        schema_version: 2,
         source_sha256: identity.source_sha256.into(),
         source_bytes: identity.source_bytes,
         source_schema: identity.instance_import_schema,
@@ -1119,7 +1131,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        "owned-normalization-sidecar-v1",
+        "owned-normalization-sidecar-v2",
         &sidecar,
         limits.draft.input.max_wire_bytes,
     )?;
@@ -1137,10 +1149,11 @@ fn add_config(
     if let DraftListCompletion::Pending { id, .. } = choices.completion {
         fallback.push(id);
     }
-    draft
-        .choice_presets
-        .members
-        .push(ChoicePresetDraft { id, choices });
+    draft.choice_presets.members.push(ChoicePresetDraft {
+        id,
+        choices,
+        rewards: b.closure(s, "configuration-rewards-not-converted", vec![])?,
+    });
     let id = b.id()?;
     b.link(s, OwnedOriginTarget::ScenarioPreset(id))?;
     draft.scenario_presets.members.push(ScenarioPresetDraft {

@@ -727,6 +727,189 @@ fn inactive_sets_keep_independent_memberships_without_source_key_pairing() {
     origin_integrity(&source, &result);
 }
 
+#[test]
+fn spec_sockets_keep_own_membership_with_equal_item_refs_and_ambiguous_or_missing_items() {
+    let xml = r#"<PathOfBuilding2><Build level="42"/><Tree activeSpec="2"><Spec title="left" nodes="10,11"><Sockets><Socket nodeId="10" itemId="1"/><Socket nodeId="11" itemId="2"/><Socket nodeId="12" itemId="0"/></Sockets></Spec><Spec title="right" nodes="20"><Sockets><Socket nodeId="20" itemId="1"/></Sockets></Spec></Tree><Items activeItemSet="9"><Item id="1">Shared backing item</Item><Item id="2">First conflicting key</Item><Item id="2">Second conflicting key</Item><ItemSet id="9"><Slot name="left" itemId="1"/><RuneSlot slotName="unknown rune" runeName="None"/><Slot name="empty" itemId="0"/></ItemSet><ItemSet id="3"><Slot name="right" itemId="1"/></ItemSet></Items></PathOfBuilding2>"#;
+    let source = source(xml, 0x32);
+    let result = run(&source, &artifacts(false), &queries());
+    let input = result.draft().input();
+    assert_eq!(input.items.members.len(), 3);
+    assert_eq!(input.equipment.members.len(), 6);
+    assert_eq!(input.allocation_presets.members.len(), 2);
+    assert_eq!(input.equipment_presets.members.len(), 2);
+    let use_at = |tag: &str, attribute: &str, value: &str| {
+        let row = source
+            .occurrences()
+            .iter()
+            .find(|row| {
+                row.name() == tag
+                    && source
+                        .attribute(row.id(), attribute)
+                        .unwrap()
+                        .is_some_and(|text| text.decoded() == value)
+            })
+            .unwrap();
+        let origin = &result.sidecar().origins[row.id().ordinal() as usize];
+        origin.links.iter().find_map(|link| match link {
+            OwnedOriginTarget::Equipment(id) => Some(*id),
+            _ => None,
+        })
+    };
+    let left_socket = use_at("Socket", "nodeId", "10").unwrap();
+    let ambiguous_socket = use_at("Socket", "nodeId", "11").unwrap();
+    let right_socket = use_at("Socket", "nodeId", "20").unwrap();
+    let left_slot = use_at("Slot", "name", "left").unwrap();
+    let right_slot = use_at("Slot", "name", "right").unwrap();
+    let rune = use_at("RuneSlot", "slotName", "unknown rune").unwrap();
+    assert_eq!(use_at("Socket", "nodeId", "12"), None);
+    assert_eq!(use_at("Slot", "name", "empty"), None);
+    assert_eq!(
+        input.allocation_presets.members[0].equipment.members,
+        vec![left_socket, ambiguous_socket]
+    );
+    assert_eq!(
+        input.allocation_presets.members[1].equipment.members,
+        vec![right_socket]
+    );
+    assert_eq!(
+        input.equipment_presets.members[0].equipment.members,
+        vec![left_slot, rune]
+    );
+    assert_eq!(
+        input.equipment_presets.members[1].equipment.members,
+        vec![right_slot]
+    );
+    let tree_uses = BTreeSet::from([left_socket, ambiguous_socket, right_socket]);
+    let ordinary_uses = BTreeSet::from([left_slot, rune, right_slot]);
+    assert!(tree_uses.is_disjoint(&ordinary_uses));
+    // Changing either selected axis would contribute only that preset's IDs.
+    // There is no ItemSet-by-Spec expansion and no union of all saved jewels.
+    for allocation in &input.allocation_presets.members {
+        let DraftListCompletion::Pending { code, .. } = &allocation.equipment.completion else {
+            panic!("source enumeration cannot certify complete equipment membership");
+        };
+        assert_eq!(code, &key("allocation-equipment-membership-not-converted"));
+        for equipment in &input.equipment_presets.members {
+            let combined: BTreeSet<_> = allocation
+                .equipment
+                .members
+                .iter()
+                .chain(&equipment.equipment.members)
+                .copied()
+                .collect();
+            assert_eq!(
+                combined.len(),
+                allocation.equipment.members.len() + equipment.equipment.members.len()
+            );
+            let other = if allocation.id == input.allocation_presets.members[0].id {
+                right_socket
+            } else {
+                left_socket
+            };
+            assert!(!combined.contains(&other));
+        }
+    }
+    let shared = [left_socket, right_socket, left_slot, right_slot];
+    let backing: BTreeSet<_> = shared
+        .iter()
+        .map(|id| {
+            input
+                .equipment
+                .members
+                .iter()
+                .find(|row| row.id == *id)
+                .unwrap()
+                .item
+                .to_resolved()
+                .unwrap()
+        })
+        .collect();
+    assert_eq!(backing.len(), 1);
+    assert_eq!(shared.into_iter().collect::<BTreeSet<_>>().len(), 4);
+    for id in [ambiguous_socket, rune] {
+        let row = input
+            .equipment
+            .members
+            .iter()
+            .find(|row| row.id == id)
+            .unwrap();
+        assert!(matches!(row.item, DraftField::Pending(_)));
+    }
+    for id in tree_uses.iter().copied().chain([rune]) {
+        let row = input
+            .equipment
+            .members
+            .iter()
+            .find(|row| row.id == id)
+            .unwrap();
+        assert!(matches!(
+            row.destination,
+            DraftEquipmentDestination::Pending(_)
+        ));
+        assert!(matches!(row.scope, DraftField::Pending(_)));
+    }
+    assert!(
+        input
+            .allocations
+            .members
+            .iter()
+            .all(|row| matches!(row.pool, DraftField::Pending(_)))
+    );
+    assert_eq!(
+        input.query_presets.members[0]
+            .queries
+            .requests
+            .members
+            .len(),
+        2
+    );
+    origin_integrity(&source, &result);
+    assert_eq!(source.source_xml(), xml);
+}
+
+#[test]
+fn undecodable_item_key_keeps_a_spec_receiving_use_pending_without_lower_tier_join() {
+    let xml = r#"<PathOfBuilding2><Tree><Spec nodes="10"><Sockets><Socket nodeId="10" itemId="1"/></Sockets></Spec><Spec nodes=""/></Tree><Items><Item id="1">Known</Item><Item id="&#49;">Lexically unavailable equal key</Item><ItemSet id="1"/></Items></PathOfBuilding2>"#;
+    let source = source(xml, 0x33);
+    let result = run(&source, &artifacts(false), &[]);
+    let input = result.draft().input();
+    assert_eq!(input.items.members.len(), 2);
+    assert_eq!(input.equipment.members.len(), 1);
+    let row = &input.equipment.members[0];
+    assert!(matches!(row.item, DraftField::Pending(_)));
+    assert!(matches!(
+        row.destination,
+        DraftEquipmentDestination::Pending(_)
+    ));
+    assert_eq!(
+        input.allocation_presets.members[0].equipment.members,
+        vec![row.id]
+    );
+    assert!(
+        input.allocation_presets.members[1]
+            .equipment
+            .members
+            .is_empty()
+    );
+    assert!(
+        input.equipment_presets.members[0]
+            .equipment
+            .members
+            .is_empty()
+    );
+    assert!(
+        input
+            .allocation_presets
+            .members
+            .iter()
+            .all(|preset| matches!(
+                preset.equipment.completion,
+                DraftListCompletion::Pending { .. }
+            ))
+    );
+    origin_integrity(&source, &result);
+}
+
 const ORIGINALS: [&str; 5] = [
     include_str!("../../../tests/fixtures/builds/breadth-20260908/build-01.xml"),
     include_str!("../../../tests/fixtures/builds/breadth-20260908/build-02.xml"),

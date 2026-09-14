@@ -64,8 +64,8 @@ adds partial session storage, structural validation and explicit selected finali
 repair and revisioned edits/adoption remain open. A conservative all-five source normalizer
 now assembles owned drafts with explicit gaps; complete selected normalization/finalization
 remains open. See [owned normalization](owned-normalization.md), including independent
-passive-socket equipment contributions, known-unavailable parity projections and source-kind
-independence. D2 must replace identity-only placeholders with semantic declarations and
+passive-socket equipment contributions (typed composition now implemented; imported semantics
+still pending), known-unavailable parity projections and source-kind independence. D2 must replace identity-only placeholders with semantic declarations and
 allow source definitions to produce zero/one/many owned declarations; PoB Gem rows do not
 prove physical gem ownership. The
 [owned package contract](owned-definition-package.md) now has typed descriptors and a

@@ -37,10 +37,28 @@ only the selected referenced item/gem records and checks cross-preset dependenci
 BuildSpec. Missing providers, containers or payload endpoints are errors, not inferred matches.
 Inventory-only item adoption requires an explicit edit; composition does not silently import it.
 
+Allocation presets also contribute equipment-use IDs. Composition unions those IDs with the
+selected equipment preset, so passive-socket equipment follows the passive setup while ordinary
+equipment remains independently selectable. Duplicate IDs within either list reject; the same
+ID in both lists selects one use. Distinct uses remain distinct even if they share one backing
+item or destination. Input memberships are bounded before deduplication, and the combined build
+still requires every supplying allocation/container. Composition neither allocates IDs nor
+adopts inventory, selects providers automatically, or establishes socket capacity/legality.
+
+Choice presets similarly contribute reward-selection IDs alongside character rewards.
+These contributions are additive, without precedence or replacement. Alternative outcomes
+must have one authored selection owner; automatically derived class/passive effects remain
+rules and grants. For example, configuration-owned quest outcomes belong to choice presets,
+while their effects can still use the selected character context. Composition does not replay
+configuration callbacks or choose unspecified defaults.
+
 Project/preset IDs share the monotonic occurrence domain and cannot collide with item copies
-or other record kinds. The version-1 owned document codec accepts `project` alongside `build`,
+or other record kinds. The version-2 owned document codec accepts `project` alongside `build`,
 `inventory`, `scenario`, `query` and `request`. Explicit null options and saved variant selections
 roundtrip. The codec preserves authored choice-owner spelling while normalizing unordered tables.
+Version 1 rejects explicitly; allocation equipment membership is required in version 2, with
+no implicit empty-list default. Concrete build/request payloads and their digest domains remain
+unchanged; the authoring project and draft shapes are versioned separately from calculation.
 
 Four direct choice owners alias the corresponding empty provider path: Character, EquipmentUse,
 Allocation and authored Skill. The exact declared choice slot is part of that identity. Either
@@ -114,7 +132,8 @@ most one Exact mapping; additional aliases require an explicit ReviewedAlias rea
 an identity to an Unmapped schema preserves that uncertainty rather than granting coverage.
 
 Registry/mapping codecs validate bounded input and canonicalize immutable artifacts. They are
-infrastructure for conversion, not a delivered PoB catalog compiler or five-build normalizer.
+infrastructure for conversion. The conservative [owned normalizer](owned-normalization.md)
+now consumes identity/role artifacts across all five originals; full semantic conversion remains open.
 The source revision/paths never become native definition IDs or required runtime dependencies.
 
 ## Verification and remaining work

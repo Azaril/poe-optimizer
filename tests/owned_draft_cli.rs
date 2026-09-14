@@ -101,6 +101,7 @@ fn draft(pending: bool) -> DraftSession {
             allocation_presets: list(vec![AllocationPresetDraft {
                 id: id(4),
                 allocations: list(vec![]),
+                equipment: list(vec![]),
             }]),
             skill_presets: list(vec![SkillPresetDraft {
                 id: id(5),
@@ -111,6 +112,7 @@ fn draft(pending: bool) -> DraftSession {
             choice_presets: list(vec![ChoicePresetDraft {
                 id: id(6),
                 choices: list(vec![]),
+                rewards: list(vec![]),
             }]),
             scenario_presets: list(vec![ScenarioPresetDraft {
                 id: id(7),
@@ -159,7 +161,10 @@ fn successful(output: Output) -> Value {
     let report: Value = serde_json::from_slice(&output.stdout).unwrap();
     assert_eq!(report["schema_version"], 1);
     assert_eq!(report["document_kind"], "draft");
-    assert_eq!(report["owned_draft_schema_version"], 1);
+    assert_eq!(
+        report["owned_draft_schema_version"],
+        OWNED_DRAFT_SCHEMA_VERSION
+    );
     assert_eq!(report["verification"]["structure"], "valid");
     assert_eq!(report["verification"]["definitions"], "not_bound");
     assert_eq!(report["verification"]["legality"], "not_checked");

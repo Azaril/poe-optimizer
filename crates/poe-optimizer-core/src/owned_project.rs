@@ -43,6 +43,8 @@ pub struct EquipmentPreset {
 pub struct AllocationPreset {
     pub id: AllocationPresetId,
     pub allocations: Vec<AllocationId>,
+    /// Receiving occurrences contributed alongside this allocation selection.
+    pub equipment: Vec<ItemSlotUseId>,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -57,6 +59,8 @@ pub struct SkillPreset {
 pub struct ChoicePreset {
     pub id: ChoicePresetId,
     pub choices: Vec<MechanicChoice>,
+    /// Explicit selected reward occurrences, additive with character rewards.
+    pub rewards: Vec<RewardSelectionId>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -327,6 +331,12 @@ fn validate_project(
             &mut reference_entries,
             limits,
         )?;
+        collection(
+            "allocation_presets.equipment",
+            preset.equipment.len(),
+            &mut reference_entries,
+            limits,
+        )?;
     }
     for preset in &input.skill_presets {
         collection(
@@ -344,6 +354,14 @@ fn validate_project(
         collection(
             "skill_presets.payload_links",
             preset.payload_links.len(),
+            &mut reference_entries,
+            limits,
+        )?;
+    }
+    for preset in &input.choice_presets {
+        collection(
+            "choice_presets.rewards",
+            preset.rewards.len(),
             &mut reference_entries,
             limits,
         )?;
@@ -402,6 +420,13 @@ fn validate_project(
             input.allocator,
             &members,
         )?;
+        references(
+            "allocation_presets.equipment",
+            &preset.equipment,
+            OccurrenceKind::EquipmentUse,
+            input.allocator,
+            &members,
+        )?;
     }
     for preset in &input.skill_presets {
         references(
@@ -422,6 +447,15 @@ fn validate_project(
             "skill_presets.payload_links",
             &preset.payload_links,
             OccurrenceKind::PayloadLink,
+            input.allocator,
+            &members,
+        )?;
+    }
+    for preset in &input.choice_presets {
+        references(
+            "choice_presets.rewards",
+            &preset.rewards,
+            OccurrenceKind::Reward,
             input.allocator,
             &members,
         )?;
@@ -454,6 +488,7 @@ fn canonicalize_project(input: &mut ProjectInput) {
     input.allocation_presets.sort_by_key(|preset| preset.id);
     for preset in &mut input.allocation_presets {
         preset.allocations.sort();
+        preset.equipment.sort();
     }
     input.skill_presets.sort_by_key(|preset| preset.id);
     for preset in &mut input.skill_presets {
@@ -464,6 +499,7 @@ fn canonicalize_project(input: &mut ProjectInput) {
     input.choice_presets.sort_by_key(|preset| preset.id);
     for preset in &mut input.choice_presets {
         owned_build::canonicalize_choices(&mut preset.choices);
+        preset.rewards.sort();
     }
     input.saved_variants.sort_by_key(|variant| variant.id);
 }
@@ -574,7 +610,25 @@ pub fn compose(
     let allocation_preset = selected(&input.allocation_presets, selection.allocations, |v| v.id);
     let skill_preset = selected(&input.skill_presets, selection.skills, |v| v.id);
     let choice_preset = selected(&input.choice_presets, selection.choices, |v| v.id);
-    let equipment = selected_records(&input.equipment, &equipment_preset.equipment, |v| v.id);
+    // Both original lists were bounded and reference-checked before deduplication.
+    // Equal receiving IDs contribute once; distinct uses never merge by item/slot.
+    let equipment_ids: Vec<_> = equipment_preset
+        .equipment
+        .iter()
+        .chain(&allocation_preset.equipment)
+        .copied()
+        .collect::<BTreeSet<_>>()
+        .into_iter()
+        .collect();
+    let equipment = selected_records(&input.equipment, &equipment_ids, |v| v.id);
+    let reward_ids: Vec<_> = character
+        .rewards
+        .iter()
+        .chain(&choice_preset.rewards)
+        .copied()
+        .collect::<BTreeSet<_>>()
+        .into_iter()
+        .collect();
     let skills = selected_records(&input.skills, &skill_preset.skills, |v| v.id);
     let supports = selected_records(&input.supports, &skill_preset.supports, |v| v.id);
     let item_ids: BTreeSet<_> = equipment.iter().map(|v| v.item).collect();
@@ -595,7 +649,7 @@ pub fn compose(
                 class: character.class.clone(),
                 ascendancy: character.ascendancy.clone(),
                 level: character.level,
-                rewards: selected_records(&input.rewards, &character.rewards, |v| v.id),
+                rewards: selected_records(&input.rewards, &reward_ids, |v| v.id),
             },
             weapon_loadouts: input.weapon_loadouts.clone(),
             active_weapon_loadout: selection.active_weapon_loadout,

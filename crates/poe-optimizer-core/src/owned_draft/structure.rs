@@ -678,6 +678,11 @@ impl Visit<'_> {
             &format!("{path}.allocations"),
             &value.allocations,
             OccurrenceKind::Allocation,
+        )?;
+        self.references(
+            &format!("{path}.equipment"),
+            &value.equipment,
+            OccurrenceKind::EquipmentUse,
         )
     }
     fn skill_preset(&mut self, path: &str, value: &SkillPresetDraft) -> Result {
@@ -700,7 +705,12 @@ impl Visit<'_> {
     }
     fn choice_preset(&mut self, path: &str, value: &ChoicePresetDraft) -> Result {
         self.row(path, value.id, OccurrenceKind::ChoicePreset)?;
-        self.choices(&format!("{path}.choices"), &value.choices)
+        self.choices(&format!("{path}.choices"), &value.choices)?;
+        self.references(
+            &format!("{path}.rewards"),
+            &value.rewards,
+            OccurrenceKind::Reward,
+        )
     }
     fn scenario_preset(&mut self, path: &str, value: &ScenarioPresetDraft) -> Result {
         self.row(path, value.id, OccurrenceKind::ScenarioPreset)?;

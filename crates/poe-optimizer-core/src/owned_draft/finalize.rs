@@ -229,8 +229,24 @@ impl DraftSession {
                 rows
             }};
         }
-        let rewards = rows!(rewards, &character.rewards.members, Reward);
-        let equipment = rows!(equipment, &equipment_preset.equipment.members, EquipmentUse);
+        let reward_ids: BTreeSet<_> = character
+            .rewards
+            .members
+            .iter()
+            .chain(&choice_preset.rewards.members)
+            .copied()
+            .collect();
+        let rewards = rows!(rewards, &reward_ids, Reward);
+        // Validate limits/known memberships before union; preserve pending closures
+        // on each selected preset and follow only actual receiving occurrences.
+        let equipment_ids: BTreeSet<_> = equipment_preset
+            .equipment
+            .members
+            .iter()
+            .chain(&allocation_preset.equipment.members)
+            .copied()
+            .collect();
+        let equipment = rows!(equipment, &equipment_ids, EquipmentUse);
         let allocations = rows!(
             allocations,
             &allocation_preset.allocations.members,

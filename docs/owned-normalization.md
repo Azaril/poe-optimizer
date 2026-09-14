@@ -86,7 +86,7 @@ The host publishes draft, sidecar and new watermark together under its owner or 
 Repeating a fresh import is not restore, changed-source migration or concurrent allocation
 authority. Those operations need separate revisioned contracts.
 
-The sidecar records source hash/schema/revision, before/after watermarks, policy plus query
+The version-2 sidecar records source hash/schema/revision, before/after watermarks, policy plus query
 identity, exact artifact identities, draft digest and one origin entry per source element.
 Its targets are a closed enum of current owned occurrences/issues. Many source rows may
 refer to one real pending collection issue; candidates never allocate hypothetical uses.
@@ -110,10 +110,12 @@ coverage claim and is available without the PoB feature.
 The following concrete gates remain before freezing D1/D2 semantics:
 
 - **Independent passive-socket equipment contributions.** A selected Spec supplies jewel
-  uses independently of the selected ItemSet. The current allocation preset contains only
-  allocations. Keep every use and source correspondence now, then add an explicit semantic
-  composition contribution/union with ownership and collision checks. Do not materialize
-  every ItemSet × Spec pair, include all saved jewels or hide the join in the evaluator.
+  uses independently of the selected ItemSet. Allocation presets now carry equipment-use
+  contributions, and Core composition/finalization unions the selected lists. The importer
+  assigns each receiving use to its actual owning Spec while retaining pending membership
+  and destination/activation facts. There are 21 such uses across the originals. Full
+  source completeness and socket semantics remain to convert; the structural composition
+  gap is addressed without expanding every preset combination or including all saved jewels.
 - **Known-unavailable reference projections.** Some original oracle rows request a selected
   minion when there is no such source target. The parity ledger must preserve that known
   unavailable row and fixed denominator without inventing an ActorKey. Core metric requests
@@ -131,6 +133,22 @@ The following concrete gates remain before freezing D1/D2 semantics:
   definitions, physical and provider-only variants, and multiple capabilities from one
   provider. Import provenance can reference this conversion; runtime rules cannot depend
   on PoB source kinds or `from_tree` fields.
+
+The next reference adapter should use an ordered projection ledger outside Core. Each row
+routes to an owned metric request (possibly still pending) or a reference-known unavailable
+projection supported by structured selected-target evidence. Six original selected-minion
+rows have no selected target; other unavailable measurements do not imply that absence.
+The ledger preserves all 110 requested rows while the Core request contains only concrete
+semantic targets. Result joining must reject missing, duplicate or extra IDs and preserve
+caller order. Exact source/selection, artifact and request bindings prevent stale reuse.
+Copying reference absence into this ledger is not independent availability or numerical
+parity; those claims still require owned resolution evidence. A missing mapping stays pending.
+The first consumer is the breadth comparison harness, not optimizer objectives.
+
+Choice presets now have independent reward contributions. The normalizer keeps these lists
+pending until injected owned mappings and value policies identify actual outcomes. The pinned
+quest-data audit establishes configuration ownership; it does not authorize inventing defaults
+or relabeling automatically derived class effects as authored rewards.
 
 Next convert domain-owned config/reward/scenario fields, loadout overlays, provider/target
 correspondence and saved selections. Revisioned repair can proceed independently; it must

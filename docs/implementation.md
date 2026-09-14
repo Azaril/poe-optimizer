@@ -11,6 +11,41 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
+**Independent preset contributions checkpoint (after `17bdeac`):** Core allocation presets
+now contribute explicit equipment-use memberships. Composition unions these with the selected
+ordinary equipment preset, and draft finalization follows both lists and their backing records.
+Choice presets similarly contribute reward selections alongside character rewards. The pinned
+source audit separates 17 config-controlled quest outcomes from 12 quest-point accounting rows;
+config outcomes therefore have a choice-preset owner, with actual outcome conversion still pending.
+Duplicate use IDs within a list reject; shared IDs across contributors deduplicate while
+separate uses of one item remain separate. No record cloning, automatic provider selection,
+inventory adoption or stock claim is introduced. Complete and draft envelopes move to version
+2 with required membership fields and explicit rejection of version 1; the complete request
+payload and digest domain remain unchanged.
+
+The normalizer assigns all 21 original passive-socket receiving uses to their actual Spec's
+allocation preset, independently of every ItemSet. Config reward memberships are explicit pending
+obligations. Original05 has two Specs reusing three backing items through six distinct uses. Pending list completeness, item/socket destination,
+activation and point-pool semantics remain visible. No imported selected request or native
+numerical evaluation is complete; coverage remains **0/5**.
+
+Final validation passes **363 selected test executions**: Core 209, owned schema 11, owned
+import 89, and owned CLI 27 with default features plus 27 without PoB. Strict workspace and
+native-only all-target Clippy, Core/Data/Engine/Import/Native WASM compilation, formatting
+and native-only runtime dependency checks pass. Protected builds, schema40 data and the clean
+PoB pin are unchanged. Receipts are `runs/owned-composition-02/validated-checkpoint.json` and
+`validation-02/ledger.json`; the initial run stopped on a stale negative test that treated
+newly supported version 2 as unsupported. Its correction changed only that test. This is
+local affected-scope evidence, not a full-workspace test or hosted-CI result.
+
+The exact-source reward audit and independent static Core review are in
+`runs/owned-composition-02/reference-reward-review.md`. The next reference ledger must keep
+all 110 rows, distinguish the six structurally absent selected-minion projections, and
+avoid treating copied reference absence as independently computed availability parity.
+Then compile finite injected quest outcome/default mappings, including the eight option
+families absent from the old structured quest data. No source callback or new Core actor
+category is needed for either step.
+
 **Owned source-normalization checkpoint (after `a49a0b6`):** the new Import path now
 separates borrowed source evidence, offline owned skill identity/role compilation, explicit
 value precedence and conservative semantic normalization. `normalize-owned` is its thin
@@ -4488,20 +4523,27 @@ the design documents.
 1. Read [domain architecture](domain-architecture.md), [architecture migration](architecture-migration.md),
    [owned normalization](owned-normalization.md) and [owned drafts](owned-drafts.md). Owned semantic
    models supersede PoB UI/loader/VM replication. No third named-skill profile.
-2. Preserve the current source-normalization receipt under `runs/owned-source-normalization-01/`.
-   This checkpoint has 343 selected test executions recorded in `validated-checkpoint.json`;
+2. Preserve the current 363-test composition receipt under `runs/owned-composition-02/` and the
+   preceding source-normalization evidence under `runs/owned-source-normalization-01/`.
+   The source-normalization checkpoint has 343 selected test executions in its `validated-checkpoint.json`;
    original complete native coverage remains 0/5. The preceding draft checkpoint `a49a0b6`
    has 274 validated test executions under
    `runs/owned-normalization-01/validation-02`; do not relabel it as this checkpoint's evidence.
    Check exact published-head CI separately and keep original inputs, schema40 package and PoB pin intact.
-3. Finish the semantic composition gaps exposed by all five: selected Spec socket-use contribution
-   union with independent ItemSet equipment; and known-unavailable reference query projection ledger.
+3. The typed selected Spec socket-use union with independent ItemSet equipment is implemented.
+   Finish known-unavailable reference query projections and full selected import semantics.
+   The exact-source reward/projection audit and reviewed API direction are in
+   `runs/owned-composition-02/reference-reward-review.md`: preserve all110 rows, route the six
+   structurally absent reference targets outside Core, never treat copied absence as owned
+   availability parity. Follow with finite injected quest outcome/default mapping; nine fixed
+   stat outcomes have reusable structured data, while eight option families still need conversion.
    Retain all uses, exact provider ownership, historical targets and every original expected row.
    Keep Physical/ProviderOnly/unresolved materialization distinct from active/support roles;
    manual origins cannot override the 18 provider-only rows in the protected originals.
    No eager Cartesian presets, hidden target replacement or fabricated actor IDs. The provisional
    alternatives/union/versioning analysis is `runs/owned-source-normalization-01/composition-next.md`;
-   verify concrete reward ownership before adopting its two-field recommendation.
+   the pinned reward audit now justifies both typed contribution fields. Source defaults,
+   reward outcomes and progression accounting still need owned conversion without callbacks.
 4. Extend normalization through owned mappings for items/quality/modifiers, class/rewards,
    point pools/loadout overlays, config destinations/scenarios, provider/support/payload targets
    and explicit saved selections. Use the real five-build compiler/normalizer tests throughout.

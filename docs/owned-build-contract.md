@@ -11,7 +11,7 @@ The source audit is in `runs/owned-build-contract-01/source-audit.md`.
 `core::owned_definitions` implements typed owned IDs and bounded authored values.
 `core::owned_build` implements raw `BuildInput`, `ScenarioInput`, `QueryInput` records,
 private immutable `BuildSpec`, `ScenarioSpec`, `QuerySpec` wrappers and an
-`OwnedEvaluationRequest`. Constructors validate structure; the version-1 JSON codec
+`OwnedEvaluationRequest`. Constructors validate structure; the version-2 JSON codec
 roundtrips standalone documents (including inventory and projects) and combined requests. `check-owned-input` is the first
 CLI consumer and can write canonical owned JSON without XML, PoB or a game package.
 
@@ -27,7 +27,7 @@ choice aliases, concrete required values and schema-versus-resolution status. Dr
 revisioned editing, legality, computability and the five-case adapter remain open. Numerical
 evaluation still uses legacy inputs; these additions do not establish native rule coverage.
 
-The envelope is `{ schema_version: 1, document: { kind, value } }`, where kind is `build`,
+The envelope is `{ schema_version: 2, document: { kind, value } }`, where kind is `build`,
 `project`, `inventory`, `scenario`, `query` or `request`. Required optional fields use explicit null; omission
 infers no semantic default. Unknown/duplicate fields reject. Defaults bound wire bytes to
 8 MiB, collection entries to 16,384, total entries to 100,000 and provider paths to 64 steps;

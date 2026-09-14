@@ -143,3 +143,13 @@ No native numerical consumer is replaced at this checkpoint; no further Spark/Ma
 or golden deletion is justified yet. The finite catalog and unused payload classifier remain
 retired. Full input correspondence, shared domain-effect resolution and numerical validation
 are the next retirement dependencies. Do not resume the paused UI/source-VM frontier.
+
+
+## Independent preset contributions
+
+Owned project composition and draft finalization now select allocation-associated equipment
+and configuration-owned rewards through typed memberships. Import normalizes Spec socket
+uses into that ownership model; no selected-view replay or evaluator callback is added.
+Version-1 owned project/draft persistence is rejected explicitly rather than maintained as a
+second implicit path. No numerical profile consumer is removed by this structural change;
+shared rule resolution and all-five selected semantic conversion remain the next dependency.

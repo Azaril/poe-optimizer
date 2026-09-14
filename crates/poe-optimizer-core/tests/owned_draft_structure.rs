@@ -201,6 +201,7 @@ fn fixture() -> DraftSessionInput {
     input.allocation_presets = list(vec![AllocationPresetDraft {
         id: id(22),
         allocations: list(vec![id(7)]),
+        equipment: list(vec![]),
     }]);
     input.skill_presets = list(vec![SkillPresetDraft {
         id: id(23),
@@ -210,6 +211,7 @@ fn fixture() -> DraftSessionInput {
     }]);
     input.choice_presets = list(vec![ChoicePresetDraft {
         id: id(24),
+        rewards: list(vec![]),
         choices: list(vec![]),
     }]);
     input.scenario_presets = list(vec![ScenarioPresetDraft {

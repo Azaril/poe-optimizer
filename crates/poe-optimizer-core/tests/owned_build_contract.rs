@@ -337,7 +337,7 @@ fn direct_authored_documents_roundtrip_without_source_or_definition_packages() {
         let decoded = decode_owned(&bytes, limits()).unwrap();
         assert_eq!(encode_owned(&decoded, limits()).unwrap(), bytes);
         let wire: Value = serde_json::from_slice(&bytes).unwrap();
-        assert_eq!(wire["schema_version"], 1);
+        assert_eq!(wire["schema_version"], 2);
         assert!(!wire.as_object().unwrap().contains_key("source"));
     }
     let original = build().into_input();
@@ -653,14 +653,14 @@ fn owned_decode_requires_explicit_options_and_rejects_unknown_or_duplicate_field
         fails(decode_value(extra), &["unknown", "field"]);
     }
     let document = serde_json::to_string(&valid["document"]).unwrap();
-    let duplicate = format!(r#"{{"schema_version":1,"schema_version":1,"document":{document}}}"#);
+    let duplicate = format!(r#"{{"schema_version":2,"schema_version":2,"document":{document}}}"#);
     fails(decode_owned(duplicate.as_bytes(), limits()), &["duplicate"]);
     let encoded = serde_json::to_string(&valid).unwrap();
     let duplicate = encoded.replacen("\"level\":60", "\"level\":60,\"level\":60", 1);
     assert_ne!(encoded, duplicate);
     fails(decode_owned(duplicate.as_bytes(), limits()), &["duplicate"]);
     let mut unsupported = valid;
-    unsupported["schema_version"] = json!(2);
+    unsupported["schema_version"] = json!(OWNED_INPUT_SCHEMA_VERSION + 1);
     fails(decode_value(unsupported), &["schema", "version"]);
 }
 

@@ -73,9 +73,9 @@ impl From<serde_json::Error> for CodecError {
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-struct WireInput {
+struct WireInput<T> {
     schema_version: u32,
-    document: DocumentInput,
+    document: T,
 }
 #[derive(Deserialize)]
 #[serde(
@@ -108,10 +108,13 @@ pub fn decode_owned(bytes: &[u8], limits: OwnedInputLimits) -> Result<OwnedDocum
             maximum: limits.max_wire_bytes,
         });
     }
-    let wire: WireInput = serde_json::from_slice(bytes)?;
+    // Read a strict envelope first so old payload shapes fail with their actual
+    // version, even if required current-version fields were absent in that schema.
+    let wire: WireInput<serde::de::IgnoredAny> = serde_json::from_slice(bytes)?;
     if wire.schema_version != OWNED_INPUT_SCHEMA_VERSION {
         return Err(CodecError::UnsupportedVersion(wire.schema_version));
     }
+    let wire: WireInput<DocumentInput> = serde_json::from_slice(bytes)?;
     Ok(match wire.document {
         DocumentInput::Build(input) => {
             OwnedDocument::Build(Box::new(BuildSpec::new(*input, limits)?))

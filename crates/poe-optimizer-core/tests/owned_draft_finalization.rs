@@ -192,6 +192,7 @@ fn project_input() -> ProjectInput {
         allocation_presets: vec![AllocationPreset {
             id: id(120),
             allocations: vec![id(50)],
+            equipment: vec![],
         }],
         skill_presets: vec![
             SkillPreset {
@@ -209,6 +210,7 @@ fn project_input() -> ProjectInput {
         ],
         choice_presets: vec![ChoicePreset {
             id: id(140),
+            rewards: vec![],
             choices: vec![MechanicChoice {
                 owner: ChoiceOwner::Character,
                 choice: ChoiceSelection {
@@ -671,7 +673,7 @@ fn draft_codec_rejects_unknown_duplicate_missing_and_unsupported_wire_values() {
         ));
     }
     let duplicate = format!(
-        "{{\"schema_version\":1,\"schema_version\":1,\"draft\":{}}}",
+        "{{\"schema_version\":2,\"schema_version\":2,\"draft\":{}}}",
         serde_json::to_string(session.input()).unwrap()
     );
     assert!(matches!(
@@ -682,7 +684,7 @@ fn draft_codec_rejects_unknown_duplicate_missing_and_unsupported_wire_values() {
     future["schema_version"] = json!(OWNED_DRAFT_SCHEMA_VERSION + 1);
     assert!(matches!(
         decode_draft(&serde_json::to_vec(&future).unwrap(), limits()),
-        Err(DraftCodecError::UnsupportedVersion(2))
+        Err(DraftCodecError::UnsupportedVersion(3))
     ));
     // A well-formed wire ID still needs the constructor's ownership checks.
     let mut foreign = input();
@@ -714,4 +716,347 @@ fn draft_codec_enforces_exact_byte_boundary_in_both_directions() {
     assert!(
         matches!(decode_draft(&bytes, tight), Err(DraftCodecError::TooLarge { maximum }) if maximum == bytes.len() - 1)
     );
+}
+
+#[test]
+fn moving_or_sharing_a_use_between_contributors_preserves_concrete_request_identity() {
+    let original = DraftSession::new(input(), limits()).unwrap();
+    let expected = ready(&original, selection());
+    for ordinary in [vec![id::<ItemSlotUseId>(40)], vec![id(40), id(41)]] {
+        let mut raw = input();
+        raw.equipment_presets.members[0].equipment = ordinary.into();
+        raw.allocation_presets.members[0].equipment = vec![id::<ItemSlotUseId>(41)].into();
+        let session = DraftSession::new(raw, limits()).unwrap();
+        let actual = ready(&session, selection());
+        assert_eq!(actual.request(), expected.request());
+        assert_eq!(actual.request_digest(), expected.request_digest());
+        assert_ne!(actual.draft_digest(), expected.draft_digest());
+        assert_eq!(actual.request().build().input().items.len(), 1);
+        assert_eq!(actual.request().build().input().equipment.len(), 2);
+        assert_eq!(
+            session.digest(limits().input.max_wire_bytes).unwrap(),
+            digest_owned("owned-draft-v2", &session, limits().input.max_wire_bytes).unwrap()
+        );
+        assert_ne!(
+            session.digest(limits().input.max_wire_bytes).unwrap(),
+            digest_owned("owned-draft-v1", &session, limits().input.max_wire_bytes).unwrap()
+        );
+    }
+}
+
+#[test]
+fn selected_pending_contribution_blocks_with_no_members_and_with_a_duplicate_contributor() {
+    for members in [vec![], vec![id::<ItemSlotUseId>(40)]] {
+        let mut raw = input();
+        raw.allocation_presets.members[0].equipment = DraftList {
+            members,
+            completion: open(220),
+        };
+        let session = DraftSession::new(raw, limits()).unwrap();
+        let (issues, queries) = pending_result(&session);
+        assert_eq!(issues.len(), 1);
+        assert_eq!(issues[0].id, id(220));
+        assert_eq!(
+            issues[0].owner,
+            Some(id::<AllocationPresetId>(120).instance_id())
+        );
+        assert!(issues[0].path.ends_with(".equipment.completion"));
+        assert_eq!(
+            queries
+                .requests
+                .members
+                .iter()
+                .map(|row| row.id.as_str())
+                .collect::<Vec<_>>(),
+            vec!["row-z", "row-a"]
+        );
+    }
+}
+
+fn with_contribution_backing() -> DraftSessionInput {
+    let mut raw = input();
+    raw.equipment.members.push(
+        EquipmentUse {
+            id: id(42),
+            item: id(12),
+            destination: EquipmentDestination::PassiveSocket {
+                allocation: id(50),
+                slot: def("socket"),
+            },
+            scope: LoadoutScope::Shared,
+        }
+        .into(),
+    );
+    raw.allocation_presets.members[0].equipment = vec![id::<ItemSlotUseId>(42)].into();
+    raw
+}
+
+#[test]
+fn pending_selected_receiving_and_backing_rows_block_but_candidates_are_not_followed() {
+    for known_backing in [false, true] {
+        let mut raw = with_contribution_backing();
+        raw.items.members[1].template = DraftField::Pending(pending(221, vec![def("item")]));
+        if !known_backing {
+            raw.equipment.members[2].item = DraftField::Pending(pending(222, vec![id(12)]));
+        }
+        let session = DraftSession::new(raw, limits()).unwrap();
+        let (issues, _) = pending_result(&session);
+        assert_eq!(issues.len(), 1);
+        assert_eq!(issues[0].id, id(if known_backing { 221 } else { 222 }));
+        assert_eq!(
+            issues[0].owner,
+            Some(if known_backing {
+                id::<ItemRecordId>(12).instance_id()
+            } else {
+                id::<ItemSlotUseId>(42).instance_id()
+            })
+        );
+    }
+    let session = DraftSession::new(with_contribution_backing(), limits()).unwrap();
+    let result = ready(&session, selection());
+    assert_eq!(
+        result
+            .request()
+            .build()
+            .input()
+            .items
+            .iter()
+            .map(|row| row.id)
+            .collect::<Vec<_>>(),
+        vec![id(10), id(12)]
+    );
+    assert_eq!(
+        result
+            .request()
+            .build()
+            .input()
+            .equipment
+            .iter()
+            .map(|row| row.id)
+            .collect::<Vec<_>>(),
+        vec![id(40), id(41), id(42)]
+    );
+}
+
+#[test]
+fn inactive_pending_allocation_contribution_stays_saved_without_affecting_selected_projection() {
+    let mut raw = with_contribution_backing();
+    raw.allocation_presets.members[0].equipment = Vec::<ItemSlotUseId>::new().into();
+    raw.allocation_presets.members.push(AllocationPresetDraft {
+        id: id(121),
+        allocations: vec![id::<AllocationId>(50)].into(),
+        equipment: DraftList {
+            members: vec![id(42)],
+            completion: open(223),
+        },
+    });
+    raw.items.members[1].template = DraftField::Pending(pending(224, vec![def("item")]));
+    let session = DraftSession::new(raw.clone(), limits()).unwrap();
+    assert_eq!(
+        ready(&session, selection()).request(),
+        ready(&DraftSession::new(input(), limits()).unwrap(), selection()).request()
+    );
+    let selected = EvaluationSelection {
+        build: VariantSelection {
+            allocations: id(121),
+            ..selection().build
+        },
+        ..selection()
+    };
+    let DraftFinalization::Pending { issues, .. } =
+        session.finalize_selection(selected, limits()).unwrap()
+    else {
+        panic!("selected pending contribution was accepted")
+    };
+    assert_eq!(
+        issues
+            .iter()
+            .map(|issue| issue.id)
+            .collect::<std::collections::BTreeSet<_>>(),
+        [id::<DraftIssueId>(223), id(224)].into_iter().collect()
+    );
+    assert_eq!(session.input(), &raw);
+}
+
+#[test]
+fn draft_contribution_members_are_domain_checked_and_charged_before_deduplication() {
+    for members in [
+        vec![id::<ItemSlotUseId>(40), id(40)],
+        vec![id(50)],
+        vec![id(999)],
+    ] {
+        let mut raw = input();
+        raw.allocation_presets.members[0].equipment = members.into();
+        assert!(DraftSession::new(raw, limits()).is_err());
+    }
+    let mut raw = input();
+    raw.allocation_presets.members[0].equipment = vec![id::<ItemSlotUseId>(41), id(40)].into();
+    let session = DraftSession::new(raw.clone(), limits()).unwrap();
+    // Find the exact public validation boundary with at most 17 bounded checks.
+    let (mut lower, mut upper) = (1, limits().input.max_entries);
+    while lower < upper {
+        let middle = lower + (upper - lower) / 2;
+        let mut bounded = limits();
+        bounded.input.max_entries = middle;
+        if session.validate_limits(bounded).is_ok() {
+            upper = middle
+        } else {
+            lower = middle + 1
+        }
+    }
+    let minimum = lower;
+    let mut exact = limits();
+    exact.input.max_entries = minimum;
+    assert!(session.finalize_selection(selection(), exact).is_ok());
+    let mut tight = exact;
+    tight.input.max_entries -= 1;
+    assert!(session.finalize_selection(selection(), tight).is_err());
+    raw.allocation_presets.members[0].equipment.members.clear();
+    let without = DraftSession::new(raw, limits()).unwrap();
+    let mut two_less = exact;
+    two_less.input.max_entries -= 2;
+    assert!(without.validate_limits(two_less).is_ok());
+}
+
+#[test]
+fn draft_v2_contribution_codec_preserves_order_and_rejects_v1_before_old_payload_shape() {
+    let mut raw = input();
+    raw.allocation_presets.members[0].equipment = DraftList {
+        members: vec![id(41), id(40)],
+        completion: open(225),
+    };
+    let session = DraftSession::new(raw, limits()).unwrap();
+    let bytes = encode_draft(&session, limits()).unwrap();
+    let mut wire: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+    assert_eq!(wire["schema_version"], 2);
+    assert_eq!(decode_draft(&bytes, limits()).unwrap(), session);
+    wire["draft"]["allocation_presets"]["members"][0]
+        .as_object_mut()
+        .unwrap()
+        .remove("equipment");
+    assert!(matches!(
+        decode_draft(&serde_json::to_vec(&wire).unwrap(), limits()),
+        Err(DraftCodecError::Json(_))
+    ));
+    wire["schema_version"] = json!(1);
+    assert!(matches!(
+        decode_draft(&serde_json::to_vec(&wire).unwrap(), limits()),
+        Err(DraftCodecError::UnsupportedVersion(1))
+    ));
+    let duplicate=String::from_utf8(bytes).unwrap().replacen("\"equipment\":{\"members\":[", "\"equipment\":{\"members\":[],\"completion\":{\"kind\":\"complete\"}},\"equipment\":{\"members\":[",1);
+    assert!(matches!(
+        decode_draft(duplicate.as_bytes(), limits()),
+        Err(DraftCodecError::Json(_))
+    ));
+}
+
+#[test]
+fn choice_reward_pending_closure_blocks_empty_and_overlap_and_known_overlap_preserves_request() {
+    let baseline = ready(&DraftSession::new(input(), limits()).unwrap(), selection());
+    for members in [vec![], vec![id::<RewardSelectionId>(30)]] {
+        let mut raw = input();
+        raw.choice_presets.members[0].rewards = DraftList {
+            members,
+            completion: open(226),
+        };
+        let session = DraftSession::new(raw.clone(), limits()).unwrap();
+        let (issues, _) = pending_result(&session);
+        assert_eq!(issues.len(), 1);
+        assert_eq!(issues[0].id, id(226));
+        assert_eq!(
+            issues[0].owner,
+            Some(id::<ChoicePresetId>(140).instance_id())
+        );
+        raw.choice_presets.members[0].rewards.completion = DraftListCompletion::Complete;
+        let known = ready(&DraftSession::new(raw, limits()).unwrap(), selection());
+        assert_eq!(known.request(), baseline.request());
+        assert_eq!(known.request_digest(), baseline.request_digest());
+    }
+}
+
+#[test]
+fn contributed_reward_fields_block_only_the_selected_choice_alternative() {
+    let mut raw = input();
+    let reward = RewardSelection {
+        id: id(31),
+        definition: def("reward"),
+        parameters: vec![ParameterAssignment {
+            slot: slot(SlotOwnerDefId::Reward(def("reward")), "reward-parameter"),
+            value: ParameterValue::Boolean(true),
+        }],
+    };
+    let mut reward: RewardDraft = reward.into();
+    reward.parameters.members[0].value = DraftField::Pending(pending(227, vec![]));
+    raw.rewards.members.push(reward);
+    raw.choice_presets.members.push(ChoicePresetDraft {
+        id: id(141),
+        choices: Vec::<MechanicChoice>::new().into(),
+        rewards: vec![id::<RewardSelectionId>(31)].into(),
+    });
+    let session = DraftSession::new(raw.clone(), limits()).unwrap();
+    assert_eq!(
+        ready(&session, selection()).request(),
+        ready(&DraftSession::new(input(), limits()).unwrap(), selection()).request()
+    );
+    let selected = EvaluationSelection {
+        build: VariantSelection {
+            choices: id(141),
+            ..selection().build
+        },
+        ..selection()
+    };
+    let DraftFinalization::Pending { issues, .. } =
+        session.finalize_selection(selected, limits()).unwrap()
+    else {
+        panic!("selected reward input not required")
+    };
+    assert_eq!(issues.len(), 1);
+    assert_eq!(issues[0].id, id(227));
+    assert_eq!(
+        issues[0].owner,
+        Some(id::<RewardSelectionId>(31).instance_id())
+    );
+    raw.rewards.members[1].parameters.members[0].value = ParameterValue::Boolean(true).into();
+    let resolved = ready(&DraftSession::new(raw, limits()).unwrap(), selected);
+    assert_eq!(
+        resolved
+            .request()
+            .build()
+            .input()
+            .character
+            .rewards
+            .iter()
+            .map(|r| r.id)
+            .collect::<Vec<_>>(),
+        vec![id(30), id(31)]
+    );
+}
+
+#[test]
+fn draft_choice_reward_membership_and_required_wire_field_have_no_implicit_defaults() {
+    for refs in [
+        vec![id::<RewardSelectionId>(30), id(30)],
+        vec![id(40)],
+        vec![id(999)],
+    ] {
+        let mut raw = input();
+        raw.choice_presets.members[0].rewards = refs.into();
+        assert!(DraftSession::new(raw, limits()).is_err());
+    }
+    let session = DraftSession::new(input(), limits()).unwrap();
+    let mut value: serde_json::Value =
+        serde_json::from_slice(&encode_draft(&session, limits()).unwrap()).unwrap();
+    value["draft"]["choice_presets"]["members"][0]
+        .as_object_mut()
+        .unwrap()
+        .remove("rewards");
+    assert!(matches!(
+        decode_draft(&serde_json::to_vec(&value).unwrap(), limits()),
+        Err(DraftCodecError::Json(_))
+    ));
+    value["schema_version"] = json!(1);
+    assert!(matches!(
+        decode_draft(&serde_json::to_vec(&value).unwrap(), limits()),
+        Err(DraftCodecError::UnsupportedVersion(1))
+    ));
 }

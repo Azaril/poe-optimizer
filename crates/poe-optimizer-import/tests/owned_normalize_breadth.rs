@@ -333,6 +333,149 @@ fn has_physical_link(origin: &SourceOwnedOrigin) -> bool {
     })
 }
 
+// Source enumeration, not selected-set pairing, determines receiving ownership.
+fn assert_spec_socket_membership(
+    evidence: &SourceProjectEvidence<'_>,
+    normalized: &NormalizedImport,
+    expected_counts: &[usize],
+) {
+    let input = normalized.draft().input();
+    let origins = &normalized.sidecar().origins;
+    let specs: Vec<_> = evidence
+        .rows()
+        .iter()
+        .filter(|row| {
+            matches!(
+                row.authored_instance(),
+                Some(AuthoredInstanceId::PassiveSpec(_))
+            )
+        })
+        .collect();
+    assert_eq!(specs.len(), expected_counts.len());
+    let ordinary: BTreeSet<_> = input
+        .equipment_presets
+        .members
+        .iter()
+        .flat_map(|preset| preset.equipment.members.iter().copied())
+        .collect();
+    let mut all_spec_uses = BTreeSet::new();
+    for (spec, expected_count) in specs.iter().zip(expected_counts) {
+        let preset_id = origins[spec.occurrence().id().ordinal() as usize]
+            .links
+            .iter()
+            .find_map(|link| match link {
+                OwnedOriginTarget::AllocationPreset(id) => Some(*id),
+                _ => None,
+            })
+            .unwrap();
+        let preset = input
+            .allocation_presets
+            .members
+            .iter()
+            .find(|preset| preset.id == preset_id)
+            .unwrap();
+        let source_sockets: Vec<_> = evidence
+            .rows()
+            .iter()
+            .filter(|row| {
+                if row.occurrence().name() != "Socket" {
+                    return false;
+                }
+                let Some(parent) = row.occurrence().parent() else {
+                    return false;
+                };
+                let container = evidence.row(parent).unwrap();
+                container.occurrence().name() == "Sockets"
+                    && container.occurrence().parent() == Some(spec.occurrence().id())
+            })
+            .collect();
+        assert_eq!(source_sockets.len(), *expected_count);
+        let mut expected_uses = vec![];
+        for socket in source_sockets {
+            assert_ne!(attribute(socket, "itemId"), Some("0"));
+            let use_ids: Vec<_> = origins[socket.occurrence().id().ordinal() as usize]
+                .links
+                .iter()
+                .filter_map(|link| match link {
+                    OwnedOriginTarget::Equipment(id) => Some(*id),
+                    _ => None,
+                })
+                .collect();
+            assert_eq!(use_ids.len(), 1);
+            let id = use_ids[0];
+            assert!(
+                all_spec_uses.insert(id),
+                "one source receiving use leaked across Specs"
+            );
+            assert!(
+                !ordinary.contains(&id),
+                "Spec socket was mixed into an ItemSet"
+            );
+            let receiving = input
+                .equipment
+                .members
+                .iter()
+                .find(|row| row.id == id)
+                .unwrap();
+            assert!(matches!(receiving.item, DraftField::Known { .. }));
+            assert!(matches!(
+                receiving.destination,
+                DraftEquipmentDestination::Pending(_)
+            ));
+            assert!(matches!(receiving.scope, DraftField::Pending(_)));
+            expected_uses.push(id);
+        }
+        assert_eq!(preset.equipment.members, expected_uses);
+        let DraftListCompletion::Pending { code, .. } = &preset.equipment.completion else {
+            panic!("enumerated source sockets do not certify complete equipment membership");
+        };
+        assert_eq!(
+            code.as_str(),
+            "allocation-equipment-membership-not-converted"
+        );
+    }
+    assert_eq!(all_spec_uses.len(), expected_counts.iter().sum::<usize>());
+    assert!(
+        input
+            .allocations
+            .members
+            .iter()
+            .all(|allocation| matches!(allocation.pool, DraftField::Pending(_)))
+    );
+    // Missing itemId is not the injected exact empty-item token, even for a
+    // source RuneSlot whose display name says None.
+    for row in evidence
+        .rows()
+        .iter()
+        .filter(|row| row.occurrence().name() == "RuneSlot")
+    {
+        assert!(row.attribute("itemId").is_none());
+        let origin = &origins[row.occurrence().id().ordinal() as usize];
+        assert!(matches!(origin.disposition, SourceDisposition::Contributes));
+        let id = origin
+            .links
+            .iter()
+            .find_map(|link| match link {
+                OwnedOriginTarget::Equipment(id) => Some(*id),
+                _ => None,
+            })
+            .expect("unknown rune source must retain a receiving occurrence");
+        assert!(ordinary.contains(&id));
+        assert!(!all_spec_uses.contains(&id));
+        let receiving = input
+            .equipment
+            .members
+            .iter()
+            .find(|row| row.id == id)
+            .unwrap();
+        assert!(matches!(receiving.item, DraftField::Pending(_)));
+        assert!(matches!(
+            receiving.destination,
+            DraftEquipmentDestination::Pending(_)
+        ));
+    }
+}
+
 #[test]
 fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semantics() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
@@ -396,6 +539,16 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         );
         let issue_ids: BTreeSet<_> = validation.issues.iter().map(|issue| issue.id).collect();
         assert_eq!(sidecar.origins.len(), evidence.rows().len());
+        assert_eq!(sidecar.schema_version, 2);
+        let socket_counts: &[usize] = match index {
+            0 => &[3],
+            1 => &[0, 0, 0, 0, 0, 3],
+            2 => &[3],
+            3 => &[6],
+            4 => &[0, 0, 0, 0, 3, 3, 0],
+            _ => unreachable!(),
+        };
+        assert_spec_socket_membership(&evidence, &normalized, socket_counts);
         assert_eq!(sidecar.source_sha256, case.input.xml_sha256);
         assert_eq!(sidecar.registry, artifacts.registry.identity().unwrap());
         assert_eq!(sidecar.mapping, *artifacts.mappings.identity());
@@ -567,6 +720,12 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         assert_eq!(draft.skill_presets.members.len(), skill_sets);
         assert_eq!(draft.equipment_presets.members.len(), item_sets);
         assert_eq!(draft.choice_presets.members.len(), 1);
+        let choices = &draft.choice_presets.members[0];
+        assert!(choices.rewards.members.is_empty());
+        let DraftListCompletion::Pending { code, .. } = &choices.rewards.completion else {
+            panic!("unconverted configuration rewards must remain pending");
+        };
+        assert_eq!(code.as_str(), "configuration-rewards-not-converted");
         assert_eq!(draft.scenario_presets.members.len(), 1);
         assert!(draft.skill_presets.members.iter().all(|preset| matches!(
             preset.skills.completion,

@@ -239,10 +239,12 @@ fn input() -> ProjectInput {
             AllocationPreset {
                 id: id(121),
                 allocations: vec![id(52)],
+                equipment: vec![],
             },
             AllocationPreset {
                 id: id(120),
                 allocations: vec![id(51), id(50)],
+                equipment: vec![],
             },
         ],
         skill_presets: vec![
@@ -268,6 +270,7 @@ fn input() -> ProjectInput {
         choice_presets: vec![
             ChoicePreset {
                 id: id(141),
+                rewards: vec![],
                 choices: vec![choice(
                     ChoiceOwner::Provider(provider(ProviderRoot::SupportAssignment(id(70)))),
                     "support-choice",
@@ -275,10 +278,12 @@ fn input() -> ProjectInput {
             },
             ChoicePreset {
                 id: id(140),
+                rewards: vec![],
                 choices: vec![choice(ChoiceOwner::Character, "character-choice")],
             },
             ChoicePreset {
                 id: id(149),
+                rewards: vec![],
                 choices: vec![],
             },
         ],
@@ -1007,4 +1012,398 @@ fn authored_choice_owner_survives_and_nonempty_paths_or_other_roots_stay_distinc
             .len(),
         4
     );
+}
+
+fn contribution_input() -> ProjectInput {
+    let mut raw = input();
+    for (use_id, item_id, allocation_id) in [(44, 10, 50), (45, 12, 51)] {
+        raw.equipment.push(EquipmentUse {
+            id: id(use_id),
+            item: id(item_id),
+            destination: EquipmentDestination::PassiveSocket {
+                allocation: id(allocation_id),
+                slot: def("passive-socket"),
+            },
+            scope: LoadoutScope::Shared,
+        });
+    }
+    for (preset_id, allocation_id, use_id) in [(120, 50, 44), (121, 51, 45)] {
+        let preset = raw
+            .allocation_presets
+            .iter_mut()
+            .find(|row| row.id == id(preset_id))
+            .unwrap();
+        preset.allocations = vec![id(allocation_id)];
+        preset.equipment = vec![id(use_id)];
+    }
+    raw
+}
+
+#[test]
+fn equipment_and_allocation_contributions_compose_all_four_independent_selections() {
+    let raw = contribution_input();
+    let project = BuildProject::new(raw.clone(), limits()).unwrap();
+    let before = serde_json::to_vec(&project).unwrap();
+    let document = OwnedDocument::Project(Box::new(project.clone()));
+    assert_eq!(
+        decode_owned(&encode_owned(&document, limits()).unwrap(), limits()).unwrap(),
+        document
+    );
+    for (equipment_id, ordinary_ids) in [(110, vec![40, 41]), (111, vec![42])] {
+        for (allocation_preset, allocation_id, socket_id) in [(120, 50, 44), (121, 51, 45)] {
+            let selected = VariantSelection {
+                equipment: id(equipment_id),
+                allocations: id(allocation_preset),
+                ..selection()
+            };
+            let actual = compose(&project, &selected, None, limits()).unwrap();
+            let expected_use_ids: Vec<ItemSlotUseId> = ordinary_ids
+                .iter()
+                .copied()
+                .chain([socket_id])
+                .map(id)
+                .collect();
+            let equipment: Vec<_> = raw
+                .equipment
+                .iter()
+                .filter(|row| expected_use_ids.contains(&row.id))
+                .cloned()
+                .collect();
+            let expected = BuildSpec::new(
+                BuildInput {
+                    allocator: raw.allocator,
+                    revision: raw.revision,
+                    game_version: namespace(),
+                    character: CharacterSpec {
+                        class: def("first-class"),
+                        ascendancy: None,
+                        level: 50,
+                        rewards: vec![
+                            raw.rewards
+                                .iter()
+                                .find(|row| row.id == id(30))
+                                .unwrap()
+                                .clone(),
+                        ],
+                    },
+                    weapon_loadouts: raw.weapon_loadouts.clone(),
+                    active_weapon_loadout: id(2),
+                    items: raw
+                        .items
+                        .iter()
+                        .filter(|item| equipment.iter().any(|row| row.item == item.id))
+                        .cloned()
+                        .collect(),
+                    equipment,
+                    gems: vec![gem(20), gem(21)],
+                    allocations: vec![
+                        raw.allocations
+                            .iter()
+                            .find(|row| row.id == id(allocation_id))
+                            .unwrap()
+                            .clone(),
+                    ],
+                    skills: raw
+                        .skills
+                        .iter()
+                        .filter(|row| [id(60), id(61)].contains(&row.id))
+                        .cloned()
+                        .collect(),
+                    supports: vec![
+                        raw.supports
+                            .iter()
+                            .find(|row| row.id == id(70))
+                            .unwrap()
+                            .clone(),
+                    ],
+                    payload_links: raw.payload_links.clone(),
+                    choices: vec![choice(ChoiceOwner::Character, "character-choice")],
+                },
+                limits(),
+            )
+            .unwrap();
+            assert_eq!(actual, expected);
+            assert_eq!(
+                build_content_binding(&actual, limits()).unwrap(),
+                build_content_binding(&expected, limits()).unwrap()
+            );
+            assert_eq!(
+                actual
+                    .input()
+                    .equipment
+                    .iter()
+                    .map(|row| row.id)
+                    .collect::<Vec<_>>(),
+                expected_use_ids
+            );
+            assert_eq!(actual.input().allocator, raw.allocator);
+            assert_eq!(actual.input().revision, raw.revision);
+        }
+    }
+    assert_eq!(serde_json::to_vec(&project).unwrap(), before);
+}
+
+#[test]
+fn shared_contribution_selects_one_use_but_distinct_uses_of_same_item_and_socket_survive() {
+    let mut raw = contribution_input();
+    let base = BuildProject::new(raw.clone(), limits()).unwrap();
+    let before = compose(&base, &selection(), None, limits()).unwrap();
+    raw.equipment_presets
+        .iter_mut()
+        .find(|p| p.id == id(110))
+        .unwrap()
+        .equipment
+        .push(id(44));
+    let overlap = BuildProject::new(raw.clone(), limits()).unwrap();
+    let after = compose(&overlap, &selection(), None, limits()).unwrap();
+    assert_eq!(before, after);
+    assert_eq!(
+        build_content_binding(&before, limits()).unwrap(),
+        build_content_binding(&after, limits()).unwrap()
+    );
+    let mut second = raw
+        .equipment
+        .iter()
+        .find(|r| r.id == id(44))
+        .unwrap()
+        .clone();
+    second.id = id(46);
+    raw.equipment.push(second);
+    raw.allocation_presets
+        .iter_mut()
+        .find(|p| p.id == id(120))
+        .unwrap()
+        .equipment
+        .push(id(46));
+    let project = BuildProject::new(raw, limits()).unwrap();
+    let result = compose(&project, &selection(), None, limits()).unwrap();
+    assert_eq!(
+        result
+            .input()
+            .equipment
+            .iter()
+            .map(|r| r.id)
+            .collect::<Vec<_>>(),
+        vec![id(40), id(41), id(44), id(46)]
+    );
+    assert_eq!(result.input().items.len(), 1);
+    assert!(result.input().equipment.iter().all(|r| r.item == id(10)));
+    assert_eq!(
+        result.input().equipment[2].destination,
+        result.input().equipment[3].destination
+    );
+}
+
+#[test]
+fn allocation_equipment_references_reject_duplicates_wrong_domains_and_unselected_dangling_ids() {
+    for (ids, expected) in [
+        (
+            vec![id(44), id(44)],
+            StructuralErrorKind::DuplicateAssignment,
+        ),
+        (
+            vec![id(50)],
+            StructuralErrorKind::MissingReference {
+                expected: OccurrenceKind::EquipmentUse,
+                id: id::<AllocationId>(50).instance_id(),
+            },
+        ),
+        (
+            vec![id(199)],
+            StructuralErrorKind::MissingReference {
+                expected: OccurrenceKind::EquipmentUse,
+                id: id::<ItemSlotUseId>(199).instance_id(),
+            },
+        ),
+    ] {
+        let mut raw = contribution_input();
+        raw.allocation_presets
+            .iter_mut()
+            .find(|p| p.id == id(121))
+            .unwrap()
+            .equipment = ids;
+        assert_eq!(
+            structure_error(BuildProject::new(raw, limits()).unwrap_err()),
+            expected
+        );
+    }
+}
+
+#[test]
+fn contribution_never_adopts_an_omitted_passive_container_or_inventory_only_item() {
+    for (contribution, expected) in [
+        (44, OccurrenceKind::Allocation),
+        (43, OccurrenceKind::EquipmentUse),
+    ] {
+        let mut raw = contribution_input();
+        raw.allocation_presets
+            .iter_mut()
+            .find(|p| p.id == id(121))
+            .unwrap()
+            .equipment = vec![id(contribution)];
+        let project = BuildProject::new(raw, limits()).unwrap();
+        let selected = VariantSelection {
+            equipment: id(111),
+            allocations: id(121),
+            ..selection()
+        };
+        assert!(
+            matches!(structure_error(compose(&project,&selected,None,limits()).unwrap_err()),StructuralErrorKind::MissingReference{expected:kind,..} if kind==expected)
+        );
+    }
+    let mut raw = contribution_input();
+    let stock = stock(vec![item(160)], vec![]);
+    raw.equipment
+        .iter_mut()
+        .find(|row| row.id == id(44))
+        .unwrap()
+        .item = stock.input().items[0].id;
+    assert!(matches!(
+        structure_error(BuildProject::new(raw, limits()).unwrap_err()),
+        StructuralErrorKind::MissingReference {
+            expected: OccurrenceKind::Item,
+            ..
+        }
+    ));
+}
+
+#[test]
+fn contribution_budget_counts_both_original_lists_before_union_and_canonicalizes_members() {
+    let mut raw = contribution_input();
+    raw.allocation_presets
+        .iter_mut()
+        .find(|p| p.id == id(120))
+        .unwrap()
+        .equipment = vec![id(44), id(41), id(40)];
+    let (count, max_collection) = array_stats(&serde_json::to_value(&raw).unwrap());
+    let exact = OwnedInputLimits {
+        max_entries: count,
+        max_collection_entries: max_collection,
+        ..limits()
+    };
+    let first = BuildProject::new(raw.clone(), exact).unwrap();
+    assert!(compose(&first, &selection(), None, exact).is_ok());
+    let tighter = OwnedInputLimits {
+        max_entries: count - 1,
+        ..exact
+    };
+    assert!(matches!(
+        structure_error(BuildProject::new(raw.clone(), tighter).unwrap_err()),
+        StructuralErrorKind::LimitExceeded
+    ));
+    assert!(compose(&first, &selection(), None, tighter).is_err());
+    let mut value = serde_json::to_value(raw).unwrap();
+    reverse_arrays(&mut value);
+    let second = BuildProject::new(serde_json::from_value(value).unwrap(), exact).unwrap();
+    assert_eq!(first, second);
+    assert_eq!(
+        compose(&first, &selection(), None, exact).unwrap(),
+        compose(&second, &selection(), None, exact).unwrap()
+    );
+}
+
+#[test]
+fn choice_rewards_are_additive_without_overrides_or_cloning_shared_occurrences() {
+    let raw = input();
+    let baseline = compose(
+        &BuildProject::new(raw.clone(), limits()).unwrap(),
+        &selection(),
+        None,
+        limits(),
+    )
+    .unwrap();
+    let mut overlap = raw.clone();
+    overlap
+        .choice_presets
+        .iter_mut()
+        .find(|p| p.id == id(140))
+        .unwrap()
+        .rewards = vec![id(30)];
+    let overlap = BuildProject::new(overlap, limits()).unwrap();
+    assert_eq!(
+        compose(&overlap, &selection(), None, limits()).unwrap(),
+        baseline
+    );
+    let mut two = raw;
+    two.choice_presets
+        .iter_mut()
+        .find(|p| p.id == id(140))
+        .unwrap()
+        .rewards = vec![id(31), id(30)];
+    let project = BuildProject::new(two, limits()).unwrap();
+    let build = compose(&project, &selection(), None, limits()).unwrap();
+    assert_eq!(
+        build
+            .input()
+            .character
+            .rewards
+            .iter()
+            .map(|r| r.id)
+            .collect::<Vec<_>>(),
+        vec![id(30), id(31)]
+    );
+    assert_eq!(
+        build.input().character.rewards[0].definition,
+        build.input().character.rewards[1].definition
+    );
+    let other = compose(
+        &project,
+        &VariantSelection {
+            choices: id(149),
+            ..selection()
+        },
+        None,
+        limits(),
+    )
+    .unwrap();
+    assert_eq!(
+        other.input().character.rewards,
+        baseline.input().character.rewards
+    );
+    let doc = OwnedDocument::Project(Box::new(project));
+    assert_eq!(
+        decode_owned(&encode_owned(&doc, limits()).unwrap(), limits()).unwrap(),
+        doc
+    );
+}
+
+#[test]
+fn choice_reward_lists_validate_and_charge_original_references_before_cross_contributor_union() {
+    for refs in [
+        vec![id::<RewardSelectionId>(30), id(30)],
+        vec![id(40)],
+        vec![id(199)],
+    ] {
+        let mut raw = input();
+        raw.choice_presets[0].rewards = refs;
+        assert!(BuildProject::new(raw, limits()).is_err());
+    }
+    let mut raw = input();
+    raw.choice_presets
+        .iter_mut()
+        .find(|p| p.id == id(140))
+        .unwrap()
+        .rewards = vec![id(31), id(30)];
+    let (count, collection) = array_stats(&serde_json::to_value(&raw).unwrap());
+    let exact = OwnedInputLimits {
+        max_entries: count,
+        max_collection_entries: collection,
+        ..limits()
+    };
+    let project = BuildProject::new(raw.clone(), exact).unwrap();
+    assert_eq!(
+        compose(&project, &selection(), None, exact)
+            .unwrap()
+            .input()
+            .character
+            .rewards
+            .len(),
+        2
+    );
+    let tight = OwnedInputLimits {
+        max_entries: count - 1,
+        ..exact
+    };
+    assert!(BuildProject::new(raw, tight).is_err());
+    assert!(compose(&project, &selection(), None, tight).is_err());
 }

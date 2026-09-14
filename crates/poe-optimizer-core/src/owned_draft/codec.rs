@@ -2,7 +2,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 use std::{fmt, io};
-pub const OWNED_DRAFT_SCHEMA_VERSION: u32 = 1;
+pub const OWNED_DRAFT_SCHEMA_VERSION: u32 = 2;
 #[derive(Debug)]
 pub enum DraftCodecError {
     Structure(StructuralError),
@@ -41,9 +41,9 @@ impl From<serde_json::Error> for DraftCodecError {
 }
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-struct WireInput {
+struct WireInput<T> {
     schema_version: u32,
-    draft: DraftSessionInput,
+    draft: T,
 }
 #[derive(Serialize)]
 struct WireOutput<'a> {
@@ -59,10 +59,13 @@ pub fn decode_draft(bytes: &[u8], limits: DraftLimits) -> Result<DraftSession, D
             maximum: limits.input.max_wire_bytes,
         });
     }
-    let wire: WireInput = serde_json::from_slice(bytes)?;
+    // Read a strict envelope first so old payload shapes fail with their actual
+    // version, even if required current-version fields were absent in that schema.
+    let wire: WireInput<serde::de::IgnoredAny> = serde_json::from_slice(bytes)?;
     if wire.schema_version != OWNED_DRAFT_SCHEMA_VERSION {
         return Err(DraftCodecError::UnsupportedVersion(wire.schema_version));
     }
+    let wire: WireInput<DraftSessionInput> = serde_json::from_slice(bytes)?;
     Ok(DraftSession::new(wire.draft, limits)?)
 }
 /// Deterministic persistence of the ordered draft; not semantic canonicalization.
