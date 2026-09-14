@@ -65,6 +65,7 @@ fn all_five_originals_report_loaded_configuration_prefix_and_pending_effects() {
         else {
             panic!("original {ordinal} gained unsupported numeric admission");
         };
+        let report = report.report();
         let prefix = report.authored_configuration.as_ref().unwrap();
         assert_eq!(prefix.status, ConfigurationPrefixStatus::Prepared);
         assert_eq!(prefix.source_sha256, report.view.source_sha256);
@@ -85,7 +86,7 @@ fn all_five_originals_report_loaded_configuration_prefix_and_pending_effects() {
                 .iter()
                 .any(|issue| issue.stage == "configuration_effects")
         );
-        let serialized = serde_json::to_value(report.as_ref()).unwrap();
+        let serialized = serde_json::to_value(report).unwrap();
         assert_eq!(serialized["schema_version"], 6);
         for key in [
             "metrics",
@@ -109,6 +110,7 @@ fn injected_input_migration_cannot_calculate_from_stale_raw_configuration() {
         else {
             panic!("changed source policy gained stale numeric admission");
         };
+        let report = report.report();
         let prefix = report.authored_configuration.as_ref().unwrap();
         assert_eq!(prefix.status, ConfigurationPrefixStatus::Prepared);
         assert_eq!(prefix.sets[0].inputs["enemyIsBoss"].text(), Some("Boss"));
@@ -162,6 +164,7 @@ fn injected_legacy_modifier_rewrite_cannot_bypass_document_or_candidate_projecti
     else {
         panic!("rewritten legacy actor modifiers gained stale admission");
     };
+    let report = report.report();
     let prefix = report.authored_configuration.as_ref().unwrap();
     assert_eq!(prefix.status, ConfigurationPrefixStatus::Prepared);
     let serialized = serde_json::to_value(&prefix.sets[0].blocks).unwrap();

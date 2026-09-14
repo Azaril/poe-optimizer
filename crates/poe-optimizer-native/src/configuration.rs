@@ -1,5 +1,13 @@
 //! Loader-local authored configuration prefix, before activation callbacks.
 //! This is not ConfigTab.Load completion, root setup, or effective configuration.
+mod read;
+pub use read::{
+    ConfigurationActivation, ConfigurationReadLimits, ConfigurationReadUsage,
+    ConfigurationReadView, ConfigurationSetRow,
+};
+#[cfg(test)]
+mod read_tests;
+
 use crate::CompiledGameData;
 use poe_optimizer_core::{
     data::DataIdentity,
@@ -169,14 +177,14 @@ pub struct ConfigurationPreparationReport {
     pub continuation: Option<ConfigurationContinuation>,
     pub frontiers: Vec<&'static str>,
 }
+/// Retains the exact first-container producer prefix, including its private maps.
+/// This is not a completed constructor, ConfigTab.Load, or resumable Build session.
 pub struct PreparedConfiguration {
-    owner: ImportedBuildInstance,
-    data: Arc<CompiledGameData>,
-    report: ConfigurationPreparationReport,
+    machine: Machine,
 }
 impl PreparedConfiguration {
     pub fn report(&self) -> &ConfigurationPreparationReport {
-        &self.report
+        &self.machine.report
     }
     pub fn validate_binding(
         &self,
@@ -186,9 +194,9 @@ impl PreparedConfiguration {
     ) -> Result<(), EvaluationError> {
         view.validate_binding(build, data.snapshot())
             .map_err(|e| contract(e.to_string()))?;
-        if !self.owner.shares_storage_with(build)
-            || !Arc::ptr_eq(&self.data, data)
-            || self.report.view_sha256 != view_digest(view)?
+        if !self.machine.build.shares_storage_with(build)
+            || !Arc::ptr_eq(&self.machine.data, data)
+            || self.machine.report.view_sha256 != view_digest(view)?
         {
             return Err(contract(
                 "configuration prefix belongs to another build, view or compiled definition owner",
@@ -223,20 +231,23 @@ fn scalar(value: Scalar) -> ConfigurationValue {
     }
 }
 
-struct Machine<'a> {
-    build: &'a ImportedBuildInstance,
-    data: &'a Arc<CompiledGameData>,
+struct Machine {
+    build: ImportedBuildInstance,
+    data: Arc<CompiledGameData>,
     report: ConfigurationPreparationReport,
     limits: ConfigurationPreparationLimits,
     sources: BTreeMap<usize, SourceOccurrenceId>,
     instances: BTreeMap<SourceOccurrenceId, AuthoredInstanceId>,
     winners: BTreeMap<u64, usize>,
+    // Captured only when this prefix actually assigns the active row aliases.
+    // None means unavailable, not that original ConfigTab input aliases are nil.
+    active: Option<(NumericValue, usize)>,
     keys: NumericSetKeys,
     pattern: poe_optimizer_engine::lua_pattern::MatchBudget,
     input_origins: BTreeMap<(usize, String), SourceOccurrenceId>,
     container: Option<SourceOccurrenceId>,
 }
-impl Machine<'_> {
+impl Machine {
     fn spend(left: &mut usize, amount: usize, name: &'static str) -> Result<(), EvaluationError> {
         *left = left.checked_sub(amount).ok_or_else(|| resource(name))?;
         Ok(())
@@ -257,8 +268,10 @@ impl Machine<'_> {
             .ok_or_else(|| contract("unmapped configuration source occurrence"))
     }
     fn attr(&mut self, node: Node<'_, '_>, key: &str) -> Result<Option<String>, EvaluationError> {
-        let value = self
-            .build
+        // Clone only the shared owner so the budget can be charged before text
+        // allocation while the decoded attribute remains borrowed.
+        let build = self.build.clone();
+        let value = build
             .attribute(self.source(node)?, key)
             .map_err(|e| contract(e.to_string()))?;
         value
@@ -495,7 +508,7 @@ impl Machine<'_> {
     ) -> Result<Option<(String, bool)>, EvaluationError> {
         use poe_optimizer_data::configuration::ConfigStringRewrite;
         use poe_optimizer_engine::lua_pattern::{GsubLimits, LuaPattern, PatternError};
-        let data = self.data;
+        let data = Arc::clone(&self.data);
         let mut migrated = false;
         for rewrite in &data
             .snapshot()
@@ -834,14 +847,20 @@ impl Machine<'_> {
             .winners
             .get(&number_key(requested))
             .copied()
+            .map(|index| (NumericValue::new(requested), index))
             .or_else(|| {
                 self.report
                     .order
                     .first()
                     .and_then(|key| *key)
-                    .and_then(|key| self.winners.get(&number_key(key.value())).copied())
+                    .and_then(|key| {
+                        self.winners
+                            .get(&number_key(key.value()))
+                            .copied()
+                            .map(|index| (key, index))
+                    })
             });
-        let Some(index) = chosen else {
+        let Some((active_key, index)) = chosen else {
             self.fail(
                 ConfigurationPrefixStatus::SourceFailure,
                 "set_active_config_set",
@@ -850,6 +869,7 @@ impl Machine<'_> {
             )?;
             return Ok(());
         };
+        self.active = Some((active_key, index));
         self.report.active_set = Some(self.report.sets[index].origin);
         self.report
             .continuation
@@ -880,8 +900,8 @@ pub fn prepare_authored_configuration(
     )
     .map_err(|e| contract(e.to_string()))?;
     let mut machine = Machine {
-        build,
-        data,
+        build: build.clone(),
+        data: Arc::clone(data),
         limits,
         sources: build
             .occurrences()
@@ -894,6 +914,7 @@ pub fn prepare_authored_configuration(
             .map(|s| (s.source(), s.instance()))
             .collect(),
         winners: BTreeMap::new(),
+        active: None,
         keys: NumericSetKeys::new(limits.max_sets),
         pattern: MatchBudget::new(MatchLimits {
             max_steps: limits.max_pattern_steps,
@@ -987,11 +1008,16 @@ pub fn prepare_authored_configuration(
         let index = machine
             .create(Some(1.0), machine.default_origin(), None)?
             .ok_or_else(|| contract("constructor config set failed"))?;
+        machine.active = Some((NumericValue::new(1.0), index));
         machine.report.active_set = Some(machine.report.sets[index].origin);
     }
-    Ok(PreparedConfiguration {
-        owner: build.clone(),
-        data: Arc::clone(data),
-        report: machine.report,
-    })
+    Ok(PreparedConfiguration { machine })
+}
+
+/// Native configuration implementation inputs for cache/backend invalidation.
+pub(crate) fn implementation_sources() -> [&'static str; 2] {
+    [
+        include_str!("configuration.rs"),
+        include_str!("configuration/read.rs"),
+    ]
 }

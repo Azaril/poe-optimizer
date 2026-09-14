@@ -80,6 +80,7 @@ fn injected_loader_policy_cannot_silently_calculate_the_old_raw_profile() {
         let PreparationOutcome::Incomplete(report) = outcome else {
             panic!("{mutation}: stale closed profile admitted")
         };
+        let report = report.report();
         let stage = report.authored_skills.as_ref().unwrap();
         assert_eq!(stage.status, SkillPreparationStatus::Complete);
         assert_eq!(stage.source_sha256, report.view.source_sha256);
@@ -119,6 +120,7 @@ fn source_loading_failure_is_reported_without_erasing_earlier_loaded_entries() {
     else {
         panic!("incomplete source gained numeric admission")
     };
+    let report = report.report();
     let stage = report.authored_skills.as_ref().unwrap();
     assert_eq!(stage.status, SkillPreparationStatus::SourceFailure);
     assert!(stage.groups[0].gems[0].processed);

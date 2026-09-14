@@ -69,7 +69,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         }
         PreparationOutcome::Incomplete(report) => {
             output["status"] = "incomplete".into();
-            output["preparation"] = serde_json::to_value(report)?;
+            output["preparation"] = serde_json::to_value(report.into_report())?;
         }
     }
     let bytes = serde_json::to_vec_pretty(&output)?;

@@ -272,6 +272,7 @@ fn failing_imported_scalar_composition_is_deferred_while_legal_roots_evaluate() 
         let poe_optimizer_native::PreparationOutcome::Incomplete(report) = &outcome else {
             panic!("failing selected composition was admitted");
         };
+        let report = report.report();
         assert_eq!(
             report.legacy_adapter_error.as_deref(),
             Some(source_error.as_str())

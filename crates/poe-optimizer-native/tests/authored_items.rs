@@ -307,6 +307,7 @@ fn public_preparation_retains_inventory_stage_for_ready_and_incomplete_results()
                 );
             }
             PreparationOutcome::Incomplete(report) => {
+                let report = report.report();
                 assert!(!ready);
                 assert_eq!(report.schema_version, 6);
                 let items = report.authored_items.as_ref().unwrap();

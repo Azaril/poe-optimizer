@@ -1,6 +1,9 @@
 //! Shared source/view entry point and explicit native preparation outcomes.
+mod incomplete;
 use crate::preparation_report::{self, PreparationReport};
 use crate::{CompiledGameData, EvaluationClock, NativeBackend, PreparedEvaluation, profile};
+pub use incomplete::IncompletePreparation;
+pub(crate) use incomplete::PreparedStages;
 use poe_optimizer_core::{
     build_identity::BuildLineage, build_view::ViewRequest, evaluation::*, metrics::MetricQuery,
     options::EvaluationOptions,
@@ -17,13 +20,13 @@ use std::sync::Arc;
 /// Incomplete has no calculated measurements and cannot enter the hot loop.
 pub enum PreparationOutcome {
     Ready(Box<PreparedEvaluation>),
-    Incomplete(Box<PreparationReport>),
+    Incomplete(Box<IncompletePreparation>),
 }
 impl PreparationOutcome {
     pub fn into_ready(self) -> Result<PreparedEvaluation, EvaluationError> {
         match self {
             Self::Ready(prepared) => Ok(*prepared),
-            Self::Incomplete(report) => Err(incomplete_error(&report)),
+            Self::Incomplete(prepared) => Err(incomplete_error(prepared.report())),
         }
     }
 }
@@ -227,9 +230,11 @@ impl<C: EvaluationClock> NativeBackend<C> {
                 profile,
                 source: build.clone(),
                 selected_view: view.report().clone(),
-                authored_skills,
-                authored_configuration,
-                authored_items,
+                stages: PreparedStages {
+                    skills: authored_skills,
+                    configuration: authored_configuration,
+                    items: authored_items,
+                },
             }))),
             Err(error) if error.kind == EvaluationErrorKind::UnsupportedCapability => {
                 let mut report = preparation_report::collect_with_stages(
@@ -241,7 +246,20 @@ impl<C: EvaluationClock> NativeBackend<C> {
                     &authored_items,
                 )?;
                 report.legacy_adapter_error = Some(error.message);
-                Ok(PreparationOutcome::Incomplete(Box::new(report)))
+                Ok(PreparationOutcome::Incomplete(Box::new(
+                    IncompletePreparation::new(
+                        build.clone(),
+                        Arc::clone(&self.data),
+                        self.identity.clone(),
+                        request,
+                        report,
+                        PreparedStages {
+                            skills: authored_skills,
+                            configuration: authored_configuration,
+                            items: authored_items,
+                        },
+                    ),
+                )))
             }
             Err(error) => Err(error),
         }

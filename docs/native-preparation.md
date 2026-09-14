@@ -13,13 +13,34 @@ with 96 registrations across 116 records; the [equipment status](native-equipmen
 records their first dependencies. General real-build numerical producers remain unfinished;
 complete native supplied builds remain **0/5**.
 
+R2as retains actual skill, configuration and item producer owners even when preparation
+is incomplete. Bounded readers expose created skill/configuration rows, their exact authored
+origins and reached active aliases. They distinguish unrepresented constructor state from
+known empty state. This advances the ownership boundary; source-ordered root construction,
+configuration effects and complete numerical evaluation remain unfinished.
+
 ## Public entry points
 
 `NativeBackend::prepare_view(build, view, options, metrics)` consumes the exact owned import
 and independently resolved `SelectedView`. It checks source-owner and definition-owner
 binding before lowering. It returns `PreparationOutcome::Ready(PreparedEvaluation)` or
-`Incomplete(PreparationReport)`. Invalid requests and foreign bindings remain errors.
+`Incomplete(IncompletePreparation)`. Invalid requests and foreign bindings remain errors.
 Incomplete preparation contains no calculated metrics and cannot enter the calculation loop.
+
+The incomplete owner retains exact imported source, the shared compiled definitions,
+request and actual producer stages. Its `source()`, `selected_view()`, `request()` and
+`authored_*()` accessors borrow that retained state. `validate_binding()` checks real
+source/data owners and the resolved selection through every retained stage. Equal source
+hashes, numeric IDs or data digests do not authorize another owner. The runtime object
+cannot be serialized or constructed from diagnostics; `report()` exposes the unchanged
+wire report, while `into_report()` explicitly drops runtime owners. Ready and Incomplete
+move the same internal producer aggregate without reconstructing any stage from a report.
+
+This retention is a prerequisite for a source-ordered coordinator. The current producers
+remain independent loader prefixes, not a root execution history. Until constructor
+callbacks, ordered loading and remaining producer transitions exist, Incomplete offers no
+resume or calculation method. Its owned state remains portable and can be moved between
+workers or borrowed concurrently; reports carry no admission authority.
 
 `prepare_request_with_lineage(request, lineage)` imports a caller XML document, resolves its
 saved view and returns that same detailed outcome. `prepare_with_lineage` maps an incomplete

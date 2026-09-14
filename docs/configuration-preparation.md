@@ -44,6 +44,22 @@ local error returns, and partial source failures. A strict authoring inspector m
 inputs that the source loader consumes; it is not the authoritative executable input model.
 Use the existing source-occurrence and XML-content seam rather than a second XML parser.
 
+## Retained producer reads
+
+`PreparedConfiguration` retains the actual loader machine: created rows, replacement winners,
+source bindings, input provenance, remaining budgets and the active assignment reached by
+that execution. The opaque rows returned by `read_view` borrow this exact owner. Creation
+order, saved order and current numeric winners remain separate. Signed-zero selection is
+retained separately from the row key, and a sparse saved order cannot be reported as having
+a proven dense length. A source failure before activation leaves the alias unavailable;
+readers do not fabricate earlier constructor or input state from diagnostics.
+
+Readers charge independent cumulative work/text limits and do not advance the producer.
+The incomplete preparation outcome retains this machine alongside the other actual stages;
+converting that outcome into its serializable report explicitly discards runtime owners.
+These APIs prepare for a shared root coordinator and do not constitute a resume operation
+or completion of UpdateControls, BuildModList or synchronization.
+
 ## Effective settings and shared programs
 
 The completed stage must execute callbacks in source variable order. Check, count,

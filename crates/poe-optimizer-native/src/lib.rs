@@ -14,7 +14,7 @@ pub mod skills;
 pub use candidates::{
     NativeMetricSnapshot, NativeMetricValue, PreparedMaceCandidates, PreparedMaceFootprint,
 };
-pub use preparation::PreparationOutcome;
+pub use preparation::{IncompletePreparation, PreparationOutcome};
 pub use preparation_report::{
     PreparationIssue, PreparationIssueKind, PreparationReport, PreparationRequest,
 };
@@ -69,21 +69,19 @@ pub struct PreparedEvaluation {
     profile: profile::Profile,
     source: poe_optimizer_import::build_instance::ImportedBuildInstance,
     selected_view: poe_optimizer_import::selected_view::SelectedViewReport,
-    authored_skills: skills::PreparedSkills,
-    authored_configuration: configuration::PreparedConfiguration,
-    authored_items: items::PreparedItems,
+    stages: preparation::PreparedStages,
 }
 impl PreparedEvaluation {
     /// Ordered inventory prefix; equipment activation and actor effects remain separate.
     pub fn authored_items(&self) -> &items::PreparedItems {
-        &self.authored_items
+        &self.stages.items
     }
     /// Executed loader-local prefix, with activation/effective effects still explicit.
     pub fn authored_configuration(&self) -> &configuration::PreparedConfiguration {
-        &self.authored_configuration
+        &self.stages.configuration
     }
     pub fn authored_skills(&self) -> &skills::PreparedSkills {
-        &self.authored_skills
+        &self.stages.skills
     }
     pub fn source(&self) -> &poe_optimizer_import::build_instance::ImportedBuildInstance {
         &self.source
@@ -371,8 +369,8 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("lib.rs"),
                 include_str!("profile.rs"),
                 include_str!("preparation.rs"),
+                include_str!("preparation/incomplete.rs"),
                 include_str!("preparation_report.rs"),
-                include_str!("skills.rs"),
                 include_str!("items.rs"),
                 include_str!("items/activation.rs"),
                 include_str!("items/slot_validity.rs"),
@@ -450,6 +448,8 @@ fn implementation_identity() -> BackendIdentity {
             ]
             .into_iter()
             .chain(poe_optimizer_import::item_sets::implementation_sources())
+            .chain(configuration::implementation_sources())
+            .chain(skills::implementation_sources())
             {
                 adapter.update(text.replace("\r\n", "\n"));
             }

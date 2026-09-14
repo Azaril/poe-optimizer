@@ -1,4 +1,5 @@
 //! Native authored skill loading, before effective support/actor/provider assembly.
+mod sets;
 use crate::CompiledGameData;
 use poe_optimizer_core::{
     build_identity::{SkillEntryId, SkillGroupId},
@@ -17,10 +18,19 @@ use poe_optimizer_import::{
 };
 use roxmltree::Node;
 use serde::{Serialize, Serializer};
+pub use sets::{
+    PreparedSkillSetRow, SkillSetActivation, SkillSetReadLimits, SkillSetReadUsage,
+    SkillSetReadView,
+};
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, sync::Arc};
 
 pub const SKILL_PREPARATION_SCHEMA: u32 = 1;
+
+/// All production sources for this retained producer and borrowed read surface.
+pub fn implementation_sources() -> [&'static str; 2] {
+    [include_str!("skills.rs"), include_str!("skills/sets.rs")]
+}
 #[derive(Debug, Clone, Copy)]
 pub struct SkillPreparationLimits {
     pub max_groups: usize,
@@ -166,6 +176,7 @@ pub struct PreparedSkills {
     data: Arc<CompiledGameData>,
     report: SkillPreparationReport,
     cost_overrides: BTreeMap<String, EffectCostOverride>,
+    sets: Option<sets::SkillSets>,
 }
 impl PreparedSkills {
     pub fn report(&self) -> &SkillPreparationReport {
@@ -248,6 +259,7 @@ struct Machine<'a> {
     limits: SkillPreparationLimits,
     pattern: MatchBudget,
     cost_overrides: BTreeMap<String, EffectCostOverride>,
+    sets: Option<sets::SkillSets>,
 }
 impl Machine<'_> {
     fn spend(left: &mut usize, amount: usize, name: &'static str) -> Result<(), EvaluationError> {
@@ -1229,6 +1241,7 @@ impl Machine<'_> {
         if !self.known(node)? {
             return Ok(());
         }
+        self.reset_skill_sets(self.source(node)?)?;
         let requested_default =
             if self.attr(node, "matchGemLevelToCharacterLevel")?.as_deref() == Some("true") {
                 "characterLevel".to_owned()
@@ -1307,26 +1320,22 @@ impl Machine<'_> {
             order: vec![],
             active_set_id: None,
         });
-        let mut keys = NumericSetKeys::new(32768);
-        let mut sets: BTreeMap<u64, Vec<usize>> = BTreeMap::new();
-        let mut order: Vec<f64> = Vec::new();
         for child in self.children(node)?.into_iter().flatten() {
             if !self.known(child)? {
                 return Ok(());
             }
             match child.tag_name().name() {
                 "Skill" => {
-                    if order.is_empty() {
-                        keys.insert(1.0).map_err(|_| resource("skill set keys"))?;
-                        sets.insert(key(1.0), vec![]);
-                        order.push(1.0);
-                        self.report.containers[ci].order.push(SkillNumber(1.0));
+                    if self.sets.as_ref().unwrap().order.is_empty() {
+                        self.append_skill_set_order(1.0, ci)?;
+                        self.create_skill_set(1.0, self.default_skill_set_origin())?;
                     }
                     if let Some(index) = self.load_group(child)? {
                         if self.report.failure.is_some() {
                             return Ok(());
                         }
-                        let Some(set) = sets.get_mut(&key(1.0)) else {
+                        let Some(row) = self.sets.as_ref().unwrap().winners.get(&key(1.0)).copied()
+                        else {
                             self.fail(
                                 SkillFailureKind::SourceRuntime,
                                 "load_skill",
@@ -1335,14 +1344,13 @@ impl Machine<'_> {
                             )?;
                             return Ok(());
                         };
-                        set.push(index);
-                        self.report.groups[index].attached = true;
+                        self.attach_skill_set_group(row, index)?;
                     }
                 }
                 "SkillSet" => {
-                    let id = self
-                        .number(child, "id")?
-                        .unwrap_or_else(|| keys.sequence_length() as f64 + 1.0);
+                    let id = self.number(child, "id")?.unwrap_or_else(|| {
+                        self.sets.as_ref().unwrap().keys.sequence_length() as f64 + 1.0
+                    });
                     if id.is_nan() {
                         self.fail(
                             SkillFailureKind::SourceRuntime,
@@ -1352,38 +1360,36 @@ impl Machine<'_> {
                         )?;
                         return Ok(());
                     }
-                    keys.insert(id).map_err(|_| resource("skill set keys"))?;
-                    sets.insert(key(id), vec![]);
-                    order.push(id);
-                    self.report.containers[ci].order.push(SkillNumber(id));
+                    let origin = self.authored_skill_set_origin(child)?;
+                    let row = self.create_skill_set(id, origin)?;
+                    let title = self.attr(child, "title")?;
+                    self.skill_set_title(row, title);
+                    self.append_skill_set_order(id, ci)?;
                     for group in self.children(child)?.into_iter().flatten() {
                         if let Some(index) = self.load_group(group)? {
                             if self.report.failure.is_some() {
                                 return Ok(());
                             }
-                            sets.get_mut(&key(id))
-                                .expect("created skill set")
-                                .push(index);
-                            self.report.groups[index].attached = true;
+                            self.attach_skill_set_group(row, index)?;
                         }
                     }
                 }
                 _ => {}
             }
         }
-        if order.is_empty() {
-            sets.insert(key(1.0), vec![]);
-            order.push(1.0);
-            self.report.containers[ci].order.push(SkillNumber(1.0));
+        if self.sets.as_ref().unwrap().order.is_empty() {
+            self.append_skill_set_order(1.0, ci)?;
+            self.create_skill_set(1.0, self.default_skill_set_origin())?;
         }
         let desired = self.number(node, "activeSkillSet")?.unwrap_or(1.0);
-        let chosen = if !desired.is_nan() && sets.contains_key(&key(desired)) {
+        let sets = self.sets.as_ref().unwrap();
+        let chosen = if !desired.is_nan() && sets.winners.contains_key(&key(desired)) {
             desired
         } else {
-            order[0]
+            sets.order[0]
         };
         self.report.containers[ci].active_set_id = Some(SkillNumber(chosen));
-        if let Some(&index) = sets.get(&key(chosen)).and_then(|v| v.first()) {
+        if let Some(index) = self.select_skill_set(chosen) {
             self.process_group(index)?;
         }
         Ok(())
@@ -1444,6 +1450,7 @@ pub fn prepare_authored_skills(
             ..MatchLimits::default()
         }),
         cost_overrides: BTreeMap::new(),
+        sets: None,
     };
     let catalog = data.snapshot().skill_preparation().data();
     let mut controls = [
@@ -1511,6 +1518,7 @@ pub fn prepare_authored_skills(
         data: Arc::clone(data),
         report: machine.report,
         cost_overrides: machine.cost_overrides,
+        sets: machine.sets,
     })
 }
 
@@ -1588,6 +1596,7 @@ mod overlay_tests {
                 ..MatchLimits::default()
             }),
             cost_overrides: BTreeMap::new(),
+            sets: None,
         };
         let mut gem = fresh.report().groups[0].gems[0].clone();
         gem.fields.remove("gemId");
@@ -1611,6 +1620,7 @@ mod overlay_tests {
             data: Arc::clone(&data),
             report: machine.report,
             cost_overrides: machine.cost_overrides,
+            sets: machine.sets,
         };
         assert!(changed.has_cost_override(&effect_id, primary.key));
         assert!(changed.has_cost_override(&effect_id, alias_key));

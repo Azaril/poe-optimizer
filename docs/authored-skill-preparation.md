@@ -18,6 +18,22 @@ A report is serializable evidence, not a plan handle. Public native preparation 
 stage and retains explicit remaining dependencies; an incomplete build cannot enter the
 numerical calculation loop. Existing supported numerical adapters keep their declared scope.
 
+## Retained skill-set state
+
+Each executed Load retains the rows it actually creates, including replaced duplicate rows,
+current numeric lookup winners, saved order, titles and references to the existing prepared
+groups. A later Load resets its map, order and active key while the previous active group-list
+alias remains until source activation replaces it. Group attachment occurs after successful
+processing, so a failure preserves the published row and only the attached group prefix.
+
+`PreparedSkills::skill_set_view` returns a bounded borrowed reader. Its opaque rows bind to
+the exact prepared owner; authored origins identify the source occurrence independently of
+numeric set IDs. Reads consume a separate cumulative work/text budget and cannot mutate the
+producer. No reader is available before an admitted Load begins. An unavailable constructor
+or current alias is explicit, rather than represented as a known absent active set. These
+reads do not execute constructor display callbacks, synchronization or effective support
+assembly. The same actual producer is retained by Ready and Incomplete preparation outcomes.
+
 ## Injected definitions
 
 Skill identities and skill preparation definitions serve different purposes. The preparation

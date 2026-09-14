@@ -2,7 +2,8 @@
 
 Last updated: 2026-09-13 (EDT)
 
-**Current priority: real-build breadth.** The five supplied originals have **0/5 complete
+**Current priority: complete native parity for the five example builds, then wider breadth.**
+The five supplied originals have **0/5 complete
 native evaluations**; all five import/inspect and evaluate in pinned PoB. Shared parser
 progress has not changed that result. Follow the [real-build rollout](real-build-rollout.md)
 for the next integration gates, with Twister and Skeletal Sniper developed together and
@@ -17,6 +18,57 @@ architecture question is answered. Prioritize source/instance/definition/plan se
 provider lifetime and contrasting cases from all five originals. Ordinary implementation
 choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
 without letting their single-profile assumptions define the new model.
+
+**R2as validated locally: retain real producer owners across incomplete outcomes.**
+`PreparationOutcome::Incomplete` now owns an `IncompletePreparation`, retaining exact
+source/data/request identity and the actual skill, configuration and item stages. Both
+Ready and Incomplete use the same internal stage aggregate. `report()` borrows diagnostics;
+`into_report()` explicitly releases runtime state. Only the unchanged report schema is
+serializable. This is not a completed source-ordered Build session or a resume API.
+
+The integrated reader APIs retain actual skill/configuration rows and their exact authored
+origins, titles, group membership and active aliases. Configuration keeps its original
+machine and budgets; Skills keeps created rows across numeric replacement and repeated
+Load map resets. Unrepresented constructor aliases are explicit unavailable states. Each
+borrowed reader has independent cumulative work/text limits. All new production modules,
+including previously omitted native configuration code, feed the backend fingerprint.
+
+Final combined validation passes **59 selected test executions**: 14 reader unit tests,
+32 native preparation/integration tests, nine original PoB comparison tests and four
+native-only CLI tests. Whole-workspace/all-target strict Clippy, DATA/ENGINE/IMPORT/NATIVE
+WASM compilation and formatting pass. The earlier owner-only validation passed 45 affected
+integration tests and the runtime serialization compile-fail doctest. Those earlier results
+are scoped to their producing revision, rather than counted again as final integration.
+
+The combined run first exposed a new test expectation error: untitled configuration sets
+use an injected default title, unlike skill-set titles. The corrected assertion follows the
+pinned source fallback while preserving source/title identity checks; no production change
+or removed check was needed. Producing commands are in
+`runs/r2an-loadout-sync-01/r2as-combined-01/` (reader tests, then failed assertion) and
+`r2as-combined-02/` (terminal success). Input guards match. Final command source guards match;
+the two reader-only command guards differ solely by the later integration-test correction.
+`runs/r2as-live-root-01/validated-checkpoint-root.json` records that scope explicitly, and
+`final-review-by-data.md` records clean independent integration/CI review. Earlier compile/
+lint attempts and the assertion failure remain available.
+
+The broader frozen `b96fbd9` suite has now terminated with **2,076 passes, two failures and
+three ignored tests** across 177 completed targets. Its two failures are in PoB
+`base_buff_parity`; later targets were not run. All 749 source and four input guards match.
+This is not a full-suite pass or a latest-main result. Reproduction/fix work is active in
+`runs/r2an-loadout-sync-01/r2as-charm-repro-01/`; the terminal frozen result is recorded in
+`runs/r2as-live-root-01/full-suite-terminal-root.json`. Session 71368 is terminal, and its
+checkout remains an unchanged baseline.
+
+The source-order audit sharpens the next example-build gate: constructors can call Sync
+before the enclosing `self.*Tab = constructor(...)` assignment publishes their owner.
+Config constructor activation uses `init=true` and skips UpdateControls/BuildModList;
+loaded Config activation must execute both before Sync. Headless UpdateControls can use
+non-notifying control writes, but complete BuildModList needs the ordered apply callbacks,
+UpdateLevel and source-owned mod lists. Current injected callbacks are metadata, not
+executable admissions. The initial default dispatch has 56 static candidates; that count
+is not a runtime result or a complete callback contract. Preserve Tree/legacy-Spec deferral
+and represent fresh versus reused root receivers explicitly. Do not assemble root-time
+state from independent completed reports or specialize production to these five fixtures.
 
 **R2ar validated: live item-set reads and creation lineage.** Bounded borrowed
 reads now follow the actual published item-set roots. Persistent opaque row identities
@@ -93,17 +145,22 @@ main is available for the next implementation slice after publication. Neither t
 full suite nor hosted CI is claimed as green. SyncLoadouts, activation and complete native
 build evaluation remain unimplemented; the complete original-build count stays **0/5**.
 
-**Next implementation gate:** retain a shared root preparation state and source-order
-cursor, using the validated live item-set reader and creation lineage. The source constructs
-all domain owners before loading non-tree
-sections in XML order and defers the saved tree load. Existing independent completed
-Tree/Skills/Config reports cannot be joined into the live state at Items.Load's Sync call.
-The current incomplete-result path also drops private prepared owners after cloning reports;
-resumption must retain those owners explicitly. Follow
-`runs/r2aq-loadout-package-01/next-live-context-by-data.md` for the exact types/source anchors.
-Bring live tree, skill and config readers and Build-owned special-link maps into that owner
-before completing synchronization, callback reentry, activation and trailing export/undo
-work. Preserve exact authored-instance identity and explicit unavailable dependencies.
+**Next implementation gate:** build the source-ordered root coordinator using the retained
+real producers and live readers, then complete configuration effects and synchronization.
+R2as fixes the incomplete path discarding its actual owners; it does not yet make the
+independent prefixes resumable. Construct each domain at the actual source point, with
+constructor callbacks able to observe a root before the new tab is published. Retain the
+initial configuration modifier pass, XML child cursor, Tree/legacy-Spec deferral and PostLoad.
+Do not join final Tree/Skills/Config reports into the state at an earlier Items.Load Sync.
+
+The source-order audit is retained in
+`runs/r2as-live-root-01/source-order-audit-by-engine.md`. Configuration's next effect gate
+must run the complete BuildModList boundary and its reached callbacks, constructors, parser
+service and dynamic Build context through the existing shared program machinery. Successful
+individual callbacks or a static dispatch list do not establish whole-method parity. A
+focused investigation is staged under `runs/r2at-config-effects-01/`. Follow the existing
+acquisition seam for missing source/data operands; preserve exact authored-instance identity
+and explicitly unavailable dependencies without adding fixture-specific execution paths.
 
 **CI follow-up: historical failures, runtime and superseded runs.** Completed authenticated
 Windows/Linux logs identify the stale 84-versus-81 factory assertion, already corrected by
@@ -113,27 +170,34 @@ local target timing and a public annotation establish that failure; it predates 
 test execution and the later prepare-once/parser-sharing changes. Those fixes are not yet
 proof that current hosted jobs complete within the limit.
 
-The latest inspected run is [34789807104](https://github.com/Azaril/poe-optimizer/actions/runs/34789807104),
-exact `fba860c`. At 23:52:13 UTC its OS jobs were testing after passing cache setup,
-Cargo.lock preservation, formatting and lint; no new failed step or annotation was found.
-Four revisions had eight concurrent OS jobs, with the oldest jobs at 250.2 minutes.
-Workflow-level branch/PR concurrency now keeps only the newest run per ref. Both OSes,
-all test targets, native-only/WASM checks and enabled debug/overflow checks remain unchanged.
-Previously started ungrouped runs are not retroactively cancelled by this change.
+The latest inspected run is [34791390458](https://github.com/Azaril/poe-optimizer/actions/runs/34791390458),
+exact `990aab7`. At 00:29:33 UTC on September 14 both OS jobs remained in Test with no new
+failed step or annotation. Older ungrouped runs were still testing after roughly 272-288
+minutes. Workflow-level branch/PR concurrency keeps only the newest grouped run per ref;
+it cannot retroactively cancel those older ungrouped runs.
 
-The concurrency patch passes diff hygiene and an exact comparison proving the existing
-workflow is unchanged after removing the new block. No YAML parser/actionlint is installed;
-no parser-run or hosted completion claim is made. CI receipts are in
-`runs/r2an-ci-investigation-01/active-followup-01/`, `runtime-scheduling-01/` and
-`concurrency-fix-01/`. Automatic approval review rejected a fresh authenticated download of
-the older timeout log because it flagged local credential access; no credential was read.
-Public annotations and previously retained logs supplied the required timeout evidence.
+Commit `259d7f7` now splits workspace tests into three disjoint package suites on each OS:
+native, PoB, and remaining workspace packages. Their union is all nine workspace packages;
+future packages enter the remaining-workspace suite automatically. All targets, default
+features, native-only test/lint/dependency checks, source checkout, Cargo.lock preservation,
+formatting, lint, Python tooling, portable compilation and enabled debug/overflow checks
+remain. Existing `check(OS)` names depend on all validation/test jobs and fail for any
+non-success dependency result. Separate suite caches avoid competing cache publication.
 
-**CI completion gate:** obtain a completed latest-revision result on both OSes. If runtime
-remains excessive, split native and PoB package jobs from the remaining workspace, proving
-the same all-target/feature/case union before adoption; never trim exhaustive candidate or
-fresh-host parity checks to fit the time limit. The static audit is retained in
-`runs/r2ar-item-set-read-01/ci-runtime-static-by-data.json`.
+Static checks verify the exact package union, preserved commands/environment and all 16
+success/failure/cancelled/skipped dependency combinations. The PowerShell gate parses and
+diff hygiene passes; independent review found no coverage or failure-propagation issue.
+No YAML parser is installed, and hosted runtime/completion is not claimed. Evidence is in
+`runs/r2as-ci-review-01/partition-01/`, with prior timeout/concurrency evidence retained under
+`runs/r2an-ci-investigation-01/`. Automatic approval review previously rejected a fresh
+credential-helper read for one older log; public annotations and already-retained logs
+supplied that timeout evidence without reading credentials.
+
+**CI completion gate:** fix and rerun the newly exposed charm-buff failures, then obtain a
+completed latest-revision result for every suite and both OSes. Splitting jobs addresses the
+historical accumulated timeout; it does not itself prove the remaining test suite succeeds
+or completes within the limit. Never trim exhaustive candidates or fresh-host comparisons
+to obtain a green result.
 
 **R2ap integrated: preparation reuse.**
 The exhaustive candidate target now prepares each full document once while retaining all

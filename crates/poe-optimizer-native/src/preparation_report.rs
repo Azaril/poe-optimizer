@@ -931,6 +931,7 @@ mod tests {
         else {
             panic!("original build must remain incomplete");
         };
+        let report = report.report();
         assert_eq!(report.requested, expected);
         assert!(!report.issues.is_empty());
         assert!(report.legacy_adapter_error.is_some());
@@ -940,7 +941,7 @@ mod tests {
             report.requested, expected,
             "report owns the original request context"
         );
-        let serialized = serde_json::to_value(&report).unwrap();
+        let serialized = serde_json::to_value(report).unwrap();
         assert_eq!(
             serialized["requested"],
             serde_json::to_value(expected).unwrap()

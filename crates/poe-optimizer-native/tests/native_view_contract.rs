@@ -103,7 +103,7 @@ fn ready(backend: &NativeBackend, build: &ImportedBuildInstance) -> Box<Prepared
         PreparationOutcome::Ready(value) => value,
         PreparationOutcome::Incomplete(report) => panic!(
             "unexpected incomplete legacy calibration: {:?}",
-            report.legacy_adapter_error
+            report.report().legacy_adapter_error
         ),
     }
 }
@@ -297,6 +297,7 @@ fn all_five_real_sources_reach_shared_preparation_with_explicit_remaining_produc
                 index + 1
             )
         };
+        let report = report.report();
         assert_eq!(report.schema_version, 6);
         let skills = report
             .authored_skills
@@ -394,9 +395,10 @@ fn all_five_real_sources_reach_shared_preparation_with_explicit_remaining_produc
         else {
             panic!("document convenience route must preserve incomplete outcome")
         };
+        let detailed = detailed.report();
         assert_eq!(
-            serde_json::to_value(&detailed).unwrap(),
-            serde_json::to_value(&report).unwrap()
+            serde_json::to_value(detailed).unwrap(),
+            serde_json::to_value(report).unwrap()
         );
         eprintln!(
             "R1c source={} selected={}/{}/{}/{} selected_identity_entries={} preparation_issues={}",
@@ -435,6 +437,7 @@ fn an_explicit_unsupported_weapon_state_stays_incomplete_and_does_not_use_saved_
     let PreparationOutcome::Incomplete(report) = outcome else {
         panic!("secondary weapon override was ignored")
     };
+    let report = report.report();
     assert_eq!(report.view.weapon_state.use_second_weapon_set, Some(true));
     assert!(!report.issues.is_empty());
     assert_eq!(report.view.source_sha256, owner.source_sha256());
@@ -461,6 +464,7 @@ fn unsupported_authored_alternative_keeps_the_requested_instance() {
     let PreparationOutcome::Incomplete(report) = outcome else {
         panic!("unsupported selected alternative gained legacy admission")
     };
+    let report = report.report();
     assert_eq!(
         report
             .view
