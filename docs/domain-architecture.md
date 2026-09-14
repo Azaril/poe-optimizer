@@ -257,3 +257,20 @@ profiles; delete their commands/adapters with the implementation that supersedes
 with an explicit documented removal of an experimental feature. Keep independent numerical
 and full-build validation evidence. Update this ADR only when a concrete counterexample
 requires changing the domain contract; the implementation log records progress instead.
+
+## Import breadth obligations
+
+Import evidence is separate from semantic membership. The first all-five normalizer exposes
+two composition obligations: selected passive-socket equipment must contribute independently
+of the item preset, and known-unavailable oracle projections must retain comparison rows
+without fabricating concrete actor targets. These belong in project composition and the
+parity adapter respectively, never PoB UI replay inside native evaluation. See the
+[owned normalization contract](owned-normalization.md) for the delivered conservative seam
+and remaining integration gates.
+
+Source categories are not domain types. Offline conversion may emit zero, one or several
+owned declarations from one upstream definition. Physical gems, provider-granted actions
+and their capabilities are explicit owned semantics; a PoB Gem/UI row is insufficient to
+create any of them. Identity-only import placeholders cannot become executable definitions
+without semantic conversion. The final package and native evaluator must express these
+relationships using owned types, with no source-format flags or source interpreter required.

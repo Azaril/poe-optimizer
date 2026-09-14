@@ -11,6 +11,7 @@ mod native_benchmark;
 mod owned_binding;
 mod owned_draft;
 mod owned_input;
+mod owned_normalize;
 mod owned_schema;
 
 use clap::{Parser, Subcommand};
@@ -55,6 +56,8 @@ enum Action {
     CheckOwnedInput(owned_input::Args),
     /// Check an owned draft and optionally finalize explicit independent presets.
     CheckOwnedDraft(owned_draft::Args),
+    /// Normalize caller input into partial owned drafts using explicit artifact paths.
+    NormalizeOwned(owned_normalize::Args),
     /// Check a caller-supplied owned definition schema package without evaluating a build.
     CheckOwnedSchema(owned_schema::Args),
     /// Bind an owned request to injected schemas without calculating.
@@ -222,6 +225,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
         Some(Action::CheckOwnedInput(args)) => owned_input::run(args)?,
         Some(Action::CheckOwnedDraft(args)) => owned_draft::run(args)?,
+        Some(Action::NormalizeOwned(args)) => owned_normalize::run(args)?,
         Some(Action::CheckOwnedSchema(args)) => owned_schema::run(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,

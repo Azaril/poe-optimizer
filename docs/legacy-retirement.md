@@ -131,3 +131,15 @@ obsolete schema-rejection tests and duplicate harnesses can retire with the prod
 Detailed read-only audits are retained under `runs/architecture-reset-01/`; they are source
 observations rather than delivered migration claims. Update this inventory when each
 consumer moves or is deleted, including the validation scope.
+
+## Owned normalization checkpoint
+
+The new source collector, offline owned skill identity/role compiler, bounded lexical
+precedence recipes and conservative normalizer have a named consumer: `normalize-owned`.
+Only import/tooling modules see PoB source evidence and mappings. The normalizer accepts
+owned artifacts and never uses `selected_view`, source evaluator stages, legacy game-data
+loading or profile parsing. Its output is the same Core DraftSession used by direct authors.
+No native numerical consumer is replaced at this checkpoint; no further Spark/Mace kernel
+or golden deletion is justified yet. The finite catalog and unused payload classifier remain
+retired. Full input correspondence, shared domain-effect resolution and numerical validation
+are the next retirement dependencies. Do not resume the paused UI/source-VM frontier.

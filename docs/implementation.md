@@ -11,6 +11,64 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
+**Owned source-normalization checkpoint (after `a49a0b6`):** the new Import path now
+separates borrowed source evidence, offline owned skill identity/role compilation, explicit
+value precedence and conservative semantic normalization. `normalize-owned` is its thin
+CLI consumer with mandatory caller-provided artifacts and no PoB evaluation or legacy
+snapshot default. The output is a validated Core DraftSession plus import-only origins;
+it preserves partial/inactive alternatives. See [owned normalization](owned-normalization.md).
+This is model breadth progress, not a complete native evaluator or full D1/D2 completion.
+
+The collector preserves all 2,946 source elements and 541 gem-shaped occurrences across the
+five protected originals. Their configuration projections are available with zero lexical
+attribute errors; injected malformed inputs separately prove preservation through projection
+failure. Separate source-origin and catalog materialization evidence now admits 478 physical
+gem drafts, 140 SkillUse rows and 338 SupportAssignment rows. The remaining 63 gem-shaped
+rows are 42 generated representations, 18 manual-looking provider-only abilities and three
+name-only unknowns; all retain source evidence and real pending obligations. The normalizer
+preserves independent presets and receiving item uses, and leaves missing definitions, quality/modifiers, pools/access,
+loadouts, config destinations, providers and selections explicit. Source-only cached
+measurements are never inputs. Original05 item26 has one record and eight saved receiving
+uses, with two in selected item-set2; physical stock is still unspecified.
+
+The real input model has exposed next integration gates, now recorded in the design:
+selected passive-socket equipment must compose independently with selected item sets, and
+known-unavailable oracle projections must retain rows without invented actor targets.
+Do not hide these gaps behind UI replay, Cartesian presets or a reduced metric denominator.
+The offline identity placeholders also must not freeze source-kind-to-owned-kind mapping:
+D2 must allow zero/one/many semantic declarations and express provider ownership independently
+of source Gem/UI categories. Eighteen manual-looking rows with tree-granted primary effects
+exposed this concrete coupling before publication.
+The current pending state deliberately cannot finalize any complete original request.
+
+Independent review corrected unique-support inference with unknown siblings, physical-origin
+admission, bounded attribute lookup/group-origin caching, early query-size validation and
+staged registry budget validation. A first combined run passed 337 selected test executions,
+but was superseded by the provider-only materialization finding before publication. The
+corrected source adds independent materialization evidence and contrasts for true/false/absent
+catalog declarations, unknown primary effects and mixed active/support/provider groups.
+Final corrected validation passes **343 selected test executions**: Core 191, owned schema
+11, owned import 87, and owned CLI 27 with default features plus 27 without PoB. Strict
+workspace/all-target and native-only Clippy, Core/Data/Engine/Import/Native WASM compilation,
+formatting and the native-only dependency check pass. That dependency tree contains no
+PoB/Lua runtime. All 913 local documentation links resolve. Protected originals, schema40
+package and clean PoB pin are unchanged.
+
+Receipts are under `runs/owned-source-normalization-01/validated-checkpoint.json`: passing
+Core/Data/Import scopes from validation-02 plus final CLI and remaining checks from
+validation-03. Their only intervening source change fixes the empty-artifact CLI expectation
+and adds retained-pending-evidence assertions. The earlier failing CLI command and pre-fix
+337-test run are not final passing evidence. This is affected-scope local validation, not a
+full-workspace test run or latest hosted-CI pass.
+
+Exact preceding-head CI `a49a0b6`, run
+[34831815003](https://github.com/Azaril/poe-optimizer/actions/runs/34831815003), has passed both
+platform validation jobs, both native suites and Ubuntu PoB tests. Windows PoB and both
+workspace suites were still running at the 2026-09-14 11:17 UTC observation. This is not a
+latest published checkpoint CI pass. No additional
+legacy numerical consumer has been removed: the finite catalog and unused payload classifier
+remain retired, while remaining profile consumers await shared semantic resolution.
+
 **CI restored:** all ten jobs on Windows and Linux passed for repair commit `1d55cea`
 ([run 34800928085](https://github.com/Azaril/poe-optimizer/actions/runs/34800928085)).
 Both platform failures are fixed without reducing test coverage, trace evidence or
@@ -4428,34 +4486,41 @@ the design documents.
 ## Resume here
 
 1. Read [domain architecture](domain-architecture.md), [architecture migration](architecture-migration.md),
-   [owned build contract](owned-build-contract.md), [owned definition package](owned-definition-package.md),
-   [composition/binding](owned-binding.md) and [owned drafts](owned-drafts.md). Owned domain models
-   supersede PoB UI/loader/VM replication.
-2. Preserve runs/owned-normalization-01/validated-checkpoint.json: 274 selected tests, strict lint,
-   WASM, format and dependency checks pass with stable guards (validation-02). The earlier 229-test
-   binding receipt describes the previous checkpoint. Inspect exact published-head CI separately;
-   preserve all original inputs, the legacy data package and the clean PoB pin.
-3. Delivered APIs: project composition/codec; inventory union/availability; schema package/index;
-   full owned-request binder; offline ID registry/mappings; partial draft validation/codec and
-   explicit selected finalization. CLI is a thin consumer. None of these is numerical coverage.
-4. Normalize all five originals with the audited occurrence/mapping/value policies. Retain every
-   source occurrence even when a convenience projection fails; map source evidence only in Import.
-   Source sets stay independent, unresolved facts stay explicit, and UI defaults are not game rules.
-   Do not delay this breadth check until editor/repair APIs are complete.
-5. In parallel, implement revisioned pending repair/edit/adoption. Bind exact prior
-   snapshot/revision/watermark; retain deleted-ID reservation and distinguish shared-record edit
-   from explicit replacement. No Known-to-Pending-to-Known identity laundering or automatic
-   historical-query retargeting.
-6. Compile representative local-item, conditional, support and grant effects into owned rules,
+   [owned normalization](owned-normalization.md) and [owned drafts](owned-drafts.md). Owned semantic
+   models supersede PoB UI/loader/VM replication. No third named-skill profile.
+2. Preserve the current source-normalization receipt under `runs/owned-source-normalization-01/`.
+   This checkpoint has 343 selected test executions recorded in `validated-checkpoint.json`;
+   original complete native coverage remains 0/5. The preceding draft checkpoint `a49a0b6`
+   has 274 validated test executions under
+   `runs/owned-normalization-01/validation-02`; do not relabel it as this checkpoint's evidence.
+   Check exact published-head CI separately and keep original inputs, schema40 package and PoB pin intact.
+3. Finish the semantic composition gaps exposed by all five: selected Spec socket-use contribution
+   union with independent ItemSet equipment; and known-unavailable reference query projection ledger.
+   Retain all uses, exact provider ownership, historical targets and every original expected row.
+   Keep Physical/ProviderOnly/unresolved materialization distinct from active/support roles;
+   manual origins cannot override the 18 provider-only rows in the protected originals.
+   No eager Cartesian presets, hidden target replacement or fabricated actor IDs. The provisional
+   alternatives/union/versioning analysis is `runs/owned-source-normalization-01/composition-next.md`;
+   verify concrete reward ownership before adopting its two-field recommendation.
+4. Extend normalization through owned mappings for items/quality/modifiers, class/rewards,
+   point pools/loadout overlays, config destinations/scenarios, provider/support/payload targets
+   and explicit saved selections. Use the real five-build compiler/normalizer tests throughout.
+   The current conservative drafts are progress; required fields and memberships remain pending.
+5. In parallel, add revisioned repair/edit/adoption with exact prior snapshot/revision/watermark,
+   deleted-ID reservation and shared-record versus replacement semantics. This must not delay
+   breadth validation or make Known-to-Pending-to-Known identity laundering possible.
+6. Before freezing D2, replace kind-preserving identity-only placeholders with semantic
+   declarations; one source definition may produce zero, one or many owned definitions.
+   Compile representative local-item, conditional, support and grant effects into owned rules,
    then implement shared player/minion resolution. Reuse numerical kernels and generic search;
-   remove profile dispatch/source consumers by named dependency closure with numerical regressions.
-7. Preserve original selections and fixed expectation manifests. Keep complete native coverage
-   at **0/5** until full gates pass. Exercise explicit mapping scenarios and independent holdouts,
-   then joint semantic search. Update this document and retirement inventory at checkpoints.
+   retire profile dispatch/source consumers with their meaningful numerical regressions migrated.
+7. Preserve fixed original selections/expectations and complete native coverage **0/5** until the
+   full gates pass. Then validate independent holdouts, explicit mapping scenarios and joint
+   semantic search. Update design, implementation and retirement documents at checkpoints.
 
-The R2at configuration source probe and allocation bridge are paused. Their unresolved
-probe fixes and source-method frontier are not prerequisites for the architecture migration.
-Historical progress below remains evidence, not the active plan.
+The R2at configuration source probe and allocation bridge remain paused. Source-method/closure
+frontiers and their harness repairs are not prerequisites for this architecture migration.
+Historical progress below is evidence, not the active continuation plan.
 
 ## R2a authored skill preparation checkpoint
 

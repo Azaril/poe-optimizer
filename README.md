@@ -45,6 +45,10 @@ owned authoring state and finalizes explicit independent presets through the sam
 APIs. Pending selections retain all query rows and cannot write a complete request;
 see [owned drafts](docs/owned-drafts.md). This command also works without PoB and does
 not calculate, bind definitions or certify legality.
+`normalize-owned` converts caller-supplied XML/share codes through injected owned schema,
+mapping, role and policy artifacts into partial owned drafts. It preserves independent
+alternatives and unresolved semantics; it does not yet produce a complete original build
+request or calculate. See [owned normalization](docs/owned-normalization.md).
 The existing numerical CLI accepts PoB share codes/XML, explicit skill/action and encounter options,
 and returns typed metrics with units, availability and structured coverage. Configurable scalar
 objectives can be assessed during evaluation or against saved results without recalculation.

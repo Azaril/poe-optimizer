@@ -61,7 +61,13 @@ seams. Its record/codec/request API, standalone inventory, coherent record union
 availability bindings are implemented. Independent project/preset composition and schema binding are implemented; see the
 [composition/binding contract](owned-binding.md). The [owned draft boundary](owned-drafts.md)
 adds partial session storage, structural validation and explicit selected finalization. Draft
-repair, revisioned edits/adoption and five-build normalization remain open. The
+repair and revisioned edits/adoption remain open. A conservative all-five source normalizer
+now assembles owned drafts with explicit gaps; complete selected normalization/finalization
+remains open. See [owned normalization](owned-normalization.md), including independent
+passive-socket equipment contributions, known-unavailable parity projections and source-kind
+independence. D2 must replace identity-only placeholders with semantic declarations and
+allow source definitions to produce zero/one/many owned declarations; PoB Gem rows do not
+prove physical gem ownership. The
 [owned package contract](owned-definition-package.md) now has typed descriptors and a
 validated injectable schema package/index. Durable owned-ID allocation and exact offline mapping artifacts are implemented. Catalog
 conversion, rule compilation and the complete D2 exit evidence remain open; schema validity is not numerical coverage.
