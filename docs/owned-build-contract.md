@@ -1,10 +1,32 @@
 # D1: owned build and scenario contract
 
-**Status: reviewed implementation proposal, 2026-09-14; not implemented.**
+**Status: D1a record/codec implementation validated, 2026-09-14; full D1 remains open.**
 [Domain architecture](domain-architecture.md) controls the boundary and
 [migration D1](architecture-migration.md) controls delivery. D1 establishes inputs,
 identity, a codec and adapter normalization; it does not establish numerical coverage.
 The source audit is in `runs/owned-build-contract-01/source-audit.md`.
+
+## Implemented boundary and remaining work
+
+`core::owned_definitions` implements typed owned IDs and bounded authored values.
+`core::owned_build` implements raw `BuildInput`, `ScenarioInput`, `QueryInput` records,
+private immutable `BuildSpec`, `ScenarioSpec`, `QuerySpec` wrappers and an
+`OwnedEvaluationRequest`. Constructors validate structure; the version-1 JSON codec
+roundtrips standalone documents and combined requests. `check-owned-input` is the first
+CLI consumer and can write canonical owned JSON without XML, PoB or a game package.
+
+Definition binding, legality, computability, project/draft/inventory composition, editing
+and the five-case adapter are not implemented by this checkpoint. Their contracts below
+remain the D1/D2 delivery target. Numerical evaluation still uses legacy inputs.
+
+The envelope is `{ schema_version: 1, document: { kind, value } }`, where kind is `build`,
+`scenario`, `query` or `request`. Required optional fields use explicit null; omission
+infers no semantic default. Unknown/duplicate fields reject. Defaults bound wire bytes to
+8 MiB, collection entries to 16,384, total entries to 100,000 and provider paths to 64 steps;
+callers can tighten these resource limits. These are not game-level caps. Unordered
+occurrence/assignment collections canonicalize; ordered queries and grant paths retain
+order. Effect order belongs in rules, not record serialization order. This codec establishes
+no content digest or prepared-plan reuse authority.
 
 ## Separate values and ownership
 
@@ -71,7 +93,7 @@ Lists have bounded size; entries with independent identity carry typed occurrenc
 
 ```rust
 BuildSpec {
-    lineage, revision, game_version,
+    allocator: InstanceAllocatorState, revision, game_version,
     character: CharacterSpec,
     weapon_loadouts: Vec<WeaponLoadoutId>, active_weapon_loadout: WeaponLoadoutId,
     items: Vec<ItemRecord>, gems: Vec<GemInstance>,
@@ -82,12 +104,14 @@ BuildSpec {
 CharacterSpec { class: ClassDefId, ascendancy: Option<AscendancyDefId>,
                 level: u16, rewards: Vec<RewardSelection> }
 ItemRecord { id: ItemRecordId, template: ItemTemplateDefId, item_level: u16,
-             quality: QualitySelection, modifiers: Vec<RolledModifier> }
+             parameters: Vec<ParameterAssignment>, quality: Option<QualitySelection>,
+             modifiers: Vec<RolledModifier> }
 RolledModifier { id: ModifierInstanceId, definition: ModifierDefId,
                  rolls: Vec<ParameterAssignment> }
 EquipmentUse { id: ItemSlotUseId, item: ItemRecordId,
                destination: EquipmentDestination, scope: LoadoutScope }
-GemInstance { id: GemInstanceId, definition: GemDefId, level: u16, quality: u16 }
+GemInstance { id: GemInstanceId, definition: GemDefId, level: u16,
+              parameters: Vec<ParameterAssignment>, quality: Option<QualitySelection> }
 SkillUse { id: SkillUseId, source: AuthoredSkillSource,
            enabled: bool, scope: LoadoutScope }
 SupportAssignment { id: SupportAssignmentId, support: GemInstanceId,
@@ -104,6 +128,15 @@ by its containing item-use and socket slot, or passive socket identified by its 
 and socket slot. This covers ordinary equipment, runes and tree jewels without string slot
 paths. Reject containment cycles. `LoadoutScope` is shared or an explicit nonempty set of
 owned weapon-loadout IDs; the game's allowed loadout count is a definition rule.
+
+Item/gem `parameters` describe intrinsic record state such as corruption, rarity, socket
+capacity or variants through injected declarations. They cannot become fake modifiers or
+use-local choices: two uses of one item record share these properties. The declaring owner
+must equal the exact enclosing ItemTemplate/Gem definition. Modifier rolls, reward parameters
+and usage-policy parameters likewise name the exact enclosing Modifier/Reward/UsagePolicy.
+D2 checks whether each slot exists and permits that value. No inherited declaration fallback
+is implied. Quality is an explicit optional, typed unit-bearing selection for items and gems;
+its allowed kind, presence and bounds come from the package.
 
 An `ItemRecord` is a concrete rolled specification occurrence, not proof of physical stock.
 Several equipment uses can reference it and receive separate local effects/grants.
@@ -186,8 +219,9 @@ and extend the reviewed domain schema; never hide it in a generic settings bag.
 Selectors describe semantic ownership before dense plan indices exist:
 
 ```rust
-ProviderRoot = Character | SkillUse(SkillUseId) | EquipmentUse(ItemSlotUseId)
-             | Allocation(AllocationId) | Reward(RewardSelectionId);
+ProviderRoot = Character | SkillUse(SkillUseId) | SupportAssignment(SupportAssignmentId)
+             | EquipmentUse(ItemSlotUseId) | Allocation(AllocationId) | Reward(RewardSelectionId)
+             | ItemModifier { equipment_use: ItemSlotUseId, modifier: ModifierInstanceId };
 DeclaredSlot<S> { declaration: SlotOwnerDefId, slot: S }
 ProviderKey { root: ProviderRoot, grant_path: Vec<DeclaredSlot<GrantSlotDefId>> }
 ActorKey = Player | Owned { provider: ProviderKey, slot: DeclaredSlot<ActorSlotDefId> };
@@ -198,7 +232,7 @@ ActionSelection { action: ActionKey, part: ActionPartDefId,
                   mode: ActionModeDefId, stat_set: ActionStatSetDefId }
 MetricRequest { id: QueryId, metric: MetricDefId,
                 target: Actor(ActorKey) | Action(ActionSelection) }
-QuerySpec { requests: Vec<MetricRequest> }
+QuerySpec { game_version, requests: Vec<MetricRequest> }
 ScenarioSpec { game_version, enemy: EnemySpec,
                assumptions: Vec<ExternalAssumption>, usage: Vec<UsagePolicySelection> }
 EnemySpec { encounter: EncounterDefId, level: u16 }
@@ -223,11 +257,20 @@ things; a definition-only filter must not satisfy a requirement for a particular
 Presence requirements and property-freezing locks belong to `OptimizationProblem`, not
 `BuildSpec`. D1 preserves the addresses without implementing search policy.
 
+Support-supplied actors have a SupportAssignment root, preserving supplying-support
+occurrence independently of the target skill. An ItemModifier root pairs a modifier
+occurrence with its receiving equipment use; the modifier must belong to that use's item
+record. Equal-definition modifiers and two uses of one shared record therefore have
+different provider addresses. D2 still checks exposed declarations and actual grant effects.
+
 Removing/replacing a provider or disabling its effective loadout makes dependent selectors
 unavailable; it cannot retarget an equal-named surviving skill. Same-occurrence numeric edits
 retain the public key if the declared output remains effective; they still require compatible
 private plan resolution against the changed content. A fresh plan never authorizes public
-selector retargeting. D1 validates key structure and authored roots. D2/D3 bind generated existence, actor ownership and action compatibility;
+selector retargeting. D1 validates key structure and authored roots. Saved query/scenario selectors may retain
+missing roots within the request lineage/watermark, while live wrong-domain or wrong-item
+modifier roots reject. Build-internal references must exist. D2/D3 bind generated existence,
+actor ownership and action compatibility;
 D1 must not fabricate the resolved actor/action graph. Explicit part/mode/stat-set IDs
 preserve primary/additional effects and average-hit versus DPS meaning. An adapter may
 choose a default only when the catalog or an explained source rule establishes it.
@@ -335,6 +378,6 @@ Required tests are contract tests, not evidence of whole-build calculation:
 | Injected definitions | Same input against a changed package rebinds; wrong kinds/units/owners reject; missing definitions remain explicit; no fixture IDs are built into code. |
 | Five originals | Frozen selection manifest is preserved; every required unresolved mapping has a typed location; importing all five is not reported as five complete native evaluations. |
 
-This reviewed proposal remains unimplemented. D1 completion needs the direct
-construction/codec path and the five-case adapter evidence together; an XML wrapper renamed
+The direct construction/codec slice is implemented and validated. Full D1
+still needs project/inventory/draft composition, editing and the five-case adapter. An XML wrapper renamed
 `BuildSpec` or a catalog-only facade does not meet that gate.

@@ -196,6 +196,15 @@ instance_domains! {
     ItemSlotUseId => "One equipment or jewel slot-use occurrence; role belongs to the build model.",
     PassiveSpecId => "One saved passive specification occurrence.",
     ConfigSetId => "One saved configuration-set occurrence.",
+    GemInstanceId => "One owned gem occurrence, independent of its definition.",
+    SkillUseId => "One authored semantic skill use.",
+    SupportAssignmentId => "One supplying support application occurrence.",
+    AllocationId => "One semantic passive allocation occurrence.",
+    WeaponLoadoutId => "One authored weapon loadout occurrence.",
+    InventoryItemId => "One physical item copy in an inventory snapshot.",
+    ModifierInstanceId => "One rolled modifier occurrence on an item record.",
+    PayloadLinkId => "One authored skill container/payload relationship.",
+    RewardSelectionId => "One earned progression reward occurrence.",
 }
 
 /// Serializable watermark, including IDs of deleted instances.

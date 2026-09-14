@@ -57,7 +57,9 @@ numerical validation before its meaning is preserved.
 See the [concrete retirement inventory](legacy-retirement.md) for file/type dependencies,
 completed finite-catalog deletion and remaining shared-type catches. The
 [owned build contract](owned-build-contract.md) proposes concrete D1 records and validation
-seams; its documented APIs are not implemented yet.
+seams. Its D1a record/codec/request API is now implemented and validated; project, inventory,
+draft/edit composition, definition binding and five-build normalization remain open. The
+[owned package proposal](owned-definition-package.md) defines the next schema/mapping seam.
 
 ## Retirement ownership
 

@@ -8,6 +8,7 @@ mod data_loading;
 #[cfg(feature = "pob")]
 mod game_data_extract;
 mod native_benchmark;
+mod owned_input;
 
 use clap::{Parser, Subcommand};
 use poe_optimizer_core::MAX_WIRE_BYTES;
@@ -47,6 +48,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Action {
+    /// Check owned semantic input structure without source import or game evaluation.
+    CheckOwnedInput(owned_input::Args),
     /// Inspect authored build containers without calculating or admitting mechanics.
     InspectBuild(build_inspect::Args),
     /// Prepare a native build or report source-linked missing stages without calculating.
@@ -208,6 +211,7 @@ fn main() -> ExitCode {
 
 fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
+        Some(Action::CheckOwnedInput(args)) => owned_input::run(args)?,
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,
         Some(Action::SearchBuild(args)) => build_search::run(args)?,
         #[cfg(feature = "pob")]

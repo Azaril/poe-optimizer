@@ -83,6 +83,9 @@ pub struct ActorOutput {
     pub non_finite_values: BTreeMap<String, metrics::NonFiniteKind>,
 }
 
+pub mod owned_build;
+pub mod owned_definitions;
+
 pub mod build_identity;
 pub mod build_view;
 pub mod candidate;

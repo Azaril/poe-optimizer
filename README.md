@@ -34,8 +34,10 @@ and [migration plan](docs/architecture-migration.md). The capabilities below des
 current experimental implementation, not the target architecture.
 
 **Status:** experimental import and evaluation CLI with switchable native and optional PoB
-backends. Its current input API still uses PoB documents; the owned semantic API above is
-not implemented yet. It accepts PoB share codes/XML, explicit skill/action and encounter options,
+backends. Numerical evaluation still uses PoB documents. A new
+`check-owned-input INPUT --canonical-output OUTPUT` command checks directly authored owned
+build/scenario/query/request structure through portable core APIs, without XML or a data
+package. Definition binding, game legality and calculation are not established by that check. It accepts PoB share codes/XML, explicit skill/action and encounter options,
 and returns typed metrics with units, availability and structured coverage. Configurable scalar
 objectives can be assessed during evaluation or against saved results without recalculation.
 Each PoB request

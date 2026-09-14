@@ -74,17 +74,46 @@ injected unit-test fixture; that importer suite and final all-target lint passed
 Earlier failures and zero-test filter attempts are retained and not counted as coverage.
 Independent review confirmed metric extraction, matrix preservation and the admission boundary.
 
-**D1 contract reviewed, not implemented:** [owned build and scenario records](owned-build-contract.md)
-define directly authored inputs, injected definition binding, separate inventory claims,
-semantic provider/action selectors and explicit unresolved imports. Review closed two API
-traps: unequipped-stock record resolution and provider replacement versus ordinary edits.
-Numerical build meaning stays independent of inventory stock and UI/import state.
+**D1a record/codec checkpoint validated:** portable `owned_definitions` and `owned_build`
+modules now provide typed project-owned definition IDs, directly authored build/scenario/query
+records, immutable structurally validated wrappers, combined requests and a bounded version-1
+owned JSON codec. `check-owned-input` is a thin CLI consumer; this path loads no XML, game
+package or PoB runtime. It does not calculate or claim definition/legality coverage.
 
-**Next:** implement D1 directly authored BuildSpec/ScenarioSpec/QuerySpec and D2 offline
-semantic-package compilation. Native evaluation must accept semantic input without XML,
-PoB or UI state. Resolve all five imported models with explicit gaps; develop player/minion
-numerical paths together. No third profile and no extension of native PoB UI/class machinery.
-Complete native coverage remains **0/5**; legacy `search-build` still uses the closed profiles.
+Independent original-five review changed the model before version-1 publication: support
+assignments can supply actors; item/gem intrinsic parameters belong to records; repeated
+modifier grants use the exact equipment-use/modifier pair. Historical selectors may retain
+removed providers, while live wrong-domain or wrong-owner references reject. Ordinary,
+ascendancy and weapon point-pool IDs remain separate; D1 invents no connectivity/budget rule.
+
+**D1 is not complete.** BuildProject/presets/drafts, inventory composition/availability,
+revisioned edit operations, definition binding and all-five owned normalization remain open.
+The [D2 package proposal](owned-definition-package.md) defines a typed schema index, durable
+owned-ID registry and separate offline mappings. No new package or rule compiler is claimed.
+The adapter audit at `runs/owned-input-implementation-01/adapter-mapping.md` identifies
+five-case mappings/default policy and explicit missing-target drafts. It checks all protected
+XML hashes and 541 source gem occurrences; it is not an input package or native evaluation.
+
+Validation passes **93 selected test executions, zero failures**: all core targets (85),
+the owned-input CLI with default features (4), and the same CLI without PoB (4). Both strict
+workspace/all-target and native-only Clippy pass, as do formatting, CORE/DATA/ENGINE/IMPORT/NATIVE
+WASM compilation and the native-only runtime dependency check. All 255 checked local links
+resolve. The original inputs, schema-40 package, lockfile and clean PoB pin are unchanged.
+No numerical/parity regression result is inferred from these input-contract tests.
+
+Evidence is under `runs/owned-input-implementation-01/`: `validation-02` holds all eight
+commands with stable source/input guards; `validated-checkpoint.json` joins their results,
+review and link checks. The earlier `validation-01` passed tests then found a collapsible
+conditional lint; the equivalent fix was followed by the full final sequence. Transient
+execution-service failures were recovered without unverified commits. All local validation
+runtimes are terminal. Existing CI automatically includes the new test targets on Windows
+and Linux. For preceding commit `5d17fbd`, run 34815018020 had four passed jobs and four running
+at the 07:23 UTC observation; that is not a full-run or next-commit CI result.
+
+**Next:** implement the D2 schema index/mapping boundary alongside D1 project/inventory/draft composition. Normalize all five
+originals with explicit unresolved facts before shared player/minion numerical resolution.
+No third profile and no extension of native PoB UI/class machinery. Complete native coverage
+remains **0/5**; legacy `search-build` still uses the closed profiles.
 
 **Historical implementation checkpoints follow.** Their tests describe producing revisions;
 old future-work instructions are superseded by this header and [Resume here](#resume-here).
@@ -4253,14 +4282,16 @@ the design documents.
 1. Read [domain architecture](domain-architecture.md), [architecture migration](architecture-migration.md)
    and the reviewed [owned build contract](owned-build-contract.md). The owner's correction
    supersedes native PoB UI/loader/VM replication gates.
-2. Finite-catalog retirement is complete; all local runtimes are terminal. The 126 selected
-   test executions and static/portability checks above pass. Preserve those receipts and
+2. Finite-catalog retirement and D1a validation are complete; all local runtimes are terminal.
+   Their separate 126- and 93-execution receipts and static/portability checks pass. Preserve those receipts and
    inspect the latest published commit's CI separately; do not treat prior CI as its result.
-3. Implement D1 directly authored BuildSpec/ScenarioSpec/QuerySpec and D2 offline conversion
-   to owned semantic rules/data. Start with the reviewed record/index/codec contracts and
-   contrasting identity/inventory/provider tests, then normalize all five original inputs
-   with explicit unresolved mappings. Import origins are optional; source formats stay
-   outside the new native evaluation request. No D1 Rust APIs or D2 package exist yet.
+3. D1a owned record/codec/request APIs and `check-owned-input` are validated (93 selected
+   tests plus lint/portability checks). Implement the D2 schema/index and separate offline
+   mapping contracts in [owned package](owned-definition-package.md).
+   In parallel, add D1 BuildProject/presets, intrinsic inventory records/claims, typed drafts
+   and revisioned edits. Normalize all five originals with explicit gaps using the adapter
+   audit. No source formats enter the new request, no game IDs come from source-name fallbacks,
+   and no D2 package/rule compiler or five-case owned normalization is complete yet.
 4. Preserve generic kernels/objectives/search and independent numerical/reference fixtures.
    Migrate or delete profile dispatch and source-shaped consumers by named dependency
    closure. The finite command/catalog is removed; do not expand remaining Spark/Mace or
