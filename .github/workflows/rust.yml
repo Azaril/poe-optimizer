@@ -2,6 +2,11 @@ name: Rust
 
 on: [push, pull_request]
 
+# Keep the newest revision of each branch or pull request; both OS jobs still run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     strategy:
