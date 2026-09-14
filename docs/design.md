@@ -5,11 +5,12 @@ Initial target: Path of Exile 2, multicore core libraries with a CLI, Windows de
 See the [living implementation record](implementation.md) for delivery sequence, current
 capabilities, validation evidence, unresolved work, and the next session's resume point.
 The [source investigation](pob-integration.md) records the inspected PoB baseline.
-The [native item-assembly design](native-item-assembly.md) defines injected policy,
-preparation identity and partial-state contracts below the build evaluator. The accepted
-[parser language decision](conditional-parser-operations-proposal.md) and
-[typed parser-program contract](typed-parser-programs.md) put modifier-preparation control
-flow in injected programs executed by reusable native Rust instructions.
+The [project-owned domain architecture](domain-architecture.md) is the controlling decision
+as of 2026-09-14. Definitions are converted offline into our semantic package/rules; native
+evaluation consumes our build/scenario model. PoB formats, source programs and application
+lifecycles remain adapter/reference concerns. Follow the [migration and retirement plan](architecture-migration.md)
+before extending native behavior. Earlier source-program and loader designs document current
+or historical implementation, not requirements to reproduce PoB internals in the target.
 
 ## Recommendation
 
@@ -61,7 +62,7 @@ before invoking it.
 
 The first useful workflow:
 
-1. Import a complete local PoB XML build.
+1. Create or load an owned build/project, or import a complete PoB build through an adapter.
 2. Resolve required skills/items, independent locks, allowed catalogs, and scenario assumptions.
 3. Configure the objective policy and any hard constraints from the supported capabilities.
 4. Evaluate the seed and show the exact interpreted metrics.
@@ -173,24 +174,23 @@ A working Rust build in this repository is not evidence that the PoB evaluator w
 
 ```mermaid
 flowchart LR
-    CLI[CLI application] --> Core[Reusable core library APIs]
-    GUI[Later GUI / Tauri candidate] --> Core
-    Core --> Search[Search coordinator + shared resource budget]
-    Search --> Rayon[Rayon candidate generation / validation / scoring]
-    Rayon --> Cache[Cache + in-flight deduplication]
-    Cache --> Backend[Calculation backend contract]
-    Backend --> Native[Native Rust calculations on Rayon]
-    Packages[Versioned game-data packages] --> Loader[Portable validation and compilation]
-    Loader --> Data[Injected immutable game data]
-    Data --> Native
-    Backend --> Pool[Optional reference workers / mlua and LuaJIT]
-    Pool --> PoB[Pinned PoB calculations and data]
-    Native --> Search
-    PoB --> Search
-    Search --> Results[Versioned run events + results + XML]
-    Results --> Reports[Report library / offline HTML]
-    Results --> CLI
-    Results --> GUI
+    Upstream[PoB definitions] --> Offline[Offline semantic compiler]
+    Offline --> Package[Owned game-data and domain-rule package]
+    Package --> Native[Native resolver and evaluator]
+    XML[PoB XML / share codes] --> Import[Import adapter]
+    Import --> Model[Owned BuildSpec + ScenarioSpec]
+    CLI[CLI] --> App[Shared application APIs]
+    GUI[Future GUI / web host] --> App
+    App --> Model
+    App --> Search[Search + objectives + resource budgets]
+    Search --> Model
+    Model --> Native
+    Native --> Results[Typed metrics + explanations]
+    Results --> Search
+    Results --> App
+    Model --> Oracle[Optional PoB parity adapter]
+    Oracle --> Compare[Semantic differential tests]
+    Results --> Compare
 ```
 
 Use a Cargo workspace with library/application boundaries from the first engine implementation:
@@ -201,8 +201,8 @@ Use a Cargo workspace with library/application boundaries from the first engine 
 | `poe-optimizer-data` | Versioned game-data model, portable package loading/validation and immutable snapshots; no evaluator or acquisition I/O |
 | `poe-optimizer-engine` | Portable Rust calculation semantics and compilation of injected data into resolved calculation tables; no Lua or OS scheduler |
 | `poe-optimizer-native` | Native build preparation, calculation backend, typed results and export |
-| `poe-optimizer-import` | Bounded build/share-code decoding and portable interchange/materialization |
-| `poe-optimizer-pob` | Optional reference backend, Lua supervision, source extraction and parity evidence |
+| `poe-optimizer-import` | External build codecs, semantic normalization, export and optional source provenance |
+| `poe-optimizer-pob` | Optional reference backend, Lua supervision and parity evidence; offline acquisition/compiler tooling is a separate responsibility |
 | `poe-optimizer-report` | Structured artifacts, comparison models, CSV/JSON exports and offline HTML reports |
 | `poe-optimizer-cli` | Configuration/flags, adapter composition, progress display and exit codes; binary named `poe-optimizer` |
 | Later desktop application | GUI using the same libraries; Tauri remains a candidate |
@@ -238,32 +238,31 @@ is deferred pending demonstrated catalog needs; SQL remains outside the native c
 loop. XML remains an input/output adapter where needed. Compatible data-only updates must
 still work without recompiling the evaluator.
 
-Configuration preparation preserves a lifecycle, not just a map of scalar inputs.
-Source-backed defaults, saved sets, control notifications and ordered callback effects
-produce per-build state without mutating shared definitions. The current implementation uses
-the shared typed-program engine for configuration and modifier logic, with explicit ownership
-and effect permissions; the investigation below may replace that representation.
-See [configuration preparation](configuration-preparation.md) for the execution boundary.
+Configuration is explicit domain input and computed mechanic state. The import adapter
+resolves legacy defaults and selections into that input. Native resolution computes game
+effects; it does not create controls, replay notifications or execute BuildModList to infer
+what the user selected. Relevant order/history is modeled by domain dependencies or explicit
+import compatibility policy.
 
-The shared source interpreter is the current implementation strategy; its language-level
-compatibility is not itself the end-state product contract. A planned
-[execution-model investigation](rule-execution-model-investigation.md) compares retaining
-it with a focused DSL, declarative rules, native Rust algorithm families and hybrids.
-Compare representations using representative parity evidence, remaining full-parity risks,
-upstream-update effort, total complexity and preparation/search performance. Full observable
-build/calculation parity remains the acceptance goal; completing the evaluator is not a
-prerequisite for investigating alternatives. Preserve the injected-data contract, explicit
-effects and diagnostics, optional PoB reference, and portable in-process parallel evaluation
-regardless of that choice. An alternative may omit internal Lua details only when their irrelevance to the supported external contract is demonstrated;
-matching a small fixture set cannot establish that. No replacement is selected yet.
-The production schema need not mirror PoB's tables or conditional-language representation.
-Evaluate any conversion, reconciliation and reference adapters as part of the total cost,
-with versioned migration and unchanged observable parity requirements.
+The accepted runtime direction is typed **domain rules plus reusable native Rust operations**,
+produced by an offline compiler into our own versioned schema. A small DSL, structured data
+or offline Lua bindings may author those rules; PoB ASTs, callback tables and UI classes do
+not become the shipped runtime ABI. The [domain ADR](domain-architecture.md) defines the
+semantics, dependency and coverage contract. The [execution-model investigation](rule-execution-model-investigation.md)
+now compares implementation choices inside that boundary, rather than postponing it until
+the source interpreter achieves full compatibility.
+
+Parity means observable build/evaluation semantics: resolved input, selected actions,
+metrics/availability and controlled mutations under matched scenarios. PoB UI graphs,
+private caches, table aliases and whole-source-method traces are diagnostic tools, not
+native acceptance criteria. Preserve meaningful game effects and recorded discrepancies;
+do not silently omit unsupported effects or loosen fixed metric expectations.
 
 ### Evaluator boundary
 
 The shared calculation and evaluation interfaces are in-process Rust traits with typed
-requests/results; see the [boundary decision](calculation-boundary.md). Native preparation
+requests/results over owned BuildSpec/ScenarioSpec values; see the
+[boundary decision](calculation-boundary.md). XML remains outside this ABI. Native preparation
 produces immutable versioned build inputs and independent mutable calculation state. It
 must not invoke PoB, require IPC or silently fall back to Lua for unsupported mechanics.
 Backend selection is explicit and participates in provenance and cache compatibility.
@@ -767,6 +766,11 @@ first, visual output, and a later GUI. The user has also confirmed:
 7. Most game data belongs in versioned configuration and an independent data model, injected
    into native evaluation. Share immutable data across workers; keep calculation semantics
    in Rust and support compatible data-only updates without rebuilding the evaluator.
+
+8. Own the semantic model and compile PoB data/rules offline into it. Decouple UI, formats,
+   data acquisition, evaluation and optimization. Keep PoB as an optional evaluation oracle,
+   not the native object model. Retire source-shaped runtime and Spark/Mace dead-end paths
+   through the explicit migration plan while preserving useful numerical validation.
 
 The [decision register](prior-art-and-product-review.md#decision-register-and-remaining-input)
 preserves the answers and rationale. Exact skill/item requirements, goals, and scenario

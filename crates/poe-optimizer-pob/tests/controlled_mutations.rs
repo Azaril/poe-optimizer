@@ -4,7 +4,7 @@ use poe_optimizer_core::{
     candidate::{CandidateBudgets, CandidateConstraints, CandidateDomain},
     evaluation::{BackendIdentity, BuildDocument, BuildFormat, EvaluationResult},
 };
-use poe_optimizer_pob::mutation::{
+use poe_optimizer_import::controlled_mace::{
     ControlledMaceCatalog, MaceSupportChoice, NormalMaceAlternative,
 };
 use std::{

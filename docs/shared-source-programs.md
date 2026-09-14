@@ -1,5 +1,12 @@
 # Shared source programs and per-build sessions
 
+> Architecture update, 2026-09-14: [domain architecture](domain-architecture.md) and
+> [migration plan](architecture-migration.md) control the target. Existing source-shaped
+> APIs below describe compatibility/current implementation. Native evaluation will consume
+> owned semantic builds/scenarios and compiled domain rules; PoB formats, UI lifecycles and
+> private callback/table behavior stay in adapters and optional reference tooling. Conflicting
+> whole-method or internal-identity parity requirements are superseded.
+
 The typed-program engine serves modifier parsing, configuration preparation and future
 source algorithm consumers. Each domain owns its input and effect policy; there is one
 verifier, compiler, interpreter and table heap. The [implementation record](implementation.md)

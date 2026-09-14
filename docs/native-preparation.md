@@ -1,5 +1,12 @@
 # Shared native preparation boundary
 
+> Architecture update, 2026-09-14: [domain architecture](domain-architecture.md) and
+> [migration plan](architecture-migration.md) control the target. Existing source-shaped
+> APIs below describe compatibility/current implementation. Native evaluation will consume
+> owned semantic builds/scenarios and compiled domain rules; PoB formats, UI lifecycles and
+> private callback/table behavior stay in adapters and optional reference tooling. Conflicting
+> whole-method or internal-identity parity requirements are superseded.
+
 Status: shared authored-skill, configuration and item-loading stages are implemented.
 R2ah adds bounded equipment activation through population, with an explicit stop before
 `SyncLoadouts`. Scoped public preparation regressions and the declared source-fed activation

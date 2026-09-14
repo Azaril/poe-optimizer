@@ -1,30 +1,54 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-13 (EDT)
+Last updated: 2026-09-14 (EDT)
 
 **Current priority: complete native parity for the five example builds, then wider breadth.**
 The five supplied originals have **0/5 complete
 native evaluations**; all five import/inspect and evaluate in pinned PoB. Shared parser
-progress has not changed that result. Follow the [real-build rollout](real-build-rollout.md)
-for the next integration gates, with Twister and Skeletal Sniper developed together and
+progress has not changed that result. Follow the [architecture migration](architecture-migration.md)
+for the active integration gates, with Twister and Skeletal Sniper developed together and
 all five originals exercising the input model. Crossbow remains an API/trigger stress
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Immediate validation gate:** restore completed CI on both operating systems before the
-next feature checkpoint. The complete local PoB and native package suites now pass. The
-Linux lifecycle failure and the reproduced parser warm-trace failure now have fixes
-validated on both operating systems; hosted confirmation remains pending. Failure
-aggregation and retained child logs will make subsequent CI failures diagnosable. Keep
-the five original builds as the native implementation priority.
+**CI restored:** all ten jobs on Windows and Linux passed for repair commit `1d55cea`
+([run 34800928085](https://github.com/Azaril/poe-optimizer/actions/runs/34800928085)).
+That exact commit is now on main. Both platform failures are fixed without reducing test
+coverage, trace evidence or comparison assertions; details and receipts are below.
 
-**Accepted direction:** proceed with the [shared instance/resolution/plan migration](general-build-input-proposal.md).
-The owner asks for the most correct structural design to avoid larger later refactors.
-The [concrete API design](real-build-api-proposal.md) is the working contract; the B3
-architecture question is answered. Prioritize source/instance/definition/plan separation,
-provider lifetime and contrasting cases from all five originals. Ordinary implementation
-choices need no repeated approval. Preserve numerical tests through explicit legacy adapters
-without letting their single-profile assumptions define the new model.
+**Current direction: architecture correction before further native parity expansion.**
+The owner explicitly requested project-owned data/model/rules with offline PoB conversion,
+strong UI/import/evaluation/search separation, and removal of the old Spark/Mace dead ends.
+The [domain architecture](domain-architecture.md) supersedes conflicting source-shaped
+runtime requirements. The [architecture migration](architecture-migration.md) is now the
+active sequence; the older R2 source-loader continuation below is historical evidence.
+
+**D0 checkpoint:** three independent boundary/parity/legacy audits are complete under
+`runs/architecture-reset-01/`. The current API still requires PoB XML, selected actions still
+use adapter indexes, and complete native dispatch remains Spark/Mace. These are migration
+targets, not a completed decoupling. Reuse injected data, generic search/objectives, instance
+identity and numerical kernels; replace source-shaped contracts and profile consumers.
+
+The isolated BuildModList probe and proposed Common.new bridge are **paused**. No bridge or
+probe files were adopted; probe review found three unresolved harness issues. They do not
+block the owned-model work and are not next implementation tasks. Useful source observations
+remain available as reference evidence. No new complete native evaluation has been claimed.
+
+**Retirement:** the [tracked inventory](legacy-retirement.md) identifies active callers and
+unique tests. The redundant PoB mutation re-export is removed and its test now imports the
+owning import crate directly. The unchanged focused suite passes seven tests (one existing
+child entry remains ignored); formatting, strict target Clippy and diff checks pass. Receipt:
+`runs/architecture-reset-01/facade-validation-01/receipt.json`. The 394 checked local document
+links resolve; two independent design reviews found no blocking boundary flaw. Larger Spark/Mace paths
+remain explicitly legacy until their dependency closures are migrated/deleted.
+
+**Next:** retire the old finite-catalog search workflow and start D1 owned BuildSpec/ScenarioSpec contracts and D2 offline semantic-package compilation.
+Native evaluation must accept directly authored semantic input without XML, PoB or UI state.
+Resolve all five imported models with explicit gaps; develop player/minion numerical paths
+together. No third profile and no extension of native PoB UI/class machinery.
+
+**Historical implementation checkpoints follow.** Their tests describe producing revisions;
+old future-work instructions are superseded by this header and [Resume here](#resume-here).
 
 **R2as validated locally: retain real producer owners across incomplete outcomes.**
 `PreparationOutcome::Incomplete` now owns an `IncompletePreparation`, retaining exact
@@ -185,7 +209,7 @@ main is available for the next implementation slice after publication. Neither t
 full suite nor hosted CI is claimed as green. SyncLoadouts, activation and complete native
 build evaluation remain unimplemented; the complete original-build count stays **0/5**.
 
-**Next implementation gate:** build the source-ordered root coordinator using the retained
+**Superseded R2 next-step proposal (paused by D0):** build the source-ordered root coordinator using the retained
 real producers and live readers, then complete configuration effects and synchronization.
 R2as fixes the incomplete path discarding its actual owners; it does not yet make the
 independent prefixes resumable. Construct each domain at the actual source point, with
@@ -195,51 +219,61 @@ Do not join final Tree/Skills/Config reports into the state at an earlier Items.
 
 The source-order audit is retained in
 `runs/r2as-live-root-01/source-order-audit-by-engine.md`. Configuration's next effect gate
-must run the complete BuildModList boundary and its reached callbacks, constructors, parser
+previously required the complete BuildModList boundary and its reached callbacks, constructors, parser
 service and dynamic Build context through the existing shared program machinery. Successful
-individual callbacks or a static dispatch list do not establish whole-method parity. A
-focused investigation is staged under `runs/r2at-config-effects-01/`. Its frozen revision 02
-adds a cumulative retained-report budget and synthetic observer-mechanics tests. The six
-manifest-verified files are adopted only into the detached `deb5694` checkout at
-`runs/r2at-config-validation-01/worktree`, with the exact pinned local PoB submodule and
-unchanged original inputs. A separate target (`runs/r2at-config-native-target`, two build
-jobs) has compiled both targets and passed all 12 synthetic mechanics/budget tests.
-Receipts are `runs/r2at-config-validation-01/compile-01/receipt.json` and
-`mechanics-01/receipt.json`. The amended public-output/selected-set control also compiles
-cleanly (`compile-02/receipt.json`), with unchanged mechanics binary. Its first build-01
-original-source child failed in 5.843 seconds with `config-effects probe: return pairing apply`;
-no result JSON, complete control comparison or native parity was produced. The exact failure
-is retained in `source-child-01/receipt.json` and `stderr.log`. Diagnostic rerun `source-child-02` identifies the original public parseMod wrapper's
-`return unpack(copyTable(cache[line]))` as the missing return event, reached from quest
-option 647. The synthetic tail-to-original-C-unpack experiment passes in
-`tail-mechanics-root-01/receipt.json`: LuaJIT emits the wrapper call and C unpack call but
-no wrapper return hook, whereas the non-tail form has that return hook. Existing paired
-internal-return assumptions therefore do not cover this actual source path. An explicit v2 dependency-entry-only trace is being implemented only in the isolated
-checkout, following `dependency-trace-proposal-01.md`. It retains strict complete-method
-entry/return and unchanged graph/public-output controls; dependency returns and depth must
-be removed from the declared scope, not inferred. Mechanics must pass before one further
-original child. No new tail interpreter or production change has been adopted. This keeps the published
-CI revision and both broad local suites unchanged. Static review also requires the probe's
-control to compare actual public scalar outputs and selected sets, alongside its declared
-configuration graph. Compile or synthetic-hook success will not establish native parity.
-Follow the existing
-acquisition seam for missing source/data operands; preserve exact authored-instance identity
-and explicitly unavailable dependencies without adding fixture-specific execution paths.
+individual callbacks or a static dispatch list do not establish whole-method parity.
+The six-file probe is isolated in
+`runs/r2at-config-validation-01/worktree`, based on `deb5694`, with the unchanged pinned
+PoB submodule and original inputs. No probe files have been adopted into main.
+
+The latest explicit-budget build-01 source child completes in 9.563 seconds, retaining
+both original BuildModList roots and 545 trace events. The declared final configuration
+graph, selected sets and all 785 public scalar outputs match independent control execution.
+Five table-valued public outputs are counted but their contents are not compared. Both
+native attempts remain **UnsupportedCapability**, at the original `new("ModList")` call:
+callback 7 has no compiled program, reached by callback 577 at source span 56-70. Native
+execution starts from the pre-call state; source-after state is never used as input.
+This is source-observer validation, not native method or original-build parity.
+
+LuaJIT does not emit a paired return hook for the original public parseMod wrapper's tail
+call to C unpack. The probe therefore declares dependency **entries only**, retaining exact
+root entry/return as the completion boundary; it does not infer dependency return packs,
+completion, depth or errors. It observes calls outside roots and calls/returns inside them.
+The whole-import default remains 5,000,000 hook events. The successful child explicitly
+requests the validated maximum of 50,000,000 and consumes 5,913,762 events. Earlier tail-
+pairing and default-budget failures remain failures. Retained trace/text/native/report
+budgets are unchanged; the 64 MiB compact-report allowance is not a process-memory limit.
+
+All 19 current synthetic observer/budget mechanics tests pass. Frozen handoff and producing
+receipts are `runs/r2at-config-validation-01/hook-work-option-v2/`, `source-child-06/` and
+`source-output-06/build-01.json`; all 18 guarded files/inputs match. Review is still required
+before adoption: the current prototype's ordinary parent test inherits the insufficient
+5M default, dropdown-list identity comparison refreshes its own reference at each boundary,
+and exact-budget cleanup can itself trigger rejection before detaching the hook. Add
+regressions and resolve those contracts before running the original-five parent normally.
+Compile/mechanics success alone does not validate the observer or native evaluator.
+
+The read-only `runs/r2at-config-validation-01/parser-session-audit.md` identifies the next
+parser seam: capture Config and its actual initialized public parser/cache/dictionaries in
+one owner and reuse the existing CompiledSourcePrograms/ProgramSession. The stateless item
+parser cannot supply its writable results, alias/capture history, cache semantics or full
+Lua return packs. Share immutable compiled definitions; keep mutable state and cumulative
+budgets preparation-owned. Preserve source errors, prior writes, preload history and
+unsupported operations. Follow the acquisition seam for missing source/data operands;
+never add fixture-specific execution paths or join independent completed reports.
 
 **CI follow-up: historical failures, runtime and superseded runs.** Completed authenticated
 Windows/Linux logs identify the stale 84-versus-81 factory assertion, already corrected by
 `69d9f5a`. An earlier [Ubuntu job](https://github.com/Azaril/poe-optimizer/actions/runs/34744566224/job/103689969289)
 also hit the six-hour limit while `native_candidate_contract` was still running. Retained
 local target timing and a public annotation establish that failure; it predates optimized
-test execution and the later prepare-once/parser-sharing changes. Those fixes are not yet
-proof that current hosted jobs complete within the limit.
+test execution and the later prepare-once/parser-sharing changes. The completed repair run
+below now establishes that all current hosted suites finish within their existing deadlines.
 
-Remote main remains `deb5694`, including the CI partition, retained-state native
-checkpoint and validated parity repairs. Its [run 34794136034](https://github.com/Azaril/poe-optimizer/actions/runs/34794136034)
-has two distinct PoB failures. At 02:53 UTC on September 14, both validation jobs and the
-Linux workspace lane passed; Windows workspace and both native lanes were still running.
-The two final gates await those jobs.
-The current local package passes do not clear the hosted failures.
+Historical main commit `deb5694`'s [run 34794136034](https://github.com/Azaril/poe-optimizer/actions/runs/34794136034)
+is terminal: both validation, both native and both remaining-workspace jobs passed; both
+PoB jobs failed for the distinct causes below, and both final gates correctly failed.
+The later repair run validates those repairs across the complete matrix.
 
 **Linux lifecycle repair validated on both operating systems.** Hosted Ubuntu reports
 20 passes and two failing build-01 child parents in `item_set_lifecycle_parity`. Exact
@@ -261,14 +295,15 @@ claimed equal. Original inputs match on both platforms. Receipts:
 `runs/r2as-ci-review-01/linux-lifecycle-validated-root.json` and
 `runs/r2as-ci-review-01/windows-lifecycle-01/summary.json`.
 
-**Parser warm repair validated locally; hosted confirmation pending.** Hosted Windows reports 13 passes and
+**Parser warm repair validated on both operating systems and hosted CI.** Hosted Windows reports 13 passes and
 one failing fifth-build child in `original_parser_factory_graph_preserves_all_five_scan_contracts`.
 Three standalone build-05 reproductions pass, but the full five-build parent reproduces
 the failure: builds 01-04 pass; build 05 fails because the actual XOR64 helper is absent
 from completed still-live warm traces. Every build uses a fresh process, so this does not
 establish shared cross-build JIT state. This is a trace-evidence gate, before any reported
 native/source graph mismatch. Hosted child stderr was not retained, so matching the local
-cause to the hosted failure remains a confirmation gate. Baseline commands, binary/input
+cause to that historical hosted failure cannot be asserted from stderr. The repaired
+complete hosted PoB suites now pass on both platforms. Baseline commands, binary/input
 hashes and child logs are retained under `runs/r2as-ci-parser-scan-01/`; all previous fixed
 output files were restored byte-for-byte. Diagnose the warming harness without dropping
 the compiled-function evidence or numerical/graph comparisons. The flag helper now uses
@@ -314,10 +349,16 @@ passes after a formatting correction; the lifecycle diagnostic test is included 
 23-test result above. Independent workflow/helper review found no coverage or failure-
 propagation regression. Earlier failed formatting and source reproductions remain recorded.
 
-Publish this reviewed repair on `codex/ci-repair-r2as` for hosted validation while the three
-remaining main jobs provide useful evidence. The separate branch avoids cancelling that
-run through main's concurrency group. Advance main to the same validated commit after the
-remaining results are available; no hosted success is claimed yet.
+Repair commit `1d55cea` passed all ten jobs in
+[run 34800928085](https://github.com/Azaril/poe-optimizer/actions/runs/34800928085), on
+`codex/ci-repair-r2as`, with both final gates complete at 05:31:51 UTC on September 14.
+The separate branch preserved the earlier main run until it completed. Main was advanced
+to that exact validated commit at 05:32 UTC. This is a full hosted matrix pass for `1d55cea`,
+not a claim about later revisions or complete native build parity. The automatic main
+[run 34810017272](https://github.com/Azaril/poe-optimizer/actions/runs/34810017272) repeats the
+same commit and was still in progress at the D0 checkpoint; the preceding completed run
+remains the evidence for `1d55cea`. Later source/document revisions need their own CI result.
+Public terminal snapshots are in `runs/r2as-ci-review-01/paired-public-03/`.
 The previous grouped `990aab7` run was cancelled on both OSes, confirming concurrency
 works. Older ungrouped runs are not retroactively cancelled. Public snapshots and evidence
 are under `runs/r2as-ci-review-01/public-05/`, `public-root-01/` through `public-root-04/` and `public-08/`.
@@ -333,18 +374,15 @@ non-success dependency result. Separate suite caches avoid competing cache publi
 Static checks verify the exact package union, preserved commands/environment and all 16
 success/failure/cancelled/skipped dependency combinations. The PowerShell gate parses and
 diff hygiene passes; independent review found no coverage or failure-propagation issue.
-No YAML parser is installed, and hosted runtime/completion is not claimed. Evidence is in
+Those were static checks; the complete hosted repair matrix subsequently passed. Evidence is in
 `runs/r2as-ci-review-01/partition-01/`, with prior timeout/concurrency evidence retained under
 `runs/r2an-ci-investigation-01/`. Automatic approval review previously rejected a fresh
 credential-helper read for one older log; public annotations and already-retained logs
 supplied that timeout evidence without reading credentials.
 
-**CI completion gate:** obtain completed results for the repair revision on every suite
-and both OSes, resolve any further observed failures, and publish the validated commit
-to main. Splitting jobs addresses the
-historical accumulated timeout; it does not itself prove the remaining test suite succeeds
-or completes within the limit. Never trim exhaustive candidates or fresh-host comparisons
-to obtain a green result.
+**CI completion gate satisfied for `1d55cea`:** every suite and both final OS gates completed
+successfully, and the exact commit is published to main. Preserve exhaustive candidates,
+fresh-host comparisons and all existing deadlines as implementation resumes.
 
 **R2ap integrated: preparation reuse.**
 The exhaustive candidate target now prepares each full document once while retaining all
@@ -4173,31 +4211,28 @@ the design documents.
 
 ## Resume here
 
-1. Read the breadth dashboard and [real-build rollout](real-build-rollout.md). The shared
-   model direction is accepted. R1a source ownership, R1b selected views and the
-   [R1c native entry point](native-preparation.md) and [R2a authored skill loading](authored-skill-preparation.md)
-   are implemented; general effective producers and all five complete native evaluations remain unfinished.
-2. Check the working tree and exact-head CI. Preserve frozen worktrees and terminal
-   validation records. Fix actual hosted failures without weakening source evidence;
-   local passes do not replace pending Windows/Linux results.
-3. Preserve the PoB pin, original caller imports, all saved sets, numerical goldens and
-   frozen evidence. Keep native calculation independent of Lua and subprocesses. Host
-   lineage is assigned at import; portable callers use explicit lineage entry points.
-4. Advance R2 preparation on the original Twister and Skeletal Sniper views together.
-   R2a authored loading and per-build definition overlays are implemented. Next map the original
-   root lifecycle and effective configuration producer, then connect reached item/passive,
-   actor/action and provider prerequisites in source order. Preserve configured callback
-   semantics through the accepted typed-program seam. Reuse shared catalogs and kernels, and compare
-   executable stages with complete original-source methods. Do not add another closed profile.
-5. Preserve and extend the fixed diagnostic expectation manifest through explicit revisions.
-   Its saved-artifact comparisons do not rerun backends or establish native coverage. Add
-   explicit mapping cases and full required resource semantics before claiming R3/R5.
-6. Update this dashboard and exact per-build blockers at each integration checkpoint.
-   Verify changed interactions and exported source before expanding search or making
-   performance claims. UI autocomplete will use loaded definitions and a derived index;
-   DuckDB is deferred. Historical checkpoints below are evidence, not a request to repeat
-   completed suites or postpone real-build integration.
+1. Read [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
+   The owner's 2026-09-14 correction supersedes native PoB UI/loader/VM replication gates.
+2. Check current worktree and CI. Repair commit `1d55cea` passed all ten hosted jobs and is
+   on main; its automatic main rerun is separate. Preserve useful running checks and frozen
+   receipts. Do not rerun completed historical suites just because old text says pending.
+3. D0 inventory and redundant-facade cleanup are complete. Retire the old finite-catalog
+   search dependency closure, then implement D1 directly authored
+   BuildSpec/ScenarioSpec and D2 offline conversion to owned semantic rules/data. Keep import
+   origins optional and source formats outside the native evaluation request.
+4. Preserve generic kernels/objectives/search and independent numerical/reference fixtures.
+   Migrate or delete profile dispatch, redundant facades and source-shaped consumers by named
+   dependency closure. Do not expand Spark/Mace or add another profile.
+5. Keep all five original imports, fixed expectation manifests and PoB pin. Compare semantic
+   selections, actions, metrics, availability and mutations; UI/table/callback identity is
+   diagnostic only. Add mapping scenarios and holdouts without changing original selections.
+6. Develop shared player/minion resolution/evaluation, then joint semantic candidate search.
+   Keep complete native coverage at 0/5 until whole-build gates actually pass. Update this
+   document and the retirement inventory at every implementation checkpoint.
 
+The R2at configuration source probe and allocation bridge are paused. Their unresolved
+probe fixes and source-method frontier are not prerequisites for the architecture migration.
+Historical progress below remains evidence, not the active plan.
 
 ## R2a authored skill preparation checkpoint
 

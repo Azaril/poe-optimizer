@@ -1,5 +1,12 @@
 # Real-build API: concrete migration proposal
 
+> Architecture update, 2026-09-14: [domain architecture](domain-architecture.md) and
+> [migration plan](architecture-migration.md) control the target. Existing source-shaped
+> APIs below describe compatibility/current implementation. Native evaluation will consume
+> owned semantic builds/scenarios and compiled domain rules; PoB formats, UI lifecycles and
+> private callback/table behavior stay in adapters and optional reference tooling. Conflicting
+> whole-method or internal-identity parity requirements are superseded.
+
 Status: **architecture direction accepted on 2026-09-10**. The owner prioritizes correct
 structure over shortcuts that cause larger later refactors. This makes the
 [general build proposal](general-build-input-proposal.md) concrete enough to review. It

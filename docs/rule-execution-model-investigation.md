@@ -1,16 +1,17 @@
 # Rule execution model investigation
 
-Status: **A1 in progress; no replacement or migration selected.**
+Status: **architecture boundary decided on 2026-09-14; implementation comparisons remain open.**
+The owner selected offline conversion to project-owned game data/rules and independent
+build/evaluation/search/UI models. See [domain architecture](domain-architecture.md) and
+[active migration](architecture-migration.md). The source interpreter is not a prerequisite
+to finish before migrating. Its evidence below is an A1 baseline, not the target contract.
 
-The loader, parser and source interpreter now carry substantial complexity. Investigate
-whether a more focused execution model can reduce the total cost of achieving and maintaining
-full PoB parity. This is an architecture decision to investigate, not authorization to replace
-the current evaluator or reduce its correctness objective.
+Future experiments compare a focused domain DSL/structured authoring, compact typed IR
+execution and native algorithm compilation within that boundary. Optional Lua bindings are
+offline authoring/acquisition tools. Retaining PoB's format, UI lifecycle or generic Lua
+object semantics in the production ABI is no longer an undecided alternative. Internal
+reference details are diagnostic; compare named game-visible outcomes and transitions.
 
-Continue A1 before generalizing further unrelated Lua features. The investigation does not
-require completion of the current evaluator first. Preserve the current measured checkpoint
-and bounded correctness work while choosing representative prototypes with the owner.
-The [implementation record](implementation.md) tracks that checkpoint and active work.
 The initial [baseline](execution-model-baseline.md),
 [semantic inventory](execution-model-semantics-inventory.md) and
 [performance inventory](execution-model-performance-inventory.md) are recorded. A1 remains
@@ -124,7 +125,7 @@ The existing [shared programs](shared-source-programs.md) and
 [parser session design](parser-sessions.md) describe the current approach. Their known state
 and identity requirements are evidence for this investigation, not a predetermined winner.
 
-## Candidate models
+## Historical A1 candidate models (boundary superseded by the domain ADR)
 
 | Model | What executes | Questions the prototype must answer |
 | --- | --- | --- |
@@ -137,7 +138,7 @@ and identity requirements are evidence for this investigation, not a predetermin
 Compare coherent combinations where useful. No model is preferred merely because it has
 fewer runtime abstractions or more generated code.
 
-## Behavior and integration boundaries
+## Historical behavior inventory (use the domain ADR for acceptance gates)
 
 Full parity covers observable game and build behavior: imported meaning, selected skills,
 configuration, conditional effects, modifier composition, numerical outputs and supported

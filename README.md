@@ -24,6 +24,14 @@ shared CPU/memory limits. Optional isolated Rust workers host the PoB reference 
 structured run data and offline HTML reports; a later GUI can use the same APIs,
 with Tauri as a candidate.
 
+**Architecture correction (2026-09-14):** the target is a project-owned semantic build model
+and domain-rule package compiled offline from PoB, with independent UI, import, evaluation
+and search layers. PoB remains an optional parity oracle. Existing Spark/Mace profiles and
+source-shaped native loaders are legacy paths being inventoried for retirement; none of the
+five supplied real builds yet completes natively. See the [controlling design](docs/domain-architecture.md)
+and [migration plan](docs/architecture-migration.md). The capabilities below describe the
+current experimental implementation, not the target architecture.
+
 **Status:** experimental import and evaluation CLI with backend-neutral calculation and
 evaluation APIs. It accepts PoB share codes/XML, explicit skill/action and encounter options,
 and returns typed metrics with units, availability and structured coverage. Configurable scalar

@@ -1,12 +1,11 @@
 # Real-build rollout and breadth gates
 
-The next integration priority is working real builds through one shared native preparation
-and evaluation path. Parser rules, data catalogs and helper parity remain prerequisites;
-their test counts are not the measure of breadth. This delivery plan uses the
-[general build-model proposal](general-build-input-proposal.md), whose architecture direction
-is now accepted, prioritizing structurally correct boundaries over narrow profile reuse. The [concrete API proposal](real-build-api-proposal.md)
-uses all five originals to specify that boundary. The [implementation log](implementation.md)
-tracks execution.
+**Delivery sequence superseded on 2026-09-14:** follow [architecture migration](architecture-migration.md)
+and the [domain architecture](domain-architecture.md) before further native work. The corpus,
+observed cases and fixed numerical breadth gates below remain evidence. The old R1/R2
+source-loader/whole-method sequence is historical and is not permission to reproduce PoB's
+UI or private object model in native evaluation. Semantic BuildSpec/ScenarioSpec→plan is
+the new integration path; source observers stay in optional adapter/oracle tooling.
 
 ## Starting position
 
@@ -55,12 +54,12 @@ The Sniper build also reports negative unreserved Spirit (-67): preserve that re
 classify feasibility separately. Matching PoB's calculation does not certify a legal or
 feasible character, and a negative resource must not be clamped into an apparent success.
 
-## Delivery sequence
+## Historical delivery sequence (superseded by D0–D6)
 
 | Gate | Work | Exit evidence |
 | --- | --- | --- |
 | R1: shared real-build contract | Map all five originals to source-bound instances and independently selected views. Preserve ordered entries, exact identity bindings and unresolved/deferred frontiers. Route existing Spark/Mace through the same outer boundary. | Executable original-source comparisons for selections, precedence/fallback and duplicate/reference cases; unchanged existing numerical goldens. Source controls establish that actor/action/provider relationships fit the contract; only implemented native producers yield effective nodes. General preparation reaches named dependencies instead of profile-count guards. Complete effective graph parity remains R2/R3. |
-| R2: native preparation along real paths | Advance both first targets through effective configuration, equipment/passives, actors, skills/supports and modifier state. Add only the complete mechanisms encountered on those paths, reusing shared operations. | Paired stage snapshots against unchanged complete source methods, including ordering, ownership and partial failures. A per-build dependency report identifies completed stages and exact next blockers. No frozen PoB state is injected as production input. |
+| R2: native preparation along real paths | Advance both first targets through effective configuration, equipment/passives, actors, skills/supports and modifier state. Add only the complete mechanisms encountered on those paths, reusing shared operations. | Semantic stage results against declared game/evaluation observers, including game-relevant ordering, provider ownership and classified failures; no PoB UI/table/whole-method equivalence gate. A per-build dependency report identifies completed stages and exact next blockers. No frozen PoB state is injected as production input. |
 | R3: two complete native real-build evaluations | Evaluate the original Twister and Skeletal Sniper views through shared native plans, including all active dependencies affecting the requested outputs. | Fresh whole-document PoB/native comparisons for explicitly declared damage, resource and defence outputs in both bossing and separately identified mapping scenarios; exact actor/action/context binding and disclosed reference limitations. No dropped active effects, fixture-derived metrics, native subprocesses or per-build/per-skill profile dispatch. Partial metrics remain labelled partial. |
 | R4: interactions and search realization | Change classes/ascendancies, supports/supporting skills, items, passive allocations and providers through the same model; verify required 1..N skills/items and separate point budgets. | Fresh full-build comparisons after controlled changes, including provider removal and a non-additive interaction. Materialize and reimport results. Serial and Rayon runs agree on outcomes and selected identities. Baseline-only agreement does not pass. |
 | R5: remaining originals and new holdouts | Bring the other three original views through the same path, then expand mechanism families using independently sourced builds. | Per-build completion and explicit gaps, first-run holdout results retained, no new profile variant to accommodate an example, and regression of earlier targets after every new mechanism family. |

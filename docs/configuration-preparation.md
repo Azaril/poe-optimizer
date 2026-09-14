@@ -1,5 +1,12 @@
 # Native configuration preparation and lifecycle
 
+> Architecture update, 2026-09-14: [domain architecture](domain-architecture.md) and
+> [migration plan](architecture-migration.md) control the target. Existing source-shaped
+> APIs below describe compatibility/current implementation. Native evaluation will consume
+> owned semantic builds/scenarios and compiled domain rules; PoB formats, UI lifecycles and
+> private callback/table behavior stay in adapters and optional reference tooling. Conflicting
+> whole-method or internal-identity parity requirements are superseded.
+
 Status: R2b authored loader prefix implemented and paired with the original runtime;
 activation callbacks and effective configuration are not complete. The
 [implementation record](implementation.md) tracks validation and the resume point.

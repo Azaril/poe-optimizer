@@ -1,5 +1,12 @@
 # ADR: replaceable calculation backends
 
+> Architecture update, 2026-09-14: [domain architecture](domain-architecture.md) and
+> [migration plan](architecture-migration.md) control the target. Existing source-shaped
+> APIs below describe compatibility/current implementation. Native evaluation will consume
+> owned semantic builds/scenarios and compiled domain rules; PoB formats, UI lifecycles and
+> private callback/table behavior stay in adapters and optional reference tooling. Conflicting
+> whole-method or internal-identity parity requirements are superseded.
+
 - Status: accepted
 - Date: 2026-09-07
 - Scope: calculation core, evaluation engine, application and execution boundaries
@@ -29,19 +36,16 @@ direct Rust parallel evaluation; the PoB backend remains optional for parity and
 Neither interface requires Lua handles, filesystem paths, process IDs, a webview or a
 particular thread/async runtime. The PoB adapter privately owns those host dependencies.
 
-`BuildDocument` carries a versioned interchange format and content. PoB XML is a supported
-interchange format that either implementation can parse. It is not the canonical candidate
-model: complete class/ascendancy/tree/equipment/skill/support state, stable requirements and
-mutation/export fidelity need their own typed models. Native import must not call Lua at
-runtime. Add formats and normalized data deliberately rather than expose private PoB state.
+The target calculation request carries owned semantic BuildSpec/ScenarioSpec and stable
+actor/action queries. BuildDocument is an import/export adapter value, not a mandatory
+native or search input. Source formats and backend transports stay behind adapters; native
+resolution accepts directly authored input and returns a plan bound to build/data semantics.
 
-Native candidate adapters may prepare privately validated typed components and return
-selected measurements without serializing a document or constructing diagnostics on each
-search attempt. This is an additional prepared-input boundary over the same injected data
-and calculation semantics. Complete document evaluation remains the interchange, baseline
-and fresh-finalist contract. The generic search kernel delegates that final check through
-`CandidateEvaluator::verify`; it does not require a native handle type or an IPC transport.
-See [typed candidate evaluation](native-candidate-evaluation.md) for the current bounded adapter.
+Candidates reuse validated plans and worker scratch through the same numerical operations.
+Fresh finalist verification resolves/evaluates semantic input again; optional PoB comparison
+exports through its adapter outside the candidate hot path. XML roundtrips validate adapters,
+not native plan admission. The old profile-specific [candidate adapter](native-candidate-evaluation.md)
+is a migration target, not the final API.
 
 Metric IDs are extensible strings with actor scopes, versioned definitions and explicit
 units. A requested metric has exactly one finite, classified nonfinite or unavailable
