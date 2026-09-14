@@ -8,7 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check:
+  validation:
     strategy:
       fail-fast: false
       matrix:
@@ -46,9 +46,6 @@ jobs:
       - name: Lint
         shell: pwsh
         run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('clippy', '--workspace', '--all-targets', '--locked', '--', '-D', 'warnings')
-      - name: Test
-        shell: pwsh
-        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--all-targets', '--locked')
       - name: Test native-only CLI
         shell: pwsh
         run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-cli', '--no-default-features', '--all-targets', '--locked')
@@ -68,3 +65,66 @@ jobs:
         run: rustup target add wasm32-unknown-unknown
       - name: Check portable core and native calculations
         run: cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data -p poe-optimizer-import -p poe-optimizer-native --lib --target wasm32-unknown-unknown --locked
+
+  # Keep every workspace package and target while separating the two long suites.
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        suite: [workspace, native, pob]
+    runs-on: ${{ matrix.os }}
+    env:
+      CARGO_PROFILE_TEST_OPT_LEVEL: '2'
+      CARGO_PROFILE_TEST_DEBUG_ASSERTIONS: 'true'
+      CARGO_PROFILE_TEST_OVERFLOW_CHECKS: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Install Rust
+        run: rustup show
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        with:
+          key: ${{ matrix.suite }}
+          cache-bin: 'false'
+          cache-on-failure: 'true'
+          save-if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      - name: Verify cache setup preserved Cargo.lock
+        run: git diff --exit-code -- Cargo.lock
+      - name: Test remaining workspace packages
+        if: matrix.suite == 'workspace'
+        shell: pwsh
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--exclude', 'poe-optimizer-native', '--exclude', 'poe-optimizer-pob', '--all-targets', '--locked')
+      - name: Test native package
+        if: matrix.suite == 'native'
+        shell: pwsh
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-native', '--all-targets', '--locked')
+      - name: Test PoB package
+        if: matrix.suite == 'pob'
+        shell: pwsh
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-pob', '--all-targets', '--locked')
+
+  # Preserve the required check names and fail them if any OS or suite failed.
+  check:
+    if: ${{ always() }}
+    needs: [validation, test]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      VALIDATION_RESULT: ${{ needs.validation.result }}
+      TEST_RESULT: ${{ needs.test.result }}
+    steps:
+      - name: Require every validation and test job to pass
+        shell: pwsh
+        run: |
+          if ($env:VALIDATION_RESULT -ne 'success' -or $env:TEST_RESULT -ne 'success') {
+            throw "Validation result: $env:VALIDATION_RESULT; test result: $env:TEST_RESULT"
+          }
