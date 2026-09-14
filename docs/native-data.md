@@ -108,7 +108,7 @@ reservation and supporting skill effects are not inferred from these records.
 
 ## CLI loading and authoring
 
-`evaluate`, `metrics`, `benchmark-native`, `search-experimental` and `search-build` accept `--data <package.json>` for the native
+`evaluate`, `metrics`, `benchmark-native` and `search-build` accept `--data <package.json>` for the native
 backend. Omission selects the embedded reviewed package through the same validated loader.
 An external byte-identical copy has the same identity and reviewed status. Other packages
 are custom/unreviewed unless the host supplies an expected digest from an external review.
@@ -156,7 +156,7 @@ quest selectors/defaults and requirement checks consume that snapshot. PoB refer
 still accepts only the reviewed default content.
 
 ```powershell
-cargo run --no-default-features --locked -- search-experimental --problem examples/mace-search.json --data runs/custom.json --jobs 4 --max-evaluations 10
+cargo run --no-default-features --locked -- search-build --problem examples/passive-equipment-search.json --data runs/custom.json --jobs 4 --max-evaluations 1000
 ```
 
 Search rejects candidates that fail the closed profile's level/attribute requirements

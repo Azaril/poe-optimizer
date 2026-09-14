@@ -138,13 +138,14 @@ not a complete inventory of every future calculation dependency.
 
 ## Candidate and parallel paths
 
-Controlled candidate preparation executes the same authored skill stage and validates its
+Retained graph-candidate preparation still targets the restricted Spark/Mace profiles.
+It executes the same authored skill stage and validates its
 projection into the selected-source adapter for its fixed
 scenario. Fixed-scenario setup also executes configuration loading and validates explicit
 scalar and migrated modifier-block agreement; a changed injected migration cannot bypass document admission through
-the candidate API. `prepare_controlled_build_with_lineage` and
-`prepare_controlled_mace_with_lineage` support portable host identity assignment; their
-existing convenience wrappers allocate it at native setup. Prepared candidate calculations
+the candidate API. `prepare_controlled_build_with_lineage` supports portable host identity
+assignment; `prepare_controlled_build` allocates that identity at native setup. The finite
+Mace preparer is retired. `PreparedBuildCandidates` calculations
 still retain typed numerical components and private ownership bindings, not source XML or
 selection reports. Source/view traversal occurs during preparation, outside repeated
 calculation and Rayon dispatch. Introduced candidate supports receive the same loader

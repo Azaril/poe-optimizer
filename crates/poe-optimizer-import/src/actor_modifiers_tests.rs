@@ -174,48 +174,30 @@ fn literal_config_blocks_and_legacy_attributes_keep_raw_crlf_and_named_entity_so
     assert!(absent.is_empty() && !absent.uses_extended_scope());
 }
 #[test]
-fn disabled_unknown_blocks_remain_exact_evidence_and_normalization_is_ordered_and_strict() {
+fn disabled_unknown_blocks_remain_exact_ordered_evidence() {
     let data = configured();
     let xml = "<ConfigSet><CustomModifierBlock title=\"Disabled\" enabled=\"false\">not yet modeled</CustomModifierBlock><CustomModifierBlock title=\"Active\" enabled=\"true\">+3 to Strength</CustomModifierBlock></ConfigSet>";
     let parsed = config(xml, &data).unwrap();
     assert_eq!(parsed.records().len(), 1);
     assert_eq!(parsed.lines()[0].block_index, 1);
-    assert_eq!(parsed.blocks()[0].text, "not yet modeled");
-    let check = |text: &str| {
-        let doc = Document::parse(text).unwrap();
-        parsed.validate_reference_blocks(doc.root_element())
-    };
-    check(xml).unwrap();
-    for bad in [
-        xml.replace("enabled=\"false\"", "enabled=\"true\""),
-        xml.replace("Disabled", "Another"),
-        xml.replace("+3 to Strength", "+4 to Strength"),
-        xml.replace("not yet modeled", "changed disabled text"),
-        xml.replace(
-            "</ConfigSet>",
-            "<CustomModifierBlock title=\"Default\" enabled=\"true\"/></ConfigSet>",
-        ),
-    ] {
-        assert!(check(&bad).is_err(), "accepted {bad}");
-    }
-    let doc = Document::parse(
-        "<ConfigSet><CustomModifierBlock title=\"Default\" enabled=\"true\"/></ConfigSet>",
-    )
-    .unwrap();
-    config("<ConfigSet/>", &data)
-        .unwrap()
-        .validate_reference_blocks(doc.root_element())
-        .unwrap();
-    let legacy = config(
-        "<ConfigSet><Input name=\"customMods\" string=\"+3 to Strength\"/></ConfigSet>",
-        &data,
-    )
-    .unwrap();
-    let doc=Document::parse("<ConfigSet><CustomModifierBlock title=\"Default\" enabled=\"true\">\n\t+3 to Strength\n</CustomModifierBlock></ConfigSet>").unwrap();
-    legacy
-        .validate_reference_blocks(doc.root_element())
-        .unwrap();
+    assert_eq!(
+        parsed.blocks(),
+        &[
+            ActorModifierBlock {
+                title: "Disabled".into(),
+                enabled: false,
+                text: "not yet modeled".into()
+            },
+            ActorModifierBlock {
+                title: "Active".into(),
+                enabled: true,
+                text: "+3 to Strength".into()
+            },
+        ]
+    );
+    assert_eq!(parsed.records()[0].source.as_deref(), Some("Custom:Active"));
 }
+
 #[test]
 fn actor_config_rejects_unknown_metadata_split_text_numeric_entities_mixed_sources_and_bounds() {
     let data = configured();
@@ -312,7 +294,7 @@ fn maximum_admitted_source_and_normalized_record_evidence_fit_the_media_bound() 
         "must exercise the former evidence limit"
     );
     assert!(
-        expanded_bytes + 256 * 1024 < super::super::controlled_mace::MAX_NATIVE_MACE_PROFILE_BYTES
+        expanded_bytes + 256 * 1024 < super::super::controlled_build::MAX_NATIVE_EVIDENCE_BYTES
     );
     eprintln!(
         "actor evidence bytes: reviewed64lines={reviewed_bytes}, configured512records={expanded_bytes}"

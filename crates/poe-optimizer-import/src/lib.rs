@@ -10,7 +10,6 @@ pub mod build_source;
 pub mod configuration;
 pub mod configuration_definitions;
 pub mod controlled_build;
-pub mod controlled_mace;
 pub mod equipment;
 mod item_formatting;
 pub mod item_loading;

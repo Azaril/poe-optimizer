@@ -74,24 +74,10 @@ attribute preflight, while its build calculations remain explicit PoB evaluation
 
 ## Prepared searches and reports
 
-Problem schema **6** enables authored attribute/resource configuration, with existing local weapons,
-class/ascendancy, finite passive and support-loadout axes. Schemas 1–5 reject authored actor
-blocks, legacy custom modifiers and explicit Spirit quest keys. Report schema **7** uses
-scope `mace_actor_local_weapon_class_passive_support_loadouts_v1`.
-The example fixes actor configuration for a run; actor modifiers are not a new optimizer
-axis yet. Its objective and constraints remain configurable.
-
-```powershell
-cargo run --release --no-default-features --locked -- search-experimental --backend native --problem examples/mace-actor-search.json --jobs 4 --max-proposals 8192 --max-evaluations 4412
-```
-
-`PreparedMaceCandidates` stores one actor component per tree/scenario alongside weapon
-and support components. `actor_preparations` reports that numerical setup work and its
-elapsed time. A zero preparation `calculations` field means no full build evaluation;
-it does not mean that resource preparation is free. Candidate skill output is freshly
-calculated and no candidate-result cache is stored. Selected composition failures remain
-associated with their affected axis. Baseline and finalist are complete fresh evaluations
-counted in the same attempt budget. Empty legal domains still use zero build attempts.
+The old finite Mace actor catalog and benchmark are retired. The remaining graph adapter
+reuses shared actor components and checks requirements before candidate calculation.
+Independent actor operation/condition/quest comparisons against fresh PoB builds remain
+in the test suite. See [retirement inventory](legacy-retirement.md) for the next migration.
 
 `player.spirit` is a pool-points metric for maximum Spirit before reservation in both
 backends. It is appended to the native catalog, preserving previous indices. Mace's
@@ -108,8 +94,5 @@ full typed/document candidate matrices, serial/Rayon searches and allocation reg
 Each checks a different boundary. Typed/document agreement alone is not an independent
 numerical oracle. Six original calibration goldens and the source pin remain unchanged.
 
-The benchmark's explicit `--candidate-set actor-resources` uses the actor fixture and
-local weapon/support choices with all selected-data tree choices. Setup, fresh equivalence
-calculations and timed API layers are reported separately. Bounded Mace throughput does
-not establish general-build speed or optimizer quality. Dated results and remaining work
-belong in [the living implementation record](implementation.md).
+Historical bounded-Mace benchmark results remain in the implementation record; the
+retired harness is not a current performance tool. General-build throughput remains open.

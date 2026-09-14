@@ -1,9 +1,10 @@
 # Native calculation engine and browser target
 
-This document defines the native replacement track. Delivery status, validation results
-and the next resume point belong in [implementation.md](implementation.md). The Rust
-engine develops alongside the mlua/PoB evaluator: the latter supplies a versioned oracle
-and usable evaluation path while the native engine grows through verified slices.
+This document records retained numerical kernels, restricted legacy profiles and their
+validation history. [Domain architecture](domain-architecture.md) and the
+[migration plan](architecture-migration.md) control the owned semantic replacement.
+Delivery status and the next resume point belong in [implementation.md](implementation.md).
+The mlua/PoB evaluator remains an optional versioned oracle and reference evaluation path.
 
 ## Boundaries and intended outcome
 
@@ -420,55 +421,40 @@ closed profile and do not establish a general native build engine or game certif
 
 ### Prepared typed candidate boundary
 
-The numerical kernel is `mace::evaluate_with_components`, receiving resolved
-`MaceInput`, `CharacterInput`, selected `CompiledGameData`, a privately bound
-`PreparedWeaponStats` and `PreparedMaceSupports`. Legacy wrappers prepare an unmodified
-weapon through the same local assembly pipeline. The typed search adapter calls that same function. It introduces no
-second damage model, game-balance constants or Lua fallback.
+The retained numerical entry point is `mace::evaluate_with_actor`, receiving resolved
+`MaceInput`, `CharacterInput`, selected `CompiledGameData`, bound `PreparedWeaponStats`,
+`PreparedMaceSupports` and `PreparedActorResources`. `mace::evaluate_with_components`
+prepares actor resources and delegates to it. The typed candidate adapter calls the same
+actor-aware kernel; it introduces no second damage model or Lua fallback.
 
-`NativeBackend::prepare_controlled_mace` accepts an immutable `NativeMaceComponents` view
-issued by portable import after a verified full-document baseline. The native adapter
-reuses the exact document parser once for scenario admission and metric validation, then
-reuses the shared character resolver for class attributes and owned passive effects.
-The resulting `PreparedMaceCandidates` stores one numerical input and prepared local
-stat object per weapon, one resolved
-character per tree choice and one compiled support handle per loadout. Preparation and
-retained component storage therefore grow with the sum of axis sizes. The separate import
-catalog still performs eager Cartesian alternative hashing.
+`NativeBackend::prepare_controlled_build` accepts a `ControlledBuildCatalog`, requires its
+exact compiled-data instance, and validates source/scenario admission once. The resulting
+`PreparedBuildCandidates` retains profile input, weapon components, introduced-support
+admission results and metric selectors. A private `AdmittedBuildSelection` carries the
+selection and actor prepared by `ControlledBuildDomain`. This lazy component path avoids
+the retired finite catalog's Cartesian axis enumeration, but its numerical dispatch still
+contains Spark and Mace only.
 
-Candidate handles preserve exact catalog membership and selected-data requirements without
-exposing mutable numerical fields. They carry a private catalog-instance binding and axis
-indices; the prepared native object checks that binding before reading inputs. Backend and
-data identities are checked at preparation and timed execution. Compiled support handles
-also retain their originating compiled-dataset binding. Ownership, support eligibility and
-source/frame admission are preserved; point budgets and user locks remain search policies.
+`PreparedBuildCandidates::calculate` recomputes the selected kernel; `measure` produces a
+stack snapshot without a host clock. `NativeBackend::evaluate_controlled_build` adds
+backend/data ownership and cooperative deadline checks. Retained
+[candidate contract tests](../crates/poe-optimizer-native/tests/native_build_candidate_contract.rs)
+cover successful allocation-free calls for their admitted selections, foreign handles,
+detached components, deferred scalar failures, owned metric conversion and clocks.
+Prepared calculations retain no XML or build-result cache. `snapshot_measurements` allocates
+the selected owned measurements; admission, scheduling and reporting have separate costs.
 
-`PreparedMaceCandidates::calculate` recomputes the supported kernel, and `measure` produces
-a stack snapshot without clocks or OS services. Timed `evaluate_controlled_mace` applies
-the host clock around the calculation. These successful calls allocate nothing in the
-mixed-candidate regression and retain no XML, JSON, diagnostic construction or build-result
-cache. `snapshot_measurements` converts selected values into the shared owned measurement
-contract and allocates query/reason strings and a vector. This separation does not imply
-allocation-free scheduling, archives, preparation or complete search runs.
+Selected scalar/weapon/support failures remain local to affected handles. Requirements and
+unsupported operations are still checked; deferred errors do not grant coverage. Search
+keeps failed imported baselines visible without suppressing valid repaired alternatives.
+Its `verify` hook performs a fresh counted full-document finalist calculation with exact
+realization/export checks. Typed snapshots remain diagnostic.
 
-Valid individual custom passive values can exceed the numerical scope when combined.
-Character preparation preserves that axis's error until an affected candidate is actually
-evaluated. Other candidates continue to calculate, including when the invalid combination
-is excluded by a lock. Unknown owners/operations and invalid requirements do not become
-valid through this deferred numeric-error path.
-
-Initial baseline and fresh finalist calculations still use full document evaluation,
-source-preserving materialization and strict realization/export checks. Verification is
-one counted calculation through the search evaluator's `verify` hook. Typed snapshots
-remain diagnostic and do not expand mechanic coverage. Full native parity with PoB,
-including the supplied minion build, is unfinished.
-
-The [adapter contract](native-backend.md#preparation-parallel-execution-and-clocks)
-describes these APIs and their clocks. Differential tests compare every admitted legal
-candidate against the full native document path, with injected data, complete numerical
-outputs, availability and finite metric bits. Pinned-source oracles and fresh PoB build
-comparisons remain separate requirements for numerical parity. Measurement commands and
-checkpoint results belong in the [implementation record](implementation.md).
+The deleted finite Mace preparer and its mixed-axis benchmark are historical. Retained
+kernel and graph-candidate tests preserve useful numerical behavior; they do not establish
+full native parity for the five originals. The [adapter contract](native-backend.md#preparation-parallel-execution-and-clocks)
+describes current methods, and the [migration plan](architecture-migration.md) controls the
+owned semantic replacement. Historical rates stay bound to their recorded workloads/data.
 
 ### Resolved class attributes and ordinary entrance effects
 

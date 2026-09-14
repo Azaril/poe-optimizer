@@ -144,47 +144,54 @@ fn receiving_layer_sources_conditions_and_removals_match_document_dispatch_and_r
 }
 
 #[test]
-fn legacy_mace_passive_actor_migration_retains_one_receiver_contribution_and_fresh_evidence() {
-    use poe_optimizer_data::class_tree::ClassTreeSelection;
-    use poe_optimizer_import::controlled_mace::{
-        ControlledMaceCatalog, MaceSupportLoadout, NormalMaceAlternative,
-    };
+fn passive_actor_migration_retains_one_receiver_contribution_and_fresh_evidence() {
     let backend = NativeBackend::new();
-    let selections = [None, Some(38646)].map(|node| ClassTreeSelection {
-        class_id: 6,
-        ascendancy_id: None,
-        entrance_node_id: node,
-        ascendancy_node_id: None,
-    });
-    let catalog = ControlledMaceCatalog::with_tree_loadouts(
-        Arc::new(backend.data().snapshot().clone()),
-        MACE.into(),
-        vec![NormalMaceAlternative {
-            id: "wood".into(),
-            item_text: "Rarity: NORMAL\nWooden Club\nItem Level: 1\nQuality: 20\nImplicits: 0"
-                .into(),
-        }],
-        vec![MaceSupportLoadout::new(vec![]).unwrap()],
-        selections.to_vec(),
+    let catalog = Arc::new(
+        ControlledBuildCatalog::new(
+            backend.data().clone(),
+            MACE.into(),
+            vec![EquipmentAlternative {
+                instance_id: "wood".into(),
+                pob_item_id: 73,
+                item_text: "Rarity: NORMAL\nWooden Club\nItem Level: 1\nQuality: 20\nImplicits: 0"
+                    .into(),
+            }],
+        )
+        .unwrap(),
+    );
+    let domain = ControlledBuildDomain::new(
+        catalog.clone(),
+        CandidateConstraints {
+            budgets: CandidateBudgets {
+                ordinary_passive_points: 1,
+                ascendancy_passive_points: 0,
+                active_skill_count: 1,
+                supports_per_skill: 2,
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+        AttributeOptionLocks::default(),
     )
     .unwrap();
-    assert!(!catalog.uses_receiving_defence_scope());
-    let baseline = backend.calculate(&request(MACE), BUDGET).unwrap();
-    let scenario = catalog
-        .bind_native_baseline(&baseline, &backend.identity())
-        .unwrap();
-    let components = catalog
-        .native_components(&scenario, &backend.identity())
-        .unwrap();
-    let prepared = backend.prepare_controlled_mace(&components, &[]).unwrap();
+    let prepared = backend.prepare_controlled_build(&catalog, &[]).unwrap();
     let mut armour = Vec::new();
-    for alternative in catalog.alternatives() {
-        let handle = catalog
-            .validated_native_candidate(&alternative.candidate, &components)
+    for node in [None, Some(38646)] {
+        let mut selection = catalog.source_selection();
+        selection.candidate.class_id = "6".into();
+        selection.candidate.ascendancy_id = None;
+        selection.candidate.passives = node.into_iter().collect();
+        selection.attribute_options.clear();
+        selection
+            .candidate
+            .equipment
+            .insert("Weapon 1".into(), "wood".into());
+        let handle = domain
+            .admit(selection, &mut ActorScratch::default())
             .unwrap();
         let full = backend
             .calculate(
-                &request(&catalog.materialize(&alternative.candidate).unwrap().content),
+                &request(&domain.materialize(&handle).unwrap().content),
                 BUDGET,
             )
             .unwrap();
@@ -193,34 +200,34 @@ fn legacy_mace_passive_actor_migration_retains_one_receiver_contribution_and_fre
             serde_json::to_value(prepared.snapshot_measurements(&typed)).unwrap(),
             serde_json::to_value(&full.measurements).unwrap()
         );
-        let evidence: Value = serde_json::from_str(
-            &full
-                .attachments
-                .iter()
-                .find(|a| a.media_type.contains("native-profile+"))
-                .unwrap()
-                .content,
-        )
-        .unwrap();
+        catalog
+            .validate_native_realization(&handle, &full, &backend.identity())
+            .unwrap();
+        let attachment = full
+            .attachments
+            .iter()
+            .find(|a| a.media_type.contains("native-profile+"))
+            .unwrap();
+        let evidence: Value = serde_json::from_str(&attachment.content).unwrap();
         armour.push(evidence["receiving_defence"]["armour"].as_f64().unwrap());
+        let mut tampered: EvaluationResult =
+            serde_json::from_value(serde_json::to_value(&full).unwrap()).unwrap();
+        let attachment = tampered
+            .attachments
+            .iter_mut()
+            .find(|a| a.media_type.contains("native-profile+"))
+            .unwrap();
+        let mut value: Value = serde_json::from_str(&attachment.content).unwrap();
+        value["receiving_defence"]["resistances"]["chaos"] = serde_json::json!(123);
+        attachment.content = value.to_string();
+        assert!(
+            catalog
+                .validate_native_realization(&handle, &tampered, &backend.identity())
+                .is_err()
+        );
     }
     armour.sort_by(f64::total_cmp);
     assert_eq!(armour, vec![0.0, 20.0]);
-    let mut tampered: EvaluationResult =
-        serde_json::from_value(serde_json::to_value(&baseline).unwrap()).unwrap();
-    let attachment = tampered
-        .attachments
-        .iter_mut()
-        .find(|a| a.media_type.contains("native-profile+"))
-        .unwrap();
-    let mut value: Value = serde_json::from_str(&attachment.content).unwrap();
-    value["receiving_defence"]["resistances"]["chaos"] = serde_json::json!(123);
-    attachment.content = value.to_string();
-    assert!(
-        catalog
-            .bind_native_baseline(&tampered, &backend.identity())
-            .is_err()
-    );
 }
 
 #[test]

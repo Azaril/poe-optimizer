@@ -25,7 +25,6 @@ pub(crate) struct Profile {
     pub prepared_weapon: Option<poe_optimizer_engine::weapon::PreparedWeaponStats>,
     pub equipment: BTreeMap<String, poe_optimizer_import::equipment::ValidatedEquipmentItem>,
     pub actor_modifiers: poe_optimizer_import::actor_modifiers::ValidatedActorModifiers,
-    pub actor_quests: poe_optimizer_engine::actor::ActorQuestSelection,
     pub prepared_actor: poe_optimizer_engine::actor::PreparedActorResources,
     pub prepared_armour: BTreeMap<String, poe_optimizer_engine::armour::PreparedArmour>,
     pub tree: crate::tree::NativeTree,
@@ -1147,7 +1146,6 @@ fn parse_projection(
         prepared_weapon,
         actor_modifiers,
         equipment,
-        actor_quests,
         prepared_actor,
         prepared_armour,
         tree: resolved_tree,
@@ -1403,7 +1401,7 @@ mod scenario_tests {
                 _ => panic!("selected full/scenario profiles disagree"),
             }
             assert_eq!(full.config, scenario.config);
-            assert_eq!(full.actor_quests, scenario.actor_quests);
+            assert_eq!(full.prepared_actor.quests(), scenario.actor_quests);
             assert_eq!(full.export_xml, source);
         }
     }

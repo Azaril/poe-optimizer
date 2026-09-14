@@ -15,7 +15,7 @@ fn attachment(result: &EvaluationResult, media: &str) -> Result<Value> {
     let value = matching
         .next()
         .ok_or_else(|| mismatch("required resolved evidence is missing"))?;
-    if matching.next().is_some() || value.content.len() > 16 * 1024 * 1024 {
+    if matching.next().is_some() || value.content.len() > MAX_NATIVE_EVIDENCE_BYTES {
         return Err(mismatch("resolved evidence must be unique and bounded"));
     }
     serde_json::from_str(&value.content).map_err(|_| mismatch("resolved evidence is not JSON"))
@@ -30,7 +30,18 @@ impl ControlledBuildCatalog {
         result: &EvaluationResult,
         expected_backend: &BackendIdentity,
     ) -> Result<()> {
-        if !self.binding().accepts(handle) {
+        self.validate_prepared_native_realization(handle.prepared(), result, expected_backend)
+    }
+    /// Checks fresh diagnostic evaluation against a structurally prepared selection.
+    /// Requirement feasibility remains a separate admission decision; this verifies
+    /// the same source, ownership and resolved evidence as the admitted entry point.
+    pub fn validate_prepared_native_realization(
+        &self,
+        handle: &PreparedBuildSelection,
+        result: &EvaluationResult,
+        expected_backend: &BackendIdentity,
+    ) -> Result<()> {
+        if !handle.bound_to(self) {
             return Err(BuildCatalogError::Ownership);
         }
         result
@@ -52,7 +63,7 @@ impl ControlledBuildCatalog {
                 "candidate retained an unresolved scalar calculation failure",
             ));
         }
-        let expected_xml = self.materialize(handle)?;
+        let expected_xml = self.materialize_prepared(handle)?;
         if result.exports.len() != 1
             || result.exports[0].format != BuildFormat::PathOfBuilding2Xml
             || result.exports[0].content != expected_xml.content
@@ -258,7 +269,7 @@ impl ControlledBuildCatalog {
     }
     fn check_skill_evidence(
         &self,
-        handle: &AdmittedBuildSelection,
+        handle: &PreparedBuildSelection,
         result: &EvaluationResult,
     ) -> Result<()> {
         let data = self.compiled.snapshot().package();
@@ -348,7 +359,7 @@ impl ControlledBuildCatalog {
         }
         Ok(())
     }
-    fn expected_tree_evidence(&self, handle: &AdmittedBuildSelection) -> Value {
+    fn expected_tree_evidence(&self, handle: &PreparedBuildSelection) -> Value {
         let tree = handle.tree();
         let data = self.compiled.snapshot();
         let selection = &tree.selection;

@@ -6,9 +6,9 @@ use poe_optimizer_core::{
     options::EvaluationOptions,
 };
 use poe_optimizer_data::{class_tree::ClassTreeSelection, game_data::bundled_snapshot};
-use poe_optimizer_import::controlled_mace::{
-    ControlledMaceCatalog, MaceSupportLoadout, NormalMaceAlternative,
-};
+#[path = "support/parity_build.rs"]
+mod parity_build;
+use parity_build::{ParityBuild, WeaponCase};
 use poe_optimizer_native::NativeBackend;
 use poe_optimizer_pob::backend::PobBackend;
 use std::{path::PathBuf, sync::Arc};
@@ -64,7 +64,7 @@ fn compare(label: &str, native: &EvaluationResult, pob: &EvaluationResult) {
     assert_eq!(native.build.class_name, pob.build.class_name);
     assert_eq!(native.build.ascendancy_name, pob.build.ascendancy_name);
 }
-fn loadouts() -> Vec<MaceSupportLoadout> {
+fn loadouts() -> Vec<Vec<String>> {
     [
         vec![],
         vec!["brutality_i"],
@@ -75,7 +75,7 @@ fn loadouts() -> Vec<MaceSupportLoadout> {
         vec!["heavy_swing", "rapid_attacks_i"],
     ]
     .into_iter()
-    .map(|keys| MaceSupportLoadout::new(keys.into_iter().map(String::from).collect()).unwrap())
+    .map(|keys| keys.into_iter().map(String::from).collect())
     .collect()
 }
 #[test]
@@ -98,7 +98,7 @@ fn all_support_loadouts_match_fresh_pob_builds_and_reimports() {
                 "enemyFireResist\" number=\"0\"",
                 &format!("enemyFireResist\" number=\"{fire}\""),
             );
-        let trees = vec![
+        let trees = [
             ClassTreeSelection {
                 class_id: 6,
                 ascendancy_id: None,
@@ -130,23 +130,20 @@ fn all_support_loadouts_match_fresh_pob_builds_and_reimports() {
                 ascendancy_node_id: Some(17058),
             },
         ];
-        let catalog = ControlledMaceCatalog::with_tree_loadouts(
+        let catalog = ParityBuild::new(
             data.clone(),
             template,
             ["Wooden Club", "Smithing Hammer"]
                 .into_iter()
                 .enumerate()
-                .map(|(i, name)| NormalMaceAlternative {
+                .map(|(i, name)| WeaponCase {
                     id: i.to_string(),
                     item_text: format!(
                         "Rarity: NORMAL\n{name}\nItem Level: 1\nQuality: 20\nImplicits: 0"
                     ),
                 })
                 .collect(),
-            loadouts(),
-            trees.clone(),
-        )
-        .unwrap();
+        );
         let nb = native
             .evaluate(&request(catalog.template_build()), BUDGET)
             .unwrap();
@@ -154,8 +151,6 @@ fn all_support_loadouts_match_fresh_pob_builds_and_reimports() {
             .evaluate(&request(catalog.template_build()), BUDGET)
             .unwrap();
         compare("baseline", &nb, &pb);
-        let ns = catalog.bind_native_baseline(&nb, &identity).unwrap();
-        let ps = catalog.bind_baseline(&pb).unwrap();
         for (tree_index, tree) in trees.iter().enumerate() {
             for weapon in ["0", "1"] {
                 for loadout in loadouts() {
@@ -163,14 +158,13 @@ fn all_support_loadouts_match_fresh_pob_builds_and_reimports() {
                     // the speed entrance and each resistance owner with paired support.
                     if tree_index > 0
                         && (weapon != "0"
-                            || (tree_index > 1 && loadout.id() != "heavy_swing+rapid_attacks_i"))
+                            || (tree_index > 1
+                                && loadout.join("+") != "heavy_swing+rapid_attacks_i"))
                     {
                         continue;
                     }
-                    let candidate = catalog
-                        .resolve_tree_loadout_candidate(tree, weapon, &loadout)
-                        .unwrap();
-                    let build = catalog.materialize(candidate).unwrap();
+                    let candidate = catalog.prepare(tree, weapon, &loadout);
+                    let build = catalog.materialize(&candidate);
                     let req = request(build);
                     let label = format!("{armour}/{tree_index}/{weapon}/{loadout:?}");
                     let actual = native
@@ -180,15 +174,12 @@ fn all_support_loadouts_match_fresh_pob_builds_and_reimports() {
                         .evaluate(&req, BUDGET)
                         .unwrap_or_else(|e| panic!("{label}: {e}"));
                     compare(&label, &actual, &expected);
-                    catalog
-                        .validate_native_realization(candidate, &actual, &ns)
-                        .unwrap();
-                    catalog
-                        .validate_realization(candidate, &expected, &ps)
-                        .unwrap();
+                    catalog.assert_realization(&candidate, &actual, &expected, &identity, &pb);
                     assert_eq!(actual.exports[0].content, req.build.content);
                     evaluated += 1;
-                    if tree_index == 0 && weapon == "1" && loadout.id() == "brutality_i+heavy_swing"
+                    if tree_index == 0
+                        && weapon == "1"
+                        && loadout.join("+") == "brutality_i+heavy_swing"
                     {
                         let reimport = oracle
                             .evaluate(&request(actual.exports[0].clone()), BUDGET)

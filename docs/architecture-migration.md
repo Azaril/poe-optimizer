@@ -55,7 +55,9 @@ numerical validation before its meaning is preserved.
    cases to the shared API in the same checkpoint. Record remaining consumers by name.
 
 See the [concrete retirement inventory](legacy-retirement.md) for file/type dependencies,
-test migration catches and the next bounded deletion.
+completed finite-catalog deletion and remaining shared-type catches. The
+[owned build contract](owned-build-contract.md) proposes concrete D1 records and validation
+seams; its documented APIs are not implemented yet.
 
 ## Retirement ownership
 
@@ -64,7 +66,7 @@ test migration catches and the next bounded deletion.
 | Generic metrics/objectives, CandidateEvaluator, search budgets, cancellation and locks | Reuse; adapt public request/candidate types to semantic inputs. |
 | Injected catalogs, stat aggregation, local arithmetic, actor/defence/action kernels | Reuse behavior after extracting profile-specific inputs/outputs; preserve numerical tests. |
 | ImportedBuildInstance/source spans/selected-view adapters | Import/export sidecars and normalization tools. They cannot be required by the new native evaluation ABI. |
-| NativeInput/NativeCalculation Spark/Mace dispatch, profile::parse, PreparedMaceCandidates and profile search commands | Temporary legacy only. Delete entry points and dependency closure as semantic consumers land; do not add profile variants. |
+| NativeInput/NativeCalculation Spark/Mace dispatch, profile::parse and remaining profile search adapter | Temporary legacy only. Delete entry points and dependency closure as semantic consumers land; do not add profile variants. |
 | Data records and CompiledGameData caches specific to legacy profiles | Remove with last legacy consumer; owned package must not require Spark/Mace sections. |
 | Config controls, loader stages, class protocols, Lua callbacks/upvalues and source VM | Confine needed acquisition/oracle tooling to optional tooling dependencies; delete unused native consumers. Port actual game effects to domain rules. Do not simply rename source bytecode as domain IR. |
 | Controlled mutation/XML export helpers | Keep only as format adapters/oracle tests where needed; search operates on BuildSpec. Delete redundant re-export facades immediately. |

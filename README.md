@@ -27,13 +27,15 @@ with Tauri as a candidate.
 **Architecture correction (2026-09-14):** the target is a project-owned semantic build model
 and domain-rule package compiled offline from PoB, with independent UI, import, evaluation
 and search layers. PoB remains an optional parity oracle. Existing Spark/Mace profiles and
-source-shaped native loaders are legacy paths being inventoried for retirement; none of the
-five supplied real builds yet completes natively. See the [controlling design](docs/domain-architecture.md)
+source-shaped native loaders are legacy paths being retired; none of the
+five supplied real builds yet completes natively. See the [controlling design](docs/domain-architecture.md),
+[reviewed owned-input contract](docs/owned-build-contract.md),
 and [migration plan](docs/architecture-migration.md). The capabilities below describe the
 current experimental implementation, not the target architecture.
 
-**Status:** experimental import and evaluation CLI with backend-neutral calculation and
-evaluation APIs. It accepts PoB share codes/XML, explicit skill/action and encounter options,
+**Status:** experimental import and evaluation CLI with switchable native and optional PoB
+backends. Its current input API still uses PoB documents; the owned semantic API above is
+not implemented yet. It accepts PoB share codes/XML, explicit skill/action and encounter options,
 and returns typed metrics with units, availability and structured coverage. Configurable scalar
 objectives can be assessed during evaluation or against saved results without recalculation.
 Each PoB request
@@ -54,39 +56,15 @@ checks. The native [`search-build` workflow](docs/passive-equipment-assembly.md)
 searches connected passives, physical attribute choices, supplied weapons/amulets and fixed helmets/body armour/gloves/boots,
 class/ascendancy identities and the admitted support loadouts. Compiled actor components
 are combined per candidate; no Cartesian build or result table is constructed.
-Legacy `search-experimental --backend native` searches supplied Mace item/support
-choices and optional class/ascendancy/ordinary and ascendancy passive selections directly on Rayon with exact locks
-and source-preserving mutations. Mace support choices include all seven zero/one/two-gem
-loadouts from Brutality I, Heavy Swing and Rapid Attacks I, with values and eligibility in
-[the injected data package](docs/support-loadouts.md). [Local item rules](docs/local-weapons.md)
-also admit supplied normal/rare Maces with physical/fire damage, local speed and critical
-modifiers. [Shared actor preparation](docs/actor-resources.md) adds configurable attribute and
-maximum-resource modifiers with the same calculations for skill output and item/support
-requirements; `player.spirit` exposes maximum Spirit before reservation.
-[Shared receiving defences](docs/receiving-defences.md) adds source-ordered Armour, Evasion,
-Energy Shield and resistance BASE/INC from configuration, gear and passives. Graph problem
-8 exposes this scope with configurable defence constraints and report 9.
-[Local armour equipment](docs/local-armour.md) adds separate item quality/local rounding,
-288 injected fixed bases and player armour/evasion rating metrics; graph problem 9/report
-10 searches this equipment scope. [Body Armour and movement](docs/body-armour-movement.md)
-adds 114 body bases, source movement penalties and `player.movement_speed_pct` (100 is
-baseline); graph problem 10/report 11 searches that scope. [Shared action timing](docs/action-timing.md)
-adds actor action speed, the ordinary server-tick cap and `player.action_speed_pct`; graph
-problem 11/report 12 searches authored action-speed sources. [Breadth validation](docs/breadth-validation.md)
-uses the five newly supplied full builds to guide general native admission and further shared
-pipelines. Caller-driven [`inspect-build`](docs/build-source-containers.md) preserves
-root/container, skill, configuration and [item-source evidence](docs/item-source-and-loading.md)
-within the shared bounded XML/lexical subset. With `--with-definitions` or `--data`, it also
-reports ordered native item loading with [data-driven formatting](docs/item-formatting.md),
-[structural modifier parsing](docs/modifier-parser.md),
-[unique requirements](docs/unique-requirements.md) and
-[authored affix reconciliation](docs/item-source-and-loading.md#authored-affix-state) and
-[socketed-augment reconstruction](docs/item-source-and-loading.md#socketed-augment-state) from the selected catalog.
-Pending callbacks and assembly operations stop explicitly. Inspection does not calculate effects; native skill admission
-remains separate and currently bounded to Spark/Mace. On the legacy command, `--backend pob`
-selects the optional reference backend. Native search uses [typed candidate calculation](docs/native-candidate-evaluation.md)
-by default, with complete document evaluation available through `--native-evaluation document`.
-Search baselines, when a legal initial seed exists, and finalist checks recalculate complete documents.
+The obsolete `search-experimental` command, finite Mace catalog/candidate API and dedicated
+benchmark have been removed. Old problem files are not silently rerouted. The surviving
+`search-build` is also profile-limited and will be replaced through the
+[retirement plan](docs/legacy-retirement.md). Shared actor, defence, item and timing kernels
+and independent numerical/reference fixtures remain available for that migration.
+Caller-driven [`inspect-build`](docs/build-source-containers.md) preserves authored build
+containers and reports available definitions and explicit preparation gaps; inspection is
+not a complete evaluation. Native graph search uses prepared inputs by default and retains
+`--native-evaluation document` for complete-document comparison.
 The developer `search-calibration` command compares complete builds from a required
 [caller-supplied catalog](docs/pob-candidates.md); it has no embedded build corpus.
 Its fresh finalist checks establish numerical consistency while generic realization and
@@ -99,7 +77,7 @@ Optional [`extract-game-data`](docs/game-data-extraction.md) regenerates the cur
 package from pinned source with a separate extraction-evidence companion.
 `benchmark-native` measures prepared or full-document typed evaluation throughput.
 Unrestricted joint mutation, full native mechanic coverage, HTML reports and browser
-bindings remain unimplemented. See [the runnable experimental workflow](docs/experimental-search.md)
+bindings remain unimplemented. See [the retained graph workflow](docs/passive-equipment-assembly.md)
 and [search contracts](docs/search-kernel.md).
 The [living implementation document](docs/implementation.md) is the progress and resume record;
 update it at feature/experiment checkpoints and handoffs.
@@ -129,12 +107,6 @@ For the native-only executable (supported profiles are listed in [native backend
 cargo build -p poe-optimizer-cli --release --no-default-features --locked
 cargo run -p poe-optimizer-cli --no-default-features --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-build --problem examples/passive-equipment-search.json --jobs 4 --max-evaluations 1000
-cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-search.json --jobs 4 --max-evaluations 10
-cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-class-search.json --jobs 4 --max-evaluations 746
-cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-resistance-search.json --jobs 4 --max-evaluations 842
-cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-support-search.json --jobs 4 --max-evaluations 2942
-cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-local-weapon-search.json --jobs 4 --max-proposals 8192 --max-evaluations 4412
-cargo run -p poe-optimizer-cli --no-default-features --locked -- search-experimental --problem examples/mace-actor-search.json --jobs 4 --max-proposals 8192 --max-evaluations 4412
 ```
 
 For the full development workspace, including optional PoB references and parity tests:

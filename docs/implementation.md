@@ -13,8 +13,9 @@ evidence, not breadth completion.
 
 **CI restored:** all ten jobs on Windows and Linux passed for repair commit `1d55cea`
 ([run 34800928085](https://github.com/Azaril/poe-optimizer/actions/runs/34800928085)).
-That exact commit is now on main. Both platform failures are fixed without reducing test
-coverage, trace evidence or comparison assertions; details and receipts are below.
+Both platform failures are fixed without reducing test coverage, trace evidence or
+comparison assertions; details and receipts are below. Later main checkpoints have
+separate CI runs; do not carry this result forward as an unverified latest-head pass.
 
 **Current direction: architecture correction before further native parity expansion.**
 The owner explicitly requested project-owned data/model/rules with offline PoB conversion,
@@ -34,18 +35,56 @@ probe files were adopted; probe review found three unresolved harness issues. Th
 block the owned-model work and are not next implementation tasks. Useful source observations
 remain available as reference evidence. No new complete native evaluation has been claimed.
 
-**Retirement:** the [tracked inventory](legacy-retirement.md) identifies active callers and
-unique tests. The redundant PoB mutation re-export is removed and its test now imports the
-owning import crate directly. The unchanged focused suite passes seven tests (one existing
-child entry remains ignored); formatting, strict target Clippy and diff checks pass. Receipt:
-`runs/architecture-reset-01/facade-validation-01/receipt.json`. The 394 checked local document
-links resolve; two independent design reviews found no blocking boundary flaw. Larger Spark/Mace paths
-remain explicitly legacy until their dependency closures are migrated/deleted.
+**Finite-catalog retirement complete and validated.** Removed `search-experimental`, its
+finite Mace catalog/candidate APIs, redundant benchmark, six problem examples and exclusive
+test harnesses. Shared metrics were extracted; unique ownership, timing, injected-data and
+composition laws were migrated. The five numerical parity matrices and fresh reimports keep
+their original cases and expectations. [Retirement inventory](legacy-retirement.md) names
+both the completed removals and the remaining profile/data/UI dependencies.
 
-**Next:** retire the old finite-catalog search workflow and start D1 owned BuildSpec/ScenarioSpec contracts and D2 offline semantic-package compilation.
-Native evaluation must accept directly authored semantic input without XML, PoB or UI state.
-Resolve all five imported models with explicit gaps; develop player/minion numerical paths
-together. No third profile and no extension of native PoB UI/class machinery.
+Preserved breadth exposed a retained importer bug: canonical support-set validation now
+sorts a copy while preserving authored order and rejecting duplicates. Diagnostic export and
+evidence can consume a structurally prepared selection, including infeasible but computable
+builds. Search/worker APIs still require admitted selections; private catalog/domain ownership
+and all numerical/evidence checks remain. No production fixture values or new profile were added.
+
+Final local validation passes **126 selected test executions, zero failures**:
+
+| Scope | Passed |
+| --- | ---: |
+| Ten migrated CLI/reference-parity targets | 29 |
+| Five affected native candidate targets | 23 |
+| Importer build-contract and modifier-parser tests | 18 + 12 |
+| Native scenario/full-projection unit tests | 6 |
+| All search crate targets | 34 |
+| Native-only calibration, custom identities and retired-command checks | 4 |
+
+Formatting, strict workspace/all-target and native-only Clippy, CORE/DATA/ENGINE/IMPORT/NATIVE
+WASM compilation and the native-only runtime dependency check pass. No PoB/Lua runtime
+dependency appears in that native-only tree. The original inputs, lockfile, schema-40 package
+and clean pinned PoB checkout are unchanged. This is affected-scope local validation, not a
+full-workspace or new hosted-CI result. The preceding main `0a64ee3` has passed both hosted
+validation jobs; its six broad suites were still running at the last observation.
+
+Receipts and logs are under `runs/finite-catalog-retirement-01/`: `root-parallel-03`,
+`native-03`, `import-03`, `native-cli-01`, `static-06` and `static-final-01`.
+`validated-checkpoint.json` joins commands, counts and guards. Every producing run was
+stable. The sole later change after numerical-suite/portability passes was a corrected
+injected unit-test fixture; that importer suite and final all-target lint passed afterward.
+Earlier failures and zero-test filter attempts are retained and not counted as coverage.
+Independent review confirmed metric extraction, matrix preservation and the admission boundary.
+
+**D1 contract reviewed, not implemented:** [owned build and scenario records](owned-build-contract.md)
+define directly authored inputs, injected definition binding, separate inventory claims,
+semantic provider/action selectors and explicit unresolved imports. Review closed two API
+traps: unequipped-stock record resolution and provider replacement versus ordinary edits.
+Numerical build meaning stays independent of inventory stock and UI/import state.
+
+**Next:** implement D1 directly authored BuildSpec/ScenarioSpec/QuerySpec and D2 offline
+semantic-package compilation. Native evaluation must accept semantic input without XML,
+PoB or UI state. Resolve all five imported models with explicit gaps; develop player/minion
+numerical paths together. No third profile and no extension of native PoB UI/class machinery.
+Complete native coverage remains **0/5**; legacy `search-build` still uses the closed profiles.
 
 **Historical implementation checkpoints follow.** Their tests describe producing revisions;
 old future-work instructions are superseded by this header and [Resume here](#resume-here).
@@ -4211,18 +4250,21 @@ the design documents.
 
 ## Resume here
 
-1. Read [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
-   The owner's 2026-09-14 correction supersedes native PoB UI/loader/VM replication gates.
-2. Check current worktree and CI. Repair commit `1d55cea` passed all ten hosted jobs and is
-   on main; its automatic main rerun is separate. Preserve useful running checks and frozen
-   receipts. Do not rerun completed historical suites just because old text says pending.
-3. D0 inventory and redundant-facade cleanup are complete. Retire the old finite-catalog
-   search dependency closure, then implement D1 directly authored
-   BuildSpec/ScenarioSpec and D2 offline conversion to owned semantic rules/data. Keep import
-   origins optional and source formats outside the native evaluation request.
+1. Read [domain architecture](domain-architecture.md), [architecture migration](architecture-migration.md)
+   and the reviewed [owned build contract](owned-build-contract.md). The owner's correction
+   supersedes native PoB UI/loader/VM replication gates.
+2. Finite-catalog retirement is complete; all local runtimes are terminal. The 126 selected
+   test executions and static/portability checks above pass. Preserve those receipts and
+   inspect the latest published commit's CI separately; do not treat prior CI as its result.
+3. Implement D1 directly authored BuildSpec/ScenarioSpec/QuerySpec and D2 offline conversion
+   to owned semantic rules/data. Start with the reviewed record/index/codec contracts and
+   contrasting identity/inventory/provider tests, then normalize all five original inputs
+   with explicit unresolved mappings. Import origins are optional; source formats stay
+   outside the new native evaluation request. No D1 Rust APIs or D2 package exist yet.
 4. Preserve generic kernels/objectives/search and independent numerical/reference fixtures.
-   Migrate or delete profile dispatch, redundant facades and source-shaped consumers by named
-   dependency closure. Do not expand Spark/Mace or add another profile.
+   Migrate or delete profile dispatch and source-shaped consumers by named dependency
+   closure. The finite command/catalog is removed; do not expand remaining Spark/Mace or
+   add another profile. [Retirement inventory](legacy-retirement.md) names what remains.
 5. Keep all five original imports, fixed expectation manifests and PoB pin. Compare semantic
    selections, actions, metrics, availability and mutations; UI/table/callback identity is
    diagnostic only. Add mapping scenarios and holdouts without changing original selections.
@@ -7169,7 +7211,7 @@ source revision, retained tree bytes and independent goldens.
 | Publication | Code **`4845efe8b2829fe3ca6815f1054a8bde850623a8`** is pushed to main. [Windows/Linux CI run 34188064859](https://github.com/Azaril/poe-optimizer/actions/runs/34188064859) is **successful on Windows and Linux**, verified during the typed-candidate checkpoint. Completed snapshots: `runs/support-main-ci-complete.json`, `runs/support-main-ci-jobs-complete.json`. |
 
 See [support loadouts](support-loadouts.md) for the configuration/API migration and
-[the example](../examples/mace-support-search.json). These are bounded diagnostic
+[the retired support example](legacy-retirement.md). These are bounded diagnostic
 integration results; no general build-optimizer quality or new throughput claim is made.
 
 ### Planned typed native candidate slice (implemented above)
@@ -7231,7 +7273,7 @@ one-point ascendancy passive choices; selected configuration supplies every effe
 | Static audit | Strict UTF-8, all 237 local file links and 20 heading links pass across 30 tracked Markdown files. Seven numerical/data sections, old defence fields and all 16 original entrance records are unchanged. Source revision/full snapshot, dependency manifests, original exports and independent goldens are unchanged. Evidence: `runs/resistance-static-audit.json`. |
 | Publication | Code **`c91fab1ace2a649cbbe22fc2d5ccd999c247c72f`** is pushed to main. Local implementation, release and documentation checks pass. [Windows/Linux CI run 34185229809](https://github.com/Azaril/poe-optimizer/actions/runs/34185229809) is **successful on Windows and Linux**, verified at the next checkpoint. Completed snapshots: `runs/resistance-main-ci-complete.json`, `runs/resistance-main-ci-jobs-complete.json`. |
 
-The [resistance example](../examples/mace-resistance-search.json) maximizes Mace hit DPS
+The [retired resistance example](legacy-retirement.md) maximizes Mace hit DPS
 subject to chaos resistance >= 1%. With reviewed data this selects the admitted Monk3 chaos
 passive. These finite profiles remain diagnostic; they do not cover general ascendancy
 paths, equipment requirements involving attribute dependencies, multiple supports,
@@ -7292,7 +7334,7 @@ It introduces no new game formulas, data records, dependencies or upstream revis
 | Release evidence | Native-only release build passes. Complete serial/four-worker archives and finalists match, each using 506 attempts. Reviewed winner: `class/6/asc/none/entrance/3936/smithing-q20/none`, **22.760867499999996 DPS**. Prior custom package with quadrupled Wooden Club endpoints selects `class/8/asc/none/entrance/56651/wooden-q20/brutality_i`, **71.44014424999999 DPS**. Fresh XML reevaluation and backend/data/trust metadata match. Locked Witch 4739 resolves effect 17306 in three attempts; its explicit over-budget variant uses zero. Artifacts: `runs/class-search-release-check/summary.json`; executable SHA-256 `215828d7944f34ccbbac33169284afaaf8edb457ed03e423f9fa98c0fd438409`. |
 | Publication | Code **`2135ed0af5ddee5d74d7eb66551f13f14a02900e`** is pushed to main. All local code, release and documentation checks pass. [Windows/Linux CI run 34181992200](https://github.com/Azaril/poe-optimizer/actions/runs/34181992200) **passes both jobs**. Completion snapshots: `runs/class-search-main-ci-complete.json` and `runs/class-search-main-ci-jobs-complete.json`. This following update changes documentation only. |
 
-The [expanded example](../examples/mace-class-search.json) combines 93 tree choices with
+The [retired class example](legacy-retirement.md) combines 93 tree choices with
 four weapons and two supports. Complete default-data search takes 506 calculations:
 one template, 504 legal alternatives and one finalist. This is a tiny integration reference,
 not a realistic optimizer-quality benchmark. Ascendancy selections allocate no ascendancy
@@ -7627,7 +7669,7 @@ current behavior/validation is recorded in the newer checkpoint above.
 | Numerical content | [Spark](../crates/poe-optimizer-engine/src/spark.rs) embeds skill/resource/quest/resistance values. [Mace](../crates/poe-optimizer-engine/src/mace.rs) embeds weapon definitions, accuracy/support values and monster tables. Move records and patch-dependent parameters into the package; retain pure calculation semantics. |
 | Further parameters and effects | Audit base evasion and other balance coefficients in [character](../crates/poe-optimizer-engine/src/character.rs) and [defence](../crates/poe-optimizer-engine/src/defence.rs). Replace native tree's twelve English-line effect mappings with typed effect records and versioned operation validation. |
 | Admission and defaults | [Native profile](../crates/poe-optimizer-native/src/profile.rs) and native reporting embed skill/item identities and quest/encounter defaults. Resolve them from data; keep operation support and structural restrictions in code. Configured content must not expand unsupported mechanics by declaration. |
-| Identity consumers | Global `backend_identity()` feeds results, [benchmarking](../src/native_benchmark.rs), [native search binding](../src/mutation_search.rs) and [catalog checks](../src/catalog_search.rs). Migrate these together. Core's current result/backend ID check alone cannot distinguish two datasets under `native-poe2`. |
+| Identity consumers | Global `backend_identity()` feeds results, [benchmarking](../src/native_benchmark.rs), [retired finite search binding](legacy-retirement.md) and [catalog checks](../src/catalog_search.rs). Migrate these together. Core's current result/backend ID check alone cannot distinguish two datasets under `native-poe2`. |
 
 ### Migration sequence and acceptance gates
 
@@ -8046,7 +8088,7 @@ scope to weapon/support selection.
   parser cap and no DTD/custom entity expansion. Predefined/numeric XML escapes work.
   [Preflight](../crates/poe-optimizer-import/src/preflight.rs) rejects missing/ambiguous
   evaluation identity while preserving the separate container-only import contract.
-  [Controlled materialization](../crates/poe-optimizer-import/src/controlled_mace.rs) owns
+  [Retired controlled materialization](legacy-retirement.md) owns
   finite Mace catalogs and exact source changes. Old PoB paths are compatibility re-exports.
 - [PoB backend](../crates/poe-optimizer-pob/src/backend.rs) remains an optional supervised
   reference. Its [runtime](../crates/poe-optimizer-pob/src/runtime.rs) embeds `mlua 0.12.1`,

@@ -88,39 +88,6 @@ impl ValidatedActorModifiers {
             "source_sha256":format!("{:x}",Sha256::digest(serde_json::to_vec(&self.source_fragments).expect("source strings"))),
             "blocks":self.blocks,"lines":self.lines,"records":self.records})
     }
-    pub(crate) fn validate_reference_blocks(&self, config_set: Node<'_, '_>) -> Result<()> {
-        let nodes: Vec<_> = config_set
-            .children()
-            .filter(|n| n.has_tag_name("CustomModifierBlock"))
-            .collect();
-        let expected = if self.blocks.is_empty() {
-            vec![ActorModifierBlock {
-                title: "Default".into(),
-                enabled: true,
-                text: String::new(),
-            }]
-        } else {
-            self.blocks.clone()
-        };
-        if nodes.len() != expected.len() {
-            return Err(invalid("reference actor block count changed"));
-        }
-        for (node, expected) in nodes.into_iter().zip(expected) {
-            let actual = parse_block(node)?;
-            if node.attribute("title") != Some(expected.title.as_str())
-                || node.attribute("enabled")
-                    != Some(if expected.enabled { "true" } else { "false" })
-                || actual.title != expected.title
-                || actual.enabled != expected.enabled
-                || actual.text.trim_ascii() != expected.text.trim_ascii()
-            {
-                return Err(invalid(
-                    "reference actor block title, enabled state or text changed",
-                ));
-            }
-        }
-        Ok(())
-    }
 }
 
 /// Parse literal modifier text as one enabled Default block, retaining every source byte.

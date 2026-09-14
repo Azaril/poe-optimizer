@@ -6,36 +6,14 @@ prepares each weapon once and reuses its local stats across tree/support candida
 This extends equipment calculations within the existing diagnostic profile; general items,
 minions, supporting actors and full native parity remain unfinished.
 
-## Run the example
+## Current scope and retirement
 
-The [local-weapon problem](../examples/mace-local-weapon-search.json) uses problem schema
-**5**, producing report schema **6**. It combines supplied weapons with the existing tree
-selections and [seven support loadouts](support-loadouts.md). Its objective maximizes selected
-hit DPS subject to a chaos-resistance floor. The item requiring level 80 demonstrates an
-independent equip-level rejection against the level-60 template.
-
-```powershell
-cargo run --no-default-features --locked -- search-experimental --problem examples/mace-local-weapon-search.json --jobs 4 --max-proposals 8192 --max-evaluations 4412 --timeout-seconds 300
-```
-
-The example's authored names and rolls are synthetic calculation cases, including a very
-large critical-chance roll. They do not claim legal affix tiers, roll combinations, rarity
-affix limits, availability or acquisition cost. The 4,412 attempt ceiling accommodates the
-entire supplied structural product plus template and finalist if every candidate were legal;
-actual requirements can reject candidates before calculation.
-
-Schema 5 retains `support_loadouts`, explicit `tree_search` point budgets and the existing
-weapon, support-loadout, class, ascendancy and passive locks. `locks.weapon_id` fixes an exact
-supplied payload. Schemas 1–4 retain their former normal, modifier-free, five-line weapon
-scope; the CLI rejects extended item syntax in either their template or alternatives before
-starting evaluation. The generalized library keeps `NormalMaceAlternative` as an alias of
-`MaceWeaponAlternative`, preserving existing constructor calls.
-
-Native search uses its prepared typed path by default. Add `--native-evaluation document`
-to compare complete document evaluation under the same problem and budget. The template
-and reserved finalist use full document evaluation in both modes. With the default `pob`
-feature enabled, `--backend pob` selects the optional reference path and rejects the
-native-only mode flag. See [search accounting](experimental-search.md#strategies-and-accounting).
+The old finite-catalog command and its schema-5 example are retired. Numerical weapon
+vectors are preserved in `tests/fixtures/local-weapon-cases.json` and fresh PoB comparisons.
+The remaining [graph search](passive-equipment-assembly.md) and native profiles still use
+these local calculations while the [owned-model migration](architecture-migration.md)
+replaces their profile-specific inputs. The grammar and arithmetic below describe that
+retained legacy capability, not the target model or full item coverage.
 
 ## Item grammar and source preservation
 
@@ -118,7 +96,7 @@ active/support gem requirements. Base attributes and support-color aggregates re
 existing [requirement rules](controlled-mutations.md#requirement-validation).
 
 Source admission and numeric evaluation remain available for diagnostic builds that fail
-requirements. Search admission and `validated_native_candidate` reject those failures before
+requirements. Search admission and private admitted candidate handles reject those failures before
 a calculation handle is issued. Item understanding does not certify affix or general build
 legality; item diagnostic evidence explicitly retains `affix_legality_verified: false`.
 
@@ -143,8 +121,8 @@ admit tagged or conditional lines. The assembly sequence preserves source roundi
 - Local critical chance rounds to two decimals; actor calculations apply the injected cap
   before the attack's second accuracy roll.
 
-[Mace candidate preparation](native-candidate-evaluation.md) stores one prepared value per
-weapon axis and combines it with immutable tree and support axes. It does not store results
+[Retained candidate preparation](passive-equipment-assembly.md) combines prepared local
+weapon values with actor/tree and support components. It does not store results
 for the Cartesian product or retain candidate XML. Successful prepared numeric snapshots
 continue to avoid heap allocation. Item preparation, owned metric conversion, objective
 assessment, search bookkeeping, diagnostics and reporting still allocate.
@@ -165,9 +143,12 @@ count and `range="0.5"`; changed ranges, extra/missing entries, altered names, r
 levels reject. Those specific derived exports are accepted only at the reference realization
 boundary. Source native item admission still rejects `ModRange` input children.
 
-The [parser tests](../crates/poe-optimizer-import/src/mace_item_tests.rs) and
-[catalog tests](../crates/poe-optimizer-import/src/controlled_mace_tests.rs) exercise source
-fidelity, duplicates/removal, unknown scopes, bounds, custom grammar, requirements and
-private handles. Source extraction and cold/warm parser comparisons live in
+The retained [parser tests](../crates/poe-optimizer-import/src/mace_item_tests.rs) cover
+source fidelity, recognized scopes, bounds, custom grammar and equip-level interpretation.
+[Graph-catalog tests](../crates/poe-optimizer-import/src/controlled_build_tests.rs) cover
+selected equipment requirements, slot compatibility and private ownership; the
+[native candidate tests](../crates/poe-optimizer-native/tests/native_build_candidate_contract.rs)
+cover document agreement and prepared calculations. The former finite Mace catalog tests
+are retired. Source extraction and cold/warm parser comparisons live in
 [PoB data tests](../crates/poe-optimizer-pob/tests/game_data.rs). These bounded checks do not
 establish general item coverage or full-build parity outside the admitted profiles.

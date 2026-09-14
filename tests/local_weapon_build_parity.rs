@@ -6,9 +6,9 @@ use poe_optimizer_core::{
     options::EvaluationOptions,
 };
 use poe_optimizer_data::{class_tree::ClassTreeSelection, game_data::bundled_snapshot};
-use poe_optimizer_import::controlled_mace::{
-    ControlledMaceCatalog, MaceSupportLoadout, MaceWeaponAlternative,
-};
+#[path = "support/parity_build.rs"]
+mod parity_build;
+use parity_build::{ParityBuild, WeaponCase};
 use poe_optimizer_native::NativeBackend;
 use poe_optimizer_pob::backend::PobBackend;
 use serde_json::Value;
@@ -107,13 +107,12 @@ fn compare(label: &str, native: &EvaluationResult, pob: &EvaluationResult) {
 #[test]
 fn supplied_local_items_supports_speed_caps_and_effect_removal_match_fresh_pob() {
     let example: Value =
-        serde_json::from_str(include_str!("../examples/mace-local-weapon-search.json")).unwrap();
-    let mut weapons: Vec<MaceWeaponAlternative> =
-        serde_json::from_value(example["weapons"].clone()).unwrap();
-    weapons.push(MaceWeaponAlternative{id:"wooden-rare-empty".into(),item_text:"Rarity: RARE\nStudy Removal\nWooden Club\nItem Level: 10\nQuality: 20\nLevelReq: 1\nImplicits: 0".into()});
-    let supports: Vec<MaceSupportLoadout> =
+        serde_json::from_str(include_str!("fixtures/local-weapon-cases.json")).unwrap();
+    let mut weapons: Vec<WeaponCase> = serde_json::from_value(example["weapons"].clone()).unwrap();
+    weapons.push(WeaponCase{id:"wooden-rare-empty".into(),item_text:"Rarity: RARE\nStudy Removal\nWooden Club\nItem Level: 10\nQuality: 20\nLevelReq: 1\nImplicits: 0".into()});
+    let supports: Vec<Vec<String>> =
         serde_json::from_value(example["support_loadouts"].clone()).unwrap();
-    let trees = vec![
+    let trees = [
         ClassTreeSelection {
             class_id: 6,
             ascendancy_id: None,
@@ -147,14 +146,7 @@ fn supplied_local_items_supports_speed_caps_and_effect_removal_match_fresh_pob()
                 "enemyFireResist\" number=\"0\"",
                 &format!("enemyFireResist\" number=\"{fire}\""),
             );
-        let registry = ControlledMaceCatalog::with_tree_loadouts(
-            data.clone(),
-            template,
-            weapons.clone(),
-            supports.clone(),
-            trees.clone(),
-        )
-        .unwrap();
+        let registry = ParityBuild::new(data.clone(), template, weapons.clone());
         let baseline = native
             .evaluate(&request(registry.template_build()), BUDGET)
             .unwrap();
@@ -162,8 +154,6 @@ fn supplied_local_items_supports_speed_caps_and_effect_removal_match_fresh_pob()
             .evaluate(&request(registry.template_build()), BUDGET)
             .unwrap();
         compare("baseline", &baseline, &reference);
-        let ns = registry.bind_native_baseline(&baseline, &identity).unwrap();
-        let ps = registry.bind_baseline(&reference).unwrap();
         for (tree_index, tree) in trees.iter().enumerate() {
             for weapon in [
                 "wooden-balanced",
@@ -177,30 +167,24 @@ fn supplied_local_items_supports_speed_caps_and_effect_removal_match_fresh_pob()
                 }
                 for support in &supports {
                     if !["wooden-balanced", "wooden-critical"].contains(&weapon)
-                        && !support.keys().is_empty()
+                        && !support.as_slice().is_empty()
                     {
                         continue;
                     }
-                    let candidate = registry
-                        .resolve_tree_loadout_candidate(tree, weapon, support)
-                        .unwrap();
-                    let req = request(registry.materialize(candidate).unwrap());
+                    let candidate = registry.prepare(tree, weapon, support);
+                    let req = request(registry.materialize(&candidate));
                     let actual = native.evaluate(&req, BUDGET).unwrap();
                     let expected = oracle.evaluate(&req, BUDGET).unwrap();
-                    let label = format!("{armour}/{tree_index}/{weapon}/{}", support.id());
+                    let label = format!("{armour}/{tree_index}/{weapon}/{}", support.join("+"));
                     compare(&label, &actual, &expected);
                     registry
-                        .validate_native_realization(candidate, &actual, &ns)
-                        .unwrap();
-                    registry
-                        .validate_realization(candidate, &expected, &ps)
-                        .unwrap_or_else(|error| panic!("{label}: {error}"));
+                        .assert_realization(&candidate, &actual, &expected, &identity, &reference);
                     assert_eq!(actual.exports[0].content, req.build.content);
                     compared += 1;
                     if tree_index == 0
                         && ((weapon == "wooden-balanced"
-                            && support.id() == "brutality_i+rapid_attacks_i")
-                            || (weapon == "smithing-fire" && support.keys().is_empty()))
+                            && support.join("+") == "brutality_i+rapid_attacks_i")
+                            || (weapon == "smithing-fire" && support.as_slice().is_empty()))
                     {
                         let reimport = oracle
                             .evaluate(&request(actual.exports[0].clone()), BUDGET)

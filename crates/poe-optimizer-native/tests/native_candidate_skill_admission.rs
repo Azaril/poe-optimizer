@@ -3,14 +3,10 @@ use poe_optimizer_core::{
     build_identity::BuildLineage, candidate::*, evaluation::*, options::EvaluationOptions,
 };
 use poe_optimizer_data::game_data::{GameDataLoader, LoadLimits, TrustPolicy, bundled_snapshot};
-use poe_optimizer_import::{
-    controlled_build::*,
-    controlled_mace::{ControlledMaceCatalog, MaceSupportChoice, NormalMaceAlternative},
-};
+use poe_optimizer_import::controlled_build::*;
 use poe_optimizer_native::{ActorScratch, CompiledGameData, HostClock, NativeBackend};
 use std::sync::{Arc, OnceLock};
 const MACE: &str = include_str!("../../../tests/fixtures/builds/mace-passive-equipment.xml");
-const TEMPLATE: &str = include_str!("../../../tests/fixtures/calibration/mace-smithing.xml");
 const BUDGET: EvaluationBudget = EvaluationBudget { timeout_ms: 30_000 };
 fn backend(mutation: &str) -> NativeBackend {
     static HIDDEN: OnceLock<Arc<CompiledGameData>> = OnceLock::new();
@@ -131,81 +127,9 @@ fn check_controlled_build(mutation: &str) {
         "failed support axis must not poison later valid candidates"
     );
 }
-fn check_controlled_mace(mutation: &str) {
-    let backend = backend(mutation);
-    let snapshot = backend.data().snapshot().clone();
-    let weapons = snapshot
-        .package()
-        .weapons
-        .iter()
-        .map(|weapon| NormalMaceAlternative {
-            id: weapon.id.clone(),
-            item_text: format!(
-                "Rarity: NORMAL\n{}\nItem Level: 1\nQuality: 0\nImplicits: 0",
-                weapon.name
-            ),
-        })
-        .collect();
-    let registry = ControlledMaceCatalog::with_data(
-        Arc::new(snapshot),
-        TEMPLATE.into(),
-        weapons,
-        vec![MaceSupportChoice::None, MaceSupportChoice::BrutalityI],
-    )
-    .unwrap();
-    let baseline = backend
-        .calculate(&request(registry.template_build()), BUDGET)
-        .unwrap();
-    let scenario = registry
-        .bind_native_baseline(&baseline, &backend.identity())
-        .unwrap();
-    let components = registry
-        .native_components(&scenario, &backend.identity())
-        .unwrap();
-    let prepared = backend
-        .prepare_controlled_mace_with_lineage(&components, &[], BuildLineage::from_bytes([96; 16]))
-        .expect("one invalid support axis must preserve the valid empty loadout");
-    assert_eq!(prepared.footprint().deferred_support_errors, 1);
-    let mut valid = 0;
-    let mut rejected = 0;
-    for alternative in registry.alternatives() {
-        let handle = registry
-            .validated_native_candidate(&alternative.candidate, &components)
-            .unwrap();
-        let request = request(registry.materialize(&alternative.candidate).unwrap());
-        if alternative.support.keys().is_empty() {
-            let full = backend.calculate(&request, BUDGET).unwrap();
-            let typed = prepared.measure(&handle).unwrap();
-            assert_eq!(
-                serde_json::to_value(prepared.snapshot_measurements(&typed)).unwrap(),
-                serde_json::to_value(&full.measurements).unwrap()
-            );
-            valid += 1;
-        } else {
-            let full = backend
-                .prepare_with_lineage(&request, BuildLineage::from_bytes([97; 16]))
-                .err()
-                .expect("full document rejects hidden support");
-            let typed = prepared
-                .measure(&handle)
-                .expect_err("typed controlled-Mace support axis must use authored admission");
-            assert_eq!(typed.kind, full.kind);
-            assert_eq!(typed.message, full.message);
-            rejected += 1;
-        }
-    }
-    assert_eq!((valid, rejected), (2, 2));
-}
-
 #[test]
 fn support_added_after_template_preparation_cannot_bypass_authored_loading() {
     for mutation in ["hidden", "level"] {
         check_controlled_build(mutation);
-    }
-}
-#[test]
-fn controlled_mace_loadout_axes_reject_changed_support_without_rejecting_empty_loadout() {
-    for mutation in ["hidden", "level"] {
-        check_controlled_mace(mutation);
     }
 }

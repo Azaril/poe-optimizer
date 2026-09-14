@@ -93,7 +93,7 @@ fn fixture(
     )
     .replace(
         "<Notes>",
-        "<!-- source identity notes -->\n<Notes>cafÃ© &amp; manual choices. ",
+        "<!-- source identity notes -->\n<Notes>cafÃƒÂ© &amp; manual choices. ",
     )
 }
 fn check_identity(
@@ -480,40 +480,53 @@ fn all_reviewed_ascendancy_passives_compose_on_both_profiles_and_preserve_source
 
 #[test]
 fn native_realization_rejects_tampered_ascendancy_resolution_and_effect_evidence() {
-    use poe_optimizer_data::{class_tree, game_data};
-    use poe_optimizer_import::controlled_mace::{
-        ControlledMaceCatalog, MaceSupportChoice, NormalMaceAlternative,
+    use poe_optimizer_core::candidate::{CandidateBudgets, CandidateConstraints};
+    use poe_optimizer_data::class_tree;
+    use poe_optimizer_import::controlled_build::{
+        AttributeOptionLocks, ControlledBuildCatalog, ControlledBuildDomain,
     };
+    use poe_optimizer_native::ActorScratch;
     use std::sync::Arc;
-    let data = Arc::new(game_data::bundled_snapshot().unwrap());
-    let selected = class_tree::selections(data.tree())
+    let backend = NativeBackend::new();
+    let selected = class_tree::selections(backend.data().snapshot().tree())
         .unwrap()
         .into_iter()
         .find(|tree| tree.entrance_node_id.is_some() && tree.ascendancy_node_id.is_some())
         .unwrap();
-    let registry = ControlledMaceCatalog::with_tree_choices(
-        data.clone(),
-        MACE.into(),
-        vec![NormalMaceAlternative {
-            id: "weapon".into(),
-            item_text: format!(
-                "Rarity: NORMAL\n{}\nItem Level: 1\nQuality: 0\nImplicits: 0",
-                data.package().weapons[0].name
-            ),
-        }],
-        vec![MaceSupportChoice::None],
-        vec![selected],
+    let registry =
+        Arc::new(ControlledBuildCatalog::new(backend.data().clone(), MACE.into(), vec![]).unwrap());
+    let domain = ControlledBuildDomain::new(
+        registry.clone(),
+        CandidateConstraints {
+            budgets: CandidateBudgets {
+                ordinary_passive_points: 1,
+                ascendancy_passive_points: 1,
+                active_skill_count: 1,
+                supports_per_skill: 2,
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+        AttributeOptionLocks::default(),
     )
     .unwrap();
-    let baseline = evaluate(MACE);
-    let scenario = registry
-        .bind_native_baseline(&baseline, &poe_optimizer_native::backend_identity())
+    let mut selection = registry.source_selection();
+    selection.candidate.class_id = selected.class_id.to_string();
+    selection.candidate.ascendancy_id = selected.ascendancy_id;
+    selection.candidate.passives = [
+        selected.entrance_node_id.unwrap(),
+        selected.ascendancy_node_id.unwrap(),
+    ]
+    .into_iter()
+    .collect();
+    selection.attribute_options.clear();
+    let handle = domain
+        .admit(selection, &mut ActorScratch::default())
         .unwrap();
-    let candidate = &registry.alternatives()[0].candidate;
-    let materialized = registry.materialize(candidate).unwrap();
+    let materialized = domain.materialize(&handle).unwrap();
     let result = evaluate(&materialized.content);
     registry
-        .validate_native_realization(candidate, &result, &scenario)
+        .validate_native_realization(&handle, &result, &backend.identity())
         .unwrap();
     for pointer in [
         "/schema_version",
@@ -542,7 +555,7 @@ fn native_realization_rejects_tampered_ascendancy_resolution_and_effect_evidence
         attachment.content = report.to_string();
         assert!(
             registry
-                .validate_native_realization(candidate, &altered, &scenario)
+                .validate_native_realization(&handle, &altered, &backend.identity())
                 .is_err(),
             "accepted {pointer}"
         );
@@ -556,7 +569,7 @@ fn native_realization_rejects_tampered_ascendancy_resolution_and_effect_evidence
         .media_type = "application/vnd.poe-optimizer.native-tree+json;version=1".into();
     assert!(
         registry
-            .validate_native_realization(candidate, &old_version, &scenario)
+            .validate_native_realization(&handle, &old_version, &backend.identity())
             .is_err()
     );
 }

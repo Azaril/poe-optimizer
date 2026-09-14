@@ -7,7 +7,6 @@ mod configuration_inspect;
 mod data_loading;
 #[cfg(feature = "pob")]
 mod game_data_extract;
-mod mutation_search;
 mod native_benchmark;
 
 use clap::{Parser, Subcommand};
@@ -39,7 +38,7 @@ use std::io::BufRead;
     name = "poe-optimizer",
     version,
     about = "Experimental Path of Exile 2 build evaluator",
-    long_about = "Import build XML/share codes and select a native Rust or optional PoB reference backend. Native coverage is currently restricted and rejects unsupported builds. Controlled search supports both backends; source-data extraction requires the PoB reference feature. Results remain diagnostic."
+    long_about = "Import build XML/share codes and select a native Rust or optional PoB reference backend. Native coverage is currently restricted and rejects unsupported builds. Legacy graph search remains restricted to supported native profiles; source-data extraction and calibration use the optional PoB reference feature. Results remain diagnostic."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -56,8 +55,6 @@ enum Action {
     InspectConfiguration(configuration_inspect::Args),
     /// Measure native fixed-input API throughput with a bounded local Rayon pool.
     BenchmarkNative(native_benchmark::Args),
-    /// Search supplied Mace item/support choices (experimental supported profile).
-    SearchExperimental(mutation_search::Args),
     /// Search connected passive allocations and supplied equipment with the native evaluator.
     SearchBuild(build_search::Args),
     /// Generate the current native game-data package and source evidence from pinned PoB.
@@ -212,7 +209,6 @@ fn main() -> ExitCode {
 fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,
-        Some(Action::SearchExperimental(args)) => mutation_search::run(args)?,
         Some(Action::SearchBuild(args)) => build_search::run(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExtractGameData(args)) => game_data_extract::run(args)?,

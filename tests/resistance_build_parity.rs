@@ -6,13 +6,11 @@ use poe_optimizer_core::{
     options::EvaluationOptions,
 };
 use poe_optimizer_data::{
-    class_tree::{self, ClassTreeSelection},
-    game_data::bundled_snapshot,
-    tree_data::TreeDataSnapshot,
+    class_tree::ClassTreeSelection, game_data::bundled_snapshot, tree_data::TreeDataSnapshot,
 };
-use poe_optimizer_import::controlled_mace::{
-    ControlledMaceCatalog, MaceSupportChoice, NormalMaceAlternative,
-};
+#[path = "support/parity_build.rs"]
+mod parity_build;
+use parity_build::{ParityBuild, WeaponCase};
 use poe_optimizer_native::NativeBackend;
 use poe_optimizer_pob::backend::PobBackend;
 use std::{collections::BTreeSet, path::PathBuf, sync::Arc, time::Duration};
@@ -124,18 +122,15 @@ fn resistance_nodes_match_fresh_spark_mace_source_and_removal_reimports() {
         poe_optimizer_pob::tree_worker::extract_tree(&exe, &source, "0_5", Duration::from_secs(60))
             .unwrap();
     let data = Arc::new(bundled_snapshot().unwrap());
-    let catalog = ControlledMaceCatalog::with_tree_choices(
+    let catalog = ParityBuild::new(
         data.clone(),
         MACE.into(),
-        vec![NormalMaceAlternative {
+        vec![WeaponCase {
             id: "wood".into(),
             item_text: "Rarity: NORMAL\nWooden Club\nItem Level: 1\nQuality: 20\nImplicits: 0"
                 .into(),
         }],
-        vec![MaceSupportChoice::None, MaceSupportChoice::BrutalityI],
-        class_tree::selections(data.tree()).unwrap(),
-    )
-    .unwrap();
+    );
     let backend = NativeBackend::new();
     let identity = backend.identity();
     let native = Engine::new(backend);
@@ -146,8 +141,7 @@ fn resistance_nodes_match_fresh_spark_mace_source_and_removal_reimports() {
     let pb = oracle
         .evaluate(&request(catalog.template_build()), BUDGET)
         .unwrap();
-    let ns = catalog.bind_native_baseline(&nb, &identity).unwrap();
-    let ps = catalog.bind_baseline(&pb).unwrap();
+    compare("baseline", &nb, &pb);
     let mut cases = Vec::new();
     for (class_id, asc, node) in [
         (6, "Warrior3", 14960),
@@ -169,7 +163,7 @@ fn resistance_nodes_match_fresh_spark_mace_source_and_removal_reimports() {
                 entrance_node_id: ordinary,
                 ascendancy_node_id: Some(node),
             };
-            for support in [MaceSupportChoice::None, MaceSupportChoice::BrutalityI] {
+            for support in [false, true] {
                 cases.push((selection.clone(), Some(support)));
             }
             cases.push((selection, None));
@@ -181,20 +175,22 @@ fn resistance_nodes_match_fresh_spark_mace_source_and_removal_reimports() {
             entrance_node_id: None,
             ascendancy_node_id: None,
         };
-        cases.push((removed.clone(), Some(MaceSupportChoice::BrutalityI)));
+        cases.push((removed.clone(), Some(true)));
         cases.push((removed, None));
     }
     assert_eq!(cases.len(), 32);
     let mut reloads = 0;
     for (selection, support) in cases {
         let candidate = support.map(|support| {
-            catalog
-                .resolve_tree_candidate(&selection, "wood", support)
-                .unwrap()
+            let supports = if support {
+                vec!["brutality_i".into()]
+            } else {
+                vec![]
+            };
+            catalog.prepare(&selection, "wood", &supports)
         });
-        let build = if let Some(candidate) = candidate {
-            catalog.validate_requirements(candidate).unwrap();
-            catalog.materialize(candidate).unwrap()
+        let build = if let Some(candidate) = &candidate {
+            catalog.materialize(candidate)
         } else {
             spark(&tree, &selection)
         };
@@ -208,13 +204,8 @@ fn resistance_nodes_match_fresh_spark_mace_source_and_removal_reimports() {
             .unwrap_or_else(|e| panic!("{label} PoB: {e}"));
         compare(&label, &actual, &expected);
         assert_eq!(actual.exports[0].content, req.build.content);
-        if let Some(candidate) = candidate {
-            catalog
-                .validate_native_realization(candidate, &actual, &ns)
-                .unwrap();
-            catalog
-                .validate_realization(candidate, &expected, &ps)
-                .unwrap();
+        if let Some(candidate) = &candidate {
+            catalog.assert_realization(candidate, &actual, &expected, &identity, &pb);
         }
         let live = expected.coverage.passives.as_ref().unwrap();
         live.validate().unwrap();
@@ -254,7 +245,7 @@ fn resistance_nodes_match_fresh_spark_mace_source_and_removal_reimports() {
         if selection.class_id == 8
             && selection.ascendancy_node_id.is_some()
             && selection.entrance_node_id.is_some()
-            && support != Some(MaceSupportChoice::None)
+            && support != Some(false)
         {
             let fresh = oracle
                 .evaluate(&request(actual.exports[0].clone()), BUDGET)

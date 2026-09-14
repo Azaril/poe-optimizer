@@ -247,10 +247,20 @@ fn selected_equipment_contributes_before_requirements_and_conditions() {
     let invalid = before.requirements();
     assert!(!invalid.is_legal());
     assert_eq!(invalid.available.strength, baseline + 5);
-    assert!(matches!(
-        domain.admit(selection.clone(), &mut scratch),
-        Err(BuildCatalogError::Requirements(_))
-    ));
+    let diagnostic = catalog.materialize_prepared(&before).unwrap();
+    let source =
+        SourceBuildTemplate::parse(diagnostic.content, catalog.compiled().snapshot().package())
+            .unwrap();
+    assert_eq!(source.equipment()["Weapon 1"], 9);
+    assert_eq!(
+        source.items()[&9].source_text(),
+        catalog.item("demanding").unwrap().source_text()
+    );
+    let rejected = domain.admit(selection.clone(), &mut scratch).unwrap_err();
+    let BuildCatalogError::Requirements(rejected) = rejected else {
+        panic!("diagnostic materialization changed requirement admission");
+    };
+    assert_eq!(&rejected, invalid);
     selection
         .candidate
         .equipment
@@ -258,6 +268,13 @@ fn selected_equipment_contributes_before_requirements_and_conditions() {
     let admitted = domain.admit(selection, &mut scratch).unwrap();
     assert_eq!(admitted.requirements().available.strength, baseline + 17);
     assert_eq!(admitted.requirements().required.strength, baseline + 17);
+    assert_eq!(
+        catalog
+            .materialize_prepared(admitted.prepared())
+            .unwrap()
+            .content,
+        domain.materialize(&admitted).unwrap().content
+    );
     let after_values = admitted.actor().values();
     assert!(after_values.attributes.strength > after_values.attributes.intelligence);
     assert_eq!(after_values.spirit, before_values.spirit + 30.0);
@@ -334,6 +351,23 @@ fn opaque_handles_bind_both_catalog_and_domain_without_owning_source() {
     ));
     assert!(matches!(
         equivalent.materialize(&handle),
+        Err(BuildCatalogError::Ownership)
+    ));
+    assert!(handle.prepared().bound_to(&first));
+    assert!(!handle.prepared().bound_to(&equivalent));
+    assert!(matches!(
+        equivalent.materialize_prepared(handle.prepared()),
+        Err(BuildCatalogError::Ownership)
+    ));
+    assert_eq!(
+        first
+            .materialize_prepared(handle.prepared())
+            .unwrap()
+            .content,
+        one.materialize(&handle).unwrap().content
+    );
+    assert!(matches!(
+        other_rules.materialize(&handle),
         Err(BuildCatalogError::Ownership)
     ));
     assert_eq!(
@@ -732,4 +766,132 @@ fn both_template_profiles_preserve_inert_auxiliary_source_through_lazy_materiali
                 .unwrap();
         assert_eq!(round_trip.allocation(), catalog.source().allocation());
     }
+}
+
+#[test]
+fn selected_support_color_costs_sum_before_maximum_item_and_skill_requirements() {
+    use poe_optimizer_data::game_data::SupportColor;
+    let mut package = compiled().snapshot().package().clone();
+    package.mace.requirements.attributes.strength = 47;
+    package.mace.requirements.level = 5;
+    package.mace.support_attribute_costs.strength = 25;
+    let wood = package
+        .weapons
+        .iter_mut()
+        .find(|weapon| weapon.name == "Wooden Club")
+        .unwrap();
+    wood.requirements.attributes.strength = 43;
+    wood.requirements.level = 3;
+    for support in &mut package.supports {
+        if ["brutality_i", "heavy_swing"].contains(&support.id.as_str()) {
+            support.color = SupportColor::Red;
+            // Per-support attributes are zero; the active gem supplies color costs.
+            support.requirements.attributes.strength = 0;
+            support.requirements.level = 7;
+        }
+    }
+    package.refresh_section_digests().unwrap();
+    let snapshot = GameDataLoader::from_bytes(
+        &package.canonical_bytes().unwrap(),
+        &TrustPolicy::AllowCustom,
+        &LoadLimits::default(),
+    )
+    .unwrap();
+    let data = Arc::new(CompiledGameData::compile(Arc::new(snapshot)).unwrap());
+    let catalog = Arc::new(
+        ControlledBuildCatalog::new(
+            data,
+            MACE.into(),
+            vec![EquipmentAlternative {
+                instance_id: "high-item-level".into(),
+                pob_item_id: 92,
+                item_text: "Rarity: NORMAL\nWooden Club\nItem Level: 99\nQuality: 0\nImplicits: 0"
+                    .into(),
+            }],
+        )
+        .unwrap(),
+    );
+    let domain = domain(catalog.clone());
+    for (keys, expected_strength) in [
+        (vec![], 47),
+        (vec!["brutality_i"], 47),
+        (vec!["brutality_i", "heavy_swing"], 50),
+    ] {
+        let mut selection = catalog.source_selection();
+        selection
+            .candidate
+            .equipment
+            .insert("Weapon 1".into(), "high-item-level".into());
+        selection
+            .candidate
+            .skills
+            .values_mut()
+            .next()
+            .unwrap()
+            .support_instance_ids = keys
+            .iter()
+            .map(|key| catalog.support_instance(key).unwrap().to_owned())
+            .collect();
+        let required = domain
+            .prepare(selection, &mut ActorScratch::default())
+            .unwrap();
+        assert_eq!(required.requirements().required.strength, expected_strength);
+        assert_eq!(
+            required.requirements().required.level,
+            if keys.is_empty() { 5 } else { 7 }
+        );
+        assert_eq!(
+            required.requirements().available.level,
+            60,
+            "item level does not become character level"
+        );
+    }
+}
+
+#[test]
+fn support_sets_validate_canonically_without_reordering_authored_source() {
+    let compiled = compiled();
+    let data = compiled.snapshot().package();
+    let source = SourceBuildTemplate::parse(MACE.into(), data).unwrap();
+    let canonical = vec!["brutality_i".to_owned(), "heavy_swing".to_owned()];
+    let authored = canonical.iter().rev().cloned().collect::<Vec<_>>();
+    assert!(data.validate_mace_support_loadout(&canonical).is_ok());
+    assert!(data.validate_mace_support_loadout(&authored).is_err());
+
+    let xml = source
+        .materialize_supports(&authored, data)
+        .unwrap()
+        .content;
+    let catalog = ControlledBuildCatalog::new(compiled.clone(), xml.clone(), vec![]).unwrap();
+    assert_eq!(catalog.source().support_order(), authored);
+    assert_eq!(catalog.source().source(), xml);
+    assert_eq!(
+        catalog
+            .source()
+            .materialize_supports(catalog.source().support_order(), data)
+            .unwrap()
+            .content,
+        xml
+    );
+    let selected = catalog.source_selection();
+    assert_eq!(
+        selected
+            .candidate
+            .skills
+            .values()
+            .next()
+            .unwrap()
+            .support_instance_ids,
+        canonical
+            .iter()
+            .map(|key| catalog.support_instance(key).unwrap().to_owned())
+            .collect::<BTreeSet<_>>()
+    );
+
+    let duplicate = vec![canonical[0].clone(), canonical[0].clone()];
+    let xml = source
+        .materialize_supports(&duplicate, data)
+        .unwrap()
+        .content;
+    assert!(SourceBuildTemplate::parse(xml, data).is_err());
 }

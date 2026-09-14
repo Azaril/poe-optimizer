@@ -472,38 +472,94 @@ fn receiving_equipment_alone_requires_new_graph_scope() {
     assert_ledger(&report, 3);
 }
 
-#[test]
-fn legacy_actor_problem_rejects_new_authored_receiving_scope() {
+// These scalar vectors have no equipment or passive contribution to the queried
+// stat. Compare the search score to both its known effect and a new CLI process
+// evaluating the exported document; another search mode alone is not an oracle.
+fn assert_authored_effect(schema: u64, modifier: &str, metric: &str, unit: &str, expected: f64) {
     let temporary = tempfile::tempdir().unwrap();
     let dir = temporary.path();
-    let mut value: Value =
-        serde_json::from_str(include_str!("../examples/mace-actor-search.json")).unwrap();
-    value["template"] = json!(dir.join("template.xml"));
-    let template=include_str!("fixtures/builds/mace-actor-resources.xml").replace("</ConfigSet>","<CustomModifierBlock title=\"Defence\" enabled=\"true\">+25 to Armour</CustomModifierBlock></ConfigSet>");
-    fs::write(dir.join("template.xml"), template).unwrap();
+    let mut value = problem(dir);
+    value["schema_version"] = json!(schema - 1);
+    value["equipment"] = json!([]);
+    value["objective"] = json!({"schema_version":1,"objective":{"kind":"scalar","metric":{"actor":"player","id":metric},"unit":unit,"direction":"maximize"},"constraints":[]});
+    value["constraints"]["budgets"]["ordinary_passive_points"] = json!(0);
+    value["constraints"]["budgets"]["ascendancy_passive_points"] = json!(0);
+    value["constraints"]["budgets"]["supports_per_skill"] = json!(0);
+    value["constraints"]["locks"]["class_id"] = json!("6");
+    value["constraints"]["locks"]["ascendancy"] = json!({"kind":"none"});
+    let template = TEMPLATE.replace("</ConfigSet>", &format!("<CustomModifierBlock title=\"Direct effect\" enabled=\"true\">{modifier}</CustomModifierBlock></ConfigSet>"));
+    write_problem(dir, &value);
+    fs::write(dir.join("template.xml"), &template).unwrap();
+    let rejected = command(dir, "typed", 1, 3)
+        .args(["--export", "rejected.xml"])
+        .output()
+        .unwrap();
+    assert!(!rejected.status.success());
+    assert!(
+        String::from_utf8_lossy(&rejected.stderr)
+            .contains(&format!("graph problem schema {schema}")),
+        "{}",
+        String::from_utf8_lossy(&rejected.stderr)
+    );
+    assert!(!dir.join("rejected.xml").exists());
+    assert!(!dir.join("rejected.xml.data.json").exists());
+    value["schema_version"] = json!(schema);
     fs::write(
         dir.join("problem.json"),
         serde_json::to_vec_pretty(&value).unwrap(),
     )
     .unwrap();
-    let output = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
-        .current_dir(dir)
-        .args([
-            "search-experimental",
-            "--backend",
-            "native",
-            "--problem",
-            "problem.json",
-        ])
-        .output()
-        .unwrap();
-    assert!(!output.status.success());
-    assert!(
-        String::from_utf8_lossy(&output.stderr)
-            .contains("receiving-defence modifiers require search-build with problem schema 8"),
-        "{}",
-        String::from_utf8_lossy(&output.stderr)
+    for mode in ["typed", "document"] {
+        let export = format!("{metric}-{mode}.xml");
+        let report = success(
+            command(dir, mode, 1, 3)
+                .args(["--export", &export])
+                .output()
+                .unwrap(),
+        );
+        assert_ledger(&report, 3);
+        assert_export(dir, &export, &report);
+        let score = report["best_verified"]["assessment"]["objective_value"]["value"]
+            .as_f64()
+            .unwrap();
+        assert!(
+            (score - expected).abs() < 1e-9,
+            "{metric}: {score} != {expected}"
+        );
+        let direct = success(
+            Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
+                .current_dir(dir)
+                .arg("evaluate")
+                .arg(&export)
+                .args([
+                    "--backend",
+                    "native",
+                    "--metric",
+                    &format!("player.{metric}"),
+                ])
+                .output()
+                .unwrap(),
+        );
+        let measurements = direct["evaluation"]["measurements"].as_array().unwrap();
+        assert_eq!(measurements.len(), 1);
+        assert_eq!(measurements[0]["query"]["id"], metric);
+        assert_eq!(measurements[0]["unit"], unit);
+        let measured = measurements[0]["value"]["value"].as_f64().unwrap();
+        assert!(
+            (measured - expected).abs() < 1e-9,
+            "{metric}: {measured} != {expected}"
+        );
+        assert!((score - measured).abs() < 1e-12);
+    }
+    assert_eq!(
+        fs::read_to_string(dir.join("template.xml")).unwrap(),
+        template
     );
+}
+
+#[test]
+fn authored_receiving_effect_matches_fresh_document_evaluation() {
+    assert_authored_effect(8, "+25 to Armour", "armour", "rating_points", 25.0);
 }
 
 #[test]
@@ -778,36 +834,13 @@ fn injected_body_penalty_changes_search_ranking_with_exact_custom_data_exports()
 }
 
 #[test]
-fn legacy_actor_problem_rejects_new_authored_movement_scope() {
-    let temporary = tempfile::tempdir().unwrap();
-    let dir = temporary.path();
-    let mut value: Value =
-        serde_json::from_str(include_str!("../examples/mace-actor-search.json")).unwrap();
-    value["template"] = json!(dir.join("template.xml"));
-    let template=include_str!("fixtures/builds/mace-actor-resources.xml").replace("</ConfigSet>","<CustomModifierBlock title=\"Defence\" enabled=\"true\">20% increased Movement Speed</CustomModifierBlock></ConfigSet>");
-    fs::write(dir.join("template.xml"), template).unwrap();
-    fs::write(
-        dir.join("problem.json"),
-        serde_json::to_vec_pretty(&value).unwrap(),
-    )
-    .unwrap();
-    let output = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
-        .current_dir(dir)
-        .args([
-            "search-experimental",
-            "--backend",
-            "native",
-            "--problem",
-            "problem.json",
-        ])
-        .output()
-        .unwrap();
-    assert!(!output.status.success());
-    assert!(
-        String::from_utf8_lossy(&output.stderr)
-            .contains("movement modifiers require search-build with problem schema 10"),
-        "{}",
-        String::from_utf8_lossy(&output.stderr)
+fn authored_movement_effect_matches_fresh_document_evaluation() {
+    assert_authored_effect(
+        10,
+        "20% increased Movement Speed",
+        "movement_speed_pct",
+        "percent",
+        120.0,
     );
 }
 
@@ -914,35 +947,12 @@ fn old_graph_schemas_reject_action_speed_in_config_equipped_and_unselected_sourc
 }
 
 #[test]
-fn legacy_actor_problem_rejects_action_speed_scope() {
-    let temporary = tempfile::tempdir().unwrap();
-    let dir = temporary.path();
-    let mut value: Value =
-        serde_json::from_str(include_str!("../examples/mace-actor-search.json")).unwrap();
-    value["template"] = json!(dir.join("template.xml"));
-    let template=include_str!("fixtures/builds/mace-actor-resources.xml").replace("</ConfigSet>","<CustomModifierBlock title=\"Defence\" enabled=\"true\">20% increased Action Speed</CustomModifierBlock></ConfigSet>");
-    fs::write(dir.join("template.xml"), template).unwrap();
-    fs::write(
-        dir.join("problem.json"),
-        serde_json::to_vec_pretty(&value).unwrap(),
-    )
-    .unwrap();
-    let output = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
-        .current_dir(dir)
-        .args([
-            "search-experimental",
-            "--backend",
-            "native",
-            "--problem",
-            "problem.json",
-        ])
-        .output()
-        .unwrap();
-    assert!(!output.status.success());
-    assert!(
-        String::from_utf8_lossy(&output.stderr)
-            .contains("action-speed modifiers require search-build with problem schema 11"),
-        "{}",
-        String::from_utf8_lossy(&output.stderr)
+fn authored_action_speed_effect_matches_fresh_document_evaluation() {
+    assert_authored_effect(
+        11,
+        "20% increased Action Speed",
+        "action_speed_pct",
+        "percent",
+        120.0,
     );
 }

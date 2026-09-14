@@ -264,7 +264,10 @@ impl SourceBuildTemplate {
             support_order.push(support.id.clone());
         }
         if profile == TemplateProfile::Mace {
-            data.validate_mace_support_loadout(&support_order)
+            // Validate the semantic set without changing the authored gem order.
+            let mut support_keys = support_order.clone();
+            support_keys.sort();
+            data.validate_mace_support_loadout(&support_keys)
                 .map_err(|e| fail(e.to_string()))?;
         }
         let active_xml = source[main.range()].to_owned();

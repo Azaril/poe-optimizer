@@ -3,17 +3,15 @@
 #![forbid(unsafe_code)]
 mod build_candidates;
 mod candidate_skill_admission;
-mod candidates;
 pub mod configuration;
 pub mod items;
+mod metric_snapshot;
 pub use build_candidates::{PreparedBuildCandidates, PreparedBuildFootprint};
 mod preparation;
 mod preparation_report;
 mod profile;
 pub mod skills;
-pub use candidates::{
-    NativeMetricSnapshot, NativeMetricValue, PreparedMaceCandidates, PreparedMaceFootprint,
-};
+pub use metric_snapshot::{NativeMetricSnapshot, NativeMetricValue};
 pub use preparation::{IncompletePreparation, PreparationOutcome};
 pub use preparation_report::{
     PreparationIssue, PreparationIssueKind, PreparationReport, PreparationRequest,
@@ -168,7 +166,7 @@ impl NativeCalculation {
             Self::Mace(o) => (
                 resources!(o),
                 MeasurementValue::Unavailable {
-                    reason: candidates::MACE_AVERAGE_REASON.into(),
+                    reason: metric_snapshot::ATTACK_AVERAGE_REASON.into(),
                 },
             ),
         };
@@ -392,7 +390,7 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("../../poe-optimizer-engine/src/selection_keys.rs"),
                 include_str!("../../poe-optimizer-engine/src/lua_number.rs"),
                 include_str!("tree.rs"),
-                include_str!("candidates.rs"),
+                include_str!("metric_snapshot.rs"),
                 include_str!("build_candidates.rs"),
                 include_str!("candidate_skill_admission.rs"),
                 include_str!("../../poe-optimizer-import/src/equipment.rs"),
@@ -401,7 +399,6 @@ fn implementation_identity() -> BackendIdentity {
                 include_str!("../../poe-optimizer-import/src/controlled_build_xml.rs"),
                 include_str!("../../poe-optimizer-import/src/controlled_build_evidence.rs"),
                 include_str!("../../poe-optimizer-engine/src/actor_program.rs"),
-                include_str!("../../poe-optimizer-import/src/controlled_mace.rs"),
                 include_str!("../../poe-optimizer-import/src/mace_item.rs"),
                 include_str!("../../poe-optimizer-import/src/item_formatting.rs"),
                 include_str!("../../poe-optimizer-import/src/modifier_syntax.rs"),

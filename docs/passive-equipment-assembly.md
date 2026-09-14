@@ -31,9 +31,8 @@ and defaults to 1,000 full calculations, 10,000 proposals, 128 rounds, a 300-sec
 and seed 0. At least three calculations are required by the CLI. Budgets and objectives
 remain caller choices; the example's damage objective and Spirit floor are illustrative.
 `--native-evaluation document` repeats full XML evaluation for intermediate candidates;
-the default `typed` path evaluates admitted numerical inputs directly. The new command is
-explicitly native-only. The legacy `search-experimental --backend native|pob` command and
-problem schemas 1–6 remain available.
+the default `typed` path evaluates admitted numerical inputs directly. The command is explicitly native-only. The old finite-catalog command and problem schemas
+1–6 are retired; they are not automatically converted to this still-profile-limited API.
 
 ## Problem schemas 7, 8, 9 and 10
 

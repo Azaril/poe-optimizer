@@ -10,9 +10,9 @@ use poe_optimizer_data::{
     class_tree::{ClassTreeSelection, selections},
     game_data::bundled_snapshot,
 };
-use poe_optimizer_import::controlled_mace::{
-    ControlledMaceCatalog, MaceSupportChoice, NormalMaceAlternative,
-};
+#[path = "support/parity_build.rs"]
+mod parity_build;
+use parity_build::{ParityBuild, WeaponCase};
 use poe_optimizer_native::{NativeBackend, NativeCalculation};
 use poe_optimizer_pob::backend::PobBackend;
 use std::{collections::BTreeSet, path::PathBuf, sync::Arc, time::Duration};
@@ -104,31 +104,22 @@ fn joint_materializations_and_fresh_export_reimports_match_pinned_pob() {
     let trees = selections(&snapshot.package().tree).unwrap();
     let weapons = [("wood", "Wooden Club"), ("smith", "Smithing Hammer")]
         .into_iter()
-        .map(|(id, name)| NormalMaceAlternative {
+        .map(|(id, name)| WeaponCase {
             id: id.into(),
             item_text: format!("Rarity: NORMAL\n{name}\nItem Level: 1\nQuality: 20\nImplicits: 0"),
         })
         .collect();
     let template = TEMPLATE.replace("  <Tree", "  <!-- unchanged café source note -->\n  <Tree");
-    let catalog = ControlledMaceCatalog::with_tree_choices(
-        snapshot.clone(),
-        template.clone(),
-        weapons,
-        vec![MaceSupportChoice::None, MaceSupportChoice::BrutalityI],
-        trees.clone(),
-    )
-    .unwrap();
+    let catalog = ParityBuild::new(snapshot.clone(), template.clone(), weapons);
     let backend = NativeBackend::new();
     let native_identity = backend.identity();
     let native = Engine::new(backend);
     let oracle = Engine::new(PobBackend::new(executable, source));
     let baseline_request = request(catalog.template_build());
     let native_baseline = native.evaluate(&baseline_request, BUDGET).unwrap();
+    // Baseline and every candidate still use independently fresh native/PoB evaluations.
     let pob_baseline = oracle.evaluate(&baseline_request, BUDGET).unwrap();
-    let native_scenario = catalog
-        .bind_native_baseline(&native_baseline, &native_identity)
-        .unwrap();
-    let pob_scenario = catalog.bind_baseline(&pob_baseline).unwrap();
+    compare("baseline", &native_baseline, &pob_baseline);
     let mut cases = Vec::new();
     // Every supported class participates with its own entrance and an ascendancy.
     for &class_id in &[1, 2, 6, 7, 8, 9, 10, 11] {
@@ -147,11 +138,7 @@ fn joint_materializations_and_fresh_export_reimports_match_pinned_pob() {
         } else {
             "wood"
         };
-        let support = if class_id % 2 == 0 {
-            MaceSupportChoice::BrutalityI
-        } else {
-            MaceSupportChoice::None
-        };
+        let support = class_id % 2 == 0;
         cases.push((selection, weapon, support));
     }
     // Explicit aliases sharing a root and two class-dependent physical-node overrides.
@@ -181,16 +168,18 @@ fn joint_materializations_and_fresh_export_reimports_match_pinned_pob() {
             ascendancy_node_id: None,
         },
     ] {
-        cases.push((selection, "wood", MaceSupportChoice::BrutalityI));
+        cases.push((selection, "wood", true));
     }
     assert_eq!(cases.len(), 12);
     let mut reimports = 0;
     for (selection, weapon, support) in cases {
-        let candidate = catalog
-            .resolve_tree_candidate(&selection, weapon, support)
-            .unwrap();
-        catalog.validate_requirements(candidate).unwrap();
-        let materialized = catalog.materialize(candidate).unwrap();
+        let supports = if support {
+            vec!["brutality_i".into()]
+        } else {
+            vec![]
+        };
+        let candidate = catalog.prepare(&selection, weapon, &supports);
+        let materialized = catalog.materialize(&candidate);
         let label = format!("{selection:?}/{weapon}/{support:?}");
         assert!(
             materialized
@@ -207,12 +196,13 @@ fn joint_materializations_and_fresh_export_reimports_match_pinned_pob() {
             .evaluate(&req, BUDGET)
             .unwrap_or_else(|error| panic!("{label} PoB: {error}"));
         compare(&label, &actual, &expected);
-        catalog
-            .validate_native_realization(candidate, &actual, &native_scenario)
-            .unwrap_or_else(|error| panic!("{label} native realization: {error}"));
-        catalog
-            .validate_realization(candidate, &expected, &pob_scenario)
-            .unwrap_or_else(|error| panic!("{label} PoB realization: {error}"));
+        catalog.assert_realization(
+            &candidate,
+            &actual,
+            &expected,
+            &native_identity,
+            &pob_baseline,
+        );
         assert_eq!(actual.exports[0].content, req.build.content);
         assert!(actual.coverage.passives.is_none());
         let live = expected
@@ -296,16 +286,18 @@ fn joint_materializations_and_fresh_export_reimports_match_pinned_pob() {
             close(&label, metric, value, source.player.metrics[metric]);
         }
         if selection.ascendancy_id.as_deref() == Some("Witch3b")
-            || (selection.class_id == 8
-                && selection.entrance_node_id == Some(56651)
-                && support == MaceSupportChoice::BrutalityI)
+            || (selection.class_id == 8 && selection.entrance_node_id == Some(56651) && support)
         {
             let reimport = request(actual.exports[0].clone());
             let fresh = oracle.evaluate(&reimport, BUDGET).unwrap();
             compare(&label, &actual, &fresh);
-            catalog
-                .validate_realization(candidate, &fresh, &pob_scenario)
-                .unwrap();
+            catalog.assert_realization(
+                &candidate,
+                &actual,
+                &fresh,
+                &native_identity,
+                &pob_baseline,
+            );
             reimports += 1;
         }
     }

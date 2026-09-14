@@ -162,6 +162,9 @@ fn full_finalist_evidence_rejects_tampered_tree_equipment_actor_context_and_expo
     catalog
         .validate_native_realization(&handle, &fresh, &backend.identity())
         .unwrap();
+    catalog
+        .validate_prepared_native_realization(handle.prepared(), &fresh, &backend.identity())
+        .unwrap();
     for (media, pointer) in [
         ("native-tree+", "/attribute_options/13397"),
         ("native-tree+", "/paid_nodes/1/effective_node_id"),
@@ -183,6 +186,16 @@ fn full_finalist_evidence_rejects_tampered_tree_equipment_actor_context_and_expo
                 .validate_native_realization(&handle, &result, &backend.identity())
                 .is_err(),
             "accepted {pointer}"
+        );
+        assert!(
+            catalog
+                .validate_prepared_native_realization(
+                    handle.prepared(),
+                    &result,
+                    &backend.identity()
+                )
+                .is_err(),
+            "prepared diagnostic accepted {pointer}"
         );
     }
     let mut result: EvaluationResult =
@@ -208,6 +221,14 @@ fn full_finalist_evidence_rejects_tampered_tree_equipment_actor_context_and_expo
             &mut ActorScratch::default(),
         )
         .unwrap();
+    assert!(matches!(
+        catalog.validate_prepared_native_realization(
+            foreign.prepared(),
+            &fresh,
+            &backend.identity()
+        ),
+        Err(BuildCatalogError::Ownership)
+    ));
     let prepared = backend.prepare_controlled_build(catalog, &[]).unwrap();
     assert_eq!(
         prepared.calculate(&foreign).unwrap_err().kind,
@@ -437,4 +458,134 @@ fn body_movement_action_and_all_sixteen_armour_combinations_calculate_without_al
         assert_eq!(prepared.footprint().retained_xml_bytes, 0);
         assert_eq!(prepared.footprint().cached_candidate_results, 0);
     }
+}
+
+#[test]
+fn selected_metrics_owned_adaptation_and_detached_components_keep_their_contract() {
+    use poe_optimizer_core::metrics::{ActorScope, MeasurementValue, MetricQuery};
+    use poe_optimizer_native::{CompiledGameData, HostClock};
+    let backend = NativeBackend::new();
+    let domain = make_domain(&backend, MACE);
+    let handle = domain
+        .admit(
+            domain.catalog().source_selection(),
+            &mut ActorScratch::default(),
+        )
+        .unwrap();
+    let queries = ["selected_hit_dps", "selected_average_hit", "life"].map(|id| MetricQuery {
+        actor: ActorScope::Player,
+        id: id.into(),
+    });
+    let prepared = backend
+        .prepare_controlled_build(domain.catalog(), &queries)
+        .unwrap();
+    let mut full_request = request(domain.materialize(&handle).unwrap().content);
+    full_request.metrics = queries.to_vec();
+    let full = backend.calculate(&full_request, BUDGET).unwrap();
+    let snapshot = prepared.measure(&handle).unwrap();
+    let (measurements, allocations) =
+        allocation_count(|| prepared.snapshot_measurements(&snapshot));
+    assert!(
+        allocations > 0,
+        "owned scheduler measurements remain an explicit adaptation cost"
+    );
+    assert_eq!(
+        serde_json::to_value(&measurements).unwrap(),
+        serde_json::to_value(&full.measurements).unwrap()
+    );
+    assert_eq!(
+        measurements
+            .iter()
+            .map(|m| m.query.id.as_str())
+            .collect::<Vec<_>>(),
+        vec!["life", "selected_average_hit", "selected_hit_dps"]
+    );
+    assert!(matches!(
+        measurements[1].value,
+        MeasurementValue::Unavailable { .. }
+    ));
+    assert!(snapshot.diagnostic_only());
+    // Equal package content does not grant access to another compiled owner's components.
+    let foreign = NativeBackend::with_data(
+        Arc::new(CompiledGameData::compile(Arc::new(backend.data().snapshot().clone())).unwrap()),
+        HostClock,
+    )
+    .unwrap();
+    assert_eq!(foreign.identity(), backend.identity());
+    assert_eq!(
+        foreign
+            .prepare_controlled_build(domain.catalog(), &[])
+            .err()
+            .unwrap()
+            .kind,
+        EvaluationErrorKind::BackendContract
+    );
+    assert_eq!(
+        foreign
+            .evaluate_controlled_build(&prepared, &handle, BUDGET)
+            .unwrap_err()
+            .kind,
+        EvaluationErrorKind::BackendContract
+    );
+    let weak = Arc::downgrade(domain.catalog());
+    drop(domain);
+    assert!(
+        weak.upgrade().is_none(),
+        "neither prepared evaluator nor handle retains source catalog"
+    );
+    assert!(prepared.calculate(&handle).is_ok());
+}
+
+#[test]
+fn typed_deadlines_keep_host_clock_and_backwards_time_checks() {
+    use poe_optimizer_native::EvaluationClock;
+    use std::{
+        sync::atomic::{AtomicU64, Ordering},
+        time::Duration,
+    };
+    struct StepClock(AtomicU64);
+    impl EvaluationClock for StepClock {
+        fn now(&self) -> Duration {
+            Duration::from_millis(self.0.fetch_add(5, Ordering::Relaxed))
+        }
+    }
+    struct BackwardClock(AtomicU64);
+    impl EvaluationClock for BackwardClock {
+        fn now(&self) -> Duration {
+            Duration::from_millis(self.0.fetch_sub(1, Ordering::Relaxed))
+        }
+    }
+    let host = NativeBackend::new();
+    let domain = make_domain(&host, MACE);
+    let handle = domain
+        .admit(
+            domain.catalog().source_selection(),
+            &mut ActorScratch::default(),
+        )
+        .unwrap();
+    let step = NativeBackend::with_data(host.data().clone(), StepClock(AtomicU64::new(0))).unwrap();
+    let prepared = step
+        .prepare_controlled_build(domain.catalog(), &[])
+        .unwrap();
+    assert_eq!(
+        step.evaluate_controlled_build(&prepared, &handle, EvaluationBudget { timeout_ms: 10 })
+            .unwrap_err()
+            .kind,
+        EvaluationErrorKind::Timeout
+    );
+    let backwards =
+        NativeBackend::with_data(host.data().clone(), BackwardClock(AtomicU64::new(10))).unwrap();
+    assert_eq!(
+        backwards
+            .evaluate_controlled_build(&prepared, &handle, BUDGET)
+            .unwrap_err()
+            .kind,
+        EvaluationErrorKind::BackendContract
+    );
+    assert_eq!(
+        host.evaluate_controlled_build(&prepared, &handle, EvaluationBudget { timeout_ms: 0 })
+            .unwrap_err()
+            .kind,
+        EvaluationErrorKind::InvalidRequest
+    );
 }

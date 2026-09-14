@@ -28,7 +28,6 @@ preparation and fixed-profile measurements; its scope and checksum qualification
 | General imported-build preparation | `prepare-build INPUT` | Source/view/data-owned preparation outcome and exact remaining stages; `calculation: not_run` | The command has no internal timing fields. External process time includes loading and report serialization. An incomplete result must not become a completed-build timing. |
 | Restricted document evaluation | `benchmark-native INPUT --mode document` | Repeated source parsing/validation, supported calculation, complete typed result, diagnostics and XML export | Also includes Rayon scheduling, accounting and checksum work. Coverage remains the selected native profile. |
 | Restricted prepared evaluation | Same command with `--mode prepared` | Same complete result work, reusing one validated input | It is not the pure calculation rate. Preparation and local pool creation are outside iteration timing. |
-| Candidate preparation and hot calculations | [mixed-candidate harness](../examples/benchmark_mace_candidates.rs) | Separate dataset/catalog, handles, XML materialization/preparation and equivalence setup; document, prepared-result, pure calculation, stack snapshot and owned-measurement modes | Uses explicit diagnostic Mace axes; it is not a general-build preparer or realistic search. Short fast-mode samples need careful interpretation. |
 | Fresh candidate admission versus reuse | [assembly harness](../examples/benchmark_assembly.rs) | `fresh_admission_and_measure` versus `already_admitted_measure`, setup costs, rotating checksums and worker scaling | The second mode already has prepared actors. Neither mode includes source XML, parser sessions, proposals, scoring, reports, deadlines or exports. |
 | Whole restricted search | `search-build --native-evaluation typed` or `document` | Candidate generation/admission, scoring, archive/ledger, fresh finalist and resulting export for an admitted diagnostic problem | Historical 1,000-attempt runs establish bounded reproducibility, not 5–30 minute optimization quality or full-original coverage. Report timing and external process timing have different endpoints. |
 | Original source/parser investigation | Full-runtime source tests and `runs/r2p-parser-factories/build-01..05.json` | Reached original behavior, native failures and their state/identity witnesses | Whole-worker elapsed time mixes bootstrap, import, probes and assertions. There is no isolated acquisition, lowering, parser-hit/miss, state-copy or witness-overhead benchmark. |
@@ -63,6 +62,12 @@ late override aliases, residual hand conditions and the final sum after override
 requirements for an equivalent preparation comparison. No hot-path speedup follows from this
 component's completion.
 
+The finite Mace mixed-candidate harness is retired. Its setup, document, prepared-result,
+pure-calculation, snapshot and owned-measurement rates below remain historical evidence.
+There is no current executable for those exact modes. The retained assembly benchmark
+measures a different workload, and its graph-domain API still dispatches only the restricted
+Spark/Mace numerical profiles.
+
 ## Replayable commands
 
 These commands describe existing interfaces, not measurements performed for this inventory.
@@ -76,9 +81,6 @@ cargo run --release --no-default-features --locked -- benchmark-native tests/fix
 
 # Independent admission and already-admitted measurement layers.
 cargo run --release --no-default-features --locked --example benchmark_assembly -- --problem examples/action-timing-search.json --sample-ms 700 --repeats 3 --jobs 1,2,4,32
-
-# Older fixed diagnostic axes, with explicit API modes.
-cargo run --release --no-default-features --locked --example benchmark_mace_candidates -- --candidate-set actor-resources --evaluations 20000 --repeats 3 --jobs 1,2,4 --modes document,prepared_result,pure_calculation,typed_snapshot,typed_owned_measurements
 
 # Whole restricted search; use a new output directory per replay if exporting artifacts.
 cargo run --release --no-default-features --locked -- search-build --problem examples/action-timing-search.json --native-evaluation typed --jobs 4 --max-evaluations 1000
@@ -116,10 +118,10 @@ historical measurement below onto the newer data or executable identity.
 
 | Existing evidence | Actual recorded measurement | Applicability at this checkpoint |
 | --- | --- | --- |
-| `runs/action-speed-benchmark-{release,summary}.json` | Windows x64, 1,806 admitted diagnostic selections, three samples per 1/2/4/32 workers. One-worker medians: **38,868 fresh admissions + measurements/s**, **4.81 million already-admitted measurements/s**. Samples were about 661–752 ms. | Historical schema **11**, package `b7943c63…`, not the recorded schema-29 checkpoint. The benchmark source, problem and Mace template hashes still match; that does not preserve the old backend/data identity. |
+| `runs/action-speed-benchmark-{release,summary}.json` | Windows x64, 1,806 admitted diagnostic selections, three samples per 1/2/4/32 workers. One-worker medians: **38,868 fresh admissions + measurements/s**, **4.81 million already-admitted measurements/s**. Samples were about 661–752 ms. | Historical schema **11**, package `b7943c63…`, not the recorded schema-29 checkpoint. At the initial inventory, the benchmark source, problem and Mace template hashes matched; that did not preserve the old backend/data identity and is not a current source-hash claim. |
 | Same action-timing evidence | Dataset/backend setup **289.81 ms**; candidate admission **60.94 ms for 1,806 attempts**; prepared-component setup **1.75 ms**. Setup also records input loading, proposals, catalog and document-equivalence checks separately. | A useful example of separating costs. These are measurements of that older package/process, not estimates for current preparation. No peak-memory measurement accompanies them. |
 | `runs/action-speed-release-search/summary.json`, summarized in `runs/action-speed-benchmark-summary.json` | Three repeats of typed/document search at 1/2/4/32 workers; **1,000 total attempts** each. One-worker report medians: **376.51 ms typed**, **3,260.87 ms document**; corresponding external process medians **408.59 / 3,277.62 ms**. | Same old schema-11 diagnostic domain. Current search source differs from its recorded implementation hash. This does not establish full-original search speed or useful build quality. |
-| `runs/actor-benchmark-isolated-summary.json` | Schema-6, 3,675 legal Mace candidates; one-worker medians **4,485 document calls/s** and **20,221 prepared-result calls/s**, three 20,000-call samples. | Earlier profile/data/backend. The contrast includes result/document work and must not be compared directly with a pure kernel rate. |
+| `runs/actor-benchmark-isolated-summary.json` | Schema-6, 3,675 legal Mace candidates; one-worker medians **4,485 document calls/s** and **20,221 prepared-result calls/s**, three 20,000-call samples. | Historical profile/data/backend from the retired finite Mace harness. The contrast includes result/document work and must not be compared directly with a pure kernel rate. |
 | `runs/actor-benchmark-fast-isolated-summary.json` | Same historical corpus; five 1,000,000-call samples. One-worker medians **15.16 million pure calculations/s**, **5.63 million calculations with stack snapshots/s**, **4.32 million calculations with owned measurements/s**. | These latter modes include fresh calculation, not isolated conversion. Useful layer separation, not a current throughput claim. At 32 workers the fastest samples are only a few milliseconds; rates are especially sensitive to scheduler/timer effects. |
 | `runs/assembly-benchmark-release.json` | An earlier schema-7 assembly/admission corpus with setup, distributions and checksums. | Both dataset and benchmark-source hashes differ from current files. Rebuild and recapture to compare; do not combine its rates with later runs as one experiment. |
 | `runs/native-class-throughput/` and `runs/native-pipelines-throughput/` | Early fixed-input prepared/document API distributions and machine reports. | Predate current explicit data identity and broad preparation changes. Preserved historical evidence only. |

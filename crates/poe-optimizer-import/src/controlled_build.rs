@@ -37,6 +37,8 @@ const SKILL_SLOT: &str = "pob-group-1";
 const MAX_ITEMS: usize = 256;
 /// Implementation input bound, independent of user-supplied game point budgets.
 pub const MAX_SELECTED_PASSIVES: usize = 240;
+/// Bound on one resolved evidence attachment accepted for a fresh candidate.
+pub(crate) const MAX_NATIVE_EVIDENCE_BYTES: usize = 16 * 1024 * 1024;
 type Result<T> = std::result::Result<T, BuildCatalogError>;
 #[derive(Debug, Error)]
 pub enum BuildCatalogError {
@@ -508,6 +510,11 @@ impl ControlledBuildCatalog {
             .materialize_supports(&[key.to_owned()], self.compiled.snapshot().package())
     }
     pub fn materialize(&self, handle: &AdmittedBuildSelection) -> Result<BuildDocument> {
+        self.materialize_prepared(handle.prepared())
+    }
+    /// Exports a structurally prepared selection for diagnostic evaluation, including
+    /// unmet equipment or gem requirements. This does not admit it to optimization.
+    pub fn materialize_prepared(&self, handle: &PreparedBuildSelection) -> Result<BuildDocument> {
         if !handle.bound_to(self) {
             return Err(BuildCatalogError::Ownership);
         }
@@ -519,9 +526,9 @@ impl ControlledBuildCatalog {
             .map(|(slot, id)| (slot.clone(), &self.items[id].item))
             .collect();
         self.source.materialize(
-            &handle.0.tree,
+            &handle.tree,
             &items,
-            &handle.0.supports,
+            &handle.supports,
             self.compiled.snapshot().package(),
         )
     }
@@ -858,19 +865,7 @@ impl ControlledBuildDomain {
     }
     pub fn materialize(&self, handle: &AdmittedBuildSelection) -> Result<BuildDocument> {
         self.validate_handle(handle)?;
-        let items = handle
-            .selection()
-            .candidate
-            .equipment
-            .iter()
-            .map(|(slot, id)| (slot.clone(), &self.catalog.items[id].item))
-            .collect();
-        self.catalog.source.materialize(
-            &handle.0.tree,
-            &items,
-            &handle.0.supports,
-            self.catalog.compiled.snapshot().package(),
-        )
+        self.catalog.materialize(handle)
     }
     fn assess(
         &self,
@@ -983,6 +978,10 @@ impl PreparedBuildSelection {
     pub fn support_keys(&self) -> &[String] {
         &self.supports
     }
+    /// Tests the exact catalog owner, independently of requirement feasibility.
+    pub fn bound_to(&self, catalog: &ControlledBuildCatalog) -> bool {
+        Arc::ptr_eq(&self.catalog_binding, &catalog.binding)
+    }
 }
 #[derive(Clone)]
 pub struct AdmittedBuildSelection(PreparedBuildSelection);
@@ -1009,7 +1008,7 @@ impl AdmittedBuildSelection {
         self.0.support_keys()
     }
     pub fn bound_to(&self, catalog: &ControlledBuildCatalog) -> bool {
-        Arc::ptr_eq(&self.0.catalog_binding, &catalog.binding)
+        self.0.bound_to(catalog)
     }
 }
 impl PartialEq for AdmittedBuildSelection {

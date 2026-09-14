@@ -6,9 +6,9 @@ use poe_optimizer_core::{
     options::EvaluationOptions,
 };
 use poe_optimizer_data::{class_tree::ClassTreeSelection, game_data::bundled_snapshot};
-use poe_optimizer_import::controlled_mace::{
-    ControlledMaceCatalog, MaceSupportLoadout, MaceWeaponAlternative,
-};
+#[path = "support/parity_build.rs"]
+mod parity_build;
+use parity_build::{ParityBuild, WeaponCase};
 use poe_optimizer_native::NativeBackend;
 use poe_optimizer_pob::backend::PobBackend;
 use serde_json::Value;
@@ -218,29 +218,18 @@ fn actor_operations_and_inherent_flags_match_fresh_spark_mapping_bossing_and_com
     let native = Engine::new(NativeBackend::new());
     let pob = oracle();
     let example: Value =
-        serde_json::from_str(include_str!("../examples/mace-local-weapon-search.json")).unwrap();
-    let weapons: Vec<MaceWeaponAlternative> =
-        serde_json::from_value(example["weapons"].clone()).unwrap();
-    let support =
-        MaceSupportLoadout::new(vec!["heavy_swing".into(), "rapid_attacks_i".into()]).unwrap();
+        serde_json::from_str(include_str!("fixtures/local-weapon-cases.json")).unwrap();
+    let weapons: Vec<WeaponCase> = serde_json::from_value(example["weapons"].clone()).unwrap();
+    let support = vec!["heavy_swing".into(), "rapid_attacks_i".into()];
     let tree = ClassTreeSelection {
         class_id: 10,
         ascendancy_id: Some("Monk3".into()),
         entrance_node_id: Some(10364),
         ascendancy_node_id: Some(24475),
     };
-    let registry = ControlledMaceCatalog::with_tree_loadouts(
-        Arc::new(bundled_snapshot().unwrap()),
-        MACE.into(),
-        weapons,
-        vec![support.clone()],
-        vec![tree.clone()],
-    )
-    .unwrap();
-    let candidate = registry
-        .resolve_tree_loadout_candidate(&tree, "wooden-balanced", &support)
-        .unwrap();
-    let composed = registry.materialize(candidate).unwrap().content;
+    let registry = ParityBuild::new(Arc::new(bundled_snapshot().unwrap()), MACE.into(), weapons);
+    let candidate = registry.prepare(&tree, "wooden-balanced", &support);
+    let composed = registry.materialize(&candidate).content;
     let mut comparisons = 0;
     let mut reimports = 0;
     for (scenario, template, is_mace) in [

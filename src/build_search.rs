@@ -26,6 +26,13 @@ use std::{
     },
     time::{Duration, Instant},
 };
+#[derive(Clone, Copy, Debug, PartialEq, Eq, clap::ValueEnum, Serialize)]
+#[serde(rename_all = "snake_case")]
+enum NativeEvaluation {
+    Typed,
+    Document,
+}
+
 #[derive(clap::Args)]
 pub(crate) struct Args {
     #[arg(long)]
@@ -44,8 +51,8 @@ pub(crate) struct Args {
     timeout_seconds: u64,
     #[arg(long, default_value_t = 0)]
     seed: u64,
-    #[arg(long,value_enum,default_value_t=super::mutation_search::NativeEvaluation::Typed)]
-    native_evaluation: super::mutation_search::NativeEvaluation,
+    #[arg(long,value_enum,default_value_t=NativeEvaluation::Typed)]
+    native_evaluation: NativeEvaluation,
     #[arg(long)]
     output: Option<PathBuf>,
     #[arg(long)]
@@ -632,10 +639,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         backend: &backend,
         prepared: &prepared,
         metrics,
-        document: matches!(
-            args.native_evaluation,
-            super::mutation_search::NativeEvaluation::Document
-        ),
+        document: matches!(args.native_evaluation, NativeEvaluation::Document),
         finalists: Mutex::new(BTreeMap::new()),
     };
     let budget = SearchBudget {
