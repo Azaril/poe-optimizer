@@ -9,6 +9,7 @@ mod data_loading;
 mod game_data_extract;
 mod native_benchmark;
 mod owned_binding;
+mod owned_draft;
 mod owned_input;
 mod owned_schema;
 
@@ -52,6 +53,8 @@ struct Cli {
 enum Action {
     /// Check owned semantic input structure without source import or game evaluation.
     CheckOwnedInput(owned_input::Args),
+    /// Check an owned draft and optionally finalize explicit independent presets.
+    CheckOwnedDraft(owned_draft::Args),
     /// Check a caller-supplied owned definition schema package without evaluating a build.
     CheckOwnedSchema(owned_schema::Args),
     /// Bind an owned request to injected schemas without calculating.
@@ -218,6 +221,7 @@ fn main() -> ExitCode {
 fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
         Some(Action::CheckOwnedInput(args)) => owned_input::run(args)?,
+        Some(Action::CheckOwnedDraft(args)) => owned_draft::run(args)?,
         Some(Action::CheckOwnedSchema(args)) => owned_schema::run(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,

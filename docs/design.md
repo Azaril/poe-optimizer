@@ -13,6 +13,8 @@ before extending native behavior. Earlier source-program and loader designs docu
 or historical implementation, not requirements to reproduce PoB internals in the target.
 The [owned composition and binding contract](owned-binding.md) defines the concrete input,
 provider, schema and offline-identity seams used by that architecture.
+The [owned draft boundary](owned-drafts.md) keeps partial authoring/import state outside
+complete evaluation and gives CLI, GUI and web hosts the same explicit finalization API.
 
 ## Recommendation
 

@@ -408,6 +408,7 @@ Required tests are contract tests, not evidence of whole-build calculation:
 | Five originals | Frozen selection manifest is preserved; every required unresolved mapping has a typed location; importing all five is not reported as five complete native evaluations. |
 
 Direct construction, the owned codec, inventory unions and availability bindings are
-implemented. Full D1 still needs project/preset/draft composition, definition binding,
-revisioned editing and the five-case adapter. An XML wrapper renamed
+implemented. Project/preset composition, definition binding and the
+[owned draft/finalization boundary](owned-drafts.md) are also implemented. Full D1 still
+needs revisioned repair/edit/adoption and the five-case adapter. An XML wrapper renamed
 `BuildSpec` or a catalog-only facade does not meet that gate.

@@ -67,6 +67,9 @@ pub enum OccurrenceKind {
     SkillPreset,
     ChoicePreset,
     SavedVariant,
+    DraftIssue,
+    ScenarioPreset,
+    QueryPreset,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -163,7 +166,7 @@ pub(crate) fn validate_record_tables(
     additional_occurrences: &[(InstanceId, OccurrenceKind)],
     limits: OwnedInputLimits,
 ) -> Result<RecordTableValidation> {
-    let mut check = Check::new(namespace, limits, Some(allocator))?;
+    let mut check = StructuralCheck::new(namespace, limits, Some(allocator))?;
     check.register_tables(tables)?;
     // Extra occurrences are metadata across actual bounded project collections.
     if additional_occurrences.len() > check.remaining {
@@ -190,7 +193,8 @@ pub(crate) fn validate_record_tables(
     })
 }
 
-struct Check<'a> {
+/// Crate-private structural leaves shared by complete inputs and typed drafts.
+pub(crate) struct StructuralCheck<'a> {
     namespace: &'a GameVersionNamespace,
     allocator: Option<InstanceAllocatorState>,
     members: Option<BTreeMap<InstanceId, OccurrenceKind>>,
@@ -200,8 +204,8 @@ struct Check<'a> {
     equipment_items: BTreeMap<ItemSlotUseId, ItemRecordId>,
     limits: OwnedInputLimits,
 }
-impl<'a> Check<'a> {
-    fn new(
+impl<'a> StructuralCheck<'a> {
+    pub(crate) fn new(
         namespace: &'a GameVersionNamespace,
         limits: OwnedInputLimits,
         allocator: Option<InstanceAllocatorState>,
@@ -218,27 +222,100 @@ impl<'a> Check<'a> {
             limits,
         })
     }
-    fn collection(&mut self, path: &str, len: usize) -> Result {
+    /// Enable membership checks even for an empty registry. Charge each actual
+    /// collection and register all rows before checking references.
+    /// Repeated initialization does not erase existing membership.
+    pub(crate) fn begin_membership(&mut self) {
+        self.members.get_or_insert_with(BTreeMap::new);
+    }
+    /// Permit historical missing roots within saved scenario/query selector checks.
+    /// Present wrong-domain IDs and known provider-owner conflicts still reject.
+    /// The previous mode is restored when the closure returns either Ok or Err.
+    pub(crate) fn with_query_references<T>(
+        &mut self,
+        check: impl FnOnce(&mut Self) -> Result<T>,
+    ) -> Result<T> {
+        let previous = self.allow_missing_references;
+        self.allow_missing_references = true;
+        let result = check(self);
+        self.allow_missing_references = previous;
+        result
+    }
+    fn known_reference(
+        &self,
+        path: &str,
+        id: impl BuildInstanceId,
+        expected: OccurrenceKind,
+    ) -> Result {
+        let id = id.instance_id();
+        self.identity(path, id)?;
+        if self.members.as_ref().and_then(|members| members.get(&id)) != Some(&expected) {
+            return Err(error(
+                path,
+                StructuralErrorKind::MissingReference { expected, id },
+            ));
+        }
+        Ok(())
+    }
+    /// Seed known ownership after registering all typed rows. Pending ownership
+    /// must remain absent; it cannot be inferred from an unresolved candidate.
+    pub(crate) fn seed_modifier_item(
+        &mut self,
+        path: &str,
+        modifier: ModifierInstanceId,
+        item: ItemRecordId,
+    ) -> Result {
+        self.known_reference(path, modifier, OccurrenceKind::Modifier)?;
+        self.known_reference(path, item, OccurrenceKind::Item)?;
+        if let Some(previous) = self.modifier_items.get(&modifier)
+            && *previous != item
+        {
+            return Err(error(path, StructuralErrorKind::WrongProviderOwner));
+        }
+        self.modifier_items.insert(modifier, item);
+        Ok(())
+    }
+    pub(crate) fn seed_equipment_item(
+        &mut self,
+        path: &str,
+        equipment: ItemSlotUseId,
+        item: ItemRecordId,
+    ) -> Result {
+        self.known_reference(path, equipment, OccurrenceKind::EquipmentUse)?;
+        self.known_reference(path, item, OccurrenceKind::Item)?;
+        if let Some(previous) = self.equipment_items.get(&equipment)
+            && *previous != item
+        {
+            return Err(error(path, StructuralErrorKind::WrongProviderOwner));
+        }
+        self.equipment_items.insert(equipment, item);
+        Ok(())
+    }
+    pub(crate) fn collection(&mut self, path: &str, len: usize) -> Result {
         if len > self.limits.max_collection_entries || len > self.remaining {
             return Err(error(path, StructuralErrorKind::LimitExceeded));
         }
         self.remaining -= len;
         Ok(())
     }
-    fn namespace(&self, path: &str, namespace: &GameVersionNamespace) -> Result {
+    pub(crate) fn namespace(&self, path: &str, namespace: &GameVersionNamespace) -> Result {
         if namespace != self.namespace {
             return Err(error(path, StructuralErrorKind::ForeignNamespace));
         }
         Ok(())
     }
-    fn definition<K: DefinitionDomain>(&self, path: &str, id: &DefId<K>) -> Result {
+    pub(crate) fn definition<K: DefinitionDomain>(&self, path: &str, id: &DefId<K>) -> Result {
         self.namespace(path, id.namespace())
     }
-    fn slot<K: DefinitionDomain>(&self, path: &str, slot: &DeclaredSlot<DefId<K>>) -> Result {
+    pub(crate) fn slot<K: DefinitionDomain>(
+        &self,
+        path: &str,
+        slot: &DeclaredSlot<DefId<K>>,
+    ) -> Result {
         self.namespace(path, slot.declaration.namespace())?;
         self.definition(path, &slot.slot)
     }
-    fn identity(&self, path: &str, id: InstanceId) -> Result {
+    pub(crate) fn identity(&self, path: &str, id: InstanceId) -> Result {
         if let Some(allocator) = self.allocator {
             if id.lineage() != allocator.lineage() {
                 return Err(error(path, StructuralErrorKind::ForeignLineage));
@@ -249,21 +326,28 @@ impl<'a> Check<'a> {
         }
         Ok(())
     }
-    fn register(&mut self, path: &str, id: impl BuildInstanceId, kind: OccurrenceKind) -> Result {
+    pub(crate) fn register(
+        &mut self,
+        path: &str,
+        id: impl BuildInstanceId,
+        kind: OccurrenceKind,
+    ) -> Result {
         let id = id.instance_id();
         self.identity(path, id)?;
-        if self
-            .members
-            .as_mut()
-            .expect("build membership collection")
-            .insert(id, kind)
-            .is_some()
-        {
-            return Err(error(path, StructuralErrorKind::DuplicateIdentity { id }));
+        let members = self.members.get_or_insert_with(BTreeMap::new);
+        if let std::collections::btree_map::Entry::Vacant(entry) = members.entry(id) {
+            entry.insert(kind);
+            Ok(())
+        } else {
+            Err(error(path, StructuralErrorKind::DuplicateIdentity { id }))
         }
-        Ok(())
     }
-    fn reference(&self, path: &str, id: impl BuildInstanceId, expected: OccurrenceKind) -> Result {
+    pub(crate) fn reference(
+        &self,
+        path: &str,
+        id: impl BuildInstanceId,
+        expected: OccurrenceKind,
+    ) -> Result {
         let id = id.instance_id();
         self.identity(path, id)?;
         if let Some(members) = &self.members {
@@ -280,7 +364,7 @@ impl<'a> Check<'a> {
         }
         Ok(())
     }
-    fn provider(&mut self, path: &str, key: &ProviderKey) -> Result {
+    pub(crate) fn provider(&mut self, path: &str, key: &ProviderKey) -> Result {
         match key.root {
             ProviderRoot::Character => {}
             ProviderRoot::ItemModifier {
@@ -318,14 +402,14 @@ impl<'a> Check<'a> {
         // Generated ownership existence/cycles belong to definition resolution.
         Ok(())
     }
-    fn actor(&mut self, path: &str, actor: &ActorKey) -> Result {
+    pub(crate) fn actor(&mut self, path: &str, actor: &ActorKey) -> Result {
         if let ActorKey::Owned(actor) = actor {
             self.provider(path, &actor.provider)?;
             self.slot(path, &actor.slot)?;
         }
         Ok(())
     }
-    fn skill(&mut self, path: &str, target: &SkillTarget) -> Result {
+    pub(crate) fn skill(&mut self, path: &str, target: &SkillTarget) -> Result {
         match target {
             SkillTarget::Authored(id) => self.reference(path, *id, OccurrenceKind::SkillUse),
             SkillTarget::Generated(key) => {
@@ -334,7 +418,7 @@ impl<'a> Check<'a> {
             }
         }
     }
-    fn action(&mut self, path: &str, action: &ActionSelection) -> Result {
+    pub(crate) fn action(&mut self, path: &str, action: &ActionSelection) -> Result {
         self.actor(path, &action.action.actor)?;
         self.provider(path, &action.action.provider)?;
         self.slot(path, &action.action.output)?;
@@ -342,21 +426,21 @@ impl<'a> Check<'a> {
         self.definition(path, &action.mode)?;
         self.definition(path, &action.stat_set)
     }
-    fn value(&self, path: &str, value: &ParameterValue) -> Result {
+    pub(crate) fn value(&self, path: &str, value: &ParameterValue) -> Result {
         match value {
             ParameterValue::Boolean(_) | ParameterValue::Integer(_) => Ok(()),
             ParameterValue::Quantity(value) => self.definition(path, value.unit()),
             ParameterValue::Option(value) => self.definition(path, value),
         }
     }
-    fn quality(&self, path: &str, quality: &Option<QualitySelection>) -> Result {
+    pub(crate) fn quality(&self, path: &str, quality: &Option<QualitySelection>) -> Result {
         if let Some(quality) = quality {
             self.definition(path, &quality.kind)?;
             self.definition(path, quality.amount.unit())?;
         }
         Ok(())
     }
-    fn parameters(
+    pub(crate) fn parameters(
         &mut self,
         path: &str,
         parameters: &[ParameterAssignment],
@@ -377,11 +461,11 @@ impl<'a> Check<'a> {
         }
         Ok(())
     }
-    fn choice(&self, path: &str, choice: &ChoiceSelection) -> Result {
+    pub(crate) fn choice(&self, path: &str, choice: &ChoiceSelection) -> Result {
         self.slot(path, &choice.slot)?;
         self.value(path, &choice.value)
     }
-    fn choice_owner(&mut self, path: &str, owner: &ChoiceOwner) -> Result {
+    pub(crate) fn choice_owner(&mut self, path: &str, owner: &ChoiceOwner) -> Result {
         match owner {
             ChoiceOwner::Character => Ok(()),
             ChoiceOwner::EquipmentUse(id) => {
@@ -393,7 +477,7 @@ impl<'a> Check<'a> {
             ChoiceOwner::Provider(provider) => self.provider(path, provider),
         }
     }
-    fn scope(&mut self, path: &str, scope: &LoadoutScope) -> Result {
+    pub(crate) fn scope(&mut self, path: &str, scope: &LoadoutScope) -> Result {
         if let LoadoutScope::Selected { loadouts } = scope {
             if loadouts.is_empty() {
                 return Err(error(path, StructuralErrorKind::EmptyLoadoutScope));
@@ -423,6 +507,7 @@ impl<'a> Check<'a> {
                     modifier.id,
                     OccurrenceKind::Modifier,
                 )?;
+                self.seed_modifier_item(&format!("{path}[{j}]"), modifier.id, item.id)?;
             }
         }
         Ok(())
@@ -450,7 +535,7 @@ impl<'a> Check<'a> {
         Ok(())
     }
     fn register_tables(&mut self, tables: RecordTables<'_>) -> Result {
-        self.members = Some(BTreeMap::new());
+        self.begin_membership();
         // Register all definitions of occurrences before checking references, so
         // forward references work but domain-confused or dangling values do not.
         macro_rules! register {
@@ -504,20 +589,6 @@ impl<'a> Check<'a> {
             PayloadLink,
             |v: &PayloadLink| v.id
         );
-        self.modifier_items = tables
-            .items
-            .iter()
-            .flat_map(|item| {
-                item.modifiers
-                    .iter()
-                    .map(move |modifier| (modifier.id, item.id))
-            })
-            .collect();
-        self.equipment_items = tables
-            .equipment
-            .iter()
-            .map(|equipment| (equipment.id, equipment.item))
-            .collect();
         Ok(())
     }
     fn record_values(&mut self, tables: RecordTables<'_>) -> Result {
@@ -558,6 +629,14 @@ impl<'a> Check<'a> {
             }
         }
         check_containment(tables.equipment)?;
+        // Item references were checked above; preserve existing error ordering.
+        for (i, equipment) in tables.equipment.iter().enumerate() {
+            self.seed_equipment_item(
+                &format!("build.equipment[{i}]"),
+                equipment.id,
+                equipment.item,
+            )?;
+        }
         for (i, allocation) in tables.allocations.iter().enumerate() {
             let path = format!("build.allocations[{i}]");
             self.definition(&path, &allocation.node)?;
@@ -736,8 +815,8 @@ pub(crate) fn validate_item_records(
     additional_occurrences: &[(InstanceId, OccurrenceKind)],
     limits: OwnedInputLimits,
 ) -> Result<usize> {
-    let mut check = Check::new(namespace, limits, Some(allocator))?;
-    check.members = Some(BTreeMap::new());
+    let mut check = StructuralCheck::new(namespace, limits, Some(allocator))?;
+    check.begin_membership();
     check.register_item_records("items", items)?;
     // Metadata combines real collections; each caller bounds its own collection.
     if additional_occurrences.len() > check.remaining {
@@ -759,7 +838,7 @@ pub(crate) fn build_occurrences(
     limits: OwnedInputLimits,
 ) -> Result<Vec<(InstanceId, OccurrenceKind)>> {
     let input = build.input();
-    let mut check = Check::new(&input.game_version, limits, Some(input.allocator))?;
+    let mut check = StructuralCheck::new(&input.game_version, limits, Some(input.allocator))?;
     check.build(input)?;
     Ok(check
         .members
@@ -769,21 +848,21 @@ pub(crate) fn build_occurrences(
 }
 
 pub(crate) fn validate_build(build: &BuildInput, limits: OwnedInputLimits) -> Result {
-    Check::new(&build.game_version, limits, Some(build.allocator))?.build(build)
+    StructuralCheck::new(&build.game_version, limits, Some(build.allocator))?.build(build)
 }
 pub(crate) fn validate_scenario(
     scenario: &ScenarioInput,
     limits: OwnedInputLimits,
     allocator: Option<InstanceAllocatorState>,
 ) -> Result {
-    Check::new(&scenario.game_version, limits, allocator)?.scenario(scenario)
+    StructuralCheck::new(&scenario.game_version, limits, allocator)?.scenario(scenario)
 }
 pub(crate) fn validate_queries(
     queries: &QueryInput,
     limits: OwnedInputLimits,
     allocator: Option<InstanceAllocatorState>,
 ) -> Result {
-    Check::new(&queries.game_version, limits, allocator)?.queries(queries)
+    StructuralCheck::new(&queries.game_version, limits, allocator)?.queries(queries)
 }
 pub(crate) fn validate_request(
     build: &BuildInput,
@@ -791,13 +870,14 @@ pub(crate) fn validate_request(
     queries: &QueryInput,
     limits: OwnedInputLimits,
 ) -> Result {
-    let mut check = Check::new(&build.game_version, limits, Some(build.allocator))?;
+    let mut check = StructuralCheck::new(&build.game_version, limits, Some(build.allocator))?;
     check.build(build)?;
     // Saved selectors can refer to removed occurrences. Keep lineage/watermark and
     // shape checks; existence/effective-loadout availability binds at resolution.
-    check.allow_missing_references = true;
-    check.scenario(scenario)?;
-    check.queries(queries)
+    check.with_query_references(|check| {
+        check.scenario(scenario)?;
+        check.queries(queries)
+    })
 }
 
 fn canonicalize_scope(scope: &mut LoadoutScope) {

@@ -202,18 +202,66 @@ had four successful jobs and four running at 09:11:56 UTC on 2026-09-14, with no
 That observation is not a full-run or later-checkpoint result. Current implementation details
 are in [owned composition and binding](owned-binding.md).
 
-**Next:** implement import drafts/explicit unresolved selections and revisioned edit/adoption
-operations over the delivered project/inventory APIs. Populate the durable mapping registry
-and compile schema facts for all five originals using the adapter audit; do not add source-name
-fallback keys or production fixture values. Then compile representative local-item, conditional,
-support and grant effects into owned rules and develop shared player/minion resolution together.
-Remove replaced legacy numerical callers while preserving their independent numerical tests.
-The bounded next-phase audit is `runs/owned-binding-implementation-01/next-normalization.md`: it
-identifies independent scenario/query drafts, import-only value/role policies and selected
-projection finalization that preserves inactive unresolved alternatives. No new user decision
-is needed to collect those facts; missing meaning remains explicit.
+**D1d owned draft/selection checkpoint validated locally.**
+
+Portable Core now stores partial semantic sessions with independent build/scenario/query
+presets, stable unresolved issue IDs, component-partial selectors and explicit collection
+completion. Validation uses the existing structural leaves, checking known facts and complete
+candidate values without installing candidates or manufacturing missing records. Unresolved
+source meaning stays outside complete evaluation; no Lua/source/UI program is introduced.
+
+Explicit selected finalization follows the selected rows and backing item/gem records through
+existing complete project/composition/request constructors. Inactive alternatives and global
+registry uncertainty stay saved; selected membership/fields must be complete. Disabled or
+off-loadout selected rows are not silently pruned. Pending output preserves every ordered query
+row. Complete output binds exact draft/selection/request identities and makes no schema,
+legality, inventory-availability or numerical claim.
+
+The separate bounded draft codec and thin check-owned-draft CLI serve both imports and direct
+authoring. Import's injected lexical codec handles exact decimal integer bounds, explicit
+whitespace/token grammar, units and rational quantity scales. Source precedence/role policies
+and all-five normalization remain next work; the codec has no game-specific field names.
+Independent review identified and fixed a pending-parent owner-family hole before publication.
+The validator rejects impossible declaration families without guessing the pending exact
+definition; known and candidate slots have regression coverage.
+
+Final local validation passes **274 selected test executions, zero failures**: all Core
+cases (191), Data schema tests (11), Import mapping/value tests (28), and four owned CLI
+suites with default features (22) and without PoB (22). Strict workspace/all-target and
+native-only Clippy, CORE/DATA/ENGINE/IMPORT/NATIVE WASM compilation, formatting and the
+native-only normal dependency check pass. No PoB/Lua runtime appears in that tree. All 922
+checked local documentation link occurrences resolve. The original inputs, legacy schema-40
+package, Cargo.lock and clean pinned PoB checkout are unchanged.
+
+runs/owned-normalization-01/validated-checkpoint.json joins all ten final producing commands,
+source/input guards, independent reviews and documentation checks. The final sequence is
+validation-02; validation-01 caught an oversized pending-result enum. Boxing its selection
+preserves the wire format and all tests/assertions. Earlier development checks caught a
+macro tokenization error and unused import; they were corrected without dropped tests,
+lint suppression or new profiles. All validation runtimes are terminal. Transient approval
+service capacity failures recovered before publication.
+
+For preceding commit 5ce8a08, [CI run 34827697718](https://github.com/Azaril/poe-optimizer/actions/runs/34827697718)
+had both platform validation jobs and both native suites passing, with four broader suites
+still running and no failed steps at 09:50:09 UTC on 2026-09-14. This is not a full-run or
+later-commit CI result; existing Windows/Linux CI includes the new tests automatically.
+
+See [owned drafts](owned-drafts.md). This is not full D1/D2 completion. No numerical consumer
+was retired in this checkpoint; active Spark/Mace consumers remain named in the retirement
+inventory until shared numerical replacements preserve their meaningful tests. No third
+profile, source VM expansion, changed original fixture or new tolerance is permitted.
+
+**Next:** normalize all five originals through the delivered draft boundary using the
+import occurrence/value policy, durable mapping registry and adapter audit. Develop
+revisioned pending repair/edit/adoption alongside that work; an editor is not a prerequisite
+for collecting and representing all five builds. Keep source occurrences/explanations in Import sidecars; do
+not reuse legacy selected-view admission or infer configuration values through f64 first.
+The bounded policy proposal is runs/owned-normalization-01/policy-proposal.md; unresolved
+source semantics remain explicit. Then compile representative local-item, conditional,
+support and grant effects into owned rules and develop shared player/minion resolution.
+Remove replaced legacy numerical callers while preserving independent numerical tests.
 Complete native coverage remains **0/5** and legacy search-build still uses closed profiles.
-Do not add a third profile or extend native PoB UI/class machinery.
+No user decision is needed for this agreed structural work.
 
 **Historical implementation checkpoints follow.** Their tests describe producing revisions;
 old future-work instructions are superseded by this header and [Resume here](#resume-here).
@@ -4380,27 +4428,30 @@ the design documents.
 ## Resume here
 
 1. Read [domain architecture](domain-architecture.md), [architecture migration](architecture-migration.md),
-   [owned build contract](owned-build-contract.md), [owned definition package](owned-definition-package.md)
-   and [composition/binding](owned-binding.md). Owned domain models supersede PoB UI/loader/VM replication.
-2. Preserve `runs/owned-binding-implementation-01/validated-checkpoint.json`: 229 selected tests,
-   strict lint, WASM, format and dependency checks passed with stable source/input guards.
-   Prior 144-test schema/inventory receipts describe 9aff988, not later changes. Inspect exact published
-   head CI separately; no inherited green claim. Preserve all original inputs and the clean PoB pin.
-3. Delivered APIs: immutable project composition and version-1 codec; inventory union/availability;
-   injected schema package/index; full owned-request schema binder; offline durable ID registry and
-   exact mapping artifacts. Do not reimplement them in CLI or source normalization. Binding is not
-   activation, stock legality, graph legality, numerical rule coverage or a reusable calculation plan.
-4. Implement import drafts and explicit repair/selection plus revisioned edit/adoption operations.
-   Normalize all five originals into owned projects/scenarios/queries using the adapter audit and
-   persisted mapping registry. Source sets stay independent, unresolved records remain explicit, and
-   mappings do not fill required choices from UI defaults. No fixture-specific production path.
-5. Compile representative local-item, conditional, support and grant effects into owned rules, then
-   develop shared player/minion resolution together. Reuse numerical kernels and generic search;
-   remove profile dispatch and source-shaped consumers by named dependency closure. Preserve useful
-   numerical/reference fixtures. [Retirement inventory](legacy-retirement.md) names remaining callers.
-6. Preserve original selections and fixed expectation manifests. Keep whole-build native coverage
-   at **0/5** until full gates pass. Exercise mapping scenarios and independent holdouts, then joint
-   semantic search. Update this document and retirement inventory at each checkpoint.
+   [owned build contract](owned-build-contract.md), [owned definition package](owned-definition-package.md),
+   [composition/binding](owned-binding.md) and [owned drafts](owned-drafts.md). Owned domain models
+   supersede PoB UI/loader/VM replication.
+2. Preserve runs/owned-normalization-01/validated-checkpoint.json: 274 selected tests, strict lint,
+   WASM, format and dependency checks pass with stable guards (validation-02). The earlier 229-test
+   binding receipt describes the previous checkpoint. Inspect exact published-head CI separately;
+   preserve all original inputs, the legacy data package and the clean PoB pin.
+3. Delivered APIs: project composition/codec; inventory union/availability; schema package/index;
+   full owned-request binder; offline ID registry/mappings; partial draft validation/codec and
+   explicit selected finalization. CLI is a thin consumer. None of these is numerical coverage.
+4. Normalize all five originals with the audited occurrence/mapping/value policies. Retain every
+   source occurrence even when a convenience projection fails; map source evidence only in Import.
+   Source sets stay independent, unresolved facts stay explicit, and UI defaults are not game rules.
+   Do not delay this breadth check until editor/repair APIs are complete.
+5. In parallel, implement revisioned pending repair/edit/adoption. Bind exact prior
+   snapshot/revision/watermark; retain deleted-ID reservation and distinguish shared-record edit
+   from explicit replacement. No Known-to-Pending-to-Known identity laundering or automatic
+   historical-query retargeting.
+6. Compile representative local-item, conditional, support and grant effects into owned rules,
+   then implement shared player/minion resolution. Reuse numerical kernels and generic search;
+   remove profile dispatch/source consumers by named dependency closure with numerical regressions.
+7. Preserve original selections and fixed expectation manifests. Keep complete native coverage
+   at **0/5** until full gates pass. Exercise explicit mapping scenarios and independent holdouts,
+   then joint semantic search. Update this document and retirement inventory at checkpoints.
 
 The R2at configuration source probe and allocation bridge are paused. Their unresolved
 probe fixes and source-method frontier are not prerequisites for the architecture migration.

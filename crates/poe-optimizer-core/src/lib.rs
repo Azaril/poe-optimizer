@@ -87,6 +87,7 @@ pub mod owned_binding;
 pub mod owned_build;
 pub mod owned_content;
 pub mod owned_definitions;
+pub mod owned_draft;
 pub mod owned_inventory;
 pub mod owned_project;
 pub mod owned_schema;

@@ -59,8 +59,9 @@ completed finite-catalog deletion and remaining shared-type catches. The
 [owned build contract](owned-build-contract.md) proposes concrete D1 records and validation
 seams. Its record/codec/request API, standalone inventory, coherent record unions and exact
 availability bindings are implemented. Independent project/preset composition and schema binding are implemented; see the
-[composition/binding contract](owned-binding.md). Draft repair, revisioned edits and five-build
-normalization remain open. The
+[composition/binding contract](owned-binding.md). The [owned draft boundary](owned-drafts.md)
+adds partial session storage, structural validation and explicit selected finalization. Draft
+repair, revisioned edits/adoption and five-build normalization remain open. The
 [owned package contract](owned-definition-package.md) now has typed descriptors and a
 validated injectable schema package/index. Durable owned-ID allocation and exact offline mapping artifacts are implemented. Catalog
 conversion, rule compilation and the complete D2 exit evidence remain open; schema validity is not numerical coverage.

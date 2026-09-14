@@ -20,6 +20,7 @@ pub mod loadouts;
 pub mod mace_item;
 mod modifier_syntax;
 pub mod owned_mapping;
+pub mod owned_value;
 pub mod preflight;
 pub mod root_admission;
 pub mod selected_view;

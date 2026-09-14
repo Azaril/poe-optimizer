@@ -211,6 +211,9 @@ instance_domains! {
     SkillPresetId => "One independent owned skill preset.",
     ChoicePresetId => "One independent owned mechanic-choice preset.",
     SavedVariantId => "One explicit saved combination of owned presets.",
+    DraftIssueId => "One stable unresolved semantic field or collection in an owned draft.",
+    ScenarioPresetId => "One independent owned scenario preset.",
+    QueryPresetId => "One independent ordered measurement preset.",
 }
 
 /// Serializable watermark, including IDs of deleted instances.
