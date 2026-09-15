@@ -38,6 +38,27 @@ not completion of joint optimization. D5 retirement happens throughout D1–D4, 
 permission to keep obsolete code indefinitely. Avoid a flag day that deletes useful
 numerical validation before its meaning is preserved.
 
+## T1: Rust tooling and test consolidation
+
+Status: planned, not started. The owner requests eventual Rust-only project tooling/tests
+and explicitly defers conversion of the existing Python tests. New tooling defaults to
+Rust; maintenance of existing Python utilities and their tests remains permitted.
+Schedule coherent replacements alongside D2/D5 consumer migration without displacing the
+five-original-build integration priority.
+
+Inventory the maintained exporters, corpus runner, expectation checker and build/boundary
+checks with their CI consumers. Replace each utility and its tests together using owned
+Rust types/validators, retaining independent expected results. Preserve artifact bytes and
+semantic identities where they are contractual, malformed-input/resource limits, and
+no-overwrite/publication behavior. A Rust harness that still requires the Python utility
+is an intermediate step only. Choose the Cargo tooling entry point when implementing the
+first replacement; this decision does not introduce another rule interpreter.
+
+Exit: supported build, data-generation and validation workflows run without Python;
+project-maintained test suites are Rust and run through documented Cargo commands. Remove
+each Python implementation, test suite and CI setup only after its last consumer migrates
+and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
+
 ## Current structural and breadth priorities
 
 The owned-model boundary is the controlling design; the latest user review reinforces

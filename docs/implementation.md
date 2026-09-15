@@ -11,6 +11,14 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
+**Tooling direction checkpoint (after `c5d0dfe`):** project-maintained tooling and tests
+should eventually all be Rust. Existing Python tests cover offline exporters and supporting
+corpus/expectation/boundary utilities; they are transitional. New tooling/tests default to
+Rust. [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation) schedules each
+utility and its tests to migrate together with preserved fixtures and behavior. No existing
+Python implementation or test is converted now, as requested. This is a documentation-only
+checkpoint; runtime coverage and the native-build completion count remain unchanged.
+
 **Current checkpoint: owned library isolation and legacy retirement (after `7391fd7`).**
 The controlling [domain architecture](domain-architecture.md) explicitly terminates source
 conversion at an owned semantic artifact. The implementation now enforces a library-level

@@ -334,6 +334,21 @@ Remove obsolete entry points, schemas and support code with their last consumer.
 source-only acquisition tools only when a named offline or reference workflow still needs
 them. New semantic work must not extend the frozen legacy interpreter frontier.
 
+## Tooling and test language
+
+The end state is Rust for project-maintained tooling and tests as well as the evaluator.
+New tooling and test suites should use Rust, sharing the owned types and validators where
+appropriate. Existing Python exporters, corpus/expectation checks and boundary checks are
+transitional utilities; their Python tests protect those utilities, not a separate game
+calculation implementation. Maintain that coverage until each utility is replaced.
+
+Migrate a utility and its tests together, preserving independent fixtures and observable
+contracts. Moving only the test harness to Rust while retaining a required Python program
+does not complete migration. The supported build, data-generation and validation workflows
+should ultimately require no Python interpreter. Optional upstream PoB/Lua remains a
+separate reference oracle; this policy does not require rewriting upstream tests.
+See the [T1 migration milestone](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
+
 ## Parity boundary
 
 PoB is a differential oracle for **observable game/evaluation behavior**. Compare resolved
