@@ -33,3 +33,7 @@ Cargo.lock text eol=lf
 
 # Offline resistance artifacts retain exact recipe and source receipt bytes.
 /data/owned/poe2/3887ae68/resistance/*.json -text
+
+# Current publication and finite tree conversion are verified byte-for-byte.
+/data/owned/poe2/3887ae68/current/*.json -text
+/data/owned/poe2/3887ae68/tree/*.json -text
