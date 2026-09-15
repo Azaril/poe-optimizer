@@ -92,6 +92,7 @@ pub enum StructuralErrorKind {
         id: InstanceId,
     },
     DuplicateAssignment,
+    InvalidModifierOrder,
     WrongDeclaration,
     WrongProviderOwner,
     EmptyLoadoutScope,
@@ -512,6 +513,32 @@ impl<'a> StructuralCheck<'a> {
         }
         Ok(())
     }
+    /// Validate precedence independently from canonical record order. The owner
+    /// registry is shared by complete records and known draft members.
+    pub(crate) fn modifier_order(
+        &mut self,
+        path: &str,
+        item: ItemRecordId,
+        order: &[ModifierInstanceId],
+        member_count: usize,
+    ) -> Result {
+        self.collection(path, order.len())?;
+        let mut seen = BTreeSet::new();
+        for (i, modifier) in order.iter().enumerate() {
+            let path = format!("{path}[{i}]");
+            self.known_reference(&path, *modifier, OccurrenceKind::Modifier)?;
+            if self.modifier_items.get(modifier) != Some(&item) {
+                return Err(error(&path, StructuralErrorKind::WrongProviderOwner));
+            }
+            if !seen.insert(*modifier) {
+                return Err(error(&path, StructuralErrorKind::DuplicateAssignment));
+            }
+        }
+        if order.len() != member_count {
+            return Err(error(path, StructuralErrorKind::InvalidModifierOrder));
+        }
+        Ok(())
+    }
     fn item_record_values(&mut self, path: &str, items: &[ItemRecord]) -> Result {
         for (i, item) in items.iter().enumerate() {
             let path = format!("{path}[{i}]");
@@ -522,6 +549,12 @@ impl<'a> StructuralCheck<'a> {
                 &SlotOwnerDefId::ItemTemplate(item.template.clone()),
             )?;
             self.quality(&path, &item.quality)?;
+            self.modifier_order(
+                &format!("{path}.modifier_order"),
+                item.id,
+                &item.modifier_order,
+                item.modifiers.len(),
+            )?;
             for (j, modifier) in item.modifiers.iter().enumerate() {
                 let path = format!("{path}.modifiers[{j}]");
                 self.definition(&path, &modifier.definition)?;

@@ -136,6 +136,7 @@ fn inactive_loadout_use_does_not_contribute_or_gain_a_final_value() {
 fn complete_empty_contributions_use_identity_but_partial_membership_never_does() {
     let mut empty = Fixture::new();
     empty.build.items[0].modifiers.clear();
+    empty.build.items[0].modifier_order.clear();
     let report = evaluate(&empty);
     known(&report, &stat(player(), "actor-total"), 0);
     known(&report, &stat(equipment(6), "local"), 10);

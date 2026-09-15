@@ -56,10 +56,11 @@ owned authoring state and finalizes explicit independent presets through the sam
 APIs. Pending selections retain all query rows and cannot write a complete request;
 see [owned drafts](docs/owned-drafts.md). This command also works without PoB and does
 not calculate, bind definitions or certify legality.
-Owned input and draft persistence now use version 3. Item level requires a number or explicit
-null; omitted fields reject, and an unresolved imported level remains pending. Allocation
-presets can contribute socket equipment and choice presets can contribute rewards independently.
-Older envelopes are rejected explicitly; unchanged numeric records retain their content digests.
+Owned input and draft persistence use version 4. Each item records explicit modifier
+precedence separately from its canonical modifier table; unresolved imported precedence
+remains pending. Item level requires a number or explicit null. Allocation presets can
+contribute socket equipment and choice presets can contribute rewards independently.
+Older envelopes reject explicitly; migration cannot invent missing semantic facts.
 `normalize-owned` converts caller-supplied XML/share codes through injected owned schema,
 mapping, role, reward, item-line, item-source and normalization policy artifacts into partial owned drafts. It preserves independent
 alternatives and unresolved semantics; it does not yet produce a complete original build

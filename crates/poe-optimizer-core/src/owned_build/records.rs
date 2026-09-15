@@ -58,6 +58,9 @@ pub struct ItemRecord {
     #[serde(deserialize_with = "required_option")]
     pub quality: Option<QualitySelection>,
     pub modifiers: Vec<RolledModifier>,
+    /// Semantic precedence, independent of record storage and occurrence IDs.
+    /// Exactly one entry for every modifier on this item; never canonicalized.
+    pub modifier_order: Vec<ModifierInstanceId>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

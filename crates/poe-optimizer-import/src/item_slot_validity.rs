@@ -244,14 +244,6 @@ impl SlotValidityProgram {
         (result, kernel.budget.steps_used())
     }
 }
-pub fn is_item_valid_for_slot<'a, C: SlotValidityContext<'a> + ?Sized>(
-    policy: &ItemSlotValidityPolicy,
-    request: SlotValidityRequest<'a>,
-    context: &mut C,
-    limits: SlotValidityLimits,
-) -> Result<SlotValidityResult<'a>> {
-    SlotValidityProgram::new(policy, limits)?.check(request, context)
-}
 pub fn implementation_sources() -> &'static [&'static str] {
     &[
         include_str!("item_slot_validity.rs"),

@@ -327,6 +327,7 @@ fn false_missing_and_ambiguous_actor_grants_gate_receivers_without_erasing_paren
 fn complete_empty_contributors_and_partial_registry_or_programs_are_distinct() {
     let mut empty = receivers_fixture();
     empty.build.items[0].modifiers.clear();
+    empty.build.items[0].modifier_order.clear();
     assert_eq!(measured(&empty)[1], 0.0);
     for registry in [false, true] {
         let mut f = receivers_fixture();

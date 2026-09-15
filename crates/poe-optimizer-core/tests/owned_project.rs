@@ -53,6 +53,7 @@ fn item(local: u64) -> ItemRecord {
             },
             value: ParameterValue::Integer(BoundedInteger::new(2).unwrap()),
         }],
+        modifier_order: vec![id(local + 1)],
         modifiers: vec![RolledModifier {
             id: id(local + 1),
             definition: def("modifier"),
@@ -777,6 +778,7 @@ fn inventory_union_rejects_foreign_snapshots_and_modifier_collisions_even_unsele
     ));
     let mut collision = item(160);
     collision.modifiers[0].id = id(11);
+    collision.modifier_order[0] = id(11);
     let other = stock(vec![collision], vec![]);
     assert!(matches!(
         structure_error(compose(&project, &selection(), Some(&other), limits()).unwrap_err()),

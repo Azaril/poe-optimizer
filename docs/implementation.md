@@ -11,7 +11,98 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: owned modifier values and persisted catalyst scalar (after `812881a`).**
+**Current checkpoint: owned data publication and structural order (after `60e65a9`).**
+The latest architecture review explicitly separates offline PoB conversion, the owned
+runtime package/model, resolution/evaluation, search, application/UI and optional reference
+comparison. The [ownership matrix](domain-architecture.md#enforced-ownership-and-release-boundary)
+is the controlling boundary. Do not extend native source-language/UI replay to advance
+parity. Compact owned rules and reusable native algorithms remain the chosen direction;
+a textual DSL or offline Lua authoring bindings cannot introduce runtime callbacks.
+
+The item model now records semantic modifier precedence separately from its ID-sorted
+storage table. Exact item-local permutations are validated for resolved inputs and draft
+candidates; pending membership or order still blocks selected finalization. Input and draft
+envelopes are version 4, with draft digest domain `owned-draft-v4`. Current normalization
+keeps order Pending rather than inferring it from source positions or IDs. This is an
+ordering contract, not implemented transform folding.
+
+The new `publish-owned-successor` command published the 2,589-entry recipe as the
+[current bundle](../data/owned/poe2/3887ae68/current/README.md). It validates both endpoints,
+preserves the 2,515-entry registry prefix, all 2,501 prior descriptors and 14 slots, then
+explicitly rebinds carried adapters through production constructors. Runtime loading never
+repairs bindings. Source policies and query templates remain tooling artifacts. All five
+unchanged originals now normalize through this shipped bundle using the existing CLI,
+retaining 116 items, 195 equipment uses, 478 gems, 81 rewards and all 110 ordered query rows.
+The original05 ring retains its 22 nominal modifier inputs, two item parameters and eight
+uses. All drafts remain Pending; publication is not complete native evaluation. New
+allocations must extend this ledger, beginning at 2,590.
+
+The five-original review found 116 saved items, 595 serialized member lines, 1,369 saved
+node tokens and 613 source-selected node tokens (including implicit roots and choice options). There are no direct item-magnitude
+transform producers in those serialized lines. This prioritizes broad structural conversion
+and common item families; it does not prove unknown members harmless. Existing final-stat,
+metric and modifier-value APIs are available; they are no longer the missing data seam.
+
+Removed the unused `is_item_valid_for_slot` compile-and-call facade while retaining its
+13 semantic tests. The [retirement inventory](legacy-retirement.md) names actual live
+Spark/Mace preparation, candidate and shared-type dependencies. They are still compiled
+and are not claimed retired. All five complete native evaluations remain **0/5**; all
+**110** fixed reference rows remain required. Complete-request and whole-plan closure
+gates are unchanged.
+
+**Validation:** **411 Rust test executions** pass in the recorded scope: all 235 Core
+tests, 42 affected Engine tests, 78 Import tests and 28 CLI tests in each feature mode.
+The CLI acceptance reproduces all 18 shipped JSON artifacts byte-for-byte and normalizes
+all five originals. Workspace and native-only strict Clippy, formatting, five-crate WASM
+compilation and six-package PoB/Lua dependency exclusion pass. The latter still does not
+exclude compiled legacy interpreter/profile modules. All nine protected inputs and the
+clean PoB pin are unchanged. No full workspace test run, full-build parity or throughput
+claim is made. Receipts are under `runs/owned-item-transforms-01/`, with Core evidence under
+`runs/owned-modifier-order-01/core/`. Review caught and fixed mapping-limit, aggregate-work
+and rebound policy/query-size checks. Initial compile/test failures were corrected before
+this final scope; no check was weakened.
+
+The public CI review found prior harness repairs followed by a successful ten-job run at
+`1d55cea`; the parent `60e65a9` remained pending behind an older active run at the snapshot.
+Pending hosted validation is not a pass. Record the newly pushed head separately.
+
+**Open design question:** whether partial selected inputs may yield independently verified
+metrics with conservative dependency coverage remains unanswered. Current closure gates
+stay unchanged; none of the next work depends on relaxing them.
+
+**Active resume point (the only current queue):**
+
+1. Settle the small owned topology/legality seam before broad passive conversion: class/
+   ascendancy implicit roots, node roles, allocation cost and earned pool capacity. Current
+   `PointPoolSchema` specifies only scope. Each selected Spec includes two implicit roots;
+   original04 includes a choice parent and option with no extra point cost. A source node
+   token must not automatically become a paid Allocation. Store game relationships in
+   injected definitions; source classification/provenance remains in Import.
+2. Convert exact class/ascendancy, topology, separate pools, scopes and attribute choices
+   through the current ledger. All 141 selected attribute nodes have explicit overrides;
+   no example-derived default is needed. Original02/04 each have disjoint 24+24-node
+   weapon overlays already in the main node set. Preserve independent presets without
+   duplicating those allocations. Handle unlock/class-switch choices explicitly. The
+   current successor policy permits new addresses only; refining existing Unmapped or
+   Partial schema declarations needs an explicit checked refinement/migration policy,
+   never fresh IDs for the same definition or weakened runtime binding checks.
+3. Complete common item input/effect families and explicit contribution membership, with
+   original05's cold/Life ring and original02's local weapon as contrasting consumers.
+   Preserve source encoding and distinct range/corruption/final rounding stages. Ordered
+   transform execution remains required for its supported domain, but is not the next
+   corpus-wide blocker. Never promote a partial catalyst scalar to effective resistance.
+4. Complete real player/actor receivers, skill inputs and exact support/provider relations
+   for Twister and Sniper together, retaining the other three originals as model stress
+   cases. Preserve all fixed availability rows; then run independent whole-build holdouts.
+5. Migrate each real numerical preparation/action consumer and its independent realization
+   checks, deleting the replaced profile/source closure in the same checkpoint. Bind
+   semantic candidate edits to this evaluator and retain all joint search dimensions.
+   Prove an owned-only compiled/shipped distribution and measure changed-build/multicore
+   throughput before claiming full decoupling or performance.
+
+Earlier checkpoints record historical evidence, not directions to resume source/UI emulation.
+
+**Previous checkpoint: owned modifier values and persisted catalyst scalar (`60e65a9`).**
 Native rules now address a typed Stat at the exact modifier occurrence. Shared item
 properties still belong to EquipmentUse; relative Modifier values retain the receiving
 use plus modifier identity. Current is unchanged. The compiler rejects foreign owners,
@@ -59,35 +150,6 @@ final passing scope. Receipts are under `runs/owned-item-effective-01/`.
 The public CI audit at 19:28:56Z found 812881a pending, an older run active, and no failure
 among the latest 20 runs. Pending hosted work is not counted as a pass. No workflow was
 cancelled or weakened; record the newly published head separately after push.
-
-**Open design question:** whether partial selected inputs may yield independently verified
-metrics with conservative dependency coverage remains unanswered. Do not change either
-current complete-request or whole-plan closure gate without resolving it.
-
-**Active resume point (the only current queue):**
-
-1. Bind bounded ordered modifier transforms to exact producer/recipient occurrences,
-   reusing the existing dependency executor. Preserve membership closure and meaningful
-   order; mixed additive percentages and doubling are not a sum/product reducer. Compute
-   transform amounts before folding the scalar. Establish complete-empty membership from
-   current owned declarations, never a cached importer ready/no-transform Boolean.
-2. Complete source encoding and effective numeric stages on the ordinary ranged path:
-   range precision, corrupted-base rounding, ordered scalar, final scaling/truncation.
-   Fixed text and baked runes require separate reviewed conversion; never divide rounded
-   display values to guess nominal input. Extend input conversion by data with the
-   original05 ring and original02 equipment as contrasting cases. No source UI replay.
-3. Add reviewed player resistance receivers/final Stat and Metric bindings, with complete
-   relevant item/reward/passive/scenario contributions and explicit limits/overrides.
-   Migrate the corresponding active preparation/realization consumers and preserve their
-   independent numerical tests before deleting their legacy dependency closure.
-4. Complete applicable skill/weapon/actor/support inputs for Twister and Sniper together;
-   use all five originals as model stress cases. Preserve fixed availability manifests,
-   then run independent holdouts and semantic joint candidates. Migrate search and remove
-   remaining profile/interpreter/snapshot closures. Prove owned-only distribution and
-   measure real changed-build reuse/multicore throughput before performance claims.
-
-The earlier checkpoint sections are historical evidence, not instructions to resume
-source/UI emulation. Current design and the active queue above supersede their next steps.
 
 **Previous checkpoint: canonical item inputs and explicit missing-field conversion (`812881a`).**
 The importer now converts canonical catalyst selection and enabled amount through injected

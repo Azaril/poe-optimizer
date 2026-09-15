@@ -110,6 +110,44 @@ filesystem access occurs inside a candidate calculation. Package generation is a
 build/release tooling step, not an unconditional Cargo build.rs task that starts PoB,
 fetches a submodule or requires Lua for native consumers.
 
+## Enforced ownership and release boundary
+
+Design from the optimizer's operations: author a character, resolve its legal choices,
+evaluate a scenario, propose a candidate and compare results. PoB is one external source
+and one reference backend. Its table layout, callback graph and selected UI controls do
+not define those operations. The following rules apply even during incremental delivery:
+
+| Layer | Owns | Must not require |
+| --- | --- | --- |
+| Definition conversion/build tooling | Pinned source readers, reviewed mappings, source syntax/defaults, conversion diagnostics and provenance | A source-shaped representation in the emitted runtime package |
+| Game package/model | Stable domain IDs, definitions, topology, typed effects/tables, instances, scenarios and queries | PoB IDs as semantic identity, XML, source AST, closures, controls or filesystem access |
+| Resolution/evaluation | Legality, provider/action relationships, dependency plans, native kernels, coverage and measurements | UI selection, source parsing, callback replay, named-build profiles or subprocesses |
+| Search/optimization | Domain edits, exact locks, objective/constraint policy, budgets, candidate scheduling and cancellation | XML rewrites, UI widgets, or separate calculation formulas |
+| Application/UI | Loading/saving through adapters, commands, progress/events, presentation and user choices | Independent game rules, legality, candidate scoring or evaluator state hidden in controls |
+| Optional oracle | Translation of admitted semantic requests to the pinned reference, observations and comparison | Authority to silently fill missing native results or change objective inputs |
+
+Release tooling publishes two distinct artifact sets. The **runtime package** has owned
+schemas, effects, tables, routes and metric bindings. The **import/tooling bundle** adds
+source mappings, syntax policies and diagnostics for users who import external builds.
+They may share a release directory for development, but the native distribution includes
+only its declared runtime set. Changing a PoB field spelling changes the adapter; changing
+a game coefficient changes data; changing a mathematical operation may require a new
+engine operation version. These are separate review and invalidation events.
+
+The current typed domain executor is not permission to reintroduce a generic Lua
+interpreter under a different name. New rule features need a game-domain consumer and
+bounded execution semantics. Compile and validate once per package/plan; worker scratch
+and candidate inputs remain private. Compare compact execution, generated native kernels
+and authoring DSLs on actual interacting builds before making speed claims. Optional Lua
+bindings can emit owned declarations offline, never callable runtime escape hatches.
+
+Dependency checks must eventually inspect compiled modules and distributed artifacts as
+well as Cargo edges: a crate can exclude mlua while still compiling a source interpreter.
+The acceptance test loads an owned build and runtime package in a directory with no PoB
+checkout, import sidecar or legacy snapshot, evaluates changed candidates in serial and
+Rayon, and preserves the same metrics/coverage. This is a migration exit gate, not a claim
+about today's native-only build. Refer to the retirement inventory for live consumers.
+
 ## Project, build and scenario models
 
 Separate stored user work from a concrete evaluation input:
@@ -137,6 +175,14 @@ selectors. Keep ordinary, ascendancy and other allocation pools distinct. Explic
 view selection resolves to one BuildSpec before evaluation; PoB loadout labels/dropdown
 fallbacks are import concerns. The evaluator never replays tab construction to find the
 selected character.
+
+Allocation identity, topology and legality are separate. Class/ascendancy definitions
+supply implicit roots; a build need not pretend the player spent points to acquire them.
+A choice attached to an allocation is not automatically another paid allocation. Injected
+legality metadata defines point costs, earned capacity, pool relations and conditional
+access; a node's location in a source tree or UI list establishes none of these. Import
+classifies source tokens into these domain roles or preserves an unresolved obligation.
+Changing class or provider invalidates the affected roots/access without replaying a UI.
 
 Import returns owned semantic input plus diagnostics and a source sidecar for faithful
 export/inspection. Unknown fields may remain in that sidecar, but an unknown field that

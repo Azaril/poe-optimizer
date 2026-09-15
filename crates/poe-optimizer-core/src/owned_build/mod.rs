@@ -17,7 +17,7 @@ pub(crate) use structure::{
     validate_item_records, validate_record_tables,
 };
 
-pub const OWNED_INPUT_SCHEMA_VERSION: u32 = 3;
+pub const OWNED_INPUT_SCHEMA_VERSION: u32 = 4;
 
 /// A self-contained, structurally validated build. Construct via `new` or the codec.
 #[derive(Clone, Debug, PartialEq, Serialize)]

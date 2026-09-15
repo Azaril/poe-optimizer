@@ -105,7 +105,7 @@ fn unpack(document: OwnedDocument) -> BuildProject {
     }
 }
 fn wire(raw: ProjectInput) -> Value {
-    json!({"schema_version":3,"document":{"kind":"project","value":raw}})
+    json!({"schema_version":4,"document":{"kind":"project","value":raw}})
 }
 fn entries(value: &Value) -> usize {
     match value {
@@ -120,7 +120,7 @@ fn project_envelope_roundtrip_retains_explicit_saved_selections_and_composes_sta
     let original = document(input());
     let bytes = encode_owned(&original, limits()).unwrap();
     let value: Value = serde_json::from_slice(&bytes).unwrap();
-    assert_eq!(value["schema_version"], 3);
+    assert_eq!(value["schema_version"], 4);
     assert_eq!(value["document"]["kind"], "project");
     let decoded = decode_owned(&bytes, limits()).unwrap();
     assert_eq!(decoded, original);
@@ -274,7 +274,7 @@ fn current_envelope_requires_explicit_contribution_and_rejects_v1_before_parsing
     value["schema_version"] = json!(OWNED_INPUT_SCHEMA_VERSION + 1);
     assert!(matches!(
         decode_owned(&serde_json::to_vec(&value).unwrap(), limits()),
-        Err(CodecError::UnsupportedVersion(4))
+        Err(CodecError::UnsupportedVersion(value)) if value == OWNED_INPUT_SCHEMA_VERSION + 1
     ));
 }
 
@@ -300,6 +300,7 @@ fn project_item_level_null_survives_selection_and_requires_explicit_wire_presenc
         parameters: vec![],
         item_level: None,
         quality: None,
+        modifier_order: vec![],
         modifiers: vec![],
     });
     raw.equipment.push(EquipmentUse {

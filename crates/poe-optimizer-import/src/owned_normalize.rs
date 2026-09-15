@@ -673,6 +673,67 @@ fn equipment_loadout_rules<'p, I: DefinitionSchemaIndex>(
     Ok(admitted)
 }
 
+/// The same source-policy validation is used by fresh import and offline package
+/// transitions. Compiled adapters never become part of the native game package.
+struct CompiledNormalizationInputs<'p> {
+    recipes: [ValueRecipe; 4],
+    equipment_rules: BTreeMap<&'p str, &'p EquipmentLoadoutRule>,
+    gem_quality: Option<quality::CompiledGemQuality>,
+}
+fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
+    policy: &'p NormalizationPolicy,
+    mappings: &OwnedMappingIndex,
+    definitions: &I,
+    limits: NormalizationLimits,
+) -> Result<CompiledNormalizationInputs<'p>> {
+    let recipes = validate_policy(policy, limits)?;
+    mappings.validate_limits(limits.mapping)?;
+    if mappings.input().source.system != ExternalSourceSystem::PathOfBuilding2
+        || policy.namespace != *definitions.namespace()
+    {
+        return Err(NormalizationError::Binding);
+    }
+    Ok(CompiledNormalizationInputs {
+        recipes,
+        equipment_rules: equipment_loadout_rules(policy, mappings, definitions, limits)?,
+        gem_quality: quality::compile(&policy.gem_quality, definitions, limits)?,
+    })
+}
+
+pub(crate) fn validate_normalization_inputs<I: DefinitionSchemaIndex>(
+    policy: &NormalizationPolicy,
+    mappings: &OwnedMappingIndex,
+    definitions: &I,
+    queries: &[ImportQueryTemplate],
+    limits: NormalizationLimits,
+) -> Result<()> {
+    compile_normalization_inputs(policy, mappings, definitions, limits)?;
+    validate_normalization_queries(queries, limits)
+}
+
+pub(crate) fn validate_normalization_queries(
+    queries: &[ImportQueryTemplate],
+    limits: NormalizationLimits,
+) -> Result<()> {
+    if queries.len() > limits.draft.input.max_collection_entries
+        || queries.iter().map(|q| &q.id).collect::<BTreeSet<_>>().len() != queries.len()
+    {
+        return Err(NormalizationError::Policy("query list"));
+    }
+    if queries.iter().any(|q| {
+        !matches!(
+            q.metric,
+            ExternalSelector::Catalog {
+                kind: ExternalCatalogKind::Metric,
+                ..
+            }
+        )
+    }) {
+        return Err(NormalizationError::Policy("query metric domain"));
+    }
+    Ok(())
+}
+
 /// One deterministic, fresh import. All source alternatives survive. Definition
 /// identities can be known while intrinsic values/effects/roles remain pending.
 /// No mutable registry, evaluator, UI or legacy selected-view API is accepted.
@@ -693,7 +754,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         items,
         item_source,
     } = artifacts;
-    let recipes = validate_policy(policy, limits)?;
+    let CompiledNormalizationInputs {
+        recipes,
+        equipment_rules,
+        gem_quality,
+    } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
     items.verify_bindings(definitions)?;
     item_source.verify_bindings(items, definitions)?;
@@ -708,9 +773,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     {
         return Err(NormalizationError::AllocatorBinding);
     }
-    if mappings.input().source.system != ExternalSourceSystem::PathOfBuilding2
-        || policy.namespace != *definitions.namespace()
-        || roles.input().mapping != *mappings.identity()
+    if roles.input().mapping != *mappings.identity()
         || roles.input().definitions != *definitions.identity()
     {
         return Err(NormalizationError::Binding);
@@ -722,24 +785,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         &mappings.input().policy_version,
         limits.mapping,
     )?;
-    let equipment_rules = equipment_loadout_rules(policy, mappings, definitions, limits)?;
-    let gem_quality = quality::compile(&policy.gem_quality, definitions, limits)?;
-    if queries.len() > limits.draft.input.max_collection_entries
-        || queries.iter().map(|q| &q.id).collect::<BTreeSet<_>>().len() != queries.len()
-    {
-        return Err(NormalizationError::Policy("query list"));
-    }
-    if queries.iter().any(|q| {
-        !matches!(
-            q.metric,
-            ExternalSelector::Catalog {
-                kind: ExternalCatalogKind::Metric,
-                ..
-            }
-        )
-    }) {
-        return Err(NormalizationError::Policy("query metric domain"));
-    }
+    validate_normalization_queries(queries, limits)?;
     let root = evidence.rows()[0].occurrence().id();
     let mut b = Builder {
         evidence,

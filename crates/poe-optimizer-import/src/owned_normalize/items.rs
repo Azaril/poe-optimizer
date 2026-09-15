@@ -47,6 +47,7 @@ pub(super) fn normalize_item(
             item_level: b.pending(source, "item-level-not-converted")?,
             quality: b.quality(source)?,
             modifiers: b.closure(source, "item-modifiers-not-converted", vec![])?,
+            modifier_order: b.pending(source, "item-modifier-order-not-converted")?,
         });
     }
     let content_entry = attribution
@@ -146,5 +147,8 @@ pub(super) fn normalize_item(
         // these collections can be declared complete.
         parameters: b.closure(source, "item-parameters-not-converted", parameters)?,
         modifiers: b.closure(source, "item-modifiers-not-converted", modifiers)?,
+        // Physical record identity and source line positions do not determine
+        // semantic transform order. Only a reviewed complete conversion can.
+        modifier_order: b.pending(source, "item-modifier-order-not-converted")?,
     })
 }

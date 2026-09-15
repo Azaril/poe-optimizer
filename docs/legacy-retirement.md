@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-09-15 for the owned metric and resistance checkpoint. This is a living companion to
+Updated 2026-09-15 for the owned data succession and boundary review. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -32,6 +32,34 @@ Source/typed-Lua program families and configuration UI/loader contracts require 
 D1–D3 consumer migration. Move only tools that still serve offline acquisition or the oracle
 into optional tooling. Do not preserve a generic source VM in every generated package under
 a new name. Source-specific diagnostics remain optional evidence, not semantic identity.
+
+## Current deletion and remaining live dependency closures
+
+Removed `import::item_slot_validity::is_item_valid_for_slot`, an unused compile-and-call
+facade. Its only caller was a test helper, which now exercises the compiled
+`SlotValidityProgram::new(...).check(...)` API already used by production activation.
+All 13 semantic tests remain; no numerical golden or source fixture was removed.
+
+The following observed calls prevent honest claims of complete retirement:
+
+- `native::preparation` still runs configuration, skill and item source stages before
+  profile parsing. `native::build_candidates` still dispatches Spark/Mace.
+- General actor preparation consumes `SparkQuestRewards`; weapon preparation consumes
+  `MaceError`, `MaceWeapon` and `MaceWeaponData`. Shared equipment decoding still uses
+  item envelope types from `import::mace_item`.
+- PoB source-program token/lowering code has an offline modifier-parser extraction
+  consumer as well as paused probes. The source extraction identity also embeds those
+  implementation files. Separate that acquisition closure before deleting its directory.
+- Existing native-only builds exclude PoB/Lua Cargo packages but still compile Data's
+  source programs and Engine's interpreter/profile modules. An owned-only compiled
+  distribution remains an explicit D5 gate.
+
+The next numerical retirement must move a real preparation/action consumer plus its
+independent realization checks to owned definitions and plans, then delete that consumer's
+profile/source dependency closure in the same checkpoint. No new compatibility facade or
+named-skill profile is allowed as a bridge. Reference-only tools may remain only with a
+named conversion or comparison consumer. Public availability alone is not justification
+for retaining an unused API.
 
 ## Owned input/schema/inventory checkpoint
 

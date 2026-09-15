@@ -18,6 +18,7 @@ mod owned_normalize;
 mod owned_recipe_cli;
 mod owned_rules;
 mod owned_schema;
+mod owned_successor;
 
 use clap::{Parser, Subcommand};
 use poe_optimizer_core::MAX_WIRE_BYTES;
@@ -71,6 +72,8 @@ enum Action {
     AssembleOwnedRecipe(owned_recipe_cli::Args),
     /// Extend a persisted owned recipe with reviewed source catalog identities.
     ExtendOwnedSkillCatalog(owned_catalog_recipe::Args),
+    /// Publish a checked recipe successor with explicitly rebound import policies.
+    PublishOwnedSuccessor(owned_successor::Args),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
     /// Resolve owned component effects from explicit packages; no game metric conversion.
@@ -245,6 +248,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::CheckOwnedRules(args)) => owned_rules::run(args)?,
         Some(Action::AssembleOwnedRecipe(args)) => owned_recipe_cli::run(args)?,
         Some(Action::ExtendOwnedSkillCatalog(args)) => owned_catalog_recipe::run(args)?,
+        Some(Action::PublishOwnedSuccessor(args)) => owned_successor::run(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
         Some(Action::EvaluateOwned(args)) => owned_metrics::run(args)?,

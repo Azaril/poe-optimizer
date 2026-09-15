@@ -627,6 +627,7 @@ draft_record! { ItemDraft=>ItemRecord {
     item_level:DraftField<Option<u16>> =>draft,
     quality:DraftQuality=>draft,
     modifiers:DraftList<ModifierDraft> =>draft,
+    modifier_order:DraftField<Vec<ModifierInstanceId>> =>draft,
 }}
 draft_record! { GemDraft=>GemInstance {
     id:GemInstanceId=>copy,

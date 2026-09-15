@@ -82,6 +82,11 @@ fn values(item: &ItemDraft, artifacts: &Artifacts, name: &str) -> Vec<Vec<f64>> 
         .collect()
 }
 fn partial_collections(item: &ItemDraft) {
+    let DraftField::Pending(order) = &item.modifier_order else {
+        panic!("source line positions cannot establish semantic modifier order");
+    };
+    assert_eq!(order.code.as_str(), "item-modifier-order-not-converted");
+    assert!(order.candidates.is_empty());
     assert!(matches!(
         item.parameters.completion,
         DraftListCompletion::Pending { .. }

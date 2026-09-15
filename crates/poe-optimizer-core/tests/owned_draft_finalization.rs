@@ -56,6 +56,7 @@ fn item(local: u64) -> ItemRecord {
             slot: slot(SlotOwnerDefId::ItemTemplate(def("item")), "rarity"),
             value: ParameterValue::Integer(BoundedInteger::new(2).unwrap()),
         }],
+        modifier_order: vec![id(local + 1)],
         modifiers: vec![RolledModifier {
             id: id(local + 1),
             definition: def("modifier"),
@@ -673,7 +674,7 @@ fn draft_codec_rejects_unknown_duplicate_missing_and_unsupported_wire_values() {
         ));
     }
     let duplicate = format!(
-        "{{\"schema_version\":3,\"schema_version\":3,\"draft\":{}}}",
+        "{{\"schema_version\":4,\"schema_version\":4,\"draft\":{}}}",
         serde_json::to_string(session.input()).unwrap()
     );
     assert!(matches!(
@@ -684,7 +685,7 @@ fn draft_codec_rejects_unknown_duplicate_missing_and_unsupported_wire_values() {
     future["schema_version"] = json!(OWNED_DRAFT_SCHEMA_VERSION + 1);
     assert!(matches!(
         decode_draft(&serde_json::to_vec(&future).unwrap(), limits()),
-        Err(DraftCodecError::UnsupportedVersion(4))
+        Err(DraftCodecError::UnsupportedVersion(value)) if value == OWNED_DRAFT_SCHEMA_VERSION + 1
     ));
     // A well-formed wire ID still needs the constructor's ownership checks.
     let mut foreign = input();
@@ -735,7 +736,7 @@ fn moving_or_sharing_a_use_between_contributors_preserves_concrete_request_ident
         assert_eq!(actual.request().build().input().equipment.len(), 2);
         assert_eq!(
             session.digest(limits().input.max_wire_bytes).unwrap(),
-            digest_owned("owned-draft-v3", &session, limits().input.max_wire_bytes).unwrap()
+            digest_owned("owned-draft-v4", &session, limits().input.max_wire_bytes).unwrap()
         );
         assert_ne!(
             session.digest(limits().input.max_wire_bytes).unwrap(),
@@ -928,7 +929,7 @@ fn draft_contribution_codec_preserves_order_and_rejects_v1_before_old_payload_sh
     let session = DraftSession::new(raw, limits()).unwrap();
     let bytes = encode_draft(&session, limits()).unwrap();
     let mut wire: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
-    assert_eq!(wire["schema_version"], 3);
+    assert_eq!(wire["schema_version"], 4);
     assert_eq!(decode_draft(&bytes, limits()).unwrap(), session);
     wire["draft"]["allocation_presets"]["members"][0]
         .as_object_mut()
@@ -1107,4 +1108,75 @@ fn explicit_unspecified_item_level_finalizes_but_pending_level_preserves_issue_a
         queries.to_resolved().unwrap(),
         before_result.request().queries().input().clone()
     );
+}
+
+#[test]
+fn modifier_order_pending_and_open_membership_each_block_selected_finalization() {
+    for open_membership in [false, true] {
+        let mut raw = input();
+        if open_membership {
+            raw.items.members[0].modifiers.completion = open(905);
+        } else {
+            raw.items.members[0].modifier_order =
+                DraftField::Pending(pending(905, vec![vec![id(11)]]));
+        }
+        let session = DraftSession::new(raw, limits()).unwrap();
+        let (issues, _) = pending_result(&session);
+        assert!(
+            issues
+                .iter()
+                .any(|issue| issue.id == id::<DraftIssueId>(905)
+                    && issue.owner == Some(id::<ItemRecordId>(10).instance_id()))
+        );
+    }
+}
+
+#[test]
+fn modifier_order_survives_project_selection_and_invalidates_finalized_request_identity() {
+    let mut project_raw = project_input();
+    let mut modifier = project_raw.items[0].modifiers[0].clone();
+    modifier.id = id(14);
+    project_raw.items[0].modifiers.push(modifier.clone());
+    project_raw.items[0].modifier_order = vec![id(14), id(11)];
+    let project = BuildProject::new(project_raw, limits().input).unwrap();
+    let project_bytes = encode_owned(
+        &OwnedDocument::Project(Box::new(project.clone())),
+        limits().input,
+    )
+    .unwrap();
+    assert_eq!(
+        decode_owned(&project_bytes, limits().input).unwrap(),
+        OwnedDocument::Project(Box::new(project.clone()))
+    );
+    let composed = compose(&project, &selection().build, None, limits().input).unwrap();
+    assert_eq!(
+        composed.input().items[0].modifier_order,
+        vec![id(14), id(11)]
+    );
+    let mut raw = input();
+    raw.items.members[0].modifiers.members.push(modifier.into());
+    raw.items.members[0].modifier_order = DraftField::Known {
+        value: vec![id(14), id(11)],
+    };
+    let session = DraftSession::new(raw.clone(), limits()).unwrap();
+    let a = ready(&session, selection());
+    assert_eq!(
+        a.request().build().input().items[0].modifier_order,
+        vec![id(14), id(11)]
+    );
+    assert_eq!(
+        a.request().build().input().items[0]
+            .modifiers
+            .iter()
+            .map(|m| m.id)
+            .collect::<Vec<_>>(),
+        vec![id(11), id(14)]
+    );
+    raw.items.members[0].modifier_order = DraftField::Known {
+        value: vec![id(11), id(14)],
+    };
+    let changed = DraftSession::new(raw, limits()).unwrap();
+    let b = ready(&changed, selection());
+    assert_ne!(a.draft_digest(), b.draft_digest());
+    assert_ne!(a.request_digest(), b.request_digest());
 }

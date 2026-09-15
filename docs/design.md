@@ -29,6 +29,12 @@ and original-build metric evaluation remain separate gates. The
 explicit player/owned-actor applicability. Their native component is implemented;
 complete-request and global coverage gates remain unchanged.
 
+The domain ADR's [ownership and release boundary](domain-architecture.md#enforced-ownership-and-release-boundary)
+is mandatory for new work. Build/release tooling converts source data into our package;
+import adapters normalize user documents once; evaluation and search consume owned domain
+values. The presence of Rust code or the absence of mlua alone does not prove decoupling.
+Retiring compiled source-interpreter/profile paths is an explicit delivery gate.
+
 ## Recommendation
 
 Build a Rust search engine with a fully native, parallel build evaluator. Keep versioned

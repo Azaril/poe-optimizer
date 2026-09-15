@@ -12,6 +12,15 @@ offline authoring/acquisition tools. Retaining PoB's format, UI lifecycle or gen
 object semantics in the production ABI is no longer an undecided alternative. Internal
 reference details are diagnostic; compare named game-visible outcomes and transitions.
 
+The next comparison uses the same **owned** data and request contract for every candidate.
+A source syntax/presentation-only change must be absorbed by conversion without changing
+runtime semantics; a supported coefficient change must be a data update; an unsupported
+mechanic must fail explicitly. Compare total converter plus runtime code, validation burden,
+update effort, package load cost, changed-candidate cost and multicore throughput. Keep
+numerical/interaction evidence when retiring compatibility code, but do not require new
+implementations to match PoB object graphs or internal UI notification histories. These
+experiments refine execution behind the accepted boundary; they do not delay its migration.
+
 The initial [baseline](execution-model-baseline.md),
 [semantic inventory](execution-model-semantics-inventory.md) and
 [performance inventory](execution-model-performance-inventory.md) are recorded. A1 remains

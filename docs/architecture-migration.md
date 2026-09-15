@@ -38,17 +38,42 @@ not completion of joint optimization. D5 retirement happens throughout D1–D4, 
 permission to keep obsolete code indefinitely. Avoid a flag day that deletes useful
 numerical validation before its meaning is preserved.
 
-## Current modifier computation checkpoint
+## Current structural and breadth priorities
 
-The persisted native catalyst scalar now uses an exact modifier-occurrence Stat target,
-with shared item properties and owned input predicates. See
-[modifier values](owned-modifier-values.md). It is an intermediate stage; emitting its
-partially scaled amount as a final contribution would be unsound even under Partial
-coverage. D3 still requires ordered transform binding, source encoding admission and
-final receivers. Package operations v6 and effect-plan identity v5 make the new semantics
-explicit; existing rule bodies/IDs retain their meaning. No additional source interpreter
-or UI lifecycle was added. Original native completion remains 0/5 and D5 retirement gates
-remain open.
+The owned-model boundary is the controlling design; the latest user review reinforces
+build-time conversion, independent UI/model/evaluation/search and physical removal of
+obsolete paths. Every new operation must serve owned game semantics. No further work is
+scheduled on native PoB UI lifecycle or the generic source-language frontier.
+
+Modifier precedence is now explicit owned input, separate from record storage order.
+Input/project/inventory/request and draft envelopes move to version 4; unknown imported
+precedence remains Pending. This supplies structural correctness for future noncommuting
+transforms without inventing PoB parser order or adding another interpreter. It does not
+implement transform folding or make partial item membership complete.
+
+The current-source census finds no direct item-magnitude transform producers among the
+595 serialized member lines in the five originals. This is prioritization evidence, not
+permission to treat unknown modifiers as harmless. The checked offline transition now joins the 2,589-entry item successor with the
+2,515-entry main import family, preserving old declarations and publishing the consolidated
+current bundle. All five originals consume it through the existing normalizer CLI; private
+test-only rebinding no longer substitutes for that integration.
+
+Next settle class/ascendancy implicit roots, choice-token roles, allocation costs and
+earned pool capacities as injected domain relationships, then append class/passive/pool
+definitions to the same ledger. All five selected trees expose 613 source tokens, including
+two implicit roots each; do not treat them all as paid allocations. Every selected attribute
+node has an explicit override. Separate point pools, scopes and conditional allocation
+access remain conversion work. The whole saved
+corpus has 1,369 allocations, including inactive alternatives. Count selected closure and
+whole-build parity separately from record counts. Common item effects and exact support/
+provider semantics follow through the same model, with Twister and Sniper developed together.
+
+The existing catalyst scalar remains an intermediate modifier-local value. Final effective
+scaling needs source encoding, complete transform membership and distinct rounding stages;
+receivers then need all applicable contributions. Operations v6 and effect-plan identity v5
+remain current. Global contributor closure and complete-request gates are unchanged.
+Original native completion remains 0/5. Paired consumer retirement is still required; an
+owned codec, successful package build or absent mlua dependency alone does not close D5.
 
 ## Native metric and retirement checkpoint
 

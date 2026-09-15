@@ -383,6 +383,7 @@ impl Fixture {
                 }],
                 item_level: Some(20),
                 quality: None,
+                modifier_order: vec![occurrence(4), occurrence(5)],
                 modifiers: vec![
                     RolledModifier {
                         id: occurrence(4),

@@ -110,8 +110,7 @@ fn run<'a>(
     flags: Value<'a>,
     ctx: &mut impl SlotValidityContext<'a>,
 ) -> Result<SlotValidityResult<'a>> {
-    is_item_valid_for_slot(
-        p,
+    SlotValidityProgram::new(p, SlotValidityLimits::default())?.check(
         SlotValidityRequest {
             item,
             slot_name: slot,
@@ -119,7 +118,6 @@ fn run<'a>(
             flag_state: flags,
         },
         ctx,
-        SlotValidityLimits::default(),
     )
 }
 fn scalar(result: SlotValidityResult<'_>, expected: Value<'_>) {

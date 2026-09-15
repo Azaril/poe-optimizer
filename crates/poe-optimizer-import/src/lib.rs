@@ -29,6 +29,7 @@ pub mod owned_reference_projection;
 pub mod owned_reward_policy;
 pub mod owned_skill_catalog;
 pub mod owned_source;
+pub mod owned_successor;
 pub mod owned_value;
 pub mod owned_value_policy;
 pub mod preflight;

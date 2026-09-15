@@ -39,6 +39,7 @@ fn item(record: u64, first_modifier: u64) -> ItemRecord {
             parameter(owner.clone(), "z-property", 2),
             parameter(owner, "a-property", 1),
         ],
+        modifier_order: vec![id(first_modifier + 1), id(first_modifier)],
         modifiers: vec![
             RolledModifier {
                 id: id(first_modifier + 1),
@@ -333,7 +334,15 @@ fn conflicting_shared_content_is_rejected_before_any_selection() {
                 shared.modifiers[0].rolls[0].value =
                     ParameterValue::Integer(BoundedInteger::new(99).unwrap())
             }
-            3 => shared.modifiers[0].id = id(40),
+            3 => {
+                let old = shared.modifiers[0].id;
+                shared.modifiers[0].id = id(40);
+                *shared
+                    .modifier_order
+                    .iter_mut()
+                    .find(|value| **value == old)
+                    .unwrap() = id(40);
+            }
             _ => unreachable!(),
         }
         let stock = InventorySnapshot::new(input, limits()).unwrap();

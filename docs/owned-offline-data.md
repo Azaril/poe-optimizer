@@ -131,6 +131,37 @@ coverage. Existing partial rules/routes remain partial. Both imported examples a
 requests use the same six reviewed Gem/Skill IDs. The all-five breadth and reference-routing
 tests load these shipped policies rather than privately allocating unrelated test catalogs.
 
+## Checked successor publication
+
+`publish-owned-successor` joins a caller-supplied successor recipe with already valid
+import artifacts. Both recipe endpoints pass the existing assembler and native compiler.
+The transition checks append-only registry history and exact retention of every prior
+definition and slot, then rebinds unchanged mapping entries, role rows, normalization
+recipes, reward rules and ordered query lists to the successor through their constructors.
+The item-line/source policies are explicit successor-bound inputs; old empty policies
+cannot silently replace the newer item semantics. Runtime constructors remain strict.
+
+This narrow transition allows new definitions and reviewed rule/routing bodies, including
+data-only balance changes. It does not authorize rewriting existing schema declarations,
+retiring IDs, inferring source facts or guessing a mapping. Future incompatible schema
+changes need an explicit migration contract. Aggregate input/output/work limits and
+constituent graph/text limits apply before atomic no-replace publication. The receipt
+identifies both endpoints and every emitted artifact; it makes no whole-build parity claim.
+
+The consolidated [current bundle](../data/owned/poe2/3887ae68/current/README.md) continues the
+same 2,589-entry ledger. The earlier 2,515-entry import bundle and resistance recipe remain
+reproducible transition inputs. New definition allocation must extend current history;
+starting from the older ledger would collide with existing item/stat IDs. The current
+bundle is a development distribution containing runtime artifacts **and** import tooling.
+Native evaluation consumes only owned schema/rule/routing/metric content, not the mapping,
+normalization, item-text syntax or query-template adapters. A fully separated owned-only
+shipped/compiled distribution remains the D5 gate.
+
+Use the current bundle with the normal `normalize-owned` CLI and caller-supplied builds.
+The 110 original query rows are ordered identities/targets, never cached answer values.
+Normalization's Pending fields remain explicit; successful publication establishes
+artifact compatibility, not complete class/passive/item/support conversion.
+
 ## Remaining integration
 
 Selected inputs, support relationships and all applicable contributions must still resolve

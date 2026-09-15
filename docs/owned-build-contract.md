@@ -27,20 +27,26 @@ choice aliases, concrete required values and schema-versus-resolution status. Dr
 revisioned editing, legality, computability and the five-case adapter remain open. Numerical
 evaluation still uses legacy inputs; these additions do not establish native rule coverage.
 
-The envelope is `{ schema_version: 3, document: { kind, value } }`, where kind is `build`,
+The envelope is `{ schema_version: 4, document: { kind, value } }`, where kind is `build`,
 `project`, `inventory`, `scenario`, `query` or `request`. Required optional fields use explicit null; omission
 infers no semantic default. Item level is an explicit optional intrinsic fact: a number
 means supplied, null means unspecified, and omission rejects. Unspecified does not mean
-zero, the equipment requirement, or the level of a granted skill. Versions 1 and 2 reject;
-an explicit migration may preserve their numeric levels, but may not invent absent values.
-Unchanged numeric records keep their semantic content digests. Changing a supplied level
-to null changes record content and its digest; occurrence IDs remain unchanged.
+zero, the equipment requirement, or the level of a granted skill. Versions 1 through 3
+reject. Migration must preserve supplied values and establish the new modifier precedence
+explicitly; it cannot infer it from record sorting. Semantic digest domains remain unchanged,
+but adding or changing semantic fields changes content digests. Occurrence IDs remain stable
+for the same supplying occurrence.
 Unknown/duplicate fields reject. Defaults bound wire bytes to
 8 MiB, collection entries to 16,384, total entries to 100,000 and provider paths to 64 steps;
 callers can tighten these resource limits. These are not game-level caps. Unordered
 occurrence/assignment collections canonicalize; ordered queries and grant paths retain
-order. Effect order belongs in rules, not record serialization order. Decoding alone
-establishes no prepared-plan reuse or stock-availability authority.
+order. Each item has a required `modifier_order`: an exact permutation of that item's
+modifier occurrence IDs. It is semantic precedence for order-sensitive operations, independent
+of the canonical ID-sorted modifier record table. Duplicate, foreign, unissued or cross-item
+IDs reject; membership edits must update and revalidate the permutation. Reordering storage
+alone leaves identity unchanged; changing semantic precedence changes it. Operation stages
+and program/effect order still belong to rules. No PoB category ordering or parser traversal
+is built into this contract. Decoding establishes no prepared-plan reuse or stock authority.
 
 ## Separate values and ownership
 
