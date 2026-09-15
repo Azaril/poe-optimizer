@@ -43,8 +43,8 @@ class ResistanceExportTests(unittest.TestCase):
 
     def test_successor_preserves_existing_history_schemas_and_rule_bodies(self):
         self.assertEqual(self.recipe["registry"]["entries"][:2515], self.base["registry"]["entries"])
-        self.assertEqual(self.recipe["registry"]["last_issued"], 2538)
-        self.assertEqual(len(self.ids), 23)
+        self.assertEqual(self.recipe["registry"]["last_issued"], 2554)
+        self.assertEqual(len(self.ids), 39)
         for table in ["definitions", "slots"]:
             for row in self.base["schema"][table]:
                 self.assertIn(row, self.recipe["schema"][table])
@@ -113,12 +113,12 @@ class ResistanceExportTests(unittest.TestCase):
             self.assertIn(effect["definition"], [self.ids["nominal-cold-modifier"], self.ids["nominal-elemental-modifier"]])
             self.assertEqual(effect["rolls"][0]["value"]["value"]["rounding"], "symmetric_half_offset")
         # Explicit nominal-family successor: original registry history and fixed programs remain unchanged.
-        self.assertEqual(EXPORT.sha(self.outputs["recipe.json"]), "cd323ca3fc11808167a039ef066c27998d51e00a7f5e635157ac38f506ece43d")
+        self.assertEqual(EXPORT.sha(self.outputs["recipe.json"]), "9f8cbf470389d5dfa79fe44d65e5da2f17faee39dbe2cbd4c3a11922431781c9")
 
     def test_nominal_families_preserve_properties_without_effective_contributions(self):
         expected = ["cold_resistance", "elemental_resistance", "elemental", "cold", "resistance"]
         source = EXPORT.DATA.decode(self.outputs["item-source.json"])
-        self.assertEqual(source["schema_version"], 2)
+        self.assertEqual(source["schema_version"], 3)
         self.assertEqual(source["property_bindings"], [{"label": p, "property": p} for p in expected])
         items = EXPORT.DATA.decode(self.outputs["items.json"])
         self.assertEqual(items["schema_version"], 2)
@@ -155,6 +155,60 @@ class ResistanceExportTests(unittest.TestCase):
             with mock.patch.object(EXPORT.DATA, "read", side_effect=guarded_read):
                 with self.assertRaises(ValueError):
                     self.changed_authoring(change)
+
+    def test_catalyst_selections_are_owned_options_with_exact_source_tokens(self):
+        expected = [("life", "Flesh"), ("mana", "Neural"), ("defence", "Carapace"),
+                    ("physical", "Uul-Netol's"), ("fire", "Xoph's"), ("cold", "Tul's"),
+                    ("lightning", "Esh's"), ("chaos", "Chayula's"), ("attack", "Reaver"),
+                    ("caster", "Sibilant"), ("speed", "Skittering"), ("attribute", "Adaptive"), ("minion", "Necrotic")]
+        items = EXPORT.DATA.decode(self.outputs["items.json"])
+        kind = next(r for r in items["rules"] if r["id"] == "catalyst-kind")
+        tokens = kind["captures"][0]["codec"]["value"]["codec"]["value"]["tokens"]
+        self.assertEqual(tokens, [{"token": token, "value": self.ids["catalyst-" + key]} for key, token in expected])
+        self.assertFalse(any(t["token"] in ["None", "Tul's Catalyst", "Unknown", "tul's"] for t in tokens))
+        for key in ["none"] + [key for key, _ in expected]:
+            definition = self.ids["catalyst-" + key]
+            self.assertIn({"kind": "option", "value": {"id": definition, "schema": {"kind": "known", "value": {}}}}, self.recipe["schema"]["definitions"])
+        amount = next(r for r in items["rules"] if r["id"] == "catalyst-amount")
+        self.assertEqual(amount["captures"][0]["codec"]["value"]["codec"], {"kind": "quantity", "value": {"syntax": "decimal", "unit": EXPORT.load(DEST / "authoring.json")["percentage_points"], "scale": {"numerator": 1, "denominator": 1}}})
+        for rule in [kind, amount]:
+            self.assertEqual(rule["emissions"][0]["value"]["value"], {"kind": "capture", "value": "value"})
+        kind_slot = next(s["value"]["schema"]["value"] for s in self.recipe["schema"]["slots"] if s["value"]["id"] == self.ids["item-catalyst-kind"])
+        self.assertEqual(kind_slot["presence"], "required_once")
+        self.assertEqual(kind_slot["sites"], ["item_parameter"])
+        self.assertEqual(set(v["key"] for v in kind_slot["value"]["value"]["allowed"]["members"]), {self.ids["catalyst-" + k]["key"] for k in ["none"] + [key for key, _ in expected]})
+
+    def test_catalyst_defaults_are_separate_from_authored_zero_and_ordinary_quality(self):
+        source = EXPORT.DATA.decode(self.outputs["item-source.json"])
+        defaults = source["template_defaults"]
+        self.assertEqual(len(defaults), 1)
+        self.assertEqual(defaults[0]["template"], self.ids["sapphire-ring-template"])
+        self.assertEqual((defaults[0]["item_level"], defaults[0]["quality"]), ("absent", "absent"))
+        parameters = defaults[0]["parameters"]
+        self.assertEqual(parameters[0], {"assignment": {"slot": self.ids["item-catalyst-kind"], "value": {"kind": "option", "value": self.ids["catalyst-none"]}}, "headers": ["Catalyst"]})
+        self.assertEqual(parameters[1]["headers"], ["CatalystQuality"])
+        self.assertEqual(parameters[1]["assignment"]["value"]["value"]["value"], 20.0)
+        amount_slot = next(s["value"]["schema"]["value"] for s in self.recipe["schema"]["slots"] if s["value"]["id"] == self.ids["item-catalyst-enabled-amount"])
+        self.assertEqual((amount_slot["presence"], amount_slot["sites"]), ("required_once", ["item_parameter"]))
+        envelope = amount_slot["value"]["value"]
+        self.assertLessEqual(envelope["minimum"]["value"], 0)
+        self.assertGreaterEqual(envelope["maximum"]["value"], 20)
+        facts = EXPORT.DATA.decode(self.outputs["source-facts.json"])
+        self.assertEqual(facts["catalyst_inputs"]["missing_amount_default"], 20)
+        self.assertFalse(facts["catalyst_inputs"]["effective_scaling"])
+        self.assertIn("explicit zero wins", facts["catalyst_inputs"]["default_authority"])
+
+    def test_malformed_unknown_or_changed_catalyst_source_data_rejects(self):
+        changes = [lambda a: a["catalyst_inputs"].update(selections=[]),
+                   lambda a: a["catalyst_inputs"].update(selections=a["catalyst_inputs"]["selections"] * 3),
+                   lambda a: a["catalyst_inputs"]["selections"][0].update(source_name="Unknown Catalyst"),
+                   lambda a: a["catalyst_inputs"]["selections"][0].update(any_properties=["cold"]),
+                   lambda a: a["catalyst_inputs"].update(default_amount=0),
+                   lambda a: a["catalyst_inputs"].update(missing_ordinary_quality="zero"),
+                   lambda a: a["catalyst_inputs"]["amount_envelope"].update(maximum=0)]
+        for change in changes:
+            with self.assertRaises(ValueError):
+                self.changed_authoring(change)
 
     def test_source_hashes_and_literal_signed_rounding_are_explicit(self):
         facts = EXPORT.DATA.decode(self.outputs["source-facts.json"])

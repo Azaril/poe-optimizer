@@ -2,7 +2,7 @@
   "schema_version": 1,
   "scope": "resistance-contribution-only",
   "base_recipe_sha256": "1e985847d255ceee684aaab55176f4cd3ee12e91d21696f17fa0c686c8c29b1d",
-  "recipe_sha256": "cd323ca3fc11808167a039ef066c27998d51e00a7f5e635157ac38f506ece43d",
+  "recipe_sha256": "9f8cbf470389d5dfa79fe44d65e5da2f17faee39dbe2cbd4c3a11922431781c9",
   "source": {
     "system": "path_of_building2",
     "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
@@ -249,6 +249,38 @@
       "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
       "sha256": "54dfb0730ec888897200257bcd8f7c7e2b12382b27fcf9cad5b9cfb3ed8c5bd3",
       "text": "\t\t\t\tline = line:gsub(\"{(%a*):?([^}]*)}\", function(k,val)\n\t\t\t\t\tif k == \"variant\" then\n\t\t\t\t\t\tmodLine.variantList = selectionTags and selectionTags.variantList or parseIdSpec(val)\n\t\t\t\t\telseif k == \"version\" then\n\t\t\t\t\t\tmodLine.versionList = selectionTags and selectionTags.versionList or parseIdSpec(val)\n\t\t\t\t\telseif k == \"group\" then\n\t\t\t\t\t\tmodLine.variantGroupList = selectionTags and selectionTags.variantGroupList or parseIdSpec(val, true)\n\t\t\t\t\telseif k == \"tags\" then\n\t\t\t\t\t\tfor tag in val:gmatch(\"[%a_]+\") do\n\t\t\t\t\t\t\tt_insert(modLine.modTags, tag)\n\t\t\t\t\t\tend\n\t\t\t\t\telseif k == \"range\" then\n\t\t\t\t\t\tself.advancedCopy = true\n\t\t\t\t\t\tmodLine.range = tonumber(val)\n\t\t\t\t\telseif k == \"corruptedRange\" then\n\t\t\t\t\t\tmodLine.corruptedRange = tonumber(val)\n\t\t\t\t\telseif lineFlags[k] then\n\t\t\t\t\t\tmodLine[k] = true\n\t\t\t\t\tend\n"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 324,
+      "end_line": 326,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "5dfafd72ebac40981fe16c998decdf0ffafb1a3ddac377d508fdc536de93f692",
+      "text": "local function specToNumber(s)\n\tlocal n = s:match(\"^([%+%-]?[%d%.]+)\")\n\treturn n and tonumber(n)\n"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 794,
+      "end_line": 802,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "a2d77b13adc5474e82c5aa41107c81ba49a910dd77268d5616b4a1feb2bc913d",
+      "text": "\t\t\t\telseif specName:match(\"Quality %(%a+ Modifiers%)\") then\n\t\t\t\t\tself.catalystQuality = specToNumber(specVal:match(\"(%d+)%%\"))\n\t\t\t\t\tfor i=1, #catalystDescriptorList do\n\t\t\t\t\t\tif specName:match(\"Quality %(([%a%s]+) Modifiers%)\") == catalystDescriptorList[i] then\n\t\t\t\t\t\t\tself.catalyst = i\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\telseif specName == \"Quality\" then\n\t\t\t\t\tself.quality = specToNumber(specVal)\n"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 935,
+      "end_line": 942,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "ed189f818aa677d8bd15c3bd07eb2aa18d60db50627f195dfeecc66c919a15d7",
+      "text": "\t\t\t\telseif specName == \"Catalyst\" then\n\t\t\t\t\tfor i=1, #catalystList do\n\t\t\t\t\t\tif specVal == catalystList[i] then\n\t\t\t\t\t\t\tself.catalyst = i\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\telseif specName == \"CatalystQuality\" then\n\t\t\t\t\tself.catalystQuality = specToNumber(specVal)\n"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 1880,
+      "end_line": 1885,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "3c013bb10aa4f5bb7abb932cb903a46ba642edcc0380e34c6910b56ffe737712",
+      "text": "\tif self.catalyst and self.catalyst > 0 then\n\t\tt_insert(rawLines, \"Catalyst: \" .. catalystList[self.catalyst])\n\tend\n\tif self.catalystQuality then\n\t\tt_insert(rawLines, \"CatalystQuality: \" .. self.catalystQuality)\n\tend\n"
     }
   ],
   "reward_outcomes": [
@@ -442,6 +474,136 @@
       "source-attributed range membership proof without source execution"
     ]
   },
+  "catalyst_inputs": {
+    "implemented": true,
+    "selections": [
+      {
+        "key": "life",
+        "source_name": "Flesh",
+        "descriptor": "Life",
+        "any_properties": [
+          "life"
+        ]
+      },
+      {
+        "key": "mana",
+        "source_name": "Neural",
+        "descriptor": "Mana",
+        "any_properties": [
+          "mana"
+        ]
+      },
+      {
+        "key": "defence",
+        "source_name": "Carapace",
+        "descriptor": "Defence",
+        "any_properties": [
+          "defences",
+          "armour",
+          "evasion",
+          "energyshield"
+        ]
+      },
+      {
+        "key": "physical",
+        "source_name": "Uul-Netol's",
+        "descriptor": "Physical",
+        "any_properties": [
+          "physical"
+        ]
+      },
+      {
+        "key": "fire",
+        "source_name": "Xoph's",
+        "descriptor": "Fire",
+        "any_properties": [
+          "fire"
+        ]
+      },
+      {
+        "key": "cold",
+        "source_name": "Tul's",
+        "descriptor": "Cold",
+        "any_properties": [
+          "cold"
+        ]
+      },
+      {
+        "key": "lightning",
+        "source_name": "Esh's",
+        "descriptor": "Lightning",
+        "any_properties": [
+          "lightning"
+        ]
+      },
+      {
+        "key": "chaos",
+        "source_name": "Chayula's",
+        "descriptor": "Chaos",
+        "any_properties": [
+          "chaos"
+        ]
+      },
+      {
+        "key": "attack",
+        "source_name": "Reaver",
+        "descriptor": "Attack",
+        "any_properties": [
+          "attack"
+        ]
+      },
+      {
+        "key": "caster",
+        "source_name": "Sibilant",
+        "descriptor": "Caster",
+        "any_properties": [
+          "caster"
+        ]
+      },
+      {
+        "key": "speed",
+        "source_name": "Skittering",
+        "descriptor": "Speed",
+        "any_properties": [
+          "speed"
+        ]
+      },
+      {
+        "key": "attribute",
+        "source_name": "Adaptive",
+        "descriptor": "Attribute",
+        "any_properties": [
+          "attribute"
+        ]
+      },
+      {
+        "key": "minion",
+        "source_name": "Necrotic",
+        "descriptor": "Minion",
+        "any_properties": [
+          "minion"
+        ]
+      }
+    ],
+    "canonical_headers": [
+      "Catalyst",
+      "CatalystQuality"
+    ],
+    "descriptor_aliases": "Recorded as source evidence; not admitted by this canonical exported-header policy.",
+    "amount_meaning": "Scalar amount in percentage points to use when the catalyst is enabled; not a claim that an amount header was authored.",
+    "missing_amount_default": 20,
+    "no_catalyst": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009eb"
+    },
+    "default_authority": "Exact template plus proven canonical source layout and absence of all declared header names and authored/pending field occurrences; explicit zero wins, malformed/unknown input does not default.",
+    "ordinary_quality": "Separate ItemRecord.quality; proved omission is explicit absence only for this reviewed template whose pinned base has no quality field. Authored Quality blocks the absence default.",
+    "effective_scaling": false
+  },
   "modifier_properties": {
     "implemented": true,
     "bindings": [
@@ -470,7 +632,7 @@
     "property_set": "Every label on the selected source member must be mapped and consumed; unknown or unconsumed labels remain Pending. Absence is not a runtime default.",
     "effective_scaling": false,
     "remaining_obligations": [
-      "catalyst/header absence and defaults",
+      "binding catalyst inputs to native equipment properties and effective transforms",
       "source nominal versus baked encoding for other source families",
       "category and numeric-component scalability",
       "applicable ordered modifier-magnitude transforms",
@@ -480,7 +642,7 @@
   "original_ring_attribution": {
     "status": "pending",
     "input_status": "nominal_amount_and_five_properties_converted",
-    "reason": "The untouched original's five labels and source-attributed range become owned nominal inputs. Catalyst/header/encoding and modifier-magnitude obligations remain; the new family has Partial rules and no effective Contribute.",
+    "reason": "The untouched original's five labels and source-attributed range become owned nominal inputs. Catalyst inputs/default provenance are preserved; encoding and modifier-magnitude obligations remain; the new family has Partial rules and no effective Contribute.",
     "reviewed_tag": "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}",
     "diagnostic_only": "Range0/0.5/1 contrasts edit only XML fractions in memory and retain the actual tag. Nominal conversion is not effective scaling or native original success."
   },

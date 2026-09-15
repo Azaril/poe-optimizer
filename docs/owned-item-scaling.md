@@ -1,12 +1,14 @@
 # Item modifier properties and scaling
 
-**Status: modifier-property conversion implemented; catalyst/header and effective scaling remain open.**
+**Status: modifier properties and canonical catalyst/default inputs implemented; effective scaling data remain open.**
 The owned source adapter converts the untouched original05 ring's nominal cold roll and
 five Boolean modifier properties. New nominal definitions retain Partial numerical rules;
 they do not reuse the prior fixed-value contribution programs. Two
 [Engine regressions](../crates/poe-optimizer-engine/tests/owned_item_properties.rs) validate
 the existing Stat dependency path across templates and repeated item uses. These seams
-are ready for real scaling data, but the whole ring remains Pending, and full
+are ready for real scaling data. Four additional native program tests validate catalyst
+arithmetic, applicability, repeated uses and ordinary-quality separation. The whole ring
+remains Pending, and full
 original-build native completion remains **0/5**. Existing complete-request and contributor
 coverage requirements are unchanged.
 
@@ -41,11 +43,26 @@ The common-property dependency path is validated with directly authored data. So
 property conversion is implemented through injected item-line/source policies v2: bounded
 source tokens map to local Import keys, then to schema-bound Boolean modifier parameters.
 Unknown or unconsumed labels block the line; source strings do not enter native rules.
-The remaining header, catalyst and scaling work follows these seams:
+Canonical catalyst header conversion and literal missing-input defaults now use source
+policy v3. Its per-template declarations map source field names to owned parameter
+assignments. Defaults require a complete admitted layout and an unambiguous template;
+present headers, including opaque Metadata, block absence for that field. Unknown,
+malformed and duplicate catalyst headers remain Pending. Defaulted parameters and scoped
+item-level/quality absence appear separately from authored lines in the v8 normalization
+sidecar. There are no synthetic line positions or conditional-default programs.
+
+All13 canonical catalyst names map to owned Options; a separate Option denotes none.
+The amount is the scalar input to use when a catalyst is enabled, not an assertion that
+an amount header was authored. Its injected missing-value20 is inert under selection none,
+and explicit0 remains0. The source-only oracle confirms the distinction. The following
+seams govern the remaining scaling work:
 
 - Reuse `ItemRecord.parameters` for declared catalyst selection/presence and amount;
   `ItemRecord.quality` continues to represent ordinary quality. Known absence needs an
   explicit complete input/normalization proof; it is not inferred from any missing header.
+  The shipped policy establishes this only for the reviewed Sapphire Ring template. Its
+  lack of base quality permits known ordinary-quality absence; the Grand Spear instead
+  normalizes omitted quality to0 in PoB, so there is no shared global absence default.
 - Reuse declared modifier parameters for a bounded set of known property predicates,
   category and affix-side selections. Preserve complete/partial membership. Do not create
   one fake modifier per label. If real callers need arbitrary property sets, introduce a
@@ -138,10 +155,13 @@ Original05 Item26 is one Sapphire Ring with eight receiving rows, including two 
 uses. Its cold member retains the five labels `cold_resistance`, `elemental_resistance`,
 `elemental`, `cold`, `resistance`, range fraction0.5 and nominal range20–30. Its second member
 is `+10 to maximum Life`. No Catalyst/CatalystQuality, ordinary Quality or rune header is
-present, but relevant header/producer completeness must establish absence. The production
+present. The scoped canonical input policy now establishes catalyst selection none,
+defaulted amount20 and ordinary-quality/item-level absence for this exact template.
+It does not establish rune/producer completeness or effective modifier scaling. The production
 converter now retains nominal cold25 and all five true properties from the untouched
 original, retains its Life input and all eight uses, and keeps the new nominal family
-Partial. The source-layout proof does not establish whole-item completeness. The former
+Partial. Its missing-input defaults retain their own provenance. The source-layout proof
+does not establish whole-item completeness. The former
 tag-stripped test helper has been replaced by the actual original test; conversion of the
 original is no longer represented by a diagnostic copy.
 

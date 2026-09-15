@@ -4,7 +4,8 @@ This append-only recipe preserves the 2,515 existing registry entries, schema
 declarations, and program bodies from `../import/compiled/recipe.json`. It adds
 nine initial identities, two fixed item contribution programs and four reviewed reward
 contribution programs. The property extension appends fourteen further identities for
-nominal cold/all-elemental amounts and five Boolean properties per modifier. It does not produce a final resistance
+nominal cold/all-elemental amounts and five Boolean properties per modifier. A further
+sixteen identities represent catalyst selection and its enabled amount. It does not produce a final resistance
 stat or metric. Original-build completion remains **0/5**.
 
 | Owned key suffix | Definition |
@@ -17,23 +18,41 @@ stat or metric. Original-build completion remains **0/5**.
 | `09dc` | Sapphire Ring template; modifier, socket, quality and game-rule coverage remain Partial |
 | `09dd`, `09de`, `09df` through `09e3` | Nominal cold modifier, amount, and five Boolean properties |
 | `09e4`, `09e5`, `09e6` through `09ea` | Nominal all-elemental modifier, amount, and five Boolean properties |
+| `09eb` through `09f8` | None plus13 canonical catalyst Options |
+| `09f9`, `09fa` | Exact Sapphire template catalyst selection and enabled amount parameters |
 
 All keys have the `def.000000000000` prefix and the namespace recorded in
 `ids.json`. The percentage-points unit reuses existing key `0002`. The roll
 envelope is a bounded computation domain, not a claim about possible game rolls.
 The property extension preserves the first 2,524 registry entries, all existing slots
 and program bodies. Its only change to an existing descriptor appends the two nominal
-families to the Sapphire Ring's partial modifier membership. The new watermark is2,538;
-new rule owners remain Partial with no effective contribution program.
+families to the Sapphire Ring's partial modifier membership. The catalyst extension preserves
+those2,538 entries and all old slots/rule bodies, adding two required Sapphire inputs. The
+current watermark is2,554; nominal rule owners remain Partial with no effective contribution
+program.
 
 `items.json` contains general lexical integer captures for plain cold,
 all-elemental and Life lines, plus integer endpoint ranges for cold and
 all-elemental resistance. `item-source.json` binds those declarations to the
 exact schema and source layout. Metadata headers do not become ItemLevel or
-Quality facts. The policies use wire/digest version2. Five exact property labels map
+Quality facts. Item lines use wire/digest version2 and source policy version3. Five exact property labels map
 to typed Boolean modifier inputs; unknown or unconsumed labels, ambiguous preceding
 lines, missing template membership and unproved range lifecycle information remain
 unresolved. Matching a line does not prove whole-item conversion or activation.
+
+Canonical `Catalyst: NAME` headers convert all13 exact source names to owned Options;
+`CatalystQuality: VALUE` converts finite decimal input in percentage-point units. Full
+currency names and descriptor aliases are separate source syntax and remain unresolved.
+Selection None and enabled amount20 are explicit per-template missing-input data. Amount
+is used only when a catalyst is enabled; it does not assert an authored header or active
+scaling. Explicit0 remains0.
+
+The source policy proves missing fields only after complete canonical layout admission.
+Each parameter fallback names the source headers whose presence suppresses it. Raw metadata
+headers also block absence, and authored/pending assignments suppress fallback for their
+exact slot. Unknown, malformed and duplicate relevant headers do not activate defaults.
+The Sapphire base alone has reviewed item-level and ordinary-quality absence policies;
+Grand Spear has different quality behavior. Defaults retain separate sidecar provenance.
 
 The reviewed fixed outcomes contribute +10 cold, +5 cold, +5 all-elemental, and
 −5 all-elemental from existing Reward identities. The mixed negative outcome
@@ -76,8 +95,8 @@ Protected original files are unchanged.
 
 The new amounts are deliberately nominal. Existing fixed-value inputs are not
 reinterpreted as nominal, and the new families do not emit unscaled effective
-contributions. Catalyst/header absence proofs, value encoding, scalability and ordered
-magnitude rules are the next obligations in the
+contributions. Canonical catalyst/header absence proofs are implemented for Sapphire. Value
+encoding, applicability/scalability and ordered magnitude rules are the next obligations in the
 [item-scaling design](../../../../../docs/owned-item-scaling.md). Whole-item closure,
 final resistance metrics and complete build parity remain incomplete.
 

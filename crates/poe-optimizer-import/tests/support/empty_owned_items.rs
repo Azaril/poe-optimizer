@@ -45,6 +45,7 @@ pub fn empty_source_for_items<I: DefinitionSchemaIndex>(
             item_lines: *items.identity(),
             dialect: ItemSourceDialect::PobExportedSingleTextV1,
             property_bindings: vec![],
+            template_defaults: vec![],
             rule_layouts: vec![],
             template_layouts: vec![],
         },

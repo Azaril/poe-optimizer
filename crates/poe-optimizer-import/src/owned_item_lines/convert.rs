@@ -331,7 +331,7 @@ impl OwnedItemLinePolicy {
             previous = input.index;
             result.push(self.line(input, &mut work, &mut output, &mut bytes)?);
         }
-        self.aggregate(result, &mut work, &mut output)
+        self.aggregate(result, None, &mut work, &mut output)
     }
     /// Internal adapter probe: same grammar and capture validation as conversion,
     /// with the caller's shared work/output budget and no invented range fraction.
@@ -360,6 +360,7 @@ impl OwnedItemLinePolicy {
     pub(crate) fn convert_source_lines<'a>(
         &self,
         lines: impl IntoIterator<Item = (ItemLineInput<'a>, Option<SourceLinePending<'a>>)>,
+        defaults: Option<&ItemInputDefaults>,
         work: &mut usize,
         output: &mut usize,
     ) -> Result<ItemTextConversion<'a>> {
@@ -380,11 +381,12 @@ impl OwnedItemLinePolicy {
             }
             result.push(line);
         }
-        self.aggregate(result, work, output)
+        self.aggregate(result, defaults, work, output)
     }
     fn aggregate<'a>(
         &self,
         lines: Vec<ItemLineEvidence<'a>>,
+        defaults: Option<&ItemInputDefaults>,
         work: &mut usize,
         output: &mut usize,
     ) -> Result<ItemTextConversion<'a>> {
@@ -396,6 +398,7 @@ impl OwnedItemLinePolicy {
             modifiers: vec![],
             parameters: vec![],
             issues: vec![],
+            defaults: ItemDefaultedInputs::default(),
         };
         let mut occurrences: BTreeMap<DeclaredSlot<ParameterSlotDefId>, Vec<usize>> =
             BTreeMap::new();
@@ -521,6 +524,24 @@ impl OwnedItemLinePolicy {
             unreachable!("known template has validated context")
         };
         let owner = SlotOwnerDefId::ItemTemplate(template.clone());
+        if let Some(defaults) = defaults.filter(|d| &d.template == template) {
+            charge(work, defaults.values.parameters.len(), "work")?;
+            for assignment in &defaults.values.parameters {
+                // A positive or unresolved authored occurrence always suppresses fallback.
+                let cost =
+                    (assignment.slot.slot.key().as_str().len() + template.key().as_str().len() + 1)
+                        .saturating_mul(occurrences.len().saturating_add(1));
+                charge(work, cost, "work")?;
+                if !occurrences.contains_key(&assignment.slot) {
+                    charge(output, 1, "output declarations")?;
+                    result.defaults.parameters.push(assignment.clone());
+                }
+            }
+            result.defaults.item_level_absent =
+                defaults.values.item_level_absent && matches!(result.item_level, ItemField::Absent);
+            result.defaults.quality_absent =
+                defaults.values.quality_absent && matches!(result.quality, ItemField::Absent);
+        }
         result.parameters.retain(|p| {
             if p.assignment.slot.declaration == owner {
                 true
@@ -604,6 +625,7 @@ impl OwnedItemLinePolicy {
             .parameters
             .iter()
             .map(|p| &p.assignment.slot)
+            .chain(result.defaults.parameters.iter().map(|p| &p.slot))
             .collect();
         charge(
             work,

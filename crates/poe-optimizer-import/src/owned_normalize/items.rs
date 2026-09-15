@@ -19,6 +19,7 @@ pub struct NormalizedItemText {
     pub issues: Vec<ItemTextIssue>,
     /// Immutable Import provenance; source positions never enter owned build records.
     pub attribution: ItemAttributionReport,
+    pub defaults: crate::owned_item_lines::ItemDefaultedInputs,
 }
 
 pub(super) fn normalize_item(
@@ -37,6 +38,7 @@ pub(super) fn normalize_item(
             lines: vec![],
             issues: vec![],
             attribution: attribution.into_report(),
+            defaults: Default::default(),
         });
         return Ok(ItemDraft {
             id,
@@ -59,7 +61,12 @@ pub(super) fn normalize_item(
         .collect();
     b.charge(raw_lines.values().map(|text| text.len()).sum())?;
     let converted = attribution.convert(b.items)?;
-    b.charge(converted.lines.len() + converted.parameters.len() + converted.modifiers.len())?;
+    b.charge(
+        converted.lines.len()
+            + converted.parameters.len()
+            + converted.modifiers.len()
+            + converted.defaults.parameters.len(),
+    )?;
     let template = match converted.template {
         ItemField::Known { value, .. } => value.into(),
         _ => b.pending(source, "item-template-not-converted")?,
@@ -68,12 +75,14 @@ pub(super) fn normalize_item(
         ItemField::Known { value, .. } if u16::try_from(value.get()).is_ok() => {
             Some(u16::try_from(value.get()).expect("checked item level")).into()
         }
+        ItemField::Absent if converted.defaults.item_level_absent => None.into(),
         // No emitted header is not proof that the source explicitly omits this fact.
         // Only a scoped absence proof or owned authoring may supply Known(None).
         _ => b.pending(source, "item-level-not-converted")?,
     };
     let quality = match converted.quality {
         ItemField::Known { value, .. } => Some(value).into(),
+        ItemField::Absent if converted.defaults.quality_absent => None.into(),
         // Absence of a header does not establish absence of item quality.
         _ => b.quality(source)?,
     };
@@ -109,6 +118,14 @@ pub(super) fn normalize_item(
         .parameters
         .into_iter()
         .map(|parameter| parameter.assignment.into())
+        .chain(
+            converted
+                .defaults
+                .parameters
+                .iter()
+                .cloned()
+                .map(Into::into),
+        )
         .collect();
     b.item_texts.push(NormalizedItemText {
         source,
@@ -116,6 +133,7 @@ pub(super) fn normalize_item(
         skipped: None,
         lines,
         issues: converted.issues,
+        defaults: converted.defaults,
         attribution: attribution.into_report(),
     });
     Ok(ItemDraft {

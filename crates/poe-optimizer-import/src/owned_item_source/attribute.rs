@@ -296,6 +296,7 @@ impl ItemSourceLayoutPolicy {
             layout: ItemLayoutStatus::Proven,
             lines: vec![],
             writes: vec![],
+            default_scope: ItemSourceDefaultScope::Unconfigured,
         };
         let mut work = self.limits.max_work.min(lines.source_limits().max_work);
         let mut output = self
@@ -488,6 +489,8 @@ impl ItemSourceLayoutPolicy {
                     "Suffix: ",
                     "Item Level: ",
                     "Quality: ",
+                    "Catalyst: ",
+                    "CatalystQuality: ",
                     "Sockets: ",
                     "Rune: ",
                     "LevelReq: ",
@@ -702,7 +705,9 @@ impl ItemSourceLayoutPolicy {
         } else {
             ItemLayoutStatus::Pending(problems)
         };
+        let defaults = self.prepare_defaults(&mut report, &templates, &mut work, &mut output)?;
         Ok(ItemRangeAttribution {
+            defaults,
             report,
             work_left: work,
             output_left: output,

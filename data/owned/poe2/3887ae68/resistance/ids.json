@@ -383,6 +383,160 @@
         },
         "key": "def.00000000000009ea"
       }
+    },
+    "catalyst-none": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009eb"
+    },
+    "catalyst-life": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009ec"
+    },
+    "catalyst-mana": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009ed"
+    },
+    "catalyst-defence": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009ee"
+    },
+    "catalyst-physical": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009ef"
+    },
+    "catalyst-fire": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009f0"
+    },
+    "catalyst-cold": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009f1"
+    },
+    "catalyst-lightning": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009f2"
+    },
+    "catalyst-chaos": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009f3"
+    },
+    "catalyst-attack": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009f4"
+    },
+    "catalyst-caster": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009f5"
+    },
+    "catalyst-speed": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009f6"
+    },
+    "catalyst-attribute": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009f7"
+    },
+    "catalyst-minion": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009f8"
+    },
+    "item-catalyst-kind": {
+      "declaration": {
+        "kind": "item_template",
+        "definition": {
+          "kind": "item_template",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000009dc"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000009f9"
+      }
+    },
+    "item-catalyst-enabled-amount": {
+      "declaration": {
+        "kind": "item_template",
+        "definition": {
+          "kind": "item_template",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000009dc"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000009fa"
+      }
     }
   }
 }

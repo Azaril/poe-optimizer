@@ -326,8 +326,8 @@ def produce(snapshot_bytes, base_bytes, ids_bytes, mechanics_bytes, facts_bytes,
         "generated_support_prefixes": [], "allocation_attribute": "nodes", "single_active_support_target": True, "equipment_loadouts": equipment,
         "gem_quality": tag("attributes", {"definitions": identity, "amount": amount, "kind_attribute": "qualityId", "kinds": [{"source": tag("missing"), "kind": quality}]})}
     items = {"schema_version": 2, "namespace": namespace, "version": authoring["item_version"], "definitions": identity, "whitespace": "exact", "rules": []}
-    item_source = {"schema_version": 2, "namespace": namespace, "version": authoring["item_source_version"], "source": source,
-        "item_lines": owned_digest("owned-item-line-policy-v2", items), "dialect": "pob_exported_single_text_v1", "rule_layouts": [], "template_layouts": [], "property_bindings": []}
+    item_source = {"schema_version": 3, "namespace": namespace, "version": authoring["item_source_version"], "source": source,
+        "item_lines": owned_digest("owned-item-line-policy-v2", items), "dialect": "pob_exported_single_text_v1", "rule_layouts": [], "template_layouts": [], "property_bindings": [], "template_defaults": []}
     outputs = {"recipe-seed.json": seed, "skill-identities.json": catalog, "source-pin.json": source, "skill-catalog-policy.json": authoring["catalog_policy"],
         "mapping-seed.json": mapping, "normalization-policy-seed.json": normalization, "reward-policy-seed.json": reward_policy,
         "item-policy-seed.json": items, "item-source-policy-seed.json": item_source, "reward-source-facts.json": rewards,

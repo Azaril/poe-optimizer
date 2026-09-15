@@ -613,6 +613,7 @@ pub fn source_policy<'a>(
             item_lines: *items.identity(),
             dialect: ItemSourceDialect::PobExportedSingleTextV1,
             property_bindings: vec![],
+            template_defaults: vec![],
             rule_layouts: items
                 .input()
                 .rules

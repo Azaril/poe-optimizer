@@ -18,8 +18,8 @@ use poe_optimizer_import::{
         OwnedItemLinePolicy, decode_item_line_policy,
     },
     owned_item_source::{
-        ItemLayoutStatus, ItemRangeAttribution, ItemSourceLayoutPolicy, ItemSourceLimits,
-        decode_item_source_policy,
+        ItemLayoutStatus, ItemRangeAttribution, ItemSourceDefaultScope, ItemSourceLayoutPolicy,
+        ItemSourceLimits, decode_item_source_policy,
     },
     owned_recipe::{OwnedRecipeLimits, StagedOwnedRecipe, decode_owned_recipe},
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
@@ -102,8 +102,8 @@ impl Component {
 #[test]
 fn persisted_recipe_and_exact_item_policies_pass_production_constructors() {
     let c = Component::load();
-    assert_eq!(c.staged.registry().input().entries.len(), 2538);
-    assert_eq!(c.staged.registry().input().last_issued.get(), 2538);
+    assert_eq!(c.staged.registry().input().entries.len(), 2554);
+    assert_eq!(c.staged.registry().input().last_issued.get(), 2554);
     assert!(c.staged.manifest().partial_rule_owners > 0);
     assert_eq!(c.staged.manifest().calculation, "not_run");
     let base: Value = serde_json::from_slice(
@@ -477,6 +477,33 @@ fn actual_tagged_original_ring_preserves_eight_uses_and_nominal_properties_witho
     let cold: ModifierDefId = c.id("nominal-cold-modifier");
     let converted = plan.convert(&c.items).unwrap();
     assert_eq!(converted.modifiers.len(), 2);
+    assert!(matches!(
+        plan.report().default_scope,
+        ItemSourceDefaultScope::Proven { .. }
+    ));
+    assert!(
+        converted.parameters.is_empty(),
+        "the original authored no catalyst headers"
+    );
+    assert_eq!(converted.defaults.parameters.len(), 2);
+    assert_eq!(
+        converted.defaults.parameters[0].slot,
+        c.id("item-catalyst-kind")
+    );
+    assert_eq!(
+        converted.defaults.parameters[0].value,
+        ParameterValue::Option(c.id("catalyst-none"))
+    );
+    assert_eq!(
+        converted.defaults.parameters[1].slot,
+        c.id("item-catalyst-enabled-amount")
+    );
+    let ParameterValue::Quantity(default_amount) = &converted.defaults.parameters[1].value else {
+        panic!("default catalyst amount");
+    };
+    assert_eq!(default_amount.value(), 20.0);
+    assert!(converted.defaults.item_level_absent);
+    assert!(converted.defaults.quality_absent);
     let modifier = converted
         .modifiers
         .iter()
@@ -587,6 +614,195 @@ fn unknown_or_unconsumed_property_labels_cannot_be_stripped_into_fixed_modifiers
         let nominal: ModifierDefId = c.id("nominal-cold-modifier");
         let fixed: ModifierDefId = c.id("flat-cold-modifier");
         assert!(!converted.modifiers.iter().any(|m| m.definition == nominal || m.definition == fixed));
+    }
+    assert_eq!(original_five(), xml);
+}
+
+const CATALYSTS: [(&str, &str); 13] = [
+    ("Flesh", "life"),
+    ("Neural", "mana"),
+    ("Carapace", "defence"),
+    ("Uul-Netol's", "physical"),
+    ("Xoph's", "fire"),
+    ("Tul's", "cold"),
+    ("Esh's", "lightning"),
+    ("Chayula's", "chaos"),
+    ("Reaver", "attack"),
+    ("Sibilant", "caster"),
+    ("Skittering", "speed"),
+    ("Adaptive", "attribute"),
+    ("Necrotic", "minion"),
+];
+
+fn ring_with_headers(xml: &str, headers: &str) -> String {
+    let source = imported(xml);
+    let evidence =
+        SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
+    let item = evidence
+        .rows()
+        .iter()
+        .find(|row| {
+            row.occurrence().name() == "Item"
+                && row.attribute("id").and_then(|a| a.decoded().ok()) == Some("26")
+        })
+        .unwrap();
+    let span = item.occurrence().range();
+    let original = &xml[span.clone()];
+    assert_eq!(original.matches("Implicits: 1").count(), 1);
+    let changed = original.replacen("Implicits: 1", &format!("{headers}\nImplicits: 1"), 1);
+    let mut copy = xml.to_owned();
+    copy.replace_range(span, &changed);
+    copy
+}
+
+#[test]
+fn canonical_catalyst_headers_cover_exact_owned_options_and_decimal_amounts() {
+    let c = Component::load();
+    for (token, label) in CATALYSTS {
+        let raw = format!("Catalyst: {token}");
+        let line = c.items.convert_line(1, &raw, None).unwrap();
+        let ItemLineOutcome::Known { emissions, .. } = line.outcome else {
+            panic!("known catalyst {token}");
+        };
+        let [ConvertedItemEmission::ItemParameter { assignment }] = emissions.as_slice() else {
+            panic!("one catalyst parameter");
+        };
+        assert_eq!(assignment.slot, c.id("item-catalyst-kind"));
+        assert_eq!(
+            assignment.value,
+            ParameterValue::Option(c.id(&format!("catalyst-{label}")))
+        );
+    }
+    for (text, expected) in [("0", 0.0), ("0.7", 0.7), ("-2.5", -2.5), ("20", 20.0)] {
+        let raw = format!("CatalystQuality: {text}");
+        let line = c.items.convert_line(1, &raw, None).unwrap();
+        let ItemLineOutcome::Known { emissions, .. } = line.outcome else {
+            panic!("known decimal {text}");
+        };
+        let [ConvertedItemEmission::ItemParameter { assignment }] = emissions.as_slice() else {
+            panic!("one amount parameter");
+        };
+        let ParameterValue::Quantity(value) = &assignment.value else {
+            panic!("quantity");
+        };
+        assert_eq!(value.value(), expected);
+        assert_eq!(assignment.slot, c.id("item-catalyst-enabled-amount"));
+    }
+    for raw in [
+        "Catalyst: Unknown",
+        "Catalyst: None",
+        "Catalyst: Tul's Catalyst",
+        "Catalyst: tul's",
+        "CatalystQuality: NaN",
+        "CatalystQuality: 1e2",
+        "CatalystQuality: bad",
+        "CatalystQuality: 1000001",
+    ] {
+        assert!(
+            matches!(
+                c.items.convert_line(1, raw, None).unwrap().outcome,
+                ItemLineOutcome::Pending { .. }
+            ),
+            "{raw}"
+        );
+    }
+}
+
+#[test]
+fn source_catalyst_defaults_preserve_authored_zero_and_keep_ordinary_headers_separate() {
+    let c = Component::load();
+    let xml = original_five();
+    for (headers, selection, amount, authored, defaulted) in [
+        ("Catalyst: Tul's", "cold", 20.0, 1, 1),
+        ("Catalyst: Tul's\nCatalystQuality: 0", "cold", 0.0, 2, 0),
+        ("CatalystQuality: 0", "none", 0.0, 1, 1),
+        ("Catalyst: Xoph's\nCatalystQuality: 0.7", "fire", 0.7, 2, 0),
+        ("Quality: 20", "none", 20.0, 0, 2),
+        ("Item Level: 77", "none", 20.0, 0, 2),
+    ] {
+        let copy = ring_with_headers(&xml, headers);
+        let plan = ring_plan(&c, &copy);
+        assert!(
+            matches!(
+                plan.report().default_scope,
+                ItemSourceDefaultScope::Proven { .. }
+            ),
+            "{headers}: {:?}",
+            plan.report().default_scope
+        );
+        let converted = plan.convert(&c.items).unwrap();
+        assert_eq!(converted.parameters.len(), authored, "{headers}");
+        assert_eq!(converted.defaults.parameters.len(), defaulted, "{headers}");
+        let all: Vec<_> = converted
+            .parameters
+            .iter()
+            .map(|p| &p.assignment)
+            .chain(&converted.defaults.parameters)
+            .collect();
+        assert_eq!(all.len(), 2);
+        let kind = all
+            .iter()
+            .find(|p| p.slot == c.id("item-catalyst-kind"))
+            .unwrap();
+        assert_eq!(
+            kind.value,
+            ParameterValue::Option(c.id(&format!("catalyst-{selection}")))
+        );
+        let value = all
+            .iter()
+            .find(|p| p.slot == c.id("item-catalyst-enabled-amount"))
+            .unwrap();
+        let ParameterValue::Quantity(value) = &value.value else {
+            panic!("quantity");
+        };
+        assert_eq!(value.value(), amount);
+        assert_eq!(
+            converted.defaults.quality_absent,
+            !headers.starts_with("Quality:")
+        );
+        assert_eq!(
+            converted.defaults.item_level_absent,
+            !headers.starts_with("Item Level:")
+        );
+        let cold: ModifierDefId = c.id("nominal-cold-modifier");
+        let modifier = converted
+            .modifiers
+            .iter()
+            .find(|m| m.definition == cold)
+            .unwrap();
+        let ParameterValue::Quantity(nominal) = &modifier.rolls[0].value else {
+            panic!("nominal");
+        };
+        assert_eq!(nominal.value(), 25.0, "headers do not calculate scaling");
+    }
+    assert_eq!(original_five(), xml);
+}
+
+#[test]
+fn unproved_malformed_and_duplicate_headers_do_not_turn_into_defaults() {
+    let c = Component::load();
+    let xml = original_five();
+    for headers in [
+        "Catalyst: Unknown",
+        "CatalystQuality: bad",
+        "Catalyst: Tul's\nCatalyst: Tul's",
+        "CatalystQuality: 0\nCatalystQuality: 20",
+        "Quality (Cold Modifiers): 20%",
+        "UnreviewedHeader: 5",
+    ] {
+        let copy = ring_with_headers(&xml, headers);
+        let plan = ring_plan(&c, &copy);
+        assert!(
+            !matches!(
+                plan.report().default_scope,
+                ItemSourceDefaultScope::Proven { .. }
+            ),
+            "{headers}"
+        );
+        let converted = plan.convert(&c.items).unwrap();
+        assert!(converted.defaults.parameters.is_empty(), "{headers}");
+        assert!(!converted.defaults.quality_absent);
+        assert!(!converted.defaults.item_level_absent);
     }
     assert_eq!(original_five(), xml);
 }

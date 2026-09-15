@@ -624,3 +624,38 @@ pub(super) fn value_fits(v: &ParameterValue, s: &ValueSchema) -> bool {
         _ => false,
     }
 }
+
+/// Reuse the literal parameter/schema checks without parsing synthetic source text.
+pub(crate) fn validate_default_assignment<I: DefinitionSchemaIndex>(
+    schema: &I,
+    assignment: &ParameterAssignment,
+    work: &mut usize,
+) -> Result<()> {
+    let mut check = Checker {
+        schema,
+        namespace: schema.namespace(),
+        work: *work,
+    };
+    let rule = ItemLineRule {
+        id: assignment.slot.slot.key().clone(),
+        pattern: vec![],
+        captures: vec![],
+        emissions: vec![],
+    };
+    let mut pending = None;
+    check.parameter(
+        &rule,
+        &assignment.slot,
+        &ItemLineValue::Literal(assignment.value.clone()),
+        ParameterSite::ItemParameter,
+        &mut pending,
+    )?;
+    *work = check.work;
+    if pending.is_some() {
+        return invalid(
+            rule.id.as_str(),
+            "default requires a known admitted input schema",
+        );
+    }
+    Ok(())
+}

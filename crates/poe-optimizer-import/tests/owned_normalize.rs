@@ -1778,7 +1778,7 @@ fn observed_exact_slots_share_loadout_identity_across_independent_item_sets() {
         draft.saved_variants.members.is_empty(),
         "nil/boolean source choices do not silently select a preset"
     );
-    assert_eq!(result.sidecar().schema_version, 7);
+    assert_eq!(result.sidecar().schema_version, 8);
     let mut no_rules = policy.clone();
     no_rules.equipment_loadouts.clear();
     let empty = normalize_with_loadouts(xml, &a, &no_rules).unwrap();

@@ -25,8 +25,8 @@
   "artifacts": [
     {
       "path": "policies/item-source.json",
-      "sha256": "69ce0cc20eb3eb354bf529851adf2022907163e4c1add5a4867025798dd8b522",
-      "bytes": 4734
+      "sha256": "e1f3c4a68ce0ca7f0d3a4bc96bcd0fe85579e195bfeceded7cf697ad4df6c8c1",
+      "bytes": 4761
     },
     {
       "path": "policies/items.json",

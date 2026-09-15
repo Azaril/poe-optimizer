@@ -290,6 +290,34 @@
       "end_line": 984,
       "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
       "sha256": "54dfb0730ec888897200257bcd8f7c7e2b12382b27fcf9cad5b9cfb3ed8c5bd3"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 324,
+      "end_line": 326,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "5dfafd72ebac40981fe16c998decdf0ffafb1a3ddac377d508fdc536de93f692"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 794,
+      "end_line": 802,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "a2d77b13adc5474e82c5aa41107c81ba49a910dd77268d5616b4a1feb2bc913d"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 935,
+      "end_line": 942,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "ed189f818aa677d8bd15c3bd07eb2aa18d60db50627f195dfeecc66c919a15d7"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 1880,
+      "end_line": 1885,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "3c013bb10aa4f5bb7abb932cb903a46ba642edcc0380e34c6910b56ffe737712"
     }
   ],
   "modifier_properties": [
@@ -313,5 +341,122 @@
       "label": "resistance",
       "property": "resistance"
     }
-  ]
+  ],
+  "catalyst_inputs": {
+    "selections": [
+      {
+        "key": "life",
+        "source_name": "Flesh",
+        "descriptor": "Life",
+        "any_properties": [
+          "life"
+        ]
+      },
+      {
+        "key": "mana",
+        "source_name": "Neural",
+        "descriptor": "Mana",
+        "any_properties": [
+          "mana"
+        ]
+      },
+      {
+        "key": "defence",
+        "source_name": "Carapace",
+        "descriptor": "Defence",
+        "any_properties": [
+          "defences",
+          "armour",
+          "evasion",
+          "energyshield"
+        ]
+      },
+      {
+        "key": "physical",
+        "source_name": "Uul-Netol's",
+        "descriptor": "Physical",
+        "any_properties": [
+          "physical"
+        ]
+      },
+      {
+        "key": "fire",
+        "source_name": "Xoph's",
+        "descriptor": "Fire",
+        "any_properties": [
+          "fire"
+        ]
+      },
+      {
+        "key": "cold",
+        "source_name": "Tul's",
+        "descriptor": "Cold",
+        "any_properties": [
+          "cold"
+        ]
+      },
+      {
+        "key": "lightning",
+        "source_name": "Esh's",
+        "descriptor": "Lightning",
+        "any_properties": [
+          "lightning"
+        ]
+      },
+      {
+        "key": "chaos",
+        "source_name": "Chayula's",
+        "descriptor": "Chaos",
+        "any_properties": [
+          "chaos"
+        ]
+      },
+      {
+        "key": "attack",
+        "source_name": "Reaver",
+        "descriptor": "Attack",
+        "any_properties": [
+          "attack"
+        ]
+      },
+      {
+        "key": "caster",
+        "source_name": "Sibilant",
+        "descriptor": "Caster",
+        "any_properties": [
+          "caster"
+        ]
+      },
+      {
+        "key": "speed",
+        "source_name": "Skittering",
+        "descriptor": "Speed",
+        "any_properties": [
+          "speed"
+        ]
+      },
+      {
+        "key": "attribute",
+        "source_name": "Adaptive",
+        "descriptor": "Attribute",
+        "any_properties": [
+          "attribute"
+        ]
+      },
+      {
+        "key": "minion",
+        "source_name": "Necrotic",
+        "descriptor": "Minion",
+        "any_properties": [
+          "minion"
+        ]
+      }
+    ],
+    "default_amount": 20,
+    "amount_envelope": {
+      "minimum": -1000000,
+      "maximum": 1000000
+    },
+    "missing_ordinary_quality": "absent"
+  }
 }

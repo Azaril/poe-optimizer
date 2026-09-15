@@ -140,7 +140,7 @@ inner endpoints allow an optional minus. Plus-prefixed and bare ranges are disjo
 Outer-minus range inversion, decimal endpoints and unreviewed grammar remain unsupported
 by that package, even though the generic lexical primitive supports other declared syntax.
 
-Item-line and item-source policies now use explicit wire/digest version **2**. A
+Item-line policies use explicit wire/digest version **2**; item-source policies use **3**. A
 `Property { property }` line value reads an explicitly supplied Boolean fact and can emit
 only into a Modifier-owned roll slot. Missing context/key remains `MissingProperty`;
 direct text conversion cannot invent a false value. Capture errors still precede missing
@@ -191,8 +191,25 @@ An immutable attribution plan retains original/semantic text, source spans, layo
 flat range-write records and the winning write. Inline fractions precede later XML writes;
 repeated valid XML IDs apply in source order. The existing injected converter still owns
 interpolation quantum, rounding and owned slot destinations. The normalizer preserves raw
-line outcomes and fresh modifier IDs, with a version-7 attribution sidecar. Item parameter
+line outcomes and fresh modifier IDs, with a version-8 attribution sidecar. Item parameter
 and modifier collections retain pending closure; attribution is not whole-item evaluation.
+
+Source policy v3 requires `template_defaults`, including an explicit empty list when none
+are reviewed. Each exact template may declare literal parameter fallbacks and separate
+item-level/quality absence policies. A parameter fallback lists every admitted source
+header spelling whose presence blocks that fallback. The adapter requires a complete
+source layout, checks raw headers even when their rules emit only Metadata, and rejects
+conflicting relevant headers as a default scope. The aggregator separately suppresses
+fallback for every authored or pending occurrence of that exact slot. Constructors check
+owner, membership, type, unit, value range, options and default uniqueness through shared
+input-schema validation. Template scans, schema reads, text, output and comparisons remain
+bounded; encoding preserves tightened constructor limits.
+
+Defaulted parameters are stored separately from located authored parameters. The normalizer
+combines their owned values while retaining default provenance in each item sidecar and
+the proven template in source attribution. Scoped absence becomes Known(None) only when
+no corresponding field is present. Direct text conversion cannot activate these defaults.
+No synthetic source lines, runtime defaults or conditional-default interpreter are used.
 The integrated evidence for this phase is recorded separately in the implementation log.
 
 Source presentation positions are consumed before matching semantic rules: an item titled
@@ -210,9 +227,12 @@ The [item modifier properties and scaling](owned-item-scaling.md) slice now conv
 untouched original05 ring's nominal range and five property predicates through the
 production policy. Its eight source uses remain distinct. New nominal resistance
 families retain Partial numerical rules, so that value is not an effective contribution.
-Existing fixed-value definitions/programs retain their prior meanings. Catalyst/header
-absence, ordinary quality, complete ordered scaling and rune/Bonded semantics remain
-unconverted; whole-item and whole-build closure remain open.
+Existing fixed-value definitions/programs retain their prior meanings. Canonical catalyst
+selection/amount and Sapphire-specific missing-input defaults are now converted using
+reviewed source data. Amount20 is the input to use only when a catalyst is enabled, and
+its default provenance remains distinct from an authored header. Ordinary quality for
+other bases, complete ordered scaling and rune/Bonded semantics remain unconverted;
+whole-item and whole-build closure remain open.
 
 The original Grand Spear has explicit attack speed 49% while its affix metadata names a
 26–28% tier. The import fixture preserves 49 once and retains the discrepancy. The original

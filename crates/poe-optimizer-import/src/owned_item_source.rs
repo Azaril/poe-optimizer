@@ -23,8 +23,9 @@ use std::{
 };
 
 mod attribute;
-pub const OWNED_ITEM_SOURCE_POLICY_VERSION: u32 = 2;
-const DOMAIN: &str = "owned-item-source-policy-v2";
+mod defaults;
+pub const OWNED_ITEM_SOURCE_POLICY_VERSION: u32 = 3;
+const DOMAIN: &str = "owned-item-source-policy-v3";
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemSourceLayoutPolicyInput {
@@ -37,8 +38,30 @@ pub struct ItemSourceLayoutPolicyInput {
     pub dialect: ItemSourceDialect,
     /// Exact source labels become local semantic property inputs, never runtime names.
     pub property_bindings: Vec<ItemSourcePropertyBinding>,
+    pub template_defaults: Vec<ItemSourceTemplateDefaults>,
     pub rule_layouts: Vec<ItemRuleSourceLayout>,
     pub template_layouts: Vec<ItemTemplateSourceLayout>,
+}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemSourceTemplateDefaults {
+    pub template: ItemTemplateDefId,
+    pub parameters: Vec<ItemSourceParameterDefault>,
+    pub item_level: ItemSourceAbsentPolicy,
+    pub quality: ItemSourceAbsentPolicy,
+}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemSourceParameterDefault {
+    pub assignment: poe_optimizer_core::owned_build::ParameterAssignment,
+    /// Every admitted source spelling for this field; presence blocks this fallback.
+    pub headers: Vec<String>,
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ItemSourceAbsentPolicy {
+    Pending,
+    Absent,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -86,6 +109,8 @@ pub struct ItemSourceLimits {
     pub max_rules: usize,
     pub max_templates: usize,
     pub max_properties: usize,
+    pub max_default_parameters: usize,
+    pub max_schema_work: usize,
     pub max_source_bytes: usize,
     pub max_line_bytes: usize,
     pub max_lines: usize,
@@ -103,6 +128,8 @@ impl Default for ItemSourceLimits {
             max_rules: 2048,
             max_templates: 8192,
             max_properties: 4096,
+            max_default_parameters: 4096,
+            max_schema_work: 1_000_000,
             max_source_bytes: 1024 * 1024,
             max_line_bytes: 65536,
             max_lines: 8192,
@@ -114,7 +141,7 @@ impl Default for ItemSourceLimits {
     }
 }
 impl ItemSourceLimits {
-    fn values(self) -> [usize; 13] {
+    fn values(self) -> [usize; 15] {
         [
             self.max_wire_bytes,
             self.max_policy_text_bytes,
@@ -122,6 +149,8 @@ impl ItemSourceLimits {
             self.max_rules,
             self.max_templates,
             self.max_properties,
+            self.max_default_parameters,
+            self.max_schema_work,
             self.max_source_bytes,
             self.max_line_bytes,
             self.max_lines,
@@ -181,6 +210,8 @@ pub struct ItemSourceLayoutPolicy {
     properties: BTreeMap<String, OwnedDefinitionKey>,
     rule_properties: BTreeMap<OwnedDefinitionKey, BTreeSet<OwnedDefinitionKey>>,
     property_reference_text: usize,
+    defaults: BTreeMap<ItemTemplateDefId, ItemSourceTemplateDefaults>,
+    default_schema_work: usize,
 }
 impl ItemSourceLayoutPolicy {
     pub fn new<I: DefinitionSchemaIndex>(
@@ -310,6 +341,8 @@ impl ItemSourceLayoutPolicy {
                 return Err(ItemSourceError::Policy("unknown or duplicate template"));
             }
         }
+        let (defaults, default_schema_work) =
+            defaults::validate(&input, lines, schema, limits, &mut text_left)?;
         let identity = digest_owned(DOMAIN, &input, limits.max_wire_bytes)?;
         Ok(Self {
             input,
@@ -320,6 +353,8 @@ impl ItemSourceLayoutPolicy {
             properties,
             rule_properties,
             property_reference_text,
+            defaults,
+            default_schema_work,
         })
     }
     pub fn input(&self) -> &ItemSourceLayoutPolicyInput {
@@ -391,6 +426,10 @@ pub fn encode_item_source_policy(
         policy.property_reference_text,
         "policy text",
     )?;
+    defaults::validate_shape(&policy.input, limits, &mut text_left)?;
+    if policy.default_schema_work > limits.max_schema_work {
+        return Err(ItemSourceError::Limit("schema work"));
+    }
     for rule in &policy.input.rule_layouts {
         charge(&mut text_left, rule.rule.as_str().len(), "policy text")?;
     }
@@ -528,6 +567,15 @@ pub struct ItemAttributionReport {
     pub layout: ItemLayoutStatus,
     pub lines: Vec<ItemAttributedLine>,
     pub writes: Vec<ItemRangeWrite>,
+    pub default_scope: ItemSourceDefaultScope,
+}
+#[derive(Clone, Debug, Serialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum ItemSourceDefaultScope {
+    Unconfigured,
+    Unproved,
+    ConflictingHeaders { headers: Vec<String> },
+    Proven { template: ItemTemplateDefId },
 }
 #[derive(Debug)]
 pub struct ItemRangeAttribution {
@@ -535,6 +583,7 @@ pub struct ItemRangeAttribution {
     work_left: usize,
     output_left: usize,
     can_convert: bool,
+    defaults: Option<ItemInputDefaults>,
 }
 impl ItemRangeAttribution {
     pub fn report(&self) -> &ItemAttributionReport {
@@ -584,6 +633,7 @@ impl ItemRangeAttribution {
                     pending,
                 )
             }),
+            self.defaults.as_ref(),
             &mut work,
             &mut output,
         )?)

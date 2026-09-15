@@ -212,8 +212,8 @@
     },
     {
       "path": "item-source-policy-seed.json",
-      "bytes": 4734,
-      "sha256": "04ab034da9fbfb6b502a37902efb2ffb440c45d32d5ae2c85602efc6a57dcf49"
+      "bytes": 4761,
+      "sha256": "075ef22e247d62d01c2edff3a89b68e23d3caf0e4074a5027fae8fd3977db2d4"
     },
     {
       "path": "mapping-seed.json",

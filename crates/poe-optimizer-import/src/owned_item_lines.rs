@@ -14,6 +14,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 mod convert;
 mod schema;
+pub(crate) use schema::validate_default_assignment;
 
 pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = 2;
 const DOMAIN: &str = "owned-item-line-policy-v2";
@@ -389,6 +390,22 @@ pub struct ItemTextConversion<'a> {
     pub modifiers: Vec<LocatedItemModifier>,
     pub parameters: Vec<LocatedItemParameter>,
     pub issues: Vec<ItemTextIssue>,
+    /// Explicit source-policy defaults, distinct from authored line emissions.
+    pub defaults: ItemDefaultedInputs,
+}
+
+/// Normalized missing inputs with provenance supplied by the source attribution scope.
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+pub struct ItemDefaultedInputs {
+    pub parameters: Vec<ParameterAssignment>,
+    pub item_level_absent: bool,
+    pub quality_absent: bool,
+}
+/// Prepared only by the source adapter after validating its complete input scope.
+#[derive(Debug)]
+pub(crate) struct ItemInputDefaults {
+    pub template: ItemTemplateDefId,
+    pub values: ItemDefaultedInputs,
 }
 
 #[derive(Clone, Debug)]

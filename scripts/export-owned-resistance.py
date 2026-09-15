@@ -58,6 +58,29 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
             raise ValueError("duplicate modifier property binding")
         labels.add(row["label"])
         keys.add(row["property"])
+    catalyst = authoring["catalyst_inputs"]
+    DATA.fields(catalyst, "selections default_amount amount_envelope missing_ordinary_quality", "catalyst input authoring")
+    selections = catalyst["selections"]
+    if not isinstance(selections, list) or not 1 <= len(selections) <= 32:
+        raise ValueError("catalyst selection bound exceeded")
+    seen = set()
+    for row in selections:
+        DATA.fields(row, "key source_name descriptor any_properties", "catalyst selection")
+        if any(not isinstance(row[k], str) or not 1 <= len(row[k]) <= 64 for k in ["key", "source_name", "descriptor"]) or re.fullmatch(r"[a-z][a-z_]{0,63}", row["key"]) is None:
+            raise ValueError("invalid catalyst selection label")
+        if row["key"] in seen or not isinstance(row["any_properties"], list) or not 1 <= len(row["any_properties"]) <= 32:
+            raise ValueError("duplicate catalyst key or property bound")
+        seen.add(row["key"])
+        if any(not isinstance(p, str) or re.fullmatch(r"[a-z][a-z_]{0,63}", p) is None for p in row["any_properties"]):
+            raise ValueError("invalid catalyst property selector")
+    if len({r["source_name"] for r in selections}) != len(selections) or len({r["descriptor"] for r in selections}) != len(selections):
+        raise ValueError("duplicate catalyst selector")
+    DATA.fields(catalyst["amount_envelope"], "minimum maximum", "catalyst computation envelope")
+    lo, hi = catalyst["amount_envelope"]["minimum"], catalyst["amount_envelope"]["maximum"]
+    if type(lo) is not int or type(hi) is not int or not -1000000 <= lo <= 0 < hi <= 1000000 or type(catalyst["default_amount"]) is not int or not lo <= catalyst["default_amount"] <= hi:
+        raise ValueError("invalid catalyst amount envelope/default")
+    if catalyst["missing_ordinary_quality"] not in ["pending", "absent"]:
+        raise ValueError("invalid ordinary quality absence policy")
     mapping = load(base_dir / "mapping.json")
     if mapping["definitions"] != base["rules"]["definitions"] or mapping["registry"] != DATA.owned_digest("owned-id-registry-v1", base["registry"]):
         raise ValueError("base mapping binding differs")
@@ -65,7 +88,7 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
         raise ValueError("base schema binding differs")
     source = copy.deepcopy(mapping["source"])
     pins = {f["path"]: f["sha256"] for f in source["files"]}
-    spans, source_bytes = [], 0
+    spans, source_bytes, source_texts = [], 0, {}
     root = source_root.resolve()
     for span in authoring["source_spans"]:
         path = (root / span["path"]).resolve()
@@ -78,13 +101,40 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
         if span["path"] in pins and pins[span["path"]] != sha(raw_source):
             raise ValueError("conflicting source pin")
         pins[span["path"]] = sha(raw_source)
-        lines = raw_source.decode().splitlines(keepends=True)
+        source_texts[span["path"]] = raw_source.decode("utf-8")
+        lines = source_texts[span["path"]].splitlines(keepends=True)
         if not 1 <= span["line"] <= span["end_line"] <= len(lines):
             raise ValueError("source span outside file")
         selected = "".join(lines[span["line"] - 1:span["end_line"]])
         if sha(selected.encode()) != span["sha256"]:
             raise ValueError("source span hash differs")
         spans.append({**span, "text": selected})
+    # Validate only these bounded literal tables; no source interpreter runs.
+    item_source = source_texts.get("src/Classes/Item.lua", "")
+    def literal_list(pattern):
+        matches = re.findall(pattern, item_source, re.S)
+        if len(matches) != 1:
+            raise ValueError("missing/ambiguous pinned catalyst literal table")
+        return re.findall(r'"([^"\\]*)"', matches[0])
+    source_names = literal_list(r"local catalystList = (\{[^\n]+\})")
+    source_descriptors = literal_list(r"local catalystDescriptorList = (\{[^\n]+\})")
+    tag_tables = re.findall(r"local catalystTags = \{(.*?)\n\}", item_source, re.S)
+    if len(tag_tables) != 1:
+        raise ValueError("missing pinned catalyst property table")
+    source_tags = [re.findall(r'"([^"\\]*)"', row) for row in re.findall(r"\{([^{}]*)\}", tag_tables[0])]
+    if [r["source_name"] for r in selections] != source_names or [r["descriptor"] for r in selections] != source_descriptors or [r["any_properties"] for r in selections] != source_tags:
+        raise ValueError("catalyst authoring differs from pinned literal tables")
+    if catalyst["default_amount"] != 20 or not re.search(r"if not quality then\s+quality = 20", item_source):
+        raise ValueError("catalyst default differs from reviewed source fallback")
+    if catalyst["missing_ordinary_quality"] == "absent":
+        base_evidence = authoring["range_template"]
+        first, last = base_evidence["source_lines"]
+        base_lines = source_texts.get(base_evidence["source_path"], "").splitlines()
+        if type(first) is not int or type(last) is not int or not 1 <= first <= last <= len(base_lines) or last - first > 64:
+            raise ValueError("ordinary quality base evidence bounds differ")
+        fragment = "\n".join(base_lines[first - 1:last])
+        if not fragment.startswith('itemBases["' + base_evidence["name"] + '"] = {') or not fragment.rstrip().endswith("}") or re.search(r"\bquality\s*=", fragment):
+            raise ValueError("ordinary quality absence lacks exact base evidence")
     source["files"] = [{"path": name, "sha256": digest} for name, digest in sorted(pins.items())]
     recipe = copy.deepcopy(base)
     registry, schema, rules = recipe["registry"], recipe["schema"], recipe["rules"]
@@ -158,6 +208,11 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
         nominal_modifiers[name] = (definition, slot, property_slots)
         payload["modifiers"]["members"].append(definition)
         rules["owners"].append({"owner": subject(definition), "programs": partial([], definition, "nominal-item-scaling-inputs-unconverted")})
+    no_catalyst = allocate("catalyst-none", "option", {})
+    catalyst_options = [(row, allocate("catalyst-" + row["key"], "option", {})) for row in selections]
+    catalyst_kind = allocate("item-catalyst-kind", "parameter_slot", {"value": tag("option", {"allowed": complete([no_catalyst] + [identifier for _, identifier in catalyst_options])}), "presence": "required_once", "sites": ["item_parameter"]}, template)
+    catalyst_amount = allocate("item-catalyst-enabled-amount", "parameter_slot", {"value": tag("quantity", {"minimum": quantity(lo)["value"], "maximum": quantity(hi)["value"]}), "presence": "required_once", "sites": ["item_parameter"]}, template)
+    payload["declarations"]["parameters"]["members"].extend([catalyst_kind, catalyst_amount])
     reward_facts = load(import_inputs / "reward-source-facts.json")
     reward_rows = {r["config_key"]: r for r in reward_facts["rows"]}
     mapped = {compact(r["source"]): r for r in mapping["entries"]}
@@ -203,6 +258,10 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
     headers = [rule("sapphire-ring-template", [tag("literal", authoring["range_template"]["name"])], [], [tag("template", {"definition": template})])]
     for name, prefix in [("rarity", "Rarity: "), ("crafted", "Crafted: "), ("prefix", "Prefix: "), ("suffix", "Suffix: "), ("level-requirement", "LevelReq: "), ("implicit-count", "Implicits: "), ("item-level-metadata", "Item Level: "), ("quality-metadata", "Quality: "), ("sockets", "Sockets: "), ("rune", "Rune: ")]:
         headers.append(rule(name, [tag("literal", prefix), tag("capture", "text")], [{"id": "text", "codec": tag("opaque_text")}], [tag("metadata", {"role": "source-preamble-only"})]))
+    kind_codec = {"namespace": namespace, "whitespace": "exact", "codec": tag("option", {"tokens": [{"token": row["source_name"], "value": identifier} for row, identifier in catalyst_options]})}
+    amount_codec = {"namespace": namespace, "whitespace": "exact", "codec": tag("quantity", {"syntax": "decimal", "unit": unit, "scale": {"numerator": 1, "denominator": 1}})}
+    for name, prefix, value_codec, parameter in [("catalyst-kind", "Catalyst: ", kind_codec, catalyst_kind), ("catalyst-amount", "CatalystQuality: ", amount_codec, catalyst_amount)]:
+        headers.append(rule(name, [tag("literal", prefix), tag("capture", "value")], [{"id": "value", "codec": tag("value", value_codec)}], [tag("item_parameter", {"slot": parameter, "value": tag("capture", "value")})]))
     outputs = {"recipe.json": pretty(recipe), "ids.json": pretty({"schema_version": 1, "namespace": namespace, "allocations": ids})}
     def numeric(name, sign="optional"):
         return tag("numeric_capture", {"capture": name, "syntax": "integer", "sign": sign})
@@ -223,12 +282,16 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
             rolls = [{"slot": nominal_slot, "value": value}] + [{"slot": property_slot, "value": tag("property", {"property": property_key})} for property_key, property_slot in property_slots]
             line_rules.append(rule("ranged-" + spelling + "-" + name, pattern, [capture("lower"), capture("upper")],
                 [tag("modifier", {"definition": nominal_definition, "rolls": rolls})]))
-    items = {"schema_version": 2, "namespace": namespace, "version": "resistance-lines-v3", "definitions": identity,
+    items = {"schema_version": 2, "namespace": namespace, "version": "resistance-lines-v4", "definitions": identity,
         "whitespace": "trim_ascii", "rules": line_rules}
-    source_policy = {"schema_version": 2, "namespace": namespace, "version": "resistance-layout-v3", "source": source,
+    source_policy = {"schema_version": 3, "namespace": namespace, "version": "resistance-layout-v4", "source": source,
         "item_lines": DATA.owned_digest("owned-item-line-policy-v2", items), "dialect": "pob_exported_single_text_v1",
         "rule_layouts": [{"rule": r["id"], "role": "header" if i < len(headers) else "single_modifier"} for i, r in enumerate(line_rules)],
-        "template_layouts": [{"template": template, "load_index_prefix": "no_generated_buff_members"}], "property_bindings": properties}
+        "template_layouts": [{"template": template, "load_index_prefix": "no_generated_buff_members"}], "property_bindings": properties,
+        "template_defaults": [{"template": template, "parameters": [
+            {"assignment": {"slot": catalyst_kind, "value": tag("option", no_catalyst)}, "headers": ["Catalyst"]},
+            {"assignment": {"slot": catalyst_amount, "value": quantity(catalyst["default_amount"])}, "headers": ["CatalystQuality"]}],
+            "item_level": "absent", "quality": catalyst["missing_ordinary_quality"]}]}
     outputs["items.json"] = pretty(items)
     outputs["item-source.json"] = pretty(source_policy)
     facts = {"schema_version": 1, "scope": "resistance-contribution-only", "base_recipe_sha256": sha(raw), "recipe_sha256": sha(outputs["recipe.json"]),
@@ -239,9 +302,13 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
         "range_conversion": {"implemented": True, "scope": "Plain cold/all-elemental integer endpoint ranges with plus or absent outer sign; explicit source-attributed fraction; literal a+f*(b-a) arithmetic; literal signed source half-offset rounding. Outer minus, decimal endpoints, other line grammar and unsupported lifecycle remain pending.",
             "source_example_only": {"base": "Sapphire Ring", "lower": 20, "upper": 30, "fraction_and_value": [[0, 20], [0.5, 25], [1, 30]]},
             "required_generic_operations": ["maximal numeric lexical capture with explicit sign policy", "literal source signed half-offset rounding", "source-attributed range membership proof without source execution"]},
+        "catalyst_inputs": {"implemented": True, "selections": selections, "canonical_headers": ["Catalyst", "CatalystQuality"], "descriptor_aliases": "Recorded as source evidence; not admitted by this canonical exported-header policy.",
+            "amount_meaning": "Scalar amount in percentage points to use when the catalyst is enabled; not a claim that an amount header was authored.", "missing_amount_default": catalyst["default_amount"], "no_catalyst": no_catalyst,
+            "default_authority": "Exact template plus proven canonical source layout and absence of all declared header names and authored/pending field occurrences; explicit zero wins, malformed/unknown input does not default.",
+            "ordinary_quality": "Separate ItemRecord.quality; proved omission is explicit absence only for this reviewed template whose pinned base has no quality field. Authored Quality blocks the absence default.", "effective_scaling": False},
         "modifier_properties": {"implemented": True, "bindings": properties, "value_encoding": "nominal_integer_range", "property_set": "Every label on the selected source member must be mapped and consumed; unknown or unconsumed labels remain Pending. Absence is not a runtime default.", "effective_scaling": False,
-            "remaining_obligations": ["catalyst/header absence and defaults", "source nominal versus baked encoding for other source families", "category and numeric-component scalability", "applicable ordered modifier-magnitude transforms", "complete owning-item inputs and contributors"]},
-        "original_ring_attribution": {"status": "pending", "input_status": "nominal_amount_and_five_properties_converted", "reason": "The untouched original's five labels and source-attributed range become owned nominal inputs. Catalyst/header/encoding and modifier-magnitude obligations remain; the new family has Partial rules and no effective Contribute.",
+            "remaining_obligations": ["binding catalyst inputs to native equipment properties and effective transforms", "source nominal versus baked encoding for other source families", "category and numeric-component scalability", "applicable ordered modifier-magnitude transforms", "complete owning-item inputs and contributors"]},
+        "original_ring_attribution": {"status": "pending", "input_status": "nominal_amount_and_five_properties_converted", "reason": "The untouched original's five labels and source-attributed range become owned nominal inputs. Catalyst inputs/default provenance are preserved; encoding and modifier-magnitude obligations remain; the new family has Partial rules and no effective Contribute.",
             "reviewed_tag": "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}",
             "diagnostic_only": "Range0/0.5/1 contrasts edit only XML fractions in memory and retain the actual tag. Nominal conversion is not effective scaling or native original success."},
         "whole_item_closure": False, "metric_producer": False, "source_execution": False, "whole_original_native_completion": "0/5"}
