@@ -363,26 +363,24 @@ fn rule_programs_and_table_cells_consume_the_aggregate_entry_budget() {
     ));
 }
 
+// Reconstruct the immutable pre-tree stage through its real publisher. The shipped
+// current bundle continues forward and must never become a second allocation base.
 fn current_input() -> SuccessorBundleInput {
-    let recipe = load("current/recipe.json");
+    let previous = stage(input());
     SuccessorBundleInput {
         schema_version: OWNED_SUCCESSOR_VERSION,
-        prior: recipe,
-        successor: load("current/recipe.json"),
-        mapping: load("current/mapping.json"),
-        roles: load("current/roles.json"),
-        normalization: load("current/normalization.json"),
-        rewards: load("current/rewards.json"),
-        query_sets: (1..=5)
-            .map(|i| NamedQuerySet {
-                name: OwnedDefinitionKey::new(format!("original-{i:02}")).unwrap(),
-                queries: load(&format!("current/queries-original-{i:02}.json")),
-            })
-            .collect(),
-        items: load("current/items.json"),
-        item_source: load("current/item-source.json"),
+        prior: previous.recipe().clone(),
+        successor: previous.recipe().clone(),
+        mapping: previous.mapping().input().clone(),
+        roles: previous.roles().input().clone(),
+        normalization: previous.normalization().clone(),
+        rewards: previous.rewards().input().clone(),
+        query_sets: previous.query_sets().to_vec(),
+        items: previous.items().input().clone(),
+        item_source: previous.item_source().input().clone(),
     }
 }
+
 fn catalog_input() -> (SuccessorBundleInput, CatalogAppend) {
     use poe_optimizer_core::{
         owned_definitions::OptionDefinition,
@@ -575,4 +573,173 @@ fn catalog_append_uses_combined_bytes_and_combined_mapping_bounds() {
     let mut limits = SuccessorBundleLimits::default();
     limits.catalog.mapping.max_collection_entries = input.mapping.entries.len();
     assert!(transition_owned_catalog(input, append, limits).is_err());
+}
+
+fn empty_tree_content(
+    input: &SuccessorBundleInput,
+) -> poe_optimizer_import::owned_tree_policy::TreeNormalizationContent {
+    use poe_optimizer_core::owned_content::digest_owned;
+    use poe_optimizer_import::owned_tree_policy::*;
+    TreeNormalizationContent {
+        version: OwnedDefinitionKey::new("test-tree-policy").unwrap(),
+        source: input.mapping.source.clone(),
+        catalog: digest_owned("test-catalog", &1, 100).unwrap(),
+        policy: digest_owned("test-policy", &2, 100).unwrap(),
+        tree_version: "test-tree".into(),
+        classes: vec![],
+        ascendancies: vec![],
+        tokens: vec![TreeTokenRow {
+            token: "unknown-node".into(),
+            role: TreeTokenRole::Unresolved {
+                code: OwnedDefinitionKey::new("not-converted").unwrap(),
+            },
+        }],
+        attributes: vec![],
+        syntax: TreeNormalizationSyntax {
+            tree_version_attribute: "treeVersion".into(),
+            class_attribute: "classInternalId".into(),
+            ascendancy_attribute: "ascendancyInternalId".into(),
+            class_consistency_attribute: Some("classId".into()),
+            ascendancy_consistency_attribute: Some("ascendClassId".into()),
+            overrides_element: "Overrides".into(),
+            attribute_override_element: "AttributeOverride".into(),
+            weapon_overlays: vec![],
+            ignored_spec_children: vec!["URL".into()],
+        },
+    }
+}
+#[test]
+fn tree_installation_uses_final_bindings_and_one_fixed_manifest_artifact() {
+    let (input, append) = catalog_input();
+    let content = empty_tree_content(&input);
+    let result = transition_owned_catalog_with_tree(
+        input,
+        append,
+        TreePolicyTransitionInput::Install {
+            content: Box::new(content.clone()),
+        },
+        Default::default(),
+    )
+    .unwrap();
+    let tree = result.tree().unwrap();
+    assert_eq!(tree.input().content, content);
+    assert_eq!(
+        tree.input().definitions,
+        *result.assembled().schema().identity()
+    );
+    assert_eq!(tree.input().mapping, *result.mapping().identity());
+    assert_eq!(
+        tree.input().normalization,
+        result.transition().after.normalization
+    );
+    assert_eq!(result.transition().tree, Some(*tree.identity()));
+    let files: BTreeMap<_, _> = result.artifacts().collect();
+    assert_eq!(
+        serde_json::from_slice::<
+            poe_optimizer_import::owned_tree_policy::TreeNormalizationPackageInput,
+        >(files["tree-normalization.json"])
+        .unwrap(),
+        *tree.input()
+    );
+    assert!(
+        result
+            .transition()
+            .artifacts
+            .iter()
+            .any(|r| r.file == "tree-normalization.json")
+    );
+    assert_eq!(files.len(), 20); // Original18 + catalog append + one typed tree artifact.
+}
+#[test]
+fn tree_rebinding_checks_prior_package_and_preserves_content() {
+    let input = current_input();
+    let content = empty_tree_content(&input);
+    let append = CatalogAppend {
+        mappings: vec![],
+        source: input.mapping.source.clone(),
+        item_policies: CatalogItemPolicyMode::RebindPrior,
+    };
+    let installed = transition_owned_catalog_with_tree(
+        input,
+        append.clone(),
+        TreePolicyTransitionInput::Install {
+            content: Box::new(content),
+        },
+        Default::default(),
+    )
+    .unwrap();
+    let input = SuccessorBundleInput {
+        schema_version: OWNED_SUCCESSOR_VERSION,
+        prior: installed.recipe().clone(),
+        successor: installed.recipe().clone(),
+        mapping: installed.mapping().input().clone(),
+        roles: installed.roles().input().clone(),
+        normalization: installed.normalization().clone(),
+        rewards: installed.rewards().input().clone(),
+        query_sets: installed.query_sets().to_vec(),
+        items: installed.items().input().clone(),
+        item_source: installed.item_source().input().clone(),
+    };
+    let tree = installed.tree().unwrap().input().clone();
+    let rebound = transition_owned_catalog_with_tree(
+        input.clone(),
+        append.clone(),
+        TreePolicyTransitionInput::RebindPrior {
+            prior: Box::new(tree.clone()),
+        },
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(rebound.tree().unwrap().input(), &tree);
+    let mut stale = tree;
+    stale.mapping = poe_optimizer_core::owned_content::digest_owned("wrong", &1, 100).unwrap();
+    assert!(
+        transition_owned_catalog_with_tree(
+            input,
+            append,
+            TreePolicyTransitionInput::RebindPrior {
+                prior: Box::new(stale)
+            },
+            Default::default()
+        )
+        .is_err()
+    );
+}
+#[test]
+fn tree_install_never_bypasses_prior_policy_checks_or_shared_output_limits() {
+    let (input, append) = catalog_input();
+    let content = empty_tree_content(&input);
+    let mut stale = input.clone();
+    if let GemQualityPolicy::Attributes(q) = &mut stale.normalization.gem_quality {
+        q.definitions = stale.successor.rules.definitions.clone();
+    }
+    assert!(
+        transition_owned_catalog_with_tree(
+            stale,
+            append.clone(),
+            TreePolicyTransitionInput::Install {
+                content: Box::new(content.clone())
+            },
+            Default::default()
+        )
+        .is_err()
+    );
+    let baseline =
+        transition_owned_catalog(input.clone(), append.clone(), Default::default()).unwrap();
+    let old_bytes = baseline.artifacts().map(|(_, bytes)| bytes.len()).sum();
+    let limits = SuccessorBundleLimits {
+        max_output_bytes: old_bytes,
+        ..Default::default()
+    };
+    assert!(
+        transition_owned_catalog_with_tree(
+            input,
+            append,
+            TreePolicyTransitionInput::Install {
+                content: Box::new(content)
+            },
+            limits
+        )
+        .is_err()
+    );
 }

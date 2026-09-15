@@ -40,6 +40,12 @@ facade. Its only caller was a test helper, which now exercises the compiled
 `SlotValidityProgram::new(...).check(...)` API already used by production activation.
 All 13 semantic tests remain; no numerical golden or source fixture was removed.
 
+Removed the unused `CompiledParserProgram::loop_states()` accessor after a repository-wide
+caller search. The backing field remains in the live interpreter allocation/execution
+path. This removes an unnecessary API; it does not retire the interpreter. The owned tree
+compiler and normalizer add no call into that path. No additional Spark/Mace pipeline
+removal is claimed by structural tree conversion.
+
 The following observed calls prevent honest claims of complete retirement:
 
 - `native::preparation` still runs configuration, skill and item source stages before

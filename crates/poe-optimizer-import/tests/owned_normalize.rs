@@ -350,6 +350,7 @@ fn run(
         &evidence,
         *source.allocator_state(),
         NormalizationArtifacts {
+            tree: None,
             items: &empty_items(&artifacts.schema),
             item_source: &empty_item_source(&artifacts.schema),
             mappings: &artifacts.mapping,
@@ -382,6 +383,7 @@ fn ids(target: &OwnedOriginTarget) -> InstanceId {
         OwnedOriginTarget::Skill(v) => v.instance_id(),
         OwnedOriginTarget::Support(v) => v.instance_id(),
         OwnedOriginTarget::Allocation(v) => v.instance_id(),
+        OwnedOriginTarget::ImplicitPassive { character, .. } => character.instance_id(),
         OwnedOriginTarget::CharacterPreset(v) => v.instance_id(),
         OwnedOriginTarget::EquipmentPreset(v) => v.instance_id(),
         OwnedOriginTarget::AllocationPreset(v) => v.instance_id(),
@@ -466,6 +468,7 @@ fn fresh_normalization_is_deterministic_above_source_watermark_and_keeps_input_i
         &evidence,
         reserved,
         NormalizationArtifacts {
+            tree: None,
             items: &empty_items(&artifacts.schema),
             item_source: &empty_item_source(&artifacts.schema),
             mappings: &artifacts.mapping,
@@ -516,6 +519,7 @@ fn failure_and_overflow_do_not_advance_caller_allocator_or_mutate_artifacts() {
             &evidence,
             allocator,
             NormalizationArtifacts {
+                tree: None,
                 items: &empty_items(&artifacts.schema),
                 item_source: &empty_item_source(&artifacts.schema),
                 mappings: &artifacts.mapping,
@@ -1191,6 +1195,7 @@ fn duplicate_requested_query_ids_reject_instead_of_dropping_rows() {
             &evidence,
             *source.allocator_state(),
             NormalizationArtifacts {
+                tree: None,
                 items: &empty_items(&artifacts.schema),
                 item_source: &empty_item_source(&artifacts.schema),
                 mappings: &artifacts.mapping,
@@ -1580,6 +1585,7 @@ fn reward_binding_rejects_stale_policy_before_any_normalization_is_returned() {
             &evidence,
             *source.allocator_state(),
             NormalizationArtifacts {
+                tree: None,
                 items: &empty_items(&a.schema),
                 item_source: &empty_item_source(&a.schema),
                 mappings: &a.mapping,
@@ -1705,6 +1711,7 @@ fn normalize_with_loadouts(
         &evidence,
         *source.allocator_state(),
         NormalizationArtifacts {
+            tree: None,
             items: &empty_items(&a.schema),
             item_source: &empty_item_source(&a.schema),
             mappings: &a.mapping,
@@ -1778,7 +1785,7 @@ fn observed_exact_slots_share_loadout_identity_across_independent_item_sets() {
         draft.saved_variants.members.is_empty(),
         "nil/boolean source choices do not silently select a preset"
     );
-    assert_eq!(result.sidecar().schema_version, 8);
+    assert_eq!(result.sidecar().schema_version, 9);
     let mut no_rules = policy.clone();
     no_rules.equipment_loadouts.clear();
     let empty = normalize_with_loadouts(xml, &a, &no_rules).unwrap();

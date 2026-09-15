@@ -12,6 +12,7 @@ use crate::{
     owned_reward_policy::*,
     owned_skill_catalog::*,
     owned_source::*,
+    owned_tree_policy::{OwnedTreeNormalizationPolicy, TreePolicyError},
     owned_value::ValueCodecKind,
     owned_value_policy::*,
 };
@@ -29,6 +30,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 mod items;
 mod quality;
+mod tree;
 pub use items::{NormalizedItemLine, NormalizedItemText};
 pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
 
@@ -149,6 +151,8 @@ pub enum NormalizationError {
     #[error(transparent)]
     ItemSource(#[from] ItemSourceError),
     #[error(transparent)]
+    Tree(#[from] TreePolicyError),
+    #[error(transparent)]
     Identity(#[from] BuildIdentityError),
     #[error(transparent)]
     Structure(#[from] StructuralError),
@@ -172,6 +176,10 @@ pub enum OwnedOriginTarget {
     Skill(SkillUseId),
     Support(SupportAssignmentId),
     Allocation(AllocationId),
+    ImplicitPassive {
+        character: CharacterPresetId,
+        node: PassiveNodeDefId,
+    },
     CharacterPreset(CharacterPresetId),
     EquipmentPreset(EquipmentPresetId),
     AllocationPreset(AllocationPresetId),
@@ -212,6 +220,7 @@ pub struct FreshNormalizationSidecar {
     pub reward_policy: OwnedContentDigest,
     pub item_policy: OwnedContentDigest,
     pub item_source_policy: OwnedContentDigest,
+    pub tree_policy: Option<OwnedContentDigest>,
     pub item_texts: Vec<NormalizedItemText>,
     pub draft: OwnedContentDigest,
     pub origins: Vec<SourceOwnedOrigin>,
@@ -233,6 +242,7 @@ pub struct NormalizationArtifacts<'a, I> {
     pub rewards: &'a OwnedRewardPolicy,
     pub items: &'a OwnedItemLinePolicy,
     pub item_source: &'a ItemSourceLayoutPolicy,
+    pub tree: Option<&'a OwnedTreeNormalizationPolicy>,
 }
 impl NormalizedImport {
     pub fn draft(&self) -> &DraftSession {
@@ -753,6 +763,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         rewards,
         items,
         item_source,
+        tree,
     } = artifacts;
     let CompiledNormalizationInputs {
         recipes,
@@ -762,6 +773,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     rewards.verify_bindings(mappings, definitions)?;
     items.verify_bindings(definitions)?;
     item_source.verify_bindings(items, definitions)?;
+    if let Some(tree) = tree {
+        tree.verify_bindings(registry, definitions, mappings, policy)?;
+    }
     let policy_digest = digest_owned(
         "owned-normalization-policy-v3",
         &(policy, queries),
@@ -863,6 +877,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let mut equipment_sets = BTreeMap::new();
     let mut skill_sets = BTreeMap::new();
     let mut spec_sets = BTreeMap::new();
+    let mut spec_characters = BTreeMap::new();
     let mut fallback_issues = vec![];
     let builds: Vec<_> = evidence
         .sections(SourceSectionKind::Build)
@@ -914,7 +929,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     .members
                     .push(AllocationPresetDraft {
                         id,
-                        allocations: b.closure(s, "allocation-membership-not-converted", vec![])?,
+                        allocations: if tree.is_some() {
+                            complete(vec![])
+                        } else {
+                            b.closure(s, "allocation-membership-not-converted", vec![])?
+                        },
                         equipment: b.closure(
                             s,
                             "allocation-equipment-membership-not-converted",
@@ -923,30 +942,34 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     });
                 let id = b.id()?;
                 b.link(s, OwnedOriginTarget::CharacterPreset(id))?;
-                let class = component(&b, row, "classInternalId");
-                let class_field = b.mapped(
-                    s,
-                    class.clone().map(|key| {
-                        ExternalSelector::Definition(ExternalOwnerSelector::Class { key })
-                    }),
-                    |v| match v {
-                        DefinitionAddress::Class(id) => Some(id.clone()),
-                        _ => None,
-                    },
-                )?;
-                let asc =
-                    class
-                        .zip(component(&b, row, "ascendancyInternalId"))
-                        .map(|(class, key)| {
+                let (class_field, ascendancy) = if let Some(tree) = tree {
+                    tree::character_fields(&mut b, row, tree)?
+                } else {
+                    let class = component(&b, row, "classInternalId");
+                    let class_field = b.mapped(
+                        s,
+                        class.clone().map(|key| {
+                            ExternalSelector::Definition(ExternalOwnerSelector::Class { key })
+                        }),
+                        |v| match v {
+                            DefinitionAddress::Class(id) => Some(id.clone()),
+                            _ => None,
+                        },
+                    )?;
+                    let asc = class.zip(component(&b, row, "ascendancyInternalId")).map(
+                        |(class, key)| {
                             ExternalSelector::Definition(ExternalOwnerSelector::Ascendancy {
                                 class,
                                 key,
                             })
-                        });
-                let ascendancy = b.mapped(s, asc, |v| match v {
-                    DefinitionAddress::Ascendancy(id) => Some(Some(id.clone())),
-                    _ => None,
-                })?;
+                        },
+                    );
+                    let ascendancy = b.mapped(s, asc, |v| match v {
+                        DefinitionAddress::Ascendancy(id) => Some(Some(id.clone())),
+                        _ => None,
+                    })?;
+                    (class_field, ascendancy)
+                };
                 let level = b.level(
                     if builds.len() == 1 {
                         Some(builds[0])
@@ -960,6 +983,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 if let DraftListCompletion::Pending { id, .. } = rewards.completion {
                     fallback_issues.push(id);
                 }
+                spec_characters.insert(s, draft.character_presets.members.len());
                 draft.character_presets.members.push(CharacterPresetDraft {
                     id,
                     class: class_field,
@@ -1167,52 +1191,67 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 .push(id);
         }
     }
-    // Every nonempty authored node token is retained. Malformed empty tokens and
-    // undecodable lists retain the real preset membership obligation. Pool, loadout overlay, attribute
-    // choice and special access require owned definitions; disconnected != illegal.
-    for (s, index) in &spec_sets {
-        let row = &evidence.rows()[s.ordinal() as usize];
-        if let Some(Ok(nodes)) = row
-            .attribute(&policy.allocation_attribute)
-            .map(|v| v.decoded())
-        {
-            for node in nodes.split(',') {
-                b.charge(1)?;
-                if node.is_empty() {
-                    continue;
+    if let Some(tree) = tree {
+        tree::allocations(
+            &mut b,
+            &mut draft,
+            tree::TreeContext {
+                specs: &spec_sets,
+                characters: &spec_characters,
+                loadouts: &loadout_ids,
+                definitions,
+                tree,
+                base: policy,
+            },
+        )?;
+    } else {
+        // Every nonempty authored node token is retained. Malformed empty tokens and
+        // undecodable lists retain the real preset membership obligation. Pool, loadout overlay, attribute
+        // choice and special access require owned definitions; disconnected != illegal.
+        for (s, index) in &spec_sets {
+            let row = &evidence.rows()[s.ordinal() as usize];
+            if let Some(Ok(nodes)) = row
+                .attribute(&policy.allocation_attribute)
+                .map(|v| v.decoded())
+            {
+                for node in nodes.split(',') {
+                    b.charge(1)?;
+                    if node.is_empty() {
+                        continue;
+                    }
+                    if node.len() > limits.mapping.max_string_bytes {
+                        return Err(NormalizationError::Limit("node selector bytes"));
+                    }
+                    b.charge(row.attributes().len())?;
+                    let id = b.id()?;
+                    b.link(*s, OwnedOriginTarget::Allocation(id))?;
+                    let selector = component(&b, row, "treeVersion").map(|tree_version| {
+                        ExternalSelector::Definition(ExternalOwnerSelector::PassiveNode {
+                            tree_version,
+                            node_id: SourceComponent::Text(node.into()),
+                            view: SourceComponent::Missing,
+                        })
+                    });
+                    draft.allocations.members.push(AllocationDraft {
+                        id,
+                        node: b.mapped(*s, selector, |v| match v {
+                            DefinitionAddress::PassiveNode(id) => Some(id.clone()),
+                            _ => None,
+                        })?,
+                        pool: b.pending(*s, "point-pool-not-converted")?,
+                        scope: b.pending(*s, "allocation-scope-not-converted")?,
+                        access: DraftAllocationAccess::Pending(PendingValue {
+                            id: b.issue(*s)?,
+                            code: key("allocation-access-not-converted"),
+                            candidates: vec![],
+                        }),
+                        choices: b.closure(*s, "allocation-choices-not-converted", vec![])?,
+                    });
+                    draft.allocation_presets.members[*index]
+                        .allocations
+                        .members
+                        .push(id);
                 }
-                if node.len() > limits.mapping.max_string_bytes {
-                    return Err(NormalizationError::Limit("node selector bytes"));
-                }
-                b.charge(row.attributes().len())?;
-                let id = b.id()?;
-                b.link(*s, OwnedOriginTarget::Allocation(id))?;
-                let selector = component(&b, row, "treeVersion").map(|tree_version| {
-                    ExternalSelector::Definition(ExternalOwnerSelector::PassiveNode {
-                        tree_version,
-                        node_id: SourceComponent::Text(node.into()),
-                        view: SourceComponent::Missing,
-                    })
-                });
-                draft.allocations.members.push(AllocationDraft {
-                    id,
-                    node: b.mapped(*s, selector, |v| match v {
-                        DefinitionAddress::PassiveNode(id) => Some(id.clone()),
-                        _ => None,
-                    })?,
-                    pool: b.pending(*s, "point-pool-not-converted")?,
-                    scope: b.pending(*s, "allocation-scope-not-converted")?,
-                    access: DraftAllocationAccess::Pending(PendingValue {
-                        id: b.issue(*s)?,
-                        code: key("allocation-access-not-converted"),
-                        candidates: vec![],
-                    }),
-                    choices: b.closure(*s, "allocation-choices-not-converted", vec![])?,
-                });
-                draft.allocation_presets.members[*index]
-                    .allocations
-                    .members
-                    .push(id);
             }
         }
     }
@@ -1429,7 +1468,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: 8,
+        schema_version: 9,
         source_sha256: identity.source_sha256.into(),
         source_bytes: identity.source_bytes,
         source_schema: identity.instance_import_schema,
@@ -1446,13 +1485,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         reward_policy: *rewards.identity(),
         item_policy: *items.identity(),
         item_source_policy: *item_source.identity(),
+        tree_policy: tree.map(|tree| *tree.identity()),
         item_texts: b.item_texts,
         draft: draft.digest(limits.draft.input.max_wire_bytes)?,
         origins: b.origins,
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        "owned-normalization-sidecar-v8",
+        "owned-normalization-sidecar-v9",
         &sidecar,
         limits.draft.input.max_wire_bytes,
     )?;

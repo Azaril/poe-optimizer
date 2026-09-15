@@ -15,6 +15,7 @@ use poe_optimizer_import::{
     owned_reward_policy::{RewardPolicyLimits, decode_reward_policy},
     owned_skill_catalog::{OwnedSkillRoleIndex, OwnedSkillRolePackageInput, SkillCatalogLimits},
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
+    owned_tree_policy::{TreePolicyLimits, decode_tree_policy},
 };
 use std::{
     collections::BTreeMap,
@@ -52,6 +53,9 @@ pub(crate) struct Args {
     /// Bound source-layout policy for item range attribution; no PoB checkout is loaded.
     #[arg(long)]
     item_source: PathBuf,
+    /// Optional checked tree interpretation policy, bound to the same owned bundle.
+    #[arg(long)]
+    tree_policy: Option<PathBuf>,
     /// Ordered JSON array of explicit import query templates.
     #[arg(long)]
     queries: PathBuf,
@@ -126,6 +130,21 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         serde_json::from_slice(&read_bounded(&args.policy, limits.max_policy_bytes)?)?;
     let queries: Vec<ImportQueryTemplate> =
         serde_json::from_slice(&read_bounded(&args.queries, limits.max_policy_bytes)?)?;
+    let tree_limits = TreePolicyLimits::default();
+    let tree = args
+        .tree_policy
+        .as_ref()
+        .map(|path| {
+            Ok::<_, Box<dyn Error>>(decode_tree_policy(
+                &read_bounded(path, tree_limits.max_wire_bytes)?,
+                &registry,
+                &definitions,
+                &mappings,
+                &policy,
+                tree_limits,
+            )?)
+        })
+        .transpose()?;
     let decoded = decode_build(&read_bounded(&args.input, MAX_XML_BYTES)?)?;
     let mut lineage = [0u8; 16];
     getrandom::fill(&mut lineage)?;
@@ -139,6 +158,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         &evidence,
         *source.allocator_state(),
         NormalizationArtifacts {
+            tree: tree.as_ref(),
             mappings: &mappings,
             registry: &registry,
             definitions: &definitions,

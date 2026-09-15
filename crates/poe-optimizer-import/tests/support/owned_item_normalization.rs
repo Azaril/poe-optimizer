@@ -552,6 +552,7 @@ pub fn normalize(source: &ImportedBuildInstance, artifacts: &Artifacts) -> Norma
         &evidence,
         *source.allocator_state(),
         NormalizationArtifacts {
+            tree: None,
             mappings: &artifacts.mapping,
             registry: &artifacts.registry,
             definitions: &artifacts.schema,

@@ -41,7 +41,8 @@ impl Default for RuleLimits {
             max_receivers: 8192,
             max_receiver_targets: 65536,
             max_gaps: 65536,
-            max_owners: 4096,
+            // A complete passive catalog needs thousands of explicit partial owners.
+            max_owners: 8192,
             max_programs: 8192,
             max_tables: 8192,
             max_table_cells: 262144,

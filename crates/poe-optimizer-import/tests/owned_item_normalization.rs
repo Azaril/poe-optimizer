@@ -177,7 +177,7 @@ fn original_twister_explicit_item26_fields_and_rolls_survive_pending_metadata() 
                 .any(|link| matches!(link, OwnedOriginTarget::Modifier(value) if *value == id))
         );
     }
-    assert_eq!(result.sidecar().schema_version, 8);
+    assert_eq!(result.sidecar().schema_version, 9);
     assert_eq!(
         result.sidecar().item_source_policy,
         *artifacts.item_source.identity()

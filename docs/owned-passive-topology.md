@@ -106,6 +106,16 @@ justify a new skill-specific path. Original01 additionally requires item-bound r
 access; original03 exercises a conjunction of unlock prerequisites; original05 exercises
 a class-dependent stat view and a saved level independent of its smaller selected tree.
 
+The first production conversion implements that structural split. The finite exporter
+produces a bounded catalog; the Rust compiler appends to the existing ledger and the
+shared finalizer publishes one bound `tree-normalization.json`. Subsequent CLI reruns
+validate the declared prior artifact and compare canonical content before publishing.
+The importer records implicit roots as origin links, places parented choices on their
+physical allocation, and preserves real loadout scopes across all saved specifications.
+Its sidecar version 9 includes the exact tree-policy digest. The absent-policy route
+remains explicitly unresolved; it does not invent topology. All actual allocation access
+is still Pending until injected legality data and the executor establish it.
+
 ## Acceptance and retirement
 
 Prove root deduplication, changed class selection, partial membership, paid-root rejection,

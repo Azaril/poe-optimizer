@@ -1,0 +1,3595 @@
+{
+  "schema_version": 1,
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/PassiveSpec.lua",
+        "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+      },
+      {
+        "path": "src/Classes/PassiveTree.lua",
+        "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+      },
+      {
+        "path": "src/TreeData/0_5/tree.json",
+        "sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95"
+      }
+    ]
+  },
+  "manifest_sha256": "27d143967927d0705eefd5879e17946b30bfe8e69a92718bd44ace50428923a1",
+  "catalog_sha256": "37db1255f28d05f67a6d81dfe286bcc698a9811e907c67d29cf640d9c28e5557",
+  "nodes": 4914,
+  "edges": 5187,
+  "unresolved_edges": 14,
+  "visual_connections_excluded": 644,
+  "self_connections_excluded": [
+    "35653"
+  ],
+  "unconverted_node_fields": [
+    {
+      "node": "59",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "110",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "479",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "483",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "722",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "761",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "829",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "1140",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "1143",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "1200",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "1207",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "1433",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "1628",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "1755",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "1826",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "1887",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "2408",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "2516",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "2582",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "2733",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "2847",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "2864",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "2877",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "2995",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "3025",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "3041",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "3251",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "3281",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "3367",
+      "fields": [
+        "aliasPassiveSocket",
+        "noRadius",
+        "sinister"
+      ]
+    },
+    {
+      "node": "3446",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "3463",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "3544",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "3681",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "3823",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "3896",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "4059",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "4140",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "4203",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "4313",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "4328",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "4456",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "4527",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "4621",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "4663",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "4681",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "4739",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "4748",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "4873",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "5314",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "5702",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "5777",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "6015",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "6088",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "6100",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "6686",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "6744",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "6772",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "6789",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "6874",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "6898",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "6999",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "7066",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "7258",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "7526",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "7553",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "7628",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "7741",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "8107",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "8248",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "8406",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "8415",
+      "fields": [
+        "isFreeAllocate"
+      ]
+    },
+    {
+      "node": "8423",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "8493",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "8525",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "8569",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "8600",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "8611",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "8616",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "8693",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "8723",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "8975",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "9212",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "9414",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "9485",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "9554",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "9988",
+      "fields": [
+        "isFreeAllocate"
+      ]
+    },
+    {
+      "node": "9997",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "10100",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "10131",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "10156",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "10192",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "10247",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "10382",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "10636",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "10713",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "10909",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "11160",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "11184",
+      "fields": [
+        "aliasPassiveSocket",
+        "noRadius",
+        "sinister"
+      ]
+    },
+    {
+      "node": "11248",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "11428",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "11464",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "11580",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "11604",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "11666",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "11672",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "11679",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "11741",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "11825",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "11861",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "11984",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "12253",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "12430",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "12462",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "12601",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "12610",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "12683",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "12890",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "12940",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "13108",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "13228",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "13241",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "13279",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "13397",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "13411",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "13468",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "13691",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "13772",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "13783",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "13950",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "14262",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "14267",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "14340",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "14432",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "14446",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "14654",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "14658",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "14980",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "15141",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "15182",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "15507",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "15580",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "15672",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "15775",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "15782",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "15842",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "15885",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "16168",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "16276",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "16332",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "16460",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "16484",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "16489",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "16615",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "16705",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "16725",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "16947",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "17059",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "17088",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "17118",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "17248",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "17468",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "17584",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "17587",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "17655",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "17672",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "17702",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "17729",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "17788",
+      "fields": [
+        "containJewelSocket",
+        "options"
+      ]
+    },
+    {
+      "node": "17894",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "17973",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "18081",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "18353",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "18407",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "18441",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "18448",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "18465",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "18713",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "18845",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "18882",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "18923",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "18972",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "19104",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "19162",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "19240",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "19808",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "19953",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "19966",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "20115",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "20195",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "20391",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "20496",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "20637",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "20772",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "20963",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "21218",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "21274",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "21280",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "21374",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "21387",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "21549",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "21568",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "21746",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "21755",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "21809",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "22049",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "22133",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "22221",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "22314",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "22419",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "22558",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "22616",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "22691",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "22795",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "22821",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "22908",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "22928",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "22975",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "23307",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "23352",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "23382",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "23436",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "23570",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "23708",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "23710",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "23932",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "23960",
+      "fields": [
+        "aliasPassiveSocket",
+        "noRadius",
+        "sinister"
+      ]
+    },
+    {
+      "node": "24165",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "24287",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "24647",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "24786",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "24825",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "24922",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "24929",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "24958",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "24993",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "25058",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "25337",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "25374",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "25438",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "25557",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "25570",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "25678",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "26085",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "26178",
+      "fields": [
+        "aliasPassiveSocket",
+        "noRadius",
+        "sinister"
+      ]
+    },
+    {
+      "node": "26228",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "26300",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "26432",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "26598",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "26786",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "27082",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "27096",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "27296",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "27373",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "27405",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "27439",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "27572",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "27705",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28002",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28050",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28175",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28201",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "28223",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "28254",
+      "fields": [
+        "isFreeAllocate",
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "28304",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28370",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28431",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28446",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28489",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "28510",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28556",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28770",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "28950",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28982",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "28992",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "29009",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "29126",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "29148",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "29197",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "29240",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "29479",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "29517",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "29582",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "29611",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "29663",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "29695",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "29985",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "30047",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "30141",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "30555",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "30657",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "30695",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "30781",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "30808",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "30979",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "31238",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "31554",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "31757",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "31765",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "31903",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "31950",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "32183",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "32194",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "32474",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "32701",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "32768",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "33141",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "33203",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "33423",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "33463",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "33570",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "33722",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "34015",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "34058",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "34136",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "34143",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "34181",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "34201",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "34490",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "34769",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "34840",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "34940",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "34990",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "35234",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "35265",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "35393",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "35426",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "35696",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "35720",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "35745",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "35896",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "35901",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "35980",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "36025",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "36197",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "36408",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "36602",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "36629",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "36696",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "37258",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "37612",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "37629",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "37694",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "37778",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "37888",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "38143",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "38323",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "38463",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "38474",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "38697",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "38707",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "38732",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "38814",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "38856",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "38876",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "39037",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "39087",
+      "fields": [
+        "aliasPassiveSocket",
+        "noRadius",
+        "sinister"
+      ]
+    },
+    {
+      "node": "39102",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "39131",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "39241",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "39298",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "39540",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "39710",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "39857",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "39886",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "40511",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "40630",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "40783",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "41017",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "41029",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "41031",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "41646",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "41768",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "41877",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "41965",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "42078",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "42118",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "42250",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "42350",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "42379",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "42500",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "42658",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "42736",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "42762",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "42781",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "43044",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "43324",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "43385",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "43486",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "43691",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "43721",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "43736",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "43746",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "43923",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "44309",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "44343",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "44344",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "44452",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "44485",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "44527",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "44560",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "44659",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "44733",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "44872",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "44951",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "45226",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "45400",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "45422",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "45522",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "45885",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "45923",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "45969",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "46034",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "46069",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "46358",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "46554",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "46628",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "46819",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "47168",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "47177",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "47263",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "47555",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "47633",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "47931",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "47976",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "48079",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "48116",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "48160",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "48305",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "48401",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "48552",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "48568",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "48631",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "48635",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "48670",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "48761",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "48773",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "48828",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "48935",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "49046",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "49153",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "49258",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "49340",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "49357",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "49512",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "49543",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "49657",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "49734",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "49769",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "49929",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "49938",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "49996",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "50104",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "50142",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "50184",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "50423",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "50469",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "50558",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "50908",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "51048",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "51052",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "51142",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "51184",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "51299",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "51335",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "51454",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "51561",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "51618",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "51741",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "51821",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "51850",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "51921",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "51968",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "52115",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "52125",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "52298",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "52319",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "52993",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "53396",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "53405",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "53589",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "53697",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "53719",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "53910",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "53960",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "54099",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "54232",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "54282",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "54289",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "54297",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "54380",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "54417",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "54521",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "54811",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "54818",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "54984",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "55033",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "55276",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "55342",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "55397",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "55429",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "55668",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "55802",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "55807",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "55897",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "55909",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "55933",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "56045",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "56090",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "56174",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "56216",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "56320",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "56466",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "56651",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "56890",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "56935",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "56978",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "57002",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "57079",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "57202",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "57386",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "57596",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "57703",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "57710",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "57821",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "58058",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "58109",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "58170",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "58197",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "58295",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "58329",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "58362",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "58368",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "58651",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "58751",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "58814",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "58932",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "59039",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "59093",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "59136",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "59362",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "59376",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "59538",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "59777",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "59785",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "59795",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "59881",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "59908",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "59945",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "60014",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "60230",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "60505",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "60685",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "60708",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "60913",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "61039",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "61042",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "61067",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "61113",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "61196",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "61312",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "61367",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "61403",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "61438",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "61471",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "61490",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "61811",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "61974",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "61976",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "61977",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "62152",
+      "fields": [
+        "aliasPassiveSocket",
+        "noRadius",
+        "sinister"
+      ]
+    },
+    {
+      "node": "62378",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "62498",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "62677",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "62797",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "63114",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "63170",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "63243",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "63526",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "63566",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "63772",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "63888",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "64046",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "64083",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "64139",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "64239",
+      "fields": [
+        "unlockConstraint"
+      ]
+    },
+    {
+      "node": "64299",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "64370",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "64471",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "64962",
+      "fields": [
+        "applyToArmour"
+      ]
+    },
+    {
+      "node": "65009",
+      "fields": [
+        "options"
+      ]
+    },
+    {
+      "node": "65192",
+      "fields": [
+        "unlockConstraint"
+      ]
+    }
+  ],
+  "source_execution": false,
+  "numerical_rules_compiled": false,
+  "legality_established": false
+}

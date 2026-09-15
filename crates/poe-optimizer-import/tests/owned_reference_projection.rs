@@ -679,6 +679,7 @@ fn normalized_fixture(
         &evidence,
         *source.allocator_state(),
         NormalizationArtifacts {
+            tree: None,
             items: &empty_items(&definitions),
             item_source: &empty_item_source(&definitions),
             mappings: &mappings,

@@ -11,122 +11,120 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: implicit passive ownership and schema-2 catalog succession (after `5e2af20`).**
-The [domain architecture](domain-architecture.md) remains authoritative: offline source
-conversion emits owned semantic data; UI, saved-build import, evaluation and search have
-separate responsibilities. The new [passive topology contract](owned-passive-topology.md)
-separates physical nodes, implicit roots, attached choices, scope eligibility, costs,
-capacity and conditional access. No Lua source interpreter or PoB UI lifecycle was added.
+**Current checkpoint: offline tree catalog and owned tree normalization (after `9c0f618`).**
+The [domain architecture](domain-architecture.md) remains the target: source conversion,
+saved-build import, native evaluation, search and UI have separate responsibilities.
+No Lua interpreter, PoB UI lifecycle or named-skill path was added. The compiler reads
+finite exported data once; the evaluator consumes owned records and typed effects.
+The requested architectural correction remains active work, not a claim that all legacy
+code or default dependencies have already been retired.
 
-`ClassSchema` and `AscendancySchema` now require explicit `implicit_passives`. Core exposes
-known roots through the Character provider, deduplicating shared physical roots. Their
-programs execute under the normal native effect plan without fabricated paid allocations.
-Partial root membership or partial-empty pool exclusion remains unresolved while preserving
-known effects as evidence. Missing/unmapped roots do not become empty contributor sets;
-known nonempty paid pools contradict an implicit root. Root-owned choices use Character
-scope and their exact PassiveNode declaration. `PointPoolScope::Either` permits the same
-ordinary pool to contain both shared and loadout-specific allocations. This is scope
-validation, not an affordability/access executor.
+The bounded `export-owned-tree.py` checks pinned source JSON and reviewed field shapes,
+then emits a classified catalog with no build-specific input or source execution.
+It counts raw acquisition bytes, expanded view membership and streamed encoded output.
+Unknown semantic fields fail conversion. The Rust compiler appends through the existing
+ledger/finalizer, preserving every prior descriptor, slot, program and positive identity.
+The **current ledger is 7,469**: the earlier 2,589 prefix plus 4,582 definitions and 298 slots.
+It is the single predecessor for new work; the earlier stage is regenerated through the
+publisher for reproduction, rather than stored as a parallel catalog.
 
-Owned definition schema wire is now **2**, effect-plan identity **v6**. Input/draft envelopes
-remain **4**, rule wire **2**, operations **6**. The base, import seed, compiled import,
-resistance and current packages were regenerated through the existing offline generators
-and production CLI. No registry identity, numerical rule, query row or source pin changes.
-The current ledger remains **2,589** entries; new catalog allocation begins at **2,590**.
-The generated current bundle remains the single predecessor for new work.
+The catalog separates eight classes, 23 ascendancy choices and 28 physical implicit roots
+from 4,503 paid-node definitions and 298 parent choices. It retains 5,187 semantic edges and
+14 unresolved links to absent source nodes. One source self-connection is explicitly
+excluded and recorded. Unknown numerical effects, class-dependent views and unlock
+semantics remain partial; structural classification does not establish their mechanics.
+A complete catalog needs thousands of explicit partial owners, so the bounded native
+owner allowance increased from 4,096 to 8,192; other compiler limits are unchanged.
 
-The shared successor finalizer now supports checked catalog additions: only new selectors,
-same source context, conflict-checked file-pin union, exact old registry/schema preservation,
-and old item-policy validation before explicit dependency rebinding. Role compilation keeps
-its historical source footprint as an exact subset of the mapping footprint; final role/
-schema/mapping identities stay exact. The carry-only CLI and its 18-file publication remain
-unchanged. A new catalog call includes its append request in the manifest. No new publisher
-or runtime repair path was created.
+`extend-owned-tree-catalog` verifies the prior manifest and all consumed artifact hashes,
+assembles the prior recipe, compiles the new catalog and installs a typed tree-import
+artifact through the shared finalizer. The tree policy binds to the final registry,
+schema, mapping and rebound base policy, without a binding cycle. Publication contains
+**20 artifacts**, including fixed `tree-normalization.json` and `catalog-append.json`.
+Repeating unchanged conversion reuses every ID and preserves semantic artifacts exactly.
+A declared prior tree cannot be silently omitted by this command, and changed canonical
+tree content requires an explicit migration. There is no new publisher or runtime repair.
 
-A finite source review covers all 4,914 tree rows, 5,187 semantic graph edges and all 16
-saved specifications. There are eight classes, six physical class roots, 23 ascendancy
-choices sharing 22 physical roots, five choice parents with 15 attached options, 293
-attribute parents and 78 class/ascendancy-dependent stat views. All 141 selected attribute
-nodes have explicit choices. The 613 selected tokens and 1,369 saved tokens include roots
-and attached options; they are not paid-allocation counts. Original02/04 have disjoint
-24+24 weapon overlays already in their main lists. Source ordinary usage is shared plus
-the maximum scoped cost, with a separate each-scope cap over the same ordinary pool.
+`normalize-owned --tree-policy` consumes that injected artifact. Roots become character
+origin links, attached options become exact parent choices, attribute lanes stay explicit,
+and weapon scope requires actual equipment loadouts. Conflicting or missing selections,
+unknown nodes and inconsistent class/ascendancy metadata stay Pending. All 16 saved Specs
+from the five unchanged originals now yield **1333 allocations, 335 allocation choices and
+32 implicit-root origin links**. The existing 116 items, 478 gems, 81 rewards, 195 equipment
+uses and 110 ordered query rows remain. Each allocation still has Pending access.
+Selected and historical alternatives remain independent; no source point total certifies
+legality, and source syntax never enters native rule execution.
 
-Original01 additionally requires From Nothing item16/socket7960 granting access around
-Ritual Cadence11230; geometry/eligibility must become owned data, not blanket connectivity
-bypass. Original03 has a conjunction of unlock prerequisites. Original05 node4739 uses its
-Sorceress/base stat view, while Witch selects different effects at the same physical node.
-Original02's selected Spec6 has no attached option; historical Specs3–5 do. Saved level and
-selected tree size remain independent. These cases prevent a class/skill-specific shortcut.
+Definition schema remains 2, input/draft envelopes 4, rule wire 2, operations 6 and effect-plan
+identity v6. The import sidecar advances to 9 and records the optional exact tree-policy
+digest. Absence of this optional import policy retains the conservative unresolved route.
+All prior numerical rule bodies and query availability rows remain unchanged.
 
-**Validation:** **787 Rust test executions** pass in the final recorded scope: all 243 Core
-tests, all 48 Data owned tests, 127 Engine owned tests plus all eight opt-in component
-oracles, all 257 Import owned tests, and 52 owned CLI tests in each feature mode. All
-56 Python exporter tests pass. Workspace/native-only strict Clippy, formatting, five-crate
-WASM compilation and six-package PoB/Lua Cargo exclusion pass. CLI acceptance reproduces
-the 18 shipped artifacts byte-for-byte and normalizes all five originals. An independent
-442-check audit confirms schema-only migration, unchanged registry histories, typed IDs,
-source pins and 110 query rows, with all 53 manifest file links valid. Two version-bound
-test assumptions and an unused test import were corrected without weakening validation.
-All nine protected inputs and the clean PoB pin remain unchanged. No full workspace test,
-whole-build parity or throughput claim is made. Original completion remains **0/5**;
-whole-request/whole-plan closure gates are unchanged. Root/provider correctness and
-package publication are component evidence. Receipt: `runs/owned-tree-01/validated-checkpoint.json`.
+**Validation:** final recorded scope is **515 Rust tests**: 278 owned Import tests,
+127 owned Engine tests and 55 owned CLI tests in each feature mode. All **134 Python
+tests** pass (72 exporter tests and 62 corpus/expectation tests). Strict workspace/native
+Clippy, formatting, five-crate WASM compilation and six-package PoB/Lua Cargo exclusion
+pass. The production CLI reproduces all 20 artifacts byte-for-byte and preserves IDs on
+repeat conversion. Its regressions reject omitted query files, contradictory counts,
+stale endpoint/item/tree identities, malformed inputs and existing destinations.
 
-Parallel CI review at 2026-09-15 20:37–20:38 UTC found exact head `5e2af20` pending with no
-jobs started, predecessor `60e65a9` running without observed failures, and latest completed
-`f280686a` successful in all ten jobs. The last 20 runs contained no failure conclusions;
-several intermediate checkpoints were cancelled. Pending is not a pass. Exact publication
-head status must be recorded separately. Evidence: `runs/owned-tree-01/ci/`.
+An independent **230-check audit** verifies history, declarations, program bodies,
+manifest/content digests, policy bindings, all-five normalized records and all 110 query
+rows. All nine protected inputs and the clean PoB pin remain unchanged. Five outdated
+sidecar assertions were updated for the explicit wire-version change. Review also closed
+bounded exporter expansion and prior-manifest consistency gaps before publication.
+Receipt: `runs/owned-tree-02/validated-checkpoint.json`; supporting logs and independent
+audit are beside it. No full workspace test or numerical source oracle was rerun in this
+scope. No whole-build or throughput claim is made; native originals remain **0/5**.
+Whole-request and whole-plan contributor closure gates are unchanged.
 
-**Open design question:** independently verified metrics from partial selected inputs remains
-unanswered. Current closure gates stay unchanged; none of the next work needs to relax them.
+The parallel retirement audit found one unused `CompiledParserProgram::loop_states()`
+accessor, now removed; its live runtime field remains. Spark/Mace preparation, the source
+interpreter and default PoB feature still have live dependencies documented in
+[legacy retirement](legacy-retirement.md). Their removal is paired with real numerical
+and search consumer migration. New owned modules do not call those paths.
+
+Parallel public CI review found exact published `9c0f618` run 35022259181 pending, with no
+jobs started; predecessor `60e65a9` had five completed successful jobs and three running,
+with no failed jobs. Historical failures have later repair evidence. Pending is not a
+pass; record the new publication's exact SHA/status separately.
+
+**Open design question:** independently verified metrics from partial selected inputs
+remains unanswered. Current closure gates stay unchanged; none of the next work requires
+relaxing them. No other owner decision blocks the next phase.
 
 **Active resume point (the only current queue):**
 
-1. Implement the bounded offline tree catalog extension over the regenerated current
-   ledger. Reuse `transition_owned_catalog`; do not create a second ledger or third
-   publisher. Compile exact classes/ascendancies, physical adjacency/root membership,
-   pool eligibility and parent choice schemas. Keep unconverted declarations/effects
-   Partial. Repeated conversion reuses exact positive mappings; changing an existing
-   descriptor needs an explicit refinement policy, never a replacement ID.
-2. Add a typed tree normalization artifact to the same final publication. Preserve the
-   prior-bound base normalization policy and its dependency-only rebind. Bind the new
-   tree artifact to final registry/schema/mapping and the rebound base policy digest;
-   the dependency direction is tree-to-base, without a binding cycle. Validate its
-   role/choice/syntax contents before adding fixed `tree-normalization.json` to the
-   same manifest. Later transitions must carry and validate any declared prior tree
-   artifact rather than silently dropping it. Convert
-   roots/attached options before allocating records; map exact attribute lanes and
-   weapon scopes without defaults, duplicates or historical-preset leakage. Exercise
-   all five originals and malformed perturbations through the normal CLI.
-3. Implement injected legality costs, shared-plus-maximum and each-scope budgets, explicit
-   acquired capacities and access prerequisites. Handle radius/alternate/granted access
-   as provider dependencies. Do not infer quest completion or legality from spent points.
-4. Complete common item input/effect families and contributor membership, using the cold/
-   Life ring and local weapon as contrasting cases. Keep source encoding and distinct
-   range/corruption/final rounding stages. Ordered transforms remain required for their
-   supported domain; do not promote a partial catalyst scalar to effective resistance.
-5. Complete real player/actor receivers, skill inputs and exact support/provider relations
-   for Twister and Sniper together, retaining the other three as model stress cases.
-   Preserve all availability rows, then run independent whole-build holdouts.
-6. Migrate each real numerical preparation/action consumer and its independent realization
+1. Implement injected allocation costs, shared-plus-maximum and each-scope budgets,
+   explicit acquired capacities and scope-aware access prerequisites. Use the real
+   catalog and saved alternatives. Keep missing edges and unknown contributors explicit.
+   Handle From Nothing/radius and alternate/granted access as provider dependencies,
+   not blanket connectivity bypass. Do not infer rewards from observed spent points.
+2. Convert passive effects and class-dependent views through owned rules, preserving
+   physical identities and exact selected attribute/attached choices. Refining existing
+   partial descriptors needs an explicit checked refinement policy; never allocate
+   replacement identities. Preserve existing policy authority on subsequent transitions.
+3. Complete common item input/effect families and contributor membership, contrasting
+   the real cold/Life ring and local weapon. Preserve source encoding and distinct
+   range/corruption/final rounding stages. Ordered transforms remain required; a partial
+   catalyst scalar cannot become effective resistance.
+4. Complete real player/actor receivers, skill inputs and exact support/provider relations
+   for Twister and Sniper together, retaining the other three originals as model stress
+   cases. Preserve all 110 availability rows, then run independent whole-build holdouts.
+5. Migrate each real numerical preparation/action consumer and independent realization
    checks, deleting its replaced profile/source closure in the same checkpoint. Bind
-   semantic edits to the evaluator with all joint search dimensions. Prove owned-only
+   semantic edits to the evaluator across all joint search dimensions. Prove owned-only
    compiled/shipped distribution and changed-build/multicore throughput before claiming
    complete decoupling or performance.
 
-Local reproducible source evidence, extraction script, compiler proposal and typed tree
-publication proposal are under
-`runs/owned-tree-01/`; validation and schema migration receipts are in its `validation/`
-and `schema2/` directories. The committed topology contract contains the lasting model
-choices. Promote reviewed extraction logic to production tooling with strict field/size
-validation when implementing step1; ignored evidence is not a distributed data compiler.
-
-No further Spark/Mace deletion is claimed in this checkpoint. The live dependencies in
-[legacy retirement](legacy-retirement.md) remain paired with their real consumer migrations;
-renaming or excluding mlua alone does not remove the compiled legacy interpreter/profile path.
-Earlier checkpoints record evidence, not instructions to resume source/UI emulation.
+**Previous checkpoint: implicit passive ownership and schema-2 succession (`9c0f618`).**
+Implemented Character-owned implicit roots, deduplication and explicit partial gaps,
+root-choice scope and Either point-pool scope. Migrated owned schema artifacts to wire 2
+without changing registry history, rules or queries. Extended the common successor
+finalizer for checked additive mappings/pins and explicit prior-policy rebinding.
+787 Rust executions and 56 Python tests passed with strict lint, portability and Cargo
+dependency checks. Independent 442-check schema audit preserved all protected inputs.
+Receipt: `runs/owned-tree-01/validated-checkpoint.json`. No full-build completion was claimed.
 
 **Previous checkpoint: owned data publication and structural order (`5e2af20`).**
 Published the integrated 2,589-entry current bundle and separated semantic item modifier
@@ -607,7 +605,7 @@ five-crate WASM compilation and native runtime dependency exclusion pass. This i
 full workspace test run or complete Twister/Sniper evaluation. Receipts are under
 `runs/owned-timing-01/validation-final/` and `early-validation.json`; the initial missing
 CLI fixture import failure is retained. Independent quality/operation review passes.
-Complete native originals remain **0/5**, with all110 fixed reference rows. Publication
+Complete native originals remain **0/5**, with all 110 fixed reference rows. Publication
 and hosted status are recorded separately in `runs/owned-timing-01/publication.json`.
 
 **Resume point:**
@@ -5527,7 +5525,7 @@ the design documents.
 3. The typed selected Spec socket-use union with independent ItemSet equipment is implemented.
    Finish known-unavailable reference query projections and full selected import semantics.
    The exact-source reward/projection audit and reviewed API direction are in
-   `runs/owned-composition-02/reference-reward-review.md`: preserve all110 rows, route the six
+   `runs/owned-composition-02/reference-reward-review.md`: preserve all 110 rows, route the six
    structurally absent reference targets outside Core, never treat copied absence as owned
    availability parity. Follow with finite injected quest outcome/default mapping; nine fixed
    stat outcomes have reusable structured data, while eight option families still need conversion.

@@ -23,6 +23,10 @@ use crate::{
     owned_skill_catalog::{
         OwnedSkillRoleIndex, OwnedSkillRolePackageInput, SkillCatalogError, SkillCatalogLimits,
     },
+    owned_tree_policy::{
+        OwnedTreeNormalizationPolicy, TreeNormalizationContent, TreeNormalizationPackageInput,
+        TreePolicyError, TreePolicyLimits,
+    },
 };
 use poe_optimizer_core::{
     data::DataIdentity,
@@ -81,6 +85,23 @@ pub enum CatalogItemPolicyMode {
     RebindPrior,
 }
 
+/// Tree interpretation is authored explicitly, or carried only after old bindings validate.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum TreePolicyTransitionInput {
+    Install {
+        content: Box<TreeNormalizationContent>,
+    },
+    RebindPrior {
+        prior: Box<TreeNormalizationPackageInput>,
+    },
+}
+
 /// Aggregate bytes, top-level declarations, rule programs/table rows, routes and
 /// queries are bounded across the transition. Nested constructors additionally
 /// bound schema members, expression edges, closure gaps and source/value text.
@@ -97,6 +118,7 @@ pub struct SuccessorBundleLimits {
     pub rewards: RewardPolicyLimits,
     pub items: ItemLineLimits,
     pub item_source: ItemSourceLimits,
+    pub tree: TreePolicyLimits,
 }
 impl Default for SuccessorBundleLimits {
     fn default() -> Self {
@@ -112,6 +134,7 @@ impl Default for SuccessorBundleLimits {
             rewards: RewardPolicyLimits::default(),
             items: ItemLineLimits::default(),
             item_source: ItemSourceLimits::default(),
+            tree: TreePolicyLimits::default(),
         }
     }
 }
@@ -155,6 +178,8 @@ pub enum SuccessorBundleError {
     #[error("invalid catalog append: {0}")]
     CatalogConflict(&'static str),
     #[error(transparent)]
+    Tree(#[from] TreePolicyError),
+    #[error(transparent)]
     Recipe(#[from] OwnedRecipeError),
     #[error(transparent)]
     Mapping(#[from] OwnedMappingError),
@@ -181,7 +206,8 @@ pub struct SuccessorArtifactManifest {
     pub bytes: usize,
     pub sha256: String,
 }
-#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct SuccessorBindings {
     pub registry: OwnedContentDigest,
     pub definitions: DataIdentity,
@@ -206,6 +232,8 @@ pub struct SuccessorBundleTransition {
     pub query_rows: usize,
     pub items: OwnedContentDigest,
     pub item_source: OwnedContentDigest,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tree: Option<OwnedContentDigest>,
     pub schema_policy: &'static str,
     pub item_policy_mode: &'static str,
     pub source_execution: bool,
@@ -228,6 +256,7 @@ pub struct StagedSuccessorBundle {
     items: OwnedItemLinePolicy,
     item_source: ItemSourceLayoutPolicy,
     queries: Vec<NamedQuerySet>,
+    tree: Option<OwnedTreeNormalizationPolicy>,
     transition: SuccessorBundleTransition,
     extra: Vec<Artifact>,
 }
@@ -255,6 +284,9 @@ impl StagedSuccessorBundle {
     }
     pub fn item_source(&self) -> &ItemSourceLayoutPolicy {
         &self.item_source
+    }
+    pub fn tree(&self) -> Option<&OwnedTreeNormalizationPolicy> {
+        self.tree.as_ref()
     }
     pub fn query_sets(&self) -> &[NamedQuerySet] {
         &self.queries
@@ -286,7 +318,7 @@ fn preflight(
     input: &SuccessorBundleInput,
     append: Option<&CatalogAppend>,
     limits: SuccessorBundleLimits,
-) -> Result<()> {
+) -> Result<usize> {
     let mut left = limits.max_validation_entries;
     if let Some(append) = append {
         for count in [append.mappings.len(), append.source.files.len()] {
@@ -376,7 +408,7 @@ fn preflight(
             limits.normalization.max_policy_bytes,
         )?;
     }
-    Ok(())
+    Ok(left)
 }
 fn preserve(before: &StagedOwnedRecipe, after: &StagedOwnedRecipe) -> Result<()> {
     before.registry().validate_successor(after.registry())?;
@@ -532,7 +564,7 @@ pub fn transition_owned_bundle(
     input: SuccessorBundleInput,
     limits: SuccessorBundleLimits,
 ) -> Result<StagedSuccessorBundle> {
-    finalize_successor(input, None, limits)
+    finalize_successor(input, None, None, limits)
 }
 
 /// Add catalog identities/mappings to one successor package. This shares every
@@ -545,27 +577,72 @@ pub fn transition_owned_catalog(
     append: CatalogAppend,
     limits: SuccessorBundleLimits,
 ) -> Result<StagedSuccessorBundle> {
-    finalize_successor(input, Some(append), limits)
+    finalize_successor(input, Some(append), None, limits)
+}
+
+/// One typed tree artifact joins the same checked finalization/publication path.
+pub fn transition_owned_catalog_with_tree(
+    input: SuccessorBundleInput,
+    append: CatalogAppend,
+    tree: TreePolicyTransitionInput,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
+    finalize_successor(input, Some(append), Some(tree), limits)
 }
 
 fn finalize_successor(
     input: SuccessorBundleInput,
     append: Option<CatalogAppend>,
+    tree_update: Option<TreePolicyTransitionInput>,
     limits: SuccessorBundleLimits,
 ) -> Result<StagedSuccessorBundle> {
     limits.validate()?;
     if input.schema_version != OWNED_SUCCESSOR_VERSION {
         return Err(SuccessorBundleError::Version(input.schema_version));
     }
-    let input_digest = match &append {
-        None => digest_owned("owned-successor-input-v1", &input, limits.max_input_bytes)?,
-        Some(append) => digest_owned(
-            "owned-catalog-successor-input-v1",
-            &(&input, append),
+    let input_digest = if let Some(tree) = &tree_update {
+        digest_owned(
+            "owned-tree-catalog-successor-input-v1",
+            &(&input, &append, tree),
             limits.max_input_bytes,
-        )?,
+        )?
+    } else {
+        match &append {
+            None => digest_owned("owned-successor-input-v1", &input, limits.max_input_bytes)?,
+            Some(append) => digest_owned(
+                "owned-catalog-successor-input-v1",
+                &(&input, append),
+                limits.max_input_bytes,
+            )?,
+        }
     };
-    preflight(&input, append.as_ref(), limits)?;
+    let mut validation_left = preflight(&input, append.as_ref(), limits)?;
+    if let Some(tree) = &tree_update {
+        let content = match tree {
+            TreePolicyTransitionInput::Install { content } => content.as_ref(),
+            TreePolicyTransitionInput::RebindPrior { prior } => &prior.content,
+        };
+        let mut count = 0usize;
+        for n in [
+            content.classes.len(),
+            content.ascendancies.len(),
+            content.tokens.len(),
+            content.attributes.len(),
+            content.source.files.len(),
+            content.syntax.weapon_overlays.len(),
+            content.syntax.ignored_spec_children.len(),
+        ] {
+            count = count
+                .checked_add(n)
+                .ok_or(SuccessorBundleError::Limit("validation entries"))?;
+        }
+        for row in &content.attributes {
+            count = count
+                .checked_add(row.lanes.len())
+                .ok_or(SuccessorBundleError::Limit("validation entries"))?;
+        }
+        charge(&mut validation_left, count, "validation entries")?;
+    }
     let item_policy_mode = append
         .as_ref()
         .map_or(CatalogItemPolicyMode::SuppliedSuccessor, |a| {
@@ -597,6 +674,21 @@ fn finalize_successor(
         &old_rewards,
         limits,
     )?;
+    let tree_content = match tree_update {
+        None => None,
+        Some(TreePolicyTransitionInput::Install { content }) => Some(*content),
+        Some(TreePolicyTransitionInput::RebindPrior { prior }) => {
+            let tree = OwnedTreeNormalizationPolicy::new(
+                *prior,
+                before.registry(),
+                before.schema(),
+                &old_mapping,
+                &input.normalization,
+                limits.tree,
+            )?;
+            Some(tree.input().content.clone())
+        }
+    };
     let recipe = input.successor;
     let after = assemble_owned_recipe(recipe.clone(), limits.recipe)?;
     preserve(&before, &after)?;
@@ -661,6 +753,18 @@ fn finalize_successor(
     }
     let item_source =
         ItemSourceLayoutPolicy::new(source_input, &items, after.schema(), limits.item_source)?;
+    let tree = tree_content
+        .map(|content| {
+            OwnedTreeNormalizationPolicy::bind_new(
+                content,
+                after.registry(),
+                after.schema(),
+                &mapping,
+                &normalization,
+                limits.tree,
+            )
+        })
+        .transpose()?;
     let after_bindings = bindings(&after, &mapping, &roles, &normalization, &rewards, limits)?;
     let mut transition = SuccessorBundleTransition {
         schema_version: OWNED_SUCCESSOR_VERSION,
@@ -675,6 +779,7 @@ fn finalize_successor(
         query_rows: input.query_sets.iter().map(|s| s.queries.len()).sum(),
         items: *items.identity(),
         item_source: *item_source.identity(),
+        tree: tree.as_ref().map(|tree| *tree.identity()),
         schema_policy: "exact_prior_declarations_new_addresses_only",
         item_policy_mode: match item_policy_mode {
             CatalogItemPolicyMode::SuppliedSuccessor => "explicit_successor_bound_inputs",
@@ -729,6 +834,14 @@ fn finalize_successor(
     if let Some(append) = &append {
         add(&mut extra, &mut left, "catalog-append.json".into(), append)?;
     }
+    if let Some(tree) = &tree {
+        add(
+            &mut extra,
+            &mut left,
+            "tree-normalization.json".into(),
+            tree.input(),
+        )?;
+    }
     transition.artifacts = after
         .artifacts()
         .iter()
@@ -751,6 +864,7 @@ fn finalize_successor(
         items,
         item_source,
         queries: input.query_sets,
+        tree,
         transition,
         extra,
     })

@@ -451,6 +451,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
             &evidence,
             *source.allocator_state(),
             NormalizationArtifacts {
+                tree: None,
                 items: &artifacts.items,
                 item_source: &artifacts.item_source,
                 mappings: &artifacts.mappings,
@@ -473,7 +474,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         );
         let issue_ids: BTreeSet<_> = validation.issues.iter().map(|issue| issue.id).collect();
         assert_eq!(sidecar.origins.len(), evidence.rows().len());
-        assert_eq!(sidecar.schema_version, 8);
+        assert_eq!(sidecar.schema_version, 9);
         assert_observed_loadouts(
             &evidence,
             &normalized,
@@ -859,6 +860,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         &evidence,
         *malformed.allocator_state(),
         NormalizationArtifacts {
+            tree: None,
             items: &artifacts.items,
             item_source: &artifacts.item_source,
             mappings: &artifacts.mappings,
@@ -1000,6 +1002,7 @@ fn original_reference_projection_binds_fresh_owned_drafts_without_losing_rows() 
             &evidence,
             *source.allocator_state(),
             NormalizationArtifacts {
+                tree: None,
                 items: &artifacts.items,
                 item_source: &artifacts.item_source,
                 mappings: &artifacts.mappings,

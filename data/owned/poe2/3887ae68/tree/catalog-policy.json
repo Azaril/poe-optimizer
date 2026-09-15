@@ -1,0 +1,32 @@
+{
+  "version": "tree-normalization-v1",
+  "level": {
+    "minimum": 1,
+    "maximum": 100
+  },
+  "syntax": {
+    "tree_version_attribute": "treeVersion",
+    "class_attribute": "classInternalId",
+    "ascendancy_attribute": "ascendancyInternalId",
+    "class_consistency_attribute": "classId",
+    "ascendancy_consistency_attribute": "ascendClassId",
+    "overrides_element": "Overrides",
+    "attribute_override_element": "AttributeOverride",
+    "weapon_overlays": [
+      {
+        "element": "WeaponSet1",
+        "nodes_attribute": "nodes",
+        "loadout": "weapon-set-one"
+      },
+      {
+        "element": "WeaponSet2",
+        "nodes_attribute": "nodes",
+        "loadout": "weapon-set-two"
+      }
+    ],
+    "ignored_spec_children": [
+      "URL",
+      "Sockets"
+    ]
+  }
+}

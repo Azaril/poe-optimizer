@@ -67,6 +67,12 @@ alternatives and unresolved semantics; it does not yet produce a complete origin
 request or calculate. Item-line conversion is separate from native rules and retains unknown
 semantics; generated-skill parameter projection does not create an authored gem. See
 [owned normalization](docs/owned-normalization.md).
+The offline tree converter now publishes class/ascendancy roots, physical nodes, adjacency
+and parent choices into the [current owned package](data/owned/poe2/3887ae68/current/README.md).
+`normalize-owned --tree-policy TREE_POLICY` maps saved trees through that injected artifact;
+it preserves pending access and unconverted effects. See the
+[passive topology contract](docs/owned-passive-topology.md). This structural path does not
+execute the legacy source interpreter and does not yet establish build legality or parity.
 The existing numerical CLI accepts PoB share codes/XML, explicit skill/action and encounter options,
 and returns typed metrics with units, availability and structured coverage. Configurable scalar
 objectives can be assessed during evaluation or against saved results without recalculation.

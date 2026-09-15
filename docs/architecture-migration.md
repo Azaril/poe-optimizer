@@ -63,12 +63,15 @@ physical passive identity. Attached options belong to parent choice slots. Schem
 makes root membership explicit; point pools admit Either scope where appropriate. The
 [passive topology contract](owned-passive-topology.md) specifies separate injected costs,
 shared-plus-maximum and each-scope budgets, acquired capacities and access constraints.
-The budget/access executor and real tree conversion remain next, not delivered legality.
+The budget/access executor remains next; structural tree conversion is delivered without a legality claim.
 
-Append class/passive/pool/choice definitions to the current 2,589-entry ledger through the
-shared additive successor finalizer. Its source-pin union is conflict checked, old selectors
-and descriptors remain exact, and carried item policies are checked before explicit rebind.
-The current package has been regenerated to schema 2; no identity is reallocated.
+The finite tree exporter and Import compiler now extend the single current ledger from
+2,589 to 7,469 identities. The same finalizer emits a typed tree normalization artifact,
+bound to the final schema/mapping/registry and the rebound base-policy digest. All 16
+saved specifications map to 1,333 allocations, 335 choices and 32 root origin links.
+Catalog reruns reuse exact IDs; missing links and unconverted effects stay partial.
+The importer consumes source syntax once. Core/Engine only receive owned records,
+schemas and typed effects, never source node lists or Lua programs.
 
 All five selected trees expose 613 source tokens, including two implicit roots each;
 do not treat them all as paid allocations. Every selected attribute node has an explicit

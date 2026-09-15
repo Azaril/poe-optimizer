@@ -207,9 +207,6 @@ impl CompiledParserProgram {
     pub fn bindings(&self) -> &[CompiledProgramBinding] {
         &self.bindings
     }
-    pub fn loop_states(&self) -> usize {
-        self.loop_states
-    }
 }
 
 /// Sorted positions refer into owner-held traversal order, so compilation

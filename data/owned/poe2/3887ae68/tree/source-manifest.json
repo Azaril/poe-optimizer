@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "tree_version": "0_5",
+  "tree_file": "src/TreeData/0_5/tree.json",
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/PassiveSpec.lua",
+        "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+      },
+      {
+        "path": "src/Classes/PassiveTree.lua",
+        "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+      },
+      {
+        "path": "src/TreeData/0_5/tree.json",
+        "sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95"
+      }
+    ]
+  },
+  "attribute_lanes": [
+    {
+      "attribute": "strNodes",
+      "option_name": "Strength"
+    },
+    {
+      "attribute": "dexNodes",
+      "option_name": "Dexterity"
+    },
+    {
+      "attribute": "intNodes",
+      "option_name": "Intelligence"
+    }
+  ]
+}
