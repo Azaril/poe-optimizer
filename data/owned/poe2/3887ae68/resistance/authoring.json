@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "resistance-contribution-component",
-  "base_recipe_sha256": "aee66dfbbc621959f1ca84ac12ee350f018656751da3401a0355018d554cdd1f",
+  "base_recipe_sha256": "3a4b7e6079ece1e95f5b54aa50be69a2b4c0aebf87283123ce2edbc9ac36fe4f",
   "base_registry_watermark": 2515,
   "percentage_points": {
     "kind": "unit",

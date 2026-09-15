@@ -240,6 +240,7 @@ impl Fixture {
         index.put_definition(DefinitionDescriptor::Class(known(
             def("class"),
             ClassSchema {
+                implicit_passives: DeclaredSet::complete(vec![]),
                 level: range(),
                 ascendancies: empty(),
                 declarations: declarations(),
@@ -1665,6 +1666,7 @@ fn occurrence_resolver_does_not_choose_one_potential_gem_skill() {
     let ProviderExposure::Root {
         owners,
         skills: Some(skills),
+        ..
     } = skill.provider().exposure()
     else {
         panic!("gem potential")

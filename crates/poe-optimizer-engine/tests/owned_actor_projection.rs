@@ -202,7 +202,7 @@ fn fixture() -> Fixture {
     }
     let schema = OwnedDefinitionSchemaPackage::new(
         SchemaPackageInput {
-            schema_version: 1,
+            schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: ns(),
             release: key("fixture"),
             semantics_version: key("actor-projection-schema-v1"),

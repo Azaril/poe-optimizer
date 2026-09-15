@@ -241,6 +241,9 @@ impl Fixture {
             DefinitionDescriptor::Class(known(
                 def("class"),
                 ClassSchema {
+                    implicit_passives: poe_optimizer_core::owned_schema::DeclaredSet::complete(
+                        vec![],
+                    ),
                     level: range(1, 100),
                     ascendancies: empty(),
                     declarations: declarations(),

@@ -26,6 +26,38 @@ impl<'a> ProviderOwner<'a> {
     }
 }
 
+/// One selected class/ascendancy declaration and its exact borrowed root schemas.
+/// Missing/unmapped nodes and partial root/pool sets remain explicit evidence;
+/// they do not erase independently known root owners or establish completeness.
+#[derive(Clone, Debug)]
+pub struct ImplicitPassiveRoots<'a> {
+    owner: SlotOwnerDefId,
+    declaration: &'a DeclaredSet<PassiveNodeDefId>,
+    nodes: Vec<(&'a PassiveNodeDefId, SchemaLookup<'a, PassiveNodeSchema>)>,
+}
+impl<'a> ImplicitPassiveRoots<'a> {
+    pub(super) fn new(
+        owner: SlotOwnerDefId,
+        declaration: &'a DeclaredSet<PassiveNodeDefId>,
+        nodes: Vec<(&'a PassiveNodeDefId, SchemaLookup<'a, PassiveNodeSchema>)>,
+    ) -> Self {
+        Self {
+            owner,
+            declaration,
+            nodes,
+        }
+    }
+    pub fn owner(&self) -> &SlotOwnerDefId {
+        &self.owner
+    }
+    pub fn declaration(&self) -> &'a DeclaredSet<PassiveNodeDefId> {
+        self.declaration
+    }
+    pub fn nodes(&self) -> &[(&'a PassiveNodeDefId, SchemaLookup<'a, PassiveNodeSchema>)] {
+        &self.nodes
+    }
+}
+
 /// Only explicitly reachable declarations are exposed. Partial sets remain partial.
 /// An actor context exposes its listed outputs, never its registry owner's siblings.
 #[derive(Clone, Debug)]
@@ -34,6 +66,8 @@ pub enum ProviderExposure<'a> {
         owners: Vec<ProviderOwner<'a>>,
         /// Potential definitions supplied by a physical gem; no one skill is selected here.
         skills: Option<&'a DeclaredSet<SkillDefId>>,
+        /// Character roots only; static membership is separate from grant activation.
+        implicit_passives: Vec<ImplicitPassiveRoots<'a>>,
     },
     Skill {
         /// The supplying parent prefix plus the skill slot, not the traversal address.
@@ -109,6 +143,7 @@ impl<'a> SkillOccurrence<'a> {
             ProviderExposure::Root {
                 owners,
                 skills: None,
+                ..
             } => owners.iter().find_map(|owner| {
                 if let SlotOwnerDefId::Skill(id) = owner.definition() {
                     Some(id)

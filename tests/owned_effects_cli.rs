@@ -65,6 +65,9 @@ fn fixture(offset: i64) -> Fixture {
                 DefinitionDescriptor::Class(known(
                     id("class"),
                     ClassSchema {
+                        implicit_passives: poe_optimizer_core::owned_schema::DeclaredSet::complete(
+                            vec![],
+                        ),
                         level: range(),
                         ascendancies: empty(),
                         declarations: ports(),

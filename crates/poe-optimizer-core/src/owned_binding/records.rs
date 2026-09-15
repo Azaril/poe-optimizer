@@ -6,6 +6,11 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         let character = &build.character;
         let site = BindingSite::new(BindingLocation::Character, BindingFacet::Definition);
         if let Some(schema) = self.definition(&character.class, &site)? {
+            let roots = self.implicit_roots(
+                SlotOwnerDefId::Class(character.class.clone()),
+                &schema.implicit_passives,
+            )?;
+            self.bind_implicit_roots(&roots, &site)?;
             self.level(
                 character.level,
                 &schema.level,
@@ -25,6 +30,11 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         if let Some(ascendancy) = &character.ascendancy
             && let Some(schema) = self.definition(ascendancy, &site)?
         {
+            let roots = self.implicit_roots(
+                SlotOwnerDefId::Ascendancy(ascendancy.clone()),
+                &schema.implicit_passives,
+            )?;
+            self.bind_implicit_roots(&roots, &site)?;
             self.membership(
                 &schema.classes,
                 &character.class,
@@ -150,6 +160,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                 let policy = match schema.scope {
                     PointPoolScope::Shared => ScopePolicy::Shared,
                     PointPoolScope::PerLoadout => ScopePolicy::Selected,
+                    PointPoolScope::Either => ScopePolicy::Either,
                 };
                 self.scope(
                     &allocation.scope,

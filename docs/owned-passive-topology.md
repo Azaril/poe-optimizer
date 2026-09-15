@@ -1,0 +1,121 @@
+# Owned passive topology and allocation legality
+
+This contract refines the [domain architecture](domain-architecture.md). It describes
+semantic ownership independently of a PoB tree, UI, save format or traversal lifecycle.
+The [implementation log](implementation.md) records which parts are delivered.
+
+## Identity and ownership
+
+A passive definition is a physical position in the game's allocation graph. An
+allocation is an authored occurrence selecting that position, a point pool, loadout
+scope, access source and choices. An external node token is an import key; it is not
+necessarily an allocation. Images and presentation-only records are not paid nodes.
+
+Classes and ascendancies declare `implicit_passives` as explicit, closed or partial sets.
+The selected character exposes those passive definitions under its Character provider.
+They consume no AllocationId or paid point pool. A physical root shared by two owners
+contributes once. Changing class/ascendancy changes root membership without rewriting
+all physical node identities. Unknown root membership or unknown pool exclusion stays
+unresolved; known root effects may be retained as evidence, but cannot close incoming
+contributions. A known nonempty paid pool contradicts an implicit-root declaration.
+
+Choices belong to their real owner. A multiple-choice tree branch is one parent
+allocation plus an option on its declared choice slot, with the option's effects
+included. It is not two paid allocations. Attribute selections likewise keep one
+physical node and a typed choice. Choices declared by an implicit root use Character
+scope and the exact PassiveNode declaration. Class-dependent stat views are definition
+rules reading the selected class/ascendancy; they do not replace physical node identity
+with a source option ID. The importer must not use a UI allocation-time default as
+proof that an omitted saved choice was authored.
+
+Passive adjacency describes semantic graph connections, including connections that a
+renderer omits. Reachability, affordability and activation are independent constraints.
+No renderer, source tree object or cached UI total belongs in native evaluation input.
+
+## Scope, cost and budgets
+
+Point-pool scope declares which authored scopes are allowed: Shared, PerLoadout or
+Either. It does not define affordability. One ordinary pool may admit shared and scoped
+allocations while several constraints account for those same allocations differently.
+
+The legality package should inject:
+
+- Node/pool costs, including explicit zero costs where game rules require them.
+- Budget constraints with named aggregation semantics and a capacity stat.
+- Access prerequisites and exceptions, including scope-aware root reachability.
+- Completeness for costs, capacity contributors, alternative membership and access.
+
+For the reviewed game rules, ordinary usage is shared cost plus the **maximum** scoped
+cost across weapon alternatives. A second constraint bounds **each** alternative's
+scoped cost by its weapon-point allowance. These operate on the same allocations;
+splitting them into unrelated point pools loses their coupling. An inactive alternative
+still affects authored feasibility. Partial alternative membership cannot prove a
+maximum or an each-alternative budget.
+
+A prospective representation is `AllocationCost { node, pool, points }` and
+`AllocationBudget { id, pools, usage, capacity_stat }`, with usage operations such as
+`SharedPlusMaximumScoped` and `EachScope`. The capacity is a nonnegative Integer
+PlayerActorStat produced by the owned effect graph from level, explicit rewards and
+other known contributors. Saved source totals, estimated quest progress and a build's
+observed spent-point count cannot supply that capacity. These types and the legality
+executor remain planned; scope eligibility alone makes no legality claim.
+
+Allocation access rules should express conjunctions of prerequisites and explicit
+provider-granted exceptions. Shared paths may use shared nodes; a scoped branch may
+use shared nodes and its own scope. An ordinary graph-disconnected node can be legal
+through an item-granted radius, alternate starting point or another declared access
+rule. Conversely, adjacency alone does not prove an ascendancy or unlock prerequisite.
+Radius eligibility should be compiled from owned geometry or exact finite membership
+with source evidence, then injected. A jewel does not automatically allocate every
+eligible node or waive their costs. Static implicit roots are not a workaround for
+unimplemented dynamic grant activation.
+
+## Offline conversion and saved-build import
+
+The offline compiler reads pinned finite source data, classifies semantic rows and
+appends owned identities through the single registry ledger. It emits definition
+schemas, known typed rules, legality data, and separate source mappings/provenance.
+It never emits Lua source ASTs, callbacks or UI state to be replayed by native code.
+Schema completeness and numerical rule completeness remain separate.
+
+Catalog publication uses the same validated successor finalizer as carried package
+publication. It can add new selectors and conflict-checked source pins while preserving
+prior descriptors and registry history. Refining an existing Unmapped definition needs
+an explicit refinement policy; appending a second identity is not a refresh strategy.
+Native loaders do not fix stale bindings. Source mapping/role policies are offline
+artifacts, not required native package dependencies.
+A typed tree-import artifact binds to the final schema/mapping/registry and the rebound
+base-normalization digest. The base policy does not refer back to the tree artifact.
+Validate the tree content before one manifest-covered publication; subsequent transitions
+must carry previously declared artifacts. Do not replace prior-bound policies with new
+successor IDs before their validation or permit arbitrary unvalidated extra files.
+
+Saved-build conversion maps each source token to a physical allocation, an implicit
+root marker, an attached option, or an unresolved fact. Root markers verify character
+selection. Attached options verify their parent and exact choice slot. Attribute
+lists, weapon overlays, class identifiers and tree version must be structurally and
+semantically consistent. Conflicting, duplicate, unknown and namespace-mismatched
+input remains diagnosable; substring recovery and last-write-wins are not normalization.
+Historical presets stay independent from the selected preset.
+
+The five protected originals provide 16 saved specifications and 613 selected node
+tokens, including implicit roots and attached choices. All 141 selected attribute nodes
+have explicit choices. Two selected trees have disjoint 24+24 weapon overlays already
+in the main node list. These exercise shared identity and scoped membership rather than
+justify a new skill-specific path. Original01 additionally requires item-bound radius
+access; original03 exercises a conjunction of unlock prerequisites; original05 exercises
+a class-dependent stat view and a saved level independent of its smaller selected tree.
+
+## Acceptance and retirement
+
+Prove root deduplication, changed class selection, partial membership, paid-root rejection,
+all attribute options, parent/option isolation, malformed overlays, class-view selection,
+coupled budgets and explicit access exceptions. Use synthetic perturbations alongside
+all five fixed original query sets; keep all 110 reference rows. No structural conversion
+or test count certifies a complete build.
+
+The runtime consumes only the owned build and compiled package. The optional PoB adapter
+compares independently realized results and reports unsupported mechanics. CLI, future
+GUI and search use the same domain services. Retire the legacy tree/profile consumer and
+its source/UI dependencies when its real replacement and numerical invariants pass;
+do not retain a second catalog or a general source interpreter as a compatibility layer.

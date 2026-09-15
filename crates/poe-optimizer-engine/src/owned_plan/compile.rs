@@ -122,7 +122,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         rules: rules.identity(),
         routing: *routing.identity(),
     };
-    let identity = digest_owned("owned-effect-plan-v5", &bindings, limits.max_wire_bytes)?;
+    let identity = digest_owned("owned-effect-plan-v6", &bindings, limits.max_wire_bytes)?;
     let resolver = OwnedOccurrenceResolver::new(definitions.as_ref(), &request, limits.binding)?;
     let mut b = Builder {
         request: &request,
@@ -418,7 +418,57 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 }
             }
             match provider.exposure() {
-                ProviderExposure::Root { owners, skills } => {
+                ProviderExposure::Root {
+                    owners,
+                    skills,
+                    implicit_passives,
+                } => {
+                    // Roots are class/ascendancy-owned providers, not paid allocation
+                    // occurrences. Retain known owners while marking every open set.
+                    for roots in implicit_passives {
+                        charge(&mut self.work, 1)?;
+                        if !roots.declaration().is_complete() {
+                            self.gap(
+                                Some(key.clone()),
+                                Some(owner_subject(roots.owner())),
+                                PlanGapReason::PartialDeclarations,
+                            )?;
+                        }
+                        for (node, schema) in roots.nodes() {
+                            charge(&mut self.work, 1)?;
+                            let subject = Some(SchemaSubject::Definition(node.address()));
+                            match schema {
+                                SchemaLookup::Known(schema) => {
+                                    if !schema.pools.members.is_empty() {
+                                        return Err(PlanError::Invalid(
+                                            "implicit passive root declares paid point pools"
+                                                .into(),
+                                        ));
+                                    }
+                                    if !schema.pools.is_complete() {
+                                        self.gap(
+                                            Some(key.clone()),
+                                            subject,
+                                            PlanGapReason::PartialDeclarations,
+                                        )?;
+                                    }
+                                }
+                                SchemaLookup::Missing | SchemaLookup::Unmapped(_) => {
+                                    self.gap(
+                                        Some(key.clone()),
+                                        subject,
+                                        PlanGapReason::UnresolvedTopology,
+                                    )?;
+                                }
+                                SchemaLookup::NamespaceMismatch
+                                | SchemaLookup::InconsistentIndex => {
+                                    return Err(PlanError::Invalid(
+                                        "implicit passive root has invalid schema binding".into(),
+                                    ));
+                                }
+                            }
+                        }
+                    }
                     // Register potential addresses before instantiating Gem-owned action
                     // programs, so their gates do not depend on owner visitation order.
                     if let Some(skills) = skills {

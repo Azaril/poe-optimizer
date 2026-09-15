@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "owned-import-input-seed",
-  "base_recipe_sha256": "ae456a2f4d1c8805ae52154235e27771dbc50d81a5736db96a8b3008d596ff94",
+  "base_recipe_sha256": "7fa8ad4c837b326357d044560c5f582100accd5d11ab3fef0437895625415ede",
   "catalog_snapshot_lf_sha256": "a90217d9bab6c0469917a2ba75ed9517205d2ac2b3d59f8d68580604f26df07f",
   "mechanics_manifest_sha256": "996e1a96abc3de69bea13e927dd4c5a8d0e8a91eb2022d9a9261b3e23ee11a42",
   "reward_facts_sha256": "3afadc1baa928c91368b711cde665a3dc6737c68cb15f51be1f7e86ed86e66fe",
@@ -10,8 +10,8 @@
   "seed_schema": {
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 1,
-    "content_sha256": "d61c98e791687ccd879ab763bf91b1ec4264a6be747b8c25f54f4f77c07d5667",
+    "schema_version": 2,
+    "content_sha256": "ac68e93e6dc158e4dea2c4e6eba3529e526a4d1d1c20c6c9669866fcbaa6293f",
     "semantics_version": "owned-mechanics-components-v1"
   },
   "source": {
@@ -208,22 +208,22 @@
     {
       "path": "item-policy-seed.json",
       "bytes": 453,
-      "sha256": "00c9a7076533bcabb5ef6ff97c8394fbb38b9872193b6b0d36cb0b851ff62f16"
+      "sha256": "67f03926864121e99d52a8b7808068b37e3478eccb4e0a2c400c42bd43619e50"
     },
     {
       "path": "item-source-policy-seed.json",
       "bytes": 4761,
-      "sha256": "075ef22e247d62d01c2edff3a89b68e23d3caf0e4074a5027fae8fd3977db2d4"
+      "sha256": "4da71bd98fbe899d540e3477a94cb573dbc4883b84e9a0804a5a48544d1370b0"
     },
     {
       "path": "mapping-seed.json",
       "bytes": 104754,
-      "sha256": "dc0c14c563c071612860a70f08c12f079d5afcf09b60ae62af467f02570b7d28"
+      "sha256": "918a25d8a888148e8fec0c0a16e50b8e12166fa37cb7c5e6b6d81b353081845f"
     },
     {
       "path": "normalization-policy-seed.json",
       "bytes": 13068,
-      "sha256": "7307b3b3c0e50084445f32dcb846ec4f9ffb26315d2ea81774ba19865018e773"
+      "sha256": "9b9f09a4d3c249d0f274c77cf1a030940a47ee30519c90a08a3db7c0e2c0c9f2"
     },
     {
       "path": "queries/original-01.json",
@@ -253,12 +253,12 @@
     {
       "path": "recipe-seed.json",
       "bytes": 342862,
-      "sha256": "a55b10c198f56fb549a8a8e703ffbd676ad40cb470878addba9a4fd482f6580a"
+      "sha256": "6706e3f67328c11fd2953717e6790529944978f21be1701c9920e10a5af3bc13"
     },
     {
       "path": "reward-policy-seed.json",
       "bytes": 61843,
-      "sha256": "564e7c319fa91b1a181351b866d322d66bba8105a255b9ee877e008572b515b3"
+      "sha256": "00b3e97c1420a88a11e163b21b79db20d6f8c2c73d05796e62a3871f318cf00e"
     },
     {
       "path": "reward-source-facts.json",

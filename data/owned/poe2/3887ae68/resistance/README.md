@@ -28,7 +28,8 @@ The property extension preserves the first 2,524 registry entries, all existing 
 and program bodies. Its only change to an existing descriptor appends the two nominal
 families to the Sapphire Ring's partial modifier membership. The catalyst extension preserves
 those2,538 entries and all old slots/rule bodies, adding two required Sapphire inputs. The
-current watermark is2,554; nominal rule owners remain Partial with no effective contribution
+catalyst-input watermark was2,554. The current watermark is2,589 after the modifier-value
+and catalyst-scalar extension; nominal rule owners remain Partial with no effective contribution
 program.
 
 `items.json` contains general lexical integer captures for plain cold,

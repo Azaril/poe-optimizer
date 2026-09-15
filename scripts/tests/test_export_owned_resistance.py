@@ -114,8 +114,8 @@ class ResistanceExportTests(unittest.TestCase):
             effect = rule["emissions"][0]["value"]
             self.assertIn(effect["definition"], [self.ids["nominal-cold-modifier"], self.ids["nominal-elemental-modifier"]])
             self.assertEqual(effect["rolls"][0]["value"]["value"]["rounding"], "symmetric_half_offset")
-        # Explicit nominal-family successor: original registry history and fixed programs remain unchanged.
-        self.assertEqual(EXPORT.sha(self.outputs["recipe.json"]), "834a24f996e97bd732d4d5972a36d21b68c66495be97876069de7e9d6539a43d")
+        # Schema-v2 envelope migration preserves registry history and fixed programs.
+        self.assertEqual(EXPORT.sha(self.outputs["recipe.json"]), "730e48051a347d418c74c9bbe615068add20d270c9763e3413f3490e94d1e5c3")
 
     def test_nominal_families_preserve_properties_without_effective_contributions(self):
         authoring = EXPORT.load(DEST / "authoring.json")

@@ -992,3 +992,50 @@ fn unknown_primary_cannot_claim_known_materialization() {
     }
     assert_eq!(index.input(), &input);
 }
+
+#[test]
+fn historical_role_receipt_retains_exact_subset_of_expanded_catalog_pins() {
+    let compiled = compile(data(), AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, roles) = assemble(&compiled);
+    let mut expanded = mapping.input().clone();
+    expanded.source.files.push(SourceFilePin {
+        path: "fixture/passives.json".into(),
+        sha256: "b".repeat(64),
+    });
+    let next =
+        OwnedMappingIndex::new(expanded, &compiled.registry, &schema, limits().mapping).unwrap();
+    let mut rebound = roles.clone();
+    rebound.mapping = *next.identity();
+    let index = OwnedSkillRoleIndex::new(rebound, &next, &schema, limits()).unwrap();
+    assert_eq!(index.input().compilation, roles.compilation);
+    assert_eq!(index.input().roles, roles.roles);
+    assert_ne!(index.input().mapping, roles.mapping);
+    // An expanded source footprint does not relax the exact final mapping binding.
+    assert!(OwnedSkillRoleIndex::new(roles, &next, &schema, limits()).is_err());
+}
+#[test]
+fn historical_role_pin_subset_rejects_missing_changed_and_foreign_contexts() {
+    let compiled = compile(data(), AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, roles) = assemble(&compiled);
+    let mut changed = mapping.input().clone();
+    changed.source.files[0].sha256 = "b".repeat(64);
+    let mut missing = mapping.input().clone();
+    missing.source.files = vec![SourceFilePin {
+        path: "fixture/unrelated.json".into(),
+        sha256: "b".repeat(64),
+    }];
+    let mut revision = mapping.input().clone();
+    revision.source.revision = "d".repeat(40);
+    let mut system = mapping.input().clone();
+    system.source.system = ExternalSourceSystem::PathOfBuilding1;
+    for input in [changed, missing, revision, system] {
+        let mapping =
+            OwnedMappingIndex::new(input, &compiled.registry, &schema, limits().mapping).unwrap();
+        let mut roles = roles.clone();
+        roles.mapping = *mapping.identity();
+        assert!(matches!(
+            OwnedSkillRoleIndex::new(roles, &mapping, &schema, limits()),
+            Err(SkillCatalogError::BindingMismatch)
+        ));
+    }
+}

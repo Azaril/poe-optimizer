@@ -106,7 +106,7 @@ impl Fixture {
             .unwrap();
         let schema = OwnedDefinitionSchemaPackage::new(
             SchemaPackageInput {
-                schema_version: 1,
+                schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
                 namespace: ns(),
                 release: key("release-a"),
                 semantics_version: key("semantics-a"),
@@ -1177,7 +1177,7 @@ fn stat_and_capability_catalog_mappings_keep_distinct_owned_identity_and_coverag
     let capability: CapabilityDefId = registry.allocate_definition().unwrap();
     let schema = OwnedDefinitionSchemaPackage::new(
         SchemaPackageInput {
-            schema_version: 1,
+            schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: ns(),
             release: key("computed"),
             semantics_version: key("schema-only"),

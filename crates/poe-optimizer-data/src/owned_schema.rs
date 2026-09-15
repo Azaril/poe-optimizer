@@ -14,7 +14,7 @@ use std::{
     io,
 };
 
-pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = 1;
+pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = 2;
 pub const DEFAULT_SCHEMA_MAX_ENTRIES: usize = 1_000_000;
 pub const DEFAULT_SCHEMA_MAX_COLLECTION_ENTRIES: usize = 100_000;
 pub const DEFAULT_SCHEMA_MAX_WIRE_BYTES: usize = 64 * 1024 * 1024;
@@ -90,6 +90,7 @@ pub enum SchemaPackageErrorKind {
     ReversedRange,
     UnitMismatch,
     EmptyGapEvidence,
+    ImplicitPassiveHasPools,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -442,12 +443,21 @@ impl Check<'_> {
             DefinitionDescriptor::Class(e) => {
                 owned!(e, Class, |c: &mut Self, s: &mut ClassSchema| {
                     c.integer_range(path, &s.level)?;
-                    c.definitions(&format!("{path}.ascendancies"), &mut s.ascendancies)
+                    c.definitions(&format!("{path}.ascendancies"), &mut s.ascendancies)?;
+                    c.definitions(
+                        &format!("{path}.implicit_passives"),
+                        &mut s.implicit_passives,
+                    )
                 })
             }
             DefinitionDescriptor::Ascendancy(e) => {
-                owned!(e, Ascendancy, |c: &mut Self, s: &mut AscendancySchema| c
-                    .definitions(&format!("{path}.classes"), &mut s.classes))
+                owned!(e, Ascendancy, |c: &mut Self, s: &mut AscendancySchema| {
+                    c.definitions(&format!("{path}.classes"), &mut s.classes)?;
+                    c.definitions(
+                        &format!("{path}.implicit_passives"),
+                        &mut s.implicit_passives,
+                    )
+                })
             }
             DefinitionDescriptor::Reward(e) => owned!(e, Reward, |_c: &mut Self,
                                                                   _s: &mut RewardSchema|
@@ -720,6 +730,34 @@ fn closed_absence<T: Ord>(set: &DeclaredSet<T>, target: &T) -> bool {
 }
 fn check_declaration_consistency(input: &SchemaPackageInput) -> Result {
     let definitions: BTreeMap<_, _> = input.definitions.iter().map(|d| (d.address(), d)).collect();
+    for (i, descriptor) in input.definitions.iter().enumerate() {
+        let implicit = match descriptor {
+            DefinitionDescriptor::Class(DefinitionEntry {
+                schema: SchemaState::Known(schema),
+                ..
+            }) => Some(&schema.implicit_passives),
+            DefinitionDescriptor::Ascendancy(DefinitionEntry {
+                schema: SchemaState::Known(schema),
+                ..
+            }) => Some(&schema.implicit_passives),
+            _ => None,
+        };
+        if let Some(implicit) = implicit {
+            for (j, node) in implicit.members.iter().enumerate() {
+                if let DefinitionDescriptor::PassiveNode(DefinitionEntry {
+                    schema: SchemaState::Known(schema),
+                    ..
+                }) = definitions[&node.address()]
+                    && !schema.pools.members.is_empty()
+                {
+                    return invalid(
+                        &format!("definitions[{i}].implicit_passives[{j}]"),
+                        SchemaPackageErrorKind::ImplicitPassiveHasPools,
+                    );
+                }
+            }
+        }
+    }
     for (i, descriptor) in input.slots.iter().enumerate() {
         let address = descriptor.address();
         let owner = definitions[&owner_address(address.declaration())];

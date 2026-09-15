@@ -115,6 +115,7 @@ fn input() -> SchemaPackageInput {
         DefinitionDescriptor::Class(known(
             id("class"),
             ClassSchema {
+                implicit_passives: DeclaredSet::complete(vec![]),
                 level: range(1, 100),
                 ascendancies: DeclaredSet::complete(vec![id("ascendancy")]),
                 declarations: declarations(),
@@ -123,6 +124,7 @@ fn input() -> SchemaPackageInput {
         DefinitionDescriptor::Ascendancy(known(
             id("ascendancy"),
             AscendancySchema {
+                implicit_passives: DeclaredSet::complete(vec![]),
                 classes: DeclaredSet::complete(vec![id("class")]),
                 declarations: declarations(),
             },
@@ -442,7 +444,10 @@ fn every_descriptor_family_loads_and_roundtrips_as_a_source_independent_index() 
     package.identity().validate().unwrap();
     assert_eq!(package.identity().game, "authored-game");
     assert_eq!(package.identity().release, "release-a");
-    assert_eq!(package.identity().schema_version, 1);
+    assert_eq!(
+        package.identity().schema_version,
+        OWNED_SCHEMA_PACKAGE_VERSION
+    );
     assert_eq!(package.identity().semantics_version, "schema-semantics-1");
     assert_eq!(
         package
@@ -758,8 +763,8 @@ fn wire_rejects_unknown_duplicate_missing_and_wrong_kind_fields() {
     assert!(decode_schema_package(&serde_json::to_vec(&wrong).unwrap(), limits).is_err());
     let encoded = serde_json::to_string(&raw).unwrap();
     let duplicated = encoded.replacen(
-        "\"schema_version\":1",
-        "\"schema_version\":1,\"schema_version\":1",
+        &format!("\"schema_version\":{OWNED_SCHEMA_PACKAGE_VERSION}"),
+        &format!("\"schema_version\":{OWNED_SCHEMA_PACKAGE_VERSION},\"schema_version\":{OWNED_SCHEMA_PACKAGE_VERSION}"),
         1,
     );
     assert_ne!(duplicated, encoded);
@@ -768,10 +773,10 @@ fn wire_rejects_unknown_duplicate_missing_and_wrong_kind_fields() {
     assert_ne!(overflow, encoded);
     assert!(decode_schema_package(overflow.as_bytes(), limits).is_err());
     let mut version = raw;
-    version.schema_version = 2;
+    version.schema_version = OWNED_SCHEMA_PACKAGE_VERSION + 1;
     assert!(matches!(
         OwnedDefinitionSchemaPackage::new(version, limits),
-        Err(SchemaPackageError::UnsupportedVersion(2))
+        Err(SchemaPackageError::UnsupportedVersion(v)) if v == OWNED_SCHEMA_PACKAGE_VERSION + 1
     ));
 }
 

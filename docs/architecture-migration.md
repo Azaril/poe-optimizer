@@ -58,19 +58,29 @@ permission to treat unknown modifiers as harmless. The checked offline transitio
 current bundle. All five originals consume it through the existing normalizer CLI; private
 test-only rebinding no longer substitutes for that integration.
 
-Next settle class/ascendancy implicit roots, choice-token roles, allocation costs and
-earned pool capacities as injected domain relationships, then append class/passive/pool
-definitions to the same ledger. All five selected trees expose 613 source tokens, including
-two implicit roots each; do not treat them all as paid allocations. Every selected attribute
-node has an explicit override. Separate point pools, scopes and conditional allocation
-access remain conversion work. The whole saved
-corpus has 1,369 allocations, including inactive alternatives. Count selected closure and
-whole-build parity separately from record counts. Common item effects and exact support/
-provider semantics follow through the same model, with Twister and Sniper developed together.
+Class/ascendancy implicit roots now belong to the Character provider, deduplicated by
+physical passive identity. Attached options belong to parent choice slots. Schema wire 2
+makes root membership explicit; point pools admit Either scope where appropriate. The
+[passive topology contract](owned-passive-topology.md) specifies separate injected costs,
+shared-plus-maximum and each-scope budgets, acquired capacities and access constraints.
+The budget/access executor and real tree conversion remain next, not delivered legality.
+
+Append class/passive/pool/choice definitions to the current 2,589-entry ledger through the
+shared additive successor finalizer. Its source-pin union is conflict checked, old selectors
+and descriptors remain exact, and carried item policies are checked before explicit rebind.
+The current package has been regenerated to schema 2; no identity is reallocated.
+
+All five selected trees expose 613 source tokens, including two implicit roots each;
+do not treat them all as paid allocations. Every selected attribute node has an explicit
+override. Original02/04 each have disjoint 24+24 weapon overlays whose usage shares the
+ordinary pool. The whole saved corpus has 1,369 node tokens, including roots, attached
+options and inactive alternatives. Count selected closure and whole-build parity separately
+from records. Common item effects and support/provider semantics follow through the same
+model, with Twister and Sniper developed together.
 
 The existing catalyst scalar remains an intermediate modifier-local value. Final effective
 scaling needs source encoding, complete transform membership and distinct rounding stages;
-receivers then need all applicable contributions. Operations v6 and effect-plan identity v5
+receivers then need all applicable contributions. Operations v6 and effect-plan identity v6
 remain current. Global contributor closure and complete-request gates are unchanged.
 Original native completion remains 0/5. Paired consumer retirement is still required; an
 owned codec, successful package build or absent mlua dependency alone does not close D5.

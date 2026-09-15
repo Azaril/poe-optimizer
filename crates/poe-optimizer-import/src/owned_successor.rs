@@ -6,7 +6,9 @@ use crate::{
     owned_item_source::{
         ItemSourceError, ItemSourceLayoutPolicy, ItemSourceLayoutPolicyInput, ItemSourceLimits,
     },
-    owned_mapping::{MappingPackageInput, OwnedMappingError, OwnedMappingIndex},
+    owned_mapping::{
+        MappingEntry, MappingPackageInput, OwnedMappingError, OwnedMappingIndex, SourcePin,
+    },
     owned_normalize::{
         GemQualityPolicy, ImportQueryTemplate, NormalizationError, NormalizationLimits,
         NormalizationPolicy, validate_normalization_inputs, validate_normalization_queries,
@@ -56,6 +58,27 @@ pub struct SuccessorBundleInput {
     pub query_sets: Vec<NamedQuerySet>,
     pub items: ItemLinePolicyInput,
     pub item_source: ItemSourceLayoutPolicyInput,
+}
+
+/// A catalog may add only new external selectors. Existing selectors, including
+/// explicit Unmapped/Ambiguous outcomes, must be handled by a separate edit policy.
+/// `source.files` is an additional/overlapping footprint in the same source
+/// system and revision. Matching old pins are retained; conflicts are rejected.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct CatalogAppend {
+    pub mappings: Vec<MappingEntry>,
+    pub source: SourcePin,
+    pub item_policies: CatalogItemPolicyMode,
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum CatalogItemPolicyMode {
+    /// `SuccessorBundleInput.items/item_source` already bind the successor.
+    SuppliedSuccessor,
+    /// They must first bind the prior package. Only exact dependency identities
+    /// are then changed; source interpretation and provenance stay immutable.
+    RebindPrior,
 }
 
 /// Aggregate bytes, top-level declarations, rule programs/table rows, routes and
@@ -129,6 +152,8 @@ pub enum SuccessorBundleError {
         "query set name must be unique lowercase ASCII letters, digits, hyphens or underscores, at most 64 bytes"
     )]
     QuerySetName,
+    #[error("invalid catalog append: {0}")]
+    CatalogConflict(&'static str),
     #[error(transparent)]
     Recipe(#[from] OwnedRecipeError),
     #[error(transparent)]
@@ -257,8 +282,20 @@ fn charge(left: &mut usize, count: usize, label: &'static str) -> Result<()> {
         .ok_or(SuccessorBundleError::Limit(label))?;
     Ok(())
 }
-fn preflight(input: &SuccessorBundleInput, limits: SuccessorBundleLimits) -> Result<()> {
+fn preflight(
+    input: &SuccessorBundleInput,
+    append: Option<&CatalogAppend>,
+    limits: SuccessorBundleLimits,
+) -> Result<()> {
     let mut left = limits.max_validation_entries;
+    if let Some(append) = append {
+        for count in [append.mappings.len(), append.source.files.len()] {
+            charge(&mut left, count, "validation entries")?;
+            if count > limits.catalog.mapping.max_collection_entries {
+                return Err(SuccessorBundleError::Limit("catalog append entries"));
+            }
+        }
+    }
     for recipe in [&input.prior, &input.successor] {
         for n in [
             recipe.registry.entries.len(),
@@ -378,6 +415,67 @@ fn preserve(before: &StagedOwnedRecipe, after: &StagedOwnedRecipe) -> Result<()>
     }
     Ok(())
 }
+fn append_mapping(
+    input: &mut MappingPackageInput,
+    append: &CatalogAppend,
+    limits: SuccessorBundleLimits,
+) -> Result<()> {
+    if input.source.system != append.source.system
+        || input.source.revision != append.source.revision
+    {
+        return Err(SuccessorBundleError::CatalogConflict(
+            "source context differs",
+        ));
+    }
+    let count = input
+        .entries
+        .len()
+        .checked_add(append.mappings.len())
+        .ok_or(SuccessorBundleError::Limit("mapping entries"))?;
+    if count > limits.catalog.mapping.max_collection_entries {
+        return Err(SuccessorBundleError::Limit("mapping entries"));
+    }
+    // Compare before appending; a failed call never mutates the caller's input.
+    let mut selectors: BTreeSet<_> = input.entries.iter().map(|entry| &entry.source).collect();
+    for entry in &append.mappings {
+        if !selectors.insert(&entry.source) {
+            return Err(SuccessorBundleError::CatalogConflict(
+                "existing or duplicate mapping selector",
+            ));
+        }
+    }
+    let mut pins: BTreeMap<_, _> = input
+        .source
+        .files
+        .iter()
+        .map(|pin| (pin.path.as_str(), pin))
+        .collect();
+    let mut supplied = BTreeSet::new();
+    for pin in &append.source.files {
+        if !supplied.insert(pin.path.as_str()) {
+            return Err(SuccessorBundleError::CatalogConflict(
+                "duplicate supplied source path",
+            ));
+        }
+        if let Some(previous) = pins.get(pin.path.as_str()) {
+            if previous.sha256 != pin.sha256 {
+                return Err(SuccessorBundleError::CatalogConflict("source hash differs"));
+            }
+        } else {
+            pins.insert(pin.path.as_str(), pin);
+        }
+    }
+    if pins.len() > limits.catalog.mapping.max_collection_entries {
+        return Err(SuccessorBundleError::Limit("source pins"));
+    }
+    let files = pins.into_values().cloned().collect();
+    input.entries.extend(append.mappings.iter().cloned());
+    input.source.files = files;
+    // The complete mapping constructor subsequently validates all appended
+    // selectors, targets, source text and aggregate budgets before publication.
+    Ok(())
+}
+
 fn bindings(
     recipe: &StagedOwnedRecipe,
     mapping: &OwnedMappingIndex,
@@ -434,12 +532,45 @@ pub fn transition_owned_bundle(
     input: SuccessorBundleInput,
     limits: SuccessorBundleLimits,
 ) -> Result<StagedSuccessorBundle> {
+    finalize_successor(input, None, limits)
+}
+
+/// Add catalog identities/mappings to one successor package. This shares every
+/// recipe, prior-binding, history and publication check with the carry-only API.
+/// The compiler supplies a fully assembled successor recipe; no IDs are allocated
+/// here and no source code is evaluated. Repeated catalog compilation should reuse
+/// exact prior identities and submit no already-existing selector in `mappings`.
+pub fn transition_owned_catalog(
+    input: SuccessorBundleInput,
+    append: CatalogAppend,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
+    finalize_successor(input, Some(append), limits)
+}
+
+fn finalize_successor(
+    input: SuccessorBundleInput,
+    append: Option<CatalogAppend>,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
     limits.validate()?;
     if input.schema_version != OWNED_SUCCESSOR_VERSION {
         return Err(SuccessorBundleError::Version(input.schema_version));
     }
-    let input_digest = digest_owned("owned-successor-input-v1", &input, limits.max_input_bytes)?;
-    preflight(&input, limits)?;
+    let input_digest = match &append {
+        None => digest_owned("owned-successor-input-v1", &input, limits.max_input_bytes)?,
+        Some(append) => digest_owned(
+            "owned-catalog-successor-input-v1",
+            &(&input, append),
+            limits.max_input_bytes,
+        )?,
+    };
+    preflight(&input, append.as_ref(), limits)?;
+    let item_policy_mode = append
+        .as_ref()
+        .map_or(CatalogItemPolicyMode::SuppliedSuccessor, |a| {
+            a.item_policies
+        });
     let before = assemble_owned_recipe(input.prior, limits.recipe)?;
     let old_mapping = OwnedMappingIndex::new(
         input.mapping,
@@ -472,6 +603,9 @@ pub fn transition_owned_bundle(
     let mut next_mapping = old_mapping.input().clone();
     next_mapping.registry = after.registry().identity()?;
     next_mapping.definitions = after.schema().identity().clone();
+    if let Some(append) = &append {
+        append_mapping(&mut next_mapping, append, limits)?;
+    }
     let mapping = OwnedMappingIndex::new(
         next_mapping,
         after.registry(),
@@ -506,13 +640,27 @@ pub fn transition_owned_bundle(
     next_rewards.definitions = after.schema().identity().clone();
     next_rewards.mapping = *mapping.identity();
     let rewards = OwnedRewardPolicy::new(next_rewards, &mapping, after.schema(), limits.rewards)?;
-    let items = OwnedItemLinePolicy::new(input.items, after.schema(), limits.items)?;
-    let item_source = ItemSourceLayoutPolicy::new(
-        input.item_source,
-        &items,
-        after.schema(),
-        limits.item_source,
-    )?;
+    let (item_input, mut source_input) = match item_policy_mode {
+        CatalogItemPolicyMode::SuppliedSuccessor => (input.items, input.item_source),
+        CatalogItemPolicyMode::RebindPrior => {
+            let old_items = OwnedItemLinePolicy::new(input.items, before.schema(), limits.items)?;
+            let old_source = ItemSourceLayoutPolicy::new(
+                input.item_source,
+                &old_items,
+                before.schema(),
+                limits.item_source,
+            )?;
+            let mut items = old_items.input().clone();
+            items.definitions = after.schema().identity().clone();
+            (items, old_source.input().clone())
+        }
+    };
+    let items = OwnedItemLinePolicy::new(item_input, after.schema(), limits.items)?;
+    if item_policy_mode == CatalogItemPolicyMode::RebindPrior {
+        source_input.item_lines = *items.identity();
+    }
+    let item_source =
+        ItemSourceLayoutPolicy::new(source_input, &items, after.schema(), limits.item_source)?;
     let after_bindings = bindings(&after, &mapping, &roles, &normalization, &rewards, limits)?;
     let mut transition = SuccessorBundleTransition {
         schema_version: OWNED_SUCCESSOR_VERSION,
@@ -528,7 +676,10 @@ pub fn transition_owned_bundle(
         items: *items.identity(),
         item_source: *item_source.identity(),
         schema_policy: "exact_prior_declarations_new_addresses_only",
-        item_policy_mode: "explicit_successor_bound_inputs",
+        item_policy_mode: match item_policy_mode {
+            CatalogItemPolicyMode::SuppliedSuccessor => "explicit_successor_bound_inputs",
+            CatalogItemPolicyMode::RebindPrior => "validated_prior_binding_rebind",
+        },
         source_execution: false,
         calculation: "not_run",
         whole_build_parity: "not_established",
@@ -574,6 +725,9 @@ pub fn transition_owned_bundle(
             format!("queries-{}.json", set.name.as_str()),
             &set.queries,
         )?;
+    }
+    if let Some(append) = &append {
+        add(&mut extra, &mut left, "catalog-append.json".into(), append)?;
     }
     transition.artifacts = after
         .artifacts()

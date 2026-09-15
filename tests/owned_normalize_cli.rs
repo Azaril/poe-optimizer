@@ -106,7 +106,7 @@ fn save(directory: &Path) {
     let registry = OwnedIdRegistry::empty(namespace(), limits).unwrap();
     let definitions = OwnedDefinitionSchemaPackage::new(
         SchemaPackageInput {
-            schema_version: 1,
+            schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: namespace(),
             release: key("caller-release"),
             semantics_version: key("caller-schema"),

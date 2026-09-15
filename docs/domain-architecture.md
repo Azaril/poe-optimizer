@@ -66,6 +66,10 @@ Computed intermediate values also need domain identities. The
 values from its supplying item's shared properties. This extends the existing native
 dependency graph; it does not expose PoB Item instances or parser state to the evaluator.
 
+The [passive topology contract](owned-passive-topology.md) separates implicit roots,
+physical allocations, attached choices, scope eligibility and injected legality budgets.
+It prevents source node lists or UI point totals from becoming native game semantics.
+
 ## Components and dependency direction
 
 ```mermaid

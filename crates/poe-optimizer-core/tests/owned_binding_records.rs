@@ -156,6 +156,7 @@ impl Fixture {
         index.put(DefinitionDescriptor::Class(known(
             def("class"),
             ClassSchema {
+                implicit_passives: DeclaredSet::complete(vec![]),
                 level: range(1, 100),
                 ascendancies: empty(),
                 declarations: declarations(),
@@ -566,6 +567,7 @@ fn missing_unmapped_malformed_indexes_and_resource_limits_are_distinct() {
         DefinitionDescriptor::Class(known(
             def("other-class"),
             ClassSchema {
+                implicit_passives: DeclaredSet::complete(vec![]),
                 level: range(1, 100),
                 ascendancies: empty(),
                 declarations: declarations(),
@@ -626,6 +628,7 @@ fn ascendancies_and_separate_pools_are_data_membership_without_invented_connecti
     f.index.put(DefinitionDescriptor::Ascendancy(known(
         def("ascendancy"),
         AscendancySchema {
+            implicit_passives: DeclaredSet::complete(vec![]),
             classes: DeclaredSet::complete(vec![def("class")]),
             declarations: declarations(),
         },

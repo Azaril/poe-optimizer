@@ -79,7 +79,7 @@ fn schema_input() -> SchemaPackageInput {
         )));
     }
     SchemaPackageInput {
-        schema_version: 1,
+        schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
         namespace: ns(),
         release: key("schema-release"),
         semantics_version: key("test-v1"),

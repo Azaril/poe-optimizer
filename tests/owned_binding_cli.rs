@@ -92,7 +92,7 @@ fn schema(maximum: i64) -> OwnedDefinitionSchemaPackage {
     };
     OwnedDefinitionSchemaPackage::new(
         SchemaPackageInput {
-            schema_version: 1,
+            schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: ns(),
             release: OwnedDefinitionKey::new("test").unwrap(),
             semantics_version: OwnedDefinitionKey::new("v1").unwrap(),
@@ -100,6 +100,9 @@ fn schema(maximum: i64) -> OwnedDefinitionSchemaPackage {
                 DefinitionDescriptor::Class(known(
                     def("class"),
                     ClassSchema {
+                        implicit_passives: poe_optimizer_core::owned_schema::DeclaredSet::complete(
+                            vec![],
+                        ),
                         level: range(),
                         ascendancies: empty(),
                         declarations: DeclaredSlots {

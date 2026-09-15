@@ -135,7 +135,12 @@ schema_enum!(AuthoredGemRole {
     SkillUse,
     SupportAssignment
 });
-schema_enum!(PointPoolScope { Shared, PerLoadout });
+// Allocation-scope eligibility only; this does not define costs or pool capacities.
+schema_enum!(PointPoolScope {
+    Shared,
+    PerLoadout,
+    Either
+});
 schema_enum!(ScopePolicy {
     Shared,
     Selected,
@@ -256,10 +261,12 @@ macro_rules! schema_record {
 schema_record!(ClassSchema {
     level: IntegerRange,
     ascendancies: DeclaredSet<AscendancyDefId>,
+    implicit_passives: DeclaredSet<PassiveNodeDefId>,
     declarations: DeclaredSlots,
 });
 schema_record!(AscendancySchema {
     classes: DeclaredSet<ClassDefId>,
+    implicit_passives: DeclaredSet<PassiveNodeDefId>,
     declarations: DeclaredSlots,
 });
 schema_record!(RewardSchema {
@@ -550,7 +557,7 @@ slot_catalog! {
     ActionOutput: ActionOutputDefId => ActionOutputSchema,
 }
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum SchemaLookup<'a, T> {
     Known(&'a T),
     Missing,

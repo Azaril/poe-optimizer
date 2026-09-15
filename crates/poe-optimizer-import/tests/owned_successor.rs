@@ -362,3 +362,217 @@ fn rule_programs_and_table_cells_consume_the_aggregate_entry_budget() {
         Err(SuccessorBundleError::Limit("validation entries"))
     ));
 }
+
+fn current_input() -> SuccessorBundleInput {
+    let recipe = load("current/recipe.json");
+    SuccessorBundleInput {
+        schema_version: OWNED_SUCCESSOR_VERSION,
+        prior: recipe,
+        successor: load("current/recipe.json"),
+        mapping: load("current/mapping.json"),
+        roles: load("current/roles.json"),
+        normalization: load("current/normalization.json"),
+        rewards: load("current/rewards.json"),
+        query_sets: (1..=5)
+            .map(|i| NamedQuerySet {
+                name: OwnedDefinitionKey::new(format!("original-{i:02}")).unwrap(),
+                queries: load(&format!("current/queries-original-{i:02}.json")),
+            })
+            .collect(),
+        items: load("current/items.json"),
+        item_source: load("current/item-source.json"),
+    }
+}
+fn catalog_input() -> (SuccessorBundleInput, CatalogAppend) {
+    use poe_optimizer_core::{
+        owned_definitions::OptionDefinition,
+        owned_schema::{DefinitionAddress, DefinitionEntry, OptionSchema, SchemaSubject},
+    };
+    use poe_optimizer_import::owned_mapping::*;
+    let mut input = current_input();
+    let mut registry =
+        OwnedIdRegistry::new(input.prior.registry.clone(), OwnedMappingLimits::default()).unwrap();
+    let option = registry.allocate_definition::<OptionDefinition>().unwrap();
+    input.successor.registry = registry.input().clone();
+    input
+        .successor
+        .schema
+        .definitions
+        .push(DefinitionDescriptor::Option(DefinitionEntry {
+            id: option.clone(),
+            schema: SchemaState::Known(OptionSchema {}),
+        }));
+    schema_rebind(&mut input);
+    let append = CatalogAppend {
+        mappings: vec![MappingEntry {
+            source: ExternalSelector::Catalog {
+                kind: ExternalCatalogKind::Option,
+                key: SourceComponent::Text("new-independent-catalog-option".into()),
+                version: SourceComponent::Text("v1".into()),
+                variant: SourceComponent::Missing,
+            },
+            outcome: MappingOutcome::Mapped {
+                target: SchemaSubject::Definition(DefinitionAddress::Option(option)),
+                basis: MappingBasis::Exact,
+            },
+        }],
+        source: SourcePin {
+            system: input.mapping.source.system,
+            revision: input.mapping.source.revision.clone(),
+            files: vec![SourceFilePin {
+                path: "test/independent-catalog.json".into(),
+                sha256: "ab".repeat(32),
+            }],
+        },
+        item_policies: CatalogItemPolicyMode::RebindPrior,
+    };
+    (input, append)
+}
+#[test]
+fn catalog_additions_share_checked_finalization_and_preserve_existing_facts() {
+    let (input, append) = catalog_input();
+    let previous = input.clone();
+    let expected_append = append.clone();
+    let result = transition_owned_catalog(input, append, Default::default()).unwrap();
+    assert_eq!(
+        result.recipe().registry.last_issued.get(),
+        previous.prior.registry.last_issued.get() + 1
+    );
+    assert_eq!(
+        &result.recipe().registry.entries[..previous.prior.registry.entries.len()],
+        &previous.prior.registry.entries
+    );
+    assert_eq!(
+        result.mapping().input().entries.len(),
+        previous.mapping.entries.len() + 1
+    );
+    for entry in &previous.mapping.entries {
+        assert!(result.mapping().input().entries.contains(entry));
+    }
+    assert!(
+        result
+            .mapping()
+            .input()
+            .entries
+            .contains(&expected_append.mappings[0])
+    );
+    assert_eq!(
+        result.mapping().input().source.files.len(),
+        previous.mapping.source.files.len() + 1
+    );
+    assert_eq!(
+        result.roles().input().compilation,
+        previous.roles.compilation
+    );
+    assert_eq!(result.roles().input().roles, previous.roles.roles);
+    assert_eq!(result.roles().input().mapping, *result.mapping().identity());
+    assert_eq!(result.query_sets(), previous.query_sets);
+    assert_eq!(result.rewards().input().rules, previous.rewards.rules);
+    assert_eq!(result.items().input().rules, previous.items.rules);
+    assert_eq!(
+        result.item_source().input().source,
+        previous.item_source.source
+    );
+    let mut expected_source = previous.item_source;
+    expected_source.item_lines = *result.items().identity();
+    assert_eq!(result.item_source().input(), &expected_source);
+    assert_eq!(
+        result.transition().item_policy_mode,
+        "validated_prior_binding_rebind"
+    );
+    assert_eq!(result.recipe().rules.owners, previous.prior.rules.owners);
+    assert_eq!(result.recipe().rules.tables, previous.prior.rules.tables);
+    let raw = result
+        .artifacts()
+        .find(|(name, _)| *name == "catalog-append.json")
+        .unwrap()
+        .1;
+    assert_eq!(
+        serde_json::from_slice::<CatalogAppend>(raw).unwrap(),
+        expected_append
+    );
+    assert!(
+        result
+            .transition()
+            .artifacts
+            .iter()
+            .any(|a| a.file == "catalog-append.json")
+    );
+}
+#[test]
+fn catalog_repeat_accepts_matching_overlaps_but_no_existing_selector_append() {
+    let input = current_input();
+    let append = CatalogAppend {
+        mappings: vec![],
+        source: input.mapping.source.clone(),
+        item_policies: CatalogItemPolicyMode::RebindPrior,
+    };
+    let before = input.clone();
+    let result = transition_owned_catalog(input, append.clone(), Default::default()).unwrap();
+    assert_eq!(result.recipe(), &before.prior);
+    assert_eq!(result.mapping().input(), &before.mapping);
+    assert_eq!(result.roles().input(), &before.roles);
+    assert_eq!(result.transition().before, result.transition().after);
+    let mut bad = append;
+    bad.mappings.push(before.mapping.entries[0].clone());
+    assert!(matches!(
+        transition_owned_catalog(before, bad, Default::default()),
+        Err(SuccessorBundleError::CatalogConflict(
+            "existing or duplicate mapping selector"
+        ))
+    ));
+}
+#[test]
+fn catalog_conflicts_fail_before_publication_and_leave_inputs_unchanged() {
+    use poe_optimizer_import::owned_mapping::ExternalSourceSystem;
+    let (input, append) = catalog_input();
+    let snapshot = serde_json::to_vec(&input).unwrap();
+    let mut duplicate_mapping = append.clone();
+    let duplicate_entry = duplicate_mapping.mappings[0].clone();
+    duplicate_mapping.mappings.push(duplicate_entry);
+    let mut duplicate_pin = append.clone();
+    let duplicate_file = duplicate_pin.source.files[0].clone();
+    duplicate_pin.source.files.push(duplicate_file);
+    let mut wrong_hash = append.clone();
+    wrong_hash.source.files = vec![input.mapping.source.files[0].clone()];
+    wrong_hash.source.files[0].sha256 = "cd".repeat(32);
+    let mut revision = append.clone();
+    revision.source.revision.push_str("-different");
+    let mut system = append;
+    system.source.system = ExternalSourceSystem::PathOfBuilding1;
+    for bad in [
+        duplicate_mapping,
+        duplicate_pin,
+        wrong_hash,
+        revision,
+        system,
+    ] {
+        assert!(matches!(
+            transition_owned_catalog(input.clone(), bad, Default::default()),
+            Err(SuccessorBundleError::CatalogConflict(_))
+        ));
+    }
+    assert_eq!(serde_json::to_vec(&input).unwrap(), snapshot);
+}
+#[test]
+fn catalog_item_rebind_never_repairs_stale_or_implicitly_supplied_bindings() {
+    let (input, append) = catalog_input();
+    let mut stale = input.clone();
+    stale.items.definitions = stale.successor.rules.definitions.clone();
+    assert!(transition_owned_catalog(stale, append.clone(), Default::default()).is_err());
+    let mut supplied = append;
+    supplied.item_policies = CatalogItemPolicyMode::SuppliedSuccessor;
+    assert!(transition_owned_catalog(input, supplied, Default::default()).is_err());
+}
+#[test]
+fn catalog_append_uses_combined_bytes_and_combined_mapping_bounds() {
+    let (input, append) = catalog_input();
+    let limits = SuccessorBundleLimits {
+        max_input_bytes: serde_json::to_vec(&input).unwrap().len(),
+        ..Default::default()
+    };
+    assert!(transition_owned_catalog(input.clone(), append.clone(), limits).is_err());
+    let mut limits = SuccessorBundleLimits::default();
+    limits.catalog.mapping.max_collection_entries = input.mapping.entries.len();
+    assert!(transition_owned_catalog(input, append, limits).is_err());
+}

@@ -659,7 +659,9 @@ fn compile_catalog(
 /// may append other domains after skill compilation, so the final mapping registry
 /// need not equal the receipt's staged registry. The exact final mapping digest
 /// and schema identity are binding authority here; the host validates/publishes
-/// the registry history and reviewed compiler provenance separately.
+/// the registry history and reviewed compiler provenance separately. Historical
+/// source files must be an immutable matching subset of the final mapping pins;
+/// adding another catalog never rewrites the original compilation receipt.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct OwnedSkillRolePackageInput {
@@ -678,6 +680,21 @@ pub struct OwnedSkillRoleIndex {
     positions: BTreeMap<GemDefId, usize>,
     sources: BTreeMap<ExternalSelector, MappingOutcome>,
 }
+/// A historical compiler receipt can cover fewer files than a later combined
+/// catalog. Its original source context and every file hash must still match.
+/// Final schema/mapping digests remain exact and are checked independently.
+fn provenance_is_subset(previous: &SourcePin, current: &SourcePin) -> bool {
+    previous.system == current.system
+        && previous.revision == current.revision
+        && previous.files.iter().all(|pin| {
+            current
+                .files
+                .binary_search_by(|value| value.path.cmp(&pin.path))
+                .ok()
+                .is_some_and(|index| current.files[index].sha256 == pin.sha256)
+        })
+}
+
 impl OwnedSkillRoleIndex {
     pub fn new<I: DefinitionSchemaIndex>(
         mut input: OwnedSkillRolePackageInput,
@@ -704,7 +721,7 @@ impl OwnedSkillRoleIndex {
         if input.definitions != *definitions.identity()
             || input.definitions != mappings.input().definitions
             || input.mapping != *mappings.identity()
-            || input.compilation.source != mappings.input().source
+            || !provenance_is_subset(&input.compilation.source, &mappings.input().source)
             || input.compilation.policy.version != mappings.input().policy_version
             || input.roles.len() != input.compilation.gem_count
         {

@@ -181,7 +181,7 @@ fn fixture() -> Fixture {
     skill_ports.parameters.members.push(target_parameter());
     let schema = OwnedDefinitionSchemaPackage::new(
         SchemaPackageInput {
-            schema_version: 1,
+            schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: namespace(),
             release: key("fixture"),
             semantics_version: key("projection-schema-v1"),

@@ -9,6 +9,7 @@ enum Exposure<'a> {
     Root {
         owners: Vec<OwnerView<'a>>,
         skills: Option<&'a DeclaredSet<SkillDefId>>,
+        implicit_passives: Vec<ImplicitPassiveRoots<'a>>,
     },
     Skill {
         owner: SlotOwnerDefId,
@@ -30,12 +31,17 @@ pub(super) struct Context<'a> {
 impl<'a> Context<'a> {
     pub(super) fn occurrence(self, key: ProviderKey) -> ProviderOccurrence<'a> {
         let exposure = match self.exposure {
-            Exposure::Root { owners, skills } => ProviderExposure::Root {
+            Exposure::Root {
+                owners,
+                skills,
+                implicit_passives,
+            } => ProviderExposure::Root {
                 owners: owners
                     .into_iter()
                     .map(|v| ProviderOwner::new(v.owner, v.declarations))
                     .collect(),
                 skills,
+                implicit_passives,
             },
             Exposure::Skill {
                 owner,
@@ -258,6 +264,82 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         }
         Ok(true)
     }
+    /// This borrowed evidence is exposed without turning partial membership into
+    /// complete provider coverage. Whole-request binding reports its gaps; the
+    /// occurrence consumer must inspect it when compiling known root owners.
+    pub(super) fn implicit_roots(
+        &mut self,
+        owner: SlotOwnerDefId,
+        set: &'a DeclaredSet<PassiveNodeDefId>,
+    ) -> Result<ImplicitPassiveRoots<'a>> {
+        self.charge(set.members.len() + 1)?;
+        if let SchemaClosure::Partial { gaps } = &set.closure {
+            self.charge(gaps.len())?;
+            if gaps.is_empty() {
+                return self.fault(Some(owner_subject(&owner)));
+            }
+        }
+        let mut seen = BTreeSet::new();
+        let mut nodes = Vec::with_capacity(set.members.len());
+        for id in &set.members {
+            if !seen.insert(id) {
+                return self.fault(Some(owner_subject(&owner)));
+            }
+            self.charge(1)?;
+            let schema = self.index.definition(id);
+            let subject = SchemaSubject::Definition(id.address());
+            match &schema {
+                SchemaLookup::NamespaceMismatch => {
+                    return Err(BindingError::Index {
+                        subject: Some(Box::new(subject)),
+                        fault: IndexFault::ForeignReference,
+                    });
+                }
+                SchemaLookup::InconsistentIndex => {
+                    return Err(BindingError::Index {
+                        subject: Some(Box::new(subject)),
+                        fault: IndexFault::InconsistentLookup,
+                    });
+                }
+                SchemaLookup::Known(schema) => {
+                    // Positive paid-allocation admission contradicts an implicit root.
+                    // A partial empty set is still representable and remains unresolved.
+                    if !schema.pools.members.is_empty() {
+                        return self.fault(Some(subject));
+                    }
+                    if let SchemaClosure::Partial { gaps } = &schema.pools.closure {
+                        self.charge(gaps.len())?;
+                        if gaps.is_empty() {
+                            return self.fault(Some(subject));
+                        }
+                    }
+                }
+                SchemaLookup::Unmapped(gaps) => {
+                    self.charge(gaps.len())?;
+                    if gaps.is_empty() {
+                        return self.fault(Some(subject));
+                    }
+                }
+                SchemaLookup::Missing => {}
+            }
+            nodes.push((id, schema));
+        }
+        Ok(ImplicitPassiveRoots::new(owner, set, nodes))
+    }
+    pub(super) fn bind_implicit_roots(
+        &mut self,
+        roots: &ImplicitPassiveRoots<'a>,
+        site: &BindingSite,
+    ) -> Result {
+        self.closure(roots.declaration(), owner_subject(roots.owner()), site)?;
+        for (id, lookup) in roots.nodes() {
+            let subject = SchemaSubject::Definition(id.address());
+            if let Some(schema) = self.found(lookup.clone(), subject.clone(), site)? {
+                self.closure(&schema.pools, subject, &site.at(BindingFacet::Pool))?;
+            }
+        }
+        Ok(())
+    }
     fn root_context(
         &mut self,
         root: &ProviderRoot,
@@ -270,11 +352,31 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         let build = self.request.build().input();
         let mut owners = Vec::new();
         let mut skills = None;
+        let mut implicit_passives = Vec::new();
         let owner = match root {
             ProviderRoot::Character => {
-                owners.push(SlotOwnerDefId::Class(build.character.class.clone()));
+                let class = &build.character.class;
+                let class_owner = SlotOwnerDefId::Class(class.clone());
+                owners.push(class_owner.clone());
+                if let Some(schema) = self.definition(class, site)? {
+                    implicit_passives
+                        .push(self.implicit_roots(class_owner, &schema.implicit_passives)?);
+                }
                 if let Some(id) = &build.character.ascendancy {
-                    owners.push(SlotOwnerDefId::Ascendancy(id.clone()));
+                    let owner = SlotOwnerDefId::Ascendancy(id.clone());
+                    owners.push(owner.clone());
+                    if let Some(schema) = self.definition(id, site)? {
+                        implicit_passives
+                            .push(self.implicit_roots(owner, &schema.implicit_passives)?);
+                    }
+                }
+                let mut seen = BTreeSet::new();
+                for roots in &implicit_passives {
+                    for (id, schema) in roots.nodes() {
+                        if matches!(schema, SchemaLookup::Known(_)) && seen.insert(*id) {
+                            owners.push(SlotOwnerDefId::PassiveNode((*id).clone()));
+                        }
+                    }
                 }
                 None
             }
@@ -391,6 +493,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             exposure: Exposure::Root {
                 owners: views,
                 skills,
+                implicit_passives,
             },
             actor: ActorKey::Player,
             role: provider_role(root),
@@ -446,7 +549,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         purpose: Purpose,
     ) -> Result<bool> {
         match &context.exposure {
-            Exposure::Root { owners, skills } => {
+            Exposure::Root { owners, skills, .. } => {
                 self.charge(owners.len() + 1)?;
                 if let Some(view) = owners
                     .iter()
@@ -762,7 +865,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             Exposure::Skill { declarations, .. } => {
                 self.required_choices(&provider_owner, &declarations.choices, site)?
             }
-            Exposure::Root { owners, skills } => {
+            Exposure::Root { owners, skills, .. } => {
                 if let Some(view) = owners
                     .iter()
                     .find(|view| view.owner == key.output.declaration)

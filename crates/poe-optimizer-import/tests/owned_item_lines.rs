@@ -500,8 +500,8 @@ fn strict_codec_and_policy_reject_contradictory_inputs() {
     );
     let text = String::from_utf8(bytes).unwrap();
     let duplicated = text.replacen(
-        r#""schema_version":1"#,
-        r#""schema_version":1,"schema_version":1"#,
+        '{',
+        &format!("{{\"schema_version\":{},", p.input().schema_version),
         1,
     );
     assert_ne!(duplicated, text);
