@@ -297,14 +297,31 @@ diagnostics; neither roundtrip requires reproducing original XML bytes or UI ide
 
 ## Distribution and retirement boundary
 
-Module-level independence is an intermediate step. The final production feature/crate
-closure must exclude the legacy source parser/interpreter, UI/loadout replay, profile
-preparation and bundled source-shaped snapshot as well as the PoB/Lua crates. A successful
-`--no-default-features` build currently proves only the latter exclusion; it is not proof
-that the legacy native implementation has been removed.
+The final production feature/crate closure must exclude the legacy source parser/interpreter,
+UI/loadout replay, profile preparation and bundled source-shaped snapshot as well as the
+PoB/Lua crates. Enforce this structurally, rather than relying on callers to avoid legacy APIs.
+Data and Engine now expose an owned-only library closure through `default-features = false`.
+Their transitional `legacy` feature retains existing consumers; it is not part of a new
+application's native calculation contract. Shared timing/resistance primitives are always
+available, while their source-package adapters compile only with `legacy`.
 
-Use an explicit offline release step to acquire/convert PoB definitions and validate the
-owned package. Ordinary Cargo compilation and candidate evaluation must not acquire the
+`check-owned-boundaries.py` inspects the resolved normal/build feature graph and rustc's
+actual dependency files. Only owned modules and explicit pure numerical leaves may enter
+that isolated closure; source programs, bundled snapshots and profile modules fail the check.
+CI runs it separately because workspace feature unification can re-enable legacy through
+Import or Native. Default CLI builds now exclude PoB/Lua, but still include those live legacy
+native consumers. Neither an isolated library build nor the absence of Lua establishes that
+the complete CLI distribution has reached the end state. The final shipped-artifact test
+must exercise the real application with only an owned package and caller-authored input.
+
+Use an explicit offline release/data-build step to acquire/convert PoB definitions and
+validate the owned package. This is the requested build-time PoB import: source data,
+source parsing and any authoring-language bindings terminate at the generated artifact.
+A frontend or search worker loads the same owned package regardless of which source or
+authoring tool produced it. Source syntax changes require converter work; they must not
+force changes to native operation semantics or UI records when game meaning is unchanged.
+
+Ordinary Cargo compilation and candidate evaluation must not acquire the
 source or regenerate data. Test the shipped native distribution from a fresh directory
 with only its owned package and caller-owned project. Keep optional reference tooling
 behind a separate feature or executable and verify the dependency/package contents in CI.

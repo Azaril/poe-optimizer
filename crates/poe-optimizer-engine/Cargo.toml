@@ -3,13 +3,18 @@ name = "poe-optimizer-engine"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.93"
-description = "Incremental native Rust translation of pinned PoB calculation kernels"
+description = "Owned native game-rule evaluation with optional legacy calculation adapters"
 publish = false
+
+[features]
+# Existing consumers retain this feature until owned preparation replaces them.
+default = ["legacy"]
+legacy = ["poe-optimizer-data/legacy"]
 
 [dependencies]
 poe-optimizer-core = { path = "../poe-optimizer-core" }
 serde = { version = "1", features = ["derive"] }
-poe-optimizer-data = { path = "../poe-optimizer-data" }
+poe-optimizer-data = { path = "../poe-optimizer-data", default-features = false }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
 mlua = { version = "=0.12.1", features = ["luajit", "vendored"] }

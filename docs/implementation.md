@@ -11,7 +11,89 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: offline tree catalog and owned tree normalization (after `9c0f618`).**
+**Current checkpoint: owned library isolation and legacy retirement (after `7391fd7`).**
+The controlling [domain architecture](domain-architecture.md) explicitly terminates source
+conversion at an owned semantic artifact. The implementation now enforces a library-level
+boundary: Data/Engine `default-features = false` excludes source programs/interpreter,
+profile preparation, source-shaped snapshot and source-embedding fingerprint. Shared
+numerical timing/resistance leaves stay available; their legacy adapters keep their
+existing APIs behind the transitional `legacy` feature. No new source interpreter or
+PoB UI lifecycle was added. The CLI makes PoB opt-in; reference commands use `--features pob`
+and full workspace validation uses `--all-features` to retain optional tests.
+
+`check-owned-boundaries.py` checks both resolved normal/build dependency features and
+actual rustc source dependency files. CI runs this separately from workspace builds,
+whose feature unification can activate legacy. The isolated closure currently contains
+six Data and thirteen Engine source files. This does not complete the application-level
+boundary: Import/Native still activate legacy in the CLI, and `search-build` still uses
+its old profile preparation. The next paired retirement must migrate those consumers.
+
+The unused `CompiledActorModifiers::bucket_count`, four RuneBudget counters,
+`ItemSetTransform::catalog_index` and `NativeItemLoadProvider::dependencies_mut` are removed.
+The test-only `parse_mace_item` API, wrapper and local-only branch are removed. Useful parser
+laws run through the actual equipment parser with an explicit physical item identity.
+Only the obsolete API-restriction assertion is discarded. No numerical golden or live
+Spark/Mace pipeline was deleted. Native identity now hashes the timing/resistance
+ordinary bodies as well as their moved adapters, closing a stale-identity omission.
+
+The next allocation phase has a source-independent Core DTO, bounded Data validator and
+offline exporter. `allocations/rules.json` binds to the existing current schema and stores
+4,503 exact node/pool costs, including three explicit zero costs, plus three budget recipes.
+Acquired capacities are Unmapped and the budget registry is Partial. Source pins/review
+facts are separate tooling artifacts. No new IDs are allocated; the current 7,469-entry
+ledger and 110 query rows are unchanged. Missing costs are unknown, and granted access
+never implies free points. This component provides invariant costs only; conditional cost
+mechanics require explicit conversion/coverage rather than universal application of a row.
+The native usage/capacity executor is not delivered by this checkpoint.
+
+**Validation:** final scope is **545 Rust tests**: 59 owned Data, 127 owned Engine,
+10 migrated item-parser laws, nine equipment tests, 146 default CLI and 194 reference-enabled
+CLI tests. All passed. The 14 new exporter tests pass and reproduce the generated artifacts.
+Strict workspace/all-feature, default-CLI and owned-only Clippy, formatting, owned-only
+Data/Engine WASM, default PoB/Lua dependency exclusion and actual compiled-source closure
+checks pass. All nine protected byte hashes, the current bundle and the clean source pin
+remain unchanged; three new JSON artifacts preserve bytes under Windows Git filters.
+
+Receipt: `runs/owned-boundary-01/validated-checkpoint.json`, with logs and independent
+source/binding review beside it. Both complete CLI test modes were run, including fresh
+PoB numerical matrices; this was not a full workspace test run. The existing Windows
+reference-linker LNK4098 warning predates the change. No original native-build or performance
+claim is made: **0/5** remains. Whole-request and global contributor closure gates are unchanged.
+The baseline publication CI is pending; record the new exact SHA/run after pushing.
+
+**Open items requiring owner input:** the automatic review rejected the parallel Engine
+allocation implementation because it retained an earlier read-only assignment. A precise
+implementation permission question is pending; no rejected file was written or bypassed.
+The earlier access-route question is also pending: imported Pending access cannot be
+silently changed into Ordinary proof. Independently verified metrics from partial selected
+inputs remains unanswered; existing closure gates stay unchanged.
+
+**Active resume point (the only current queue):**
+
+1. Integrate the delivered injected allocation package with native usage,
+   shared-plus-maximum and each-scope budgets, acquired capacities and access prerequisites.
+   Resolve the pending implementation-review authorization before the rejected Engine edits. Use the
+   real catalog and saved alternatives. Keep missing edges and unknown contributors explicit.
+   Handle From Nothing/radius and alternate/granted access as provider dependencies,
+   not blanket connectivity bypass. Do not infer rewards from observed spent points.
+2. Convert passive effects and class-dependent views through owned rules, preserving
+   physical identities and exact selected attribute/attached choices. Refining existing
+   partial descriptors needs an explicit checked refinement policy; never allocate
+   replacement identities. Preserve existing policy authority on subsequent transitions.
+3. Complete common item input/effect families and contributor membership, contrasting
+   the real cold/Life ring and local weapon. Preserve source encoding and distinct
+   range/corruption/final rounding stages. Ordered transforms remain required; a partial
+   catalyst scalar cannot become effective resistance.
+4. Complete real player/actor receivers, skill inputs and exact support/provider relations
+   for Twister and Sniper together, retaining the other three originals as model stress
+   cases. Preserve all 110 availability rows, then run independent whole-build holdouts.
+5. Migrate each real numerical preparation/action consumer and independent realization
+   checks, deleting its replaced profile/source closure in the same checkpoint. Bind
+   semantic edits to the evaluator across all joint search dimensions. Extend the proven
+   owned-only library closure to the complete compiled/shipped application. Measure
+   changed-build/multicore throughput before claiming complete decoupling or performance.
+
+**Previous checkpoint: offline tree catalog and owned tree normalization (after `9c0f618`).**
 The [domain architecture](domain-architecture.md) remains the target: source conversion,
 saved-build import, native evaluation, search and UI have separate responsibilities.
 No Lua interpreter, PoB UI lifecycle or named-skill path was added. The compiler reads
@@ -88,34 +170,6 @@ Parallel public CI review found exact published `9c0f618` run 35022259181 pendin
 jobs started; predecessor `60e65a9` had five completed successful jobs and three running,
 with no failed jobs. Historical failures have later repair evidence. Pending is not a
 pass; record the new publication's exact SHA/status separately.
-
-**Open design question:** independently verified metrics from partial selected inputs
-remains unanswered. Current closure gates stay unchanged; none of the next work requires
-relaxing them. No other owner decision blocks the next phase.
-
-**Active resume point (the only current queue):**
-
-1. Implement injected allocation costs, shared-plus-maximum and each-scope budgets,
-   explicit acquired capacities and scope-aware access prerequisites. Use the real
-   catalog and saved alternatives. Keep missing edges and unknown contributors explicit.
-   Handle From Nothing/radius and alternate/granted access as provider dependencies,
-   not blanket connectivity bypass. Do not infer rewards from observed spent points.
-2. Convert passive effects and class-dependent views through owned rules, preserving
-   physical identities and exact selected attribute/attached choices. Refining existing
-   partial descriptors needs an explicit checked refinement policy; never allocate
-   replacement identities. Preserve existing policy authority on subsequent transitions.
-3. Complete common item input/effect families and contributor membership, contrasting
-   the real cold/Life ring and local weapon. Preserve source encoding and distinct
-   range/corruption/final rounding stages. Ordered transforms remain required; a partial
-   catalyst scalar cannot become effective resistance.
-4. Complete real player/actor receivers, skill inputs and exact support/provider relations
-   for Twister and Sniper together, retaining the other three originals as model stress
-   cases. Preserve all 110 availability rows, then run independent whole-build holdouts.
-5. Migrate each real numerical preparation/action consumer and independent realization
-   checks, deleting its replaced profile/source closure in the same checkpoint. Bind
-   semantic edits to the evaluator across all joint search dimensions. Prove owned-only
-   compiled/shipped distribution and changed-build/multicore throughput before claiming
-   complete decoupling or performance.
 
 **Previous checkpoint: implicit passive ownership and schema-2 succession (`9c0f618`).**
 Implemented Character-owned implicit roots, deduplication and explicit partial gaps,

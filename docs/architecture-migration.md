@@ -63,7 +63,9 @@ physical passive identity. Attached options belong to parent choice slots. Schem
 makes root membership explicit; point pools admit Either scope where appropriate. The
 [passive topology contract](owned-passive-topology.md) specifies separate injected costs,
 shared-plus-maximum and each-scope budgets, acquired capacities and access constraints.
-The budget/access executor remains next; structural tree conversion is delivered without a legality claim.
+The injected allocation cost/budget DTO, validated package and offline source conversion
+are now delivered. The native usage/capacity/access executors remain next; structural
+conversion and validated storage do not establish a legal build.
 
 The finite tree exporter and Import compiler now extend the single current ledger from
 2,589 to 7,469 identities. The same finalizer emits a typed tree normalization artifact,
@@ -107,10 +109,15 @@ migrated; shipped game registries remain empty until actual receiver data is rev
 Do not use a fabricated class/usage owner or change partial-input gates to bridge the gap.
 
 D5's distribution exit must inspect both normal dependency edges and shipped/compiled
-contents. The current no-default-features check excludes six PoB/Lua packages, but still
-compiles the legacy interpreter, snapshot and Spark/Mace paths in existing crates. Add an
-owned-only feature/crate closure when the named preparation/search consumers migrate;
-test it from a directory containing only owned artifacts. The independent oracle stays
+contents. Data/Engine now have an isolated owned-only feature closure, checked against
+actual compiler dependency files in CI. Legacy source/parser/profile/snapshot modules
+and source-embedding fingerprints are excluded when these libraries disable defaults.
+The root CLI now makes PoB opt-in, while full CI explicitly enables reference tests.
+Root Import/Native consumers still activate the legacy library features: moving those
+callers and testing the shipped application with only owned artifacts remains open.
+A separate library build is evidence for the seam, not completion of D5. Keep existing
+legacy callers behind that temporary feature until each named replacement is admitted;
+remove their entry points and feature dependencies together. The independent oracle stays
 optional. The [retirement inventory](legacy-retirement.md) names the remaining pairs.
 
 ## Current offline production data gate

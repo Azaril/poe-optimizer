@@ -139,7 +139,8 @@ Install Git and Rust through rustup, with a working native linker
 (on Windows, Visual Studio Build Tools with the C++ toolchain).
 Use the repository-pinned Rust toolchain so local formatting and lint checks match CI.
 
-For the native-only executable (supported profiles are listed in [native backend](docs/native-backend.md)):
+The default executable excludes PoB/Lua. Its legacy numerical coverage is listed in
+[native backend](docs/native-backend.md); owned evaluation consumes explicitly supplied artifacts:
 
 ```powershell
 cargo build -p poe-optimizer-cli --release --no-default-features --locked
@@ -147,6 +148,8 @@ cargo run -p poe-optimizer-cli --no-default-features --locked -- evaluate tests/
 cargo run -p poe-optimizer-cli --no-default-features --locked -- search-build --problem examples/passive-equipment-search.json --jobs 4 --max-evaluations 1000
 ```
 
+For reference commands, enable `--features pob` explicitly. A reference-enabled build
+retains the existing PoB default for legacy `evaluate`; pass `--backend native` to compare.
 For the full development workspace, including optional PoB references and parity tests:
 
 ```powershell
@@ -154,9 +157,15 @@ git submodule update --init --recursive
 cargo run --locked -- --help
 cargo run --locked -- --version
 cargo fmt --all -- --check
-cargo clippy --workspace --all-targets --locked -- -D warnings
-cargo test --workspace --all-targets --locked
+cargo clippy --workspace --all-features --all-targets --locked -- -D warnings
+cargo test --workspace --all-features --all-targets --locked
 ```
+
+Data and Engine can also be consumed with `default-features = false`. That library
+closure excludes legacy source programs, profiles and snapshots; `python scripts/check-owned-boundaries.py`
+verifies the actual compiler inputs. The CLI still includes legacy native consumers through
+Import/Native; it is not yet an owned-only distribution. See the
+[distribution boundary](docs/domain-architecture.md#distribution-and-retirement-boundary).
 
 The project selects stable Rust and declares Rust 1.93 as its minimum version. Cargo
 builds a pinned LuaJIT runtime and the native UTF-8 module when the PoB feature is enabled; no Lua
@@ -168,7 +177,7 @@ Import and evaluate the preserved original single-build fixture:
 ```powershell
 cargo run --locked -- import tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt
 New-Item -ItemType Directory -Force runs | Out-Null
-cargo run --locked -- evaluate tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --timeout-seconds 30 --output runs/example.json --export runs/example.xml
+cargo run --features pob --locked -- evaluate --backend pob tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --timeout-seconds 30 --output runs/example.json --export runs/example.xml
 ```
 
 The current `example.import.txt` contains five builds, one per line; use the
@@ -253,7 +262,7 @@ and average-damage modes do not yield an invented sustainable DPS objective.
 Configure an objective or reassess a saved evaluation:
 
 ```powershell
-cargo run --locked -- evaluate tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
+cargo run --features pob --locked -- evaluate --backend pob tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
 cargo run --locked -- assess runs/assessed.json --objective examples/evaluation-objective.json
 ```
 
@@ -266,7 +275,7 @@ Compare complete caller-supplied builds with the optional PoB reference backend:
 
 ```powershell
 New-Item -ItemType Directory -Force runs | Out-Null
-cargo run --locked -- search-calibration --catalog examples/calibration-catalog.json --objective examples/calibration-objective.json --jobs 2 --max-evaluations 5 --output runs/calibration-search.json --export runs/calibration-best.xml
+cargo run --features pob --locked -- search-calibration --catalog examples/calibration-catalog.json --objective examples/calibration-objective.json --jobs 2 --max-evaluations 5 --output runs/calibration-search.json --export runs/calibration-best.xml
 ```
 
 The required catalog uses schema 1 with `builds: [{ "id": "...", "path": "..." }]`;

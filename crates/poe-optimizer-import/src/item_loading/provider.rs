@@ -55,9 +55,6 @@ impl<'a, P> NativeItemLoadProvider<'a, P> {
     pub fn dependencies(&self) -> &P {
         &self.dependencies
     }
-    pub fn dependencies_mut(&mut self) -> &mut P {
-        &mut self.dependencies
-    }
 }
 fn error(error: FormatError) -> DependencyResult<String> {
     match error {

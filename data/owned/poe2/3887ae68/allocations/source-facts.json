@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "scope": "owned-allocation-cost-and-budget-component",
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/PassiveSpec.lua",
+        "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+      },
+      {
+        "path": "src/Classes/PassiveTree.lua",
+        "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+      },
+      {
+        "path": "src/Data/QuestRewards.lua",
+        "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af"
+      },
+      {
+        "path": "src/Modules/Build.lua",
+        "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+      },
+      {
+        "path": "src/Modules/Calcs.lua",
+        "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+      },
+      {
+        "path": "src/TreeData/0_5/tree.json",
+        "sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95"
+      }
+    ]
+  },
+  "source_manifest_sha256": "27d143967927d0705eefd5879e17946b30bfe8e69a92718bd44ace50428923a1",
+  "export_policy_sha256": "83d79d4fe0cd36dcc1192d7664638d92d8b7ea8d3ca49292836a84a94d1838c3",
+  "catalog_sha256": "37db1255f28d05f67a6d81dfe286bcc698a9811e907c67d29cf640d9c28e5557",
+  "bundle_transition_sha256": "dc8a42abb09aa6e84a481aa86921532280b88c6d58619c9899921181c1acdf1c",
+  "bindings": {
+    "registry": "4628e3941e6cfd735b0ed97357e11f13339d03c0e119525e3bafdebc816aeb15",
+    "mapping": "54653ea98cea642cd6f3c434fccf60257c9ec1e6a3298e81e6de33d9a63c3203",
+    "normalization": "a194afb11f92394cda0025f6fd0663f150bbf53e8dab50aea5ee568acb33d003",
+    "tree": "fb22b945a916b1e7c5145e5bb76c8d359f62bfaec597f3304301dc0cab624211",
+    "definitions": {
+      "game": "poe2",
+      "release": "pob-3887ae68-components",
+      "schema_version": 2,
+      "content_sha256": "9ee542bb473f7c215e973ccf80b3b85a09f7ccf483a8ab689255fcf4a60bcda2",
+      "semantics_version": "owned-mechanics-components-v1"
+    }
+  },
+  "algorithms": {
+    "cost": "pinned-count-alloc-nodes-v1",
+    "budget": "shared-max-each-scope-and-ascendancy-v1"
+  },
+  "cost_rows": 4503,
+  "zero_cost_source_tokens": [
+    "8415",
+    "9988",
+    "28254"
+  ],
+  "excluded_source_rows": {
+    "implicit_root": 28,
+    "attached_choice": 15,
+    "unsupported": 368
+  },
+  "budget_rows": 3,
+  "capacity": "acquired_progression_unmapped",
+  "budget_membership": "partial_additional_point_constraints_not_converted",
+  "access": "outside_this_artifact",
+  "source_execution": false,
+  "legality_established": false,
+  "artifact": {
+    "file": "rules.json",
+    "bytes": 1909831,
+    "sha256": "30a79be0d556a022ac30e60edf2beabb6d8e32bd16a101e0c10ecb40ca6898b3"
+  }
+}

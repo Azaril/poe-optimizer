@@ -129,3 +129,26 @@ compares independently realized results and reports unsupported mechanics. CLI, 
 GUI and search use the same domain services. Retire the legacy tree/profile consumer and
 its source/UI dependencies when its real replacement and numerical invariants pass;
 do not retain a second catalog or a general source interpreter as a compatibility layer.
+
+## Injected allocation package checkpoint
+
+Core now defines version-1 `AllocationRulesInput`, including node/pool integer costs,
+budget membership/closure, `Total`, `SharedPlusMaximumScoped` and `EachScope` usage, and
+explicit final-stat capacity bindings. Data validates bounded canonical packages against
+the exact owned schema. It neither executes the usage formulas nor certifies capacity or
+access. Missing cost rows are unknown; explicit zero is a supplied game rule.
+
+A cost row asserts an invariant cost across the admitted route, choices and scope.
+Conditional cost modifiers require a modeled rule and corresponding coverage; a static
+row must not silently suppress their effect. Granted access does not waive a node's cost.
+A uniform capacity must agree across all authored weapon alternatives; per-scope capacity
+uses that alternative's final Integer PlayerActor stat. Capacity cannot be reconstructed
+from spent points, configured level or a source UI's endgame maximum.
+
+The [offline component](../data/owned/poe2/3887ae68/allocations/README.md) emits 4,503 exact
+costs and three budget declarations using the current owned IDs. Its acquired capacities
+are Unmapped and budget membership is Partial. Source policy/provenance remain separate
+from `rules.json`; the native loader needs only that artifact and its owned schema. The
+native usage/capacity executor and access resolution remain next. This does not change
+the complete-request or contributor-closure gates, finalize any Pending allocation,
+or establish original-build legality.

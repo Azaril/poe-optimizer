@@ -65,10 +65,6 @@ fn weapon_local_consumption_and_remaining_global_records_are_disjoint() {
     );
     assert_eq!(item.allowed_slots(), &["Weapon 1"]);
     assert!(
-        crate::mace_item::parse_mace_item(text, &data).is_err(),
-        "legacy API silently expanded"
-    );
-    assert!(
         parse_equipment_item(
             &text.replace("+20 to Strength", "+20 to Accuracy Rating"),
             &data,

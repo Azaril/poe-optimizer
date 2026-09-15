@@ -12,7 +12,7 @@ From the repository root, with the optional PoB backend available:
 
 ```powershell
 New-Item -ItemType Directory -Force runs | Out-Null
-cargo run --release --locked -- search-calibration --catalog examples/calibration-catalog.json --objective examples/calibration-objective.json --jobs 4 --max-evaluations 5 --timeout-seconds 60 --output runs/calibration-search.json --export runs/calibration-winner.xml
+cargo run --features pob --release --locked -- search-calibration --catalog examples/calibration-catalog.json --objective examples/calibration-objective.json --jobs 4 --max-evaluations 5 --timeout-seconds 60 --output runs/calibration-search.json --export runs/calibration-winner.xml
 ```
 
 The [example manifest](../examples/calibration-catalog.json) explicitly selects the four

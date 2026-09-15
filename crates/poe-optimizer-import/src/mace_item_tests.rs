@@ -12,6 +12,13 @@ const MODS: [&str; 5] = [
 fn data() -> GameDataPackage {
     bundled_snapshot().unwrap().package().clone()
 }
+// Exercise the production equipment parser with an explicit test-only instance.
+fn parse_payload(
+    input: &str,
+    data: &GameDataPackage,
+) -> Result<ValidatedMaceWeapon, MaceItemError> {
+    parse_mace_equipment(input, data, 1)
+}
 fn rare() -> String {
     format!("{RARE}\n{}", MODS.join("\n"))
 }
@@ -20,7 +27,7 @@ fn rare() -> String {
 fn parses_reviewed_local_families_and_retains_exact_ordered_roll_evidence() {
     let data = data();
     let text = rare();
-    let weapon = parse_mace_item(&text, &data).unwrap();
+    let weapon = parse_payload(&text, &data).unwrap();
     assert_eq!(weapon.weapon_key(), "wooden_club");
     assert_eq!(weapon.rarity(), MaceItemRarity::Rare);
     assert_eq!(weapon.rare_name(), Some("Study Hammer"));
@@ -64,8 +71,8 @@ fn line_edge_whitespace_and_blank_lines_preserve_bytes_hashes_and_locations() {
     let data = data();
     let plain = rare();
     let decorated = format!("\r\n\t{}  \r\n\r\n", plain.replace('\n', "  \r\n\t"));
-    let a = parse_mace_item(&plain, &data).unwrap();
-    let b = parse_mace_item(&decorated, &data).unwrap();
+    let a = parse_payload(&plain, &data).unwrap();
+    let b = parse_payload(&decorated, &data).unwrap();
     assert_eq!(a.local_modifiers(), b.local_modifiers());
     assert_eq!(b.source_text(), decorated);
     assert_ne!(a.source_sha256(), b.source_sha256());
@@ -80,17 +87,17 @@ fn line_edge_whitespace_and_blank_lines_preserve_bytes_hashes_and_locations() {
 fn duplicate_lines_stay_distinct_and_removal_rebuilds_only_retained_rolls() {
     let data = data();
     let repeated = format!("{RARE}\n{}\n{}\n{}", MODS[0], MODS[0], MODS[3]);
-    let item = parse_mace_item(&repeated, &data).unwrap();
+    let item = parse_payload(&repeated, &data).unwrap();
     assert_eq!(item.local_modifiers().len(), 3);
     assert_eq!(item.local_modifiers()[0], item.local_modifiers()[1]);
     assert_ne!(
         item.modifier_lines()[0].line_number,
         item.modifier_lines()[1].line_number
     );
-    let removed = parse_mace_item(&format!("{RARE}\n{}", MODS[3]), &data).unwrap();
+    let removed = parse_payload(&format!("{RARE}\n{}", MODS[3]), &data).unwrap();
     assert_eq!(removed.local_modifiers(), &item.local_modifiers()[2..]);
     assert!(
-        parse_mace_item(RARE, &data)
+        parse_payload(RARE, &data)
             .unwrap()
             .local_modifiers()
             .is_empty()
@@ -135,7 +142,7 @@ fn all_lines_require_an_exact_complete_rule_match_and_bounded_numeric_syntax() {
         "Implicits: 1",
     ] {
         assert!(
-            parse_mace_item(&format!("{RARE}\n{line}"), &data).is_err(),
+            parse_payload(&format!("{RARE}\n{line}"), &data).is_err(),
             "accepted {line}"
         );
     }
@@ -146,7 +153,7 @@ fn all_lines_require_an_exact_complete_rule_match_and_bounded_numeric_syntax() {
         "1000000% increased Critical Hit Chance",
     ] {
         assert!(
-            parse_mace_item(&format!("{RARE}\n{line}"), &data).is_ok(),
+            parse_payload(&format!("{RARE}\n{line}"), &data).is_ok(),
             "rejected {line}"
         );
     }
@@ -172,15 +179,15 @@ fn metadata_requires_ordered_unique_fields_and_admitted_rarity_base_and_limits()
         RARE.replace("Implicits: 0", "Implicits: 1"),
         RARE.replace("Study Hammer", "Study\0Hammer"),
     ] {
-        assert!(parse_mace_item(&text, &data).is_err(), "accepted {text:?}");
+        assert!(parse_payload(&text, &data).is_err(), "accepted {text:?}");
     }
-    assert!(parse_mace_item("", &data).is_err());
-    assert!(parse_mace_item(&format!("{RARE}{}", " ".repeat(MAX_MACE_ITEM_BYTES)), &data).is_err());
-    assert!(parse_mace_item(&format!("{RARE}\n{}", " ".repeat(257)), &data).is_err());
+    assert!(parse_payload("", &data).is_err());
+    assert!(parse_payload(&format!("{RARE}{}", " ".repeat(MAX_MACE_ITEM_BYTES)), &data).is_err());
+    assert!(parse_payload(&format!("{RARE}\n{}", " ".repeat(257)), &data).is_err());
     for count in [MAX_MACE_MODIFIER_LINES, MAX_MACE_MODIFIER_LINES + 1] {
         let text = format!("{RARE}\n{}", vec![MODS[3]; count].join("\n"));
         assert_eq!(
-            parse_mace_item(&text, &data).is_ok(),
+            parse_payload(&text, &data).is_ok(),
             count <= MAX_MACE_MODIFIER_LINES
         );
     }
@@ -194,13 +201,13 @@ fn authored_equip_level_overrides_base_level_without_using_item_level() {
         .unwrap()
         .requirements
         .level = 27;
-    let base = parse_mace_item(&NORMAL.replace("Item Level: 1", "Item Level: 100"), &data).unwrap();
+    let base = parse_payload(&NORMAL.replace("Item Level: 1", "Item Level: 100"), &data).unwrap();
     assert_eq!(base.item_level(), 100);
     assert_eq!(base.explicit_level_requirement(), None);
     assert_eq!(base.effective_level_requirement(), 27);
     for level in [0, 1, 26, 27, 60, 100] {
         let text = NORMAL.replace("Implicits: 0", &format!("LevelReq: {level}\nImplicits: 0"));
-        let item = parse_mace_item(&text, &data).unwrap();
+        let item = parse_payload(&text, &data).unwrap();
         assert_eq!(item.effective_level_requirement(), level);
     }
 }
@@ -216,16 +223,16 @@ fn configured_grammar_and_rule_id_are_injected_but_ambiguity_never_picks_a_rule(
     speed.template = "Attack rate is increased by {0}%".into();
     speed.captures = vec![ItemCaptureKind::UnsignedDecimal];
     let parsed =
-        parse_mace_item(&format!("{RARE}\nAttack rate is increased by 12.5%"), &data).unwrap();
+        parse_payload(&format!("{RARE}\nAttack rate is increased by 12.5%"), &data).unwrap();
     assert_eq!(
         parsed.local_modifiers()[0].rule_id,
         "configured_local_speed"
     );
     assert_eq!(parsed.local_modifiers()[0].values, vec![12.5]);
-    assert!(parse_mace_item(&format!("{RARE}\n{}", MODS[3]), &data).is_err());
+    assert!(parse_payload(&format!("{RARE}\n{}", MODS[3]), &data).is_err());
     for number in [".5", "1.", "1.2.3", "+1.5", "-1.5", "1e2"] {
         assert!(
-            parse_mace_item(
+            parse_payload(
                 &format!("{RARE}\nAttack rate is increased by {number}%"),
                 &data
             )
@@ -240,7 +247,7 @@ fn configured_grammar_and_rule_id_are_injected_but_ambiguity_never_picks_a_rule(
         .clone();
     data.item_modifier_rules.push(duplicate);
     assert!(
-        parse_mace_item(&format!("{RARE}\nAttack rate is increased by 12.5%"), &data)
+        parse_payload(&format!("{RARE}\nAttack rate is increased by 12.5%"), &data)
             .unwrap_err()
             .to_string()
             .contains("multiple")
@@ -269,11 +276,11 @@ fn xml_item_source_helper_retains_crlf_and_decodes_only_compatible_complete_text
         crate::xml_compat::validate_native(&xml).unwrap();
         let document = roxmltree::Document::parse(&xml).unwrap();
         let payload = decode_item_payload(document.root_element()).unwrap();
-        let item = parse_mace_item(&payload, &data).unwrap();
+        let item = parse_payload(&payload, &data).unwrap();
         assert_eq!(item.source_text(), source);
         assert_eq!(
             item.diagnostic(),
-            parse_mace_item(&source, &data).unwrap().diagnostic()
+            parse_payload(&source, &data).unwrap().diagnostic()
         );
     }
     let plain = rare();
@@ -296,7 +303,7 @@ fn xml_item_source_helper_retains_crlf_and_decodes_only_compatible_complete_text
 #[test]
 fn canonical_metadata_headers_do_not_restrict_modifier_capture_spelling() {
     let data = data();
-    let normal = parse_mace_item(NORMAL, &data).unwrap();
+    let normal = parse_payload(NORMAL, &data).unwrap();
     assert_eq!(normal.rarity(), MaceItemRarity::Normal);
     assert_eq!(normal.item_level(), 1);
     assert_eq!(normal.quality(), 0);
@@ -309,16 +316,16 @@ fn canonical_metadata_headers_do_not_restrict_modifier_capture_spelling() {
         RARE.replace("LevelReq: 1", "LevelReq: 00"),
     ] {
         assert!(
-            parse_mace_item(&source, &data).is_err(),
+            parse_payload(&source, &data).is_err(),
             "accepted {source:?}"
         );
     }
     for quality in [0, 1, 20] {
         let source = NORMAL.replace("Quality: 0", &format!("Quality: {quality}"));
-        assert_eq!(parse_mace_item(&source, &data).unwrap().quality(), quality);
+        assert_eq!(parse_payload(&source, &data).unwrap().quality(), quality);
     }
     let source = format!("{RARE}\n020% increased Attack Speed");
-    let item = parse_mace_item(&source, &data).unwrap();
+    let item = parse_payload(&source, &data).unwrap();
     assert_eq!(item.local_modifiers()[0].values, [20.0]);
     assert_eq!(
         item.modifier_lines()[0].source,
@@ -330,7 +337,7 @@ fn canonical_metadata_headers_do_not_restrict_modifier_capture_spelling() {
 fn local_weapon_modifier_case_follows_source_parser_without_rewriting_source() {
     let data = data();
     let text = format!("{RARE}\nAdDs 2 To 5 PhYsIcAl DaMaGe\n20% INCREASED ATTACK SPEED");
-    let weapon = parse_mace_item(&text, &data).unwrap();
+    let weapon = parse_payload(&text, &data).unwrap();
     assert_eq!(weapon.source_text(), text);
     assert_eq!(weapon.local_modifiers()[0].values, vec![2.0, 5.0]);
     assert_eq!(weapon.local_modifiers()[1].values, vec![20.0]);
@@ -343,5 +350,5 @@ fn local_weapon_modifier_case_follows_source_parser_without_rewriting_source() {
     duplicate.id = "case_duplicate".into();
     duplicate.template = duplicate.template.to_ascii_lowercase();
     ambiguous.item_modifier_rules.push(duplicate);
-    assert!(parse_mace_item(&text, &ambiguous).is_err());
+    assert!(parse_payload(&text, &ambiguous).is_err());
 }

@@ -37,3 +37,6 @@ Cargo.lock text eol=lf
 # Current publication and finite tree conversion are verified byte-for-byte.
 /data/owned/poe2/3887ae68/current/*.json -text
 /data/owned/poe2/3887ae68/tree/*.json -text
+
+# Offline point-cost artifacts and their separate reviewed source receipts.
+/data/owned/poe2/3887ae68/allocations/*.json -text

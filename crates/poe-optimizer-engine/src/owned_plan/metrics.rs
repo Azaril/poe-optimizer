@@ -129,49 +129,54 @@ impl<I: DefinitionSchemaIndex> OwnedMetricPlan<I> {
     pub fn new_scratch(&self) -> OwnedPlanScratch {
         self.effects.new_scratch()
     }
-    pub fn evaluate(&self, scratch: &mut OwnedPlanScratch) -> Result<OwnedMetricReport> {
-        let mut work = graph::execute(&self.effects, scratch)?;
-        let result = (|| {
-            charge(&mut work, self.rows.len() + self.effects.gaps.len())?;
-            let requests = &self.effects.request().queries().input().requests;
-            let mut results = Vec::with_capacity(self.rows.len());
-            for (index, row) in self.rows.iter().enumerate() {
-                let request = &requests[index];
-                let value = if let Some(blocked) = graph::gate_result(
-                    &self.effects.query_gates[index],
-                    &scratch.values,
-                    request.metric.key(),
-                    &mut work,
-                )? {
-                    blocked
-                } else if let Some(row) = row {
-                    graph::read(&row.value, &scratch.values, request.metric.key(), &mut work)?
-                } else {
-                    EffectValue::unresolved(PlanGapReason::MissingMetricBinding)
-                };
-                if let EffectValue::Known { value } = &value {
-                    match (row, value) {
-                        (Some(row), ParameterValue::Quantity(quantity))
-                            if quantity.unit() == &row.unit => {}
-                        _ => {
-                            return Err(PlanError::Invalid(
-                                "metric value violates its bound type/unit".into(),
-                            ));
-                        }
+    pub(super) fn collect(
+        &self,
+        scratch: &OwnedPlanScratch,
+        work: &mut usize,
+    ) -> Result<OwnedMetricReport> {
+        charge(work, self.rows.len() + self.effects.gaps.len())?;
+        let requests = &self.effects.request().queries().input().requests;
+        let mut results = Vec::with_capacity(self.rows.len());
+        for (index, row) in self.rows.iter().enumerate() {
+            let request = &requests[index];
+            let value = if let Some(blocked) = graph::gate_result(
+                &self.effects.query_gates[index],
+                &scratch.values,
+                request.metric.key(),
+                work,
+            )? {
+                blocked
+            } else if let Some(row) = row {
+                graph::read(&row.value, &scratch.values, request.metric.key(), work)?
+            } else {
+                EffectValue::unresolved(PlanGapReason::MissingMetricBinding)
+            };
+            if let EffectValue::Known { value } = &value {
+                match (row, value) {
+                    (Some(row), ParameterValue::Quantity(quantity))
+                        if quantity.unit() == &row.unit => {}
+                    _ => {
+                        return Err(PlanError::Invalid(
+                            "metric value violates its bound type/unit".into(),
+                        ));
                     }
                 }
-                results.push(OwnedMetricResult {
-                    request: request.clone(),
-                    stat: row.as_ref().map(|row| row.stat.clone()),
-                    value,
-                });
             }
-            Ok(OwnedMetricReport {
-                identity: self.identity,
-                gaps: self.effects.gaps.clone(),
-                results,
-            })
-        })();
+            results.push(OwnedMetricResult {
+                request: request.clone(),
+                stat: row.as_ref().map(|row| row.stat.clone()),
+                value,
+            });
+        }
+        Ok(OwnedMetricReport {
+            identity: self.identity,
+            gaps: self.effects.gaps.clone(),
+            results,
+        })
+    }
+    pub fn evaluate(&self, scratch: &mut OwnedPlanScratch) -> Result<OwnedMetricReport> {
+        let mut work = graph::execute(&self.effects, scratch)?;
+        let result = self.collect(scratch, &mut work);
         if result.is_err() {
             scratch.values.clear();
             scratch.facts.clear();

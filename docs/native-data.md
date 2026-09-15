@@ -144,7 +144,7 @@ sections from source; broader source-version updates remain unfinished.
 To regenerate the reviewed package from the pinned PoB checkout, use the development CLI:
 
 ```powershell
-cargo run --locked -- extract-game-data --output runs/extracted-game-data.json
+cargo run --features pob --locked -- extract-game-data --output runs/extracted-game-data.json
 ```
 
 It also writes an `.extraction.json` evidence companion. Native evaluation can load the
@@ -529,7 +529,7 @@ cargo test -p poe-optimizer-data --locked
 cargo test -p poe-optimizer-engine --test data_injection --locked
 cargo test -p poe-optimizer-cli --no-default-features --test native_data --test native_data_cli --locked
 cargo test -p poe-optimizer-pob --test game_data --locked
-cargo test -p poe-optimizer-cli --test native_passive_parity --locked
+cargo test --features pob -p poe-optimizer-cli --test native_passive_parity --locked
 ```
 
 The optional source tests verify package records against pinned Lua data, modifier parsing

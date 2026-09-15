@@ -97,8 +97,9 @@ and general mutation coverage still require further work.
 
 ## CLI and dependency separation
 
-The default developer build includes the PoB reference feature and defaults to that backend.
-Select native explicitly when using that build:
+The default build excludes PoB and selects the native backend. `--features pob` enables
+the optional reference commands and retains the PoB default for that reference-enabled
+legacy CLI. Select native explicitly when comparing with that build:
 
 ```powershell
 cargo run --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml --backend native

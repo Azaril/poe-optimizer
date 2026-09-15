@@ -40,6 +40,8 @@ jobs:
         run: python scripts/tests/test_export_owned_resistance.py
       - name: Verify owned tree conversion
         run: python scripts/tests/test_export_owned_tree.py
+      - name: Verify owned allocation conversion
+        run: python scripts/tests/test_export_owned_allocations.py
       - name: Install Rust
         run: rustup show
       - name: Cache Rust dependencies
@@ -54,24 +56,30 @@ jobs:
         run: cargo fmt --all -- --check
       - name: Lint
         shell: pwsh
-        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('clippy', '--workspace', '--all-targets', '--locked', '--', '-D', 'warnings')
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('clippy', '--workspace', '--all-features', '--all-targets', '--locked', '--', '-D', 'warnings')
+      - name: Verify owned-only compiled boundaries
+        run: python scripts/check-owned-boundaries.py
+      - name: Lint owned-only libraries
+        run: cargo clippy -p poe-optimizer-engine -p poe-optimizer-data --no-default-features --lib --locked -- -D warnings
       - name: Test native-only CLI
         shell: pwsh
         run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-cli', '--no-default-features', '--all-targets', '--locked')
       - name: Lint native-only CLI
         shell: pwsh
         run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('clippy', '-p', 'poe-optimizer-cli', '--no-default-features', '--all-targets', '--locked', '--', '-D', 'warnings')
-      - name: Verify native-only runtime dependencies
+      - name: Verify default runtime dependencies
         shell: pwsh
         run: |
-          $dependencies = cargo tree -p poe-optimizer-cli --no-default-features --edges normal --prefix none --locked
+          $dependencies = cargo tree -p poe-optimizer-cli --edges normal --prefix none --locked
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $dependencies
           if ($dependencies -match '^(poe-optimizer-pob|poe-optimizer-lua-utf8|mlua|mlua-sys|lua-src|luajit-src) ') {
-            throw 'Native-only deployment includes a PoB or Lua runtime dependency'
+            throw 'Default deployment includes a PoB or Lua runtime dependency'
           }
       - name: Install portable target
         run: rustup target add wasm32-unknown-unknown
+      - name: Check portable owned-only libraries
+        run: cargo check -p poe-optimizer-engine -p poe-optimizer-data --no-default-features --lib --target wasm32-unknown-unknown --locked
       - name: Check portable core and native calculations
         run: cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data -p poe-optimizer-import -p poe-optimizer-native --lib --target wasm32-unknown-unknown --locked
 
@@ -108,7 +116,7 @@ jobs:
       - name: Test remaining workspace packages
         if: matrix.suite == 'workspace'
         shell: pwsh
-        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--exclude', 'poe-optimizer-native', '--exclude', 'poe-optimizer-pob', '--all-targets', '--locked', '--no-fail-fast')
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--all-features', '--exclude', 'poe-optimizer-native', '--exclude', 'poe-optimizer-pob', '--all-targets', '--locked', '--no-fail-fast')
       - name: Test native package
         if: matrix.suite == 'native'
         shell: pwsh

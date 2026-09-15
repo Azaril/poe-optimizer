@@ -102,9 +102,6 @@ impl CompiledActorModifiers {
         self.rows.capacity() * std::mem::size_of::<Row>()
             + self.buckets.capacity() * std::mem::size_of::<Bucket>()
     }
-    pub fn bucket_count(&self) -> usize {
-        self.buckets.len()
-    }
     fn bucket(&self, name: &str, kind: Kind) -> Option<&Bucket> {
         self.buckets
             .binary_search_by_key(&(name, kind), |bucket| (bucket.name, bucket.kind))

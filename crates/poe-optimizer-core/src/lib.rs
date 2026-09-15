@@ -83,6 +83,7 @@ pub struct ActorOutput {
     pub non_finite_values: BTreeMap<String, metrics::NonFiniteKind>,
 }
 
+pub mod owned_allocations;
 pub mod owned_binding;
 pub mod owned_build;
 pub mod owned_content;

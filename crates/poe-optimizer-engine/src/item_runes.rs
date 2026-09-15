@@ -82,18 +82,6 @@ impl RuneBudget {
             search_steps: 0,
         }
     }
-    pub fn match_steps_used(&self) -> u64 {
-        self.matching.steps_used()
-    }
-    pub fn output_bytes_used(&self) -> usize {
-        self.output_bytes
-    }
-    pub fn callbacks_used(&self) -> u64 {
-        self.callbacks
-    }
-    pub fn search_steps_used(&self) -> u64 {
-        self.search_steps
-    }
     fn append(&mut self, out: &mut Vec<u8>, bytes: &[u8]) -> Result<()> {
         self.output_bytes = self
             .output_bytes

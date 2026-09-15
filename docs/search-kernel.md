@@ -100,7 +100,7 @@ backend identity changes during a run.
 
 ```powershell
 New-Item -ItemType Directory -Force runs | Out-Null
-cargo run --locked -- search-calibration --catalog examples/calibration-catalog.json --objective examples/calibration-objective.json --jobs 2 --max-evaluations 5 --output runs/calibration-search.json --export runs/calibration-best.xml
+cargo run --features pob --locked -- search-calibration --catalog examples/calibration-catalog.json --objective examples/calibration-objective.json --jobs 2 --max-evaluations 5 --output runs/calibration-search.json --export runs/calibration-best.xml
 ```
 
 The example manifest explicitly lists the four original Mace regression fixtures. Five

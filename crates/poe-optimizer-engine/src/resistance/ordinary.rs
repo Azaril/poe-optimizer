@@ -13,6 +13,7 @@ pub struct OrdinaryResistanceParameters {
     pub resistance_cap: f64,
     pub floor: f64,
 }
+#[cfg(feature = "legacy")]
 impl OrdinaryResistanceParameters {
     pub(crate) fn truncated_limits(self) -> (f64, f64) {
         truncated_limits(lua_min(self.maximum_cap, self.resistance_cap), self.floor)

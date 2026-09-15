@@ -5,6 +5,11 @@ edition = "2024"
 rust-version = "1.93"
 publish = false
 
+[features]
+# Transitional callers retain the old source-shaped package explicitly.
+default = ["legacy"]
+legacy = []
+
 [dependencies]
 poe-optimizer-core = { path = "../poe-optimizer-core" }
 serde = { version = "1", features = ["derive"] }

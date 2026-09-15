@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "release": "pob-3887ae68-allocation-costs-v1",
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/PassiveSpec.lua",
+        "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+      },
+      {
+        "path": "src/Classes/PassiveTree.lua",
+        "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+      },
+      {
+        "path": "src/Data/QuestRewards.lua",
+        "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af"
+      },
+      {
+        "path": "src/Modules/Build.lua",
+        "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+      },
+      {
+        "path": "src/Modules/Calcs.lua",
+        "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+      },
+      {
+        "path": "src/TreeData/0_5/tree.json",
+        "sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95"
+      }
+    ]
+  },
+  "cost_algorithm": "pinned-count-alloc-nodes-v1",
+  "budget_algorithm": "shared-max-each-scope-and-ascendancy-v1"
+}

@@ -56,9 +56,9 @@ The following observed calls prevent honest claims of complete retirement:
 - PoB source-program token/lowering code has an offline modifier-parser extraction
   consumer as well as paused probes. The source extraction identity also embeds those
   implementation files. Separate that acquisition closure before deleting its directory.
-- Existing native-only builds exclude PoB/Lua Cargo packages but still compile Data's
-  source programs and Engine's interpreter/profile modules. An owned-only compiled
-  distribution remains an explicit D5 gate.
+- The current CLI excludes PoB/Lua by default but still enables legacy through Import/Native.
+  Isolated Data/Engine builds now exclude source/profile modules; the application consumer
+  migration and owned-only shipped distribution remain explicit D5 gates.
 
 The next numerical retirement must move a real preparation/action consumer plus its
 independent realization checks to owned definitions and plans, then delete that consumer's
@@ -66,6 +66,30 @@ profile/source dependency closure in the same checkpoint. No new compatibility f
 named-skill profile is allowed as a bridge. Reference-only tools may remain only with a
 named conversion or comparison consumer. Public availability alone is not justification
 for retaining an unused API.
+
+## Compiled boundary and dead API checkpoint
+
+Data and Engine have an explicit transitional `legacy` feature. Isolated builds that
+turn it off exclude the source interpreter, profile preparation, source-shaped package
+and source-embedding fingerprint. Shared `timing::ordinary` and `resistance::ordinary`
+remain source-independent; their unchanged legacy adapters moved to feature-gated files.
+The legacy Native fingerprint now includes both adapter and shared numerical bodies.
+Root CLI PoB support is opt-in. Full CI uses `--all-features` for reference validation,
+and a separate compiler-input check prevents source code leaking into owned libraries.
+Import/Native still enable legacy in the current CLI; their dependency closure is not retired.
+
+Removed seven repository-unused methods: `CompiledActorModifiers::bucket_count`,
+`RuneBudget::{match_steps_used, output_bytes_used, callbacks_used, search_steps_used}`,
+`ItemSetTransform::catalog_index` and `NativeItemLoadProvider::dependencies_mut`.
+Their backing state and production callers remain. No numerical tests were deleted.
+
+Removed public `parse_mace_item`, its private wrapper and its `None`/local-only branch.
+Production already calls `parse_mace_equipment` with a physical item ID. The useful
+metadata, range, grammar, ambiguity, source-attribution and XML decoding tests now call
+that same entry point with an explicit test instance. Only the assertion preserving the
+obsolete API's deliberately narrower grammar is removed. Shared equipment parsing and
+its still-live profile consumers remain; this is a bounded deletion, not a general
+item evaluator or the retirement of Spark/Mace calculation.
 
 ## Owned input/schema/inventory checkpoint
 

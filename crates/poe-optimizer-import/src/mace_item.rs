@@ -304,29 +304,12 @@ pub(crate) fn decode_item_payload(item: roxmltree::Node<'_, '_>) -> Result<Strin
     Ok(decoded)
 }
 
-/// Admit a bounded exact payload with explicit local rolls. Only line-edge ASCII
-/// whitespace and empty lines are ignored for interpretation; source bytes are retained.
-/// Rarity/name/base, Item Level, Quality, optional LevelReq and Implicits: 0 must appear
-/// in that order. Every following line must match exactly one selected rule in full.
-pub fn parse_mace_item(
-    input: &str,
-    data: &GameDataPackage,
-) -> Result<ValidatedMaceWeapon, MaceItemError> {
-    parse_mace_item_inner(input, data, None)
-}
-
-/// Expanded equipment assembly is separate from the historical local-only API.
+/// Admit a bounded equipment payload with explicit local rolls and a physical
+/// item identity for actor modifier attribution. Source bytes remain unchanged.
 pub(crate) fn parse_mace_equipment(
     input: &str,
     data: &GameDataPackage,
     item_id: u32,
-) -> Result<ValidatedMaceWeapon, MaceItemError> {
-    parse_mace_item_inner(input, data, Some(item_id))
-}
-fn parse_mace_item_inner(
-    input: &str,
-    data: &GameDataPackage,
-    item_id: Option<u32>,
 ) -> Result<ValidatedMaceWeapon, MaceItemError> {
     if input.is_empty() || input.len() > MAX_MACE_ITEM_BYTES {
         return Err(invalid("item payload must contain 1..=8192 bytes"));
@@ -423,15 +406,13 @@ fn parse_mace_item_inner(
     let mut modifier_lines = Vec::new();
     let mut local_modifiers = Vec::new();
     let mut actor_modifiers = Vec::new();
-    let actor_source = item_id.map(|id| {
-        format!(
-            "Item:{id}:{}",
-            rare_name
-                .as_ref()
-                .map(|name| format!("{name}, {base_name}"))
-                .unwrap_or_else(|| base_name.into())
-        )
-    });
+    let actor_source = format!(
+        "Item:{item_id}:{}",
+        rare_name
+            .as_ref()
+            .map(|name| format!("{name}, {base_name}"))
+            .unwrap_or_else(|| base_name.into())
+    );
     for line in &lines[at..] {
         let mut found = None;
         for rule in &data.item_modifier_rules {
@@ -448,14 +429,12 @@ fn parse_mace_item_inner(
                 });
             }
         }
-        let actor = actor_source
-            .as_ref()
-            .map(|source| {
-                crate::actor_modifiers::match_equipment_modifier_line(line.trimmed, source, data)
-                    .map_err(|e| invalid(e.to_string()))
-            })
-            .transpose()?
-            .flatten();
+        let actor = crate::actor_modifiers::match_equipment_modifier_line(
+            line.trimmed,
+            &actor_source,
+            data,
+        )
+        .map_err(|e| invalid(e.to_string()))?;
         if found.is_some() && actor.is_some() {
             return Err(invalid(format!(
                 "line {} ambiguously matches local and actor grammar",

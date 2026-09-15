@@ -1,32 +1,56 @@
-//! Portable, authenticated versioned game data. No Lua, I/O or host runtime.
+//! Portable owned game packages; optional legacy source packages are feature-gated.
 #![forbid(unsafe_code)]
+#[cfg(feature = "legacy")]
 mod action_speed;
+#[cfg(feature = "legacy")]
 mod actor;
+#[cfg(feature = "legacy")]
 pub mod bundled;
+#[cfg(feature = "legacy")]
 pub mod class_tree;
+#[cfg(feature = "legacy")]
 pub mod configuration;
+#[cfg(feature = "legacy")]
 pub mod game_data;
+#[cfg(feature = "legacy")]
 pub mod item_assembly;
+#[cfg(feature = "legacy")]
 mod item_formatting;
+#[cfg(feature = "legacy")]
 pub mod item_loading;
+#[cfg(feature = "legacy")]
 mod item_rules;
+#[cfg(feature = "legacy")]
 pub mod item_scalability;
+#[cfg(feature = "legacy")]
 pub mod loadouts;
+#[cfg(feature = "legacy")]
 pub mod modifier_parser;
+#[cfg(feature = "legacy")]
 mod movement;
+pub mod owned_allocations;
 pub mod owned_metrics;
 pub mod owned_routing;
 pub mod owned_rules;
 pub mod owned_schema;
+#[cfg(feature = "legacy")]
 pub mod passive_allocation;
+#[cfg(feature = "legacy")]
 pub mod skill_identities;
+#[cfg(feature = "legacy")]
 pub mod skill_preparation;
+#[cfg(feature = "legacy")]
 pub mod source_program;
+#[cfg(feature = "legacy")]
 pub mod tree_data;
+#[cfg(feature = "legacy")]
 pub mod tree_projection;
+#[cfg(feature = "legacy")]
 pub mod unique_requirements;
+#[cfg(feature = "legacy")]
 use sha2::{Digest, Sha256};
 /// Fingerprint the portable implementation independently of bundled content provenance.
+#[cfg(feature = "legacy")]
 pub fn implementation_fingerprint() -> String {
     let mut digest = Sha256::new();
     for source in [

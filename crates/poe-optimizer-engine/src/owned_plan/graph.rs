@@ -260,11 +260,21 @@ pub(super) fn execute<I: DefinitionSchemaIndex>(
     plan: &OwnedEffectPlan<I>,
     scratch: &mut OwnedPlanScratch,
 ) -> Result<usize> {
+    execute_limited(plan, scratch, plan.limits.max_work)
+}
+
+// A composite native evaluation shares one decreasing budget across loadouts.
+// Existing single-plan callers retain their exact previous limit.
+pub(super) fn execute_limited<I: DefinitionSchemaIndex>(
+    plan: &OwnedEffectPlan<I>,
+    scratch: &mut OwnedPlanScratch,
+    maximum_work: usize,
+) -> Result<usize> {
     // No value from an earlier attempt can satisfy a dependency in this one.
     scratch.values.clear();
     scratch.facts.clear();
     scratch.values.resize_with(plan.effects.len(), || None);
-    let mut work = plan.limits.max_work;
+    let mut work = maximum_work.min(plan.limits.max_work);
     let result = (|| {
         charge(&mut work, plan.effects.len())?;
         if plan.order.len() != plan.effects.len() {

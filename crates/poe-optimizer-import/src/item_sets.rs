@@ -131,9 +131,6 @@ impl ItemSetTransform {
     pub fn same_identity(&self, other: &Self) -> bool {
         Arc::ptr_eq(&self.owner, &other.owner) && self.index == other.index
     }
-    pub fn catalog_index(&self) -> u16 {
-        self.index
-    }
 }
 pub struct ItemSetState {
     graph: Graph,

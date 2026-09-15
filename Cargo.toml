@@ -19,7 +19,7 @@ name = "poe-optimizer"
 path = "src/main.rs"
 
 [features]
-default = ["pob"]
+default = []
 pob = ["dep:poe-optimizer-pob"]
 
 [dependencies]

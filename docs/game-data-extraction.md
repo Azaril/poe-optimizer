@@ -19,11 +19,11 @@ or broaden accepted source revisions. Progress and validation evidence belong in
 
 ## Run the exporter
 
-Use the default development build with its `pob` feature and initialized pinned submodule.
+Enable the optional `pob` feature explicitly and initialize the pinned submodule.
 The output directory must already exist; both output paths must be new.
 
 ```powershell
-cargo run --locked -- extract-game-data --output runs/extracted-game-data.json
+cargo run --features pob --locked -- extract-game-data --output runs/extracted-game-data.json
 cargo run --no-default-features --locked -- evaluate examples/native-witch-entrance.xml --data runs/extracted-game-data.json --raw
 ```
 
