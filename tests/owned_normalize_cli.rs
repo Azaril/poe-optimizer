@@ -14,6 +14,7 @@ use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
     decode_build,
     owned_item_lines::*,
+    owned_item_source::*,
     owned_mapping::*,
     owned_normalize::{ImportQueryTarget, ImportQueryTemplate, NormalizationPolicy},
     owned_reward_policy::*,
@@ -192,6 +193,22 @@ fn save(directory: &Path) {
         ItemLineLimits::default(),
     )
     .unwrap();
+    let item_source = ItemSourceLayoutPolicy::new(
+        ItemSourceLayoutPolicyInput {
+            schema_version: OWNED_ITEM_SOURCE_POLICY_VERSION,
+            namespace: namespace(),
+            version: key("caller-item-source"),
+            source: mappings.input().source.clone(),
+            item_lines: *items.identity(),
+            dialect: ItemSourceDialect::PobExportedSingleTextV1,
+            rule_layouts: vec![],
+            template_layouts: vec![],
+        },
+        &items,
+        &definitions,
+        ItemSourceLimits::default(),
+    )
+    .unwrap();
     let metric = ExternalSelector::Catalog {
         kind: ExternalCatalogKind::Metric,
         key: SourceComponent::Text("caller-metric".into()),
@@ -231,6 +248,10 @@ fn save(directory: &Path) {
             "items.json",
             encode_item_line_policy(&items, ItemLineLimits::default()).unwrap(),
         ),
+        (
+            "item-source.json",
+            encode_item_source_policy(&item_source, ItemSourceLimits::default()).unwrap(),
+        ),
         ("queries.json", serde_json::to_vec(&queries).unwrap()),
     ] {
         fs::write(directory.join(name), bytes).unwrap();
@@ -254,6 +275,8 @@ fn arguments(output: &str) -> Vec<&str> {
         "rewards.json",
         "--items",
         "items.json",
+        "--item-source",
+        "item-source.json",
         "--queries",
         "queries.json",
         "--output",
@@ -297,6 +320,7 @@ fn help_and_missing_required_artifacts_do_not_need_runtime_data() {
         "--roles",
         "--rewards",
         "--items",
+        "--item-source",
         "--queries",
         "--output",
     ] {
@@ -351,7 +375,7 @@ fn explicit_artifacts_produce_a_checked_pending_draft_sidecar_and_summary() {
     assert_eq!(queries[1].id, QueryId::new("a-second").unwrap());
     let sidecar: Value =
         serde_json::from_slice(&fs::read(directory.join("sidecar.json")).unwrap()).unwrap();
-    assert_eq!(sidecar["schema_version"], 4);
+    assert_eq!(sidecar["schema_version"], 5);
     let definitions = decode_schema_package(
         &fs::read(temp.path().join("definitions.json")).unwrap(),
         OwnedSchemaLimits::default(),
@@ -366,6 +390,17 @@ fn explicit_artifacts_produce_a_checked_pending_draft_sidecar_and_summary() {
     assert_eq!(
         sidecar["item_policy"],
         serde_json::to_value(items.identity()).unwrap()
+    );
+    let item_source = decode_item_source_policy(
+        &fs::read(temp.path().join("item-source.json")).unwrap(),
+        &items,
+        &definitions,
+        ItemSourceLimits::default(),
+    )
+    .unwrap();
+    assert_eq!(
+        sidecar["item_source_policy"],
+        serde_json::to_value(item_source.identity()).unwrap()
     );
     assert_eq!(sidecar["draft"], report["draft_digest"]);
     assert_eq!(sidecar["allocator_after"], report["allocator_after"]);
@@ -507,6 +542,7 @@ fn strict_roles_queries_and_wrong_bindings_fail_before_publication() {
         "mapping.json",
         "rewards.json",
         "items.json",
+        "item-source.json",
     ] {
         let temp = tempfile::tempdir().unwrap();
         save(temp.path());
@@ -600,6 +636,80 @@ fn malformed_stale_missing_or_oversized_item_policy_never_publishes_output() {
     fs::File::create(&path)
         .unwrap()
         .set_len(ItemLineLimits::default().max_wire_bytes as u64 + 1)
+        .unwrap();
+    let output = run(temp.path(), &arguments("oversized"));
+    assert!(!output.status.success());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("exceeds"));
+    assert!(!temp.path().join("oversized").exists());
+}
+
+#[test]
+fn source_layout_policy_is_required_and_must_bind_the_exact_item_line_artifact() {
+    let temp = tempfile::tempdir().unwrap();
+    save(temp.path());
+    let mut args = arguments("missing-argument");
+    let position = args.iter().position(|arg| *arg == "--item-source").unwrap();
+    drop(args.drain(position..position + 2));
+    let output = run(temp.path(), &args);
+    assert!(!output.status.success());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("--item-source"));
+    assert!(!temp.path().join("missing-argument").exists());
+    let path = temp.path().join("item-source.json");
+    let original = fs::read(&path).unwrap();
+    let mut input: Value = serde_json::from_slice(&original).unwrap();
+    input["item_lines"] = json!("cd".repeat(32));
+    fs::write(&path, serde_json::to_vec(&input).unwrap()).unwrap();
+    assert!(!run(temp.path(), &arguments("stale")).status.success());
+    assert!(!temp.path().join("stale").exists());
+    fs::write(&path, &original).unwrap();
+    successful(run(temp.path(), &arguments("valid")));
+    assert_eq!(fs::read(&path).unwrap(), original);
+}
+
+#[test]
+fn source_layout_malformed_missing_and_oversized_inputs_never_publish_output() {
+    for case in [
+        "missing-field",
+        "duplicate",
+        "version",
+        "namespace",
+        "dialect",
+    ] {
+        let temp = tempfile::tempdir().unwrap();
+        save(temp.path());
+        let path = temp.path().join("item-source.json");
+        let original = fs::read_to_string(&path).unwrap();
+        let mut input: Value = serde_json::from_str(&original).unwrap();
+        let invalid = if case == "duplicate" {
+            format!("{{\"schema_version\":1,{}", &original[1..])
+        } else {
+            match case {
+                "missing-field" => {
+                    input.as_object_mut().unwrap().remove("rule_layouts");
+                }
+                "version" => input["schema_version"] = json!(OWNED_ITEM_SOURCE_POLICY_VERSION + 1),
+                "namespace" => input["namespace"]["version"] = json!("foreign"),
+                "dialect" => input["dialect"] = json!("unreviewed-source"),
+                _ => unreachable!(),
+            }
+            input.to_string()
+        };
+        fs::write(&path, invalid).unwrap();
+        assert!(
+            !run(temp.path(), &arguments("result")).status.success(),
+            "{case}"
+        );
+        assert!(!temp.path().join("result").exists());
+    }
+    let temp = tempfile::tempdir().unwrap();
+    save(temp.path());
+    let path = temp.path().join("item-source.json");
+    fs::remove_file(&path).unwrap();
+    assert!(!run(temp.path(), &arguments("missing")).status.success());
+    assert!(!temp.path().join("missing").exists());
+    fs::File::create(&path)
+        .unwrap()
+        .set_len(ItemSourceLimits::default().max_wire_bytes as u64 + 1)
         .unwrap();
     let output = run(temp.path(), &arguments("oversized"));
     assert!(!output.status.success());

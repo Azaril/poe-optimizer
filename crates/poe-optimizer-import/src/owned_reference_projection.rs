@@ -361,6 +361,7 @@ pub struct ProjectionPolicyBinding {
     pub normalization_policy: OwnedContentDigest,
     pub reward_policy: OwnedContentDigest,
     pub item_policy: OwnedContentDigest,
+    pub item_source_policy: OwnedContentDigest,
     pub mapping: OwnedContentDigest,
     pub mapping_source: OwnedContentDigest,
     pub registry: OwnedContentDigest,
@@ -517,6 +518,7 @@ impl ProjectionPlan {
             || sidecar.policy != self.policy.normalization_policy
             || sidecar.reward_policy != self.policy.reward_policy
             || sidecar.item_policy != self.policy.item_policy
+            || sidecar.item_source_policy != self.policy.item_source_policy
             || sidecar.mapping != self.policy.mapping
             || sidecar.mapping_source != self.policy.mapping_source
             || sidecar.registry != self.policy.registry

@@ -11,7 +11,47 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Published base checkpoint:** `7a244267a709c77c6cfd015cb47d03101cb3528c`.
+**Current checkpoint: source item range attribution (after `da831b3`).**
+The new Import-only `ItemSourceLayoutPolicy` is implemented and validated. The public CLI
+requires `--item-source`, sidecar v5 binds its exact identity, and reference projection rejects
+stale policy bindings. Owned input/draft remain v3. Guarded validation covers **524 selected
+test executions** across the base suite and affected-scope follow-up: Core 217, Data 19,
+Engine 48, Import 164, CLI 38 with default features and 38 without PoB. Strict workspace and
+native-only lint, five-crate WASM checks, formatting and native dependency exclusion pass.
+The follow-up rechecks every changed scope; this is not a full workspace test invocation.
+Receipts: `runs/owned-item-range-01/validated-checkpoint.json` and both validation ledgers.
+Protected builds, schema40 data, fixed expectations and the clean PoB pin are unchanged.
+
+The separate source adapter reuses injected item recipes and lexical validation. It records
+inline/XML writes and category/member positions without loading Lua or PoB UI. Original05
+staff grant conversion now yields level 11 without inventing an item level, physical gem or
+provider activation. Original02 preserves explicit speed 49 and six admitted plain modifiers;
+rune/Bonded and tagged strike-range meaning remain pending. Both parameter/modifier collections
+remain incomplete. Full native originals remain **0/5**, with all 110 reference rows retained.
+
+Nineteen source tests and six real normalization tests pass locally. Independent review
+found and fixed uncharged overlay scans, encoder text-limit omission, source names emitting
+facts and unknown tags hiding competing candidates. A final source audit added conservative
+two-line combination blocking and rejection of unsupported reminder-block lifecycle.
+The unused `ProgramOutput::source_output` facade is removed; its active backing data and
+runtime tests remain. Two optional Engine tests execute the
+actual pinned Item parser, XML parser, ItemsTab child loop and BuildModList; both pass. They
+establish source item behavior, not provider resolution or full-build parity.
+
+Both earlier published revisions now have successful hosted CI: `7a24426` and
+[`da831b3`](https://github.com/Azaril/poe-optimizer/actions/runs/34946835742), whose run
+completed at 12:54:22 UTC. Exact-head evidence is in `runs/owned-item-range-01/ci-review/`.
+That verifies the queue fix and those revisions; this checkpoint's publication/hosted result
+is recorded separately in `runs/owned-item-range-01/publication.json`.
+
+Resume after publication by binding item parameters/local weapon outputs
+to concrete provider/action occurrences, proving contribution closure, and replacing the
+first active legacy numerical consumer with its useful tests. Keep player Twister and minion
+Sniper together and all five input cases in the model. Do not return to native source-method
+or UI lifecycle replay. Remaining rune/variant/source absence proof and selected finalization
+are explicit gates; do not mistake partial import for complete evaluation.
+
+**Earlier publication history:** `7a244267a709c77c6cfd015cb47d03101cb3528c`.
 Its [CI run](https://github.com/Azaril/poe-optimizer/actions/runs/34945189769) had eight
 running jobs and no failures at 08:10:28 UTC. Do not infer hosted success from local validation. Publication and
 exact-head status are recorded in `runs/owned-item-provider-01/publication.json` and
@@ -88,8 +128,8 @@ Track exact published-revision CI separately from local validation. The follow-u
 concurrency setting lets running checks finish as newer revisions wait; a previous green
 revision is not proof that the current main revision passed.
 
-**Resume order:** verify publication and the main CI queue transition, then convert source
-range attribution and bind item-granted parameters/local weapon
+**Resume order:** bind
+item-granted parameters/local weapon
 outputs to actual equipment/provider/action occurrences. Original05 item28 has no Item
 Level header: neither its equipment requirement 26 nor Firebolt level 11 supplies it.
 No default is to be invented. Current drafts leave that fact pending; no matching item-line
@@ -98,8 +138,8 @@ wire fields; source absence still needs a scoped proof or user repair. Twister a
 remain joint model cases; grant projection must not turn Firebolt into an authored Gem or
 retarget the independent manual Sniper. Full native coverage remains **0/5**.
 
-The next Import slice is specified in the migration plan's range-attribution section and
-`runs/owned-item-level-01/range-design.md`: exact single-text staff attribution first, rune/list
+The delivered source-range slice is specified in the migration plan's attribution section
+and `runs/owned-item-level-01/range-design.md`: exact single-text staff attribution, rune/list
 uncertainty retained for the spear, and ordered overlays with provenance. Its source pins
 are offline provenance; ordinary import must not require a PoB checkout or claim an exact
 exporter revision from XML alone. No production source interpreter/UI replay is selected.

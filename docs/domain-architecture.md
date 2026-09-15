@@ -33,6 +33,13 @@ is metadata, not executable authority. A game update within implemented semantic
 as a new data package without rebuilding the engine. A genuinely new mechanic can require a
 new versioned native operation; calling arbitrary PoB code is not a runtime fallback.
 
+Distribution builds may run the offline converter and ship its generated owned artifact
+with a provenance manifest. Loading that artifact must not require a PoB checkout, XML,
+or source evaluator. Importing a user's saved PoB build is a separate boundary operation:
+it produces owned records and optional source diagnostics before evaluation/search begins.
+Neither definition conversion nor saved-build parsing runs for each search candidate.
+A source-format compatibility policy belongs to that importer, not to domain rule execution.
+
 The chosen direction is **typed domain rules plus reusable native Rust algorithms**.
 Whether authors edit a small textual DSL or structured documents is a tooling choice.
 Both compile to the same project-owned typed rule representation. Optional Lua authoring

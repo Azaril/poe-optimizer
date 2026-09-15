@@ -1,7 +1,7 @@
 //! Fresh normalization contracts with injected artifacts; no evaluator or VM.
 #[path = "support/empty_owned_items.rs"]
 mod empty_owned_items;
-use empty_owned_items::empty_items;
+use empty_owned_items::{empty_item_source, empty_items};
 
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_draft::*, owned_schema::*,
@@ -349,6 +349,7 @@ fn run(
         *source.allocator_state(),
         NormalizationArtifacts {
             items: &empty_items(&artifacts.schema),
+            item_source: &empty_item_source(&artifacts.schema),
             mappings: &artifacts.mapping,
             registry: &artifacts.registry,
             definitions: &artifacts.schema,
@@ -463,6 +464,7 @@ fn fresh_normalization_is_deterministic_above_source_watermark_and_keeps_input_i
         reserved,
         NormalizationArtifacts {
             items: &empty_items(&artifacts.schema),
+            item_source: &empty_item_source(&artifacts.schema),
             mappings: &artifacts.mapping,
             registry: &artifacts.registry,
             definitions: &artifacts.schema,
@@ -512,6 +514,7 @@ fn failure_and_overflow_do_not_advance_caller_allocator_or_mutate_artifacts() {
             allocator,
             NormalizationArtifacts {
                 items: &empty_items(&artifacts.schema),
+                item_source: &empty_item_source(&artifacts.schema),
                 mappings: &artifacts.mapping,
                 registry: &artifacts.registry,
                 definitions: &artifacts.schema,
@@ -1186,6 +1189,7 @@ fn duplicate_requested_query_ids_reject_instead_of_dropping_rows() {
             *source.allocator_state(),
             NormalizationArtifacts {
                 items: &empty_items(&artifacts.schema),
+                item_source: &empty_item_source(&artifacts.schema),
                 mappings: &artifacts.mapping,
                 registry: &artifacts.registry,
                 definitions: &artifacts.schema,
@@ -1574,6 +1578,7 @@ fn reward_binding_rejects_stale_policy_before_any_normalization_is_returned() {
             *source.allocator_state(),
             NormalizationArtifacts {
                 items: &empty_items(&a.schema),
+                item_source: &empty_item_source(&a.schema),
                 mappings: &a.mapping,
                 registry: &a.registry,
                 definitions: &a.schema,

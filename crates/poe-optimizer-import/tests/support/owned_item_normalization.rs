@@ -7,6 +7,7 @@ use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits, SourceOccurrenceId},
     decode_build,
     owned_item_lines::*,
+    owned_item_source::*,
     owned_mapping::*,
     owned_normalize::*,
     owned_reward_policy::*,
@@ -121,6 +122,7 @@ pub struct Artifacts {
     pub roles: OwnedSkillRoleIndex,
     pub rewards: OwnedRewardPolicy,
     pub items: OwnedItemLinePolicy,
+    pub item_source: ItemSourceLayoutPolicy,
     pub spear: ItemTemplateDefId,
     pub staff: ItemTemplateDefId,
     pub quality: QualityDefId,
@@ -388,11 +390,11 @@ pub fn artifacts() -> Artifacts {
             }],
         ));
     }
-    // Matching the text does not supply a resolved range fraction or replay ModRange.
+    // Semantic recipe receives a fraction only from the separate source adapter.
     rules.push(rule(
         "ranged-staff-grant",
         vec![
-            literal("{range:0.5}Grants Skill: Level ("),
+            literal("Grants Skill: Level ("),
             capture("lower"),
             literal("-"),
             capture("upper"),
@@ -430,6 +432,7 @@ pub fn artifacts() -> Artifacts {
             sha256: "a".repeat(64),
         }],
     };
+    let item_source = source_policy(&items, &schema, [&spear, &staff], source_pin.clone());
     let mapping = OwnedMappingIndex::new(
         MappingPackageInput {
             schema_version: OWNED_MAPPING_PACKAGE_VERSION,
@@ -492,6 +495,7 @@ pub fn artifacts() -> Artifacts {
         roles,
         rewards,
         items,
+        item_source,
         spear,
         staff,
         quality,
@@ -554,6 +558,7 @@ pub fn normalize(source: &ImportedBuildInstance, artifacts: &Artifacts) -> Norma
             roles: &artifacts.roles,
             rewards: &artifacts.rewards,
             items: &artifacts.items,
+            item_source: &artifacts.item_source,
         },
         &NormalizationPolicy {
             version: key("item-test-normalization"),
@@ -588,4 +593,55 @@ pub fn item_source(source: &ImportedBuildInstance, id: &str) -> SourceOccurrence
         .unwrap()
         .occurrence()
         .id()
+}
+
+/// Reviewed source-layout declarations belong to this test fixture, not native data.
+pub fn source_policy<'a>(
+    items: &OwnedItemLinePolicy,
+    schema: &OwnedDefinitionSchemaPackage,
+    templates: impl IntoIterator<Item = &'a ItemTemplateDefId>,
+    source: SourcePin,
+) -> ItemSourceLayoutPolicy {
+    ItemSourceLayoutPolicy::new(
+        ItemSourceLayoutPolicyInput {
+            schema_version: OWNED_ITEM_SOURCE_POLICY_VERSION,
+            namespace: schema.namespace().clone(),
+            version: key("reviewed-test-layout"),
+            source,
+            item_lines: *items.identity(),
+            dialect: ItemSourceDialect::PobExportedSingleTextV1,
+            rule_layouts: items
+                .input()
+                .rules
+                .iter()
+                .map(|r| ItemRuleSourceLayout {
+                    rule: r.id.clone(),
+                    role: if r.emissions.iter().all(|e| {
+                        matches!(
+                            e,
+                            ItemEmission::Metadata { .. }
+                                | ItemEmission::Template { .. }
+                                | ItemEmission::ItemLevel { .. }
+                                | ItemEmission::Quality { .. }
+                        )
+                    }) {
+                        ItemRuleSourceRole::Header
+                    } else {
+                        ItemRuleSourceRole::SingleModifier
+                    },
+                })
+                .collect(),
+            template_layouts: templates
+                .into_iter()
+                .map(|t| ItemTemplateSourceLayout {
+                    template: t.clone(),
+                    load_index_prefix: ItemLoadIndexPrefix::NoGeneratedBuffMembers,
+                })
+                .collect(),
+        },
+        items,
+        schema,
+        ItemSourceLimits::default(),
+    )
+    .unwrap()
 }

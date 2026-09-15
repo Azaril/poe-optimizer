@@ -281,6 +281,53 @@ impl OwnedItemLinePolicy {
         }
         self.aggregate(result, &mut work, &mut output)
     }
+    /// Internal adapter probe: same grammar and capture validation as conversion,
+    /// with the caller's shared work/output budget and no invented range fraction.
+    pub(crate) fn probe_source_line<'a>(
+        &self,
+        index: usize,
+        text: &'a str,
+        work: &mut usize,
+        output: &mut usize,
+    ) -> Result<ItemLineEvidence<'a>> {
+        self.line(
+            ItemLineInput {
+                index,
+                text,
+                range_fraction: None,
+            },
+            work,
+            output,
+        )
+    }
+    /// Source blockers retain positively matched candidates for aggregate conflict
+    /// handling. The adapter cannot erase a pending competing parameter/header.
+    pub(crate) fn convert_source_lines<'a>(
+        &self,
+        lines: impl IntoIterator<Item = (ItemLineInput<'a>, Option<SourceLinePending<'a>>)>,
+        work: &mut usize,
+        output: &mut usize,
+    ) -> Result<ItemTextConversion<'a>> {
+        let mut count = self.limits.max_lines;
+        let mut bytes = self.limits.max_source_bytes;
+        let mut previous = 0;
+        let mut result = Vec::new();
+        for (input, pending) in lines {
+            charge(&mut count, 1, "lines")?;
+            charge(&mut bytes, input.text.len(), "source bytes")?;
+            if input.index <= previous {
+                return Err(ItemLineError::LineOrder);
+            }
+            previous = input.index;
+            let mut line = self.line(input, work, output)?;
+            if let Some(pending) = pending {
+                charge(output, pending.candidates.len(), "output declarations")?;
+                line.outcome = unresolved(pending.reason, pending.candidates.to_vec());
+            }
+            result.push(line);
+        }
+        self.aggregate(result, work, output)
+    }
     fn aggregate<'a>(
         &self,
         lines: Vec<ItemLineEvidence<'a>>,

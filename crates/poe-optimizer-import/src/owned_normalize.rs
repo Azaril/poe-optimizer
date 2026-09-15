@@ -7,6 +7,7 @@
 use crate::{
     build_instance::{AuthoredInstanceId, SourceOccurrenceId},
     owned_item_lines::*,
+    owned_item_source::*,
     owned_mapping::*,
     owned_reward_policy::*,
     owned_skill_catalog::*,
@@ -118,6 +119,8 @@ pub enum NormalizationError {
     #[error(transparent)]
     Item(#[from] ItemLineError),
     #[error(transparent)]
+    ItemSource(#[from] ItemSourceError),
+    #[error(transparent)]
     Identity(#[from] BuildIdentityError),
     #[error(transparent)]
     Structure(#[from] StructuralError),
@@ -176,6 +179,7 @@ pub struct FreshNormalizationSidecar {
     pub skill_roles: OwnedContentDigest,
     pub reward_policy: OwnedContentDigest,
     pub item_policy: OwnedContentDigest,
+    pub item_source_policy: OwnedContentDigest,
     pub item_texts: Vec<NormalizedItemText>,
     pub draft: OwnedContentDigest,
     pub origins: Vec<SourceOwnedOrigin>,
@@ -196,6 +200,7 @@ pub struct NormalizationArtifacts<'a, I> {
     pub roles: &'a OwnedSkillRoleIndex,
     pub rewards: &'a OwnedRewardPolicy,
     pub items: &'a OwnedItemLinePolicy,
+    pub item_source: &'a ItemSourceLayoutPolicy,
 }
 impl NormalizedImport {
     pub fn draft(&self) -> &DraftSession {
@@ -250,6 +255,7 @@ struct Builder<'e, 's> {
     roles: &'e OwnedSkillRoleIndex,
     rewards: &'e OwnedRewardPolicy,
     items: &'e OwnedItemLinePolicy,
+    item_source: &'e ItemSourceLayoutPolicy,
     item_texts: Vec<NormalizedItemText>,
     allocator: InstanceAllocator,
     limits: NormalizationLimits,
@@ -540,10 +546,12 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         roles,
         rewards,
         items,
+        item_source,
     } = artifacts;
     let recipes = validate_policy(policy, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
     items.verify_bindings(definitions)?;
+    item_source.verify_bindings(items, definitions)?;
     let policy_digest = digest_owned(
         "owned-normalization-policy-v1",
         &(policy, queries),
@@ -592,6 +600,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         roles,
         rewards,
         items,
+        item_source,
         item_texts: vec![],
         allocator: InstanceAllocator::from_state(allocator_before),
         limits,
@@ -1134,7 +1143,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: 4,
+        schema_version: 5,
         source_sha256: identity.source_sha256.into(),
         source_bytes: identity.source_bytes,
         source_schema: identity.instance_import_schema,
@@ -1150,13 +1159,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         skill_roles: *roles.identity(),
         reward_policy: *rewards.identity(),
         item_policy: *items.identity(),
+        item_source_policy: *item_source.identity(),
         item_texts: b.item_texts,
         draft: draft.digest(limits.draft.input.max_wire_bytes)?,
         origins: b.origins,
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        "owned-normalization-sidecar-v4",
+        "owned-normalization-sidecar-v5",
         &sidecar,
         limits.draft.input.max_wire_bytes,
     )?;

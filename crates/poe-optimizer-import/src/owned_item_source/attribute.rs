@@ -1,0 +1,603 @@
+use super::*;
+fn problem(problems: &mut Vec<ItemSourceProblem>, p: ItemSourceProblem) {
+    if !problems.contains(&p) {
+        problems.push(p);
+    }
+}
+fn fraction(text: &str) -> Option<f64> {
+    let value = text.parse::<f64>().ok()?;
+    (value.is_finite() && (0.0..=1.0).contains(&value)).then_some(value)
+}
+fn integer(text: &str) -> Option<usize> {
+    // Supported exported integer syntax. Do not inherit Lua tonumber's arbitrary coercions.
+    (!text.is_empty() && text.bytes().all(|b| b.is_ascii_digit()))
+        .then(|| text.parse().ok())
+        .flatten()
+}
+fn field<'a>(
+    row: &'a SourceEvidenceRow<'_>,
+    name: &str,
+) -> (Option<SourceAttributeRef>, Option<&'a str>) {
+    let mut found = None;
+    for (i, a) in row.attributes().iter().enumerate() {
+        if a.origin().namespace.is_none() && a.origin().name == name {
+            if found.is_some() {
+                return (None, None);
+            }
+            found = Some((
+                SourceAttributeRef {
+                    occurrence: row.occurrence().id(),
+                    index: i as u32,
+                },
+                a.decoded().ok(),
+            ));
+        }
+    }
+    found.map_or((None, None), |(id, value)| (Some(id), value))
+}
+struct Tags {
+    semantic: String,
+    enchant: bool,
+    implicit: bool,
+    tagged: bool,
+}
+fn tags(
+    line: &mut ItemAttributedLine,
+    report: &mut Vec<ItemRangeWrite>,
+    tag_left: &mut usize,
+    output: &mut usize,
+    work: &mut usize,
+) -> Result<Tags> {
+    let text = line.raw.trim_ascii();
+    let leading = line.raw.len() - line.raw.trim_ascii_start().len();
+    let mut at = 0;
+    let mut semantic = String::new();
+    let mut enchant = false;
+    let mut implicit = false;
+    let mut tagged = false;
+    while let Some(relative) = text[at..].find('{') {
+        tagged = true;
+        let start = at + relative;
+        charge(work, text.len() - at, "work")?;
+        semantic.push_str(&text[at..start]);
+        let Some(end) = text[start + 1..].find('}').map(|v| v + start + 1) else {
+            problem(&mut line.blockers, ItemSourceProblem::MalformedTag);
+            semantic.push_str(&text[start..]);
+            at = text.len();
+            break;
+        };
+        charge(tag_left, 1, "tags")?;
+        let tag = &text[start + 1..end];
+        if let Some(value) = tag.strip_prefix("range:") {
+            charge(output, 1, "output records")?;
+            let value = fraction(value);
+            let write = report.len();
+            report.push(ItemRangeWrite {
+                origin: ItemRangeOrigin::Inline {
+                    line: line.index,
+                    span: (line.decoded_span.start + leading + start)
+                        ..(line.decoded_span.start + leading + end + 1),
+                },
+                source_id: None,
+                fraction: value,
+                target: ItemRangeTarget::Line(line.index),
+            });
+            line.range = match value {
+                Some(fraction) => ItemRangeDecision::Resolved {
+                    fraction,
+                    winning_write: write,
+                },
+                None => ItemRangeDecision::Pending,
+            };
+            if value.is_none() {
+                problem(&mut line.blockers, ItemSourceProblem::InvalidRange);
+            }
+        } else {
+            match tag {
+                "enchant" => {
+                    enchant = true;
+                    implicit = true;
+                }
+                "implicit" => implicit = true,
+                "rune" => problem(&mut line.blockers, ItemSourceProblem::RuneLifecycle),
+                _ => problem(&mut line.blockers, ItemSourceProblem::UnsupportedTag),
+            }
+        }
+        at = end + 1;
+    }
+    semantic.push_str(&text[at..]);
+    if semantic.contains('}') {
+        problem(&mut line.blockers, ItemSourceProblem::MalformedTag);
+    }
+    Ok(Tags {
+        semantic,
+        enchant,
+        implicit,
+        tagged,
+    })
+}
+fn matched(evidence: &ItemLineEvidence<'_>) -> (Option<OwnedDefinitionKey>, bool) {
+    match &evidence.outcome {
+        ItemLineOutcome::Known { rule, .. } => (Some(rule.clone()), true),
+        ItemLineOutcome::Pending { reason, candidates } if candidates.len() == 1 => (
+            Some(candidates[0].clone()),
+            !matches!(
+                reason,
+                ItemLinePending::UnknownLine
+                    | ItemLinePending::AmbiguousRules
+                    | ItemLinePending::AmbiguousCapture
+                    | ItemLinePending::MalformedCapture { .. }
+                    | ItemLinePending::UnsupportedLineLayout
+            ),
+        ),
+        _ => (None, false),
+    }
+}
+fn collect_candidates(
+    evidence: &ItemLineEvidence<'_>,
+    into: &mut Vec<OwnedDefinitionKey>,
+    output: &mut usize,
+    work: &mut usize,
+) -> Result<()> {
+    let candidates: &[OwnedDefinitionKey] = match &evidence.outcome {
+        ItemLineOutcome::Known { rule, .. } => std::slice::from_ref(rule),
+        ItemLineOutcome::Pending { candidates, .. } => candidates,
+    };
+    for id in candidates {
+        charge(
+            work,
+            into.len()
+                .saturating_add(1)
+                .saturating_mul(id.as_str().len().saturating_add(1)),
+            "work",
+        )?;
+        if !into.contains(id) {
+            charge(output, 1, "output records")?;
+            into.push(id.clone());
+        }
+    }
+    Ok(())
+}
+impl ItemSourceLayoutPolicy {
+    pub fn attribute(
+        &self,
+        evidence: &SourceProjectEvidence<'_>,
+        item: SourceOccurrenceId,
+        lines: &OwnedItemLinePolicy,
+    ) -> Result<ItemRangeAttribution> {
+        if self.input.item_lines != *lines.identity() {
+            return Err(ItemSourceError::Binding);
+        }
+        let row = evidence.row(item)?;
+        let root = evidence.rows().first().ok_or(ItemSourceError::SourceKind)?;
+        if root.occurrence().name() != "PathOfBuilding2"
+            || root.occurrence().has_namespace_context()
+            || row.occurrence().name() != "Item"
+            || row.occurrence().has_namespace_context()
+            || !matches!(
+                row.authored_instance(),
+                Some(AuthoredInstanceId::ItemRecord(_))
+            )
+        {
+            return Err(ItemSourceError::SourceKind);
+        }
+        let identity = evidence.identity();
+        let mut report = ItemAttributionReport {
+            source: ItemSourceBinding {
+                source_sha256: identity.source_sha256.into(),
+                source_bytes: identity.source_bytes,
+                source_schema: identity.instance_import_schema,
+                lineage: identity.lineage,
+                revision: identity.revision,
+                allocator: identity.allocator,
+            },
+            item,
+            content_entry: None,
+            policy: self.identity,
+            item_lines: *lines.identity(),
+            layout: ItemLayoutStatus::Proven,
+            lines: vec![],
+            writes: vec![],
+        };
+        let mut work = self.limits.max_work.min(lines.source_limits().max_work);
+        let mut output = self
+            .limits
+            .max_output_records
+            .min(lines.source_limits().max_output_declarations);
+        let mut unsupported = Vec::new();
+        let mut texts = Vec::new();
+        let mut overlays = Vec::new();
+        charge(&mut work, row.attributes().len(), "work")?;
+        if row
+            .attributes()
+            .iter()
+            .any(|a| a.origin().namespace.is_some() || a.origin().name != "id")
+        {
+            problem(&mut unsupported, ItemSourceProblem::UnsupportedAttribute);
+        }
+        if let SourceContentEvidence::Available(content) = row.content() {
+            for (position, entry) in content.consumed().iter().enumerate() {
+                charge(&mut work, 1, "work")?;
+                match entry {
+                    PobContentEntry::Text { text, .. } => texts.push((position, text.as_str())),
+                    PobContentEntry::Element { child_index } => {
+                        if overlays.len() >= self.limits.max_overlays {
+                            return Err(ItemSourceError::Limit("overlays"));
+                        }
+                        let id = *row
+                            .children()
+                            .get(*child_index)
+                            .ok_or(ItemSourceError::SourceKind)?;
+                        let child = evidence.row(id)?;
+                        if child.occurrence().name() != "ModRange"
+                            || child.occurrence().has_namespace_context()
+                            || !child.children().is_empty()
+                        {
+                            problem(&mut unsupported, ItemSourceProblem::UnsupportedChild);
+                        }
+                        overlays.push((position, child));
+                    }
+                }
+            }
+        } else {
+            problem(&mut unsupported, ItemSourceProblem::ContentUnavailable);
+        }
+        if texts.len() != 1 || (texts.len() == 1 && overlays.iter().any(|(p, _)| *p < texts[0].0)) {
+            problem(&mut unsupported, ItemSourceProblem::UnsupportedContentOrder);
+        }
+        if texts.len() == 1 {
+            report.content_entry = Some(texts[0].0);
+        }
+        // Retain overlay identities even when the text lifecycle cannot be converted.
+        let mut source_left = self.limits.max_source_bytes;
+        for (_, text) in &texts {
+            charge(&mut source_left, text.len(), "source bytes")?;
+        }
+        let text = texts.first().map(|(_, text)| *text).unwrap_or("");
+        if text.len() > self.limits.max_source_bytes {
+            return Err(ItemSourceError::Limit("source bytes"));
+        }
+        let mut offset = 0;
+        for (i, raw) in text.split_inclusive('\n').enumerate() {
+            if i >= self.limits.max_lines {
+                return Err(ItemSourceError::Limit("lines"));
+            }
+            let stripped = raw.strip_suffix('\n').unwrap_or(raw);
+            let stripped = stripped.strip_suffix('\r').unwrap_or(stripped);
+            if stripped.len() > self.limits.max_line_bytes {
+                return Err(ItemSourceError::Limit("line bytes"));
+            }
+            charge(&mut output, 1, "output records")?;
+            charge(&mut work, stripped.len(), "work")?;
+            report.lines.push(ItemAttributedLine {
+                index: i + 1,
+                decoded_span: offset..offset + stripped.len(),
+                raw: stripped.into(),
+                semantic_text: stripped.into(),
+                rule: None,
+                presentation: false,
+                pending_candidates: vec![],
+                member: None,
+                blockers: vec![],
+                range: ItemRangeDecision::Absent,
+            });
+            offset += raw.len();
+        }
+        let mut can_convert = unsupported.is_empty();
+        let mut problems = Vec::new();
+        let mut templates = Vec::new();
+        let mut count = None;
+        let mut rarity_seen = false;
+        let mut started = false;
+        let mut occupied_implicit = 0;
+        let mut ordinals = BTreeMap::<SourceModifierCategory, usize>::new();
+        let mut tag_left = self.limits.max_tags;
+        let mut significant = 0usize;
+        let mut item_class_first = false;
+        let mut rarity_position = None;
+        let mut named_rarity = false;
+        let mut previous_may_combine = false;
+        for line in &mut report.lines {
+            let text = line.raw.trim_ascii();
+            if text.is_empty() {
+                continue;
+            }
+            significant += 1;
+            let consumed_by_previous = previous_may_combine;
+            previous_may_combine = false;
+            if consumed_by_previous {
+                problem(&mut problems, ItemSourceProblem::PossibleCombinedLine);
+                problem(&mut line.blockers, ItemSourceProblem::PossibleCombinedLine);
+            }
+            if significant == 1 && text.starts_with("Item Class: ") {
+                item_class_first = true;
+            }
+            let preamble = !started;
+            if named_rarity && rarity_position.is_some_and(|p| significant == p + 1) {
+                // ParseRaw consumes the title before considering header/modifier syntax.
+                line.presentation = true;
+                continue;
+            }
+            if text
+                .strip_prefix('(')
+                .is_some_and(|rest| rest.as_bytes().first().is_some_and(u8::is_ascii_alphabetic))
+            {
+                // Source reminder blocks consume an arbitrary span. Decline this
+                // lifecycle rather than implementing its mutable parser control flow.
+                problem(
+                    &mut unsupported,
+                    ItemSourceProblem::UnsupportedSourceControl,
+                );
+                can_convert = false;
+            }
+            if let Some(rarity) = text.strip_prefix("Rarity: ") {
+                if rarity_seen || !preamble {
+                    problem(&mut problems, ItemSourceProblem::UnsupportedRarity);
+                }
+                if significant != if item_class_first { 2 } else { 1 } {
+                    problem(&mut problems, ItemSourceProblem::UnsupportedRarity);
+                }
+                rarity_seen = true;
+                rarity_position = Some(significant);
+                named_rarity = matches!(rarity, "RARE" | "UNIQUE" | "RELIC");
+                if !matches!(rarity, "NORMAL" | "MAGIC" | "RARE" | "UNIQUE" | "RELIC") {
+                    problem(&mut problems, ItemSourceProblem::UnsupportedRarity);
+                }
+            }
+            let base_position = rarity_position.map(|p| p + if named_rarity { 2 } else { 1 });
+            let raw_probe =
+                lines.probe_source_line(line.index, &line.raw, &mut work, &mut output)?;
+            collect_candidates(
+                &raw_probe,
+                &mut line.pending_candidates,
+                &mut output,
+                &mut work,
+            )?;
+            let (raw_rule, raw_valid) = matched(&raw_probe);
+            let raw_role = raw_rule.as_ref().and_then(|r| self.roles.get(r)).copied();
+            let header = raw_role == Some(ItemRuleSourceRole::Header);
+            if header {
+                previous_may_combine = consumed_by_previous;
+                line.rule = raw_rule;
+                if !preamble {
+                    problem(&mut problems, ItemSourceProblem::HeaderAfterModifiers);
+                    problem(&mut line.blockers, ItemSourceProblem::HeaderAfterModifiers);
+                }
+                if !raw_valid {
+                    problem(&mut problems, ItemSourceProblem::MalformedCapture);
+                    problem(&mut line.blockers, ItemSourceProblem::MalformedCapture);
+                }
+                let is_template =
+                    if let ItemLineOutcome::Known { emissions, .. } = &raw_probe.outcome {
+                        let mut found = false;
+                        for emission in emissions {
+                            if let ConvertedItemEmission::Template { definition } = emission {
+                                templates.push(definition.clone());
+                                found = true;
+                            }
+                        }
+                        found
+                    } else {
+                        false
+                    };
+                let fixed_header = [
+                    "Item Class: ",
+                    "Rarity: ",
+                    "Crafted: ",
+                    "Prefix: ",
+                    "Suffix: ",
+                    "Item Level: ",
+                    "Quality: ",
+                    "Sockets: ",
+                    "Rune: ",
+                    "LevelReq: ",
+                    "Implicits: ",
+                ]
+                .iter()
+                .any(|prefix| text.starts_with(prefix));
+                if is_template && base_position != Some(significant)
+                    || !is_template && !fixed_header
+                {
+                    problem(&mut problems, ItemSourceProblem::UnknownHeader);
+                    problem(&mut line.blockers, ItemSourceProblem::UnknownHeader);
+                }
+                if fixed_header
+                    && !text.starts_with("Rarity: ")
+                    && !text.starts_with("Item Class: ")
+                    && !base_position.is_some_and(|p| significant > p)
+                {
+                    problem(&mut problems, ItemSourceProblem::UnknownHeader);
+                    problem(&mut line.blockers, ItemSourceProblem::UnknownHeader);
+                }
+                if text.starts_with("Item Class: ") && significant != 1 {
+                    problem(&mut problems, ItemSourceProblem::UnknownHeader);
+                    problem(&mut line.blockers, ItemSourceProblem::UnknownHeader);
+                }
+                if let Some(value) = text.strip_prefix("Implicits: ") {
+                    if count.is_some() {
+                        problem(&mut problems, ItemSourceProblem::InvalidImplicitCount);
+                    }
+                    count = integer(value).filter(|v| *v <= self.limits.max_lines);
+                    if count.is_none() {
+                        problem(&mut problems, ItemSourceProblem::InvalidImplicitCount);
+                    }
+                }
+                if let Some(rune) = text.strip_prefix("Rune: ")
+                    && rune != "None"
+                {
+                    problem(&mut problems, ItemSourceProblem::RuneLifecycle);
+                }
+                // Metadata braces are not executable modifier range instructions.
+                continue;
+            }
+            if !base_position.is_some_and(|p| significant > p) {
+                problem(&mut problems, ItemSourceProblem::UnknownHeader);
+                problem(&mut line.blockers, ItemSourceProblem::UnknownHeader);
+            }
+            let tagged = tags(
+                line,
+                &mut report.writes,
+                &mut tag_left,
+                &mut output,
+                &mut work,
+            )?;
+            line.semantic_text = tagged.semantic;
+            let probe =
+                lines.probe_source_line(line.index, &line.semantic_text, &mut work, &mut output)?;
+            collect_candidates(&probe, &mut line.pending_candidates, &mut output, &mut work)?;
+            let (rule, valid) = matched(&probe);
+            line.rule = rule.clone();
+            let single = rule.as_ref().and_then(|r| self.roles.get(r))
+                == Some(&ItemRuleSourceRole::SingleModifier)
+                && valid;
+            // ParseRaw may consume the next physical line after a failed/partial
+            // parse. A known standalone next line cannot prove it stayed independent.
+            // Raw and stripped reviewed grammars both prove the no-join shape even
+            // when a separate rune/tag lifecycle still blocks semantic admission.
+            previous_may_combine =
+                !(single || raw_valid && raw_role == Some(ItemRuleSourceRole::SingleModifier));
+            if tagged.tagged && !single {
+                problem(&mut line.blockers, ItemSourceProblem::UnprovedTaggedLine);
+            }
+            if !single
+                || !line.blockers.is_empty()
+                    && line
+                        .blockers
+                        .iter()
+                        .any(|p| !matches!(p, ItemSourceProblem::InvalidRange))
+            {
+                problem(
+                    &mut problems,
+                    if !valid && rule.is_some() {
+                        ItemSourceProblem::MalformedCapture
+                    } else {
+                        ItemSourceProblem::UnknownMember
+                    },
+                );
+                if preamble {
+                    problem(&mut problems, ItemSourceProblem::UnknownHeader);
+                    problem(&mut line.blockers, ItemSourceProblem::UnknownHeader);
+                }
+                continue;
+            }
+            started = true;
+            if !rarity_seen {
+                problem(&mut problems, ItemSourceProblem::MissingRarity);
+            }
+            let category = if tagged.enchant {
+                SourceModifierCategory::Enchant
+            } else if tagged.implicit || occupied_implicit < count.unwrap_or(0) {
+                SourceModifierCategory::Implicit
+            } else {
+                SourceModifierCategory::Explicit
+            };
+            if matches!(
+                category,
+                SourceModifierCategory::Enchant | SourceModifierCategory::Implicit
+            ) {
+                occupied_implicit += 1;
+            }
+            let ordinal = ordinals.entry(category).or_default();
+            *ordinal += 1;
+            line.member = Some(SourceModifierSlot {
+                category,
+                ordinal: *ordinal,
+                line: line.index,
+            });
+        }
+        if !rarity_seen {
+            problem(&mut problems, ItemSourceProblem::MissingRarity);
+        }
+        if count.is_none() {
+            problem(&mut problems, ItemSourceProblem::MissingImplicitCount);
+        }
+        if templates.len() != 1
+            || self.prefixes.get(&templates[0])
+                != Some(&ItemLoadIndexPrefix::NoGeneratedBuffMembers)
+        {
+            problem(&mut problems, ItemSourceProblem::UnknownTemplatePrefix);
+        }
+        let proven = can_convert && problems.is_empty();
+        let mut ordered: Vec<_> = report.lines.iter().filter_map(|l| l.member).collect();
+        ordered.sort_by_key(|slot| (slot.category, slot.ordinal));
+        if !proven {
+            for line in &mut report.lines {
+                if !matches!(line.range, ItemRangeDecision::Absent) {
+                    line.range = ItemRangeDecision::Pending;
+                }
+            }
+        }
+        for (position, child) in overlays {
+            charge(&mut work, child.attributes().len() + 1, "work")?;
+            charge(&mut output, 1, "output records")?;
+            for attribute in child.attributes() {
+                charge(&mut work, attribute.raw().len().saturating_mul(4), "work")?;
+            }
+            let (id_ref, id_text) = field(child, "id");
+            let (range_ref, range_text) = field(child, "range");
+            let id = id_text.and_then(integer).filter(|v| *v > 0);
+            let value = range_text.and_then(fraction);
+            let valid = child.occurrence().name() == "ModRange"
+                && !child.occurrence().has_namespace_context()
+                && child.attributes().len() == 2
+                && child.attributes().iter().all(|a| {
+                    a.origin().namespace.is_none()
+                        && matches!(a.origin().name.as_str(), "id" | "range")
+                })
+                && id.is_some()
+                && value.is_some();
+            let target = if proven && valid {
+                id.and_then(|v| ordered.get(v - 1))
+                    .map_or(ItemRangeTarget::IgnoredOutOfBounds, |slot| {
+                        ItemRangeTarget::Line(slot.line)
+                    })
+            } else {
+                ItemRangeTarget::Pending
+            };
+            let write = report.writes.len();
+            report.writes.push(ItemRangeWrite {
+                origin: ItemRangeOrigin::Xml {
+                    occurrence: child.occurrence().id(),
+                    content_entry: position,
+                    id: id_ref,
+                    range: range_ref,
+                },
+                source_id: id,
+                fraction: value,
+                target: target.clone(),
+            });
+            match target {
+                ItemRangeTarget::Line(index) => {
+                    report.lines[index - 1].range = ItemRangeDecision::Resolved {
+                        fraction: value.expect("validated fraction"),
+                        winning_write: write,
+                    };
+                }
+                ItemRangeTarget::Pending => {
+                    // Unknown targets cannot leave an earlier fraction authoritative.
+                    charge(&mut work, report.lines.len(), "work")?;
+                    for line in &mut report.lines {
+                        line.range = ItemRangeDecision::Pending;
+                    }
+                    if !valid {
+                        problem(&mut problems, ItemSourceProblem::InvalidOverlay);
+                    }
+                }
+                ItemRangeTarget::IgnoredOutOfBounds => {}
+            }
+        }
+        report.layout = if !can_convert {
+            ItemLayoutStatus::Unsupported(unsupported)
+        } else if problems.is_empty() {
+            ItemLayoutStatus::Proven
+        } else {
+            ItemLayoutStatus::Pending(problems)
+        };
+        Ok(ItemRangeAttribution {
+            report,
+            work_left: work,
+            output_left: output,
+            can_convert,
+        })
+    }
+}

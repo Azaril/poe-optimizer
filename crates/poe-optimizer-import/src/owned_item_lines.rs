@@ -254,6 +254,9 @@ pub enum ItemLinePending {
         slot: Option<Box<DeclaredSlot<ParameterSlotDefId>>>,
     },
     UnsupportedLineLayout,
+    SourceMeaningUnresolved,
+    /// Source syntax proves this line is presentation, not an owned declaration.
+    SourcePresentation,
 }
 #[derive(Clone, Debug, PartialEq, Serialize)]
 #[serde(tag = "kind", content = "value", rename_all = "snake_case")]
@@ -387,6 +390,9 @@ fn invalid<T>(path: &str, reason: &'static str) -> Result<T> {
     })
 }
 impl OwnedItemLinePolicy {
+    pub(crate) fn source_limits(&self) -> ItemLineLimits {
+        self.limits
+    }
     pub fn input(&self) -> &ItemLinePolicyInput {
         &self.input
     }
@@ -424,4 +430,10 @@ pub fn encode_item_line_policy(
     }
     digest_owned(DOMAIN, &policy.input, limits.max_wire_bytes)?;
     Ok(serde_json::to_vec(&policy.input)?)
+}
+
+/// Adapter-only override; candidate IDs still flow through the same aggregate guards.
+pub(crate) struct SourceLinePending<'a> {
+    pub reason: ItemLinePending,
+    pub candidates: &'a [OwnedDefinitionKey],
 }

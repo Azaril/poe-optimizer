@@ -20,6 +20,7 @@ pub mod loadouts;
 pub mod mace_item;
 mod modifier_syntax;
 pub mod owned_item_lines;
+pub mod owned_item_source;
 pub mod owned_mapping;
 pub mod owned_normalize;
 pub mod owned_reference_projection;

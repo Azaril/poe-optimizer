@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-09-15 for the owned rule component checkpoint. This is a living companion to
+Updated 2026-09-15 for the source item attribution checkpoint. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -214,3 +214,14 @@ prove contribution closure and supply a real action consumer. Keep the generic
 `consume_local_numeric` helper while armour uses it. Retire useful numerical laws into
 that shared consumer in the same checkpoint; do not claim the complete profile/request
 path retired when only this dependency is replaced.
+
+
+## Source item attribution checkpoint
+
+Removed the unused `ProgramOutput::source_output` accessor from
+`engine/src/parser_program/runtime/mod.rs`. An exact repository symbol search found only
+its definition; its backing source output, allocation/graph/work accessors and their tests
+remain active and are retained. This deletes an unused facade, not the source interpreter
+or a numerical profile. The source adapter now feeds the owned item converter without
+production Lua/UI execution; optional original-source tests own the reference bootstrap.
+The next numerical retirement still depends on general provider/action resolution.

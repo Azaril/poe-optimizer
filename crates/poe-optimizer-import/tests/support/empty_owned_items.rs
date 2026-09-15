@@ -18,3 +18,38 @@ pub fn empty_items<I: DefinitionSchemaIndex>(schema: &I) -> OwnedItemLinePolicy 
     )
     .unwrap()
 }
+
+pub fn empty_item_source<I: DefinitionSchemaIndex>(
+    schema: &I,
+) -> poe_optimizer_import::owned_item_source::ItemSourceLayoutPolicy {
+    empty_source_for_items(schema, &empty_items(schema))
+}
+pub fn empty_source_for_items<I: DefinitionSchemaIndex>(
+    schema: &I,
+    items: &OwnedItemLinePolicy,
+) -> poe_optimizer_import::owned_item_source::ItemSourceLayoutPolicy {
+    use poe_optimizer_import::{owned_item_source::*, owned_mapping::*};
+    ItemSourceLayoutPolicy::new(
+        ItemSourceLayoutPolicyInput {
+            schema_version: OWNED_ITEM_SOURCE_POLICY_VERSION,
+            namespace: schema.namespace().clone(),
+            version: OwnedDefinitionKey::new("explicit-empty-source-fixture").unwrap(),
+            source: SourcePin {
+                system: ExternalSourceSystem::PathOfBuilding2,
+                revision: "c".repeat(40),
+                files: vec![SourceFilePin {
+                    path: "injected/source-layout.json".into(),
+                    sha256: "d".repeat(64),
+                }],
+            },
+            item_lines: *items.identity(),
+            dialect: ItemSourceDialect::PobExportedSingleTextV1,
+            rule_layouts: vec![],
+            template_layouts: vec![],
+        },
+        items,
+        schema,
+        ItemSourceLimits::default(),
+    )
+    .unwrap()
+}

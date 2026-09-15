@@ -96,13 +96,32 @@ fields and member lists include only declarations individually admitted by the u
 item template. Conflicting headers/parameter assignments stay pending; listed members of
 partial sets may survive without implying that the set is complete.
 
-Fresh normalization accepts a single consumed item-text chunk with only ModRange children.
-It deliberately does not assign those child IDs to raw line numbers. Range expressions
-remain pending; fixed values can convert independently. Multiple text resets or unknown
-child operations prevent this partial conversion. The sidecar preserves the chosen content
-entry, every line outcome, template-context issues and fresh modifier occurrence IDs.
-Unknown lines remain visible. Item parameter/modifier collections retain pending closure
-until the remaining source lifecycle and semantics are accounted for.
+The source-layout adapter is an additional injected Import artifact bound to the exact
+item-line policy. It supports a reviewed canonical preamble and one consumed text chunk
+followed by ordered ModRange children. It proves source category/member positions before assigning
+fractions; XML IDs are never raw line numbers or counts of emitted owned modifiers. A line
+can emit several owned values while occupying one source slot. Unknown membership or
+unimplemented list-changing lifecycle leaves attribution pending. Multiple text resets,
+unsupported tags and child operations cannot be stripped into apparently known semantics.
+
+An immutable attribution plan retains original/semantic text, source spans, layout evidence,
+flat range-write records and the winning write. Inline fractions precede later XML writes;
+repeated valid XML IDs apply in source order. The existing injected converter still owns
+interpolation quantum, rounding and owned slot destinations. The normalizer preserves raw
+line outcomes and fresh modifier IDs, with a version-5 attribution sidecar. Item parameter
+and modifier collections retain pending closure; attribution is not whole-item evaluation.
+The integrated evidence for this phase is recorded separately in the implementation log.
+
+Source presentation positions are consumed before matching semantic rules: an item titled
+`49% increased Attack Speed` does not acquire that modifier. Unsupported tags preserve raw
+text and a bounded union of raw/body candidates; cleaned text is diagnostic input only until
+its meaning is admitted. A blocked competing parameter/header invalidates an earlier known
+assignment. An unrecognized source line may consume the following line as a combined
+modifier; that following row stays blocked until its independence is known. Arbitrary
+reminder-block control flow is declined as an unsupported item lifecycle, not replayed. Source membership proof and individually admitted literal facts remain distinct.
+Malformed overlays invalidate earlier fractions conservatively; a later valid write can
+recover its exact proven target. No source checkout or exporter-version authentication is
+implied by the policy's offline provenance pins.
 
 The original Grand Spear has explicit attack speed 49% while its affix metadata names a
 26–28% tier. The import fixture preserves 49 once and retains the discrepancy. The original
@@ -119,13 +138,13 @@ a partial policy can miss a real header. A later source-format-scoped proof or e
 owned authoring must establish unspecified. Never substitute zero, equipment requirement
 or granted skill level. Native rules leave a demanded missing fact unresolved while unused
 facts do not block component effects. Provider binding and complete selected-request
-finalization still need their own evidence. The provenance sidecar remains version 4;
-its embedded draft digest changes with the version-3 draft protocol.
+finalization still need their own evidence. The provenance sidecar uses version 5 for the
+source-layout identity/attribution; owned input and draft protocols remain version 3.
 
 ## Identity, bounds and publication
 
 `NormalizationArtifacts` groups references; it is not a validation token. Normalization
-checks the exact registry/schema/mapping/role/reward-policy/item-policy bindings and PoB2 source family before output.
+checks the exact registry/schema/mapping/role/reward-policy/item-policy/source-layout bindings and PoB2 source family before output.
 The allocator must have the source lineage and a watermark at least as high as the source
 importer's final state. Every owned ID is allocated above that watermark. Work happens on
 a local allocator; errors return no partial result and cannot consume the caller's state.
@@ -133,8 +152,8 @@ The host publishes draft, sidecar and new watermark together under its owner or 
 Repeating a fresh import is not restore, changed-source migration or concurrent allocation
 authority. Those operations need separate revisioned contracts.
 
-The version-4 sidecar records source hash/schema/revision, before/after watermarks, policy plus query
-identity, exact artifact identities (including reward and item policies), draft digest and one origin entry per source element.
+The version-5 sidecar records source hash/schema/revision, before/after watermarks, policy plus query
+identity, exact artifact identities (including reward, item-line and item-source policies), draft digest and one origin entry per source element.
 Its targets are a closed enum of current owned occurrences/issues. Many source rows may
 refer to one real pending collection issue; candidates never allocate hypothetical uses.
 Unknown semantics are not automatically called presentation metadata. The current broad
@@ -145,7 +164,7 @@ bounded. Attribute indexes and cached group origins avoid repeated source scans.
 fail explicitly rather than truncating source or silently claiming complete collections.
 
 `normalize-owned INPUT --policy POLICY --registry REGISTRY --definitions DEFINITIONS
---mapping MAPPING --roles ROLES --rewards REWARDS --items ITEMS --queries QUERIES --output NEW_DIRECTORY` is the thin CLI
+--mapping MAPPING --roles ROLES --rewards REWARDS --items ITEMS --item-source ITEM_SOURCE --queries QUERIES --output NEW_DIRECTORY` is the thin CLI
 consumer. It accepts XML or one PoB share code and requires all owned artifacts. It prepares
 and validates draft.json, sidecar.json and report.json before creating the output directory;
 existing paths are refused. A filesystem failure during publication is not an atomic

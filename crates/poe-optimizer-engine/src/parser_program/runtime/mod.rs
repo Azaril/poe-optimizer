@@ -166,9 +166,6 @@ impl ProgramOutput {
     pub fn pattern_steps(&self) -> u64 {
         self.source.pattern_steps()
     }
-    pub fn source_output(&self) -> &SourceProgramOutput {
-        &self.source
-    }
 }
 
 /// One request's cumulative program work and allocations. The public standalone

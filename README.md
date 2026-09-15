@@ -55,7 +55,7 @@ null; omitted fields reject, and an unresolved imported level remains pending. A
 presets can contribute socket equipment and choice presets can contribute rewards independently.
 Older envelopes are rejected explicitly; unchanged numeric records retain their content digests.
 `normalize-owned` converts caller-supplied XML/share codes through injected owned schema,
-mapping, role, reward, item and normalization policy artifacts into partial owned drafts. It preserves independent
+mapping, role, reward, item-line, item-source and normalization policy artifacts into partial owned drafts. It preserves independent
 alternatives and unresolved semantics; it does not yet produce a complete original build
 request or calculate. Item-line conversion is separate from native rules and retains unknown
 semantics; generated-skill parameter projection does not create an authored gem. See

@@ -6,6 +6,7 @@ use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
     decode_build,
     owned_item_lines::{ItemLineLimits, decode_item_line_policy},
+    owned_item_source::{ItemSourceLimits, decode_item_source_policy},
     owned_mapping::{decode_mapping_package, decode_registry},
     owned_normalize::{
         ImportQueryTemplate, NormalizationArtifacts, NormalizationLimits, NormalizationPolicy,
@@ -48,6 +49,9 @@ pub(crate) struct Args {
     /// Bound item-line policy JSON; supply an explicit empty policy for pending item semantics.
     #[arg(long)]
     items: PathBuf,
+    /// Bound source-layout policy for item range attribution; no PoB checkout is loaded.
+    #[arg(long)]
+    item_source: PathBuf,
     /// Ordered JSON array of explicit import query templates.
     #[arg(long)]
     queries: PathBuf,
@@ -111,6 +115,13 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         &definitions,
         item_limits,
     )?;
+    let item_source_limits = ItemSourceLimits::default();
+    let item_source = decode_item_source_policy(
+        &read_bounded(&args.item_source, item_source_limits.max_wire_bytes)?,
+        &items,
+        &definitions,
+        item_source_limits,
+    )?;
     let policy: NormalizationPolicy =
         serde_json::from_slice(&read_bounded(&args.policy, limits.max_policy_bytes)?)?;
     let queries: Vec<ImportQueryTemplate> =
@@ -134,6 +145,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             roles: &roles,
             rewards: &rewards,
             items: &items,
+            item_source: &item_source,
         },
         &policy,
         &queries,

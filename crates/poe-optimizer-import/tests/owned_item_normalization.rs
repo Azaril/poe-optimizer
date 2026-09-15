@@ -7,6 +7,7 @@ use poe_optimizer_core::{
 use poe_optimizer_import::{
     build_instance::SourceOccurrenceId,
     owned_item_lines::{ItemLineOutcome, ItemLinePending},
+    owned_item_source::{ItemLayoutStatus, ItemRangeDecision},
     owned_normalize::{
         NormalizedImport, NormalizedItemLine, NormalizedItemText, OwnedOriginTarget,
     },
@@ -124,14 +125,19 @@ fn original_twister_explicit_item26_fields_and_rolls_survive_pending_metadata() 
     assert_eq!(values(item, &artifacts, "attack-speed"), vec![vec![49.0]]);
     assert_eq!(values(item, &artifacts, "critical-bonus"), vec![vec![16.0]]);
     assert_eq!(values(item, &artifacts, "leech"), vec![vec![9.51]]);
-    assert_eq!(values(item, &artifacts, "broken-armour"), vec![vec![20.0]]);
-    assert_eq!(values(item, &artifacts, "strike-range"), vec![vec![25.0]]);
-    assert_eq!(item.modifiers.members.len(), 8);
+    // Source rune/tag semantics have no admitted recipe in this fixture.
+    assert!(values(item, &artifacts, "broken-armour").is_empty());
+    assert!(values(item, &artifacts, "strike-range").is_empty());
+    assert_eq!(item.modifiers.members.len(), 6);
+    assert!(matches!(
+        text.attribution.layout,
+        ItemLayoutStatus::Pending(_)
+    ));
     let rune = line(text, "{enchant}{rune}18% increased Physical Damage");
     assert!(matches!(
         rune.outcome,
         ItemLineOutcome::Pending {
-            reason: ItemLinePending::MalformedCapture { .. },
+            reason: ItemLinePending::SourceMeaningUnresolved,
             ..
         }
     ));
@@ -166,14 +172,18 @@ fn original_twister_explicit_item26_fields_and_rolls_survive_pending_metadata() 
                 .any(|link| matches!(link, OwnedOriginTarget::Modifier(value) if *value == id))
         );
     }
-    assert_eq!(result.sidecar().schema_version, 4);
+    assert_eq!(result.sidecar().schema_version, 5);
+    assert_eq!(
+        result.sidecar().item_source_policy,
+        *artifacts.item_source.identity()
+    );
     assert_eq!(result.sidecar().item_policy, *artifacts.items.identity());
     assert_eq!(result.sidecar().source_sha256, original.source_sha256());
     assert_eq!(original.source_xml(), TWISTER);
 }
 
 #[test]
-fn original_sniper_staff_headers_do_not_invent_item_level_or_resolve_range_lifecycle() {
+fn original_sniper_staff_resolves_grant_without_inventing_item_level_or_gem() {
     let artifacts = artifacts();
     let original = source(SNIPER);
     let source_id = item_source(&original, "28");
@@ -183,19 +193,27 @@ fn original_sniper_staff_headers_do_not_invent_item_level_or_resolve_range_lifec
     assert!(matches!(item.item_level, DraftField::Pending(_)));
     quality_twenty(item, &artifacts);
     partial_collections(item);
-    assert!(item.parameters.members.is_empty());
     assert_eq!(values(item, &artifacts, "spell"), vec![vec![128.0]]);
     assert_eq!(item.modifiers.members.len(), 1);
     let grant = line(text, "{range:0.5}Grants Skill: Level (1-20) Firebolt");
+    assert!(matches!(grant.outcome, ItemLineOutcome::Known { .. }));
+    assert!(matches!(text.attribution.layout, ItemLayoutStatus::Proven));
+    let attributed = text
+        .attribution
+        .lines
+        .iter()
+        .find(|l| l.index == grant.index)
+        .unwrap();
     assert!(matches!(
-        grant.outcome,
-        ItemLineOutcome::Pending {
-            reason: ItemLinePending::MissingRangeFraction,
-            ..
-        }
+        attributed.range,
+        ItemRangeDecision::Resolved { fraction: 0.5, .. }
     ));
+    assert_eq!(item.parameters.members.len(), 1);
+    assert!(
+        matches!(item.parameters.members[0].value.to_resolved(), Some(ParameterValue::Integer(v)) if v.get() == 11)
+    );
     assert!(grant.modifiers.is_empty());
-    assert!(text.skipped.is_none()); // ModRange children are retained, not executed.
+    assert!(text.skipped.is_none()); // The bounded source adapter resolves these exact writes.
     let fragment = original.source_fragment(source_id).unwrap();
     assert!(fragment.contains("<ModRange"));
     assert!(!fragment.contains("Item Level:"));
@@ -220,7 +238,7 @@ fn original_sniper_staff_headers_do_not_invent_item_level_or_resolve_range_lifec
 fn unknown_line_preserves_known_fields_and_exact_explicit_speed_despite_tier_metadata() {
     let artifacts = artifacts();
     let original = source(&wrapped(
-        "Grand Spear\nItem Level: 81\nQuality: 20\nSuffix: LocalIncreasedAttackSpeed8 (26-28)\n49% increased Attack Speed\nUnconverted game effect",
+        "Rarity: RARE\nNew Item\nGrand Spear\nItem Level: 81\nQuality: 20\nSuffix: LocalIncreasedAttackSpeed8 (26-28)\n49% increased Attack Speed\nUnconverted game effect",
     ));
     let result = normalize(&original, &artifacts);
     let (item, text) = converted(&result, item_source(&original, "7"));
@@ -248,9 +266,9 @@ fn unknown_line_preserves_known_fields_and_exact_explicit_speed_despite_tier_met
 fn repeated_text_resets_and_unknown_children_do_not_apply_a_filtered_item() {
     let artifacts = artifacts();
     for content in [
-        "Grand Spear\nItem Level: 81<ModRange id=\"1\" range=\"0.5\"/>Quality: 20\n49% increased Attack Speed",
-        "Grand Spear\nItem Level: 81\nQuality: 20\n49% increased Attack Speed<UnknownItemOperation/>",
-        "Grand Spear\nItem Level: 81\nQuality: 20\n49% increased Attack Speed<ModRange xmlns=\"urn:other\" id=\"1\" range=\"0.5\"/>",
+        "Rarity: RARE\nNew Item\nGrand Spear\nItem Level: 81<ModRange id=\"1\" range=\"0.5\"/>Quality: 20\n49% increased Attack Speed",
+        "Rarity: RARE\nNew Item\nGrand Spear\nItem Level: 81\nQuality: 20\n49% increased Attack Speed<UnknownItemOperation/>",
+        "Rarity: RARE\nNew Item\nGrand Spear\nItem Level: 81\nQuality: 20\n49% increased Attack Speed<ModRange xmlns=\"urn:other\" id=\"1\" range=\"0.5\"/>",
     ] {
         let original = source(&wrapped(content));
         let result = normalize(&original, &artifacts);
@@ -273,7 +291,7 @@ fn repeated_text_resets_and_unknown_children_do_not_apply_a_filtered_item() {
 fn two_plain_same_definition_modifiers_keep_distinct_line_and_occurrence_identity() {
     let artifacts = artifacts();
     let original = source(&wrapped(
-        "Grand Spear\nItem Level: 81\nQuality: 20\n18% increased Physical Damage\n101% increased Physical Damage<ModRange id=\"1\" range=\"0.5\"/>",
+        "Rarity: RARE\nNew Item\nGrand Spear\nItem Level: 81\nQuality: 20\n18% increased Physical Damage\n101% increased Physical Damage<ModRange id=\"1\" range=\"0.5\"/>",
     ));
     let result = normalize(&original, &artifacts);
     let (item, text) = converted(&result, item_source(&original, "7"));
@@ -303,9 +321,15 @@ fn incomplete_item_policy_does_not_turn_unrecognized_or_missing_level_into_known
     policy.rules.clear();
     artifacts.items =
         OwnedItemLinePolicy::new(policy, &artifacts.schema, ItemLineLimits::default()).unwrap();
+    artifacts.item_source = support::source_policy(
+        &artifacts.items,
+        &artifacts.schema,
+        [&artifacts.spear, &artifacts.staff],
+        artifacts.item_source.input().source.clone(),
+    );
     for content in [
         "Ashen Staff",
-        "Grand Spear\nItem Level: 81",
+        "Rarity: RARE\nNew Item\nGrand Spear\nItem Level: 81",
         "Ashen Staff\nLevelReq: 26",
     ] {
         let original = source(&wrapped(content));

@@ -1,7 +1,6 @@
 //! Partial item conversion and exact source-line provenance. This does not replay
-//! the source item's mutable ParseRaw/ModRange/variant/socket lifecycle.
+//! the source item's mutable ParseRaw/variant/socket lifecycle.
 use super::*;
-use crate::source_xml::PobContentEntry;
 
 #[derive(Clone, Debug, Serialize)]
 pub struct NormalizedItemLine {
@@ -18,6 +17,8 @@ pub struct NormalizedItemText {
     pub skipped: Option<OwnedDefinitionKey>,
     pub lines: Vec<NormalizedItemLine>,
     pub issues: Vec<ItemTextIssue>,
+    /// Immutable Import provenance; source positions never enter owned build records.
+    pub attribution: ItemAttributionReport,
 }
 
 pub(super) fn normalize_item(
@@ -26,41 +27,16 @@ pub(super) fn normalize_item(
     id: ItemRecordId,
 ) -> Result<ItemDraft> {
     let source = row.occurrence().id();
-    let mut texts = Vec::new();
-    let mut layout_supported = true;
-    if let SourceContentEvidence::Available(content) = row.content() {
-        for (index, entry) in content.consumed().iter().enumerate() {
-            b.charge(1)?;
-            match entry {
-                PobContentEntry::Text { text, .. } => texts.push((index, text.as_str())),
-                PobContentEntry::Element { .. } => {}
-            }
-        }
-        for child in row.children() {
-            let child = &b.evidence.rows()[child.ordinal() as usize];
-            // Range overrides only change interpolation. No fraction is supplied
-            // below, so any range expression remains pending. Unknown child
-            // operations and repeated text resets are not silently ignored.
-            if child.occurrence().has_namespace_context() || child.occurrence().name() != "ModRange"
-            {
-                layout_supported = false;
-            }
-        }
-    }
-    let converted = if layout_supported && texts.len() == 1 {
-        let (index, text) = texts[0];
-        b.charge(text.len())?;
-        Some((index, b.items.convert_text(text)?))
-    } else {
-        None
-    };
-    let Some((content_entry, converted)) = converted else {
+    let attribution = b.item_source.attribute(b.evidence, source, b.items)?;
+    b.charge(attribution.report().lines.len() + attribution.report().writes.len())?;
+    if !attribution.can_convert_lines() {
         b.item_texts.push(NormalizedItemText {
             source,
             content_entry: None,
             skipped: Some(key("item-content-lifecycle-not-converted")),
             lines: vec![],
             issues: vec![],
+            attribution: attribution.into_report(),
         });
         return Ok(ItemDraft {
             id,
@@ -70,7 +46,19 @@ pub(super) fn normalize_item(
             quality: b.quality(source)?,
             modifiers: b.closure(source, "item-modifiers-not-converted", vec![])?,
         });
-    };
+    }
+    let content_entry = attribution
+        .report()
+        .content_entry
+        .expect("admitted item text");
+    let raw_lines: BTreeMap<_, _> = attribution
+        .report()
+        .lines
+        .iter()
+        .map(|line| (line.index, line.raw.as_str()))
+        .collect();
+    b.charge(raw_lines.values().map(|text| text.len()).sum())?;
+    let converted = attribution.convert(b.items)?;
     b.charge(converted.lines.len() + converted.parameters.len() + converted.modifiers.len())?;
     let template = match converted.template {
         ItemField::Known { value, .. } => value.into(),
@@ -94,7 +82,7 @@ pub(super) fn normalize_item(
         .into_iter()
         .map(|line| NormalizedItemLine {
             index: line.index,
-            text: line.text.to_owned(),
+            text: raw_lines[&line.index].to_owned(),
             outcome: line.outcome,
             modifiers: vec![],
         })
@@ -128,15 +116,16 @@ pub(super) fn normalize_item(
         skipped: None,
         lines,
         issues: converted.issues,
+        attribution: attribution.into_report(),
     });
     Ok(ItemDraft {
         id,
         template,
         item_level,
         quality,
-        // Classified text is not whole-item closure. Affix metadata, child range
-        // overrides, variants, sockets and implicit lifecycle need their own
-        // conversion before these collections can be declared complete.
+        // Source range attribution is not whole-item closure. Affix, variant,
+        // socket and implicit lifecycle still need their own conversion before
+        // these collections can be declared complete.
         parameters: b.closure(source, "item-parameters-not-converted", parameters)?,
         modifiers: b.closure(source, "item-modifiers-not-converted", modifiers)?,
     })

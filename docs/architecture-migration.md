@@ -118,9 +118,9 @@ Original02 Twister and original05 Sniper remain joint design cases, with all fiv
 inputs and all 110 reference rows retained. Item-line knowledge and an oracle-confirmed
 grant level are not complete native builds. The denominator remains **0/5**.
 
-## Next range-attribution slice
+## Source range-attribution checkpoint
 
-Add a bounded Import-only source-layout adapter around the existing injected item-line
+The bounded Import-only source-layout adapter now surrounds the existing injected item-line
 converter. Source syntax and classified-list positions belong to that adapter; owned
 modifier/parameter definitions, units, interpolation and rounding remain injected. Reuse
 bounded lexical matching instead of building another semantic parser or source interpreter.
@@ -140,10 +140,27 @@ Keep one flat provenance table for line/category positions, range writes, winnin
 and unresolved targets; bound aggregate work and diagnostic output. Compatibility source
 pins document offline review, not a requirement to load PoB during ordinary import or proof
 of the exporter's exact version. Runtime binds supported source dialect and artifact identity.
-The next evidence gate compares actual native source attribution and values with optional
-isolated original-source reference functions. Production does not construct PoB UI objects.
+Native attribution/conversion fixtures now cover the original staff and conservative spear
+path. Two optional tests execute the pinned original ParseRaw, XML parser, exact ItemsTab
+overlay loop and BuildModList; they confirm staff writes and the spear's rune-excluded
+load indices. Production does not construct PoB UI objects.
 Whole-item closure, provider activation and complete builds remain separate gates. The
 source audit and proposed API are in `runs/owned-item-level-01/range-design.md`.
+
+The normalizer requires an explicit `--item-source` policy bound to its item-line artifact,
+and sidecar v5 binds reference routing to that same policy. Rare titles are consumed as
+presentation independently of injected semantic patterns. Unsupported tags remain blocked
+while retaining candidates from raw and cleaned text, so they cannot hide competing fields.
+Preamble position failures block facts as well as range proof. Source/output/work bounds
+include repeated invalidation and candidate collection; uncertainty never becomes a default.
+
+Next bind admitted item parameters and local weapon outputs to real provider/action uses.
+Do not broaden the source adapter into general PoB object reconstruction. Rune/Bonded,
+variants, collection closure, unspecified-level proof and complete selected finalization
+remain explicit conversion work. D3 must activate the item-granted Firebolt separately from
+the authored Sniper and exercise player/minion paths through the same owned contracts.
+The next numerical checkpoint still requires a named active legacy consumer migration and
+retirement; the source-attribution component alone does not meet that gate.
 
 ## Retirement ownership
 
