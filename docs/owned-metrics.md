@@ -60,8 +60,8 @@ from a directory containing no PoB files. The existing `evaluate --backend nativ
 still uses the legacy profile backend; these are explicit different experimental commands.
 
 Mapping format is version 1; metric plan identity uses `owned-metric-plan-v1` and binds
-both the effect plan and mapping. Effect-plan identity is now `owned-effect-plan-v3` because
-query activation is prebound. Worker scratch can be reused after success or error and
+both the effect plan and mapping. Effect-plan identity is now `owned-effect-plan-v4`, extending the v3 prebound query
+activation contract with explicit stat receiver instantiation. Worker scratch can be reused after success or error and
 across plans; immutable plans can be shared across native workers. This is not evidence of
 throughput for admitted whole builds or reusable bindings after candidate mutation.
 
@@ -69,8 +69,8 @@ throughput for admitted whole builds or reusable bindings after candidate mutati
 
 Real data needs complete selected item/passive/reward/scenario contributions and shared
 receiver rules before it can declare a final resistance stat and map the fixed original
-query. The proposed [stat-owned actor receivers](owned-stat-receivers.md) give common
-formulas explicit semantic ownership and player/owned-actor applicability. They are not
+query. The [stat-owned actor receivers](owned-stat-receivers.md) give common
+formulas explicit semantic ownership and player/owned-actor applicability. They are
 implemented and retain the existing whole-plan coverage requirement; no fabricated usage
 policy or per-class receiver is a substitute.
 The [resistance data slice](../data/owned/poe2/3887ae68/resistance/README.md) intentionally

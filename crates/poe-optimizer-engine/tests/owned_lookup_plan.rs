@@ -99,6 +99,7 @@ fn compile(f: &Fixture) -> OwnedEffectPlan<OwnedDefinitionSchemaPackage> {
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap(),
     );
     let rules = RulePackageInput {
+        receivers: DeclaredSet::complete(vec![]),
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("lookup-tests"),

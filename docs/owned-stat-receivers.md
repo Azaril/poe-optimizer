@@ -1,9 +1,10 @@
-# Proposed stat-owned actor receivers
+# Stat-owned actor receivers
 
-**Status: Proposed.** This describes the next receiver design within the accepted
-[owned domain architecture](domain-architecture.md). It is not an implemented API or a
-change to complete-request and global contributor-closure requirements. See
-[implementation](implementation.md) for delivered behavior and validation.
+**Status: component implemented, 2026-09-15.** This is the common actor calculation
+boundary within the [owned domain architecture](domain-architecture.md). Complete-request
+and global contributor-closure requirements remain unchanged. Real game receiver data
+and complete original-build evaluation are separate work; see
+[implementation](implementation.md) for validation and the current resume point.
 
 Common final statistics need an owner independent of class, equipment, encounter and user
 usage choices. An explicit stat-owned receiver can combine contributions for a concrete
@@ -11,9 +12,9 @@ actor using the existing typed rule DAG and dependency scheduler. Player and own
 formulas have explicit applicability; a missing owned-actor recipe never inherits player
 defaults. No source callback, UI object or fabricated provider is involved.
 
-## Proposed contract
+## Contract
 
-Add a required receiver registry to the owned rule package:
+Rule-package wire version 2 requires an explicit receiver registry:
 
 ```rust
 pub receivers: DeclaredSet<ActorStatReceiver>;
@@ -57,7 +58,7 @@ supplying gem records match. Discover receivers independently of query order, si
 stat or action may depend on their outputs. An applicability declaration alone must not
 create an actor or adopt a provider.
 
-Give receiver invocations a distinct origin such as `RuleOrigin::Receiver { id, actor }`.
+Give receiver invocations a distinct origin `RuleOrigin::Receiver { receiver, actor }`.
 Reuse actor-query context resolution: retain the parent provider, ancestry, possible
 generated Skill exposure and exact actor grant. A context containing only an actor key
 would lose supplying Skill required-input readiness and ancestor activation. False grants
@@ -72,8 +73,8 @@ a cycle. Activation/final-stat cycles require explicit future semantics, not rep
 execution until values settle.
 
 A complete empty receiver registry supplies no final producers; missing requested stats
-remain `MissingProducer`. A Partial registry adds a plan coverage gap even if known roots
-run. Program and contributor membership retain their existing closure checks. This proposal
+remain `MissingProducer`. A Partial registry adds a `PartialReceivers` coverage gap even if known roots
+run. Program and contributor membership retain their existing closure checks. This boundary
 does not introduce partial-draft evaluation or demand-local completeness. A Known component
 value is not automatically an available final metric.
 
@@ -84,10 +85,16 @@ rows. Compile an applicability index once and charge actor/path expansion before
 Use existing invocation, effect, edge and work ceilings for instantiated roots. Plans and
 programs remain immutable; each worker owns its scratch state.
 
-Receiver declarations participate in the rule-package identity. Add an explicit rule-package
-wire-version transition and a new plan digest version; do not default old artifacts to a
-silently empty registry. Numerical operation versions change only when operation semantics
-change. Regenerate affected owned artifacts and fixtures explicitly.
+Receiver declarations participate in canonical rule-package identity. Storage uses
+`owned-rule-package-v2`; compiled input/program domains use `owned-rule-input-v2` and
+`owned-rule-programs-v2`; effect plans use `owned-effect-plan-v4`. Numerical operations
+remain v5. Old wire versions and a missing registry reject explicitly. Receiver rows and
+targets canonicalize before final identities; effect ordering remains meaningful.
+
+Base, import seed, CLI-published catalog and resistance artifacts have migrated with
+complete-empty receiver registries. Schemas, IDs and existing formulas are preserved.
+An empty registry supplies no game receivers. New real recipes must explicitly declare
+reviewed programs and their coverage.
 
 ## Why this extension
 
@@ -115,7 +122,7 @@ presence/priority, conversions, block-related maxima and actor-specific inputs n
 semantics or coverage gaps. Missing producers cannot prove that those mechanics are absent.
 Existing typed arithmetic and the pure resistance kernel provide reusable numerical laws.
 
-Before implementation is accepted, test:
+The component acceptance suite covers:
 
 - Direct-authored contributions through receivers to real metric queries, changed input,
   and equivalent facts across classes without class-specific receiver dispatch.
@@ -126,8 +133,9 @@ Before implementation is accepted, test:
   producers and aliases, valid derived dependencies, and direct/indirect cycles.
 - Strict wire/version/reference/type/unit validation, budgets, canonical identity,
   A→B→A scratch reuse and shared immutable worker execution.
-- Independent pinned-source numerical contrasts, then originals 05 and 02 cold queries only
-  once their real selected contributions and existing global closure are established.
+Real cold-resistance comparisons remain an integration obligation after selected
+contributions and global closure are established. Existing numerical source tests alone
+do not establish the new receiver's whole-build fidelity.
 
 Receiver ownership alone does not complete source normalization, full metric coverage or
 legacy retirement. Preserve all five originals and fixed expectations. Replace active

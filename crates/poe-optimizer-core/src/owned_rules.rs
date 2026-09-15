@@ -10,7 +10,7 @@ use crate::{
 };
 use serde::{Deserialize, Serialize};
 
-pub const OWNED_RULE_PACKAGE_VERSION: u32 = 1;
+pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v5";
 
@@ -26,6 +26,28 @@ pub struct RulePackageInput {
     /// Immutable finite data shared by programs in this package.
     pub tables: Vec<IntegerRuleTable>,
     pub owners: Vec<DefinitionRules>,
+    /// Explicit applicability; this registry never creates actor occurrences.
+    /// Partial membership remains a coverage gap even if all known rows run.
+    pub receivers: DeclaredSet<ActorStatReceiver>,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ActorStatReceiver {
+    pub id: OwnedDefinitionKey,
+    pub stat: StatDefId,
+    pub program: OwnedDefinitionKey,
+    pub targets: Vec<ActorReceiverTarget>,
+}
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum ActorReceiverTarget {
+    Player,
+    OwnedSlot { slot: DeclaredSlot<ActorSlotDefId> },
 }
 /// Dense, explicitly bounded integer-keyed scalar data. Each row corresponds to
 /// `minimum + row_index`; no interpolation, sparse fallback or endpoint clamping.

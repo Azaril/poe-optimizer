@@ -41,7 +41,7 @@
   },
   "catalog_lf_sha256": "a90217d9bab6c0469917a2ba75ed9517205d2ac2b3d59f8d68580604f26df07f",
   "manifest_sha256": "996e1a96abc3de69bea13e927dd4c5a8d0e8a91eb2022d9a9261b3e23ee11a42",
-  "recipe_sha256": "e99f510d0c9d7a6624174695e5540b146366e2a487b5beec937682b3fc266690",
+  "recipe_sha256": "b8c7a75dc01000b1b2e311c9b8305a47b6642b4a12b914b07d792e41aacecf45",
   "identities": [
     {
       "gem_key": "Metadata/Items/Gems/SkillGemTwister",

@@ -68,7 +68,9 @@ inserted unknown member must still make the affected range pending. All eight
 receiving rows remain distinct; none is selected or multiplied into a build
 total here. Original02 item26 is a Grand Spear and is kept distinct. Protected
 original files are never rewritten. Source modTags and their scaling effects
-are the next blocking semantic-input obligation for the original ring.
+are the next blocking semantic-input obligation for the original ring. The proposed
+[item-scaling slice](../../../../../docs/owned-item-scaling.md) defines the next input,
+owning-item and ordered-transform seams; it is not implemented tag/catalyst or rune support.
 
 The Life input declaration preserves that second source member; it does not
 supply a Life effect. Source layout completeness is separate from the Partial

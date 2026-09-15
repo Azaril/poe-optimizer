@@ -2,7 +2,9 @@
 #[path = "../crates/poe-optimizer-engine/tests/support/owned_metric_fixture.rs"]
 #[allow(dead_code)]
 mod support;
-use poe_optimizer_core::{owned_build::*, owned_routing::*, owned_rules::*};
+use poe_optimizer_core::{
+    owned_build::*, owned_routing::*, owned_rules::*, owned_schema::DeclaredSet,
+};
 use poe_optimizer_data::owned_schema::*;
 use serde_json::Value;
 use std::{
@@ -29,6 +31,7 @@ fn save(dir: &Path, f: &Fixture) {
     )
     .unwrap();
     let rules = RulePackageInput {
+        receivers: DeclaredSet::complete(vec![]),
         tables: f.tables.clone(),
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),

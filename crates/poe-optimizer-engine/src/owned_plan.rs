@@ -120,6 +120,10 @@ pub enum RuleOrigin {
         provider: ProviderKey,
     },
     Encounter,
+    Receiver {
+        receiver: OwnedDefinitionKey,
+        actor: ActorKey,
+    },
     Usage {
         index: usize,
     },
@@ -186,6 +190,7 @@ pub enum PlanGapReason {
     SchemaUnresolved,
     MissingPrograms,
     PartialPrograms,
+    PartialReceivers,
     PartialDeclarations,
     UnresolvedTopology,
     UnsupportedContext,

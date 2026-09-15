@@ -35,6 +35,20 @@ class ImportExportTests(unittest.TestCase):
         for name, data in self.outputs.items():
             self.assertEqual(data, (DATA / "import" / name).read_bytes(), name)
 
+    def test_rule_registry_survives_with_no_implicit_old_wire_migration(self):
+        for value in [EXPORT.decode(self.inputs[1]), EXPORT.decode(self.outputs["recipe-seed.json"])]:
+            self.assertEqual(value["rules"]["schema_version"], 2)
+            self.assertEqual(value["rules"]["receivers"], {"members": [], "closure": {"kind": "complete"}})
+        original = EXPORT.decode(self.inputs[1])["rules"]
+        for changed in ["missing", "old_version"]:
+            rules = copy.deepcopy(original)
+            if changed == "missing":
+                rules.pop("receivers")
+            else:
+                rules["schema_version"] = 1
+            with self.assertRaisesRegex(ValueError, "owned rule"):
+                EXPORT.validate_rule_wire(rules)
+
     def test_standalone_catalog_is_exact_identity_projection(self):
         original = EXPORT.decode(self.inputs[0])["skill_identities"]
         catalog = EXPORT.decode(self.outputs["skill-identities.json"])

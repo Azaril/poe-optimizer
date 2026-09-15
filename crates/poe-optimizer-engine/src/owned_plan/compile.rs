@@ -34,6 +34,8 @@ struct Builder<'a, I> {
     actions: BTreeSet<ActionSelection>,
     providers: BTreeSet<ProviderKey>,
     actors: BTreeMap<OwnedActorKey, Vec<PlanValueKey>>,
+    /// Actual discovered actors, distinct from merely declared grant targets.
+    receiver_actors: BTreeSet<ActorKey>,
     unsupported_roots: BTreeSet<ProviderRoot>,
     potential_skills: BTreeSet<(ProviderKey, SkillDefId)>,
     skill_supplies: BTreeMap<GeneratedSkillKey, ProviderKey>,
@@ -102,7 +104,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         rules: rules.identity(),
         routing: *routing.identity(),
     };
-    let identity = digest_owned("owned-effect-plan-v3", &bindings, limits.max_wire_bytes)?;
+    let identity = digest_owned("owned-effect-plan-v4", &bindings, limits.max_wire_bytes)?;
     let resolver = OwnedOccurrenceResolver::new(definitions.as_ref(), &request, limits.binding)?;
     let mut b = Builder {
         request: &request,
@@ -121,6 +123,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         actions: BTreeSet::new(),
         providers: BTreeSet::new(),
         actors: BTreeMap::new(),
+        receiver_actors: BTreeSet::from([ActorKey::Player]),
         unsupported_roots: BTreeSet::new(),
         potential_skills: BTreeSet::new(),
         skill_supplies: BTreeMap::new(),
@@ -151,6 +154,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         return Err(PlanError::Limit("actions"));
     }
     b.discover()?;
+    b.actor_receivers()?;
     b.encounter_and_usage()?;
     b.action_programs()?;
     b.routes(&routing)?;
@@ -453,6 +457,8 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 ProviderExposure::Actor {
                     key: actor, schema, ..
                 } => {
+                    self.receiver_actors
+                        .insert(ActorKey::Owned(Box::new(actor.clone())));
                     if !schema.skills.is_complete() || !schema.outputs.is_complete() {
                         self.gap(Some(key.clone()), None, PlanGapReason::PartialDeclarations)?;
                     }
@@ -810,6 +816,107 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         self.gates.push(gates);
         Ok(())
     }
+    /// Resolve the same parent and generated-skill context for receiver roots and
+    /// metric queries. A bare actor key would lose ancestor and required-input gates.
+    fn actor_context(
+        &mut self,
+        actor: &ActorKey,
+    ) -> Result<(SelectorBindingStatus, Option<Context>)> {
+        let resolved = self.resolver.actor(actor)?;
+        charge(&mut self.work, resolved.work_used())?;
+        let status = resolved.status();
+        if resolved.into_value().is_none() {
+            return Ok((status, None));
+        }
+        let provider = match actor {
+            ActorKey::Player => root(ProviderRoot::Character),
+            ActorKey::Owned(actor) => actor.provider.clone(),
+        };
+        let parent = self.resolver.provider(&provider)?;
+        charge(&mut self.work, parent.work_used())?;
+        let parent_status = parent.status();
+        let context = parent.into_value().map(|parent| Context {
+            origin: RuleOrigin::Provider {
+                provider: provider.clone(),
+            },
+            skill: match parent.exposure() {
+                ProviderExposure::Skill { key, .. } => Some(key.clone()),
+                _ => None,
+            },
+            provider: Some(provider),
+            actor: actor.clone(),
+            entity: ConcreteEntity::Actor(actor.clone()),
+        });
+        Ok((parent_status, context))
+    }
+
+    fn actor_receivers(&mut self) -> Result<()> {
+        let rules = self.rules.input();
+        if !rules.receivers.is_complete() {
+            self.gap(None, None, PlanGapReason::PartialReceivers)?;
+        }
+        // Index authored stat programs and exact applicability once. Neither query
+        // order nor an applicability declaration creates an actor occurrence.
+        charge(&mut self.work, rules.owners.len())?;
+        let mut programs = BTreeMap::new();
+        for owner in &rules.owners {
+            if let SchemaSubject::Definition(DefinitionAddress::Stat(stat)) = &owner.owner {
+                charge(&mut self.work, owner.programs.members.len())?;
+                for program in &owner.programs.members {
+                    programs.insert((stat, &program.id), (program, owner.programs.is_complete()));
+                }
+            }
+        }
+        let mut applicable: BTreeMap<_, Vec<_>> = BTreeMap::new();
+        charge(&mut self.work, rules.receivers.members.len())?;
+        for receiver in &rules.receivers.members {
+            let (program, complete) = programs
+                .get(&(&receiver.stat, &receiver.program))
+                .copied()
+                .ok_or_else(|| PlanError::Invalid("validated receiver program is absent".into()))?;
+            charge(&mut self.work, receiver.targets.len())?;
+            for target in &receiver.targets {
+                applicable
+                    .entry(target.clone())
+                    .or_default()
+                    .push((receiver, program, complete));
+            }
+        }
+        let actors = std::mem::take(&mut self.receiver_actors);
+        charge(&mut self.work, actors.len())?;
+        for actor in actors {
+            let target = match &actor {
+                ActorKey::Player => ActorReceiverTarget::Player,
+                ActorKey::Owned(actor) => ActorReceiverTarget::OwnedSlot {
+                    slot: actor.slot.clone(),
+                },
+            };
+            let Some(receivers) = applicable.get(&target) else {
+                continue;
+            };
+            charge(&mut self.work, receivers.len())?;
+            let (status, context) = self.actor_context(&actor)?;
+            for (receiver, program, complete) in receivers {
+                let subject = SchemaSubject::Definition(receiver.stat.address());
+                if !complete {
+                    self.gap(None, Some(subject.clone()), PlanGapReason::PartialPrograms)?;
+                }
+                let Some(mut context) = context.clone() else {
+                    if status != SelectorBindingStatus::Unavailable {
+                        self.gap(None, Some(subject), PlanGapReason::UnresolvedTopology)?;
+                    }
+                    continue;
+                };
+                context.origin = RuleOrigin::Receiver {
+                    receiver: receiver.id.clone(),
+                    actor: actor.clone(),
+                };
+                self.instantiate(subject, program, &context)?;
+            }
+        }
+        Ok(())
+    }
+
     /// Bind target existence separately from final stat production. A parent may
     /// project a useful diagnostic value into a child whose grant is false.
     fn query_gates(&mut self) -> Result<Vec<Vec<PendingRead>>> {
@@ -818,35 +925,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         let mut result = Vec::with_capacity(queries.len());
         for query in queries {
             let (status, context) = match &query.target {
-                MetricTarget::Actor(actor) => {
-                    let resolved = self.resolver.actor(actor)?;
-                    charge(&mut self.work, resolved.work_used())?;
-                    let status = resolved.status();
-                    if resolved.into_value().is_none() {
-                        (status, None)
-                    } else {
-                        let provider = match actor {
-                            ActorKey::Player => root(ProviderRoot::Character),
-                            ActorKey::Owned(actor) => actor.provider.clone(),
-                        };
-                        let parent = self.resolver.provider(&provider)?;
-                        charge(&mut self.work, parent.work_used())?;
-                        let parent_status = parent.status();
-                        let context = parent.into_value().map(|parent| Context {
-                            origin: RuleOrigin::Provider {
-                                provider: provider.clone(),
-                            },
-                            skill: match parent.exposure() {
-                                ProviderExposure::Skill { key, .. } => Some(key.clone()),
-                                _ => None,
-                            },
-                            provider: Some(provider),
-                            actor: actor.clone(),
-                            entity: ConcreteEntity::Actor(actor.clone()),
-                        });
-                        (parent_status, context)
-                    }
-                }
+                MetricTarget::Actor(actor) => self.actor_context(actor)?,
                 MetricTarget::Action(action) => {
                     let resolved = self.resolver.action(action)?;
                     charge(&mut self.work, resolved.work_used())?;

@@ -28,6 +28,18 @@ class ExportTests(unittest.TestCase):
         cls.recipe = EXPORT.load(DATA / "recipe.json", EXPORT.HARD.recipe_bytes)
         cls.catalog = EXPORT.read(ROOT / "crates/poe-optimizer-data/data/game-data.json", EXPORT.HARD.catalog_bytes)
 
+    def test_explicit_receiver_registry_and_rule_wire_version(self):
+        self.assertEqual(self.recipe["rules"]["schema_version"], 2)
+        self.assertEqual(self.recipe["rules"]["receivers"], {"members": [], "closure": {"kind": "complete"}})
+        for changed in ["missing", "old_version"]:
+            recipe = copy.deepcopy(self.recipe)
+            if changed == "missing":
+                recipe["rules"].pop("receivers")
+            else:
+                recipe["rules"]["schema_version"] = 1
+            with self.assertRaisesRegex(ValueError, "owned rule"):
+                EXPORT.export(self.manifest, recipe, self.catalog, SOURCE)
+
     def changed_source(self, path, before, after):
         work = ROOT / "runs/owned-timing-01/export-tests"
         work.mkdir(parents=True, exist_ok=True)

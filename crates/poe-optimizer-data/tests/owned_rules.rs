@@ -39,6 +39,7 @@ fn input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
         unreachable!()
     };
     RulePackageInput {
+        receivers: DeclaredSet::complete(vec![]),
         tables: vec![],
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
@@ -100,7 +101,11 @@ fn unknown_duplicate_missing_fields_and_foreign_bindings_reject() {
     let l = RuleStorageLimits::default();
     let i = input(&s);
     let raw = serde_json::to_string(&i).unwrap();
-    let duplicate = format!("{{\"schema_version\":1,{}", &raw[1..]);
+    let duplicate = format!(
+        "{{\"schema_version\":{},{}",
+        OWNED_RULE_PACKAGE_VERSION,
+        &raw[1..]
+    );
     assert!(decode_rule_package(duplicate.as_bytes(), &s, l).is_err());
     let mut value = serde_json::to_value(&i).unwrap();
     value["unknown"] = true.into();

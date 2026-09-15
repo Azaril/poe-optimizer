@@ -24,10 +24,10 @@ semantic compilation. An occurrence-bound effect plan is the next integration la
 owned requests and injected action routes; its component implementation is validated; full build metrics remain open.
 The [owned metric boundary](owned-metrics.md) maps semantic final stats to requested
 measurements while retaining activation and coverage checks. Complete semantic conversion
-and original-build metric evaluation remain separate gates. The proposed
-[stat-owned actor receivers](owned-stat-receivers.md) supply the next common final-stat
-ownership seam, with explicit player/owned-actor applicability. They are not implemented
-and do not change the current complete-request or global coverage gates.
+and original-build metric evaluation remain separate gates. The
+[stat-owned actor receivers](owned-stat-receivers.md) give common final-stat formulas
+explicit player/owned-actor applicability. Their native component is implemented;
+complete-request and global coverage gates remain unchanged.
 
 ## Recommendation
 

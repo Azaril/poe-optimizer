@@ -184,6 +184,11 @@ Malformed overlays invalidate earlier fractions conservatively; a later valid wr
 recover its exact proven target. No source checkout or exporter-version authentication is
 implied by the policy's offline provenance pins.
 
+The proposed [item modifier properties and scaling](owned-item-scaling.md) slice separates
+source property labels, ordinary/catalyst quality, exact owning-item inputs and ordered
+numeric transforms. It does not yet admit the tagged original05 ring or rune/Bonded
+semantics; unsupported annotations remain Pending rather than being stripped.
+
 The original Grand Spear has explicit attack speed 49% while its affix metadata names a
 26–28% tier. The import fixture preserves 49 once and retains the discrepancy. The original
 Ashen Staff has a ranged Firebolt grant and no Item Level header. Its generated source

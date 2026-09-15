@@ -78,6 +78,13 @@ def fields(value, expected, label):
         raise ValueError(f"unreviewed {label} fields")
 
 
+def validate_rule_wire(rules):
+    """Require the current explicit wire shape; never migrate absent roots on load."""
+    fields(rules, "schema_version namespace release semantics_version operations_version definitions tables owners receivers", "owned rules")
+    if rules["schema_version"] != 2 or rules["operations_version"] != "owned-domain-operations-v5":
+        raise ValueError("unsupported owned rule package version/operations")
+
+
 def bounded(value, maximum, label):
     if not isinstance(value, list) or len(value) > maximum:
         raise ValueError(f"{label} collection bound exceeded")
@@ -147,6 +154,7 @@ def produce(snapshot_bytes, base_bytes, ids_bytes, mechanics_bytes, facts_bytes,
     for name in ["gems", "skills", "gem_declarations", "skill_declarations", "missing_references"]:
         bounded(catalog[name], limits.catalog_rows, name)
     namespace = base["registry"]["namespace"]
+    validate_rule_wire(base["rules"])
     if ids["namespace"] != namespace or base["schema"]["namespace"] != namespace or base["rules"]["definitions"] != schema_identity(base["schema"]) or base["routing"]["definitions"] != base["rules"]["definitions"]:
         raise ValueError("base identity/schema binding mismatch")
     source = {"system": "path_of_building2", "revision": catalog["source"]["upstream_revision"], "files": []}
@@ -373,6 +381,8 @@ def bind_policies(seed_outputs, compiled, limits=HARD):
     previous_mapping = decode(seed_outputs["mapping-seed.json"])
     after = decode(compiled["recipe.json"])
     mapping = decode(compiled["mapping.json"])
+    validate_rule_wire(before["rules"])
+    validate_rule_wire(after["rules"])
     before_identity, after_identity = before["rules"]["definitions"], after["rules"]["definitions"]
     if transition["before_registry"] != owned_digest("owned-id-registry-v1", before["registry"]) or transition["before_definitions"] != before_identity or transition["before_mapping"] != owned_digest("owned-external-mapping-v1", previous_mapping):
         raise ValueError("transition does not begin at the exact seed")

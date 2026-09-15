@@ -76,6 +76,7 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
     source["files"] = [{"path": name, "sha256": digest} for name, digest in sorted(pins.items())]
     recipe = copy.deepcopy(base)
     registry, schema, rules = recipe["registry"], recipe["schema"], recipe["rules"]
+    DATA.validate_rule_wire(rules)
     namespace, ids = registry["namespace"], {}
     old_entries = list(registry["entries"])
     unit = authoring["percentage_points"]

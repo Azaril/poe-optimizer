@@ -59,6 +59,11 @@ class ResistanceExportTests(unittest.TestCase):
         self.assertEqual(self.ids["cold-resistance-base-contributions"]["key"], "def.00000000000009d4")
         self.assertEqual(self.ids["elemental-resistance-base-contributions"]["key"], "def.00000000000009d5")
 
+    def test_rule_version_transition_adds_no_receiver_or_changes_operation_version(self):
+        self.assertEqual(self.recipe["rules"]["schema_version"], 2)
+        self.assertEqual(self.recipe["rules"]["operations_version"], "owned-domain-operations-v5")
+        self.assertEqual(self.recipe["rules"]["receivers"], {"members": [], "closure": {"kind": "complete"}})
+
     def test_new_numerical_rules_only_contribute_on_player(self):
         old = len(self.base["rules"]["owners"])
         owners = self.recipe["rules"]["owners"][old:]
@@ -107,7 +112,8 @@ class ResistanceExportTests(unittest.TestCase):
             effect = rule["emissions"][0]["value"]
             self.assertIn(effect["definition"], [self.ids["flat-cold-modifier"], self.ids["flat-elemental-modifier"]])
             self.assertEqual(effect["rolls"][0]["value"]["value"]["rounding"], "symmetric_half_offset")
-        self.assertEqual(EXPORT.sha(self.outputs["recipe.json"]), "34e8902225acdd95f2dcdfc34d88c0d3d3a815a313354181ee95304a3e53ddf0")
+        # Explicit wire-v2/empty-receiver migration; schema, IDs and rule bodies are unchanged.
+        self.assertEqual(EXPORT.sha(self.outputs["recipe.json"]), "bced082199c5f8d67a6a3dbc991ea59c82861fb9a780d3969859e6bed071b68c")
 
     def test_source_hashes_and_literal_signed_rounding_are_explicit(self):
         facts = EXPORT.DATA.decode(self.outputs["source-facts.json"])

@@ -478,6 +478,7 @@ pub fn fixture() -> Fixture {
         )],
     };
     let rules = RulePackageInput {
+        receivers: DeclaredSet::complete(vec![]),
         tables: vec![],
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: namespace(),

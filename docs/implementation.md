@@ -11,7 +11,90 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: owned range conversion and common receiver design (after `90fcb36`).**
+**Current checkpoint: stat-owned actor receivers and rule wire v2 (after `b67e0b6`).**
+The [receiver boundary](owned-stat-receivers.md) is implemented across Core, Data and Engine.
+Common final calculations belong to Stat definitions and explicitly target Player or exact
+owned-actor slots. Data/Engine validate required programs, Actor context, one final Derive,
+exact units/owners/refs, canonical membership and bounded registry/target/gap/work counts.
+Existing typed programs and the effect graph execute the formulas; no new interpreter,
+source callback, fabricated usage/encounter provider or class-specific dispatch was added.
+
+The planner indexes applicability once and instantiates each receiver once per actual
+ActorKey. Receiver origins remain distinct from providers. Shared actor-context resolution
+preserves parent ancestry, exact grant activation and every RequiredOnce generated-skill
+input. Inactive or unresolved actors do not gain final metrics from a Known parent
+projection. Missing applicability never inherits player defaults. Receiver/program coverage
+retains global closure; competing final producers and direct/indirect dependency cycles
+reject. Plans are immutable and scratch remains private to each worker.
+
+Rule-package wire version is **2** with required `receivers`; numerical operations remain
+**v5**. Data/compiled input/compiled programs use their respective v2 identity domains;
+effect plans use `owned-effect-plan-v4`, and metric plans remain v1. Old versions and a
+missing registry reject rather than acquiring defaults. Base, import seed, CLI-published
+catalog and resistance artifacts were explicitly regenerated with complete-empty receiver
+registries. Schemas, registry IDs, existing tables/program bodies and routing are preserved;
+compiled schema/registry/routing/mapping/roles bytes are unchanged. Changed recipe and
+publication hashes reflect the explicit envelope migration. The production native CLI
+created the migrated catalog bundle before it was adopted as shipped data.
+
+**Real data remains incomplete:** the shipped registries currently contain no game receiver
+roots. Existing resistance recipes supply partial contributions only. Original05's tagged
+ring stays Pending and no cold modifier is promoted by ignoring its tags. The
+[item-scaling design](owned-item-scaling.md) now records the next bounded conversion seam:
+modifier properties, separate catalyst/ordinary quality, exact owning-item input access,
+ordered magnitude transforms and base-versus-baked source encoding. Original02 rune and
+Bonded records exercise separate ownership/activation obligations. These are proposed
+next inputs and rules, not implemented support or a PoB lifecycle replay requirement.
+
+**Validation:** **347 Rust test executions** pass: Data 12, Engine component/plan/library
+250, one additional generated-skill actor receiver regression, Import integration/breadth
+30, and CLI 27 in each feature mode. **49 Python tests** pass across mechanics (22), import
+(16) and resistance (11) exporters. Workspace/native-only strict Clippy, formatting,
+five-crate WASM compilation and six-package PoB/Lua runtime dependency exclusion pass.
+Independent planner review found no production blocker and led to the generated-skill
+regression. This is an affected-scope suite, not a full workspace run, new whole-build
+oracle comparison or throughput result. The final owned-only distribution gate remains open.
+
+Evidence is under `runs/owned-receivers-01/`, including actual CLI publication, explicit
+artifact before/after invariants and validation logs. Initial test fixes corrected a unit
+enum spelling and two fixture assumptions (unselected action context and duplicate old
+actor consumers); production activation/coverage gates were not weakened. A deliberate
+recipe-byte SHA expectation changed after unchanged semantic bodies were verified.
+Protected originals, all **110** fixed query rows and the clean pinned submodule remain
+unchanged. Complete native original builds remain **0/5**. The pre-publication CI snapshot
+found the prior exact main run pending with no jobs; hosted status is recorded separately.
+
+**Open design question:** whether partial selected inputs may yield independently verified
+metrics with conservative dependency coverage was raised with the user and remains pending.
+Complete-request and whole-plan closure gates remain unchanged.
+
+**Active resume point (the only current queue):**
+
+1. Implement bounded modifier-property/header conversion and exact owning-item input access
+   using the [item-scaling design](owned-item-scaling.md). Preserve ordinary versus catalyst
+   quality, explicit zero versus absence, nominal versus already baked values, per-component
+   scalability and meaningful transform ordering. Do not discard tags or copy mutable PoB
+   item/reparse/UI objects. Original05's untouched ring and original02's selected equipment
+   are contrasting integration cases; unknown labels/headers remain explicit.
+2. Add reviewed player resistance receiver data and final Stat/Metric bindings using the
+   implemented stat roots. Establish complete relevant item/reward/passive/scenario
+   contributions, limits and override semantics. Preserve exact repeated occurrences and
+   separate owned-actor defaults. Do not use the original references 5 or 93/75 as inputs.
+   Resolve the partial-input question before changing normalization finalization or global
+   closure; receiver ownership is not permission to bypass either gate.
+3. Complete applicable skill/weapon/actor/support inputs for Twister and Sniper together,
+   retaining all five originals as model stress cases. Bind shared timing/damage kernels,
+   preserve fixed metric availability and run fresh independent reference comparisons.
+   Retire replaced preparation and realization-validation consumers together.
+4. Complete all five originals, then independent holdouts and semantic joint candidates.
+   Migrate search and remove legacy profile/interpreter/snapshot dependency closures;
+   prove the owned-only distribution before claiming PoB independence complete. Measure
+   changed-build evaluation, reuse and multicore throughput over real admitted cases.
+
+The earlier checkpoint sections below are historical evidence, not instructions to resume
+source/UI emulation. Current design and the active queue above supersede their next steps.
+
+**Previous checkpoint: owned range conversion and common receiver design (`b67e0b6`).**
 The offline item policy now separates lexical matching from semantic value conversion.
 `NumericCapture` uses the existing owned decimal grammar with explicit sign policy and
 maximal token boundaries. Fixed lines and parenthesized ranges are structurally distinct;
@@ -64,38 +147,6 @@ are unchanged. This was an affected-scope suite, not a full workspace test run o
 whole-build parity comparison. Hosted status is separate: the prior published checkpoint's
 CI run was pending with no jobs at the recorded pre-publication snapshot.
 
-**Open design question:** whether partial selected inputs may yield independently verified
-metrics with conservative dependency coverage was raised with the user and remains pending.
-The owned architecture is already agreed. Complete-request and whole-plan closure gates
-remain unchanged; this checkpoint does not adopt that proposed change.
-
-**Active resume point (the only current queue):**
-
-1. Implement the proposed stat-owned actor receiver boundary with an explicit package
-   migration, exact applicability/activation, existing dependency closure and limits.
-   Validate direct-authored player and multiple-owned-actor contrasts before adding real
-   receiver data. Do not change partial-input/metric coverage without resolving the open
-   question. Missing actor applicability never inherits player defaults.
-2. Convert source modifier tags and their magnitude/quality effects into owned semantic
-   inputs through the offline adapter. Do not classify them as inert metadata or clone
-   PoB item lifecycle objects. Original05's tagged ring and original02's active equipment
-   provide contrasting integration cases. Preserve raw evidence and all actual receiving
-   occurrences; keep unsupported families explicit.
-3. Wire complete reviewed item/reward/passive/scenario contributions into owned receivers
-   and final Stat/Metric mappings. Use original05/02 player cold queries as integration
-   targets without using their recorded 5 or 93/75 as evaluator inputs. Existing ranged
-   conversion is bounded support, not permission to ignore unknown tags or other members.
-4. Resolve applicable skill/weapon/actor/support inputs for Twister and Sniper together,
-   retaining all five originals as model stress cases. Bind shared timing/damage kernels,
-   preserve fixed metric availability and run fresh independent reference comparisons.
-   Retire replaced preparation and realization-validation consumers together.
-5. Complete all five originals, then independent holdouts and semantic joint candidates.
-   Migrate the search backend and remove legacy profile/interpreter/snapshot dependency
-   closures; prove the owned-only distribution before claiming PoB independence complete.
-   Measure changed-build evaluation, reuse and multicore throughput over real admitted cases.
-
-The earlier checkpoint sections below are historical evidence, not instructions to resume
-source/UI emulation. Current design and the active queue above supersede their next steps.
 
 **Previous checkpoint: owned metric boundary and shared resistance (`90fcb36`).**
 The [native metric contract](owned-metrics.md) now joins complete owned requests, injected

@@ -29,7 +29,7 @@ physical level/quality. Its supplied skill owns projected computed inputs and an
 parent/slot identity. Distinct slots remain distinct even when their skill definition is
 equal. Required generated-skill inputs gate both rule effects and routed action values.
 Potential memberships alone cannot activate an action or redirect a saved root selector.
-The plan content digest now uses `owned-effect-plan-v3`; the rule operation set is v5.
+The plan content digest now uses `owned-effect-plan-v4`; the rule operation set is v5.
 
 These modules contain no source-language parser, Lua interpreter, PoB callback, UI object or
 named-build dispatch. Existing source readers and any optional Lua acquisition stay offline
@@ -37,14 +37,14 @@ or in the reference adapter. Adding a game coefficient within these operations c
 injected data; adding an operation requires explicit versioned Rust semantics and tests.
 
 `RulePackageInput` carries its namespace, release, semantics version, operation version and
-the exact definition-schema `DataIdentity`. Its version is 1; the implemented operation set
+the exact definition-schema `DataIdentity`. Its wire version is 2 with required `receivers`; the implemented operation set
 is `owned-domain-operations-v5`. Earlier operation versions are explicitly rejected by the compiler; regenerate experimental
 artifacts rather than silently interpreting them with new semantics. Both storage and compilation check the supplied index's
 identity and namespace. Execution checks that binding again. A digest identifies content;
 it does not authenticate its source or prove conversion fidelity.
 
-Storage emits deterministic JSON for the supplied ordered artifact. Compilation separately
-canonicalizes finite-table, owner, program, read and node declaration tables. Effect order and boolean
+Storage emits deterministic JSON, canonicalizing receiver rows and applicability targets.
+Compilation separately canonicalizes finite-table, owner, program, read and node declaration tables. Effect order and boolean
 operand order remain significant. Stored-package and compiled-program digests have separate
 domains; consumers must not interchange them. Public declaration IDs are distinct from the
 private indices used during execution.

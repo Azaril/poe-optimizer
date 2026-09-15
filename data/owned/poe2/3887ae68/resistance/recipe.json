@@ -147568,7 +147568,7 @@
     ]
   },
   "rules": {
-    "schema_version": 1,
+    "schema_version": 2,
     "namespace": {
       "game": "poe2",
       "version": "owned-mechanics-v1"
@@ -152923,7 +152923,13 @@
           }
         }
       }
-    ]
+    ],
+    "receivers": {
+      "members": [],
+      "closure": {
+        "kind": "complete"
+      }
+    }
   },
   "routing": {
     "schema_version": 1,

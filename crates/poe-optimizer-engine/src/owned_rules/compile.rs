@@ -32,6 +32,7 @@ fn add(total: &mut usize, n: usize, max: usize, path: &str) -> Result<(), RuleEr
 }
 #[derive(Default)]
 struct Budget {
+    gaps: usize,
     programs: usize,
     table_cells: usize,
     reads: usize,
@@ -133,6 +134,7 @@ fn closure<I: DefinitionSchemaIndex>(
 ) -> Result<(), RuleError> {
     if let SchemaClosure::Partial { gaps } = value {
         check(!gaps.is_empty(), path, "partial membership requires gaps")?;
+        add(&mut b.gaps, gaps.len(), l.max_gaps, path)?;
         b.work(gaps.len(), l, path)?;
         for gap in gaps {
             subject_namespace(&gap.subject, index, path)?;
@@ -1120,6 +1122,100 @@ fn program<I: DefinitionSchemaIndex>(
     })
 }
 
+/// Applicability validation only. Every referenced program is compiled by the
+/// ordinary semantic compiler below; no receiver-specific expression executor.
+fn receivers<I: DefinitionSchemaIndex>(
+    input: &RulePackageInput,
+    index: &I,
+    l: RuleLimits,
+    b: &mut Budget,
+) -> Result<(), RuleError> {
+    let path = "receivers";
+    let programs: BTreeMap<_, _> = if input.receivers.members.is_empty() {
+        BTreeMap::new()
+    } else {
+        b.work(input.owners.len() + b.programs, l, path)?;
+        input
+            .owners
+            .iter()
+            .filter_map(|owner| {
+                if let SchemaSubject::Definition(DefinitionAddress::Stat(stat)) = &owner.owner {
+                    Some((stat, &owner.programs.members))
+                } else {
+                    None
+                }
+            })
+            .flat_map(|(stat, programs)| programs.iter().map(move |p| ((stat, &p.id), p)))
+            .collect()
+    };
+    let mut ids = BTreeSet::new();
+    let mut selected = BTreeSet::new();
+    for receiver in &input.receivers.members {
+        b.work(3, l, path)?;
+        check(
+            ids.insert(&receiver.id) && selected.insert((&receiver.stat, &receiver.program)),
+            path,
+            "duplicate receiver ID or stat/program",
+        )?;
+        let stat = known(index.definition(&receiver.stat), path)?;
+        b.work(stat.targets.len() + 1, l, path)?;
+        check(
+            stat.targets.contains(&RuleEntityKind::Actor),
+            path,
+            "receiver stat must admit Actor",
+        )?;
+        validate_type(&stat.value, index, path)?;
+        check(
+            !receiver.targets.is_empty(),
+            path,
+            "receiver requires explicit targets",
+        )?;
+        let mut targets = BTreeSet::new();
+        for target in &receiver.targets {
+            b.work(1, l, path)?;
+            check(targets.insert(target), path, "duplicate receiver target")?;
+            if let ActorReceiverTarget::OwnedSlot { slot } = target {
+                known(index.slot(slot), path)?;
+            }
+        }
+        let program = programs
+            .get(&(&receiver.stat, &receiver.program))
+            .ok_or_else(|| fail(path, "receiver requires an existing stat-owned program"))?;
+        check(
+            program.context == RuleEntityKind::Actor
+                && program.effects.len() == 1
+                && matches!(&program.effects[0].effect,
+                RuleEffectKind::Derive { entity: RuleEntity::Current | RuleEntity::Actor, stat, .. }
+                if stat == &receiver.stat),
+            path,
+            "receiver requires exactly one Actor-context final derive to its stat",
+        )?;
+    }
+    closure(&input.receivers.closure, index, "receivers.closure", l, b)?;
+    if let SchemaClosure::Partial { gaps } = &input.receivers.closure {
+        let mut seen = BTreeSet::new();
+        for gap in gaps {
+            b.work(1, l, path)?;
+            let exists = match &gap.subject {
+                SchemaSubject::Definition(id) => index
+                    .lookup_definition(id)
+                    .is_some_and(|d| d.address() == *id),
+                SchemaSubject::Slot(id) => {
+                    index.lookup_slot(id).is_some_and(|d| d.address() == *id)
+                }
+            };
+            check(
+                exists
+                    && gap.facet == SchemaFacet::GameRules
+                    && seen.insert((SubjectKey::from(&gap.subject), &gap.code)),
+                path,
+                "invalid receiver registry gap",
+            )?;
+        }
+    }
+    Ok(())
+}
+
 pub(super) fn compile<I: DefinitionSchemaIndex>(
     input: &RulePackageInput,
     index: &I,
@@ -1155,7 +1251,28 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         "tables",
         "table count exceeds limit",
     )?;
+    check(
+        input.receivers.members.len() <= l.max_receivers,
+        "receivers",
+        "receiver count exceeds limit",
+    )?;
     let mut b = Budget::default();
+    let mut targets = 0;
+    for receiver in &input.receivers.members {
+        add(
+            &mut targets,
+            receiver.targets.len(),
+            l.max_receiver_targets,
+            "receivers.targets",
+        )?;
+    }
+    if let SchemaClosure::Partial { gaps } = &input.receivers.closure {
+        check(
+            gaps.len() <= l.max_gaps,
+            "receivers.closure",
+            "receiver gap count exceeds limit",
+        )?;
+    }
     for table in &input.tables {
         add(
             &mut b.table_cells,
@@ -1197,8 +1314,9 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     }
     // Streaming bound before cloning/index allocation. Source order of effects and
     // boolean operands remains meaningful; declaration tables are canonicalized.
-    digest_owned("owned-rule-input-v1", input, l.max_wire_bytes)
+    digest_owned("owned-rule-input-v2", input, l.max_wire_bytes)
         .map_err(|e| RuleError::new("wire", e.to_string()))?;
+    receivers(input, index, l, &mut b)?;
     let mut table_ids = BTreeSet::new();
     for table in &input.tables {
         let path = format!("tables.{}", table.id);
@@ -1218,6 +1336,10 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         }
     }
     let mut input = input.clone();
+    input.receivers.members.sort_by(|a, b| a.id.cmp(&b.id));
+    for receiver in &mut input.receivers.members {
+        receiver.targets.sort();
+    }
     input.tables.sort_by(|a, b| a.id.cmp(&b.id));
     let tables: BTreeMap<_, _> = input
         .tables
@@ -1267,7 +1389,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             );
         }
     }
-    let identity = digest_owned("owned-rule-programs-v1", &input, l.max_wire_bytes)
+    let identity = digest_owned("owned-rule-programs-v2", &input, l.max_wire_bytes)
         .map_err(|e| RuleError::new("wire", e.to_string()))?;
     Ok(CompiledRulePackage {
         input,

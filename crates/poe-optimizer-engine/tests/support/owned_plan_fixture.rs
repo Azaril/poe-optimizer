@@ -224,6 +224,7 @@ pub struct Fixture {
     pub queries: QueryInput,
     pub owners: Vec<DefinitionRules>,
     pub tables: Vec<IntegerRuleTable>,
+    pub receivers: DeclaredSet<ActorStatReceiver>,
     pub routes: Vec<ActionOutputRoutes>,
 }
 impl Fixture {
@@ -450,6 +451,7 @@ impl Fixture {
                 ),
             ],
             tables: vec![],
+            receivers: DeclaredSet::complete(vec![]),
             routes: vec![],
         }
     }
@@ -481,6 +483,7 @@ impl Fixture {
                 .unwrap(),
         );
         let rules = RulePackageInput {
+            receivers: self.receivers.clone(),
             tables: self.tables.clone(),
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: ns(),

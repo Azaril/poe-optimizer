@@ -562,3 +562,274 @@ fn metric_query_requires_unused_generated_inputs_even_for_constant_final_stats()
         }
     }
 }
+
+fn generated_actor_slot() -> DeclaredSlot<ActorSlotDefId> {
+    DeclaredSlot {
+        declaration: SlotOwnerDefId::Skill(def("generated")),
+        slot: def("generated-child"),
+    }
+}
+fn generated_actor_grant() -> DeclaredSlot<GrantSlotDefId> {
+    DeclaredSlot {
+        declaration: SlotOwnerDefId::Skill(def("generated")),
+        slot: def("activate-generated-child"),
+    }
+}
+fn generated_actor(use_id: u64) -> ActorKey {
+    let mut provider = supplying_provider(use_id);
+    provider.grant_path.push(activation());
+    ActorKey::Owned(Box::new(OwnedActorKey {
+        provider,
+        slot: generated_actor_slot(),
+    }))
+}
+fn actor_receiver_key(actor: ActorKey) -> PlanValueKey {
+    PlanValueKey::Stat {
+        entity: ConcreteEntity::Actor(actor),
+        stat: def("actor-receiver-constant"),
+    }
+}
+fn actor_receiver_fixture() -> Fixture {
+    let mut f = fixture();
+    // A second physical item lets one supplying use change while its sibling
+    // keeps valid inputs. No modifier IDs are cloned into the new record.
+    f.build.items.push(ItemRecord {
+        id: occurrence(21),
+        template: def("item"),
+        parameters: f.build.items[0].parameters.clone(),
+        item_level: Some(20),
+        quality: None,
+        modifiers: vec![],
+    });
+    f.build
+        .equipment
+        .iter_mut()
+        .find(|u| u.id == occurrence(7))
+        .unwrap()
+        .item = occurrence(21);
+    for definition in &mut f.schema.definitions {
+        if let DefinitionDescriptor::Skill(row) = definition
+            && row.id == def("generated")
+            && let SchemaState::Known(schema) = &mut row.schema
+        {
+            schema
+                .declarations
+                .actors
+                .members
+                .push(generated_actor_slot());
+            schema
+                .declarations
+                .grants
+                .members
+                .push(generated_actor_grant());
+        }
+    }
+    f.schema.slots.extend([
+        SlotDescriptor::Actor(entry(
+            generated_actor_slot(),
+            ActorSlotSchema {
+                skills: empty(),
+                outputs: empty(),
+            },
+        )),
+        SlotDescriptor::Grant(entry(
+            generated_actor_grant(),
+            GrantSlotSchema {
+                provider_roles: vec![ProviderRole::EquipmentUse],
+                target: GrantTarget::Actor(generated_actor_slot()),
+            },
+        )),
+    ]);
+    for owner in [
+        SchemaSubject::Slot(SlotAddress::Actor(generated_actor_slot())),
+        SchemaSubject::Slot(SlotAddress::Grant(generated_actor_grant())),
+    ] {
+        f.owners.push(DefinitionRules {
+            owner,
+            programs: empty(),
+        });
+    }
+    f.owner_mut(&generated_owner())
+        .programs
+        .members
+        .push(RuleProgram {
+            id: key("supply-generated-actor"),
+            context: RuleEntityKind::Actor,
+            reads: vec![],
+            nodes: vec![node(
+                "yes",
+                RuleExpression::Literal {
+                    value: ParameterValue::Boolean(true),
+                },
+            )],
+            effects: vec![effect(
+                "activate-child",
+                RuleEffectKind::ActivateGrant {
+                    slot: generated_actor_grant(),
+                    enabled: key("yes"),
+                },
+            )],
+        });
+    f.schema.definitions.push(DefinitionDescriptor::Stat(entry(
+        def("actor-receiver-constant"),
+        StatSchema {
+            value: ComputedValueType::Integer,
+            targets: vec![RuleEntityKind::Actor],
+        },
+    )));
+    let mut receiver_programs = vec![];
+    for (name, target, n) in [
+        (
+            "generated-actor-receiver",
+            ActorReceiverTarget::OwnedSlot {
+                slot: generated_actor_slot(),
+            },
+            83,
+        ),
+        ("player-control-receiver", ActorReceiverTarget::Player, 84),
+    ] {
+        f.receivers.members.push(ActorStatReceiver {
+            id: key(name),
+            stat: def("actor-receiver-constant"),
+            program: key(name),
+            targets: vec![target],
+        });
+        receiver_programs.push(RuleProgram {
+            id: key(name),
+            context: RuleEntityKind::Actor,
+            reads: vec![],
+            nodes: vec![literal("constant", n)],
+            effects: vec![derive(
+                "constant",
+                RuleEntity::Current,
+                "actor-receiver-constant",
+                "constant",
+            )],
+        });
+    }
+    f.owners.push(DefinitionRules {
+        owner: subject(def::<StatDefinition>("actor-receiver-constant")),
+        programs: DeclaredSet::complete(receiver_programs),
+    });
+    let parent = projection(&mut f);
+    parent.reads.push(RuleRead {
+        id: key("blocked"),
+        value_type: ComputedValueType::Boolean,
+        source: RuleReadSource::Parameter {
+            slot: parameter(SlotOwnerDefId::ItemTemplate(def("item")), "needs-level"),
+        },
+    });
+    parent.nodes.extend([
+        read_node("blocked", "blocked"),
+        node(
+            "per-item-enabled",
+            RuleExpression::Not {
+                value: key("blocked"),
+            },
+        ),
+    ]);
+    f
+}
+
+#[test]
+fn owned_actor_receiver_keeps_generated_parent_readiness_and_activation() {
+    for case in [
+        "ready",
+        "missing-level",
+        "unsupported-level",
+        "unused-boolean",
+        "false-ancestor",
+    ] {
+        let mut f = actor_receiver_fixture();
+        match case {
+            "missing-level" => f.build.items[0].item_level = None,
+            "unsupported-level" => f.build.items[0].item_level = Some(21),
+            "unused-boolean" => {
+                f.build.items[0].parameters[0].value = ParameterValue::Boolean(true);
+                projection(&mut f)
+                    .effects
+                    .iter_mut()
+                    .find(|e| e.id == key("project-false"))
+                    .unwrap()
+                    .when = Some(key("per-item-enabled"));
+            }
+            "false-ancestor" => {
+                // A false ancestor still dominates a missing required input.
+                f.build.items[0].item_level = None;
+                f.build.items[0].parameters[0].value = ParameterValue::Boolean(true);
+                projection(&mut f)
+                    .nodes
+                    .iter_mut()
+                    .find(|n| n.id == key("active"))
+                    .unwrap()
+                    .expression = RuleExpression::Not {
+                    value: key("blocked"),
+                };
+            }
+            "ready" => {}
+            _ => unreachable!(),
+        }
+        let report = evaluate(&f);
+        assert!(report.gaps.is_empty(), "{case}: {report:?}");
+        assert_eq!(
+            value(&report, &actor_receiver_key(ActorKey::Player)),
+            &EffectValue::Known { value: integer(84) },
+            "{case}"
+        );
+        assert_eq!(
+            value(&report, &actor_receiver_key(generated_actor(7))),
+            &EffectValue::Known { value: integer(83) },
+            "{case}"
+        );
+        let affected = value(&report, &actor_receiver_key(generated_actor(6)));
+        match case {
+            "ready" => assert_eq!(affected, &EffectValue::Known { value: integer(83) }),
+            "false-ancestor" => assert_eq!(affected, &EffectValue::Inactive),
+            _ => assert!(
+                matches!(affected, EffectValue::Unresolved { .. }),
+                "{case}: {report:?}"
+            ),
+        }
+        if case == "unsupported-level" {
+            assert_eq!(
+                value(&report, &required_key(6, "required-level")),
+                &EffectValue::UnsupportedValue { value: integer(21) }
+            );
+        }
+        if case == "unused-boolean" {
+            assert_eq!(
+                value(&report, &required_key(6, "required-false")),
+                &EffectValue::Inactive
+            );
+        }
+        // Assert exact occurrence identities and ledger presence: no query or
+        // parameter read is needed to demand a receiver, and no parent rebase
+        // or omitted child can make this contrast pass.
+        let receiver_rows: Vec<_> = report
+            .effects
+            .iter()
+            .filter_map(|row| {
+                if let RuleOrigin::Receiver { receiver, actor } = &row.key.invocation.origin {
+                    Some((receiver.clone(), actor.clone()))
+                } else {
+                    None
+                }
+            })
+            .collect();
+        assert_eq!(receiver_rows.len(), 3, "{case}: {report:?}");
+        for (receiver, actor) in [
+            (key("player-control-receiver"), ActorKey::Player),
+            (key("generated-actor-receiver"), generated_actor(6)),
+            (key("generated-actor-receiver"), generated_actor(7)),
+        ] {
+            assert_eq!(
+                receiver_rows
+                    .iter()
+                    .filter(|row| **row == (receiver.clone(), actor.clone()))
+                    .count(),
+                1,
+                "{case}"
+            );
+        }
+    }
+}
