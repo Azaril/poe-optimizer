@@ -4,7 +4,7 @@
     "game": "poe2",
     "version": "owned-mechanics-v1"
   },
-  "version": "resistance-fixed-layout-v1",
+  "version": "resistance-layout-v2",
   "source": {
     "system": "path_of_building2",
     "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
@@ -147,7 +147,7 @@
       }
     ]
   },
-  "item_lines": "b1f5676fb84161a7cb0b1e8e23c2e75c1c2a3bc8f82c36071f6c748904fa7a0f",
+  "item_lines": "5dd03e92e25e7a3573c0986075f9c66b4b5f7a14cef1cfbe931945245ba1b9aa",
   "dialect": "pob_exported_single_text_v1",
   "rule_layouts": [
     {
@@ -199,7 +199,23 @@
       "role": "single_modifier"
     },
     {
+      "rule": "ranged-plus-cold",
+      "role": "single_modifier"
+    },
+    {
+      "rule": "ranged-bare-cold",
+      "role": "single_modifier"
+    },
+    {
       "rule": "fixed-elemental",
+      "role": "single_modifier"
+    },
+    {
+      "rule": "ranged-plus-elemental",
+      "role": "single_modifier"
+    },
+    {
+      "rule": "ranged-bare-elemental",
       "role": "single_modifier"
     },
     {

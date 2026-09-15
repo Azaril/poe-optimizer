@@ -47,6 +47,20 @@ pub struct ItemLineRule {
 pub enum ItemPatternPart {
     Literal(String),
     Capture(OwnedDefinitionKey),
+    /// Maximal ASCII numeric token; lexical matching precedes semantic decoding.
+    /// It never retries a shorter token to satisfy a subsequent literal or codec.
+    NumericCapture {
+        capture: OwnedDefinitionKey,
+        syntax: DecimalSyntax,
+        sign: ItemNumericSign,
+    },
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ItemNumericSign {
+    Optional,
+    OptionalMinus,
+    Forbidden,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -72,6 +86,10 @@ pub enum ItemRangeRounding {
     Ceiling,
     Truncate,
     NearestTiesPositive,
+    /// Literal signed half offset: x >= 0 uses floor(x + 0.5), otherwise
+    /// ceil(x - 0.5). IEEE offset rounding is preserved, including next-down
+    /// 0.5 rounding to 1 and 2^52 + 1 rounding to 2^52 + 2.
+    SymmetricHalfOffset,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(
@@ -87,6 +105,15 @@ pub enum ItemLineValue {
     /// Endpoints and quantum must share Integer kind or an exact Quantity unit.
     /// A supplied range fraction in [0,1] is mandatory; no source/default lookup.
     Interpolate {
+        lower: OwnedDefinitionKey,
+        upper: OwnedDefinitionKey,
+        quantum: ParameterValue,
+        rounding: ItemRangeRounding,
+    },
+    /// Literal a + fraction * (b - a), then explicit quantum rounding. Every
+    /// intermediate must remain finite, including the difference at endpoints.
+    /// This is distinct from Interpolate's stable convex/endpoints arithmetic.
+    InterpolateOffset {
         lower: OwnedDefinitionKey,
         upper: OwnedDefinitionKey,
         quantum: ParameterValue,

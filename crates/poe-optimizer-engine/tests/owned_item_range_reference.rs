@@ -119,3 +119,48 @@ fn original_spear_source_lists_exclude_runes_from_overlay_indices_and_preserve_s
     );
     println!("{}",serde_json::to_string_pretty(&json!({"case":"original02-source-rune-list-contrast","upstream_revision":REVISION,"raw_xml_sha256":HASH_02,"source_events":events,"final":result,"after_id1_zero":changed,"coverage":"reference rune reconstruction/list attribution only; production adapter may remain partial; explicit affix metadata does not replace speed49"})).unwrap());
 }
+
+#[path = "../../poe-optimizer-import/tests/support/item_range_vectors.rs"]
+mod item_range_vectors;
+#[test]
+#[ignore = "optional pinned Common/ItemTools arithmetic oracle; requires vendor source"]
+fn original_symmetric_half_offset_and_crossing_zero_range_preserve_ieee_order() {
+    use mlua::{Function, Table};
+    for warm in [false, true] {
+        let oracle = owned_item_reference::ItemOracle::new(warm);
+        let round: Function = oracle.lua.globals().get("roundSymmetric").unwrap();
+        for &(value, expected) in item_range_vectors::SYMMETRIC_HALF_OFFSET {
+            for _ in 0..if warm { 200 } else { 1 } {
+                let actual: f64 = round.call(value).unwrap();
+                assert_eq!(
+                    actual.to_bits(),
+                    expected.to_bits(),
+                    "roundSymmetric({value:?}), warm={warm}: {actual:?} != {expected:?}"
+                );
+            }
+        }
+        let format: Function = oracle
+            .lua
+            .globals()
+            .get::<Table>("itemLib")
+            .unwrap()
+            .get("formatValue")
+            .unwrap();
+        for (value, expected) in [
+            (-2.5, -3.0),
+            (-0.5, -1.0),
+            (0.5, 1.0),
+            (2.5, 3.0),
+            (f64::from_bits(0x3fdfffffffffffff), 1.0),
+        ] {
+            let actual: String = format.call((value, 1.0, 1.0, 1.0)).unwrap();
+            assert_eq!(actual.parse::<f64>().unwrap(), expected);
+        }
+        // The actual applyRange source evaluates -3 + .7 * (2 - -3) = .5.
+        // Convex interpolation would produce .4999999999999998 and round to0.
+        assert_eq!(
+            oracle.range("(-3-2)% to Fire Resistance", 0.7),
+            "1% to Fire Resistance"
+        );
+    }
+}

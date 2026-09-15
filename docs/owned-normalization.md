@@ -129,6 +129,27 @@ affix tier metadata is never a second applied modifier or an instruction to clam
 explicit roll. Game names, units, IDs and supported domains are injected policy/schema data.
 This layer contains no Lua patterns, source callbacks, UI state or general interpreter.
 
+`NumericCapture` matches a maximal ASCII numeric token under an explicit `DecimalSyntax`
+and sign policy (`Optional`, `OptionalMinus` or `Forbidden`) before its semantic codec
+runs. It does not retry a shorter token or select a pattern because a decoder happens to
+succeed. The combined resistance
+[items.json](../data/owned/poe2/3887ae68/resistance/items.json) and
+[item-source.json](../data/owned/poe2/3887ae68/resistance/item-source.json) policies cover
+both fixed values and reviewed integer ranges. Fixed values allow an optional plus/minus;
+inner endpoints allow an optional minus. Plus-prefixed and bare ranges are disjoint rules.
+Outer-minus range inversion, decimal endpoints and unreviewed grammar remain unsupported
+by that package, even though the generic lexical primitive supports other declared syntax.
+
+`InterpolateOffset` explicitly computes `a + f * (b - a)` for a supplied fraction in
+`[0,1]`, then divides by the declared positive quantum. `SymmetricHalfOffset` applies
+`floor(x + 0.5)` for nonnegative scaled values and `ceil(x - 0.5)` for negative ones,
+then multiplies by the quantum. Their literal floating-point order is intentional; it
+is distinct from stable `Interpolate` arithmetic and mathematical nearest rounding.
+Every intermediate/result must remain finite, including `b - a` at fraction 0 or 1.
+Both endpoints and quantum must share Integer kind or the exact Quantity unit, and
+schema bounds still apply. These are explicit import compatibility operations, not a
+change to native domain rounding semantics or a source-runtime dependency.
+
 Every line retains its text, index and known/pending outcome. Multiple matching rules or
 capture boundaries stay ambiguous. Interpolation needs an explicitly supplied range
 fraction and rounding quantum; `convert_text` supplies no implicit range/default. Aggregate

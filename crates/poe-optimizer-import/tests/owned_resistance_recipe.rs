@@ -1,6 +1,7 @@
 //! Validate the persisted producer component through production constructors.
 //! No PoB checkout, source VM, legacy profile, final metric or build-parity claim.
 use poe_optimizer_core::{
+    build_identity::BuildLineage,
     owned_build::ParameterValue,
     owned_definitions::{ModifierDefId, OwnedDefinitionKey, RewardDefId, StatDefId},
     owned_rules::{ContributionKind, RuleEffectKind, RuleEntity},
@@ -10,17 +11,23 @@ use poe_optimizer_engine::owned_rules::{
     CompiledRulePackage, EffectDisposition, RuleFact, RuleLimits,
 };
 use poe_optimizer_import::{
+    build_instance::{ImportedBuildInstance, InstanceImportLimits},
+    decode_build,
     owned_item_lines::{
         ConvertedItemEmission, ItemField, ItemLineLimits, ItemLineOutcome, OwnedItemLinePolicy,
         decode_item_line_policy,
     },
-    owned_item_source::{ItemSourceLimits, decode_item_source_policy},
+    owned_item_source::{
+        ItemLayoutStatus, ItemRangeAttribution, ItemSourceLayoutPolicy, ItemSourceLimits,
+        ItemSourceProblem, decode_item_source_policy,
+    },
     owned_recipe::{OwnedRecipeLimits, StagedOwnedRecipe, decode_owned_recipe},
+    owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
 };
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 use sha2::{Digest, Sha256};
-use std::{fs, path::PathBuf};
+use std::{collections::BTreeSet, fs, path::PathBuf};
 
 fn key(value: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(value).unwrap()
@@ -37,6 +44,7 @@ struct Component {
     staged: StagedOwnedRecipe,
     rules: CompiledRulePackage,
     items: OwnedItemLinePolicy,
+    layout: ItemSourceLayoutPolicy,
     ids: Value,
 }
 impl Component {
@@ -48,7 +56,7 @@ impl Component {
             format!("{:x}", Sha256::digest(&raw))
         );
         assert_eq!(facts["metric_producer"], false);
-        assert_eq!(facts["range_conversion"]["implemented"], false);
+        assert_eq!(facts["range_conversion"]["implemented"], true);
         assert_eq!(facts["whole_original_native_completion"], "0/5");
         // This path deserializes every exact DTO, checks registry/schema closure,
         // compiles all programs, and validates the injected routing package.
@@ -60,13 +68,13 @@ impl Component {
         )
         .unwrap();
         let items = decode_item_line_policy(
-            &data("items-fixed.json"),
+            &data("items.json"),
             staged.schema(),
             ItemLineLimits::default(),
         )
         .unwrap();
         let layout = decode_item_source_policy(
-            &data("item-source-fixed.json"),
+            &data("item-source.json"),
             &items,
             staged.schema(),
             ItemSourceLimits::default(),
@@ -78,6 +86,7 @@ impl Component {
             staged,
             rules,
             items,
+            layout,
             ids: serde_json::from_slice(&data("ids.json")).unwrap(),
         }
     }
@@ -201,11 +210,12 @@ fn repeated_equal_definition_lines_remain_separate_modifiers_and_missing_roll_is
 }
 
 #[test]
-fn ranges_unknown_lines_and_metadata_do_not_become_numeric_facts() {
+fn unsupported_ranges_unknown_lines_and_metadata_do_not_become_numeric_facts() {
     let c = Component::load();
     for text in [
-        "+(20-30)% to Cold Resistance",
-        "+(-3--2)% to Cold Resistance",
+        "+(+20-30)% to Cold Resistance",
+        "-(20-30)% to Cold Resistance",
+        "+(20.0-30)% to Cold Resistance",
         "{range:0.5}+(20-30)% to Cold Resistance",
         "unknown nearby effect",
     ] {
@@ -284,11 +294,204 @@ fn obsolete_read_field_and_stale_line_binding_are_rejected() {
         OwnedItemLinePolicy::new(changed, c.staged.schema(), ItemLineLimits::default()).unwrap();
     assert!(
         decode_item_source_policy(
-            &data("item-source-fixed.json"),
+            &data("item-source.json"),
             &changed,
             c.staged.schema(),
             ItemSourceLimits::default(),
         )
         .is_err()
     );
+}
+
+#[test]
+fn signed_ranges_use_literal_source_interpolation_and_half_offset_rounding() {
+    let c = Component::load();
+    for (text, fraction, expected) in [
+        ("+(20-30)% to Cold Resistance", 0.0, 20.0),
+        ("+(20-30)% to Cold Resistance", 0.5, 25.0),
+        ("+(20-30)% to Cold Resistance", 1.0, 30.0),
+        ("+(-3--2)% to Cold Resistance", 0.5, -3.0),
+        ("(2-3)% to all Elemental Resistances", 0.5, 3.0),
+        // Stable convex interpolation instead rounds to zero for this case.
+        ("+(-3-2)% to Cold Resistance", 0.7, 1.0),
+    ] {
+        let ItemLineOutcome::Known { emissions, .. } = c
+            .items
+            .convert_line(1, text, Some(fraction))
+            .unwrap()
+            .outcome
+        else {
+            panic!("one lexical ranged match for {text}");
+        };
+        let [ConvertedItemEmission::Modifier { rolls, .. }] = emissions.as_slice() else {
+            panic!("one modifier");
+        };
+        let ParameterValue::Quantity(value) = &rolls[0].value else {
+            panic!("quantity");
+        };
+        assert_eq!(value.value(), expected, "{text}, fraction={fraction}");
+        assert!(matches!(
+            c.items.convert_line(1, text, None).unwrap().outcome,
+            ItemLineOutcome::Pending { .. }
+        ));
+    }
+}
+fn original_five() -> String {
+    fs::read_to_string(
+        PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/builds/breadth-20260908/build-05.xml"),
+    )
+    .unwrap()
+}
+fn imported(xml: &str) -> ImportedBuildInstance {
+    ImportedBuildInstance::from_decoded(
+        decode_build(xml.as_bytes()).unwrap(),
+        BuildLineage::from_bytes([73; 16]),
+        InstanceImportLimits::default(),
+    )
+    .unwrap()
+}
+fn ring_plan(c: &Component, xml: &str) -> ItemRangeAttribution {
+    let source = imported(xml);
+    let evidence =
+        SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
+    let records: Vec<_> = evidence
+        .rows()
+        .iter()
+        .filter(|row| {
+            row.occurrence().name() == "Item"
+                && row.attribute("id").and_then(|a| a.decoded().ok()) == Some("26")
+        })
+        .collect();
+    assert_eq!(records.len(), 1);
+    c.layout
+        .attribute(&evidence, records[0].occurrence().id(), &c.items)
+        .unwrap()
+}
+fn untagged_ring_diagnostic(xml: &str, fraction: &str, extra_line: bool) -> String {
+    let source = imported(xml);
+    let evidence =
+        SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
+    let item = evidence
+        .rows()
+        .iter()
+        .find(|row| {
+            row.occurrence().name() == "Item"
+                && row.attribute("id").and_then(|a| a.decoded().ok()) == Some("26")
+        })
+        .unwrap();
+    let span = item.occurrence().range();
+    let original = &xml[span.clone()];
+    assert_eq!(original.matches("range=\"0.5\"").count(), 2);
+    let mut changed = original.replace("range=\"0.5\"", &format!("range=\"{fraction}\""));
+    // Explicit test-only counterfactual. This metadata is not ignored by production.
+    const TAG: &str = "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}";
+    assert_eq!(changed.matches(TAG).count(), 1);
+    changed = changed.replacen(TAG, "", 1);
+    if extra_line {
+        const COLD: &str = "{range:0.5}+(20-30)% to Cold Resistance";
+        assert_eq!(changed.matches(COLD).count(), 1);
+        changed = changed.replacen(COLD, &format!("Unconverted inserted modifier\n{COLD}"), 1);
+    }
+    let mut copy = xml.to_owned();
+    copy.replace_range(span, &changed);
+    copy
+}
+#[test]
+fn actual_tagged_original_ring_retains_eight_uses_and_pending_source_metadata() {
+    let c = Component::load();
+    let xml = original_five();
+    let source = imported(&xml);
+    let evidence =
+        SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
+    let uses: BTreeSet<_> = evidence
+        .rows()
+        .iter()
+        .filter(|row| {
+            row.occurrence().name() == "Slot"
+                && row.attribute("itemId").and_then(|a| a.decoded().ok()) == Some("26")
+        })
+        .map(|row| row.occurrence().id())
+        .collect();
+    assert_eq!(uses.len(), 8);
+    let plan = ring_plan(&c, &xml);
+    assert!(matches!(plan.report().layout, ItemLayoutStatus::Pending(_)));
+    let raw_members: Vec<_> = plan
+        .report()
+        .lines
+        .iter()
+        .filter(|l| {
+            l.raw.contains("+(20-30)% to Cold Resistance") || l.raw.trim() == "+10 to maximum Life"
+        })
+        .collect();
+    assert_eq!(raw_members.len(), 2);
+    assert!(
+        raw_members[0]
+            .raw
+            .contains("{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}")
+    );
+    assert!(
+        raw_members[0]
+            .blockers
+            .contains(&ItemSourceProblem::UnsupportedTag)
+    );
+    assert_eq!(plan.report().writes.len(), 3);
+    let cold: ModifierDefId = c.id("flat-cold-modifier");
+    let converted = plan.convert(&c.items).unwrap();
+    assert!(!converted.modifiers.iter().any(|m| m.definition == cold));
+    assert_eq!(original_five(), xml);
+}
+
+#[test]
+fn explicitly_untagged_ring_diagnostics_prove_range_attribution_without_original_success() {
+    let c = Component::load();
+    let xml = original_five();
+    let cold: ModifierDefId = c.id("flat-cold-modifier");
+    for (fraction, expected) in [("0", 20.0), ("0.5", 25.0), ("1", 30.0)] {
+        let copy = untagged_ring_diagnostic(&xml, fraction, false);
+        let plan = ring_plan(&c, &copy);
+        assert!(
+            matches!(plan.report().layout, ItemLayoutStatus::Proven),
+            "layout={:?}; blocked lines={:?}",
+            plan.report().layout,
+            plan.report()
+                .lines
+                .iter()
+                .filter(|l| !l.blockers.is_empty())
+                .map(|l| (l.index, &l.raw, &l.rule, &l.blockers))
+                .collect::<Vec<_>>()
+        );
+        assert!(
+            plan.report()
+                .lines
+                .iter()
+                .any(|l| l.raw.contains("{range:0.5}"))
+        );
+        let converted = plan.convert(&c.items).unwrap();
+        assert_eq!(converted.modifiers.len(), 2);
+        let modifier = converted
+            .modifiers
+            .iter()
+            .find(|m| m.definition == cold)
+            .unwrap();
+        let ParameterValue::Quantity(amount) = &modifier.rolls[0].value else {
+            panic!("cold quantity");
+        };
+        assert_eq!(amount.value(), expected);
+        assert!(matches!(converted.item_level, ItemField::Absent));
+        assert!(matches!(converted.quality, ItemField::Absent));
+    }
+    // The explicitly untagged diagnostic does not establish original-source success.
+    assert_eq!(original_five(), xml);
+    assert!(c.staged.manifest().partial_rule_owners > 0);
+}
+#[test]
+fn unknown_inserted_source_member_blocks_the_known_ring_range() {
+    let c = Component::load();
+    let copy = untagged_ring_diagnostic(&original_five(), "0.5", true);
+    let plan = ring_plan(&c, &copy);
+    assert!(matches!(plan.report().layout, ItemLayoutStatus::Pending(_)));
+    let cold: ModifierDefId = c.id("flat-cold-modifier");
+    let converted = plan.convert(&c.items).unwrap();
+    assert!(!converted.modifiers.iter().any(|m| m.definition == cold));
 }

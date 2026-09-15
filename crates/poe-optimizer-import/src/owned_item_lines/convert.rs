@@ -23,6 +23,25 @@ fn match_rule<'a>(rule: &ItemLineRule, text: &'a str, work: &mut usize) -> Resul
                 };
                 remaining = rest;
             }
+            ItemPatternPart::NumericCapture {
+                capture,
+                syntax,
+                sign,
+            } => {
+                charge(work, remaining.len().saturating_add(1), "work")?;
+                if matches!(
+                    (sign, remaining.as_bytes().first()),
+                    (ItemNumericSign::Forbidden, Some(b'+' | b'-'))
+                        | (ItemNumericSign::OptionalMinus, Some(b'+'))
+                ) {
+                    return Ok(Match::No);
+                }
+                let Some(length) = numeric_prefix_length(remaining, *syntax) else {
+                    return Ok(Match::No);
+                };
+                captures.insert(capture.clone(), &remaining[..length]);
+                remaining = &remaining[length..];
+            }
             ItemPatternPart::Capture(id) => {
                 let length = if let Some(ItemPatternPart::Literal(next)) = rule.pattern.get(i + 1) {
                     charge(work, remaining.len().saturating_add(next.len()), "work")?;
@@ -626,6 +645,12 @@ fn resolve(
             upper,
             quantum,
             rounding,
+        }
+        | ItemLineValue::InterpolateOffset {
+            lower,
+            upper,
+            quantum,
+            rounding,
         } => {
             let fraction = fraction.ok_or(ItemLinePending::MissingRangeFraction)?;
             if !fraction.is_finite() || !(0.0..=1.0).contains(&fraction) {
@@ -652,9 +677,17 @@ fn resolve(
             if a > b {
                 return Err(ItemLinePending::InvalidRange);
             }
-            // Endpoints are exact choices. General interpolation uses a convex
-            // combination to avoid overflow of b-a across opposite-sign bounds.
-            let raw = if fraction == 0.0 {
+            // The offset operation preserves each literal intermediate. The
+            // existing operation keeps exact endpoints and uses a convex
+            // combination across opposite-sign bounds to avoid overflow of b-a.
+            let raw = if matches!(value, ItemLineValue::InterpolateOffset { .. }) {
+                let difference = b - a;
+                let offset = fraction * difference;
+                if !difference.is_finite() || !offset.is_finite() {
+                    return Err(ItemLinePending::InvalidRange);
+                }
+                a + offset
+            } else if fraction == 0.0 {
                 a
             } else if fraction == 1.0 {
                 b
@@ -683,6 +716,15 @@ fn resolve(
                     }
                 }
                 ItemRangeRounding::Truncate => scaled.trunc(),
+                // Preserve the source import's literal IEEE offset order;
+                // mathematically nearest f64::round() is not equivalent.
+                ItemRangeRounding::SymmetricHalfOffset => {
+                    if scaled >= 0.0 {
+                        (scaled + 0.5).floor()
+                    } else {
+                        (scaled - 0.5).ceil()
+                    }
+                }
                 ItemRangeRounding::NearestTiesPositive => {
                     let floor = scaled.floor();
                     if scaled - floor < 0.5 {

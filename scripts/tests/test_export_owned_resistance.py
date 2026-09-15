@@ -34,12 +34,12 @@ class ResistanceExportTests(unittest.TestCase):
         with mock.patch.object(EXPORT, "load", side_effect=lambda p: value if p == DEST / "authoring.json" else original(p)):
             return EXPORT.produce(IMPORT / "compiled", IMPORT, DEST / "authoring.json", SOURCE)
 
-    def test_exact_reproduction_and_fixed_only_publication(self):
-        self.assertEqual(set(self.outputs), {"recipe.json", "ids.json", "items-fixed.json", "item-source-fixed.json", "source-facts.json"})
+    def test_exact_reproduction_and_combined_policy_publication(self):
+        self.assertEqual(set(self.outputs), {"recipe.json", "ids.json", "items.json", "item-source.json", "source-facts.json"})
         for name, raw in self.outputs.items():
             self.assertEqual(raw, (DEST / name).read_bytes(), name)
-        self.assertFalse((DEST / "items-ranged.json").exists())
-        self.assertFalse((DEST / "item-source-ranged.json").exists())
+        self.assertFalse((DEST / "items-fixed.json").exists())
+        self.assertFalse((DEST / "item-source-fixed.json").exists())
 
     def test_successor_preserves_existing_history_schemas_and_rule_bodies(self):
         self.assertEqual(self.recipe["registry"]["entries"][:2515], self.base["registry"]["entries"])
@@ -86,21 +86,36 @@ class ResistanceExportTests(unittest.TestCase):
         self.assertEqual(reward_values, [10.0, 5.0, 5.0, -5.0])
 
     def test_fixed_policy_uses_generic_signed_integer_captures_and_exact_bindings(self):
-        items = EXPORT.DATA.decode(self.outputs["items-fixed.json"])
-        source = EXPORT.DATA.decode(self.outputs["item-source-fixed.json"])
+        items = EXPORT.DATA.decode(self.outputs["items.json"])
+        source = EXPORT.DATA.decode(self.outputs["item-source.json"])
         self.assertEqual(items["definitions"], EXPORT.DATA.schema_identity(self.recipe["schema"]))
         self.assertEqual(source["item_lines"], EXPORT.DATA.owned_digest("owned-item-line-policy-v1", items))
-        for rule in items["rules"][-3:]:
-            self.assertEqual(rule["pattern"][0], {"kind": "capture", "value": "amount"})
+        for rule in [r for r in items["rules"] if r["id"].startswith("fixed-")]:
+            self.assertEqual(rule["pattern"][0], {"kind": "numeric_capture", "value": {"capture": "amount", "syntax": "integer", "sign": "optional"}})
             self.assertEqual(rule["captures"][0]["codec"]["value"]["codec"]["value"]["syntax"], "integer")
             self.assertEqual(rule["emissions"][0]["value"]["rolls"][0]["value"], {"kind": "capture", "value": "amount"})
         self.assertFalse(any(e["kind"] in ["item_level", "quality"] for r in items["rules"] for e in r["emissions"]))
 
-    def test_source_hashes_and_signed_rounding_gap_are_explicit(self):
+    def test_range_endpoints_use_exact_source_sign_grammar_and_shared_ids(self):
+        items = EXPORT.DATA.decode(self.outputs["items.json"])
+        ranges = [r for r in items["rules"] if r["id"].startswith("ranged-")]
+        self.assertEqual(len(ranges), 4)
+        for rule in ranges:
+            captures = [p["value"] for p in rule["pattern"] if p["kind"] == "numeric_capture"]
+            self.assertEqual(captures, [{"capture": "lower", "syntax": "integer", "sign": "optional_minus"},
+                                        {"capture": "upper", "syntax": "integer", "sign": "optional_minus"}])
+            effect = rule["emissions"][0]["value"]
+            self.assertIn(effect["definition"], [self.ids["flat-cold-modifier"], self.ids["flat-elemental-modifier"]])
+            self.assertEqual(effect["rolls"][0]["value"]["value"]["rounding"], "symmetric_half_offset")
+        self.assertEqual(EXPORT.sha(self.outputs["recipe.json"]), "34e8902225acdd95f2dcdfc34d88c0d3d3a815a313354181ee95304a3e53ddf0")
+
+    def test_source_hashes_and_literal_signed_rounding_are_explicit(self):
         facts = EXPORT.DATA.decode(self.outputs["source-facts.json"])
-        self.assertFalse(facts["range_conversion"]["implemented"])
+        self.assertTrue(facts["range_conversion"]["implemented"])
         self.assertFalse(facts["receiver"]["implemented"])
         self.assertFalse(facts["metric_producer"])
+        self.assertEqual(facts["original_ring_attribution"]["status"], "pending")
+        self.assertIn("exactly this one literal tag", facts["original_ring_attribution"]["diagnostic_only"])
         self.assertEqual(facts["whole_original_native_completion"], "0/5")
         for span in facts["source_spans"]:
             raw = (SOURCE / span["path"]).read_bytes().replace(b"\r\n", b"\n")

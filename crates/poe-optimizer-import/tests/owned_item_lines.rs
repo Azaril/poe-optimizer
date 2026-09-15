@@ -885,3 +885,282 @@ fn option_membership_scans_consume_runtime_work() {
         Err(ItemLineError::Limit("work"))
     ));
 }
+
+fn numeric(capture: &str, syntax: DecimalSyntax, sign: ItemNumericSign) -> ItemPatternPart {
+    ItemPatternPart::NumericCapture {
+        capture: key(capture),
+        syntax,
+        sign,
+    }
+}
+fn numeric_rule(syntax: DecimalSyntax, sign: ItemNumericSign) -> ItemLineRule {
+    rule(
+        "number",
+        vec![numeric("x", syntax, sign), lit(" units")],
+        vec![ItemCapture {
+            id: key("x"),
+            codec: codec(false),
+        }],
+        vec![ItemEmission::Modifier {
+            definition: modifier(),
+            rolls: vec![ItemRollTemplate {
+                slot: roll(),
+                value: val("x"),
+            }],
+        }],
+    )
+}
+fn with_rules(rules: Vec<ItemLineRule>, limits: ItemLineLimits) -> OwnedItemLinePolicy {
+    let s = schema();
+    let mut i = input(&s);
+    i.rules = rules;
+    OwnedItemLinePolicy::new(i, &s, limits).unwrap()
+}
+
+#[test]
+fn numeric_patterns_use_explicit_ascii_syntax_and_sign_policy() {
+    use DecimalSyntax::*;
+    use ItemNumericSign::*;
+    for (syntax, accepted, rejected) in [
+        (
+            Integer,
+            vec!["12", "0", "-0", "+12"],
+            vec!["1.", ".1", "1e2"],
+        ),
+        (
+            Decimal,
+            vec!["1.", ".1", "-1.25", "+12"],
+            vec!["1e2", "1e+", "."],
+        ),
+        (
+            Scientific,
+            vec!["1e2", "-1.25e-1", "+.1E+2"],
+            vec!["1e", "1e+", "1e--2"],
+        ),
+    ] {
+        let p = with_rules(
+            vec![numeric_rule(syntax, Optional)],
+            ItemLineLimits::default(),
+        );
+        for token in accepted {
+            assert!(
+                matches!(
+                    p.convert_line(1, &format!("{token} units"), None)
+                        .unwrap()
+                        .outcome,
+                    ItemLineOutcome::Known { .. }
+                ),
+                "{syntax:?} {token}"
+            );
+        }
+        for token in rejected
+            .into_iter()
+            .chain(["", "+", "-", "NaN", "inf", "0x1", "１２", "−1", "1_0"])
+        {
+            assert_eq!(
+                pending(&p.convert_line(1, &format!("{token} units"), None).unwrap()),
+                &ItemLinePending::UnknownLine,
+                "{syntax:?} {token}"
+            );
+        }
+    }
+    for (sign, plus, minus) in [
+        (Optional, true, true),
+        (OptionalMinus, false, true),
+        (Forbidden, false, false),
+    ] {
+        let p = with_rules(vec![numeric_rule(Integer, sign)], ItemLineLimits::default());
+        for (token, accepted) in [("1", true), ("+1", plus), ("-1", minus)] {
+            assert_eq!(
+                matches!(
+                    p.convert_line(1, &format!("{token} units"), None)
+                        .unwrap()
+                        .outcome,
+                    ItemLineOutcome::Known { .. }
+                ),
+                accepted,
+                "{sign:?} {token}"
+            );
+        }
+    }
+}
+
+#[test]
+fn numeric_patterns_are_maximal_and_never_resolve_ambiguity_by_decoding() {
+    let p = with_rules(
+        vec![numeric_rule(
+            DecimalSyntax::Scientific,
+            ItemNumericSign::Optional,
+        )],
+        ItemLineLimits::default(),
+    );
+    assert!(matches!(
+        pending(&p.convert_line(1, "1e9999 units", None).unwrap()),
+        ItemLinePending::MalformedCapture { .. }
+    ));
+    let mut decimal = numeric_rule(DecimalSyntax::Decimal, ItemNumericSign::Optional);
+    decimal.id = key("decimal");
+    let p = with_rules(
+        vec![
+            numeric_rule(DecimalSyntax::Integer, ItemNumericSign::Optional),
+            decimal,
+        ],
+        ItemLineLimits::default(),
+    );
+    assert_eq!(
+        pending(&p.convert_line(1, "7 units", None).unwrap()),
+        &ItemLinePending::AmbiguousRules
+    );
+    // The lexer does not split a numeric token to make a following literal match.
+    let mut r = numeric_rule(DecimalSyntax::Integer, ItemNumericSign::Optional);
+    r.pattern[1] = lit("2 units");
+    let p = with_rules(vec![r], ItemLineLimits::default());
+    assert_eq!(
+        pending(&p.convert_line(1, "12 units", None).unwrap()),
+        &ItemLinePending::UnknownLine
+    );
+    // Once a scientific exponent marker appears it must be well formed; no retry as "1".
+    let mut r = numeric_rule(DecimalSyntax::Scientific, ItemNumericSign::Optional);
+    r.pattern[1] = lit("e units");
+    let p = with_rules(vec![r], ItemLineLimits::default());
+    assert_eq!(
+        pending(&p.convert_line(1, "1e units", None).unwrap()),
+        &ItemLinePending::UnknownLine
+    );
+}
+
+#[test]
+fn numeric_patterns_preserve_signed_range_boundaries() {
+    let r = rule(
+        "range",
+        vec![
+            lit("+("),
+            numeric("a", DecimalSyntax::Integer, ItemNumericSign::OptionalMinus),
+            lit("-"),
+            numeric("b", DecimalSyntax::Integer, ItemNumericSign::OptionalMinus),
+            lit(") units"),
+        ],
+        vec![
+            ItemCapture {
+                id: key("a"),
+                codec: codec(false),
+            },
+            ItemCapture {
+                id: key("b"),
+                codec: codec(false),
+            },
+        ],
+        vec![ItemEmission::Modifier {
+            definition: modifier(),
+            rolls: vec![ItemRollTemplate {
+                slot: roll(),
+                value: ItemLineValue::InterpolateOffset {
+                    lower: key("a"),
+                    upper: key("b"),
+                    quantum: qty(1.0),
+                    rounding: ItemRangeRounding::SymmetricHalfOffset,
+                },
+            }],
+        }],
+    );
+    let p = with_rules(
+        vec![
+            numeric_rule(DecimalSyntax::Integer, ItemNumericSign::Optional),
+            r.clone(),
+        ],
+        ItemLineLimits::default(),
+    );
+    let line = p.convert_line(1, "+(-3--2) units", Some(0.5)).unwrap();
+    let ItemLineOutcome::Known { emissions, .. } = line.outcome else {
+        panic!("{line:?}")
+    };
+    assert!(
+        matches!(&emissions[0], ConvertedItemEmission::Modifier { rolls, .. } if rolls[0].value == qty(-3.0))
+    );
+    assert_eq!(
+        pending(&p.convert_line(1, "+(-3-+2) units", Some(0.5)).unwrap()),
+        &ItemLinePending::UnknownLine
+    );
+    let mut raw = r;
+    raw.pattern[1] = cap("a");
+    raw.pattern[3] = cap("b");
+    let p = with_rules(vec![raw], ItemLineLimits::default());
+    assert_eq!(
+        pending(&p.convert_line(1, "+(-3--2) units", Some(0.5)).unwrap()),
+        &ItemLinePending::AmbiguousCapture
+    );
+}
+
+#[test]
+fn numeric_capture_wire_and_declarations_are_strict() {
+    let original = numeric("x", DecimalSyntax::Integer, ItemNumericSign::OptionalMinus);
+    let wire = serde_json::to_value(&original).unwrap();
+    assert_eq!(
+        wire,
+        serde_json::json!({"kind":"numeric_capture","value":{
+        "capture":"x","syntax":"integer","sign":"optional_minus"}})
+    );
+    assert_eq!(
+        serde_json::from_value::<ItemPatternPart>(wire.clone()).unwrap(),
+        original
+    );
+    for field in ["capture", "syntax", "sign"] {
+        let mut bad = wire.clone();
+        bad["value"].as_object_mut().unwrap().remove(field);
+        assert!(serde_json::from_value::<ItemPatternPart>(bad).is_err());
+    }
+    for (field, value) in [("sign", "automatic"), ("extra", "ignored")] {
+        let mut bad = wire.clone();
+        bad["value"][field] = serde_json::json!(value);
+        assert!(serde_json::from_value::<ItemPatternPart>(bad).is_err());
+    }
+    let s = schema();
+    let base = numeric_rule(DecimalSyntax::Integer, ItemNumericSign::Optional);
+    for mutation in 0..4 {
+        let mut i = input(&s);
+        let mut r = base.clone();
+        match mutation {
+            0 => r.captures.clear(),
+            1 => r.pattern.push(numeric(
+                "x",
+                DecimalSyntax::Integer,
+                ItemNumericSign::Optional,
+            )),
+            2 => {
+                r.captures.push(ItemCapture {
+                    id: key("y"),
+                    codec: codec(false),
+                });
+                r.pattern.insert(
+                    1,
+                    numeric("y", DecimalSyntax::Integer, ItemNumericSign::Optional),
+                );
+            }
+            _ => r.pattern = vec![lit("unused")],
+        }
+        i.rules = vec![r];
+        assert!(
+            OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).is_err(),
+            "{mutation}"
+        );
+    }
+}
+
+#[test]
+fn numeric_prefix_scanning_consumes_the_work_budget() {
+    let p = with_rules(
+        vec![numeric_rule(
+            DecimalSyntax::Scientific,
+            ItemNumericSign::Optional,
+        )],
+        ItemLineLimits {
+            max_work: 64,
+            ..ItemLineLimits::default()
+        },
+    );
+    let text = format!("{} units", "1".repeat(128));
+    assert!(matches!(
+        p.convert_line(1, &text, None),
+        Err(ItemLineError::Limit("work"))
+    ));
+}

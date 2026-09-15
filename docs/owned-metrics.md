@@ -69,8 +69,10 @@ throughput for admitted whole builds or reusable bindings after candidate mutati
 
 Real data needs complete selected item/passive/reward/scenario contributions and shared
 receiver rules before it can declare a final resistance stat and map the fixed original
-query. A receiver common to characters must have explicit owned game/stat semantics; do
-not hide it in a made-up usage policy or duplicate it across class-specific programs.
+query. The proposed [stat-owned actor receivers](owned-stat-receivers.md) give common
+formulas explicit semantic ownership and player/owned-actor applicability. They are not
+implemented and retain the existing whole-plan coverage requirement; no fabricated usage
+policy or per-class receiver is a substitute.
 The [resistance data slice](../data/owned/poe2/3887ae68/resistance/README.md) intentionally
 contains contributions only. Full original import finalization, complete mechanics,
 backend-neutral search adoption and legacy retirement remain separate milestones.

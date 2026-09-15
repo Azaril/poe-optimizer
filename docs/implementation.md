@@ -11,7 +11,93 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: owned metric boundary and shared resistance (after `957cc89`).**
+**Current checkpoint: owned range conversion and common receiver design (after `90fcb36`).**
+The offline item policy now separates lexical matching from semantic value conversion.
+`NumericCapture` uses the existing owned decimal grammar with explicit sign policy and
+maximal token boundaries. Fixed lines and parenthesized ranges are structurally distinct;
+negative endpoints do not become ambiguous delimiter splits. Raw captures retain their
+strict ambiguity behavior. Failed decoding never selects a different rule, and scanning
+remains bounded. These are generic Import operations, not runtime skill/item selectors.
+
+Source-compatible range arithmetic is explicit data: `InterpolateOffset` evaluates
+`a + fraction * (b - a)` and `SymmetricHalfOffset` preserves literal signed half-offset
+rounding. Existing stable interpolation and rounding modes retain their semantics. The
+new operations check finite intermediates/results, exact numeric kinds/units and integer
+bounds. This distinction matters across zero and near representable half values.
+
+The resistance component replaces its two fixed-only policy artifacts with combined
+`items.json` and `item-source.json`. The 2,524 IDs, schema and contribution recipe remain
+unchanged. The exporter performs offline conversion; neither source text nor source
+execution enters the owned evaluator. The old fixed-only artifacts are removed together
+with their consumers, rather than retained as a second active import route.
+
+**Real-build limitation:** original05's ring contains source tags that affect catalyst and
+modifier-magnitude behavior. The current source adapter does not model them, so the
+untouched original remains Pending. Its eight saved receiving rows remain distinct.
+Clearly labelled in-memory diagnostic copies test supported range attribution and
+fractions; they are not a complete conversion of the original. Unknown source members and
+unreviewed lifecycle information continue to block promotion. Whole-item, final resistance
+metric and complete-build coverage remain incomplete: **0/5**, with all **110** fixed
+reference rows preserved.
+
+The [stat-owned receiver proposal](owned-stat-receivers.md) documents the next D2/D3 seam:
+explicit player/exact-owned-slot applicability, one instance per concrete actor, existing
+rule DAGs and activation/dependency checks, bounded expansion and honest contributor
+closure. It avoids per-class formula copies, fabricated usage/encounter providers and a
+second interpreter. The API is proposed, not implemented. Existing metric execution and
+the shared pure resistance kernel remain the consumers for the next integration slice.
+
+**Validation:** **92 Rust test executions** pass: 91 affected Import tests, including all-five
+normalization, and one executed pinned Common/ItemTools arithmetic oracle. The latter
+checks JIT-disabled/enabled source behavior; only the rounding helper receives repeated
+calls, so it does not claim all helper paths compiled hot. **10 Python tests** pass and
+all five exporter outputs reproduce exactly. Workspace/native-only strict Clippy,
+formatting, five-crate WASM compilation and the six-package PoB/Lua runtime dependency
+exclusion pass. The dependency check is not the final owned-only distribution gate;
+legacy Rust paths still share these crates.
+
+Evidence is under `runs/owned-range-01/`. The initial real-ring test exposed unsupported
+source tags; its false whole-layout expectation was corrected without changing production
+tag handling or relaxing gates. Independent lexical/arithmetic reviews found no remaining
+blocker. Protected inputs, original fixtures, existing recipes/IDs and the pinned submodule
+are unchanged. This was an affected-scope suite, not a full workspace test run or a fresh
+whole-build parity comparison. Hosted status is separate: the prior published checkpoint's
+CI run was pending with no jobs at the recorded pre-publication snapshot.
+
+**Open design question:** whether partial selected inputs may yield independently verified
+metrics with conservative dependency coverage was raised with the user and remains pending.
+The owned architecture is already agreed. Complete-request and whole-plan closure gates
+remain unchanged; this checkpoint does not adopt that proposed change.
+
+**Active resume point (the only current queue):**
+
+1. Implement the proposed stat-owned actor receiver boundary with an explicit package
+   migration, exact applicability/activation, existing dependency closure and limits.
+   Validate direct-authored player and multiple-owned-actor contrasts before adding real
+   receiver data. Do not change partial-input/metric coverage without resolving the open
+   question. Missing actor applicability never inherits player defaults.
+2. Convert source modifier tags and their magnitude/quality effects into owned semantic
+   inputs through the offline adapter. Do not classify them as inert metadata or clone
+   PoB item lifecycle objects. Original05's tagged ring and original02's active equipment
+   provide contrasting integration cases. Preserve raw evidence and all actual receiving
+   occurrences; keep unsupported families explicit.
+3. Wire complete reviewed item/reward/passive/scenario contributions into owned receivers
+   and final Stat/Metric mappings. Use original05/02 player cold queries as integration
+   targets without using their recorded 5 or 93/75 as evaluator inputs. Existing ranged
+   conversion is bounded support, not permission to ignore unknown tags or other members.
+4. Resolve applicable skill/weapon/actor/support inputs for Twister and Sniper together,
+   retaining all five originals as model stress cases. Bind shared timing/damage kernels,
+   preserve fixed metric availability and run fresh independent reference comparisons.
+   Retire replaced preparation and realization-validation consumers together.
+5. Complete all five originals, then independent holdouts and semantic joint candidates.
+   Migrate the search backend and remove legacy profile/interpreter/snapshot dependency
+   closures; prove the owned-only distribution before claiming PoB independence complete.
+   Measure changed-build evaluation, reuse and multicore throughput over real admitted cases.
+
+The earlier checkpoint sections below are historical evidence, not instructions to resume
+source/UI emulation. Current design and the active queue above supersede their next steps.
+
+**Previous checkpoint: owned metric boundary and shared resistance (`90fcb36`).**
 The [native metric contract](owned-metrics.md) now joins complete owned requests, injected
 schema/rules/routes and an independent metric-to-final-stat mapping. Core owns the mapping
 DTO, Data validates exact units/roles/schema identity, and Engine prebinds ordered queries
@@ -65,34 +151,6 @@ fresh complete-build PoB comparison. Full native originals remain **0/5**, and a
 fixed reference rows remain required. Hosted status is separate: the pre-publication check
 found the prior main checkpoint queued behind an active run with no failed jobs observed.
 
-**Open design question:** whether partial selected inputs may yield independently verified
-metrics with conservative dependency coverage was raised with the user and remains pending.
-The owned architecture is already agreed. The new metric API preserves the existing
-complete-request and whole-plan closure gates; it does not implement that proposed change.
-
-**Active resume point (the only current queue):**
-
-1. Resolve the partial-input/metric coverage question before changing finalization or global
-   closure. Independently design a common owned stat receiver with explicit activation and
-   contribution semantics; no hidden UsagePolicy/Encounter owner or per-class formula copy.
-   Use the fixed player cold-resistance query on original05 and original02 as the next real
-   integration target, preserving each selected occurrence and every unknown record.
-2. Complete generic source range conversion: lexical capture shapes independent of codecs,
-   signed half-away rounding and source member/range attribution. Original05's one ranged
-   Sapphire Ring used twice is a contrast case, never a production selector. Wire complete
-   reviewed item/reward/passive/scenario contributions to the shared receiver and declare
-   actual final Stat/Metric bindings. Do not use the recorded 5 or 93/75 as input facts.
-3. Resolve all applicable skill/weapon/actor/support inputs for Twister and Sniper together,
-   retaining all five originals as model stress cases. Bind shared timing/damage kernels,
-   preserve fixed metric availability and run fresh independent reference comparisons.
-   Retire replaced preparation and realization-validation consumers in the same checkpoint.
-4. Complete all five originals, then independent holdouts and semantic joint candidates.
-   Migrate the search backend and remove legacy profile/interpreter/snapshot dependency
-   closures; prove the owned-only distribution before claiming PoB independence complete.
-   Measure changed-build evaluation, reuse and multicore throughput over real admitted cases.
-
-The earlier checkpoint sections below are historical evidence, not instructions to resume
-source/UI emulation. Current design and the active queue above supersede their next steps.
 
 **Previous checkpoint: production catalog/import integration (`957cc89`).**
 The [offline data pipeline](owned-offline-data.md) now extends the persisted mechanics

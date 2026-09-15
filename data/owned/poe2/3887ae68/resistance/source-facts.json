@@ -389,10 +389,10 @@
       "separate selected player/owned actor identity"
     ]
   },
-  "structural_pattern_limitation": "Fixed capture and ranged capture overlap before codecs. A lexical capture-shape discriminator is required; selecting a successful numeric decoder is not ambiguity resolution.",
+  "structural_pattern_boundary": "NumericCapture uses a maximal ASCII integer token before semantic decoding. Fixed captures allow optional plus/minus; source range endpoints allow optional minus only. No successful-codec selection or runtime source execution.",
   "range_conversion": {
-    "implemented": false,
-    "reason": "Pinned ItemTools uses signed symmetric half-away rounding. Current item interpolation has no such operation; nearest-ties-positive differs on negative halves. No executable ranged policy is published.",
+    "implemented": true,
+    "scope": "Plain cold/all-elemental integer endpoint ranges with plus or absent outer sign; explicit source-attributed fraction; literal a+f*(b-a) arithmetic; literal signed source half-offset rounding. Outer minus, decimal endpoints, other line grammar and unsupported lifecycle remain pending.",
     "source_example_only": {
       "base": "Sapphire Ring",
       "lower": 20,
@@ -412,11 +412,17 @@
         ]
       ]
     },
-    "next_generic_requirements": [
-      "signed nearest-half-away rounding",
-      "numeric lexical shape constraints independent of semantic codecs",
+    "required_generic_operations": [
+      "maximal numeric lexical capture with explicit sign policy",
+      "literal source signed half-offset rounding",
       "source-attributed range membership proof without source execution"
     ]
+  },
+  "original_ring_attribution": {
+    "status": "pending",
+    "reason": "The exact original carries source modTags used by catalyst/modifier-magnitude semantics. UnsupportedTag blocks promotion of the cold modifier; no source metadata is silently removed.",
+    "reviewed_tag": "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}",
+    "diagnostic_only": "Range0/0.5/1 attribution is exercised on explicit in-memory copies removing exactly this one literal tag. This is not native success for the original."
   },
   "whole_item_closure": false,
   "metric_producer": false,

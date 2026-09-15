@@ -49,7 +49,12 @@ The ordinary resistance arithmetic in `engine::resistance` and `actor_receiving`
 shares one pure Rust kernel with explicit inputs and limits. Both legacy callers retain
 their admission and contribution order. This removes duplicate arithmetic, not their
 profile preparation. Real owned item/reward contribution recipes remain partial and lack
-a final common receiver. Do not add a fabricated class/usage owner to bridge that gap.
+a final common receiver. The proposed [stat-owned actor receivers](owned-stat-receivers.md)
+are the next D2/D3 ownership seam: explicit applicability, one instance per concrete actor,
+existing activation/dependency checks and global closure. Validate direct-authored player
+and owned-actor contrasts before adding the real player recipe. The proposal is not yet
+implemented; do not add a fabricated class/usage owner or change partial-input gates to
+bridge the gap.
 
 D5's distribution exit must inspect both normal dependency edges and shipped/compiled
 contents. The current no-default-features check excludes six PoB/Lua packages, but still

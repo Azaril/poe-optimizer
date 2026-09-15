@@ -3,7 +3,7 @@
 
 This offline exporter neither executes source nor computes a build/metric. It
 preserves the prior recipe, adds explicit input/rule declarations, and emits a
-fixed-line syntax policy. Ranged syntax remains unsupported source evidence.
+lexically constrained fixed/ranged syntax policy with explicit signed rounding.
 """
 import argparse
 import copy
@@ -175,28 +175,42 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
     for name, prefix in [("rarity", "Rarity: "), ("crafted", "Crafted: "), ("prefix", "Prefix: "), ("suffix", "Suffix: "), ("level-requirement", "LevelReq: "), ("implicit-count", "Implicits: "), ("item-level-metadata", "Item Level: "), ("quality-metadata", "Quality: "), ("sockets", "Sockets: "), ("rune", "Rune: ")]:
         headers.append(rule(name, [tag("literal", prefix), tag("capture", "text")], [{"id": "text", "codec": tag("opaque_text")}], [tag("metadata", {"role": "source-preamble-only"})]))
     outputs = {"recipe.json": pretty(recipe), "ids.json": pretty({"schema_version": 1, "namespace": namespace, "allocations": ids})}
-    for mode in ["fixed"]:
-        line_rules = copy.deepcopy(headers)
-        for name, suffix in [("cold", "% to Cold Resistance"), ("elemental", "% to all Elemental Resistances"), ("life", " to maximum Life")]:
-            definition, slot = modifiers[name]
-            pattern = [tag("capture", "amount"), tag("literal", suffix)]
-            captures, value = [capture("amount", name == "life")], tag("capture", "amount")
-            line_rules.append(rule(mode + "-" + name, pattern, captures, [tag("modifier", {"definition": definition, "rolls": [{"slot": slot, "value": value}]})]))
-        items = {"schema_version": 1, "namespace": namespace, "version": "resistance-" + mode + "-lines-v1", "definitions": identity, "whitespace": "trim_ascii", "rules": line_rules}
-        source_policy = {"schema_version": 1, "namespace": namespace, "version": "resistance-" + mode + "-layout-v1", "source": source,
-            "item_lines": DATA.owned_digest("owned-item-line-policy-v1", items), "dialect": "pob_exported_single_text_v1",
-            "rule_layouts": [{"rule": r["id"], "role": "header" if i < len(headers) else "single_modifier"} for i, r in enumerate(line_rules)],
-            "template_layouts": [{"template": template, "load_index_prefix": "no_generated_buff_members"}]}
-        outputs["items-" + mode + ".json"] = pretty(items)
-        outputs["item-source-" + mode + ".json"] = pretty(source_policy)
+    def numeric(name, sign="optional"):
+        return tag("numeric_capture", {"capture": name, "syntax": "integer", "sign": sign})
+    line_rules = copy.deepcopy(headers)
+    for name, suffix in [("cold", "% to Cold Resistance"), ("elemental", "% to all Elemental Resistances"), ("life", " to maximum Life")]:
+        definition, slot = modifiers[name]
+        pattern = [numeric("amount"), tag("literal", suffix)]
+        line_rules.append(rule("fixed-" + name, pattern, [capture("amount", name == "life")],
+            [tag("modifier", {"definition": definition, "rolls": [{"slot": slot, "value": tag("capture", "amount")}]})]))
+        if name == "life":
+            continue
+        for spelling, prefix in [("plus", "+("), ("bare", "(")]:
+            pattern = [tag("literal", prefix), numeric("lower", "optional_minus"), tag("literal", "-"),
+                numeric("upper", "optional_minus"), tag("literal", ")" + suffix)]
+            value = tag("interpolate_offset", {"lower": "lower", "upper": "upper", "quantum": quantity(1),
+                "rounding": "symmetric_half_offset"})
+            line_rules.append(rule("ranged-" + spelling + "-" + name, pattern, [capture("lower"), capture("upper")],
+                [tag("modifier", {"definition": definition, "rolls": [{"slot": slot, "value": value}]})]))
+    items = {"schema_version": 1, "namespace": namespace, "version": "resistance-lines-v2", "definitions": identity,
+        "whitespace": "trim_ascii", "rules": line_rules}
+    source_policy = {"schema_version": 1, "namespace": namespace, "version": "resistance-layout-v2", "source": source,
+        "item_lines": DATA.owned_digest("owned-item-line-policy-v1", items), "dialect": "pob_exported_single_text_v1",
+        "rule_layouts": [{"rule": r["id"], "role": "header" if i < len(headers) else "single_modifier"} for i, r in enumerate(line_rules)],
+        "template_layouts": [{"template": template, "load_index_prefix": "no_generated_buff_members"}]}
+    outputs["items.json"] = pretty(items)
+    outputs["item-source.json"] = pretty(source_policy)
     facts = {"schema_version": 1, "scope": "resistance-contribution-only", "base_recipe_sha256": sha(raw), "recipe_sha256": sha(outputs["recipe.json"]),
         "source": source, "source_spans": spans, "reward_outcomes": authoring["reward_contributions"],
         "receiver": {"implemented": False, "source": "src/Modules/CalcDefence.lua:926-979", "formula": "Absent an override: truncate_toward_zero((sum cold BASE + sum elemental BASE) * max(cold/elemental increase-more multiplier, 0)); final=max(min(total,truncated maximum),truncated minimum).",
             "obligations": ["exact common receiver ownership", "complete contributor membership", "override and increase/more inputs", "maximum/floor policies and special maximum branches", "separate selected player/owned actor identity"]},
-        "structural_pattern_limitation": "Fixed capture and ranged capture overlap before codecs. A lexical capture-shape discriminator is required; selecting a successful numeric decoder is not ambiguity resolution.",
-        "range_conversion": {"implemented": False, "reason": "Pinned ItemTools uses signed symmetric half-away rounding. Current item interpolation has no such operation; nearest-ties-positive differs on negative halves. No executable ranged policy is published.",
+        "structural_pattern_boundary": "NumericCapture uses a maximal ASCII integer token before semantic decoding. Fixed captures allow optional plus/minus; source range endpoints allow optional minus only. No successful-codec selection or runtime source execution.",
+        "range_conversion": {"implemented": True, "scope": "Plain cold/all-elemental integer endpoint ranges with plus or absent outer sign; explicit source-attributed fraction; literal a+f*(b-a) arithmetic; literal signed source half-offset rounding. Outer minus, decimal endpoints, other line grammar and unsupported lifecycle remain pending.",
             "source_example_only": {"base": "Sapphire Ring", "lower": 20, "upper": 30, "fraction_and_value": [[0, 20], [0.5, 25], [1, 30]]},
-            "next_generic_requirements": ["signed nearest-half-away rounding", "numeric lexical shape constraints independent of semantic codecs", "source-attributed range membership proof without source execution"]},
+            "required_generic_operations": ["maximal numeric lexical capture with explicit sign policy", "literal source signed half-offset rounding", "source-attributed range membership proof without source execution"]},
+        "original_ring_attribution": {"status": "pending", "reason": "The exact original carries source modTags used by catalyst/modifier-magnitude semantics. UnsupportedTag blocks promotion of the cold modifier; no source metadata is silently removed.",
+            "reviewed_tag": "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}",
+            "diagnostic_only": "Range0/0.5/1 attribution is exercised on explicit in-memory copies removing exactly this one literal tag. This is not native success for the original."},
         "whole_item_closure": False, "metric_producer": False, "source_execution": False, "whole_original_native_completion": "0/5"}
     outputs["source-facts.json"] = pretty(facts)
     if sum(map(len, outputs.values())) > 16 * 1024 * 1024:

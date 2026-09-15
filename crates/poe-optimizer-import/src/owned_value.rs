@@ -413,6 +413,25 @@ impl Decimal<'_> {
 }
 
 fn parse_decimal(source: &str, syntax: DecimalSyntax) -> Result<Decimal<'_>, ValueDecodeError> {
+    let (value, length) = parse_decimal_prefix(source, syntax)?;
+    if length != source.len() {
+        return Err(ValueDecodeError::MalformedDecimal);
+    }
+    Ok(value)
+}
+
+/// Shared lexical grammar for item-pattern matching. No integer, unit, scale or
+/// finite-value conversion participates in choosing a structural rule match.
+pub(crate) fn numeric_prefix_length(source: &str, syntax: DecimalSyntax) -> Option<usize> {
+    parse_decimal_prefix(source, syntax)
+        .ok()
+        .map(|(_, length)| length)
+}
+
+fn parse_decimal_prefix(
+    source: &str,
+    syntax: DecimalSyntax,
+) -> Result<(Decimal<'_>, usize), ValueDecodeError> {
     let bytes = source.as_bytes();
     let mut cursor = 0usize;
     let negative = bytes.first() == Some(&b'-');
@@ -461,13 +480,13 @@ fn parse_decimal(source: &str, syntax: DecimalSyntax) -> Result<Decimal<'_>, Val
             exponent = -exponent;
         }
     }
-    if cursor != bytes.len() {
-        return Err(ValueDecodeError::MalformedDecimal);
-    }
-    Ok(Decimal {
-        negative,
-        whole,
-        fraction,
-        exponent,
-    })
+    Ok((
+        Decimal {
+            negative,
+            whole,
+            fraction,
+            exponent,
+        },
+        cursor,
+    ))
 }

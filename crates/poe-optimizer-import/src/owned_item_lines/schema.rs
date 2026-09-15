@@ -85,7 +85,8 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
                     }
                     was_capture = false;
                 }
-                ItemPatternPart::Capture(id) => {
+                ItemPatternPart::Capture(id)
+                | ItemPatternPart::NumericCapture { capture: id, .. } => {
                     if was_capture || !declared.contains(id) || !used.insert(id) {
                         return invalid(
                             path,
@@ -206,6 +207,12 @@ impl<'s, I: DefinitionSchemaIndex> Checker<'s, I> {
             }
             ItemLineValue::Capture(id) => self.capture_type(rule, id),
             ItemLineValue::Interpolate {
+                lower,
+                upper,
+                quantum,
+                ..
+            }
+            | ItemLineValue::InterpolateOffset {
                 lower,
                 upper,
                 quantum,
