@@ -229,6 +229,19 @@ fn input() -> SchemaPackageInput {
                 ],
             },
         )),
+        DefinitionDescriptor::Stat(known(
+            id("stat"),
+            StatSchema {
+                value: ComputedValueType::Quantity { unit: id("ratio") },
+                targets: vec![RuleEntityKind::Actor, RuleEntityKind::EquipmentUse],
+            },
+        )),
+        DefinitionDescriptor::Capability(known(
+            id("capability"),
+            CapabilitySchema {
+                targets: vec![RuleEntityKind::Action, RuleEntityKind::Actor],
+            },
+        )),
         DefinitionDescriptor::Option(known(id("option"), OptionSchema {})),
         DefinitionDescriptor::ActionPart(known(id("part"), ActionPartSchema {})),
         DefinitionDescriptor::ActionMode(known(id("mode"), ActionModeSchema {})),
@@ -440,7 +453,7 @@ fn every_descriptor_family_loads_and_roundtrips_as_a_source_independent_index() 
             .map(|a| a.kind())
             .collect::<std::collections::BTreeSet<_>>()
             .len(),
-        22
+        24
     );
     assert_eq!(
         package
@@ -869,4 +882,133 @@ fn large_complete_owner_sets_preserve_membership_after_canonical_sorting() {
         .members
         .retain(|slot| slot != &middle);
     reject(missing, SchemaPackageErrorKind::UndeclaredSlot);
+}
+
+fn computed_input() -> SchemaPackageInput {
+    SchemaPackageInput {
+        schema_version: OWNED_SCHEMA_PACKAGE_VERSION,
+        namespace: ns(),
+        release: key("computed"),
+        semantics_version: key("declarations-only"),
+        slots: vec![],
+        definitions: vec![
+            DefinitionDescriptor::Unit(known(
+                id("exact-unit"),
+                UnitSchema {
+                    dimension: UnitDimension::Count,
+                },
+            )),
+            DefinitionDescriptor::Stat(known(
+                id("computed-stat"),
+                StatSchema {
+                    value: ComputedValueType::Quantity {
+                        unit: id("exact-unit"),
+                    },
+                    targets: vec![RuleEntityKind::Actor, RuleEntityKind::EquipmentUse],
+                },
+            )),
+            DefinitionDescriptor::Capability(known(
+                id("computed-capability"),
+                CapabilitySchema {
+                    targets: vec![RuleEntityKind::Action, RuleEntityKind::Actor],
+                },
+            )),
+        ],
+    }
+}
+fn computed_stat(input: &mut SchemaPackageInput) -> &mut StatSchema {
+    let DefinitionDescriptor::Stat(entry) = &mut input.definitions[1] else {
+        unreachable!()
+    };
+    let SchemaState::Known(schema) = &mut entry.schema else {
+        unreachable!()
+    };
+    schema
+}
+fn computed_capability(input: &mut SchemaPackageInput) -> &mut CapabilitySchema {
+    let DefinitionDescriptor::Capability(entry) = &mut input.definitions[2] else {
+        unreachable!()
+    };
+    let SchemaState::Known(schema) = &mut entry.schema else {
+        unreachable!()
+    };
+    schema
+}
+#[test]
+fn computed_schema_validates_exact_unit_closure_targets_and_limits() {
+    let first = package(computed_input());
+    let mut shuffled = computed_input();
+    computed_stat(&mut shuffled).targets.reverse();
+    computed_capability(&mut shuffled).targets.reverse();
+    assert_eq!(first.identity(), package(shuffled).identity());
+    let bytes = encode_schema_package(&first, OwnedSchemaLimits::default()).unwrap();
+    assert_eq!(
+        decode_schema_package(&bytes, OwnedSchemaLimits::default())
+            .unwrap()
+            .input(),
+        first.input()
+    );
+    for capability in [false, true] {
+        let mut duplicate = computed_input();
+        if capability {
+            computed_capability(&mut duplicate)
+                .targets
+                .push(RuleEntityKind::Actor);
+        } else {
+            computed_stat(&mut duplicate)
+                .targets
+                .push(RuleEntityKind::Actor);
+        }
+        reject(duplicate, SchemaPackageErrorKind::DuplicateMember);
+    }
+    let mut missing = computed_input();
+    computed_stat(&mut missing).value = ComputedValueType::Quantity {
+        unit: id("missing-unit"),
+    };
+    reject(missing, SchemaPackageErrorKind::MissingDefinition);
+    let mut foreign = computed_input();
+    computed_stat(&mut foreign).value = ComputedValueType::Quantity {
+        unit: UnitDefId::parse(
+            GameVersionNamespace::new("foreign", "v1").unwrap(),
+            "exact-unit",
+        )
+        .unwrap(),
+    };
+    reject(foreign, SchemaPackageErrorKind::ForeignNamespace);
+    // Identity closure is independent of conversion coverage of the unit.
+    let mut unresolved = computed_input();
+    let DefinitionDescriptor::Unit(entry) = &mut unresolved.definitions[0] else {
+        unreachable!()
+    };
+    entry.schema = SchemaState::Unmapped {
+        gaps: vec![gap(SchemaSubject::Definition(entry.id.address()))],
+    };
+    let unresolved = package(unresolved);
+    assert!(matches!(
+        unresolved.definition(&id::<UnitDefinition>("exact-unit")),
+        SchemaLookup::Unmapped(_)
+    ));
+    // Closed empty targets mean no targets; this layer never invents applicability.
+    let mut empty = computed_input();
+    computed_stat(&mut empty).targets.clear();
+    computed_capability(&mut empty).targets.clear();
+    let empty = package(empty);
+    let SchemaLookup::Known(stat) = empty.definition(&id::<StatDefinition>("computed-stat")) else {
+        unreachable!()
+    };
+    assert!(stat.targets.is_empty());
+    let mut bounded = computed_input();
+    computed_capability(&mut bounded).targets = vec![
+        RuleEntityKind::Actor,
+        RuleEntityKind::Action,
+        RuleEntityKind::EquipmentUse,
+        RuleEntityKind::Enemy,
+        RuleEntityKind::Environment,
+    ];
+    let limits = OwnedSchemaLimits {
+        max_collection_entries: 4,
+        ..OwnedSchemaLimits::default()
+    };
+    assert!(matches!(OwnedDefinitionSchemaPackage::new(bounded, limits),
+        Err(SchemaPackageError::Invalid { path, kind: SchemaPackageErrorKind::LimitExceeded }) if path.ends_with(".targets")));
 }

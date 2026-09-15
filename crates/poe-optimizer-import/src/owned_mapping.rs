@@ -246,6 +246,8 @@ mapping_enum!(ExternalCatalogKind {
     Unit,
     Quality,
     ExternalInput,
+    Stat,
+    Capability,
 });
 mapping_enum!(ExternalSlotKind {
     Parameter,

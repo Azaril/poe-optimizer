@@ -127,6 +127,7 @@ fn every_definition_domain_retains_its_wire_kind() {
         ActionOutputDefId => "action_output", ActionPartDefId => "action_part", ActionModeDefId => "action_mode",
         ActionStatSetDefId => "action_stat_set", UsagePolicyDefId => "usage_policy", SkillLinkRoleDefId => "skill_link_role",
         SocketSlotDefId => "socket_slot", UnitDefId => "unit", QualityDefId => "quality", ExternalInputDefId => "external_input",
+        StatDefId => "stat", CapabilityDefId => "capability",
     }
 }
 

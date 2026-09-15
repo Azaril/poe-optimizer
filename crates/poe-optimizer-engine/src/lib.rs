@@ -33,6 +33,7 @@ pub mod modifiers;
 pub mod movement;
 pub mod multipliers;
 mod offence;
+pub mod owned_rules;
 pub mod resistance;
 pub mod selection_keys;
 pub mod spark;

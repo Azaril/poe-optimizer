@@ -7,6 +7,8 @@ description = "Incremental native Rust translation of pinned PoB calculation ker
 publish = false
 
 [dependencies]
+poe-optimizer-core = { path = "../poe-optimizer-core" }
+serde = { version = "1", features = ["derive"] }
 poe-optimizer-data = { path = "../poe-optimizer-data" }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]

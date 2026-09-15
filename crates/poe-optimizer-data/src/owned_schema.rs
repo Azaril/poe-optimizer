@@ -527,6 +527,15 @@ impl Check<'_> {
                 c.value(path, &mut s.value)?;
                 c.sorted(&format!("{path}.targets"), &mut s.targets)
             }),
+            DefinitionDescriptor::Stat(e) => self.state(path, &mut e.schema, |c, s| {
+                if let ComputedValueType::Quantity { unit } = &s.value {
+                    c.definition(&format!("{path}.value.unit"), unit)?;
+                }
+                c.sorted(&format!("{path}.targets"), &mut s.targets)
+            }),
+            DefinitionDescriptor::Capability(e) => self.state(path, &mut e.schema, |c, s| {
+                c.sorted(&format!("{path}.targets"), &mut s.targets)
+            }),
             DefinitionDescriptor::Option(e) => self.state(path, &mut e.schema, |_, _| Ok(())),
             DefinitionDescriptor::ActionPart(e) => self.state(path, &mut e.schema, |_, _| Ok(())),
             DefinitionDescriptor::ActionMode(e) => self.state(path, &mut e.schema, |_, _| Ok(())),

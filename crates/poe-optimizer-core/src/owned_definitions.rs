@@ -195,6 +195,8 @@ definition_domains! {
     UnitDefinition, UnitDefId, Unit => "unit";
     QualityDefinition, QualityDefId, Quality => "quality";
     ExternalInputDefinition, ExternalInputDefId, ExternalInput => "external_input";
+    StatDefinition, StatDefId, Stat => "stat";
+    CapabilityDefinition, CapabilityDefId, Capability => "capability";
 }
 
 /// A typed symbolic definition reference, independent of package availability.

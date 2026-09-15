@@ -1,17 +1,22 @@
 # D2: owned definition schema and offline mapping
 
-**Status: schema DTOs, typed index interface and data loader implemented in source,
-2026-09-14.** The core [schema contracts](../crates/poe-optimizer-core/src/owned_schema.rs)
-and data [package loader/index](../crates/poe-optimizer-data/src/owned_schema.rs) are present.
-Request binding, the offline compiler, the durable ID registry and external mapping artifacts
-remain planned in this document. No validation receipts are asserted here.
+**Status: schema storage, request binding, durable ID registry and offline mapping are
+implemented; owned rule components added, 2026-09-15.** The core
+[schema contracts](../crates/poe-optimizer-core/src/owned_schema.rs), data
+[package loader/index](../crates/poe-optimizer-data/src/owned_schema.rs), and
+[composition/binding APIs](owned-binding.md) are present. Import has limited offline
+identity/role conversion and conservative draft normalization. The separate
+[owned rule components](owned-rules.md) store, compile and execute explicit-fact programs.
+Complete real semantic conversion and D3 build evaluation remain open. Validation receipts
+belong in [implementation](implementation.md).
 
 This boundary supports [owned D1 inputs](owned-build-contract.md) under the accepted
 [domain architecture](domain-architecture.md) and [migration plan](architecture-migration.md).
 It establishes definition identity, input schemas and declared relationships. It does not
 calculate effects, prove generated actors exist, or establish complete D1/D2 delivery.
-Five-build normalization, representative numerical rule conversion and D3 resolution retain
-separate completion gates.
+Complete selected five-build normalization, representative real numerical rule conversion
+and D3 resolution retain separate completion gates. Synthetic rule component tests do not
+advance the **0/5** complete-native original-build count.
 
 ## Shared types and ownership
 
@@ -32,9 +37,11 @@ The last variant lets an independent usage policy declare its own parameters.
 
 Core implements these portable value/schema contracts and the binding-facing trait. Data
 implements package decoding, validated immutable descriptor storage and its index.
-Planned offline tools will own upstream readers, owned-ID allocation/mapping and conversion
-reports; a future import adapter will consume the separate external-to-owned map. No source
-program, raw PoB callback/control field or source lookup is a dependency of the native index.
+Import implements durable owned-ID allocation, pinned external-to-owned mappings, limited
+offline skill identity/role compilation and conservative normalization into Core drafts.
+Conversion evidence remains adapter-side; full numerical conversion is still required.
+No source program, raw PoB callback/control field or source lookup is a dependency of the
+native index.
 
 `BuildInput`, `ScenarioInput` and `QueryInput` are raw DTOs; their `BuildSpec`, `ScenarioSpec`
 and `QuerySpec` wrappers establish structural validity. `QueryInput` carries its own
@@ -45,15 +52,15 @@ Well-formed saved queries can name missing/disabled providers; neither decoding 
 index silently retargets them. Support assignments are provider roots too: a support gem
 can declare an owned actor/action, independently of the supported action's provider.
 
-## Durable owned IDs and package identity (registry planned)
+## Durable owned IDs and package identity
 
-The offline compiler must maintain a version-controlled owned-ID registry; that registry
-and allocation workflow are not implemented yet. That registry will allocate symbols once
-and record aliases to external identities separately. An owned key is not a PoB key,
-a slug of the current display name, a source-path/index, or a content hash. New keys may
-be allocated deterministically from the registry's persisted counter; subsequent builds
-read the registry rather than regenerate IDs from source order. Never reuse retired keys.
-Concurrent allocation conflicts require registry reconciliation before publication.
+Import's `OwnedIdRegistry` implements persisted allocation/retirement history, bounded
+codecs and successor checks. Offline tools retain that registry as a versioned artifact
+and record aliases in the separate mapping package. An owned key is not a PoB key, a slug
+of the current display name, a source-path/index or a content hash. New keys are allocated
+from the persisted counter; later assemblies read the registry rather than regenerate IDs
+from source order. Retired keys are never reused. Concurrent allocation conflicts still
+require reconciliation before publication; the registry is not a distributed merge service.
 
 Names and upstream keys can change while the owned identity remains stable. Retain identity
 only when review establishes semantic continuity. A replacement definition or changed
@@ -81,6 +88,7 @@ all displayed labels and original text live in optional presentation/debug sidec
 | EquipmentSlot, SocketSlot | Semantic destination kind, containing declaration and loadout scope. An item socket and a passive socket are different addresses. No PoB slot-name matching. |
 | Encounter, ExternalInput | Enemy-level input range, allowed external-input definitions and target kinds; external values have declared types and units. There is no generic character-stat override. |
 | Metric, Unit | Metric target kind, result unit and supported selector roles; unit identity and dimension. Average damage and damage/time are distinct definitions. Unit equality is exact; D1 does not silently convert units. |
+| Stat, Capability | A computed stat's value type/exact unit and permitted semantic targets; a boolean capability's permitted targets. They are typed rule inputs/outputs, not source stat names, external overrides or proof that a concrete actor has the capability. |
 | UsagePolicy, SkillLinkRole | Permitted actor/action/skill target kinds and parameter slots; permitted authored container/payload roles. This declares input structure, not actual trigger rates or support applicability. |
 | Option, ActionPart, ActionMode, ActionStatSet | Typed alternatives and membership in their declaring choice/output context. A stat set is not another generated action. |
 
@@ -137,7 +145,7 @@ struct DeclaredSlots {
 Entries carry identity; payload schemas do not duplicate it. For example,
 `DefinitionDescriptor::Quality` contains `DefinitionEntry<QualityDefId, QualitySchema>`;
 `SlotDescriptor::Parameter` contains
-`DefinitionEntry<DeclaredSlot<ParameterSlotDefId>, ParameterSlotSchema>`. There are 22
+`DefinitionEntry<DeclaredSlot<ParameterSlotDefId>, ParameterSlotSchema>`. There are 24
 standalone descriptor families and six declared-slot families. SocketSlot is standalone,
 with an explicit `owner`, `kind` and `scope`. Option/ActionPart/ActionMode/ActionStatSet have
 empty typed payloads; their contextual membership is declared by the relevant slot/output.
@@ -145,7 +153,7 @@ empty typed payloads; their contextual membership is declared by the relevant sl
 `SchemaGap { subject, facet, code }` uses
 `SchemaSubject::Definition(DefinitionAddress)` or `SchemaSubject::Slot(SlotAddress)`,
 `SchemaFacet::{Identity, InputSchema, StaticLinks, GameRules}` and a bounded
-`OwnedDefinitionKey` issue code. Source spans and explanatory text belong to future
+`OwnedDefinitionKey` issue code. Source spans and explanatory text belong to adapter-side
 conversion evidence. Partial collections and unmapped entries require nonempty gap evidence
 in the loader. Empty closed role/site vectors mean known none, never unrestricted use.
 
@@ -156,8 +164,8 @@ Distance, Damage, DamagePerTime, ResourcePoints and Rating. Distinct unit IDs ca
 dimension without becoming interchangeable. Candidate-dependent caps and requirements remain
 rules, not schema defaults.
 
-The following input-binding behavior is the pending binder contract; the package loader
-validates schema declarations, not the values or availability in a concrete request.
+The following input-binding behavior is implemented by the request binder. The package
+loader validates schema declarations, not values or availability in a concrete request.
 
 Both item and gem quality are `Option<QualitySelection>`; the wire field is required even
 when its value is null. Their template/gem descriptor supplies `QualityUseSchema`. A present
@@ -314,7 +322,7 @@ enum SchemaLookup<'a, T> {
 ```
 
 The omitted private sealing bounds prevent callers from adding ID families. `DefinitionAddress`
-contains the 22 standalone typed IDs; `SlotAddress` contains the six exact declared pairs.
+contains the 24 standalone typed IDs; `SlotAddress` contains the six exact declared pairs.
 Both are ordered owned keys. Their `namespace()`, `key()` and `kind()` helpers and each
 descriptor's `address()` avoid repeated enum dispatch in consumers. `SlotAddress::declaration()`
 returns the owner; its `namespace()` returns the slot ID namespace, checked separately.
@@ -326,7 +334,7 @@ maps into canonical descriptor vectors; lookup does not scan the package or comp
 Missing is not proof of absence when enclosing membership is partial. No lookup traverses
 links, loads source, mutates state, supplies defaults or invokes a numerical callback.
 
-The following request-binding outcomes remain requirements for the pending binder:
+The request binder distinguishes these outcomes:
 
 | Situation | Binding outcome |
 | --- | --- |
@@ -389,11 +397,11 @@ absent. This source implementation is independent of legacy package schemas and 
 profiles. It contains no rules and cannot supply evaluation authority or satisfy D2's
 representative rule-conversion gate. No test, CI or numerical receipts are claimed here.
 
-Two associated tooling artifacts remain planned outside the native package. An external
-mapping entry will pair a pinned source selector with Mapped, Ambiguous or Unmapped outcomes.
-Conversion evidence will pair an external/owned subject and semantic facet with a stable
-issue code and optional source location. Neither artifact nor its compiler is implemented by
-the schema loader.
+Import's separate `OwnedMappingIndex` now validates pinned external selectors with
+Mapped, Ambiguous or Unmapped outcomes against a registry and the exact schema identity.
+The conservative normalizer retains source/owned correspondence and unresolved facts in
+its adapter evidence and Core drafts. These artifacts do not belong to the schema loader;
+full effect-conversion diagnostics and numerical coverage remain separate work.
 
 `SchemaSubject` is the shared closed union of typed definition and declared-slot addresses;
 the implemented offline mapping uses it without adding another erased native lookup path. External selectors are tagged by source record kind:
@@ -405,7 +413,7 @@ pin. Multiple aliases may map to one owned ID only through explicit reviewed con
 equivalence; equal labels alone do not merge definitions. Mapping tables are data; runtime
 Rust must not switch on a named build/skill.
 
-The planned offline pipeline is:
+The offline pipeline and its remaining conversion obligations are:
 
 1. Read the pinned upstream sources or reusable extracted factual catalogs. Optional Lua
    execution stays in acquisition tooling. Do not require constructing the entire legacy
@@ -426,18 +434,23 @@ The planned offline pipeline is:
    optional adapter map and conversion evidence with their own hashes/versions. Existing
    source observers can investigate discrepancies without becoming release parity targets.
 
-Later D2 rule packages lower local arithmetic, conditions, support applicability and grants
-into reviewed typed operations using these same IDs. Unknown operations or missing active
-dependencies stay explicit. Compatible coefficient changes update data; new operations
-require versioned Rust semantics and tests. There is no source VM or generic text-expression
-fallback inside the package.
+The separate [owned rule package](owned-rules.md) now represents local arithmetic,
+conditions, support applicability and grants using these IDs. Data validates its storage
+structure and exact schema binding; Engine checks operation semantics and executes explicit
+facts. This component path does not perform offline source conversion or concrete build
+resolution. Unknown operations and missing demanded facts stay explicit. Compatible
+coefficient changes update data; new operations require versioned Rust semantics and tests.
+There is no source VM or generic text-expression fallback inside either package.
 
 ## Remaining implementation and acceptance gates
 
 The core DTOs/index, bounded data loader, request binder and durable offline ID-registry/mapping
 artifacts are implemented. See [composition and binding](owned-binding.md) for the delivered APIs.
-The next work is source conversion for representative record kinds and all-five normalization. Directly authored and imported D1 inputs must use the same
-binding boundary. Search, simulation and numerical rule conversion remain separate work.
+Conservative all-five draft normalization and limited identity/role conversion are also
+implemented. Remaining work includes complete selected normalization, reproducible conversion
+of real effect semantics, and D3 concrete resolution/metric coverage. Directly authored and
+imported D1 inputs use the same binding boundary. Rule components validate supplied facts;
+they are not a replacement for that request-level resolution or for search integration.
 
 The binder checks every concrete authored parameter, choice and quality selection
 against indexed kind, unit, range, membership and owner/action context. Its report binds

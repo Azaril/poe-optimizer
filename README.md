@@ -40,6 +40,11 @@ build/inventory/scenario/query/request structure through portable core APIs, wit
 a data package. `check-owned-schema INPUT --canonical-output OUTPUT` validates a supplied
 owned definition schema package and reports its canonical content identity. Both commands
 work in a native-only build; neither claims build binding, legality or numerical coverage.
+`check-owned-rules INPUT --definitions SCHEMA [--probe FACTS]` checks the new
+owned rule format, compiles its typed effects, and optionally evaluates explicit component
+facts without PoB. This is the shared library boundary for real effect conversion and
+future build-plan integration; it does not yet calculate an owned build. See
+[owned rule components](docs/owned-rules.md).
 `check-owned-draft INPUT --selection SELECTION --owned-output OUTPUT` validates partial
 owned authoring state and finalizes explicit independent presets through the same Core
 APIs. Pending selections retain all query rows and cannot write a complete request;

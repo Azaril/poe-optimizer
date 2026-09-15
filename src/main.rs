@@ -12,6 +12,7 @@ mod owned_binding;
 mod owned_draft;
 mod owned_input;
 mod owned_normalize;
+mod owned_rules;
 mod owned_schema;
 
 use clap::{Parser, Subcommand};
@@ -60,6 +61,8 @@ enum Action {
     NormalizeOwned(owned_normalize::Args),
     /// Check a caller-supplied owned definition schema package without evaluating a build.
     CheckOwnedSchema(owned_schema::Args),
+    /// Compile owned game rules and optionally evaluate explicit component facts.
+    CheckOwnedRules(owned_rules::Args),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
     /// Inspect authored build containers without calculating or admitting mechanics.
@@ -227,6 +230,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::CheckOwnedDraft(args)) => owned_draft::run(args)?,
         Some(Action::NormalizeOwned(args)) => owned_normalize::run(args)?,
         Some(Action::CheckOwnedSchema(args)) => owned_schema::run(args)?,
+        Some(Action::CheckOwnedRules(args)) => owned_rules::run(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,
         Some(Action::SearchBuild(args)) => build_search::run(args)?,

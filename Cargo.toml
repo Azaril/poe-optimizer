@@ -27,6 +27,7 @@ clap = { version = "4", features = ["derive"] }
 getrandom = "0.4"
 poe-optimizer-core = { path = "crates/poe-optimizer-core" }
 poe-optimizer-data = { path = "crates/poe-optimizer-data" }
+poe-optimizer-engine = { path = "crates/poe-optimizer-engine" }
 poe-optimizer-pob = { path = "crates/poe-optimizer-pob", optional = true }
 poe-optimizer-import = { path = "crates/poe-optimizer-import" }
 poe-optimizer-native = { path = "crates/poe-optimizer-native" }

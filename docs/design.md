@@ -19,6 +19,9 @@ embedding PoB callbacks or its UI state. Reference projection metadata stays in 
 comparison ledger; it cannot become objective data or invent native actor availability.
 The [owned draft boundary](owned-drafts.md) keeps partial authoring/import state outside
 complete evaluation and gives CLI, GUI and web hosts the same explicit finalization API.
+The [owned rule components](owned-rules.md) now provide strict bound package storage,
+semantic compilation and explicit-fact execution. They do not yet resolve complete builds;
+offline semantic conversion and provider/actor/action plan integration remain separate gates.
 
 ## Recommendation
 
@@ -259,6 +262,13 @@ not become the shipped runtime ABI. The [domain ADR](domain-architecture.md) def
 semantics, dependency and coverage contract. The [execution-model investigation](rule-execution-model-investigation.md)
 now compares implementation choices inside that boundary, rather than postponing it until
 the source interpreter achieves full compatibility.
+
+The implemented rule component uses typed stat/capability definitions, explicit quality
+presence/amount reads, bounded expression DAGs and classified effect results. Its
+`check-owned-rules` host validates caller-supplied rule data and optional component facts.
+It establishes neither source conversion nor original-build metric coverage, and does not
+replace the current legacy numerical consumers. The [component contract](owned-rules.md)
+defines that boundary and the next paired integration/retirement requirement.
 
 Parity means observable build/evaluation semantics: resolved input, selected actions,
 metrics/availability and controlled mutations under matched scenarios. PoB UI graphs,

@@ -265,8 +265,9 @@ fn every_existing_definition_and_slot_family_has_a_typed_projection() {
         ActionStatSet: ActionStatSetDefId, UsagePolicy: UsagePolicyDefId,
         SkillLinkRole: SkillLinkRoleDefId, SocketSlot: SocketSlotDefId,
         Unit: UnitDefId, Quality: QualityDefId, ExternalInput: ExternalInputDefId,
+        Stat: StatDefId, Capability: CapabilityDefId,
     }
-    assert_eq!(index.definitions.len(), 22);
+    assert_eq!(index.definitions.len(), 24);
 
     macro_rules! check_slots {
         ($($variant:ident: $id:ty),+ $(,)?) => { $(
@@ -361,4 +362,79 @@ fn potential_topology_retains_explicit_cross_declaration_links() {
         },
     );
     // Serialization of potential topology grants no activation/legality authority.
+}
+
+#[test]
+fn computed_stat_kinds_and_capability_targets_have_strict_owned_wire_shapes() {
+    let mut index = TestIndex::new();
+    for (n, value) in [
+        ComputedValueType::Boolean,
+        ComputedValueType::Integer,
+        ComputedValueType::Quantity {
+            unit: id("unit.count"),
+        },
+        ComputedValueType::Option,
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        roundtrip(&value);
+        let stat: StatDefId = id(&format!("stat.{n}"));
+        let schema = StatSchema {
+            value,
+            targets: vec![RuleEntityKind::Actor],
+        };
+        let descriptor = DefinitionDescriptor::Stat(DefinitionEntry {
+            id: stat.clone(),
+            schema: SchemaState::Known(schema.clone()),
+        });
+        roundtrip(&descriptor);
+        index.definitions.insert(descriptor.address(), descriptor);
+        assert_eq!(index.definition(&stat), SchemaLookup::Known(&schema));
+    }
+    let capability: CapabilityDefId = id("capability");
+    let descriptor = DefinitionDescriptor::Capability(DefinitionEntry {
+        id: capability.clone(),
+        schema: SchemaState::Known(CapabilitySchema {
+            targets: vec![
+                RuleEntityKind::Actor,
+                RuleEntityKind::Action,
+                RuleEntityKind::EquipmentUse,
+                RuleEntityKind::Enemy,
+                RuleEntityKind::Environment,
+            ],
+        }),
+    });
+    roundtrip(&descriptor);
+    index.definitions.insert(descriptor.address(), descriptor);
+    assert!(matches!(
+        index.definition(&capability),
+        SchemaLookup::Known(_)
+    ));
+    assert!(serde_json::from_value::<ComputedValueType>(json!({"kind":"quantity"})).is_err());
+    assert!(
+        serde_json::from_value::<ComputedValueType>(json!({"kind":"option","allowed":[]})).is_err()
+    );
+    assert!(serde_json::from_value::<StatSchema>(json!({"value":{"kind":"integer"}})).is_err());
+    assert!(
+        serde_json::from_str::<StatSchema>(
+            r#"{"value":{"kind":"integer"},"targets":[],"targets":[]}"#
+        )
+        .is_err()
+    );
+    assert!(serde_json::from_value::<RuleEntityKind>(json!("minion")).is_err());
+    let wrong_unit = json!({"kind":"quantity","value":{"unit":{
+        "kind":"stat","namespace":{"game":"authored-game","version":"schema-test"},"key":"unit.count"
+    }}});
+    assert!(serde_json::from_value::<ComputedValueType>(wrong_unit).is_err());
+    let foreign: StatDefId = DefId::parse(
+        GameVersionNamespace::new("foreign", "v1").unwrap(),
+        "stat.0",
+    )
+    .unwrap();
+    assert_eq!(index.definition(&foreign), SchemaLookup::NamespaceMismatch);
+    assert_eq!(
+        index.definition(&id::<StatDefinition>("missing")),
+        SchemaLookup::Missing
+    );
 }

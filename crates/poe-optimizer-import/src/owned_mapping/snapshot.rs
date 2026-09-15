@@ -434,6 +434,8 @@ fn expected_kind(source: &ExternalSelector) -> DefinitionKind {
             ExternalCatalogKind::Unit => DefinitionKind::Unit,
             ExternalCatalogKind::Quality => DefinitionKind::Quality,
             ExternalCatalogKind::ExternalInput => DefinitionKind::ExternalInput,
+            ExternalCatalogKind::Stat => DefinitionKind::Stat,
+            ExternalCatalogKind::Capability => DefinitionKind::Capability,
         },
         ExternalSelector::Socket { .. } => DefinitionKind::SocketSlot,
         ExternalSelector::Slot { kind, .. } => match kind {

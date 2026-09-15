@@ -90,6 +90,7 @@ pub mod owned_definitions;
 pub mod owned_draft;
 pub mod owned_inventory;
 pub mod owned_project;
+pub mod owned_rules;
 pub mod owned_schema;
 
 pub mod build_identity;

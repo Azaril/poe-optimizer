@@ -185,7 +185,9 @@ fn allocation_uses_only_persisted_sequence_and_supports_all_typed_families() {
         SocketSlotDefId,
         UnitDefId,
         QualityDefId,
-        ExternalInputDefId
+        ExternalInputDefId,
+        StatDefId,
+        CapabilityDefId
     );
     let owner = SlotOwnerDefId::Class(ClassDefId::parse(ns(), "def.0000000000000001").unwrap());
     macro_rules! allocate_slots { ($($ty:ty),+ $(,)?) => { $(let _: DeclaredSlot<$ty> = registry.allocate_slot(owner.clone()).unwrap();)+ }; }
@@ -197,7 +199,7 @@ fn allocation_uses_only_persisted_sequence_and_supports_all_typed_families() {
         SkillGrantSlotDefId,
         ActionOutputDefId
     );
-    assert_eq!(registry.input().last_issued.get(), 28);
+    assert_eq!(registry.input().last_issued.get(), 30);
     let encoded = encode_registry(&registry, limits()).unwrap();
     let mut shuffled = registry.input().clone();
     shuffled.entries.reverse();
@@ -206,7 +208,7 @@ fn allocation_uses_only_persisted_sequence_and_supports_all_typed_families() {
     assert_eq!(restored.identity().unwrap(), registry.identity().unwrap());
     let mut restored = decode_registry(&encoded, limits()).unwrap();
     let next: GemDefId = restored.allocate_definition().unwrap();
-    assert_eq!(next.key().as_str(), "def.000000000000001d");
+    assert_eq!(next.key().as_str(), "def.000000000000001f");
     registry.validate_successor(&restored).unwrap();
 }
 
@@ -1165,5 +1167,88 @@ fn positively_mapped_output_checks_only_known_complete_alternative_membership() 
             },
         ),
         OwnedMappingErrorKind::LimitExceeded,
+    );
+}
+
+#[test]
+fn stat_and_capability_catalog_mappings_keep_distinct_owned_identity_and_coverage() {
+    let mut registry = OwnedIdRegistry::empty(ns(), limits()).unwrap();
+    let stat: StatDefId = registry.allocate_definition().unwrap();
+    let capability: CapabilityDefId = registry.allocate_definition().unwrap();
+    let schema = OwnedDefinitionSchemaPackage::new(
+        SchemaPackageInput {
+            schema_version: 1,
+            namespace: ns(),
+            release: key("computed"),
+            semantics_version: key("schema-only"),
+            definitions: vec![
+                DefinitionDescriptor::Stat(unmapped(stat.clone(), subject(&stat))),
+                DefinitionDescriptor::Capability(unmapped(
+                    capability.clone(),
+                    subject(&capability),
+                )),
+            ],
+            slots: vec![],
+        },
+        OwnedSchemaLimits::default(),
+    )
+    .unwrap();
+    let external = |kind| ExternalSelector::Catalog {
+        kind,
+        key: text("exact-source-key"),
+        version: SourceComponent::Missing,
+        variant: SourceComponent::Missing,
+    };
+    let input = MappingPackageInput {
+        schema_version: OWNED_MAPPING_PACKAGE_VERSION,
+        namespace: ns(),
+        registry: registry.identity().unwrap(),
+        definitions: schema.identity().clone(),
+        source: pin(),
+        policy_version: key("computed-identities"),
+        entries: vec![
+            mapped(external(ExternalCatalogKind::Stat), subject(&stat)),
+            mapped(
+                external(ExternalCatalogKind::Capability),
+                subject(&capability),
+            ),
+        ],
+    };
+    let index = OwnedMappingIndex::new(input.clone(), &registry, &schema, limits()).unwrap();
+    assert!(
+        matches!(index.lookup(&external(ExternalCatalogKind::Stat)), Some(MappingOutcome::Mapped { target, .. }) if target == &subject(&stat))
+    );
+    assert!(matches!(
+        schema.definition(&stat),
+        SchemaLookup::Unmapped(_)
+    ));
+    assert!(matches!(
+        schema.definition(&capability),
+        SchemaLookup::Unmapped(_)
+    ));
+    let bytes = encode_mapping_package(&index, limits()).unwrap();
+    let restored = decode_mapping_package(&bytes, &registry, &schema, limits()).unwrap();
+    assert_eq!(index.identity(), restored.identity());
+    for (source, target) in [
+        (external(ExternalCatalogKind::Stat), subject(&capability)),
+        (external(ExternalCatalogKind::Capability), subject(&stat)),
+    ] {
+        let mut wrong = input.clone();
+        wrong.entries = vec![mapped(source, target)];
+        expect_kind(
+            OwnedMappingIndex::new(wrong, &registry, &schema, limits()),
+            OwnedMappingErrorKind::WrongTargetKind,
+        );
+    }
+    registry
+        .retire(&subject(&stat), key("retired-stat"))
+        .unwrap();
+    let restored_registry =
+        decode_registry(&encode_registry(&registry, limits()).unwrap(), limits()).unwrap();
+    let mut retired = input;
+    retired.registry = restored_registry.identity().unwrap();
+    expect_kind(
+        OwnedMappingIndex::new(retired, &restored_registry, &schema, limits()),
+        OwnedMappingErrorKind::RetiredTarget,
     );
 }

@@ -1,9 +1,9 @@
 # Architecture migration and retirement plan
 
-Status: active delivery plan, 2026-09-14. The owner requested this correction before
+Status: active delivery plan, updated 2026-09-15. The owner requested this correction before
 further PoB-shaped runtime work. [Domain architecture](domain-architecture.md) is the
 controlling design. [Implementation](implementation.md) records actual completion and
-validation; the phases below are not claims that the new APIs exist.
+validation; each phase's complete exit gate remains separate from its delivered APIs.
 
 ## Starting point and immediate rule
 
@@ -74,7 +74,22 @@ allow source definitions to produce zero/one/many owned declarations; PoB Gem ro
 prove physical gem ownership. The
 [owned package contract](owned-definition-package.md) now has typed descriptors and a
 validated injectable schema package/index. Durable owned-ID allocation and exact offline mapping artifacts are implemented. Catalog
-conversion, rule compilation and the complete D2 exit evidence remain open; schema validity is not numerical coverage.
+conversion and the complete D2 exit evidence remain open; schema validity is not numerical coverage.
+
+The [owned rule component boundary](owned-rules.md) is now implemented: Core authoring DTOs,
+Data's strict schema-bound rule storage, Engine's typed DAG compiler and explicit-fact
+executor, and the thin `check-owned-rules` CLI. Stat/capability definitions bring the schema
+to 24 standalone descriptor families. Item/gem quality has explicit presence/amount reads;
+missing facts never become default zero. Synthetic component fixtures exercise local-item,
+attribute-condition, support and grant operations with changed data and scope checks.
+They do not complete real source conversion or original-build parity; **0/5** remains.
+
+The next D2 gate is reproducible conversion of real effects with independent numerical
+evidence. D3 still owns concrete provider/actor/action binding, incoming-contribution
+completeness, inter-program dependency/cycle checks, activation and metric coverage.
+No legacy numerical consumer moved in this component slice. The next numerical integration
+must pair a named consumer migration with deletion of its replaced profile/request path and
+preservation of its useful reference laws.
 
 ## Retirement ownership
 

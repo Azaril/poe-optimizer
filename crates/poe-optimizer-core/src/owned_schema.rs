@@ -155,6 +155,15 @@ schema_enum!(UsageTargetKind {
     Action,
     Skill
 });
+// Semantic targets for computed facts. These are independent of provider roots
+// and source actor/category names; concrete target compatibility binds later.
+schema_enum!(RuleEntityKind {
+    Actor,
+    Action,
+    EquipmentUse,
+    Enemy,
+    Environment,
+});
 schema_enum!(UnitDimension {
     DimensionlessFactor,
     PercentagePoints,
@@ -309,6 +318,28 @@ schema_record!(SkillLinkRoleSchema {
     containers: DeclaredSet<SkillDefId>,
     payloads: DeclaredSet<SkillDefId>,
 });
+/// Computed kind only: ranges, reductions, stages and contextual option membership
+/// belong to the rule/input contracts. Quantity retains an exact owned unit.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum ComputedValueType {
+    Boolean,
+    Integer,
+    Quantity { unit: UnitDefId },
+    Option,
+}
+schema_record!(StatSchema {
+    value: ComputedValueType,
+    targets: Vec<RuleEntityKind>,
+});
+schema_record!(CapabilitySchema {
+    targets: Vec<RuleEntityKind>,
+});
 schema_record!(UnitSchema {
     dimension: UnitDimension
 });
@@ -462,6 +493,8 @@ definition_catalog! {
     Unit: UnitDefId => UnitSchema,
     Quality: QualityDefId => QualitySchema,
     ExternalInput: ExternalInputDefId => ExternalInputSchema,
+    Stat: StatDefId => StatSchema,
+    Capability: CapabilityDefId => CapabilitySchema,
 }
 
 macro_rules! slot_catalog {

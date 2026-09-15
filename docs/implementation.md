@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-14 (EDT)
+Last updated: 2026-09-15 (EDT)
 
 **Current priority: complete native parity for the five example builds, then wider breadth.**
 The five supplied originals have **0/5 complete
@@ -10,6 +10,86 @@ for the active integration gates, with Twister and Skeletal Sniper developed tog
 all five originals exercising the input model. Crossbow remains an API/trigger stress
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
+
+**Owned rule component checkpoint (after `7de9628`):** the portable contracts now
+include owned stat and capability definitions and a closed expression/effect package.
+Data stores a bounded, exact-schema-bound artifact; Engine separately compiles all
+programs, including unreachable branches, with typed units, target contexts, declaration
+ownership and cycle checks. See [owned rules](owned-rules.md). No source Lua instructions,
+UI objects, callbacks, profile selector or legacy game-data default enter this API.
+The owned schema now has 24 standalone descriptor families and six slot families.
+
+The first domain operations cover same-unit arithmetic, explicit scaling/percentage
+conversion and rounding, comparisons, lazy Boolean/branch selection, stat contributions,
+derived values, capabilities, support applicability, declared grants and requirements.
+Item/gem quality has explicit presence/amount reads bound to its owner's quality policy;
+it is not a fabricated parameter or a candidate value hidden in generated constants.
+Missing demanded facts and numerical failures remain classified per effect. False
+applicability is distinct from an effect whose guard is inactive. Partial owner program
+membership remains visible even when all known programs return values.
+
+The immutable compiler result can be shared across workers; each evaluation owns/reuses
+separate scratch. This component API validates explicit caller facts, including their
+schema and resource bounds. It does not yet establish provider/actor/action correspondence,
+complete incoming contributions, inter-program dependency ordering or whole-build coverage.
+Its validation/serialization overhead is not the intended repeated-search input ABI;
+D3 must bind validated semantic requests to indexed slots before performance work.
+
+`check-owned-rules` is a thin CLI for explicit schema/rule files and optional component
+probe facts. It rejects stale artifacts, unknown operations, invalid graphs/facts and
+no-overwrite violations. Reports explicitly distinguish storage validation, compilation,
+component calculation, unresolved membership and whole-build parity. Direct library users,
+CLI and eventual GUI/web clients share these contracts.
+
+The independent authored fixture covers four effect families with eight contrasting cases:
+local item arithmetic (quality present/absent), an effective-attribute threshold, support
+applicability and a conditional actor grant. These are synthetic component laws, not
+converted original-build effects or independent PoB numerical parity. They demonstrate
+injected definitions and a data-only coefficient change without a skill-name dispatch.
+The original-build denominator remains **0/5 complete native evaluations**.
+
+Final guarded validation passes **430 selected test executions**: Core 210, owned Data
+18, Engine components 20, owned Import 116, and CLI 33 with default features plus 33 without
+PoB. Strict workspace/native-only Clippy, Core/Data/Engine/Import/Native WASM compilation,
+formatting and the native-only runtime dependency check pass. The runtime tree contains
+no PoB/Lua dependency. Receipts are
+`runs/owned-effect-seam-01/validation-03/ledger.json` and `validated-checkpoint.json`.
+This is affected-scope local evidence, not a whole-workspace test run or new-head hosted
+CI result. Exact-head hosted CI for parent `7de9628` passed all ten jobs on Windows and
+Linux: [run 34841871175](https://github.com/Azaril/poe-optimizer/actions/runs/34841871175).
+No protected input, expectation manifest, schema40 data or pinned PoB checkout has changed.
+
+Review tightened gap/read-edge accounting, direct compiler closure validation and numerical
+rounding boundaries. Validation-01 stopped on new-code Clippy style issues. Validation-02
+then exposed Serde accepting unknown fields on new internally tagged unit variants; the
+unpublished value-type/read-source envelopes now use the existing owned adjacent-tag
+convention, with regression checks. Validation-03 is the final passing source. These fixes
+do not alter original build expectations or legacy numerical kernels.
+
+**Resume after this checkpoint:** finish D2 conversion of real effects through these owned
+contracts while completing remaining selected input semantics. Start with local item
+arithmetic and support/grant effects exercised by Twister and Skeletal Sniper together;
+keep all five inputs and all 110 reference rows. A source catalog kind may compile to
+zero/one/many owned declarations. Preserve unsupported semantics as gaps. Then bind actual
+provider, actor, action and equipment occurrences; prove incoming contribution membership,
+resolve dependencies and reject unsupported cross-program cycles/competing derived outputs.
+Grant activation and metric availability must be computed independently of oracle rows.
+Reuse numerical kernels and replace legacy numerical consumers with their useful tests in
+that same vertical slice. The new component package alone does not justify deleting those
+still-active pipelines. The finite catalog and unused payload classifier remain retired;
+no additional Spark/Mace numerical consumer is claimed retired here. Do not resume the
+paused Lua/UI frontier or create another named-skill adapter.
+
+The source audit for the next slice is in
+`runs/owned-effect-seam-01/next-conversion-slice.md`. Original02's selected swap weapon
+(item26 Grand Spear) has an explicit 49% attack-speed modifier despite affix metadata
+naming a 26-28% tier. Preserve the explicit effect once; keep the metadata discrepancy and
+roll legality separate from the schema's computable numeric domain. Original05's selected
+item28 Ashen Staff grants Firebolt at a recorded level of 11; its selected Skeletal Sniper
+is a separate manual summoner. The next model slice needs typed generated-skill parameter
+transfer and receiving-provider binding, without creating a physical Gem or copying 11 as
+a constant. Equipment-local outputs also need explicit transport into the action's selected
+attack source. Neither the grant nor local weapon arithmetic completes those builds' DPS.
 
 **Owned reward and reference routing checkpoint (after `ff4c07d`):** finite
 `OwnedRewardPolicy` artifacts now bind owned schema/mapping identities, apply existing

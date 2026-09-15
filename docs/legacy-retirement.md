@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-09-14 for the owned composition/binding/mapping checkpoint after `9aff988`. This is a living companion to
+Updated 2026-09-15 for the owned rule component checkpoint. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -15,7 +15,7 @@ and public entry points, not a filename pattern.
 
 | Code/type | Current dependency | Retirement action |
 | --- | --- | --- |
-| `core/src/evaluation.rs`: BuildFormat, EvaluationRequest | Legacy numerical requests still mandate PoB XML; options use source action/group indexes | The owned_build request and codec now accept independent semantic inputs. Replace numerical callers after definition binding/general resolution lands; external selectors remain adapter-only. |
+| `core/src/evaluation.rs`: BuildFormat, EvaluationRequest | Legacy numerical requests still mandate PoB XML; options use source action/group indexes | The owned_build request, codec and schema binder accept independent semantic inputs. Replace numerical callers when general resolution lands; external selectors remain adapter-only. |
 | `src/mutation_search.rs`: SearchExperimental, NativeEvaluation | Removed | Enum moved to its only consumer, build_search. Command/module and six obsolete problem examples deleted; no silent compatibility route. |
 | `import/src/controlled_mace.rs`: ControlledMaceCatalog and related types | Removed | Implementation, exclusive tests and all callers deleted. Useful invariants moved to the retained candidate/import APIs. |
 | `native/src/candidates.rs`: PreparedMaceCandidates | Removed | Shared NativeMetricSnapshot/Value extracted to metric_snapshot.rs; finite preparation/evaluation APIs and benchmark deleted. |
@@ -44,8 +44,8 @@ adding a parallel implementation or constructing a fake character for inventory 
 
 This checkpoint introduces the replacement input/data seams but does not yet replace a
 legacy numerical consumer. No additional profile/kernel deletion is claimed. The remaining
-retirement dependency is explicit: definition binding, five-case owned normalization and
-general effect resolution must preserve the current useful numerical tests before legacy
+retirement dependency is explicit: complete selected five-case normalization and general
+effect resolution must preserve the current useful numerical tests before legacy
 request/profile/package consumers can be removed. New numerical work must use those owned
 contracts; the legacy UI/source VM frontier remains paused.
 
@@ -163,3 +163,20 @@ hashes; it adds no evaluator/interpreter. Reference reports live only in compres
 No numerical profile is replaced by this checkpoint, so no additional Spark/Mace deletion
 is claimed. The next deletion unit remains legacy numerical request/profile consumers
 as shared effect resolution lands; the removed experimental catalog stays removed.
+
+## Owned rule component checkpoint
+
+Core's typed rule contracts, Data's independent rule package storage, Engine's bounded
+compiler/executor and `check-owned-rules` have a named component consumer. They load no
+legacy Spark/Mace sections or source VM programs. The [component boundary](owned-rules.md)
+separates schema-bound storage, semantic compilation and explicit-fact execution from
+actual build/provider resolution. Synthetic four-family tests and changed-data probes are
+not original-build numerical parity; **0/5** remains.
+
+No numerical profile caller was replaced by this slice, so no further profile/kernel or
+golden deletion is claimed. The next numerical integration must convert real effects,
+resolve them against owned requests, migrate a named legacy consumer with its useful
+reference laws, and remove that replaced request/profile path and dependency closure in
+the same checkpoint. Shared effect resolution must not become another permanent profile
+or a source-program compatibility layer. Existing schema binding, durable ID allocation
+and offline mapping are delivered prerequisites, not reasons to retain duplicate new APIs.
