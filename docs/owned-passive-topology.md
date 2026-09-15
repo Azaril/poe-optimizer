@@ -152,3 +152,26 @@ from `rules.json`; the native loader needs only that artifact and its owned sche
 native usage/capacity executor and access resolution remain next. This does not change
 the complete-request or contributor-closure gates, finalize any Pending allocation,
 or establish original-build legality.
+
+## Ordinary attribute effects
+
+The offline Rust `compile-owned-attributes` command converts an injected finite catalog
+and reviewed lane policy into ordinary Choice/Compare/Contribute programs. It preserves
+the physical passive, exact allocation-owned choice slot, selected option, pool and
+adjacency. The [production authoring inputs](../data/owned/poe2/3887ae68/attributes/README.md)
+cover 293 ordinary attribute nodes. Names, values and target stat IDs are supplied data;
+the runtime uses existing typed operations without attribute-specific dispatch.
+
+Publishing this conversion uses a narrow `PassiveDeclarationRefinement`: exact before
+and after schema identities plus the affected node IDs. The finalizer permits only
+Partial-to-Complete port closure with identical members; every other old declaration and
+registry entry remains exact. Unknown nodes, duplicate entries, unused assertions,
+changed topology or changed slots reject. Rule membership is validated separately and
+is never inferred from port closure. A prior nonempty conflicting program cannot be
+replaced by invoking the attribute converter again.
+
+The shared CLI bundle loader retains manifest hashes, endpoint checks and all carried
+import policies. Unchanged reruns preserve semantic artifact identities and allocate
+nothing. Allocation access remains Pending in imported builds; this conversion does not
+prove affordability, grant activation, class-view semantics or complete attributes.
+The original query set and whole-request/contributor closure gates are unchanged.

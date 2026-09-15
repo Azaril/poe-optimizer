@@ -59,6 +59,22 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Attribute conversion checkpoint
+
+The ordinary attribute family now has a Rust offline compiler using injected target
+stats, lane values and exact source facts. It reuses the existing choice/effect language
+and preserves all 293 physical owners. A checked, endpoint-bound passive declaration
+refinement closes only reviewed port-list membership; unchanged slots, topology, registry
+history, import policies and query meaning remain enforced by the shared finalizer.
+This is a concrete D2/D3 input/effect component, not full tree legality or native-build parity.
+See [passive topology](owned-passive-topology.md#ordinary-attribute-effects).
+
+The next class-view family must model whole-effect-list replacement. The finite catalog
+contains 78 nodes with views across Witch, Abyssal Lich, Druid and Huntress selectors.
+Review typed selected-class/ascendancy predicates and guarded effect branches; never add
+view effects to the default list or change physical node identity. Shared attribute base
+contributions and final attribute receivers still need class, item and other sources.
+
 ## Current structural and breadth priorities
 
 The owned-model boundary is the controlling design; the latest user review reinforces

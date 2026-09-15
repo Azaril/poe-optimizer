@@ -141,10 +141,12 @@ recipes, reward rules and ordered query lists to the successor through their con
 The item-line/source policies are explicit successor-bound inputs; old empty policies
 cannot silently replace the newer item semantics. Runtime constructors remain strict.
 
-This narrow transition allows new definitions and reviewed rule/routing bodies, including
-data-only balance changes. It does not authorize rewriting existing schema declarations,
-retiring IDs, inferring source facts or guessing a mapping. Future incompatible schema
-changes need an explicit migration contract. Aggregate input/output/work limits and
+This transition allows new definitions and reviewed rule/routing bodies, including
+data-only balance changes. Ordinary succession preserves existing schema declarations.
+The explicit passive declaration refinement additionally permits reviewed port-closure
+completion, bound to both exact schemas, with members and all other fields unchanged.
+It does not authorize rewriting topology or slots, retiring IDs, inferring source facts
+or guessing a mapping. Incompatible schema changes need a separate migration contract. Aggregate input/output/work limits and
 constituent graph/text limits apply before atomic no-replace publication. The receipt
 identifies both endpoints and every emitted artifact; it makes no whole-build parity claim.
 

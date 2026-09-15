@@ -1,15 +1,18 @@
 //! Offline tree compiler host; one checked bundle and one publication transaction.
 use poe_optimizer_core::{
-    owned_content::OwnedContentDigest, owned_definitions::OwnedDefinitionKey,
+    owned_content::OwnedContentDigest,
+    owned_definitions::OwnedDefinitionKey,
+    owned_schema::{DefinitionSchemaIndex, SchemaLookup},
 };
 use poe_optimizer_import::{
     owned_item_lines::{ItemLinePolicyInput, OwnedItemLinePolicy},
     owned_item_source::{ItemSourceLayoutPolicy, ItemSourceLayoutPolicyInput},
     owned_mapping::{MappingPackageInput, OwnedMappingIndex},
-    owned_recipe::{OwnedRecipeInput, assemble_owned_recipe},
+    owned_recipe::{OwnedRecipeInput, StagedOwnedRecipe, assemble_owned_recipe},
     owned_successor::{
         CatalogAppend, CatalogItemPolicyMode, NamedQuerySet, OWNED_SUCCESSOR_VERSION,
-        SuccessorBindings, SuccessorBundleInput, SuccessorBundleLimits, TreePolicyTransitionInput,
+        PassiveDeclarationRefinement, StagedSuccessorBundle, SuccessorBindings,
+        SuccessorBundleInput, SuccessorBundleLimits, TreePolicyTransitionInput,
         transition_owned_catalog_with_tree,
     },
     owned_tree_catalog::{
@@ -61,8 +64,7 @@ struct Manifest {
     document_kind: String,
     #[serde(rename = "input")]
     _input: IgnoredAny,
-    #[serde(rename = "before")]
-    _before: IgnoredAny,
+    before: SuccessorBindings,
     after: SuccessorBindings,
     #[serde(rename = "preserved_registry_entries")]
     _registry_count: IgnoredAny,
@@ -75,6 +77,7 @@ struct Manifest {
     items: OwnedContentDigest,
     item_source: OwnedContentDigest,
     tree: Option<OwnedContentDigest>,
+    schema_refinement: Option<PassiveDeclarationRefinement>,
     #[serde(rename = "schema_policy")]
     _schema_policy: IgnoredAny,
     #[serde(rename = "item_policy_mode")]
@@ -105,10 +108,10 @@ const REQUIRED: &[&str] = &[
     "items.json",
     "item-source.json",
 ];
-fn invalid(message: impl Into<String>) -> Box<dyn Error> {
+pub(crate) fn invalid(message: impl Into<String>) -> Box<dyn Error> {
     io::Error::new(io::ErrorKind::InvalidData, message.into()).into()
 }
-fn read(path: &Path, left: &mut usize) -> Result<Vec<u8>, Box<dyn Error>> {
+pub(crate) fn read(path: &Path, left: &mut usize) -> Result<Vec<u8>, Box<dyn Error>> {
     let mut bytes = Vec::new();
     File::open(path)?
         .take(*left as u64 + 1)
@@ -206,14 +209,45 @@ fn decode<T: DeserializeOwned>(
             .ok_or_else(|| invalid(format!("missing {name}")))?,
     )?)
 }
-pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
-    let limits = SuccessorBundleLimits::default();
-    let catalog_limits = TreeCatalogLimits::default();
-    let mut remaining = limits.max_input_bytes;
-    let PriorBundle { files, manifest } = load_bundle(&args.input, &mut remaining, limits)?;
+/// The same checked publication loader serves every offline compiler host.
+pub(crate) struct CheckedPriorBundle {
+    pub(crate) input: SuccessorBundleInput,
+    pub(crate) base: StagedOwnedRecipe,
+    pub(crate) mapping: OwnedMappingIndex,
+    pub(crate) tree: Option<TreeNormalizationPackageInput>,
+    after: SuccessorBindings,
+    previous_content: Option<poe_optimizer_import::owned_tree_policy::TreeNormalizationContent>,
+}
+impl CheckedPriorBundle {
+    pub(crate) fn successor_input(&self, successor: OwnedRecipeInput) -> SuccessorBundleInput {
+        let mut input = self.input.clone();
+        input.successor = successor;
+        input
+    }
+    pub(crate) fn check_transition(
+        &self,
+        staged: &StagedSuccessorBundle,
+    ) -> Result<(), Box<dyn Error>> {
+        if staged.transition().before != self.after {
+            return Err(invalid("prior manifest endpoint identities differ"));
+        }
+        if let Some(previous) = &self.previous_content
+            && staged.tree().map(|tree| &tree.input().content) != Some(previous)
+        {
+            return Err(invalid(
+                "tree content revision needs an explicit migration; unchanged reruns are supported",
+            ));
+        }
+        Ok(())
+    }
+}
+pub(crate) fn load_checked_bundle(
+    root: &Path,
+    remaining: &mut usize,
+    limits: SuccessorBundleLimits,
+) -> Result<CheckedPriorBundle, Box<dyn Error>> {
+    let PriorBundle { files, manifest } = load_bundle(root, remaining, limits)?;
     let tree_identity = manifest.tree;
-    let catalog: TreeCatalogInput = serde_json::from_slice(&read(&args.catalog, &mut remaining)?)?;
-    let policy: TreeCatalogPolicy = serde_json::from_slice(&read(&args.policy, &mut remaining)?)?;
     let prior: OwnedRecipeInput = decode(&files, "recipe.json")?;
     let base = assemble_owned_recipe(prior.clone(), limits.recipe)?;
     for artifact in base.artifacts() {
@@ -238,6 +272,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         None
     };
     let previous_content = previous_tree
+        .clone()
         .map(|tree| {
             let checked = OwnedTreeNormalizationPolicy::new(
                 tree,
@@ -283,16 +318,38 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     {
         return Err(invalid("prior manifest item-policy identities differ"));
     }
-    let compiled =
-        compile_owned_tree_catalog_extension(&base, &mapping, &catalog, &policy, catalog_limits)?;
-    let tree = TreePolicyTransitionInput::Install {
-        content: Box::new(compiled.content),
-    };
-    let staged = transition_owned_catalog_with_tree(
-        SuccessorBundleInput {
+    if let Some(refinement) = &manifest.schema_refinement {
+        if refinement.schema_version != 1
+            || refinement.before != manifest.before.definitions
+            || refinement.after != manifest.after.definitions
+            || refinement.nodes.is_empty()
+        {
+            return Err(invalid("prior schema refinement metadata differs"));
+        }
+        let mut seen = std::collections::BTreeSet::new();
+        for node in &refinement.nodes {
+            let SchemaLookup::Known(schema) = base.schema().definition(node) else {
+                return Err(invalid("prior schema refinement node is unknown"));
+            };
+            let declarations = &schema.declarations;
+            if !seen.insert(node)
+                || !declarations.parameters.is_complete()
+                || !declarations.choices.is_complete()
+                || !declarations.grants.is_complete()
+                || !declarations.actors.is_complete()
+                || !declarations.skill_grants.is_complete()
+                || !declarations.outputs.is_complete()
+                || !declarations.sockets.is_complete()
+            {
+                return Err(invalid("prior schema refinement nodes differ"));
+            }
+        }
+    }
+    Ok(CheckedPriorBundle {
+        input: SuccessorBundleInput {
             schema_version: OWNED_SUCCESSOR_VERSION,
+            successor: prior.clone(),
             prior,
-            successor: compiled.successor,
             mapping: mapping_input,
             roles: decode(&files, "roles.json")?,
             normalization,
@@ -301,6 +358,31 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             items,
             item_source,
         },
+        base,
+        mapping,
+        tree: previous_tree,
+        after: manifest.after,
+        previous_content,
+    })
+}
+pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
+    let limits = SuccessorBundleLimits::default();
+    let mut remaining = limits.max_input_bytes;
+    let prior = load_checked_bundle(&args.input, &mut remaining, limits)?;
+    let catalog: TreeCatalogInput = serde_json::from_slice(&read(&args.catalog, &mut remaining)?)?;
+    let policy: TreeCatalogPolicy = serde_json::from_slice(&read(&args.policy, &mut remaining)?)?;
+    let compiled = compile_owned_tree_catalog_extension(
+        &prior.base,
+        &prior.mapping,
+        &catalog,
+        &policy,
+        TreeCatalogLimits::default(),
+    )?;
+    let tree = TreePolicyTransitionInput::Install {
+        content: Box::new(compiled.content),
+    };
+    let staged = transition_owned_catalog_with_tree(
+        prior.successor_input(compiled.successor),
         CatalogAppend {
             mappings: compiled.new_mappings,
             source: catalog.source,
@@ -309,17 +391,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         tree,
         limits,
     )?;
-    if staged.transition().before != manifest.after {
-        return Err(invalid("prior manifest endpoint identities differ"));
-    }
-    if let Some(previous) = previous_content {
-        // Compare validated canonical content, never a source-order approximation.
-        if staged.tree().map(|tree| &tree.input().content) != Some(&previous) {
-            return Err(invalid(
-                "tree content revision needs an explicit migration; unchanged reruns are supported",
-            ));
-        }
-    }
+    prior.check_transition(&staged)?;
     super::owned_recipe_cli::publish_artifacts(&args.output, staged.artifacts())?;
     let mut stdout = io::stdout().lock();
     serde_json::to_writer(

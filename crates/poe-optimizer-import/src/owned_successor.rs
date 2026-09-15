@@ -1,6 +1,7 @@
 //! Explicit offline package succession. This is not runtime binding repair.
 //! Prior import facts are validated before rebind; successor mechanics are fully
-//! constructed and compiled. Existing schema declarations are immutable here.
+//! constructed and compiled. Changes to existing declarations require a typed,
+//! endpoint-bound refinement; ordinary succession preserves declarations exactly.
 use crate::{
     owned_item_lines::{ItemLineError, ItemLineLimits, ItemLinePolicyInput, OwnedItemLinePolicy},
     owned_item_source::{
@@ -31,13 +32,27 @@ use crate::{
 use poe_optimizer_core::{
     data::DataIdentity,
     owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},
-    owned_definitions::OwnedDefinitionKey,
+    owned_definitions::{OwnedDefinitionKey, PassiveNodeDefId},
+    owned_schema::{DefinitionAddress, DefinitionDescriptor, SchemaClosure, SchemaState},
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 
 pub const OWNED_SUCCESSOR_VERSION: u32 = 1;
+
+/// Explicit authoring assertion that these passive owners have no further ports.
+/// Only closure metadata may change: every known member, physical identity, pool,
+/// adjacency and slot descriptor is preserved. Rule coverage remains independent.
+/// Whole-schema identities bind the assertion to exact reviewed endpoints.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct PassiveDeclarationRefinement {
+    pub schema_version: u32,
+    pub before: DataIdentity,
+    pub after: DataIdentity,
+    pub nodes: Vec<PassiveNodeDefId>,
+}
 
 /// Independent ordered query lists. Names are publication labels, not game IDs.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -171,6 +186,8 @@ pub enum SuccessorBundleError {
     ChangedRegistry,
     #[error("successor changed an existing schema declaration")]
     ChangedDeclaration,
+    #[error("invalid passive declaration refinement: {0}")]
+    Refinement(&'static str),
     #[error(
         "query set name must be unique lowercase ASCII letters, digits, hyphens or underscores, at most 64 bytes"
     )]
@@ -235,6 +252,8 @@ pub struct SuccessorBundleTransition {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tree: Option<OwnedContentDigest>,
     pub schema_policy: &'static str,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_refinement: Option<PassiveDeclarationRefinement>,
     pub item_policy_mode: &'static str,
     pub source_execution: bool,
     pub calculation: &'static str,
@@ -410,7 +429,11 @@ fn preflight(
     }
     Ok(left)
 }
-fn preserve(before: &StagedOwnedRecipe, after: &StagedOwnedRecipe) -> Result<()> {
+fn preserve(
+    before: &StagedOwnedRecipe,
+    after: &StagedOwnedRecipe,
+    refinement: Option<&PassiveDeclarationRefinement>,
+) -> Result<usize> {
     before.registry().validate_successor(after.registry())?;
     let old = &before.registry().input().entries;
     if after.registry().input().entries.get(..old.len()) != Some(old.as_slice()) {
@@ -430,22 +453,79 @@ fn preserve(before: &StagedOwnedRecipe, after: &StagedOwnedRecipe) -> Result<()>
         .iter()
         .map(|row| (row.address(), row))
         .collect();
+    let mut refined = BTreeSet::new();
+    if let Some(policy) = refinement {
+        if policy.schema_version != 1
+            || policy.before != *before.schema().identity()
+            || policy.after != *after.schema().identity()
+        {
+            return Err(SuccessorBundleError::Refinement(
+                "version or endpoint binding",
+            ));
+        }
+        if policy.nodes.is_empty() {
+            return Err(SuccessorBundleError::Refinement("empty policy"));
+        }
+        for node in &policy.nodes {
+            if node.namespace() != &before.schema().input().namespace
+                || !refined.insert(DefinitionAddress::PassiveNode(node.clone()))
+            {
+                return Err(SuccessorBundleError::Refinement(
+                    "foreign or duplicate node",
+                ));
+            }
+        }
+    }
+    let count = refined.len();
+    for row in &before.schema().input().definitions {
+        let address = row.address();
+        let next = definitions.get(&address).copied();
+        if refined.remove(&address) {
+            let mut expected = row.clone();
+            let DefinitionDescriptor::PassiveNode(entry) = &mut expected else {
+                return Err(SuccessorBundleError::Refinement("not a passive definition"));
+            };
+            let SchemaState::Known(schema) = &mut entry.schema else {
+                return Err(SuccessorBundleError::Refinement(
+                    "unmapped passive definition",
+                ));
+            };
+            let ports = &mut schema.declarations;
+            for closure in [
+                &mut ports.parameters.closure,
+                &mut ports.choices.closure,
+                &mut ports.grants.closure,
+                &mut ports.actors.closure,
+                &mut ports.skill_grants.closure,
+                &mut ports.outputs.closure,
+                &mut ports.sockets.closure,
+            ] {
+                *closure = SchemaClosure::Complete;
+            }
+            if &expected == row || next != Some(&expected) {
+                return Err(SuccessorBundleError::Refinement(
+                    "not an exact closure refinement",
+                ));
+            }
+        } else if next != Some(row) {
+            return Err(SuccessorBundleError::ChangedDeclaration);
+        }
+    }
+    if !refined.is_empty() {
+        return Err(SuccessorBundleError::Refinement(
+            "node absent from predecessor",
+        ));
+    }
     if before
         .schema()
         .input()
-        .definitions
+        .slots
         .iter()
-        .any(|row| definitions.get(&row.address()).copied() != Some(row))
-        || before
-            .schema()
-            .input()
-            .slots
-            .iter()
-            .any(|row| slots.get(&row.address()).copied() != Some(row))
+        .any(|row| slots.get(&row.address()).copied() != Some(row))
     {
         return Err(SuccessorBundleError::ChangedDeclaration);
     }
-    Ok(())
+    Ok(count)
 }
 fn append_mapping(
     input: &mut MappingPackageInput,
@@ -564,7 +644,7 @@ pub fn transition_owned_bundle(
     input: SuccessorBundleInput,
     limits: SuccessorBundleLimits,
 ) -> Result<StagedSuccessorBundle> {
-    finalize_successor(input, None, None, limits)
+    finalize_successor(input, None, None, None, limits)
 }
 
 /// Add catalog identities/mappings to one successor package. This shares every
@@ -577,7 +657,7 @@ pub fn transition_owned_catalog(
     append: CatalogAppend,
     limits: SuccessorBundleLimits,
 ) -> Result<StagedSuccessorBundle> {
-    finalize_successor(input, Some(append), None, limits)
+    finalize_successor(input, Some(append), None, None, limits)
 }
 
 /// One typed tree artifact joins the same checked finalization/publication path.
@@ -587,20 +667,40 @@ pub fn transition_owned_catalog_with_tree(
     tree: TreePolicyTransitionInput,
     limits: SuccessorBundleLimits,
 ) -> Result<StagedSuccessorBundle> {
-    finalize_successor(input, Some(append), Some(tree), limits)
+    finalize_successor(input, Some(append), Some(tree), None, limits)
+}
+
+/// Refine reviewed passive port closure while carrying the tree/import artifacts
+/// through the same validated finalizer. This is an explicit offline operation;
+/// native loaders never infer or apply refinements to stale packages.
+pub fn transition_owned_catalog_with_tree_refinement(
+    input: SuccessorBundleInput,
+    append: CatalogAppend,
+    tree: TreePolicyTransitionInput,
+    refinement: PassiveDeclarationRefinement,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
+    finalize_successor(input, Some(append), Some(tree), Some(refinement), limits)
 }
 
 fn finalize_successor(
     input: SuccessorBundleInput,
     append: Option<CatalogAppend>,
     tree_update: Option<TreePolicyTransitionInput>,
+    refinement: Option<PassiveDeclarationRefinement>,
     limits: SuccessorBundleLimits,
 ) -> Result<StagedSuccessorBundle> {
     limits.validate()?;
     if input.schema_version != OWNED_SUCCESSOR_VERSION {
         return Err(SuccessorBundleError::Version(input.schema_version));
     }
-    let input_digest = if let Some(tree) = &tree_update {
+    let input_digest = if let Some(policy) = &refinement {
+        digest_owned(
+            "owned-passive-refinement-successor-input-v1",
+            &(&input, &append, &tree_update, policy),
+            limits.max_input_bytes,
+        )?
+    } else if let Some(tree) = &tree_update {
         digest_owned(
             "owned-tree-catalog-successor-input-v1",
             &(&input, &append, tree),
@@ -617,6 +717,13 @@ fn finalize_successor(
         }
     };
     let mut validation_left = preflight(&input, append.as_ref(), limits)?;
+    if let Some(policy) = &refinement {
+        charge(
+            &mut validation_left,
+            policy.nodes.len(),
+            "refinement entries",
+        )?;
+    }
     if let Some(tree) = &tree_update {
         let content = match tree {
             TreePolicyTransitionInput::Install { content } => content.as_ref(),
@@ -691,7 +798,7 @@ fn finalize_successor(
     };
     let recipe = input.successor;
     let after = assemble_owned_recipe(recipe.clone(), limits.recipe)?;
-    preserve(&before, &after)?;
+    let refined_count = preserve(&before, &after, refinement.as_ref())?;
     let mut next_mapping = old_mapping.input().clone();
     next_mapping.registry = after.registry().identity()?;
     next_mapping.definitions = after.schema().identity().clone();
@@ -773,14 +880,19 @@ fn finalize_successor(
         before: before_bindings,
         after: after_bindings,
         preserved_registry_entries: before.registry().input().entries.len(),
-        preserved_definitions: before.schema().input().definitions.len(),
+        preserved_definitions: before.schema().input().definitions.len() - refined_count,
         preserved_slots: before.schema().input().slots.len(),
         query_sets: input.query_sets.len(),
         query_rows: input.query_sets.iter().map(|s| s.queries.len()).sum(),
         items: *items.identity(),
         item_source: *item_source.identity(),
         tree: tree.as_ref().map(|tree| *tree.identity()),
-        schema_policy: "exact_prior_declarations_new_addresses_only",
+        schema_policy: if refinement.is_some() {
+            "explicit_passive_declaration_closure"
+        } else {
+            "exact_prior_declarations_new_addresses_only"
+        },
+        schema_refinement: refinement,
         item_policy_mode: match item_policy_mode {
             CatalogItemPolicyMode::SuppliedSuccessor => "explicit_successor_bound_inputs",
             CatalogItemPolicyMode::RebindPrior => "validated_prior_binding_rebind",

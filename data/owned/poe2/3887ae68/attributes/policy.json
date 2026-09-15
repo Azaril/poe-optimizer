@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "version": "ordinary-attribute-effects-v1",
+  "expected_node_stats": [
+    "+5 to any Attribute"
+  ],
+  "lanes": [
+    {
+      "key": "strNodes",
+      "expected_stats": [
+        "+5 to Strength"
+      ],
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d2e"
+      },
+      "value": {
+        "kind": "integer",
+        "value": 5
+      }
+    },
+    {
+      "key": "dexNodes",
+      "expected_stats": [
+        "+5 to Dexterity"
+      ],
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d2f"
+      },
+      "value": {
+        "kind": "integer",
+        "value": 5
+      }
+    },
+    {
+      "key": "intNodes",
+      "expected_stats": [
+        "+5 to Intelligence"
+      ],
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d30"
+      },
+      "value": {
+        "kind": "integer",
+        "value": 5
+      }
+    }
+  ]
+}

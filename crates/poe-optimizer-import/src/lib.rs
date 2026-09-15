@@ -19,6 +19,7 @@ pub mod item_source;
 pub mod loadouts;
 pub mod mace_item;
 mod modifier_syntax;
+pub mod owned_attribute_recipe;
 pub mod owned_catalog_recipe;
 pub mod owned_item_lines;
 pub mod owned_item_source;

@@ -8,6 +8,7 @@ mod data_loading;
 #[cfg(feature = "pob")]
 mod game_data_extract;
 mod native_benchmark;
+mod owned_attribute_cli;
 mod owned_binding;
 mod owned_catalog_recipe;
 mod owned_draft;
@@ -77,6 +78,8 @@ enum Action {
     PublishOwnedSuccessor(owned_successor::Args),
     /// Compile finite tree data into one owned package without loading PoB.
     ExtendOwnedTreeCatalog(owned_tree_cli::Args),
+    /// Compile reviewed passive attribute choices into owned rule data.
+    CompileOwnedAttributes(owned_attribute_cli::Args),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
     /// Resolve owned component effects from explicit packages; no game metric conversion.
@@ -253,6 +256,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::ExtendOwnedSkillCatalog(args)) => owned_catalog_recipe::run(args)?,
         Some(Action::PublishOwnedSuccessor(args)) => owned_successor::run(args)?,
         Some(Action::ExtendOwnedTreeCatalog(args)) => owned_tree_cli::run(args)?,
+        Some(Action::CompileOwnedAttributes(args)) => owned_attribute_cli::run(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
         Some(Action::EvaluateOwned(args)) => owned_metrics::run(args)?,

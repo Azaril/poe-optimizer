@@ -73,6 +73,9 @@ and parent choices into the [current owned package](data/owned/poe2/3887ae68/cur
 it preserves pending access and unconverted effects. See the
 [passive topology contract](docs/owned-passive-topology.md). This structural path does not
 execute the legacy source interpreter and does not yet establish build legality or parity.
+`compile-owned-attributes` now converts ordinary attribute choices into native rule data
+through supplied catalog, policy and stat definitions. Its checked successor preserves
+physical nodes and import policies; see [attribute data build](data/owned/poe2/3887ae68/attributes/README.md).
 The existing numerical CLI accepts PoB share codes/XML, explicit skill/action and encounter options,
 and returns typed metrics with units, availability and structured coverage. Configurable scalar
 objectives can be assessed during evaluation or against saved results without recalculation.

@@ -1,0 +1,65 @@
+[
+  {
+    "id": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001d2e"
+    },
+    "schema": {
+      "kind": "known",
+      "value": {
+        "value": {
+          "kind": "integer"
+        },
+        "targets": [
+          "actor"
+        ]
+      }
+    }
+  },
+  {
+    "id": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001d2f"
+    },
+    "schema": {
+      "kind": "known",
+      "value": {
+        "value": {
+          "kind": "integer"
+        },
+        "targets": [
+          "actor"
+        ]
+      }
+    }
+  },
+  {
+    "id": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001d30"
+    },
+    "schema": {
+      "kind": "known",
+      "value": {
+        "value": {
+          "kind": "integer"
+        },
+        "targets": [
+          "actor"
+        ]
+      }
+    }
+  }
+]

@@ -11,6 +11,47 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
+**Current checkpoint: ordinary attribute-passive conversion (after `b556739`).**
+The new Rust `compile-owned-attributes` command compiles all 293 reviewed ordinary
+attribute nodes through the existing Choice/Compare/Contribute language. The caller
+supplies the exact finite tree catalog, source-lane policy, coefficient and target stat
+schema. The production authoring inputs add three Actor Integer contribution channels
+through the canonical registry: 7470 Strength, 7471 Dexterity, 7472 Intelligence. No
+source VM, attribute-specific engine dispatch or example-build input was added.
+
+A `PassiveDeclarationRefinement` binds both exact schemas and the reviewed node IDs.
+Only the seven port-list closures may change, with all members, physical IDs, pools,
+adjacency and slots preserved. Numerical rule membership remains independent. The
+converter rejects added source effects, views/unlocks, unresolved choices and conflicting
+prior programs. The thin CLI reuses the existing checked manifest/bundle loader and
+atomic no-replace publisher; it validates the catalog digest against the prior tree
+policy and carries all import policies plus the 110 query rows through one finalizer.
+
+The checked-in `current` bundle remains the 7469-entry predecessor so historical
+reproduction evidence stays intact. Regenerate the 7472-entry successor with the
+[documented data-build command](../data/owned/poe2/3887ae68/attributes/README.md) and use
+that successor for the next attribute/class integration. Do not allocate another branch
+from the older import/resistance seeds or treat the three new IDs as freely reusable.
+
+**Validation:** 24 targeted Rust tests pass: seven successor-refinement contracts,
+eight attribute compiler tests, four new CLI tests and five existing tree/successor CLI
+regressions. The original-input test executes 331 saved attribute choices, including all
+141 selected choices (25/28/21/45/22), without changing Pending access. Independent
+coefficient tests use 5/7/11 to detect hidden constants. These are component-execution
+checks, not independent whole-build PoB numerical parity. Strict all-feature workspace
+Clippy, formatting and Import-library WASM compilation pass. The existing Python tests
+remain unchanged and were not rerun.
+
+The documented command generated `runs/owned-attributes-01/package` with 7472 registry
+entries, 293 converted/refined owners and all 110 query rows. Receipt:
+`runs/owned-attributes-01/compilation.json`; validation summary beside it. Only targeted
+Rust suites ran, not the full workspace numerical suites. The latest observed pre-change
+CI status was pending for `b556739`, with no confirmed failure; `60e65a9` had passed all
+10 jobs. New publication CI requires its own subsequent observation.
+Whole-request/contributor closure gates, Pending allocation access and **0/5 complete
+native originals** remain unchanged. Attribute contributions are not final effective
+attribute values, allocation legality or full original-build parity.
+
 **Tooling direction checkpoint (after `c5d0dfe`):** project-maintained tooling and tests
 should eventually all be Rust. Existing Python tests cover offline exporters and supporting
 corpus/expectation/boundary utilities; they are transitional. New tooling/tests default to
@@ -19,7 +60,7 @@ utility and its tests to migrate together with preserved fixtures and behavior. 
 Python implementation or test is converted now, as requested. This is a documentation-only
 checkpoint; runtime coverage and the native-build completion count remain unchanged.
 
-**Current checkpoint: owned library isolation and legacy retirement (after `7391fd7`).**
+**Previous checkpoint: owned library isolation and legacy retirement (after `7391fd7`).**
 The controlling [domain architecture](domain-architecture.md) explicitly terminates source
 conversion at an owned semantic artifact. The implementation now enforces a library-level
 boundary: Data/Engine `default-features = false` excludes source programs/interpreter,
@@ -84,10 +125,13 @@ inputs remains unanswered; existing closure gates stay unchanged.
    real catalog and saved alternatives. Keep missing edges and unknown contributors explicit.
    Handle From Nothing/radius and alternate/granted access as provider dependencies,
    not blanket connectivity bypass. Do not infer rewards from observed spent points.
-2. Convert passive effects and class-dependent views through owned rules, preserving
-   physical identities and exact selected attribute/attached choices. Refining existing
-   partial descriptors needs an explicit checked refinement policy; never allocate
-   replacement identities. Preserve existing policy authority on subsequent transitions.
+2. Build on the attribute compiler's 7472-entry successor. Convert other passive effects
+   and class-dependent views through owned rules, preserving physical identities and
+   exact selected attribute/attached choices. The 293 ordinary attribute owners are
+   converted; final attribute receivers and class/item contributions remain open. For
+   the 78 class-view nodes, review typed class/ascendancy predicates and whole-list
+   replacement branches. Do not add a selected view to the default effects. Other
+   descriptor changes still need an explicit refinement policy; preserve prior authority.
 3. Complete common item input/effect families and contributor membership, contrasting
    the real cold/Life ring and local weapon. Preserve source encoding and distinct
    range/corruption/final rounding stages. Ordered transforms remain required; a partial
