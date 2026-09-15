@@ -128,6 +128,12 @@ class ImportExportTests(unittest.TestCase):
         layout = EXPORT.decode(self.outputs["item-source-policy-seed.json"])
         self.assertEqual((layout["rule_layouts"], layout["template_layouts"]), ([], []))
         self.assertEqual(layout["source"], EXPORT.decode(self.outputs["source-pin.json"]))
+        self.assertEqual(layout["schema_version"], 2)
+        self.assertEqual(layout["property_bindings"], [])
+        items = EXPORT.decode(self.outputs["item-policy-seed.json"])
+        self.assertEqual(items["schema_version"], 2)
+        self.assertEqual(layout["item_lines"], EXPORT.owned_digest("owned-item-line-policy-v2", items))
+        self.assertNotEqual(layout["item_lines"], EXPORT.owned_digest("owned-item-line-policy-v1", items))
 
     def test_only_query_identity_actor_and_order_are_consumed(self):
         manifest = EXPORT.decode(self.inputs[6])

@@ -101,8 +101,23 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
             return invalid(path, "unused capture declaration");
         }
         for emission in &rule.emissions {
-            if let ItemEmission::Modifier { rolls: values, .. } = emission {
-                charge(&mut rolls, values.len(), "rolls")?;
+            match emission {
+                ItemEmission::Modifier { rolls: values, .. } => {
+                    charge(&mut rolls, values.len(), "rolls")?;
+                    for roll in values {
+                        if let ItemLineValue::Property { property } = &roll.value {
+                            charge(&mut text, property.as_str().len(), "policy text bytes")?;
+                        }
+                    }
+                }
+                ItemEmission::ItemLevel { value }
+                | ItemEmission::ItemParameter { value, .. }
+                | ItemEmission::Quality { amount: value, .. }
+                    if matches!(value, ItemLineValue::Property { .. }) =>
+                {
+                    return invalid(path, "property values require modifier rolls");
+                }
+                _ => {}
             }
         }
     }
@@ -206,6 +221,7 @@ impl<'s, I: DefinitionSchemaIndex> Checker<'s, I> {
                 Ok(value_type(v))
             }
             ItemLineValue::Capture(id) => self.capture_type(rule, id),
+            ItemLineValue::Property { .. } => Ok(ComputedValueType::Boolean),
             ItemLineValue::Interpolate {
                 lower,
                 upper,

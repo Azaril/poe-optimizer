@@ -325,9 +325,9 @@ def produce(snapshot_bytes, base_bytes, ids_bytes, mechanics_bytes, facts_bytes,
         "group_enabled": attribute_recipe("enabled", True), "manual_skill_sources": [tag("missing"), text("")], "empty_item_keys": [text("0")],
         "generated_support_prefixes": [], "allocation_attribute": "nodes", "single_active_support_target": True, "equipment_loadouts": equipment,
         "gem_quality": tag("attributes", {"definitions": identity, "amount": amount, "kind_attribute": "qualityId", "kinds": [{"source": tag("missing"), "kind": quality}]})}
-    items = {"schema_version": 1, "namespace": namespace, "version": authoring["item_version"], "definitions": identity, "whitespace": "exact", "rules": []}
-    item_source = {"schema_version": 1, "namespace": namespace, "version": authoring["item_source_version"], "source": source,
-        "item_lines": owned_digest("owned-item-line-policy-v1", items), "dialect": "pob_exported_single_text_v1", "rule_layouts": [], "template_layouts": []}
+    items = {"schema_version": 2, "namespace": namespace, "version": authoring["item_version"], "definitions": identity, "whitespace": "exact", "rules": []}
+    item_source = {"schema_version": 2, "namespace": namespace, "version": authoring["item_source_version"], "source": source,
+        "item_lines": owned_digest("owned-item-line-policy-v2", items), "dialect": "pob_exported_single_text_v1", "rule_layouts": [], "template_layouts": [], "property_bindings": []}
     outputs = {"recipe-seed.json": seed, "skill-identities.json": catalog, "source-pin.json": source, "skill-catalog-policy.json": authoring["catalog_policy"],
         "mapping-seed.json": mapping, "normalization-policy-seed.json": normalization, "reward-policy-seed.json": reward_policy,
         "item-policy-seed.json": items, "item-source-policy-seed.json": item_source, "reward-source-facts.json": rewards,
@@ -415,12 +415,12 @@ def bind_policies(seed_outputs, compiled, limits=HARD):
     rewards = decode(seed_outputs["reward-policy-seed.json"])
     items = decode(seed_outputs["item-policy-seed.json"])
     item_source = decode(seed_outputs["item-source-policy-seed.json"])
-    if normalization["gem_quality"]["value"]["definitions"] != before_identity or rewards["definitions"] != before_identity or items["definitions"] != before_identity or rewards["mapping"] != transition["before_mapping"] or item_source["item_lines"] != owned_digest("owned-item-line-policy-v1", items) or item_source["source"] != previous_mapping["source"]:
+    if normalization["gem_quality"]["value"]["definitions"] != before_identity or rewards["definitions"] != before_identity or items["definitions"] != before_identity or rewards["mapping"] != transition["before_mapping"] or item_source["item_lines"] != owned_digest("owned-item-line-policy-v2", items) or item_source["source"] != previous_mapping["source"]:
         raise ValueError("policy does not bind exact seed dependencies")
     normalization["gem_quality"]["value"]["definitions"] = after_identity
     rewards["definitions"], rewards["mapping"] = after_identity, transition["after_mapping"]
     items["definitions"] = after_identity
-    item_source["item_lines"] = owned_digest("owned-item-line-policy-v1", items)
+    item_source["item_lines"] = owned_digest("owned-item-line-policy-v2", items)
     outputs = {"policies/normalization.json": pretty(normalization), "policies/rewards.json": pretty(rewards),
                "policies/items.json": pretty(items), "policies/item-source.json": pretty(item_source)}
     receipt = {"schema_version": 1, "scope": "explicit-checked-import-policy-successor",

@@ -43,6 +43,7 @@ struct Tags {
 }
 fn tags(
     line: &mut ItemAttributedLine,
+    bindings: &BTreeMap<String, OwnedDefinitionKey>,
     report: &mut Vec<ItemRangeWrite>,
     tag_left: &mut usize,
     output: &mut usize,
@@ -91,6 +92,40 @@ fn tags(
             };
             if value.is_none() {
                 problem(&mut line.blockers, ItemSourceProblem::InvalidRange);
+            }
+        } else if tag == "tags" || tag.starts_with("tags:") {
+            // The reviewed source grammar extracts ASCII alphabetic/underscore
+            // runs. Separators add no tokens; case and explicit aliases stay exact.
+            let value = tag.strip_prefix("tags:").unwrap_or("");
+            let start_of_value = line.decoded_span.start + leading + start + 6;
+            charge(work, value.len(), "work")?;
+            let mut at = 0;
+            while at < value.len() {
+                if !(value.as_bytes()[at].is_ascii_alphabetic() || value.as_bytes()[at] == b'_') {
+                    at += 1;
+                    continue;
+                }
+                let begin = at;
+                while at < value.len()
+                    && (value.as_bytes()[at].is_ascii_alphabetic() || value.as_bytes()[at] == b'_')
+                {
+                    at += 1;
+                }
+                let label = &value[begin..at];
+                charge(tag_left, 1, "tags")?;
+                charge(output, 1, "output records")?;
+                comparison_work(work, label.len(), bindings.len())?;
+                let property = bindings.get(label);
+                if let Some(property) = property {
+                    charge(work, property.as_str().len(), "work")?;
+                } else {
+                    problem(&mut line.blockers, ItemSourceProblem::UnknownProperty);
+                }
+                line.property_tokens.push(ItemSourcePropertyToken {
+                    label: label.into(),
+                    decoded_span: start_of_value + begin..start_of_value + at,
+                    property: property.cloned(),
+                });
             }
         } else {
             match tag {
@@ -158,7 +193,70 @@ fn collect_candidates(
     }
     Ok(())
 }
+// A conservative bound independent of the standard library tree's fanout and
+// comparison strategy. Charge before variable-length lookup/insert comparisons.
+fn comparison_work(work: &mut usize, key_bytes: usize, entries: usize) -> Result<()> {
+    charge(
+        work,
+        key_bytes
+            .saturating_add(1)
+            .saturating_mul(entries.saturating_add(1)),
+        "work",
+    )
+}
 impl ItemSourceLayoutPolicy {
+    fn bind_properties(
+        &self,
+        line: &mut ItemAttributedLine,
+        rule: &OwnedDefinitionKey,
+        work: &mut usize,
+        output: &mut usize,
+    ) -> Result<()> {
+        let required = self.rule_properties.get(rule);
+        charge(work, line.property_tokens.len(), "work")?;
+        for token in &line.property_tokens {
+            if let Some(property) = &token.property {
+                comparison_work(
+                    work,
+                    property.as_str().len(),
+                    required.map_or(0, BTreeSet::len),
+                )?;
+                if !required.is_some_and(|keys| keys.contains(property)) {
+                    problem(&mut line.blockers, ItemSourceProblem::UnconsumedProperty);
+                }
+            }
+        }
+        // Recognition without a typed output cannot silently discard a label.
+        // No false values are synthesized for a malformed/unsupported member.
+        if line
+            .blockers
+            .iter()
+            .any(|p| !matches!(p, ItemSourceProblem::InvalidRange))
+        {
+            return Ok(());
+        }
+        let Some(required) = required else {
+            return Ok(());
+        };
+        charge(output, required.len(), "output records")?;
+        charge(work, required.len(), "work")?;
+        let mut present = BTreeSet::new();
+        for property in line
+            .property_tokens
+            .iter()
+            .filter_map(|token| token.property.as_ref())
+        {
+            comparison_work(work, property.as_str().len(), present.len())?;
+            present.insert(property);
+        }
+        for property in required {
+            comparison_work(work, property.as_str().len(), present.len())?;
+            let value = present.contains(property);
+            comparison_work(work, property.as_str().len(), line.properties.len())?;
+            line.properties.insert(property.clone(), value);
+        }
+        Ok(())
+    }
     pub fn attribute(
         &self,
         evidence: &SourceProjectEvidence<'_>,
@@ -280,6 +378,8 @@ impl ItemSourceLayoutPolicy {
                 member: None,
                 blockers: vec![],
                 range: ItemRangeDecision::Absent,
+                property_tokens: vec![],
+                properties: BTreeMap::new(),
             });
             offset += raw.len();
         }
@@ -436,6 +536,7 @@ impl ItemSourceLayoutPolicy {
             }
             let tagged = tags(
                 line,
+                &self.properties,
                 &mut report.writes,
                 &mut tag_left,
                 &mut output,
@@ -450,6 +551,14 @@ impl ItemSourceLayoutPolicy {
             let single = rule.as_ref().and_then(|r| self.roles.get(r))
                 == Some(&ItemRuleSourceRole::SingleModifier)
                 && valid;
+            if single {
+                self.bind_properties(
+                    line,
+                    rule.as_ref().expect("single rule"),
+                    &mut work,
+                    &mut output,
+                )?;
+            }
             // ParseRaw may consume the next physical line after a failed/partial
             // parse. A known standalone next line cannot prove it stayed independent.
             // Raw and stripped reviewed grammars both prove the no-join shape even

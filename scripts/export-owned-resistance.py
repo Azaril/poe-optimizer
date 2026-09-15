@@ -46,6 +46,18 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
         raise ValueError("unsupported resistance authoring version/scope")
     if len(authoring["source_spans"]) > 32 or len(authoring["reward_contributions"]) > 32 or len(authoring["ring_equipment_slots"]) > 32:
         raise ValueError("authoring collection bound exceeded")
+    properties = authoring["modifier_properties"]
+    if not isinstance(properties, list) or not 1 <= len(properties) <= 32:
+        raise ValueError("modifier property collection bound exceeded")
+    labels, keys = set(), set()
+    for row in properties:
+        DATA.fields(row, "label property", "modifier property binding")
+        if any(not isinstance(row[field], str) or re.fullmatch(r"[a-z][a-z_]{0,63}", row[field]) is None for field in ["label", "property"]):
+            raise ValueError("invalid bounded modifier property label/key")
+        if row["label"] in labels or row["property"] in keys:
+            raise ValueError("duplicate modifier property binding")
+        labels.add(row["label"])
+        keys.add(row["property"])
     mapping = load(base_dir / "mapping.json")
     if mapping["definitions"] != base["rules"]["definitions"] or mapping["registry"] != DATA.owned_digest("owned-id-registry-v1", base["registry"]):
         raise ValueError("base mapping binding differs")
@@ -130,6 +142,22 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
         "modifiers": partial([d for d, _ in modifiers.values()], template, "other-item-modifiers-unconverted", "input_schema"),
         "quality": {"presence": "optional", "allowed_kinds": partial([], template, "item-quality-unconverted", "input_schema")}, "declarations": declarations()})
     rules["owners"].append({"owner": subject(template), "programs": partial([], template, "remaining-item-template-effects-unconverted")})
+    # Preserve the first 2,524 registry entries and existing fixed-value meanings.
+    # Nominal inputs deliberately have no effective numerical rule yet.
+    nominal_modifiers = {}
+    for name in ["cold", "elemental"]:
+        ports = declarations()
+        definition = allocate("nominal-" + name + "-modifier", "modifier", {"declarations": ports})
+        slot = allocate("nominal-" + name + "-roll", "parameter_slot", {"value": value_schema(), "presence": "required_once", "sites": ["modifier_roll"]}, definition)
+        ports["parameters"]["members"].append(slot)
+        property_slots = []
+        for binding in properties:
+            property_slot = allocate("nominal-" + name + "-property-" + binding["property"], "parameter_slot", {"value": tag("boolean"), "presence": "required_once", "sites": ["modifier_roll"]}, definition)
+            ports["parameters"]["members"].append(property_slot)
+            property_slots.append((binding["property"], property_slot))
+        nominal_modifiers[name] = (definition, slot, property_slots)
+        payload["modifiers"]["members"].append(definition)
+        rules["owners"].append({"owner": subject(definition), "programs": partial([], definition, "nominal-item-scaling-inputs-unconverted")})
     reward_facts = load(import_inputs / "reward-source-facts.json")
     reward_rows = {r["config_key"]: r for r in reward_facts["rows"]}
     mapped = {compact(r["source"]): r for r in mapping["entries"]}
@@ -191,14 +219,16 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
                 numeric("upper", "optional_minus"), tag("literal", ")" + suffix)]
             value = tag("interpolate_offset", {"lower": "lower", "upper": "upper", "quantum": quantity(1),
                 "rounding": "symmetric_half_offset"})
+            nominal_definition, nominal_slot, property_slots = nominal_modifiers[name]
+            rolls = [{"slot": nominal_slot, "value": value}] + [{"slot": property_slot, "value": tag("property", {"property": property_key})} for property_key, property_slot in property_slots]
             line_rules.append(rule("ranged-" + spelling + "-" + name, pattern, [capture("lower"), capture("upper")],
-                [tag("modifier", {"definition": definition, "rolls": [{"slot": slot, "value": value}]})]))
-    items = {"schema_version": 1, "namespace": namespace, "version": "resistance-lines-v2", "definitions": identity,
+                [tag("modifier", {"definition": nominal_definition, "rolls": rolls})]))
+    items = {"schema_version": 2, "namespace": namespace, "version": "resistance-lines-v3", "definitions": identity,
         "whitespace": "trim_ascii", "rules": line_rules}
-    source_policy = {"schema_version": 1, "namespace": namespace, "version": "resistance-layout-v2", "source": source,
-        "item_lines": DATA.owned_digest("owned-item-line-policy-v1", items), "dialect": "pob_exported_single_text_v1",
+    source_policy = {"schema_version": 2, "namespace": namespace, "version": "resistance-layout-v3", "source": source,
+        "item_lines": DATA.owned_digest("owned-item-line-policy-v2", items), "dialect": "pob_exported_single_text_v1",
         "rule_layouts": [{"rule": r["id"], "role": "header" if i < len(headers) else "single_modifier"} for i, r in enumerate(line_rules)],
-        "template_layouts": [{"template": template, "load_index_prefix": "no_generated_buff_members"}]}
+        "template_layouts": [{"template": template, "load_index_prefix": "no_generated_buff_members"}], "property_bindings": properties}
     outputs["items.json"] = pretty(items)
     outputs["item-source.json"] = pretty(source_policy)
     facts = {"schema_version": 1, "scope": "resistance-contribution-only", "base_recipe_sha256": sha(raw), "recipe_sha256": sha(outputs["recipe.json"]),
@@ -209,9 +239,11 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
         "range_conversion": {"implemented": True, "scope": "Plain cold/all-elemental integer endpoint ranges with plus or absent outer sign; explicit source-attributed fraction; literal a+f*(b-a) arithmetic; literal signed source half-offset rounding. Outer minus, decimal endpoints, other line grammar and unsupported lifecycle remain pending.",
             "source_example_only": {"base": "Sapphire Ring", "lower": 20, "upper": 30, "fraction_and_value": [[0, 20], [0.5, 25], [1, 30]]},
             "required_generic_operations": ["maximal numeric lexical capture with explicit sign policy", "literal source signed half-offset rounding", "source-attributed range membership proof without source execution"]},
-        "original_ring_attribution": {"status": "pending", "reason": "The exact original carries source modTags used by catalyst/modifier-magnitude semantics. UnsupportedTag blocks promotion of the cold modifier; no source metadata is silently removed.",
+        "modifier_properties": {"implemented": True, "bindings": properties, "value_encoding": "nominal_integer_range", "property_set": "Every label on the selected source member must be mapped and consumed; unknown or unconsumed labels remain Pending. Absence is not a runtime default.", "effective_scaling": False,
+            "remaining_obligations": ["catalyst/header absence and defaults", "source nominal versus baked encoding for other source families", "category and numeric-component scalability", "applicable ordered modifier-magnitude transforms", "complete owning-item inputs and contributors"]},
+        "original_ring_attribution": {"status": "pending", "input_status": "nominal_amount_and_five_properties_converted", "reason": "The untouched original's five labels and source-attributed range become owned nominal inputs. Catalyst/header/encoding and modifier-magnitude obligations remain; the new family has Partial rules and no effective Contribute.",
             "reviewed_tag": "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}",
-            "diagnostic_only": "Range0/0.5/1 attribution is exercised on explicit in-memory copies removing exactly this one literal tag. This is not native success for the original."},
+            "diagnostic_only": "Range0/0.5/1 contrasts edit only XML fractions in memory and retain the actual tag. Nominal conversion is not effective scaling or native original success."},
         "whole_item_closure": False, "metric_producer": False, "source_execution": False, "whole_original_native_completion": "0/5"}
     outputs["source-facts.json"] = pretty(facts)
     if sum(map(len, outputs.values())) > 16 * 1024 * 1024:

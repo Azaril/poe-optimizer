@@ -15,8 +15,8 @@ use std::collections::{BTreeMap, BTreeSet};
 mod convert;
 mod schema;
 
-pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = 1;
-const DOMAIN: &str = "owned-item-line-policy-v1";
+pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = 2;
+const DOMAIN: &str = "owned-item-line-policy-v2";
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -99,6 +99,10 @@ pub enum ItemRangeRounding {
     deny_unknown_fields
 )]
 pub enum ItemLineValue {
+    /// Explicit per-line Boolean fact, usable only in modifier rolls.
+    Property {
+        property: OwnedDefinitionKey,
+    },
     Literal(ParameterValue),
     Capture(OwnedDefinitionKey),
     /// Explicit f64 interpolation followed by rounding to a positive quantum.
@@ -270,6 +274,9 @@ pub enum ItemLinePending {
         capture: OwnedDefinitionKey,
         reason: String,
     },
+    MissingProperty {
+        property: OwnedDefinitionKey,
+    },
     MissingRangeFraction,
     InvalidRangeFraction,
     InvalidRange,
@@ -331,6 +338,8 @@ pub struct ItemLineInput<'a> {
     pub index: usize,
     pub text: &'a str,
     pub range_fraction: Option<f64>,
+    /// None or an absent key is unresolved, never implicitly false.
+    pub properties: Option<&'a BTreeMap<OwnedDefinitionKey, bool>>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize)]
 #[serde(tag = "kind", content = "value", rename_all = "snake_case")]

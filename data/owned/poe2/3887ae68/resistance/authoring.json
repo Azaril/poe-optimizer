@@ -269,6 +269,49 @@
       "end_line": 6252,
       "file_sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c",
       "sha256": "ded06e7a07e75c9a9e66b2856240ccba8049313e39684959b257e169be877556"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 14,
+      "end_line": 63,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "55e030bb0c71c185634f0b74936f66eb32ba50ff0a2806fedbbaefb381a741f7"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 560,
+      "end_line": 564,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "ccf529abbe312396c11e7e0597887ecc21c60a4c9e386ff3bf1c536d30860cc6"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 966,
+      "end_line": 984,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "54dfb0730ec888897200257bcd8f7c7e2b12382b27fcf9cad5b9cfb3ed8c5bd3"
+    }
+  ],
+  "modifier_properties": [
+    {
+      "label": "cold_resistance",
+      "property": "cold_resistance"
+    },
+    {
+      "label": "elemental_resistance",
+      "property": "elemental_resistance"
+    },
+    {
+      "label": "elemental",
+      "property": "elemental"
+    },
+    {
+      "label": "cold",
+      "property": "cold"
+    },
+    {
+      "label": "resistance",
+      "property": "resistance"
     }
   ]
 }

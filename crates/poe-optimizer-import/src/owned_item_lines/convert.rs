@@ -81,17 +81,17 @@ impl OwnedItemLinePolicy {
     ) -> Result<ItemLineEvidence<'a>> {
         let mut work = self.limits.max_work;
         let mut output = self.limits.max_output_declarations;
-        if text.len() > self.limits.max_source_bytes {
-            return Err(ItemLineError::Limit("source bytes"));
-        }
+        let mut bytes = self.limits.max_source_bytes;
         self.line(
             ItemLineInput {
                 index,
                 text,
                 range_fraction,
+                properties: None,
             },
             &mut work,
             &mut output,
+            &mut bytes,
         )
     }
     fn line<'a>(
@@ -99,7 +99,23 @@ impl OwnedItemLinePolicy {
         input: ItemLineInput<'a>,
         work: &mut usize,
         output: &mut usize,
+        bytes: &mut usize,
     ) -> Result<ItemLineEvidence<'a>> {
+        // Charge supplied facts even for an unknown/malformed line, before any
+        // matching, decoding or output cloning. Borrowed maps are never copied.
+        charge(bytes, input.text.len(), "source bytes")?;
+        if let Some(properties) = input.properties {
+            charge(output, properties.len(), "output declarations")?;
+            charge(work, properties.len(), "work")?;
+            for property in properties.keys() {
+                charge(work, property.as_str().len(), "work")?;
+                charge(
+                    bytes,
+                    property.as_str().len().saturating_add(1),
+                    "source bytes",
+                )?;
+            }
+        }
         if input.index == 0 {
             return Err(ItemLineError::LineOrder);
         }
@@ -151,6 +167,23 @@ impl OwnedItemLinePolicy {
         };
         let rule = &self.input.rules[index];
         let bound = &self.rules[index];
+        for emission in &rule.emissions {
+            charge(work, 1, "work")?;
+            if let ItemEmission::Modifier { rolls, .. } = emission {
+                charge(work, rolls.len(), "work")?;
+                for roll in rolls {
+                    if let ItemLineValue::Property { property } = &roll.value {
+                        // A conservative bound covers every key comparison in
+                        // the borrowed BTreeMap lookup, including repeated uses.
+                        let comparisons = input.properties.map_or(1, |p| p.len().max(1));
+                        let cost = comparisons
+                            .checked_mul(property.as_str().len().saturating_add(1))
+                            .ok_or(ItemLineError::Limit("work"))?;
+                        charge(work, cost, "work")?;
+                    }
+                }
+            }
+        }
         let mut values = BTreeMap::new();
         // Decode present values before reporting schema uncertainty. A malformed
         // matched value never falls through to a second rule or a default tier.
@@ -195,7 +228,7 @@ impl OwnedItemLinePolicy {
             }
             let mut get =
                 |value: &ItemLineValue, slot: Option<&DeclaredSlot<ParameterSlotDefId>>| {
-                    let value = resolve(value, &values, input.range_fraction)?;
+                    let value = resolve(value, &values, input.range_fraction, input.properties)?;
                     if let Some(Some(schema)) = constraints.next()
                         && !value_fits(&value, schema)
                     {
@@ -276,6 +309,7 @@ impl OwnedItemLinePolicy {
                 index: index + 1,
                 text,
                 range_fraction: None,
+                properties: None,
             }
         }))
     }
@@ -291,12 +325,11 @@ impl OwnedItemLinePolicy {
         let mut previous = 0;
         for input in lines {
             charge(&mut count, 1, "lines")?;
-            charge(&mut bytes, input.text.len(), "source bytes")?;
             if input.index <= previous {
                 return Err(ItemLineError::LineOrder);
             }
             previous = input.index;
-            result.push(self.line(input, &mut work, &mut output)?);
+            result.push(self.line(input, &mut work, &mut output, &mut bytes)?);
         }
         self.aggregate(result, &mut work, &mut output)
     }
@@ -309,14 +342,17 @@ impl OwnedItemLinePolicy {
         work: &mut usize,
         output: &mut usize,
     ) -> Result<ItemLineEvidence<'a>> {
+        let mut bytes = self.limits.max_source_bytes;
         self.line(
             ItemLineInput {
                 index,
                 text,
                 range_fraction: None,
+                properties: None,
             },
             work,
             output,
+            &mut bytes,
         )
     }
     /// Source blockers retain positively matched candidates for aggregate conflict
@@ -333,12 +369,11 @@ impl OwnedItemLinePolicy {
         let mut result = Vec::new();
         for (input, pending) in lines {
             charge(&mut count, 1, "lines")?;
-            charge(&mut bytes, input.text.len(), "source bytes")?;
             if input.index <= previous {
                 return Err(ItemLineError::LineOrder);
             }
             previous = input.index;
-            let mut line = self.line(input, work, output)?;
+            let mut line = self.line(input, work, output, &mut bytes)?;
             if let Some(pending) = pending {
                 charge(output, pending.candidates.len(), "output declarations")?;
                 line.outcome = unresolved(pending.reason, pending.candidates.to_vec());
@@ -636,10 +671,18 @@ fn resolve(
     value: &ItemLineValue,
     values: &BTreeMap<OwnedDefinitionKey, ParameterValue>,
     fraction: Option<f64>,
+    properties: Option<&BTreeMap<OwnedDefinitionKey, bool>>,
 ) -> std::result::Result<ParameterValue, ItemLinePending> {
     match value {
         ItemLineValue::Literal(v) => Ok(v.clone()),
         ItemLineValue::Capture(id) => Ok(values[id].clone()),
+        ItemLineValue::Property { property } => properties
+            .and_then(|values| values.get(property))
+            .copied()
+            .map(ParameterValue::Boolean)
+            .ok_or_else(|| ItemLinePending::MissingProperty {
+                property: property.clone(),
+            }),
         ItemLineValue::Interpolate {
             lower,
             upper,

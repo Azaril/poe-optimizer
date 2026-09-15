@@ -1,10 +1,10 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": {
     "game": "poe2",
     "version": "owned-mechanics-v1"
   },
-  "version": "resistance-layout-v2",
+  "version": "resistance-layout-v3",
   "source": {
     "system": "path_of_building2",
     "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
@@ -147,7 +147,7 @@
       }
     ]
   },
-  "item_lines": "5dd03e92e25e7a3573c0986075f9c66b4b5f7a14cef1cfbe931945245ba1b9aa",
+  "item_lines": "6b3852bb019f523e736949c3e98cb8116110dad58a7ed5c58783d89285804274",
   "dialect": "pob_exported_single_text_v1",
   "rule_layouts": [
     {
@@ -234,6 +234,28 @@
         "key": "def.00000000000009dc"
       },
       "load_index_prefix": "no_generated_buff_members"
+    }
+  ],
+  "property_bindings": [
+    {
+      "label": "cold_resistance",
+      "property": "cold_resistance"
+    },
+    {
+      "label": "elemental_resistance",
+      "property": "elemental_resistance"
+    },
+    {
+      "label": "elemental",
+      "property": "elemental"
+    },
+    {
+      "label": "cold",
+      "property": "cold"
+    },
+    {
+      "label": "resistance",
+      "property": "resistance"
     }
   ]
 }

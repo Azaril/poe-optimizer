@@ -411,11 +411,13 @@ fn interpolation_requires_fraction_and_explicit_result_kind() {
                     index: 1,
                     text: "Injected Base",
                     range_fraction: None,
+                    properties: None,
                 },
                 ItemLineInput {
                     index: 2,
                     text: "Grant: (1-20)",
                     range_fraction: Some(fraction),
+                    properties: None,
                 },
             ])
             .unwrap();
@@ -717,12 +719,14 @@ fn collection_byte_and_work_limits_cover_construction_conversion_and_encoding() 
             ItemLineInput {
                 index: 2,
                 text: "Injected Base",
-                range_fraction: None
+                range_fraction: None,
+                properties: None,
             },
             ItemLineInput {
                 index: 2,
                 text: "Speed: 1",
-                range_fraction: None
+                range_fraction: None,
+                properties: None,
             }
         ])
         .is_err()

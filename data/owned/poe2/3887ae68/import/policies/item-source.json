@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "namespace": {
     "game": "poe2",
     "version": "owned-mechanics-v1"
@@ -127,8 +127,9 @@
       }
     ]
   },
-  "item_lines": "500319b266b35ab4e095d4925c2b949677c69dc0887a970e136a3f5203628f05",
+  "item_lines": "16f00f47f7632d9ff0c57483f6a153428f146499f22de19410dfb38728c4a115",
   "dialect": "pob_exported_single_text_v1",
   "rule_layouts": [],
-  "template_layouts": []
+  "template_layouts": [],
+  "property_bindings": []
 }

@@ -205,6 +205,7 @@ fn save(directory: &Path) {
             source: mappings.input().source.clone(),
             item_lines: *items.identity(),
             dialect: ItemSourceDialect::PobExportedSingleTextV1,
+            property_bindings: vec![],
             rule_layouts: vec![],
             template_layouts: vec![],
         },

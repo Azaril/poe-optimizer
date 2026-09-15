@@ -612,6 +612,7 @@ pub fn source_policy<'a>(
             source,
             item_lines: *items.identity(),
             dialect: ItemSourceDialect::PobExportedSingleTextV1,
+            property_bindings: vec![],
             rule_layouts: items
                 .input()
                 .rules

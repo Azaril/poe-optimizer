@@ -140,6 +140,28 @@ inner endpoints allow an optional minus. Plus-prefixed and bare ranges are disjo
 Outer-minus range inversion, decimal endpoints and unreviewed grammar remain unsupported
 by that package, even though the generic lexical primitive supports other declared syntax.
 
+Item-line and item-source policies now use explicit wire/digest version **2**. A
+`Property { property }` line value reads an explicitly supplied Boolean fact and can emit
+only into a Modifier-owned roll slot. Missing context/key remains `MissingProperty`;
+direct text conversion cannot invent a false value. Capture errors still precede missing
+property inputs. The supplied map is bounded and charged before matching and decoding.
+
+The source policy requires exact `property_bindings` from labels to local property keys.
+The admitted source grammar extracts runs of ASCII letters or underscores from tag values;
+punctuation, digits and whitespace separate tokens. Case is preserved and aliases are
+explicit. Binding labels must themselves satisfy that token grammar. This small adapter
+does not embed a source pattern interpreter. For an admitted single-member grammar, it
+scans every property tag, preserves every token and decoded span, and supplies true/false
+only for keys requested by that rule. Unknown
+labels or recognized labels without a corresponding consumed property block the whole
+line. No tag list means an empty label set only in this scoped source grammar; it does
+not prove absence of catalysts, quality, other headers or unconverted item effects.
+These local keys remain Import data. The owned Modifier receives ordinary schema-bound
+Boolean ParameterAssignments, not source labels or a source condition interpreter.
+Policy decoding and encoding both charge every derived property reference against text
+limits. Token scanning, aliases, variable-length comparisons and property-map expansion
+consume explicit work/output budgets before they execute.
+
 `InterpolateOffset` explicitly computes `a + f * (b - a)` for a supplied fraction in
 `[0,1]`, then divides by the declared positive quantum. `SymmetricHalfOffset` applies
 `floor(x + 0.5)` for nonnegative scaled values and `ceil(x - 0.5)` for negative ones,
@@ -184,10 +206,13 @@ Malformed overlays invalidate earlier fractions conservatively; a later valid wr
 recover its exact proven target. No source checkout or exporter-version authentication is
 implied by the policy's offline provenance pins.
 
-The proposed [item modifier properties and scaling](owned-item-scaling.md) slice separates
-source property labels, ordinary/catalyst quality, exact owning-item inputs and ordered
-numeric transforms. It does not yet admit the tagged original05 ring or rune/Bonded
-semantics; unsupported annotations remain Pending rather than being stripped.
+The [item modifier properties and scaling](owned-item-scaling.md) slice now converts the
+untouched original05 ring's nominal range and five property predicates through the
+production policy. Its eight source uses remain distinct. New nominal resistance
+families retain Partial numerical rules, so that value is not an effective contribution.
+Existing fixed-value definitions/programs retain their prior meanings. Catalyst/header
+absence, ordinary quality, complete ordered scaling and rune/Bonded semantics remain
+unconverted; whole-item and whole-build closure remain open.
 
 The original Grand Spear has explicit attack speed 49% while its affix metadata names a
 26–28% tier. The import fixture preserves 49 once and retains the discrepancy. The original

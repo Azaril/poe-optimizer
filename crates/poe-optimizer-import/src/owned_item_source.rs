@@ -23,8 +23,8 @@ use std::{
 };
 
 mod attribute;
-pub const OWNED_ITEM_SOURCE_POLICY_VERSION: u32 = 1;
-const DOMAIN: &str = "owned-item-source-policy-v1";
+pub const OWNED_ITEM_SOURCE_POLICY_VERSION: u32 = 2;
+const DOMAIN: &str = "owned-item-source-policy-v2";
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemSourceLayoutPolicyInput {
@@ -35,8 +35,16 @@ pub struct ItemSourceLayoutPolicyInput {
     pub source: SourcePin,
     pub item_lines: OwnedContentDigest,
     pub dialect: ItemSourceDialect,
+    /// Exact source labels become local semantic property inputs, never runtime names.
+    pub property_bindings: Vec<ItemSourcePropertyBinding>,
     pub rule_layouts: Vec<ItemRuleSourceLayout>,
     pub template_layouts: Vec<ItemTemplateSourceLayout>,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemSourcePropertyBinding {
+    pub label: String,
+    pub property: OwnedDefinitionKey,
 }
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -77,6 +85,7 @@ pub struct ItemSourceLimits {
     pub max_source_files: usize,
     pub max_rules: usize,
     pub max_templates: usize,
+    pub max_properties: usize,
     pub max_source_bytes: usize,
     pub max_line_bytes: usize,
     pub max_lines: usize,
@@ -93,6 +102,7 @@ impl Default for ItemSourceLimits {
             max_source_files: 64,
             max_rules: 2048,
             max_templates: 8192,
+            max_properties: 4096,
             max_source_bytes: 1024 * 1024,
             max_line_bytes: 65536,
             max_lines: 8192,
@@ -104,13 +114,14 @@ impl Default for ItemSourceLimits {
     }
 }
 impl ItemSourceLimits {
-    fn values(self) -> [usize; 12] {
+    fn values(self) -> [usize; 13] {
         [
             self.max_wire_bytes,
             self.max_policy_text_bytes,
             self.max_source_files,
             self.max_rules,
             self.max_templates,
+            self.max_properties,
             self.max_source_bytes,
             self.max_line_bytes,
             self.max_lines,
@@ -167,6 +178,9 @@ pub struct ItemSourceLayoutPolicy {
     limits: ItemSourceLimits,
     roles: BTreeMap<OwnedDefinitionKey, ItemRuleSourceRole>,
     prefixes: BTreeMap<ItemTemplateDefId, ItemLoadIndexPrefix>,
+    properties: BTreeMap<String, OwnedDefinitionKey>,
+    rule_properties: BTreeMap<OwnedDefinitionKey, BTreeSet<OwnedDefinitionKey>>,
+    property_reference_text: usize,
 }
 impl ItemSourceLayoutPolicy {
     pub fn new<I: DefinitionSchemaIndex>(
@@ -193,6 +207,7 @@ impl ItemSourceLayoutPolicy {
         if input.source.files.len() > limits.max_source_files
             || input.rule_layouts.len() > limits.max_rules
             || input.template_layouts.len() > limits.max_templates
+            || input.property_bindings.len() > limits.max_properties
         {
             return Err(ItemSourceError::Limit("policy entries"));
         }
@@ -220,6 +235,57 @@ impl ItemSourceLayoutPolicy {
             {
                 return Err(ItemSourceError::Policy("source file provenance"));
             }
+        }
+        let mut properties = BTreeMap::new();
+        let mut bound_properties = BTreeSet::new();
+        for binding in &input.property_bindings {
+            charge(&mut text_left, binding.label.len(), "policy text")?;
+            charge(
+                &mut text_left,
+                binding.property.as_str().len(),
+                "policy text",
+            )?;
+            if binding.label.is_empty()
+                || !binding
+                    .label
+                    .bytes()
+                    .all(|b| b.is_ascii_alphabetic() || b == b'_')
+                || properties
+                    .insert(binding.label.clone(), binding.property.clone())
+                    .is_some()
+            {
+                return Err(ItemSourceError::Policy(
+                    "invalid or duplicate property label",
+                ));
+            }
+            bound_properties.insert(binding.property.clone());
+        }
+        let mut rule_properties = BTreeMap::new();
+        let mut property_reference_text = 0;
+        let mut referenced_properties = BTreeSet::new();
+        for rule in &lines.input().rules {
+            let mut required = BTreeSet::new();
+            for emission in &rule.emissions {
+                if let ItemEmission::Modifier { rolls, .. } = emission {
+                    for roll in rolls {
+                        if let ItemLineValue::Property { property } = &roll.value {
+                            charge(&mut text_left, property.as_str().len(), "policy text")?;
+                            property_reference_text += property.as_str().len();
+                            if !bound_properties.contains(property) {
+                                return Err(ItemSourceError::Policy("unbound modifier property"));
+                            }
+                            required.insert(property.clone());
+                            referenced_properties.insert(property.clone());
+                        }
+                    }
+                }
+            }
+            if !required.is_empty() {
+                rule_properties.insert(rule.id.clone(), required);
+            }
+        }
+        if bound_properties != referenced_properties {
+            return Err(ItemSourceError::Policy("unused property binding"));
         }
         let known: BTreeSet<_> = lines.input().rules.iter().map(|r| &r.id).collect();
         let mut roles = BTreeMap::new();
@@ -251,6 +317,9 @@ impl ItemSourceLayoutPolicy {
             limits,
             roles,
             prefixes,
+            properties,
+            rule_properties,
+            property_reference_text,
         })
     }
     pub fn input(&self) -> &ItemSourceLayoutPolicyInput {
@@ -292,6 +361,7 @@ pub fn encode_item_source_policy(
     if policy.input.rule_layouts.len() > limits.max_rules
         || policy.input.template_layouts.len() > limits.max_templates
         || policy.input.source.files.len() > limits.max_source_files
+        || policy.input.property_bindings.len() > limits.max_properties
     {
         return Err(ItemSourceError::Limit("policy entries"));
     }
@@ -308,6 +378,19 @@ pub fn encode_item_source_policy(
             "policy text",
         )?;
     }
+    for binding in &policy.input.property_bindings {
+        charge(&mut text_left, binding.label.len(), "policy text")?;
+        charge(
+            &mut text_left,
+            binding.property.as_str().len(),
+            "policy text",
+        )?;
+    }
+    charge(
+        &mut text_left,
+        policy.property_reference_text,
+        "policy text",
+    )?;
     for rule in &policy.input.rule_layouts {
         charge(&mut text_left, rule.rule.as_str().len(), "policy text")?;
     }
@@ -363,6 +446,8 @@ pub enum ItemSourceProblem {
     MalformedCapture,
     PossibleCombinedLine,
     UnsupportedTag,
+    UnknownProperty,
+    UnconsumedProperty,
     MalformedTag,
     RuneLifecycle,
     UnprovedTaggedLine,
@@ -412,6 +497,12 @@ pub enum ItemRangeDecision {
     Pending,
 }
 #[derive(Clone, Debug, Serialize)]
+pub struct ItemSourcePropertyToken {
+    pub label: String,
+    pub decoded_span: Range<usize>,
+    pub property: Option<OwnedDefinitionKey>,
+}
+#[derive(Clone, Debug, Serialize)]
 pub struct ItemAttributedLine {
     pub index: usize,
     pub decoded_span: Range<usize>,
@@ -423,6 +514,9 @@ pub struct ItemAttributedLine {
     pub member: Option<SourceModifierSlot>,
     pub blockers: Vec<ItemSourceProblem>,
     pub range: ItemRangeDecision,
+    /// Tokens and spans remain adapter evidence; only typed Boolean assignments leave Import.
+    pub property_tokens: Vec<ItemSourcePropertyToken>,
+    pub properties: BTreeMap<OwnedDefinitionKey, bool>,
 }
 #[derive(Clone, Debug, Serialize)]
 pub struct ItemAttributionReport {
@@ -481,6 +575,7 @@ impl ItemRangeAttribution {
                     ItemLineInput {
                         index: l.index,
                         text: &l.semantic_text,
+                        properties: Some(&l.properties),
                         range_fraction: match l.range {
                             ItemRangeDecision::Resolved { fraction, .. } => Some(fraction),
                             _ => None,

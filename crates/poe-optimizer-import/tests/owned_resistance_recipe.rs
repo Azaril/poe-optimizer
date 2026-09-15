@@ -14,12 +14,12 @@ use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
     decode_build,
     owned_item_lines::{
-        ConvertedItemEmission, ItemField, ItemLineLimits, ItemLineOutcome, OwnedItemLinePolicy,
-        decode_item_line_policy,
+        ConvertedItemEmission, ItemField, ItemLineInput, ItemLineLimits, ItemLineOutcome,
+        OwnedItemLinePolicy, decode_item_line_policy,
     },
     owned_item_source::{
         ItemLayoutStatus, ItemRangeAttribution, ItemSourceLayoutPolicy, ItemSourceLimits,
-        ItemSourceProblem, decode_item_source_policy,
+        decode_item_source_policy,
     },
     owned_recipe::{OwnedRecipeLimits, StagedOwnedRecipe, decode_owned_recipe},
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
@@ -27,7 +27,11 @@ use poe_optimizer_import::{
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 use sha2::{Digest, Sha256};
-use std::{collections::BTreeSet, fs, path::PathBuf};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    fs,
+    path::PathBuf,
+};
 
 fn key(value: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(value).unwrap()
@@ -98,8 +102,8 @@ impl Component {
 #[test]
 fn persisted_recipe_and_exact_item_policies_pass_production_constructors() {
     let c = Component::load();
-    assert_eq!(c.staged.registry().input().entries.len(), 2524);
-    assert_eq!(c.staged.registry().input().last_issued.get(), 2524);
+    assert_eq!(c.staged.registry().input().entries.len(), 2538);
+    assert_eq!(c.staged.registry().input().last_issued.get(), 2538);
     assert!(c.staged.manifest().partial_rule_owners > 0);
     assert_eq!(c.staged.manifest().calculation, "not_run");
     let base: Value = serde_json::from_slice(
@@ -315,12 +319,20 @@ fn signed_ranges_use_literal_source_interpolation_and_half_offset_rounding() {
         // Stable convex interpolation instead rounds to zero for this case.
         ("+(-3-2)% to Cold Resistance", 0.7, 1.0),
     ] {
-        let ItemLineOutcome::Known { emissions, .. } = c
+        let properties: BTreeMap<_, _> = PROPERTY_LABELS
+            .iter()
+            .map(|label| (key(label), false))
+            .collect();
+        let converted = c
             .items
-            .convert_line(1, text, Some(fraction))
-            .unwrap()
-            .outcome
-        else {
+            .convert_lines([ItemLineInput {
+                index: 1,
+                text,
+                range_fraction: Some(fraction),
+                properties: Some(&properties),
+            }])
+            .unwrap();
+        let ItemLineOutcome::Known { emissions, .. } = &converted.lines[0].outcome else {
             panic!("one lexical ranged match for {text}");
         };
         let [ConvertedItemEmission::Modifier { rolls, .. }] = emissions.as_slice() else {
@@ -330,12 +342,43 @@ fn signed_ranges_use_literal_source_interpolation_and_half_offset_rounding() {
             panic!("quantity");
         };
         assert_eq!(value.value(), expected, "{text}, fraction={fraction}");
+        assert_eq!(rolls.len(), 6);
+        assert!(
+            rolls[1..]
+                .iter()
+                .all(|roll| roll.value == ParameterValue::Boolean(false))
+        );
         assert!(matches!(
-            c.items.convert_line(1, text, None).unwrap().outcome,
+            c.items
+                .convert_lines([ItemLineInput {
+                    index: 1,
+                    text,
+                    range_fraction: None,
+                    properties: Some(&properties),
+                }])
+                .unwrap()
+                .lines[0]
+                .outcome,
+            ItemLineOutcome::Pending { .. }
+        ));
+        // A bare caller range does not prove the source property set.
+        assert!(matches!(
+            c.items
+                .convert_line(1, text, Some(fraction))
+                .unwrap()
+                .outcome,
             ItemLineOutcome::Pending { .. }
         ));
     }
 }
+const PROPERTY_LABELS: [&str; 5] = [
+    "cold_resistance",
+    "elemental_resistance",
+    "elemental",
+    "cold",
+    "resistance",
+];
+
 fn original_five() -> String {
     fs::read_to_string(
         PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -368,7 +411,7 @@ fn ring_plan(c: &Component, xml: &str) -> ItemRangeAttribution {
         .attribute(&evidence, records[0].occurrence().id(), &c.items)
         .unwrap()
 }
-fn untagged_ring_diagnostic(xml: &str, fraction: &str, extra_line: bool) -> String {
+fn ring_range_copy(xml: &str, fraction: &str, extra_line: bool) -> String {
     let source = imported(xml);
     let evidence =
         SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
@@ -384,10 +427,9 @@ fn untagged_ring_diagnostic(xml: &str, fraction: &str, extra_line: bool) -> Stri
     let original = &xml[span.clone()];
     assert_eq!(original.matches("range=\"0.5\"").count(), 2);
     let mut changed = original.replace("range=\"0.5\"", &format!("range=\"{fraction}\""));
-    // Explicit test-only counterfactual. This metadata is not ignored by production.
+    // Test-only range edit preserves the original property annotation verbatim.
     const TAG: &str = "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}";
     assert_eq!(changed.matches(TAG).count(), 1);
-    changed = changed.replacen(TAG, "", 1);
     if extra_line {
         const COLD: &str = "{range:0.5}+(20-30)% to Cold Resistance";
         assert_eq!(changed.matches(COLD).count(), 1);
@@ -398,7 +440,7 @@ fn untagged_ring_diagnostic(xml: &str, fraction: &str, extra_line: bool) -> Stri
     copy
 }
 #[test]
-fn actual_tagged_original_ring_retains_eight_uses_and_pending_source_metadata() {
+fn actual_tagged_original_ring_preserves_eight_uses_and_nominal_properties_without_scaling() {
     let c = Component::load();
     let xml = original_five();
     let source = imported(&xml);
@@ -415,7 +457,7 @@ fn actual_tagged_original_ring_retains_eight_uses_and_pending_source_metadata() 
         .collect();
     assert_eq!(uses.len(), 8);
     let plan = ring_plan(&c, &xml);
-    assert!(matches!(plan.report().layout, ItemLayoutStatus::Pending(_)));
+    assert!(matches!(plan.report().layout, ItemLayoutStatus::Proven));
     let raw_members: Vec<_> = plan
         .report()
         .lines
@@ -430,25 +472,53 @@ fn actual_tagged_original_ring_retains_eight_uses_and_pending_source_metadata() 
             .raw
             .contains("{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}")
     );
-    assert!(
-        raw_members[0]
-            .blockers
-            .contains(&ItemSourceProblem::UnsupportedTag)
-    );
+    assert!(raw_members[0].blockers.is_empty());
     assert_eq!(plan.report().writes.len(), 3);
-    let cold: ModifierDefId = c.id("flat-cold-modifier");
+    let cold: ModifierDefId = c.id("nominal-cold-modifier");
     let converted = plan.convert(&c.items).unwrap();
-    assert!(!converted.modifiers.iter().any(|m| m.definition == cold));
+    assert_eq!(converted.modifiers.len(), 2);
+    let modifier = converted
+        .modifiers
+        .iter()
+        .find(|m| m.definition == cold)
+        .unwrap();
+    assert_eq!(modifier.rolls.len(), 6);
+    let ParameterValue::Quantity(amount) = &modifier.rolls[0].value else {
+        panic!("nominal amount");
+    };
+    assert_eq!(amount.value(), 25.0);
+    for (roll, property) in modifier.rolls[1..].iter().zip(PROPERTY_LABELS) {
+        assert_eq!(
+            roll.slot,
+            c.id(&format!("nominal-cold-property-{property}"))
+        );
+        assert_eq!(roll.value, ParameterValue::Boolean(true));
+    }
+    let life: ModifierDefId = c.id("flat-life-modifier");
+    assert!(converted.modifiers.iter().any(|m| m.definition == life));
+    let owner = c
+        .staged
+        .rules()
+        .input()
+        .owners
+        .iter()
+        .find(|o| o.owner == SchemaSubject::Definition(cold.address()))
+        .unwrap();
+    assert!(owner.programs.members.is_empty());
+    assert!(matches!(
+        owner.programs.closure,
+        SchemaClosure::Partial { .. }
+    ));
     assert_eq!(original_five(), xml);
 }
 
 #[test]
-fn explicitly_untagged_ring_diagnostics_prove_range_attribution_without_original_success() {
+fn tagged_ring_range_edits_preserve_properties_and_exact_xml_attribution() {
     let c = Component::load();
     let xml = original_five();
-    let cold: ModifierDefId = c.id("flat-cold-modifier");
+    let cold: ModifierDefId = c.id("nominal-cold-modifier");
     for (fraction, expected) in [("0", 20.0), ("0.5", 25.0), ("1", 30.0)] {
-        let copy = untagged_ring_diagnostic(&xml, fraction, false);
+        let copy = ring_range_copy(&xml, fraction, false);
         let plan = ring_plan(&c, &copy);
         assert!(
             matches!(plan.report().layout, ItemLayoutStatus::Proven),
@@ -478,20 +548,45 @@ fn explicitly_untagged_ring_diagnostics_prove_range_attribution_without_original
             panic!("cold quantity");
         };
         assert_eq!(amount.value(), expected);
+        assert_eq!(modifier.rolls.len(), 6);
+        assert!(
+            modifier.rolls[1..]
+                .iter()
+                .all(|r| r.value == ParameterValue::Boolean(true))
+        );
         assert!(matches!(converted.item_level, ItemField::Absent));
         assert!(matches!(converted.quality, ItemField::Absent));
     }
-    // The explicitly untagged diagnostic does not establish original-source success.
+    // Edited XML fractions prove nominal conversion, not effective scaling or whole-build success.
     assert_eq!(original_five(), xml);
     assert!(c.staged.manifest().partial_rule_owners > 0);
 }
 #[test]
 fn unknown_inserted_source_member_blocks_the_known_ring_range() {
     let c = Component::load();
-    let copy = untagged_ring_diagnostic(&original_five(), "0.5", true);
+    let copy = ring_range_copy(&original_five(), "0.5", true);
     let plan = ring_plan(&c, &copy);
     assert!(matches!(plan.report().layout, ItemLayoutStatus::Pending(_)));
-    let cold: ModifierDefId = c.id("flat-cold-modifier");
+    let cold: ModifierDefId = c.id("nominal-cold-modifier");
     let converted = plan.convert(&c.items).unwrap();
     assert!(!converted.modifiers.iter().any(|m| m.definition == cold));
+}
+
+#[test]
+fn unknown_or_unconsumed_property_labels_cannot_be_stripped_into_fixed_modifiers() {
+    let c = Component::load();
+    let xml = original_five();
+    const TAG: &str = "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}";
+    for copy in [
+        xml.replacen(TAG, "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance,unreviewed_property}", 1),
+        xml.replacen("+(20-30)% to Cold Resistance", "+25% to Cold Resistance", 1),
+    ] {
+        let plan = ring_plan(&c, &copy);
+        assert!(matches!(plan.report().layout, ItemLayoutStatus::Pending(_)));
+        let converted = plan.convert(&c.items).unwrap();
+        let nominal: ModifierDefId = c.id("nominal-cold-modifier");
+        let fixed: ModifierDefId = c.id("flat-cold-modifier");
+        assert!(!converted.modifiers.iter().any(|m| m.definition == nominal || m.definition == fixed));
+    }
+    assert_eq!(original_five(), xml);
 }

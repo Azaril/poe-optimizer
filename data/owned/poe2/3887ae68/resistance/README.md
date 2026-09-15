@@ -2,8 +2,9 @@
 
 This append-only recipe preserves the 2,515 existing registry entries, schema
 declarations, and program bodies from `../import/compiled/recipe.json`. It adds
-nine explicitly allocated identities, two item contribution programs and four
-reviewed reward contribution programs. It does not produce a final resistance
+nine initial identities, two fixed item contribution programs and four reviewed reward
+contribution programs. The property extension appends fourteen further identities for
+nominal cold/all-elemental amounts and five Boolean properties per modifier. It does not produce a final resistance
 stat or metric. Original-build completion remains **0/5**.
 
 | Owned key suffix | Definition |
@@ -14,19 +15,24 @@ stat or metric. Original-build completion remains **0/5**.
 | `09d8`, `09d9` | All-elemental modifier and its required roll parameter |
 | `09da`, `09db` | Life modifier input and roll; numerical effect remains Partial |
 | `09dc` | Sapphire Ring template; modifier, socket, quality and game-rule coverage remain Partial |
+| `09dd`, `09de`, `09df` through `09e3` | Nominal cold modifier, amount, and five Boolean properties |
+| `09e4`, `09e5`, `09e6` through `09ea` | Nominal all-elemental modifier, amount, and five Boolean properties |
 
 All keys have the `def.000000000000` prefix and the namespace recorded in
 `ids.json`. The percentage-points unit reuses existing key `0002`. The roll
 envelope is a bounded computation domain, not a claim about possible game rolls.
-The range-policy extension preserves all 2,524 identities and the existing
-recipe/schema bytes.
+The property extension preserves the first 2,524 registry entries, all existing slots
+and program bodies. Its only change to an existing descriptor appends the two nominal
+families to the Sapphire Ring's partial modifier membership. The new watermark is2,538;
+new rule owners remain Partial with no effective contribution program.
 
 `items.json` contains general lexical integer captures for plain cold,
 all-elemental and Life lines, plus integer endpoint ranges for cold and
 all-elemental resistance. `item-source.json` binds those declarations to the
 exact schema and source layout. Metadata headers do not become ItemLevel or
-Quality facts. Unsupported lines, tag semantics, ambiguous preceding lines,
-missing template membership and unproved range lifecycle information remain
+Quality facts. The policies use wire/digest version2. Five exact property labels map
+to typed Boolean modifier inputs; unknown or unconsumed labels, ambiguous preceding
+lines, missing template membership and unproved range lifecycle information remain
 unresolved. Matching a line does not prove whole-item conversion or activation.
 
 The reviewed fixed outcomes contribute +10 cold, +5 cold, +5 all-elemental, and
@@ -53,24 +59,27 @@ nonfinite intermediates/results. For example, −3..2 at fraction 0.7 follows th
 source result 0.5→1; stable convex interpolation produces a value below 0.5.
 
 Original05 item26 is one Sapphire Ring record referenced by eight receiving
-rows across four item sets. Its two raw source members are the cold implicit and
-`+10 to maximum Life`. The exact original remains **Pending**: its
-`{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}` metadata
-feeds catalyst and modifier-magnitude semantics that are not yet modeled here.
-`UnsupportedTag` prevents promotion of its cold modifier. Production does not
-strip or ignore that metadata.
+rows across four item sets. Its two raw members are the cold implicit and
+`+10 to maximum Life`. The original text now converts without removing its
+`{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}` annotation:
+the nominal cold amount is25 and all five explicit property parameters are true.
+The source label tokens/spans remain in attribution evidence. Each rule receives
+only its declared properties. Recognized labels cannot disappear into an older
+fixed-value rule that has no property outputs.
 
-The integration target separately uses clearly labelled in-memory diagnostic
-copies that remove exactly this one reviewed literal tag and vary the two XML
-range writes to 0, 0.5 and 1, yielding cold rolls 20, 25 and 30. These copies prove the generic
-range/source-attribution component, not native success for the original. An
-inserted unknown member must still make the affected range pending. All eight
-receiving rows remain distinct; none is selected or multiplied into a build
-total here. Original02 item26 is a Grand Spear and is kept distinct. Protected
-original files are never rewritten. Source modTags and their scaling effects
-are the next blocking semantic-input obligation for the original ring. The proposed
-[item-scaling slice](../../../../../docs/owned-item-scaling.md) defines the next input,
-owning-item and ordered-transform seams; it is not implemented tag/catalyst or rune support.
+Range perturbation tests preserve that annotation and vary XML fractions0,0.5,1,
+yielding nominal amounts20,25,30. Unknown added labels or members remain unresolved;
+all eight saved receiving rows remain distinct. The older tag-stripped diagnostic
+helper has been replaced by these tag-preserving cases. Original02 item26 is a
+separate Grand Spear; rune/Bonded and ordinary weapon inputs remain separate work.
+Protected original files are unchanged.
+
+The new amounts are deliberately nominal. Existing fixed-value inputs are not
+reinterpreted as nominal, and the new families do not emit unscaled effective
+contributions. Catalyst/header absence proofs, value encoding, scalability and ordered
+magnitude rules are the next obligations in the
+[item-scaling design](../../../../../docs/owned-item-scaling.md). Whole-item closure,
+final resistance metrics and complete build parity remain incomplete.
 
 The Life input declaration preserves that second source member; it does not
 supply a Life effect. Source layout completeness is separate from the Partial
@@ -80,10 +89,10 @@ item, modifier, quality and rule memberships in the owned package.
 
 `source-facts.json` records the exact cold/all-elemental BASE combination,
 increase/more multiplier, override, truncation and clamp source. There is no
-appropriate common receiver owner in the current package. This slice does not
-invent one through a UsagePolicy, Encounter or per-class duplicate program.
-Contributor completeness, receiver ownership, limits, overrides and selected
-actor identity must be resolved before a final Stat and Metric can be declared.
+game receiver root in the shipped package yet. The native stat-owned receiver
+mechanism is implemented, so common calculations need no fabricated usage, encounter
+or class owner. Contributor completeness, real receiver data, limits, overrides and
+selected actor identity must be resolved before final Stat/Metric coverage is claimed.
 
 ## Reproduction
 

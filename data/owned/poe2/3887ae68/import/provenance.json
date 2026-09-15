@@ -208,12 +208,12 @@
     {
       "path": "item-policy-seed.json",
       "bytes": 453,
-      "sha256": "b1bca116d15ffa25f4faaf4cb5a42fbc2cec9f05c1c4c983d28a35fa8dda81ff"
+      "sha256": "00c9a7076533bcabb5ef6ff97c8394fbb38b9872193b6b0d36cb0b851ff62f16"
     },
     {
       "path": "item-source-policy-seed.json",
-      "bytes": 4707,
-      "sha256": "dd896d61b4b69a7ff890134889cea2c9e8f64b3ce3d9a0aa4734b388e57cab89"
+      "bytes": 4734,
+      "sha256": "04ab034da9fbfb6b502a37902efb2ffb440c45d32d5ae2c85602efc6a57dcf49"
     },
     {
       "path": "mapping-seed.json",

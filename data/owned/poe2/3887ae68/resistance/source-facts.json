@@ -2,7 +2,7 @@
   "schema_version": 1,
   "scope": "resistance-contribution-only",
   "base_recipe_sha256": "1e985847d255ceee684aaab55176f4cd3ee12e91d21696f17fa0c686c8c29b1d",
-  "recipe_sha256": "bced082199c5f8d67a6a3dbc991ea59c82861fb9a780d3969859e6bed071b68c",
+  "recipe_sha256": "cd323ca3fc11808167a039ef066c27998d51e00a7f5e635157ac38f506ece43d",
   "source": {
     "system": "path_of_building2",
     "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
@@ -225,6 +225,30 @@
       "file_sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c",
       "sha256": "ded06e7a07e75c9a9e66b2856240ccba8049313e39684959b257e169be877556",
       "text": "\t[\"#% to all Elemental Resistances\"] = { { isScalable = true } },\n"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 14,
+      "end_line": 63,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "55e030bb0c71c185634f0b74936f66eb32ba50ff0a2806fedbbaefb381a741f7",
+      "text": "local catalystList = {\"Flesh\", \"Neural\", \"Carapace\", \"Uul-Netol's\", \"Xoph's\", \"Tul's\", \"Esh's\", \"Chayula's\", \"Reaver\", \"Sibilant\", \"Skittering\", \"Adaptive\", \"Necrotic\"}\nlocal catalystDescriptorList = {\"Life\", \"Mana\", \"Defence\", \"Physical\", \"Fire\", \"Cold\", \"Lightning\", \"Chaos\", \"Attack\", \"Caster\", \"Speed\", \"Attribute\", \"Minion\"}\nlocal catalystTags = {\n\t{ \"life\" },\n\t{ \"mana\" },\n\t{ \"defences\", \"armour\", \"evasion\", \"energyshield\" },\n\t{ \"physical\" },\n\t{ \"fire\" },\n\t{ \"cold\" },\n\t{ \"lightning\" },\n\t{ \"chaos\" },\n\t{ \"attack\" },\n\t{ \"caster\" },\n\t{ \"speed\" },\n\t{ \"attribute\" },\n\t{ \"minion\" },\n}\n\nlocal function getCatalystScalar(catalystId, mod, quality)\n\tif mod.unscalable then\n\t\treturn 1\n\tend\n\tlocal tags = mod.modTags\n\tif not catalystId or type(catalystId) ~= \"number\" or not catalystTags[catalystId] or not tags or type(tags) ~= \"table\" or #tags == 0 then\n\t\treturn 1\n\tend\n\tif not quality then\n\t\tquality = 20\n\tend\n\n\t-- Create a fast lookup table for all provided tags\n\tlocal tagLookup = {}\n\tfor _, curTag in ipairs(tags) do\n\t\ttagLookup[curTag] = true;\n\tend\n\t-- these aren't actual mod tags but do sinistral/dextral catalyst\n\tfor _, lineFlag in ipairs({ \"prefix\", \"suffix\" }) do\n\t\tif mod[lineFlag] then\n\t\t\ttagLookup[lineFlag] = true\n\t\tend\n\tend\n\n\t-- Find if any of the catalyst's tags match the provided tags\n\tfor _, catalystTag in ipairs(catalystTags[catalystId]) do\n\t\tif tagLookup[catalystTag] then\n\t\t\treturn (100 + quality) / 100\n\t\tend\n\tend\n\treturn 1\nend\n"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 560,
+      "end_line": 564,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "ccf529abbe312396c11e7e0597887ecc21c60a4c9e386ff3bf1c536d30860cc6",
+      "text": "\t-- old items or trade-sourced items have increases to modifiers baked in to the item text, which\n\t-- means that we can't add e.g. quality or mod magnitude effect to them during parsing. we will\n\t-- assume an item to be an advanced copy format if either has mod roll information, a modifier\n\t-- line with a range, or advanced copy lines\n\tself.advancedCopy = false\n"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 966,
+      "end_line": 984,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "54dfb0730ec888897200257bcd8f7c7e2b12382b27fcf9cad5b9cfb3ed8c5bd3",
+      "text": "\t\t\t\tline = line:gsub(\"{(%a*):?([^}]*)}\", function(k,val)\n\t\t\t\t\tif k == \"variant\" then\n\t\t\t\t\t\tmodLine.variantList = selectionTags and selectionTags.variantList or parseIdSpec(val)\n\t\t\t\t\telseif k == \"version\" then\n\t\t\t\t\t\tmodLine.versionList = selectionTags and selectionTags.versionList or parseIdSpec(val)\n\t\t\t\t\telseif k == \"group\" then\n\t\t\t\t\t\tmodLine.variantGroupList = selectionTags and selectionTags.variantGroupList or parseIdSpec(val, true)\n\t\t\t\t\telseif k == \"tags\" then\n\t\t\t\t\t\tfor tag in val:gmatch(\"[%a_]+\") do\n\t\t\t\t\t\t\tt_insert(modLine.modTags, tag)\n\t\t\t\t\t\tend\n\t\t\t\t\telseif k == \"range\" then\n\t\t\t\t\t\tself.advancedCopy = true\n\t\t\t\t\t\tmodLine.range = tonumber(val)\n\t\t\t\t\telseif k == \"corruptedRange\" then\n\t\t\t\t\t\tmodLine.corruptedRange = tonumber(val)\n\t\t\t\t\telseif lineFlags[k] then\n\t\t\t\t\t\tmodLine[k] = true\n\t\t\t\t\tend\n"
     }
   ],
   "reward_outcomes": [
@@ -418,11 +442,47 @@
       "source-attributed range membership proof without source execution"
     ]
   },
+  "modifier_properties": {
+    "implemented": true,
+    "bindings": [
+      {
+        "label": "cold_resistance",
+        "property": "cold_resistance"
+      },
+      {
+        "label": "elemental_resistance",
+        "property": "elemental_resistance"
+      },
+      {
+        "label": "elemental",
+        "property": "elemental"
+      },
+      {
+        "label": "cold",
+        "property": "cold"
+      },
+      {
+        "label": "resistance",
+        "property": "resistance"
+      }
+    ],
+    "value_encoding": "nominal_integer_range",
+    "property_set": "Every label on the selected source member must be mapped and consumed; unknown or unconsumed labels remain Pending. Absence is not a runtime default.",
+    "effective_scaling": false,
+    "remaining_obligations": [
+      "catalyst/header absence and defaults",
+      "source nominal versus baked encoding for other source families",
+      "category and numeric-component scalability",
+      "applicable ordered modifier-magnitude transforms",
+      "complete owning-item inputs and contributors"
+    ]
+  },
   "original_ring_attribution": {
     "status": "pending",
-    "reason": "The exact original carries source modTags used by catalyst/modifier-magnitude semantics. UnsupportedTag blocks promotion of the cold modifier; no source metadata is silently removed.",
+    "input_status": "nominal_amount_and_five_properties_converted",
+    "reason": "The untouched original's five labels and source-attributed range become owned nominal inputs. Catalyst/header/encoding and modifier-magnitude obligations remain; the new family has Partial rules and no effective Contribute.",
     "reviewed_tag": "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}",
-    "diagnostic_only": "Range0/0.5/1 attribution is exercised on explicit in-memory copies removing exactly this one literal tag. This is not native success for the original."
+    "diagnostic_only": "Range0/0.5/1 contrasts edit only XML fractions in memory and retain the actual tag. Nominal conversion is not effective scaling or native original success."
   },
   "whole_item_closure": false,
   "metric_producer": false,

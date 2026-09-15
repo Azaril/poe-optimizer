@@ -43,8 +43,8 @@ class ResistanceExportTests(unittest.TestCase):
 
     def test_successor_preserves_existing_history_schemas_and_rule_bodies(self):
         self.assertEqual(self.recipe["registry"]["entries"][:2515], self.base["registry"]["entries"])
-        self.assertEqual(self.recipe["registry"]["last_issued"], 2524)
-        self.assertEqual(len(self.ids), 9)
+        self.assertEqual(self.recipe["registry"]["last_issued"], 2538)
+        self.assertEqual(len(self.ids), 23)
         for table in ["definitions", "slots"]:
             for row in self.base["schema"][table]:
                 self.assertIn(row, self.recipe["schema"][table])
@@ -67,7 +67,7 @@ class ResistanceExportTests(unittest.TestCase):
     def test_new_numerical_rules_only_contribute_on_player(self):
         old = len(self.base["rules"]["owners"])
         owners = self.recipe["rules"]["owners"][old:]
-        self.assertEqual(len(owners), 8)
+        self.assertEqual(len(owners), 10)
         effects = [e["effect"] for o in owners for p in o["programs"]["members"] for e in p["effects"]]
         self.assertEqual(len(effects), 6)
         for owner in owners:
@@ -83,7 +83,7 @@ class ResistanceExportTests(unittest.TestCase):
         owners = self.recipe["rules"]["owners"]
         by_id = {o["owner"]["value"]["value"]["key"]: o for o in owners if o["owner"]["kind"] == "definition"}
         self.assertEqual(by_id["def.0000000000000062"]["programs"]["closure"]["kind"], "partial")
-        for label in ["flat-life-modifier", "sapphire-ring-template"]:
+        for label in ["flat-life-modifier", "sapphire-ring-template", "nominal-cold-modifier", "nominal-elemental-modifier"]:
             row = by_id[self.ids[label]["key"]]
             self.assertEqual(row["programs"]["members"], [])
             self.assertEqual(row["programs"]["closure"]["kind"], "partial")
@@ -94,7 +94,7 @@ class ResistanceExportTests(unittest.TestCase):
         items = EXPORT.DATA.decode(self.outputs["items.json"])
         source = EXPORT.DATA.decode(self.outputs["item-source.json"])
         self.assertEqual(items["definitions"], EXPORT.DATA.schema_identity(self.recipe["schema"]))
-        self.assertEqual(source["item_lines"], EXPORT.DATA.owned_digest("owned-item-line-policy-v1", items))
+        self.assertEqual(source["item_lines"], EXPORT.DATA.owned_digest("owned-item-line-policy-v2", items))
         for rule in [r for r in items["rules"] if r["id"].startswith("fixed-")]:
             self.assertEqual(rule["pattern"][0], {"kind": "numeric_capture", "value": {"capture": "amount", "syntax": "integer", "sign": "optional"}})
             self.assertEqual(rule["captures"][0]["codec"]["value"]["codec"]["value"]["syntax"], "integer")
@@ -110,10 +110,51 @@ class ResistanceExportTests(unittest.TestCase):
             self.assertEqual(captures, [{"capture": "lower", "syntax": "integer", "sign": "optional_minus"},
                                         {"capture": "upper", "syntax": "integer", "sign": "optional_minus"}])
             effect = rule["emissions"][0]["value"]
-            self.assertIn(effect["definition"], [self.ids["flat-cold-modifier"], self.ids["flat-elemental-modifier"]])
+            self.assertIn(effect["definition"], [self.ids["nominal-cold-modifier"], self.ids["nominal-elemental-modifier"]])
             self.assertEqual(effect["rolls"][0]["value"]["value"]["rounding"], "symmetric_half_offset")
-        # Explicit wire-v2/empty-receiver migration; schema, IDs and rule bodies are unchanged.
-        self.assertEqual(EXPORT.sha(self.outputs["recipe.json"]), "bced082199c5f8d67a6a3dbc991ea59c82861fb9a780d3969859e6bed071b68c")
+        # Explicit nominal-family successor: original registry history and fixed programs remain unchanged.
+        self.assertEqual(EXPORT.sha(self.outputs["recipe.json"]), "cd323ca3fc11808167a039ef066c27998d51e00a7f5e635157ac38f506ece43d")
+
+    def test_nominal_families_preserve_properties_without_effective_contributions(self):
+        expected = ["cold_resistance", "elemental_resistance", "elemental", "cold", "resistance"]
+        source = EXPORT.DATA.decode(self.outputs["item-source.json"])
+        self.assertEqual(source["schema_version"], 2)
+        self.assertEqual(source["property_bindings"], [{"label": p, "property": p} for p in expected])
+        items = EXPORT.DATA.decode(self.outputs["items.json"])
+        self.assertEqual(items["schema_version"], 2)
+        self.assertEqual(items["definitions"], self.recipe["rules"]["definitions"])
+        for name in ["cold", "elemental"]:
+            definition = self.ids["nominal-" + name + "-modifier"]
+            owner = next(o for o in self.recipe["rules"]["owners"] if o["owner"] == EXPORT.subject(definition))
+            self.assertEqual(owner["programs"]["members"], [])
+            self.assertEqual(owner["programs"]["closure"]["kind"], "partial")
+            for prop in expected:
+                slot = self.ids["nominal-" + name + "-property-" + prop]
+                self.assertEqual(slot["declaration"]["definition"], definition)
+                row = next(s for s in self.recipe["schema"]["slots"] if s["value"]["id"] == slot)
+                self.assertEqual(row["value"]["schema"]["value"], {"value": {"kind": "boolean"}, "presence": "required_once", "sites": ["modifier_roll"]})
+            for rule in [r for r in items["rules"] if r["id"].startswith("ranged-") and r["id"].endswith("-" + name)]:
+                rolls = rule["emissions"][0]["value"]["rolls"]
+                self.assertEqual(len(rolls), 6)
+                self.assertEqual([r["value"] for r in rolls[1:]], [{"kind": "property", "value": {"property": p}} for p in expected])
+        self.assertEqual(self.ids["nominal-cold-modifier"]["key"], "def.00000000000009dd")
+        self.assertEqual(self.ids["nominal-elemental-modifier"]["key"], "def.00000000000009e4")
+
+    def test_property_authoring_is_bounded_and_rejects_duplicates_before_source_reads(self):
+        changes = [lambda a: a.update(modifier_properties=[]),
+                   lambda a: a.update(modifier_properties=a["modifier_properties"] * 7),
+                   lambda a: a["modifier_properties"].append(dict(a["modifier_properties"][0])),
+                   lambda a: a["modifier_properties"][0].update(property="Bad Unknown Key"),
+                   lambda a: a["modifier_properties"][0].update(unrecognized=True)]
+        original = EXPORT.DATA.read
+        def guarded_read(path, maximum):
+            if path.is_relative_to(SOURCE):
+                raise AssertionError("invalid property authoring must fail before source reads")
+            return original(path, maximum)
+        for change in changes:
+            with mock.patch.object(EXPORT.DATA, "read", side_effect=guarded_read):
+                with self.assertRaises(ValueError):
+                    self.changed_authoring(change)
 
     def test_source_hashes_and_literal_signed_rounding_are_explicit(self):
         facts = EXPORT.DATA.decode(self.outputs["source-facts.json"])
@@ -121,7 +162,9 @@ class ResistanceExportTests(unittest.TestCase):
         self.assertFalse(facts["receiver"]["implemented"])
         self.assertFalse(facts["metric_producer"])
         self.assertEqual(facts["original_ring_attribution"]["status"], "pending")
-        self.assertIn("exactly this one literal tag", facts["original_ring_attribution"]["diagnostic_only"])
+        self.assertEqual(facts["original_ring_attribution"]["input_status"], "nominal_amount_and_five_properties_converted")
+        self.assertFalse(facts["modifier_properties"]["effective_scaling"])
+        self.assertIn("retain the actual tag", facts["original_ring_attribution"]["diagnostic_only"])
         self.assertEqual(facts["whole_original_native_completion"], "0/5")
         for span in facts["source_spans"]:
             raw = (SOURCE / span["path"]).read_bytes().replace(b"\r\n", b"\n")

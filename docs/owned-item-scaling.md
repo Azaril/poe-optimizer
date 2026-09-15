@@ -1,10 +1,12 @@
-# Proposed item modifier properties and scaling
+# Item modifier properties and scaling
 
-**Status: Proposed real-data slice; shared equipment-property boundary structurally validated.**
-Two [Engine regressions](../crates/poe-optimizer-engine/tests/owned_item_properties.rs)
-exercise the existing Stat dependency path across templates and repeated item uses.
-This document describes input and calculation seams, not implemented tag/catalyst support.
-The unmodified original05 ring remains Pending, and full
+**Status: modifier-property conversion implemented; catalyst/header and effective scaling remain open.**
+The owned source adapter converts the untouched original05 ring's nominal cold roll and
+five Boolean modifier properties. New nominal definitions retain Partial numerical rules;
+they do not reuse the prior fixed-value contribution programs. Two
+[Engine regressions](../crates/poe-optimizer-engine/tests/owned_item_properties.rs) validate
+the existing Stat dependency path across templates and repeated item uses. These seams
+are ready for real scaling data, but the whole ring remains Pending, and full
 original-build native completion remains **0/5**. Existing complete-request and contributor
 coverage requirements are unchanged.
 
@@ -36,7 +38,10 @@ tests; none becomes a native dependency or a general parser/interpreter specific
 ## Candidate owned seams
 
 The common-property dependency path is validated with directly authored data. Source
-conversion, complete catalyst definitions and the remaining scaling choices are proposals:
+property conversion is implemented through injected item-line/source policies v2: bounded
+source tokens map to local Import keys, then to schema-bound Boolean modifier parameters.
+Unknown or unconsumed labels block the line; source strings do not enter native rules.
+The remaining header, catalyst and scaling work follows these seams:
 
 - Reuse `ItemRecord.parameters` for declared catalyst selection/presence and amount;
   `ItemRecord.quality` continues to represent ordinary quality. Known absence needs an
@@ -95,8 +100,12 @@ implicitly. Exclude inactive variants, unscalable components and skill-grant num
 converted rule specifies. Rune members are not automatically in the ordinary magnitude
 receiver set.
 
-Start with the applicable catalyst scalar, then apply ordered signed additive percentages
-or doubling operations. `(1 + 0.2) * 2` differs from `1 * 2 + 0.2`. Scale only the declared
+Start with the applicable catalyst scalar, preserving the source grouping
+`(100 + quality) / 100`, then apply ordered signed additive percentages or doubling
+operations. The optional pinned oracle confirms a meaningful floating-point contrast:
+quality0.7 with base1000 truncates to1007 with that grouping, but to1006 with
+`1 + quality / 100`. Existing native Add and percentage-to-factor operations can express
+the required grouping; no new interpreter or operation is required. `(1 + 0.2) * 2` differs from `1 * 2 + 0.2`. Scale only the declared
 numeric components, not condition thresholds or every number present in a line.
 
 Preserve the stages: resolve the range at its declared internal precision; apply any
@@ -114,11 +123,14 @@ applied. Normalize that distinction through an explicit import encoding decision
 provenance. Never apply a scale twice or recover a nominal roll by dividing an already
 rounded value. A source `advancedCopy` or editor-history flag is not an owned domain field.
 
-The inspected source magnitude loop reparses only when its running scalar differs from1.
-A sequence returning to1 may retain an earlier parsed value. This is an **oracle
-investigation**, not an adopted domain rule: first establish the observable contrast, then
-record the compatibility decision. Do not add mutable cache history to reproduce an
-inferred quirk. The current ring/rune cases do not require that sequence.
+The optional pinned oracle now confirms a source-history contrast: for a fixed25 line,
+ordered +20% then -20% can retain30 when the scalar returns to1; the reverse order can
+retain20. The ranged form recomputes the final25 during the source build stage. This is
+reference evidence, not an adopted domain rule. Keep the fixed/baked encoding compatibility
+decision open and do not add mutable cache history to native evaluation. The original05
+ring uses the ranged path and does not require that quirk. The source-only test lives in
+[owned_catalyst_oracle.rs](../crates/poe-optimizer-pob/tests/owned_catalyst_oracle.rs); its31
+contrasts do not establish native scaling or whole-build parity.
 
 ## Concrete acceptance cases
 
@@ -126,9 +138,12 @@ Original05 Item26 is one Sapphire Ring with eight receiving rows, including two 
 uses. Its cold member retains the five labels `cold_resistance`, `elemental_resistance`,
 `elemental`, `cold`, `resistance`, range fraction0.5 and nominal range20–30. Its second member
 is `+10 to maximum Life`. No Catalyst/CatalystQuality, ordinary Quality or rune header is
-present, but relevant header/producer completeness must establish absence. The original
-stays Pending until the labels and relevant inputs are modeled. Existing tag-removed
-in-memory copies remain explicitly diagnostic; they do not validate the original.
+present, but relevant header/producer completeness must establish absence. The production
+converter now retains nominal cold25 and all five true properties from the untouched
+original, retains its Life input and all eight uses, and keeps the new nominal family
+Partial. The source-layout proof does not establish whole-item completeness. The former
+tag-stripped test helper has been replaced by the actual original test; conversion of the
+original is no longer represented by a diagnostic copy.
 
 The component regressions validate two distinct ItemTemplates and their exact parameter
 declarations feeding the same Modifier definition, repeated uses of one backing item, an

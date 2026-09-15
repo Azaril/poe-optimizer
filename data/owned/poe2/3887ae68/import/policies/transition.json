@@ -25,12 +25,12 @@
   "artifacts": [
     {
       "path": "policies/item-source.json",
-      "sha256": "b731e5b7951bc313509ca58fdbd6ca4a0af24a4473206de01d3541c5eb2c2676",
-      "bytes": 4707
+      "sha256": "69ce0cc20eb3eb354bf529851adf2022907163e4c1add5a4867025798dd8b522",
+      "bytes": 4734
     },
     {
       "path": "policies/items.json",
-      "sha256": "802583f17e958508706d7d1d522838d11a2f6d650ca0e4b362f48e87e90a1463",
+      "sha256": "adefd96ad385434699a7a62976becb55da15ddb10253bfe007ef1573f3a1e8d1",
       "bytes": 453
     },
     {
