@@ -18,7 +18,6 @@ pub const PROFILE_ID: &str = "poe2-mace-strike-action-timing-v11";
 pub const TREE_VERSION: &str = "0_5";
 /// Index in the pinned tree classes table; XML classInternalId is a separate id.
 pub const CLASS_ID: u32 = 3;
-pub const CLASS_INTERNAL_ID: u32 = 6;
 pub const SKILL_ID: &str = "Melee1HMacePlayer";
 pub const SUPPORT_ID: &str = "SupportBrutalityPlayer";
 

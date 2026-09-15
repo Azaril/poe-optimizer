@@ -74,6 +74,30 @@ pub struct NormalizationPolicy {
     /// Explicitly permits one active gem in a manual group to receive supports.
     /// Multiple active gems always need declared payload/target conversion.
     pub single_active_support_target: bool,
+    /// Exact source slot relations. Empty means no equipment scope conversion.
+    pub equipment_loadouts: Vec<EquipmentLoadoutRule>,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct EquipmentLoadoutRule {
+    pub source_slot: SourceComponent,
+    pub destination: EquipmentSlotDefId,
+    pub scope: ImportEquipmentScope,
+}
+
+/// Keys are injected import-local correspondence, never owned definition IDs.
+/// A key is allocated only when a unique, mapped source Slot actually exposes it.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum ImportEquipmentScope {
+    Shared,
+    Selected { loadouts: Vec<OwnedDefinitionKey> },
 }
 #[derive(Clone, Copy, Debug)]
 pub struct NormalizationLimits {
@@ -131,6 +155,10 @@ type Result<T> = std::result::Result<T, NormalizationError>;
 #[derive(Clone, Debug, PartialEq, Serialize)]
 #[serde(tag = "kind", content = "value", rename_all = "snake_case")]
 pub enum OwnedOriginTarget {
+    WeaponLoadout {
+        key: OwnedDefinitionKey,
+        id: WeaponLoadoutId,
+    },
     Item(ItemRecordId),
     ItemReference(ItemRecordId),
     Modifier(ModifierInstanceId),
@@ -459,7 +487,7 @@ fn validate_policy(
         }
     }
     digest_owned(
-        "owned-normalization-policy-v1",
+        "owned-normalization-policy-v2",
         policy,
         limits.max_policy_bytes,
     )?;
@@ -528,6 +556,88 @@ fn validate_policy(
     ])
 }
 
+// Compile exact source-slot relations once. Unknown mapping coverage does not
+// become a fallback scope; positively contradictory artifact facts are rejected.
+fn equipment_loadout_rules<'p, I: DefinitionSchemaIndex>(
+    policy: &'p NormalizationPolicy,
+    mappings: &OwnedMappingIndex,
+    definitions: &I,
+    limits: NormalizationLimits,
+) -> Result<BTreeMap<&'p str, &'p EquipmentLoadoutRule>> {
+    if policy.equipment_loadouts.len() > 128 {
+        return Err(NormalizationError::Policy("equipment loadout rules"));
+    }
+    let mut sources = BTreeSet::new();
+    let mut keys = BTreeSet::new();
+    let mut admitted = BTreeMap::new();
+    for rule in &policy.equipment_loadouts {
+        let SourceComponent::Text(source) = &rule.source_slot else {
+            return Err(NormalizationError::Policy("missing equipment slot rule"));
+        };
+        if source.is_empty()
+            || source.len() > limits.mapping.max_string_bytes
+            || !sources.insert(source.as_str())
+        {
+            return Err(NormalizationError::Policy(
+                "duplicate or invalid equipment slot rule",
+            ));
+        }
+        if rule.destination.namespace() != &policy.namespace {
+            return Err(NormalizationError::Binding);
+        }
+        if let ImportEquipmentScope::Selected { loadouts } = &rule.scope {
+            if loadouts.is_empty()
+                || loadouts.len() > 64
+                || loadouts.iter().collect::<BTreeSet<_>>().len() != loadouts.len()
+            {
+                return Err(NormalizationError::Policy("equipment loadout keys"));
+            }
+            keys.extend(loadouts.iter());
+            if keys.len() > 64 {
+                return Err(NormalizationError::Policy("equipment loadout keys"));
+            }
+        }
+        let selector = catalog(ExternalCatalogKind::EquipmentSlot, rule.source_slot.clone());
+        let Some(MappingOutcome::Mapped { target, .. }) = mappings.lookup(&selector) else {
+            continue;
+        };
+        if target
+            != &SchemaSubject::Definition(DefinitionAddress::EquipmentSlot(
+                rule.destination.clone(),
+            ))
+        {
+            return Err(NormalizationError::Policy(
+                "equipment loadout mapping contradiction",
+            ));
+        }
+        match definitions.definition(&rule.destination) {
+            SchemaLookup::Known(schema) => {
+                if !matches!(
+                    (&rule.scope, schema.scope),
+                    (
+                        ImportEquipmentScope::Shared,
+                        ScopePolicy::Shared | ScopePolicy::Either
+                    ) | (
+                        ImportEquipmentScope::Selected { .. },
+                        ScopePolicy::Selected | ScopePolicy::Either
+                    )
+                ) {
+                    return Err(NormalizationError::Policy(
+                        "equipment loadout schema contradiction",
+                    ));
+                }
+            }
+            SchemaLookup::Unmapped(_) => {} // Explicit import fact; schema binding remains unresolved.
+            SchemaLookup::Missing => continue,
+            SchemaLookup::NamespaceMismatch | SchemaLookup::InconsistentIndex => {
+                return Err(NormalizationError::Binding);
+            }
+        }
+        admitted.insert(source.as_str(), rule);
+    }
+    Ok(admitted)
+}
+
 /// One deterministic, fresh import. All source alternatives survive. Definition
 /// identities can be known while intrinsic values/effects/roles remain pending.
 /// No mutable registry, evaluator, UI or legacy selected-view API is accepted.
@@ -553,7 +663,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     items.verify_bindings(definitions)?;
     item_source.verify_bindings(items, definitions)?;
     let policy_digest = digest_owned(
-        "owned-normalization-policy-v1",
+        "owned-normalization-policy-v2",
         &(policy, queries),
         limits.max_policy_bytes,
     )?;
@@ -577,6 +687,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         &mappings.input().policy_version,
         limits.mapping,
     )?;
+    let equipment_rules = equipment_loadout_rules(policy, mappings, definitions, limits)?;
     if queries.len() > limits.draft.input.max_collection_entries
         || queries.iter().map(|q| &q.id).collect::<BTreeSet<_>>().len() != queries.len()
     {
@@ -784,6 +895,95 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     if draft.choice_presets.members.is_empty() {
         add_config(&mut b, &mut draft, root, &mut fallback_issues)?;
     }
+    // Only actually observed, unique ordinary slots prove equipment scopes and
+    // named loadout members. Empty item references still expose a slot; no item
+    // identity, saved active selector or source-name heuristic supplies a default.
+    let mut equipment_scopes = BTreeMap::new();
+    let mut loadout_ids = BTreeMap::new();
+    let mut slot_uniqueness = BTreeMap::new();
+    let source_root = evidence.rows()[0].occurrence();
+    if source_root.name() == "PathOfBuilding2" && !source_root.has_namespace_context() {
+        for row in evidence.rows() {
+            b.charge(1)?;
+            let occurrence = row.occurrence();
+            if occurrence.name() != "Slot"
+                || occurrence.has_namespace_context()
+                || !matches!(
+                    row.authored_instance(),
+                    Some(AuthoredInstanceId::ItemSlotUse(_))
+                )
+            {
+                continue;
+            }
+            let Some(parent) = occurrence
+                .parent()
+                .filter(|p| equipment_sets.contains_key(p))
+            else {
+                continue;
+            };
+            let Some(Ok(name)) = row.attribute("name").map(|attribute| attribute.decoded()) else {
+                continue;
+            };
+            let Some(rule) = equipment_rules.get(name) else {
+                continue;
+            };
+            let unique = if let Some(unique) = slot_uniqueness.get(&(parent, name)) {
+                *unique
+            } else {
+                // Conservative charge bounds candidate allocation in the indexed lookup,
+                // including duplicate and lexically unavailable same-scope keys.
+                b.charge(evidence.rows()[parent.ordinal() as usize].children().len())?;
+                let unique = matches!(
+                    evidence.lookup_key(SourceKeyQuery {
+                        parent: Some(parent),
+                        element: SourceQName {
+                            namespace: None,
+                            local: "Slot"
+                        },
+                        attribute: SourceQName {
+                            namespace: None,
+                            local: "name"
+                        },
+                        value: name,
+                    }),
+                    Ok(SourceKeyLookup::Unique(_))
+                );
+                slot_uniqueness.insert((parent, name), unique);
+                unique
+            };
+            if !unique {
+                continue;
+            }
+            let scope = match &rule.scope {
+                ImportEquipmentScope::Shared => LoadoutScope::Shared,
+                ImportEquipmentScope::Selected { loadouts } => {
+                    b.charge(loadouts.len())?;
+                    let mut ids = Vec::with_capacity(loadouts.len());
+                    for key in loadouts {
+                        let id = if let Some(id) = loadout_ids.get(key) {
+                            *id
+                        } else {
+                            let id = b.id()?;
+                            loadout_ids.insert(key.clone(), id);
+                            draft.weapon_loadouts.members.push(id);
+                            id
+                        };
+                        b.link(
+                            occurrence.id(),
+                            OwnedOriginTarget::WeaponLoadout {
+                                key: key.clone(),
+                                id,
+                            },
+                        )?;
+                        ids.push(id);
+                    }
+                    ids.sort();
+                    LoadoutScope::Selected { loadouts: ids }
+                }
+            };
+            equipment_scopes.insert(occurrence.id(), scope);
+        }
+    }
     // Receiving occurrences stay distinct and follow their owning independent
     // preset. Composition selects the union; no stock/copy claim is made.
     for row in evidence.rows() {
@@ -864,7 +1064,10 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             id,
             item,
             destination,
-            scope: b.pending(s, "equipment-scope-not-converted")?,
+            scope: match equipment_scopes.remove(&s) {
+                Some(scope) => scope.into(),
+                None => b.pending(s, "equipment-scope-not-converted")?,
+            },
         });
         if let Some(parent) = b.ancestor(s, "ItemSet")?
             && let Some(index) = equipment_sets.get(&parent)
@@ -1143,7 +1346,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: 5,
+        schema_version: 6,
         source_sha256: identity.source_sha256.into(),
         source_bytes: identity.source_bytes,
         source_schema: identity.instance_import_schema,
@@ -1166,7 +1369,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        "owned-normalization-sidecar-v5",
+        "owned-normalization-sidecar-v6",
         &sidecar,
         limits.draft.input.max_wire_bytes,
     )?;

@@ -117,6 +117,31 @@ with their useful reference laws preserved and the replaced profile/request depe
 closure deleted. Complete metric coverage, all-five finalization and that paired numerical
 retirement remain open.
 
+## Explicit skill supply and equipment-scope checkpoint
+
+Use existing domain grant operations for physical Gem -> supplied Skill -> owned Actor
+relationships. Gem potential membership remains useful to the import/binding contract;
+activation and multiplicity come from exact declared slots and instantiated rule producers.
+The plan now accounts for such explicitly supplied gem skills, rejects multiple traversal
+paths to one skill slot, and gates routed values on the same required generated inputs as
+rule outputs. Root action selectors and authored support targets are not implicit child
+aliases. No new source interpreter or activation artifact is introduced.
+
+The importer now admits equipment scopes from injected exact source-slot mappings and
+allocates loadout members only from observed unambiguous slots. All five originals exercise
+this data seam. Complete original finalization, saved active-selection conversion and
+passive/skill scope semantics remain open. Keep global pending closure and source diagnostics;
+do not manufacture an otherwise empty complete build to run the numerical engine.
+
+The immediate next conversion work is explicit quality kinds/amounts, projected effective
+skill levels and real local weapon/actor inputs, followed by support application to exact
+supplied occurrences. Sniper's actor abilities must retain their own output/skill context;
+an unresolved source command reference must not produce an invented physical gem or skill.
+The numerical timing replacement also needs independent output availability: a finite
+capped rate can coexist with an unavailable nonfinite uncapped rate. Preserve the existing
+kernel/reference laws while replacing both calculation and realization-validation callers.
+The active Spark/Mace consumers remain scheduled for retirement with that replacement.
+
 ## Item/provider checkpoint and next integration gate
 
 The import seam now has injected item-line declarations, while rule operations v2 can

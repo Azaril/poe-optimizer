@@ -651,6 +651,7 @@ fn normalized_fixture(
         generated_support_prefixes: vec![],
         allocation_attribute: "nodes".into(),
         single_active_support_target: false,
+        equipment_loadouts: vec![],
     };
     let source = ImportedBuildInstance::from_decoded(
         decode_build(xml.as_bytes()).unwrap(),

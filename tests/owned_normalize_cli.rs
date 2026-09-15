@@ -95,6 +95,7 @@ fn policy() -> NormalizationPolicy {
         generated_support_prefixes: vec![],
         allocation_attribute: "nodes".into(),
         single_active_support_target: false,
+        equipment_loadouts: vec![],
     }
 }
 fn save(directory: &Path) {
@@ -375,7 +376,7 @@ fn explicit_artifacts_produce_a_checked_pending_draft_sidecar_and_summary() {
     assert_eq!(queries[1].id, QueryId::new("a-second").unwrap());
     let sidecar: Value =
         serde_json::from_slice(&fs::read(directory.join("sidecar.json")).unwrap()).unwrap();
-    assert_eq!(sidecar["schema_version"], 5);
+    assert_eq!(sidecar["schema_version"], 6);
     let definitions = decode_schema_package(
         &fs::read(temp.path().join("definitions.json")).unwrap(),
         OwnedSchemaLimits::default(),

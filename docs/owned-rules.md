@@ -21,6 +21,14 @@ and an [action-routing artifact](../crates/poe-optimizer-data/src/owned_routing.
 actual item/modifier/skill/provider occurrences, normalizes relative targets and prepares
 an effect dependency graph. `evaluate` uses only that immutable plan and worker-owned scratch.
 
+A gem's explicit skill-supply rules reuse `ActivateGrant` and
+`ProjectSkillParameter`; no separate activation interpreter is needed. The gem owns its
+physical level/quality. Its supplied skill owns projected computed inputs and an exact
+parent/slot identity. Distinct slots remain distinct even when their skill definition is
+equal. Required generated-skill inputs gate both rule effects and routed action values.
+Potential memberships alone cannot activate an action or redirect a saved root selector.
+The plan content digest now uses `owned-effect-plan-v2`; the rule operation set stays v3.
+
 These modules contain no source-language parser, Lua interpreter, PoB callback, UI object or
 named-build dispatch. Existing source readers and any optional Lua acquisition stay offline
 or in the reference adapter. Adding a game coefficient within these operations changes

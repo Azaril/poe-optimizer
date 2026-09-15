@@ -11,7 +11,66 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: native owned provider/effect plan (after `c14a8b0`).**
+**Current checkpoint: explicit skill supply and imported equipment scopes (after `0d05985`).**
+The owned effect plan now accounts for a gem's possible skill identities through explicit
+`Grant -> SkillGrant` links and instantiated activation producers. Physical gem level/quality
+and projected skill inputs remain separate. Different slots naming the same SkillDef retain
+different occurrences; two traversal paths into one parent/slot reject as ambiguous. Saved
+root selectors are not redirected and support application remains an explicit gap.
+
+Independent review found and fixed two readiness defects: generated action routes skipped
+required skill inputs, and Gem-owned root action effects acquired gates after instantiation.
+Both new regression tests fail with their respective old bug temporarily restored and pass
+with the fix. The ten new integration tests also execute reviewed Twister level19/20 and
+quality coefficients and a separate Sniper summoner/actor/two-output topology. These are
+isolated component recipes, not complete original evaluations or a shipped semantic catalog.
+The plan digest domain is `owned-effect-plan-v2`; rule operations remain v3.
+
+`NormalizationPolicy.equipment_loadouts` now injects exact source-slot/destination/scope
+relations. Unambiguous observed slots allocate fresh loadout members and known equipment
+scopes across independent item sets. Source active selection is not inferred. Policy identity
+uses v2; required wire fields reject stale policies; the correspondence sidecar is v6.
+Global membership, passive/skill scopes and all other unknown fields remain Pending.
+All-five validation checks both selectable loadouts and preserved pending finalization with
+all 110 queries. This closes the absent-loadout-record gate without claiming complete import.
+
+Only the unused `engine::mace::CLASS_INTERNAL_ID` constant was removed. The detailed timing
+audit confirms the remaining actor/timing helpers have active calculation and independent
+realization-validation consumers. Replace both sides with the same owned preparation contract
+before deleting them; do not validate an attached result against itself. The generic timing
+kernel and its useful source/numerical tests remain. Independent finite-output classification
+and rounding semantics are the next numerical design gate.
+
+**Validation:** all **311 selected test executions** pass: Engine69, Import158, and CLI42
+in each feature mode. Workspace/native-only strict Clippy, formatting, five-crate WASM
+compilation and native runtime dependency exclusion pass. This is an affected-scope suite,
+not a full workspace test run. Receipts are in `runs/owned-activation-01/validation-final/`;
+the initial test-fixture failures and both before-fix regression probes are retained.
+Independent skill-supply/loadout review and the protected-input/source-boundary audit pass.
+All five originals, schema40 data, fixed110 expectations and clean PoB pin are unchanged.
+Complete native originals remain **0/5**. Publication and hosted status are recorded
+separately in `runs/owned-activation-01/publication.json`; local validation is not CI success.
+
+**Resume point:**
+
+1. Convert physical-gem quality and the remaining selected input fields using injected
+   recipes. Preserve known zero versus absence. All 478 physical gems have explicit quality
+   amounts in the originals; source kind/default semantics still need reviewed data.
+2. Build reproducible offline semantic packages for real local weapons, effective skill inputs,
+   grants and actor actions, and map imported selections to their exact supplied occurrences.
+   Current Twister/Sniper activation recipes are test artifacts. Preserve unresolved source
+   relationships, including Sniper's missing command definition; do not synthesize IDs.
+3. Resolve support application/payload/usage/allocation relations with explicit target identity,
+   then add metric-definition mapping. Keep Twister and Sniper together and the other three
+   originals as model stress cases; complete required input and contribution closure first.
+4. Implement the shared native timing operation with independent output availability and
+   retained numerical/reference laws. Migrate calculation and realization validation together,
+   then delete the first active Spark/Mace dependency closure.
+5. Measure candidate preparation separately from execution before reusable candidate binding
+   and incremental invalidation. Continue all-five/held-out breadth gates before general joint
+   search or performance claims.
+
+**Previous checkpoint: native owned provider/effect plan (after `c14a8b0`).**
 `resolve-owned-effects --input REQUEST --schema SCHEMA --rules RULES --routing ROUTES`
 is implemented over the shared Engine plan. Its inputs are complete owned requests and
 injected artifacts; it has no source-document, PoB UI, Lua or caller-computed-fact path.
@@ -44,7 +103,7 @@ candidate requires preparation again. Reusable candidate slots/invalidation and 
 preparation/evaluation throughput remain open. No active Spark/Mace numerical consumer was
 removed in this checkpoint; its replacement must carry the same useful numerical laws.
 
-**Resume point:**
+**Previous resume point:**
 
 1. Close real provider/skill activation and support/payload/usage/granted-allocation relations
    through explicit owned data. Do not promote potential memberships or schema binding to

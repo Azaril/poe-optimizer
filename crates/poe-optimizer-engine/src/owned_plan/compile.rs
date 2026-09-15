@@ -36,6 +36,8 @@ struct Builder<'a, I> {
     actors: BTreeMap<OwnedActorKey, Vec<PlanValueKey>>,
     unsupported_roots: BTreeSet<ProviderRoot>,
     potential_skills: BTreeSet<(ProviderKey, SkillDefId)>,
+    skill_supplies: BTreeMap<GeneratedSkillKey, ProviderKey>,
+    supplied_skills: BTreeMap<(ProviderKey, SkillDefId), Vec<PlanValueKey>>,
     binding_edges: usize,
 }
 fn owner_subject(owner: &SlotOwnerDefId) -> SchemaSubject {
@@ -100,7 +102,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         rules: rules.identity(),
         routing: *routing.identity(),
     };
-    let identity = digest_owned("owned-effect-plan-v1", &bindings, limits.max_wire_bytes)?;
+    let identity = digest_owned("owned-effect-plan-v2", &bindings, limits.max_wire_bytes)?;
     let resolver = OwnedOccurrenceResolver::new(definitions.as_ref(), &request, limits.binding)?;
     let mut b = Builder {
         request: &request,
@@ -121,6 +123,8 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         actors: BTreeMap::new(),
         unsupported_roots: BTreeSet::new(),
         potential_skills: BTreeSet::new(),
+        skill_supplies: BTreeMap::new(),
+        supplied_skills: BTreeMap::new(),
         binding_edges: 0,
     };
     // Whole-request binding is independently bounded; reserve its entire allowance.
@@ -372,24 +376,22 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             }
             match provider.exposure() {
                 ProviderExposure::Root { owners, skills } => {
-                    for owner in owners {
-                        self.declarations(&key, owner.declarations(), &mut pending)?;
-                        self.owner(owner.subject(), &key, provider.actor(), None)?;
-                    }
+                    // Register potential addresses before instantiating Gem-owned action
+                    // programs, so their gates do not depend on owner visitation order.
                     if let Some(skills) = skills {
                         if !skills.is_complete() {
                             self.gap(Some(key.clone()), None, PlanGapReason::PartialDeclarations)?;
                         }
                         for skill in &skills.members {
                             charge(&mut self.work, 1)?;
-                            // A gem's potential skill membership is not activation authority.
+                            // Membership permits symbolic binding, but only an explicit
+                            // supplied occurrence and its activation producer account for it.
                             self.potential_skills.insert((key.clone(), skill.clone()));
-                            self.gap(
-                                Some(key.clone()),
-                                Some(SchemaSubject::Definition(skill.address())),
-                                PlanGapReason::UnresolvedActivation,
-                            )?;
                         }
+                    }
+                    for owner in owners {
+                        self.declarations(&key, owner.declarations(), &mut pending)?;
+                        self.owner(owner.subject(), &key, provider.actor(), None)?;
                     }
                 }
                 ProviderExposure::Skill {
@@ -398,6 +400,32 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     declarations,
                     ..
                 } => {
+                    // A grant path is a traversal address. Two paths entering the same
+                    // parent/skill slot identify one occurrence, not two copies. Alternative
+                    // grant combination needs explicit semantics; do not choose a path.
+                    charge(&mut self.work, key.grant_path.len() + 1)?;
+                    if let Some(previous) = self.skill_supplies.insert(skill.clone(), key.clone())
+                        && previous != key
+                    {
+                        return Err(PlanError::Invalid(format!(
+                            "ambiguous skill supply for {skill:?}: {previous:?} and {key:?}"
+                        )));
+                    }
+                    let SlotOwnerDefId::Skill(definition) = owner else {
+                        return Err(PlanError::Invalid(
+                            "skill occurrence has no skill owner".into(),
+                        ));
+                    };
+                    let grant = key.grant_path.last().ok_or_else(|| {
+                        PlanError::Invalid("supplied skill has no entering grant".into())
+                    })?;
+                    self.supplied_skills
+                        .entry((skill.provider.clone(), definition.clone()))
+                        .or_default()
+                        .push(PlanValueKey::Grant {
+                            provider: skill.provider.clone(),
+                            slot: grant.clone(),
+                        });
                     self.declarations(&key, declarations, &mut pending)?;
                     self.owner(owner_subject(owner), &key, provider.actor(), Some(skill))?;
                 }
@@ -431,9 +459,33 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 return Err(PlanError::Limit("providers"));
             }
         }
+        self.check_skill_supply_coverage()?;
         if !input.payload_links.is_empty() {
             self.gap(None, None, PlanGapReason::UnsupportedRelation)?;
         }
+        Ok(())
+    }
+    fn check_skill_supply_coverage(&mut self) -> Result<()> {
+        // Wait until every provider has instantiated its rules. Looking at source
+        // program declarations alone would accept an unavailable/wrong-context producer.
+        charge(&mut self.work, self.potential_skills.len())?;
+        let potentials = std::mem::take(&mut self.potential_skills);
+        for (provider, skill) in &potentials {
+            charge(&mut self.work, provider.grant_path.len() + 1)?;
+            let supplies = self.supplied_skills.get(&(provider.clone(), skill.clone()));
+            charge(&mut self.work, supplies.map_or(0, Vec::len) + 1)?;
+            let covered = supplies.is_some_and(|grants| {
+                !grants.is_empty() && grants.iter().all(|grant| self.values.contains_key(grant))
+            });
+            if !covered {
+                self.gap(
+                    Some(provider.clone()),
+                    Some(SchemaSubject::Definition(skill.address())),
+                    PlanGapReason::UnresolvedActivation,
+                )?;
+            }
+        }
+        self.potential_skills = potentials;
         Ok(())
     }
     fn declarations(
@@ -785,6 +837,13 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     .potential_skills
                     .contains(&(provider.clone(), skill.clone()))
             {
+                // A root selector remains a different address from an explicitly
+                // supplied child. Do not silently redirect saved queries or supports.
+                self.gap(
+                    Some(provider.clone()),
+                    Some(SchemaSubject::Definition(skill.address())),
+                    PlanGapReason::UnresolvedActivation,
+                )?;
                 gates.push(missing(PlanGapReason::UnresolvedActivation));
             }
             for (i, slot) in provider.grant_path.iter().enumerate() {
@@ -961,9 +1020,13 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         for action in self.actions.clone() {
             let resolution = self.resolver.action(&action)?;
             charge(&mut self.work, resolution.work_used())?;
-            if resolution.value().is_none() {
+            let Some(resolved) = resolution.into_value() else {
                 continue;
-            }
+            };
+            let skill = match resolved.provider().exposure() {
+                ProviderExposure::Skill { key, .. } => Some(key.clone()),
+                _ => None,
+            };
             let Some(routes) = routing.routes_for(&action.action.output) else {
                 self.gap(
                     Some(action.action.provider.clone()),
@@ -1028,7 +1091,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     },
                     provider: Some(action.action.provider.clone()),
                     actor: action.action.actor.clone(),
-                    skill: None,
+                    skill: skill.clone(),
                     entity: ConcreteEntity::Action(Box::new(action.clone())),
                 };
                 sources.push((self.effects.len(), source));

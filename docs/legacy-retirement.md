@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-09-15 for the source item attribution checkpoint. This is a living companion to
+Updated 2026-09-15 for the owned activation and loadout checkpoint. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -225,3 +225,23 @@ remain active and are retained. This deletes an unused facade, not the source in
 or a numerical profile. The source adapter now feeds the owned item converter without
 production Lua/UI execution; optional original-source tests own the reference bootstrap.
 The next numerical retirement still depends on general provider/action resolution.
+
+## Timing migration audit and unused constant removal
+
+The unused `engine::mace::CLASS_INTERNAL_ID` constant is removed. Repository-wide consumer
+search found no use. This cleanup removes no numerical behavior or tests.
+
+`import::actor_assembly::mace_action_timing` is still active through
+`ControlledBuildCatalog::validate_prepared_native_realization`; both Engine timing wrappers
+also serve full calculation. The replacement must migrate calculation and independent
+realization validation together. Reusing an attached result as its own reconstruction
+would discard the validation law. Keep the generic `timing::calculate` arithmetic and
+reference vectors while moving its inputs to explicit owned action/equipment/actor routes.
+Twister applies a skill attack-rate adjustment before reciprocal; a Sniper's innate rate
+belongs to its minion actor. Neither belongs in another named-build wrapper.
+
+A bounded native timing operation still needs a deliberate contract for independent finite
+outputs when an intermediate or another output is nonfinite, plus the existing rounding
+and signed-zero evidence. This is the next numerical design gate; the current owned
+activation checkpoint does not retire an active profile. The detailed audit and test
+inventory are in `runs/owned-activation-01/timing-migration.md`.

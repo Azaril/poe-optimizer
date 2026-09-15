@@ -1,6 +1,6 @@
 # Owned import and offline identity compilation
 
-Status: first conservative implementation, 2026-09-14. This is an import boundary,
+Status: conservative normalization with explicit equipment scopes, 2026-09-15. This is an import boundary,
 not a numerical evaluator or full D1 completion. The [domain architecture](domain-architecture.md)
 and [migration plan](architecture-migration.md) control the end state.
 
@@ -80,6 +80,26 @@ The caller supplies any ordered query list; no production 22-metric or named-bui
 embedded. Known player targets can be represented; action/owned-actor correspondence that
 has not been converted remains pending. All rows survive with their original query IDs.
 
+## Explicit equipment loadouts
+
+`NormalizationPolicy.equipment_loadouts` supplies exact source-slot relations. Each
+`EquipmentLoadoutRule` names a source slot, its mapped owned equipment-slot definition and
+`ImportEquipmentScope::Shared` or `Selected { loadouts }`. These loadout keys are import-local
+correspondence labels; they are never cast into Core IDs. The normalizer allocates fresh
+`WeaponLoadoutId` values only for keys exposed by observed, uniquely identified ordinary
+slots, including explicit empty slots. The same key is reused across independent item sets.
+
+A rule must agree with the exact equipment mapping and any known schema scope. An unknown,
+duplicate or undecodable slot does not acquire a fallback scope. The all-five path keeps
+unrecognized equipment/passive/skill scopes and global membership closure pending. Known
+loadout members can now be selected explicitly during finalization; this does not make a
+partially imported build finalizable. Saved active-weapon selection is still unconverted.
+
+The required field is part of policy digest domain `owned-normalization-policy-v2`. Earlier
+policy JSON without it rejects; an explicit empty rule list preserves unresolved scope.
+Sidecar version 6 records source-to-owned loadout origins and binds that policy. Loadout
+source strings, UI state and correspondence never enter the native evaluator.
+
 ## Injected item-line conversion
 
 `OwnedItemLinePolicy` is an import artifact bound to an exact owned schema. Its bounded
@@ -108,7 +128,7 @@ An immutable attribution plan retains original/semantic text, source spans, layo
 flat range-write records and the winning write. Inline fractions precede later XML writes;
 repeated valid XML IDs apply in source order. The existing injected converter still owns
 interpolation quantum, rounding and owned slot destinations. The normalizer preserves raw
-line outcomes and fresh modifier IDs, with a version-5 attribution sidecar. Item parameter
+line outcomes and fresh modifier IDs, with a version-6 attribution sidecar. Item parameter
 and modifier collections retain pending closure; attribution is not whole-item evaluation.
 The integrated evidence for this phase is recorded separately in the implementation log.
 
@@ -138,7 +158,7 @@ a partial policy can miss a real header. A later source-format-scoped proof or e
 owned authoring must establish unspecified. Never substitute zero, equipment requirement
 or granted skill level. Native rules leave a demanded missing fact unresolved while unused
 facts do not block component effects. Provider binding and complete selected-request
-finalization still need their own evidence. The provenance sidecar uses version 5 for the
+finalization still need their own evidence. The provenance sidecar uses version 6 for the
 source-layout identity/attribution; owned input and draft protocols remain version 3.
 
 ## Identity, bounds and publication
@@ -152,7 +172,7 @@ The host publishes draft, sidecar and new watermark together under its owner or 
 Repeating a fresh import is not restore, changed-source migration or concurrent allocation
 authority. Those operations need separate revisioned contracts.
 
-The version-5 sidecar records source hash/schema/revision, before/after watermarks, policy plus query
+The version-6 sidecar records source hash/schema/revision, before/after watermarks, policy plus query
 identity, exact artifact identities (including reward, item-line and item-source policies), draft digest and one origin entry per source element.
 Its targets are a closed enum of current owned occurrences/issues. Many source rows may
 refer to one real pending collection issue; candidates never allocate hypothetical uses.

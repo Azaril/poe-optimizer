@@ -243,6 +243,20 @@ payloads remain explicit typed references and may cross declarations; their cont
 compatibility belongs to binding. A registered slot omitted from its known, complete owner's
 list rejects; a partial or unmapped owner leaves that relationship unresolved.
 
+`GemSchema.skills` is a set of possible definition identities, not a list of active
+occurrences. A physical gem may explicitly supply skills through its declared
+`Grant -> SkillGrant` links. Concrete multiplicity belongs to the skill slots: two distinct
+slots naming the same SkillDef remain two occurrences. Two grant paths into the same
+parent/skill slot are ambiguous until a combination rule is defined; the effect planner
+rejects that case instead of evaluating twice or choosing one path.
+
+Complete grant/skill-slot declarations and an instantiated activation producer at the exact
+parent account for a possible gem skill. False activation accounts for the relationship
+while deactivating the child. Missing producers, uncovered members and partial declarations
+remain unresolved. A root-level action selector is not an alias for its supplied child;
+import tooling must construct the explicit path. Support and payload targets likewise are
+not silently forwarded. Actor skill membership still needs its own explicit supply semantics.
+
 Request binding must check that the selected part/mode/stat-set and choice belong to the
 selected output. Narrower applicability needs an explicit rule constraint. Required choices
 apply only to the concrete authored/bound context, not every potential output in the package.

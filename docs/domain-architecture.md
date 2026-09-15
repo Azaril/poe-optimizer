@@ -54,6 +54,13 @@ to that skill and provider occurrence, not to a fabricated authored gem or a UI 
 Intrinsic facts absent from an imported item must remain unspecified rather than receiving
 sample-build defaults. Domain resolution determines which facts each requested result needs.
 
+Physical records and their supplied capabilities are distinct. For example, a gem use
+can supply a skill through a declared slot; that skill can supply a summoned actor with
+its own action outputs. Each transition has an explicit activation rule and retains its
+provider identity. Neither a possible-definition list nor a UI's current selection creates
+an occurrence. Import adapters translate source selections to these addresses once; the
+native evaluator and future UI consume the same owned graph.
+
 ## Components and dependency direction
 
 ```mermaid

@@ -7,10 +7,13 @@ use empty_owned_items::{empty_item_source, empty_items};
 
 use poe_optimizer_core::{
     build_identity::BuildLineage,
-    owned_build::{ParameterValue, QueryId},
-    owned_definitions::{GameVersionNamespace, OwnedDefinitionKey},
+    owned_build::{LoadoutScope, ParameterValue, QueryId},
+    owned_definitions::{EquipmentSlotDefinition, GameVersionNamespace, OwnedDefinitionKey},
     owned_draft::*,
-    owned_schema::{DefinitionDescriptor, SchemaState},
+    owned_schema::{
+        DefinitionAddress, DefinitionDescriptor, DefinitionEntry, EquipmentSlotSchema, SchemaState,
+        SchemaSubject, ScopePolicy,
+    },
 };
 use poe_optimizer_data::{
     owned_schema::*,
@@ -107,6 +110,7 @@ struct Artifacts {
     mappings: OwnedMappingIndex,
     roles: OwnedSkillRoleIndex,
     rewards: OwnedRewardPolicy,
+    equipment_loadouts: Vec<EquipmentLoadoutRule>,
 }
 fn artifacts(root: &Path) -> Artifacts {
     let bytes = read_bounded(
@@ -178,11 +182,90 @@ fn artifacts(root: &Path) -> Artifacts {
     }
     let rewards_staged = reward_fixture::stage_rewards(&compiled.registry);
     assert_eq!(rewards_staged.source.revision, source.revision);
-    let registry = rewards_staged.registry.clone();
+    let mut registry = rewards_staged.registry.clone();
     let mut owned_definitions = compiled.definitions;
     owned_definitions.extend(rewards_staged.definitions.clone());
     let mut owned_mappings = compiled.mappings;
     owned_mappings.extend(rewards_staged.mappings.clone());
+    // Reviewed source slot vocabulary is injected test data. Swap aliases bind
+    // the same owned receiving slot while their loadout occurrence differs.
+    let mut equipment_loadouts = vec![];
+    for names in [
+        vec!["Weapon 1", "Weapon 1 Swap"],
+        vec!["Weapon 2", "Weapon 2 Swap"],
+        vec!["Helmet"],
+        vec!["Body Armour"],
+        vec!["Gloves"],
+        vec!["Boots"],
+        vec!["Amulet"],
+        vec!["Ring 1"],
+        vec!["Ring 2"],
+        vec!["Ring 3"],
+        vec!["Belt"],
+        vec!["Flask 1"],
+        vec!["Flask 2"],
+        vec!["Charm 1"],
+        vec!["Charm 2"],
+        vec!["Charm 3"],
+        vec!["Arm 1"],
+        vec!["Arm 2"],
+        vec!["Leg 1"],
+        vec!["Leg 2"],
+    ] {
+        let weapon = names.len() == 2;
+        let destination = registry
+            .allocate_definition::<EquipmentSlotDefinition>()
+            .unwrap();
+        owned_definitions.push(DefinitionDescriptor::EquipmentSlot(DefinitionEntry {
+            id: destination.clone(),
+            schema: SchemaState::Known(EquipmentSlotSchema {
+                scope: if weapon {
+                    ScopePolicy::Selected
+                } else {
+                    ScopePolicy::Shared
+                },
+            }),
+        }));
+        for (index, name) in names.into_iter().enumerate() {
+            owned_mappings.push(MappingEntry {
+                source: ExternalSelector::Catalog {
+                    kind: ExternalCatalogKind::EquipmentSlot,
+                    key: SourceComponent::Text(name.into()),
+                    version: SourceComponent::Missing,
+                    variant: SourceComponent::Missing,
+                },
+                outcome: MappingOutcome::Mapped {
+                    target: SchemaSubject::Definition(DefinitionAddress::EquipmentSlot(
+                        destination.clone(),
+                    )),
+                    // The paired Swap source slot is the same owned receiving
+                    // destination in a distinct loadout, not a second exact identity.
+                    basis: if index == 0 {
+                        MappingBasis::Exact
+                    } else {
+                        MappingBasis::ReviewedAlias {
+                            reason: key("weapon-swap-same-receiving-slot"),
+                        }
+                    },
+                },
+            });
+            equipment_loadouts.push(EquipmentLoadoutRule {
+                source_slot: SourceComponent::Text(name.into()),
+                destination: destination.clone(),
+                scope: if weapon {
+                    ImportEquipmentScope::Selected {
+                        loadouts: vec![key(if index == 0 {
+                            "weapon-set-one"
+                        } else {
+                            "weapon-set-two"
+                        })],
+                    }
+                } else {
+                    ImportEquipmentScope::Shared
+                },
+            });
+        }
+    }
     let definitions = OwnedDefinitionSchemaPackage::new(
         SchemaPackageInput {
             schema_version: OWNED_SCHEMA_PACKAGE_VERSION,
@@ -238,6 +321,7 @@ fn artifacts(root: &Path) -> Artifacts {
         mappings,
         roles,
         rewards,
+        equipment_loadouts,
     }
 }
 
@@ -305,6 +389,7 @@ fn policy() -> NormalizationPolicy {
         generated_support_prefixes: vec![],
         allocation_attribute: "nodes".into(),
         single_active_support_target: true,
+        equipment_loadouts: vec![],
     }
 }
 fn queries(case: &ReferenceCase) -> Vec<ImportQueryTemplate> {
@@ -512,6 +597,123 @@ fn assert_spec_socket_membership(
     }
 }
 
+fn assert_observed_loadouts(
+    evidence: &SourceProjectEvidence<'_>,
+    normalized: &NormalizedImport,
+    expected: [usize; 3],
+) {
+    use std::collections::BTreeMap;
+    let draft = normalized.draft().input();
+    let loadouts: BTreeMap<_, _> = normalized
+        .sidecar()
+        .origins
+        .iter()
+        .flat_map(|o| &o.links)
+        .filter_map(|link| match link {
+            OwnedOriginTarget::WeaponLoadout { key, id } => Some((key.as_str(), *id)),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(loadouts.len(), 2);
+    assert_eq!(draft.weapon_loadouts.members.len(), 2);
+    assert!(matches!(
+        draft.weapon_loadouts.completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    let receiving: BTreeMap<_, _> = draft
+        .equipment
+        .members
+        .iter()
+        .map(|row| (row.id, row))
+        .collect();
+    let mut counts = [0usize; 3];
+    for row in evidence.rows() {
+        let Some(parent) = row.occurrence().parent() else {
+            continue;
+        };
+        if row.occurrence().name() != "Slot"
+            || evidence.row(parent).unwrap().occurrence().name() != "ItemSet"
+        {
+            continue;
+        }
+        let origin = &normalized.sidecar().origins[row.occurrence().id().ordinal() as usize];
+        let source_name = attribute(row, "name").unwrap();
+        let index = match source_name {
+            "Weapon 1" | "Weapon 2" => 0,
+            "Weapon 1 Swap" | "Weapon 2 Swap" => 1,
+            _ => 2,
+        };
+        if index < 2 {
+            assert!(
+                origin
+                    .links
+                    .iter()
+                    .any(|link| matches!(link, OwnedOriginTarget::WeaponLoadout { .. })),
+                "empty slots still prove observed loadouts"
+            );
+        }
+        if attribute(row, "itemId") == Some("0") {
+            continue;
+        }
+        let id = origin
+            .links
+            .iter()
+            .find_map(|link| match link {
+                OwnedOriginTarget::Equipment(id) => Some(id),
+                _ => None,
+            })
+            .unwrap();
+        let scope = receiving[id].scope.to_resolved().unwrap();
+        let expected_scope = if index == 2 {
+            LoadoutScope::Shared
+        } else {
+            LoadoutScope::Selected {
+                loadouts: vec![
+                    loadouts[if index == 0 {
+                        "weapon-set-one"
+                    } else {
+                        "weapon-set-two"
+                    }],
+                ],
+            }
+        };
+        assert_eq!(scope, expected_scope);
+        counts[index] += 1;
+    }
+    assert_eq!(counts, expected);
+    // Explicit caller selections exercise the formerly missing loadout lookup.
+    // These are not inferred source active selections or complete build claims.
+    for loadout in loadouts.values() {
+        let selection = EvaluationSelection {
+            build: poe_optimizer_core::owned_project::VariantSelection {
+                character: draft.character_presets.members[0].id,
+                equipment: draft.equipment_presets.members[0].id,
+                allocations: draft.allocation_presets.members[0].id,
+                skills: draft.skill_presets.members[0].id,
+                choices: draft.choice_presets.members[0].id,
+                active_weapon_loadout: *loadout,
+            },
+            scenario: draft.scenario_presets.members[0].id,
+            queries: draft.query_presets.members[0].id,
+        };
+        let finalization = normalized
+            .draft()
+            .finalize_selection(selection, DraftLimits::default())
+            .unwrap();
+        let DraftFinalization::Pending {
+            issues, queries, ..
+        } = finalization
+        else {
+            panic!("source scope admission cannot complete missing semantic coverage");
+        };
+        assert!(!issues.is_empty());
+        assert_eq!(queries.requests.members.len(), 22);
+    }
+    println!(
+        "observed owned loadouts=2; mapped receiving scopes first/second/shared={counts:?}; active selection not inferred; membership pending"
+    );
+}
+
 #[test]
 fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semantics() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
@@ -524,7 +726,8 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
     assert_eq!(manifest.schema_version, 1);
     assert_eq!(manifest.cases.len(), 5);
     let artifacts = artifacts(&root);
-    let policy = policy();
+    let mut policy = policy();
+    policy.equipment_loadouts = artifacts.equipment_loadouts.clone();
     let limits = NormalizationLimits::default();
     // Independently reviewed source census, not results computed by this adapter.
     let expected = [
@@ -578,7 +781,12 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         );
         let issue_ids: BTreeSet<_> = validation.issues.iter().map(|issue| issue.id).collect();
         assert_eq!(sidecar.origins.len(), evidence.rows().len());
-        assert_eq!(sidecar.schema_version, 5);
+        assert_eq!(sidecar.schema_version, 6);
+        assert_observed_loadouts(
+            &evidence,
+            &normalized,
+            [[2, 0, 11], [6, 9, 43], [1, 0, 13], [1, 1, 13], [11, 0, 58]][index],
+        );
         let socket_counts: &[usize] = match index {
             0 => &[3],
             1 => &[0, 0, 0, 0, 0, 3],

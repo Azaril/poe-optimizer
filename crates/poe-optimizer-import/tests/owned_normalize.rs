@@ -314,6 +314,7 @@ fn policy() -> NormalizationPolicy {
         generated_support_prefixes: vec!["Tree:".into(), "Item:".into()],
         allocation_attribute: "nodes".into(),
         single_active_support_target: true,
+        equipment_loadouts: vec![],
     }
 }
 fn source(xml: &str, seed: u8) -> ImportedBuildInstance {
@@ -371,6 +372,7 @@ fn group(gems: &str) -> String {
 }
 fn ids(target: &OwnedOriginTarget) -> InstanceId {
     match target {
+        OwnedOriginTarget::WeaponLoadout { id, .. } => id.instance_id(),
         OwnedOriginTarget::Item(v) | OwnedOriginTarget::ItemReference(v) => v.instance_id(),
         OwnedOriginTarget::Reward(v) => v.instance_id(),
         OwnedOriginTarget::Modifier(v) => v.instance_id(),
@@ -1620,4 +1622,282 @@ fn reward_recipes_can_select_same_name_across_admitted_typed_lanes() {
             "{body}"
         );
     }
+}
+
+fn loadout_artifacts() -> (Artifacts, NormalizationPolicy) {
+    let mut a = artifacts(false);
+    let mut definitions = a.schema.input().clone();
+    let mut mapping = a.mapping.input().clone();
+    let mut policy = policy();
+    for (source, selected) in [
+        ("blade", Some("first")),
+        ("blade-alt", Some("second")),
+        ("coat", None),
+    ] {
+        let destination = a
+            .registry
+            .allocate_definition::<EquipmentSlotDefinition>()
+            .unwrap();
+        definitions
+            .definitions
+            .push(DefinitionDescriptor::EquipmentSlot(DefinitionEntry {
+                id: destination.clone(),
+                schema: SchemaState::Known(EquipmentSlotSchema {
+                    scope: if selected.is_some() {
+                        ScopePolicy::Selected
+                    } else {
+                        ScopePolicy::Shared
+                    },
+                }),
+            }));
+        mapping.entries.push(MappingEntry {
+            source: ExternalSelector::Catalog {
+                kind: ExternalCatalogKind::EquipmentSlot,
+                key: SourceComponent::Text(source.into()),
+                version: SourceComponent::Missing,
+                variant: SourceComponent::Missing,
+            },
+            outcome: MappingOutcome::Mapped {
+                target: subject(&destination),
+                basis: MappingBasis::Exact,
+            },
+        });
+        policy.equipment_loadouts.push(EquipmentLoadoutRule {
+            source_slot: SourceComponent::Text(source.into()),
+            destination,
+            scope: match selected {
+                Some(name) => ImportEquipmentScope::Selected {
+                    loadouts: vec![key(name)],
+                },
+                None => ImportEquipmentScope::Shared,
+            },
+        });
+    }
+    a.schema =
+        OwnedDefinitionSchemaPackage::new(definitions, OwnedSchemaLimits::default()).unwrap();
+    mapping.registry = a.registry.identity().unwrap();
+    mapping.definitions = a.schema.identity().clone();
+    a.mapping = OwnedMappingIndex::new(
+        mapping,
+        &a.registry,
+        &a.schema,
+        OwnedMappingLimits::default(),
+    )
+    .unwrap();
+    let mut roles = a.roles.input().clone();
+    roles.mapping = *a.mapping.identity();
+    roles.definitions = a.schema.identity().clone();
+    a.roles = OwnedSkillRoleIndex::new(roles, &a.mapping, &a.schema, SkillCatalogLimits::default())
+        .unwrap();
+    a.rewards = empty_rewards(&a.mapping, &a.schema);
+    (a, policy)
+}
+fn normalize_with_loadouts(
+    xml: &str,
+    a: &Artifacts,
+    policy: &NormalizationPolicy,
+) -> Result<NormalizedImport, NormalizationError> {
+    let source = source(xml, 93);
+    let evidence =
+        SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
+    normalize_fresh(
+        &evidence,
+        *source.allocator_state(),
+        NormalizationArtifacts {
+            items: &empty_items(&a.schema),
+            item_source: &empty_item_source(&a.schema),
+            mappings: &a.mapping,
+            registry: &a.registry,
+            definitions: &a.schema,
+            roles: &a.roles,
+            rewards: &a.rewards,
+        },
+        policy,
+        &[],
+        NormalizationLimits::default(),
+    )
+}
+fn proven_loadouts(
+    result: &NormalizedImport,
+) -> std::collections::BTreeMap<OwnedDefinitionKey, WeaponLoadoutId> {
+    result
+        .sidecar()
+        .origins
+        .iter()
+        .flat_map(|row| &row.links)
+        .filter_map(|link| match link {
+            OwnedOriginTarget::WeaponLoadout { key, id } => Some((key.clone(), *id)),
+            _ => None,
+        })
+        .collect()
+}
+#[test]
+fn observed_exact_slots_share_loadout_identity_across_independent_item_sets() {
+    let (a, policy) = loadout_artifacts();
+    let xml = r#"<PathOfBuilding2><Items useSecondWeaponSet="nil"><Item id="1">Unconverted</Item><ItemSet id="left" useSecondWeaponSet="false"><Slot name="blade" itemId="1"/><Slot name="blade-alt" itemId="0"/><Slot name="coat" itemId="1"/></ItemSet><ItemSet id="right" useSecondWeaponSet="true"><Slot name="blade" itemId="0"/><Slot name="blade-alt" itemId="1"/><Slot name="coat" itemId="1"/></ItemSet></Items></PathOfBuilding2>"#;
+    let result = normalize_with_loadouts(xml, &a, &policy).unwrap();
+    let known = proven_loadouts(&result);
+    assert_eq!(known.len(), 2);
+    assert_ne!(known[&key("first")], known[&key("second")]);
+    let draft = result.draft().input();
+    assert_eq!(draft.weapon_loadouts.members.len(), 2);
+    assert!(matches!(
+        draft.weapon_loadouts.completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    assert_eq!(draft.equipment_presets.members.len(), 2);
+    assert_eq!(draft.equipment.members.len(), 4);
+    let scopes: Vec<_> = draft
+        .equipment
+        .members
+        .iter()
+        .map(|r| r.scope.to_resolved().unwrap())
+        .collect();
+    assert_eq!(
+        scopes,
+        vec![
+            LoadoutScope::Selected {
+                loadouts: vec![known[&key("first")]]
+            },
+            LoadoutScope::Shared,
+            LoadoutScope::Selected {
+                loadouts: vec![known[&key("second")]]
+            },
+            LoadoutScope::Shared,
+        ]
+    );
+    assert!(
+        draft
+            .equipment_presets
+            .members
+            .iter()
+            .all(|p| p.equipment.members.len() == 2)
+    );
+    assert!(
+        draft.saved_variants.members.is_empty(),
+        "nil/boolean source choices do not silently select a preset"
+    );
+    assert_eq!(result.sidecar().schema_version, 6);
+    let mut no_rules = policy.clone();
+    no_rules.equipment_loadouts.clear();
+    let empty = normalize_with_loadouts(xml, &a, &no_rules).unwrap();
+    assert!(empty.draft().input().weapon_loadouts.members.is_empty());
+    assert_ne!(result.sidecar().policy, empty.sidecar().policy);
+}
+#[test]
+fn duplicate_unknown_and_lexically_unavailable_slot_names_do_not_prove_scopes() {
+    let (a, policy) = loadout_artifacts();
+    for slots in [
+        r#"<Slot name="blade" itemId="1"/><Slot name="blade" itemId="1"/>"#,
+        r#"<Slot name="blade" itemId="1"/><Slot name="bl&#97;de" itemId="1"/>"#,
+        r#"<Slot name="unreviewed" itemId="1"/><Slot itemId="1"/>"#,
+        r#"<Slot xmlns="urn:other" name="blade" itemId="1"/>"#,
+    ] {
+        let xml = format!(
+            "<PathOfBuilding2><Items><Item id=\"1\">Unconverted</Item><ItemSet id=\"1\">{slots}</ItemSet></Items></PathOfBuilding2>"
+        );
+        let result = normalize_with_loadouts(&xml, &a, &policy).unwrap();
+        assert!(
+            result.draft().input().weapon_loadouts.members.is_empty(),
+            "{slots}"
+        );
+        assert!(
+            result
+                .draft()
+                .input()
+                .equipment
+                .members
+                .iter()
+                .all(|row| matches!(row.scope, DraftField::Pending(_))),
+            "{slots}"
+        );
+    }
+    // An unattached Slot cannot establish an ItemSet-owned receiving scope.
+    let result = normalize_with_loadouts(r#"<PathOfBuilding2><Items><Item id="1">Unconverted</Item><Slot name="blade" itemId="1"/></Items></PathOfBuilding2>"#, &a, &policy).unwrap();
+    assert!(result.draft().input().weapon_loadouts.members.is_empty());
+}
+#[test]
+fn loadout_policy_rejects_known_mapping_and_scope_contradictions_and_stale_wire() {
+    let (a, baseline) = loadout_artifacts();
+    let xml = r#"<PathOfBuilding2><Items><ItemSet id="1"><Slot name="blade" itemId="0"/></ItemSet></Items></PathOfBuilding2>"#;
+    let mut changed = baseline.clone();
+    changed.equipment_loadouts[0].destination = baseline.equipment_loadouts[1].destination.clone();
+    assert!(matches!(
+        normalize_with_loadouts(xml, &a, &changed),
+        Err(NormalizationError::Policy(
+            "equipment loadout mapping contradiction"
+        ))
+    ));
+    let mut changed = baseline.clone();
+    changed.equipment_loadouts[0].scope = ImportEquipmentScope::Shared;
+    assert!(matches!(
+        normalize_with_loadouts(xml, &a, &changed),
+        Err(NormalizationError::Policy(
+            "equipment loadout schema contradiction"
+        ))
+    ));
+    let mut changed = baseline.clone();
+    changed
+        .equipment_loadouts
+        .push(changed.equipment_loadouts[0].clone());
+    assert!(normalize_with_loadouts(xml, &a, &changed).is_err());
+    let mut changed = baseline.clone();
+    changed.equipment_loadouts[0].scope = ImportEquipmentScope::Selected { loadouts: vec![] };
+    assert!(normalize_with_loadouts(xml, &a, &changed).is_err());
+    changed.equipment_loadouts[0].scope = ImportEquipmentScope::Selected {
+        loadouts: vec![key("same"), key("same")],
+    };
+    assert!(normalize_with_loadouts(xml, &a, &changed).is_err());
+    let mut stale = serde_json::to_value(&baseline).unwrap();
+    stale.as_object_mut().unwrap().remove("equipment_loadouts");
+    assert!(serde_json::from_value::<NormalizationPolicy>(stale).is_err());
+    let mut unknown = serde_json::to_value(&baseline).unwrap();
+    unknown["equipment_loadouts"][0]["extra"] = serde_json::json!(true);
+    assert!(serde_json::from_value::<NormalizationPolicy>(unknown).is_err());
+    // A rule absent from the mapping cannot allocate even an observed key.
+    let mut changed = baseline.clone();
+    changed.equipment_loadouts[0].source_slot = SourceComponent::Text("unmapped".into());
+    let result = normalize_with_loadouts(&xml.replace("blade", "unmapped"), &a, &changed).unwrap();
+    assert!(result.draft().input().weapon_loadouts.members.is_empty());
+}
+
+#[test]
+fn equipment_loadout_policy_limits_and_namespace_are_checked_without_source_fallback() {
+    let (a, baseline) = loadout_artifacts();
+    let xml = "<PathOfBuilding2><Items><ItemSet id=\"1\"/></Items></PathOfBuilding2>";
+    let mut changed = baseline.clone();
+    changed.equipment_loadouts = (0..129)
+        .map(|i| {
+            let mut rule = baseline.equipment_loadouts[0].clone();
+            rule.source_slot = SourceComponent::Text(format!("slot-{i}"));
+            rule
+        })
+        .collect();
+    assert!(matches!(
+        normalize_with_loadouts(xml, &a, &changed),
+        Err(NormalizationError::Policy("equipment loadout rules"))
+    ));
+    let mut changed = baseline.clone();
+    changed.equipment_loadouts[0].scope = ImportEquipmentScope::Selected {
+        loadouts: (0..65).map(|i| key(&format!("loadout-{i}"))).collect(),
+    };
+    assert!(matches!(
+        normalize_with_loadouts(xml, &a, &changed),
+        Err(NormalizationError::Policy("equipment loadout keys"))
+    ));
+    let mut changed = baseline.clone();
+    changed.equipment_loadouts[0].source_slot = SourceComponent::Missing;
+    assert!(normalize_with_loadouts(xml, &a, &changed).is_err());
+    let mut changed = baseline.clone();
+    changed.equipment_loadouts[0].source_slot =
+        SourceComponent::Text("x".repeat(OwnedMappingLimits::default().max_string_bytes + 1));
+    assert!(normalize_with_loadouts(xml, &a, &changed).is_err());
+    let mut changed = baseline;
+    changed.equipment_loadouts[0].destination =
+        EquipmentSlotDefId::parse(GameVersionNamespace::new("other", "v1").unwrap(), "slot")
+            .unwrap();
+    assert!(matches!(
+        normalize_with_loadouts(xml, &a, &changed),
+        Err(NormalizationError::Binding)
+    ));
 }

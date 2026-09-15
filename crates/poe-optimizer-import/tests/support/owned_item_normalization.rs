@@ -575,6 +575,7 @@ pub fn normalize(source: &ImportedBuildInstance, artifacts: &Artifacts) -> Norma
             generated_support_prefixes: vec![],
             allocation_attribute: "nodes".into(),
             single_active_support_target: false,
+            equipment_loadouts: vec![],
         },
         &[],
         NormalizationLimits::default(),
