@@ -1,0 +1,4343 @@
+{
+  "schema_version": 1,
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "registry": "56c3fd31093dd7fe5465943d9ee0204519e1f3f62fcf832a0bd70a7a81d9181a",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-components",
+    "schema_version": 1,
+    "content_sha256": "d61c98e791687ccd879ab763bf91b1ec4264a6be747b8c25f54f4f77c07d5667",
+    "semantics_version": "owned-mechanics-components-v1"
+  },
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/ConfigTab.lua",
+        "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+      },
+      {
+        "path": "src/Classes/Item.lua",
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      {
+        "path": "src/Classes/ItemsTab.lua",
+        "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+      },
+      {
+        "path": "src/Classes/PassiveSpec.lua",
+        "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+      },
+      {
+        "path": "src/Classes/SkillsTab.lua",
+        "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+      },
+      {
+        "path": "src/Data/Assets.lua",
+        "sha256": "d57230441d6205f001466a1c3a0d4458ddda0a1ccf9f685345f0f0fa2d5154ba"
+      },
+      {
+        "path": "src/Data/BossSkills.lua",
+        "sha256": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d"
+      },
+      {
+        "path": "src/Data/Bosses.lua",
+        "sha256": "831a328c0c554687b5f3c40e1ff8a4ee905457f8b940baab236fab9281415ed3"
+      },
+      {
+        "path": "src/Data/Gems.lua",
+        "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+      },
+      {
+        "path": "src/Data/Global.lua",
+        "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+      },
+      {
+        "path": "src/Data/Minions.lua",
+        "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+      },
+      {
+        "path": "src/Data/Misc.lua",
+        "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+      },
+      {
+        "path": "src/Data/QuestRewards.lua",
+        "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af"
+      },
+      {
+        "path": "src/Data/SkillStatMap.lua",
+        "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+      },
+      {
+        "path": "src/Data/Skills/SkillAssets.lua",
+        "sha256": "6fab71e4a5f07e04bd363472374fe059f8ae1cdd77c126357f3adceff8f145ed"
+      },
+      {
+        "path": "src/Data/Skills/act_dex.lua",
+        "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+      },
+      {
+        "path": "src/Data/Skills/act_int.lua",
+        "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+      },
+      {
+        "path": "src/Data/Skills/act_str.lua",
+        "sha256": "7da86ad169055e234fcfdd82ded89c2b4cf883ed3d1b217ef25533ad64ebeeed"
+      },
+      {
+        "path": "src/Data/Skills/minion.lua",
+        "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+      },
+      {
+        "path": "src/Data/Skills/other.lua",
+        "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+      },
+      {
+        "path": "src/Data/Skills/spectre.lua",
+        "sha256": "3bc57d7abee172364977c174884cdf3d2d94980c70e3b12b7ae65c62bd726603"
+      },
+      {
+        "path": "src/Data/Skills/sup_dex.lua",
+        "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac"
+      },
+      {
+        "path": "src/Data/Skills/sup_int.lua",
+        "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+      },
+      {
+        "path": "src/Data/Skills/sup_str.lua",
+        "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+      },
+      {
+        "path": "src/Modules/CalcActiveSkill.lua",
+        "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+      },
+      {
+        "path": "src/Modules/CalcTools.lua",
+        "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+      },
+      {
+        "path": "src/Modules/Common.lua",
+        "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+      },
+      {
+        "path": "src/Modules/ConfigOptions.lua",
+        "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+      },
+      {
+        "path": "src/Modules/Data.lua",
+        "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+      }
+    ]
+  },
+  "policy_version": "reviewed-pob2-identity-role-v1",
+  "entries": [
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "gem",
+          "value": {
+            "game_id": {
+              "kind": "text",
+              "value": "Metadata/Items/Gem/SkillGemTwister"
+            },
+            "variant_id": {
+              "kind": "text",
+              "value": "Twister"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "gem",
+              "value": {
+                "kind": "gem",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000000a"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "gem",
+          "value": {
+            "game_id": {
+              "kind": "text",
+              "value": "Metadata/Items/Gems/SkillGemSkeletalSniper"
+            },
+            "variant_id": {
+              "kind": "text",
+              "value": "SkeletalSniper"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "gem",
+              "value": {
+                "kind": "gem",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000011"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "GasShotSkeletonSniperMinion"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "skill",
+              "value": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000024"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "MinionMeleeBow"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "skill",
+              "value": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000021"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "SummonSkeletalSnipersPlayer"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "skill",
+              "value": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000012"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "TwisterPlayer"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "skill",
+              "value": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000000b"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Amulet"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006a"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Arm 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000074"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Arm 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000075"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Belt"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006e"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Body Armour"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000067"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Boots"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000069"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Charm 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000071"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Charm 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000072"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Charm 3"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000073"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Flask 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006f"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Flask 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000070"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Gloves"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000068"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Helmet"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000066"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Leg 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000076"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Leg 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000077"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Ring 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006b"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Ring 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006c"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Ring 3"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006d"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Weapon 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000064"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Weapon 1 Swap"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000064"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "weapon-swap-same-receiving-slot"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Weapon 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000065"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Weapon 2 Swap"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000065"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "weapon-swap-same-receiving-slot"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 1ClearfellBeira"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000027"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 1ClearfellBeira"
+          },
+          "source": "default",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000027"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 1FreythornKing In The Mists"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000028"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 1FreythornKing In The Mists"
+          },
+          "source": "default",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000028"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 1Ogham ManorCandlemass"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000029"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 1Ogham ManorCandlemass"
+          },
+          "source": "default",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000029"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 2Spires of DesharSisters of Garukhan Shrine"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002a"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 2Spires of DesharSisters of Garukhan Shrine"
+          },
+          "source": "default",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002a"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 2Valley of the TitansMedallion"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Charm Charges Gained\n\t+1 Charm Slot"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002d"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 2Valley of the TitansMedallion"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Charm Effect Duration\n\t+1 Charm Slot"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002f"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 2Valley of the TitansMedallion"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Charm Charges Gained\n\t+1 Charm Slot"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002c"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 2Valley of the TitansMedallion"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Charm Effect Duration\n\t+1 Charm Slot"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002e"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 2Valley of the TitansMedallion"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002b"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 2Valley of the TitansMedallion"
+          },
+          "source": "default",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002b"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Azak BogIgnagduk"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000030"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Azak BogIgnagduk"
+          },
+          "source": "default",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000030"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Jiquani's MachinariumBlackjaw"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000031"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Jiquani's MachinariumBlackjaw"
+          },
+          "source": "default",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000031"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Venom CryptsVenom Draught"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "25% increased Mana Regeneration Rate"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000038"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Venom CryptsVenom Draught"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "25% increased Stun Threshold"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000034"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Venom CryptsVenom Draught"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Elemental Ailment Threshold"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000036"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Venom CryptsVenom Draught"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "25% increased Mana Regeneration Rate"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000037"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Venom CryptsVenom Draught"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "25% increased Stun Threshold"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000033"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Venom CryptsVenom Draught"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Elemental Ailment Threshold"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000035"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Venom CryptsVenom Draught"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000032"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 3Venom CryptsVenom Draught"
+          },
+          "source": "default",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000032"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Life Recovery from Flasks"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000003b"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Mana Recovery from Flasks"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000003d"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Life Recovery from Flasks"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000003a"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Mana Recovery from Flasks"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000003c"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000039"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          "source": "default",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000039"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Eye of HinekoraSilent Hall"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000003e"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Eye of HinekoraSilent Hall"
+          },
+          "source": "default",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000003e"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+15% of Armour also applies to Elemental Damage\n\tGain Deflection Rating equal to 12% of Evasion Rating\n\t12% faster start of Energy Shield Recharge"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000043"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Global Armour, Evasion and Energy Shield"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000041"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "+15% of Armour also applies to Elemental Damage\n\tGain Deflection Rating equal to 12% of Evasion Rating\n\t12% faster start of Energy Shield Recharge"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000042"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "30% increased Global Armour, Evasion and Energy Shield"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000040"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000003f"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          "source": "default",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000003f"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5 to Strength"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000046"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5% to Fire Resistance"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000048"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "+5 to Strength"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000045"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "+5% to Fire Resistance"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000047"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000044"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          "source": "default",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000044"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5 to Intelligence"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000004b"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5% to Cold Resistance"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000004d"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "+5 to Intelligence"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000004a"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "+5% to Cold Resistance"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000004c"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000049"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          "source": "default",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000049"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5 to Dexterity"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000050"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5% to Lightning Resistance"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000052"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "+5 to Dexterity"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000004f"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "+5% to Lightning Resistance"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000051"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000004e"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          "source": "default",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000004e"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2Khari CrossingMolten Shrine"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000053"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2Khari CrossingMolten Shrine"
+          },
+          "source": "default",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000053"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5 to all Attributes"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000060"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5% to all Elemental Resistances"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000056"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "12% increased Cooldown Recovery Rate"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000005e"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "15% increased Global Armour, Evasion and Energy Shield"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000005a"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "20% increased Presence Area Of Effect"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000005c"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "3% increased Movement Speed"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000058"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "5% increased Experience Gain\n\t-5% to all Elemental Resistances\n\t3% reduced Movement Speed\n\t15% reduced Global Armour, Evasion and Energy Shield\n\t20% reduced Presence Area Of Effect\n\t12% reduced Cooldown Recovery Rate\n\t5% reduced Attributes"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000062"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "+5 to all Attributes"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000005f"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "+5% to all Elemental Resistances"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000055"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "12% increased Cooldown Recovery Rate"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000005d"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "15% increased Global Armour, Evasion and Energy Shield"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000059"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "20% increased Presence Area Of Effect"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000005b"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "3% increased Movement Speed"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000057"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "5% increased Experience Gain\n\t-5% to all Elemental Resistances\n\t3% reduced Movement Speed\n\t15% reduced Global Armour, Evasion and Energy Shield\n\t20% reduced Presence Area Of Effect\n\t12% reduced Cooldown Recovery Rate\n\t5% reduced Attributes"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000061"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000054"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "default",
+          "role": "option",
+          "value": {
+            "kind": "text",
+            "value": "None"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000054"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 3Kriar VillageLythara"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000063"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 3Kriar VillageLythara"
+          },
+          "source": "default",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "reward",
+              "value": {
+                "kind": "reward",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000063"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "declared-default-equals-fixed-input-outcome"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

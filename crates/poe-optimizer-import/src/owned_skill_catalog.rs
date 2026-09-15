@@ -1,8 +1,8 @@
-//! Offline conversion of injected skill identity facts into fresh owned IDs.
+//! Offline conversion of injected skill identity facts into owned IDs.
 //!
-//! This compiler appends fresh allocations to a staged clone. It is not an update
-//! or identity-reuse operation. The resulting schemas remain explicitly unmapped;
-//! import role evidence establishes neither activation nor numerical coverage.
+//! Fresh compilation and exact same-pin extension share catalog interpretation.
+//! New schemas remain Unmapped; extension preserves existing schemas unchanged.
+//! Import role evidence establishes neither activation nor numerical coverage.
 use crate::owned_mapping::*;
 use poe_optimizer_core::{
     data::DataIdentity,
@@ -10,7 +10,12 @@ use poe_optimizer_core::{
     owned_definitions::*,
     owned_schema::*,
 };
-use poe_optimizer_data::skill_identities::SkillIdentityCatalog;
+use poe_optimizer_data::{
+    owned_schema::{
+        OwnedDefinitionSchemaPackage, OwnedSchemaLimits, SchemaPackageError, encode_schema_package,
+    },
+    skill_identities::SkillIdentityCatalog,
+};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -58,6 +63,12 @@ pub enum SkillCatalogError {
     UnknownTarget,
     #[error("owned skill role contradicts known schema metadata")]
     SchemaConflict,
+    #[error("existing selector has no unambiguous reusable identity: {0:?}")]
+    ReuseUnresolved(Box<ExternalSelector>),
+    #[error("catalog selector does not uniquely identify a reusable source row: {0:?}")]
+    DuplicateSourceSelector(Box<ExternalSelector>),
+    #[error(transparent)]
+    Schema(#[from] SchemaPackageError),
     #[error("unsupported owned skill role version {0}")]
     UnsupportedVersion(u32),
     #[error(transparent)]
@@ -136,6 +147,35 @@ pub struct FreshOwnedSkillCatalog {
     pub mappings: Vec<MappingEntry>,
     pub roles: Vec<OwnedGemRoleRow>,
     pub receipt: SkillCatalogReceipt,
+}
+
+/// Full staged same-pin extension; existing declarations and unrelated mappings
+/// are preserved. No successful identity mapping establishes input/rule coverage.
+#[derive(Clone, Debug)]
+pub struct OwnedSkillCatalogExtension {
+    pub registry: OwnedIdRegistry,
+    pub definitions: Vec<DefinitionDescriptor>,
+    pub slots: Vec<SlotDescriptor>,
+    pub mappings: Vec<MappingEntry>,
+    pub roles: Vec<OwnedGemRoleRow>,
+    pub receipt: SkillCatalogReceipt,
+    pub counts: SkillCatalogExtensionCounts,
+}
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SkillCatalogExtensionCounts {
+    pub reused_gems: usize,
+    pub reused_skills: usize,
+    pub allocated_gems: usize,
+    pub allocated_skills: usize,
+}
+struct ExtensionBase<'a> {
+    definitions: &'a OwnedDefinitionSchemaPackage,
+    mappings: &'a OwnedMappingIndex,
+}
+struct CatalogCompilation {
+    output: FreshOwnedSkillCatalog,
+    counts: SkillCatalogExtensionCounts,
 }
 
 fn key(value: &str) -> OwnedDefinitionKey {
@@ -235,6 +275,121 @@ pub fn compile_fresh_owned_skill_catalog(
     policy: &SkillCatalogPolicy,
     limits: SkillCatalogLimits,
 ) -> Result<FreshOwnedSkillCatalog> {
+    Ok(compile_catalog(catalog, base, source, policy, limits, None)?.output)
+}
+
+/// Extend an exact prior registry/schema/mapping under the same source pin and
+/// policy version. Positive mappings reuse active owned IDs; only absent unique
+/// selectors allocate. Ambiguous/unmapped reuse needs an explicit later migration.
+///
+/// The prior mapping authenticates a policy version, not historical policy
+/// settings. This operation records the complete current injected policy in its
+/// receipt and checks it against known schema metadata. It makes no stronger
+/// unchanged-settings claim. Hosts publish by compare-and-swap on prior identity.
+pub fn compile_owned_skill_catalog_extension(
+    catalog: &SkillIdentityCatalog,
+    base: &OwnedIdRegistry,
+    definitions: &OwnedDefinitionSchemaPackage,
+    mappings: &OwnedMappingIndex,
+    source: &SourcePin,
+    policy: &SkillCatalogPolicy,
+    limits: SkillCatalogLimits,
+) -> Result<OwnedSkillCatalogExtension> {
+    base.validate_limits(limits.mapping)?;
+    mappings.verify_bindings(base, definitions, source, &policy.version, limits.mapping)?;
+    // Bound the whole existing seed before cloning indexes, descriptors or slots.
+    digest_owned(
+        "owned-skill-extension-base-v1",
+        &(base.input(), definitions.input(), mappings.input()),
+        limits.mapping.max_wire_bytes,
+    )?;
+    let schema_limits = OwnedSchemaLimits {
+        max_entries: limits.mapping.max_entries,
+        max_collection_entries: limits.mapping.max_collection_entries,
+        max_wire_bytes: limits.mapping.max_wire_bytes,
+    };
+    // The immutable schema can have been built under looser caller limits.
+    encode_schema_package(definitions, schema_limits)?;
+    for descriptor in &definitions.input().definitions {
+        base.require_active(&SchemaSubject::Definition(descriptor.address()))?;
+    }
+    for descriptor in &definitions.input().slots {
+        base.require_active(&SchemaSubject::Slot(descriptor.address()))?;
+    }
+    let CatalogCompilation { mut output, counts } = compile_catalog(
+        catalog,
+        base,
+        source,
+        policy,
+        limits,
+        Some(ExtensionBase {
+            definitions,
+            mappings,
+        }),
+    )?;
+    base.validate_successor(&output.registry)?;
+    // Return the same canonical descriptor order used by the assembled schema,
+    // so a no-allocation second pass also preserves staged descriptor ordering.
+    output
+        .definitions
+        .sort_by_cached_key(DefinitionDescriptor::address);
+    let mut schema_input = definitions.input().clone();
+    schema_input.definitions = output.definitions.clone();
+    let schema = OwnedDefinitionSchemaPackage::new(schema_input, schema_limits)?;
+    let mut mapping_input = mappings.input().clone();
+    mapping_input.registry = output.registry.identity()?;
+    mapping_input.definitions = schema.identity().clone();
+    mapping_input.entries = output.mappings.clone();
+    let final_mappings =
+        OwnedMappingIndex::new(mapping_input, &output.registry, &schema, limits.mapping)?;
+    // Reuse the established role/schema consistency check, including provider-only,
+    // known primary membership, role contradictions and duplicate owned Gem roles.
+    OwnedSkillRoleIndex::new(
+        OwnedSkillRolePackageInput {
+            schema_version: OWNED_SKILL_ROLE_VERSION,
+            namespace: schema.input().namespace.clone(),
+            definitions: schema.identity().clone(),
+            mapping: *final_mappings.identity(),
+            compilation: output.receipt.clone(),
+            roles: output.roles.clone(),
+        },
+        &final_mappings,
+        &schema,
+        limits,
+    )?;
+    let slots = definitions.input().slots.clone();
+    digest_owned(
+        "owned-skill-extension-output-v1",
+        &(
+            output.registry.input(),
+            &output.definitions,
+            &slots,
+            &output.mappings,
+            &output.roles,
+            &output.receipt,
+            counts,
+        ),
+        limits.mapping.max_wire_bytes,
+    )?;
+    Ok(OwnedSkillCatalogExtension {
+        registry: output.registry,
+        definitions: output.definitions,
+        slots,
+        mappings: output.mappings,
+        roles: output.roles,
+        receipt: output.receipt,
+        counts,
+    })
+}
+
+fn compile_catalog(
+    catalog: &SkillIdentityCatalog,
+    base: &OwnedIdRegistry,
+    source: &SourcePin,
+    policy: &SkillCatalogPolicy,
+    limits: SkillCatalogLimits,
+    extension: Option<ExtensionBase<'_>>,
+) -> Result<CatalogCompilation> {
     let mut budget = Budget::new(limits)?;
     base.validate_limits(limits.mapping)?;
     budget.pin(source)?;
@@ -306,21 +461,56 @@ pub fn compile_fresh_owned_skill_catalog(
             .ok_or(SkillCatalogError::LimitExceeded("owned definitions"))?,
     )?;
     budget.collection("owned role rows", data.gems.len())?;
+    let mut counts = SkillCatalogExtensionCounts::default();
+    if let Some(previous) = &extension {
+        budget.collection("preserved registry entries", base.input().entries.len())?;
+        budget.collection(
+            "preserved schema definitions",
+            previous.definitions.input().definitions.len(),
+        )?;
+        budget.collection(
+            "preserved schema slots",
+            previous.definitions.input().slots.len(),
+        )?;
+        budget.collection(
+            "preserved mapping rows",
+            previous.mappings.input().entries.len(),
+        )?;
+    }
     let mut registry = base.clone();
-    let mut definitions = Vec::new();
-    let mut mappings = Vec::new();
+    let mut definitions = extension
+        .as_ref()
+        .map_or_else(Vec::new, |v| v.definitions.input().definitions.clone());
+    let mut mappings = extension
+        .as_ref()
+        .map_or_else(Vec::new, |v| v.mappings.input().entries.clone());
     let mut skills = BTreeMap::new();
     let mut source_skills: Vec<_> = data.skills.iter().collect();
     source_skills.sort_by(|a, b| a.id.cmp(&b.id));
     for skill in source_skills {
-        let id = registry.allocate_definition::<SkillDefinition>()?;
-        definitions.push(DefinitionDescriptor::Skill(unknown(id.clone())));
-        mappings.push(exact(
-            ExternalSelector::Definition(ExternalOwnerSelector::Skill {
-                effect_id: SourceComponent::Text(skill.id.clone()),
-            }),
-            subject(&id),
-        ));
+        let source = ExternalSelector::Definition(ExternalOwnerSelector::Skill {
+            effect_id: SourceComponent::Text(skill.id.clone()),
+        });
+        let previous = extension.as_ref().and_then(|e| e.mappings.lookup(&source));
+        let id = match previous {
+            Some(MappingOutcome::Mapped {
+                target: SchemaSubject::Definition(DefinitionAddress::Skill(id)),
+                ..
+            }) => {
+                registry.require_active(&subject(id))?;
+                counts.reused_skills += 1;
+                id.clone()
+            }
+            Some(MappingOutcome::Mapped { .. }) => return Err(SkillCatalogError::UnknownTarget),
+            Some(_) => return Err(SkillCatalogError::ReuseUnresolved(Box::new(source))),
+            None => {
+                let id = registry.allocate_definition::<SkillDefinition>()?;
+                counts.allocated_skills += 1;
+                definitions.push(DefinitionDescriptor::Skill(unknown(id.clone())));
+                mappings.push(exact(source, subject(&id)));
+                id
+            }
+        };
         skills.insert(skill.id.as_str(), (id, skill.support, skill.from_tree));
     }
     let mut source_gems: Vec<_> = data.gems.iter().collect();
@@ -328,15 +518,33 @@ pub fn compile_fresh_owned_skill_catalog(
     let mut gem_selectors: BTreeMap<ExternalSelector, Vec<SchemaSubject>> = BTreeMap::new();
     let mut roles = Vec::new();
     for gem in source_gems {
-        let id = registry.allocate_definition::<GemDefinition>()?;
-        definitions.push(DefinitionDescriptor::Gem(unknown(id.clone())));
-        gem_selectors
-            .entry(ExternalSelector::Definition(ExternalOwnerSelector::Gem {
-                game_id: SourceComponent::Text(gem.game_id.clone()),
-                variant_id: SourceComponent::Text(gem.variant_id.clone()),
-            }))
-            .or_default()
-            .push(subject(&id));
+        let source = ExternalSelector::Definition(ExternalOwnerSelector::Gem {
+            game_id: SourceComponent::Text(gem.game_id.clone()),
+            variant_id: SourceComponent::Text(gem.variant_id.clone()),
+        });
+        if extension.is_some() && gem_selectors.contains_key(&source) {
+            return Err(SkillCatalogError::DuplicateSourceSelector(Box::new(source)));
+        }
+        let previous = extension.as_ref().and_then(|e| e.mappings.lookup(&source));
+        let id = match previous {
+            Some(MappingOutcome::Mapped {
+                target: SchemaSubject::Definition(DefinitionAddress::Gem(id)),
+                ..
+            }) => {
+                registry.require_active(&subject(id))?;
+                counts.reused_gems += 1;
+                id.clone()
+            }
+            Some(MappingOutcome::Mapped { .. }) => return Err(SkillCatalogError::UnknownTarget),
+            Some(_) => return Err(SkillCatalogError::ReuseUnresolved(Box::new(source))),
+            None => {
+                let id = registry.allocate_definition::<GemDefinition>()?;
+                counts.allocated_gems += 1;
+                definitions.push(DefinitionDescriptor::Gem(unknown(id.clone())));
+                id
+            }
+        };
+        gem_selectors.entry(source).or_default().push(subject(&id));
         let (primary, role, materialization) = match skills.get(gem.primary_effect_id.as_str()) {
             Some((primary, support, from_tree)) => {
                 let role = match (support, policy.absent_support) {
@@ -390,6 +598,12 @@ pub fn compile_fresh_owned_skill_catalog(
             .ok_or(SkillCatalogError::LimitExceeded("mapping rows"))?,
     )?;
     for (source, mut targets) in gem_selectors {
+        if extension
+            .as_ref()
+            .is_some_and(|e| e.mappings.lookup(&source).is_some())
+        {
+            continue; // Preserve the exact prior mapping and its reviewed alias basis.
+        }
         let outcome = if targets.len() == 1 {
             MappingOutcome::Mapped {
                 target: targets.remove(0),
@@ -428,12 +642,15 @@ pub fn compile_fresh_owned_skill_catalog(
         &(&definitions, &mappings, &roles, &receipt),
         limits.mapping.max_wire_bytes,
     )?;
-    Ok(FreshOwnedSkillCatalog {
-        registry,
-        definitions,
-        mappings,
-        roles,
-        receipt,
+    Ok(CatalogCompilation {
+        output: FreshOwnedSkillCatalog {
+            registry,
+            definitions,
+            mappings,
+            roles,
+            receipt,
+        },
+        counts,
     })
 }
 

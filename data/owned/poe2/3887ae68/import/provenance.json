@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "scope": "owned-import-input-seed",
+  "base_recipe_sha256": "e99f510d0c9d7a6624174695e5540b146366e2a487b5beec937682b3fc266690",
+  "catalog_snapshot_lf_sha256": "a90217d9bab6c0469917a2ba75ed9517205d2ac2b3d59f8d68580604f26df07f",
+  "mechanics_manifest_sha256": "996e1a96abc3de69bea13e927dd4c5a8d0e8a91eb2022d9a9261b3e23ee11a42",
+  "reward_facts_sha256": "3afadc1baa928c91368b711cde665a3dc6737c68cb15f51be1f7e86ed86e66fe",
+  "query_manifest_lf_sha256": "f0c10e148523d1d1f9969a844b266e07ca1c1bdbe7d3814aba73b55181840a25",
+  "authoring_sha256": "c56114c6728698917aabc22d77cd4c2f4b37a1ee9a77bc622f9e3bbfcd8babe9",
+  "seed_schema": {
+    "game": "poe2",
+    "release": "pob-3887ae68-components",
+    "schema_version": 1,
+    "content_sha256": "d61c98e791687ccd879ab763bf91b1ec4264a6be747b8c25f54f4f77c07d5667",
+    "semantics_version": "owned-mechanics-components-v1"
+  },
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/ConfigTab.lua",
+        "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+      },
+      {
+        "path": "src/Classes/Item.lua",
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      {
+        "path": "src/Classes/ItemsTab.lua",
+        "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+      },
+      {
+        "path": "src/Classes/PassiveSpec.lua",
+        "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+      },
+      {
+        "path": "src/Classes/SkillsTab.lua",
+        "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+      },
+      {
+        "path": "src/Data/Assets.lua",
+        "sha256": "d57230441d6205f001466a1c3a0d4458ddda0a1ccf9f685345f0f0fa2d5154ba"
+      },
+      {
+        "path": "src/Data/BossSkills.lua",
+        "sha256": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d"
+      },
+      {
+        "path": "src/Data/Bosses.lua",
+        "sha256": "831a328c0c554687b5f3c40e1ff8a4ee905457f8b940baab236fab9281415ed3"
+      },
+      {
+        "path": "src/Data/Gems.lua",
+        "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+      },
+      {
+        "path": "src/Data/Global.lua",
+        "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+      },
+      {
+        "path": "src/Data/Minions.lua",
+        "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+      },
+      {
+        "path": "src/Data/Misc.lua",
+        "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+      },
+      {
+        "path": "src/Data/QuestRewards.lua",
+        "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af"
+      },
+      {
+        "path": "src/Data/SkillStatMap.lua",
+        "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+      },
+      {
+        "path": "src/Data/Skills/SkillAssets.lua",
+        "sha256": "6fab71e4a5f07e04bd363472374fe059f8ae1cdd77c126357f3adceff8f145ed"
+      },
+      {
+        "path": "src/Data/Skills/act_dex.lua",
+        "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+      },
+      {
+        "path": "src/Data/Skills/act_int.lua",
+        "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+      },
+      {
+        "path": "src/Data/Skills/act_str.lua",
+        "sha256": "7da86ad169055e234fcfdd82ded89c2b4cf883ed3d1b217ef25533ad64ebeeed"
+      },
+      {
+        "path": "src/Data/Skills/minion.lua",
+        "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+      },
+      {
+        "path": "src/Data/Skills/other.lua",
+        "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+      },
+      {
+        "path": "src/Data/Skills/spectre.lua",
+        "sha256": "3bc57d7abee172364977c174884cdf3d2d94980c70e3b12b7ae65c62bd726603"
+      },
+      {
+        "path": "src/Data/Skills/sup_dex.lua",
+        "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac"
+      },
+      {
+        "path": "src/Data/Skills/sup_int.lua",
+        "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+      },
+      {
+        "path": "src/Data/Skills/sup_str.lua",
+        "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+      },
+      {
+        "path": "src/Modules/CalcActiveSkill.lua",
+        "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+      },
+      {
+        "path": "src/Modules/CalcTools.lua",
+        "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+      },
+      {
+        "path": "src/Modules/Common.lua",
+        "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+      },
+      {
+        "path": "src/Modules/ConfigOptions.lua",
+        "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+      },
+      {
+        "path": "src/Modules/Data.lua",
+        "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+      }
+    ]
+  },
+  "counts": {
+    "base_allocations": 38,
+    "new_allocations": 81,
+    "seed_watermark": 119,
+    "gems": 966,
+    "skills": 1436,
+    "reward_rules": 17,
+    "equipment_relations": 22
+  },
+  "queries": [
+    {
+      "file": "queries/original-01.json",
+      "source_line": 1,
+      "input": {
+        "xml_path": "../builds/breadth-20260908/build-01.xml",
+        "xml_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+      },
+      "rows": 22,
+      "numerical_results_used": false
+    },
+    {
+      "file": "queries/original-02.json",
+      "source_line": 2,
+      "input": {
+        "xml_path": "../builds/breadth-20260908/build-02.xml",
+        "xml_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+      },
+      "rows": 22,
+      "numerical_results_used": false
+    },
+    {
+      "file": "queries/original-03.json",
+      "source_line": 3,
+      "input": {
+        "xml_path": "../builds/breadth-20260908/build-03.xml",
+        "xml_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+      },
+      "rows": 22,
+      "numerical_results_used": false
+    },
+    {
+      "file": "queries/original-04.json",
+      "source_line": 4,
+      "input": {
+        "xml_path": "../builds/breadth-20260908/build-04.xml",
+        "xml_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+      },
+      "rows": 22,
+      "numerical_results_used": false
+    },
+    {
+      "file": "queries/original-05.json",
+      "source_line": 5,
+      "input": {
+        "xml_path": "../builds/breadth-20260908/build-05.xml",
+        "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "rows": 22,
+      "numerical_results_used": false
+    }
+  ],
+  "source_execution": false,
+  "numeric_coverage": false,
+  "artifacts": [
+    {
+      "path": "allocations.json",
+      "bytes": 23528,
+      "sha256": "a748d3023240168ea11a4e21fca0f9e7cd5bed14125ff255b0e122756dcc60a8"
+    },
+    {
+      "path": "item-policy-seed.json",
+      "bytes": 453,
+      "sha256": "b1bca116d15ffa25f4faaf4cb5a42fbc2cec9f05c1c4c983d28a35fa8dda81ff"
+    },
+    {
+      "path": "item-source-policy-seed.json",
+      "bytes": 4707,
+      "sha256": "dd896d61b4b69a7ff890134889cea2c9e8f64b3ce3d9a0aa4734b388e57cab89"
+    },
+    {
+      "path": "mapping-seed.json",
+      "bytes": 104754,
+      "sha256": "dc0c14c563c071612860a70f08c12f079d5afcf09b60ae62af467f02570b7d28"
+    },
+    {
+      "path": "normalization-policy-seed.json",
+      "bytes": 13068,
+      "sha256": "7307b3b3c0e50084445f32dcb846ec4f9ffb26315d2ea81774ba19865018e773"
+    },
+    {
+      "path": "queries/original-01.json",
+      "bytes": 8688,
+      "sha256": "3955ec26b84897a7268a87c68dea738f8166e20c03a62c72114a828e389661b8"
+    },
+    {
+      "path": "queries/original-02.json",
+      "bytes": 8688,
+      "sha256": "3955ec26b84897a7268a87c68dea738f8166e20c03a62c72114a828e389661b8"
+    },
+    {
+      "path": "queries/original-03.json",
+      "bytes": 8688,
+      "sha256": "3955ec26b84897a7268a87c68dea738f8166e20c03a62c72114a828e389661b8"
+    },
+    {
+      "path": "queries/original-04.json",
+      "bytes": 8688,
+      "sha256": "3955ec26b84897a7268a87c68dea738f8166e20c03a62c72114a828e389661b8"
+    },
+    {
+      "path": "queries/original-05.json",
+      "bytes": 8688,
+      "sha256": "3955ec26b84897a7268a87c68dea738f8166e20c03a62c72114a828e389661b8"
+    },
+    {
+      "path": "recipe-seed.json",
+      "bytes": 342761,
+      "sha256": "a6fe8cce6ffbadd67804992a36ddc63d8a43bd27b824d1bf4f13349675ab4338"
+    },
+    {
+      "path": "reward-policy-seed.json",
+      "bytes": 61843,
+      "sha256": "564e7c319fa91b1a181351b866d322d66bba8105a255b9ee877e008572b515b3"
+    },
+    {
+      "path": "reward-source-facts.json",
+      "bytes": 26768,
+      "sha256": "3afadc1baa928c91368b711cde665a3dc6737c68cb15f51be1f7e86ed86e66fe"
+    },
+    {
+      "path": "skill-catalog-policy.json",
+      "bytes": 119,
+      "sha256": "24da50a2def13eb4eb29e8097f758804a34a82fd14d0595463833a4419b1d288"
+    },
+    {
+      "path": "skill-identities.json",
+      "bytes": 2247063,
+      "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e"
+    },
+    {
+      "path": "source-pin.json",
+      "bytes": 4120,
+      "sha256": "150e8aef37a5395f42a8f8526d7afb08e87f50e466f767d02dadbfb6c5fa519b"
+    }
+  ]
+}

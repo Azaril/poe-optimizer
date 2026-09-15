@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "scope": "reviewed-owned-import-seed",
+  "catalog_policy": {
+    "version": "reviewed-pob2-identity-role-v1",
+    "absent_support": "non_support",
+    "absent_from_tree": "physical"
+  },
+  "seed_bindings": [
+    {
+      "owned_label": "twister-gem",
+      "catalog_key": "Metadata/Items/Gems/SkillGemTwister",
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "gem",
+          "value": {
+            "game_id": {
+              "kind": "text",
+              "value": "Metadata/Items/Gem/SkillGemTwister"
+            },
+            "variant_id": {
+              "kind": "text",
+              "value": "Twister"
+            }
+          }
+        }
+      }
+    },
+    {
+      "owned_label": "sniper-gem",
+      "catalog_key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "gem",
+          "value": {
+            "game_id": {
+              "kind": "text",
+              "value": "Metadata/Items/Gems/SkillGemSkeletalSniper"
+            },
+            "variant_id": {
+              "kind": "text",
+              "value": "SkeletalSniper"
+            }
+          }
+        }
+      }
+    },
+    {
+      "owned_label": "twister-skill",
+      "catalog_key": "TwisterPlayer",
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "TwisterPlayer"
+            }
+          }
+        }
+      }
+    },
+    {
+      "owned_label": "sniper-skill",
+      "catalog_key": "SummonSkeletalSnipersPlayer",
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "SummonSkeletalSnipersPlayer"
+            }
+          }
+        }
+      }
+    },
+    {
+      "owned_label": "sniper-basic-attack-skill",
+      "catalog_key": "MinionMeleeBow",
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "MinionMeleeBow"
+            }
+          }
+        }
+      }
+    },
+    {
+      "owned_label": "sniper-gas-arrow-skill",
+      "catalog_key": "GasShotSkeletonSniperMinion",
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "effect_id": {
+              "kind": "text",
+              "value": "GasShotSkeletonSniperMinion"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "equipment_slots": [
+    {
+      "label": "equipment-slot-01",
+      "source_slots": [
+        "Weapon 1",
+        "Weapon 1 Swap"
+      ],
+      "scope": "selected",
+      "loadouts": [
+        "weapon-set-one",
+        "weapon-set-two"
+      ]
+    },
+    {
+      "label": "equipment-slot-02",
+      "source_slots": [
+        "Weapon 2",
+        "Weapon 2 Swap"
+      ],
+      "scope": "selected",
+      "loadouts": [
+        "weapon-set-one",
+        "weapon-set-two"
+      ]
+    },
+    {
+      "label": "equipment-slot-03",
+      "source_slots": [
+        "Helmet"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-04",
+      "source_slots": [
+        "Body Armour"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-05",
+      "source_slots": [
+        "Gloves"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-06",
+      "source_slots": [
+        "Boots"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-07",
+      "source_slots": [
+        "Amulet"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-08",
+      "source_slots": [
+        "Ring 1"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-09",
+      "source_slots": [
+        "Ring 2"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-10",
+      "source_slots": [
+        "Ring 3"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-11",
+      "source_slots": [
+        "Belt"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-12",
+      "source_slots": [
+        "Flask 1"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-13",
+      "source_slots": [
+        "Flask 2"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-14",
+      "source_slots": [
+        "Charm 1"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-15",
+      "source_slots": [
+        "Charm 2"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-16",
+      "source_slots": [
+        "Charm 3"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-17",
+      "source_slots": [
+        "Arm 1"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-18",
+      "source_slots": [
+        "Arm 2"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-19",
+      "source_slots": [
+        "Leg 1"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    },
+    {
+      "label": "equipment-slot-20",
+      "source_slots": [
+        "Leg 2"
+      ],
+      "scope": "shared",
+      "loadouts": []
+    }
+  ],
+  "quality_label": "standard-quality",
+  "quality_unit_label": "percentage-points",
+  "normalization_version": "reviewed-pob2-production-import-v1",
+  "reward_version": "reviewed-quest-input-metadata-v1",
+  "item_version": "explicit-unconverted-item-lines-v1",
+  "item_source_version": "explicit-unconverted-item-layout-v1",
+  "extra_source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    }
+  ]
+}

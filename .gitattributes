@@ -27,3 +27,6 @@ Cargo.lock text eol=lf
 
 # Preserve owned production recipe and acquisition receipt byte hashes.
 /data/owned/poe2/3887ae68/*.json -text
+
+# Persisted import bundles use exact canonical content and receipt hashes.
+/data/owned/poe2/3887ae68/import/**/*.json -text

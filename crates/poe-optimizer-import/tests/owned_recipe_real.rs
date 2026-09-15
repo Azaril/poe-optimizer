@@ -856,3 +856,110 @@ fn fractional_quality_is_preserved_through_supply_and_truncated_only_at_stat_emi
         }
     }
 }
+
+#[test]
+fn expanded_production_catalog_preserves_component_values_and_occurrence_gaps() {
+    let before = Real::load();
+    let mut after = Real::load();
+    let limits = OwnedRecipeLimits::default();
+    let expanded = decode_owned_recipe(&data("import/compiled/recipe.json"), limits).unwrap();
+    after.input = serde_json::from_slice(&data("import/compiled/recipe.json")).unwrap();
+    after.schema = Arc::new(expanded.schema().clone());
+    after.rules = Arc::new(
+        CompiledRulePackage::compile(
+            expanded.rules().input(),
+            after.schema.as_ref(),
+            limits.compile,
+        )
+        .unwrap(),
+    );
+    after.routing = Arc::new(expanded.routing().clone());
+    assert_ne!(before.schema.identity(), after.schema.identity());
+    let mut old_scratch = before.rules.new_scratch();
+    let mut new_scratch = after.rules.new_scratch();
+    // Include both finite-domain boundaries and fractional quality, then compare
+    // actual component results. Prior tests independently establish source laws.
+    for level in 1..=40 {
+        for quality in [0.0, 0.9, 20.5] {
+            for (owner, program) in [
+                ("twister-skill", "intrinsic-action-coefficients"),
+                ("sniper-skill", "ordinary-population-inputs"),
+            ] {
+                let facts = before.facts(level, quality, 100);
+                let old = before.evaluate(&before.owner(owner), program, &facts, &mut old_scratch);
+                let new = after.evaluate(&after.owner(owner), program, &facts, &mut new_scratch);
+                assert_eq!(old.effects, new.effects);
+                assert_eq!(old.owner_programs_closure, new.owner_programs_closure);
+            }
+            let facts = [fact("level", integer(level))];
+            let old = before.evaluate(
+                &before.owner("sniper-skill"),
+                "intrinsic-reservation-coefficients",
+                &facts,
+                &mut old_scratch,
+            );
+            let new = after.evaluate(
+                &after.owner("sniper-skill"),
+                "intrinsic-reservation-coefficients",
+                &facts,
+                &mut new_scratch,
+            );
+            assert_eq!(old.effects, new.effects);
+        }
+    }
+    // Outside the reviewed authored range the fact validator may reject before
+    // lookup. Preserve that rejection as well as any admitted unsupported result.
+    for level in [0, 41] {
+        let facts = before.facts(level, 20.5, 100);
+        let old = before
+            .rules
+            .evaluate(
+                &before.owner("twister-skill"),
+                &key("intrinsic-action-coefficients"),
+                &facts,
+                before.schema.as_ref(),
+                &mut old_scratch,
+            )
+            .map(|r| r.effects)
+            .map_err(|e| e.to_string());
+        let new = after
+            .rules
+            .evaluate(
+                &after.owner("twister-skill"),
+                &key("intrinsic-action-coefficients"),
+                &facts,
+                after.schema.as_ref(),
+                &mut new_scratch,
+            )
+            .map(|r| r.effects)
+            .map_err(|e| e.to_string());
+        assert_eq!(old, new);
+    }
+    let old = OwnedEffectPlan::compile(
+        Arc::new(authored_request(&before)),
+        before.schema.clone(),
+        before.rules.clone(),
+        before.routing.clone(),
+        PlanLimits::default(),
+    )
+    .unwrap();
+    let new = OwnedEffectPlan::compile(
+        Arc::new(authored_request(&after)),
+        after.schema.clone(),
+        after.rules.clone(),
+        after.routing.clone(),
+        PlanLimits::default(),
+    )
+    .unwrap();
+    let old_report = old.evaluate(&mut old.new_scratch()).unwrap();
+    let new_report = new.evaluate(&mut new.new_scratch()).unwrap();
+    assert_eq!(old.gaps(), new.gaps());
+    assert_eq!(old_report.effects, new_report.effects);
+    assert_eq!(old_report.values, new_report.values);
+    assert!(
+        new_report
+            .values
+            .iter()
+            .all(|v| !matches!(v.value, EffectValue::Known { .. }))
+    );
+}

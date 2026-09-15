@@ -11,7 +11,75 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: real owned definition assembly and finite tables (after `c256151`).**
+**Current checkpoint: production catalog/import integration (after `aca8afb`).**
+The [offline data pipeline](owned-offline-data.md) now extends the persisted mechanics
+registry through production Import/CLI APIs. The extension reuses reviewed positive
+mappings, preserves every existing descriptor/slot/tombstone, and allocates only missing
+unique catalog selectors. Stale or ambiguous affected bindings reject before publication.
+A second pass allocates zero IDs. The prior mapping binds the policy version; the receipt
+records the current full policy without pretending to authenticate historical settings.
+
+The [production import bundle](../data/owned/poe2/3887ae68/import/README.md) preserves all
+38 mechanics allocations, adds 81 reviewed reward/option/equipment definitions, then reuses
+six existing Gem/Skill identities and adds 2,396 identity-only definitions. Its final registry
+contains 2,515 allocations. The ordinary owned schema/rule/routing compiler validates an
+explicit successor; runtime loaders still reject stale artifact bindings. The CLI shares
+the existing atomic no-replace publisher. Policy rebinding is an explicit offline operation
+that verifies the prior seed and unchanged definitions, mappings and rule bodies.
+
+All five originals now normalize through these persisted artifacts using `normalize-owned`.
+The same policies retain 478 physical gems, 140 skill uses, 338 supports, 81 known reward
+selections, 448 explicit zero-quality amounts and all 110 ordered queries. Independent
+loadouts and passive-socket equipment remain separate. Generated/provider-only/name-only
+rows and unresolved mechanics remain pending. The breadth tests now load production data;
+the former private namespace, fresh registry construction and duplicated policy builder
+have been removed from that path. Native runtime/import consumes no legacy game snapshot
+or PoB checkout. The offline exporter retains source provenance with canonical LF hashes,
+including correction of the former test-only SkillsTab path alias and synthetic empty-item
+source pin.
+
+**Validation:** all **288 Rust test executions in the affected-scope suite pass**:
+Import 188, CLI 48 in each feature mode, and two private publication tests in each mode.
+The offline exporter has **15 passing Python tests** and reproduces 22 seed/policy/query
+artifacts exactly. Workspace/native-only strict Clippy, formatting, five-crate WASM
+compilation and native runtime dependency exclusion pass. Tests reproduce the production
+bundle byte-for-byte, prove zero-allocation repeat, and preserve component values/typed
+failures and occurrence-plan gaps across the expanded catalog. All-five CLI imports retain
+the breadth/reference-routing assertions. This is not a full workspace test run or a new
+whole-build numerical parity claim. Evidence and the initial new-test boundary expectation
+failure are retained under `runs/owned-import-integration-01/`; publication/hosted status is
+recorded separately. Full native builds remain **0/5**. No profile-specific calculation
+consumer is retired by identity/input integration alone.
+
+**Next design decision:** the current evaluator requires a completely finalized owned
+request and uses global contributor closure. A proposed extension would evaluate an explicit
+partial selected view and report each metric only when its own dependency coverage is proven;
+unknown potentially applicable effects would still block that metric. This direction has been
+raised with the user and is not implemented by this checkpoint. Existing complete-request
+and whole-build parity gates remain unchanged.
+
+**Resume point:**
+
+1. Agree the partial-input/per-metric boundary, then target the actual fixed player cold
+   resistance query on original05 and original02. Use selected item occurrences, reviewed
+   reward/passive/scenario effects and the existing player contribution operations. Original05's
+   ranged ring used twice is a required contrast. Add explicit metric-to-stat binding and
+   conservative per-channel coverage; do not erase unknown selected records or global gaps.
+   The concrete input/kernel/reference inventory is in
+   `runs/owned-import-integration-01/next-native-slice.md`.
+2. Close selected-build input and contribution gaps with data-driven mechanics. Resolve
+   actual item/passive/support effects and exact supplied action occurrences for Twister
+   and Sniper together; keep all five originals as model stress cases. Catalog identity
+   membership is not evidence of complete effective level, actor stats or available metrics.
+3. Bind resolved weapon/actor inputs to shared timing and damage kernels, map semantic
+   output stats to the fixed metric ledger, and retain independent reference comparisons.
+   Migrate both fresh preparation and realization validation before removing active
+   Spark/Mace helpers. Do not add another named-skill production adapter.
+4. Complete all five originals and independent holdouts, then evaluate joint candidates,
+   dependency invalidation and multicore throughput using admitted real builds. Preserve
+   class/ascendancy, passive, equipment, support and supporting-skill search dimensions.
+
+**Previous checkpoint: real owned definition assembly and finite tables (after `c256151`).**
 The [offline data pipeline](owned-offline-data.md) now consumes a persisted registry,
 schema, rules and routing recipe through production Import/CLI APIs. Exact schema bindings
 and active registry allocations are checked before compilation. The CLI stages five

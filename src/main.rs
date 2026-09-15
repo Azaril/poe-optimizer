@@ -9,6 +9,7 @@ mod data_loading;
 mod game_data_extract;
 mod native_benchmark;
 mod owned_binding;
+mod owned_catalog_recipe;
 mod owned_draft;
 mod owned_effects;
 mod owned_input;
@@ -67,6 +68,8 @@ enum Action {
     CheckOwnedRules(owned_rules::Args),
     /// Assemble explicit persisted owned data recipes without source evaluation.
     AssembleOwnedRecipe(owned_recipe_cli::Args),
+    /// Extend a persisted owned recipe with reviewed source catalog identities.
+    ExtendOwnedSkillCatalog(owned_catalog_recipe::Args),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
     /// Resolve owned component effects from explicit packages; no game metric conversion.
@@ -238,6 +241,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::CheckOwnedSchema(args)) => owned_schema::run(args)?,
         Some(Action::CheckOwnedRules(args)) => owned_rules::run(args)?,
         Some(Action::AssembleOwnedRecipe(args)) => owned_recipe_cli::run(args)?,
+        Some(Action::ExtendOwnedSkillCatalog(args)) => owned_catalog_recipe::run(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,

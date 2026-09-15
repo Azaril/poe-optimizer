@@ -1,28 +1,16 @@
 //! Offline breadth regression: pinned identity data -> owned artifacts -> drafts.
 //! The fixed reference manifest supplies ordered query identities only. Its
 //! numerical results, source programs and UI selections are never evaluated.
-#[path = "support/empty_owned_items.rs"]
-mod empty_owned_items;
-use empty_owned_items::{empty_item_source, empty_items};
+#[path = "support/production_owned_artifacts.rs"]
+mod production;
 
 use poe_optimizer_core::{
     build_identity::BuildLineage,
-    owned_build::{LoadoutScope, ParameterValue, QueryId},
-    owned_definitions::{
-        BoundedInteger, EquipmentSlotDefinition, FiniteQuantity, GameVersionNamespace,
-        OwnedDefinitionKey, QualityDefId, QualityDefinition, UnitDefId, UnitDefinition,
-    },
+    owned_build::{LoadoutScope, QueryId},
+    owned_definitions::OwnedDefinitionKey,
     owned_draft::*,
-    owned_schema::{
-        DefinitionAddress, DefinitionDescriptor, DefinitionEntry, EquipmentSlotSchema,
-        QualitySchema, QuantityRange, SchemaState, SchemaSubject, ScopePolicy, UnitDimension,
-        UnitSchema,
-    },
 };
-use poe_optimizer_data::{
-    owned_schema::*,
-    skill_identities::{SkillIdentity, SkillIdentityCatalog, SkillIdentityData},
-};
+use poe_optimizer_data::skill_identities::{SkillIdentity, SkillIdentityCatalog};
 use poe_optimizer_import::{
     build_instance::{
         AuthoredInstanceId, ImportedBuildInstance, InstanceImportLimits, ProjectionKind,
@@ -32,11 +20,8 @@ use poe_optimizer_import::{
     owned_mapping::*,
     owned_normalize::*,
     owned_reference_projection::*,
-    owned_reward_policy::*,
-    owned_skill_catalog::*,
+    owned_skill_catalog::OwnedGemMaterialization,
     owned_source::*,
-    owned_value::*,
-    owned_value_policy::*,
 };
 use serde::Deserialize;
 use sha2::{Digest, Sha256};
@@ -44,10 +29,6 @@ use std::{collections::BTreeSet, fs::File, io::Read, path::Path};
 
 #[path = "support/owned_reference_fixture.rs"]
 mod reference_fixture;
-#[path = "support/owned_reward_fixture.rs"]
-mod reward_fixture;
-
-const CATALOG_SHA256: &str = "a90217d9bab6c0469917a2ba75ed9517205d2ac2b3d59f8d68580604f26df07f";
 
 fn read_bounded(path: &Path, maximum: usize) -> Vec<u8> {
     let mut bytes = Vec::new();
@@ -66,21 +47,8 @@ fn read_bounded(path: &Path, maximum: usize) -> Vec<u8> {
 fn key(value: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(value).unwrap()
 }
-fn namespace() -> GameVersionNamespace {
-    GameVersionNamespace::new("poe2", "breadth-owned-identity-v1").unwrap()
-}
-
 // Intentional test-only projections of existing artifacts. Unrelated package
 // sections/reference values are skipped by serde, rather than loaded as rules.
-#[derive(Deserialize)]
-struct IdentityProjection {
-    manifest: PackageVersion,
-    skill_identities: SkillIdentityData,
-}
-#[derive(Deserialize)]
-struct PackageVersion {
-    schema_version: u32,
-}
 #[derive(Deserialize)]
 struct ReferenceManifest {
     schema_version: u32,
@@ -107,357 +75,6 @@ struct ReferenceQuery {
     id: String,
 }
 
-struct Artifacts {
-    catalog: SkillIdentityCatalog,
-    registry: OwnedIdRegistry,
-    definitions: OwnedDefinitionSchemaPackage,
-    mappings: OwnedMappingIndex,
-    roles: OwnedSkillRoleIndex,
-    rewards: OwnedRewardPolicy,
-    equipment_loadouts: Vec<EquipmentLoadoutRule>,
-    gem_quality: GemQualityPolicy,
-    quality: QualityDefId,
-    quality_unit: UnitDefId,
-}
-fn artifacts(root: &Path) -> Artifacts {
-    let bytes = read_bounded(
-        &root.join("crates/poe-optimizer-data/data/game-data.json"),
-        32 * 1024 * 1024,
-    );
-    assert_eq!(format!("{:x}", Sha256::digest(&bytes)), CATALOG_SHA256);
-    let projection: IdentityProjection = serde_json::from_slice(&bytes).unwrap();
-    assert_eq!(projection.manifest.schema_version, 40);
-    let catalog = SkillIdentityCatalog::new(projection.skill_identities).unwrap();
-    assert_eq!(catalog.data().gems.len(), 966);
-    assert_eq!(catalog.data().skills.len(), 1_436);
-    let mut source = SourcePin {
-        system: ExternalSourceSystem::PathOfBuilding2,
-        revision: catalog.data().source.upstream_revision.clone(),
-        files: catalog
-            .data()
-            .source
-            .files
-            .iter()
-            .map(|(path, sha256)| SourceFilePin {
-                path: path.clone(),
-                sha256: sha256.clone(),
-            })
-            .collect(),
-    };
-    // Reviewed plain quality amount/default-kind convention: pinned
-    // SkillsTab.lua:352-353 imports the scalar; 927-931 describes percentage points.
-    source.files.push(SourceFilePin {
-        path: "Classes/SkillsTab.lua".into(),
-        sha256: "dec569fa04f2509fa4e4ff0207441d5ea350b23d436e9ea1829ecad84f7f863e".into(),
-    });
-    let reward_source = reward_fixture::source_pin();
-    assert_eq!(source.revision, reward_source.revision);
-    for file in reward_source.files {
-        if let Some(existing) = source.files.iter().find(|f| f.path == file.path) {
-            assert_eq!(existing.sha256, file.sha256);
-        } else {
-            source.files.push(file);
-        }
-    }
-    let limits = SkillCatalogLimits::default();
-    let base = OwnedIdRegistry::empty(namespace(), limits.mapping).unwrap();
-    let base_digest = base.identity().unwrap();
-    let compiled = compile_fresh_owned_skill_catalog(
-        &catalog,
-        &base,
-        &source,
-        &SkillCatalogPolicy {
-            version: key("reviewed-pob2-identity-role-v1"),
-            // Reviewed source identity convention; not a production default.
-            absent_support: AbsentSupportPolicy::NonSupport,
-            absent_from_tree: AbsentFromTreePolicy::Physical,
-        },
-        limits,
-    )
-    .unwrap();
-    assert_eq!(base.identity().unwrap(), base_digest);
-    assert_eq!(compiled.receipt.gem_count, 966);
-    assert_eq!(compiled.receipt.skill_count, 1_436);
-    assert_eq!(compiled.definitions.len(), 2_402);
-    assert_eq!(compiled.roles.len(), 966);
-    assert!(!compiled.mappings.is_empty());
-    for descriptor in &compiled.definitions {
-        // Identity-only compilation cannot certify level/quality/rules coverage.
-        match descriptor {
-            DefinitionDescriptor::Gem(row) => {
-                assert!(matches!(row.schema, SchemaState::Unmapped { .. }));
-            }
-            DefinitionDescriptor::Skill(row) => {
-                assert!(matches!(row.schema, SchemaState::Unmapped { .. }));
-            }
-            other => panic!("unexpected identity definition: {other:?}"),
-        }
-    }
-    let rewards_staged = reward_fixture::stage_rewards(&compiled.registry);
-    assert_eq!(rewards_staged.source.revision, source.revision);
-    let mut registry = rewards_staged.registry.clone();
-    let mut owned_definitions = compiled.definitions;
-    owned_definitions.extend(rewards_staged.definitions.clone());
-    let quality_unit = registry.allocate_definition::<UnitDefinition>().unwrap();
-    let quality = registry.allocate_definition::<QualityDefinition>().unwrap();
-    owned_definitions.push(DefinitionDescriptor::Unit(DefinitionEntry {
-        id: quality_unit.clone(),
-        schema: SchemaState::Known(UnitSchema {
-            dimension: UnitDimension::PercentagePoints,
-        }),
-    }));
-    owned_definitions.push(DefinitionDescriptor::Quality(DefinitionEntry {
-        id: quality.clone(),
-        schema: SchemaState::Known(QualitySchema {
-            // Explicit broad computation envelope, not a gameplay quality cap.
-            amount: QuantityRange {
-                minimum: FiniteQuantity::new(0.0, quality_unit.clone()).unwrap(),
-                maximum: FiniteQuantity::new(1_000_000.0, quality_unit.clone()).unwrap(),
-            },
-        }),
-    }));
-    let mut owned_mappings = compiled.mappings;
-    owned_mappings.extend(rewards_staged.mappings.clone());
-    // Reviewed source slot vocabulary is injected test data. Swap aliases bind
-    // the same owned receiving slot while their loadout occurrence differs.
-    let mut equipment_loadouts = vec![];
-    for names in [
-        vec!["Weapon 1", "Weapon 1 Swap"],
-        vec!["Weapon 2", "Weapon 2 Swap"],
-        vec!["Helmet"],
-        vec!["Body Armour"],
-        vec!["Gloves"],
-        vec!["Boots"],
-        vec!["Amulet"],
-        vec!["Ring 1"],
-        vec!["Ring 2"],
-        vec!["Ring 3"],
-        vec!["Belt"],
-        vec!["Flask 1"],
-        vec!["Flask 2"],
-        vec!["Charm 1"],
-        vec!["Charm 2"],
-        vec!["Charm 3"],
-        vec!["Arm 1"],
-        vec!["Arm 2"],
-        vec!["Leg 1"],
-        vec!["Leg 2"],
-    ] {
-        let weapon = names.len() == 2;
-        let destination = registry
-            .allocate_definition::<EquipmentSlotDefinition>()
-            .unwrap();
-        owned_definitions.push(DefinitionDescriptor::EquipmentSlot(DefinitionEntry {
-            id: destination.clone(),
-            schema: SchemaState::Known(EquipmentSlotSchema {
-                scope: if weapon {
-                    ScopePolicy::Selected
-                } else {
-                    ScopePolicy::Shared
-                },
-            }),
-        }));
-        for (index, name) in names.into_iter().enumerate() {
-            owned_mappings.push(MappingEntry {
-                source: ExternalSelector::Catalog {
-                    kind: ExternalCatalogKind::EquipmentSlot,
-                    key: SourceComponent::Text(name.into()),
-                    version: SourceComponent::Missing,
-                    variant: SourceComponent::Missing,
-                },
-                outcome: MappingOutcome::Mapped {
-                    target: SchemaSubject::Definition(DefinitionAddress::EquipmentSlot(
-                        destination.clone(),
-                    )),
-                    // The paired Swap source slot is the same owned receiving
-                    // destination in a distinct loadout, not a second exact identity.
-                    basis: if index == 0 {
-                        MappingBasis::Exact
-                    } else {
-                        MappingBasis::ReviewedAlias {
-                            reason: key("weapon-swap-same-receiving-slot"),
-                        }
-                    },
-                },
-            });
-            equipment_loadouts.push(EquipmentLoadoutRule {
-                source_slot: SourceComponent::Text(name.into()),
-                destination: destination.clone(),
-                scope: if weapon {
-                    ImportEquipmentScope::Selected {
-                        loadouts: vec![key(if index == 0 {
-                            "weapon-set-one"
-                        } else {
-                            "weapon-set-two"
-                        })],
-                    }
-                } else {
-                    ImportEquipmentScope::Shared
-                },
-            });
-        }
-    }
-    let definitions = OwnedDefinitionSchemaPackage::new(
-        SchemaPackageInput {
-            schema_version: OWNED_SCHEMA_PACKAGE_VERSION,
-            namespace: namespace(),
-            release: key("reviewed-breadth-identities-v1"),
-            semantics_version: key("identity-only-unmapped-input-schema-v1"),
-            definitions: owned_definitions,
-            slots: vec![],
-        },
-        OwnedSchemaLimits::default(),
-    )
-    .unwrap();
-    let mappings = OwnedMappingIndex::new(
-        MappingPackageInput {
-            schema_version: OWNED_MAPPING_PACKAGE_VERSION,
-            namespace: namespace(),
-            registry: registry.identity().unwrap(),
-            definitions: definitions.identity().clone(),
-            source,
-            policy_version: compiled.receipt.policy.version.clone(),
-            entries: owned_mappings,
-        },
-        &registry,
-        &definitions,
-        limits.mapping,
-    )
-    .unwrap();
-    let roles = OwnedSkillRoleIndex::new(
-        OwnedSkillRolePackageInput {
-            schema_version: OWNED_SKILL_ROLE_VERSION,
-            namespace: namespace(),
-            definitions: definitions.identity().clone(),
-            mapping: *mappings.identity(),
-            compilation: compiled.receipt,
-            roles: compiled.roles,
-        },
-        &mappings,
-        &definitions,
-        limits,
-    )
-    .unwrap();
-    let rewards = OwnedRewardPolicy::new(
-        rewards_staged.policy_input(&definitions, &mappings),
-        &mappings,
-        &definitions,
-        RewardPolicyLimits::default(),
-    )
-    .unwrap();
-    let gem_quality = GemQualityPolicy::Attributes(Box::new(GemQualityPolicyInput {
-        definitions: definitions.identity().clone(),
-        amount: ValueRecipeInput {
-            id: key("reviewed-explicit-gem-quality"),
-            codec: ValueCodecInput {
-                namespace: namespace(),
-                whitespace: WhitespacePolicy::Exact,
-                codec: ValueCodecKind::Quantity {
-                    syntax: DecimalSyntax::Decimal,
-                    unit: quality_unit.clone(),
-                    scale: RationalScale {
-                        numerator: BoundedInteger::new(1).unwrap(),
-                        denominator: BoundedInteger::new(1).unwrap(),
-                    },
-                },
-            },
-            tiers: vec![ValueTier {
-                selectors: vec![ValueSelector {
-                    lane: ValueLane::Attribute,
-                    name: "quality".into(),
-                }],
-                duplicates: DuplicatePolicy::Reject,
-            }],
-            missing: MissingValuePolicy::Pending,
-        },
-        kind_attribute: "qualityId".into(),
-        kinds: vec![GemQualityKindRule {
-            source: SourceComponent::Missing,
-            kind: quality.clone(),
-        }],
-    }));
-    Artifacts {
-        catalog,
-        registry,
-        definitions,
-        mappings,
-        roles,
-        rewards,
-        equipment_loadouts,
-        gem_quality,
-        quality,
-        quality_unit,
-    }
-}
-
-fn recipe(name: &str, boolean: bool) -> ValueRecipeInput {
-    ValueRecipeInput {
-        id: key(if boolean {
-            "reviewed-enabled"
-        } else {
-            "reviewed-level"
-        }),
-        codec: ValueCodecInput {
-            namespace: namespace(),
-            whitespace: WhitespacePolicy::Exact,
-            codec: if boolean {
-                ValueCodecKind::Boolean {
-                    tokens: vec![
-                        BooleanToken {
-                            token: "true".into(),
-                            value: true,
-                        },
-                        BooleanToken {
-                            token: "false".into(),
-                            value: false,
-                        },
-                    ],
-                }
-            } else {
-                ValueCodecKind::Integer {
-                    syntax: DecimalSyntax::Integer,
-                }
-            },
-        },
-        tiers: vec![ValueTier {
-            selectors: vec![ValueSelector {
-                lane: ValueLane::Attribute,
-                name: name.into(),
-            }],
-            duplicates: DuplicatePolicy::Reject,
-        }],
-        missing: if boolean {
-            MissingValuePolicy::Explicit {
-                value: ParameterValue::Boolean(true),
-            }
-        } else {
-            MissingValuePolicy::Pending
-        },
-    }
-}
-fn policy() -> NormalizationPolicy {
-    // These finite syntax choices are injected for this reviewed source version.
-    // No class/item/config values or build-specific conversion branches are added.
-    NormalizationPolicy {
-        version: key("reviewed-pob2-breadth-import-v1"),
-        namespace: namespace(),
-        character_level: recipe("level", false),
-        gem_level: recipe("level", false),
-        gem_enabled: recipe("enabled", true),
-        group_enabled: recipe("enabled", true),
-        manual_skill_sources: vec![
-            SourceComponent::Missing,
-            SourceComponent::Text(String::new()),
-        ],
-        empty_item_keys: vec![SourceComponent::Text("0".into())],
-        // Generated provider and support correspondence awaits a separate policy.
-        generated_support_prefixes: vec![],
-        allocation_attribute: "nodes".into(),
-        single_active_support_target: true,
-        equipment_loadouts: vec![],
-        gem_quality: GemQualityPolicy::Unconverted,
-    }
-}
 fn queries(case: &ReferenceCase) -> Vec<ImportQueryTemplate> {
     assert_eq!(case.measurements.len(), 22);
     case.measurements
@@ -791,10 +408,18 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
     .unwrap();
     assert_eq!(manifest.schema_version, 1);
     assert_eq!(manifest.cases.len(), 5);
-    let artifacts = artifacts(&root);
-    let mut policy = policy();
-    policy.equipment_loadouts = artifacts.equipment_loadouts.clone();
-    policy.gem_quality = artifacts.gem_quality.clone();
+    let artifacts = production::load(&root);
+    let policy = artifacts.policy.clone();
+    let GemQualityPolicy::Attributes(quality_policy) = &policy.gem_quality else {
+        panic!("production quality conversion missing")
+    };
+    let expected_quality = &quality_policy.kinds[0].kind;
+    let poe_optimizer_import::owned_value::ValueCodecKind::Quantity {
+        unit: quality_unit, ..
+    } = &quality_policy.amount.codec.codec
+    else {
+        panic!("production quality quantity codec missing")
+    };
     let limits = NormalizationLimits::default();
     // Independently reviewed source census, not results computed by this adapter.
     let expected = [
@@ -826,8 +451,8 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
             &evidence,
             *source.allocator_state(),
             NormalizationArtifacts {
-                items: &empty_items(&artifacts.definitions),
-                item_source: &empty_item_source(&artifacts.definitions),
+                items: &artifacts.items,
+                item_source: &artifacts.item_source,
                 mappings: &artifacts.mappings,
                 registry: &artifacts.registry,
                 definitions: &artifacts.definitions,
@@ -948,8 +573,8 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
                     let Some(Some(quality)) = gem_by_id[gem_id].quality.to_resolved() else {
                         panic!("explicit physical-gem quality must be known");
                     };
-                    assert_eq!(quality.kind, artifacts.quality);
-                    assert_eq!(quality.amount.unit(), &artifacts.quality_unit);
+                    assert_eq!(&quality.kind, expected_quality);
+                    assert_eq!(quality.amount.unit(), quality_unit);
                     let source_quality: f64 = attribute(row, "quality").unwrap().parse().unwrap();
                     assert_eq!(quality.amount.value(), source_quality);
                     assert!(row.attribute("qualityId").is_none());
@@ -1234,8 +859,8 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         &evidence,
         *malformed.allocator_state(),
         NormalizationArtifacts {
-            items: &empty_items(&artifacts.definitions),
-            item_source: &empty_item_source(&artifacts.definitions),
+            items: &artifacts.items,
+            item_source: &artifacts.item_source,
             mappings: &artifacts.mappings,
             registry: &artifacts.registry,
             definitions: &artifacts.definitions,
@@ -1303,7 +928,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
     );
 
     println!(
-        "owned normalization breadth: catalog=966_gems/1436_skills physical_gems=478 skill_uses=140 supports=338 generated_pending=42 manual_provider_only_pending=18 name_only_pending=3 ordered_queries=110; definitions=identity_only legality=not_checked calculation=not_run native_completion=not_claimed"
+        "owned normalization breadth: catalog=966_gems/1436_skills physical_gems=478 skill_uses=140 supports=338 generated_pending=42 manual_provider_only_pending=18 name_only_pending=3 ordered_queries=110; definitions=production_components_partial legality=not_checked calculation=not_run native_completion=not_claimed"
     );
 }
 
@@ -1317,7 +942,7 @@ fn original_reference_projection_binds_fresh_owned_drafts_without_losing_rows() 
         1024 * 1024,
     ))
     .unwrap();
-    let artifacts = artifacts(&root);
+    let artifacts = production::load(&root);
     let limits = NormalizationLimits::default();
     let projection_limits = ProjectionLimits::default();
     let mut totals = [0usize; 2];
@@ -1375,15 +1000,15 @@ fn original_reference_projection_binds_fresh_owned_drafts_without_losing_rows() 
             &evidence,
             *source.allocator_state(),
             NormalizationArtifacts {
-                items: &empty_items(&artifacts.definitions),
-                item_source: &empty_item_source(&artifacts.definitions),
+                items: &artifacts.items,
+                item_source: &artifacts.item_source,
                 mappings: &artifacts.mappings,
                 registry: &artifacts.registry,
                 definitions: &artifacts.definitions,
                 roles: &artifacts.roles,
                 rewards: &artifacts.rewards,
             },
-            &policy(),
+            &artifacts.policy,
             &selected,
             limits,
         )
@@ -1392,7 +1017,7 @@ fn original_reference_projection_binds_fresh_owned_drafts_without_losing_rows() 
         let sidecar = normalized.sidecar();
         let policy_binding = ProjectionPolicyBinding {
             version: key("reviewed-original-query-routing-v1"),
-            game_version: namespace(),
+            game_version: artifacts.policy.namespace.clone(),
             normalization_policy: sidecar.policy,
             reward_policy: sidecar.reward_policy,
             item_policy: sidecar.item_policy,

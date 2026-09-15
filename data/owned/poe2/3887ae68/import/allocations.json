@@ -1,0 +1,898 @@
+{
+  "schema_version": 1,
+  "base_registry": "f40bc92ee3dd9e607eaa2e254ceab57fb9e649bec0826ba012bd5900c3f43efd",
+  "seed_registry": "56c3fd31093dd7fe5465943d9ee0204519e1f3f62fcf832a0bd70a7a81d9181a",
+  "entries": [
+    {
+      "label": "reward:questAct 1ClearfellBeira:true",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000027"
+      }
+    },
+    {
+      "label": "reward:questAct 1FreythornKing In The Mists:true",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000028"
+      }
+    },
+    {
+      "label": "reward:questAct 1Ogham ManorCandlemass:true",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000029"
+      }
+    },
+    {
+      "label": "reward:questAct 2Spires of DesharSisters of Garukhan Shrine:true",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000002a"
+      }
+    },
+    {
+      "label": "option:questAct 2Valley of the TitansMedallion:None",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000002b"
+      }
+    },
+    {
+      "label": "option:questAct 2Valley of the TitansMedallion:30% increased Charm Charges Gained\n\t+1 Charm Slot",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000002c"
+      }
+    },
+    {
+      "label": "reward:questAct 2Valley of the TitansMedallion:30% increased Charm Charges Gained\n\t+1 Charm Slot",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000002d"
+      }
+    },
+    {
+      "label": "option:questAct 2Valley of the TitansMedallion:30% increased Charm Effect Duration\n\t+1 Charm Slot",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000002e"
+      }
+    },
+    {
+      "label": "reward:questAct 2Valley of the TitansMedallion:30% increased Charm Effect Duration\n\t+1 Charm Slot",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000002f"
+      }
+    },
+    {
+      "label": "reward:questAct 3Azak BogIgnagduk:true",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000030"
+      }
+    },
+    {
+      "label": "reward:questAct 3Jiquani's MachinariumBlackjaw:true",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000031"
+      }
+    },
+    {
+      "label": "option:questAct 3Venom CryptsVenom Draught:None",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000032"
+      }
+    },
+    {
+      "label": "option:questAct 3Venom CryptsVenom Draught:25% increased Stun Threshold",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000033"
+      }
+    },
+    {
+      "label": "reward:questAct 3Venom CryptsVenom Draught:25% increased Stun Threshold",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000034"
+      }
+    },
+    {
+      "label": "option:questAct 3Venom CryptsVenom Draught:30% increased Elemental Ailment Threshold",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000035"
+      }
+    },
+    {
+      "label": "reward:questAct 3Venom CryptsVenom Draught:30% increased Elemental Ailment Threshold",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000036"
+      }
+    },
+    {
+      "label": "option:questAct 3Venom CryptsVenom Draught:25% increased Mana Regeneration Rate",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000037"
+      }
+    },
+    {
+      "label": "reward:questAct 3Venom CryptsVenom Draught:25% increased Mana Regeneration Rate",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000038"
+      }
+    },
+    {
+      "label": "option:questAct 4Abandoned PrisonGoddess of Justice:None",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000039"
+      }
+    },
+    {
+      "label": "option:questAct 4Abandoned PrisonGoddess of Justice:30% increased Life Recovery from Flasks",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000003a"
+      }
+    },
+    {
+      "label": "reward:questAct 4Abandoned PrisonGoddess of Justice:30% increased Life Recovery from Flasks",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000003b"
+      }
+    },
+    {
+      "label": "option:questAct 4Abandoned PrisonGoddess of Justice:30% increased Mana Recovery from Flasks",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000003c"
+      }
+    },
+    {
+      "label": "reward:questAct 4Abandoned PrisonGoddess of Justice:30% increased Mana Recovery from Flasks",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000003d"
+      }
+    },
+    {
+      "label": "reward:questAct 4Eye of HinekoraSilent Hall:true",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000003e"
+      }
+    },
+    {
+      "label": "option:questAct 4Eye of HinekoraTribal Medicine:None",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000003f"
+      }
+    },
+    {
+      "label": "option:questAct 4Eye of HinekoraTribal Medicine:30% increased Global Armour, Evasion and Energy Shield",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000040"
+      }
+    },
+    {
+      "label": "reward:questAct 4Eye of HinekoraTribal Medicine:30% increased Global Armour, Evasion and Energy Shield",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000041"
+      }
+    },
+    {
+      "label": "option:questAct 4Eye of HinekoraTribal Medicine:+15% of Armour also applies to Elemental Damage\n\tGain Deflection Rating equal to 12% of Evasion Rating\n\t12% faster start of Energy Shield Recharge",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000042"
+      }
+    },
+    {
+      "label": "reward:questAct 4Eye of HinekoraTribal Medicine:+15% of Armour also applies to Elemental Damage\n\tGain Deflection Rating equal to 12% of Evasion Rating\n\t12% faster start of Energy Shield Recharge",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000043"
+      }
+    },
+    {
+      "label": "option:questAct 4Halls Of The DeadNgamahu's Test:None",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000044"
+      }
+    },
+    {
+      "label": "option:questAct 4Halls Of The DeadNgamahu's Test:+5 to Strength",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000045"
+      }
+    },
+    {
+      "label": "reward:questAct 4Halls Of The DeadNgamahu's Test:+5 to Strength",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000046"
+      }
+    },
+    {
+      "label": "option:questAct 4Halls Of The DeadNgamahu's Test:+5% to Fire Resistance",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000047"
+      }
+    },
+    {
+      "label": "reward:questAct 4Halls Of The DeadNgamahu's Test:+5% to Fire Resistance",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000048"
+      }
+    },
+    {
+      "label": "option:questAct 4Halls Of The DeadTasalio's Test:None",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000049"
+      }
+    },
+    {
+      "label": "option:questAct 4Halls Of The DeadTasalio's Test:+5 to Intelligence",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000004a"
+      }
+    },
+    {
+      "label": "reward:questAct 4Halls Of The DeadTasalio's Test:+5 to Intelligence",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000004b"
+      }
+    },
+    {
+      "label": "option:questAct 4Halls Of The DeadTasalio's Test:+5% to Cold Resistance",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000004c"
+      }
+    },
+    {
+      "label": "reward:questAct 4Halls Of The DeadTasalio's Test:+5% to Cold Resistance",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000004d"
+      }
+    },
+    {
+      "label": "option:questAct 4Halls Of The DeadTawhoa's Test:None",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000004e"
+      }
+    },
+    {
+      "label": "option:questAct 4Halls Of The DeadTawhoa's Test:+5 to Dexterity",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000004f"
+      }
+    },
+    {
+      "label": "reward:questAct 4Halls Of The DeadTawhoa's Test:+5 to Dexterity",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000050"
+      }
+    },
+    {
+      "label": "option:questAct 4Halls Of The DeadTawhoa's Test:+5% to Lightning Resistance",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000051"
+      }
+    },
+    {
+      "label": "reward:questAct 4Halls Of The DeadTawhoa's Test:+5% to Lightning Resistance",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000052"
+      }
+    },
+    {
+      "label": "reward:questInterlude 2Khari CrossingMolten Shrine:true",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000053"
+      }
+    },
+    {
+      "label": "option:questInterlude 2QimahSeven Pillars:None",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000054"
+      }
+    },
+    {
+      "label": "option:questInterlude 2QimahSeven Pillars:+5% to all Elemental Resistances",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000055"
+      }
+    },
+    {
+      "label": "reward:questInterlude 2QimahSeven Pillars:+5% to all Elemental Resistances",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000056"
+      }
+    },
+    {
+      "label": "option:questInterlude 2QimahSeven Pillars:3% increased Movement Speed",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000057"
+      }
+    },
+    {
+      "label": "reward:questInterlude 2QimahSeven Pillars:3% increased Movement Speed",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000058"
+      }
+    },
+    {
+      "label": "option:questInterlude 2QimahSeven Pillars:15% increased Global Armour, Evasion and Energy Shield",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000059"
+      }
+    },
+    {
+      "label": "reward:questInterlude 2QimahSeven Pillars:15% increased Global Armour, Evasion and Energy Shield",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000005a"
+      }
+    },
+    {
+      "label": "option:questInterlude 2QimahSeven Pillars:20% increased Presence Area Of Effect",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000005b"
+      }
+    },
+    {
+      "label": "reward:questInterlude 2QimahSeven Pillars:20% increased Presence Area Of Effect",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000005c"
+      }
+    },
+    {
+      "label": "option:questInterlude 2QimahSeven Pillars:12% increased Cooldown Recovery Rate",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000005d"
+      }
+    },
+    {
+      "label": "reward:questInterlude 2QimahSeven Pillars:12% increased Cooldown Recovery Rate",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000005e"
+      }
+    },
+    {
+      "label": "option:questInterlude 2QimahSeven Pillars:+5 to all Attributes",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000005f"
+      }
+    },
+    {
+      "label": "reward:questInterlude 2QimahSeven Pillars:+5 to all Attributes",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000060"
+      }
+    },
+    {
+      "label": "option:questInterlude 2QimahSeven Pillars:5% increased Experience Gain\n\t-5% to all Elemental Resistances\n\t3% reduced Movement Speed\n\t15% reduced Global Armour, Evasion and Energy Shield\n\t20% reduced Presence Area Of Effect\n\t12% reduced Cooldown Recovery Rate\n\t5% reduced Attributes",
+      "id": {
+        "kind": "option",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000061"
+      }
+    },
+    {
+      "label": "reward:questInterlude 2QimahSeven Pillars:5% increased Experience Gain\n\t-5% to all Elemental Resistances\n\t3% reduced Movement Speed\n\t15% reduced Global Armour, Evasion and Energy Shield\n\t20% reduced Presence Area Of Effect\n\t12% reduced Cooldown Recovery Rate\n\t5% reduced Attributes",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000062"
+      }
+    },
+    {
+      "label": "reward:questInterlude 3Kriar VillageLythara:true",
+      "id": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000063"
+      }
+    },
+    {
+      "label": "equipment-slot-01",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000064"
+      }
+    },
+    {
+      "label": "equipment-slot-02",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000065"
+      }
+    },
+    {
+      "label": "equipment-slot-03",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000066"
+      }
+    },
+    {
+      "label": "equipment-slot-04",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000067"
+      }
+    },
+    {
+      "label": "equipment-slot-05",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000068"
+      }
+    },
+    {
+      "label": "equipment-slot-06",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000069"
+      }
+    },
+    {
+      "label": "equipment-slot-07",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006a"
+      }
+    },
+    {
+      "label": "equipment-slot-08",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006b"
+      }
+    },
+    {
+      "label": "equipment-slot-09",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006c"
+      }
+    },
+    {
+      "label": "equipment-slot-10",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006d"
+      }
+    },
+    {
+      "label": "equipment-slot-11",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006e"
+      }
+    },
+    {
+      "label": "equipment-slot-12",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006f"
+      }
+    },
+    {
+      "label": "equipment-slot-13",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000070"
+      }
+    },
+    {
+      "label": "equipment-slot-14",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000071"
+      }
+    },
+    {
+      "label": "equipment-slot-15",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000072"
+      }
+    },
+    {
+      "label": "equipment-slot-16",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000073"
+      }
+    },
+    {
+      "label": "equipment-slot-17",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000074"
+      }
+    },
+    {
+      "label": "equipment-slot-18",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000075"
+      }
+    },
+    {
+      "label": "equipment-slot-19",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000076"
+      }
+    },
+    {
+      "label": "equipment-slot-20",
+      "id": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000077"
+      }
+    }
+  ]
+}

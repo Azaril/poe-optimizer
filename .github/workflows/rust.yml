@@ -34,6 +34,8 @@ jobs:
         run: python scripts/test_build_expectations.py
       - name: Verify owned mechanics conversion
         run: python scripts/tests/test_export_owned_mechanics.py
+      - name: Verify owned import artifact conversion
+        run: python scripts/tests/test_export_owned_import_data.py
       - name: Install Rust
         run: rustup show
       - name: Cache Rust dependencies

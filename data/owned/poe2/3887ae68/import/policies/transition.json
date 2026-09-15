@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "scope": "explicit-checked-import-policy-successor",
+  "before_definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-components",
+    "schema_version": 1,
+    "content_sha256": "d61c98e791687ccd879ab763bf91b1ec4264a6be747b8c25f54f4f77c07d5667",
+    "semantics_version": "owned-mechanics-components-v1"
+  },
+  "after_definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-components",
+    "schema_version": 1,
+    "content_sha256": "be845a5de89f06eba928c4c285678cbc177b0ff4293a9a69528138db1d50f87b",
+    "semantics_version": "owned-mechanics-components-v1"
+  },
+  "before_mapping": "02d4714fa1cabc00205692a0981b44a99e16e5240ba4d61a486b9dd62265a22a",
+  "after_mapping": "3794c5e01ddcf7495fb130bfc6524e0fa256149bccec3e7b5f4da89efd24a3e7",
+  "compiled_transition_sha256": "498572d427cc66b1441f89d0f26c035f721a437fda0d2de8d9503ee653116e0e",
+  "preserved_definition_count": 105,
+  "preserved_slot_count": 14,
+  "source_execution": false,
+  "numeric_coverage": false,
+  "artifacts": [
+    {
+      "path": "policies/item-source.json",
+      "sha256": "b731e5b7951bc313509ca58fdbd6ca4a0af24a4473206de01d3541c5eb2c2676",
+      "bytes": 4707
+    },
+    {
+      "path": "policies/items.json",
+      "sha256": "802583f17e958508706d7d1d522838d11a2f6d650ca0e4b362f48e87e90a1463",
+      "bytes": 453
+    },
+    {
+      "path": "policies/normalization.json",
+      "sha256": "7ac99b2ce7f2f09b165ce0cbe0adb283f71b751bfd45f86985d887e9bc6ba6c3",
+      "bytes": 13068
+    },
+    {
+      "path": "policies/rewards.json",
+      "sha256": "7bbf49ce8dcc8b87044ba4525afeb5fe230f2925fa67cce0025ce672372ed171",
+      "bytes": 61843
+    }
+  ]
+}

@@ -30,7 +30,27 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         .take(limits.max_wire_bytes as u64 + 1)
         .read_to_end(&mut input)?;
     let staged = decode_owned_recipe(&input, limits)?;
-    let output = super::destination(&args.output)?;
+    publish_artifacts(
+        &args.output,
+        staged.artifacts().iter().map(|a| (a.name(), a.bytes())),
+    )?;
+    let manifest = staged
+        .artifacts()
+        .iter()
+        .find(|a| a.name() == "manifest.json")
+        .expect("fixed artifact set");
+    let mut stdout = io::stdout().lock();
+    stdout.write_all(manifest.bytes())?;
+    stdout.write_all(b"\n")?;
+    Ok(())
+}
+
+/// Shared host-only directory publication for already validated fixed artifacts.
+pub(crate) fn publish_artifacts<'a>(
+    output: &Path,
+    artifacts: impl IntoIterator<Item = (&'a str, &'a [u8])>,
+) -> Result<(), Box<dyn Error>> {
+    let output = super::destination(output)?;
     match fs::symlink_metadata(&output) {
         Ok(_) => {
             return Err(io::Error::new(
@@ -46,26 +66,30 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let staging = tempfile::Builder::new()
         .prefix(".owned-recipe-")
         .tempdir_in(output.parent().expect("absolute output"))?;
-    for artifact in staged.artifacts() {
+    for (name, bytes) in artifacts {
+        if Path::new(name).components().count() != 1
+            || !matches!(
+                Path::new(name).components().next(),
+                Some(std::path::Component::Normal(_))
+            )
+        {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "artifact name is not a basename",
+            )
+            .into());
+        }
         let mut file = File::options()
             .write(true)
             .create_new(true)
-            .open(staging.path().join(artifact.name()))?;
-        file.write_all(artifact.bytes())?;
+            .open(staging.path().join(name))?;
+        file.write_all(bytes)?;
         file.sync_all()?;
     }
     publish_noclobber(staging.path(), &output)?;
     // The old path no longer exists. Disarm cleanup so another process creating
     // that old path cannot have its unrelated directory removed by TempDir Drop.
     let _ = staging.keep();
-    let manifest = staged
-        .artifacts()
-        .iter()
-        .find(|a| a.name() == "manifest.json")
-        .expect("fixed artifact set");
-    let mut stdout = io::stdout().lock();
-    stdout.write_all(manifest.bytes())?;
-    stdout.write_all(b"\n")?;
     Ok(())
 }
 

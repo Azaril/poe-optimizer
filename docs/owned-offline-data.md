@@ -92,20 +92,52 @@ replaces independent whole-build oracle comparisons. The exporter exclusively cr
 output directory; an I/O failure can leave an incomplete directory. Its output is an offline
 intermediate, and it does not provide the assembler's atomic publication guarantee.
 
-## Next integration
+## Production import identity integration
 
-Bind the persisted registry to the import mappings and role/policy artifacts so the five
-originals and independently authored builds reach the same owned requests. Preserve
-independent loadouts, exact provider occurrences, item-granted abilities and unresolved
-support targets. Effective skill/actor inputs must include all applicable contributions;
-raw Gem level is not generally effective level. Complete weapon and actor action timing
-must consume the shared native kernels after this resolution. Migrate their independent
-realization checks before removing remaining profile-specific preparation callers.
+The [persisted import bundle](../data/owned/poe2/3887ae68/import/README.md) connects source
+normalization to these same owned definitions. Its reviewed seed preserves the original
+38 allocations and adds reward/option/equipment metadata. Six exact source mappings reuse
+the two physical Gems and four Skills already referenced by the mechanics graph. The
+standalone source identity catalog is an offline compiler input; native normalization
+loads only the emitted registry, schema, mappings, roles and policies.
 
-The first catalog integration must reuse reviewed mappings for the existing two Gems and
-four Skills, preserve all 38 registry entries and descriptors, and append only missing
-identities under the same source pin. Repeated extension must allocate nothing. A successor
-schema changes content identity even when existing IDs remain stable; the offline caller
-must validate prior bindings, construct explicit successors and recompile their rules and
-routes. Runtime load must never silently repair stale bindings. Persist normalization
-policies against this same registry rather than transplanting private test namespaces.
+`compile_owned_skill_catalog_extension` extends under an exact source pin and policy
+version. Positive mappings reuse active addresses and full descriptors; genuinely missing
+unique selectors allocate new Unmapped definitions. Affected unresolved/ambiguous selectors,
+retired targets and known-role contradictions reject. Other schema/mapping entries and
+tombstones survive. Repeating with the successor allocates nothing. The mapping proves its
+version binding, not the contents of an unrecorded historical policy; the new receipt records
+the full current injected policy.
+
+`extend_owned_catalog_recipe` validates the prior recipe and mapping, calls this compiler,
+independently checks that every old descriptor is unchanged, and explicitly constructs new
+schema/rule/routing/mapping/role bindings. The thin `extend-owned-skill-catalog` CLI publishes
+nine artifacts with the shared atomic no-replace directory publisher. Its transition receipt
+records old/new identities, reuse/allocation counts and hashes for the complete emitted
+family. Runtime load never repairs stale bindings. Whole-input and whole-output byte limits
+apply in addition to constituent catalog/schema/compiler budgets.
+
+The optional offline import exporter authors reviewed reward, equipment, quality and syntax
+policies as data. A separate explicit policy-binding operation checks seed bindings and the
+successor before producing final policy files; it cannot be used to silently repair a bad
+old artifact. Source-file pins are canonical paths and LF hashes. Explicit empty item policies
+preserve pending semantics and honest provenance. Ordered example query templates contain
+only requested identities/targets, never cached metric values. Actual build input is always
+a separate caller-supplied XML/share code or owned document.
+
+The production family contains 2,515 stable allocations, including 2,396 newly appended
+identity-only Gem/Skill definitions. These new entries deliberately do not assert mechanics
+coverage. Existing partial rules/routes remain partial. Both imported examples and authored
+requests use the same six reviewed Gem/Skill IDs. The all-five breadth and reference-routing
+tests load these shipped policies rather than privately allocating unrelated test catalogs.
+
+## Remaining integration
+
+Selected inputs, support relationships and all applicable contributions must still resolve
+before complete effective skill/actor values are available. Raw Gem level is not generally
+effective level. Weapon and actor timing must consume shared native kernels after this
+resolution. Class/ascendancy, passive access and separate point pools, local item semantics,
+scenario effects and metric bindings retain their declared gaps. Completing one import field
+must not close unrelated membership obligations. Migrate independent realization checks
+before removing remaining profile-specific preparation callers; full-original completion is
+still a separate gate.

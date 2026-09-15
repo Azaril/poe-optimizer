@@ -1,0 +1,1044 @@
+{
+  "schema_version": 1,
+  "scope": "quest_input_metadata_fixture",
+  "effects_compiled": false,
+  "package": {
+    "sha256": "a90217d9bab6c0469917a2ba75ed9517205d2ac2b3d59f8d68580604f26df07f",
+    "schema_version": 40,
+    "release": "poe2-0_5-native-profiles-3887ae6",
+    "semantics_version": "poe2-native-profiles-v40"
+  },
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/ConfigTab.lua",
+        "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+      },
+      {
+        "path": "src/Data/BossSkills.lua",
+        "sha256": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d"
+      },
+      {
+        "path": "src/Data/Bosses.lua",
+        "sha256": "831a328c0c554687b5f3c40e1ff8a4ee905457f8b940baab236fab9281415ed3"
+      },
+      {
+        "path": "src/Data/Global.lua",
+        "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+      },
+      {
+        "path": "src/Data/Misc.lua",
+        "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+      },
+      {
+        "path": "src/Data/QuestRewards.lua",
+        "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af"
+      },
+      {
+        "path": "src/Modules/Common.lua",
+        "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+      },
+      {
+        "path": "src/Modules/ConfigOptions.lua",
+        "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+      },
+      {
+        "path": "src/Modules/Data.lua",
+        "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+      }
+    ]
+  },
+  "defaults_evidence": {
+    "create_config_set": {
+      "path": "src/Classes/ConfigTab.lua",
+      "line": 1317,
+      "end_line": 1334,
+      "sha256": "60ff84266cd7f571d1b199bf0dae52509d516d61c1bf8108131029fef2724dd3"
+    },
+    "get_default_state": {
+      "path": "src/Classes/ConfigTab.lua",
+      "line": 980,
+      "end_line": 998,
+      "sha256": "baea460ba9491fd0bc3eff3f93fbffeb1dffd5572dc4171d015da2f736c7f54b"
+    }
+  },
+  "rows": [
+    {
+      "config_key": "questAct 1ClearfellBeira",
+      "source_index": 1,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 2
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 1.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Clearfell"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 2.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 1"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Beira"
+        },
+        "Stat": {
+          "kind": "text",
+          "value": "+10% to Cold Resistance"
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "boolean",
+        "default": true,
+        "stat_text": "+10% to Cold Resistance"
+      }
+    },
+    {
+      "config_key": "questAct 1FreythornKing In The Mists",
+      "source_index": 3,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 21
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 1.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Freythorn"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 11.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 1"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "King In The Mists"
+        },
+        "Stat": {
+          "kind": "text",
+          "value": "+30 to Spirit"
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "boolean",
+        "default": true,
+        "stat_text": "+30 to Spirit"
+      }
+    },
+    {
+      "config_key": "questAct 1Ogham ManorCandlemass",
+      "source_index": 5,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 40
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 1.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Ogham Manor"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 15.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 1"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Candlemass"
+        },
+        "Stat": {
+          "kind": "text",
+          "value": "+20 to maximum Life"
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "boolean",
+        "default": true,
+        "stat_text": "+20 to maximum Life"
+      }
+    },
+    {
+      "config_key": "questAct 2Spires of DesharSisters of Garukhan Shrine",
+      "source_index": 9,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 81
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 2.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Spires of Deshar"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 30.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 2"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Sisters of Garukhan Shrine"
+        },
+        "Stat": {
+          "kind": "text",
+          "value": "+10% to Lightning Resistance"
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "boolean",
+        "default": true,
+        "stat_text": "+10% to Lightning Resistance"
+      }
+    },
+    {
+      "config_key": "questAct 2Valley of the TitansMedallion",
+      "source_index": 7,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 59
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 2.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Valley of the Titans"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 26.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 2"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Medallion"
+        },
+        "Options": {
+          "kind": "array",
+          "value": [
+            {
+              "kind": "text",
+              "value": "30% increased Charm Charges Gained\n\t+1 Charm Slot"
+            },
+            {
+              "kind": "text",
+              "value": "30% increased Charm Effect Duration\n\t+1 Charm Slot"
+            }
+          ]
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "option",
+        "default": "None",
+        "none_token": "None",
+        "options": [
+          "None",
+          "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+          "30% increased Charm Effect Duration\n\t+1 Charm Slot"
+        ]
+      }
+    },
+    {
+      "config_key": "questAct 3Azak BogIgnagduk",
+      "source_index": 11,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 100
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 3.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Azak Bog"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 36.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 3"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Ignagduk"
+        },
+        "Stat": {
+          "kind": "text",
+          "value": "+30 to Spirit"
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "boolean",
+        "default": true,
+        "stat_text": "+30 to Spirit"
+      }
+    },
+    {
+      "config_key": "questAct 3Jiquani's MachinariumBlackjaw",
+      "source_index": 13,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 122
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 3.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Jiquani's Machinarium"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 37.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 3"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Blackjaw"
+        },
+        "Stat": {
+          "kind": "text",
+          "value": "+10% to Fire Resistance"
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "boolean",
+        "default": true,
+        "stat_text": "+10% to Fire Resistance"
+      }
+    },
+    {
+      "config_key": "questAct 3Venom CryptsVenom Draught",
+      "source_index": 12,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 109
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 3.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Venom Crypts"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 35.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 3"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Venom Draught"
+        },
+        "Options": {
+          "kind": "array",
+          "value": [
+            {
+              "kind": "text",
+              "value": "25% increased Stun Threshold"
+            },
+            {
+              "kind": "text",
+              "value": "30% increased Elemental Ailment Threshold"
+            },
+            {
+              "kind": "text",
+              "value": "25% increased Mana Regeneration Rate"
+            }
+          ]
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "option",
+        "default": "None",
+        "none_token": "None",
+        "options": [
+          "None",
+          "25% increased Stun Threshold",
+          "30% increased Elemental Ailment Threshold",
+          "25% increased Mana Regeneration Rate"
+        ]
+      }
+    },
+    {
+      "config_key": "questAct 4Abandoned PrisonGoddess of Justice",
+      "source_index": 22,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 218
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 4.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Abandoned Prison"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 51.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 4"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Goddess of Justice"
+        },
+        "Options": {
+          "kind": "array",
+          "value": [
+            {
+              "kind": "text",
+              "value": "30% increased Life Recovery from Flasks"
+            },
+            {
+              "kind": "text",
+              "value": "30% increased Mana Recovery from Flasks"
+            }
+          ]
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "option",
+        "default": "None",
+        "none_token": "None",
+        "options": [
+          "None",
+          "30% increased Life Recovery from Flasks",
+          "30% increased Mana Recovery from Flasks"
+        ]
+      }
+    },
+    {
+      "config_key": "questAct 4Eye of HinekoraSilent Hall",
+      "source_index": 16,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 151
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 4.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Eye of Hinekora"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 51.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 4"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Silent Hall"
+        },
+        "Stat": {
+          "kind": "text",
+          "value": "5% increased Maximum Mana"
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "boolean",
+        "default": true,
+        "stat_text": "5% increased Maximum Mana"
+      }
+    },
+    {
+      "config_key": "questAct 4Eye of HinekoraTribal Medicine",
+      "source_index": 17,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 160
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 4.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Eye of Hinekora"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 51.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 4"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Tribal Medicine"
+        },
+        "Options": {
+          "kind": "array",
+          "value": [
+            {
+              "kind": "text",
+              "value": "30% increased Global Armour, Evasion and Energy Shield"
+            },
+            {
+              "kind": "text",
+              "value": "+15% of Armour also applies to Elemental Damage\n\tGain Deflection Rating equal to 12% of Evasion Rating\n\t12% faster start of Energy Shield Recharge"
+            }
+          ]
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "option",
+        "default": "None",
+        "none_token": "None",
+        "options": [
+          "None",
+          "30% increased Global Armour, Evasion and Energy Shield",
+          "+15% of Armour also applies to Elemental Damage\n\tGain Deflection Rating equal to 12% of Evasion Rating\n\t12% faster start of Energy Shield Recharge"
+        ]
+      }
+    },
+    {
+      "config_key": "questAct 4Halls Of The DeadNgamahu's Test",
+      "source_index": 20,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 196
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 4.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Halls Of The Dead"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 52.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 4"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Ngamahu's Test"
+        },
+        "Options": {
+          "kind": "array",
+          "value": [
+            {
+              "kind": "text",
+              "value": "+5 to Strength"
+            },
+            {
+              "kind": "text",
+              "value": "+5% to Fire Resistance"
+            }
+          ]
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "option",
+        "default": "None",
+        "none_token": "None",
+        "options": [
+          "None",
+          "+5 to Strength",
+          "+5% to Fire Resistance"
+        ]
+      }
+    },
+    {
+      "config_key": "questAct 4Halls Of The DeadTasalio's Test",
+      "source_index": 19,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 184
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 4.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Halls Of The Dead"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 52.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 4"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Tasalio's Test"
+        },
+        "Options": {
+          "kind": "array",
+          "value": [
+            {
+              "kind": "text",
+              "value": "+5 to Intelligence"
+            },
+            {
+              "kind": "text",
+              "value": "+5% to Cold Resistance"
+            }
+          ]
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "option",
+        "default": "None",
+        "none_token": "None",
+        "options": [
+          "None",
+          "+5 to Intelligence",
+          "+5% to Cold Resistance"
+        ]
+      }
+    },
+    {
+      "config_key": "questAct 4Halls Of The DeadTawhoa's Test",
+      "source_index": 18,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 172
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 4.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Halls Of The Dead"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 52.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Act 4"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Tawhoa's Test"
+        },
+        "Options": {
+          "kind": "array",
+          "value": [
+            {
+              "kind": "text",
+              "value": "+5 to Dexterity"
+            },
+            {
+              "kind": "text",
+              "value": "+5% to Lightning Resistance"
+            }
+          ]
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "option",
+        "default": "None",
+        "none_token": "None",
+        "options": [
+          "None",
+          "+5 to Dexterity",
+          "+5% to Lightning Resistance"
+        ]
+      }
+    },
+    {
+      "config_key": "questInterlude 2Khari CrossingMolten Shrine",
+      "source_index": 25,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 250
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 5.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Khari Crossing"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 61.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Interlude 2"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Molten Shrine"
+        },
+        "Stat": {
+          "kind": "text",
+          "value": "5% increased maximum Life"
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "boolean",
+        "default": true,
+        "stat_text": "5% increased maximum Life"
+      }
+    },
+    {
+      "config_key": "questInterlude 2QimahSeven Pillars",
+      "source_index": 26,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 259
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 5.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Qimah"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 63.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Interlude 2"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Seven Pillars"
+        },
+        "Options": {
+          "kind": "array",
+          "value": [
+            {
+              "kind": "text",
+              "value": "+5% to all Elemental Resistances"
+            },
+            {
+              "kind": "text",
+              "value": "3% increased Movement Speed"
+            },
+            {
+              "kind": "text",
+              "value": "15% increased Global Armour, Evasion and Energy Shield"
+            },
+            {
+              "kind": "text",
+              "value": "20% increased Presence Area Of Effect"
+            },
+            {
+              "kind": "text",
+              "value": "12% increased Cooldown Recovery Rate"
+            },
+            {
+              "kind": "text",
+              "value": "+5 to all Attributes"
+            },
+            {
+              "kind": "text",
+              "value": "5% increased Experience Gain\n\t-5% to all Elemental Resistances\n\t3% reduced Movement Speed\n\t15% reduced Global Armour, Evasion and Energy Shield\n\t20% reduced Presence Area Of Effect\n\t12% reduced Cooldown Recovery Rate\n\t5% reduced Attributes"
+            }
+          ]
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "option",
+        "default": "None",
+        "none_token": "None",
+        "options": [
+          "None",
+          "+5% to all Elemental Resistances",
+          "3% increased Movement Speed",
+          "15% increased Global Armour, Evasion and Energy Shield",
+          "20% increased Presence Area Of Effect",
+          "12% increased Cooldown Recovery Rate",
+          "+5 to all Attributes",
+          "5% increased Experience Gain\n\t-5% to all Elemental Resistances\n\t3% reduced Movement Speed\n\t15% reduced Global Armour, Evasion and Energy Shield\n\t20% reduced Presence Area Of Effect\n\t12% reduced Cooldown Recovery Rate\n\t5% reduced Attributes"
+        ]
+      }
+    },
+    {
+      "config_key": "questInterlude 3Kriar VillageLythara",
+      "source_index": 27,
+      "location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 276
+      },
+      "generator": {
+        "path": "src/Modules/ConfigOptions.lua",
+        "line": 56,
+        "end_line": 108,
+        "sha256": "8ff7915dec56f99fbf341fdb5413826bdecd8af772ab16fe08e0a7520dafc120"
+      },
+      "source_record": {
+        "Act": {
+          "kind": "number",
+          "value": 5.0
+        },
+        "Area": {
+          "kind": "text",
+          "value": "Kriar Village"
+        },
+        "AreaLevel": {
+          "kind": "number",
+          "value": 61.0
+        },
+        "Description": {
+          "kind": "text",
+          "value": "Interlude 3"
+        },
+        "Info": {
+          "kind": "text",
+          "value": "Lythara"
+        },
+        "Stat": {
+          "kind": "text",
+          "value": "+40 to Spirit"
+        },
+        "useConfig": {
+          "kind": "boolean",
+          "value": true
+        }
+      },
+      "choice": {
+        "kind": "boolean",
+        "default": true,
+        "stat_text": "+40 to Spirit"
+      }
+    }
+  ]
+}

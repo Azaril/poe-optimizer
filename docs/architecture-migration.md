@@ -47,10 +47,16 @@ source-bound quality coefficients. Checked native lookup preserves unsupported d
 through required inputs and provider/actor/action evaluation. The optional source exporter
 recognizes reviewed literal shapes only; it does not load UI state or interpret Lua.
 
+The production catalog extension now binds all-five normalization to this persisted
+registry. It preserves existing IDs/descriptors, rejects stale inputs and produces explicit
+successor bindings; runtime loading never repairs artifacts. Reviewed reward/equipment/
+quality policies retain the existing breadth coverage, and breadth tests load shipped data
+instead of allocating a separate private identity namespace.
+
 This advances D2 beyond test-authored numerical fixtures. It does not complete D2/D3:
-import mappings/policies still need binding to this persisted registry, effective inputs
-need all incoming contributions, and the real recipes retain partial mechanics/routes.
-The assembler reports those limits instead of declaring a full build. D5 retirement of
+selected input semantics and effective values still need all applicable contributions,
+and the real recipes retain partial mechanics/routes. The assembler and normalizer report
+those limits instead of declaring a full build. D5 retirement of
 active Spark/Mace preparation still requires replacing both fresh calculation and its
 independent realization validation with the owned semantic path.
 

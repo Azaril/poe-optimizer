@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "version": "explicit-unconverted-item-lines-v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-components",
+    "schema_version": 1,
+    "content_sha256": "be845a5de89f06eba928c4c285678cbc177b0ff4293a9a69528138db1d50f87b",
+    "semantics_version": "owned-mechanics-components-v1"
+  },
+  "whitespace": "exact",
+  "rules": []
+}
