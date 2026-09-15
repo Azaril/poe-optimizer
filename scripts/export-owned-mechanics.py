@@ -227,7 +227,7 @@ def export(manifest, recipe, catalog_bytes: bytes, source_root: Path, limits: Li
                       "record_tables", "array_tables", "literal_facts", "algorithm_evidence", "table_bindings", "literal_bindings", "unresolved"}, "manifest")
     fields(recipe, {"schema_version", "registry", "schema", "rules", "routing"}, "owned recipe")
     fields(recipe["rules"], {"schema_version", "namespace", "release", "semantics_version", "operations_version", "definitions", "tables", "owners", "receivers"}, "owned rules")
-    if recipe["rules"]["schema_version"] != 2 or recipe["rules"]["operations_version"] != "owned-domain-operations-v5":
+    if recipe["rules"]["schema_version"] != 2 or recipe["rules"]["operations_version"] != "owned-domain-operations-v6":
         raise ValueError("unsupported owned rule package version/operations")
     if manifest["schema_version"] != 1 or recipe["schema_version"] != 1:
         raise ValueError("unsupported manifest/recipe version")

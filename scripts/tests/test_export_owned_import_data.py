@@ -40,10 +40,12 @@ class ImportExportTests(unittest.TestCase):
             self.assertEqual(value["rules"]["schema_version"], 2)
             self.assertEqual(value["rules"]["receivers"], {"members": [], "closure": {"kind": "complete"}})
         original = EXPORT.decode(self.inputs[1])["rules"]
-        for changed in ["missing", "old_version"]:
+        for changed in ["missing", "old_version", "old_operations"]:
             rules = copy.deepcopy(original)
             if changed == "missing":
                 rules.pop("receivers")
+            elif changed == "old_operations":
+                rules["operations_version"] = "owned-domain-operations-v5"
             else:
                 rules["schema_version"] = 1
             with self.assertRaisesRegex(ValueError, "owned rule"):

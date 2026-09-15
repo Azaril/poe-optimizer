@@ -38,6 +38,18 @@ not completion of joint optimization. D5 retirement happens throughout D1–D4, 
 permission to keep obsolete code indefinitely. Avoid a flag day that deletes useful
 numerical validation before its meaning is preserved.
 
+## Current modifier computation checkpoint
+
+The persisted native catalyst scalar now uses an exact modifier-occurrence Stat target,
+with shared item properties and owned input predicates. See
+[modifier values](owned-modifier-values.md). It is an intermediate stage; emitting its
+partially scaled amount as a final contribution would be unsound even under Partial
+coverage. D3 still requires ordered transform binding, source encoding admission and
+final receivers. Package operations v6 and effect-plan identity v5 make the new semantics
+explicit; existing rule bodies/IDs retain their meaning. No additional source interpreter
+or UI lifecycle was added. Original native completion remains 0/5 and D5 retirement gates
+remain open.
+
 ## Native metric and retirement checkpoint
 
 The [owned metric contract](owned-metrics.md) now gives D3 a data-bound native query
@@ -120,8 +132,8 @@ placeholders with semantic declarations and
 allow source definitions to produce zero/one/many owned declarations; PoB Gem rows do not
 prove physical gem ownership. The
 [owned package contract](owned-definition-package.md) now has typed descriptors and a
-validated injectable schema package/index. Durable owned-ID allocation and exact offline mapping artifacts are implemented. Catalog
-conversion and the complete D2 exit evidence remain open; schema validity is not numerical coverage.
+validated injectable schema package/index. Durable owned-ID allocation and exact offline mapping artifacts are implemented. Catalog conversion is now implemented. Complete D2 semantic coverage remains open;
+schema validity is not numerical coverage.
 
 The [owned rule component boundary](owned-rules.md) is now implemented: Core authoring DTOs,
 Data's strict schema-bound rule storage, Engine's typed DAG compiler and explicit-fact
@@ -129,10 +141,11 @@ executor, and the thin `check-owned-rules` CLI. Stat/capability definitions brin
 to 24 standalone descriptor families. Item/gem quality has explicit presence/amount reads;
 missing facts never become default zero. Synthetic component fixtures exercise local-item,
 attribute-condition, support and grant operations with changed data and scope checks.
-They do not complete real source conversion or original-build parity; **0/5** remains.
+Persisted real-effect recipes and reviewed numerical tables now extend these fixtures,
+without completing original-build parity; **0/5** remains.
 
-The next D2 gate is reproducible conversion of real effects with independent numerical
-evidence. D3's owned effect-plan component implementation is validated. It accepts a
+The remaining D2 gate is sufficient real-effect coverage for complete original builds,
+with independent numerical evidence. D3's owned effect-plan component implementation is validated. It accepts a
 directly authored `OwnedEvaluationRequest`, injected schema, compiled rule package and a
 schema-bound action-routing artifact. It binds exact equipment/modifier/provider occurrences,
 projects stats into declared generated actors, and compiles effect-level dependencies with
@@ -167,7 +180,7 @@ retirement remain open.
 
 ## Shared timing and real quality inputs
 
-The owned v4 operation set now includes a bounded native ordinary-timing algorithm with
+The owned operation set introduced in v4, now v6, includes a bounded native ordinary-timing algorithm with
 explicit reciprocal units and independent output classification. The legacy timing entry
 point delegates to the same pure primitive, preserving numerical/reference laws. Its
 profile-specific input preparation and independent realization-validation path still need
@@ -176,10 +189,9 @@ support or metric coverage.
 
 Explicit gem quality now imports through injected kind/amount policy for all five originals,
 including known zero amounts. This advances input normalization while preserving pending
-schema/collection/selection obligations. The next data gate is production persisted owned
-recipes and full reviewed numerical tables. Reuse existing registry/package validators and
-keep source-fact acquisition offline. Choose finite-table representation from real level and
-actor data; do not encode source callbacks, promote test recipes to a complete catalog, or
+schema/collection/selection obligations. Production persisted recipes and reviewed
+finite tables are now implemented. Expand their coverage through the existing package
+validators and keep source-fact acquisition offline; do not encode source callbacks, promote test recipes to a complete catalog, or
 use reference output values as execution inputs.
 
 ## Explicit skill supply and equipment-scope checkpoint
@@ -264,17 +276,19 @@ Whole-item closure, provider activation and complete builds remain separate gate
 source audit and proposed API are in `runs/owned-item-level-01/range-design.md`.
 
 The normalizer requires an explicit `--item-source` policy bound to its item-line artifact,
-and sidecar v5 binds reference routing to that same policy. Rare titles are consumed as
+and the current sidecar v8 binds reference routing to that same policy. Rare titles are consumed as
 presentation independently of injected semantic patterns. Unsupported tags remain blocked
 while retaining candidates from raw and cleaned text, so they cannot hide competing fields.
 Preamble position failures block facts as well as range proof. Source/output/work bounds
 include repeated invalidation and candidate collection; uncertainty never becomes a default.
 
-The owned effect-plan work above begins binding admitted item parameters and local weapon
-outputs to real provider/action uses; its validation and real-source integration remain open.
+The owned effect-plan work above validates exact provider bindings and now integrates
+real imported item inputs with persisted scalar recipes. Complete local weapon outputs,
+final resistance and whole-build evaluation remain open.
 Do not broaden the source adapter into general PoB object reconstruction. Rune/Bonded,
-variants, collection closure, unspecified-level proof and complete selected finalization
-remain explicit conversion work. D3 must activate the item-granted Firebolt separately from
+variants, collection closure and complete selected finalization remain explicit conversion
+work. Scoped item-level/quality absence is implemented for the reviewed Sapphire template;
+broader absence/default policies require separate evidence. D3 must activate the item-granted Firebolt separately from
 the authored Sniper and exercise player/minion paths through the same owned contracts.
 The next numerical checkpoint still requires a named active legacy consumer migration and
 retirement; the source-attribution component alone does not meet that gate.

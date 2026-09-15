@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v5";
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v6";
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -95,6 +95,10 @@ pub struct RuleProgram {
 #[serde(rename_all = "snake_case")]
 pub enum RuleEntity {
     Current,
+    /// This program's exact modifier occurrence. Semantic compilation permits
+    /// this only for a Modifier owner in EquipmentUse context; Current remains
+    /// the owning equipment use, not the modifier.
+    Modifier,
     Actor,
     Player,
     Enemy,

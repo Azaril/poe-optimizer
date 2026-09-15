@@ -399,21 +399,21 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 entity: relative,
                 stat,
             } => PendingRead::Value(PlanValueKey::Stat {
-                entity: entity(*relative, c),
+                entity: entity(*relative, c)?,
                 stat: stat.clone(),
             }),
             RuleReadSource::Capability {
                 entity: relative,
                 capability,
             } => PendingRead::Value(PlanValueKey::Capability {
-                entity: entity(*relative, c),
+                entity: entity(*relative, c)?,
                 capability: capability.clone(),
             }),
             RuleReadSource::External {
                 entity: relative,
                 input,
             } => {
-                let target = match entity(*relative, c) {
+                let target = match entity(*relative, c)? {
                     ConcreteEntity::Actor(actor) => AssumptionTarget::Actor(actor),
                     ConcreteEntity::Enemy => AssumptionTarget::Enemy,
                     ConcreteEntity::Environment => AssumptionTarget::Environment,
@@ -436,7 +436,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 empty,
             } => PendingRead::Contributions(
                 ContributionKey {
-                    entity: entity(*relative, c),
+                    entity: entity(*relative, c)?,
                     stat: stat.clone(),
                     kind: *contribution,
                 },

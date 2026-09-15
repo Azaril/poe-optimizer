@@ -343,9 +343,26 @@ fn membership<T: PartialEq>(
         "slot is not a declared member of this owner",
     )
 }
-fn entity(e: RuleEntity, context: RuleEntityKind, path: &str) -> Result<RuleEntityKind, RuleError> {
+fn entity(
+    e: RuleEntity,
+    context: RuleEntityKind,
+    owner: &SchemaSubject,
+    path: &str,
+) -> Result<RuleEntityKind, RuleError> {
     Ok(match e {
         RuleEntity::Current => context,
+        RuleEntity::Modifier => {
+            check(
+                context == RuleEntityKind::EquipmentUse
+                    && matches!(
+                        owner,
+                        SchemaSubject::Definition(DefinitionAddress::Modifier(_))
+                    ),
+                path,
+                "relative Modifier requires Modifier owner and EquipmentUse context",
+            )?;
+            RuleEntityKind::Modifier
+        }
         RuleEntity::Player => RuleEntityKind::Actor,
         RuleEntity::Enemy => RuleEntityKind::Enemy,
         RuleEntity::Environment => RuleEntityKind::Environment,
@@ -363,12 +380,13 @@ fn stat<'a, I: DefinitionSchemaIndex>(
     id: &StatDefId,
     e: RuleEntity,
     c: RuleEntityKind,
+    owner: &SchemaSubject,
     index: &'a I,
     path: &str,
 ) -> Result<&'a ComputedValueType, RuleError> {
     let s = known(index.definition(id), path)?;
     check(
-        s.targets.contains(&entity(e, c, path)?),
+        s.targets.contains(&entity(e, c, owner, path)?),
         path,
         "stat target/context mismatch",
     )?;
@@ -379,13 +397,14 @@ fn capability<I: DefinitionSchemaIndex>(
     id: &CapabilityDefId,
     e: RuleEntity,
     c: RuleEntityKind,
+    owner: &SchemaSubject,
     index: &I,
     path: &str,
 ) -> Result<(), RuleError> {
     check(
         known(index.definition(id), path)?
             .targets
-            .contains(&entity(e, c, path)?),
+            .contains(&entity(e, c, owner, path)?),
         path,
         "capability target/context mismatch",
     )
@@ -533,17 +552,17 @@ fn read<I: DefinitionSchemaIndex>(
         RuleReadSource::Stat {
             entity: e,
             stat: id,
-        } => stat(id, *e, p.context, index, path)?.clone(),
+        } => stat(id, *e, p.context, owner, index, path)?.clone(),
         RuleReadSource::Capability {
             entity: e,
             capability: id,
         } => {
-            capability(id, *e, p.context, index, path)?;
+            capability(id, *e, p.context, owner, index, path)?;
             ComputedValueType::Boolean
         }
         RuleReadSource::External { entity: e, input } => {
             let s = known(index.definition(input), path)?;
-            let target = match entity(*e, p.context, path)? {
+            let target = match entity(*e, p.context, owner, path)? {
                 RuleEntityKind::Actor => AssumptionTargetKind::Actor,
                 RuleEntityKind::Enemy => AssumptionTargetKind::Enemy,
                 RuleEntityKind::Environment => AssumptionTargetKind::Environment,
@@ -564,7 +583,7 @@ fn read<I: DefinitionSchemaIndex>(
             reduction,
             empty,
         } => {
-            let st = stat(id, *e, p.context, index, path)?;
+            let st = stat(id, *e, p.context, owner, index, path)?;
             validate_value(empty, index, path)?;
             contribution(*kind, st, &r.value_type, index, path)?;
             let product = *kind == ContributionKind::Multiply;
@@ -846,6 +865,11 @@ fn program<I: DefinitionSchemaIndex>(
     b: &mut Budget,
     path: &str,
 ) -> Result<CompiledProgram, RuleError> {
+    check(
+        p.context != RuleEntityKind::Modifier,
+        path,
+        "Modifier is a relative value scope, not a program context",
+    )?;
     let (ports, tables) = declarations;
     let mut reads = Vec::with_capacity(p.reads.len());
     let mut read_index = BTreeMap::new();
@@ -960,7 +984,7 @@ fn program<I: DefinitionSchemaIndex>(
                 let i = resolve(value)?;
                 contribution(
                     *kind,
-                    stat(id, *e, p.context, index, &ep)?,
+                    stat(id, *e, p.context, &owner.owner, index, &ep)?,
                     &nodes[i].ty,
                     index,
                     &ep,
@@ -971,13 +995,16 @@ fn program<I: DefinitionSchemaIndex>(
                 entity: e,
                 stat: id,
                 value,
-            } => (value, stat(id, *e, p.context, index, &ep)?.clone()),
+            } => (
+                value,
+                stat(id, *e, p.context, &owner.owner, index, &ep)?.clone(),
+            ),
             RuleEffectKind::Capability {
                 entity: e,
                 capability: id,
                 enabled,
             } => {
-                capability(id, *e, p.context, index, &ep)?;
+                capability(id, *e, p.context, &owner.owner, index, &ep)?;
                 (enabled, ComputedValueType::Boolean)
             }
             RuleEffectKind::SupportApplicability { applicable } => {
@@ -1067,7 +1094,15 @@ fn program<I: DefinitionSchemaIndex>(
                 // current program's context; this does not activate that actor.
                 (
                     value,
-                    stat(id, RuleEntity::Current, RuleEntityKind::Actor, index, &ep)?.clone(),
+                    stat(
+                        id,
+                        RuleEntity::Current,
+                        RuleEntityKind::Actor,
+                        &owner.owner,
+                        index,
+                        &ep,
+                    )?
+                    .clone(),
                 )
             }
             RuleEffectKind::Requirement { satisfied, .. } => {

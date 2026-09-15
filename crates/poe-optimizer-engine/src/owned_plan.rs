@@ -110,6 +110,9 @@ pub enum ConcreteEntity {
     Actor(ActorKey),
     Action(Box<ActionSelection>),
     EquipmentUse(ItemSlotUseId),
+    /// One exact modifier on one receiving equipment use. Repeated definitions
+    /// and repeated uses of a backing item never share intermediate values.
+    Modifier(ProviderKey),
     Enemy,
     Environment,
 }

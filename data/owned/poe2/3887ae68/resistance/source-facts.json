@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "scope": "resistance-contribution-only",
-  "base_recipe_sha256": "1e985847d255ceee684aaab55176f4cd3ee12e91d21696f17fa0c686c8c29b1d",
-  "recipe_sha256": "9f8cbf470389d5dfa79fe44d65e5da2f17faee39dbe2cbd4c3a11922431781c9",
+  "base_recipe_sha256": "aee66dfbbc621959f1ca84ac12ee350f018656751da3401a0355018d554cdd1f",
+  "recipe_sha256": "834a24f996e97bd732d4d5972a36d21b68c66495be97876069de7e9d6539a43d",
   "source": {
     "system": "path_of_building2",
     "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
@@ -281,6 +281,38 @@
       "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
       "sha256": "3c013bb10aa4f5bb7abb932cb903a46ba642edcc0380e34c6910b56ffe737712",
       "text": "\tif self.catalyst and self.catalyst > 0 then\n\t\tt_insert(rawLines, \"Catalyst: \" .. catalystList[self.catalyst])\n\tend\n\tif self.catalystQuality then\n\t\tt_insert(rawLines, \"CatalystQuality: \" .. self.catalystQuality)\n\tend\n"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 100,
+      "end_line": 114,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "d2a91c60c446110e9da57009f854b980454de51e182fc3c87973d61f8abaa70b",
+      "text": "---@enum (key) LineFlags\nlocal lineFlags = {\n\t[\"crafted\"] = true,\n\t[\"custom\"] = true,\n\t[\"disabled\"] = true,\n\t[\"enchant\"] = true,\n\t[\"fractured\"] = true,\n\t[\"implicit\"] = true,\n\t[\"desecrated\"] = true,\n\t[\"mutated\"] = true,\n\t[\"rune\"] = true,\n\t[\"unscalable\"] = true,\n\t[\"prefix\"] = true,\n\t[\"suffix\"] = true,\n}\n"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 978,
+      "end_line": 994,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "909864ea83f4949fa302f796c7c73e24ac7804848d4d823b203e633cd9346d58",
+      "text": "\t\t\t\t\t\tself.advancedCopy = true\n\t\t\t\t\t\tmodLine.range = tonumber(val)\n\t\t\t\t\telseif k == \"corruptedRange\" then\n\t\t\t\t\t\tmodLine.corruptedRange = tonumber(val)\n\t\t\t\t\telseif lineFlags[k] then\n\t\t\t\t\t\tmodLine[k] = true\n\t\t\t\t\tend\n\n\t\t\t\t\treturn \"\"\n\t\t\t\tend)\n\t\t\t\tline = line:gsub(\" %((%l+)%)\", function(k)\n\t\t\t\t\tif lineFlags[k] then\n\t\t\t\t\t\tmodLine[k] = true\n\t\t\t\t\tend\n\t\t\t\t\treturn \"\"\n\t\t\t\tend)\n\n"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 1117,
+      "end_line": 1126,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "a74238c68553d053332f327ab96d32b2ec204c52cd18befcf6d8345e8bb07250",
+      "text": "\t\t\t\t\tgoto continue\n\t\t\t\tend\n\t\t\t\tlocal catalystScalar = 1\n\t\t\t\tif line:match(\" %- Unscalable Value$\") or line:match(\" — Unscalable Value$\") then\n\t\t\t\t\tline = line:gsub(\" %- Unscalable Value$\", \"\"):gsub(\" — Unscalable Value$\", \"\")\n\t\t\t\t\tmodLine.unscalable = true\n\t\t\t\telse\n\t\t\t\t\tcatalystScalar = getCatalystScalar(self.catalyst, modLine, self.catalystQuality)\n\t\t\t\tend\n\t\t\t\t-- Advanced copy uses current(base) for fixed-value modifiers,\n"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 1954,
+      "end_line": 1958,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "f09cc2cfc953cc1a7119da2d00b644fbec4c401ea4b1c79c1535f5f73ec11450",
+      "text": "\t\tif modLine.unscalable then\n\t\t\tline = \"{unscalable}\" .. line\n\t\tend\n\t\tlocal hasNewSelection = modLine.versionList or modLine.variantGroupList\n\t\tif hasNewSelection and modLine.modTags and #modLine.modTags > 0 then\n"
     }
   ],
   "reward_outcomes": [
@@ -604,6 +636,46 @@
     "ordinary_quality": "Separate ItemRecord.quality; proved omission is explicit absence only for this reviewed template whose pinned base has no quality field. Authored Quality blocks the absence default.",
     "effective_scaling": false
   },
+  "catalyst_scalar": {
+    "implemented": true,
+    "scope": "Unrounded dimensionless intermediate on the exact modifier occurrence; not a final resistance contribution.",
+    "factor_unit": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000001"
+    },
+    "formula": "If unscalable is true:1. Otherwise if any selected catalyst predicate is true: (100 + enabled amount) / 100; otherwise1. Shared item inputs are transported by exact EquipmentUse identity.",
+    "property_predicates": [
+      "armour",
+      "attack",
+      "attribute",
+      "caster",
+      "chaos",
+      "cold",
+      "defences",
+      "energyshield",
+      "evasion",
+      "fire",
+      "life",
+      "lightning",
+      "mana",
+      "minion",
+      "physical",
+      "speed"
+    ],
+    "unknown_property_behavior": "Required typed inputs never default in the native evaluator. The source adapter alone proves false for absent labels after complete label scanning.",
+    "unscalable_input": "Required Boolean member metadata distinct from modTags. Literal false is limited to the exact admitted plain range grammar; other flags/suffixes remain pending.",
+    "final_magnitude_application": false,
+    "remaining_obligations": [
+      "source nominal versus baked encoding",
+      "per-member corruptedRange and numeric-component scalability",
+      "ordered additive and multiplicative magnitude operations",
+      "complete incoming transform membership"
+    ]
+  },
   "modifier_properties": {
     "implemented": true,
     "bindings": [
@@ -626,13 +698,73 @@
       {
         "label": "resistance",
         "property": "resistance"
+      },
+      {
+        "label": "life",
+        "property": "life"
+      },
+      {
+        "label": "mana",
+        "property": "mana"
+      },
+      {
+        "label": "defences",
+        "property": "defences"
+      },
+      {
+        "label": "armour",
+        "property": "armour"
+      },
+      {
+        "label": "evasion",
+        "property": "evasion"
+      },
+      {
+        "label": "energyshield",
+        "property": "energyshield"
+      },
+      {
+        "label": "physical",
+        "property": "physical"
+      },
+      {
+        "label": "fire",
+        "property": "fire"
+      },
+      {
+        "label": "lightning",
+        "property": "lightning"
+      },
+      {
+        "label": "chaos",
+        "property": "chaos"
+      },
+      {
+        "label": "attack",
+        "property": "attack"
+      },
+      {
+        "label": "caster",
+        "property": "caster"
+      },
+      {
+        "label": "speed",
+        "property": "speed"
+      },
+      {
+        "label": "attribute",
+        "property": "attribute"
+      },
+      {
+        "label": "minion",
+        "property": "minion"
       }
     ],
     "value_encoding": "nominal_integer_range",
     "property_set": "Every label on the selected source member must be mapped and consumed; unknown or unconsumed labels remain Pending. Absence is not a runtime default.",
     "effective_scaling": false,
     "remaining_obligations": [
-      "binding catalyst inputs to native equipment properties and effective transforms",
+      "remaining ordered transform inputs and final magnitude application",
       "source nominal versus baked encoding for other source families",
       "category and numeric-component scalability",
       "applicable ordered modifier-magnitude transforms",
@@ -641,8 +773,8 @@
   },
   "original_ring_attribution": {
     "status": "pending",
-    "input_status": "nominal_amount_and_five_properties_converted",
-    "reason": "The untouched original's five labels and source-attributed range become owned nominal inputs. Catalyst inputs/default provenance are preserved; encoding and modifier-magnitude obligations remain; the new family has Partial rules and no effective Contribute.",
+    "input_status": "nominal_amount_and_twenty_properties_converted",
+    "reason": "The untouched original's five labels and source-attributed range become owned nominal inputs, with fifteen additional catalyst predicates explicitly false from complete source labels. Shared item inputs feed a modifier-occurrence catalyst scalar only; encoding, scalability and ordered magnitude obligations remain Partial. No final effective Contribute is emitted.",
     "reviewed_tag": "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}",
     "diagnostic_only": "Range0/0.5/1 contrasts edit only XML fractions in memory and retain the actual tag. Nominal conversion is not effective scaling or native original success."
   },

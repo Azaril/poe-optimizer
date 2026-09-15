@@ -4,7 +4,7 @@
     "game": "poe2",
     "version": "owned-mechanics-v1"
   },
-  "version": "resistance-layout-v4",
+  "version": "resistance-layout-v5",
   "source": {
     "system": "path_of_building2",
     "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
@@ -147,7 +147,7 @@
       }
     ]
   },
-  "item_lines": "4ffed17225ddaa82bacfb8fc3cbc65b9840b5e47ec648b6a64429904c10e3a4e",
+  "item_lines": "0c24366c7b45d045eb6e5423d5a53e4aad497d06886ca33e8e42b5332082f627",
   "dialect": "pob_exported_single_text_v1",
   "rule_layouts": [
     {
@@ -264,6 +264,66 @@
     {
       "label": "resistance",
       "property": "resistance"
+    },
+    {
+      "label": "life",
+      "property": "life"
+    },
+    {
+      "label": "mana",
+      "property": "mana"
+    },
+    {
+      "label": "defences",
+      "property": "defences"
+    },
+    {
+      "label": "armour",
+      "property": "armour"
+    },
+    {
+      "label": "evasion",
+      "property": "evasion"
+    },
+    {
+      "label": "energyshield",
+      "property": "energyshield"
+    },
+    {
+      "label": "physical",
+      "property": "physical"
+    },
+    {
+      "label": "fire",
+      "property": "fire"
+    },
+    {
+      "label": "lightning",
+      "property": "lightning"
+    },
+    {
+      "label": "chaos",
+      "property": "chaos"
+    },
+    {
+      "label": "attack",
+      "property": "attack"
+    },
+    {
+      "label": "caster",
+      "property": "caster"
+    },
+    {
+      "label": "speed",
+      "property": "speed"
+    },
+    {
+      "label": "attribute",
+      "property": "attribute"
+    },
+    {
+      "label": "minion",
+      "property": "minion"
     }
   ],
   "template_defaults": [

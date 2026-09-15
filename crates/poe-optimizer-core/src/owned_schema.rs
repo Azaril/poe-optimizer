@@ -161,6 +161,7 @@ schema_enum!(RuleEntityKind {
     Actor,
     Action,
     EquipmentUse,
+    Modifier,
     Enemy,
     Environment,
 });

@@ -61,6 +61,11 @@ provider identity. Neither a possible-definition list nor a UI's current selecti
 an occurrence. Import adapters translate source selections to these addresses once; the
 native evaluator and future UI consume the same owned graph.
 
+Computed intermediate values also need domain identities. The
+[modifier occurrence contract](owned-modifier-values.md) distinguishes a modifier's own
+values from its supplying item's shared properties. This extends the existing native
+dependency graph; it does not expose PoB Item instances or parser state to the evaluator.
+
 ## Components and dependency direction
 
 ```mermaid

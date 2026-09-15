@@ -81,6 +81,27 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
         raise ValueError("invalid catalyst amount envelope/default")
     if catalyst["missing_ordinary_quality"] not in ["pending", "absent"]:
         raise ValueError("invalid ordinary quality absence policy")
+    scaling = authoring["catalyst_scaling"]
+    DATA.fields(scaling, "factor_unit percentage_base additional_properties", "catalyst scaling authoring")
+    additional = scaling["additional_properties"]
+    if not isinstance(additional, list) or len(additional) > 32 or len(properties) + len(additional) > 32:
+        raise ValueError("catalyst property collection bound exceeded")
+    for row in additional:
+        DATA.fields(row, "label property", "catalyst property binding")
+        if any(not isinstance(row[k], str) or re.fullmatch(r"[a-z][a-z_]{0,63}", row[k]) is None for k in ["label", "property"]):
+            raise ValueError("invalid catalyst property binding")
+        if row["label"] in labels or row["property"] in keys:
+            raise ValueError("duplicate catalyst property binding")
+        labels.add(row["label"])
+        keys.add(row["property"])
+    all_properties = properties + additional
+    selected_properties = set(p for row in selections for p in row["any_properties"])
+    if any(p["property"] in selected_properties and p["label"] != p["property"] for p in all_properties):
+        raise ValueError("catalyst property label must match the reviewed source predicate")
+    if set(p["property"] for p in additional) != selected_properties - set(p["property"] for p in properties):
+        raise ValueError("catalyst predicate coverage must be exact")
+    if type(scaling["percentage_base"]) is not int or scaling["percentage_base"] != 100:
+        raise ValueError("catalyst source arithmetic constants differ")
     mapping = load(base_dir / "mapping.json")
     if mapping["definitions"] != base["rules"]["definitions"] or mapping["registry"] != DATA.owned_digest("owned-id-registry-v1", base["registry"]):
         raise ValueError("base mapping binding differs")
@@ -135,6 +156,8 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
         fragment = "\n".join(base_lines[first - 1:last])
         if not fragment.startswith('itemBases["' + base_evidence["name"] + '"] = {') or not fragment.rstrip().endswith("}") or re.search(r"\bquality\s*=", fragment):
             raise ValueError("ordinary quality absence lacks exact base evidence")
+    if not re.search(r"return \(100 \+ quality\) / 100", item_source):
+        raise ValueError("catalyst scalar source expression differs")
     source["files"] = [{"path": name, "sha256": digest} for name, digest in sorted(pins.items())]
     recipe = copy.deepcopy(base)
     registry, schema, rules = recipe["registry"], recipe["schema"], recipe["rules"]
@@ -145,6 +168,10 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
     unit_schema = next((d for d in schema["definitions"] if d["value"]["id"] == unit), None)
     if unit_schema is None or unit_schema["value"]["schema"] != tag("known", {"dimension": "percentage_points"}):
         raise ValueError("exact percentage-points unit is not known")
+    factor_unit = scaling["factor_unit"]
+    factor_schema = next((d for d in schema["definitions"] if d["value"]["id"] == factor_unit), None)
+    if factor_schema is None or factor_schema["value"]["schema"] != tag("known", {"dimension": "dimensionless_factor"}):
+        raise ValueError("exact dimensionless factor unit is not known")
     def allocate(label, kind, payload, owner=None):
         registry["last_issued"] += 1
         registry["revision"] += 1
@@ -193,7 +220,7 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
         "quality": {"presence": "optional", "allowed_kinds": partial([], template, "item-quality-unconverted", "input_schema")}, "declarations": declarations()})
     rules["owners"].append({"owner": subject(template), "programs": partial([], template, "remaining-item-template-effects-unconverted")})
     # Preserve the first 2,524 registry entries and existing fixed-value meanings.
-    # Nominal inputs deliberately have no effective numerical rule yet.
+    # Nominal inputs retain explicit incomplete effective-transform coverage.
     nominal_modifiers = {}
     for name in ["cold", "elemental"]:
         ports = declarations()
@@ -213,6 +240,60 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
     catalyst_kind = allocate("item-catalyst-kind", "parameter_slot", {"value": tag("option", {"allowed": complete([no_catalyst] + [identifier for _, identifier in catalyst_options])}), "presence": "required_once", "sites": ["item_parameter"]}, template)
     catalyst_amount = allocate("item-catalyst-enabled-amount", "parameter_slot", {"value": tag("quantity", {"minimum": quantity(lo)["value"], "maximum": quantity(hi)["value"]}), "presence": "required_once", "sites": ["item_parameter"]}, template)
     payload["declarations"]["parameters"]["members"].extend([catalyst_kind, catalyst_amount])
+    # New consumer-required facts append after the entire prior 2,554-ID history.
+    for name, (definition, _, property_slots) in nominal_modifiers.items():
+        ports = next(d["value"]["schema"]["value"]["declarations"] for d in schema["definitions"] if d["value"]["id"] == definition)
+        for binding in additional:
+            parameter = allocate("nominal-" + name + "-property-" + binding["property"], "parameter_slot", {"value": tag("boolean"), "presence": "required_once", "sites": ["modifier_roll"]}, definition)
+            ports["parameters"]["members"].append(parameter)
+            property_slots.append((binding["property"], parameter))
+    equipment_kind = allocate("equipment-catalyst-kind", "stat", {"value": tag("option"), "targets": ["equipment_use"]})
+    equipment_amount = allocate("equipment-catalyst-enabled-amount", "stat", {"value": quantity_type(), "targets": ["equipment_use"]})
+    modifier_scalar = allocate("modifier-catalyst-scalar", "stat", {"value": tag("quantity", {"unit": factor_unit}), "targets": ["modifier"]})
+    unscalable_slots = {}
+    for name, (definition, _, _) in nominal_modifiers.items():
+        slot = allocate("nominal-" + name + "-unscalable", "parameter_slot", {"value": tag("boolean"), "presence": "required_once", "sites": ["modifier_roll"]}, definition)
+        next(d["value"]["schema"]["value"]["declarations"]["parameters"]["members"] for d in schema["definitions"] if d["value"]["id"] == definition).append(slot)
+        unscalable_slots[name] = slot
+    template_program = {"id": "catalyst-inputs", "context": "equipment_use", "reads": [], "nodes": [], "effects": []}
+    for name, slot, stat, value_type in [("catalyst-kind", catalyst_kind, equipment_kind, tag("option")), ("catalyst-amount", catalyst_amount, equipment_amount, quantity_type())]:
+        template_program["reads"].append({"id": name, "value_type": value_type, "source": tag("parameter", {"slot": slot})})
+        template_program["nodes"].append({"id": name, "expression": {"kind": "read", "input": name}})
+        template_program["effects"].append({"id": name, "when": None, "effect": {"kind": "derive", "entity": "current", "stat": stat, "value": name}})
+    next(o for o in rules["owners"] if o["owner"] == subject(template))["programs"]["members"].append(template_program)
+    for name, (definition, amount_slot, property_slots) in nominal_modifiers.items():
+        program = {"id": "catalyst-scalar", "context": "equipment_use", "reads": [], "nodes": [], "effects": []}
+        def add_node(identifier, kind, **fields):
+            program["nodes"].append({"id": identifier, "expression": {"kind": kind, **fields}})
+            return identifier
+        def add_read(identifier, value_type, source):
+            program["reads"].append({"id": identifier, "value_type": value_type, "source": source})
+            return add_node(identifier, "read", input=identifier)
+        add_read("unscalable", tag("boolean"), tag("parameter", {"slot": unscalable_slots[name]}))
+        add_read("catalyst-kind", tag("option"), tag("stat", {"entity": "current", "stat": equipment_kind}))
+        add_read("catalyst-amount", quantity_type(), tag("stat", {"entity": "current", "stat": equipment_amount}))
+        for property_key, property_slot in property_slots:
+            if property_key in selected_properties:
+                add_read("property-" + property_key, tag("boolean"), tag("parameter", {"slot": property_slot}))
+        matches = []
+        for selector, option in catalyst_options:
+            key = selector["key"]
+            add_node("option-" + key, "literal", value=tag("option", option))
+            add_node("selected-" + key, "compare", operation="equal", left="catalyst-kind", right="option-" + key)
+            add_node("properties-" + key, "any", values=["property-" + prop for prop in selector["any_properties"]])
+            matches.append(add_node("applies-" + key, "all", values=["selected-" + key, "properties-" + key]))
+        add_node("catalyst-applicable", "any", values=matches)
+        add_node("percentage-base", "literal", value=quantity(scaling["percentage_base"]))
+        add_node("enabled-percentage", "add", left="percentage-base", right="catalyst-amount")
+        add_node("enabled-factor", "ratio", numerator="enabled-percentage", denominator="percentage-base", unit=factor_unit)
+        add_node("one", "literal", value=tag("quantity", {"value": 1.0, "unit": factor_unit}))
+        add_node("eligible-factor", "select", condition="catalyst-applicable", when_true="enabled-factor", when_false="one")
+        add_node("catalyst-factor", "select", condition="unscalable", when_true="one", when_false="eligible-factor")
+        program["effects"].append({"id": "catalyst-scalar", "when": None, "effect": {"kind": "derive", "entity": "modifier", "stat": modifier_scalar, "value": "catalyst-factor"}})
+        owner = next(o for o in rules["owners"] if o["owner"] == subject(definition))
+        owner["programs"] = {"members": [program], "closure": tag("partial", {"gaps": [
+            {"subject": subject(definition), "facet": "game_rules", "code": code} for code in [
+                "source-encoding-and-corrupted-range-unproved", "numeric-component-scalability-unproved", "remaining-ordered-magnitude-transforms-unconverted"]]})}
     reward_facts = load(import_inputs / "reward-source-facts.json")
     reward_rows = {r["config_key"]: r for r in reward_facts["rows"]}
     mapped = {compact(r["source"]): r for r in mapping["entries"]}
@@ -280,14 +361,16 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
                 "rounding": "symmetric_half_offset"})
             nominal_definition, nominal_slot, property_slots = nominal_modifiers[name]
             rolls = [{"slot": nominal_slot, "value": value}] + [{"slot": property_slot, "value": tag("property", {"property": property_key})} for property_key, property_slot in property_slots]
+            # Exact admitted grammar excludes every source unscalable form; this is not a modTags label.
+            rolls.append({"slot": unscalable_slots[name], "value": tag("literal", tag("boolean", False))})
             line_rules.append(rule("ranged-" + spelling + "-" + name, pattern, [capture("lower"), capture("upper")],
                 [tag("modifier", {"definition": nominal_definition, "rolls": rolls})]))
-    items = {"schema_version": 2, "namespace": namespace, "version": "resistance-lines-v4", "definitions": identity,
+    items = {"schema_version": 2, "namespace": namespace, "version": "resistance-lines-v5", "definitions": identity,
         "whitespace": "trim_ascii", "rules": line_rules}
-    source_policy = {"schema_version": 3, "namespace": namespace, "version": "resistance-layout-v4", "source": source,
+    source_policy = {"schema_version": 3, "namespace": namespace, "version": "resistance-layout-v5", "source": source,
         "item_lines": DATA.owned_digest("owned-item-line-policy-v2", items), "dialect": "pob_exported_single_text_v1",
         "rule_layouts": [{"rule": r["id"], "role": "header" if i < len(headers) else "single_modifier"} for i, r in enumerate(line_rules)],
-        "template_layouts": [{"template": template, "load_index_prefix": "no_generated_buff_members"}], "property_bindings": properties,
+        "template_layouts": [{"template": template, "load_index_prefix": "no_generated_buff_members"}], "property_bindings": all_properties,
         "template_defaults": [{"template": template, "parameters": [
             {"assignment": {"slot": catalyst_kind, "value": tag("option", no_catalyst)}, "headers": ["Catalyst"]},
             {"assignment": {"slot": catalyst_amount, "value": quantity(catalyst["default_amount"])}, "headers": ["CatalystQuality"]}],
@@ -306,9 +389,13 @@ def produce(base_dir, import_inputs, authoring_path, source_root):
             "amount_meaning": "Scalar amount in percentage points to use when the catalyst is enabled; not a claim that an amount header was authored.", "missing_amount_default": catalyst["default_amount"], "no_catalyst": no_catalyst,
             "default_authority": "Exact template plus proven canonical source layout and absence of all declared header names and authored/pending field occurrences; explicit zero wins, malformed/unknown input does not default.",
             "ordinary_quality": "Separate ItemRecord.quality; proved omission is explicit absence only for this reviewed template whose pinned base has no quality field. Authored Quality blocks the absence default.", "effective_scaling": False},
-        "modifier_properties": {"implemented": True, "bindings": properties, "value_encoding": "nominal_integer_range", "property_set": "Every label on the selected source member must be mapped and consumed; unknown or unconsumed labels remain Pending. Absence is not a runtime default.", "effective_scaling": False,
-            "remaining_obligations": ["binding catalyst inputs to native equipment properties and effective transforms", "source nominal versus baked encoding for other source families", "category and numeric-component scalability", "applicable ordered modifier-magnitude transforms", "complete owning-item inputs and contributors"]},
-        "original_ring_attribution": {"status": "pending", "input_status": "nominal_amount_and_five_properties_converted", "reason": "The untouched original's five labels and source-attributed range become owned nominal inputs. Catalyst inputs/default provenance are preserved; encoding and modifier-magnitude obligations remain; the new family has Partial rules and no effective Contribute.",
+        "catalyst_scalar": {"implemented": True, "scope": "Unrounded dimensionless intermediate on the exact modifier occurrence; not a final resistance contribution.", "factor_unit": factor_unit,
+            "formula": "If unscalable is true:1. Otherwise if any selected catalyst predicate is true: (100 + enabled amount) / 100; otherwise1. Shared item inputs are transported by exact EquipmentUse identity.",
+            "property_predicates": sorted(selected_properties), "unknown_property_behavior": "Required typed inputs never default in the native evaluator. The source adapter alone proves false for absent labels after complete label scanning.",
+            "unscalable_input": "Required Boolean member metadata distinct from modTags. Literal false is limited to the exact admitted plain range grammar; other flags/suffixes remain pending.", "final_magnitude_application": False, "remaining_obligations": ["source nominal versus baked encoding", "per-member corruptedRange and numeric-component scalability", "ordered additive and multiplicative magnitude operations", "complete incoming transform membership"]},
+        "modifier_properties": {"implemented": True, "bindings": all_properties, "value_encoding": "nominal_integer_range", "property_set": "Every label on the selected source member must be mapped and consumed; unknown or unconsumed labels remain Pending. Absence is not a runtime default.", "effective_scaling": False,
+            "remaining_obligations": ["remaining ordered transform inputs and final magnitude application", "source nominal versus baked encoding for other source families", "category and numeric-component scalability", "applicable ordered modifier-magnitude transforms", "complete owning-item inputs and contributors"]},
+        "original_ring_attribution": {"status": "pending", "input_status": "nominal_amount_and_twenty_properties_converted", "reason": "The untouched original's five labels and source-attributed range become owned nominal inputs, with fifteen additional catalyst predicates explicitly false from complete source labels. Shared item inputs feed a modifier-occurrence catalyst scalar only; encoding, scalability and ordered magnitude obligations remain Partial. No final effective Contribute is emitted.",
             "reviewed_tag": "{tags:cold_resistance,elemental_resistance,elemental,cold,resistance}",
             "diagnostic_only": "Range0/0.5/1 contrasts edit only XML fractions in memory and retain the actual tag. Nominal conversion is not effective scaling or native original success."},
         "whole_item_closure": False, "metric_producer": False, "source_execution": False, "whole_original_native_completion": "0/5"}

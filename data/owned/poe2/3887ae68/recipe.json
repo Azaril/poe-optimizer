@@ -3239,7 +3239,7 @@
     },
     "release": "pob-3887ae68-components",
     "semantics_version": "owned-mechanics-components-v1",
-    "operations_version": "owned-domain-operations-v5",
+    "operations_version": "owned-domain-operations-v6",
     "definitions": {
       "game": "poe2",
       "release": "pob-3887ae68-components",

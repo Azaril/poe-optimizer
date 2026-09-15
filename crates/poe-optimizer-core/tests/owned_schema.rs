@@ -400,6 +400,7 @@ fn computed_stat_kinds_and_capability_targets_have_strict_owned_wire_shapes() {
                 RuleEntityKind::Actor,
                 RuleEntityKind::Action,
                 RuleEntityKind::EquipmentUse,
+                RuleEntityKind::Modifier,
                 RuleEntityKind::Enemy,
                 RuleEntityKind::Environment,
             ],
@@ -437,4 +438,35 @@ fn computed_stat_kinds_and_capability_targets_have_strict_owned_wire_shapes() {
         index.definition(&id::<StatDefinition>("missing")),
         SchemaLookup::Missing
     );
+}
+
+#[test]
+fn modifier_stat_schema_keeps_a_distinct_typed_target_and_one_index_lookup() {
+    let stat: StatDefId = id("modifier.scalar");
+    let schema = StatSchema {
+        value: ComputedValueType::Quantity {
+            unit: id("unit.factor"),
+        },
+        targets: vec![RuleEntityKind::Modifier],
+    };
+    let descriptor = DefinitionDescriptor::Stat(DefinitionEntry {
+        id: stat.clone(),
+        schema: SchemaState::Known(schema.clone()),
+    });
+    roundtrip(&descriptor);
+    let mut index = TestIndex::new();
+    index.definitions.insert(descriptor.address(), descriptor);
+    assert_eq!(index.definition(&stat), SchemaLookup::Known(&schema));
+    assert_eq!(index.definition_reads.get(), 1);
+    assert_ne!(RuleEntityKind::Modifier, RuleEntityKind::EquipmentUse);
+    assert_eq!(
+        serde_json::to_value(&schema).unwrap()["targets"],
+        json!(["modifier"])
+    );
+    assert!(serde_json::from_value::<RuleEntityKind>(json!("item_modifier")).is_err());
+    assert!(serde_json::from_value::<RuleEntityKind>(json!({"kind":"modifier"})).is_err());
+    // The raw schema does not infer concrete providers or weaken exact unit IDs.
+    let mut wrong_unit = serde_json::to_value(&schema).unwrap();
+    wrong_unit["value"]["value"]["unit"]["kind"] = json!("stat");
+    assert!(serde_json::from_value::<StatSchema>(wrong_unit).is_err());
 }

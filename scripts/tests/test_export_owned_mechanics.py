@@ -31,10 +31,12 @@ class ExportTests(unittest.TestCase):
     def test_explicit_receiver_registry_and_rule_wire_version(self):
         self.assertEqual(self.recipe["rules"]["schema_version"], 2)
         self.assertEqual(self.recipe["rules"]["receivers"], {"members": [], "closure": {"kind": "complete"}})
-        for changed in ["missing", "old_version"]:
+        for changed in ["missing", "old_version", "old_operations"]:
             recipe = copy.deepcopy(self.recipe)
             if changed == "missing":
                 recipe["rules"].pop("receivers")
+            elif changed == "old_operations":
+                recipe["rules"]["operations_version"] = "owned-domain-operations-v5"
             else:
                 recipe["rules"]["schema_version"] = 1
             with self.assertRaisesRegex(ValueError, "owned rule"):

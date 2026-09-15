@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "resistance-contribution-component",
-  "base_recipe_sha256": "1e985847d255ceee684aaab55176f4cd3ee12e91d21696f17fa0c686c8c29b1d",
+  "base_recipe_sha256": "aee66dfbbc621959f1ca84ac12ee350f018656751da3401a0355018d554cdd1f",
   "base_registry_watermark": 2515,
   "percentage_points": {
     "kind": "unit",
@@ -318,6 +318,34 @@
       "end_line": 1885,
       "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
       "sha256": "3c013bb10aa4f5bb7abb932cb903a46ba642edcc0380e34c6910b56ffe737712"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 100,
+      "end_line": 114,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "d2a91c60c446110e9da57009f854b980454de51e182fc3c87973d61f8abaa70b"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 978,
+      "end_line": 994,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "909864ea83f4949fa302f796c7c73e24ac7804848d4d823b203e633cd9346d58"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 1117,
+      "end_line": 1126,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "a74238c68553d053332f327ab96d32b2ec204c52cd18befcf6d8345e8bb07250"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "line": 1954,
+      "end_line": 1958,
+      "file_sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+      "sha256": "f09cc2cfc953cc1a7119da2d00b644fbec4c401ea4b1c79c1535f5f73ec11450"
     }
   ],
   "modifier_properties": [
@@ -458,5 +486,78 @@
       "maximum": 1000000
     },
     "missing_ordinary_quality": "absent"
+  },
+  "catalyst_scaling": {
+    "factor_unit": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000001"
+    },
+    "percentage_base": 100,
+    "additional_properties": [
+      {
+        "label": "life",
+        "property": "life"
+      },
+      {
+        "label": "mana",
+        "property": "mana"
+      },
+      {
+        "label": "defences",
+        "property": "defences"
+      },
+      {
+        "label": "armour",
+        "property": "armour"
+      },
+      {
+        "label": "evasion",
+        "property": "evasion"
+      },
+      {
+        "label": "energyshield",
+        "property": "energyshield"
+      },
+      {
+        "label": "physical",
+        "property": "physical"
+      },
+      {
+        "label": "fire",
+        "property": "fire"
+      },
+      {
+        "label": "lightning",
+        "property": "lightning"
+      },
+      {
+        "label": "chaos",
+        "property": "chaos"
+      },
+      {
+        "label": "attack",
+        "property": "attack"
+      },
+      {
+        "label": "caster",
+        "property": "caster"
+      },
+      {
+        "label": "speed",
+        "property": "speed"
+      },
+      {
+        "label": "attribute",
+        "property": "attribute"
+      },
+      {
+        "label": "minion",
+        "property": "minion"
+      }
+    ]
   }
 }

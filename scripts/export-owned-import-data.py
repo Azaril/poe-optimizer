@@ -81,7 +81,7 @@ def fields(value, expected, label):
 def validate_rule_wire(rules):
     """Require the current explicit wire shape; never migrate absent roots on load."""
     fields(rules, "schema_version namespace release semantics_version operations_version definitions tables owners receivers", "owned rules")
-    if rules["schema_version"] != 2 or rules["operations_version"] != "owned-domain-operations-v5":
+    if rules["schema_version"] != 2 or rules["operations_version"] != "owned-domain-operations-v6":
         raise ValueError("unsupported owned rule package version/operations")
 
 

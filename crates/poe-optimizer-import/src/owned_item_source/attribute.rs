@@ -419,12 +419,14 @@ impl ItemSourceLayoutPolicy {
                 line.presentation = true;
                 continue;
             }
-            if text
-                .strip_prefix('(')
-                .is_some_and(|rest| rest.as_bytes().first().is_some_and(u8::is_ascii_alphabetic))
+            if text.starts_with("{ ")
+                || text.strip_prefix('(').is_some_and(|rest| {
+                    rest.as_bytes().first().is_some_and(u8::is_ascii_alphabetic)
+                })
             {
-                // Source reminder blocks consume an arbitrary span. Decline this
-                // lifecycle rather than implementing its mutable parser control flow.
+                // Source reminder blocks consume an arbitrary span; advanced-copy
+                // headers alter flags/tags on subsequent members until a delimiter.
+                // Decline these lifecycles rather than replaying parser state.
                 problem(
                     &mut unsupported,
                     ItemSourceProblem::UnsupportedSourceControl,

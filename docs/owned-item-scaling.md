@@ -1,16 +1,14 @@
 # Item modifier properties and scaling
 
-**Status: modifier properties and canonical catalyst/default inputs implemented; effective scaling data remain open.**
-The owned source adapter converts the untouched original05 ring's nominal cold roll and
-five Boolean modifier properties. New nominal definitions retain Partial numerical rules;
-they do not reuse the prior fixed-value contribution programs. Two
-[Engine regressions](../crates/poe-optimizer-engine/tests/owned_item_properties.rs) validate
-the existing Stat dependency path across templates and repeated item uses. These seams
-are ready for real scaling data. Four additional native program tests validate catalyst
-arithmetic, applicability, repeated uses and ordinary-quality separation. The whole ring
-remains Pending, and full
-original-build native completion remains **0/5**. Existing complete-request and contributor
-coverage requirements are unchanged.
+**Status: canonical inputs and the persisted native catalyst scalar implemented;
+final effective scaling remains open.** The shared equipment-property graph now feeds a
+real [modifier-occurrence Stat](owned-modifier-values.md), preserving an unrounded scalar
+for later stages. It does not publish a catalyst-only final resistance contribution.
+All 13 selectors and their 20 required property predicates are data-defined. The admitted
+ordinary grammar supplies an explicit unscalable fact; broader source markers remain
+unsupported. The original ring retains nominal 25, all property facts and eight receiving
+uses. Whole-item collections remain Pending and complete native originals remain **0/5**.
+Complete-request and contributor coverage gates are unchanged.
 
 Convert source annotations into owned modifier properties and item inputs, then calculate
 their effects against the exact item/modifier occurrence. Preserve meaningful numeric
@@ -40,7 +38,8 @@ tests; none becomes a native dependency or a general parser/interpreter specific
 ## Candidate owned seams
 
 The common-property dependency path is validated with directly authored data. Source
-property conversion is implemented through injected item-line/source policies v2: bounded
+property conversion was introduced in v2; current injected policies are item-line v2 and
+source v3. Bounded
 source tokens map to local Import keys, then to schema-bound Boolean modifier parameters.
 Unknown or unconsumed labels block the line; source strings do not enter native rules.
 Canonical catalyst header conversion and literal missing-input defaults now use source
@@ -51,7 +50,7 @@ malformed and duplicate catalyst headers remain Pending. Defaulted parameters an
 item-level/quality absence appear separately from authored lines in the v8 normalization
 sidecar. There are no synthetic line positions or conditional-default programs.
 
-All13 canonical catalyst names map to owned Options; a separate Option denotes none.
+All 13 canonical catalyst names map to owned Options; a separate Option denotes none.
 The amount is the scalar input to use when a catalyst is enabled, not an assertion that
 an amount header was authored. Its injected missing-value20 is inert under selection none,
 and explicit0 remains0. The source-only oracle confirms the distinction. The following
@@ -84,7 +83,8 @@ seams govern the remaining scaling work:
   a real consumer, compare a small typed item-to-modifier projection with an explicit
   common-input binding before adding API. Do not copy mutable item values into imported
   modifier records: those copies would become stale after an item edit.
-- Keep occurrence-specific roll/scaling intermediates local to each modifier program.
+- Keep occurrence-specific roll/scaling intermediates at the exact modifier occurrence.
+  The implemented relative Modifier Stat scope supports dependencies between its programs.
   Repeated occurrences may contribute to the same target, but must not each derive the
   same final equipment-property Stat. That is a competing-producer error, not an
   aggregation rule. Player contributions use an explicit Player target; this equipment
@@ -102,10 +102,10 @@ a Gem instance.
 
 Ordinary quality and catalyst quality are independent inputs. Ordinary weapon physical or
 armour/evasion/energy-shield formulas must not scale cold resistance just because the item
-has Quality20. Effective quality is also distinct from the authored amount.
+has Quality 20. Effective quality is also distinct from the authored amount.
 
 Catalyst applicability matches **any** qualifying property; affix-side flags can participate.
-Unscalable components retain scalar1. A recognized source catalyst with an omitted amount
+Unscalable components retain scalar 1. A recognized source catalyst with an omitted amount
 uses20 only where the reviewed parser policy establishes that default; explicit0 remains0.
 The source UI's separate Breach Ring authoring default50 is not an intrinsic runtime value
 or permission to dispatch on an item name.
@@ -120,7 +120,7 @@ receiver set.
 Start with the applicable catalyst scalar, preserving the source grouping
 `(100 + quality) / 100`, then apply ordered signed additive percentages or doubling
 operations. The optional pinned oracle confirms a meaningful floating-point contrast:
-quality0.7 with base1000 truncates to1007 with that grouping, but to1006 with
+quality 0.7 with base 1000 truncates to1007 with that grouping, but to1006 with
 `1 + quality / 100`. Existing native Add and percentage-to-factor operations can express
 the required grouping; no new interpreter or operation is required. `(1 + 0.2) * 2` differs from `1 * 2 + 0.2`. Scale only the declared
 numeric components, not condition thresholds or every number present in a line.
@@ -151,16 +151,18 @@ contrasts do not establish native scaling or whole-build parity.
 
 ## Concrete acceptance cases
 
-Original05 Item26 is one Sapphire Ring with eight receiving rows, including two selected
+Original05 Item 26 is one Sapphire Ring with eight receiving rows, including two selected
 uses. Its cold member retains the five labels `cold_resistance`, `elemental_resistance`,
 `elemental`, `cold`, `resistance`, range fraction0.5 and nominal range20–30. Its second member
 is `+10 to maximum Life`. No Catalyst/CatalystQuality, ordinary Quality or rune header is
 present. The scoped canonical input policy now establishes catalyst selection none,
-defaulted amount20 and ordinary-quality/item-level absence for this exact template.
+defaulted amount 20 and ordinary-quality/item-level absence for this exact template.
 It does not establish rune/producer completeness or effective modifier scaling. The production
 converter now retains nominal cold25 and all five true properties from the untouched
 original, retains its Life input and all eight uses, and keeps the new nominal family
-Partial. Its missing-input defaults retain their own provenance. The source-layout proof
+Partial. Its missing-input defaults retain their own provenance. A persisted native
+scalar program now consumes those inputs, with all 20 properties and an explicit
+unscalable predicate; it does not yet compute final effective resistance. The source-layout proof
 does not establish whole-item completeness. The former
 tag-stripped test helper has been replaced by the actual original test; conversion of the
 original is no longer represented by a diagnostic copy.
@@ -175,8 +177,8 @@ modifier occurrences and actor target. This is a structural test, not catalyst p
 
 Test the original ring without stripping labels, unknown added labels/headers, exact
 modifier membership, and all eight receiving rows. Contrast known absence, unresolved
-catalyst, reviewed missing amount20 and explicit0. With explicitly established Tul20
-applicability, nominal25 becomes30; ordinary Quality20 alone must leave cold unchanged.
+catalyst, reviewed missing amount 20 and explicit0. With explicitly established Tul20
+applicability, nominal 25 becomes 30; ordinary Quality 20 alone must leave cold unchanged.
 
 Original02 supplies separate rune contrasts: helmet cold18 from GreaterGlacialRune plus
 explicit cold27; two GreaterIronRunes represented by a single serialized36 defensive

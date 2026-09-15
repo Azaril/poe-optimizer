@@ -61,14 +61,32 @@ fn root(root: ProviderRoot) -> ProviderKey {
         grant_path: vec![],
     }
 }
-fn entity(relative: RuleEntity, context: &Context) -> ConcreteEntity {
-    match relative {
+fn entity(relative: RuleEntity, context: &Context) -> Result<ConcreteEntity> {
+    Ok(match relative {
         RuleEntity::Current => context.entity.clone(),
+        RuleEntity::Modifier => {
+            let provider = context.provider.as_ref().ok_or_else(|| {
+                PlanError::Invalid("modifier value requires an exact modifier provider".into())
+            })?;
+            let ProviderRoot::ItemModifier { equipment_use, .. } = &provider.root else {
+                return Err(PlanError::Invalid(
+                    "modifier value requires an item-modifier root".into(),
+                ));
+            };
+            if !provider.grant_path.is_empty()
+                || context.entity != ConcreteEntity::EquipmentUse(*equipment_use)
+            {
+                return Err(PlanError::Invalid(
+                    "modifier value has an incompatible occurrence context".into(),
+                ));
+            }
+            ConcreteEntity::Modifier(provider.clone())
+        }
         RuleEntity::Actor => ConcreteEntity::Actor(context.actor.clone()),
         RuleEntity::Player => ConcreteEntity::Actor(ActorKey::Player),
         RuleEntity::Enemy => ConcreteEntity::Enemy,
         RuleEntity::Environment => ConcreteEntity::Environment,
-    }
+    })
 }
 fn missing(reason: PlanGapReason) -> PendingRead {
     PendingRead::Ready(ReadBinding::Missing(reason))
@@ -104,7 +122,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         rules: rules.identity(),
         routing: *routing.identity(),
     };
-    let identity = digest_owned("owned-effect-plan-v4", &bindings, limits.max_wire_bytes)?;
+    let identity = digest_owned("owned-effect-plan-v5", &bindings, limits.max_wire_bytes)?;
     let resolver = OwnedOccurrenceResolver::new(definitions.as_ref(), &request, limits.binding)?;
     let mut b = Builder {
         request: &request,
@@ -595,6 +613,11 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         for program in &row.programs.members {
             let contexts: Vec<ConcreteEntity> = match program.context {
                 RuleEntityKind::Actor => vec![ConcreteEntity::Actor(actor.clone())],
+                RuleEntityKind::Modifier => {
+                    return Err(PlanError::Invalid(
+                        "Modifier is a relative value scope, not a program context".into(),
+                    ));
+                }
                 RuleEntityKind::EquipmentUse => match (&key.root, key.grant_path.is_empty()) {
                     (
                         ProviderRoot::EquipmentUse(id)
@@ -711,7 +734,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     ..
                 } => BoundEffectTarget::Contribution {
                     key: ContributionKey {
-                        entity: entity(*e, context),
+                        entity: entity(*e, context)?,
                         stat: stat.clone(),
                         kind: *contribution,
                     },
@@ -720,7 +743,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     entity: e, stat, ..
                 } => BoundEffectTarget::Value {
                     key: PlanValueKey::Stat {
-                        entity: entity(*e, context),
+                        entity: entity(*e, context)?,
                         stat: stat.clone(),
                     },
                 },
@@ -730,7 +753,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     ..
                 } => BoundEffectTarget::Value {
                     key: PlanValueKey::Capability {
-                        entity: entity(*e, context),
+                        entity: entity(*e, context)?,
                         capability: capability.clone(),
                     },
                 },

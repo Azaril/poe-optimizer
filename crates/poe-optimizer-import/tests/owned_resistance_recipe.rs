@@ -2,9 +2,11 @@
 //! No PoB checkout, source VM, legacy profile, final metric or build-parity claim.
 use poe_optimizer_core::{
     build_identity::BuildLineage,
-    owned_build::ParameterValue,
-    owned_definitions::{ModifierDefId, OwnedDefinitionKey, RewardDefId, StatDefId},
-    owned_rules::{ContributionKind, RuleEffectKind, RuleEntity},
+    owned_build::{ParameterAssignment, ParameterValue},
+    owned_definitions::{
+        FiniteQuantity, ModifierDefId, OwnedDefinitionKey, RewardDefId, StatDefId,
+    },
+    owned_rules::{ContributionKind, RuleEffectKind, RuleEntity, RuleReadSource},
     owned_schema::{SchemaClosure, SchemaDefinitionId, SchemaSubject},
 };
 use poe_optimizer_engine::owned_rules::{
@@ -102,8 +104,8 @@ impl Component {
 #[test]
 fn persisted_recipe_and_exact_item_policies_pass_production_constructors() {
     let c = Component::load();
-    assert_eq!(c.staged.registry().input().entries.len(), 2554);
-    assert_eq!(c.staged.registry().input().last_issued.get(), 2554);
+    assert_eq!(c.staged.registry().input().entries.len(), 2589);
+    assert_eq!(c.staged.registry().input().last_issued.get(), 2589);
     assert!(c.staged.manifest().partial_rule_owners > 0);
     assert_eq!(c.staged.manifest().calculation, "not_run");
     let base: Value = serde_json::from_slice(
@@ -319,9 +321,12 @@ fn signed_ranges_use_literal_source_interpolation_and_half_offset_rounding() {
         // Stable convex interpolation instead rounds to zero for this case.
         ("+(-3-2)% to Cold Resistance", 0.7, 1.0),
     ] {
-        let properties: BTreeMap<_, _> = PROPERTY_LABELS
+        let properties: BTreeMap<_, _> = c
+            .layout
+            .input()
+            .property_bindings
             .iter()
-            .map(|label| (key(label), false))
+            .map(|binding| (binding.property.clone(), false))
             .collect();
         let converted = c
             .items
@@ -342,7 +347,7 @@ fn signed_ranges_use_literal_source_interpolation_and_half_offset_rounding() {
             panic!("quantity");
         };
         assert_eq!(value.value(), expected, "{text}, fraction={fraction}");
-        assert_eq!(rolls.len(), 6);
+        assert_eq!(rolls.len(), 22);
         assert!(
             rolls[1..]
                 .iter()
@@ -509,7 +514,7 @@ fn actual_tagged_original_ring_preserves_eight_uses_and_nominal_properties_witho
         .iter()
         .find(|m| m.definition == cold)
         .unwrap();
-    assert_eq!(modifier.rolls.len(), 6);
+    assert_eq!(modifier.rolls.len(), 22);
     let ParameterValue::Quantity(amount) = &modifier.rolls[0].value else {
         panic!("nominal amount");
     };
@@ -531,7 +536,15 @@ fn actual_tagged_original_ring_preserves_eight_uses_and_nominal_properties_witho
         .iter()
         .find(|o| o.owner == SchemaSubject::Definition(cold.address()))
         .unwrap();
-    assert!(owner.programs.members.is_empty());
+    assert_eq!(owner.programs.members.len(), 1);
+    assert_eq!(owner.programs.members[0].id, key("catalyst-scalar"));
+    assert!(owner.programs.members[0].effects.iter().all(|e| matches!(
+        e.effect,
+        RuleEffectKind::Derive {
+            entity: RuleEntity::Modifier,
+            ..
+        }
+    )));
     assert!(matches!(
         owner.programs.closure,
         SchemaClosure::Partial { .. }
@@ -575,11 +588,14 @@ fn tagged_ring_range_edits_preserve_properties_and_exact_xml_attribution() {
             panic!("cold quantity");
         };
         assert_eq!(amount.value(), expected);
-        assert_eq!(modifier.rolls.len(), 6);
+        assert_eq!(modifier.rolls.len(), 22);
         assert!(
-            modifier.rolls[1..]
+            modifier.rolls[1..6]
                 .iter()
                 .all(|r| r.value == ParameterValue::Boolean(true))
+                && modifier.rolls[6..]
+                    .iter()
+                    .all(|r| r.value == ParameterValue::Boolean(false))
         );
         assert!(matches!(converted.item_level, ItemField::Absent));
         assert!(matches!(converted.quality, ItemField::Absent));
@@ -805,4 +821,354 @@ fn unproved_malformed_and_duplicate_headers_do_not_turn_into_defaults() {
         assert!(!converted.defaults.item_level_absent);
     }
     assert_eq!(original_five(), xml);
+}
+
+// Test adapters supply only the declared reads of the persisted programs. They
+// are component facts, not authority to finalize a partially normalized build.
+fn scalar(
+    c: &Component,
+    family: &str,
+    rolls: &[ParameterAssignment],
+    shared: &[RuleFact],
+) -> EffectDisposition {
+    let definition: ModifierDefId = c.id(&format!("nominal-{family}-modifier"));
+    let owner = SchemaSubject::Definition(definition.address());
+    let program = &c
+        .staged
+        .rules()
+        .input()
+        .owners
+        .iter()
+        .find(|o| o.owner == owner)
+        .unwrap()
+        .programs
+        .members[0];
+    let mut facts = shared.to_vec();
+    for read in &program.reads {
+        if let RuleReadSource::Parameter { slot } = &read.source
+            && let Some(roll) = rolls.iter().find(|r| &r.slot == slot)
+        {
+            facts.push(RuleFact {
+                read: read.id.clone(),
+                value: roll.value.clone(),
+            });
+        }
+    }
+    let result = c
+        .rules
+        .evaluate(
+            &owner,
+            &key("catalyst-scalar"),
+            &facts,
+            c.staged.schema(),
+            &mut c.rules.new_scratch(),
+        )
+        .unwrap();
+    assert!(matches!(
+        result.owner_programs_closure,
+        SchemaClosure::Partial { .. }
+    ));
+    assert_eq!(result.effects.len(), 1);
+    assert!(matches!(&result.effects[0].effect,
+        RuleEffectKind::Derive { entity: RuleEntity::Modifier, stat, .. }
+        if stat == &c.id::<StatDefId>("modifier-catalyst-scalar")));
+    result.effects[0].disposition.clone()
+}
+fn shared(c: &Component, selection: &str, amount: Option<f64>) -> Vec<RuleFact> {
+    let mut facts = vec![RuleFact {
+        read: key("catalyst-kind"),
+        value: ParameterValue::Option(c.id(&format!("catalyst-{selection}"))),
+    }];
+    if let Some(amount) = amount {
+        let raw = format!("CatalystQuality: {amount}");
+        let line = c.items.convert_line(1, &raw, None).unwrap();
+        let ItemLineOutcome::Known { emissions, .. } = line.outcome else {
+            panic!("amount")
+        };
+        let ConvertedItemEmission::ItemParameter { assignment } = &emissions[0] else {
+            panic!("amount parameter")
+        };
+        facts.push(RuleFact {
+            read: key("catalyst-amount"),
+            value: assignment.value.clone(),
+        });
+    }
+    facts
+}
+fn applied_factor(c: &Component, expected: f64) -> EffectDisposition {
+    use poe_optimizer_core::owned_schema::{
+        ComputedValueType, DefinitionSchemaIndex, SchemaLookup,
+    };
+    let SchemaLookup::Known(stat) = c
+        .staged
+        .schema()
+        .definition(&c.id::<StatDefId>("modifier-catalyst-scalar"))
+    else {
+        panic!("scalar stat")
+    };
+    let ComputedValueType::Quantity { unit } = &stat.value else {
+        panic!("factor unit")
+    };
+    EffectDisposition::Applied {
+        value: ParameterValue::Quantity(FiniteQuantity::new(expected, unit.clone()).unwrap()),
+    }
+}
+#[test]
+fn persisted_catalyst_scalar_covers_all_selectors_and_each_defence_property() {
+    let c = Component::load();
+    for (selection, matched) in [
+        ("life", "life"),
+        ("mana", "mana"),
+        ("defence", "defences"),
+        ("defence", "armour"),
+        ("defence", "evasion"),
+        ("defence", "energyshield"),
+        ("physical", "physical"),
+        ("fire", "fire"),
+        ("cold", "cold"),
+        ("lightning", "lightning"),
+        ("chaos", "chaos"),
+        ("attack", "attack"),
+        ("caster", "caster"),
+        ("speed", "speed"),
+        ("attribute", "attribute"),
+        ("minion", "minion"),
+    ] {
+        for (family, text) in [
+            ("cold", "+(20-30)% to Cold Resistance"),
+            ("elemental", "(20-30)% to all Elemental Resistances"),
+        ] {
+            for enabled in [false, true] {
+                let properties: BTreeMap<_, _> = c
+                    .layout
+                    .input()
+                    .property_bindings
+                    .iter()
+                    .map(|p| (p.property.clone(), enabled && p.property == key(matched)))
+                    .collect();
+                let converted = c
+                    .items
+                    .convert_lines([ItemLineInput {
+                        index: 1,
+                        text,
+                        range_fraction: Some(0.5),
+                        properties: Some(&properties),
+                    }])
+                    .unwrap();
+                let ItemLineOutcome::Known { emissions, .. } = &converted.lines[0].outcome else {
+                    panic!("reviewed range line: {family} {selection} {matched}");
+                };
+                let [ConvertedItemEmission::Modifier { rolls, .. }] = emissions.as_slice() else {
+                    panic!("one nominal modifier emission");
+                };
+                for amount in [0.0, 0.7, 20.0, 50.0] {
+                    assert_eq!(
+                        scalar(&c, family, rolls, &shared(&c, selection, Some(amount))),
+                        applied_factor(
+                            &c,
+                            if enabled {
+                                (100.0 + amount) / 100.0
+                            } else {
+                                1.0
+                            }
+                        ),
+                        "{family} {selection} {matched} {amount} {enabled}"
+                    );
+                }
+            }
+        }
+    }
+}
+#[test]
+fn persisted_scalar_guards_absence_and_unscalable_without_claiming_final_resistance() {
+    let c = Component::load();
+    let plan = ring_plan(&c, &original_five());
+    let converted = plan.convert(&c.items).unwrap();
+    let definition: ModifierDefId = c.id("nominal-cold-modifier");
+    let mut rolls = converted
+        .modifiers
+        .iter()
+        .find(|m| m.definition == definition)
+        .unwrap()
+        .rolls
+        .clone();
+    assert_eq!(
+        scalar(&c, "cold", &rolls, &shared(&c, "none", None)),
+        applied_factor(&c, 1.0)
+    );
+    assert_eq!(
+        scalar(&c, "cold", &rolls, &shared(&c, "life", None)),
+        applied_factor(&c, 1.0)
+    );
+    assert_eq!(
+        scalar(&c, "cold", &rolls, &shared(&c, "cold", None)),
+        EffectDisposition::Unresolved {
+            input: key("catalyst-amount")
+        }
+    );
+    assert_eq!(
+        scalar(&c, "cold", &rolls, &shared(&c, "cold", Some(0.0))),
+        applied_factor(&c, 1.0)
+    );
+    let mut without_unrelated = rolls.clone();
+    without_unrelated.retain(|r| r.slot != c.id("nominal-cold-property-mana"));
+    assert_eq!(
+        scalar(
+            &c,
+            "cold",
+            &without_unrelated,
+            &shared(&c, "cold", Some(20.0))
+        ),
+        applied_factor(&c, 1.2)
+    );
+    let mut without_selected = rolls.clone();
+    without_selected.retain(|r| r.slot != c.id("nominal-cold-property-cold"));
+    assert_eq!(
+        scalar(
+            &c,
+            "cold",
+            &without_selected,
+            &shared(&c, "cold", Some(20.0))
+        ),
+        EffectDisposition::Unresolved {
+            input: key("property-cold")
+        }
+    );
+    assert_eq!(
+        scalar(&c, "cold", &without_selected, &shared(&c, "none", None)),
+        applied_factor(&c, 1.0)
+    );
+    let slot = c.id("nominal-cold-unscalable");
+    rolls.iter_mut().find(|r| r.slot == slot).unwrap().value = ParameterValue::Boolean(true);
+    assert_eq!(scalar(&c, "cold", &rolls, &[]), applied_factor(&c, 1.0));
+    rolls.retain(|r| r.slot != slot);
+    assert_eq!(
+        scalar(&c, "cold", &rolls, &shared(&c, "cold", Some(20.0))),
+        EffectDisposition::Unresolved {
+            input: key("unscalable")
+        }
+    );
+}
+#[test]
+fn actual_ring_inputs_feed_persisted_template_transport_and_modifier_scalar() {
+    let c = Component::load();
+    let original = original_five();
+    for (headers, expected) in [
+        ("", 1.0),
+        ("Catalyst: Tul's", 1.2),
+        (
+            "Catalyst: Tul's\nCatalystQuality: 0.7",
+            (100.0 + 0.7) / 100.0,
+        ),
+        ("Catalyst: Flesh", 1.0),
+    ] {
+        let xml = if headers.is_empty() {
+            original.clone()
+        } else {
+            ring_with_headers(&original, headers)
+        };
+        let plan = ring_plan(&c, &xml);
+        let converted = plan.convert(&c.items).unwrap();
+        let owner = SchemaSubject::Definition(
+            c.id::<poe_optimizer_core::owned_definitions::ItemTemplateDefId>(
+                "sapphire-ring-template",
+            )
+            .address(),
+        );
+        let row = c
+            .staged
+            .rules()
+            .input()
+            .owners
+            .iter()
+            .find(|o| o.owner == owner)
+            .unwrap();
+        let p = row
+            .programs
+            .members
+            .iter()
+            .find(|p| p.id == key("catalyst-inputs"))
+            .unwrap();
+        let facts: Vec<_> = p
+            .reads
+            .iter()
+            .map(|r| {
+                let RuleReadSource::Parameter { slot } = &r.source else {
+                    panic!("exact template parameter")
+                };
+                let parameter = converted
+                    .parameters
+                    .iter()
+                    .map(|p| &p.assignment)
+                    .chain(&converted.defaults.parameters)
+                    .find(|a| &a.slot == slot)
+                    .unwrap();
+                RuleFact {
+                    read: r.id.clone(),
+                    value: parameter.value.clone(),
+                }
+            })
+            .collect();
+        let result = c
+            .rules
+            .evaluate(
+                &owner,
+                &p.id,
+                &facts,
+                c.staged.schema(),
+                &mut c.rules.new_scratch(),
+            )
+            .unwrap();
+        let shared: Vec<_> = result
+            .effects
+            .iter()
+            .map(|e| {
+                let EffectDisposition::Applied { value } = &e.disposition else {
+                    panic!("template transport")
+                };
+                RuleFact {
+                    read: e.id.clone(),
+                    value: value.clone(),
+                }
+            })
+            .collect();
+        let definition: ModifierDefId = c.id("nominal-cold-modifier");
+        let rolls = &converted
+            .modifiers
+            .iter()
+            .find(|m| m.definition == definition)
+            .unwrap()
+            .rolls;
+        assert_eq!(
+            scalar(&c, "cold", rolls, &shared),
+            applied_factor(&c, expected)
+        );
+    }
+    assert_eq!(original_five(), original);
+}
+#[test]
+fn source_unscalable_encodings_never_acquire_nominal_scalable_defaults() {
+    let c = Component::load();
+    let original = original_five();
+    let base = "{range:0.5}+(20-30)% to Cold Resistance";
+    for changed in [
+        format!("{{unscalable}}{base}"),
+        format!("{base} (unscalable)"),
+        format!("{base} - Unscalable Value"),
+        format!("{base} — Unscalable Value"),
+        format!("{{ Unscalable Modifier }}\n{base}\n{base}"),
+    ] {
+        let copy = original.replace(base, &changed);
+        assert_ne!(copy, original);
+        let plan = ring_plan(&c, &copy);
+        let converted = plan.convert(&c.items).unwrap();
+        let definition: ModifierDefId = c.id("nominal-cold-modifier");
+        assert!(
+            !converted
+                .modifiers
+                .iter()
+                .any(|m| m.definition == definition),
+            "{changed}"
+        );
+    }
 }

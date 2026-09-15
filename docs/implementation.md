@@ -11,7 +11,85 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: canonical item inputs and explicit missing-field conversion (after `c7081cb`).**
+**Current checkpoint: owned modifier values and persisted catalyst scalar (after `812881a`).**
+Native rules now address a typed Stat at the exact modifier occurrence. Shared item
+properties still belong to EquipmentUse; relative Modifier values retain the receiving
+use plus modifier identity. Current is unchanged. The compiler rejects foreign owners,
+wrong contexts/targets and Modifier as a program context. The planner rejects root/grant
+aliasing and preserves existing collision, cycle, budget and scratch rules. No new
+arithmetic interpreter, PoB object model or source/UI callback was added. See the
+[modifier value contract](owned-modifier-values.md).
+
+The persisted injected recipe computes the unrounded catalyst scalar through the existing
+Add/Ratio/Select operations. All 13 selectors and their property predicates are data; no
+build or skill name enters native dispatch. Explicit unscalable, None, missing amount,
+zero and fractional amount remain distinct. Template inputs feed shared equipment Stats;
+modifier programs produce only their local scalar. The first 2,554 IDs, previous slots and
+fixed/reward rule bodies are preserved; 35 additions take the watermark to 2,589. Two
+nominal families now carry 22 inputs: nominal amount, 20 property facts and unscalable.
+The ordinary admitted source grammar explicitly supplies false for the latter. Inline and
+suffix flags remain unsupported; advanced-copy `{ ` headers now decline the complete
+source-control lifecycle, including subsequent members, rather than replaying PoB state.
+
+Rule package wire 2 is unchanged; operations v6 and effect-plan identity v5 identify the new
+scope semantics. Base, seed and compiled packages were regenerated through the production
+CLI; outside resistance additions their only rule-content change is operations_version.
+Source policy remains 3, item-line policy 2 and normalization sidecar 8. The optional source
+oracle passed 19 contrasts covering nominal ranged export, corruption/precision order,
+unscalable/category/label behavior, fixed-history ambiguity and baked rune reconstruction.
+Native component tests consume the actual original05 ring and all 13 data selectors.
+
+**A partial owner never authorizes an incorrect known contribution.** The catalyst-only
+amount is not emitted as final resistance. Final effective scaling still requires source
+encoding, complete ordered transform membership and the distinct corruption/precision
+stages. The pending ring member list cannot prove no transforms. Final metrics and
+complete-request/whole-plan contributor closure gates remain unchanged. Complete native
+original builds remain **0/5**, and all **110** fixed query rows remain required.
+
+**Validation:** **163 Rust test executions** pass in the final recorded scope: 11 Core,
+77 Engine, 20 Import, 27 CLI in each feature mode, and one optional source oracle covering
+19 contrasts. **56 Python tests** pass with exact artifact reproduction. Workspace and
+native-only strict Clippy, five-crate WASM compilation and six-package PoB/Lua runtime
+dependency exclusion pass. All nine protected inputs and the clean source pin are
+preserved. This is an affected-scope checkpoint, not a full workspace suite, full-build
+parity result or throughput measurement. An earlier broader Import run stopped at a new
+test-only line-emission/template assumption; the corrected target is included in the
+final passing scope. Receipts are under `runs/owned-item-effective-01/`.
+
+The public CI audit at 19:28:56Z found 812881a pending, an older run active, and no failure
+among the latest 20 runs. Pending hosted work is not counted as a pass. No workflow was
+cancelled or weakened; record the newly published head separately after push.
+
+**Open design question:** whether partial selected inputs may yield independently verified
+metrics with conservative dependency coverage remains unanswered. Do not change either
+current complete-request or whole-plan closure gate without resolving it.
+
+**Active resume point (the only current queue):**
+
+1. Bind bounded ordered modifier transforms to exact producer/recipient occurrences,
+   reusing the existing dependency executor. Preserve membership closure and meaningful
+   order; mixed additive percentages and doubling are not a sum/product reducer. Compute
+   transform amounts before folding the scalar. Establish complete-empty membership from
+   current owned declarations, never a cached importer ready/no-transform Boolean.
+2. Complete source encoding and effective numeric stages on the ordinary ranged path:
+   range precision, corrupted-base rounding, ordered scalar, final scaling/truncation.
+   Fixed text and baked runes require separate reviewed conversion; never divide rounded
+   display values to guess nominal input. Extend input conversion by data with the
+   original05 ring and original02 equipment as contrasting cases. No source UI replay.
+3. Add reviewed player resistance receivers/final Stat and Metric bindings, with complete
+   relevant item/reward/passive/scenario contributions and explicit limits/overrides.
+   Migrate the corresponding active preparation/realization consumers and preserve their
+   independent numerical tests before deleting their legacy dependency closure.
+4. Complete applicable skill/weapon/actor/support inputs for Twister and Sniper together;
+   use all five originals as model stress cases. Preserve fixed availability manifests,
+   then run independent holdouts and semantic joint candidates. Migrate search and remove
+   remaining profile/interpreter/snapshot closures. Prove owned-only distribution and
+   measure real changed-build reuse/multicore throughput before performance claims.
+
+The earlier checkpoint sections are historical evidence, not instructions to resume
+source/UI emulation. Current design and the active queue above supersede their next steps.
+
+**Previous checkpoint: canonical item inputs and explicit missing-field conversion (`812881a`).**
 The importer now converts canonical catalyst selection and enabled amount through injected
 owned data. Source policy wire/digest **3** requires exact-template default declarations;
 item-line wire remains **2**. The normalization sidecar and identity domain are **8**.
@@ -55,45 +133,6 @@ and the all-five census are under `runs/owned-item-headers-01/`.
 Complete native original builds remain **0/5**, all **110** fixed query rows remain required,
 and game receiver roots remain unpopulated. Source-format acceptance is a strict canonical
 subset; duplicate/malformed PoB parser history is reference evidence, not native state.
-
-**Open design question:** whether partial selected inputs may yield independently verified
-metrics with conservative dependency coverage was raised with the user and remains pending.
-Complete-request and whole-plan closure gates remain unchanged.
-
-**Active resume point (the only current queue):**
-
-1. Bind real effective item-scaling data after the implemented property/catalyst/default
-   inputs, using the [item-scaling design](owned-item-scaling.md). Establish nominal/baked
-   source encoding and complete applicable transform membership explicitly. Guard catalyst
-   enabled-amount reads with selection, bind property/category/scalability predicates, and
-   use the observed arithmetic grouping and ordered-transform contracts. Extend ordinary
-   quality conversion through base-specific reviewed data; never infer shared defaults
-   from the Sapphire-only proof. Reuse the structurally validated
-   EquipmentUse Stat graph: exact ItemTemplate parameters produce common semantic item
-   properties consumed by a shared Modifier definition. Avoid a cross-owner read tied to
-   one template; retain exact declarations, occurrence-local intermediates and explicit
-   player targets. A new projection API requires a concrete unmet consumer. Preserve
-   ordinary versus catalyst quality, explicit zero versus absence, nominal versus already
-   baked values, per-component scalability and meaningful transform ordering. Do not discard tags or copy mutable PoB
-   item/reparse/UI objects. Original05's untouched ring and original02's selected equipment
-   are contrasting integration cases; unknown labels/headers remain explicit.
-2. Add reviewed player resistance receiver data and final Stat/Metric bindings using the
-   implemented stat roots. Establish complete relevant item/reward/passive/scenario
-   contributions, limits and override semantics. Preserve exact repeated occurrences and
-   separate owned-actor defaults. Do not use the original references 5 or 93/75 as inputs.
-   Resolve the partial-input question before changing normalization finalization or global
-   closure; receiver ownership is not permission to bypass either gate.
-3. Complete applicable skill/weapon/actor/support inputs for Twister and Sniper together,
-   retaining all five originals as model stress cases. Bind shared timing/damage kernels,
-   preserve fixed metric availability and run fresh independent reference comparisons.
-   Retire replaced preparation and realization-validation consumers together.
-4. Complete all five originals, then independent holdouts and semantic joint candidates.
-   Migrate search and remove legacy profile/interpreter/snapshot dependency closures;
-   prove the owned-only distribution before claiming PoB independence complete. Measure
-   changed-build evaluation, reuse and multicore throughput over real admitted cases.
-
-The earlier checkpoint sections below are historical evidence, not instructions to resume
-source/UI emulation. Current design and the active queue above supersede their next steps.
 
 **Previous checkpoint: owned modifier-property conversion (`c7081cb`).**
 Item-line and item-source policies now use explicit wire/digest version **2**. An injected
@@ -141,7 +180,7 @@ remain separate.
 The CI audit found that the previously long-running `c256151` workflow completed with all
 ten jobs passing. Its workspace test step took about147 minutes on Windows and97 minutes
 on Ubuntu. At the recorded snapshot `f280686` was running with validation/native jobs
-passed, while `e70e8d5` was pending. No failure appeared among the latest20 runs. Public
+passed, while `e70e8d5` was pending. No failure appeared among the latest 20 runs. Public
 per-job logs returned HTTP403, so individual test/compile bottlenecks remain unverified.
 Do not describe these pending heads as hosted passes. Follow-up CI work should measure
 per-target elapsed time and evaluate separating CLI oracle suites; no speculative timeout,
