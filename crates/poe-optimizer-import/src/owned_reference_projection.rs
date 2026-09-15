@@ -360,6 +360,7 @@ pub struct ProjectionPolicyBinding {
     pub game_version: GameVersionNamespace,
     pub normalization_policy: OwnedContentDigest,
     pub reward_policy: OwnedContentDigest,
+    pub item_policy: OwnedContentDigest,
     pub mapping: OwnedContentDigest,
     pub mapping_source: OwnedContentDigest,
     pub registry: OwnedContentDigest,
@@ -515,6 +516,7 @@ impl ProjectionPlan {
         if input.game_version != self.policy.game_version
             || sidecar.policy != self.policy.normalization_policy
             || sidecar.reward_policy != self.policy.reward_policy
+            || sidecar.item_policy != self.policy.item_policy
             || sidecar.mapping != self.policy.mapping
             || sidecar.mapping_source != self.policy.mapping_source
             || sidecar.registry != self.policy.registry

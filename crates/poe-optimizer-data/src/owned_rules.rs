@@ -319,7 +319,9 @@ fn validate_structure<I: DefinitionSchemaIndex>(
                 }
                 use RuleEffectKind::*;
                 match &effect.effect {
-                    Contribute { value, .. } | Derive { value, .. } => node_ref(value)?,
+                    Contribute { value, .. }
+                    | Derive { value, .. }
+                    | ProjectSkillParameter { value, .. } => node_ref(value)?,
                     Capability { enabled, .. } | ActivateGrant { enabled, .. } => {
                         node_ref(enabled)?
                     }

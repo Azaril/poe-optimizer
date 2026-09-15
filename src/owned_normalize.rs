@@ -5,6 +5,7 @@ use poe_optimizer_import::{
     MAX_XML_BYTES,
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
     decode_build,
+    owned_item_lines::{ItemLineLimits, decode_item_line_policy},
     owned_mapping::{decode_mapping_package, decode_registry},
     owned_normalize::{
         ImportQueryTemplate, NormalizationArtifacts, NormalizationLimits, NormalizationPolicy,
@@ -44,6 +45,9 @@ pub(crate) struct Args {
     /// Bound finite reward policy JSON (an empty partial policy is allowed).
     #[arg(long)]
     rewards: PathBuf,
+    /// Bound item-line policy JSON; supply an explicit empty policy for pending item semantics.
+    #[arg(long)]
+    items: PathBuf,
     /// Ordered JSON array of explicit import query templates.
     #[arg(long)]
     queries: PathBuf,
@@ -101,6 +105,12 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         &definitions,
         reward_limits,
     )?;
+    let item_limits = ItemLineLimits::default();
+    let items = decode_item_line_policy(
+        &read_bounded(&args.items, item_limits.max_wire_bytes)?,
+        &definitions,
+        item_limits,
+    )?;
     let policy: NormalizationPolicy =
         serde_json::from_slice(&read_bounded(&args.policy, limits.max_policy_bytes)?)?;
     let queries: Vec<ImportQueryTemplate> =
@@ -123,6 +133,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             definitions: &definitions,
             roles: &roles,
             rewards: &rewards,
+            items: &items,
         },
         &policy,
         &queries,

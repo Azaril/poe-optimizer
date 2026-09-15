@@ -180,3 +180,14 @@ reference laws, and remove that replaced request/profile path and dependency clo
 the same checkpoint. Shared effect resolution must not become another permanent profile
 or a source-program compatibility layer. Existing schema binding, durable ID allocation
 and offline mapping are delivered prerequisites, not reasons to retain duplicate new APIs.
+
+## Item/provider component checkpoint
+
+`OwnedItemLinePolicy` has a production Import/CLI consumer and emits owned declarations;
+its patterns and source annotations are not native rule operations. Engine's computed
+skill-parameter projection similarly uses declared owned slots, without a generated PoB UI
+group. New optional local-item parity tests depend on the actual pinned source and owned
+rules, with no Spark/Mace profile helper. These establish component evidence needed for
+migration. They do not yet replace an active whole-build numerical consumer, so no new
+profile deletion is claimed. The next deletion remains coupled to actual semantic plan
+integration, preserving the useful independent numerical vectors.

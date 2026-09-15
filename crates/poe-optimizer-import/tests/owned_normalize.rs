@@ -1,4 +1,8 @@
 //! Fresh normalization contracts with injected artifacts; no evaluator or VM.
+#[path = "support/empty_owned_items.rs"]
+mod empty_owned_items;
+use empty_owned_items::empty_items;
+
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_draft::*, owned_schema::*,
 };
@@ -344,6 +348,7 @@ fn run(
         &evidence,
         *source.allocator_state(),
         NormalizationArtifacts {
+            items: &empty_items(&artifacts.schema),
             mappings: &artifacts.mapping,
             registry: &artifacts.registry,
             definitions: &artifacts.schema,
@@ -367,6 +372,7 @@ fn ids(target: &OwnedOriginTarget) -> InstanceId {
     match target {
         OwnedOriginTarget::Item(v) | OwnedOriginTarget::ItemReference(v) => v.instance_id(),
         OwnedOriginTarget::Reward(v) => v.instance_id(),
+        OwnedOriginTarget::Modifier(v) => v.instance_id(),
         OwnedOriginTarget::Equipment(v) => v.instance_id(),
         OwnedOriginTarget::Gem(v) => v.instance_id(),
         OwnedOriginTarget::Skill(v) => v.instance_id(),
@@ -456,6 +462,7 @@ fn fresh_normalization_is_deterministic_above_source_watermark_and_keeps_input_i
         &evidence,
         reserved,
         NormalizationArtifacts {
+            items: &empty_items(&artifacts.schema),
             mappings: &artifacts.mapping,
             registry: &artifacts.registry,
             definitions: &artifacts.schema,
@@ -504,6 +511,7 @@ fn failure_and_overflow_do_not_advance_caller_allocator_or_mutate_artifacts() {
             &evidence,
             allocator,
             NormalizationArtifacts {
+                items: &empty_items(&artifacts.schema),
                 mappings: &artifacts.mapping,
                 registry: &artifacts.registry,
                 definitions: &artifacts.schema,
@@ -1177,6 +1185,7 @@ fn duplicate_requested_query_ids_reject_instead_of_dropping_rows() {
             &evidence,
             *source.allocator_state(),
             NormalizationArtifacts {
+                items: &empty_items(&artifacts.schema),
                 mappings: &artifacts.mapping,
                 registry: &artifacts.registry,
                 definitions: &artifacts.schema,
@@ -1564,6 +1573,7 @@ fn reward_binding_rejects_stale_policy_before_any_normalization_is_returned() {
             &evidence,
             *source.allocator_state(),
             NormalizationArtifacts {
+                items: &empty_items(&a.schema),
                 mappings: &a.mapping,
                 registry: &a.registry,
                 definitions: &a.schema,

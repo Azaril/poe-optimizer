@@ -874,6 +874,7 @@ fn program<I: DefinitionSchemaIndex>(
                 "effect guard must be boolean",
             )?;
         }
+        let mut value_schema = None;
         let (id, expected) = match &e.effect {
             RuleEffectKind::Contribute {
                 entity: e,
@@ -931,6 +932,46 @@ fn program<I: DefinitionSchemaIndex>(
                 known(index.slot(slot), &ep)?;
                 (enabled, ComputedValueType::Boolean)
             }
+            RuleEffectKind::ProjectSkillParameter {
+                skill,
+                parameter,
+                value,
+            } => {
+                check(
+                    declaration_subject(&skill.declaration) == owner.owner,
+                    &ep,
+                    "projected skill declaration does not equal owner",
+                )?;
+                let declared = ports
+                    .declarations
+                    .ok_or_else(|| fail(&ep, "owner has no skill grant declarations"))?;
+                closure(&declared.skill_grants.closure, index, &ep, l, b)?;
+                membership(skill, &declared.skill_grants.members, b, l, &ep)?;
+                let granted = known(index.slot(skill), &ep)?;
+                let target = known(index.definition(&granted.skill), &ep)?;
+                check(
+                    parameter.declaration == SlotOwnerDefId::Skill(granted.skill.clone()),
+                    &ep,
+                    "projected parameter declaration does not equal target skill",
+                )?;
+                closure(&target.declarations.parameters.closure, index, &ep, l, b)?;
+                membership(
+                    parameter,
+                    &target.declarations.parameters.members,
+                    b,
+                    l,
+                    &ep,
+                )?;
+                let schema = known(index.slot(parameter), &ep)?;
+                check(
+                    schema.sites.is_empty(),
+                    &ep,
+                    "projected skill parameter must have no authored input sites",
+                )?;
+                let expected = schema_type(&schema.value, index, &ep, l, b)?;
+                value_schema = Some(schema.value.clone());
+                (value, expected)
+            }
             RuleEffectKind::Requirement { satisfied, .. } => {
                 (satisfied, ComputedValueType::Boolean)
             }
@@ -952,6 +993,7 @@ fn program<I: DefinitionSchemaIndex>(
             kind: e.effect.clone(),
             when,
             value,
+            value_schema,
         });
     }
     Ok(CompiledProgram {

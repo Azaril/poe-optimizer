@@ -11,6 +11,61 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
+**Item/provider checkpoint (after `6cf9f70`):** owned rule operations v2 add
+computed parameter projection into an owner's exact declared generated skill, with
+explicit unsupported-value outcomes. The component compiler still does not bind actual
+provider occurrences or activate grants. New native projection tests pass (nine cases);
+five isolated pinned-source item tests pass, including two owned-engine comparisons.
+Local arithmetic varies quality/speed and absent channels, checks missing-input recovery,
+and exercises A-to-B-to-A scratch reuse. Grant tests compare explicitly supplied decoded
+Integer levels with source results; they do not prove Import range attribution or provider
+binding. The oracle bootstrap loads the actual pinned Misc constants table. No Spark/Mace
+profile supplies native results. These are component comparisons, not full-build parity.
+
+The new injected `OwnedItemLinePolicy` and required `normalize-owned --items` artifact
+convert individual admitted template/level/quality/parameter/modifier facts. Normalization
+preserves raw line outcomes and fresh modifier IDs in a version-4 sidecar. Rule patterns,
+source metadata and XML range instructions remain Import concerns; Engine receives owned
+values only. Reference projection now binds the item-policy digest as well.
+
+**Final guarded validation passes 466 selected test executions:** Core 210, Data 18,
+Engine 34 (including five optional source/native item tests), Import 134, and CLI 35 with
+default features plus 35 without PoB. Strict workspace/native-only Clippy, WASM compilation
+of Core/Data/Engine/Import/Native, formatting and the native-only dependency audit pass.
+No PoB/Lua runtime dependency enters the native-only tree. All five drafts and all 110
+reference rows survive. Original inputs, fixed expectations, schema40 data and the PoB pin
+are unchanged. Receipts: `runs/owned-item-provider-01/validation-03/ledger.json` and
+`validated-checkpoint.json`. This is affected-scope local evidence, not a complete workspace
+test run or hosted new-head CI conclusion.
+
+Review fixed linear diagnostic output, candidate/Option work accounting and conflicting
+singular parameters. The 13 converter regressions reproduced four failures before the fixes
+and now pass. Lint cleanup boxes large diagnostic payloads without changing their wire form.
+Independent review removed an unsupported flat attack-rate port from the new test fixture;
+final source comparisons use PoB's actual base-rate scaling. Earlier failed runs remain in
+this checkpoint's receipts. The approval-service capacity interruption did not waive checks.
+At the last prepublication observation, parent `6cf9f70` had passing Windows/Linux lint and
+native suites; its longer workspace/PoB suites were still running with no observed failures.
+Track the published revision's CI to completion before another routine checkpoint push,
+while continuing independent implementation locally.
+
+**Resume order:** verify publication/hosted CI, then correct the mandatory
+item-level model to represent explicit unspecified
+values, convert source range attribution, and bind item-granted parameters/local weapon
+outputs to actual equipment/provider/action occurrences. Original05 item28 has no Item
+Level header: neither its equipment requirement 26 nor Firebolt level 11 supplies it.
+No default is to be invented. Current drafts leave that fact pending; no matching item-line
+rule is not proof of absence. The next model permits explicit null while rejecting omitted
+wire fields; source absence still needs a scoped proof or user repair. Twister and Sniper
+remain joint model cases; grant projection must not turn Firebolt into an authored Gem or
+retarget the independent manual Sniper. Full native coverage remains **0/5**.
+
+No additional legacy numerical consumer is retired in this work yet. The next shared
+semantic evaluator must migrate a named active consumer and its useful numerical tests,
+then delete the replaced profile path. Do not restart the paused Lua/UI frontier or add
+a third named-skill profile. See [item conversion](owned-normalization.md#injected-item-line-conversion)
+and the [migration gates](architecture-migration.md#itemprovider-checkpoint-and-next-integration-gate).
+
 **Owned rule component checkpoint (after `7de9628`):** the portable contracts now
 include owned stat and capability definitions and a closed expression/effect package.
 Data stores a bounded, exact-schema-bound artifact; Engine separately compiles all

@@ -1,5 +1,9 @@
 //! Reference routing laws use exact original reports and separately authored
 //! synthetic malformed evidence. No evaluator, VM or copied parity result.
+#[path = "support/empty_owned_items.rs"]
+mod empty_owned_items;
+use empty_owned_items::empty_items;
+
 use poe_optimizer_core::{
     build_identity::*,
     data::DataIdentity,
@@ -39,6 +43,7 @@ fn policy() -> ProjectionPolicyBinding {
         game_version: ns(),
         normalization_policy: hash('a'),
         reward_policy: hash('b'),
+        item_policy: hash('1'),
         mapping: hash('c'),
         mapping_source: hash('d'),
         registry: hash('e'),
@@ -671,6 +676,7 @@ fn normalized_fixture(
         &evidence,
         *source.allocator_state(),
         NormalizationArtifacts {
+            items: &empty_items(&definitions),
             mappings: &mappings,
             registry: &registry,
             definitions: &definitions,
@@ -701,6 +707,7 @@ fn normalized_plan(
         game_version: ns(),
         normalization_policy: sidecar.policy,
         reward_policy: sidecar.reward_policy,
+        item_policy: sidecar.item_policy,
         mapping: sidecar.mapping,
         mapping_source: sidecar.mapping_source,
         registry: sidecar.registry,
@@ -828,12 +835,13 @@ fn changed_source_lineage_query_order_or_artifacts_cannot_reuse_exact_query_bind
             },
         })
         .collect();
-    for mutate in 0..4 {
+    for mutate in 0..5 {
         let mut wrong = plan.policy().clone();
         match mutate {
             0 => wrong.reward_policy = hash('0'),
             1 => wrong.mapping = hash('0'),
             2 => wrong.normalization_policy = hash('0'),
+            3 => wrong.item_policy = hash('0'),
             _ => wrong.definitions.content_sha256 = "0".repeat(64),
         }
         let stale = ProjectionPlan::new(&reference, wrong, rows.clone(), limits()).unwrap();

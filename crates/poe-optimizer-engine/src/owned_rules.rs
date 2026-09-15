@@ -109,6 +109,12 @@ pub enum EffectDisposition {
     Applied {
         value: ParameterValue,
     },
+    /// A finite computed projection outside the explicitly supported target
+    /// parameter domain. The value is retained; this is not gameplay illegality,
+    /// missing input, an arithmetic error, or permission to clamp.
+    UnsupportedValue {
+        value: ParameterValue,
+    },
     Inactive,
     Unresolved {
         input: OwnedDefinitionKey,
@@ -204,6 +210,7 @@ struct CompiledEffect {
     kind: RuleEffectKind,
     when: Option<usize>,
     value: usize,
+    value_schema: Option<ValueSchema>,
 }
 #[derive(Clone, Debug)]
 struct CompiledProgram {

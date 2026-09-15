@@ -6,6 +6,7 @@
 //! Unconverted semantics remain real pending fields/collection obligations.
 use crate::{
     build_instance::{AuthoredInstanceId, SourceOccurrenceId},
+    owned_item_lines::*,
     owned_mapping::*,
     owned_reward_policy::*,
     owned_skill_catalog::*,
@@ -24,6 +25,9 @@ use poe_optimizer_core::{
 };
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
+
+mod items;
+pub use items::{NormalizedItemLine, NormalizedItemText};
 
 /// The caller supplies desired measurements. There is no built-in metric list.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -112,6 +116,8 @@ pub enum NormalizationError {
     #[error(transparent)]
     Reward(#[from] RewardPolicyError),
     #[error(transparent)]
+    Item(#[from] ItemLineError),
+    #[error(transparent)]
     Identity(#[from] BuildIdentityError),
     #[error(transparent)]
     Structure(#[from] StructuralError),
@@ -124,6 +130,7 @@ type Result<T> = std::result::Result<T, NormalizationError>;
 pub enum OwnedOriginTarget {
     Item(ItemRecordId),
     ItemReference(ItemRecordId),
+    Modifier(ModifierInstanceId),
     Equipment(ItemSlotUseId),
     Reward(RewardSelectionId),
     Gem(GemInstanceId),
@@ -168,6 +175,8 @@ pub struct FreshNormalizationSidecar {
     pub definitions: DataIdentity,
     pub skill_roles: OwnedContentDigest,
     pub reward_policy: OwnedContentDigest,
+    pub item_policy: OwnedContentDigest,
+    pub item_texts: Vec<NormalizedItemText>,
     pub draft: OwnedContentDigest,
     pub origins: Vec<SourceOwnedOrigin>,
 }
@@ -186,6 +195,7 @@ pub struct NormalizationArtifacts<'a, I> {
     pub definitions: &'a I,
     pub roles: &'a OwnedSkillRoleIndex,
     pub rewards: &'a OwnedRewardPolicy,
+    pub items: &'a OwnedItemLinePolicy,
 }
 impl NormalizedImport {
     pub fn draft(&self) -> &DraftSession {
@@ -239,6 +249,8 @@ struct Builder<'e, 's> {
     mappings: &'e OwnedMappingIndex,
     roles: &'e OwnedSkillRoleIndex,
     rewards: &'e OwnedRewardPolicy,
+    items: &'e OwnedItemLinePolicy,
+    item_texts: Vec<NormalizedItemText>,
     allocator: InstanceAllocator,
     limits: NormalizationLimits,
     work: usize,
@@ -527,9 +539,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         definitions,
         roles,
         rewards,
+        items,
     } = artifacts;
     let recipes = validate_policy(policy, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
+    items.verify_bindings(definitions)?;
     let policy_digest = digest_owned(
         "owned-normalization-policy-v1",
         &(policy, queries),
@@ -577,6 +591,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         mappings,
         roles,
         rewards,
+        items,
+        item_texts: vec![],
         allocator: InstanceAllocator::from_state(allocator_before),
         limits,
         work: 0,
@@ -662,14 +678,10 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 let id = b.id()?;
                 item_ids.insert(s, id);
                 b.link(s, OwnedOriginTarget::Item(id))?;
-                draft.items.members.push(ItemDraft {
-                    id,
-                    template: b.pending(s, "item-template-not-converted")?,
-                    parameters: b.closure(s, "item-parameters-not-converted", vec![])?,
-                    item_level: b.pending(s, "item-level-not-converted")?,
-                    quality: b.quality(s)?,
-                    modifiers: b.closure(s, "item-modifiers-not-converted", vec![])?,
-                });
+                draft
+                    .items
+                    .members
+                    .push(items::normalize_item(&mut b, row, id)?);
             }
             Some(AuthoredInstanceId::ItemSet(_)) => {
                 let id = b.id()?;
@@ -1122,7 +1134,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: 3,
+        schema_version: 4,
         source_sha256: identity.source_sha256.into(),
         source_bytes: identity.source_bytes,
         source_schema: identity.instance_import_schema,
@@ -1137,12 +1149,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         definitions: definitions.identity().clone(),
         skill_roles: *roles.identity(),
         reward_policy: *rewards.identity(),
+        item_policy: *items.identity(),
+        item_texts: b.item_texts,
         draft: draft.digest(limits.draft.input.max_wire_bytes)?,
         origins: b.origins,
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        "owned-normalization-sidecar-v3",
+        "owned-normalization-sidecar-v4",
         &sidecar,
         limits.draft.input.max_wire_bytes,
     )?;

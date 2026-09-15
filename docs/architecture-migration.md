@@ -91,6 +91,31 @@ No legacy numerical consumer moved in this component slice. The next numerical i
 must pair a named consumer migration with deletion of its replaced profile/request path and
 preservation of its useful reference laws.
 
+## Item/provider checkpoint and next integration gate
+
+The import seam now has injected item-line declarations, while rule operations v2 can
+project an item-owned computed parameter into a declared generated skill. CLI normalization
+requires the item artifact and records its identity; optional source tests isolate local
+weapon arithmetic and granted-skill range behavior. These are partial D1/D2 capabilities.
+No native source-method replay or PoB UI object is introduced into the owned engine.
+
+Before the next complete semantic plan, address the model issues exposed by real items:
+
+1. Represent unspecified item level independently of unresolved conversion and legality.
+2. Convert range/variant/socket source meaning with explicit provenance. XML range IDs are
+   classified-list positions, not raw line indexes; source save/load rune membership differs.
+3. Bind generated-skill parameters to an actual receiving provider and separate activation.
+   Transport local weapon outputs into the action's chosen attack source explicitly.
+4. Prove producer and contribution closure across programs before publishing a metric.
+   Compile compact indexed inputs once; keep import, hashing and serialization outside
+   repeated Rayon candidate evaluation.
+5. Migrate the first active numerical consumer and its useful parity laws together, then
+   delete its profile/source-shaped request path. Component tests alone do not retire it.
+
+Original02 Twister and original05 Sniper remain joint design cases, with all five source
+inputs and all 110 reference rows retained. Item-line knowledge and an oracle-confirmed
+grant level are not complete native builds. The denominator remains **0/5**.
+
 ## Retirement ownership
 
 | Existing area | Destination / retirement condition |

@@ -54,9 +54,11 @@ Owned project/draft persistence now uses version 2. Allocation presets can contr
 socket equipment and choice presets can contribute rewards independently; older envelopes
 are rejected explicitly. Concrete build/request payloads remain unchanged.
 `normalize-owned` converts caller-supplied XML/share codes through injected owned schema,
-mapping, role, reward and normalization policy artifacts into partial owned drafts. It preserves independent
+mapping, role, reward, item and normalization policy artifacts into partial owned drafts. It preserves independent
 alternatives and unresolved semantics; it does not yet produce a complete original build
-request or calculate. See [owned normalization](docs/owned-normalization.md).
+request or calculate. Item-line conversion is separate from native rules and retains unknown
+semantics; generated-skill parameter projection does not create an authored gem. See
+[owned normalization](docs/owned-normalization.md).
 The existing numerical CLI accepts PoB share codes/XML, explicit skill/action and encounter options,
 and returns typed metrics with units, availability and structured coverage. Configurable scalar
 objectives can be assessed during evaluation or against saved results without recalculation.

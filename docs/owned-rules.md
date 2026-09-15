@@ -21,7 +21,8 @@ injected data; adding an operation requires explicit versioned Rust semantics an
 
 `RulePackageInput` carries its namespace, release, semantics version, operation version and
 the exact definition-schema `DataIdentity`. Its version is 1; the implemented operation set
-is `owned-domain-operations-v1`. Both storage and compilation check the supplied index's
+is `owned-domain-operations-v2`. Version 1 operations are explicitly rejected by the compiler; regenerate experimental
+artifacts rather than silently interpreting them with new semantics. Both storage and compilation check the supplied index's
 identity and namespace. Execution checks that binding again. A digest identifies content;
 it does not authenticate its source or prove conversion fidelity.
 
@@ -90,6 +91,15 @@ that an omitted contribution read means an empty set.
 It does not create an actor/action. Likewise, a support-applicability boolean does not attach
 a support to every action in a group or establish its cost, trigger or receiver semantics.
 
+`ProjectSkillParameter` transfers a computed value into a parameter declared by the exact
+skill behind an owner's declared skill-grant slot. The target parameter has no authored
+write sites; it is not a fake Gem level. Types, units and membership are checked at
+compilation. Listed members of partial declarations can compile, while required producer
+closure remains a later resolution obligation. A computed value outside the supported
+schema is reported as `UnsupportedValue`, without clamping or disguising it as a missing
+fact. This operation does not activate a grant or choose its receiving equipment use;
+D3 must bind the parent occurrence, target and dependency order.
+
 ## Compilation and execution outcomes
 
 Compilation validates every node, including unreachable branches, for references, types,
@@ -110,6 +120,8 @@ The ordered `ProgramEvaluation.effects` ledger retains each effect and its dispo
   for a grant or requirement it does not mean activation or satisfaction.
 - `Inactive`: the effect's guard was false; this is distinct from zero or a missing value.
 - `Unresolved { input }`: a demanded fact was not supplied.
+- `UnsupportedValue { value }`: a projected value lies outside its supported destination
+  schema. The computed value is retained; this is not a gameplay-legality verdict.
 - `NumericalError { node, reason }`: division by zero, nonfinite arithmetic or integer overflow.
 
 Malformed facts, package mismatch, unknown programs and resource exhaustion return
@@ -181,3 +193,10 @@ The next numerical migration must move a named legacy consumer and preserve its 
 numeric/reference laws in the same checkpoint, then delete the replaced request/profile
 path and dependency closure. See [retirement inventory](legacy-retirement.md). No third
 profile, mandatory source-program package or parallel default evaluator is introduced here.
+
+The optional [item source tests](../crates/poe-optimizer-engine/tests/owned_item_reference.rs)
+now compare the owned rule engine with independently executed pinned local-item arithmetic.
+They vary quality and speed, preserve absent damage channels, and exercise missing-input
+recovery. The granted-skill comparison uses explicitly supplied decoded Integer levels;
+source range decoding and receiving-provider resolution are not established by that test.
+Neither the oracle outputs nor the legacy Spark/Mace evaluator supply native results.

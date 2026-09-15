@@ -1,6 +1,10 @@
 //! Offline breadth regression: pinned identity data -> owned artifacts -> drafts.
 //! The fixed reference manifest supplies ordered query identities only. Its
 //! numerical results, source programs and UI selections are never evaluated.
+#[path = "support/empty_owned_items.rs"]
+mod empty_owned_items;
+use empty_owned_items::empty_items;
+
 use poe_optimizer_core::{
     build_identity::BuildLineage,
     owned_build::{ParameterValue, QueryId},
@@ -552,6 +556,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
             &evidence,
             *source.allocator_state(),
             NormalizationArtifacts {
+                items: &empty_items(&artifacts.definitions),
                 mappings: &artifacts.mappings,
                 registry: &artifacts.registry,
                 definitions: &artifacts.definitions,
@@ -572,7 +577,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         );
         let issue_ids: BTreeSet<_> = validation.issues.iter().map(|issue| issue.id).collect();
         assert_eq!(sidecar.origins.len(), evidence.rows().len());
-        assert_eq!(sidecar.schema_version, 3);
+        assert_eq!(sidecar.schema_version, 4);
         let socket_counts: &[usize] = match index {
             0 => &[3],
             1 => &[0, 0, 0, 0, 0, 3],
@@ -921,6 +926,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         &evidence,
         *malformed.allocator_state(),
         NormalizationArtifacts {
+            items: &empty_items(&artifacts.definitions),
             mappings: &artifacts.mappings,
             registry: &artifacts.registry,
             definitions: &artifacts.definitions,
@@ -1060,6 +1066,7 @@ fn original_reference_projection_binds_fresh_owned_drafts_without_losing_rows() 
             &evidence,
             *source.allocator_state(),
             NormalizationArtifacts {
+                items: &empty_items(&artifacts.definitions),
                 mappings: &artifacts.mappings,
                 registry: &artifacts.registry,
                 definitions: &artifacts.definitions,
@@ -1078,6 +1085,7 @@ fn original_reference_projection_binds_fresh_owned_drafts_without_losing_rows() 
             game_version: namespace(),
             normalization_policy: sidecar.policy,
             reward_policy: sidecar.reward_policy,
+            item_policy: sidecar.item_policy,
             mapping: sidecar.mapping,
             mapping_source: sidecar.mapping_source,
             registry: sidecar.registry,

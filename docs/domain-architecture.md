@@ -1,8 +1,8 @@
 # ADR: project-owned game semantics and independent evaluation
 
 **Status:** architectural boundary accepted by the owner on 2026-09-14. The contracts
-below are the target; their exact Rust/wire names and rule syntax are proposed, not
-implemented. This decision supersedes conflicting source-shaped runtime and parity
+below describe the target. Companion contract documents and the implementation log identify
+delivered Rust/wire APIs and remaining gates. This decision supersedes conflicting source-shaped runtime and parity
 requirements in earlier designs. See [migration](architecture-migration.md) for delivery
 and [implementation](implementation.md) for actual capability and the resume point.
 
@@ -38,6 +38,14 @@ Whether authors edit a small textual DSL or structured documents is a tooling ch
 Both compile to the same project-owned typed rule representation. Optional Lua authoring
 bindings may emit this representation in offline tools; Lua callbacks cannot escape into
 it. Do not build another general language interpreter in order to translate all Lua syntax.
+
+Offline conversion and runtime semantics have different formats and release cadences.
+A source text pattern may emit zero, one or several owned declarations; the runtime never
+receives that pattern as a rule to execute. Preserve import uncertainty and origin metadata
+outside evaluation inputs. Likewise, computed parameters of a provider-granted skill belong
+to that skill and provider occurrence, not to a fabricated authored gem or a UI group.
+Intrinsic facts absent from an imported item must remain unspecified rather than receiving
+sample-build defaults. Domain resolution determines which facts each requested result needs.
 
 ## Components and dependency direction
 

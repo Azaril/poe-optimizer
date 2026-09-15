@@ -349,7 +349,27 @@ pub(super) fn evaluate<I: DefinitionSchemaIndex>(
             Some(Ok(ParameterValue::Boolean(false))) => EffectDisposition::Inactive,
             Some(Err(error)) => disposition(p, Err(error)),
             Some(Ok(ParameterValue::Boolean(true))) | None => {
-                disposition(p, node(p, effect.value, s, package.limits.max_work)?)
+                let value = node(p, effect.value, s, package.limits.max_work)?;
+                if let (Ok(value), Some(schema)) = (&value, &effect.value_schema) {
+                    if let ValueSchema::Option { allowed } = schema {
+                        s.work = s
+                            .work
+                            .checked_add(allowed.members.len())
+                            .filter(|v| *v <= package.limits.max_work)
+                            .ok_or_else(|| RuleError::new("effect", "work limit exceeded"))?;
+                    }
+                    if value_in_schema(value, schema) {
+                        EffectDisposition::Applied {
+                            value: value.clone(),
+                        }
+                    } else {
+                        EffectDisposition::UnsupportedValue {
+                            value: value.clone(),
+                        }
+                    }
+                } else {
+                    disposition(p, value)
+                }
             }
             _ => unreachable!("compiled boolean guard"),
         };

@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 1;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v1";
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v2";
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -251,6 +251,15 @@ pub enum RuleEffectKind {
     ActivateGrant {
         slot: DeclaredSlot<GrantSlotDefId>,
         enabled: OwnedDefinitionKey,
+    },
+    /// Project a computed input into this owner's declared generated skill.
+    /// The target parameter belongs to that exact Skill definition. This emits
+    /// a value only; concrete occurrence binding and grant activation belong to
+    /// the resolver, which also checks complete required-input/producer coverage.
+    ProjectSkillParameter {
+        skill: DeclaredSlot<SkillGrantSlotDefId>,
+        parameter: DeclaredSlot<ParameterSlotDefId>,
+        value: OwnedDefinitionKey,
     },
     Requirement {
         satisfied: OwnedDefinitionKey,

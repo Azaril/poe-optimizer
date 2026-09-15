@@ -7,7 +7,7 @@ and [migration plan](architecture-migration.md) control the end state.
 ## Boundaries
 
 The production normalizer accepts immutable source evidence, a caller-owned fresh allocator
-state, exact owned registry/schema/mapping/skill-role/reward-policy artifacts, a normalization policy and
+state, exact owned registry/schema/mapping/skill-role/reward-policy/item-policy artifacts, a normalization policy and
 an ordered caller-supplied query list. It returns a validated [owned draft](owned-drafts.md)
 and an optional import-owned correspondence sidecar. No selected PoB UI view, source VM,
 legacy game-data snapshot, numerical evaluator or skill-name profile enters this API.
@@ -80,10 +80,47 @@ The caller supplies any ordered query list; no production 22-metric or named-bui
 embedded. Known player targets can be represented; action/owned-actor correspondence that
 has not been converted remains pending. All rows survive with their original query IDs.
 
+## Injected item-line conversion
+
+`OwnedItemLinePolicy` is an import artifact bound to an exact owned schema. Its bounded
+literal/capture patterns use the existing lexical codecs and emit owned template, level,
+quality, parameter or modifier declarations. Metadata rules retain provenance separately;
+affix tier metadata is never a second applied modifier or an instruction to clamp an
+explicit roll. Game names, units, IDs and supported domains are injected policy/schema data.
+This layer contains no Lua patterns, source callbacks, UI state or general interpreter.
+
+Every line retains its text, index and known/pending outcome. Multiple matching rules or
+capture boundaries stay ambiguous. Interpolation needs an explicitly supplied range
+fraction and rounding quantum; `convert_text` supplies no implicit range/default. Aggregate
+fields and member lists include only declarations individually admitted by the unique
+item template. Conflicting headers/parameter assignments stay pending; listed members of
+partial sets may survive without implying that the set is complete.
+
+Fresh normalization accepts a single consumed item-text chunk with only ModRange children.
+It deliberately does not assign those child IDs to raw line numbers. Range expressions
+remain pending; fixed values can convert independently. Multiple text resets or unknown
+child operations prevent this partial conversion. The sidecar preserves the chosen content
+entry, every line outcome, template-context issues and fresh modifier occurrence IDs.
+Unknown lines remain visible. Item parameter/modifier collections retain pending closure
+until the remaining source lifecycle and semantics are accounted for.
+
+The original Grand Spear has explicit attack speed 49% while its affix metadata names a
+26–28% tier. The import fixture preserves 49 once and retains the discrepancy. The original
+Ashen Staff has a ranged Firebolt grant and no Item Level header. Its generated source
+skill is not a physical gem and is separate from the manual Skeletal Sniper. The optional
+source oracle confirms grant levels 1/11/20 at fractions 0/.5/1; this does not establish
+native provider resolution or full build parity.
+
+**Next structural gate:** finalized item records must permit an explicitly unspecified
+item level, distinct from unresolved conversion. Missing level must not become zero,
+equipment requirement level or granted skill level. Only computations or legality checks
+that demand that fact should be blocked. Current drafts conservatively retain a pending
+level; resolve this contract before claiming complete selected-request finalization.
+
 ## Identity, bounds and publication
 
 `NormalizationArtifacts` groups references; it is not a validation token. Normalization
-checks the exact registry/schema/mapping/role/reward-policy bindings and PoB2 source family before output.
+checks the exact registry/schema/mapping/role/reward-policy/item-policy bindings and PoB2 source family before output.
 The allocator must have the source lineage and a watermark at least as high as the source
 importer's final state. Every owned ID is allocated above that watermark. Work happens on
 a local allocator; errors return no partial result and cannot consume the caller's state.
@@ -91,8 +128,8 @@ The host publishes draft, sidecar and new watermark together under its owner or 
 Repeating a fresh import is not restore, changed-source migration or concurrent allocation
 authority. Those operations need separate revisioned contracts.
 
-The version-3 sidecar records source hash/schema/revision, before/after watermarks, policy plus query
-identity, exact artifact identities (including reward policy), draft digest and one origin entry per source element.
+The version-4 sidecar records source hash/schema/revision, before/after watermarks, policy plus query
+identity, exact artifact identities (including reward and item policies), draft digest and one origin entry per source element.
 Its targets are a closed enum of current owned occurrences/issues. Many source rows may
 refer to one real pending collection issue; candidates never allocate hypothetical uses.
 Unknown semantics are not automatically called presentation metadata. The current broad
@@ -103,7 +140,7 @@ bounded. Attribute indexes and cached group origins avoid repeated source scans.
 fail explicitly rather than truncating source or silently claiming complete collections.
 
 `normalize-owned INPUT --policy POLICY --registry REGISTRY --definitions DEFINITIONS
---mapping MAPPING --roles ROLES --rewards REWARDS --queries QUERIES --output NEW_DIRECTORY` is the thin CLI
+--mapping MAPPING --roles ROLES --rewards REWARDS --items ITEMS --queries QUERIES --output NEW_DIRECTORY` is the thin CLI
 consumer. It accepts XML or one PoB share code and requires all owned artifacts. It prepares
 and validates draft.json, sidecar.json and report.json before creating the output directory;
 existing paths are refused. A filesystem failure during publication is not an atomic
