@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 1;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v2";
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v3";
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -259,6 +259,15 @@ pub enum RuleEffectKind {
     ProjectSkillParameter {
         skill: DeclaredSlot<SkillGrantSlotDefId>,
         parameter: DeclaredSlot<ParameterSlotDefId>,
+        value: OwnedDefinitionKey,
+    },
+    /// Project a computed stat into this owner's exact declared child actor.
+    /// The stat must support Actor targets with the same value type/unit. This
+    /// emits a value only: the resolver binds the parent provider occurrence,
+    /// proves producer coverage and resolves activation separately.
+    ProjectActorStat {
+        actor: DeclaredSlot<ActorSlotDefId>,
+        stat: StatDefId,
         value: OwnedDefinitionKey,
     },
     Requirement {

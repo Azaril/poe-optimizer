@@ -119,11 +119,16 @@ fn hidden_cycle_and_unknown_operations_fail_before_writing_canonical_data() {
     assert!(!run(temp.path(), &args()).status.success());
     assert!(!temp.path().join("canonical.json").exists());
     fixture.rules = fixture::fixture().rules;
-    fixture.rules.operations_version =
-        OwnedDefinitionKey::new("future-unknown-operation-set").unwrap();
-    save(temp.path(), &fixture, 0);
-    assert!(!run(temp.path(), &args()).status.success());
-    assert!(!temp.path().join("canonical.json").exists());
+    for version in [
+        "owned-domain-operations-v1",
+        "owned-domain-operations-v2",
+        "future-unknown-operation-set",
+    ] {
+        fixture.rules.operations_version = OwnedDefinitionKey::new(version).unwrap();
+        save(temp.path(), &fixture, 0);
+        assert!(!run(temp.path(), &args()).status.success(), "{version}");
+        assert!(!temp.path().join("canonical.json").exists());
+    }
 }
 #[test]
 fn pending_owner_membership_remains_visible_after_known_program_execution() {

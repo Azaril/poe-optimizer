@@ -34,7 +34,7 @@ and [migration plan](docs/architecture-migration.md). The capabilities below des
 current experimental implementation, not the target architecture.
 
 **Status:** experimental import and evaluation CLI with switchable native and optional PoB
-backends. Numerical evaluation still uses PoB documents. A new
+backends. The legacy metric evaluator still uses PoB documents. The
 `check-owned-input INPUT --canonical-output OUTPUT` command checks directly authored owned
 build/inventory/scenario/query/request structure through portable core APIs, without XML or
 a data package. `check-owned-schema INPUT --canonical-output OUTPUT` validates a supplied
@@ -42,9 +42,11 @@ owned definition schema package and reports its canonical content identity. Both
 work in a native-only build; neither claims build binding, legality or numerical coverage.
 `check-owned-rules INPUT --definitions SCHEMA [--probe FACTS]` checks the new
 owned rule format, compiles its typed effects, and optionally evaluates explicit component
-facts without PoB. This is the shared library boundary for real effect conversion and
-future build-plan integration; it does not yet calculate an owned build. See
-[owned rule components](docs/owned-rules.md).
+facts without PoB. `resolve-owned-effects --input REQUEST --schema SCHEMA --rules RULES
+--routing ROUTES [--output REPORT]` binds a complete owned request and resolves component
+effects from those supplied artifacts. It uses no source document, Lua or caller-supplied
+calculated facts. It reports typed effects/values and gaps; it does not yet calculate build
+metrics or complete any original build. See [owned rule components](docs/owned-rules.md).
 `check-owned-draft INPUT --selection SELECTION --owned-output OUTPUT` validates partial
 owned authoring state and finalizes explicit independent presets through the same Core
 APIs. Pending selections retain all query rows and cannot write a complete request;

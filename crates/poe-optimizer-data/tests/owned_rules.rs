@@ -253,3 +253,26 @@ fn unit_read_variants_reject_unknown_and_duplicate_wire_fields() {
         assert!(serde_json::from_str::<RuleReadSource>(&duplicate).is_err());
     }
 }
+
+#[test]
+fn operation_version_changes_identity_without_changing_storage_envelope() {
+    let s = schema();
+    let limits = RuleStorageLimits::default();
+    let current = OwnedRulePackage::new(input(&s), &s, limits).unwrap();
+    let mut previous = input(&s);
+    previous.operations_version = key("owned-domain-operations-v2");
+    // Data storage preserves an explicit operation contract; Engine decides
+    // which version it can execute. Neither path silently upgrades the package.
+    let previous = OwnedRulePackage::new(previous, &s, limits).unwrap();
+    assert_ne!(current.identity(), previous.identity());
+    assert_eq!(
+        current.input().schema_version,
+        previous.input().schema_version
+    );
+    let restored =
+        decode_rule_package(&encode_rule_package(&previous, limits).unwrap(), &s, limits).unwrap();
+    assert_eq!(
+        restored.input().operations_version.as_str(),
+        "owned-domain-operations-v2"
+    );
+}

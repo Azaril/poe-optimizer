@@ -272,6 +272,85 @@ fn disposition(p: &CompiledProgram, value: NodeValue) -> EffectDisposition {
         },
     }
 }
+fn validate_fact(
+    read: &CompiledRead,
+    value: &ParameterValue,
+    scratch: &mut RuleScratch,
+    max_work: usize,
+) -> Result<(), RuleError> {
+    if !value_matches_type(value, &read.ty) {
+        return Err(RuleError::new(
+            format!("facts.{}", read.id),
+            "fact type/unit mismatch",
+        ));
+    }
+    if let Some(schema) = &read.schema {
+        charge_schema(schema, scratch, max_work, "facts")?;
+        if !value_in_schema(value, schema) {
+            return Err(RuleError::new(
+                format!("facts.{}", read.id),
+                "fact violates declared value schema/membership",
+            ));
+        }
+    }
+    Ok(())
+}
+fn charge_schema(
+    schema: &ValueSchema,
+    scratch: &mut RuleScratch,
+    max_work: usize,
+    path: &str,
+) -> Result<(), RuleError> {
+    if let ValueSchema::Option { allowed } = schema {
+        scratch.work = scratch
+            .work
+            .checked_add(allowed.members.len())
+            .filter(|v| *v <= max_work)
+            .ok_or_else(|| RuleError::new(path, "work limit exceeded"))?;
+    }
+    Ok(())
+}
+/// The sole effect evaluator, shared by checked reporting and prepared plans.
+fn evaluate_effect(
+    p: &CompiledProgram,
+    effect: &CompiledEffect,
+    s: &mut RuleScratch,
+    max_work: usize,
+) -> Result<EffectDisposition, RuleError> {
+    charge(s, max_work)?;
+    let guard = effect.when.map(|i| node(p, i, s, max_work)).transpose()?;
+    Ok(match guard {
+        Some(Ok(ParameterValue::Boolean(false))) => EffectDisposition::Inactive,
+        Some(Err(error)) => disposition(p, Err(error)),
+        Some(Ok(ParameterValue::Boolean(true))) | None => {
+            let value = node(p, effect.value, s, max_work)?;
+            if let (Ok(value), Some(schema)) = (&value, &effect.value_schema) {
+                charge_schema(schema, s, max_work, "effect")?;
+                if value_in_schema(value, schema) {
+                    EffectDisposition::Applied {
+                        value: value.clone(),
+                    }
+                } else {
+                    EffectDisposition::UnsupportedValue {
+                        value: value.clone(),
+                    }
+                }
+            } else {
+                disposition(p, value)
+            }
+        }
+        _ => unreachable!("compiled boolean guard"),
+    })
+}
+fn finish_attempt<T>(
+    scratch: &mut RuleScratch,
+    result: Result<T, RuleError>,
+) -> Result<T, RuleError> {
+    if result.is_err() {
+        scratch.clear_caches();
+    }
+    result
+}
 pub(super) fn evaluate<I: DefinitionSchemaIndex>(
     package: &CompiledRulePackage,
     owner: &SchemaSubject,
@@ -280,116 +359,118 @@ pub(super) fn evaluate<I: DefinitionSchemaIndex>(
     definitions: &I,
     s: &mut RuleScratch,
 ) -> Result<ProgramEvaluation, RuleError> {
-    // Reset before any validation error. No failed attempt retains active caches.
-    s.values.clear();
-    s.facts.clear();
-    s.stack.clear();
-    s.work = 0;
-    if definitions.identity() != &package.input.definitions
-        || definitions.namespace() != &package.input.namespace
-    {
-        return Err(RuleError::new(
-            "definitions",
-            "definition identity/namespace mismatch",
-        ));
+    s.reset();
+    let result = (|| {
+        if definitions.identity() != &package.input.definitions
+            || definitions.namespace() != &package.input.namespace
+        {
+            return Err(RuleError::new(
+                "definitions",
+                "definition identity/namespace mismatch",
+            ));
+        }
+        let p = package
+            .programs
+            .get(&(SubjectKey::from(owner), program.clone()))
+            .ok_or_else(|| RuleError::new("program", "unknown owner/program"))?;
+        if facts.len() > package.limits.max_reads || facts.len() > p.reads.len() {
+            return Err(RuleError::new(
+                "facts",
+                "fact count exceeds declared reads or resource limit",
+            ));
+        }
+        digest_owned("owned-rule-facts-v1", &facts, package.limits.max_wire_bytes)
+            .map_err(|e| RuleError::new("facts", e.to_string()))?;
+        s.values.resize_with(p.nodes.len(), || None);
+        s.facts.resize_with(p.reads.len(), || None);
+        for fact in facts {
+            charge(s, package.limits.max_work)?;
+            let i = *p
+                .read_index
+                .get(&fact.read)
+                .ok_or_else(|| RuleError::new("facts", "unknown fact read ID"))?;
+            if s.facts[i].is_some() {
+                return Err(RuleError::new("facts", "duplicate fact read ID"));
+            }
+            compile::validate_value(&fact.value, definitions, &format!("facts.{}", fact.read))?;
+            validate_fact(&p.reads[i], &fact.value, s, package.limits.max_work)?;
+            s.facts[i] = Some(fact.value.clone());
+        }
+        let mut effects = Vec::with_capacity(p.effects.len());
+        for effect in &p.effects {
+            effects.push(EffectEvaluation {
+                id: effect.id.clone(),
+                effect: effect.kind.clone(),
+                disposition: evaluate_effect(p, effect, s, package.limits.max_work)?,
+            });
+        }
+        let result = ProgramEvaluation {
+            owner: p.owner.clone(),
+            program: p.id.clone(),
+            owner_programs_closure: p.closure.clone(),
+            effects,
+        };
+        digest_owned(
+            "owned-rule-result-v1",
+            &result,
+            package.limits.max_wire_bytes,
+        )
+        .map_err(|e| RuleError::new("result", e.to_string()))?;
+        Ok(result)
+    })();
+    finish_attempt(s, result)
+}
+fn load_indexed(
+    prepared: &PreparedRuleProgram,
+    facts: &[Option<ParameterValue>],
+    s: &mut RuleScratch,
+    max_work: usize,
+) -> Result<(), RuleError> {
+    if max_work == 0 {
+        return Err(RuleError::new("limits", "work allowance must be positive"));
     }
-    let p = package
-        .programs
-        .get(&(SubjectKey::from(owner), program.clone()))
-        .ok_or_else(|| RuleError::new("program", "unknown owner/program"))?;
-    if facts.len() > package.limits.max_reads || facts.len() > p.reads.len() {
+    let p = &prepared.program;
+    if facts.len() != p.reads.len() {
         return Err(RuleError::new(
             "facts",
-            "fact count exceeds declared reads or resource limit",
+            "indexed fact count must equal declared reads",
         ));
     }
-    digest_owned("owned-rule-facts-v1", &facts, package.limits.max_wire_bytes)
-        .map_err(|e| RuleError::new("facts", e.to_string()))?;
     s.values.resize_with(p.nodes.len(), || None);
     s.facts.resize_with(p.reads.len(), || None);
-    for fact in facts {
-        charge(s, package.limits.max_work)?;
-        let i = *p
-            .read_index
-            .get(&fact.read)
-            .ok_or_else(|| RuleError::new("facts", "unknown fact read ID"))?;
-        if s.facts[i].is_some() {
-            return Err(RuleError::new("facts", "duplicate fact read ID"));
-        }
-        let path = format!("facts.{}", fact.read);
-        compile::validate_value(&fact.value, definitions, &path)?;
-        if value_type(&fact.value) != p.reads[i].ty {
-            return Err(RuleError::new(path, "fact type/unit mismatch"));
-        }
-        if let Some(schema) = &p.reads[i].schema {
-            if let ValueSchema::Option { allowed } = schema {
-                s.work = s
-                    .work
-                    .checked_add(allowed.members.len())
-                    .filter(|v| *v <= package.limits.max_work)
-                    .ok_or_else(|| RuleError::new("facts", "work limit exceeded"))?;
+    for (i, value) in facts.iter().enumerate() {
+        // None positions also cost work: the supplied vector must be checked in
+        // full, including reads not demanded by the selected effect or branch.
+        charge(s, max_work)?;
+        if let Some(value) = value {
+            if let ParameterValue::Option(id) = value
+                && id.namespace() != &prepared.namespace
+            {
+                return Err(RuleError::new("facts", "foreign option namespace"));
             }
-            if !value_in_schema(&fact.value, schema) {
-                return Err(RuleError::new(
-                    path,
-                    "fact violates declared value schema/membership",
-                ));
-            }
+            validate_fact(&p.reads[i], value, s, max_work)?;
+            s.facts[i] = Some(value.clone());
         }
-        s.facts[i] = Some(fact.value.clone());
     }
-    let mut effects = Vec::with_capacity(p.effects.len());
-    for effect in &p.effects {
-        charge(s, package.limits.max_work)?;
-        let guard = effect
-            .when
-            .map(|i| node(p, i, s, package.limits.max_work))
-            .transpose()?;
-        let result = match guard {
-            Some(Ok(ParameterValue::Boolean(false))) => EffectDisposition::Inactive,
-            Some(Err(error)) => disposition(p, Err(error)),
-            Some(Ok(ParameterValue::Boolean(true))) | None => {
-                let value = node(p, effect.value, s, package.limits.max_work)?;
-                if let (Ok(value), Some(schema)) = (&value, &effect.value_schema) {
-                    if let ValueSchema::Option { allowed } = schema {
-                        s.work = s
-                            .work
-                            .checked_add(allowed.members.len())
-                            .filter(|v| *v <= package.limits.max_work)
-                            .ok_or_else(|| RuleError::new("effect", "work limit exceeded"))?;
-                    }
-                    if value_in_schema(value, schema) {
-                        EffectDisposition::Applied {
-                            value: value.clone(),
-                        }
-                    } else {
-                        EffectDisposition::UnsupportedValue {
-                            value: value.clone(),
-                        }
-                    }
-                } else {
-                    disposition(p, value)
-                }
-            }
-            _ => unreachable!("compiled boolean guard"),
-        };
-        effects.push(EffectEvaluation {
-            id: effect.id.clone(),
-            effect: effect.kind.clone(),
-            disposition: result,
-        });
-    }
-    let result = ProgramEvaluation {
-        owner: p.owner.clone(),
-        program: p.id.clone(),
-        owner_programs_closure: p.closure.clone(),
-        effects,
-    };
-    digest_owned(
-        "owned-rule-result-v1",
-        &result,
-        package.limits.max_wire_bytes,
-    )
-    .map_err(|e| RuleError::new("result", e.to_string()))?;
-    Ok(result)
+    Ok(())
+}
+pub(super) fn evaluate_effect_indexed(
+    prepared: &PreparedRuleProgram,
+    effect_index: usize,
+    facts: &[Option<ParameterValue>],
+    s: &mut RuleScratch,
+    max_work: usize,
+) -> Result<EffectDisposition, RuleError> {
+    let max_work = max_work.min(prepared.max_work);
+    s.reset();
+    let result = (|| {
+        let effect = prepared
+            .program
+            .effects
+            .get(effect_index)
+            .ok_or_else(|| RuleError::new("effect", "unknown effect index"))?;
+        load_indexed(prepared, facts, s, max_work)?;
+        evaluate_effect(&prepared.program, effect, s, max_work)
+    })();
+    finish_attempt(s, result)
 }

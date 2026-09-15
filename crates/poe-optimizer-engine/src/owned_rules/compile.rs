@@ -972,6 +972,29 @@ fn program<I: DefinitionSchemaIndex>(
                 value_schema = Some(schema.value.clone());
                 (value, expected)
             }
+            RuleEffectKind::ProjectActorStat {
+                actor,
+                stat: id,
+                value,
+            } => {
+                check(
+                    declaration_subject(&actor.declaration) == owner.owner,
+                    &ep,
+                    "projected actor declaration does not equal owner",
+                )?;
+                let declared = ports
+                    .declarations
+                    .ok_or_else(|| fail(&ep, "owner has no actor declarations"))?;
+                closure(&declared.actors.closure, index, &ep, l, b)?;
+                membership(actor, &declared.actors.members, b, l, &ep)?;
+                known(index.slot(actor), &ep)?;
+                // The recipient is the declared child actor, independent of the
+                // current program's context; this does not activate that actor.
+                (
+                    value,
+                    stat(id, RuleEntity::Current, RuleEntityKind::Actor, index, &ep)?.clone(),
+                )
+            }
             RuleEffectKind::Requirement { satisfied, .. } => {
                 (satisfied, ComputedValueType::Boolean)
             }
@@ -988,12 +1011,29 @@ fn program<I: DefinitionSchemaIndex>(
             l.max_edges,
             &ep,
         )?;
+        let mut pending = vec![value];
+        pending.extend(when);
+        let mut visited = BTreeSet::new();
+        let mut reachable_reads = BTreeSet::new();
+        while let Some(node) = pending.pop() {
+            b.work(1, l, &ep)?;
+            if !visited.insert(node) {
+                continue;
+            }
+            if let Op::Read(read) = &nodes[node].expression {
+                reachable_reads.insert(*read);
+            }
+            let dependencies = nodes[node].expression.dependencies();
+            b.work(dependencies.len(), l, &ep)?;
+            pending.extend(dependencies);
+        }
         effects.push(CompiledEffect {
             id: e.id.clone(),
             kind: e.effect.clone(),
             when,
             value,
             value_schema,
+            read_indices: reachable_reads.into_iter().collect(),
         });
     }
     Ok(CompiledProgram {
@@ -1097,7 +1137,15 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             )?;
             programs.insert(
                 key,
-                program(p, o, &ports, index, l, &mut b, &format!("program.{}", p.id))?,
+                Arc::new(program(
+                    p,
+                    o,
+                    &ports,
+                    index,
+                    l,
+                    &mut b,
+                    &format!("program.{}", p.id),
+                )?),
             );
         }
     }

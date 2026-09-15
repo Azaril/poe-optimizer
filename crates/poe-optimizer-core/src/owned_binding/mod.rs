@@ -1,6 +1,8 @@
 //! Bind owned inputs to injected schemas without evaluating effects or importing source state.
 //! A diagnostic report is never a prepared-plan authority token.
+mod occurrence;
 mod records;
+pub use occurrence::*;
 mod selectors;
 mod values;
 use crate::{
@@ -52,6 +54,8 @@ pub enum BindingLocation {
         index: usize,
     },
     Query(QueryId),
+    /// A caller-supplied owned occurrence selector, outside the ordered metric rows.
+    Occurrence,
 }
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -260,6 +264,29 @@ pub fn bind_owned_request<I: DefinitionSchemaIndex>(
     request: &OwnedEvaluationRequest,
     limits: BindingLimits,
 ) -> Result<DefinitionBindingReport> {
+    let request_digest = validated_request_digest(index, request, limits)?;
+    let mut checker = Checker {
+        index,
+        request,
+        limits,
+        work: limits.max_work,
+        issues: Vec::new(),
+    };
+    checker.bind_records()?;
+    let queries = checker.bind_queries()?;
+    Ok(DefinitionBindingReport {
+        request_digest,
+        data_identity: index.identity().clone(),
+        schema: schema_status(&checker.issues),
+        issues: checker.issues,
+        queries,
+    })
+}
+fn validated_request_digest<I: DefinitionSchemaIndex>(
+    index: &I,
+    request: &OwnedEvaluationRequest,
+    limits: BindingLimits,
+) -> Result<OwnedContentDigest> {
     request.validate_limits(limits.input)?;
     if limits.max_work == 0
         || limits.max_work > 100_000_000
@@ -279,23 +306,11 @@ pub fn bind_owned_request<I: DefinitionSchemaIndex>(
             fault: IndexFault::InvalidIdentity,
         });
     }
-    let request_digest = digest_owned("owned-request-v1", request, limits.input.max_wire_bytes)?;
-    let mut checker = Checker {
-        index,
+    Ok(digest_owned(
+        "owned-request-v1",
         request,
-        limits,
-        work: limits.max_work,
-        issues: Vec::new(),
-    };
-    checker.bind_records()?;
-    let queries = checker.bind_queries()?;
-    Ok(DefinitionBindingReport {
-        request_digest,
-        data_identity: index.identity().clone(),
-        schema: schema_status(&checker.issues),
-        issues: checker.issues,
-        queries,
-    })
+        limits.input.max_wire_bytes,
+    )?)
 }
 struct Checker<'a, I> {
     index: &'a I,

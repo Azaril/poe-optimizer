@@ -19,9 +19,10 @@ embedding PoB callbacks or its UI state. Reference projection metadata stays in 
 comparison ledger; it cannot become objective data or invent native actor availability.
 The [owned draft boundary](owned-drafts.md) keeps partial authoring/import state outside
 complete evaluation and gives CLI, GUI and web hosts the same explicit finalization API.
-The [owned rule components](owned-rules.md) now provide strict bound package storage,
-semantic compilation and explicit-fact execution. They do not yet resolve complete builds;
-offline semantic conversion and provider/actor/action plan integration remain separate gates.
+The [owned rule components](owned-rules.md) provide strict bound package storage and
+semantic compilation. An occurrence-bound effect plan is the next integration layer over
+owned requests and injected action routes; its component implementation is validated; full build metrics remain open.
+Complete semantic conversion and original-build metric evaluation remain separate gates.
 
 ## Recommendation
 
@@ -263,12 +264,15 @@ semantics, dependency and coverage contract. The [execution-model investigation]
 now compares implementation choices inside that boundary, rather than postponing it until
 the source interpreter achieves full compatibility.
 
-The implemented rule component uses typed stat/capability definitions, explicit quality
-presence/amount reads, bounded expression DAGs and classified effect results. Its
-`check-owned-rules` host validates caller-supplied rule data and optional component facts.
-It establishes neither source conversion nor original-build metric coverage, and does not
-replace the current legacy numerical consumers. The [component contract](owned-rules.md)
-defines that boundary and the next paired integration/retirement requirement.
+Rule components use typed stat/capability definitions, explicit quality presence/amount
+reads, bounded expression DAGs and classified effects. The `check-owned-rules` host exercises
+isolated components with explicit facts. The owned effect plan instead binds an
+`OwnedEvaluationRequest` to immutable schema, compiled rules and action-routing artifacts;
+provider inputs come from that request and resolved dependencies. Component effects and
+semantic stats remain distinct from requested `MetricDef` results. The current plan resolves component effects and does not replace the active legacy numerical
+consumers. The
+[component contract](owned-rules.md) and [migration plan](architecture-migration.md) retain
+the separate full-evaluator and numerical-consumer retirement gates.
 
 Parity means observable build/evaluation semantics: resolved input, selected actions,
 metrics/availability and controlled mutations under matched scenarios. PoB UI graphs,
@@ -284,6 +288,29 @@ requests/results over owned BuildSpec/ScenarioSpec values; see the
 produces immutable versioned build inputs and independent mutable calculation state. It
 must not invoke PoB, require IPC or silently fall back to Lua for unsupported mechanics.
 Backend selection is explicit and participates in provenance and cache compatibility.
+
+The resolved plan keys providers and effects by concrete occurrence. A shared item record
+used twice produces separate equipment and modifier occurrences; a generated actor is
+identified by its supplying provider prefix and declared actor slot. Relative Current,
+Actor and Player targets normalize before producer grouping. Reject competing final
+producers and dependency cycles; a contribution and its reducer in the same program are
+valid when the effect dependencies are acyclic. Reductions use their declared empty
+identity only after proving complete incoming membership. Missing inputs, incomplete
+membership, inactive effects, known false values and numerical failures stay distinct.
+
+Action transport is injected data: an exact output declaration and explicit selector policy
+route a stat from a named player-equipment slot or the action's own actor. Type and unit
+compatibility do not establish that a source occurrence is active or unique; the resolver
+must prove that relation. Projecting a value into a generated actor or skill also does not
+activate it. A parent actor-stat projection may remain a known diagnostic value while a
+false grant gates the child's consumers and actions inactive. Missing activation remains
+unresolved. Neither projection nor a computed stat alone authorizes a metric result.
+
+Bind plans and caches to exact request, schema, rule and routing identities. Share immutable
+plans across workers, keep scratch state private, and preserve deterministic dependency and
+reduction order across serial and Rayon runs. Import, source lookup, package hashing and
+serialization belong outside the repeated bound calculation path. Portability and throughput
+claims require the validation and measurement gates in the implementation record.
 
 The optional PoB backend privately uses versioned JSON Lines with request IDs and a startup handshake.
 Only protocol messages go to stdout; PoB logging is captured on stderr. A worker declares

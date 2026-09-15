@@ -2,17 +2,24 @@
 
 Status: component APIs implemented in source, 2026-09-15. This is the delivered
 storage/compiler/execution boundary under the [domain architecture](domain-architecture.md).
-It accepts injected owned data and explicit facts. It does not yet resolve or evaluate an
-owned build; **0/5 protected originals complete native evaluation**. Validation receipts and
+The component API accepts injected owned data and explicit facts. The owned effect plan
+now binds complete owned requests to concrete effects without supplied facts. Neither is a
+complete build metric evaluator; **0/5 protected originals complete native evaluation**. Validation receipts and
 the next resume point belong in [implementation](implementation.md).
 
-## Three separate responsibilities
+## Separate responsibilities
 
 | Layer | Implemented responsibility | What success establishes |
 | --- | --- | --- |
 | [Core authoring contracts](../crates/poe-optimizer-core/src/owned_rules.rs) | Versioned package, declared reads, expression DAGs and typed effects. | A portable representation. Raw DTO construction is not validation authority. |
 | [Data storage](../crates/poe-optimizer-data/src/owned_rules.rs) | `OwnedRulePackage::new`, `decode_rule_package` and `encode_rule_package`; strict bounded JSON, exact schema binding, owner/program/local identities, expression references and partial-membership evidence. | Structurally valid stored rule data. Operation types, target compatibility and cycles require compilation. |
 | [Engine components](../crates/poe-optimizer-engine/src/owned_rules.rs) | `CompiledRulePackage::compile`, immutable private indices, `new_scratch` and `evaluate` with caller-supplied facts. | A checked program and the classified results of its demanded expressions. Supplied facts do not prove provider existence, activation, legality or incoming-effect completeness. |
+
+The [owned effect plan](../crates/poe-optimizer-engine/src/owned_plan.rs) is the consumer of
+these layers. `OwnedEffectPlan::compile` receives an owned request, schema, compiled rules
+and an [action-routing artifact](../crates/poe-optimizer-data/src/owned_routing.rs). It binds
+actual item/modifier/skill/provider occurrences, normalizes relative targets and prepares
+an effect dependency graph. `evaluate` uses only that immutable plan and worker-owned scratch.
 
 These modules contain no source-language parser, Lua interpreter, PoB callback, UI object or
 named-build dispatch. Existing source readers and any optional Lua acquisition stay offline
@@ -21,7 +28,7 @@ injected data; adding an operation requires explicit versioned Rust semantics an
 
 `RulePackageInput` carries its namespace, release, semantics version, operation version and
 the exact definition-schema `DataIdentity`. Its version is 1; the implemented operation set
-is `owned-domain-operations-v2`. Version 1 operations are explicitly rejected by the compiler; regenerate experimental
+is `owned-domain-operations-v3`. Earlier operation versions are explicitly rejected by the compiler; regenerate experimental
 artifacts rather than silently interpreting them with new semantics. Both storage and compilation check the supplied index's
 identity and namespace. Execution checks that binding again. A digest identifies content;
 it does not authenticate its source or prove conversion fidelity.
@@ -55,8 +62,8 @@ grant ports must belong to the exact rule owner and its declared membership. Gem
 and quality reads require the corresponding owner; their declared ranges apply to supplied
 values. A choice read uses the owner's exposed choice context. No lookup inherits unrelated
 ports from a same-named or adjacent definition.
-Owned item records may explicitly leave item level unspecified. The later occurrence-fact
-adapter must omit that fact rather than substitute a number; ItemLevel retains its Integer
+Owned item records may explicitly leave item level unspecified. The occurrence binder
+omits that fact rather than substituting a number; ItemLevel retains its Integer
 rule type. Evaluation reports unresolved only when an active effect demands it. Lazy guards
 and branches that do not use it can still produce their own component result.
 
@@ -70,7 +77,7 @@ The same pattern exists for gem quality. The kind must be declared by that item'
 or gem schema and have a known amount schema. A supplied false presence fact can select
 the data-authored absent branch without an amount fact. A missing presence fact, or a missing
 amount on the selected present branch, is unresolved. Present zero remains a value. The
-executor does not read a build or infer absence; a future resolver must establish these
+component executor does not read a build or infer absence; the owned plan binds these
 facts from the actual selection. An explicitly supplied malformed amount still rejects
 even when its branch would be inactive.
 
@@ -102,15 +109,24 @@ compilation. Listed members of partial declarations can compile, while required 
 closure remains a later resolution obligation. A computed value outside the supported
 schema is reported as `UnsupportedValue`, without clamping or disguising it as a missing
 fact. This operation does not activate a grant or choose its receiving equipment use;
-D3 must bind the parent occurrence, target and dependency order.
+The owned plan binds the parent occurrence, target and dependency order. Every required
+generated-skill input has an availability gate, even when the current formula does not read
+it. A known Boolean false is a present input; an inactive/missing/rejected projection is not.
+
+`ProjectActorStat` transfers a value to the actor declared by the exact supplying provider.
+Its destination must admit Actor stats with the same type/unit. It does not activate that
+actor or alias two summoners. Parent projection evidence can remain known while a false
+grant makes the child consumer inactive.
 
 ## Compilation and execution outcomes
 
 Compilation validates every node, including unreachable branches, for references, types,
 units, declared scope and cycles. Unsupported operation versions, foreign/missing/unmapped
 required schemas, duplicate identities, invalid ports and malformed reductions reject.
-The resulting expression graph is acyclic. This does not yet check dependencies between
-different programs, competing final-stat producers or feedback through grants.
+The component expression graph is acyclic. The owned plan separately rejects inter-program
+cycles, including grants/projections/reductions, and competing concrete final producers. It
+uses effect-level dependencies so one independent contribution can feed another effect in
+the same program.
 
 Execution uses lazy `Select`, left-to-right short-circuiting `All`/`Any`, and effect guards.
 A decisive boolean or false guard avoids demanding later inputs. A missing/erroring operand
@@ -175,10 +191,13 @@ support and provider-grant semantics into these owned declarations and rules, wi
 pins, conversion diagnostics and independent numerical evidence. Identity-only catalogs and
 fixed reward input schemas do not establish effect coverage.
 
-D3 must bind rules to actual provider, actor and action occurrences from an owned request;
-establish active memberships and incoming-contribution completeness; select and validate
-inter-program dependencies, competing producers and unsupported cycles; apply grant,
-support, cost and legality semantics; and produce the requested metric/availability ledger.
+D3 now binds supported provider, actor and action occurrences and rejects conflicting
+producers/cycles. It conservatively withholds final values whenever discovered coverage is
+incomplete; the effect ledger retains component evidence. Potential gem/actor skills do not
+activate merely by appearing in a schema list. Unsupported support, payload, usage and granted
+allocation relations remain gaps, including dependent action/route contexts. Generated
+Skill versus traversed Provider choices use declared scopes; ambiguous scopes remain
+unsupported. Support/cost/legality semantics and the requested metric ledger remain open.
 Develop Twister and Sniper together, retaining the other originals as model stress cases.
 Neither raw facts nor a successful component result may become a bypass around that plan.
 
@@ -189,9 +208,19 @@ keep a parameter's supported computable domain separate from gameplay roll bound
 explicit item effect that disagrees with crafting metadata must retain its value and
 provenance; assess the legality discrepancy separately instead of silently clamping,
 double-counting, or making a computable original structurally unbindable.
-The component API currently validates and hashes supplied facts on every call. D3 needs a
-bound slot/index ABI that moves import, schema checks and serialization out of the hot search
-loop while preserving exact plan ownership. Current component tests make no throughput claim.
+The public component API still validates/hashes supplied facts. The plan uses a private
+prepared single-effect ABI sharing that same executor; evaluation performs no source/index
+lookup, serialization or hashing. Plan preparation binds and hashes an exact request snapshot.
+A changed candidate currently requires preparation again. Reusable candidate input slots and
+incremental invalidation remain a separate measured performance gate; no search throughput
+claim follows from repeated evaluation of one snapshot.
+
+`resolve-owned-effects --input REQUEST --schema SCHEMA --rules RULES --routing ROUTES`
+exposes this boundary without PoB. An optional `--output REPORT` writes a new report. The CLI
+requires explicit input/data paths and keeps typed effects/values distinct from MetricDef
+results. Routes are injected data: exact output and selection, with either a player equipment
+slot or the selected action's actor as source. Missing/partial routing is not an empty route
+set; multiple routes to a final target reject. No weapon is selected by position or name.
 
 The next numerical migration must move a named legacy consumer and preserve its useful
 numeric/reference laws in the same checkpoint, then delete the replaced request/profile

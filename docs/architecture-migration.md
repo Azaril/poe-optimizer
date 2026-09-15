@@ -85,11 +85,37 @@ attribute-condition, support and grant operations with changed data and scope ch
 They do not complete real source conversion or original-build parity; **0/5** remains.
 
 The next D2 gate is reproducible conversion of real effects with independent numerical
-evidence. D3 still owns concrete provider/actor/action binding, incoming-contribution
-completeness, inter-program dependency/cycle checks, activation and metric coverage.
-No legacy numerical consumer moved in this component slice. The next numerical integration
-must pair a named consumer migration with deletion of its replaced profile/request path and
-preservation of its useful reference laws.
+evidence. D3's owned effect-plan component implementation is validated. It accepts a
+directly authored `OwnedEvaluationRequest`, injected schema, compiled rule package and a
+schema-bound action-routing artifact. It binds exact equipment/modifier/provider occurrences,
+projects stats into declared generated actors, and compiles effect-level dependencies with
+explicit closure and cycle checks. It returns concrete effects, semantic stats and gaps;
+it does not implement `MetricDef` evaluation or complete a selected original build.
+
+Routing names an exact action output, an All or exact part/mode/stat-set selection, and an
+explicit player-equipment slot or action-actor stat source. Storage preserves overlapping
+routes; the Engine resolves the concrete relation and rejects competing final producers
+after Current/Actor/Player normalization. There is no implicit weapon selection, numeric
+fallback or source-format lookup. Generated actor keys retain the supplying provider prefix.
+A parent projection can remain known while its child grant is false: child consumers and
+actions are inactive, and that diagnostic value is not proof of an active actor. Missing
+grant production remains unresolved.
+
+The initial plan conservatively requires complete discovered contributor coverage before
+using reductions or final-stat dependencies. Unsupported active support, payload, usage and
+granted-allocation relations remain explicit gaps. An empty complete contribution set can
+use its declared identity; partial or missing membership cannot. Plans bind request/schema/
+rule/routing content and separate immutable dependencies from per-worker scratch. Direct
+occurrence, lazy-input, required-input, activation, cycle and scratch/worker tests pass in the
+selected checkpoint suite documented in [implementation](implementation.md). The plan still
+prepares an exact snapshot for every changed candidate; reusable candidate bindings and
+throughput measurement are open. Hosted success is recorded separately.
+
+No active legacy numerical consumer is retired by introducing this plan. Local weapon
+preparation and its active action/timing consumers still need a shared owned replacement,
+with their useful reference laws preserved and the replaced profile/request dependency
+closure deleted. Complete metric coverage, all-five finalization and that paired numerical
+retirement remain open.
 
 ## Item/provider checkpoint and next integration gate
 
@@ -154,7 +180,8 @@ while retaining candidates from raw and cleaned text, so they cannot hide compet
 Preamble position failures block facts as well as range proof. Source/output/work bounds
 include repeated invalidation and candidate collection; uncertainty never becomes a default.
 
-Next bind admitted item parameters and local weapon outputs to real provider/action uses.
+The owned effect-plan work above begins binding admitted item parameters and local weapon
+outputs to real provider/action uses; its validation and real-source integration remain open.
 Do not broaden the source adapter into general PoB object reconstruction. Rune/Bonded,
 variants, collection closure, unspecified-level proof and complete selected finalization
 remain explicit conversion work. D3 must activate the item-granted Firebolt separately from

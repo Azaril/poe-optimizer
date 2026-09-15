@@ -10,6 +10,7 @@ mod game_data_extract;
 mod native_benchmark;
 mod owned_binding;
 mod owned_draft;
+mod owned_effects;
 mod owned_input;
 mod owned_normalize;
 mod owned_rules;
@@ -65,6 +66,8 @@ enum Action {
     CheckOwnedRules(owned_rules::Args),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
+    /// Resolve owned component effects from explicit packages; no game metric conversion.
+    ResolveOwnedEffects(owned_effects::Args),
     /// Inspect authored build containers without calculating or admitting mechanics.
     InspectBuild(build_inspect::Args),
     /// Prepare a native build or report source-linked missing stages without calculating.
@@ -232,6 +235,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::CheckOwnedSchema(args)) => owned_schema::run(args)?,
         Some(Action::CheckOwnedRules(args)) => owned_rules::run(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
+        Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,
         Some(Action::SearchBuild(args)) => build_search::run(args)?,
         #[cfg(feature = "pob")]

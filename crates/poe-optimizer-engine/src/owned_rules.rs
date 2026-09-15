@@ -5,7 +5,7 @@
 use poe_optimizer_core::{
     owned_build::ParameterValue,
     owned_content::{OwnedContentDigest, digest_owned},
-    owned_definitions::OwnedDefinitionKey,
+    owned_definitions::{GameVersionNamespace, OwnedDefinitionKey},
     owned_rules::{RuleEffectKind, RulePackageInput},
     owned_schema::{
         ComputedValueType, DefinitionAddress, DefinitionSchemaIndex, SchemaClosure, SchemaSubject,
@@ -13,9 +13,11 @@ use poe_optimizer_core::{
     },
 };
 use serde::{Deserialize, Serialize};
-use std::{collections::BTreeMap, fmt};
+use std::{collections::BTreeMap, fmt, sync::Arc};
 mod compile;
 mod execute;
+#[cfg(test)]
+mod prepared_tests;
 
 #[derive(Clone, Copy, Debug)]
 pub struct RuleLimits {
@@ -211,6 +213,7 @@ struct CompiledEffect {
     when: Option<usize>,
     value: usize,
     value_schema: Option<ValueSchema>,
+    read_indices: Vec<usize>,
 }
 #[derive(Clone, Debug)]
 struct CompiledProgram {
@@ -227,7 +230,7 @@ struct CompiledProgram {
 pub struct CompiledRulePackage {
     input: RulePackageInput,
     identity: OwnedContentDigest,
-    programs: BTreeMap<(SubjectKey, OwnedDefinitionKey), CompiledProgram>,
+    programs: BTreeMap<(SubjectKey, OwnedDefinitionKey), Arc<CompiledProgram>>,
     limits: RuleLimits,
 }
 impl CompiledRulePackage {
@@ -243,6 +246,23 @@ impl CompiledRulePackage {
     }
     pub fn identity(&self) -> OwnedContentDigest {
         self.identity
+    }
+    /// Resolve IDs once during plan construction. Reads use this program's
+    /// canonical compiled order, exposed by PreparedRuleProgram::read_ids.
+    pub(crate) fn prepare_program(
+        &self,
+        owner: &SchemaSubject,
+        program: &OwnedDefinitionKey,
+    ) -> Result<PreparedRuleProgram, RuleError> {
+        let program = self
+            .programs
+            .get(&(SubjectKey::from(owner), program.clone()))
+            .ok_or_else(|| RuleError::new("program", "unknown owner/program"))?;
+        Ok(PreparedRuleProgram {
+            program: Arc::clone(program),
+            namespace: self.input.namespace.clone(),
+            max_work: self.limits.max_work,
+        })
     }
     pub fn new_scratch(&self) -> RuleScratch {
         let mut s = RuleScratch::default();
@@ -274,6 +294,40 @@ impl CompiledRulePackage {
         execute::evaluate(self, owner, program, facts, definitions, scratch)
     }
 }
+/// Cold-bound program handle for the owned planner, not an unchecked public
+/// fact API. The planner validates arbitrary Option identity existence before
+/// injecting values; execution checks exact kind/unit/namespace and declared
+/// input schemas. No source/index lookup or serialization occurs in this path.
+#[derive(Clone, Debug)]
+pub(crate) struct PreparedRuleProgram {
+    program: Arc<CompiledProgram>,
+    namespace: GameVersionNamespace,
+    max_work: usize,
+}
+impl PreparedRuleProgram {
+    pub(crate) fn read_ids(&self) -> impl ExactSizeIterator<Item = &OwnedDefinitionKey> {
+        self.program.reads.iter().map(|read| &read.id)
+    }
+    /// Conservative static dependencies, including both branches and guards.
+    /// Activation still uses the shared lazy evaluator at execution time.
+    pub(crate) fn effect_read_indices(&self, effect_index: usize) -> Result<&[usize], RuleError> {
+        self.program
+            .effects
+            .get(effect_index)
+            .map(|effect| effect.read_indices.as_slice())
+            .ok_or_else(|| RuleError::new("effect", "unknown effect index"))
+    }
+    /// The caller's remaining allowance is capped by the package work limit.
+    pub(crate) fn evaluate_effect_indexed(
+        &self,
+        effect_index: usize,
+        facts: &[Option<ParameterValue>],
+        scratch: &mut RuleScratch,
+        max_work: usize,
+    ) -> Result<EffectDisposition, RuleError> {
+        execute::evaluate_effect_indexed(self, effect_index, facts, scratch, max_work)
+    }
+}
 #[derive(Clone, Debug)]
 enum NodeFailure {
     Missing(usize),
@@ -292,6 +346,33 @@ pub struct RuleScratch {
     facts: Vec<Option<ParameterValue>>,
     stack: Vec<Frame>,
     work: usize,
+}
+impl RuleScratch {
+    /// Work consumed by the latest attempt, including a failed attempt. Caches
+    /// are cleared after errors; telemetry survives for the caller's budget.
+    pub(crate) fn work_used(&self) -> usize {
+        self.work
+    }
+    fn clear_caches(&mut self) {
+        self.values.clear();
+        self.facts.clear();
+        self.stack.clear();
+    }
+    fn reset(&mut self) {
+        self.clear_caches();
+        self.work = 0;
+    }
+}
+fn value_matches_type(v: &ParameterValue, ty: &ComputedValueType) -> bool {
+    match (v, ty) {
+        (ParameterValue::Boolean(_), ComputedValueType::Boolean)
+        | (ParameterValue::Integer(_), ComputedValueType::Integer)
+        | (ParameterValue::Option(_), ComputedValueType::Option) => true,
+        (ParameterValue::Quantity(value), ComputedValueType::Quantity { unit }) => {
+            value.unit() == unit
+        }
+        _ => false,
+    }
 }
 fn value_type(v: &ParameterValue) -> ComputedValueType {
     match v {

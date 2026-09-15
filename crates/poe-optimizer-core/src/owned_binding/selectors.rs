@@ -23,6 +23,44 @@ pub(super) struct Context<'a> {
     exposure: Exposure<'a>,
     actor: ActorKey,
     role: ProviderRole,
+    generated_skill: Option<GeneratedSkillKey>,
+    actor_parent: Option<ActorKey>,
+}
+
+impl<'a> Context<'a> {
+    pub(super) fn occurrence(self, key: ProviderKey) -> ProviderOccurrence<'a> {
+        let exposure = match self.exposure {
+            Exposure::Root { owners, skills } => ProviderExposure::Root {
+                owners: owners
+                    .into_iter()
+                    .map(|v| ProviderOwner::new(v.owner, v.declarations))
+                    .collect(),
+                skills,
+            },
+            Exposure::Skill {
+                owner,
+                declarations,
+                outputs,
+            } => ProviderExposure::Skill {
+                key: self
+                    .generated_skill
+                    .expect("entered skill has an exact occurrence"),
+                owner,
+                declarations,
+                outputs,
+            },
+            Exposure::Actor(schema) => ProviderExposure::Actor {
+                key: match &self.actor {
+                    ActorKey::Owned(key) => key.as_ref().clone(),
+                    ActorKey::Player => unreachable!("entered actor has an owned occurrence"),
+                },
+                parent_actor: self.actor_parent.expect("entered actor has a parent"),
+                schema,
+            },
+            Exposure::Access(pools) => ProviderExposure::AllocationAccess { pools },
+        };
+        ProviderOccurrence::new(key, self.actor, self.role, exposure)
+    }
 }
 
 fn provider_role(root: &ProviderRoot) -> ProviderRole {
@@ -356,6 +394,8 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             },
             actor: ActorKey::Player,
             role: provider_role(root),
+            generated_skill: None,
+            actor_parent: None,
         }))
     }
     fn declared_member(
@@ -506,6 +546,8 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                         return Ok(None);
                     };
                     self.charge(i + 1)?;
+                    context.generated_skill = None;
+                    context.actor_parent = Some(context.actor.clone());
                     context.actor = ActorKey::Owned(Box::new(OwnedActorKey {
                         provider: ProviderKey {
                             root: key.root.clone(),
@@ -525,13 +567,24 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                     let Some(definition) = self.definition(&schema.skill, site)? else {
                         return Ok(None);
                     };
+                    self.charge(i + 1)?;
+                    context.generated_skill = Some(GeneratedSkillKey {
+                        provider: ProviderKey {
+                            root: key.root.clone(),
+                            grant_path: key.grant_path[..i].to_vec(),
+                        },
+                        slot: skill.clone(),
+                    });
                     Exposure::Skill {
                         owner: SlotOwnerDefId::Skill(schema.skill.clone()),
                         declarations: &definition.declarations,
                         outputs: &schema.outputs,
                     }
                 }
-                GrantTarget::AllocationAccess { pools } => Exposure::Access(pools),
+                GrantTarget::AllocationAccess { pools } => {
+                    context.generated_skill = None;
+                    Exposure::Access(pools)
+                }
             };
         }
         Ok(Some(context))
@@ -559,6 +612,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         let Some(definition) = self.definition(&schema.skill, site)? else {
             return Ok(None);
         };
+        context.generated_skill = Some(key.clone());
         context.exposure = Exposure::Skill {
             owner: SlotOwnerDefId::Skill(schema.skill.clone()),
             declarations: &definition.declarations,
@@ -566,18 +620,54 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         };
         Ok(Some(context))
     }
+    pub(super) fn skill_context(
+        &mut self,
+        target: &SkillTarget,
+        site: &BindingSite,
+        purpose: Purpose,
+    ) -> Result<Option<Context<'a>>> {
+        match target {
+            SkillTarget::Authored(id) => {
+                self.bind_provider(&empty_provider(ProviderRoot::SkillUse(*id)), site, purpose)
+            }
+            SkillTarget::Generated(key) => self.generated_context(key, site, purpose),
+        }
+    }
     pub(super) fn bind_skill_target(
         &mut self,
         target: &SkillTarget,
         site: &BindingSite,
         purpose: Purpose,
     ) -> Result<bool> {
-        Ok(match target {
-            SkillTarget::Authored(id) => self
-                .bind_provider(&empty_provider(ProviderRoot::SkillUse(*id)), site, purpose)?
-                .is_some(),
-            SkillTarget::Generated(key) => self.generated_context(key, site, purpose)?.is_some(),
-        })
+        Ok(self.skill_context(target, site, purpose)?.is_some())
+    }
+    pub(super) fn actor_occurrence(
+        &mut self,
+        key: &ActorKey,
+        site: &BindingSite,
+        purpose: Purpose,
+    ) -> Result<Option<ActorOccurrence<'a>>> {
+        let ActorKey::Owned(owned) = key else {
+            return Ok(Some(ActorOccurrence::Player));
+        };
+        let Some(context) = self.bind_provider(&owned.provider, site, purpose)? else {
+            return Ok(None);
+        };
+        if !self.context_slot(
+            &context,
+            &ActorSlotDefId::address(&owned.slot),
+            site,
+            purpose,
+        )? {
+            return Ok(None);
+        }
+        Ok(self
+            .slot(&owned.slot, site)?
+            .map(|schema| ActorOccurrence::Owned {
+                key: owned.clone(),
+                parent_actor: context.actor,
+                schema,
+            }))
     }
     pub(super) fn bind_actor(
         &mut self,
@@ -585,16 +675,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         site: &BindingSite,
         purpose: Purpose,
     ) -> Result<bool> {
-        let ActorKey::Owned(key) = key else {
-            return Ok(true);
-        };
-        let Some(context) = self.bind_provider(&key.provider, site, purpose)? else {
-            return Ok(false);
-        };
-        if !self.context_slot(&context, &ActorSlotDefId::address(&key.slot), site, purpose)? {
-            return Ok(false);
-        }
-        Ok(self.slot(&key.slot, site)?.is_some())
+        Ok(self.actor_occurrence(key, site, purpose)?.is_some())
     }
     pub(super) fn bind_action(
         &mut self,
@@ -602,6 +683,16 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         site: &BindingSite,
         purpose: Purpose,
     ) -> Result<Option<&'a ActionOutputSchema>> {
+        Ok(self
+            .action_occurrence(selection, site, purpose)?
+            .map(|value| value.schema()))
+    }
+    pub(super) fn action_occurrence(
+        &mut self,
+        selection: &ActionSelection,
+        site: &BindingSite,
+        purpose: Purpose,
+    ) -> Result<Option<ActionOccurrence<'a>>> {
         let key = &selection.action;
         let Some(context) =
             self.bind_provider(&key.provider, &site.at(BindingFacet::Provider), purpose)?
@@ -692,7 +783,12 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             &schema.choices,
             site,
         )?;
-        Ok(Some(schema))
+        Ok(Some(ActionOccurrence::new(
+            selection.clone(),
+            context.occurrence(key.provider.clone()),
+            expected,
+            schema,
+        )))
     }
     pub(super) fn bind_allocation_access(
         &mut self,

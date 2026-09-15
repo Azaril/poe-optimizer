@@ -321,7 +321,8 @@ fn validate_structure<I: DefinitionSchemaIndex>(
                 match &effect.effect {
                     Contribute { value, .. }
                     | Derive { value, .. }
-                    | ProjectSkillParameter { value, .. } => node_ref(value)?,
+                    | ProjectSkillParameter { value, .. }
+                    | ProjectActorStat { value, .. } => node_ref(value)?,
                     Capability { enabled, .. } | ActivateGrant { enabled, .. } => {
                         node_ref(enabled)?
                     }

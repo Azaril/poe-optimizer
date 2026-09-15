@@ -11,7 +11,56 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: source item range attribution (after `da831b3`).**
+**Current checkpoint: native owned provider/effect plan (after `c14a8b0`).**
+`resolve-owned-effects --input REQUEST --schema SCHEMA --rules RULES --routing ROUTES`
+is implemented over the shared Engine plan. Its inputs are complete owned requests and
+injected artifacts; it has no source-document, PoB UI, Lua or caller-computed-fact path.
+Rule operation semantics are now `owned-domain-operations-v3`; owned input/draft remain v3.
+The new routing artifact is independently versioned and bound to the exact schema.
+
+The plan binds actual equipment uses and modifier instances, generated skills/actors and
+selected action outputs. It rejects competing concrete final producers and effect dependency
+cycles, preserves lazy missing-input behavior, and requires closed incoming membership before
+using reduction identities. Parent projected values do not activate children. Every required
+generated-skill input has a readiness gate, including inputs unused by the current formula.
+Potential gem/actor skills, unsupported relations and ambiguous generated choice scopes remain
+explicit. Separate summons, false/missing grants, repeated definitions, active loadouts,
+unused-read expansion bounds and scratch/worker reuse have contrasting tests.
+
+**Validation:** all **418 selected test executions** pass: Core 225, Data 30, Engine 72,
+seven explicitly enabled pinned-PoB item reference tests, and CLI 42 in each feature mode.
+Workspace and native-only strict Clippy, formatting, five-crate WASM checks and native runtime
+dependency exclusion pass. This is the selected checkpoint suite, not a full workspace test
+run. Receipts are in `runs/owned-plan-01/validation-final/`; protected-input/boundary/link
+review is in `runs/owned-plan-01/audit.json`. No protected build, schema40 data, fixed
+expectation or PoB pin changed. Publication and hosted status are recorded separately in
+`runs/owned-plan-01/publication.json`; local checks do not imply hosted success.
+
+This remains **component effect/stat resolution, not a complete MetricDef evaluator**.
+All five originals are still incomplete natively and all 110 reference rows are retained.
+The new prepared ABI shares the existing typed executor without runtime hashing, serialization
+or schema lookup. Preparation still binds/hashes an exact request snapshot; changing a
+candidate requires preparation again. Reusable candidate slots/invalidation and measured
+preparation/evaluation throughput remain open. No active Spark/Mace numerical consumer was
+removed in this checkpoint; its replacement must carry the same useful numerical laws.
+
+**Resume point:**
+
+1. Close real provider/skill activation and support/payload/usage/granted-allocation relations
+   through explicit owned data. Do not promote potential memberships or schema binding to
+   activation, or finalize pending original drafts with fabricated empty collections.
+2. Bind independently converted local weapon, effective-attribute and granted-skill values
+   for Twister and Skeletal Sniper together. Keep the other three originals as model stress
+   cases; expose exact component gaps before claiming a complete build.
+3. Add an injected metric-definition mapping and migrate the first active local action/timing
+   consumer (`actor_assembly::mace_action_timing`) with its source-independent timing recipe,
+   preserved reference laws and deletion of the replaced helper/dependency path. Do not map
+   StatDef to MetricDef by matching names or units.
+4. Measure candidate preparation separately from numerical execution, then add reusable
+   candidate bindings and incremental invalidation without weakening snapshot/data identity.
+   Continue the all-five and held-out breadth gates before general joint search claims.
+
+**Previous checkpoint: source item range attribution (after `da831b3`).**
 The new Import-only `ItemSourceLayoutPolicy` is implemented and validated. The public CLI
 requires `--item-source`, sidecar v5 binds its exact identity, and reference projection rejects
 stale policy bindings. Owned input/draft remain v3. Guarded validation covers **524 selected
