@@ -5,7 +5,7 @@
 use poe_optimizer_core::{
     owned_build::ParameterValue,
     owned_content::{OwnedContentDigest, digest_owned},
-    owned_definitions::{GameVersionNamespace, OwnedDefinitionKey},
+    owned_definitions::{BoundedInteger, GameVersionNamespace, OwnedDefinitionKey},
     owned_rules::{RuleEffectKind, RulePackageInput},
     owned_schema::{
         ComputedValueType, DefinitionAddress, DefinitionSchemaIndex, SchemaClosure, SchemaSubject,
@@ -23,6 +23,8 @@ mod prepared_tests;
 pub struct RuleLimits {
     pub max_owners: usize,
     pub max_programs: usize,
+    pub max_tables: usize,
+    pub max_table_cells: usize,
     pub max_reads: usize,
     pub max_nodes: usize,
     pub max_edges: usize,
@@ -35,6 +37,8 @@ impl Default for RuleLimits {
         Self {
             max_owners: 4096,
             max_programs: 8192,
+            max_tables: 8192,
+            max_table_cells: 262144,
             max_reads: 65536,
             max_nodes: 262144,
             max_edges: 1048576,
@@ -50,6 +54,8 @@ impl RuleLimits {
         for (name, v, max) in [
             ("owners", self.max_owners, h.max_owners),
             ("programs", self.max_programs, h.max_programs),
+            ("tables", self.max_tables, h.max_tables),
+            ("table_cells", self.max_table_cells, h.max_table_cells),
             ("reads", self.max_reads, h.max_reads),
             ("nodes", self.max_nodes, h.max_nodes),
             ("edges", self.max_edges, h.max_edges),
@@ -117,6 +123,14 @@ pub enum EffectDisposition {
     UnsupportedValue {
         value: ParameterValue,
     },
+    /// A demanded lookup key lies outside the table's explicit supported domain.
+    UnsupportedDomain {
+        node: OwnedDefinitionKey,
+        table: OwnedDefinitionKey,
+        key: BoundedInteger,
+        minimum: BoundedInteger,
+        maximum: BoundedInteger,
+    },
     Inactive,
     Unresolved {
         input: OwnedDefinitionKey,
@@ -168,6 +182,10 @@ struct CompiledTiming {
 }
 #[derive(Clone, Debug)]
 enum Op {
+    LookupIntegerTable {
+        key: usize,
+        table: Arc<poe_optimizer_core::owned_rules::IntegerRuleTable>,
+    },
     OrdinaryTiming(Box<CompiledTiming>),
     Literal(ParameterValue),
     Read(usize),
@@ -207,6 +225,7 @@ impl Op {
     fn dependencies(&self) -> Vec<usize> {
         match self {
             Self::OrdinaryTiming(recipe) => recipe.inputs.to_vec(),
+            Self::LookupIntegerTable { key, .. } => vec![*key],
             Self::Literal(_) | Self::Read(_) => vec![],
             Self::Binary(_, a, b) | Self::Ratio(a, b, _) | Self::Compare(_, a, b) => vec![*a, *b],
             Self::Percent(a, _) | Self::Round(a, _, _) | Self::Not(a) => vec![*a],
@@ -341,6 +360,7 @@ impl PreparedRuleProgram {
 enum NodeFailure {
     Missing(usize),
     Numerical(usize, NumericalFailure),
+    UnsupportedDomain(usize, BoundedInteger),
 }
 type NodeValue = Result<ParameterValue, NodeFailure>;
 #[derive(Clone, Copy, Debug)]

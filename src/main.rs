@@ -13,6 +13,7 @@ mod owned_draft;
 mod owned_effects;
 mod owned_input;
 mod owned_normalize;
+mod owned_recipe_cli;
 mod owned_rules;
 mod owned_schema;
 
@@ -64,6 +65,8 @@ enum Action {
     CheckOwnedSchema(owned_schema::Args),
     /// Compile owned game rules and optionally evaluate explicit component facts.
     CheckOwnedRules(owned_rules::Args),
+    /// Assemble explicit persisted owned data recipes without source evaluation.
+    AssembleOwnedRecipe(owned_recipe_cli::Args),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
     /// Resolve owned component effects from explicit packages; no game metric conversion.
@@ -234,6 +237,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::NormalizeOwned(args)) => owned_normalize::run(args)?,
         Some(Action::CheckOwnedSchema(args)) => owned_schema::run(args)?,
         Some(Action::CheckOwnedRules(args)) => owned_rules::run(args)?,
+        Some(Action::AssembleOwnedRecipe(args)) => owned_recipe_cli::run(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,

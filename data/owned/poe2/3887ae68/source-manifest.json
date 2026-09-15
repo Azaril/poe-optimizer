@@ -1,0 +1,351 @@
+{
+  "schema_version": 1,
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Data/Gems.lua",
+        "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+      },
+      {
+        "path": "src/Data/Minions.lua",
+        "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+      },
+      {
+        "path": "src/Data/Misc.lua",
+        "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+      },
+      {
+        "path": "src/Data/Skills/act_dex.lua",
+        "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+      },
+      {
+        "path": "src/Data/Skills/act_int.lua",
+        "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+      },
+      {
+        "path": "src/Data/Skills/minion.lua",
+        "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+      },
+      {
+        "path": "src/Modules/CalcActiveSkill.lua",
+        "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+      },
+      {
+        "path": "src/Modules/CalcTools.lua",
+        "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+      }
+    ]
+  },
+  "catalog_lf_sha256": "a90217d9bab6c0469917a2ba75ed9517205d2ac2b3d59f8d68580604f26df07f",
+  "identities": [
+    {
+      "gem_key": "Metadata/Items/Gems/SkillGemTwister",
+      "skill_id": "TwisterPlayer",
+      "gem_definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000000a"
+      },
+      "skill_definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000000b"
+      }
+    },
+    {
+      "gem_key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "skill_id": "SummonSkeletalSnipersPlayer",
+      "gem_definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000011"
+      },
+      "skill_definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000012"
+      }
+    }
+  ],
+  "record_tables": [
+    {
+      "id": "twister-levels",
+      "span": {
+        "path": "src/Data/Skills/act_dex.lua",
+        "line": 10049,
+        "end_line": 10090,
+        "sha256": "537fe0faa5a3d5658e2ee4ac965926a1c162e52b67a81fbb3556ecbb640bdaaa"
+      },
+      "opening": "levels = {",
+      "closing": "},",
+      "row_template": "[{{level}}] = { attackSpeedMultiplier = {{speed}}, baseMultiplier = {{damage}}, levelRequirement = {{requirement}}, cost = { Mana = {{mana}}, }, },",
+      "minimum": 1,
+      "maximum": 40,
+      "columns": [
+        "speed",
+        "damage",
+        "requirement",
+        "mana"
+      ]
+    },
+    {
+      "id": "sniper-levels",
+      "span": {
+        "path": "src/Data/Skills/act_int.lua",
+        "line": 18694,
+        "end_line": 18735,
+        "sha256": "dacc59a1ba1cce6677d489bb31ecb36b12708a11167245e958e87dd4808811bb"
+      },
+      "opening": "levels = {",
+      "closing": "},",
+      "row_template": "[{{level}}] = { levelRequirement = {{requirement}}, spiritReservationFlat = {{spirit}}, },",
+      "minimum": 1,
+      "maximum": 40,
+      "columns": [
+        "requirement",
+        "spirit"
+      ]
+    },
+    {
+      "id": "twister-stat-set-scaling-evidence",
+      "span": {
+        "path": "src/Data/Skills/act_dex.lua",
+        "line": 10137,
+        "end_line": 10178,
+        "sha256": "60993500472866d0101f8fb370839b737108b26469b0a5f9da2aac57df94e8ac"
+      },
+      "opening": "levels = {",
+      "closing": "},",
+      "row_template": "[{{level}}] = { actorLevel = {{scaling_coordinate}}, },",
+      "minimum": 1,
+      "maximum": 40,
+      "columns": [
+        "scaling_coordinate"
+      ]
+    },
+    {
+      "id": "sniper-stat-set-scaling-evidence",
+      "span": {
+        "path": "src/Data/Skills/act_int.lua",
+        "line": 18755,
+        "end_line": 18796,
+        "sha256": "60993500472866d0101f8fb370839b737108b26469b0a5f9da2aac57df94e8ac"
+      },
+      "opening": "levels = {",
+      "closing": "},",
+      "row_template": "[{{level}}] = { actorLevel = {{scaling_coordinate}}, },",
+      "minimum": 1,
+      "maximum": 40,
+      "columns": [
+        "scaling_coordinate"
+      ]
+    }
+  ],
+  "array_tables": [
+    {
+      "id": "ordinary-minion-levels",
+      "span": {
+        "path": "src/Data/Misc.lua",
+        "line": 17,
+        "end_line": 17,
+        "sha256": "f120552b9e84b07ee5e66bfa5f312765f80c33c75e4bde30abc3ea54b71e0e4b"
+      },
+      "prefix": "data.minionLevelTable = {",
+      "suffix": "}",
+      "minimum": 1,
+      "maximum": 40,
+      "column": "actor_level"
+    }
+  ],
+  "literal_facts": [
+    {
+      "id": "twister-standard-quality",
+      "span": {
+        "path": "src/Data/Skills/act_dex.lua",
+        "line": 10044,
+        "end_line": 10044,
+        "sha256": "3af7219a745d5f9b2a7a69322c53110b249c5a27b0dac842e373ea7f18e35dfd"
+      },
+      "template": "{ \"twister_%_chance_for_additional_twister\", {{per_quality}}, {  } },"
+    },
+    {
+      "id": "sniper-standard-quality",
+      "span": {
+        "path": "src/Data/Skills/act_int.lua",
+        "line": 18690,
+        "end_line": 18690,
+        "sha256": "bf50fe3b54d9ab64a3abb3e75ed458187a60acb9ce1b86bc07d471382af88e86"
+      },
+      "template": "{ \"active_skill_minion_damage_+%_final\", {{per_quality}}, {  } },"
+    },
+    {
+      "id": "twister-alternate-quality-unconverted",
+      "span": {
+        "path": "src/Data/Skills/act_dex.lua",
+        "line": 10047,
+        "end_line": 10047,
+        "sha256": "c63d9bee8d9af156fe869e5ef2ec74524c061741c3b197fa8190cb505d829391"
+      },
+      "template": "{ \"active_skill_projectile_speed_+%_final\", {{per_quality}}, {  } },"
+    },
+    {
+      "id": "sniper-actor-damage",
+      "span": {
+        "path": "src/Data/Minions.lua",
+        "line": 96,
+        "end_line": 96,
+        "sha256": "2d8dcb857e4a455d59fb0e527a183a0ac635513c105182741784a6cd077efe21"
+      },
+      "template": "damage = {{value}},"
+    },
+    {
+      "id": "sniper-actor-damageSpread",
+      "span": {
+        "path": "src/Data/Minions.lua",
+        "line": 97,
+        "end_line": 97,
+        "sha256": "c72a0bd71bfc65fca1f7202f82c6441e2bf1c70003a0e6331a5f1ad3cbcc055f"
+      },
+      "template": "damageSpread = {{value}},"
+    },
+    {
+      "id": "sniper-actor-attackTime",
+      "span": {
+        "path": "src/Data/Minions.lua",
+        "line": 98,
+        "end_line": 98,
+        "sha256": "9910a59bcb4f328db62b359e98b078487213abd786e96710c60dbb81c02f3e00"
+      },
+      "template": "attackTime = {{value}},"
+    },
+    {
+      "id": "sniper-actor-critChance",
+      "span": {
+        "path": "src/Data/Minions.lua",
+        "line": 101,
+        "end_line": 101,
+        "sha256": "b20f634286591acef897d0a551dd07d10faecdc06d25d9489adb9fa5be33dc2b"
+      },
+      "template": "critChance = {{value}},"
+    }
+  ],
+  "algorithm_evidence": [
+    {
+      "id": "per-quality-stat-truncation-and-additive-alternate-mode",
+      "span": {
+        "path": "src/Modules/CalcTools.lua",
+        "line": 161,
+        "end_line": 176,
+        "sha256": "694037c2e3d59c92efa13af463f8b885baeb8b83c4ac72fa59437d27f6595d12"
+      },
+      "claim": "For positive quality, truncate each standard coefficient times raw quality toward zero before accumulation; includeAltQualityStats additionally emits separately truncated alternate stats. Only standard-stat conversion is implemented; no alternate kind or inclusion switch is invented."
+    }
+  ],
+  "table_bindings": [
+    {
+      "table": "twister.base-damage-factor",
+      "source_table": "twister-levels",
+      "column": "damage"
+    },
+    {
+      "table": "twister.attack-speed-percent",
+      "source_table": "twister-levels",
+      "column": "speed"
+    },
+    {
+      "table": "twister.required-character-level",
+      "source_table": "twister-levels",
+      "column": "requirement"
+    },
+    {
+      "table": "twister.mana-cost",
+      "source_table": "twister-levels",
+      "column": "mana"
+    },
+    {
+      "table": "sniper.required-character-level",
+      "source_table": "sniper-levels",
+      "column": "requirement"
+    },
+    {
+      "table": "sniper.spirit-reservation",
+      "source_table": "sniper-levels",
+      "column": "spirit"
+    },
+    {
+      "table": "sniper.actor-level",
+      "source_table": "ordinary-minion-levels",
+      "column": "actor_level"
+    }
+  ],
+  "unresolved": [
+    {
+      "gem_key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "kind": "declared_additional_effect",
+      "index": 1,
+      "effect_id": "CommandSkeletalSniperPlayer"
+    },
+    {
+      "gem_key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "kind": "constructed_additional_effect",
+      "index": 1,
+      "effect_id": "CommandSkeletalSniperPlayer"
+    }
+  ],
+  "literal_bindings": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000000b"
+          }
+        }
+      },
+      "program": "intrinsic-action-coefficients",
+      "node": "quality-coefficient",
+      "source_fact": "twister-standard-quality",
+      "column": "per_quality"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000012"
+          }
+        }
+      },
+      "program": "ordinary-population-inputs",
+      "node": "quality-coefficient",
+      "source_fact": "sniper-standard-quality",
+      "column": "per_quality"
+    }
+  ]
+}

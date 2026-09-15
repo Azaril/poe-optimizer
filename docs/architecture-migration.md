@@ -38,6 +38,22 @@ not completion of joint optimization. D5 retirement happens throughout D1–D4, 
 permission to keep obsolete code indefinitely. Avoid a flag day that deletes useful
 numerical validation before its meaning is preserved.
 
+## Current offline production data gate
+
+The [offline assembler and production data](owned-offline-data.md) now connect persisted
+registry/schema/rule/routing recipes to the same validators and native compiler used at
+runtime. Real Twister/Sniper coefficients use complete finite level tables and explicit
+source-bound quality coefficients. Checked native lookup preserves unsupported domains
+through required inputs and provider/actor/action evaluation. The optional source exporter
+recognizes reviewed literal shapes only; it does not load UI state or interpret Lua.
+
+This advances D2 beyond test-authored numerical fixtures. It does not complete D2/D3:
+import mappings/policies still need binding to this persisted registry, effective inputs
+need all incoming contributions, and the real recipes retain partial mechanics/routes.
+The assembler reports those limits instead of declaring a full build. D5 retirement of
+active Spark/Mace preparation still requires replacing both fresh calculation and its
+independent realization validation with the owned semantic path.
+
 ## Concrete first vertical slice
 
 1. Define the owned inputs, game/rules identity and metric selectors in portable contracts.

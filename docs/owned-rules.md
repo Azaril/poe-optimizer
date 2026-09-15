@@ -27,7 +27,7 @@ physical level/quality. Its supplied skill owns projected computed inputs and an
 parent/slot identity. Distinct slots remain distinct even when their skill definition is
 equal. Required generated-skill inputs gate both rule effects and routed action values.
 Potential memberships alone cannot activate an action or redirect a saved root selector.
-The plan content digest now uses `owned-effect-plan-v2`; the rule operation set is v4.
+The plan content digest now uses `owned-effect-plan-v2`; the rule operation set is v5.
 
 These modules contain no source-language parser, Lua interpreter, PoB callback, UI object or
 named-build dispatch. Existing source readers and any optional Lua acquisition stay offline
@@ -36,18 +36,51 @@ injected data; adding an operation requires explicit versioned Rust semantics an
 
 `RulePackageInput` carries its namespace, release, semantics version, operation version and
 the exact definition-schema `DataIdentity`. Its version is 1; the implemented operation set
-is `owned-domain-operations-v4`. Earlier operation versions are explicitly rejected by the compiler; regenerate experimental
+is `owned-domain-operations-v5`. Earlier operation versions are explicitly rejected by the compiler; regenerate experimental
 artifacts rather than silently interpreting them with new semantics. Both storage and compilation check the supplied index's
 identity and namespace. Execution checks that binding again. A digest identifies content;
 it does not authenticate its source or prove conversion fidelity.
 
 Storage emits deterministic JSON for the supplied ordered artifact. Compilation separately
-canonicalizes owner, program, read and node declaration tables. Effect order and boolean
+canonicalizes finite-table, owner, program, read and node declaration tables. Effect order and boolean
 operand order remain significant. Stored-package and compiled-program digests have separate
 domains; consumers must not interchange them. Public declaration IDs are distinct from the
 private indices used during execution.
 Computed value types and read sources use adjacent `kind`/`value` envelopes, matching the
 owned schema conventions and retaining strict unknown-field checks for tag-only variants.
+
+## Finite integer data tables
+
+`RulePackageInput.tables` is an explicit collection of immutable `IntegerRuleTable`
+records. Each table has a package-local ID, inclusive bounded-integer minimum/maximum,
+a computed scalar type and one row per integer in that domain. Tables can be shared by
+multiple programs and owners. This is owned game data, with no source-language table
+layout, callback, build name, UI selection or executable cell content.
+
+`LookupIntegerTable { table, key }` requires an Integer key expression. Storage and
+compilation reject duplicate IDs, missing rows, reversed/oversized domains, dangling table
+references and cells with mismatched types or exact units. Quantity units and Option IDs
+must resolve to known definitions, including in tables that no current program reads.
+Empty/sparse tables and interpolation are not supported; incomplete source evidence must
+remain an unconverted recipe obligation rather than a fabricated row or fallback.
+
+Compilation validates every table and gives lookup operations shared immutable arrays.
+Worker evaluation performs checked indexing after evaluating the demanded key. It needs
+no schema lookup, source access or table-map allocation. It never clamps a key or selects
+an endpoint. A present zero cell is an applied zero; a missing key remains Unresolved.
+An out-of-domain integer returns `UnsupportedDomain` with the original lookup node,
+table ID, requested key and supported bounds. This cause survives downstream expressions,
+required skill inputs, actor/action reads and activation gates. Lazy guards can avoid the
+lookup. A false grant still deactivates its descendants while keeping the parent's
+component diagnostic; incomplete contributor closure still withholds final values.
+
+Cell edits change stored/compiled identities while keeping definition, slot and table IDs.
+The compiler canonicalizes table declaration order; row order always follows its domain.
+Independent table/cell and wire/work bounds apply before secondary allocations. The
+[direct table tests](../crates/poe-optimizer-engine/tests/owned_tables.rs) and
+[occurrence-plan tests](../crates/poe-optimizer-engine/tests/owned_lookup_plan.rs) cover
+extreme keys, exact units, lazy demand, unchanged IDs, partial coverage and worker reuse.
+These laws do not establish complete skill mechanics or full-build parity.
 
 ## Ordinary direct-action timing
 
@@ -177,6 +210,8 @@ The ordered `ProgramEvaluation.effects` ledger retains each effect and its dispo
 - `Unresolved { input }`: a demanded fact was not supplied.
 - `UnsupportedValue { value }`: a projected value lies outside its supported destination
   schema. The computed value is retained; this is not a gameplay-legality verdict.
+- `UnsupportedDomain { node, table, key, minimum, maximum }`: a demanded integer lookup
+  lies outside the table's supported domain; no output value is fabricated.
 - `NumericalError { node, reason }`: division by zero, nonfinite arithmetic or integer overflow.
 
 Malformed facts, package mismatch, unknown programs and resource exhaustion return
@@ -185,8 +220,9 @@ not turn arithmetic infinity into a valid full-build metric classification.
 `owner_programs_closure` preserves Partial versus Complete membership in the report.
 Successfully running the known programs cannot close an unconverted owner's rule inventory.
 
-`RuleStorageLimits` bound bytes, owners, programs, reads, nodes, edges, effects and aggregate
-gap evidence. Edge accounting includes expression-to-read references. Engine
+`RuleStorageLimits` bound bytes, owners, programs, tables, table cells, reads, nodes, edges,
+effects and aggregate gap evidence. Edge accounting includes expression-to-read and
+expression-to-table references as well as key-node dependencies. Engine
 `RuleLimits` adds compilation/execution work limits and has separate, smaller component
 bounds. Both currently permit tightening their default maxima, not arbitrary increases;
 full-game capacity remains to be measured. Immutable compiled packages can be shared;
@@ -218,6 +254,10 @@ and scratch reuse. Their constants and explicit input facts are component fixtur
 generated semantic package for Twister, Sniper or the other protected originals. Retained
 PoB reports and old numerical matrices remain independent evidence to migrate; this slice
 does not claim fresh original-build parity or replace a legacy numerical consumer.
+
+Real level/quality components now ship as persisted data through the
+[offline recipe assembler](owned-offline-data.md). The source-free assembler and emitted
+artifacts use these same APIs; all unconverted mechanics and routes remain partial.
 
 ## Next integration and retirement gate
 

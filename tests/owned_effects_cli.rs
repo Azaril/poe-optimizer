@@ -141,6 +141,7 @@ fn fixture(offset: i64) -> Fixture {
     .unwrap();
     let request = OwnedEvaluationRequest::new(build, scenario, queries, limits).unwrap();
     let rules = RulePackageInput {
+        tables: vec![],
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: namespace(),
         release: key("fixture"),

@@ -218,6 +218,19 @@ fn program(
         EffectDisposition::Applied { value } => known(value),
         EffectDisposition::Inactive => EffectValue::Inactive,
         EffectDisposition::UnsupportedValue { value } => EffectValue::UnsupportedValue { value },
+        EffectDisposition::UnsupportedDomain {
+            node,
+            table,
+            key,
+            minimum,
+            maximum,
+        } => EffectValue::UnsupportedDomain {
+            node,
+            table,
+            key,
+            minimum,
+            maximum,
+        },
         EffectDisposition::NumericalError { node, reason } => {
             EffectValue::NumericalError { node, reason }
         }
@@ -607,5 +620,47 @@ mod tests {
             .unwrap(),
             Some(EffectValue::Inactive)
         );
+    }
+    #[test]
+    fn unsupported_lookup_domain_survives_required_reads_reductions_and_demand() {
+        let failure = EffectValue::UnsupportedDomain {
+            node: key("lookup"),
+            table: key("levels"),
+            key: BoundedInteger::new(41).unwrap(),
+            minimum: BoundedInteger::new(1).unwrap(),
+            maximum: BoundedInteger::new(40).unwrap(),
+        };
+        let values = vec![Some(failure.clone())];
+        let final_read = ReadBinding::Final {
+            effect: Some(0),
+            complete: true,
+        };
+        let required = ReadBinding::Present {
+            source: Box::new(final_read.clone()),
+        };
+        let reduction = ReadBinding::Reduction {
+            effects: vec![0],
+            reduction: ContributionReduction::Sum,
+            empty: integer(0),
+            complete: true,
+        };
+        for binding in [final_read, required.clone(), reduction] {
+            let result = read(&binding, &values, &key("consumer"), &mut 100).unwrap();
+            assert_eq!(result, failure);
+            assert_eq!(demanded(result, key("demanded")).unwrap(), failure);
+        }
+        let inactive = ReadBinding::Constant(Some(ParameterValue::Boolean(false)));
+        for gates in [[required.clone(), inactive.clone()], [inactive, required]] {
+            assert_eq!(
+                gate_result(&gates, &values, &key("consumer"), &mut 100).unwrap(),
+                Some(EffectValue::Inactive),
+            );
+        }
+        assert_eq!(final_value(&failure, true), failure);
+        assert_eq!(
+            final_value(&failure, false),
+            EffectValue::unresolved(PlanGapReason::IncompleteContributors),
+        );
+        assert_eq!(values[0].as_ref(), Some(&failure));
     }
 }

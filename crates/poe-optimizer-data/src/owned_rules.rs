@@ -8,8 +8,8 @@ use poe_optimizer_core::{
     owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},
     owned_rules::*,
     owned_schema::{
-        DefinitionAddress, DefinitionSchemaIndex, SchemaClosure, SchemaFacet, SchemaSubject,
-        SlotAddress,
+        ComputedValueType, DefinitionAddress, DefinitionSchemaIndex, SchemaClosure, SchemaFacet,
+        SchemaLookup, SchemaSubject, SlotAddress,
     },
 };
 use serde::Serialize;
@@ -19,6 +19,8 @@ use std::collections::BTreeSet;
 pub struct RuleStorageLimits {
     pub max_owners: usize,
     pub max_programs: usize,
+    pub max_tables: usize,
+    pub max_table_cells: usize,
     pub max_reads: usize,
     pub max_nodes: usize,
     pub max_effects: usize,
@@ -31,6 +33,8 @@ impl Default for RuleStorageLimits {
         Self {
             max_owners: 100_000,
             max_programs: 200_000,
+            max_tables: 65_536,
+            max_table_cells: 2_000_000,
             max_reads: 1_000_000,
             max_nodes: 2_000_000,
             max_effects: 1_000_000,
@@ -46,6 +50,8 @@ impl RuleStorageLimits {
         for (name, actual, maximum) in [
             ("owners", self.max_owners, hard.max_owners),
             ("programs", self.max_programs, hard.max_programs),
+            ("tables", self.max_tables, hard.max_tables),
+            ("table cells", self.max_table_cells, hard.max_table_cells),
             ("reads", self.max_reads, hard.max_reads),
             ("nodes", self.max_nodes, hard.max_nodes),
             ("effects", self.max_effects, hard.max_effects),
@@ -81,6 +87,8 @@ pub enum RuleStorageError {
 pub struct RuleStorageUse {
     pub owners: usize,
     pub programs: usize,
+    pub tables: usize,
+    pub table_cells: usize,
     pub reads: usize,
     pub nodes: usize,
     pub effects: usize,
@@ -93,6 +101,8 @@ impl RuleStorageUse {
         for (name, n, max) in [
             ("owners", self.owners, l.max_owners),
             ("programs", self.programs, l.max_programs),
+            ("tables", self.tables, l.max_tables),
+            ("table cells", self.table_cells, l.max_table_cells),
             ("reads", self.reads, l.max_reads),
             ("nodes", self.nodes, l.max_nodes),
             ("effects", self.effects, l.max_effects),
@@ -177,9 +187,42 @@ fn validate_structure<I: DefinitionSchemaIndex>(
 ) -> Result<RuleStorageUse, RuleStorageError> {
     let mut use_ = RuleStorageUse {
         owners: input.owners.len(),
+        tables: input.tables.len(),
         ..Default::default()
     };
     use_.check(l)?;
+    let mut tables = BTreeSet::new();
+    for table in &input.tables {
+        add(&mut use_.table_cells, table.rows.len())?;
+        use_.check(l)?;
+        if !tables.insert(&table.id) {
+            return Err(RuleStorageError::Structure("duplicate integer table"));
+        }
+        if table.domain_size() != Some(table.rows.len()) || table.rows.is_empty() {
+            return Err(RuleStorageError::Structure(
+                "integer table requires every domain row",
+            ));
+        }
+        for value in &table.rows {
+            use poe_optimizer_core::owned_build::ParameterValue;
+            let valid = match (value, &table.value_type) {
+                (ParameterValue::Boolean(_), ComputedValueType::Boolean)
+                | (ParameterValue::Integer(_), ComputedValueType::Integer) => true,
+                (ParameterValue::Quantity(v), ComputedValueType::Quantity { unit }) => {
+                    v.unit() == unit && matches!(index.definition(unit), SchemaLookup::Known(_))
+                }
+                (ParameterValue::Option(v), ComputedValueType::Option) => {
+                    matches!(index.definition(v), SchemaLookup::Known(_))
+                }
+                _ => false,
+            };
+            if !valid {
+                return Err(RuleStorageError::Structure(
+                    "invalid integer table cell type/unit/definition",
+                ));
+            }
+        }
+    }
     let mut owners = BTreeSet::new();
     for owner in &input.owners {
         if !owners.insert(owner_key(&owner.owner)) {
@@ -245,7 +288,12 @@ fn validate_structure<I: DefinitionSchemaIndex>(
                 &mut use_.edges,
                 p.nodes
                     .iter()
-                    .filter(|n| matches!(n.expression, RuleExpression::Read { .. }))
+                    .filter(|n| {
+                        matches!(
+                            n.expression,
+                            RuleExpression::Read { .. } | RuleExpression::LookupIntegerTable { .. }
+                        )
+                    })
                     .count(),
             )?;
             use_.check(l)?;
@@ -265,6 +313,12 @@ fn validate_structure<I: DefinitionSchemaIndex>(
                         for input in recipe.inputs() {
                             node_ref(input)?;
                         }
+                    }
+                    LookupIntegerTable { table, key } => {
+                        if !tables.contains(table) {
+                            return Err(RuleStorageError::Structure("missing integer table"));
+                        }
+                        node_ref(key)?;
                     }
                     Literal { .. } => {}
                     Read { input } => {

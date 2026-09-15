@@ -39,6 +39,7 @@ fn input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
         unreachable!()
     };
     RulePackageInput {
+        tables: vec![],
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("rules"),
@@ -260,7 +261,7 @@ fn operation_version_changes_identity_without_changing_storage_envelope() {
     let limits = RuleStorageLimits::default();
     let current = OwnedRulePackage::new(input(&s), &s, limits).unwrap();
     let mut previous = input(&s);
-    previous.operations_version = key("owned-domain-operations-v3");
+    previous.operations_version = key("owned-domain-operations-v4");
     // Data storage preserves an explicit operation contract; Engine decides
     // which version it can execute. Neither path silently upgrades the package.
     let previous = OwnedRulePackage::new(previous, &s, limits).unwrap();
@@ -273,6 +274,6 @@ fn operation_version_changes_identity_without_changing_storage_envelope() {
         decode_rule_package(&encode_rule_package(&previous, limits).unwrap(), &s, limits).unwrap();
     assert_eq!(
         restored.input().operations_version.as_str(),
-        "owned-domain-operations-v3"
+        "owned-domain-operations-v4"
     );
 }

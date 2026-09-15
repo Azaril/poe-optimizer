@@ -11,7 +11,72 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: shared native timing and explicit gem quality (after `d83af04`).**
+**Current checkpoint: real owned definition assembly and finite tables (after `c256151`).**
+The [offline data pipeline](owned-offline-data.md) now consumes a persisted registry,
+schema, rules and routing recipe through production Import/CLI APIs. Exact schema bindings
+and active registry allocations are checked before compilation. The CLI stages five
+artifacts and uses atomic no-replace directory publication on Windows/Linux; it does not
+allocate IDs, acquire source or run an evaluator. Missing coverage remains explicit.
+
+Rule operations are **v5** with required package-local `IntegerRuleTable` data and checked
+`LookupIntegerTable`. Complete integer domains, exact scalar types/units, table/cell/edge
+budgets and every table reference are validated. Worker lookups share immutable arrays.
+Out-of-domain keys retain typed node/table/key/bound diagnostics through actor/action
+reads, generated-skill readiness and grant gates. Missing inputs, false grants and partial
+incoming coverage retain their separate meanings. No source-format or Lua runtime enters
+the new operation.
+
+The first [persisted production recipe](../data/owned/poe2/3887ae68/recipe.json) contains
+seven complete 1–40 tables (280 cells), explicit quality coefficient data and 38 stable
+registry allocations for Twister/Sniper components. The optional literal exporter checks
+pinned winning declarations and source spans; its source facts preserve unused stat-set
+scaling separately from the minion-level table and keep missing command references.
+Nine rule owners and four output routes remain partial. These are executable definition
+components, not complete protected builds. The input build remains separately authored or
+imported data; no runtime path selects a sample by name.
+
+**Validation:** all **635 Rust test executions in the affected-scope suite pass**:
+Core 225, Data 30, Engine 97 plus 14 private tests, Import 175, and CLI 45 plus 2 private
+publication tests in each feature mode. The offline exporter has **21 passing Python tests**.
+Workspace/native-only strict Clippy, formatting, five-crate WASM compilation and native
+runtime dependency exclusion pass. Source-free tests reload the emitted real artifacts,
+exercise all 40 levels, fractional quality, duplicate summons, changed data and worker reuse.
+The CLI published the final recipe to `runs/owned-data-01/assembled-final/`.
+
+Review and regression tests corrected reservation ownership to each summoning action and
+quality scaling to per-stat truncation while retaining raw fractional input. Additive
+alternate-quality and missing-command effects remain partial. Effective actor values stay
+unresolved when their incoming contributions are incomplete; component values do not bypass
+that gate. Independent source/table reviews and protected-input checks pass. This is not
+a full workspace test run or fresh whole-build PoB parity evidence. Full native originals
+remain **0/5**, with all 110 fixed reference rows. Final validation, archived failed attempts
+and publication/hosted status are recorded separately under `runs/owned-data-01/`.
+
+**Resume point:**
+
+1. Bind source import mappings, roles and normalization policies to the persisted production
+   registry/schema. Refine existing stable identities; do not allocate fresh IDs on every
+   data refresh. Resolve the five originals' selected Gem/provider/action requests against
+   this data, with supporting skills and item-granted providers still explicit. Start with six
+   reviewed Gem/Skill mapping seeds and a same-source catalog extension: preserve all 38
+   existing allocations and descriptors, append only missing identities, and require a
+   second pass to allocate zero IDs. Explicitly validate successor rules/routing/policy
+   bindings after the schema changes; the runtime assembler must continue rejecting stale
+   bindings. The concrete API/consumer outline is in
+   `runs/owned-data-01/next-import-integration.md`.
+2. Resolve effective skill/actor inputs from all applicable item/passive/support/scenario
+   contributions. Expand partial mechanics, actor coefficients and action routes; a raw
+   physical Gem level/quality component is not the complete effective calculation.
+3. Feed fully resolved weapon and actor timing inputs into the shared native timing kernel.
+   Migrate independent realization validation and then remove the active Spark/Mace
+   preparation dependencies. The current checkpoint retires no additional profile caller.
+4. Map complete StatDef outputs to the fixed MetricDef ledger; complete Twister and Sniper
+   together, then all five originals and independent holdouts. Keep source facts separate
+   from oracle metric expectations, and preserve unresolved/unsupported classifications.
+5. Measure data load/compilation separately from per-candidate execution, then implement
+   dependency reuse/invalidation and joint search integration across all requested dimensions.
+
+**Previous checkpoint: shared native timing and explicit gem quality (after `d83af04`).**
 The ordinary timing formula now has a data-independent native primitive. The old timing
 entry point delegates to it, and the owned rule engine consumes it through
 `RuleExpression::OrdinaryTiming`. The recipe binds eight typed input nodes and explicit

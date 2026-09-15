@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 1;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v4";
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v5";
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -23,7 +23,32 @@ pub struct RulePackageInput {
     pub semantics_version: OwnedDefinitionKey,
     pub operations_version: OwnedDefinitionKey,
     pub definitions: DataIdentity,
+    /// Immutable finite data shared by programs in this package.
+    pub tables: Vec<IntegerRuleTable>,
     pub owners: Vec<DefinitionRules>,
+}
+/// Dense, explicitly bounded integer-keyed scalar data. Each row corresponds to
+/// `minimum + row_index`; no interpolation, sparse fallback or endpoint clamping.
+/// IDs are local to a rule package, not game-definition or runtime instance IDs.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct IntegerRuleTable {
+    pub id: OwnedDefinitionKey,
+    pub minimum: BoundedInteger,
+    pub maximum: BoundedInteger,
+    pub value_type: ComputedValueType,
+    pub rows: Vec<ParameterValue>,
+}
+impl IntegerRuleTable {
+    /// Checked before allocation, including on 32-bit/WASM hosts.
+    pub fn domain_size(&self) -> Option<usize> {
+        self.maximum
+            .get()
+            .checked_sub(self.minimum.get())
+            .filter(|n| *n >= 0)?
+            .checked_add(1)
+            .and_then(|n| usize::try_from(n).ok())
+    }
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -201,6 +226,12 @@ impl OrdinaryTimingRecipe {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum RuleExpression {
+    /// The key is an integer expression. A known out-of-domain key is unsupported,
+    /// distinct from a missing key or an arithmetic failure.
+    LookupIntegerTable {
+        table: OwnedDefinitionKey,
+        key: OwnedDefinitionKey,
+    },
     OrdinaryTiming {
         recipe: Box<OrdinaryTimingRecipe>,
     },

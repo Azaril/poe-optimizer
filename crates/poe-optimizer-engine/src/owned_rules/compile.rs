@@ -33,6 +33,7 @@ fn add(total: &mut usize, n: usize, max: usize, path: &str) -> Result<(), RuleEr
 #[derive(Default)]
 struct Budget {
     programs: usize,
+    table_cells: usize,
     reads: usize,
     nodes: usize,
     edges: usize,
@@ -606,6 +607,7 @@ fn lower(
     e: &RuleExpression,
     nodes: &BTreeMap<OwnedDefinitionKey, usize>,
     reads: &BTreeMap<OwnedDefinitionKey, usize>,
+    tables: &BTreeMap<OwnedDefinitionKey, Arc<IntegerRuleTable>>,
     path: &str,
 ) -> Result<Op, RuleError> {
     let n = |id: &OwnedDefinitionKey| {
@@ -615,6 +617,14 @@ fn lower(
             .ok_or_else(|| fail(path, "unknown node reference"))
     };
     Ok(match e {
+        RuleExpression::LookupIntegerTable { table, key } => Op::LookupIntegerTable {
+            key: n(key)?,
+            table: Arc::clone(
+                tables
+                    .get(table)
+                    .ok_or_else(|| fail(path, "unknown integer table"))?,
+            ),
+        },
         RuleExpression::OrdinaryTiming { recipe } => {
             let mut inputs = [0; 8];
             for (bound, input) in inputs.iter_mut().zip(recipe.inputs()) {
@@ -688,6 +698,14 @@ fn infer<I: DefinitionSchemaIndex>(
         )
     };
     Ok(match op {
+        Op::LookupIntegerTable { key, table } => {
+            check(
+                t(*key) == &ComputedValueType::Integer,
+                path,
+                "table lookup requires integer key",
+            )?;
+            table.value_type.clone()
+        }
         Op::OrdinaryTiming(recipe) => {
             let [base, inc, more, attack, cast, action, repeats, tick] = recipe.inputs;
             check(recipe.precision <= 12, path, "timing precision exceeds 12")?;
@@ -817,12 +835,16 @@ fn infer<I: DefinitionSchemaIndex>(
 fn program<I: DefinitionSchemaIndex>(
     p: &RuleProgram,
     owner: &DefinitionRules,
-    ports: &Ports<'_>,
+    declarations: (
+        &Ports<'_>,
+        &BTreeMap<OwnedDefinitionKey, Arc<IntegerRuleTable>>,
+    ),
     index: &I,
     l: RuleLimits,
     b: &mut Budget,
     path: &str,
 ) -> Result<CompiledProgram, RuleError> {
+    let (ports, tables) = declarations;
     let mut reads = Vec::with_capacity(p.reads.len());
     let mut read_index = BTreeMap::new();
     for r in &p.reads {
@@ -852,11 +874,11 @@ fn program<I: DefinitionSchemaIndex>(
     let mut indegree = vec![0usize; p.nodes.len()];
     let mut consumers = vec![Vec::new(); p.nodes.len()];
     for (i, n) in p.nodes.iter().enumerate() {
-        let op = lower(&n.expression, &node_index, &read_index, path)?;
+        let op = lower(&n.expression, &node_index, &read_index, tables, path)?;
         let deps = op.dependencies();
         add(
             &mut b.edges,
-            deps.len() + usize::from(matches!(op, Op::Read(_))),
+            deps.len() + usize::from(matches!(op, Op::Read(_) | Op::LookupIntegerTable { .. })),
             l.max_edges,
             path,
         )?;
@@ -1128,7 +1150,27 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         "owners",
         "owner count exceeds limit",
     )?;
+    check(
+        input.tables.len() <= l.max_tables,
+        "tables",
+        "table count exceeds limit",
+    )?;
     let mut b = Budget::default();
+    for table in &input.tables {
+        add(
+            &mut b.table_cells,
+            table.rows.len(),
+            l.max_table_cells,
+            "tables",
+        )?;
+        b.work(table.rows.len() + 1, l, "tables")?;
+        check(
+            table.domain_size() == Some(table.rows.len()) && !table.rows.is_empty(),
+            "tables",
+            "integer table requires every domain row",
+        )?;
+    }
+
     for o in &input.owners {
         add(
             &mut b.programs,
@@ -1157,7 +1199,32 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     // boolean operands remains meaningful; declaration tables are canonicalized.
     digest_owned("owned-rule-input-v1", input, l.max_wire_bytes)
         .map_err(|e| RuleError::new("wire", e.to_string()))?;
+    let mut table_ids = BTreeSet::new();
+    for table in &input.tables {
+        let path = format!("tables.{}", table.id);
+        check(
+            table_ids.insert(&table.id),
+            &path,
+            "duplicate integer table",
+        )?;
+        validate_type(&table.value_type, index, &path)?;
+        for cell in &table.rows {
+            validate_value(cell, index, &path)?;
+            check(
+                value_type(cell) == table.value_type,
+                &path,
+                "table cell type/unit mismatch",
+            )?;
+        }
+    }
     let mut input = input.clone();
+    input.tables.sort_by(|a, b| a.id.cmp(&b.id));
+    let tables: BTreeMap<_, _> = input
+        .tables
+        .iter()
+        .map(|table| (table.id.clone(), Arc::new(table.clone())))
+        .collect();
+
     input.owners.sort_by_key(|o| SubjectKey::from(&o.owner));
     let mut owners = BTreeSet::new();
     let mut programs = BTreeMap::new();
@@ -1191,7 +1258,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                 Arc::new(program(
                     p,
                     o,
-                    &ports,
+                    (&ports, &tables),
                     index,
                     l,
                     &mut b,

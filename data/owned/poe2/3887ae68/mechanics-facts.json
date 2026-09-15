@@ -1,0 +1,2696 @@
+{
+  "schema_version": 1,
+  "scope": "reviewed-literal-mechanics-components",
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Data/Gems.lua",
+        "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+      },
+      {
+        "path": "src/Data/Minions.lua",
+        "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+      },
+      {
+        "path": "src/Data/Misc.lua",
+        "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+      },
+      {
+        "path": "src/Data/Skills/act_dex.lua",
+        "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+      },
+      {
+        "path": "src/Data/Skills/act_int.lua",
+        "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+      },
+      {
+        "path": "src/Data/Skills/minion.lua",
+        "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+      },
+      {
+        "path": "src/Modules/CalcActiveSkill.lua",
+        "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+      },
+      {
+        "path": "src/Modules/CalcTools.lua",
+        "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+      }
+    ]
+  },
+  "catalog_lf_sha256": "a90217d9bab6c0469917a2ba75ed9517205d2ac2b3d59f8d68580604f26df07f",
+  "manifest_sha256": "996e1a96abc3de69bea13e927dd4c5a8d0e8a91eb2022d9a9261b3e23ee11a42",
+  "recipe_sha256": "e99f510d0c9d7a6624174695e5540b146366e2a487b5beec937682b3fc266690",
+  "identities": [
+    {
+      "gem_key": "Metadata/Items/Gems/SkillGemTwister",
+      "skill_id": "TwisterPlayer",
+      "gem_definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000000a"
+      },
+      "skill_definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000000b"
+      },
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemTwister",
+        "game_id": "Metadata/Items/Gem/SkillGemTwister",
+        "variant_id": "Twister",
+        "name": "Twister",
+        "name_spec": null,
+        "base_type_name": "Twister",
+        "primary_effect_id": "TwisterPlayer",
+        "declared_additional_effects": [],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [],
+        "additional_effects": [],
+        "effect_list": [
+          "TwisterPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 325
+      },
+      "skill": {
+        "id": "TwisterPlayer",
+        "name": "Twister",
+        "base_type_name": "Twister",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 200
+      },
+      "gem_source": {
+        "path": "src/Data/Gems.lua",
+        "line": 7032,
+        "end_line": 7056,
+        "sha256": "4f9cea4f037b2405eca864bba8e5d6b24cf724394325b9c6c065f49f260e223c"
+      },
+      "skill_source": {
+        "path": "src/Data/Skills/act_dex.lua",
+        "line": 10032,
+        "end_line": 10181,
+        "sha256": "048765596f5fc4255ab94b7edf86286cce0708a678c12a1636055b3af8e2a4d9"
+      }
+    },
+    {
+      "gem_key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "skill_id": "SummonSkeletalSnipersPlayer",
+      "gem_definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000011"
+      },
+      "skill_definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000012"
+      },
+      "gem": {
+        "key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "game_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "variant_id": "SkeletalSniper",
+        "name": "Skeletal Sniper",
+        "name_spec": null,
+        "base_type_name": "Skeletal Sniper Minion",
+        "primary_effect_id": "SummonSkeletalSnipersPlayer",
+        "declared_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalSniperPlayer"
+          }
+        ],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalSniperPlayer"
+          }
+        ],
+        "additional_effects": [],
+        "effect_list": [
+          "SummonSkeletalSnipersPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 116
+      },
+      "skill": {
+        "id": "SummonSkeletalSnipersPlayer",
+        "name": "Skeletal Sniper Minion",
+        "base_type_name": "Skeletal Sniper Minion",
+        "support": null,
+        "from_tree": null,
+        "winning_declaration": 332
+      },
+      "gem_source": {
+        "path": "src/Data/Gems.lua",
+        "line": 2447,
+        "end_line": 2470,
+        "sha256": "dd93cb09e3f957e9bd0014384acc11303b5567166c7a76097040f49929996224"
+      },
+      "skill_source": {
+        "path": "src/Data/Skills/act_int.lua",
+        "line": 18677,
+        "end_line": 18799,
+        "sha256": "fb834997a7c392e6a8e1a190ecd1f864b7537562611f2237dd650e12d54de192"
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "twister-levels",
+      "span": {
+        "path": "src/Data/Skills/act_dex.lua",
+        "line": 10049,
+        "end_line": 10090,
+        "sha256": "537fe0faa5a3d5658e2ee4ac965926a1c162e52b67a81fbb3556ecbb640bdaaa"
+      },
+      "minimum": 1,
+      "maximum": 40,
+      "rows": [
+        {
+          "level": 1,
+          "values": {
+            "speed": -20.0,
+            "damage": 0.8,
+            "requirement": 0.0,
+            "mana": 4.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "0.8",
+            "requirement": "0",
+            "mana": "4"
+          },
+          "source_line": 10050
+        },
+        {
+          "level": 2,
+          "values": {
+            "speed": -20.0,
+            "damage": 0.88,
+            "requirement": 3.0,
+            "mana": 5.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "0.88",
+            "requirement": "3",
+            "mana": "5"
+          },
+          "source_line": 10051
+        },
+        {
+          "level": 3,
+          "values": {
+            "speed": -20.0,
+            "damage": 0.97,
+            "requirement": 6.0,
+            "mana": 6.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "0.97",
+            "requirement": "6",
+            "mana": "6"
+          },
+          "source_line": 10052
+        },
+        {
+          "level": 4,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.05,
+            "requirement": 10.0,
+            "mana": 7.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.05",
+            "requirement": "10",
+            "mana": "7"
+          },
+          "source_line": 10053
+        },
+        {
+          "level": 5,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.14,
+            "requirement": 14.0,
+            "mana": 8.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.14",
+            "requirement": "14",
+            "mana": "8"
+          },
+          "source_line": 10054
+        },
+        {
+          "level": 6,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.22,
+            "requirement": 18.0,
+            "mana": 9.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.22",
+            "requirement": "18",
+            "mana": "9"
+          },
+          "source_line": 10055
+        },
+        {
+          "level": 7,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.3,
+            "requirement": 22.0,
+            "mana": 10.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.3",
+            "requirement": "22",
+            "mana": "10"
+          },
+          "source_line": 10056
+        },
+        {
+          "level": 8,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.38,
+            "requirement": 26.0,
+            "mana": 11.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.38",
+            "requirement": "26",
+            "mana": "11"
+          },
+          "source_line": 10057
+        },
+        {
+          "level": 9,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.44,
+            "requirement": 31.0,
+            "mana": 12.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.44",
+            "requirement": "31",
+            "mana": "12"
+          },
+          "source_line": 10058
+        },
+        {
+          "level": 10,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.51,
+            "requirement": 36.0,
+            "mana": 13.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.51",
+            "requirement": "36",
+            "mana": "13"
+          },
+          "source_line": 10059
+        },
+        {
+          "level": 11,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.58,
+            "requirement": 41.0,
+            "mana": 15.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.58",
+            "requirement": "41",
+            "mana": "15"
+          },
+          "source_line": 10060
+        },
+        {
+          "level": 12,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.65,
+            "requirement": 46.0,
+            "mana": 16.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.65",
+            "requirement": "46",
+            "mana": "16"
+          },
+          "source_line": 10061
+        },
+        {
+          "level": 13,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.72,
+            "requirement": 52.0,
+            "mana": 18.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.72",
+            "requirement": "52",
+            "mana": "18"
+          },
+          "source_line": 10062
+        },
+        {
+          "level": 14,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.8,
+            "requirement": 58.0,
+            "mana": 19.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.8",
+            "requirement": "58",
+            "mana": "19"
+          },
+          "source_line": 10063
+        },
+        {
+          "level": 15,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.88,
+            "requirement": 64.0,
+            "mana": 21.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.88",
+            "requirement": "64",
+            "mana": "21"
+          },
+          "source_line": 10064
+        },
+        {
+          "level": 16,
+          "values": {
+            "speed": -20.0,
+            "damage": 1.96,
+            "requirement": 66.0,
+            "mana": 23.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "1.96",
+            "requirement": "66",
+            "mana": "23"
+          },
+          "source_line": 10065
+        },
+        {
+          "level": 17,
+          "values": {
+            "speed": -20.0,
+            "damage": 2.05,
+            "requirement": 72.0,
+            "mana": 25.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "2.05",
+            "requirement": "72",
+            "mana": "25"
+          },
+          "source_line": 10066
+        },
+        {
+          "level": 18,
+          "values": {
+            "speed": -20.0,
+            "damage": 2.14,
+            "requirement": 78.0,
+            "mana": 27.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "2.14",
+            "requirement": "78",
+            "mana": "27"
+          },
+          "source_line": 10067
+        },
+        {
+          "level": 19,
+          "values": {
+            "speed": -20.0,
+            "damage": 2.23,
+            "requirement": 84.0,
+            "mana": 30.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "2.23",
+            "requirement": "84",
+            "mana": "30"
+          },
+          "source_line": 10068
+        },
+        {
+          "level": 20,
+          "values": {
+            "speed": -20.0,
+            "damage": 2.32,
+            "requirement": 90.0,
+            "mana": 32.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "2.32",
+            "requirement": "90",
+            "mana": "32"
+          },
+          "source_line": 10069
+        },
+        {
+          "level": 21,
+          "values": {
+            "speed": -20.0,
+            "damage": 2.42,
+            "requirement": 90.0,
+            "mana": 35.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "2.42",
+            "requirement": "90",
+            "mana": "35"
+          },
+          "source_line": 10070
+        },
+        {
+          "level": 22,
+          "values": {
+            "speed": -20.0,
+            "damage": 2.52,
+            "requirement": 90.0,
+            "mana": 37.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "2.52",
+            "requirement": "90",
+            "mana": "37"
+          },
+          "source_line": 10071
+        },
+        {
+          "level": 23,
+          "values": {
+            "speed": -20.0,
+            "damage": 2.63,
+            "requirement": 90.0,
+            "mana": 40.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "2.63",
+            "requirement": "90",
+            "mana": "40"
+          },
+          "source_line": 10072
+        },
+        {
+          "level": 24,
+          "values": {
+            "speed": -20.0,
+            "damage": 2.74,
+            "requirement": 90.0,
+            "mana": 43.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "2.74",
+            "requirement": "90",
+            "mana": "43"
+          },
+          "source_line": 10073
+        },
+        {
+          "level": 25,
+          "values": {
+            "speed": -20.0,
+            "damage": 2.85,
+            "requirement": 90.0,
+            "mana": 46.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "2.85",
+            "requirement": "90",
+            "mana": "46"
+          },
+          "source_line": 10074
+        },
+        {
+          "level": 26,
+          "values": {
+            "speed": -20.0,
+            "damage": 2.97,
+            "requirement": 90.0,
+            "mana": 50.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "2.97",
+            "requirement": "90",
+            "mana": "50"
+          },
+          "source_line": 10075
+        },
+        {
+          "level": 27,
+          "values": {
+            "speed": -20.0,
+            "damage": 3.1,
+            "requirement": 90.0,
+            "mana": 54.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "3.1",
+            "requirement": "90",
+            "mana": "54"
+          },
+          "source_line": 10076
+        },
+        {
+          "level": 28,
+          "values": {
+            "speed": -20.0,
+            "damage": 3.23,
+            "requirement": 90.0,
+            "mana": 57.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "3.23",
+            "requirement": "90",
+            "mana": "57"
+          },
+          "source_line": 10077
+        },
+        {
+          "level": 29,
+          "values": {
+            "speed": -20.0,
+            "damage": 3.36,
+            "requirement": 90.0,
+            "mana": 62.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "3.36",
+            "requirement": "90",
+            "mana": "62"
+          },
+          "source_line": 10078
+        },
+        {
+          "level": 30,
+          "values": {
+            "speed": -20.0,
+            "damage": 3.5,
+            "requirement": 90.0,
+            "mana": 66.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "3.5",
+            "requirement": "90",
+            "mana": "66"
+          },
+          "source_line": 10079
+        },
+        {
+          "level": 31,
+          "values": {
+            "speed": -20.0,
+            "damage": 3.65,
+            "requirement": 90.0,
+            "mana": 71.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "3.65",
+            "requirement": "90",
+            "mana": "71"
+          },
+          "source_line": 10080
+        },
+        {
+          "level": 32,
+          "values": {
+            "speed": -20.0,
+            "damage": 3.8,
+            "requirement": 90.0,
+            "mana": 75.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "3.8",
+            "requirement": "90",
+            "mana": "75"
+          },
+          "source_line": 10081
+        },
+        {
+          "level": 33,
+          "values": {
+            "speed": -20.0,
+            "damage": 3.96,
+            "requirement": 90.0,
+            "mana": 81.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "3.96",
+            "requirement": "90",
+            "mana": "81"
+          },
+          "source_line": 10082
+        },
+        {
+          "level": 34,
+          "values": {
+            "speed": -20.0,
+            "damage": 4.13,
+            "requirement": 90.0,
+            "mana": 86.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "4.13",
+            "requirement": "90",
+            "mana": "86"
+          },
+          "source_line": 10083
+        },
+        {
+          "level": 35,
+          "values": {
+            "speed": -20.0,
+            "damage": 4.3,
+            "requirement": 90.0,
+            "mana": 92.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "4.3",
+            "requirement": "90",
+            "mana": "92"
+          },
+          "source_line": 10084
+        },
+        {
+          "level": 36,
+          "values": {
+            "speed": -20.0,
+            "damage": 4.48,
+            "requirement": 90.0,
+            "mana": 98.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "4.48",
+            "requirement": "90",
+            "mana": "98"
+          },
+          "source_line": 10085
+        },
+        {
+          "level": 37,
+          "values": {
+            "speed": -20.0,
+            "damage": 4.67,
+            "requirement": 90.0,
+            "mana": 104.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "4.67",
+            "requirement": "90",
+            "mana": "104"
+          },
+          "source_line": 10086
+        },
+        {
+          "level": 38,
+          "values": {
+            "speed": -20.0,
+            "damage": 4.87,
+            "requirement": 90.0,
+            "mana": 111.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "4.87",
+            "requirement": "90",
+            "mana": "111"
+          },
+          "source_line": 10087
+        },
+        {
+          "level": 39,
+          "values": {
+            "speed": -20.0,
+            "damage": 5.07,
+            "requirement": 90.0,
+            "mana": 118.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "5.07",
+            "requirement": "90",
+            "mana": "118"
+          },
+          "source_line": 10088
+        },
+        {
+          "level": 40,
+          "values": {
+            "speed": -20.0,
+            "damage": 5.29,
+            "requirement": 90.0,
+            "mana": 126.0
+          },
+          "literal_tokens": {
+            "speed": "-20",
+            "damage": "5.29",
+            "requirement": "90",
+            "mana": "126"
+          },
+          "source_line": 10089
+        }
+      ]
+    },
+    {
+      "id": "sniper-levels",
+      "span": {
+        "path": "src/Data/Skills/act_int.lua",
+        "line": 18694,
+        "end_line": 18735,
+        "sha256": "dacc59a1ba1cce6677d489bb31ecb36b12708a11167245e958e87dd4808811bb"
+      },
+      "minimum": 1,
+      "maximum": 40,
+      "rows": [
+        {
+          "level": 1,
+          "values": {
+            "requirement": 0.0,
+            "spirit": 90.0
+          },
+          "literal_tokens": {
+            "requirement": "0",
+            "spirit": "90"
+          },
+          "source_line": 18695
+        },
+        {
+          "level": 2,
+          "values": {
+            "requirement": 3.0,
+            "spirit": 65.0
+          },
+          "literal_tokens": {
+            "requirement": "3",
+            "spirit": "65"
+          },
+          "source_line": 18696
+        },
+        {
+          "level": 3,
+          "values": {
+            "requirement": 6.0,
+            "spirit": 50.0
+          },
+          "literal_tokens": {
+            "requirement": "6",
+            "spirit": "50"
+          },
+          "source_line": 18697
+        },
+        {
+          "level": 4,
+          "values": {
+            "requirement": 10.0,
+            "spirit": 41.0
+          },
+          "literal_tokens": {
+            "requirement": "10",
+            "spirit": "41"
+          },
+          "source_line": 18698
+        },
+        {
+          "level": 5,
+          "values": {
+            "requirement": 14.0,
+            "spirit": 37.0
+          },
+          "literal_tokens": {
+            "requirement": "14",
+            "spirit": "37"
+          },
+          "source_line": 18699
+        },
+        {
+          "level": 6,
+          "values": {
+            "requirement": 18.0,
+            "spirit": 37.0
+          },
+          "literal_tokens": {
+            "requirement": "18",
+            "spirit": "37"
+          },
+          "source_line": 18700
+        },
+        {
+          "level": 7,
+          "values": {
+            "requirement": 22.0,
+            "spirit": 35.0
+          },
+          "literal_tokens": {
+            "requirement": "22",
+            "spirit": "35"
+          },
+          "source_line": 18701
+        },
+        {
+          "level": 8,
+          "values": {
+            "requirement": 26.0,
+            "spirit": 35.0
+          },
+          "literal_tokens": {
+            "requirement": "26",
+            "spirit": "35"
+          },
+          "source_line": 18702
+        },
+        {
+          "level": 9,
+          "values": {
+            "requirement": 31.0,
+            "spirit": 35.0
+          },
+          "literal_tokens": {
+            "requirement": "31",
+            "spirit": "35"
+          },
+          "source_line": 18703
+        },
+        {
+          "level": 10,
+          "values": {
+            "requirement": 36.0,
+            "spirit": 33.0
+          },
+          "literal_tokens": {
+            "requirement": "36",
+            "spirit": "33"
+          },
+          "source_line": 18704
+        },
+        {
+          "level": 11,
+          "values": {
+            "requirement": 41.0,
+            "spirit": 33.0
+          },
+          "literal_tokens": {
+            "requirement": "41",
+            "spirit": "33"
+          },
+          "source_line": 18705
+        },
+        {
+          "level": 12,
+          "values": {
+            "requirement": 46.0,
+            "spirit": 33.0
+          },
+          "literal_tokens": {
+            "requirement": "46",
+            "spirit": "33"
+          },
+          "source_line": 18706
+        },
+        {
+          "level": 13,
+          "values": {
+            "requirement": 52.0,
+            "spirit": 31.0
+          },
+          "literal_tokens": {
+            "requirement": "52",
+            "spirit": "31"
+          },
+          "source_line": 18707
+        },
+        {
+          "level": 14,
+          "values": {
+            "requirement": 58.0,
+            "spirit": 31.0
+          },
+          "literal_tokens": {
+            "requirement": "58",
+            "spirit": "31"
+          },
+          "source_line": 18708
+        },
+        {
+          "level": 15,
+          "values": {
+            "requirement": 64.0,
+            "spirit": 31.0
+          },
+          "literal_tokens": {
+            "requirement": "64",
+            "spirit": "31"
+          },
+          "source_line": 18709
+        },
+        {
+          "level": 16,
+          "values": {
+            "requirement": 66.0,
+            "spirit": 31.0
+          },
+          "literal_tokens": {
+            "requirement": "66",
+            "spirit": "31"
+          },
+          "source_line": 18710
+        },
+        {
+          "level": 17,
+          "values": {
+            "requirement": 72.0,
+            "spirit": 30.0
+          },
+          "literal_tokens": {
+            "requirement": "72",
+            "spirit": "30"
+          },
+          "source_line": 18711
+        },
+        {
+          "level": 18,
+          "values": {
+            "requirement": 78.0,
+            "spirit": 30.0
+          },
+          "literal_tokens": {
+            "requirement": "78",
+            "spirit": "30"
+          },
+          "source_line": 18712
+        },
+        {
+          "level": 19,
+          "values": {
+            "requirement": 84.0,
+            "spirit": 30.0
+          },
+          "literal_tokens": {
+            "requirement": "84",
+            "spirit": "30"
+          },
+          "source_line": 18713
+        },
+        {
+          "level": 20,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 30.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "30"
+          },
+          "source_line": 18714
+        },
+        {
+          "level": 21,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 29.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "29"
+          },
+          "source_line": 18715
+        },
+        {
+          "level": 22,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 29.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "29"
+          },
+          "source_line": 18716
+        },
+        {
+          "level": 23,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 29.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "29"
+          },
+          "source_line": 18717
+        },
+        {
+          "level": 24,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 29.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "29"
+          },
+          "source_line": 18718
+        },
+        {
+          "level": 25,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 29.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "29"
+          },
+          "source_line": 18719
+        },
+        {
+          "level": 26,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 28.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "28"
+          },
+          "source_line": 18720
+        },
+        {
+          "level": 27,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 28.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "28"
+          },
+          "source_line": 18721
+        },
+        {
+          "level": 28,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 28.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "28"
+          },
+          "source_line": 18722
+        },
+        {
+          "level": 29,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 28.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "28"
+          },
+          "source_line": 18723
+        },
+        {
+          "level": 30,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 28.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "28"
+          },
+          "source_line": 18724
+        },
+        {
+          "level": 31,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 27.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "27"
+          },
+          "source_line": 18725
+        },
+        {
+          "level": 32,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 27.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "27"
+          },
+          "source_line": 18726
+        },
+        {
+          "level": 33,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 27.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "27"
+          },
+          "source_line": 18727
+        },
+        {
+          "level": 34,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 27.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "27"
+          },
+          "source_line": 18728
+        },
+        {
+          "level": 35,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 27.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "27"
+          },
+          "source_line": 18729
+        },
+        {
+          "level": 36,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 26.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "26"
+          },
+          "source_line": 18730
+        },
+        {
+          "level": 37,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 26.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "26"
+          },
+          "source_line": 18731
+        },
+        {
+          "level": 38,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 26.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "26"
+          },
+          "source_line": 18732
+        },
+        {
+          "level": 39,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 26.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "26"
+          },
+          "source_line": 18733
+        },
+        {
+          "level": 40,
+          "values": {
+            "requirement": 90.0,
+            "spirit": 26.0
+          },
+          "literal_tokens": {
+            "requirement": "90",
+            "spirit": "26"
+          },
+          "source_line": 18734
+        }
+      ]
+    },
+    {
+      "id": "twister-stat-set-scaling-evidence",
+      "span": {
+        "path": "src/Data/Skills/act_dex.lua",
+        "line": 10137,
+        "end_line": 10178,
+        "sha256": "60993500472866d0101f8fb370839b737108b26469b0a5f9da2aac57df94e8ac"
+      },
+      "minimum": 1,
+      "maximum": 40,
+      "rows": [
+        {
+          "level": 1,
+          "values": {
+            "scaling_coordinate": 1.0
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "1"
+          },
+          "source_line": 10138
+        },
+        {
+          "level": 2,
+          "values": {
+            "scaling_coordinate": 3.4519999027252
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "3.4519999027252"
+          },
+          "source_line": 10139
+        },
+        {
+          "level": 3,
+          "values": {
+            "scaling_coordinate": 6.7670001983643
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "6.7670001983643"
+          },
+          "source_line": 10140
+        },
+        {
+          "level": 4,
+          "values": {
+            "scaling_coordinate": 10.307999610901
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "10.307999610901"
+          },
+          "source_line": 10141
+        },
+        {
+          "level": 5,
+          "values": {
+            "scaling_coordinate": 14.074999809265
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "14.074999809265"
+          },
+          "source_line": 10142
+        },
+        {
+          "level": 6,
+          "values": {
+            "scaling_coordinate": 18.068000793457
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "18.068000793457"
+          },
+          "source_line": 10143
+        },
+        {
+          "level": 7,
+          "values": {
+            "scaling_coordinate": 22.287000656128
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "22.287000656128"
+          },
+          "source_line": 10144
+        },
+        {
+          "level": 8,
+          "values": {
+            "scaling_coordinate": 26.732000350952
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "26.732000350952"
+          },
+          "source_line": 10145
+        },
+        {
+          "level": 9,
+          "values": {
+            "scaling_coordinate": 31.40299987793
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "31.40299987793"
+          },
+          "source_line": 10146
+        },
+        {
+          "level": 10,
+          "values": {
+            "scaling_coordinate": 36.299999237061
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "36.299999237061"
+          },
+          "source_line": 10147
+        },
+        {
+          "level": 11,
+          "values": {
+            "scaling_coordinate": 41.423000335693
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "41.423000335693"
+          },
+          "source_line": 10148
+        },
+        {
+          "level": 12,
+          "values": {
+            "scaling_coordinate": 46.771999359131
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "46.771999359131"
+          },
+          "source_line": 10149
+        },
+        {
+          "level": 13,
+          "values": {
+            "scaling_coordinate": 52.34700012207
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "52.34700012207"
+          },
+          "source_line": 10150
+        },
+        {
+          "level": 14,
+          "values": {
+            "scaling_coordinate": 58.147998809814
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "58.147998809814"
+          },
+          "source_line": 10151
+        },
+        {
+          "level": 15,
+          "values": {
+            "scaling_coordinate": 64.175003051758
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "64.175003051758"
+          },
+          "source_line": 10152
+        },
+        {
+          "level": 16,
+          "values": {
+            "scaling_coordinate": 70.428001403809
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "70.428001403809"
+          },
+          "source_line": 10153
+        },
+        {
+          "level": 17,
+          "values": {
+            "scaling_coordinate": 76.906997680664
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "76.906997680664"
+          },
+          "source_line": 10154
+        },
+        {
+          "level": 18,
+          "values": {
+            "scaling_coordinate": 83.611999511719
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "83.611999511719"
+          },
+          "source_line": 10155
+        },
+        {
+          "level": 19,
+          "values": {
+            "scaling_coordinate": 90.542999267578
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "90.542999267578"
+          },
+          "source_line": 10156
+        },
+        {
+          "level": 20,
+          "values": {
+            "scaling_coordinate": 97.699996948242
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "97.699996948242"
+          },
+          "source_line": 10157
+        },
+        {
+          "level": 21,
+          "values": {
+            "scaling_coordinate": 105.08300018311
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "105.08300018311"
+          },
+          "source_line": 10158
+        },
+        {
+          "level": 22,
+          "values": {
+            "scaling_coordinate": 112.69200134277
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "112.69200134277"
+          },
+          "source_line": 10159
+        },
+        {
+          "level": 23,
+          "values": {
+            "scaling_coordinate": 120.52700042725
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "120.52700042725"
+          },
+          "source_line": 10160
+        },
+        {
+          "level": 24,
+          "values": {
+            "scaling_coordinate": 128.58799743652
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "128.58799743652"
+          },
+          "source_line": 10161
+        },
+        {
+          "level": 25,
+          "values": {
+            "scaling_coordinate": 136.875
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "136.875"
+          },
+          "source_line": 10162
+        },
+        {
+          "level": 26,
+          "values": {
+            "scaling_coordinate": 145.38800048828
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "145.38800048828"
+          },
+          "source_line": 10163
+        },
+        {
+          "level": 27,
+          "values": {
+            "scaling_coordinate": 154.12699890137
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "154.12699890137"
+          },
+          "source_line": 10164
+        },
+        {
+          "level": 28,
+          "values": {
+            "scaling_coordinate": 163.09199523926
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "163.09199523926"
+          },
+          "source_line": 10165
+        },
+        {
+          "level": 29,
+          "values": {
+            "scaling_coordinate": 172.28300476074
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "172.28300476074"
+          },
+          "source_line": 10166
+        },
+        {
+          "level": 30,
+          "values": {
+            "scaling_coordinate": 181.69999694824
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "181.69999694824"
+          },
+          "source_line": 10167
+        },
+        {
+          "level": 31,
+          "values": {
+            "scaling_coordinate": 191.34300231934
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "191.34300231934"
+          },
+          "source_line": 10168
+        },
+        {
+          "level": 32,
+          "values": {
+            "scaling_coordinate": 201.21200561523
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "201.21200561523"
+          },
+          "source_line": 10169
+        },
+        {
+          "level": 33,
+          "values": {
+            "scaling_coordinate": 211.30700683594
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "211.30700683594"
+          },
+          "source_line": 10170
+        },
+        {
+          "level": 34,
+          "values": {
+            "scaling_coordinate": 221.62800598145
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "221.62800598145"
+          },
+          "source_line": 10171
+        },
+        {
+          "level": 35,
+          "values": {
+            "scaling_coordinate": 232.17500305176
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "232.17500305176"
+          },
+          "source_line": 10172
+        },
+        {
+          "level": 36,
+          "values": {
+            "scaling_coordinate": 242.94799804688
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "242.94799804688"
+          },
+          "source_line": 10173
+        },
+        {
+          "level": 37,
+          "values": {
+            "scaling_coordinate": 253.94700622559
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "253.94700622559"
+          },
+          "source_line": 10174
+        },
+        {
+          "level": 38,
+          "values": {
+            "scaling_coordinate": 265.17199707031
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "265.17199707031"
+          },
+          "source_line": 10175
+        },
+        {
+          "level": 39,
+          "values": {
+            "scaling_coordinate": 276.62298583984
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "276.62298583984"
+          },
+          "source_line": 10176
+        },
+        {
+          "level": 40,
+          "values": {
+            "scaling_coordinate": 288.29998779297
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "288.29998779297"
+          },
+          "source_line": 10177
+        }
+      ]
+    },
+    {
+      "id": "sniper-stat-set-scaling-evidence",
+      "span": {
+        "path": "src/Data/Skills/act_int.lua",
+        "line": 18755,
+        "end_line": 18796,
+        "sha256": "60993500472866d0101f8fb370839b737108b26469b0a5f9da2aac57df94e8ac"
+      },
+      "minimum": 1,
+      "maximum": 40,
+      "rows": [
+        {
+          "level": 1,
+          "values": {
+            "scaling_coordinate": 1.0
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "1"
+          },
+          "source_line": 18756
+        },
+        {
+          "level": 2,
+          "values": {
+            "scaling_coordinate": 3.4519999027252
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "3.4519999027252"
+          },
+          "source_line": 18757
+        },
+        {
+          "level": 3,
+          "values": {
+            "scaling_coordinate": 6.7670001983643
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "6.7670001983643"
+          },
+          "source_line": 18758
+        },
+        {
+          "level": 4,
+          "values": {
+            "scaling_coordinate": 10.307999610901
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "10.307999610901"
+          },
+          "source_line": 18759
+        },
+        {
+          "level": 5,
+          "values": {
+            "scaling_coordinate": 14.074999809265
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "14.074999809265"
+          },
+          "source_line": 18760
+        },
+        {
+          "level": 6,
+          "values": {
+            "scaling_coordinate": 18.068000793457
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "18.068000793457"
+          },
+          "source_line": 18761
+        },
+        {
+          "level": 7,
+          "values": {
+            "scaling_coordinate": 22.287000656128
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "22.287000656128"
+          },
+          "source_line": 18762
+        },
+        {
+          "level": 8,
+          "values": {
+            "scaling_coordinate": 26.732000350952
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "26.732000350952"
+          },
+          "source_line": 18763
+        },
+        {
+          "level": 9,
+          "values": {
+            "scaling_coordinate": 31.40299987793
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "31.40299987793"
+          },
+          "source_line": 18764
+        },
+        {
+          "level": 10,
+          "values": {
+            "scaling_coordinate": 36.299999237061
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "36.299999237061"
+          },
+          "source_line": 18765
+        },
+        {
+          "level": 11,
+          "values": {
+            "scaling_coordinate": 41.423000335693
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "41.423000335693"
+          },
+          "source_line": 18766
+        },
+        {
+          "level": 12,
+          "values": {
+            "scaling_coordinate": 46.771999359131
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "46.771999359131"
+          },
+          "source_line": 18767
+        },
+        {
+          "level": 13,
+          "values": {
+            "scaling_coordinate": 52.34700012207
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "52.34700012207"
+          },
+          "source_line": 18768
+        },
+        {
+          "level": 14,
+          "values": {
+            "scaling_coordinate": 58.147998809814
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "58.147998809814"
+          },
+          "source_line": 18769
+        },
+        {
+          "level": 15,
+          "values": {
+            "scaling_coordinate": 64.175003051758
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "64.175003051758"
+          },
+          "source_line": 18770
+        },
+        {
+          "level": 16,
+          "values": {
+            "scaling_coordinate": 70.428001403809
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "70.428001403809"
+          },
+          "source_line": 18771
+        },
+        {
+          "level": 17,
+          "values": {
+            "scaling_coordinate": 76.906997680664
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "76.906997680664"
+          },
+          "source_line": 18772
+        },
+        {
+          "level": 18,
+          "values": {
+            "scaling_coordinate": 83.611999511719
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "83.611999511719"
+          },
+          "source_line": 18773
+        },
+        {
+          "level": 19,
+          "values": {
+            "scaling_coordinate": 90.542999267578
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "90.542999267578"
+          },
+          "source_line": 18774
+        },
+        {
+          "level": 20,
+          "values": {
+            "scaling_coordinate": 97.699996948242
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "97.699996948242"
+          },
+          "source_line": 18775
+        },
+        {
+          "level": 21,
+          "values": {
+            "scaling_coordinate": 105.08300018311
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "105.08300018311"
+          },
+          "source_line": 18776
+        },
+        {
+          "level": 22,
+          "values": {
+            "scaling_coordinate": 112.69200134277
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "112.69200134277"
+          },
+          "source_line": 18777
+        },
+        {
+          "level": 23,
+          "values": {
+            "scaling_coordinate": 120.52700042725
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "120.52700042725"
+          },
+          "source_line": 18778
+        },
+        {
+          "level": 24,
+          "values": {
+            "scaling_coordinate": 128.58799743652
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "128.58799743652"
+          },
+          "source_line": 18779
+        },
+        {
+          "level": 25,
+          "values": {
+            "scaling_coordinate": 136.875
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "136.875"
+          },
+          "source_line": 18780
+        },
+        {
+          "level": 26,
+          "values": {
+            "scaling_coordinate": 145.38800048828
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "145.38800048828"
+          },
+          "source_line": 18781
+        },
+        {
+          "level": 27,
+          "values": {
+            "scaling_coordinate": 154.12699890137
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "154.12699890137"
+          },
+          "source_line": 18782
+        },
+        {
+          "level": 28,
+          "values": {
+            "scaling_coordinate": 163.09199523926
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "163.09199523926"
+          },
+          "source_line": 18783
+        },
+        {
+          "level": 29,
+          "values": {
+            "scaling_coordinate": 172.28300476074
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "172.28300476074"
+          },
+          "source_line": 18784
+        },
+        {
+          "level": 30,
+          "values": {
+            "scaling_coordinate": 181.69999694824
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "181.69999694824"
+          },
+          "source_line": 18785
+        },
+        {
+          "level": 31,
+          "values": {
+            "scaling_coordinate": 191.34300231934
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "191.34300231934"
+          },
+          "source_line": 18786
+        },
+        {
+          "level": 32,
+          "values": {
+            "scaling_coordinate": 201.21200561523
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "201.21200561523"
+          },
+          "source_line": 18787
+        },
+        {
+          "level": 33,
+          "values": {
+            "scaling_coordinate": 211.30700683594
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "211.30700683594"
+          },
+          "source_line": 18788
+        },
+        {
+          "level": 34,
+          "values": {
+            "scaling_coordinate": 221.62800598145
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "221.62800598145"
+          },
+          "source_line": 18789
+        },
+        {
+          "level": 35,
+          "values": {
+            "scaling_coordinate": 232.17500305176
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "232.17500305176"
+          },
+          "source_line": 18790
+        },
+        {
+          "level": 36,
+          "values": {
+            "scaling_coordinate": 242.94799804688
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "242.94799804688"
+          },
+          "source_line": 18791
+        },
+        {
+          "level": 37,
+          "values": {
+            "scaling_coordinate": 253.94700622559
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "253.94700622559"
+          },
+          "source_line": 18792
+        },
+        {
+          "level": 38,
+          "values": {
+            "scaling_coordinate": 265.17199707031
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "265.17199707031"
+          },
+          "source_line": 18793
+        },
+        {
+          "level": 39,
+          "values": {
+            "scaling_coordinate": 276.62298583984
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "276.62298583984"
+          },
+          "source_line": 18794
+        },
+        {
+          "level": 40,
+          "values": {
+            "scaling_coordinate": 288.29998779297
+          },
+          "literal_tokens": {
+            "scaling_coordinate": "288.29998779297"
+          },
+          "source_line": 18795
+        }
+      ]
+    },
+    {
+      "id": "ordinary-minion-levels",
+      "span": {
+        "path": "src/Data/Misc.lua",
+        "line": 17,
+        "end_line": 17,
+        "sha256": "f120552b9e84b07ee5e66bfa5f312765f80c33c75e4bde30abc3ea54b71e0e4b"
+      },
+      "minimum": 1,
+      "maximum": 40,
+      "rows": [
+        {
+          "level": 1,
+          "values": {
+            "actor_level": 2.0
+          },
+          "literal_tokens": {
+            "actor_level": "2"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 2,
+          "values": {
+            "actor_level": 4.0
+          },
+          "literal_tokens": {
+            "actor_level": "4"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 3,
+          "values": {
+            "actor_level": 6.0
+          },
+          "literal_tokens": {
+            "actor_level": "6"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 4,
+          "values": {
+            "actor_level": 8.0
+          },
+          "literal_tokens": {
+            "actor_level": "8"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 5,
+          "values": {
+            "actor_level": 10.0
+          },
+          "literal_tokens": {
+            "actor_level": "10"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 6,
+          "values": {
+            "actor_level": 12.0
+          },
+          "literal_tokens": {
+            "actor_level": "12"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 7,
+          "values": {
+            "actor_level": 14.0
+          },
+          "literal_tokens": {
+            "actor_level": "14"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 8,
+          "values": {
+            "actor_level": 16.0
+          },
+          "literal_tokens": {
+            "actor_level": "16"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 9,
+          "values": {
+            "actor_level": 18.0
+          },
+          "literal_tokens": {
+            "actor_level": "18"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 10,
+          "values": {
+            "actor_level": 20.0
+          },
+          "literal_tokens": {
+            "actor_level": "20"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 11,
+          "values": {
+            "actor_level": 22.0
+          },
+          "literal_tokens": {
+            "actor_level": "22"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 12,
+          "values": {
+            "actor_level": 24.0
+          },
+          "literal_tokens": {
+            "actor_level": "24"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 13,
+          "values": {
+            "actor_level": 26.0
+          },
+          "literal_tokens": {
+            "actor_level": "26"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 14,
+          "values": {
+            "actor_level": 28.0
+          },
+          "literal_tokens": {
+            "actor_level": "28"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 15,
+          "values": {
+            "actor_level": 30.0
+          },
+          "literal_tokens": {
+            "actor_level": "30"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 16,
+          "values": {
+            "actor_level": 32.0
+          },
+          "literal_tokens": {
+            "actor_level": "32"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 17,
+          "values": {
+            "actor_level": 34.0
+          },
+          "literal_tokens": {
+            "actor_level": "34"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 18,
+          "values": {
+            "actor_level": 36.0
+          },
+          "literal_tokens": {
+            "actor_level": "36"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 19,
+          "values": {
+            "actor_level": 38.0
+          },
+          "literal_tokens": {
+            "actor_level": "38"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 20,
+          "values": {
+            "actor_level": 40.0
+          },
+          "literal_tokens": {
+            "actor_level": "40"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 21,
+          "values": {
+            "actor_level": 42.0
+          },
+          "literal_tokens": {
+            "actor_level": "42"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 22,
+          "values": {
+            "actor_level": 44.0
+          },
+          "literal_tokens": {
+            "actor_level": "44"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 23,
+          "values": {
+            "actor_level": 46.0
+          },
+          "literal_tokens": {
+            "actor_level": "46"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 24,
+          "values": {
+            "actor_level": 48.0
+          },
+          "literal_tokens": {
+            "actor_level": "48"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 25,
+          "values": {
+            "actor_level": 50.0
+          },
+          "literal_tokens": {
+            "actor_level": "50"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 26,
+          "values": {
+            "actor_level": 52.0
+          },
+          "literal_tokens": {
+            "actor_level": "52"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 27,
+          "values": {
+            "actor_level": 54.0
+          },
+          "literal_tokens": {
+            "actor_level": "54"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 28,
+          "values": {
+            "actor_level": 56.0
+          },
+          "literal_tokens": {
+            "actor_level": "56"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 29,
+          "values": {
+            "actor_level": 58.0
+          },
+          "literal_tokens": {
+            "actor_level": "58"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 30,
+          "values": {
+            "actor_level": 60.0
+          },
+          "literal_tokens": {
+            "actor_level": "60"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 31,
+          "values": {
+            "actor_level": 62.0
+          },
+          "literal_tokens": {
+            "actor_level": "62"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 32,
+          "values": {
+            "actor_level": 64.0
+          },
+          "literal_tokens": {
+            "actor_level": "64"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 33,
+          "values": {
+            "actor_level": 66.0
+          },
+          "literal_tokens": {
+            "actor_level": "66"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 34,
+          "values": {
+            "actor_level": 68.0
+          },
+          "literal_tokens": {
+            "actor_level": "68"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 35,
+          "values": {
+            "actor_level": 70.0
+          },
+          "literal_tokens": {
+            "actor_level": "70"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 36,
+          "values": {
+            "actor_level": 72.0
+          },
+          "literal_tokens": {
+            "actor_level": "72"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 37,
+          "values": {
+            "actor_level": 74.0
+          },
+          "literal_tokens": {
+            "actor_level": "74"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 38,
+          "values": {
+            "actor_level": 76.0
+          },
+          "literal_tokens": {
+            "actor_level": "76"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 39,
+          "values": {
+            "actor_level": 78.0
+          },
+          "literal_tokens": {
+            "actor_level": "78"
+          },
+          "source_line": 17
+        },
+        {
+          "level": 40,
+          "values": {
+            "actor_level": 80.0
+          },
+          "literal_tokens": {
+            "actor_level": "80"
+          },
+          "source_line": 17
+        }
+      ]
+    }
+  ],
+  "literal_facts": [
+    {
+      "id": "twister-standard-quality",
+      "span": {
+        "path": "src/Data/Skills/act_dex.lua",
+        "line": 10044,
+        "end_line": 10044,
+        "sha256": "3af7219a745d5f9b2a7a69322c53110b249c5a27b0dac842e373ea7f18e35dfd"
+      },
+      "values": {
+        "per_quality": 1.0
+      },
+      "literal_tokens": {
+        "per_quality": "1"
+      }
+    },
+    {
+      "id": "sniper-standard-quality",
+      "span": {
+        "path": "src/Data/Skills/act_int.lua",
+        "line": 18690,
+        "end_line": 18690,
+        "sha256": "bf50fe3b54d9ab64a3abb3e75ed458187a60acb9ce1b86bc07d471382af88e86"
+      },
+      "values": {
+        "per_quality": 1.0
+      },
+      "literal_tokens": {
+        "per_quality": "1"
+      }
+    },
+    {
+      "id": "twister-alternate-quality-unconverted",
+      "span": {
+        "path": "src/Data/Skills/act_dex.lua",
+        "line": 10047,
+        "end_line": 10047,
+        "sha256": "c63d9bee8d9af156fe869e5ef2ec74524c061741c3b197fa8190cb505d829391"
+      },
+      "values": {
+        "per_quality": 1.0
+      },
+      "literal_tokens": {
+        "per_quality": "1"
+      }
+    },
+    {
+      "id": "sniper-actor-damage",
+      "span": {
+        "path": "src/Data/Minions.lua",
+        "line": 96,
+        "end_line": 96,
+        "sha256": "2d8dcb857e4a455d59fb0e527a183a0ac635513c105182741784a6cd077efe21"
+      },
+      "values": {
+        "value": 1.15
+      },
+      "literal_tokens": {
+        "value": "1.15"
+      }
+    },
+    {
+      "id": "sniper-actor-damageSpread",
+      "span": {
+        "path": "src/Data/Minions.lua",
+        "line": 97,
+        "end_line": 97,
+        "sha256": "c72a0bd71bfc65fca1f7202f82c6441e2bf1c70003a0e6331a5f1ad3cbcc055f"
+      },
+      "values": {
+        "value": 0.3
+      },
+      "literal_tokens": {
+        "value": "0.3"
+      }
+    },
+    {
+      "id": "sniper-actor-attackTime",
+      "span": {
+        "path": "src/Data/Minions.lua",
+        "line": 98,
+        "end_line": 98,
+        "sha256": "9910a59bcb4f328db62b359e98b078487213abd786e96710c60dbb81c02f3e00"
+      },
+      "values": {
+        "value": 1.5
+      },
+      "literal_tokens": {
+        "value": "1.5"
+      }
+    },
+    {
+      "id": "sniper-actor-critChance",
+      "span": {
+        "path": "src/Data/Minions.lua",
+        "line": 101,
+        "end_line": 101,
+        "sha256": "b20f634286591acef897d0a551dd07d10faecdc06d25d9489adb9fa5be33dc2b"
+      },
+      "values": {
+        "value": 5.0
+      },
+      "literal_tokens": {
+        "value": "5"
+      }
+    }
+  ],
+  "algorithm_evidence": [
+    {
+      "id": "per-quality-stat-truncation-and-additive-alternate-mode",
+      "span": {
+        "path": "src/Modules/CalcTools.lua",
+        "line": 161,
+        "end_line": 176,
+        "sha256": "694037c2e3d59c92efa13af463f8b885baeb8b83c4ac72fa59437d27f6595d12"
+      },
+      "claim": "For positive quality, truncate each standard coefficient times raw quality toward zero before accumulation; includeAltQualityStats additionally emits separately truncated alternate stats. Only standard-stat conversion is implemented; no alternate kind or inclusion switch is invented.",
+      "text": "function calcLib.buildSkillInstanceStats(skillInstance, grantedEffect, statSet, includeAltQualityStats)\n\tlocal stats = { }\n\tif skillInstance.quality > 0 then\n\t\tlocal qualityStats = grantedEffect.qualityStats\n\t\tif qualityStats then\n\t\t\tfor _, stat in ipairs(qualityStats) do\n\t\t\t\tstats[stat[1]] = (stats[stat[1]] or 0) + math.modf(stat[2] * skillInstance.quality)\n\t\t\tend\n\t\tend\n\t\tqualityStats = grantedEffect.altQualityStats\n\t\tif includeAltQualityStats and qualityStats then\n\t\t\tfor _, stat in ipairs(qualityStats) do\n\t\t\t\tstats[stat[1]] = (stats[stat[1]] or 0) + math.modf(stat[2] * skillInstance.quality)\n\t\t\tend\n\t\tend\n\tend\n"
+    }
+  ],
+  "unresolved": [
+    {
+      "gem_key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "kind": "declared_additional_effect",
+      "index": 1,
+      "effect_id": "CommandSkeletalSniperPlayer"
+    },
+    {
+      "gem_key": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "kind": "constructed_additional_effect",
+      "index": 1,
+      "effect_id": "CommandSkeletalSniperPlayer"
+    }
+  ],
+  "full_build_numeric_coverage": false,
+  "source_execution": false
+}

@@ -245,6 +245,7 @@ fn fixture() -> Fixture {
     )
     .unwrap();
     let rules = RulePackageInput {
+        tables: vec![],
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: namespace(),
         release: key("fixture"),

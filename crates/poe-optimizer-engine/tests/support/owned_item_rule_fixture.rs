@@ -464,6 +464,7 @@ pub fn fixture() -> Fixture {
     let weapon_owner = owner("weapon");
     let staff_owner = owner("staff");
     let rules = RulePackageInput {
+        tables: vec![],
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: namespace(),
         release: key("component-test"),

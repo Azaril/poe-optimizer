@@ -123,6 +123,7 @@ fn hidden_cycle_and_unknown_operations_fail_before_writing_canonical_data() {
         "owned-domain-operations-v1",
         "owned-domain-operations-v2",
         "owned-domain-operations-v3",
+        "owned-domain-operations-v4",
         "future-unknown-operation-set",
     ] {
         fixture.rules.operations_version = OwnedDefinitionKey::new(version).unwrap();

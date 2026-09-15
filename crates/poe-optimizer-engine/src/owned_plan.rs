@@ -210,6 +210,15 @@ pub enum EffectValue {
     UnsupportedValue {
         value: ParameterValue,
     },
+    /// A demanded finite lookup key outside the package table's reviewed
+    /// domain. Preserve its cause through downstream readiness and activation.
+    UnsupportedDomain {
+        node: OwnedDefinitionKey,
+        table: OwnedDefinitionKey,
+        key: BoundedInteger,
+        minimum: BoundedInteger,
+        maximum: BoundedInteger,
+    },
     NumericalError {
         node: OwnedDefinitionKey,
         reason: NumericalFailure,

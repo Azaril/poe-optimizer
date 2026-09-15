@@ -469,10 +469,12 @@ dependencies = [
  "poe-optimizer-pob",
  "poe-optimizer-search",
  "rayon",
+ "rustix",
  "serde",
  "serde_json",
  "sha2",
  "tempfile",
+ "windows-sys",
 ]
 
 [[package]]

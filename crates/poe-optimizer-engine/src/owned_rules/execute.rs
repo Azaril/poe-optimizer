@@ -148,6 +148,19 @@ fn ordinary_timing(recipe: &CompiledTiming, s: &RuleScratch, node: usize) -> Nod
 }
 fn compute(op: &Op, s: &RuleScratch, node: usize) -> NodeValue {
     match op {
+        Op::LookupIntegerTable { key, table } => {
+            let ParameterValue::Integer(key) = val(s, *key) else {
+                unreachable!("compiled integer table key")
+            };
+            // Bounds and checked indexing are independent of any input schema.
+            let row = key
+                .get()
+                .checked_sub(table.minimum.get())
+                .and_then(|n| usize::try_from(n).ok())
+                .and_then(|n| table.rows.get(n));
+            row.cloned()
+                .ok_or(NodeFailure::UnsupportedDomain(node, *key))
+        }
         Op::OrdinaryTiming(recipe) => ordinary_timing(recipe, s, node),
         Op::Literal(v) => Ok(v.clone()),
         Op::Read(i) => s.facts[*i].clone().ok_or(NodeFailure::Missing(*i)),
@@ -212,6 +225,7 @@ fn compute(op: &Op, s: &RuleScratch, node: usize) -> NodeValue {
 fn dependency(op: &Op, next: usize) -> Option<usize> {
     match op {
         Op::OrdinaryTiming(recipe) => recipe.inputs.get(next).copied(),
+        Op::LookupIntegerTable { key, .. } => (next == 0).then_some(*key),
         Op::Binary(_, a, b) | Op::Ratio(a, b, _) | Op::Compare(_, a, b) => match next {
             0 => Some(*a),
             1 => Some(*b),
@@ -302,6 +316,18 @@ fn node(
 fn disposition(p: &CompiledProgram, value: NodeValue) -> EffectDisposition {
     match value {
         Ok(value) => EffectDisposition::Applied { value },
+        Err(NodeFailure::UnsupportedDomain(i, key)) => {
+            let Op::LookupIntegerTable { table, .. } = &p.nodes[i].expression else {
+                unreachable!("lookup failure carries original lookup node")
+            };
+            EffectDisposition::UnsupportedDomain {
+                node: p.nodes[i].id.clone(),
+                table: table.id.clone(),
+                key,
+                minimum: table.minimum,
+                maximum: table.maximum,
+            }
+        }
         Err(NodeFailure::Missing(i)) => EffectDisposition::Unresolved {
             input: p.reads[i].id.clone(),
         },

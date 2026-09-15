@@ -24,3 +24,6 @@ Cargo.lock text eol=lf
 # Exact owned adapter fixtures and their recorded reference manifest.
 /crates/poe-optimizer-import/tests/fixtures/owned-quest-rewards-v1.json -text
 /crates/poe-optimizer-import/tests/fixtures/owned-reference/** -text
+
+# Preserve owned production recipe and acquisition receipt byte hashes.
+/data/owned/poe2/3887ae68/*.json -text
