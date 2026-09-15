@@ -315,6 +315,7 @@ fn policy() -> NormalizationPolicy {
         allocation_attribute: "nodes".into(),
         single_active_support_target: true,
         equipment_loadouts: vec![],
+        gem_quality: GemQualityPolicy::Unconverted,
     }
 }
 fn source(xml: &str, seed: u8) -> ImportedBuildInstance {
@@ -1777,7 +1778,7 @@ fn observed_exact_slots_share_loadout_identity_across_independent_item_sets() {
         draft.saved_variants.members.is_empty(),
         "nil/boolean source choices do not silently select a preset"
     );
-    assert_eq!(result.sidecar().schema_version, 6);
+    assert_eq!(result.sidecar().schema_version, 7);
     let mut no_rules = policy.clone();
     no_rules.equipment_loadouts.clear();
     let empty = normalize_with_loadouts(xml, &a, &no_rules).unwrap();
@@ -1900,4 +1901,431 @@ fn equipment_loadout_policy_limits_and_namespace_are_checked_without_source_fall
         normalize_with_loadouts(xml, &a, &changed),
         Err(NormalizationError::Binding)
     ));
+}
+
+fn rebind_quality_schema(
+    a: &mut Artifacts,
+    policy: &mut NormalizationPolicy,
+    schema: SchemaPackageInput,
+) {
+    a.schema = OwnedDefinitionSchemaPackage::new(schema, OwnedSchemaLimits::default()).unwrap();
+    let mut mapping = a.mapping.input().clone();
+    mapping.registry = a.registry.identity().unwrap();
+    mapping.definitions = a.schema.identity().clone();
+    a.mapping = OwnedMappingIndex::new(
+        mapping,
+        &a.registry,
+        &a.schema,
+        OwnedMappingLimits::default(),
+    )
+    .unwrap();
+    let mut roles = a.roles.input().clone();
+    roles.mapping = *a.mapping.identity();
+    roles.definitions = a.schema.identity().clone();
+    a.roles = OwnedSkillRoleIndex::new(roles, &a.mapping, &a.schema, SkillCatalogLimits::default())
+        .unwrap();
+    a.rewards = empty_rewards(&a.mapping, &a.schema);
+    if let GemQualityPolicy::Attributes(input) = &mut policy.gem_quality {
+        input.definitions = a.schema.identity().clone();
+    }
+}
+fn quality_artifacts() -> (Artifacts, NormalizationPolicy, QualityDefId, UnitDefId) {
+    let mut a = artifacts(true);
+    let mut policy = policy();
+    let unit = a.registry.allocate_definition::<UnitDefinition>().unwrap();
+    let kind = a
+        .registry
+        .allocate_definition::<QualityDefinition>()
+        .unwrap();
+    let mut schema = a.schema.input().clone();
+    schema
+        .definitions
+        .push(DefinitionDescriptor::Unit(DefinitionEntry {
+            id: unit.clone(),
+            schema: SchemaState::Known(UnitSchema {
+                dimension: UnitDimension::PercentagePoints,
+            }),
+        }));
+    schema
+        .definitions
+        .push(DefinitionDescriptor::Quality(DefinitionEntry {
+            id: kind.clone(),
+            schema: SchemaState::Known(QualitySchema {
+                amount: QuantityRange {
+                    minimum: FiniteQuantity::new(0.0, unit.clone()).unwrap(),
+                    maximum: FiniteQuantity::new(100.0, unit.clone()).unwrap(),
+                },
+            }),
+        }));
+    let mut amount = value_recipe("explicit-quality", "quality", false);
+    amount.codec.codec = ValueCodecKind::Quantity {
+        syntax: DecimalSyntax::Decimal,
+        unit: unit.clone(),
+        scale: RationalScale {
+            numerator: BoundedInteger::new(1).unwrap(),
+            denominator: BoundedInteger::new(1).unwrap(),
+        },
+    };
+    policy.gem_quality = GemQualityPolicy::Attributes(Box::new(GemQualityPolicyInput {
+        definitions: a.schema.identity().clone(),
+        amount,
+        kind_attribute: "quality-kind".into(),
+        kinds: vec![
+            GemQualityKindRule {
+                source: SourceComponent::Missing,
+                kind: kind.clone(),
+            },
+            GemQualityKindRule {
+                source: SourceComponent::Text("normal".into()),
+                kind: kind.clone(),
+            },
+        ],
+    }));
+    rebind_quality_schema(&mut a, &mut policy, schema);
+    (a, policy, kind, unit)
+}
+fn quality_xml(attributes: &str) -> String {
+    format!(
+        r#"<PathOfBuilding2><Skills><SkillSet id="1"><Skill enabled="true"><Gem gemId="active" variantId="v" level="17" enabled="true" {attributes}/></Skill></SkillSet></Skills></PathOfBuilding2>"#
+    )
+}
+fn quality_pending_code(result: &NormalizedImport) -> &str {
+    match &result.draft().input().gems.members[0].quality {
+        DraftQuality::Pending(value) => value.code.as_str(),
+        _ => panic!("expected unresolved authored quality"),
+    }
+}
+#[test]
+fn physical_gem_quality_preserves_zero_decimal_and_exact_explicit_kind_without_closing_schema() {
+    let (a, policy, kind, unit) = quality_artifacts();
+    for (attributes, expected) in [
+        (r#"quality="0""#, 0.0),
+        (r#"quality="20" quality-kind="normal""#, 20.0),
+        (r#"quality="1.5""#, 1.5),
+    ] {
+        let normalized = normalize_with_loadouts(&quality_xml(attributes), &a, &policy).unwrap();
+        let gem = &normalized.draft().input().gems.members[0];
+        let Some(Some(quality)) = gem.quality.to_resolved() else {
+            panic!("explicit quality lost");
+        };
+        assert_eq!(quality.kind, kind);
+        assert_eq!(quality.amount.unit(), &unit);
+        assert_eq!(quality.amount.value(), expected);
+        assert!(matches!(
+            gem.parameters.completion,
+            DraftListCompletion::Pending { .. }
+        ));
+        assert!(matches!(
+            a.schema.definition(&gem.definition.to_resolved().unwrap()),
+            SchemaLookup::Unmapped(_)
+        ));
+    }
+    let mut explicit = policy.clone();
+    let GemQualityPolicy::Attributes(input) = &mut explicit.gem_quality else {
+        unreachable!()
+    };
+    input
+        .kinds
+        .retain(|row| row.source != SourceComponent::Missing);
+    let result = normalize_with_loadouts(&quality_xml(r#"quality="20""#), &a, &explicit).unwrap();
+    assert_eq!(quality_pending_code(&result), "gem-quality-kind-unmapped");
+}
+#[test]
+fn absent_malformed_ambiguous_and_unknown_quality_evidence_stays_distinct_and_pending() {
+    let (a, policy, _, _) = quality_artifacts();
+    for (attributes, code) in [
+        ("", "gem-quality-amount-missing"),
+        (r#"quality="""#, "gem-quality-amount-malformed"),
+        (r#"quality="NaN""#, "gem-quality-amount-malformed"),
+        (r#"quality="1e2""#, "gem-quality-amount-malformed"),
+        (r#"quality="&#50;0""#, "gem-quality-amount-unavailable"),
+        (r#"quality="-1""#, "gem-quality-amount-outside-schema"),
+        (r#"quality="101""#, "gem-quality-amount-outside-schema"),
+        (
+            r#"quality="20" quality-kind="unknown""#,
+            "gem-quality-kind-unmapped",
+        ),
+        (
+            r#"quality="20" quality-kind="""#,
+            "gem-quality-kind-unmapped",
+        ),
+        (
+            r#"quality="20" quality-kind="norm&#97;l""#,
+            "gem-quality-kind-unavailable",
+        ),
+    ] {
+        let result = normalize_with_loadouts(&quality_xml(attributes), &a, &policy).unwrap();
+        assert_eq!(quality_pending_code(&result), code, "{attributes}");
+        assert_eq!(
+            result.draft().input().gems.members[0].quality.to_resolved(),
+            None
+        );
+    }
+    let mut alternate = policy.clone();
+    let GemQualityPolicy::Attributes(input) = &mut alternate.gem_quality else {
+        unreachable!()
+    };
+    input.amount.tiers[0].selectors.push(ValueSelector {
+        lane: ValueLane::Attribute,
+        name: "alternate-quality".into(),
+    });
+    let result = normalize_with_loadouts(
+        &quality_xml(r#"quality="20" alternate-quality="30""#),
+        &a,
+        &alternate,
+    )
+    .unwrap();
+    assert_eq!(
+        quality_pending_code(&result),
+        "gem-quality-amount-ambiguous"
+    );
+    let GemQualityPolicy::Attributes(input) = &mut alternate.gem_quality else {
+        unreachable!()
+    };
+    input.amount.tiers[0].selectors.pop();
+    input.amount.tiers.push(ValueTier {
+        selectors: vec![ValueSelector {
+            lane: ValueLane::Attribute,
+            name: "alternate-quality".into(),
+        }],
+        duplicates: DuplicatePolicy::Reject,
+    });
+    let result = normalize_with_loadouts(
+        &quality_xml(r#"quality="NaN" alternate-quality="20""#),
+        &a,
+        &alternate,
+    )
+    .unwrap();
+    assert_eq!(
+        quality_pending_code(&result),
+        "gem-quality-amount-malformed",
+        "present invalid higher tier cannot choose fallback"
+    );
+}
+#[test]
+fn missing_quality_or_unit_schema_is_unresolved_and_known_unit_contradiction_rejects() {
+    for unknown_unit in [false, true] {
+        let (mut a, mut policy, kind, unit) = quality_artifacts();
+        let mut schema = a.schema.input().clone();
+        for entry in &mut schema.definitions {
+            match entry {
+                DefinitionDescriptor::Quality(row) if !unknown_unit && row.id == kind => {
+                    *row = unknown(kind.clone());
+                }
+                DefinitionDescriptor::Unit(row) if unknown_unit && row.id == unit => {
+                    *row = unknown(unit.clone());
+                }
+                _ => {}
+            }
+        }
+        rebind_quality_schema(&mut a, &mut policy, schema);
+        let result = normalize_with_loadouts(&quality_xml(r#"quality="20""#), &a, &policy).unwrap();
+        assert_eq!(
+            quality_pending_code(&result),
+            "gem-quality-schema-unresolved"
+        );
+    }
+    let (mut a, mut policy, _, _) = quality_artifacts();
+    let other_unit = a.registry.allocate_definition::<UnitDefinition>().unwrap();
+    let mut schema = a.schema.input().clone();
+    schema
+        .definitions
+        .push(DefinitionDescriptor::Unit(DefinitionEntry {
+            id: other_unit.clone(),
+            schema: SchemaState::Known(UnitSchema {
+                dimension: UnitDimension::PercentagePoints,
+            }),
+        }));
+    rebind_quality_schema(&mut a, &mut policy, schema);
+    let GemQualityPolicy::Attributes(input) = &mut policy.gem_quality else {
+        unreachable!()
+    };
+    let ValueCodecKind::Quantity { unit, .. } = &mut input.amount.codec.codec else {
+        unreachable!()
+    };
+    *unit = other_unit; // Same dimension is not the same owned unit.
+    assert!(matches!(
+        normalize_with_loadouts(&quality_xml(r#"quality="20""#), &a, &policy),
+        Err(NormalizationError::Policy(
+            "gem quality schema unit or range"
+        ))
+    ));
+}
+
+#[test]
+fn known_gem_quality_presence_and_complete_or_partial_membership_are_respected() {
+    for (presence, include, partial, pending) in [
+        (QualityPresence::Optional, true, false, None),
+        (
+            QualityPresence::Forbidden,
+            false,
+            false,
+            Some("gem-quality-forbidden"),
+        ),
+        (
+            QualityPresence::Optional,
+            false,
+            false,
+            Some("gem-quality-kind-not-allowed"),
+        ),
+        (
+            QualityPresence::Optional,
+            false,
+            true,
+            Some("gem-quality-owner-schema-unresolved"),
+        ),
+        (QualityPresence::Optional, true, true, None),
+    ] {
+        let (mut a, mut policy, kind, _) = quality_artifacts();
+        let role = a
+            .roles
+            .input()
+            .roles
+            .iter()
+            .find(|row| matches!(row.role, OwnedGemRole::Known(AuthoredGemRole::SkillUse)))
+            .unwrap()
+            .clone();
+        let OwnedPrimarySkill::Known(primary) = role.primary else {
+            unreachable!()
+        };
+        let members = if include { vec![kind] } else { vec![] };
+        let allowed_kinds = if partial {
+            DeclaredSet::partial(
+                members,
+                vec![SchemaGap {
+                    subject: subject(&role.gem),
+                    facet: SchemaFacet::InputSchema,
+                    code: key("quality-membership-partial"),
+                }],
+            )
+        } else {
+            DeclaredSet::complete(members)
+        };
+        let mut schema = a.schema.input().clone();
+        for entry in &mut schema.definitions {
+            if let DefinitionDescriptor::Gem(row) = entry
+                && row.id == role.gem
+            {
+                row.schema = SchemaState::Known(GemSchema {
+                    level: IntegerRange {
+                        minimum: BoundedInteger::new(1).unwrap(),
+                        maximum: BoundedInteger::new(100).unwrap(),
+                    },
+                    roles: vec![AuthoredGemRole::SkillUse],
+                    skills: DeclaredSet::complete(vec![primary.clone()]),
+                    quality: QualityUseSchema {
+                        presence,
+                        allowed_kinds: allowed_kinds.clone(),
+                    },
+                    declarations: DeclaredSlots {
+                        parameters: DeclaredSet::complete(vec![]),
+                        choices: DeclaredSet::complete(vec![]),
+                        grants: DeclaredSet::complete(vec![]),
+                        actors: DeclaredSet::complete(vec![]),
+                        skill_grants: DeclaredSet::complete(vec![]),
+                        outputs: DeclaredSet::complete(vec![]),
+                        sockets: DeclaredSet::complete(vec![]),
+                    },
+                });
+            }
+        }
+        rebind_quality_schema(&mut a, &mut policy, schema);
+        let result = normalize_with_loadouts(&quality_xml(r#"quality="20""#), &a, &policy).unwrap();
+        if let Some(code) = pending {
+            assert_eq!(quality_pending_code(&result), code);
+        } else {
+            assert!(matches!(
+                result.draft().input().gems.members[0].quality.to_resolved(),
+                Some(Some(_))
+            ));
+        }
+    }
+}
+#[test]
+fn gem_quality_policy_rejects_stale_identity_defaults_lanes_duplicates_and_resource_overflow() {
+    let (a, baseline, kind, unit) = quality_artifacts();
+    let xml = quality_xml(r#"quality="20""#);
+    let mut changed = baseline.clone();
+    let GemQualityPolicy::Attributes(input) = &mut changed.gem_quality else {
+        unreachable!()
+    };
+    input.definitions = artifacts(false).schema.identity().clone();
+    assert!(matches!(
+        normalize_with_loadouts(&xml, &a, &changed),
+        Err(NormalizationError::Binding)
+    ));
+    let mut changed = baseline.clone();
+    let GemQualityPolicy::Attributes(input) = &mut changed.gem_quality else {
+        unreachable!()
+    };
+    input.amount.missing = MissingValuePolicy::Explicit {
+        value: ParameterValue::Quantity(FiniteQuantity::new(0.0, unit).unwrap()),
+    };
+    assert!(matches!(
+        normalize_with_loadouts(&xml, &a, &changed),
+        Err(NormalizationError::Policy(
+            "gem quality needs explicit attribute amount"
+        ))
+    ));
+    let mut changed = baseline.clone();
+    let GemQualityPolicy::Attributes(input) = &mut changed.gem_quality else {
+        unreachable!()
+    };
+    input.amount.tiers[0].selectors[0].lane = ValueLane::ParentAttribute;
+    assert!(normalize_with_loadouts(&xml, &a, &changed).is_err());
+    let mut changed = baseline.clone();
+    let GemQualityPolicy::Attributes(input) = &mut changed.gem_quality else {
+        unreachable!()
+    };
+    input.kinds.push(input.kinds[0].clone());
+    assert!(normalize_with_loadouts(&xml, &a, &changed).is_err());
+    let mut changed = baseline.clone();
+    let GemQualityPolicy::Attributes(input) = &mut changed.gem_quality else {
+        unreachable!()
+    };
+    input.kinds = (0..65)
+        .map(|index| GemQualityKindRule {
+            source: SourceComponent::Text(format!("kind-{index}")),
+            kind: kind.clone(),
+        })
+        .collect();
+    assert!(normalize_with_loadouts(&xml, &a, &changed).is_err());
+    let mut changed = baseline.clone();
+    let GemQualityPolicy::Attributes(input) = &mut changed.gem_quality else {
+        unreachable!()
+    };
+    input.kinds[0].kind =
+        QualityDefId::parse(GameVersionNamespace::new("foreign", "v1").unwrap(), "kind").unwrap();
+    assert!(matches!(
+        normalize_with_loadouts(&xml, &a, &changed),
+        Err(NormalizationError::Binding)
+    ));
+    let mut changed = baseline.clone();
+    let GemQualityPolicy::Attributes(input) = &mut changed.gem_quality else {
+        unreachable!()
+    };
+    input.kind_attribute = "x".repeat(ValuePolicyLimits::default().max_selector_bytes + 1);
+    assert!(normalize_with_loadouts(&xml, &a, &changed).is_err());
+    let oversized = "1".repeat(OwnedValueLimits::default().max_source_bytes + 1);
+    assert!(
+        normalize_with_loadouts(
+            &quality_xml(&format!("quality=\"{oversized}\"")),
+            &a,
+            &baseline
+        )
+        .is_err()
+    );
+    let mut stale = serde_json::to_value(&baseline).unwrap();
+    stale.as_object_mut().unwrap().remove("gem_quality");
+    assert!(serde_json::from_value::<NormalizationPolicy>(stale).is_err());
+    let mut unknown = serde_json::to_value(&baseline).unwrap();
+    unknown["gem_quality"]["value"]["unknown"] = serde_json::json!(true);
+    assert!(serde_json::from_value::<NormalizationPolicy>(unknown).is_err());
+    let repeated = serde_json::to_string(&baseline).unwrap().replace(
+        "\"kind_attribute\":\"quality-kind\"",
+        "\"kind_attribute\":\"quality-kind\",\"kind_attribute\":\"other\"",
+    );
+    assert!(serde_json::from_str::<NormalizationPolicy>(&repeated).is_err());
+    let bad_unconverted = serde_json::json!({"kind":"unconverted","value":{"unknown":true}});
+    assert!(serde_json::from_value::<GemQualityPolicy>(bad_unconverted).is_err());
 }

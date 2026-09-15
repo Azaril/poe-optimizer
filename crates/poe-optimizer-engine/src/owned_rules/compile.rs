@@ -615,6 +615,18 @@ fn lower(
             .ok_or_else(|| fail(path, "unknown node reference"))
     };
     Ok(match e {
+        RuleExpression::OrdinaryTiming { recipe } => {
+            let mut inputs = [0; 8];
+            for (bound, input) in inputs.iter_mut().zip(recipe.inputs()) {
+                *bound = n(input)?;
+            }
+            Op::OrdinaryTiming(Box::new(CompiledTiming {
+                inputs,
+                precision: recipe.speed_multiplier_rounding_precision,
+                units: recipe.units.clone(),
+                output: recipe.output,
+            }))
+        }
         RuleExpression::Literal { value } => Op::Literal(value.clone()),
         RuleExpression::Read { input } => Op::Read(
             *reads
@@ -676,6 +688,45 @@ fn infer<I: DefinitionSchemaIndex>(
         )
     };
     Ok(match op {
+        Op::OrdinaryTiming(recipe) => {
+            let [base, inc, more, attack, cast, action, repeats, tick] = recipe.inputs;
+            check(recipe.precision <= 12, path, "timing precision exceeds 12")?;
+            let time = ComputedValueType::Quantity {
+                unit: recipe.units.time.clone(),
+            };
+            let rate = ComputedValueType::Quantity {
+                unit: recipe.units.rate.clone(),
+            };
+            dimension(&time, UnitDimension::Time, index, path)?;
+            dimension(&rate, UnitDimension::Rate, index, path)?;
+            check(
+                t(base) == &time && t(attack) == &time && t(cast) == &time,
+                path,
+                "timing inputs must use the declared exact time unit",
+            )?;
+            check(
+                t(tick) == &rate,
+                path,
+                "timing cap must use the declared exact rate unit",
+            )?;
+            dimension(t(inc), UnitDimension::PercentagePoints, index, path)?;
+            dimension(t(more), UnitDimension::DimensionlessFactor, index, path)?;
+            check(
+                t(action) == t(more),
+                path,
+                "timing multipliers require the same exact factor unit",
+            )?;
+            check(
+                t(repeats) == &ComputedValueType::Integer,
+                path,
+                "timing repeats must be an integer",
+            )?;
+            match recipe.output {
+                OrdinaryTimingChannel::SpeedMultiplier => t(more).clone(),
+                OrdinaryTimingChannel::PreCapRate | OrdinaryTimingChannel::ActionRate => rate,
+                OrdinaryTimingChannel::ActionTime => time,
+            }
+        }
         Op::Literal(v) => {
             validate_value(v, index, path)?;
             value_type(v)

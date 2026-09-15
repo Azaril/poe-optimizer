@@ -28,7 +28,9 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
 mod items;
+mod quality;
 pub use items::{NormalizedItemLine, NormalizedItemText};
+pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
 
 /// The caller supplies desired measurements. There is no built-in metric list.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -76,6 +78,8 @@ pub struct NormalizationPolicy {
     pub single_active_support_target: bool,
     /// Exact source slot relations. Empty means no equipment scope conversion.
     pub equipment_loadouts: Vec<EquipmentLoadoutRule>,
+    /// Explicit authored amount plus a reviewed exact source-kind convention.
+    pub gem_quality: GemQualityPolicy,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -277,6 +281,14 @@ fn catalog(kind: ExternalCatalogKind, key: SourceComponent) -> ExternalSelector 
         variant: SourceComponent::Missing,
     }
 }
+enum ScalarValue {
+    Selected(ParameterValue),
+    Defaulted(ParameterValue),
+    Absent,
+    Missing,
+    Unavailable,
+    Malformed,
+}
 struct Builder<'e, 's> {
     evidence: &'e SourceProjectEvidence<'s>,
     mappings: &'e OwnedMappingIndex,
@@ -388,11 +400,24 @@ impl Builder<'_, '_> {
         row: &SourceEvidenceRow<'_>,
         recipe: &ValueRecipe,
     ) -> Result<Option<ParameterValue>> {
+        Ok(match self.scalar_value(row, recipe)? {
+            ScalarValue::Selected(value) | ScalarValue::Defaulted(value) => Some(value),
+            ScalarValue::Absent
+            | ScalarValue::Missing
+            | ScalarValue::Unavailable
+            | ScalarValue::Malformed => None,
+        })
+    }
+    fn scalar_value(
+        &mut self,
+        row: &SourceEvidenceRow<'_>,
+        recipe: &ValueRecipe,
+    ) -> Result<ScalarValue> {
         let mut candidates = vec![];
         for tier in &recipe.input().tiers {
             for selector in &tier.selectors {
                 self.charge(1)?;
-                // Recipe policy validation confines these four scalar contexts to
+                // Recipe policy validation confines these scalar contexts to
                 // their own exact attributes. Config/default traversal is separate.
                 if let Some((index, a)) = self.attributes[row.occurrence().id().ordinal() as usize]
                     .get(selector.name.as_str())
@@ -412,8 +437,18 @@ impl Builder<'_, '_> {
             }
         }
         Ok(match recipe.decide(&candidates)?.outcome {
-            ValueOutcome::Selected { value, .. } | ValueOutcome::Defaulted { value } => Some(value),
-            ValueOutcome::Absent | ValueOutcome::Pending { .. } => None,
+            ValueOutcome::Selected { value, .. } => ScalarValue::Selected(value),
+            ValueOutcome::Defaulted { value } => ScalarValue::Defaulted(value),
+            ValueOutcome::Absent => ScalarValue::Absent,
+            ValueOutcome::Pending {
+                reason: ValuePendingReason::Missing,
+            } => ScalarValue::Missing,
+            ValueOutcome::Pending {
+                reason: ValuePendingReason::Unavailable(_),
+            } => ScalarValue::Unavailable,
+            ValueOutcome::Pending {
+                reason: ValuePendingReason::Decode(_),
+            } => ScalarValue::Malformed,
         })
     }
     fn level(
@@ -487,7 +522,7 @@ fn validate_policy(
         }
     }
     digest_owned(
-        "owned-normalization-policy-v2",
+        "owned-normalization-policy-v3",
         policy,
         limits.max_policy_bytes,
     )?;
@@ -663,7 +698,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     items.verify_bindings(definitions)?;
     item_source.verify_bindings(items, definitions)?;
     let policy_digest = digest_owned(
-        "owned-normalization-policy-v2",
+        "owned-normalization-policy-v3",
         &(policy, queries),
         limits.max_policy_bytes,
     )?;
@@ -688,6 +723,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         limits.mapping,
     )?;
     let equipment_rules = equipment_loadout_rules(policy, mappings, definitions, limits)?;
+    let gem_quality = quality::compile(&policy.gem_quality, definitions, limits)?;
     if queries.len() > limits.draft.input.max_collection_entries
         || queries.iter().map(|q| &q.id).collect::<BTreeSet<_>>().len() != queries.len()
     {
@@ -1220,15 +1256,16 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         }
         let gem_id = b.id()?;
         b.link(s, OwnedOriginTarget::Gem(gem_id))?;
+        let gem_definition = b.mapped(s, selector, |v| match v {
+            DefinitionAddress::Gem(id) => Some(id.clone()),
+            _ => None,
+        })?;
         let gem = GemDraft {
             id: gem_id,
-            definition: b.mapped(s, selector, |v| match v {
-                DefinitionAddress::Gem(id) => Some(id.clone()),
-                _ => None,
-            })?,
+            quality: b.gem_quality(row, &gem_definition, gem_quality.as_ref(), definitions)?,
+            definition: gem_definition,
             parameters: b.closure(s, "gem-parameters-not-converted", vec![])?,
             level: b.level(Some(row), s, &recipes[1])?,
-            quality: b.quality(s)?,
         };
         draft.gems.members.push(gem);
         let preset = b
@@ -1346,7 +1383,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: 6,
+        schema_version: 7,
         source_sha256: identity.source_sha256.into(),
         source_bytes: identity.source_bytes,
         source_schema: identity.instance_import_schema,
@@ -1369,7 +1406,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        "owned-normalization-sidecar-v6",
+        "owned-normalization-sidecar-v7",
         &sidecar,
         limits.draft.input.max_wire_bytes,
     )?;

@@ -109,8 +109,46 @@ fn binary(kind: Binary, a: &ParameterValue, b: &ParameterValue, node: usize) -> 
         node,
     )
 }
+fn ordinary_timing(recipe: &CompiledTiming, s: &RuleScratch, node: usize) -> NodeValue {
+    use crate::timing::ordinary::{
+        OrdinaryTimingInput, OrdinaryTimingParameters, TimingChannel, TimingNumber, calculate,
+    };
+    use poe_optimizer_core::owned_rules::OrdinaryTimingChannel;
+    let [base, inc, more, attack, cast, action, repeats, tick] = recipe.inputs;
+    let result = calculate(
+        OrdinaryTimingParameters {
+            server_tick_rate: number(val(s, tick)),
+            speed_multiplier_rounding_precision: recipe.precision,
+        },
+        OrdinaryTimingInput {
+            base_time: number(val(s, base)),
+            increased_percent: number(val(s, inc)),
+            more_multiplier: number(val(s, more)),
+            additional_attack_time: number(val(s, attack)),
+            additional_cast_time: number(val(s, cast)),
+            action_speed_multiplier: number(val(s, action)),
+            repeats: number(val(s, repeats)),
+        },
+    );
+    let (channel, unit) = match recipe.output {
+        OrdinaryTimingChannel::SpeedMultiplier => {
+            let ParameterValue::Quantity(factor) = val(s, more) else {
+                unreachable!("compiled timing factor type")
+            };
+            (TimingChannel::SpeedMultiplier, factor.unit())
+        }
+        OrdinaryTimingChannel::PreCapRate => (TimingChannel::PreCapRate, &recipe.units.rate),
+        OrdinaryTimingChannel::ActionRate => (TimingChannel::ActionRate, &recipe.units.rate),
+        OrdinaryTimingChannel::ActionTime => (TimingChannel::ActionTime, &recipe.units.time),
+    };
+    match result.channel(channel) {
+        TimingNumber::Finite { value } => quantity(value, unit, node),
+        _ => Err(NodeFailure::Numerical(node, NumericalFailure::NonFinite)),
+    }
+}
 fn compute(op: &Op, s: &RuleScratch, node: usize) -> NodeValue {
     match op {
+        Op::OrdinaryTiming(recipe) => ordinary_timing(recipe, s, node),
         Op::Literal(v) => Ok(v.clone()),
         Op::Read(i) => s.facts[*i].clone().ok_or(NodeFailure::Missing(*i)),
         Op::Binary(kind, a, b) => binary(*kind, val(s, *a), val(s, *b), node),
@@ -173,6 +211,7 @@ fn compute(op: &Op, s: &RuleScratch, node: usize) -> NodeValue {
 }
 fn dependency(op: &Op, next: usize) -> Option<usize> {
     match op {
+        Op::OrdinaryTiming(recipe) => recipe.inputs.get(next).copied(),
         Op::Binary(_, a, b) | Op::Ratio(a, b, _) | Op::Compare(_, a, b) => match next {
             0 => Some(*a),
             1 => Some(*b),

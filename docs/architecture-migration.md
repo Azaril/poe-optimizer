@@ -117,6 +117,23 @@ with their useful reference laws preserved and the replaced profile/request depe
 closure deleted. Complete metric coverage, all-five finalization and that paired numerical
 retirement remain open.
 
+## Shared timing and real quality inputs
+
+The owned v4 operation set now includes a bounded native ordinary-timing algorithm with
+explicit reciprocal units and independent output classification. The legacy timing entry
+point delegates to the same pure primitive, preserving numerical/reference laws. Its
+profile-specific input preparation and independent realization-validation path still need
+migration before removal. A checked timing component does not establish complete branch,
+support or metric coverage.
+
+Explicit gem quality now imports through injected kind/amount policy for all five originals,
+including known zero amounts. This advances input normalization while preserving pending
+schema/collection/selection obligations. The next data gate is production persisted owned
+recipes and full reviewed numerical tables. Reuse existing registry/package validators and
+keep source-fact acquisition offline. Choose finite-table representation from real level and
+actor data; do not encode source callbacks, promote test recipes to a complete catalog, or
+use reference output values as execution inputs.
+
 ## Explicit skill supply and equipment-scope checkpoint
 
 Use existing domain grant operations for physical Gem -> supplied Skill -> owned Actor

@@ -8,11 +8,15 @@ use empty_owned_items::{empty_item_source, empty_items};
 use poe_optimizer_core::{
     build_identity::BuildLineage,
     owned_build::{LoadoutScope, ParameterValue, QueryId},
-    owned_definitions::{EquipmentSlotDefinition, GameVersionNamespace, OwnedDefinitionKey},
+    owned_definitions::{
+        BoundedInteger, EquipmentSlotDefinition, FiniteQuantity, GameVersionNamespace,
+        OwnedDefinitionKey, QualityDefId, QualityDefinition, UnitDefId, UnitDefinition,
+    },
     owned_draft::*,
     owned_schema::{
-        DefinitionAddress, DefinitionDescriptor, DefinitionEntry, EquipmentSlotSchema, SchemaState,
-        SchemaSubject, ScopePolicy,
+        DefinitionAddress, DefinitionDescriptor, DefinitionEntry, EquipmentSlotSchema,
+        QualitySchema, QuantityRange, SchemaState, SchemaSubject, ScopePolicy, UnitDimension,
+        UnitSchema,
     },
 };
 use poe_optimizer_data::{
@@ -111,6 +115,9 @@ struct Artifacts {
     roles: OwnedSkillRoleIndex,
     rewards: OwnedRewardPolicy,
     equipment_loadouts: Vec<EquipmentLoadoutRule>,
+    gem_quality: GemQualityPolicy,
+    quality: QualityDefId,
+    quality_unit: UnitDefId,
 }
 fn artifacts(root: &Path) -> Artifacts {
     let bytes = read_bounded(
@@ -137,6 +144,12 @@ fn artifacts(root: &Path) -> Artifacts {
             })
             .collect(),
     };
+    // Reviewed plain quality amount/default-kind convention: pinned
+    // SkillsTab.lua:352-353 imports the scalar; 927-931 describes percentage points.
+    source.files.push(SourceFilePin {
+        path: "Classes/SkillsTab.lua".into(),
+        sha256: "dec569fa04f2509fa4e4ff0207441d5ea350b23d436e9ea1829ecad84f7f863e".into(),
+    });
     let reward_source = reward_fixture::source_pin();
     assert_eq!(source.revision, reward_source.revision);
     for file in reward_source.files {
@@ -185,6 +198,24 @@ fn artifacts(root: &Path) -> Artifacts {
     let mut registry = rewards_staged.registry.clone();
     let mut owned_definitions = compiled.definitions;
     owned_definitions.extend(rewards_staged.definitions.clone());
+    let quality_unit = registry.allocate_definition::<UnitDefinition>().unwrap();
+    let quality = registry.allocate_definition::<QualityDefinition>().unwrap();
+    owned_definitions.push(DefinitionDescriptor::Unit(DefinitionEntry {
+        id: quality_unit.clone(),
+        schema: SchemaState::Known(UnitSchema {
+            dimension: UnitDimension::PercentagePoints,
+        }),
+    }));
+    owned_definitions.push(DefinitionDescriptor::Quality(DefinitionEntry {
+        id: quality.clone(),
+        schema: SchemaState::Known(QualitySchema {
+            // Explicit broad computation envelope, not a gameplay quality cap.
+            amount: QuantityRange {
+                minimum: FiniteQuantity::new(0.0, quality_unit.clone()).unwrap(),
+                maximum: FiniteQuantity::new(1_000_000.0, quality_unit.clone()).unwrap(),
+            },
+        }),
+    }));
     let mut owned_mappings = compiled.mappings;
     owned_mappings.extend(rewards_staged.mappings.clone());
     // Reviewed source slot vocabulary is injected test data. Swap aliases bind
@@ -314,6 +345,37 @@ fn artifacts(root: &Path) -> Artifacts {
         RewardPolicyLimits::default(),
     )
     .unwrap();
+    let gem_quality = GemQualityPolicy::Attributes(Box::new(GemQualityPolicyInput {
+        definitions: definitions.identity().clone(),
+        amount: ValueRecipeInput {
+            id: key("reviewed-explicit-gem-quality"),
+            codec: ValueCodecInput {
+                namespace: namespace(),
+                whitespace: WhitespacePolicy::Exact,
+                codec: ValueCodecKind::Quantity {
+                    syntax: DecimalSyntax::Decimal,
+                    unit: quality_unit.clone(),
+                    scale: RationalScale {
+                        numerator: BoundedInteger::new(1).unwrap(),
+                        denominator: BoundedInteger::new(1).unwrap(),
+                    },
+                },
+            },
+            tiers: vec![ValueTier {
+                selectors: vec![ValueSelector {
+                    lane: ValueLane::Attribute,
+                    name: "quality".into(),
+                }],
+                duplicates: DuplicatePolicy::Reject,
+            }],
+            missing: MissingValuePolicy::Pending,
+        },
+        kind_attribute: "qualityId".into(),
+        kinds: vec![GemQualityKindRule {
+            source: SourceComponent::Missing,
+            kind: quality.clone(),
+        }],
+    }));
     Artifacts {
         catalog,
         registry,
@@ -322,6 +384,9 @@ fn artifacts(root: &Path) -> Artifacts {
         roles,
         rewards,
         equipment_loadouts,
+        gem_quality,
+        quality,
+        quality_unit,
     }
 }
 
@@ -390,6 +455,7 @@ fn policy() -> NormalizationPolicy {
         allocation_attribute: "nodes".into(),
         single_active_support_target: true,
         equipment_loadouts: vec![],
+        gem_quality: GemQualityPolicy::Unconverted,
     }
 }
 fn queries(case: &ReferenceCase) -> Vec<ImportQueryTemplate> {
@@ -728,6 +794,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
     let artifacts = artifacts(&root);
     let mut policy = policy();
     policy.equipment_loadouts = artifacts.equipment_loadouts.clone();
+    policy.gem_quality = artifacts.gem_quality.clone();
     let limits = NormalizationLimits::default();
     // Independently reviewed source census, not results computed by this adapter.
     let expected = [
@@ -781,7 +848,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         );
         let issue_ids: BTreeSet<_> = validation.issues.iter().map(|issue| issue.id).collect();
         assert_eq!(sidecar.origins.len(), evidence.rows().len());
-        assert_eq!(sidecar.schema_version, 6);
+        assert_eq!(sidecar.schema_version, 7);
         assert_observed_loadouts(
             &evidence,
             &normalized,
@@ -811,6 +878,9 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         let mut gem_rows = 0;
         let mut config_rows = 0;
         let mut lexical_config_errors = 0;
+        let mut quality_zeros = 0;
+        let gem_by_id: std::collections::BTreeMap<_, _> =
+            draft.gems.members.iter().map(|gem| (gem.id, gem)).collect();
         for (row, origin) in evidence.rows().iter().zip(&sidecar.origins) {
             assert_eq!(origin.source, row.occurrence().id());
             for link in &origin.links {
@@ -867,6 +937,28 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
                             .count(),
                         1
                     );
+                    let gem_id = origin
+                        .links
+                        .iter()
+                        .find_map(|link| match link {
+                            OwnedOriginTarget::Gem(id) => Some(id),
+                            _ => None,
+                        })
+                        .unwrap();
+                    let Some(Some(quality)) = gem_by_id[gem_id].quality.to_resolved() else {
+                        panic!("explicit physical-gem quality must be known");
+                    };
+                    assert_eq!(quality.kind, artifacts.quality);
+                    assert_eq!(quality.amount.unit(), &artifacts.quality_unit);
+                    let source_quality: f64 = attribute(row, "quality").unwrap().parse().unwrap();
+                    assert_eq!(quality.amount.value(), source_quality);
+                    assert!(row.attribute("qualityId").is_none());
+                    quality_zeros += usize::from(source_quality == 0.0);
+                    assert!(matches!(
+                        gem_by_id[gem_id].parameters.completion,
+                        DraftListCompletion::Pending { .. }
+                    ));
+
                     assert_eq!(
                         origin
                             .links
@@ -899,6 +991,13 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
                 );
             }
         }
+        assert_eq!(quality_zeros, [50, 146, 51, 52, 149][index]);
+        println!(
+            "original-{:02}: known physical gem qualities={} explicit_zero={} input-schema/rule coverage remains unresolved",
+            index + 1,
+            draft.gems.members.len(),
+            quality_zeros
+        );
         assert!(config_rows > 0);
         // A typed projection can reject a source shape/value whose every lexical
         // attribute is available. Both facts and every raw row must survive.

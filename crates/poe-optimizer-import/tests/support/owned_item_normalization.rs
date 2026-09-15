@@ -576,6 +576,7 @@ pub fn normalize(source: &ImportedBuildInstance, artifacts: &Artifacts) -> Norma
             allocation_attribute: "nodes".into(),
             single_active_support_target: false,
             equipment_loadouts: vec![],
+            gem_quality: GemQualityPolicy::Unconverted,
         },
         &[],
         NormalizationLimits::default(),

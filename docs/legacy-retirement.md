@@ -245,3 +245,17 @@ outputs when an intermediate or another output is nonfinite, plus the existing r
 and signed-zero evidence. This is the next numerical design gate; the current owned
 activation checkpoint does not retire an active profile. The detailed audit and test
 inventory are in `runs/owned-activation-01/timing-migration.md`.
+
+## Shared timing primitive checkpoint
+
+The numerical body formerly inside `timing::calculate` now lives in the data-independent
+`timing::ordinary` primitive. The old entry point maps fields and delegates, so legacy
+reference cases and the new owned v4 timing expression execute the same arithmetic.
+Independent channel classification preserves a finite capped rate/time even when another
+channel is nonfinite. No PoB or `CompiledGameData` object enters the primitive.
+
+This moves the numerical implementation out of the legacy data dependency; its preparation
+callers remain active. `actor_assembly::mace_action_timing`, Spark/Mace evaluation and independent
+realization validation still select/precompute their inputs through the legacy package.
+Their replacement must bind actual equipment, supports, actor inputs and branch eligibility
+through the owned plan before deleting those profile paths.

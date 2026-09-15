@@ -95,10 +95,30 @@ unrecognized equipment/passive/skill scopes and global membership closure pendin
 loadout members can now be selected explicitly during finalization; this does not make a
 partially imported build finalizable. Saved active-weapon selection is still unconverted.
 
-The required field is part of policy digest domain `owned-normalization-policy-v2`. Earlier
+The required field is part of policy digest domain `owned-normalization-policy-v3`. Earlier
 policy JSON without it rejects; an explicit empty rule list preserves unresolved scope.
-Sidecar version 6 records source-to-owned loadout origins and binds that policy. Loadout
+Sidecar version 7 records source-to-owned loadout origins and binds that policy. Loadout
 source strings, UI state and correspondence never enter the native evaluator.
+
+## Explicit physical-gem quality
+
+`NormalizationPolicy.gem_quality` is required. `Unconverted` retains pending quality;
+`Attributes` supplies an exact schema identity, a quantity `ValueRecipe`, an attribute name
+for the kind and finite exact source-kind mappings. A `Missing` kind mapping is an explicit
+reviewed default for an absent attribute. A present empty, unknown or undecodable kind does
+not fall back to that mapping.
+
+The amount recipe uses explicit attributes and a Pending missing-value policy. A known
+zero is a present quality selection. Missing, malformed, ambiguous, unavailable and
+out-of-schema amounts remain distinct pending diagnostics; none becomes an implicit zero
+or absent quality. Kind, unit, range and any known enclosing Gem quality membership must
+agree. Identity-only Gem schemas can retain this independently bound authored value while
+their input/rule coverage remains unresolved. Collection closure is unchanged.
+
+All five originals exercise the converter through injected ordinary-quality data: 478
+physical gem amounts, including 448 zeros. The source default-kind rule is Import data;
+Core/Engine receive only the owned kind and quantity. Policy identity uses v3 and the
+correspondence sidecar uses v7; stale policies must be explicitly regenerated.
 
 ## Injected item-line conversion
 
@@ -128,7 +148,7 @@ An immutable attribution plan retains original/semantic text, source spans, layo
 flat range-write records and the winning write. Inline fractions precede later XML writes;
 repeated valid XML IDs apply in source order. The existing injected converter still owns
 interpolation quantum, rounding and owned slot destinations. The normalizer preserves raw
-line outcomes and fresh modifier IDs, with a version-6 attribution sidecar. Item parameter
+line outcomes and fresh modifier IDs, with a version-7 attribution sidecar. Item parameter
 and modifier collections retain pending closure; attribution is not whole-item evaluation.
 The integrated evidence for this phase is recorded separately in the implementation log.
 
@@ -158,7 +178,7 @@ a partial policy can miss a real header. A later source-format-scoped proof or e
 owned authoring must establish unspecified. Never substitute zero, equipment requirement
 or granted skill level. Native rules leave a demanded missing fact unresolved while unused
 facts do not block component effects. Provider binding and complete selected-request
-finalization still need their own evidence. The provenance sidecar uses version 6 for the
+finalization still need their own evidence. The provenance sidecar uses version 7 for the
 source-layout identity/attribution; owned input and draft protocols remain version 3.
 
 ## Identity, bounds and publication
@@ -172,7 +192,7 @@ The host publishes draft, sidecar and new watermark together under its owner or 
 Repeating a fresh import is not restore, changed-source migration or concurrent allocation
 authority. Those operations need separate revisioned contracts.
 
-The version-6 sidecar records source hash/schema/revision, before/after watermarks, policy plus query
+The version-7 sidecar records source hash/schema/revision, before/after watermarks, policy plus query
 identity, exact artifact identities (including reward, item-line and item-source policies), draft digest and one origin entry per source element.
 Its targets are a closed enum of current owned occurrences/issues. Many source rows may
 refer to one real pending collection issue; candidates never allocate hypothetical uses.

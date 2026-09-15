@@ -2,6 +2,8 @@
 //! identifiers enter this reusable kernel. Other action modes need their own
 //! complete source branches before callers can select them.
 use poe_optimizer_data::game_data::DirectActionTimingData;
+
+pub mod ordinary;
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct DirectActionTimingInput {
     pub base_time: f64,
@@ -31,28 +33,27 @@ pub fn calculate(
     data: &DirectActionTimingData,
     input: DirectActionTimingInput,
 ) -> DirectActionTimingOutput {
-    let power = 10_f64.powi(data.speed_multiplier_rounding_precision as i32);
-    let speed_multiplier =
-        (((1.0 + input.increased / 100.0) * input.more) * power + 0.5).floor() / power;
-    let ordinary_speed = 1.0
-        / (input.base_time / speed_multiplier
-            + input.additional_attack_time
-            + input.additional_cast_time);
-    let cast_rate = ordinary_speed * input.action_speed_mod;
-    let ceiling = data.server_tick_rate * input.repeats;
-    // Lua m_min chooses its second argument on equality (and unordered inputs).
-    let speed = if cast_rate < ceiling {
-        cast_rate
-    } else {
-        ceiling
-    };
-    let time = if speed == 0.0 { 0.0 } else { 1.0 / speed };
+    let output = ordinary::calculate(
+        ordinary::OrdinaryTimingParameters {
+            server_tick_rate: data.server_tick_rate,
+            speed_multiplier_rounding_precision: data.speed_multiplier_rounding_precision,
+        },
+        ordinary::OrdinaryTimingInput {
+            base_time: input.base_time,
+            increased_percent: input.increased,
+            more_multiplier: input.more,
+            additional_attack_time: input.additional_attack_time,
+            additional_cast_time: input.additional_cast_time,
+            action_speed_multiplier: input.action_speed_mod,
+            repeats: input.repeats,
+        },
+    );
     DirectActionTimingOutput {
-        base_time: input.base_time,
-        speed_multiplier,
-        cast_rate,
-        speed,
-        time,
-        action_speed_mod: input.action_speed_mod,
+        base_time: output.base_time,
+        speed_multiplier: output.speed_multiplier,
+        cast_rate: output.pre_cap_rate,
+        speed: output.action_rate,
+        time: output.action_time,
+        action_speed_mod: output.action_speed_multiplier,
     }
 }

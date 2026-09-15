@@ -11,7 +11,62 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: explicit skill supply and imported equipment scopes (after `0d05985`).**
+**Current checkpoint: shared native timing and explicit gem quality (after `d83af04`).**
+The ordinary timing formula now has a data-independent native primitive. The old timing
+entry point delegates to it, and the owned rule engine consumes it through
+`RuleExpression::OrdinaryTiming`. The recipe binds eight typed input nodes and explicit
+reciprocal time/rate units; each requested output is classified independently. An infinite
+uncapped rate does not erase a finite capped rate or action time. Internal rounding and
+floating-point order preserve the existing source laws; finite owned quantities retain the
+normal signed-zero normalization. Gameplay ranges/branch eligibility remain injected
+schema and requirement responsibilities, distinct from numerical computability.
+
+Rule operations are **v4**. Precision is bounded, all operation inputs are required, and
+missing inputs remain unresolved unless a lazy enclosing guard avoids the operation.
+The legacy profile-specific preparation and realization-validation callers still exist;
+sharing their arithmetic is not full dependency retirement. The new core, Data storage and
+Engine operation have no source interpreter, UI or named-skill dispatch.
+
+The production importer now supports an injected `gem_quality` policy with exact kind
+mappings and an explicit quantity recipe. It preserves all **478 physical-gem amounts**
+from the five originals, including **448 explicit zeros**. Missing, malformed, ambiguous,
+unknown-kind and out-of-schema evidence stays pending. Existing Unmapped Gem schemas and
+all collection closures remain unresolved. Normalization policy identity is **v3**, its
+required wire field rejects stale policies, and the sidecar is **v7**. Owned input/draft
+remain v3. All 110 query identities and the five protected source builds are retained.
+
+**Validation:** all **600 tests in the guarded affected-scope suite pass**: Core225,
+Data30, Engine85 plus13 private tests, Import163, and CLI42 in each feature mode. Four
+existing pinned PoB action-speed/timing parity tests also pass, including direct boundary
+vectors and both complete legacy pipelines. Workspace/native-only strict Clippy, formatting,
+five-crate WASM compilation and native runtime dependency exclusion pass. This is not a
+full workspace test run or complete Twister/Sniper evaluation. Receipts are under
+`runs/owned-timing-01/validation-final/` and `early-validation.json`; the initial missing
+CLI fixture import failure is retained. Independent quality/operation review passes.
+Complete native originals remain **0/5**, with all110 fixed reference rows. Publication
+and hosted status are recorded separately in `runs/owned-timing-01/publication.json`.
+
+**Resume point:**
+
+1. Ship real offline definition data through a production recipe assembler and persisted
+   registry/schema/rules/routing/import-policy artifacts. Current semantic Twister/Sniper
+   fixtures remain test data. Export complete reviewed level/actor facts; never fill them
+   from observed reference metrics. Keep source acquisition outside normal builds/runtime.
+2. Decide typed finite table storage/lookup versus bounded offline DAG lowering from actual
+   level-table use. Avoid endpoint fallbacks, sparse-table guessing and duplicate source
+   semantics. The investigation is in `runs/owned-timing-01/offline-conversion-plan.md`;
+   existing validators and IDs should be reused, not another source-language interpreter.
+3. Bind selected imported providers/actions, effective skill/actor inputs and weapon rates
+   to the owned plan. Resolve supports/payload/usage/allocation and complete incoming
+   membership, then map StatDef outputs to explicit MetricDef queries. Preserve all-five
+   stress cases and wider holdouts; known quality/timing components are not full builds.
+4. Migrate both fresh timing preparation and independent realization validation to the owned
+   semantic path, then remove their Spark/Mace callers and request dependencies. Preserve
+   selected equipment/support/actor identity and useful numerical/reference laws.
+5. Measure preparation separately from evaluation and implement candidate reuse/invalidation
+   before general multicore performance claims. Continue complete-original and holdout gates.
+
+**Previous checkpoint: explicit skill supply and imported equipment scopes (after `0d05985`).**
 The owned effect plan now accounts for a gem's possible skill identities through explicit
 `Grant -> SkillGrant` links and instantiated activation producers. Physical gem level/quality
 and projected skill inputs remain separate. Different slots naming the same SkillDef retain
@@ -51,7 +106,7 @@ All five originals, schema40 data, fixed110 expectations and clean PoB pin are u
 Complete native originals remain **0/5**. Publication and hosted status are recorded
 separately in `runs/owned-activation-01/publication.json`; local validation is not CI success.
 
-**Resume point:**
+**Previous resume point:**
 
 1. Convert physical-gem quality and the remaining selected input fields using injected
    recipes. Preserve known zero versus absence. All 478 physical gems have explicit quality

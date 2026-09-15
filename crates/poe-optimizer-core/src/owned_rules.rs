@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 1;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v3";
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v4";
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -143,9 +143,67 @@ pub enum RuleRounding {
     Truncate,
     NearestTiesPositive,
 }
+/// Outputs of the bounded ordinary direct-action timing algorithm. Each channel
+/// has independent finite availability; an uncapped infinity does not erase a
+/// finite capped rate or time. The recipe selects this algorithm, not other
+/// trigger/channel/cooldown/reload branches.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum OrdinaryTimingChannel {
+    SpeedMultiplier,
+    PreCapRate,
+    ActionRate,
+    ActionTime,
+}
+
+/// Explicit assertion that rate is measured per one of the selected time units.
+/// Equal dimensions alone never select this pair or authorize unit conversion.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ReciprocalTimingUnits {
+    pub time: UnitDefId,
+    pub rate: UnitDefId,
+}
+
+/// All inputs are expression references and must be available for this atomic
+/// algorithm. Rounding and reciprocal/cap order are versioned native semantics;
+/// game values and selection of the timing branch remain injected rule data.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct OrdinaryTimingRecipe {
+    pub base_time: OwnedDefinitionKey,
+    pub increased_percent: OwnedDefinitionKey,
+    pub more_multiplier: OwnedDefinitionKey,
+    pub additional_attack_time: OwnedDefinitionKey,
+    pub additional_cast_time: OwnedDefinitionKey,
+    pub action_speed_multiplier: OwnedDefinitionKey,
+    pub repeats: OwnedDefinitionKey,
+    pub server_tick_rate: OwnedDefinitionKey,
+    pub speed_multiplier_rounding_precision: u32,
+    pub units: ReciprocalTimingUnits,
+    pub output: OrdinaryTimingChannel,
+}
+impl OrdinaryTimingRecipe {
+    pub fn inputs(&self) -> [&OwnedDefinitionKey; 8] {
+        [
+            &self.base_time,
+            &self.increased_percent,
+            &self.more_multiplier,
+            &self.additional_attack_time,
+            &self.additional_cast_time,
+            &self.action_speed_multiplier,
+            &self.repeats,
+            &self.server_tick_rate,
+        ]
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum RuleExpression {
+    OrdinaryTiming {
+        recipe: Box<OrdinaryTimingRecipe>,
+    },
     Literal {
         value: ParameterValue,
     },

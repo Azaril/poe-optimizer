@@ -27,7 +27,7 @@ physical level/quality. Its supplied skill owns projected computed inputs and an
 parent/slot identity. Distinct slots remain distinct even when their skill definition is
 equal. Required generated-skill inputs gate both rule effects and routed action values.
 Potential memberships alone cannot activate an action or redirect a saved root selector.
-The plan content digest now uses `owned-effect-plan-v2`; the rule operation set stays v3.
+The plan content digest now uses `owned-effect-plan-v2`; the rule operation set is v4.
 
 These modules contain no source-language parser, Lua interpreter, PoB callback, UI object or
 named-build dispatch. Existing source readers and any optional Lua acquisition stay offline
@@ -36,7 +36,7 @@ injected data; adding an operation requires explicit versioned Rust semantics an
 
 `RulePackageInput` carries its namespace, release, semantics version, operation version and
 the exact definition-schema `DataIdentity`. Its version is 1; the implemented operation set
-is `owned-domain-operations-v3`. Earlier operation versions are explicitly rejected by the compiler; regenerate experimental
+is `owned-domain-operations-v4`. Earlier operation versions are explicitly rejected by the compiler; regenerate experimental
 artifacts rather than silently interpreting them with new semantics. Both storage and compilation check the supplied index's
 identity and namespace. Execution checks that binding again. A digest identifies content;
 it does not authenticate its source or prove conversion fidelity.
@@ -48,6 +48,33 @@ domains; consumers must not interchange them. Public declaration IDs are distinc
 private indices used during execution.
 Computed value types and read sources use adjacent `kind`/`value` envelopes, matching the
 owned schema conventions and retaining strict unknown-field checks for tag-only variants.
+
+## Ordinary direct-action timing
+
+`RuleExpression::OrdinaryTiming` is a closed native numerical operation. Its recipe names
+all eight input nodes: base time, speed increase, speed multiplier, added attack and cast
+time, actor action speed, repeats and server rate. Precision is injected and bounded to
+0–12 decimal places. `ReciprocalTimingUnits` explicitly declares a time unit and its rate
+per one time unit; compilation enforces those exact units and matching factor units. Equal
+dimensions alone do not choose a unit pair or convert values. Repeats is an Integer.
+
+Each node requests speed multiplier, uncapped rate, capped action rate or action time.
+All eight inputs must be available for the atomic operation. Internal infinities/NaN remain
+inside its numerical algorithm: an unavailable uncapped rate does not erase a separately
+requested finite capped rate or time. The selected nonfinite channel becomes `NonFinite`;
+finite quantities use the normal owned signed-zero normalization. Lazy enclosing guards
+can still avoid demanding the operation at all.
+
+The pure [timing primitive](../crates/poe-optimizer-engine/src/timing/ordinary.rs) preserves
+rounding, reciprocal/addition order and cap semantics. The legacy timing entry point now
+delegates to it. This shares numerical behavior but does not migrate the profile-specific
+preparation/realization callers. Raw reference tests retain infinity sign, NaN and signed-zero
+evidence separately from the finite owned-value contract.
+
+Numerical computability does not certify a valid timing branch or character. Positive tick
+rates, legal repeat counts, support applicability and exclusion of trigger/channel/reload
+branches belong to injected input schemas and requirement/selection rules. No coefficient,
+actor selection or missing-input default comes from a skill name or PoB UI object.
 
 ## Typed reads, operations and effects
 

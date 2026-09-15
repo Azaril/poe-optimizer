@@ -160,7 +160,15 @@ struct CompiledNode {
     ty: ComputedValueType,
 }
 #[derive(Clone, Debug)]
+struct CompiledTiming {
+    inputs: [usize; 8],
+    precision: u32,
+    units: poe_optimizer_core::owned_rules::ReciprocalTimingUnits,
+    output: poe_optimizer_core::owned_rules::OrdinaryTimingChannel,
+}
+#[derive(Clone, Debug)]
 enum Op {
+    OrdinaryTiming(Box<CompiledTiming>),
     Literal(ParameterValue),
     Read(usize),
     Binary(Binary, usize, usize),
@@ -198,6 +206,7 @@ enum Binary {
 impl Op {
     fn dependencies(&self) -> Vec<usize> {
         match self {
+            Self::OrdinaryTiming(recipe) => recipe.inputs.to_vec(),
             Self::Literal(_) | Self::Read(_) => vec![],
             Self::Binary(_, a, b) | Self::Ratio(a, b, _) | Self::Compare(_, a, b) => vec![*a, *b],
             Self::Percent(a, _) | Self::Round(a, _, _) | Self::Not(a) => vec![*a],

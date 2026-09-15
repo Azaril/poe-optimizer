@@ -652,6 +652,7 @@ fn normalized_fixture(
         allocation_attribute: "nodes".into(),
         single_active_support_target: false,
         equipment_loadouts: vec![],
+        gem_quality: GemQualityPolicy::Unconverted,
     };
     let source = ImportedBuildInstance::from_decoded(
         decode_build(xml.as_bytes()).unwrap(),
