@@ -233,6 +233,28 @@ Owned-format roundtrips and supported PoB import/export roundtrips preserve sema
 and explicit instance/provider correspondence. Unresolved and non-exportable features produce
 diagnostics; neither roundtrip requires reproducing original XML bytes or UI identities.
 
+## Distribution and retirement boundary
+
+Module-level independence is an intermediate step. The final production feature/crate
+closure must exclude the legacy source parser/interpreter, UI/loadout replay, profile
+preparation and bundled source-shaped snapshot as well as the PoB/Lua crates. A successful
+`--no-default-features` build currently proves only the latter exclusion; it is not proof
+that the legacy native implementation has been removed.
+
+Use an explicit offline release step to acquire/convert PoB definitions and validate the
+owned package. Ordinary Cargo compilation and candidate evaluation must not acquire the
+source or regenerate data. Test the shipped native distribution from a fresh directory
+with only its owned package and caller-owned project. Keep optional reference tooling
+behind a separate feature or executable and verify the dependency/package contents in CI.
+Do not turn an unavailable PoB oracle into a native runtime requirement.
+
+Retire the smallest coherent consumer closure after preserving its meaningful observable
+laws. For numerical preparation, migrate both fresh calculation and independent candidate
+realization validation; feeding a cached result back as its own verifier is insufficient.
+Remove obsolete entry points, schemas and support code with their last consumer. Keep
+source-only acquisition tools only when a named offline or reference workflow still needs
+them. New semantic work must not extend the frozen legacy interpreter frontier.
+
 ## Parity boundary
 
 PoB is a differential oracle for **observable game/evaluation behavior**. Compare resolved

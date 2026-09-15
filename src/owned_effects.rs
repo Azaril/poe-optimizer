@@ -19,7 +19,7 @@ use std::{
 };
 
 #[derive(clap::Args)]
-pub(crate) struct Args {
+pub(crate) struct PlanArgs {
     /// Complete owned Request envelope with build, scenario and ordered queries.
     #[arg(long)]
     input: PathBuf,
@@ -32,11 +32,16 @@ pub(crate) struct Args {
     /// Injected owned action-routing package, including explicit empty routing.
     #[arg(long)]
     routing: PathBuf,
+}
+#[derive(clap::Args)]
+pub(crate) struct Args {
+    #[command(flatten)]
+    plan: PlanArgs,
     /// Also save the component report to a new file; existing files are preserved.
     #[arg(long)]
     output: Option<PathBuf>,
 }
-fn read_bounded(path: &Path, maximum: usize) -> io::Result<Vec<u8>> {
+pub(crate) fn read_bounded(path: &Path, maximum: usize) -> io::Result<Vec<u8>> {
     let mut bytes = Vec::new();
     File::open(path)?
         .take(maximum as u64 + 1)
@@ -64,7 +69,12 @@ struct Report<'a> {
     resolution: &'a OwnedEffectsReport,
     verification: Verification,
 }
-pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
+pub(crate) fn load_plan(
+    args: PlanArgs,
+) -> Result<
+    OwnedEffectPlan<poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage>,
+    Box<dyn Error>,
+> {
     let input_limits = OwnedInputLimits::default();
     let OwnedDocument::Request(request) = decode_owned(
         &read_bounded(&args.input, input_limits.max_wire_bytes)?,
@@ -102,6 +112,10 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         routing,
         PlanLimits::default(),
     )?;
+    Ok(plan)
+}
+pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
+    let plan = load_plan(args.plan)?;
     let mut scratch = plan.new_scratch();
     let resolution = plan.evaluate(&mut scratch)?;
     let report = Report {

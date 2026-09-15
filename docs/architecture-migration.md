@@ -38,6 +38,26 @@ not completion of joint optimization. D5 retirement happens throughout D1–D4, 
 permission to keep obsolete code indefinitely. Avoid a flag day that deletes useful
 numerical validation before its meaning is preserved.
 
+## Native metric and retirement checkpoint
+
+The [owned metric contract](owned-metrics.md) now gives D3 a data-bound native query
+consumer. It reuses the effect executor, binds exact final stat indices and separately
+checks actor/action activation. It requires complete owned requests and the existing
+global contributor closure; it does not adopt partial-build evaluation or complete D3.
+
+The ordinary resistance arithmetic in `engine::resistance` and `actor_receiving` now
+shares one pure Rust kernel with explicit inputs and limits. Both legacy callers retain
+their admission and contribution order. This removes duplicate arithmetic, not their
+profile preparation. Real owned item/reward contribution recipes remain partial and lack
+a final common receiver. Do not add a fabricated class/usage owner to bridge that gap.
+
+D5's distribution exit must inspect both normal dependency edges and shipped/compiled
+contents. The current no-default-features check excludes six PoB/Lua packages, but still
+compiles the legacy interpreter, snapshot and Spark/Mace paths in existing crates. Add an
+owned-only feature/crate closure when the named preparation/search consumers migrate;
+test it from a directory containing only owned artifacts. The independent oracle stays
+optional. The [retirement inventory](legacy-retirement.md) names the remaining pairs.
+
 ## Current offline production data gate
 
 The [offline assembler and production data](owned-offline-data.md) now connect persisted
@@ -112,7 +132,8 @@ directly authored `OwnedEvaluationRequest`, injected schema, compiled rule packa
 schema-bound action-routing artifact. It binds exact equipment/modifier/provider occurrences,
 projects stats into declared generated actors, and compiles effect-level dependencies with
 explicit closure and cycle checks. It returns concrete effects, semantic stats and gaps;
-it does not implement `MetricDef` evaluation or complete a selected original build.
+the subsequent [metric layer](owned-metrics.md) consumes its final values and activation
+gates. Neither completes a selected original build.
 
 Routing names an exact action output, an All or exact part/mode/stat-set selection, and an
 explicit player-equipment slot or action-actor stat source. Storage preserves overlapping

@@ -1,0 +1,425 @@
+{
+  "schema_version": 1,
+  "scope": "resistance-contribution-only",
+  "base_recipe_sha256": "252df8d56c7673fa4686bab0afcdcba67648fc93929439a538b6b0e2d6c1fd20",
+  "recipe_sha256": "34e8902225acdd95f2dcdfc34d88c0d3d3a815a313354181ee95304a3e53ddf0",
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/ConfigTab.lua",
+        "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+      },
+      {
+        "path": "src/Classes/Item.lua",
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      {
+        "path": "src/Classes/ItemsTab.lua",
+        "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+      },
+      {
+        "path": "src/Classes/PassiveSpec.lua",
+        "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+      },
+      {
+        "path": "src/Classes/SkillsTab.lua",
+        "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+      },
+      {
+        "path": "src/Data/Assets.lua",
+        "sha256": "d57230441d6205f001466a1c3a0d4458ddda0a1ccf9f685345f0f0fa2d5154ba"
+      },
+      {
+        "path": "src/Data/Bases/ring.lua",
+        "sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382"
+      },
+      {
+        "path": "src/Data/BossSkills.lua",
+        "sha256": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d"
+      },
+      {
+        "path": "src/Data/Bosses.lua",
+        "sha256": "831a328c0c554687b5f3c40e1ff8a4ee905457f8b940baab236fab9281415ed3"
+      },
+      {
+        "path": "src/Data/Gems.lua",
+        "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+      },
+      {
+        "path": "src/Data/Global.lua",
+        "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+      },
+      {
+        "path": "src/Data/Minions.lua",
+        "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+      },
+      {
+        "path": "src/Data/Misc.lua",
+        "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+      },
+      {
+        "path": "src/Data/ModScalability.lua",
+        "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+      },
+      {
+        "path": "src/Data/QuestRewards.lua",
+        "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af"
+      },
+      {
+        "path": "src/Data/SkillStatMap.lua",
+        "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+      },
+      {
+        "path": "src/Data/Skills/SkillAssets.lua",
+        "sha256": "6fab71e4a5f07e04bd363472374fe059f8ae1cdd77c126357f3adceff8f145ed"
+      },
+      {
+        "path": "src/Data/Skills/act_dex.lua",
+        "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+      },
+      {
+        "path": "src/Data/Skills/act_int.lua",
+        "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+      },
+      {
+        "path": "src/Data/Skills/act_str.lua",
+        "sha256": "7da86ad169055e234fcfdd82ded89c2b4cf883ed3d1b217ef25533ad64ebeeed"
+      },
+      {
+        "path": "src/Data/Skills/minion.lua",
+        "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+      },
+      {
+        "path": "src/Data/Skills/other.lua",
+        "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+      },
+      {
+        "path": "src/Data/Skills/spectre.lua",
+        "sha256": "3bc57d7abee172364977c174884cdf3d2d94980c70e3b12b7ae65c62bd726603"
+      },
+      {
+        "path": "src/Data/Skills/sup_dex.lua",
+        "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac"
+      },
+      {
+        "path": "src/Data/Skills/sup_int.lua",
+        "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+      },
+      {
+        "path": "src/Data/Skills/sup_str.lua",
+        "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+      },
+      {
+        "path": "src/Modules/CalcActiveSkill.lua",
+        "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+      },
+      {
+        "path": "src/Modules/CalcDefence.lua",
+        "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+      },
+      {
+        "path": "src/Modules/CalcTools.lua",
+        "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+      },
+      {
+        "path": "src/Modules/Common.lua",
+        "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+      },
+      {
+        "path": "src/Modules/ConfigOptions.lua",
+        "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+      },
+      {
+        "path": "src/Modules/Data.lua",
+        "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+      },
+      {
+        "path": "src/Modules/ItemTools.lua",
+        "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+      },
+      {
+        "path": "src/Modules/ModParser.lua",
+        "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+      }
+    ]
+  },
+  "source_spans": [
+    {
+      "path": "src/Modules/ModParser.lua",
+      "line": 63,
+      "end_line": 90,
+      "file_sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+      "sha256": "b4dbb5daeedfdfed340fc961c111eb20549f3a57ef00df2f62babd0742cd190a",
+      "text": "\t[\"^(%d+)%% increased\"] = \"INC\",\n\t[\"^(%d+)%% faster\"] = \"INC\",\n\t[\"^(%d+)%% reduced\"] = \"RED\",\n\t[\"^(%d+)%% slower\"] = \"RED\",\n\t[\"^(%d+)%% more\"] = \"MORE\",\n\t[\"^you have (%d+)%% more\"] = \"MORE\",\n\t[\"^(%d+)%% less\"] = \"LESS\",\n\t[\"^you have (%d+)%% less\"] = \"LESS\",\n\t[\"^([%+%-][%d%.]+)%%?\"] = \"BASE\",\n\t[\"^([%+%-][%d%.]+)%%? to\"] = \"BASE\",\n\t[\"^([%+%-]?[%d%.]+)%%? of\"] = \"BASE\",\n\t[\"^([%+%-][%d%.]+)%%? base\"] = \"BASE\",\n\t[\"^([%+%-]?[%d%.]+)%%? additional\"] = \"BASE\",\n\t[\"(%d+) additional hits?\"] = \"BASE\",\n\t[\"^throw up to (%d+)\"] = \"BASE\",\n\t[\"^you gain ([%d%.]+)\"] = \"GAIN\",\n\t[\"^gains? ([%d%.]+)%% of their\"] = \"GAIN\",\n\t[\"^gains? ([%d%.]+)%% ?o?f?\"] = \"GAIN\",\n\t[\"^gains? ([%d%.]+)\"] = \"GAIN\",\n\t[\"^gain %+(%d+)%% to\"] = \"GAIN\",\n\t[\"^you lose ([%d%.]+)\"] = \"LOSE\",\n\t[\"^loses? ([%d%.]+)%% of\"] = \"LOSE\",\n\t[\"^lose ([%d%.]+)\"] = \"LOSE\",\n\t[\"^lose %+(%d+)%% to\"] = \"LOSE\",\n\t[\"^grants ([%d%.]+)\"] = \"GRANTS\",    -- local\n\t[\"^grants ([%d%.]+) additional\"] = \"GRANTS_GLOBAL\",\n\t[\"^removes? ([%d%.]+) ?o?f? ?y?o?u?r?\"] = \"REMOVES\", -- local\n\t[\"^(%d+)\"] = \"BASE\",\n"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "line": 276,
+      "end_line": 295,
+      "file_sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+      "sha256": "bde2674771985c118ecfa2aeb4977764555f28931565c336c579b69cfa3fb2bb",
+      "text": "\t[\"maximum fire resistance\"] = \"FireResistMax\",\n\t[\"maximum fire resistances\"] = \"FireResistMax\",\n\t[\"cold resistance\"] = \"ColdResist\",\n\t[\"maximum cold resistance\"] = \"ColdResistMax\",\n\t[\"maximum cold resistances\"] = \"ColdResistMax\",\n\t[\"lightning resistance\"] = \"LightningResist\",\n\t[\"maximum lightning resistance\"] = \"LightningResistMax\",\n\t[\"maximum lightning resistances\"] = \"LightningResistMax\",\n\t[\"chaos resistance\"] = \"ChaosResist\",\n\t[\"maximum chaos resistance\"] = \"ChaosResistMax\",\n\t[\"fire and cold resistances\"] = { \"FireResist\", \"ColdResist\" },\n\t[\"fire and lightning resistances\"] = { \"FireResist\", \"LightningResist\" },\n\t[\"cold and lightning resistances\"] = { \"ColdResist\", \"LightningResist\" },\n\t[\"elemental resistance\"] = \"ElementalResist\",\n\t[\"elemental resistances\"] = \"ElementalResist\",\n\t[\"all elemental resistances\"] = \"ElementalResist\",\n\t[\"all resistances\"] = { \"ElementalResist\", \"ChaosResist\" },\n\t[\"all maximum elemental resistances\"] = \"ElementalResistMax\",\n\t[\"all maximum resistances\"] = { \"ElementalResistMax\", \"ChaosResistMax\" },\n\t[\"all elemental resistances and maximum elemental resistances\"] = { \"ElementalResist\", \"ElementalResistMax\" },\n"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 926,
+      "end_line": 979,
+      "file_sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2",
+      "sha256": "717e08afe9d7e3c02cfc317646d7a9ab7fea9f29089858558b6d2448a33b9413",
+      "text": "\tfor _, elem in ipairs(resistTypeList) do\n\t\tlocal min, max, total, dotTotal, totemTotal, totemMax\n\t\tmin = data.misc.ResistFloor\n\t\ttotal = modDB:Override(nil, elem..\"Resist\")\n\t\ttotemMax = modDB:Override(nil, \"Totem\"..elem..\"ResistMax\") or m_min(data.misc.MaxResistCap, modDB:Sum(\"BASE\", nil, \"Totem\"..elem..\"ResistMax\", isElemental[elem] and \"TotemElementalResistMax\"))\n\t\ttotemTotal = modDB:Override(nil, \"Totem\"..elem..\"Resist\")\n\t\tif not total then\n\t\t\tlocal base = modDB:Sum(\"BASE\", nil, elem..\"Resist\", isElemental[elem] and \"ElementalResist\")\n\t\t\tlocal inc = m_max(calcLib.mod(modDB, nil, elem..\"Resist\", isElemental[elem] and \"ElementalResist\"), 0)\n\t\t\ttotal = base * inc\n\t\t\tlocal dotBase = modDB:Sum(\"BASE\", { flags = ModFlag.Dot, keywordFlags = 0 }, elem..\"Resist\", isElemental[elem] and \"ElementalResist\")\n\t\t\tdotTotal = dotBase * inc\n\t\tend\n\t\tif not totemTotal then\n\t\t\tlocal base = modDB:Sum(\"BASE\", nil, \"Totem\"..elem..\"Resist\", isElemental[elem] and \"TotemElementalResist\")\n\t\t\ttotemTotal = base * m_max(calcLib.mod(modDB, nil, \"Totem\"..elem..\"Resist\", isElemental[elem] and \"TotemElementalResist\"), 0)\n\t\tend\n\n\t\t-- Fractional resistances are truncated\n\t\ttotal = m_modf(total)\n\t\t-- Unnatural Resilience needs FireResistTotal before we calc FireResistMax\n\t\toutput[elem..\"ResistTotal\"] = total\n\t\tif modDB:Flag(nil, \"MaxBlockChanceModsApplyMaxResist\") then\n\t\t\tlocal blockMaxBonus = modDB:Override(nil, \"BlockChanceMax\") and 0 or modDB:Sum(\"BASE\", nil, \"BlockChanceMax\")\n\t\t\tmax = modDB:Override(nil, elem..\"ResistMax\") or m_min(data.misc.MaxResistCap, modDB:Sum(\"BASE\", nil, elem..\"ResistMax\", isElemental[elem] and \"ElementalResistMax\") + blockMaxBonus)\n\t\telse\n\t\t\tmax = modDB:Override(nil, elem..\"ResistMax\") or m_min(data.misc.MaxResistCap, modDB:Sum(\"BASE\", nil, elem..\"ResistMax\", isElemental[elem] and \"ElementalResistMax\"))\n\t\tend\n\n\t\tdotTotal = dotTotal and m_modf(dotTotal) or total\n\t\ttotemTotal = m_modf(totemTotal)\n\t\tmin = m_modf(min)\n\t\tmax = m_modf(max)\n\t\ttotemMax = m_modf(totemMax)\n\n\t\tlocal final = m_max(m_min(total, max), min)\n\t\tlocal dotFinal = m_max(m_min(dotTotal, max), min)\n\t\tlocal totemFinal = m_max(m_min(totemTotal, totemMax), min)\n\n\t\toutput[elem..\"Resist\"] = final\n\t\toutput[elem..\"ResistOverCap\"] = m_max(0, total - max)\n\t\toutput[elem..\"ResistOver75\"] = m_max(0, final - 75)\n\t\toutput[\"Missing\"..elem..\"Resist\"] = m_max(0, max - final)\n\t\toutput[elem..\"ResistOverTime\"] = dotFinal\n\t\toutput[\"Totem\"..elem..\"Resist\"] = totemFinal\n\t\toutput[\"Totem\"..elem..\"ResistTotal\"] = totemTotal\n\t\toutput[\"Totem\"..elem..\"ResistOverCap\"] = m_max(0, totemTotal - totemMax)\n\t\toutput[\"MissingTotem\"..elem..\"Resist\"] = m_max(0, totemMax - totemFinal)\n\t\tif breakdown then\n\t\t\tbreakdown[elem..\"Resist\"] = {\n\t\t\t\t\"Min: \"..min..\"%\",\n\t\t\t\t\"Max: \"..max..\"%\",\n\t\t\t\t\"Total: \"..total..\"%\",\n\t\t\t}\n"
+    },
+    {
+      "path": "src/Data/Bases/ring.lua",
+      "line": 33,
+      "end_line": 39,
+      "file_sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382",
+      "sha256": "0c1c67d4cd839c012ab3d5e1d1f481096291cfe86fe3412e13e766597be5eed8",
+      "text": "itemBases[\"Sapphire Ring\"] = {\n\ttype = \"Ring\",\n\ttags = { default = true, genesis_tree_caster = true, genesis_tree_minion = true, ring = true, },\n\timplicit = \"+(20-30)% to Cold Resistance\",\n\timplicitModTypes = { { \"cold_resistance\", \"elemental_resistance\", \"elemental\", \"cold\", \"resistance\" }, },\n\treq = { level = 12, },\n}\n"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "line": 45,
+      "end_line": 57,
+      "file_sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973",
+      "sha256": "392511047595c4f234030eca52a1e56f0b55ce52d4caeabecef4cf4c0dbcd776",
+      "text": "function itemLib.formatValue(value, baseValueScalar, valueScalar, precision, displayPrecision, ifRequired)\n\tvalue = roundSymmetric(value * precision) -- resolve range to internal value\n\tif baseValueScalar and baseValueScalar ~= 1 then value = alwaysPositiveRound(value * baseValueScalar) end -- apply corrupted mult\n\tif valueScalar and valueScalar ~= 1 then value = floorSymmetric(value * valueScalar) end -- apply modifier magnitude\n\tvalue = value / precision -- convert back to display space\n\tif displayPrecision then value = roundSymmetric(value, displayPrecision) end -- presentation\n\tif displayPrecision and not ifRequired then -- whitespace is needed\n\t\treturn string.format(\"%.\"..displayPrecision..\"f\", value)\n\telseif displayPrecision then\n\t\treturn tostring(value, displayPrecision)\n\telse\n\t\treturn tostring(roundSymmetric(value,  precision and m_min(2, m_floor(math.log(precision, 10) + 0.001)) or 2)) -- max decimals ingame is 2\n\tend\n"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "line": 134,
+      "end_line": 144,
+      "file_sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973",
+      "sha256": "6fee0c74490ac04081694977248f8301a9717e6e266ec884264dbaf1a2ca5754",
+      "text": "\tlocal ranges = type(range) == \"table\" and range\n\tlocal strippedLine = line:gsub(\"([%+-]?)%((%-?%d+%.?%d*)%-(%-?%d+%.?%d*)%)\", function(sign, min, max)\n\t\t\trangeIndex = rangeIndex + 1\n\t\t\tlocal valueRange = ranges and (ranges[rangeIndex] or 0.5) or range\n\t\t\tlocal value = min + valueRange * (tonumber(max) - min)\n\t\t\tif sign == \"-\" then value = value * -1 end\n\t\t\treturn (sign == \"+\" and value > 0) and sign .. tostring(value) or tostring(value)\n\t\tend)\n\t\t:gsub(\"%-(%d+%.?%d*%%) (%a+)\", antonymFunc)\n\t\t:gsub(\"(%-?%d+%.?%d*)\", function(value)\n\t\t\tt_insert(values, value)\n"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "line": 273,
+      "end_line": 284,
+      "file_sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973",
+      "sha256": "3de32097bf97898fc456d306ad2380d2461a094a3e60a47fc526471b1b9bc2f9",
+      "text": "\t\t\t\tend\n\t\t\tend\n\t\t\tif scalability.isScalable and ((baseValueScalar and baseValueScalar ~= 1) or (valueScalar and valueScalar ~= 1)) then\n\t\t\t\tscalableValues[i] = itemLib.formatValue(scalableValues[i], baseValueScalar, valueScalar, precision or 1, displayPrecision, ifRequired)\n\t\t\telse\n\t\t\t\tscalableValues[i] = itemLib.formatValue(scalableValues[i], 1, 1, precision or 1, displayPrecision, ifRequired)\n\t\t\tend\n\t\tend\n\t\tfor _, replacement in ipairs(scalableValues) do\n\t\t\tscalableLine = scalableLine:gsub(\"#\", replacement, 1)\n\t\tend\n\t\treturn scalableLine\n"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "line": 744,
+      "end_line": 759,
+      "file_sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8",
+      "sha256": "961888d319e63e656827bb0b3c676078932170459e63b819e8c4c9a030b195c6",
+      "text": "function roundSymmetric(val, dec)\n\tif dec then\n\t\tlocal factor = 10 ^ dec\n\t\tif val >= 0 then\n\t\t\treturn m_floor(val * factor + 0.5) / factor\n\t\telse\n\t\t\treturn m_ceil(val * factor - 0.5) / factor\n\t\tend\n\telse\n\t\tif val >= 0 then\n\t\t\treturn m_floor(val + 0.5)\n\t\telse\n\t\t\treturn m_ceil(val - 0.5)\n\t\tend\n\tend\nend\n"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "line": 6114,
+      "end_line": 6114,
+      "file_sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c",
+      "sha256": "5fb44d2fd5ad7658dbea3398de1a9816e4df9ab3b0c3039fab313ed535149de6",
+      "text": "\t[\"#% to Cold Resistance\"] = { { isScalable = true } },\n"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "line": 6252,
+      "end_line": 6252,
+      "file_sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c",
+      "sha256": "ded06e7a07e75c9a9e66b2856240ccba8049313e39684959b257e169be877556",
+      "text": "\t[\"#% to all Elemental Resistances\"] = { { isScalable = true } },\n"
+    }
+  ],
+  "reward_outcomes": [
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 1ClearfellBeira"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "target": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000027"
+      },
+      "values": [
+        {
+          "amount": 10,
+          "stat": "cold"
+        }
+      ],
+      "complete_effect_text": true,
+      "source_location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 2
+      },
+      "text": "+10% to Cold Resistance"
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5% to Cold Resistance"
+          }
+        }
+      },
+      "target": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000004d"
+      },
+      "values": [
+        {
+          "amount": 5,
+          "stat": "cold"
+        }
+      ],
+      "complete_effect_text": true,
+      "source_location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 184
+      },
+      "text": "+5% to Cold Resistance"
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5% to all Elemental Resistances"
+          }
+        }
+      },
+      "target": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000056"
+      },
+      "values": [
+        {
+          "amount": 5,
+          "stat": "elemental"
+        }
+      ],
+      "complete_effect_text": true,
+      "source_location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 259
+      },
+      "text": "+5% to all Elemental Resistances"
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "5% increased Experience Gain\n\t-5% to all Elemental Resistances\n\t3% reduced Movement Speed\n\t15% reduced Global Armour, Evasion and Energy Shield\n\t20% reduced Presence Area Of Effect\n\t12% reduced Cooldown Recovery Rate\n\t5% reduced Attributes"
+          }
+        }
+      },
+      "target": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000062"
+      },
+      "values": [
+        {
+          "amount": -5,
+          "stat": "elemental"
+        }
+      ],
+      "complete_effect_text": false,
+      "source_location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 259
+      },
+      "text": "5% increased Experience Gain\n\t-5% to all Elemental Resistances\n\t3% reduced Movement Speed\n\t15% reduced Global Armour, Evasion and Energy Shield\n\t20% reduced Presence Area Of Effect\n\t12% reduced Cooldown Recovery Rate\n\t5% reduced Attributes"
+    }
+  ],
+  "receiver": {
+    "implemented": false,
+    "source": "src/Modules/CalcDefence.lua:926-979",
+    "formula": "Absent an override: truncate_toward_zero((sum cold BASE + sum elemental BASE) * max(cold/elemental increase-more multiplier, 0)); final=max(min(total,truncated maximum),truncated minimum).",
+    "obligations": [
+      "exact common receiver ownership",
+      "complete contributor membership",
+      "override and increase/more inputs",
+      "maximum/floor policies and special maximum branches",
+      "separate selected player/owned actor identity"
+    ]
+  },
+  "structural_pattern_limitation": "Fixed capture and ranged capture overlap before codecs. A lexical capture-shape discriminator is required; selecting a successful numeric decoder is not ambiguity resolution.",
+  "range_conversion": {
+    "implemented": false,
+    "reason": "Pinned ItemTools uses signed symmetric half-away rounding. Current item interpolation has no such operation; nearest-ties-positive differs on negative halves. No executable ranged policy is published.",
+    "source_example_only": {
+      "base": "Sapphire Ring",
+      "lower": 20,
+      "upper": 30,
+      "fraction_and_value": [
+        [
+          0,
+          20
+        ],
+        [
+          0.5,
+          25
+        ],
+        [
+          1,
+          30
+        ]
+      ]
+    },
+    "next_generic_requirements": [
+      "signed nearest-half-away rounding",
+      "numeric lexical shape constraints independent of semantic codecs",
+      "source-attributed range membership proof without source execution"
+    ]
+  },
+  "whole_item_closure": false,
+  "metric_producer": false,
+  "source_execution": false,
+  "whole_original_native_completion": "0/5"
+}

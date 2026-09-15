@@ -1,7 +1,10 @@
 //! Shared global receiver stage for admitted Armour/Evasion/ES and resistances.
 //! Queries run on the same ordered DB and final attribute conditions as resources.
 use super::*;
-use crate::{character::CharacterModifiers, resistance::PlayerResistances};
+use crate::{
+    character::CharacterModifiers,
+    resistance::{PlayerResistances, ordinary},
+};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct ReceivingScenario {
@@ -56,9 +59,6 @@ pub(super) fn validate_source_character(character: &CharacterInput) -> Result<()
     Ok(())
 }
 // Lua min/max select the second operand on equality, including signed zero.
-fn min(a: f64, b: f64) -> f64 {
-    if a < b { a } else { b }
-}
 fn max(a: f64, b: f64) -> f64 {
     if a > b { a } else { b }
 }
@@ -100,12 +100,12 @@ pub(super) fn calculate(
         };
         resources[index] = value;
     }
-    let cap = min(
-        data.defence.resistance_maximum_cap,
-        data.defence.player_resistance_cap,
-    )
-    .trunc();
-    let floor = data.defence.resistance_floor.trunc();
+    let parameters = ordinary::OrdinaryResistanceParameters {
+        maximum_cap: data.defence.resistance_maximum_cap,
+        resistance_cap: data.defence.player_resistance_cap,
+        floor: data.defence.resistance_floor,
+    };
+    let (cap, floor) = parameters.truncated_limits();
     let mut totals = [0.0; 4];
     let mut finals = [0.0; 4];
     for resistance in &data.receiving_defence.resistances {
@@ -115,11 +115,18 @@ pub(super) fn calculate(
         }
         let names = &names[..resistance.query_stats.len()];
         let base = queries.sum(SumKind::Base, names)?;
-        let inc = max(
-            (1.0 + queries.sum(SumKind::Increased, names)? / 100.0) * 1.0,
-            0.0,
+        let increased_percent = queries.sum(SumKind::Increased, names)?;
+        let output = ordinary::calculate(
+            parameters,
+            ordinary::OrdinaryResistanceInput {
+                base,
+                increased_percent,
+                // Receiving admission still excludes MORE resistance records.
+                more_multiplier: 1.0,
+            },
         );
-        let total = finite(base * inc)?.trunc();
+        // Preserve the existing rejection before cap/floor can mask overflow.
+        finite(output.pre_truncation_total)?;
         let index = match resistance.stat {
             ActorStat::FireResist => 0,
             ActorStat::ColdResist => 1,
@@ -127,8 +134,8 @@ pub(super) fn calculate(
             ActorStat::ChaosResist => 3,
             _ => unreachable!("validated receiving resistance output"),
         };
-        totals[index] = total;
-        finals[index] = max(min(total, cap), floor);
+        totals[index] = output.total;
+        finals[index] = output.resistance;
     }
     let values = |[fire, cold, lightning, chaos]: [f64; 4]| PlayerResistances {
         fire,

@@ -54,7 +54,7 @@ fn combine(
     }
 }
 
-fn read(
+pub(super) fn read(
     binding: &ReadBinding,
     values: &[Option<EffectValue>],
     node: &OwnedDefinitionKey,
@@ -133,7 +133,7 @@ fn read(
 
 /// Gates are a closed conjunction. A false/Inactive gate dominates unknown or
 /// numerical gates regardless of their authored order; candidate facts stay lazy.
-fn gate_result(
+pub(super) fn gate_result(
     gates: &[ReadBinding],
     values: &[Option<EffectValue>],
     node: &OwnedDefinitionKey,
@@ -256,10 +256,10 @@ fn final_value(value: &EffectValue, complete: bool) -> EffectValue {
     }
 }
 
-pub(super) fn evaluate<I: DefinitionSchemaIndex>(
+pub(super) fn execute<I: DefinitionSchemaIndex>(
     plan: &OwnedEffectPlan<I>,
     scratch: &mut OwnedPlanScratch,
-) -> Result<OwnedEffectsReport> {
+) -> Result<usize> {
     // No value from an earlier attempt can satisfy a dependency in this one.
     scratch.values.clear();
     scratch.facts.clear();
@@ -313,6 +313,21 @@ pub(super) fn evaluate<I: DefinitionSchemaIndex>(
             };
             scratch.values[*index] = Some(value);
         }
+        Ok(work)
+    })();
+    if result.is_err() {
+        scratch.values.clear();
+        scratch.facts.clear();
+    }
+    result
+}
+
+pub(super) fn evaluate<I: DefinitionSchemaIndex>(
+    plan: &OwnedEffectPlan<I>,
+    scratch: &mut OwnedPlanScratch,
+) -> Result<OwnedEffectsReport> {
+    let mut work = execute(plan, scratch)?;
+    let result = (|| {
         charge(
             &mut work,
             plan.effects.len() + plan.values.len() + plan.gaps.len(),

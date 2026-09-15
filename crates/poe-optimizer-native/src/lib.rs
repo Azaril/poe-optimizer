@@ -1,5 +1,7 @@
-//! Native build evaluation: owned Rust inputs and calculations, with an injectable clock.
-//! No PoB checkout, Lua state, subprocess, filesystem or network access is required.
+//! Legacy Spark/Mace build backend with an injectable clock. Preparation still uses
+//! source-shaped build data and the compiled legacy snapshot. The project-owned
+//! request/rule/metric path lives in Core, Data and Engine and will replace this ABI.
+//! Calculation requires no PoB checkout, Lua state, subprocess or host I/O.
 #![forbid(unsafe_code)]
 mod build_candidates;
 mod candidate_skill_admission;

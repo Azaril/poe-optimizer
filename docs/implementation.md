@@ -11,7 +11,90 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: production catalog/import integration (after `aca8afb`).**
+**Current checkpoint: owned metric boundary and shared resistance (after `957cc89`).**
+The [native metric contract](owned-metrics.md) now joins complete owned requests, injected
+schema/rules/routes and an independent metric-to-final-stat mapping. Core owns the mapping
+DTO, Data validates exact units/roles/schema identity, and Engine prebinds ordered queries
+to final values and target readiness. `evaluate-owned` is a thin host using the same plan
+loader as `resolve-owned-effects`. It does not call the legacy backend or consume PoB files.
+
+The metric path keeps parent-projected diagnostics separate from active actor measurements:
+query readiness separately checks the exact actor grant, provider ancestry and required
+generated inputs. Missing bindings/producers, partial closure, inactive targets, unsupported
+domains and numerical errors retain typed outcomes. Metric execution reuses the effect
+graph directly, without constructing the full diagnostic effect report. Immutable plans
+share across workers; scratch remains private. This is not a throughput result or mutable
+candidate-plan reuse. Effect-plan identity is v3 and metric-plan identity is v1; domain
+rule operations remain v5.
+
+The pure `resistance::ordinary` kernel now serves both former arithmetic implementations
+in `resistance::calculate` and `actor_receiving::calculate`. It takes explicit BASE/INC/MORE
+and limits, shares the truncation/cap/floor finishing law and classifies numerical channels
+independently. The callers retain their original BASE-only and BASE/INC admission and
+source contribution order. Duplicate numerical bodies are removed; active Spark/Mace
+preparation and independent realization validation still require migration.
+
+The [resistance contribution recipe](../data/owned/poe2/3887ae68/resistance/README.md)
+preserves the prior 2,515 identities and adds nine. Two item and four reward programs emit
+owned player contributions. The Life input and mixed reward/template effects stay Partial.
+No final receiver or real metric binding is invented. Fixed-line policies are separate
+from native rules; ranged lines remain unsupported pending lexical capture disambiguation
+and signed half-away rounding. The offline exporter and source facts are conversion tooling,
+not evaluation inputs. Existing five-build normalization artifacts remain unchanged.
+
+The [architecture review](architecture-migration.md) now explicitly requires an owned-only
+production dependency/artifact check. Current no-default-features checks exclude the six
+PoB/Lua packages but do not remove the Rust legacy interpreter or profile snapshot sharing
+these crates. The [retirement inventory](legacy-retirement.md) names active consumers and
+the paired calculation/realization migration. No further dead module was demonstrated by
+the audit; active independent numerical tests are retained.
+
+**Validation:** **251 Rust test executions pass** in the recorded affected-scope suite:
+Engine library/owned plan tests 209, Data mapping tests 8, CLI/effect CLI 6 in each feature
+mode, unchanged pinned-source resistance/receiver tests 7, and Import real-data/breadth tests
+15. The offline exporter has **9 passing Python tests**; its five artifacts reproduce exactly
+and the production CLI assembler validates/publishes the recipe. Workspace and native-only
+strict Clippy, formatting, five-crate WASM compilation and six-package PoB/Lua runtime
+exclusion pass. Independent code review found no blocker. Protected inputs, prior schema/
+recipe, original reference fixtures and the pinned submodule are unchanged.
+
+Evidence is under `runs/owned-metrics-01/` and `runs/owned-resistance-01/`. The first new-test
+compile attempt needed an import and a cloned test owner; a generated Read field was also
+corrected before the production loader checks. This is not a full workspace test run or a
+fresh complete-build PoB comparison. Full native originals remain **0/5**, and all **110**
+fixed reference rows remain required. Hosted status is separate: the pre-publication check
+found the prior main checkpoint queued behind an active run with no failed jobs observed.
+
+**Open design question:** whether partial selected inputs may yield independently verified
+metrics with conservative dependency coverage was raised with the user and remains pending.
+The owned architecture is already agreed. The new metric API preserves the existing
+complete-request and whole-plan closure gates; it does not implement that proposed change.
+
+**Active resume point (the only current queue):**
+
+1. Resolve the partial-input/metric coverage question before changing finalization or global
+   closure. Independently design a common owned stat receiver with explicit activation and
+   contribution semantics; no hidden UsagePolicy/Encounter owner or per-class formula copy.
+   Use the fixed player cold-resistance query on original05 and original02 as the next real
+   integration target, preserving each selected occurrence and every unknown record.
+2. Complete generic source range conversion: lexical capture shapes independent of codecs,
+   signed half-away rounding and source member/range attribution. Original05's one ranged
+   Sapphire Ring used twice is a contrast case, never a production selector. Wire complete
+   reviewed item/reward/passive/scenario contributions to the shared receiver and declare
+   actual final Stat/Metric bindings. Do not use the recorded 5 or 93/75 as input facts.
+3. Resolve all applicable skill/weapon/actor/support inputs for Twister and Sniper together,
+   retaining all five originals as model stress cases. Bind shared timing/damage kernels,
+   preserve fixed metric availability and run fresh independent reference comparisons.
+   Retire replaced preparation and realization-validation consumers in the same checkpoint.
+4. Complete all five originals, then independent holdouts and semantic joint candidates.
+   Migrate the search backend and remove legacy profile/interpreter/snapshot dependency
+   closures; prove the owned-only distribution before claiming PoB independence complete.
+   Measure changed-build evaluation, reuse and multicore throughput over real admitted cases.
+
+The earlier checkpoint sections below are historical evidence, not instructions to resume
+source/UI emulation. Current design and the active queue above supersede their next steps.
+
+**Previous checkpoint: production catalog/import integration (`957cc89`).**
 The [offline data pipeline](owned-offline-data.md) now extends the persisted mechanics
 registry through production Import/CLI APIs. The extension reuses reviewed positive
 mappings, preserves every existing descriptor/slot/tombstone, and allocates only missing
@@ -33,8 +116,9 @@ selections, 448 explicit zero-quality amounts and all 110 ordered queries. Indep
 loadouts and passive-socket equipment remain separate. Generated/provider-only/name-only
 rows and unresolved mechanics remain pending. The breadth tests now load production data;
 the former private namespace, fresh registry construction and duplicated policy builder
-have been removed from that path. Native runtime/import consumes no legacy game snapshot
-or PoB checkout. The offline exporter retains source provenance with canonical LF hashes,
+have been removed from that path. The new owned artifact/normalization call path consumes no legacy game snapshot
+or PoB checkout. Existing NativeBackend and search-build still retain the legacy snapshot,
+source-shaped preparation and Spark/Mace profiles. The offline exporter retains source provenance with canonical LF hashes,
 including correction of the former test-only SkillsTab path alias and synthetic empty-item
 source pin.
 
@@ -50,34 +134,6 @@ whole-build numerical parity claim. Evidence and the initial new-test boundary e
 failure are retained under `runs/owned-import-integration-01/`; publication/hosted status is
 recorded separately. Full native builds remain **0/5**. No profile-specific calculation
 consumer is retired by identity/input integration alone.
-
-**Next design decision:** the current evaluator requires a completely finalized owned
-request and uses global contributor closure. A proposed extension would evaluate an explicit
-partial selected view and report each metric only when its own dependency coverage is proven;
-unknown potentially applicable effects would still block that metric. This direction has been
-raised with the user and is not implemented by this checkpoint. Existing complete-request
-and whole-build parity gates remain unchanged.
-
-**Resume point:**
-
-1. Agree the partial-input/per-metric boundary, then target the actual fixed player cold
-   resistance query on original05 and original02. Use selected item occurrences, reviewed
-   reward/passive/scenario effects and the existing player contribution operations. Original05's
-   ranged ring used twice is a required contrast. Add explicit metric-to-stat binding and
-   conservative per-channel coverage; do not erase unknown selected records or global gaps.
-   The concrete input/kernel/reference inventory is in
-   `runs/owned-import-integration-01/next-native-slice.md`.
-2. Close selected-build input and contribution gaps with data-driven mechanics. Resolve
-   actual item/passive/support effects and exact supplied action occurrences for Twister
-   and Sniper together; keep all five originals as model stress cases. Catalog identity
-   membership is not evidence of complete effective level, actor stats or available metrics.
-3. Bind resolved weapon/actor inputs to shared timing and damage kernels, map semantic
-   output stats to the fixed metric ledger, and retain independent reference comparisons.
-   Migrate both fresh preparation and realization validation before removing active
-   Spark/Mace helpers. Do not add another named-skill production adapter.
-4. Complete all five originals and independent holdouts, then evaluate joint candidates,
-   dependency invalidation and multicore throughput using admitted real builds. Preserve
-   class/ascendancy, passive, equipment, support and supporting-skill search dimensions.
 
 **Previous checkpoint: real owned definition assembly and finite tables (after `c256151`).**
 The [offline data pipeline](owned-offline-data.md) now consumes a persisted registry,

@@ -22,7 +22,9 @@ complete evaluation and gives CLI, GUI and web hosts the same explicit finalizat
 The [owned rule components](owned-rules.md) provide strict bound package storage and
 semantic compilation. An occurrence-bound effect plan is the next integration layer over
 owned requests and injected action routes; its component implementation is validated; full build metrics remain open.
-Complete semantic conversion and original-build metric evaluation remain separate gates.
+The [owned metric boundary](owned-metrics.md) maps semantic final stats to requested
+measurements while retaining activation and coverage checks. Complete semantic conversion
+and original-build metric evaluation remain separate gates.
 
 ## Recommendation
 

@@ -19,6 +19,8 @@ use std::{
 };
 mod compile;
 mod graph;
+mod metrics;
+pub use metrics::{MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport, OwnedMetricResult};
 
 #[derive(Clone, Copy, Debug)]
 pub struct PlanLimits {
@@ -192,6 +194,7 @@ pub enum PlanGapReason {
     PartialRouting,
     MissingInput,
     MissingProducer,
+    MissingMetricBinding,
     IncompleteContributors,
     UpstreamUnavailable,
     UnresolvedActivation,
@@ -313,6 +316,9 @@ pub struct OwnedEffectPlan<I> {
     effects: Vec<EffectNode>,
     order: Vec<usize>,
     values: BTreeMap<PlanValueKey, usize>,
+    // Ordered exactly like the immutable request queries. Diagnostic projections
+    // alone do not establish activation of an actor or action.
+    query_gates: Vec<Vec<ReadBinding>>,
 }
 impl<I: DefinitionSchemaIndex> OwnedEffectPlan<I> {
     pub fn compile(

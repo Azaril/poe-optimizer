@@ -46,7 +46,11 @@ facts without PoB. `resolve-owned-effects --input REQUEST --schema SCHEMA --rule
 --routing ROUTES [--output REPORT]` binds a complete owned request and resolves component
 effects from those supplied artifacts. It uses no source document, Lua or caller-supplied
 calculated facts. It reports typed effects/values and gaps; it does not yet calculate build
-metrics or complete any original build. See [owned rule components](docs/owned-rules.md).
+metrics or complete any original build. `evaluate-owned` adds `--metrics MAPPING` to the
+same owned request/schema/rules/routing inputs and returns ordered requested native metrics
+through shared final-stat and activation checks. It retains whole-plan coverage gates and
+does not complete the five originals or replace the legacy search backend. See
+[owned metrics](docs/owned-metrics.md) and [owned rule components](docs/owned-rules.md).
 `check-owned-draft INPUT --selection SELECTION --owned-output OUTPUT` validates partial
 owned authoring state and finalizes explicit independent presets through the same Core
 APIs. Pending selections retain all query rows and cannot write a complete request;

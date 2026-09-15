@@ -9,6 +9,8 @@
 use crate::character::CharacterModifiers;
 use poe_optimizer_data::game_data::DefenceData;
 
+pub mod ordinary;
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct PlayerResistances {
     pub fire: f64,
@@ -28,19 +30,22 @@ pub(crate) fn calculate(
     quest_rewards: [f64; 3],
     rules: &DefenceData,
 ) -> PlayerResistances {
-    let finish = |total: f64| {
-        let total = total.trunc();
-        let cap = if rules.resistance_maximum_cap < rules.player_resistance_cap {
-            rules.resistance_maximum_cap
-        } else {
-            rules.player_resistance_cap
-        }
-        .trunc();
-        let floor = rules.resistance_floor.trunc();
-        // Lua min/max select the second operand on equality, including signed
-        // zero. f64::min/max are allowed to choose either zero operand.
-        let capped = if total >= cap { cap } else { total };
-        if capped <= floor { floor } else { capped }
+    let parameters = ordinary::OrdinaryResistanceParameters {
+        maximum_cap: rules.resistance_maximum_cap,
+        resistance_cap: rules.player_resistance_cap,
+        floor: rules.resistance_floor,
+    };
+    let finish = |base: f64| {
+        ordinary::calculate(
+            parameters,
+            ordinary::OrdinaryResistanceInput {
+                base,
+                // This compatibility adapter admits BASE contributions only.
+                increased_percent: 0.0,
+                more_multiplier: 1.0,
+            },
+        )
+        .resistance
     };
     let elemental = |individual: f64, quest: f64| {
         // The per-type bucket contains admitted passive, then base penalty and

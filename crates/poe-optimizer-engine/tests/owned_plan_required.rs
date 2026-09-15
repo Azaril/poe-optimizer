@@ -493,3 +493,72 @@ fn false_activation_deactivates_child_with_missing_required_producer() {
     }
     consumers(&report, |value| matches!(value, EffectValue::Inactive));
 }
+
+#[test]
+fn metric_query_requires_unused_generated_inputs_even_for_constant_final_stats() {
+    use poe_optimizer_core::owned_metrics::*;
+    use poe_optimizer_data::owned_metrics::*;
+    use std::sync::Arc;
+    for missing in [false, true] {
+        let mut f = fixture();
+        for row in &mut f.schema.definitions {
+            if let DefinitionDescriptor::Stat(row) = row
+                && row.id == def("output-constant")
+                && let SchemaState::Known(schema) = &mut row.schema
+            {
+                schema.value = ComputedValueType::Quantity { unit: def("count") };
+            }
+        }
+        let owner = SchemaSubject::Slot(SlotAddress::ActionOutput(generated_output()));
+        f.owner_mut(&owner).programs.members[0].nodes[0].expression = RuleExpression::Literal {
+            value: ParameterValue::Quantity(FiniteQuantity::new(72.0, def("count")).unwrap()),
+        };
+        if missing {
+            projection(&mut f)
+                .effects
+                .retain(|e| e.id != key("project-level"));
+        }
+        let effects = Arc::new(f.compile().unwrap());
+        let mapping = Arc::new(
+            OwnedMetricMapping::new(
+                MetricMappingInput {
+                    schema_version: OWNED_METRIC_MAPPING_VERSION,
+                    namespace: ns(),
+                    release: key("mapping"),
+                    definitions: effects.definitions().identity().clone(),
+                    bindings: vec![MetricStatBinding {
+                        metric: def("requested"),
+                        role: MetricBindingRole::Action,
+                        stat: def("output-constant"),
+                    }],
+                },
+                effects.definitions(),
+                MetricMappingLimits::default(),
+            )
+            .unwrap(),
+        );
+        let plan = OwnedMetricPlan::compile(effects, mapping).unwrap();
+        let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        assert_eq!(report.results.len(), 2);
+        for row in &report.results {
+            if missing {
+                assert!(matches!(
+                    row.value,
+                    EffectValue::Unresolved {
+                        reason: PlanGapReason::MissingProducer,
+                        ..
+                    }
+                ));
+            } else {
+                assert_eq!(
+                    row.value,
+                    EffectValue::Known {
+                        value: ParameterValue::Quantity(
+                            FiniteQuantity::new(72.0, def("count")).unwrap()
+                        )
+                    }
+                );
+            }
+        }
+    }
+}

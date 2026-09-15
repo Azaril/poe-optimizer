@@ -14,6 +14,7 @@ pub mod item_scalability;
 pub mod loadouts;
 pub mod modifier_parser;
 mod movement;
+pub mod owned_metrics;
 pub mod owned_routing;
 pub mod owned_rules;
 pub mod owned_schema;

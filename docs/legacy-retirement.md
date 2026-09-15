@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-09-15 for the owned activation and loadout checkpoint. This is a living companion to
+Updated 2026-09-15 for the owned metric and resistance checkpoint. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -259,3 +259,26 @@ callers remain active. `actor_assembly::mace_action_timing`, Spark/Mace evaluati
 realization validation still select/precompute their inputs through the legacy package.
 Their replacement must bind actual equipment, supports, actor inputs and branch eligibility
 through the owned plan before deleting those profile paths.
+
+
+## Shared resistance and native metric checkpoint
+
+Removed the duplicated resistance truncation/cap/floor bodies from `resistance::calculate`
+and `actor_receiving::calculate`. Both call `resistance::ordinary`, whose explicit numeric
+inputs and separate finishing step preserve signed values, override zero, multiplication
+order and independent finite/nonfinite channels. The existing scalar adapter remains
+BASE-only; the actor receiver remains BASE/INC-only. Their source admission has not widened.
+Independent pinned-source tests continue to validate both callers.
+
+`OwnedMetricPlan` and `evaluate-owned` are new consumers of the owned model and final stat
+semantics. They do not call the old NativeBackend or parse a PoB document. The latter and
+`search-build` still depend on `CompiledGameData`, source preparation and Spark/Mace; their
+migration is unfinished. No additional unused file or helper was demonstrated by this
+checkpoint's consumer audit, so no active numerical golden was discarded as cleanup.
+
+Next paired deletion: general owned local weapon/action inputs must replace
+`CompiledGameData::prepare_mace_weapon` / `assemble_local_weapon` and the corresponding
+`ControlledBuildCatalog::validate_prepared_native_realization` preparation before removing
+that profile dependency closure. `SparkQuestRewards`, shared weapon types and
+`NativeMetricSnapshot` also retain active callers. The final distribution gate must remove
+those source/interpreter/snapshot dependencies, not just the optional PoB/Lua crates.

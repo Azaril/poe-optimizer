@@ -1,0 +1,591 @@
+{
+  "schema_version": 1,
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "version": "resistance-fixed-lines-v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-components",
+    "schema_version": 1,
+    "content_sha256": "12b5545c6a277d2fe7e8cb459d285dcf2993c7d192b64ce40f79f46bc3b74c26",
+    "semantics_version": "owned-mechanics-components-v1"
+  },
+  "whitespace": "trim_ascii",
+  "rules": [
+    {
+      "id": "sapphire-ring-template",
+      "pattern": [
+        {
+          "kind": "literal",
+          "value": "Sapphire Ring"
+        }
+      ],
+      "captures": [],
+      "emissions": [
+        {
+          "kind": "template",
+          "value": {
+            "definition": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000009dc"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "rarity",
+      "pattern": [
+        {
+          "kind": "literal",
+          "value": "Rarity: "
+        },
+        {
+          "kind": "capture",
+          "value": "text"
+        }
+      ],
+      "captures": [
+        {
+          "id": "text",
+          "codec": {
+            "kind": "opaque_text"
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "metadata",
+          "value": {
+            "role": "source-preamble-only"
+          }
+        }
+      ]
+    },
+    {
+      "id": "crafted",
+      "pattern": [
+        {
+          "kind": "literal",
+          "value": "Crafted: "
+        },
+        {
+          "kind": "capture",
+          "value": "text"
+        }
+      ],
+      "captures": [
+        {
+          "id": "text",
+          "codec": {
+            "kind": "opaque_text"
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "metadata",
+          "value": {
+            "role": "source-preamble-only"
+          }
+        }
+      ]
+    },
+    {
+      "id": "prefix",
+      "pattern": [
+        {
+          "kind": "literal",
+          "value": "Prefix: "
+        },
+        {
+          "kind": "capture",
+          "value": "text"
+        }
+      ],
+      "captures": [
+        {
+          "id": "text",
+          "codec": {
+            "kind": "opaque_text"
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "metadata",
+          "value": {
+            "role": "source-preamble-only"
+          }
+        }
+      ]
+    },
+    {
+      "id": "suffix",
+      "pattern": [
+        {
+          "kind": "literal",
+          "value": "Suffix: "
+        },
+        {
+          "kind": "capture",
+          "value": "text"
+        }
+      ],
+      "captures": [
+        {
+          "id": "text",
+          "codec": {
+            "kind": "opaque_text"
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "metadata",
+          "value": {
+            "role": "source-preamble-only"
+          }
+        }
+      ]
+    },
+    {
+      "id": "level-requirement",
+      "pattern": [
+        {
+          "kind": "literal",
+          "value": "LevelReq: "
+        },
+        {
+          "kind": "capture",
+          "value": "text"
+        }
+      ],
+      "captures": [
+        {
+          "id": "text",
+          "codec": {
+            "kind": "opaque_text"
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "metadata",
+          "value": {
+            "role": "source-preamble-only"
+          }
+        }
+      ]
+    },
+    {
+      "id": "implicit-count",
+      "pattern": [
+        {
+          "kind": "literal",
+          "value": "Implicits: "
+        },
+        {
+          "kind": "capture",
+          "value": "text"
+        }
+      ],
+      "captures": [
+        {
+          "id": "text",
+          "codec": {
+            "kind": "opaque_text"
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "metadata",
+          "value": {
+            "role": "source-preamble-only"
+          }
+        }
+      ]
+    },
+    {
+      "id": "item-level-metadata",
+      "pattern": [
+        {
+          "kind": "literal",
+          "value": "Item Level: "
+        },
+        {
+          "kind": "capture",
+          "value": "text"
+        }
+      ],
+      "captures": [
+        {
+          "id": "text",
+          "codec": {
+            "kind": "opaque_text"
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "metadata",
+          "value": {
+            "role": "source-preamble-only"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quality-metadata",
+      "pattern": [
+        {
+          "kind": "literal",
+          "value": "Quality: "
+        },
+        {
+          "kind": "capture",
+          "value": "text"
+        }
+      ],
+      "captures": [
+        {
+          "id": "text",
+          "codec": {
+            "kind": "opaque_text"
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "metadata",
+          "value": {
+            "role": "source-preamble-only"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sockets",
+      "pattern": [
+        {
+          "kind": "literal",
+          "value": "Sockets: "
+        },
+        {
+          "kind": "capture",
+          "value": "text"
+        }
+      ],
+      "captures": [
+        {
+          "id": "text",
+          "codec": {
+            "kind": "opaque_text"
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "metadata",
+          "value": {
+            "role": "source-preamble-only"
+          }
+        }
+      ]
+    },
+    {
+      "id": "rune",
+      "pattern": [
+        {
+          "kind": "literal",
+          "value": "Rune: "
+        },
+        {
+          "kind": "capture",
+          "value": "text"
+        }
+      ],
+      "captures": [
+        {
+          "id": "text",
+          "codec": {
+            "kind": "opaque_text"
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "metadata",
+          "value": {
+            "role": "source-preamble-only"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fixed-cold",
+      "pattern": [
+        {
+          "kind": "capture",
+          "value": "amount"
+        },
+        {
+          "kind": "literal",
+          "value": "% to Cold Resistance"
+        }
+      ],
+      "captures": [
+        {
+          "id": "amount",
+          "codec": {
+            "kind": "value",
+            "value": {
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "whitespace": "exact",
+              "codec": {
+                "kind": "quantity",
+                "value": {
+                  "syntax": "integer",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  },
+                  "scale": {
+                    "numerator": 1,
+                    "denominator": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "modifier",
+          "value": {
+            "definition": {
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000009d6"
+            },
+            "rolls": [
+              {
+                "slot": {
+                  "declaration": {
+                    "kind": "modifier",
+                    "definition": {
+                      "kind": "modifier",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000009d6"
+                    }
+                  },
+                  "slot": {
+                    "kind": "parameter_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000009d7"
+                  }
+                },
+                "value": {
+                  "kind": "capture",
+                  "value": "amount"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "fixed-elemental",
+      "pattern": [
+        {
+          "kind": "capture",
+          "value": "amount"
+        },
+        {
+          "kind": "literal",
+          "value": "% to all Elemental Resistances"
+        }
+      ],
+      "captures": [
+        {
+          "id": "amount",
+          "codec": {
+            "kind": "value",
+            "value": {
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "whitespace": "exact",
+              "codec": {
+                "kind": "quantity",
+                "value": {
+                  "syntax": "integer",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  },
+                  "scale": {
+                    "numerator": 1,
+                    "denominator": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "modifier",
+          "value": {
+            "definition": {
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000009d8"
+            },
+            "rolls": [
+              {
+                "slot": {
+                  "declaration": {
+                    "kind": "modifier",
+                    "definition": {
+                      "kind": "modifier",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000009d8"
+                    }
+                  },
+                  "slot": {
+                    "kind": "parameter_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000009d9"
+                  }
+                },
+                "value": {
+                  "kind": "capture",
+                  "value": "amount"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "fixed-life",
+      "pattern": [
+        {
+          "kind": "capture",
+          "value": "amount"
+        },
+        {
+          "kind": "literal",
+          "value": " to maximum Life"
+        }
+      ],
+      "captures": [
+        {
+          "id": "amount",
+          "codec": {
+            "kind": "value",
+            "value": {
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "whitespace": "exact",
+              "codec": {
+                "kind": "integer",
+                "value": {
+                  "syntax": "integer"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "emissions": [
+        {
+          "kind": "modifier",
+          "value": {
+            "definition": {
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000009da"
+            },
+            "rolls": [
+              {
+                "slot": {
+                  "declaration": {
+                    "kind": "modifier",
+                    "definition": {
+                      "kind": "modifier",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000009da"
+                    }
+                  },
+                  "slot": {
+                    "kind": "parameter_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000009db"
+                  }
+                },
+                "value": {
+                  "kind": "capture",
+                  "value": "amount"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

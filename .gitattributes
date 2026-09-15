@@ -30,3 +30,6 @@ Cargo.lock text eol=lf
 
 # Persisted import bundles use exact canonical content and receipt hashes.
 /data/owned/poe2/3887ae68/import/**/*.json -text
+
+# Offline resistance artifacts retain exact recipe and source receipt bytes.
+/data/owned/poe2/3887ae68/resistance/*.json -text

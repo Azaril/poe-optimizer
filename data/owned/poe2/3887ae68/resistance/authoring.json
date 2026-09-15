@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "scope": "resistance-contribution-component",
+  "base_recipe_sha256": "252df8d56c7673fa4686bab0afcdcba67648fc93929439a538b6b0e2d6c1fd20",
+  "base_registry_watermark": 2515,
+  "percentage_points": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "ring_equipment_slots": [
+    {
+      "kind": "equipment_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000006b"
+    },
+    {
+      "kind": "equipment_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000006c"
+    },
+    {
+      "kind": "equipment_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000006d"
+    }
+  ],
+  "reward_contributions": [
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 1ClearfellBeira"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "true"
+          }
+        }
+      },
+      "target": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000027"
+      },
+      "values": [
+        {
+          "amount": 10,
+          "stat": "cold"
+        }
+      ],
+      "complete_effect_text": true,
+      "source_location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 2
+      },
+      "text": "+10% to Cold Resistance"
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5% to Cold Resistance"
+          }
+        }
+      },
+      "target": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000004d"
+      },
+      "values": [
+        {
+          "amount": 5,
+          "stat": "cold"
+        }
+      ],
+      "complete_effect_text": true,
+      "source_location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 184
+      },
+      "text": "+5% to Cold Resistance"
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "+5% to all Elemental Resistances"
+          }
+        }
+      },
+      "target": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000056"
+      },
+      "values": [
+        {
+          "amount": 5,
+          "stat": "elemental"
+        }
+      ],
+      "complete_effect_text": true,
+      "source_location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 259
+      },
+      "text": "+5% to all Elemental Resistances"
+    },
+    {
+      "source": {
+        "kind": "configuration",
+        "value": {
+          "key": {
+            "kind": "text",
+            "value": "questInterlude 2QimahSeven Pillars"
+          },
+          "source": "input",
+          "role": "reward",
+          "value": {
+            "kind": "text",
+            "value": "5% increased Experience Gain\n\t-5% to all Elemental Resistances\n\t3% reduced Movement Speed\n\t15% reduced Global Armour, Evasion and Energy Shield\n\t20% reduced Presence Area Of Effect\n\t12% reduced Cooldown Recovery Rate\n\t5% reduced Attributes"
+          }
+        }
+      },
+      "target": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000062"
+      },
+      "values": [
+        {
+          "amount": -5,
+          "stat": "elemental"
+        }
+      ],
+      "complete_effect_text": false,
+      "source_location": {
+        "path": "src/Data/QuestRewards.lua",
+        "line": 259
+      },
+      "text": "5% increased Experience Gain\n\t-5% to all Elemental Resistances\n\t3% reduced Movement Speed\n\t15% reduced Global Armour, Evasion and Energy Shield\n\t20% reduced Presence Area Of Effect\n\t12% reduced Cooldown Recovery Rate\n\t5% reduced Attributes"
+    }
+  ],
+  "range_template": {
+    "name": "Sapphire Ring",
+    "source_path": "src/Data/Bases/ring.lua",
+    "source_lines": [
+      33,
+      39
+    ]
+  },
+  "computation_envelope": {
+    "minimum": -1000000,
+    "maximum": 1000000
+  },
+  "source_spans": [
+    {
+      "path": "src/Modules/ModParser.lua",
+      "line": 63,
+      "end_line": 90,
+      "file_sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+      "sha256": "b4dbb5daeedfdfed340fc961c111eb20549f3a57ef00df2f62babd0742cd190a"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "line": 276,
+      "end_line": 295,
+      "file_sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+      "sha256": "bde2674771985c118ecfa2aeb4977764555f28931565c336c579b69cfa3fb2bb"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "line": 926,
+      "end_line": 979,
+      "file_sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2",
+      "sha256": "717e08afe9d7e3c02cfc317646d7a9ab7fea9f29089858558b6d2448a33b9413"
+    },
+    {
+      "path": "src/Data/Bases/ring.lua",
+      "line": 33,
+      "end_line": 39,
+      "file_sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382",
+      "sha256": "0c1c67d4cd839c012ab3d5e1d1f481096291cfe86fe3412e13e766597be5eed8"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "line": 45,
+      "end_line": 57,
+      "file_sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973",
+      "sha256": "392511047595c4f234030eca52a1e56f0b55ce52d4caeabecef4cf4c0dbcd776"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "line": 134,
+      "end_line": 144,
+      "file_sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973",
+      "sha256": "6fee0c74490ac04081694977248f8301a9717e6e266ec884264dbaf1a2ca5754"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "line": 273,
+      "end_line": 284,
+      "file_sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973",
+      "sha256": "3de32097bf97898fc456d306ad2380d2461a094a3e60a47fc526471b1b9bc2f9"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "line": 744,
+      "end_line": 759,
+      "file_sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8",
+      "sha256": "961888d319e63e656827bb0b3c676078932170459e63b819e8c4c9a030b195c6"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "line": 6114,
+      "end_line": 6114,
+      "file_sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c",
+      "sha256": "5fb44d2fd5ad7658dbea3398de1a9816e4df9ab3b0c3039fab313ed535149de6"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "line": 6252,
+      "end_line": 6252,
+      "file_sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c",
+      "sha256": "ded06e7a07e75c9a9e66b2856240ccba8049313e39684959b257e169be877556"
+    }
+  ]
+}

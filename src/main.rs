@@ -13,6 +13,7 @@ mod owned_catalog_recipe;
 mod owned_draft;
 mod owned_effects;
 mod owned_input;
+mod owned_metrics;
 mod owned_normalize;
 mod owned_recipe_cli;
 mod owned_rules;
@@ -74,6 +75,8 @@ enum Action {
     BindOwnedInput(owned_binding::Args),
     /// Resolve owned component effects from explicit packages; no game metric conversion.
     ResolveOwnedEffects(owned_effects::Args),
+    /// Evaluate ordered metrics from a complete owned request using injected native rules.
+    EvaluateOwned(owned_metrics::Args),
     /// Inspect authored build containers without calculating or admitting mechanics.
     InspectBuild(build_inspect::Args),
     /// Prepare a native build or report source-linked missing stages without calculating.
@@ -244,6 +247,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::ExtendOwnedSkillCatalog(args)) => owned_catalog_recipe::run(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
+        Some(Action::EvaluateOwned(args)) => owned_metrics::run(args)?,
         Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,
         Some(Action::SearchBuild(args)) => build_search::run(args)?,
         #[cfg(feature = "pob")]

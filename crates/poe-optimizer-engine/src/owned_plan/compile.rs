@@ -102,7 +102,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         rules: rules.identity(),
         routing: *routing.identity(),
     };
-    let identity = digest_owned("owned-effect-plan-v2", &bindings, limits.max_wire_bytes)?;
+    let identity = digest_owned("owned-effect-plan-v3", &bindings, limits.max_wire_bytes)?;
     let resolver = OwnedOccurrenceResolver::new(definitions.as_ref(), &request, limits.binding)?;
     let mut b = Builder {
         request: &request,
@@ -154,6 +154,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     b.encounter_and_usage()?;
     b.action_programs()?;
     b.routes(&routing)?;
+    let query_gates = b.query_gates()?;
     let complete = b.gaps.is_empty();
     for (inv, reads) in b.invocations.iter_mut().zip(b.pending) {
         inv.reads = reads
@@ -193,6 +194,25 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             *c = complete;
         }
     }
+    let query_gates = query_gates
+        .into_iter()
+        .map(|gates| {
+            gates
+                .into_iter()
+                .map(|r| {
+                    resolve(
+                        r,
+                        &b.values,
+                        &b.contributions,
+                        complete,
+                        &mut b.work,
+                        &mut b.binding_edges,
+                        limits.max_edges,
+                    )
+                })
+                .collect::<Result<Vec<_>>>()
+        })
+        .collect::<Result<Vec<_>>>()?;
     let order = dependency_order(&mut b.effects, &b.invocations, limits, &mut b.work)?;
     Ok(OwnedEffectPlan {
         request: Arc::clone(&request),
@@ -208,6 +228,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         effects: b.effects,
         order,
         values: b.values,
+        query_gates,
     })
 }
 fn resolve(
@@ -788,6 +809,72 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         self.effects.push(node);
         self.gates.push(gates);
         Ok(())
+    }
+    /// Bind target existence separately from final stat production. A parent may
+    /// project a useful diagnostic value into a child whose grant is false.
+    fn query_gates(&mut self) -> Result<Vec<Vec<PendingRead>>> {
+        let queries = &self.request.queries().input().requests;
+        charge(&mut self.work, queries.len())?;
+        let mut result = Vec::with_capacity(queries.len());
+        for query in queries {
+            let (status, context) = match &query.target {
+                MetricTarget::Actor(actor) => {
+                    let resolved = self.resolver.actor(actor)?;
+                    charge(&mut self.work, resolved.work_used())?;
+                    let status = resolved.status();
+                    if resolved.into_value().is_none() {
+                        (status, None)
+                    } else {
+                        let provider = match actor {
+                            ActorKey::Player => root(ProviderRoot::Character),
+                            ActorKey::Owned(actor) => actor.provider.clone(),
+                        };
+                        let parent = self.resolver.provider(&provider)?;
+                        charge(&mut self.work, parent.work_used())?;
+                        let parent_status = parent.status();
+                        let context = parent.into_value().map(|parent| Context {
+                            origin: RuleOrigin::Provider {
+                                provider: provider.clone(),
+                            },
+                            skill: match parent.exposure() {
+                                ProviderExposure::Skill { key, .. } => Some(key.clone()),
+                                _ => None,
+                            },
+                            provider: Some(provider),
+                            actor: actor.clone(),
+                            entity: ConcreteEntity::Actor(actor.clone()),
+                        });
+                        (parent_status, context)
+                    }
+                }
+                MetricTarget::Action(action) => {
+                    let resolved = self.resolver.action(action)?;
+                    charge(&mut self.work, resolved.work_used())?;
+                    let status = resolved.status();
+                    let context = resolved.into_value().map(|resolved| Context {
+                        origin: RuleOrigin::Provider {
+                            provider: action.action.provider.clone(),
+                        },
+                        provider: Some(action.action.provider.clone()),
+                        actor: resolved.expected_actor().clone(),
+                        skill: match resolved.provider().exposure() {
+                            ProviderExposure::Skill { key, .. } => Some(key.clone()),
+                            _ => None,
+                        },
+                        entity: ConcreteEntity::Action(action.clone()),
+                    });
+                    (status, context)
+                }
+            };
+            result.push(match context {
+                Some(context) => self.context_gates(&context)?,
+                None if status == SelectorBindingStatus::Unavailable => vec![PendingRead::Ready(
+                    ReadBinding::Constant(Some(ParameterValue::Boolean(false))),
+                )],
+                None => vec![missing(PlanGapReason::UnresolvedTopology)],
+            });
+        }
+        Ok(result)
     }
     fn context_gates(&mut self, context: &Context) -> Result<Vec<PendingRead>> {
         let depth = context.provider.as_ref().map_or(0, |p| p.grant_path.len());
