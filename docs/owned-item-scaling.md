@@ -1,7 +1,10 @@
 # Proposed item modifier properties and scaling
 
-**Status: Proposed next slice.** This document describes input and calculation seams, not
-implemented tag/catalyst support. The unmodified original05 ring remains Pending, and full
+**Status: Proposed real-data slice; shared equipment-property boundary structurally validated.**
+Two [Engine regressions](../crates/poe-optimizer-engine/tests/owned_item_properties.rs)
+exercise the existing Stat dependency path across templates and repeated item uses.
+This document describes input and calculation seams, not implemented tag/catalyst support.
+The unmodified original05 ring remains Pending, and full
 original-build native completion remains **0/5**. Existing complete-request and contributor
 coverage requirements are unchanged.
 
@@ -32,7 +35,8 @@ tests; none becomes a native dependency or a general parser/interpreter specific
 
 ## Candidate owned seams
 
-The following API choices are proposals, not delivered behavior:
+The common-property dependency path is validated with directly authored data. Source
+conversion, complete catalyst definitions and the remaining scaling choices are proposals:
 
 - Reuse `ItemRecord.parameters` for declared catalyst selection/presence and amount;
   `ItemRecord.quality` continues to represent ordinary quality. Known absence needs an
@@ -41,12 +45,28 @@ The following API choices are proposals, not delivered behavior:
   category and affix-side selections. Preserve complete/partial membership. Do not create
   one fake modifier per label. If real callers need arbitrary property sets, introduce a
   small typed qualifier collection rather than string bags or actor capabilities.
-- Add a separately named owning-item parameter read or explicit projection. Ordinary
-  `Parameter` reads must continue requiring the exact program owner. The new seam must
-  validate the actual ItemTemplate declaration reached through
-  `ProviderRoot::ItemModifier { equipment_use, modifier }`, and the modifier must belong
-  to that use's backing item. Do not copy catalyst values into each modifier during import:
-  such copies would become stale after an item edit.
+- Establish a shared semantic equipment-property contract before adding a cross-owner
+  parameter read. A Modifier definition can occur on different ItemTemplates; a read of
+  one template's declared slot cannot represent every occurrence, and equal slot names
+  never authorize a match. Reuse the validated path: an ItemTemplate-owned program
+  in EquipmentUse context reads its exact authored parameters and derives named effective
+  equipment properties; a shared Modifier program in that same equipment context consumes
+  them through existing Stat dependencies. The concrete ItemSlotUseId determines the
+  supplying item. Ordinary `Parameter` reads keep their exact-owner requirement.
+- Use that existing dependency path only for explicit semantic properties, such as catalyst
+  applicability inputs and effective amount, with declared types, units and coverage. It is
+  not a bag of source fields or a substitute for arbitrary parameter transport. An
+  Actor-context modifier cannot implicitly read its equipment through Current; any needed
+  relationship must be designed explicitly. Computed Stat types also do not supply the
+  allowed-option/range constraints of authored ValueSchema inputs. If these limits prevent
+  a real consumer, compare a small typed item-to-modifier projection with an explicit
+  common-input binding before adding API. Do not copy mutable item values into imported
+  modifier records: those copies would become stale after an item edit.
+- Keep occurrence-specific roll/scaling intermediates local to each modifier program.
+  Repeated occurrences may contribute to the same target, but must not each derive the
+  same final equipment-property Stat. That is a competing-producer error, not an
+  aggregation rule. Player contributions use an explicit Player target; this equipment
+  contract does not establish item-to-minion or actor-relative recipient transport.
 - Bind a bounded sequence of applicable magnitude transforms to each modifier occurrence.
   Reuse native arithmetic for Add/Multiply and Scale/Truncate. A generic commutative
   contribution reducer cannot replace an ordered transform sequence.
@@ -109,6 +129,14 @@ is `+10 to maximum Life`. No Catalyst/CatalystQuality, ordinary Quality or rune 
 present, but relevant header/producer completeness must establish absence. The original
 stays Pending until the labels and relevant inputs are modeled. Existing tag-removed
 in-memory copies remain explicitly diagnostic; they do not validate the original.
+
+The component regressions validate two distinct ItemTemplates and their exact parameter
+declarations feeding the same Modifier definition, repeated uses of one backing item, an
+unrelated item's inputs, missing/zero/absent amounts and inactive equipment. Retain these
+contrasts when binding real data, including the existing competing-producer checks.
+Changing a backing item's parameters must update its uses without changing provider
+identities or borrowing from another template. Shared effects must retain their exact
+modifier occurrences and actor target. This is a structural test, not catalyst parity.
 
 Test the original ring without stripping labels, unknown added labels/headers, exact
 modifier membership, and all eight receiving rows. Contrast known absence, unresolved

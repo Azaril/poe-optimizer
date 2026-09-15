@@ -11,7 +11,7 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: stat-owned actor receivers and rule wire v2 (after `b67e0b6`).**
+**Current checkpoint: stat-owned actor receivers and rule wire v2 (`f280686`).**
 The [receiver boundary](owned-stat-receivers.md) is implemented across Core, Data and Engine.
 Common final calculations belong to Stat definitions and explicitly target Player or exact
 owned-actor slots. Data/Engine validate required programs, Actor context, one final Derive,
@@ -63,6 +63,29 @@ recipe-byte SHA expectation changed after unchanged semantic bodies were verifie
 Protected originals, all **110** fixed query rows and the clean pinned submodule remain
 unchanged. Complete native original builds remain **0/5**. The pre-publication CI snapshot
 found the prior exact main run pending with no jobs; hosted status is recorded separately.
+The published `f280686` run was pending with no jobs at 17:59:35 UTC. An older Windows
+workspace test job remained active; seven other jobs had passed. The latest completed
+non-cancelled run (`c14a8b0`) passed all ten jobs. This does not establish hosted success
+for the current checkpoint; see `runs/owned-receivers-01/ci-publication.json`.
+
+**Follow-up: shared semantic equipment properties.** Two focused Engine regressions
+validate the existing EquipmentUse Stat path before introducing any owning-item API.
+Two ItemTemplates with distinct exact parameter declarations feed one shared Modifier
+definition. Repeated modifier occurrences and repeated uses of one backing item retain
+separate origins; changing that item's input updates both uses while the other item is
+unchanged. Missing amount, explicit zero, declared absence and an inactive equipment use
+remain distinct. These are direct-authored structural contrasts, not imported catalyst
+semantics, a full-build result or a new partial-input coverage policy.
+
+The [item-scaling design](owned-item-scaling.md) now prioritizes this shared-property
+contract. Modifier-local intermediates remain local; player contributions name Player
+explicitly. Actor-relative transport and computed-property option/range constraints remain
+separate design obligations. Existing Stat dependencies and exact Parameter owner checks
+suffice for this slice. No runtime operation, source-field transport or wire migration was
+added. The two tests, formatting and strict Clippy for the new target pass; receipt and
+read-only comparison are under `runs/owned-item-properties-01/`. The receiver checkpoint's
+347 Rust/49 Python checks remain its separate validation scope. Complete native originals
+remain **0/5** and the next work is real property/header conversion and ordered scaling.
 
 **Open design question:** whether partial selected inputs may yield independently verified
 metrics with conservative dependency coverage was raised with the user and remains pending.
@@ -70,10 +93,14 @@ Complete-request and whole-plan closure gates remain unchanged.
 
 **Active resume point (the only current queue):**
 
-1. Implement bounded modifier-property/header conversion and exact owning-item input access
-   using the [item-scaling design](owned-item-scaling.md). Preserve ordinary versus catalyst
-   quality, explicit zero versus absence, nominal versus already baked values, per-component
-   scalability and meaningful transform ordering. Do not discard tags or copy mutable PoB
+1. Implement bounded modifier-property/header conversion using the
+   [item-scaling design](owned-item-scaling.md). Reuse the structurally validated
+   EquipmentUse Stat graph: exact ItemTemplate parameters produce common semantic item
+   properties consumed by a shared Modifier definition. Avoid a cross-owner read tied to
+   one template; retain exact declarations, occurrence-local intermediates and explicit
+   player targets. A new projection API requires a concrete unmet consumer. Preserve
+   ordinary versus catalyst quality, explicit zero versus absence, nominal versus already
+   baked values, per-component scalability and meaningful transform ordering. Do not discard tags or copy mutable PoB
    item/reparse/UI objects. Original05's untouched ring and original02's selected equipment
    are contrasting integration cases; unknown labels/headers remain explicit.
 2. Add reviewed player resistance receiver data and final Stat/Metric bindings using the
