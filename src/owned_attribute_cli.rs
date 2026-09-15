@@ -1,4 +1,4 @@
-//! Offline attribute recipe publication from caller-supplied definitions and policy.
+//! Shared offline passive recipe publication from caller-supplied definitions and policy.
 use super::owned_tree_cli::{invalid, load_checked_bundle, read};
 use poe_optimizer_core::{
     owned_content::digest_owned,
@@ -13,6 +13,7 @@ use poe_optimizer_import::{
     owned_attribute_recipe::{
         AttributeRecipeLimits, AttributeRecipePolicy, compile_owned_attribute_recipe,
     },
+    owned_passive_views::{ViewRecipeLimits, ViewRecipePolicy, compile_owned_passive_views},
     owned_recipe::{OwnedRecipeInput, StagedOwnedRecipe},
     owned_successor::{
         CatalogAppend, CatalogItemPolicyMode, PassiveDeclarationRefinement, SuccessorBundleLimits,
@@ -34,7 +35,7 @@ pub(crate) struct Args {
     /// Finite exported tree catalog. Never source code or a character build.
     #[arg(long)]
     catalog: PathBuf,
-    /// Reviewed attribute-choice conversion policy, including exact source facts.
+    /// Reviewed passive conversion policy, including exact source facts.
     #[arg(long)]
     policy: PathBuf,
     /// Ordered owned statistics descriptors; new IDs must match the registry sequence.
@@ -92,18 +93,43 @@ fn augment_statistics(
     Ok(successor)
 }
 
+enum Conversion {
+    Attributes,
+    Views,
+}
+impl Conversion {
+    fn label(&self) -> &'static str {
+        match self {
+            Self::Attributes => "attribute",
+            Self::Views => "passive view",
+        }
+    }
+    fn receipt_key(&self) -> &'static str {
+        match self {
+            Self::Attributes => "attributes",
+            Self::Views => "views",
+        }
+    }
+}
 pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
+    run_conversion(args, Conversion::Attributes)
+}
+pub(crate) fn run_views(args: Args) -> Result<(), Box<dyn Error>> {
+    run_conversion(args, Conversion::Views)
+}
+fn run_conversion(args: Args, conversion: Conversion) -> Result<(), Box<dyn Error>> {
     let limits = SuccessorBundleLimits::default();
     let mut remaining = limits.max_input_bytes;
     let prior = load_checked_bundle(&args.input, &mut remaining, limits)?;
     let catalog: TreeCatalogInput = serde_json::from_slice(&read(&args.catalog, &mut remaining)?)?;
-    let policy: AttributeRecipePolicy =
-        serde_json::from_slice(&read(&args.policy, &mut remaining)?)?;
+    let policy_bytes = read(&args.policy, &mut remaining)?;
     let statistics = serde_json::from_slice(&read(&args.statistics, &mut remaining)?)?;
-    let previous_tree = prior
-        .tree
-        .clone()
-        .ok_or_else(|| invalid("attribute compilation requires a prior tree policy"))?;
+    let previous_tree = prior.tree.clone().ok_or_else(|| {
+        invalid(format!(
+            "{} compilation requires a prior tree policy",
+            conversion.label()
+        ))
+    })?;
     if previous_tree.content.catalog
         != digest_owned(
             "owned-tree-catalog-v1",
@@ -111,9 +137,10 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             TreeCatalogLimits::default().max_wire_bytes,
         )?
     {
-        return Err(invalid(
-            "attribute catalog differs from the prior tree policy",
-        ));
+        return Err(invalid(format!(
+            "{} catalog differs from the prior tree policy",
+            conversion.label()
+        )));
     }
     let tree = TreePolicyTransitionInput::RebindPrior {
         prior: Box::new(previous_tree),
@@ -133,39 +160,60 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         limits,
     )?;
     prior.check_transition(&staged)?;
-    let compiled = compile_owned_attribute_recipe(
-        staged.assembled(),
-        staged.mapping(),
-        &catalog,
-        &policy,
-        AttributeRecipeLimits::default(),
-    )?;
-    let finalized = if compiled.refined.is_empty() {
-        transition_owned_catalog_with_tree(
-            prior.successor_input(compiled.successor),
-            append,
-            tree,
-            limits,
-        )?
+    let (successor, refined, after_definitions, receipt) = match &conversion {
+        Conversion::Attributes => {
+            let policy: AttributeRecipePolicy = serde_json::from_slice(&policy_bytes)?;
+            let compiled = compile_owned_attribute_recipe(
+                staged.assembled(),
+                staged.mapping(),
+                &catalog,
+                &policy,
+                AttributeRecipeLimits::default(),
+            )?;
+            (
+                compiled.successor,
+                compiled.refined,
+                compiled.receipt.after_definitions.clone(),
+                serde_json::to_value(compiled.receipt)?,
+            )
+        }
+        Conversion::Views => {
+            let policy: ViewRecipePolicy = serde_json::from_slice(&policy_bytes)?;
+            let compiled = compile_owned_passive_views(
+                staged.assembled(),
+                staged.mapping(),
+                &catalog,
+                &policy,
+                ViewRecipeLimits::default(),
+            )?;
+            (
+                compiled.successor,
+                compiled.refined,
+                compiled.receipt.after_definitions.clone(),
+                serde_json::to_value(compiled.receipt)?,
+            )
+        }
+    };
+    let finalized = if refined.is_empty() {
+        transition_owned_catalog_with_tree(prior.successor_input(successor), append, tree, limits)?
     } else {
-        let nodes = compiled
-            .refined
+        let nodes = refined
             .into_iter()
             .map(|address| match address {
                 DefinitionAddress::PassiveNode(id) => Ok(id),
                 _ => Err(invalid(
-                    "attribute refinement contains a non-passive definition",
+                    "passive refinement contains a non-passive definition",
                 )),
             })
             .collect::<Result<Vec<_>, _>>()?;
         transition_owned_catalog_with_tree_refinement(
-            prior.successor_input(compiled.successor),
+            prior.successor_input(successor),
             append,
             tree,
             PassiveDeclarationRefinement {
                 schema_version: 1,
                 before: prior.base.schema().identity().clone(),
-                after: compiled.receipt.after_definitions.clone(),
+                after: after_definitions,
                 nodes,
             },
             limits,
@@ -174,13 +222,13 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     prior.check_transition(&finalized)?;
     super::owned_recipe_cli::publish_artifacts(&args.output, finalized.artifacts())?;
     let mut stdout = io::stdout().lock();
-    serde_json::to_writer(
-        &mut stdout,
-        &serde_json::json!({
-            "attributes": compiled.receipt,
-            "publication": finalized.transition(),
-        }),
-    )?;
+    let mut report = serde_json::Map::new();
+    report.insert(conversion.receipt_key().into(), receipt);
+    report.insert(
+        "publication".into(),
+        serde_json::to_value(finalized.transition())?,
+    );
+    serde_json::to_writer(&mut stdout, &report)?;
     stdout.write_all(b"\n")?;
     Ok(())
 }

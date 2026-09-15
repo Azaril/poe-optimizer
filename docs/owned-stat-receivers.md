@@ -87,8 +87,7 @@ programs remain immutable; each worker owns its scratch state.
 
 Receiver declarations participate in canonical rule-package identity. Storage uses
 `owned-rule-package-v2`; compiled input/program domains use `owned-rule-input-v2` and
-`owned-rule-programs-v2`; effect plans use `owned-effect-plan-v4`. Numerical operations
-remain v5. Old wire versions and a missing registry reject explicitly. Receiver rows and
+`owned-rule-programs-v2`; effect plans use `owned-effect-plan-v4`. The latest operation set is v7; the existing v6 subset remains accepted unchanged. Old wire versions and a missing registry reject explicitly. Receiver rows and
 targets canonicalize before final identities; effect ordering remains meaningful.
 
 Base, import seed, CLI-published catalog and resistance artifacts have migrated with
@@ -141,3 +140,19 @@ Receiver ownership alone does not complete source normalization, full metric cov
 legacy retirement. Preserve all five originals and fixed expectations. Replace active
 legacy consumers only after their selected-occurrence and independent numerical laws move
 to the owned path; see the [migration plan](architecture-migration.md).
+
+## Player-granted minion modifier component
+
+An actor may read a specifically modeled property of its owner without sharing all owner
+stats. The [passive-view data](../data/owned/poe2/3887ae68/passive-views/README.md) declares a
+Player receiver that sums increased damage granted to owned minions. A separate receiver
+for the exact declared Skeletal Sniper actor slot reads that Player property and derives
+its received modifier. Spell and elemental contributions use separate channels.
+
+This is an injected recipe and applicability relation, not a Sniper branch in the Engine.
+The actor must still exist and its grant/provider inputs must be active. Other slots do
+not inherit this receiver. The property is only the modifier granted by the player;
+local minion effects and the complete action formula are separate. It does not generalize
+to arbitrary aura recipients, allies or Offering relationships without explicit semantics.
+Contributor and whole-request completeness rules remain in force. Component tests use
+explicitly synthetic closed requests; they do not close the original builds' inputs.

@@ -175,3 +175,25 @@ import policies. Unchanged reruns preserve semantic artifact identities and allo
 nothing. Allocation access remains Pending in imported builds; this conversion does not
 prove affordability, grant activation, class-view semantics or complete attributes.
 The original query set and whole-request/contributor closure gates are unchanged.
+
+## Class-dependent effect views
+
+A view is an alternative complete effect list on the same physical node. Its selection
+reads the authored player character even when evaluated from an owned actor context.
+Matching class takes precedence over matching primary ascendancy; absent matches use the
+default list. Secondary ascendancies do not select these views. Never merge the selected
+list with the default list, allocate a second node, or infer selection from a source UI.
+
+The Rust offline `compile-owned-passive-views` command resolves reviewed source selectors
+through the mapping into `CharacterClassIs` / `CharacterAscendancyIs` predicates. Native
+rules contain only owned identities. Exact source stat lists, selector membership, numeric
+values and target stats are injected conversion policy. Unreviewed views, unlocks, ports
+or conflicting existing programs reject. The shared finalizer applies the same explicit
+closure refinement and checks the bound predecessor, catalog and carried import policies.
+
+The [first data family](../data/owned/poe2/3887ae68/passive-views/README.md) covers seven
+Witch-view nodes, including elemental-to-spell/minion replacements and a 20-to-16 spell
+modifier change with retained Intelligence. Original05 is Sorceress, so its selected
+node 4739 retains the default 10% spell modifier. Other view-bearing nodes remain explicit
+conversion obligations; grants, conditions and implicit roots need their own reviewed
+semantics. Imported Pending access is unchanged by numerical effect conversion.

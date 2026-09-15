@@ -12,7 +12,10 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v6";
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v7";
+/// Supported prior operation set. Its input and identity remain unchanged;
+/// character identity predicates require v7 and cannot be authored under v6.
+pub const OWNED_RULE_OPERATIONS_V6: &str = "owned-domain-operations-v6";
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -132,6 +135,14 @@ pub enum RuleReadSource {
         slot: DeclaredSlot<ChoiceSlotDefId>,
     },
     CharacterLevel,
+    /// The validated request's player character, independent of invocation actor.
+    CharacterClassIs {
+        class: ClassDefId,
+    },
+    /// Exact player ascendancy membership; an explicitly absent ascendancy is false.
+    CharacterAscendancyIs {
+        ascendancy: AscendancyDefId,
+    },
     GemLevel,
     ItemLevel,
     /// Amount is available only for this explicitly selected quality kind.

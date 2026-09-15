@@ -69,11 +69,17 @@ history, import policies and query meaning remain enforced by the shared finaliz
 This is a concrete D2/D3 input/effect component, not full tree legality or native-build parity.
 See [passive topology](owned-passive-topology.md#ordinary-attribute-effects).
 
-The next class-view family must model whole-effect-list replacement. The finite catalog
-contains 78 nodes with views across Witch, Abyssal Lich, Druid and Huntress selectors.
-Review typed selected-class/ascendancy predicates and guarded effect branches; never add
-view effects to the default list or change physical node identity. Shared attribute base
-contributions and final attribute receivers still need class, item and other sources.
+Class-dependent views now use typed selected-character predicates in operation set v7,
+with unchanged v6 artifacts still accepted. The finite catalog contains 78 nodes with views
+across Witch, Abyssal Lich, Druid and Huntress selectors. The Rust offline converter lowers
+reviewed whole lists into ordinary guarded contributions: matching class first, matching
+primary ascendancy second, default otherwise. Physical nodes and topology stay unchanged.
+The first seven-node family appends four injected stat definitions to the attribute
+successor and includes a player-to-Sniper granted-minion-modifier receiver path. This is
+component coverage, not final spell/minion damage or whole-build parity. The other 71
+view-bearing nodes, class base attributes and final attribute receivers remain open.
+Use the resulting 7476-entry successor as the next ledger; see the
+[production data command](../data/owned/poe2/3887ae68/passive-views/README.md).
 
 ## Current structural and breadth priorities
 

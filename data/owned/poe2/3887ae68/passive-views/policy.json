@@ -1,0 +1,1024 @@
+{
+  "schema_version": 1,
+  "version": "ordinary-witch-passive-views-v1",
+  "nodes": [
+    {
+      "node": "1755",
+      "pool": "ordinary",
+      "default": {
+        "expected_stats": [
+          "8% increased Spell Damage"
+        ],
+        "contributions": [
+          {
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001d31"
+            },
+            "contribution": "increase",
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "value": 8,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "views": [
+        {
+          "selector": "Witch",
+          "when": {
+            "kind": "class",
+            "value": {
+              "key": "1"
+            }
+          },
+          "effects": {
+            "expected_stats": [
+              "8% increased Spell Damage",
+              "Minions deal 8% increased Damage"
+            ],
+            "contributions": [
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d31"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 8,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d33"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 8,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "node": "18845",
+      "pool": "ordinary",
+      "default": {
+        "expected_stats": [
+          "10% increased Spell Damage"
+        ],
+        "contributions": [
+          {
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001d31"
+            },
+            "contribution": "increase",
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "value": 10,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "views": [
+        {
+          "selector": "Witch",
+          "when": {
+            "kind": "class",
+            "value": {
+              "key": "1"
+            }
+          },
+          "effects": {
+            "expected_stats": [
+              "10% increased Spell Damage",
+              "Minions deal 10% increased Damage"
+            ],
+            "contributions": [
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d31"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 10,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d33"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 10,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "node": "22314",
+      "pool": "ordinary",
+      "default": {
+        "expected_stats": [
+          "8% increased Elemental Damage"
+        ],
+        "contributions": [
+          {
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001d32"
+            },
+            "contribution": "increase",
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "value": 8,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "views": [
+        {
+          "selector": "Witch",
+          "when": {
+            "kind": "class",
+            "value": {
+              "key": "1"
+            }
+          },
+          "effects": {
+            "expected_stats": [
+              "8% increased Spell Damage",
+              "Minions deal 8% increased Damage"
+            ],
+            "contributions": [
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d31"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 8,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d33"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 8,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "node": "41965",
+      "pool": "ordinary",
+      "default": {
+        "expected_stats": [
+          "8% increased Spell Damage"
+        ],
+        "contributions": [
+          {
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001d31"
+            },
+            "contribution": "increase",
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "value": 8,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "views": [
+        {
+          "selector": "Witch",
+          "when": {
+            "kind": "class",
+            "value": {
+              "key": "1"
+            }
+          },
+          "effects": {
+            "expected_stats": [
+              "8% increased Spell Damage",
+              "Minions deal 8% increased Damage"
+            ],
+            "contributions": [
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d31"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 8,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d33"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 8,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "node": "4739",
+      "pool": "ordinary",
+      "default": {
+        "expected_stats": [
+          "10% increased Spell Damage"
+        ],
+        "contributions": [
+          {
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001d31"
+            },
+            "contribution": "increase",
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "value": 10,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "views": [
+        {
+          "selector": "Witch",
+          "when": {
+            "kind": "class",
+            "value": {
+              "key": "1"
+            }
+          },
+          "effects": {
+            "expected_stats": [
+              "10% increased Spell Damage",
+              "Minions deal 10% increased Damage"
+            ],
+            "contributions": [
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d31"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 10,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d33"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 10,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "node": "51184",
+      "pool": "ordinary",
+      "default": {
+        "expected_stats": [
+          "20% increased Spell Damage",
+          "+10 to Intelligence"
+        ],
+        "contributions": [
+          {
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001d31"
+            },
+            "contribution": "increase",
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "value": 20,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            }
+          },
+          {
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001d30"
+            },
+            "contribution": "add",
+            "value": {
+              "kind": "integer",
+              "value": 10
+            }
+          }
+        ]
+      },
+      "views": [
+        {
+          "selector": "Witch",
+          "when": {
+            "kind": "class",
+            "value": {
+              "key": "1"
+            }
+          },
+          "effects": {
+            "expected_stats": [
+              "16% increased Spell Damage",
+              "Minions deal 16% increased Damage",
+              "+10 to Intelligence"
+            ],
+            "contributions": [
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d31"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 16,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d33"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 16,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d30"
+                },
+                "contribution": "add",
+                "value": {
+                  "kind": "integer",
+                  "value": 10
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "node": "60230",
+      "pool": "ordinary",
+      "default": {
+        "expected_stats": [
+          "8% increased Elemental Damage"
+        ],
+        "contributions": [
+          {
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001d32"
+            },
+            "contribution": "increase",
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "value": 8,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "views": [
+        {
+          "selector": "Witch",
+          "when": {
+            "kind": "class",
+            "value": {
+              "key": "1"
+            }
+          },
+          "effects": {
+            "expected_stats": [
+              "8% increased Spell Damage",
+              "Minions deal 8% increased Damage"
+            ],
+            "contributions": [
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d31"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 8,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              },
+              {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d33"
+                },
+                "contribution": "increase",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 8,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "receiver_rules": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001d33"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "owned-minion-damage-granted",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "incoming",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contributions",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d33"
+                    },
+                    "contribution": "increase",
+                    "reduction": "sum",
+                    "empty": {
+                      "kind": "quantity",
+                      "value": {
+                        "value": 0,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000002"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "result",
+                "expression": {
+                  "kind": "read",
+                  "input": "incoming"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "final",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d33"
+                  },
+                  "value": "result"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "complete"
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001d34"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "received-owner-minion-damage",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "incoming",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "player",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d33"
+                    }
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "result",
+                "expression": {
+                  "kind": "read",
+                  "input": "incoming"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "final",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d34"
+                  },
+                  "value": "result"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "complete"
+        }
+      }
+    }
+  ],
+  "receivers": [
+    {
+      "id": "player-owned-minion-damage-grant",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d33"
+      },
+      "program": "owned-minion-damage-granted",
+      "targets": [
+        {
+          "kind": "player"
+        }
+      ]
+    },
+    {
+      "id": "sniper-received-owner-minion-damage",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d34"
+      },
+      "program": "received-owner-minion-damage",
+      "targets": [
+        {
+          "kind": "owned_slot",
+          "value": {
+            "slot": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000012"
+                }
+              },
+              "slot": {
+                "kind": "actor_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000001f"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

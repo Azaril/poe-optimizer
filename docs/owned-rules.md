@@ -29,7 +29,8 @@ physical level/quality. Its supplied skill owns projected computed inputs and an
 parent/slot identity. Distinct slots remain distinct even when their skill definition is
 equal. Required generated-skill inputs gate both rule effects and routed action values.
 Potential memberships alone cannot activate an action or redirect a saved root selector.
-The plan content digest now uses `owned-effect-plan-v6`; the rule operation set is v6.
+The plan content digest uses `owned-effect-plan-v6`; the latest rule operation set is v7,
+with the v6 subset still accepted unchanged.
 
 These modules contain no source-language parser, Lua interpreter, PoB callback, UI object or
 named-build dispatch. Existing source readers and any optional Lua acquisition stay offline
@@ -38,7 +39,9 @@ injected data; adding an operation requires explicit versioned Rust semantics an
 
 `RulePackageInput` carries its namespace, release, semantics version, operation version and
 the exact definition-schema `DataIdentity`. Its wire version is 2 with required `receivers`; the implemented operation set
-is `owned-domain-operations-v6`. Earlier operation versions are explicitly rejected by the compiler; regenerate experimental
+is `owned-domain-operations-v7`. The compiler also accepts v6 with its unchanged operation
+set and identities; character identity predicates require v7. Other operation versions are
+explicitly rejected by the compiler; regenerate experimental
 artifacts rather than silently interpreting them with new semantics. Both storage and compilation check the supplied index's
 identity and namespace. Execution checks that binding again. A digest identifies content;
 it does not authenticate its source or prove conversion fidelity.
@@ -112,6 +115,15 @@ branches belong to injected input schemas and requirement/selection rules. No co
 actor selection or missing-input default comes from a skill name or PoB UI object.
 
 ## Typed reads, operations and effects
+
+`CharacterClassIs` and `CharacterAscendancyIs` are Boolean reads of the authored player
+character, including inside an owned actor's invocation. Their operands are typed owned
+IDs validated against the injected schema. Known absence of an ascendancy yields false;
+no class name, source numeric key, selected UI object or synthesized capability is read.
+They retain ordinary provider activation, required-input and global completeness gates.
+Changing class/ascendancy changes the bound plan and its identity. Existing v6 packages
+are not upgraded implicitly, and cannot contain these v7 reads.
+
 
 The [definition schema](owned-definition-package.md) has 24 standalone descriptor families
 and six declared-slot families. `StatDefId` declares a computed value type and permitted

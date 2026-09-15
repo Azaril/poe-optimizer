@@ -11,7 +11,59 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: ordinary attribute-passive conversion (after `b556739`).**
+**Current checkpoint: class-dependent passive views (after `f1cdf4f`).**
+The owned Engine now has typed `CharacterClassIs` and `CharacterAscendancyIs` reads of
+the authored player character. They work from any invocation context, including owned
+actors. Operation set v7 introduces these reads; the compiler accepts the existing v6
+subset without rewriting input or changing persisted v6 identities. v6 packages containing
+the new reads reject. No class-specific capability or source UI state is introduced.
+
+The Rust `compile-owned-passive-views` command uses injected complete stat lists, selector
+mappings, numerical contributions and receiver recipes. Matching class wins over primary
+ascendancy, then the default applies; each branch replaces the entire effect list. Seven
+reviewed physical nodes are converted with the same narrow declaration refinement as
+attributes. Existing topology, slots, policy bindings and all 110 query rows are retained.
+Unreviewed views/unlocks/ports and conflicting prior rules or receivers reject.
+
+Four stat definitions append to the 7472-entry attribute successor: spell and elemental
+contribution channels, the player's increased-damage grant to owned minions, and the
+modifier received by the exact declared Sniper actor. Both receiver programs and target
+relations are supplied data. The actor still needs its own active grant/provider inputs;
+other slots receive no implicit fallback. This is a granted modifier, not total minion
+or spell damage. General aura/allies/Offering recipient semantics remain separate work.
+
+The checked-in `current` package remains the 7469-entry predecessor. Follow the
+[attribute command](../data/owned/poe2/3887ae68/attributes/README.md), then the
+[passive-view command](../data/owned/poe2/3887ae68/passive-views/README.md) to generate the
+7476-entry successor. Use that successor for new definition allocations. Do not fork
+another definition history from the older import/resistance seeds.
+
+**Validation:** 80 targeted Rust tests pass: 59 Engine tests (including six new identity
+predicate contracts), eight new Import compiler tests and 13 CLI tests (four new view
+contracts plus nine attribute/tree/successor regressions). Tests preserve persisted v6
+identity and exercise class-first selection even when the unused ascendancy branch lacks
+facts. Original05's selected Sorceress node 4739 retains its default 10% spell modifier
+and Pending access. Separate explicitly synthetic closed requests execute the unchanged
+published receiver programs: Witch grants 8, non-Witch grants 0, unrelated active actors
+receive no value, false provider activation blocks the child, and partial contributors
+withhold totals. These checks do not rewrite original closure/access or establish PoB
+whole-build numerical parity.
+
+The production command generated `runs/owned-passive-views-01/package` with 7476 registry
+entries, seven converted/refined nodes, two receivers and 110 query rows. Its final schema
+hash is `0f5673d010e7993bf113234d6a820f661d38f152b25516113afe0427c2d03b72`.
+Receipts are `compilation.json` and `publication-summary.json` in the parent directory.
+Strict workspace/all-feature/all-target and owned-only Clippy, formatting, owned-only
+Data/Engine WASM and Import-library WASM compilation pass.
+The full workspace numerical suites were not rerun; existing Python tests are unchanged
+and were not rerun. All new tooling/tests are Rust. The observed baseline CI run for
+`f1cdf4f` remains pending; new publication CI requires its own observation.
+
+Complete native originals remain **0/5**. The other 71 view-bearing nodes, class base
+attributes, final attribute receivers and whole-action formulas remain open. Whole-request
+and contributor closure gates are unchanged.
+
+**Previous checkpoint: ordinary attribute-passive conversion (after `b556739`).**
 The new Rust `compile-owned-attributes` command compiles all 293 reviewed ordinary
 attribute nodes through the existing Choice/Compare/Contribute language. The caller
 supplies the exact finite tree catalog, source-lane policy, coefficient and target stat
@@ -125,13 +177,14 @@ inputs remains unanswered; existing closure gates stay unchanged.
    real catalog and saved alternatives. Keep missing edges and unknown contributors explicit.
    Handle From Nothing/radius and alternate/granted access as provider dependencies,
    not blanket connectivity bypass. Do not infer rewards from observed spent points.
-2. Build on the attribute compiler's 7472-entry successor. Convert other passive effects
-   and class-dependent views through owned rules, preserving physical identities and
-   exact selected attribute/attached choices. The 293 ordinary attribute owners are
-   converted; final attribute receivers and class/item contributions remain open. For
-   the 78 class-view nodes, review typed class/ascendancy predicates and whole-list
-   replacement branches. Do not add a selected view to the default effects. Other
-   descriptor changes still need an explicit refinement policy; preserve prior authority.
+2. Build on the passive-view compiler's 7476-entry successor. The 293 ordinary attribute
+   owners and seven class-view owners are converted. Continue final attribute receivers,
+   class base attributes and class/item contributions, then the remaining 71 view-bearing
+   nodes and other real passive effects. Reuse the typed selected-character predicates
+   and whole-list replacement branches; preserve physical identities, exact saved choices
+   and separate granted-minion properties. Other descriptor changes still need an explicit
+   refinement policy. Keep implicit roots/grants/conditional effects unresolved until
+   their actual semantics are represented; preserve prior authority.
 3. Complete common item input/effect families and contributor membership, contrasting
    the real cold/Life ring and local weapon. Preserve source encoding and distinct
    range/corruption/final rounding stages. Ordered transforms remain required; a partial

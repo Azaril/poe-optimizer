@@ -80,6 +80,8 @@ enum Action {
     ExtendOwnedTreeCatalog(owned_tree_cli::Args),
     /// Compile reviewed passive attribute choices into owned rule data.
     CompileOwnedAttributes(owned_attribute_cli::Args),
+    /// Compile reviewed class-dependent passive views into owned rule data.
+    CompileOwnedPassiveViews(owned_attribute_cli::Args),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
     /// Resolve owned component effects from explicit packages; no game metric conversion.
@@ -257,6 +259,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::PublishOwnedSuccessor(args)) => owned_successor::run(args)?,
         Some(Action::ExtendOwnedTreeCatalog(args)) => owned_tree_cli::run(args)?,
         Some(Action::CompileOwnedAttributes(args)) => owned_attribute_cli::run(args)?,
+        Some(Action::CompileOwnedPassiveViews(args)) => owned_attribute_cli::run_views(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
         Some(Action::EvaluateOwned(args)) => owned_metrics::run(args)?,

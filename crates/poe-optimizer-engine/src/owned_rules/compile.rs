@@ -505,6 +505,14 @@ fn read<I: DefinitionSchemaIndex>(
             }
             ComputedValueType::Integer
         }
+        RuleReadSource::CharacterClassIs { class } => {
+            known(index.definition(class), path)?;
+            ComputedValueType::Boolean
+        }
+        RuleReadSource::CharacterAscendancyIs { ascendancy } => {
+            known(index.definition(ascendancy), path)?;
+            ComputedValueType::Boolean
+        }
         RuleReadSource::GemLevel => {
             let SchemaSubject::Definition(DefinitionAddress::Gem(id)) = owner else {
                 return Err(fail(path, "GemLevel requires gem owner"));
@@ -1263,7 +1271,10 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         "unsupported rule package version",
     )?;
     check(
-        input.operations_version.as_str() == OWNED_RULE_OPERATIONS_VERSION,
+        matches!(
+            input.operations_version.as_str(),
+            OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V6
+        ),
         "operations_version",
         "unsupported operation version",
     )?;
@@ -1332,6 +1343,19 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         )?;
         for p in &o.programs.members {
             add(&mut b.reads, p.reads.len(), l.max_reads, "reads")?;
+            if input.operations_version.as_str() == OWNED_RULE_OPERATIONS_V6 {
+                check(
+                    !p.reads.iter().any(|read| {
+                        matches!(
+                            &read.source,
+                            RuleReadSource::CharacterClassIs { .. }
+                                | RuleReadSource::CharacterAscendancyIs { .. }
+                        )
+                    }),
+                    "operations_version",
+                    "character identity predicates require owned-domain-operations-v7",
+                )?;
+            }
             add(&mut b.nodes, p.nodes.len(), l.max_nodes, "nodes")?;
             add(&mut b.effects, p.effects.len(), l.max_effects, "effects")?;
             for n in &p.nodes {

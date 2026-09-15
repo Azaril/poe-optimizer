@@ -361,6 +361,14 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 }
                 constant(Some(level(character.level)?))
             }
+            RuleReadSource::CharacterClassIs { class } => constant(Some(ParameterValue::Boolean(
+                &self.request.build().input().character.class == class,
+            ))),
+            RuleReadSource::CharacterAscendancyIs { ascendancy } => {
+                constant(Some(ParameterValue::Boolean(
+                    self.request.build().input().character.ascendancy.as_ref() == Some(ascendancy),
+                )))
+            }
             RuleReadSource::GemLevel => {
                 let Some(gem) = self.gem_read_record(c, owner)? else {
                     return Ok(missing(PlanGapReason::UnsupportedContext));
