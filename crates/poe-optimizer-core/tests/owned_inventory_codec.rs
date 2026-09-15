@@ -14,7 +14,7 @@ fn input() -> InventoryInput {
             id: ItemRecordId::from_instance_id(raw(1)),
             template: ItemTemplateDefId::parse(namespace, "authored-template").unwrap(),
             parameters: vec![],
-            item_level: 4,
+            item_level: Some(4),
             quality: None,
             modifiers: vec![],
         }],
@@ -29,7 +29,7 @@ fn input() -> InventoryInput {
     }
 }
 fn wire(input: InventoryInput) -> Vec<u8> {
-    serde_json::to_vec(&json!({"schema_version":2,"document":{"kind":"inventory","value":input}}))
+    serde_json::to_vec(&json!({"schema_version":3,"document":{"kind":"inventory","value":input}}))
         .unwrap()
 }
 #[test]
@@ -94,7 +94,7 @@ fn malformed_stock_cannot_enter_the_codec_as_a_validated_document() {
         decode_owned(&wire(duplicate), OwnedInputLimits::default()),
         Err(CodecError::Inventory(_))
     ));
-    let mut value = json!({"schema_version":2,"document":{"kind":"inventory","value":input()}});
+    let mut value = json!({"schema_version":3,"document":{"kind":"inventory","value":input()}});
     value["document"]["value"]["pob_stock"] = json!({});
     assert!(matches!(
         decode_owned(
@@ -102,5 +102,33 @@ fn malformed_stock_cannot_enter_the_codec_as_a_validated_document() {
             OwnedInputLimits::default()
         ),
         Err(CodecError::Json(_))
+    ));
+}
+
+#[test]
+fn inventory_item_level_null_roundtrips_but_omission_and_previous_envelope_do_not() {
+    let limits = OwnedInputLimits::default();
+    let mut raw = input();
+    raw.items[0].item_level = None;
+    let document = decode_owned(&wire(raw), limits).unwrap();
+    let encoded = encode_owned(&document, limits).unwrap();
+    assert_eq!(decode_owned(&encoded, limits).unwrap(), document);
+    let mut value: serde_json::Value = serde_json::from_slice(&encoded).unwrap();
+    assert_eq!(
+        value["document"]["value"]["items"][0]["item_level"],
+        serde_json::Value::Null
+    );
+    value["document"]["value"]["items"][0]
+        .as_object_mut()
+        .unwrap()
+        .remove("item_level");
+    assert!(matches!(
+        decode_owned(&serde_json::to_vec(&value).unwrap(), limits),
+        Err(CodecError::Json(_))
+    ));
+    value["schema_version"] = json!(2);
+    assert!(matches!(
+        decode_owned(&serde_json::to_vec(&value).unwrap(), limits),
+        Err(CodecError::UnsupportedVersion(2))
     ));
 }

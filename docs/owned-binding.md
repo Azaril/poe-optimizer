@@ -53,12 +53,17 @@ while their effects can still use the selected character context. Composition do
 configuration callbacks or choose unspecified defaults.
 
 Project/preset IDs share the monotonic occurrence domain and cannot collide with item copies
-or other record kinds. The version-2 owned document codec accepts `project` alongside `build`,
+or other record kinds. The version-3 owned document codec accepts `project` alongside `build`,
 `inventory`, `scenario`, `query` and `request`. Explicit null options and saved variant selections
 roundtrip. The codec preserves authored choice-owner spelling while normalizing unordered tables.
-Version 1 rejects explicitly; allocation equipment membership is required in version 2, with
-no implicit empty-list default. Concrete build/request payloads and their digest domains remain
-unchanged; the authoring project and draft shapes are versioned separately from calculation.
+Versions 1 and 2 reject explicitly. Allocation equipment membership remains required,
+with no implicit empty-list default. Item level is a required optional field: explicit null
+means unspecified, while omission rejects. Binding checks the template's item-level range
+only when a value is supplied; it does not establish legality or provide a fallback for
+calculation. Equal-ID records with null versus a number conflict, and removing a supplied
+level invalidates content-bound snapshots. Semantic content digest domains remain unchanged
+so unchanged numeric payloads keep their identity. The wire envelope and draft protocol
+are versioned separately from calculation.
 
 Four direct choice owners alias the corresponding empty provider path: Character, EquipmentUse,
 Allocation and authored Skill. The exact declared choice slot is part of that identity. Either

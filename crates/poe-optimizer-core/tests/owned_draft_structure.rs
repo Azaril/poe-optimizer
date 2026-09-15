@@ -63,7 +63,7 @@ fn bare_item(local: u64) -> ItemDraft {
         id: id(local),
         template: def("item"),
         parameters: vec![],
-        item_level: 77,
+        item_level: Some(77),
         quality: None,
         modifiers: vec![],
     }
@@ -103,7 +103,7 @@ fn fixture() -> DraftSessionInput {
             id: id(2),
             template: def("item"),
             parameters: vec![parameter(SlotOwnerDefId::ItemTemplate(def("item")))],
-            item_level: 77,
+            item_level: Some(77),
             quality: None,
             modifiers: vec![RolledModifier {
                 id: id(3),

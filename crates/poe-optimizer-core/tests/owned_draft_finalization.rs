@@ -50,7 +50,7 @@ fn item(local: u64) -> ItemRecord {
     ItemRecord {
         id: id(local),
         template: def("item"),
-        item_level: 50,
+        item_level: Some(50),
         quality: None,
         parameters: vec![ParameterAssignment {
             slot: slot(SlotOwnerDefId::ItemTemplate(def("item")), "rarity"),
@@ -673,7 +673,7 @@ fn draft_codec_rejects_unknown_duplicate_missing_and_unsupported_wire_values() {
         ));
     }
     let duplicate = format!(
-        "{{\"schema_version\":2,\"schema_version\":2,\"draft\":{}}}",
+        "{{\"schema_version\":3,\"schema_version\":3,\"draft\":{}}}",
         serde_json::to_string(session.input()).unwrap()
     );
     assert!(matches!(
@@ -684,7 +684,7 @@ fn draft_codec_rejects_unknown_duplicate_missing_and_unsupported_wire_values() {
     future["schema_version"] = json!(OWNED_DRAFT_SCHEMA_VERSION + 1);
     assert!(matches!(
         decode_draft(&serde_json::to_vec(&future).unwrap(), limits()),
-        Err(DraftCodecError::UnsupportedVersion(3))
+        Err(DraftCodecError::UnsupportedVersion(4))
     ));
     // A well-formed wire ID still needs the constructor's ownership checks.
     let mut foreign = input();
@@ -735,7 +735,7 @@ fn moving_or_sharing_a_use_between_contributors_preserves_concrete_request_ident
         assert_eq!(actual.request().build().input().equipment.len(), 2);
         assert_eq!(
             session.digest(limits().input.max_wire_bytes).unwrap(),
-            digest_owned("owned-draft-v2", &session, limits().input.max_wire_bytes).unwrap()
+            digest_owned("owned-draft-v3", &session, limits().input.max_wire_bytes).unwrap()
         );
         assert_ne!(
             session.digest(limits().input.max_wire_bytes).unwrap(),
@@ -919,7 +919,7 @@ fn draft_contribution_members_are_domain_checked_and_charged_before_deduplicatio
 }
 
 #[test]
-fn draft_v2_contribution_codec_preserves_order_and_rejects_v1_before_old_payload_shape() {
+fn draft_contribution_codec_preserves_order_and_rejects_v1_before_old_payload_shape() {
     let mut raw = input();
     raw.allocation_presets.members[0].equipment = DraftList {
         members: vec![id(41), id(40)],
@@ -928,7 +928,7 @@ fn draft_v2_contribution_codec_preserves_order_and_rejects_v1_before_old_payload
     let session = DraftSession::new(raw, limits()).unwrap();
     let bytes = encode_draft(&session, limits()).unwrap();
     let mut wire: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
-    assert_eq!(wire["schema_version"], 2);
+    assert_eq!(wire["schema_version"], 3);
     assert_eq!(decode_draft(&bytes, limits()).unwrap(), session);
     wire["draft"]["allocation_presets"]["members"][0]
         .as_object_mut()
@@ -1059,4 +1059,52 @@ fn draft_choice_reward_membership_and_required_wire_field_have_no_implicit_defau
         decode_draft(&serde_json::to_vec(&value).unwrap(), limits()),
         Err(DraftCodecError::UnsupportedVersion(1))
     ));
+}
+
+#[test]
+fn explicit_unspecified_item_level_finalizes_but_pending_level_preserves_issue_and_queries() {
+    let before = DraftSession::new(input(), limits()).unwrap();
+    let before_result = ready(&before, selection());
+    let mut raw = input();
+    raw.items.members[0].item_level = None.into();
+    let session = DraftSession::new(raw.clone(), limits()).unwrap();
+    let bytes = encode_draft(&session, limits()).unwrap();
+    let decoded = decode_draft(&bytes, limits()).unwrap();
+    assert_eq!(decoded, session);
+    let result = ready(&decoded, selection());
+    let item = result
+        .request()
+        .build()
+        .input()
+        .items
+        .iter()
+        .find(|v| v.id == id::<ItemRecordId>(10))
+        .unwrap();
+    assert_eq!(item.item_level, None);
+    assert_eq!(
+        result.request().queries(),
+        before_result.request().queries()
+    );
+    assert_eq!(
+        result.request().build().input().equipment,
+        before_result.request().build().input().equipment
+    );
+    assert_ne!(result.draft_digest(), before_result.draft_digest());
+    assert_ne!(result.request_digest(), before_result.request_digest());
+    let mut previous: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+    previous["schema_version"] = json!(2);
+    assert!(matches!(
+        decode_draft(&serde_json::to_vec(&previous).unwrap(), limits()),
+        Err(DraftCodecError::UnsupportedVersion(2))
+    ));
+    raw.items.members[0].item_level = DraftField::Pending(pending(240, vec![None, Some(50)]));
+    let session = DraftSession::new(raw, limits()).unwrap();
+    let (issues, queries) = pending_result(&session);
+    assert_eq!(issues.len(), 1);
+    assert_eq!(issues[0].id, id::<DraftIssueId>(240));
+    assert!(issues[0].path.ends_with(".item_level"));
+    assert_eq!(
+        queries.to_resolved().unwrap(),
+        before_result.request().queries().input().clone()
+    );
 }

@@ -81,7 +81,7 @@ fn item() -> ItemRecord {
         id: id(1),
         template: def("template"),
         parameters: vec![parameter()],
-        item_level: 72,
+        item_level: Some(72),
         quality: Some(quality()),
         modifiers: vec![RolledModifier {
             id: id(2),
@@ -456,4 +456,42 @@ fn complete_conversion_does_not_claim_structural_or_definition_validity() {
     assert_eq!(draft.to_resolved(), Some(parameters));
     let unresolved = DraftField::<ItemTemplateDefId>::Pending(pending(116, vec![]));
     assert!(unresolved.to_resolved().is_none());
+}
+
+#[test]
+fn item_level_known_null_is_resolved_while_pending_candidates_are_not_selected() {
+    for level in [None, Some(0), Some(u16::MAX)] {
+        let mut original = item();
+        original.item_level = level;
+        let draft = ItemDraft::from(original.clone());
+        assert_eq!(draft.item_level.to_resolved(), Some(level));
+        assert_eq!(draft.to_resolved(), Some(original));
+        let decoded: ItemDraft =
+            serde_json::from_slice(&serde_json::to_vec(&draft).unwrap()).unwrap();
+        assert_eq!(decoded, draft);
+    }
+    let mut draft = ItemDraft::from(item());
+    draft.item_level = DraftField::Pending(pending(120, vec![None, Some(81)]));
+    assert!(draft.to_resolved().is_none());
+    assert!(draft.item_level.to_resolved().is_none());
+    let decoded: ItemDraft = serde_json::from_slice(&serde_json::to_vec(&draft).unwrap()).unwrap();
+    assert_eq!(decoded, draft);
+    draft.item_level = None.into();
+    let wire = serde_json::to_value(&draft).unwrap();
+    assert_eq!(wire["item_level"], json!({"kind":"known","value":null}));
+    let mut missing_field = wire.clone();
+    missing_field.as_object_mut().unwrap().remove("item_level");
+    assert!(serde_json::from_value::<ItemDraft>(missing_field).is_err());
+    let mut missing_value = wire;
+    missing_value["item_level"]
+        .as_object_mut()
+        .unwrap()
+        .remove("value");
+    assert!(serde_json::from_value::<ItemDraft>(missing_value).is_err());
+    assert!(
+        serde_json::from_str::<DraftField<Option<u16>>>(
+            r#"{"kind":"known","value":null,"value":81}"#
+        )
+        .is_err()
+    );
 }

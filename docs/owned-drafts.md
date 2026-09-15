@@ -91,10 +91,13 @@ and advancing the shared revision/watermark also changes the complete request di
 
 ## Persistence and hosts
 
-Owned drafts have a separate version-2 JSON envelope, `{schema_version, draft}`, with
+Owned drafts have a separate version-3 JSON envelope, `{schema_version, draft}`, with
 bounded UTF-8 input and output. Unknown/duplicate fields and unsupported versions reject.
-Version 1 is explicitly unsupported; no missing allocation equipment list is treated as empty.
-The draft digest domain is `owned-draft-v2`; unchanged concrete request digests keep their
+Versions 1 and 2 are explicitly unsupported; no missing allocation equipment list is treated
+as empty. Item level uses `DraftField<Option<u16>>`: `Known(null)` is complete authoring,
+`Known(number)` supplies a fact, and `Pending` remains unresolved. The Known value field is
+required even for null. Imported lack of a matching rule cannot establish `Known(null)`.
+The draft digest domain is `owned-draft-v3`; unchanged concrete request digests keep their
 existing domain. A later migration must be explicit and preserve unresolved membership facts.
 Encoding preserves the ordered authoring state; only the existing complete constructors
 canonicalize the finalized request. Deserialization cannot bypass validation or confer

@@ -379,7 +379,7 @@ impl Fixture {
             id: occurrence(3),
             template: def("item"),
             parameters: vec![],
-            item_level: 20,
+            item_level: Some(20),
             quality: None,
             modifiers: vec![],
         });

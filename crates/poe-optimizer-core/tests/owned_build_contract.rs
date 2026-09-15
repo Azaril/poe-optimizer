@@ -59,7 +59,7 @@ fn build_input() -> BuildInput {
                 id: id(18),
                 template: definition("template-a"),
                 parameters: vec![],
-                item_level: 60,
+                item_level: Some(60),
                 quality: None,
                 modifiers: vec![],
             },
@@ -73,7 +73,7 @@ fn build_input() -> BuildInput {
                     ),
                     value: ParameterValue::Boolean(true),
                 }],
-                item_level: 60,
+                item_level: Some(60),
                 quality: Some(quality()),
                 modifiers: vec![RolledModifier {
                     id: id(15),
@@ -337,7 +337,13 @@ fn direct_authored_documents_roundtrip_without_source_or_definition_packages() {
         let decoded = decode_owned(&bytes, limits()).unwrap();
         assert_eq!(encode_owned(&decoded, limits()).unwrap(), bytes);
         let wire: Value = serde_json::from_slice(&bytes).unwrap();
-        assert_eq!(wire["schema_version"], 2);
+        assert_eq!(wire["schema_version"], OWNED_INPUT_SCHEMA_VERSION);
+        let mut previous = wire.clone();
+        previous["schema_version"] = json!(2);
+        assert!(matches!(
+            decode_value(previous),
+            Err(CodecError::UnsupportedVersion(2))
+        ));
         assert!(!wire.as_object().unwrap().contains_key("source"));
     }
     let original = build().into_input();
@@ -625,6 +631,7 @@ fn owned_decode_requires_explicit_options_and_rejects_unknown_or_duplicate_field
     for path in [
         "/document/value/character/ascendancy",
         "/document/value/items/0/quality",
+        "/document/value/items/0/item_level",
         "/document/value/gems/0/quality",
     ] {
         let mut missing = valid.clone();
@@ -653,7 +660,7 @@ fn owned_decode_requires_explicit_options_and_rejects_unknown_or_duplicate_field
         fails(decode_value(extra), &["unknown", "field"]);
     }
     let document = serde_json::to_string(&valid["document"]).unwrap();
-    let duplicate = format!(r#"{{"schema_version":2,"schema_version":2,"document":{document}}}"#);
+    let duplicate = format!(r#"{{"schema_version":3,"schema_version":3,"document":{document}}}"#);
     fails(decode_owned(duplicate.as_bytes(), limits()), &["duplicate"]);
     let encoded = serde_json::to_string(&valid).unwrap();
     let duplicate = encoded.replacen("\"level\":60", "\"level\":60,\"level\":60", 1);
@@ -1035,4 +1042,42 @@ fn modifier_provider_requires_the_modifier_to_belong_to_its_receiving_use() {
         )
         .is_ok()
     );
+}
+
+#[test]
+fn item_level_null_is_explicit_and_roundtrips_in_build_and_request_envelopes() {
+    for level in [None, Some(0), Some(u16::MAX)] {
+        let mut raw = build_input();
+        raw.items[0].item_level = level;
+        let build = BuildSpec::new(raw, limits()).unwrap();
+        let request = OwnedEvaluationRequest::new(
+            build.clone(),
+            scenario(),
+            queries(ProviderRoot::SupportAssignment(id(11))),
+            limits(),
+        )
+        .unwrap();
+        for document in [
+            OwnedDocument::Build(Box::new(build)),
+            OwnedDocument::Request(Box::new(request)),
+        ] {
+            let bytes = encode_owned(&document, limits()).unwrap();
+            assert_eq!(decode_owned(&bytes, limits()).unwrap(), document);
+        }
+    }
+    let mut wire = encoded_build();
+    wire["document"]["value"]["items"][0]["item_level"] = Value::Null;
+    let text = serde_json::to_string(&wire).unwrap();
+    let duplicate = text.replacen(
+        "\"item_level\":null",
+        "\"item_level\":null,\"item_level\":null",
+        1,
+    );
+    assert_ne!(text, duplicate);
+    fails(decode_owned(duplicate.as_bytes(), limits()), &["duplicate"]);
+    for invalid in [json!(-1), json!(65536), json!(1.5), json!("81")] {
+        let mut malformed = wire.clone();
+        malformed["document"]["value"]["items"][0]["item_level"] = invalid;
+        assert!(matches!(decode_value(malformed), Err(CodecError::Json(_))));
+    }
 }

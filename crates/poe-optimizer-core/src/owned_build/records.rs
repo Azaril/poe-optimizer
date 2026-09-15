@@ -52,7 +52,9 @@ pub struct ItemRecord {
     pub id: ItemRecordId,
     pub template: ItemTemplateDefId,
     pub parameters: Vec<ParameterAssignment>,
-    pub item_level: u16,
+    /// Explicitly unspecified is distinct from a supplied level or an unresolved draft field.
+    #[serde(deserialize_with = "required_option")]
+    pub item_level: Option<u16>,
     #[serde(deserialize_with = "required_option")]
     pub quality: Option<QualitySelection>,
     pub modifiers: Vec<RolledModifier>,

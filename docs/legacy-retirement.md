@@ -191,3 +191,26 @@ rules, with no Spark/Mace profile helper. These establish component evidence nee
 migration. They do not yet replace an active whole-build numerical consumer, so no new
 profile deletion is claimed. The next deletion remains coupled to actual semantic plan
 integration, preserving the useful independent numerical vectors.
+
+
+## Nullable item-level and unused helper retirement
+
+Two unconsumed Import facades are removed alongside the owned model migration:
+
+- `parse_mace_item_element` had only its own XML test caller. That test now calls the
+  shared `decode_item_payload` followed by `parse_mace_item`, retaining exact CRLF,
+  escaped/CDATA input and entity/comment/ModRange rejection. The shared decoder still
+  serves equipment import; neither it nor the active item parser is deleted.
+- `legacy_passive_actor_records` had no production caller. Its one-entrance wrapper test
+  retires with it. Injected passive record values, exact allocation views and tamper
+  rejection remain tested in Data's `passive_allocation` and Engine's `data_injection`.
+  The active native tree consumer already reads resolved allocation actor modifiers directly.
+
+This removes unused compatibility code, not an active numerical profile. The smallest
+next numerical replacement is local weapon preparation: Engine's `assemble_local_weapon`
+and `CompiledGameData::prepare_mace_weapon`, including the closed Mace-keyed preparation
+cache. The owned component plan must first bind exact equipment/modifier occurrences,
+prove contribution closure and supply a real action consumer. Keep the generic
+`consume_local_numeric` helper while armour uses it. Retire useful numerical laws into
+that shared consumer in the same checkpoint; do not claim the complete profile/request
+path retired when only this dependency is replaced.

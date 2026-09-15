@@ -101,7 +101,9 @@ No native source-method replay or PoB UI object is introduced into the owned eng
 
 Before the next complete semantic plan, address the model issues exposed by real items:
 
-1. Represent unspecified item level independently of unresolved conversion and legality.
+1. Explicit unspecified item level is represented by the version-3 owned input/draft model.
+   The importer still needs a scoped source-absence proof; unmatched rules remain pending.
+   Validate selected finalization separately from field representation and legality.
 2. Convert range/variant/socket source meaning with explicit provenance. XML range IDs are
    classified-list positions, not raw line indexes; source save/load rune membership differs.
 3. Bind generated-skill parameters to an actual receiving provider and separate activation.
@@ -115,6 +117,33 @@ Before the next complete semantic plan, address the model issues exposed by real
 Original02 Twister and original05 Sniper remain joint design cases, with all five source
 inputs and all 110 reference rows retained. Item-line knowledge and an oracle-confirmed
 grant level are not complete native builds. The denominator remains **0/5**.
+
+## Next range-attribution slice
+
+Add a bounded Import-only source-layout adapter around the existing injected item-line
+converter. Source syntax and classified-list positions belong to that adapter; owned
+modifier/parameter definitions, units, interpolation and rounding remain injected. Reuse
+bounded lexical matching instead of building another semantic parser or source interpreter.
+One physical line may emit several owned values without occupying several source list slots.
+Unknown source membership must never disappear and shift subsequent range targets.
+
+First prove one canonical text chunk with reviewed single-line members and no unimplemented
+list-changing lifecycle. Original05's staff is the positive case: prove implicit/explicit
+positions, apply inline then ordered XML overlays, and obtain native grant levels 1/11/20
+from changed fractions. Original02 retains literal speed 49 while rune/Bonded rebuilding and
+source-list uncertainty stay explicit. Source save/load lists differ; do not index raw lines,
+reject ordered duplicate writes as inherently ambiguous, or regenerate affix metadata over
+explicit numbers. Missing/malformed/out-of-scope inputs remain visible and dependent values
+stay pending. Literal values can survive without complete range attribution.
+
+Keep one flat provenance table for line/category positions, range writes, winning writes
+and unresolved targets; bound aggregate work and diagnostic output. Compatibility source
+pins document offline review, not a requirement to load PoB during ordinary import or proof
+of the exporter's exact version. Runtime binds supported source dialect and artifact identity.
+The next evidence gate compares actual native source attribution and values with optional
+isolated original-source reference functions. Production does not construct PoB UI objects.
+Whole-item closure, provider activation and complete builds remain separate gates. The
+source audit and proposed API are in `runs/owned-item-level-01/range-design.md`.
 
 ## Retirement ownership
 

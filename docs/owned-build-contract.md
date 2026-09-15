@@ -11,7 +11,7 @@ The source audit is in `runs/owned-build-contract-01/source-audit.md`.
 `core::owned_definitions` implements typed owned IDs and bounded authored values.
 `core::owned_build` implements raw `BuildInput`, `ScenarioInput`, `QueryInput` records,
 private immutable `BuildSpec`, `ScenarioSpec`, `QuerySpec` wrappers and an
-`OwnedEvaluationRequest`. Constructors validate structure; the version-2 JSON codec
+`OwnedEvaluationRequest`. Constructors validate structure; the version-3 JSON codec
 roundtrips standalone documents (including inventory and projects) and combined requests. `check-owned-input` is the first
 CLI consumer and can write canonical owned JSON without XML, PoB or a game package.
 
@@ -27,9 +27,15 @@ choice aliases, concrete required values and schema-versus-resolution status. Dr
 revisioned editing, legality, computability and the five-case adapter remain open. Numerical
 evaluation still uses legacy inputs; these additions do not establish native rule coverage.
 
-The envelope is `{ schema_version: 2, document: { kind, value } }`, where kind is `build`,
+The envelope is `{ schema_version: 3, document: { kind, value } }`, where kind is `build`,
 `project`, `inventory`, `scenario`, `query` or `request`. Required optional fields use explicit null; omission
-infers no semantic default. Unknown/duplicate fields reject. Defaults bound wire bytes to
+infers no semantic default. Item level is an explicit optional intrinsic fact: a number
+means supplied, null means unspecified, and omission rejects. Unspecified does not mean
+zero, the equipment requirement, or the level of a granted skill. Versions 1 and 2 reject;
+an explicit migration may preserve their numeric levels, but may not invent absent values.
+Unchanged numeric records keep their semantic content digests. Changing a supplied level
+to null changes record content and its digest; occurrence IDs remain unchanged.
+Unknown/duplicate fields reject. Defaults bound wire bytes to
 8 MiB, collection entries to 16,384, total entries to 100,000 and provider paths to 64 steps;
 callers can tighten these resource limits. These are not game-level caps. Unordered
 occurrence/assignment collections canonicalize; ordered queries and grant paths retain
@@ -111,7 +117,7 @@ BuildSpec {
 }
 CharacterSpec { class: ClassDefId, ascendancy: Option<AscendancyDefId>,
                 level: u16, rewards: Vec<RewardSelection> }
-ItemRecord { id: ItemRecordId, template: ItemTemplateDefId, item_level: u16,
+ItemRecord { id: ItemRecordId, template: ItemTemplateDefId, item_level: Option<u16>,
              parameters: Vec<ParameterAssignment>, quality: Option<QualitySelection>,
              modifiers: Vec<RolledModifier> }
 RolledModifier { id: ModifierInstanceId, definition: ModifierDefId,

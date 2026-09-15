@@ -40,6 +40,6 @@ impl DraftSession {
     /// Exact ordered authoring snapshot identity, not a numerical-plan cache key.
     /// Includes allocator watermark/revision and inactive/unresolved alternatives.
     pub fn digest(&self, max_bytes: usize) -> Result<OwnedContentDigest, ContentDigestError> {
-        digest_owned("owned-draft-v2", self, max_bytes)
+        digest_owned("owned-draft-v3", self, max_bytes)
     }
 }

@@ -44,7 +44,7 @@ fn item(local: u64) -> ItemRecord {
     ItemRecord {
         id: id(local),
         template: def("item"),
-        item_level: 40,
+        item_level: Some(40),
         quality: None,
         parameters: vec![ParameterAssignment {
             slot: DeclaredSlot {
@@ -731,7 +731,7 @@ fn inventory_union_checks_all_records_and_copy_domains_without_adopting_stock() 
     assert_eq!(selected.input().allocator.last_issued(), 250);
     assert_eq!(selected.input().revision, project.input().revision);
     let mut changed = item(14);
-    changed.item_level += 1;
+    *changed.item_level.as_mut().unwrap() += 1;
     let conflict = stock(vec![changed], vec![]);
     assert!(
         matches!(compose(&project,&selection(),Some(&conflict),limits()),Err(ProjectError::Inventory(InventoryError::ConflictingItemRecord(record))) if record==id(14))

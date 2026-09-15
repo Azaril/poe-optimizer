@@ -236,6 +236,121 @@ fn missing_quality_amount_is_demanded_only_on_selected_branch_and_never_zero() {
     );
 }
 #[test]
+fn missing_item_level_is_unresolved_only_when_demanded_and_never_a_default() {
+    let mut f = fixture();
+    let mut p = empty_program();
+    p.context = RuleEntityKind::EquipmentUse;
+    p.reads = vec![RuleRead {
+        id: key("item-level"),
+        value_type: ComputedValueType::Integer,
+        source: RuleReadSource::ItemLevel,
+    }];
+    p.nodes = vec![
+        literal("false", ParameterValue::Boolean(false)),
+        literal("true", ParameterValue::Boolean(true)),
+        literal("threshold", integer(80)),
+        node(
+            "level",
+            RuleExpression::Read {
+                input: key("item-level"),
+            },
+        ),
+        node(
+            "meets-threshold",
+            RuleExpression::Compare {
+                operation: RuleComparison::GreaterOrEqual,
+                left: key("level"),
+                right: key("threshold"),
+            },
+        ),
+        node(
+            "unused-level",
+            RuleExpression::Select {
+                condition: key("true"),
+                when_true: key("true"),
+                when_false: key("meets-threshold"),
+            },
+        ),
+    ];
+    p.effects = vec![
+        requirement("inactive", "meets-threshold", Some("false")),
+        requirement("unused", "unused-level", None),
+        requirement("demanded", "meets-threshold", None),
+    ];
+    let owner = replace(&mut f, p);
+    let c = compile(&f);
+    let mut scratch = c.new_scratch();
+
+    // An absent owned item level will omit this fact. It is neither zero nor an
+    // inferred level; an explicit rule branch may independently avoid its read.
+    for (level, demanded) in [
+        (
+            None,
+            EffectDisposition::Unresolved {
+                input: key("item-level"),
+            },
+        ),
+        (
+            Some(81),
+            EffectDisposition::Applied {
+                value: ParameterValue::Boolean(true),
+            },
+        ),
+        (
+            Some(79),
+            EffectDisposition::Applied {
+                value: ParameterValue::Boolean(false),
+            },
+        ),
+        (
+            None,
+            EffectDisposition::Unresolved {
+                input: key("item-level"),
+            },
+        ),
+    ] {
+        let input = level
+            .map(|level| facts(&[(key("item-level"), integer(level))]))
+            .unwrap_or_default();
+        let actual = c
+            .evaluate(&owner, &key("test"), &input, &f.schema, &mut scratch)
+            .unwrap();
+        assert_eq!(
+            actual
+                .effects
+                .iter()
+                .map(|effect| (&effect.id, &effect.disposition))
+                .collect::<Vec<_>>(),
+            vec![
+                (&key("inactive"), &EffectDisposition::Inactive),
+                (
+                    &key("unused"),
+                    &EffectDisposition::Applied {
+                        value: ParameterValue::Boolean(true),
+                    },
+                ),
+                (&key("demanded"), &demanded),
+            ],
+        );
+    }
+
+    let error = c
+        .evaluate(
+            &owner,
+            &key("test"),
+            &facts(&[(key("item-level"), integer(0))]),
+            &f.schema,
+            &mut scratch,
+        )
+        .unwrap_err();
+    assert!(
+        error
+            .to_string()
+            .contains("fact violates declared value schema")
+    );
+}
+
+#[test]
 fn lazy_all_any_and_guards_skip_missing_boolean_reads_and_keep_false_values() {
     let mut f = fixture();
     let mut p = empty_program();

@@ -111,11 +111,16 @@ skill is not a physical gem and is separate from the manual Skeletal Sniper. The
 source oracle confirms grant levels 1/11/20 at fractions 0/.5/1; this does not establish
 native provider resolution or full build parity.
 
-**Next structural gate:** finalized item records must permit an explicitly unspecified
-item level, distinct from unresolved conversion. Missing level must not become zero,
-equipment requirement level or granted skill level. Only computations or legality checks
-that demand that fact should be blocked. Current drafts conservatively retain a pending
-level; resolve this contract before claiming complete selected-request finalization.
+Finalized item records permit an explicitly unspecified item level; owned wire version 3
+requires a numeric or null field and rejects omission. Drafts distinguish `Known(None)`
+from `Pending`. A converted numeric header becomes `Known(Some(level))`; the current
+normalizer keeps every other case pending. No matching rule is not an absence proof:
+a partial policy can miss a real header. A later source-format-scoped proof or explicit
+owned authoring must establish unspecified. Never substitute zero, equipment requirement
+or granted skill level. Native rules leave a demanded missing fact unresolved while unused
+facts do not block component effects. Provider binding and complete selected-request
+finalization still need their own evidence. The provenance sidecar remains version 4;
+its embedded draft digest changes with the version-3 draft protocol.
 
 ## Identity, bounds and publication
 

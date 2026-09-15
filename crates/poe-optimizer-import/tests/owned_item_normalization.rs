@@ -112,7 +112,7 @@ fn original_twister_explicit_item26_fields_and_rolls_survive_pending_metadata() 
     let result = normalize(&original, &artifacts);
     let (item, text) = converted(&result, source_id);
     assert_eq!(item.template.to_resolved(), Some(artifacts.spear.clone()));
-    assert_eq!(item.item_level.to_resolved(), Some(81));
+    assert_eq!(item.item_level.to_resolved(), Some(Some(81)));
     quality_twenty(item, &artifacts);
     partial_collections(item);
     assert_eq!(values(item, &artifacts, "physical"), vec![vec![101.0]]);
@@ -225,7 +225,7 @@ fn unknown_line_preserves_known_fields_and_exact_explicit_speed_despite_tier_met
     let result = normalize(&original, &artifacts);
     let (item, text) = converted(&result, item_source(&original, "7"));
     assert_eq!(item.template.to_resolved(), Some(artifacts.spear.clone()));
-    assert_eq!(item.item_level.to_resolved(), Some(81));
+    assert_eq!(item.item_level.to_resolved(), Some(Some(81)));
     quality_twenty(item, &artifacts);
     assert_eq!(values(item, &artifacts, "attack-speed"), vec![vec![49.0]]);
     assert_eq!(item.modifiers.members.len(), 1);
@@ -293,4 +293,32 @@ fn two_plain_same_definition_modifiers_keep_distinct_line_and_occurrence_identit
     assert_eq!(first.modifiers, vec![item.modifiers.members[0].id]);
     assert_eq!(second.modifiers, vec![item.modifiers.members[1].id]);
     partial_collections(item);
+}
+
+#[test]
+fn incomplete_item_policy_does_not_turn_unrecognized_or_missing_level_into_known_null() {
+    use poe_optimizer_import::owned_item_lines::{ItemLineLimits, OwnedItemLinePolicy};
+    let mut artifacts = artifacts();
+    let mut policy = artifacts.items.input().clone();
+    policy.rules.clear();
+    artifacts.items =
+        OwnedItemLinePolicy::new(policy, &artifacts.schema, ItemLineLimits::default()).unwrap();
+    for content in [
+        "Ashen Staff",
+        "Grand Spear\nItem Level: 81",
+        "Ashen Staff\nLevelReq: 26",
+    ] {
+        let original = source(&wrapped(content));
+        let result = normalize(&original, &artifacts);
+        let (item, text) = converted(&result, item_source(&original, "7"));
+        assert!(matches!(item.item_level, DraftField::Pending(_)));
+        assert_eq!(item.item_level.to_resolved(), None);
+        assert!(text.skipped.is_none());
+        assert!(!text.lines.is_empty());
+        assert!(
+            text.lines
+                .iter()
+                .all(|line| matches!(line.outcome, ItemLineOutcome::Pending { .. }))
+        );
+    }
 }

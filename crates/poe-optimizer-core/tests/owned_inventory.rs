@@ -33,7 +33,7 @@ fn item(record: u64, first_modifier: u64) -> ItemRecord {
     ItemRecord {
         id: id(record),
         template: definition("same-template"),
-        item_level: 60,
+        item_level: Some(60),
         quality: None,
         parameters: vec![
             parameter(owner.clone(), "z-property", 2),
@@ -324,7 +324,7 @@ fn conflicting_shared_content_is_rejected_before_any_selection() {
             .find(|item| item.id == id::<ItemRecordId>(3))
             .unwrap();
         match mutation {
-            0 => shared.item_level += 1,
+            0 => *shared.item_level.as_mut().unwrap() += 1,
             1 => {
                 shared.parameters[0].value =
                     ParameterValue::Integer(BoundedInteger::new(99).unwrap())
@@ -345,7 +345,7 @@ fn conflicting_shared_content_is_rejected_before_any_selection() {
     input.items.push(item(30, 31));
     let with_unused = BuildSpec::new(input, limits()).unwrap();
     let mut stock = inventory_input();
-    stock.items[0].item_level += 1;
+    *stock.items[0].item_level.as_mut().unwrap() += 1;
     assert!(
         matches!(union_build_inventory(&with_unused, &InventorySnapshot::new(stock, limits()).unwrap(), limits()), Err(InventoryError::ConflictingItemRecord(record)) if record == id::<ItemRecordId>(30))
     );
@@ -589,19 +589,21 @@ fn replacement_and_hypothetical_roll_edits_do_not_inherit_stale_stock_claims() {
         Err(InventoryError::UnknownEquipmentUse(_))
     ));
     let mut edited = build.clone().into_input();
-    edited.items[0].item_level += 1;
+    *edited.items[0].item_level.as_mut().unwrap() += 1;
     let edited = BuildSpec::new(edited, limits()).unwrap();
     assert!(matches!(
         union_build_inventory(&edited, &stock, limits()),
         Err(InventoryError::ConflictingItemRecord(_))
     ));
     let mut coherent = stock.clone().into_input();
-    coherent
+    *coherent
         .items
         .iter_mut()
         .find(|item| item.id == id::<ItemRecordId>(3))
         .unwrap()
-        .item_level += 1;
+        .item_level
+        .as_mut()
+        .unwrap() += 1;
     let coherent = InventorySnapshot::new(coherent, limits()).unwrap();
     assert!(matches!(
         bind_availability(&edited, &coherent, claims, limits()),
@@ -774,4 +776,58 @@ fn raw_inventory_and_claim_wires_reject_unknown_fields_without_conveying_authori
         serde_json::from_slice(&serde_json::to_vec(&stock).unwrap()).unwrap();
     raw.copies[0].item = id(29);
     assert!(InventorySnapshot::new(raw, limits()).is_err());
+}
+
+#[test]
+fn unspecified_level_conflicts_with_supplied_level_and_invalidates_exact_snapshot_claims() {
+    let original = build();
+    let stock = inventory();
+    let claims = known(&original, &stock);
+    let mut raw = original.clone().into_input();
+    raw.items[0].item_level = None;
+    let changed = BuildSpec::new(raw, limits()).unwrap();
+    assert!(matches!(union_build_inventory(&changed, &stock, limits()),
+        Err(InventoryError::ConflictingItemRecord(record)) if record == id::<ItemRecordId>(3)));
+    let mut raw_stock = stock.clone().into_input();
+    raw_stock
+        .items
+        .iter_mut()
+        .find(|v| v.id == id::<ItemRecordId>(3))
+        .unwrap()
+        .item_level = None;
+    let changed_stock = InventorySnapshot::new(raw_stock, limits()).unwrap();
+    assert!(
+        matches!(union_build_inventory(&original, &changed_stock, limits()),
+        Err(InventoryError::ConflictingItemRecord(record)) if record == id::<ItemRecordId>(3))
+    );
+    let union = union_build_inventory(&changed, &changed_stock, limits()).unwrap();
+    assert_eq!(union.item(id(3)).unwrap().item_level, None);
+    assert_eq!(changed.input().equipment, original.input().equipment);
+    assert_eq!(changed.input().revision, original.input().revision);
+    assert_eq!(changed.input().allocator, original.input().allocator);
+    assert_ne!(
+        build_content_binding(&changed, limits()).unwrap(),
+        claims.build
+    );
+    assert_ne!(
+        inventory_content_binding(&changed_stock, limits()).unwrap(),
+        claims.inventory
+    );
+    assert!(matches!(
+        bind_availability(&changed, &changed_stock, claims.clone(), limits()),
+        Err(InventoryError::BuildBindingMismatch)
+    ));
+    let mut partial_refresh = claims;
+    partial_refresh.build = build_content_binding(&changed, limits()).unwrap();
+    assert!(matches!(
+        bind_availability(&changed, &changed_stock, partial_refresh, limits()),
+        Err(InventoryError::InventoryBindingMismatch)
+    ));
+    bind_availability(
+        &changed,
+        &changed_stock,
+        known(&changed, &changed_stock),
+        limits(),
+    )
+    .unwrap();
 }

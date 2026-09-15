@@ -44,7 +44,7 @@ fn build_input() -> BuildInput {
                 },
                 value: ParameterValue::Boolean(true),
             }],
-            item_level: 17,
+            item_level: Some(17),
             quality: None,
             modifiers: vec![],
         }],
@@ -348,4 +348,42 @@ fn invalid_inventory_copy_is_rejected_before_any_output_file_is_created() {
     assert!(!result.status.success());
     assert!(!result.stderr.is_empty());
     assert!(!temp.path().join("canonical.json").exists());
+}
+
+#[test]
+fn explicit_unspecified_item_level_roundtrips_but_omission_is_rejected() {
+    let temp = tempfile::tempdir().unwrap();
+    let mut wire: Value = serde_json::from_slice(&build_wire()).unwrap();
+    wire["document"]["value"]["items"][0]["item_level"] = Value::Null;
+    fs::write(
+        temp.path().join("unspecified.json"),
+        serde_json::to_vec(&wire).unwrap(),
+    )
+    .unwrap();
+    successful(
+        run(temp.path(), "unspecified.json", Some("canonical.json")),
+        "build",
+    );
+    let canonical = fs::read(temp.path().join("canonical.json")).unwrap();
+    let OwnedDocument::Build(build) = decode_owned(&canonical, limits()).unwrap() else {
+        panic!("expected build");
+    };
+    assert_eq!(build.input().items[0].item_level, None);
+    let value: Value = serde_json::from_slice(&canonical).unwrap();
+    let item = value["document"]["value"]["items"][0].as_object().unwrap();
+    assert_eq!(item.get("item_level"), Some(&Value::Null));
+
+    wire["document"]["value"]["items"][0]
+        .as_object_mut()
+        .unwrap()
+        .remove("item_level");
+    fs::write(
+        temp.path().join("omitted.json"),
+        serde_json::to_vec(&wire).unwrap(),
+    )
+    .unwrap();
+    let result = run(temp.path(), "omitted.json", Some("invalid-output.json"));
+    assert!(!result.status.success());
+    assert!(String::from_utf8_lossy(&result.stderr).contains("item_level"));
+    assert!(!temp.path().join("invalid-output.json").exists());
 }

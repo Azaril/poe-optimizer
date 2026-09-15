@@ -624,7 +624,7 @@ draft_record! { ItemDraft=>ItemRecord {
     id:ItemRecordId=>copy,
     template:DraftField<ItemTemplateDefId> =>draft,
     parameters:DraftList<ParameterDraft> =>draft,
-    item_level:DraftField<u16> =>draft,
+    item_level:DraftField<Option<u16>> =>draft,
     quality:DraftQuality=>draft,
     modifiers:DraftList<ModifierDraft> =>draft,
 }}

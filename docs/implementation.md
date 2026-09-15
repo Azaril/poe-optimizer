@@ -11,6 +11,44 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
+**Published base checkpoint:** `7a244267a709c77c6cfd015cb47d03101cb3528c`.
+Its [CI run](https://github.com/Azaril/poe-optimizer/actions/runs/34945189769) had eight
+running jobs and no failures at 08:10:28 UTC. Do not infer hosted success from local validation. Publication and
+exact-head status are recorded in `runs/owned-item-provider-01/publication.json` and
+`ci-published.json`.
+The predecessor run was canceled by this newer push: both PoB jobs had succeeded after
+57m36s/64m48s, while workspace jobs were canceled after about 65 minutes. Its two red aggregate
+checks are cancellation consequences. Public annotations confirm this; completed-job log
+access returned HTTP 403, so no individual slow test is identified. Evidence is in
+`runs/owned-item-level-01/ci/review.md`. The follow-up workflow disables cancellation for
+main pushes while retaining the same concurrency group, default pending-run coalescing,
+branch/PR cancellation and all checks. The expected next push queues behind this running
+revision; verify that transition and exact completed SHA before claiming hosted success.
+See [GitHub concurrency semantics](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency).
+Do not rerun older workflow revisions with the former unconditional cancellation setting.
+
+**Validated checkpoint after `7a24426`: nullable intrinsic item level and unused helper
+retirement.** The owned input and draft protocols now use version 3 so explicit null is
+distinguishable from omission and pending conversion. Core finalization, binding, wire and
+inventory tests preserve this distinction. Numeric content identities retain their existing digest domains;
+draft protocol identity changes to `owned-draft-v3`. Import still does not infer absent
+level from an unmatched line or missing header under an incomplete policy. Range attribution,
+provider binding and the first legacy numerical consumer replacement remain next.
+Two unused Import facades (`parse_mace_item_element`, `legacy_passive_actor_records`) are
+removed; XML payload checks and underlying passive/allocation laws remain. This is dead
+helper retirement, not replacement of an active numerical profile.
+
+**Guarded local validation passes 489 selected test executions:** Core 217, Data 19,
+Engine 36 (including five optional pinned-source item checks), Import 145, and CLI 36
+with default features plus 36 without PoB. Strict workspace/native-only Clippy, five-crate
+WASM compilation, formatting, native-only dependency exclusion and 937 documentation file
+links pass. No protected build, fixed expectation, schema40 data or PoB pin changed. All
+110 reference rows remain, and complete native originals remain **0/5**. Receipts live under
+`runs/owned-item-level-01/validation-01/`; `validated-checkpoint.json` records scope and
+`publication.json` records the eventual commit/remote state. This is not a full workspace
+test invocation or hosted CI conclusion. The workflow change is checked separately for its
+exact condition and byte-identical jobs/required checks; verify its first live queue transition.
+
 **Item/provider checkpoint (after `6cf9f70`):** owned rule operations v2 add
 computed parameter projection into an owner's exact declared generated skill, with
 explicit unsupported-value outcomes. The component compiler still does not bind actual
@@ -46,19 +84,25 @@ final source comparisons use PoB's actual base-rate scaling. Earlier failed runs
 this checkpoint's receipts. The approval-service capacity interruption did not waive checks.
 At the last prepublication observation, parent `6cf9f70` had passing Windows/Linux lint and
 native suites; its longer workspace/PoB suites were still running with no observed failures.
-Track the published revision's CI to completion before another routine checkpoint push,
-while continuing independent implementation locally.
+Track exact published-revision CI separately from local validation. The follow-up main
+concurrency setting lets running checks finish as newer revisions wait; a previous green
+revision is not proof that the current main revision passed.
 
-**Resume order:** verify publication/hosted CI, then correct the mandatory
-item-level model to represent explicit unspecified
-values, convert source range attribution, and bind item-granted parameters/local weapon
+**Resume order:** verify publication and the main CI queue transition, then convert source
+range attribution and bind item-granted parameters/local weapon
 outputs to actual equipment/provider/action occurrences. Original05 item28 has no Item
 Level header: neither its equipment requirement 26 nor Firebolt level 11 supplies it.
 No default is to be invented. Current drafts leave that fact pending; no matching item-line
-rule is not proof of absence. The next model permits explicit null while rejecting omitted
+rule is not proof of absence. The version-3 model permits explicit null while rejecting omitted
 wire fields; source absence still needs a scoped proof or user repair. Twister and Sniper
 remain joint model cases; grant projection must not turn Firebolt into an authored Gem or
 retarget the independent manual Sniper. Full native coverage remains **0/5**.
+
+The next Import slice is specified in the migration plan's range-attribution section and
+`runs/owned-item-level-01/range-design.md`: exact single-text staff attribution first, rune/list
+uncertainty retained for the spear, and ordered overlays with provenance. Its source pins
+are offline provenance; ordinary import must not require a PoB checkout or claim an exact
+exporter revision from XML alone. No production source interpreter/UI replay is selected.
 
 No additional legacy numerical consumer is retired in this work yet. The next shared
 semantic evaluator must migrate a named active consumer and its useful numerical tests,

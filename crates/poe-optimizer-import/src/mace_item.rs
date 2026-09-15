@@ -223,16 +223,6 @@ fn match_rule(line: &str, rule: &ItemModifierRule) -> Result<Option<Vec<f64>>, M
     Ok(Some(values))
 }
 
-/// Read one unsplit Item payload before XML line-ending normalization. Only the named
-/// entities understood by PoB are decoded; literal CRLF and complete CDATA stay intact.
-/// Callers retain responsibility for the surrounding profile's attributes and state.
-pub fn parse_mace_item_element(
-    item: roxmltree::Node<'_, '_>,
-    data: &GameDataPackage,
-) -> Result<ValidatedMaceWeapon, MaceItemError> {
-    parse_mace_item(&decode_item_payload(item)?, data)
-}
-
 /// Preserve item bytes before XML text normalization; shared by equipment families.
 pub(crate) fn decode_item_payload(item: roxmltree::Node<'_, '_>) -> Result<String, MaceItemError> {
     if !item.has_tag_name("Item")

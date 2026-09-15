@@ -58,12 +58,14 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             let owner = SlotOwnerDefId::ItemTemplate(item.template.clone());
             let schema = self.definition(&item.template, &site)?;
             if let Some(schema) = schema {
-                self.level(
-                    item.item_level,
-                    &schema.item_level,
-                    &owner_subject(&owner),
-                    &site.at(BindingFacet::Level),
-                )?;
+                if let Some(level) = item.item_level {
+                    self.level(
+                        level,
+                        &schema.item_level,
+                        &owner_subject(&owner),
+                        &site.at(BindingFacet::Level),
+                    )?;
+                }
                 self.quality(
                     &item.quality,
                     &schema.quality,

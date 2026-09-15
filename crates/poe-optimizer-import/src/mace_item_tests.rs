@@ -268,7 +268,8 @@ fn xml_item_source_helper_retains_crlf_and_decodes_only_compatible_complete_text
         let xml = format!("<Item id=\"1\">{payload}</Item>");
         crate::xml_compat::validate_native(&xml).unwrap();
         let document = roxmltree::Document::parse(&xml).unwrap();
-        let item = parse_mace_item_element(document.root_element(), &data).unwrap();
+        let payload = decode_item_payload(document.root_element()).unwrap();
+        let item = parse_mace_item(&payload, &data).unwrap();
         assert_eq!(item.source_text(), source);
         assert_eq!(
             item.diagnostic(),
@@ -288,7 +289,7 @@ fn xml_item_source_helper_retains_crlf_and_decodes_only_compatible_complete_text
         format!("<Item>{plain}<ModRange id=\"1\" range=\"0.5\"/></Item>"),
     ] {
         let document = roxmltree::Document::parse(&xml).unwrap();
-        assert!(parse_mace_item_element(document.root_element(), &data).is_err());
+        assert!(decode_item_payload(document.root_element()).is_err());
     }
 }
 

@@ -78,10 +78,10 @@ pub(super) fn normalize_item(
     };
     let item_level = match converted.item_level {
         ItemField::Known { value, .. } if u16::try_from(value.get()).is_ok() => {
-            u16::try_from(value.get())
-                .expect("checked item level")
-                .into()
+            Some(u16::try_from(value.get()).expect("checked item level")).into()
         }
+        // No emitted header is not proof that the source explicitly omits this fact.
+        // Only a scoped absence proof or owned authoring may supply Known(None).
         _ => b.pending(source, "item-level-not-converted")?,
     };
     let quality = match converted.quality {

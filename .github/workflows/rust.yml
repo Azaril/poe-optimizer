@@ -2,10 +2,11 @@ name: Rust
 
 on: [push, pull_request]
 
-# Keep the newest revision of each branch or pull request; both OS jobs still run.
+# Let running main validation finish; coalesce pending main revisions.
+# PRs and other branches still cancel superseded work.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name != 'push' || github.ref != 'refs/heads/main' }}
 
 jobs:
   validation:

@@ -55,6 +55,10 @@ grant ports must belong to the exact rule owner and its declared membership. Gem
 and quality reads require the corresponding owner; their declared ranges apply to supplied
 values. A choice read uses the owner's exposed choice context. No lookup inherits unrelated
 ports from a same-named or adjacent definition.
+Owned item records may explicitly leave item level unspecified. The later occurrence-fact
+adapter must omit that fact rather than substitute a number; ItemLevel retains its Integer
+rule type. Evaluation reports unresolved only when an active effect demands it. Lazy guards
+and branches that do not use it can still produce their own component result.
 
 Quality has explicit presence and amount reads:
 

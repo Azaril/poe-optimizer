@@ -249,7 +249,7 @@ impl Fixture {
                     id: id(3),
                     template: def("item"),
                     parameters: vec![],
-                    item_level: 20,
+                    item_level: Some(20),
                     quality: None,
                     modifiers: vec![RolledModifier {
                         id: id(4),
@@ -785,4 +785,39 @@ fn payload_membership_is_a_possible_intersection_not_all_companion_effects() {
         ))],
     );
     assert_eq!(f.bind().schema(), SchemaBindingStatus::Unresolved);
+}
+
+#[test]
+fn unspecified_item_level_skips_only_the_supplied_level_range_check() {
+    let mut f = Fixture::new();
+    f.build.items[0].item_level = None;
+    valid(&f.bind());
+    for level in [1, 100] {
+        f.build.items[0].item_level = Some(level);
+        valid(&f.bind());
+    }
+    for level in [0, 101] {
+        f.build.items[0].item_level = Some(level);
+        let report = f.bind();
+        assert!(
+            report
+                .issues()
+                .iter()
+                .any(|issue| issue.code == BindingIssueCode::OutOfRange
+                    && issue.site.location == BindingLocation::Item(id(3))
+                    && issue.site.facet == BindingFacet::Level)
+        );
+    }
+    f.build.items[0].item_level = None;
+    let _ = f.parameters();
+    valid(&f.bind());
+    f.build.items[0].parameters.clear();
+    assert!(has(&f.bind(), BindingIssueCode::RequiredValueMissing));
+    let mut missing = Fixture::new();
+    missing.build.items[0].item_level = None;
+    missing
+        .index
+        .definitions
+        .remove(&def::<ItemTemplateDefinition>("item").address());
+    assert!(has(&missing.bind(), BindingIssueCode::MissingDefinition));
 }
