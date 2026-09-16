@@ -567,3 +567,42 @@ from component numerical checks. Complete native originals remain 0/5.
 
 All new utility and test code in this checkpoint is Rust. T1 remains planned; existing
 Python implementations and tests are deliberately unchanged.
+
+## Explicit header inputs and finite actor/augment catalogs
+
+The recipe extension host now accepts an optional exact pair of item-line and item-source
+policies. Both files must be supplied together; stale definition/line bindings fail instead
+of being silently rewritten. Omitting the pair retains checked prior-policy rebinding.
+The first data consumer replaces opaque quality/item-level metadata with explicit values
+for the existing template contracts. A quality amount of zero is distinct from absence;
+missing, malformed, duplicate or inapplicable selections cannot become a known zero.
+This preserves the definition, rule, tree and 110-query artifacts and changes only import
+policy meaning. No new general parser or source interpreter was introduced.
+
+Finite offline Rust acquisitions now preserve all 649 actor profiles and 594 socketed-
+augment selector rows. They run only authenticated bounded data constructors behind the
+optional PoB feature. Their catalogs contain typed scalar/ordered facts and explicit
+unconverted metadata; source scripts and UI state do not enter native evaluation. Next
+consumers are the exact generated-actor baseline compiler and native rune reconstruction.
+These components do not retire a still-used legacy numerical consumer; D5 retirement
+remains attached to corresponding end-to-end integration.
+
+Actor conversion must use an explicit owned actor slot and exact creating occurrence.
+Summon-level and allied/hostile damage tables remain separate: the creating-skill policy,
+not the acquisition module name, selects the curve. Preserve raw zero attack time and
+route spell actions through their cast-time inputs. Extra actor life/defence scalars and
+modifier/flag descriptions remain unconverted until explicit policies lower them.
+
+Rune reconstruction must retain socketed-item identity and its EquipmentUse::ItemSocket
+ancestry. Select bounded active sockets/categories before combining effects by augment
+family, normal/Bonded lane and numeric stat order. Equal order does not establish equal
+modifier meaning. Known headers rebuild/reconcile saved rune lines once; unknown names,
+including surplus headers, cannot be ignored. Bonded activation and additional effect
+scaling are separate semantics. The extra scaled copy uses its own truncation/rounding,
+not a blanket multiplication of the combined total. Missing-header inference is deferred.
+
+Next integrate ordinary local modifier rolls with explicit nominal/effective magnitude
+stages, then reconstruct/reconcile rune effects and finish local damage/range/reload and
+ordered overrides. Integrate generated actors and caller-requested action baselines in
+parallel. Keep whole-plan, allocation and original-build completeness gates unchanged.
+All new tooling and tests are Rust; existing Python suites remain unchanged under T1.

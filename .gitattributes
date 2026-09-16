@@ -49,3 +49,8 @@ Cargo.lock text eol=lf
 
 # Finite numeric profile acquisition and conversion use exact artifact identities.
 /data/owned/poe2/3887ae68/weapon-profiles/*.json -text
+
+# Finite actor/augment acquisition and explicit header policies retain exact bytes.
+/data/owned/poe2/3887ae68/actor-baselines/*.json -text
+/data/owned/poe2/3887ae68/augments/*.json -text
+/data/owned/poe2/3887ae68/item-header-inputs/*.json -text

@@ -1,4 +1,6 @@
 //! Owned local arithmetic is data; publication does not certify whole item coverage.
+#[path = "support/owned_item_headers.rs"]
+mod headers;
 #[path = "support/owned_intrinsic_predecessor.rs"]
 mod predecessor;
 #[allow(dead_code)]
@@ -387,4 +389,5 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     }
     assert_eq!(bundle(&prior), before);
     assert!(!run(cwd, &output, &extension, &output).status.success());
+    headers::check_headers(cwd, &output, recipe.schema());
 }

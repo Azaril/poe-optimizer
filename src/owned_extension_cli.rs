@@ -21,6 +21,12 @@ pub(crate) struct Args {
     /// Project-owned schema additions and rule expressions; never source code.
     #[arg(long)]
     extension: PathBuf,
+    /// Exact successor-bound item line policy; requires --item-source.
+    #[arg(long, requires = "item_source")]
+    items: Option<PathBuf>,
+    /// Exact source layout policy bound to --items; requires --items.
+    #[arg(long, requires = "items")]
+    item_source: Option<PathBuf>,
     /// New destination directory; an existing directory is never replaced.
     #[arg(long)]
     output: PathBuf,
@@ -35,10 +41,29 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let extension: OwnedRecipeExtension =
         serde_json::from_slice(&read(&args.extension, &mut remaining)?)?;
     let extended = extend_owned_recipe(&prior.base, &extension, extension_limits)?;
+    let mut input = prior.successor_input(extended.successor);
+    let item_policies = match (args.items, args.item_source) {
+        (None, None) => CatalogItemPolicyMode::RebindPrior,
+        (Some(items), Some(source)) => {
+            // Bound each supplied wire before decoding. The shared finalizer
+            // validates the exact successor schema and item-line digest; this
+            // explicit mode never rewrites a stale caller binding.
+            let mut remaining = limits.items.max_wire_bytes;
+            input.items = serde_json::from_slice(&read(&items, &mut remaining)?)?;
+            let mut remaining = limits.item_source.max_wire_bytes;
+            input.item_source = serde_json::from_slice(&read(&source, &mut remaining)?)?;
+            CatalogItemPolicyMode::SuppliedSuccessor
+        }
+        _ => {
+            return Err(invalid(
+                "--items and --item-source must be supplied together",
+            ));
+        }
+    };
     let append = CatalogAppend {
         mappings: vec![],
         source: prior.mapping.input().source.clone(),
-        item_policies: CatalogItemPolicyMode::RebindPrior,
+        item_policies,
     };
     let tree = TreePolicyTransitionInput::RebindPrior {
         prior: Box::new(
@@ -48,7 +73,6 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
                 .ok_or_else(|| invalid("recipe extension requires a prior tree policy"))?,
         ),
     };
-    let input = prior.successor_input(extended.successor);
     let finalized = match extended.refinement {
         Some(refinement) => transition_owned_catalog_with_membership_refinement_compact(
             input, append, tree, refinement, limits,

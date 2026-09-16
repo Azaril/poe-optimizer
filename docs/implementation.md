@@ -11,7 +11,76 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: owned local weapon recipes and shared equipment receivers (after `0fc9362`).**
+**Current checkpoint: explicit item headers and finite actor/augment catalogs (after `e77f37e`).**
+The native `extend-owned-recipe` host accepts paired `--items` / `--item-source` inputs.
+Both are required together and must already bind the exact successor schema and line
+policy; stale inputs are rejected. Omission retains the existing checked-prior rebind.
+The shared finalizer still verifies prior history, tree/query membership and no-overwrite.
+
+The first authored consumer replaces the opaque Quality/Item Level metadata recipes with
+explicit integer headers. Standard quality uses the existing kind6/percentage-point unit2;
+zero survives as zero, with absence/malformed/duplicate/inapplicable values kept distinct.
+Template applicability comes from the injected schema. Three original02 weapons now retain
+explicit quality20 and item levels through the header path, consumable by the applicable
+exact-template quality adapters. Source lifecycle gaps keep the other original weapon
+headers Pending; admitting the grammar does not bypass those gaps. Item magnitude, crafted-quality state, rune lifecycle,
+modifier membership/order and action routing are still separate unresolved stages.
+The [header data](../data/owned/poe2/3887ae68/item-header-inputs/README.md) retains source
+policy v3 and publishes at `runs/owned-item-headers-01/package`: 37,302,379 bytes,
+unchanged schema `c3a3851df20d87b52ce786a35d33757b267a20e801bf95961f5dd09a28f89caf`,
+unchanged calculations and all 110 query rows. Its exact item-line identity is
+`5c8f588a466ead5c0a121049b12241baf540dd2b57a546e7b2f4cc4ab4d7cb56`.
+
+Two optional offline Rust commands now export finite inputs for the next native converters:
+`export-owned-actor-baselines` retains all 649 final profiles, 2,777 ordered child-skill
+references, 661 unconverted modifier descriptors and 240 level-table values. The catalog
+is 1,821,208 bytes, SHA `e6782772efcec900c23616556a4de252ae639ff8b8ab07b0a75cb026f58dcff6`.
+`export-owned-augments` retains 287 names/594 selectors, 629 normal plus 559 Bonded lines,
+fractional order and optional legality/trade metadata. Its 661,094-byte catalog has SHA
+`d2e22a6bcdeadb0e44aa04c885b4f3b93624afe44f28f5425caca8f012a2d9bc`.
+Both authenticate the pinned source and run only bounded finite constructors in an empty
+Lua environment behind the optional PoB feature. Exact private acquisition validates
+content independently of carried hashes. Native import DTOs contain no Lua program or UI
+state. Source absence/zero/false and ordered lists remain distinct; unconverted effects
+and selecting the correct damage curve remain explicit. Catalogs and evidence are tracked
+under [actor-baselines](../data/owned/poe2/3887ae68/actor-baselines/README.md) and
+[augments](../data/owned/poe2/3887ae68/augments/README.md).
+
+**Validation:** 41 scoped Rust test executions pass: nine Import wire checks, ten
+independent catalog/source integrations, nine bounded-constructor unit checks and 13 CLI
+executions across native/PoB feature modes. The CLI verifies exact catalog/evidence
+reproduction, source failure/no-overwrite, paired policy binding and unchanged prior data;
+the full successor chain also exercises explicit/zero/malformed/duplicate/inapplicable
+headers and all five original imports with the same 110 queries. Source lifecycle gaps
+remain visible. Strict workspace all-feature/all-target and native-only CLI Clippy,
+formatting, five-library WASM compilation and native dependency isolation pass. No Python
+file changed; existing Python and full numerical workspace suites were not rerun.
+Receipt: `runs/owned-acquisition-01/validation.json`; both header integration logs are
+alongside it. The optional Windows link retains the known LNK4098 warning. Source/test
+reviews corrected bounded callback allocation, a vacuous failure fixture and cross-platform
+extractor fingerprinting; an initial mlua string-conversion compile mismatch was fixed.
+Git attributes preserve the exact new catalog/policy bytes on Windows and Linux.
+Baseline `e77f37e` CI remained pending at this turn's observation; exact post-push state is
+recorded separately in `runs/owned-acquisition-01/ci-observation.json`.
+No active legacy numerical consumer was retired; named next consumers are generated-actor
+baseline conversion and native rune reconstruction. All new tooling/tests are Rust; T1
+still defers existing Python migration. Complete native originals remain **0/5**;
+allocation/whole-plan completeness is unchanged.
+
+**Resume:** continue from `runs/owned-item-headers-01/package`, retaining all 110 queries.
+Admit ordinary weapon-local modifier rolls with distinct nominal/effective magnitude
+stages; do not silently treat saved nominal values as final effective values. Then use
+the finite augment catalog for socket/category selection and reconstruction/reconciliation
+of ordinary/Bonded effects. Preserve socketed-item identity, unknown/surplus headers and
+additional-effect rounding. Finish elemental/chaos/range/reload, positive-pair emission,
+ordered overrides and action compatibility/hand selection. In parallel lower finite actor
+facts and caller-requested action rows using exact creating-skill level projections.
+Do not choose ally/hostile curves by source module, replace spell cast time with raw zero
+attack time, or merge duplicate summoning occurrences. Existing Unmapped declarations need
+an explicit semantic refinement, not an implicit membership promotion. Staged attributes
+and full native original-build parity remain open. Existing Python suites stay intact.
+
+**Previous checkpoint: owned local weapon recipes and shared equipment receivers (after `0fc9362`).**
 Operations v9 adds exact EquipmentTemplate applicability to reusable stat-owned programs,
 while rule-package wire v2 and operations v6/v7/v8 remain supported. Native resolution
 instantiates receivers per actual active EquipmentUse with a distinct origin, retaining
@@ -70,7 +139,7 @@ Existing Python utilities and tests are unchanged; [T1](architecture-migration.m
 continues to track eventual utility/test migration together. New code and tests are Rust.
 Complete native originals remain **0/5**.
 
-**Resume:** start from `runs/owned-local-weapon-01/package`, retaining all
+**Prior resume:** start from `runs/owned-local-weapon-01/package`, retaining all
 110 original query rows. Next admit ordinary local modifiers and exact quality selections,
 then implement finite rune reconstruction/reconciliation. Complete elemental/chaos, range,
 reload, positive-pair emission, ordered overrides, crafted-quality state and correct-unit

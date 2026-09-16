@@ -58,6 +58,11 @@ is a separate Rust command behind the `pob` feature; see [weapon profiles](data/
 owned schema/rule additions through the same checked boundary. Shared equipment receivers
 consume the [local weapon recipes](data/owned/poe2/3887ae68/local-weapon-inputs/README.md);
 these intermediate channels preserve incomplete item/build coverage.
+Supplying paired `--items` and `--item-source` flags validates exact successor-bound
+policies. The [header inputs](data/owned/poe2/3887ae68/item-header-inputs/README.md)
+use this path to retain explicit quality and item-level values. Optional Rust commands
+`export-owned-actor-baselines` and `export-owned-augments` acquire finite catalogs
+for the next native actor and rune converters; they do not execute build calculations.
 `check-owned-draft INPUT --selection SELECTION --owned-output OUTPUT` validates partial
 owned authoring state and finalizes explicit independent presets through the same Core
 APIs. Pending selections retain all query rows and cannot write a complete request;

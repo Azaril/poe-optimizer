@@ -63,3 +63,15 @@ with all 337 finite attack profiles, all 14 raw numeric fields, explicit absence
 and typed equipment-local outputs. Native compilation uses no source checkout or Lua.
 Compact v2 publication preserves the same checked constituent/policy/query contracts while
 omitting the duplicate recipe. Local item effects and final action assembly remain open.
+
+## Explicit headers and finite actor/augment acquisition
+
+[Item header inputs](item-header-inputs/README.md) replace two opaque metadata rules
+with explicit quality and item-level values using the existing injected codecs.
+The checked publisher accepts exact paired item/source policy replacements; all
+calculation/schema/query artifacts are preserved.
+
+[Actor baselines](actor-baselines/README.md) and [augments](augments/README.md) are
+finite optional acquisitions for the next native semantic converters. They retain
+source absence/order and unconverted coverage, and introduce no PoB dependency into
+the native evaluator. The original five builds are still incomplete natively.

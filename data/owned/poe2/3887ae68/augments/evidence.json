@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "extractor_sha256": "ee02e290c9ef7f48bb7d0a4347b9e43704759a3749631a5adda6cebe42323d0f",
+  "acquisition_source_sha256": "aa7840843369c84796a82bb0d6034fd217e255a7eebf9b5d1df75e652833bace",
+  "normalized_source_sha256": "aa7840843369c84796a82bb0d6034fd217e255a7eebf9b5d1df75e652833bace",
+  "catalog_sha256": "d2e22a6bcdeadb0e44aa04c885b4f3b93624afe44f28f5425caca8f012a2d9bc",
+  "counts": {
+    "augments": 287,
+    "selectors": 594,
+    "normal_lines": 629,
+    "bonded_lines": 559,
+    "trade_hashes": 626,
+    "trade_lines": 635
+  }
+}

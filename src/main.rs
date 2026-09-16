@@ -8,6 +8,8 @@ mod data_loading;
 #[cfg(feature = "pob")]
 mod game_data_extract;
 mod native_benchmark;
+#[cfg(feature = "pob")]
+mod owned_acquisition_cli;
 mod owned_attribute_cli;
 mod owned_binding;
 mod owned_catalog_recipe;
@@ -107,6 +109,12 @@ enum Action {
     /// Export finite weapon profiles through the optional pinned data adapter.
     #[cfg(feature = "pob")]
     ExportOwnedWeaponProfiles(owned_weapon_profiles_cli::ExportArgs),
+    /// Export finite actor baselines through the optional pinned data adapter.
+    #[cfg(feature = "pob")]
+    ExportOwnedActorBaselines(owned_acquisition_cli::Args),
+    /// Export finite socketed-augment definitions through the optional pinned adapter.
+    #[cfg(feature = "pob")]
+    ExportOwnedAugments(owned_acquisition_cli::Args),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
     /// Resolve owned component effects from explicit packages; no game metric conversion.
@@ -293,6 +301,10 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedIntrinsicAttack(args)) => owned_intrinsic_cli::export(args)?,
         Some(Action::CompileOwnedWeaponProfiles(args)) => owned_weapon_profiles_cli::run(args)?,
+        #[cfg(feature = "pob")]
+        Some(Action::ExportOwnedActorBaselines(args)) => owned_acquisition_cli::actors(args)?,
+        #[cfg(feature = "pob")]
+        Some(Action::ExportOwnedAugments(args)) => owned_acquisition_cli::augments(args)?,
         Some(Action::ExtendOwnedRecipe(args)) => owned_extension_cli::run(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedWeaponProfiles(args)) => owned_weapon_profiles_cli::export(args)?,

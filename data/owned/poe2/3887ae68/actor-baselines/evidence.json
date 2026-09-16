@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "extractor_sha256": "ae3b79260f8637aebea2b9f2415c9505e794110ba2a48b04cc2841c8c45fdcaa",
+  "extraction_source_files": [
+    {
+      "path": "src/Data/Minions.lua",
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "path": "src/Data/Spectres.lua",
+      "sha256": "7a75425de6161ab52719d3ac8e5205dac1ac4194c994ff20eae5e99cb535416d"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    }
+  ],
+  "catalog_sha256": "e6782772efcec900c23616556a4de252ae639ff8b8ab07b0a75cb026f58dcff6",
+  "profiles": 649,
+  "child_skills": 2777,
+  "unconverted_modifiers": 661,
+  "zero_attack_times": 8,
+  "numeric_field_names": [
+    "accuracy",
+    "armour",
+    "attackRange",
+    "attackTime",
+    "baseMovementSpeed",
+    "chaosResist",
+    "coldResist",
+    "companionChaosResist",
+    "companionColdResist",
+    "companionFireResist",
+    "companionLightningResist",
+    "companionReservation",
+    "critChance",
+    "damage",
+    "damageSpread",
+    "energyShield",
+    "evasion",
+    "fireResist",
+    "life",
+    "lightningResist",
+    "spectreReservation"
+  ],
+  "boolean_field_names": [
+    "baseDamageIgnoresAttackSpeed"
+  ]
+}
