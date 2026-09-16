@@ -15,6 +15,7 @@ mod owned_class_cli;
 mod owned_draft;
 mod owned_effects;
 mod owned_input;
+mod owned_intrinsic_cli;
 mod owned_metrics;
 mod owned_normalize;
 mod owned_recipe_cli;
@@ -85,6 +86,11 @@ enum Action {
     CompileOwnedPassiveViews(owned_attribute_cli::Args),
     /// Compile pinned class base attributes into owned rule data.
     CompileOwnedClassBases(owned_class_cli::Args),
+    /// Compile finite intrinsic attack baselines into owned class rules.
+    CompileOwnedIntrinsicAttack(owned_intrinsic_cli::Args),
+    /// Export finite intrinsic attack facts through the optional pinned PoB adapter.
+    #[cfg(feature = "pob")]
+    ExportOwnedIntrinsicAttack(owned_intrinsic_cli::ExportArgs),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
     /// Resolve owned component effects from explicit packages; no game metric conversion.
@@ -264,6 +270,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::CompileOwnedAttributes(args)) => owned_attribute_cli::run(args)?,
         Some(Action::CompileOwnedPassiveViews(args)) => owned_attribute_cli::run_views(args)?,
         Some(Action::CompileOwnedClassBases(args)) => owned_class_cli::run(args)?,
+        Some(Action::CompileOwnedIntrinsicAttack(args)) => owned_intrinsic_cli::run(args)?,
+        #[cfg(feature = "pob")]
+        Some(Action::ExportOwnedIntrinsicAttack(args)) => owned_intrinsic_cli::export(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
         Some(Action::EvaluateOwned(args)) => owned_metrics::run(args)?,

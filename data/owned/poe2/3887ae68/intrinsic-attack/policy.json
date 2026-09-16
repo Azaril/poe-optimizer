@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "version": "intrinsic-attack-baselines-v1",
+  "catalog_sha256": "e1a7fd72a1a764cf9d5cde523abb697f2184143bea19b85495f29bb7ecbc3371",
+  "excluded_classes": [
+    "0"
+  ],
+  "constants": {
+    "type": "None"
+  },
+  "fields": [
+    {
+      "source_field": "AttackRate",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d35"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d39"
+      }
+    },
+    {
+      "source_field": "CritChance",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d36"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      }
+    },
+    {
+      "source_field": "PhysicalMin",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d37"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d3a"
+      }
+    },
+    {
+      "source_field": "PhysicalMax",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d38"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d3a"
+      }
+    }
+  ]
+}

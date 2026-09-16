@@ -11,7 +11,67 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: class bases and integer arithmetic (after `a1dfef3`).**
+**Current checkpoint: intrinsic attack baselines and shared action sources (after `e6fd3a4`).**
+The optional Rust/`mlua` exporter reads the two reviewed source files in a bounded, isolated
+VM and emits a finite nine-row catalog. The default `compile-owned-intrinsic-attack`
+command executes no Lua: it checks an injected catalog digest, complete field membership,
+explicit source-class exclusion and typed stat/unit bindings, then adds eight class-owned
+literal Derive programs. Four Actor statistics and Rate/Damage units append to the same
+ledger (7477–7482). Class numerical rule membership stays Partial; no synthetic item,
+example input or runtime class switch is introduced.
+
+Routing v2 introduces named source selectors shared by all associated action channels.
+Active equipment occupancy is resolved before an injected EquipmentUse eligibility
+capability: known true chooses the equipped source, known false and proven empty use
+separately declared outcomes, and unresolved equipment/capability stays unresolved.
+Missing selected statistics never trigger fallback. Intrinsic actor and skill-local
+replacement sources retain their exact entity types; all branch mappings are explicit.
+The native plan binds one selector decision per action, preserves activation/global
+coverage gates and detects competing producers and cycles. Existing v1 routing bytes and
+digests remain unchanged. Rayon is a non-WASM test dependency only; evaluation remains an
+in-process immutable plan with worker-local scratch.
+
+The documented production command generated `runs/owned-intrinsic-attack-01/package`
+from the actual prior class-base bundle. It has 7482 registry entries, eight added class
+programs and the same 110 query rows. Schema SHA:
+`dc3f509fde272059cc9a6a307be2ca41bbe58ab26b52e0957e1b893d527724d6`.
+The finite catalog is 2235 bytes, SHA:
+`e1a7fd72a1a764cf9d5cde523abb697f2184143bea19b85495f29bb7ecbc3371`.
+It is checked in with exact-byte Git attributes and reproduces through the optional
+exporter. The package retains rule operation v7 and routing v1 because this numeric
+conversion does not yet author original-build equipment eligibility/action policies.
+
+**Validation:** 102 targeted Rust test executions pass: Data routing 15, Engine 55,
+Import 9, optional exporter 8 and CLI 15 (three optional-feature contracts plus twelve
+native-only contracts/regressions). These cover exhaustive typed source bindings, v1
+identity compatibility, active/empty/unresolved equipment, missing selected values,
+replacements, cycles, owned actors, Rayon scratch reuse, injected changed data, exact
+catalog reproduction and no-overwrite publication. All five originals still normalize
+with Pending access and unchanged query rows. Independent reviews found no blocking issue.
+The seven selector tests also pass after a Clippy conditional cleanup.
+
+Strict all-feature/all-target workspace and native-only CLI Clippy, owned-only library
+Clippy, formatting, owned Data/Engine and Import WASM compilation pass. The native CLI's
+normal dependency tree excludes PoB and Lua. The full numerical workspace suite was not
+rerun. Owned-only Clippy uses `--lib`: selecting all targets with legacy disabled also
+selects older tests that require legacy modules. No unrelated legacy tests were changed.
+Existing Python utilities/tests are unchanged and were not rerun; new tooling/tests are
+Rust, as required by [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
+Receipt: `runs/owned-intrinsic-attack-01/validation.json`. The routing receipt distinguishes
+retained logs from an overwritten broader test log. Baseline `e6fd3a4` CI was pending
+behind an older workspace run; a fresh exact-SHA observation follows publication.
+
+Keep complete native originals at **0/5** and their full query manifests fixed. The
+checked-in `current` bundle remains the historical 7469-entry predecessor; generate the
+attribute, view, class and [intrinsic successors](../data/owned/poe2/3887ae68/intrinsic-attack/README.md)
+in order. The next integration must convert explicit martial-source eligibility for
+actual equipment and bind reviewed action policies, exercise occupied caster/real weapon/
+empty/changed-loadout contrasts, then connect staged attribute contributions and inherent
+bonuses. Hollow Palm, disabled weapons and skill-specific replacements need their own
+policy coverage. Do not close Class rule coverage merely because four baseline numbers
+are available, or treat source audit/component counts as whole-build parity.
+
+**Previous checkpoint: class bases and integer arithmetic (after `a1dfef3`).**
 The Rust `compile-owned-class-bases` command converts all eight class rows from a caller's
 pinned source tree JSON into owned literal Add programs. The injected policy binds source
 fields to the existing Strength/Dexterity/Intelligence contribution stats. All 7476 registry

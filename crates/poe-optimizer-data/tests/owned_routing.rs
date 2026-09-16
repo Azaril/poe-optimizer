@@ -146,6 +146,7 @@ fn input(s: &OwnedDefinitionSchemaPackage) -> ActionRoutingInput {
         release: key("routes"),
         definitions: s.identity().clone(),
         outputs: vec![ActionOutputRoutes {
+            source_selectors: Some(DeclaredSet::complete(vec![])),
             output: output("first"),
             routes: DeclaredSet::complete(vec![equipment(), actor()]),
         }],
@@ -166,6 +167,7 @@ fn canonical_roundtrip_preserves_overlapping_routes_without_choosing_a_winner() 
     let s = schema();
     let mut i = input(&s);
     i.outputs.push(ActionOutputRoutes {
+        source_selectors: Some(DeclaredSet::complete(vec![])),
         output: output("second"),
         routes: DeclaredSet::partial(vec![actor()], vec![gap("second", "z"), gap("second", "a")]),
     });
@@ -206,6 +208,7 @@ fn absent_output_complete_empty_and_partial_empty_have_distinct_content() {
     let absent = package(i.clone(), &s);
     assert!(absent.routes_for(&output("first")).is_none());
     i.outputs.push(ActionOutputRoutes {
+        source_selectors: Some(DeclaredSet::complete(vec![])),
         output: output("first"),
         routes: DeclaredSet::complete(vec![]),
     });
@@ -395,8 +398,8 @@ fn strict_codec_rejects_unknown_duplicate_missing_fields_and_wrong_id_domains() 
     }
     let text = String::from_utf8(bytes).unwrap();
     let duplicate = text.replacen(
-        "\"schema_version\":1",
-        "\"schema_version\":1,\"schema_version\":1",
+        &format!("\"schema_version\":{OWNED_ACTION_ROUTING_VERSION}"),
+        &format!("\"schema_version\":{OWNED_ACTION_ROUTING_VERSION},\"schema_version\":{OWNED_ACTION_ROUTING_VERSION}"),
         1,
     );
     assert_ne!(duplicate, text);
@@ -437,6 +440,7 @@ fn aggregate_and_wire_budgets_apply_to_construction_and_encoding() {
     assert!(encode_action_routing(&p, limits).is_err());
     let mut i = input(&s);
     i.outputs.push(ActionOutputRoutes {
+        source_selectors: Some(DeclaredSet::complete(vec![])),
         output: output("second"),
         routes: DeclaredSet::complete(vec![]),
     });
@@ -518,4 +522,244 @@ fn inconsistent_custom_index_cannot_alias_source_stat_identity() {
             .to_string()
             .contains("inconsistent")
     );
+}
+
+fn selected_input() -> (OwnedDefinitionSchemaPackage, ActionRoutingInput) {
+    let mut raw = schema_input();
+    raw.definitions.push(DefinitionDescriptor::Capability(known(
+        id("eligible"),
+        CapabilitySchema {
+            targets: vec![RuleEntityKind::EquipmentUse],
+        },
+    )));
+    let s = OwnedDefinitionSchemaPackage::new(raw, OwnedSchemaLimits::default()).unwrap();
+    let mut i = input(&s);
+    i.outputs[0].source_selectors = Some(DeclaredSet::complete(vec![ActionSourceSelector {
+        id: key("attack"),
+        selection: ActionRouteSelection::All,
+        sources: vec![
+            NamedActionSource {
+                id: key("weapon"),
+                origin: ActionSourceOrigin::PlayerEquipment { slot: id("weapon") },
+            },
+            NamedActionSource {
+                id: key("intrinsic"),
+                origin: ActionSourceOrigin::ActionActor,
+            },
+            NamedActionSource {
+                id: key("replacement"),
+                origin: ActionSourceOrigin::CurrentAction,
+            },
+        ],
+        policy: ActionSourcePolicy::EquipmentEligibility {
+            source: key("weapon"),
+            capability: id("eligible"),
+            when_empty: ActionSourceOutcome::Use {
+                source: key("intrinsic"),
+            },
+            when_ineligible: ActionSourceOutcome::Use {
+                source: key("replacement"),
+            },
+        },
+    }]));
+    i.outputs[0].routes.members = vec![ActionStatRoute {
+        id: key("selected"),
+        selection: ActionRouteSelection::All,
+        target: id("action"),
+        source: ActionStatRouteSource::Selected {
+            selector: key("attack"),
+            stats: vec![
+                ActionSourceStat {
+                    source: key("weapon"),
+                    stat: id("equipment"),
+                },
+                ActionSourceStat {
+                    source: key("intrinsic"),
+                    stat: id("actor"),
+                },
+                ActionSourceStat {
+                    source: key("replacement"),
+                    stat: id("action"),
+                },
+            ],
+        },
+    }];
+    (s, i)
+}
+#[test]
+fn selected_sources_roundtrip_canonicalize_and_preserve_v1_identity_bytes() {
+    let (s, i) = selected_input();
+    let p = package(i.clone(), &s);
+    let mut reordered = i;
+    reordered.outputs[0]
+        .source_selectors
+        .as_mut()
+        .unwrap()
+        .members[0]
+        .sources
+        .reverse();
+    if let ActionStatRouteSource::Selected { stats, .. } =
+        &mut reordered.outputs[0].routes.members[0].source
+    {
+        stats.reverse();
+    }
+    assert_eq!(p.identity(), package(reordered, &s).identity());
+    let wire = encode_action_routing(&p, RoutingLimits::default()).unwrap();
+    assert_eq!(
+        decode_action_routing(&wire, &s, RoutingLimits::default())
+            .unwrap()
+            .identity(),
+        p.identity()
+    );
+    let mut old = input(&s);
+    old.schema_version = OWNED_ACTION_ROUTING_V1;
+    old.outputs[0].source_selectors = None;
+    old.outputs[0]
+        .routes
+        .members
+        .sort_by(|a, b| a.id.cmp(&b.id));
+    let bytes = serde_json::to_vec(&old).unwrap();
+    assert!(
+        !String::from_utf8(bytes.clone())
+            .unwrap()
+            .contains("source_selectors")
+    );
+    let expected = poe_optimizer_core::owned_content::digest_owned(
+        "owned-action-routing-v1",
+        &old,
+        RoutingLimits::default().max_wire_bytes,
+    )
+    .unwrap();
+    let checked = package(old.clone(), &s);
+    assert_eq!(*checked.identity(), expected);
+    assert_eq!(
+        encode_action_routing(&checked, RoutingLimits::default()).unwrap(),
+        bytes
+    );
+    old.outputs[0].source_selectors = Some(DeclaredSet::complete(vec![]));
+    assert!(OwnedActionRouting::new(old, &s, RoutingLimits::default()).is_err());
+    let mut null: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+    null["outputs"][0]["source_selectors"] = serde_json::Value::Null;
+    assert!(serde_json::from_value::<ActionRoutingInput>(null).is_err());
+}
+#[test]
+fn selected_source_bindings_are_exhaustive_typed_and_exactly_scoped() {
+    let (s, original) = selected_input();
+    for change in 0..10 {
+        let mut i = original.clone();
+        let output = &mut i.outputs[0];
+        let selector = &mut output.source_selectors.as_mut().unwrap().members[0];
+        let ActionStatRouteSource::Selected { stats, .. } = &mut output.routes.members[0].source
+        else {
+            panic!()
+        };
+        match change {
+            0 => {
+                stats.pop();
+            }
+            1 => stats[1] = stats[0].clone(),
+            2 => stats[1].source = key("missing"),
+            3 => stats[1].stat = id("equipment"),
+            4 => stats[2].stat = id("action-other-unit"),
+            5 => stats[2].stat = id("action-integer"),
+            6 => selector.sources.push(NamedActionSource {
+                id: key("unused"),
+                origin: ActionSourceOrigin::ActionActor,
+            }),
+            7 => selector.sources[1].id = key("weapon"),
+            8 => {
+                selector.selection = ActionRouteSelection::Exact(Box::new(ActionRouteSelector {
+                    part: id("part"),
+                    mode: id("mode"),
+                    stat_set: id("stats"),
+                }))
+            }
+            9 => {
+                selector.policy = ActionSourcePolicy::Fixed {
+                    source: key("weapon"),
+                }
+            }
+            _ => unreachable!(),
+        }
+        assert!(
+            OwnedActionRouting::new(i, &s, RoutingLimits::default()).is_err(),
+            "mutation {change}"
+        );
+    }
+}
+#[test]
+fn source_selector_membership_eligibility_and_versions_never_default() {
+    let (s, original) = selected_input();
+    for change in 0..7 {
+        let mut i = original.clone();
+        match change {
+            0 => i.outputs[0].source_selectors = None,
+            1 => i.schema_version = OWNED_ACTION_ROUTING_V1,
+            2 => {
+                let selectors = i.outputs[0].source_selectors.as_mut().unwrap();
+                selectors.members.push(selectors.members[0].clone());
+            }
+            3 => {
+                i.outputs[0].source_selectors.as_mut().unwrap().closure =
+                    SchemaClosure::Partial { gaps: vec![] }
+            }
+            4 | 5 => {
+                if let ActionSourcePolicy::EquipmentEligibility { capability, .. } =
+                    &mut i.outputs[0].source_selectors.as_mut().unwrap().members[0].policy
+                {
+                    *capability = if change == 4 {
+                        id("missing")
+                    } else {
+                        DefId::new(
+                            GameVersionNamespace::new("foreign", "v1").unwrap(),
+                            key("eligible"),
+                        )
+                    };
+                }
+            }
+            6 => {
+                if let ActionSourcePolicy::EquipmentEligibility { when_empty, .. } =
+                    &mut i.outputs[0].source_selectors.as_mut().unwrap().members[0].policy
+                {
+                    *when_empty = ActionSourceOutcome::Use {
+                        source: key("weapon"),
+                    };
+                }
+            }
+            _ => unreachable!(),
+        }
+        assert!(
+            OwnedActionRouting::new(i, &s, RoutingLimits::default()).is_err(),
+            "mutation {change}"
+        );
+    }
+    let mut i = original;
+    i.outputs[0].source_selectors.as_mut().unwrap().closure = SchemaClosure::Partial {
+        gaps: vec![gap("first", "unknown-selectors")],
+    };
+    assert!(OwnedActionRouting::new(i, &s, RoutingLimits::default()).is_ok());
+}
+
+#[test]
+fn source_selector_resources_are_bounded_across_outputs_even_without_routes() {
+    let (s, mut i) = selected_input();
+    let p = package(i.clone(), &s);
+    assert_eq!(p.resources().source_selectors, 1);
+    assert_eq!(p.resources().named_sources, 3);
+    assert_eq!(p.resources().source_bindings, 3);
+    i.outputs[0].routes.members.clear();
+    let mut second = i.outputs[0].clone();
+    second.output = output("second");
+    i.outputs.push(second);
+    assert!(matches!(
+        OwnedActionRouting::new(
+            i,
+            &s,
+            RoutingLimits {
+                max_routes: 1,
+                ..RoutingLimits::default()
+            }
+        ),
+        Err(RoutingError::Limit("source selectors"))
+    ));
 }

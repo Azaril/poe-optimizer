@@ -565,6 +565,7 @@ impl Fixture {
             target: MetricTarget::Action(Box::new(action())),
         });
         self.routes.push(ActionOutputRoutes {
+            source_selectors: Some(DeclaredSet::complete(vec![])),
             output: output(),
             routes: DeclaredSet::complete(vec![ActionStatRoute {
                 id: key("weapon-local"),

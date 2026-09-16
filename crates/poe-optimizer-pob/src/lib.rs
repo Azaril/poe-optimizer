@@ -7,6 +7,7 @@ mod item_loading_extract;
 mod item_scalability_extract;
 pub mod loadouts_extract;
 mod modifier_parser_extract;
+pub mod owned_intrinsic_attack;
 pub mod parser_programs;
 mod skill_identity_extract;
 mod skill_preparation_extract;

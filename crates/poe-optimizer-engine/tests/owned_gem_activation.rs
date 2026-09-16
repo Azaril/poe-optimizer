@@ -318,6 +318,7 @@ fn add_gem(f: &mut Fixture, stem: &str, use_id: u64, gem_id: u64, level: u16, qu
         vec![],
     );
     f.routes.push(ActionOutputRoutes {
+        source_selectors: Some(DeclaredSet::complete(vec![])),
         output: skill_output(stem),
         routes: empty(),
     });
@@ -987,6 +988,7 @@ fn add_sniper(f: &mut Fixture) {
             output_schema(),
         )));
         f.routes.push(ActionOutputRoutes {
+            source_selectors: Some(DeclaredSet::complete(vec![])),
             output: skill_output(name),
             routes: empty(),
         });

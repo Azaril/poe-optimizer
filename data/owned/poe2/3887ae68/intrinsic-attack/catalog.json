@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Data/Misc.lua",
+        "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+      },
+      {
+        "path": "src/Modules/Data.lua",
+        "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+      }
+    ]
+  },
+  "classes": [
+    {
+      "class_key": "0",
+      "fields": {
+        "AttackRate": 1.65,
+        "CritChance": 5.0,
+        "PhysicalMax": 6.0,
+        "PhysicalMin": 2.0,
+        "type": "None"
+      }
+    },
+    {
+      "class_key": "1",
+      "fields": {
+        "AttackRate": 1.65,
+        "CritChance": 5.0,
+        "PhysicalMax": 5.0,
+        "PhysicalMin": 2.0,
+        "type": "None"
+      }
+    },
+    {
+      "class_key": "10",
+      "fields": {
+        "AttackRate": 1.65,
+        "CritChance": 5.0,
+        "PhysicalMax": 5.0,
+        "PhysicalMin": 2.0,
+        "type": "None"
+      }
+    },
+    {
+      "class_key": "11",
+      "fields": {
+        "AttackRate": 1.65,
+        "CritChance": 5.0,
+        "PhysicalMax": 6.0,
+        "PhysicalMin": 2.0,
+        "type": "None"
+      }
+    },
+    {
+      "class_key": "2",
+      "fields": {
+        "AttackRate": 1.65,
+        "CritChance": 5.0,
+        "PhysicalMax": 5.0,
+        "PhysicalMin": 2.0,
+        "type": "None"
+      }
+    },
+    {
+      "class_key": "6",
+      "fields": {
+        "AttackRate": 1.65,
+        "CritChance": 5.0,
+        "PhysicalMax": 8.0,
+        "PhysicalMin": 2.0,
+        "type": "None"
+      }
+    },
+    {
+      "class_key": "7",
+      "fields": {
+        "AttackRate": 1.65,
+        "CritChance": 5.0,
+        "PhysicalMax": 5.0,
+        "PhysicalMin": 2.0,
+        "type": "None"
+      }
+    },
+    {
+      "class_key": "8",
+      "fields": {
+        "AttackRate": 1.65,
+        "CritChance": 5.0,
+        "PhysicalMax": 5.0,
+        "PhysicalMin": 2.0,
+        "type": "None"
+      }
+    },
+    {
+      "class_key": "9",
+      "fields": {
+        "AttackRate": 1.65,
+        "CritChance": 5.0,
+        "PhysicalMax": 6.0,
+        "PhysicalMin": 2.0,
+        "type": "None"
+      }
+    }
+  ]
+}

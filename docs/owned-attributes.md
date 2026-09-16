@@ -1,7 +1,8 @@
 # Owned attribute resolution
 
-Status: class-base conversion and integer quantization are implemented components. Complete
-native evaluation remains 0/5 originals. The [domain architecture](domain-architecture.md)
+Status: class-base conversion, integer quantization, intrinsic attack baselines and shared
+action-source selection are implemented components. Complete native evaluation remains
+0/5 originals. The [domain architecture](domain-architecture.md)
 and [implementation log](implementation.md) control integration and validation claims.
 
 ## Inputs and ownership
@@ -16,7 +17,8 @@ matches the existing mapping pin. Reviewed field membership and source-field to 
 bindings are supplied policy. It emits ordinary literal Add effects using existing IDs.
 Source text and paths do not enter native evaluation. Numerical Class game-rule membership
 remains partial: class-specific unarmed weapon defaults are outside the tree class record.
-They need independent owned action/base-weapon semantics before that gap can close.
+Their owned intrinsic baseline is a separate component; selection, activation and remaining
+class-mechanic obligations must close before the Class rule gap can close.
 
 Occupied hands and the selected numeric attack source are separate facts. In the current
 original corpus, equipped caster weapons in originals01/04/05 have no source attack-weapon
@@ -32,17 +34,18 @@ and binds both schema endpoints. It changes only the seven port-list closure mar
 with all members and existing slots preserved. Version-1 passive manifests remain readable
 with unchanged wire bytes and digest semantics.
 
-## Intrinsic attack baseline follow-up
+## Intrinsic attack baseline
 
-The next class-coverage slice should inject an intrinsic actor attack profile: rate
+The offline converter injects intrinsic actor attack facts: rate
 1.65/s, critical chance 5%, physical minimum 2, and class-dependent maximum 5/6/8.
 Maximum is 5 for Witch, Ranger, Sorceress, Huntress and Monk; 6 for Mercenary and Druid;
 8 for Warrior. These reviewed source values belong in configuration data. Source class 0
 is outside the current eight-class namespace. Numeric profile identity is separate from
 inventory equipment and from an action's selected source.
 
-Extend the action-routing seam with an explicit selected attack source: active equipped
-weapon, intrinsic actor baseline or skill-specific source. Preserve unknown versus absent
+The version-2 action-routing seam has an explicit selected attack source: active equipped
+weapon, intrinsic actor baseline or skill-specific source. Concrete equipment eligibility
+and action policies still need coverage for the original builds. Preserve unknown versus absent
 states, loadout scope, compatibility and activation. The existing PlayerEquipment route
 cannot infer this from a missing stat or equipment match. Hollow Palm off-hand creation,
 disabled weapons and skill-specific replacement are separate policy cases. Directly
@@ -53,6 +56,44 @@ Class game-rule coverage can close after all intrinsic facts are represented and
 selection/activation obligations have explicit owners in action/equipment policy. Unsupported
 activation must remain visible in those owners. Evidence above is a source audit; independent
 numerical and changed-loadout comparisons remain required.
+
+## Shared action-source selection
+
+An action chooses its numeric attack source once, then all related channels use that
+choice. The routing package owns named source selectors per declared action output and
+exact part/mode/stat-set selection. A source origin is the selected actor, the current
+action (for a skill-specific replacement), or an exact player equipment slot. Each route
+provides an exhaustive source-name-to-stat mapping; actor and equipment statistics retain
+their distinct target types and exact units. This does not add an item-shaped intrinsic
+profile or read PoB source keys at runtime.
+
+Equipment selection proves active-loadout slot occupancy before inspecting a separately
+injected EquipmentUse capability. Known true selects the equipped source. Known false
+uses the explicitly declared ineligible outcome. A proven empty slot uses its separately
+declared empty outcome. A present unresolved item, ambiguous occupancy, unknown capability,
+or missing selected stat remains unresolved. Failure to obtain a stat never retries another
+source. A declared Unavailable outcome means known absence (inactive), not numeric zero.
+
+A shared selector node precedes the chosen stat reads in the native dependency plan.
+Every selected route uses the same decision; only that branch's numerical read is demanded.
+Conservative dependency and cycle validation still sees both branches. Capability providers,
+source activation and complete contributor membership obey the existing global gates.
+Selectors cannot make an otherwise partial original build complete. Fixed action-local
+sources cover replacements without pretending they occupy a hand; secondary equipment
+fallbacks require their own occupancy proof and are outside the first selector policy.
+
+Routing version 2 makes selector membership explicit. Earlier version-1 packages retain
+exact wire and identity semantics and cannot use the new fields/variants. The intrinsic
+baseline conversion itself does not claim the equipment eligibility or action-policy
+coverage needed to wire all original skills through this seam.
+
+The optional Rust/`mlua` exporter authenticates reviewed source bytes and evaluates only
+finite data in an isolated, bounded environment. It emits all source rows, including class
+0; the injected conversion policy explicitly excludes that class from the eight-class
+namespace. The default/native command reads the catalog without Lua. It checks a reviewed
+catalog digest independently from carried source provenance, accounts for every source
+field, and preserves partial Class rule membership. Existing Python tooling/tests remain
+unchanged; both this converter and its new tests are Rust.
 
 ## Numerical step
 
@@ -123,7 +164,7 @@ and 8% increased Dexterity on originals02/03. Absence of a conditional phrase in
 census does not prove complete effect coverage.
 
 Next integration must establish complete selected contributor membership, staged conditions,
-class-specific unarmed defaults and inherent-stat receivers. Test ties, signed values,
+concrete attack-source eligibility/activation and inherent-stat receivers. Test ties, signed values,
 zero-base lazy reads, noncommuting rounding order, per-stat cross dependencies, inactive
 provider paths, partial contributors and actual changed builds. Compare original and held-out
 builds independently against the optional PoB backend. Preserve global closure gates and

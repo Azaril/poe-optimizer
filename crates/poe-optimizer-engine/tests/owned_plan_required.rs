@@ -285,6 +285,7 @@ fn fixture() -> Fixture {
         programs: empty(),
     });
     f.routes.push(ActionOutputRoutes {
+        source_selectors: Some(DeclaredSet::complete(vec![])),
         output: generated_output(),
         routes: empty(),
     });

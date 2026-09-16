@@ -63,6 +63,21 @@ pub(super) fn read(
     charge(work, 1)?;
     match binding {
         ReadBinding::Constant(Some(value)) => Ok(known(value.clone())),
+        ReadBinding::Inactive => Ok(EffectValue::Inactive),
+        ReadBinding::Select {
+            decision,
+            when_true,
+            when_false,
+        } => match value_at(values, *decision)? {
+            EffectValue::Known {
+                value: ParameterValue::Boolean(true),
+            } => read(when_true, values, node, work),
+            EffectValue::Known {
+                value: ParameterValue::Boolean(false),
+            } => read(when_false, values, node, work),
+            EffectValue::Known { .. } => Err(invalid("source decision is not boolean")),
+            failure => Ok(failure.clone()),
+        },
         ReadBinding::Constant(None) => Ok(EffectValue::unresolved(PlanGapReason::MissingInput)),
         ReadBinding::Missing(reason) => Ok(EffectValue::unresolved(*reason)),
         ReadBinding::Present { source } => Ok(match read(source, values, node, work)? {
@@ -304,6 +319,21 @@ pub(super) fn execute_limited<I: DefinitionSchemaIndex>(
                 match &effect.operation {
                     EffectOperation::Route { source } => {
                         read(source, &scratch.values, &effect.key.effect, &mut work)?
+                    }
+                    EffectOperation::SelectSource { source } => {
+                        let selected =
+                            read(source, &scratch.values, &effect.key.effect, &mut work)?;
+                        if matches!(
+                            selected,
+                            EffectValue::Known {
+                                value: ParameterValue::Integer(_)
+                                    | ParameterValue::Quantity(_)
+                                    | ParameterValue::Option(_)
+                            }
+                        ) {
+                            return Err(invalid("source eligibility must be boolean"));
+                        }
+                        selected
                     }
                     EffectOperation::Program { invocation, effect } => {
                         let invocation = plan

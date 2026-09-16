@@ -78,11 +78,13 @@ through supplied catalog, policy and stat definitions. Its checked successor pre
 physical nodes and import policies; see [attribute data build](data/owned/poe2/3887ae68/attributes/README.md).
 `compile-owned-passive-views` handles reviewed class-dependent replacements, and
 `compile-owned-class-bases` adds base attributes for all eight classes from pinned source
-JSON. The latter retains unresolved class rule coverage for unarmed defaults. Both publish
-owned data through the same checked successor boundary; see
-[class base data](data/owned/poe2/3887ae68/class-bases/README.md) and the
-[staged attribute design](docs/owned-attributes.md). These are components, not complete
-attribute totals or original-build parity.
+JSON. Both publish owned data through the same checked successor boundary; see
+[class base data](data/owned/poe2/3887ae68/class-bases/README.md).
+The [intrinsic attack baseline converter](data/owned/poe2/3887ae68/intrinsic-attack/README.md)
+adds class attack facts through an optional offline exporter and a native Rust compiler.
+Source selection, activation and complete contributor coverage remain separate. These are
+components, not complete attribute totals or original-build parity; see the
+[staged attribute design](docs/owned-attributes.md).
 The existing numerical CLI accepts PoB share codes/XML, explicit skill/action and encounter options,
 and returns typed metrics with units, availability and structured coverage. Configurable scalar
 objectives can be assessed during evaluation or against saved results without recalculation.

@@ -130,6 +130,10 @@ pub enum RuleOrigin {
     Usage {
         index: usize,
     },
+    SourceSelection {
+        action: Box<ActionSelection>,
+        selector: OwnedDefinitionKey,
+    },
     Route {
         action: Box<ActionSelection>,
         route: OwnedDefinitionKey,
@@ -176,10 +180,20 @@ pub struct ContributionKey {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum BoundEffectTarget {
-    Value { key: PlanValueKey },
-    Contribution { key: ContributionKey },
-    Requirement { code: OwnedDefinitionKey },
+    Value {
+        key: PlanValueKey,
+    },
+    Contribution {
+        key: ContributionKey,
+    },
+    Requirement {
+        code: OwnedDefinitionKey,
+    },
     Applicability,
+    SourceSelection {
+        action: Box<ActionSelection>,
+        selector: OwnedDefinitionKey,
+    },
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct PlanGap {
@@ -276,6 +290,12 @@ pub struct PlanIdentity {
 #[derive(Clone, Debug)]
 enum ReadBinding {
     Constant(Option<ParameterValue>),
+    Inactive,
+    Select {
+        decision: usize,
+        when_true: Box<ReadBinding>,
+        when_false: Box<ReadBinding>,
+    },
     Present {
         source: Box<ReadBinding>,
     },
@@ -300,6 +320,7 @@ struct Invocation {
 enum EffectOperation {
     Program { invocation: usize, effect: usize },
     Route { source: ReadBinding },
+    SelectSource { source: ReadBinding },
 }
 struct EffectNode {
     key: EffectOccurrenceKey,

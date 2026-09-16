@@ -73,6 +73,9 @@ fn invalid(path: &str, message: &'static str) -> RoutingError {
 pub struct RoutingUse {
     pub outputs: usize,
     pub routes: usize,
+    pub source_selectors: usize,
+    pub named_sources: usize,
+    pub source_bindings: usize,
     pub gaps: usize,
     pub schema_work: usize,
 }
@@ -81,6 +84,13 @@ impl RoutingUse {
         for (name, value, maximum) in [
             ("outputs", self.outputs, limits.max_outputs),
             ("routes", self.routes, limits.max_routes),
+            ("source selectors", self.source_selectors, limits.max_routes),
+            ("named sources", self.named_sources, limits.max_routes * 3),
+            (
+                "source bindings",
+                self.source_bindings,
+                limits.max_routes * 3,
+            ),
             ("gaps", self.gaps, limits.max_gaps),
             ("schema work", self.schema_work, limits.max_schema_work),
         ] {
@@ -143,6 +153,162 @@ fn stat<'a, I: DefinitionSchemaIndex>(
     }
     Ok(&schema.value)
 }
+fn selection<I: DefinitionSchemaIndex>(
+    selection: &ActionRouteSelection,
+    schema: &ActionOutputSchema,
+    index: &I,
+    path: &str,
+    used: &mut RoutingUse,
+    limits: RoutingLimits,
+) -> Result<(), RoutingError> {
+    if let ActionRouteSelection::Exact(selector) = selection {
+        used.charge(3, limits)?;
+        known(index.definition(&selector.part), path)?;
+        known(index.definition(&selector.mode), path)?;
+        known(index.definition(&selector.stat_set), path)?;
+        member(&selector.part, &schema.parts, path, used, limits)?;
+        member(&selector.mode, &schema.modes, path, used, limits)?;
+        member(&selector.stat_set, &schema.stat_sets, path, used, limits)?;
+    }
+    Ok(())
+}
+fn source_kind(origin: &ActionSourceOrigin) -> RuleEntityKind {
+    match origin {
+        ActionSourceOrigin::ActionActor => RuleEntityKind::Actor,
+        ActionSourceOrigin::CurrentAction => RuleEntityKind::Action,
+        ActionSourceOrigin::PlayerEquipment { .. } => RuleEntityKind::EquipmentUse,
+    }
+}
+fn selectors<I: DefinitionSchemaIndex>(
+    output: &ActionOutputRoutes,
+    version: u32,
+    schema: &ActionOutputSchema,
+    index: &I,
+    path: &str,
+    used: &mut RoutingUse,
+    limits: RoutingLimits,
+) -> Result<(), RoutingError> {
+    if version == OWNED_ACTION_ROUTING_V1 {
+        if output.source_selectors.is_some() {
+            return Err(invalid(path, "v1 cannot declare source selectors"));
+        }
+        return Ok(());
+    }
+    let selectors = output
+        .source_selectors
+        .as_ref()
+        .ok_or_else(|| invalid(path, "v2 requires explicit source selectors"))?;
+    add(&mut used.source_selectors, selectors.members.len())?;
+    used.charge(selectors.members.len(), limits)?;
+    if let SchemaClosure::Partial { gaps } = &selectors.closure {
+        add(&mut used.gaps, gaps.len())?;
+        used.check(limits)?;
+        if gaps.is_empty() {
+            return Err(invalid(path, "partial selectors require gaps"));
+        }
+        let expected = SchemaSubject::Slot(SlotAddress::ActionOutput(output.output.clone()));
+        let mut codes = BTreeSet::new();
+        for gap in gaps {
+            used.charge(1, limits)?;
+            if gap.subject != expected
+                || gap.facet != SchemaFacet::GameRules
+                || !codes.insert(&gap.code)
+            {
+                return Err(invalid(path, "invalid or duplicate selector closure gap"));
+            }
+        }
+    }
+    let mut ids = BTreeSet::new();
+    for selector in &selectors.members {
+        add(&mut used.named_sources, selector.sources.len())?;
+        used.charge(selector.sources.len() + 1, limits)?;
+        if !ids.insert(&selector.id) {
+            return Err(invalid(path, "duplicate source selector"));
+        }
+        // The finite policy admits at most an equipped source and two alternatives.
+        if selector.sources.is_empty() || selector.sources.len() > 3 {
+            return Err(invalid(
+                path,
+                "selector requires one to three reachable sources",
+            ));
+        }
+        selection(&selector.selection, schema, index, path, used, limits)?;
+        let mut sources = std::collections::BTreeMap::new();
+        for source in &selector.sources {
+            if sources.insert(&source.id, &source.origin).is_some() {
+                return Err(invalid(path, "duplicate named source"));
+            }
+            if let ActionSourceOrigin::PlayerEquipment { slot } = &source.origin {
+                used.charge(1, limits)?;
+                known(index.definition(slot), path)?;
+            }
+        }
+        let mut reachable = BTreeSet::new();
+        match &selector.policy {
+            ActionSourcePolicy::Fixed { source } => {
+                if !matches!(
+                    sources.get(source),
+                    Some(ActionSourceOrigin::ActionActor | ActionSourceOrigin::CurrentAction)
+                ) {
+                    return Err(invalid(
+                        path,
+                        "fixed source requires an actor or current action origin",
+                    ));
+                }
+                reachable.insert(source);
+            }
+            ActionSourcePolicy::EquipmentEligibility {
+                source,
+                capability,
+                when_empty,
+                when_ineligible,
+            } => {
+                if !matches!(
+                    sources.get(source),
+                    Some(ActionSourceOrigin::PlayerEquipment { .. })
+                ) {
+                    return Err(invalid(
+                        path,
+                        "eligibility source must name player equipment",
+                    ));
+                }
+                used.charge(1, limits)?;
+                let capability = known(index.definition(capability), path)?;
+                used.charge(capability.targets.len(), limits)?;
+                if !capability.targets.contains(&RuleEntityKind::EquipmentUse) {
+                    return Err(invalid(
+                        path,
+                        "eligibility capability must target EquipmentUse",
+                    ));
+                }
+                reachable.insert(source);
+                for outcome in [when_empty, when_ineligible] {
+                    if let ActionSourceOutcome::Use { source } = outcome {
+                        if !matches!(
+                            sources.get(source),
+                            Some(
+                                ActionSourceOrigin::ActionActor | ActionSourceOrigin::CurrentAction
+                            )
+                        ) {
+                            return Err(invalid(
+                                path,
+                                "alternative source requires an actor or current action origin",
+                            ));
+                        }
+                        reachable.insert(source);
+                    }
+                }
+            }
+        }
+        if reachable.len() != sources.len() {
+            return Err(invalid(
+                path,
+                "declared sources must exactly match reachable policy outcomes",
+            ));
+        }
+    }
+    Ok(())
+}
 fn validate<I: DefinitionSchemaIndex>(
     input: &ActionRoutingInput,
     index: &I,
@@ -161,6 +327,15 @@ fn validate<I: DefinitionSchemaIndex>(
         }
         used.charge(1, limits)?;
         let schema = known(index.slot(&output.output), &path)?;
+        selectors(
+            output,
+            input.schema_version,
+            schema,
+            index,
+            &path,
+            &mut used,
+            limits,
+        )?;
         add(&mut used.routes, output.routes.members.len())?;
         used.check(limits)?;
         if let SchemaClosure::Partial { gaps } = &output.routes.closure {
@@ -188,19 +363,66 @@ fn validate<I: DefinitionSchemaIndex>(
             if !ids.insert(&route.id) {
                 return Err(invalid(&path, "duplicate route id"));
             }
-            if let ActionRouteSelection::Exact(selector) = &route.selection {
-                let ActionRouteSelector {
-                    part,
-                    mode,
-                    stat_set,
-                } = selector.as_ref();
-                used.charge(3, limits)?;
-                known(index.definition(part), &path)?;
-                known(index.definition(mode), &path)?;
-                known(index.definition(stat_set), &path)?;
-                member(part, &schema.parts, &path, &mut used, limits)?;
-                member(mode, &schema.modes, &path, &mut used, limits)?;
-                member(stat_set, &schema.stat_sets, &path, &mut used, limits)?;
+            selection(&route.selection, schema, index, &path, &mut used, limits)?;
+            if let ActionStatRouteSource::Selected { selector, stats } = &route.source {
+                add(&mut used.source_bindings, stats.len())?;
+                used.charge(stats.len(), limits)?;
+                if stats.len() > 3 {
+                    return Err(invalid(
+                        &path,
+                        "selected route admits at most three branch statistics",
+                    ));
+                }
+                let selectors = output
+                    .source_selectors
+                    .as_ref()
+                    .ok_or_else(|| invalid(&path, "selected route requires v2 source selectors"))?;
+                used.charge(selectors.members.len(), limits)?;
+                let selector = selectors
+                    .members
+                    .iter()
+                    .find(|s| &s.id == selector)
+                    .ok_or_else(|| invalid(&path, "unknown source selector"))?;
+                if selector.selection != route.selection {
+                    return Err(invalid(
+                        &path,
+                        "route and source selector selections differ",
+                    ));
+                }
+                let target = stat(
+                    index,
+                    &route.target,
+                    RuleEntityKind::Action,
+                    &path,
+                    &mut used,
+                    limits,
+                )?;
+                if stats.len() != selector.sources.len() {
+                    return Err(invalid(&path, "source stat bindings must be exhaustive"));
+                }
+                let mut seen = BTreeSet::new();
+                for binding in stats {
+                    if !seen.insert(&binding.source) {
+                        return Err(invalid(&path, "duplicate source stat binding"));
+                    }
+                    let origin = selector
+                        .sources
+                        .iter()
+                        .find(|s| s.id == binding.source)
+                        .ok_or_else(|| invalid(&path, "unknown source stat binding"))?;
+                    let source = stat(
+                        index,
+                        &binding.stat,
+                        source_kind(&origin.origin),
+                        &path,
+                        &mut used,
+                        limits,
+                    )?;
+                    if source != target {
+                        return Err(invalid(&path, "source and target type/unit mismatch"));
+                    }
+                }
+                continue;
             }
             let (source_stat, source_kind) = match &route.source {
                 ActionStatRouteSource::PlayerEquipment { slot, stat } => {
@@ -209,6 +431,7 @@ fn validate<I: DefinitionSchemaIndex>(
                     (stat, RuleEntityKind::EquipmentUse)
                 }
                 ActionStatRouteSource::ActionActor { stat } => (stat, RuleEntityKind::Actor),
+                ActionStatRouteSource::Selected { .. } => unreachable!("validated above"),
             };
             let source_type = stat(index, source_stat, source_kind, &path, &mut used, limits)?;
             let target_type = stat(
@@ -241,7 +464,10 @@ impl OwnedActionRouting {
         limits: RoutingLimits,
     ) -> Result<Self, RoutingError> {
         limits.validate()?;
-        if input.schema_version != OWNED_ACTION_ROUTING_VERSION {
+        if !matches!(
+            input.schema_version,
+            OWNED_ACTION_ROUTING_V1 | OWNED_ACTION_ROUTING_VERSION
+        ) {
             return Err(RoutingError::Version(input.schema_version));
         }
         if input.definitions != *index.identity()
@@ -251,16 +477,46 @@ impl OwnedActionRouting {
             return Err(RoutingError::Binding);
         }
         // Bound direct-authored values before auxiliary indexes or output buffers.
-        digest_owned(DOMAIN, &input, limits.max_wire_bytes)?;
+        digest_owned(
+            if input.schema_version == OWNED_ACTION_ROUTING_V1 {
+                DOMAIN
+            } else {
+                "owned-action-routing-v2"
+            },
+            &input,
+            limits.max_wire_bytes,
+        )?;
         let resources = validate(&input, index, limits)?;
         input.outputs.sort_by(|a, b| a.output.cmp(&b.output));
         for output in &mut input.outputs {
             output.routes.members.sort_by(|a, b| a.id.cmp(&b.id));
+            for route in &mut output.routes.members {
+                if let ActionStatRouteSource::Selected { stats, .. } = &mut route.source {
+                    stats.sort_by(|a, b| a.source.cmp(&b.source));
+                }
+            }
+            if let Some(selectors) = &mut output.source_selectors {
+                selectors.members.sort_by(|a, b| a.id.cmp(&b.id));
+                for selector in &mut selectors.members {
+                    selector.sources.sort_by(|a, b| a.id.cmp(&b.id));
+                }
+                if let SchemaClosure::Partial { gaps } = &mut selectors.closure {
+                    gaps.sort_by(|a, b| a.code.cmp(&b.code));
+                }
+            }
             if let SchemaClosure::Partial { gaps } = &mut output.routes.closure {
                 gaps.sort_by(|a, b| a.code.cmp(&b.code));
             }
         }
-        let identity = digest_owned(DOMAIN, &input, limits.max_wire_bytes)?;
+        let identity = digest_owned(
+            if input.schema_version == OWNED_ACTION_ROUTING_V1 {
+                DOMAIN
+            } else {
+                "owned-action-routing-v2"
+            },
+            &input,
+            limits.max_wire_bytes,
+        )?;
         let canonical = serde_json::to_vec(&input)?;
         Ok(Self {
             input,
@@ -293,6 +549,16 @@ impl OwnedActionRouting {
             return Err(RoutingError::Limit("bytes"));
         }
         Ok(())
+    }
+    pub fn source_selectors_for(
+        &self,
+        output: &poe_optimizer_core::owned_build::DeclaredSlot<ActionOutputDefId>,
+    ) -> Option<&DeclaredSet<ActionSourceSelector>> {
+        self.input
+            .outputs
+            .binary_search_by(|entry| entry.output.cmp(output))
+            .ok()
+            .and_then(|i| self.input.outputs[i].source_selectors.as_ref())
     }
     pub fn routes_for(
         &self,

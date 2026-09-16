@@ -77,8 +77,8 @@ primary ascendancy second, default otherwise. Physical nodes and topology stay u
 The first seven-node family appends four injected stat definitions to the attribute
 successor and includes a player-to-Sniper granted-minion-modifier receiver path. This is
 component coverage, not final spell/minion damage or whole-build parity. The other 71
-view-bearing nodes, class base attributes and final attribute receivers remain open.
-Use the resulting 7476-entry successor as the next ledger; see the
+view-bearing nodes and final attribute receivers remain open.
+This 7476-entry successor precedes the class and intrinsic conversions below; see the
 [production data command](../data/owned/poe2/3887ae68/passive-views/README.md).
 
 ## Class and attribute integration checkpoint
@@ -97,7 +97,28 @@ membership the next D3 structural work: two passes, ordered live per-stat reads,
 comparison updates, separate MORE grouping and inherent-stat receivers. This prevents
 accidental final-stat cycles or source UI/database objects from becoming the native model.
 Do not substitute the existing single-store numerical fixtures for complete original-build
-validation. Use the class-base successor as the current ledger; all 110 queries remain fixed.
+validation. The class-base successor precedes the intrinsic conversion below; all 110
+queries remain fixed.
+
+## Intrinsic attack and source-selection checkpoint
+
+The optional Rust/`mlua` adapter now exports a finite, pinned intrinsic attack catalog;
+the default native compiler consumes only that artifact and injected field/stat/unit policy.
+All eight class baselines append to the class-base successor using six new owned IDs
+(four Actor statistics and two exact units). Source class 0 is an explicit exclusion, and
+every source field is accounted for. Class numerical membership remains Partial. The
+conversion preserves the original 110 queries and does not add a profile-specific evaluator.
+
+Routing v2 chooses a named source once per action/selector. It separates authored active
+hand occupancy, a typed equipment eligibility capability, intrinsic actor values and
+skill-local replacements. Every channel has exhaustive typed branch bindings; missing
+selected values never trigger another source. Existing v1 artifacts preserve their wire
+and digest. Native selection and evaluation run in process with per-worker scratch.
+This is D2/D3 component coverage: concrete original equipment/action policies, staged
+attribute contributors and complete original evaluations remain open. Continue from the
+7482-entry intrinsic successor; keep the historical checked-in `current` bundle unchanged.
+No existing Python utility or test was converted; the new exporter, converter and tests
+are Rust, consistent with T1.
 
 ## Current structural and breadth priorities
 

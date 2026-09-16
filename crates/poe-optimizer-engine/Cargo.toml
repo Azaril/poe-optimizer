@@ -21,3 +21,4 @@ mlua = { version = "=0.12.1", features = ["luajit", "vendored"] }
 sha2 = "0.10"
 serde_json = { workspace = true }
 roxmltree = "0.21"
+rayon = "1"

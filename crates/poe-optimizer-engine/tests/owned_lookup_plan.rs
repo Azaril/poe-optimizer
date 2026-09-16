@@ -253,6 +253,7 @@ fn setup() -> Fixture {
             )],
         });
     f.routes.push(ActionOutputRoutes {
+        source_selectors: Some(DeclaredSet::complete(vec![])),
         output: output(),
         routes: DeclaredSet::complete(vec![ActionStatRoute {
             id: key("actor-route"),

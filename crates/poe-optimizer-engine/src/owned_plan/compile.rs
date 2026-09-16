@@ -1,10 +1,16 @@
 use super::*;
 use poe_optimizer_core::owned_routing::*;
 mod reads;
+mod sources;
 
 #[derive(Clone, Debug)]
 enum PendingRead {
     Ready(ReadBinding),
+    Select {
+        decision: usize,
+        when_true: Box<PendingRead>,
+        when_false: Box<PendingRead>,
+    },
     Required(Box<PendingRead>),
     Value(PlanValueKey),
     Contributions(ContributionKey, ContributionReduction, ParameterValue),
@@ -209,11 +215,11 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                 )
             })
             .collect::<Result<Vec<_>>>()?;
-        if let EffectOperation::Route {
-            source: ReadBinding::Final { complete: c, .. },
-        } = &mut node.operation
-        {
-            *c = complete;
+        match &mut node.operation {
+            EffectOperation::Route { source } | EffectOperation::SelectSource { source } => {
+                bind_completeness(source, complete, &mut b.work)?;
+            }
+            EffectOperation::Program { .. } => {}
         }
     }
     let query_gates = query_gates
@@ -264,6 +270,7 @@ fn resolve(
 ) -> Result<ReadBinding> {
     let expansion = match &read {
         PendingRead::Ready(_) => 0,
+        PendingRead::Select { .. } => 3,
         PendingRead::Required(_) => 1,
         PendingRead::Value(_) => 1,
         PendingRead::Contributions(key, ..) => contributions.get(key).map_or(0, Vec::len),
@@ -277,6 +284,31 @@ fn resolve(
     }
     Ok(match read {
         PendingRead::Ready(v) => v,
+        PendingRead::Select {
+            decision,
+            when_true,
+            when_false,
+        } => ReadBinding::Select {
+            decision,
+            when_true: Box::new(resolve(
+                *when_true,
+                values,
+                contributions,
+                complete,
+                work,
+                edges,
+                max_edges,
+            )?),
+            when_false: Box::new(resolve(
+                *when_false,
+                values,
+                contributions,
+                complete,
+                work,
+                edges,
+                max_edges,
+            )?),
+        },
         PendingRead::Required(source) => ReadBinding::Present {
             source: Box::new(resolve(
                 *source,
@@ -1281,6 +1313,8 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     PlanGapReason::PartialRouting,
                 )?;
             }
+            let selected_sources =
+                self.bind_source_selectors(&action, skill.as_ref(), routing, &mut sources)?;
             for route in &routes.members {
                 charge(&mut self.work, 1)?;
                 if let ActionRouteSelection::Exact(selector) = &route.selection
@@ -1291,6 +1325,15 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     continue;
                 }
                 let source = match &route.source {
+                    ActionStatRouteSource::Selected { selector, stats } => {
+                        let bound = selected_sources.get(selector).ok_or_else(|| {
+                            PlanError::Invalid(
+                                "selected route has no matching source selector".into(),
+                            )
+                        })?;
+                        self.selected_source_read(&action, bound, stats)?
+                    }
+
                     ActionStatRouteSource::ActionActor { stat } => {
                         PendingRead::Value(PlanValueKey::Stat {
                             entity: ConcreteEntity::Actor(action.action.actor.clone()),
@@ -1363,27 +1406,61 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             }
         }
         for (index, source) in sources {
-            self.effects[index].operation = EffectOperation::Route {
-                source: resolve(
-                    source,
-                    &self.values,
-                    &self.contributions,
-                    self.gaps.is_empty(),
-                    &mut self.work,
-                    &mut self.binding_edges,
-                    self.limits.max_edges,
-                )?,
+            let source = resolve(
+                source,
+                &self.values,
+                &self.contributions,
+                self.gaps.is_empty(),
+                &mut self.work,
+                &mut self.binding_edges,
+                self.limits.max_edges,
+            )?;
+            self.effects[index].operation = match self.effects[index].operation {
+                EffectOperation::SelectSource { .. } => EffectOperation::SelectSource { source },
+                _ => EffectOperation::Route { source },
             };
         }
         Ok(())
     }
+}
+fn bind_completeness(read: &mut ReadBinding, complete: bool, work: &mut usize) -> Result<()> {
+    charge(work, 1)?;
+    match read {
+        ReadBinding::Final {
+            complete: value, ..
+        }
+        | ReadBinding::Reduction {
+            complete: value, ..
+        } => *value = complete,
+        ReadBinding::Present { source } => bind_completeness(source, complete, work)?,
+        ReadBinding::Select {
+            when_true,
+            when_false,
+            ..
+        } => {
+            bind_completeness(when_true, complete, work)?;
+            bind_completeness(when_false, complete, work)?;
+        }
+        _ => {}
+    }
+    Ok(())
 }
 fn read_dependencies(
     read: &ReadBinding,
     out: &mut BTreeSet<usize>,
     work: &mut usize,
 ) -> Result<()> {
+    charge(work, 1)?;
     match read {
+        ReadBinding::Select {
+            decision,
+            when_true,
+            when_false,
+        } => {
+            out.insert(*decision);
+            read_dependencies(when_true, out, work)?;
+            read_dependencies(when_false, out, work)?;
+        }
         ReadBinding::Present { source } => read_dependencies(source, out, work)?,
         ReadBinding::Final {
             effect: Some(i), ..
@@ -1419,7 +1496,7 @@ fn dependency_order(
                     read_dependencies(&inv.reads[*read], &mut dependencies, work)?;
                 }
             }
-            EffectOperation::Route { source } => {
+            EffectOperation::Route { source } | EffectOperation::SelectSource { source } => {
                 read_dependencies(source, &mut dependencies, work)?
             }
         }

@@ -504,6 +504,7 @@ dependencies = [
  "mlua",
  "poe-optimizer-core",
  "poe-optimizer-data",
+ "rayon",
  "roxmltree",
  "serde",
  "serde_json",
