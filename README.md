@@ -85,6 +85,11 @@ adds class attack facts through an optional offline exporter and a native Rust c
 Source selection, activation and complete contributor coverage remain separate. These are
 components, not complete attribute totals or original-build parity; see the
 [staged attribute design](docs/owned-attributes.md).
+The [item-base converter](data/owned/poe2/3887ae68/item-bases/README.md) extends the same
+ledger with all 1,756 base identities and an EquipmentUse capability for explicit base
+attack-profile presence. Exact header import keeps unique/variant effects unresolved;
+base-profile presence remains separate from action compatibility and activation. All new
+exporter/converter tooling and tests are Rust; existing Python tests remain intact.
 The existing numerical CLI accepts PoB share codes/XML, explicit skill/action and encounter options,
 and returns typed metrics with units, availability and structured coverage. Configurable scalar
 objectives can be assessed during evaluation or against saved results without recalculation.

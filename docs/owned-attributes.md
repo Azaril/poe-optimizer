@@ -95,6 +95,29 @@ catalog digest independently from carried source provenance, accounts for every 
 field, and preserves partial Class rule membership. Existing Python tooling/tests remain
 unchanged; both this converter and its new tests are Rust.
 
+## Equipment source facts and compatibility
+
+The offline item-base catalog covers the complete constructed base table, including caster
+and martial bases sharing the same source type. Its owned EquipmentUse capability means
+only that the template supplies a base attack profile. It comes from explicit table
+presence, never the item type label, item name substring or presence of physical damage.
+Elemental-only profiles are still sources. Unsupported source shapes produce no Boolean.
+
+A static template fact does not certify a concrete item's numeric channels, modifier order,
+activation, generated buffs, skill compatibility or replacements. Exact base headers can
+identify a unique item's base while its unique effects stay unresolved. Decorated magic
+names and conditional base variants need independent identity conversion. New template
+ports, equipment/quality/modifier membership and game rules stay Partial.
+
+Keep source presence and compatibility as separate gates. An incompatible martial weapon
+must not become a class-intrinsic fallback. Player and minion baselines belong to their
+actual actor. Original02 selects Grand Spear plus Shrine Sceptre in its secondary loadout;
+original04 selects Crossbow Shot while Ashen Staff is active. These are loadout/compatibility
+cases to resolve explicitly, not reasons to silently choose saved primary equipment or
+player unarmed values. Next convert raw numeric profile channels, then local item effects
+and reviewed action/hand policies through the shared routing seam. See the
+[finite catalog and production commands](../data/owned/poe2/3887ae68/item-bases/README.md).
+
 ## Numerical step
 
 An attribute step first sums eligible flat contributions. An exact zero base skips modifier

@@ -525,3 +525,123 @@ fn production_normalization_preserves_default_provenance_and_partial_closure() {
             .is_empty()
     );
 }
+
+#[test]
+fn sparse_defaults_scale_to_a_full_base_catalog_without_defaulting_unrelated_templates() {
+    let mut a = fixture();
+    let expected_missing = attribute(&a, &xml("")).convert(&a.items).unwrap().defaults;
+    let expected_authored = attribute(&a, &xml("Catalyst: Tul\nCatalystQuality: 0\n"))
+        .convert(&a.items)
+        .unwrap()
+        .defaults;
+    let mut schema = a.schema.input().clone();
+    let SchemaLookup::Known(unrelated_schema) = a.schema.definition(&a.spear) else {
+        panic!("known fixture template");
+    };
+    let unrelated_schema = unrelated_schema.clone();
+    let mut lines = a.items.input().clone();
+    let mut input = a.item_source.input().clone();
+    assert_eq!(input.template_defaults.len(), 1);
+    // Two fixture templates plus 1,754 unrelated bases reproduce the breadth
+    // of the final source catalog, while only the staff requests defaults.
+    for index in 0..1754 {
+        let template = a
+            .registry
+            .allocate_definition::<ItemTemplateDefinition>()
+            .unwrap();
+        schema
+            .definitions
+            .push(DefinitionDescriptor::ItemTemplate(DefinitionEntry {
+                id: template.clone(),
+                schema: SchemaState::Known(unrelated_schema.clone()),
+            }));
+        let rule = key(&format!("unrelated-base-{index}"));
+        lines.rules.push(ItemLineRule {
+            id: rule.clone(),
+            pattern: vec![ItemPatternPart::Literal(format!("Unrelated Base {index}"))],
+            captures: vec![],
+            emissions: vec![ItemEmission::Template {
+                definition: template.clone(),
+            }],
+        });
+        input.rule_layouts.push(ItemRuleSourceLayout {
+            rule,
+            role: ItemRuleSourceRole::Header,
+        });
+        input.template_layouts.push(ItemTemplateSourceLayout {
+            template,
+            load_index_prefix: ItemLoadIndexPrefix::Unresolved,
+        });
+    }
+    a.schema = OwnedDefinitionSchemaPackage::new(schema, OwnedSchemaLimits::default()).unwrap();
+    lines.definitions = a.schema.identity().clone();
+    a.items = OwnedItemLinePolicy::new(lines, &a.schema, ItemLineLimits::default()).unwrap();
+    input.item_lines = *a.items.identity();
+    let limits = ItemSourceLimits {
+        max_schema_work: 200_000,
+        ..Default::default()
+    };
+    a.item_source =
+        ItemSourceLayoutPolicy::new(input.clone(), &a.items, &a.schema, limits).unwrap();
+    assert_eq!(
+        attribute(&a, &xml("")).convert(&a.items).unwrap().defaults,
+        expected_missing
+    );
+    assert_eq!(
+        attribute(&a, &xml("Catalyst: Tul\nCatalystQuality: 0\n"))
+            .convert(&a.items)
+            .unwrap()
+            .defaults,
+        expected_authored
+    );
+    let unrelated = xml("").replace("Ashen Staff", "Unrelated Base 1753");
+    assert_eq!(
+        attribute(&a, &unrelated)
+            .convert(&a.items)
+            .unwrap()
+            .defaults,
+        ItemDefaultedInputs::default()
+    );
+    let malformed = xml("CatalystQuality: malformed\n");
+    assert_eq!(
+        attribute(&a, &malformed)
+            .convert(&a.items)
+            .unwrap()
+            .defaults,
+        ItemDefaultedInputs::default()
+    );
+    let bytes = encode_item_source_policy(&a.item_source, limits).unwrap();
+    let decoded = decode_item_source_policy(&bytes, &a.items, &a.schema, limits).unwrap();
+    assert_eq!(decoded.identity(), a.item_source.identity());
+    // Unrelated emissions still consume bounded work; the optimization is not
+    // an exemption from scanning or accounting for supplied catalog content.
+    assert!(matches!(
+        ItemSourceLayoutPolicy::new(
+            input.clone(),
+            &a.items,
+            &a.schema,
+            ItemSourceLimits {
+                max_schema_work: 1_000,
+                ..Default::default()
+            }
+        ),
+        Err(ItemSourceError::Limit("schema work"))
+    ));
+    // Finding many other templates must never satisfy the requested binding.
+    let mut missing = a.items.input().clone();
+    missing.rules.retain(|rule| {
+        !rule.emissions.iter().any(|emission|
+        matches!(emission, ItemEmission::Template { definition } if definition == &a.staff))
+    });
+    input
+        .rule_layouts
+        .retain(|layout| missing.rules.iter().any(|rule| rule.id == layout.rule));
+    let missing = OwnedItemLinePolicy::new(missing, &a.schema, ItemLineLimits::default()).unwrap();
+    input.item_lines = *missing.identity();
+    assert!(matches!(
+        ItemSourceLayoutPolicy::new(input, &missing, &a.schema, limits),
+        Err(ItemSourceError::Policy(
+            "default template has no source layout or line binding"
+        ))
+    ));
+}

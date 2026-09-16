@@ -43,3 +43,6 @@ Cargo.lock text eol=lf
 
 # Finite intrinsic catalog has an independently reviewed exact-byte digest.
 /data/owned/poe2/3887ae68/intrinsic-attack/*.json -text
+
+# Finite item-base acquisition and authored conversion identities use exact bytes.
+/data/owned/poe2/3887ae68/item-bases/*.json -text

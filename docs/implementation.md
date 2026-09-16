@@ -11,7 +11,67 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: intrinsic attack baselines and shared action sources (after `e6fd3a4`).**
+**Current checkpoint: complete item-base catalog and source-presence facts (after `bb017c4`).**
+The optional Rust exporter authenticates the pinned checkout and reuses the bounded final
+item-definition constructor. Its finite artifact contains all 1,756 constructed bases:
+337 with an explicit attack-profile table, 1,419 without one, and no unsupported shapes
+in this revision. Staff alone contains both cases; six final profiles have no physical
+channels. Source shape, not type labels or physical-damage presence, determines this fact.
+The artifact carries 29 relevant pins; separate acquisition evidence retains all 89
+constructor pins. Legacy metadata, callbacks and UI/build objects stay outside native data.
+
+The default `compile-owned-item-bases` host appends an injected EquipmentUse capability
+(7483) and 1,755 template IDs (7484–9238), preserving Sapphire Ring's existing descriptor.
+It adds exact base-header rules and one source-presence program per template, using the
+existing owned rule language. New schema facets and all template rule membership remain
+Partial; unsupported shapes would have no Boolean producer. It does not infer absent
+quality/levels/parameters, modifier order, compatibility, activation or unique/variant
+semantics. Existing schemas, source defaults, tree content and all 110 queries remain fixed.
+
+The actual successor is `runs/owned-equipment-attack-01/package` (9238 registry entries).
+Schema SHA: `c9a00d61d71ac8261f445ade4f6e339bb001904c46177a81ec314a1fc561420d`.
+The finite catalog is 289,502 bytes, SHA:
+`6dda4b5aa9371050b72343542219ad54d6b469ce16af7ede3c0e9cacbbec9554`.
+All five original imports remain Pending, with 13/16, 28/34, 16/17, 19/21 and 25/28 known
+base identities respectively across their full imported inventories. Those 101/116 records
+are identity coverage, not active equipment or complete item/build coverage. Every
+allocation's access remains Pending; complete native original evaluations remain **0/5**.
+
+Full-catalog use exposed unnecessary quadratic accounting in source-default validation.
+Only templates with configured defaults are now retained, while every emission is still
+scanned and charged. The 1,756-header/one-default regression passes without raising that
+limit or weakening absence guards. The CLI separately budgets the checked prior bundle
+and authored inputs at 64 MiB each, because the published bundle contains both recipe and
+constituent copies (63,474,371 bytes here). Library and publication caps remain unchanged.
+Reruns preserve semantic artifact bytes and no-overwrite behavior.
+
+**Validation:** 36 targeted Rust test executions pass: Import 20 (ten new converter
+contracts and ten defaults tests, including the new breadth regression), optional exporter
+7, and CLI 9 across native/optional modes plus attribute/intrinsic helper regressions.
+They cover full-catalog parity with independently retained data, modified injected facts,
+unknown shapes, lifecycle/header collisions, exclusive writers, unchanged IDs/queries,
+all-five imports, idempotent publication, exact exporter reproduction and failed overwrite.
+Strict workspace/all-feature/all-target and native-only CLI Clippy, formatting, owned
+Data/Engine and Import WASM compilation pass. Native CLI dependencies exclude PoB/Lua.
+The full numerical workspace suites were not rerun. All new tooling/tests are Rust;
+existing Python files are untouched and those tests were not rerun. Independent reviews
+found no remaining blocking issue. Receipt: `runs/owned-equipment-attack-01/validation.json`.
+The last exact baseline observation had `bb017c4` CI pending with no jobs/failures; fresh
+exact-SHA CI observation follows publication. Local test evidence is separate from hosted CI.
+
+**Resume:** generate the [item-base successor](../data/owned/poe2/3887ae68/item-bases/README.md)
+from the 7482-entry intrinsic package; do not fork from historical `current`. Next convert
+numeric base channels and local item effects, then independent action compatibility,
+hand/replacement policy and actor-specific baselines. Original02 uses Grand Spear plus
+Shrine Sceptre in its active secondary loadout; original04's selected Crossbow Shot with
+Ashen Staff remains incompatible; selected minion actions need minion data, never player
+class baselines. Preserve source-selection/global closure gates and all query rows. Staged
+attribute contributors/conditions and inherent bonuses remain the next shared numerical
+work. Before substantial catalog growth, measure compact bundle publication and indexed
+literal-header lookup so duplicated authoring artifacts and pattern-table bounds do not
+become the next breadth limit; this does not change owned runtime semantics.
+
+**Previous checkpoint: intrinsic attack baselines and shared action sources (after `e6fd3a4`).**
 The optional Rust/`mlua` exporter reads the two reviewed source files in a bounded, isolated
 VM and emits a finite nine-row catalog. The default `compile-owned-intrinsic-attack`
 command executes no Lua: it checks an injected catalog digest, complete field membership,

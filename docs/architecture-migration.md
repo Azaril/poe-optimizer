@@ -41,8 +41,8 @@ numerical validation before its meaning is preserved.
 ## T1: Rust tooling and test consolidation
 
 Status: planned, not started. The owner requests eventual Rust-only project tooling/tests
-and explicitly defers conversion of the existing Python tests. New tooling defaults to
-Rust; maintenance of existing Python utilities and their tests remains permitted.
+and explicitly defers conversion of the existing Python tests. Use Rust for new project
+tooling and tests; maintenance of existing Python utilities and their tests remains permitted.
 Schedule coherent replacements alongside D2/D5 consumer migration without displacing the
 five-original-build integration priority.
 
@@ -119,6 +119,29 @@ attribute contributors and complete original evaluations remain open. Continue f
 7482-entry intrinsic successor; keep the historical checked-in `current` bundle unchanged.
 No existing Python utility or test was converted; the new exporter, converter and tests
 are Rust, consistent with T1.
+
+## Item-base identity and source-presence checkpoint
+
+The optional Rust adapter projects the authenticated final constructed base table into a
+finite catalog of 1,756 identities; the native compiler accepts only that artifact and
+injected policy/definitions. It emits exact base headers and ordinary EquipmentUse
+capabilities for explicit base-profile presence (337 true, 1,419 false). Unsupported shapes
+remain unknown. The single registry appends capability 7483 and 1,755 templates through
+9238, preserving Sapphire Ring and all prior schemas. New schema facets and numerical
+membership remain Partial. Native evaluation never receives legacy metadata tables.
+
+A full-catalog test exposed needless quadratic accounting in the source-default validator.
+It now retains only templates with configured defaults, still scanning and charging every
+emission; resource caps, default guards and serialized identities are unchanged. New
+exporter/converter/validation code and tests are Rust, with existing Python code untouched.
+
+This is D2/D3 identity/component progress. Continue with numeric equipment channels and
+independent compatibility/hand/actor policy, not another skill-specific profile. Keep all
+five original query sets and 0/5 full native results. Conditional variant selection,
+decorated magic base names, local modifiers, replacements and generated-actor baselines
+remain explicit obligations. The new successor follows the 7482-entry intrinsic package;
+the checked-in `current` bundle remains historical. See
+[item-base commands](../data/owned/poe2/3887ae68/item-bases/README.md).
 
 ## Current structural and breadth priorities
 

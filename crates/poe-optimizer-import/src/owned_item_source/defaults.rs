@@ -73,8 +73,21 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
     validate_shape(input, limits, text)?;
     let mut work = limits.max_schema_work;
     let mut line_templates = BTreeSet::new();
-    // Account once for the complete scan instead of repeating it for each template.
-    if !input.template_defaults.is_empty() {
+    // Only configured defaults need proof of a line binding. Indexing every
+    // unrelated base made a single default's work quadratic in catalog breadth.
+    let mut requested_templates = BTreeSet::new();
+    for defaults in &input.template_defaults {
+        charge(
+            &mut work,
+            (defaults.template.key().as_str().len() + 1)
+                .saturating_mul(requested_templates.len() + 1),
+            "schema work",
+        )?;
+        requested_templates.insert(&defaults.template);
+    }
+    // Scan every emission once, charging even unrelated templates for the
+    // bounded requested-set lookup. Retain only positive requested matches.
+    if !requested_templates.is_empty() {
         for rule in &lines.input().rules {
             charge(
                 &mut work,
@@ -83,13 +96,20 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             )?;
             for emission in &rule.emissions {
                 if let ItemEmission::Template { definition } = emission {
+                    let key_work = definition.key().as_str().len() + 1;
                     charge(
                         &mut work,
-                        (definition.key().as_str().len() + 1)
-                            .saturating_mul(line_templates.len() + 1),
+                        key_work.saturating_mul(requested_templates.len() + 1),
                         "schema work",
                     )?;
-                    line_templates.insert(definition);
+                    if requested_templates.contains(definition) {
+                        charge(
+                            &mut work,
+                            key_work.saturating_mul(line_templates.len() + 1),
+                            "schema work",
+                        )?;
+                        line_templates.insert(definition);
+                    }
                 }
             }
         }
